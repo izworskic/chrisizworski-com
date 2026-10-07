@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "product": [
+    "first useful run requires four core decisions",
+    "winner always includes human-readable reasons",
+    "meaningful runner-up explains a tradeoff",
+    "fit and evidence confidence are separate",
+    "regional handoff preserves date, intent and usable time window",
+    "Southwest Michigan is narrowed by visitor cluster rather than modeled as one tiny loop",
+    "390px breakpoint prevents control and result-card overflow"
+  ],
+  "canonical": "https://chrisizworski.com/michigan-wine-day/",
+  "decisionPromise": "origin + date + time window + wine intent → best feasible Michigan wine region → explanation → regional planner handoff",
+  "truth": [
+    "unknown hours are never converted to closed",
+    "missing varietal evidence is never converted to 'does not have'",
+    "reservation availability and tasting fees are not invented",
+    "operational claims carry freshness/source behavior",
+    "positive evidence saturates so the largest dataset cannot win on record count alone"
+  ],
+  "reliability": [
+    "routing failure falls back to labeled travel estimates",
+    "weather failure removes the modifier rather than blocking the recommendation",
+    "common origins use curated centroids; geocoder failure yields an actionable city/ZIP error",
+    "regional adapter failure uses a dated snapshot and lowers confidence",
+    "no worthwhile region is an allowed answer"
+  ],
+  "search": [
+    "one indexable statewide owner",
+    "query-state combinations remain application state",
+    "Southwest handoff is noindex",
+    "existing Traverse City and Petoskey canonical owners remain intact",
+    "statewide canonical is included once in sitemap and tool network"
+  ],
+  "scenarios": [
+    "A Traverse City first timer",
+    "B short Bay City day",
+    "C sparkling vs reds",
+    "D rain modifier",
+    "E missing hours",
+    "F routing provider failure",
+    "G regional adapter failure",
+    "H Southwest origin",
+    "I long-origin short window"
+  ],
+  "lossFunctions": [
+    "generic-directory",
+    "planner-duplication",
+    "data-rich-region-bias",
+    "false-negative",
+    "false-freshness",
+    "fake-precision",
+    "impossible-day",
+    "explanation",
+    "input-friction",
+    "tourism-copy",
+    "map-first",
+    "SEO-cannibalization",
+    "thin-page",
+    "statewide-claim",
+    "stale-count",
+    "mobile-layout",
+    "dependency-failure",
+    "safety"
+  ],
+  "competitorBenchmark": {
+    "dimensions": [
+      "speed to useful answer",
+      "input burden",
+      "region choice",
+      "wine-style personalization",
+      "travel burden",
+      "hours feasibility",
+      "explanation",
+      "uncertainty handling",
+      "regional handoff",
+      "statewide usefulness"
+    ],
+    "currentMarketFinding": "Official tourism and trail sites are strong at discovery after a region is chosen; route planners are strong after wineries are chosen. The distinct product layer here is choosing the region for a person's actual day and handing that decision into the authoritative regional planner."
+  }
+}
