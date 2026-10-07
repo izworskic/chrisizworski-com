@@ -117,7 +117,7 @@ const lastCommitDate = lastContentCommitDate;
 // The sitemap carries its own lastmod per URL and drifts independently. PR #44's integrity test
 // caught exactly that: a page whose dateModified moved while its sitemap entry did not. Both are
 // freshness signals and they must agree, so the stamper owns both.
-// Every page sitemap robots.txt declares. This list was three of seven, so sitemap-fall.xml,
+// Page sitemaps checked against this repository's source dates. This list was three of seven, so sitemap-fall.xml,
 // sitemap-manistee.xml and sitemap-winter.xml drifted with nothing checking them. If you add a
 // sitemap to robots.txt, add it here in the same commit. image-sitemap.xml is deliberately out:
 // it indexes images, not pages, so it has no page dateModified to agree with.
@@ -129,6 +129,7 @@ const SITEMAPS = [
   "sitemap-fall.xml",
   "sitemap-manistee.xml",
   "sitemap-winter.xml",
+  "sitemap-breakout-live.xml",
 ];
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
@@ -204,6 +205,23 @@ for (const file of files) {
 }
 
 const bad = lagging.filter((l) => l.lagDays > TOLERANCE_DAYS);
+
+// Mirrored documents live under /synced-national-tools/, while sitemaps publish
+// their canonical /national-tools/ routes. Resolve exact local rewrites so those
+// entries cannot silently miss the date and missing-stamp checks.
+let localRewrites = [];
+try {
+  localRewrites = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8")).rewrites || [];
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+for (const rule of localRewrites) {
+  if (!rule.destination?.startsWith("/") || !rule.destination.endsWith(".html") || /[:*(){?]/.test(rule.source)) continue;
+  const documentRoute = rule.destination.replace(/index\.html$/, "");
+  const date = dateByRoute.get(documentRoute);
+  if (date) dateByRoute.set(rule.source, date);
+  else if (unstamped.includes(documentRoute)) unstamped.push(rule.source);
+}
 
 // These pages are emitted at build time. Their content also depends on the
 // generator, so an absent tracked child HTML file must not bypass freshness.

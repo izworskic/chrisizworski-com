@@ -65,8 +65,11 @@ function syncKilaueaSitemap(targetRoot){
   const file=path.join(targetRoot,'public','sitemap-breakout-live.xml');
   if(!fs.existsSync(file)) throw new Error('Breakout sync: breakout sitemap missing');
   let xml=fs.readFileSync(file,'utf8');
+  const page=fs.readFileSync(path.join(targetRoot,'public','synced-national-tools','kilauea-live','index.html'),'utf8');
+  const modified=page.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  if(!modified) throw new Error('Breakout sync: Kilauea page dateModified missing');
   xml=xml.replace(/\s*<url><loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc>[\s\S]*?<\/url>/g,'');
-  const entry='  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>2026-09-28</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n';
+  const entry=`  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>${modified}</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n`;
   if(!xml.includes('</urlset>')) throw new Error('Breakout sync: sitemap closing tag missing');
   xml=xml.replace('</urlset>',entry+'</urlset>');
   if((xml.match(/https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//g)||[]).length!==1) throw new Error('Breakout sync: Kilauea sitemap URL must be unique');

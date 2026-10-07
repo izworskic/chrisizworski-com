@@ -40,6 +40,9 @@ The export does not show a site-wide indexing loss.
   Michigan Outdoors Now tool; permanently redirect both old URL forms there.
 - The 22 top-level Michigan fall-color aliases already resolve successfully.
   Intentional noindex on the Niagara best-time utility and publisher page remains.
+- Include the breakout-live sitemap in freshness verification and resolve its
+  public routes to their local mirrored documents. Synchronize its existing
+  dates and derive the generated Kīlauea entry from the page's current stamp.
 
 The observed 404s are documented in
 `benchmarks/coverage-route-repairs-2026-10-07.json`; they cannot be matched
