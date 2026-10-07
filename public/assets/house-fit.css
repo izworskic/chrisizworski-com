@@ -116,3 +116,9 @@
   .ledger-label small{font-size:10px}
 }
 
+
+/* Opening house inputs: keep price, down payment, and editable daily rate together. */
+@media(min-width:720px){
+  .core-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .core-fields .field.wide{grid-column:1/-1}
+}
