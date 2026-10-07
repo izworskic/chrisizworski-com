@@ -3,7 +3,7 @@
 const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
 const CACHE_SECONDS = 30;
 const MAX_HTML_BYTES = 1_500_000;
-const RECENT_ARRIVAL_LOOKBACK_MS = 6 * 60 * 60 * 1000;
+const RECENT_ARRIVAL_LOOKBACK_MS = 12 * 60 * 60 * 1000;
 const RECENT_ARRIVAL_LOOKAHEAD_MS = 2 * 60 * 60 * 1000;
 const RECENT_ARRIVAL_MAX_DETAILS = 24;
 const RECENT_ARRIVAL_BATCH_SIZE = 6;
@@ -415,6 +415,7 @@ function sanitizeFlight(flight, marketingFlight, detailUrl) {
 
   return {
     status:'found',
+    fetchedAt:new Date().toISOString(),
     flightNumber:marketingFlight.display,
     flightId:String(flight?.flightId || ''),
     assignmentState,
