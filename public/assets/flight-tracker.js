@@ -242,18 +242,22 @@
     const elapsedSeconds = Math.floor(elapsedMs / 1000);
     const baseAge = Number.isFinite(lastReportedAgeSeconds) ? lastReportedAgeSeconds : 0;
     const apparentAge = baseAge + elapsedSeconds;
-    freshness.textContent = formatAge(apparentAge) + ' · refresh retrying';
-    freshness.dataset.stale = apparentAge > 90 ? 'true' : 'false';
+    const meaningfullyStale = apparentAge > 90;
 
-    if (apparentAge > 90) {
+    freshness.textContent = formatAge(apparentAge) + (meaningfullyStale ? ' · refresh retrying' : '');
+    freshness.dataset.stale = meaningfullyStale ? 'true' : 'false';
+
+    if (meaningfullyStale) {
       phaseLabel.textContent = 'Last reported';
       landingLabel.textContent = 'Refresh pending';
+      const reason = data?.status === 'ambiguous'
+        ? 'Live position is temporarily stale. Showing the last confirmed aircraft report while retrying.'
+        : 'Live position is temporarily stale. Showing the last confirmed aircraft report while retrying.';
+      setMessage(reason, 'warning');
+    } else {
+      setMessage('', 'neutral');
     }
 
-    const reason = data?.status === 'ambiguous'
-      ? 'The latest refresh was ambiguous. Showing the last confirmed aircraft report.'
-      : 'Live refresh missed. Showing the last confirmed aircraft report while retrying.';
-    setMessage(reason, 'warning');
     submit.disabled = false;
     submit.textContent = 'FIND MY PLANE';
     return true;
