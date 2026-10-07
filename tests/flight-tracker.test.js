@@ -605,7 +605,8 @@ test('different-flight-number inbound occurrence becomes the traveler-facing cur
   assert.match(client, /return crossFlightOccurrenceRoute\(live\) \|\| confirmedOccurrenceRoute\(assignment, live\)/);
   assert.match(client, /const operatingOccurrence = await resolveOperatingOccurrence\(assignmentData,data\)/);
   assert.match(client, /data\.confirmedOperatingOccurrence = operatingOccurrence/);
-  assert.match(client, /currentOperatingFlight = live\?\.confirmedOperatingOccurrence\?\.flightNumber/);
+  assert.match(client, /const inboundOccurrence = live\?\.confirmedOperatingOccurrence \|\| assignment\?\.currentAircraftOccurrence \|\| null/);
+  assert.match(client, /const currentOperatingFlight = inboundOccurrence\?\.flightNumber \|\| null/);
   assert.match(client, /is currently operating .* from .* to/s);
 });
 
@@ -722,7 +723,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261007m/);
+  assert.match(html, /flight-tracker\.js\?v=20261007n/);
 });
 
 
