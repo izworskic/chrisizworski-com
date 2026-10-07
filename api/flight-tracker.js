@@ -3,7 +3,7 @@
 const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const VRS_AIRPORTS_URL = 'https://vrs-standing-data.adsb.lol/airports.csv';
-const POSITION_MAX_AGE_SECONDS = 90;
+const POSITION_MAX_AGE_SECONDS = 15 * 60;
 const AIRPORT_INDEX_MAX_BYTES = 4_000_000;
 let airportIndexPromise = null;
 const CACHE_SECONDS = 5;
@@ -609,6 +609,9 @@ function flightProgress(aircraft, route, positionFresh) {
   const step = distanceNm >= 500 ? 15 : 5;
   const earliest = Math.max(10, Math.floor(fastestMinutes / step) * step);
   const latest = Math.max(earliest + step * 2, Math.ceil(slowestMinutes / step) * step);
+  const spreadMinutes = latest - earliest;
+  const maxUsefulSpread = Math.max(60, Math.min(120, Math.round(earliest * 0.45)));
+  if (spreadMinutes > maxUsefulSpread) return result;
   result.landingEstimate = {
     minMinutes:earliest,
     maxMinutes:latest,
