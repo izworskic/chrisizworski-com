@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007n/);
+  assert.match(html, /flight-tracker\.js\?v=20261007p/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -180,7 +180,7 @@ test('phase labels derive only from fresh telemetry and never equate ground to l
   assert.equal(api.flightPhase(testPlane({speedKnots:null,altitudeFeet:null}), true).label, 'Phase unavailable');
 });
 
-test('straight-line miles left and broad landing window are computed for a credible airborne flight', () => {
+test('straight-line miles left and a useful landing window are computed for a credible airborne flight', () => {
   const progress=api.flightProgress(testPlane(), testRoute(), true);
   assert.equal(progress.phase.label,'Cruising');
   assert.equal(progress.remainingBasis,'straight-line');
@@ -193,6 +193,22 @@ test('straight-line miles left and broad landing window are computed for a credi
   assert.ok(progress.landingEstimate.maxMinutes > 45);
 });
 
+
+test('overly broad long-haul landing windows are dropped instead of showing false precision', () => {
+  const route = {
+    plausible:true,
+    origin:{iata:'JFK',lat:40.639801,lon:-73.7789},
+    destination:{iata:'LHR',lat:51.4706,lon:-0.461941}
+  };
+  const plane = {
+    lat:41.0,lon:-71.0,onGround:false,altitudeFeet:35000,speedKnots:300,
+    verticalRateFpm:0,positionAgeSeconds:180
+  };
+  plane.trackDegrees = api.bearingDegrees(plane,route.destination);
+  const progress = api.flightProgress(plane,route,true);
+  assert.ok(progress.remainingMiles > 2500);
+  assert.equal(progress.landingEstimate,null);
+});
 
 test('direct progress is rounded, bounded, and clearly separate from route miles', () => {
   const route = {
@@ -276,9 +292,11 @@ test('page renders human-readable route, aircraft identity and tiny direct-progr
 test('silent refresh keeps the last confirmed flight through transient source misses', () => {
   assert.match(client, /const HOLD_LAST_LIVE_MS = 5 \* 60 \* 1000/);
   assert.match(client, /function holdLastLiveOnRefreshMiss\(data\)/);
-  assert.match(client, /const meaningfullyStale = apparentAge > 90/);
+  assert.match(client, /const LIVE_POSITION_MAX_AGE_SECONDS = 15 \* 60/);
+  assert.match(client, /const meaningfullyStale = apparentAge > LIVE_POSITION_MAX_AGE_SECONDS/);
   assert.match(client, /if \(silent && refreshInFlight\) return;/);
-  assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);[\s\S]*\} else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\)/s);
+  assert.match(client, /if \(data\.status === 'live' && data\.positionFresh === true\)/);
+  assert.match(client, /const \[data, recentOccurrence\] = await Promise\.all\(\[livePromise,historyPromise\]\)/);
   assert.match(client, /meaningfullyStale \? ' · refresh retrying' : ''/);
   assert.match(client, /if \(meaningfullyStale\) \{\s*phaseLabel\.textContent = 'Last reported';\s*landingLabel\.textContent = 'Refresh pending';/s);
   assert.match(client, /else \{\s*setMessage\('', 'neutral'\);\s*\}/s);
@@ -602,10 +620,11 @@ test('cross-flight inbound resolver matches a different operating flight only by
 test('different-flight-number inbound occurrence becomes the traveler-facing current trip', () => {
   assert.match(client, /function crossFlightOccurrenceRoute\(live\)/);
   assert.match(client, /live\?\.confirmedOperatingOccurrence/);
-  assert.match(client, /return crossFlightOccurrenceRoute\(live\) \|\| confirmedOccurrenceRoute\(assignment, live\)/);
+  assert.match(client, /return crossFlightOccurrenceRoute\(live\) \|\|\s*assignmentInboundOccurrenceRoute\(assignment, live\) \|\|\s*confirmedOccurrenceRoute\(assignment, live\)/s);
   assert.match(client, /const operatingOccurrence = await resolveOperatingOccurrence\(assignmentData,data\)/);
   assert.match(client, /data\.confirmedOperatingOccurrence = operatingOccurrence/);
-  assert.match(client, /const inboundOccurrence = live\?\.confirmedOperatingOccurrence \|\| assignment\?\.currentAircraftOccurrence \|\| null/);
+  assert.match(client, /const recentInboundRoute = assignmentInboundOccurrenceRoute\(assignment, live\)/);
+  assert.match(client, /\(recentInboundRoute \? assignmentInboundOccurrence\(assignment\) : null\)/);
   assert.match(client, /const currentOperatingFlight = inboundOccurrence\?\.flightNumber \|\| null/);
   assert.match(client, /is currently operating .* from .* to/s);
 });
@@ -723,7 +742,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261007n/);
+  assert.match(html, /flight-tracker\.js\?v=20261007p/);
 });
 
 
@@ -765,6 +784,34 @@ test('completed FlightStats occurrence exposes a bounded actual arrival timestam
   const result=assignmentApi.sanitizeFlight(flight,{display:'DL2587'},'https://example.test');
   assert.equal(result.schedule.actualArrivalUTC,'2026-10-07T20:23:00Z');
   assert.equal(result.flightStatus.arrivalDelayMinutes,40);
+});
+
+test('adversarial V2 fixes make story enrichment deterministic and separate fresh from stale positions', () => {
+  const apiSource = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(apiSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
+  assert.match(client, /const historyPromise = assignmentData[\s\S]*resolveRecentInboundOccurrence\(assignmentData\)/);
+  assert.match(client, /const \[data, recentOccurrence\] = await Promise\.all\(\[livePromise,historyPromise\]\)/);
+  assert.match(client, /assignmentData = attachInboundOccurrence\(assignmentData,recentOccurrence\)/);
+  assert.match(client, /data\.status === 'live' && data\.positionFresh === true/);
+  assert.match(client, /snapshotFromAircraftData\(data\)/);
+  assert.match(client, /ageSeconds <= LIVE_POSITION_MAX_AGE_SECONDS/);
+  assert.match(client, /renderInboundAnswer\(assignment,recentData\)/);
+});
+
+test('parked same-tail arrival is asserted and stale airline status is timestamped', () => {
+  assert.match(client, /recentInboundOccurrence\?\.flightStatus\?\.landed === true/);
+  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /function unresolvedStatusIsStale\(assignment\)/);
+  assert.match(client, /Date\.now\(\) > departure \+ 90 \* 60 \* 1000/);
+  assert.match(client, /Status may be stale/);
+  assert.match(client, /checked /);
+});
+
+test('password-manager accessibility artifacts are excluded from the rendered flight tracker', () => {
+  assert.match(html, /data-1p-ignore="true"/);
+  assert.doesNotMatch(html, /1Password menu is available/);
+  assert.match(client, /const PASSWORD_MANAGER_ARTIFACT = '1Password menu is available'/);
+  assert.match(client, /stripPasswordManagerArtifacts/);
 });
 
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {
