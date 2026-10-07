@@ -4,6 +4,7 @@ const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const POSITION_MAX_AGE_SECONDS = 90;
 const CACHE_SECONDS = 5;
+const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
 
 const IATA_TO_CALLSIGNS = Object.freeze({
   AA: ['AAL'],
@@ -236,6 +237,221 @@ async function getJson(url, options = {}, timeoutMs = 5500) {
   }
 }
 
+
+async function getText(url, options = {}, timeoutMs = 6000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        accept:'text/html,application/xhtml+xml',
+        'user-agent':'Mozilla/5.0 (compatible; ChrisIzworski-FlightTracker/1.0; +https://chrisizworski.com/flight-tracker/)',
+        ...(options.headers || {})
+      },
+      redirect:'follow',
+      signal:controller.signal
+    });
+    if (!response.ok) throw new Error('upstream ' + response.status);
+    return await response.text();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function extractFlightStatsState(html) {
+  const marker = '__NEXT_DATA__ = ';
+  const startMarker = String(html || '').indexOf(marker);
+  if (startMarker < 0) return null;
+  const start = startMarker + marker.length;
+  const end = String(html).indexOf(';__NEXT_LOADED_PAGES__', start);
+  if (end <= start) return null;
+  try {
+    const parsed = JSON.parse(String(html).slice(start, end));
+    return parsed?.props?.initialState?.flightTracker || null;
+  } catch {
+    return null;
+  }
+}
+
+function flattenFlightStatsCandidates(otherDays) {
+  const out = [];
+  for (const day of Array.isArray(otherDays) ? otherDays : []) {
+    for (const flight of Array.isArray(day?.flights) ? day.flights : []) {
+      const match = String(flight?.url || '').match(/[?&]year=(\d+)&month=(\d+)&date=(\d+)&flightId=(\d+)/);
+      if (!match) continue;
+      const sortMs = Date.parse(flight.sortTime || '');
+      out.push({
+        flightId:match[4],
+        year:match[1],
+        month:match[2],
+        date:match[3],
+        sortTime:flight.sortTime || null,
+        sortMs:Number.isFinite(sortMs) ? sortMs : null,
+        origin:{
+          iata:flight?.departureAirport?.iata || flight?.departureAirport?.fs || null,
+          city:flight?.departureAirport?.city || null,
+          name:flight?.departureAirport?.name || null
+        },
+        destination:{
+          iata:flight?.arrivalAirport?.iata || flight?.arrivalAirport?.fs || null,
+          city:flight?.arrivalAirport?.city || null,
+          name:flight?.arrivalAirport?.name || null
+        }
+      });
+    }
+  }
+  return out;
+}
+
+function chooseScheduledCandidate(candidates, nowMs = Date.now(), requestedFlightId = null) {
+  const valid = (Array.isArray(candidates) ? candidates : []).filter(c => Number.isFinite(c.sortMs));
+  if (requestedFlightId) {
+    return valid.find(c => String(c.flightId) === String(requestedFlightId)) || null;
+  }
+  const nearby = valid
+    .map(c => ({...c, deltaMs:c.sortMs - nowMs}))
+    .filter(c => c.deltaMs >= -6 * 3600000 && c.deltaMs <= 24 * 3600000)
+    .sort((a,b) => Math.abs(a.deltaMs) - Math.abs(b.deltaMs));
+  if (!nearby.length) return null;
+
+  const close = nearby.filter(c => Math.abs(c.deltaMs) <= 3 * 3600000);
+  const routeKeys = new Set(close.map(c => (c.origin?.iata || '') + '>' + (c.destination?.iata || '')));
+  if (close.length > 1 && routeKeys.size > 1) {
+    return {ambiguous:true, candidates:close.slice(0,4)};
+  }
+  return nearby[0];
+}
+
+function cleanFlightStatsAirport(ap) {
+  return {
+    iata:ap?.iata || ap?.fs || null,
+    fs:ap?.fs || null,
+    city:ap?.city || null,
+    name:ap?.name || null,
+    gate:ap?.gate || null,
+    terminal:ap?.terminal || null
+  };
+}
+
+function cleanScheduledFlight(flight) {
+  if (!flight || typeof flight !== 'object' || !flight.flightId) return null;
+  const flex = flight?.positional?.flexTrack || {};
+  const equipment = flight?.additionalFlightInfo?.equipment || {};
+  return {
+    flightId:String(flight.flightId),
+    status:flight?.status?.status || flight?.resultHeader?.status || null,
+    statusDescription:flight?.status?.statusDescription || flight?.resultHeader?.statusDescription || null,
+    delayMinutes:finiteNumber(flight?.status?.delayStatus?.minutes ?? flight?.status?.delay?.departure?.minutes),
+    isScheduled:Boolean(flight.isScheduled),
+    isTracking:Boolean(flight.isTracking),
+    isLanded:Boolean(flight.isLanded),
+    canceled:Boolean(flight?.flightNote?.canceled),
+    scheduledDepartureUTC:flight?.schedule?.scheduledDepartureUTC || null,
+    estimatedDepartureUTC:flight?.schedule?.estimatedActualDepartureUTC || null,
+    scheduledArrivalUTC:flight?.schedule?.scheduledArrivalUTC || null,
+    estimatedArrivalUTC:flight?.schedule?.estimatedActualArrivalUTC || null,
+    origin:cleanFlightStatsAirport(flight.departureAirport),
+    destination:cleanFlightStatsAirport(flight.arrivalAirport),
+    operatedBy:flight?.operatedBy || null,
+    equipment:equipment?.name || equipment?.iata || flex?.equipment || null,
+    assignedTail:String(flex?.tailNumber || '').trim().toUpperCase() || null,
+    source:{
+      name:'FlightStats public flight tracker',
+      url:'https://www.flightstats.com/v2/flight-tracker',
+      note:'Airline status and aircraft assignment can change before departure.'
+    }
+  };
+}
+
+async function lookupScheduledFlight(normalized, requestedFlightId = null) {
+  if (!normalized?.marketingCode || !normalized?.number) return {scheduled:null,candidates:[]};
+  try {
+    const rootUrl = FLIGHTSTATS_BASE + '/flight-tracker/' +
+      encodeURIComponent(normalized.marketingCode) + '/' + encodeURIComponent(normalized.number);
+    const rootHtml = await getText(rootUrl);
+    const rootState = extractFlightStatsState(rootHtml);
+    if (!rootState) return {scheduled:null,candidates:[]};
+
+    const candidates = flattenFlightStatsCandidates(rootState.otherDays);
+    const chosen = chooseScheduledCandidate(candidates, Date.now(), requestedFlightId);
+    if (chosen?.ambiguous) return {scheduled:null,candidates:chosen.candidates,ambiguous:true};
+    if (!chosen) return {scheduled:null,candidates:[]};
+
+    const instanceUrl = rootUrl + '?year=' + encodeURIComponent(chosen.year) +
+      '&month=' + encodeURIComponent(chosen.month) +
+      '&date=' + encodeURIComponent(chosen.date) +
+      '&flightId=' + encodeURIComponent(chosen.flightId);
+    const instanceHtml = await getText(instanceUrl);
+    const state = extractFlightStatsState(instanceHtml);
+    const scheduled = cleanScheduledFlight(state?.flight);
+    return {scheduled,candidates,ambiguous:false};
+  } catch {
+    return {scheduled:null,candidates:[]};
+  }
+}
+
+async function lookupRegistration(registration) {
+  const reg = String(registration || '').trim().toUpperCase();
+  if (!/^[A-Z0-9-]{3,10}$/.test(reg)) return null;
+  try {
+    const data = await getJson(ADSB_BASE + '/v2/registration/' + encodeURIComponent(reg));
+    const aircraft = Array.isArray(data?.ac) ? data.ac : [];
+    const live = aircraft
+      .map(ac => sanitizeAircraft(ac, ac?.flight || reg))
+      .filter(Boolean)
+      .sort((a,b) => (a.positionAgeSeconds ?? 9999) - (b.positionAgeSeconds ?? 9999));
+    return live[0] || null;
+  } catch {
+    return null;
+  }
+}
+
+function airportCode(ap) {
+  return String(ap?.iata || ap?.fs || ap?.icao || '').trim().toUpperCase() || null;
+}
+
+function buildJourneyState(scheduled, assignedAircraft, currentRoute, positionFresh, directAircraft) {
+  if (directAircraft) {
+    return {
+      state:'your-flight-live',
+      headline:'Your flight is airborne.',
+      detail:'Showing the aircraft operating your flight now.'
+    };
+  }
+  if (!scheduled) return null;
+  if (!scheduled.assignedTail) {
+    return {
+      state:'assignment-unavailable',
+      headline:'Your flight has not left yet.',
+      detail:'The airline has not published a usable aircraft assignment yet.'
+    };
+  }
+  if (!assignedAircraft) {
+    return {
+      state:'assigned-aircraft-not-visible',
+      headline:'Your aircraft is assigned, but it is not currently visible airborne.',
+      detail:'The assigned aircraft is ' + scheduled.assignedTail + '. It may be at a gate, outside coverage, or between reports.'
+    };
+  }
+
+  const inboundToDeparture = airportCode(currentRoute?.destination) &&
+    airportCode(currentRoute.destination) === airportCode(scheduled.origin);
+  const routeText = currentRoute?.origin && currentRoute?.destination
+    ? [currentRoute.origin.city || airportCode(currentRoute.origin), currentRoute.destination.city || airportCode(currentRoute.destination)]
+        .filter(Boolean).join(' → ')
+    : assignedAircraft.callsign || 'another flight';
+  return {
+    state:inboundToDeparture ? 'inbound-aircraft' : 'assigned-aircraft-live',
+    headline:inboundToDeparture
+      ? 'Your plane is still inbound to ' + (scheduled.origin?.city || airportCode(scheduled.origin) || 'your departure airport') + '.'
+      : 'We found the aircraft assigned to your flight.',
+    detail:'Assigned aircraft ' + scheduled.assignedTail + ' is currently ' +
+      (assignedAircraft.onGround ? 'on the ground' : 'flying') + (routeText ? ' on ' + routeText + '.' : '.'),
+    positionFresh
+  };
+}
+
 async function lookupCallsign(callsign) {
   try {
     const data = await getJson(ADSB_BASE + '/v2/callsign/' + encodeURIComponent(callsign));
@@ -440,7 +656,7 @@ function buildNotFound(normalized) {
   };
 }
 
-async function buildSnapshot(value) {
+async function buildSnapshot(value, options = {}) {
   const normalized = normalizeFlightInput(value);
   if (!normalized.ok) {
     return {
@@ -452,7 +668,28 @@ async function buildSnapshot(value) {
     };
   }
 
-  const resolved = await resolveFlight(normalized);
+  const [resolved, scheduleLookup] = await Promise.all([
+    resolveFlight(normalized),
+    lookupScheduledFlight(normalized, options.flightId || null)
+  ]);
+
+  if (scheduleLookup?.ambiguous && !options.flightId && resolved.status !== 'unique') {
+    return {
+      status:'choose-flight',
+      flightNumber:normalized.display,
+      airline:normalized.airline,
+      message:'Which flight do you mean?',
+      candidates:scheduleLookup.candidates.map(c => ({
+        flightId:c.flightId,
+        sortTime:c.sortTime,
+        origin:c.origin,
+        destination:c.destination
+      }))
+    };
+  }
+
+  const scheduled = scheduleLookup?.scheduled || null;
+
   if (resolved.status === 'ambiguous') {
     return {
       status:'ambiguous',
@@ -460,31 +697,66 @@ async function buildSnapshot(value) {
       airline:normalized.airline,
       message:'More than one live aircraft matched this flight number, so the tracker will not guess.',
       checkedCallsigns:normalized.callsigns,
-      matchedCallsigns:resolved.candidates || []
+      matchedCallsigns:resolved.candidates || [],
+      scheduledFlight:scheduled
     };
   }
-  if (resolved.status !== 'unique' || !resolved.aircraft) return buildNotFound(normalized);
 
-  const route = resolved.route || await lookupRoute(resolved.aircraft);
-  const age = resolved.aircraft.positionAgeSeconds;
-  const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
-  return {
-    status:'live',
-    generatedAt:new Date().toISOString(),
-    flightNumber:normalized.display,
-    airline:normalized.airline,
-    aircraft:resolved.aircraft,
-    route,
-    positionFresh,
-    progress:flightProgress(resolved.aircraft, route, positionFresh),
-    source:{
-      name:'ADSB.lol',
-      url:'https://adsb.lol/',
-      api:'https://api.adsb.lol/',
-      license:'ODbL 1.0',
-      note:'Live ADS-B/MLAT position. Movement is never simulated between reports.'
-    }
-  };
+  if (resolved.status === 'unique' && resolved.aircraft) {
+    const route = resolved.route || await lookupRoute(resolved.aircraft);
+    const age = resolved.aircraft.positionAgeSeconds;
+    const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
+    return {
+      status:'live',
+      generatedAt:new Date().toISOString(),
+      flightNumber:normalized.display,
+      airline:normalized.airline,
+      aircraft:resolved.aircraft,
+      route,
+      positionFresh,
+      progress:flightProgress(resolved.aircraft, route, positionFresh),
+      scheduledFlight:scheduled,
+      journey:buildJourneyState(scheduled, null, null, positionFresh, resolved.aircraft),
+      source:{
+        name:'ADSB.lol',
+        url:'https://adsb.lol/',
+        api:'https://api.adsb.lol/',
+        license:'ODbL 1.0',
+        note:'Live ADS-B/MLAT position. Movement is never simulated between reports.'
+      }
+    };
+  }
+
+  if (scheduled) {
+    const assignedAircraft = scheduled.assignedTail ? await lookupRegistration(scheduled.assignedTail) : null;
+    const currentRoute = assignedAircraft ? await lookupRoute(assignedAircraft) : null;
+    const age = assignedAircraft?.positionAgeSeconds;
+    const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
+    const currentProgress = assignedAircraft
+      ? flightProgress(assignedAircraft, currentRoute, positionFresh)
+      : null;
+
+    return {
+      status:'scheduled',
+      generatedAt:new Date().toISOString(),
+      flightNumber:normalized.display,
+      airline:normalized.airline,
+      scheduledFlight:scheduled,
+      aircraft:assignedAircraft,
+      route:currentRoute,
+      positionFresh,
+      progress:currentProgress,
+      journey:buildJourneyState(scheduled, assignedAircraft, currentRoute, positionFresh, null),
+      source:{
+        name:'ADSB.lol + FlightStats public flight tracker',
+        url:'https://adsb.lol/',
+        license:'ADSB position ODbL 1.0',
+        note:'Aircraft assignments can change before departure. Live position is shown only when the assigned tail is currently reported.'
+      }
+    };
+  }
+
+  return buildNotFound(normalized);
 }
 
 module.exports = async function handler(req, res) {
@@ -498,8 +770,9 @@ module.exports = async function handler(req, res) {
   }
 
   const value = Array.isArray(req.query?.flight) ? req.query.flight[0] : req.query?.flight;
+  const flightId = Array.isArray(req.query?.flightId) ? req.query.flightId[0] : req.query?.flightId;
   try {
-    const body = await buildSnapshot(value);
+    const body = await buildSnapshot(value, {flightId});
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
   } catch (error) {
@@ -519,6 +792,13 @@ module.exports._test = {
   sanitizeAircraft,
   chooseUnique,
   buildSnapshot,
+  extractFlightStatsState,
+  flattenFlightStatsCandidates,
+  chooseScheduledCandidate,
+  cleanScheduledFlight,
+  lookupScheduledFlight,
+  lookupRegistration,
+  buildJourneyState,
   haversineNm,
   routeLooksPlausible,
   flightPhase,
