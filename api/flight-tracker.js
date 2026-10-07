@@ -21,7 +21,29 @@ const IATA_TO_CALLSIGNS = Object.freeze({
   XP: ['VXP'],
   AC: ['ACA'],
   WS: ['WJA'],
-  '3M': ['SIL']
+  '3M': ['SIL'],
+  AM: ['AMX'],
+  AV: ['AVA'],
+  CM: ['CMP'],
+  PD: ['POE'],
+  TS: ['TSC'],
+  BA: ['BAW'],
+  LH: ['DLH'],
+  AF: ['AFR'],
+  KL: ['KLM'],
+  EI: ['EIN'],
+  FI: ['ICE'],
+  VS: ['VIR'],
+  TK: ['THY'],
+  EK: ['UAE'],
+  QR: ['QTR'],
+  NH: ['ANA'],
+  JL: ['JAL'],
+  SQ: ['SIA'],
+  QF: ['QFA'],
+  NZ: ['ANZ'],
+  AI: ['AIC'],
+  KE: ['KAL']
 });
 
 const AIRLINE_NAMES = Object.freeze({
@@ -40,8 +62,84 @@ const AIRLINE_NAMES = Object.freeze({
   XP: 'Avelo Airlines',
   AC: 'Air Canada',
   WS: 'WestJet',
-  '3M': 'Silver Airways'
+  '3M': 'Silver Airways',
+  AM: 'Aeromexico',
+  AV: 'Avianca',
+  CM: 'Copa Airlines',
+  PD: 'Porter Airlines',
+  TS: 'Air Transat',
+  BA: 'British Airways',
+  LH: 'Lufthansa',
+  AF: 'Air France',
+  KL: 'KLM',
+  EI: 'Aer Lingus',
+  FI: 'Icelandair',
+  VS: 'Virgin Atlantic',
+  TK: 'Turkish Airlines',
+  EK: 'Emirates',
+  QR: 'Qatar Airways',
+  NH: 'ANA',
+  JL: 'Japan Airlines',
+  SQ: 'Singapore Airlines',
+  QF: 'Qantas',
+  NZ: 'Air New Zealand',
+  AI: 'Air India',
+  KE: 'Korean Air'
 });
+
+const AIRCRAFT_TYPE_NAMES = Object.freeze({
+  A319:'Airbus A319',
+  A320:'Airbus A320',
+  A20N:'Airbus A320neo',
+  A321:'Airbus A321',
+  A21N:'Airbus A321neo',
+  A332:'Airbus A330-200',
+  A333:'Airbus A330-300',
+  A338:'Airbus A330-800neo',
+  A339:'Airbus A330-900neo',
+  A359:'Airbus A350-900',
+  A35K:'Airbus A350-1000',
+  A388:'Airbus A380-800',
+  BCS1:'Airbus A220-100',
+  BCS3:'Airbus A220-300',
+  B736:'Boeing 737-600',
+  B737:'Boeing 737-700',
+  B738:'Boeing 737-800',
+  B739:'Boeing 737-900',
+  B37M:'Boeing 737 MAX 7',
+  B38M:'Boeing 737 MAX 8',
+  B39M:'Boeing 737 MAX 9',
+  B3XM:'Boeing 737 MAX 10',
+  B752:'Boeing 757-200',
+  B753:'Boeing 757-300',
+  B762:'Boeing 767-200',
+  B763:'Boeing 767-300',
+  B764:'Boeing 767-400',
+  B772:'Boeing 777-200',
+  B77L:'Boeing 777-200LR/F',
+  B773:'Boeing 777-300',
+  B77W:'Boeing 777-300ER',
+  B788:'Boeing 787-8',
+  B789:'Boeing 787-9',
+  B78X:'Boeing 787-10',
+  E170:'Embraer E170',
+  E75L:'Embraer E175',
+  E75S:'Embraer E175',
+  E190:'Embraer E190',
+  E195:'Embraer E195',
+  E290:'Embraer E190-E2',
+  E295:'Embraer E195-E2',
+  CRJ2:'Bombardier CRJ200',
+  CRJ7:'Bombardier CRJ700',
+  CRJ9:'Bombardier CRJ900',
+  DH8D:'De Havilland Dash 8-400',
+  AT76:'ATR 72-600'
+});
+
+function aircraftTypeName(code) {
+  const key = String(code || '').trim().toUpperCase();
+  return key ? (AIRCRAFT_TYPE_NAMES[key] || key) : null;
+}
 
 function cleanFlightInput(value) {
   return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -105,6 +203,7 @@ function sanitizeAircraft(ac, callsign) {
     hex: String(ac.hex || '').trim() || null,
     registration: String(ac.r || '').trim() || null,
     aircraftType: String(ac.t || '').trim() || null,
+    aircraftTypeName: aircraftTypeName(ac.t),
     lat: position.lat,
     lon: position.lon,
     altitudeFeet: altitudeRaw,
@@ -249,14 +348,27 @@ function bearingDegrees(a, b) {
  */
 function flightProgress(aircraft, route, positionFresh) {
   const phase = flightPhase(aircraft, positionFresh);
-  const result = { phase, remainingMiles:null, remainingBasis:'straight-line', landingEstimate:null };
+  const result = {
+    phase,
+    remainingMiles:null,
+    directDistanceMiles:null,
+    directProgressPercent:null,
+    remainingBasis:'straight-line',
+    landingEstimate:null
+  };
   if (!positionFresh || !route?.plausible || !route.destination ||
       !Number.isFinite(aircraft?.lat) || !Number.isFinite(aircraft?.lon) ||
       !Number.isFinite(route.destination.lat) || !Number.isFinite(route.destination.lon)) return result;
 
   const distanceNm = haversineNm(aircraft, route.destination);
+  const directNm = route.origin ? haversineNm(route.origin, route.destination) : null;
   if (!Number.isFinite(distanceNm) || distanceNm < 0 || distanceNm > 7000) return result;
   result.remainingMiles = Math.round(distanceNm * NM_TO_MILES / 5) * 5;
+  if (Number.isFinite(directNm) && directNm > 20) {
+    result.directDistanceMiles = Math.round(directNm * NM_TO_MILES / 5) * 5;
+    const fraction = Math.max(0, Math.min(1, 1 - distanceNm / directNm));
+    result.directProgressPercent = Math.round((fraction * 100) / 5) * 5;
+  }
   const speed = aircraft.speedKnots;
   if (aircraft.onGround === true || !Number.isFinite(speed) || speed < 150 || speed > 650 ||
       distanceNm < 20 || distanceNm > 5000) return result;
@@ -412,5 +524,7 @@ module.exports._test = {
   flightPhase,
   flightProgress,
   bearingDegrees,
+  aircraftTypeName,
+  AIRCRAFT_TYPE_NAMES,
   IATA_TO_CALLSIGNS
 };
