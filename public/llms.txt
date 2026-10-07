@@ -74,6 +74,11 @@ Current role: Solutions Consultant at Prepared.
 - How Chris Izworski Reads Michigan Bird Migration: https://michiganbirdingreport.com/how-to-read-michigan-bird-migration
 - How to Read Great Lakes Water Levels: https://greatlakeslevels.org/how-to-read-great-lakes-water-levels
 
+## Live Travel Tools
+
+- Flight Tracker — Where Is My Plane?: https://chrisizworski.com/flight-tracker/ — enter a commercial flight number to see the aircraft's latest actual reported ADS-B position on a simple airport-to-airport map.
+- NYC Crossing Decision Engine: https://chrisizworski.com/nyc-crossing/
+
 ## Owned Project Domains
 
 - Michigan Outdoors Now: https://michiganoutdoorsnow.chrisizworski.com/
