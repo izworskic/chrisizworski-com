@@ -1,6 +1,7 @@
 'use strict';
 
 const ADSB_BASE = 'https://api.adsb.lol';
+const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const POSITION_MAX_AGE_SECONDS = 90;
 const CACHE_SECONDS = 5;
 
@@ -148,27 +149,38 @@ async function lookupCallsign(callsign) {
   }
 }
 
+function haversineNm(a, b) {
+  const rad = degrees => degrees * Math.PI / 180;
+  const lat1 = rad(a.lat);
+  const lat2 = rad(b.lat);
+  const dLat = lat2 - lat1;
+  const dLon = rad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+  return 3440.065 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+function routeLooksPlausible(aircraft, origin, destination) {
+  const direct = haversineNm(origin, destination);
+  const viaAircraft = haversineNm(origin, aircraft) + haversineNm(aircraft, destination);
+  if (!Number.isFinite(direct) || !Number.isFinite(viaAircraft) || direct < 1) return false;
+  const allowanceNm = Math.max(250, direct * 0.30);
+  return viaAircraft <= direct + allowanceNm;
+}
+
 async function lookupRoute(aircraft) {
   try {
-    const data = await getJson(ADSB_BASE + '/api/0/routeset', {
-      method:'POST',
-      headers:{'content-type':'application/json'},
-      body:JSON.stringify({
-        planes:[{
-          callsign:aircraft.callsign,
-          lat:aircraft.lat,
-          lng:aircraft.lon
-        }]
-      })
-    }, 6500);
+    const callsign = String(aircraft.callsign || '').trim().toUpperCase();
+    if (!/^[A-Z0-9]{3,8}$/.test(callsign)) return null;
+    const prefix = callsign.slice(0, 2);
+    const route = await getJson(
+      VRS_ROUTES_BASE + '/' + encodeURIComponent(prefix) + '/' + encodeURIComponent(callsign) + '.json',
+      {},
+      4500
+    );
 
-    const route = Array.isArray(data) ? data[0] : null;
     const airports = Array.isArray(route?._airports) ? route._airports.filter(Boolean) : [];
     if (!route || route.airport_codes === 'unknown' || airports.length < 2) return null;
-    if (route.plausible === false) return null;
 
-    const origin = airports[0];
-    const destination = airports[airports.length - 1];
     const cleanAirport = ap => ({
       icao:String(ap?.icao || '').trim() || null,
       iata:String(ap?.iata || '').trim() || null,
@@ -178,15 +190,23 @@ async function lookupRoute(aircraft) {
       lat:finiteNumber(ap?.lat),
       lon:finiteNumber(ap?.lon)
     });
-    const from = cleanAirport(origin);
-    const to = cleanAirport(destination);
+
+    const from = cleanAirport(airports[0]);
+    const to = cleanAirport(airports[airports.length - 1]);
     if (from.lat === null || from.lon === null || to.lat === null || to.lon === null) return null;
+    if (!routeLooksPlausible(aircraft, from, to)) return null;
 
     return {
       origin:from,
       destination:to,
       airportCodes:String(route._airport_codes_iata || route.airport_codes || '').trim() || null,
-      plausible:route.plausible !== false
+      plausible:true,
+      source:{
+        name:'VRS standing data via ADSB.lol',
+        url:'https://github.com/adsblol/vrs-standing-data',
+        license:'CC0 1.0',
+        updateCadence:'hourly'
+      }
     };
   } catch {
     return null;
@@ -313,5 +333,7 @@ module.exports._test = {
   sanitizeAircraft,
   chooseUnique,
   buildSnapshot,
+  haversineNm,
+  routeLooksPlausible,
   IATA_TO_CALLSIGNS
 };
