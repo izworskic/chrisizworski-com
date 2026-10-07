@@ -117,8 +117,6 @@
       confidence.label === 'Limited by flood premium' ? 'needs' : 'close'
     );
 
-    $('bottomLineLead').textContent = 'Plan on ' + monthlyRange(trueCost.low, trueCost.high) + ' for this house.';
-
     const included = [];
     if (Number(breakdown.propertyTax) > 0) included.push('property taxes');
     if (Number(breakdown.homeInsurance) > 0) included.push('homeowners insurance');
@@ -127,18 +125,17 @@
     if (Number(breakdown.floodInsurance) > 0) included.push('flood insurance');
 
     $('bottomLineExplain').textContent =
-      'Principal + interest is about ' + moneyMo(gap.mortgageOnlyMonthly) +
-      '. Adding ' + (included.length ? included.join(', ') : 'the modeled ownership costs') +
-      ' adds about ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
-      '. That difference is the Reality Gap.';
+      'The added ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
+      ' is the Reality Gap: ' + (included.length ? included.join(', ') : 'the modeled ownership costs') +
+      ' that sit on top of principal + interest.';
 
     $('bottomLineExcluded').textContent = unpricedCosts.length
       ? 'Still outside this estimate: ' + unpricedCosts.map((item) => item.label).join(', ') + '.'
       : 'No additional unpriced cost categories are currently flagged.';
 
     $('trueMonthlyNote').textContent = unpricedCosts.length
-      ? 'Before unresolved costs listed below'
-      : 'Mortgage + modeled property costs';
+      ? 'Estimated true monthly cost · before unresolved costs below'
+      : 'Estimated true monthly cost';
 
     if (drivers.length) {
       const names = drivers.slice(0, 2).map((driver) => driver.label.toLowerCase());
