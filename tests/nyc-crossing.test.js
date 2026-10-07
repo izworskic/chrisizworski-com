@@ -7,6 +7,9 @@ const {
   normalizeNycdotTraffic,
   mergeTraffic,
   fetchTraffic,
+  normalizeMapboxResponse,
+  fetchMapboxTraffic,
+  MAPBOX_PROBES,
   NYCDOT_LINKS
 }=require('../lib/nyc-crossing/traffic');
 
@@ -145,10 +148,52 @@ test('mixed official traffic surfaces multiple crossings but never ranks unlike 
   assert.equal(s.recommendationState,'LIVE_CROSSING_CONDITIONS');
 });
 
-test('pending TRANSCOM crossings are explicit instead of silently treated as researched dead ends',()=>{
+test('Mapbox fallback crossings are explicit when live routing is unavailable',()=>{
   const s=buildSnapshot({});
-  assert.match(s.routes.find(r=>r.id==='williamsburg').trafficPending,/TRANSCOM/);
-  assert.match(s.routes.find(r=>r.id==='queensboro').trafficPending,/TRANSCOM/);
+  assert.match(s.routes.find(r=>r.id==='williamsburg').trafficPending,/Mapbox/);
+  assert.match(s.routes.find(r=>r.id==='queensboro').trafficPending,/Mapbox/);
+});
+
+test('Mapbox bridge probes are pinned through the intended crossings',()=>{
+  assert.equal(MAPBOX_PROBES.queensboro.coordinates.length,3);
+  assert.equal(MAPBOX_PROBES.williamsburg.coordinates.length,3);
+  assert.equal(MAPBOX_PROBES.queensboro.scope,'CROSSING_APPROACH');
+  assert.equal(MAPBOX_PROBES.williamsburg.scope,'CROSSING_APPROACH');
+});
+
+test('Mapbox traffic response exposes current, typical and delay minutes',()=>{
+  const route=normalizeMapboxResponse('queensboro',{
+    code:'Ok',
+    waypoints:[{distance:4},{distance:2},{distance:5}],
+    routes:[{
+      duration:480,
+      duration_typical:300,
+      distance:2600,
+      legs:[{incidents:[{description:'Lane restriction'}]},{incidents:[]}]
+    }]
+  },new Date('2026-10-06T23:00:00Z'));
+  assert.equal(route.crossingId,'queensboro');
+  assert.equal(route.etaMinutes,8);
+  assert.equal(route.baselineMinutes,5);
+  assert.equal(route.delayMinutes,3);
+  assert.equal(route.baselineKind,'MAPBOX_TYPICAL_TRAFFIC');
+  assert.equal(route.sourceName,'Mapbox live traffic routing');
+  assert.equal(route.mapboxDistanceMeters,2600);
+  assert.equal(route.incident,'Lane restriction');
+});
+
+test('Mapbox probe rejects routes that detour far beyond the fixed crossing corridor',()=>{
+  assert.throws(()=>normalizeMapboxResponse('williamsburg',{
+    code:'Ok',
+    routes:[{duration:900,duration_typical:600,distance:12000,legs:[]}],
+    waypoints:[]
+  }),/sanity checks/);
+});
+
+test('Mapbox traffic is skipped cleanly when no token is configured',async()=>{
+  const result=await fetchMapboxTraffic({env:{},fetchImpl:async()=>{throw Error('should not fetch')}});
+  assert.equal(result.state,'NOT_CONFIGURED');
+  assert.equal(result.routes.length,0);
 });
 
 test('authority fetch failure keeps times unavailable',async()=>{
