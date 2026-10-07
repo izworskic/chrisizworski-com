@@ -224,6 +224,24 @@ test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async(
   assert.ok(['LIVE','PARTIAL'].includes(result.state));
 });
 
+test('Mapbox failure diagnostics expose status without leaking the token',async()=>{
+  trafficInternal.clearMapboxCache();
+  const result=await fetchMapboxTraffic({
+    env:{MAPBOX_TOKEN:'secret-test-token'},
+    fetchImpl:async(url)=>({
+      ok:false,
+      status:403,
+      json:async()=>({message:'Forbidden for this token'})
+    }),
+    now:new Date('2026-10-06T23:00:00Z')
+  });
+  assert.equal(result.state,'UNAVAILABLE');
+  assert.match(result.reason,/queensboro: HTTP 403/);
+  assert.match(result.reason,/williamsburg: HTTP 403/);
+  assert.match(result.reason,/Forbidden for this token/);
+  assert.doesNotMatch(result.reason,/secret-test-token/);
+});
+
 test('Mapbox traffic is skipped cleanly when no token is configured',async()=>{
   const result=await fetchMapboxTraffic({env:{},fetchImpl:async()=>{throw Error('should not fetch')}});
   assert.equal(result.state,'NOT_CONFIGURED');
