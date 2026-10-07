@@ -78,7 +78,6 @@
   }
 
   function render(decision) {
-    const trueCost = decision.trueMonthlyCost || {};
     const gap = decision.realityGap || {};
     const loan = decision.loan || {};
     const cash = decision.cashToClose || {};
@@ -127,7 +126,6 @@
     const displayedRealityGap = Math.max(0, displayedPlanningTotal - displayedMortgage);
 
     $('planningTotalResult').textContent = moneyMo(displayedPlanningTotal);
-    $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
     $('matchedAddress').textContent = address && address.matched
@@ -139,7 +137,7 @@
     const confidenceMap = {
       'Good planning estimate': 'GOOD DATA COVERAGE',
       'Moderate planning estimate': 'SOME COSTS ESTIMATED',
-      'Broad planning estimate': 'WIDE RANGE · VERIFY COSTS',
+      'Broad planning estimate': 'ESTIMATES · VERIFY COSTS',
       'Limited by flood premium': 'FLOOD QUOTE NEEDED',
     };
     badge.textContent = confidenceMap[confidence.label] || 'PLANNING ESTIMATE';
@@ -159,31 +157,30 @@
     if (drivers.length) {
       const names = drivers.slice(0, 2).map((driver) => driver.label.toLowerCase());
       $('rangeExplainLead').textContent =
-        'The low and high ends are different because ' + names.join(' and ') +
-        ' are estimates rather than exact bills or quotes.';
+        'The total above uses planning estimates for ' + names.join(' and ') +
+        '. Verify those numbers against the actual tax bill and insurance quote before buying.';
     } else {
       $('rangeExplainLead').textContent =
-        'The modeled tax and insurance assumptions are producing a relatively narrow range.';
+        'The total above uses planning estimates. Verify the material costs before buying.';
     }
 
     $('realityGapCopy').textContent =
-      'The low end uses the lower tax and insurance assumptions; the high end uses the upper assumptions. ' +
-      'This is an uncertainty range for carrying costs, not a prediction that your payment will bounce between the two numbers.';
+      'The monthly total is the exact sum of the numbers shown in the ledger. Actual taxes and insurance can still differ from these planning estimates.';
 
     const driverList = $('uncertaintyDriversList');
     driverList.textContent = '';
     drivers.forEach((driver) => {
       driverList.appendChild(provRow(
         driver.label,
-        'WHY THE RANGE MOVES',
-        'This assumption accounts for about ' + moneyMo(driver.monthlySpread) + ' of the low-to-high spread.'
+        'VERIFY ESTIMATE',
+        'Modeled uncertainty around this estimate is about ' + moneyMo(driver.monthlySpread) + '.'
       ));
     });
     if (!driverList.children.length) {
       driverList.appendChild(provRow(
-        'Tax + insurance range',
-        'RELATIVELY NARROW',
-        'These modeled assumptions are not creating a large spread in this result.'
+        'Tax + insurance estimates',
+        'VERIFY ESTIMATE',
+        'Use the actual tax bill and an insurance quote before making a purchase decision.'
       ));
     }
 

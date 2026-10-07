@@ -237,7 +237,7 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /class="cost-ledger"/);
   assert.match(html, /Automatically assembled/);
   assert.match(html, /Monthly cost breakdown/);
-  assert.match(html, /The rows below are the planning estimate\. Tax and insurance uncertainty is shown separately after the total/);
+  assert.match(html, /Automatically assembled planning estimates\. Verify taxes and insurance before buying/);
   assert.match(html, /Mortgage principal \+ interest/);
   assert.match(html, /Included because down payment is below 20%/);
   assert.match(html, /Property tax estimate/);
@@ -246,13 +246,12 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /Automatic planning estimate/);
   assert.match(html, /Maintenance reserve/);
   assert.match(html, /Modeled reserve, not a bill/);
-  assert.match(html, /PLANNING TOTAL/);
-  assert.match(html, /Exact sum of the displayed monthly rows/);
-  assert.match(html, /LIKELY MONTHLY RANGE/);
-  assert.match(html, /Tax \+ insurance uncertainty/);
+  assert.match(html, /TOTAL MONTHLY COST/);
+  assert.match(html, /Exact sum of the displayed planning estimates/);
   assert.match(html, /class="ledger-rule"/);
   assert.match(html, /id="planningTotalResult"/);
-  assert.match(html, /id="trueMonthlyResult"/);
+  assert.doesNotMatch(html, /LIKELY MONTHLY RANGE/);
+  assert.doesNotMatch(html, /id="trueMonthlyResult"/);
   assert.doesNotMatch(html, /Added ownership costs/);
   assert.doesNotMatch(html, /id="breakdownGrid"/);
   assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="pmiLedgerResult"'));
@@ -260,12 +259,11 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.ok(html.indexOf('id="propertyTaxLedgerResult"') < html.indexOf('id="insuranceLedgerResult"'));
   assert.ok(html.indexOf('id="insuranceLedgerResult"') < html.indexOf('id="maintenanceLedgerResult"'));
   assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="planningTotalResult"'));
-  assert.ok(html.indexOf('id="planningTotalResult"') < html.indexOf('id="trueMonthlyResult"'));
   assert.match(html, /What reaching 20% down would change/);
   assert.ok(html.indexOf('id="downPaymentBreakpointPanel"') < html.indexOf('id="range-explainer"'));
 });
 
-test('ledger renders midpoint rows, a reconciled planning total, then uncertainty range', () => {
+test('ledger renders midpoint rows and one reconciled monthly total', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
   assert.match(js, /mortgageOnlyResult'\)\.textContent = moneyMo\(breakdown\.mortgagePI\)/);
   assert.match(js, /propertyTaxLedgerResult'\)\.textContent = moneyMo\(breakdown\.propertyTax\)/);
@@ -275,11 +273,12 @@ test('ledger renders midpoint rows, a reconciled planning total, then uncertaint
   assert.match(js, /displayedPlanningTotal = \[/);
   assert.match(js, /Math\.round\(Number\(breakdown\[key\]\) \|\| 0\)/);
   assert.match(js, /planningTotalResult'\)\.textContent = moneyMo\(displayedPlanningTotal\)/);
-  assert.match(js, /trueMonthlyResult'\)\.textContent = monthlyRange\(trueCost\.low, trueCost\.high\)/);
+  assert.doesNotMatch(js, /trueMonthlyResult/);
+  assert.doesNotMatch(js, /monthlyRange\(trueCost\.low, trueCost\.high\)/);
   assert.match(js, /rate\.toFixed\(2\) \+ '% · ' \+ Number\(loan\.termYears \|\| 30\) \+ ' years'/);
 });
 
-test('mobile ledger keeps long monthly ranges aligned and inside the result', () => {
+test('mobile ledger keeps monthly amounts aligned and inside the result', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
   assert.match(html, /name="viewport" content="width=device-width,initial-scale=1"/);
@@ -323,6 +322,9 @@ test('result copy explicitly distinguishes included costs from unresolved costs'
   assert.match(js, /Reality Gap: \+'/);
   assert.match(js, /moneyMo\(displayedRealityGap\)/);
   assert.match(js, /Not included:/);
-  assert.match(js, /low end uses the lower tax and insurance assumptions/i);
-  assert.match(js, /WIDE RANGE · VERIFY COSTS/);
+  assert.match(js, /The monthly total is the exact sum of the numbers shown in the ledger/);
+  assert.match(js, /ESTIMATES · VERIFY COSTS/);
+  assert.match(js, /VERIFY ESTIMATE/);
+  assert.doesNotMatch(js, /low end uses the lower tax and insurance assumptions/i);
+  assert.doesNotMatch(js, /WIDE RANGE · VERIFY COSTS/);
 });

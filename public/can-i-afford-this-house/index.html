@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006i">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006j">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006i"></script>
+  <script defer src="/assets/house-fit.js?v=20261006j"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -69,7 +69,7 @@
         <div class="cost-ledger" aria-label="Monthly cost breakdown">
           <p class="eyebrow">Automatically assembled</p>
           <h3>Monthly cost breakdown</h3>
-          <p class="ledger-range-note">The rows below are the planning estimate. Tax and insurance uncertainty is shown separately after the total.</p>
+          <p class="ledger-range-note">Automatically assembled planning estimates. Verify taxes and insurance before buying.</p>
 
           <div class="ledger-row">
             <span class="ledger-sign"></span>
@@ -130,19 +130,10 @@
           <div class="ledger-row ledger-total">
             <span class="ledger-sign"></span>
             <span class="ledger-label">
-              <strong>PLANNING TOTAL</strong>
-              <small>Exact sum of the displayed monthly rows</small>
+              <strong>TOTAL MONTHLY COST</strong>
+              <small>Exact sum of the displayed planning estimates</small>
             </span>
             <strong class="ledger-value" id="planningTotalResult">—</strong>
-          </div>
-
-          <div class="ledger-row ledger-range-row">
-            <span class="ledger-sign"></span>
-            <span class="ledger-label">
-              <strong>LIKELY MONTHLY RANGE</strong>
-              <small>Tax + insurance uncertainty</small>
-            </span>
-            <strong class="ledger-value" id="trueMonthlyResult">—</strong>
           </div>
 
           <div class="ledger-notes">
@@ -168,7 +159,7 @@
 
       <section class="panel" id="range-explainer" aria-labelledby="range-explainer-title">
         <div class="section-head">
-          <div><p class="eyebrow">Why this is a range</p><h2 id="range-explainer-title">What still needs verification</h2></div>
+          <div><p class="eyebrow">Before you trust the total</p><h2 id="range-explainer-title">What still needs verification</h2></div>
           <p id="rangeExplainLead">Taxes and insurance are planning estimates until you have the actual tax bill and insurance quote.</p>
         </div>
         <p id="realityGapCopy" class="range-copy"></p>
