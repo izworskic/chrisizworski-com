@@ -105,7 +105,7 @@ test('page is flight number to plane map without dashboard creep', () => {
   assert.match(html, /<h1 id="page-title">Where's My Plane\?<\/h1>/);
   assert.match(html, /id="flight-number"/);
   assert.match(html, /id="flight-map"/);
-  assert.match(html, /Actual reports only/);
+  assert.match(html, /Built for the delayed-flight question/);
   assert.match(html, /ADSB\.lol/);
   assert.doesNotMatch(html, /delay prediction|weather score|airport dashboard|recommendation score/i);
 });
@@ -113,7 +113,7 @@ test('page is flight number to plane map without dashboard creep', () => {
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007b/);
+  assert.match(html, /flight-tracker\.js\?v=20261007c/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -121,7 +121,7 @@ test('browser loader uses the supported MapLibre ESM bundle instead of the missi
 test('client plots only API positions and refreshes without simulated motion', () => {
   assert.match(client, /planeMarker\.setLngLat\(\[ac\.lon,ac\.lat\]\)/);
   assert.match(client, /setInterval\(\(\) => \{/);
-  assert.match(client, /10000/);
+  assert.match(client, /15000/);
   assert.doesNotMatch(client, /requestAnimationFrame/);
   assert.doesNotMatch(client, /interpolate.*aircraft|estimated position/i);
 });
@@ -273,7 +273,7 @@ test('silent refresh keeps the last confirmed flight through transient source mi
   assert.match(client, /function holdLastLiveOnRefreshMiss\(data\)/);
   assert.match(client, /Showing the last confirmed aircraft report while retrying/);
   assert.match(client, /if \(silent && refreshInFlight\) return;/);
-  assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);\s*\} else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\)/s);
+  assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);\s*\} else if \(data\.status === 'scheduled'\)/s);
   assert.match(client, /freshness\.textContent = formatAge\(apparentAge\) \+ ' · refresh retrying'/);
   assert.match(client, /if \(apparentAge > 90\) \{\s*phaseLabel\.textContent = 'Last reported';\s*landingLabel\.textContent = 'Refresh pending';/s);
 });
