@@ -157,9 +157,9 @@ test('Mapbox fallback crossings are explicit when live routing is unavailable',(
   assert.match(s.routes.find(r=>r.id==='queensboro').trafficPending,/Mapbox/);
 });
 
-test('Mapbox fallback has a strict latency budget',()=>{
+test('Mapbox fallback gives normal provider latency an eight-second budget',()=>{
   assert.ok(MAPBOX_CACHE_TIMEOUT_MS <= 1000);
-  assert.ok(MAPBOX_ROUTE_TIMEOUT_MS <= 3000);
+  assert.equal(MAPBOX_ROUTE_TIMEOUT_MS,8000);
 });
 
 test('Mapbox bridge probes are pinned through the intended crossings',()=>{
