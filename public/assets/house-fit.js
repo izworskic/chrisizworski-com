@@ -207,17 +207,15 @@
     });
 
     const isUserRate = prov.mortgageRate === 'USER PROVIDED';
-    if (!rateTouched) {
-      $('ratePct').value = rate.toFixed(3);
-      const sourceText = rateSource.frequency === 'DAILY'
-        ? 'Latest daily average'
-        : rateSource.frequency === 'WEEKLY'
-          ? 'Daily average unavailable · weekly fallback'
-          : 'Live rate unavailable · fallback assumption';
-      $('rateDefaultNote').textContent = sourceText + ': ' + rate.toFixed(3) + '%' +
-        (rateSource.observationDate ? ' · ' + rateSource.observationDate : '') +
-        (rateSource.source ? ' · ' + rateSource.source : '');
-    }
+    if (!rateTouched) $('ratePct').value = rate.toFixed(3);
+    const sourceText = rateSource.frequency === 'DAILY'
+      ? 'Current daily 30-year conforming average'
+      : rateSource.frequency === 'WEEKLY'
+        ? 'Daily average unavailable · current weekly fallback'
+        : 'Live rate unavailable · fallback assumption';
+    $('rateMarketSummary').textContent = sourceText + ': ' + rate.toFixed(3) + '%' +
+      (rateSource.observationDate ? ' · ' + rateSource.observationDate : '') +
+      (rateSource.source ? ' · ' + rateSource.source : '');
 
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
@@ -309,7 +307,7 @@
 
   $('ratePct').addEventListener('input', () => {
     rateTouched = true;
-    $('rateDefaultNote').textContent = 'Using your rate. The daily national average remains the default when this field is unchanged.';
+    $('rateDefaultNote').textContent = 'Using your rate for this build. Taxes, insurance, PMI and the other modeled monthly costs stay in the calculation.';
   });
 
   async function loadDailyRate() {
@@ -325,13 +323,12 @@
         : source.frequency === 'WEEKLY'
           ? 'Daily average unavailable · weekly fallback'
           : 'Live rate unavailable · fallback assumption';
-      if (!rateTouched) {
-        $('rateDefaultNote').textContent = label + ': ' + rate.toFixed(3) + '%' +
-          (source.observationDate ? ' · ' + source.observationDate : '') +
-          (source.source ? ' · ' + source.source : '');
-      }
+      $('rateMarketSummary').textContent = label.replace('Latest daily average', 'Current daily 30-year conforming average') +
+        ': ' + rate.toFixed(3) + '%' +
+        (source.observationDate ? ' · ' + source.observationDate : '') +
+        (source.source ? ' · ' + source.source : '');
     } catch {
-      if (!rateTouched) $('rateDefaultNote').textContent = 'Daily rate will be loaded automatically when you calculate.';
+      $('rateMarketSummary').textContent = 'Daily rate will be loaded automatically when you calculate.';
     }
   }
 
