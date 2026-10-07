@@ -3,6 +3,10 @@
 const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
 const CACHE_SECONDS = 30;
 const MAX_HTML_BYTES = 1_500_000;
+const RECENT_ARRIVAL_LOOKBACK_MS = 6 * 60 * 60 * 1000;
+const RECENT_ARRIVAL_LOOKAHEAD_MS = 2 * 60 * 60 * 1000;
+const RECENT_ARRIVAL_MAX_DETAILS = 24;
+const RECENT_ARRIVAL_BATCH_SIZE = 6;
 
 function clean(value) {
   return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -113,6 +117,162 @@ function optionsForDate(nextData, date) {
     }
   }
   return options.sort((a,b) => String(a.sortTime || '').localeCompare(String(b.sortTime || '')));
+}
+
+
+
+function normalizeAirportCode(value) {
+  const compact = clean(value);
+  return /^[A-Z0-9]{3,4}$/.test(compact) ? compact : null;
+}
+
+function normalizeCarrierCode(value) {
+  const compact = clean(value);
+  return /^[A-Z0-9]{2}$/.test(compact) ? compact : null;
+}
+
+function recentArrivalCandidates(nextData, { carrier, airport, nowMs = Date.now() }) {
+  const flights = nextData?.props?.initialState?.flightTracker?.route?.flights;
+  if (!Array.isArray(flights)) return [];
+
+  const seen = new Set();
+  const candidates = [];
+  for (const item of flights) {
+    const itemCarrier = clean(item?.carrier?.fs);
+    const number = clean(item?.carrier?.flightNumber);
+    if (itemCarrier !== carrier || !number) continue;
+    if (item?.operatedBy) continue;
+
+    const d = optionDate(item);
+    if (!d || seen.has(d.flightId)) continue;
+
+    const sortMs = Date.parse(String(item?.sortTime || ''));
+    if (!Number.isFinite(sortMs)) continue;
+    const delta = sortMs - nowMs;
+    if (delta < -RECENT_ARRIVAL_LOOKBACK_MS || delta > RECENT_ARRIVAL_LOOKAHEAD_MS) continue;
+
+    seen.add(d.flightId);
+    candidates.push({
+      flightId:d.flightId,
+      flightNumber:itemCarrier + number,
+      sourcePath:String(item.url || ''),
+      sortTime:String(item.sortTime || '').trim() || null,
+      sortMs,
+      origin:{
+        iata:String(item?.airport?.fs || '').trim() || null,
+        code:String(item?.airport?.fs || '').trim() || null,
+        city:String(item?.airport?.city || '').trim() || null
+      },
+      destination:{iata:airport,code:airport}
+    });
+  }
+
+  return candidates
+    .sort((a,b) => Math.abs(a.sortMs - nowMs) - Math.abs(b.sortMs - nowMs))
+    .slice(0, RECENT_ARRIVAL_MAX_DETAILS);
+}
+
+function recentArrivalMatchScore(occurrence, candidate, nowMs = Date.now()) {
+  const stateScore = occurrence?.flightStatus?.landed === true
+    ? 2
+    : occurrence?.flightStatus?.airborne === true
+      ? 3
+      : 1;
+  const distanceHours = Math.min(12, Math.abs((candidate?.sortMs || nowMs) - nowMs) / 3600000);
+  return stateScore * 100 - distanceHours;
+}
+
+function recentArrivalSummary(occurrence, boardUrl) {
+  if (!occurrence) return null;
+  return {
+    ...previousOccurrenceSummary(occurrence),
+    evidence:{
+      kind:'recent-arrival-same-tail-at-origin',
+      note:'Confirmed from a recent arrival at the passenger departure airport with the same aircraft tail.'
+    },
+    source:{
+      ...(occurrence.source || {}),
+      boardUrl
+    }
+  };
+}
+
+async function lookupRecentArrivalByTail({ tail, airport, carrier, nowMs = Date.now() }) {
+  const normalizedTail = clean(tail);
+  const normalizedAirport = normalizeAirportCode(airport);
+  const normalizedCarrier = normalizeCarrierCode(carrier);
+  if (!/^[A-Z0-9-]{3,10}$/.test(normalizedTail) || !normalizedAirport || !normalizedCarrier) {
+    return { status:'invalid', code:'invalid-inbound-recovery', message:'Invalid aircraft, airport, or airline code.' };
+  }
+
+  const boardUrl = `${FLIGHTSTATS_BASE}/flight-tracker/arrivals/${encodeURIComponent(normalizedAirport)}/${encodeURIComponent(normalizedCarrier)}`;
+  const boardHtml = await fetchText(boardUrl);
+  const boardData = parseNextData(boardHtml);
+  const candidates = recentArrivalCandidates(boardData, {
+    carrier:normalizedCarrier,
+    airport:normalizedAirport,
+    nowMs
+  });
+
+  const matches = [];
+  for (let i = 0; i < candidates.length; i += RECENT_ARRIVAL_BATCH_SIZE) {
+    const batch = candidates.slice(i, i + RECENT_ARRIVAL_BATCH_SIZE);
+    const details = await Promise.all(batch.map(async candidate => {
+      try {
+        const detailUrl = FLIGHTSTATS_BASE + candidate.sourcePath;
+        const detailHtml = await fetchText(detailUrl);
+        const detailData = parseNextData(detailHtml);
+        const flightData = detailData?.props?.initialState?.flightTracker?.flight;
+        if (!flightData?.flightId) return null;
+        const marketingFlight = {
+          display:candidate.flightNumber,
+          carrier:candidate.flightNumber.slice(0,2),
+          number:candidate.flightNumber.slice(2)
+        };
+        const occurrence = sanitizeFlight(flightData, marketingFlight, detailUrl);
+        if (!sameTail(occurrence.tailNumber, normalizedTail)) return null;
+        if (clean(occurrence?.destination?.iata || occurrence?.destination?.code) !== normalizedAirport) return null;
+        return {occurrence,candidate};
+      } catch {
+        return null;
+      }
+    }));
+
+    for (const detail of details) if (detail) matches.push(detail);
+
+    const strong = matches
+      .filter(({occurrence}) => occurrence?.flightStatus?.landed === true ||
+        (occurrence?.flightStatus?.airborne === true && occurrence?.flightStatus?.landed !== true))
+      .sort((a,b) => recentArrivalMatchScore(b.occurrence,b.candidate,nowMs) - recentArrivalMatchScore(a.occurrence,a.candidate,nowMs));
+    if (strong.length) {
+      return {
+        status:'found-inbound-occurrence',
+        tailNumber:normalizedTail,
+        airport:normalizedAirport,
+        occurrence:recentArrivalSummary(strong[0].occurrence, boardUrl),
+        source:{name:'FlightStats public arrivals tracker',url:boardUrl}
+      };
+    }
+  }
+
+  if (matches.length) {
+    matches.sort((a,b) => recentArrivalMatchScore(b.occurrence,b.candidate,nowMs) - recentArrivalMatchScore(a.occurrence,a.candidate,nowMs));
+    return {
+      status:'found-inbound-occurrence',
+      tailNumber:normalizedTail,
+      airport:normalizedAirport,
+      occurrence:recentArrivalSummary(matches[0].occurrence, boardUrl),
+      source:{name:'FlightStats public arrivals tracker',url:boardUrl}
+    };
+  }
+
+  return {
+    status:'not-found',
+    tailNumber:normalizedTail,
+    airport:normalizedAirport,
+    message:'No recent same-tail arrival was confirmed at the departure airport.',
+    source:{name:'FlightStats public arrivals tracker',url:boardUrl}
+  };
 }
 
 
@@ -392,9 +552,14 @@ module.exports = async function handler(req, res) {
   const flight = Array.isArray(req.query?.flight) ? req.query.flight[0] : req.query?.flight;
   const date = Array.isArray(req.query?.date) ? req.query.date[0] : req.query?.date;
   const flightId = Array.isArray(req.query?.flightId) ? req.query.flightId[0] : req.query?.flightId;
+  const tail = Array.isArray(req.query?.tail) ? req.query.tail[0] : req.query?.tail;
+  const airport = Array.isArray(req.query?.airport) ? req.query.airport[0] : req.query?.airport;
+  const carrier = Array.isArray(req.query?.carrier) ? req.query.carrier[0] : req.query?.carrier;
 
   try {
-    const body = await lookupAssignment({flight,date,flightId});
+    const body = tail || airport || carrier
+      ? await lookupRecentArrivalByTail({tail,airport,carrier})
+      : await lookupAssignment({flight,date,flightId});
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
   } catch (error) {
@@ -416,6 +581,12 @@ module.exports._test = {
   optionsForDate,
   sanitizeOption,
   sanitizeFlight,
+  normalizeAirportCode,
+  normalizeCarrierCode,
+  recentArrivalCandidates,
+  recentArrivalMatchScore,
+  recentArrivalSummary,
+  lookupRecentArrivalByTail,
   sameTail,
   isMatchingAirborneOccurrence,
   isMatchingPreviousOccurrence,
