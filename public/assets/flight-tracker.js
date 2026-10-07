@@ -15,6 +15,12 @@
   const distanceLabel = document.getElementById('flight-distance');
   const landingLabel = document.getElementById('landing-window');
   const mapShell = document.querySelector('.map-shell');
+  const routeCodes = document.getElementById('route-codes');
+  const progressBar = document.getElementById('direct-progress');
+  const progressFill = document.getElementById('direct-progress-fill');
+  const progressOrigin = document.getElementById('direct-progress-origin');
+  const progressDestination = document.getElementById('direct-progress-destination');
+  const progressPercent = document.getElementById('direct-progress-percent');
 
   let maplibregl;
   try {
@@ -55,6 +61,14 @@
     return ap?.iata || ap?.icao || '';
   }
 
+  function airportPlace(ap) {
+    return ap?.city || ap?.name || airportCode(ap) || 'Airport';
+  }
+
+  function aircraftIdentity(ac) {
+    return [$(ac?.aircraftTypeName || ac?.aircraftType), $(ac?.registration)].filter(Boolean).join(' · ');
+  }
+
   function formatAltitude(value) {
     return Number.isFinite(value) ? Math.round(value).toLocaleString() + ' ft' : null;
   }
@@ -89,10 +103,24 @@
     landingLabel.textContent = eta
       ? durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes)
       : 'Unavailable';
-    glanceNote.hidden = !eta;
-    glanceNote.textContent = eta?.note
-      ? eta.note + ' Miles remaining are straight-line.'
-      : '';
+
+    const route = data.route;
+    const percent = progress?.directProgressPercent;
+    const showProgress = Number.isFinite(percent) && route?.origin && route?.destination;
+    progressBar.hidden = !showProgress;
+    if (showProgress) {
+      progressOrigin.textContent = airportCode(route.origin) || 'ORG';
+      progressDestination.textContent = airportCode(route.destination) || 'DST';
+      progressPercent.textContent = '~' + percent + '%';
+      progressFill.style.width = Math.max(0, Math.min(100, percent)) + '%';
+      progressBar.setAttribute('aria-label', 'About ' + percent + '% of direct airport-to-airport distance covered');
+    }
+
+    glanceNote.hidden = !eta && !showProgress;
+    const notes = [];
+    if (eta?.note) notes.push(eta.note);
+    if (showProgress) notes.push('Progress and miles use direct airport-to-airport distance.');
+    glanceNote.textContent = notes.join(' ');
   }
 
   function setMessage(text, kind='neutral') {
@@ -195,12 +223,18 @@
     const ac = data.aircraft;
     flightLabel.textContent = data.flightNumber || ac.callsign || 'Flight';
     if (data.route?.origin && data.route?.destination) {
-      routeLabel.textContent = airportCode(data.route.origin) + ' → ' + airportCode(data.route.destination);
+      routeLabel.textContent = airportPlace(data.route.origin) + ' → ' + airportPlace(data.route.destination);
+      routeCodes.textContent = airportCode(data.route.origin) + ' → ' + airportCode(data.route.destination);
     } else {
       routeLabel.textContent = ac.callsign ? 'Live aircraft · ' + ac.callsign : 'Live aircraft';
+      routeCodes.textContent = '';
     }
 
-    const details = [formatAltitude(ac.altitudeFeet), formatSpeed(ac.speedKnots), $(ac.registration)].filter(Boolean);
+    const details = [
+      aircraftIdentity(ac),
+      formatAltitude(ac.altitudeFeet),
+      formatSpeed(ac.speedKnots)
+    ].filter(Boolean);
     detailLabel.textContent = details.join(' · ');
     freshness.textContent = formatAge(ac.positionAgeSeconds);
     freshness.dataset.stale = data.positionFresh ? 'false' : 'true';
@@ -237,6 +271,9 @@
   function renderUnavailable(data) {
     glance.hidden = true;
     glanceNote.hidden = true;
+    progressBar.hidden = true;
+    progressFill.style.width = '0%';
+    routeCodes.textContent = '';
     mapShell.classList.remove('with-progress');
     submit.disabled = false;
     submit.textContent = 'TRACK';
