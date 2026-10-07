@@ -21,6 +21,14 @@
   const progressOrigin = document.getElementById('direct-progress-origin');
   const progressDestination = document.getElementById('direct-progress-destination');
   const progressPercent = document.getElementById('direct-progress-percent');
+  const dateInput = document.getElementById('flight-date');
+  const answerCard = document.getElementById('answer-card');
+  const answerKicker = document.getElementById('answer-kicker');
+  const answerHeadline = document.getElementById('answer-headline');
+  const answerSummary = document.getElementById('answer-summary');
+  const answerMeta = document.getElementById('answer-meta');
+  const answerSource = document.getElementById('answer-source');
+  const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
   try {
@@ -48,10 +56,18 @@
   let originMarker = null;
   let destinationMarker = null;
   let activeFlight = null;
+  let activeDate = null;
+  let activeFlightId = null;
+  let assignedTail = null;
+  let assignmentData = null;
+  let assignmentChangedFrom = null;
+  let assignmentTimer = null;
+  let assignmentInFlight = false;
   let refreshTimer = null;
   let routeKey = '';
   let refreshInFlight = false;
   let requestSequence = 0;
+  let activeLiveKey = null;
   let lastLiveFlight = null;
   let lastLiveSuccessAt = 0;
   let lastReportedAgeSeconds = null;
@@ -61,6 +77,78 @@
 
   function clean(value) {
     return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  }
+
+  function localDateString(date=new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2,'0');
+    const day = String(date.getDate()).padStart(2,'0');
+    return year + '-' + month + '-' + day;
+  }
+
+  function airportCodeAny(ap) {
+    return ap?.iata || ap?.icao || ap?.code || '';
+  }
+
+  function scheduledTimeLabel(ap) {
+    const t = ap?.estimatedTime || ap?.scheduledTime;
+    if (!t?.time) return null;
+    return [t.time, t.ampm, t.timezone].filter(Boolean).join(' ');
+  }
+
+  function delayLabel(assignment) {
+    if (assignment?.flightStatus?.canceled) return 'Canceled';
+    const mins = assignment?.flightStatus?.departureDelayMinutes;
+    if (Number.isFinite(mins) && mins > 0) return 'Delayed ' + mins + ' min';
+    return assignment?.flightStatus?.description || assignment?.flightStatus?.label || 'Scheduled';
+  }
+
+  function clearAnswerMeta() {
+    while (answerMeta.firstChild) answerMeta.removeChild(answerMeta.firstChild);
+  }
+
+  function addAnswerPill(text) {
+    if (!text) return;
+    const pill = document.createElement('span');
+    pill.className = 'answer-pill';
+    pill.textContent = text;
+    answerMeta.appendChild(pill);
+  }
+
+  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',pills=[],source=''}) {
+    answerCard.hidden = false;
+    answerKicker.textContent = kicker;
+    answerHeadline.textContent = headline || 'Checking your aircraft…';
+    answerSummary.textContent = summary || '';
+    clearAnswerMeta();
+    pills.filter(Boolean).forEach(addAnswerPill);
+    answerSource.textContent = source || '';
+  }
+
+  function hideAnswer() {
+    answerCard.hidden = true;
+    routeChoices.hidden = true;
+    routeChoices.replaceChildren();
+  }
+
+  function assignmentRoute(assignment) {
+    if (!assignment?.origin || !assignment?.destination) return null;
+    const from = airportCodeAny(assignment.origin);
+    const to = airportCodeAny(assignment.destination);
+    return from && to ? from + ' → ' + to : null;
+  }
+
+  function assignmentSourceText() {
+    return 'Aircraft assignment/status: FlightStats public tracker. Live aircraft position: ADSB.lol. Airline aircraft assignments can change before departure.';
+  }
+
+  function syncUrl() {
+    const url = new URL(location.href);
+    if (activeFlight) url.searchParams.set('flight',activeFlight);
+    if (activeDate) url.searchParams.set('date',activeDate);
+    if (activeFlightId) url.searchParams.set('flightId',activeFlightId);
+    else url.searchParams.delete('flightId');
+    history.replaceState({},'',url);
   }
 
   function airportCode(ap) {
@@ -136,7 +224,7 @@
   }
 
   function holdLastLiveOnRefreshMiss(data) {
-    if (!activeFlight || lastLiveFlight !== activeFlight || !lastLiveSuccessAt) return false;
+    if (!activeLiveKey || lastLiveFlight !== activeLiveKey || !lastLiveSuccessAt) return false;
     const elapsedMs = Date.now() - lastLiveSuccessAt;
     if (elapsedMs < 0 || elapsedMs > HOLD_LAST_LIVE_MS) return false;
 
@@ -156,7 +244,7 @@
       : 'Live refresh missed. Showing the last confirmed aircraft report while retrying.';
     setMessage(reason, 'warning');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND MY PLANE';
     return true;
   }
 
@@ -258,7 +346,7 @@
 
   function renderLive(data) {
     const ac = data.aircraft;
-    lastLiveFlight = activeFlight;
+    lastLiveFlight = activeLiveKey || activeFlight;
     lastLiveSuccessAt = Date.now();
     lastReportedAgeSeconds = Number.isFinite(ac.positionAgeSeconds) ? ac.positionAgeSeconds : null;
     flightLabel.textContent = data.flightNumber || ac.callsign || 'Flight';
@@ -282,7 +370,7 @@
 
     setMessage('', 'neutral');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND MY PLANE';
 
     if (!planeMarker) {
       planeMarker = new maplibregl.Marker({
@@ -316,7 +404,7 @@
     routeCodes.textContent = '';
     mapShell.classList.remove('with-progress');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND MY PLANE';
     flightLabel.textContent = data.flightNumber || activeFlight || 'Flight';
     routeLabel.textContent = 'No live position';
     detailLabel.textContent = '';
@@ -330,12 +418,298 @@
     map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
   }
 
+  function clearLiveMap() {
+    glance.hidden = true;
+    glanceNote.hidden = true;
+    progressBar.hidden = true;
+    progressFill.style.width = '0%';
+    routeCodes.textContent = '';
+    mapShell.classList.remove('with-progress');
+    planeMarker = clearMarker(planeMarker);
+    originMarker = clearMarker(originMarker);
+    destinationMarker = clearMarker(destinationMarker);
+    routeKey = '';
+    if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
+    map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
+  }
+
+  function sameAirport(a, b) {
+    const left = String(airportCodeAny(a) || '').toUpperCase();
+    const right = String(airportCodeAny(b) || '').toUpperCase();
+    return Boolean(left && right && left === right);
+  }
+
+  function renderAssignmentBase(assignment) {
+    const route = assignmentRoute(assignment);
+    const tail = assignment.tailNumber;
+    const equipment = assignment?.equipment?.name || assignment?.equipment?.code;
+    const dep = scheduledTimeLabel(assignment.origin);
+    const gate = assignment?.origin?.gate ? 'Gate ' + assignment.origin.gate : null;
+    const delay = delayLabel(assignment);
+    const pills = [route, delay, dep ? 'Departure ' + dep : null, gate, tail ? 'Assigned ' + tail : null, equipment].filter(Boolean);
+
+    if (assignment.flightStatus?.canceled) {
+      setAnswer({
+        kicker:'FLIGHT STATUS',
+        headline:'Your flight is canceled.',
+        summary:'The airline status source currently marks ' + assignment.flightNumber + ' as canceled.',
+        pills,
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (!tail) {
+      setAnswer({
+        kicker:delay.toLowerCase().includes('delay') ? 'DELAYED FLIGHT · AIRCRAFT ASSIGNMENT' : 'AIRCRAFT ASSIGNMENT',
+        headline:'The airline has not published an aircraft assignment yet.',
+        summary:'We found your scheduled flight, but there is no tail number to follow yet. We will keep checking the assignment while this page is open.',
+        pills,
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    const changed = assignmentChangedFrom ? ' The assignment changed from ' + assignmentChangedFrom + ' to ' + tail + '.' : '';
+    setAnswer({
+      kicker:delay.toLowerCase().includes('delay') ? 'DELAYED FLIGHT · INBOUND AIRCRAFT' : 'INBOUND AIRCRAFT',
+      headline:'Your assigned aircraft is ' + tail + '.',
+      summary:'Now finding where that exact airplane is and what leg it is operating.' + changed,
+      pills,
+      source:assignmentSourceText()
+    });
+  }
+
+  function liveLegText(live) {
+    if (!live?.route?.origin || !live?.route?.destination) return null;
+    return airportPlace(live.route.origin) + ' → ' + airportPlace(live.route.destination);
+  }
+
+  function renderInboundAnswer(assignment, live) {
+    const tail = assignment?.tailNumber || live?.aircraft?.registration;
+    const route = assignmentRoute(assignment);
+    const delay = delayLabel(assignment);
+    const identity = aircraftIdentity(live?.aircraft) || assignment?.equipment?.name || tail;
+    const pills = [route, delay, tail, identity].filter(Boolean);
+    const currentLeg = liveLegText(live);
+    const eta = live?.progress?.landingEstimate;
+    const userOrigin = assignment?.origin;
+    const inboundToOrigin = live?.route?.destination && userOrigin && sameAirport(live.route.destination,userOrigin);
+    const userFlightAirborne = assignment?.flightStatus?.airborne === true;
+
+    if (userFlightAirborne) {
+      setAnswer({
+        kicker:'YOUR FLIGHT IS AIRBORNE',
+        headline:'This is your aircraft in flight.',
+        summary:currentLeg ? 'It is currently operating ' + currentLeg + '.' : 'The assigned aircraft is airborne and reporting a live position.',
+        pills,
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (inboundToOrigin) {
+      const originName = airportPlace(userOrigin);
+      let summary = currentLeg ? 'It is currently flying ' + currentLeg + '.' : 'The aircraft is currently inbound to ' + originName + '.';
+      if (eta) summary += ' From the latest live report, it is roughly ' + durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes) + ' from landing there.';
+      if (assignmentChangedFrom) summary += ' The airline recently changed the assigned aircraft from ' + assignmentChangedFrom + ' to ' + tail + '.';
+      setAnswer({
+        kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
+        headline:'Your plane is on the way to ' + originName + '.',
+        summary,
+        pills:[...pills,currentLeg],
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (currentLeg) {
+      setAnswer({
+        kicker:'YOUR ASSIGNED AIRCRAFT',
+        headline:'Your plane is currently flying ' + currentLeg + '.',
+        summary:'That is the aircraft currently assigned to your flight. It is not yet on a leg that ends at ' + airportPlace(userOrigin) + ', so another leg or an aircraft swap may happen before your departure.',
+        pills:[...pills,currentLeg],
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    setAnswer({
+      kicker:'YOUR ASSIGNED AIRCRAFT',
+      headline:'We found your airplane: ' + tail + '.',
+      summary:'It is reporting a live position, but its current airport-to-airport leg is not available yet.',
+      pills,
+      source:assignmentSourceText()
+    });
+  }
+
+  function renderAssignedNoPosition(assignment, data) {
+    const tail = assignment?.tailNumber;
+    const route = assignmentRoute(assignment);
+    const delay = delayLabel(assignment);
+    const seen = data?.status === 'seen-no-position';
+    setAnswer({
+      kicker:'YOUR ASSIGNED AIRCRAFT',
+      headline:tail ? 'Your assigned plane is ' + tail + '.' : 'Aircraft assignment found.',
+      summary:seen
+        ? 'The ADS-B network is seeing this aircraft, but it does not currently have a usable position to put on the map. We will keep checking.'
+        : 'This aircraft is not currently reporting a live ADS-B position. It may be parked, outside coverage, or not transmitting a usable position yet.',
+      pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
+      source:assignmentSourceText()
+    });
+    clearLiveMap();
+    flightLabel.textContent = tail || assignment?.flightNumber || 'Assigned aircraft';
+    routeLabel.textContent = seen && data?.aircraft?.onGround ? 'Aircraft seen · on ground' : 'No current position';
+    detailLabel.textContent = [data?.aircraft?.aircraftTypeName,tail].filter(Boolean).join(' · ');
+    freshness.textContent = data?.aircraft?.lastSeenSeconds != null ? formatAge(data.aircraft.lastSeenSeconds) : '';
+  }
+
+  function renderRouteChoices(data) {
+    routeChoices.replaceChildren();
+    routeChoices.hidden = false;
+    setAnswer({
+      kicker:'CHOOSE YOUR FLIGHT',
+      headline:'This flight number has more than one route on ' + activeDate + '.',
+      summary:'Choose the route on your ticket so we follow the correct aircraft.',
+      pills:[],
+      source:'Flight occurrence data: FlightStats public tracker.'
+    });
+
+    for (const option of data.options || []) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'route-choice';
+      const left = document.createElement('strong');
+      left.textContent = [airportCodeAny(option.origin),airportCodeAny(option.destination)].filter(Boolean).join(' → ');
+      const right = document.createElement('span');
+      const dep = [option.departureTime,option.departureAmPm,option.departureTimezone].filter(Boolean).join(' ');
+      right.textContent = dep || option.sortTime || '';
+      button.append(left,right);
+      button.addEventListener('click',() => {
+        activeFlightId = option.flightId;
+        routeChoices.hidden = true;
+        syncUrl();
+        loadAssignment(activeFlight,activeDate,activeFlightId,{silent:false});
+      });
+      routeChoices.appendChild(button);
+    }
+  }
+
+  async function loadRegistration(registration, {silent=false}={}) {
+    if (!registration) return;
+    if (silent && refreshInFlight) return;
+    activeLiveKey = 'registration:' + registration;
+    if (silent) refreshInFlight = true;
+    const sequence = ++requestSequence;
+
+    try {
+      const response = await fetch('/api/flight-tracker?registration=' + encodeURIComponent(registration), {headers:{accept:'application/json'}});
+      const data = await response.json();
+      if (sequence !== requestSequence || assignedTail !== registration) return;
+      if (data.status === 'live') {
+        renderLive(data);
+        if (assignmentData) renderInboundAnswer(assignmentData,data);
+      } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
+        if (assignmentData) renderAssignedNoPosition(assignmentData,data);
+      }
+    } catch {
+      if (sequence !== requestSequence || assignedTail !== registration) return;
+      if (!(silent && holdLastLiveOnRefreshMiss({status:'error'})) && assignmentData) {
+        renderAssignedNoPosition(assignmentData,{status:'not-found'});
+      }
+    } finally {
+      if (silent) refreshInFlight = false;
+    }
+  }
+
+  async function loadAssignment(flight, date, flightId=null, {silent=false}={}) {
+    if (!flight || !date) return;
+    if (silent && assignmentInFlight) return;
+    if (silent) assignmentInFlight = true;
+    if (!silent) {
+      submit.disabled = true;
+      submit.textContent = 'FINDING…';
+      setMessage('Finding the aircraft assigned to your flight…');
+      routeChoices.hidden = true;
+    }
+
+    const params = new URLSearchParams({flight,date});
+    if (flightId) params.set('flightId',flightId);
+
+    try {
+      const response = await fetch('/api/flight-assignment?' + params.toString(), {headers:{accept:'application/json'}});
+      const data = await response.json();
+      if (activeFlight !== flight || activeDate !== date) return;
+
+      if (data.status === 'choose-flight') {
+        renderRouteChoices(data);
+        submit.disabled = false;
+        submit.textContent = 'FIND MY PLANE';
+        return;
+      }
+
+      if (data.status !== 'found') {
+        if (!silent) {
+          setAnswer({
+            kicker:'AIRCRAFT ASSIGNMENT UNAVAILABLE',
+            headline:'We could not identify the aircraft assigned to this scheduled flight yet.',
+            summary:data.message || 'Live tracking will still work once the flight itself is airborne.',
+            pills:[activeFlight,activeDate],
+            source:'Live-flight fallback: ADSB.lol.'
+          });
+          loadFlight(activeFlight,{silent:false});
+        }
+        return;
+      }
+
+      const priorTail = assignedTail;
+      assignmentData = data;
+      activeFlightId = data.flightId || activeFlightId;
+      assignedTail = data.tailNumber || null;
+      assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail ? priorTail : null;
+      syncUrl();
+      renderAssignmentBase(data);
+      submit.disabled = false;
+      submit.textContent = 'FIND MY PLANE';
+      setMessage('', 'neutral');
+
+      if (assignmentChangedFrom) {
+        resetHeldLive();
+        clearLiveMap();
+      }
+
+      if (assignedTail) {
+        await loadRegistration(assignedTail,{silent});
+      } else if (data.flightStatus?.airborne) {
+        await loadFlight(activeFlight,{silent});
+      } else if (!silent) {
+        clearLiveMap();
+      }
+    } catch {
+      if (!silent) {
+        setAnswer({
+          kicker:'AIRCRAFT ASSIGNMENT UNAVAILABLE',
+          headline:'The assignment source is temporarily unavailable.',
+          summary:'We can still look for your flight itself if it is already airborne.',
+          pills:[activeFlight,activeDate],
+          source:'Live-flight fallback: ADSB.lol.'
+        });
+        await loadFlight(activeFlight,{silent:false});
+      }
+    } finally {
+      if (silent) assignmentInFlight = false;
+      submit.disabled = false;
+      submit.textContent = 'FIND MY PLANE';
+    }
+  }
+
   async function loadFlight(flight, {silent=false}={}) {
     const normalized = clean(flight);
     if (!normalized) return;
     if (silent && refreshInFlight) return;
 
     activeFlight = normalized;
+    activeLiveKey = 'flight:' + normalized;
     if (!silent) {
       resetHeldLive();
       submit.disabled = true;
@@ -363,7 +737,7 @@
       if (sequence !== requestSequence || activeFlight !== normalized) return;
       if (!(silent && holdLastLiveOnRefreshMiss({status:'error'}))) {
         submit.disabled = false;
-        submit.textContent = 'TRACK';
+        submit.textContent = 'FIND MY PLANE';
         setMessage('Live aircraft data is temporarily unavailable.', 'error');
       }
     } finally {
@@ -371,38 +745,71 @@
     }
   }
 
+  function refreshCurrentAircraft() {
+    if (document.hidden) return;
+    if (assignedTail) loadRegistration(assignedTail,{silent:true});
+    else if (activeFlight) loadFlight(activeFlight,{silent:true});
+  }
+
   function beginRefresh() {
     if (refreshTimer) clearInterval(refreshTimer);
-    refreshTimer = setInterval(() => {
-      if (!activeFlight || document.hidden) return;
-      loadFlight(activeFlight,{silent:true});
-    }, 10000);
+    refreshTimer = setInterval(refreshCurrentAircraft,10000);
+
+    if (assignmentTimer) clearInterval(assignmentTimer);
+    assignmentTimer = setInterval(() => {
+      if (!document.hidden && activeFlight && activeDate) {
+        loadAssignment(activeFlight,activeDate,activeFlightId,{silent:true});
+      }
+    },60000);
+  }
+
+  async function startJourney(flight,date,flightId=null) {
+    if (refreshTimer) clearInterval(refreshTimer);
+    if (assignmentTimer) clearInterval(assignmentTimer);
+    resetHeldLive();
+    requestSequence++;
+    refreshInFlight = false;
+    assignmentInFlight = false;
+    assignmentData = null;
+    assignedTail = null;
+    assignmentChangedFrom = null;
+    activeFlight = clean(flight);
+    activeDate = date || localDateString();
+    activeFlightId = flightId || null;
+    activeLiveKey = null;
+    input.value = activeFlight;
+    dateInput.value = activeDate;
+    syncUrl();
+    hideAnswer();
+    clearLiveMap();
+    await loadAssignment(activeFlight,activeDate,activeFlightId,{silent:false});
+    beginRefresh();
   }
 
   form.addEventListener('submit', event => {
     event.preventDefault();
     const value = clean(input.value);
+    const date = dateInput.value || localDateString();
     if (!value) {
       input.focus();
       setMessage('Enter a flight number like DL1234.');
       return;
     }
-    input.value = value;
-    const url = new URL(location.href);
-    url.searchParams.set('flight',value);
-    history.replaceState({},'',url);
-    loadFlight(value);
-    beginRefresh();
+    startJourney(value,date,null);
   });
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && activeFlight) loadFlight(activeFlight,{silent:true});
+    if (document.hidden || !activeFlight) return;
+    if (activeDate) loadAssignment(activeFlight,activeDate,activeFlightId,{silent:true});
+    refreshCurrentAircraft();
   });
 
-  const initial = clean(new URLSearchParams(location.search).get('flight'));
+  const params = new URLSearchParams(location.search);
+  const initial = clean(params.get('flight'));
+  const initialDate = params.get('date') || localDateString();
+  const initialFlightId = params.get('flightId');
+  dateInput.value = initialDate;
   if (initial) {
-    input.value = initial;
-    loadFlight(initial);
-    beginRefresh();
+    startJourney(initial,initialDate,initialFlightId);
   }
 })();
