@@ -46,8 +46,8 @@ export function ensureKilaueaDirectory(targetRoot=process.cwd()){
   if(hawaiiAnchor>=0) list.itemListElement.splice(hawaiiAnchor+1,0,entry); else list.itemListElement.push(entry);
   list.itemListElement.forEach((x,i)=>x.position=i+1);
   list.numberOfItems=list.itemListElement.length;
-  const page=graph.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#page');
-  if(page) page.dateModified=MODIFIED;
+  // Preserve the parent directory's authoritative publication date. Kilauea
+  // owns its card placement and its own page metadata, not the hub's freshness.
   html=replaceSchema(html,match,schema);
 
   const count=(html.match(/data-search-card/g)||[]).length;
