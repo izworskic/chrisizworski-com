@@ -22,7 +22,7 @@ const enrichment = {
   address: { matched: true, status: 'MATCHED', matchedAddress: '4600 SILVER HILL RD, WASHINGTON, DC 20233' },
   tax: { status: 'AVAILABLE', effectiveRatePct: 1.15, geography: 'Example County', sourceDate: '2024 ACS 5-year' },
   flood: { status: 'AVAILABLE', zone: 'X', sfha: false },
-  mortgageRate: { status: 'AVAILABLE', ratePct: 7.386, observationDate: '2026-10-05', frequency: 'DAILY', series: 'OBMMIC30YFNA', provenance: 'MARKET SOURCED', source: 'Optimal Blue OBMMI via FRED' },
+  mortgageRate: { status: 'AVAILABLE', ratePct: 7.458, observationDate: '2026-10-05', frequency: 'DAILY', series: 'OBMMIC30YF', provenance: 'MARKET SOURCED', source: 'Optimal Blue OBMMI via FRED' },
 };
 
 test('mortgage math matches a known 30-year P&I example', () => {
@@ -40,7 +40,9 @@ test('opening form includes the full mortgage-rate what-if module before the fir
   assert.match(formMatch[1], /Easy what-if/);
   assert.match(formMatch[1], /Adjust the mortgage rate/);
   assert.match(formMatch[1], /id="rateMarketSummary"/);
-  assert.match(formMatch[1], /id="ratePct" name="ratePct"/);
+  assert.match(formMatch[1], /id="ratePct" name="ratePct"[^>]*value="7\.458"/);
+  assert.match(formMatch[1], /Latest published daily 30-year conforming average: 7\.458%/);
+  assert.doesNotMatch(formMatch[1], /placeholder="Loading…"/);
   assert.match(formMatch[1], /Change this to your lender quote if needed/);
   assert.match(formMatch[1], /Taxes, insurance, PMI and the other modeled monthly costs stay in the calculation/);
   assert.ok(formMatch[1].indexOf('name="downPayment"') < formMatch[1].indexOf('class="rate-whatif"'));
@@ -54,7 +56,7 @@ test('opening form includes the full mortgage-rate what-if module before the fir
 
 test('opening form preloads the daily market rate and only sends an override after user edits it', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
-  assert.match(js, /fetch\('\/api\/house-fit'/);
+  assert.match(js, /fetch\('\/api\/house-rate'/);
   assert.match(js, /rateTouched = false/);
   assert.match(js, /if \(rateTouched && Number\.isFinite\(rate\)\) payload\.ratePct = rate/);
   assert.match(js, /Current daily 30-year conforming average/);
@@ -66,9 +68,9 @@ test('opening form preloads the daily market rate and only sends an override aft
 
 test('first run defaults to the latest daily mortgage average from enrichment', () => {
   const input = normalizeInput(base({ ratePct: '' }), enrichment);
-  assert.equal(input.ratePct, 7.386);
+  assert.equal(input.ratePct, 7.458);
   const result = buildDecision(base({ ratePct: '' }), enrichment);
-  assert.equal(result.input.ratePct, 7.386);
+  assert.equal(result.input.ratePct, 7.458);
   assert.equal(result.provenance.mortgageRate, 'MARKET SOURCED');
   assert.equal(result.enrichment.mortgageRate.observationDate, '2026-10-05');
   assert.equal(result.enrichment.mortgageRate.frequency, 'DAILY');
@@ -80,13 +82,37 @@ test('user rate override replaces the daily average before first calculation', (
   assert.equal(result.provenance.mortgageRate, 'USER PROVIDED');
 });
 
-test('daily mortgage source uses Optimal Blue conforming non-adjusted index with weekly fallback', () => {
+test('daily mortgage source uses the primary Optimal Blue conforming index with fast fallback', () => {
   const source = readFileSync(path.join(__dirname, '..', 'lib', 'house-fit', 'data-sources.js'), 'utf8');
-  assert.match(source, /OBMMIC30YFNA/);
+  assert.match(source, /OBMMIC30YF/);
+  assert.doesNotMatch(source, /OBMMIC30YFNA/);
+  assert.match(source, /latestFredObservation\(FRED_CSV, 2500\)/);
+  assert.match(source, /latestFredObservation\(FRED_WEEKLY_FALLBACK_CSV, 1800\)/);
   assert.match(source, /frequency: 'DAILY'/);
   assert.match(source, /Optimal Blue OBMMI via FRED/);
   assert.match(source, /MORTGAGE30US/);
   assert.match(source, /Daily mortgage index was temporarily unavailable/);
+});
+
+test('mortgage-rate preload uses a lightweight existing function and never starts blank', () => {
+  const root = path.join(__dirname, '..');
+  const config = JSON.parse(readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+  assert.ok(config.rewrites.some((item) =>
+    item.source === '/api/house-rate' &&
+    item.destination === '/api/field-camera?view=house-rate'
+  ));
+
+  const fieldCamera = readFileSync(path.join(root, 'api', 'field-camera.js'), 'utf8');
+  assert.match(fieldCamera, /fetchCurrentMortgageRate/);
+  assert.match(fieldCamera, /view\) \|\| ""\) === "house-rate"/);
+
+  const html = readFileSync(path.join(root, 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+  assert.match(html, /value="7\.458"/);
+  assert.doesNotMatch(html, /Loading the latest daily 30-year conforming average/);
+
+  const js = readFileSync(path.join(root, 'public', 'assets', 'house-fit.js'), 'utf8');
+  assert.match(js, /setTimeout\(\(\) => controller\.abort\(\), 5000\)/);
+  assert.match(js, /Latest saved daily 30-year conforming average: 7\.458%/);
 });
 
 test('house API is multiplexed through the existing fall-color dispatcher instead of consuming a Vercel function slot', () => {
@@ -115,7 +141,7 @@ test('house client rejects HTML responses before attempting JSON parsing', () =>
   assert.match(js, /House calculator service returned an unexpected response/);
   assert.match(js, /await response\.text\(\)/);
   assert.doesNotMatch(js, /await response\.json\(\)/);
-  assert.match(html, /house-fit\.js\?v=20261007a/);
+  assert.match(html, /house-fit\.js\?v=20261007b/);
 });
 
 test('normalization fixes loan term and automatic assumptions instead of exposing extra inputs', () => {

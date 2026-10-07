@@ -438,6 +438,10 @@
       "destination": "/old-sow-live/index.html"
     },
     {
+      "source": "/api/house-rate",
+      "destination": "/api/field-camera?view=house-rate"
+    },
+    {
       "source": "/api/house-fit",
       "destination": "/api/fall-color?view=house-fit"
     },
