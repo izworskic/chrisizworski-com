@@ -12,7 +12,8 @@ const {
   MAPBOX_PROBES,
   MAPBOX_CACHE_TIMEOUT_MS,
   MAPBOX_ROUTE_TIMEOUT_MS,
-  NYCDOT_LINKS
+  NYCDOT_LINKS,
+  _internal: trafficInternal
 }=require('../lib/nyc-crossing/traffic');
 
 test('peak Lincoln applies toll, zone charge and crossing credit',()=>{
@@ -198,6 +199,7 @@ test('Mapbox probe rejects routes that detour far beyond the fixed crossing corr
 });
 
 test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async()=>{
+  trafficInternal.clearMapboxCache();
   const calls=[];
   const fetchImpl=async(url,options={})=>{
     calls.push(String(url));
