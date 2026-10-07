@@ -89,35 +89,20 @@
     const prov = decision.provenance || {};
     const rate = Number(decision.input && decision.input.ratePct);
     const breakdown = decision.breakdown || {};
-    const breakdownRange = decision.breakdownRange || {};
     const unpricedCosts = decision.unpricedCosts || [];
     const drivers = decision.uncertaintyDrivers || [];
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
-    $('mortgageOnlyResult').textContent = monthlyRange(
-      breakdownRange.mortgagePI && breakdownRange.mortgagePI.low,
-      breakdownRange.mortgagePI && breakdownRange.mortgagePI.high
-    );
-    $('propertyTaxLedgerResult').textContent = monthlyRange(
-      breakdownRange.propertyTax && breakdownRange.propertyTax.low,
-      breakdownRange.propertyTax && breakdownRange.propertyTax.high
-    );
-    $('insuranceLedgerResult').textContent = monthlyRange(
-      breakdownRange.homeInsurance && breakdownRange.homeInsurance.low,
-      breakdownRange.homeInsurance && breakdownRange.homeInsurance.high
-    );
-    $('maintenanceLedgerResult').textContent = monthlyRange(
-      breakdownRange.maintenance && breakdownRange.maintenance.low,
-      breakdownRange.maintenance && breakdownRange.maintenance.high
-    );
+    $('mortgageOnlyResult').textContent = moneyMo(breakdown.mortgagePI);
+    $('mortgageLedgerNote').textContent = rate.toFixed(2) + '% · ' + Number(loan.termYears || 30) + ' years';
+    $('propertyTaxLedgerResult').textContent = moneyMo(breakdown.propertyTax);
+    $('insuranceLedgerResult').textContent = moneyMo(breakdown.homeInsurance);
+    $('maintenanceLedgerResult').textContent = moneyMo(breakdown.maintenance);
 
     const pmiRow = $('pmiLedgerRow');
     if (Number(breakdown.pmi) > 0.005) {
       pmiRow.hidden = false;
-      $('pmiLedgerResult').textContent = monthlyRange(
-        breakdownRange.pmi && breakdownRange.pmi.low,
-        breakdownRange.pmi && breakdownRange.pmi.high
-      );
+      $('pmiLedgerResult').textContent = moneyMo(breakdown.pmi);
     } else {
       pmiRow.hidden = true;
     }
@@ -125,10 +110,7 @@
     const floodRow = $('floodLedgerRow');
     if (Number(breakdown.floodInsurance) > 0.005) {
       floodRow.hidden = false;
-      $('floodLedgerResult').textContent = monthlyRange(
-        breakdownRange.floodInsurance && breakdownRange.floodInsurance.low,
-        breakdownRange.floodInsurance && breakdownRange.floodInsurance.high
-      );
+      $('floodLedgerResult').textContent = moneyMo(breakdown.floodInsurance);
     } else {
       floodRow.hidden = true;
     }
