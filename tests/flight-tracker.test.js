@@ -50,6 +50,16 @@ test('aircraft sanitizer requires an actual reported position', () => {
   assert.equal(plane.positionAgeSeconds,3.6);
 });
 
+
+test('route plausibility rejects grossly wrong airport pairs without hiding normal corridor progress', () => {
+  const jfk = {lat:40.639801,lon:-73.7789};
+  const lhr = {lat:51.4706,lon:-0.461941};
+  const connecticut = {lat:41.57,lon:-72.64};
+  const losAngeles = {lat:34.05,lon:-118.24};
+  assert.equal(api.routeLooksPlausible(connecticut,jfk,lhr),true);
+  assert.equal(api.routeLooksPlausible(losAngeles,jfk,lhr),false);
+});
+
 test('resolver never guesses when multiple live candidates remain', () => {
   const one = api.chooseUnique([{callsign:'DAL123',positionAgeSeconds:2},null]);
   assert.equal(one.status,'unique');
@@ -84,10 +94,11 @@ test('flight API uses ADSB.lol callsign and route sources with API noindex', () 
   const source = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
   assert.match(source, /api\.adsb\.lol/);
   assert.match(source, /\/v2\/callsign\//);
-  assert.match(source, /\/api\/0\/routeset/);
+  assert.match(source, /vrs-standing-data\.adsb\.lol\/routes/);
   assert.match(source, /X-Robots-Tag/);
   assert.match(source, /s-maxage=/);
   assert.match(source, /ODbL 1\.0/);
+  assert.match(source, /CC0 1\.0/);
 });
 
 test('flight tracker SEO contract remains concise and canonical', () => {
