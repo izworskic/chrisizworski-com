@@ -8,6 +8,7 @@
 // working one, and an unlabelled stale image is worse than showing no camera at all.
 
 const { resolveCamera, isUsable, USER_AGENT } = require("../lib/field-cameras.js");
+const { fetchCurrentMortgageRate } = require("../lib/house-fit/data-sources.js");
 
 const MAX_AGE_HOURS = 26;
 
@@ -43,6 +44,19 @@ function metadataBody(camera, id, capturedAt, fresh) {
 
 async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
+
+  if (String(first(req.query?.view) || "") === "house-rate") {
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      res.setHeader("Allow", "GET, HEAD");
+      return res.status(405).json({ error: "Method not allowed" });
+    }
+    const mortgageRate = await fetchCurrentMortgageRate();
+    res.setHeader("Cache-Control", "public, max-age=300, s-maxage=21600, stale-while-revalidate=86400");
+    if (req.method === "HEAD") return res.status(200).end();
+    return res.status(200).json({ mortgageRate });
+  }
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   res.setHeader("X-Content-Type-Options", "nosniff");
 
