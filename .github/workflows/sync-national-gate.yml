@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: f6ea8a4ed502e58f3f3b708ae390a6a24be1e5cc
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/f6ea8a4ed502e58f3f3b708ae390a6a24be1e5cc
+      HUB_COMMIT: 43bb7e92a17779889aaaec00279e5405ab3c3336
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/43bb7e92a17779889aaaec00279e5405ab3c3336
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -149,7 +149,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for id in bird-migration columbia-salmon great-lakes-levels florida-red-tide space-coast-launch trail-ridge-road yellowstone-geysers shoshone-falls midwest-xc; do
+          for id in house-fit bird-migration columbia-salmon great-lakes-levels florida-red-tide space-coast-launch trail-ridge-road yellowstone-geysers shoshone-falls midwest-xc; do
             grep -q "data-tool-id=\"$id\"" public/synced-national-tools/index.html
           done
           grep -q 'href="/national-tools/northeast-great-lakes/"' public/synced-national-tools/index.html
@@ -160,7 +160,11 @@ jobs:
           grep -q 'href="https://xcski.chrisizworski.com/midwest/"' public/synced-national-tools/index.html
           grep -q 'href="https://xcski.chrisizworski.com/wisconsin/"' public/synced-national-tools/index.html
           grep -q 'href="https://xcski.chrisizworski.com/minnesota/"' public/synced-national-tools/index.html
-          grep -q 'numberOfItems":48' public/synced-national-tools/index.html
+          grep -q 'numberOfItems":53' public/synced-national-tools/index.html
+          grep -q 'class="catalog-group everyday-decisions"' public/synced-national-tools/index.html
+          grep -q 'data-filter="everyday"' public/synced-national-tools/index.html
+          grep -q 'Use the same decision-engine approach beyond outdoors.' public/synced-national-tools/index.html
+          grep -q 'href="https://chrisizworski.com/can-i-afford-this-house/"' public/synced-national-tools/index.html
           test "$(grep -o 'data-tool-id="live-decisions"' public/synced-national-tools/index.html | wc -l)" -eq 0
           for id in zion-narrows-conditions grand-canyon-access lake-mead-access lake-powell-ramp-status going-to-the-sun-road-status yellowstone-road-status tioga-road-status mount-rainier-road-status cadillac-mountain-sunrise haleakala-sunrise kilauea-live; do
             test "$(grep -o "data-tool-id=\"$id\"" public/synced-national-tools/index.html | wc -l)" -eq 1
