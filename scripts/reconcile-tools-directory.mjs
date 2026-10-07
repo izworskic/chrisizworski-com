@@ -64,8 +64,9 @@ function reconcileMarylandBayBridgeNationalTools() {
   }
   itemList.itemListElement.forEach((entry, index) => { entry.position = index + 1; });
   itemList.numberOfItems = itemList.itemListElement.length;
-  const page = graph.find(node => node?.['@id'] === 'https://chrisizworski.com/national-tools/#page');
-  if (page) page.dateModified = '2026-10-05';
+  // The extracted National Tools hub owns its publication metadata.
+  // This compatibility shim may add a legacy Maryland card, but it must never
+  // roll the hub's dateModified backward after a verified mirror sync.
   national = national.replace(schemaMatch[0], `<script type="application/ld+json">${JSON.stringify(nationalSchema)}</script>`);
 
   const visibleCount = (national.match(/data-search-card/g) || []).length;
