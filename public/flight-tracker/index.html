@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Flight Tracker: See Your Plane Live | Chris Izworski</title>
-  <meta name="description" content="Enter a flight number and see the aircraft's latest reported live position on a simple airport-to-airport map. No simulated movement.">
+  <meta name="description" content="Track your flight on a live map. See the plane, flight phase, direct miles remaining and a rough time-to-landing range from real aircraft reports.">
   <link rel="canonical" href="https://chrisizworski.com/flight-tracker/">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="google-adsense-account" content="ca-pub-8222782620788075">
@@ -22,7 +22,7 @@
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/flight-tracker.js?v=20261006b"></script>
+  <script defer src="/assets/flight-tracker.js?v=20261006c"></script>
   <style>
     :root{--ink:#13202b;--muted:#5d6973;--line:#d9e0e5;--paper:#fff;--wash:#f4f7f8;--accent:#18344a;--danger:#9b312b}
     *{box-sizing:border-box}
@@ -45,6 +45,13 @@
     #tracker-message{margin:9px 0 0;font-size:13px;color:var(--muted);min-height:18px}
     #tracker-message[data-kind="error"]{color:var(--danger)}
     #tracker-message[data-kind="warning"]{color:#805f00}
+    .flight-glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:650px;margin:12px 0 0}
+    .flight-glance[hidden],.flight-glance-note[hidden]{display:none}
+    .glance-cell{min-width:0;background:#f4f7f8;border:1px solid var(--line);border-radius:10px;padding:10px 10px 9px}
+    .glance-cell span{display:block;color:var(--muted);font-size:11px;line-height:1.3}
+    .glance-cell strong{display:block;margin-top:3px;font-size:16px;letter-spacing:-.015em;line-height:1.25;overflow-wrap:anywhere}
+    .flight-glance-note{max-width:650px;margin:6px 0 0;font-size:11px;line-height:1.4;color:var(--muted)}
+    .map-shell.with-progress{height:clamp(380px,calc(100vh - 295px),760px);min-height:380px}
     .map-shell{position:relative;width:100%;height:clamp(430px,calc(100vh - 215px),760px);min-height:430px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#dfe7eb}
     #flight-map{position:absolute;inset:0}
     .flight-strip{position:absolute;z-index:3;left:12px;right:12px;top:12px;pointer-events:none;display:flex;justify-content:center}
@@ -78,6 +85,11 @@
       .flight-strip{left:8px;right:8px;top:8px}
       .flight-main{gap:8px}.flight-sub{gap:8px}
       #flight-label{font-size:15px}#route-label{font-size:14px}
+      .flight-glance{gap:6px;margin-top:9px}
+      .glance-cell{padding:8px 7px}
+      .glance-cell strong{font-size:14px}
+      .glance-cell span{font-size:10px}
+      .map-shell.with-progress{height:calc(100vh - 280px);min-height:350px}
       #detail-label{max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     }
   </style>
@@ -99,6 +111,13 @@
         <button id="track-flight" type="submit">TRACK</button>
       </form>
       <p id="tracker-message" role="status" aria-live="polite" hidden></p>
+      <div class="flight-glance" id="flight-glance" aria-label="Flight progress" aria-live="polite" hidden>
+        <div class="glance-cell"><span>Flight phase</span><strong id="flight-phase">—</strong></div>
+        <div class="glance-cell"><span>Direct miles left</span><strong id="flight-distance">—</strong></div>
+        <div class="glance-cell"><span>Est. to land</span><strong id="landing-window">—</strong></div>
+      </div>
+      <p class="flight-glance-note" id="flight-glance-note" hidden>Rough landing window based on current aircraft telemetry, not an airline arrival time. Direct distance is straight-line.</p>
+
     </section>
 
     <section class="map-shell" aria-label="Live flight map">
