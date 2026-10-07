@@ -1,9 +1,10 @@
+import { pathToFileURL } from 'node:url';
+
 const BASE = String(process.env.NYC_CROSSING_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/nyc-crossing/`;
-const API_URL = `${BASE}/api/nyc-crossing?smoke=${process.env.GITHUB_SHA || Date.now()}`;
 const ATTEMPTS = Number(process.env.NYC_CROSSING_SMOKE_ATTEMPTS || 36);
 const WAIT_MS = Number(process.env.NYC_CROSSING_SMOKE_WAIT_MS || 10000);
-const TIMEOUT_MS = Number(process.env.NYC_CROSSING_SMOKE_TIMEOUT_MS || 25000);
+const TIMEOUT_MS = Number(process.env.NYC_CROSSING_SMOKE_TIMEOUT_MS || 35000);
 
 const EXPECTED_IDS = [
   'gwb',
@@ -43,8 +44,55 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-async function verifyOnce() {
-  const page = await request(PAGE_URL + '?smoke=' + encodeURIComponent(process.env.GITHUB_SHA || Date.now()), 'text/html');
+const FALLBACK_IDS = ['queensboro', 'williamsburg'];
+
+export function mapboxDiagnostics(data) {
+  const probes = FALLBACK_IDS.map(id => {
+    const route = data.routes?.find(item => item.id === id);
+    return `${id}=${route?.etaState || 'MISSING'} (source=${route?.trafficSourceName || 'none'})`;
+  });
+  return `mapboxState=${data.mapboxState} | mapboxReason=${JSON.stringify(data.mapboxReason || 'none')} | ${probes.join(' | ')}`;
+}
+
+export function evaluateMapboxHealth(data) {
+  const reason = String(data.mapboxReason || '');
+  if (/\bHTTP\s+4\d{2}\b|Invalid Token|Not Authorized|Unauthorized|Forbidden/i.test(reason)) {
+    const error = new Error(`Mapbox authorization/request failure: ${mapboxDiagnostics(data)}`);
+    error.fatal = true;
+    throw error;
+  }
+  assert(['LIVE', 'PARTIAL', 'UNAVAILABLE'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}: ${reason}`);
+
+  for (const id of FALLBACK_IDS) {
+    const route = data.routes?.find(item => item.id === id);
+    assert(route, `${id} route missing`);
+    if (route.etaState === 'LIVE' && route.trafficSourceName === 'Mapbox live traffic routing') {
+      assert(Number.isFinite(route.etaMinutes) && route.etaMinutes > 0, `${id} Mapbox ETA invalid`);
+      assert(route.baselineKind === 'MAPBOX_TYPICAL_TRAFFIC', `${id} Mapbox typical baseline missing`);
+      assert(Number.isFinite(route.baselineMinutes) && route.baselineMinutes > 0, `${id} Mapbox baseline invalid`);
+      const min = id === 'queensboro' ? 1200 : 1400;
+      const max = id === 'queensboro' ? 5000 : 5500;
+      assert(Number.isFinite(route.probeDistanceMeters) && route.probeDistanceMeters >= min && route.probeDistanceMeters <= max, `${id} Mapbox probe distance invalid`);
+    } else if (route.etaState === 'LIVE' && ['Port Authority', 'NYC DOT Traffic Management Center'].includes(route.trafficSourceName)) {
+      // Official evidence may still outrank a working Mapbox fallback.
+    } else {
+      assert(/Mapbox/.test(route.trafficPending || ''), `${id} Mapbox fallback state missing when live route is unavailable`);
+      assert(data.mapboxState !== 'LIVE', `${id} unavailable despite Mapbox LIVE state`);
+    }
+  }
+
+  if (data.mapboxState !== 'LIVE') {
+    assert(/timeout|HTTP\s+5\d{2}\b|fetch failed|network|request failed|ECONN|ENOTFOUND|EAI_AGAIN/i.test(reason), `Mapbox failure is not a temporary third-party outage: ${reason}`);
+    assert(!/NoRoute|NoSegment|normalization failure|sanity failure|snap failure/i.test(reason), `Mapbox route validation failed: ${reason}`);
+    return 'DEGRADED';
+  }
+  return 'PASS';
+}
+
+async function verifyOnce(attempt) {
+  // Each attempt bypasses any earlier CDN response, including pre-deploy failures.
+  const nonce = encodeURIComponent(`${process.env.GITHUB_SHA || 'manual'}-${Date.now()}-${attempt}`);
+  const page = await request(`${PAGE_URL}?smoke=${nonce}`, 'text/html');
   assert(page.ok, `page returned ${page.status}`);
   const html = await page.text();
   for (const marker of [
@@ -58,11 +106,13 @@ async function verifyOnce() {
     assert(html.includes(marker), `page missing marker: ${marker}`);
   }
 
-  const api = await request(API_URL, 'application/json');
+  const api = await request(`${BASE}/api/nyc-crossing?smoke=${nonce}`, 'application/json');
   assert(api.ok, `API returned ${api.status}`);
   const cacheControl = api.headers.get('cache-control') || '';
   assert(!/stale-while-revalidate=300/.test(cacheControl), `stale live API cache policy still deployed: ${cacheControl}`);
   const data = await api.json();
+  console.log(`NYC crossing Mapbox diagnostics | ${mapboxDiagnostics(data)}`);
+  const mapboxHealth = evaluateMapboxHealth(data);
 
   assert(Array.isArray(data.routes), 'API routes missing');
   assert(data.routes.length === EXPECTED_IDS.length, `expected ${EXPECTED_IDS.length} crossings, got ${data.routes.length}`);
@@ -76,8 +126,6 @@ async function verifyOnce() {
   assert(data.sources?.nycdotTraffic, 'NYC DOT live source missing');
   assert(data.sources?.nycdotHistory, 'NYC DOT history source missing');
   assert(data.sources?.mapbox, 'Mapbox source missing');
-  assert(['LIVE', 'PARTIAL', 'UNAVAILABLE'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}`);
-  assert(data.mapboxState !== 'NOT_CONFIGURED', 'Mapbox production token is not configured');
   assert(['LIVE', 'NO_MATCH', 'UNAVAILABLE', 'NOT_APPLICABLE'].includes(data.baselineState), `unexpected baselineState ${data.baselineState}`);
   assert(data.baselineSource, 'NYC DOT historical baseline source missing');
 
@@ -101,19 +149,6 @@ async function verifyOnce() {
     assert(nycdotBaselines.length === data.baselineCount, 'baselineCount does not match enriched NYC DOT routes');
   }
 
-  const fallbackIds = ['williamsburg', 'queensboro'];
-  for (const id of fallbackIds) {
-    const route = data.routes.find(item => item.id === id);
-    assert(route, `${id} route missing`);
-    if (route.etaState === 'LIVE' && route.trafficSourceName === 'Mapbox live traffic routing') {
-      assert(route.baselineKind === 'MAPBOX_TYPICAL_TRAFFIC', `${id} Mapbox typical baseline missing`);
-      assert(Number.isFinite(route.baselineMinutes) && route.baselineMinutes > 0, `${id} Mapbox baseline invalid`);
-      assert(Number.isFinite(route.probeDistanceMeters) && route.probeDistanceMeters >= 1200 && route.probeDistanceMeters <= 5500, `${id} Mapbox probe distance invalid`);
-    } else {
-      assert(/Mapbox/.test(route.trafficPending || ''), `${id} Mapbox fallback state missing when live route is unavailable`);
-    }
-  }
-
   return {
     page: page.status,
     api: api.status,
@@ -126,26 +161,35 @@ async function verifyOnce() {
     baselineReason: data.baselineReason,
     mapboxState: data.mapboxState,
     mapboxCount: data.mapboxCount,
+    mapboxHealth,
+    mapboxDiagnostics: mapboxDiagnostics(data),
   };
 }
 
-let lastError;
-for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
-  try {
-    const result = await verifyOnce();
-    const suffix = result.liveCount === 0
-      ? ' | warning=no fresh official live readings at smoke time'
-      : '';
-    console.log(
-      `NYC crossing production smoke PASS | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapboxState=${result.mapboxState} | mapbox=${result.mapboxCount || 0} | baselineReason=${result.baselineReason || 'none'}${suffix}`,
-    );
-    process.exit(0);
-  } catch (error) {
-    lastError = error;
-    console.warn(`NYC crossing production smoke attempt ${attempt}/${ATTEMPTS} failed: ${error.message}`);
-    if (attempt < ATTEMPTS) await sleep(WAIT_MS);
+async function runSmoke() {
+  let lastError;
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
+    try {
+      const result = await verifyOnce(attempt);
+      const suffix = result.liveCount === 0
+        ? ' | warning=no fresh live readings at smoke time'
+        : '';
+      console.log(
+        `NYC crossing production smoke ${result.mapboxHealth} | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapbox=${result.mapboxCount || 0} | ${result.mapboxDiagnostics} | baselineReason=${result.baselineReason || 'none'}${suffix}${result.mapboxHealth === 'DEGRADED' ? ' | warning=temporary Mapbox outage; East River fallback coverage is incomplete' : ''}`,
+      );
+      process.exit(0);
+    } catch (error) {
+      lastError = error;
+      console.warn(`NYC crossing production smoke attempt ${attempt}/${ATTEMPTS} failed: ${error.message}`);
+      if (error.fatal) break;
+      if (attempt < ATTEMPTS) await sleep(WAIT_MS);
+    }
   }
+
+  console.error(`NYC crossing production smoke FAIL — ${lastError?.message || 'unknown error'}`);
+  process.exit(1);
 }
 
-console.error(`NYC crossing production smoke FAIL — ${lastError?.message || 'unknown error'}`);
-process.exit(1);
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await runSmoke();
+}

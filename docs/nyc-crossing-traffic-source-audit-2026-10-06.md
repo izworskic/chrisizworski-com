@@ -47,6 +47,16 @@ The baseline deliberately uses the public SODA 2.1 resource endpoint. Socrata pe
 
 The public release has a production smoke contract at `scripts/smoke-nyc-crossing-production.mjs`. It verifies the live page and API, all 11 crossing identities, traffic-source provenance, historical-baseline sample gates, and the invariant that mixed-scope crossing measurements cannot be promoted into a door-to-door fastest-route claim. A temporary upstream traffic outage may reduce live readings but does not by itself fail the smoke check.
 
+### Mapbox reliability correction — 2026-10-07
+
+Queensboro and Williamsburg use the existing fixed three-waypoint Mapbox driving-traffic probes where official readings are absent. Their coordinates, bridge-pinning middle waypoint, duration/typical-duration limits, corridor-distance limits, waypoint snap check, authority precedence, and incomparable-segment semantics remain unchanged.
+
+Each probe allows 8 seconds for the request and body, with one immediate retry only for a timeout or HTTP 5xx. The two probes run concurrently: routing is bounded to 16 seconds plus the 750 ms Redis read. HTTP 4xx, invalid JSON, NoRoute/NoSegment, and normalization/sanity rejections never retry. Diagnostics include the bridge, failure category or HTTP status/message, elapsed milliseconds, and attempt; token values are redacted.
+
+Only complete `LIVE` Mapbox results receive the existing 60-second memory / 90-second Redis cache. `PARTIAL`, `UNAVAILABLE`, and `NOT_CONFIGURED` never populate either cache; old failure documents are ignored when read. API responses with incomplete Mapbox coverage use `no-store` so the CDN cannot hold a transient failure after the provider recovers. Fully live results retain the existing public cache policy.
+
+The production smoke prints `mapboxReason` and both bridges' individual state/source. Authorization and request errors fail immediately. Genuine temporary third-party outages are explicitly labeled `DEGRADED`, never `PASS`; invalid routes and contradictory live coverage fail. Every smoke attempt uses a fresh URL. Release acceptance additionally requires repeated production calls over several minutes, spanning provider-cache refreshes, with both probes live and finite ETA/typical baseline plus valid bridge-specific distances.
+
 ## Sources
 
 - Port Authority crossing conditions: https://www.panynj.gov/bridges-tunnels/en/index.html
