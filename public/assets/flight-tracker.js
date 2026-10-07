@@ -238,6 +238,13 @@
     return code && place !== code ? place + ' (' + code + ')' : place;
   }
 
+
+  function relationshipDistanceText(relationship, label) {
+    if (!Number.isFinite(relationship?.distanceMiles) || !label) return null;
+    const miles = relationship.distanceMiles;
+    return 'about ' + miles + ' ' + (miles === 1 ? 'mile' : 'miles') + ' from ' + label;
+  }
+
   function aircraftFactSentence(live) {
     const ac = live?.aircraft || {};
     const parts = [];
@@ -643,19 +650,17 @@
     const focusLabel = focusAirportLabel(relationship);
     const reportLead = reportAgeLead(live?.aircraft?.positionAgeSeconds);
     const fact = aircraftFactSentence(live);
-    const distanceText = Number.isFinite(relationship?.distanceMiles)
-      ? 'about ' + relationship.distanceMiles + ' miles from ' + focusLabel
-      : null;
+    const distanceText = relationshipDistanceText(relationship, focusLabel);
     const reportDetails = [distanceText, fact].filter(Boolean).join(', ');
 
     if (relationship?.state === 'at-airport') {
       setAnswer({
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is on the ground at ' + focusLabel + '.',
-        summary:reportLead + '. ' + tail + ' is on the ground at your departure airport' +
-          (Number.isFinite(relationship.distanceMiles) && relationship.distanceMiles > 0
-            ? ', about ' + relationship.distanceMiles + ' miles from the airport reference point.'
-            : '.'),
+        summary:reportLead +
+          (Number.isFinite(relationship.distanceMiles)
+            ? ', about ' + relationship.distanceMiles + ' ' + (relationship.distanceMiles === 1 ? 'mile' : 'miles') + ' from the center of ' + (airportCodeAny(relationship.airport) || 'the airport')
+            : '') + '. ' + tail + ' is on the ground at your departure airport.',
         pills,
         next:'What happens next: the aircraft is already at your departure airport. We’ll keep checking the airline assignment in case it changes before your flight.',
         source:assignmentSourceText()
