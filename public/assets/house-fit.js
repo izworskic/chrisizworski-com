@@ -3,10 +3,9 @@
 
   const $ = (id) => document.getElementById(id);
   const form = $('houseFitForm');
-  const rateForm = $('rateAdjustForm');
   const result = $('result');
   const status = $('formStatus');
-  let rateOverride = null;
+  let rateTouched = false;
 
   const money0 = (n) => Number.isFinite(Number(n))
     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n))
@@ -44,7 +43,8 @@
       askingPrice: Number(valueOf('askingPrice')),
       downPayment: Number(valueOf('downPayment')),
     };
-    if (Number.isFinite(rateOverride)) payload.ratePct = rateOverride;
+    const rate = Number(valueOf('ratePct'));
+    if (rateTouched && Number.isFinite(rate)) payload.ratePct = rate;
     return payload;
   }
 
@@ -94,7 +94,7 @@
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
     $('mortgageOnlyResult').textContent = moneyMo(breakdown.mortgagePI);
-    $('mortgageLedgerNote').textContent = rate.toFixed(2) + '% · ' + Number(loan.termYears || 30) + ' years';
+    $('mortgageLedgerNote').textContent = rate.toFixed(3) + '% · ' + Number(loan.termYears || 30) + ' years';
     $('propertyTaxLedgerResult').textContent = moneyMo(breakdown.propertyTax);
     $('insuranceLedgerResult').textContent = moneyMo(breakdown.homeInsurance);
     $('maintenanceLedgerResult').textContent = moneyMo(breakdown.maintenance);
@@ -207,11 +207,17 @@
     });
 
     const isUserRate = prov.mortgageRate === 'USER PROVIDED';
-    $('ratePctAdjust').value = rate.toFixed(2);
-    $('rateSourceResult').textContent = isUserRate
-      ? 'Using your adjusted rate of ' + rate.toFixed(2) + '%.'
-      : 'First run used the current Freddie Mac 30-year benchmark: ' + rate.toFixed(2) + '%' +
-        (rateSource.observationDate ? ' · observation ' + rateSource.observationDate : '') + '.';
+    if (!rateTouched) {
+      $('ratePct').value = rate.toFixed(3);
+      const sourceText = rateSource.frequency === 'DAILY'
+        ? 'Latest daily average'
+        : rateSource.frequency === 'WEEKLY'
+          ? 'Daily average unavailable · weekly fallback'
+          : 'Live rate unavailable · fallback assumption';
+      $('rateDefaultNote').textContent = sourceText + ': ' + rate.toFixed(3) + '%' +
+        (rateSource.observationDate ? ' · ' + rateSource.observationDate : '') +
+        (rateSource.source ? ' · ' + rateSource.source : '');
+    }
 
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
@@ -243,8 +249,11 @@
         'Mortgage rate',
         prov.mortgageRate,
         isUserRate
-          ? 'Adjusted by you after the first result: ' + rate.toFixed(2) + '%.'
-          : 'Current Freddie Mac 30-year benchmark via FRED: ' + rate.toFixed(2) + '%' + (rateSource.observationDate ? ' (' + rateSource.observationDate + ')' : '') + '.'
+          ? 'Rate entered by you before calculation: ' + rate.toFixed(3) + '%.'
+          : (rateSource.frequency === 'DAILY' ? 'Latest daily 30-year conforming average' : 'Current mortgage benchmark') +
+            ': ' + rate.toFixed(3) + '%' +
+            (rateSource.observationDate ? ' (' + rateSource.observationDate + ')' : '') +
+            (rateSource.source ? ' · ' + rateSource.source : '') + '.'
       ),
       provRow('Property tax', prov.propertyTax && prov.propertyTax.provenance, prov.propertyTax && prov.propertyTax.note),
       provRow('Homeowners insurance', prov.homeInsurance && prov.homeInsurance.provenance, prov.homeInsurance && prov.homeInsurance.note),
@@ -265,9 +274,7 @@
       return;
     }
 
-    status.textContent = source === 'rate'
-      ? 'Recalculating the Reality Gap with your mortgage rate…'
-      : 'Pulling the current mortgage rate and property data…';
+    status.textContent = 'Pulling property data and building the true cost…';
     track('calculation_started');
 
     try {
@@ -283,7 +290,7 @@
       track('calculation_completed');
       track('reality_gap_viewed');
       if (data.downPaymentBreakpoint && data.downPaymentBreakpoint.active) track('pmi_breakpoint_viewed');
-      if (source === 'rate') track('mortgage_rate_adjusted');
+      if (rateTouched) track('mortgage_rate_adjusted');
       else track('market_rate_used');
     } catch (error) {
       status.textContent = 'Unable to calculate: ' + (error.message || error);
@@ -292,20 +299,42 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    rateOverride = null;
-    calculate('initial');
-  });
-
-  rateForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const candidate = Number($('ratePctAdjust').value);
-    if (!Number.isFinite(candidate) || candidate < 0 || candidate > 25) {
+    const candidate = Number(valueOf('ratePct'));
+    if (rateTouched && (!Number.isFinite(candidate) || candidate < 0 || candidate > 25)) {
       status.textContent = 'Enter a mortgage rate from 0% to 25%.';
       return;
     }
-    rateOverride = candidate;
-    calculate('rate');
+    calculate('initial');
   });
 
+  $('ratePct').addEventListener('input', () => {
+    rateTouched = true;
+    $('rateDefaultNote').textContent = 'Using your rate. The daily national average remains the default when this field is unchanged.';
+  });
+
+  async function loadDailyRate() {
+    try {
+      const response = await fetch('/api/house-fit', { headers: { Accept: 'application/json' } });
+      const data = await response.json();
+      const rate = Number(data && data.mortgageRate && data.mortgageRate.ratePct);
+      if (!response.ok || !Number.isFinite(rate)) throw new Error('Rate unavailable');
+      if (!rateTouched) $('ratePct').value = rate.toFixed(3);
+      const source = data.mortgageRate || {};
+      const label = source.frequency === 'DAILY'
+        ? 'Latest daily average'
+        : source.frequency === 'WEEKLY'
+          ? 'Daily average unavailable · weekly fallback'
+          : 'Live rate unavailable · fallback assumption';
+      if (!rateTouched) {
+        $('rateDefaultNote').textContent = label + ': ' + rate.toFixed(3) + '%' +
+          (source.observationDate ? ' · ' + source.observationDate : '') +
+          (source.source ? ' · ' + source.source : '');
+      }
+    } catch {
+      if (!rateTouched) $('rateDefaultNote').textContent = 'Daily rate will be loaded automatically when you calculate.';
+    }
+  }
+
+  loadDailyRate();
   track('tool_view');
 })();
