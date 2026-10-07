@@ -30,6 +30,7 @@
   const answerMeta = document.getElementById('answer-meta');
   const answerSource = document.getElementById('answer-source');
   const answerNext = document.getElementById('answer-next');
+  const answerDelay = document.getElementById('answer-delay');
   const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
@@ -102,6 +103,99 @@
     const t = ap?.estimatedTime || ap?.scheduledTime;
     if (!t?.time) return null;
     return [t.time, t.ampm, t.timezone].filter(Boolean).join(' ');
+  }
+
+  function formatClock(iso, timezone) {
+    const date = new Date(iso || '');
+    if (!Number.isFinite(date.getTime())) return null;
+    try {
+      return new Intl.DateTimeFormat('en-US',{
+        hour:'numeric',
+        minute:'2-digit',
+        timeZone:timezone || undefined,
+        timeZoneName:'short'
+      }).format(date);
+    } catch {
+      return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(date);
+    }
+  }
+
+  function scheduledDepartureClock(assignment) {
+    const iso = assignment?.schedule?.estimatedDepartureUTC || assignment?.schedule?.scheduledDepartureUTC;
+    return formatClock(iso, assignment?.origin?.timezone) || scheduledTimeLabel(assignment?.origin);
+  }
+
+  function completedArrivalClock(occurrence) {
+    const iso = occurrence?.schedule?.actualArrivalUTC || occurrence?.schedule?.estimatedArrivalUTC;
+    return formatClock(iso, occurrence?.destination?.timezone) || scheduledTimeLabel(occurrence?.destination);
+  }
+
+  function minutesBetween(startIso, endIso) {
+    const start = Date.parse(startIso || '');
+    const end = Date.parse(endIso || '');
+    if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+    return Math.round((end - start) / 60000);
+  }
+
+  function scheduledTurnMinutes(assignment, inbound) {
+    const minutes = minutesBetween(inbound?.schedule?.scheduledArrivalUTC, assignment?.schedule?.scheduledDepartureUTC);
+    return Number.isFinite(minutes) && minutes >= 0 && minutes <= 360 ? minutes : null;
+  }
+
+  function inboundArrivalDelayMinutes(inbound) {
+    const explicit = inbound?.flightStatus?.arrivalDelayMinutes;
+    if (Number.isFinite(explicit)) return Math.max(0,Math.round(explicit));
+    const minutes = minutesBetween(inbound?.schedule?.scheduledArrivalUTC, inbound?.schedule?.estimatedArrivalUTC);
+    return Number.isFinite(minutes) ? Math.max(0,minutes) : null;
+  }
+
+  function previousLegStory(assignment, previous) {
+    if (!previous?.origin) return null;
+    const tail = assignment?.tailNumber || previous?.tailNumber || 'Your plane';
+    const from = airportPlace(previous.origin);
+    const flight = previous?.flightNumber ? ' (' + previous.flightNumber + ')' : '';
+    const landedAt = completedArrivalClock(previous);
+    return tail + ' arrived from ' + from + flight + (landedAt ? ' at ' + landedAt : '') + '.';
+  }
+
+  function delayWhyText(assignment, inbound) {
+    const departureDelay = assignment?.flightStatus?.departureDelayMinutes;
+    if (!Number.isFinite(departureDelay) || departureDelay <= 0 || !inbound) return '';
+    const late = inboundArrivalDelayMinutes(inbound);
+    const turn = scheduledTurnMinutes(assignment,inbound);
+    const from = inbound?.origin ? airportPlace(inbound.origin) : null;
+    const flight = inbound?.flightNumber ? ' on ' + inbound.flightNumber : '';
+    let first = '';
+    if (Number.isFinite(late) && late > 0) {
+      first = inbound?.flightStatus?.landed === true
+        ? 'Your plane arrived ' + late + ' min late' + (from ? ' from ' + from : '') + flight + '.'
+        : 'Your inbound plane is running about ' + late + ' min late' + (from ? ' from ' + from : '') + flight + '.';
+    } else if (Number.isFinite(late)) {
+      first = 'The inbound flight is not currently showing a late arrival.';
+    }
+    const second = Number.isFinite(turn)
+      ? 'The scheduled turn before your flight is ' + turn + ' min.'
+      : '';
+    return [first,second].filter(Boolean).join(' ');
+  }
+
+  function inboundLandingClock(assignment, inbound, live) {
+    const sourceIso = inbound?.schedule?.estimatedArrivalUTC;
+    const sourceClock = formatClock(sourceIso, assignment?.origin?.timezone);
+    if (sourceClock) return sourceClock;
+    const eta = live?.progress?.landingEstimate;
+    if (!eta || !Number.isFinite(eta.minMinutes) || !Number.isFinite(eta.maxMinutes)) return null;
+    const midpoint = Math.max(0,(eta.minMinutes + eta.maxMinutes) / 2);
+    return formatClock(Date.now() + midpoint * 60000, assignment?.origin?.timezone);
+  }
+
+  function inboundTimingText(assignment, inbound, live) {
+    const arrival = inboundLandingClock(assignment,inbound,live);
+    const departure = scheduledDepartureClock(assignment);
+    if (arrival && departure) return 'Your plane lands about ' + arrival + '; your flight departs ' + departure + '.';
+    if (arrival) return 'Your plane lands about ' + arrival + '.';
+    if (departure) return 'Your flight departs ' + departure + '.';
+    return '';
   }
 
   function delayLabel(assignment) {
@@ -177,7 +271,7 @@
     answerJourney.hidden = false;
   }
 
-  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',journey=null,pills=[],next='',source=''}) {
+  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',journey=null,pills=[],next='',delayWhy='',source=''}) {
     answerCard.hidden = false;
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
@@ -187,6 +281,8 @@
     pills.filter(Boolean).forEach(addAnswerPill);
     answerNext.textContent = next || '';
     answerNext.hidden = !next;
+    answerDelay.textContent = delayWhy ? 'Why is my flight delayed? ' + delayWhy : '';
+    answerDelay.hidden = !delayWhy;
     answerSource.textContent = source || '';
   }
 
@@ -194,6 +290,7 @@
     answerCard.hidden = true;
     answerJourney.hidden = true;
     answerNext.hidden = true;
+    answerDelay.hidden = true;
     routeChoices.hidden = true;
     routeChoices.replaceChildren();
   }
@@ -508,23 +605,26 @@
     if (occurrence?.flightStatus?.airborne === true && occurrence?.flightStatus?.landed !== true) {
       const route = assignmentRoute(assignment);
       const currentRoute = compactRoute(occurrence.origin,occurrence.destination);
+      const timing = inboundTimingText(assignment,occurrence,null);
       setAnswer({
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is still on the way to ' + airportPlace(assignment.origin) + '.',
         summary:registration + ' is operating ' + occurrence.flightNumber + ' ' + currentRoute +
-          '. We can confirm the inbound flight, but we do not have a current live map position right now.',
+          '. We can confirm the inbound flight, but we do not have a current live map position right now.' +
+          (timing ? ' ' + timing : ''),
         journey:{
           now:{
             primary:[occurrence.flightNumber,currentRoute].filter(Boolean).join(' · '),
-            secondary:registration + ' · inbound flight confirmed'
+            secondary:journeySecondary([registration,inboundLandingClock(assignment,occurrence,null) ? 'Lands about ' + inboundLandingClock(assignment,occurrence,null) : 'inbound flight confirmed'])
           },
           next:{
             primary:[assignment.flightNumber,route].filter(Boolean).join(' · '),
-            secondary:journeySecondary([scheduledTimeLabel(assignment.origin),delayLabel(assignment)])
+            secondary:journeySecondary([scheduledDepartureClock(assignment),delayLabel(assignment)])
           }
         },
         pills:[delayLabel(assignment),registration,assignment?.equipment?.name || assignment?.equipment?.code].filter(Boolean),
-        next:'What happens next: we’ll keep checking for a live position and for the inbound flight to arrive.',
+        next:'What happens next: the inbound aircraft must land and complete its turn before your flight can leave.',
+        delayWhy:delayWhyText(assignment,occurrence),
         source:assignmentSourceText()
       });
       clearLiveMap();
@@ -907,32 +1007,28 @@
     const delay = delayLabel(assignment);
     const originName = airportPlace(assignment?.origin);
     const originCode = airportCodeAny(assignment?.origin);
-    const previousRoute = previous?.origin && previous?.destination
-      ? airportPlace(previous.origin) + ' → ' + airportPlace(previous.destination)
-      : null;
     const equipment = assignment?.equipment?.name || assignment?.equipment?.code;
-    const dep = scheduledTimeLabel(assignment?.origin);
+    const dep = scheduledDepartureClock(assignment);
+    const story = previousLegStory(assignment,previous);
 
     setAnswer({
       kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
-      headline:'Your plane has arrived in ' + originName + ' and is on the ground.',
-      summary:(tail ? tail + ' ' : 'The assigned aircraft ') +
-        (previousRoute ? 'completed ' + previousRoute + ' and ' : '') +
-        'is still assigned to your ' + (route || 'next') + ' flight.',
+      headline:(tail || 'Your plane') + ' is at the gate — live tracking starts at pushback.',
+      summary:(story ? story + ' ' : '') +
+        'It is still assigned to your ' + (route || 'next') + ' flight.',
       journey:{
         now:{
-          primary:[tail,originCode ? 'at ' + originCode : 'on the ground'].filter(Boolean).join(' · '),
-          secondary:'Previous flight landed'
+          primary:[tail,originCode ? 'at ' + originCode : 'at the gate'].filter(Boolean).join(' · '),
+          secondary:journeySecondary([previous?.flightNumber ? 'Arrived on ' + previous.flightNumber : 'Previous flight landed',completedArrivalClock(previous)])
         },
         next:{
           primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
-          secondary:journeySecondary([dep ? dep : null,delay])
+          secondary:journeySecondary([dep,delay])
         }
       },
       pills:[delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
-      next:'What happens next: the aircraft turns at ' + originName +
-        ', then operates your ' + (route || 'next') +
-        ' flight. We’ll keep checking for an aircraft swap or departure.',
+      next:'The aircraft is parked at ' + originName + '. Live tracking starts again at pushback; the airline assignment can still change before departure.',
+      delayWhy:delayWhyText(assignment,previous),
       source:assignmentSourceText()
     });
 
@@ -1012,8 +1108,8 @@
     const currentLeg = currentRoute?.origin && currentRoute?.destination
       ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
       : null;
-    const currentOperatingFlight = live?.confirmedOperatingOccurrence?.flightNumber ||
-      assignment?.currentAircraftOccurrence?.flightNumber || null;
+    const inboundOccurrence = live?.confirmedOperatingOccurrence || assignment?.currentAircraftOccurrence || null;
+    const currentOperatingFlight = inboundOccurrence?.flightNumber || null;
     const eta = live?.route ? live?.progress?.landingEstimate : null;
     const userOrigin = assignment?.origin;
     const inboundToOrigin = currentRoute?.destination && userOrigin && sameAirport(currentRoute.destination,userOrigin);
@@ -1048,8 +1144,11 @@
         : currentLeg
           ? 'It is currently flying ' + currentLeg + '.'
           : 'The aircraft is currently inbound to ' + originName + '.';
-      if (eta) summary += ' From the latest live report, it is roughly ' + durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes) + ' from landing there.';
+      const timing = inboundTimingText(assignment,inboundOccurrence,live);
+      if (timing) summary += ' ' + timing;
+      else if (eta) summary += ' From the latest live report, it is roughly ' + durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes) + ' from landing there.';
       if (assignmentChangedFrom) summary += ' The airline recently changed the assigned aircraft from ' + assignmentChangedFrom + ' to ' + tail + '.';
+      const landingClock = inboundLandingClock(assignment,inboundOccurrence,live);
       setAnswer({
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is on the way to ' + originName + '.',
@@ -1057,15 +1156,16 @@
         journey:{
           now:{
             primary:[currentOperatingFlight || tail,compactRoute(currentRoute?.origin,currentRoute?.destination)].filter(Boolean).join(' · '),
-            secondary:journeySecondary([tail,currentOperatingFlight ? 'airborne now' : 'inbound now'])
+            secondary:journeySecondary([tail,landingClock ? 'Lands about ' + landingClock : (currentOperatingFlight ? 'airborne now' : 'inbound now')])
           },
           next:{
             primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
-            secondary:journeySecondary([scheduledTimeLabel(assignment?.origin),delay])
+            secondary:journeySecondary([scheduledDepartureClock(assignment),delay])
           }
         },
         pills,
         next:'What happens next: ' + tail + ' lands at ' + originName + ' → taxis to a gate → turns for your ' + (route || 'next') + ' flight.',
+        delayWhy:delayWhyText(assignment,inboundOccurrence),
         source:assignmentSourceText()
       });
       return;
@@ -1223,7 +1323,9 @@
           ? 'Our live aircraft feed can see ' + tail + ', but it does not have a current location we can show on the map yet.'
           : 'The assigned aircraft is ' + tail + '. It may be parked at a gate, outside coverage, or between usable position reports.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
-      next:'What happens next: we’ll keep checking ' + tail + '. If it starts reporting a usable position, this page will update automatically.',
+      next:onGround
+        ? 'Live tracking starts again when the aircraft begins transmitting a usable position at pushback. The airline assignment is still rechecked for swaps.'
+        : 'We checked the recent inbound history too. If no same-tail arrival is confirmed and no live position exists, we leave the map empty rather than guess.',
       source:assignmentSourceText()
     });
     clearLiveMap();

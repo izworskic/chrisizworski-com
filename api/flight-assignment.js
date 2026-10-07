@@ -433,8 +433,14 @@ function sanitizeFlight(flight, marketingFlight, detailUrl) {
     schedule:{
       scheduledDepartureUTC:String(flight?.schedule?.scheduledDepartureUTC || '').trim() || null,
       estimatedDepartureUTC:String(flight?.schedule?.estimatedActualDepartureUTC || '').trim() || null,
+      actualDepartureUTC:(airborne || landed)
+        ? String(flight?.schedule?.actualDepartureUTC || flight?.schedule?.estimatedActualDepartureUTC || '').trim() || null
+        : null,
       scheduledArrivalUTC:String(flight?.schedule?.scheduledArrivalUTC || '').trim() || null,
-      estimatedArrivalUTC:String(flight?.schedule?.estimatedActualArrivalUTC || '').trim() || null
+      estimatedArrivalUTC:String(flight?.schedule?.estimatedActualArrivalUTC || '').trim() || null,
+      actualArrivalUTC:landed
+        ? String(flight?.schedule?.actualArrivalUTC || flight?.schedule?.estimatedActualArrivalUTC || '').trim() || null
+        : null
     },
     flightStatus:{
       code:String(status.statusCode || '').trim() || null,
