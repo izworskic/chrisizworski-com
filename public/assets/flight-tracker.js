@@ -26,6 +26,7 @@
   const answerKicker = document.getElementById('answer-kicker');
   const answerHeadline = document.getElementById('answer-headline');
   const answerSummary = document.getElementById('answer-summary');
+  const answerJourney = document.getElementById('answer-journey');
   const answerMeta = document.getElementById('answer-meta');
   const answerSource = document.getElementById('answer-source');
   const answerNext = document.getElementById('answer-next');
@@ -120,11 +121,66 @@
     answerMeta.appendChild(pill);
   }
 
-  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',pills=[],next='',source=''}) {
+  function compactRoute(origin, destination) {
+    const from = airportCodeAny(origin);
+    const to = airportCodeAny(destination);
+    return from && to ? from + ' → ' + to : null;
+  }
+
+  function journeySecondary(parts) {
+    return parts.filter(Boolean).join(' · ');
+  }
+
+  function renderAnswerJourney(journey) {
+    answerJourney.replaceChildren();
+    if (!journey?.now?.primary || !journey?.next?.primary) {
+      answerJourney.hidden = true;
+      return;
+    }
+
+    const makeStep = (label, step, className='') => {
+      const wrap = document.createElement('div');
+      wrap.className = 'journey-step' + (className ? ' ' + className : '');
+
+      const kicker = document.createElement('span');
+      kicker.className = 'journey-label';
+      kicker.textContent = label;
+
+      const primary = document.createElement('strong');
+      primary.className = 'journey-primary';
+      primary.textContent = step.primary;
+
+      wrap.append(kicker,primary);
+
+      if (step.secondary) {
+        const secondary = document.createElement('span');
+        secondary.className = 'journey-secondary';
+        secondary.textContent = step.secondary;
+        wrap.appendChild(secondary);
+      }
+
+      return wrap;
+    };
+
+    const arrow = document.createElement('span');
+    arrow.className = 'journey-arrow';
+    arrow.setAttribute('aria-hidden','true');
+    arrow.textContent = '→';
+
+    answerJourney.append(
+      makeStep('NOW', journey.now),
+      arrow,
+      makeStep('YOUR FLIGHT', journey.next, 'is-next')
+    );
+    answerJourney.hidden = false;
+  }
+
+  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',journey=null,pills=[],next='',source=''}) {
     answerCard.hidden = false;
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
     answerSummary.textContent = summary || '';
+    renderAnswerJourney(journey);
     clearAnswerMeta();
     pills.filter(Boolean).forEach(addAnswerPill);
     answerNext.textContent = next || '';
@@ -134,6 +190,7 @@
 
   function hideAnswer() {
     answerCard.hidden = true;
+    answerJourney.hidden = true;
     answerNext.hidden = true;
     routeChoices.hidden = true;
     routeChoices.replaceChildren();
@@ -644,7 +701,17 @@
       summary:(tail ? tail + ' ' : 'The assigned aircraft ') +
         (previousRoute ? 'completed ' + previousRoute + ' and ' : '') +
         'is still assigned to your ' + (route || 'next') + ' flight.',
-      pills:[route,delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
+      journey:{
+        now:{
+          primary:[tail,originCode ? 'at ' + originCode : 'on the ground'].filter(Boolean).join(' · '),
+          secondary:'Previous flight landed'
+        },
+        next:{
+          primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
+          secondary:journeySecondary([dep ? dep : null,delay])
+        }
+      },
+      pills:[delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
       next:'What happens next: the aircraft turns at ' + originName +
         ', then operates your ' + (route || 'next') +
         ' flight. We’ll keep checking for an aircraft swap or departure.',
@@ -721,7 +788,7 @@
     const tail = assignment?.tailNumber || live?.aircraft?.registration;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
-    const identity = aircraftIdentity(live?.aircraft) || assignment?.equipment?.name || tail;
+    const identity = live?.aircraft?.aircraftTypeName || live?.aircraft?.aircraftType || assignment?.equipment?.name || assignment?.equipment?.code;
     const pills = [route, delay, tail, identity].filter(Boolean);
     const currentRoute = resolvedCurrentRoute(assignment, live);
     const currentLeg = currentRoute?.origin && currentRoute?.destination
@@ -769,7 +836,17 @@
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is on the way to ' + originName + '.',
         summary,
-        pills:[...pills,currentOperatingFlight,currentLeg],
+        journey:{
+          now:{
+            primary:[currentOperatingFlight || tail,compactRoute(currentRoute?.origin,currentRoute?.destination)].filter(Boolean).join(' · '),
+            secondary:journeySecondary([tail,currentOperatingFlight ? 'airborne now' : 'inbound now'])
+          },
+          next:{
+            primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
+            secondary:journeySecondary([scheduledTimeLabel(assignment?.origin),delay])
+          }
+        },
+        pills,
         next:'What happens next: ' + tail + ' lands at ' + originName + ' → taxis to a gate → turns for your ' + (route || 'next') + ' flight.',
         source:assignmentSourceText()
       });
@@ -782,7 +859,17 @@
         headline:'Your plane is currently flying ' + currentLeg + '.',
         summary:(currentOperatingFlight ? 'It is currently operating ' + currentOperatingFlight + '. ' : '') +
           'That is the aircraft currently assigned to your flight. It is not yet flying into ' + airportPlace(userOrigin) + ', so it may have another flight to make first, or the airline may swap aircraft before your departure.',
-        pills:[...pills,currentOperatingFlight,currentLeg],
+        journey:{
+          now:{
+            primary:[currentOperatingFlight || tail,compactRoute(currentRoute?.origin,currentRoute?.destination)].filter(Boolean).join(' · '),
+            secondary:journeySecondary([tail,'airborne now'])
+          },
+          next:{
+            primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
+            secondary:journeySecondary([scheduledTimeLabel(assignment?.origin),delay])
+          }
+        },
+        pills,
         next:'What happens next: keep watching the assignment. This aircraft may make another flight first, or the airline may swap aircraft before departure.',
         source:assignmentSourceText()
       });
@@ -798,6 +885,18 @@
           ? 'Your plane is on the ground at ' + focusLabel + '.'
           : 'Your assigned plane is on the ground.',
         summary:tail + ' is currently reporting on the ground and is assigned to your ' + (route || 'next') + ' flight.',
+        journey:relationship?.state === 'at-airport'
+          ? {
+              now:{
+                primary:[tail,'at ' + airportCodeAny(relationship.airport)].filter(Boolean).join(' · '),
+                secondary:'On the ground'
+              },
+              next:{
+                primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
+                secondary:journeySecondary([scheduledTimeLabel(assignment?.origin),delay])
+              }
+            }
+          : null,
         pills,
         next:'What happens next: we’ll keep checking the aircraft assignment and watch for your flight to depart.',
         source:assignmentSourceText()
@@ -816,6 +915,16 @@
       setAnswer({
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is on the ground at ' + focusLabel + '.',
+        journey:{
+          now:{
+            primary:[tail,'at ' + airportCodeAny(relationship.airport)].filter(Boolean).join(' · '),
+            secondary:'On the ground'
+          },
+          next:{
+            primary:[assignment?.flightNumber,route].filter(Boolean).join(' · '),
+            secondary:journeySecondary([scheduledTimeLabel(assignment?.origin),delay])
+          }
+        },
         summary:reportLead +
           (Number.isFinite(relationship.distanceMiles)
             ? ', about ' + relationship.distanceMiles + ' ' + (relationship.distanceMiles === 1 ? 'mile' : 'miles') + ' from the center of ' + (airportCodeAny(relationship.airport) || 'the airport')

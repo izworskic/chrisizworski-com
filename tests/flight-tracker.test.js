@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007k/);
+  assert.match(html, /flight-tracker\.js\?v=20261007l/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -607,4 +607,38 @@ test('different-flight-number inbound occurrence becomes the traveler-facing cur
   assert.match(client, /data\.confirmedOperatingOccurrence = operatingOccurrence/);
   assert.match(client, /currentOperatingFlight = live\?\.confirmedOperatingOccurrence\?\.flightNumber/);
   assert.match(client, /is currently operating .* from .* to/s);
+});
+
+
+test('ergonomic answer card makes the aircraft chain scannable without adding a dashboard', () => {
+  assert.match(html, /id="answer-journey"/);
+  assert.match(html, /.answer-journey\{display:grid;grid-template-columns:minmax\(0,1fr\) 22px minmax\(0,1fr\)/);
+  assert.match(html, /.journey-label/);
+  assert.match(html, /.journey-primary/);
+  assert.match(client, /function renderAnswerJourney\(journey\)/);
+  assert.match(client, /kicker\.textContent = label/);
+  assert.match(client, /arrow\.textContent = '→'/);
+  assert.match(client, /makeStep\('NOW', journey\.now\)/);
+  assert.match(client, /makeStep\('YOUR FLIGHT', journey\.next, 'is-next'\)/);
+});
+
+test('inbound and landed states show NOW to YOUR FLIGHT relationship while ordinary states hide it', () => {
+  assert.match(client, /journey:\{\s*now:\{\s*primary:\[currentOperatingFlight \|\| tail,compactRoute/s);
+  assert.match(client, /primary:\[assignment\?\.flightNumber,route\]/);
+  assert.match(client, /Previous flight landed/);
+  assert.match(client, /answerJourney\.hidden = true/);
+  assert.match(client, /renderAnswerJourney\(journey\)/);
+});
+
+test('ergonomic polish removes duplicate tail registration from answer pills', () => {
+  assert.match(client, /const identity = live\?\.aircraft\?\.aircraftTypeName \|\| live\?\.aircraft\?\.aircraftType/);
+  assert.match(client, /const pills = \[route, delay, tail, identity\]/);
+  assert.doesNotMatch(client, /const identity = aircraftIdentity\(live\?\.aircraft\)/);
+});
+
+test('mobile journey strip remains compact at the 390px baseline', () => {
+  assert.match(html, /@media \(max-width:520px\)/);
+  assert.match(html, /\.answer-journey\{grid-template-columns:minmax\(0,1fr\) 18px minmax\(0,1fr\);gap:6px\}/);
+  assert.match(html, /\.journey-primary\{font-size:12\.5px\}/);
+  assert.match(html, /\.journey-secondary\{font-size:10px\}/);
 });
