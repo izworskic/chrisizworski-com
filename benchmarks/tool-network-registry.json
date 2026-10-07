@@ -2514,6 +2514,43 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "michigan-wine-day",
+      "name": "Michigan Wine Day Decision Engine",
+      "canonical": "https://chrisizworski.com/michigan-wine-day/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "trip-planning",
+      "primaryIntent": "which Michigan wine region should I visit for the day I have",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan"
+      ],
+      "personas": [
+        "trip-planner",
+        "wine-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
     }
   ],
   "relationships": [
@@ -3524,6 +3561,22 @@
       "surface": "transportation-live",
       "strength": "optional",
       "reason": "Travelers tracking an NYC-bound flight can continue into live bridge and tunnel conditions when the ground trip crosses the metro area."
+    },
+    {
+      "from": "michigan-wine-day",
+      "to": "petoskey-wine",
+      "type": "decision-handoff",
+      "surface": "wine-region-choice",
+      "strength": "strong",
+      "reason": "Statewide engine chooses Petoskey when fit and feasibility win; Petoskey remains authoritative for the actual regional route, wineries and hours."
+    },
+    {
+      "from": "michigan-wine-day",
+      "to": "tc-wine",
+      "type": "decision-handoff",
+      "surface": "wine-region-choice",
+      "strength": "strong",
+      "reason": "Statewide engine chooses Old Mission or Leelanau; Traverse City Wine Country remains authoritative for the actual regional route, wineries and hours."
     }
   ],
   "cannibalizationGroups": [
@@ -3699,6 +3752,15 @@
         "white-christmas-michigan"
       ],
       "rule": "Snow Totals owns reported snowfall (how much fell, where, when) from NWS Local Storm Reports. National Snow owns measured snowpack depth and SWE on the ground. Snowmobile and XC own trail rideability and skiability. Do not create county or city snowfall doorway pages."
+    },
+    {
+      "intent": "Michigan wine-region choice for a specific day",
+      "owner": "michigan-wine-day",
+      "supports": [
+        "tc-wine",
+        "petoskey-wine"
+      ],
+      "rule": "Michigan Wine Day owns statewide region-selection intent. Traverse City Wine Country owns Old Mission/Leelanau winery maps, winery detail and regional day routing. Petoskey Wine owns Petoskey/Tip of the Mitt winery detail and regional day routing. Do not create indexable city/query-state doorway pages from the statewide engine."
     }
   ],
   "expansionOpportunities": [

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "adapter": "petoskey-wine-region",
+  "region": {
+    "id": "petoskey",
+    "label": "Petoskey / Tip of the Mitt",
+    "publicLabel": "Petoskey Wine Region",
+    "plannerUrl": "https://chrisizworski.com/petoskey-wine/",
+    "plannerOrigin": "Petoskey",
+    "officialGeography": [
+      {
+        "type": "AVA",
+        "name": "Tip of the Mitt AVA",
+        "authority": "TTB"
+      },
+      {
+        "type": "wine-region",
+        "name": "Petoskey Wine Region",
+        "authority": "official association"
+      }
+    ],
+    "anchor": {
+      "lat": 45.35,
+      "lng": -84.96
+    },
+    "experience": {
+      "compactness": "medium",
+      "scenery": "high",
+      "villages": "high",
+      "variety": "medium",
+      "relaxedPace": "high",
+      "firstTripAppeal": "medium"
+    }
+  },
+  "inventory": {
+    "wineryCount": 15,
+    "officialTrailMemberCount": 13,
+    "knownHoursCount": 10,
+    "unknownHoursCount": 5,
+    "foodSignalCount": 12,
+    "viewSignalCount": 12
+  },
+  "intentEvidence": {
+    "first-trip": 11,
+    "serious-wine": 10,
+    "riesling": 0,
+    "sparkling": 1,
+    "reds": 4,
+    "whites": 2,
+    "food": 11,
+    "views": 9,
+    "quiet": 10
+  },
+  "localDrive": {
+    "medianNearestNeighborMiles": 3.7,
+    "spreadMiles": 36.7
+  },
+  "freshness": {
+    "wineryTruthReviewedAt": "2026-09-18",
+    "hoursReviewedLabel": "September 18, 2026",
+    "officialMembershipVerifiedAt": "2026-09-18"
+  },
+  "truthRules": {
+    "unknownIsFalse": false,
+    "unknownHoursMeaning": "call-ahead / not verified, never treated as closed",
+    "reservationAvailabilityKnown": false,
+    "tastingFeesKnown": false
+  },
+  "handoff": {
+    "plannerUrl": "https://chrisizworski.com/petoskey-wine/",
+    "plannerOrigin": "Petoskey",
+    "area": "any",
+    "presets": {
+      "first-trip": [
+        "petoskey-farms",
+        "mackinaw-trail",
+        "walloon-lake-winery"
+      ],
+      "serious-wine": [
+        "petoskey-farms",
+        "mackinaw-trail",
+        "boyne-valley-vineyards"
+      ],
+      "riesling": [
+        "petoskey-farms",
+        "mackinaw-trail",
+        "boyne-valley-vineyards"
+      ],
+      "sparkling": [
+        "walloon-lake-winery",
+        "rudbeckia",
+        "mackinaw-trail"
+      ],
+      "reds": [
+        "petoskey-farms",
+        "mackinaw-trail",
+        "boyne-valley-vineyards"
+      ],
+      "whites": [
+        "petoskey-farms",
+        "boyne-valley-vineyards",
+        "mackinaw-trail"
+      ],
+      "food": [
+        "petoskey-farms",
+        "mackinaw-trail",
+        "boyne-valley-vineyards"
+      ],
+      "views": [
+        "petoskey-farms",
+        "boyne-valley-vineyards",
+        "walloon-lake-winery"
+      ],
+      "quiet": [
+        "walloon-lake-winery",
+        "rudbeckia",
+        "spare-key"
+      ]
+    },
+    "source": "owner-validated-regional-presets"
+  },
+  "operatingByWeekday": {
+    "Sunday": {
+      "knownOpen": 10,
+      "knownClosed": 0,
+      "unknown": 5
+    },
+    "Monday": {
+      "knownOpen": 6,
+      "knownClosed": 4,
+      "unknown": 5
+    },
+    "Tuesday": {
+      "knownOpen": 5,
+      "knownClosed": 5,
+      "unknown": 5
+    },
+    "Wednesday": {
+      "knownOpen": 7,
+      "knownClosed": 3,
+      "unknown": 5
+    },
+    "Thursday": {
+      "knownOpen": 8,
+      "knownClosed": 2,
+      "unknown": 5
+    },
+    "Friday": {
+      "knownOpen": 9,
+      "knownClosed": 1,
+      "unknown": 5
+    },
+    "Saturday": {
+      "knownOpen": 9,
+      "knownClosed": 1,
+      "unknown": 5
+    }
+  }
+}
