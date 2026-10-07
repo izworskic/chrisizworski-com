@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007c/);
+  assert.match(html, /flight-tracker\.js\?v=20261007d/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -393,4 +393,31 @@ test('assignment source remains a bounded best-effort dependency with live-fligh
   assert.match(source, /Aircraft assignments can change before departure/);
   assert.match(client, /AIRCRAFT ASSIGNMENT UNAVAILABLE/);
   assert.match(client, /loadFlight\(activeFlight,\{silent:false\}\)/);
+});
+
+
+test('route disambiguation makes time and city names dominant so opposite-direction legs are hard to confuse', () => {
+  assert.match(client, /kicker\.textContent = 'YOUR FLIGHT'/);
+  assert.match(client, /time\.className = 'route-choice-time'/);
+  assert.match(client, /cities\.className = 'route-choice-cities'/);
+  assert.match(client, /airportChoiceText\(option\.origin\) \+ ' → ' \+ airportChoiceText\(option\.destination\)/);
+  assert.match(client, /codes\.className = 'route-choice-codes'/);
+  assert.match(html, /\.route-choice-time\{font-size:20px/);
+  assert.match(html, /\.route-choice-cities\{font-size:14px/);
+  assert.match(client, /Choose the city pair and departure time on your ticket/);
+});
+
+test('answer card includes one bounded what-happens-next interpretation instead of adding dashboard panels', () => {
+  assert.match(html, /id="answer-next"/);
+  assert.match(client, /answerNext\.textContent = next \|\| ''/);
+  assert.match(client, /What happens next: .*lands at .*taxis to a gate .*turns for your/s);
+  assert.match(client, /What happens next: we’ll recheck the aircraft assignment every minute/);
+  assert.match(client, /What happens next: we’ll keep checking .*If it starts reporting a usable position/s);
+  assert.doesNotMatch(html, /weather panel|gate history|squawk|vertical speed/i);
+});
+
+test('assigned aircraft without a live map is framed as a useful answer rather than a tracker failure', () => {
+  assert.match(client, /Your plane is assigned, but we can’t map it live right now/);
+  assert.match(client, /Your plane is assigned and on the ground/);
+  assert.match(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
 });
