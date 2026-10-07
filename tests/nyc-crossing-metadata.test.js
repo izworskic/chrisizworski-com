@@ -40,6 +40,7 @@ test('NYC Crossing schema defines its creator and connects page, software, image
   const graph = JSON.parse(json)['@graph'];
   const byId = new Map(graph.map(item => [item['@id'], item]));
   assert.equal(byId.get('https://chrisizworski.com/#person')?.name, 'Chris Izworski');
+  assert.equal(byId.get('https://chrisizworski.com/nyc-crossing/#page')?.dateModified, '2026-10-07');
   assert.equal(byId.get('https://chrisizworski.com/nyc-crossing/#page')?.mainEntity?.['@id'], 'https://chrisizworski.com/nyc-crossing/#app');
   assert.equal(byId.get('https://chrisizworski.com/nyc-crossing/#page')?.primaryImageOfPage?.['@id'], 'https://chrisizworski.com/nyc-crossing/#social-image');
   assert.equal(byId.get('https://chrisizworski.com/nyc-crossing/#app')?.author?.['@id'], 'https://chrisizworski.com/#person');
