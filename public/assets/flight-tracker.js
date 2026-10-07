@@ -221,6 +221,40 @@
     return 'Last position ' + mins + ' min ago';
   }
 
+
+  function reportAgeLead(value) {
+    if (!Number.isFinite(value)) return 'Latest live report';
+    if (value < 10) return 'Last reported just now';
+    if (value < 60) return 'Last reported ' + Math.round(value) + ' seconds ago';
+    const mins = Math.max(1, Math.round(value / 60));
+    return 'Last reported ' + mins + (mins === 1 ? ' minute ago' : ' minutes ago');
+  }
+
+  function focusAirportLabel(relationship) {
+    const ap = relationship?.airport;
+    if (!ap) return null;
+    const place = airportPlace(ap);
+    const code = airportCodeAny(ap);
+    return code && place !== code ? place + ' (' + code + ')' : place;
+  }
+
+
+  function relationshipDistanceText(relationship, label) {
+    if (!Number.isFinite(relationship?.distanceMiles) || !label) return null;
+    const miles = relationship.distanceMiles;
+    return 'about ' + miles + ' ' + (miles === 1 ? 'mile' : 'miles') + ' from ' + label;
+  }
+
+  function aircraftFactSentence(live) {
+    const ac = live?.aircraft || {};
+    const parts = [];
+    const phase = live?.progress?.phase?.label;
+    if (phase && !/unavailable|not current/i.test(phase)) parts.push(phase.toLowerCase());
+    const altitude = formatAltitude(ac.altitudeFeet);
+    if (altitude && ac.onGround !== true) parts.push('at ' + altitude);
+    return parts.join(' ');
+  }
+
   function durationLabel(minutes) {
     if (!Number.isFinite(minutes) || minutes < 0) return '—';
     const hours = Math.floor(minutes / 60);
@@ -399,6 +433,15 @@
     if (data.route?.origin && data.route?.destination) {
       routeLabel.textContent = airportPlace(data.route.origin) + ' → ' + airportPlace(data.route.destination);
       routeCodes.textContent = airportCode(data.route.origin) + ' → ' + airportCode(data.route.destination);
+    } else if (data.focusAirportRelationship?.airport) {
+      const relationship = data.focusAirportRelationship;
+      const focusLabel = focusAirportLabel(relationship);
+      routeLabel.textContent = relationship.state === 'at-airport'
+        ? 'At ' + focusLabel
+        : (Number.isFinite(relationship.distanceMiles)
+            ? 'About ' + relationship.distanceMiles + ' mi from ' + focusLabel
+            : (ac.callsign ? 'Live aircraft · ' + ac.callsign : 'Live aircraft'));
+      routeCodes.textContent = '';
     } else {
       routeLabel.textContent = ac.callsign ? 'Live aircraft · ' + ac.callsign : 'Live aircraft';
       routeCodes.textContent = '';
@@ -438,7 +481,17 @@
       originMarker = clearMarker(originMarker);
       destinationMarker = clearMarker(destinationMarker);
       if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
-      map.easeTo({center:[ac.lon,ac.lat],zoom:7,duration:500});
+
+      const focus = data.focusAirportRelationship?.airport;
+      if (focus && Number.isFinite(focus.lat) && Number.isFinite(focus.lon)) {
+        originMarker = airportMarker('origin', focus, (airportCodeAny(focus) || 'Departure airport') + ' departure airport');
+        const bounds = new maplibregl.LngLatBounds();
+        bounds.extend([ac.lon,ac.lat]);
+        bounds.extend([focus.lon,focus.lat]);
+        map.fitBounds(bounds,{padding:{top:76,bottom:90,left:36,right:36},maxZoom:8,duration:600});
+      } else {
+        map.easeTo({center:[ac.lon,ac.lat],zoom:7,duration:500});
+      }
     }
   }
 
@@ -593,10 +646,73 @@
       return;
     }
 
+    const relationship = live?.focusAirportRelationship;
+    const focusLabel = focusAirportLabel(relationship);
+    const reportLead = reportAgeLead(live?.aircraft?.positionAgeSeconds);
+    const fact = aircraftFactSentence(live);
+    const distanceText = relationshipDistanceText(relationship, focusLabel);
+    const reportDetails = [distanceText, fact].filter(Boolean).join(', ');
+
+    if (relationship?.state === 'at-airport') {
+      setAnswer({
+        kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
+        headline:'Your plane is on the ground at ' + focusLabel + '.',
+        summary:reportLead +
+          (Number.isFinite(relationship.distanceMiles)
+            ? ', about ' + relationship.distanceMiles + ' ' + (relationship.distanceMiles === 1 ? 'mile' : 'miles') + ' from the center of ' + (airportCodeAny(relationship.airport) || 'the airport')
+            : '') + '. ' + tail + ' is on the ground at your departure airport.',
+        pills,
+        next:'What happens next: the aircraft is already at your departure airport. We’ll keep checking the airline assignment in case it changes before your flight.',
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (relationship?.state === 'approaching') {
+      setAnswer({
+        kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
+        headline:'Your plane appears to be approaching ' + focusLabel + '.',
+        summary:reportLead + (reportDetails ? ', ' + reportDetails : '') +
+          '. Its latest movement is generally toward your departure airport, but we have not yet confirmed the origin of its current flight.',
+        pills,
+        next:'What happens next: keep this page open. We’ll keep tracking the aircraft and replace this position-based read with the confirmed current trip as soon as we can verify it.',
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (relationship?.state === 'moving-toward') {
+      setAnswer({
+        kicker:'YOUR ASSIGNED AIRCRAFT',
+        headline:'Your plane is moving generally toward ' + focusLabel + '.',
+        summary:reportLead + (reportDetails ? ', ' + reportDetails : '') +
+          '. We can see the aircraft moving toward your departure airport, but we have not yet confirmed its current flight route.',
+        pills,
+        next:'What happens next: keep this page open. We’ll keep checking the route while following the aircraft’s actual position.',
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (relationship?.state === 'nearby' || relationship?.state === 'distance-only') {
+      setAnswer({
+        kicker:'YOUR ASSIGNED AIRCRAFT',
+        headline:relationship.state === 'nearby'
+          ? 'Your plane is near ' + focusLabel + '.'
+          : 'We found your plane: ' + tail + '.',
+        summary:reportLead + (reportDetails ? ', ' + reportDetails : '') +
+          '. We can track where the airplane is, but we can’t yet confirm the airports for its current flight.',
+        pills,
+        next:'What happens next: keep this page open. We’ll continue following the live position and show the current trip as soon as we can confirm it.',
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
     setAnswer({
       kicker:'YOUR ASSIGNED AIRCRAFT',
-      headline:'We found your plane: ' + tail + '.',
-      summary:'It’s in the air, and we’re tracking it. We can see where it is right now, but we can’t yet confirm where this airplane is coming from or where it’s headed.',
+      headline:live?.aircraft?.onGround === true ? 'We found your plane: ' + tail + '.' : 'We found your plane: ' + tail + '.',
+      summary:reportLead + (fact ? ', ' + fact : '') + '. We can see where it is right now, but we can’t yet confirm where this airplane is coming from or where it’s headed.',
       pills,
       next:'What happens next: keep this page open. We’ll keep checking and show its current trip as soon as we can confirm it.',
       source:assignmentSourceText()
@@ -682,7 +798,10 @@
     const sequence = ++requestSequence;
 
     try {
-      const response = await fetch('/api/flight-tracker?registration=' + encodeURIComponent(registration), {headers:{accept:'application/json'}});
+      const liveParams = new URLSearchParams({registration});
+      const focusAirport = airportCodeAny(assignmentData?.origin);
+      if (focusAirport) liveParams.set('focusAirport', focusAirport);
+      const response = await fetch('/api/flight-tracker?' + liveParams.toString(), {headers:{accept:'application/json'}});
       const data = await response.json();
       if (sequence !== requestSequence || assignedTail !== registration) return;
       if (data.status === 'live') {
