@@ -815,7 +815,7 @@ test('landed previous trip overrides stale airborne narrative and becomes the be
   assert.match(client, /arrived from/);
   assert.match(client, /Live tracking starts again at pushback/);
   assert.match(client, /if \(assignmentData && renderArrivedForTurn\(assignmentData\)\) \{\s*resetHeldLive\(\);\s*return true;/s);
-  assert.match(client, /if \(renderArrivedForTurn\(assignment\)\) return;/);
+  assert.match(client, /if \(!assignmentArrivalConfirmed\(assignment\) && renderArrivedForTurn\(assignment\)\) return;/);
 });
 
 test('a grounded live aircraft can never fall through to the generic airborne-style fallback', () => {
