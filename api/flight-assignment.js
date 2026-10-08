@@ -1008,18 +1008,210 @@ function dateIsNearNow(date,nowMs = Date.now()) {
   return Number.isFinite(target) && Math.abs(target - nowMs) <= 36 * 60 * 60 * 1000;
 }
 
+function embeddedInboundOccurrence(assignment) {
+  for (const occurrence of [assignment?.recentInboundOccurrence,assignment?.previousAircraftOccurrence]) {
+    if (!occurrence) continue;
+    if (!sameTail(occurrence?.tailNumber,assignment?.tailNumber)) continue;
+    if (!sameAirport(occurrence?.destination,assignment?.origin)) continue;
+    return occurrence;
+  }
+  return null;
+}
+
 async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
   if (!dateIsNearNow(date,nowMs)) return null;
   const tail = assignment?.tailNumber;
   const airport = airportCode(assignment?.origin);
-  const carrier = carrierCode(assignment?.flightNumber);
+  const carrier = carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
   if (!tail || !airport || !carrier) return null;
+
   try {
     const result = await lookupRecentArrivalByTail({tail,airport,carrier,nowMs});
-    return result?.status === 'found-inbound-occurrence' ? result.occurrence || null : null;
+    if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
+      await writeInboundCache(date,tail,airport,result.occurrence);
+      return result.occurrence;
+    }
+  } catch {}
+
+  const embedded=embeddedInboundOccurrence(assignment);
+  if (embedded) {
+    await writeInboundCache(date,tail,airport,embedded);
+    return embedded;
+  }
+  return await readInboundCache(date,tail,airport);
+}
+
+async function fetchCodeshareText(marketingFlight) {
+  const normalized=normalizeMarketingFlight(marketingFlight);
+  if (!normalized.ok) return null;
+  const slug=FLIGHTMAPPER_AIRLINE_SLUGS[normalized.carrier];
+  if (!slug) return null;
+  const controller=new AbortController();
+  const timer=setTimeout(() => controller.abort(),CODESHARE_TIMEOUT_MS);
+  try {
+    const url=CODESHARE_READER_BASE + encodeURIComponent(slug + '_' + normalized.display);
+    const response=await fetch(url,{
+      headers:{accept:'text/plain','user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'},
+      signal:controller.signal
+    });
+    if (!response.ok) return null;
+    const text=await response.text();
+    return text && text.length <= 600000 ? text : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function parseCodeshareOperatingCandidates(markdown,marketingFlight) {
+  const requested=clean(marketingFlight);
+  const found=[];
+  const seen=new Set();
+  const regex=/\(\[([A-Z0-9]{2})\s*([0-9]{1,4}[A-Z]?)\]\(https:\/\/info\.flightmapper\.net\/flight\/[^)]+\)\)/gi;
+  let match;
+  while ((match=regex.exec(String(markdown || '')))) {
+    const flight=clean(match[1] + match[2]);
+    if (!flight || flight === requested || seen.has(flight)) continue;
+    seen.add(flight);
+    found.push(flight);
+  }
+  return found;
+}
+
+function codeshareAssignmentScore(assignment,nowMs = Date.now()) {
+  if (assignment?.status !== 'found' || !assignment?.tailNumber) return -Infinity;
+  let score=100;
+  if (assignment?.flightStatus?.airborne === true && assignment?.flightStatus?.landed !== true) score += 700;
+  if (confirmedArrival(assignment)) score += 600;
+  const eventMs=Date.parse(
+    assignment?.schedule?.actualArrivalUTC ||
+    assignment?.schedule?.estimatedArrivalUTC ||
+    assignment?.schedule?.actualDepartureUTC ||
+    assignment?.schedule?.scheduledDepartureUTC || ''
+  );
+  if (Number.isFinite(eventMs)) score += Math.max(0,240 - Math.abs(nowMs - eventMs) / 3600000 * 20);
+  return score;
+}
+
+async function cachedAssignmentsForFlight(flight,date) {
+  const base=await readAssignmentCache(flight,date,null);
+  if (!base) return [];
+  if (base.status === 'found') return [base];
+  if (base.status !== 'choose-flight') return [];
+  const results=[];
+  for (const option of (base.options || []).slice(0,8)) {
+    const detail=await readAssignmentCache(flight,date,option.flightId);
+    if (detail?.status === 'found') results.push(detail);
+  }
+  return results;
+}
+
+async function resolveCodeshareOperatingFlight(marketingFlight,date,nowMs = Date.now()) {
+  const markdown=await fetchCodeshareText(marketingFlight);
+  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight);
+  if (!candidates.length) return null;
+
+  const cached=[];
+  for (const candidate of candidates.slice(0,12)) {
+    for (const assignment of await cachedAssignmentsForFlight(candidate,date)) {
+      cached.push({operatingFlight:candidate,assignment,score:codeshareAssignmentScore(assignment,nowMs)});
+    }
+  }
+  cached.sort((a,b) => b.score - a.score);
+  if (cached[0] && Number.isFinite(cached[0].score)) {
+    return {
+      marketingFlight:clean(marketingFlight),
+      operatingFlight:cached[0].operatingFlight,
+      assignment:cached[0].assignment,
+      candidates,
+      source:{name:'FlightMapper public schedule via Jina Reader',url:'https://info.flightmapper.net/'}
+    };
+  }
+
+  if (candidates.length === 1) {
+    return {
+      marketingFlight:clean(marketingFlight),
+      operatingFlight:candidates[0],
+      assignment:null,
+      candidates,
+      source:{name:'FlightMapper public schedule via Jina Reader',url:'https://info.flightmapper.net/'}
+    };
+  }
+  return null;
+}
+
+function applyCodeshareAssignment(assignment,marketingFlight,operatingFlight,source=null) {
+  if (!assignment) return null;
+  return {
+    ...assignment,
+    flightNumber:clean(marketingFlight),
+    marketingFlightNumber:clean(marketingFlight),
+    operatingFlightNumber:clean(operatingFlight),
+    codeshare:{
+      marketingFlightNumber:clean(marketingFlight),
+      operatingFlightNumber:clean(operatingFlight),
+      source
+    }
+  };
+}
+
+function directLiveIsAirborne(live) {
+  return Boolean(
+    live?.status === 'live' &&
+    live?.positionFresh === true &&
+    live?.aircraft?.onGround !== true &&
+    live?.aircraft?.registration
+  );
+}
+
+async function directLiveSnapshot(flight) {
+  try {
+    const tracker=require('./flight-tracker.js')._test;
+    return await tracker.buildSnapshot(flight);
   } catch {
     return null;
   }
+}
+
+function directLiveAssignment(marketingFlight,live,operatingFlight=null,codeshareSource=null) {
+  const route=live?.route || null;
+  const flightNumber=clean(marketingFlight);
+  const operator=clean(operatingFlight || live?.flightNumber || marketingFlight);
+  return {
+    status:'found',
+    fetchedAt:new Date().toISOString(),
+    flightNumber,
+    marketingFlightNumber:flightNumber,
+    operatingFlightNumber:operator !== flightNumber ? operator : null,
+    flightId:'live:' + flightNumber + ':' + clean(live?.aircraft?.callsign || operator),
+    assignmentState:'airborne',
+    tailNumber:live?.aircraft?.registration || null,
+    equipment:live?.aircraft?.aircraftType ? {
+      code:live.aircraft.aircraftType,
+      name:live.aircraft.aircraftTypeName || live.aircraft.aircraftType,
+      title:'Live ADS-B'
+    } : null,
+    operatingCarrier:null,
+    origin:route?.origin || null,
+    destination:route?.destination || null,
+    schedule:{
+      scheduledDepartureUTC:null,estimatedDepartureUTC:null,actualDepartureUTC:null,
+      scheduledArrivalUTC:null,estimatedArrivalUTC:null,actualArrivalUTC:null
+    },
+    flightStatus:{
+      code:'A',label:'Airborne',description:'Fresh live aircraft position',
+      departureDelayMinutes:null,arrivalDelayMinutes:null,lastUpdatedText:null,
+      canceled:false,airborne:true,landed:false
+    },
+    note:'Tracked directly from the operating callsign because a fresh airborne position is available.',
+    source:{name:'ADSB.lol direct operating callsign',url:'https://adsb.lol/',kind:'direct-live-callsign'},
+    codeshare:operator !== flightNumber ? {
+      marketingFlightNumber:flightNumber,
+      operatingFlightNumber:operator,
+      source:codeshareSource
+    } : null
+  };
 }
 
 function logUnifiedRender(assignment,reconciliation) {
