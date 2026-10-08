@@ -13,7 +13,7 @@ test('passenger flight numbers normalize only to direct unambiguous operating ca
   const delta = api.normalizeFlightInput('dl 1234');
   assert.equal(delta.ok, true);
   assert.equal(delta.display, 'DL1234');
-  assert.deepEqual(delta.callsigns, ['DAL1234']);
+  assert.deepEqual(delta.callsigns, ['DAL1234','EDV1234','SKW1234']);
 
   const american = api.normalizeFlightInput('AA86');
   assert.equal(american.callsigns[0], 'AAL86');
@@ -36,8 +36,8 @@ test('direct airline coverage includes verified major international and nearby c
     assert.equal(normalized.ok, true, iata);
     assert.deepEqual(normalized.callsigns, [icao + '123'], iata);
   }
-  // The resolver still does not invent same-number regional partner callsigns.
-  assert.deepEqual(api.normalizeFlightInput('DL123').callsigns, ['DAL123']);
+  // Delta fallback now checks the two current Delta Connection operating prefixes too.
+  assert.deepEqual(api.normalizeFlightInput('DL123').callsigns, ['DAL123','EDV123','SKW123']);
   assert.deepEqual(api.normalizeFlightInput('AA123').callsigns, ['AAL123']);
   assert.deepEqual(api.normalizeFlightInput('UA123').callsigns, ['UAL123']);
 });
@@ -304,7 +304,7 @@ test('silent refresh keeps the last confirmed flight through transient source mi
 test('refresh resilience is bounded and explicit lookups still fail closed', () => {
   assert.match(client, /elapsedMs > HOLD_LAST_LIVE_MS/);
   assert.match(client, /if \(!silent\) \{\s*resetHeldLive\(\);/s);
-  assert.match(client, /else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\) \{\s*renderUnavailable\(data\);/s);
+  assert.match(client, /else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\) \{[\s\S]*preserveUnavailableAnswer[\s\S]*renderUnavailable\(data\);/s);
   assert.match(client, /const sequence = \+\+requestSequence/);
   assert.match(client, /sequence !== requestSequence \|\| activeFlight !== normalized/);
 });
@@ -545,10 +545,11 @@ test('assignment source remains a bounded best-effort dependency with live-fligh
   assert.match(source, /www\.flightstats\.com\/v2/);
   assert.match(source, /__NEXT_DATA__ = /);
   assert.match(source, /tailNumber/);
-  assert.match(source, /source-unavailable/);
+  assert.match(source, /assignment-source-unavailable/);
   assert.match(source, /Aircraft assignments can change before departure/);
-  assert.match(client, /AIRCRAFT ASSIGNMENT UNAVAILABLE/);
-  assert.match(client, /loadFlight\(activeFlight,\{silent:false\}\)/);
+  assert.match(source, /last-good-assignment-cache/);
+  assert.match(client, /ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE/);
+  assert.match(client, /loadFlight\(activeFlight,\{silent:false,preserveUnavailableAnswer:sourceDown\}\)/);
 });
 
 
