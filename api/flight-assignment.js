@@ -2086,5 +2086,10 @@ module.exports._test = {
   fr24SyntheticFlightId,
   fr24RouteHintFromFlightId,
   fr24AssignmentFromRow,
+  fr24ReaderTextLooksUsable,
+  parseFr24TailHistoryRows,
+  fr24TailInboundSummary,
+  lookupIndependentInboundByTail,
+  inboundOccurrenceMatchesAssignment,
   lookupIndependentAssignmentFallback
 };
