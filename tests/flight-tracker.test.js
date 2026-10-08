@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
 const assignmentApi = require('../api/flight-assignment.js')._test;
+const stateApi = require('../api/flight-state.js')._test;
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -118,7 +119,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008a/);
+  assert.match(html, /flight-tracker\.js\?v=20261008b/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -386,14 +387,120 @@ test('registration lookup support is explicit and preserves grounded aircraft wi
   assert.equal(seen.lastSeenSeconds,4.5);
 });
 
-test('client resolves scheduled assignment first, then follows the exact tail by registration', () => {
-  assert.match(client, /fetch\('\/api\/flight-assignment\?' \+ params\.toString\(\)/);
-  assert.match(client, /const liveParams = new URLSearchParams\(\{registration\}\)/);
-  assert.match(client, /liveParams\.set\('focusAirport', focusAirport\)/);
-  assert.match(client, /assignedTail = data\.tailNumber \|\| null/);
+test('client renders scheduled flights from one reconciled server state instead of racing assignment and ADS-B', () => {
+  assert.match(client, /fetch\('\/api\/flight-state\?' \+ params\.toString\(\)/);
+  assert.match(client, /function renderUnifiedFlightState\(payload\)/);
+  assert.match(client, /assignedTail = assignment\.tailNumber \|\| null/);
   assert.match(client, /assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail/);
-  assert.match(client, /setInterval\(\(\) => \{[\s\S]*loadAssignment\(activeFlight,activeDate,activeFlightId,\{silent:true\}\)[\s\S]*\},60000\)/);
-  assert.match(client, /if \(assignedTail\) loadRegistration\(assignedTail,\{silent:true\}\)/);
+  assert.match(client, /refreshCurrentAircraft\(\)[\s\S]*loadAssignment\(activeFlight,activeDate,activeFlightId,\{silent:true\}\)/s);
+  assert.match(client, /assignmentTimer = null/);
+  assert.doesNotMatch(client, /async function loadAssignment[\s\S]*?loadRegistration\(/);
+});
+
+test('server reconciliation timestamps ADS-B fixes and enforces the 15 minute cutoff', () => {
+  const now=Date.parse('2026-10-08T12:00:00Z');
+  const fresh=stateApi.positionObservation({
+    aircraft:{lat:50.1,lon:8.6,onGround:false,positionAgeSeconds:899}
+  },now);
+  assert.equal(fresh.fresh,true);
+  assert.equal(fresh.fixTimestamp,'2026-10-08T11:45:01.000Z');
+  assert.equal(fresh.displayAgeSeconds,840);
+
+  const stale=stateApi.positionObservation({
+    aircraft:{lat:50.1,lon:8.6,onGround:true,positionAgeSeconds:7200}
+  },now);
+  assert.equal(stale.fresh,false);
+  assert.equal(stale.fixTimestamp,'2026-10-08T10:00:00.000Z');
+  assert.equal(stale.displayAgeSeconds,7200);
+});
+
+test('fresh ADS-B wins source conflicts and stale ADS-B loses to flight status', () => {
+  const assignment={
+    status:'found',flightNumber:'DL107',tailNumber:'N861NW',
+    origin:{iata:'FRA'},destination:{iata:'JFK'},
+    schedule:{actualDepartureUTC:'2026-10-08T09:00:00Z'},
+    flightStatus:{airborne:true,landed:false,canceled:false}
+  };
+  const now=Date.parse('2026-10-08T12:00:00Z');
+
+  const freshGround=stateApi.reconcileFlightState({
+    assignment,
+    live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:120}},
+    recentInboundOccurrence:null,
+    nowMs:now
+  });
+  assert.equal(freshGround.renderedState,'ground-live');
+  assert.equal(freshGround.renderSource,'adsb-fresh');
+  assert.equal(freshGround.sourceConflict,true);
+
+  const staleGround=stateApi.reconcileFlightState({
+    assignment,
+    live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:7200}},
+    recentInboundOccurrence:null,
+    nowMs:now
+  });
+  assert.equal(staleGround.renderedState,'airborne-status');
+  assert.equal(staleGround.renderSource,'flight-status');
+  assert.equal(staleGround.sourceConflict,false);
+});
+
+test('a confirmed departure over an hour ago cannot regress to parked without a fresh ground fix', () => {
+  const assignment={
+    status:'found',flightNumber:'DL107',tailNumber:'N861NW',
+    origin:{iata:'FRA'},destination:{iata:'JFK'},
+    schedule:{actualDepartureUTC:'2026-10-08T09:00:00Z'},
+    flightStatus:{airborne:false,landed:false,canceled:false}
+  };
+  const recentInbound={
+    tailNumber:'N861NW',
+    destination:{iata:'FRA'},
+    flightStatus:{landed:true}
+  };
+  const result=stateApi.reconcileFlightState({
+    assignment,
+    live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:7200}},
+    recentInboundOccurrence:recentInbound,
+    nowMs:Date.parse('2026-10-08T12:00:00Z')
+  });
+  assert.equal(result.renderedState,'airborne-status');
+  assert.equal(result.renderSource,'confirmed-departure');
+});
+
+test('same flight-state inputs reconcile identically across five reloads', () => {
+  const input={
+    assignment:{
+      status:'found',flightNumber:'DL107',tailNumber:'N861NW',
+      origin:{iata:'FRA'},destination:{iata:'JFK'},
+      schedule:{actualDepartureUTC:'2026-10-08T09:00:00Z'},
+      flightStatus:{airborne:true,landed:false,canceled:false}
+    },
+    live:{
+      status:'live',
+      aircraft:{registration:'N861NW',lat:53.2,lon:-20.1,onGround:false,positionAgeSeconds:180}
+    },
+    recentInboundOccurrence:null,
+    nowMs:Date.parse('2026-10-08T12:00:00Z')
+  };
+  const states=Array.from({length:5},() => stateApi.reconcileFlightState(input));
+  for (const state of states.slice(1)) assert.deepEqual(state,states[0]);
+  assert.equal(states[0].renderedState,'airborne-live');
+  assert.equal(states[0].observation.fixAgeSeconds,180);
+});
+
+test('server reconciliation logs the rendered source, fix age and source-conflict counter', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
+  assert.match(source, /event:'flight-state-render'/);
+  assert.match(source, /fixTimestamp:reconciliation\?\.observation\?\.fixTimestamp/);
+  assert.match(source, /fixAgeSeconds:reconciliation\?\.observation\?\.fixAgeSeconds/);
+  assert.match(source, /renderedState:reconciliation\?\.renderedState/);
+  assert.match(source, /sourceConflictCount \+= 1/);
+  assert.match(source, /console\.log\(JSON\.stringify\(record\)\)/);
+});
+
+test('fresh reconciled ground state cannot be overwritten by older inbound-arrival history', () => {
+  assert.match(client, /live\?\.aircraft\?\.onGround === true && !live\?\.reconciledState && landedPreviousAtOrigin\(assignment\)/);
+  assert.match(client, /live\.reconciledState = payload\?\.renderedState/);
+  assert.match(client, /live\.renderPositionAgeSeconds = payload\?\.observation\?\.displayAgeSeconds/);
 });
 
 test('client answers whether the assigned aircraft is actually inbound to the departure airport', () => {
@@ -744,7 +851,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008a/);
+  assert.match(html, /flight-tracker\.js\?v=20261008b/);
 });
 
 
@@ -808,16 +915,17 @@ test('completed FlightStats occurrence exposes a bounded actual arrival timestam
   assert.equal(result.flightStatus.arrivalDelayMinutes,40);
 });
 
-test('adversarial V2 fixes make story enrichment deterministic and separate fresh from stale positions', () => {
+test('adversarial V2 state enrichment is server-side and stale local snapshots cannot decide scheduled-flight state', () => {
   const apiSource = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  const stateSource = fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
   assert.match(apiSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
-  assert.match(client, /const historyPromise = assignmentData[\s\S]*resolveRecentInboundOccurrence\(assignmentData\)/);
-  assert.match(client, /const \[data, recentOccurrence\] = await Promise\.all\(\[livePromise,historyPromise\]\)/);
-  assert.match(client, /assignmentData = attachInboundOccurrence\(assignmentData,recentOccurrence\)/);
-  assert.match(client, /data\.status === 'live' && data\.positionFresh === true/);
-  assert.match(client, /snapshotFromAircraftData\(data\)/);
-  assert.match(client, /ageSeconds <= LIVE_POSITION_MAX_AGE_SECONDS/);
-  assert.match(client, /renderInboundAnswer\(assignment,recentData\)/);
+  assert.match(stateSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
+  assert.match(stateSource, /Promise\.all\(\[/);
+  assert.match(stateSource, /trackerApi\.buildRegistrationSnapshot/);
+  assert.match(stateSource, /resolveRecentInbound\(assignment, date, nowMs\)/);
+  assert.match(stateSource, /reconcileFlightState/);
+  assert.match(client, /renderUnifiedFlightState\(data\)/);
+  assert.doesNotMatch(client, /async function loadAssignment[\s\S]*?loadLastKnownSnapshot\(/);
 });
 
 test('parked same-tail arrival is asserted and stale airline status is timestamped', () => {
