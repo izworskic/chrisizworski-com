@@ -1,5 +1,7 @@
 'use strict';
 
+const { resolvePublicFlightIdentity } = require('../lib/flight-public-identity.js');
+
 const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const VRS_AIRPORTS_URL = 'https://vrs-standing-data.adsb.lol/airports.csv';
@@ -682,13 +684,83 @@ async function resolveFlight(normalized) {
   return direct;
 }
 
-function buildNotFound(normalized) {
+function uniqueStrings(values) {
+  return [...new Set((values || []).filter(Boolean).map(value => String(value).trim()).filter(Boolean))];
+}
+
+async function recoverLiveFromPublicIdentity(normalized, identity) {
+  if (!identity?.recognized) return null;
+  const checkedCallsigns = [...normalized.callsigns];
+
+  const operatingFlight = cleanFlightInput(identity.operatingFlight);
+  if (operatingFlight && operatingFlight !== normalized.display) {
+    const operatingNormalized = normalizeFlightInput(operatingFlight);
+    if (operatingNormalized.ok) {
+      checkedCallsigns.push(...operatingNormalized.callsigns);
+      const operatingResolved = await resolveFlight(operatingNormalized);
+      if (operatingResolved.status === 'unique' && operatingResolved.aircraft) {
+        return {
+          resolved:operatingResolved,
+          identity,
+          checkedCallsigns:uniqueStrings(checkedCallsigns),
+          recoveredBy:'operating-flight-callsign'
+        };
+      }
+    }
+  }
+
+  if (identity.callsign) {
+    checkedCallsigns.push(identity.callsign);
+    const aircraft = await lookupCallsign(identity.callsign);
+    if (aircraft) {
+      return {
+        resolved:{status:'unique',aircraft},
+        identity,
+        checkedCallsigns:uniqueStrings(checkedCallsigns),
+        recoveredBy:'resolved-callsign'
+      };
+    }
+  }
+
+  const registration = normalizeRegistration(identity.registration);
+  if (registration) {
+    const byRegistration = await lookupRegistration(registration);
+    if (byRegistration.status === 'positioned' && byRegistration.aircraft) {
+      return {
+        resolved:{status:'unique',aircraft:byRegistration.aircraft},
+        identity,
+        checkedCallsigns:uniqueStrings(checkedCallsigns),
+        recoveredBy:'resolved-registration'
+      };
+    }
+  }
+
+  return {
+    resolved:null,
+    identity,
+    checkedCallsigns:uniqueStrings(checkedCallsigns),
+    recoveredBy:null
+  };
+}
+
+function buildNotFound(normalized, context={}) {
   return {
     status:'not-found',
     flightNumber:normalized.display,
     airline:normalized.airline,
     message:'No live aircraft position found. The flight may not be airborne yet, may have landed, or may be using a different operating callsign.',
-    checkedCallsigns:normalized.callsigns,
+    checkedCallsigns:uniqueStrings(context.checkedCallsigns || normalized.callsigns),
+    operatingFlightNumber:context.identity?.operatingFlight && context.identity.operatingFlight !== normalized.display
+      ? context.identity.operatingFlight
+      : null,
+    publicIdentity:context.identity ? {
+      recognized:true,
+      operatingFlight:context.identity.operatingFlight || normalized.display,
+      callsign:context.identity.callsign || null,
+      registration:context.identity.registration || null,
+      codeshare:context.identity.codeshare === true,
+      source:context.identity.source || null
+    } : null,
     source:{
       name:'ADSB.lol',
       url:'https://adsb.lol/',
@@ -766,29 +838,61 @@ async function buildSnapshot(value, operatingCarrier = null) {
     };
   }
 
-  const resolved = await resolveFlight(normalized);
+  let resolved = await resolveFlight(normalized);
+  let identity = null;
+  let recovery = null;
+
+  if (resolved.status !== 'unique' || !resolved.aircraft) {
+    identity = await resolvePublicFlightIdentity(normalized.display);
+    if (identity) recovery = await recoverLiveFromPublicIdentity(normalized,identity);
+    if (recovery?.resolved?.status === 'unique' && recovery.resolved.aircraft) {
+      resolved = recovery.resolved;
+    }
+  }
+
   if (resolved.status === 'ambiguous') {
     return {
       status:'ambiguous',
       flightNumber:normalized.display,
       airline:normalized.airline,
       message:'More than one live aircraft matched this flight number, so the tracker will not guess.',
-      checkedCallsigns:normalized.callsigns,
-      matchedCallsigns:resolved.candidates || []
+      checkedCallsigns:uniqueStrings(recovery?.checkedCallsigns || normalized.callsigns),
+      matchedCallsigns:resolved.candidates || [],
+      publicIdentity:identity || null
     };
   }
-  if (resolved.status !== 'unique' || !resolved.aircraft) return buildNotFound(normalized);
+  if (resolved.status !== 'unique' || !resolved.aircraft) {
+    return buildNotFound(normalized,{
+      identity,
+      checkedCallsigns:recovery?.checkedCallsigns || normalized.callsigns
+    });
+  }
 
   const route = resolved.route || await lookupRoute(resolved.aircraft);
   const age = resolved.aircraft.positionAgeSeconds;
   const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
+  const operatingFlightNumber = identity?.operatingFlight && identity.operatingFlight !== normalized.display
+    ? identity.operatingFlight
+    : marketingFlightFromCallsign(resolved.aircraft?.callsign);
+  const checkedCallsigns = uniqueStrings(recovery?.checkedCallsigns || normalized.callsigns);
+
   return {
     status:'live',
     generatedAt:new Date().toISOString(),
     flightNumber:normalized.display,
     airline:normalized.airline,
-    checkedCallsigns:normalized.callsigns,
+    checkedCallsigns,
     matchedCallsign:resolved.aircraft?.callsign || null,
+    operatingFlightNumber:operatingFlightNumber || null,
+    codeshare:identity?.codeshare === true ? {
+      marketingFlightNumber:normalized.display,
+      operatingFlightNumber:identity.operatingFlight,
+      source:identity.source || null
+    } : null,
+    identityRecovery:recovery?.recoveredBy ? {
+      kind:recovery.recoveredBy,
+      source:identity?.source || null
+    } : null,
     aircraft:resolved.aircraft,
     route,
     positionFresh,
@@ -843,6 +947,7 @@ module.exports._test = {
   sanitizeSeenAircraft,
   lookupRegistration,
   chooseUnique,
+  recoverLiveFromPublicIdentity,
   buildSnapshot,
   buildRegistrationSnapshot,
   parseCsvLine,
