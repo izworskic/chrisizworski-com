@@ -173,6 +173,18 @@ function normalizeOperatingPrefix(value) {
   return null;
 }
 
+function callsignSuffixVariants(value) {
+  const suffix = String(value || '').trim().toUpperCase();
+  if (!/^\d+$/.test(suffix)) return suffix ? [suffix] : [];
+  if (suffix.length >= 3) return [suffix];
+  return [...new Set([
+    suffix,
+    ...(suffix.length === 1 ? [suffix.padStart(2,'0')] : []),
+    suffix.padStart(3,'0'),
+    suffix.padStart(4,'0')
+  ])];
+}
+
 function normalizeFlightInput(value, operatingCarrier = null) {
   const compact = cleanFlightInput(value);
   const iata = compact.match(/^([A-Z0-9]{2})([0-9]{1,4}[A-Z]?)$/);
@@ -181,6 +193,10 @@ function normalizeFlightInput(value, operatingCarrier = null) {
     const suffix = iata[2];
     const operators = IATA_TO_CALLSIGNS[prefix];
     if (!operators) return { ok:false, code:'unsupported-airline', input:compact };
+    const primary = operators[0];
+    const paddedPrimary = callsignSuffixVariants(suffix).map(number => primary + number);
+    const otherOperators = operators.slice(1).map(code => code + suffix);
+    const operatingPrefix = normalizeOperatingPrefix(operatingCarrier);
     return {
       ok:true,
       input:compact,
@@ -189,8 +205,9 @@ function normalizeFlightInput(value, operatingCarrier = null) {
       number: suffix,
       airline: AIRLINE_NAMES[prefix] || prefix,
       callsigns:[...new Set([
-        ...operators.map(code => code + suffix),
-        ...(normalizeOperatingPrefix(operatingCarrier) ? [normalizeOperatingPrefix(operatingCarrier) + suffix] : [])
+        ...paddedPrimary,
+        ...otherOperators,
+        ...(operatingPrefix ? [operatingPrefix + suffix] : [])
       ])]
     };
   }
@@ -816,6 +833,7 @@ module.exports = async function handler(req, res) {
 
 module.exports._test = {
   cleanFlightInput,
+  callsignSuffixVariants,
   normalizeFlightInput,
   normalizeOperatingPrefix,
   normalizeRegistration,
