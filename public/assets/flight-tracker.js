@@ -1677,10 +1677,14 @@
     flightActions.hidden = !usable;
     if (!usable) return;
 
-    const record = readWatchRecord();
+    let record = readWatchRecord();
     const watchUnavailable = !('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window);
     const complete = assignment?.flightStatus?.landed === true || assignment?.flightStatus?.canceled === true;
-    watchButton.disabled = watchUnavailable || (complete && !record);
+    if (complete && record) {
+      writeWatchRecord(null);
+      record = null;
+    }
+    watchButton.disabled = watchUnavailable || complete;
     watchButton.textContent = record ? 'Stop watching' : complete ? 'Flight complete' : 'Watch this flight';
     watchButton.title = watchUnavailable ? 'Browser push notifications are not supported here.' : '';
 
