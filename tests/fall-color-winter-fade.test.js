@@ -54,6 +54,8 @@ test("date axis reaches December correctly and winter has an explicit season sta
  assert.match(javascript,/fallPreviewNext"\)\.addEventListener\("click"/);
  assert.match(javascript,/fallSeasonStatus"\)\.addEventListener\("click"/);
  assert.match(javascript,/scrub\.max="98"/);
+ assert.match(javascript,/scrub\.min=String\(winterCalendar\?0:Math\.min\(0,todayFromSep1\)\)/);
+ assert.match(javascript,/Michigan's main fall-color season has ended/);
  assert.match(javascript,/winterMode=false;previewMode=true;selIdx=0/);
  assert.match(javascript,/winterMode=false;selIdx=\+e\.target\.value;renderAll\(\)/); // Slider preserves an active preview.
  assert.match(javascript,/if\(winterCalendar\)\{renderLiveStrip\(\);\}/);
