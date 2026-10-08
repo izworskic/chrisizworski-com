@@ -1473,7 +1473,7 @@ async function directLiveSnapshot(flight) {
 function directLiveAssignment(marketingFlight,live,operatingFlight=null,codeshareSource=null) {
   const route=live?.route || null;
   const flightNumber=clean(marketingFlight);
-  const operator=clean(operatingFlight || live?.flightNumber || marketingFlight);
+  const operator=clean(operatingFlight || live?.operatingFlightNumber || live?.flightNumber || marketingFlight);
   return {
     status:'found',
     fetchedAt:new Date().toISOString(),
