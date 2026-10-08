@@ -176,9 +176,10 @@ function normalizeOperatingPrefix(value) {
 function callsignSuffixVariants(value) {
   const suffix = String(value || '').trim().toUpperCase();
   if (!/^\d+$/.test(suffix)) return suffix ? [suffix] : [];
+  if (suffix.length >= 3) return [suffix];
   return [...new Set([
     suffix,
-    suffix.padStart(2,'0'),
+    ...(suffix.length === 1 ? [suffix.padStart(2,'0')] : []),
     suffix.padStart(3,'0'),
     suffix.padStart(4,'0')
   ])];
