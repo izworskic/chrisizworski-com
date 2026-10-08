@@ -1931,12 +1931,15 @@
 
     const math = document.createElement('div');
     math.className = 'connection-math';
+    const arrivalLead = data.arrivalClock ? 'Inbound arrival ' + data.arrivalClock + '. ' : '';
+    const departureLead = data.departureClock ? 'Connection departs ' + data.departureClock + '. ' : '';
     if (Number.isFinite(data.slackMinutes)) {
-      math.textContent = 'Layover ' + data.rawLayoverMinutes + ' min − ' + data.deplaneMinutes +
-        ' min deplane − ' + data.transfer.minutes + ' min transfer = ' + data.slackMinutes + ' min slack.';
+      math.textContent = arrivalLead + departureLead + 'Layover ' + data.rawLayoverMinutes +
+        ' min − ' + data.deplaneMinutes + ' min deplane − ' + data.transfer.minutes +
+        ' min transfer = ' + data.slackMinutes + ' min slack.';
     } else {
-      math.textContent = 'Layover ' + data.rawLayoverMinutes + ' min − ' + data.deplaneMinutes +
-        ' min deplane. Transfer time is unknown, so no verdict is shown.';
+      math.textContent = arrivalLead + departureLead + 'Layover ' + data.rawLayoverMinutes +
+        ' min − ' + data.deplaneMinutes + ' min deplane. Transfer time is unknown, so no verdict is shown.';
     }
     connectionResult.appendChild(math);
 
