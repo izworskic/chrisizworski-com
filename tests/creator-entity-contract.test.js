@@ -127,6 +127,11 @@ test('vendored Petoskey owner export preserves all 33 useful canonical pages', a
   );
   assert.equal(pages.length, 33);
   const sitemap = await readFile(path.join(PUBLIC_DIR, 'sitemap-petoskey-wine.xml'), 'utf8');
+  // Owner PR #7 updates social metadata on these guides; other pages retain their prior date.
+  const metadataUpdatedGuides = new Set([
+    'charlevoix-area-wineries', 'petoskey-distilleries', 'petoskey-stone-beaches',
+    'petoskey-wine-region-trail', 'tunnel-of-trees-wine-tour', 'venues', 'walloon-lake-wineries',
+  ]);
   const visit = (value, nodes = []) => {
     if (!value || typeof value !== 'object') return nodes;
     if (Array.isArray(value)) { value.forEach(child => visit(child, nodes)); return nodes; }
@@ -167,7 +172,8 @@ test('vendored Petoskey owner export preserves all 33 useful canonical pages', a
       try { return new URL(anchor.href, canonical).href === 'https://chrisizworski.com/tools/'; } catch { return false; }
     }), route + ': useful Tools discovery link missing');
     assert.ok(sitemap.includes('<loc>' + canonical + '</loc>'), route + ': sitemap entry missing');
-    assert.ok(sitemap.includes('<loc>' + canonical + '</loc>\n    <lastmod>2026-10-06</lastmod>'), route + ': sitemap freshness mismatch');
+    const expectedLastmod = metadataUpdatedGuides.has(inner) ? '2026-10-08' : '2026-10-06';
+    assert.ok(sitemap.includes('<loc>' + canonical + '</loc>\n    <lastmod>' + expectedLastmod + '</lastmod>'), route + ': sitemap freshness mismatch');
     assert.doesNotMatch(html, /<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i, route + ': page is noindex');
   }
 });
