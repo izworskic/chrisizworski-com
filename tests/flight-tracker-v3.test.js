@@ -201,12 +201,12 @@ test('connection checker uses requested verdict thresholds and exposes its math'
   assert.ok(result.arrivalClock);
   assert.ok(result.departureClock);
 
-  onward.assignment.schedule.estimatedDepartureUTC='2026-10-08T16:20:00Z';
+  onward.assignment.schedule.estimatedDepartureUTC='2026-10-08T16:05:00Z';
   result=v3.connectionAnalysis(primary,onward,{});
   assert.equal(result.slackMinutes,35);
   assert.equal(result.verdict,'tight');
 
-  onward.assignment.schedule.estimatedDepartureUTC='2026-10-08T16:10:00Z';
+  onward.assignment.schedule.estimatedDepartureUTC='2026-10-08T15:55:00Z';
   result=v3.connectionAnalysis(primary,onward,{});
   assert.equal(result.slackMinutes,25);
   assert.equal(result.verdict,'unlikely');
@@ -296,7 +296,10 @@ test('browser push registration is user initiated and V3 companions cannot repla
   assert.match(client,/watchButton\.addEventListener\('click'/);
   assert.match(client,/fetch\('\/api\/flight-assignment\?' \+ params\.toString\(\)/);
   assert.match(client,/renderUnifiedFlightState\(data\)/);
-  assert.doesNotMatch(client,/function renderV3Companions[\s\S]*setAnswer\(/);
+  const companionStart=client.indexOf('function renderV3Companions(payload)');
+  const companionEnd=client.indexOf('\n  }',companionStart);
+  assert.ok(companionStart >= 0 && companionEnd > companionStart);
+  assert.doesNotMatch(client.slice(companionStart,companionEnd),/setAnswer\(/);
 });
 
 test('service worker displays push messages and opens only the flight tracker scope', () => {
