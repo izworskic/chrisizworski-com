@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
 const assignmentApi = require('../api/flight-assignment.js')._test;
+const publicIdentity = require('../lib/flight-public-identity.js');
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -47,6 +48,49 @@ test('short flight numbers check common zero-padded operating callsigns without 
   assert.deepEqual(api.callsignSuffixVariants('86'),['86','086','0086']);
   assert.deepEqual(api.callsignSuffixVariants('123'),['123']);
   assert.deepEqual(api.normalizeFlightInput('DL5').callsigns,['DAL5','DAL05','DAL005','DAL0005','EDV5','SKW5']);
+});
+
+test('public identity resolver maps exact codeshares and rejects begins-with false positives', () => {
+  const vsFixture={
+    results:[
+      {id:'VIR',type:'operator',match:'iata',detail:{iata:'VS'}},
+      {
+        id:'DL3898',
+        label:'VS1671 → DL3898 / SKW3898',
+        type:'schedule',
+        match:'codeshare',
+        detail:{codeshare:'VS1671',flight:'DL3898',callsign:'SKW3898',operator:'DAL'}
+      }
+    ]
+  };
+  const vs=publicIdentity.pickExactIdentity(vsFixture,'VS1671');
+  assert.equal(vs.requestedFlight,'VS1671');
+  assert.equal(vs.operatingFlight,'DL3898');
+  assert.equal(vs.codeshare,true);
+  assert.equal(vs.callsign,'SKW3898');
+
+  const dl5Fixture={
+    results:[
+      {id:'42051',type:'live',match:'begins',detail:{flight:'DL51',callsign:'DAL51',reg:'N854NW',lat:48.5,lon:-106.3}},
+      {id:'DL5',type:'schedule',match:'begins',detail:{flight:'DL5',operator:'DAL'}}
+    ]
+  };
+  const dl5=publicIdentity.pickExactIdentity(dl5Fixture,'DL5');
+  assert.equal(dl5.operatingFlight,'DL5');
+  assert.equal(dl5.type,'schedule');
+  assert.equal(dl5.registration,null);
+  assert.equal(publicIdentity.pickExactIdentity({results:[dl5Fixture.results[0]]},'DL5'),null);
+});
+
+test('public identity can recover an operating identity but never becomes live map telemetry itself', () => {
+  const trackerSource=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(trackerSource,/resolvePublicFlightIdentity/);
+  assert.match(trackerSource,/recoverLiveFromPublicIdentity/);
+  assert.match(trackerSource,/lookupCallsign\(identity\.callsign\)/);
+  assert.match(trackerSource,/lookupRegistration\(registration\)/);
+  assert.match(trackerSource,/identityRecovery/);
+  assert.doesNotMatch(trackerSource,/lat:identity\.lat/);
+  assert.doesNotMatch(trackerSource,/lon:identity\.lon/);
 });
 
 test('common aircraft type designators become passenger-readable names and unknown types stay truthful', () => {
@@ -1069,9 +1113,10 @@ test('FlightStats parser supports both legacy assignment and standard Next data 
   assert.equal(assignmentApi.parseNextData(modern).props.ok,2);
 });
 
-test('successful live responses retain callsign observability', () => {
+test('successful live responses retain all checked callsigns and the matched callsign', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
-  assert.match(source,/checkedCallsigns:normalized\.callsigns/);
+  assert.match(source,/const checkedCallsigns = uniqueStrings\(recovery\?\.checkedCallsigns \|\| normalized\.callsigns\)/);
+  assert.match(source,/checkedCallsigns,/);
   assert.match(source,/matchedCallsign:resolved\.aircraft\?\.callsign \|\| null/);
 });
 
