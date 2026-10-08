@@ -79,6 +79,8 @@
   let activeFlightId = null;
   let assignedTail = null;
   let assignmentData = null;
+  // Arrival is terminal for the selected occurrence, even if a later poll regresses.
+  let confirmedArrivalSnapshot = null;
   let assignmentChangedFrom = null;
   let assignmentTimer = null;
   let assignmentInFlight = false;
@@ -380,6 +382,12 @@
   }
 
   function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',journey=null,pills=[],next='',delayWhy='',source=''}) {
+    // Last line of defense: stale recovery callbacks must not overwrite an arrived flight.
+    const arrived = canonicalArrivalAssignment(assignmentData);
+    if (arrived && kicker !== 'YOUR FLIGHT HAS ARRIVED') {
+      renderAssignedNoPosition(arrived,{status:'not-found'});
+      return;
+    }
     answerCard.hidden = false;
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
@@ -420,6 +428,17 @@
   function assignmentArrivalConfirmed(assignment) {
     return assignment?.flightStatus?.landed === true ||
       Boolean(String(assignment?.schedule?.actualArrivalUTC || '').trim());
+  }
+
+  function canonicalArrivalAssignment(assignment) {
+    if (assignmentArrivalConfirmed(assignment)) return assignment;
+    const arrived = confirmedArrivalSnapshot;
+    if (!arrived || !assignment) return null;
+    // Never carry the arrived state into a different flight occurrence.
+    if (clean(assignment.flightNumber) !== clean(arrived.flightNumber)) return null;
+    if (assignment.flightId && arrived.flightId &&
+        String(assignment.flightId) !== String(arrived.flightId)) return null;
+    return arrived;
   }
 
   function assignmentSourceText(assignment=assignmentData) {
@@ -738,6 +757,11 @@
   }
 
   function renderLastKnownPosition(assignment, snapshot) {
+    const arrived = canonicalArrivalAssignment(assignment);
+    if (arrived) {
+      renderAssignedNoPosition(arrived,{status:'not-found'});
+      return true;
+    }
     const data = snapshot?.data;
     const ac = data?.aircraft;
     if (!ac || !Number.isFinite(ac.lat) || !Number.isFinite(ac.lon)) return false;
@@ -849,7 +873,18 @@
   }
 
   async function recoverNoPositionState(assignment, registration, data) {
+    const alreadyArrived = canonicalArrivalAssignment(assignment);
+    if (alreadyArrived) {
+      renderAssignedNoPosition(alreadyArrived,{status:'not-found'});
+      return true;
+    }
     const occurrence = assignment?.recentInboundOccurrence || await resolveRecentInboundOccurrence(assignment);
+    // An arrival may have been confirmed while the history request was in flight.
+    const arrivedDuringLookup = canonicalArrivalAssignment(assignment);
+    if (arrivedDuringLookup) {
+      renderAssignedNoPosition(arrivedDuringLookup,{status:'not-found'});
+      return true;
+    }
     if (occurrence) {
       assignment = attachInboundOccurrence(assignment,occurrence);
       assignmentData = assignment;
@@ -1310,6 +1345,11 @@
   }
 
   function renderArrivedForTurn(assignment) {
+    const arrived = canonicalArrivalAssignment(assignment);
+    if (arrived) {
+      renderAssignedNoPosition(arrived,{status:'not-found'});
+      return true;
+    }
     const previous = landedPreviousAtOrigin(assignment);
     if (!previous) return false;
 
@@ -1362,6 +1402,11 @@
   }
 
   function renderAssignmentBase(assignment) {
+    const arrived = canonicalArrivalAssignment(assignment);
+    if (arrived) {
+      renderAssignedNoPosition(arrived,{status:'not-found'});
+      return;
+    }
     const route = assignmentRoute(assignment);
     const tail = assignment.tailNumber;
     const equipment = assignment?.equipment?.name || assignment?.equipment?.code;
@@ -1410,6 +1455,11 @@
   }
 
   function renderInboundAnswer(assignment, live) {
+    const arrived = canonicalArrivalAssignment(assignment);
+    if (arrived) {
+      renderAssignedNoPosition(arrived,{status:'not-found'});
+      return;
+    }
     const tail = assignment?.tailNumber || live?.aircraft?.registration;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
@@ -1622,14 +1672,16 @@
   }
 
   function renderAssignedNoPosition(assignment, data) {
-    if (!assignmentArrivalConfirmed(assignment) && renderArrivedForTurn(assignment)) return;
+    const arrived = canonicalArrivalAssignment(assignment);
+    if (arrived) assignment = arrived;
+    if (!arrived && renderArrivedForTurn(assignment)) return;
     const tail = assignment?.tailNumber;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
     const seen = data?.status === 'seen-no-position';
     const onGround = data?.aircraft?.onGround === true;
-    const completedAt = assignmentArrivalConfirmed(assignment) && assignment?.destination
-      ? airportPlace(assignment.destination)
+    const completedAt = arrived
+      ? (assignment?.destination ? airportPlace(assignment.destination) : 'its destination')
       : null;
     const completedCode = completedAt ? airportCodeAny(assignment.destination) : null;
 
@@ -1949,7 +2001,8 @@
   }
 
   function renderTripTimeline(payload) {
-    const assignment = assignmentData || payload?.assignment;
+    const candidate = assignmentData || payload?.assignment;
+    const assignment = canonicalArrivalAssignment(candidate) || candidate;
     if (!assignment) {
       tripTimeline.hidden = true;
       return;
@@ -2140,6 +2193,11 @@
         .then(response => response.json());
       const [data, recentOccurrence] = await Promise.all([livePromise,historyPromise]);
       if (sequence !== requestSequence || assignedTail !== registration) return;
+      const arrived = canonicalArrivalAssignment(assignmentData);
+      if (arrived) {
+        renderAssignedNoPosition(arrived,{status:'not-found'});
+        return;
+      }
 
       if (recentOccurrence && assignmentData) {
         assignmentData = attachInboundOccurrence(assignmentData,recentOccurrence);
@@ -2195,11 +2253,14 @@
 
     const staleAge = staleFixAgeText(payload?.observation);
     const state = payload?.renderedState;
+    if (assignmentArrivalConfirmed(assignmentData)) confirmedArrivalSnapshot = assignmentData;
 
     // Passenger-flight completion outranks tail telemetry and stale departure flags.
     // A tail may already be moving again, but that cannot make the completed flight airborne.
-    if (assignmentArrivalConfirmed(assignmentData)) {
-      renderAssignedNoPosition(assignmentData,live || {status:'not-found'});
+    const arrived = canonicalArrivalAssignment(assignmentData);
+    if (arrived) {
+      assignmentData = arrived;
+      renderAssignedNoPosition(arrived,live || {status:'not-found'});
       return;
     }
 
@@ -2233,7 +2294,9 @@
     }
 
     if (state === 'parked-origin-confirmed') {
-      renderArrivedForTurn(assignmentData);
+      if (!renderArrivedForTurn(assignmentData)) {
+        renderAssignedNoPosition(assignmentData,live || {status:'not-found'});
+      }
       return;
     }
 
@@ -2440,6 +2503,7 @@
     refreshInFlight = false;
     assignmentInFlight = false;
     assignmentData = null;
+    confirmedArrivalSnapshot = null;
     currentUnifiedPayload = null;
     activeConnectionSpec = null;
     connectionRequestSequence++;
