@@ -271,7 +271,7 @@ test('main page exposes V3 actions and a chronological trip timeline', () => {
   assert.match(html,/id="add-connection"/);
   assert.match(html,/id="trip-timeline"/);
   assert.match(html,/id="reliability-panel"/);
-  assert.match(html,/flight-tracker\.js\?v=20261008c/);
+  assert.match(html,/flight-tracker\.js\?v=20261008[a-z0-9]+/);
   assert.match(client,/function renderTripTimeline\(payload\)/);
   assert.match(client,/Inbound aircraft/);
   assert.match(client,/Aircraft on ground \/ turn/);

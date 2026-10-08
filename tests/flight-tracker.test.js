@@ -13,7 +13,7 @@ test('passenger flight numbers normalize only to direct unambiguous operating ca
   const delta = api.normalizeFlightInput('dl 1234');
   assert.equal(delta.ok, true);
   assert.equal(delta.display, 'DL1234');
-  assert.deepEqual(delta.callsigns, ['DAL1234']);
+  assert.deepEqual(delta.callsigns, ['DAL1234','EDV1234','SKW1234']);
 
   const american = api.normalizeFlightInput('AA86');
   assert.equal(american.callsigns[0], 'AAL86');
@@ -36,8 +36,8 @@ test('direct airline coverage includes verified major international and nearby c
     assert.equal(normalized.ok, true, iata);
     assert.deepEqual(normalized.callsigns, [icao + '123'], iata);
   }
-  // The resolver still does not invent same-number regional partner callsigns.
-  assert.deepEqual(api.normalizeFlightInput('DL123').callsigns, ['DAL123']);
+  // Delta fallback now checks the two current Delta Connection operating prefixes too.
+  assert.deepEqual(api.normalizeFlightInput('DL123').callsigns, ['DAL123','EDV123','SKW123']);
   assert.deepEqual(api.normalizeFlightInput('AA123').callsigns, ['AAL123']);
   assert.deepEqual(api.normalizeFlightInput('UA123').callsigns, ['UAL123']);
 });
@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008c/);
+  assert.match(html, /flight-tracker\.js\?v=20261008d/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -304,7 +304,7 @@ test('silent refresh keeps the last confirmed flight through transient source mi
 test('refresh resilience is bounded and explicit lookups still fail closed', () => {
   assert.match(client, /elapsedMs > HOLD_LAST_LIVE_MS/);
   assert.match(client, /if \(!silent\) \{\s*resetHeldLive\(\);/s);
-  assert.match(client, /else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\) \{\s*renderUnavailable\(data\);/s);
+  assert.match(client, /else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\) \{[\s\S]*preserveUnavailableAnswer[\s\S]*renderUnavailable\(data\);/s);
   assert.match(client, /const sequence = \+\+requestSequence/);
   assert.match(client, /sequence !== requestSequence \|\| activeFlight !== normalized/);
 });
@@ -545,10 +545,11 @@ test('assignment source remains a bounded best-effort dependency with live-fligh
   assert.match(source, /www\.flightstats\.com\/v2/);
   assert.match(source, /__NEXT_DATA__ = /);
   assert.match(source, /tailNumber/);
-  assert.match(source, /source-unavailable/);
+  assert.match(source, /assignment-source-unavailable/);
   assert.match(source, /Aircraft assignments can change before departure/);
-  assert.match(client, /AIRCRAFT ASSIGNMENT UNAVAILABLE/);
-  assert.match(client, /loadFlight\(activeFlight,\{silent:false\}\)/);
+  assert.match(source, /last-good-assignment-cache/);
+  assert.match(client, /ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE/);
+  assert.match(client, /loadFlight\(activeFlight,\{silent:false,preserveUnavailableAnswer:sourceDown\}\)/);
 });
 
 
@@ -879,7 +880,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008c/);
+  assert.match(html, /flight-tracker\.js\?v=20261008d/);
 });
 
 
@@ -970,6 +971,80 @@ test('password-manager accessibility artifacts are excluded from the rendered fl
   assert.doesNotMatch(html, /1Password menu is available/);
   assert.match(client, /const PASSWORD_MANAGER_ARTIFACT = '1Password menu is available'/);
   assert.match(client, /stripPasswordManagerArtifacts/);
+});
+
+test('regional operating carrier identity survives FlightStats string operatedBy and flexTrack carrier code', () => {
+  const flight={
+    flightId:1412873434,
+    flightNote:{canceled:false,hasDepartedRunway:false,landed:false},
+    isTracking:false,
+    isLanded:false,
+    operatedBy:'Operated by SkyWest Airlines on behalf of Delta Air Lines',
+    resultHeader:{carrier:{fs:'DL'},flightNumber:'3898'},
+    departureAirport:{fs:'MBS',iata:'MBS',city:'Saginaw',country:'US',date:'2026-10-08T11:43:00.000'},
+    arrivalAirport:{fs:'DTW',iata:'DTW',city:'Detroit',country:'US'},
+    positional:{flexTrack:{tailNumber:'N821SK',carrierFsCode:'OO',equipment:'CR9'}},
+    additionalFlightInfo:{equipment:{iata:'CR9',name:'CRJ900'}},
+    schedule:{scheduledDepartureUTC:'2026-10-08T15:43:00.000Z',scheduledArrivalUTC:'2026-10-08T16:38:00.000Z'},
+    status:{status:'Scheduled',statusDescription:'On time'}
+  };
+  const result=assignmentApi.sanitizeFlight(flight,{display:'DL3898'},'https://example.test');
+  assert.equal(result.tailNumber,'N821SK');
+  assert.equal(result.operatingCarrier.code,'OO');
+  assert.equal(result.operatingCarrier.name,'SkyWest Airlines');
+  assert.equal(result.operatingCarrier.icaoCallsignPrefix,'SKW');
+});
+
+test('FlightStats base occurrence can resolve the requested date without a secondary detail page', () => {
+  const flight={
+    flightId:1412873434,
+    departureAirport:{date:'2026-10-08T11:43:00.000'},
+    schedule:{scheduledDepartureUTC:'2026-10-08T15:43:00.000Z'}
+  };
+  assert.equal(assignmentApi.baseFlightMatchesDate(flight,{raw:'2026-10-08'}),true);
+  assert.equal(assignmentApi.baseFlightMatchesDate(flight,{raw:'2026-10-09'}),false);
+});
+
+test('FlightStats parser supports both legacy assignment and standard Next data script formats', () => {
+  const legacy='<script>__NEXT_DATA__ = {"props":{"ok":1}};__NEXT_LOADED_PAGES__=[]</script>';
+  const modern='<script id="__NEXT_DATA__" type="application/json">{"props":{"ok":2}}</script>';
+  assert.equal(assignmentApi.parseNextData(legacy).props.ok,1);
+  assert.equal(assignmentApi.parseNextData(modern).props.ok,2);
+});
+
+test('successful live responses retain callsign observability', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(source,/checkedCallsigns:normalized\.callsigns/);
+  assert.match(source,/matchedCallsign:resolved\.aircraft\?\.callsign \|\| null/);
+});
+
+test('Delta live fallback checks mainline and regional operating callsigns', () => {
+  const tracker=require('../api/flight-tracker.js')._test;
+  const normalized=tracker.normalizeFlightInput('DL3898');
+  assert.deepEqual(normalized.callsigns,['DAL3898','EDV3898','SKW3898']);
+  const exact=tracker.normalizeFlightInput('DL3898','OO');
+  assert.ok(exact.callsigns.includes('SKW3898'));
+  assert.equal(tracker.normalizeOperatingPrefix('9E'),'EDV');
+  assert.equal(tracker.normalizeOperatingPrefix('OO'),'SKW');
+});
+
+test('assignment source outage is distinct from a normally scheduled flight with an assigned tail', () => {
+  assert.match(client,/ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE/);
+  assert.match(client,/We cannot confirm the assigned aircraft right now/);
+  assert.match(client,/preserveUnavailableAnswer:sourceDown/);
+  assert.match(client,/FLIGHT NOT AIRBORNE YET · ASSIGNED AIRCRAFT/);
+  assert.match(client,/Your flight has not departed yet\. .* is the assigned aircraft/);
+  assert.match(client,/Checked ' \+ data\.checkedCallsigns\.join/);
+});
+
+test('assignment lookup has durable last-good cache and base-page fallback before declaring source unavailable', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:'/);
+  assert.match(source,/ASSIGNMENT_CACHE_TTL_SECONDS = 18 \* 60 \* 60/);
+  assert.match(source,/flightstats-base-occurrence/);
+  assert.match(source,/last-good-assignment-cache/);
+  assert.match(source,/assignment-source-unavailable/);
+  assert.match(source,/live-operating-callsigns/);
 });
 
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {

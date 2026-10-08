@@ -10,7 +10,7 @@ const CACHE_SECONDS = 5;
 
 const IATA_TO_CALLSIGNS = Object.freeze({
   AA: ['AAL'],
-  DL: ['DAL'],
+  DL: ['DAL','EDV','SKW'],
   UA: ['UAL'],
   WN: ['SWA'],
   AS: ['ASA'],
@@ -161,7 +161,19 @@ function cleanFlightInput(value) {
   return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
-function normalizeFlightInput(value) {
+const OPERATING_IATA_TO_ICAO = Object.freeze({
+  OO:'SKW', '9E':'EDV', YX:'RPA', OH:'JIA', MQ:'ENY', YV:'ASH',
+  QX:'QXE', G7:'GJS', ZW:'AWI', C5:'UCA', PT:'PDT'
+});
+
+function normalizeOperatingPrefix(value) {
+  const compact = cleanFlightInput(value);
+  if (/^[A-Z]{3}$/.test(compact)) return compact;
+  if (/^[A-Z0-9]{2}$/.test(compact)) return OPERATING_IATA_TO_ICAO[compact] || null;
+  return null;
+}
+
+function normalizeFlightInput(value, operatingCarrier = null) {
   const compact = cleanFlightInput(value);
   const iata = compact.match(/^([A-Z0-9]{2})([0-9]{1,4}[A-Z]?)$/);
   if (iata) {
@@ -176,7 +188,10 @@ function normalizeFlightInput(value) {
       marketingCode: prefix,
       number: suffix,
       airline: AIRLINE_NAMES[prefix] || prefix,
-      callsigns: operators.map(code => code + suffix)
+      callsigns:[...new Set([
+        ...operators.map(code => code + suffix),
+        ...(normalizeOperatingPrefix(operatingCarrier) ? [normalizeOperatingPrefix(operatingCarrier) + suffix] : [])
+      ])]
     };
   }
 
@@ -722,8 +737,8 @@ async function buildRegistrationSnapshot(value, focusAirportCode = null) {
   };
 }
 
-async function buildSnapshot(value) {
-  const normalized = normalizeFlightInput(value);
+async function buildSnapshot(value, operatingCarrier = null) {
+  const normalized = normalizeFlightInput(value, operatingCarrier);
   if (!normalized.ok) {
     return {
       status:'invalid',
@@ -755,6 +770,8 @@ async function buildSnapshot(value) {
     generatedAt:new Date().toISOString(),
     flightNumber:normalized.display,
     airline:normalized.airline,
+    checkedCallsigns:normalized.callsigns,
+    matchedCallsign:resolved.aircraft?.callsign || null,
     aircraft:resolved.aircraft,
     route,
     positionFresh,
@@ -782,8 +799,9 @@ module.exports = async function handler(req, res) {
   const value = Array.isArray(req.query?.flight) ? req.query.flight[0] : req.query?.flight;
   const registration = Array.isArray(req.query?.registration) ? req.query.registration[0] : req.query?.registration;
   const focusAirport = Array.isArray(req.query?.focusAirport) ? req.query.focusAirport[0] : req.query?.focusAirport;
+  const operatingCarrier = Array.isArray(req.query?.operatingCarrier) ? req.query.operatingCarrier[0] : req.query?.operatingCarrier;
   try {
-    const body = registration ? await buildRegistrationSnapshot(registration, focusAirport) : await buildSnapshot(value);
+    const body = registration ? await buildRegistrationSnapshot(registration, focusAirport) : await buildSnapshot(value, operatingCarrier);
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
   } catch (error) {
@@ -799,6 +817,7 @@ module.exports = async function handler(req, res) {
 module.exports._test = {
   cleanFlightInput,
   normalizeFlightInput,
+  normalizeOperatingPrefix,
   normalizeRegistration,
   marketingFlightFromCallsign,
   actualPosition,
@@ -821,5 +840,6 @@ module.exports._test = {
   bearingDegrees,
   aircraftTypeName,
   AIRCRAFT_TYPE_NAMES,
-  IATA_TO_CALLSIGNS
+  IATA_TO_CALLSIGNS,
+  OPERATING_IATA_TO_ICAO
 };
