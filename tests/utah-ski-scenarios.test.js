@@ -13,6 +13,8 @@ function feeds(rows=[]){return {events:rows,roadconditions:[],messagesigns:[]};}
 const cases=[
  ['entire Little Cottonwood closure','CLOSED',{...baseEvent}],
  ['isolated roadway segment','REVIEW_REQUIRED',{...baseEvent,Description:'All lanes blocked at isolated Snowbird lot entrance'}],
+ ['segment qualified despite canyon-closed wording','REVIEW_REQUIRED',{...baseEvent,Description:'Little Cottonwood Canyon closed at Snowbird parking entrance only'}],
+ ['missing start time cannot establish active closure','REVIEW_REQUIRED',{...baseEvent,StartDate:null}],
  ['unspecified full closure scope','REVIEW_REQUIRED',{...baseEvent,Description:''}],
  ['future closure','UNKNOWN',{...baseEvent,StartDate:N+1200}],
  ['expired closure','UNKNOWN',{...baseEvent,PlannedEndDate:N-5}],
@@ -32,6 +34,11 @@ test('UDOT: explicit canyon-wide sign closure is not treated as ordinary traffic
  const signs=[{Id:'S1',Name:'SR-210 canyon approach',Roadway:'SR-210',
    Messages:['<MSG>LITTLE COTTONWOOD CANYON<BR/>CLOSED</MSG>'],LastUpdated:N-10}];
  assert.equal(classify({events:[],roadconditions:[],messagesigns:signs},'SR210',N).status,'CLOSED');
+});
+test('UDOT: sign saying canyon closed at local driveway only requires review',()=>{
+ const signs=[{Id:'S2',Name:'SR-210 canyon approach',Roadway:'SR-210',
+   Messages:['<MSG>LITTLE COTTONWOOD CANYON CLOSED<BR/>NEAR PARKING ENTRANCE ONLY</MSG>'],LastUpdated:N-10}];
+ assert.equal(classify({events:[],roadconditions:[],messagesigns:signs},'SR210',N).status,'REVIEW_REQUIRED');
 });
 test('UDOT: generic road-closed sign remains spatially ambiguous',()=>{
  const signs=[{Id:'S1',Name:'SR-210 canyon approach',Roadway:'SR-210',
