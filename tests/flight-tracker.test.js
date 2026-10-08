@@ -1174,10 +1174,13 @@ test('inbound recovery prefers stable v2 cache then exact-tail sequence before t
   assert.match(source,/lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
   assert.match(source,/sameTail\(result\.occurrence\?\.tailNumber,tail\)/);
   assert.match(source,/sameAirport\(result\.occurrence\?\.destination,assignment\?\.origin\)/);
-  assert.ok(source.indexOf('const cached=await readInboundCache(date,tail,airport)') <
-    source.indexOf('lookupIndependentInboundByTail(assignment,date)'));
-  assert.ok(source.indexOf('lookupIndependentInboundByTail(assignment,date)') <
-    source.indexOf('lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs})'));
+  const resolveStart=source.indexOf('async function resolveRecentInbound(assignment,date,nowMs = Date.now())');
+  const resolveEnd=source.indexOf('\nasync function fetchCodeshareText',resolveStart);
+  const resolveBody=source.slice(resolveStart,resolveEnd);
+  assert.ok(resolveBody.indexOf('const cached=await readInboundCache(date,tail,airport)') <
+    resolveBody.indexOf('lookupIndependentInboundByTail(assignment,date)'));
+  assert.ok(resolveBody.indexOf('lookupIndependentInboundByTail(assignment,date)') <
+    resolveBody.indexOf('lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs})'));
 });
 
 test('browser retains only validated same-tail inbound context for the active travel date', () => {
