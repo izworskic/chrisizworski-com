@@ -1028,6 +1028,11 @@ async function lookupAssignment({ flight, date, flightId }) {
 }
 
 module.exports = async function handler(req, res) {
+  const flightV3 = String(Array.isArray(req.query?.flightV3) ? req.query.flightV3[0] : req.query?.flightV3 || '') === '1';
+  if (flightV3) {
+    const v3Handler = require('../lib/flight-v3.js');
+    return v3Handler(req,res);
+  }
   res.setHeader('Content-Type','application/json; charset=utf-8');
   res.setHeader('X-Robots-Tag','noindex, nofollow');
   const unified = String(Array.isArray(req.query?.unified) ? req.query.unified[0] : req.query?.unified || '') === '1';
