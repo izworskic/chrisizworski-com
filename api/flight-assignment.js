@@ -1476,6 +1476,17 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
     }
   }
 
+  if (allowDirectLive && assignment && typeof assignment === 'object') {
+    return {
+      ...assignment,
+      liveCoverage:{
+        status:direct?.status || 'not-found',
+        message:direct?.message || 'No fresh live aircraft position was observed for the checked operating callsigns.',
+        checkedCallsigns:Array.isArray(direct?.checkedCallsigns) ? direct.checkedCallsigns : [],
+        source:direct?.source || {name:'ADSB.lol',url:'https://adsb.lol/'}
+      }
+    };
+  }
   return assignment;
 }
 
@@ -1754,12 +1765,34 @@ async function lookupAssignment({ flight, date, flightId }) {
         fallback:{kind:'flightstats-base-occurrence',stale:false,note:'Resolved from the primary flight page because the occurrence list was unavailable.'}
       };
     }
+
+    const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,flightId);
+    if (cached) return cached;
+    let independentReachable=false;
+    try {
+      const routeHint=await cachedRouteHint(normalized.display,normalizedDate.raw,flightId);
+      const independent=await lookupIndependentAssignmentFallback({normalized,normalizedDate,flightId,routeHint});
+      independentReachable=true;
+      if (independent) {
+        await writeAssignmentCache(normalized.display,normalizedDate.raw,flightId,independent);
+        if (!flightId || independent.status === 'choose-flight') {
+          await writeAssignmentCache(normalized.display,normalizedDate.raw,null,independent);
+        }
+        return independent;
+      }
+    } catch {}
+
     return {
-      status:'not-found',
+      status:'assignment-not-covered',
       flightNumber:normalized.display,
       date:normalizedDate.raw,
-      message:'No scheduled occurrence of that flight was found for this date.',
-      source:{ name:'FlightStats public flight tracker', url:baseUrl }
+      message:independentReachable
+        ? 'The public assignment sources responded, but no aircraft-assignment coverage is published for this flight and date. This is a coverage gap, not a temporary outage.'
+        : 'The primary public source responded without a usable occurrence or aircraft assignment for this flight and date. This is an assignment coverage gap, not proof that the passenger flight does not exist.',
+      checkedFallbacks:independentReachable
+        ? ['last-good-assignment-cache','independent-public-history']
+        : ['last-good-assignment-cache'],
+      source:{name:'Public flight assignment sources',url:baseUrl}
     };
   }
 
