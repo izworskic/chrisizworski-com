@@ -55,3 +55,27 @@ Road observations are UTC-stamped; planned dates/hours are Utah-local (America/D
 - https://www.ikonpass.com/en/faq/
 
 Prototype owner: izworskic/chrisizworski-com, until extraction is explicitly decided. Preserve existing national hub architecture when introducing a canonical URL.
+
+
+## Adversarial scenario campaign — 2026-10-08
+
+All results are based on synthetic fixtures or verified published resort policy. These are NOT observations from an authenticated live UDOT feed.
+
+- 30,155 original cross-product checks against the connected GitHub-branch source exposed a segment-to-entire-canyon false-positive. It was corrected.
+- 25 targeted, published-policy / official-schema tests passed after adding Alta holiday weekdays and early-morning parking, Brighton Ikon 5/7-day rules and Base blackout dates, and Solitude unlimited access.
+- 18,400 independent date-hour-passenger-reservation calendar oracle checks passed for January 1 through April 25, 2027.
+- Two closure-location false-positive classes were corrected: generic road-segment IsFullClosure and apparently canyon-wide notices qualified by parking/driveway/milepost-specific language.
+- UDOT explicitly permits certain exceptions during an uphill restriction, unlike full closures. Visitors with resort parking reservations, qualifying transit, authorized vehicles and lodging guests may be allowed, but entry is never guaranteed. A partial uphill restriction at the Town of Alta bypass may leave Snowbird accessible. Both cases are modeled as uncertain rather than conflated with full closure.
+- HTTP 401/403, 429, 5xx, malformed JSON, transport failures and partial feed outages now have offline tests.
+- Re-run all tests from this branch to establish final pass counts. Do not use raw cross-product totals as independent real-world evidence.
+
+## Remaining material risks
+
+- Developer key and permissioned live UDOT winter captures are absent, so classification recall/precision is not quantified.
+- Location and direction still require more detailed corridor geospatial evidence, especially between Snowbird and Alta, and at Cardiff Fork; the classifier deliberately returns REVIEW_REQUIRED when source scope is ambiguous.
+- Published resort rules can change during the season. A monitored provenance trail is required; no live reservation inventory is accessible yet.
+- Official vehicle traction eligibility has not been implemented; no legal-to-enter assertion is possible.
+- A resort parking reservation can be an uphill-restriction exception but is not an exception to a full canyon closure. A confirmed bus position is not a guarantee of seats.
+- End-to-end public UI, API hardening, scheduled centralized polling and real-user field trials are not part of this PR.
+
+Reference: https://cottonwoodcanyons.udot.utah.gov/road-closures-uphill-restrictions/
