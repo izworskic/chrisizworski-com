@@ -835,13 +835,21 @@
   }
 
   function staleFixAgeText(observation) {
-    const seconds = observation?.fixAgeSeconds;
+    const seconds = Number.isFinite(observation?.displayAgeSeconds)
+      ? observation.displayAgeSeconds
+      : observation?.fixAgeSeconds;
     if (!Number.isFinite(seconds)) return '';
     if (seconds < 60) return 'Last seen ' + Math.max(1,Math.round(seconds)) + ' sec ago';
     const minutes = Math.max(1,Math.round(seconds / 60));
     if (minutes < 90) return 'Last seen ' + minutes + (minutes === 1 ? ' min ago' : ' min ago');
     const hours = Math.max(1,Math.round(minutes / 60));
     return 'Last seen ' + hours + (hours === 1 ? 'h ago' : 'h ago');
+  }
+
+  function displayedPositionAge(live) {
+    return Number.isFinite(live?.renderPositionAgeSeconds)
+      ? live.renderPositionAgeSeconds
+      : live?.aircraft?.positionAgeSeconds;
   }
 
   function focusAirportLabel(relationship) {
@@ -1071,7 +1079,7 @@
       formatSpeed(ac.speedKnots)
     ].filter(Boolean);
     detailLabel.textContent = details.join(' · ');
-    freshness.textContent = formatAge(ac.positionAgeSeconds);
+    freshness.textContent = formatAge(displayedPositionAge(data));
     freshness.dataset.stale = data.positionFresh ? 'false' : 'true';
     renderProgress(data);
 
@@ -1310,7 +1318,7 @@
       return;
     }
 
-    if (live?.aircraft?.onGround === true && landedPreviousAtOrigin(assignment)) {
+    if (live?.aircraft?.onGround === true && !live?.reconciledState && landedPreviousAtOrigin(assignment)) {
       renderArrivedForTurn(assignment);
       return;
     }
@@ -1402,7 +1410,7 @@
 
     const relationship = live?.focusAirportRelationship;
     const focusLabel = focusAirportLabel(relationship);
-    const reportLead = reportAgeLead(live?.aircraft?.positionAgeSeconds);
+    const reportLead = reportAgeLead(displayedPositionAge(live));
     const fact = aircraftFactSentence(live);
     const distanceText = relationshipDistanceText(relationship, focusLabel);
     const reportDetails = [distanceText, fact].filter(Boolean).join(', ');
@@ -1645,6 +1653,7 @@
     if (live) {
       live.confirmedOperatingOccurrence = payload?.confirmedOperatingOccurrence || live.confirmedOperatingOccurrence || null;
       live.reconciledState = payload?.renderedState || null;
+      live.renderPositionAgeSeconds = payload?.observation?.displayAgeSeconds;
     }
 
     const staleAge = staleFixAgeText(payload?.observation);
