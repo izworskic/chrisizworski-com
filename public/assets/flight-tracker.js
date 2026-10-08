@@ -1562,16 +1562,23 @@
       return;
     }
 
+    const passengerNotAirborne = assignment?.flightStatus?.airborne !== true &&
+      assignment?.flightStatus?.landed !== true &&
+      assignment?.flightStatus?.canceled !== true;
     setAnswer({
-      kicker:'YOUR ASSIGNED AIRCRAFT',
+      kicker:passengerNotAirborne ? 'FLIGHT NOT AIRBORNE YET · ASSIGNED AIRCRAFT' : 'YOUR ASSIGNED AIRCRAFT',
       headline:onGround
         ? 'Your plane is assigned and reported on the ground.'
-        : 'Your plane is assigned, but its present location is unknown.',
+        : passengerNotAirborne
+          ? 'Your flight has not departed yet. ' + tail + ' is the assigned aircraft.'
+          : 'Your plane is assigned, but its present location is unknown.',
       summary:onGround
         ? 'The live aircraft feed reports ' + tail + ' on the ground, but it does not provide a usable position, so we cannot identify the airport.'
         : seen
           ? 'The live aircraft feed can see ' + tail + ', but it has no current location. We also could not confirm a same-tail arrival at ' + airportPlace(assignment?.origin) + '.'
-          : 'We confirmed ' + tail + ' is assigned to your flight, but there is no current position and no confirmed same-tail arrival at ' + airportPlace(assignment?.origin) + '. Its present location is unknown.',
+          : passengerNotAirborne
+            ? 'The assignment is confirmed, but there is no fresh aircraft position right now. We will keep following this exact tail and its inbound leg when evidence appears.'
+            : 'We confirmed ' + tail + ' is assigned to your flight, but there is no current position and no confirmed same-tail arrival at ' + airportPlace(assignment?.origin) + '. Its present location is unknown.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
       next:onGround
         ? 'Tracking starts when the aircraft reports a usable position. Until then, we will not guess which airport it is at.'
@@ -2170,14 +2177,24 @@
 
       if (data.status !== 'found' || !data.assignment) {
         if (!silent) {
+          const sourceDown = data.status === 'assignment-source-unavailable' || data.status === 'source-unavailable';
           setAnswer({
-            kicker:'AIRCRAFT ASSIGNMENT UNAVAILABLE',
-            headline:'We could not identify the aircraft assigned to this scheduled flight yet.',
-            summary:data.message || 'Live tracking will still work once the flight itself is airborne.',
+            kicker:sourceDown ? 'ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE' : 'AIRCRAFT ASSIGNMENT NOT FOUND',
+            headline:sourceDown
+              ? 'We cannot confirm the assigned aircraft right now.'
+              : 'We could not identify an aircraft assignment for this scheduled occurrence.',
+            summary:data.message || (sourceDown
+              ? 'The assignment source is down. We will still check live operating callsigns without pretending that means the aircraft is assigned.'
+              : 'The flight may not have an assignment published yet.'),
             pills:[activeFlight,activeDate],
-            source:'Live-flight fallback: ADSB.lol.'
+            next:sourceDown
+              ? 'Live callsign tracking is a fallback only. If it finds nothing, that means no live position was found — not that the flight or assignment does not exist.'
+              : null,
+            source:sourceDown
+              ? 'Assignment status: temporarily unavailable · Live fallback: ADSB.lol.'
+              : 'Flight occurrence data: FlightStats public tracker.'
           });
-          await loadFlight(activeFlight,{silent:false});
+          await loadFlight(activeFlight,{silent:false,preserveUnavailableAnswer:sourceDown});
         }
         return;
       }
@@ -2217,7 +2234,7 @@
     }
   }
 
-  async function loadFlight(flight, {silent=false}={}) {
+  async function loadFlight(flight, {silent=false,preserveUnavailableAnswer=false,operatingCarrier=null}={}) {
     const normalized = clean(flight);
     if (!normalized) return;
     if (silent && refreshInFlight) return;
@@ -2235,7 +2252,9 @@
     if (silent) refreshInFlight = true;
 
     try {
-      const response = await fetch('/api/flight-tracker?flight=' + encodeURIComponent(normalized), {
+      const liveParams = new URLSearchParams({flight:normalized});
+      if (operatingCarrier) liveParams.set('operatingCarrier',operatingCarrier);
+      const response = await fetch('/api/flight-tracker?' + liveParams.toString(), {
         headers:{accept:'application/json'}
       });
       const data = await response.json();
@@ -2244,7 +2263,21 @@
       if (data.status === 'live' && data.positionFresh === true) {
         renderLive(data);
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
-        renderUnavailable(data);
+        if (preserveUnavailableAnswer) {
+          clearLiveMap();
+          glance.hidden = true;
+          progressBar.hidden = true;
+          flightLabel.textContent = normalized;
+          routeLabel.textContent = 'No live position';
+          routeCodes.textContent = '';
+          detailLabel.textContent = Array.isArray(data?.checkedCallsigns) && data.checkedCallsigns.length
+            ? 'Checked ' + data.checkedCallsigns.join(', ')
+            : 'Live callsign fallback checked';
+          freshness.textContent = '';
+          setMessage('', 'neutral');
+        } else {
+          renderUnavailable(data);
+        }
         if (!silent) resetHeldLive();
       }
     } catch {
