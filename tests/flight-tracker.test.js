@@ -1163,13 +1163,58 @@ test('future dates never attach a current-day direct aircraft merely because the
   assert.doesNotMatch(client,/new URLSearchParams\(\{flight,date,unified:'1',liveNow:'1'\}\)/);
 });
 
-test('last-confirmed inbound legs survive transient arrival-board failures', () => {
+test('last-confirmed inbound legs are stable and exact-tail history precedes the flaky arrival board', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v2:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
-  assert.match(source,/writeInboundCache\(date,tail,airport,result\.occurrence\)/);
-  assert.match(source,/const embedded=embeddedInboundOccurrence\(assignment\)/);
-  assert.match(source,/return await readInboundCache\(date,tail,airport\)/);
+  assert.match(source,/const cached=await readInboundCache\(date,tail,airport\)/);
+  assert.match(source,/lookupIndependentInboundByTail\(\{assignment,date\}\)/);
+  assert.match(source,/lookupRecentArrivalByTail\(\{tail,airport,carrier,nowMs\}\)/);
+  assert.match(source,/inboundOccurrenceMatchesAssignment\(assignment,result\.occurrence\)/);
+  assert.ok(source.indexOf('const cached=await readInboundCache') < source.indexOf('lookupIndependentInboundByTail({assignment,date})'));
+  assert.ok(source.indexOf('lookupIndependentInboundByTail({assignment,date})') < source.indexOf('lookupRecentArrivalByTail({tail,airport,carrier,nowMs})'));
+});
+
+test('independent tail history only accepts the exact tail, date and destination airport', () => {
+  const markdown=[
+    'DL1432 08 Oct 2026 1:40 Landed 16:05 FROM Boston [(BOS)](https://data.flightradar24.com/data/airports/bos) TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) [DL1432](https://data.flightradar24.com/data/flights/dl1432)',
+    '08 Oct 2026 Orlando [(MCO)](https://free.flightradar24.com/data/airports/mco) Atlanta [(ATL)](https://free.flightradar24.com/data/airports/atl) [DL1213](https://free.flightradar24.com/data/flights/dl1213) 1:20 Landed 14:00'
+  ].join('\n');
+  const rows=assignmentApi.parseFr24TailHistoryRows(markdown,'N121DZ');
+  assert.equal(rows.length,2);
+  assert.equal(rows[0].flightNumber,'DL1432');
+  assert.equal(rows[0].tailNumber,'N121DZ');
+  assert.equal(rows[0].origin,'BOS');
+  assert.equal(rows[0].destination,'DTW');
+  assert.equal(rows[0].landed,true);
+  assert.equal(rows[1].destination,'ATL');
+
+  const assignment={
+    flightNumber:'DL1171',
+    tailNumber:'N121DZ',
+    origin:{iata:'DTW',code:'DTW',city:'Detroit'},
+    destination:{iata:'BOS',code:'BOS',city:'Boston'}
+  };
+  const summary=assignmentApi.fr24TailInboundSummary(rows[0],assignment,'2026-10-08');
+  assert.equal(summary.flightNumber,'DL1432');
+  assert.equal(summary.tailNumber,'N121DZ');
+  assert.equal(summary.destination.iata,'DTW');
+  assert.equal(summary.flightStatus.landed,true);
+  assert.equal(summary.evidence.kind,'independent-tail-history-arrival');
+  assert.equal(assignmentApi.inboundOccurrenceMatchesAssignment(assignment,summary),true);
+  assert.equal(assignmentApi.inboundOccurrenceMatchesAssignment(assignment,{...summary,tailNumber:'N999ZZ'}),false);
+});
+
+test('FR24 public-history reader rejects challenge pages and retries alternate public hostnames', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.equal(assignmentApi.fr24ReaderTextLooksUsable('Just a moment... Enable JavaScript and cookies to continue'),false);
+  assert.equal(assignmentApi.fr24ReaderTextLooksUsable('FLIGHTS HISTORY\n08 Oct 2026'),true);
+  assert.match(source,/FR24_READER_ORIGINS = Object\.freeze\(\[/);
+  assert.match(source,/data\.flightradar24\.com/);
+  assert.match(source,/free\.flightradar24\.com/);
+  assert.match(source,/Promise\.any\(attempts\)/);
+  assert.match(source,/fetchFr24ReaderPath\('\/data\/flights\/'/);
+  assert.match(source,/fetchFr24ReaderPath\('\/data\/aircraft\/'/);
 });
 
 test('independent public-history parser resolves the exact same-day route and registration', () => {
