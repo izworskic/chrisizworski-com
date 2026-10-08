@@ -1155,7 +1155,7 @@ test('new searches clear previous flight map labels before lookup and failures k
   assert.match(client,/routeLabel\.textContent = 'Checking current flight…'/);
   assert.match(client,/hideAnswer\(\);\s*resetMapForLookup\(activeFlight\);\s*await loadAssignment/s);
   assert.match(client,/function resetMapForFailure\(flight,label='No live position'\)/);
-  assert.match(client,/resetMapForFailure\(activeFlight\)/);
+  assert.match(client,/resetMapForFailure\(activeFlight(?:,|\))/);
 });
 
 test('future dates never attach a current-day direct aircraft merely because the flight number matches', () => {
