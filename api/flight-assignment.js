@@ -881,9 +881,14 @@ function positionObservation(live,nowMs = Date.now()) {
   };
 }
 
+function confirmedArrival(assignment) {
+  if (assignment?.flightStatus?.landed === true) return true;
+  return Boolean(String(assignment?.schedule?.actualArrivalUTC || '').trim());
+}
+
 function strongStatusState(assignment) {
   if (assignment?.flightStatus?.canceled === true) return 'canceled';
-  if (assignment?.flightStatus?.landed === true) return 'landed';
+  if (confirmedArrival(assignment)) return 'landed';
   if (assignment?.flightStatus?.airborne === true) return 'airborne';
   return 'scheduled';
 }
@@ -916,6 +921,9 @@ function reconcileFlightState({assignment,live,recentInboundOccurrence,nowMs = D
   let renderSource = 'flight-status';
   if (assignment?.flightStatus?.canceled === true) {
     renderedState = 'canceled';
+  } else if (confirmedArrival(assignment)) {
+    renderedState = 'landed-status';
+    renderSource = 'flight-status-arrival';
   } else if (!assignment?.tailNumber) {
     renderedState = 'unassigned';
   } else if (observation.fresh) {
@@ -923,8 +931,6 @@ function reconcileFlightState({assignment,live,recentInboundOccurrence,nowMs = D
     renderSource = 'adsb-fresh';
   } else if (assignment?.flightStatus?.airborne === true) {
     renderedState = 'airborne-status';
-  } else if (assignment?.flightStatus?.landed === true) {
-    renderedState = 'landed-status';
   } else if (departedOverHourAgo(assignment,nowMs) &&
              !assignment?.flightStatus?.canceled && !isDiverted(assignment)) {
     renderedState = 'airborne-status';
@@ -1459,6 +1465,7 @@ module.exports._test = {
   buildUnifiedFlightState,
   operatingCarrierSummary,
   baseFlightMatchesDate,
+  confirmedArrival,
   readAssignmentCache,
   writeAssignmentCache,
   REGIONAL_IATA_TO_ICAO,
