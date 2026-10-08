@@ -591,7 +591,11 @@
         <span class="kicker">The season</span>
         <span class="mono" id="dateBig" style="font-size:22px"></span>
       </div>
-      <input id="scrub" type="range" min="-120" max="75" value="0" style="margin-top:12px" aria-label="Date in the fall color season" />
+      <input id="scrub" type="range" min="-120" max="98" value="0" style="margin-top:12px" aria-label="Date in the fall color season" />
+      <div class="row" style="justify-content:flex-end;gap:9px;margin-top:9px;flex-wrap:wrap">
+        <button id="fallSeasonStatus" type="button" class="chip" hidden>Season status</button>
+        <button id="fallPreviewNext" type="button" class="chip" hidden>Preview next fall</button>
+      </div>
       <div class="row mono tiny muted" id="scrubAxis" style="margin-top:7px"></div>
       <div class="chips" id="dateChips" style="margin-top:14px"></div>
       <div class="tiny muted" id="modeNote" style="margin-top:12px"></div>
@@ -713,6 +717,7 @@
 const C={bg:"#F5EEDF",panel:"#FFFCF5",panel2:"#EFE5D2",line:"#DFD1B4",
   bone:"#2A2018",soft:"#4B3F32",muted:"#726351",
   gold:"#8E6410",amber:"#9E5F13",rust:"#9C4E27",maple:"#8E301C",russet:"#75512F",
+  bare:"#888178",offseason:"#777A76",
   moss:"#5A6B3A",green:"#4A6633",water:"#2A6070",rain:"#3E6070",snow:"#5B6B74",cloud:"#7C7263"};
 
 const REGIONS=[
@@ -794,8 +799,9 @@ const MONTHS_ALL=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","N
 const dayIndex=(m,d)=>OFF[m]+(d-1);
 function idxToDate(i){if(i<30)return{m:9,d:i+1};if(i<61)return{m:10,d:i-30+1};return{m:11,d:i-61+1};}
 function fmt(i){
-  if(i<0){const d=new Date(SEP1.getTime()+i*86400000);return MONTHS_ALL[d.getMonth()]+" "+d.getDate();}
-  const o=idxToDate(i);return MONTHS[o.m]+" "+o.d;
+  // Use real date arithmetic: day 98 is December 8, not "November 38".
+  const d=new Date(Date.UTC(now.getFullYear(),8,1+i));
+  return MONTHS_ALL[d.getUTCMonth()]+" "+d.getUTCDate();
 }
 const lerp=(a,b,t)=>a+(b-a)*Math.min(1,Math.max(0,t));
 function stageOf(r,i){
@@ -805,11 +811,18 @@ function stageOf(r,i){
   else if(i<ps){pct=lerp(15,88,(i-g)/(ps-g));phase="rising";}
   else if(i<=pe){pct=lerp(92,100,(i-ps)/Math.max(1,pe-ps));phase="peak";}
   else if(i<=b){pct=lerp(88,14,(i-pe)/(b-pe));phase="falling";}
-  else{pct=7;phase="down";}
+  else if(i<=b+5){pct=lerp(14,4,(i-b)/5);phase="down";}
+  else if(i<=b+14){pct=2;phase="bare";}
+  else{pct=0;phase="offseason";}
   return{pct:Math.round(pct),phase,ps,pe,b};
 }
 function colorOf(pct,phase){
-  if(phase==="down"||(phase==="falling"&&pct<40))return C.russet;
+  if(phase==="offseason")return C.offseason;
+  if(phase==="bare")return C.bare;
+  if(phase==="down")return C.russet;
+  // After peak, transition red -> amber -> rust -> brown rather than
+  // keeping peak-red at 85% or jumping to bare instantly.
+  if(phase==="falling")return pct>=70?C.amber:pct>=40?C.rust:C.russet;
   if(pct>=85)return C.maple; if(pct>=70)return C.rust; if(pct>=52)return C.amber;
   if(pct>=34)return C.gold; if(pct>=16)return C.moss; return C.green;
 }
@@ -817,14 +830,17 @@ function labelOf(pct,phase){
   if(phase==="green")return "Still green";
   if(phase==="peak")return "At peak";
   if(phase==="rising")return pct<45?"Color starting":pct<78?"Approaching peak":"Nearly there";
-  if(phase==="falling")return pct>=78?"Just past peak":pct>=45?"Fading":"Past peak";
+  if(phase==="falling")return pct>=78?"Color beginning to fade":pct>=45?"Fading":"Late rust and copper";
+  if(phase==="down")return "Leaves coming down";
+  if(phase==="bare")return "Mostly bare";
+  if(phase==="offseason")return "Season complete";
   return "Leaves down";
 }
 function countdownOf(i,s){
   if(i<s.ps)return (s.ps-i)+" days to peak";
   if(i<=s.pe)return "peaking now";
-  if(i<=s.b)return "just past peak";
-  return "rested for the year";
+  if(i<=s.b)return "fading after peak";
+  return "season complete";
 }
 function hexA(hex,a){const n=parseInt(hex.slice(1),16);return "rgba("+((n>>16)&255)+","+((n>>8)&255)+","+(n&255)+","+a+")";}
 function listNames(a){return a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];}
@@ -837,6 +853,13 @@ const now=new Date();
 const tm=now.getMonth()+1, td=now.getDate();
 function isFallReportSeason(m,d){return (m===8&&d>=20)||m===9||m===10||(m===11&&d<=15);}
 const inSeason=isFallReportSeason(tm,td);
+// The live season ends in mid-November. During winter and before next
+// September, display subdued woodland instead of resetting green on Jan 1.
+// Visitors can explicitly preview next fall, independent of current feeds.
+const winterCalendar=(tm<9&&!(tm===8&&td>=20))||(tm===11&&td>15)||(tm===12);
+const completedSeasonYear=tm<9?now.getFullYear()-1:now.getFullYear();
+const nextPreviewYear=completedSeasonYear+1;
+let winterMode=winterCalendar,previewMode=false;
 // todayFromSep1: days from Sep 1 to today; negative before Sep 1.
 // This is the universal slider anchor: the page always opens here.
 const SEP1=new Date(now.getFullYear(),8,1);
@@ -844,7 +867,7 @@ const todayFromSep1=Math.floor((now.getTime()-SEP1.getTime())/86400000);
 // todayIdx follows that same arc, including negative August launch days, and is
 // null only outside the Aug 20-Nov 15 reporting window.
 const todayIdx=inSeason?todayFromSep1:null;
-let selIdx=todayFromSep1;   // always open on today
+let selIdx=winterMode?98:todayFromSep1;   // winter begins on a muted, season-complete map
 let openBand=null;
 
 function weatherAdjust(w){
@@ -876,7 +899,7 @@ function liveStageFor(r){
   return{pct,phase,predicted:pred.pct,nd:nd||null,w:(live&&live.weather)||null,ps:pred.ps,pe:pred.pe,b:pred.b};
 }
 // Today = slider is at the todayFromSep1 anchor (works in any month).
-const isToday=()=> selIdx===todayFromSep1;
+const isToday=()=>!winterMode&&!previewMode&&selIdx===todayFromSep1;
 // Compute the gap between today's live reading and the climatology prediction.
 // Every future projection carries this offset forward so the forecast always
 // begins with the actual current state of the season.
@@ -892,11 +915,12 @@ function computeLiveOffsets(){
 
 function bandData(r){
   // Today with live data: full live blend (canopy + weather).
+  if(winterMode)return {...stageOf(r,98),phase:"offseason",pct:0,live:false,projected:false};
   if(isToday()&&LIVE){const ls=liveStageFor(r);return{...ls,live:true,projected:false};}
   const s=stageOf(r,selIdx);
   // Future with live offsets: project forward FROM today's real state.
   // Only meaningful once the color season is open (todayIdx not null).
-  if(selIdx>todayFromSep1&&todayIdx!==null&&Object.keys(LIVE_OFFSET).length){
+  if(!previewMode&&selIdx>todayFromSep1&&todayIdx!==null&&Object.keys(LIVE_OFFSET).length){
     const offset=LIVE_OFFSET[r.id]||0;
     const pct=Math.max(0,Math.min(100,s.pct+offset));
     return{pct,phase:s.phase,ps:s.ps,pe:s.pe,b:s.b,live:false,projected:true,offset};
@@ -940,6 +964,7 @@ function fc(regionId){
 // ---- render: live strip ----
 function renderLiveStrip(){
   const el=document.getElementById("liveStripBody");
+  if(winterCalendar){el.textContent="Fall color season complete. The subdued map is a seasonal view; the next-fall preview uses typical timing, not live canopy or weather readings.";return;}
   if(!LIVE){el.textContent="Live feed unavailable just now. Use the seasonal planning baseline above and the regional season bands below; neither will invent a live reading.";return;}
   let canopy=[],lows=[],dt=null,froze=false;
   REGIONS.forEach(r=>{const v=LIVE[r.id];if(v){if(v.ndvi){canopy.push(v.ndvi.canopyPct);dt=v.ndvi.date;}if(v.weather){if(v.weather.lowestRecent!=null)lows.push(v.weather.lowestRecent);if(v.weather.frostRecent)froze=true;}}});
@@ -962,6 +987,13 @@ function renderStatewideStatus(){
   const body=document.getElementById("statewideStatusBody");
   const updated=document.getElementById("statewideStatusUpdated");
   if(!heading||!body||!updated)return;
+  if(winterCalendar){
+    document.getElementById("statewideStatusLabel").textContent="Season complete";
+    heading.textContent="Michigan's main fall-color season has ended.";
+    body.textContent="The map is intentionally gray-brown during the off-season. Review a previous fall date or preview fall "+nextPreviewYear+" for typical north-to-south timing. Neither is a current canopy observation.";
+    updated.hidden=true;
+    return;
+  }
   if(!inSeason||!LIVE_FRESHNESS)return;
   const ranked=REGIONS.filter(r=>LIVE_FRESHNESS.regionIds.includes(r.id)).map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
   const lead=ranked[0];
@@ -1008,7 +1040,10 @@ function buildMap(){
 // page ever gets, bare pulls back to almost nothing. Kept deliberately low: the point
 // is to feel the season move across the state, not to hide the map under paint.
 function washAlpha(pct,phase){
-  if(phase==="bare"||phase==="down")return 0.05;
+  if(phase==="offseason")return 0.005;
+  if(phase==="bare")return 0.018;
+  if(phase==="down")return 0.045;
+  if(phase==="falling")return pct>=65?0.11:pct>=35?0.075:0.045;
   if(phase==="green")return 0.07;
   if(pct>=85)return 0.20;
   if(pct>=70)return 0.17;
@@ -1023,7 +1058,7 @@ function drawWash(){
     const d=bandData(r);
     // colorOf falls through to green at a low percentage, which is right for a marker
     // mid-season but wrong for bare trees. Bare washes russet, the colour of the litter.
-    const col=(d.phase==="bare"||d.phase==="down")?C.russet:colorOf(d.pct,d.phase);
+    const col=colorOf(d.pct,d.phase);
     const a=washAlpha(d.pct,d.phase);
     // Three rings approximate a radial falloff, which Leaflet has no native support for.
     [[125000,0.42],[88000,0.70],[52000,1.0]].forEach(function(ring){
@@ -1082,7 +1117,7 @@ function renderBands(){
             '<div class="small muted" style="margin-top:3px">'+r.area+'</div>'+
           '</div>'+
           '<div style="text-align:right;flex:0 0 auto">'+
-            '<div class="mono" style="font-size:20px;line-height:1;color:'+col+'">'+d.pct+'%</div>'+
+            '<div class="mono" style="font-size:20px;line-height:1;color:'+col+'">'+(d.phase==="offseason"?"—":d.pct+"%")+'</div>'+
             '<div class="tiny muted" style="margin-top:5px">'+labelOf(d.pct,d.phase)+'</div>'+
           '</div>'+
         '</div>'+
@@ -1143,6 +1178,8 @@ function renderSpecies(){
 function renderBanner(){
   const peaking=REGIONS.filter(r=>{const d=bandData(r);return d.phase==="peak"||(d.phase==="rising"&&d.pct>=80);});
   let txt;
+  if(winterMode){document.getElementById("bannerText").textContent="Season complete. The map stays muted through winter; review a fall date or preview next season when you choose.";return;}
+  if(previewMode){document.getElementById("bannerText").textContent="Planning preview for fall "+nextPreviewYear+". These are typical seasonal estimates, not live canopy measurements.";return;}
   if(peaking.length){txt="Around "+fmt(selIdx)+", the color is fullest in "+listNames(peaking.map(r=>r.name))+".";}
   else{
     const up=REGIONS.map(r=>({r,s:stageOf(r,selIdx)})).filter(x=>selIdx<x.s.ps).sort((a,b)=>a.s.ps-b.s.ps)[0];
@@ -1155,18 +1192,25 @@ function renderBanner(){
 function renderScrubAxis(){
   const el=document.getElementById("scrubAxis");
   if(!el)return;
-  const labels=["Today, "+fmt(todayFromSep1)];
+  const labels=[winterMode?"Season complete":previewMode?"Fall "+nextPreviewYear:winterCalendar?"Review fall "+completedSeasonYear:"Today, "+fmt(todayFromSep1)];
   if(todayFromSep1<0)labels.push("Sep 1");
   if(todayFromSep1<30)labels.push("Oct 1");
-  labels.push("Nov 15");
+  labels.push("Dec 8");
   el.innerHTML=labels.map(l=>'<span>'+l+'</span>').join('');
 }
 function renderDate(){
-  document.getElementById("dateBig").textContent=fmt(selIdx);
-  document.getElementById("planDate").textContent=fmt(selIdx);
+  document.getElementById("dateBig").textContent=winterMode?"Season complete":fmt(selIdx);
+  document.getElementById("planDate").textContent=winterMode?"Season complete":fmt(selIdx);
+  const seasonStatus=document.getElementById("fallSeasonStatus");
+  const nextPreview=document.getElementById("fallPreviewNext");
+  if(seasonStatus)seasonStatus.hidden=!winterCalendar;
+  if(nextPreview){nextPreview.hidden=!winterCalendar;nextPreview.textContent="Preview fall "+nextPreviewYear;}
   const note=document.getElementById("modeNote");
   const isFuture=selIdx>todayFromSep1;
-  if(isToday()){
+  if(winterMode)note.textContent="Fall "+completedSeasonYear+" has ended. Gray-brown dots show the off-season, not live foliage. Use the slider to review the season or preview fall "+nextPreviewYear+".";
+  else if(previewMode)note.textContent="Fall "+nextPreviewYear+" planning preview. Typical seasonal estimates only; current-year canopy and weather readings are not projected into next year.";
+  else if(winterCalendar)note.textContent="Reviewing typical fall "+completedSeasonYear+" timing, not live observations.";
+  else if(isToday()){
     if(LIVE&&todayIdx!==null)
       note.innerHTML="Today's live color from canopy and weather. Slide right to project forward from where the season actually is.";
     else if(LIVE)
@@ -1215,6 +1259,11 @@ function activityFor(r,vibe){
   return ["A slow drive",r.drive+"."];
 }
 function buildPlan(){
+  if(winterMode){
+    const host=document.getElementById("thread");
+    host.innerHTML='<div class="card pad"><div class="kicker">Season complete</div><p class="small soft">Michigan fall color has ended. Select a historical fall date or choose Preview fall '+nextPreviewYear+' to plan a future autumn trip. Winter map dots are not live leaf-color readings.</p></div>';
+    return;
+  }
   const regionName=document.getElementById("planRegion").value;
   const vibe=document.querySelector("#vibeChips .chip.on").textContent;
   const anywhere=(regionName==="Anywhere in Michigan");
@@ -1246,9 +1295,13 @@ function buildPlan(){
   const isFutureProjected=todayIdx!==null&&selIdx>todayIdx&&Object.keys(LIVE_OFFSET).length;
   const host=document.getElementById("thread");host.innerHTML="";
   const card=document.createElement("div");card.className="card pad";
-  const modeNote=isFutureProjected
-    ?"Projected forward from today's live canopy and weather readings."
-    :"Drawn from today's live color and weather. Change the date, place, or mood and it reconsiders.";
+  const modeNote=previewMode
+    ?"Fall "+nextPreviewYear+" preview uses typical timing only, not current canopy or weather observations."
+    :winterCalendar
+      ?"Review of typical fall "+completedSeasonYear+" timing, not a current foliage observation."
+      :isFutureProjected
+        ?"Projected forward from today's live canopy and weather readings."
+        :"Drawn from today's live color and weather. Change the date, place, or mood and it reconsiders.";
   card.innerHTML='<div class="kicker" style="margin-bottom:12px">A suggestion for '+fmt(selIdx)+(isToday()?', today':'')+'</div>'+parts.join("")+
     '<div class="tiny muted" style="text-align:center;margin-top:10px">'+modeNote+'</div>';
   host.appendChild(card);
@@ -1264,7 +1317,8 @@ function nearestRegion(la,lo){
   REGIONS.forEach(r=>{const dx=r.lat-la,dy=(r.lon-lo)*Math.cos(la*Math.PI/180);const d=dx*dx+dy*dy;if(d<bd){bd=d;best=r.id;}});
   return best;
 }
-function todayStage(r){return (LIVE&&Object.keys(LIVE).length)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
+function todayStage(r){return winterMode?{...stageOf(r,98),phase:"offseason",pct:0}:
+  (previewMode||winterCalendar)?stageOf(r,selIdx):(LIVE&&Object.keys(LIVE).length&&!winterCalendar)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
 function locateMe(){
   const btn=document.getElementById("nearBtn");
   if(!navigator.geolocation){document.getElementById("nearPick").style.display="block";return;}
@@ -1279,12 +1333,13 @@ function locateMe(){
 function renderNearMe(){
   const host=document.getElementById("nearBody"); if(!host||!nearId)return;
   const r=REGIONS.find(x=>x.id===nearId); const d=todayStage(r); const col=colorOf(d.pct,d.phase);
-  const ti=todayFromSep1;
+  const ti=(previewMode||winterCalendar)?selIdx:todayFromSep1;
   const north=REGIONS.filter(x=>x.lat>r.lat+0.2).map(x=>({x,s:todayStage(x)})).sort((a,b)=>b.s.pct-a.s.pct)[0];
   const hasNorth=REGIONS.some(x=>x.lat>r.lat+0.2);
   let nudge="";
   if(d.phase==="peak"){nudge="You are in it. This is about as full as the color gets here.";}
   else if(north&&north.s.pct>=d.pct+8){nudge="Color is further along to your north: "+north.x.name+" is near "+north.s.pct+"% now.";}
+  else if(d.phase==="offseason"||d.phase==="bare"){nudge="Season complete here. The next fall-color season is a planning preview, not a live observation.";}
   else if(d.phase==="falling"||d.phase==="down"){nudge="Past peak here. Oak, beech, and tamarack carry the late color into November.";}
   else if(!hasNorth){nudge="You are in the first of it: Michigan's earliest color shows up here, often by late September.";}
   else{nudge="The north turns first. Color usually starts in the U.P. and the Tip of the Mitt in late September, then works its way down toward you.";}
@@ -1293,7 +1348,7 @@ function renderNearMe(){
     '<div class="near-big">'+(nearVia==="gps"?"Your nearest color: ":"")+r.name+'</div>'+
     '<div class="small muted" style="margin-top:3px">'+r.area+'</div>'+
     '<div class="row" style="align-items:baseline;margin-top:13px">'+
-      '<span class="mono" style="font-size:26px;line-height:1;color:'+col+'">'+d.pct+'%</span>'+
+      '<span class="mono" style="font-size:26px;line-height:1;color:'+col+'">'+(d.phase==="offseason"?"—":d.pct+"%")+'</span>'+
       '<span class="tiny" style="color:'+col+';text-align:right">'+labelOf(d.pct,d.phase)+'<br><span class="muted">'+countdownOf(ti,d)+'</span></span>'+
     '</div>'+
     '<div class="meter" style="margin-top:11px"><i style="width:'+Math.max(4,d.pct)+'%;background:'+col+'"></i></div>'+
@@ -1305,7 +1360,7 @@ function renderNearMe(){
       '<a href="/fall-color/when-do-leaves-peak-in-michigan/">Full Michigan timeline</a>'+
     '</div>';
   const nm=document.getElementById("nearMap");
-  if(nm)nm.onclick=e=>{e.preventDefault();openBand=REGIONS.findIndex(x=>x.id===nearId);selIdx=todayFromSep1;syncScrub();setTab("now");renderAll();const b=document.getElementById("bands");if(b)b.scrollIntoView({behavior:"smooth",block:"start"});};
+  if(nm)nm.onclick=e=>{e.preventDefault();openBand=REGIONS.findIndex(x=>x.id===nearId);selIdx=winterMode?98:previewMode?0:todayFromSep1;syncScrub();setTab("now");renderAll();const b=document.getElementById("bands");if(b)b.scrollIntoView({behavior:"smooth",block:"start"});};
 }
 function wireNear(){
   const btn=document.getElementById("nearBtn"); if(btn)btn.onclick=locateMe;
@@ -1348,7 +1403,9 @@ function setTab(name){
 function initChips(){
   const dc=document.getElementById("dateChips");
   [["Late Sep",27],["Early Oct",37],["Mid Oct",44],["Late Oct",51],["Early Nov",65]].forEach(([l,v])=>{
-    const b=document.createElement("button");b.className="chip";b.textContent=l;b.onclick=()=>{selIdx=v;syncScrub();renderAll();rebuildIfShown();};dc.appendChild(b);
+    const b=document.createElement("button");b.className="chip";b.textContent=l;b.onclick=()=>{
+      winterMode=false;previewMode=winterCalendar;selIdx=v;syncScrub();renderAll();rebuildIfShown();
+    };dc.appendChild(b);
   });
   const vc=document.getElementById("vibeChips");
   ["A walk","On the water","A slow drive","Photographs","Easy outing","Birds too"].forEach((v,i)=>{
@@ -1358,13 +1415,27 @@ function initChips(){
   const sel=document.getElementById("planRegion");
   sel.innerHTML='<option>Anywhere in Michigan</option>'+REGIONS.map(r=>'<option>'+r.name+'</option>').join("");
 }
-function syncScrub(){document.getElementById("scrub").value=selIdx;}
+function syncScrub(){document.getElementById("scrub").value=Math.max(+document.getElementById("scrub").min,Math.min(98,selIdx));}
 function init(){
   document.getElementById("todayLabel").textContent=now.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const scrub=document.getElementById("scrub");
-  scrub.min=todayFromSep1; scrub.value=todayFromSep1;
+  // Keep the 2026 Michigan seasonal window navigable even in January, when
+  // today's index would otherwise create a slider min greater than its max.
+  scrub.min=String(winterCalendar?0:Math.min(0,todayFromSep1));
+  scrub.max="98";
+  scrub.value=String(Math.max(+scrub.min,Math.min(98,selIdx)));
   initChips(); wireNear(); syncScrub(); renderScrubAxis();
-  document.getElementById("scrub").addEventListener("input",e=>{selIdx=+e.target.value;renderAll();});
+  document.getElementById("scrub").addEventListener("input",e=>{
+    winterMode=false;selIdx=+e.target.value;renderAll(); // Keep preview mode as the date moves.
+  });
+  document.getElementById("fallSeasonStatus").addEventListener("click",()=>{
+    if(!winterCalendar)return;
+    winterMode=true;previewMode=false;selIdx=98;syncScrub();renderAll();rebuildIfShown();
+  });
+  document.getElementById("fallPreviewNext").addEventListener("click",()=>{
+    if(!winterCalendar)return;
+    winterMode=false;previewMode=true;selIdx=0;syncScrub();renderAll();rebuildIfShown();
+  });
   document.getElementById("scrub").addEventListener("change",rebuildIfShown);
   const tabs=[...document.querySelectorAll(".tab")];
   tabs.forEach((t,index)=>{
@@ -1381,14 +1452,15 @@ function init(){
   document.getElementById("planBtn").onclick=buildPlan;
   document.getElementById("planRegion").addEventListener("change",rebuildIfShown);
   renderStatewideStatus(); buildMap(); renderAll();
-  fetch("/api/fall-color-conditions").then(r=>{if(!r.ok)throw new Error("Conditions unavailable");return r.json();}).then(j=>{
+  if(winterCalendar){renderLiveStrip();}
+  else fetch("/api/fall-color-conditions").then(r=>{if(!r.ok)throw new Error("Conditions unavailable");return r.json();}).then(j=>{
     LIVE_FRESHNESS=FallColorFreshness.assess(j,REGIONS.map(r=>r.id));
     if(!LIVE_FRESHNESS)throw new Error("Recent conditions unavailable");
     LIVE={}; (j.regions||[]).forEach(r=>LIVE[r.id]={weather:r.weather,ndvi:r.ndvi,forecast:r.forecast});
     computeLiveOffsets();
     renderStatewideStatus(); renderLiveStrip(); renderAll(); if(nearId)renderNearMe();
   }).catch(()=>{renderStatewideStatus();renderLiveStrip();});
-  fetch("/api/fall-color-report").then(r=>r.json()).then(renderReport).catch(()=>{});
+  if(!winterCalendar)fetch("/api/fall-color-report").then(r=>r.json()).then(renderReport).catch(()=>{});
 }
 init();
 </script>
