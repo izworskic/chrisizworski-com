@@ -24,7 +24,7 @@ const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
 const CODESHARE_READER_BASE = 'https://r.jina.ai/https://info.flightmapper.net/flight/';
 const CODESHARE_TIMEOUT_MS = 6500;
 const FLIGHTMAPPER_AIRLINE_SLUGS = Object.freeze({
-  VS:'Virgin_Atlantic', KL:'KLM', AF:'Air_France', WS:'WestJet', BA:'British_Airways',
+  DL:'Delta_Air_Lines', VS:'Virgin_Atlantic', KL:'KLM', AF:'Air_France', WS:'WestJet', BA:'British_Airways',
   LH:'Lufthansa', AC:'Air_Canada', KE:'Korean_Air', QF:'Qantas', NZ:'Air_New_Zealand'
 });
 const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '';
@@ -1276,15 +1276,33 @@ async function fetchCodeshareText(marketingFlight) {
   }
 }
 
-function parseCodeshareOperatingCandidates(markdown,marketingFlight) {
+function codeshareScheduleApplies(segment,travelDate) {
+  if (!travelDate || !normalizeDate(travelDate)) return true;
+  // A flight page may contain several historical operator schedules.
+  // Use the published validity range preceding this exact operator link.
+  const descriptors=[...String(segment || '').matchAll(
+    /Effective\s+(from\s+)?(\d{4}-\d{2}-\d{2})(?:\s+through\s+(\d{4}-\d{2}-\d{2}))?|Valid until\s+(\d{4}-\d{2}-\d{2})|Operates only on\s+(\d{4}-\d{2}-\d{2})/gi
+  )];
+  if (!descriptors.length) return true;
+  const last=descriptors[descriptors.length-1];
+  if (last[5]) return travelDate === last[5];
+  if (last[4]) return travelDate <= last[4];
+  return travelDate >= last[2] && (!last[3] || travelDate <= last[3]);
+}
+
+function parseCodeshareOperatingCandidates(markdown,marketingFlight,date=null) {
   const requested=clean(marketingFlight);
   const found=[];
   const seen=new Set();
+  const content=String(markdown || '');
   const regex=/\(\[([A-Z0-9]{2})\s*([0-9]{1,4}[A-Z]?)\]\(https:\/\/info\.flightmapper\.net\/flight\/[^)]+\)\)/gi;
-  let match;
-  while ((match=regex.exec(String(markdown || '')))) {
+  let match,previousEnd=0;
+  while ((match=regex.exec(content))) {
+    const section=content.slice(previousEnd,match.index);
+    previousEnd=regex.lastIndex;
     const flight=clean(match[1] + match[2]);
-    if (!flight || flight === requested || seen.has(flight)) continue;
+    if (!flight || flight === requested || seen.has(flight) ||
+        !codeshareScheduleApplies(section,date)) continue;
     seen.add(flight);
     found.push(flight);
   }
@@ -1321,7 +1339,7 @@ async function cachedAssignmentsForFlight(flight,date) {
 
 async function resolveCodeshareOperatingFlight(marketingFlight,date,nowMs = Date.now()) {
   const markdown=await fetchCodeshareText(marketingFlight);
-  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight);
+  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight,date);
   if (!candidates.length) return null;
 
   const cached=[];
@@ -1416,7 +1434,7 @@ async function resolveCodeshareAgainstAssignment(marketingFlight,date,marketingA
   }
 
   const markdown=await fetchCodeshareText(marketingFlight);
-  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight);
+  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight,date);
   if (!candidates.length) return null;
 
   const groups=await Promise.all(candidates.slice(0,12).map(async operatingFlight => ({
@@ -1859,6 +1877,12 @@ async function lookupIndependentAssignmentFallback({normalized,normalizedDate,fl
   return null;
 }
 
+function assignmentSourceIsUnreachable(error) {
+  const message=String(error?.message || error || '');
+  // Missing records, HTTP 404/403 and malformed HTML are not proof of outage.
+  return /(?:fetch failed|network|ECONN|ENOTFOUND|ETIMEDOUT|EAI_AGAIN|abort|timeout|timed out|source returned (?:429|5\\d\\d))/i.test(message);
+}
+
 async function fetchText(url, timeoutMs = 6500) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -1911,7 +1935,7 @@ async function lookupAssignment({ flight, date, flightId }) {
         return independent;
       }
     } catch {}
-    if (independentReachable) {
+    if (independentReachable || !assignmentSourceIsUnreachable(error)) {
       return {
         status:'assignment-not-covered',
         flightNumber:normalized.display,
@@ -2033,7 +2057,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       };
     }
     return {
-      status:'assignment-source-unavailable',
+      status:'assignment-not-covered',
       flightNumber:normalized.display,
       date:normalizedDate.raw,
       flightId:selected.flightId,
@@ -2092,8 +2116,10 @@ module.exports = async function handler(req, res) {
   } catch (error) {
     res.statusCode = 200;
     return res.end(JSON.stringify({
-      status:'source-unavailable',
-      message:'Aircraft assignment data is temporarily unavailable. Live-flight tracking can still work after departure.',
+      status:assignmentSourceIsUnreachable(error) ? 'source-unavailable' : 'assignment-not-covered',
+      message:assignmentSourceIsUnreachable(error)
+        ? 'Aircraft assignment data is temporarily unavailable. Live-flight tracking can still work after departure.'
+        : 'We could not resolve a usable aircraft assignment for this flight and date. This is an assignment coverage gap, not a verified source outage.',
       detail:process.env.NODE_ENV === 'development' ? String(error?.message || error) : undefined
     }));
   }
