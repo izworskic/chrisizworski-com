@@ -2,6 +2,8 @@
 
 const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
 const PLANEMAPPER_BASE = 'https://www.planemapper.com/flights/';
+const FR24_DATA_BASE = 'https://data.flightradar24.com/data/flights/';
+const FR24_READER_BASE = 'https://r.jina.ai/https://data.flightradar24.com/data/flights/';
 const CACHE_SECONDS = 30;
 const MAX_HTML_BYTES = 1_500_000;
 const RECENT_ARRIVAL_LOOKBACK_MS = 12 * 60 * 60 * 1000;
@@ -1062,6 +1064,203 @@ async function fetchText(url, timeoutMs = 6500) {
 }
 
 
+
+function fr24DateToken(date) {
+  const normalized=normalizeDate(date);
+  if (!normalized) return null;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return String(normalized.day).padStart(2,'0') + ' ' + months[normalized.month - 1] + ' ' + normalized.year;
+}
+
+function fr24SyntheticFlightId(row) {
+  return ['fr24',row.originCode,row.destinationCode,clean(row.scheduledDepartureText || row.departureText || 'time')].join('-');
+}
+
+function parseFr24FlightRows(markdown,{flight,date}) {
+  const wantedFlight=clean(flight);
+  const dateToken=fr24DateToken(date);
+  if (!wantedFlight || !dateToken) return [];
+  const rows=[];
+  for (const rawLine of String(markdown || '').split(/\r?\n/)) {
+    const line=rawLine.trim();
+    if (!line.startsWith('|') || !line.includes(dateToken)) continue;
+    const routeMatch=line.match(/FROM\s+(.+?)\s+\[\(([A-Z]{3})\)\]\([^)]*\)\s+TO\s+(.+?)\s+\[\(([A-Z]{3})\)\]\([^)]*\)/i);
+    if (!routeMatch) continue;
+    const regMatch=line.match(/^\|\s*\[([A-Z0-9-]{3,10})\]\([^)]*\)/i);
+    const registration=regMatch ? regMatch[1].toUpperCase() : null;
+    const equipmentMatch=line.match(/\|\s*([A-Z0-9]{3,5})\s+\[\([A-Z0-9-]{3,10}\)\]/i);
+    const nameMatch=line.match(/^\|\s*\[[A-Z0-9-]{3,10}\]\([^)]*?"([^"]+)"\)/i);
+    const stdMatch=line.match(/\bSTD\s+(.+?)\s+ATD\b/i);
+    const staMatch=line.match(/\bSTA\s+(.+?)\s+FROM\b/i);
+    const row={
+      flightNumber:wantedFlight,
+      date,
+      registration,
+      equipment:registration ? {
+        code:equipmentMatch?.[1]?.toUpperCase() || null,
+        name:nameMatch?.[1] || null,
+        title:'Secondary source'
+      } : null,
+      originName:routeMatch[1].replace(/\s+/g,' ').trim(),
+      originCode:routeMatch[2].toUpperCase(),
+      destinationName:routeMatch[3].replace(/\s+/g,' ').trim(),
+      destinationCode:routeMatch[4].toUpperCase(),
+      scheduledDepartureText:stdMatch?.[1]?.trim() || null,
+      scheduledArrivalText:staMatch?.[1]?.trim() || null,
+      rawLine:line
+    };
+    row.flightId=fr24SyntheticFlightId(row);
+    rows.push(row);
+  }
+  return rows;
+}
+
+async function fetchPlainText(url,timeoutMs=9000) {
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try {
+    const response=await fetch(url,{
+      redirect:'follow',
+      headers:{
+        accept:'text/plain,text/markdown;q=0.9,*/*;q=0.1',
+        'user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'
+      },
+      signal:controller.signal
+    });
+    if (!response.ok) throw new Error('secondary assignment source returned ' + response.status);
+    const text=await response.text();
+    if (!text || text.length > MAX_HTML_BYTES) throw new Error('secondary assignment source returned invalid content');
+    return text;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchFr24Rows(marketingFlight,date) {
+  const slug=clean(marketingFlight?.display).toLowerCase();
+  if (!slug) return [];
+  const readerUrl=FR24_READER_BASE + encodeURIComponent(slug);
+  const markdown=await fetchPlainText(readerUrl,12000);
+  return parseFr24FlightRows(markdown,{flight:marketingFlight.display,date});
+}
+
+function routeSummaryFromFr24(row) {
+  const timezone=null;
+  return {
+    origin:{
+      iata:row.originCode,code:row.originCode,name:null,city:row.originName,state:null,country:null,
+      gate:null,terminal:null,timezone,localDateTime:null,scheduledTime:null,estimatedTime:null
+    },
+    destination:{
+      iata:row.destinationCode,code:row.destinationCode,name:null,city:row.destinationName,state:null,country:null,
+      gate:null,terminal:null,timezone,localDateTime:null,scheduledTime:null,estimatedTime:null
+    }
+  };
+}
+
+function assignmentFromFr24Row(row,marketingFlight) {
+  if (!row?.registration) return null;
+  const route=routeSummaryFromFr24(row);
+  return {
+    status:'found',
+    fetchedAt:new Date().toISOString(),
+    flightNumber:marketingFlight.display,
+    flightId:row.flightId,
+    assignmentState:'assigned',
+    tailNumber:row.registration,
+    equipment:row.equipment,
+    operatingCarrier:null,
+    origin:route.origin,
+    destination:route.destination,
+    schedule:{
+      scheduledDepartureUTC:null,estimatedDepartureUTC:null,actualDepartureUTC:null,
+      scheduledArrivalUTC:null,estimatedArrivalUTC:null,actualArrivalUTC:null
+    },
+    flightStatus:{
+      code:'S',label:'Scheduled',description:'Scheduled',
+      departureDelayMinutes:null,arrivalDelayMinutes:null,lastUpdatedText:null,
+      canceled:false,airborne:false,landed:false
+    },
+    note:'Tracking will begin after departure',
+    source:{
+      name:'Flightradar24 public flight history',
+      url:FR24_DATA_BASE + clean(marketingFlight.display).toLowerCase(),
+      retrievalUrl:FR24_READER_BASE + clean(marketingFlight.display).toLowerCase(),
+      kind:'secondary-public-status-page',
+      note:'Registration matched on the exact travel date, flight number, origin and destination through a text mirror of the public flight-history page. Airline assignments can still change before departure.'
+    },
+    sourceDebug:{
+      resultCarrier:marketingFlight.carrier,
+      resultFlightNumber:marketingFlight.number,
+      fr24ScheduledDepartureText:row.scheduledDepartureText,
+      fr24ScheduledArrivalText:row.scheduledArrivalText
+    },
+    fallback:{
+      kind:'fr24-exact-route',
+      stale:false,
+      note:'Primary assignment data was unavailable; this registration was confirmed by an exact date-and-route match from a secondary public flight-history source.'
+    }
+  };
+}
+
+function chooseFlightFromFr24Rows(rows,marketingFlight,date) {
+  if (!Array.isArray(rows) || !rows.length) return null;
+  if (rows.length === 1 && rows[0].registration) return assignmentFromFr24Row(rows[0],marketingFlight);
+  return {
+    status:'choose-flight',
+    flightNumber:marketingFlight.display,
+    date,
+    message:'More than one flight uses this number today. Choose your route.',
+    options:rows.map(row=>{
+      const route=routeSummaryFromFr24(row);
+      return {
+        flightId:row.flightId,
+        date,
+        sortTime:null,
+        origin:route.origin,
+        destination:route.destination,
+        departureTime:row.scheduledDepartureText,
+        departureAmPm:null,
+        departureTimezone:null,
+        arrivalTime:row.scheduledArrivalText,
+        arrivalAmPm:null,
+        arrivalTimezone:null
+      };
+    }),
+    source:{
+      name:'Flightradar24 public flight history',
+      url:FR24_DATA_BASE + clean(marketingFlight.display).toLowerCase(),
+      retrievalUrl:FR24_READER_BASE + clean(marketingFlight.display).toLowerCase()
+    },
+    fallback:{
+      kind:'fr24-route-list',
+      stale:false,
+      note:'Primary assignment data was unavailable; route choices came from the secondary public flight-history source.'
+    }
+  };
+}
+
+async function lookupFr24Fallback({marketingFlight,date,flightId,origin,destination}) {
+  try {
+    const rows=await fetchFr24Rows(marketingFlight,date);
+    if (!rows.length) return null;
+    if (flightId && String(flightId).startsWith('fr24-')) {
+      const row=rows.find(item=>item.flightId===String(flightId));
+      return row ? assignmentFromFr24Row(row,marketingFlight) : null;
+    }
+    const originCode=clean(origin?.iata || origin?.code);
+    const destinationCode=clean(destination?.iata || destination?.code);
+    if (originCode && destinationCode) {
+      const row=rows.find(item=>item.originCode===originCode && item.destinationCode===destinationCode);
+      return row ? assignmentFromFr24Row(row,marketingFlight) : null;
+    }
+    if (!flightId) return chooseFlightFromFr24Rows(rows,marketingFlight,date);
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function decodePlaneMapperText(value) {
   return String(value || '')
     .replace(/<script[\s\S]*?<\/script>/gi,' ')
@@ -1233,6 +1432,18 @@ async function lookupAssignment({ flight, date, flightId }) {
     return { status:'invalid', code:'invalid-date', message:'Choose a valid travel date.' };
   }
 
+  if (flightId && String(flightId).startsWith('fr24-')) {
+    const secondary = await lookupFr24Fallback({
+      marketingFlight:normalized,
+      date:normalizedDate.raw,
+      flightId
+    });
+    if (secondary) {
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,flightId,secondary);
+      return secondary;
+    }
+  }
+
   const baseUrl = `${FLIGHTSTATS_BASE}/flight-tracker/${encodeURIComponent(normalized.carrier)}/${encodeURIComponent(normalized.number)}`;
   let baseData;
   try {
@@ -1240,6 +1451,20 @@ async function lookupAssignment({ flight, date, flightId }) {
     baseData = parseNextData(baseHtml);
   } catch (error) {
     const routeOption = await cachedRouteOption(normalized.display,normalizedDate.raw,flightId);
+    const fr24 = await lookupFr24Fallback({
+      marketingFlight:normalized,
+      date:normalizedDate.raw,
+      flightId,
+      origin:routeOption?.origin || null,
+      destination:routeOption?.destination || null
+    });
+    if (fr24) {
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,flightId,fr24);
+      if (!flightId && fr24.status === 'choose-flight') {
+        await writeAssignmentCache(normalized.display,normalizedDate.raw,null,fr24);
+      }
+      return fr24;
+    }
     if (routeOption) {
       const secondary = await lookupPlaneMapperAssignment({
         marketingFlight:normalized,
@@ -1260,7 +1485,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       flightNumber:normalized.display,
       date:normalizedDate.raw,
       message:'The aircraft-assignment source is temporarily unavailable. We can still check live operating callsigns, but we cannot confirm the assigned tail right now.',
-      checkedFallbacks:['planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
+      checkedFallbacks:['fr24-exact-route','planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
       source:{name:'FlightStats public flight tracker',url:baseUrl},
       sourceError:String(error?.message || error)
     };
@@ -1319,6 +1544,17 @@ async function lookupAssignment({ flight, date, flightId }) {
     flightData = baseFlightData;
   }
   if (!flightData?.flightId) {
+    const fr24 = await lookupFr24Fallback({
+      marketingFlight:normalized,
+      date:normalizedDate.raw,
+      flightId:selected.flightId,
+      origin:selected.origin,
+      destination:selected.destination
+    });
+    if (fr24?.status === 'found') {
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId,fr24);
+      return fr24;
+    }
     const secondary = await lookupPlaneMapperAssignment({
       marketingFlight:normalized,
       date:normalizedDate.raw,
@@ -1339,7 +1575,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       flightId:selected.flightId,
       message:'The scheduled flight was found, but its aircraft-assignment detail is temporarily unavailable.',
       route:{origin:selected.origin,destination:selected.destination},
-      checkedFallbacks:['flightstats-base-occurrence','planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
+      checkedFallbacks:['flightstats-base-occurrence','fr24-exact-route','planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
       source:{name:'FlightStats public flight tracker',url:detailUrl}
     };
   }
@@ -1448,5 +1684,12 @@ module.exports._test = {
   parsePlaneMapperAssignment,
   secondaryAssignmentFromPlaneMapper,
   lookupPlaneMapperAssignment,
-  cachedRouteOption
+  cachedRouteOption,
+  fr24DateToken,
+  fr24SyntheticFlightId,
+  parseFr24FlightRows,
+  routeSummaryFromFr24,
+  assignmentFromFr24Row,
+  chooseFlightFromFr24Rows,
+  lookupFr24Fallback
 };
