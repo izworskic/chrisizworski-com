@@ -55,6 +55,13 @@ test('actual arrival timestamp also suppresses misleading delay explanation', ()
   assert.equal(delayWhyText(arrived,{flightNumber:'DL235'}),'');
 });
 
+test('canceled passenger flight has no inbound delay explanation', () => {
+  const {delayLabel,delayWhyText} = statusFunctions();
+  const canceled = {flightStatus:{canceled:true,landed:false,departureDelayMinutes:82},schedule:{}};
+  assert.equal(delayLabel(canceled),'Canceled');
+  assert.equal(delayWhyText(canceled,{flightNumber:'DL235'}),'');
+});
+
 test('active delayed flight retains departure delay and inbound explanation', () => {
   const {delayLabel,delayWhyText} = statusFunctions();
   const active = {flightStatus:{landed:false,departureDelayMinutes:82,label:'Delayed'},schedule:{}};
