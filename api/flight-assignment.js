@@ -1,6 +1,7 @@
 'use strict';
 
 const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
+const PLANEMAPPER_BASE = 'https://www.planemapper.com/flights/';
 const CACHE_SECONDS = 30;
 const MAX_HTML_BYTES = 1_500_000;
 const RECENT_ARRIVAL_LOOKBACK_MS = 12 * 60 * 60 * 1000;
@@ -1060,6 +1061,168 @@ async function fetchText(url, timeoutMs = 6500) {
   }
 }
 
+
+function decodePlaneMapperText(value) {
+  return String(value || '')
+    .replace(/<script[\s\S]*?<\/script>/gi,' ')
+    .replace(/<style[\s\S]*?<\/style>/gi,' ')
+    .replace(/<[^>]+>/g,' ')
+    .replace(/&nbsp;/gi,' ')
+    .replace(/&amp;/gi,'&')
+    .replace(/&#39;/g,"'")
+    .replace(/&quot;/gi,'"')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function planeMapperDateToken(date) {
+  const normalized = normalizeDate(date);
+  if (!normalized) return null;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return String(normalized.day).padStart(2,'0') + ' ' + months[normalized.month - 1];
+}
+
+function planeMapperAirportCode(value) {
+  const match=String(value || '').match(/\(\s*([A-Z]{3})\s*(?:\/[A-Z0-9]{4})?\s*\)/i);
+  return match ? match[1].toUpperCase() : null;
+}
+
+function planeMapperRegistration(value) {
+  const text=decodePlaneMapperText(value).toUpperCase();
+  const us=text.match(/\b(N[0-9]{1,5}[A-Z]{0,2})\b/);
+  if (us) return us[1];
+  const hyphen=text.match(/\b([A-Z]{1,2}-[A-Z0-9]{3,5})\b/);
+  return hyphen ? hyphen[1] : null;
+}
+
+function planeMapperEquipment(value) {
+  const text=decodePlaneMapperText(value);
+  const code=text.match(/\b([A-Z]{2,4}[0-9][A-Z0-9]?)\b/)?.[1] || null;
+  if (!text) return null;
+  const name=text
+    .replace(/\bN[0-9]{1,5}[A-Z]{0,2}\b/i,'')
+    .replace(/\([^)]*\)/g,'')
+    .replace(/\s+/g,' ')
+    .trim() || null;
+  return {code,name,title:'Secondary source'};
+}
+
+function parsePlaneMapperAssignment(html,{flight,date,origin,destination}) {
+  const wantedFlight=clean(flight);
+  const wantedOrigin=clean(origin);
+  const wantedDestination=clean(destination);
+  const dateToken=planeMapperDateToken(date);
+  if (!wantedFlight || !wantedOrigin || !wantedDestination || !dateToken) return null;
+
+  const tdRe=/<td[^>]*>([\s\S]*?)<\/td>/gi;
+  for (const row of String(html || '').split(/<\/tr>/i)) {
+    const cells=[];
+    let match;
+    tdRe.lastIndex=0;
+    while ((match=tdRe.exec(row))) cells.push(decodePlaneMapperText(match[1]));
+    if (cells.length < 7) continue;
+    if (!cells[0].includes(dateToken)) continue;
+    if (clean(cells[1]) !== wantedFlight) continue;
+    if (planeMapperAirportCode(cells[2]) !== wantedOrigin) continue;
+    if (planeMapperAirportCode(cells[3]) !== wantedDestination) continue;
+    const registration=planeMapperRegistration(cells[6]);
+    if (!registration) return null;
+    return {
+      registration,
+      equipment:planeMapperEquipment(cells[6]),
+      departureText:cells[4] || null,
+      arrivalText:cells[5] || null
+    };
+  }
+  return null;
+}
+
+function secondaryAssignmentFromPlaneMapper(match,{marketingFlight,date,flightId,origin,destination,url}) {
+  if (!match?.registration || !origin || !destination) return null;
+  return {
+    status:'found',
+    fetchedAt:new Date().toISOString(),
+    flightNumber:marketingFlight.display,
+    flightId:String(flightId || '') || null,
+    assignmentState:'assigned',
+    tailNumber:match.registration,
+    equipment:match.equipment,
+    operatingCarrier:null,
+    origin,
+    destination,
+    schedule:{
+      scheduledDepartureUTC:null,
+      estimatedDepartureUTC:null,
+      actualDepartureUTC:null,
+      scheduledArrivalUTC:null,
+      estimatedArrivalUTC:null,
+      actualArrivalUTC:null
+    },
+    flightStatus:{
+      code:'S',
+      label:'Scheduled',
+      description:'Scheduled',
+      departureDelayMinutes:null,
+      arrivalDelayMinutes:null,
+      lastUpdatedText:null,
+      canceled:false,
+      airborne:false,
+      landed:false
+    },
+    note:'Tracking will begin after departure',
+    source:{
+      name:'PlaneMapper public flight history',
+      url,
+      kind:'secondary-public-status-page',
+      note:'Registration matched on the exact travel date, flight number, origin and destination. Airline assignments can still change before departure.'
+    },
+    sourceDebug:{
+      resultCarrier:marketingFlight.carrier,
+      resultFlightNumber:marketingFlight.number,
+      planeMapperDepartureText:match.departureText,
+      planeMapperArrivalText:match.arrivalText
+    },
+    fallback:{
+      kind:'planemapper-exact-route',
+      stale:false,
+      note:'Primary assignment data was unavailable; this registration was confirmed by an exact date-and-route match from a secondary public flight-history source.'
+    }
+  };
+}
+
+async function lookupPlaneMapperAssignment({marketingFlight,date,flightId,origin,destination}) {
+  const originCode=clean(origin?.iata || origin?.code);
+  const destinationCode=clean(destination?.iata || destination?.code);
+  if (!marketingFlight?.display || !originCode || !destinationCode) return null;
+  const url=PLANEMAPPER_BASE + encodeURIComponent(marketingFlight.display);
+  try {
+    const html=await fetchText(url,5500);
+    const match=parsePlaneMapperAssignment(html,{
+      flight:marketingFlight.display,
+      date,
+      origin:originCode,
+      destination:destinationCode
+    });
+    return secondaryAssignmentFromPlaneMapper(match,{
+      marketingFlight,
+      date,
+      flightId,
+      origin,
+      destination,
+      url
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function cachedRouteOption(flight,date,flightId) {
+  if (!flightId) return null;
+  const cached=await readAssignmentCache(flight,date,null);
+  if (cached?.status !== 'choose-flight' || !Array.isArray(cached.options)) return null;
+  return cached.options.find(option => String(option.flightId) === String(flightId)) || null;
+}
+
 async function lookupAssignment({ flight, date, flightId }) {
   const normalized = normalizeMarketingFlight(flight);
   if (!normalized.ok) {
@@ -1076,6 +1239,20 @@ async function lookupAssignment({ flight, date, flightId }) {
     const baseHtml = await fetchText(baseUrl);
     baseData = parseNextData(baseHtml);
   } catch (error) {
+    const routeOption = await cachedRouteOption(normalized.display,normalizedDate.raw,flightId);
+    if (routeOption) {
+      const secondary = await lookupPlaneMapperAssignment({
+        marketingFlight:normalized,
+        date:normalizedDate.raw,
+        flightId,
+        origin:routeOption.origin,
+        destination:routeOption.destination
+      });
+      if (secondary) {
+        await writeAssignmentCache(normalized.display,normalizedDate.raw,flightId,secondary);
+        return secondary;
+      }
+    }
     const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,flightId);
     if (cached) return cached;
     return {
@@ -1083,7 +1260,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       flightNumber:normalized.display,
       date:normalizedDate.raw,
       message:'The aircraft-assignment source is temporarily unavailable. We can still check live operating callsigns, but we cannot confirm the assigned tail right now.',
-      checkedFallbacks:['last-good-assignment-cache','live-operating-callsigns'],
+      checkedFallbacks:['planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
       source:{name:'FlightStats public flight tracker',url:baseUrl},
       sourceError:String(error?.message || error)
     };
@@ -1142,6 +1319,17 @@ async function lookupAssignment({ flight, date, flightId }) {
     flightData = baseFlightData;
   }
   if (!flightData?.flightId) {
+    const secondary = await lookupPlaneMapperAssignment({
+      marketingFlight:normalized,
+      date:normalizedDate.raw,
+      flightId:selected.flightId,
+      origin:selected.origin,
+      destination:selected.destination
+    });
+    if (secondary) {
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId,secondary);
+      return secondary;
+    }
     const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId);
     if (cached) return cached;
     return {
@@ -1151,7 +1339,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       flightId:selected.flightId,
       message:'The scheduled flight was found, but its aircraft-assignment detail is temporarily unavailable.',
       route:{origin:selected.origin,destination:selected.destination},
-      checkedFallbacks:['flightstats-base-occurrence','last-good-assignment-cache','live-operating-callsigns'],
+      checkedFallbacks:['flightstats-base-occurrence','planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'],
       source:{name:'FlightStats public flight tracker',url:detailUrl}
     };
   }
@@ -1251,5 +1439,14 @@ module.exports._test = {
   baseFlightMatchesDate,
   readAssignmentCache,
   writeAssignmentCache,
-  REGIONAL_IATA_TO_ICAO
+  REGIONAL_IATA_TO_ICAO,
+  decodePlaneMapperText,
+  planeMapperDateToken,
+  planeMapperAirportCode,
+  planeMapperRegistration,
+  planeMapperEquipment,
+  parsePlaneMapperAssignment,
+  secondaryAssignmentFromPlaneMapper,
+  lookupPlaneMapperAssignment,
+  cachedRouteOption
 };
