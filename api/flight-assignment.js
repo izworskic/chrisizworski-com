@@ -10,7 +10,16 @@ const RECENT_ARRIVAL_BATCH_SIZE = 6;
 const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const POSITION_MAX_AGE_SECONDS = 15 * 60;
+const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
+const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '';
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || '';
 let sourceConflictCount = 0;
+
+const REGIONAL_IATA_TO_ICAO = Object.freeze({
+  OO:'SKW', '9E':'EDV', YX:'RPA', OH:'JIA', MQ:'ENY', YV:'ASH',
+  QX:'QXE', G7:'GJS', ZW:'AWI', C5:'UCA', PT:'PDT'
+});
 
 const ICAO_TO_IATA = Object.freeze({
   AAL:'AA', DAL:'DL', UAL:'UA', SWA:'WN', ASA:'AS', JBU:'B6', NKS:'NK',
@@ -48,14 +57,98 @@ function normalizeDate(value) {
 }
 
 function parseNextData(html) {
+  const text = String(html || '');
   const marker = '__NEXT_DATA__ = ';
-  const start = html.indexOf(marker);
-  if (start < 0) throw new Error('Flight status page did not contain structured data');
-  const jsonStart = start + marker.length;
-  const endMarker = ';__NEXT_LOADED_PAGES__';
-  const end = html.indexOf(endMarker, jsonStart);
-  if (end < 0) throw new Error('Flight status structured data was incomplete');
-  return JSON.parse(html.slice(jsonStart, end));
+  const start = text.indexOf(marker);
+  if (start >= 0) {
+    const jsonStart = start + marker.length;
+    const endMarker = ';__NEXT_LOADED_PAGES__';
+    const end = text.indexOf(endMarker, jsonStart);
+    if (end < 0) throw new Error('Flight status structured data was incomplete');
+    return JSON.parse(text.slice(jsonStart, end));
+  }
+
+  const script = text.match(/<script[^>]+id=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script>/i);
+  if (script?.[1]) return JSON.parse(script[1]);
+  throw new Error('Flight status page did not contain structured data');
+}
+
+function redisReady() {
+  return Boolean(REDIS_URL && REDIS_TOKEN);
+}
+
+async function redisCommand(command) {
+  if (!redisReady()) return null;
+  const response = await fetch(REDIS_URL,{
+    method:'POST',
+    headers:{authorization:'Bearer ' + REDIS_TOKEN,'content-type':'application/json'},
+    body:JSON.stringify(command),
+    signal:AbortSignal.timeout(3500)
+  });
+  if (!response.ok) throw new Error('assignment cache ' + response.status);
+  const body = await response.json();
+  if (body?.error) throw new Error(String(body.error));
+  return body?.result ?? null;
+}
+
+function assignmentCacheKey(flight,date,flightId=null) {
+  return ASSIGNMENT_CACHE_PREFIX + [clean(flight),String(date || ''),String(flightId || 'route-list')].join(':');
+}
+
+async function readAssignmentCache(flight,date,flightId=null) {
+  try {
+    const raw = await redisCommand(['GET',assignmentCacheKey(flight,date,flightId)]);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !['found','choose-flight'].includes(parsed.status)) return null;
+    return {
+      ...parsed,
+      fallback:{
+        kind:'last-good-assignment-cache',
+        stale:true,
+        note:'The live assignment source is temporarily unavailable; this is the most recent confirmed assignment.'
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function writeAssignmentCache(flight,date,flightId,value) {
+  if (!redisReady() || !value || !['found','choose-flight'].includes(value.status)) return;
+  try {
+    await redisCommand(['SET',assignmentCacheKey(flight,date,flightId),JSON.stringify(value),'EX',ASSIGNMENT_CACHE_TTL_SECONDS]);
+  } catch {}
+}
+
+function operatingCarrierSummary(flight, flexTrack = {}) {
+  const raw = flight?.operatedBy;
+  const code = String(
+    (raw && typeof raw === 'object' ? raw.fs : '') ||
+    flexTrack?.carrierFsCode ||
+    ''
+  ).trim().toUpperCase() || null;
+  let name = null;
+  if (typeof raw === 'string') {
+    const match = raw.match(/^Operated by\s+(.+?)(?:\s+on behalf of\s+.+)?$/i);
+    name = String(match?.[1] || raw).trim() || null;
+  } else if (raw && typeof raw === 'object') {
+    name = String(raw.name || '').trim() || null;
+  }
+  if (!name && !code) return null;
+  return {
+    name,
+    code,
+    icaoCallsignPrefix:REGIONAL_IATA_TO_ICAO[code] || null
+  };
+}
+
+function baseFlightMatchesDate(flightData, normalizedDate) {
+  if (!flightData || !normalizedDate) return false;
+  const localDate = String(flightData?.departureAirport?.date || flightData?.schedule?.scheduledDeparture || '').slice(0,10);
+  if (localDate) return localDate === normalizedDate.raw;
+  const utcDate = String(flightData?.schedule?.scheduledDepartureUTC || '').slice(0,10);
+  return utcDate === normalizedDate.raw;
 }
 
 function optionDate(option) {
@@ -438,10 +531,7 @@ function sanitizeFlight(flight, marketingFlight, detailUrl) {
       name:String(equipment.name || '').trim() || null,
       title:String(equipment.title || '').trim() || null
     },
-    operatingCarrier:flight?.operatedBy ? {
-      name:String(flight.operatedBy.name || '').trim() || null,
-      code:String(flight.operatedBy.fs || '').trim() || null
-    } : null,
+    operatingCarrier:operatingCarrierSummary(flight, flexTrack),
     origin:airportSummary(flight?.departureAirport),
     destination:airportSummary(flight?.arrivalAirport),
     schedule:{
@@ -981,11 +1071,39 @@ async function lookupAssignment({ flight, date, flightId }) {
   }
 
   const baseUrl = `${FLIGHTSTATS_BASE}/flight-tracker/${encodeURIComponent(normalized.carrier)}/${encodeURIComponent(normalized.number)}`;
-  const baseHtml = await fetchText(baseUrl);
-  const baseData = parseNextData(baseHtml);
+  let baseData;
+  try {
+    const baseHtml = await fetchText(baseUrl);
+    baseData = parseNextData(baseHtml);
+  } catch (error) {
+    const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,flightId);
+    if (cached) return cached;
+    return {
+      status:'assignment-source-unavailable',
+      flightNumber:normalized.display,
+      date:normalizedDate.raw,
+      message:'The aircraft-assignment source is temporarily unavailable. We can still check live operating callsigns, but we cannot confirm the assigned tail right now.',
+      checkedFallbacks:['last-good-assignment-cache','live-operating-callsigns'],
+      source:{name:'FlightStats public flight tracker',url:baseUrl},
+      sourceError:String(error?.message || error)
+    };
+  }
+
   const options = optionsForDate(baseData, normalizedDate);
+  const baseFlightData = baseData?.props?.initialState?.flightTracker?.flight;
+  const baseFlight = baseFlightMatchesDate(baseFlightData,normalizedDate)
+    ? sanitizeFlight(baseFlightData,normalized,baseUrl)
+    : null;
 
   if (!options.length) {
+    if (baseFlight?.flightId) {
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,baseFlight.flightId,baseFlight);
+      await writeAssignmentCache(normalized.display,normalizedDate.raw,null,baseFlight);
+      return {
+        ...baseFlight,
+        fallback:{kind:'flightstats-base-occurrence',stale:false,note:'Resolved from the primary flight page because the occurrence list was unavailable.'}
+      };
+    }
     return {
       status:'not-found',
       flightNumber:normalized.display,
@@ -1000,7 +1118,7 @@ async function lookupAssignment({ flight, date, flightId }) {
   if (!selected && options.length === 1) selected = options[0];
 
   if (!selected) {
-    return {
+    const choice = {
       status:'choose-flight',
       flightNumber:normalized.display,
       date:normalizedDate.raw,
@@ -1008,13 +1126,35 @@ async function lookupAssignment({ flight, date, flightId }) {
       options:options.map(({sourcePath,...option}) => option),
       source:{ name:'FlightStats public flight tracker', url:baseUrl }
     };
+    await writeAssignmentCache(normalized.display,normalizedDate.raw,null,choice);
+    return choice;
   }
 
   const detailUrl = FLIGHTSTATS_BASE + selected.sourcePath;
-  const detailHtml = await fetchText(detailUrl);
-  const detailData = parseNextData(detailHtml);
-  const flightData = detailData?.props?.initialState?.flightTracker?.flight;
-  if (!flightData || !flightData.flightId) throw new Error('Flight status detail was unavailable');
+  let flightData = null;
+  try {
+    const detailHtml = await fetchText(detailUrl);
+    const detailData = parseNextData(detailHtml);
+    flightData = detailData?.props?.initialState?.flightTracker?.flight || null;
+  } catch {}
+
+  if (!flightData?.flightId && baseFlightData?.flightId && String(baseFlightData.flightId) === String(selected.flightId)) {
+    flightData = baseFlightData;
+  }
+  if (!flightData?.flightId) {
+    const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId);
+    if (cached) return cached;
+    return {
+      status:'assignment-source-unavailable',
+      flightNumber:normalized.display,
+      date:normalizedDate.raw,
+      flightId:selected.flightId,
+      message:'The scheduled flight was found, but its aircraft-assignment detail is temporarily unavailable.',
+      route:{origin:selected.origin,destination:selected.destination},
+      checkedFallbacks:['flightstats-base-occurrence','last-good-assignment-cache','live-operating-callsigns'],
+      source:{name:'FlightStats public flight tracker',url:detailUrl}
+    };
+  }
 
   const selectedFlight = sanitizeFlight(flightData, normalized, detailUrl);
   const previousOccurrence = await findPreviousAircraftOccurrence(options, selected, selectedFlight, normalized);
@@ -1024,6 +1164,8 @@ async function lookupAssignment({ flight, date, flightId }) {
       selectedFlight.currentAircraftOccurrence = currentOccurrenceSummary(previousOccurrence);
     }
   }
+  await writeAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId,selectedFlight);
+  if (options.length === 1) await writeAssignmentCache(normalized.display,normalizedDate.raw,null,selectedFlight);
   return selectedFlight;
 }
 
@@ -1104,5 +1246,10 @@ module.exports._test = {
   reconcileFlightState,
   operatingOccurrenceMatches,
   dateIsNearNow,
-  buildUnifiedFlightState
+  buildUnifiedFlightState,
+  operatingCarrierSummary,
+  baseFlightMatchesDate,
+  readAssignmentCache,
+  writeAssignmentCache,
+  REGIONAL_IATA_TO_ICAO
 };
