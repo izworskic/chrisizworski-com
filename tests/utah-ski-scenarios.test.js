@@ -27,6 +27,14 @@ const cases=[
 for(const [name,expected,input] of cases){
  test('UDOT: '+name,()=>{assert.equal(classify(feeds([input]),'SR210',N).status,expected);});
 }
+test('UDOT: partial uphill restriction at Alta bypass is not a full-canyon uphill restriction',()=>{
+ const e={...baseEvent,IsFullClosure:false,Description:'Partial uphill travel restriction at Town of Alta bypass road'};
+ assert.equal(classify(feeds([e]),'SR210',N).status,'PARTIAL_UPHILL_RESTRICTION');
+});
+test('UDOT: wording canyon is closed is recognized as a hazard',()=>{
+ const e={...baseEvent,IsFullClosure:false,Description:'Little Cottonwood Canyon is closed'};
+ assert.equal(classify(feeds([e]),'SR210',N).status,'CLOSED');
+});
 test('UDOT: nearby roadway does not contaminate the wrong canyon',()=>{
  assert.notEqual(classify(feeds([baseEvent]),'SR190',N).status,'CLOSED');
 });
@@ -120,6 +128,41 @@ test('visitor: traction alert and parking deficit must both survive',()=>{
  const r=evaluate(i,'brighton',localNow);
  assert.ok(r.actions.some(x=>x.code==='PARKING_RESERVATION_REQUIRED'));
  assert.ok(r.unknowns.some(x=>x.code==='TRACTION_COMPLIANCE_UNVERIFIED'));
+});
+test('visitor: uphill restriction blocks unreserved ordinary private driver',()=>{
+ const i=visitor();i.roads.SR210={...current,status:'UPHILL_RESTRICTED'};
+ const r=evaluate(i,'snowbird',localNow);
+ assert.equal(r.verdict,'TRIP_NOT_FEASIBLE_AS_PLANNED');
+ assert.ok(r.blockers.some(x=>x.code==='UPHILL_RESTRICTION_NO_DOCUMENTED_EXCEPTION'));
+});
+test('visitor: self-reported Snowbird parking reservation implies possible uphill exception, not guaranteed access',()=>{
+ const i=visitor();i.parkingReservations.snowbird=true;i.roads.SR210={...current,status:'UPHILL_RESTRICTED'};
+ const r=evaluate(i,'snowbird',localNow);
+ assert.notEqual(r.verdict,'TRIP_NOT_FEASIBLE_AS_PLANNED');
+ assert.ok(r.unknowns.some(x=>x.code==='UPHILL_EXCEPTION_MAY_APPLY'));
+ assert.equal(r.safetyOrInventoryGuaranteed,false);
+});
+test('visitor: full canyon closure overrides any uphill exemption',()=>{
+ const i=visitor();i.parkingReservations.snowbird=true;i.roads.SR210={...current,status:'CLOSED'};
+ assert.equal(evaluate(i,'snowbird',localNow).verdict,'TRIP_NOT_FEASIBLE_AS_PLANNED');
+});
+test('visitor: partial Alta-bypass restriction does not automatically block Snowbird',()=>{
+ const i=visitor();i.roads.SR210={...current,status:'PARTIAL_UPHILL_RESTRICTION'};
+ const r=evaluate(i,'snowbird',localNow);
+ assert.ok(r.unknowns.some(x=>x.code==='ALTA_BYPASS_RESTRICTION_VERIFY'));
+ assert.ok(!r.blockers.some(x=>x.code==='UPHILL_RESTRICTION_NO_DOCUMENTED_EXCEPTION'));
+});
+test('visitor: partial Alta-bypass restriction still affects unreserved Alta driver',()=>{
+ const i=visitor();i.pass='IKON';i.combinedAltaSnowbirdUsed=0;
+ i.roads.SR210={...current,status:'PARTIAL_UPHILL_RESTRICTION'};
+ const r=evaluate(i,'alta',localNow);
+ assert.equal(r.verdict,'TRIP_NOT_FEASIBLE_AS_PLANNED');
+ assert.ok(r.blockers.some(x=>x.code==='UPHILL_RESTRICTION_NO_DOCUMENTED_EXCEPTION'));
+});
+test('visitor: public bus is a possible uphill exception, not guaranteed boarding',()=>{
+ const i=visitor();i.travelMode='UTA_BUS';i.roads.SR210={...current,status:'UPHILL_RESTRICTED'};
+ const r=evaluate(i,'snowbird',localNow);
+ assert.ok(r.unknowns.some(x=>x.code==='UPHILL_EXCEPTION_MAY_APPLY'));
 });
 test('visitor: changed future date cannot reuse the day-old road observation',()=>{
  const i=visitor();i.date='2027-01-10';i.roads.SR210={...current,status:'CLOSED'};
