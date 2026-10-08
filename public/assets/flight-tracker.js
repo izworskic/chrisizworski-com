@@ -411,6 +411,11 @@
     return from && to ? from + ' → ' + to : null;
   }
 
+  function assignmentArrivalConfirmed(assignment) {
+    return assignment?.flightStatus?.landed === true ||
+      Boolean(String(assignment?.schedule?.actualArrivalUTC || '').trim());
+  }
+
   function assignmentSourceText() {
     return 'Aircraft assignment/status: FlightStats public tracker. Live aircraft position: ADSB.lol. Airline aircraft assignments can change before departure.';
   }
@@ -1538,20 +1543,24 @@
     const delay = delayLabel(assignment);
     const seen = data?.status === 'seen-no-position';
     const onGround = data?.aircraft?.onGround === true;
-    const completedAt = assignment?.flightStatus?.landed === true && assignment?.destination
+    const completedAt = assignmentArrivalConfirmed(assignment) && assignment?.destination
       ? airportPlace(assignment.destination)
       : null;
     const completedCode = completedAt ? airportCodeAny(assignment.destination) : null;
 
     if (completedAt) {
+      const arrivalTime = completedArrivalClock(assignment);
+      const arrivalDetails = [
+        arrivalTime ? 'Arrived ' + arrivalTime : 'Arrival confirmed',
+        assignment?.destination?.terminal ? 'terminal ' + assignment.destination.terminal : null,
+        assignment?.destination?.gate ? 'gate ' + assignment.destination.gate : null
+      ].filter(Boolean).join(' · ');
       setAnswer({
-        kicker:'LAST CONFIRMED AIRCRAFT STATE',
-        headline:(tail || 'Your plane') + ' is at the gate at ' + completedAt +
-          (completedCode && completedCode !== completedAt ? ' (' + completedCode + ')' : '') +
-          ' — tracking starts at pushback.',
-        summary:(assignment?.flightNumber || 'The flight') + ' is confirmed landed there, and we have no newer live position or later same-tail leg. That is the aircraft’s last confirmed state.',
+        kicker:'YOUR FLIGHT HAS ARRIVED',
+        headline:(assignment?.flightNumber || 'Your flight') + ' has arrived in ' + completedAt + '.',
+        summary:arrivalDetails + '. The arrival status is confirmed; a missing or stale aircraft position does not make this flight airborne.',
         pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
-        next:'Tracking resumes when a newer aircraft position or subsequent same-tail flight appears.',
+        next:'This flight is complete. Live aircraft tracking may resume only if the same airplane later operates another flight.',
         source:assignmentSourceText()
       });
       clearLiveMap();
@@ -1865,7 +1874,7 @@
     const state = payload?.renderedState || '';
     const rows = [];
     let currentStage = 'departure';
-    if (assignment?.flightStatus?.landed === true) currentStage = 'arrival';
+    if (assignmentArrivalConfirmed(assignment)) currentStage = 'arrival';
     else if (assignment?.flightStatus?.airborne === true || state === 'airborne-live' || state === 'airborne-status') currentStage = 'departure';
     else if (state === 'parked-origin-confirmed' || state === 'ground-live') currentStage = 'turn';
     else if (inbound?.flightStatus?.airborne === true && inbound?.flightStatus?.landed !== true) currentStage = 'inbound';
@@ -1917,7 +1926,7 @@
       key:'arrival',
       time:timelineClock(arrivalIso,assignment?.destination?.timezone),
       label:'Arrival',
-      status:(assignment?.flightStatus?.landed ? 'Arrived in ' : 'Expected in ') + airportPlace(assignment.destination) +
+      status:(assignmentArrivalConfirmed(assignment) ? 'Arrived in ' : 'Expected in ') + airportPlace(assignment.destination) +
         (assignment?.destination?.terminal ? ' · terminal ' + assignment.destination.terminal : '') +
         (assignment?.destination?.gate ? ' · gate ' + assignment.destination.gate : '')
     });
@@ -2100,6 +2109,13 @@
 
     const staleAge = staleFixAgeText(payload?.observation);
     const state = payload?.renderedState;
+
+    // Passenger-flight completion outranks tail telemetry and stale departure flags.
+    // A tail may already be moving again, but that cannot make the completed flight airborne.
+    if (assignmentArrivalConfirmed(assignmentData)) {
+      renderAssignedNoPosition(assignmentData,live || {status:'not-found'});
+      return;
+    }
 
     if (state === 'airborne-live' || state === 'ground-live') {
       renderLive(live);
