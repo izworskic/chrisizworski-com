@@ -718,6 +718,8 @@ function connectionAnalysis(primary,onward,env = process.env) {
       slackMinutes:null,
       arrivalUTC:new Date(arrivalMs).toISOString(),
       departureUTC:new Date(departureMs).toISOString(),
+      arrivalClock:formatClock(arrivalMs,primary?.assignment?.destination?.timezone),
+      departureClock:formatClock(departureMs,onward?.assignment?.origin?.timezone),
       unknowns,
       note:'The terminal transfer portion is unknown, so a connection verdict would be a guess.'
     };
@@ -737,6 +739,8 @@ function connectionAnalysis(primary,onward,env = process.env) {
     slackMinutes,
     arrivalUTC:new Date(arrivalMs).toISOString(),
     departureUTC:new Date(departureMs).toISOString(),
+    arrivalClock:formatClock(arrivalMs,primary?.assignment?.destination?.timezone),
+    departureClock:formatClock(departureMs,onward?.assignment?.origin?.timezone),
     unknowns,
     note:unknowns.length ? 'Missing: ' + unknowns.join(', ') + '. The verdict uses only the stated terminal-transfer allowance.' : null
   };
