@@ -17,7 +17,7 @@ const FR24_AIRCRAFT_PUBLIC_BASE = 'https://www.flightradar24.com/data/aircraft/'
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
 const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
-const INBOUND_CACHE_PREFIX = 'flight:inbound:v1:';
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v2:';
 const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
 const CODESHARE_CACHE_PREFIX = 'flight:codeshare:v1:';
 const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
@@ -1290,18 +1290,21 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
       .catch(()=>({status:'source-unavailable'})),
     lookupIndependentInboundByTailResult(assignment,date)
   ]);
-  if (arrival?.status === 'found-inbound-occurrence' && arrival.occurrence) {
-    await writeInboundCache(date,tail,airport,arrival.occurrence);
-    return {occurrence:arrival.occurrence,status:'found'};
+  // The per-tail ordered history is stronger than a carrier-filtered airport
+  // arrivals board: never let a different flight that happened to use this
+  // tail during the day displace its actual immediate predecessor.
+  if (history.occurrence) {
+    await writeInboundCache(date,tail,airport,history.occurrence);
+    return {occurrence:history.occurrence,status:'found'};
   }
   const embedded=embeddedInboundOccurrence(assignment);
   if (embedded) {
     await writeInboundCache(date,tail,airport,embedded);
     return {occurrence:embedded,status:'found'};
   }
-  if (history.occurrence) {
-    await writeInboundCache(date,tail,airport,history.occurrence);
-    return {occurrence:history.occurrence,status:'found'};
+  if (arrival?.status === 'found-inbound-occurrence' && arrival.occurrence) {
+    await writeInboundCache(date,tail,airport,arrival.occurrence);
+    return {occurrence:arrival.occurrence,status:'found'};
   }
   const cached=await readInboundCache(date,tail,airport);
   if (cached) return {occurrence:cached,status:'found-cached'};
