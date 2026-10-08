@@ -1374,7 +1374,7 @@
         'It is still assigned to your ' + (route || 'next') + ' flight.',
       journey:{
         now:{
-          primary:[tail,originCode ? 'at ' + originCode : 'at the gate'].filter(Boolean).join(' · '),
+          primary:[tail,originCode ? 'landed at ' + originCode : 'previous flight landed'].filter(Boolean).join(' · '),
           secondary:journeySecondary([previous?.flightNumber ? 'Arrived on ' + previous.flightNumber : 'Previous flight landed',completedArrivalClock(previous)])
         },
         next:{
@@ -2016,7 +2016,7 @@
     const inbound = payload?.recentInboundOccurrence || assignment?.recentInboundOccurrence || assignment?.previousAircraftOccurrence || null;
     const state = payload?.renderedState || '';
     const rows = [];
-    let currentStage = 'departure';
+    let currentStage = null;
     if (assignmentArrivalConfirmed(assignment)) currentStage = 'arrival';
     else if (assignment?.flightStatus?.airborne === true || state === 'airborne-live' || state === 'airborne-status') currentStage = 'departure';
     else if (state === 'parked-origin-confirmed' || state === 'ground-live') currentStage = 'turn';
