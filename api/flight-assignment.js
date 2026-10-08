@@ -1551,8 +1551,10 @@ async function lookupAssignment({ flight, date, flightId }) {
     const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,flightId);
     if (cached) return cached;
     const routeHint = await cachedRouteHint(normalized.display,normalizedDate.raw,flightId);
+    let independentReachable=false;
     try {
       const independent = await lookupIndependentAssignmentFallback({normalized,normalizedDate,flightId,routeHint});
+      independentReachable=true;
       if (independent) {
         await writeAssignmentCache(normalized.display,normalizedDate.raw,flightId,independent);
         if (!flightId || independent.status === 'choose-flight') {
@@ -1561,6 +1563,16 @@ async function lookupAssignment({ flight, date, flightId }) {
         return independent;
       }
     } catch {}
+    if (independentReachable) {
+      return {
+        status:'assignment-not-covered',
+        flightNumber:normalized.display,
+        date:normalizedDate.raw,
+        message:'We could not find published aircraft-assignment coverage for this flight and date. This is a coverage gap, not a temporary outage.',
+        checkedFallbacks:['last-good-assignment-cache','independent-public-history'],
+        source:{name:'Independent public flight history',url:FR24_PUBLIC_BASE + normalized.display.toLowerCase()}
+      };
+    }
     return {
       status:'assignment-source-unavailable',
       flightNumber:normalized.display,
@@ -1627,15 +1639,29 @@ async function lookupAssignment({ flight, date, flightId }) {
   if (!flightData?.flightId) {
     const cached = await readAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId);
     if (cached) return cached;
+    let independentReachable=false;
     try {
       const independent = await lookupIndependentAssignmentFallback({
         normalized,normalizedDate,flightId:selected.flightId,routeHint:selected
       });
+      independentReachable=true;
       if (independent?.status === 'found') {
         await writeAssignmentCache(normalized.display,normalizedDate.raw,selected.flightId,independent);
         return independent;
       }
     } catch {}
+    if (independentReachable) {
+      return {
+        status:'assignment-not-covered',
+        flightNumber:normalized.display,
+        date:normalizedDate.raw,
+        flightId:selected.flightId,
+        message:'The scheduled flight exists, but no public aircraft-assignment coverage is available for this occurrence.',
+        route:{origin:selected.origin,destination:selected.destination},
+        checkedFallbacks:['flightstats-base-occurrence','last-good-assignment-cache','independent-public-history'],
+        source:{name:'Independent public flight history',url:FR24_PUBLIC_BASE + normalized.display.toLowerCase()}
+      };
+    }
     return {
       status:'assignment-source-unavailable',
       flightNumber:normalized.display,
