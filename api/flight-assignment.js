@@ -1232,10 +1232,8 @@ function logUnifiedRender(assignment,reconciliation) {
   return record;
 }
 
-async function buildUnifiedFlightState({flight,date,flightId,nowMs = Date.now()}) {
-  const assignment = await lookupAssignment({flight,date,flightId});
-  if (assignment?.status !== 'found') return assignment;
-  if (!assignment.tailNumber) {
+async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
+  if (!assignment?.tailNumber) {
     const reconciliation = reconcileFlightState({assignment,live:null,recentInboundOccurrence:null,nowMs});
     return {
       status:'found',
@@ -1268,6 +1266,62 @@ async function buildUnifiedFlightState({flight,date,flightId,nowMs = Date.now()}
     ...reconciliation,
     observability:logUnifiedRender(assignment,reconciliation)
   };
+}
+
+async function buildUnifiedFromDirectLive(marketingFlight,live,operatingFlight=null,codeshareSource=null,nowMs=Date.now()) {
+  const assignment=directLiveAssignment(marketingFlight,live,operatingFlight,codeshareSource);
+  const reconciliation=reconcileFlightState({assignment,live,recentInboundOccurrence:null,nowMs});
+  return {
+    status:'found',
+    generatedAt:new Date(nowMs).toISOString(),
+    assignment,
+    live,
+    recentInboundOccurrence:null,
+    confirmedOperatingOccurrence:null,
+    ...reconciliation,
+    observability:logUnifiedRender(assignment,reconciliation)
+  };
+}
+
+async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=false,nowMs = Date.now()}) {
+  const assignmentPromise=lookupAssignment({flight,date,flightId});
+  const directPromise=allowDirectLive ? directLiveSnapshot(flight) : Promise.resolve(null);
+
+  const direct=await directPromise;
+  if (directLiveIsAirborne(direct)) {
+    return await buildUnifiedFromDirectLive(flight,direct,null,null,nowMs);
+  }
+
+  const assignment=await assignmentPromise;
+  if (assignment?.status === 'found') {
+    return await buildUnifiedFromAssignment(assignment,date,nowMs);
+  }
+
+  const codeshare=await resolveCodeshareOperatingFlight(flight,date,nowMs);
+  if (codeshare?.operatingFlight) {
+    if (allowDirectLive) {
+      const operatingLive=await directLiveSnapshot(codeshare.operatingFlight);
+      if (directLiveIsAirborne(operatingLive)) {
+        return await buildUnifiedFromDirectLive(
+          flight,operatingLive,codeshare.operatingFlight,codeshare.source,nowMs
+        );
+      }
+    }
+
+    let operatingAssignment=codeshare.assignment;
+    if (!operatingAssignment) {
+      const candidate=await lookupAssignment({flight:codeshare.operatingFlight,date,flightId:null}).catch(() => null);
+      if (candidate?.status === 'found') operatingAssignment=candidate;
+    }
+    if (operatingAssignment?.status === 'found') {
+      const aliased=applyCodeshareAssignment(
+        operatingAssignment,flight,codeshare.operatingFlight,codeshare.source
+      );
+      return await buildUnifiedFromAssignment(aliased,date,nowMs);
+    }
+  }
+
+  return assignment;
 }
 
 
@@ -1629,10 +1683,11 @@ module.exports = async function handler(req, res) {
   const tail = Array.isArray(req.query?.tail) ? req.query.tail[0] : req.query?.tail;
   const airport = Array.isArray(req.query?.airport) ? req.query.airport[0] : req.query?.airport;
   const carrier = Array.isArray(req.query?.carrier) ? req.query.carrier[0] : req.query?.carrier;
+  const allowDirectLive = String(Array.isArray(req.query?.liveNow) ? req.query.liveNow[0] : req.query?.liveNow || '') === '1';
 
   try {
     const body = unified
-      ? await buildUnifiedFlightState({flight,date,flightId})
+      ? await buildUnifiedFlightState({flight,date,flightId,allowDirectLive})
       : tail || airport || carrier
         ? await lookupRecentArrivalByTail({tail,airport,carrier})
         : await lookupAssignment({flight,date,flightId});
@@ -1684,6 +1739,17 @@ module.exports._test = {
   reconcileFlightState,
   operatingOccurrenceMatches,
   dateIsNearNow,
+  embeddedInboundOccurrence,
+  readInboundCache,
+  writeInboundCache,
+  parseCodeshareOperatingCandidates,
+  codeshareAssignmentScore,
+  cachedAssignmentsForFlight,
+  resolveCodeshareOperatingFlight,
+  applyCodeshareAssignment,
+  directLiveIsAirborne,
+  directLiveAssignment,
+  buildUnifiedFromAssignment,
   buildUnifiedFlightState,
   operatingCarrierSummary,
   baseFlightMatchesDate,
