@@ -32,6 +32,7 @@
   const answerNext = document.getElementById('answer-next');
   const answerDelay = document.getElementById('answer-delay');
   const tripTimeline = document.getElementById('trip-timeline');
+  const travelerAnswers = document.getElementById('traveler-answers');
   const flightActions = document.getElementById('flight-actions');
   const watchButton = document.getElementById('watch-flight');
   const shareButton = document.getElementById('share-flight');
@@ -392,6 +393,8 @@
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
     answerSummary.textContent = summary || '';
+    travelerAnswers.hidden = true;
+    travelerAnswers.replaceChildren();
     renderAnswerJourney(journey);
     clearAnswerMeta();
     pills.filter(Boolean).forEach(addAnswerPill);
@@ -405,6 +408,8 @@
   function hideAnswer() {
     answerCard.hidden = true;
     answerJourney.hidden = true;
+    travelerAnswers.hidden = true;
+    travelerAnswers.replaceChildren();
     tripTimeline.hidden = true;
     tripTimeline.replaceChildren();
     answerNext.hidden = true;
@@ -1364,12 +1369,12 @@
 
     setAnswer({
       kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
-      headline:(tail || 'Your plane') + ' is at the gate — live tracking starts at pushback.',
+      headline:(tail || 'Your plane') + ' last landed at ' + originName + '. Gate arrival is not verified.',
       summary:(story ? story + ' ' : '') +
         'It is still assigned to your ' + (route || 'next') + ' flight.',
       journey:{
         now:{
-          primary:[tail,originCode ? 'at ' + originCode : 'at the gate'].filter(Boolean).join(' · '),
+          primary:[tail,originCode ? 'landed at ' + originCode : 'previous flight landed'].filter(Boolean).join(' · '),
           secondary:journeySecondary([previous?.flightNumber ? 'Arrived on ' + previous.flightNumber : 'Previous flight landed',completedArrivalClock(previous)])
         },
         next:{
@@ -1378,7 +1383,7 @@
         }
       },
       pills:[delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
-      next:'The aircraft is parked at ' + originName + '. Live tracking starts again at pushback; the airline assignment can still change before departure.',
+      next:'The same tail was confirmed landing at ' + originName + '. Landing does not establish that it reached your departure gate; the assignment can still change.',
       delayWhy:delayWhyText(assignment,previous),
       source:assignmentSourceText()
     });
@@ -1392,9 +1397,9 @@
     freshness.dataset.stale = 'false';
     glance.hidden = false;
     mapShell.classList.add('with-progress');
-    phaseLabel.textContent = 'On ground · between flights';
+    phaseLabel.textContent = 'Previous leg landed · gate unverified';
     distanceLabel.textContent = '—';
-    landingLabel.textContent = 'Already at departure airport';
+    landingLabel.textContent = 'Landed at departure airport';
     glanceNote.hidden = true;
     progressBar.hidden = true;
     setMessage('', 'neutral');
@@ -1723,7 +1728,7 @@
         : seen
           ? 'The live aircraft feed can see ' + tail + ', but it has no current location. We also could not confirm a same-tail arrival at ' + airportPlace(assignment?.origin) + '.'
           : passengerNotAirborne
-            ? 'The assignment is confirmed, but there is no fresh aircraft position right now. We will keep following this exact tail and its inbound leg when evidence appears.'
+            ? 'We know the assigned tail (' + tail + '), but cannot identify its previous inbound leg or obtain a fresh aircraft position. We cannot yet say which airport it is at.'
             : 'We confirmed ' + tail + ' is assigned to your flight, but there is no current position and no confirmed same-tail arrival at ' + airportPlace(assignment?.origin) + '. Its present location is unknown.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
       next:onGround
@@ -1989,7 +1994,7 @@
     if (current) {
       const here = document.createElement('span');
       here.className = 'timeline-here';
-      here.textContent = 'YOU ARE HERE';
+      here.textContent = 'AIRCRAFT PHASE';
       labelEl.appendChild(here);
     }
     const statusEl = document.createElement('div');
@@ -2011,7 +2016,7 @@
     const inbound = payload?.recentInboundOccurrence || assignment?.recentInboundOccurrence || assignment?.previousAircraftOccurrence || null;
     const state = payload?.renderedState || '';
     const rows = [];
-    let currentStage = 'departure';
+    let currentStage = null;
     if (assignmentArrivalConfirmed(assignment)) currentStage = 'arrival';
     else if (assignment?.flightStatus?.airborne === true || state === 'airborne-live' || state === 'airborne-status') currentStage = 'departure';
     else if (state === 'parked-origin-confirmed' || state === 'ground-live') currentStage = 'turn';
@@ -2032,9 +2037,11 @@
     const turn = scheduledTurnMinutes(assignment,inbound);
     const turnTime = inbound ? completedArrivalClock(inbound) || '—' : '—';
     let turnStatus = 'Aircraft turn timing is not confirmed.';
-    if (state === 'parked-origin-confirmed' || state === 'ground-live') {
-      turnStatus = 'Aircraft is on the ground at ' + airportPlace(assignment.origin) +
-        (Number.isFinite(turn) ? ' · scheduled turn ' + turn + ' min.' : '.');
+    if (state === 'parked-origin-confirmed' || (state === 'ground-live' && payload?.live?.focusAirportRelationship?.state === 'at-airport')) {
+      turnStatus = (state === 'parked-origin-confirmed' ? 'Previous flight landed at ' : 'Live aircraft position is on the ground at ') + airportPlace(assignment.origin) +
+        (Number.isFinite(turn) ? ' · scheduled arrival-to-departure interval ' + turn + ' min.' : '.');
+    } else if (state === 'ground-live') {
+      turnStatus = 'Aircraft reported on the ground, but not verified at your departure airport.';
     } else if (Number.isFinite(turn)) {
       turnStatus = 'Scheduled aircraft turn: ' + turn + ' min.';
     }
@@ -2167,9 +2174,131 @@
     }
   }
 
+
+  function travelerDecisionFacts(payload) {
+    const a = payload?.assignment;
+    if (!a || assignmentArrivalConfirmed(a) || a?.flightStatus?.airborne || a?.flightStatus?.canceled) return null;
+    const airport = airportPlace(a.origin);
+    const gate = a?.origin?.gate;
+    const tail = a.tailNumber;
+    const live = payload?.live;
+    const ac = live?.aircraft;
+    const fresh = live?.positionFresh === true && Number.isFinite(ac?.lat) && Number.isFinite(ac?.lon);
+    const rel = live?.focusAirportRelationship;
+    const inbound = [payload?.recentInboundOccurrence,a?.previousAircraftOccurrence].find(x =>
+      tail && x?.tailNumber && clean(x.tailNumber) === clean(tail) && sameAirport(x.destination,a.origin)) || null;
+    const landed = inbound?.flightStatus?.landed === true;
+    const arrival = inbound?.schedule?.actualArrivalUTC || inbound?.schedule?.estimatedArrivalUTC ||
+      inbound?.schedule?.scheduledArrivalUTC || null;
+    const landingClock = formatClock(arrival,a?.origin?.timezone);
+    const departure = a?.schedule?.estimatedDepartureUTC || a?.schedule?.scheduledDepartureUTC;
+    const departureClock = formatClock(departure,a?.origin?.timezone);
+    const buffer = inbound && !landed
+      ? minutesBetween(inbound?.schedule?.estimatedArrivalUTC || inbound?.schedule?.scheduledArrivalUTC,departure)
+      : null;
+    const namedRoute = live?.route?.plausible && live.route.origin && live.route.destination
+      ? compactRoute(live.route.origin,live.route.destination) : null;
+    const coordinates = fresh
+      ? Math.abs(ac.lat).toFixed(2) + '°' + (ac.lat < 0 ? 'S' : 'N') + ', ' +
+        Math.abs(ac.lon).toFixed(2) + '°' + (ac.lon < 0 ? 'W' : 'E')
+      : null;
+    const seen = Number.isFinite(ac?.positionAgeSeconds) ? formatAge(ac.positionAgeSeconds) : 'Fresh report';
+    let where, whereDetail, arriving, arrivingDetail, verdict, verdictDetail;
+    const gateNote = gate ? ' Your flight is posted at gate ' + gate + '; this does not confirm the plane is parked there.' : '';
+    if (fresh && ac?.onGround === true && rel?.state === 'at-airport') {
+      where = 'On the ground at ' + airport + '.';
+      whereDetail = seen + '. This is a position-confirmed airport, not a confirmed gate.';
+    } else if (fresh) {
+      where = (ac?.onGround ? 'On the ground' : 'Airborne') + (namedRoute ? ' · ' + namedRoute : '') + '.';
+      whereDetail = [coordinates,formatAltitude(ac?.altitudeFeet),seen,
+        Number.isFinite(rel?.distanceMiles) ? 'About ' + rel.distanceMiles + ' mi from ' + airport : null]
+        .filter(Boolean).join(' · ') + '. See the aircraft on the map.';
+    } else if (landed) {
+      where = 'Last confirmed landed at ' + airport + (landingClock ? ' at ' + landingClock : '') + '.';
+      whereDetail = 'The last same-tail arrival is confirmed; current gate or current position is not.';
+    } else if (inbound?.flightStatus?.airborne === true) {
+      where = 'Inbound from ' + airportPlace(inbound.origin) + ' to ' + airport + '.';
+      whereDetail = 'The same-tail inbound leg is identified, but a live map position is not available.';
+    } else {
+      where = tail ? 'Assigned tail ' + tail + ' · physical location unknown.' : 'Tail assignment not yet published.';
+      whereDetail = tail
+        ? 'We know your tail but not its previous inbound flight; there is no fresh position to show.'
+        : 'Without a confirmed aircraft registration, its physical location cannot be identified.';
+    }
+
+    if (landed) {
+      arriving = landingClock ? 'Previous flight landed at ' + landingClock + '.' : 'Previous flight landing confirmed.';
+      arrivingDetail = 'A runway landing is not a verified arrival at your gate.' + gateNote;
+    } else if (inbound && landingClock) {
+      arriving = 'Inbound lands at ' + airport + ' around ' + landingClock + '.';
+      arrivingDetail = (inbound.schedule?.estimatedArrivalUTC ? 'Published estimated landing' : 'Scheduled landing, not a live forecast') +
+        '; taxi and gate time are not published.' + gateNote;
+    } else if (fresh && !ac?.onGround && sameAirport(live?.route?.destination,a.origin) &&
+               Number.isFinite(live?.progress?.landingEstimate?.minMinutes) &&
+               Number.isFinite(live?.progress?.landingEstimate?.maxMinutes)) {
+      arriving = 'Estimated landing in ' + Math.round(live.progress.landingEstimate.minMinutes) +
+        '–' + Math.round(live.progress.landingEstimate.maxMinutes) + ' min.';
+      arrivingDetail = 'Live-position model range, not a published landing or gate-arrival time.' + gateNote;
+    } else if (fresh && ac?.onGround && rel?.state === 'at-airport') {
+      arriving = 'Aircraft is at ' + airport + '; gate arrival unverified.';
+      arrivingDetail = 'Its position does not prove arrival at the assigned stand.' + gateNote;
+    } else {
+      arriving = 'No verified inbound landing or gate ETA.';
+      arrivingDetail = 'An inbound leg and arrival timestamp are missing.' + gateNote;
+    }
+
+    const delay = departureDelayMinutes(a);
+    if (Number.isFinite(delay) && delay > 0) {
+      verdict = 'DELAYED ' + delay + ' MIN · airline-reported.';
+      verdictDetail = 'Delay cause is not verified.' +
+        (Number.isFinite(buffer) ? ' Inbound landing-to-departure interval: ' + buffer + ' min (not gate or boarding time).' : '');
+    } else if (Number.isFinite(buffer) && buffer < 45) {
+      verdict = 'AT RISK · tight inbound turnaround.';
+      verdictDetail = 'Only ' + buffer + ' min between posted inbound landing and' +
+        (departureClock ? ' ' + departureClock : ' your') +
+        ' departure. Taxi, deplaning and boarding are not included; this is not an airline delay announcement.';
+    } else if (landed || (fresh && ac?.onGround && rel?.state === 'at-airport')) {
+      verdict = 'NO INBOUND DELAY CONFIRMED · gate not verified.';
+      verdictDetail = 'The aircraft has been seen at the departure airport. Boarding readiness remains unknown.';
+    } else if (Number.isFinite(buffer)) {
+      verdict = 'NO PUBLISHED INBOUND TIMING CONFLICT.';
+      verdictDetail = 'The posted interval is ' + buffer + ' min; gate arrival and aircraft readiness remain unconfirmed.';
+    } else {
+      verdict = 'RISK UNKNOWN · inbound flight unverified.';
+      verdictDetail = 'A published departure time does not establish that the assigned aircraft will be ready.';
+    }
+    return [
+      {label:'1 · Where is my aircraft now?',answer:where,detail:whereDetail},
+      {label:'2 · When does it reach my gate?',answer:arriving,detail:arrivingDetail},
+      {label:'3 · What does that mean for me?',answer:verdict,detail:verdictDetail}
+    ];
+  }
+
+  function renderTravelerAnswers(payload) {
+    travelerAnswers.replaceChildren();
+    const facts = travelerDecisionFacts(payload);
+    if (!facts) { travelerAnswers.hidden = true; return; }
+    for (const fact of facts) {
+      const row = document.createElement('div');
+      row.className = 'traveler-fact';
+      for (const [className,value] of [
+        ['traveler-fact-label',fact.label],['traveler-fact-answer',fact.answer],
+        ['traveler-fact-detail',fact.detail]
+      ]) {
+        const part = document.createElement('div');
+        part.className = className;
+        part.textContent = value;
+        row.appendChild(part);
+      }
+      travelerAnswers.appendChild(row);
+    }
+    travelerAnswers.hidden = false;
+  }
+
   function renderV3Companions(payload) {
     if (payload !== currentUnifiedPayload) return;
     renderTripTimeline(payload);
+    renderTravelerAnswers(payload);
     updateActionControls(payload);
     loadReliability(payload);
     refreshConnection(false);

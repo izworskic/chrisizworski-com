@@ -81,7 +81,7 @@ test('completed leg outranks previous aircraft turn and strips timeline departur
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008j/);
+  assert.match(html,/flight-tracker\.js\?v=20261008k/);
 });
 
 
@@ -104,9 +104,9 @@ function arrivedFlightFixture() {
 }
 
 function arrivedRendererHarness(confirmed) {
-  const el = () => ({textContent:'',hidden:false,dataset:{}});
+  const el = () => ({textContent:'',hidden:false,dataset:{},replaceChildren:() => {}});
   const elements = Object.fromEntries([
-    'answerCard','answerKicker','answerHeadline','answerSummary','answerNext',
+    'answerCard','answerKicker','answerHeadline','answerSummary','answerNext','travelerAnswers',
     'answerDelay','answerSource','flightLabel','routeLabel','routeCodes',
     'detailLabel','freshness'
   ].map(name => [name,el()]));

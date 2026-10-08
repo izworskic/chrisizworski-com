@@ -805,7 +805,8 @@ async function buildRegistrationSnapshot(value, focusAirportCode = null) {
   const route = await lookupRoute(aircraft);
   const age = aircraft.positionAgeSeconds;
   const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
-  const focusAirport = !route && focusAirportCode ? await lookupAirportCoordinates(focusAirportCode) : null;
+  const focusAirport = (aircraft.onGround === true || !route) && focusAirportCode
+    ? await lookupAirportCoordinates(focusAirportCode) : null;
   const focusAirportRelationship = focusAirport
     ? aircraftAirportRelationship(aircraft, focusAirport, positionFresh)
     : null;
@@ -938,6 +939,8 @@ module.exports = async function handler(req, res) {
     }));
   }
 };
+
+module.exports.buildRegistrationSnapshot = buildRegistrationSnapshot;
 
 module.exports._test = {
   cleanFlightInput,

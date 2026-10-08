@@ -207,7 +207,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008j/);
+  assert.match(html, /flight-tracker\.js\?v=20261008k/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -772,7 +772,7 @@ test('position relationship recognizes an assigned aircraft on the ground at the
 test('route-missing registration lookup can attach a focus-airport relationship without claiming a route', () => {
   const source = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
   assert.match(source, /VRS_AIRPORTS_URL = 'https:\/\/vrs-standing-data\.adsb\.lol\/airports\.csv'/);
-  assert.match(source, /const focusAirport = !route && focusAirportCode \? await lookupAirportCoordinates\(focusAirportCode\) : null/);
+  assert.match(source, /const focusAirport = \(aircraft.onGround === true \|\| !route\) && focusAirportCode/);
   assert.match(source, /focusAirportRelationship/);
   assert.match(client, /data\.focusAirportRelationship/);
   assert.match(client, /originMarker = airportMarker\('origin', focus/);
@@ -810,10 +810,10 @@ test('landed previous trip overrides stale airborne narrative and becomes the be
   assert.match(client, /previous\?\.flightStatus\?\.landed !== true/);
   assert.match(client, /sameAirport\(previous\.destination, assignment\?\.origin\)/);
   assert.match(client, /function renderArrivedForTurn\(assignment\)/);
-  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /Gate arrival is not verified/);
   assert.match(client, /function previousLegStory\(assignment, previous\)/);
   assert.match(client, /arrived from/);
-  assert.match(client, /Live tracking starts again at pushback/);
+  assert.match(client, /Landing does not establish that it reached your departure gate/);
   assert.match(client, /if \(assignmentData && renderArrivedForTurn\(assignmentData\)\) \{\s*resetHeldLive\(\);\s*return true;/s);
   assert.match(client, /if \(!arrived && renderArrivedForTurn\(assignment\)\) return;/);
 });
@@ -972,7 +972,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008j/);
+  assert.match(html, /flight-tracker\.js\?v=20261008k/);
 });
 
 
@@ -990,7 +990,7 @@ test('v2 traveler story shows completed-leg arrival, inbound timing and delay-tu
   assert.match(client, /Why is my flight delayed\?/);
   assert.match(client, /Scheduled turn is /);
   assert.match(client, /cannot prove how much of the delay came from the inbound aircraft/);
-  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /Gate arrival is not verified/);
   assert.match(client, /map stays empty rather than guessing/);
   assert.doesNotMatch(client, /simulated position|estimated marker|predicted marker/i);
 });
@@ -1089,7 +1089,7 @@ test('adversarial V2 state enrichment is server-side and stale local snapshots c
   assert.match(apiSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /Promise\.all\(\[/);
-  assert.match(stateSource, /buildAdsbRegistrationSnapshot\(assignment\.tailNumber\)/);
+  assert.match(stateSource, /buildRegistrationSnapshot\(assignment\.tailNumber,airportCode\(assignment\.origin\)\)/);
   assert.match(stateSource, /resolveRecentInbound\(assignment,date,nowMs\)/);
   assert.match(stateSource, /reconcileFlightState/);
   assert.match(client, /renderUnifiedFlightState\(data\)/);
@@ -1098,7 +1098,7 @@ test('adversarial V2 state enrichment is server-side and stale local snapshots c
 
 test('parked same-tail arrival is asserted and stale airline status is timestamped', () => {
   assert.match(client, /recentInboundOccurrence\?\.flightStatus\?\.landed === true/);
-  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /Gate arrival is not verified/);
   assert.match(client, /function unresolvedStatusIsStale\(assignment\)/);
   assert.match(client, /Date\.now\(\) > departure \+ 90 \* 60 \* 1000/);
   assert.match(client, /Status may be stale/);
@@ -1395,7 +1395,7 @@ test('cold assignment outage checks independent public history before declaring 
   assert.match(source,/lookupIndependentAssignmentFallback/);
   assert.match(source,/independent-public-history/);
   assert.match(source,/cachedRouteHint/);
-  assert.match(source,/checkedFallbacks:\['last-good-assignment-cache','independent-public-history','live-operating-callsigns'\]/);
+  assert.match(source,/checkedFallbacks:\['last-good-assignment-cache','independent-public-history','control-flight-source-check'\]/);
 });
 
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {

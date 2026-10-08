@@ -1564,6 +1564,27 @@ function logUnifiedRender(assignment,reconciliation) {
   return record;
 }
 
+function observedInboundFromLive(assignment,live) {
+  // The current registration and its route may identify an inbound aircraft
+  // even before public arrivals boards identify the previous flight number.
+  // This is an observed route, NOT an airline-confirmed operating flight.
+  if (!live?.positionFresh || live?.aircraft?.onGround === true ||
+      !live?.route?.plausible || assignment?.flightStatus?.airborne === true ||
+      !sameAirport(live.route.destination,assignment?.origin) ||
+      !sameTail(live.aircraft.registration,assignment?.tailNumber)) return null;
+  return {
+    flightNumber:null,
+    flightId:null,
+    tailNumber:assignment.tailNumber,
+    origin:live.route.origin,
+    destination:live.route.destination,
+    schedule:{scheduledArrivalUTC:null,estimatedArrivalUTC:null,actualArrivalUTC:null},
+    flightStatus:{airborne:true,landed:false,canceled:false,arrivalDelayMinutes:null},
+    evidence:{kind:'fresh-same-tail-adsb-route',note:'Aircraft registration and live position match a plausible route into the departure airport; operating flight identity is not independently confirmed.'},
+    source:{name:'ADSB.lol + VRS standing route data',kind:'live-inbound-route'}
+  };
+}
+
 async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
   if (!assignment?.tailNumber) {
     const reconciliation = reconcileFlightState({assignment,live:null,recentInboundOccurrence:null,nowMs});
@@ -1580,20 +1601,24 @@ async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
   }
 
   const [live,recentInboundOccurrence] = await Promise.all([
-    buildAdsbRegistrationSnapshot(assignment.tailNumber),
+    require('./flight-tracker.js').buildRegistrationSnapshot(assignment.tailNumber,airportCode(assignment.origin)),
     resolveRecentInbound(assignment,date,nowMs)
   ]);
   const confirmedOperatingOccurrence = await resolveOperatingOccurrence(assignment,live,date);
+  const inbound = recentInboundOccurrence ||
+    (confirmedOperatingOccurrence && sameAirport(confirmedOperatingOccurrence.destination,assignment.origin)
+      ? confirmedOperatingOccurrence : null) ||
+    observedInboundFromLive(assignment,live);
   if (confirmedOperatingOccurrence && live && typeof live === 'object') {
     live.confirmedOperatingOccurrence = confirmedOperatingOccurrence;
   }
-  const reconciliation = reconcileFlightState({assignment,live,recentInboundOccurrence,nowMs});
+  const reconciliation = reconcileFlightState({assignment,live,recentInboundOccurrence:inbound,nowMs});
   return {
     status:'found',
     generatedAt:new Date(nowMs).toISOString(),
     assignment,
     live,
-    recentInboundOccurrence,
+    recentInboundOccurrence:inbound,
     confirmedOperatingOccurrence,
     ...reconciliation,
     observability:logUnifiedRender(assignment,reconciliation)
@@ -1995,24 +2020,35 @@ async function lookupAssignment({ flight, date, flightId }) {
         return independent;
       }
     } catch {}
-    if (independentReachable || !assignmentSourceIsUnreachable(error)) {
-      return {
-        status:'assignment-not-covered',
-        flightNumber:normalized.display,
-        date:normalizedDate.raw,
-        message:'We could not find published aircraft-assignment coverage for this flight and date. This is a coverage gap, not a temporary outage.',
-        checkedFallbacks:['last-good-assignment-cache','independent-public-history'],
-        source:{name:'Independent public flight history',url:FR24_PUBLIC_BASE + normalized.display.toLowerCase()}
-      };
+    // An unknown flight is not evidence of a provider-wide outage.
+    // Confirm a failure against a separate, known published flight page before
+    // using outage language. HTTP 403/404, missing records or bad markup are
+    // per-flight coverage gaps even if a data scraper cannot resolve them.
+    let verifiedFeedUnreachable=false;
+    if (!independentReachable && assignmentSourceIsUnreachable(error) &&
+        !(normalized.carrier === 'DL' && Number(normalized.number) >= 5000)) {
+      // Marketing codeshares that cannot be resolved are coverage gaps.
+      // A missing DL6xxx record is not proof that the entire feed is down.
+      try {
+        await fetchText(FLIGHTSTATS_BASE + '/flight-tracker/DL/445',3000);
+      } catch (probeError) {
+        verifiedFeedUnreachable=assignmentSourceIsUnreachable(probeError);
+      }
     }
-    return {
+    return verifiedFeedUnreachable ? {
       status:'assignment-source-unavailable',
       flightNumber:normalized.display,
       date:normalizedDate.raw,
-      message:'The aircraft-assignment source is temporarily unavailable. We can still check live operating callsigns, but we cannot confirm the assigned tail right now.',
-      checkedFallbacks:['last-good-assignment-cache','independent-public-history','live-operating-callsigns'],
-      source:{name:'FlightStats public flight tracker',url:baseUrl},
-      sourceError:String(error?.message || error)
+      message:'The flight-assignment source is unreachable even for a separate control flight. We cannot confirm the assigned aircraft right now.',
+      checkedFallbacks:['last-good-assignment-cache','independent-public-history','control-flight-source-check'],
+      source:{name:'FlightStats public flight tracker',url:baseUrl}
+    } : {
+      status:'assignment-not-covered',
+      flightNumber:normalized.display,
+      date:normalizedDate.raw,
+      message:'We could not resolve a published aircraft assignment for this flight and date. This is a coverage gap; no source-wide outage was verified.',
+      checkedFallbacks:['last-good-assignment-cache','independent-public-history','control-flight-source-check'],
+      source:{name:'Public flight assignment sources',url:baseUrl}
     };
   }
 
@@ -2121,7 +2157,7 @@ async function lookupAssignment({ flight, date, flightId }) {
       flightNumber:normalized.display,
       date:normalizedDate.raw,
       flightId:selected.flightId,
-      message:'The scheduled flight was found, but its aircraft-assignment detail is temporarily unavailable.',
+      message:'The scheduled flight exists, but its aircraft-assignment detail is not covered by the available public records. This is not a verified source outage.',
       route:{origin:selected.origin,destination:selected.destination},
       checkedFallbacks:['flightstats-base-occurrence','last-good-assignment-cache','independent-public-history','live-operating-callsigns'],
       source:{name:'FlightStats public flight tracker',url:detailUrl}
@@ -2176,10 +2212,8 @@ module.exports = async function handler(req, res) {
   } catch (error) {
     res.statusCode = 200;
     return res.end(JSON.stringify({
-      status:assignmentSourceIsUnreachable(error) ? 'source-unavailable' : 'assignment-not-covered',
-      message:assignmentSourceIsUnreachable(error)
-        ? 'Aircraft assignment data is temporarily unavailable. Live-flight tracking can still work after departure.'
-        : 'We could not resolve a usable aircraft assignment for this flight and date. This is an assignment coverage gap, not a verified source outage.',
+      status:'assignment-not-covered',
+      message:'We could not resolve a usable aircraft assignment for this flight and date. No source-wide outage is verified; treat this as an assignment coverage gap.',
       detail:process.env.NODE_ENV === 'development' ? String(error?.message || error) : undefined
     }));
   }
@@ -2227,6 +2261,7 @@ module.exports._test = {
   parseFr24AircraftHistoryRows,
   independentInboundFromTailRows,
   lookupIndependentInboundByTail,
+  observedInboundFromLive,
   readInboundCache,
   writeInboundCache,
   readCodeshareCache,
