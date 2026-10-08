@@ -47,7 +47,7 @@ test("date axis reaches December correctly and winter has an explicit season sta
  assert.equal(fmt(0),"Sep 1");
  assert.equal(fmt(61),"Nov 1");
  assert.equal(fmt(98),"Dec 8");
- assert.match(javascript,/const winterCalendar=\(tm<9\)/);
+ assert.match(javascript,/const winterCalendar=\(tm<9&&!\(tm===8&&td>=20\)\)/);
  assert.match(javascript,/let winterMode=winterCalendar,previewMode=false/);
  assert.match(javascript,/if\(winterMode\)return \{\.\.\.stageOf\(r,98\),phase:"offseason",pct:0,live:false,projected:false\}/);
  assert.match(javascript,/if\(!previewMode&&selIdx>todayFromSep1/);
@@ -55,5 +55,7 @@ test("date axis reaches December correctly and winter has an explicit season sta
  assert.match(javascript,/fallSeasonStatus"\)\.addEventListener\("click"/);
  assert.match(javascript,/scrub\.max="98"/);
  assert.match(javascript,/winterMode=false;previewMode=true;selIdx=0/);
+ assert.match(javascript,/if\(winterCalendar\)\{renderLiveStrip\(\);\}/);
+ assert.match(javascript,/if\(!winterCalendar\)fetch\("\/api\/fall-color-report"\)/);
  assert.match(javascript,/winterMode=true;previewMode=false;selIdx=98/);
 });
