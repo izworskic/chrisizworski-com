@@ -1621,7 +1621,11 @@ function parseFr24TailHistoryRows(markdown,tailNumber) {
     const flightMatch=line.match(/\[([A-Z0-9]{2}[0-9]{1,4}[A-Z]?)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/flights\//i) ||
       line.match(/^\s*([A-Z0-9]{2}[0-9]{1,4}[A-Z]?)\s+\d{2}\s+[A-Z][a-z]{2}\s+\d{4}\b/);
     if (!dateMatch || !flightMatch) continue;
-    const airports=[...line.matchAll(/\[\(([A-Z0-9]{3})\)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/airports\/[a-z0-9-]+/gi)]
+    // FR24 tail-history summary lines may repeat a "TO <airport>" link before
+    // the occurrence date. Only parse route airports after the date token so
+    // that header context cannot become the flight origin.
+    const routeText=line.slice((dateMatch.index || 0) + dateMatch[0].length);
+    const airports=[...routeText.matchAll(/\[\(([A-Z0-9]{3})\)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/airports\/[a-z0-9-]+/gi)]
       .map(match => match[1].toUpperCase());
     let origin=null;
     let destination=null;
