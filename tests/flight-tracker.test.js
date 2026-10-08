@@ -6,7 +6,6 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
 const assignmentApi = require('../api/flight-assignment.js')._test;
-const stateApi = require('../api/flight-state.js')._test;
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -405,7 +404,7 @@ test('registration lookup support is explicit and preserves grounded aircraft wi
 });
 
 test('client renders scheduled flights from one reconciled server state instead of racing assignment and ADS-B', () => {
-  assert.match(client, /fetch\('\/api\/flight-state\?' \+ params\.toString\(\)/);
+  assert.match(client, /fetch\('\/api\/flight-assignment\?' \+ params\.toString\(\)/);
   assert.match(client, /function renderUnifiedFlightState\(payload\)/);
   assert.match(client, /assignedTail = assignment\.tailNumber \|\| null/);
   assert.match(client, /assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail/);
@@ -416,14 +415,14 @@ test('client renders scheduled flights from one reconciled server state instead 
 
 test('server reconciliation timestamps ADS-B fixes and enforces the 15 minute cutoff', () => {
   const now=Date.parse('2026-10-08T12:00:00Z');
-  const fresh=stateApi.positionObservation({
+  const fresh=assignmentApi.positionObservation({
     aircraft:{lat:50.1,lon:8.6,onGround:false,positionAgeSeconds:899}
   },now);
   assert.equal(fresh.fresh,true);
   assert.equal(fresh.fixTimestamp,'2026-10-08T11:45:01.000Z');
   assert.equal(fresh.displayAgeSeconds,840);
 
-  const stale=stateApi.positionObservation({
+  const stale=assignmentApi.positionObservation({
     aircraft:{lat:50.1,lon:8.6,onGround:true,positionAgeSeconds:7200}
   },now);
   assert.equal(stale.fresh,false);
@@ -440,7 +439,7 @@ test('fresh ADS-B wins source conflicts and stale ADS-B loses to flight status',
   };
   const now=Date.parse('2026-10-08T12:00:00Z');
 
-  const freshGround=stateApi.reconcileFlightState({
+  const freshGround=assignmentApi.reconcileFlightState({
     assignment,
     live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:120}},
     recentInboundOccurrence:null,
@@ -450,7 +449,7 @@ test('fresh ADS-B wins source conflicts and stale ADS-B loses to flight status',
   assert.equal(freshGround.renderSource,'adsb-fresh');
   assert.equal(freshGround.sourceConflict,true);
 
-  const staleGround=stateApi.reconcileFlightState({
+  const staleGround=assignmentApi.reconcileFlightState({
     assignment,
     live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:7200}},
     recentInboundOccurrence:null,
@@ -473,7 +472,7 @@ test('a confirmed departure over an hour ago cannot regress to parked without a 
     destination:{iata:'FRA'},
     flightStatus:{landed:true}
   };
-  const result=stateApi.reconcileFlightState({
+  const result=assignmentApi.reconcileFlightState({
     assignment,
     live:{aircraft:{registration:'N861NW',lat:50.03,lon:8.57,onGround:true,positionAgeSeconds:7200}},
     recentInboundOccurrence:recentInbound,
@@ -498,14 +497,14 @@ test('same flight-state inputs reconcile identically across five reloads', () =>
     recentInboundOccurrence:null,
     nowMs:Date.parse('2026-10-08T12:00:00Z')
   };
-  const states=Array.from({length:5},() => stateApi.reconcileFlightState(input));
+  const states=Array.from({length:5},() => assignmentApi.reconcileFlightState(input));
   for (const state of states.slice(1)) assert.deepEqual(state,states[0]);
   assert.equal(states[0].renderedState,'airborne-live');
   assert.equal(states[0].observation.fixAgeSeconds,180);
 });
 
 test('server reconciliation logs the rendered source, fix age and source-conflict counter', () => {
-  const source=fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(source, /event:'flight-state-render'/);
   assert.match(source, /fixTimestamp:reconciliation\?\.observation\?\.fixTimestamp/);
   assert.match(source, /fixAgeSeconds:reconciliation\?\.observation\?\.fixAgeSeconds/);
@@ -527,7 +526,7 @@ test('no stale aircraft fix can enter the live renderer from the direct fallback
 });
 
 test('flight-state endpoint is uncached so each render produces an observability log record', () => {
-  const source=fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(source, /Cache-Control','private, no-store'/);
   assert.match(source, /console\.log\(JSON\.stringify\(record\)\)/);
 });
@@ -946,7 +945,7 @@ test('completed FlightStats occurrence exposes a bounded actual arrival timestam
 
 test('adversarial V2 state enrichment is server-side and stale local snapshots cannot decide scheduled-flight state', () => {
   const apiSource = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
-  const stateSource = fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
+  const stateSource = fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(apiSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /Promise\.all\(\[/);
