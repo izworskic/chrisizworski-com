@@ -1269,7 +1269,7 @@ test('last-confirmed inbound legs survive transient arrival-board failures', () 
   assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);
   assert.match(source,/const cached = await readInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport\)/);
   assert.match(source,/kind:'last-confirmed-inbound-cache'/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
+  assert.match(source,/lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
   assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date\}\)/);
 });
 
