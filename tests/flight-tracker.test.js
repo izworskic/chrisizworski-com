@@ -125,7 +125,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008g/);
+  assert.match(html, /flight-tracker\.js\?v=20261008h/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -890,7 +890,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008g/);
+  assert.match(html, /flight-tracker\.js\?v=20261008h/);
 });
 
 
@@ -1163,20 +1163,24 @@ test('future dates never attach a current-day direct aircraft merely because the
   assert.doesNotMatch(client,/new URLSearchParams\(\{flight,date,unified:'1',liveNow:'1'\}\)/);
 });
 
-test('last-confirmed inbound legs survive transient arrival-board failures', () => {
+test('last-confirmed inbound legs survive feed failures and exact-tail history validates the first story', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v2:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
   assert.match(source,/async function lookupRecentArrivalWithCache/);
-  assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);
-  assert.match(source,/const cached = await readInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport\)/);
   assert.match(source,/kind:'last-confirmed-inbound-cache'/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date\}\)/);
+  assert.match(source,/const cached = await readInboundCache\(date,tail,airport\)/);
+  assert.match(source,/lookupIndependentInboundByTail\(\{assignment,date\}\)/);
+  assert.match(source,/lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
+  assert.match(source,/inboundOccurrenceMatchesAssignment\(assignment,result\.occurrence\)/);
+  assert.ok(source.indexOf('const cached = await readInboundCache(date,tail,airport)') <
+    source.indexOf('lookupIndependentInboundByTail({assignment,date})'));
+  assert.ok(source.indexOf('lookupIndependentInboundByTail({assignment,date})') <
+    source.indexOf('lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs})'));
 });
 
 test('browser retains only validated same-tail inbound context for the active travel date', () => {
-  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:'/);
+  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:v2:'/);
   assert.match(client,/const INBOUND_STORAGE_MAX_AGE_MS = 12 \* 60 \* 60 \* 1000/);
   assert.match(client,/function validInboundOccurrence\(assignment, occurrence\)/);
   assert.match(client,/clean\(occurrence\?\.tailNumber\) !== clean\(assignment\?\.tailNumber\)/);
@@ -1186,6 +1190,50 @@ test('browser retains only validated same-tail inbound context for the active tr
   assert.match(client,/date:activeDate/);
   assert.match(client,/return loadInboundOccurrence\(assignment\)/);
   assert.match(client,/saveInboundOccurrence\(assignment,occurrence\)/);
+});
+
+test('independent tail history rejects repeated destination header links and finds the exact inbound leg', () => {
+  const markdown=[
+    'TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) 08 Oct 2026 Boston [(BOS)](https://data.flightradar24.com/data/airports/bos) Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) [DL1432](https://data.flightradar24.com/data/flights/dl1432) — 21:25 — 23:46 Estimated departure 21:35',
+    'TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) 08 Oct 2026 Atlanta [(ATL)](https://data.flightradar24.com/data/airports/atl) Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) [DL1240](https://data.flightradar24.com/data/flights/dl1240) 1:29 15:08 15:20 17:06 Landed 16:49',
+    'TO Atlanta [(ATL)](https://free.flightradar24.com/data/airports/atl) 08 Oct 2026 Houston [(IAH)](https://free.flightradar24.com/data/airports/iah) Atlanta [(ATL)](https://free.flightradar24.com/data/airports/atl) [DL1315](https://free.flightradar24.com/data/flights/dl1315) 1:30 12:00 12:15 14:02 Landed 13:45'
+  ].join('\n');
+  const rows=assignmentApi.parseFr24TailHistoryRows(markdown,'N121DZ');
+  assert.equal(rows.length,3);
+  assert.equal(rows[0].origin,'BOS');
+  assert.equal(rows[0].destination,'DTW');
+  assert.equal(rows[1].flightNumber,'DL1240');
+  assert.equal(rows[1].origin,'ATL');
+  assert.equal(rows[1].destination,'DTW');
+  assert.equal(rows[1].landed,true);
+
+  const assignment={
+    flightNumber:'DL1171',
+    tailNumber:'N121DZ',
+    origin:{iata:'DTW',code:'DTW',city:'Detroit'},
+    destination:{iata:'BOS',code:'BOS',city:'Boston'}
+  };
+  const summary=assignmentApi.fr24TailInboundSummary(rows[1],assignment,'2026-10-08');
+  assert.equal(summary.flightNumber,'DL1240');
+  assert.equal(summary.tailNumber,'N121DZ');
+  assert.equal(summary.origin.iata,'ATL');
+  assert.equal(summary.destination.iata,'DTW');
+  assert.equal(summary.flightStatus.landed,true);
+  assert.equal(summary.evidence.kind,'independent-tail-history-arrival');
+  assert.equal(assignmentApi.inboundOccurrenceMatchesAssignment(assignment,summary),true);
+  assert.equal(assignmentApi.inboundOccurrenceMatchesAssignment(assignment,{...summary,tailNumber:'N999ZZ'}),false);
+});
+
+test('FR24 public-history reads retry alternate public hosts and reject challenge pages', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.equal(assignmentApi.fr24ReaderTextLooksUsable('Just a moment... Enable JavaScript and cookies to continue'),false);
+  assert.equal(assignmentApi.fr24ReaderTextLooksUsable('08 Oct 2026 ATL DTW DL1240 Landed'),true);
+  assert.match(source,/FR24_READER_ORIGINS = Object\.freeze\(\[/);
+  assert.match(source,/data\.flightradar24\.com/);
+  assert.match(source,/free\.flightradar24\.com/);
+  assert.match(source,/Promise\.any\(attempts\)/);
+  assert.match(source,/fetchFr24ReaderPath\('\/data\/flights\/'/);
+  assert.match(source,/fetchFr24ReaderPath\('\/data\/aircraft\/'/);
 });
 
 test('current-day assignment coverage gaps carry direct-live evidence without claiming an outage', () => {
