@@ -11,8 +11,10 @@ const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 
 function clientFunction(name,nextName) {
-  const start = client.indexOf('  function ' + name + '(');
-  const end = client.indexOf('\n  function ' + nextName + '(',start);
+  const starts = [client.indexOf('  function ' + name + '('),client.indexOf('  async function ' + name + '(')].filter(i => i >= 0);
+  const start = starts.length ? Math.min(...starts) : -1;
+  const ends = [client.indexOf('\n  function ' + nextName + '(',start),client.indexOf('\n  async function ' + nextName + '(',start)].filter(i => i > start);
+  const end = ends.length ? Math.min(...ends) : -1;
   assert.ok(start >= 0 && end > start, name + ' must be defined with the expected boundary');
   return client.slice(start,end).trim();
 }
