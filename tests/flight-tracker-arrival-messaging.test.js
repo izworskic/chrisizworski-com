@@ -104,9 +104,9 @@ function arrivedFlightFixture() {
 }
 
 function arrivedRendererHarness(confirmed) {
-  const el = () => ({textContent:'',hidden:false,dataset:{}});
+  const el = () => ({textContent:'',hidden:false,dataset:{},replaceChildren:() => {}});
   const elements = Object.fromEntries([
-    'answerCard','answerKicker','answerHeadline','answerSummary','answerNext',
+    'answerCard','answerKicker','answerHeadline','answerSummary','answerNext','travelerAnswers',
     'answerDelay','answerSource','flightLabel','routeLabel','routeCodes',
     'detailLabel','freshness'
   ].map(name => [name,el()]));
