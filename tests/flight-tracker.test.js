@@ -1177,7 +1177,7 @@ test('last-confirmed inbound legs are stable and exact-tail history precedes the
 
 test('independent tail history only accepts the exact tail, date and destination airport', () => {
   const markdown=[
-    'DL1432 08 Oct 2026 1:40 Landed 16:05 FROM Boston [(BOS)](https://data.flightradar24.com/data/airports/bos) TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) [DL1432](https://data.flightradar24.com/data/flights/dl1432)',
+    'TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) 08 Oct 2026 Boston [(BOS)](https://data.flightradar24.com/data/airports/bos) Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) [DL1432](https://data.flightradar24.com/data/flights/dl1432) 1:40 Landed 16:05',
     '08 Oct 2026 Orlando [(MCO)](https://free.flightradar24.com/data/airports/mco) Atlanta [(ATL)](https://free.flightradar24.com/data/airports/atl) [DL1213](https://free.flightradar24.com/data/flights/dl1213) 1:20 Landed 14:00'
   ].join('\n');
   const rows=assignmentApi.parseFr24TailHistoryRows(markdown,'N121DZ');
