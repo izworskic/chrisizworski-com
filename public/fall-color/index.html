@@ -1252,6 +1252,11 @@ function activityFor(r,vibe){
   return ["A slow drive",r.drive+"."];
 }
 function buildPlan(){
+  if(winterMode){
+    const host=document.getElementById("thread");
+    host.innerHTML='<div class="card pad"><div class="kicker">Season complete</div><p class="small soft">Michigan fall color has ended. Select a historical fall date or choose Preview fall '+nextPreviewYear+' to plan a future autumn trip. Winter map dots are not live leaf-color readings.</p></div>';
+    return;
+  }
   const regionName=document.getElementById("planRegion").value;
   const vibe=document.querySelector("#vibeChips .chip.on").textContent;
   const anywhere=(regionName==="Anywhere in Michigan");
@@ -1283,9 +1288,13 @@ function buildPlan(){
   const isFutureProjected=todayIdx!==null&&selIdx>todayIdx&&Object.keys(LIVE_OFFSET).length;
   const host=document.getElementById("thread");host.innerHTML="";
   const card=document.createElement("div");card.className="card pad";
-  const modeNote=isFutureProjected
-    ?"Projected forward from today's live canopy and weather readings."
-    :"Drawn from today's live color and weather. Change the date, place, or mood and it reconsiders.";
+  const modeNote=previewMode
+    ?"Fall "+nextPreviewYear+" preview uses typical timing only, not current canopy or weather observations."
+    :winterCalendar
+      ?"Review of typical fall "+completedSeasonYear+" timing, not a current foliage observation."
+      :isFutureProjected
+        ?"Projected forward from today's live canopy and weather readings."
+        :"Drawn from today's live color and weather. Change the date, place, or mood and it reconsiders.";
   card.innerHTML='<div class="kicker" style="margin-bottom:12px">A suggestion for '+fmt(selIdx)+(isToday()?', today':'')+'</div>'+parts.join("")+
     '<div class="tiny muted" style="text-align:center;margin-top:10px">'+modeNote+'</div>';
   host.appendChild(card);
@@ -1302,7 +1311,7 @@ function nearestRegion(la,lo){
   return best;
 }
 function todayStage(r){return winterMode?{...stageOf(r,98),phase:"offseason",pct:0}:
-  previewMode?stageOf(r,selIdx):(LIVE&&Object.keys(LIVE).length&&!winterCalendar)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
+  (previewMode||winterCalendar)?stageOf(r,selIdx):(LIVE&&Object.keys(LIVE).length&&!winterCalendar)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
 function locateMe(){
   const btn=document.getElementById("nearBtn");
   if(!navigator.geolocation){document.getElementById("nearPick").style.display="block";return;}
@@ -1317,7 +1326,7 @@ function locateMe(){
 function renderNearMe(){
   const host=document.getElementById("nearBody"); if(!host||!nearId)return;
   const r=REGIONS.find(x=>x.id===nearId); const d=todayStage(r); const col=colorOf(d.pct,d.phase);
-  const ti=todayFromSep1;
+  const ti=(previewMode||winterCalendar)?selIdx:todayFromSep1;
   const north=REGIONS.filter(x=>x.lat>r.lat+0.2).map(x=>({x,s:todayStage(x)})).sort((a,b)=>b.s.pct-a.s.pct)[0];
   const hasNorth=REGIONS.some(x=>x.lat>r.lat+0.2);
   let nudge="";
