@@ -42,7 +42,7 @@
   const token=location.pathname.split('/').filter(Boolean).pop()||new URLSearchParams(location.search).get('token')||'';
   const message=document.getElementById('message');
   try{
-    const r=await fetch('/api/flight-v3?action=share&token='+encodeURIComponent(token),{headers:{accept:'application/json'}});
+    const r=await fetch('/api/flight-assignment?flightV3=1&action=share&token='+encodeURIComponent(token),{headers:{accept:'application/json'}});
     const data=await r.json();
     if(!data.ok||!data.share){
       message.textContent=data.code==='expired'?'This pickup link has expired.':'This pickup link is unavailable.';
