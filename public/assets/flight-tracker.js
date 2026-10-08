@@ -1728,12 +1728,12 @@
       routeChoices.hidden = true;
     }
 
-    const params = new URLSearchParams({flight,date});
+    const params = new URLSearchParams({flight,date,unified:'1'});
     if (flightId) params.set('flightId',flightId);
     const sequence = ++requestSequence;
 
     try {
-      const response = await fetch('/api/flight-state?' + params.toString(), {headers:{accept:'application/json'}});
+      const response = await fetch('/api/flight-assignment?' + params.toString(), {headers:{accept:'application/json'}});
       const data = await response.json();
       if (sequence !== requestSequence || activeFlight !== flight || activeDate !== date) return;
 
