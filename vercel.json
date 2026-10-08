@@ -201,6 +201,19 @@
   ],
   "headers": [
     {
+      "source": "/flight-tracker-sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/flight-tracker/"
+        }
+      ]
+    },
+    {
       "source": "/assets/mackinac-island.:ext(css|js)",
       "headers": [
         {
@@ -429,9 +442,21 @@
     {
       "path": "/api/fall-color?view=cron",
       "schedule": "0 11 * * *"
+    },
+    {
+      "path": "/api/flight-assignment?flightV3=1&action=cron",
+      "schedule": "*/5 * * * *"
     }
   ],
   "rewrites": [
+    {
+      "source": "/flight-tracker/share/:token",
+      "destination": "/flight-tracker/share/index.html?token=:token"
+    },
+    {
+      "source": "/flight-tracker/share/:token/",
+      "destination": "/flight-tracker/share/index.html?token=:token"
+    },
     {
       "source": "/api/national-fall-region",
       "destination": "https://national-fall-color.vercel.app/api/national-fall-region"

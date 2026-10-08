@@ -31,6 +31,22 @@
   const answerSource = document.getElementById('answer-source');
   const answerNext = document.getElementById('answer-next');
   const answerDelay = document.getElementById('answer-delay');
+  const tripTimeline = document.getElementById('trip-timeline');
+  const flightActions = document.getElementById('flight-actions');
+  const watchButton = document.getElementById('watch-flight');
+  const shareButton = document.getElementById('share-flight');
+  const addConnectionButton = document.getElementById('add-connection');
+  const actionMessage = document.getElementById('flight-action-message');
+  const connectionPanel = document.getElementById('connection-panel');
+  const connectionForm = document.getElementById('connection-form');
+  const connectionFlightInput = document.getElementById('connection-flight');
+  const connectionDateInput = document.getElementById('connection-date');
+  const connectionResult = document.getElementById('connection-result');
+  const reliabilityPanel = document.getElementById('reliability-panel');
+  const reliabilityOnTime = document.getElementById('reliability-ontime');
+  const reliabilityDelay = document.getElementById('reliability-delay');
+  const reliabilityCancel = document.getElementById('reliability-cancel');
+  const reliabilityContext = document.getElementById('reliability-context');
   const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
@@ -77,6 +93,12 @@
   let operatingOccurrenceCacheKey = null;
   let operatingOccurrenceCacheValue = null;
   let operatingOccurrenceCacheAt = 0;
+  let currentUnifiedPayload = null;
+  let activeConnectionSpec = null;
+  let connectionRequestSequence = 0;
+  let reliabilityFetchKey = '';
+  let reliabilityFetchAt = 0;
+  const WATCH_STORAGE_PREFIX = 'flight-tracker:v3:watch:';
   const HOLD_LAST_LIVE_MS = 5 * 60 * 1000;
   const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
@@ -369,8 +391,15 @@
   function hideAnswer() {
     answerCard.hidden = true;
     answerJourney.hidden = true;
+    tripTimeline.hidden = true;
+    tripTimeline.replaceChildren();
     answerNext.hidden = true;
     answerDelay.hidden = true;
+    flightActions.hidden = true;
+    actionMessage.hidden = true;
+    connectionPanel.hidden = true;
+    connectionResult.hidden = true;
+    reliabilityPanel.hidden = true;
     routeChoices.hidden = true;
     routeChoices.replaceChildren();
   }
@@ -1600,6 +1629,397 @@
     }
   }
 
+  function setActionMessage(text,kind='neutral') {
+    actionMessage.textContent = text || '';
+    actionMessage.dataset.kind = kind;
+    actionMessage.hidden = !text;
+  }
+
+  function watchStorageKey() {
+    if (!activeFlight || !activeDate) return null;
+    return WATCH_STORAGE_PREFIX + [activeFlight,activeDate,activeFlightId || ''].join(':');
+  }
+
+  function readWatchRecord() {
+    const key = watchStorageKey();
+    if (!key) return null;
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; }
+  }
+
+  function writeWatchRecord(record) {
+    const key = watchStorageKey();
+    if (!key) return;
+    try {
+      if (record) localStorage.setItem(key,JSON.stringify(record));
+      else localStorage.removeItem(key);
+    } catch {}
+  }
+
+  function urlBase64ToUint8Array(value) {
+    const padding = '='.repeat((4 - String(value || '').length % 4) % 4);
+    const base64 = String(value || '').replace(/-/g,'+').replace(/_/g,'/') + padding;
+    const raw = atob(base64);
+    return Uint8Array.from(raw,ch => ch.charCodeAt(0));
+  }
+
+  async function postV3(action,body) {
+    const response = await fetch('/api/flight-assignment?flightV3=1&action=' + encodeURIComponent(action),{
+      method:'POST',
+      headers:{'content-type':'application/json',accept:'application/json'},
+      body:JSON.stringify(body)
+    });
+    return await response.json();
+  }
+
+  function updateActionControls(payload) {
+    const assignment = payload?.assignment;
+    const usable = Boolean(assignment?.flightNumber);
+    flightActions.hidden = !usable;
+    if (!usable) return;
+
+    let record = readWatchRecord();
+    const watchUnavailable = !('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window);
+    const complete = assignment?.flightStatus?.landed === true || assignment?.flightStatus?.canceled === true;
+    if (complete && record) {
+      writeWatchRecord(null);
+      record = null;
+    }
+    watchButton.disabled = watchUnavailable || complete;
+    watchButton.textContent = record ? 'Stop watching' : complete ? 'Flight complete' : 'Watch this flight';
+    watchButton.title = watchUnavailable ? 'Browser push notifications are not supported here.' : '';
+
+    shareButton.disabled = false;
+    addConnectionButton.disabled = false;
+  }
+
+  async function enableWatch() {
+    if (!currentUnifiedPayload?.assignment || !activeFlight || !activeDate) return;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
+      setActionMessage('Browser push notifications are not supported on this device.','warning');
+      return;
+    }
+
+    watchButton.disabled = true;
+    setActionMessage('Setting up flight alerts…');
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        setActionMessage('Notifications were not enabled. The flight is not being watched.','warning');
+        return;
+      }
+
+      const keyResponse = await fetch('/api/flight-assignment?flightV3=1&action=vapid-key',{headers:{accept:'application/json'}});
+      const keyData = await keyResponse.json();
+      if (!keyData?.ok || !keyData.publicKey) throw new Error('push unavailable');
+
+      const registration = await navigator.serviceWorker.register('/flight-tracker-sw.js',{scope:'/flight-tracker/'});
+      await navigator.serviceWorker.ready;
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly:true,
+          applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)
+        });
+      }
+
+      const result = await postV3('watch-subscribe',{
+        flight:activeFlight,
+        date:activeDate,
+        flightId:activeFlightId,
+        subscription:subscription.toJSON()
+      });
+      if (!result?.ok) throw new Error(result?.message || 'watch unavailable');
+
+      writeWatchRecord({
+        watchId:result.watchId,
+        manageToken:result.manageToken,
+        flight:activeFlight,
+        date:activeDate,
+        flightId:activeFlightId || null
+      });
+      updateActionControls(currentUnifiedPayload);
+      watchButton.textContent = 'Stop watching';
+      setActionMessage(result.message || 'Watching this flight.');
+    } catch (error) {
+      setActionMessage(String(error?.message || '').includes('denied')
+        ? 'Notifications were not enabled. The flight is not being watched.'
+        : 'Flight alerts are temporarily unavailable.','warning');
+    } finally {
+      watchButton.disabled = false;
+    }
+  }
+
+  async function disableWatch() {
+    const record = readWatchRecord();
+    if (!record) return;
+    watchButton.disabled = true;
+    try {
+      const result = await postV3('watch-unsubscribe',{
+        watchId:record.watchId,
+        manageToken:record.manageToken
+      });
+      if (!result?.ok) throw new Error('stop failed');
+      writeWatchRecord(null);
+      updateActionControls(currentUnifiedPayload);
+      watchButton.textContent = 'Watch this flight';
+      setActionMessage('Flight alerts stopped.');
+    } catch {
+      setActionMessage('Could not stop flight alerts right now.','warning');
+    } finally {
+      watchButton.disabled = false;
+    }
+  }
+
+  async function shareCurrentFlight() {
+    if (!currentUnifiedPayload?.assignment || !activeFlight || !activeDate) return;
+    shareButton.disabled = true;
+    setActionMessage('Creating a private pickup link…');
+    try {
+      const result = await postV3('share-create',{
+        flight:activeFlight,
+        date:activeDate,
+        flightId:activeFlightId
+      });
+      if (!result?.ok || !result.url) throw new Error('share unavailable');
+      const shareData = {
+        title:'Pickup update for ' + (currentUnifiedPayload.assignment.flightNumber || activeFlight),
+        text:'Latest arrival update',
+        url:result.url
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          setActionMessage('Pickup link ready. It expires six hours after arrival.');
+          return;
+        } catch (error) {
+          if (error?.name === 'AbortError') {
+            setActionMessage('Pickup link created: ' + result.url);
+            return;
+          }
+        }
+      }
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(result.url);
+        setActionMessage('Pickup link copied. It expires six hours after arrival.');
+      } else {
+        setActionMessage('Pickup link: ' + result.url);
+      }
+    } catch {
+      setActionMessage('The pickup link could not be created right now.','warning');
+    } finally {
+      shareButton.disabled = false;
+    }
+  }
+
+  function timelineClock(iso,timezone) {
+    return formatClock(iso,timezone) || 'Time not published';
+  }
+
+  function makeTimelineRow({key,time,label,status,current}) {
+    const row = document.createElement('div');
+    row.className = 'timeline-row' + (current ? ' is-current' : '');
+    row.dataset.stage = key;
+
+    const timeEl = document.createElement('div');
+    timeEl.className = 'timeline-time';
+    timeEl.textContent = time || '—';
+
+    const dot = document.createElement('span');
+    dot.className = 'timeline-dot';
+    dot.setAttribute('aria-hidden','true');
+
+    const copy = document.createElement('div');
+    copy.className = 'timeline-copy';
+    const labelEl = document.createElement('div');
+    labelEl.className = 'timeline-label';
+    labelEl.append(document.createTextNode(label));
+    if (current) {
+      const here = document.createElement('span');
+      here.className = 'timeline-here';
+      here.textContent = 'YOU ARE HERE';
+      labelEl.appendChild(here);
+    }
+    const statusEl = document.createElement('div');
+    statusEl.className = 'timeline-status';
+    statusEl.textContent = status;
+    copy.append(labelEl,statusEl);
+    row.append(timeEl,dot,copy);
+    return row;
+  }
+
+  function renderTripTimeline(payload) {
+    const assignment = assignmentData || payload?.assignment;
+    if (!assignment) {
+      tripTimeline.hidden = true;
+      return;
+    }
+
+    const inbound = payload?.recentInboundOccurrence || assignment?.recentInboundOccurrence || assignment?.previousAircraftOccurrence || null;
+    const state = payload?.renderedState || '';
+    const rows = [];
+    let currentStage = 'departure';
+    if (assignment?.flightStatus?.landed === true) currentStage = 'arrival';
+    else if (assignment?.flightStatus?.airborne === true || state === 'airborne-live' || state === 'airborne-status') currentStage = 'departure';
+    else if (state === 'parked-origin-confirmed' || state === 'ground-live') currentStage = 'turn';
+    else if (inbound?.flightStatus?.airborne === true && inbound?.flightStatus?.landed !== true) currentStage = 'inbound';
+
+    if (inbound) {
+      const inboundTime = inbound?.flightStatus?.landed === true
+        ? timelineClock(inbound?.schedule?.actualArrivalUTC || inbound?.schedule?.estimatedArrivalUTC,inbound?.destination?.timezone)
+        : timelineClock(inbound?.schedule?.estimatedArrivalUTC || inbound?.schedule?.scheduledArrivalUTC,inbound?.destination?.timezone);
+      const inboundStatus = inbound?.flightStatus?.landed === true
+        ? 'Arrived from ' + airportPlace(inbound.origin) + (inbound.flightNumber ? ' on ' + inbound.flightNumber : '') + '.'
+        : 'Inbound from ' + airportPlace(inbound.origin) + (inbound.flightNumber ? ' on ' + inbound.flightNumber : '') + '.';
+      rows.push({key:'inbound',time:inboundTime,label:'Inbound aircraft',status:inboundStatus});
+    } else {
+      rows.push({key:'inbound',time:'—',label:'Inbound aircraft',status:'No confirmed previous leg is available.'});
+    }
+
+    const turn = scheduledTurnMinutes(assignment,inbound);
+    const turnTime = inbound ? completedArrivalClock(inbound) || '—' : '—';
+    let turnStatus = 'Aircraft turn timing is not confirmed.';
+    if (state === 'parked-origin-confirmed' || state === 'ground-live') {
+      turnStatus = 'Aircraft is on the ground at ' + airportPlace(assignment.origin) +
+        (Number.isFinite(turn) ? ' · scheduled turn ' + turn + ' min.' : '.');
+    } else if (Number.isFinite(turn)) {
+      turnStatus = 'Scheduled aircraft turn: ' + turn + ' min.';
+    }
+    rows.push({key:'turn',time:turnTime,label:'Aircraft on ground / turn',status:turnStatus});
+
+    rows.push({
+      key:'boarding',
+      time:'Not published',
+      label:'Boarding',
+      status:assignment?.origin?.gate
+        ? 'Departure gate ' + assignment.origin.gate + ' is published; boarding time is not.'
+        : 'Boarding time and gate are not both published in the source.'
+    });
+
+    const departureIso = assignment?.schedule?.actualDepartureUTC || assignment?.schedule?.estimatedDepartureUTC || assignment?.schedule?.scheduledDepartureUTC;
+    rows.push({
+      key:'departure',
+      time:timelineClock(departureIso,assignment?.origin?.timezone),
+      label:'Departure',
+      status:(assignment?.flightStatus?.airborne ? 'Departed ' : 'Scheduled from ') + airportPlace(assignment.origin) +
+        (assignment?.origin?.gate ? ' · gate ' + assignment.origin.gate : '') +
+        (delayLabel(assignment) ? ' · ' + delayLabel(assignment) : '')
+    });
+
+    const arrivalIso = assignment?.schedule?.actualArrivalUTC || assignment?.schedule?.estimatedArrivalUTC || assignment?.schedule?.scheduledArrivalUTC;
+    rows.push({
+      key:'arrival',
+      time:timelineClock(arrivalIso,assignment?.destination?.timezone),
+      label:'Arrival',
+      status:(assignment?.flightStatus?.landed ? 'Arrived in ' : 'Expected in ') + airportPlace(assignment.destination) +
+        (assignment?.destination?.terminal ? ' · terminal ' + assignment.destination.terminal : '') +
+        (assignment?.destination?.gate ? ' · gate ' + assignment.destination.gate : '')
+    });
+
+    tripTimeline.replaceChildren(...rows.map(row => makeTimelineRow({...row,current:row.key === currentStage})));
+    tripTimeline.hidden = false;
+    answerJourney.hidden = true;
+  }
+
+  function renderConnectionResult(data) {
+    connectionResult.replaceChildren();
+    if (!data?.ok) {
+      connectionResult.textContent = data?.message || 'Connection timing is unavailable.';
+      connectionResult.hidden = false;
+      return;
+    }
+
+    const verdict = document.createElement('div');
+    verdict.className = 'connection-verdict';
+    verdict.textContent = data.label || 'Can’t score yet';
+    connectionResult.appendChild(verdict);
+
+    const math = document.createElement('div');
+    math.className = 'connection-math';
+    const arrivalLead = data.arrivalClock ? 'Inbound arrival ' + data.arrivalClock + '. ' : '';
+    const departureLead = data.departureClock ? 'Connection departs ' + data.departureClock + '. ' : '';
+    if (Number.isFinite(data.slackMinutes)) {
+      math.textContent = arrivalLead + departureLead + 'Layover ' + data.rawLayoverMinutes +
+        ' min − ' + data.deplaneMinutes + ' min deplane − ' + data.transfer.minutes +
+        ' min transfer = ' + data.slackMinutes + ' min slack.';
+    } else {
+      math.textContent = arrivalLead + departureLead + 'Layover ' + data.rawLayoverMinutes +
+        ' min − ' + data.deplaneMinutes + ' min deplane. Transfer time is unknown, so no verdict is shown.';
+    }
+    connectionResult.appendChild(math);
+
+    const basis = document.createElement('p');
+    basis.className = 'connection-note';
+    basis.textContent = data.transfer?.label || data.note || '';
+    connectionResult.appendChild(basis);
+
+    if (data.note && data.note !== basis.textContent) {
+      const note = document.createElement('p');
+      note.className = 'connection-note';
+      note.textContent = data.note;
+      connectionResult.appendChild(note);
+    }
+    connectionResult.hidden = false;
+  }
+
+  async function refreshConnection(force=false) {
+    if (!activeConnectionSpec || !activeFlight || !activeDate) return;
+    const now = Date.now();
+    if (!force && refreshConnection.lastAt && now - refreshConnection.lastAt < 30000) return;
+    refreshConnection.lastAt = now;
+    const sequence = ++connectionRequestSequence;
+    try {
+      const data = await postV3('connection',{
+        flight:activeFlight,
+        date:activeDate,
+        flightId:activeFlightId,
+        connectionFlight:activeConnectionSpec.flight,
+        connectionDate:activeConnectionSpec.date,
+        connectionFlightId:activeConnectionSpec.flightId || null
+      });
+      if (sequence !== connectionRequestSequence) return;
+      renderConnectionResult(data);
+    } catch {
+      if (sequence !== connectionRequestSequence) return;
+      connectionResult.textContent = 'Connection timing is temporarily unavailable.';
+      connectionResult.hidden = false;
+    }
+  }
+
+  async function loadReliability(payload) {
+    const assignment = payload?.assignment;
+    if (!assignment?.flightNumber || !activeFlight || !activeDate) return;
+    const key = [activeFlight,activeDate,activeFlightId || ''].join('|');
+    if (key === reliabilityFetchKey && Date.now() - reliabilityFetchAt < 5 * 60 * 1000) return;
+    reliabilityFetchKey = key;
+    reliabilityFetchAt = Date.now();
+    try {
+      const params = new URLSearchParams({action:'reliability',flight:activeFlight,date:activeDate});
+      if (activeFlightId) params.set('flightId',activeFlightId);
+      const response = await fetch('/api/flight-assignment?flightV3=1&' + params.toString(),{headers:{accept:'application/json'}});
+      const data = await response.json();
+      if (key !== [activeFlight,activeDate,activeFlightId || ''].join('|')) return;
+      if (!data?.available) {
+        reliabilityPanel.hidden = true;
+        return;
+      }
+      reliabilityOnTime.textContent = data.onTimePct + '%';
+      reliabilityDelay.textContent = data.averageDelayMinutes + ' min';
+      reliabilityCancel.textContent = data.cancellationRatePct + '%';
+      reliabilityContext.textContent = data.context + ' Based on ' + data.sampleSize + ' observed flights in the trailing 30 days.';
+      reliabilityPanel.hidden = false;
+    } catch {
+      reliabilityPanel.hidden = true;
+    }
+  }
+
+  function renderV3Companions(payload) {
+    if (payload !== currentUnifiedPayload) return;
+    renderTripTimeline(payload);
+    updateActionControls(payload);
+    loadReliability(payload);
+    refreshConnection(false);
+  }
+
   async function loadRegistration(registration, {silent=false}={}) {
     if (!registration) return;
     if (silent && refreshInFlight) return;
@@ -1651,6 +2071,10 @@
   function renderUnifiedFlightState(payload) {
     const assignment = payload?.assignment;
     if (!assignment) return;
+    currentUnifiedPayload = payload;
+    queueMicrotask(() => {
+      if (currentUnifiedPayload === payload) renderV3Companions(payload);
+    });
 
     if (payload?.recentInboundOccurrence) {
       assignmentData = attachInboundOccurrence(assignment,payload.recentInboundOccurrence);
@@ -1856,6 +2280,9 @@
     refreshInFlight = false;
     assignmentInFlight = false;
     assignmentData = null;
+    currentUnifiedPayload = null;
+    activeConnectionSpec = null;
+    connectionRequestSequence++;
     assignedTail = null;
     assignmentChangedFrom = null;
     operatingOccurrenceCacheKey = null;
@@ -1873,6 +2300,37 @@
     await loadAssignment(activeFlight,activeDate,activeFlightId,{silent:false});
     beginRefresh();
   }
+
+  watchButton.addEventListener('click', () => {
+    if (readWatchRecord()) disableWatch();
+    else enableWatch();
+  });
+
+  shareButton.addEventListener('click', shareCurrentFlight);
+
+  addConnectionButton.addEventListener('click', () => {
+    connectionPanel.hidden = !connectionPanel.hidden;
+    if (!connectionPanel.hidden) {
+      if (!connectionDateInput.value) connectionDateInput.value = activeDate || localDateString();
+      connectionFlightInput.focus();
+    }
+  });
+
+  connectionForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const flight = clean(connectionFlightInput.value);
+    const date = connectionDateInput.value || activeDate || localDateString();
+    if (!flight) {
+      connectionResult.textContent = 'Enter a connecting flight number like AA1234.';
+      connectionResult.hidden = false;
+      connectionFlightInput.focus();
+      return;
+    }
+    activeConnectionSpec = {flight,date,flightId:null};
+    connectionResult.textContent = 'Checking both flights…';
+    connectionResult.hidden = false;
+    refreshConnection(true);
+  });
 
   form.addEventListener('submit', event => {
     event.preventDefault();
