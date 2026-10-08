@@ -478,6 +478,18 @@
       "destination": "https://national-fall-color.vercel.app/fall-color/national/index.html"
     },
     {
+      "source": "/fall-color/destinations-sitemap.xml",
+      "destination": "https://national-fall-color.vercel.app/fall-color/destinations-sitemap.xml"
+    },
+    {
+      "source": "/fall-color/:region(new-england|great-smoky-mountains|colorado-aspens|adirondacks|north-shore-superior|ozarks|eastern-sierra|wasatch|columbia-river-gorge|door-county|poconos|texas-hill-country|west-virginia-highlands|catskills|shenandoah)/:destination",
+      "destination": "https://national-fall-color.vercel.app/fall-color/:region/:destination/index.html"
+    },
+    {
+      "source": "/fall-color/:region(new-england|great-smoky-mountains|colorado-aspens|adirondacks|north-shore-superior|ozarks|eastern-sierra|wasatch|columbia-river-gorge|door-county|poconos|texas-hill-country|west-virginia-highlands|catskills|shenandoah)/:destination/",
+      "destination": "https://national-fall-color.vercel.app/fall-color/:region/:destination/index.html"
+    },
+    {
       "source": "/fall-color/:slug(new-england|great-smoky-mountains|colorado-aspens|adirondacks|north-shore-superior|ozarks|eastern-sierra|wasatch|columbia-river-gorge|door-county|poconos|texas-hill-country|west-virginia-highlands|catskills|shenandoah)",
       "destination": "https://national-fall-color.vercel.app/fall-color/:slug/index.html"
     },
