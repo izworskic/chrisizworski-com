@@ -125,7 +125,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008f/);
+  assert.match(html, /flight-tracker\.js\?v=20261008g/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -890,7 +890,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008f/);
+  assert.match(html, /flight-tracker\.js\?v=20261008g/);
 });
 
 
@@ -1155,7 +1155,7 @@ test('new searches clear previous flight map labels before lookup and failures k
   assert.match(client,/routeLabel\.textContent = 'Checking current flight…'/);
   assert.match(client,/hideAnswer\(\);\s*resetMapForLookup\(activeFlight\);\s*await loadAssignment/s);
   assert.match(client,/function resetMapForFailure\(flight,label='No live position'\)/);
-  assert.match(client,/resetMapForFailure\(activeFlight\)/);
+  assert.match(client,/resetMapForFailure\(activeFlight(?:,|\))/);
 });
 
 test('future dates never attach a current-day direct aircraft merely because the flight number matches', () => {
@@ -1170,6 +1170,25 @@ test('last-confirmed inbound legs survive transient arrival-board failures', () 
   assert.match(source,/writeInboundCache\(date,tail,airport,result\.occurrence\)/);
   assert.match(source,/const embedded=embeddedInboundOccurrence\(assignment\)/);
   assert.match(source,/return await readInboundCache\(date,tail,airport\)/);
+});
+
+test('current-day assignment coverage gaps carry direct-live evidence without claiming an outage', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/liveCoverage:\{/);
+  assert.match(source,/checkedCallsigns:Array\.isArray\(direct\?\.checkedCallsigns\)/);
+  assert.match(source,/status:'assignment-not-covered'/);
+  assert.match(source,/coverage gap, not a temporary outage/);
+  assert.match(client,/Outside current live coverage/);
+  assert.match(client,/Direct operating callsigns were also checked for a fresh ADS-B position/);
+  assert.match(client,/The tracker will keep checking every 10 seconds/);
+  assert.match(client,/no position is estimated or simulated/);
+});
+
+test('reachable assignment source with no usable occurrence is classified as coverage, not flight nonexistence', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.doesNotMatch(source,/status:'not-found',[\s\S]{0,180}No scheduled occurrence of that flight was found for this date/);
+  assert.match(source,/The primary public source responded without a usable occurrence or aircraft assignment/);
+  assert.match(source,/not proof that the passenger flight does not exist/);
 });
 
 test('independent public-history parser resolves the exact same-day route and registration', () => {
