@@ -70,14 +70,14 @@ test('active delayed flight retains departure delay and inbound explanation', ()
 });
 
 test('completed leg outranks previous aircraft turn and strips timeline departure delay', () => {
-  assert.match(client,/if \(!assignmentArrivalConfirmed\(assignment\) && renderArrivedForTurn\(assignment\)\) return;/);
+  assert.match(client,/if \(!arrived && renderArrivedForTurn\(assignment\)\) return;/);
   assert.match(client,/const passengerFlightArrived = assignmentArrivalConfirmed\(assignment\);/);
   assert.match(client,/!passengerFlightArrived && delayLabel\(assignment\)/);
-  assert.match(client,/if \(assignmentArrivalConfirmed\(assignmentData\)\) \{\s*renderAssignedNoPosition\(/s);
+  assert.match(client,/const arrived = canonicalArrivalAssignment\(assignmentData\);[\s\S]*?if \(arrived\) \{[\s\S]*?renderAssignedNoPosition\(/s);
 });
 
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008h/);
+  assert.match(html,/flight-tracker\.js\?v=20261008i/);
 });
