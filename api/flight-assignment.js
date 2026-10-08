@@ -1601,7 +1601,7 @@ async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
   }
 
   const [live,recentInboundOccurrence] = await Promise.all([
-    require('./flight-tracker.js')._test.buildRegistrationSnapshot(assignment.tailNumber,airportCode(assignment.origin)),
+    require('./flight-tracker.js').buildRegistrationSnapshot(assignment.tailNumber,airportCode(assignment.origin)),
     resolveRecentInbound(assignment,date,nowMs)
   ]);
   const confirmedOperatingOccurrence = await resolveOperatingOccurrence(assignment,live,date);
