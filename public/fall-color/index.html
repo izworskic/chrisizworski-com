@@ -987,6 +987,13 @@ function renderStatewideStatus(){
   const body=document.getElementById("statewideStatusBody");
   const updated=document.getElementById("statewideStatusUpdated");
   if(!heading||!body||!updated)return;
+  if(winterCalendar){
+    document.getElementById("statewideStatusLabel").textContent="Season complete";
+    heading.textContent="Michigan's main fall-color season has ended.";
+    body.textContent="The map is intentionally gray-brown during the off-season. Review a previous fall date or preview fall "+nextPreviewYear+" for typical north-to-south timing. Neither is a current canopy observation.";
+    updated.hidden=true;
+    return;
+  }
   if(!inSeason||!LIVE_FRESHNESS)return;
   const ranked=REGIONS.filter(r=>LIVE_FRESHNESS.regionIds.includes(r.id)).map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
   const lead=ranked[0];
@@ -1414,7 +1421,7 @@ function init(){
   const scrub=document.getElementById("scrub");
   // Keep the 2026 Michigan seasonal window navigable even in January, when
   // today's index would otherwise create a slider min greater than its max.
-  scrub.min=String(Math.min(0,todayFromSep1));
+  scrub.min=String(winterCalendar?0:Math.min(0,todayFromSep1));
   scrub.max="98";
   scrub.value=String(Math.max(+scrub.min,Math.min(98,selIdx)));
   initChips(); wireNear(); syncScrub(); renderScrubAxis();
