@@ -916,7 +916,7 @@ function computeLiveOffsets(){
 function bandData(r){
   // Today with live data: full live blend (canopy + weather).
   if(winterMode)return {...stageOf(r,98),phase:"offseason",pct:0,live:false,projected:false};
-  if(isToday()&&LIVE&&inSeason){const ls=liveStageFor(r);return{...ls,live:true,projected:false};}
+  if(isToday()&&LIVE){const ls=liveStageFor(r);return{...ls,live:true,projected:false};}
   const s=stageOf(r,selIdx);
   // Future with live offsets: project forward FROM today's real state.
   // Only meaningful once the color season is open (todayIdx not null).
@@ -1301,7 +1301,7 @@ function nearestRegion(la,lo){
   return best;
 }
 function todayStage(r){return winterMode?{...stageOf(r,98),phase:"offseason",pct:0}:
-  previewMode?stageOf(r,selIdx):(inSeason&&LIVE&&Object.keys(LIVE).length)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
+  previewMode?stageOf(r,selIdx):(LIVE&&Object.keys(LIVE).length&&!winterCalendar)?liveStageFor(r):stageOf(r,Math.max(0,todayFromSep1));}
 function locateMe(){
   const btn=document.getElementById("nearBtn");
   if(!navigator.geolocation){document.getElementById("nearPick").style.display="block";return;}
