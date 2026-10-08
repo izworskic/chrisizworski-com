@@ -1343,7 +1343,7 @@ function renderNearMe(){
       '<a href="/fall-color/when-do-leaves-peak-in-michigan/">Full Michigan timeline</a>'+
     '</div>';
   const nm=document.getElementById("nearMap");
-  if(nm)nm.onclick=e=>{e.preventDefault();openBand=REGIONS.findIndex(x=>x.id===nearId);selIdx=todayFromSep1;syncScrub();setTab("now");renderAll();const b=document.getElementById("bands");if(b)b.scrollIntoView({behavior:"smooth",block:"start"});};
+  if(nm)nm.onclick=e=>{e.preventDefault();openBand=REGIONS.findIndex(x=>x.id===nearId);selIdx=winterMode?98:previewMode?0:todayFromSep1;syncScrub();setTab("now");renderAll();const b=document.getElementById("bands");if(b)b.scrollIntoView({behavior:"smooth",block:"start"});};
 }
 function wireNear(){
   const btn=document.getElementById("nearBtn"); if(btn)btn.onclick=locateMe;
@@ -1386,7 +1386,9 @@ function setTab(name){
 function initChips(){
   const dc=document.getElementById("dateChips");
   [["Late Sep",27],["Early Oct",37],["Mid Oct",44],["Late Oct",51],["Early Nov",65]].forEach(([l,v])=>{
-    const b=document.createElement("button");b.className="chip";b.textContent=l;b.onclick=()=>{selIdx=v;syncScrub();renderAll();rebuildIfShown();};dc.appendChild(b);
+    const b=document.createElement("button");b.className="chip";b.textContent=l;b.onclick=()=>{
+      winterMode=false;previewMode=winterCalendar;selIdx=v;syncScrub();renderAll();rebuildIfShown();
+    };dc.appendChild(b);
   });
   const vc=document.getElementById("vibeChips");
   ["A walk","On the water","A slow drive","Photographs","Easy outing","Birds too"].forEach((v,i)=>{
@@ -1396,13 +1398,27 @@ function initChips(){
   const sel=document.getElementById("planRegion");
   sel.innerHTML='<option>Anywhere in Michigan</option>'+REGIONS.map(r=>'<option>'+r.name+'</option>').join("");
 }
-function syncScrub(){document.getElementById("scrub").value=selIdx;}
+function syncScrub(){document.getElementById("scrub").value=Math.max(+document.getElementById("scrub").min,Math.min(98,selIdx));}
 function init(){
   document.getElementById("todayLabel").textContent=now.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const scrub=document.getElementById("scrub");
-  scrub.min=todayFromSep1; scrub.value=todayFromSep1;
+  // Keep the 2026 Michigan seasonal window navigable even in January, when
+  // today's index would otherwise create a slider min greater than its max.
+  scrub.min=String(Math.min(0,todayFromSep1));
+  scrub.max="98";
+  scrub.value=String(Math.max(+scrub.min,Math.min(98,selIdx)));
   initChips(); wireNear(); syncScrub(); renderScrubAxis();
-  document.getElementById("scrub").addEventListener("input",e=>{selIdx=+e.target.value;renderAll();});
+  document.getElementById("scrub").addEventListener("input",e=>{
+    winterMode=false;previewMode=false;selIdx=+e.target.value;renderAll();
+  });
+  document.getElementById("fallSeasonStatus").addEventListener("click",()=>{
+    if(!winterCalendar)return;
+    winterMode=true;previewMode=false;selIdx=98;syncScrub();renderAll();rebuildIfShown();
+  });
+  document.getElementById("fallPreviewNext").addEventListener("click",()=>{
+    if(!winterCalendar)return;
+    winterMode=false;previewMode=true;selIdx=0;syncScrub();renderAll();rebuildIfShown();
+  });
   document.getElementById("scrub").addEventListener("change",rebuildIfShown);
   const tabs=[...document.querySelectorAll(".tab")];
   tabs.forEach((t,index)=>{
