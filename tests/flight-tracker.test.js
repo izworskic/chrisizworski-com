@@ -125,7 +125,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008g/);
+  assert.match(html, /flight-tracker\.js\?v=20261008h/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -890,7 +890,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008g/);
+  assert.match(html, /flight-tracker\.js\?v=20261008h/);
 });
 
 
@@ -1163,20 +1163,25 @@ test('future dates never attach a current-day direct aircraft merely because the
   assert.doesNotMatch(client,/new URLSearchParams\(\{flight,date,unified:'1',liveNow:'1'\}\)/);
 });
 
-test('last-confirmed inbound legs survive transient arrival-board failures', () => {
+test('inbound recovery prefers stable v2 cache then exact-tail sequence before the airport board', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v2:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
   assert.match(source,/async function lookupRecentArrivalWithCache/);
-  assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);
-  assert.match(source,/const cached = await readInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport\)/);
   assert.match(source,/kind:'last-confirmed-inbound-cache'/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date\}\)/);
+  assert.match(source,/const cached=await readInboundCache\(date,tail,airport\)/);
+  assert.match(source,/lookupIndependentInboundByTail\(assignment,date\)/);
+  assert.match(source,/lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
+  assert.match(source,/sameTail\(result\.occurrence\?\.tailNumber,tail\)/);
+  assert.match(source,/sameAirport\(result\.occurrence\?\.destination,assignment\?\.origin\)/);
+  assert.ok(source.indexOf('const cached=await readInboundCache(date,tail,airport)') <
+    source.indexOf('lookupIndependentInboundByTail(assignment,date)'));
+  assert.ok(source.indexOf('lookupIndependentInboundByTail(assignment,date)') <
+    source.indexOf('lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs})'));
 });
 
 test('browser retains only validated same-tail inbound context for the active travel date', () => {
-  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:'/);
+  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:v2:'/);
   assert.match(client,/const INBOUND_STORAGE_MAX_AGE_MS = 12 \* 60 \* 60 \* 1000/);
   assert.match(client,/function validInboundOccurrence\(assignment, occurrence\)/);
   assert.match(client,/clean\(occurrence\?\.tailNumber\) !== clean\(assignment\?\.tailNumber\)/);
