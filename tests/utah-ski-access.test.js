@@ -9,7 +9,8 @@ const NOW=1791500000;
 const feeds=()=>({events:[],roadconditions:[],messagesigns:[]});
 const condition=(road='SR-210 Little Cottonwood Canyon',when=NOW)=>({Id:1,RoadwayName:road,LastUpdated:when,Restriction:'none'});
 const event=(over={})=>({ID:'x1',RoadwayName:'SR-210 Little Cottonwood Canyon',Location:'Little Cottonwood Canyon',
- StartDate:NOW-60,PlannedEndDate:NOW+3600,LastUpdated:NOW-30,IsFullClosure:true,...over});
+ StartDate:NOW-60,PlannedEndDate:NOW+3600,LastUpdated:NOW-30,IsFullClosure:true,
+ Description:'Little Cottonwood Canyon closed to all traffic',...over});
 const DATE_NOW=new Date('2027-01-09T16:00:00Z'); // 09:00 MST
 const status=(value,at='2027-01-09T15:55:00Z')=>({status:value,observedAt:at});
 const visitor=()=>({date:'2027-01-09',hour:9,passengers:2,pass:'IKON_BASE',
@@ -75,7 +76,7 @@ test('Alta Base pass is excluded and combined full Ikon limit is enforced',()=>{
 });
 test('Snowbird Base blackout does not falsely impose blanket Solitude denial',()=>{
  assert.equal(admission({resort:'snowbird',date:'2027-01-16',pass:'IKON_BASE'}).status,'BLACKOUT');
- assert.equal(admission({resort:'solitude',date:'2027-01-16',pass:'IKON_BASE'}).status,'UNKNOWN');
+ assert.equal(admission({resort:'solitude',date:'2027-01-16',pass:'IKON_BASE'}).status,'POTENTIALLY_ELIGIBLE');
 });
 test('bad occupancy and out-of-season trips are explicitly uncertain',()=>{
  assert.equal(parking({resort:'brighton',date:'2027-01-09',hour:9,passengers:0}).status,'UNKNOWN');
