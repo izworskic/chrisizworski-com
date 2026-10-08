@@ -164,6 +164,24 @@ test('visitor: public bus is a possible uphill exception, not guaranteed boardin
  const r=evaluate(i,'snowbird',localNow);
  assert.ok(r.unknowns.some(x=>x.code==='UPHILL_EXCEPTION_MAY_APPLY'));
 });
+test('visitor: UTA bus traveler is never instructed to reserve a personal parking spot',()=>{
+ const i=visitor();i.travelMode='UTA_BUS';
+ const r=evaluate(i,'brighton',localNow);
+ assert.equal(r.parking.status,'NOT_APPLICABLE_TRANSIT');
+ assert.ok(!r.actions.some(x=>x.code==='PARKING_RESERVATION_REQUIRED'));
+ assert.ok(!r.unknowns.some(x=>x.code==='PARKING_CAPACITY_UNKNOWN'));
+ assert.ok(r.unknowns.some(x=>x.code==='TRANSIT_SERVICE_AND_BOARDING_UNVERIFIED'));
+});
+test('visitor: UTA bus traveler during traction restriction is not asked to inspect their own tires',()=>{
+ const i=visitor();i.travelMode='UTA_BUS';i.roads.SR190={...current,status:'TRACTION_RESTRICTION'};
+ const r=evaluate(i,'brighton',localNow);
+ assert.ok(!r.unknowns.some(x=>x.code==='TRACTION_COMPLIANCE_UNVERIFIED'));
+ assert.ok(r.unknowns.some(x=>x.code==='TRANSIT_ROUTE_IMPACT_UNVERIFIED'));
+});
+test('visitor: full canyon closure still blocks public bus trip',()=>{
+ const i=visitor();i.travelMode='UTA_BUS';i.roads.SR190={...current,status:'CLOSED'};
+ assert.equal(evaluate(i,'brighton',localNow).verdict,'TRIP_NOT_FEASIBLE_AS_PLANNED');
+});
 test('visitor: changed future date cannot reuse the day-old road observation',()=>{
  const i=visitor();i.date='2027-01-10';i.roads.SR210={...current,status:'CLOSED'};
  const r=evaluate(i,'snowbird',localNow);
