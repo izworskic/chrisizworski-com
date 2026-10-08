@@ -17,7 +17,7 @@ const FR24_AIRCRAFT_PUBLIC_BASE = 'https://www.flightradar24.com/data/aircraft/'
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
 const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
-const INBOUND_CACHE_PREFIX = 'flight:inbound:v1:';
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v2:';
 const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
 const CODESHARE_CACHE_PREFIX = 'flight:codeshare:v1:';
 const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
@@ -1220,8 +1220,33 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
   const carrier = carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
   if (!tail || !airport || !carrier) return null;
 
+  // A confirmed v2 record is the stable traveler-facing story for this exact
+  // date + tail + departure airport. Old matcher records are excluded by the
+  // cache generation bump below.
+  const cached=await readInboundCache(date,tail,airport);
+  if (cached &&
+      sameTail(cached?.tailNumber,tail) &&
+      sameAirport(cached?.destination,assignment?.origin)) {
+    return cached;
+  }
+
+  // Exact aircraft history is stronger than the airport-board recovery feed:
+  // it proves the sequence on this registration immediately before the
+  // passenger flight. Use it before the board so a transient wrong board
+  // association cannot become the persisted inbound story.
+  const independent=await lookupIndependentInboundByTail(assignment,date);
+  if (independent &&
+      sameTail(independent?.tailNumber,tail) &&
+      sameAirport(independent?.destination,assignment?.origin)) {
+    await writeInboundCache(date,tail,airport,independent);
+    return independent;
+  }
+
   const result = await lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs});
-  if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
+  if (result?.status === 'found-inbound-occurrence' &&
+      result.occurrence &&
+      sameTail(result.occurrence?.tailNumber,tail) &&
+      sameAirport(result.occurrence?.destination,assignment?.origin)) {
     return result.occurrence;
   }
 
@@ -1231,13 +1256,7 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
     return embedded;
   }
 
-  const independent=await lookupIndependentInboundByTail(assignment,date);
-  if (independent) {
-    await writeInboundCache(date,tail,airport,independent);
-    return independent;
-  }
-
-  return await readInboundCache(date,tail,airport);
+  return null;
 }
 
 async function fetchCodeshareText(marketingFlight) {
