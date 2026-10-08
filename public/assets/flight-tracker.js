@@ -834,6 +834,24 @@
     return 'Last reported ' + mins + (mins === 1 ? ' minute ago' : ' minutes ago');
   }
 
+  function staleFixAgeText(observation) {
+    const seconds = Number.isFinite(observation?.displayAgeSeconds)
+      ? observation.displayAgeSeconds
+      : observation?.fixAgeSeconds;
+    if (!Number.isFinite(seconds)) return '';
+    if (seconds < 60) return 'Last seen ' + Math.max(1,Math.round(seconds)) + ' sec ago';
+    const minutes = Math.max(1,Math.round(seconds / 60));
+    if (minutes < 90) return 'Last seen ' + minutes + (minutes === 1 ? ' min ago' : ' min ago');
+    const hours = Math.max(1,Math.round(minutes / 60));
+    return 'Last seen ' + hours + (hours === 1 ? 'h ago' : 'h ago');
+  }
+
+  function displayedPositionAge(live) {
+    return Number.isFinite(live?.renderPositionAgeSeconds)
+      ? live.renderPositionAgeSeconds
+      : live?.aircraft?.positionAgeSeconds;
+  }
+
   function focusAirportLabel(relationship) {
     const ap = relationship?.airport;
     if (!ap) return null;
@@ -1033,6 +1051,17 @@
   }
 
   function renderLive(data) {
+    if (!data || data.positionFresh !== true) {
+      const age = data?.aircraft?.positionAgeSeconds;
+      renderUnavailable({
+        flightNumber:data?.flightNumber || activeFlight,
+        status:'stale-position',
+        message:Number.isFinite(age)
+          ? 'The newest aircraft position is stale (' + staleFixAgeText({fixAgeSeconds:age}) + '). It is not shown as live.'
+          : 'No fresh aircraft position is available.'
+      });
+      return;
+    }
     const ac = data.aircraft;
     lastLiveFlight = activeLiveKey || activeFlight;
     lastLiveSuccessAt = Date.now();
@@ -1061,7 +1090,7 @@
       formatSpeed(ac.speedKnots)
     ].filter(Boolean);
     detailLabel.textContent = details.join(' · ');
-    freshness.textContent = formatAge(ac.positionAgeSeconds);
+    freshness.textContent = formatAge(displayedPositionAge(data));
     freshness.dataset.stale = data.positionFresh ? 'false' : 'true';
     renderProgress(data);
 
@@ -1280,7 +1309,8 @@
     const eta = live?.route ? live?.progress?.landingEstimate : null;
     const userOrigin = assignment?.origin;
     const inboundToOrigin = currentRoute?.destination && userOrigin && sameAirport(currentRoute.destination,userOrigin);
-    const userFlightAirborne = assignment?.flightStatus?.airborne === true;
+    const userFlightAirborne = assignment?.flightStatus?.airborne === true &&
+      live?.reconciledState !== 'ground-live';
 
     if (!live?.route && currentRoute) {
       routeLabel.textContent = airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination);
@@ -1299,7 +1329,7 @@
       return;
     }
 
-    if (live?.aircraft?.onGround === true && landedPreviousAtOrigin(assignment)) {
+    if (live?.aircraft?.onGround === true && !live?.reconciledState && landedPreviousAtOrigin(assignment)) {
       renderArrivedForTurn(assignment);
       return;
     }
@@ -1391,7 +1421,7 @@
 
     const relationship = live?.focusAirportRelationship;
     const focusLabel = focusAirportLabel(relationship);
-    const reportLead = reportAgeLead(live?.aircraft?.positionAgeSeconds);
+    const reportLead = reportAgeLead(displayedPositionAge(live));
     const fact = aircraftFactSentence(live);
     const distanceText = relationshipDistanceText(relationship, focusLabel);
     const reportDetails = [distanceText, fact].filter(Boolean).join(', ');
@@ -1618,6 +1648,75 @@
     }
   }
 
+  function renderUnifiedFlightState(payload) {
+    const assignment = payload?.assignment;
+    if (!assignment) return;
+
+    if (payload?.recentInboundOccurrence) {
+      assignmentData = attachInboundOccurrence(assignment,payload.recentInboundOccurrence);
+    } else {
+      assignmentData = assignment;
+    }
+
+    const live = payload?.live && typeof payload.live === 'object'
+      ? {...payload.live}
+      : null;
+    if (live) {
+      live.confirmedOperatingOccurrence = payload?.confirmedOperatingOccurrence || live.confirmedOperatingOccurrence || null;
+      live.reconciledState = payload?.renderedState || null;
+      live.renderPositionAgeSeconds = payload?.observation?.displayAgeSeconds;
+    }
+
+    const staleAge = staleFixAgeText(payload?.observation);
+    const state = payload?.renderedState;
+
+    if (state === 'airborne-live' || state === 'ground-live') {
+      renderLive(live);
+      renderInboundAnswer(assignmentData,live);
+      return;
+    }
+
+    if (state === 'airborne-status') {
+      const route = assignmentRoute(assignmentData);
+      const delay = delayLabel(assignmentData);
+      const prior = assignmentData?.recentInboundOccurrence || assignmentData?.previousAircraftOccurrence || null;
+      setAnswer({
+        kicker:'YOUR FLIGHT IS AIRBORNE',
+        headline:(assignmentData.flightNumber || 'Your flight') + ' is airborne.',
+        summary:'The flight-status feed confirms departure.' +
+          (staleAge ? ' The newest aircraft position is stale (' + staleAge.toLowerCase() + '), so it is not shown as live.' : ' No fresh aircraft position is available right now.'),
+        pills:[route,delay,assignmentData.tailNumber,assignmentData?.equipment?.name].filter(Boolean),
+        next:'What happens next: the map stays empty until a fresh aircraft fix arrives. A stale ground report cannot move this flight back to the gate.',
+        delayWhy:delayWhyText(assignmentData,prior),
+        source:assignmentSourceText()
+      });
+      clearLiveMap();
+      flightLabel.textContent = assignmentData.tailNumber || assignmentData.flightNumber || 'Flight';
+      routeLabel.textContent = route || 'Airborne';
+      detailLabel.textContent = [assignmentData?.equipment?.name,assignmentData.tailNumber].filter(Boolean).join(' · ');
+      freshness.textContent = staleAge || 'Flight status confirms airborne';
+      freshness.dataset.stale = staleAge ? 'true' : 'false';
+      return;
+    }
+
+    if (state === 'parked-origin-confirmed') {
+      renderArrivedForTurn(assignmentData);
+      return;
+    }
+
+    if (state === 'landed-status' || state === 'assigned-no-position') {
+      renderAssignedNoPosition(assignmentData,live || {status:'not-found'});
+      if (staleAge) {
+        freshness.textContent = staleAge;
+        freshness.dataset.stale = 'true';
+      }
+      return;
+    }
+
+    renderAssignmentBase(assignmentData);
+    if (!assignmentData.tailNumber) clearLiveMap();
+  }
+
   async function loadAssignment(flight, date, flightId=null, {silent=false}={}) {
     if (!flight || !date) return;
     if (silent && assignmentInFlight) return;
@@ -1631,11 +1730,12 @@
 
     const params = new URLSearchParams({flight,date});
     if (flightId) params.set('flightId',flightId);
+    const sequence = ++requestSequence;
 
     try {
-      const response = await fetch('/api/flight-assignment?' + params.toString(), {headers:{accept:'application/json'}});
+      const response = await fetch('/api/flight-state?' + params.toString(), {headers:{accept:'application/json'}});
       const data = await response.json();
-      if (activeFlight !== flight || activeDate !== date) return;
+      if (sequence !== requestSequence || activeFlight !== flight || activeDate !== date) return;
 
       if (data.status === 'choose-flight') {
         renderRouteChoices(data);
@@ -1644,7 +1744,7 @@
         return;
       }
 
-      if (data.status !== 'found') {
+      if (data.status !== 'found' || !data.assignment) {
         if (!silent) {
           setAnswer({
             kicker:'AIRCRAFT ASSIGNMENT UNAVAILABLE',
@@ -1653,44 +1753,38 @@
             pills:[activeFlight,activeDate],
             source:'Live-flight fallback: ADSB.lol.'
           });
-          loadFlight(activeFlight,{silent:false});
+          await loadFlight(activeFlight,{silent:false});
         }
         return;
       }
 
       const priorTail = assignedTail;
-      assignmentData = data;
-      activeFlightId = data.flightId || activeFlightId;
-      assignedTail = data.tailNumber || null;
+      const assignment = data.assignment;
+      activeFlightId = assignment.flightId || activeFlightId;
+      assignedTail = assignment.tailNumber || null;
       assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail ? priorTail : null;
       syncUrl();
-      renderAssignmentBase(data);
-      submit.disabled = false;
-      submit.textContent = 'FIND MY PLANE';
-      setMessage('', 'neutral');
 
       if (assignmentChangedFrom) {
         resetHeldLive();
         clearLiveMap();
       }
 
-      if (assignedTail) {
-        await loadRegistration(assignedTail,{silent});
-      } else if (data.flightStatus?.airborne) {
-        await loadFlight(activeFlight,{silent});
-      } else if (!silent) {
-        clearLiveMap();
-      }
+      renderUnifiedFlightState(data);
+      submit.disabled = false;
+      submit.textContent = 'FIND MY PLANE';
+      setMessage('', 'neutral');
     } catch {
+      if (sequence !== requestSequence || activeFlight !== flight || activeDate !== date) return;
       if (!silent) {
         setAnswer({
-          kicker:'AIRCRAFT ASSIGNMENT UNAVAILABLE',
-          headline:'The assignment source is temporarily unavailable.',
-          summary:'We can still look for your flight itself if it is already airborne.',
+          kicker:'FLIGHT STATE UNAVAILABLE',
+          headline:'The combined flight-state source is temporarily unavailable.',
+          summary:'We will not combine stale aircraft data with airline status or guess whether the plane is airborne or at a gate.',
           pills:[activeFlight,activeDate],
-          source:'Live-flight fallback: ADSB.lol.'
+          source:'Flight status: FlightStats · Aircraft position: ADSB.lol.'
         });
-        await loadFlight(activeFlight,{silent:false});
+        clearLiveMap();
       }
     } finally {
       if (silent) assignmentInFlight = false;
@@ -1723,7 +1817,7 @@
       const data = await response.json();
 
       if (sequence !== requestSequence || activeFlight !== normalized) return;
-      if (data.status === 'live') {
+      if (data.status === 'live' && data.positionFresh === true) {
         renderLive(data);
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
         renderUnavailable(data);
@@ -1742,9 +1836,8 @@
   }
 
   function refreshCurrentAircraft() {
-    if (document.hidden) return;
-    if (assignedTail) loadRegistration(assignedTail,{silent:true});
-    else if (activeFlight) loadFlight(activeFlight,{silent:true});
+    if (document.hidden || !activeFlight || !activeDate) return;
+    loadAssignment(activeFlight,activeDate,activeFlightId,{silent:true});
   }
 
   function beginRefresh() {
@@ -1752,11 +1845,7 @@
     refreshTimer = setInterval(refreshCurrentAircraft,10000);
 
     if (assignmentTimer) clearInterval(assignmentTimer);
-    assignmentTimer = setInterval(() => {
-      if (!document.hidden && activeFlight && activeDate) {
-        loadAssignment(activeFlight,activeDate,activeFlightId,{silent:true});
-      }
-    },60000);
+    assignmentTimer = null;
   }
 
   async function startJourney(flight,date,flightId=null) {
@@ -1798,8 +1887,7 @@
   });
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden || !activeFlight) return;
-    if (activeDate) loadAssignment(activeFlight,activeDate,activeFlightId,{silent:true});
+    if (document.hidden || !activeFlight || !activeDate) return;
     refreshCurrentAircraft();
   });
 
