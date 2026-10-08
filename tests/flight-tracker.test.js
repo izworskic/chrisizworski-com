@@ -50,6 +50,15 @@ test('short flight numbers check common zero-padded operating callsigns without 
   assert.deepEqual(api.normalizeFlightInput('DL5').callsigns,['DAL5','DAL05','DAL005','DAL0005','EDV5','SKW5']);
 });
 
+test('public identity reader extracts FR24 search JSON from Jina text', () => {
+  const parsed=publicIdentity.parseReaderJson(
+    'Title:  \n\nURL Source: https://example.test\n\nMarkdown Content:\n' +
+    '{"results":[{"id":"DL3898","type":"schedule","match":"codeshare","detail":{"codeshare":"VS1671","flight":"DL3898","callsign":"SKW3898"}}]}'
+  );
+  assert.equal(parsed.results[0].detail.codeshare,'VS1671');
+  assert.equal(parsed.results[0].detail.flight,'DL3898');
+});
+
 test('public identity resolver maps exact codeshares and rejects begins-with false positives', () => {
   const vsFixture={
     results:[
