@@ -15,6 +15,14 @@ const FR24_PUBLIC_BASE = 'https://www.flightradar24.com/data/flights/';
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
 const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v1:';
+const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
+const CODESHARE_READER_BASE = 'https://r.jina.ai/https://info.flightmapper.net/flight/';
+const CODESHARE_TIMEOUT_MS = 6500;
+const FLIGHTMAPPER_AIRLINE_SLUGS = Object.freeze({
+  VS:'Virgin_Atlantic', KL:'KLM', AF:'Air_France', WS:'WestJet', BA:'British_Airways',
+  LH:'Lufthansa', AC:'Air_Canada', KE:'Korean_Air', QF:'Qantas', NZ:'Air_New_Zealand'
+});
 const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '';
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || '';
 let sourceConflictCount = 0;
@@ -121,6 +129,28 @@ async function writeAssignmentCache(flight,date,flightId,value) {
   if (!redisReady() || !value || !['found','choose-flight'].includes(value.status)) return;
   try {
     await redisCommand(['SET',assignmentCacheKey(flight,date,flightId),JSON.stringify(value),'EX',ASSIGNMENT_CACHE_TTL_SECONDS]);
+  } catch {}
+}
+
+function inboundCacheKey(date,tail,airport) {
+  return INBOUND_CACHE_PREFIX + [String(date || ''),clean(tail),clean(airport)].join(':');
+}
+
+async function readInboundCache(date,tail,airport) {
+  try {
+    const raw=await redisCommand(['GET',inboundCacheKey(date,tail,airport)]);
+    if (!raw) return null;
+    const parsed=JSON.parse(raw);
+    return parsed?.flightNumber && parsed?.tailNumber ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+async function writeInboundCache(date,tail,airport,occurrence) {
+  if (!redisReady() || !occurrence) return;
+  try {
+    await redisCommand(['SET',inboundCacheKey(date,tail,airport),JSON.stringify(occurrence),'EX',INBOUND_CACHE_TTL_SECONDS]);
   } catch {}
 }
 
