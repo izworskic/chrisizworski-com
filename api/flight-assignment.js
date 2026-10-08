@@ -444,6 +444,62 @@ async function lookupRecentArrivalByTail({ tail, airport, carrier, nowMs = Date.
   };
 }
 
+async function lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs = Date.now()}) {
+  const normalizedTail = clean(tail);
+  const normalizedAirport = normalizeAirportCode(airport);
+  const normalizedCarrier = normalizeCarrierCode(carrier);
+  const normalizedDate = normalizeDate(date);
+  if (!/^[A-Z0-9-]{3,10}$/.test(normalizedTail) || !normalizedAirport || !normalizedCarrier) {
+    return {status:'invalid',code:'invalid-inbound-recovery',message:'Invalid aircraft, airport, or airline code.'};
+  }
+
+  let liveResult = null;
+  let liveError = null;
+  try {
+    liveResult = await lookupRecentArrivalByTail({
+      tail:normalizedTail,
+      airport:normalizedAirport,
+      carrier:normalizedCarrier,
+      nowMs
+    });
+    if (liveResult?.status === 'found-inbound-occurrence' && liveResult.occurrence) {
+      if (normalizedDate) {
+        await writeInboundCache(normalizedDate.raw,normalizedTail,normalizedAirport,liveResult.occurrence);
+      }
+      return liveResult;
+    }
+  } catch (error) {
+    liveError = error;
+  }
+
+  if (normalizedDate) {
+    const cached = await readInboundCache(normalizedDate.raw,normalizedTail,normalizedAirport);
+    if (cached) {
+      return {
+        status:'found-inbound-occurrence',
+        tailNumber:normalizedTail,
+        airport:normalizedAirport,
+        occurrence:cached,
+        fallback:{
+          kind:'last-confirmed-inbound-cache',
+          stale:true,
+          note:'The arrivals source is unavailable or no longer exposes this leg; using the last confirmed same-tail arrival for this travel date.'
+        },
+        source:{name:'Last confirmed inbound cache',kind:'durable-last-confirmed'}
+      };
+    }
+  }
+
+  if (liveResult) return liveResult;
+  return {
+    status:'source-unavailable',
+    tailNumber:normalizedTail,
+    airport:normalizedAirport,
+    message:'Recent inbound-flight data is temporarily unavailable.',
+    sourceError:String(liveError?.message || liveError || '')
+  };
+}
+
 
 function sameTail(a, b) {
   return Boolean(a && b && clean(a) === clean(b));
@@ -1055,13 +1111,10 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
   const carrier = carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
   if (!tail || !airport || !carrier) return null;
 
-  try {
-    const result = await lookupRecentArrivalByTail({tail,airport,carrier,nowMs});
-    if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
-      await writeInboundCache(date,tail,airport,result.occurrence);
-      return result.occurrence;
-    }
-  } catch {}
+  const result = await lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs});
+  if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
+    return result.occurrence;
+  }
 
   const embedded=embeddedInboundOccurrence(assignment);
   if (embedded) {
@@ -1903,7 +1956,7 @@ module.exports = async function handler(req, res) {
     const body = unified
       ? await buildUnifiedFlightState({flight,date,flightId,allowDirectLive})
       : tail || airport || carrier
-        ? await lookupRecentArrivalByTail({tail,airport,carrier})
+        ? await lookupRecentArrivalWithCache({tail,airport,carrier,date})
         : await lookupAssignment({flight,date,flightId});
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
@@ -1932,6 +1985,7 @@ module.exports._test = {
   recentArrivalMatchScore,
   recentArrivalSummary,
   lookupRecentArrivalByTail,
+  lookupRecentArrivalWithCache,
   sameTail,
   isMatchingAirborneOccurrence,
   isMatchingPreviousOccurrence,

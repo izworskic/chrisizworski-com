@@ -103,6 +103,8 @@
   const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const LAST_KNOWN_STORAGE_PREFIX = 'flight-tracker:last-known:';
+  const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:';
+  const INBOUND_STORAGE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const OPERATING_OCCURRENCE_CACHE_MS = 45 * 1000;
 
   const $ = value => value == null || value === '' ? null : value;
@@ -630,29 +632,75 @@
     }
   }
 
+  function inboundStorageKey(assignment) {
+    const tail = clean(assignment?.tailNumber);
+    const airport = airportCodeAny(assignment?.origin);
+    if (!activeDate || !tail || !airport) return null;
+    return INBOUND_STORAGE_PREFIX + [activeDate,tail,airport].join(':');
+  }
+
+  function validInboundOccurrence(assignment, occurrence) {
+    if (!assignment || !occurrence) return false;
+    if (clean(occurrence?.tailNumber) !== clean(assignment?.tailNumber)) return false;
+    if (!sameAirport(occurrence?.destination, assignment?.origin)) return false;
+    return occurrence?.flightStatus?.landed === true ||
+      (occurrence?.flightStatus?.airborne === true && occurrence?.flightStatus?.landed !== true);
+  }
+
+  function saveInboundOccurrence(assignment, occurrence) {
+    const key = inboundStorageKey(assignment);
+    if (!key || !validInboundOccurrence(assignment,occurrence)) return;
+    try {
+      localStorage.setItem(key,JSON.stringify({
+        version:1,
+        savedAt:Date.now(),
+        date:activeDate,
+        tailNumber:clean(assignment.tailNumber),
+        airport:airportCodeAny(assignment.origin),
+        occurrence
+      }));
+    } catch {}
+  }
+
+  function loadInboundOccurrence(assignment) {
+    const key = inboundStorageKey(assignment);
+    if (!key) return null;
+    try {
+      const parsed=JSON.parse(localStorage.getItem(key) || 'null');
+      if (!parsed || parsed.version !== 1 || parsed.date !== activeDate) return null;
+      if (!Number.isFinite(parsed.savedAt) || Date.now() - parsed.savedAt > INBOUND_STORAGE_MAX_AGE_MS) return null;
+      return validInboundOccurrence(assignment,parsed.occurrence) ? parsed.occurrence : null;
+    } catch {
+      return null;
+    }
+  }
+
   async function resolveRecentInboundOccurrence(assignment) {
     const existing = assignment?.recentInboundOccurrence;
-    if (existing && clean(existing?.tailNumber) === clean(assignment?.tailNumber) &&
-        sameAirport(existing?.destination, assignment?.origin)) return existing;
+    if (validInboundOccurrence(assignment,existing)) {
+      saveInboundOccurrence(assignment,existing);
+      return existing;
+    }
     if (!assignment?.tailNumber || !assignment?.origin || activeDate !== localDateString()) return null;
-    const carrier = carrierCodeFromFlight(assignment.flightNumber);
+    const carrier = carrierCodeFromFlight(assignment.operatingFlightNumber || assignment.flightNumber);
     const airport = airportCodeAny(assignment.origin);
-    if (!carrier || !airport) return null;
+    if (!carrier || !airport) return loadInboundOccurrence(assignment);
     try {
       const params = new URLSearchParams({
         tail:assignment.tailNumber,
         airport,
-        carrier
+        carrier,
+        date:activeDate
       });
       const response = await fetch('/api/flight-assignment?' + params.toString(), {headers:{accept:'application/json'}});
       const result = await response.json();
-      if (result?.status !== 'found-inbound-occurrence') return null;
+      if (result?.status !== 'found-inbound-occurrence') return loadInboundOccurrence(assignment);
       const occurrence = result.occurrence;
-      if (clean(occurrence?.tailNumber) !== clean(assignment.tailNumber)) return null;
-      if (!sameAirport(occurrence?.destination, assignment.origin)) return null;
+      if (!validInboundOccurrence(assignment,occurrence)) return loadInboundOccurrence(assignment);
+      saveInboundOccurrence(assignment,occurrence);
       return occurrence;
     } catch {
-      return null;
+      return loadInboundOccurrence(assignment);
     }
   }
 

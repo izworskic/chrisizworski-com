@@ -1167,9 +1167,25 @@ test('last-confirmed inbound legs survive transient arrival-board failures', () 
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
-  assert.match(source,/writeInboundCache\(date,tail,airport,result\.occurrence\)/);
-  assert.match(source,/const embedded=embeddedInboundOccurrence\(assignment\)/);
-  assert.match(source,/return await readInboundCache\(date,tail,airport\)/);
+  assert.match(source,/async function lookupRecentArrivalWithCache/);
+  assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);
+  assert.match(source,/const cached = await readInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport\)/);
+  assert.match(source,/kind:'last-confirmed-inbound-cache'/);
+  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
+  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date\}\)/);
+});
+
+test('browser retains only validated same-tail inbound context for the active travel date', () => {
+  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:'/);
+  assert.match(client,/const INBOUND_STORAGE_MAX_AGE_MS = 12 \* 60 \* 60 \* 1000/);
+  assert.match(client,/function validInboundOccurrence\(assignment, occurrence\)/);
+  assert.match(client,/clean\(occurrence\?\.tailNumber\) !== clean\(assignment\?\.tailNumber\)/);
+  assert.match(client,/!sameAirport\(occurrence\?\.destination, assignment\?\.origin\)/);
+  assert.match(client,/function saveInboundOccurrence\(assignment, occurrence\)/);
+  assert.match(client,/function loadInboundOccurrence\(assignment\)/);
+  assert.match(client,/date:activeDate/);
+  assert.match(client,/return loadInboundOccurrence\(assignment\)/);
+  assert.match(client,/saveInboundOccurrence\(assignment,occurrence\)/);
 });
 
 test('current-day assignment coverage gaps carry direct-live evidence without claiming an outage', () => {
