@@ -450,6 +450,10 @@ async function removeWatch(body) {
 
 async function processWatch(watch,state,nowMs = Date.now()) {
   const window = watchWindow(state,nowMs);
+  if ((watch.alertCount || 0) >= MAX_ALERTS) {
+    await redis(['ZREM',WATCH_INDEX,watch.id]);
+    return {id:watch.id,capped:true,alerts:0};
+  }
   if (state.assignment.flightStatus?.landed === true || window.reason === 'expired') {
     await redis(['ZREM',WATCH_INDEX,watch.id]);
     watch.lastSnapshot = snapshotState(state);
@@ -500,6 +504,9 @@ async function runWatchCron(nowMs = Date.now()) {
   const watches = rawWatches.map(raw => {
     try { return raw ? JSON.parse(raw) : null; } catch { return null; }
   }).filter(Boolean);
+  const liveIds = new Set(watches.map(watch => watch.id));
+  const missingIds = ids.filter(id => !liveIds.has(id));
+  if (missingIds.length) await redis(['ZREM',WATCH_INDEX,...missingIds]).catch(() => {});
   const groups = new Map();
   for (const watch of watches) {
     const i = watch.identity || {};
@@ -601,6 +608,7 @@ async function createShare(body) {
   const record = {
     identity,
     createdAt:new Date().toISOString(),
+    expiresAt:new Date(expiresAtMs).toISOString(),
     fallback:simpleShareState(state)
   };
   const ttl = Math.max(3600,Math.ceil((expiresAtMs + 18 * 60 * 60 * 1000 - Date.now()) / 1000));
@@ -618,8 +626,13 @@ async function getShare(token) {
   const key = SHARE_PREFIX + token;
   const record = await redisGetJson(key);
   if (!record) return {ok:false,code:'not-found'};
+  const storedExpiryMs = safeDateMs(record.expiresAt);
+  if (storedExpiryMs && Date.now() > storedExpiryMs) {
+    await redis(['DEL',key]).catch(() => {});
+    return {ok:false,code:'expired'};
+  }
   const state = await fetchUnifiedFlight(record.identity).catch(() => null);
-  if (!state) return {ok:true,stale:true,share:record.fallback,expiresAt:null};
+  if (!state) return {ok:true,stale:true,share:record.fallback,expiresAt:record.expiresAt || null};
   const expiresAtMs = shareExpiryMs(state);
   if (Date.now() > expiresAtMs) {
     await redis(['DEL',key]).catch(() => {});
@@ -627,6 +640,7 @@ async function getShare(token) {
   }
   const share = simpleShareState(state);
   record.fallback = share;
+  record.expiresAt = new Date(expiresAtMs).toISOString();
   await redisSetJson(key,record,Math.max(3600,Math.ceil((expiresAtMs + 18 * 60 * 60 * 1000 - Date.now())/1000))).catch(() => {});
   return {ok:true,stale:false,share,expiresAt:new Date(expiresAtMs).toISOString()};
 }
