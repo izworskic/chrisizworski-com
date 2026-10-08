@@ -25,6 +25,8 @@ function base(overrides = {}) {
       access: { parkClosed: false, closureUnknown: false, closedViewpoints: [] },
       weather: { hourly: [
         { startTime: '2026-09-28T10:00:00Z', endTime: '2026-09-28T11:00:00Z', shortForecast: 'Rain Showers and Fog', precipProbability: 75, temperature: 58, temperatureUnit: 'F' },
+        { startTime: '2026-09-28T11:00:00Z', endTime: '2026-09-28T12:00:00Z', shortForecast: 'Mostly Cloudy', precipProbability: 30 },
+        { startTime: '2026-09-28T13:00:00Z', endTime: '2026-09-28T14:00:00Z', shortForecast: 'Mostly Cloudy', precipProbability: 30 },
         { startTime: '2026-09-28T15:00:00Z', endTime: '2026-09-28T16:00:00Z', shortForecast: 'Partly Cloudy', precipProbability: 15, temperature: 62, temperatureUnit: 'F' },
         { startTime: '2026-09-29T18:00:00Z', endTime: '2026-09-29T19:00:00Z', shortForecast: 'Mostly Clear', precipProbability: 5, temperature: 63, temperatureUnit: 'F' }
       ] },
@@ -50,6 +52,51 @@ test('current fountaining language is classified as active even if historical co
 test('historical fountaining mention alone does not create an active fountain state', () => {
   const t = 'The previous fountaining episode lasted nine hours. Small overflows and strong glow continue now.';
   assert.equal(classifyActivity(t).state, 'ELEVATED');
+});
+
+test('a past episode beginning and current negation cannot become live fountaining', () => {
+  assert.equal(classifyActivity('The previous fountaining episode began on August 25 and ended that evening. No fountaining is occurring now.').state, 'PAUSED');
+  assert.notEqual(classifyActivity('Since the end of fountaining episode 54, inflation patterns have changed. Possible Outcomes: Eruption returns to fountaining. Lava flows could continue.').state, 'FOUNTAINING');
+  assert.notEqual(classifyActivity('Inflation continues. Possible Outcomes: New lava flows and overflows could occur.').state, 'ELEVATED');
+  assert.equal(classifyActivity('STATUS REPORT Summary: Imagery shows a shallow magma intrusion. Emplacement of the Dike Intrusion: Previous overflows were visible. Interpretation: Fountaining began in an earlier episode.').state, 'UNREST');
+});
+
+test('all listed viewpoints closed overrides current fountaining', () => {
+  const { input, now } = base();
+  input.eruption.text = 'Lava fountains are ongoing.';
+  input.access.closedViewpoints = ['uekahuna','kilauea-overlook','keanakakoi'];
+  const d = buildDecision(input, {travel:'here'}, now);
+  assert.equal(d.state, 'NO LISTED VIEWPOINT');
+  assert.equal(d.viewpoint, null);
+});
+
+test('missing weather and air do not permit a confident live travel recommendation', () => {
+  const { input, now } = base();
+  input.eruption.text = 'Lava fountains are ongoing.';
+  input.weather.hourly = [];
+  input.sources.weather.status = 'offline';
+  assert.equal(buildDecision(input, {travel:'one'}, now).state, 'VERIFY WEATHER');
+  input.weather.hourly = [{startTime:'2026-09-28T09:00:00Z',endTime:'2026-09-28T12:00:00Z',shortForecast:'Clear',precipProbability:0}];
+  input.sources.weather.status = 'ok';
+  input.sources.air = {status:'offline'};
+  assert.equal(buildDecision(input, {travel:'one'}, now).state, 'VERIFY AIR');
+  input.sources.air.status = 'ok';
+  input.air = {advisoryDetected:true};
+  assert.equal(buildDecision(input, {travel:'one'}, now).state, 'CHECK AIR');
+});
+
+test('arrival weather governs travel and the chosen window cannot end before arrival', () => {
+  const { input, now } = base();
+  input.eruption.text = 'Lava fountains are ongoing.';
+  input.weather.hourly = [
+    {startTime:'2026-09-28T10:00:00Z',endTime:'2026-09-28T11:00:00Z',shortForecast:'Clear',precipProbability:0},
+    {startTime:'2026-09-28T11:00:00Z',endTime:'2026-09-28T12:00:00Z',shortForecast:'Rain Showers and Fog',precipProbability:90}
+  ];
+  const d = buildDecision(input, {travel:'one'}, now);
+  assert.equal(d.state, 'MIXED');
+  assert.equal(d.wxBest.startTime, '2026-09-28T11:00:00Z');
+  input.eruption.observedAt = '2026-09-28T12:00:00Z';
+  assert.equal(buildDecision(input, {travel:'one'}, now).state, 'LIMITED');
 });
 
 test('honors official inability to model a fountain window', () => {
@@ -118,6 +165,16 @@ test('missing precipitation remains unknown and cannot improve weather score', (
   const row = { startTime:'2026-09-28T15:00:00Z', endTime:'2026-09-28T16:00:00Z', shortForecast:'Clear' };
   assert.equal(weatherScore(row), null);
   assert.equal(bestWeatherWindow([row], new Date('2026-09-28T10:00:00Z'), 'now'), null);
+});
+
+test('clear weather outranks partial cloud cover without double-counting adjectives', () => {
+  const score = shortForecast => weatherScore({shortForecast,precipProbability:0});
+  assert.ok(score('Sunny') > score('Mostly Sunny'));
+  assert.ok(score('Mostly Sunny') > score('Partly Cloudy'));
+  assert.ok(score('Partly Cloudy') > score('Mostly Cloudy'));
+  const d = new Date('2026-09-28T11:20:00Z');
+  const window = bestWeatherWindow([{startTime:'2026-09-28T11:00:00Z',endTime:'2026-09-28T12:00:00Z',shortForecast:'Clear',precipProbability:0}],new Date('2026-09-28T10:20:00Z'),'now',d);
+  assert.equal(window.startTime,d.toISOString());
 });
 
 test('tomorrow planning uses tomorrow weather and never returns GO NOW from current fountaining', () => {
@@ -236,7 +293,7 @@ function installOfficialFetch({dailyText,messageText}) {
     if (url.includes('/planyourvisit/conditions.htm')) return fakeResponse('<main>National Park Service Current Conditions for Hawaiʻi Volcanoes National Park. Visitors should check official alerts before travel.</main>');
     if (url.includes('/planyourvisit/eruption-viewing.htm')) return fakeResponse('<main>National Park Service eruption viewing information.</main>');
     if (url.includes('api.weather.gov/points/')) return fakeResponse({properties:{forecastHourly:'https://api.weather.gov/gridpoints/HFO/1,1/forecast/hourly'}}, true);
-    if (url.includes('/forecast/hourly')) return fakeResponse({properties:{updateTime:new Date().toISOString(),periods:[{number:1,startTime:new Date(Date.now()-5*60*1000).toISOString(),endTime:new Date(Date.now()+55*60*1000).toISOString(),temperature:61,temperatureUnit:'F',probabilityOfPrecipitation:{value:60},windSpeed:'8 mph',windDirection:'NE',shortForecast:'Rain Showers and Fog',isDaytime:true},{number:2,startTime:new Date(Date.now()+60*60*1000).toISOString(),endTime:new Date(Date.now()+2*60*60*1000).toISOString(),temperature:60,temperatureUnit:'F',probabilityOfPrecipitation:{value:10},windSpeed:'6 mph',windDirection:'NE',shortForecast:'Partly Cloudy',isDaytime:true}]}}, true);
+    if (url.includes('/forecast/hourly')) return fakeResponse({properties:{updateTime:new Date().toISOString(),periods:[{number:1,startTime:new Date(Date.now()-5*60*1000).toISOString(),endTime:new Date(Date.now()+55*60*1000).toISOString(),temperature:61,temperatureUnit:'F',probabilityOfPrecipitation:{value:60},windSpeed:'8 mph',windDirection:'NE',shortForecast:'Rain Showers and Fog',isDaytime:true},{number:2,startTime:new Date(Date.now()+60*60*1000).toISOString(),endTime:new Date(Date.now()+2*60*60*1000).toISOString(),temperature:60,temperatureUnit:'F',probabilityOfPrecipitation:{value:10},windSpeed:'6 mph',windDirection:'NE',shortForecast:'Partly Cloudy',isDaytime:true},{number:3,startTime:new Date(Date.now()+175*60*1000).toISOString(),endTime:new Date(Date.now()+4*60*60*1000).toISOString(),shortForecast:'Mostly Cloudy',probabilityOfPrecipitation:{value:30}}]}}, true);
     if (url.includes('air.doh.hawaii.gov/HawaiiSO2/')) return fakeResponse(dohFixture());
     if (url.includes('hans-public')) return fakeResponse({notice:'fallback should not be needed',sent:new Date().toISOString()}, true);
     throw new Error('unexpected URL '+url);
@@ -292,4 +349,27 @@ test('newer HVO pause message overrides contradictory older daily fountaining', 
   assert.equal(payload.eruption.activity.state,'PAUSED');
   assert.equal(payload.decision.state,'WAIT');
   assert.match(payload.sources.hvo.note,/short message controls current activity/i);
+});
+
+test('official status reports remain usable when the short-message page fails', async () => {
+  const handler = require('../api/kilauea-live');
+  const daily = hvoStamps(20);
+  const restore = installOfficialFetch({
+    messageText:'',
+    dailyText:`HAWAIIAN VOLCANO OBSERVATORY STATUS REPORT U.S. Geological Survey ${daily.daily} HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Inflation continues at the summit. Possible Outcomes: Lava fountains are ongoing in a hypothetical scenario. It is not possible to forecast an exact outcome.`
+  });
+  const original = global.fetch;
+  global.fetch = async url => {
+    if (String(url).includes('/volcano-updates/volcano-messages')) throw new Error('temporary message outage');
+    if (String(url).includes('hans-public')) throw new Error('fallback should not be used');
+    return original(url);
+  };
+  let payload;
+  const res = {setHeader(){},status(){return this},json(v){payload=v;return v}};
+  try { await handler({method:'GET',query:{travel:'here'}},res); } finally { restore(); }
+  assert.equal(payload.sources.hvo.status, 'ok');
+  assert.equal(payload.sources.hvo.observedAt, payload.eruption.dailyObservedAt);
+  assert.equal(payload.eruption.activity.state, 'UNREST');
+  assert.equal(payload.eruption.forecastability.state, 'UNPREDICTABLE');
+  assert.match(payload.sources.hvo.note, /status report/);
 });
