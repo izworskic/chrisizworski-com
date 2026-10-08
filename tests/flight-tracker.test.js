@@ -42,6 +42,13 @@ test('direct airline coverage includes verified major international and nearby c
   assert.deepEqual(api.normalizeFlightInput('UA123').callsigns, ['UAL123']);
 });
 
+test('short flight numbers check common zero-padded operating callsigns without broadening normal numbers', () => {
+  assert.deepEqual(api.callsignSuffixVariants('5'),['5','05','005','0005']);
+  assert.deepEqual(api.callsignSuffixVariants('86'),['86','086','0086']);
+  assert.deepEqual(api.callsignSuffixVariants('123'),['123']);
+  assert.deepEqual(api.normalizeFlightInput('DL5').callsigns,['DAL5','DAL05','DAL005','DAL0005','EDV5','SKW5']);
+});
+
 test('common aircraft type designators become passenger-readable names and unknown types stay truthful', () => {
   assert.equal(api.aircraftTypeName('A321'), 'Airbus A321');
   assert.equal(api.aircraftTypeName('B38M'), 'Boeing 737 MAX 8');
@@ -549,7 +556,10 @@ test('assignment source remains a bounded best-effort dependency with live-fligh
   assert.match(source, /Aircraft assignments can change before departure/);
   assert.match(source, /last-good-assignment-cache/);
   assert.match(client, /ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE/);
-  assert.match(client, /loadFlight\(activeFlight,\{silent:false,preserveUnavailableAnswer:sourceDown\}\)/);
+  assert.match(client, /if \(date === localDateString\(\)\) params\.set\('liveNow','1'\)/);
+  assert.match(source, /allowDirectLive/);
+  assert.match(source, /directLiveSnapshot\(flight\)/);
+  assert.match(source, /directLiveIsAirborne/);
 });
 
 
@@ -790,7 +800,7 @@ test('inbound and landed states show NOW to YOUR FLIGHT relationship while ordin
 
 test('ergonomic polish removes duplicate tail registration from answer pills', () => {
   assert.match(client, /const identity = live\?\.aircraft\?\.aircraftTypeName \|\| live\?\.aircraft\?\.aircraftType/);
-  assert.match(client, /const pills = \[route, delay, tail, identity\]/);
+  assert.match(client, /const pills = \[route, delay, codesharePill\(assignment\), tail, identity\]/);
   assert.doesNotMatch(client, /const identity = aircraftIdentity\(live\?\.aircraft\)/);
 });
 
@@ -1075,13 +1085,16 @@ test('Delta live fallback checks mainline and regional operating callsigns', () 
   assert.equal(tracker.normalizeOperatingPrefix('OO'),'SKW');
 });
 
-test('assignment source outage is distinct from a normally scheduled flight with an assigned tail', () => {
+test('assignment source outage is distinct from coverage gaps and confirmed scheduled assignments', () => {
   assert.match(client,/ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE/);
   assert.match(client,/We cannot confirm the assigned aircraft right now/);
-  assert.match(client,/preserveUnavailableAnswer:sourceDown/);
+  assert.match(client,/AIRCRAFT ASSIGNMENT COVERAGE NOT AVAILABLE/);
+  assert.match(client,/We do not have published assignment coverage for this flight and date/);
   assert.match(client,/FLIGHT NOT AIRBORNE YET · ASSIGNED AIRCRAFT/);
   assert.match(client,/Your flight has not departed yet\. .* is the assigned aircraft/);
-  assert.match(client,/Checked ' \+ data\.checkedCallsigns\.join/);
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/status:'assignment-not-covered'/);
+  assert.match(source,/This is a coverage gap, not a temporary outage/);
 });
 
 test('assignment lookup has durable last-good cache and base-page fallback before declaring source unavailable', () => {
@@ -1092,6 +1105,71 @@ test('assignment lookup has durable last-good cache and base-page fallback befor
   assert.match(source,/last-good-assignment-cache/);
   assert.match(source,/assignment-source-unavailable/);
   assert.match(source,/live-operating-callsigns/);
+});
+
+test('current-day unified lookup can render a fresh direct callsign without an assignment feed', () => {
+  const live={
+    status:'live',
+    flightNumber:'DL5',
+    positionFresh:true,
+    aircraft:{
+      callsign:'DAL005',registration:'N501DN',aircraftType:'A359',aircraftTypeName:'Airbus A350-900',
+      lat:44,lon:-60,onGround:false,positionAgeSeconds:5
+    },
+    route:{
+      origin:{iata:'JFK',city:'New York',lat:40.64,lon:-73.78},
+      destination:{iata:'LHR',city:'London',lat:51.47,lon:-0.45},
+      plausible:true
+    }
+  };
+  assert.equal(assignmentApi.directLiveIsAirborne(live),true);
+  const assignment=assignmentApi.directLiveAssignment('DL5',live);
+  assert.equal(assignment.flightNumber,'DL5');
+  assert.equal(assignment.tailNumber,'N501DN');
+  assert.equal(assignment.flightStatus.airborne,true);
+  const reconciled=assignmentApi.reconcileFlightState({
+    assignment,live,recentInboundOccurrence:null,nowMs:Date.parse('2026-10-08T17:00:00Z')
+  });
+  assert.equal(reconciled.renderedState,'airborne-live');
+});
+
+test('codeshare parser and alias preserve ticket number while exposing operating flight', () => {
+  const markdown='Virgin Atlantic VS1671\\nCodeshare flight, operated by Delta Air Lines. ([DL 3898](https://info.flightmapper.net/flight/Delta_Air_Lines_DL_3898))';
+  assert.deepEqual(assignmentApi.parseCodeshareOperatingCandidates(markdown,'VS1671'),['DL3898']);
+  const operator={
+    status:'found',flightNumber:'DL3898',flightId:'1412873434',tailNumber:'N821SK',
+    origin:{iata:'MBS'},destination:{iata:'DTW'},
+    schedule:{actualArrivalUTC:'2026-10-08T16:23:00Z'},
+    flightStatus:{airborne:true,landed:true,canceled:false}
+  };
+  const aliased=assignmentApi.applyCodeshareAssignment(operator,'VS1671','DL3898',{name:'fixture'});
+  assert.equal(aliased.flightNumber,'VS1671');
+  assert.equal(aliased.operatingFlightNumber,'DL3898');
+  assert.equal(aliased.tailNumber,'N821SK');
+  assert.equal(aliased.codeshare.marketingFlightNumber,'VS1671');
+});
+
+test('new searches clear previous flight map labels before lookup and failures keep the submitted flight', () => {
+  assert.match(client,/function resetMapForLookup\(flight\)/);
+  assert.match(client,/flightLabel\.textContent = clean\(flight\) \|\| 'Flight'/);
+  assert.match(client,/routeLabel\.textContent = 'Checking current flight…'/);
+  assert.match(client,/hideAnswer\(\);\s*resetMapForLookup\(activeFlight\);\s*await loadAssignment/s);
+  assert.match(client,/function resetMapForFailure\(flight,label='No live position'\)/);
+  assert.match(client,/resetMapForFailure\(activeFlight\)/);
+});
+
+test('future dates never attach a current-day direct aircraft merely because the flight number matches', () => {
+  assert.match(client,/if \(date === localDateString\(\)\) params\.set\('liveNow','1'\)/);
+  assert.doesNotMatch(client,/new URLSearchParams\(\{flight,date,unified:'1',liveNow:'1'\}\)/);
+});
+
+test('last-confirmed inbound legs survive transient arrival-board failures', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
+  assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
+  assert.match(source,/writeInboundCache\(date,tail,airport,result\.occurrence\)/);
+  assert.match(source,/const embedded=embeddedInboundOccurrence\(assignment\)/);
+  assert.match(source,/return await readInboundCache\(date,tail,airport\)/);
 });
 
 test('independent public-history parser resolves the exact same-day route and registration', () => {
