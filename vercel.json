@@ -434,6 +434,10 @@
       "destination": "https://national-fall-color.vercel.app/api/national-fall-region"
     },
     {
+      "source": "/api/national-fall-phenocam",
+      "destination": "https://national-fall-color.vercel.app/api/national-fall-phenocam"
+    },
+    {
       "source": "/fall-color/national-sitemap.xml",
       "destination": "https://national-fall-color.vercel.app/fall-color/national-sitemap.xml"
     },
