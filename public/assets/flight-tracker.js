@@ -106,7 +106,7 @@
   const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const LAST_KNOWN_STORAGE_PREFIX = 'flight-tracker:last-known:';
-  const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:';
+  const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:v2:';
   const INBOUND_STORAGE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const OPERATING_OCCURRENCE_CACHE_MS = 45 * 1000;
 
@@ -2183,7 +2183,8 @@
     const tail = a.tailNumber;
     const live = payload?.live;
     const ac = live?.aircraft;
-    const fresh = live?.positionFresh === true && Number.isFinite(ac?.lat) && Number.isFinite(ac?.lon);
+    const fresh = live?.positionFresh === true && Number.isFinite(ac?.lat) && Number.isFinite(ac?.lon) &&
+      Boolean(tail && clean(ac?.registration) === clean(tail));
     const rel = live?.focusAirportRelationship;
     const inbound = [payload?.recentInboundOccurrence,a?.previousAircraftOccurrence].find(x =>
       tail && x?.tailNumber && clean(x.tailNumber) === clean(tail) && sameAirport(x.destination,a.origin)) || null;
@@ -2191,13 +2192,19 @@
     const arrival = inbound?.schedule?.actualArrivalUTC || inbound?.schedule?.estimatedArrivalUTC ||
       inbound?.schedule?.scheduledArrivalUTC || null;
     const landingClock = formatClock(arrival,a?.origin?.timezone);
+    const arrivalDay = arrival ? new Intl.DateTimeFormat('en-US',{
+      timeZone:a?.origin?.timezone || 'UTC',month:'short',day:'numeric'
+    }).format(new Date(arrival)) : null;
+    const arrivalDisplay = [landingClock,arrivalDay].filter(Boolean).join(' · ');
     const departure = a?.schedule?.estimatedDepartureUTC || a?.schedule?.scheduledDepartureUTC;
     const departureClock = formatClock(departure,a?.origin?.timezone);
     const buffer = inbound && !landed
       ? minutesBetween(inbound?.schedule?.estimatedArrivalUTC || inbound?.schedule?.scheduledArrivalUTC,departure)
       : null;
-    const namedRoute = live?.route?.plausible && live.route.origin && live.route.destination
-      ? compactRoute(live.route.origin,live.route.destination) : null;
+    const inboundRoute = inbound?.origin && inbound?.destination ? compactRoute(inbound.origin,inbound.destination) : null;
+    const namedRoute = (inboundRoute || (live?.route?.plausible && live.route.origin && live.route.destination
+      ? compactRoute(live.route.origin,live.route.destination) : null));
+    const flightName = inbound?.flightNumber || null;
     const coordinates = fresh
       ? Math.abs(ac.lat).toFixed(2) + '°' + (ac.lat < 0 ? 'S' : 'N') + ', ' +
         Math.abs(ac.lon).toFixed(2) + '°' + (ac.lon < 0 ? 'W' : 'E')
@@ -2205,30 +2212,41 @@
     const seen = Number.isFinite(ac?.positionAgeSeconds) ? formatAge(ac.positionAgeSeconds) : 'Fresh report';
     let where, whereDetail, arriving, arrivingDetail, verdict, verdictDetail;
     const gateNote = gate ? ' Your flight is posted at gate ' + gate + '; this does not confirm the plane is parked there.' : '';
+
     if (fresh && ac?.onGround === true && rel?.state === 'at-airport') {
-      where = 'On the ground at ' + airport + '.';
-      whereDetail = seen + '. This is a position-confirmed airport, not a confirmed gate.';
+      where = 'On the ground at ' + airport + (flightName ? ' · last leg ' + flightName : '') + '.';
+      whereDetail = seen + (arrivalDisplay ? '. Last inbound landing ' + arrivalDisplay : '') +
+        '. Live location confirms the airport, not the gate.';
     } else if (fresh) {
-      where = (ac?.onGround ? 'On the ground' : 'Airborne') + (namedRoute ? ' · ' + namedRoute : '') + '.';
-      whereDetail = [coordinates,formatAltitude(ac?.altitudeFeet),seen,
+      where = (ac?.onGround ? 'On the ground' : 'Airborne') +
+        (flightName ? ' · ' + flightName : '') + (namedRoute ? ' · ' + namedRoute : '') + '.';
+      whereDetail = [coordinates,formatAltitude(ac?.altitudeFeet),
+        Number.isFinite(ac?.speedKnots) ? Math.round(ac.speedKnots) + ' kt' : null,seen,
         Number.isFinite(rel?.distanceMiles) ? 'About ' + rel.distanceMiles + ' mi from ' + airport : null]
         .filter(Boolean).join(' · ') + '. See the aircraft on the map.';
     } else if (landed) {
-      where = 'Last confirmed landed at ' + airport + (landingClock ? ' at ' + landingClock : '') + '.';
-      whereDetail = 'The last same-tail arrival is confirmed; current gate or current position is not.';
-    } else if (inbound?.flightStatus?.airborne === true) {
-      where = 'Inbound from ' + airportPlace(inbound.origin) + ' to ' + airport + '.';
-      whereDetail = 'The same-tail inbound leg is identified, but a live map position is not available.';
+      where = 'Last recorded at ' + airport + (arrivalDisplay ? ' · ' + arrivalDisplay : '') + '.';
+      whereDetail = (flightName ? 'Previous leg ' + flightName : 'Previous leg') +
+        (inboundRoute ? ' (' + inboundRoute + ')' : '') +
+        ' landed at the departure airport. This is the last confirmed location, not a current ADS-B fix or verified gate position.';
+    } else if (inbound) {
+      where = 'Previous leg ' + (flightName || 'identified') + (inboundRoute ? ' · ' + inboundRoute : '') + '.';
+      whereDetail = 'Previous same-tail flight found, but no fresh live position is available. Its present location is unconfirmed.';
     } else {
-      where = tail ? 'Assigned tail ' + tail + ' · physical location unknown.' : 'Tail assignment not yet published.';
-      whereDetail = tail
-        ? 'We know your tail but not its previous inbound flight; there is no fresh position to show.'
-        : 'Without a confirmed aircraft registration, its physical location cannot be identified.';
+      where = tail ? 'Assigned tail ' + tail + ' · location unknown.' : 'Tail assignment not yet published.';
+      whereDetail = !tail
+        ? 'Without a confirmed registration the plane cannot be located.'
+        : payload?.inboundLookupStatus === 'previous-leg-not-found'
+          ? 'No previous same-tail leg found in the available aircraft history; no fresh ADS-B fix.'
+          : payload?.inboundLookupStatus === 'inbound-history-unavailable'
+            ? 'Previous-flight history could not be read; no fresh ADS-B fix. This does not mean the aircraft did not fly.'
+            : 'No confirmed previous leg or fresh ADS-B position is available.';
     }
 
     if (landed) {
-      arriving = landingClock ? 'Previous flight landed at ' + landingClock + '.' : 'Previous flight landing confirmed.';
-      arrivingDetail = 'A runway landing is not a verified arrival at your gate.' + gateNote;
+      arriving = arrivalDisplay ? 'Previous flight landed at ' + arrivalDisplay + '.' : 'Previous flight landing confirmed.';
+      arrivingDetail = (flightName ? flightName + ' · ' : '') +
+        'A runway landing is not a verified arrival at your gate.' + gateNote;
     } else if (inbound && landingClock) {
       arriving = 'Inbound lands at ' + airport + ' around ' + landingClock + '.';
       arrivingDetail = (inbound.schedule?.estimatedArrivalUTC ? 'Published estimated landing' : 'Scheduled landing, not a live forecast') +
@@ -2243,8 +2261,8 @@
       arriving = 'Aircraft is at ' + airport + '; gate arrival unverified.';
       arrivingDetail = 'Its position does not prove arrival at the assigned stand.' + gateNote;
     } else {
-      arriving = 'No verified inbound landing or gate ETA.';
-      arrivingDetail = 'An inbound leg and arrival timestamp are missing.' + gateNote;
+      arriving = inbound ? 'Inbound leg found; gate ETA unavailable.' : 'No verified inbound landing or gate ETA.';
+      arrivingDetail = (inbound ? 'No fresh position or reliable inbound landing ETA.' : 'An inbound leg and arrival timestamp are missing.') + gateNote;
     }
 
     const delay = departureDelayMinutes(a);
@@ -2259,12 +2277,12 @@
         ' departure. Taxi, deplaning and boarding are not included; this is not an airline delay announcement.';
     } else if (landed || (fresh && ac?.onGround && rel?.state === 'at-airport')) {
       verdict = 'NO INBOUND DELAY CONFIRMED · gate not verified.';
-      verdictDetail = 'The aircraft has been seen at the departure airport. Boarding readiness remains unknown.';
+      verdictDetail = 'Last confirmed at the departure airport; current boarding readiness remains unknown.';
     } else if (Number.isFinite(buffer)) {
       verdict = 'NO PUBLISHED INBOUND TIMING CONFLICT.';
       verdictDetail = 'The posted interval is ' + buffer + ' min; gate arrival and aircraft readiness remain unconfirmed.';
     } else {
-      verdict = 'RISK UNKNOWN · inbound flight unverified.';
+      verdict = inbound ? 'RISK UNKNOWN · previous leg identified.' : 'RISK UNKNOWN · inbound flight unverified.';
       verdictDetail = 'A published departure time does not establish that the assigned aircraft will be ready.';
     }
     return [

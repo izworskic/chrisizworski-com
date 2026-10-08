@@ -207,7 +207,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008k/);
+  assert.match(html, /flight-tracker\.js\?v=20261008l/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -972,7 +972,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008k/);
+  assert.match(html, /flight-tracker\.js\?v=20261008l/);
 });
 
 
@@ -1263,18 +1263,18 @@ test('future dates never attach a current-day direct aircraft merely because the
 
 test('last-confirmed inbound legs survive transient arrival-board failures', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v1:'/);
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v2:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
   assert.match(source,/async function lookupRecentArrivalWithCache/);
   assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);
   assert.match(source,/const cached = await readInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport\)/);
   assert.match(source,/kind:'last-confirmed-inbound-cache'/);
-  assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
+  assert.match(source,/lookupRecentArrivalWithCache\(\{tail,airport,carrier,date,nowMs\}\)/);
   assert.match(source,/await lookupRecentArrivalWithCache\(\{tail,airport,carrier,date\}\)/);
 });
 
 test('browser retains only validated same-tail inbound context for the active travel date', () => {
-  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:'/);
+  assert.match(client,/const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:v2:'/);
   assert.match(client,/const INBOUND_STORAGE_MAX_AGE_MS = 12 \* 60 \* 60 \* 1000/);
   assert.match(client,/function validInboundOccurrence\(assignment, occurrence\)/);
   assert.match(client,/clean\(occurrence\?\.tailNumber\) !== clean\(assignment\?\.tailNumber\)/);
@@ -1315,15 +1315,12 @@ test('independent same-tail history recovers the leg immediately before the pass
 
   const rows=assignmentApi.parseFr24AircraftHistoryRows(markdown);
   assert.equal(rows.length,4);
-  assert.deepEqual(rows[1],{
-    dateLabel:'08 Oct 2026',
-    origin:'DTW',
-    destination:'BOS',
-    flightNumber:'DL1171',
-    landed:false,
-    actualArrivalUTC:null,
-    sourceLine:rows[1].sourceLine
-  });
+  assert.equal(rows[1].dateLabel,'08 Oct 2026');
+  assert.equal(rows[1].origin,'DTW');
+  assert.equal(rows[1].destination,'BOS');
+  assert.equal(rows[1].flightNumber,'DL1171');
+  assert.equal(rows[1].landed,false);
+  assert.equal(rows[1].actualArrivalUTC,null);
   const inbound=assignmentApi.independentInboundFromTailRows(rows,{
     dateLabel:'08 Oct 2026',
     passengerFlight:'DL1171',
@@ -1338,18 +1335,18 @@ test('independent same-tail history recovers the leg immediately before the pass
   assert.equal(assignmentApi.fr24HistoryUtc('08 Oct 2026','16:49'),'2026-10-08T16:49:00.000Z');
 });
 
-test('independent tail fallback is bounded to exact date, flight sequence, route and tail', () => {
+test('independent tail fallback validates exact flight sequence across midnight', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(source,/FR24_AIRCRAFT_READER_BASE/);
-  assert.match(source,/async function lookupIndependentInboundByTail\(assignment,date\)/);
+  assert.match(source,/async function lookupIndependentInboundByTailResult\(assignment,date\)/);
   assert.match(source,/passengerFlight=clean\(assignment\?\.operatingFlightNumber \|\| assignment\?\.flightNumber\)/);
   assert.match(source,/row\.flightNumber === flight/);
   assert.match(source,/row\.origin === from/);
   assert.match(source,/row\.destination === to/);
-  assert.match(source,/for \(let i=passengerIndex \+ 1; i<sameDay\.length; i\+\+\)/);
-  assert.match(source,/if \(row\.destination === from && row\.landed\) return row/);
-  assert.match(source,/kind:'independent-tail-history-same-aircraft'/);
-  assert.match(source,/await writeInboundCache\(date,tail,airport,independent\)/);
+  assert.match(source,/slice\(passengerIndex \+ 1,passengerIndex \+ 2\)/);
+  assert.match(source,/previous\.destination !== from/);
+  assert.match(source,/kind:'independent-tail-history-previous-leg'/);
+  assert.match(source,/await writeInboundCache\(date,tail,airport,history\.occurrence\)/);
 });
 
 test('independent public-history parser resolves the exact same-day route and registration', () => {

@@ -17,7 +17,7 @@ const FR24_AIRCRAFT_PUBLIC_BASE = 'https://www.flightradar24.com/data/aircraft/'
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
 const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
-const INBOUND_CACHE_PREFIX = 'flight:inbound:v1:';
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v2:';
 const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
 const CODESHARE_CACHE_PREFIX = 'flight:codeshare:v1:';
 const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
@@ -1107,7 +1107,7 @@ function embeddedInboundOccurrence(assignment) {
 }
 
 function fr24HistoryUtc(dateLabel,timeText) {
-  const date=String(dateLabel || '').match(/^(\d{2})\s+([A-Z][a-z]{2})\s+(\d{4})$/);
+  const date=String(dateLabel || '').match(/^(\d{1,2})\s+([A-Z][a-z]{2})\s+(\d{4})$/);
   const clock=String(timeText || '').match(/^(\d{1,2}):(\d{2})$/);
   if (!date || !clock) return null;
   const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
@@ -1117,53 +1117,138 @@ function fr24HistoryUtc(dateLabel,timeText) {
   return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
 }
 
+function fr24ArrivalUtc(dateLabel,arrivalTime,departureTime) {
+  const arrival=fr24HistoryUtc(dateLabel,arrivalTime);
+  const departure=fr24HistoryUtc(dateLabel,departureTime);
+  if (!arrival) return null;
+  // FR24's row date is the departure date. Overnight arrivals use the next UTC day.
+  return departure && Date.parse(arrival) < Date.parse(departure)
+    ? new Date(Date.parse(arrival) + 86400000).toISOString() : arrival;
+}
+
 function parseFr24AircraftHistoryRows(markdown) {
   const rows=[];
   for (const line of String(markdown || '').split(/\r?\n/)) {
-    if (!line.includes('https://www.flightradar24.com/data/flights/')) continue;
-    const match=line.match(/\b(\d{2}\s+[A-Z][a-z]{2}\s+\d{4})\b[\s\S]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)[\s\S]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)[\s\S]*?\[([A-Z0-9]{2,3}\s*[0-9]{1,4}[A-Z]?)\]\(https:\/\/www\.flightradar24\.com\/data\/flights\/[^)]+\)/i);
-    if (!match) continue;
-    const landedTime=String(line.match(/\bLanded\s+(\d{1,2}:\d{2})\b/i)?.[1] || '').trim() || null;
+    // FR24 history prints flight number BEFORE date in some layouts, AFTER it
+    // in others. Never depend on table-column order.
+    if (!line.includes('flightradar24.com/data/flights/')) continue;
+    const date=line.match(/\b(\d{1,2}\s+[A-Z][a-z]{2}\s+\d{4})\b/i);
+    const flight=line.match(/\[([A-Z0-9]{2,3}\s*[0-9]{1,4}[A-Z]?)\]\(https:\/\/www\.flightradar24\.com\/data\/flights\/[^)]+\)/i);
+    // FR24 prepends a repeated "TO airport" link before the history date in
+    // its compact reader layout. Only links AFTER the dated occurrence describe
+    // this flight's FROM/TO pair.
+    const routeSegment=date ? line.slice(date.index + date[0].length) : '';
+    const airports=[...routeSegment.matchAll(/\[\(([A-Z0-9]{3})\)\]\([^)]+\)/gi)].map(x=>x[1].toUpperCase());
+    if (!date || !flight || airports.length < 2) continue;
+    const dateLabel=date[1].replace(/^(\d)\s/,'0$1 ');
+    const std=line.match(/\bSTD\s+(\d{1,2}:\d{2})\b/i)?.[1] || null;
+    const atd=line.match(/\bATD\s+(\d{1,2}:\d{2})\b/i)?.[1] || null;
+    const sta=line.match(/\bSTA\s+(\d{1,2}:\d{2})\b/i)?.[1] || null;
+    const landedTime=line.match(/\bLanded\s+(\d{1,2}:\d{2})\b/i)?.[1] || null;
+    const landed=Boolean(landedTime);
+    const airborne=!landed && /\b(?:airborne|en route|in flight|departed)\b/i.test(line);
     rows.push({
-      dateLabel:match[1],
-      origin:match[2].toUpperCase(),
-      destination:match[3].toUpperCase(),
-      flightNumber:clean(match[4]),
-      landed:Boolean(landedTime || /\bLanded\b/i.test(line)),
-      actualArrivalUTC:landedTime ? fr24HistoryUtc(match[1],landedTime) : null,
+      dateLabel,
+      origin:airports[0],
+      destination:airports[1],
+      flightNumber:clean(flight[1]),
+      scheduledDepartureUTC:std ? fr24HistoryUtc(dateLabel,std) : null,
+      actualDepartureUTC:atd ? fr24HistoryUtc(dateLabel,atd) : null,
+      scheduledArrivalUTC:sta ? fr24ArrivalUtc(dateLabel,sta,atd || std) : null,
+      actualArrivalUTC:landedTime ? fr24ArrivalUtc(dateLabel,landedTime,atd || std) : null,
+      landed,
+      airborne,
       sourceLine:line
     });
   }
   return rows;
 }
 
-function independentInboundFromTailRows(rows,{dateLabel,passengerFlight,origin,destination}) {
-  const sameDay=(rows || []).filter(row => row.dateLabel === dateLabel);
+function independentInboundFromTailRows(rows,{dateLabel,passengerFlight,origin,destination,scheduledDepartureUTC=null}) {
   const flight=clean(passengerFlight);
   const from=clean(origin);
   const to=clean(destination);
-  const passengerIndex=sameDay.findIndex(row =>
-    row.flightNumber === flight &&
-    row.origin === from &&
-    row.destination === to
+  const passengerIndex=(rows || []).findIndex(row =>
+    row.dateLabel === dateLabel && row.flightNumber === flight &&
+    row.origin === from && row.destination === to
   );
-  if (passengerIndex < 0) return null;
-
-  for (let i=passengerIndex + 1; i<sameDay.length; i++) {
-    const row=sameDay[i];
-    if (row.destination === from && row.landed) return row;
+  let candidates=[];
+  if (passengerIndex >= 0) {
+    // The history is newest-first. The very next entry is the actual previous
+    // leg of this airframe, even if its flight/date differs.
+    candidates=(rows || []).slice(passengerIndex + 1,passengerIndex + 2);
+  } else {
+    // Some providers omit not-yet-departed flights. Only use a flight with a
+    // verifiable earlier departure time, and never leap over another leg.
+    const departureMs=Date.parse(scheduledDepartureUTC || '');
+    if (!Number.isFinite(departureMs)) return null;
+    candidates=(rows || []).filter(row => {
+      const startMs=Date.parse(row.actualDepartureUTC || row.scheduledDepartureUTC || '');
+      return Number.isFinite(startMs) && startMs < departureMs &&
+        departureMs - startMs <= 48 * 3600000;
+    }).sort((a,b)=>Date.parse(b.actualDepartureUTC || b.scheduledDepartureUTC) -
+      Date.parse(a.actualDepartureUTC || a.scheduledDepartureUTC)).slice(0,1);
   }
-  return null;
+  const previous=candidates[0];
+  if (!previous || previous.destination !== from) return null;
+  // A scheduled flight is not evidence this aircraft actually flew it.
+  if (!previous.landed && !previous.airborne) return null;
+  const passengerMs=Date.parse(scheduledDepartureUTC || '');
+  const priorMs=Date.parse(previous.actualDepartureUTC || previous.scheduledDepartureUTC || '');
+  if (Number.isFinite(passengerMs) && Number.isFinite(priorMs) &&
+      (priorMs >= passengerMs || passengerMs - priorMs > 48 * 3600000)) return null;
+  return previous;
 }
 
-async function lookupIndependentInboundByTail(assignment,date) {
+function fr24IndependentInboundOccurrence(row,tail,normalizedDate) {
+  return {
+    flightNumber:row.flightNumber,
+    flightId:['fr24tail',normalizedDate.raw,row.flightNumber,row.origin,row.destination].join(':'),
+    tailNumber:tail,
+    origin:minimalAirport(row.origin),
+    destination:minimalAirport(row.destination),
+    schedule:{
+      scheduledDepartureUTC:row.scheduledDepartureUTC,
+      estimatedDepartureUTC:null,
+      actualDepartureUTC:row.actualDepartureUTC,
+      scheduledArrivalUTC:row.scheduledArrivalUTC,
+      estimatedArrivalUTC:null,
+      actualArrivalUTC:row.actualArrivalUTC
+    },
+    flightStatus:{
+      code:row.landed ? 'L' : 'A',
+      label:row.landed ? 'Landed' : 'Airborne',
+      description:row.landed ? 'Landed' : 'Airborne',
+      departureDelayMinutes:null,
+      arrivalDelayMinutes:null,
+      lastUpdatedText:null,
+      canceled:false,
+      airborne:row.airborne,
+      landed:row.landed
+    },
+    assignmentState:row.landed ? 'landed' : 'airborne',
+    note:'Recovered from the immediately preceding flight in this aircraft registration history.',
+    evidence:{
+      kind:'independent-tail-history-previous-leg',
+      note:'Same aircraft tail, preceding flight in aircraft history (including previous UTC day).'
+    },
+    source:{
+      name:'Flightradar24 public aircraft history via Jina Reader',
+      url:FR24_AIRCRAFT_PUBLIC_BASE + tail.toLowerCase(),
+      kind:'independent-tail-history-fallback'
+    }
+  };
+}
+
+async function lookupIndependentInboundByTailResult(assignment,date) {
   const normalizedDate=normalizeDate(date);
   const tail=normalizeTail(assignment?.tailNumber);
   const origin=airportCode(assignment?.origin);
   const destination=airportCode(assignment?.destination);
   const passengerFlight=clean(assignment?.operatingFlightNumber || assignment?.flightNumber);
-  if (!normalizedDate || !tail || !origin || !destination || !passengerFlight) return null;
-
+  if (!normalizedDate || !tail || !origin || !destination || !passengerFlight) {
+    return {status:'invalid',occurrence:null};
+  }
   const controller=new AbortController();
   const timer=setTimeout(() => controller.abort(),FR24_FALLBACK_TIMEOUT_MS);
   try {
@@ -1172,85 +1257,67 @@ async function lookupIndependentInboundByTail(assignment,date) {
       headers:{accept:'text/plain','user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'},
       signal:controller.signal
     });
-    if (!response.ok) return null;
-    const text=await response.text();
-    if (!text || text.length > 800000) return null;
-    const row=independentInboundFromTailRows(parseFr24AircraftHistoryRows(text),{
-      dateLabel:fr24DateLabel(normalizedDate),
-      passengerFlight,
-      origin,
-      destination
+    if (!response.ok) return {status:'history-unavailable',occurrence:null};
+    const markdown=await response.text();
+    if (!markdown || markdown.length > 800000) return {status:'history-unavailable',occurrence:null};
+    const rows=parseFr24AircraftHistoryRows(markdown);
+    if (!rows.length) return {status:'history-unavailable',occurrence:null};
+    const row=independentInboundFromTailRows(rows,{
+      dateLabel:fr24DateLabel(normalizedDate),passengerFlight,origin,destination,
+      scheduledDepartureUTC:assignment?.schedule?.scheduledDepartureUTC
     });
-    if (!row) return null;
-    return {
-      flightNumber:row.flightNumber,
-      flightId:['fr24tail',normalizedDate.raw,row.flightNumber,row.origin,row.destination].join(':'),
-      tailNumber:tail,
-      origin:minimalAirport(row.origin),
-      destination:minimalAirport(row.destination),
-      schedule:{
-        scheduledDepartureUTC:null,
-        estimatedDepartureUTC:null,
-        actualDepartureUTC:null,
-        scheduledArrivalUTC:null,
-        estimatedArrivalUTC:row.actualArrivalUTC || null,
-        actualArrivalUTC:row.actualArrivalUTC || null
-      },
-      flightStatus:{
-        code:'L',
-        label:'Landed',
-        description:'Landed',
-        departureDelayMinutes:null,
-        arrivalDelayMinutes:null,
-        lastUpdatedText:null,
-        canceled:false,
-        airborne:false,
-        landed:true
-      },
-      assignmentState:'landed',
-      note:'Recovered from the exact aircraft history immediately before this flight.',
-      evidence:{
-        kind:'independent-tail-history-same-aircraft',
-        note:'Confirmed from the same aircraft registration and sequence immediately before the passenger flight.'
-      },
-      source:{
-        name:'Flightradar24 public aircraft history via Jina Reader',
-        url:FR24_AIRCRAFT_PUBLIC_BASE + tail.toLowerCase(),
-        kind:'independent-tail-history-fallback'
-      }
-    };
+    if (!row) return {status:'previous-leg-not-found',occurrence:null};
+    return {status:'found',occurrence:fr24IndependentInboundOccurrence(row,tail,normalizedDate)};
   } catch {
-    return null;
+    return {status:'history-unavailable',occurrence:null};
   } finally {
     clearTimeout(timer);
   }
 }
 
+async function lookupIndependentInboundByTail(assignment,date) {
+  return (await lookupIndependentInboundByTailResult(assignment,date)).occurrence;
+}
+
 async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
-  if (!dateIsNearNow(date,nowMs)) return null;
-  const tail = assignment?.tailNumber;
-  const airport = airportCode(assignment?.origin);
-  const carrier = carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
-  if (!tail || !airport || !carrier) return null;
+  if (!dateIsNearNow(date,nowMs)) return {occurrence:null,status:'history-outside-live-window'};
+  const tail=assignment?.tailNumber;
+  const airport=airportCode(assignment?.origin);
+  const carrier=carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
+  if (!tail || !airport || !carrier) return {occurrence:null,status:'missing-aircraft-context'};
 
-  const result = await lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs});
-  if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
-    return result.occurrence;
+  // FR24 registration history must be consulted even if the FlightStats
+  // carrier-filtered arrivals board fails: an earlier leg can belong to a
+  // different flight number, airline, or calendar day.
+  const [arrival,history]=await Promise.all([
+    lookupRecentArrivalWithCache({tail,airport,carrier,date,nowMs})
+      .catch(()=>({status:'source-unavailable'})),
+    lookupIndependentInboundByTailResult(assignment,date)
+  ]);
+  // The per-tail ordered history is stronger than a carrier-filtered airport
+  // arrivals board: never let a different flight that happened to use this
+  // tail during the day displace its actual immediate predecessor.
+  if (history.occurrence) {
+    await writeInboundCache(date,tail,airport,history.occurrence);
+    return {occurrence:history.occurrence,status:'found'};
   }
-
   const embedded=embeddedInboundOccurrence(assignment);
   if (embedded) {
     await writeInboundCache(date,tail,airport,embedded);
-    return embedded;
+    return {occurrence:embedded,status:'found'};
   }
-
-  const independent=await lookupIndependentInboundByTail(assignment,date);
-  if (independent) {
-    await writeInboundCache(date,tail,airport,independent);
-    return independent;
+  if (arrival?.status === 'found-inbound-occurrence' && arrival.occurrence) {
+    await writeInboundCache(date,tail,airport,arrival.occurrence);
+    return {occurrence:arrival.occurrence,status:'found'};
   }
-
-  return await readInboundCache(date,tail,airport);
+  const cached=await readInboundCache(date,tail,airport);
+  if (cached) return {occurrence:cached,status:'found-cached'};
+  return {
+    occurrence:null,
+    status:history.status === 'previous-leg-not-found'
+      ? 'previous-leg-not-found'
+      : 'inbound-history-unavailable'
+  };
 }
 
 async function fetchCodeshareText(marketingFlight) {
@@ -1600,10 +1667,11 @@ async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
     };
   }
 
-  const [live,recentInboundOccurrence] = await Promise.all([
+  const [live,inboundResolution] = await Promise.all([
     require('./flight-tracker.js').buildRegistrationSnapshot(assignment.tailNumber,airportCode(assignment.origin)),
     resolveRecentInbound(assignment,date,nowMs)
   ]);
+  const recentInboundOccurrence = inboundResolution.occurrence;
   const confirmedOperatingOccurrence = await resolveOperatingOccurrence(assignment,live,date);
   const inbound = recentInboundOccurrence ||
     (confirmedOperatingOccurrence && sameAirport(confirmedOperatingOccurrence.destination,assignment.origin)
@@ -1619,6 +1687,7 @@ async function buildUnifiedFromAssignment(assignment,date,nowMs = Date.now()) {
     assignment,
     live,
     recentInboundOccurrence:inbound,
+    inboundLookupStatus:inbound ? 'previous-leg-identified' : inboundResolution.status,
     confirmedOperatingOccurrence,
     ...reconciliation,
     observability:logUnifiedRender(assignment,reconciliation)
@@ -2260,6 +2329,9 @@ module.exports._test = {
   fr24HistoryUtc,
   parseFr24AircraftHistoryRows,
   independentInboundFromTailRows,
+  fr24ArrivalUtc,
+  fr24IndependentInboundOccurrence,
+  lookupIndependentInboundByTailResult,
   lookupIndependentInboundByTail,
   observedInboundFromLive,
   readInboundCache,

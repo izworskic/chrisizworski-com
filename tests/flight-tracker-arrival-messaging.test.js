@@ -81,7 +81,7 @@ test('completed leg outranks previous aircraft turn and strips timeline departur
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008k/);
+  assert.match(html,/flight-tracker\.js\?v=20261008l/);
 });
 
 
