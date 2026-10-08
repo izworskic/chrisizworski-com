@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chris Izworski Works | Projects and Publications</title>
-<meta name="description" content="Complete index of Chris Izworski projects, publications, sites, daily reports, Great Lakes tools, public safety AI work, and outdoor writing.">
+<meta name="description" content="Explore Chris Izworski's Fall Color, Soo Locks, ship tracking, Mackinac Bridge tools, publications, and public engineering work.">
 <meta name="author" content="Chris Izworski">
 <link rel="canonical" href="https://chrisizworski.com/chris-izworski-works/">
 <link rel="author" href="https://chrisizworski.com/">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Chris Izworski Works | Projects and Publications">
-<meta property="og:description" content="Complete index of Chris Izworski projects, publications, sites, daily reports, Great Lakes tools, public safety AI work, and outdoor writing.">
+<meta property="og:description" content="Explore Chris Izworski's Fall Color, Soo Locks, ship tracking, Mackinac Bridge tools, publications, and public engineering work.">
 <meta property="og:url" content="https://chrisizworski.com/chris-izworski-works/">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -52,7 +52,7 @@
       "@id": "https://chrisizworski.com/chris-izworski-works/",
       "url": "https://chrisizworski.com/chris-izworski-works/",
       "name": "Chris Izworski, Projects, Sites, and Daily Publications",
-      "description": "Complete index of Chris Izworski's online publications and tools.",
+      "description": "Explore Chris Izworski's Fall Color, Soo Locks, ship tracking, Mackinac Bridge tools, publications, and public engineering work.",
       "isPartOf": {
         "@type": "WebSite",
         "url": "https://chrisizworski.com/",
@@ -61,7 +61,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-10-07",
+      "dateModified": "2026-10-08",
       "inLanguage": "en-US",
       "mainEntity": {
         "@id": "https://chrisizworski.com/chris-izworski-works/#works"
@@ -78,11 +78,15 @@
           "@type": "ListItem",
           "position": 1,
           "item": {
-            "@type": "WebSite",
-            "name": "Michigan Trout Daily",
-            "url": "https://daily.michigantroutreport.com",
-            "description": "Daily Michigan trout stream conditions, hatch reports, and fly fishing intelligence. One river, every morning.",
-            "author": {
+            "@type": [
+              "WebPage",
+              "CollectionPage"
+            ],
+            "@id": "https://chrisizworski.com/fall-color/#webpage",
+            "name": "Michigan Fall Color",
+            "url": "https://chrisizworski.com/fall-color/",
+            "description": "Compare regional color timing, weather context, and named drives before choosing a fall trip. I built the map and regional planning system, with source dates and a distinction between model estimates and written interpretation.",
+            "creator": {
               "@id": "https://chrisizworski.com/#person"
             }
           }
@@ -91,11 +95,12 @@
           "@type": "ListItem",
           "position": 2,
           "item": {
-            "@type": "WebSite",
-            "name": "Michigan Trout Report",
-            "url": "https://michigantroutreport.com",
-            "description": "Michigan trout-stream conditions with USGS gauge data, local forecasts, fishing context, and stream-access mapping.",
-            "author": {
+            "@type": "WebApplication",
+            "@id": "https://chrisizworski.com/soo-locks/#app",
+            "name": "Soo Locks Ship Schedule",
+            "url": "https://chrisizworski.com/soo-locks/",
+            "description": "Plan a visit around approaching freighters, recent vessel reports, and estimated arrival windows. I built the next-ship engine and viewing context, including the shipping channels around the river\u2019s islands.",
+            "creator": {
               "@id": "https://chrisizworski.com/#person"
             }
           }
@@ -104,11 +109,12 @@
           "@type": "ListItem",
           "position": 3,
           "item": {
-            "@type": "WebSite",
-            "name": "Great Lakes Gazette",
-            "url": "https://gazette.chrisizworski.com",
-            "description": "Daily Great Lakes maritime news: vessel movements, port reports, NOAA water levels, NWS marine forecasts.",
-            "author": {
+            "@type": "WebApplication",
+            "@id": "https://chrisizworski.com/great-lakes-freighter-tracking/#app",
+            "name": "Great Lakes Ship Tracker",
+            "url": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+            "description": "Find a useful shoreside viewing area across the Great Lakes, from the Soo and Mackinac to Duluth and the Detroit River. I built the regional interface and context around positions supplied by public AIS providers.",
+            "creator": {
               "@id": "https://chrisizworski.com/#person"
             }
           }
@@ -117,11 +123,12 @@
           "@type": "ListItem",
           "position": 4,
           "item": {
-            "@type": "WebSite",
-            "name": "Freighter View Farms",
-            "url": "https://freighterviewfarms.com",
-            "description": "Seed-saving and Great Lakes-themed gardening blog from Saginaw Bay.",
-            "author": {
+            "@type": "WebApplication",
+            "@id": "https://chrisizworski.com/mackinac-bridge-live/#app",
+            "name": "Mackinac Bridge Live",
+            "url": "https://chrisizworski.com/mackinac-bridge-live/",
+            "description": "Check official bridge status, vehicle guidance, cameras, and approach weather in one place. I built the interpretation layer that keeps Bridge Authority restrictions separate from nearby weather observations.",
+            "creator": {
               "@id": "https://chrisizworski.com/#person"
             }
           }
@@ -129,72 +136,6 @@
         {
           "@type": "ListItem",
           "position": 5,
-          "item": {
-            "@type": "WebSite",
-            "name": "Michigan Birding Report",
-            "url": "https://michiganbirdingreport.com",
-            "description": "Live Michigan bird sightings, county birding pages, migration context, and species profiles.",
-            "author": {
-              "@id": "https://chrisizworski.com/#person"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 6,
-          "item": {
-            "@type": "WebSite",
-            "name": "Michigan Birding Daily",
-            "url": "https://daily.michiganbirdingreport.com",
-            "description": "Daily Michigan birding reports built around interesting sightings and county-level eBird data.",
-            "author": {
-              "@id": "https://chrisizworski.com/#person"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 7,
-          "item": {
-            "@type": "WebSite",
-            "name": "Perfect Lawn Advisor",
-            "url": "https://lawn.chrisizworski.com",
-            "description": "Address-based lawn planning and turfgrass guidance tool.",
-            "author": {
-              "@id": "https://chrisizworski.com/#person"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 8,
-          "item": {
-            "@type": "ProfilePage",
-            "name": "Chris Izworski GitHub Pages Profile",
-            "url": "https://izworskic.github.io/",
-            "description": "Public GitHub Pages profile linking Chris Izworski projects, code, writing, and verified identity sources.",
-            "about": {
-              "@id": "https://chrisizworski.com/#person"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 9,
-          "item": {
-            "@type": "WebApplication",
-            "name": "Traverse City Wine Country Planner",
-            "url": "https://tcwine.chrisizworski.com",
-            "description": "Free interactive trip planner for tasting days across the Old Mission and Leelanau peninsulas near Traverse City, Michigan.",
-            "author": {
-              "@id": "https://chrisizworski.com/#person"
-            },
-            "@id": "https://tcwine.chrisizworski.com/#app"
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 10,
           "item": {
             "@type": "WebApplication",
             "name": "Michigan Snowmobile Trail Maps and Route Planner",
@@ -208,7 +149,111 @@
         },
         {
           "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "WebSite",
+            "name": "Michigan Trout Daily",
+            "url": "https://daily.michigantroutreport.com",
+            "description": "Daily Michigan trout stream conditions, hatch reports, and fly fishing intelligence. One river, every morning.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "item": {
+            "@type": "WebSite",
+            "name": "Michigan Trout Report",
+            "url": "https://michigantroutreport.com",
+            "description": "Michigan trout-stream conditions with USGS gauge data, local forecasts, fishing context, and stream-access mapping.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "item": {
+            "@type": "WebSite",
+            "name": "Great Lakes Gazette",
+            "url": "https://gazette.chrisizworski.com",
+            "description": "Daily Great Lakes maritime news: vessel movements, port reports, NOAA water levels, NWS marine forecasts.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "item": {
+            "@type": "WebSite",
+            "name": "Freighter View Farms",
+            "url": "https://freighterviewfarms.com",
+            "description": "Seed-saving and Great Lakes-themed gardening blog from Saginaw Bay.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "item": {
+            "@type": "WebSite",
+            "name": "Michigan Birding Report",
+            "url": "https://michiganbirdingreport.com",
+            "description": "Live Michigan bird sightings, county birding pages, migration context, and species profiles.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
           "position": 11,
+          "item": {
+            "@type": "WebSite",
+            "name": "Michigan Birding Daily",
+            "url": "https://daily.michiganbirdingreport.com",
+            "description": "Daily Michigan birding reports built around interesting sightings and county-level eBird data.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 12,
+          "item": {
+            "@type": "WebSite",
+            "name": "Perfect Lawn Advisor",
+            "url": "https://lawn.chrisizworski.com",
+            "description": "Address-based lawn planning and turfgrass guidance tool.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 13,
+          "item": {
+            "@type": "ProfilePage",
+            "name": "Chris Izworski GitHub Pages Profile",
+            "url": "https://izworskic.github.io/",
+            "description": "Public GitHub Pages profile linking Chris Izworski projects, code, writing, and verified identity sources.",
+            "about": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 14,
           "item": {
             "@type": "ProfilePage",
             "name": "Medium Writing by Chris Izworski",
@@ -221,7 +266,7 @@
         },
         {
           "@type": "ListItem",
-          "position": 12,
+          "position": 15,
           "item": {
             "@type": "CollectionPage",
             "name": "AI in Public Safety",
@@ -234,7 +279,21 @@
         },
         {
           "@type": "ListItem",
-          "position": 13,
+          "position": 16,
+          "item": {
+            "@type": "WebApplication",
+            "name": "Traverse City Wine Country Planner",
+            "url": "https://tcwine.chrisizworski.com",
+            "description": "Free interactive trip planner for tasting days across the Old Mission and Leelanau peninsulas near Traverse City, Michigan.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            },
+            "@id": "https://tcwine.chrisizworski.com/#app"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 17,
           "item": {
             "@type": "WebApplication",
             "name": "Great Lakes Levels",
@@ -247,7 +306,7 @@
         }
       ],
       "@id": "https://chrisizworski.com/chris-izworski-works/#works",
-      "numberOfItems": 13
+      "numberOfItems": 17
     },
     {
       "@type": "BreadcrumbList",
@@ -284,6 +343,9 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
 .work h2 a:hover{color:#a47020}
 .work-url{font-family:'Courier New',monospace;font-size:13px;color:#888;margin-bottom:10px}
 .work-desc{color:#444;line-height:1.7}
+.section-heading{font-size:22px;line-height:1.3;margin:28px 0 8px;color:#1a5c3a}
+.work-url,a{overflow-wrap:anywhere}
+@media(max-width:620px){.wrap{padding:28px 18px 56px}h1{font-size:30px}.work h2{font-size:22px}}
 .back{display:inline-block;margin-top:36px;padding:10px 20px;border:1px solid #222;color:#222;text-decoration:none;font-family:Georgia,serif;font-size:14px}
 .back:hover{background:#222;color:#fff}
 </style>
@@ -304,6 +366,8 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Chris Izworski citations and verified sources preview image">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chris Izworski Works | Projects and Publications">
+<meta name="twitter:description" content="Explore Chris Izworski's Fall Color, Soo Locks, ship tracking, Mackinac Bridge tools, publications, and public engineering work.">
 <meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-verified-sources.png">
 <meta name="twitter:image:alt" content="Chris Izworski citations and verified sources preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-verified-sources.png">
@@ -315,9 +379,36 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
     <div class="kicker">Chris Izworski &nbsp;·&nbsp; Bay City, Michigan</div>
     <h1>Projects, Sites, and Daily Publications</h1>
     <p class="lede">Tools, publications, and public code by Chris Izworski. Explore a project to use it, read its sources, or learn how it was built.</p>
-  <p><a href="/tools/">Browse all live tools</a> &middot; <a href="/chris-izworski/">About the creator</a> &middot; <a href="https://izworskic.github.io/">Code and development notes</a></p>
+  <p><a href="/tools/">Browse all live tools</a> &middot; <a href="/chris-izworski/">About the creator</a> &middot; <a href="https://izworskic.github.io/projects/">Project methods and public code</a></p>
   </header>
 
+<section aria-labelledby="featured-work"><h2 id="featured-work" class="section-heading">Featured Michigan and Great Lakes tools</h2>
+  <div class="work">
+    <div class="work-num">Featured Tool</div>
+    <h2><a href="/fall-color/">Michigan Fall Color</a></h2>
+    <div class="work-url">chrisizworski.com/fall-color/</div>
+    <p class="work-desc">Compare regional color timing, weather context, and named drives before choosing a fall trip. I built the map and regional planning system, with source dates and a distinction between model estimates and written interpretation. <a href="https://izworskic.github.io/projects/#fall-color-method">See a worked color-model example</a>.</p>
+  </div>
+  <div class="work">
+    <div class="work-num">Featured Tool</div>
+    <h2><a href="/soo-locks/">Soo Locks Ship Schedule</a></h2>
+    <div class="work-url">chrisizworski.com/soo-locks/</div>
+    <p class="work-desc">Plan a visit around approaching freighters, recent vessel reports, and estimated arrival windows. I built the next-ship engine and viewing context, including the shipping channels around the river’s islands. <a href="https://izworskic.github.io/projects/#soo-locks-method">See a worked arrival-window example</a>.</p>
+  </div>
+  <div class="work">
+    <div class="work-num">Featured Tool</div>
+    <h2><a href="/great-lakes-freighter-tracking/">Great Lakes Ship Tracker</a></h2>
+    <div class="work-url">chrisizworski.com/great-lakes-freighter-tracking/</div>
+    <p class="work-desc">Find a useful shoreside viewing area across the Great Lakes, from the Soo and Mackinac to Duluth and the Detroit River. I built the regional interface and context around positions supplied by public AIS providers.</p>
+  </div>
+  <div class="work">
+    <div class="work-num">Featured Tool</div>
+    <h2><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a></h2>
+    <div class="work-url">chrisizworski.com/mackinac-bridge-live/</div>
+    <p class="work-desc">Check official bridge status, vehicle guidance, cameras, and approach weather in one place. I built the interpretation layer that keeps Bridge Authority restrictions separate from nearby weather observations.</p>
+  </div>
+</section>
+<h2 class="section-heading">More tools, sites, and publications</h2>
   <div class="work">
     <div class="work-num">Winter Trip Tool</div>
     <h2><a href="/snowmobile/">Michigan Snowmobile Maps &amp; Route Planner</a></h2>
@@ -378,7 +469,7 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
     <div class="work-num">08 &nbsp;·&nbsp; Public Code &amp; Project Profile</div>
     <h2><a href="https://izworskic.github.io/" target="_blank" rel="noopener">Chris Izworski GitHub Pages</a></h2>
     <div class="work-url">izworskic.github.io</div>
-    <p class="work-desc">A project-focused GitHub Pages profile that connects Chris Izworski's public code, topical sites, verified identity links, and owned-domain project index. The related GitHub profile is at <a href="https://github.com/izworskic" target="_blank" rel="noopener">github.com/izworskic</a>.</p>
+    <p class="work-desc">A project-focused GitHub Pages profile that connects Chris Izworski's public code, topical sites, verified identity links, and owned-domain project index. Read the <a href="https://izworskic.github.io/projects/">project portfolio</a> and the <a href="https://izworskic.github.io/projects/#nyc-reliability">NYC crossing reliability notes</a>. The related GitHub profile is at <a href="https://github.com/izworskic" target="_blank" rel="noopener">github.com/izworskic</a>.</p>
   </div>
 
   <div class="work">
