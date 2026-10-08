@@ -1614,12 +1614,20 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
   const normalized=normalizeMarketingFlight(flight);
   const shouldResolveCodeshare=Boolean(normalized.ok && FLIGHTMAPPER_AIRLINE_SLUGS[normalized.carrier]);
   const assignmentPromise=lookupAssignment({flight,date,flightId});
+  // Marketing-only Delta numbers can require two sequential independent lookups.
+  // Begin their schedule resolution concurrently to avoid adding avoidable latency.
+  const earlyCodesharePromise=shouldResolveCodeshare && normalized.carrier === 'DL' &&
+    Number.parseInt(normalized.number,10) >= 5000
+      ? resolveCodeshareOperatingFlight(flight,date,nowMs).catch(() => null)
+      : null;
   const directPromise=allowDirectLive ? directLiveSnapshot(flight) : Promise.resolve(null);
 
   const direct=await directPromise;
   if (directLiveIsAirborne(direct)) {
     if (shouldResolveCodeshare) {
-      const codeshare=await resolveCodeshareOperatingFlight(flight,date,nowMs);
+      const codeshare=earlyCodesharePromise
+        ? await earlyCodesharePromise
+        : await resolveCodeshareOperatingFlight(flight,date,nowMs);
       if (codeshare?.operatingFlight) {
         const operatingLive=await directLiveSnapshot(codeshare.operatingFlight);
         if (directLiveIsAirborne(operatingLive)) {
@@ -1647,7 +1655,15 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
   );
   if (assignment?.status === 'found') {
     if (needsCodeshareLookup) {
-      codeshare=await resolveCodeshareAgainstAssignment(flight,date,assignment,nowMs);
+      codeshare=earlyCodesharePromise
+        ? await earlyCodesharePromise
+        : await resolveCodeshareAgainstAssignment(flight,date,assignment,nowMs);
+      // When the marketing occurrence exists, validate an early candidate
+      // against that occurrence instead of trusting an unrelated cached operator.
+      if (codeshare?.operatingFlight && earlyCodesharePromise) {
+        const verified=await resolveCodeshareAgainstAssignment(flight,date,assignment,nowMs);
+        codeshare=verified || null;
+      }
     }
     if (codeshare?.operatingFlight) {
       const resolvedAssignment=codeshare.assignment?.status === 'found'
@@ -1662,7 +1678,9 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
   }
 
   if (!codeshare && needsCodeshareLookup) {
-    codeshare=await resolveCodeshareOperatingFlight(flight,date,nowMs);
+    codeshare=earlyCodesharePromise
+      ? await earlyCodesharePromise
+      : await resolveCodeshareOperatingFlight(flight,date,nowMs);
   }
   if (codeshare?.operatingFlight) {
     if (allowDirectLive) {
