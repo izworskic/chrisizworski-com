@@ -22,6 +22,9 @@
     "api/fall-color.js": {
       "maxDuration": 60
     },
+    "api/flight-assignment.js": {
+      "maxDuration": 60
+    },
     "api/aurora.js": {
       "maxDuration": 20
     },
