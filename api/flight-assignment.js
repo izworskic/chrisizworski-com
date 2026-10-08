@@ -1049,7 +1049,7 @@ async function fetchCodeshareText(marketingFlight) {
   const controller=new AbortController();
   const timer=setTimeout(() => controller.abort(),CODESHARE_TIMEOUT_MS);
   try {
-    const url=CODESHARE_READER_BASE + encodeURIComponent(slug + '_' + normalized.display);
+    const url=CODESHARE_READER_BASE + encodeURIComponent(slug + '_' + normalized.carrier + '_' + normalized.number);
     const response=await fetch(url,{
       headers:{accept:'text/plain','user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'},
       signal:controller.signal
@@ -1284,20 +1284,43 @@ async function buildUnifiedFromDirectLive(marketingFlight,live,operatingFlight=n
 }
 
 async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=false,nowMs = Date.now()}) {
+  const normalized=normalizeMarketingFlight(flight);
+  const shouldResolveCodeshare=Boolean(normalized.ok && FLIGHTMAPPER_AIRLINE_SLUGS[normalized.carrier]);
   const assignmentPromise=lookupAssignment({flight,date,flightId});
   const directPromise=allowDirectLive ? directLiveSnapshot(flight) : Promise.resolve(null);
+  const codesharePromise=shouldResolveCodeshare
+    ? resolveCodeshareOperatingFlight(flight,date,nowMs)
+    : Promise.resolve(null);
 
   const direct=await directPromise;
   if (directLiveIsAirborne(direct)) {
+    const codeshare=await codesharePromise;
+    if (codeshare?.operatingFlight) {
+      const operatingLive=await directLiveSnapshot(codeshare.operatingFlight);
+      if (directLiveIsAirborne(operatingLive)) {
+        return await buildUnifiedFromDirectLive(
+          flight,operatingLive,codeshare.operatingFlight,codeshare.source,nowMs
+        );
+      }
+    }
     return await buildUnifiedFromDirectLive(flight,direct,null,null,nowMs);
   }
 
   const assignment=await assignmentPromise;
+  const codeshare=await codesharePromise;
   if (assignment?.status === 'found') {
+    if (codeshare?.operatingFlight) {
+      const resolvedAssignment=codeshare.assignment?.status === 'found'
+        ? codeshare.assignment
+        : assignment;
+      const aliased=applyCodeshareAssignment(
+        resolvedAssignment,flight,codeshare.operatingFlight,codeshare.source
+      );
+      return await buildUnifiedFromAssignment(aliased,date,nowMs);
+    }
     return await buildUnifiedFromAssignment(assignment,date,nowMs);
   }
 
-  const codeshare=await resolveCodeshareOperatingFlight(flight,date,nowMs);
   if (codeshare?.operatingFlight) {
     if (allowDirectLive) {
       const operatingLive=await directLiveSnapshot(codeshare.operatingFlight);
