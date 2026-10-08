@@ -227,6 +227,8 @@
   }
 
   function delayWhyText(assignment, inbound) {
+    // Completed passenger flights must not inherit delay explanations from an inbound leg.
+    if (assignmentArrivalConfirmed(assignment) || assignment?.flightStatus?.canceled === true) return '';
     const departureDelay = departureDelayMinutes(assignment);
     if (!Number.isFinite(departureDelay) || departureDelay <= 0 || !inbound) return '';
 
@@ -299,6 +301,8 @@
   }
 
   function delayLabel(assignment) {
+    // Arrival confirmation outranks old departure-delay numbers and status text.
+    if (assignmentArrivalConfirmed(assignment)) return 'Arrived';
     if (assignment?.flightStatus?.canceled) return 'Canceled';
     if (unresolvedStatusIsStale(assignment)) {
       const checked = statusCheckedClock(assignment);
@@ -1618,7 +1622,7 @@
   }
 
   function renderAssignedNoPosition(assignment, data) {
-    if (renderArrivedForTurn(assignment)) return;
+    if (!assignmentArrivalConfirmed(assignment) && renderArrivedForTurn(assignment)) return;
     const tail = assignment?.tailNumber;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
@@ -1993,13 +1997,14 @@
     });
 
     const departureIso = assignment?.schedule?.actualDepartureUTC || assignment?.schedule?.estimatedDepartureUTC || assignment?.schedule?.scheduledDepartureUTC;
+    const passengerFlightArrived = assignmentArrivalConfirmed(assignment);
     rows.push({
       key:'departure',
       time:timelineClock(departureIso,assignment?.origin?.timezone),
       label:'Departure',
-      status:(assignment?.flightStatus?.airborne ? 'Departed ' : 'Scheduled from ') + airportPlace(assignment.origin) +
+      status:(assignment?.flightStatus?.airborne || passengerFlightArrived ? 'Departed from ' : 'Scheduled from ') + airportPlace(assignment.origin) +
         (assignment?.origin?.gate ? ' · gate ' + assignment.origin.gate : '') +
-        (delayLabel(assignment) ? ' · ' + delayLabel(assignment) : '')
+        (!passengerFlightArrived && delayLabel(assignment) ? ' · ' + delayLabel(assignment) : '')
     });
 
     const arrivalIso = assignment?.schedule?.actualArrivalUTC || assignment?.schedule?.estimatedArrivalUTC || assignment?.schedule?.scheduledArrivalUTC;
@@ -2214,7 +2219,7 @@
         summary:'The flight-status feed confirms departure.' +
           (staleAge ? ' The newest aircraft position is stale (' + staleAge.toLowerCase() + '), so it is not shown as live.' : ' No fresh aircraft position is available right now.'),
         pills:[route,delay,assignmentData.tailNumber,assignmentData?.equipment?.name].filter(Boolean),
-        next:'What happens next: the map stays empty until a fresh aircraft fix arrives. A stale ground report cannot move this flight back to the gate.',
+        next:'What happens next: we will show a map position only when a fresh fix arrives. An old ground report does not override the confirmed airborne status.',
         delayWhy:delayWhyText(assignmentData,prior),
         source:assignmentSourceText()
       });
