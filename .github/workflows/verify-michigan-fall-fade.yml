@@ -1,0 +1,25 @@
+name: Verify Michigan fall-color seasonal map
+on:
+  pull_request:
+    paths:
+      - "public/fall-color/index.html"
+      - "tests/fall-color-winter-fade.test.js"
+      - ".github/workflows/verify-michigan-fall-fade.yml"
+  push:
+    branches: [main]
+    paths:
+      - "public/fall-color/index.html"
+      - "tests/fall-color-winter-fade.test.js"
+permissions:
+  contents: read
+jobs:
+  seasonal-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify Michigan map runtime syntax and all eight seasonal gradients
+        run: node --test tests/fall-color-winter-fade.test.js
