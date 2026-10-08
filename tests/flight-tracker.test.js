@@ -91,12 +91,41 @@ test('public identity resolver maps exact codeshares and rejects begins-with fal
   assert.equal(publicIdentity.pickExactIdentity({results:[dl5Fixture.results[0]]},'DL5'),null);
 });
 
+test('operating identity recovery fixes the original marketing-callsign miss without inventing position', async () => {
+  const normalized=api.normalizeFlightInput('VS1671');
+  const identity={
+    recognized:true,
+    requestedFlight:'VS1671',
+    operatingFlight:'DL3898',
+    codeshare:true,
+    callsign:'SKW3898',
+    registration:null
+  };
+  const aircraft={
+    callsign:'SKW3898',registration:'N821SK',lat:43.4,lon:-84.0,
+    positionAgeSeconds:4,onGround:false
+  };
+  const recovery=await api.recoverLiveFromPublicIdentity(normalized,identity,{
+    resolveFlightFn:async resolved => {
+      assert.equal(resolved.display,'DL3898');
+      assert.ok(resolved.callsigns.includes('SKW3898'));
+      return {status:'unique',aircraft};
+    },
+    lookupCallsignFn:async()=>{ throw new Error('should not need second callsign lookup'); },
+    lookupRegistrationFn:async()=>{ throw new Error('should not need registration lookup'); }
+  });
+  assert.equal(recovery.recoveredBy,'operating-flight-callsign');
+  assert.equal(recovery.resolved.aircraft.registration,'N821SK');
+  assert.ok(recovery.checkedCallsigns.includes('VIR1671'));
+  assert.ok(recovery.checkedCallsigns.includes('SKW3898'));
+});
+
 test('public identity can recover an operating identity but never becomes live map telemetry itself', () => {
   const trackerSource=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
   assert.match(trackerSource,/resolvePublicFlightIdentity/);
   assert.match(trackerSource,/recoverLiveFromPublicIdentity/);
-  assert.match(trackerSource,/lookupCallsign\(identity\.callsign\)/);
-  assert.match(trackerSource,/lookupRegistration\(registration\)/);
+  assert.match(trackerSource,/lookupCallsignFn\(identity\.callsign\)/);
+  assert.match(trackerSource,/lookupRegistrationFn\(registration\)/);
   assert.match(trackerSource,/identityRecovery/);
   assert.doesNotMatch(trackerSource,/lat:identity\.lat/);
   assert.doesNotMatch(trackerSource,/lon:identity\.lon/);
@@ -1185,6 +1214,21 @@ test('current-day unified lookup can render a fresh direct callsign without an a
     assignment,live,recentInboundOccurrence:null,nowMs:Date.parse('2026-10-08T17:00:00Z')
   });
   assert.equal(reconciled.renderedState,'airborne-live');
+});
+
+test('direct live assignment preserves independently resolved operating flight', () => {
+  const live={
+    status:'live',
+    flightNumber:'VS1671',
+    operatingFlightNumber:'DL3898',
+    positionFresh:true,
+    aircraft:{callsign:'SKW3898',registration:'N821SK',lat:43.4,lon:-84,onGround:false,positionAgeSeconds:3},
+    route:null
+  };
+  const assignment=assignmentApi.directLiveAssignment('VS1671',live);
+  assert.equal(assignment.flightNumber,'VS1671');
+  assert.equal(assignment.operatingFlightNumber,'DL3898');
+  assert.equal(assignment.codeshare.operatingFlightNumber,'DL3898');
 });
 
 test('codeshare parser and alias preserve ticket number while exposing operating flight', () => {
