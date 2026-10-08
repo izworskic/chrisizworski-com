@@ -911,13 +911,60 @@ test('text-only delay labels still produce an inbound-aircraft explanation', () 
   assert.match(client, /The inbound arrival alone does not explain the full departure delay/);
 });
 
-test('landed passenger flight becomes a last-confirmed gate state instead of vague no-position hedging', () => {
-  assert.match(client, /const completedAt = assignment\?\.flightStatus\?\.landed === true/);
-  assert.match(client, /LAST CONFIRMED AIRCRAFT STATE/);
-  assert.match(client, /is at the gate at .*tracking starts at pushback/s);
-  assert.match(client, /no newer live position or later same-tail leg/);
-  assert.match(client, /Its present location is unknown/);
-  assert.doesNotMatch(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
+test('landed passenger flight renders an arrived header and never no-position airborne fallback copy', () => {
+  assert.match(client, /function assignmentArrivalConfirmed\(assignment\)/);
+  assert.match(client, /schedule\?\.actualArrivalUTC/);
+  assert.match(client, /const completedAt = assignmentArrivalConfirmed\(assignment\)/);
+  assert.match(client, /YOUR FLIGHT HAS ARRIVED/);
+  assert.match(client, /has arrived in/);
+  assert.match(client, /The arrival status is confirmed; a missing or stale aircraft position does not make this flight airborne/);
+  assert.match(client, /if \(assignmentArrivalConfirmed\(assignmentData\)\) \{[\s\S]*?renderAssignedNoPosition/s);
+  assert.doesNotMatch(client, /LAST CONFIRMED AIRCRAFT STATE/);
+});
+
+test('confirmed arrival outranks airborne flags and fresh tail telemetry', () => {
+  const now=Date.parse('2026-10-08T16:30:00Z');
+  const landed={
+    flightNumber:'DL3898',
+    tailNumber:'N821SK',
+    origin:{iata:'MBS'},
+    destination:{iata:'DTW'},
+    flightStatus:{airborne:true,landed:true,canceled:false},
+    schedule:{actualDepartureUTC:'2026-10-08T15:57:00Z',actualArrivalUTC:'2026-10-08T16:23:00Z'}
+  };
+  const freshAirborneTail={
+    status:'live',
+    aircraft:{lat:42.5,lon:-83.3,positionAgeSeconds:10,onGround:false}
+  };
+  const result=assignmentApi.reconcileFlightState({
+    assignment:landed,
+    live:freshAirborneTail,
+    recentInboundOccurrence:null,
+    nowMs:now
+  });
+  assert.equal(assignmentApi.confirmedArrival(landed),true);
+  assert.equal(result.statusState,'landed');
+  assert.equal(result.renderedState,'landed-status');
+  assert.equal(result.renderSource,'flight-status-arrival');
+
+  const actualArrivalOnly={
+    ...landed,
+    flightStatus:{airborne:true,landed:false,canceled:false}
+  };
+  const byActualArrival=assignmentApi.reconcileFlightState({
+    assignment:actualArrivalOnly,
+    live:null,
+    recentInboundOccurrence:null,
+    nowMs:now
+  });
+  assert.equal(assignmentApi.confirmedArrival(actualArrivalOnly),true);
+  assert.equal(byActualArrival.renderedState,'landed-status');
+  assert.equal(byActualArrival.statusState,'landed');
+});
+
+test('timeline uses the same arrival-confirmed predicate as the status header', () => {
+  assert.match(client,/if \(assignmentArrivalConfirmed\(assignment\)\) currentStage = 'arrival'/);
+  assert.match(client,/assignmentArrivalConfirmed\(assignment\) \? 'Arrived in ' : 'Expected in '/);
 });
 
 test('completed FlightStats occurrence exposes a bounded actual arrival timestamp for the last-leg story', () => {
