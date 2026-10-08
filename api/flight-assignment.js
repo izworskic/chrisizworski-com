@@ -1634,8 +1634,19 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
 
   const assignment=await assignmentPromise;
   let codeshare=null;
+  // Normal Delta flights with a confirmed tail do not require a second lookup.
+  // Unknown Delta occurrences, missing tails and explicitly foreign-operated
+  // flights do: the ticket flight may only be a marketing codeshare.
+  const operatingCode=clean(assignment?.operatingCarrier?.code);
+  const operatingName=String(assignment?.operatingCarrier?.name || '');
+  const needsCodeshareLookup=shouldResolveCodeshare && (
+    normalized.carrier !== 'DL' ||
+    assignment?.status !== 'found' || !assignment?.tailNumber ||
+    (operatingCode && operatingCode !== 'DL') ||
+    /Virgin Atlantic|Air France|KLM|WestJet|Korean Air|Aeromexico/i.test(operatingName)
+  );
   if (assignment?.status === 'found') {
-    if (shouldResolveCodeshare) {
+    if (needsCodeshareLookup) {
       codeshare=await resolveCodeshareAgainstAssignment(flight,date,assignment,nowMs);
     }
     if (codeshare?.operatingFlight) {
@@ -1650,7 +1661,7 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
     return await buildUnifiedFromAssignment(assignment,date,nowMs);
   }
 
-  if (!codeshare && shouldResolveCodeshare) {
+  if (!codeshare && needsCodeshareLookup) {
     codeshare=await resolveCodeshareOperatingFlight(flight,date,nowMs);
   }
   if (codeshare?.operatingFlight) {
@@ -1674,6 +1685,32 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
       );
       return await buildUnifiedFromAssignment(aliased,date,nowMs);
     }
+    // A known operator is not proof of a tail number or a live ADS-B fix.
+    // Never report an outage merely because the marketing or operating
+    // occurrence is absent from the available public assignment records.
+    const uncovered={
+      status:'assignment-not-covered',
+      flightNumber:clean(flight),
+      date,
+      marketingFlightNumber:clean(flight),
+      operatingFlightNumber:codeshare.operatingFlight,
+      codeshare:{
+        marketingFlightNumber:clean(flight),
+        operatingFlightNumber:codeshare.operatingFlight,
+        source:codeshare.source
+      },
+      message:'This flight is marketed as ' + clean(flight) + ' and operated as ' +
+        codeshare.operatingFlight + '. We can identify its operating flight, but cannot confirm a tail-number assignment for this date. This is a coverage gap, not a source outage.',
+      checkedFallbacks:['marketing-flight-status','operating-flight-status','independent-public-history'],
+      source:codeshare.source
+    };
+    if (allowDirectLive) {
+      uncovered.liveCoverage={
+        status:direct?.status || 'not-found',
+        checkedCallsigns:Array.isArray(direct?.checkedCallsigns) ? direct.checkedCallsigns : []
+      };
+    }
+    return uncovered;
   }
 
   if (allowDirectLive && assignment && typeof assignment === 'object') {
