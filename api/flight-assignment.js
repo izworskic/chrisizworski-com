@@ -1141,6 +1141,86 @@ async function resolveCodeshareOperatingFlight(marketingFlight,date,nowMs = Date
   return null;
 }
 
+async function candidateAssignmentsForCodeshare(flight,date) {
+  const cached=await cachedAssignmentsForFlight(flight,date);
+  if (cached.length) return cached;
+
+  const base=await lookupAssignment({flight,date,flightId:null}).catch(() => null);
+  if (base?.status === 'found') return [base];
+  if (base?.status !== 'choose-flight') return [];
+
+  const options=(base.options || []).slice(0,6);
+  const details=await Promise.all(options.map(option =>
+    lookupAssignment({flight,date,flightId:option.flightId}).catch(() => null)
+  ));
+  return details.filter(detail => detail?.status === 'found');
+}
+
+function codeshareOccurrenceMatchScore(marketingAssignment,operatorAssignment,nowMs=Date.now()) {
+  if (operatorAssignment?.status !== 'found') return -Infinity;
+  let score=0;
+  const marketingTail=clean(marketingAssignment?.tailNumber);
+  const operatorTail=clean(operatorAssignment?.tailNumber);
+  if (marketingTail && operatorTail) {
+    if (marketingTail !== operatorTail) return -Infinity;
+    score += 2000;
+  }
+  if (sameAirport(marketingAssignment?.origin,operatorAssignment?.origin) &&
+      sameAirport(marketingAssignment?.destination,operatorAssignment?.destination)) {
+    score += 900;
+  } else if (marketingAssignment?.origin && marketingAssignment?.destination) {
+    return -Infinity;
+  }
+
+  const marketingTime=Date.parse(
+    marketingAssignment?.schedule?.actualDepartureUTC ||
+    marketingAssignment?.schedule?.estimatedDepartureUTC ||
+    marketingAssignment?.schedule?.scheduledDepartureUTC || ''
+  );
+  const operatorTime=Date.parse(
+    operatorAssignment?.schedule?.actualDepartureUTC ||
+    operatorAssignment?.schedule?.estimatedDepartureUTC ||
+    operatorAssignment?.schedule?.scheduledDepartureUTC || ''
+  );
+  if (Number.isFinite(marketingTime) && Number.isFinite(operatorTime)) {
+    const diffMinutes=Math.abs(marketingTime - operatorTime) / 60000;
+    if (diffMinutes > 180) return -Infinity;
+    score += Math.max(0,600 - diffMinutes * 3);
+  }
+  score += codeshareAssignmentScore(operatorAssignment,nowMs) / 10;
+  return score;
+}
+
+async function resolveCodeshareAgainstAssignment(marketingFlight,date,marketingAssignment,nowMs=Date.now()) {
+  const markdown=await fetchCodeshareText(marketingFlight);
+  const candidates=parseCodeshareOperatingCandidates(markdown,marketingFlight);
+  if (!candidates.length) return null;
+
+  const groups=await Promise.all(candidates.slice(0,12).map(async operatingFlight => ({
+    operatingFlight,
+    assignments:await candidateAssignmentsForCodeshare(operatingFlight,date)
+  })));
+  const matches=[];
+  for (const group of groups) {
+    for (const assignment of group.assignments) {
+      const score=codeshareOccurrenceMatchScore(marketingAssignment,assignment,nowMs);
+      if (Number.isFinite(score)) matches.push({operatingFlight:group.operatingFlight,assignment,score});
+    }
+  }
+  matches.sort((a,b) => b.score - a.score);
+  if (!matches.length || matches[0].score < 900) return null;
+  if (matches[1] && matches[0].score - matches[1].score < 100 &&
+      matches[0].operatingFlight !== matches[1].operatingFlight) return null;
+
+  return {
+    marketingFlight:clean(marketingFlight),
+    operatingFlight:matches[0].operatingFlight,
+    assignment:matches[0].assignment,
+    candidates,
+    source:{name:'FlightMapper public schedule via Jina Reader',url:'https://info.flightmapper.net/'}
+  };
+}
+
 function applyCodeshareAssignment(assignment,marketingFlight,operatingFlight,source=null) {
   if (!assignment) return null;
   return {
@@ -1307,8 +1387,12 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
   }
 
   const assignment=await assignmentPromise;
-  const codeshare=await codesharePromise;
+  let codeshare=await codesharePromise;
   if (assignment?.status === 'found') {
+    if (shouldResolveCodeshare) {
+      const occurrenceResolved=await resolveCodeshareAgainstAssignment(flight,date,assignment,nowMs);
+      if (occurrenceResolved) codeshare=occurrenceResolved;
+    }
     if (codeshare?.operatingFlight) {
       const resolvedAssignment=codeshare.assignment?.status === 'found'
         ? codeshare.assignment
@@ -1795,6 +1879,9 @@ module.exports._test = {
   codeshareAssignmentScore,
   cachedAssignmentsForFlight,
   resolveCodeshareOperatingFlight,
+  candidateAssignmentsForCodeshare,
+  codeshareOccurrenceMatchScore,
+  resolveCodeshareAgainstAssignment,
   applyCodeshareAssignment,
   directLiveIsAirborne,
   directLiveAssignment,
