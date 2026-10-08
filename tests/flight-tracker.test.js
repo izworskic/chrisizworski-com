@@ -1047,6 +1047,52 @@ test('assignment lookup has durable last-good cache and base-page fallback befor
   assert.match(source,/live-operating-callsigns/);
 });
 
+test('independent public-history parser resolves the exact same-day route and registration', () => {
+  const markdown = [
+    '| [N821SK](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") 08 Oct 2026 - Estimated 12:22 PM STD 11:43 AM ATD 11:57 AM STA 12:38 PM FROM Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) TO Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) |  | 08 Oct 2026 | Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) | Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) | CRJ9 [(N821SK)](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") | — | 11:43 AM | 11:57 AM | 12:38 PM |  | Estimated 12:22 PM | [Live](https://www.flightradar24.com/data/flights/dl3898#x) |',
+    '| [N821SK](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") 08 Oct 2026 0:30 Landed 10:47 AM STD 10:04 AM ATD 10:17 AM STA 11:01 AM FROM Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) TO Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) |  | 08 Oct 2026 | Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) | Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) | CRJ9 [(N821SK)](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") | 0:30 | 10:04 AM | 10:17 AM | 11:01 AM |  | Landed 10:47 AM |'
+  ].join('\n');
+  const rows=assignmentApi.parseFr24HistoryRows(markdown);
+  assert.equal(rows.length,2);
+  assert.equal(rows[0].registration,'N821SK');
+  assert.equal(rows[0].origin,'MBS');
+  assert.equal(rows[0].destination,'DTW');
+  assert.equal(rows[0].equipmentCode,'CRJ9');
+  assert.equal(rows[1].landed,true);
+
+  const normalized={display:'DL3898'};
+  const normalizedDate={raw:'2026-10-08',year:2026,month:10,day:8};
+  const selected=assignmentApi.fr24AssignmentFromRow({
+    normalized,
+    normalizedDate,
+    row:rows[0],
+    routeHint:{
+      flightId:'1412873434',
+      sortTime:'2026-10-08T15:43:00.000Z',
+      origin:{iata:'MBS',code:'MBS',city:'Saginaw'},
+      destination:{iata:'DTW',code:'DTW',city:'Detroit'}
+    },
+    flightId:'1412873434'
+  });
+  assert.equal(selected.status,'found');
+  assert.equal(selected.tailNumber,'N821SK');
+  assert.equal(selected.flightId,'1412873434');
+  assert.equal(selected.origin.iata,'MBS');
+  assert.equal(selected.destination.iata,'DTW');
+  assert.equal(selected.schedule.scheduledDepartureUTC,'2026-10-08T15:43:00.000Z');
+  assert.equal(selected.fallback.kind,'independent-public-history');
+  assert.equal(selected.source.kind,'independent-public-history-fallback');
+});
+
+test('cold assignment outage checks independent public history before declaring source unavailable', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/FR24_READER_BASE = 'https:\/\/r\.jina\.ai\/https:\/\/www\.flightradar24\.com\/data\/flights\/'/);
+  assert.match(source,/lookupIndependentAssignmentFallback/);
+  assert.match(source,/independent-public-history/);
+  assert.match(source,/cachedRouteHint/);
+  assert.match(source,/checkedFallbacks:\['last-good-assignment-cache','independent-public-history','live-operating-callsigns'\]/);
+});
+
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {
   assert.match(html, /Enter the flight number on your ticket/);
   assert.match(html, /currently flying a different flight number/);
