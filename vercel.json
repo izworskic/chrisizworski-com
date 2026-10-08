@@ -430,6 +430,30 @@
   ],
   "rewrites": [
     {
+      "source": "/api/national-fall-region",
+      "destination": "https://national-fall-color.vercel.app/api/national-fall-region"
+    },
+    {
+      "source": "/fall-color/national-sitemap.xml",
+      "destination": "https://national-fall-color.vercel.app/fall-color/national-sitemap.xml"
+    },
+    {
+      "source": "/fall-color/national",
+      "destination": "https://national-fall-color.vercel.app/fall-color/national/index.html"
+    },
+    {
+      "source": "/fall-color/national/",
+      "destination": "https://national-fall-color.vercel.app/fall-color/national/index.html"
+    },
+    {
+      "source": "/fall-color/:slug(new-england|great-smoky-mountains|colorado-aspens|adirondacks|north-shore-superior|ozarks|eastern-sierra|wasatch|columbia-river-gorge|door-county|poconos|texas-hill-country|west-virginia-highlands|catskills|shenandoah)",
+      "destination": "https://national-fall-color.vercel.app/fall-color/:slug/index.html"
+    },
+    {
+      "source": "/fall-color/:slug(new-england|great-smoky-mountains|colorado-aspens|adirondacks|north-shore-superior|ozarks|eastern-sierra|wasatch|columbia-river-gorge|door-county|poconos|texas-hill-country|west-virginia-highlands|catskills|shenandoah)/",
+      "destination": "https://national-fall-color.vercel.app/fall-color/:slug/index.html"
+    },
+    {
       "source": "/old-sow-live",
       "destination": "/old-sow-live/index.html"
     },
