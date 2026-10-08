@@ -61,10 +61,18 @@ function positionObservation(live, nowMs = Date.now()) {
   const fixTimestamp = validAge === null
     ? null
     : new Date(nowMs - validAge * 1000).toISOString();
+  const displayAgeSeconds = validAge === null
+    ? null
+    : validAge < 60
+      ? 0
+      : validAge < 90 * 60
+        ? Math.floor(validAge / 60) * 60
+        : Math.floor(validAge / 3600) * 3600;
   return {
     hasPosition:true,
     fixTimestamp,
     fixAgeSeconds:validAge,
+    displayAgeSeconds,
     fixAgeMinutes:validAge === null ? null : Math.max(0, Math.round(validAge / 60)),
     fresh:validAge !== null && validAge <= POSITION_MAX_AGE_SECONDS,
     onGround:aircraft?.onGround === true,
