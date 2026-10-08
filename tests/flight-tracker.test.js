@@ -1321,6 +1321,7 @@ test('independent same-tail history recovers the leg immediately before the pass
     destination:'BOS',
     flightNumber:'DL1171',
     landed:false,
+    actualArrivalUTC:null,
     sourceLine:rows[1].sourceLine
   });
   const inbound=assignmentApi.independentInboundFromTailRows(rows,{
@@ -1333,6 +1334,8 @@ test('independent same-tail history recovers the leg immediately before the pass
   assert.equal(inbound.origin,'ATL');
   assert.equal(inbound.destination,'DTW');
   assert.equal(inbound.landed,true);
+  assert.equal(inbound.actualArrivalUTC,'2026-10-08T16:49:00.000Z');
+  assert.equal(assignmentApi.fr24HistoryUtc('08 Oct 2026','16:49'),'2026-10-08T16:49:00.000Z');
 });
 
 test('independent tail fallback is bounded to exact date, flight sequence, route and tail', () => {
