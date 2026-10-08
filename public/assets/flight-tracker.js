@@ -2271,7 +2271,7 @@
 
       if (assignmentChangedFrom) {
         resetHeldLive();
-        resetMapForFailure(activeFlight,'Flight state unavailable');
+        clearLiveMap();
       }
 
       renderUnifiedFlightState(data);
@@ -2288,7 +2288,7 @@
           pills:[activeFlight,activeDate],
           source:'Flight status: FlightStats · Aircraft position: ADSB.lol.'
         });
-        clearLiveMap();
+        resetMapForFailure(activeFlight,'Flight state unavailable');
       }
     } finally {
       if (silent) assignmentInFlight = false;
