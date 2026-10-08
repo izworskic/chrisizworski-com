@@ -1207,6 +1207,50 @@ test('reachable assignment source with no usable occurrence is classified as cov
   assert.match(source,/not proof that the passenger flight does not exist/);
 });
 
+test('independent same-tail history recovers the leg immediately before the passenger flight', () => {
+  const markdown=[
+    'TO Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)08 Oct 2026 Boston [(BOS)](https://www.flightradar24.com/data/airports/bos)Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)[DL1432](https://www.flightradar24.com/data/flights/dl1432)—21:25—23:46 Estimated departure 21:35',
+    'TO Boston [(BOS)](https://www.flightradar24.com/data/airports/bos)08 Oct 2026 Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)Boston [(BOS)](https://www.flightradar24.com/data/airports/bos)[DL1171](https://www.flightradar24.com/data/flights/dl1171)—18:17—20:15 Estimated departure 19:12',
+    'TO Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)08 Oct 2026 Atlanta [(ATL)](https://www.flightradar24.com/data/airports/atl)Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)[DL1240](https://www.flightradar24.com/data/flights/dl1240)1:29 15:08 15:20 17:06 Landed 16:49[Play](https://www.flightradar24.com/data/aircraft/n121dz#42083126)',
+    'TO Atlanta [(ATL)](https://www.flightradar24.com/data/airports/atl)08 Oct 2026 Houston [(IAH)](https://www.flightradar24.com/data/airports/iah)Atlanta [(ATL)](https://www.flightradar24.com/data/airports/atl)[DL1315](https://www.flightradar24.com/data/flights/dl1315)1:30 12:00 12:15 14:02 Landed 13:45'
+  ].join('\n');
+
+  const rows=assignmentApi.parseFr24AircraftHistoryRows(markdown);
+  assert.equal(rows.length,4);
+  assert.deepEqual(rows[1],{
+    dateLabel:'08 Oct 2026',
+    origin:'DTW',
+    destination:'BOS',
+    flightNumber:'DL1171',
+    landed:false,
+    sourceLine:rows[1].sourceLine
+  });
+  const inbound=assignmentApi.independentInboundFromTailRows(rows,{
+    dateLabel:'08 Oct 2026',
+    passengerFlight:'DL1171',
+    origin:'DTW',
+    destination:'BOS'
+  });
+  assert.equal(inbound.flightNumber,'DL1240');
+  assert.equal(inbound.origin,'ATL');
+  assert.equal(inbound.destination,'DTW');
+  assert.equal(inbound.landed,true);
+});
+
+test('independent tail fallback is bounded to exact date, flight sequence, route and tail', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/FR24_AIRCRAFT_READER_BASE/);
+  assert.match(source,/async function lookupIndependentInboundByTail\(assignment,date\)/);
+  assert.match(source,/passengerFlight=clean\(assignment\?\.operatingFlightNumber \|\| assignment\?\.flightNumber\)/);
+  assert.match(source,/row\.flightNumber === flight/);
+  assert.match(source,/row\.origin === from/);
+  assert.match(source,/row\.destination === to/);
+  assert.match(source,/for \(let i=passengerIndex \+ 1; i<sameDay\.length; i\+\+\)/);
+  assert.match(source,/if \(row\.destination === from && row\.landed\) return row/);
+  assert.match(source,/kind:'independent-tail-history-same-aircraft'/);
+  assert.match(source,/await writeInboundCache\(date,tail,airport,independent\)/);
+});
+
 test('independent public-history parser resolves the exact same-day route and registration', () => {
   const markdown = [
     '| [N821SK](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") 08 Oct 2026 - Estimated 12:22 PM STD 11:43 AM ATD 11:57 AM STA 12:38 PM FROM Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) TO Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) |  | 08 Oct 2026 | Saginaw [(MBS)](https://www.flightradar24.com/data/airports/mbs) | Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw) | CRJ9 [(N821SK)](https://www.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") | — | 11:43 AM | 11:57 AM | 12:38 PM |  | Estimated 12:22 PM | [Live](https://www.flightradar24.com/data/flights/dl3898#x) |',
