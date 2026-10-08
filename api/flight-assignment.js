@@ -1300,6 +1300,11 @@ function parseCodeshareOperatingCandidates(markdown,marketingFlight,date=null) {
   while ((match=regex.exec(content))) {
     const section=content.slice(previousEnd,match.index);
     previousEnd=regex.lastIndex;
+    // Another marketed flight can appear later in the same schedule page.
+    // Do not borrow its operating flight even when its validity dates match.
+    const marketedLabels=[...section.matchAll(/\b([A-Z]{2})\s*([0-9]{1,4}[A-Z]?)\b/g)]
+      .map(parts=>clean(parts[1] + parts[2]));
+    if (marketedLabels.length && marketedLabels[marketedLabels.length-1] !== requested) continue;
     const flight=clean(match[1] + match[2]);
     if (!flight || flight === requested || seen.has(flight) ||
         !codeshareScheduleApplies(section,date)) continue;
