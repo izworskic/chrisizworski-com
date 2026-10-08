@@ -7,12 +7,12 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const root = path.join(__dirname,'..');
-const v3 = require('../api/flight-v3.js')._test;
+const v3 = require('../lib/flight-v3.js')._test;
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const shareHtml = fs.readFileSync(path.join(root,'public','flight-tracker','share','index.html'),'utf8');
 const sw = fs.readFileSync(path.join(root,'public','flight-tracker-sw.js'),'utf8');
-const apiSource = fs.readFileSync(path.join(root,'api','flight-v3.js'),'utf8');
+const apiSource = fs.readFileSync(path.join(root,'lib','flight-v3.js'),'utf8');
 const vercel = JSON.parse(fs.readFileSync(path.join(root,'vercel.json'),'utf8'));
 
 function assignment(overrides={}) {
@@ -319,9 +319,10 @@ test('reliability remains hidden until enough final history exists and uses 30 d
 });
 
 test('Vercel schedules one five-minute watch cron and routes share tokens', () => {
-  const cron=vercel.crons.find(item=>item.path==='/api/flight-v3?action=cron');
-  assert.deepEqual(cron,{path:'/api/flight-v3?action=cron',schedule:'*/5 * * * *'});
-  assert.equal(vercel.functions['api/flight-v3.js'].maxDuration,60);
+  const cron=vercel.crons.find(item=>item.path==='/api/flight-assignment?flightV3=1&action=cron');
+  assert.deepEqual(cron,{path:'/api/flight-assignment?flightV3=1&action=cron',schedule:'*/5 * * * *'});
+  assert.equal(vercel.functions['api/flight-assignment.js'].maxDuration,60);
+  assert.equal(vercel.functions['api/flight-v3.js'],undefined);
   assert.ok(vercel.rewrites.some(r=>r.source==='/flight-tracker/share/:token' && /token=:token/.test(r.destination)));
   const swHeaders=vercel.headers.find(h=>h.source==='/flight-tracker-sw.js');
   assert.ok(swHeaders);
