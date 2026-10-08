@@ -688,7 +688,11 @@ function uniqueStrings(values) {
   return [...new Set((values || []).filter(Boolean).map(value => String(value).trim()).filter(Boolean))];
 }
 
-async function recoverLiveFromPublicIdentity(normalized, identity) {
+async function recoverLiveFromPublicIdentity(normalized, identity, {
+  resolveFlightFn=resolveFlight,
+  lookupCallsignFn=lookupCallsign,
+  lookupRegistrationFn=lookupRegistration
+}={}) {
   if (!identity?.recognized) return null;
   const checkedCallsigns = [...normalized.callsigns];
 
@@ -697,7 +701,7 @@ async function recoverLiveFromPublicIdentity(normalized, identity) {
     const operatingNormalized = normalizeFlightInput(operatingFlight);
     if (operatingNormalized.ok) {
       checkedCallsigns.push(...operatingNormalized.callsigns);
-      const operatingResolved = await resolveFlight(operatingNormalized);
+      const operatingResolved = await resolveFlightFn(operatingNormalized);
       if (operatingResolved.status === 'unique' && operatingResolved.aircraft) {
         return {
           resolved:operatingResolved,
@@ -711,7 +715,7 @@ async function recoverLiveFromPublicIdentity(normalized, identity) {
 
   if (identity.callsign) {
     checkedCallsigns.push(identity.callsign);
-    const aircraft = await lookupCallsign(identity.callsign);
+    const aircraft = await lookupCallsignFn(identity.callsign);
     if (aircraft) {
       return {
         resolved:{status:'unique',aircraft},
@@ -724,7 +728,7 @@ async function recoverLiveFromPublicIdentity(normalized, identity) {
 
   const registration = normalizeRegistration(identity.registration);
   if (registration) {
-    const byRegistration = await lookupRegistration(registration);
+    const byRegistration = await lookupRegistrationFn(registration);
     if (byRegistration.status === 'positioned' && byRegistration.aircraft) {
       return {
         resolved:{status:'unique',aircraft:byRegistration.aircraft},
