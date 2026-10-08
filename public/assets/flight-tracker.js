@@ -2345,6 +2345,7 @@
         if (!silent) {
           const sourceDown = data.status === 'assignment-source-unavailable' || data.status === 'source-unavailable';
           const coverageGap = data.status === 'assignment-not-covered';
+          const operatingFlight = clean(data?.operatingFlightNumber || data?.codeshare?.operatingFlightNumber);
           const liveCoverageChecked = coverageGap && data?.liveCoverage &&
             Array.isArray(data.liveCoverage.checkedCallsigns);
           resetMapForFailure(activeFlight,liveCoverageChecked ? 'Outside current live coverage' : 'No live position');
@@ -2355,13 +2356,15 @@
                 ? 'ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE'
                 : 'AIRCRAFT ASSIGNMENT NOT FOUND',
             headline:coverageGap
-              ? liveCoverageChecked
-                ? 'We cannot place ' + activeFlight + ' on the live map from the available public feeds right now.'
-                : 'We do not have published assignment coverage for this flight and date.'
+              ? operatingFlight
+                ? 'We found the operating flight (' + operatingFlight + '), but not its assigned aircraft.'
+                : liveCoverageChecked
+                  ? 'We cannot place ' + activeFlight + ' on the live map from the available public feeds right now.'
+                  : 'We do not have published assignment coverage for this flight and date.'
               : sourceDown
                 ? 'We cannot confirm the assigned aircraft right now.'
                 : 'We could not identify an aircraft assignment for this scheduled occurrence.',
-            summary:coverageGap && liveCoverageChecked
+            summary:coverageGap && liveCoverageChecked && !operatingFlight
               ? (data.message || 'The public assignment sources do not publish a usable aircraft assignment for this occurrence.') +
                 ' Direct operating callsigns were also checked for a fresh ADS-B position and none is currently observable. This is a coverage gap, not a temporary assignment outage.'
               : data.message || (coverageGap
@@ -2369,18 +2372,22 @@
               : sourceDown
                 ? 'The assignment sources are temporarily unavailable. For today’s flight, direct live operating callsigns were also checked before showing this message.'
                 : 'The flight may not have an assignment published yet.'),
-            pills:[activeFlight,activeDate],
+            pills:[activeFlight,operatingFlight ? 'Operated as ' + operatingFlight : null,activeDate].filter(Boolean),
             next:coverageGap
-              ? liveCoverageChecked
-                ? 'The tracker will keep checking every 10 seconds. If the aircraft enters live ADS-B coverage, the real plane position will appear automatically; no position is estimated or simulated.'
-                : 'If this is a future flight, check again closer to departure; aircraft assignments are often published later.'
+              ? operatingFlight
+                ? 'We will recheck ' + operatingFlight + ' for a published aircraft assignment. No tail number or location is guessed.'
+                : liveCoverageChecked
+                  ? 'The tracker will keep checking every 10 seconds. If the aircraft enters live ADS-B coverage, the real plane position will appear automatically; no position is estimated or simulated.'
+                  : 'If this is a future flight, check again closer to departure; aircraft assignments are often published later.'
               : sourceDown
                 ? 'For a flight happening today, the tracker checks fresh ADS-B operating callsigns independently of the assignment feed.'
                 : null,
             source:coverageGap
-              ? liveCoverageChecked
-                ? 'Assignment coverage: unavailable for this occurrence · Live callsign check: ADSB.lol.'
-                : 'Assignment coverage: no matching published occurrence in the available public sources.'
+              ? operatingFlight
+                ? 'Codeshare identity: public schedule · Assigned aircraft: not confirmed.'
+                : liveCoverageChecked
+                  ? 'Assignment coverage: unavailable for this occurrence · Live callsign check: ADSB.lol.'
+                  : 'Assignment coverage: no matching published occurrence in the available public sources.'
               : sourceDown
                 ? 'Assignment sources: temporarily unavailable · Live aircraft source: ADSB.lol.'
                 : 'Flight occurrence data: public flight sources.'
