@@ -15,6 +15,7 @@ const cases=[
  ['isolated roadway segment','REVIEW_REQUIRED',{...baseEvent,Description:'All lanes blocked at isolated Snowbird lot entrance'}],
  ['segment qualified despite canyon-closed wording','REVIEW_REQUIRED',{...baseEvent,Description:'Little Cottonwood Canyon closed at Snowbird parking entrance only'}],
  ['missing start time cannot establish active closure','REVIEW_REQUIRED',{...baseEvent,StartDate:null}],
+ ['one-way all-lanes event cannot assert both-directions canyon closure','REVIEW_REQUIRED',{...baseEvent,DirectionOfTravel:'Eastbound'}],
  ['unspecified full closure scope','REVIEW_REQUIRED',{...baseEvent,Description:''}],
  ['future closure','UNKNOWN',{...baseEvent,StartDate:N+1200}],
  ['expired closure','UNKNOWN',{...baseEvent,PlannedEndDate:N-5}],
