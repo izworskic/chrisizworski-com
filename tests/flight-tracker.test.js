@@ -207,7 +207,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008h/);
+  assert.match(html, /flight-tracker\.js\?v=20261008i/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -815,7 +815,7 @@ test('landed previous trip overrides stale airborne narrative and becomes the be
   assert.match(client, /arrived from/);
   assert.match(client, /Live tracking starts again at pushback/);
   assert.match(client, /if \(assignmentData && renderArrivedForTurn\(assignmentData\)\) \{\s*resetHeldLive\(\);\s*return true;/s);
-  assert.match(client, /if \(!assignmentArrivalConfirmed\(assignment\) && renderArrivedForTurn\(assignment\)\) return;/);
+  assert.match(client, /if \(!arrived && renderArrivedForTurn\(assignment\)\) return;/);
 });
 
 test('a grounded live aircraft can never fall through to the generic airborne-style fallback', () => {
@@ -972,7 +972,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008h/);
+  assert.match(html, /flight-tracker\.js\?v=20261008i/);
 });
 
 
@@ -1006,11 +1006,11 @@ test('text-only delay labels still produce an inbound-aircraft explanation', () 
 test('landed passenger flight renders an arrived header and never no-position airborne fallback copy', () => {
   assert.match(client, /function assignmentArrivalConfirmed\(assignment\)/);
   assert.match(client, /schedule\?\.actualArrivalUTC/);
-  assert.match(client, /const completedAt = assignmentArrivalConfirmed\(assignment\)/);
+  assert.match(client, /const completedAt = arrived/);
   assert.match(client, /YOUR FLIGHT HAS ARRIVED/);
   assert.match(client, /has arrived in/);
   assert.match(client, /The arrival status is confirmed; a missing or stale aircraft position does not make this flight airborne/);
-  assert.match(client, /if \(assignmentArrivalConfirmed\(assignmentData\)\) \{[\s\S]*?renderAssignedNoPosition/s);
+  assert.match(client, /const arrived = canonicalArrivalAssignment\(assignmentData\);[\s\S]*?if \(arrived\) \{[\s\S]*?renderAssignedNoPosition/s);
   assert.doesNotMatch(client, /LAST CONFIRMED AIRCRAFT STATE/);
 });
 
