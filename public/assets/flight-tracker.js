@@ -228,7 +228,7 @@
 
   function delayWhyText(assignment, inbound) {
     // Completed passenger flights must not inherit delay explanations from an inbound leg.
-    if (assignmentArrivalConfirmed(assignment)) return '';
+    if (assignmentArrivalConfirmed(assignment) || assignment?.flightStatus?.canceled === true) return '';
     const departureDelay = departureDelayMinutes(assignment);
     if (!Number.isFinite(departureDelay) || departureDelay <= 0 || !inbound) return '';
 
