@@ -1051,6 +1051,17 @@
   }
 
   function renderLive(data) {
+    if (!data || data.positionFresh !== true) {
+      const age = data?.aircraft?.positionAgeSeconds;
+      renderUnavailable({
+        flightNumber:data?.flightNumber || activeFlight,
+        status:'stale-position',
+        message:Number.isFinite(age)
+          ? 'The newest aircraft position is stale (' + staleFixAgeText({fixAgeSeconds:age}) + '). It is not shown as live.'
+          : 'No fresh aircraft position is available.'
+      });
+      return;
+    }
     const ac = data.aircraft;
     lastLiveFlight = activeLiveKey || activeFlight;
     lastLiveSuccessAt = Date.now();
@@ -1806,7 +1817,7 @@
       const data = await response.json();
 
       if (sequence !== requestSequence || activeFlight !== normalized) return;
-      if (data.status === 'live') {
+      if (data.status === 'live' && data.positionFresh === true) {
         renderLive(data);
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
         renderUnavailable(data);
