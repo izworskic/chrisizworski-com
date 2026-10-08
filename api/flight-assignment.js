@@ -1629,7 +1629,7 @@ async function buildUnifiedFlightState({flight,date,flightId,allowDirectLive=fal
 
   const direct=await directPromise;
   if (directLiveIsAirborne(direct)) {
-    if (shouldResolveCodeshare) {
+    if (shouldResolveCodeshare && (normalized.carrier !== 'DL' || earlyCodesharePromise)) {
       const codeshare=earlyCodesharePromise
         ? await earlyCodesharePromise
         : await resolveCodeshareOperatingFlight(flight,date,nowMs);
