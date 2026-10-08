@@ -103,7 +103,7 @@
   const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const LAST_KNOWN_STORAGE_PREFIX = 'flight-tracker:last-known:';
-  const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:';
+  const INBOUND_STORAGE_PREFIX = 'flight-tracker:inbound:v2:';
   const INBOUND_STORAGE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const OPERATING_OCCURRENCE_CACHE_MS = 45 * 1000;
 
