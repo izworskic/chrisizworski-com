@@ -1134,7 +1134,11 @@ function parseFr24AircraftHistoryRows(markdown) {
     if (!line.includes('flightradar24.com/data/flights/')) continue;
     const date=line.match(/\b(\d{1,2}\s+[A-Z][a-z]{2}\s+\d{4})\b/i);
     const flight=line.match(/\[([A-Z0-9]{2,3}\s*[0-9]{1,4}[A-Z]?)\]\(https:\/\/www\.flightradar24\.com\/data\/flights\/[^)]+\)/i);
-    const airports=[...line.matchAll(/\[\(([A-Z0-9]{3})\)\]\([^)]+\)/gi)].map(x=>x[1].toUpperCase());
+    // FR24 prepends a repeated "TO airport" link before the history date in
+    // its compact reader layout. Only links AFTER the dated occurrence describe
+    // this flight's FROM/TO pair.
+    const routeSegment=date ? line.slice(date.index + date[0].length) : '';
+    const airports=[...routeSegment.matchAll(/\[\(([A-Z0-9]{3})\)\]\([^)]+\)/gi)].map(x=>x[1].toUpperCase());
     if (!date || !flight || airports.length < 2) continue;
     const dateLabel=date[1].replace(/^(\d)\s/,'0$1 ');
     const std=line.match(/\bSTD\s+(\d{1,2}:\d{2})\b/i)?.[1] || null;
