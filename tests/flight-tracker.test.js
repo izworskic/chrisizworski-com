@@ -1012,6 +1012,12 @@ test('FlightStats parser supports both legacy assignment and standard Next data 
   assert.equal(assignmentApi.parseNextData(modern).props.ok,2);
 });
 
+test('successful live responses retain callsign observability', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(source,/checkedCallsigns:normalized\.callsigns/);
+  assert.match(source,/matchedCallsign:resolved\.aircraft\?\.callsign \|\| null/);
+});
+
 test('Delta live fallback checks mainline and regional operating callsigns', () => {
   const tracker=require('../api/flight-tracker.js')._test;
   const normalized=tracker.normalizeFlightInput('DL3898');
