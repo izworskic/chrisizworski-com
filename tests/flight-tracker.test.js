@@ -1037,6 +1037,66 @@ test('assignment source outage is distinct from a normally scheduled flight with
   assert.match(client,/Checked ' \+ data\.checkedCallsigns\.join/);
 });
 
+
+test('FR24 secondary parser returns exact dated route registrations without borrowing another leg tail', () => {
+  const markdown = [
+    '| [N821SK](https://data.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") 08 Oct 2026 - Estimated departure 12:21 PM STD 11:43 AM ATD 11:57 AM STA 12:38 PM FROM Saginaw [(MBS)](https://data.flightradar24.com/data/airports/mbs) TO Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) |  | 08 Oct 2026 | Saginaw [(MBS)](https://data.flightradar24.com/data/airports/mbs) | Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) | CRJ9 [(N821SK)](https://data.flightradar24.com/data/aircraft/n821sk "Mitsubishi CRJ-900LR") | — | 11:43 AM | 11:57 AM | 12:38 PM |  | Estimated 12:21 PM | | |',
+    '| [N900XX](https://data.flightradar24.com/data/aircraft/n900xx "Mitsubishi CRJ-900LR") 08 Oct 2026 - Landed STD 10:04 AM ATD 10:17 AM STA 11:01 AM FROM Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) TO Saginaw [(MBS)](https://data.flightradar24.com/data/airports/mbs) |  | 08 Oct 2026 | Detroit [(DTW)](https://data.flightradar24.com/data/airports/dtw) | Saginaw [(MBS)](https://data.flightradar24.com/data/airports/mbs) | CRJ9 [(N900XX)](https://data.flightradar24.com/data/aircraft/n900xx "Mitsubishi CRJ-900LR") | 0:30 | 10:04 AM | 10:17 AM | 11:01 AM | | Landed | | |'
+  ].join('\n');
+  const rows=assignmentApi.parseFr24FlightRows(markdown,{flight:'DL3898',date:'2026-10-08'});
+  assert.equal(rows.length,2);
+  const mbs=rows.find(row=>row.originCode==='MBS' && row.destinationCode==='DTW');
+  assert.equal(mbs.registration,'N821SK');
+  assert.equal(mbs.equipment.code,'CRJ9');
+  assert.equal(mbs.flightId,'fr24-MBS-DTW-1143AM');
+  const dtw=rows.find(row=>row.originCode==='DTW' && row.destinationCode==='MBS');
+  assert.equal(dtw.registration,'N900XX');
+});
+
+test('FR24 cold-start fallback can build route choices and resolve the chosen synthetic occurrence', () => {
+  const rows=[
+    {
+      flightNumber:'DL3898',date:'2026-10-08',registration:'N821SK',
+      equipment:{code:'CRJ9',name:'Mitsubishi CRJ-900LR',title:'Secondary source'},
+      originName:'Saginaw',originCode:'MBS',destinationName:'Detroit',destinationCode:'DTW',
+      scheduledDepartureText:'11:43 AM',scheduledArrivalText:'12:38 PM'
+    },
+    {
+      flightNumber:'DL3898',date:'2026-10-08',registration:'N900XX',
+      equipment:{code:'CRJ9',name:'Mitsubishi CRJ-900LR',title:'Secondary source'},
+      originName:'Detroit',originCode:'DTW',destinationName:'Saginaw',destinationCode:'MBS',
+      scheduledDepartureText:'10:04 AM',scheduledArrivalText:'11:01 AM'
+    }
+  ];
+  for (const row of rows) row.flightId=assignmentApi.fr24SyntheticFlightId(row);
+  const marketing=assignmentApi.normalizeMarketingFlight('DL3898');
+  const choice=assignmentApi.chooseFlightFromFr24Rows(rows,marketing,'2026-10-08');
+  assert.equal(choice.status,'choose-flight');
+  assert.equal(choice.options.length,2);
+  assert.match(choice.options[0].flightId,/^fr24-/);
+  const selected=assignmentApi.assignmentFromFr24Row(rows[0],marketing);
+  assert.equal(selected.status,'found');
+  assert.equal(selected.tailNumber,'N821SK');
+  assert.equal(selected.origin.iata,'MBS');
+  assert.equal(selected.destination.iata,'DTW');
+  assert.equal(selected.fallback.kind,'fr24-exact-route');
+});
+
+test('FR24 parser refuses to assign a tail when the exact route row has no registration', () => {
+  const markdown='| 08 Oct 2026 - Scheduled STD 11:43 AM ATD — STA 12:38 PM FROM Saginaw [(MBS)](x) TO Detroit [(DTW)](y) | | 08 Oct 2026 | Saginaw [(MBS)](x) | Detroit [(DTW)](y) | | — | 11:43 AM | — | 12:38 PM |';
+  const rows=assignmentApi.parseFr24FlightRows(markdown,{flight:'DL3898',date:'2026-10-08'});
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].registration,null);
+  assert.equal(assignmentApi.assignmentFromFr24Row(rows[0],assignmentApi.normalizeMarketingFlight('DL3898')),null);
+});
+
+test('assignment source fallback advertises FR24 exact-route recovery before stale cache', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/FR24_READER_BASE = 'https:\/\/r\.jina\.ai\/https:\/\/data\.flightradar24\.com\/data\/flights\/'/);
+  assert.match(source,/checkedFallbacks:\['fr24-exact-route','planemapper-exact-route','last-good-assignment-cache','live-operating-callsigns'\]/);
+  assert.match(source,/flightId && String\(flightId\)\.startsWith\('fr24-'\)/);
+});
+
 test('assignment lookup has durable last-good cache and base-page fallback before declaring source unavailable', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
   assert.match(source,/ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:'/);
