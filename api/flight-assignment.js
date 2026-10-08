@@ -2025,7 +2025,10 @@ async function lookupAssignment({ flight, date, flightId }) {
     // using outage language. HTTP 403/404, missing records or bad markup are
     // per-flight coverage gaps even if a data scraper cannot resolve them.
     let verifiedFeedUnreachable=false;
-    if (!independentReachable && assignmentSourceIsUnreachable(error)) {
+    if (!independentReachable && assignmentSourceIsUnreachable(error) &&
+        !(normalized.carrier === 'DL' && Number(normalized.number) >= 5000)) {
+      // Marketing codeshares that cannot be resolved are coverage gaps.
+      // A missing DL6xxx record is not proof that the entire feed is down.
       try {
         await fetchText(FLIGHTSTATS_BASE + '/flight-tracker/DL/445',3000);
       } catch (probeError) {
