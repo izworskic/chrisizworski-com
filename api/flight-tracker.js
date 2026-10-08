@@ -770,6 +770,8 @@ async function buildSnapshot(value, operatingCarrier = null) {
     generatedAt:new Date().toISOString(),
     flightNumber:normalized.display,
     airline:normalized.airline,
+    checkedCallsigns:normalized.callsigns,
+    matchedCallsign:resolved.aircraft?.callsign || null,
     aircraft:resolved.aircraft,
     route,
     positionFresh,
