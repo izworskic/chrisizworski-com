@@ -278,7 +278,9 @@ test('main page exposes V3 actions and a chronological trip timeline', () => {
   assert.match(client,/label:'Boarding'/);
   assert.match(client,/label:'Departure'/);
   assert.match(client,/label:'Arrival'/);
-  assert.match(client,/YOU ARE HERE/);
+  assert.match(client,/AIRCRAFT PHASE/);
+  assert.match(client,/let currentStage = null;/);
+  assert.match(html,/id="traveler-answers"/);
   assert.match(client,/answerJourney\.hidden = true/);
   assert.match(client,/currentUnifiedPayload = payload/);
   assert.match(client,/queueMicrotask/);
