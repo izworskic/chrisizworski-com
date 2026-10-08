@@ -82,7 +82,7 @@ test('last inbound landing does not become fabricated gate-arrival time',()=>{
       flightStatus:{landed:true,airborne:false}
     }
   }));
-  assert.match(result[0].answer,/Last confirmed landed/);
+  assert.match(result[0].answer,/Last recorded at/);
   assert.match(result[1].detail,/runway landing is not a verified arrival at your gate/i);
 });
 
@@ -121,7 +121,7 @@ test('timeline describes plane phase rather than labeling a future departure YOU
 test('FR24 same-tail registration history crosses midnight: DL2595 on Oct 7 precedes DL242 on Oct 8',()=>{
   const link='https://www.flightradar24.com';
   const markdown=[
-    '| [DL243]('+link+'/data/flights/dl243) | 09 Oct 2026 | FROM [ (AMS)]('+link+'/data/airports/ams) TO [(BOS)]('+link+'/data/airports/bos) | Scheduled STD 09:25 |',
+    '| [DL243]('+link+'/data/flights/dl243) | 09 Oct 2026 | FROM [(AMS)]('+link+'/data/airports/ams) TO [(BOS)]('+link+'/data/airports/bos) | Scheduled STD 09:25 |',
     '| [DL242]('+link+'/data/flights/dl242) | 08 Oct 2026 | FROM [(BOS)]('+link+'/data/airports/bos) TO [(AMS)]('+link+'/data/airports/ams) | Estimated departure 23:05 STD 22:55 |',
     '| [DL2595]('+link+'/data/flights/dl2595) | 07 Oct 2026 | 2:07 Landed 22:24 STD 19:20 ATD 20:18 STA 22:02 FROM [(ATL)]('+link+'/data/airports/atl) TO [(BOS)]('+link+'/data/airports/bos) |',
     '| [DL8858]('+link+'/data/flights/dl8858) | 06 Oct 2026 | Landed 06:38 STD 05:15 FROM [(MSY)]('+link+'/data/airports/msy) TO [(ATL)]('+link+'/data/airports/atl) |'
