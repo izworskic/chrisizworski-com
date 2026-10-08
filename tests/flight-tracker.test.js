@@ -772,7 +772,7 @@ test('position relationship recognizes an assigned aircraft on the ground at the
 test('route-missing registration lookup can attach a focus-airport relationship without claiming a route', () => {
   const source = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
   assert.match(source, /VRS_AIRPORTS_URL = 'https:\/\/vrs-standing-data\.adsb\.lol\/airports\.csv'/);
-  assert.match(source, /const focusAirport = !route && focusAirportCode \? await lookupAirportCoordinates\(focusAirportCode\) : null/);
+  assert.match(source, /const focusAirport = \(aircraft.onGround === true \|\| !route\) && focusAirportCode/);
   assert.match(source, /focusAirportRelationship/);
   assert.match(client, /data\.focusAirportRelationship/);
   assert.match(client, /originMarker = airportMarker\('origin', focus/);
@@ -1395,7 +1395,7 @@ test('cold assignment outage checks independent public history before declaring 
   assert.match(source,/lookupIndependentAssignmentFallback/);
   assert.match(source,/independent-public-history/);
   assert.match(source,/cachedRouteHint/);
-  assert.match(source,/checkedFallbacks:\['last-good-assignment-cache','independent-public-history','live-operating-callsigns'\]/);
+  assert.match(source,/checkedFallbacks:\['last-good-assignment-cache','independent-public-history','control-flight-source-check'\]/);
 });
 
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {
