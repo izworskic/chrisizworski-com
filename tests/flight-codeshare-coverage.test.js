@@ -67,8 +67,8 @@ function flightStub({operatorAvailable=false,primaryDL='404',other='404'}={}) {
 
 test('Delta codeshare parser finds VS158 on Oct 8 but not the future VS12',()=>{
   assert.deepEqual(api.parseCodeshareOperatingCandidates(DELTA_MARKETING_PAGE,'DL5938',DATE),['VS158']);
-  assert.deepEqual(api.parseCodeshareOperatingCandidates(DELTA_MARKETING_PAGE,'DL5938','2026-10-28'),['VS12']);
-  assert.deepEqual(api.parseCodeshareOperatingCandidates(DELTA_MARKETING_PAGE,'DL5938','2027-01-28'),['VS12']);
+  assert.deepEqual(api.parseCodeshareOperatingCandidates(DELTA_MARKETING_PAGE,'DL5938','2026-10-28'),[]);
+  assert.deepEqual(api.parseCodeshareOperatingCandidates(DELTA_MARKETING_PAGE,'DL5938','2027-01-28'),[]);
 });
 
 test('DL5938 resolves to VS158 from a distinct marketing identity when operator flight is published',async()=>{
