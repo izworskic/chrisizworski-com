@@ -32,6 +32,7 @@
   const answerNext = document.getElementById('answer-next');
   const answerDelay = document.getElementById('answer-delay');
   const tripTimeline = document.getElementById('trip-timeline');
+  const travelerAnswers = document.getElementById('traveler-answers');
   const flightActions = document.getElementById('flight-actions');
   const watchButton = document.getElementById('watch-flight');
   const shareButton = document.getElementById('share-flight');
@@ -392,6 +393,8 @@
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
     answerSummary.textContent = summary || '';
+    travelerAnswers.hidden = true;
+    travelerAnswers.replaceChildren();
     renderAnswerJourney(journey);
     clearAnswerMeta();
     pills.filter(Boolean).forEach(addAnswerPill);
@@ -405,6 +408,8 @@
   function hideAnswer() {
     answerCard.hidden = true;
     answerJourney.hidden = true;
+    travelerAnswers.hidden = true;
+    travelerAnswers.replaceChildren();
     tripTimeline.hidden = true;
     tripTimeline.replaceChildren();
     answerNext.hidden = true;
@@ -1364,7 +1369,7 @@
 
     setAnswer({
       kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
-      headline:(tail || 'Your plane') + ' is at the gate — live tracking starts at pushback.',
+      headline:(tail || 'Your plane') + ' last landed at ' + originName + '. Gate arrival is not verified.',
       summary:(story ? story + ' ' : '') +
         'It is still assigned to your ' + (route || 'next') + ' flight.',
       journey:{
@@ -1378,7 +1383,7 @@
         }
       },
       pills:[delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
-      next:'The aircraft is parked at ' + originName + '. Live tracking starts again at pushback; the airline assignment can still change before departure.',
+      next:'The same tail was confirmed landing at ' + originName + '. Landing does not establish that it reached your departure gate; the assignment can still change.',
       delayWhy:delayWhyText(assignment,previous),
       source:assignmentSourceText()
     });
@@ -1392,9 +1397,9 @@
     freshness.dataset.stale = 'false';
     glance.hidden = false;
     mapShell.classList.add('with-progress');
-    phaseLabel.textContent = 'On ground · between flights';
+    phaseLabel.textContent = 'Previous leg landed · gate unverified';
     distanceLabel.textContent = '—';
-    landingLabel.textContent = 'Already at departure airport';
+    landingLabel.textContent = 'Landed at departure airport';
     glanceNote.hidden = true;
     progressBar.hidden = true;
     setMessage('', 'neutral');
@@ -1723,7 +1728,7 @@
         : seen
           ? 'The live aircraft feed can see ' + tail + ', but it has no current location. We also could not confirm a same-tail arrival at ' + airportPlace(assignment?.origin) + '.'
           : passengerNotAirborne
-            ? 'The assignment is confirmed, but there is no fresh aircraft position right now. We will keep following this exact tail and its inbound leg when evidence appears.'
+            ? 'We know the assigned tail (' + tail + '), but cannot identify its previous inbound leg or obtain a fresh aircraft position. We cannot yet say which airport it is at.'
             : 'We confirmed ' + tail + ' is assigned to your flight, but there is no current position and no confirmed same-tail arrival at ' + airportPlace(assignment?.origin) + '. Its present location is unknown.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
       next:onGround
@@ -1989,7 +1994,7 @@
     if (current) {
       const here = document.createElement('span');
       here.className = 'timeline-here';
-      here.textContent = 'YOU ARE HERE';
+      here.textContent = 'AIRCRAFT PHASE';
       labelEl.appendChild(here);
     }
     const statusEl = document.createElement('div');
@@ -2032,9 +2037,11 @@
     const turn = scheduledTurnMinutes(assignment,inbound);
     const turnTime = inbound ? completedArrivalClock(inbound) || '—' : '—';
     let turnStatus = 'Aircraft turn timing is not confirmed.';
-    if (state === 'parked-origin-confirmed' || state === 'ground-live') {
-      turnStatus = 'Aircraft is on the ground at ' + airportPlace(assignment.origin) +
-        (Number.isFinite(turn) ? ' · scheduled turn ' + turn + ' min.' : '.');
+    if (state === 'parked-origin-confirmed' || (state === 'ground-live' && payload?.live?.focusAirportRelationship?.state === 'at-airport')) {
+      turnStatus = (state === 'parked-origin-confirmed' ? 'Previous flight landed at ' : 'Live aircraft position is on the ground at ') + airportPlace(assignment.origin) +
+        (Number.isFinite(turn) ? ' · scheduled arrival-to-departure interval ' + turn + ' min.' : '.');
+    } else if (state === 'ground-live') {
+      turnStatus = 'Aircraft reported on the ground, but not verified at your departure airport.';
     } else if (Number.isFinite(turn)) {
       turnStatus = 'Scheduled aircraft turn: ' + turn + ' min.';
     }
