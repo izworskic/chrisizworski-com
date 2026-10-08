@@ -377,6 +377,24 @@ test('assignment sanitizer extracts assigned tail, delay, gates and scheduled ro
   assert.equal(result.currentLeg,undefined);
 });
 
+test('actual departure evidence survives a stale status flag so one-hour sanity checks can use it', () => {
+  const result=assignmentApi.sanitizeFlight({
+    flightId:99,
+    flightNote:{canceled:false,hasDepartedRunway:false,landed:false},
+    isTracking:false,isLanded:false,
+    status:{status:'Scheduled'},
+    departureAirport:{fs:'FRA',iata:'FRA',city:'Frankfurt'},
+    arrivalAirport:{fs:'JFK',iata:'JFK',city:'New York'},
+    positional:{flexTrack:{tailNumber:'N861NW'}},
+    schedule:{
+      scheduledDepartureUTC:'2026-10-08T08:00:00Z',
+      actualDepartureUTC:'2026-10-08T08:22:00Z'
+    }
+  },{display:'DL107'},'https://example.test');
+  assert.equal(result.flightStatus.airborne,false);
+  assert.equal(result.schedule.actualDepartureUTC,'2026-10-08T08:22:00Z');
+});
+
 test('registration lookup support is explicit and preserves grounded aircraft without fabricating a position', () => {
   assert.equal(api.normalizeRegistration(' n463aa '),'N463AA');
   assert.equal(api.normalizeRegistration('***'),null);
@@ -501,6 +519,18 @@ test('fresh reconciled ground state cannot be overwritten by older inbound-arriv
   assert.match(client, /live\?\.aircraft\?\.onGround === true && !live\?\.reconciledState && landedPreviousAtOrigin\(assignment\)/);
   assert.match(client, /live\.reconciledState = payload\?\.renderedState/);
   assert.match(client, /live\.renderPositionAgeSeconds = payload\?\.observation\?\.displayAgeSeconds/);
+});
+
+test('no stale aircraft fix can enter the live renderer from the direct fallback path', () => {
+  assert.match(client, /function renderLive\(data\) \{\s*if \(!data \|\| data\.positionFresh !== true\)/s);
+  assert.match(client, /if \(data\.status === 'live' && data\.positionFresh === true\) \{\s*renderLive\(data\);/s);
+  assert.match(client, /The newest aircraft position is stale/);
+});
+
+test('flight-state endpoint is uncached so each render produces an observability log record', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-state.js'),'utf8');
+  assert.match(source, /Cache-Control','private, no-store'/);
+  assert.match(source, /console\.log\(JSON\.stringify\(record\)\)/);
 });
 
 test('client answers whether the assigned aircraft is actually inbound to the departure airport', () => {
