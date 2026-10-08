@@ -287,7 +287,7 @@ async function buildUnifiedFlightState({flight, date, flightId, nowMs = Date.now
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type','application/json; charset=utf-8');
   res.setHeader('X-Robots-Tag','noindex, nofollow');
-  res.setHeader('Cache-Control','public, s-maxage=' + CACHE_SECONDS + ', stale-while-revalidate=5');
+  res.setHeader('Cache-Control','private, no-store');
   if (req.method !== 'GET') {
     res.statusCode = 405;
     res.setHeader('Allow','GET');
