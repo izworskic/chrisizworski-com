@@ -45,9 +45,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/flight-v3.js": {
-      "maxDuration": 60
     }
   },
   "redirects": [
@@ -447,7 +444,7 @@
       "schedule": "0 11 * * *"
     },
     {
-      "path": "/api/flight-v3?action=cron",
+      "path": "/api/flight-assignment?flightV3=1&action=cron",
       "schedule": "*/5 * * * *"
     }
   ],
