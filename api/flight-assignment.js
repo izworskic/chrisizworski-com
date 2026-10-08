@@ -11,11 +11,16 @@ const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const POSITION_MAX_AGE_SECONDS = 15 * 60;
 const FR24_READER_BASE = 'https://r.jina.ai/https://www.flightradar24.com/data/flights/';
+const FR24_READER_ORIGINS = Object.freeze([
+  'https://r.jina.ai/https://www.flightradar24.com',
+  'https://r.jina.ai/https://data.flightradar24.com',
+  'https://r.jina.ai/https://free.flightradar24.com'
+]);
 const FR24_PUBLIC_BASE = 'https://www.flightradar24.com/data/flights/';
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
 const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
-const INBOUND_CACHE_PREFIX = 'flight:inbound:v1:';
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v2:';
 const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
 const CODESHARE_CACHE_PREFIX = 'flight:codeshare:v1:';
 const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
@@ -1038,11 +1043,19 @@ function dateIsNearNow(date,nowMs = Date.now()) {
   return Number.isFinite(target) && Math.abs(target - nowMs) <= 36 * 60 * 60 * 1000;
 }
 
+function inboundOccurrenceMatchesAssignment(assignment,occurrence) {
+  return Boolean(
+    occurrence &&
+    assignment?.tailNumber &&
+    assignment?.origin &&
+    sameTail(occurrence?.tailNumber,assignment.tailNumber) &&
+    sameAirport(occurrence?.destination,assignment.origin)
+  );
+}
+
 function embeddedInboundOccurrence(assignment) {
   for (const occurrence of [assignment?.recentInboundOccurrence,assignment?.previousAircraftOccurrence]) {
-    if (!occurrence) continue;
-    if (!sameTail(occurrence?.tailNumber,assignment?.tailNumber)) continue;
-    if (!sameAirport(occurrence?.destination,assignment?.origin)) continue;
+    if (!inboundOccurrenceMatchesAssignment(assignment,occurrence)) continue;
     return occurrence;
   }
   return null;
@@ -1055,9 +1068,21 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
   const carrier = carrierCode(assignment?.operatingFlightNumber || assignment?.flightNumber);
   if (!tail || !airport || !carrier) return null;
 
+  const cached=await readInboundCache(date,tail,airport);
+  if (inboundOccurrenceMatchesAssignment(assignment,cached)) return cached;
+
+  try {
+    const independent=await lookupIndependentInboundByTail({assignment,date});
+    if (inboundOccurrenceMatchesAssignment(assignment,independent)) {
+      await writeInboundCache(date,tail,airport,independent);
+      return independent;
+    }
+  } catch {}
+
   try {
     const result = await lookupRecentArrivalByTail({tail,airport,carrier,nowMs});
-    if (result?.status === 'found-inbound-occurrence' && result.occurrence) {
+    if (result?.status === 'found-inbound-occurrence' &&
+        inboundOccurrenceMatchesAssignment(assignment,result.occurrence)) {
       await writeInboundCache(date,tail,airport,result.occurrence);
       return result.occurrence;
     }
@@ -1068,7 +1093,7 @@ async function resolveRecentInbound(assignment,date,nowMs = Date.now()) {
     await writeInboundCache(date,tail,airport,embedded);
     return embedded;
   }
-  return await readInboundCache(date,tail,airport);
+  return null;
 }
 
 async function fetchCodeshareText(marketingFlight) {
@@ -1491,11 +1516,11 @@ function parseFr24HistoryRows(markdown) {
     if (!line.startsWith('|')) continue;
     const dateMatch=line.match(/\b(\d{2}\s+[A-Z][a-z]{2}\s+\d{4})\b/);
     const routeMatch=line.match(/FROM\s+[^|]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)\s+TO\s+[^|]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)/i);
-    const registrationMatch=line.match(/\[([A-Z0-9-]{3,10})\]\(https:\/\/www\.flightradar24\.com\/data\/aircraft\/[a-z0-9-]+/i);
+    const registrationMatch=line.match(/\[([A-Z0-9-]{3,10})\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/aircraft\/[a-z0-9-]+/i);
     if (!dateMatch || !routeMatch || !registrationMatch) continue;
 
     let equipmentCode=null;
-    const aircraftColumn=line.match(/\|\s*([A-Z0-9]{3,4})\s+\[\([A-Z0-9-]{3,10}\)\]\(https:\/\/www\.flightradar24\.com\/data\/aircraft\//i);
+    const aircraftColumn=line.match(/\|\s*([A-Z0-9]{3,4})\s+\[\([A-Z0-9-]{3,10}\)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/aircraft\//i);
     if (aircraftColumn) equipmentCode=aircraftColumn[1].toUpperCase();
 
     const std=line.match(/\bSTD\s+([0-9]{1,2}:[0-9]{2}(?:\s*[AP]M)?)/i);
@@ -1537,10 +1562,16 @@ async function cachedRouteHint(flight,date,flightId) {
   return null;
 }
 
-async function fetchFr24History(marketingFlight) {
-  const url=FR24_READER_BASE + encodeURIComponent(marketingFlight);
+function fr24ReaderTextLooksUsable(text) {
+  const value=String(text || '');
+  if (!value || value.length > 600000) return false;
+  if (/captcha-delivery|just a moment|enable javascript and cookies|attention required/i.test(value)) return false;
+  return true;
+}
+
+async function fetchFr24ReaderUrl(url,timeoutMs=FR24_FALLBACK_TIMEOUT_MS) {
   const controller=new AbortController();
-  const timer=setTimeout(() => controller.abort(),FR24_FALLBACK_TIMEOUT_MS);
+  const timer=setTimeout(() => controller.abort(),timeoutMs);
   try {
     const response=await fetch(url,{
       headers:{accept:'text/plain','user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'},
@@ -1548,11 +1579,118 @@ async function fetchFr24History(marketingFlight) {
     });
     if (!response.ok) throw new Error('Independent assignment source returned ' + response.status);
     const text=await response.text();
-    if (!text || text.length > 600000) throw new Error('Independent assignment source returned invalid content');
+    if (!fr24ReaderTextLooksUsable(text)) throw new Error('Independent assignment source returned unusable content');
     return text;
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchFr24ReaderPath(pathname) {
+  const primary=FR24_READER_ORIGINS[0] + pathname;
+  try {
+    return await fetchFr24ReaderUrl(primary,5500);
+  } catch (primaryError) {
+    const attempts=FR24_READER_ORIGINS.slice(1).map(origin =>
+      fetchFr24ReaderUrl(origin + pathname,5500)
+    );
+    try {
+      return await Promise.any(attempts);
+    } catch {
+      throw primaryError;
+    }
+  }
+}
+
+async function fetchFr24History(marketingFlight) {
+  return await fetchFr24ReaderPath('/data/flights/' + encodeURIComponent(marketingFlight));
+}
+
+async function fetchFr24TailHistory(tailNumber) {
+  const tail=normalizeTail(tailNumber);
+  if (!tail) return null;
+  return await fetchFr24ReaderPath('/data/aircraft/' + encodeURIComponent(tail.toLowerCase()));
+}
+
+function parseFr24TailHistoryRows(markdown,tailNumber) {
+  const tail=normalizeTail(tailNumber);
+  if (!tail) return [];
+  const rows=[];
+  for (const line of String(markdown || '').split(/\r?\n/)) {
+    const dateMatch=line.match(/\b(\d{2}\s+[A-Z][a-z]{2}\s+\d{4})\b/);
+    const flightMatch=line.match(/\[([A-Z0-9]{2}[0-9]{1,4}[A-Z]?)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/flights\//i) ||
+      line.match(/^\s*([A-Z0-9]{2}[0-9]{1,4}[A-Z]?)\s+\d{2}\s+[A-Z][a-z]{2}\s+\d{4}\b/);
+    if (!dateMatch || !flightMatch) continue;
+    const airports=[...line.matchAll(/\[\(([A-Z0-9]{3})\)\]\(https:\/\/(?:www\.|data\.|free\.)?flightradar24\.com\/data\/airports\/[a-z0-9-]+/gi)]
+      .map(match => match[1].toUpperCase());
+    let origin=null;
+    let destination=null;
+    if (airports.length >= 2) {
+      [origin,destination]=airports;
+    } else {
+      const route=line.match(/\bFROM\s+.*?\(([A-Z0-9]{3})\)\s+TO\s+.*?\(([A-Z0-9]{3})\)/i);
+      if (route) {
+        origin=route[1].toUpperCase();
+        destination=route[2].toUpperCase();
+      }
+    }
+    if (!origin || !destination) continue;
+    const landedMatch=line.match(/\bLanded(?:\s+([0-9]{1,2}:[0-9]{2}(?:\s*[AP]M)?))?/i);
+    rows.push({
+      dateLabel:dateMatch[1],
+      flightNumber:clean(flightMatch[1]),
+      tailNumber:tail,
+      origin,
+      destination,
+      landed:Boolean(landedMatch),
+      arrivalText:landedMatch?.[1]?.trim() || null,
+      sourceLine:line
+    });
+  }
+  return rows;
+}
+
+function fr24TailInboundSummary(row,assignment,date) {
+  if (!row || !assignment?.tailNumber) return null;
+  return {
+    flightNumber:row.flightNumber,
+    flightId:['fr24-tail',date,row.flightNumber,row.origin,row.destination].join(':'),
+    tailNumber:normalizeTail(assignment.tailNumber),
+    origin:minimalAirport(row.origin),
+    destination:minimalAirport(row.destination,assignment.origin),
+    schedule:{
+      scheduledDepartureUTC:null,estimatedDepartureUTC:null,actualDepartureUTC:null,
+      scheduledArrivalUTC:null,estimatedArrivalUTC:null,actualArrivalUTC:null
+    },
+    flightStatus:{
+      code:'L',label:'Landed',description:'Landed',
+      departureDelayMinutes:null,arrivalDelayMinutes:null,lastUpdatedText:null,
+      canceled:false,airborne:false,landed:true
+    },
+    assignmentState:'landed',
+    note:'Confirmed from independent same-tail public aircraft history.',
+    evidence:{
+      kind:'independent-tail-history-arrival',
+      note:'Confirmed from the same aircraft tail arriving at the passenger departure airport on the travel date.'
+    },
+    source:{
+      name:'Flightradar24 public aircraft history via Jina Reader',
+      url:'https://www.flightradar24.com/data/aircraft/' + normalizeTail(assignment.tailNumber),
+      kind:'independent-tail-history'
+    }
+  };
+}
+
+async function lookupIndependentInboundByTail({assignment,date}) {
+  const normalizedDate=normalizeDate(date);
+  const tail=normalizeTail(assignment?.tailNumber);
+  const airport=airportCode(assignment?.origin);
+  if (!normalizedDate || !tail || !airport) return null;
+  const markdown=await fetchFr24TailHistory(tail);
+  const dateLabel=fr24DateLabel(normalizedDate);
+  const rows=parseFr24TailHistoryRows(markdown,tail)
+    .filter(row => row.dateLabel === dateLabel && row.destination === airport && row.landed);
+  return rows.length ? fr24TailInboundSummary(rows[0],assignment,date) : null;
 }
 
 function minimalAirport(code,existing=null) {
