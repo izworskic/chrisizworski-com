@@ -149,7 +149,7 @@ test('flight tracker SEO contract remains concise and canonical', () => {
   assert.ok(description.length <= 158, 'description exceeds 158 characters');
   assert.match(html, /https:\/\/chrisizworski\.com\/flight-tracker\//);
   assert.match(html, /"@id":"https:\/\/chrisizworski\.com\/#person"/);
-  assert.match(html, /"dateModified":"2026-10-07"/);
+  assert.match(html, /"dateModified":"2026-10-08"/);
 });
 
 
@@ -450,7 +450,7 @@ test('assigned aircraft states use traveler language and state exactly what is u
   assert.match(client, /Your plane is on the ground at/);
   assert.match(client, /function relationshipDistanceText\(relationship, label\)/);
   assert.match(client, /we have not yet confirmed the origin of its current flight/);
-  assert.match(client, /Our live aircraft feed can see/);
+  assert.match(client, /The live aircraft feed can see/);
   assert.doesNotMatch(client, /current airport-to-airport leg/);
   assert.doesNotMatch(client, /The ADS-B network is seeing/);
 });
@@ -744,7 +744,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261007p/);
+  assert.match(html, /flight-tracker\.js\?v=20261008a/);
 });
 
 
@@ -763,7 +763,7 @@ test('v2 traveler story shows completed-leg arrival, inbound timing and delay-tu
   assert.match(client, /Scheduled turn is /);
   assert.match(client, /cannot prove how much of the delay came from the inbound aircraft/);
   assert.match(client, /is at the gate — live tracking starts at pushback/);
-  assert.match(client, /leave the map empty rather than guess/);
+  assert.match(client, /map stays empty rather than guessing/);
   assert.doesNotMatch(client, /simulated position|estimated marker|predicted marker/i);
 });
 
