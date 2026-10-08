@@ -1410,7 +1410,7 @@ function init(){
   scrub.value=String(Math.max(+scrub.min,Math.min(98,selIdx)));
   initChips(); wireNear(); syncScrub(); renderScrubAxis();
   document.getElementById("scrub").addEventListener("input",e=>{
-    winterMode=false;previewMode=false;selIdx=+e.target.value;renderAll();
+    winterMode=false;selIdx=+e.target.value;renderAll(); // Keep preview mode as the date moves.
   });
   document.getElementById("fallSeasonStatus").addEventListener("click",()=>{
     if(!winterCalendar)return;
