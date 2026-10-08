@@ -126,8 +126,7 @@ test('browser loader uses the supported MapLibre ESM bundle instead of the missi
 
 test('client plots only API positions and refreshes without simulated motion', () => {
   assert.match(client, /planeMarker\.setLngLat\(\[ac\.lon,ac\.lat\]\)/);
-  assert.match(client, /setInterval\(\(\) => \{/);
-  assert.match(client, /10000/);
+  assert.match(client, /setInterval\(refreshCurrentAircraft,10000\)/);
   assert.doesNotMatch(client, /requestAnimationFrame/);
   assert.doesNotMatch(client, /interpolate.*aircraft|estimated position/i);
 });
@@ -728,7 +727,7 @@ test('landed previous trip overrides stale airborne narrative and becomes the be
 });
 
 test('a grounded live aircraft can never fall through to the generic airborne-style fallback', () => {
-  assert.match(client, /if \(live\?\.aircraft\?\.onGround === true && landedPreviousAtOrigin\(assignment\)\)/);
+  assert.match(client, /if \(live\?\.aircraft\?\.onGround === true && !live\?\.reconciledState && landedPreviousAtOrigin\(assignment\)\)/);
   assert.match(client, /if \(live\?\.aircraft\?\.onGround === true\) \{/);
   assert.match(client, /Your assigned plane is on the ground/);
   assert.match(client, /currently reporting on the ground/);
