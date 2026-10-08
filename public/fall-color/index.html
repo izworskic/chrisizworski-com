@@ -856,7 +856,7 @@ const inSeason=isFallReportSeason(tm,td);
 // The live season ends in mid-November. During winter and before next
 // September, display subdued woodland instead of resetting green on Jan 1.
 // Visitors can explicitly preview next fall, independent of current feeds.
-const winterCalendar=(tm<9)||(tm===11&&td>15)||(tm===12);
+const winterCalendar=(tm<9&&!(tm===8&&td>=20))||(tm===11&&td>15)||(tm===12);
 const completedSeasonYear=tm<9?now.getFullYear()-1:now.getFullYear();
 const nextPreviewYear=completedSeasonYear+1;
 let winterMode=winterCalendar,previewMode=false;
@@ -964,6 +964,7 @@ function fc(regionId){
 // ---- render: live strip ----
 function renderLiveStrip(){
   const el=document.getElementById("liveStripBody");
+  if(winterCalendar){el.textContent="Fall color season complete. The subdued map is a seasonal view; the next-fall preview uses typical timing, not live canopy or weather readings.";return;}
   if(!LIVE){el.textContent="Live feed unavailable just now. Use the seasonal planning baseline above and the regional season bands below; neither will invent a live reading.";return;}
   let canopy=[],lows=[],dt=null,froze=false;
   REGIONS.forEach(r=>{const v=LIVE[r.id];if(v){if(v.ndvi){canopy.push(v.ndvi.canopyPct);dt=v.ndvi.date;}if(v.weather){if(v.weather.lowestRecent!=null)lows.push(v.weather.lowestRecent);if(v.weather.frostRecent)froze=true;}}});
@@ -1184,7 +1185,7 @@ function renderBanner(){
 function renderScrubAxis(){
   const el=document.getElementById("scrubAxis");
   if(!el)return;
-  const labels=[winterMode?"Season complete":previewMode?"Fall "+nextPreviewYear:"Today, "+fmt(todayFromSep1)];
+  const labels=[winterMode?"Season complete":previewMode?"Fall "+nextPreviewYear:winterCalendar?"Review fall "+completedSeasonYear:"Today, "+fmt(todayFromSep1)];
   if(todayFromSep1<0)labels.push("Sep 1");
   if(todayFromSep1<30)labels.push("Oct 1");
   labels.push("Dec 8");
@@ -1435,14 +1436,15 @@ function init(){
   document.getElementById("planBtn").onclick=buildPlan;
   document.getElementById("planRegion").addEventListener("change",rebuildIfShown);
   renderStatewideStatus(); buildMap(); renderAll();
-  fetch("/api/fall-color-conditions").then(r=>{if(!r.ok)throw new Error("Conditions unavailable");return r.json();}).then(j=>{
+  if(winterCalendar){renderLiveStrip();}
+  else fetch("/api/fall-color-conditions").then(r=>{if(!r.ok)throw new Error("Conditions unavailable");return r.json();}).then(j=>{
     LIVE_FRESHNESS=FallColorFreshness.assess(j,REGIONS.map(r=>r.id));
     if(!LIVE_FRESHNESS)throw new Error("Recent conditions unavailable");
     LIVE={}; (j.regions||[]).forEach(r=>LIVE[r.id]={weather:r.weather,ndvi:r.ndvi,forecast:r.forecast});
     computeLiveOffsets();
     renderStatewideStatus(); renderLiveStrip(); renderAll(); if(nearId)renderNearMe();
   }).catch(()=>{renderStatewideStatus();renderLiveStrip();});
-  fetch("/api/fall-color-report").then(r=>r.json()).then(renderReport).catch(()=>{});
+  if(!winterCalendar)fetch("/api/fall-color-report").then(r=>r.json()).then(renderReport).catch(()=>{});
 }
 init();
 </script>
