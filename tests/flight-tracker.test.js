@@ -527,7 +527,7 @@ test('no stale aircraft fix can enter the live renderer from the direct fallback
 
 test('flight-state endpoint is uncached so each render produces an observability log record', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source, /Cache-Control','private, no-store'/);
+  assert.match(source, /unified \? 'private, no-store'/);
   assert.match(source, /console\.log\(JSON\.stringify\(record\)\)/);
 });
 
@@ -949,8 +949,8 @@ test('adversarial V2 state enrichment is server-side and stale local snapshots c
   assert.match(apiSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /const POSITION_MAX_AGE_SECONDS = 15 \* 60/);
   assert.match(stateSource, /Promise\.all\(\[/);
-  assert.match(stateSource, /trackerApi\.buildRegistrationSnapshot/);
-  assert.match(stateSource, /resolveRecentInbound\(assignment, date, nowMs\)/);
+  assert.match(stateSource, /buildAdsbRegistrationSnapshot\(assignment\.tailNumber\)/);
+  assert.match(stateSource, /resolveRecentInbound\(assignment,date,nowMs\)/);
   assert.match(stateSource, /reconcileFlightState/);
   assert.match(client, /renderUnifiedFlightState\(data\)/);
   assert.doesNotMatch(client, /async function loadAssignment[\s\S]*?loadLastKnownSnapshot\(/);
