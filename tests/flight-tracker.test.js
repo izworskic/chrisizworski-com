@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
 const assignmentApi = require('../api/flight-assignment.js')._test;
+const publicIdentity = require('../lib/flight-public-identity.js');
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -47,6 +48,50 @@ test('short flight numbers check common zero-padded operating callsigns without 
   assert.deepEqual(api.callsignSuffixVariants('86'),['86','086','0086']);
   assert.deepEqual(api.callsignSuffixVariants('123'),['123']);
   assert.deepEqual(api.normalizeFlightInput('DL5').callsigns,['DAL5','DAL05','DAL005','DAL0005','EDV5','SKW5']);
+});
+
+test('public identity resolver maps exact codeshares and rejects begins-with false positives', () => {
+  const vsFixture={
+    results:[
+      {id:'VIR',type:'operator',match:'iata',detail:{iata:'VS'}},
+      {
+        id:'DL3898',
+        label:'VS1671 → DL3898 / SKW3898',
+        type:'schedule',
+        match:'codeshare',
+        detail:{codeshare:'VS1671',flight:'DL3898',callsign:'SKW3898',operator:'DAL'}
+      }
+    ]
+  };
+  const vs=publicIdentity.pickExactIdentity(vsFixture,'VS1671');
+  assert.equal(vs.requestedFlight,'VS1671');
+  assert.equal(vs.operatingFlight,'DL3898');
+  assert.equal(vs.codeshare,true);
+  assert.equal(vs.callsign,'SKW3898');
+
+  const dl5Fixture={
+    results:[
+      {id:'42051',type:'live',match:'begins',detail:{flight:'DL51',callsign:'DAL51',reg:'N854NW',lat:48.5,lon:-106.3}},
+      {id:'DL5',type:'schedule',match:'begins',detail:{flight:'DL5',operator:'DAL'}}
+    ]
+  };
+  const dl5=publicIdentity.pickExactIdentity(dl5Fixture,'DL5');
+  assert.equal(dl5.operatingFlight,'DL5');
+  assert.equal(dl5.type,'schedule');
+  assert.equal(dl5.registration,null);
+
+  const onlyPrefix={results:[{id:'DL51',type:'live',match:'begins',detail:{flight:'DL51',callsign:'DAL51'}}]};
+  assert.equal(publicIdentity.pickExactIdentity(onlyPrefix,'DL5'),null);
+});
+
+test('live recovery uses public identity only to find ADS-B identity, never as map telemetry', () => {
+  const trackerSource=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(trackerSource,/resolvePublicFlightIdentity/);
+  assert.match(trackerSource,/recoverLiveFromPublicIdentity/);
+  assert.match(trackerSource,/lookupCallsign\(identity\.callsign\)/);
+  assert.match(trackerSource,/lookupRegistration\(registration\)/);
+  assert.doesNotMatch(trackerSource,/lat:identity\.lat/);
+  assert.doesNotMatch(trackerSource,/lon:identity\.lon/);
 });
 
 test('common aircraft type designators become passenger-readable names and unknown types stay truthful', () => {
@@ -1205,6 +1250,43 @@ test('reachable assignment source with no usable occurrence is classified as cov
   assert.doesNotMatch(source,/status:'not-found',[\s\S]{0,180}No scheduled occurrence of that flight was found for this date/);
   assert.match(source,/The primary public source responded without a usable occurrence or aircraft assignment/);
   assert.match(source,/not proof that the passenger flight does not exist/);
+});
+
+test('independent tail history recovers the exact previous same-tail arrival', () => {
+  const markdown=[
+    '08 Oct 2026',
+    'Landed 16:49',
+    'FROM  Atlanta [(ATL)](https://www.flightradar24.com/data/airports/atl)',
+    'TO  Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)08 Oct 2026 Atlanta [(ATL)](https://www.flightradar24.com/data/airports/atl)Detroit [(DTW)](https://www.flightradar24.com/data/airports/dtw)[DL1240](https://www.flightradar24.com/data/flights/dl1240)1:29 15:08 15:20 17:06 Landed 16:49[Play](https://www.flightradar24.com/data/aircraft/n121dz#42083126 "Show playback of flight")'
+  ].join('\n');
+  const rows=assignmentApi.parseFr24AircraftHistoryRows(markdown,'N121DZ');
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].dateLabel,'08 Oct 2026');
+  assert.equal(rows[0].flightNumber,'DL1240');
+  assert.equal(rows[0].tailNumber,'N121DZ');
+  assert.equal(rows[0].origin,'ATL');
+  assert.equal(rows[0].destination,'DTW');
+  assert.equal(rows[0].landed,true);
+  assert.equal(rows[0].actualArrivalUTC,'2026-10-08T16:49:00.000Z');
+
+  const occurrence=assignmentApi.fr24InboundOccurrenceFromRow(rows[0],'N121DZ');
+  assert.equal(occurrence.flightNumber,'DL1240');
+  assert.equal(occurrence.tailNumber,'N121DZ');
+  assert.equal(occurrence.origin.iata,'ATL');
+  assert.equal(occurrence.destination.iata,'DTW');
+  assert.equal(occurrence.schedule.actualArrivalUTC,'2026-10-08T16:49:00.000Z');
+  assert.equal(occurrence.flightStatus.landed,true);
+  assert.equal(occurrence.evidence.kind,'independent-same-tail-arrival');
+});
+
+test('inbound recovery falls back to exact-tail public history after live board and cache miss', () => {
+  const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source,/resolveRecentInboundFromPublicTailHistory/);
+  assert.match(source,/parseFr24AircraftHistoryRows/);
+  assert.match(source,/row\.destination === airport/);
+  assert.match(source,/row\.flightNumber !== passengerFlight/);
+  assert.match(source,/row\.flightNumber\.startsWith\(carrier\)/);
+  assert.match(source,/writeInboundCache\(date,tail,airport,independent\)/);
 });
 
 test('independent public-history parser resolves the exact same-day route and registration', () => {
