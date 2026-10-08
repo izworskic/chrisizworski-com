@@ -416,8 +416,21 @@
       Boolean(String(assignment?.schedule?.actualArrivalUTC || '').trim());
   }
 
-  function assignmentSourceText() {
+  function assignmentSourceText(assignment=assignmentData) {
+    if (assignment?.source?.kind === 'direct-live-callsign') {
+      return 'Live aircraft position: ADSB.lol. This airborne flight is being tracked directly by its operating callsign.';
+    }
+    if (assignment?.codeshare?.operatingFlightNumber) {
+      return 'Codeshare resolved: ' + assignment.codeshare.marketingFlightNumber + ' → ' +
+        assignment.codeshare.operatingFlightNumber + '. Aircraft status/assignment: public flight sources. Live aircraft position: ADSB.lol.';
+    }
     return 'Aircraft assignment/status: FlightStats public tracker. Live aircraft position: ADSB.lol. Airline aircraft assignments can change before departure.';
+  }
+
+  function codesharePill(assignment) {
+    const marketing=clean(assignment?.marketingFlightNumber || assignment?.flightNumber);
+    const operating=clean(assignment?.operatingFlightNumber);
+    return operating && marketing && operating !== marketing ? 'Operated as ' + operating : null;
   }
 
   function syncUrl() {
@@ -1205,6 +1218,26 @@
     map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
   }
 
+  function resetMapForLookup(flight) {
+    clearLiveMap();
+    flightLabel.textContent = clean(flight) || 'Flight';
+    routeLabel.textContent = 'Checking current flight…';
+    routeCodes.textContent = '';
+    detailLabel.textContent = '';
+    freshness.textContent = '';
+    freshness.dataset.stale = 'false';
+  }
+
+  function resetMapForFailure(flight,label='No live position') {
+    clearLiveMap();
+    flightLabel.textContent = clean(flight) || 'Flight';
+    routeLabel.textContent = label;
+    routeCodes.textContent = '';
+    detailLabel.textContent = '';
+    freshness.textContent = '';
+    freshness.dataset.stale = 'false';
+  }
+
   function sameAirport(a, b) {
     const left = String(airportCodeAny(a) || '').toUpperCase();
     const right = String(airportCodeAny(b) || '').toUpperCase();
@@ -1329,7 +1362,7 @@
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
     const identity = live?.aircraft?.aircraftTypeName || live?.aircraft?.aircraftType || assignment?.equipment?.name || assignment?.equipment?.code;
-    const pills = [route, delay, tail, identity].filter(Boolean);
+    const pills = [route, delay, codesharePill(assignment), tail, identity].filter(Boolean);
     const currentRoute = resolvedCurrentRoute(assignment, live);
     const currentLeg = currentRoute?.origin && currentRoute?.destination
       ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
@@ -1559,7 +1592,7 @@
         kicker:'YOUR FLIGHT HAS ARRIVED',
         headline:(assignment?.flightNumber || 'Your flight') + ' has arrived in ' + completedAt + '.',
         summary:arrivalDetails + '. The arrival status is confirmed; a missing or stale aircraft position does not make this flight airborne.',
-        pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
+        pills:[route,delay,codesharePill(assignment),tail,assignment?.equipment?.name].filter(Boolean),
         next:'This flight is complete. Live aircraft tracking may resume only if the same airplane later operates another flight.',
         source:assignmentSourceText()
       });
@@ -2176,6 +2209,7 @@
     }
 
     const params = new URLSearchParams({flight,date,unified:'1'});
+    if (date === localDateString()) params.set('liveNow','1');
     if (flightId) params.set('flightId',flightId);
     const sequence = ++requestSequence;
 
@@ -2194,23 +2228,36 @@
       if (data.status !== 'found' || !data.assignment) {
         if (!silent) {
           const sourceDown = data.status === 'assignment-source-unavailable' || data.status === 'source-unavailable';
+          const coverageGap = data.status === 'assignment-not-covered';
+          resetMapForFailure(activeFlight);
           setAnswer({
-            kicker:sourceDown ? 'ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE' : 'AIRCRAFT ASSIGNMENT NOT FOUND',
-            headline:sourceDown
-              ? 'We cannot confirm the assigned aircraft right now.'
-              : 'We could not identify an aircraft assignment for this scheduled occurrence.',
-            summary:data.message || (sourceDown
-              ? 'The assignment source is down. We will still check live operating callsigns without pretending that means the aircraft is assigned.'
-              : 'The flight may not have an assignment published yet.'),
+            kicker:coverageGap
+              ? 'AIRCRAFT ASSIGNMENT COVERAGE NOT AVAILABLE'
+              : sourceDown
+                ? 'ASSIGNMENT SOURCE TEMPORARILY UNAVAILABLE'
+                : 'AIRCRAFT ASSIGNMENT NOT FOUND',
+            headline:coverageGap
+              ? 'We do not have published assignment coverage for this flight and date.'
+              : sourceDown
+                ? 'We cannot confirm the assigned aircraft right now.'
+                : 'We could not identify an aircraft assignment for this scheduled occurrence.',
+            summary:data.message || (coverageGap
+              ? 'The public sources responded, but they did not publish an aircraft assignment for this occurrence.'
+              : sourceDown
+                ? 'The assignment sources are temporarily unavailable. For today’s flight, direct live operating callsigns were also checked before showing this message.'
+                : 'The flight may not have an assignment published yet.'),
             pills:[activeFlight,activeDate],
-            next:sourceDown
-              ? 'Live callsign tracking is a fallback only. If it finds nothing, that means no live position was found — not that the flight or assignment does not exist.'
-              : null,
-            source:sourceDown
-              ? 'Assignment status: temporarily unavailable · Live fallback: ADSB.lol.'
-              : 'Flight occurrence data: FlightStats public tracker.'
+            next:coverageGap
+              ? 'If this is a future flight, check again closer to departure; aircraft assignments are often published later.'
+              : sourceDown
+                ? 'For a flight happening today, the tracker checks fresh ADS-B operating callsigns independently of the assignment feed.'
+                : null,
+            source:coverageGap
+              ? 'Assignment coverage: no matching published occurrence in the available public sources.'
+              : sourceDown
+                ? 'Assignment sources: temporarily unavailable · Live aircraft source: ADSB.lol.'
+                : 'Flight occurrence data: public flight sources.'
           });
-          await loadFlight(activeFlight,{silent:false,preserveUnavailableAnswer:sourceDown});
         }
         return;
       }
@@ -2224,7 +2271,7 @@
 
       if (assignmentChangedFrom) {
         resetHeldLive();
-        clearLiveMap();
+        resetMapForFailure(activeFlight,'Flight state unavailable');
       }
 
       renderUnifiedFlightState(data);
@@ -2345,7 +2392,7 @@
     dateInput.value = activeDate;
     syncUrl();
     hideAnswer();
-    clearLiveMap();
+    resetMapForLookup(activeFlight);
     await loadAssignment(activeFlight,activeDate,activeFlightId,{silent:false});
     beginRefresh();
   }
