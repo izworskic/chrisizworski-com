@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007p/);
+  assert.match(html, /flight-tracker\.js\?v=20261008a/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -149,7 +149,7 @@ test('flight tracker SEO contract remains concise and canonical', () => {
   assert.ok(description.length <= 158, 'description exceeds 158 characters');
   assert.match(html, /https:\/\/chrisizworski\.com\/flight-tracker\//);
   assert.match(html, /"@id":"https:\/\/chrisizworski\.com\/#person"/);
-  assert.match(html, /"dateModified":"2026-10-07"/);
+  assert.match(html, /"dateModified":"2026-10-08"/);
 });
 
 
@@ -433,14 +433,16 @@ test('answer card includes one bounded what-happens-next interpretation instead 
   assert.match(client, /answerNext\.textContent = next \|\| ''/);
   assert.match(client, /What happens next: .*lands at .*taxis to a gate .*turns for your/s);
   assert.match(client, /What happens next: we’ll recheck the aircraft assignment every minute/);
-  assert.match(client, /leave the map empty rather than guess/);
+  assert.match(client, /map stays empty rather than guessing/);
   assert.doesNotMatch(html, /weather panel|gate history|squawk|vertical speed/i);
 });
 
-test('assigned aircraft states use traveler language and live position relationships', () => {
-  assert.match(client, /Your plane is assigned, but we can’t map it live right now/);
-  assert.match(client, /Your plane is assigned and on the ground/);
-  assert.match(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
+test('assigned aircraft states use traveler language and state exactly what is unknown', () => {
+  assert.match(client, /Your plane is assigned, but its present location is unknown/);
+  assert.match(client, /Your plane is assigned and reported on the ground/);
+  assert.match(client, /no current position and no confirmed same-tail arrival/);
+  assert.match(client, /we cannot identify the airport/);
+  assert.doesNotMatch(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
   assert.match(client, /We found your plane:/);
   assert.match(client, /function reportAgeLead\(value\)/);
   assert.match(client, /Your plane appears to be approaching/);
@@ -448,7 +450,7 @@ test('assigned aircraft states use traveler language and live position relations
   assert.match(client, /Your plane is on the ground at/);
   assert.match(client, /function relationshipDistanceText\(relationship, label\)/);
   assert.match(client, /we have not yet confirmed the origin of its current flight/);
-  assert.match(client, /Our live aircraft feed can see/);
+  assert.match(client, /The live aircraft feed can see/);
   assert.doesNotMatch(client, /current airport-to-airport leg/);
   assert.doesNotMatch(client, /The ADS-B network is seeing/);
 });
@@ -742,7 +744,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261007p/);
+  assert.match(html, /flight-tracker\.js\?v=20261008a/);
 });
 
 
@@ -754,12 +756,32 @@ test('v2 traveler story shows completed-leg arrival, inbound timing and delay-tu
   assert.match(client, /function inboundTimingText\(assignment, inbound, live\)/);
   assert.match(client, /Your plane lands about .*; your flight departs /);
   assert.match(client, /function scheduledTurnMinutes\(assignment, inbound\)/);
+  assert.match(client, /function departureDelayMinutes\(assignment\)/);
+  assert.match(client, /delay\(\?:ed\)\?/);
   assert.match(client, /function delayWhyText\(assignment, inbound\)/);
   assert.match(client, /Why is my flight delayed\?/);
-  assert.match(client, /The scheduled turn before your flight is /);
+  assert.match(client, /Scheduled turn is /);
+  assert.match(client, /cannot prove how much of the delay came from the inbound aircraft/);
   assert.match(client, /is at the gate — live tracking starts at pushback/);
-  assert.match(client, /leave the map empty rather than guess/);
+  assert.match(client, /map stays empty rather than guessing/);
   assert.doesNotMatch(client, /simulated position|estimated marker|predicted marker/i);
+});
+
+test('text-only delay labels still produce an inbound-aircraft explanation', () => {
+  assert.match(client, /const texts = \[[\s\S]*flightStatus\?\.description,[\s\S]*flightStatus\?\.label/s);
+  assert.match(client, /match\(\/delay/);
+  assert.match(client, /Your flight is delayed ' \+ departureDelay \+ ' min/);
+  assert.match(client, /Scheduled turn is ' \+ turn \+ ' min/);
+  assert.match(client, /The inbound arrival alone does not explain the full departure delay/);
+});
+
+test('landed passenger flight becomes a last-confirmed gate state instead of vague no-position hedging', () => {
+  assert.match(client, /const completedAt = assignment\?\.flightStatus\?\.landed === true/);
+  assert.match(client, /LAST CONFIRMED AIRCRAFT STATE/);
+  assert.match(client, /is at the gate at .*tracking starts at pushback/s);
+  assert.match(client, /no newer live position or later same-tail leg/);
+  assert.match(client, /Its present location is unknown/);
+  assert.doesNotMatch(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
 });
 
 test('completed FlightStats occurrence exposes a bounded actual arrival timestamp for the last-leg story', () => {

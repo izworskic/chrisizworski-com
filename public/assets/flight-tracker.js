@@ -188,25 +188,56 @@
     return tail + ' arrived from ' + from + flight + (landedAt ? ' at ' + landedAt : '') + '.';
   }
 
+  function departureDelayMinutes(assignment) {
+    const explicit = assignment?.flightStatus?.departureDelayMinutes;
+    if (Number.isFinite(explicit)) return Math.max(0,Math.round(explicit));
+    const texts = [
+      assignment?.flightStatus?.description,
+      assignment?.flightStatus?.label
+    ].filter(Boolean);
+    for (const text of texts) {
+      const match = String(text).match(/delay(?:ed)?(?:\s+by)?\s*(\d{1,3})\s*m(?:in(?:ute)?s?)?/i);
+      if (match) return Number(match[1]);
+    }
+    return null;
+  }
+
   function delayWhyText(assignment, inbound) {
-    const departureDelay = assignment?.flightStatus?.departureDelayMinutes;
+    const departureDelay = departureDelayMinutes(assignment);
     if (!Number.isFinite(departureDelay) || departureDelay <= 0 || !inbound) return '';
+
     const late = inboundArrivalDelayMinutes(inbound);
     const turn = scheduledTurnMinutes(assignment,inbound);
     const from = inbound?.origin ? airportPlace(inbound.origin) : null;
     const flight = inbound?.flightNumber ? ' on ' + inbound.flightNumber : '';
+    const landedAt = completedArrivalClock(inbound);
+    const inboundLanded = inbound?.flightStatus?.landed === true;
+
     let first = '';
     if (Number.isFinite(late) && late > 0) {
-      first = inbound?.flightStatus?.landed === true
-        ? 'Your plane arrived ' + late + ' min late' + (from ? ' from ' + from : '') + flight + '.'
-        : 'Your inbound plane is running about ' + late + ' min late' + (from ? ' from ' + from : '') + flight + '.';
+      first = (inboundLanded ? 'Your plane arrived ' : 'Your inbound plane is running about ') +
+        late + ' min late' + (from ? ' from ' + from : '') + flight + '.';
     } else if (Number.isFinite(late)) {
-      first = 'The inbound flight is not currently showing a late arrival.';
+      first = (inboundLanded ? 'Your plane arrived' : 'Your inbound plane is coming') +
+        (from ? ' from ' + from : '') + flight +
+        (landedAt && inboundLanded ? ' at ' + landedAt : '') +
+        ' with no recorded inbound arrival delay.';
+    } else {
+      first = 'Your flight is delayed ' + departureDelay + ' min. ' +
+        (inboundLanded ? 'Your plane arrived' : 'Your inbound plane is coming') +
+        (from ? ' from ' + from : '') + flight +
+        (landedAt && inboundLanded ? ' at ' + landedAt : '') + '.';
     }
-    const second = Number.isFinite(turn)
-      ? 'The scheduled turn before your flight is ' + turn + ' min.'
-      : '';
-    return [first,second].filter(Boolean).join(' ');
+
+    if (Number.isFinite(turn)) {
+      const second = 'Scheduled turn is ' + turn + ' min.';
+      if (Number.isFinite(late) && late === 0) {
+        return first + ' ' + second + ' The inbound arrival alone does not explain the full departure delay.';
+      }
+      return first + ' ' + second;
+    }
+
+    return first + ' The published flight data does not expose a reliable scheduled turn here, so we cannot prove how much of the delay came from the inbound aircraft.';
   }
 
   function inboundLandingClock(assignment, inbound, live) {
@@ -249,7 +280,7 @@
       const checked = statusCheckedClock(assignment);
       return 'Status may be stale' + (checked ? ' · checked ' + checked : '');
     }
-    const mins = assignment?.flightStatus?.departureDelayMinutes;
+    const mins = departureDelayMinutes(assignment);
     if (Number.isFinite(mins) && mins > 0) return 'Delayed ' + mins + ' min';
     return assignment?.flightStatus?.description || assignment?.flightStatus?.label || 'Scheduled';
   }
@@ -1448,20 +1479,44 @@
     const delay = delayLabel(assignment);
     const seen = data?.status === 'seen-no-position';
     const onGround = data?.aircraft?.onGround === true;
+    const completedAt = assignment?.flightStatus?.landed === true && assignment?.destination
+      ? airportPlace(assignment.destination)
+      : null;
+    const completedCode = completedAt ? airportCodeAny(assignment.destination) : null;
+
+    if (completedAt) {
+      setAnswer({
+        kicker:'LAST CONFIRMED AIRCRAFT STATE',
+        headline:(tail || 'Your plane') + ' is at the gate at ' + completedAt +
+          (completedCode && completedCode !== completedAt ? ' (' + completedCode + ')' : '') +
+          ' — tracking starts at pushback.',
+        summary:(assignment?.flightNumber || 'The flight') + ' is confirmed landed there, and we have no newer live position or later same-tail leg. That is the aircraft’s last confirmed state.',
+        pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
+        next:'Tracking resumes when a newer aircraft position or subsequent same-tail flight appears.',
+        source:assignmentSourceText()
+      });
+      clearLiveMap();
+      flightLabel.textContent = tail || assignment?.flightNumber || 'Assigned aircraft';
+      routeLabel.textContent = 'Last confirmed at ' + completedAt + (completedCode ? ' (' + completedCode + ')' : '');
+      detailLabel.textContent = [assignment?.equipment?.name,tail].filter(Boolean).join(' · ');
+      freshness.textContent = 'Flight confirmed landed';
+      return;
+    }
+
     setAnswer({
       kicker:'YOUR ASSIGNED AIRCRAFT',
       headline:onGround
-        ? 'Your plane is assigned and on the ground.'
-        : 'Your plane is assigned, but we can’t map it live right now.',
+        ? 'Your plane is assigned and reported on the ground.'
+        : 'Your plane is assigned, but its present location is unknown.',
       summary:onGround
-        ? 'The assigned aircraft is ' + tail + '. It is currently reported on the ground, so there is no airborne route to show yet.'
+        ? 'The live aircraft feed reports ' + tail + ' on the ground, but it does not provide a usable position, so we cannot identify the airport.'
         : seen
-          ? 'Our live aircraft feed can see ' + tail + ', but it does not have a current location we can show on the map yet.'
-          : 'The assigned aircraft is ' + tail + '. It may be parked at a gate, outside coverage, or between usable position reports.',
+          ? 'The live aircraft feed can see ' + tail + ', but it has no current location. We also could not confirm a same-tail arrival at ' + airportPlace(assignment?.origin) + '.'
+          : 'We confirmed ' + tail + ' is assigned to your flight, but there is no current position and no confirmed same-tail arrival at ' + airportPlace(assignment?.origin) + '. Its present location is unknown.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
       next:onGround
-        ? 'Live tracking starts again when the aircraft begins transmitting a usable position at pushback. The airline assignment is still rechecked for swaps.'
-        : 'We checked the recent inbound history too. If no same-tail arrival is confirmed and no live position exists, we leave the map empty rather than guess.',
+        ? 'Tracking starts when the aircraft reports a usable position. Until then, we will not guess which airport it is at.'
+        : 'We will keep checking for a live position or a confirmed same-tail leg. Until one appears, the map stays empty rather than guessing.',
       source:assignmentSourceText()
     });
     clearLiveMap();
