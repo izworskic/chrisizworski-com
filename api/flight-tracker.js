@@ -940,6 +940,8 @@ module.exports = async function handler(req, res) {
   }
 };
 
+module.exports.buildRegistrationSnapshot = buildRegistrationSnapshot;
+
 module.exports._test = {
   cleanFlightInput,
   callsignSuffixVariants,
