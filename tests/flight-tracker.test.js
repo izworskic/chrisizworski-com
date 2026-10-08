@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
 const assignmentApi = require('../api/flight-assignment.js')._test;
+const publicIdentity = require('../lib/flight-public-identity.js');
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -47,6 +48,87 @@ test('short flight numbers check common zero-padded operating callsigns without 
   assert.deepEqual(api.callsignSuffixVariants('86'),['86','086','0086']);
   assert.deepEqual(api.callsignSuffixVariants('123'),['123']);
   assert.deepEqual(api.normalizeFlightInput('DL5').callsigns,['DAL5','DAL05','DAL005','DAL0005','EDV5','SKW5']);
+});
+
+test('public identity reader extracts FR24 search JSON from Jina text', () => {
+  const parsed=publicIdentity.parseReaderJson(
+    'Title:  \n\nURL Source: https://example.test\n\nMarkdown Content:\n' +
+    '{"results":[{"id":"DL3898","type":"schedule","match":"codeshare","detail":{"codeshare":"VS1671","flight":"DL3898","callsign":"SKW3898"}}]}'
+  );
+  assert.equal(parsed.results[0].detail.codeshare,'VS1671');
+  assert.equal(parsed.results[0].detail.flight,'DL3898');
+});
+
+test('public identity resolver maps exact codeshares and rejects begins-with false positives', () => {
+  const vsFixture={
+    results:[
+      {id:'VIR',type:'operator',match:'iata',detail:{iata:'VS'}},
+      {
+        id:'DL3898',
+        label:'VS1671 → DL3898 / SKW3898',
+        type:'schedule',
+        match:'codeshare',
+        detail:{codeshare:'VS1671',flight:'DL3898',callsign:'SKW3898',operator:'DAL'}
+      }
+    ]
+  };
+  const vs=publicIdentity.pickExactIdentity(vsFixture,'VS1671');
+  assert.equal(vs.requestedFlight,'VS1671');
+  assert.equal(vs.operatingFlight,'DL3898');
+  assert.equal(vs.codeshare,true);
+  assert.equal(vs.callsign,'SKW3898');
+
+  const dl5Fixture={
+    results:[
+      {id:'42051',type:'live',match:'begins',detail:{flight:'DL51',callsign:'DAL51',reg:'N854NW',lat:48.5,lon:-106.3}},
+      {id:'DL5',type:'schedule',match:'begins',detail:{flight:'DL5',operator:'DAL'}}
+    ]
+  };
+  const dl5=publicIdentity.pickExactIdentity(dl5Fixture,'DL5');
+  assert.equal(dl5.operatingFlight,'DL5');
+  assert.equal(dl5.type,'schedule');
+  assert.equal(dl5.registration,null);
+  assert.equal(publicIdentity.pickExactIdentity({results:[dl5Fixture.results[0]]},'DL5'),null);
+});
+
+test('operating identity recovery fixes the original marketing-callsign miss without inventing position', async () => {
+  const normalized=api.normalizeFlightInput('VS1671');
+  const identity={
+    recognized:true,
+    requestedFlight:'VS1671',
+    operatingFlight:'DL3898',
+    codeshare:true,
+    callsign:'SKW3898',
+    registration:null
+  };
+  const aircraft={
+    callsign:'SKW3898',registration:'N821SK',lat:43.4,lon:-84.0,
+    positionAgeSeconds:4,onGround:false
+  };
+  const recovery=await api.recoverLiveFromPublicIdentity(normalized,identity,{
+    resolveFlightFn:async resolved => {
+      assert.equal(resolved.display,'DL3898');
+      assert.ok(resolved.callsigns.includes('SKW3898'));
+      return {status:'unique',aircraft};
+    },
+    lookupCallsignFn:async()=>{ throw new Error('should not need second callsign lookup'); },
+    lookupRegistrationFn:async()=>{ throw new Error('should not need registration lookup'); }
+  });
+  assert.equal(recovery.recoveredBy,'operating-flight-callsign');
+  assert.equal(recovery.resolved.aircraft.registration,'N821SK');
+  assert.ok(recovery.checkedCallsigns.includes('VIR1671'));
+  assert.ok(recovery.checkedCallsigns.includes('SKW3898'));
+});
+
+test('public identity can recover an operating identity but never becomes live map telemetry itself', () => {
+  const trackerSource=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(trackerSource,/resolvePublicFlightIdentity/);
+  assert.match(trackerSource,/recoverLiveFromPublicIdentity/);
+  assert.match(trackerSource,/lookupCallsignFn\(identity\.callsign\)/);
+  assert.match(trackerSource,/lookupRegistrationFn\(registration\)/);
+  assert.match(trackerSource,/identityRecovery/);
+  assert.doesNotMatch(trackerSource,/lat:identity\.lat/);
+  assert.doesNotMatch(trackerSource,/lon:identity\.lon/);
 });
 
 test('common aircraft type designators become passenger-readable names and unknown types stay truthful', () => {
@@ -1069,9 +1151,10 @@ test('FlightStats parser supports both legacy assignment and standard Next data 
   assert.equal(assignmentApi.parseNextData(modern).props.ok,2);
 });
 
-test('successful live responses retain callsign observability', () => {
+test('successful live responses retain all checked callsigns and the matched callsign', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
-  assert.match(source,/checkedCallsigns:normalized\.callsigns/);
+  assert.match(source,/const checkedCallsigns = uniqueStrings\(recovery\?\.checkedCallsigns \|\| normalized\.callsigns\)/);
+  assert.match(source,/checkedCallsigns,/);
   assert.match(source,/matchedCallsign:resolved\.aircraft\?\.callsign \|\| null/);
 });
 
@@ -1131,6 +1214,21 @@ test('current-day unified lookup can render a fresh direct callsign without an a
     assignment,live,recentInboundOccurrence:null,nowMs:Date.parse('2026-10-08T17:00:00Z')
   });
   assert.equal(reconciled.renderedState,'airborne-live');
+});
+
+test('direct live assignment preserves independently resolved operating flight', () => {
+  const live={
+    status:'live',
+    flightNumber:'VS1671',
+    operatingFlightNumber:'DL3898',
+    positionFresh:true,
+    aircraft:{callsign:'SKW3898',registration:'N821SK',lat:43.4,lon:-84,onGround:false,positionAgeSeconds:3},
+    route:null
+  };
+  const assignment=assignmentApi.directLiveAssignment('VS1671',live);
+  assert.equal(assignment.flightNumber,'VS1671');
+  assert.equal(assignment.operatingFlightNumber,'DL3898');
+  assert.equal(assignment.codeshare.operatingFlightNumber,'DL3898');
 });
 
 test('codeshare parser and alias preserve ticket number while exposing operating flight', () => {
@@ -1223,6 +1321,7 @@ test('independent same-tail history recovers the leg immediately before the pass
     destination:'BOS',
     flightNumber:'DL1171',
     landed:false,
+    actualArrivalUTC:null,
     sourceLine:rows[1].sourceLine
   });
   const inbound=assignmentApi.independentInboundFromTailRows(rows,{
@@ -1235,6 +1334,8 @@ test('independent same-tail history recovers the leg immediately before the pass
   assert.equal(inbound.origin,'ATL');
   assert.equal(inbound.destination,'DTW');
   assert.equal(inbound.landed,true);
+  assert.equal(inbound.actualArrivalUTC,'2026-10-08T16:49:00.000Z');
+  assert.equal(assignmentApi.fr24HistoryUtc('08 Oct 2026','16:49'),'2026-10-08T16:49:00.000Z');
 });
 
 test('independent tail fallback is bounded to exact date, flight sequence, route and tail', () => {

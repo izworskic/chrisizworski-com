@@ -1106,18 +1106,31 @@ function embeddedInboundOccurrence(assignment) {
   return null;
 }
 
+function fr24HistoryUtc(dateLabel,timeText) {
+  const date=String(dateLabel || '').match(/^(\d{2})\s+([A-Z][a-z]{2})\s+(\d{4})$/);
+  const clock=String(timeText || '').match(/^(\d{1,2}):(\d{2})$/);
+  if (!date || !clock) return null;
+  const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const month=months[date[2]];
+  if (!Number.isInteger(month)) return null;
+  const ms=Date.UTC(Number(date[3]),month,Number(date[1]),Number(clock[1]),Number(clock[2]));
+  return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
+}
+
 function parseFr24AircraftHistoryRows(markdown) {
   const rows=[];
   for (const line of String(markdown || '').split(/\r?\n/)) {
     if (!line.includes('https://www.flightradar24.com/data/flights/')) continue;
     const match=line.match(/\b(\d{2}\s+[A-Z][a-z]{2}\s+\d{4})\b[\s\S]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)[\s\S]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)[\s\S]*?\[([A-Z0-9]{2,3}\s*[0-9]{1,4}[A-Z]?)\]\(https:\/\/www\.flightradar24\.com\/data\/flights\/[^)]+\)/i);
     if (!match) continue;
+    const landedTime=String(line.match(/\bLanded\s+(\d{1,2}:\d{2})\b/i)?.[1] || '').trim() || null;
     rows.push({
       dateLabel:match[1],
       origin:match[2].toUpperCase(),
       destination:match[3].toUpperCase(),
       flightNumber:clean(match[4]),
-      landed:/\bLanded\b/i.test(line),
+      landed:Boolean(landedTime || /\bLanded\b/i.test(line)),
+      actualArrivalUTC:landedTime ? fr24HistoryUtc(match[1],landedTime) : null,
       sourceLine:line
     });
   }
@@ -1180,8 +1193,8 @@ async function lookupIndependentInboundByTail(assignment,date) {
         estimatedDepartureUTC:null,
         actualDepartureUTC:null,
         scheduledArrivalUTC:null,
-        estimatedArrivalUTC:null,
-        actualArrivalUTC:null
+        estimatedArrivalUTC:row.actualArrivalUTC || null,
+        actualArrivalUTC:row.actualArrivalUTC || null
       },
       flightStatus:{
         code:'L',
@@ -1473,7 +1486,7 @@ async function directLiveSnapshot(flight) {
 function directLiveAssignment(marketingFlight,live,operatingFlight=null,codeshareSource=null) {
   const route=live?.route || null;
   const flightNumber=clean(marketingFlight);
-  const operator=clean(operatingFlight || live?.flightNumber || marketingFlight);
+  const operator=clean(operatingFlight || live?.operatingFlightNumber || live?.flightNumber || marketingFlight);
   return {
     status:'found',
     fetchedAt:new Date().toISOString(),
@@ -2124,6 +2137,7 @@ module.exports._test = {
   operatingOccurrenceMatches,
   dateIsNearNow,
   embeddedInboundOccurrence,
+  fr24HistoryUtc,
   parseFr24AircraftHistoryRows,
   independentInboundFromTailRows,
   lookupIndependentInboundByTail,
