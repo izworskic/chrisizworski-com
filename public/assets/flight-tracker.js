@@ -31,6 +31,22 @@
   const answerSource = document.getElementById('answer-source');
   const answerNext = document.getElementById('answer-next');
   const answerDelay = document.getElementById('answer-delay');
+  const tripTimeline = document.getElementById('trip-timeline');
+  const flightActions = document.getElementById('flight-actions');
+  const watchButton = document.getElementById('watch-flight');
+  const shareButton = document.getElementById('share-flight');
+  const addConnectionButton = document.getElementById('add-connection');
+  const actionMessage = document.getElementById('flight-action-message');
+  const connectionPanel = document.getElementById('connection-panel');
+  const connectionForm = document.getElementById('connection-form');
+  const connectionFlightInput = document.getElementById('connection-flight');
+  const connectionDateInput = document.getElementById('connection-date');
+  const connectionResult = document.getElementById('connection-result');
+  const reliabilityPanel = document.getElementById('reliability-panel');
+  const reliabilityOnTime = document.getElementById('reliability-ontime');
+  const reliabilityDelay = document.getElementById('reliability-delay');
+  const reliabilityCancel = document.getElementById('reliability-cancel');
+  const reliabilityContext = document.getElementById('reliability-context');
   const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
@@ -77,6 +93,12 @@
   let operatingOccurrenceCacheKey = null;
   let operatingOccurrenceCacheValue = null;
   let operatingOccurrenceCacheAt = 0;
+  let currentUnifiedPayload = null;
+  let activeConnectionSpec = null;
+  let connectionRequestSequence = 0;
+  let reliabilityFetchKey = '';
+  let reliabilityFetchAt = 0;
+  const WATCH_STORAGE_PREFIX = 'flight-tracker:v3:watch:';
   const HOLD_LAST_LIVE_MS = 5 * 60 * 1000;
   const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
@@ -369,8 +391,15 @@
   function hideAnswer() {
     answerCard.hidden = true;
     answerJourney.hidden = true;
+    tripTimeline.hidden = true;
+    tripTimeline.replaceChildren();
     answerNext.hidden = true;
     answerDelay.hidden = true;
+    flightActions.hidden = true;
+    actionMessage.hidden = true;
+    connectionPanel.hidden = true;
+    connectionResult.hidden = true;
+    reliabilityPanel.hidden = true;
     routeChoices.hidden = true;
     routeChoices.replaceChildren();
   }
