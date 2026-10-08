@@ -1663,7 +1663,7 @@
   }
 
   async function postV3(action,body) {
-    const response = await fetch('/api/flight-v3?action=' + encodeURIComponent(action),{
+    const response = await fetch('/api/flight-assignment?flightV3=1&action=' + encodeURIComponent(action),{
       method:'POST',
       headers:{'content-type':'application/json',accept:'application/json'},
       body:JSON.stringify(body)
@@ -1708,7 +1708,7 @@
         return;
       }
 
-      const keyResponse = await fetch('/api/flight-v3?action=vapid-key',{headers:{accept:'application/json'}});
+      const keyResponse = await fetch('/api/flight-assignment?flightV3=1&action=vapid-key',{headers:{accept:'application/json'}});
       const keyData = await keyResponse.json();
       if (!keyData?.ok || !keyData.publicKey) throw new Error('push unavailable');
 
@@ -1995,7 +1995,7 @@
     try {
       const params = new URLSearchParams({action:'reliability',flight:activeFlight,date:activeDate});
       if (activeFlightId) params.set('flightId',activeFlightId);
-      const response = await fetch('/api/flight-v3?' + params.toString(),{headers:{accept:'application/json'}});
+      const response = await fetch('/api/flight-assignment?flightV3=1&' + params.toString(),{headers:{accept:'application/json'}});
       const data = await response.json();
       if (key !== [activeFlight,activeDate,activeFlightId || ''].join('|')) return;
       if (!data?.available) {
