@@ -1733,6 +1733,7 @@
         date:activeDate,
         flightId:activeFlightId || null
       });
+      updateActionControls(currentUnifiedPayload);
       watchButton.textContent = 'Stop watching';
       setActionMessage(result.message || 'Watching this flight.');
     } catch (error) {
@@ -1755,6 +1756,7 @@
       });
       if (!result?.ok) throw new Error('stop failed');
       writeWatchRecord(null);
+      updateActionControls(currentUnifiedPayload);
       watchButton.textContent = 'Watch this flight';
       setActionMessage('Flight alerts stopped.');
     } catch {
@@ -2062,6 +2064,10 @@
   function renderUnifiedFlightState(payload) {
     const assignment = payload?.assignment;
     if (!assignment) return;
+    currentUnifiedPayload = payload;
+    queueMicrotask(() => {
+      if (currentUnifiedPayload === payload) renderV3Companions(payload);
+    });
 
     if (payload?.recentInboundOccurrence) {
       assignmentData = attachInboundOccurrence(assignment,payload.recentInboundOccurrence);
@@ -2267,6 +2273,9 @@
     refreshInFlight = false;
     assignmentInFlight = false;
     assignmentData = null;
+    currentUnifiedPayload = null;
+    activeConnectionSpec = null;
+    connectionRequestSequence++;
     assignedTail = null;
     assignmentChangedFrom = null;
     operatingOccurrenceCacheKey = null;
@@ -2284,6 +2293,37 @@
     await loadAssignment(activeFlight,activeDate,activeFlightId,{silent:false});
     beginRefresh();
   }
+
+  watchButton.addEventListener('click', () => {
+    if (readWatchRecord()) disableWatch();
+    else enableWatch();
+  });
+
+  shareButton.addEventListener('click', shareCurrentFlight);
+
+  addConnectionButton.addEventListener('click', () => {
+    connectionPanel.hidden = !connectionPanel.hidden;
+    if (!connectionPanel.hidden) {
+      if (!connectionDateInput.value) connectionDateInput.value = activeDate || localDateString();
+      connectionFlightInput.focus();
+    }
+  });
+
+  connectionForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const flight = clean(connectionFlightInput.value);
+    const date = connectionDateInput.value || activeDate || localDateString();
+    if (!flight) {
+      connectionResult.textContent = 'Enter a connecting flight number like AA1234.';
+      connectionResult.hidden = false;
+      connectionFlightInput.focus();
+      return;
+    }
+    activeConnectionSpec = {flight,date,flightId:null};
+    connectionResult.textContent = 'Checking both flights…';
+    connectionResult.hidden = false;
+    refreshConnection(true);
+  });
 
   form.addEventListener('submit', event => {
     event.preventDefault();
