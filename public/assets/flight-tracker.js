@@ -157,7 +157,7 @@
   }
 
   function scheduledTimeLabel(ap) {
-    const t = ap?.estimatedTime || ap?.scheduledTime;
+    const t = ap?.estimatedTime?.time ? ap.estimatedTime : ap?.scheduledTime;
     if (!t?.time) return null;
     return [t.time, t.ampm, t.timezone].filter(Boolean).join(' ');
   }
@@ -169,12 +169,27 @@
       return new Intl.DateTimeFormat('en-US',{
         hour:'numeric',
         minute:'2-digit',
-        timeZone:timezone || undefined,
+        timeZone:timezone || 'UTC',
         timeZoneName:'short'
       }).format(date);
     } catch {
-      return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit'}).format(date);
+      return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'UTC',timeZoneName:'short'}).format(date);
     }
+  }
+
+  function formatFlightDateTime(iso,timezone) {
+    if (!iso || !Number.isFinite(Date.parse(iso))) return null;
+    try {
+      return new Intl.DateTimeFormat('en-US',{
+        month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',
+        timeZone:timezone || 'UTC',timeZoneName:'short'
+      }).format(new Date(iso));
+    } catch { return formatFlightDateTime(iso,'UTC'); }
+  }
+
+  function flightDepartureDate(assignment) {
+    const local=assignment?.departureDate || assignment?.schedule?.scheduledDeparture?.slice(0,10) || assignment?.origin?.localDateTime?.slice(0,10);
+    return local ? 'Departure date ' + local : formatFlightDateTime(assignment?.schedule?.scheduledDepartureUTC,assignment?.origin?.timezone);
   }
 
   function scheduledDepartureClock(assignment) {
@@ -184,7 +199,7 @@
 
   function completedArrivalClock(occurrence) {
     const iso = occurrence?.schedule?.actualArrivalUTC || occurrence?.schedule?.estimatedArrivalUTC;
-    return formatClock(iso, occurrence?.destination?.timezone) || scheduledTimeLabel(occurrence?.destination);
+    return formatFlightDateTime(iso, occurrence?.destination?.timezone) || [occurrence?.destination?.localDateTime?.slice(0,10),scheduledTimeLabel(occurrence?.destination)].filter(Boolean).join(' ') || null;
   }
 
   function minutesBetween(startIso, endIso) {
@@ -441,6 +456,9 @@
     if (!arrived || !assignment) return null;
     // Never carry the arrived state into a different flight occurrence.
     if (clean(assignment.flightNumber) !== clean(arrived.flightNumber)) return null;
+    if (assignment.departureDate && arrived.departureDate && assignment.departureDate !== arrived.departureDate) return null;
+    if (assignment.schedule?.scheduledDepartureUTC && arrived.schedule?.scheduledDepartureUTC &&
+        assignment.schedule.scheduledDepartureUTC !== arrived.schedule.scheduledDepartureUTC) return null;
     if (assignment.flightId && arrived.flightId &&
         String(assignment.flightId) !== String(arrived.flightId)) return null;
     return arrived;
@@ -1693,7 +1711,8 @@
     if (completedAt) {
       const arrivalTime = completedArrivalClock(assignment);
       const arrivalDetails = [
-        arrivalTime ? 'Arrived ' + arrivalTime : 'Arrival confirmed',
+        arrivalTime ? 'Arrived ' + arrivalTime : 'Arrival confirmed; arrival time not published',
+        flightDepartureDate(assignment),
         assignment?.destination?.terminal ? 'terminal ' + assignment.destination.terminal : null,
         assignment?.destination?.gate ? 'gate ' + assignment.destination.gate : null
       ].filter(Boolean).join(' · ');
@@ -1765,7 +1784,7 @@
 
       const time = document.createElement('strong');
       time.className = 'route-choice-time';
-      const dep = [option.departureTime,option.departureAmPm,option.departureTimezone].filter(Boolean).join(' ');
+      const dep = formatFlightDateTime(option.sortTime,option.origin?.timezone) || [option.date,option.departureTime,option.departureAmPm,option.departureTimezone].filter(Boolean).join(' ');
       time.textContent = dep || option.sortTime || 'Departure time unavailable';
 
       const cities = document.createElement('span');
@@ -1970,7 +1989,7 @@
   }
 
   function timelineClock(iso,timezone) {
-    return formatClock(iso,timezone) || 'Time not published';
+    return formatFlightDateTime(iso,timezone) || 'Time not published';
   }
 
   function makeTimelineRow({key,time,label,status,current}) {
