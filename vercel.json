@@ -1233,6 +1233,30 @@
       "destination": "https://national-frost.vercel.app/national-tools/frost/:slug/index.html"
     },
     {
+      "source": "/national-tools/frost/cover-plants-tonight",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/cover-plants-tonight/index.html"
+    },
+    {
+      "source": "/national-tools/frost/cover-plants-tonight/",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/cover-plants-tonight/index.html"
+    },
+    {
+      "source": "/national-tools/planting/garlic",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/garlic/index.html"
+    },
+    {
+      "source": "/national-tools/planting/garlic/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/garlic/index.html"
+    },
+    {
+      "source": "/national-tools/planting/spring-bulbs",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/spring-bulbs/index.html"
+    },
+    {
+      "source": "/national-tools/planting/spring-bulbs/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/spring-bulbs/index.html"
+    },
+    {
       "source": "/national-tools/frost/:path*",
       "destination": "https://national-frost.vercel.app/national-tools/frost/:path*"
     },
