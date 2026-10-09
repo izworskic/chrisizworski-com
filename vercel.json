@@ -1261,6 +1261,30 @@
       "destination": "https://national-frost.vercel.app/national-tools/frost/:path*"
     },
     {
+      "source": "/national-tools/planting/tomato-ripening",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/tomato-ripening/index.html"
+    },
+    {
+      "source": "/national-tools/planting/tomato-ripening/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/tomato-ripening/index.html"
+    },
+    {
+      "source": "/national-tools/planting/dig-dahlias",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/dig-dahlias/index.html"
+    },
+    {
+      "source": "/national-tools/planting/dig-dahlias/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/dig-dahlias/index.html"
+    },
+    {
+      "source": "/national-tools/planting/cover-crops",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/cover-crops/index.html"
+    },
+    {
+      "source": "/national-tools/planting/cover-crops/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/cover-crops/index.html"
+    },
+    {
       "source": "/national-tools/planting/:path*",
       "destination": "https://national-planting.vercel.app/national-tools/planting/:path*"
     },
