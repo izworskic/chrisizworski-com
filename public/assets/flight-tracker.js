@@ -457,8 +457,10 @@
     // Never carry the arrived state into a different flight occurrence.
     if (clean(assignment.flightNumber) !== clean(arrived.flightNumber)) return null;
     if (assignment.departureDate && arrived.departureDate && assignment.departureDate !== arrived.departureDate) return null;
-    if (assignment.schedule?.scheduledDepartureUTC && arrived.schedule?.scheduledDepartureUTC &&
-        assignment.schedule.scheduledDepartureUTC !== arrived.schedule.scheduledDepartureUTC) return null;
+    const departureMs=Date.parse(assignment.schedule?.scheduledDepartureUTC || '');
+    const arrivedDepartureMs=Date.parse(arrived.schedule?.scheduledDepartureUTC || '');
+    if (Number.isFinite(departureMs) && Number.isFinite(arrivedDepartureMs) &&
+        departureMs !== arrivedDepartureMs) return null;
     if (assignment.flightId && arrived.flightId &&
         String(assignment.flightId) !== String(arrived.flightId)) return null;
     return arrived;
