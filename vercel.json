@@ -1521,6 +1521,10 @@
       "destination": "/synced-national-tools/assets/national-tools-directory.css"
     },
     {
+      "source": "/national-tools/assets/fall-color-network.css",
+      "destination": "/synced-national-tools/assets/fall-color-network.css"
+    },
+    {
       "source": "/national-tools/assets/national-tools-directory.js",
       "destination": "/synced-national-tools/assets/national-tools-directory.js"
     },
