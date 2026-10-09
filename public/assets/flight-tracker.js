@@ -51,26 +51,32 @@
   const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
+  let map = null;
   try {
     const maplibreModule = await import('https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs');
     maplibregl = maplibreModule.default || maplibreModule;
+    map = createFlightMap(maplibregl);
   } catch (error) {
-    message.hidden = false;
-    message.dataset.kind = 'error';
-    message.textContent = 'The flight map could not load. Refresh the page and try again.';
-    submit.disabled = true;
-    console.error('Flight tracker map failed to load', error);
-    return;
+    // Flight status and dates remain useful when graphics or the map CDN fail.
+    map = null;
+    document.getElementById('flight-map').textContent = 'Map unavailable in this browser. Flight status is still available below.';
+    console.warn('Flight tracker map unavailable', error);
   }
 
-  const map = new maplibregl.Map({
-    container:'flight-map',
-    style:'https://tiles.openfreemap.org/styles/liberty',
-    center:[-98.5,39.5],
-    zoom:3.2,
-    attributionControl:false
-  });
-  map.addControl(new maplibregl.AttributionControl({compact:true}), 'bottom-right');
+  function createFlightMap(library) {
+    const probe = document.createElement('canvas').getContext('webgl2');
+    if (!probe) throw new Error('WebGL2 is unavailable');
+    probe.getExtension('WEBGL_lose_context')?.loseContext();
+    const instance = new library.Map({
+      container:'flight-map',
+      style:'https://tiles.openfreemap.org/styles/liberty',
+      center:[-98.5,39.5],
+      zoom:3.2,
+      attributionControl:false
+    });
+    instance.addControl(new library.AttributionControl({compact:true}), 'bottom-right');
+    return instance;
+  }
 
   let planeMarker = null;
   let originMarker = null;
@@ -849,32 +855,34 @@
       source:assignmentSourceText()
     });
 
-    routeKey = '';
-    originMarker = clearMarker(originMarker);
-    destinationMarker = clearMarker(destinationMarker);
-    if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
+    if (map) {
+      routeKey = '';
+      originMarker = clearMarker(originMarker);
+      destinationMarker = clearMarker(destinationMarker);
+      if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
 
-    if (!planeMarker) {
-      planeMarker = new maplibregl.Marker({
-        element:planeElement(),
-        anchor:'center',
-        rotationAlignment:'map',
-        pitchAlignment:'map'
-      }).setLngLat([ac.lon,ac.lat]).addTo(map);
-    } else {
-      planeMarker.setLngLat([ac.lon,ac.lat]);
-    }
-    planeMarker.getElement().classList.add('is-stale');
-    if (Number.isFinite(ac.trackDegrees)) planeMarker.setRotation(ac.trackDegrees);
+      if (!planeMarker) {
+        planeMarker = new maplibregl.Marker({
+          element:planeElement(),
+          anchor:'center',
+          rotationAlignment:'map',
+          pitchAlignment:'map'
+        }).setLngLat([ac.lon,ac.lat]).addTo(map);
+      } else {
+        planeMarker.setLngLat([ac.lon,ac.lat]);
+      }
+      planeMarker.getElement().classList.add('is-stale');
+      if (Number.isFinite(ac.trackDegrees)) planeMarker.setRotation(ac.trackDegrees);
 
-    if (focus && Number.isFinite(focus.lat) && Number.isFinite(focus.lon)) {
-      destinationMarker = airportMarker('destination',focus,(airportCodeAny(focus) || 'Airport') + ' departure airport');
-      const bounds = new maplibregl.LngLatBounds();
-      bounds.extend([ac.lon,ac.lat]);
-      bounds.extend([focus.lon,focus.lat]);
-      map.fitBounds(bounds,{padding:{top:82,bottom:90,left:40,right:40},maxZoom:7,duration:500});
-    } else {
-      map.easeTo({center:[ac.lon,ac.lat],zoom:6,duration:500});
+      if (focus && Number.isFinite(focus.lat) && Number.isFinite(focus.lon)) {
+        destinationMarker = airportMarker('destination',focus,(airportCodeAny(focus) || 'Airport') + ' departure airport');
+        const bounds = new maplibregl.LngLatBounds();
+        bounds.extend([ac.lon,ac.lat]);
+        bounds.extend([focus.lon,focus.lat]);
+        map.fitBounds(bounds,{padding:{top:82,bottom:90,left:40,right:40},maxZoom:7,duration:500});
+      } else {
+        map.easeTo({center:[ac.lon,ac.lat],zoom:6,duration:500});
+      }
     }
 
     flightLabel.textContent = tail || 'Assigned aircraft';
@@ -1168,7 +1176,7 @@
   }
 
   function drawRoute(route) {
-    if (!route?.origin || !route?.destination) return;
+    if (!map || !route?.origin || !route?.destination) return;
     const from = route.origin;
     const to = route.destination;
     const nextKey = [from.icao,from.lat,from.lon,to.icao,to.lat,to.lon].join('|');
@@ -1257,6 +1265,9 @@
     submit.disabled = false;
     submit.textContent = 'FIND MY PLANE';
 
+    saveLastKnownSnapshot(data);
+    if (!map) return;
+
     if (!planeMarker) {
       planeMarker = new maplibregl.Marker({
         element:planeElement(),
@@ -1269,7 +1280,6 @@
     }
     planeMarker.getElement().classList.remove('is-stale');
     if (Number.isFinite(ac.trackDegrees)) planeMarker.setRotation(ac.trackDegrees);
-    saveLastKnownSnapshot(data);
 
     if (data.route) {
       if (map.isStyleLoaded()) drawRoute(data.route);
@@ -1311,6 +1321,7 @@
     originMarker = clearMarker(originMarker);
     destinationMarker = clearMarker(destinationMarker);
     routeKey = '';
+    if (!map) return;
     if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
     map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
   }
@@ -1326,6 +1337,7 @@
     originMarker = clearMarker(originMarker);
     destinationMarker = clearMarker(destinationMarker);
     routeKey = '';
+    if (!map) return;
     if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
     map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
   }
