@@ -1,0 +1,25 @@
+/* National fall-color cluster: one directory result with crawlable regional and place links. */
+.fall-network{margin-bottom:43px}
+.fall-network>.catalog-head{margin-bottom:12px}
+.fall-network .directory-card{min-height:0;padding:22px;border-top-width:5px;background:#fffdfa}
+.fall-network .fall-network-intro{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:22px;align-items:start}
+.fall-network h3{margin:10px 0 7px;font-size:25px;line-height:1.25}
+.fall-network-intro p{margin:0;font-size:14px;color:#536159;line-height:1.7}
+.fall-network-cta{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding-top:10px}
+.fall-network-cta .primary-action{min-height:45px;justify-content:center;text-align:center}
+.fall-network-more{font:700 12px/1.45 Arial,sans-serif;text-align:center;text-decoration:underline;text-underline-offset:3px}
+.fall-network-section{margin-top:21px;padding-top:18px;border-top:1px solid var(--line)}
+.fall-network h4{margin:0 0 12px;color:var(--ink);font:normal 18px/1.25 Georgia,serif}
+.fall-network-regions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.fall-network-region{display:block;min-width:0;padding:11px 12px;border:1px solid #d9dfd5;border-radius:5px;background:#f5f8f2;line-height:1.35}
+.fall-network-region strong,.fall-network-destination strong{display:block;color:#255728;font:700 13px/1.4 Arial,sans-serif}
+.fall-network-region span,.fall-network-destination span:not(.fall-network-arrow){display:block;color:#5b6860;font:12px/1.4 Arial,sans-serif;margin-top:3px}
+.fall-network-region:hover,.fall-network-destination:hover{background:#edf4e9;border-color:#90b18d;text-decoration:none}
+.fall-network-destinations{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.fall-network-destination{position:relative;display:block;min-width:0;padding:12px;border:1px solid var(--panel-line);border-radius:5px;background:#fff}
+.fall-network-destination .fall-network-arrow{position:absolute;bottom:8px;right:10px;font-family:Arial,sans-serif;color:var(--accent)}
+.fall-network-method{margin:17px 0 0;color:#73796f;font:12px/1.5 Arial,sans-serif}
+.fall-network-card[hidden]{display:none}
+@media(max-width:750px){.fall-network .fall-network-intro{grid-template-columns:minmax(0,1fr)}.fall-network-cta{flex-direction:row;flex-wrap:wrap;padding-top:0;align-items:center}.fall-network-destinations{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.fall-network .directory-card{padding:16px}.fall-network-regions{grid-template-columns:repeat(2,minmax(0,1fr))}.fall-network-region{padding:10px}.fall-network-cta{flex-direction:column;align-items:stretch}.fall-network .primary-action{width:100%}}
+@media(max-width:350px){.fall-network-regions,.fall-network-destinations{grid-template-columns:minmax(0,1fr)}}
