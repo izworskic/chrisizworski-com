@@ -111,3 +111,17 @@ test('fallback departure clocks handle midnight delays and early departures with
   assert.equal(early.actualDepartureUTC,'2026-10-08T15:55:00.000Z');
   assert.equal(early.estimatedDepartureUTC,'2026-10-08T15:55:00.000Z');
 });
+
+test('UTC history clocks support noon, midnight and both clock formats',()=>{
+  for (const [clock,expected] of [['12:00 AM','00:00'],['12:00 PM','12:00'],['11:43 AM','11:43'],['9:00 pm','21:00'],['21:00','21:00']])
+    assert.equal(api.fr24HistoryUtc('08 Oct 2026',clock),`2026-10-08T${expected}:00.000Z`);
+  for (const clock of ['00:00 AM','13:00 PM','24:00','12:60 PM']) assert.equal(api.fr24HistoryUtc('08 Oct 2026',clock),null);
+});
+test('AM/PM fallback rows retain the late-evening local ticket date',async()=>{
+  const rows=historyRow({day:'09',std:'1:00 AM',sta:'3:07 AM'})+'\n'+historyRow({day:'08',std:'1:00 AM',atd:'1:22 AM',sta:'3:07 AM',state:'Landed 2:39 AM'});
+  await withFetch(async()=>new Response(rows),async()=>{
+    const result=await api.lookupIndependentAssignmentFallback({normalized:{display:'DL4946'},normalizedDate:date});
+    assert.equal(result.status,'found');assert.equal(result.departureDate,date.raw);assert.equal(result.flightStatus.landed,false);
+    assert.equal(result.schedule.scheduledDepartureUTC,'2026-10-09T01:00:00.000Z');
+  });
+});

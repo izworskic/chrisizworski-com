@@ -81,7 +81,7 @@ test('completed leg outranks previous aircraft turn and strips timeline departur
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008m/);
+  assert.match(html,/flight-tracker\.js\?v=20261008n/);
 });
 
 
@@ -146,7 +146,7 @@ function arrivedRendererHarness(confirmed) {
     clientFunction('recoverNoPositionState','aircraftIdentity'),
     clientFunction('renderUnifiedFlightState','loadAssignment')
   ];
-  const harness = vm.runInNewContext(functions.join('\n') + '\n({renderArrivedForTurn,renderAssignmentBase,renderInboundAnswer,renderAssignedNoPosition,renderLastKnownPosition,recoverNoPositionState,renderUnifiedFlightState,setAnswer})',sandbox);
+  const harness = vm.runInNewContext(functions.join('\n') + '\n({canonicalArrivalAssignment,renderArrivedForTurn,renderAssignmentBase,renderInboundAnswer,renderAssignedNoPosition,renderLastKnownPosition,recoverNoPositionState,renderUnifiedFlightState,setAnswer})',sandbox);
   return {harness,elements,output,sandbox};
 }
 
@@ -211,4 +211,14 @@ test('arrival is scoped to the selected flight occurrence and reset before a dif
   assert.match(src,/String\(assignment.flightId\) !== String\(arrived.flightId\)/);
   assert.match(src,/function renderArrivedForTurn\(assignment\) \{\s*const arrived = canonicalArrivalAssignment\(assignment\)/);
   assert.match(src,/const arrived = canonicalArrivalAssignment\(assignmentData\);\s*if \(arrived && kicker !== 'YOUR FLIGHT HAS ARRIVED'\)/);
+});
+
+test('arrival snapshots compare scheduled instants across equivalent ISO formats',()=>{
+  const confirmed=arrivedFlightFixture();
+  confirmed.schedule.scheduledDepartureUTC='2026-10-08T18:17:00.000Z';
+  const {harness}=arrivedRendererHarness(confirmed);
+  const refreshed={...confirmed,flightStatus:{landed:false,airborne:false},schedule:{scheduledDepartureUTC:'2026-10-08T18:17:00Z'}};
+  assert.equal(harness.canonicalArrivalAssignment(refreshed),confirmed);
+  refreshed.schedule.scheduledDepartureUTC='2026-10-08T18:18:00Z';
+  assert.equal(harness.canonicalArrivalAssignment(refreshed),null);
 });

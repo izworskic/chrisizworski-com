@@ -1144,12 +1144,17 @@ function embeddedInboundOccurrence(assignment) {
 
 function fr24HistoryUtc(dateLabel,timeText) {
   const date=String(dateLabel || '').match(/^(\d{1,2})\s+([A-Z][a-z]{2})\s+(\d{4})$/);
-  const clock=String(timeText || '').match(/^(\d{1,2}):(\d{2})$/);
-  if (!date || !clock || Number(clock[1]) > 23 || Number(clock[2]) > 59) return null;
+  const clock=String(timeText || '').trim().match(/^(\d{1,2}):(\d{2})(?:\s*(AM|PM))?$/i);
+  if (!date || !clock || Number(clock[2]) > 59) return null;
+  let hour=Number(clock[1]);
+  if (clock[3]) {
+    if (hour < 1 || hour > 12) return null;
+    hour=hour % 12 + (clock[3].toUpperCase() === 'PM' ? 12 : 0);
+  } else if (hour > 23) return null;
   const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   const month=months[date[2]];
   if (!Number.isInteger(month)) return null;
-  const ms=Date.UTC(Number(date[3]),month,Number(date[1]),Number(clock[1]),Number(clock[2]));
+  const ms=Date.UTC(Number(date[3]),month,Number(date[1]),hour,Number(clock[2]));
   return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
 }
 
@@ -1983,8 +1988,8 @@ function minimalAirport(code,existing=null) {
 
 function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId}) {
   const resolvedFlightId=String(routeHint?.flightId || flightId || fr24SyntheticFlightId(normalizedDate.raw,row.origin,row.destination,0));
-  const scheduledDepartureUTC=row.scheduledDepartureUTC || (routeHint?.sortTime && Number.isFinite(Date.parse(routeHint.sortTime))
-    ? new Date(Date.parse(routeHint.sortTime)).toISOString() : null);
+  const scheduledDepartureUTC=routeHint?.sortTime && Number.isFinite(Date.parse(routeHint.sortTime))
+    ? new Date(Date.parse(routeHint.sortTime)).toISOString() : row.scheduledDepartureUTC || null;
   return {
     status:'found',
     fetchedAt:new Date().toISOString(),
