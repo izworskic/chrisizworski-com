@@ -1153,6 +1153,16 @@ function fr24HistoryUtc(dateLabel,timeText) {
   return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
 }
 
+function fr24DepartureUtc(dateLabel,timeText,scheduledTime) {
+  const value=fr24HistoryUtc(dateLabel,timeText);
+  const scheduled=fr24HistoryUtc(dateLabel,scheduledTime);
+  if (!value || !scheduled) return value;
+  const delta=Date.parse(value)-Date.parse(scheduled);
+  // Near-midnight clocks may wrap; an early departure must not gain a full day.
+  const shift=delta < -12 * 3600000 ? 86400000 : delta > 12 * 3600000 ? -86400000 : 0;
+  return new Date(Date.parse(value)+shift).toISOString();
+}
+
 function fr24ArrivalUtc(dateLabel,arrivalTime,departureTime) {
   const arrival=fr24HistoryUtc(dateLabel,arrivalTime);
   const departure=fr24HistoryUtc(dateLabel,departureTime);
@@ -1910,10 +1920,10 @@ function parseFr24HistoryRows(markdown) {
       equipmentCode,
       scheduledDepartureText:std?.[1]?.trim() || null,
       scheduledDepartureUTC:fr24HistoryUtc(dateMatch[1],std?.[1]),
-      actualDepartureUTC:fr24HistoryUtc(dateMatch[1],line.match(/\bATD\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1]),
+      actualDepartureUTC:fr24DepartureUtc(dateMatch[1],line.match(/\bATD\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
       scheduledArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bSTA\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
       actualArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bLanded\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
-      estimatedDepartureUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bEstimated departure\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      estimatedDepartureUTC:fr24DepartureUtc(dateMatch[1],line.match(/\bEstimated departure\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
       estimatedArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bEstimated\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
       canceled:/\bCancel(?:led|ed)\b/i.test(line),
       airborne:/\[Live\]/i.test(line) && /\bATD\s+\d/i.test(line) && !/\bEstimated departure/i.test(line),

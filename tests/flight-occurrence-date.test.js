@@ -100,3 +100,12 @@ test('inbound history anchors the passenger occurrence to its scheduled instant 
 test('conflicting local and UTC schedule fields cannot establish a dated occurrence',()=>{
   assert.equal(api.departureLocalDate({origin:{iata:'JFK'},schedule:{scheduledDeparture:'2026-10-08T21:00:00',scheduledDepartureUTC:'2026-10-08T01:00:00Z'}}),null);
 });
+
+test('fallback departure clocks handle midnight delays and early departures without changing the ticket date',()=>{
+  const delayed=api.parseFr24HistoryRows(historyRow({day:'08',std:'23:30',atd:'00:20',sta:'01:00',state:'Estimated departure 00:20'}))[0];
+  assert.equal(delayed.actualDepartureUTC,'2026-10-09T00:20:00.000Z');
+  assert.equal(delayed.estimatedDepartureUTC,'2026-10-09T00:20:00.000Z');
+  const early=api.parseFr24HistoryRows(historyRow({day:'08',std:'16:00',atd:'15:55',state:'Estimated departure 15:55'}))[0];
+  assert.equal(early.actualDepartureUTC,'2026-10-08T15:55:00.000Z');
+  assert.equal(early.estimatedDepartureUTC,'2026-10-08T15:55:00.000Z');
+});
