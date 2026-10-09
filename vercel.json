@@ -1285,6 +1285,30 @@
       "destination": "https://national-planting.vercel.app/national-tools/planting/cover-crops/index.html"
     },
     {
+      "source": "/national-tools/planting/prune-hydrangeas",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/prune-hydrangeas/index.html"
+    },
+    {
+      "source": "/national-tools/planting/prune-hydrangeas/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/prune-hydrangeas/index.html"
+    },
+    {
+      "source": "/national-tools/planting/soil-temperature-ready",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/soil-temperature-ready/index.html"
+    },
+    {
+      "source": "/national-tools/planting/soil-temperature-ready/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/soil-temperature-ready/index.html"
+    },
+    {
+      "source": "/national-tools/planting/harden-off-seedlings",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/harden-off-seedlings/index.html"
+    },
+    {
+      "source": "/national-tools/planting/harden-off-seedlings/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/harden-off-seedlings/index.html"
+    },
+    {
       "source": "/national-tools/planting/:path*",
       "destination": "https://national-planting.vercel.app/national-tools/planting/:path*"
     },
