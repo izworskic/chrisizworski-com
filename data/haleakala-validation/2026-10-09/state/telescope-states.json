@@ -1,0 +1,437 @@
+{
+  "ogg.clma.0m4a": [
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:47:21Z",
+      "end": "2026-10-09T15:48:16.911000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable",
+      "start": "2026-10-09T15:48:16.911000Z",
+      "end": "2026-10-09T15:49:17.186000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:49:17.186000Z",
+      "end": "2026-10-09T15:50:19.457000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:50:19.457000Z",
+      "end": "2026-10-09T15:54:13.013000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:54:13.013000Z",
+      "end": "2026-10-09T15:55:15.310000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:55:15.310000Z",
+      "end": "2026-10-09T15:59:24.381000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:59:24.381000Z",
+      "end": "2026-10-09T16:06:24.692000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:06:24.692000Z",
+      "end": "2026-10-09T16:15:13.918000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:15:13.918000Z",
+      "end": "2026-10-09T16:18:20.729000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:18:20.729000Z",
+      "end": "2026-10-09T16:19:23.053000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:19:23.053000Z",
+      "end": "2026-10-09T16:22:16.893000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:22:16.893000Z",
+      "end": "2026-10-09T16:25:21.137000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:25:21.137000Z",
+      "end": "2026-10-09T16:27:25.654000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:27:25.654000Z",
+      "end": "2026-10-09T16:37:21Z"
+    }
+  ],
+  "ogg.clma.0m4b": [
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:47:21Z",
+      "end": "2026-10-09T15:48:16.933000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable",
+      "start": "2026-10-09T15:48:16.933000Z",
+      "end": "2026-10-09T15:49:17.272000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:49:17.272000Z",
+      "end": "2026-10-09T15:50:19.481000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:50:19.481000Z",
+      "end": "2026-10-09T15:54:13.013000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:54:13.013000Z",
+      "end": "2026-10-09T15:55:15.312000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:55:15.312000Z",
+      "end": "2026-10-09T15:59:24.383000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:59:24.383000Z",
+      "end": "2026-10-09T16:06:24.689000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:06:24.689000Z",
+      "end": "2026-10-09T16:15:13.919000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:15:13.919000Z",
+      "end": "2026-10-09T16:18:20.730000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:18:20.730000Z",
+      "end": "2026-10-09T16:19:23.064000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:19:23.064000Z",
+      "end": "2026-10-09T16:22:16.877000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:22:16.877000Z",
+      "end": "2026-10-09T16:25:21.137000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:25:21.137000Z",
+      "end": "2026-10-09T16:27:25.654000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:27:25.654000Z",
+      "end": "2026-10-09T16:37:21Z"
+    }
+  ],
+  "ogg.clma.0m4c": [
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:47:21Z",
+      "end": "2026-10-09T15:48:16.907000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable",
+      "start": "2026-10-09T15:48:16.907000Z",
+      "end": "2026-10-09T15:49:17.187000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:49:17.187000Z",
+      "end": "2026-10-09T15:50:19.456000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:50:19.456000Z",
+      "end": "2026-10-09T15:54:13.013000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:54:13.013000Z",
+      "end": "2026-10-09T15:55:15.309000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:55:15.309000Z",
+      "end": "2026-10-09T15:59:24.391000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:59:24.391000Z",
+      "end": "2026-10-09T16:06:24.686000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:06:24.686000Z",
+      "end": "2026-10-09T16:15:13.920000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:15:13.920000Z",
+      "end": "2026-10-09T16:18:20.745000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:18:20.745000Z",
+      "end": "2026-10-09T16:19:23.023000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T16:19:23.023000Z",
+      "end": "2026-10-09T16:22:16.875000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:22:16.875000Z",
+      "end": "2026-10-09T16:25:21.149000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:25:21.149000Z",
+      "end": "2026-10-09T16:27:25.655000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:27:25.655000Z",
+      "end": "2026-10-09T16:37:21Z"
+    }
+  ],
+  "ogg.clma.2m0a": [
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Mount: SUSPEND state",
+      "start": "2026-10-09T15:47:21Z",
+      "end": "2026-10-09T15:48:16.905000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable. Mount: SUSPEND state",
+      "start": "2026-10-09T15:48:16.905000Z",
+      "end": "2026-10-09T15:48:46.432000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable",
+      "start": "2026-10-09T15:48:46.432000Z",
+      "end": "2026-10-09T15:48:57.435000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Weather system unavailable. Mount: SUSPEND state",
+      "start": "2026-10-09T15:48:57.435000Z",
+      "end": "2026-10-09T15:49:17.272000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Mount: SUSPEND state",
+      "start": "2026-10-09T15:49:17.272000Z",
+      "end": "2026-10-09T15:49:51.549000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:49:51.549000Z",
+      "end": "2026-10-09T15:50:19.499000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:50:19.499000Z",
+      "end": "2026-10-09T15:54:13.028000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:54:13.028000Z",
+      "end": "2026-10-09T15:55:15.304000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T15:55:15.304000Z",
+      "end": "2026-10-09T15:59:24.436000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-10-09T15:59:24.436000Z",
+      "end": "2026-10-09T16:06:24.701000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining",
+      "start": "2026-10-09T16:06:24.701000Z",
+      "end": "2026-10-09T16:13:36.883000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Mount: SUSPEND state",
+      "start": "2026-10-09T16:13:36.883000Z",
+      "end": "2026-10-09T16:15:13.958000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Mount: SUSPEND state",
+      "start": "2026-10-09T16:15:13.958000Z",
+      "end": "2026-10-09T16:18:20.745000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Mount: SUSPEND state",
+      "start": "2026-10-09T16:18:20.745000Z",
+      "end": "2026-10-09T16:19:23.080000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Mount: SUSPEND state",
+      "start": "2026-10-09T16:19:23.080000Z",
+      "end": "2026-10-09T16:22:16.915000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Mount: SUSPEND state. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:22:16.915000Z",
+      "end": "2026-10-09T16:22:27.794000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:22:27.794000Z",
+      "end": "2026-10-09T16:25:21.067000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Raining. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:25:21.067000Z",
+      "end": "2026-10-09T16:27:25.656000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-10-09T16:27:25.656000Z",
+      "end": "2026-10-09T16:37:21Z"
+    }
+  ]
+}
