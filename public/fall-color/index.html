@@ -39,6 +39,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="/assets/seasonal-field-desk.css" />
+<link rel="preconnect" href="https://thumb.wikimedia.org" crossorigin />
+<link rel="preload" as="image" href="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Road_curve_in_the_autumn_%28Unsplash%29.jpg/1280px-Road_curve_in_the_autumn_%28Unsplash%29.jpg" fetchpriority="high" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -76,7 +78,7 @@
         "height": 630
       },
       "datePublished": "2026-03-15",
-      "dateModified": "2026-10-08",
+      "dateModified": "2026-10-09",
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
@@ -498,6 +500,7 @@
     .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
     .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
+<link rel="stylesheet" href="/assets/fall-color-visual.css?v=20261009a" />
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/seasonal-field-desk.js"></script>
@@ -506,13 +509,28 @@
 </head>
 <body class="seasonal-fall" data-seasonal-tool="fall-color">
 <div class="wrap">
-  <div class="row" style="align-items:baseline">
-    <div class="kicker">Field guide</div>
+  <div class="fall-topline">
+    <div class="kicker">Chris Izworski &nbsp;/&nbsp; Michigan field guide</div>
     <div class="tiny muted mono" id="todayLabel"></div>
   </div>
-  <h1 style="margin-top:7px">Michigan Fall Color</h1>
-  <div class="sub">Where the leaves are turning, and quiet places to find them.</div>
-  <p class="lede">Michigan's fall color turns from north to south. It usually peaks in late September across the Upper Peninsula and the Keweenaw, through the second and third weeks of October in northern Michigan and the Lower Peninsula, and in the last week of October near Ann Arbor and the southern border. This guide follows the season from live canopy and weather data, with a multi-day forecast and rivers to paddle through the color.</p>
+  <header class="fall-hero" aria-label="Michigan fall color field guide">
+    <img class="fall-hero__photo"
+      src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Road_curve_in_the_autumn_%28Unsplash%29.jpg/1280px-Road_curve_in_the_autumn_%28Unsplash%29.jpg"
+      width="1280" height="960" alt="" fetchpriority="high" decoding="async" />
+    <div class="fall-hero__content">
+      <div class="kicker">Michigan &bull; 2026 foliage season</div>
+      <h1>Michigan Fall Color</h1>
+      <p class="sub">Where the leaves are turning, and quiet places to find them.</p>
+      <div class="fall-hero__actions">
+        <a class="fall-primary" href="#map">Explore the color map <span aria-hidden="true">&darr;</span></a>
+        <a class="fall-secondary" href="/fall-color/michigan-leaf-peeping-planner/">Plan a weekend <span aria-hidden="true">&nearr;</span></a>
+      </div>
+    </div>
+    <div class="fall-hero__credit">Tunnel of Trees, Harbor Springs &middot; <a href="https://commons.wikimedia.org/wiki/File:Road_curve_in_the_autumn_(Unsplash).jpg" target="_blank" rel="noopener noreferrer">Photo: Aaron Burden (CC0)</a></div>
+  </header>
+  <div class="fall-intro">
+    <p class="lede">Michigan's fall color turns from north to south. It usually peaks in late September across the Upper Peninsula and the Keweenaw, through the second and third weeks of October in northern Michigan and the Lower Peninsula, and in the last week of October near Ann Arbor and the southern border. This guide follows the season from live canopy and weather data, with a multi-day forecast and rivers to paddle through the color.</p>
+  </div>
 
   <section class="card pad" id="statewideStatus" aria-labelledby="statewideStatusHeading" style="margin:16px 0">
     <div class="row" style="align-items:baseline;margin-bottom:8px">
@@ -584,9 +602,16 @@
       <div id="liveStripBody" class="small soft">Seasonal baseline: western U.P. peak Sep 28&ndash;Oct 6; northern Lower Michigan Oct 5&ndash;17; southern Michigan Oct 18&ndash;28. Live readings refine these windows when available.</div>
     </div>
 
+    <div class="fall-map-head">
+      <div>
+        <div class="kicker">Statewide foliage map</div>
+        <h2>Follow the color north to south</h2>
+      </div>
+      <p>Select a region to see its color stage. Check the reading date before you travel.</p>
+    </div>
     <div id="map"></div>
 
-    <div class="card pad" style="margin-bottom:16px">
+    <div class="card pad fall-season-scrubber" style="margin-bottom:16px">
       <div class="row" style="align-items:baseline">
         <span class="kicker">The season</span>
         <span class="mono" id="dateBig" style="font-size:22px"></span>
