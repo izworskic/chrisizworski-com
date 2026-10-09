@@ -81,7 +81,7 @@ test('completed leg outranks previous aircraft turn and strips timeline departur
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008n/);
+  assert.match(html,/flight-tracker\.js\?v=20261008o/);
 });
 
 
@@ -221,4 +221,54 @@ test('arrival snapshots compare scheduled instants across equivalent ISO formats
   assert.equal(harness.canonicalArrivalAssignment(refreshed),confirmed);
   refreshed.schedule.scheduledDepartureUTC='2026-10-08T18:18:00Z';
   assert.equal(harness.canonicalArrivalAssignment(refreshed),null);
+});
+
+
+test('map import or unavailable graphics cannot disable flight status lookup', async () => {
+  const start = client.indexOf('  let maplibregl;');
+  const end = client.indexOf('  let planeMarker',start);
+  const init = client.slice(start,end).replace(/await import\('[^']+'\)/,'await loadLibrary()');
+  for (const failure of ['cdn','graphics','constructor']) {
+    const mapElement = {textContent:''};
+    const submit = {disabled:false};
+    const library = {Map:class { constructor() { throw new Error('graphics initialization failed'); } }};
+    const result = await vm.runInNewContext('(async () => {' + init + '; return map; })()',{
+      loadLibrary:async () => { if (failure === 'cdn') throw new Error('CDN unavailable'); return library; },
+      document:{
+        getElementById:() => mapElement,
+        createElement:() => ({getContext:() => failure === 'graphics' ? null : {getExtension:() => null}})
+      },
+      submit,console:{warn:() => {}}
+    });
+    assert.equal(result,null);
+    assert.equal(submit.disabled,false);
+    assert.match(mapElement.textContent,/Flight status is still available/);
+  }
+});
+
+test('lookup reset and fresh position status work when the map is unavailable', () => {
+  const el = () => ({textContent:'',hidden:false,dataset:{},style:{},classList:{remove:() => {}}});
+  const elements = Object.fromEntries(['glance','glanceNote','progressBar','progressFill','routeCodes','mapShell',
+    'flightLabel','routeLabel','detailLabel','freshness','submit'].map(name => [name,el()]));
+  let snapshot = null;
+  const sandbox = {
+    ...elements,map:null,planeMarker:null,originMarker:null,destinationMarker:null,routeKey:'old',
+    activeFlight:'DL4946',activeLiveKey:null,lastLiveFlight:null,lastLiveSuccessAt:0,lastReportedAgeSeconds:null,
+    clean:x => x,clearMarker:() => null,setMessage:() => {},renderProgress:() => {},
+    aircraftIdentity:() => 'CRJ9',formatAltitude:() => '30,000 ft',formatSpeed:() => '400 kt',
+    formatAge:() => 'Just reported',displayedPositionAge:() => 0,
+    saveLastKnownSnapshot:data => { snapshot=data; },
+    maplibregl:{Marker:class { constructor() { throw new Error('Must not draw a marker without a map'); } }}
+  };
+  const js = [clientFunction('clearLiveMap','resetMapForLookup'),clientFunction('resetMapForLookup','resetMapForFailure'),
+    clientFunction('renderLive','renderUnavailable'),'({resetMapForLookup,renderLive})'].join('\n');
+  const ui = vm.runInNewContext(js,sandbox);
+  ui.resetMapForLookup('DL4946');
+  assert.equal(elements.routeLabel.textContent,'Checking current flight…');
+  const fresh = {flightNumber:'DL4946',positionFresh:true,aircraft:{callsign:'EDV4946',positionAgeSeconds:0}};
+  ui.renderLive(fresh);
+  assert.equal(elements.flightLabel.textContent,'DL4946');
+  assert.equal(elements.freshness.textContent,'Just reported');
+  assert.equal(elements.submit.disabled,false);
+  assert.equal(snapshot,fresh);
 });
