@@ -15,9 +15,10 @@ const FR24_PUBLIC_BASE = 'https://www.flightradar24.com/data/flights/';
 const FR24_AIRCRAFT_READER_BASE = 'https://r.jina.ai/https://www.flightradar24.com/data/aircraft/';
 const FR24_AIRCRAFT_PUBLIC_BASE = 'https://www.flightradar24.com/data/aircraft/';
 const FR24_FALLBACK_TIMEOUT_MS = 9500;
-const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:';
+const ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v3:';
+const AIRPORT_TIMEZONES = require('../data/flight-airport-timezones.json');
 const ASSIGNMENT_CACHE_TTL_SECONDS = 18 * 60 * 60;
-const INBOUND_CACHE_PREFIX = 'flight:inbound:v2:';
+const INBOUND_CACHE_PREFIX = 'flight:inbound:v3:';
 const INBOUND_CACHE_TTL_SECONDS = 12 * 60 * 60;
 const CODESHARE_CACHE_PREFIX = 'flight:codeshare:v1:';
 const CODESHARE_CACHE_TTL_SECONDS = 24 * 60 * 60;
@@ -116,6 +117,8 @@ async function readAssignmentCache(flight,date,flightId=null) {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!parsed || !['found','choose-flight'].includes(parsed.status)) return null;
+    if (parsed.status === 'found' && departureLocalDate(parsed) !== date) return null;
+    if (parsed.status === 'choose-flight' && (parsed.date !== date || !parsed.options?.every(o=>o.date === date))) return null;
     return {
       ...parsed,
       fallback:{
@@ -208,12 +211,38 @@ function operatingCarrierSummary(flight, flexTrack = {}) {
   };
 }
 
+function airportTimezone(ap) {
+  return ap?.timezone || ap?.timeZoneRegionName || AIRPORT_TIMEZONES[clean(ap?.iata || ap?.fs || ap?.code)] || null;
+}
+
+function localDateAt(iso, timezone) {
+  if (!iso || !timezone || !Number.isFinite(Date.parse(iso))) return null;
+  try {
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(iso));
+    const values=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+  } catch { return null; }
+}
+
+function departureLocalDate(flight) {
+  // The ticket date belongs to the scheduled departure, even after a delay past midnight.
+  const local=String(flight?.schedule?.scheduledDeparture || flight?.positional?.flexTrack?.departureDate?.dateLocal || '').slice(0,10);
+  const origin=flight?.departureAirport || flight?.origin;
+  const converted=localDateAt(flight?.schedule?.scheduledDepartureUTC,airportTimezone(origin));
+  if (normalizeDate(local)) return converted && converted !== local ? null : local;
+  if (converted) return converted;
+  const airportDate=String(origin?.localDateTime || origin?.date || '').slice(0,10);
+  return normalizeDate(airportDate) ? airportDate : null;
+}
+
 function baseFlightMatchesDate(flightData, normalizedDate) {
-  if (!flightData || !normalizedDate) return false;
-  const localDate = String(flightData?.departureAirport?.date || flightData?.schedule?.scheduledDeparture || '').slice(0,10);
-  if (localDate) return localDate === normalizedDate.raw;
-  const utcDate = String(flightData?.schedule?.scheduledDepartureUTC || '').slice(0,10);
-  return utcDate === normalizedDate.raw;
+  return Boolean(flightData && normalizedDate && departureLocalDate(flightData) === normalizedDate.raw);
+}
+
+function detailMatchesSelection(flight, selected, date) {
+  return baseFlightMatchesDate(flight,date) && String(flight?.flightId || '') === String(selected?.flightId || '') &&
+    airportCode(flight?.departureAirport) === airportCode(selected?.origin) &&
+    airportCode(flight?.arrivalAirport) === airportCode(selected?.destination);
 }
 
 function optionDate(option) {
@@ -239,7 +268,7 @@ function airportSummary(ap) {
     country:String(ap.country || '').trim() || null,
     gate:String(ap.gate || '').trim() || null,
     terminal:String(ap.terminal || '').trim() || null,
-    timezone:String(ap.timeZoneRegionName || '').trim() || null,
+    timezone:airportTimezone(ap),
     localDateTime:String(ap.date || '').trim() || null,
     scheduledTime:ap?.times?.scheduled ? {
       time:String(ap.times.scheduled.time || '').trim() || null,
@@ -284,10 +313,15 @@ function optionsForDate(nextData, date) {
     for (const item of (Array.isArray(day?.flights) ? day.flights : [])) {
       const parsed = sanitizeOption(item);
       if (!parsed) continue;
-      if (parsed.date === date.raw) options.push(parsed);
+      const localDate=localDateAt(parsed.sortTime,parsed.origin?.timezone) || parsed.date;
+      if (localDate === date.raw) options.push({...parsed,date:localDate});
     }
   }
-  return options.sort((a,b) => String(a.sortTime || '').localeCompare(String(b.sortTime || '')));
+  return options.sort((a,b) => {
+    const aUpcoming=Date.parse(a.sortTime) >= Date.now();
+    const bUpcoming=Date.parse(b.sortTime) >= Date.now();
+    return Number(bUpcoming)-Number(aUpcoming) || String(a.sortTime || '').localeCompare(String(b.sortTime || ''));
+  });
 }
 
 
@@ -645,6 +679,7 @@ function sanitizeFlight(flight, marketingFlight, detailUrl) {
     fetchedAt:new Date().toISOString(),
     flightNumber:marketingFlight.display,
     flightId:String(flight?.flightId || ''),
+    departureDate:departureLocalDate(flight),
     assignmentState,
     tailNumber:tail,
     equipment:{
@@ -656,6 +691,7 @@ function sanitizeFlight(flight, marketingFlight, detailUrl) {
     origin:airportSummary(flight?.departureAirport),
     destination:airportSummary(flight?.arrivalAirport),
     schedule:{
+      scheduledDeparture:String(flight?.schedule?.scheduledDeparture || '').trim() || null,
       scheduledDepartureUTC:String(flight?.schedule?.scheduledDepartureUTC || '').trim() || null,
       estimatedDepartureUTC:String(flight?.schedule?.estimatedActualDepartureUTC || '').trim() || null,
       actualDepartureUTC:String(flight?.schedule?.actualDepartureUTC || '').trim() ||
@@ -1109,12 +1145,22 @@ function embeddedInboundOccurrence(assignment) {
 function fr24HistoryUtc(dateLabel,timeText) {
   const date=String(dateLabel || '').match(/^(\d{1,2})\s+([A-Z][a-z]{2})\s+(\d{4})$/);
   const clock=String(timeText || '').match(/^(\d{1,2}):(\d{2})$/);
-  if (!date || !clock) return null;
+  if (!date || !clock || Number(clock[1]) > 23 || Number(clock[2]) > 59) return null;
   const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   const month=months[date[2]];
   if (!Number.isInteger(month)) return null;
   const ms=Date.UTC(Number(date[3]),month,Number(date[1]),Number(clock[1]),Number(clock[2]));
   return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
+}
+
+function fr24DepartureUtc(dateLabel,timeText,scheduledTime) {
+  const value=fr24HistoryUtc(dateLabel,timeText);
+  const scheduled=fr24HistoryUtc(dateLabel,scheduledTime);
+  if (!value || !scheduled) return value;
+  const delta=Date.parse(value)-Date.parse(scheduled);
+  // Near-midnight clocks may wrap; an early departure must not gain a full day.
+  const shift=delta < -12 * 3600000 ? 86400000 : delta > 12 * 3600000 ? -86400000 : 0;
+  return new Date(Date.parse(value)+shift).toISOString();
 }
 
 function fr24ArrivalUtc(dateLabel,arrivalTime,departureTime) {
@@ -1169,7 +1215,9 @@ function independentInboundFromTailRows(rows,{dateLabel,passengerFlight,origin,d
   const from=clean(origin);
   const to=clean(destination);
   const passengerIndex=(rows || []).findIndex(row =>
-    row.dateLabel === dateLabel && row.flightNumber === flight &&
+    (scheduledDepartureUTC
+      ? Date.parse(row.scheduledDepartureUTC) === Date.parse(scheduledDepartureUTC)
+      : row.dateLabel === dateLabel) && row.flightNumber === flight &&
     row.origin === from && row.destination === to
   );
   let candidates=[];
@@ -1857,7 +1905,7 @@ function parseFr24HistoryRows(markdown) {
     const dateMatch=line.match(/\b(\d{2}\s+[A-Z][a-z]{2}\s+\d{4})\b/);
     const routeMatch=line.match(/FROM\s+[^|]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)\s+TO\s+[^|]*?\[\(([A-Z0-9]{3})\)\]\([^)]+\)/i);
     const registrationMatch=line.match(/\[([A-Z0-9-]{3,10})\]\(https:\/\/www\.flightradar24\.com\/data\/aircraft\/[a-z0-9-]+/i);
-    if (!dateMatch || !routeMatch || !registrationMatch) continue;
+    if (!dateMatch || !routeMatch) continue;
 
     let equipmentCode=null;
     const aircraftColumn=line.match(/\|\s*([A-Z0-9]{3,4})\s+\[\([A-Z0-9-]{3,10}\)\]\(https:\/\/www\.flightradar24\.com\/data\/aircraft\//i);
@@ -1868,9 +1916,17 @@ function parseFr24HistoryRows(markdown) {
       dateLabel:dateMatch[1],
       origin:routeMatch[1].toUpperCase(),
       destination:routeMatch[2].toUpperCase(),
-      registration:registrationMatch[1].toUpperCase(),
+      registration:registrationMatch?.[1]?.toUpperCase() || null,
       equipmentCode,
       scheduledDepartureText:std?.[1]?.trim() || null,
+      scheduledDepartureUTC:fr24HistoryUtc(dateMatch[1],std?.[1]),
+      actualDepartureUTC:fr24DepartureUtc(dateMatch[1],line.match(/\bATD\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      scheduledArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bSTA\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      actualArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bLanded\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      estimatedDepartureUTC:fr24DepartureUtc(dateMatch[1],line.match(/\bEstimated departure\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      estimatedArrivalUTC:fr24ArrivalUtc(dateMatch[1],line.match(/\bEstimated\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)/i)?.[1],std?.[1]),
+      canceled:/\bCancel(?:led|ed)\b/i.test(line),
+      airborne:/\[Live\]/i.test(line) && /\bATD\s+\d/i.test(line) && !/\bEstimated departure/i.test(line),
       landed:/\bLanded\b/i.test(line),
       sourceLine:line
     });
@@ -1921,20 +1977,21 @@ async function fetchFr24History(marketingFlight) {
 }
 
 function minimalAirport(code,existing=null) {
-  return existing || {iata:code,code,name:null,city:null,state:null,country:null,gate:null,terminal:null,timezone:null,localDateTime:null,scheduledTime:null,estimatedTime:null};
+  const ap=existing || {iata:code,code,name:null,city:null,state:null,country:null,gate:null,terminal:null,localDateTime:null,scheduledTime:null,estimatedTime:null};
+  return {...ap,timezone:airportTimezone(ap)};
 }
 
 function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId}) {
   const resolvedFlightId=String(routeHint?.flightId || flightId || fr24SyntheticFlightId(normalizedDate.raw,row.origin,row.destination,0));
-  const scheduledDepartureUTC=routeHint?.sortTime && Number.isFinite(Date.parse(routeHint.sortTime))
-    ? new Date(Date.parse(routeHint.sortTime)).toISOString()
-    : null;
+  const scheduledDepartureUTC=row.scheduledDepartureUTC || (routeHint?.sortTime && Number.isFinite(Date.parse(routeHint.sortTime))
+    ? new Date(Date.parse(routeHint.sortTime)).toISOString() : null);
   return {
     status:'found',
     fetchedAt:new Date().toISOString(),
     flightNumber:normalized.display,
     flightId:resolvedFlightId,
-    assignmentState:'assigned',
+    departureDate:normalizedDate.raw,
+    assignmentState:row.canceled ? 'cancelled' : row.landed ? 'landed' : row.airborne ? 'airborne' : row.registration ? 'assigned' : 'unassigned',
     tailNumber:row.registration,
     equipment:row.equipmentCode ? {code:row.equipmentCode,name:row.equipmentCode,title:'Fallback source'} : null,
     operatingCarrier:null,
@@ -1942,24 +1999,25 @@ function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId
     destination:minimalAirport(row.destination,routeHint?.destination || null),
     schedule:{
       scheduledDepartureUTC,
-      estimatedDepartureUTC:null,
-      actualDepartureUTC:null,
-      scheduledArrivalUTC:null,
-      estimatedArrivalUTC:null,
-      actualArrivalUTC:null
+      estimatedDepartureUTC:row.estimatedDepartureUTC || null,
+      actualDepartureUTC:row.actualDepartureUTC || null,
+      scheduledArrivalUTC:row.scheduledArrivalUTC || null,
+      estimatedArrivalUTC:row.estimatedArrivalUTC || null,
+      actualArrivalUTC:row.actualArrivalUTC || null
     },
     flightStatus:{
-      code:row.landed ? 'L' : 'S',
-      label:row.landed ? 'Landed' : 'Scheduled',
-      description:row.landed ? 'Landed' : 'Aircraft assignment confirmed; airline timing source unavailable',
+      code:row.canceled ? 'C' : row.landed ? 'L' : row.airborne ? 'A' : 'S',
+      label:row.canceled ? 'Cancelled' : row.landed ? 'Landed' : row.airborne ? 'Airborne' : 'Scheduled',
+      description:row.canceled ? 'Cancelled' : row.landed ? 'Landed' : row.airborne ? 'Airborne' :
+        row.registration ? 'Aircraft assignment confirmed from public flight history' : 'Flight scheduled; aircraft assignment not yet published',
       departureDelayMinutes:null,
       arrivalDelayMinutes:null,
       lastUpdatedText:null,
-      canceled:false,
-      airborne:false,
+      canceled:row.canceled === true,
+      airborne:row.airborne === true && !row.landed,
       landed:row.landed
     },
-    note:row.landed ? null : 'Tracking will begin when a fresh aircraft position is available',
+    note:row.landed || row.canceled ? null : 'Tracking will begin when a fresh aircraft position is available',
     source:{
       name:'Flightradar24 public flight history via Jina Reader',
       url:FR24_PUBLIC_BASE + normalized.display.toLowerCase(),
@@ -1969,65 +2027,49 @@ function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId
     fallback:{
       kind:'independent-public-history',
       stale:false,
-      note:'Assigned registration confirmed from an independent public flight-history source because FlightStats was unavailable.'
+      note:row.registration
+        ? 'Assigned registration confirmed from an independent public flight-history source because FlightStats was unavailable.'
+        : 'Flight schedule recovered from public history; no assigned registration is published.'
     }
   };
 }
 
 async function lookupIndependentAssignmentFallback({normalized,normalizedDate,flightId,routeHint=null}) {
   const markdown=await fetchFr24History(normalized.display);
-  const dateLabel=fr24DateLabel(normalizedDate);
-  const rows=parseFr24HistoryRows(markdown).filter(row => row.dateLabel === dateLabel);
-  if (!rows.length) return null;
-
   const effectiveHint=routeHint || fr24RouteHintFromFlightId(flightId);
-  const origin=clean(effectiveHint?.origin?.iata || effectiveHint?.origin?.code || effectiveHint?.origin || '');
-  const destination=clean(effectiveHint?.destination?.iata || effectiveHint?.destination?.code || effectiveHint?.destination || '');
-  let matches=rows;
-  if (origin && destination) matches=rows.filter(row => row.origin === origin && row.destination === destination);
-
-  if (matches.length === 1) {
-    return fr24AssignmentFromRow({normalized,normalizedDate,row:matches[0],routeHint:effectiveHint,flightId});
-  }
-  if (matches.length > 1 && origin && destination) {
-    return fr24AssignmentFromRow({normalized,normalizedDate,row:matches[0],routeHint:effectiveHint,flightId});
-  }
-  if (!effectiveHint && rows.length > 1) {
-    const seen=new Set();
-    const options=[];
-    rows.forEach((row,index) => {
-      const key=row.origin + '>' + row.destination;
-      if (seen.has(key)) return;
-      seen.add(key);
-      options.push({
-        flightId:fr24SyntheticFlightId(normalizedDate.raw,row.origin,row.destination,index),
-        date:normalizedDate.raw,
-        sortTime:null,
-        origin:minimalAirport(row.origin),
-        destination:minimalAirport(row.destination),
-        departureTime:row.scheduledDepartureText,
-        departureAmPm:null,
-        departureTimezone:null,
-        arrivalTime:null,
-        arrivalAmPm:null,
-        arrivalTimezone:null
-      });
+  const rows=parseFr24HistoryRows(markdown).filter(row => {
+    const timezone=airportTimezone(effectiveHint?.origin) || airportTimezone({iata:row.origin});
+    return localDateAt(row.scheduledDepartureUTC,timezone) === normalizedDate.raw;
+  });
+  const options=rows.map((row,index)=>({
+    flightId:fr24SyntheticFlightId(normalizedDate.raw,row.origin,row.destination,Math.floor(Date.parse(row.scheduledDepartureUTC)/60000)),
+    date:normalizedDate.raw,sortTime:row.scheduledDepartureUTC,
+    origin:minimalAirport(row.origin),destination:minimalAirport(row.destination),
+    departureTime:row.scheduledDepartureText,departureAmPm:null,departureTimezone:'UTC',
+    arrivalTime:null,arrivalAmPm:null,arrivalTimezone:null
+  }));
+  let selectedIndex=-1;
+  if (effectiveHint) {
+    const matches=rows.map((row,index)=>({row,index})).filter(({row}) => {
+      if (row.origin !== airportCode(effectiveHint.origin) || row.destination !== airportCode(effectiveHint.destination)) return false;
+      if (effectiveHint.sortTime) return Math.abs(Date.parse(row.scheduledDepartureUTC)-Date.parse(effectiveHint.sortTime)) < 60000;
+      const synthetic=fr24RouteHintFromFlightId(flightId);
+      return synthetic ? options[rows.indexOf(row)].flightId === String(flightId) : false;
     });
-    if (options.length > 1) {
-      return {
-        status:'choose-flight',
-        flightNumber:normalized.display,
-        date:normalizedDate.raw,
-        message:'More than one flight uses this number today. Choose your route.',
-        options,
-        source:{name:'Flightradar24 public flight history via Jina Reader',url:FR24_PUBLIC_BASE + normalized.display.toLowerCase()},
-        fallback:{kind:'independent-public-history',stale:false,note:'Route choices recovered because the primary assignment source is unavailable.'}
-      };
-    }
-  }
-  if (rows.length === 1) {
-    return fr24AssignmentFromRow({normalized,normalizedDate,row:rows[0],routeHint:effectiveHint,flightId});
-  }
+    if (matches.length === 1) selectedIndex=matches[0].index;
+  } else if (rows.length === 1 && !flightId) selectedIndex=0;
+  if (selectedIndex >= 0) return fr24AssignmentFromRow({normalized,normalizedDate,row:rows[selectedIndex],routeHint:effectiveHint,flightId:flightId || options[selectedIndex].flightId});
+  if (options.length) return {
+    status:'choose-flight',flightNumber:normalized.display,date:normalizedDate.raw,
+    message:'Choose the route and departure time on your ticket. Dates are local to the departure airport.',
+    options:options.sort((a,b)=>{
+      const aUpcoming=Date.parse(a.sortTime) >= Date.now();
+      const bUpcoming=Date.parse(b.sortTime) >= Date.now();
+      return Number(bUpcoming)-Number(aUpcoming) || Date.parse(a.sortTime)-Date.parse(b.sortTime);
+    }),
+    source:{name:'Flightradar24 public flight history via Jina Reader',url:FR24_PUBLIC_BASE + normalized.display.toLowerCase()},
+    fallback:{kind:'independent-public-history',stale:false,note:'Occurrences matched by scheduled local departure date.'}
+  };
   return null;
 }
 
@@ -2128,7 +2170,7 @@ async function lookupAssignment({ flight, date, flightId }) {
     : null;
 
   if (!options.length) {
-    if (baseFlight?.flightId) {
+    if (baseFlight?.flightId && (!flightId || String(flightId) === baseFlight.flightId)) {
       await writeAssignmentCache(normalized.display,normalizedDate.raw,baseFlight.flightId,baseFlight);
       await writeAssignmentCache(normalized.display,normalizedDate.raw,null,baseFlight);
       return {
@@ -2169,7 +2211,7 @@ async function lookupAssignment({ flight, date, flightId }) {
 
   let selected = null;
   if (flightId) selected = options.find(option => option.flightId === String(flightId)) || null;
-  if (!selected && options.length === 1) selected = options[0];
+  if (!selected && !flightId && options.length === 1) selected = options[0];
 
   if (!selected) {
     const choice = {
@@ -2189,10 +2231,11 @@ async function lookupAssignment({ flight, date, flightId }) {
   try {
     const detailHtml = await fetchText(detailUrl);
     const detailData = parseNextData(detailHtml);
-    flightData = detailData?.props?.initialState?.flightTracker?.flight || null;
+    const candidate=detailData?.props?.initialState?.flightTracker?.flight || null;
+    flightData=detailMatchesSelection(candidate,selected,normalizedDate) ? candidate : null;
   } catch {}
 
-  if (!flightData?.flightId && baseFlightData?.flightId && String(baseFlightData.flightId) === String(selected.flightId)) {
+  if (!flightData?.flightId && detailMatchesSelection(baseFlightData,selected,normalizedDate)) {
     flightData = baseFlightData;
   }
   if (!flightData?.flightId) {
@@ -2352,6 +2395,11 @@ module.exports._test = {
   buildUnifiedFlightState,
   operatingCarrierSummary,
   baseFlightMatchesDate,
+  departureLocalDate,
+  localDateAt,
+  airportTimezone,
+  detailMatchesSelection,
+  lookupIndependentAssignmentFallback,
   confirmedArrival,
   readAssignmentCache,
   writeAssignmentCache,

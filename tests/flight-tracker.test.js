@@ -207,7 +207,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261008l/);
+  assert.match(html, /flight-tracker\.js\?v=20261008m/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -972,7 +972,7 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 });
 
 test('flight page loads the last-known recovery client asset', () => {
-  assert.match(html, /flight-tracker\.js\?v=20261008l/);
+  assert.match(html, /flight-tracker\.js\?v=20261008m/);
 });
 
 
@@ -1182,7 +1182,7 @@ test('assignment source outage is distinct from coverage gaps and confirmed sche
 
 test('assignment lookup has durable last-good cache and base-page fallback before declaring source unavailable', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v2:'/);
+  assert.match(source,/ASSIGNMENT_CACHE_PREFIX = 'flight:assignment:v3:'/);
   assert.match(source,/ASSIGNMENT_CACHE_TTL_SECONDS = 18 \* 60 \* 60/);
   assert.match(source,/flightstats-base-occurrence/);
   assert.match(source,/last-good-assignment-cache/);
@@ -1263,7 +1263,7 @@ test('future dates never attach a current-day direct aircraft merely because the
 
 test('last-confirmed inbound legs survive transient arrival-board failures', () => {
   const source=fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
-  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v2:'/);
+  assert.match(source,/INBOUND_CACHE_PREFIX = 'flight:inbound:v3:'/);
   assert.match(source,/INBOUND_CACHE_TTL_SECONDS = 12 \* 60 \* 60/);
   assert.match(source,/async function lookupRecentArrivalWithCache/);
   assert.match(source,/await writeInboundCache\(normalizedDate\.raw,normalizedTail,normalizedAirport,liveResult\.occurrence\)/);

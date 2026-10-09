@@ -81,7 +81,7 @@ test('completed leg outranks previous aircraft turn and strips timeline departur
 test('fresh-fix next-step notice is complete and never CSS-clamped', () => {
   assert.match(client,/What happens next: we will show a map position only when a fresh fix arrives\. An old ground report does not override the confirmed airborne status\./);
   assert.match(html,/\.answer-next\{[^}]*max-height:none;overflow:visible;white-space:normal;overflow-wrap:break-word;text-overflow:clip/);
-  assert.match(html,/flight-tracker\.js\?v=20261008l/);
+  assert.match(html,/flight-tracker\.js\?v=20261008m/);
 });
 
 
@@ -90,8 +90,9 @@ function arrivedFlightFixture() {
     flightNumber:'DL1171',
     flightId:'dl1171-20261008',
     tailNumber:'N121DZ',
-    origin:{iata:'DTW',city:'Detroit'},
-    destination:{iata:'BOS',city:'Boston',terminal:'A',gate:'A17'},
+    departureDate:'2026-10-08',
+    origin:{iata:'DTW',city:'Detroit',timezone:'America/Detroit'},
+    destination:{iata:'BOS',city:'Boston',timezone:'America/New_York',terminal:'A',gate:'A17'},
     equipment:{name:'Airbus A321'},
     flightStatus:{landed:true,airborne:true,canceled:false,departureDelayMinutes:26,label:'Delayed'},
     schedule:{actualArrivalUTC:'2026-10-08T20:08:00Z'},
@@ -133,6 +134,7 @@ function arrivedRendererHarness(confirmed) {
     staleFixAgeText:() => null
   };
   const functions = [
+    clientFunction('scheduledTimeLabel','minutesBetween'),
     clientFunction('assignmentArrivalConfirmed','canonicalArrivalAssignment'),
     clientFunction('canonicalArrivalAssignment','assignmentSourceText'),
     clientFunction('setAnswer','hideAnswer'),
@@ -159,7 +161,7 @@ function assertOnlyArrivedMessaging(ui) {
     ...ui.output.pills
   ].join(' ');
   assert.match(text,/DL1171 has arrived in Boston/);
-  assert.match(text,/Arrived 4:08 PM EDT/);
+  assert.match(text,/Arrived Oct 8, 2026, 4:08 PM EDT/);
   assert.match(text,/gate A17/);
   assert.doesNotMatch(text,/Why is my flight delayed|delayed 26 min|at the gate|parked at Detroit|pushback|before departure|assigned to your next flight/i);
   assert.equal(ui.elements.answerDelay.hidden,true);
