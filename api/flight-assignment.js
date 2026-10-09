@@ -2008,7 +2008,8 @@ function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId
     flightStatus:{
       code:row.canceled ? 'C' : row.landed ? 'L' : row.airborne ? 'A' : 'S',
       label:row.canceled ? 'Cancelled' : row.landed ? 'Landed' : row.airborne ? 'Airborne' : 'Scheduled',
-      description:row.landed ? 'Landed' : 'Aircraft assignment confirmed; airline timing source unavailable',
+      description:row.canceled ? 'Cancelled' : row.landed ? 'Landed' : row.airborne ? 'Airborne' :
+        row.registration ? 'Aircraft assignment confirmed from public flight history' : 'Flight scheduled; aircraft assignment not yet published',
       departureDelayMinutes:null,
       arrivalDelayMinutes:null,
       lastUpdatedText:null,
@@ -2016,7 +2017,7 @@ function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId
       airborne:row.airborne === true && !row.landed,
       landed:row.landed
     },
-    note:row.landed ? null : 'Tracking will begin when a fresh aircraft position is available',
+    note:row.landed || row.canceled ? null : 'Tracking will begin when a fresh aircraft position is available',
     source:{
       name:'Flightradar24 public flight history via Jina Reader',
       url:FR24_PUBLIC_BASE + normalized.display.toLowerCase(),
@@ -2026,7 +2027,9 @@ function fr24AssignmentFromRow({normalized,normalizedDate,row,routeHint,flightId
     fallback:{
       kind:'independent-public-history',
       stale:false,
-      note:'Assigned registration confirmed from an independent public flight-history source because FlightStats was unavailable.'
+      note:row.registration
+        ? 'Assigned registration confirmed from an independent public flight-history source because FlightStats was unavailable.'
+        : 'Flight schedule recovered from public history; no assigned registration is published.'
     }
   };
 }

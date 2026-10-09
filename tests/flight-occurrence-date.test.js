@@ -59,6 +59,8 @@ test('no assigned tail still returns a correctly dated scheduled flight',async()
     const result=await api.lookupIndependentAssignmentFallback({normalized:{display:'DL4946'},normalizedDate:date});
     assert.equal(result.status,'found');assert.equal(result.tailNumber,null);assert.equal(result.assignmentState,'unassigned');
     assert.equal(result.flightStatus.landed,false);
+    assert.match(result.flightStatus.description,/assignment not yet published/);
+    assert.match(result.fallback.note,/no assigned registration/);
   });
 });
 test('primary lookup rejects wrong occurrence detail and uses a time-matched fallback',async()=>{
