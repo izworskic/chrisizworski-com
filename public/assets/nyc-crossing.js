@@ -22,7 +22,7 @@
   }
 
   function incidentStamp(info){
-    const date=Date.parse(info?.eventsUpdatedAt||info?.updatedAt||'');
+    const date=Date.parse(info?.eventsUpdatedAt||'');
     if(!Number.isFinite(date))return '511NY live incident layer awaiting its first cached update';
     const age=Math.max(0,Math.round((Date.now()-date)/60000));
     return '511NY live incidents updated '+age+'m ago'+(info.state==='STALE'?' · cached / potentially stale':'');
@@ -30,6 +30,7 @@
 
   function disruptionHtml(r,info){
     if(!info?.updatedAt)return '';
+    if(!info.eventsUpdatedAt)return '<div class="disruption">511NY incident feed awaiting first update</div>';
     const d=r.disruption||{};
     const count=d.incidentCount||0;
     const events=(d.events||[]).slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
