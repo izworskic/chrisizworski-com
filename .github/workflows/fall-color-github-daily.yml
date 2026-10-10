@@ -1,0 +1,29 @@
+name: Publish free GitHub fall-color editions
+
+on:
+  # GitHub's schedule is UTC; 11:25 UTC is 7:25 AM in October and
+  # 6:25 AM in winter. Date keys themselves always use Detroit local time.
+  schedule:
+    - cron: '25 11 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/fall-color-github-daily.yml"
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: fall-color-github-daily-writer
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    uses: ./.github/workflows/fall-color-writer-test.yml
+    with:
+      publish_github: true
+    permissions:
+      contents: write
+      id-token: write
