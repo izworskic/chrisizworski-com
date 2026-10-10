@@ -26,3 +26,9 @@
 @media(max-width:380px){
   .routes tr{grid-template-columns:minmax(0,1fr)}
 }
+
+/* 511NY is an advisory under each measured segment, not a substitute ETA. */
+.disruption{margin-top:8px;padding:8px 10px;border-left:3px solid #d49c42;border-radius:4px;background:#fff8e9;font-size:.82rem;overflow-wrap:anywhere}
+.disruption strong{color:#704500}
+.disruption .detail{margin-top:3px}
+.disruption .vms{font-weight:600;color:#364c59}
