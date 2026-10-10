@@ -1,25 +1,23 @@
-name: Trigger fall color writer end-to-end test
+# Old Redis writer smoke workflow: keep an explicit manual repair/retry control,
+# but no longer auto-run the retired Redis path on push.
+name: Manual fall color GitHub publisher
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/fall-color-writer-test.yml"
-      - ".github/workflows/fall-color-writer-trigger.yml"
-      - "lib/fall-color/github-actions-oidc.js"
-      - "lib/fall-color/routes/cron.js"
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
+concurrency:
+  group: fall-color-github-daily-writer
+  cancel-in-progress: false
+
 jobs:
-  test-production-writer:
-    # Do not race today's paid seed with the legacy deterministic test writer.
-    if: ${{ !contains(github.event.head_commit.message, '[fall-color-one-time-seed]') }}
+  publish:
     uses: ./.github/workflows/fall-color-writer-test.yml
+    with:
+      publish_github: true
     permissions:
-      contents: read
+      contents: write
       id-token: write
