@@ -105,6 +105,17 @@ test('missing credentials never poll; poll failure retains stale cache',async()=
  assert.equal(cached.state,'STALE');
  assert.equal(cached.crossings.gwb.incidentCount,1);
 });
+test('cache failures return safe timeout diagnostics without exposing credentials',async()=>{
+ const w=mockWorld();
+ const cacheFailure=async()=>{const error=new Error('do not print sensitive infrastructure detail');error.name='TimeoutError';throw error;};
+ const snapshot=await getCached511({env:w.env,fetchImpl:cacheFailure});
+ assert.equal(snapshot.state,'CACHE_UNAVAILABLE');
+ assert.equal(snapshot.cacheIssue,'TIMEOUT');
+ assert.doesNotMatch(JSON.stringify(snapshot),/sensitive infrastructure|unit-redis-token/);
+ const poll=await refresh511({env:w.env,fetchImpl:cacheFailure});
+ assert.equal(poll.state,'CACHE_UNAVAILABLE');
+ assert.equal(poll.reason,'CACHE_TIMEOUT');
+});
 test('incident layer is additive and cannot fabricate incomparable fastest routes',()=>{
  const incident={state:'LIVE',updatedAt:new Date().toISOString(),events:{updatedAt:new Date().toISOString()},signs:{updatedAt:new Date().toISOString()},
  crossings:{gwb:{incidentCount:1,events:[{description:'Crash'}],penaltyPoints:7,signCount:0,signs:[]}}};
