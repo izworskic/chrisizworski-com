@@ -33,5 +33,5 @@ test('ship marker semantics remain color-based', () => {
   assert.match(js, /\.ship-map-marker\.is-local \.ship-hull\{fill:#567d8b\}/);
   assert.match(js, /\.ship-map-marker\.is-stopped \.ship-hull\{fill:#8a6a42\}/);
   assert.match(js, /Rust freighter = selected next watch/);
-  assert.match(html, /duluth-canal\.js\?v=20260925-ships1/);
+  assert.match(html, /duluth-canal\.js\?v=20261010-schedule2/);
 });
