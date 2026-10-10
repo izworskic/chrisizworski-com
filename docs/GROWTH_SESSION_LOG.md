@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Michigan + national fall-color zero-Anthropic resilience — October 10, 2026
+
+- **Scope / ownership:** Michigan statewide map and report are owned by `izworskic/chrisizworski-com`; all 15 new national regional families and destination-page generators are owned by `izworskic/national-fall-color`. No new indexable URLs, redirects, title, canonical, or ad placement changes.
+- **Dependency audit:** Michigan's daily editorial writer alone called Anthropic Sonnet; the live canopy/weather map and regional forecasts do not. The national owner repo has no `ANTHROPIC_API_KEY` code-search matches. Its NWS regional route already caches for 3 hours, and its broader national fall-color route for 6 hours; live regional data, destination pages and maps do not require paid AI. National owner remains unchanged to protect the newly built regional experience.
+- **Implementation:** Replace Michigan's seasonal cron Claude generation with a source-grounded, deterministic three-paragraph report based on the existing per-region snapshots. Keep the established at-most-once-daily Redis cache, 45-day daily archives, stored latest report, one-hour CDN report cache, date-based stale hide and the existing 11:00 UTC cron schedule. Report production now requires **zero Anthropic calls** and no Anthropic key. Preserve explicit failure responses for unusable conditions or storage errors.
+- **Trust and quality:** Legacy cached AI-generated editions keep their accurate provenance. Newly generated deterministic editions receive separate truthful API/RSS disclosure; page heading is neutral. Map, color model, slider, 8 Michigan region guides and all 15 national regional family interfaces remain unchanged. A new pure report-writer test and provenance tests cover output and method labeling.
+- **Search/revenue measurement:** No current GSC 28-day slice, GA4 visit counts, AdSense page revenue or before/after paid API charges were read in this session: **NOT AVAILABLE**. No visibility/CTR/revenue lift claimed. Existing growth program remains ship-and-observe.
+- **Release:** Feature branch `fix/fall-color-zero-ai-report-20261010`. PR, full CI status, Vercel READY and public production readback must be recorded from verified results before claiming release.
+- **Exactly one next action:** Confirm the feature PR's full required `npm run verify:all` gate, merge only after green, and verify one fresh deterministic report and unchanged map/regional endpoints on production.
+
 **Permanent handoff for the [Million Impressions + Revenue Playbook](../MILLION_IMPRESSIONS_PLAYBOOK.md).**  
 This is an operational journal, not a record of proven ranking lift unless measured results are recorded. Append each completed session here, newest first, and always leave one concrete next step.
 

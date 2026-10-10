@@ -40,7 +40,7 @@ jobs:
             unset oidc_token
 
             if [[ "$status" == "200" ]]; then
-              jq --exit-status '.ok == true and (.date | type == "string") and (.chars > 0)' "$response_file"
+              jq --exit-status '((.ok == true and (.chars > 0)) or .skipped == "already-generated") and (.date | type == "string")' "$response_file"
               writer_date="$(jq --exit-status --raw-output '.date' "$response_file")"
 
               curl --fail --silent --show-error --max-time 30 \
@@ -49,11 +49,11 @@ jobs:
                 '.date == $date and (.updated | type == "string") and (.body | type == "string") and (.body | length > 0)' \
                 "$report_file"
 
-              chars="$(jq --raw-output '.chars' "$response_file")"
+              chars="$(jq --raw-output '.chars // 0' "$response_file")"
               {
                 echo "### Fall color writer verified"
                 echo ""
-                echo "Production generated and stored the ${writer_date} report (${chars} characters)."
+                echo "Production generated or reused the ${writer_date} cached model report (${chars} newly written characters)."
               } >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi

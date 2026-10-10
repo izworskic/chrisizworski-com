@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const report = require('../lib/fall-color/routes/report');
 const rss = require('../lib/fall-color/routes/rss');
-const { NOTE_DISCLOSURE } = require('../lib/fall-color/report-provenance');
+const { NOTE_DISCLOSURE, MODEL_DISCLOSURE } = require('../lib/fall-color/report-provenance');
 function response() {
   return { setHeader() {}, status(code) { this.code=code; return this; }, json(value) { this.body=value; }, send(value) { this.body=value; } };
 }
@@ -31,4 +31,17 @@ test('RSS identifies automated summaries even for legacy notes and protects the 
   assert.ok(res.body.includes('<description><![CDATA['+NOTE_DISCLOSURE));
   assert.ok(res.body.includes(']]]]><![CDATA[>'));
   assert.match(res.body,/regional model estimates/);
+});
+
+test('new deterministic model brief publishes correct disclosure in API and RSS',async t=>{
+  const edition={date:'2026-10-10',body:'Modeled regional color, not a sighting.',generationMethod:'Deterministic model summary'};
+  storage(t,edition);
+  const api=response();await report({},api);
+  assert.equal(api.code,200);
+  assert.equal(api.body.generationMethod,'Deterministic model summary');
+  assert.equal(api.body.disclosure,MODEL_DISCLOSURE);
+  const feed=response();await rss({},feed);
+  assert.equal(feed.code,200);
+  assert.ok(feed.body.includes(MODEL_DISCLOSURE));
+  assert.ok(!feed.body.includes(NOTE_DISCLOSURE));
 });

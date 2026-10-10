@@ -25,13 +25,12 @@ test("the only 200 responses are genuine skips and genuine success", () => {
   assert.deepEqual(shapes.sort(), ["ok", "skipped", "skipped"], "200 is reserved for skips and success");
 });
 
-test("configuration and upstream failures are distinguished", () => {
-  // A missing key or a failed write is ours (5xx). A failed upstream is theirs (502). Both are
-  // failures, but the distinction is what makes the cron log worth reading at a glance.
-  assert.match(source, /res\.status\(500\)\.json\(\{ error: "missing ANTHROPIC_API_KEY"/);
+test("model writer is independent of Anthropic while preserving error visibility", () => {
+  assert.match(source, /writeModelReport\(snap\)/);
   assert.match(source, /res\.status\(500\)\.json\(\{ error: "redis-write"/);
-  assert.match(source, /res\.status\(502\)\.json\(\{ error: "anthropic"/);
-  assert.match(source, /res\.status\(502\)\.json\(\{ error: "empty-generation"/);
+  assert.match(source, /res\.status\(502\)\.json\(\{ error: "empty-model-report"/);
+  assert.match(source, /res\.status\(502\)\.json\(\{ error: "conditions-unavailable"/);
+  assert.doesNotMatch(source, /ANTHROPIC_API_KEY|api\.anthropic\.com|claude-sonnet-/i);
 });
 
 test("the writer refuses to generate a report from zero regions", () => {
