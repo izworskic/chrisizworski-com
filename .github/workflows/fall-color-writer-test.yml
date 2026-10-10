@@ -160,6 +160,14 @@ jobs:
             echo ""
             echo "All Anthropic writes still require the existing daily Redis NX locks."
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Checkout separate data branch
+        if: ${{ inputs.publish_github }}
+        uses: actions/checkout@v4
+        with:
+          ref: fall-color-data
+          path: archive
+          persist-credentials: true
+
       - name: Archive daily Michigan and national fall-color editions
         if: ${{ inputs.publish_github }}
         shell: bash
