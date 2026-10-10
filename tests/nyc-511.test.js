@@ -131,7 +131,10 @@ test('canonical route and sitemap untouched, cron protected and credentials abse
  const js=fs.readFileSync(path.join(root,'public/assets/nyc-crossing.js'),'utf8');
  const vercel=JSON.parse(fs.readFileSync(path.join(root,'vercel.json'),'utf8'));
  assert.match(html,/rel="canonical" href="https:\/\/chrisizworski.com\/nyc-crossing\/"/);
- assert.ok(vercel.crons.some(c=>c.path==='/api/nyc-511?action=cron'&&c.schedule==='*/5 * * * *'));
+ assert.ok(vercel.crons.some(c=>c.path==='/api/flight-assignment?flightV3=1&action=cron'&&c.schedule==='*/5 * * * *'));
+ assert.ok(!vercel.crons.some(c=>c.path==='/api/nyc-511?action=cron'));
+ const cronSource=fs.readFileSync(path.join(root,'lib/flight-v3.js'),'utf8');
+ assert.match(cronSource,/nyc-crossing\/ny511'\)\.refresh511\(\)/);
  assert.doesNotMatch(js,/nysdot\.carsprogram|nyapi\.carsprogram|NY511_USERNAME|NY511_PASSWORD/);
  assert.ok(!('username' in require('../lib/nyc-crossing/ny511')));
 });
