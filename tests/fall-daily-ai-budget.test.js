@@ -19,12 +19,15 @@ test("Michigan AI never runs from a public reader and must reserve a unique dail
  assert.match(cron,/aiBody \|\| writeModelReport\(snap\)/);
  assert.doesNotMatch(fs.readFileSync(path.join(__dirname,"../lib/fall-color/routes/report.js"),"utf8"),/generateDailyFallEditorial|api\.anthropic\.com/);
 });
-test("the 15 national region briefings share one cron, not visitor-triggered generation",()=>{
+test("the 15 regions share one GitHub writer, never visitor-triggered generation",()=>{
  assert.equal(national._test.IDS.length,15);
  assert.equal(new Set(national._test.IDS).size,15);
  assert.match(dispatch,/"national-briefings-cron"/);
  assert.match(dispatch,/"national-briefings"/);
- assert.deepEqual(vercel.crons.filter(c=>c.path.includes("national-briefings")).map(c=>c.schedule),["15 11 * * *"]);
+ assert.deepEqual(vercel.crons.filter(c=>c.path.includes("national-briefings") || c.path.includes("view=cron")),[]);
+ const workflow=fs.readFileSync(path.join(__dirname,"../.github/workflows/fall-color-github-daily.yml"),"utf8");
+ assert.match(workflow,/publish_github: true/);
+ assert.match(workflow,/25 11 \* \* \*/);
  const src=fs.readFileSync(path.join(__dirname,"../lib/fall-color/routes/national-briefings.js"),"utf8");
  assert.match(src,/process\.env\.ANTHROPIC_API_KEY_FALL_COLOR/);
  assert.match(src,/"NX"/);
