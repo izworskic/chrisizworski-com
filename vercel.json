@@ -449,10 +449,6 @@
     {
       "path": "/api/flight-assignment?flightV3=1&action=cron",
       "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/nyc-511?action=cron",
-      "schedule": "*/5 * * * *"
     }
   ],
   "rewrites": [
