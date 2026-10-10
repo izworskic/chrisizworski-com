@@ -2,6 +2,12 @@ name: Fall color writer end-to-end test
 
 on:
   workflow_call:
+    inputs:
+      seed_daily:
+        description: "Run the one-time October 10 daily writers using GitHub OIDC"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -17,6 +23,7 @@ jobs:
     timeout-minutes: 12
     steps:
       - name: Wait for production, run the writer, and read back its report
+        if: ${{ !inputs.seed_daily }}
         shell: bash
         env:
           OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
@@ -71,3 +78,80 @@ jobs:
           echo "Production did not accept this workflow identity before the retry window closed." >&2
           jq . "$response_file" >&2 2>/dev/null || true
           exit 1
+
+      - name: One-time authenticated October 10 seed (Michigan + 15 national regions)
+        if: ${{ inputs.seed_daily }}
+        shell: bash
+        env:
+          OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
+          MI_URL: "https://chrisizworski.com/api/fall-color?view=cron&seed=2026-10-10"
+          NATIONAL_URL: "https://chrisizworski.com/api/fall-color?view=national-briefings-cron&seed=2026-10-10"
+          REPORT_URL: "https://chrisizworski.com/api/fall-color-report"
+          NATIONAL_READ_URL: "https://chrisizworski.com/api/fall-color?view=national-briefings&region=new-england"
+          NATIONAL_SOURCE_URL: "https://chrisizworski.com/api/national-fall-region?region=new-england"
+        run: |
+          set -euo pipefail
+          body="$RUNNER_TEMP/fall-color-seed-response.json"
+          doc="$RUNNER_TEMP/fall-color-seed-read.json"
+
+          # Preflight before spending any tokens: make sure the national source is reachable.
+          curl --fail --silent --show-error --max-time 20 "$NATIONAL_SOURCE_URL" \
+            | jq --exit-status -e '.region.id == "new-england" and (.today | type == "object")' > /dev/null
+
+          for attempt in $(seq 1 32); do
+            token_url="${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}"
+            oidc_token="$(curl --fail --silent --show-error \
+              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+              "$token_url" | jq --exit-status --raw-output '.value')"
+
+            status="$(curl --silent --show-error --max-time 70 \
+              --output "$body" --write-out '%{http_code}' \
+              -H "Authorization: Bearer ${oidc_token}" "$MI_URL")"
+            unset oidc_token
+
+            if [[ "$status" == "200" ]]; then
+              jq --exit-status -e '(.date == "2026-10-10") and (.ok == true or .skipped == "already-generated" or .skipped == "daily-attempt-already-claimed")' "$body"
+              break
+            elif [[ "$status" == "401" || "$status" == "404" ]]; then
+              echo "Production commit not active yet (HTTP $status, attempt $attempt/32)."
+              sleep 15
+            else
+              echo "Michigan cron failed (HTTP $status)." >&2
+              jq . "$body" >&2 2>/dev/null || true
+              exit 1
+            fi
+            if [[ "$attempt" == "32" ]]; then echo "Michigan did not authorize after retries." >&2; exit 1; fi
+          done
+
+          # Authenticate separately: each job token is short-lived and the SHA
+          # must match the production deployment. The region batch is one model call.
+          token_url="${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}"
+          oidc_token="$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "$token_url" | jq --exit-status --raw-output '.value')"
+          status="$(curl --silent --show-error --max-time 70 \
+            --output "$body" --write-out '%{http_code}' \
+            -H "Authorization: Bearer ${oidc_token}" "$NATIONAL_URL")"
+          unset oidc_token
+          if [[ "$status" != "200" ]]; then
+            echo "National writer failed: HTTP $status." >&2
+            jq . "$body" >&2 2>/dev/null || true
+            exit 1
+          fi
+          jq --exit-status -e '(.date == "2026-10-10") and ((.ok == true and .regions >= 1) or .skipped == "already-published" or .skipped == "daily-attempt-already-claimed")' "$body"
+
+          curl --fail --silent --show-error --max-time 25 \
+            "${REPORT_URL}?seed_verify=${GITHUB_SHA}" -o "$doc"
+          jq --exit-status -e '.date == "2026-10-10" and (.body | type=="string" and length > 0)' "$doc"
+
+          curl --fail --silent --show-error --max-time 25 \
+            "${NATIONAL_READ_URL}&seed_verify=${GITHUB_SHA}" -o "$doc"
+          jq --exit-status -e '.date == "2026-10-10" and (.briefing | type=="string" and length > 30)' "$doc"
+
+          {
+            echo "### Daily fall-color seed verified"
+            echo ""
+            echo "Michigan report and national New England briefing are both available for October 10, 2026."
+            echo ""
+            echo "All Anthropic writes still require the existing daily Redis NX locks."
+          } >> "$GITHUB_STEP_SUMMARY"
