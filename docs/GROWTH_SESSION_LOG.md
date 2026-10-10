@@ -3,6 +3,13 @@
 **Permanent handoff for the [Million Impressions + Revenue Playbook](../MILLION_IMPRESSIONS_PLAYBOOK.md).**  
 This is an operational journal, not a record of proven ranking lift unless measured results are recorded. Append each completed session here, newest first, and always leave one concrete next step.
 
+## NYC crossing 511NY incident enrichment — October 9, 2026
+
+- **Status:** Implementation branch `feature/nyc-511ny-live-disruptions-20261009` prepared for review, not yet merged or deployed. No live 511NY credentials used or written to Git.
+- **Implementation:** server-only five-minute Vercel cron, TMDD 3.0 event and message-sign normalization, Upstash Redis durable cache and polling lock; per-crossing risk/advisory indicators integrated without changing the canonical page, sitemap or title. Ranking penalty applies only when route measurements are genuinely comparable.
+- **Verification:** synthetic TMDD fixture and Redis-rate-limit checks added to `tests/nyc-511.test.js`. Live signed polling and non-empty production incident evidence unavailable pending secret configuration and merge. No new GSC or AdSense measurements were retrieved; no SEO/revenue improvement claim.
+- **Next action for this feature:** add `NY511_USERNAME` and `NY511_PASSWORD` as Vercel server-only production environment variables before approving the PR.
+
 ## Current next assignment (as of 2026-10-09)
 
 **Mission:** Establish a verified pre/post measurement record for the Smokies three-page pilot; then choose the best **next 1–3-page** improvement based on search demand, user utility and expected money.
