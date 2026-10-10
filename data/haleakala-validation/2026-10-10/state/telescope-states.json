@@ -1,0 +1,66 @@
+{
+  "ogg.clma.0m4a": [
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-10T15:47:40Z",
+      "end": "2026-10-10T16:22:32.163000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-10T16:22:32.163000Z",
+      "end": "2026-10-10T16:37:40Z"
+    }
+  ],
+  "ogg.clma.0m4b": [
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-10T15:47:40Z",
+      "end": "2026-10-10T16:22:31.976000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-10T16:22:31.976000Z",
+      "end": "2026-10-10T16:37:40Z"
+    }
+  ],
+  "ogg.clma.0m4c": [
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-10T15:47:40Z",
+      "end": "2026-10-10T16:22:31.998000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-10T16:22:31.998000Z",
+      "end": "2026-10-10T16:37:40Z"
+    }
+  ],
+  "ogg.clma.2m0a": [
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-10T15:47:40Z",
+      "end": "2026-10-10T16:22:33.436000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-10T16:22:33.436000Z",
+      "end": "2026-10-10T16:37:40Z"
+    }
+  ]
+}
