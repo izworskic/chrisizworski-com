@@ -214,3 +214,25 @@ test('Harbor Lookout is a lower-page schedule cross-check rather than a primary 
   const hero = html.slice(html.indexOf('<div class="hero-actions">'), html.indexOf('</div>', html.indexOf('<div class="hero-actions">')) + 6);
   assert.doesNotMatch(hero, /harborlookout\.com/);
 });
+
+test('Duluth next-ship fallback distinguishes unknown, unavailable and confirmed passage states', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
+  assert.match(html, /class="schedule-decision-guide"/);
+  assert.match(html, /No window does not mean there are no ships scheduled/);
+  assert.match(html, /published Duluth arrival\/departure list/);
+  assert.match(html, /duluth-canal\.js\?v=20261010-schedule2/);
+  assert.match(html, /"dateModified":"2026-10-10"/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/duluth-canal-park\/"/);
+  assert.match(js, /function fallbackWatchActions\(\)/);
+  assert.match(js, /Check published ship arrivals/);
+  assert.match(js, /Check Canal Cam/);
+  assert.match(js, /if \(failed\) \{\s*card\.className = 'watch-card quiet'/);
+  assert.match(js, /Next Aerial Lift Bridge passage not confirmed right now/);
+  assert.match(js, /Earlier predictions are not current ship arrival times/);
+  assert.match(js, /renderCandidates\(data, failed\)/);
+  assert.match(js, /renderMap\(failed \? \{ \.\.\.data, watchPick: null, candidates: \[\] \} : data\)/);
+  assert.match(js, /Live AIS refresh unavailable; earlier passage windows are not current estimates/);
+  assert.match(js, /This is not a zero-traffic report/);
+  assert.doesNotMatch(js, /No ships (?:today|scheduled)/);
+});
