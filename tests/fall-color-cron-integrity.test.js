@@ -32,8 +32,8 @@ test("one daily Anthropic attempt with deterministic fallback and 5xx failures",
   assert.match(source, /res\.status\(502\)\.json\(\{ error: "conditions-unavailable"/);
   assert.match(source, /ANTHROPIC_API_KEY_FALL_COLOR/);
   assert.match(source, /"NX"/);
-  assert.match(source, /generateDailyFallEditorial\\(snap\\)/);
-  assert.doesNotMatch(source, /process\\.env\\.ANTHROPIC_API_KEY(?!_FALL_COLOR)/);
+  assert.match(source, /generateDailyFallEditorial\(snap\)/);
+  assert.doesNotMatch(source, /process\.env\.ANTHROPIC_API_KEY(?!_FALL_COLOR)/);
 });
 
 test("the writer refuses to generate a report from zero regions", () => {
