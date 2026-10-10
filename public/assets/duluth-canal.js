@@ -93,17 +93,42 @@
     window.setTimeout(() => { if (map) map.invalidateSize(); }, 250);
   }
 
+  function fallbackWatchActions() {
+    const actions = el('div', '', 'watch-actions');
+    const published = el('a', 'Check published ship arrivals', 'button secondary compact');
+    published.href = 'https://harborlookout.com/';
+    published.target = '_blank';
+    published.rel = 'noopener noreferrer';
+    actions.append(
+      published,
+      button('Check Canal Cam', 'button secondary compact', () => openCameraMonitor(false))
+    );
+    return actions;
+  }
+
   function renderPick(data, failed) {
     const card = $('watchPick');
     card.replaceChildren();
     const pick = data.watchPick;
+    if (failed) {
+      card.className = 'watch-card quiet';
+      card.append(
+        el('div', 'LIVE AIS UPDATE UNAVAILABLE', 'watch-kicker'),
+        el('h2', 'Next Aerial Lift Bridge passage not confirmed right now.'),
+        el('p', 'The current ship positions and passage window cannot be verified. This is not a report of no ships today.'),
+        el('p', data.checkedAt ? `Last successful AIS check: ${dayTime(data.checkedAt)} CT. Earlier predictions are not current ship arrival times.` : 'There is no confirmed live AIS estimate to show.'),
+        fallbackWatchActions()
+      );
+      return;
+    }
     if (!pick) {
       card.className = 'watch-card quiet';
       card.append(
         el('div', 'NEXT SHIP TO WATCH', 'watch-kicker'),
         el('h2', 'No supported Canal Park passage to call yet.'),
         el('p', 'That is not a zero-traffic report. The current AIS evidence does not support a useful passage window right now.'),
-        el('p', 'The monitor still gives you recent local vessel reports, both live camera locations and all three in-person watch spots.', 'watch-note')
+        el('p', 'Check the independently published arrival/departure list for later vessels, or use the Canal Cam for a current visual check.', 'watch-note'),
+        fallbackWatchActions()
       );
       return;
     }
@@ -135,9 +160,13 @@
     return [c.sizeLabel, `${c.distanceNm} NM`, `${Number(c.speedKnots).toFixed(1)} kn`, `AIS ${c.ageMinutes} min old`].join(' · ');
   }
 
-  function renderCandidates(data) {
+  function renderCandidates(data, failed) {
     const list = $('anticipatedShips');
     list.replaceChildren();
+    if (failed) {
+      list.append(el('div', 'No current AIS-supported passage queue can be confirmed. Older vessel reports are reference only; check the published ship schedule for later arrivals.', 'empty-state'));
+      return;
+    }
     const candidates = Array.isArray(data.candidates) ? data.candidates : [];
     if (!candidates.length) {
       const empty = el('div', '', 'empty-state');
@@ -168,7 +197,12 @@
     const next = $('monitorNext');
     if (next) {
       next.replaceChildren(el('div', 'NEXT WATCH', 'monitor-kicker'));
-      if (pick) {
+      if (failed) {
+        next.append(
+          el('strong', 'Next passage not confirmed', 'monitor-title'),
+          el('span', 'Live AIS refresh unavailable; earlier passage windows are not current estimates.', 'monitor-detail')
+        );
+      } else if (pick) {
         next.append(
           el('strong', pick.name, 'monitor-title'),
           el('span', range(pick.window), 'monitor-detail'),
@@ -517,20 +551,20 @@
     const count = Array.isArray(data.mapVessels) ? data.mapVessels.length : 0;
     const candidates = Array.isArray(data.candidates) ? data.candidates.length : 0;
     $('mapStatus').textContent = failed
-      ? `Refresh unavailable. Last successful AIS picture retained · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots.`
-      : `${count} nearby AIS report${count === 1 ? '' : 's'} · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
+      ? 'Live AIS refresh unavailable · previous vessel positions are reference only · no current ship passage window confirmed.'
+      : `${count} nearby AIS report${count === 1 ? '' : 's'} · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · camera network · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
     $('liveDot').className = `live-dot${failed ? ' offline' : ' on'}`;
     const credits = (data.attribution || []).map(a => a.credit).filter(Boolean);
     $('sourceCredits').textContent = credits.length ? `AIS credits: ${credits.join(' · ')}` : 'AIS source credits unavailable for this refresh.';
-    $('updated').textContent = failed ? 'Last successful live check retained' : `Live AIS checked ${time(data.checkedAt)} CT`;
+    $('updated').textContent = failed ? (data.checkedAt ? `AIS unavailable · last successful check ${dayTime(data.checkedAt)} CT` : 'Live AIS currently unavailable') : `Live AIS checked ${time(data.checkedAt)} CT`;
   }
 
   function render(data, failed) {
     currentData = data;
     renderPick(data, failed);
     renderMonitorSummary(data, failed);
-    renderMap(data);
-    renderCandidates(data);
+    renderMap(failed ? { ...data, watchPick: null, candidates: [] } : data);
+    renderCandidates(data, failed);
     renderSource(data, failed);
     window.setTimeout(() => { if (map) map.invalidateSize(); }, 80);
   }
@@ -548,16 +582,10 @@
     } catch (_) {
       if (previous) render(previous, true);
       else {
-        $('watchPick').className = 'watch-card quiet';
-        $('watchPick').replaceChildren(
-          el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
-          el('h2', 'The cameras and watch locations still work.'),
-          el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.'),
-          el('p', 'Harbor Lookout remains available below as a published schedule cross-check.', 'watch-note')
-        );
+        renderPick({ watchPick: null, checkedAt: null }, true);
         $('anticipatedShips').replaceChildren(el('div', 'Anticipated ship estimates are unavailable until fresh AIS data returns.', 'empty-state'));
         renderMonitorSummary({ watchPick: null }, true);
-        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 2 camera locations and 3 viewing spots remain available on the monitor. This is not a zero-traffic report.';
+        $('mapStatus').textContent = 'Live AIS unavailable. The camera network and 3 viewing spots still work; no current arrival is confirmed. This is not a zero-traffic report.';
         $('liveDot').className = 'live-dot offline';
       }
     } finally {
