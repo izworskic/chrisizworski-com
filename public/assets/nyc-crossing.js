@@ -30,12 +30,12 @@
 
   function disruptionHtml(r,info){
     if(!info?.updatedAt)return '';
-    if(!info.eventsUpdatedAt)return '<div class="disruption">511NY incident feed awaiting first update</div>';
     const d=r.disruption||{};
     const count=d.incidentCount||0;
     const events=(d.events||[]).slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
     const signs=(d.signs||[]).slice(0,1).map(s=>'<div class="detail vms">VMS: '+escapeHtml(s.message)+'</div>').join('');
-    return '<div class="disruption"><strong>'+count+' mapped 511NY incident'+(count===1?'':'s')+'</strong>'+(d.signCount?' · '+d.signCount+' sign'+(d.signCount===1?'':'s'):'')+events+signs+'</div>';
+    const incidentLabel=info.eventsUpdatedAt?count+' mapped 511NY incident'+(count===1?'':'s'):'Incident feed awaiting first update';
+    return '<div class="disruption"><strong>'+incidentLabel+'</strong>'+(d.signCount?' · '+d.signCount+' sign'+(d.signCount===1?'':'s'):'')+events+signs+'</div>';
   }
 
   function render(data){
