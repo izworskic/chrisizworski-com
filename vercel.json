@@ -45,9 +45,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/nyc-511.js": {
-      "maxDuration": 60
     }
   },
   "redirects": [
