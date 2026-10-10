@@ -20,12 +20,12 @@ test("failure paths in the fall colour cron return a 5xx, not a 200 with an erro
 
 test("the only 200 responses are genuine skips and genuine success", () => {
   const twoHundreds = [...source.matchAll(/res\.status\(200\)\.json\(\{([^}]*)\}/g)].map((m) => m[1]);
-  assert.equal(twoHundreds.length, 3, "expected exactly three 200 responses");
+  assert.equal(twoHundreds.length, 4, "expected exactly four 200 responses");
   const shapes = twoHundreds.map((body) => body.trim().split(":")[0].trim());
-  assert.deepEqual(shapes.sort(), ["ok", "skipped", "skipped"], "200 is reserved for skips and success");
+  assert.deepEqual(shapes.sort(), ["ok", "skipped", "skipped", "skipped"], "200 is reserved for skips and success");
 });
 
-test("model writer is independent of Anthropic while preserving error visibility", () => {
+test("one daily Anthropic attempt with deterministic fallback and 5xx failures", () => {
   assert.match(source, /writeModelReport\(snap\)/);
   assert.match(source, /res\.status\(500\)\.json\(\{ error: "redis-write"/);
   assert.match(source, /res\.status\(502\)\.json\(\{ error: "empty-model-report"/);
