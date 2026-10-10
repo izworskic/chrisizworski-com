@@ -22,10 +22,12 @@
   }
 
   function incidentStamp(info){
+    if(info?.state==='CACHE_UNAVAILABLE')return '511NY incident cache temporarily unavailable; live crossing times and tolls remain usable.';
+    if(info?.state==='NOT_CONFIGURED')return '511NY incidents not configured; live crossing times and tolls remain usable.';
     const date=Date.parse(info?.eventsUpdatedAt||'');
-    if(!Number.isFinite(date))return '511NY live incident layer awaiting its first cached update';
+    if(!Number.isFinite(date))return '511NY incident feed awaiting its first verified cache refresh; no incident-clear claim is available.';
     const age=Math.max(0,Math.round((Date.now()-date)/60000));
-    return '511NY live incidents updated '+age+'m ago'+(info.state==='STALE'?' · cached / potentially stale':'');
+    return '511NY reported incidents updated '+age+'m ago'+(info.state==='STALE'?' · cached / potentially stale':'');
   }
 
   function disruptionHtml(r,info){
