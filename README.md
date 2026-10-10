@@ -1,5 +1,9 @@
 # ChrisIzworski.com source migration
 
+## Website growth, revenue and personal search authority
+
+The ongoing plan is [**Million Impressions + Revenue Playbook**](MILLION_IMPRESSIONS_PLAYBOOK.md), with a dated [**Growth Session Log**](docs/GROWTH_SESSION_LOG.md). Together they define the 1,000,000 Search impressions/28 days and 5% CTR objectives, revenue milestones up to $300/day, and protections for the Chris Izworski branded SERP. See these documents before proposing, coding or evaluating a search-growth or monetization mission. Existing `AGENTS.md`, search governance and CI requirements still control implementation.
+
 This repository is the staging area for converting the existing live site into a reproducible, GitHub-backed deployment without changing public URLs or search signals.
 
 The live-site audit is read-only:

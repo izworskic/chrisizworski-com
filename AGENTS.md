@@ -1,5 +1,11 @@
 # Working agreement for coding agents
 
+## Search growth / revenue / Chris Izworski SERP handoff — October 9, 2026
+
+For **any** search-growth, GSC, SEO, monetization, or national-tool-network development session, first read [`MILLION_IMPRESSIONS_PLAYBOOK.md`](MILLION_IMPRESSIONS_PLAYBOOK.md) and [`docs/GROWTH_SESSION_LOG.md`](docs/GROWTH_SESSION_LOG.md), then follow the existing search governance and owning-repository rules below. The owner-approved targets are **1,000,000 GSC Web impressions / 28 days**, **5% sitewide organic CTR (50,000 clicks / 28 days)** and growing **real revenue toward $50/day → $100/day → $300/day**, while preserving the Chris Izworski branded SERP/Person identity. These are targets, not measured achievements.
+
+**Always leave an updated session-log handoff** with verified PR/commit/deploy status, actual or unavailable GSC/AdSense data, known regressions and exactly one concrete next action. No marketing or ranking uplift claims without dated evidence. This procedural pointer does **not** relax any CI, Search Strategy, SERP, ad, ownership or content-quality gate.
+
 ## Current operating mode — September 8, 2026
 
 The owner retired all search experiments on September 2. `benchmarks/growth-experiments.json` is authoritative: `activeExperiments` is empty and the mode is **ship-and-observe**. Historical freeze lists and hold queues below document earlier decisions; they impose no current waiting period. Preserve winning utility, canonical ownership and factual accuracy, record changes, and observe comparable search windows without claiming causal uplift. A future freeze requires a new explicit owner-approved ledger entry.
