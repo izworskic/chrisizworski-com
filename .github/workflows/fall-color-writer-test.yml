@@ -8,6 +8,11 @@ on:
         type: boolean
         required: false
         default: false
+      publish_github:
+        description: "Write dated fall-color editions to the independent GitHub data branch"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -20,10 +25,10 @@ concurrency:
 jobs:
   write-and-read-report:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
     steps:
       - name: Wait for production, run the writer, and read back its report
-        if: ${{ !inputs.seed_daily }}
+        if: ${{ !inputs.seed_daily && !inputs.publish_github }}
         shell: bash
         env:
           OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
@@ -155,3 +160,102 @@ jobs:
             echo ""
             echo "All Anthropic writes still require the existing daily Redis NX locks."
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Archive daily Michigan and national fall-color editions
+        if: ${{ inputs.publish_github }}
+        shell: bash
+        env:
+          OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
+          WRITER_URL: "https://chrisizworski.com/api/fall-color?view=github-publish"
+        run: |
+          set -euo pipefail
+          today="$(TZ=America/Detroit date +%F)"
+          root="archive/data/fall-color"
+
+          # This is a read-only preflight: wait for the exact GitHub commit to be
+          # live on Vercel BEFORE recording the daily paid-attempt sentinel.
+          for attempt in $(seq 1 78); do
+            oidc_token="$(curl --fail --silent --show-error \
+              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+              "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}" | jq -er '.value')"
+            status="$(curl --silent --show-error --max-time 15 \
+              -o "$RUNNER_TEMP/fall-check.json" -w '%{http_code}' \
+              -H "Authorization: Bearer ${oidc_token}" \
+              "${WRITER_URL}&kind=mi&check=1")"
+            unset oidc_token
+            if [[ "$status" == "200" ]]; then
+              jq -e --arg date "$today" '.ok == true and .authenticated == true and .date == $date' "$RUNNER_TEMP/fall-check.json"
+              echo "Identity and production SHA verified."
+              break
+            fi
+            if [[ "$status" != "401" && "$status" != "404" ]]; then
+              echo "::error::Production writer unavailable: HTTP $status"
+              exit 1
+            fi
+            if [[ "$attempt" == "78" ]]; then
+              echo "::error::No matching production commit after preflight retries."
+              exit 1
+            fi
+            sleep 10
+          done
+
+          cd archive
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for kind in mi national; do
+            if [[ -f "data/fall-color/${kind}/${today}.json" ]]; then
+              echo "Edition $kind $today already exists; no paid model call."
+              continue
+            fi
+            sentinel="data/fall-color/attempts/${kind}-${today}.json"
+            if [[ -f "$sentinel" ]]; then
+              echo "Daily $kind paid attempt already reserved; refusing any second spend."
+              continue
+            fi
+            mkdir -p data/fall-color/attempts "data/fall-color/$kind"
+            # This commit makes paid generation at most once per model/day,
+            # even across workflow retries, server failures or redeploys.
+            printf '{"date":"%s","kind":"%s","attempted":true}\n' "$today" "$kind" > "$sentinel"
+            git add "$sentinel"
+            git commit -m "Reserve one daily $kind model attempt for $today"
+            git push origin HEAD:fall-color-data
+
+            oidc_token="$(curl --fail --silent --show-error \
+              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+              "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}" | jq -er '.value')"
+            response="$RUNNER_TEMP/fall-${kind}-edition.json"
+            code="$(curl --silent --show-error --max-time 65 \
+              -o "$response" -w '%{http_code}' \
+              -H "Authorization: Bearer ${oidc_token}" \
+              "${WRITER_URL}&kind=${kind}")"
+            unset oidc_token
+            if [[ "$code" != "200" ]]; then
+              echo "::error::Fall $kind generation failed (HTTP $code); daily attempt stays reserved."
+              jq '{error,date}' "$response" 2>/dev/null || true
+              exit 1
+            fi
+            jq --exit-status -e --arg date "$today" --arg kind "$kind" \
+              '.ok == true and .kind == $kind and .date == $date and .edition.date == $date' \
+              "$response" > /dev/null
+            jq --exit-status '.edition' "$response" > "data/fall-color/$kind/$today.json"
+            cp "data/fall-color/$kind/$today.json" "data/fall-color/$kind/latest.json"
+            if [[ "$kind" == "mi" ]]; then
+              jq --arg date "$today" \
+                '.dates = ((.dates // []) + [$date] | unique | sort | reverse)' \
+                data/fall-color/mi/index.json > "$RUNNER_TEMP/fall-index.json"
+              cp "$RUNNER_TEMP/fall-index.json" data/fall-color/mi/index.json
+            fi
+            git add data/fall-color
+            git commit -m "Publish $kind foliage edition for $today"
+            git push origin HEAD:fall-color-data
+            echo "Verified dated $kind edition archived for $today."
+          done
+
+          # Read-back from GitHub's public JSON origin, no Redis commands.
+          for kind in mi national; do
+            if [[ ! -f "data/fall-color/$kind/$today.json" ]]; then
+              echo "::error::Missing $kind daily edition: see reserved sentinel"
+              exit 1
+            fi
+            jq --exit-status -e --arg date "$today" '.date == $date' "data/fall-color/$kind/$today.json"
+          done
