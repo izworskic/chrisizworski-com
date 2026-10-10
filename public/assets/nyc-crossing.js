@@ -2,6 +2,7 @@
   const $=id=>document.getElementById(id);
   const money=c=>c==null?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);
   const form=$('crossingForm'), results=$('results'), answer=$('answer'), status=$('trafficStatus');
+  const escapeHtml=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   function scopeLabel(scope){
     return ({
@@ -20,6 +21,22 @@
     return d>0 ? ' · +'+d+' min vs '+reference : ' · '+Math.abs(d)+' min faster than '+reference;
   }
 
+  function incidentStamp(info){
+    const date=Date.parse(info?.eventsUpdatedAt||info?.updatedAt||'');
+    if(!Number.isFinite(date))return '511NY live incident layer awaiting its first cached update';
+    const age=Math.max(0,Math.round((Date.now()-date)/60000));
+    return '511NY live incidents updated '+age+'m ago'+(info.state==='STALE'?' · cached / potentially stale':'');
+  }
+
+  function disruptionHtml(r,info){
+    if(!info?.updatedAt)return '';
+    const d=r.disruption||{};
+    const count=d.incidentCount||0;
+    const events=(d.events||[]).slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
+    const signs=(d.signs||[]).slice(0,1).map(s=>'<div class="detail vms">VMS: '+escapeHtml(s.message)+'</div>').join('');
+    return '<div class="disruption"><strong>'+count+' mapped 511NY incident'+(count===1?'':'s')+'</strong>'+(d.signCount?' · '+d.signCount+' sign'+(d.signCount===1?'':'s'):'')+events+signs+'</div>';
+  }
+
   function render(data){
     const liveCount=data.routes.filter(r=>r.etaState==='LIVE').length;
     status.textContent=data.trafficState==='UNAVAILABLE'
@@ -31,7 +48,7 @@
       (liveCount
         ? 'Official live measurements are used where available, with fixed Mapbox traffic probes filling selected source gaps. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
         : 'Official live measurements are unavailable right now. Toll and congestion-charge comparisons remain available.')+
-      '</p><p class="muted">Lowest road charge among eligible listed crossings: '+
+      '</p><p class="muted">'+incidentStamp(data.ny511)+'</p><p class="muted">511NY advisories add a caution penalty when comparable drive times exist; they do not replace live times or posted closure instructions.</p><p class="muted">Lowest road charge among eligible listed crossings: '+
       (data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
 
     results.innerHTML=data.routes.map(r=>{
@@ -44,7 +61,7 @@
           '<div class="detail">'+(r.trafficSourceName||'Official traffic source')+(r.reportedAt?' · '+r.reportedAt:'')+'</div>'
         : '<div class="detail">'+(r.trafficPending||'No fresh official reading connected')+'</div>';
       return '<tr role="row"><td role="cell" headers="crossing-name"><div class="route-name">'+r.name+'</div><div class="detail">'+r.corridor+' · '+r.cost.periodLabel+'</div></td>'+
-        '<td role="cell" headers="crossing-time"><span class="mobile-label" aria-hidden="true">Live crossing / corridor time</span>'+eta+detail+'</td>'+
+        '<td role="cell" headers="crossing-time"><span class="mobile-label" aria-hidden="true">Live crossing / corridor time</span>'+eta+detail+disruptionHtml(r,data.ny511)+'</td>'+
         '<td role="cell" headers="crossing-charge"><span class="mobile-label" aria-hidden="true">Total road charge</span><div class="cost">'+money(r.cost.total)+'</div><div class="detail">Crossing '+money(r.cost.toll)+' · Zone '+money(r.cost.zone)+(r.cost.credit?' · credit −'+money(r.cost.credit):'')+'</div></td>'+
         '<td role="cell" headers="crossing-vehicle"><span class="mobile-label" aria-hidden="true">Vehicle check</span><span class="status '+(r.eligibility.state==='ELIGIBLE'?'live':'off')+'">'+r.eligibility.state+'</span><div class="detail">'+r.eligibility.reason+'</div></td>'+
         '<td role="cell" headers="crossing-camera"><span class="mobile-label" aria-hidden="true">Traffic / camera</span><a href="'+r.cameraUrl+'" target="_blank" rel="noopener">511NY ↗</a></td></tr>';
