@@ -32,3 +32,14 @@
 .disruption strong{color:#704500}
 .disruption .detail{margin-top:3px}
 .disruption .vms{font-weight:600;color:#364c59}
+
+/* Crawlable NYC route-decision explainer, compact and single-column on phones. */
+.quick-guide h2{font-size:clamp(1.25rem,2.4vw,1.75rem);line-height:1.24;margin:.3rem 0 12px}
+.quick-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.quick-facts article{min-width:0;border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafb}
+.quick-facts h3{font-size:1rem;line-height:1.25;margin:0 0 8px}
+.quick-facts p{font-size:.91rem;line-height:1.5;margin:0}
+.quick-guide .guide-action{font-size:.91rem;margin:16px 0 0;color:var(--muted)}
+.quick-guide a{color:var(--blue);text-underline-offset:2px}
+#comparison-results{scroll-margin-top:20px}
+@media(max-width:760px){.quick-facts{grid-template-columns:minmax(0,1fr)}}
