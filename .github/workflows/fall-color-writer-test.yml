@@ -15,7 +15,9 @@ on:
         default: false
 
 permissions:
-  contents: read
+  # Only the no-Redis publish caller requests write; the original signed
+  # verification workflow continues to inherit its caller's narrower rights.
+  contents: write
   id-token: write
 
 concurrency:
