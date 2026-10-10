@@ -1,0 +1,28 @@
+name: Seed fall color reports once (October 10, 2026)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/fall-color-seed-once.yml"
+
+permissions:
+  contents: read
+  id-token: write
+
+# Keep this invocation unique; it cannot write on later dates because the
+# server-side one-time seed gate is hard-coded to 2026-10-10.
+concurrency:
+  group: fall-color-once-2026-10-10
+  cancel-in-progress: false
+
+jobs:
+  write-october-10:
+    if: ${{ contains(github.event.head_commit.message, '[fall-color-one-time-seed]') }}
+    uses: ./.github/workflows/fall-color-writer-test.yml
+    with:
+      seed_daily: true
+    permissions:
+      contents: read
+      id-token: write
