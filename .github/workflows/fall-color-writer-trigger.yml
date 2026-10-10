@@ -17,6 +17,8 @@ permissions:
 
 jobs:
   test-production-writer:
+    # Do not race today's paid seed with the legacy deterministic test writer.
+    if: ${{ !contains(github.event.head_commit.message, '[fall-color-one-time-seed]') }}
     uses: ./.github/workflows/fall-color-writer-test.yml
     permissions:
       contents: read
