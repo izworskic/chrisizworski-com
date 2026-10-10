@@ -73,7 +73,8 @@ function mockWorld(){
 }
 test('cron refresh stores successful feeds and subsequent reads contact Redis only',async()=>{
  const w=mockWorld();
- const first=await refresh511(w);
+ // Use the fixture's observation time, not the CI runner wall clock.
+ const first=await refresh511({...w,now:at});
  assert.equal(first.state,'UPDATED');assert.equal(first.eventsCount,1);assert.equal(first.signsCount,1);
  const upstream=w.calls.filter(x=>x.url!==w.env.UPSTASH_REDIS_REST_URL);
  assert.equal(upstream.length,2);
@@ -85,13 +86,24 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  assert.equal(cache.crossings.gwb.incidentCount,1);
  assert.equal(cache.crossings.gwb.signCount,1);
  assert.equal(cache.crossings.gwb.penaltyPoints,7);
- assert.equal((await refresh511(w)).state,'ALREADY_POLLED');
+ assert.equal((await refresh511({...w,now:at})).state,'ALREADY_POLLED');
  assert.equal(w.calls.filter(x=>x.url!==w.env.UPSTASH_REDIS_REST_URL).length,2);
+});
+test('refresh excludes expired incidents but still fetches sign messages at a fixed clock',async()=>{
+ const w=mockWorld();
+ const expiredAt=Date.parse('2026-10-11T12:00:00Z');
+ const summary=await refresh511({...w,now:expiredAt});
+ assert.equal(summary.state,'UPDATED');
+ assert.equal(summary.eventsCount,0);
+ assert.equal(summary.signsCount,1);
+ const cache=await getCached511(w);
+ assert.equal(cache.crossings.gwb.incidentCount,0);
+ assert.equal(cache.crossings.gwb.signCount,1);
 });
 test('missing credentials never poll; poll failure retains stale cache',async()=>{
  const w=mockWorld();
  assert.equal((await refresh511({env:{},fetchImpl:w.fetchImpl})).state,'NOT_CONFIGURED');
- await refresh511(w);
+ await refresh511({...w,now:at});
  // Simulate feed records from previous successful run with a stale timestamp.
  for(const key of ['nyc:511ny:events:v1','nyc:511ny:signs:v1']){
    const v=JSON.parse(w.store.get(key));v.updatedAt='2026-09-01T00:00:00Z';
@@ -99,7 +111,7 @@ test('missing credentials never poll; poll failure retains stale cache',async()=
  }
  w.store.delete('nyc:511ny:refresh-lock:v1');
  const failingFetch=async(url,options)=>url===w.env.UPSTASH_REDIS_REST_URL?w.fetchImpl(url,options):Promise.reject(new Error('provider failed'));
- const failed=await refresh511({env:w.env,fetchImpl:failingFetch});
+ const failed=await refresh511({env:w.env,fetchImpl:failingFetch,now:at});
  assert.equal(failed.state,'STALE_CACHE');
  const cached=await getCached511(w);
  assert.equal(cached.state,'STALE');
