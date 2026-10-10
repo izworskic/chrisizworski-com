@@ -16,6 +16,7 @@ const handlers = {
   rss: require("../lib/fall-color/routes/rss.js"),
   sitemap: require("../lib/fall-color/routes/sitemap.js"),
   cron: require("../lib/fall-color/routes/cron.js"),
+  "github-publish": require("../lib/fall-color/routes/github-publish.js"),
   "national-briefings": require("../lib/fall-color/routes/national-briefings.js"),
   "national-briefings-cron": require("../lib/fall-color/routes/national-briefings.js"),
   "circle-tour-smoke": require("../lib/fall-color/routes/circle-tour-smoke.js"),

@@ -440,16 +440,8 @@
   ],
   "crons": [
     {
-      "path": "/api/fall-color?view=cron",
-      "schedule": "0 11 * * *"
-    },
-    {
       "path": "/api/flight-assignment?flightV3=1&action=cron",
       "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/fall-color?view=national-briefings-cron",
-      "schedule": "15 11 * * *"
     }
   ],
   "rewrites": [
