@@ -97,6 +97,10 @@ test('missing credentials never poll; poll failure retains stale cache',async()=
    const v=JSON.parse(w.store.get(key));v.updatedAt='2026-09-01T00:00:00Z';
    w.store.set(key,JSON.stringify(v));
  }
+ w.store.delete('nyc:511ny:refresh-lock:v1');
+ const failingFetch=async(url,options)=>url===w.env.UPSTASH_REDIS_REST_URL?w.fetchImpl(url,options):Promise.reject(new Error('provider failed'));
+ const failed=await refresh511({env:w.env,fetchImpl:failingFetch});
+ assert.equal(failed.state,'STALE_CACHE');
  const cached=await getCached511(w);
  assert.equal(cached.state,'STALE');
  assert.equal(cached.crossings.gwb.incidentCount,1);
