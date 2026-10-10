@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0.0",
+  "program": "MILLION_IMPRESSIONS_PLAYBOOK.md",
+  "analysisDate": "2026-10-09",
+  "timeZone": "America/Detroit",
+  "state": "ship-and-observe",
+  "canonical": "https://chrisizworski.com/nyc-crossing/",
+  "owner": "izworskic/chrisizworski-com",
+  "singleIntent": "Choose a suitable New York City bridge or tunnel by comparing current measured segment traffic, crossing toll, Manhattan congestion-zone charge and vehicle eligibility",
+  "targets": {
+    "siteGscImpressions28d": 1000000,
+    "siteOrganicCtr": 0.05,
+    "siteGscClicks28d": 50000,
+    "dailyRevenueMilestonesUsd": [
+      50,
+      100,
+      300
+    ]
+  },
+  "measurement": {
+    "property": "sc-domain:chrisizworski.com",
+    "searchType": "Web",
+    "dateFrom": "2026-09-10",
+    "dateTo": "2026-10-07",
+    "site": {
+      "impressions": 109592,
+      "clicks": 2815,
+      "ctr": 0.0257,
+      "position": 7.8913
+    },
+    "nycPage": {
+      "searchConsoleRowsReturned": 0,
+      "impressions": null,
+      "clicks": null,
+      "ctr": null,
+      "position": null,
+      "status": "NOT AVAILABLE; no page-specific GSC row in this query, not asserted measured zero"
+    },
+    "nycQueryFamily": {
+      "status": "NOT AVAILABLE; filtered phrase returned no GSC rows"
+    },
+    "ga4": {
+      "propertyId": "256047565",
+      "path": "/nyc-crossing/",
+      "views": 23,
+      "activeUsers": 5,
+      "engagedSessions": 7
+    },
+    "adsenseRevenue": {
+      "status": "NOT AVAILABLE"
+    },
+    "nonBrandedCtr": {
+      "status": "NOT AVAILABLE"
+    },
+    "searchVolume": {
+      "status": "NOT VERIFIED"
+    }
+  },
+  "evidence": {
+    "officialSources": [
+      "https://congestionreliefzone.mta.info/tolling",
+      "https://portal.311.nyc.gov/article/?kanumber=KA-03612",
+      "https://www.panynj.gov/port-authority/en/help-center/faq/bridges-and-tunnels-faq.html"
+    ],
+    "competitiveProducts": [
+      "https://nyccalculator.com/nyc-congestion-pricing-calculator",
+      "https://tollguru.com/new-york-toll-calculator"
+    ],
+    "queryFamiliesToObserve": [
+      "nyc bridge and tunnel tolls",
+      "nyc bridge toll congestion pricing",
+      "lincoln vs holland tunnel toll",
+      "queensboro bridge congestion charge",
+      "nyc crossing live traffic"
+    ],
+    "note": "Official toll and road-condition data support product distinctions. Competitor presence is qualitative only; no verified query volume or ranking forecast."
+  },
+  "decision": {
+    "action": "REPAIR+CONNECT",
+    "newIndexableUrls": 0,
+    "reason": "Existing 11-crossing canonical serves overlapping toll/traffic/congestion intents; no new doorway or duplicate crossing pages. Core data engine and toll logic unchanged."
+  },
+  "protection": {
+    "canonicalPreserved": true,
+    "personId": "https://chrisizworski.com/#person",
+    "adsenseLoaderPreserved": true,
+    "trafficComparabilityPreserved": true,
+    "credentialsNotExposed": true
+  },
+  "exactlyOneNextAction": {
+    "action": "Capture the same 28-day Search Console Web page+query report for /nyc-crossing/ after a complete observation window, alongside GA4 path engagement and actual AdSense earnings if accessible",
+    "doneWhen": "An exact-URL 28-day result is recorded as observed metrics or NOT AVAILABLE, segmented into non-branded and branded queries when data permits, with a protect/revise decision; no causal improvement claim is inferred from deployment alone."
+  }
+}
