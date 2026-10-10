@@ -115,6 +115,16 @@ test('incident layer is additive and cannot fabricate incomparable fastest route
  assert.equal(comparison.fastest.id,'gwb'); // raw ETA preserved
  assert.equal(comparison.preferred.id,'lincoln'); // incident advisory penalty in comparable ranking
 });
+test('stale incidents stay visible but do not affect ranking decisions',()=>{
+ const outdated='2026-09-01T00:00:00Z';
+ const s=buildSnapshot({ny511:{state:'STALE',updatedAt:outdated,events:{updatedAt:outdated},signs:{updatedAt:outdated},
+   crossings:{gwb:{incidentCount:1,penaltyPoints:12,events:[{description:'old closure'}],signCount:0,signs:[]}}},
+   traffic:{state:'PARTIAL',routes:[{crossingId:'gwb',etaMinutes:10}],comparable:false}});
+ const gwb=s.routes.find(r=>r.id==='gwb');
+ assert.equal(gwb.disruption.incidentCount,1);
+ assert.equal(gwb.disruptionPenaltyPoints,0);
+ assert.equal(s.ny511.state,'STALE');
+});
 test('canonical route and sitemap untouched, cron protected and credentials absent from client',()=>{
  const root=path.join(__dirname,'..');
  const html=fs.readFileSync(path.join(root,'public/nyc-crossing/index.html'),'utf8');
