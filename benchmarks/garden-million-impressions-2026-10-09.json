@@ -1,0 +1,350 @@
+{
+  "schemaVersion": "1.0.0",
+  "program": "MILLION_IMPRESSIONS_PLAYBOOK.md",
+  "analysisDate": "2026-10-09",
+  "timeZone": "America/Detroit",
+  "state": "ship-and-observe",
+  "sourceOfTruth": "Google Search Console Web search property sc-domain:chrisizworski.com; connected Windsor.ai searchconsole read",
+  "targets": {
+    "gscImpressions28d": 1000000,
+    "ctr": 0.05,
+    "gscClicks28d": 50000,
+    "earnedRevenueDailyUsdMilestones": [
+      50,
+      100,
+      300
+    ],
+    "protectPerson": "https://chrisizworski.com/#person"
+  },
+  "gscBaseline": {
+    "property": "sc-domain:chrisizworski.com",
+    "searchType": "Web",
+    "dateFrom": "2026-09-10",
+    "dateTo": "2026-10-07",
+    "inclusiveDays": 28,
+    "impressions": 109592,
+    "clicks": 2815,
+    "ctr": 0.0257,
+    "averagePosition": 7.8913,
+    "source": "connected live Search Console connector accessed 2026-10-09",
+    "reliableForNewLaunch": false
+  },
+  "ga4Known": {
+    "scope": "/national-tools/planting/",
+    "window": "2026-09-10 to 2026-10-07",
+    "views": 29,
+    "measurementId": "G-Y5D2V2W7HN",
+    "account": "256047565"
+  },
+  "adsenseRevenue": {
+    "status": "NOT AVAILABLE",
+    "reason": "No authenticated AdSense earnings account/read used; Google Ads or GA4 event counts are not AdSense revenue."
+  },
+  "gardenHub": {
+    "url": "https://chrisizworski.com/national-tools/garden/",
+    "gsc28d": {
+      "impressions": 3,
+      "clicks": 0,
+      "ctr": 0,
+      "position": 3.3333
+    },
+    "cards": 12
+  },
+  "cohort": [
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/",
+      "owner": "izworskic/national-frost",
+      "intent": "NOAA frost climatology vs forecast",
+      "action": "PROTECT",
+      "measured28d": {
+        "impressions": 79,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 10.1519
+      },
+      "measurementStatus": "EXISTING_URL_VERIFIED",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/",
+      "owner": "izworskic/national-planting",
+      "intent": "Crop planting schedule and seed starts",
+      "action": "PROTECT",
+      "measured28d": {
+        "impressions": 72,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 17.6944
+      },
+      "measurementStatus": "EXISTING_URL_VERIFIED",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/cover-plants-tonight/",
+      "owner": "izworskic/national-frost",
+      "intent": "Crop protection tonight",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/garlic/",
+      "owner": "izworskic/national-planting",
+      "intent": "Fall garlic planting",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/spring-bulbs/",
+      "owner": "izworskic/national-planting",
+      "intent": "Fall spring-flowering bulb planting",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/tomato-ripening/",
+      "owner": "izworskic/national-planting",
+      "intent": "Tomato maturity ahead of cold",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/dig-dahlias/",
+      "owner": "izworskic/national-planting",
+      "intent": "Dahlia tuber overwintering",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/cover-crops/",
+      "owner": "izworskic/national-planting",
+      "intent": "Cover crop species and seeding window",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/prune-hydrangeas/",
+      "owner": "izworskic/national-planting",
+      "intent": "Old vs new wood pruning",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/soil-temperature-ready/",
+      "owner": "izworskic/national-planting",
+      "intent": "Measured crop-specific soil germination readiness",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/planting/harden-off-seedlings/",
+      "owner": "izworskic/national-planting",
+      "intent": "Acclimation, sun, wind and frost",
+      "action": "REPAIR",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/garden-water/",
+      "owner": "izworskic/chrisizworski-com",
+      "intent": "Watering decision using soil/weather",
+      "action": "PROTECT",
+      "measured28d": null,
+      "measurementStatus": "NOT AVAILABLE / NEW PAGE PRE-LAUNCH WINDOW",
+      "acceptedSources": [
+        "NWS/NOAA or USDA as relevant",
+        "University extension guidance where plant biology requires it"
+      ],
+      "qualityGates": [
+        "unique decision",
+        "indexable canonical",
+        "in hub",
+        "valid creator Person",
+        "live source uncertainty",
+        "mobile input",
+        "ads policy (unverified serving)"
+      ]
+    }
+  ],
+  "findings": [
+    "Nine child gardening decision URLs absent from the main XML sitemap before this pass; they have distinct live canonical pages and nine explicit shell routes.",
+    "Nine child pages (eight in national-planting and one in national-frost) had overlong titles and an author reference with no Person definition in their own JSON-LD block.",
+    "Gardening Hub and its 12 distinct cards already carry a defined Person; preserve hub and original intent owners.",
+    "National-planting build pipeline injects Google tag and AdSense publisher loader into all eligible emitted HTML; authenticated AdSense serving/revenue remains NOT AVAILABLE.",
+    "Sitemap and snippet repairs are crawl/discovery improvements, not evidence of indexing, traffic lift or ad earnings.",
+    "New pages launched after the measured 28-day baseline; do not describe missing prelaunch impressions as confirmed zero traffic."
+  ],
+  "prospectiveMeasurement": {
+    "primaryWindowDays": 28,
+    "leadingDays": [
+      7,
+      14
+    ],
+    "searchType": "Web",
+    "metrics": [
+      "impressions",
+      "clicks",
+      "ctr",
+      "average_position",
+      "query_family",
+      "branded_vs_nonbranded",
+      "ga4_views",
+      "source_correctness",
+      "adsense_earned_revenue"
+    ],
+    "decision": "NO EVIDENCE YET",
+    "noRankingPromises": true
+  },
+  "exactlyOneNextAction": {
+    "task": "Capture a dated post-launch 28-day Search Console Web comparison for the 12 garden tools and hub, with query segmentation, GA4 engagement and authenticated AdSense revenue where available.",
+    "doneWhen": "13 canonical URLs each have explicitly sourced impressions/clicks/CTR/position or a truthful no-data status; changes are compared on equivalent windows and the next priority is selected by evidence."
+  }
+}
