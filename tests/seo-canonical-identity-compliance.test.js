@@ -40,7 +40,7 @@ for(const slug of paths){
   const nodes=schemas.flatMap(x=>x["@graph"]||[x]);
   const people=nodes.filter(x=>x["@type"]==="Person");
   assert.equal(people.length,1,"exactly one canonical Person node");
-  assert.deepEqual({id:people[0]["@id"],name:people[0].name,url:people[0].url},{id:PERSON,name:"Chris Izworski",url:PROFILE});
+  assert.deepEqual({id:people[0]["@id"],name:people[0].name,url:people[0].url},{id:PERSON,name:"Chris Izworski",url:SITE+"/"});
   for(const n of nodes){
    const types=Array.isArray(n["@type"])?n["@type"]:[n["@type"]];
    if(types.includes("WebSite")){assert.equal(n["@id"],SITE+"/#website");assert.equal(n.publisher?.["@id"],PERSON);}
