@@ -1105,11 +1105,13 @@
   }
 
   function checkRestrictionChange(official) {
-    if (!official?.available) return;
-    var signature = [official.level, official.title].join("|");
+    if (!official?.available || !["open", "advisory", "escort", "partial", "closed"].includes(official.level)) return;
+    var signature = official.level;
     var previous = storageGet(STATUS_KEY);
     storageSet(STATUS_KEY, signature);
-    if (!previous || previous === signature) return;
+    // Old storage included the title. Title-only editorial changes are not restriction transitions.
+    if (!previous || previous.split("|")[0] === signature ||
+        !["open", "advisory", "escort", "partial", "closed"].includes(previous.split("|")[0])) return;
 
     var toast = byId("statusChangeToast");
     toast.hidden = false;
@@ -1118,7 +1120,13 @@
       toast.hidden = true;
     }, 12_000);
 
+    var backgroundActive = false;
+    try {
+      var savedWatch = JSON.parse(storageGet("mackinac:watch:v2:local") || "null");
+      backgroundActive = Boolean(savedWatch && Date.parse(savedWatch.expiresAt) > Date.now());
+    } catch (_error) {}
     if (
+      !backgroundActive &&
       storageGet(ALERT_KEY) === "on" &&
       "Notification" in window &&
       Notification.permission === "granted"
