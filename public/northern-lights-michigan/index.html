@@ -109,9 +109,9 @@
 body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
 a{color:#2c5f2d;text-decoration:none}
 a:hover{text-decoration:underline}
-.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
+.site-header{max-width:1160px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px}.header{padding:0}
 .header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
-.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav{font:12px system-ui,sans-serif;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 0}
 .nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
 .nav a:hover{color:#2c5f2d}
 
@@ -124,49 +124,76 @@ a:hover{text-decoration:underline}
 .live-strip .live-status{color:#fff;font-weight:bold}
 .live-strip .refresh-info{font-size:10px;color:#88a8c0;margin-left:8px}
 
-.body{max-width:880px;margin:0 auto;padding:38px 20px 60px}
-.breadcrumb{font-size:13px;color:#999;margin-bottom:22px}
+.body{max-width:1040px;margin:0 auto;padding:24px 24px 60px}
+.breadcrumb{font-size:13px;color:#999;margin-bottom:12px}
 .breadcrumb a{color:#999}
 h1.page-title{font-size:34px;font-weight:normal;color:#2c2c2c;margin-bottom:8px;line-height:1.2}
-.sub{font-size:16px;color:#6b6b6b;font-style:italic;margin-bottom:24px;border-bottom:1px solid #e8e4dc;padding-bottom:18px}
+.sub{font-size:15px;color:#647168;margin-bottom:18px;line-height:1.5}
 .body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
 h2.sh{font-size:22px;font-weight:normal;color:#2c5f2d;margin:36px 0 14px;border-bottom:1px solid #e8e4dc;padding-bottom:7px}
 h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 
-/* Hero panel with gauge */
-.hero-panel{background:radial-gradient(ellipse at top right,#2a5580 0%,#0a1428 60%,#050810 100%);color:#fff;border-radius:8px;padding:28px 28px 24px;margin:8px 0 22px;border:1px solid #2a4a6a;position:relative;overflow:hidden}
-.hero-panel::before{content:'';position:absolute;top:-20%;right:-10%;width:60%;height:140%;background:radial-gradient(ellipse,rgba(91,200,140,.12) 0%,transparent 60%);pointer-events:none}
-.hero-grid{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;position:relative;z-index:1}
-.gauge-wrap{position:relative;width:200px;height:200px}
+/* Regional answer panel */
+.hero-panel{background:radial-gradient(ellipse at top right,#234960 0%,#102d37 55%,#0b242c 100%);color:#fff;border-radius:16px;padding:26px 30px;margin:8px 0 20px;border:1px solid #315261;position:relative;overflow:hidden;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.decision-heading{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:18px}
+.decision-eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a8e5ce;font-weight:700}
+.decision-source{font-size:11px;color:#bfd0d7}
+.region-picker{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 20px}
+.region-picker label{font-size:13px;font-weight:650;color:#d7e9e7}
+.region-picker select{flex:1;min-width:0;max-width:420px;min-height:46px;background:#f9fcfa;color:#143c35;border:1px solid #b6d9cd;border-radius:8px;padding:10px 36px 10px 12px;font:600 15px system-ui,sans-serif}
+.local-answer .tonight-label{font-size:12px;color:#bfd7df;margin-bottom:5px}
+.local-answer h2{font:normal clamp(26px,3.8vw,36px)/1.15 Georgia,serif;color:#fff;margin:0 0 10px}
+.body .local-answer p{font-size:14px;color:#d2e3e9;line-height:1.6;margin:0 0 20px;max-width:760px}
+.decision-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.decision-factor{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:8px;padding:13px 15px}
+.decision-factor span{display:block;color:#b6d1da;font-size:10px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px}
+.decision-factor strong{display:block;color:#fff;font-size:15px;line-height:1.45}
+.hero-action-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.hero-btn{display:inline-flex;justify-content:center;align-items:center;min-height:44px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:10px 15px;border-radius:7px;font:600 13px/1.4 system-ui,sans-serif;cursor:pointer;transition:background .2s}
+.hero-btn:hover{background:rgba(255,255,255,.16);text-decoration:none}
+.hero-btn.primary{background:#a8e5ce;border-color:#a8e5ce;color:#14392f}
+.hero-btn.primary:hover{background:#c7f0df}
+.decision-context{margin-top:20px;border-top:1px solid rgba(255,255,255,.18);padding-top:14px}
+.decision-context summary{font-size:12px;color:#c5dae0;cursor:pointer;min-height:30px}
+.hero-grid{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;margin-top:14px}
+.gauge-wrap{position:relative;width:150px;height:150px}
 .gauge-wrap svg{width:100%;height:100%;display:block}
 .gauge-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:14}
 .gauge-fg{fill:none;stroke-width:14;stroke-linecap:round;transition:stroke-dasharray 1.5s cubic-bezier(.4,0,.2,1),stroke 1.5s}
 .gauge-num{font-family:Georgia,serif;font-size:54px;font-weight:normal;fill:#fff;text-anchor:middle;dominant-baseline:middle}
 .gauge-label{font-family:Georgia,serif;font-size:10px;letter-spacing:1.2px;fill:#88c8e8;text-anchor:middle;text-transform:uppercase}
 .gauge-status{font-family:Georgia,serif;font-size:11px;letter-spacing:.6px;fill:#aac8d8;text-anchor:middle;text-transform:uppercase}
-.hero-info .tonight-label{font-size:11px;color:#88c8e8;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
-.hero-info .tonight-headline{font-size:23px;font-weight:normal;color:#fff;margin-bottom:10px;line-height:1.3}
-.hero-info .tonight-detail{font-size:14px;color:#aac8d8;line-height:1.7;margin-bottom:14px}
-.hero-info .tonight-detail strong{color:#fff;font-style:normal}
-.region-picker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
-.region-picker label{font-size:11px;color:#88c8e8;letter-spacing:.7px;text-transform:uppercase}
-.region-picker select{max-width:100%;background:#102946;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:8px 10px;font:13px Georgia,serif}
-.decision-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 13px}
-.decision-factor{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:4px;padding:8px 10px}
-.decision-factor span{display:block;color:#88c8e8;font-size:9px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px}
-.decision-factor strong{display:block;color:#fff;font-size:12px;line-height:1.4}
-.night-strip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.night-strip .night{flex:1 1 120px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:4px;padding:9px 11px}
-.night-strip .night.best{border-color:#7bc8e8;background:rgba(123,200,232,.13)}
-.night-strip .night .n-day{font-size:11px;color:#88c8e8;letter-spacing:.7px;text-transform:uppercase;margin-bottom:3px}
-.night-strip .night .n-kp{font-size:17px;color:#fff;line-height:1.25}
-.night-strip .night .n-note{font-size:12px;color:#aac8d8;line-height:1.45;margin-top:2px}
-.hero-action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.hero-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;padding:9px 16px;border-radius:4px;font-family:Georgia,serif;font-size:13px;cursor:pointer;letter-spacing:.3px;transition:all .2s}
-.hero-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}
-.hero-btn.primary{background:#5fc88f;border-color:#5fc88f;color:#0a1428;font-weight:bold}
-.hero-btn.primary:hover{background:#7fd8a8;border-color:#7fd8a8}
-@media(max-width:680px){.hero-grid{grid-template-columns:1fr;text-align:center}.gauge-wrap{margin:0 auto;width:170px;height:170px}.hero-action-row,.region-picker{justify-content:center}.decision-factors{grid-template-columns:1fr}}
+.hero-info .tonight-label{font-size:10px;color:#b5d7df;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+.hero-info .tonight-headline{font:normal 20px/1.3 Georgia,serif;color:#fff;margin-bottom:10px}
+.hero-info .tonight-detail{font-size:13px;color:#c3d7df;line-height:1.7;margin-bottom:14px}
+.hero-info .tonight-detail strong{color:#fff}
+.next-nights{margin:0 0 18px;font-family:system-ui,sans-serif}
+.next-nights-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.next-nights-heading h2{font:normal 21px/1.3 Georgia,serif;color:#193f35}
+.next-nights-heading span{font-size:11px;color:#64746c}
+.night-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 10px}
+.night-strip .night{background:#fff;border:1px solid #d7e0da;border-radius:8px;padding:12px 14px}
+.night-strip .night.best{border-color:#4f8b73;background:#edf6f0}
+.night-strip .night .n-day{font-size:10px;color:#426457;letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px}
+.night-strip .night .n-kp{font-size:18px;color:#193f35;line-height:1.3}
+.night-strip .night .n-note{font-size:11px;color:#586960;line-height:1.5;margin-top:4px}
+.body .next-window{font-size:12px;color:#586960;margin:0 0 10px}
+.next-window span{margin-right:8px}
+.next-window strong{color:#244c3c}
+.notification-btn{background:#fff;color:#244c3c;border-color:#b7c9bd;font-size:12px}
+.notification-btn:hover{background:#edf6f0}
+.notification-note{font-size:11px;color:#64746c;margin-left:10px}
+.forecast-nav{display:flex;flex-wrap:wrap;gap:8px 20px;font:600 12px system-ui,sans-serif;margin:20px 0}
+.forecast-nav a{padding:8px 0;text-decoration:underline;text-underline-offset:4px}
+.forecast-guide{background:#fff;border:1px solid #e0dbd2;border-radius:8px;padding:15px 18px;margin:0 0 22px}
+.forecast-guide summary{font:600 13px/1.5 system-ui,sans-serif;color:#254c3b;cursor:pointer;min-height:28px}
+.forecast-guide[open] summary{margin-bottom:12px}
+.skip-link{position:absolute;left:16px;top:-100px;background:#fff;color:#14392f;padding:12px;z-index:1000}
+.skip-link:focus{top:12px}
+:focus-visible{outline:3px solid #c48c21;outline-offset:4px}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+@media(max-width:680px){.hero-panel{padding:20px 18px;border-radius:12px}.decision-heading{margin-bottom:14px}.region-picker{display:block;margin-bottom:18px}.region-picker label{display:block;margin-bottom:7px}.region-picker select{width:100%;max-width:none;font-size:16px}.decision-factors{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.decision-factor{padding:11px}.decision-factor:last-child{grid-column:1/-1}.decision-factor strong{font-size:14px}.local-answer h2{font-size:27px}.hero-grid{grid-template-columns:1fr}.gauge-wrap{margin:0 auto;width:130px;height:130px}.hero-action-row .primary{flex-basis:100%}.hero-action-row .hero-btn:not(.primary){flex:1}.next-nights-heading{display:block}.next-nights-heading span{display:block;margin-top:4px}.night-strip{gap:6px}.night-strip .night{padding:10px}.night-strip .night .n-note{font-size:10px}.next-window span{display:block}.notification-note{display:block;margin:6px 0 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.live-strip .live-dot,.smart-cta.alert{animation:none}.gauge-fg,.hero-btn{transition:none}}
 
 /* Solar wind panel */
 .sw-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:0 0 28px}
@@ -323,7 +350,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .gear-list .gi strong{color:#2c5f2d}
 .static-answer{background:#edf6f0;border-left:4px solid #2c5f2d;border-radius:0 5px 5px 0;padding:15px 17px;margin:16px 0 24px;color:#334239;font-size:14px;line-height:1.65}
 .footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
-@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}}
+@media(max-width:640px){.site-header{display:block;padding:13px 16px}.header .site-title{font-size:20px}.nav{justify-content:flex-start;margin-top:9px}.nav a{margin:3px 14px 3px 0}.body{padding:18px 14px 40px}h1.page-title{font-size:26px}h2.sh{font-size:18px}.live-strip{gap:5px 8px;padding:8px 12px}.live-strip .refresh-info{margin:0}.breadcrumb{font-size:11px}}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
@@ -338,33 +365,50 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <meta name="twitter:description" content="Northern lights Michigan tonight: live NOAA aurora borealis signals, NWS cloud cover, moonlight and viewing windows. Visibility is never guaranteed.">
 </head>
 <body data-analytics-page="northern-lights-michigan">
+<a class="skip-link" href="#main">Skip to your regional forecast</a>
+<header class="site-header">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
 <div class="nav">
 <a href="/">Home</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-gazette/">Gazette</a><a href="/blog/">Blog</a>
 </div>
+</header>
 <div class="live-strip" id="liveStrip">
   <span class="live-dot" id="liveDot" aria-hidden="true">&#9679;</span>
   <span class="live-label">Aurora forecast</span>
   <span class="live-status" id="liveStatus">loading NOAA SWPC data...</span>
   <span class="refresh-info" id="refreshInfo"></span>
 </div>
-<div class="body">
+<main class="body" id="main">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
 
 <h1 class="page-title">Northern Lights Michigan Tonight</h1>
 <p class="sub">Live NOAA aurora forecast, peak time, and regional outlooks for the Upper Peninsula and Lower Peninsula</p>
 
-<div class="static-answer" id="aurora-static-answer"><strong>Use this Michigan guide while the live NOAA verdict updates:</strong> Kp below 5 usually means low odds; Kp 5 to 6 favors dark northern Upper Peninsula locations; Kp 7 or higher can bring the aurora farther into the Lower Peninsula when skies are clear. Check cloud cover and the official NOAA watch before driving, and never treat a forecast as a visibility guarantee.</div>
-
-<p>Michigan aurora visibility changes sharply by latitude, darkness, cloud cover, and the strength and timing of each geomagnetic disturbance. The Upper Peninsula has the best odds, while Lower Peninsula viewing usually requires a stronger event and an unobstructed northern horizon.</p>
-
-<p>The tool below combines official NOAA Space Weather Prediction Center products with National Weather Service cloud forecasts and U.S. Naval Observatory moon data. Kp and Bz describe space weather; the added sky factors help answer when a regional trip is worth considering, without claiming a visibility probability. The page refreshes every 10 minutes, and the map ranks dark-sky viewing locations without collecting or storing your position.</p>
-
-<p><strong>Planning an autumn trip north?</strong> <a href="/fall-color-northern-lights-michigan/" data-growth-cta="fall-aurora-trip">Pair daytime fall color with your northern lights viewing plans</a>. Compare foliage timing and the aurora forecast before choosing your dates.</p>
-
-<!-- Hero panel with animated SVG gauge -->
-<div class="hero-panel">
-  <div class="hero-grid">
+<!-- Regional decision first; statewide context and guide remain below. -->
+<section class="hero-panel" id="aurora-decision" aria-labelledby="localHeadline">
+  <div class="decision-heading">
+    <span class="decision-eyebrow">Your aurora night</span>
+    <span class="decision-source">NOAA · NWS · USNO</span>
+  </div>
+  <div class="region-picker"><label for="regionSelect">Choose your region</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select></div>
+  <div class="local-answer" aria-live="polite" aria-atomic="true">
+    <div class="tonight-label" id="localRegion">Tonight near the Straits of Mackinac</div>
+    <h2 id="localHeadline">Checking your regional outlook</h2>
+    <p id="localDetail">Your nighttime Kp signal and cloud forecast will appear here. A forecast is not a visibility guarantee.</p>
+  </div>
+  <div class="decision-factors" aria-live="polite">
+    <div class="decision-factor"><span>Tonight's planning time · ET</span><strong id="tonightBestTime">Checking...</strong></div>
+    <div class="decision-factor"><span>NWS forecast clouds</span><strong id="selectedCloud">Checking...</strong></div>
+    <div class="decision-factor"><span>USNO moon tonight</span><strong id="selectedMoon">Checking...</strong></div>
+  </div>
+  <div class="hero-action-row">
+    <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
+    <a class="hero-btn" href="#viewing-locations">View the dark-sky map ↓</a>
+    <button class="hero-btn" id="refreshBtn">Refresh now</button>
+  </div>
+  <details class="decision-context">
+    <summary>Statewide outlook and tonight's timing details</summary>
+    <div class="hero-grid">
     <div class="gauge-wrap">
       <svg viewBox="0 0 240 240" id="kpGauge">
         <circle class="gauge-bg" cx="120" cy="120" r="100"></circle>
@@ -374,22 +418,36 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
         <text class="gauge-status" id="gaugeStatus" x="120" y="158">guide</text>
       </svg>
     </div>
-    <div class="hero-info">
-      <div class="tonight-label">Tonight in Michigan</div>
-      <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Checking tonight's live NOAA aurora forecast</h2>
-      <div class="tonight-detail" id="tonightDetail">Until the update completes: Kp 5 to 6 favors dark Upper Peninsula locations; Kp 7 or higher can reach farther south when skies are clear.</div>
-      <div class="region-picker"><label for="regionSelect">Plan for</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select></div>
-      <div class="decision-factors" aria-live="polite"><div class="decision-factor"><span>NWS forecast clouds</span><strong id="selectedCloud">Checking...</strong></div><div class="decision-factor"><span>USNO moon tonight</span><strong id="selectedMoon">Checking...</strong></div><div class="decision-factor"><span>Next best window</span><strong id="nextBestWindow">Calculating...</strong></div></div>
-      <div class="tonight-detail" id="tonightWindow">Calculating tonight's dark window and the best hours to be outside.</div>
-      <div class="night-strip" id="nightStrip"></div>
-      <div class="hero-action-row">
-        <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
-        <button class="hero-btn" id="notifyBtn">Alert me when Kp 5+</button>
-        <button class="hero-btn" id="refreshBtn">Refresh now</button>
+      <div class="hero-info">
+        <div class="tonight-label">Michigan · next 24 hours</div>
+        <h3 class="tonight-headline" id="tonightHeadline">Checking tonight's live NOAA aurora forecast</h3>
+        <div class="tonight-detail" id="tonightDetail">Until the update completes: Kp 5 to 6 favors dark Upper Peninsula locations; Kp 7 or higher can reach farther south when skies are clear.</div>
+        <div class="tonight-detail" id="tonightWindow">Calculating tonight's dark window and the best hours to be outside.</div>
       </div>
     </div>
-  </div>
-</div>
+  </details>
+</section>
+
+<section class="next-nights" aria-labelledby="nextNightsHeading">
+  <div class="next-nights-heading"><h2 id="nextNightsHeading">The next three nights</h2><span>Michigan time · forecasts can change</span></div>
+  <div class="night-strip" id="nightStrip"></div>
+  <p class="next-window"><span>Strongest upcoming planning window</span><strong id="nextBestWindow">Calculating...</strong></p>
+  <button class="hero-btn notification-btn" id="notifyBtn">Alert me when Kp 5+</button>
+  <span class="notification-note">Alerts work while this page is open.</span>
+</section>
+
+<nav class="forecast-nav" aria-label="Explore the aurora forecast"><a href="#regional-outlook">Compare regions</a><a href="#viewing-locations">Viewing map</a><a href="#aurora-guide">How to read this forecast</a></nav>
+
+<details class="forecast-guide" id="aurora-guide"><summary>How to read this Michigan aurora forecast</summary>
+<div class="static-answer" id="aurora-static-answer"><strong>Use this Michigan guide while the live NOAA verdict updates:</strong> Kp below 5 usually means low odds; Kp 5 to 6 favors dark northern Upper Peninsula locations; Kp 7 or higher can bring the aurora farther into the Lower Peninsula when skies are clear. Check cloud cover and the official NOAA watch before driving, and never treat a forecast as a visibility guarantee.</div>
+
+<p>Michigan aurora visibility changes sharply by latitude, darkness, cloud cover, and the strength and timing of each geomagnetic disturbance. The Upper Peninsula has the best odds, while Lower Peninsula viewing usually requires a stronger event and an unobstructed northern horizon.</p>
+
+<p>The tool below combines official NOAA Space Weather Prediction Center products with National Weather Service cloud forecasts and U.S. Naval Observatory moon data. Kp and Bz describe space weather; the added sky factors help answer when a regional trip is worth considering, without claiming a visibility probability. The page refreshes every 10 minutes, and the map ranks dark-sky viewing locations without collecting or storing your position.</p>
+
+<p><strong>Planning an autumn trip north?</strong> <a href="/fall-color-northern-lights-michigan/" data-growth-cta="fall-aurora-trip">Pair daytime fall color with your northern lights viewing plans</a>. Compare foliage timing and the aurora forecast before choosing your dates.</p>
+
+</details>
 
 <!-- Solar wind status -->
 <div class="sw-row" id="swRow">
@@ -399,7 +457,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
   <div class="sw-card" id="swKpPeak"><div class="sw-label">Peak Kp 72h</div><div class="sw-val">--</div><div class="sw-status">loading...</div></div>
 </div>
 
-<section class="region-outlook" aria-labelledby="regionOutlookHeading">
+<section class="region-outlook" id="regional-outlook" aria-labelledby="regionOutlookHeading">
   <div class="region-outlook-head">
     <h2 id="regionOutlookHeading">Michigan aurora forecast by region tonight</h2>
     <p id="regionOutlookTime">Checking NOAA's 30-to-90-minute OVATION nowcast and the next 24 hours of Kp guidance.</p>
@@ -453,7 +511,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 </div>
 
 <!-- Interactive map -->
-<h2 class="sh">Viewing Locations</h2>
+<h2 class="sh" id="viewing-locations">Viewing Locations</h2>
 <p>Click any marker for site detail. Markers are colored by Bortle dark-sky rating (darker = better aurora viewing). The Keweenaw, Lake Superior Provincial Park, and Whitefish Point are the three highest-leverage locations for serious aurora viewing.</p>
 <div class="map-section">
   <div class="map-wrap">
@@ -675,7 +733,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
     <a class="dnt-link" data-dnt-link href="/detroit-outdoors/">See the Detroit board →</a>
   </div>
 </section>
-</div>
+</main>
 <div class="footer">Bay City, Michigan &middot; Compiled by <a href="/chris-izworski/">Chris Izworski</a> &middot; Updated August 2026 &middot; <a href="/about/">About this site</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -1190,6 +1248,28 @@ function bestPlanningPeriod(rows, region) {
   return contenders[0];
 }
 
+// Present the existing nighttime choice; do not substitute the daytime Kp peak.
+function renderLocalPlanningAnswer(region, choice) {
+  const select = document.getElementById('regionSelect');
+  const name = region && region.label || select.options[select.selectedIndex].text;
+  const headline = document.getElementById('localHeadline');
+  const detail = document.getElementById('localDetail');
+  document.getElementById('localRegion').textContent = 'Tonight near '+name;
+  document.getElementById('tonightBestTime').textContent = choice
+    ? michiganClock(new Date(choice.row.time_tag)) : 'Time unavailable';
+  if (!region || !Number.isFinite(region.planning_kp) || !choice) {
+    headline.textContent = 'Nighttime signal unavailable';
+    detail.textContent = 'We cannot compare a nighttime forecast with this region\u2019s planning threshold yet. Check the official NOAA short-term forecast and local clouds before traveling.';
+    return;
+  }
+  const kp = choice.row.kp, threshold = region.planning_kp;
+  headline.textContent = kp >= threshold ? 'Aurora signal worth monitoring tonight'
+    : kp >= threshold-1 ? 'Borderline aurora signal tonight'
+    : 'Low aurora signal tonight';
+  detail.textContent = 'The selected nighttime forecast is Kp '+kp.toFixed(1)+'; this guide\u2019s regional threshold is Kp '+threshold+'. '+
+    'Check short-term NOAA conditions and local clouds. This is planning guidance, not a visibility guarantee.';
+}
+
 function renderTonightWindow(periods, region) {
   const el = document.getElementById('tonightWindow');
   const now = new Date();
@@ -1197,6 +1277,7 @@ function renderTonightWindow(periods, region) {
   const lat = reference.latitude||reference.lat;
   const lng = reference.longitude||reference.lng;
   const name = reference.label||reference.name;
+  renderLocalPlanningAnswer(region, null);
   // Astronomical dark: the sun is 18 degrees below the horizon. Even around the
   // summer solstice the Straits briefly cross this threshold, but the window is short.
   const alreadyDark = sunAltitudeDeg(now,lat,lng)<=-18;
@@ -1220,6 +1301,7 @@ function renderTonightWindow(periods, region) {
   if (inDark.length) {
     const choice = bestPlanningPeriod(inDark,region);
     const best = choice.row;
+    renderLocalPlanningAnswer(region, choice);
     const cloudText = Number.isFinite(choice.cloud) ? ' with about <strong>'+Math.round(choice.cloud)+'% forecast sky cover</strong>' : ' (the regional cloud feed is unavailable)';
     text += ' The best planning window among the strongest forecast periods is around <strong>' +
       michiganClock(new Date(best.time_tag)) + '</strong>: Kp <strong>' + best.kp.toFixed(1) +
