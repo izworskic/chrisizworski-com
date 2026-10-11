@@ -34,7 +34,9 @@
     }).format(date);
   }
   function riskValue(wind) {
-    if (wind >= 35) return { level: 'high', label: 'High', hint: '35+ mph: escort / closure reference range' };
+    if (wind >= 65) return { level: 'high', label: 'High', hint: '65+ mph: full-closure reference range' };
+    if (wind >= 50) return { level: 'high', label: 'High', hint: '50–64 mph: partial-closure reference range' };
+    if (wind >= 35) return { level: 'high', label: 'High', hint: '35–49 mph: escort reference range' };
     if (wind >= 20) return { level: 'elevated', label: 'Elevated', hint: '20–34 mph: advisory reference range' };
     return { level: 'low', label: 'Low', hint: 'Below 20 mph wind reference' };
   }
@@ -189,7 +191,7 @@
     var item = loadWatch();
     if (item) {
       api('status', { watchId: item.watchId, manageToken: item.manageToken })
-        .then(function (result) { if (!result?.ok) { saveWatch(null); updateWatchUI(); } })
+        .then(function (result) { if (!result?.active) { saveWatch(null); updateWatchUI(); } })
         .catch(function () { /* temporary server outages must not wipe the watch */ });
     }
   }
