@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Great Lakes freighter U.S. query audit — October 10, 2026
+
+- **Owner and URL:** `izworskic/chrisizworski-com`, `https://chrisizworski.com/great-lakes-freighter-tracking/`.
+- **Verified GSC baseline:** U.S., 2026-09-10–2026-10-07, 4,967 impressions, 58 clicks, 1.17% CTR, position 7.41. Top query `great lakes ship tracker`: 1,107 impressions, 7 clicks, position 6.95.
+- **Decision:** PROTECT existing live AIS map, answer-first HTML, canonical, title and Person graph. The top queries already align with the existing live tracker; low CTR alone is not proof of an implementation defect.
+- **Audit artifact:** `benchmarks/freighter-us-gsc-audit-2026-10-10.md`. No product code or SEO changes. No live AIS readback, AdSense RPM or post-change lift established.
+- **Release:** Documentation-only PR; record CI and deployment outcomes only when verified.
+- **Exactly one next action:** Reproduce production AIS/map interactions on mobile and desktop, fix only verified defects, run `npm run verify:all` before any merge.
+
+
 ## Michigan + national fall-color zero-Anthropic resilience — October 10, 2026
 
 - **Scope / ownership:** Michigan statewide map and report are owned by `izworskic/chrisizworski-com`; all 15 new national regional families and destination-page generators are owned by `izworskic/national-fall-color`. No new indexable URLs, redirects, title, canonical, or ad placement changes.
