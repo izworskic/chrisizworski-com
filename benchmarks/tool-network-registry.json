@@ -3582,7 +3582,7 @@
       "from": "welland-canal",
       "to": "soo-locks",
       "type": "related-locks",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "welland-canal",
       "reason": "Compare Great Lakes locking operations and ship watching."
     },
@@ -3590,7 +3590,7 @@
       "from": "welland-canal",
       "to": "duluth-canal-park",
       "type": "related-port",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "welland-canal",
       "reason": "Related canal and vessel watching experience."
     }
