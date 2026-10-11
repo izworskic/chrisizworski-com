@@ -38,6 +38,15 @@ async function fetchJson(url) {
   return response.json();
 }
 
+const MAX_OBSERVED_AGE_MS = 6 * 60 * 60 * 1000;
+const MAX_OVATION_AGE_MS = 2 * 60 * 60 * 1000;
+const MAX_NWS_AGE_MS = 12 * 60 * 60 * 1000;
+
+function isFresh(value, maxAgeMs, now = Date.now(), futureToleranceMs = 10 * 60 * 1000) {
+  const time = Date.parse(value);
+  return Number.isFinite(time) && time <= now + futureToleranceMs && now - time <= maxAgeMs;
+}
+
 function sourceState(result, name, url) {
   return { name, url, available: result.status === "fulfilled" };
 }
@@ -101,20 +110,25 @@ module.exports = async function handler(req, res) {
     forecastResult.status === "fulfilled"
       ? parseKpForecast(forecastResult.value)
       : { peak_24h: null, peak_24h_at: null, peak_72h: null, peak_72h_at: null, periods: [] };
-  const currentKp =
+  const currentKpRaw =
     currentResult.status === "fulfilled" ? parseCurrentKp(currentResult.value) : null;
-  const solarWind = parseSolarWind(
+  const currentKp = isFresh(currentKpRaw?.observed_at, MAX_OBSERVED_AGE_MS) ? currentKpRaw : null;
+  const solarWindRaw = parseSolarWind(
     magneticResult.status === "fulfilled" ? magneticResult.value : [],
     speedResult.status === "fulfilled" ? speedResult.value : [],
   );
+  const solarWind = isFresh(solarWindRaw?.observed_at, MAX_OBSERVED_AGE_MS) ? solarWindRaw : null;
+  const ovationPayload = ovationResult.status === "fulfilled" ? ovationResult.value : {};
+  const ovationFresh = isFresh(ovationPayload["Observation Time"], MAX_OVATION_AGE_MS) && isFresh(ovationPayload["Forecast Time"], MAX_OVATION_AGE_MS, Date.now(), 2 * 60 * 60 * 1000);
   const regional = buildRegionalOutlook(
-    ovationResult.status === "fulfilled" ? ovationResult.value : {},
+    ovationFresh ? ovationPayload : {},
     forecast.peak_24h,
   );
   const skyCoverByRegion = Object.fromEntries(
     weatherEntries.map(([id], index) => {
       const result = weatherResults[index];
-      return [id, result?.status === "fulfilled" ? parseSkyCover(result.value) : { updated_at: null, periods: [] }];
+      const parsed = result?.status === "fulfilled" ? parseSkyCover(result.value) : { updated_at: null, periods: [] };
+      return [id, isFresh(parsed.updated_at, MAX_NWS_AGE_MS) ? parsed : { updated_at: parsed.updated_at, periods: [] }];
     }),
   );
   regional.regions = regional.regions.map((region) => ({
@@ -133,17 +147,18 @@ module.exports = async function handler(req, res) {
       "https://www.spaceweather.gov/products/3-day-forecast",
     ),
     kp_observed: sourceState(
-      currentResult,
+      currentKp ? currentResult : { status: "rejected" },
       "NOAA Space Weather Prediction Center",
       "https://www.spaceweather.gov/products/planetary-k-index",
     ),
     solar_wind: {
+      observed_at: solarWindRaw?.observed_at || null,
       name: "NOAA Space Weather Prediction Center",
       url: "https://www.spaceweather.gov/products/real-time-solar-wind",
-      available: magneticResult.status === "fulfilled" || speedResult.status === "fulfilled",
+      available: Boolean(solarWind),
     },
     ovation: sourceState(
-      ovationResult,
+      ovationFresh ? ovationResult : { status: "rejected" },
       "NOAA Space Weather Prediction Center OVATION",
       "https://www.spaceweather.gov/products/aurora-30-minute-forecast",
     ),
@@ -165,6 +180,15 @@ module.exports = async function handler(req, res) {
     fetched_at: new Date().toISOString(),
     degraded: !forecast.periods.length || !regional.forecast_time,
     weather_degraded: weatherAvailable < weatherEntries.length,
+    source_freshness: {
+      kp_observed_at: currentKpRaw?.observed_at || null,
+      solar_wind_observed_at: solarWindRaw?.observed_at || null,
+      ovation_observed_at: ovationPayload["Observation Time"] || null,
+      ovation_forecast_at: ovationPayload["Forecast Time"] || null,
+      kp_observed_fresh: Boolean(currentKp),
+      solar_wind_fresh: Boolean(solarWind),
+      ovation_fresh: ovationFresh,
+    },
     forecast: { ...forecast, current: currentKp },
     solar_wind: solarWind,
     ovation: regional,

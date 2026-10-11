@@ -46,6 +46,12 @@ test('main-site build sync installs both Ballard APIs and tour', () => {
   assert.match(sync, /api\/ballard-ais\.js/);
   assert.match(sync, /public\/ballard-locks/);
   assert.match(sync, /public\/sitemap\.xml/);
+  // The checked-in page must remain available while the pinned remote
+  // release is fetched. Vercel can scan files concurrently with build scripts.
+  assert.doesNotMatch(sync, /fs\.rmSync\(destPage/);
+  const remoteReady = sync.indexOf('const [mainSource, tourSource, salmonSource, apiSource]');
+  const copied = sync.indexOf('fs.cpSync(sourcePage, destPage');
+  assert.ok(remoteReady >= 0 && copied > remoteReady, 'Ballard mirror must not be replaced before sources resolve');
 });
 
 test('committed tour uses one MapLibre map for basemap, AIS, routes and stops', () => {

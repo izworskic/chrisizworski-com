@@ -32,12 +32,6 @@ if (!fs.existsSync(sourcePage)) throw new Error(`Ballard sync: missing ${sourceP
 if (!fs.existsSync(sourceApi)) throw new Error(`Ballard sync: missing ${sourceApi}`);
 if (!fs.existsSync(sourceAisApi)) throw new Error(`Ballard sync: missing ${sourceAisApi}`);
 
-fs.rmSync(destPage, { recursive: true, force: true });
-fs.mkdirSync(path.dirname(destPage), { recursive: true });
-fs.cpSync(sourcePage, destPage, { recursive: true });
-fs.copyFileSync(sourceApi, destApi);
-fs.copyFileSync(sourceAisApi, destAisApi);
-
 async function fetchExact(url, label) {
   const response = await fetch(url, { headers: { 'user-agent': 'chrisizworski-com-build/2.0' } });
   if (!response.ok) throw new Error(`Ballard sync: ${label} source returned ${response.status}`);
@@ -54,6 +48,15 @@ const [mainSource, tourSource, salmonSource, apiSource] = await Promise.all([
 const mainEnhanced = applyBallardSiteShell(enhanceBallardMain(mainSource), '/ballard-locks/');
 const tourEnhanced = applyBallardSiteShell(enhanceBallardTourAuthority(enhanceBallardTour(tourSource)), '/ballard-locks/tour/');
 const salmonEnhanced = applyBallardSiteShell(salmonSource, '/ballard-locks/salmon-counts/');
+
+// Never delete the committed Ballard mirror during a Vercel build. Previously
+// rmSync removed index.html before the remote pinned sources were fetched,
+// leaving parallel deployment scanners with ENOENT on a tracked production page.
+// Resolve and enhance every source first; update files in place only afterwards.
+fs.mkdirSync(destPage, { recursive: true });
+fs.cpSync(sourcePage, destPage, { recursive: true, force: true });
+fs.copyFileSync(sourceApi, destApi);
+fs.copyFileSync(sourceAisApi, destAisApi);
 
 fs.mkdirSync(path.join(destPage, 'tour'), { recursive: true });
 fs.mkdirSync(path.join(destPage, 'salmon-counts'), { recursive: true });
