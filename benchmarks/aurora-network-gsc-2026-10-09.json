@@ -1,0 +1,264 @@
+{
+  "report": "Aurora network page-level GSC search performance",
+  "source": "Connected Search Console via Windsor.ai",
+  "site": "sc-domain:chrisizworski.com",
+  "search": "page-level Search Analytics; aurora path filters",
+  "recent_window": {
+    "start": "2026-09-12",
+    "end": "2026-10-09"
+  },
+  "comparison_window": {
+    "start": "2026-08-15",
+    "end": "2026-09-11"
+  },
+  "disclaimer": "No row is recorded as null rather than zero; it does not establish an indexing verdict. This is search impressions and clicks, not site sessions.",
+  "distinct_urls": 27,
+  "reporting_urls": 11,
+  "recent_totals": {
+    "impressions": 15741,
+    "clicks": 204
+  },
+  "comparison_totals": {
+    "impressions": 13325,
+    "clicks": 145
+  },
+  "pages": [
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/",
+      "recent": {
+        "impressions": 414,
+        "clicks": 1,
+        "ctr": 0.0024,
+        "position": 24.1329
+      },
+      "previous": {
+        "impressions": 87,
+        "clicks": 1,
+        "ctr": 0.0115,
+        "position": 23.5977
+      },
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/alaska/",
+      "recent": {
+        "impressions": 378,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 40.418
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/alaska/fairbanks/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/alaska/anchorage/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/alaska/denali/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/minnesota/",
+      "recent": {
+        "impressions": 313,
+        "clicks": 1,
+        "ctr": 0.0032,
+        "position": 24.0383
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/minnesota/duluth/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/minnesota/grand-marais/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/minnesota/ely-boundary-waters/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/minnesota/voyageurs/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/north-dakota/",
+      "recent": {
+        "impressions": 131,
+        "clicks": 2,
+        "ctr": 0.0153,
+        "position": 12.4275
+      },
+      "previous": {
+        "impressions": 2,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 6
+      },
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/north-dakota/fargo/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/north-dakota/bismarck/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/north-dakota/grand-forks/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/montana/",
+      "recent": {
+        "impressions": 225,
+        "clicks": 9,
+        "ctr": 0.04,
+        "position": 13.1289
+      },
+      "previous": {
+        "impressions": 1,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 2
+      },
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/montana/glacier-national-park/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/montana/whitefish/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/montana/billings/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/maine/",
+      "recent": {
+        "impressions": 47,
+        "clicks": 1,
+        "ctr": 0.0213,
+        "position": 15.9787
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/maine/presque-isle/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/maine/bangor/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/national-tools/aurora/maine/acadia-national-park/",
+      "recent": null,
+      "previous": null,
+      "reporting": "no_search_analytics_row"
+    },
+    {
+      "url": "https://chrisizworski.com/northern-lights-michigan/",
+      "recent": {
+        "impressions": 13692,
+        "clicks": 156,
+        "ctr": 0.0114,
+        "position": 7.3189
+      },
+      "previous": {
+        "impressions": 13235,
+        "clicks": 144,
+        "ctr": 0.0109,
+        "position": 7.9917
+      },
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/northern-lights-michigan/keweenaw/",
+      "recent": {
+        "impressions": 47,
+        "clicks": 5,
+        "ctr": 0.1064,
+        "position": 6.4255
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/northern-lights-michigan/marquette/",
+      "recent": {
+        "impressions": 123,
+        "clicks": 2,
+        "ctr": 0.0163,
+        "position": 9.3902
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/northern-lights-michigan/munising/",
+      "recent": {
+        "impressions": 120,
+        "clicks": 8,
+        "ctr": 0.0667,
+        "position": 5.0833
+      },
+      "previous": null,
+      "reporting": "reported"
+    },
+    {
+      "url": "https://chrisizworski.com/northern-lights-michigan/mackinaw-city/",
+      "recent": {
+        "impressions": 251,
+        "clicks": 19,
+        "ctr": 0.0757,
+        "position": 4.5259
+      },
+      "previous": null,
+      "reporting": "reported"
+    }
+  ]
+}
