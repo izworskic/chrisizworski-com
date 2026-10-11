@@ -1,5 +1,13 @@
 # Search Growth + Revenue Session Log
 
+## Welland Canal ship markers — October 11, 2026
+
+- **Request/owner:** Match Duluth Canal Park's recognizable freighter silhouettes in the live Welland Canal map; retain existing lock pins, AIS freshness, public sources and vessel list.
+- **Change:** Replace teal AIS circles with the Duluth side-view freighter SVG via Leaflet `divIcon`; blue for moving, brown for stopped/slow (≤0.5 kn), gray for missing speed. Mouse/keyboard-friendly ship-name tooltips and popups; list's **Find on map** opens the corresponding vessel. Lock markers stay gold. Cache-bust page assets and update the legend; no API or SEO/canonical changes.
+- **Evidence:** Visual parity comes from `public/assets/duluth-canal.js` ship icon; no GSC/AdSense values claimed or inferred. Programmatic regression test added. Full GitHub CI is the merge gate. Production must be verified after deployment.
+- **One next action:** After successful CI merge and production READY, verify Welland displays ship silhouettes and an AIS vessel popup from the public URL.
+
+
 ## Welland Canal Live implementation — October 11, 2026
 
 - **Scope:** Branch `feature/welland-canal-live-20261011` of `izworskic/chrisizworski-com`; new canonical `/welland-canal/`, designed as sister to the existing Soo Locks and Duluth pages while preserving their code and rankings.
