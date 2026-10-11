@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Welland Canal Live implementation — October 11, 2026
+
+- **Scope:** Branch `feature/welland-canal-live-20261011` of `izworskic/chrisizworski-com`; new canonical `/welland-canal/`, designed as sister to the existing Soo Locks and Duluth pages while preserving their code and rankings.
+- **Evidence:** Primary source list and source constraints are documented in `docs/WELLAND_CANAL_SOURCES.md`. Official Seaway order-of-turn, named-vessel reports, map, notices and 2026 pleasure-craft information are linked; no machine-readable official Seaway API has been authorized. Existing Open Waters AIS provider reused.
+- **New utility:** A new map with eight approximate lock locations, corridor-local fresh AIS vessels, timestamp and vessel search, 8 lock quick-select and nearby reported ships, Lock 3/7/8 visitor guidance, official schedule links, facts and FAQ. The tool carefully separates reported AIS position from official transit schedules; unsupported ETA, queue, occupancy and camera claims are excluded. API fails closed.
+- **Discovery/SEO:** New Tools card, Freighter Central feature, registry node with 3 relationships, canonical page with common Person `https://chrisizworski.com/#person`, sitemap inclusion, metadata, source docs and focused Node tests. Canonical ownership: Welland lock-watch decision only; do not compete with `/great-lakes-freighter-tracking/`.
+- **Measurement:** No measured new-page GSC, CTR, clicks, AdSense or attributable revenue yet (new canonical). Continue owner goals of 1 million Search impressions / 28 days, 5% sitewide CTR, real revenue, and legitimate Chris Izworski SERP integrity; no forecasts attributed to launch.
+- **Verification status:** Feature branch implementation committed. Main's 2026-10-11 Agent branch verification checked successful before branch work. New feature requires **PR CI and full `npm run verify:all` before merge**; status must be updated from actual checks, never assumed. No claim of production deployment.
+- **One next action:** Run review and full CI on the feature branch, resolve any failures, then merge only when green and verify live page, API and internal links.
+
+
 ## Freighter Central live-map-first improvement — October 11, 2026
 
 - **Owner / change:** `izworskic/chrisizworski-com`, branch `feature/freighters-hub-live-map-20261011`. Owner requested the actual lake-wide map as Freighter Central's primary feature, with corridor switching and existing watch-finder/directory preserved. URLs: `/freighters/` (indexable hub), `/great-lakes-freighter-tracking/` (unchanged specialist canonical).

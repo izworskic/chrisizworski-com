@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 11, 2026: Welland Canal discovery link added to Freighter Central.
+  "/freighters/",
   // Oct 7 2026: repair the two dead Michigan Outdoors navigation targets.
   "/michigan-snow-depth/",
   // Oct 5 2026: existing ice-out shell discovery pilot. Correct child identities in the

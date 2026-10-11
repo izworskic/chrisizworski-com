@@ -1,0 +1,51 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const handler = require('../api/welland-canal');
+const { normalize } = require('../lib/soo-ais');
+const bbox = [42.83, -79.34, 43.28, -79.10];
+function makeRes() {
+  return { headers:{}, code:200, body:null,
+    setHeader(k,v){this.headers[k]=v;},
+    status(n){this.code=n; return this;},
+    json(j){this.body=j;return this;}
+  };
+}
+test('Welland isolates fresh positions and never invents a schedule',async()=>{
+  const original=global.fetch;
+  const now=Date.now();
+  const fresh=new Date(now-2*60*1000).toISOString();
+  const stale=new Date(now-45*60*1000).toISOString();
+  global.fetch=async()=>({ok:true,json:async()=>({type:'FeatureCollection',features:[
+    {type:'Feature',geometry:{type:'Point',coordinates:[-79.1930,43.1552]},properties:{mmsi:316001111,name:'CANAL SHIP',sog:2,seen:fresh,source:'example'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[-79.20,43.15]},properties:{mmsi:316002222,name:'OLD SHIP',sog:3,seen:stale,source:'example'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[-83.9,46.5]},properties:{mmsi:316003333,name:'SOO SHIP',sog:3,seen:fresh,source:'example'}}
+  ]})});
+  try{
+    const res=makeRes();
+    await handler({method:'GET'},res);
+    assert.equal(res.code,200);
+    assert.equal(res.headers['X-Robots-Tag'],'noindex, nofollow');
+    assert.equal(res.body.isSchedule,false);
+    assert.equal(res.body.vessels.length,1);
+    assert.equal(res.body.vessels[0].name,'CANAL SHIP');
+    assert.equal('eta' in res.body,false);
+  }finally{global.fetch=original;}
+});
+test('Invalid methods and unavailable upstream fail closed',async()=>{
+  const bad=makeRes();await handler({method:'POST'},bad);
+  assert.equal(bad.code,405);
+  const orig=global.fetch;global.fetch=async()=>{throw new Error('provider down')};
+  try{
+    const res=makeRes();await handler({method:'GET'},res);
+    assert.equal(res.code,502);
+    assert.equal(res.body.ok,false);
+    assert.equal(res.headers['Cache-Control'],'no-store');
+  }finally{global.fetch=orig;}
+});
+test('Normalization rejects stale and outside-corridor reports',()=>{
+  const now=Date.now();
+  const raw={type:'FeatureCollection',features:[]};
+  const result=normalize(raw,now,bbox);
+  assert.equal(result.vessels.length,0);
+});

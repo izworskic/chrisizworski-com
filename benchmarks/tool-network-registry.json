@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-06",
+  "updated": "2026-10-11",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2514,6 +2514,51 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "welland-canal",
+      "name": "Welland Canal Ships and Locks Live",
+      "canonical": "https://chrisizworski.com/welland-canal/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "Welland Canal ships today and which lock to watch",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "niagara-peninsula",
+        "welland-canal",
+        "ontario"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler",
+        "canal-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-canonical",
+        "note": "Added 2026-10-11. Source-verified official Seaway vessel-transit and lock queue links plus distinct eight-lock AIS map and watch-location picker; GSC baseline pending."
+      },
+      "measurement": {
+        "search": "GSC Web page × non-branded query at 7/28 days",
+        "product": "GA4 page views and context handoffs to Seaway official link and maritime hubs",
+        "decisionWindowDays": 28,
+        "privacy": "No personal location required; only vessel-name search is local to browser."
+      }
     }
   ],
   "relationships": [
@@ -3524,6 +3569,30 @@
       "surface": "transportation-live",
       "strength": "optional",
       "reason": "Travelers tracking an NYC-bound flight can continue into live bridge and tunnel conditions when the ground trip crosses the metro area."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "welland-canal",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes",
+      "reason": "Welland canal lock-specific ship watch is a distinct follow-up to lake-wide vessel positions."
+    },
+    {
+      "from": "welland-canal",
+      "to": "soo-locks",
+      "type": "related-locks",
+      "strength": "optional",
+      "surface": "welland-canal",
+      "reason": "Compare Great Lakes locking operations and ship watching."
+    },
+    {
+      "from": "welland-canal",
+      "to": "duluth-canal-park",
+      "type": "related-port",
+      "strength": "optional",
+      "surface": "welland-canal",
+      "reason": "Related canal and vessel watching experience."
     }
   ],
   "cannibalizationGroups": [

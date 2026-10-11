@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welland Canal Ships Today &amp; Lock Map | Chris Izworski</title>
+<meta name="description" content="Find reported ships near the Welland Canal&#39;s eight locks, explore a live AIS map, and check official ship schedules and Lock 3 viewing spots.">
+<link rel="canonical" href="https://chrisizworski.com/welland-canal/">
+<link rel="icon" href="/favicon.ico">
+<meta name="theme-color" content="#092b3e">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chris Izworski">
+<meta property="og:title" content="Welland Canal Live: Ships, Locks &amp; Watch Map">
+<meta property="og:description" content="Explore all eight Welland Canal locks, recent AIS vessel positions and official Seaway transit sources.">
+<meta property="og:url" content="https://chrisizworski.com/welland-canal/">
+<meta property="og:image" content="https://chrisizworski.com/assets/soo-locks/freighter.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Welland Canal Live — Ships and Locks">
+<meta name="twitter:description" content="Recent reported ships, all eight locks and official vessel schedules.">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/soo-locks/freighter.jpg">
+<link rel="author" href="https://chrisizworski.com/chris-izworski/">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/welland-canal.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ships Today and Live Lock Map","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-10-11","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Live Ships and Eight-Lock Watch Map","url":"https://chrisizworski.com/welland-canal/","description":"Find reported ships near the Welland Canal's eight locks, explore a live AIS map, and check official ship schedules and Lock 3 viewing spots.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
+</head>
+<body data-analytics-page="welland-canal">
+<a href="#main" class="skip">Skip to canal map</a>
+<header class="site-bar"><div class="bar-inner">
+<a class="brand" href="/">Chris Izworski <span aria-hidden="true"> / </span> Great Lakes Desk</a>
+<nav aria-label="Main navigation"><a href="/freighters/">Freighter Central</a><a href="/soo-locks/">Soo Locks</a><a href="/duluth-canal-park/">Duluth</a><a href="/tools/">Tools</a></nav>
+</div></header>
+<main id="main">
+<section class="hero"><div class="hero-inner">
+<p class="eyebrow">Great Lakes shipping network / Niagara Peninsula</p>
+<h1>Welland Canal <em>Ships &amp; Locks Live</em></h1>
+<p class="deck">Where is the next freighter to watch? See recent ship positions along the 27-mile Welland Canal, inspect all eight locks, and open the official vessel schedule before you go.</p>
+<div class="actions"><a class="btn primary" href="#ship-watch">Explore the ship map ↓</a><a class="btn secondary" href="https://www.seaway-greatlakes.com/vessel-transit/order-of-turn" target="_blank" rel="noopener noreferrer">Official lock order of turn ↗</a></div>
+<p class="hero-foot">Times are Eastern (Ontario). AIS reports are not confirmed passage appointments or navigational advice.</p>
+</div></section>
+<nav class="quickbar" aria-label="Page sections"><div class="wrap">
+<a href="#ship-watch">Live ships</a><a href="#locks">8 locks</a><a href="#watch-spots">Where to watch</a><a href="#official">Official information</a><a href="#boaters">Pleasure craft</a><a href="#faq">FAQ</a>
+</div></nav>
+<div class="wrap">
+<div class="stats" aria-label="Welland Canal quick facts">
+<div class="stat"><b>8</b><span>navigation locks</span></div>
+<div class="stat"><b>43 km</b><span>Lake Ontario to Lake Erie</span></div>
+<div class="stat"><b>99.5 m</b><span>change in water elevation</span></div>
+<div class="stat"><b>~11 h</b><span>typical complete commercial transit</span></div>
+</div>
+<section class="section" id="ship-watch" aria-labelledby="ship-title">
+<div class="section-head"><div><p class="kicker">Vessel watch · positions not appointments</p><h2 id="ship-title">Ships along the canal, right now</h2></div><p>Fresh public AIS vessel reports show where ships were reported recently. Confirm named upcoming traffic using the Seaway's official schedule.</p></div>
+<div class="desk">
+<div class="panel">
+<div class="panel-head"><div><h3>Welland Canal vessel map</h3><p class="muted" id="lastUpdated">Waiting for the AIS service…</p></div><div><div class="status"><span class="dot" aria-hidden="true"></span><span id="liveStatus" role="status" aria-live="polite">Checking reports</span></div><button class="subtle-btn" id="refreshShips" type="button">Refresh positions</button></div></div>
+<div id="shipMap" role="region" aria-label="Map of eight Welland Canal locks and most recent reported vessel locations"></div>
+<div id="mapFallback" hidden>Map tiles are unavailable. You can still use the official vessel schedule and the lock-viewing guide below.</div>
+<div class="map-caption">Gold dots: approximate lock locations. Teal dots: recent AIS positions. Dashed line: orientation only, <strong>not a navigational route</strong>. <a href="https://greatlakes-seaway.com/en/navigating-the-seaway/seaway-map/" target="_blank" rel="noopener noreferrer">Official Seaway map ↗</a></div>
+</div>
+<aside class="panel ship-panel" aria-label="Recent AIS vessels">
+<div class="panel-head"><div><h3>Recent reported vessels</h3><p class="muted" id="vesselCount">Checking coverage…</p></div></div>
+<label for="shipSearch">Find a vessel name</label><input id="shipSearch" type="search" placeholder="Search recent reports" maxlength="100">
+<label for="lockSelect">Show a specific lock</label><select id="lockSelect"><option value="all">All locks / corridor</option><option value="1">Lock 1</option><option value="2">Lock 2</option><option value="3">Lock 3</option><option value="4">Lock 4</option><option value="5">Lock 5</option><option value="6">Lock 6</option><option value="7">Lock 7</option><option value="8">Lock 8</option></select>
+<div id="vesselList" aria-live="polite"><p>Requesting AIS reports…</p></div>
+<p class="small">Only positions reported within the past 30 minutes are eligible. A missing marker does not mean a lock is empty. No ETA is calculated here.</p>
+<div id="sourceCredit" class="source-credit"><span>Source: <a href="https://openwaters.io/ais/">Open Waters AIS</a>, where covered.</span></div>
+</aside>
+</div>
+</section>
+</div>
+<section id="locks" class="lock-section" aria-labelledby="lock-title"><div class="wrap">
+<p class="eyebrow">One route · eight locks</p><h2 id="lock-title">Follow a ship up or down the escarpment</h2>
+<p>Upbound ships travel south from Lake Ontario to Lake Erie; downbound ships travel north. Select a lock to focus the map and filter nearby reports. These are approximate reference locations, not current lock operating states.</p>
+<div id="lockRail" class="lock-rail" aria-label="Select a Welland Canal lock"></div>
+<div class="lock-note" id="lockFocus" role="status">Choose a lock for viewing guidance.</div>
+</div></section>
+<div class="wrap">
+<section id="watch-spots" class="section" aria-labelledby="watch-title">
+<p class="kicker">Ship-watch decision guide</p><h2 id="watch-title">Where should you watch a ship?</h2>
+<p>Choose your viewing point by experience, then use the official order-of-turn information for actual vessel names and expected lock progression.</p>
+<div class="tips">
+<article class="tip"><span class="num">01 / EASIEST FIRST VISIT</span><h3>Lock 3 — St. Catharines</h3><p>Dedicated public viewing platform beside the St. Catharines Museum and Welland Canals Centre. Good close-up lock observation and an onsite schedule display.</p><a href="https://www.stcatharines.ca/arts-culture-and-events/st-catharines-museum-and-welland-canals-centre/visiting-us/" target="_blank" rel="noopener noreferrer">Museum and viewing details ↗</a></article>
+<article class="tip"><span class="num">02 / ESCARPMENT VIEWS</span><h3>Lock 7 — Thorold</h3><p>The Lock 7 Viewing Centre overlooks vessels in the Thorold flight-lock area. Check seasonal visitor-centre hours; viewing access may differ from building hours.</p><a href="https://www.thorold.ca/recreation-culture-community/canals/lock-7-viewing-centre/" target="_blank" rel="noopener noreferrer">Thorold viewing information ↗</a></article>
+<article class="tip"><span class="num">03 / LAKE ERIE END</span><h3>Lock 8 — Port Colborne</h3><p>Gateway Park offers ship-watching opportunities at the canal's southern entrance. Use public viewing areas and stay clear of operational lock infrastructure.</p><a href="https://www.niagarawellandcanal.com/" target="_blank" rel="noopener noreferrer">Canal tourism guide ↗</a></article>
+</div>
+<div class="notice"><strong>Heading to the canal today?</strong> First open the <a href="https://www.seaway-greatlakes.com/vessel-transit/order-of-turn" target="_blank" rel="noopener noreferrer">official lock order of turn</a> to check the next vessels. Then pick a viewing location. Reported AIS dots alone cannot confirm when a ship will enter a particular lock.</div>
+</section>
+<section id="official" class="section">
+<p class="kicker">Authoritative data first</p><h2>Schedules, lock notices and current conditions</h2>
+<div class="resource-grid">
+<div class="resource"><h3>Official vessel transit &amp; order of turn</h3><p>Names, reported past and next locations, and published estimated next locations are provided by the Seaway. These can change with operations and are not our predictions.</p><a href="https://www.seaway-greatlakes.com/vessel-transit/order-of-turn" target="_blank" rel="noopener noreferrer">View the official queue ↗</a></div>
+<div class="resource"><h3>Official Seaway traffic map</h3><p>Seaway-operated traffic overview, separate from this site's public AIS provider.</p><a href="https://greatlakes-seaway.com/en/navigating-the-seaway/seaway-map/" target="_blank" rel="noopener noreferrer">Open the Seaway map ↗</a></div>
+<div class="resource"><h3>Welland Canal notices to shipping</h3><p>Current maintenance, restrictions, interruptions and operating notices. Treat notices as the authority over third-party trip summaries.</p><a href="https://greatlakes-seaway.com/en/news-and-information/notices/notices-to-shipping-welland-canal/" target="_blank" rel="noopener noreferrer">Review canal notices ↗</a></div>
+<div class="resource"><h3>Watch more Great Lakes shipping</h3><p>Compare nearby vessel activity and ship-watching tools for the Soo Locks, Duluth Canal Park and the five-lake freighter map.</p><a href="/freighters/">Explore Freighter Central →</a></div>
+</div>
+</section>
+<section id="boaters" class="section">
+<p class="kicker">Pleasure craft · 2026 operational guide</p><h2>Private boat? The schedule is different.</h2>
+<p>The Seaway's <strong>commercial shipping traffic</strong> is not the same as the <strong>pleasure-craft reservation schedule</strong>. For 2026, pleasure-craft Welland Canal transits are scheduled May 1–October 25, with regular upbound Monday/Wednesday/Friday/Sunday and downbound Tuesday/Thursday/Saturday services through September 27. October 3–25 uses weekend-only lockages: Saturday upbound and Sunday downbound. Reservations and same-day reporting requirements apply.</p>
+<p>Upbound craft must arrive at the Port Weller small-boat dock and report by 9:00 a.m.; downbound craft report at Port Colborne by 7:00 a.m., subject to official revisions. This summary is for planning, not navigation or proof of a reservation.</p>
+<p><a href="https://greatlakes-seaway.com/en/pleasure-craft/" target="_blank" rel="noopener noreferrer">Check current Seaway pleasure-craft instructions and book through the official system ↗</a></p>
+</section>
+<section class="section faq" id="faq">
+<p class="kicker">Canal basics</p><h2>Welland Canal questions</h2>
+<details><summary>Are ships going through the Welland Canal today?</summary><p>Check the official Seaway vessel-transit page for named commercial traffic and the latest lock queue. The map on this page shows only fresh public AIS positions within the canal corridor; no reports does not establish no traffic.</p></details>
+<details><summary>Where is the best place to watch freighters on the Welland Canal?</summary><p>Lock 3 in St. Catharines has a public viewing platform and museum. Lock 7 in Thorold and Lock 8 in Port Colborne are other established watch areas.</p></details>
+<details><summary>How many locks does the canal have?</summary><p>Eight. Locks 1–7 lift or lower vessels through most of the roughly 99.5-metre elevation change. Lock 8 serves as the southern control lock.</p></details>
+<details><summary>Can a 1,000-foot Great Lakes freighter pass through?</summary><p>No. Seaway vessel-length limits are approximately 740 feet, shorter than the 1,000-foot lakers that can navigate the upper Great Lakes.</p></details>
+<details><summary>Is a vessel on the map guaranteed to enter the next lock soon?</summary><p>No. AIS shows reported position and motion, not an operational lock appointment. Ships may wait, berth, turn, or experience operational delays. Official order-of-turn information takes precedence.</p></details>
+<details><summary>Does this map show live cameras?</summary><p>No verified licensed camera embed is included. We do not present an old video or an unrelated stream as live. Use the map and the official viewing guidance until a dependable camera source can be confirmed.</p></details>
+</section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><span>Independent Welland Canal ship-watching guide. Not affiliated with the St. Lawrence Seaway Management Corporation. For shore viewing only; not for navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Updated October 11, 2026</span></div></footer>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/welland-canal.js"></script>
+<script defer src="/assets/tool-engagement.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body></html>

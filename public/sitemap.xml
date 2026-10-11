@@ -751,7 +751,13 @@
     <priority>0.8</priority>
   </url>
 <url><loc>https://chrisizworski.com/up-north-michigan/</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url>
+   <url>
+    <loc>https://chrisizworski.com/welland-canal/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+   <url>
     <loc>https://chrisizworski.com/duluth-canal-park/</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
