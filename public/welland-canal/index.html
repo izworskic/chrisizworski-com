@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="https://chrisizworski.com/assets/soo-locks/freighter.jpg">
 <link rel="author" href="https://chrisizworski.com/chris-izworski/">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="/assets/welland-canal.css?v=20261011-ships1">
+<link rel="stylesheet" href="/assets/welland-canal.css?v=20261011-locks1">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ships Today and Live Lock Map","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-10-11","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Live Ships and Eight-Lock Watch Map","url":"https://chrisizworski.com/welland-canal/","description":"Find reported ships near the Welland Canal's eight locks, explore a live AIS map, and check official ship schedules and Lock 3 viewing spots.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
 </head>
 <body data-analytics-page="welland-canal">
@@ -52,9 +52,10 @@
 <div class="desk">
 <div class="panel">
 <div class="panel-head"><div><h3>Welland Canal vessel map</h3><p class="muted" id="lastUpdated">Waiting for the AIS service…</p></div><div><div class="status"><span class="dot" aria-hidden="true"></span><span id="liveStatus" role="status" aria-live="polite">Checking reports</span></div><button class="subtle-btn" id="refreshShips" type="button">Refresh positions</button></div></div>
-<div id="shipMap" role="region" aria-label="Map of eight Welland Canal locks and most recent reported vessel locations"></div>
+<div class="lock-map-toolbar"><div class="lock-map-toolbar__copy"><strong class="lock-map-toolbar__tag">8 NUMBERED LOCKS</strong><span id="lockMapHint" class="lock-map-toolbar__hint" role="status">Tap a gold lock to explore all eight locations</span></div><button class="lock-map-toolbar__reset" id="showAllLocks" type="button">View all locks</button></div>
+<div id="shipMap" role="region" aria-label="Map of eight numbered Welland Canal lock landmarks and recently reported ships"></div>
 <div id="mapFallback" hidden>Map tiles are unavailable. You can still use the official vessel schedule and the lock-viewing guide below.</div>
-<div class="map-caption">Gold dots: approximate lock locations. Blue freighters: moving AIS vessels. Brown freighters: stopped or very slow vessels. Gray freighters: speed unknown. Ship silhouettes do not indicate course. Dashed line: orientation only, <strong>not a navigational route</strong>. <a href="https://greatlakes-seaway.com/en/navigating-the-seaway/seaway-map/" target="_blank" rel="noopener noreferrer">Official Seaway map ↗</a></div>
+<div class="map-caption">Gold numbered badges: approximate lock locations. The central 3–7 badge expands into individual markers; zoom in again to separate the Thorold 4–6 flight. Blue freighters: moving AIS vessels. Brown freighters: stopped or very slow vessels. Gray freighters: speed unknown. Ship silhouettes do not indicate course. Dashed line: orientation only, <strong>not a navigational route</strong>. <a href="https://greatlakes-seaway.com/en/navigating-the-seaway/seaway-map/" target="_blank" rel="noopener noreferrer">Official Seaway map ↗</a></div>
 </div>
 <aside class="panel ship-panel" aria-label="Recent AIS vessels">
 <div class="panel-head"><div><h3>Recent reported vessels</h3><p class="muted" id="vesselCount">Checking coverage…</p></div></div>
@@ -111,7 +112,7 @@
 </div></main>
 <footer class="site-footer"><div class="footer-inner"><span>Independent Welland Canal ship-watching guide. Not affiliated with the St. Lawrence Seaway Management Corporation. For shore viewing only; not for navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Updated October 11, 2026</span></div></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/welland-canal.js?v=20261011-ships1"></script>
+<script defer src="/assets/welland-canal.js?v=20261011-locks1"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
