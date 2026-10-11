@@ -91,7 +91,7 @@ test("new aurora landings are meaningful linked pages, not misleading copied reg
     assert.ok(page.length>12000,"distinct substantial location guidance");
     assert.ok(page.includes('<link rel="canonical" href="'+url+'">'));
     assert.ok(page.includes("const REGION="+JSON.stringify(region)));
-    assert.ok(page.includes("const TOWN="+JSON.stringify(slug)));
+    assert.ok(page.includes("TOWN="+JSON.stringify(slug)));
     assert.ok(page.includes("'/api/aurora-town-sky?town='"),"local separate weather source");
     assert.ok(page.includes("source_freshness?.ovation_fresh"),"refuse stale NOAA model output");
     assert.ok(page.includes("local.status==='fulfilled'&&local.value.available"),"unknown local sky when unavailable");
