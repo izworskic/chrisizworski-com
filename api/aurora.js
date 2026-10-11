@@ -42,9 +42,9 @@ const MAX_OBSERVED_AGE_MS = 6 * 60 * 60 * 1000;
 const MAX_OVATION_AGE_MS = 2 * 60 * 60 * 1000;
 const MAX_NWS_AGE_MS = 12 * 60 * 60 * 1000;
 
-function isFresh(value, maxAgeMs, now = Date.now()) {
+function isFresh(value, maxAgeMs, now = Date.now(), futureToleranceMs = 10 * 60 * 1000) {
   const time = Date.parse(value);
-  return Number.isFinite(time) && time <= now + 10 * 60 * 1000 && now - time <= maxAgeMs;
+  return Number.isFinite(time) && time <= now + futureToleranceMs && now - time <= maxAgeMs;
 }
 
 function sourceState(result, name, url) {
@@ -119,7 +119,7 @@ module.exports = async function handler(req, res) {
   );
   const solarWind = isFresh(solarWindRaw?.observed_at, MAX_OBSERVED_AGE_MS) ? solarWindRaw : null;
   const ovationPayload = ovationResult.status === "fulfilled" ? ovationResult.value : {};
-  const ovationFresh = isFresh(ovationPayload["Observation Time"], MAX_OVATION_AGE_MS) && isFresh(ovationPayload["Forecast Time"], MAX_OVATION_AGE_MS);
+  const ovationFresh = isFresh(ovationPayload["Observation Time"], MAX_OVATION_AGE_MS) && isFresh(ovationPayload["Forecast Time"], MAX_OVATION_AGE_MS, Date.now(), 2 * 60 * 60 * 1000);
   const regional = buildRegionalOutlook(
     ovationFresh ? ovationPayload : {},
     forecast.peak_24h,
