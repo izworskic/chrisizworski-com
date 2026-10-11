@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Five-priority U.S. query review — October 10, 2026
+
+- **Source/window:** Search Console U.S. Web via Windsor.ai, 2026-09-10–2026-10-07.
+- **Reviewed in priority order:** Freighter Tracking 4,967 impressions / 58 clicks; Mackinac Tolls 3,067 / 6; Northern Lights Michigan 2,717 / 17; Mackinac Bridge Live 2,006 / 2; Michigan Fall Color 3,680 / 93.
+- **Decision:** Existing titles, descriptions and canonical ownership match dominant queries. Protect pages; no speculative metadata rewrites. Bridge toll and open-status searches are distinct intents.
+- **Evidence:** `benchmarks/five-priority-us-gsc-review-2026-10-10.md`.
+- **Deploy:** PR #892 merged commit `276849c`; Vercel production deployment `dpl_FkHensQgCR7rpEyx2MRXXzGydMvG` remained BUILDING at last verified check. Live AIS and NOAA retry not browser-verified. No uplift claims.
+- **Exactly one next action:** Confirm freighter production READY and exercise AIS, mobile corridor controls, and NOAA retry; diagnose deployment if not READY.
+
+
 ## Great Lakes freighter U.S. query audit — October 10, 2026
 
 - **Owner and URL:** `izworskic/chrisizworski-com`, `https://chrisizworski.com/great-lakes-freighter-tracking/`.
