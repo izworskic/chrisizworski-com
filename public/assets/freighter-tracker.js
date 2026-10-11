@@ -227,7 +227,11 @@
           return Array.isArray(payload.stations) ? payload.stations : [];
         });
     }
-    return stationsPromise;
+    return stationsPromise.catch(function (error) {
+      // A temporary NOAA failure must not poison all later corridor selections.
+      stationsPromise = null;
+      throw error;
+    });
   }
 
   function renderNearestCondition(key) {
