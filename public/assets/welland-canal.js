@@ -16,6 +16,7 @@
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
   let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
+  const shipMarkers=new Map();
 
   function el(tag,text,cls) { const x=document.createElement(tag); if(text!==undefined)x.textContent=text; if(cls)x.className=cls; return x; }
   function when(iso) {
@@ -67,7 +68,7 @@
       const relation=n.km<=1.5?'Reported near '+n.lock.name:'Nearest listed lock: '+n.lock.name+' ('+n.km.toFixed(1)+' km away)';
       const detail=el('p',relation+'. '+heading(v)+'.');
       const btn=el('button','Find on map','subtle-btn');
-      btn.type='button';btn.addEventListener('click',()=>{if(!map)return;map.setView([v.lat,v.lon],13);const node=$('shipMap');node.scrollIntoView({behavior:'smooth',block:'center'});});
+      btn.type='button';btn.addEventListener('click',()=>{if(!map)return;map.setView([v.lat,v.lon],13);const marker=shipMarkers.get(String(v.mmsi));if(marker)marker.openPopup();const node=$('shipMap');node.scrollIntoView({behavior:'smooth',block:'center'});});
       card.append(title,meta,detail,btn);list.append(card);
     });
   }
@@ -110,16 +111,30 @@
     L.control.scale({imperial:false}).addTo(map);
     window.setTimeout(()=>map.invalidateSize(),250);
   }
+  // Same freighter silhouette as the Duluth Canal Park monitor. This side-view
+  // glyph indicates a ship's position, not its compass course or lock assignment.
+  function shipIcon(v) {
+    const speed=Number(v.speedKnots);
+    const unknown=v.speedKnots===null||v.speedKnots===undefined||!Number.isFinite(speed);
+    const stopped=!unknown&&speed<=0.5;
+    const width=stopped?38:46, height=stopped?22:26;
+    const className='welland-ship-marker'+(stopped?' is-stopped':unknown?' is-unknown':' is-moving');
+    const html='<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>';
+    return L.divIcon({className,html,iconSize:[width,height],iconAnchor:[Math.round(width/2),Math.round(height/2)],popupAnchor:[0,-Math.round(height/2)]});
+  }
   function renderMarkers() {
     if(!shipsLayer)return;
     shipsLayer.clearLayers();
+    shipMarkers.clear();
     vesselData.forEach(v=>{
       const n=nearest(v);
-      const marker=L.circleMarker([v.lat,v.lon],{radius:6,color:'#fff',weight:1.5,fillColor:'#188f9c',fillOpacity:.95}).addTo(shipsLayer);
+      const name=v.name||'Vessel '+v.mmsi;
+      const marker=L.marker([v.lat,v.lon],{icon:shipIcon(v),keyboard:true,title:name,zIndexOffset:520}).addTo(shipsLayer);
       const pop=document.createElement('div');
-      pop.append(el('strong',v.name||v.mmsi),el('p',timeLabel(v)+'. '+heading(v)+'.'));
+      pop.append(el('strong',name),el('p',timeLabel(v)+'. '+heading(v)+'.'));
       pop.append(el('p',n.km<=1.5?'Reported near '+n.lock.name:'Nearest mapped lock: '+n.lock.name));
-      marker.bindPopup(pop);
+      marker.bindTooltip(name,{direction:'top'}).bindPopup(pop);
+      shipMarkers.set(String(v.mmsi),marker);
     });
   }
   async function refresh() {
