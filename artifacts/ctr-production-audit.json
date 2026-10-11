@@ -1,0 +1,91 @@
+{
+  "checkedAt": "2026-10-11T16:04:12.558Z",
+  "origin": "https://chrisizworski.com",
+  "pages": [
+    {
+      "route": "northern-lights-michigan",
+      "status": 200,
+      "title": "Northern Lights Michigan Tonight: Live | Chris Izworski",
+      "canonical": [
+        "https://chrisizworski.com/northern-lights-michigan/"
+      ],
+      "personCount": 1,
+      "adLoaders": 1,
+      "failures": []
+    },
+    {
+      "route": "mackinac-bridge-tolls",
+      "status": 200,
+      "title": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
+      "canonical": [
+        "https://chrisizworski.com/mackinac-bridge-tolls/"
+      ],
+      "personCount": 1,
+      "adLoaders": 1,
+      "failures": []
+    },
+    {
+      "route": "great-lakes-freighter-tracking",
+      "status": 200,
+      "title": "Great Lakes Ship Tracker Live Now | Chris Izworski",
+      "canonical": [
+        "https://chrisizworski.com/great-lakes-freighter-tracking/"
+      ],
+      "personCount": 1,
+      "adLoaders": 1,
+      "failures": []
+    },
+    {
+      "route": "mackinac-bridge-live",
+      "status": 200,
+      "title": "Mackinac Bridge Conditions Today: Live Status & Wind",
+      "canonical": [
+        "https://chrisizworski.com/mackinac-bridge-live/"
+      ],
+      "personCount": 1,
+      "adLoaders": 1,
+      "failures": []
+    }
+  ],
+  "sources": [
+    {
+      "path": "api/aurora",
+      "status": 200,
+      "checkedAt": "2026-10-11T16:03:38.859Z",
+      "degraded": false,
+      "sourceFreshness": {
+        "kp_observed_at": "2026-10-11T12:00:00.000Z",
+        "solar_wind_observed_at": "2026-10-11T15:54:00.000Z",
+        "ovation_observed_at": "2026-10-11T15:54:00Z",
+        "ovation_forecast_at": "2026-10-11T16:44:00Z",
+        "kp_observed_fresh": true,
+        "solar_wind_fresh": true,
+        "ovation_fresh": true
+      },
+      "error": null
+    },
+    {
+      "path": "api/mackinac",
+      "status": 200,
+      "checkedAt": "2026-10-11T16:03:37.985Z",
+      "degraded": false,
+      "sourceFreshness": null,
+      "official": {
+        "available": true,
+        "level": "open"
+      },
+      "error": null
+    },
+    {
+      "path": "api/freighter-ais",
+      "status": 200,
+      "checkedAt": "2026-10-11T16:03:32.130Z",
+      "degraded": false,
+      "sourceFreshness": null,
+      "recentVessels": 300,
+      "error": null
+    }
+  ],
+  "passed": true,
+  "limits": "HTTP/initial-HTML check only. Browser interactions, mobile, Google-selected canonical/snippets, push delivery and AdSense earnings require separate evidence. Upstream degradation is recorded, not misclassified as an HTML regression."
+}
