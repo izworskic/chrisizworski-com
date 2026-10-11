@@ -103,7 +103,7 @@
     }else{
       focus.append(el('strong','Eight locks. One connected waterway.'),el('p','Tap a numbered lock on the map or choose one below. The central 3–7 badge expands at closer zoom, then Thorold Locks 4–6 separate as you zoom in further. Lock locations are approximate.'));
     }
-    lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(item=>item.id===key),selected===key)));
+    lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(item=>item.id===key),selected===key,Boolean(map&&map.getZoom()<12))));
     if(flightMarker){
       const wide=map&&map.getZoom()<12;
       flightMarker.setIcon(flightIcon(wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected),wide));
@@ -114,9 +114,10 @@
   }
   // The eight locks are permanent landmarks, never AIS contacts. At wide zoom
   // the tightly spaced Thorold flight (4-6) shares one expandable landmark.
-  function lockIcon(lock,active=false){
+  function lockIcon(lock,active=false,compact=false){
     const html='<span class="lock-pin__shield"><span class="lock-pin__word">LOCK</span><span class="lock-pin__digit">'+lock.id+'</span></span><span class="lock-pin__point"></span>';
-    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':''),html,iconSize:[52,66],iconAnchor:[26,62],popupAnchor:[0,-55]});
+    const width=compact?30:52,height=compact?35:66;
+    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':'')+(compact?' is-compact':''),html,iconSize:[width,height],iconAnchor:[Math.round(width/2),height-4],popupAnchor:[0,-height+10]});
   }
   function flightIcon(active=false,wide=false){
     const title=wide?'CENTRAL':'THOROLD';
@@ -152,7 +153,7 @@
     LOCKS.forEach(lock=>{
       if(wide&&['3','4','5','6','7'].includes(lock.id))return;
       if(combine&&['4','5','6'].includes(lock.id))return;
-      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
+      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id,wide),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
         .addTo(lockLayer).bindTooltip(lock.name,{direction:'top'}).bindPopup(lockPopup(lock));
       marker.on('click',()=>chooseLock(lock.id,false));
       lockMarkers.set(lock.id,marker);
