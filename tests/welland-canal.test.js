@@ -76,7 +76,10 @@ test('Welland locks are navigational landmarks with numbered pins and accessible
   assert.match(script,/function lockIcon\(lock,active=false\)/);
   assert.match(script,/function flightIcon\(active=false\)/);
   assert.match(script,/function renderLockMarkers\(\)/);
+  assert.match(script,/const wide=map\.getZoom\(\)<12/);
   assert.match(script,/const combine=map\.getZoom\(\)<14/);
+  assert.match(script,/if\(wide&&\['3','4','5','6','7'\]\.includes\(lock\.id\)\)return/);
+  assert.match(script,/map\.setView\(\[43\.1382,-79\.1920\],12\)/);
   assert.match(script,/map\.on\('zoomend',renderLockMarkers\)/);
   assert.match(script,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false\)\)/);
   assert.match(script,/flightMarker\.on\('click'/);
@@ -85,6 +88,6 @@ test('Welland locks are navigational landmarks with numbered pins and accessible
   assert.match(css,/\.welland-lock-pin/);
   assert.match(css,/\.lock-pill__number/);
   assert.match(page,/8 NUMBERED LOCKS/);
-  assert.match(page,/The 4–6 Thorold flight badge expands when tapped/);
+  assert.match(page,/The central 3–7 badge expands into individual markers/);
   assert.doesNotMatch(script,/L\.circleMarker\(\[l\.lat,l\.lon\]/);
 });
