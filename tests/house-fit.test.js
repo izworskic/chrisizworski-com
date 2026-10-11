@@ -359,10 +359,12 @@ test('site discovery surfaces describe the current House product rather than the
   assert.match(llms, /https:\/\/chrisizworski\.com\/can-i-afford-this-house\//);
   assert.match(llms, /property-cost planning tool/);
 
-  assert.match(
-    sitemap,
-    /<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-10-07<\/lastmod>/
-  );
+  const directoryDate = tools.split('"dateModified":"')[1]?.split('"')[0];
+  const loc = '<loc>https://chrisizworski.com/tools/</loc>';
+  const entry = sitemap.slice(sitemap.indexOf(loc) + loc.length);
+  const sitemapDate = entry.split('<lastmod>')[1]?.split('</lastmod>')[0];
+  assert.ok(sitemap.includes(loc) && directoryDate && sitemapDate, 'directory and sitemap both report dates');
+  assert.equal(sitemapDate, directoryDate, 'directory lastmod matches page dateModified');
 });
 
 test('page promise is obvious before the first input and stays out of generic affordability territory', () => {
