@@ -56,5 +56,24 @@
   document.querySelectorAll('input[name="intent"]').forEach(function (radio) {
     radio.addEventListener("change", update);
   });
+
+  // Live tracking remains with the proven shared AIS map engine.
+  // Choose the already-rendered corridor in place; the dedicated tracker is
+  // the fallback when Leaflet or the embedded map cannot initialize.
+  link.addEventListener("click", function (event) {
+    const intentInput = document.querySelector('input[name="intent"]:checked');
+    if (!intentInput || intentInput.value !== "track") return;
+    const place = places[select.value] || places.soo;
+    const mapNode = document.getElementById("freighterMap");
+    const tab = document.querySelector('.view-tab[data-freighter-view="' + place.map + '"]');
+    if (!mapNode || !tab || typeof window.L === "undefined" || !mapNode.classList.contains("leaflet-container")) return;
+    event.preventDefault();
+    tab.click();
+    document.getElementById("live-map").scrollIntoView({
+      behavior: window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start"
+    });
+  });
+
   update();
 })();
