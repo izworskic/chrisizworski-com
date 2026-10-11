@@ -28,6 +28,7 @@
 <link rel="preconnect" href="https://www.mackinacbridge.org">
 <link rel="preconnect" href="https://radar.weather.gov">
 <link rel="stylesheet" href="/assets/mackinac-bridge-live.css">
+<link rel="stylesheet" href="/assets/mackinac-bridge-v2.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
 <script type="application/ld+json">
 {
@@ -54,7 +55,7 @@
       "description": "A real-time Mackinac Bridge conditions tool combining the official bridge status, cameras, National Weather Service radar and approach forecast, clearly labeled off-bridge NOAA observations, vehicle guidance, tolls, and approach-road restrictions.",
       "isPartOf": {"@id": "https://chrisizworski.com/#website"},
       "author": {"@id": "https://chrisizworski.com/#person"},
-      "dateModified": "2026-10-06",
+      "dateModified": "2026-10-11",
       "inLanguage": "en-US",
       "breadcrumb": {"@id": "https://chrisizworski.com/mackinac-bridge-live/#breadcrumb"},
       "mainEntity": {"@id": "https://chrisizworski.com/mackinac-bridge-live/#app"},
@@ -94,7 +95,8 @@
         "High-profile vehicle checker and RV, camper, trailer, van, and pickup guidance",
         "Official driver-assistance instructions and toll calculator",
         "Nearby MDOT approach-road incidents and construction",
-        "Restriction-change alerts while the tool is open"
+        "In-tab restriction-change alerts and optional 48-hour background Web Push",
+        "Next-24-hour NWS wind planning risk in 6-hour blocks"
       ]
     }
   ]
@@ -107,6 +109,7 @@
 <script defer src="/assets/growth-cta.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/assets/mackinac-bridge-live.js"></script>
+<script defer src="/assets/mackinac-bridge-v2.js"></script>
 <script defer src="/assets/mackinac-bridge-walk.js"></script>
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
 </head>
@@ -190,8 +193,10 @@
               <span aria-hidden="true">↻</span> Refresh now
             </button>
             <button class="button button-ghost" type="button" id="alertButton">Enable page alerts</button>
+            <button class="button button-light" type="button" id="bridgeWatchButton">Watch the bridge</button>
           </div>
           <p class="alert-explainer" id="alertExplainer">Page alerts work while this tool is open and this browser tab stays active.</p>
+          <p class="bridge-watch-notice" id="bridgeWatchExplainer" role="status">Background push watching requires browser permission. Watches expire after 48 hours.</p>
         </div>
 
         <div class="confidence-block">
@@ -227,6 +232,14 @@
     </section>
 
     <div class="status-change-toast" id="statusChangeToast" role="alert" hidden></div>
+
+    <section class="bridge-v2-outlook" aria-labelledby="bridgeRiskHeading">
+      <p class="eyebrow">Planning outlook · National Weather Service</p>
+      <h2 id="bridgeRiskHeading">Next 24 hours: wind restriction risk</h2>
+      <p>Four six-hour windows based on forecast sustained winds near the Mackinaw City approach. Low (under 20 mph), Elevated (20–34 mph) or High (35+ mph) are <strong>planning labels only</strong>, not official bridge restrictions.</p>
+      <div class="bridge-risk-grid" id="bridgeRiskStrip" aria-live="polite">Loading NWS hourly forecast…</div>
+      <p class="bridge-risk-disclaimer"><strong>Not a prediction.</strong> The Bridge Authority decides restrictions using its own bridge gauges and safety observations; fog, ice, incidents or other hazards can prompt restrictions at lower wind speeds. The official status above always controls. <a href="https://www.mackinacbridge.org/about-the-bridge/frequently-asked-questions/" rel="noopener" target="_blank">Authority wind rules ↗</a></p>
+    </section>
 
     <section class="planner-card" aria-labelledby="plannerHeading">
       <div class="section-heading compact">
@@ -456,6 +469,17 @@
       <p class="forecast-disclaimer">Forecast threshold colors are an early-planning guide only. Bridge restrictions are based on sustained wind measured by the Bridge Authority's own gauges, and restrictions may be imposed at lower speeds when other hazards exist.</p>
     </section>
 
+    <section class="bridge-v2-plan" aria-labelledby="bridgePlanHeading">
+      <p class="eyebrow">Practical crossing checklist</p>
+      <h2 id="bridgePlanHeading">Plan your crossing</h2>
+      <div class="bridge-v2-plan-grid">
+        <article><h3>Check before leaving</h3><p>Check the <a href="https://www.mackinacbridge.org/fares-traffic/conditions/" target="_blank" rel="noopener">official condition report</a> before departure and again as you approach. In the Straits, watch highway signs and tune to AM 530 or 1610 for changes.</p></article>
+        <article><h3>High-profile escort staging</h3><p><strong>Northbound:</strong> east side of approaches just past Jamet Street (Exit 339). <strong>Southbound:</strong> west side just past the toll booths. Queue for a Bridge Authority vehicle when escorts are ordered; follow signs and staff if staging changes.</p></article>
+        <article><h3>Prepare your toll</h3><p>Estimate your total axles in the <a href="#tollHeading">toll calculator</a> above. Cash, credit/debit cards, Apple Pay, Google Pay and MacPass are accepted; the Authority notes a 2.3% card fee for credit/debit cards.</p></article>
+        <article><h3>If an advisory starts</h3><p>Follow the official signs and staff directions, turn on lights, reduce speed and use the outside lane. Under a high-wind advisory, high-profile vehicles should travel no faster than 20 mph. Under an escort restriction, wait for the escort rather than entering on your own.</p></article>
+      </div>
+    </section>
+
     <section class="guidance-section" aria-labelledby="guidanceHeading">
       <div class="section-heading">
         <div>
@@ -548,6 +572,16 @@
           <ol class="status-history" id="statusHistory"></ol>
           <p class="traffic-footnote">This is device-local history, not an official Bridge Authority archive. It records only checks made while you use this tool.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="bridge-v2-further" aria-labelledby="bridgeFurtherHeading">
+      <p class="eyebrow">Keep planning</p>
+      <h2 id="bridgeFurtherHeading">Going further after the bridge</h2>
+      <div class="bridge-v2-further-grid">
+        <a href="/michigan-border-wait-times/" data-bridge-v2-link="border" data-track-tool="mackinac-going-further-border"><strong>Continuing into Canada?</strong><span>Check Michigan–Ontario border wait reports before choosing your crossing.</span></a>
+        <a href="/fall-color/" data-bridge-v2-link="fall-color" data-track-tool="mackinac-going-further-fall"><strong>Fall-color drives</strong><span>Compare Michigan foliage locations and scenic routes during peak leaf season.</span></a>
+        <a href="/northern-lights-michigan/" data-bridge-v2-link="aurora" data-track-tool="mackinac-going-further-aurora"><strong>Aurora near the Straits</strong><span>Check the northern lights outlook before heading to a dark-sky viewpoint.</span></a>
       </div>
     </section>
 
