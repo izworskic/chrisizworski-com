@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Workstream 2 — distinct planning companions (October 11, 2026)
+
+- **Source:** Workstream 1 query/CTR review and owner's confirmed commercial hypothesis that planning pages generate more revenue per view. The revenue multiplier is owner-provided, not independently revalidated in this commit. No uplift forecast or claim.
+- **Before publishing:** audited committed 265-route `public/sitemap.xml`. All five Michigan–Ontario crossing-specific pages already exist, as do Mackinaw City, Munising, Keweenaw and Marquette aurora subpages. Do not duplicate those pages or alter their intent owners.
+- **New unique canonicals:** `/soo-locks/plan-your-visit/` (USACE park season/hours, parking, 45/90/180-minute itineraries and AIS uncertainty); `/great-lakes-ship-watching-spots/` (which viewing experience suits the traveler, source-backed Soo/Duluth/Port Huron/Straits/Detroit, AIS handoff); `/mackinac-bridge-crossing-planner/` (vehicle-aware trip prep, official wind restriction classes, toll and approach decisions without duplicating live tool).
+- **Network:** each new page linked from `/tools/` plus two existing sibling tools, with cross-companion links. New canonicals + correct lastmod in sitemap. Five touched existing pages have updated lastmod. Static test validates title length, Q&A JSON-LD, BreadcrumbList, page depth and three inbound sources.
+- **Trust:** no invented current wait or bridge status; no prediction of ship passage or opening hour; primary live dashboards remain authoritative for current observations. Sources USACE, Soo Locks Visitors Center Association, MDOT/Mackinac Bridge Authority, Michigan tourism, Visit Duluth.
+- **Monetization:** the existing ad/revenue pipeline is not changed or duplicated. Observe 28-day GSC impressions/CTR and per-page engagement/revenue after publication. Do not claim causality based on contemporaneous site-wide changes.
+- **Release status:** branch `seo/2026-10-11-planning-companions` only. Merge and production 200/HTML audit required before counting as published.
+
+
 ## Query-led CTR and FAQ pilot — October 11, 2026
 
 - **Owner/repo:** `izworskic/chrisizworski-com`, branch `seo/2026-10-11-ctr-intent-faq`; PR/deployment **NOT YET VERIFIED** at authorship time.
