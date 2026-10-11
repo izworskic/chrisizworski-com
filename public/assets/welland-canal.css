@@ -60,3 +60,11 @@
   .lock-map-toolbar__reset{padding:7px 8px}
   .lock-pill{min-height:64px;padding:9px}
 }
+
+/* In full-canal overview, Locks 1 and 2 are only ~2.7 km apart.
+   Compact numbered pins keep their actual map positions readable. */
+.welland-lock-pin.is-compact .lock-pin__shield{width:28px;height:27px;border-width:2px;border-radius:6px;box-shadow:inset 0 0 0 1px #fff4ca,0 0 0 1px #fff}
+.welland-lock-pin.is-compact .lock-pin__word{display:none}
+.welland-lock-pin.is-compact .lock-pin__digit{font-size:17px}
+.welland-lock-pin.is-compact .lock-pin__shield:before,.welland-lock-pin.is-compact .lock-pin__shield:after{display:none}
+.welland-lock-pin.is-compact .lock-pin__point{border-left-width:7px;border-right-width:7px;border-top-width:6px}
