@@ -145,8 +145,10 @@
       saveWatch(result);
       track('watch-bridge-start');
     } catch (error) {
+      updateWatchUI();
       watchNote.textContent = String(error.message || error);
       track('watch-bridge-error');
+      return;
     }
     updateWatchUI();
   }
@@ -187,7 +189,7 @@
     var item = loadWatch();
     if (item) {
       api('status', { watchId: item.watchId, manageToken: item.manageToken })
-        .then(function () { /* active; local expiry is unchanged */ })
+        .then(function (result) { if (!result?.ok) { saveWatch(null); updateWatchUI(); } })
         .catch(function () { /* temporary server outages must not wipe the watch */ });
     }
   }
