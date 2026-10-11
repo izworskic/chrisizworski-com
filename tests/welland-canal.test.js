@@ -66,3 +66,25 @@ test('Welland map uses Duluth-style freighter SVG markers rather than anonymous 
   assert.match(page,/Blue freighters: moving AIS vessels/);
   assert.doesNotMatch(script,/L\.circleMarker\(\[v\.lat,v\.lon\]/);
 });
+
+test('Welland locks are navigational landmarks with numbered pins and accessible selection',()=>{
+  const fs=require('node:fs');
+  const path=require('node:path');
+  const script=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const page=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  assert.match(script,/function lockIcon\(lock,active=false\)/);
+  assert.match(script,/function flightIcon\(active=false\)/);
+  assert.match(script,/function renderLockMarkers\(\)/);
+  assert.match(script,/const combine=map\.getZoom\(\)<14/);
+  assert.match(script,/map\.on\('zoomend',renderLockMarkers\)/);
+  assert.match(script,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false\)\)/);
+  assert.match(script,/flightMarker\.on\('click'/);
+  assert.match(script,/lockMarkers\.forEach\(\(marker,key\)=>marker\.setIcon/);
+  assert.match(script,/\$\('showAllLocks'\)\.addEventListener/);
+  assert.match(css,/\.welland-lock-pin/);
+  assert.match(css,/\.lock-pill__number/);
+  assert.match(page,/8 NUMBERED LOCKS/);
+  assert.match(page,/The 4–6 Thorold flight badge expands when tapped/);
+  assert.doesNotMatch(script,/L\.circleMarker\(\[l\.lat,l\.lon\]/);
+});
