@@ -27,8 +27,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/freighter-tracker.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -54,23 +53,50 @@
       "isAccessibleForFree": true,
       "dateModified": "2026-10-11",
       "inLanguage": "en-US",
-      "author": {"@id": "https://chrisizworski.com/#person"},
-      "isPartOf": {"@id": "https://chrisizworski.com/#website"},
-      "publisher": {"@id":"https://chrisizworski.com/#person"}
+      "author": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://chrisizworski.com/#website"
+      },
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "creator": {
+        "@id": "https://chrisizworski.com/#person"
+      }
     },
     {
       "@type": "WebSite",
       "@id": "https://chrisizworski.com/#website",
       "name": "Chris Izworski",
-      "url": "https://chrisizworski.com/"
+      "url": "https://chrisizworski.com/",
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      }
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://chrisizworski.com/great-lakes-freighter-tracking/#breadcrumb",
       "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://chrisizworski.com/"},
-        {"@type": "ListItem", "position": 2, "name": "Great Lakes", "item": "https://chrisizworski.com/great-lakes/"},
-        {"@type": "ListItem", "position": 3, "name": "Great Lakes Ship Tracker Live", "item": "https://chrisizworski.com/great-lakes-freighter-tracking/"}
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://chrisizworski.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Great Lakes",
+          "item": "https://chrisizworski.com/great-lakes/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Great Lakes Ship Tracker Live",
+          "item": "https://chrisizworski.com/great-lakes-freighter-tracking/"
+        }
       ]
     },
     {
@@ -79,28 +105,39 @@
         {
           "@type": "Question",
           "name": "How do I track Great Lakes freighters live?",
-          "acceptedAnswer": {"@type": "Answer", "text": "Use the live AIS map on this page, then choose a corridor such as the Soo Locks, Straits of Mackinac, Duluth-Superior, Port Huron, Detroit River, or Saginaw Bay. Click a vessel marker or name for the details supplied by the map provider."}
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the live AIS map on this page, then choose a corridor such as the Soo Locks, Straits of Mackinac, Duluth-Superior, Port Huron, Detroit River, or Saginaw Bay. Click a vessel marker or name for the details supplied by the map provider."
+          }
         },
         {
           "@type": "Question",
           "name": "Does every Great Lakes ship appear on AIS?",
-          "acceptedAnswer": {"@type": "Answer", "text": "No. Most large commercial vessels people follow transmit AIS, but public map coverage can be delayed, incomplete, or unavailable in some areas. Small recreational boats may not carry AIS, and no public tracker should be used for navigation."}
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Most large commercial vessels people follow transmit AIS, but public map coverage can be delayed, incomplete, or unavailable in some areas. Small recreational boats may not carry AIS, and no public tracker should be used for navigation."
+          }
         },
         {
           "@type": "Question",
           "name": "What is the best place to watch Great Lakes freighters?",
-          "acceptedAnswer": {"@type": "Answer", "text": "Reliable shoreside choices include the Soo Locks observation deck, Canal Park in Duluth, Vantage Point in Port Huron, the Mackinaw City and St. Ignace waterfronts, Belle Isle on the Detroit River, and Bay City's Saginaw River waterfront."}
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Reliable shoreside choices include the Soo Locks observation deck, Canal Park in Duluth, Vantage Point in Port Huron, the Mackinaw City and St. Ignace waterfronts, Belle Isle on the Detroit River, and Bay City's Saginaw River waterfront."
+          }
         },
         {
           "@type": "Question",
           "name": "What is the difference between a laker and a saltie?",
-          "acceptedAnswer": {"@type": "Answer", "text": "A laker is designed mainly for Great Lakes service. A saltie is an ocean-going vessel able to reach the lakes through the St. Lawrence Seaway. The largest thousand-foot lakers are too large for the Seaway locks and remain within the Great Lakes system."}
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A laker is designed mainly for Great Lakes service. A saltie is an ocean-going vessel able to reach the lakes through the St. Lawrence Seaway. The largest thousand-foot lakers are too large for the Seaway locks and remain within the Great Lakes system."
+          }
         }
       ]
     }
   ]
-}
-</script>
+}</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -111,6 +148,7 @@
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
 <link rel="stylesheet" href="/assets/detroit-network-teaser.css?v=20260921a">
 <script defer src="/assets/detroit-network-teaser.js?v=20260921a"></script>
+<meta property="og:site_name" content="Chris Izworski">
 </head>
 <body data-analytics-page="great-lakes-freighter-tracker">
 <header class="site-header">
@@ -339,6 +377,6 @@
     <span>&copy; 2026 <a href="/chris-izworski/">Chris Izworski</a> &middot; Independent Great Lakes planning tool</span>
     <nav aria-label="Footer navigation"><a href="/tools/">All tools</a><a href="/great-lakes/">Great Lakes</a><a href="/chris-izworski/">About Chris</a><a href="/connect/">Contact</a></nav>
   </div>
-</footer>
+<span class="seo-author-credit" style="display:inline-block;margin-inline-start:.6rem;font-size:.8rem;line-height:1.5;opacity:.76">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer>
 </body>
 </html>

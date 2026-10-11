@@ -20,18 +20,90 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@graph": [
-    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
-    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp, solar-wind, OVATION nowcast, NWS cloud cover, moonlight, peak timing, and regional Michigan aurora outlooks for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified": "2026-10-11","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
-    {"@type":"WebApplication","name":"Michigan Aurora Forecast","url":"https://chrisizworski.com/northern-lights-michigan/","applicationCategory":"WeatherApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"A live Michigan aurora planning tool using NOAA SWPC Kp and OVATION products, NWS cloud forecasts, and USNO moon data.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
-    {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
+    {
+      "@type": "WebSite",
+      "@id": "https://chrisizworski.com/#website",
+      "url": "https://chrisizworski.com/",
+      "name": "Chris Izworski",
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/northern-lights-michigan/",
+      "name": "Northern Lights Michigan Tonight: Live Aurora Forecast",
+      "description": "Live NOAA Kp, solar-wind, OVATION nowcast, NWS cloud cover, moonlight, peak timing, and regional Michigan aurora outlooks for tonight.",
+      "url": "https://chrisizworski.com/northern-lights-michigan/",
+      "isPartOf": {
+        "@id": "https://chrisizworski.com/#website"
+      },
+      "author": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "dateModified": "2026-10-11",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Michigan Aurora Forecast",
+      "url": "https://chrisizworski.com/northern-lights-michigan/",
+      "applicationCategory": "WeatherApplication",
+      "operatingSystem": "Any",
+      "isAccessibleForFree": true,
+      "description": "A live Michigan aurora planning tool using NOAA SWPC Kp and OVATION products, NWS cloud forecasts, and USNO moon data.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "creator": {
+        "@id": "https://chrisizworski.com/#person"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://chrisizworski.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://chrisizworski.com/tools/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Northern Lights Michigan",
+          "item": "https://chrisizworski.com/northern-lights-michigan/"
+        }
+      ]
+    }
   ]
-}
-</script>
+}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
@@ -260,54 +332,10 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <script defer src="/assets/affiliate-commerce.js"></script>
 <link rel="stylesheet" href="/assets/detroit-network-teaser.css?v=20260921a">
 <script defer src="/assets/detroit-network-teaser.js?v=20260921a"></script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How often can I see the aurora from Michigan?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "There is no dependable monthly count. Visibility changes with solar activity, latitude, cloud cover, darkness, moonlight, and local light pollution. The Upper Peninsula generally has more opportunities than southern Michigan, so use the live NOAA outlook and local sky conditions for each night."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What does Kp need to be for me to see aurora from where I am?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This guide uses Kp 4 to 5 as an Upper Peninsula planning signal, Kp 6 for the northern Lower Peninsula, and Kp 7 or higher farther south. Those are conservative planning thresholds, not visibility guarantees. Always confirm the NOAA short-term oval, darkness, and local clouds."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why is Bz important?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Bz is the north-south component of the solar wind's magnetic field. A sustained southward, negative Bz can help energy couple into Earth's magnetosphere, but it is only one input. Read it alongside solar-wind speed, Kp, the NOAA short-term oval, and local sky conditions."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How accurate is the 3-day Kp forecast?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Confidence generally falls as the forecast extends farther out. Use the three-day Kp outlook to plan, then recheck NOAA's 30-to-90-minute OVATION model, real-time solar wind, and local clouds before traveling."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I see colors with my eyes?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Sometimes. Cameras often capture more color than human vision, especially during a faint display. What you see depends on the display's strength, your dark adaptation, light pollution, and cloud cover, not a single Kp cutoff."
-      }
-    }
-  ]
-}
-</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How often can I see the aurora from Michigan?","acceptedAnswer":{"@type":"Answer","text":"There is no dependable monthly count. Visibility changes with solar activity, latitude, cloud cover, darkness, moonlight, and local light pollution. The Upper Peninsula generally has more opportunities than southern Michigan, so use the live NOAA outlook and local sky conditions for each night."}},{"@type":"Question","name":"What does Kp need to be for me to see aurora from where I am?","acceptedAnswer":{"@type":"Answer","text":"This guide uses Kp 4 to 5 as an Upper Peninsula planning signal, Kp 6 for the northern Lower Peninsula, and Kp 7 or higher farther south. Those are conservative planning thresholds, not visibility guarantees. Always confirm the NOAA short-term oval, darkness, and local clouds."}},{"@type":"Question","name":"Why is Bz important?","acceptedAnswer":{"@type":"Answer","text":"Bz is the north-south component of the solar wind's magnetic field. A sustained southward, negative Bz can help energy couple into Earth's magnetosphere, but it is only one input. Read it alongside solar-wind speed, Kp, the NOAA short-term oval, and local sky conditions."}},{"@type":"Question","name":"How accurate is the 3-day Kp forecast?","acceptedAnswer":{"@type":"Answer","text":"Confidence generally falls as the forecast extends farther out. Use the three-day Kp outlook to plan, then recheck NOAA's 30-to-90-minute OVATION model, real-time solar wind, and local clouds before traveling."}},{"@type":"Question","name":"Can I see colors with my eyes?","acceptedAnswer":{"@type":"Answer","text":"Sometimes. Cameras often capture more color than human vision, especially during a faint display. What you see depends on the display's strength, your dark adaptation, light pollution, and cloud cover, not a single Kp cutoff."}}]}</script>
+<meta property="og:site_name" content="Chris Izworski">
+<meta name="twitter:title" content="Northern Lights Michigan Tonight: Live | Chris Izworski">
+<meta name="twitter:description" content="Northern lights Michigan tonight: live NOAA aurora borealis signals, NWS cloud cover, moonlight and viewing windows. Visibility is never guaranteed.">
 </head>
 <body data-analytics-page="northern-lights-michigan">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -1278,5 +1306,5 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 <aside id="national-aurora-handoff" style="margin:32px 0 8px;padding:18px 20px;border:1px solid #d7ded9;border-radius:6px;background:#f7faf8"><strong>Watching from outside Michigan?</strong><p style="margin:6px 0 0">Use the <a href="/national-tools/aurora/">U.S. Northern Lights forecast</a> for location-specific aurora signal, darkness and cloud-cover context across the country.</p></aside>
-</body>
+<footer class="seo-identity-credit" style="padding:1rem;text-align:center;color:inherit"><span class="seo-author-credit" style="display:inline-block;margin-inline-start:.6rem;font-size:.8rem;line-height:1.5;opacity:.76">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer></body>
 </html>
