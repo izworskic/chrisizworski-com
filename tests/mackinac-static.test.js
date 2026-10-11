@@ -9,23 +9,23 @@ const css = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.css
 const js = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.js"), "utf8");
 
 test("Mackinac Bridge Live has indexable metadata and valid structured data", () => {
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Open, Wind &amp; Cameras<\/title>/);
+  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Wind<\/title>/);
   assert.ok(
     html.includes(
       '<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">',
     ),
   );
-  assert.match(html, /name="description" content="[^"]*open now/i);
+  assert.match(html, /name="description" content="[^"]*official open or closure status/i);
   assert.ok(html.includes('"@type": "WebApplication"'));
   assert.ok(html.includes('"@type": "Offer"'));
-  assert.doesNotMatch(html, /"@type": "FAQPage"/);
+  assert.match(html, /"@type": "FAQPage"/);
   assert.match(html, /og:image:alt" content="Photograph of the Mackinac Bridge/);
   assert.doesNotMatch(html, /Illustrated Mackinac Bridge/i);
   assert.ok(html.includes('id="mackinac-conditions-answer"'));
   assert.match(html, /Is the Mackinac Bridge open today\?/i);
 
   const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
-  assert.equal(blocks.length, 1);
+  assert.equal(blocks.length, 2);
   blocks.forEach((block) => assert.doesNotThrow(() => JSON.parse(block[1])));
 });
 

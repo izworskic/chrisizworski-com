@@ -1,5 +1,17 @@
 # Search Growth + Revenue Session Log
 
+## Query-led CTR and FAQ pilot — October 11, 2026
+
+- **Owner/repo:** `izworskic/chrisizworski-com`, branch `seo/2026-10-11-ctr-intent-faq`; PR/deployment **NOT YET VERIFIED** at authorship time.
+- **GSC source/window:** Windsor.ai, Search Console domain `chrisizworski.com`, 2026-09-11–2026-10-08, all geographies (Web intent; not country-filtered). Page totals: northern lights 14,106 impressions / 159 clicks / 1.13% CTR / position 7.33; Great Lakes freighter tracking 9,013 / 139 / 1.54% / 7.37; Mackinac Bridge Live 4,811 / 15 / 0.31% / 8.76; Michigan border waits 1,659 / 6 / 0.36% / 9.61. Treat mixed-query page CTR as prioritization, not a per-query conversion estimate.
+- **Leading queries:** northern lights michigan tonight (374 impressions), great lakes ship tracker (1,171), mackinac bridge conditions today live (437), gordie howe bridge wait times (93; hub overlaps an existing canonical crossing guide). No unsupported rank or CTR projections.
+- **Ship-and-observe treatment:** preserve URLs, H1, source/fallback logic, tool behavior, Person entity, and commercial surfaces; update titles/descriptions to highlight live-data utility and report uncertainty. Add schema.org FAQPage JSON-LD drawn from visible Q&A for Aurora, Bridge Live and border hub; freighter already has FAQPage. Four touched pages are dated 2026-10-11 in structured data and sitemap. Static title and structural schema tests updated/added.
+- **Guardrail:** schema.org-valid FAQ markup does **not** make pages eligible for Google FAQ rich results: Google retired the FAQ rich-result feature on May 7, 2026 and removed its documentation in June 2026 (Google Search documentation changelog). Keep structured Q&A truthful, but do not forecast CTR benefit from FAQ markup. Unknown conditions remain unknown. Page freshness is editorial modification, not a claim that upstream agencies update every minute.
+- **Breadth audit:** crossing detail guides already exist for all five bridges/tunnel; town aurora pages already exist for Mackinaw City, Munising, Marquette and Keweenaw. Avoid publishing duplicates. Potential new planning companions require a distinct-usefulness and existing-URL audit.
+- **Revenue:** page-attributable AdSense actuals **NOT AVAILABLE** for this pilot; no uplift claimed.
+- **One next action:** get green full verification on this branch and merge only after CI succeeds; verify production READY and changed live metadata before adding a planning-companion pilot.
+
+
 ## Five-priority U.S. query review — October 10, 2026
 
 - **Source/window:** Search Console U.S. Web via Windsor.ai, 2026-09-10–2026-10-07.
