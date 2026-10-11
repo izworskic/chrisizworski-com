@@ -39,7 +39,7 @@ test("All six corridor deep links match the source AIS map view keys", () => {
   const keys = ["soo", "duluth", "detroit", "saginaw", "port-huron", "mackinac"];
   for (const key of keys) {
     assert.match(html, new RegExp('href="/great-lakes-freighter-tracking/#' + key + '"'));
-    assert.ok(tracker.includes(key + ":"), key + " AIS map view not defined");
+    assert.ok(tracker.includes(key === "port-huron" ? '"port-huron":' : key + ":"), key + " AIS map view not defined");
     assert.ok(js.includes(key), key + " finder route not defined");
   }
 });
