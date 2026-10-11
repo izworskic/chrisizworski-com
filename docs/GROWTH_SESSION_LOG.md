@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Welland maritime minimalist lock experience — October 11, 2026
+
+- **Owner request:** Replace visually overwhelming gold badges with a premium yet restrained maritime UI, using the detail panel for visual emphasis.
+- **Change:** 27px navy/gold numbered lock circles (32px selected), restrained 46–48px group capsules; no oversized shields or Leaflet popups for locks. Map at desktop left, interactive editorial lock profile/official visitor detail and AIS availability alongside it; on mobile map then lock card then ship list. Selected lock synchronizes map, lock rail, filter, detail card and next-lock control; overview control remains. Duluth-style ship silhouettes and all existing AIS freshness/error contracts remain unchanged.
+- **Evidence boundaries:** Lock positions approximate, never lock occupancy. “Nearby vessels” only reports AIS fixes within approx. 1.5 km and age at most 30 minutes; data outages never imply empty locks. GSC/AdSense impacts not measured, not claimed.
+- **SEO:** Preserve existing canonical and Chris Izworski Person ID, avoid extra pages, preserve existing metadata/content.
+- **Validation:** Updated targeted Node regression tests for marker dimensions, grouped zoom handling, evidence-aware lock profile and original AIS mechanics. Full GitHub CI and emitted HTML audit before merge. Independently check READY production deployment and public HTML afterward.
+- **One next action:** Once live, inspect lock-card/mobile map experience for real usability and adjust only on observed feedback.
+
+
 ## Welland lock landmark experience — October 11, 2026
 
 - **Scope:** Owner requested that the eight stationary lock pins be a show-stopping, unmistakable visual differentiator of `/welland-canal/`, without sacrificing actual AIS ship legibility or factual integrity.

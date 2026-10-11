@@ -17,7 +17,7 @@
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
   let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
   const shipMarkers=new Map(), lockMarkers=new Map();
-  let lockLayer=null, flightMarker=null;
+  let lockLayer=null, flightMarker=null, aisState='loading';
 
   function el(tag,text,cls) { const x=document.createElement(tag); if(text!==undefined)x.textContent=text; if(cls)x.className=cls; return x; }
   function when(iso) {
@@ -86,62 +86,68 @@
       rail.append(b);
     });
   }
-  function chooseLock(id,recenter=true) {
+  function chooseLock(id,recenter=true){
     selected=id;select.value=id;
     for(const b of $('lockRail').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
-    const l=LOCKS.find(x=>x.id===id);
-    if(map&&recenter&&l)map.setView([l.lat,l.lon],['4','5','6'].includes(id)?14:13);
-    else if(map&&recenter&&!l)map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
-    const focus=$('lockFocus');
-    focus.replaceChildren();
-    if(l){
-      focus.append(el('strong',l.name+' · '+l.place),el('p',l.note));
-      if(l.url){
-        const link=el('a','Official viewing information ↗','lock-detail-link');
-        link.href=l.url;link.target='_blank';link.rel='noopener noreferrer';focus.append(link);
-      }
-    }else{
-      focus.append(el('strong','Eight locks. One connected waterway.'),el('p','Tap a numbered lock on the map or choose one below. The central 3–7 badge expands at closer zoom, then Thorold Locks 4–6 separate as you zoom in further. Lock locations are approximate.'));
+    const lock=LOCKS.find(l=>l.id===id);
+    if(map&&recenter&&lock){
+      const zoom=['4','5','6'].includes(id)?15:13;
+      const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduced)map.setView([lock.lat,lock.lon],zoom);
+      else map.flyTo([lock.lat,lock.lon],zoom,{duration:0.7});
+    }else if(map&&recenter&&!lock){
+      map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
     }
-    lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(item=>item.id===key),selected===key,Boolean(map&&map.getZoom()<12))));
+    renderLockDetail();
+    lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(l=>l.id===key),selected===key)));
     if(flightMarker){
       const wide=map&&map.getZoom()<12;
       flightMarker.setIcon(flightIcon(wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected),wide));
     }
-    const note=$('lockMapHint');
-    if(note)note.textContent=l?'Viewing '+l.name+' near '+l.place+' · positions approximate':'Tap a gold lock to explore all eight locations';
+    $('lockMapHint').textContent=lock?'Exploring '+lock.name+' · approximate location':'Select a numbered lock to see its guide';
+    const focus=$('lockFocus');
+    focus.replaceChildren();
+    if(lock)focus.append(el('strong',lock.name+' — '+lock.place),el('p',lock.note));
+    else focus.append(el('strong','Explore the eight locks'),el('p','Select a lock above or below the map. Closely spaced locks are grouped until you zoom in.'));
     renderList();
   }
-  // The eight locks are permanent landmarks, never AIS contacts. At wide zoom
-  // the tightly spaced Thorold flight (4-6) shares one expandable landmark.
-  function lockIcon(lock,active=false,compact=false){
-    const html='<span class="lock-pin__shield"><span class="lock-pin__word">LOCK</span><span class="lock-pin__digit">'+lock.id+'</span></span><span class="lock-pin__point"></span>';
-    const width=compact?30:52,height=compact?35:66;
-    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':'')+(compact?' is-compact':''),html,iconSize:[width,height],iconAnchor:[Math.round(width/2),height-4],popupAnchor:[0,-height+10]});
+  function renderLockDetail(){
+    const lock=LOCKS.find(l=>l.id===selected);
+    $('lockDetailIndex').textContent=lock?String(lock.id).padStart(2,'0')+' / 08':'01 — 08';
+    $('lockDetailMedallion').textContent=lock?lock.id:'8';
+    $('lockDetailLabel').textContent=lock?'LOCK PROFILE':'THE CANAL AT A GLANCE';
+    $('lockDetailTitle').textContent=lock?lock.name:'Eight locks. One waterway.';
+    $('lockDetailPlace').textContent=lock?lock.place:'Lake Ontario → Lake Erie';
+    $('lockDetailDescription').textContent=lock?lock.note:'Follow the Welland Canal from north to south. Select a numbered marker to learn about its location, nearby reported vessels and visitor access.';
+    $('lockDetail').classList.toggle('has-selection',Boolean(lock));
+    const visitor=$('lockDetailVisitor');
+    visitor.hidden=!lock?.url;
+    if(lock?.url)visitor.href=lock.url;else visitor.removeAttribute('href');
+    const next=lock?(Number(lock.id)%8)+1:1;
+    $('lockDetailNext').textContent=lock?'Next · Lock '+next+' →':'Explore Lock 1 →';
+    $('lockDetailNext').dataset.next=String(next);
+    const count=lock?vesselData.filter(v=>nearest(v).lock.id===lock.id&&nearest(v).km<=1.5).length:vesselData.length;
+    if(aisState==='loading'){
+      $('lockDetailAIS').textContent='Checking vessel reports…';
+      $('lockDetailAISNote').textContent='Reports refresh from the AIS provider.';
+    }else if(aisState==='unavailable'){
+      $('lockDetailAIS').textContent='AIS coverage unavailable';
+      $('lockDetailAISNote').textContent='Check the official Seaway transit information.';
+    }else{
+      $('lockDetailAIS').textContent=count===0?'No recent reports nearby':count+' recent AIS '+(count===1?'vessel':'vessels');
+      $('lockDetailAISNote').textContent=lock?'Reported within about 1.5 km of this lock. Not a lock occupancy count.':'Recent reports in the wider corridor. Not a vessel transit schedule.';
+    }
+  }
+  // Minimalist lock markers: the information lives in the editorial card.
+  function lockIcon(lock,active=false){
+    const html='<span class="lock-pin__dot">'+lock.id+'</span>';
+    const size=active?32:27;
+    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':''),html,iconSize:[size,size],iconAnchor:[size/2,size/2],popupAnchor:[0,-size/2]});
   }
   function flightIcon(active=false,wide=false){
-    const title=wide?'CENTRAL':'THOROLD';
-    const number=wide?'3–7':'4–6';
-    const subtitle=wide?'TAP TO EXPAND':'FLIGHT LOCKS';
-    const html='<span class="lock-pin__shield"><span class="lock-pin__word">'+title+'</span><span class="lock-pin__digit">'+number+'</span><span class="lock-pin__flight">'+subtitle+'</span></span><span class="lock-pin__point"></span>';
-    return L.divIcon({className:'welland-lock-pin is-flight'+(active?' is-active':''),html,iconSize:[86,71],iconAnchor:[43,67],popupAnchor:[0,-62]});
-  }
-  function lockPopup(lock){
-    const pop=document.createElement('div');
-    pop.append(el('strong',lock.name+' · '+lock.place),el('p',lock.note));
-    const note=el('p','Approximate lock location; not a live occupancy or passage-status indicator.');
-    note.className='small';
-    pop.append(note);
-    const btn=el('button','Explore this lock','subtle-btn');
-    btn.type='button';
-    btn.addEventListener('click',()=>chooseLock(lock.id));
-    pop.append(btn);
-    if(lock.url){
-      const link=el('a','Official visitor details ↗','lock-popup-link');
-      link.href=lock.url;link.target='_blank';link.rel='noopener noreferrer';
-      pop.append(link);
-    }
-    return pop;
+    const html='<span class="lock-pin__group">'+(wide?'3–7':'4–6')+'</span>';
+    const width=wide?48:46,height=27;
+    return L.divIcon({className:'welland-lock-pin is-flight'+(active?' is-active':''),html,iconSize:[width,height],iconAnchor:[width/2,height/2],popupAnchor:[0,-height/2]});
   }
   function renderLockMarkers(){
     if(!map||!lockLayer)return;
@@ -153,19 +159,19 @@
     LOCKS.forEach(lock=>{
       if(wide&&['3','4','5','6','7'].includes(lock.id))return;
       if(combine&&['4','5','6'].includes(lock.id))return;
-      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id,wide),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
-        .addTo(lockLayer).bindTooltip(lock.name,{direction:'top'}).bindPopup(lockPopup(lock));
-      marker.on('click',()=>chooseLock(lock.id,false));
+      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
+        .addTo(lockLayer).bindTooltip(lock.name,{direction:'top'});
+      marker.on('click',()=>chooseLock(lock.id));
       lockMarkers.set(lock.id,marker);
     });
     if(wide){
       flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,title:'Central locks 3 through 7, click to expand',zIndexOffset:780})
         .addTo(lockLayer).bindTooltip('Locks 3–7 · click to zoom in',{direction:'top'});
-      flightMarker.on('click',()=>{map.setView([43.1382,-79.1920],12);chooseLock('3',false);});
+      flightMarker.on('click',()=>map.flyTo([43.1382,-79.1920],12,{duration:0.65}));
     }else if(combine){
       flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,title:'Thorold flight locks 4 through 6, click to expand',zIndexOffset:780})
         .addTo(lockLayer).bindTooltip('Locks 4–6 · click to zoom in',{direction:'top'});
-      flightMarker.on('click',()=>{map.setView([43.1382,-79.1920],14);chooseLock('5',false);});
+      flightMarker.on('click',()=>map.flyTo([43.1382,-79.1920],14,{duration:0.65}));
     }
   }
   function initMap() {
@@ -219,14 +225,14 @@
       vesselData=data.vessels.filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon)&&minutesOld(v.seen)!==null&&minutesOld(v.seen)<=30);
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
       updated.textContent='Last checked '+when(data.checkedAt)+' · positions at most 30 minutes old';
-      renderList();renderMarkers();
+      aisState='available';renderList();renderMarkers();renderLockDetail();
       const credits=$('sourceCredit');credits.replaceChildren();
       (data.attribution||[]).forEach(a=>credits.append(el('span',a.credit||a.source)));
     } catch (_) {
       vesselData=[];
       status.textContent='AIS data unavailable — official vessel schedule remains available below';
       updated.textContent='Unable to verify fresh AIS positions';
-      renderList();renderMarkers();
+      aisState='unavailable';renderList();renderMarkers();renderLockDetail();
     } finally {
       busy=false;$('refreshShips').disabled=false;
     }
@@ -235,6 +241,7 @@
   select.addEventListener('change',()=>chooseLock(select.value));
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
+  $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   renderLocks();chooseLock('all');initMap();refresh();
   window.setInterval(refresh,120000);
 })();
