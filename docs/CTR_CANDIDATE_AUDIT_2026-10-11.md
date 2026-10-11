@@ -68,7 +68,7 @@ Run after production deployment completes:
 node scripts/audit-ctr-production.mjs
 ```
 
-The manual workflow avoids racing an in-progress deployment. Tests cover stale title rejection, missing/invalid metadata and correct acceptance of the existing FAQPage WebPage subtype. No URLs, page content, titles, links, schema nodes or sitemap entries are added or removed.
+The manual workflow avoids racing an in-progress deployment. Six regression tests cover stale title rejection, missing/invalid metadata, robots attributes in either order, inert ad URLs, content publisher references and correct acceptance of the existing FAQPage WebPage subtype. The strengthened live audit passed again at 16:21:49Z on October 11. No URLs, page content, titles, links, schema nodes or sitemap entries are added or removed.
 
 ## Measurement continuation and next action
 

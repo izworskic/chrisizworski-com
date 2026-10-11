@@ -7,16 +7,25 @@ const origin = 'https://chrisizworski.com';
 const personId = `${origin}/#person`;
 const decode = value => value.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&#x27;/g, "'");
 const title = html => decode(html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '');
+const attributes = tag => Object.fromEntries([...tag.matchAll(/\s([^\s=/>]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)]
+  .map(m => [m[1].toLowerCase(), decode(m[2] ?? m[3] ?? m[4])]));
+const tagPattern = '<[^>"\']*(?:"[^"]*"[^>"\']*|\'[^\']*\'[^>"\']*)*>';
 
 export function inspectPage(html, route, expectedTitle, headers = {}) {
   const failures = [];
-  const canonical = [...html.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']/gi)].map(m => m[1]);
+  // Ignore inert markup and raw script bodies when inspecting actual elements.
+  const markup = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<(template|noscript|style|textarea)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '');
+  const scripts = [...markup.matchAll(new RegExp(`(${tagPattern.replace('<', '<script\\b')})([\\s\\S]*?)<\\/script\\s*>`, 'gi'))]
+    .map(m => ({ attrs: attributes(m[1]), text: m[2] }));
+  const tags = [...markup.replace(/<script\b[\s\S]*?<\/script\s*>/gi, '').matchAll(new RegExp(tagPattern, 'g'))]
+    .map(m => ({ name: m[0].match(/^<([\w-]+)/)?.[1]?.toLowerCase(), attrs: attributes(m[0]) }));
+  const canonical = tags.filter(t => t.name === 'link' && t.attrs.rel?.toLowerCase().split(/\s+/).includes('canonical')).map(t => t.attrs.href);
   if (title(html) !== expectedTitle) failures.push('Normal production URL does not serve the expected title');
   if (canonical.length !== 1 || canonical[0] !== `${origin}/${route}/`) failures.push('Missing, duplicate or incorrect canonical');
-  if (/noindex/i.test(headers['x-robots-tag'] || '') || /<meta\b[^>]*name=["'](?:robots|googlebot)["'][^>]*content=["'][^"']*noindex/i.test(html)) failures.push('Page is noindex');
+  if (/noindex/i.test(headers['x-robots-tag'] || '') || tags.some(t => t.name === 'meta' && /^(robots|googlebot)$/i.test(t.attrs.name || '') && /noindex/i.test(t.attrs.content || ''))) failures.push('Page is noindex');
   const nodes = [];
-  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
-    try { const data = JSON.parse(match[1]); nodes.push(...(data['@graph'] || [data])); }
+  for (const script of scripts.filter(s => s.attrs.type?.toLowerCase() === 'application/ld+json')) {
+    try { const data = JSON.parse(script.text); nodes.push(...(data['@graph'] || [data])); }
     catch { failures.push('Invalid JSON-LD'); }
   }
   const isType = (n, type) => [n['@type']].flat().includes(type);
@@ -27,10 +36,17 @@ export function inspectPage(html, route, expectedTitle, headers = {}) {
   if (!nodes.some(n => ['WebPage', 'FAQPage', 'CollectionPage'].some(t => isType(n, t)))) failures.push('Missing WebPage or subtype');
   for (const n of nodes) {
     if (isType(n, 'WebSite') && n.publisher?.['@id'] !== personId) failures.push('WebSite publisher does not use shared Person');
-    if (['WebPage', 'WebApplication', 'SoftwareApplication', 'Article'].some(t => isType(n, t)) && n.author?.['@id'] !== personId) failures.push('Content author does not use shared Person');
+    if (['WebPage', 'WebApplication', 'SoftwareApplication', 'Article'].some(t => isType(n, t))) {
+      if (n.author?.['@id'] !== personId) failures.push('Content author does not use shared Person');
+      if (n.publisher?.['@id'] !== personId) failures.push('Content publisher does not use shared Person');
+    }
   }
   if (!/Built by[\s\S]{0,160}href=["'](?:https:\/\/chrisizworski\.com)?\/chris-izworski\/["'][^>]*>Chris Izworski<\/a>/i.test(html)) failures.push('Missing linked Built by Chris Izworski credit');
-  const adLoaders = (html.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g) || []).length;
+  const adLoaders = scripts.filter(s => {
+    if (s.attrs.type && !/^(module|(?:text|application)\/(?:java|ecma)script)$/i.test(s.attrs.type)) return false;
+    try { const url = new URL(s.attrs.src, origin); return url.protocol === 'https:' && url.hostname === 'pagead2.googlesyndication.com' && url.pathname === '/pagead/js/adsbygoogle.js'; }
+    catch { return false; }
+  }).length;
   if (adLoaders !== 1) failures.push('Expected exactly one shared ad loader (delivery is not established)');
   return { title: title(html), canonical, personCount: people.length, adLoaders, failures };
 }
