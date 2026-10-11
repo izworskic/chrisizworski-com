@@ -144,6 +144,8 @@ const intentionalChanges = new Set([
   "/fall-color/",
   "/northern-lights-michigan/",
   "/mackinac-bridge-live/",
+  // Oct 11 V2: intentional restriction-level-only page-alert refinement; keep snapshot checks for all other assets.
+  "/assets/mackinac-bridge-live.js",
   "/mackinac-bridge-tolls/",
   // Sep 20: refresh shared Gazette cards and disclose delayed/unavailable editions.
   "/assets/gazette-latest.js",
