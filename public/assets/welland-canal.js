@@ -101,10 +101,13 @@
         link.href=l.url;link.target='_blank';link.rel='noopener noreferrer';focus.append(link);
       }
     }else{
-      focus.append(el('strong','Eight locks. One connected waterway.'),el('p','Tap a numbered lock on the map or choose one below. Zoom into the Thorold flight to separate Locks 4, 5 and 6. Lock locations are approximate.'));
+      focus.append(el('strong','Eight locks. One connected waterway.'),el('p','Tap a numbered lock on the map or choose one below. The central 3–7 badge expands at closer zoom, then Thorold Locks 4–6 separate as you zoom in further. Lock locations are approximate.'));
     }
     lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(item=>item.id===key),selected===key)));
-    if(flightMarker)flightMarker.setIcon(flightIcon(['4','5','6'].includes(selected)));
+    if(flightMarker){
+      const wide=map&&map.getZoom()<12;
+      flightMarker.setIcon(flightIcon(wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected),wide));
+    }
     const note=$('lockMapHint');
     if(note)note.textContent=l?'Viewing '+l.name+' near '+l.place+' · positions approximate':'Tap a gold lock to explore all eight locations';
     renderList();
@@ -115,8 +118,11 @@
     const html='<span class="lock-pin__shield"><span class="lock-pin__word">LOCK</span><span class="lock-pin__digit">'+lock.id+'</span></span><span class="lock-pin__point"></span>';
     return L.divIcon({className:'welland-lock-pin'+(active?' is-active':''),html,iconSize:[52,66],iconAnchor:[26,62],popupAnchor:[0,-55]});
   }
-  function flightIcon(active=false){
-    const html='<span class="lock-pin__shield"><span class="lock-pin__word">THOROLD</span><span class="lock-pin__digit">4–6</span><span class="lock-pin__flight">FLIGHT LOCKS</span></span><span class="lock-pin__point"></span>';
+  function flightIcon(active=false,wide=false){
+    const title=wide?'CENTRAL':'THOROLD';
+    const number=wide?'3–7':'4–6';
+    const subtitle=wide?'TAP TO EXPAND':'FLIGHT LOCKS';
+    const html='<span class="lock-pin__shield"><span class="lock-pin__word">'+title+'</span><span class="lock-pin__digit">'+number+'</span><span class="lock-pin__flight">'+subtitle+'</span></span><span class="lock-pin__point"></span>';
     return L.divIcon({className:'welland-lock-pin is-flight'+(active?' is-active':''),html,iconSize:[86,71],iconAnchor:[43,67],popupAnchor:[0,-62]});
   }
   function lockPopup(lock){
@@ -141,15 +147,21 @@
     lockLayer.clearLayers();
     lockMarkers.clear();
     flightMarker=null;
+    const wide=map.getZoom()<12;
     const combine=map.getZoom()<14;
     LOCKS.forEach(lock=>{
+      if(wide&&['3','4','5','6','7'].includes(lock.id))return;
       if(combine&&['4','5','6'].includes(lock.id))return;
       const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
         .addTo(lockLayer).bindTooltip(lock.name,{direction:'top'}).bindPopup(lockPopup(lock));
       marker.on('click',()=>chooseLock(lock.id,false));
       lockMarkers.set(lock.id,marker);
     });
-    if(combine){
+    if(wide){
+      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,title:'Central locks 3 through 7, click to expand',zIndexOffset:780})
+        .addTo(lockLayer).bindTooltip('Locks 3–7 · click to zoom in',{direction:'top'});
+      flightMarker.on('click',()=>{map.setView([43.1382,-79.1920],12);chooseLock('3',false);});
+    }else if(combine){
       flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,title:'Thorold flight locks 4 through 6, click to expand',zIndexOffset:780})
         .addTo(lockLayer).bindTooltip('Locks 4–6 · click to zoom in',{direction:'top'});
       flightMarker.on('click',()=>{map.setView([43.1382,-79.1920],14);chooseLock('5',false);});
