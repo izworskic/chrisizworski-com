@@ -26,25 +26,25 @@ function jsonLd(html) {
 test("Michigan border flagship has indexable metadata and honest application schema", () => {
   assert.match(
     main,
-    /<title>Michigan Border Wait Times Today: Detroit &amp; All 5 Crossings<\/title>/,
+    /<title>Michigan Border Wait Times Today: Live at 5 Crossings<\/title>/,
   );
   assert.ok(
     main.includes(
       '<link rel="canonical" href="https://chrisizworski.com/michigan-border-wait-times/">',
     ),
   );
-  assert.match(main, /name="description" content="[^"]*Detroit[^"]*Port Huron[^"]*Sault Ste\. Marie/i);
+  assert.match(main, /name="description" content="[^"]*Official CBP and CBSA border wait times/i);
   assert.ok(main.includes('"@type": "WebApplication"'));
   assert.ok(main.includes('"@type": "ItemList"'));
   assert.ok(main.includes('"numberOfItems": 5'));
-  assert.doesNotMatch(main, /"@type"\s*:\s*"FAQPage"/);
+  assert.match(main, /"@type"\s*:\s*"FAQPage"/);
   // Derived from git by scripts/stamp-freshness.mjs, so assert the shape rather than a
   // literal date that goes stale the next time this page is legitimately edited.
   const stamp = main.match(/dateModified": "(\d{4}-\d{2}-\d{2})"/);
   assert.ok(stamp, "dateModified must be present");
   assert.ok(Date.parse(stamp[1]) <= Date.now(), "dateModified must not be in the future");
   assert.match(main, /"creditText": "U\.S\. Environmental Protection Agency, public domain"/);
-  assert.equal(jsonLd(main).length, 1);
+  assert.equal(jsonLd(main).length, 2);
 });
 
 test("flagship exposes the complete five-crossing decision flow and Upper Peninsula answer", () => {
