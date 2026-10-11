@@ -121,7 +121,7 @@ const pageChecks = [
   {
     file: "public/northern-lights-michigan/index.html",
     path: "/northern-lights-michigan/",
-    title: "Northern Lights Michigan Tonight: Aurora | Chris Izworski",
+    title: "Northern Lights Michigan Tonight: Live | Chris Izworski",
     marker: 'id="aurora-static-answer"',
   },
   {
@@ -133,7 +133,7 @@ const pageChecks = [
   {
     file: "public/mackinac-bridge-live/index.html",
     path: "/mackinac-bridge-live/",
-    title: "Mackinac Bridge Conditions Today: Open, Wind &amp; Cameras",
+    title: "Mackinac Bridge Conditions Today: Live Status &amp; Wind",
     marker: 'id="mackinac-conditions-answer"',
   },
 ];
