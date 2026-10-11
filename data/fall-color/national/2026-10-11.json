@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-11",
+  "updated": "2026-10-11T16:45:37.625Z",
+  "briefings": {
+    "new-england": "Peak timing aligns with traditional window; rain and snow showers likely for the weekend.",
+    "great-smoky-mountains": "Peak timing with favorable conditions; mostly dry weekend with low rain chance.",
+    "colorado-aspens": "Color past peak; sunny conditions this weekend with minimal precipitation.",
+    "adirondacks": "Peak timing within traditional window; rain and snow showers possible for the weekend.",
+    "north-shore-superior": "Peak timing within traditional window; live weather data unavailable for weekend planning.",
+    "ozarks": "Approaching peak timing; sunny conditions expected with minimal rain chance.",
+    "eastern-sierra": "Peak timing with ideal conditions; sunny weekend with no precipitation expected.",
+    "wasatch": "Peak timing within traditional window; sunny conditions with minimal rain chance.",
+    "columbia-river-gorge": "Peak timing with favorable conditions; mostly dry weekend with low rain chance.",
+    "door-county": "Peak timing within traditional window; mostly dry weekend with low rain chance.",
+    "poconos": "Peak timing within traditional window; moderate rain chance for the weekend.",
+    "texas-hill-country": "Color not yet approaching peak; mostly sunny weekend with minimal rain.",
+    "west-virginia-highlands": "Peak timing within traditional window; rain and snow showers possible for the weekend.",
+    "catskills": "Peak timing within traditional window; moderate rain chance for the weekend.",
+    "shenandoah": "Peak timing within traditional window; mostly dry weekend with low rain chance."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
