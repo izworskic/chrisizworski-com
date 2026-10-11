@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Town-specific aurora discovery — October 11, 2026
+
+- **Task:** add original geographic aurora answers for Paradise / Whitefish Point and Sleeping Bear Dunes, without duplicating the Michigan aurora engine or existing Mackinaw City, Munising, Marquette and Keweenaw pages.
+- **Honesty gate:** the existing `/api/aurora` provides official NOAA Kp and OVATION by its eight broad model regions. Whitefish Point and Sleeping Bear Dunes **are not separately modeled OVATION regions**. Each new landing clearly labels the nearest regional model proxy (Sault Ste. Marie / Traverse City) and separately fetches near-site NWS grid sky cover via `/api/aurora-town-sky?town=...`. The new endpoint uses a hardcoded allowlist of the two locations, discovers grid data through NWS `/points`, allows only `api.weather.gov` HTTPS grid URLs, respects 12-hour NWS freshness, and returns `available:false` with an empty forecast on failure or stale source. It never guesses a cloud percentage.
+- **Location uniqueness:** Whitefish Point highlights museum/boardwalk versus bird observatory sunset access rules and Lake Superior conditions; Sleeping Bear contrasts Platte River Point, Glen Haven and Dune Climb with NPS 24-hour lakeshore access (facility exceptions and no overnight camping).
+- **Crawl:** the four *previously omitted* published aurora regional URLs were added to `sitemap.xml`, along with the two new unique URLs. Both new pages have their own editorial content, canonical, Person entity, FAQPage structured content, BreadcrumbList and 2026-10-11 modification date. All are linked from the statewide aurora tool, `/tools/`, and four existing aurora sibling pages.
+- **Validity:** tests exercise authoritative NWS endpoint path, unknown fallback, visible FAQ schema, canonical, sitemap entry, proper model-source attribution, and multiple inbound links. Google retired FAQ rich results in May 2026; this markup is semantic, not a rich-result promise.
+- **Measurement:** new pages have no GSC impressions or observed AdSense lift yet. Collect an indexed-pages report, then 28-day page/query impressions, clicks and CTR after production release. Do not invent a ranking uplift.
+- **Release state:** this entry describes branch work, not verified production. Merge only after the complete gate passes and verify live 200s plus sitemap inclusion.
+
+
 ## Workstream 2 — distinct planning companions (October 11, 2026)
 
 - **Source:** Workstream 1 query/CTR review and owner's confirmed commercial hypothesis that planning pages generate more revenue per view. The revenue multiplier is owner-provided, not independently revalidated in this commit. No uplift forecast or claim.
