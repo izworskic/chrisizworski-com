@@ -45,7 +45,7 @@
     riskRoot.replaceChildren();
     var hours = data?.forecast?.hours || [];
     var generated = Date.parse(data?.forecast?.generated_at || '');
-    if (!hours.length || (Number.isFinite(generated) && (Date.now() - generated > 6 * 60 * 60 * 1000 || generated > Date.now() + 60 * 60 * 1000))) {
+    if (!hours.length || !Number.isFinite(generated) || Date.now() - generated > 6 * 60 * 60 * 1000 || generated > Date.now() + 60 * 60 * 1000) {
       riskRoot.textContent = 'NWS planning outlook unavailable or stale. Check the official status above.';
       lastForecast = null;
       return;
