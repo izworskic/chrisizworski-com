@@ -38,7 +38,7 @@
   }
   function heading(v) {
     const c=Number(v.course);
-    if(!Number.isFinite(c)||v.speedKnots===null||v.speedKnots<1) return 'Direction not established';
+    if(v.course===null||v.course===undefined||!Number.isFinite(c)||v.speedKnots===null||v.speedKnots<1) return 'Direction not established';
     if(c>=315||c<=45) return 'Northbound (toward Lake Ontario)';
     if(c>=135&&c<=225) return 'Southbound (toward Lake Erie)';
     return 'Cross-channel / direction uncertain';
