@@ -24,11 +24,11 @@ const symbolicEvent=asset.includes("emit('Contextual Tool Handoff'")&&asset.incl
 const forbiddenAnalytics=/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i.test(asset);
 check('Handoffs use symbolic analytics only',symbolicEvent&&!forbiddenAnalytics,10);
 const protectedTitles={
-  'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Aurora | Chris Izworski',
+  'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Live | Chris Izworski',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',
   'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: 2026 Dates by Region',
   'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: 2026 Planting Calendar',
-  'public/great-lakes-freighter-tracking/index.html':'Great Lakes Ship Tracker: Live AIS Map | Chris Izworski'
+  'public/great-lakes-freighter-tracking/index.html':'Great Lakes Ship Tracker Live Now | Chris Izworski'
 };
 let protectedOk=true;for(const [file,title] of Object.entries(protectedTitles)){const html=await read(file);if(!html.includes(`<title>${title}</title>`))protectedOk=false}
 check('Protected experiment titles stay frozen',protectedOk,15);
