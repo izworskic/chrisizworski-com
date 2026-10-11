@@ -76,7 +76,7 @@ test('Welland locks are navigational landmarks with numbered pins and accessible
   assert.match(script,/function lockIcon\(lock,active=false,compact=false\)/);
   assert.match(script,/const width=compact\?30:52,height=compact\?35:66/);
   assert.match(css,/\.welland-lock-pin\.is-compact/);
-  assert.match(script,/function flightIcon\(active=false\)/);
+  assert.match(script,/function flightIcon\(active=false,wide=false\)/);
   assert.match(script,/function renderLockMarkers\(\)/);
   assert.match(script,/const wide=map\.getZoom\(\)<12/);
   assert.match(script,/const combine=map\.getZoom\(\)<14/);
