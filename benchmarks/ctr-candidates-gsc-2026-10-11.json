@@ -1,0 +1,886 @@
+{
+  "retrievedAt": "2026-10-11T16:01:31.100Z",
+  "source": "Windsor.ai Search Console",
+  "account": "sc-domain:chrisizworski.com",
+  "searchType": "web",
+  "requestedWindow": {
+    "from": "2026-09-12",
+    "to": "2026-10-09"
+  },
+  "pages": [
+    {
+      "path": "northern-lights-michigan",
+      "rowCount": 1593,
+      "min": "2026-09-12",
+      "max": "2026-10-09",
+      "pageTotals": {
+        "search_type": "web",
+        "page": "https://chrisizworski.com/northern-lights-michigan/",
+        "clicks": 179,
+        "impressions": 15929,
+        "ctr": 0.0112,
+        "position": 7.3363
+      },
+      "visibleQueryTotals": {
+        "nonbranded": {
+          "clicks": 29,
+          "impressions": 3443
+        },
+        "branded": {
+          "clicks": 0,
+          "impressions": 0
+        }
+      },
+      "nonbrandedTopQueries": [
+        {
+          "query": "northern lights michigan tonight",
+          "impressions": 448,
+          "clicks": 4,
+          "ctr": 0.008928571428571428,
+          "position": 7.834825
+        },
+        {
+          "query": "northern lights tonight near me",
+          "impressions": 156,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.512821794871795
+        },
+        {
+          "query": "northern lights upper peninsula tonight",
+          "impressions": 124,
+          "clicks": 2,
+          "ctr": 0.016129032258064516,
+          "position": 6.000002419354839
+        },
+        {
+          "query": "can you see the northern lights in michigan tonight",
+          "impressions": 118,
+          "clicks": 1,
+          "ctr": 0.00847457627118644,
+          "position": 8.576272881355932
+        },
+        {
+          "query": "northern lights in michigan tonight",
+          "impressions": 95,
+          "clicks": 3,
+          "ctr": 0.031578947368421054,
+          "position": 7.905263157894737
+        },
+        {
+          "query": "northern lights michigan",
+          "impressions": 89,
+          "clicks": 2,
+          "ctr": 0.02247191011235955,
+          "position": 11.258423595505619
+        },
+        {
+          "query": "aurora borealis forecast michigan",
+          "impressions": 88,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.681817045454546
+        },
+        {
+          "query": "northern lights forecast marquette mi",
+          "impressions": 80,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.51250625
+        },
+        {
+          "query": "will the northern lights be visible in michigan tonight",
+          "impressions": 78,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.884615384615385
+        },
+        {
+          "query": "are the northern lights visible in michigan tonight",
+          "impressions": 76,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.039473684210526
+        },
+        {
+          "query": "northern lights forecast upper peninsula",
+          "impressions": 69,
+          "clicks": 3,
+          "ctr": 0.043478260869565216,
+          "position": 6.420289855072465
+        },
+        {
+          "query": "are there northern lights in michigan tonight",
+          "impressions": 61,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.278680327868853
+        },
+        {
+          "query": "northern lights forecast munising",
+          "impressions": 55,
+          "clicks": 2,
+          "ctr": 0.03636363636363636,
+          "position": 5.709103636363636
+        },
+        {
+          "query": "northern lights upper peninsula tonight tracker",
+          "impressions": 55,
+          "clicks": 1,
+          "ctr": 0.01818181818181818,
+          "position": 4.618170909090909
+        },
+        {
+          "query": "are the northern lights visible tonight in michigan",
+          "impressions": 45,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.688891111111111
+        },
+        {
+          "query": "northern lights tonight michigan",
+          "impressions": 43,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.7907
+        },
+        {
+          "query": "northern lights tonight",
+          "impressions": 42,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.952366666666666
+        },
+        {
+          "query": "can i see the northern lights in michigan tonight",
+          "impressions": 40,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.925
+        },
+        {
+          "query": "aurora borealis michigan tonight",
+          "impressions": 36,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.861108333333334
+        },
+        {
+          "query": "northern lights forecast houghton mi",
+          "impressions": 36,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.777783333333334
+        }
+      ]
+    },
+    {
+      "path": "mackinac-bridge-tolls",
+      "rowCount": 1192,
+      "min": "2026-09-12",
+      "max": "2026-10-09",
+      "pageTotals": {
+        "search_type": "web",
+        "page": "https://chrisizworski.com/mackinac-bridge-tolls/",
+        "clicks": 18,
+        "impressions": 6505,
+        "ctr": 0.0028,
+        "position": 8.236
+      },
+      "visibleQueryTotals": {
+        "nonbranded": {
+          "clicks": 6,
+          "impressions": 3287
+        },
+        "branded": {
+          "clicks": 0,
+          "impressions": 0
+        }
+      },
+      "nonbrandedTopQueries": [
+        {
+          "query": "mackinac bridge toll",
+          "impressions": 781,
+          "clicks": 1,
+          "ctr": 0.0012804097311139564,
+          "position": 10.058892317541615
+        },
+        {
+          "query": "how much does it cost to cross the mackinac bridge",
+          "impressions": 268,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.007465671641791
+        },
+        {
+          "query": "mackinac bridge toll cost",
+          "impressions": 132,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.863637878787877
+        },
+        {
+          "query": "toll for mackinac bridge",
+          "impressions": 120,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.316664999999999
+        },
+        {
+          "query": "how much is it to cross the mackinac bridge",
+          "impressions": 112,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.499999107142857
+        },
+        {
+          "query": "cost to cross mackinac bridge",
+          "impressions": 105,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.28571238095238
+        },
+        {
+          "query": "mackinaw bridge toll",
+          "impressions": 104,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.903839423076922
+        },
+        {
+          "query": "mackinac bridge toll price",
+          "impressions": 86,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.453486046511628
+        },
+        {
+          "query": "how much to cross the mackinac bridge",
+          "impressions": 79,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.860762025316455
+        },
+        {
+          "query": "how much is the mackinac bridge toll",
+          "impressions": 78,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.961541025641026
+        },
+        {
+          "query": "how much is the toll for the mackinac bridge",
+          "impressions": 71,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.788732394366197
+        },
+        {
+          "query": "how much to cross mackinac bridge",
+          "impressions": 64,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.6874984375
+        },
+        {
+          "query": "what is the toll for the mackinac bridge",
+          "impressions": 60,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.283339999999999
+        },
+        {
+          "query": "how much is mackinac bridge toll",
+          "impressions": 53,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.69811320754717
+        },
+        {
+          "query": "mackinac bridge fare",
+          "impressions": 47,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.851068085106385
+        },
+        {
+          "query": "mackinac bridge tolls",
+          "impressions": 47,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.61701489361702
+        },
+        {
+          "query": "mackinac bridge toll fee",
+          "impressions": 38,
+          "clicks": 1,
+          "ctr": 0.02631578947368421,
+          "position": 9.263157894736842
+        },
+        {
+          "query": "mackinac bridge toll both ways",
+          "impressions": 35,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 6.800002857142857
+        },
+        {
+          "query": "mackinac bridge cost to cross",
+          "impressions": 32,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.75
+        },
+        {
+          "query": "how much is the toll on the mackinac bridge",
+          "impressions": 29,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.068962068965517
+        }
+      ]
+    },
+    {
+      "path": "great-lakes-freighter-tracking",
+      "rowCount": 1232,
+      "min": "2026-09-12",
+      "max": "2026-10-09",
+      "pageTotals": {
+        "search_type": "web",
+        "page": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+        "clicks": 141,
+        "impressions": 9125,
+        "ctr": 0.0155,
+        "position": 7.336
+      },
+      "visibleQueryTotals": {
+        "nonbranded": {
+          "clicks": 65,
+          "impressions": 5356
+        },
+        "branded": {
+          "clicks": 0,
+          "impressions": 0
+        }
+      },
+      "nonbrandedTopQueries": [
+        {
+          "query": "great lakes ship tracker",
+          "impressions": 1168,
+          "clicks": 8,
+          "ctr": 0.00684931506849315,
+          "position": 6.930648972602741
+        },
+        {
+          "query": "great lakes freighter tracker",
+          "impressions": 556,
+          "clicks": 3,
+          "ctr": 0.00539568345323741,
+          "position": 7.16186726618705
+        },
+        {
+          "query": "ship tracker great lakes",
+          "impressions": 299,
+          "clicks": 4,
+          "ctr": 0.013377926421404682,
+          "position": 6.227428093645486
+        },
+        {
+          "query": "great lakes ship tracker live map",
+          "impressions": 209,
+          "clicks": 8,
+          "ctr": 0.03827751196172249,
+          "position": 8.330144019138755
+        },
+        {
+          "query": "freighter tracker great lakes",
+          "impressions": 204,
+          "clicks": 8,
+          "ctr": 0.0392156862745098,
+          "position": 6.200978921568627
+        },
+        {
+          "query": "marine traffic great lakes",
+          "impressions": 177,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.406773446327684
+        },
+        {
+          "query": "great lakes ship tracker live",
+          "impressions": 176,
+          "clicks": 2,
+          "ctr": 0.011363636363636364,
+          "position": 7.607957386363637
+        },
+        {
+          "query": "great lakes shipping tracker",
+          "impressions": 174,
+          "clicks": 2,
+          "ctr": 0.011494252873563218,
+          "position": 7.517245977011493
+        },
+        {
+          "query": "lake freighter tracker",
+          "impressions": 154,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.214287662337662
+        },
+        {
+          "query": "great lakes marine traffic",
+          "impressions": 147,
+          "clicks": 1,
+          "ctr": 0.006802721088435374,
+          "position": 8.115646938775509
+        },
+        {
+          "query": "great lakes freighters locations map",
+          "impressions": 140,
+          "clicks": 3,
+          "ctr": 0.02142857142857143,
+          "position": 7.849992142857143
+        },
+        {
+          "query": "great lakes ship tracking",
+          "impressions": 138,
+          "clicks": 2,
+          "ctr": 0.014492753623188406,
+          "position": 6.920291304347827
+        },
+        {
+          "query": "great lakes boat tracker",
+          "impressions": 133,
+          "clicks": 1,
+          "ctr": 0.007518796992481203,
+          "position": 6.473681203007518
+        },
+        {
+          "query": "boat tracker great lakes",
+          "impressions": 79,
+          "clicks": 1,
+          "ctr": 0.012658227848101266,
+          "position": 6.924051898734177
+        },
+        {
+          "query": "lake michigan ship tracker",
+          "impressions": 78,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 5.923075641025641
+        },
+        {
+          "query": "great lake ship tracker",
+          "impressions": 69,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 6.144934782608695
+        },
+        {
+          "query": "freighter tracker",
+          "impressions": 68,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.50001617647059
+        },
+        {
+          "query": "great lakes shipping schedule today",
+          "impressions": 63,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.333333333333334
+        },
+        {
+          "query": "lake superior ship tracker",
+          "impressions": 63,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.58729365079365
+        },
+        {
+          "query": "great lakes live ship tracking map free",
+          "impressions": 55,
+          "clicks": 1,
+          "ctr": 0.01818181818181818,
+          "position": 8.545452727272728
+        }
+      ]
+    },
+    {
+      "path": "mackinac-bridge-live",
+      "rowCount": 709,
+      "min": "2026-09-12",
+      "max": "2026-10-09",
+      "pageTotals": {
+        "search_type": "web",
+        "page": "https://chrisizworski.com/mackinac-bridge-live/",
+        "clicks": 16,
+        "impressions": 4773,
+        "ctr": 0.0034,
+        "position": 8.7138
+      },
+      "visibleQueryTotals": {
+        "nonbranded": {
+          "clicks": 3,
+          "impressions": 2063
+        },
+        "branded": {
+          "clicks": 0,
+          "impressions": 0
+        }
+      },
+      "nonbrandedTopQueries": [
+        {
+          "query": "mackinac bridge conditions today live",
+          "impressions": 431,
+          "clicks": 1,
+          "ctr": 0.002320185614849188,
+          "position": 8.013917633410673
+        },
+        {
+          "query": "is the mackinac bridge open today",
+          "impressions": 259,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.505791505791507
+        },
+        {
+          "query": "mackinac bridge conditions",
+          "impressions": 254,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.74015905511811
+        },
+        {
+          "query": "mackinac bridge status",
+          "impressions": 82,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.987809756097562
+        },
+        {
+          "query": "mackinac bridge conditions today",
+          "impressions": 74,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.837844594594594
+        },
+        {
+          "query": "mackinac bridge traffic",
+          "impressions": 60,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.266670000000001
+        },
+        {
+          "query": "is the mackinac bridge open 24/7",
+          "impressions": 50,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.880002000000001
+        },
+        {
+          "query": "mackinac bridge current conditions",
+          "impressions": 42,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.857138095238096
+        },
+        {
+          "query": "mackinac bridge weather conditions",
+          "impressions": 39,
+          "clicks": 1,
+          "ctr": 0.02564102564102564,
+          "position": 10.000005128205128
+        },
+        {
+          "query": "current mackinac bridge conditions",
+          "impressions": 38,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.236831578947369
+        },
+        {
+          "query": "is mackinac bridge open right now",
+          "impressions": 35,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.742857142857142
+        },
+        {
+          "query": "mackinac bridge traffic today",
+          "impressions": 34,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.323529411764707
+        },
+        {
+          "query": "mackinac bridge open today",
+          "impressions": 33,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9
+        },
+        {
+          "query": "conditions on mackinac bridge",
+          "impressions": 31,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.67741935483871
+        },
+        {
+          "query": "mackinac bridge hours",
+          "impressions": 30,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.233336666666666
+        },
+        {
+          "query": "mackinac bridge today",
+          "impressions": 27,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.185196296296297
+        },
+        {
+          "query": "does the mackinac bridge close at night",
+          "impressions": 25,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.36
+        },
+        {
+          "query": "is mackinac bridge open today",
+          "impressions": 20,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.999995
+        },
+        {
+          "query": "mackinac bridge conditions today live camera",
+          "impressions": 20,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.000005
+        },
+        {
+          "query": "mackinaw bridge conditions",
+          "impressions": 20,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.650005
+        }
+      ]
+    }
+  ],
+  "siteDaily": [
+    {
+      "date": "2026-09-12",
+      "search_type": "web",
+      "clicks": 81,
+      "impressions": 3780,
+      "position": 8.7103
+    },
+    {
+      "date": "2026-09-13",
+      "search_type": "web",
+      "clicks": 84,
+      "impressions": 3608,
+      "position": 8.8381
+    },
+    {
+      "date": "2026-09-14",
+      "search_type": "web",
+      "clicks": 92,
+      "impressions": 3103,
+      "position": 8.3861
+    },
+    {
+      "date": "2026-09-15",
+      "search_type": "web",
+      "clicks": 95,
+      "impressions": 3522,
+      "position": 8.3333
+    },
+    {
+      "date": "2026-09-16",
+      "search_type": "web",
+      "clicks": 93,
+      "impressions": 3086,
+      "position": 8.86
+    },
+    {
+      "date": "2026-09-17",
+      "search_type": "web",
+      "clicks": 89,
+      "impressions": 2883,
+      "position": 7.6774
+    },
+    {
+      "date": "2026-09-18",
+      "search_type": "web",
+      "clicks": 60,
+      "impressions": 2798,
+      "position": 8.119
+    },
+    {
+      "date": "2026-09-19",
+      "search_type": "web",
+      "clicks": 68,
+      "impressions": 3317,
+      "position": 7.8936
+    },
+    {
+      "date": "2026-09-20",
+      "search_type": "web",
+      "clicks": 100,
+      "impressions": 3772,
+      "position": 7.5681
+    },
+    {
+      "date": "2026-09-21",
+      "search_type": "web",
+      "clicks": 94,
+      "impressions": 3667,
+      "position": 7.4532
+    },
+    {
+      "date": "2026-09-22",
+      "search_type": "web",
+      "clicks": 75,
+      "impressions": 3629,
+      "position": 7.4368
+    },
+    {
+      "date": "2026-09-23",
+      "search_type": "web",
+      "clicks": 114,
+      "impressions": 5194,
+      "position": 7.8281
+    },
+    {
+      "date": "2026-09-24",
+      "search_type": "web",
+      "clicks": 90,
+      "impressions": 3933,
+      "position": 7.8754
+    },
+    {
+      "date": "2026-09-25",
+      "search_type": "web",
+      "clicks": 88,
+      "impressions": 4056,
+      "position": 7.7655
+    },
+    {
+      "date": "2026-09-26",
+      "search_type": "web",
+      "clicks": 127,
+      "impressions": 5080,
+      "position": 7.4593
+    },
+    {
+      "date": "2026-09-27",
+      "search_type": "web",
+      "clicks": 125,
+      "impressions": 5266,
+      "position": 7.6052
+    },
+    {
+      "date": "2026-09-28",
+      "search_type": "web",
+      "clicks": 146,
+      "impressions": 4991,
+      "position": 7.1831
+    },
+    {
+      "date": "2026-09-29",
+      "search_type": "web",
+      "clicks": 132,
+      "impressions": 4373,
+      "position": 7.7896
+    },
+    {
+      "date": "2026-09-30",
+      "search_type": "web",
+      "clicks": 103,
+      "impressions": 3948,
+      "position": 7.9514
+    },
+    {
+      "date": "2026-10-01",
+      "search_type": "web",
+      "clicks": 109,
+      "impressions": 3882,
+      "position": 8.211
+    },
+    {
+      "date": "2026-10-02",
+      "search_type": "web",
+      "clicks": 170,
+      "impressions": 5752,
+      "position": 8.0438
+    },
+    {
+      "date": "2026-10-03",
+      "search_type": "web",
+      "clicks": 144,
+      "impressions": 4654,
+      "position": 7.6132
+    },
+    {
+      "date": "2026-10-04",
+      "search_type": "web",
+      "clicks": 156,
+      "impressions": 5651,
+      "position": 7.7208
+    },
+    {
+      "date": "2026-10-05",
+      "search_type": "web",
+      "clicks": 116,
+      "impressions": 4810,
+      "position": 7.5428
+    },
+    {
+      "date": "2026-10-06",
+      "search_type": "web",
+      "clicks": 102,
+      "impressions": 4279,
+      "position": 7.6625
+    },
+    {
+      "date": "2026-10-07",
+      "search_type": "web",
+      "clicks": 105,
+      "impressions": 4438,
+      "position": 8.53
+    },
+    {
+      "date": "2026-10-08",
+      "search_type": "web",
+      "clicks": 140,
+      "impressions": 6109,
+      "position": 8.0119
+    },
+    {
+      "date": "2026-10-09",
+      "search_type": "web",
+      "clicks": 135,
+      "impressions": 7041,
+      "position": 8.1068
+    }
+  ],
+  "siteTotals": {
+    "impressions": 120622,
+    "clicks": 3033,
+    "ctr": 0.025144666810366267,
+    "position": 7.908676040854902
+  },
+  "brandRule": "chris|izworski|hisworski|freighter\\s*view|chrisizworski\\.com",
+  "notes": [
+    "Explicit Web-filtered extraction supersedes preliminary pulls that omitted search_type and returned different totals.",
+    "Query rows omit anonymized queries; query sums are not page totals. Geography is worldwide, not US-only.",
+    "The live reporting baseline ends before October 11 changes. No post-change lift can be inferred."
+  ]
+}
