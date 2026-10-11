@@ -158,13 +158,17 @@ test("aurora endpoint combines official NOAA sources with CDN caching", async ()
       skyCover: { values: [{ validTime: iso(-1)+"Z/PT72H", value: 24 }] },
     },
   };
+  const freshCurrentKp = [{ ...currentKp.at(-1), time_tag: iso(-1) }];
+  const freshMagnetic = [{ ...magnetic[0], time_tag: iso(-0.3) + "Z" }];
+  const freshSpeed = [{ ...speed[0], time_tag: iso(-0.25) + "Z" }];
+  const freshOvation = { ...ovation, "Observation Time": iso(-0.5) + "Z", "Forecast Time": iso(0.5) + "Z" };
   global.fetch = async (url) => {
     const value = String(url);
     if (value.includes("forecast.json")) return new Response(JSON.stringify(relativeKpForecast), { status: 200 });
-    if (value.endsWith("planetary-k-index.json")) return new Response(JSON.stringify(currentKp), { status: 200 });
-    if (value.includes("mag-field")) return new Response(JSON.stringify(magnetic), { status: 200 });
-    if (value.includes("wind-speed")) return new Response(JSON.stringify(speed), { status: 200 });
-    if (value.includes("ovation_aurora")) return new Response(JSON.stringify(ovation), { status: 200 });
+    if (value.endsWith("planetary-k-index.json")) return new Response(JSON.stringify(freshCurrentKp), { status: 200 });
+    if (value.includes("mag-field")) return new Response(JSON.stringify(freshMagnetic), { status: 200 });
+    if (value.includes("wind-speed")) return new Response(JSON.stringify(freshSpeed), { status: 200 });
+    if (value.includes("ovation_aurora")) return new Response(JSON.stringify(freshOvation), { status: 200 });
     if (value.includes("api.weather.gov/gridpoints")) return new Response(JSON.stringify(relativeNwsGrid), { status: 200 });
     if (value.includes("aa.usno.navy.mil")) return new Response(JSON.stringify(moon), { status: 200 });
     return new Response("Not found", { status: 404 });
