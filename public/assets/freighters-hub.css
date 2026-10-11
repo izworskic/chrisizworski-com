@@ -10,3 +10,61 @@
 @media(max-width:940px){.feature-grid{grid-template-columns:repeat(2,1fr)}.corridor-grid,.story-grid{grid-template-columns:repeat(2,1fr)}.finder-form{grid-template-columns:1fr}.finder-result{align-items:start}.intro{gap:22px}}
 @media(max-width:640px){.header-inner{min-height:65px;gap:9px}.brand{font-size:1.12rem}.brand span{font-size:.55rem}.top-nav{gap:11px}.top-nav a{font-size:.74rem}.top-nav a:nth-child(4){display:none}.hero{min-height:520px}.hero-inner{padding:30px 0 54px}.crumb{margin-bottom:52px}.hero-photo{background-image:linear-gradient(90deg,rgba(6,24,37,.94),rgba(7,31,44,.68)),url('/assets/soo-locks/freighter.jpg');background-position:64% 50%}.hero h1{font-size:clamp(2.85rem,10vw,4.3rem)}.hero-actions .button{flex:1 1 210px}.quick-rail{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:thin}.quick-rail a{flex:0 0 auto;padding:13px 12px}.intro{display:block;padding:50px 0 38px}.intro h2{margin-bottom:20px}.intro p:last-child{font-size:.96rem}.finder-header,.finder-form,.finder-result{padding-left:20px;padding-right:20px}.finder-header{padding-top:28px}.finder-mark{display:none}.finder-form{gap:24px}.choice{margin-right:6px;padding:10px}.finder-result{display:block}.finder-result .button{margin-top:20px;width:100%}.section{padding-top:56px}.section-head{display:block}.section-head>p{margin-top:13px}.feature-grid,.corridor-grid,.story-grid,.fleet-grid{grid-template-columns:1fr}.feature{min-height:0}.fleet{padding-bottom:44px}.fleet-grid{gap:14px}.fleet-grid article{border-bottom:1px solid #d5ddda}.field-note{display:block}.field-note p{margin:15px 0}.image-story{grid-template-columns:1fr}.image-story img{max-height:230px}.image-story>div{padding:28px}.footer-inner{display:block}.footer-links{margin-top:20px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button{transition:none}.button:hover{transform:none}}
+
+
+/* Freighter Central's live AIS stage reuses /assets/freighter-tracker.js and /api/freighter-ais.
+   The source tracker remains the canonical owner of live-ship-tracker search intent. */
+body[data-analytics-page="freighters"] .hero{min-height:345px}
+body[data-analytics-page="freighters"] .hero-inner{padding-top:29px;padding-bottom:39px}
+body[data-analytics-page="freighters"] .crumb{margin-bottom:24px}
+body[data-analytics-page="freighters"] .hero h1{font-size:clamp(2.85rem,5.3vw,5rem);max-width:750px;margin-bottom:17px}
+body[data-analytics-page="freighters"] .hero-deck{margin-bottom:18px}
+body[data-analytics-page="freighters"] .hero-disclaimer{margin-top:12px}
+.hub-map-section{padding:42px 0 25px;scroll-margin-top:12px}
+.hub-map-heading{display:flex;gap:25px;align-items:end;justify-content:space-between;margin-bottom:18px}
+.hub-map-heading h2{font-size:clamp(2rem,3.2vw,3.15rem);margin:0 0 10px}
+.hub-map-heading h2 em{font-weight:normal;color:#287484}
+.hub-map-heading p:last-child{font-size:.91rem;color:#536b73;max-width:720px;line-height:1.7;margin:0}
+.hub-map-full-link{flex:0 0 auto;font-size:.85rem;font-weight:750;padding:10px 13px;border-radius:5px;border:1px solid #8bb4ba;background:#f7fcfa;text-decoration:none}
+.hub-map-full-link:hover{background:#e8f5f3}
+.hub-map-card{border-radius:10px;border:1px solid #b9ced0;overflow:hidden;background:#fff;box-shadow:0 15px 38px rgba(12,37,45,.09)}
+.hub-map-toolbar{background:#0b2c3d;color:#e5f3f4;padding:16px 19px 12px}
+.hub-map-state{display:flex;align-items:center;gap:10px;color:#d4e7e9;font-size:.81rem;min-height:22px;line-height:1.4;margin-bottom:11px}
+.hub-map-state .map-state-dot{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:#e3ad5a;box-shadow:0 0 0 3px #d39b3c33}
+.hub-map-state .map-state-dot.loaded{background:#58cf92;box-shadow:0 0 0 3px #58cf9233}
+.hub-map-state .map-state-dot.slow{background:#e58c7a;box-shadow:0 0 0 3px #e58c7a33}
+.hub-map-tabs{display:flex;overflow-x:auto;gap:7px;scrollbar-width:thin;scrollbar-color:#5c8590 transparent;padding:4px 1px}
+.hub-map-tabs .view-tab{flex:0 0 auto;border-radius:999px;border:1px solid #6c8c97;background:#184052;color:#e9f5f6;min-height:38px;padding:7px 14px;cursor:pointer;font:700 .77rem var(--sans)}
+.hub-map-tabs .view-tab:hover{background:#276078}
+.hub-map-tabs .view-tab[aria-selected="true"]{border-color:#a5d2d6;background:#e8f8f8;color:#0e3544}
+.hub-map-canvas-wrap{position:relative;background:#d6e5e5;min-height:525px}
+#freighterMap{height:525px;width:100%;display:block;background:#d6e5e5}
+.hub-map-tools{position:absolute;bottom:16px;right:16px;z-index:500}
+.hub-map-refresh{background:#fff;color:#123c4c;min-height:40px;padding:9px 14px;border:1px solid #8baeb6;border-radius:5px;font:750 .8rem var(--sans);cursor:pointer;box-shadow:0 2px 11px #183b4e33}
+.hub-map-refresh:hover{background:#e8f6f5}
+.hub-map-refresh:disabled{opacity:.65;cursor:wait}
+.hub-map-bottom{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)}
+.hub-map-route,.hub-map-noaa{padding:22px 24px}
+.hub-map-route{border-right:1px solid #dce5e4}
+.hub-map-noaa{background:#f0f6f4}
+.hub-mini-label{color:#2a7581;text-transform:uppercase;letter-spacing:.1em;font-size:.69rem;font-weight:850;margin:0 0 5px}
+.hub-map-bottom h3{font:normal 1.33rem var(--serif);margin:0 0 8px}
+.hub-map-bottom p:not(.hub-mini-label){font-size:.83rem;color:#52676b;line-height:1.65;margin:0 0 9px}
+.hub-map-route .hub-map-watch-note{border-top:1px solid #e6ece8;padding-top:9px;margin-top:10px!important}
+.hub-map-bottom a{font-size:.83rem;font-weight:700}
+.hub-map-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+.hub-map-metrics div{text-align:center;border:1px solid #d9e4e2;background:#fff;padding:10px 4px;border-radius:5px}
+.hub-map-metrics strong{display:block;font-size:1.05rem;color:#1b4754}
+.hub-map-metrics span{font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;color:#687f83}
+.hub-map-reports{border-top:1px solid #dce6e3;padding:0 23px}
+.hub-map-reports summary{cursor:pointer;min-height:53px;padding:16px 0;font-weight:800;font-size:.87rem}
+.hub-report-hint{font-weight:400;color:#617980;margin-left:10px;font-size:.78rem}
+.hub-map-reports>p{font-size:.79rem;color:#587077;line-height:1.65}
+#freighterVessels{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#freighterVessels li{border:1px solid #dce8e6;border-radius:5px;padding:10px;min-width:0;line-height:1.4}
+#freighterVessels li button{display:block;border:0;background:none;padding:0;color:#145d70;text-align:left;font:750 .83rem var(--sans);cursor:pointer}
+#freighterVessels li span{display:block;color:#647a80;font-size:.76rem;margin-top:5px;overflow-wrap:anywhere}
+.hub-map-legal{margin:0;padding:13px 23px;background:#f9f6ee;border-top:1px solid #e8e3d7;color:#657476;font-size:.74rem;line-height:1.65}
+body[data-analytics-page="freighters"] .intro{padding:58px 0 50px}
+@media(max-width:760px){.hub-map-heading{display:block}.hub-map-full-link{display:inline-flex;margin-top:16px}.hub-map-bottom{grid-template-columns:1fr}.hub-map-route{border-right:0;border-bottom:1px solid #dce5e4}.hub-map-canvas-wrap{min-height:410px}#freighterMap{height:410px}}
+@media(max-width:640px){body[data-analytics-page="freighters"] .hero{min-height:360px}body[data-analytics-page="freighters"] .hero h1{font-size:clamp(2.65rem,9.3vw,4.1rem)}body[data-analytics-page="freighters"] .hero-inner{padding:19px 0 31px}body[data-analytics-page="freighters"] .crumb{margin-bottom:22px}.hub-map-section{padding:28px 0 12px}.hub-map-toolbar{padding:12px}.hub-map-canvas-wrap{min-height:360px}#freighterMap{height:360px}.hub-map-refresh{min-height:36px;padding:6px 9px}.hub-map-route,.hub-map-noaa{padding:18px 16px}.hub-map-tabs .view-tab{min-height:43px}#freighterVessels{grid-template-columns:1fr}.hub-map-legal{padding:12px 16px}.hub-map-reports{padding:0 15px}.hub-report-hint{display:block;margin-left:0}.hub-map-heading h2{font-size:2.1rem}body[data-analytics-page="freighters"] .intro{padding-top:38px}}
