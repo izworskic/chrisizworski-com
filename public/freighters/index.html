@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Great Lakes Freighter Central: Live Ships | Chris Izworski</title>
-<meta name="description" content="Find Great Lakes freighters on a live AIS map. Explore Soo Locks, Duluth, Detroit, Saginaw Bay, viewing spots, ship news and maritime history.">
+<title>Great Lakes Freighter Central: Ports | Chris Izworski</title>
+<meta name="description" content="Explore Great Lakes freighter ports, ship-watching spots, maritime history and the live five-lake AIS map. See Soo Locks, Duluth, Detroit and more.">
 <link rel="canonical" href="https://chrisizworski.com/freighters/">
 <meta name="theme-color" content="#0c2437">
 <meta property="og:type" content="website">
@@ -20,6 +20,7 @@
 <meta name="twitter:image" content="https://chrisizworski.com/assets/soo-locks/freighter.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/freighters-hub.css">
 <script type="application/ld+json">
 {
@@ -63,14 +64,75 @@
     <p class="eyebrow light">The Great Lakes shipping desk</p>
     <h1>Great Lakes<br><em>Freighter Central</em></h1>
     <p class="hero-deck">Track a ship. Find a place to watch. Follow the ports, working fleet, and stories of the inland seas.</p>
-    <div class="hero-actions"><a class="button bright" href="/great-lakes-freighter-tracking/" data-track-tool="ship-tracker" data-placement="freighters-hero">Open live ship map <span aria-hidden="true">↗</span></a><a class="button outline" href="#watch-finder">Plan a ship watch ↓</a></div>
-    <p class="hero-disclaimer">The live AIS map is a separate tool; public positions can be delayed or incomplete.</p>
+    <div class="hero-actions"><a class="button bright" href="#live-map">Explore the live ship map <span aria-hidden="true">↓</span></a><a class="button outline" href="#watch-finder">Plan a ship watch ↓</a></div>
+    <p class="hero-disclaimer">The live AIS map is below. Public positions can be delayed or incomplete.</p>
   </div>
 </div>
 <div class="quick-rail" aria-label="Jump to freighter resources">
- <a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#stories">History &amp; news</a>
+ <a href="#live-map">Live map</a><a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#stories">History &amp; news</a>
 </div>
 <div class="wrap">
+
+<section id="live-map" class="hub-map-section" aria-labelledby="hub-map-title">
+  <div class="hub-map-heading">
+    <div>
+      <p class="eyebrow">Live vessel tracking · five Great Lakes</p>
+      <h2 id="hub-map-title">The Great Lakes, <em>live on the map.</em></h2>
+      <p>Explore AIS-reported ship positions across all five lakes, or zoom to a shipping corridor. Select a vessel to read its name, speed, course (when reported), and the age of its last position.</p>
+    </div>
+    <a class="hub-map-full-link" href="/great-lakes-freighter-tracking/" data-track-tool="ship-tracker" data-placement="freighters-map">Open the full ship tracker ↗</a>
+  </div>
+  <div class="hub-map-card">
+    <div class="hub-map-toolbar">
+      <div class="hub-map-state" role="status" aria-live="polite">
+        <span class="map-state-dot" id="mapStatusDot" aria-hidden="true"></span>
+        <span id="mapStatusText">Loading recent AIS vessel reports…</span>
+      </div>
+      <div class="view-tabs hub-map-tabs" role="tablist" aria-label="Great Lakes ship map regions">
+        <button class="view-tab" type="button" role="tab" aria-selected="true" data-freighter-view="overview">All Great Lakes</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="soo">Soo Locks</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="duluth">Duluth</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="detroit">Detroit River</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="saginaw">Saginaw Bay</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="port-huron">Port Huron</button>
+        <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="mackinac">Mackinac</button>
+      </div>
+    </div>
+    <div class="hub-map-canvas-wrap">
+      <div id="freighterMap" role="region" aria-label="Interactive AIS map of Great Lakes vessel positions"></div>
+      <div class="hub-map-tools"><button class="hub-map-refresh" id="mapRefresh" type="button">↻ Refresh vessel reports</button></div>
+    </div>
+    <div class="hub-map-bottom">
+      <div class="hub-map-route">
+        <p class="hub-mini-label" id="corridorLabel">Current map: All Great Lakes</p>
+        <h3 id="corridorTitle">All Great Lakes</h3>
+        <p id="corridorCopy">The lake-wide view covers all five Great Lakes. Select a corridor for a closer look.</p>
+        <p class="hub-map-watch-note" id="watchNote">For named vessel passages, use the provider's current passage list.</p>
+        <a id="passageLink" href="https://ais.boatnerd.com/" target="_blank" rel="noopener noreferrer">Open BoatNerd lake-wide map ↗</a>
+      </div>
+      <aside class="hub-map-noaa" aria-labelledby="stationTitle">
+        <p class="hub-mini-label">Nearby NOAA weather context</p>
+        <h3 id="stationTitle">Choose a corridor</h3>
+        <p id="stationSource">Nearby station observations appear for selected corridors.</p>
+        <div class="hub-map-metrics" aria-label="Nearby buoy reports">
+          <div><strong id="windValue">—</strong><span>Wind</span></div>
+          <div><strong id="waveValue">—</strong><span>Waves</span></div>
+          <div><strong id="waterValue">—</strong><span>Water</span></div>
+        </div>
+        <p id="conditionTime">AIS and NOAA reports update on different schedules.</p>
+        <a href="/great-lakes-buoys/">Full buoy observations ↗</a>
+      </aside>
+    </div>
+    <details class="hub-map-reports">
+      <summary>Recent vessel reports and source credits <span class="hub-report-hint">View the names behind the markers</span></summary>
+      <p>Only AIS reports less than 30 minutes old appear. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
+      <ul id="freighterVessels"><li>Checking reported positions…</li></ul>
+      <p id="freighterCredits">Sources will be listed when AIS reports load.</p>
+    </details>
+    <p class="hub-map-legal"><strong>For shore watching only.</strong> Public AIS may be stale, partial or unavailable and must not be used for navigation. Positions come from the existing <a href="/great-lakes-freighter-tracking/">Great Lakes Ship Tracker</a> data service; NOAA observations are nearby context, not conditions on a ship. <a href="https://openwaters.io/ais/" target="_blank" rel="noopener noreferrer">AIS source information</a>.</p>
+    <noscript><p class="hub-map-legal">JavaScript is required for live markers. <a href="/great-lakes-freighter-tracking/">Open the dedicated ship tracker</a> or <a href="https://ais.boatnerd.com/">BoatNerd's map</a>.</p></noscript>
+  </div>
+</section>
 <section class="intro" aria-label="What Freighter Central does">
   <div><p class="eyebrow">Start with your question</p><h2>One shoreline. Five lakes. A working fleet.</h2></div>
   <p>Freighter Central is the <strong>directory and shore-watching guide</strong> for the Great Lakes shipping tools on this site. If you're trying to locate a particular vessel, use the AIS tracker. If you're planning to see one in person, choose a corridor below, then verify a fresh vessel report before you leave. For today's reported movements and port news, use the Great Lakes Gazette.</p>
@@ -159,7 +221,9 @@
  <div><strong>Freighter Central</strong><p>Great Lakes vessel watching, ports, ship stories and shoreline decisions.</p></div>
  <div class="footer-links"><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-freighter-tracking/">Live AIS</a><a href="/soo-locks/">Soo Locks</a><a href="/tools/">All tools</a></div>
 </div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated October 11, 2026</p></footer>
-<script src="/assets/freighters-hub.js" defer></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/freighter-tracker.js?v=20260917"></script>
+<script defer src="/assets/freighters-hub.js"></script>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
 </body>
