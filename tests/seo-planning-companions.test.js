@@ -40,7 +40,7 @@ for(const slug of slugs){
 }
 test("planning companions remain linked in a real network and do not replace original tools",()=>{
  const tools=read("public/tools/index.html");
- for(const slug of slugs)assert.ok(tools.includes('href="/'+slug+'/"));
+ for(const slug of slugs)assert.ok(tools.includes('href="/'+slug+'/"'));
  for(const slug of ["soo-locks","mackinac-bridge-live","mackinac-bridge-tolls","great-lakes-freighter-tracking"])
  assert.ok(read("public/"+slug+"/index.html").includes("<link rel=\"canonical\""),slug);
 });
