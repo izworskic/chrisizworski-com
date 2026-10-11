@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
     if (action === 'status') {
       if (!watch.ready()) return json(res, 503, { ok: false, code: 'unavailable' });
       const item = await watch.getWatch(body.watchId, body.manageToken);
-      return json(res, 200, { ok: Boolean(item && item.expiresAt > Date.now()), expiresAt: item ? new Date(item.expiresAt).toISOString() : null });
+      return json(res, 200, { ok: true, active: Boolean(item && item.expiresAt > Date.now()), expiresAt: item ? new Date(item.expiresAt).toISOString() : null });
     }
     if (action === 'subscribe') {
       const result = await watch.createWatch(body.subscription);
