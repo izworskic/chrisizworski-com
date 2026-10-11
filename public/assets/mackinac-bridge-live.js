@@ -1081,6 +1081,7 @@
       if (!response.ok) throw new Error("Live endpoint returned " + response.status);
       var data = await response.json();
       state.data = data;
+      window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: data }));
       if (
         state.selectedHour != null &&
         !state.data?.forecast?.hours?.[state.selectedHour]
@@ -1092,6 +1093,7 @@
       renderAll();
       if (manual) track("manual-refresh", { status: data.official?.level || "unknown" });
     } catch (_error) {
+      window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: null }));
       if (!state.data) renderUnavailable();
       else {
         setText("ribbonTime", "• refresh failed; showing last result");
