@@ -79,7 +79,7 @@ test('Maritime Minimalist lock markers are restrained and map-driven',()=>{
  assert.match(js,/const wide=map\.getZoom\(\)<12/);
  assert.match(js,/const combine=map\.getZoom\(\)<14/);
  assert.match(js,/map\.on\('zoomend',renderLockMarkers\)/);
- assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id\)\)/);
+ assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
  assert.doesNotMatch(js,/function lockPopup/);
  assert.doesNotMatch(js,/\.bindPopup\(lockPopup/);
  assert.match(css,/\.welland-lock-pin\.is-active \.lock-pin__dot/);
@@ -104,4 +104,33 @@ test('Selecting a lock uses a premium evidence-aware detail card',()=>{
  assert.match(html,/id="lockDetailVisitor"/);
  assert.match(html,/id="lockDetailAIS"/);
  assert.match(html,/not live lock-status indicators/);
+});
+
+test('Touching an individual lock shows persistent useful detail instead of a temporary name-only tooltip',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+ const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+ const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+ assert.match(js,/function showLockPreview\(lock\)/);
+ assert.match(js,/\$\('mapLockPreviewTitle'\)\.textContent=lock\.name\+' · '\+lock\.place/);
+ assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=lock\.note/);
+ assert.match(js,/\$\('mapLockPreview'\)\.hidden=false/);
+ assert.match(js,/if\(fromMap&&lock\)showLockPreview\(lock\);else hideLockPreview\(\)/);
+ assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
+ assert.doesNotMatch(js,/bindTooltip\(lock\.name/);
+ assert.doesNotMatch(js,/bindTooltip\('Locks 3–7/);
+ assert.doesNotMatch(js,/bindTooltip\('Locks 4–6/);
+ assert.match(js,/\$\('mapLockPreviewDismiss'\)\.addEventListener\('click',hideLockPreview\)/);
+ assert.match(js,/\$\('mapLockPreviewOpen'\)\.addEventListener\('click'/);
+ assert.match(js,/card\.scrollIntoView\(/);
+ assert.match(js,/card\.focus\(\{preventScroll:true\}\)/);
+ assert.match(css,/\.ship-map-stage\{position:relative\}/);
+ assert.match(css,/\.map-lock-preview\[hidden\]\{display:none!important\}/);
+ assert.match(css,/@media\(min-width:691px\)\{\.map-lock-preview\{display:none!important\}\}/);
+ assert.match(html,/id="mapLockPreview"/);
+ assert.match(html,/id="mapLockPreviewTitle"/);
+ assert.match(html,/id="mapLockPreviewText"/);
+ assert.match(html,/id="mapLockPreviewDismiss"/);
+ assert.match(html,/id="mapLockPreviewOpen"/);
+ assert.match(html,/id="lockDetail"[^>]*tabindex="-1"/);
 });
