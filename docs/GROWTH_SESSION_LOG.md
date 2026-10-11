@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Welland lock landmark experience — October 11, 2026
+
+- **Scope:** Owner requested that the eight stationary lock pins be a show-stopping, unmistakable visual differentiator of `/welland-canal/`, without sacrificing actual AIS ship legibility or factual integrity.
+- **Change:** Bold gold gate-shaped numbered Lock 1–8 pins with keyboard/hover tooltips and informative popups; zoom-dependent Thorold flight 4–6 pin that expands to individual locations at zoom 14; linked lock detail/official visitor resources where available; matching numbered rail; explicit map legend, focus strip and **View all locks** control. Vessel markers stay freighter-shaped and remain above nearby landmark pins. Coordinates explicitly approximate. No invented lock occupancy, movement, or next-transit ETA.
+- **Boundaries:** Reuse existing AIS backend, same canonical URL, eight sourced approximate coordinates, cache-busted two assets and existing person schema. No indexable page added and no changes to Duluth, Soo Locks or fall-color winners. GSC/AdSense improvements cannot be inferred from this design change.
+- **Validation:** Targeted Node regression asserts numbered SVG-equivalent DOM icons, flight clustering, selection and retained ship markers. Full repository CI remains mandatory before merge, with production READY and public page checks afterward.
+- **One next action:** Verify the merged production map can select the numbered Lock 3 icon and expand the 4–6 Thorold flight without obscuring active ships.
+
+
 ## Welland Canal ship markers — October 11, 2026
 
 - **Request/owner:** Match Duluth Canal Park's recognizable freighter silhouettes in the live Welland Canal map; retain existing lock pins, AIS freshness, public sources and vessel list.
