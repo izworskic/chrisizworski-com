@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Freighter Central hub and network handoff — October 11, 2026
+
+- **User authorization / ownership:** Build a complete freighter central page. Repository `izworskic/chrisizworski-com`; new canonical `https://chrisizworski.com/freighters/`; PR [#904](https://github.com/izworskic/chrisizworski-com/pull/904), branch `feature/freighter-central-hub-20261011`. The page is a **navigation + shore-watch decision** that differs from, and does not replace, the live AIS tracker.
+- **Implementation:** responsive editorial hub with six direct AIS corridor deep links, source-preserving watch finder for live positions / shore locations / shipping news, canonical and Person-ID schema, clear stale/unknown caveats, structured ship-watching directory, maritime history and today's Gazette handoff. Inbound contextual links from `/great-lakes/`, `/tools/`, and the AIS tracker; sitemap registration; static regression tests. Existing specialized engines, fall-color winners, national extracted repos and advertising policy untouched.
+- **Validation and release boundary:** GitHub Actions Agent branch verification and Vercel PR preview are authoritative gates; this entry is created with PR awaiting final checks. **Do not infer deployment from branch commits.** Merge only if required checks and Vercel preview pass. When merged, confirm a successful production deployment and retrieve the canonical HTML before claiming the public URL is live.
+- **Measurement:** New URL has no established GSC Web search baseline, query mix or comparable 28-day outcomes. New-page CTR, clicks, GA4 engagement, AdSense RPM/revenue and cost impacts **not available**. No claimed SEO/revenue lift; watch separately from existing tracker, Soo Locks, Duluth and Detroit owners. This builds a missing cross-network navigation job rather than cloning a query owner.
+- **Decision / next action:** SHIP only after gates. **Exactly one next action:** verify the production `/freighters/` page returns the intended hub with functioning six-corridor links, then capture its first GSC Web query/page snapshot when reporting becomes available.
+
+
 ## Aurora merge and verdict edge-case repair — October 11, 2026
 
 - **Release:** Chris explicitly authorized merging PR #902. Squash merge `71380e8e389052110592fc25295382b841645ad5` is on main; all final-head code checks passed. Production deployment was still building at this checkpoint, so the refreshed canonical URL is not yet verified live. The automated review completed immediately after merge and raised two valid rendering defects, which this follow-up repairs. Its structural-change finding concerns the explicitly owner-authorized design refresh; the reviewed reflow preserves original content/links/schema and is intentional.
