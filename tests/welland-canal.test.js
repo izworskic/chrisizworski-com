@@ -49,3 +49,20 @@ test('Normalization rejects stale and outside-corridor reports',()=>{
   const result=normalize(raw,now,bbox);
   assert.equal(result.vessels.length,0);
 });
+
+test('Welland map uses Duluth-style freighter SVG markers rather than anonymous dots',()=>{
+  const fs=require('node:fs');
+  const path=require('node:path');
+  const script=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const style=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const page=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  assert.match(script,/function shipIcon\(v\)/);
+  assert.match(script,/L\.divIcon\(\{className,html,iconSize:/);
+  assert.match(script,/L\.marker\(\[v\.lat,v\.lon\],\{icon:shipIcon\(v\)/);
+  assert.match(script,/class="ship-glyph"/);
+  assert.match(script,/class="ship-hull"/);
+  assert.match(script,/\.bindTooltip\(name,\{direction:'top'\}\)\.bindPopup\(pop\)/);
+  assert.match(style,/\.welland-ship-marker\.is-stopped \.ship-hull\{fill:#8a6a42\}/);
+  assert.match(page,/Blue freighters: moving AIS vessels/);
+  assert.doesNotMatch(script,/L\.circleMarker\(\[v\.lat,v\.lon\]/);
+});
