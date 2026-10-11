@@ -786,6 +786,7 @@ function setSelectedRegion(id, source, measure){
   try { localStorage.setItem(REGION_PREF_KEY, id); } catch (error) {}
   if (measure !== false) trackAuroraEvent('Aurora Region Selected', {region:id, source:source||'selector'});
   if (latestAuroraData) renderDecisionData(latestAuroraData);
+  else renderLocalPlanningAnswer(null, null);
 }
 
 // === Kp threshold by latitude (rough geomagnetic) ===
@@ -1293,10 +1294,13 @@ function renderTonightWindow(periods, region) {
   let text = alreadyDark ? 'It is fully dark now near ' + name + ' until <strong>' + michiganClock(darkEnd) + '</strong>.'
     : 'Tonight it is fully dark near ' + name + ' from <strong>' + michiganClock(darkStart) + '</strong> to <strong>' + michiganClock(darkEnd) + '</strong>.';
 
-  // The Kp peak only helps if it lands while the sky is dark. Say which it is.
+  // NOAA rows describe three-hour intervals. Keep an active interval that
+  // overlaps the remaining dark window, then plan from its first dark minute.
   const inDark = (periods || []).filter(function (row) {
     const t = new Date(row.time_tag).getTime();
-    return t >= darkStart.getTime() && t <= darkEnd.getTime() && Number.isFinite(row.kp);
+    return t < darkEnd.getTime() && t + 3*3600000 > darkStart.getTime() && Number.isFinite(row.kp);
+  }).map(function (row) {
+    return Object.assign({}, row, {time_tag:new Date(Math.max(new Date(row.time_tag).getTime(),darkStart.getTime())).toISOString()});
   });
   if (inDark.length) {
     const choice = bestPlanningPeriod(inDark,region);
