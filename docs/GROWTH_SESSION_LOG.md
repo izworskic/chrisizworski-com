@@ -1,5 +1,12 @@
 # Search Growth + Revenue Session Log
 
+## Aurora merge and verdict edge-case repair — October 11, 2026
+
+- **Release:** Chris explicitly authorized merging PR #902. Squash merge `71380e8e389052110592fc25295382b841645ad5` is on main; all final-head code checks passed. Production deployment was still building at this checkpoint, so the refreshed canonical URL is not yet verified live. The automated review completed immediately after merge and raised two valid rendering defects, which this follow-up repairs. Its structural-change finding concerns the explicitly owner-authorized design refresh; the reviewed reflow preserves original content/links/schema and is intentional.
+- **Repair:** preserve a still-active NOAA three-hour interval when it overlaps the remaining astronomical-dark window, and use its first remaining dark minute for planning time/clouds. Exclude expired intervals and intervals starting at sunrise. During a feed outage, selecting another region updates the visible regional label and clears any local verdict/time. Preserve the new layout, thresholds, scoring, search metadata, shared creator, ads and fall-color winners.
+- **Validation:** six functional scenarios pass, including nighttime-vs-daytime guidance, regional thresholds, forecast loss, an active interval at 11:30 PM with current clouds, expired-interval/sunset overlap, and selecting Detroit without live data. Local `npm run verify:all`: all 52 steps passed (30s); main Agent branch verification is green. Follow-up final-head CI must pass before merge. No post-release GSC, engagement or revenue effect is measured; baseline remains the October 11 snapshot.
+- **Exactly one next action:** merge this bounded repair after green checks, then verify the final production layout/verdict and record the release boundary for comparable observations.
+
 ## Northern Lights Michigan regional answer layout — October 11, 2026
 
 - **Owner / scope:** Chris authorized the Northern Lights Michigan design refresh. Owning repo `izworskic/chrisizworski-com`; existing `/northern-lights-michigan/` only. Branch `design/aurora-answer-first-20261011`, base main `cb5c667d`. Main Agent branch verification is green. The historical Aurora portfolio PROTECT/freeze wording is superseded by the retired experiment ledger; no active freeze exists. Preserve the fresh search treatment and all fall-color winners.
