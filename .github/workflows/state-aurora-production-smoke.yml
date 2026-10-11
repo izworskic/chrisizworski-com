@@ -1,8 +1,13 @@
 name: State Aurora Production Smoke
 on:
   push:
+    branches: [main]
     paths:
       - '.github/workflows/state-aurora-production-smoke.yml'
+      - 'vercel.json'
+      - 'public/sitemap-aurora-states.xml'
+  schedule:
+    - cron: '15 12 * * *'
   workflow_dispatch:
 permissions:
   contents: read
@@ -49,7 +54,15 @@ jobs:
             console.error(d);
             process.exit(1);
           }
-          console.log(JSON.stringify({state:d.state.name,region:d.selected_region.id,score:d.verdict?.score,fetched_at:d.fetched_at,degraded:d.degraded}));
+          const freshness = d.source_freshness;
+          for (const key of ['kp_observed_fresh','solar_wind_fresh','ovation_fresh','nws_sky_fresh']) {
+            if (typeof freshness?.[key] !== 'boolean') throw new Error('Missing source-age gate: '+key);
+          }
+          if (!freshness.kp_observed_fresh && d.conditions?.current_kp != null) throw new Error('Stale observed Kp used');
+          if (!freshness.ovation_fresh && d.conditions?.local_ovation != null) throw new Error('Stale OVATION used');
+          if (!freshness.nws_sky_fresh && d.conditions?.cloud_percent != null) throw new Error('Stale NWS cloud cover used');
+          if (!freshness.solar_wind_fresh && d.conditions?.solar_wind != null) throw new Error('Stale solar wind used');
+          console.log(JSON.stringify({state:d.state.name,region:d.selected_region.id,score:d.verdict?.score,fetched_at:d.fetched_at,degraded:d.degraded,freshness}));
           NODE
           }
 
@@ -67,6 +80,16 @@ jobs:
           check_state north-dakota north-dakota-aurora-live.vercel.app peace-garden 'North Dakota'
           check_state montana montana-aurora-live.vercel.app glacier Montana
           check_state maine maine-aurora-live.vercel.app allagash Maine
+
+          echo 'Checking national aurora source age reporting'
+          fetch_retry 'https://chrisizworski.com/api/national-aurora?lat=46.54&lon=-87.39' /tmp/national-aurora.json
+          node - <<'NODE'
+          const d=require('/tmp/national-aurora.json');
+          const f=d.source_freshness;
+          if (!d.retrieved_at || !f || typeof f.kp_observed_fresh!=='boolean' || typeof f.ovation_fresh!=='boolean' || typeof f.nws_sky_fresh!=='boolean') throw Error('National aurora freshness contract missing');
+          if (!f.ovation_fresh && d.local_signal?.ovation_value != null) throw Error('National API used stale OVATION');
+          if (!f.kp_observed_fresh && d.geomagnetic?.current_kp != null) throw Error('National API used stale Kp observation');
+          NODE
 
           check_page /national-tools/aurora/alaska/fairbanks/
           check_page /national-tools/aurora/alaska/anchorage/
