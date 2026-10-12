@@ -48,18 +48,27 @@
     south8:{
       src:'/assets/welland/photos/south8.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg/800px-Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg',
       alt:'Lock 8 Gateway Park in Port Colborne, at the Lake Erie end of the Welland Canal',
-      caption:'Lock 8 Gateway Park · Port Colborne viewing area',
+      caption:'Nearby Lock 8 Gateway Park · park photo, NOT the Lock 8 chamber',
       credit:'Mhsheikholeslami',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
       source:'https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg'
     }
   };
+    // The triptych below replaces a demonstrably incorrect, repeated Lock 7
+    // photo for Locks 4–6. Engineering schematics are not camera photographs.
+    // Each panel highlights the exact lock, with NOAA-published lift values.
+    // Definitions added through Object.assign to preserve licensed photo audit.
+  Object.assign(LOCK_PHOTOS,{
+    flight4:{kind:'schematic',subjectLock:'4',src:'/assets/welland/photos/flight4-schematic.svg',alt:'Diagram of Thorold flight showing Lock 4 highlighted, 15 metre lift; not a photograph',caption:'Lock 4 · exact chamber identified in a schematic; NOT a photograph',credit:'Chris Izworski',license:'NOAA lift figures',licenseUrl:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf',source:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf'},
+    flight5:{kind:'schematic',subjectLock:'5',src:'/assets/welland/photos/flight5-schematic.svg',alt:'Diagram of Thorold flight showing Lock 5 highlighted, 15 metre lift; not a photograph',caption:'Lock 5 · exact chamber identified in a schematic; NOT a photograph',credit:'Chris Izworski',license:'NOAA lift figures',licenseUrl:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf',source:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf'},
+    flight6:{kind:'schematic',subjectLock:'6',src:'/assets/welland/photos/flight6-schematic.svg',alt:'Diagram of Thorold flight showing Lock 6 highlighted, 13 metre lift; not a photograph',caption:'Lock 6 · exact chamber identified in a schematic; NOT a photograph',credit:'Chris Izworski',license:'NOAA lift figures',licenseUrl:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf',source:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf'}
+  });
   const LOCK_STORIES = {
     '1':{photo:'north1',segment:'NORTHERN LIFT · LAKE ONTARIO',explainer:'Lock 1 is the canal’s northern gateway near Port Weller. An upbound vessel begins its climb toward Lake Erie here, moving from the lower Lake Ontario level into the first raised reach of the canal. It is the opening chapter of the eight-lock journey.',tip:'View from designated public areas only; shoreline access varies.'},
     '2':{photo:'north2',segment:'NORTHERN LIFT · ST. CATHARINES',explainer:'Lock 2 continues the stepped ascent south of Port Weller. Each chamber holds a vessel while water levels change, then opens to the next section of canal. The process explains how very large ships navigate a landscape that rises sharply toward Lake Erie.',tip:'A working lock, not a confirmed public viewing facility. Verify access locally.'},
     '3':{photo:'north3',segment:'NORTHERN LIFT · PUBLIC VIEWING',explainer:'Lock 3 is the canal’s best-established public introduction. Beside it, the St. Catharines Museum and Welland Canals Centre offers a viewing platform where visitors can watch freighters enter the chamber and rise or descend. The official Seaway schedule helps you time a visit, but ship arrival times can change.',tip:'Best documented first visit: the museum and Lock 3 viewing platform.'},
-    '4':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 4 marks the lower entry to the extraordinary Thorold twin flight. Locks 4, 5 and 6 form connected steps that carry ships roughly 43 metres up or down the Niagara Escarpment. Parallel chambers let traffic in opposite directions pass through the flight without sharing one chamber.',tip:'This photo shows nearby Lock 7, not the Lock 4 chamber. Use the Lock 7 Viewing Centre for a broader look at the flight.'},
-    '5':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 5 is the middle step of the Thorold flight, between Locks 4 and 6. Instead of a single enormous lift, the canal distributes the escarpment climb across successive lock chambers. Watching the sequence helps make sense of the engineering behind the Welland Canal.',tip:'This photo shows nearby Lock 7, not the Lock 5 chamber. Public viewing is best researched through the Lock 7 Viewing Centre.'},
-    '6':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 6 completes the three-step flight as upbound ships continue toward the summit of the canal. The paired design of Locks 4 through 6 helps manage traffic through one of the waterway’s most dramatic elevation changes. Lock 7 is the next lift south of this complex.',tip:'This photo shows nearby Lock 7, not the Lock 6 chamber. Check the official Seaway schedule before traveling.'},
+    '4':{photo:'flight4',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 4 marks the lower entry to the extraordinary Thorold twin flight. Locks 4, 5 and 6 form connected steps that carry ships roughly 43 metres up or down the Niagara Escarpment. Parallel chambers let traffic in opposite directions pass through the flight without sharing one chamber.',tip:'This photo shows nearby Lock 7, not the Lock 4 chamber. Use the Lock 7 Viewing Centre for a broader look at the flight.'},
+    '5':{photo:'flight5',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 5 is the middle step of the Thorold flight, between Locks 4 and 6. Instead of a single enormous lift, the canal distributes the escarpment climb across successive lock chambers. Watching the sequence helps make sense of the engineering behind the Welland Canal.',tip:'This photo shows nearby Lock 7, not the Lock 5 chamber. Public viewing is best researched through the Lock 7 Viewing Centre.'},
+    '6':{photo:'flight6',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 6 completes the three-step flight as upbound ships continue toward the summit of the canal. The paired design of Locks 4 through 6 helps manage traffic through one of the waterway’s most dramatic elevation changes. Lock 7 is the next lift south of this complex.',tip:'This photo shows nearby Lock 7, not the Lock 6 chamber. Check the official Seaway schedule before traveling.'},
     '7':{photo:'thorold',segment:'THOROLD · ESCARPMENT SUMMIT',explainer:'Lock 7 is the last lift for upbound ships as they reach the high canal level. Thorold’s Lock 7 Viewing Centre sits above the Niagara Escarpment and provides a perspective on ships moving through Locks 4, 5, 6 and 7. It is a strong place to appreciate the whole engineered climb.',tip:'The City of Thorold publishes seasonal Viewing Centre details; confirm hours before visiting.'},
     '8':{photo:'south8',segment:'PORT COLBORNE · LAKE ERIE',explainer:'Lock 8 has a different job from the seven lift locks to its north. At Port Colborne, it helps regulate the connection with Lake Erie, making a comparatively small water-level adjustment depending on conditions. Gateway Park provides a public viewing area near this remarkable, long control lock.',tip:'Gateway Park includes a viewing platform. Check local visitor information for facilities and current access.'}
   };
@@ -239,7 +248,8 @@
     const photo=LOCK_PHOTOS[story.photo];
     setLockPhoto($('lockDetailImage'),$('lockDetailImageFallback'),photo);
     $('lockDetailImageCaption').textContent=lock?photo.caption:'Lock 3 viewing platform · example of the Welland Canal';
-    $('lockDetailImageCredit').textContent='Photo: '+photo.credit;
+    $('lockDetailImageCredit').textContent=(photo.kind==='schematic'?'Diagram: ':'Photo: ')+photo.credit;
+    $('lockDetailImageFormat').textContent=photo.kind==='schematic'?'· Original diagram; not a photograph':'· Display cropped';
     $('lockDetailImageCredit').href=photo.source;
     $('lockDetailImageLicense').textContent=photo.license;
     $('lockDetailImageLicense').href=photo.licenseUrl;
@@ -261,6 +271,8 @@
     const visitor=$('lockDetailVisitor');
     visitor.hidden=!lock?.url;
     if(lock?.url)visitor.href=lock.url;else visitor.removeAttribute('href');
+    const watchCam=$('lockDetailWatchCam');
+    watchCam.hidden=lock?.id!=='8';
     const next=lock?(Number(lock.id)%8)+1:1;
     $('lockDetailNext').textContent=lock?'Next · Lock '+next+' →':'Explore Lock 1 →';
     $('lockDetailNext').dataset.next=String(next);
@@ -378,6 +390,23 @@
       busy=false;$('refreshShips').disabled=false;
     }
   }
+  // Cameras are embedded only after a deliberate click. No API here proves
+  // current uptime: YouTube controls playback, and the PTZ view can change.
+  const cameraFrame=$('canalCameraFrame');
+  const cameraPlay=$('canalCameraPlay');
+  const cameraStop=$('canalCameraStop');
+  cameraPlay.addEventListener('click',()=>{
+    cameraFrame.src='https://www.youtube-nocookie.com/embed/yF7XdpkL34w?autoplay=1&rel=0';
+    cameraFrame.hidden=false;
+    cameraPlay.hidden=true;
+    cameraStop.hidden=false;
+  });
+  cameraStop.addEventListener('click',()=>{
+    cameraFrame.removeAttribute('src');
+    cameraFrame.hidden=true;
+    cameraPlay.hidden=false;
+    cameraStop.hidden=true;
+  });
   $('shipSearch').addEventListener('input',renderList);
   select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
