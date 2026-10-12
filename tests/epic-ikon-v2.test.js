@@ -86,6 +86,8 @@ test('Official JSON route returns authoritative policy; API is server-side and P
  }
  const read=await fake('GET',null);
  assert.equal(read.statusCode,405);
+ assert.equal(read.headers['X-Robots-Tag'],'noindex, nofollow');
+ assert.equal(read.headers.Allow,'POST');
  const output=await fake('POST',trip());
  assert.equal(output.statusCode,200);
  assert.equal(output.body.verdict.status,E.evaluate(trip()).status);
