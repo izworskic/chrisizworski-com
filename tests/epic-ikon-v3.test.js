@@ -76,3 +76,38 @@ test('V3 page preserves canonical SEO ownership, pass engine and deliberately lo
  assert.match(PAGE,/Source-linked trip brief|source-linked trip brief/i);
  assert.doesNotMatch(PAGE,/<script[^>]+(?:redis|anthropic)/i);
 });
+
+
+test('15 direct season-policy scenarios never turn absent proof into an entitled day',()=>{
+ const cases=[
+  ['Epic Local blocked at Vail New Year', {pass:'epicLocal',resort:'vail',date:'2026-12-31'},'NO'],
+  ['Epic Vail published rules yes', {pass:'epic',resort:'vail',date:'2026-12-31'},'YES'],
+  ['Epic Local post-peak with pool available', {pass:'epicLocal',resort:'vail',date:'2027-01-04',usedDays:0},'YES'],
+  ['Epic Local pool unknown', {pass:'epicLocal',resort:'vail',date:'2027-01-04'},'CHECK'],
+  ['Epic Local pool exhausted', {pass:'epicLocal',resort:'vail',date:'2027-01-04',usedDays:10},'NO'],
+  ['Ikon Base Aspen excluded', {pass:'ikonBase',resort:'aspen-mountain',date:'2027-01-12'},'NO'],
+  ['Ikon Base Snowmass day bank unknown', {pass:'ikonBase',resort:'snowmass',date:'2027-01-12'},'CHECK'],
+  ['Ikon Full shared pool exhausted', {pass:'ikon',resort:'snowmass',date:'2027-01-12',usedDays:7},'NO'],
+  ['Ikon Full shared pool has days', {pass:'ikon',resort:'snowmass',date:'2027-01-12',usedDays:2},'YES'],
+  ['Jackson reservation no', {pass:'ikon',resort:'jackson-hole',date:'2027-01-12',usedDays:0,reservationMade:'no'},'ACTION'],
+  ['Jackson reservation reported yes', {pass:'ikon',resort:'jackson-hole',date:'2027-01-12',usedDays:0,reservationMade:'yes'},'YES'],
+  ['Epic Day missing product choice', {pass:'epicDay',resort:'vail',date:'2026-12-31'},'UNKNOWN'],
+  ['Epic Day without holiday option', {pass:'epicDay',resort:'vail',date:'2026-12-31',epicDayTotal:2,epicPeak:'no',usedDays:0},'NO'],
+  ['Epic Day purchased peak option', {pass:'epicDay',resort:'vail',date:'2026-12-31',epicDayTotal:2,epicPeak:'yes',usedDays:0},'YES'],
+  ['Invalid impossible date', {pass:'epicLocal',resort:'vail',date:'2027-02-30'},'UNKNOWN'],
+ ];
+ for(const [label,input,expected]of cases){
+    const verdict=E.evaluate(input);
+    assert.equal(verdict.status,expected,label);
+    const commit=V.commitment(verdict);
+    if(expected==='NO')assert.equal(commit.code,'BLOCKED',label);
+    if(expected==='YES')assert.equal(commit.code,'RULES_ALLOW_PLAN',label);
+    if(expected==='CHECK'||expected==='ACTION')assert.equal(commit.code,'NEEDS_ACTION',label);
+    if(expected==='UNKNOWN')assert.equal(commit.code,'NOT_YET_VERIFIABLE',label);
+ }
+});
+test('All proposed Vail media use visible historical provenance and no 2026 winter claim',()=>{
+ for(const item of V.MEDIA) assert.ok(Number(item.captureDate.slice(0,4))<=2010);
+ assert.ok(V.MEDIA.every(x=>x.exactSubject.toLowerCase().includes('vail')||x.exactSubject.includes('Lionshead')));
+ assert.match(PAGE,/Historical|historical/);
+});
