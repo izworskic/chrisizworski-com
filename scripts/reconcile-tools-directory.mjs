@@ -30,6 +30,13 @@ list.itemListElement = cards.map((card, index) => ({
 if (new Set(list.itemListElement.map(entry => normalize(entry.item.url))).size !== cards.length) throw new Error('Duplicate directory URL');
 list.numberOfItems = cards.length;
 html = html.replace(match[0], `<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+// Ballard CTR: contextual Seattle links are navigation, not duplicate tool cards.
+const ballardToolsAnchor = '<p>Planning beyond Michigan?';
+const ballardToolsNav = '<p data-ballard-ctr-v1="tools-links"><strong>Seattle now:</strong> <a href="/ballard-locks/">Ballard Locks live visitor guide</a> · <a href="/ballard-locks/salmon-counts/">Latest Ballard Locks fish and salmon counts</a></p>\n';
+if (!html.includes('data-ballard-ctr-v1="tools-links"')) {
+  if (!html.includes(ballardToolsAnchor)) throw new Error('Ballard CTR: tools navigation anchor missing');
+  html = html.replace(ballardToolsAnchor, ballardToolsNav + ballardToolsAnchor);
+}
 fs.writeFileSync(file, html);
 console.log(`Tools directory reconciled: ${cards.length} visible and structured entries`);
 
@@ -48,6 +55,15 @@ function reconcileMarylandBayBridgeNationalTools() {
     national = national.slice(0, insertAt) + card + national.slice(insertAt);
   }
 
+  // A sibling hub link for each page; reuse the existing Ballard card.
+  if (!national.includes('data-ballard-ctr-v1="salmon-link"')) {
+    const ballardVariant = '<strong>Also at Ballard:</strong> ';
+    const revisedVariant = '<strong>Also at Ballard:</strong> <a data-ballard-ctr-v1="salmon-link" href="/ballard-locks/salmon-counts/">Latest official fish and salmon counts</a> · ';
+    if (!national.includes('data-tool-id="ballard-locks"') || !national.includes(ballardVariant)) {
+      throw new Error('Ballard CTR: national tools card is missing');
+    }
+    national = national.replace(ballardVariant, revisedVariant);
+  }
   const schemaMatch = national.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
   if (!schemaMatch) throw new Error('National tools: JSON-LD graph missing');
   const nationalSchema = JSON.parse(schemaMatch[1]);
