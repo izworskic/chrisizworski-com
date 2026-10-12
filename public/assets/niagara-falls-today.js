@@ -17,6 +17,16 @@ function draw(r){
  out+='<div class="sectitle">Your route · Eastern local time</div>';
  if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4><p>'+safe(s.description)+'</p><div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:'Check park access notices')+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
  else out+='<p>There is no safe confirmed stop for this request. Check official park advisories.</p>';
+ if(r.weather){
+  var w=r.weather;
+  out+='<div class="caveat"><strong>Official regional weather:</strong> '+safe(w.status.replace(/_/g,' '))+'. '+safe(w.caveat||'')+' '+link(w.authority_url,'Check official weather');
+  if(w.alerts&&w.alerts.length){
+   out+='<ul class="excluded">';
+   w.alerts.slice(0,4).forEach(function(a){out+='<li><strong>'+safe(a.headline)+'</strong> · '+safe(a.severity)+'</li>';});
+   out+='</ul>';
+  }
+  out+='</div>';
+ }
  out+='<div class="caveat"><strong>Admission and travel limits:</strong> '+safe(r.unknowns.join(' '))+' Parking and applicable taxes are not included in the subtotal.</div>';
  if(r.excluded.length){out+='<p class="sectitle">What to skip, and why</p><ul class="excluded">';r.excluded.slice(0,4).forEach(function(x){out+='<li><strong>'+safe(x.name)+':</strong> '+safe(explain(x.reason))+' '+link(x.source,'check source')+'</li>';});out+='</ul>';}
  if(r.alternatives.length){out+='<details class="source-details"><summary>Other feasible sequences</summary><ul>';r.alternatives.forEach(function(a){out+='<li>'+safe(a.label)+'</li>';});out+='</ul></details>';}
