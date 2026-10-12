@@ -118,6 +118,11 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  assert.match(js,/if\(fromMap&&lock\)showLockPreview\(lock\);else hideLockPreview\(\)/);
  assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
  assert.doesNotMatch(js,/bindTooltip\(lock\.name/);
+ assert.doesNotMatch(js,/title:lock\.name/);
+ assert.doesNotMatch(js,/title:'Central locks/);
+ assert.doesNotMatch(js,/title:'Thorold flight locks/);
+ assert.match(js,/marker\.getElement\(\)\?\.setAttribute\('aria-label'/);
+ assert.match(js,/flightMarker\.getElement\(\)\?\.setAttribute\('aria-label'/);
  assert.doesNotMatch(js,/bindTooltip\('Locks 3–7/);
  assert.doesNotMatch(js,/bindTooltip\('Locks 4–6/);
  assert.match(js,/\$\('mapLockPreviewDismiss'\)\.addEventListener\('click',hideLockPreview\)/);
