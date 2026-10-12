@@ -383,3 +383,32 @@ test('Freighters open a persistent source-labeled briefing without covering the 
   assert.match(css,/\.vessel-spotlight\[hidden\]\{display:none!important\}/);
   assert.match(css,/@media\(max-width:620px\)/);
 });
+
+test('Welland search discovery preserves canonical truth and wires high-intent visitor handoffs',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
+  const html=read('public/welland-canal/index.html');
+  const soo=read('public/soo-locks/index.html');
+  const lake=read('public/great-lakes-freighter-tracking/index.html');
+  const sitemap=read('public/sitemap.xml');
+  assert.match(html,/<title>Welland Canal Ship Tracker Today: Locks &amp; Schedule \| Chris Izworski<\/title>/);
+  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/welland-canal\/">/);
+  assert.match(html,/id="ship-schedule"/);
+  assert.match(html,/Welland Canal ship schedule today: three checks before you leave/);
+  assert.match(html,/data-track-tool="welland-official-schedule" data-placement="welland-three-checks"/);
+  assert.match(html,/What time will a freighter arrive at Lock 3\?/);
+  assert.match(html,/last-reported time and direction/);
+  assert.match(html,/don.t interpret an empty map as an empty canal/);
+  assert.doesNotMatch(html,/<meta name="robots" content="noindex"/);
+  assert.match(soo,/href="\/welland-canal\/" data-track-tool="welland-canal" data-placement="soo-locks-related"/);
+  assert.match(lake,/href="\/welland-canal\/" data-track-tool="welland-canal" data-placement="freighter-related"/);
+  assert.equal((lake.match(/Soo Locks Schedule Today<\/strong>/g)||[]).length,1,'remove duplicate Soo card');
+  assert.match(sitemap,/https:\/\/chrisizworski\.com\/welland-canal\//);
+  const structured=html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(structured,'JSON-LD exists');
+  const graph=JSON.parse(structured[1])['@graph'];
+  const person=graph.filter(item=>item['@type']==='Person');
+  assert.equal(person.length,1,'a single consistent Person identity');
+  assert.equal(person[0]['@id'],'https://chrisizworski.com/#person');
+  assert.equal(graph.find(item=>item['@type']==='WebPage').mainEntity['@id'],'https://chrisizworski.com/welland-canal/#app');
+});
