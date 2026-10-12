@@ -1,5 +1,6 @@
 'use strict';
-const {plan}=require('../lib/niagara-falls/planner.js');
+const {plan,validate}=require('../lib/niagara-falls/planner.js');
+const {getCanadianHours}=require('../lib/niagara-falls/parks-hours.js');
 const {weatherForVisit}=require('../lib/niagara-falls/weather.js');
 module.exports=async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
@@ -11,7 +12,9 @@ module.exports=async function handler(req,res){
  try{
   if(Number(req.headers['content-length']||0)>8192)throw Error('Planner request too large.');
   const body=typeof req.body==='string'?JSON.parse(req.body):req.body;
-  const result=plan(body);
+  const input=validate(body);
+  const caHours=input.side==='CA'?await getCanadianHours(input.date):null;
+  const result=plan(body,new Date(),caHours);
   result.weather=await weatherForVisit(result.side,result.visit_local_date);
   const severe=(result.weather.alerts||[]).some(a=>/\b(tornado warning|severe thunderstorm warning|flash flood warning|blizzard warning)\b/i.test(a.headline));
   if(severe){
