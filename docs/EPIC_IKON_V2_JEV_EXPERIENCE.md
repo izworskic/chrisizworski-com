@@ -16,7 +16,7 @@ Prior user product guidance (Detroit Outdoors, Old Sow, Niagara Falls):
 - Four Aspen mountains: https://www.ikonpass.com/en/destinations/aspen-snowmass
 - Whistler hours and PEAK 2 PEAK: https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/hours-of-operation.aspx
 
-Curated place notes only. No place photo unless subject, license and sourcing have been verified. Fallback for unprofiled mountains deliberately avoids claiming specific terrain, drive times or experiences. Do not show a random Vail photo for all 75 mountains.
+Curated place notes only. The historical, place-specific images for Vail (Joe Lin, CC BY 2.0), Breckenridge (Jlfdz, CC BY-SA 4.0), and Jackson Hole Aerial Tram (Sirguh, CC BY-SA 4.0) are correctly captioned and attributed beside the image, hidden if unavailable. No place photo unless subject, license and sourcing have been verified. Fallback for unprofiled mountains deliberately avoids claiming specific terrain, drive times or experiences. Do not show a random Vail photo for all 75 mountains.
 
 ## Loss functions / release gates
 - False YES due to JEV or editorial (loss 100): **0 permitted**. API verdict must exactly equal synchronous engine.evaluate(input); 20k deterministic engine fuzz suite remains mandatory.
