@@ -104,11 +104,11 @@ window.NiagaraFallsMedia = Object.freeze({
   },
   "videos": [
     {
-      "id": "l6fu2huqWNE",
+      "id": "DlMgURteL3E",
       "title": "A closer look: Journey Behind the Falls",
       "publisher": "Niagara Parks · official attraction film",
       "caption": "Hear what makes the descent through the rock and the view near Horseshoe Falls different from an ordinary overlook.",
-      "href": "https://www.youtube.com/watch?v=l6fu2huqWNE"
+      "href": "https://www.youtube.com/watch?v=DlMgURteL3E"
     },
     {
       "id": "hmQwm0drhGU",

@@ -40,6 +40,7 @@ test('photos appear in route stops without corrupting existing decision semantic
 });
 test('films are original sources and never load third-party playback automatically',()=>{
  assert.equal(media.videos.length,2);
+ assert.equal(media.videos[0].id,'DlMgURteL3E','official Niagara Parks film must use its verified video identifier');
  for(const film of media.videos){
   assert.match(film.id,/^[a-zA-Z0-9_-]{11}$/);
   assert.match(html,new RegExp('data-video-id="'+film.id+'"'));
