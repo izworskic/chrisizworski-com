@@ -325,3 +325,30 @@
 .shore-watch__footer{padding:14px 20px}
 .shore-watch__footer a,.shore-watch__footer button{flex:1 1 180px}
 }
+
+/* Vessel briefing uses the same restrained maritime vocabulary as the lock
+   story. It docks beneath the map, never covering ship icons or map controls. */
+.vessel-spotlight[hidden]{display:none!important}
+.vessel-spotlight{position:relative;display:grid;grid-template-columns:65px minmax(0,1fr);gap:17px;padding:20px 53px 19px 20px;border-top:2px solid #d4af70;background:#12394d;color:#e9f1f2}
+.vessel-spotlight__emblem{display:grid;place-items:center;width:62px;height:62px;border:1px solid rgba(222,186,121,.55);border-radius:50%;color:#dfbd80;background:#194b60}
+.vessel-spotlight__emblem svg{width:46px;height:26px}
+.vessel-spotlight__content{min-width:0}
+.vessel-spotlight__eyebrow{margin:0 0 5px;color:#e5bd7c;letter-spacing:.12em;font:850 10px/1.4 system-ui,sans-serif}
+.vessel-spotlight h3{margin:0 0 5px;color:#fff;overflow-wrap:anywhere;font:700 24px/1.25 Georgia,serif}
+.vessel-spotlight__time{margin:0 0 13px;color:#c6d6db;font-size:12px}
+.vessel-spotlight__motion{display:block;margin:0 0 7px;color:#f3dfb8;font-size:14px;font-weight:780}
+.vessel-spotlight__content>p:not(.vessel-spotlight__eyebrow):not(.vessel-spotlight__time){margin:6px 0;color:#d1e0e4;font-size:12px;line-height:1.55}
+.vessel-spotlight__links{display:flex;align-items:center;gap:9px 18px;flex-wrap:wrap;margin-top:13px;padding-top:12px;border-top:1px solid rgba(209,224,227,.2)}
+.vessel-spotlight__links a{color:#f3d399;text-underline-offset:3px;font-size:12px;font-weight:800}
+.vessel-spotlight__links span{color:#b8cbd1;font-size:11px;line-height:1.45}
+.vessel-spotlight__dismiss{position:absolute;right:12px;top:12px;display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(215,231,234,.3);border-radius:50%;background:rgba(255,255,255,.06);color:#f6f7f3;font-size:23px;line-height:1;cursor:pointer}
+.vessel-spotlight__dismiss:hover{background:rgba(255,255,255,.17)}
+.vessel-spotlight__dismiss:focus-visible,.vessel-spotlight__links a:focus-visible{outline:3px solid #e5bd7c;outline-offset:3px}
+.welland-ship-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 3px #e3b970) drop-shadow(0 0 5px #f4dfbd)}
+@media(max-width:620px){
+  .vessel-spotlight{grid-template-columns:43px minmax(0,1fr);gap:11px;padding:15px 44px 16px 13px}
+  .vessel-spotlight__emblem{width:42px;height:42px}
+  .vessel-spotlight__emblem svg{width:34px;height:21px}
+  .vessel-spotlight h3{font-size:20px}
+  .vessel-spotlight__links{align-items:flex-start}
+}

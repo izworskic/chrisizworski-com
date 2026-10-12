@@ -61,7 +61,9 @@ test('Welland map uses Duluth-style freighter SVG markers rather than anonymous 
   assert.match(script,/L\.marker\(\[v\.lat,v\.lon\],\{icon:shipIcon\(v\)/);
   assert.match(script,/class="ship-glyph"/);
   assert.match(script,/class="ship-hull"/);
-  assert.match(script,/\.bindTooltip\(name,\{direction:'top'\}\)\.bindPopup\(pop\)/);
+  assert.match(script,/marker\.bindTooltip\(name,\{direction:'top'\}\)/);
+  assert.match(script,/marker\.on\('click',\(\)=>focusVessel\(v\.mmsi,true\)\)/);
+  assert.doesNotMatch(script,/\.bindPopup\(pop\)/);
   assert.match(style,/\.welland-ship-marker\.is-stopped \.ship-hull\{fill:#8a6a42\}/);
   assert.match(page,/AIS vessels/);
   assert.doesNotMatch(script,/L\.circleMarker\(\[v\.lat,v\.lon\]/);
@@ -177,8 +179,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-shore1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-shore1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -329,8 +331,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/iconSize:\[hit,hit\]/);
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
-  assert.match(html,/welland-canal\.css\?v=20261012-shore1/);
-  assert.match(html,/welland-canal\.js\?v=20261012-shore1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
 });
 
 
@@ -357,4 +359,27 @@ test('Shore-watch choices tie public viewing logistics to bounded fresh AIS evid
   assert.ok(css.includes('.shore-watch__choices{display:grid'));
   assert.ok(css.includes('@media(max-width:760px)'));
   assert.ok(!js.includes('predictedLockArrival'));
+});
+
+test('Freighters open a persistent source-labeled briefing without covering the map',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const start=html.indexOf('id="shipMap"'),afterMap=html.indexOf('id="vesselSpotlight"'),beforeFallback=html.indexOf('id="mapFallback"');
+  assert.ok(start>=0&&afterMap>start&&beforeFallback>afterMap,'dock vessel briefing after map');
+  for(const id of ['vesselSpotlight','vesselSpotlightTitle','vesselSpotlightTime','vesselSpotlightMotion','vesselSpotlightPosition','vesselSpotlightDestination','vesselSpotlightDismiss'])
+    assert.ok(html.includes('id="'+id+'"'),id+' exists');
+  assert.match(js,/function renderVesselSpotlight\(\)/);
+  assert.match(js,/function focusVessel\(mmsi,scrollToCard=false\)/);
+  assert.match(js,/vesselData\.find\(v=>String\(v\.mmsi\)===selectedVessel\)/);
+  assert.match(js,/Next lock and arrival time not verified from AIS/);
+  assert.match(js,/Proximity does not establish lock occupancy/);
+  assert.match(js,/marker\.on\('click',\(\)=>focusVessel\(v\.mmsi,true\)\)/);
+  assert.match(js,/btn\.type='button';btn\.addEventListener\('click',\(\)=>focusVessel\(v\.mmsi,true\)\)/);
+  assert.match(js,/renderShoreWatch\(\);renderVesselSpotlight\(\)/);
+  assert.match(html,/Check official order of turn/);
+  assert.match(css,/\.vessel-spotlight\{position:relative;display:grid/);
+  assert.match(css,/\.vessel-spotlight\[hidden\]\{display:none!important\}/);
+  assert.match(css,/@media\(max-width:620px\)/);
 });

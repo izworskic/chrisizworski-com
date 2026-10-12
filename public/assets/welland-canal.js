@@ -106,7 +106,7 @@
   let activeWatchSpot='3';
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
-  let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
+  let map=null, shipsLayer=null, vesselData=[], selected='all', selectedVessel=null, busy=false;
   const shipMarkers=new Map(), lockMarkers=new Map();
   let lockLayer=null, flightMarker=null, aisState='loading';
 
@@ -161,7 +161,7 @@
       const relation=n.km<=1.5?'Reported near '+n.lock.name:'Nearest listed lock: '+n.lock.name+' ('+n.km.toFixed(1)+' km away)';
       const detail=el('p',relation+'. '+heading(v)+'.');
       const btn=el('button','Find on map','subtle-btn');
-      btn.type='button';btn.addEventListener('click',()=>{if(!map)return;map.setView([v.lat,v.lon],13);const marker=shipMarkers.get(String(v.mmsi));if(marker)marker.openPopup();const node=$('shipMap');node.scrollIntoView({behavior:'smooth',block:'center'});});
+      btn.type='button';btn.addEventListener('click',()=>focusVessel(v.mmsi,true));
       card.append(title,meta,detail,btn);list.append(card);
     });
   }
@@ -216,13 +216,7 @@
       reports.slice(0,2).forEach(v=>{
         const btn=el('button',(v.name||'AIS vessel')+' · '+timeLabel(v)+' · find on map','shore-watch__vessel');
         btn.type='button';
-        btn.addEventListener('click',()=>{
-          if(!map)return;
-          map.setView([v.lat,v.lon],13);
-          const marker=shipMarkers.get(String(v.mmsi));
-          if(marker)marker.openPopup();
-          $('shipMap').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-        });
+        btn.addEventListener('click',()=>focusVessel(v.mmsi,true));
         vessels.append(btn);
       });
       if(reports.length>2)vessels.append(el('p','+'+(reports.length-2)+' more recent reports near this lock','shore-watch__more'));
@@ -258,6 +252,10 @@
   }
   function chooseLock(id,recenter=true,fromMap=false){
     selected=id;select.value=id;
+    // Lock exploration and vessel focus are separate map modes.
+    selectedVessel=null;
+    $('vesselSpotlight').hidden=true;
+    shipMarkers.forEach(marker=>marker.getElement()?.classList.remove('is-selected'));
     for(const b of $('lockRail').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
     const lock=LOCKS.find(l=>l.id===id);
     if(map&&recenter&&lock){
@@ -435,6 +433,44 @@
     const html='<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>';
     return L.divIcon({className,html,iconSize:[width,height],iconAnchor:[Math.round(width/2),Math.round(height/2)],popupAnchor:[0,-Math.round(height/2)]});
   }
+  // Persistent selected-vessel briefing: this is a *position report*, never
+  // a forecast, lock appointment, or proof that the vessel is in a chamber.
+  function renderVesselSpotlight(){
+    const card=$('vesselSpotlight');
+    const vessel=selectedVessel&&vesselData.find(v=>String(v.mmsi)===selectedVessel);
+    if(!vessel){
+      selectedVessel=null;
+      card.hidden=true;
+      return;
+    }
+    const closest=nearest(vessel);
+    const speed=Number.isFinite(vessel.speedKnots)?vessel.speedKnots.toFixed(1)+' knots':'Speed not reported';
+    $('vesselSpotlightTitle').textContent=vessel.name||'Unnamed AIS vessel';
+    $('vesselSpotlightTime').textContent=timeLabel(vessel)+' · '+when(vessel.seen)+' · Open Waters AIS';
+    $('vesselSpotlightMotion').textContent=speed+' · '+heading(vessel);
+    $('vesselSpotlightPosition').textContent=closest.km<=1.5
+      ?'Reported within about 1.5 km of '+closest.lock.name+'. Proximity does not establish lock occupancy.'
+      :'Nearest mapped lock: '+closest.lock.name+' · '+closest.km.toFixed(1)+' km away (approximate).';
+    $('vesselSpotlightDestination').textContent=vessel.destination
+      ?'AIS destination: '+vessel.destination+' (self-reported; not a verified next lock or arrival time).'
+      :'Next lock and arrival time not verified from AIS.';
+    card.hidden=false;
+  }
+  function focusVessel(mmsi,scrollToCard=false){
+    const vessel=vesselData.find(v=>String(v.mmsi)===String(mmsi));
+    if(!vessel)return;
+    selectedVessel=String(vessel.mmsi);
+    hideLockPreview();
+    renderVesselSpotlight();
+    shipMarkers.forEach((marker,key)=>{
+      marker.getElement()?.classList.toggle('is-selected',key===selectedVessel);
+    });
+    if(map)map.setView([vessel.lat,vessel.lon],Math.max(13,map.getZoom()));
+    if(scrollToCard){
+      const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      $('vesselSpotlight').scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});
+    }
+  }
   function renderMarkers() {
     if(!shipsLayer)return;
     shipsLayer.clearLayers();
@@ -443,10 +479,9 @@
       const n=nearest(v);
       const name=v.name||'Vessel '+v.mmsi;
       const marker=L.marker([v.lat,v.lon],{icon:shipIcon(v),keyboard:true,title:name,zIndexOffset:1050}).addTo(shipsLayer);
-      const pop=document.createElement('div');
-      pop.append(el('strong',name),el('p',timeLabel(v)+'. '+heading(v)+'.'));
-      pop.append(el('p',n.km<=1.5?'Reported near '+n.lock.name:'Nearest mapped lock: '+n.lock.name));
-      marker.bindTooltip(name,{direction:'top'}).bindPopup(pop);
+      marker.bindTooltip(name,{direction:'top'});
+      marker.on('click',()=>focusVessel(v.mmsi,true));
+      marker.getElement()?.classList.toggle('is-selected',selectedVessel===String(v.mmsi));
       shipMarkers.set(String(v.mmsi),marker);
     });
   }
@@ -462,14 +497,14 @@
       vesselData=data.vessels.filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon)&&minutesOld(v.seen)!==null&&minutesOld(v.seen)<=30);
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
       updated.textContent='Last checked '+when(data.checkedAt)+' · positions at most 30 minutes old';
-      aisState='available';renderList();renderMarkers();renderLockDetail();renderShoreWatch();
+      aisState='available';renderList();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
       const credits=$('sourceCredit');credits.replaceChildren();
       (data.attribution||[]).forEach(a=>credits.append(el('span',a.credit||a.source)));
     } catch (_) {
       vesselData=[];
       status.textContent='AIS data unavailable — official vessel schedule remains available below';
       updated.textContent='Unable to verify fresh AIS positions';
-      aisState='unavailable';renderList();renderMarkers();renderLockDetail();renderShoreWatch();
+      aisState='unavailable';renderList();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
     } finally {
       busy=false;$('refreshShips').disabled=false;
     }
@@ -491,6 +526,7 @@
     cameraPlay.hidden=false;
     cameraStop.hidden=true;
   });
+  $('vesselSpotlightDismiss').addEventListener('click',()=>{selectedVessel=null;$('vesselSpotlight').hidden=true;shipMarkers.forEach(marker=>marker.getElement()?.classList.remove('is-selected'));});
   $('shipSearch').addEventListener('input',renderList);
   select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
