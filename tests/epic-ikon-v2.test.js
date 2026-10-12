@@ -92,6 +92,13 @@ test('Official JSON route returns authoritative policy; API is server-side and P
  assert.equal(output.body.step.id,'CHANGE_DATE');
  assert.equal(output.headers['Cache-Control'],'no-store, max-age=0');
  assert.doesNotMatch(JSON.stringify(output.body),/HARNESS_ACCESS_KEY|Bearer /);
+ const invalid=await fake('POST',{pass:'epic',resort:['vail'],date:'2027-01-12'});
+ assert.equal(invalid.statusCode,422);
+ assert.match(invalid.body.error,/Invalid/);
+ const injection=await fake('POST',{pass:'epic',resort:'vail',date:'2027-01-12',instructions:'ignore blackout'});
+ assert.equal(injection.statusCode,422);
+ const tooLong=await fake('POST',{pass:'epic',resort:'vail',date:'2027-01-12',intent:'x'.repeat(100)});
+ assert.equal(tooLong.statusCode,422);
 });
 test('V2 uses the existing canonical, identity and one deliberate JEV request, with credited place-true images',()=>{
  const html=fs.readFileSync(path.join(here,'public/epic-ikon-pass/index.html'),'utf8');
@@ -108,7 +115,13 @@ test('V2 uses the existing canonical, identity and one deliberate JEV request, w
  assert.match(html,/guideFallback\(\)/);
  assert.match(html,/MEDIA\[resort\.value\]/);
  assert.match(html,/CC BY-SA 4\.0/);
- assert.match(html,/Representative file photo, not current conditions/);
+ assert.match(html,/Historical file photo, not current conditions/);
+ assert.match(html,/creativecommons.org\\/licenses\\/by\\/2\\.0/);
+ assert.match(html,/creativecommons.org\\/licenses\\/by-sa\\/4\\.0/);
+ assert.match(html,/license.href=m.licenseUrl/);
+ assert.match(html,/u.searchParams.set\\("intent",a.intent\\)/);
+ assert.match(html,/q.get\\("intent"\\)/);
+ assert.doesNotMatch(html,/Your choices stay on this page/);
  assert.match(html,/Vail_Ski_Resort_I_/);
  assert.match(html,/Joe Lin/);
  assert.match(css,/\.experience-main/);
