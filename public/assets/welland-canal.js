@@ -365,7 +365,7 @@
     }
   }
   $('shipSearch').addEventListener('input',renderList);
-  select.addEventListener('change',()=>chooseLock(select.value,true,true));
+  select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
