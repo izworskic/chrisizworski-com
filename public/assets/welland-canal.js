@@ -92,7 +92,7 @@
   // A persistent, map-adjacent mobile preview survives Leaflet marker redraws
   // and offers a deliberate path to the premium full-size lock profile.
   function showLockPreview(lock){
-    if(!window.matchMedia||!window.matchMedia('(max-width: 690px)').matches){
+    if(!window.matchMedia||!window.matchMedia('(max-width: 900px)').matches){
       hideLockPreview();
       return;
     }
