@@ -1,24 +1,24 @@
 {
   "version": "v3-vail-audit-2026-10-12",
-  "status": "STAGING_ONLY_NOT_LICENSE_OR_RUNTIME_CERTIFIED",
+  "status": "OFFICIAL_COMMONS_LICENSE_AND_SUBJECT_REVIEWED__RUNTIME_PENDING",
   "policy": "Three real destination-specific Commons images; keep dated subject and license links visible; do not represent as live mountain conditions. No unlicensed resort-map image.",
   "assets": [
     {
-      "id": "vail-ski-scene-2009",
-      "exactSubject": "Vail Ski Resort snowy ski trails",
+      "id": "vail-blue-sky-2012",
+      "exactSubject": "Snow panorama from Blue Sky Basin at Vail Ski Resort",
       "season": "WINTER",
-      "captureDate": "2009-12-24",
-      "photographer": "Joe Lin",
-      "sourcePage": "https://commons.wikimedia.org/wiki/File:Vail_Ski_Resort_I_(33672235356).jpg",
+      "captureDate": "2012-02-09",
+      "photographer": "Zach Dischner",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Morning_Corn_(6849146266).jpg",
       "license": "CC BY 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
       "rights": "CC",
-      "rightsNotes": "Attribution required; displayed cropping should be disclosed; verify redirect image availability at release",
+      "rightsNotes": "Commons photo and Flickr Creative Commons reviewed by FlickreviewR. Cropped for responsive layout; no alteration to original file. Source-linked caption. Runtime availability needs browser check.",
       "editorialPurpose": "MOUNTAIN"
     },
     {
       "id": "vail-front-side-2005",
-      "exactSubject": "Vail Front Side from Red Sandstone Road",
+      "exactSubject": "Front Side of Vail Ski Resort from Red Sandstone Road",
       "season": "WINTER",
       "captureDate": "2005-02-13",
       "photographer": "David Benbennick",
@@ -26,7 +26,7 @@
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
       "rights": "CC",
-      "rightsNotes": "Attribution/ShareAlike license conditions; verify any derivative use and file delivery at release",
+      "rightsNotes": "Photographer credited by Commons. Multi-licensed photograph; CC BY-SA 3.0 selected. Display crop must be disclosed. Source-linked caption.",
       "editorialPurpose": "TERRAIN"
     },
     {
@@ -39,7 +39,7 @@
       "license": "CC BY-SA 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
       "rights": "CC",
-      "rightsNotes": "Flickr Commons image passed FlickreviewR; explicitly summer arrival photo; share-alike/modification terms still require validation; verify file delivery at release",
+      "rightsNotes": "FlickreviewR confirmed source license in Aug 2018. Historical SUMMER photograph, no claims about winter conditions. Display crop disclosed.",
       "editorialPurpose": "ARRIVAL"
     }
   ],
@@ -53,11 +53,10 @@
     "roads": "https://www.cotrip.org/"
   },
   "blockingReviews": [
-    "Image URL GET+responsive format delivery audit",
-    "Actual 390px and desktop screenshot inspection",
-    "Exact mapped marker vs operator site arrival map review",
-    "Per-provider seasonal status TTL integration or honest unavailable state",
-    "Run npm test and npm run verify:all",
-    "20k policy seed tests and visual scoring"
+    "Verify 3 direct Wikimedia thumbnail URLs in live browser, with media onerror captions visible",
+    "390px/desktop screenshot and keyboard check",
+    "POI reference precision check with resort arrival map; current pins are community POI centers, not lesson entrances",
+    "Full npm test, npm run verify:all and Vercel screenshot audit",
+    "Do not merge until Vail passes 94/100"
   ]
 }
