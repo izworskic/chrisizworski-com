@@ -1,0 +1,63 @@
+{
+  "version": "v3-vail-audit-2026-10-12",
+  "status": "STAGING_ONLY_NOT_LICENSE_OR_RUNTIME_CERTIFIED",
+  "policy": "Three real destination-specific Commons images; keep dated subject and license links visible; do not represent as live mountain conditions. No unlicensed resort-map image.",
+  "assets": [
+    {
+      "id": "vail-ski-scene-2009",
+      "exactSubject": "Vail Ski Resort snowy ski trails",
+      "season": "WINTER",
+      "captureDate": "2009-12-24",
+      "photographer": "Joe Lin",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Vail_Ski_Resort_I_(33672235356).jpg",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "rights": "CC",
+      "rightsNotes": "Attribution required; displayed cropping should be disclosed; verify redirect image availability at release",
+      "editorialPurpose": "MOUNTAIN"
+    },
+    {
+      "id": "vail-front-side-2005",
+      "exactSubject": "Vail Front Side from Red Sandstone Road",
+      "season": "WINTER",
+      "captureDate": "2005-02-13",
+      "photographer": "David Benbennick",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Vail_front_side.jpg",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "rights": "CC",
+      "rightsNotes": "Attribution/ShareAlike license conditions; verify any derivative use and file delivery at release",
+      "editorialPurpose": "TERRAIN"
+    },
+    {
+      "id": "vail-lionshead-2009",
+      "exactSubject": "Buildings at Lionshead Village, Vail",
+      "season": "SUMMER",
+      "captureDate": "2009-08-11",
+      "photographer": "Pattie (Pirate Alice)",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Buildings_at_Lionshead_Village_(3826589153).jpg",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "rights": "CC",
+      "rightsNotes": "Flickr Commons image passed FlickreviewR; explicitly summer arrival photo; share-alike/modification terms still require validation; verify file delivery at release",
+      "editorialPurpose": "ARRIVAL"
+    }
+  ],
+  "sourceIndex": {
+    "place": "https://www.vail.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "maps": "https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx",
+    "lessons": "https://www.vail.com/plan-your-trip/ski-and-ride-lessons/know-before-you-go.aspx",
+    "arrival": "https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx",
+    "status": "https://www.vail.com/the-mountain/mountain-conditions/terrain-and-lift-status",
+    "parking": "https://www.vail.gov/government/departments/transportation-services/parking-information",
+    "roads": "https://www.cotrip.org/"
+  },
+  "blockingReviews": [
+    "Image URL GET+responsive format delivery audit",
+    "Actual 390px and desktop screenshot inspection",
+    "Exact mapped marker vs operator site arrival map review",
+    "Per-provider seasonal status TTL integration or honest unavailable state",
+    "Run npm test and npm run verify:all",
+    "20k policy seed tests and visual scoring"
+  ]
+}
