@@ -296,12 +296,13 @@
   // Minimalist lock markers: the information lives in the editorial card.
   function lockIcon(lock,active=false){
     const html='<span class="lock-pin__dot">'+lock.id+'</span>';
-    const size=active?32:27;
-    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':''),html,iconSize:[size,size],iconAnchor:[size/2,size/2],popupAnchor:[0,-size/2]});
+    // The visible dot stays small; the transparent Leaflet hit area meets a 44px touch target.
+    const hit=44;
+    return L.divIcon({className:'welland-lock-pin'+(active?' is-active':''),html,iconSize:[hit,hit],iconAnchor:[hit/2,hit/2],popupAnchor:[0,-hit/2]});
   }
   function flightIcon(active=false,wide=false){
     const html='<span class="lock-pin__group">'+(wide?'3–7':'4–6')+'</span>';
-    const width=wide?48:46,height=27;
+    const width=wide?52:50,height=44;
     return L.divIcon({className:'welland-lock-pin is-flight'+(active?' is-active':''),html,iconSize:[width,height],iconAnchor:[width/2,height/2],popupAnchor:[0,-height/2]});
   }
   function renderLockMarkers(){
