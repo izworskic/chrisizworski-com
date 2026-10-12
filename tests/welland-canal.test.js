@@ -391,7 +391,7 @@ test('Welland search discovery preserves canonical truth and wires high-intent v
   const soo=read('public/soo-locks/index.html');
   const lake=read('public/great-lakes-freighter-tracking/index.html');
   const sitemap=read('public/sitemap.xml');
-  assert.match(html,/<title>Welland Canal Ship Tracker Today: Locks &amp; Schedule \| Chris Izworski<\/title>/);
+  assert.match(html,/<title>Welland Canal Ship Tracker &amp; Schedule \| Chris Izworski<\/title>/);
   assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/welland-canal\/">/);
   assert.match(html,/id="ship-schedule"/);
   assert.match(html,/Welland Canal ship schedule today: three checks before you leave/);
