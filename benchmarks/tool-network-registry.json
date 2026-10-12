@@ -2551,7 +2551,7 @@
       },
       "searchEvidence": {
         "status": "new-canonical",
-        "note": "Added 2026-10-11. Source-verified official Seaway vessel-transit and lock queue links plus distinct eight-lock AIS map and watch-location picker; GSC baseline pending."
+        "note": "Added 2026-10-11. GSC page/query rows not yet available for 2026-09-13 to 2026-10-10 (prelaunch period; checked 2026-10-12). Search-intent guide and maritime discovery links released 2026-10-12; compare 7/28-day postlaunch GSC, no assumed clicks."
       },
       "measurement": {
         "search": "GSC Web page × non-branded query at 7/28 days",
