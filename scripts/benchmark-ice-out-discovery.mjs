@@ -107,7 +107,7 @@ export async function auditIceOutDirectory(workspace) {
 
 export function auditIceOutPublication(robots, stamper, config) {
   const failures = [];
-  if (config.buildCommand !== 'npm run vercel-build') failures.push('Vercel must run the generator and emitted-HTML checks through npm run vercel-build');
+  if (config.buildCommand !== 'npm run build:site') failures.push('Vercel must run the generator and emitted-HTML checks through npm run build:site');
   if (config.outputDirectory !== 'public') failures.push('Vercel must publish the generated public directory');
   if (!robots.split(/\r?\n/).some(line => line.trim() === `Sitemap: ${origin}/${sitemapFile}`)) failures.push('ice-out sitemap must be advertised in robots.txt');
   const registered = (stamper.match(/const SITEMAPS = \[([\s\S]*?)\];/) || [])[1] || '';

@@ -3,11 +3,18 @@ name: Agent branch verification
 on:
   push:
     branches:
-      - 'agent/**'
       - main
   pull_request:
     branches:
       - main
+
+  workflow_dispatch:
+
+# A branch push and its pull request must not build the same revision twice.
+# Cancel obsolete runs when another commit reaches the same branch.
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -22,6 +29,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
       - name: Install pinned dependencies
         run: npm ci
       - name: Report baseline tool network
@@ -29,7 +37,7 @@ jobs:
       - name: Run full repository gate
         run: npm run verify:all
       - name: Build production output and audit emitted tool pages
-        run: npm run vercel-build
+        run: npm run build:site
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
@@ -38,3 +46,17 @@ jobs:
           path: artifacts/boat-launch-source-audit.json
           if-no-files-found: ignore
           retention-days: 7
+      - name: Package verified site output for the public audit
+        run: tar -czf verified-site-output.tar.gz public benchmarks/tool-network-registry.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-site-output
+          path: verified-site-output.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
+  public-audit:
+    needs: verify
+    uses: ./.github/workflows/tool-authority-live-audit.yml
+    with:
+      build-artifact: verified-site-output
