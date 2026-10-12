@@ -118,9 +118,9 @@
       map=new mapLib.Map({container:'v3-map-canvas',style:'https://tiles.openfreemap.org/styles/liberty',center:[-106.38,39.64],zoom:12,attributionControl:true});
       map.addControl(new mapLib.NavigationControl({showCompass:false}),'top-right');
       map.on('load',()=>{status.textContent='Planning map: point locations, not travel routes, lift or trail navigation.';updateMapMode(mode);});
-      map.on('error',()=>{status.textContent='Map tiles unavailable. Use the written locations and official arrival guide below.';});
+      map.on('error',()=>{status.textContent='Map tiles unavailable. Use the accessible schematic and official arrival guide below.';document.getElementById('v3-static-map').open=true;});
     }catch{
-      status.textContent='Interactive map unavailable. See the named arrival points and official resort guide below.';
+      status.textContent='Interactive map unavailable. See the accessible schematic, named locations and official resort guide below.';document.getElementById('v3-static-map').open=true;
     }
   }
   function getProfile(){
@@ -177,6 +177,7 @@
       const E=window.PassDecoder;
       const args={pass:document.getElementById('pass').value,resort:document.getElementById('resort').value,date:document.getElementById('ski-date').value,usedDays:document.getElementById('used-days').value,reservationMade:document.getElementById('reservation').value,epicDayTotal:document.getElementById('epicday-total').value,epicPeak:document.getElementById('epic-peak').value,sessionTotal:document.getElementById('session-total').value};
       update(args,E.evaluate(args));
+      if(id==='v3-end-date')document.dispatchEvent(new Event('epicikon:span-updated'));
     });
     document.querySelectorAll('[data-v3-map]').forEach(b=>b.addEventListener('click',()=>{window.gtag?.('event','map_arrival_open',{resort_id:'vail',mode:b.dataset.v3Map});openMap(b.dataset.v3Map);}));
     document.getElementById('v3-changedate').addEventListener('click',()=>{
