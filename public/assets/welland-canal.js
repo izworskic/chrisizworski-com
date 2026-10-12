@@ -13,6 +13,56 @@
     {id:'7',name:'Lock 7',lat:43.123446,lon:-79.193895,place:'Thorold',note:'Lock 7 Viewing Centre gives a view of the flight locks.',url:'https://www.thorold.ca/recreation-culture-community/canals/lock-7-viewing-centre/'},
     {id:'8',name:'Lock 8',lat:42.899122,lon:-79.246166,place:'Port Colborne',note:'Gateway Park and the Lake Erie end of the route.'}
   ];
+  // Photography is from licensed Wikimedia Commons files. Specific vs.
+  // representative views are explicitly distinguished in their captions.
+  // Maintain visible author/license links when adding or replacing photos.
+  const LOCK_PHOTOS = {
+    north1:{
+      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Welland_Canal_Lock_1_Port_Weller.JPG/800px-Welland_Canal_Lock_1_Port_Weller.JPG',
+      alt:'Welland Canal Lock 1 at Port Weller, St. Catharines',
+      caption:'Lock 1 · Port Weller, northern Welland Canal',
+      credit:'Balcer',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_1_Port_Weller.JPG'
+    },
+    north2:{
+      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg/800px-Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg',
+      alt:'Freighter Thunder Bay emerging from Welland Canal Lock 2',
+      caption:'A ship emerging from Lock 2 · St. Catharines',
+      credit:'Cpfan776',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg'
+    },
+    north3:{
+      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Welland_Canal_Lock_3_from_observation_deck.jpeg/800px-Welland_Canal_Lock_3_from_observation_deck.jpeg',
+      alt:'View of Welland Canal Lock 3 from the public observation deck',
+      caption:'Lock 3 · photographed from the public viewing platform',
+      credit:'Dough4872',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_3_from_observation_deck.jpeg'
+    },
+    thorold:{
+      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Welland_Canal_Lock_7.jpg/800px-Welland_Canal_Lock_7.jpg',
+      alt:'Welland Canal Lock 7 at Thorold, near the twin flight locks',
+      caption:'Nearby Lock 7 at Thorold · regional image, not Locks 4–6',
+      credit:'Gogerr',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg'
+    },
+    south8:{
+      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg/800px-Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg',
+      alt:'Lock 8 Gateway Park in Port Colborne, at the Lake Erie end of the Welland Canal',
+      caption:'Lock 8 Gateway Park · Port Colborne viewing area',
+      credit:'Mhsheikholeslami',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg'
+    }
+  };
+  const LOCK_STORIES = {
+    '1':{photo:'north1',segment:'NORTHERN LIFT · LAKE ONTARIO',explainer:'Lock 1 is the canal’s northern gateway near Port Weller. An upbound vessel begins its climb toward Lake Erie here, moving from the lower Lake Ontario level into the first raised reach of the canal. It is the opening chapter of the eight-lock journey.',tip:'View from designated public areas only; shoreline access varies.'},
+    '2':{photo:'north2',segment:'NORTHERN LIFT · ST. CATHARINES',explainer:'Lock 2 continues the stepped ascent south of Port Weller. Each chamber holds a vessel while water levels change, then opens to the next section of canal. The process explains how very large ships navigate a landscape that rises sharply toward Lake Erie.',tip:'A working lock, not a confirmed public viewing facility. Verify access locally.'},
+    '3':{photo:'north3',segment:'NORTHERN LIFT · PUBLIC VIEWING',explainer:'Lock 3 is the canal’s best-established public introduction. Beside it, the St. Catharines Museum and Welland Canals Centre offers a viewing platform where visitors can watch freighters enter the chamber and rise or descend. The official Seaway schedule helps you time a visit, but ship arrival times can change.',tip:'Best documented first visit: the museum and Lock 3 viewing platform.'},
+    '4':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 4 marks the lower entry to the extraordinary Thorold twin flight. Locks 4, 5 and 6 form connected steps that carry ships roughly 43 metres up or down the Niagara Escarpment. Parallel chambers let traffic in opposite directions pass through the flight without sharing one chamber.',tip:'This photo shows nearby Lock 7, not the Lock 4 chamber. Use the Lock 7 Viewing Centre for a broader look at the flight.'},
+    '5':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 5 is the middle step of the Thorold flight, between Locks 4 and 6. Instead of a single enormous lift, the canal distributes the escarpment climb across successive lock chambers. Watching the sequence helps make sense of the engineering behind the Welland Canal.',tip:'This photo shows nearby Lock 7, not the Lock 5 chamber. Public viewing is best researched through the Lock 7 Viewing Centre.'},
+    '6':{photo:'thorold',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 6 completes the three-step flight as upbound ships continue toward the summit of the canal. The paired design of Locks 4 through 6 helps manage traffic through one of the waterway’s most dramatic elevation changes. Lock 7 is the next lift south of this complex.',tip:'This photo shows nearby Lock 7, not the Lock 6 chamber. Check the official Seaway schedule before traveling.'},
+    '7':{photo:'thorold',segment:'THOROLD · ESCARPMENT SUMMIT',explainer:'Lock 7 is the last lift for upbound ships as they reach the high canal level. Thorold’s Lock 7 Viewing Centre sits above the Niagara Escarpment and provides a perspective on ships moving through Locks 4, 5, 6 and 7. It is a strong place to appreciate the whole engineered climb.',tip:'The City of Thorold publishes seasonal Viewing Centre details; confirm hours before visiting.'},
+    '8':{photo:'south8',segment:'PORT COLBORNE · LAKE ERIE',explainer:'Lock 8 has a different job from the seven lift locks to its north. At Port Colborne, it helps regulate the connection with Lake Erie, making a comparatively small water-level adjustment depending on conditions. Gateway Park provides a public viewing area near this remarkable, long control lock.',tip:'Gateway Park includes a viewing platform. Check local visitor information for facilities and current access.'}
+  };
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
   let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
@@ -98,7 +148,9 @@
     }
     $('mapLockPreviewNumber').textContent='LOCK '+lock.id;
     $('mapLockPreviewTitle').textContent=lock.name+' · '+lock.place;
-    $('mapLockPreviewText').textContent=lock.note;
+    $('mapLockPreviewText').textContent=LOCK_STORIES[lock.id].explainer;
+    const photo=LOCK_PHOTOS[LOCK_STORIES[lock.id].photo];
+    setLockPhoto($('mapLockPreviewImage'),$('mapLockPreviewImageFallback'),photo);
     $('mapLockPreview').hidden=false;
   }
   function chooseLock(id,recenter=true,fromMap=false){
@@ -127,14 +179,41 @@
     else focus.append(el('strong','Explore the eight locks'),el('p','Select a lock above or below the map. Closely spaced locks are grouped until you zoom in.'));
     renderList();
   }
+  function setLockPhoto(img,fallback,photo){
+    // The DOM nodes are reused across lock selections; stale events must not
+    // replace a newer image or mislabel a different lock.
+    img.onload=null;
+    img.onerror=null;
+    img.hidden=false;
+    fallback.hidden=true;
+    img.alt=photo.alt;
+    img.onload=()=>{fallback.hidden=true;img.hidden=false;};
+    img.onerror=()=>{img.hidden=true;fallback.hidden=false;};
+    if(img.src!==photo.src)img.src=photo.src;
+    else if(!img.complete||img.naturalWidth===0){img.hidden=true;fallback.hidden=false;}
+  }
+  function renderLockPhoto(lock){
+    const story=lock?LOCK_STORIES[lock.id]:LOCK_STORIES['3'];
+    const photo=LOCK_PHOTOS[story.photo];
+    setLockPhoto($('lockDetailImage'),$('lockDetailImageFallback'),photo);
+    $('lockDetailImageCaption').textContent=lock?photo.caption:'Lock 3 viewing platform · example of the Welland Canal';
+    $('lockDetailImageCredit').textContent='Photo: '+photo.credit;
+    $('lockDetailImageCredit').href=photo.source;
+    $('lockDetailImageLicense').textContent=photo.license;
+    $('lockDetailImageLicense').href=photo.licenseUrl;
+  }
   function renderLockDetail(){
     const lock=LOCKS.find(l=>l.id===selected);
+    const story=lock?LOCK_STORIES[lock.id]:null;
+    renderLockPhoto(lock);
     $('lockDetailIndex').textContent=lock?String(lock.id).padStart(2,'0')+' / 08':'01 — 08';
     $('lockDetailMedallion').textContent=lock?lock.id:'8';
     $('lockDetailLabel').textContent=lock?'LOCK PROFILE':'THE CANAL AT A GLANCE';
     $('lockDetailTitle').textContent=lock?lock.name:'Eight locks. One waterway.';
     $('lockDetailPlace').textContent=lock?lock.place:'Lake Ontario → Lake Erie';
-    $('lockDetailDescription').textContent=lock?lock.note:'Follow the Welland Canal from north to south. Select a numbered marker to learn about its location, nearby reported vessels and visitor access.';
+    $('lockDetailSegment').textContent=story?story.segment:'LAKE ONTARIO → LAKE ERIE';
+    $('lockDetailDescription').textContent=story?story.explainer:'The Welland Canal uses eight locks to connect Lake Ontario and Lake Erie. Select a lock to discover what happens at each stop, see a sourced photograph, and find practical viewing guidance.';
+    $('lockDetailTip').textContent=story?story.tip:'Start at Lock 3 for the museum viewing platform or explore the Thorold flight around Locks 4–7.';
     $('lockDetail').classList.toggle('has-selection',Boolean(lock));
     const visitor=$('lockDetailVisitor');
     visitor.hidden=!lock?.url;
