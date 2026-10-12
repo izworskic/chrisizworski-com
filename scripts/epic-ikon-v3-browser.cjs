@@ -15,14 +15,21 @@ fs.mkdirSync(out,{recursive:true});
   page.on('pageerror',error=>errs.push(error.message));
   await page.goto(base+'/epic-ikon-pass/?pass=epicLocal&resort=vail&date=2026-12-25&used=0&last=2026-12-29', {waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('#v3-slice').waitFor({state:'visible',timeout:12000});
-  const firstFold=await page.evaluate(()=>({decisionTop:document.getElementById('decision').getBoundingClientRect().top,scrollWidth:document.documentElement.scrollWidth}));
+  const firstFold=await page.evaluate(()=>({decisionTop:document.getElementById('decision').getBoundingClientRect().top,verdictTitleBottom:document.getElementById('verdict-title').getBoundingClientRect().bottom,scrollWidth:document.documentElement.scrollWidth}));
   await page.locator('#v3-gallery').scrollIntoViewIfNeeded();
   await page.locator('#v3-gallery img').last().scrollIntoViewIfNeeded();
   try{await page.waitForFunction(()=>[...document.querySelectorAll('#v3-gallery img')].every(i=>i.complete&&i.naturalWidth>0),{timeout:15000});}catch{}
+  await page.locator('#v3-map-canvas').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(2000);
+  const mapEvidence=await page.evaluate(()=>({
+    hasCanvas:!!document.querySelector('#v3-map-canvas canvas'),
+    mapStatus:document.getElementById('v3-map-status').textContent,
+    fallbackOpen:document.getElementById('v3-static-map').open
+  }));
   const verdict=await page.locator('#verdict-title').innerText();
   const decisions=await page.locator('#v3-day-by-day .v3-date-list li').allTextContents();
   const badCount=await page.locator('#v3-day-by-day .v3-date-list li[data-status="NO"]').count();
-  const metrics={...firstFold,...await page.evaluate(()=>({
+  const metrics={...firstFold,...mapEvidence,...await page.evaluate(()=>({
      width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
      decisionScrollAfterPhotoLoad:document.getElementById('decision').getBoundingClientRect().top,
      imageReports:[...document.querySelectorAll('#v3-gallery img')].map(i=>({url:i.currentSrc,complete:i.complete,naturalWidth:i.naturalWidth,alt:i.alt})),
@@ -35,6 +42,8 @@ fs.mkdirSync(out,{recursive:true});
    assert.equal(badCount,4,'Dec 26–29 must be blocked');
    assert.ok(metrics.scrollWidth<=width+1,'no horizontal overflow');
    assert.ok(metrics.decisionTop<height,'decision must begin on mobile first viewport');
+   assert.ok(metrics.verdictTitleBottom<height,'entire verdict headline should appear within first mobile viewport');
+   assert.ok(metrics.hasCanvas||metrics.fallbackOpen,'geographic map must render or open an accessible fallback');
    assert.equal(metrics.imageReports.length,3,'three Vail photographs');
    assert.ok(metrics.imageReports.every(x=>x.alt&&x.naturalWidth>0),'three actual files must load, not a hidden broken image');
    assert.equal(errs.length,0,'no uncaught client-side errors: '+errs.join('; '));
