@@ -391,3 +391,15 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Measurements:** attributable GSC/GA4/AdSense lift and billed savings NOT AVAILABLE; this is reliability/cost-control work.
 - **Decision:** REPAIR and remove the provider dependency while preserving recoverable data.
 - **Exactly one next action:** finish and verify every active Redis consumer, then review the exact shared database deletion only after source dependencies and environment connections are cleared.
+
+
+## Redis cutover release and source-only smoke repair — October 12, 2026
+
+- Main PR #933 and trout #15, birding #17, birding-daily #6 and lawn #8 merged with required PR checks green; all five production deployments READY. Live private state PING succeeds and main, trout and birding cache writes are present in isolated production namespaces. No new subscription.
+- Cleared all 23 Redis variable values in 12 projects and individually read them back as empty. Variable record deletion and the old suspended/free database deletion are pending explicit action-time confirmation; 8MB of provider-blocked historic data is unexported.
+- Retired the old manual chris-izworski site to canonical redirects. Disabled its automatic custom-domain assignment; verified the main domain stays on the main project. The old fallcolor deployment is already redirect-only.
+- Lawn #9 fixes pre-existing multi-child Satori text layout. Live share image returns HTTP 200, PNG 1200x630. A delayed Git build of the preceding merge temporarily took the alias; promoted the already-built fix without rebuilding. Automatic Git deployments arrive several minutes late: prefer waiting for them over creating duplicate builds.
+- NYC production smoke exposed an import-time SDK dependency in the new state adapter: its source-only runner deliberately does not install dependencies. Load @vercel/oidc only inside the configured request. Added a regression check with the SDK unavailable. All 52 gates passed (83s), plus all six focused state tests. Remote repair PR/release validation pending at commit creation.
+- Separate blockers are not Redis/deployment success: native GSC Google credentials are absent; JEV deep health reports TypeSafe HTTP 402 because the organization has no API credits. Restored the canceled AgentBase registry main deployment 2c766f09... in 20s; it now reports route-only health accurately. No credits, auto-reload or paid upgrade were enabled; Detroit AI production checks remain blocked by provider credits.
+- Build CPU remains dominated by prior main-site builds (98.1% in the observed cycle; $396.61 Build CPU at inspection). New main builds complete in 31–37s on Basic; old accumulated charges do not reverse. Do not claim a matched-window billed saving yet.
+- Exactly one next action: verify the source-only smoke repair's PR and production release, then retain the old free database for recovery unless Chris confirms its permanent deletion with the data-loss consequence.

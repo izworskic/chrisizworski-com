@@ -7,6 +7,7 @@ on:
     paths:
       - 'api/nyc-crossing.js'
       - 'lib/nyc-crossing/**'
+      - 'lib/tool-state.js'
       - 'public/nyc-crossing/**'
       - 'public/assets/nyc-crossing.js'
       - 'public/assets/nyc-crossing.css'
