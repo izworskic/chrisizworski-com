@@ -6,6 +6,8 @@ on:
       - fix/welland-local-photo-assets-20261011
     paths:
       - .github/workflows/welland-import-photos.yml
+      - scripts/fetch-welland-photos.cjs
+      - scripts/optimize-welland-photos.py
   workflow_dispatch:
 
 permissions:
