@@ -1,14 +1,14 @@
 {
-  "modified": "2026-10-06",
+  "modified": "2026-10-11",
   "pages": {
     "/ballard-locks/": {
-      "title": "Ballard Locks Live: Ships, Salmon & Tides | Chris Izworski",
-      "description": "Live Ballard Locks ships, salmon counts, access, weather and water levels, with a best-first-stop recommendation and tour map for Seattle.",
+      "title": "Ballard Locks Today: Fish Counts, Salmon Ladder & Tours",
+      "description": "Ballard Locks today: see the latest fish counts, check the salmon ladder and plan a self-guided tour with current visitor access and vessel conditions.",
       "graph": [
         {
           "@type": "WebApplication",
           "@id": "https://chrisizworski.com/ballard-locks/#app",
-          "name": "Ballard Locks Live: Ships, Salmon & Tides",
+          "name": "Ballard Locks Today: Fish Counts, Salmon Ladder & Tours",
           "url": "https://chrisizworski.com/ballard-locks/",
           "description": "Live visitor intelligence for the Hiram M. Chittenden Locks combining AIS vessel traffic, salmon counts, NOAA tides, weather, operating status and nearby live canal camera links.",
           "applicationCategory": "TravelApplication",
@@ -71,6 +71,50 @@
           "@id": "https://chrisizworski.com/#person",
           "name": "Chris Izworski",
           "url": "https://chrisizworski.com/"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://chrisizworski.com/ballard-locks/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are Ballard Locks fish counts live?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The fish counts are the latest daily figures published by the Washington Department of Fish and Wildlife, not a second-by-second count. Look at each species' published date before interpreting its number."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I visit the Ballard Locks salmon ladder and take a tour?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The fish ladder has public viewing areas when open, and the site offers a self-guided walking route. Check current U.S. Army Corps of Engineers access before going."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://chrisizworski.com/#website",
+          "url": "https://chrisizworski.com/",
+          "name": "Chris Izworski",
+          "publisher": {
+            "@id": "https://chrisizworski.com/#person"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://chrisizworski.com/ballard-locks/#webpage",
+          "url": "https://chrisizworski.com/ballard-locks/",
+          "name": "Ballard Locks Today: Fish Counts, Salmon Ladder & Tours",
+          "description": "Ballard Locks today: see the latest fish counts, check the salmon ladder and plan a self-guided tour with current visitor access and vessel conditions.",
+          "isPartOf": {
+            "@id": "https://chrisizworski.com/#website"
+          },
+          "mainEntity": {
+            "@id": "https://chrisizworski.com/ballard-locks/#app"
+          }
         }
       ]
     },
@@ -181,14 +225,21 @@
       ]
     },
     "/ballard-locks/salmon-counts/": {
-      "title": "Ballard Locks Salmon Counts | Chris Izworski",
-      "description": "See the latest Ballard Locks salmon counts for sockeye, Chinook and coho, count dates, 7-day averages, fish ladder hours and current salmon activity signal.",
+      "title": "Ballard Locks Fish Count Today: Latest Salmon Counts",
+      "description": "Ballard Locks fish count today: latest official WDFW salmon counts for sockeye, Chinook and coho, with published dates, data freshness and ladder information.",
       "graph": [
         {
           "@type": "WebPage",
-          "name": "Ballard Locks Salmon Counts",
+          "name": "Ballard Locks Fish Count Today: Latest Salmon Counts",
           "url": "https://chrisizworski.com/ballard-locks/salmon-counts/",
-          "description": "Latest WDFW sockeye, Chinook and coho counts at the Ballard Locks fish ladder."
+          "description": "Latest WDFW sockeye, Chinook and coho counts at the Ballard Locks fish ladder.",
+          "@id": "https://chrisizworski.com/ballard-locks/salmon-counts/#webpage",
+          "isPartOf": {
+            "@id": "https://chrisizworski.com/#website"
+          },
+          "mainEntity": {
+            "@id": "https://chrisizworski.com/ballard-locks/salmon-counts/#faq"
+          }
         },
         {
           "@type": "FAQPage",
@@ -206,10 +257,20 @@
               "name": "When is the Ballard Locks fish ladder open?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The current USACE visitor schedule used by this tool lists the fish ladder as open from 7:00 AM to 8:45 PM, subject to operational changes."
+                "text": "Check the current U.S. Army Corps of Engineers visitor schedule before visiting. Fish ladder viewing hours can change with operations."
               }
             }
-          ]
+          ],
+          "@id": "https://chrisizworski.com/ballard-locks/salmon-counts/#faq"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://chrisizworski.com/#website",
+          "url": "https://chrisizworski.com/",
+          "name": "Chris Izworski",
+          "publisher": {
+            "@id": "https://chrisizworski.com/#person"
+          }
         }
       ]
     }

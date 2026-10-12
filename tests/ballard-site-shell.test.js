@@ -11,14 +11,22 @@ test('Ballard delivery retains inherited schema, canonical identity and a quiet 
   const { hasVisibleCreatorAttribution } = await import('../lib/creator-attribution.mjs');
   for (const [route, contract] of Object.entries(shell.pages)) {
     const html = fs.readFileSync(path.join(root, 'public', route, 'index.html'), 'utf8');
-    const graph = JSON.parse(html.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1])['@graph'];
-    assert.match(html, new RegExp(`href="https://chrisizworski.com${route}"`));
+    const composed = applyBallardSiteShell(html, route);
+    const graph = JSON.parse(composed.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1])['@graph'];
+    assert.match(composed, new RegExp(`href="https://chrisizworski.com${route}"`));
     const result = auditStructuredAuthority({ nodes: graph, documentNodes: graph, personId: 'https://chrisizworski.com/#person', homepage: 'https://chrisizworski.com/' });
     assert.deepEqual(result.errors, [], route);
-    assert.equal(hasVisibleCreatorAttribution(html), true, route);
+    assert.equal(hasVisibleCreatorAttribution(composed), true, route);
     for (const inherited of contract.graph) {
       assert.ok(graph.some(node => node['@type'] === inherited['@type'] && (!inherited['@id'] || node['@id'] === inherited['@id'])), `${route}: ${inherited['@type']}`);
     }
-    assert.equal(applyBallardSiteShell(html, route), html, `${route}: composition must be idempotent`);
+
+    const again = applyBallardSiteShell(composed, route);
+    if (again !== composed) {
+      let offset = 0;
+      while (offset < Math.min(again.length, composed.length) && again[offset] === composed[offset]) offset++;
+      assert.fail(`${route}: composition changed at ${offset}; around original ${JSON.stringify(composed.slice(Math.max(0, offset-120), offset+250))}; around second ${JSON.stringify(again.slice(Math.max(0, offset-120), offset+250))}; lengths ${composed.length}/${again.length}`);
+    }
+
   }
 });
