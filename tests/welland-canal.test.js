@@ -332,3 +332,29 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
   assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
 });
+
+
+test('Shore-watch choices tie public viewing logistics to bounded fresh AIS evidence',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  for(const id of ['3','7','8']){
+    assert.ok(html.includes('data-spot="'+id+'"'), 'visitor option '+id);
+    assert.ok(html.includes('id="shoreSignal'+id+'"'), 'evidence '+id);
+    assert.ok(js.includes("'"+id+"':{title:"),'source-defined location '+id);
+  }
+  for(const id of ['shoreWatch','shoreWatchChoices','shoreWatchStatus','shoreWatchVessels','shoreWatchDirections','shoreWatchOfficial','shoreWatchMap']){
+    assert.ok(html.includes('id="'+id+'"'), 'interactive surface '+id);
+  }
+  assert.ok(js.includes('function renderShoreWatch()'));
+  assert.ok(js.includes('distanceKm(v,lock)<=2'));
+  assert.ok(js.includes("aisState==='unavailable'"));
+  assert.ok(js.includes('No fresh report nearby—not proof of an empty canal'));
+  assert.ok(js.includes('chooseLock(activeWatchSpot,true,false)'));
+  assert.ok(html.includes('order-of-turn'));
+  assert.ok(html.includes('past 30 minutes within about 2 km'));
+  assert.ok(css.includes('.shore-watch__choices{display:grid'));
+  assert.ok(css.includes('@media(max-width:760px)'));
+  assert.ok(!js.includes('predictedLockArrival'));
+});
