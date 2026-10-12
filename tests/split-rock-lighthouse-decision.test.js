@@ -1,0 +1,9 @@
+const test=require('node:test');const assert=require('node:assert/strict');const e=require('../public/assets/split-rock-lighthouse-engine.js');
+test('tower ticket distinct from park vehicle permit',()=>{const r=e.evaluate({date:'2026-10-12',experience:'tower',adults:2});assert.equal(r.state,'STANDARD_ADMISSION');assert.equal(r.price,30);assert.match(r.requirements.join(' '),/parking/i)});
+test('grounds-only excludes lighthouse and keepers house',()=>{const r=e.evaluate({date:'2026-10-12',experience:'grounds',adults:2});assert.equal(r.price,16);assert.equal(r.state,'GROUNDS_ONLY');assert.match(r.headline,/no lighthouse/i)});
+test('park-only cannot grant historic admission or fabricate park permit fee',()=>{const r=e.evaluate({date:'2026-10-12',experience:'park',adults:2});assert.equal(r.state,'PARK_ONLY');assert.equal(r.price,null);assert.match(r.requirements.join(' '),/does not include historic-site/i)});
+test('November 10 memorial is not ordinary admission',()=>{const r=e.evaluate({date:'2026-11-10',experience:'memorial',adults:2});assert.equal(r.state,'MEMORIAL_EVENT');assert.equal(r.price,null);assert.match(r.requirements.join(' '),/not guarantee a parking space/i)});
+test('special memorial date is strict',()=>{assert.equal(e.evaluate({date:'2026-11-11',experience:'memorial',adults:2}).state,'EVENT_DATE_MISMATCH')});
+test('2027 ordinary hours are never invented',()=>{const r=e.evaluate({date:'2027-07-15',experience:'tower',adults:2});assert.equal(r.state,'OUTSIDE_POSTED_SEASON');assert.equal(r.price,null)});
+test('historical 2026 regular season dates remain bounded',()=>{assert.equal(e.evaluate({date:'2026-10-20',experience:'tower',adults:1}).state,'OUTSIDE_POSTED_SEASON')});
+test('invalid date and empty party fail closed',()=>{assert.equal(e.evaluate({date:'2026-02-30',adults:2}).state,'NEED_DATE');assert.equal(e.evaluate({date:'2026-10-12',adults:0}).state,'NEED_PARTY')});
