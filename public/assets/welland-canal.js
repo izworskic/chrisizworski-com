@@ -175,7 +175,7 @@
     if(map&&recenter&&lock){
       // Preserve context: choose the lowest useful zoom rather than always
       // jumping to 15 and hiding the surrounding canal.
-      const zoom=Math.max(map.getZoom(),['4','5','6'].includes(id)?14:12);
+      const zoom=['4','5','6'].includes(id)?14:12;
       const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(reduced)map.setView([lock.lat,lock.lon],zoom);
       else map.flyTo([lock.lat,lock.lon],zoom,{duration:0.7});
