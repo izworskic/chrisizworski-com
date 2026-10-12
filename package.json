@@ -84,7 +84,8 @@
     "audit:adsense": "node scripts/audit-adsense-network.mjs --check",
     "benchmark:mackinac-usefulness": "node scripts/benchmark-mackinac-usefulness.mjs",
     "benchmark:creator-attribution": "node scripts/inject-creator-attribution.mjs --check",
-    "benchmark:ice-out-discovery": "node scripts/benchmark-ice-out-discovery.mjs"
+    "benchmark:ice-out-discovery": "node scripts/benchmark-ice-out-discovery.mjs",
+    "profile:build": "node scripts/profile-site-build.mjs"
   },
   "dependencies": {
     "@vercel/oidc": "3.8.8",

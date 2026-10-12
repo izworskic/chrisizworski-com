@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readPinnedSource } from '../lib/pinned-build-source.mjs';
 import { enhanceBallardMain, enhanceBallardTour } from './ballard-photo-program.mjs';
 import { enhanceBallardTourAuthority } from './ballard-tour-authority.mjs';
 import { applyBallardSiteShell } from './ballard-site-shell.mjs';
@@ -20,30 +21,16 @@ const salmonCanonical = 'https://chrisizworski.com/ballard-locks/salmon-counts/'
 // tour, salmon interpretation and API cannot drift from one another. The photo and
 // authority layers are intentionally small production presentation enhancements with hard guards.
 const ballardSourceCommit = '761a041de378f1265211122b1395c3968106a94e';
-const rawBase = `https://raw.githubusercontent.com/izworskic/national-ballard-locks/${ballardSourceCommit}`;
-const rawSources = {
-  main: `${rawBase}/public/ballard-locks-v2/index.html`,
-  tour: `${rawBase}/public/ballard-locks-v2/tour/index.html`,
-  salmon: `${rawBase}/public/ballard-locks-v2/salmon-counts/index.html`,
-  api: `${rawBase}/api/ballard-live-v2.js`,
-};
+const snapshotDirectory = path.resolve('data/build-sources/ballard');
+const snapshotManifest = JSON.parse(fs.readFileSync(path.join(snapshotDirectory, 'manifest.json'), 'utf8'));
 
 if (!fs.existsSync(sourcePage)) throw new Error(`Ballard sync: missing ${sourcePage}`);
 if (!fs.existsSync(sourceApi)) throw new Error(`Ballard sync: missing ${sourceApi}`);
 if (!fs.existsSync(sourceAisApi)) throw new Error(`Ballard sync: missing ${sourceAisApi}`);
 
-async function fetchExact(url, label) {
-  const response = await fetch(url, { headers: { 'user-agent': 'chrisizworski-com-build/2.0' } });
-  if (!response.ok) throw new Error(`Ballard sync: ${label} source returned ${response.status}`);
-  return response.text();
-}
-
-const [mainSource, tourSource, salmonSource, apiSource] = await Promise.all([
-  fetchExact(rawSources.main, 'main page'),
-  fetchExact(rawSources.tour, 'tour page'),
-  fetchExact(rawSources.salmon, 'salmon page'),
-  fetchExact(rawSources.api, 'live API'),
-]);
+const [mainSource, tourSource, salmonSource, apiSource] = ['main', 'tour', 'salmon', 'api'].map(
+  label => readPinnedSource(snapshotDirectory, snapshotManifest, label, ballardSourceCommit)
+);
 
 const mainEnhanced = applyBallardSiteShell(enhanceBallardMain(mainSource), '/ballard-locks/');
 const tourEnhanced = applyBallardSiteShell(enhanceBallardTourAuthority(enhanceBallardTour(tourSource)), '/ballard-locks/tour/');
