@@ -1,5 +1,13 @@
 # Search Growth + Revenue Session Log
 
+## Epic / Ikon National Tools mirror sync — October 12, 2026
+
+- PR #918 merged to the public site repository at 9dcf58de; PR #88 merged to the National Tools owning repository at baa07940. Both passed full GitHub verification. Initial automatic site deployment failed with Vercel git_info_fail; a targeted Git-backed production deployment was started, with public availability not yet verified at the time of this commit.
+- The actual /national-tools/ route serves the local synced-national-tools mirror, not the separately deployed hub root. An explicit pinned mirror entry was added at the correct winter position and into the ordered ItemList, with an idempotent post-sync build hook and automated parity gate.
+- No tool rules, existing winner URLs or paid APIs changed. Do not claim live status until the public /epic-ikon-pass/ and assets return HTTP 200 and the public National Tools catalog contains the card.
+- Exactly one next action: verify production URL/asset and catalog readiness after the site deployment, then investigate routing if missing.
+
+
 ## Epic / Ikon Pass Access Decoder — October 12, 2026
 
 - **Goal:** New winter-2026/27 national decision engine, exact pass + resort + date with shared-day pools, blackout exclusions and reservation action. Canonical /epic-ikon-pass/.

@@ -1,0 +1,24 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {spawnSync}=require('node:child_process');
+const root=path.resolve(__dirname,'..');
+test('Epic Ikon canonical is discoverable exactly once in public national mirror',()=>{
+ const html=fs.readFileSync(path.join(root,'public/synced-national-tools/index.html'),'utf8');
+ const m=html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+ assert.ok(m);
+ const schema=JSON.parse(m[1]);
+ const list=schema['@graph'].find(x=>x['@id']==='https://chrisizworski.com/national-tools/#toollist');
+ assert.ok(list);
+ const url='https://chrisizworski.com/epic-ikon-pass/';
+ assert.equal((html.match(/data-tool-id="epic-ikon-pass"/g)||[]).length,1);
+ assert.equal(list.itemListElement.filter(x=>x.url===url).length,1);
+ assert.equal(list.numberOfItems,(html.match(/data-search-card/g)||[]).length);
+ assert.ok(html.indexOf('data-tool-id="snow"')<html.indexOf('data-tool-id="epic-ikon-pass"'));
+ assert.ok(html.indexOf('data-tool-id="epic-ikon-pass"')<html.indexOf('data-tool-id="aurora"'));
+ assert.equal(list.itemListElement.find(x=>x.url===url).name,'Epic vs Ikon Pass Blackout Checker');
+ const result=spawnSync(process.execPath,['scripts/add-epic-ikon-discovery.mjs','--check'],{cwd:root,encoding:'utf8'});
+ assert.equal(result.status,0,result.stdout+result.stderr);
+});

@@ -28,6 +28,6 @@ const page=graph.find(x=>x['@id']==='https://chrisizworski.com/national-tools/#p
 assert.equal(list.numberOfItems,(html.match(/data-search-card/g)||[]).length, 'searchable card count equals schema count');
 assert.equal(list.itemListElement.filter(x=>x.url==='https://chrisizworski.com/fall-color/national/').length,1,'one canonical map directory entry');
 assert.equal(regionList.itemListElement.length,15);
-assert.equal(page.dateModified,'2026-10-09');
+assert.equal(page.dateModified,'2026-10-12','National Tools directory modification date includes the Epic/Ikon mirror release');
 assert.equal(new Set(regionList.itemListElement.map(x=>x.url)).size,15);
 console.log('NATIONAL_FALL_NETWORK_PASS — 15 regions, 4 featured destinations, all 30 linked through hub; directory schema and filters intact');
