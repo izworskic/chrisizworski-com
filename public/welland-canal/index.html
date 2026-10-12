@@ -52,7 +52,13 @@
 <div class="desk">
 <div class="panel">
 <div class="panel-head"><div><h3>Explore the eight locks</h3><p class="muted">Choose any number to learn what that lock does. Ships on the map are recent AIS reports.</p><p class="muted" id="lastUpdated">Waiting for the AIS service…</p></div><div><div class="status"><span class="dot" aria-hidden="true"></span><span id="liveStatus" role="status" aria-live="polite">Checking reports</span></div><button class="subtle-btn" id="refreshShips" type="button">Refresh positions</button></div></div>
-<div class="lock-quick-select"><div class="lock-quick-select__head"><strong>CHOOSE A LOCK</strong><span>All eight, one tap each <span aria-hidden="true">→</span></span></div><div id="lockRail" class="lock-rail" role="group" aria-label="Choose any of the eight Welland Canal locks"></div></div>
+<div class="lock-quick-select"><div class="lock-quick-select__head"><strong>CHOOSE A LOCK</strong><span>All eight, one tap each <span aria-hidden="true">→</span></span></div><div id="lockRail" class="lock-rail" role="group" aria-label="Choose any of the eight Welland Canal locks"></div>
+<section id="lockInstantAnswer" class="lock-instant-answer" aria-label="Selected lock at a glance" aria-live="polite" hidden>
+  <div class="lock-instant-answer__image"><img id="lockInstantImage" width="130" height="95" loading="lazy" decoding="async" alt=""><div id="lockInstantImageFallback" class="lock-instant-answer__image-fallback" hidden aria-hidden="true"></div></div>
+  <div class="lock-instant-answer__copy"><strong id="lockInstantTitle">Lock overview</strong><p id="lockInstantText"></p><span id="lockInstantPhotoCaption" class="lock-instant-answer__caption"></span></div>
+  <button id="lockInstantOpen" class="lock-instant-answer__more" type="button" aria-label="Open full lock story and visitor information">Full story <span aria-hidden="true">→</span></button>
+</section>
+</div>
 <div class="lock-map-toolbar"><div class="lock-map-toolbar__copy"><strong class="lock-map-toolbar__tag">MAP &amp; SHIPS</strong><span id="lockMapHint" class="lock-map-toolbar__hint" role="status">Tap a numbered lock once to understand it</span></div><button class="lock-map-toolbar__reset" id="showAllLocks" type="button">Show entire canal</button></div>
 <div class="ship-map-stage">
 <div id="shipMap" role="region" aria-label="Map of eight numbered Welland Canal lock landmarks and recently reported ships"></div>
