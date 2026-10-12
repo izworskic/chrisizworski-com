@@ -2,7 +2,7 @@ name: Research Welland exact lock photo rights
 on:
   push:
     branches: [research/welland-exact-lock-photos-20261012]
-    paths: [.github/workflows/welland-photo-source-audit.yml]
+    paths: [.github/workflows/welland-photo-source-audit.yml, scripts/research-welland-archive.cjs]
   workflow_dispatch:
 permissions: {contents: read}
 jobs:
@@ -15,6 +15,8 @@ jobs:
         with: {node-version: '24'}
       - name: Research Commons exact lock photographs and media rights
         run: node scripts/research-welland-photo-sources.cjs
+      - name: Inspect Niagara Falls Public Library exact source rights and image URLs
+        run: node scripts/research-welland-archive.cjs
       - uses: actions/upload-artifact@v4
         with:
           name: welland-source-audit
