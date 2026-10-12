@@ -17,7 +17,7 @@ test('NIA-08 no pass price or pass entitlement claims',()=>{const v=p({visit_dat
 test('NIA-09 explicit crossing intent not sufficient for crossing',()=>{const v=p({cross_border:true,documentation_confirmed:false});assert.equal(v.cross_border_auto_planned,false);assert.match(v.unknowns.join(' '),/cross-border/i);});
 test('NIA-10 no source unverified border wait assertion',()=>{const v=p();assert.equal(v.cross_border_auto_planned,false);assert.ok(!JSON.stringify(v).includes('fastest bridge'));});
 test('NIA-11 rainbow service not a planner dependency',()=>{assert.ok(p().stops.length);});
-test('NIA-12 unknown Canadian hours not equivalent to closed',()=>{const v=p({starting_side:'CA'});assert.ok(v.excluded.some(x=>x.reason==='HOURS_NOT_VERIFIED'));assert.ok(!v.excluded.some(x=>x.reason==='PUBLISHED_CLOSED'));});
+test('NIA-12 unknown Canadian hours not equivalent to closed',()=>{const v=p({starting_side:'CA',visit_date:'2026-10-13'});assert.ok(v.excluded.some(x=>x.reason==='HOURS_NOT_VERIFIED'));assert.ok(!v.excluded.some(x=>x.reason==='PUBLISHED_CLOSED'));});
 test('NIA-13 scenic result when paid closed',()=>{const v=p({visit_date:'2026-12-25'});assert.ok(v.stops.length);assert.ok(v.stops.every(s=>s.type==='view'));});
 test('NIA-14 mobility excludes partially accessible cave',()=>{const v=p({step_free:true,priority:'mist'});assert.ok(!v.stops.some(x=>x.id==='cave'));});
 test('NIA-15 Oct 12 fireworks not guaranteed by planner data',()=>{assert.ok(!JSON.stringify(p({arrival_local:'20:00'})).includes('guaranteed fireworks'));});
@@ -48,3 +48,31 @@ test('NWS official warning structure becomes concise alert',()=>{
  assert.equal(v.length,1);assert.equal(v[0].source,'NWS');assert.match(v[0].headline,/Warning/);
 });
 test('Unexpected official weather response fails closed',()=>{assert.throws(()=>normalize({features:null},'CA'));});
+
+test('Canada October 12 official dated hours are available only on their verified date',()=>{
+ const journey=items.find(s=>s.id==='journey'),cruise=items.find(s=>s.id==='cruise');
+ assert.equal(operating(journey,'2026-10-12').close,'19:00');
+ assert.equal(operating(cruise,'2026-10-12').close,'20:00');
+ assert.equal(operating(journey,'2026-10-13').status,'UNKNOWN');
+ assert.equal(operating(cruise,'2027-10-12').status,'UNKNOWN');
+});
+test('Maid published closing time is not misrepresented as last-ticket cutoff',()=>{
+ const h=operating(maid,'2026-10-12');
+ assert.equal(h.open,'09:00');assert.equal(h.close,'17:00');
+ assert.equal(h.lastAdmission,null);
+ assert.match(h.basis,/does not publish a last-ticket cutoff/);
+});
+test('Canada boat trip never treats unknown admission prices as free',()=>{
+ const v=p({starting_side:'CA',priority:'boat',arrival_local:'10:00',duration_minutes:360});
+ assert.ok(v.stops.some(s=>s.id==='cruise'));
+ assert.equal(v.costs[0].currency,'CAD');
+ assert.equal(v.costs[0].prices_complete,false);
+ assert.ok(v.costs[0].unverified_attractions.includes('Niagara City Cruises'));
+ assert.match(v.unknowns.join(' '),/displayed known subtotal is not the full cost/);
+});
+test('Canada hard zero-dollar budget cannot silently include unknown-price paid attractions',()=>{
+ const v=p({starting_side:'CA',priority:'boat',budget:0});
+ assert.ok(v.stops.every(s=>s.type==='view'));
+ assert.equal(v.costs[0].prices_complete,true);
+ assert.ok(v.excluded.some(s=>s.reason==='PRICE_NOT_VERIFIED'));
+});

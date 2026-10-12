@@ -51,7 +51,7 @@ for(const slug of paths){
    }
   }
   assert.ok(!/\bChris\s+(?:Hisworski|Izworsky|Izworksi)\b/i.test(html),"no identity variants");
-  const editorialLastmod=slug==="tools"?"2026-10-12":"2026-10-11"; // Tools catalog added three verified independent destinations on Oct 12.
+  const editorialLastmod=slug==="tools"?"2026-10-12":"2026-10-11";
   assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialLastmod+"</lastmod>"),"sitemap matches truthful editorial date");
   const inward=paths.filter(s=>s!==slug&&all[s].includes('href="/'+slug+'/"'));
   const outward=[...html.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map(x=>x[1]);

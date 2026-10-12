@@ -50,7 +50,7 @@ test('valid local HTML cannot pass publication without the configured Vercel bui
     const report = await auditIceOutDirectory(workspace);
     assert.equal(report.score, 100);
     assert.equal(report.passed, false);
-    assert.ok(report.publicationFailures.some(failure => failure.includes('npm run vercel-build')));
+    assert.ok(report.publicationFailures.some(failure => failure.includes('npm run build:site')));
     assert.ok(report.publicationFailures.some(failure => failure.includes('generated public directory')));
   } finally { await fs.writeFile(configPath, original); }
 });

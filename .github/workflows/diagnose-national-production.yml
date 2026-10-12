@@ -1,10 +1,6 @@
 name: Diagnose National Tools production build
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/diagnose-national-production.yml'
   workflow_dispatch:
 
 jobs:
@@ -20,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Reproduce repository Vercel build command
-        run: npm run vercel-build
+        run: npm run build:site
       - name: Verify synced National Tools survive build mutations
         run: |
           grep -q 'data-tool-id="bird-migration"' public/synced-national-tools/index.html

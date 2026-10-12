@@ -11,6 +11,28 @@
 - **Exactly one next action:** Finish successful full-gate + preview URL/asset verification for both PRs, then release only verified routes and begin a 7/28-day GSC baseline.
 
 
+## Niagara Falls Today V3 guided experience release — October 12, 2026
+
+- **Problem repaired:** V2 external Commons thumbnail hero failed and overpopulated gallery repeated the same waterfall imagery. V3 removes 4 static image cards, 8 repeated photo cards and 2 detached film cards; retains one licensed first-party photograph plus operator-sourced route-specific guided text for the eight actual planner stop IDs.
+- **Media:** Chicken4War Aug 19 2026 Horseshoe Falls and Niagara River (Wikimedia CC BY-SA 4.0) imported by exact Commons source workflow, optimized to 1600x900 JPEG at /assets/niagara-falls/photos/horseshoe-2026.jpg (269052 bytes at initial import). Attribution, license and cropped/historical labels visible. Local image has CSS fallback and first-party OG/X image URLs.
+- **Visitor content:** Two layers: deterministic planner keeps scheduled attraction truth/unknown states, and independent Niagara field guide explains landscape, context, focus and conditions for selected stops. North American park operator source links. A verified Niagara Parks film (DlMgURteL3E) is opt-in only on Canada Table Rock routes; does not claim that the separate Journey Behind the Falls attraction is open or bookable.
+- **Regression:** Twenty-six existing itinerary tests retained; V3 experience tests assert correct asset bytes and no gallery. Chromium smoke successfully checked 375/768/1440 viewport widths, locally decoded 1600x900 image, no horizontal overflow, US/CA route rendering and source-video click-to-load; screenshots uploaded to GitHub Actions run 38254822202. Full verify:all and emitted production audits must pass again after main reconciliation.
+- **Parallel product safety:** #929 added date-specific Niagara Parks schedule_feed and validation; its UI source timestamp display must survive the V3 merge (never regress official hours logic).
+- **Metrics:** No current GSC/AdSense change measured. No CTR/ranking claims.
+- **Status:** Review branch / PR #930; awaiting final merged-base CI, Vercel READY and public image smoke.
+- **Exactly one next action:** On green CI and preview, merge PR #930, confirm production and first-party JPG/route responses.
+
+
+## Epic / Ikon V2 JEV + experiential decision release — October 12, 2026
+
+- **Owner/repo:** `izworskic/chrisizworski-com`, branch `feat/epic-ikon-v2-jev-experience-20261012`. PR and production deploy unverified at authorship.
+- **Why:** V0 answers published entitlement but offers little sense of place or traveler guidance. Reuse Detroit/Old Sow JEV closed-set editorial judgment and Niagara’s destination-specific, source-bound ranger-style field guide.
+- **Scope:** `/api/epic-ikon-guide` uses existing Vercel OIDC-authenticated shared harness; hard pass-rule verdict and first action are deterministic. JEV selects optional safe editorial focus. 2.2s timeout, no Anthropic/Haiku fee, deterministic fallback, no continuous polling. Public page adds visit intent, longer mountain-specific story, traceable official place/policy source, self-report warnings, optional three verified attributed Commons file photos, and three real scenario controls.
+- **SEO:** One canonical page; identity `https://chrisizworski.com/#person`, author attribution, original structured data, analytics and ads preserved. No thin resort/date pages. No claims about live mountain access.
+- **Benchmark:** Zero false greens/override of blackouts, reservations or day pool; source truth for each claim/photo; mobile, keyboard, performance and ad gates; request is POST-only; fallback if JEV fails.
+- **Follow-up:** Await full GitHub gates, merge, Vercel READY, public page and API live smoke before declaring V2 shipped.
+
+
 ## Epic / Ikon National Tools mirror sync — October 12, 2026
 
 - PR #918 merged to the public site repository at 9dcf58de; PR #88 merged to the National Tools owning repository at baa07940. Both passed full GitHub verification. Initial automatic site deployment failed with Vercel git_info_fail; a targeted Git-backed production deployment was started, with public availability not yet verified at the time of this commit.
@@ -351,3 +373,71 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Revenue / operational evidence:** Google AdSense page revenue, RPM, organic channel conversion and attributable earnings: **NOT AVAILABLE**. This work is not an earnings claim.
 - **Decision:** **PROTECT the forecast headline and model; CONNECT U.S. city intent; OBSERVE geographically segmented GSC results.** Avoid chasing international broad-query impressions.
 - **Exactly one next action:** Review the existing `/duluth-canal-park/` search entry and actual next-vessel UX against **U.S.** GSC Web query data and the production AIS/bridge response, then complete one measured improvement without altering working vessel-scoring logic. Definition of done: verified current search queries, honest live/fallback state and one documented shipped fix or explicit no-change decision.
+
+
+## Vercel repeated-build cost repair — October 12, 2026
+
+- **Goal / user decision:** Chris requested all deployment problems and duplicate build cost causes be fixed. Scope: main site's deployment composition and CI, `izworskic/chrisizworski-com`; no product-logic or SEO treatment changes.
+- **Before:** Paid Vercel deployment `dpl_DBG1Y6nW3ondXEJuFFSzwKCVaeud` for `f40b7b6a7ca4e72dca7ab3546149850bb0a78bae` took 10m35s; logs repeated the whole site pipeline during API packaging and reached the 4 MB log cap. GitHub verification and authority-audit jobs independently built the same revision. Root `vercel-build` is inherited as Vercel's Node per-function hook; the repository has 78 API code files.
+- **Repair:** Rename the unchanged site pipeline to `build:site`, explicitly invoke it once in `vercel.json`, and prohibit reserved `vercel-build`/`now-build` hooks with a regression test. Keep all generation, creator, ads, analytics and emitted-output checks. Share successful CI public output and reconciled registry with the reusable live audit in the same run. Keep live/release checks; eliminate overlapping agent push/PR triggers, cancel obsolete runs, remove the CBBT workflow that only repeated the generic build, and make the National Tools diagnostic manual-only.
+- **Dashboard controls verified before this code repair:** Basic 2 CPU / 8 GB build machine, on-demand concurrent builds disabled, production priority retained. Account spending alerts do not impose an enforced pause.
+- **Validation at this handoff:** Full `npm run verify:all`: all 52 steps passed on the repair branch; `npm run build:site` exited 0; changed workflow files passed actionlint. The exact 39-step build command and 52-step gate are retained. PR/remote CI/preview/production verification are pending at commit creation; the completed release result belongs in the linked repair PR. Branch: `fix/single-site-build-20261012`.
+- **Revenue / search evidence:** GSC, GA4 and AdSense revenue measurements NOT AVAILABLE in this operational session. No ranking or attributable revenue uplift claim; billed savings remain unmeasured.
+- **Guardrails / risks:** Canonical URLs, Chris Izworski Person identity, ads and analytics remain under existing gates. Standard Vercel Node API packaging remains enabled. The live audit restores only the successful build from its own workflow run. Build generators' working-tree outputs are not committed as incidental source changes.
+- **Decision:** REPAIR repeated compute before considering a hosting migration.
+- **Exactly one next action:** After the repair's production verification, compare the main project's Vercel Build CPU usage over the next full 24 hours against the preceding 24 hours, including deployment count and build duration; confirm reduced repeated-build activity without claiming savings from an unmatched traffic/deployment window.
+
+
+## Removing suspended Redis — October 12, 2026
+
+- **User decision:** Chris requested removal of Redis, use of an existing/free alternative and closure after migration. No new paid plan is authorized.
+- **Ownership and scope:** main-site state/alert/cache integration; standalone consumers belong in their owner repos. Public Gazette/fall daily editions already use GitHub and are preserved. Brand, canonical, analytics and ad behavior remain under existing gates.
+- **Verified baseline:** the preceding build-cost repair PR #932 merged as `619c47faa1355cf4bd7f903626f18c84bfc7cb05`, production `dpl_3wSdkawLM2Nb8yfrkBq4pPhEvRq2` READY in 35s; all 52 gates and the post-release public audit passed. The Redis outage is separate.
+- **Actual provider state:** authenticated Upstash console shows shared Gazette/winning-dogfish database is Free Tier, $0 current cost, 104K commands, 8MB stored and 10GB/10GB monthly bandwidth; suspended. Export and data access are disabled and no backup exists. Do not claim a Redis fee was eliminated or old records were recovered. Main Redis PING returned the fixed-plan-limit 403.
+- **Account inventory:** all 82 Vercel projects inspected without printing secret values; 12 had Redis variable names and all pointed to the same endpoint. Gazette, phenology and tcwine current code no longer calls Redis; active trout, birding, birding-daily and lawn consumers need their own migrations. Older/manual projects require separate deployment inspection.
+- **Replacement provisioned:** isolated private `tool_state` schema and authenticated Edge Function in existing healthy free Supabase `hzsydskkscdtytimtjqc`. Restoring unused Nano2 was rejected by the account's active-free-project limit; no project or paid plan was created. Backend keys remain inside the function; signed Vercel project identity is verified, with isolated project/environment namespaces.
+- **Changes:** replace main flight assignment/watch, Mackinac watch, NYC traffic/baseline/511, Detroit image/editorial state, private GSC reporting and dormant fall cron transports; no provider fallback. Preserve expiry, NX reservation, compare-owned release and ordered state operations. Compress large values. Main GSC health checks actual storage PING.
+- **Validation before PR:** full repository gate passed all 52 steps; production site build passed; authenticated state semantics tested directly in rolled-back Postgres transactions, including expiry, NX/ownership, score ordering, ordered nulls, lists, sets/counters and denied public privileges. Signature/identity/environment and async-token tests pass; unauthenticated backend returns 401. Remote main PR/CI/production status pending at commit creation.
+- **Data limitation / closing:** old Redis-only data remains provider-blocked and unexported. Permanent deletion is not authorized until the completed cutover and data-loss consequence are reviewed at action time. Existing alert subscribers and older archives must not be falsely claimed migrated. The account currently accrues no Redis fees.
+- **Measurements:** attributable GSC/GA4/AdSense lift and billed savings NOT AVAILABLE; this is reliability/cost-control work.
+- **Decision:** REPAIR and remove the provider dependency while preserving recoverable data.
+- **Exactly one next action:** finish and verify every active Redis consumer, then review the exact shared database deletion only after source dependencies and environment connections are cleared.
+
+
+## Redis cutover release and source-only smoke repair — October 12, 2026
+
+- Main PR #933 and trout #15, birding #17, birding-daily #6 and lawn #8 merged with required PR checks green; all five production deployments READY. Live private state PING succeeds and main, trout and birding cache writes are present in isolated production namespaces. No new subscription.
+- Cleared all 23 Redis variable values in 12 projects and individually read them back as empty. Variable record deletion and the old suspended/free database deletion are pending explicit action-time confirmation; 8MB of provider-blocked historic data is unexported.
+- Retired the old manual chris-izworski site to canonical redirects. Disabled its automatic custom-domain assignment; verified the main domain stays on the main project. The old fallcolor deployment is already redirect-only.
+- Lawn #9 fixes pre-existing multi-child Satori text layout. Live share image returns HTTP 200, PNG 1200x630. A delayed Git build of the preceding merge temporarily took the alias; promoted the already-built fix without rebuilding. Automatic Git deployments arrive several minutes late: prefer waiting for them over creating duplicate builds.
+- NYC production smoke exposed an import-time SDK dependency in the new state adapter: its source-only runner deliberately does not install dependencies. Load @vercel/oidc only inside the configured request. Added a regression check with the SDK unavailable. All 52 gates passed (83s), plus all six focused state tests. Remote repair PR/release validation pending at commit creation.
+- Separate blockers are not Redis/deployment success: native GSC Google credentials are absent; JEV deep health reports TypeSafe HTTP 402 because the organization has no API credits. Restored the canceled AgentBase registry main deployment 2c766f09... in 20s; it now reports route-only health accurately. No credits, auto-reload or paid upgrade were enabled; Detroit AI production checks remain blocked by provider credits.
+- Build CPU remains dominated by prior main-site builds (98.1% in the observed cycle; $396.61 Build CPU at inspection). New main builds complete in 31–37s on Basic; old accumulated charges do not reverse. Do not claim a matched-window billed saving yet.
+- Exactly one next action: verify the source-only smoke repair's PR and production release, then retain the old free database for recovery unless Chris confirms its permanent deletion with the data-loss consequence.
+
+
+## Canonical release identity verification — October 12, 2026
+
+- PR #934 merged as 5f61f37184aae8df484d30b7875bcdfe9ac43172. Automatic production dpl_DCXY6Kmom3Wau5dtHGCKsP84bEm9 READY in 35.259s; production full gate/public audit succeeded; real live NYC smoke passed with page/API 200 and all five Mapbox probes live.
+- The automated NYC wait still depends on a GitHub Vercel status that is absent even when the verified exact production deployment is READY. Replace that notification wait with the exact SHA actually served by HEAD /api/nyc-crossing. HEAD returns 204, no-store/noindex and the real VERCEL_GIT_COMMIT_SHA, without calling any traffic or paid providers. Missing SHA never satisfies the wait. The existing complete GET smoke remains required after the identity check.
+- Add concurrency cancellation so older NYC release waits cannot continue after superseding main pushes. This removes obsolete polling and the GitHub statuses permission; it does not relax the release hash or functional checks.
+- Validation: all 52 gates passed (69s); seven focused tests passed, including source-only SDK absence and deployment identity with missing-SHA/no-provider-call cases; workflow YAML parses. PR/remote CI/production verification pending at commit creation.
+- Exactly one next action: complete this release check repair, then retain the disconnected free Redis database for recovery unless Chris confirms permanent deletion of its unexported data.
+
+## Build cost pass two — October 12, 2026
+
+- Owner requested all four proposed cost actions: skip internal-documentation deployments, audit other projects, profile/reuse unchanged build inputs, and test building outside Vercel. Scope is deployment composition; no tool decision logic, canonical URLs, ads, analytics or creator identity changed.
+- Implemented fail-closed documentation-only ignore command against the previous successful deployment SHA, with range/missing-history regression tests. Full GitHub verification still runs for documentation revisions.
+- Measured all 39 unchanged site-build stages. Replaced four per-build GitHub downloads at the unchanged Ballard authoritative pin with 77,640 bytes of versioned, SHA-256-verified snapshots. Local clean-source timings: 12.869s before, 9.882s after. All 1,049 public/API/benchmark output hashes were identical. These are local timings, not account-billed savings.
+- Agent verification now retains a per-stage build profile; the audit continues to reuse its same-run successful site output. All original build stages and 52 full-gate steps remain enabled.
+- Local CLI 63.1.2 standalone preview packaging succeeded: 79 function/middleware bundles, 360 routing rules and both cron schedules. Added a main-only manual prebuilt-preview trial with exact target checks, scoped token steps, static-page verification and provider-free API method/noindex smoke. It does not deploy/promote production, add an automatic trigger or upload secret-bearing `.vercel` artifacts.
+- Eight projects were audited through the visible Vercel connection. Latest logs show 4 CPUs on six active/small projects plus the legacy project; portfolio-sentinel used 2. Two lawn SHAs had duplicate successful production deployments (API SHA plus Git main); its only repository workflow verifies and does not deploy. Seed-store repeated SHAs were provisioning failures/retries, not proven duplicate-success triggers.
+- Access blockers: main project/deployment is inaccessible via this connector (404). Updating lawn build tier was rejected because owner/project-admin access is required; concurrency update was also rejected for insufficient role. No dashboard settings were changed. No authenticated prebuilt preview was uploaded; its owner-configured VERCEL_TOKEN is a prerequisite before choosing a new primary deployment route.
+- Validation: current main Agent verification and NYC production smoke both green at f79e831e5eb244ab825791f452c7cd367afae91b. Final local full gate: all 52 steps passed in 31s; snapshot/ignore/manual-only regression checks passed; prebuilt-output verifier passed; changed workflows parse as YAML and diff whitespace check passed. Remote PR/preview verification pending at commit creation. No attributable GSC/GA4/AdSense measurements or matched-window billed saving available.
+- Exactly one next action: review the cost-control PR and complete an owner-authenticated prebuilt preview before switching the automatic production deployment route.
+
+### Cost pass two PR handoff
+
+- PR https://github.com/izworskic/chrisizworski-com/pull/936 is open and unmerged. Code commit: 1bbe6b3c5c75c23133e0f2644ad9ea4f028910df. Remote Agent branch verification run 38295815466 passed both verification and the same-artifact public audit; the timed CI build took 11 seconds on Node 22. Other triggered PR checks are green. Review was still running at inspection, with no submitted reviews/threads yet.
+- Read-only production checks confirm homepage HTTP 200 and NYC HEAD HTTP 204/no-store/noindex at the existing f79e831e5eb244ab825791f452c7cd367afae91b production SHA. This cost pass has not been merged or deployed. Dashboard tier changes and an authenticated prebuilt preview remain blocked by owner/admin access.
+- Exactly one next action: obtain owner approval for PR #936 and dashboard access, then run the guarded prebuilt preview before selecting a single automatic production deployment route.

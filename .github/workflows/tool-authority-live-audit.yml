@@ -1,24 +1,12 @@
 name: Tool authority public HTML audit
 
 on:
-  push:
-    branches:
-      - 'agent/**'
-      - main
-    paths:
-      - 'benchmarks/tool-network-registry.json'
-      - 'benchmarks/creator-entity-contract.json'
-      - 'middleware.ts'
-      - 'api/garden-water-page.js'
-      - 'public/**'
-      - 'scripts/audit-tool-authority.mjs'
-      - 'scripts/inject-creator-attribution.mjs'
-      - 'lib/creator-attribution.mjs'
-      - 'lib/tool-authority-identity.mjs'
-      - 'lib/garden-water-identity-composition.js'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/tool-authority-live-audit.yml'
+  workflow_call:
+    inputs:
+      build-artifact:
+        description: Verified public output from this workflow run and checkout SHA
+        required: true
+        type: string
   workflow_dispatch:
 
 permissions:
@@ -35,12 +23,24 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - name: Install pinned dependencies
+      # Automatic audits consume only the successful build from this same run.
+      # Manual audits deliberately build their selected revision once.
+      - name: Download verified public output
+        if: inputs.build-artifact != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.build-artifact }}
+      - name: Restore verified public output
+        if: inputs.build-artifact != ''
+        run: |
+          rm -rf public
+          tar -xzf verified-site-output.tar.gz
+      - name: Install pinned dependencies for a manual build
+        if: inputs.build-artifact == ''
         run: npm ci
-      - name: Build production output and reconcile its published inventory
-        id: build
-        continue-on-error: true
-        run: npm run vercel-build
+      - name: Build production output for a manual audit
+        if: inputs.build-artifact == ''
+        run: npm run build:site
       - name: Audit actual public HTML for every published tool canonical
         if: always()
         run: node scripts/audit-tool-authority.mjs --live > tool-authority-live.json
@@ -53,10 +53,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Wait for the main deployment to propagate
-        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
+        if: github.ref == 'refs/heads/main'
         run: node -e "setTimeout(() => process.exit(0), 180000)"
       - name: Verify changed public outputs after promotion
-        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
+        if: github.ref == 'refs/heads/main'
         run: node scripts/audit-tool-authority.mjs --live-release --check > tool-authority-release.json
       - name: Upload changed-route release report
         if: always() && github.ref == 'refs/heads/main'
@@ -66,6 +66,3 @@ jobs:
           path: tool-authority-release.json
           if-no-files-found: ignore
           retention-days: 7
-      - name: Preserve production build gate result
-        if: steps.build.outcome != 'success'
-        run: exit 1

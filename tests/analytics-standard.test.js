@@ -17,7 +17,7 @@ test('site build keeps GA4 automatic for current and future HTML pages', async (
   ]);
   const pkg = JSON.parse(pkgText);
 
-  assert.match(pkg.scripts?.['vercel-build'] || '', /inject-ga4\.mjs/);
+  assert.match(pkg.scripts?.['build:site'] || '', /inject-ga4\.mjs/);
   assert.match(injector, new RegExp(ID.replace(/-/g, '\\-')));
   assert.match(injector, /\.endsWith\('\.html'\)/);
   assert.match(injector, /ai-referral-measurement\.js/);

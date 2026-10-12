@@ -73,9 +73,10 @@ test('Maritime Minimalist lock markers are restrained and map-driven',()=>{
  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
  assert.match(js,/function lockIcon\(lock,active=false\)/);
- assert.match(js,/const size=active\?32:27/);
+ assert.match(js,/const hit=44/);
+  assert.match(js,/iconSize:\[hit,hit\]/);
  assert.match(js,/function flightIcon\(active=false,wide=false\)/);
- assert.match(js,/const width=wide\?48:46,height=27/);
+ assert.match(js,/const width=wide\?52:50,height=44/);
  assert.match(js,/const wide=map\.getZoom\(\)<12/);
  assert.match(js,/const combine=map\.getZoom\(\)<14/);
  assert.match(js,/map\.on\('zoomend',renderLockMarkers\)/);
@@ -176,8 +177,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-media1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-media1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -311,4 +312,23 @@ test('Camera source is explicitly Bridge 21 and only loads on user demand',()=>{
   assert.match(html,/https:\/\/streamtimelive\.com\/port-colborne\//);
   assert.match(html,/current availability not verified/);
   assert.match(css,/\.welland-camera-player\{aspect-ratio:16\/9/);
+});
+
+test('Mobile lock preview docks below the ship map without covering vessel markers',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const posMap=html.indexOf('id="shipMap"'),posStageEnd=html.indexOf('</div>',posMap),posDock=html.indexOf('id="mapLockPreview"'),posFallback=html.indexOf('id="mapFallback"');
+  assert.ok(posMap>0&&posStageEnd>posMap&&posDock>posStageEnd&&posFallback>posDock,'preview follows closed map stage');
+  assert.match(html,/id="mapLockPreview"[^>]*aria-live="polite"/);
+  assert.match(css,/Premium lock handoff: on phones/);
+  assert.match(css,/\.map-lock-preview\{[\s\S]*?position:relative;z-index:1/);
+  assert.match(css,/\.welland-lock-pin\{display:grid;place-items:center;cursor:pointer\}/);
+  assert.match(js,/const hit=44/);
+  assert.match(js,/iconSize:\[hit,hit\]/);
+  assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
+  assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
+  assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
 });
