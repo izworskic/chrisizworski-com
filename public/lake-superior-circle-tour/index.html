@@ -296,6 +296,25 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .itin-panel{display:block !important;page-break-before:always}
   .itin-tab{display:none}
 }
+
+/* Decision handoffs in the Minnesota segment of the existing 31-stop Circle Tour. */
+.nshore-circle-guide{margin:18px 0 25px;padding:23px 22px 19px;background:linear-gradient(132deg,#e9f2f2,#f6f8f4);border:1px solid #bfd6d4;border-left:5px solid #1a6b8a;border-radius:7px}
+.nshore-circle-kicker{font:700 11px/1.3 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#267280;margin-bottom:9px}
+.nshore-circle-guide h3{font:normal 24px/1.24 Georgia,serif;color:#143d4c;margin:0 0 8px}
+.nshore-circle-guide>p:not(.nshore-circle-kicker){font-size:13px;line-height:1.72;color:#3f5d65;max-width:760px;margin:0 0 15px}
+.nshore-circle-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.nshore-circle-choices>a{display:block;background:#fff;border:1px solid #d6e2e0;padding:15px 16px;border-radius:5px;text-decoration:none;min-width:0;transition:background .15s,border-color .15s}
+.nshore-circle-choices>a:hover,.nshore-circle-choices>a:focus-visible{background:#f0f8f8;border-color:#8ebac4}
+.nshore-circle-choices small{display:block;color:#287783;font:bold 10px/1.35 Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;margin-bottom:7px}
+.nshore-circle-choices strong{display:block;color:#174659;font:normal 19px/1.25 Georgia,serif;margin-bottom:7px}
+.nshore-circle-choices span{display:block;color:#506c73;font:12px/1.65 Arial,sans-serif}
+.nshore-circle-warning{margin:0!important;font-size:11px!important;color:#536970!important}
+.nshore-stop-decision{background:#eef5f3;border-left:3px solid #38818a;margin:11px 0 13px;padding:12px 15px;font-size:12px;line-height:1.65;color:#355b62}
+.nshore-stop-decision strong{color:#194d5c}
+.nshore-stop-decision a{font-weight:700;text-decoration:underline;text-underline-offset:3px;color:#125a74}
+@media(max-width:660px){.nshore-circle-guide{padding:17px 14px}.nshore-circle-choices{grid-template-columns:1fr}.nshore-circle-choices>a{padding:13px}.nshore-circle-guide h3{font-size:21px}}
+@media print{.nshore-circle-guide{break-inside:avoid}.nshore-circle-choices>a{break-inside:avoid}}
+
 </style>
 
 
@@ -863,6 +882,19 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <section class="seg-section" id="seg-mn" data-seg="mn">
 <div class="seg-heading"><span class="seg-badge mn">MN</span><h2>Minnesota North Shore</h2></div>
 <p class="seg-desc">165 miles from Duluth to the Canadian border along Highway 61. Eight state parks, the most photographed lighthouse in America, five waterfall stops, and the Superior Hiking Trail connecting everything above the lake.</p>
+<!-- Minnesota North Shore decision layer: complements, does not change, Circle Tour route stops -->
+<div class="nshore-circle-guide" id="north-shore-decisions" aria-labelledby="nshore-circle-title">
+  <p class="nshore-circle-kicker">Circle Tour / Minnesota North Shore · Pick the experience</p>
+  <h3 id="nshore-circle-title">Four decisions that can change your Highway 61 day.</h3>
+  <p>The Minnesota North Shore is more than a scenic leg of the Circle Tour. Give Duluth, Split Rock and Grand Portage enough time to do something worth the stop. Each specialist tool handles one practical question; this page remains your full-lake route planner.</p>
+  <div class="nshore-circle-choices">
+    <a href="/duluth-canal-park/" data-circle-north-shore="duluth"><small>01 / Duluth · Canal Park</small><strong>When will a ship pass?</strong><span>Check the next supported freighter watch, cameras and Aerial Lift Bridge context before heading to the canal.</span></a>
+    <a href="/split-rock-river-loop/" data-circle-north-shore="river"><small>02 / Split Rock River · trail access</small><strong>Is the loop hike possible?</strong><span>Both trail sides reopened, but the upper bridge is still absent. See the signed alternate before starting.</span></a>
+    <a href="/split-rock-lighthouse-visit/" data-circle-north-shore="lighthouse"><small>03 / Split Rock Lighthouse · admission</small><strong>Which ticket or park pass?</strong><span>Plan historic-site entry, grounds-only access or the state park viewpoint without buying the wrong admission.</span></a>
+    <a href="/isle-royale-ferry/" data-circle-north-shore="ferry"><small>04 / Grand Portage · Isle Royale</small><strong>Is Windigo a day trip?</strong><span>Compare Sea Hunter III to Windigo with the longer Voyageur II route toward Rock Harbor.</span></a>
+  </div>
+  <p class="nshore-circle-warning"><strong>Circle Tour vs. island side trip:</strong> Isle Royale ferry travel is optional and adds time beyond the driving itineraries. Ferry dates and seats, historic-site access, and trail advisories must be verified with their operators.</p>
+</div>
 <article class="stop-card" id="stop-21" data-seg="mn" data-acts="history waterfall">
   <div class="stop-header">
     <div class="stop-num mn">21</div>
@@ -896,6 +928,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   <div class="stop-body">
     <p class="stop-desc">Grand Portage is where French voyageurs and Ojibwe traders built the greatest fur trade depot in North America. The National Monument preserves this history impeccably with a reconstructed 1797 fur trade post. Grand Portage is also the Minnesota terminus for the Isle Royale National Park ferry.</p>
     <div class="activities-list"><h4>Activities &amp; Attractions</h4><div class="activity-item"><span class="act-icon">🏛</span><span class="act-text">Grand Portage National Monument <span class="act-note">Reconstructed 1797 fur trade post with demonstrations of voyageur and Ojibwe culture. One of the most underrated NPS sites in the Midwest.</span> <a href="https://www.nps.gov/grpo" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div><div class="activity-item"><span class="act-icon">⛵</span><span class="act-text">Isle Royale National Park Ferry <span class="act-note">Grand Portage–Isle Royale Transportation Lines ferries to Isle Royale NP run April–October. Book well ahead.</span> <a href="https://www.grandportageisleroyale.com" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div><div class="activity-item"><span class="act-icon">⛰</span><span class="act-text">Mount Rose Trail <span class="act-note">1.5-mile hike to a 700-foot overlook above Grand Portage Bay. Short but rewarding views.</span></span></div><div class="activity-item"><span class="act-icon">🎰</span><span class="act-text">Grand Portage Lodge & Casino <span class="act-note">Only hotel/casino on the Circle Tour run by a tribal nation (Grand Portage Band of Lake Superior Chippewa). Good restaurant.</span> <a href="https://www.grandportage.com" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div></div>
+    <div class="nshore-stop-decision"><strong>Want an Isle Royale side trip?</strong> <a href="/isle-royale-ferry/">Choose Windigo day ferry vs. Rock Harbor overnight itinerary</a> before adjusting your Circle Tour days. The published 2026 ferry season has ended; future dates and seats are unverified.</div>
     <div class="stop-links"><a href="https://www.nps.gov/grpo" class="ext-link" target="_blank" rel="noopener">Grand Portage NM →</a><a href="https://www.grandportage.com" class="ext-link" target="_blank" rel="noopener">Grand Portage Band →</a></div>
     <div class="season-note">🗓 <strong>When to visit:</strong> Monument open daily late May–mid-October. Isle Royale ferry April–October, book well ahead. Falls accessible year-round.</div>
   </div>
@@ -986,6 +1019,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   <div class="stop-body">
     <p class="stop-desc">Split Rock Lighthouse, built in 1910 on a 130-foot cliff above Lake Superior following the devastating 1905 Mataafa Storm, is the most photographed lighthouse in the country. Decommissioned in 1969 and meticulously maintained by the Minnesota Historical Society. The November 10th annual lighting ceremony on the anniversary of the Edmund Fitzgerald sinking is one of the most moving public events on the Great Lakes.</p>
     <div class="activities-list"><h4>Activities &amp; Attractions</h4><div class="activity-item"><span class="act-icon">🗼</span><span class="act-text">Split Rock Lighthouse Tours <span class="act-note">Guided tours of the lighthouse tower, fog signal building, and restored keeper's house. Managed by the Minnesota Historical Society.</span> <a href="https://www.mnhs.org/splitrock" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div><div class="activity-item"><span class="act-icon">📸</span><span class="act-text">Pebble Beach Viewpoint <span class="act-note">The classic postcard photo of the lighthouse from the rocky beach below. Walk down from the visitor center parking.</span></span></div><div class="activity-item"><span class="act-icon">🥾</span><span class="act-text">Day Hill and Split Rock River Trail <span class="act-note">6-mile loop trail with views of Lake Superior and the Split Rock River gorge.</span></span></div><div class="activity-item"><span class="act-icon">🏖</span><span class="act-text">Corundum Point Beach <span class="act-note">Pebble beach considered one of the best Lake Superior agate hunting beaches on the North Shore.</span></span></div><div class="activity-item"><span class="act-icon">🕯</span><span class="act-text">November 10th Edmund Fitzgerald Lighting Ceremony <span class="act-note">Every year on the anniversary of the Edmund Fitzgerald sinking (November 10, 1975), the lighthouse is lit and all 29 crew names are read aloud. A profoundly moving annual event.</span></span></div></div>
+    <div class="nshore-stop-decision"><strong>Two separate decisions at Split Rock:</strong> <a href="/split-rock-lighthouse-visit/">historic lighthouse tickets, grounds and parking</a> are different from <a href="/split-rock-river-loop/">hiking the Split Rock River Loop around its missing bridge</a>. Check both before planning your stop.</div>
     <div class="stop-links"><a href="https://www.mnhs.org/splitrock" class="ext-link" target="_blank" rel="noopener">MN Historical Society →</a><a href="https://www.dnr.state.mn.us/state_parks/park.html?id=spk00161" class="ext-link" target="_blank" rel="noopener">MN DNR →</a></div>
     <div class="season-note">🗓 <strong>When to visit:</strong> Lighthouse tours May–October. State park open year-round. November 10 ceremony draws large crowds. Best photography light in the morning.</div>
   </div>
@@ -1040,6 +1074,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   <div class="stop-body">
     <p class="stop-desc">You've made it, approximately 1,300 miles around the largest freshwater lake in the world by surface area. Duluth deserves a celebration meal. Pick up your Lake Superior Circle Tour Stamp Certificate if you collected stamps at participating locations along the route.</p>
     <div class="activities-list"><h4>Activities &amp; Attractions</h4><div class="activity-item"><span class="act-icon">🎉</span><span class="act-text">Collect Your Lake Superior Circle Tour Certificate <span class="act-note">Submit completed stamp books online to receive an official certificate from Superior Country.</span> <a href="https://lakesuperiorcircletour.info" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div><div class="activity-item"><span class="act-icon">🍺</span><span class="act-text">Celebrate at Fitger's Brewhouse or Canal Park <span class="act-note">Fitger's has a great brew pub with lake views. Canal Park has multiple excellent restaurants.</span> <a href="https://fitgers.com" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div><div class="activity-item"><span class="act-icon">📚</span><span class="act-text">Lake Superior Magazine and Gift Shop <span class="act-note">Excellent regional publications, maps, and gifts in downtown Duluth.</span> <a href="https://www.lakesuperior.com" class="act-link" target="_blank" rel="noopener">Official link →</a></span></div></div>
+    <div class="nshore-stop-decision"><strong>Finish with a freighter?</strong> <a href="/duluth-canal-park/">Check supported ship arrivals, AIS and Canal Park cameras</a> before deciding where to stand at the harbor.</div>
     <div class="stop-links"><a href="https://lakesuperiorcircletour.info" class="ext-link" target="_blank" rel="noopener">Circle Tour Stamp Program →</a><a href="https://www.visitduluth.com" class="ext-link" target="_blank" rel="noopener">Visit Duluth →</a></div>
     <div class="season-note">🗓 <strong>When to visit:</strong> Year-round.</div>
   </div>
@@ -1162,7 +1197,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 
 <div class="companion-tools">
   <h3>Chris's Companion Tools</h3>
-  <p class="ct-sub">Built for trips like this. Free, no signup. All run live data.</p>
+  <p class="ct-sub">Built for trips like this. Free, no signup. Live data where available; published access, tickets and future schedules where live verification is unavailable.</p>
   <div class="ct-grid">
     <div class="ct-card"><a class="ct-link" href="/sault-ste-marie-border-wait-time/">🌉 Sault Border Wait Live</a><div class="ct-desc">Official waits in both directions at the Upper Peninsula bridge, plus live cameras, weather warnings, and tolls.</div></div>
     <div class="ct-card"><a class="ct-link" href="https://gazette.chrisizworski.com" target="_blank" rel="noopener">🌊 Great Lakes Gazette</a><div class="ct-desc">Daily maritime brief: which freighters are where, port activity, marine forecasts. Check it before each driving day.</div></div>
