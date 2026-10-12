@@ -1,0 +1,78 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const E=require('../public/assets/epic-ikon-2026-27.js');
+const V=require('../public/assets/epic-ikon-v3.js');
+const PAGE=fs.readFileSync(path.resolve(__dirname,'../public/epic-ikon-pass/index.html'),'utf8');
+
+test('Vail restricted holiday always remains BLOCKED',()=>{
+ const input={pass:'epicLocal',resort:'vail',date:'2026-12-31',usedDays:'0'};
+ const r=E.evaluate(input);
+ assert.equal(r.status,'NO');assert.equal(r.reason,'blackout');
+ assert.equal(V.commitment(r).code,'BLOCKED');
+ const next=E.nextDate(input,30);
+ assert.ok(next);assert.ok(next.date>'2026-12-31');
+ assert.notEqual(next.status,'NO');
+});
+test('Unrestricted Epic does not assert lift availability',()=>{
+ const r=E.evaluate({pass:'epic',resort:'vail',date:'2026-12-31'});
+ assert.equal(r.status,'YES');
+ assert.equal(V.commitment(r).code,'RULES_ALLOW_PLAN');
+ assert.match(V.commitment(r).next,/verify/i);
+});
+test('Aspen/Snowmass pool and resort special-case regressions',()=>{
+ assert.equal(E.evaluate({pass:'ikonBase',resort:'aspen-mountain',date:'2027-01-12'}).status,'NO');
+ assert.equal(E.evaluate({pass:'ikonBase',resort:'snowmass',date:'2027-01-12'}).status,'CHECK');
+ assert.equal(E.evaluate({pass:'ikon',resort:'snowmass',date:'2027-01-12',usedDays:'7'}).status,'NO');
+});
+test('Reservation remains a primary gate and day-pass details are never assumed',()=>{
+ assert.equal(E.evaluate({pass:'ikon',resort:'jackson-hole',date:'2027-01-12',usedDays:'0',reservationMade:'no'}).status,'ACTION');
+ assert.equal(V.commitment(E.evaluate({pass:'ikon',resort:'jackson-hole',date:'2027-01-12',usedDays:'0'})).code,'NEEDS_ACTION');
+ assert.equal(E.evaluate({pass:'epicDay',resort:'vail',date:'2026-12-31'}).status,'UNKNOWN');
+});
+test('Media are correctly attributed winter/arrival references with commercial-compatible Creative Commons URLs',()=>{
+ assert.equal(V.MEDIA.length,3);
+ assert.equal(new Set(V.MEDIA.map(x=>x.id)).size,3);
+ assert.equal(V.MEDIA.filter(x=>x.season==='WINTER').length,2);
+ assert.equal(V.MEDIA.filter(x=>x.season==='SUMMER').length,1);
+ for(const item of V.MEDIA){
+   assert.match(item.sourcePage,/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+   assert.match(item.licenseUrl,/^https:\/\/creativecommons\.org\/licenses\/by/);
+   assert.equal(item.rights,'CC');assert.match(item.src,/commons\.wikimedia\.org/);
+   assert.ok(item.captureDate&&item.photographer&&item.exactSubject&&item.alt&&item.why);
+ }
+});
+test('Mapped points are specific verified features, not invented lift entrances',()=>{
+ assert.equal(V.PLACES.length,5);
+ assert.deepEqual(V.PLACES.map(x=>x.id),['den','ege','vail-parking','lionshead-center','golden-peak']);
+ for(const p of V.PLACES){
+   assert.ok(Number.isFinite(p.lat)&&Number.isFinite(p.lon));
+   assert.ok(p.lat>39&&p.lat<41&&p.lon< -104&&p.lon> -108);
+   assert.ok(p.sourceUrl&&p.note);
+ }
+ assert.ok(!V.PLACES.some(x=>/gondola/i.test(x.name)));
+});
+test('Arrival advice never turns a group preference into made-up times, routes, lifts or booking inventory',()=>{
+ for(const ability of ['novice','intermediate','advanced','mixed']){
+   for(const arrival of ['town','transit','drive','uncertain']){
+     const p=V.chosenArrival({ability,arrival});
+     assert.ok(p.title&&p.text&&p.source.startsWith('https://www.vail.com/'));
+     assert.doesNotMatch(p.text,/guaranteed|available hotel|minutes to lift|safe to drive/i);
+   }
+ }
+});
+test('V3 page preserves canonical SEO ownership, pass engine and deliberately loads map only when requested',()=>{
+ assert.match(PAGE,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/epic-ikon-pass\/">/);
+ assert.match(PAGE,/https:\/\/chrisizworski\.com\/#person/);
+ assert.match(PAGE,/Built by Chris Izworski/);
+ assert.match(PAGE,/pass_decoder_check/);
+ assert.match(PAGE,/epic-ikon-2026-27\.js/);
+ assert.match(PAGE,/epic-ikon-v3\.js/);
+ assert.match(PAGE,/data-v3-map="region"/);
+ assert.match(PAGE,/data-v3-map="arrival"/);
+ assert.match(PAGE,/data-v3-map="terrain"/);
+ assert.match(PAGE,/Source-linked trip brief|source-linked trip brief/i);
+ assert.doesNotMatch(PAGE,/<script[^>]+(?:redis|anthropic)/i);
+});
