@@ -18,7 +18,7 @@ assert.ok(!lock.packages?.['node_modules/gauley-release-live'],'Main-site lockfi
 assert.ok(!fs.existsSync('api/gauley-live.js'),'Main site must not duplicate the Gauley live function');
 assert.ok(!fs.existsSync('api/gauley-history.js'),'Main site must not duplicate the Gauley history function');
 assert.ok(!fs.existsSync('public/national-tools/gauley-release-live/index.html'),'Main site must not carry a stale Gauley page mirror');
-assert.ok(!String(pkg.scripts['vercel-build']).includes('sync-gauley-release-live'),'Main build must not sync Gauley locally');
+assert.ok(!String(pkg.scripts['build:site']).includes('sync-gauley-release-live'),'Main build must not sync Gauley locally');
 assert.ok(!Object.keys(vercel.functions||{}).some(k=>k.includes('gauley')),'Main Vercel function config must not package Gauley');
 
 const rewrites=vercel.rewrites||[];

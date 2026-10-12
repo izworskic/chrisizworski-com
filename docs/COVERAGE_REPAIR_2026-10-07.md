@@ -55,7 +55,7 @@ the main sitemap URL count remains 241.
 The regression tests validate both public URL forms, canonical redirect
 destinations, ordering before owner wildcards, and exclusion of sitemap files,
 unpublished cities, and nested coastal tools. Run `npm run verify:all` and
-`npm run vercel-build` before release.
+`npm run build:site` before release.
 
 After the approved merge deploys, recheck all repaired public URLs with GETs.
 Then inspect the 404/redirect-error examples in Search Console and validate only

@@ -18,7 +18,7 @@ test('Melvin Price page preserves core live-data integrity language', () => {
 });
 
 test('Melvin Price canonical is added to the deployed sitemap', () => {
-  assert.match(pkg.scripts['vercel-build'], /add-melvin-price-to-sitemap\.mjs/);
+  assert.match(pkg.scripts['build:site'], /add-melvin-price-to-sitemap\.mjs/);
   assert.match(sitemapScript, /https:\/\/chrisizworski\.com\/melvin-price\//);
   assert.match(sitemapScript, /<changefreq>daily<\/changefreq>/);
 });

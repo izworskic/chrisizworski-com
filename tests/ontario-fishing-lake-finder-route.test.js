@@ -14,7 +14,7 @@ test('Ontario fishing surfaces deploy from the pinned standalone V2 release with
     pkg.dependencies?.['ontario-fishing-lake-finder'],
     'github:izworskic/ontario-fishing-lake-finder#d569e47823058b5b95fd55a0700254e8b5f633f8'
   );
-  assert.match(pkg.scripts?.['vercel-build'] || '', /sync-ontario-finder\.mjs/);
+  assert.match(pkg.scripts?.['build:site'] || '', /sync-ontario-finder\.mjs/);
   assert.match(api, /ontario-fishing-lake-finder\/api\/lakes/);
   assert.match(sync, /Ontario Hydro Network/);
   assert.match(sync, /Remote Trout Lake Finder/);

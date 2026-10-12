@@ -5,7 +5,7 @@ Updated: 2026-10-01
 
 All public pages emitted by `chrisizworski-com` use Google Analytics 4 measurement ID `G-Y5D2V2W7HN`.
 
-The repository's `vercel-build` script must run `scripts/inject-ga4.mjs`, which recursively tags every HTML document under `public/`. New static pages and newly generated pages therefore inherit analytics automatically at deployment.
+The repository's `build:site` script must run `scripts/inject-ga4.mjs`, which recursively tags every HTML document under `public/`. New static pages and newly generated pages therefore inherit analytics automatically at deployment.
 
 The same injector also installs `/assets/ai-referral-measurement.js` on every public HTML page. The AI referral layer is deliberately additive: it does **not** overwrite GA4 campaign source, medium, referrer, or other native attribution fields.
 

@@ -69,7 +69,7 @@ test('check mode detects drift without mutating files; generate touches only the
 
 test('production build links reconciled entries and checks final emitted graph after HTML injections', async () => {
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
-  const steps = pkg.scripts['vercel-build'].split(' && ');
+  const steps = pkg.scripts['build:site'].split(' && ');
   const reconcile = steps.indexOf('node scripts/reconcile-tools-directory.mjs');
   const generate = steps.indexOf('node scripts/generate-tool-entity-graph.mjs');
   const attribution = steps.indexOf('node scripts/inject-creator-attribution.mjs');
