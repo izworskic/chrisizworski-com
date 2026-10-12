@@ -109,4 +109,5 @@ function alignNationalHubFreshness() {
 }
 
 normalizeNortheastAuthority();
+await import('./add-welland-niagara-discovery.mjs');
 alignNationalHubFreshness();
