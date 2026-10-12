@@ -1,0 +1,45 @@
+name: Welland photo production smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/assets/welland/photos/**'
+      - 'public/assets/welland-canal.js'
+      - 'public/welland-canal/index.html'
+      - '.github/workflows/welland-photo-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-photo-delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - name: Wait for public Welland photo deploy and verify actual image bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://chrisizworski.com"
+          ready=0
+          for attempt in $(seq 1 45); do
+            if curl -fLSs --max-time 20 --retry 1 "$origin/assets/welland-canal.js?v=20261011-photos1" -o /tmp/welland-script.js \
+              && grep -Fq "src:'/assets/welland/photos/north3.jpg'" /tmp/welland-script.js \
+              && curl -fLSs --max-time 20 "$origin/assets/welland/photos/north3.jpg" -o /tmp/welland-smoke.jpg \
+              && file /tmp/welland-smoke.jpg | grep -q 'JPEG image data' \
+              && [ "$(wc -c < /tmp/welland-smoke.jpg)" -gt 10000 ]; then
+              ready=1; break
+            fi
+            echo "Waiting for new public Welland JS and real JPEG, attempt $attempt of 45"
+            sleep 20
+          done
+          test "$ready" -eq 1 || { echo "::error::New Welland photo image did not appear on production"; exit 1; }
+          for photo in north1 north2 north3 thorold south8; do
+            curl -fLSs --max-time 30 "$origin/assets/welland/photos/$photo.jpg" -o "/tmp/$photo.jpg"
+            file "/tmp/$photo.jpg" | grep -q 'JPEG image data' || { echo "::error::Invalid photo: $photo"; exit 1; }
+            test "$(wc -c < "/tmp/$photo.jpg")" -gt 10000 || { echo "::error::Empty photo: $photo"; exit 1; }
+            echo "Verified first-party Welland photo $photo: $(wc -c < "/tmp/$photo.jpg") bytes"
+          done
+          echo "All five Welland JPEGs and updated first-party photo code served on production."
