@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Welland lock tap clarity — October 11, 2026
+
+- **Reported bug:** Tapping small numbered lock positions on mobile produced a short-lived Leaflet tooltip containing only the lock name. The real detail lived below the map and was not discoverable from the tap.
+- **Fix:** Remove lock and lock-group name tooltips without touching vessel tooltips. Individual map-marker tap selects and recenters the map, updates the existing evidence-aware lock profile, and opens a persistent compact mobile preview showing lock number/name/place, source-backed descriptive note, dismiss control, and **Open full lock profile** action. The full-profile action scrolls to and focuses the editorial card; the preview sits outside Leaflet panes and survives map zoom/marker redraw. Group tap still zooms to reveal constituent lock markers, with explanatory toolbar copy.
+- **Constraints:** Maintain Maritime Minimalist palette and small markers. Desktop continues to use side-by-side profile; preview in stacked <=900px phone/tablet layouts (with a narrower overlay on tablets). No invented lock occupancy, wait time, camera, or next passage prediction. Existing AIS source and 30-minute freshness check untouched. No additional SEO pages, canonical or attribution changes.
+- **Verification:** Add targeted regression tests for tooltip absence, persistent preview and meaningful touch content; require full repository suite and both branch checks before merge. Production Vercel readiness and public assets to be verified before calling the fix live.
+- **Next action:** On a phone, tap Lock 3, open its full profile, dismiss the preview on Lock 5, and confirm grouped 3–7/4–6 markers expand rather than displaying empty name bubbles.
+
+
 ## Welland maritime minimalist lock experience — October 11, 2026
 
 - **Owner request:** Replace visually overwhelming gold badges with a premium yet restrained maritime UI, using the detail panel for visual emphasis.

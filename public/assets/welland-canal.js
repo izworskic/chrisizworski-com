@@ -86,7 +86,22 @@
       rail.append(b);
     });
   }
-  function chooseLock(id,recenter=true){
+  function hideLockPreview(){
+    $('mapLockPreview').hidden=true;
+  }
+  // A persistent, map-adjacent mobile preview survives Leaflet marker redraws
+  // and offers a deliberate path to the premium full-size lock profile.
+  function showLockPreview(lock){
+    if(!window.matchMedia||!window.matchMedia('(max-width: 900px)').matches){
+      hideLockPreview();
+      return;
+    }
+    $('mapLockPreviewNumber').textContent='LOCK '+lock.id;
+    $('mapLockPreviewTitle').textContent=lock.name+' · '+lock.place;
+    $('mapLockPreviewText').textContent=lock.note;
+    $('mapLockPreview').hidden=false;
+  }
+  function chooseLock(id,recenter=true,fromMap=false){
     selected=id;select.value=id;
     for(const b of $('lockRail').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
     const lock=LOCKS.find(l=>l.id===id);
@@ -99,6 +114,7 @@
       map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
     }
     renderLockDetail();
+    if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
     lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(l=>l.id===key),selected===key)));
     if(flightMarker){
       const wide=map&&map.getZoom()<12;
@@ -159,19 +175,22 @@
     LOCKS.forEach(lock=>{
       if(wide&&['3','4','5','6','7'].includes(lock.id))return;
       if(combine&&['4','5','6'].includes(lock.id))return;
-      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
-        .addTo(lockLayer).bindTooltip(lock.name,{direction:'top'});
-      marker.on('click',()=>chooseLock(lock.id));
+      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,zIndexOffset:750})
+        .addTo(lockLayer);
+      marker.getElement()?.setAttribute('aria-label',lock.name+', '+lock.place+'. Show lock details');
+      marker.on('click',()=>chooseLock(lock.id,true,true));
       lockMarkers.set(lock.id,marker);
     });
     if(wide){
-      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,title:'Central locks 3 through 7, click to expand',zIndexOffset:780})
-        .addTo(lockLayer).bindTooltip('Locks 3–7 · click to zoom in',{direction:'top'});
-      flightMarker.on('click',()=>map.flyTo([43.1382,-79.1920],12,{duration:0.65}));
+      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,zIndexOffset:780})
+        .addTo(lockLayer);
+      flightMarker.getElement()?.setAttribute('aria-label','Locks 3 to 7. Zoom in to explore');
+      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],12,{duration:0.65});$('lockMapHint').textContent='Zoom in and choose an individual numbered lock';});
     }else if(combine){
-      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,title:'Thorold flight locks 4 through 6, click to expand',zIndexOffset:780})
-        .addTo(lockLayer).bindTooltip('Locks 4–6 · click to zoom in',{direction:'top'});
-      flightMarker.on('click',()=>map.flyTo([43.1382,-79.1920],14,{duration:0.65}));
+      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,zIndexOffset:780})
+        .addTo(lockLayer);
+      flightMarker.getElement()?.setAttribute('aria-label','Locks 4 to 6. Zoom in to explore');
+      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],14,{duration:0.65});$('lockMapHint').textContent='Choose Lock 4, 5, or 6 to explore';});
     }
   }
   function initMap() {
@@ -242,6 +261,13 @@
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
+  $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
+  $('mapLockPreviewOpen').addEventListener('click',()=>{
+    hideLockPreview();
+    const card=$('lockDetail');
+    card.scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    card.focus({preventScroll:true});
+  });
   renderLocks();chooseLock('all');initMap();refresh();
   window.setInterval(refresh,120000);
 })();
