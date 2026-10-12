@@ -11,7 +11,7 @@ This subsystem replaces the paid GSC Wizard dependency for first-party Search Co
 - Classifies pages as `BREAKOUT`, `EMERGING`, `STABLE`, `DECAYING`, `SEASONAL`, or `NEW_UNPROVEN`.
 - Builds site-specific CTR benchmarks by ranking bucket and estimates recoverable clicks.
 - Aggregates pages into tool families.
-- Stores full reports privately in the existing Upstash Redis instance for 400 days.
+- Stores full reports privately in private Postgres tool state in the existing free Supabase project for 400 days.
 - Emits a compact `gsc_analytics_summary` object to Vercel runtime logs so portfolio analysis can be inspected without publishing raw query data.
 - Runs daily from `.github/workflows/gsc-analytics.yml` using short-lived GitHub OIDC authentication, so no GitHub secret is required to trigger the protected collector.
 

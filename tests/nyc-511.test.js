@@ -47,10 +47,10 @@ test('link pagination follows next and rejects origin changes',()=>{
 });
 function mockWorld(){
  const store=new Map(),calls=[];const env={NY511_USERNAME:'unit-user',NY511_PASSWORD:'unit-pass',
-   UPSTASH_REDIS_REST_URL:'https://redis.example',UPSTASH_REDIS_REST_TOKEN:'unit-redis-token'};
+   TOOL_STATE_URL:'https://state.example',VERCEL_OIDC_TOKEN:'unit-redis-token'};
  const fetchImpl=async (url,opts={})=>{
    calls.push({url:String(url),headers:opts.headers||{},body:opts.body});
-   if(url==='https://redis.example'){
+   if(url==='https://state.example'){
      const [action,key,val,flag,n]=JSON.parse(opts.body);
      let result=null;
      if(action==='GET')result=store.get(key)||null;
@@ -76,7 +76,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  // Use the fixture's observation time, not the CI runner wall clock.
  const first=await refresh511({...w,now:at});
  assert.equal(first.state,'UPDATED');assert.equal(first.eventsCount,1);assert.equal(first.signsCount,1);
- const upstream=w.calls.filter(x=>x.url!==w.env.UPSTASH_REDIS_REST_URL);
+ const upstream=w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL);
  assert.equal(upstream.length,2);
  assert.ok(upstream.every(x=>x.headers.Authorization.startsWith('Basic ')));
  assert.ok(upstream.every(x=>!x.url.includes('unit-user')&&!x.url.includes('unit-pass')));
@@ -87,7 +87,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  assert.equal(cache.crossings.gwb.signCount,1);
  assert.equal(cache.crossings.gwb.penaltyPoints,7);
  assert.equal((await refresh511({...w,now:at})).state,'ALREADY_POLLED');
- assert.equal(w.calls.filter(x=>x.url!==w.env.UPSTASH_REDIS_REST_URL).length,2);
+ assert.equal(w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL).length,2);
 });
 test('refresh excludes expired incidents but still fetches sign messages at a fixed clock',async()=>{
  const w=mockWorld();
@@ -110,7 +110,7 @@ test('missing credentials never poll; poll failure retains stale cache',async()=
    w.store.set(key,JSON.stringify(v));
  }
  w.store.delete('nyc:511ny:refresh-lock:v1');
- const failingFetch=async(url,options)=>url===w.env.UPSTASH_REDIS_REST_URL?w.fetchImpl(url,options):Promise.reject(new Error('provider failed'));
+ const failingFetch=async(url,options)=>url===w.env.TOOL_STATE_URL?w.fetchImpl(url,options):Promise.reject(new Error('provider failed'));
  const failed=await refresh511({env:w.env,fetchImpl:failingFetch,now:at});
  assert.equal(failed.state,'STALE_CACHE');
  const cached=await getCached511(w);

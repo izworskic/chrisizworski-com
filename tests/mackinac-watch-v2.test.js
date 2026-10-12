@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const watch = require('../lib/mackinac-watch');
 
-const env = { KV_REST_API_URL: 'https://fake-redis.example', KV_REST_API_TOKEN: 'unit-test', CRON_SECRET: 'unit-test-vapid-seed' };
+const env = { TOOL_STATE_URL: 'https://fake-state.example', VERCEL_OIDC_TOKEN: 'unit-test', CRON_SECRET: 'unit-test-vapid-seed' };
 const NOW = Date.parse('2026-10-11T14:00:00Z');
 function fakeRedis() {
   const values = new Map();

@@ -33,7 +33,7 @@ test("the 15 regions share one GitHub writer, never visitor-triggered generation
  assert.match(src,/"NX"/);
  assert.match(src,/max_tokens:1300/);
  assert.doesNotMatch(src,/process\.env\.ANTHROPIC_API_KEY(?!_FALL_COLOR)/);
- assert.ok(src.indexOf("await redis([\"SET\",\"fallcolor:anthropic:national:attempt:")<src.indexOf("const notes=await generate(evidence)"));
+ assert.ok(src.indexOf("await storeCommand([\"SET\",\"fallcolor:anthropic:national:attempt:")<src.indexOf("const notes=await generate(evidence)"));
 });
 test("national notes are evidence constrained and stale editions are not promoted",()=>{
  const {dateKey,isSeason,compactRegion,parseBriefings}=national._test;
