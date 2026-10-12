@@ -40,7 +40,7 @@ test('Media are correctly attributed winter/arrival references with commercial-c
  for(const item of V.MEDIA){
    assert.match(item.sourcePage,/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
    assert.match(item.licenseUrl,/^https:\/\/creativecommons\.org\/licenses\/by/);
-   assert.equal(item.rights,'CC');assert.match(item.src,/commons\.wikimedia\.org/);
+   assert.equal(item.rights,'CC');assert.match(item.src,/^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//);
    assert.ok(item.captureDate&&item.photographer&&item.exactSubject&&item.alt&&item.why);
  }
 });
