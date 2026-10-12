@@ -1,5 +1,17 @@
 # Search Growth + Revenue Session Log
 
+## Niagara Falls Today V3 guided experience release — October 12, 2026
+
+- **Problem repaired:** V2 external Commons thumbnail hero failed and overpopulated gallery repeated the same waterfall imagery. V3 removes 4 static image cards, 8 repeated photo cards and 2 detached film cards; retains one licensed first-party photograph plus operator-sourced route-specific guided text for the eight actual planner stop IDs.
+- **Media:** Chicken4War Aug 19 2026 Horseshoe Falls and Niagara River (Wikimedia CC BY-SA 4.0) imported by exact Commons source workflow, optimized to 1600x900 JPEG at /assets/niagara-falls/photos/horseshoe-2026.jpg (269052 bytes at initial import). Attribution, license and cropped/historical labels visible. Local image has CSS fallback and first-party OG/X image URLs.
+- **Visitor content:** Two layers: deterministic planner keeps scheduled attraction truth/unknown states, and independent Niagara field guide explains landscape, context, focus and conditions for selected stops. North American park operator source links. A verified Niagara Parks film (DlMgURteL3E) is opt-in only on Canada Table Rock routes; does not claim that the separate Journey Behind the Falls attraction is open or bookable.
+- **Regression:** Twenty-six existing itinerary tests retained; V3 experience tests assert correct asset bytes and no gallery. Chromium smoke successfully checked 375/768/1440 viewport widths, locally decoded 1600x900 image, no horizontal overflow, US/CA route rendering and source-video click-to-load; screenshots uploaded to GitHub Actions run 38254822202. Full verify:all and emitted production audits must pass again after main reconciliation.
+- **Parallel product safety:** #929 added date-specific Niagara Parks schedule_feed and validation; its UI source timestamp display must survive the V3 merge (never regress official hours logic).
+- **Metrics:** No current GSC/AdSense change measured. No CTR/ranking claims.
+- **Status:** Review branch / PR #930; awaiting final merged-base CI, Vercel READY and public image smoke.
+- **Exactly one next action:** On green CI and preview, merge PR #930, confirm production and first-party JPG/route responses.
+
+
 ## Epic / Ikon V2 JEV + experiential decision release — October 12, 2026
 
 - **Owner/repo:** `izworskic/chrisizworski-com`, branch `feat/epic-ikon-v2-jev-experience-20261012`. PR and production deploy unverified at authorship.

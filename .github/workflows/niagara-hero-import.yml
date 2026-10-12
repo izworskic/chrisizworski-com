@@ -1,0 +1,53 @@
+name: Import licensed Niagara Falls 2026 photograph
+on:
+  push:
+    branches:
+      - feature/niagara-experience-rescue-build-20261012
+    paths:
+      - .github/workflows/niagara-hero-import.yml
+      - scripts/fetch-niagara-hero.cjs
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: niagara-hero-import-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  import-photo:
+    if: github.ref == 'refs/heads/feature/niagara-experience-rescue-build-20261012'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download exact Commons photograph and validate real JPEG bytes
+        run: node scripts/fetch-niagara-hero.cjs
+      - name: Crop and optimize real image
+        run: |
+          python -m pip install --quiet Pillow
+          python scripts/optimize-niagara-hero.py
+      - name: Validate first-party photograph as launch requirement
+        run: |
+          set -euo pipefail
+          f=public/assets/niagara-falls/photos/horseshoe-2026.jpg
+          test -s "$f"
+          file "$f" | grep -q 'JPEG image data'
+          test "$(wc -c < "$f")" -gt 45000
+          test "$(wc -c < "$f")" -lt 1600000
+      - name: Commit and push exact licensed image to review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/assets/niagara-falls/photos/horseshoe-2026.jpg
+          if git diff --cached --quiet; then echo 'Original photo already imported'; exit 0; fi
+          git commit -m 'Bundle verified licensed Niagara Falls hero photograph locally'
+          git push origin "HEAD:$GITHUB_REF_NAME"
