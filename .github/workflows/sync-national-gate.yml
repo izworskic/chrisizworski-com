@@ -161,7 +161,7 @@ jobs:
           grep -q 'href="https://xcski.chrisizworski.com/wisconsin/"' public/synced-national-tools/index.html
           grep -q 'href="https://xcski.chrisizworski.com/minnesota/"' public/synced-national-tools/index.html
           grep -q 'data-tool-id="welland-canal"' public/synced-national-tools/index.html
-          node -e 'const fs=require("fs"); const h=fs.readFileSync("public/synced-national-tools/index.html","utf8"); const j=JSON.parse(h.split("<script type=\\\"application/ld+json\\\">")[1].split("</script>")[0]); const n=j["@graph"].find(x=>x["@type"]==="ItemList"); if(n.numberOfItems!==(h.match(/data-search-card/g)||[]).length || !n.itemListElement.some(x=>x.url==="https://chrisizworski.com/welland-canal/")) process.exit(1);'
+          node -e 'const fs=require("fs"); const h=fs.readFileSync("public/synced-national-tools/index.html","utf8"); const j=JSON.parse(h.split("application/ld+json")[1].split(">")[1].split("</script>")[0]); const n=j["@graph"].find(x=>x["@type"]==="ItemList"); if(n.numberOfItems!==(h.match(/data-search-card/g)||[]).length || !n.itemListElement.some(x=>x.url==="https://chrisizworski.com/welland-canal/")) process.exit(1);'
           grep -q 'class="catalog-group everyday-decisions"' public/synced-national-tools/index.html
           grep -q 'data-filter="everyday"' public/synced-national-tools/index.html
           grep -q 'Use the same decision-engine approach beyond outdoors.' public/synced-national-tools/index.html
