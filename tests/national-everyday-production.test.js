@@ -8,7 +8,8 @@ test('synced National Tools retains Everyday Decisions and House Reality Check',
   assert.match(html,/data-filter="everyday"/);
   assert.match(html,/data-tool-id="house-fit" data-personas="everyday"/);
   assert.match(html,/href="https:\/\/chrisizworski\.com\/can-i-afford-this-house\//);
-  assert.match(html,/numberOfItems":53/);
+  assert.match(html,/data-tool-id="welland-canal"/);
+  assert.match(html,/href="\/welland-canal\/"/);
 });
 
 test('main build compatibility shim does not rewrite authoritative hub freshness', () => {
@@ -25,8 +26,9 @@ test('synced National Tools metadata is current after verified hub sync', () => 
   const schema=JSON.parse(schemaText);
   const page=schema?.['@graph']?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#page');
   const list=schema?.['@graph']?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#toollist');
-  assert.equal(page?.dateModified,'2026-10-07');
+  assert.ok(page?.dateModified >= '2026-10-11', 'National Tools modification date should reflect Welland discovery');
   assert.match(page?.description||'',/Everyday Decisions/);
-  assert.equal(list?.numberOfItems,53);
+  assert.equal(list?.numberOfItems, (html.match(/data-search-card/g) || []).length, 'structured ItemList must match visible tools');
+  assert.ok(list?.itemListElement?.some(x=>x.url==='https://chrisizworski.com/welland-canal/'));
   assert.ok(list?.itemListElement?.some(x=>x.url==='https://chrisizworski.com/can-i-afford-this-house/'));
 });

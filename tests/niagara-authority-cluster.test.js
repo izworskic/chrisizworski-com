@@ -95,7 +95,7 @@ test('rainbow detailed timing page stays intentionally consolidated into the fla
 test('Northeast Great Lakes hub links both distinct Niagara intents and the author source guide', () => {
   assert.match(region, /href="\/niagara-border-crossing\/"/);
   assert.match(region, /href="\/national-tools\/niagara-rainbow\/"/);
-  assert.match(region, /numberOfItems":4/);
+  assert.match(region, /numberOfItems":5/);
   assert.match(region, /href="\/chris-izworski\/"/);
   assert.match(region, /href="\/chris-izworski-source-guide\/"/);
 });
@@ -118,4 +118,25 @@ test('Niagara flagship author graph resolves to the shared Person and related Mi
   }
   assert.ok(border.includes('https://chrisizworski.com/michigan-border-wait-times/'));
   assert.ok(sitemap.includes("<loc>https://chrisizworski.com/niagara-border-crossing/</loc><lastmod>2026-10-06</lastmod>"));
+});
+
+
+test('Welland canal is discoverable and Niagara specialists link into one decision desk', () => {
+  const national = read('public/synced-national-tools/index.html');
+  const welland = read('public/welland-canal/index.html');
+  assert.match(national, /data-tool-id="welland-canal"/);
+  assert.match(national, /href="\/welland-canal\/"/);
+  assert.match(region, /id="niagara-trip-desk"/);
+  assert.match(region, /href="\/welland-canal\/"/);
+  assert.match(region, /numberOfItems":5/);
+  assert.match(border, /href="\/welland-canal\/"/);
+  assert.match(rainbow, /href="\/welland-canal\/"/);
+  assert.match(welland, /href="\/niagara-border-crossing\/"/);
+  assert.match(welland, /href="\/national-tools\/niagara-rainbow\/"/);
+  for (const [html, url] of [
+    [border, 'https://chrisizworski.com/niagara-border-crossing/'],
+    [rainbow, 'https://chrisizworski.com/national-tools/niagara-rainbow/'],
+    [welland, 'https://chrisizworski.com/welland-canal/'],
+  ]) assert.ok(html.includes('<link rel="canonical" href="' + url + '">'), 'Preserve independent specialist canonical ' + url);
+  assert.equal((national.match(/data-tool-id="welland-canal"/g) || []).length, 1, 'no duplicate National Tools card');
 });
