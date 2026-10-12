@@ -88,9 +88,9 @@ export function applyBallardSiteShell(source, route) {
   nodes.set(personId, { '@type': 'Person', '@id': personId, name: 'Chris Izworski', url: 'https://chrisizworski.com/' });
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escape(page.title)}</title>`);
   html = html.replace(/<meta\b(?=[^>]*name=["']description["'])[^>]*>/i, `<meta name="description" content="${escape(page.description)}">`);
+  html = applyBallardCtr(html, route, page);
   html = html.replace(/<\/head>/i, `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': [...nodes.values()] }).replace(/</g, '\\u003c')}</script>\n</head>`);
   // Reuse an existing quiet footer credit before adding one to child pages.
   html = html.replace(/Built by <a href="https:\/\/chrisizworski\.com\/">Chris Izworski<\/a>/g, 'Built by <a href="https://chrisizworski.com/chris-izworski/" rel="author">Chris Izworski</a>');
-  html = applyBallardCtr(html, route, page);
   return addCreatorAttribution(html);
 }
