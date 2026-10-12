@@ -11,6 +11,28 @@
 - **Exactly one next action:** Finish successful full-gate + preview URL/asset verification for both PRs, then release only verified routes and begin a 7/28-day GSC baseline.
 
 
+## Epic / Ikon Pass Access Decoder — October 12, 2026
+
+- **Goal:** New winter-2026/27 national decision engine, exact pass + resort + date with shared-day pools, blackout exclusions and reservation action. Canonical /epic-ikon-pass/.
+- **Work:** Source-backed curated 2026/27 rule engine; conservative YES/NO/CHECK/ACTION/UNKNOWN verdicts, holiday boundary handling, source links, self-reported day count and reservations, same-region alternatives; premium responsive form; versioned policy specification; regression and seeded 20k randomized safety tests.
+- **Research:** Epic and Ikon official 2026/27 rules; TravelMagma and EpicorIkon already supply price/pass comparisons. Distinction is specific trip feasibility and transparent uncertainty. Semrush API units unavailable; search Monte Carlo assumptions explicitly hypothetical, not measured demand or forecasts.
+- **Search/ad identity:** One new canonical, shared Person @id https://chrisizworski.com/#person, visible attribution, GA4 check event, one AdSense loader, registry relationships and sitemap lastmod 2026-10-12. No new thin date/resort landing pages.
+- **Deployment state:** Feature branch feat/epic-ikon-pass-decoder-2026 prepared for PR and CI review; no production claim until green verify:all, merge and exact URL/asset smoke tests. GSC/AdSense for this new URL unavailable (unlaunched), no uplift claim.
+- **Existing regressions:** None demonstrated by this task yet; site-wide regression suite must be run in CI. Other pending work unchanged.
+- **Exactly one next action:** Complete the PR's verify:all and Vercel preview checks, resolve any failures before merging.
+
+
+## Niagara Falls Today — experiential field guide V2 — October 12, 2026
+
+- **Request:** Preserve the Niagara date-aware planner but make visitors imagine the trip through compelling factual field-guide storytelling, real photos and playable videos. State-park/parkland ranger-style explanatory voice without claiming NPS affiliation.
+- **Source review:** Wikimedia Commons file-level licenses for nine distinct waterfall/attraction images (credited and linked beside each photo; CSS crop disclosed), and YouTube videos from Niagara Parks (Journey Behind the Falls, l6fu2huqWNE) and independent visitors (Cave of the Winds, hmQwm0drhGU).
+- **Implementation:** Licensed panoramic hero + four illustrated field-guide choices; two click-to-play, privacy-enhanced YouTube embeds that never autoplay on initial load; stop-specific picture, “What to notice,” and on-the-ground tip for all eight planner stops; responsive design, alt text, photographer/license links, related specialist links remain.
+- **Safeguards:** Historic illustrative photos not passed off as current or live. Source photos map to the correct place or vantage, no repeated stock imagery, no copied producer video files, no video requested until visitor click. Existing itinerary source gates, confidence, pricing, border restrictions, weather alerts and canonical identity untouched.
+- **Measurement:** Existing planner submit metrics preserved; one anonymous video-play event. No GSC or revenue outcome verified in this session.
+- **Status:** CI and Vercel to verify the feature branch; merge only on green and successful preview.
+- **Next action:** Verify the page's licensed images and embedded videos in the deployed preview, including phone widths, before calling production ready.
+
+
 ## Welland camera + identity-safe lock media upgrade — October 12, 2026
 
 - **User problem:** Real photos exist, but many were duplicated or wrong for the selected lock. Requested live video camera from `https://www.youtube.com/live/yF7XdpkL34w` and measurable media quality benchmark.

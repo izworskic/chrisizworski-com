@@ -2608,6 +2608,49 @@
       }
     },
     {
+      "id": "epic-ikon-pass",
+      "name": "Epic vs Ikon Pass Blackout Checker",
+      "canonical": "https://chrisizworski.com/epic-ikon-pass/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "winter-recreation",
+      "primaryIntent": "Can my specific 2026/27 Epic or Ikon pass access this ski resort on this date including blackout dates day pools and reservations",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "geographies": [
+        "united-states",
+        "british-columbia"
+      ],
+      "personas": [
+        "ski-traveler",
+        "pass-holder",
+        "holiday-family",
+        "pass-shopper"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "hypothetical",
+        "note": "Official 2026/27 pass rules verified 2026-10-12; traffic and keyword demand not yet established. One canonical owner, no resort/date doorway expansion."
+      },
+      "measurement": {
+        "search": "GSC Web page + query family, days 7/28",
+        "product": "GA4 pass_decoder_check event with pass/resort/status only",
+        "decisionWindowDays": 28,
+        "privacy": "No user accounts, pass numbers or location collected"
+      }
+    },
+    {
       "id": "isle-royale-ferry",
       "name": "Grand Portage Isle Royale Ferry and Permit Planner",
       "canonical": "https://chrisizworski.com/isle-royale-ferry/",
@@ -3792,6 +3835,22 @@
       "strength": "strong",
       "surface": "niagara-trip-desk",
       "reason": "After travel access is established, plan what fits at the Falls."
+    },
+    {
+      "from": "epic-ikon-pass",
+      "to": "national-snow",
+      "type": "trip-context",
+      "surface": "winter-recreation",
+      "strength": "optional",
+      "reason": "After confirming pass-rule eligibility, visitors can separately inspect national snow conditions without implying resort operations."
+    },
+    {
+      "from": "snowmobile",
+      "to": "epic-ikon-pass",
+      "type": "related-winter-activity",
+      "surface": "winter-recreation",
+      "strength": "optional",
+      "reason": "A different winter recreation decision for travel planning; no overlapping search intent."
     },
     {
       "from": "isle-royale-map",
