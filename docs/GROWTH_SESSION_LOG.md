@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Welland camera + identity-safe lock media upgrade — October 12, 2026
+
+- **User problem:** Real photos exist, but many were duplicated or wrong for the selected lock. Requested live video camera from `https://www.youtube.com/live/yF7XdpkL34w` and measurable media quality benchmark.
+- **Camera:** Identified user's stream as a Port Colborne / Bridge 21-area PTZ view near Lake Erie; **not** inside Lock 8. Added clear camera desk, location disclosure, user-triggered YouTube embed, Stop control, direct-source link, independent StreamTime Live Port Colborne link and historical Lock 7 webcam listing with unknown 2026 uptime. No stream presented as guaranteed live, no inference about lock occupancy or vessel schedules.
+- **Photos:** Removed repeated Lock 7 picture from all three Thorold flight profiles. Replaced each with a distinct labeled engineering schematic for Locks 4, 5, 6, highlighting that chamber in order and NOAA Coast Pilot 6 published lift (+15 m, +15 m, +13 m). The schematics are disclosed as **not photographs and not to scale**; historical public-domain archive photo landing pages are linked for independent photographic context. Locks 1, 2, 3, 7 retain exact-lock licensed photos; Lock 8 retains clearly labeled Gateway Park photo (nearby visitor context, not the lock chamber).
+- **Media value function:** `V = .35 subject accuracy + .20 uniqueness + .15 provenance + .15 explanation + .10 camera truth + .05 local delivery`. Wrong lock, duplicate primary image, misleading camera status/location, missing rights/attribution or missing local asset = hard veto. Benchmark `scripts/benchmark-welland-media.cjs`, human verification targets and remaining photo-sourcing gaps documented in `docs/WELLAND_MEDIA_VALUE_FUNCTION.md`. A structural result is not an empirical photo-quality or engagement metric.
+- **SEO and stability:** Same indexable /welland-canal/ URL, OG/X/Person metadata, creator credit, the AIS data and map engine. No additional unrelated pages or cost-bearing video proxies.
+- **Definition of done:** 8 unique actual displayed media, source truth gates and full repo verification pass, production HTML/camera ready, and new photos/videos accurately distinguish place and operating state. Do not claim camera uptime without publisher verification.
+
+
 ## Niagara Falls Today P0 build — October 12, 2026
 
 - **Request:** Deliver the attached Niagara Falls Today 1.0 flagship spec: one canonical date-aware visit decision engine, not six SEO satellites.
