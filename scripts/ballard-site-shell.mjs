@@ -6,7 +6,10 @@ import { addCreatorAttribution } from '../lib/creator-attribution.mjs';
 const shell = JSON.parse(readFileSync(new URL('../config/ballard-site-shell.json', import.meta.url), 'utf8'));
 const personId = 'https://chrisizworski.com/#person';
 const publishingTypes = new Set(['WebPage', 'WebSite', 'WebApplication']);
-const keyFor = node => node['@id'] || `${node['@type']}:${node.name || ''}`;
+// Stable keys prevent duplicate WebPage and FAQPage nodes when upstream has an older name/no @id.
+const keyFor = node => node['@type'] === 'FAQPage' ? 'FAQPage' :
+  (node['@type'] === 'WebPage' && node.url?.startsWith('https://chrisizworski.com/ballard-locks/') ? 'WebPage:' + node.url :
+  node['@id'] || `${node['@type']}:${node.name || ''}`);
 const escape = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 
@@ -60,7 +63,16 @@ export function applyBallardSiteShell(source, route) {
     const data = JSON.parse(json);
     for (const node of data['@graph'] || [data]) {
       const key = keyFor(node);
-      nodes.set(key, { ...nodes.get(key), ...node });
+      const merged = { ...nodes.get(key), ...node };
+      // Use CTR title and visible FAQ over pinned older copy on the target pages.
+      if (ctrTargets.has(route) && ['WebPage', 'WebApplication'].includes(node['@type'])) {
+        merged.name = page.title;
+        merged.description = page.description;
+      }
+      if (ctrTargets.has(route) && node['@type'] === 'FAQPage') {
+        merged.mainEntity = page.graph.find(item => item['@type'] === 'FAQPage').mainEntity;
+      }
+      nodes.set(key, merged);
     }
     return '';
   });
