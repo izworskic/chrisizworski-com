@@ -62,15 +62,27 @@
     flight5:{kind:'schematic',subjectLock:'5',view:'schematic',src:'/assets/welland/photos/flight5-schematic.svg',alt:'Diagram of Thorold flight showing Lock 5 highlighted, 15 metre lift; not a photograph',caption:'Lock 5 · exact chamber identified in a schematic; NOT a photograph',credit:'Chris Izworski',license:'NOAA lift figures',licenseUrl:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf',source:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf'},
     flight6:{kind:'schematic',subjectLock:'6',view:'schematic',src:'/assets/welland/photos/flight6-schematic.svg',alt:'Diagram of Thorold flight showing Lock 6 highlighted, 13 metre lift; not a photograph',caption:'Lock 6 · exact chamber identified in a schematic; NOT a photograph',credit:'Chris Izworski',license:'NOAA lift figures',licenseUrl:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf',source:'https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf'}
   });
+  Object.assign(LOCK_PHOTOS,{
+    lock5Historic:{kind:'photo',subjectLock:'5',view:'historical-exact',taken:'1916',src:'/assets/welland/photos/lock5-construction-1916.jpg',
+      alt:'Archival photograph of excavated Lock 5 pit and channelled rock faces during Welland Ship Canal construction in 1916; not a modern completed chamber',
+      caption:'HISTORIC 1916 · Lock 5 excavation pit before its chambers were completed; not today’s lock',
+      credit:'George Grantham Bain Collection / Library of Congress',license:'Public domain',licenseUrl:'https://creativecommons.org/publicdomain/mark/1.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Welland_ship_canal_-_channelled_faces_for_pit_for_lock_no._5_LCCN2007681023.jpg'},
+    lock8Historic:{kind:'photo',subjectLock:'8',view:'historical-exact',taken:'1929',src:'/assets/welland/photos/lock8-gates-1929.jpg',
+      alt:'Historic photograph of the actual Welland Canal Lock 8 gates opening for the ship S.S. Meaford at Port Colborne in September 1929',
+      caption:'HISTORIC SEPTEMBER 1929 · Actual Lock 8 gates opening for S.S. Meaford; not a current view',
+      credit:'Photographer unknown / historic archive',license:'Public domain',licenseUrl:'https://creativecommons.org/publicdomain/mark/1.0/',
+      source:'https://commons.wikimedia.org/wiki/File:Lock_8_On_The_Welland_Ship_Canal.jpg'}
+  });
   const LOCK_STORIES = {
     '1':{photo:'north1',segment:'NORTHERN LIFT · LAKE ONTARIO',explainer:'Lock 1 is the canal’s northern gateway near Port Weller. An upbound vessel begins its climb toward Lake Erie here, moving from the lower Lake Ontario level into the first raised reach of the canal. It is the opening chapter of the eight-lock journey.',tip:'View from designated public areas only; shoreline access varies.'},
     '2':{photo:'north2',segment:'NORTHERN LIFT · ST. CATHARINES',explainer:'Lock 2 continues the stepped ascent south of Port Weller. Each chamber holds a vessel while water levels change, then opens to the next section of canal. The process explains how very large ships navigate a landscape that rises sharply toward Lake Erie.',tip:'A working lock, not a confirmed public viewing facility. Verify access locally.'},
     '3':{photo:'north3',segment:'NORTHERN LIFT · PUBLIC VIEWING',explainer:'Lock 3 is the canal’s best-established public introduction. Beside it, the St. Catharines Museum and Welland Canals Centre offers a viewing platform where visitors can watch freighters enter the chamber and rise or descend. The official Seaway schedule helps you time a visit, but ship arrival times can change.',tip:'Best documented first visit: the museum and Lock 3 viewing platform.'},
     '4':{photo:'flight4',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 4 marks the lower entry to the extraordinary Thorold twin flight. Locks 4, 5 and 6 form connected steps that carry ships roughly 43 metres up or down the Niagara Escarpment. Parallel chambers let traffic in opposite directions pass through the flight without sharing one chamber.',tip:'This is a Lock 4 engineering schematic, not a photograph; it highlights this exact flight chamber. Use the Lock 7 Viewing Centre for a broader look at the flight.'},
-    '5':{photo:'flight5',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 5 is the middle step of the Thorold flight, between Locks 4 and 6. Instead of a single enormous lift, the canal distributes the escarpment climb across successive lock chambers. Watching the sequence helps make sense of the engineering behind the Welland Canal.',tip:'This is a Lock 5 engineering schematic, not a photograph; it highlights this exact flight chamber. Public viewing is best researched through the Lock 7 Viewing Centre.'},
+    '5':{photo:'lock5Historic',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 5 is the middle step of the Thorold flight, between Locks 4 and 6. Instead of a single enormous lift, the canal distributes the escarpment climb across successive lock chambers. Watching the sequence helps make sense of the engineering behind the Welland Canal.',tip:'Historical 1916 photograph of the actual Lock 5 excavation; it predates today’s operating lock. The technical flight diagram remains available as an additional reference. Public viewing is best researched through the Lock 7 Viewing Centre.'},
     '6':{photo:'flight6',segment:'THOROLD · TWIN FLIGHT',explainer:'Lock 6 completes the three-step flight as upbound ships continue toward the summit of the canal. The paired design of Locks 4 through 6 helps manage traffic through one of the waterway’s most dramatic elevation changes. Lock 7 is the next lift south of this complex.',tip:'This is a Lock 6 engineering schematic, not a photograph; it highlights this exact flight chamber. Check the official Seaway schedule before traveling.'},
     '7':{photo:'thorold',segment:'THOROLD · ESCARPMENT SUMMIT',explainer:'Lock 7 is the last lift for upbound ships as they reach the high canal level. Thorold’s Lock 7 Viewing Centre sits above the Niagara Escarpment and provides a perspective on ships moving through Locks 4, 5, 6 and 7. It is a strong place to appreciate the whole engineered climb.',tip:'The City of Thorold publishes seasonal Viewing Centre details; confirm hours before visiting.'},
-    '8':{photo:'south8',segment:'PORT COLBORNE · LAKE ERIE',explainer:'Lock 8 has a different job from the seven lift locks to its north. At Port Colborne, it helps regulate the connection with Lake Erie, making a comparatively small water-level adjustment depending on conditions. Gateway Park provides a public viewing area near this remarkable, long control lock.',tip:'Gateway Park includes a viewing platform. Check local visitor information for facilities and current access.'}
+    '8':{photo:'lock8Historic',segment:'PORT COLBORNE · LAKE ERIE',explainer:'Lock 8 has a different job from the seven lift locks to its north. At Port Colborne, it helps regulate the connection with Lake Erie, making a comparatively small water-level adjustment depending on conditions. Gateway Park provides a public viewing area near this remarkable, long control lock.',tip:'The main photo shows the actual Lock 8 gates in September 1929, not their present appearance. Gateway Park remains a nearby public viewing option; check visitor access before traveling.'}
   };
   // One-tap explanation contract: a lock always answers WHAT and WHERE
   // without making the user open another panel or guess at map clusters.
@@ -185,6 +197,12 @@
     $('lockInstantTitle').textContent=lock.name+' · '+LOCK_QUICK[lock.id].cue;
     $('lockInstantText').textContent=LOCK_QUICK[lock.id].answer;
     $('lockInstantPhotoCaption').textContent=photo.caption;
+    const photoLink=$('lockInstantPhotoLink');
+    const aerialIds={4:'w4',5:'w5',6:'w6',8:'w8'};
+    const aerialId=aerialIds[lock.id];
+    photoLink.hidden=!aerialId;
+    if(aerialId)photoLink.href='https://www.offshoreblue.com/assets/cruise/imgs/'+aerialId+'-welland.png';
+    else photoLink.removeAttribute('href');
     setLockPhoto($('lockInstantImage'),$('lockInstantImageFallback'),photo);
   }
   function chooseLock(id,recenter=true,fromMap=false){
@@ -249,7 +267,7 @@
     setLockPhoto($('lockDetailImage'),$('lockDetailImageFallback'),photo);
     $('lockDetailImageCaption').textContent=lock?photo.caption:'Lock 3 viewing platform · example of the Welland Canal';
     $('lockDetailImageCredit').textContent=(photo.kind==='schematic'?'Diagram: ':'Photo: ')+photo.credit;
-    $('lockDetailImageFormat').textContent=photo.kind==='schematic'?'· Original diagram; not a photograph':'· Display cropped';
+    $('lockDetailImageFormat').textContent=photo.taken?'· Historic '+photo.taken+'; not live or current':photo.kind==='schematic'?'· Original diagram; not a photograph':'· Display cropped';
     $('lockDetailImageCredit').href=photo.source;
     $('lockDetailImageLicense').textContent=photo.license;
     $('lockDetailImageLicense').href=photo.licenseUrl;
@@ -271,6 +289,14 @@
     const visitor=$('lockDetailVisitor');
     visitor.hidden=!lock?.url;
     if(lock?.url)visitor.href=lock.url;else visitor.removeAttribute('href');
+    const actualAerial=$('lockDetailAerial');
+    const aerials={4:'w4',5:'w5',6:'w6',8:'w8'};
+    const basename=lock&&aerials[lock.id];
+    actualAerial.hidden=!basename;
+    if(basename){
+      actualAerial.href='https://www.offshoreblue.com/assets/cruise/imgs/'+basename+'-welland.png';
+      actualAerial.textContent='See labeled aerial of Lock '+lock.id+' at original publisher ↗';
+    }else actualAerial.removeAttribute('href');
     const archive=$('lockDetailArchive');
     const archiveUrl=['4','5'].includes(lock?.id)?'https://nfpl.historicniagara.ca/s/All/item/99282':lock?.id==='6'?'https://nfpl.historicniagara.ca/s/All/item/99277':null;
     archive.hidden=!archiveUrl;

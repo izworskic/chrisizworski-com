@@ -236,3 +236,9 @@
 .welland-camera-other .welland-camera-disclaimer{border-top:1px solid #d6e3e3;padding-top:13px;margin-top:16px;color:#547077;font-size:12px}
 @media(max-width:850px){.welland-camera-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.welland-camera-panel,.welland-camera-other{padding:14px}.welland-camera-heading h3{font-size:21px}.welland-camera-play span{width:58px;height:58px;font-size:23px}.welland-camera-play{font-size:16px}}
+
+/* Individual lock visual evidence: linked publisher-owned aerials are never copied. */
+.lock-instant-answer__aerial[hidden],.lock-detail__actions [hidden]{display:none!important}
+.lock-instant-answer__aerial{grid-column:2;grid-row:auto;font-size:12px;font-weight:800;color:#1b6078;line-height:1.5;text-decoration:underline;text-underline-offset:3px}
+.lock-instant-answer__aerial:hover{color:#113c50}
+@media(max-width:690px){.lock-instant-answer__aerial{grid-column:2}}

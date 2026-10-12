@@ -1,3 +1,16 @@
+## October 12 correction — do not confuse code compliance with real-photo coverage
+
+The earlier 96.8/100 benchmark overly rewarded informative schematics and a contextual park photo. Following direct user feedback the scorer now explicitly separates **photographs of the numbered structure/site** from diagrams, and current completed chambers from archival construction photos.
+
+After source vetting, the published target assignments are:
+- 1,2,3,7: exact-lock photographs with Creative Commons rights (4).
+- 5: **actual excavation for Lock 5, 1916**, Library of Congress public-domain historic photographic evidence (one). Does not depict the present finished chamber.
+- 8: **actual Lock 8 gate structure in 1929**, public domain (one). Does not depict contemporary appearance.
+- 4 and 6: original engineering schematics only, pending accurate photo source access; 2 outstanding gaps.
+- Direct outside-site aerial viewing available for 4,5,6,8 via BlueSeas, whose photos are not republished or assumed licensed.
+
+**Measured photo coverage: 6/8 real photographs of the appropriate numbered structure or worksite; 4/8 contemporary exact-lock photographs. Complete-photo mission: false.** This explicitly fails the desired final user outcome; changes on the current release are incremental source-truth improvements, not project completion. The objective remains eight **current, clearly visible, rights-cleared individual lock chamber photos**, with verified license and exact identity before primary assignment. The strict benchmark penalizes diagrams as photos and construction views as completed-chamber evidence.
+
 # Welland Canal — camera and lock-image value function V1
 
 ## The problem to solve

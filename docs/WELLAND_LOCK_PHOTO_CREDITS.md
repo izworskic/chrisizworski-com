@@ -1,3 +1,17 @@
+## October 12 follow-up: exact historic Lock 5 and Lock 8 pictures
+
+The prior eight-lock layout still had **no actual photographs for Locks 4, 5 or 6** and used a **park photo for Lock 8**. A fresh source-rights audit researched Wikimedia Commons, the U.S. Library of Congress, Niagara Falls Public Library and BlueSeas. Two newly sourced real historical photographs are now displayed:
+
+- **Lock 5 — excavation, 1916.** [Library of Congress Bain Collection LCCN 2007681023](https://commons.wikimedia.org/wiki/File:Welland_ship_canal_-_channelled_faces_for_pit_for_lock_no._5_LCCN2007681023.jpg), explicitly **public domain**. This is the construction pit of Lock 5, **not a view of its finished chamber or current operation**. Hosted image `/assets/welland/photos/lock5-construction-1916.jpg`. Do not imply modern physical appearance from the excavation.
+- **Lock 8 — actual gates, September 1929.** [“Lock 8 On The Welland Ship Canal”](https://commons.wikimedia.org/wiki/File:Lock_8_On_The_Welland_Ship_Canal.jpg), **public domain**, historic S.S. Meaford gates opening. Hosted image `/assets/welland/photos/lock8-gates-1929.jpg`. It is the Lock 8 structure, not nearby Gateway Park, but it is historical, **not the present-day operating view**.
+- Both images are downloaded from their own Commons file metadata, rejected unless the license is explicitly `Public domain`, optimized without changing their actual physical content and committed as first-party JPEGs. Photographer/collection credit, original file links and public-domain mark are visible on the selected lock profile and a prominent `HISTORIC` date is shown in all photo captions.
+
+**Outstanding genuine-photo gap:** Locks **4 and 6** still have original engineering schematics as primary media. Public-domain historic photography is documented at [Lock Nos. 4 & 5 under construction](https://nfpl.historicniagara.ca/s/All/item/99282) and [Lock 6 under construction](https://nfpl.historicniagara.ca/s/All/item/99277), but the library denied automated original-image retrieval (403). These were **not copied**, guessed from a wrong lock, or simulated. The photo mission is therefore **6/8 photographed, of which 4/8 are contemporary exact-lock photographs**. Another goal is a contemporary completed Lock 5 photo and current Lock 8 chamber photo.
+
+For direct understanding while image reproduction permissions are unresolved, the lock-selection and full profiles provide labeled external [BlueSeas aerial images for every lock](https://www.offshoreblue.com/cruise/welland-canal.php) (4 East/West, 5 East/West, 6 East/West, and 8). Those files remain on their source website and are **not bundled, copied or asserted to be Creative Commons**; BlueSeas asserts copyright on its content. Historic Public Domain Niagara photos remain linked directly at their archive pages.
+
+The honest strict photo benchmark (`scripts/benchmark-welland-media.cjs`) separately reports real-photo count, modern exact-photo count and missing images; passing the publication truth gate is not equivalent to achieving eight contemporary chamber photographs. Its full-coverage goal remains incomplete.
+
 # Welland Canal lock photography and factual sources
 
 Date reviewed: 2026-10-11. Page: `/welland-canal/`.

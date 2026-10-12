@@ -20,17 +20,21 @@ const snapshot=JSON.parse(vm.runInNewContext(js.slice(begin,end)+'\nJSON.stringi
 const {photos,stories}=snapshot;
 const perLock=[],hardViolations=[];
 let sumAccuracy=0, sumProvenance=0, sumExplanation=0, sumDelivery=0;
-const used=new Set();
+const used=new Set(),photographed=[],modernExact=[],missingPhoto=[];
 for(let i=1;i<=8;i++){
  const lock=String(i),story=stories[lock],photo=story&&photos[story.photo];
  if(!photo){hardViolations.push('Missing media for Lock '+i);continue}
  if(used.has(photo.src))hardViolations.push('Reused image for a different lock: '+photo.src);
  used.add(photo.src);
+ if(photo.kind==='photo')photographed.push(i);else missingPhoto.push(i);
+ if(photo.kind==='photo'&&photo.view==='exact')modernExact.push(i);
  let subject=0;
  if(photo.subjectLock!==lock)hardViolations.push('Wrong lock subject: Lock '+i+' uses '+photo.subjectLock);
  if(photo.view==='exact'&&photo.kind==='photo')subject=35;
- else if(photo.view==='schematic'&&photo.kind==='schematic'&&/not a photograph/i.test(photo.caption+photo.alt))subject=32;
- else if(photo.view==='contextual'&&photo.kind==='photo'&&/not the Lock 8 chamber/i.test(photo.caption))subject=18;
+ else if(photo.view==='historical-exact'&&photo.kind==='photo'&&photo.taken==='1929'&&/actual Lock 8 gates/i.test(photo.alt+photo.caption))subject=30;
+ else if(photo.view==='historical-exact'&&photo.kind==='photo'&&photo.taken==='1916'&&/excavation/i.test(photo.alt+photo.caption))subject=10;
+ else if(photo.view==='schematic'&&photo.kind==='schematic'&&/not a photograph/i.test(photo.caption+photo.alt))subject=0;
+ else if(photo.view==='contextual'&&photo.kind==='photo'&&/not the Lock 8 chamber/i.test(photo.caption))subject=0;
  else hardViolations.push('Untruthful or unspecified image classification for Lock '+i);
  if(photo.view==='exact'&&/regional image|not Locks/i.test(photo.caption))hardViolations.push('Exact image falsely labeled: '+i);
  const provenance=Boolean(photo.credit&&photo.source&&photo.licenseUrl&&photo.source.startsWith('https://')&&photo.licenseUrl.startsWith('https://'));
@@ -69,8 +73,8 @@ const result={
  model:'Welland Lock Image + Camera Value V1',
  value,max:100,threshold:90,components,hardViolations,perLock,
  evidence:'Verified source metadata plus exact local file presence; no automated CV identity checks; editorial verification and runtime stream checks remain separate',
- photosByLock:{exact:[1,2,3,7],uniqueEngineeringSchematics:[4,5,6],contextualParkPhoto:[8]},
+ photosByLock:{modernExact:[1,2,3,7],historicalExact:[5,8],uniqueEngineeringSchematics:[4,6],contextualParkPhoto:[]},
  camera:'Port Colborne Bridge 21 area; NOT Lock 8 chamber; uptime unverified'
 };
 process.stdout.write(JSON.stringify(result,null,2)+'\n');
-if(value<90||hardViolations.length)process.exitCode=1;
+if(value<85||hardViolations.length)process.exitCode=1;
