@@ -6,7 +6,22 @@ async function pull(url){
  try{const r=await fetch(url,{headers,signal:c.signal});if(!r.ok)throw Error(r.status+' '+url);return await r.json()}finally{clearTimeout(timer)}
 }
 function values(o,key){return(o[key]||[]).map(v=>v['@value']||v['o:label']||v.display_title||v['@id']||'').join(' / ').slice(0,500)}
-(async()=>{for(const id of ids){
+(async()=>{
+ const pages=[
+  'https://nfpl.historicniagara.ca/s/images/item/99282',
+  'https://www.historicniagara.ca/s/images/item/99282',
+  'https://nfpl.historicniagara.ca/s/images/media/525889',
+  'https://www.historicniagara.ca/s/images/media/525889',
+  'https://nfpl.historicniagara.ca/s/images/item/99277',
+  'https://nfpl.historicniagara.ca/s/images/media/525870'
+ ];
+ for(const url of pages){
+  try{const r=await fetch(url,{headers,redirect:'follow'});const text=await r.text();
+   const imgs=[...text.matchAll(/(?:href|src)=["']([^"']*(?:files\/(?:original|large|medium)|\/media\/)[^"']*)["']/g)].map(x=>x[1]).slice(0,12);
+   console.log(JSON.stringify({page:url,status:r.status,size:text.length,images:imgs,sample:text.slice(0,70)}))
+  }catch(e){console.log(JSON.stringify({page:url,error:String(e)}))}
+ }
+ for(const id of ids){
  try{
   const item=await pull('https://nfpl.historicniagara.ca/api/items/'+id);
   const info={id,title:values(item,'dcterms:title'),rights:values(item,'dcterms:rights'),rightsHolder:values(item,'dcterms:rightsHolder'),source:values(item,'dcterms:source'),created:values(item,'dcterms:date'),medias:[]};
