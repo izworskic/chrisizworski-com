@@ -204,10 +204,17 @@
     renderInstantAnswer(lock);
     renderLockDetail();
     if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
-    lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(l=>l.id===key),selected===key)));
+    // Keep existing Leaflet elements mounted while changing selection.
+    // Replacing icons on every tap drops keyboard focus and triggers map layout churn.
+    lockMarkers.forEach((marker,key)=>{
+      const element=marker.getElement();
+      if(element)element.classList.toggle('is-active',selected===key);
+    });
     if(flightMarker){
       const wide=map&&map.getZoom()<12;
-      flightMarker.setIcon(flightIcon(wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected),wide));
+      const active=wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected);
+      const element=flightMarker.getElement();
+      if(element)element.classList.toggle('is-active',active);
     }
     $('lockMapHint').textContent=lock?'Selected '+lock.name+' · '+LOCK_QUICK[lock.id].cue:'Tap a numbered lock once to understand it';
     const focus=$('lockFocus');
