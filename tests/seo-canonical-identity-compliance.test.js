@@ -51,7 +51,8 @@ for(const slug of paths){
    }
   }
   assert.ok(!/\bChris\s+(?:Hisworski|Izworsky|Izworksi)\b/i.test(html),"no identity variants");
-  assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>2026-10-11</lastmod>"),"sitemap matches truthful editorial date");
+  const editorialLastmod=slug==="tools"?"2026-10-12":"2026-10-11"; // Tools catalog added three verified independent destinations on Oct 12.
+  assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialLastmod+"</lastmod>"),"sitemap matches truthful editorial date");
   const inward=paths.filter(s=>s!==slug&&all[s].includes('href="/'+slug+'/"'));
   const outward=[...html.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map(x=>x[1]);
   assert.ok(inward.length>0,"linked from tool network");
