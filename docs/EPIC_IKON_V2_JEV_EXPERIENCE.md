@@ -18,6 +18,14 @@ Prior user product guidance (Detroit Outdoors, Old Sow, Niagara Falls):
 
 Curated place notes only. The historical, place-specific images for Vail (Joe Lin, CC BY 2.0), Breckenridge (Jlfdz, CC BY-SA 4.0), and Jackson Hole Aerial Tram (Sirguh, CC BY-SA 4.0) are correctly captioned and attributed beside the image, hidden if unavailable. No place photo unless subject, license and sourcing have been verified. Fallback for unprofiled mountains deliberately avoids claiming specific terrain, drive times or experiences. Do not show a random Vail photo for all 75 mountains.
 
+## V2 trust and handoff corrections
+
+- When a user explicitly selects **Check**, only their selected pass tier, mountain, date, trip intent and optional count/reservation answers are submitted to the site's server for the editorial recommendation; no account credentials or pass numbers are requested. Do not claim the choices remain entirely on-device.
+- Shareable trip URLs preserve the four traveler-intent modes as well as pass, date, resort and optional fields, without account identifiers.
+- The server rejects array/object/oversized values and unknown keys before JEV runs; it cannot accept untrusted free-text instructions disguised as pass inputs.
+- Each historical source photo has a source-page link and a separately clickable Creative Commons license URL. Images are explicitly not current mountain-condition reports.
+- All these are regression-tested and do not change V0's season-specific eligibility engine or incur new recurring API calls.
+
 ## Loss functions / release gates
 - False YES due to JEV or editorial (loss 100): **0 permitted**. API verdict must exactly equal synchronous engine.evaluate(input); 20k deterministic engine fuzz suite remains mandatory.
 - Missed blackout / failed reservations/day pool (100): **0 permitted**; mandatory first step cannot be replaced.
