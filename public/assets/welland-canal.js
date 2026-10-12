@@ -146,7 +146,7 @@
       b.append(number,copy);
       b.setAttribute('aria-pressed',String(selected===l.id));
       b.setAttribute('aria-label','Explore '+l.name+': '+LOCK_QUICK[l.id].cue);
-      b.addEventListener('click',()=>chooseLock(l.id,true,true));
+      b.addEventListener('click',()=>chooseLock(l.id,true,false));
       rail.append(b);
     });
   }
@@ -168,6 +168,16 @@
     $('mapLockPreviewCaption').textContent=photo.caption;
     $('mapLockPreview').hidden=false;
   }
+  function renderInstantAnswer(lock){
+    const box=$('lockInstantAnswer');
+    box.hidden=!lock;
+    if(!lock)return;
+    const photo=LOCK_PHOTOS[LOCK_STORIES[lock.id].photo];
+    $('lockInstantTitle').textContent=lock.name+' · '+LOCK_QUICK[lock.id].cue;
+    $('lockInstantText').textContent=LOCK_QUICK[lock.id].answer;
+    $('lockInstantPhotoCaption').textContent=photo.caption;
+    setLockPhoto($('lockInstantImage'),$('lockInstantImageFallback'),photo);
+  }
   function chooseLock(id,recenter=true,fromMap=false){
     selected=id;select.value=id;
     for(const b of $('lockRail').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
@@ -182,6 +192,7 @@
     }else if(map&&recenter&&!lock){
       map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
     }
+    renderInstantAnswer(lock);
     renderLockDetail();
     if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
     lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(l=>l.id===key),selected===key)));
@@ -359,12 +370,14 @@
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
-  $('mapLockPreviewOpen').addEventListener('click',()=>{
+  function openFullLockStory(){
     hideLockPreview();
     const card=$('lockDetail');
     card.scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
     card.focus({preventScroll:true});
-  });
+  }
+  $('mapLockPreviewOpen').addEventListener('click',openFullLockStory);
+  $('lockInstantOpen').addEventListener('click',openFullLockStory);
   renderLocks();chooseLock('all');initMap();refresh();
   window.setInterval(refresh,120000);
 })();
