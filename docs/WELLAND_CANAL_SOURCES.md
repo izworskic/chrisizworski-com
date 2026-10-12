@@ -37,3 +37,13 @@ This is distinct from `/great-lakes-freighter-tracking/`, which owns lake-wide A
 
 ## Next improvement only after launch data
 Acquire an official *machine-readable and permitted* Seaway order-of-turn feed (or verify a stable/public legally reusable source) and compute a defensible lock-specific next vessel recommendation with explicit source/age. Otherwise retain current non-predictive result.
+
+## Search discovery release — October 12, 2026
+- **Objective:** Support the site-wide goal of one million monthly Google Search impressions and a 5% organic CTR, without claiming this single page can produce those totals.
+- **GSC baseline:** The Welland URL had no Search Analytics page/query rows returned for September 13–October 10, 2026 (Search Console via Windsor.ai; site property `sc-domain:chrisizworski.com`). This pre-dates the October 11 launch and is **not** a measured post-launch CTR or ranking.
+- **Intent:** “Welland Canal ship tracker”, “ships today”, “lock schedule”, “Lock 3 viewing”, and “Welland Canal cameras”; title/description support one canonical URL instead of publishing thin lock-specific pages.
+- **Content/value:** A three-step decision path between the authoritative Seaway queue, fresh observational AIS and safe shoreside viewing. Do not imply that a map position yields next-lock entry or a verified ETA.
+- **Discovery edges:** Freighter Central and the Niagara planner already linked here. Replace the duplicate Soo link in the lake-wide ship tracker with Welland, and add a relevant Welland card to the Soo Locks related links. Do not modify winner titles, live logic, or fall-color pages.
+- **Instrumentation:** Existing `tool-engagement.js` logs visitor clicks on tagged official order-of-turn links (placements hero, guide, resource and FAQ) plus maritime-network handoffs. These are **clicks to sources**, not proved lock transits or purchases.
+- **Decision gate:** Re-read GSC on or after October 19 for initial discovery and after November 9 for ~28-day evidence: page and query impressions, clicks, CTR, average position, branded vs non-branded. Site-wide 5% CTR is an aspiration; first compare this page's actual query mix and discoverability. If no impressions, audit indexing, canonical selection and crawlability before any further title change. If impressions rise with low CTR, review the actual leading queries, displayed Google title and SERP competitors before one surgical rewrite.
+- **Cost guardrails:** All copy/static HTML changes, no new runtime API/LLM calls, no new cron or external assets; one production merge/build.
