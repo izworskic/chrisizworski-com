@@ -18,35 +18,35 @@
   // Maintain visible author/license links when adding or replacing photos.
   const LOCK_PHOTOS = {
     north1:{
-      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Welland_Canal_Lock_1_Port_Weller.JPG/800px-Welland_Canal_Lock_1_Port_Weller.JPG',
+      src:'/assets/welland/photos/north1.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Welland_Canal_Lock_1_Port_Weller.JPG/800px-Welland_Canal_Lock_1_Port_Weller.JPG',
       alt:'Welland Canal Lock 1 at Port Weller, St. Catharines',
       caption:'Lock 1 · Port Weller, northern Welland Canal',
       credit:'Balcer',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_1_Port_Weller.JPG'
     },
     north2:{
-      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg/800px-Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg',
+      src:'/assets/welland/photos/north2.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg/800px-Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg',
       alt:'Freighter Thunder Bay emerging from Welland Canal Lock 2',
       caption:'A ship emerging from Lock 2 · St. Catharines',
       credit:'Cpfan776',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
       source:'https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg'
     },
     north3:{
-      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Welland_Canal_Lock_3_from_observation_deck.jpeg/800px-Welland_Canal_Lock_3_from_observation_deck.jpeg',
+      src:'/assets/welland/photos/north3.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Welland_Canal_Lock_3_from_observation_deck.jpeg/800px-Welland_Canal_Lock_3_from_observation_deck.jpeg',
       alt:'View of Welland Canal Lock 3 from the public observation deck',
       caption:'Lock 3 · photographed from the public viewing platform',
       credit:'Dough4872',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_3_from_observation_deck.jpeg'
     },
     thorold:{
-      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Welland_Canal_Lock_7.jpg/800px-Welland_Canal_Lock_7.jpg',
+      src:'/assets/welland/photos/thorold.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Welland_Canal_Lock_7.jpg/800px-Welland_Canal_Lock_7.jpg',
       alt:'Welland Canal Lock 7 at Thorold, near the twin flight locks',
       caption:'Nearby Lock 7 at Thorold · regional image, not Locks 4–6',
       credit:'Gogerr',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg'
     },
     south8:{
-      src:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg/800px-Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg',
+      src:'/assets/welland/photos/south8.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg/800px-Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg',
       alt:'Lock 8 Gateway Park in Port Colborne, at the Lake Erie end of the Welland Canal',
       caption:'Lock 8 Gateway Park · Port Colborne viewing area',
       credit:'Mhsheikholeslami',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
@@ -208,17 +208,31 @@
     renderList();
   }
   function setLockPhoto(img,fallback,photo){
-    // The DOM nodes are reused across lock selections; stale events must not
-    // replace a newer image or mislabel a different lock.
+    // First-party static files, with a Commons fallback for older deployments.
+    // A request token prevents stale image events from overwriting new locks.
+    const token=(Number(img.dataset.photoToken)||0)+1;
+    img.dataset.photoToken=String(token);
     img.onload=null;
     img.onerror=null;
+    img.alt=photo.alt;
     img.hidden=false;
     fallback.hidden=true;
-    img.alt=photo.alt;
-    img.onload=()=>{if(img.src===photo.src){fallback.hidden=true;img.hidden=false;}};
-    img.onerror=()=>{if(img.src===photo.src){img.hidden=true;fallback.hidden=false;}};
-    if(img.src!==photo.src)img.src=photo.src;
-    else if(img.complete&&img.naturalWidth===0){img.hidden=true;fallback.hidden=false;}
+    let triedRemote=false;
+    const valid=()=>img.dataset.photoToken===String(token);
+    img.onload=()=>{if(valid()){img.hidden=false;fallback.hidden=true;}};
+    img.onerror=()=>{
+      if(!valid())return;
+      if(!triedRemote&&photo.remote){
+        triedRemote=true;
+        img.src=photo.remote;
+        return;
+      }
+      img.hidden=true;
+      fallback.hidden=false;
+      fallback.textContent='Photograph unavailable — open the credited source below.';
+    };
+    if(img.getAttribute('src')!==photo.src)img.src=photo.src;
+    else if(img.complete&&img.naturalWidth===0)img.onerror();
   }
   function renderLockPhoto(lock){
     const story=lock?LOCK_STORIES[lock.id]:LOCK_STORIES['3'];
