@@ -403,3 +403,12 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Separate blockers are not Redis/deployment success: native GSC Google credentials are absent; JEV deep health reports TypeSafe HTTP 402 because the organization has no API credits. Restored the canceled AgentBase registry main deployment 2c766f09... in 20s; it now reports route-only health accurately. No credits, auto-reload or paid upgrade were enabled; Detroit AI production checks remain blocked by provider credits.
 - Build CPU remains dominated by prior main-site builds (98.1% in the observed cycle; $396.61 Build CPU at inspection). New main builds complete in 31–37s on Basic; old accumulated charges do not reverse. Do not claim a matched-window billed saving yet.
 - Exactly one next action: verify the source-only smoke repair's PR and production release, then retain the old free database for recovery unless Chris confirms its permanent deletion with the data-loss consequence.
+
+
+## Canonical release identity verification — October 12, 2026
+
+- PR #934 merged as 5f61f37184aae8df484d30b7875bcdfe9ac43172. Automatic production dpl_DCXY6Kmom3Wau5dtHGCKsP84bEm9 READY in 35.259s; production full gate/public audit succeeded; real live NYC smoke passed with page/API 200 and all five Mapbox probes live.
+- The automated NYC wait still depends on a GitHub Vercel status that is absent even when the verified exact production deployment is READY. Replace that notification wait with the exact SHA actually served by HEAD /api/nyc-crossing. HEAD returns 204, no-store/noindex and the real VERCEL_GIT_COMMIT_SHA, without calling any traffic or paid providers. Missing SHA never satisfies the wait. The existing complete GET smoke remains required after the identity check.
+- Add concurrency cancellation so older NYC release waits cannot continue after superseding main pushes. This removes obsolete polling and the GitHub statuses permission; it does not relax the release hash or functional checks.
+- Validation: all 52 gates passed (69s); seven focused tests passed, including source-only SDK absence and deployment identity with missing-SHA/no-provider-call cases; workflow YAML parses. PR/remote CI/production verification pending at commit creation.
+- Exactly one next action: complete this release check repair, then retain the disconnected free Redis database for recovery unless Chris confirms permanent deletion of its unexported data.
