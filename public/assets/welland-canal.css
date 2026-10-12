@@ -94,5 +94,6 @@
 .map-lock-preview__open{padding:0;border:0;background:transparent;color:#17617c;font-weight:800;font-size:12px;text-decoration:underline;text-underline-offset:3px}
 .map-lock-preview__open:hover{color:#0d4158}
 .lock-detail-panel:focus{outline:2px solid #d2a45d;outline-offset:3px}
-@media(min-width:691px){.map-lock-preview{display:none!important}}
+@media(min-width:901px){.map-lock-preview{display:none!important}}
+@media(min-width:691px) and (max-width:900px){.map-lock-preview{right:auto;width:calc(100% - 32px);max-width:440px;left:16px}}
 @media(max-width:420px){.map-lock-preview{left:10px;right:10px;bottom:10px;padding:12px 44px 12px 14px}.map-lock-preview strong{font-size:17px}}
