@@ -109,6 +109,8 @@ test('V2 uses the existing canonical, identity and one deliberate JEV request, w
  assert.match(html,/MEDIA\[resort\.value\]/);
  assert.match(html,/CC BY-SA 4\.0/);
  assert.match(html,/Representative file photo, not current conditions/);
+ assert.match(html,/Vail_Ski_Resort_I_/);
+ assert.match(html,/Joe Lin/);
  assert.match(css,/\.experience-main/);
  assert.match(css,/@media\(max-width:530px\)/);
  assert.match(css,/\[hidden\]\{display:none!important\}/);
