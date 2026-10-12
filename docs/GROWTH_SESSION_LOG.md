@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Five existing state aurora pages: local field-guide depth — October 12, 2026
+
+- **Intent and boundaries:** Expand existing Montana, Minnesota, North Dakota, Maine, and Alaska state-root pages, preserving the original canonical URLs, live NOAA/NWS/USNO widget markup, APIs, scoring calculations and page layouts. No new URLs or redesigns.
+- **Authoritative releases:** PR #4 in each of `izworskic/montana-aurora-live`, `minnesota-aurora-live`, `north-dakota-aurora-live`, `maine-aurora-live`, and `alaska-aurora-live` merged on October 12 after successful owner Verify workflow and Vercel PR status checks.
+- **New content:** Each state root gains six regional Kp planning explanations, eight to nine named viewing places, location-appropriate seasons and dark hours, photography basics and five state-specific questions; total 30 regional entries, 41 viewing places, and 25 FAQs. Underlying existing regional engine threshold values were not changed. Each page distinguishes Kp planning signals from guaranteed viewing; exact Bortle classes deliberately omitted when unverified.
+- **Locality:** Glacier photography and North Fork access, Voyageurs mainland aurora sites, North Dakota prairie and dark-sky landmarks, Maine Katahdin/Allagash/Acadia access and Atlantic clouds, and Alaska auroral oval versus summer daylight are separately explained, with relevant park/tourism source links.
+- **Discovery:** Main-site integration on `content/aurora-state-depth-20261012` adds all five state links to Michigan's existing outside-Michigan aurora handoff, plus a Minnesota state-guide link in Duluth's North Shore aurora paragraph; only edited root sitemap freshness dates are updated.
+- **Validation and metrics:** All five owner Verify and Vercel PR checks green; updates to live widget script suffix were excluded by before/after equality comparisons. Main site full verification and canonical production delivery must still be checked. No attributable GSC clicks, impressions, ranking change, or AdSense uplift measured at completion.
+- **Exactly one next action:** Complete main-site full verification and production spot checks on the links, then capture comparable 7/28-day GSC outcomes for the five existing state URLs.
+
+
 ## North Shore three independent spot-decision engines — October 12, 2026
 
 - **Approved goal:** Three independent place/itinerary engines, never a generic North Shore weather/driving verdict. Isle Royale ferry has its own owning repo, separate from the Split Rock River trail access and lighthouse ticket/parking engines.
