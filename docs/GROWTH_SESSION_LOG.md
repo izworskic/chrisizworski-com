@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Epic / Ikon V2 JEV + experiential decision release — October 12, 2026
+
+- **Owner/repo:** `izworskic/chrisizworski-com`, branch `feat/epic-ikon-v2-jev-experience-20261012`. PR and production deploy unverified at authorship.
+- **Why:** V0 answers published entitlement but offers little sense of place or traveler guidance. Reuse Detroit/Old Sow JEV closed-set editorial judgment and Niagara’s destination-specific, source-bound ranger-style field guide.
+- **Scope:** `/api/epic-ikon-guide` uses existing Vercel OIDC-authenticated shared harness; hard pass-rule verdict and first action are deterministic. JEV selects optional safe editorial focus. 2.2s timeout, no Anthropic/Haiku fee, deterministic fallback, no continuous polling. Public page adds visit intent, longer mountain-specific story, traceable official place/policy source, self-report warnings, optional two verified attributed Commons file photos, and three real scenario controls.
+- **SEO:** One canonical page; identity `https://chrisizworski.com/#person`, author attribution, original structured data, analytics and ads preserved. No thin resort/date pages. No claims about live mountain access.
+- **Benchmark:** Zero false greens/override of blackouts, reservations or day pool; source truth for each claim/photo; mobile, keyboard, performance and ad gates; request is POST-only; fallback if JEV fails.
+- **Follow-up:** Await full GitHub gates, merge, Vercel READY, public page and API live smoke before declaring V2 shipped.
+
+
 ## Epic / Ikon National Tools mirror sync — October 12, 2026
 
 - PR #918 merged to the public site repository at 9dcf58de; PR #88 merged to the National Tools owning repository at baa07940. Both passed full GitHub verification. Initial automatic site deployment failed with Vercel git_info_fail; a targeted Git-backed production deployment was started, with public availability not yet verified at the time of this commit.
