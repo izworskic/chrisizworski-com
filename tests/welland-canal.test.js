@@ -177,8 +177,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-media1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-media1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
