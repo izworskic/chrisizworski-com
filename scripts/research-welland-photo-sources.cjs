@@ -16,6 +16,7 @@ const q=[
 ];
 const manual=[
   'File:Lock 8 On The Welland Ship Canal.jpg',
+  'File:Welland ship canal - channelled faces for pit for lock no. 5 LCCN2007681023.jpg',
   'File:Welland Canal aerial.png',
   'File:Aerial view of the Welland Canal.jpg',
   'File:Welland Canal locks.png',
@@ -40,6 +41,11 @@ async function main(){
    titles.forEach(t=>candidateTitles.add(t));
  }catch(e){searches.push({term,error:String(e)})}
  }
+ try{
+ const special=await api({action:'query',pageids:'106064694',prop:'imageinfo',iiprop:'url|size|extmetadata'});
+ console.log('TARGET WOLFGANG IMAGE PAGEID:',JSON.stringify(special.query?.pages||[]).slice(0,4000));
+ for(const item of special.query?.pages||[])if(item.title?.startsWith('File:'))candidateTitles.add(item.title);
+ }catch(e){console.log('TARGET WOLFGANG ERROR',String(e))}
  const names=[...candidateTitles].filter(s=>s.startsWith('File:')).slice(0,160),images=[];
  for(let i=0;i<names.length;i+=20){
   try{
