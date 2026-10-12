@@ -7,7 +7,11 @@ module.exports=async function handler(req,res){
  res.setHeader('X-Content-Type-Options','nosniff');
  if(req.method!=='POST'){res.setHeader('Allow','POST');return res.status(405).json({error:'Use POST to interpret a chosen ski visit.'});}
  if(Number(req.headers['content-length']||0)>MAX_BODY)return res.status(413).json({error:'Request too large.'});
- const body=req.body&&typeof req.body==='object'?req.body:{};
+ const body=req.body===undefined?{}:req.body;
+ if(!body || typeof body!=='object' || Array.isArray(body))return res.status(422).json({error:'Submit a supported set of ski-trip choices.'});
+ const allowed=new Set(['pass','resort','date','intent','usedDays','reservationMade','epicDayTotal','epicPeak','sessionTotal']);
+ if(Object.entries(body).some(([key,value])=>!allowed.has(key)||!['string','number'].includes(typeof value)||String(value).length>80))
+  return res.status(422).json({error:'Invalid ski-trip choice type or length.'});
  if(JSON.stringify(body).length>MAX_BODY)return res.status(413).json({error:'Request too large.'});
  try{
   // The engine is invoked server-side on every request; JEV never supplies the verdict.
