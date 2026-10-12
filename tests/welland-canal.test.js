@@ -126,7 +126,9 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  assert.match(js,/card\.focus\(\{preventScroll:true\}\)/);
  assert.match(css,/\.ship-map-stage\{position:relative\}/);
  assert.match(css,/\.map-lock-preview\[hidden\]\{display:none!important\}/);
- assert.match(css,/@media\(min-width:691px\)\{\.map-lock-preview\{display:none!important\}\}/);
+ assert.match(css,/@media\(min-width:901px\)\{\.map-lock-preview\{display:none!important\}\}/);
+ assert.match(js,/max-width: 900px/);
+ assert.match(css,/@media\(min-width:691px\) and \(max-width:900px\)/);
  assert.match(html,/id="mapLockPreview"/);
  assert.match(html,/id="mapLockPreviewTitle"/);
  assert.match(html,/id="mapLockPreviewText"/);
