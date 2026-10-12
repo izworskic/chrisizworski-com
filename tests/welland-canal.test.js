@@ -327,6 +327,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(css,/\.welland-lock-pin\{display:grid;place-items:center;cursor:pointer\}/);
   assert.match(js,/const hit=44/);
   assert.match(js,/iconSize:\[hit,hit\]/);
+  assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
+  assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
   assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
   assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
 });
