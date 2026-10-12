@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Niagara Falls Today — experiential field guide V2 — October 12, 2026
+
+- **Request:** Preserve the Niagara date-aware planner but make visitors imagine the trip through compelling factual field-guide storytelling, real photos and playable videos. State-park/parkland ranger-style explanatory voice without claiming NPS affiliation.
+- **Source review:** Wikimedia Commons file-level licenses for nine distinct waterfall/attraction images (credited and linked beside each photo; CSS crop disclosed), and YouTube videos from Niagara Parks (Journey Behind the Falls, l6fu2huqWNE) and independent visitors (Cave of the Winds, hmQwm0drhGU).
+- **Implementation:** Licensed panoramic hero + four illustrated field-guide choices; two click-to-play, privacy-enhanced YouTube embeds that never autoplay on initial load; stop-specific picture, “What to notice,” and on-the-ground tip for all eight planner stops; responsive design, alt text, photographer/license links, related specialist links remain.
+- **Safeguards:** Historic illustrative photos not passed off as current or live. Source photos map to the correct place or vantage, no repeated stock imagery, no copied producer video files, no video requested until visitor click. Existing itinerary source gates, confidence, pricing, border restrictions, weather alerts and canonical identity untouched.
+- **Measurement:** Existing planner submit metrics preserved; one anonymous video-play event. No GSC or revenue outcome verified in this session.
+- **Status:** CI and Vercel to verify the feature branch; merge only on green and successful preview.
+- **Next action:** Verify the page's licensed images and embedded videos in the deployed preview, including phone widths, before calling production ready.
+
+
 ## Welland camera + identity-safe lock media upgrade — October 12, 2026
 
 - **User problem:** Real photos exist, but many were duplicated or wrong for the selected lock. Requested live video camera from `https://www.youtube.com/live/yF7XdpkL34w` and measurable media quality benchmark.
