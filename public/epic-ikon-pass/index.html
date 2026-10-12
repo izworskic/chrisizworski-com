@@ -291,6 +291,6 @@ render();guideFallback();
 <script src="/assets/epic-ikon-v3.js"></script>
 <script>
 window.EpicIkonV3?.init();
-(function(){const E=window.PassDecoder,V=window.EpicIkonV3;if(!E||!V)return;const get=id=>document.getElementById(id)?.value||'';const a={pass:get('pass'),resort:get('resort'),date:get('ski-date'),usedDays:get('used-days'),reservationMade:get('reservation'),epicDayTotal:get('epicday-total'),epicPeak:get('epic-peak'),sessionTotal:get('session-total')};V.update(a,E.evaluate(a));})();
+(function(){const E=window.PassDecoder,V=window.EpicIkonV3;if(!E||!V)return;const get=id=>document.getElementById(id)?.value||'';const a={pass:get('pass'),resort:get('resort'),date:get('ski-date'),usedDays:get('used-days'),reservationMade:get('reservation'),epicDayTotal:get('epicday-total'),epicPeak:get('epic-peak'),sessionTotal:get('session-total')};V.update(a,E.evaluate(a));document.dispatchEvent(new Event('epicikon:span-updated'));})();
 </script>
 </body></html>
