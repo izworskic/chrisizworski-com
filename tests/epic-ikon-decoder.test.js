@@ -111,6 +111,13 @@ test("Seeded 20,000-draw Monte Carlo safety regression: no green across hard gat
  }
  assert.equal(total,20000);assert.ok(green>1000);assert.ok(red>1000);assert.ok(unknown>0);
 });
+test("Optional inputs stay hidden and alternatives do not borrow unrelated pass pools",()=>{
+ const css=readFileSync(path.join(__dirname,"../public/assets/epic-ikon-decoder.css"),"utf8");
+ const page=readFileSync(path.join(__dirname,"../public/epic-ikon-pass/index.html"),"utf8");
+ assert.match(css,/\[hidden\]\s*\{\s*display:none!important\s*\}/);
+ assert.match(page,/const probe=E\.evaluate/);
+ assert.match(page,/r\.group&&probe\.group===r\.group/);
+});
 test("Search, ads and identity contracts in the emitted HTML source",()=>{
  const html=readFileSync(path.join(__dirname,"../public/epic-ikon-pass/index.html"),"utf8");
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/epic-ikon-pass\/">/);
