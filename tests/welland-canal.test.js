@@ -113,7 +113,7 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
  assert.match(js,/function showLockPreview\(lock\)/);
  assert.match(js,/\$\('mapLockPreviewTitle'\)\.textContent=lock\.name\+' · '\+lock\.place/);
- assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=lock\.note/);
+ assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=LOCK_STORIES\[lock\.id\]\.explainer/);
  assert.match(js,/\$\('mapLockPreview'\)\.hidden=false/);
  assert.match(js,/if\(fromMap&&lock\)showLockPreview\(lock\);else hideLockPreview\(\)/);
  assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
@@ -140,4 +140,51 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  assert.match(html,/id="mapLockPreviewDismiss"/);
  assert.match(html,/id="mapLockPreviewOpen"/);
  assert.match(html,/id="lockDetail"[^>]*tabindex="-1"/);
+});
+
+test('All eight Welland lock profiles carry authored explanations and truth-labelled images',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const start=js.indexOf('  const LOCK_STORIES = {');
+  const end=js.indexOf('  const $ =',start);
+  const profile=js.slice(start,end);
+  assert.ok(start>=0&&end>start,'all eight lock editorial stories must exist');
+  for(let i=1;i<=8;i++)assert.match(profile,new RegExp("'"+i+"':\\{photo:'[^']+',segment:'[^']+',explainer:'.{110,}"));
+  assert.match(profile,/Lock 8 has a different job from the seven lift locks/);
+  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 4 chamber/);
+  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 5 chamber/);
+  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 6 chamber/);
+  assert.match(html,/id="lockDetailImage"/);
+  assert.match(html,/id="lockDetailImageCaption"/);
+  assert.match(html,/id="lockDetailImageCredit"/);
+  assert.match(html,/id="lockDetailImageLicense"/);
+  assert.match(html,/id="lockDetailImageFallback"/);
+  assert.match(html,/id="lockDetailSegment"/);
+  assert.match(html,/id="lockDetailTip"/);
+  assert.match(html,/id="mapLockPreviewImage"/);
+  assert.match(html,/id="mapLockPreviewImageFallback"/);
+  assert.match(css,/\.lock-detail__photo-stage\{[^\n]*aspect-ratio:16\/9/);
+  assert.match(css,/\.map-lock-preview__photo\{/);
+  assert.match(css,/\.lock-detail__photo-credit a\{/);
+  assert.match(js,/function renderLockPhoto\(lock\)/);
+  assert.match(js,/function setLockPhoto\(img,fallback,photo\)/);
+  assert.match(js,/renderLockPhoto\(lock\)/);
+  assert.match(js,/\$\('mapLockPreviewImage'\)/);
+  assert.match(js,/img\.onerror=/);
+  assert.match(js,/img\.complete&&img\.naturalWidth===0/);
+  assert.match(html,/welland-canal\.js\?v=20261011-stories1/);
+  assert.match(html,/welland-canal\.css\?v=20261011-stories1/);
+});
+
+test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const script=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const photos=script.slice(script.indexOf('  const LOCK_PHOTOS = {'),script.indexOf('  const LOCK_STORIES = {'));
+  assert.equal((photos.match(/src:'https:\/\/upload\.wikimedia\.org\//g)||[]).length,5);
+  assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,5);
+  assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
+  assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,5);
+  assert.match(photos,/regional image, not Locks 4–6/);
 });

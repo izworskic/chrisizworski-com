@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Welland lock photo stories — October 11, 2026
+
+- **Request:** Implement the premium lock visual package: real lock/regional photos, distinct 2–4-sentence explanations, useful visiting information in all eight interactive profiles; preserve Maritime Minimalist map hierarchy.
+- **Production UX change:** Created `LOCK_PHOTOS` with five licensed Commons photograph entries (credits + source + licence URLs) and `LOCK_STORIES` with eight authored passages and grounded shore-viewing guidance. All eight cards show a 16:9 photo with descriptive caption and linked licence/source credits, explanation and context note; image thumbnail and narrative also appear in the persistent phone/tablet tap preview. Image failure shows an honest fallback. Credits and specific-vs-representative image identities documented in `docs/WELLAND_LOCK_PHOTO_CREDITS.md`. Assets cache-busted.
+- **Accuracy:** Photos of Lock 1, a Lock 2 ship, and Lock 3 are specific; Lock 7 photo is reused for the Thorold flight profiles **with explicit notice that it depicts Lock 7, not Locks 4–6**; Lock 8 photo depicts Gateway Park, not the chamber. No licensed photo can silently be represented as an exact chamber image. Descriptive facts sourced from Brock University, St. Catharines, Thorold and Port Colborne official pages, and official marine reference. AIS reports remain position-only evidence, not locking appointments/ETAs.
+- **SEO/business:** Preserve canonical, Person ID, link structure, AIS freshness contract, ship markers, status text, cache and other tools. This visual work alone does not prove GSC/impression/CTR/AdSense improvement.
+- **Verification:** Targeted regression asserts five credited licensed images, eight long-form narratives, view slots, fallback, toolbar and touch preview; full repository verification/production build audit required before merge.
+- **One next action:** Verify in production that mobile taps show the correct image and explainer for Lock 3 and Lock 8, and that Thorold 4–6 photo captions disclose representative geography.
+
+
 ## Welland lock tap clarity — October 11, 2026
 
 - **Reported bug:** Tapping small numbered lock positions on mobile produced a short-lived Leaflet tooltip containing only the lock name. The real detail lived below the map and was not discoverable from the tap.
