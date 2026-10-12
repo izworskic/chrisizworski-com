@@ -189,7 +189,7 @@ test('Every reused image has explicit Wikimedia source, author and licence links
   assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,5);
   assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
   assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,8);
-  assert.match(photos,/regional image, not Locks 4–6/);
+  assert.match(photos,/Lock 7 chamber · Thorold, Ontario/);
 });
 
 test('One-tap Welland value function meets structural usability, comprehension and truth gates',()=>{
