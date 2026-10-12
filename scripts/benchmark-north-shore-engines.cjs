@@ -2,7 +2,7 @@
 /* Product-truth gate. Intentionally independent from engagement measurements. */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),cases=[
-{url:'/split-rock-river-loop/',html:'public/split-rock-river-loop/index.html',script:'public/assets/split-rock-river-engine.js',official:'superiorhiking.org',expected:'NO bridge'},
+{url:'/split-rock-river-loop/',html:'public/split-rock-river-loop/index.html',script:'public/assets/split-rock-river-engine.js',official:'superiorhiking.org',expected:'bridge'},
 {url:'/split-rock-lighthouse-visit/',html:'public/split-rock-lighthouse-visit/index.html',script:'public/assets/split-rock-lighthouse-engine.js',official:'mnhs.org',expected:'parking'}
 ];
 let passes=0;
@@ -16,8 +16,11 @@ for(const c of cases){
  gate(c.url+' byline and source',h.includes('Built by Chris Izworski')&&h.includes(c.official));
  gate(c.url+' independent engine',s.includes('function evaluate('));
  gate(c.url+' no invented live monitoring',/not a live|not real-time|not a real-time|no live/i.test(h));
- gate(c.url+' safety/entry identity',h.includes(c.expected));
- gate(c.url+' tracked interaction',h.includes("gtag('event'"));
+ gate(c.url+' safety/entry identity',c.url.includes('river')?/no\s+bridge/i.test(h)&&/crossing|ford/i.test(h):/park|parking/i.test(h)&&/ticket|admission/i.test(h));
+ const experienceScript=fs.readFileSync(path.join(root,'public/assets/'+(c.url.includes('river')?'split-rock-river-v2.js':'split-rock-lighthouse-v2.js')),'utf8');
+ gate(c.url+' tracked interaction',/gtag\([\"']event[\"']/.test(experienceScript));
+ gate(c.url+' distinct experiential layout',h.includes('<svg')||h.includes('hero-photo'));
+ gate(c.url+' image credit and license',/commons.wikimedia.org/.test(h)&&/CC BY/.test(h));
 }
 const river=require('../public/assets/split-rock-river-engine.js');
 const lh=require('../public/assets/split-rock-lighthouse-engine.js');
