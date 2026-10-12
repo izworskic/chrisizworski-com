@@ -2,6 +2,7 @@
 const {plan,validate}=require('../lib/niagara-falls/planner.js');
 const {getCanadianHours}=require('../lib/niagara-falls/parks-hours.js');
 const {weatherForVisit}=require('../lib/niagara-falls/weather.js');
+const {wayfinding}=require('../lib/niagara-falls/wayfinding.js');
 module.exports=async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
  res.setHeader('Cache-Control','private, no-store');
@@ -53,6 +54,8 @@ module.exports=async function handler(req,res){
     }
    }
   }
+  // Build arrival guidance from the same selected stops, after severe weather veto.
+  result.wayfinding=result.status==='WEATHER_SAFETY_HOLD'?null:wayfinding(result,body.arrival_mode);
   res.statusCode=200;res.end(JSON.stringify(result));
  }catch(error){res.statusCode=400;res.end(JSON.stringify({error:error.message||'Could not make itinerary.'}));}
 };
