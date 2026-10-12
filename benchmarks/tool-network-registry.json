@@ -2606,6 +2606,134 @@
         "decisionWindowDays": 28,
         "privacy": "No personal identifiers or exact geolocation required."
       }
+    },
+    {
+      "id": "isle-royale-ferry",
+      "name": "Grand Portage Isle Royale Ferry and Permit Planner",
+      "canonical": "https://chrisizworski.com/isle-royale-ferry/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "trip-planning",
+      "primaryIntent": "Grand Portage Isle Royale ferry schedules day trip overnight fees Windigo Rock Harbor permits",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "geographies": [
+        "Minnesota",
+        "Grand Portage",
+        "Isle Royale"
+      ],
+      "personas": [
+        "ferry-traveler",
+        "island-backpacker",
+        "day-tripper"
+      ],
+      "networkRole": "leaf",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "primary-source-reviewed",
+        "note": "2026 archival timetable; 2027 dates unverified; source implementation in isle-royale-outdoors; no seat inventory."
+      },
+      "measurement": {
+        "search": "GSC non-branded page and query (7/28-day indexed windows)",
+        "product": "GA4 anonymous decision event and official-source handoffs",
+        "decisionWindowDays": 28,
+        "privacy": "No login, exact user location or personally identifiable information collected."
+      }
+    },
+    {
+      "id": "split-rock-river-loop",
+      "name": "Split Rock River Loop Missing Bridge and Detour",
+      "canonical": "https://chrisizworski.com/split-rock-river-loop/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "trip-planning",
+      "primaryIntent": "Split Rock River loop missing bridge trail open detour signed Highway 61 underpass",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "Minnesota",
+        "Lake Superior North Shore",
+        "Split Rock River"
+      ],
+      "personas": [
+        "day-hiker",
+        "Superior-Hiking-Trail-hiker"
+      ],
+      "networkRole": "leaf",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "primary-source-reviewed",
+        "note": "SHTA bulletin Oct 5, 2026; missing bridge and alternative, never ford clearance."
+      },
+      "measurement": {
+        "search": "GSC non-branded page and query (7/28-day indexed windows)",
+        "product": "GA4 anonymous decision event and official-source handoffs",
+        "decisionWindowDays": 28,
+        "privacy": "No login, exact user location or personally identifiable information collected."
+      }
+    },
+    {
+      "id": "split-rock-lighthouse-visit",
+      "name": "Split Rock Lighthouse Tickets Parking and Fitzgerald Memorial",
+      "canonical": "https://chrisizworski.com/split-rock-lighthouse-visit/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "trip-planning",
+      "primaryIntent": "Split Rock Lighthouse ticket prices historic grounds state park permit Fitzgerald memorial",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "Minnesota",
+        "Two Harbors",
+        "Split Rock Lighthouse"
+      ],
+      "personas": [
+        "historic-site-visitor",
+        "state-park-visitor",
+        "maritime-history-visitor"
+      ],
+      "networkRole": "leaf",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "primary-source-reviewed",
+        "note": "Distinct admission authorities, 2026 bounded rules and special Fitzgerald memorial tickets; 2027 unknown."
+      },
+      "measurement": {
+        "search": "GSC non-branded page and query (7/28-day indexed windows)",
+        "product": "GA4 anonymous decision event and official-source handoffs",
+        "decisionWindowDays": 28,
+        "privacy": "No login, exact user location or personally identifiable information collected."
+      }
     }
   ],
   "relationships": [
@@ -3664,6 +3792,46 @@
       "strength": "strong",
       "surface": "niagara-trip-desk",
       "reason": "After travel access is established, plan what fits at the Falls."
+    },
+    {
+      "from": "isle-royale-map",
+      "to": "isle-royale-ferry",
+      "type": "island-transport-planning",
+      "strength": "strong",
+      "surface": "isle-royale",
+      "reason": "Isle Royale map users can separately solve ferry route and permit logistics."
+    },
+    {
+      "from": "isle-royale-ferry",
+      "to": "isle-royale-map",
+      "type": "trip-next",
+      "strength": "strong",
+      "surface": "ferry-planner",
+      "reason": "After evaluating ferry travel, review NPS docks and camps on Isle Royale map."
+    },
+    {
+      "from": "duluth-canal-park",
+      "to": "split-rock-lighthouse-visit",
+      "type": "north-shore-history-next",
+      "strength": "optional",
+      "surface": "duluth",
+      "reason": "Distinct lighthouse admission and memorial decision for North Shore visitor."
+    },
+    {
+      "from": "split-rock-lighthouse-visit",
+      "to": "split-rock-river-loop",
+      "type": "nearby-different-activity",
+      "strength": "optional",
+      "surface": "lighthouse",
+      "reason": "Distinct SHT trail loop and missing-bridge access planning."
+    },
+    {
+      "from": "split-rock-river-loop",
+      "to": "split-rock-lighthouse-visit",
+      "type": "nearby-different-activity",
+      "strength": "optional",
+      "surface": "trail",
+      "reason": "Separate MNHS lighthouse admission and access decision."
     }
   ],
   "cannibalizationGroups": [
