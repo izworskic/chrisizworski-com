@@ -175,18 +175,21 @@
     LOCKS.forEach(lock=>{
       if(wide&&['3','4','5','6','7'].includes(lock.id))return;
       if(combine&&['4','5','6'].includes(lock.id))return;
-      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,title:lock.name+', '+lock.place,zIndexOffset:750})
+      const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,zIndexOffset:750})
         .addTo(lockLayer);
+      marker.getElement()?.setAttribute('aria-label',lock.name+', '+lock.place+'. Show lock details');
       marker.on('click',()=>chooseLock(lock.id,true,true));
       lockMarkers.set(lock.id,marker);
     });
     if(wide){
-      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,title:'Central locks 3 through 7, click to expand',zIndexOffset:780})
+      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,zIndexOffset:780})
         .addTo(lockLayer);
+      flightMarker.getElement()?.setAttribute('aria-label','Locks 3 to 7. Zoom in to explore');
       flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],12,{duration:0.65});$('lockMapHint').textContent='Zoom in and choose an individual numbered lock';});
     }else if(combine){
-      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,title:'Thorold flight locks 4 through 6, click to expand',zIndexOffset:780})
+      flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,zIndexOffset:780})
         .addTo(lockLayer);
+      flightMarker.getElement()?.setAttribute('aria-label','Locks 4 to 6. Zoom in to explore');
       flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],14,{duration:0.65});$('lockMapHint').textContent='Choose Lock 4, 5, or 6 to explore';});
     }
   }
