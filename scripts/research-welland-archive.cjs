@@ -6,7 +6,7 @@ async function pull(url){
  try{const r=await fetch(url,{headers,signal:c.signal});if(!r.ok)throw Error(r.status+' '+url);return await r.json()}finally{clearTimeout(timer)}
 }
 function values(o,key){return(o[key]||[]).map(v=>v['@value']||v['o:label']||v.display_title||v['@id']||'').join(' / ').slice(0,500)}
-for(const id of ids){
+(async()=>{for(const id of ids){
  try{
   const item=await pull('https://nfpl.historicniagara.ca/api/items/'+id);
   const info={id,title:values(item,'dcterms:title'),rights:values(item,'dcterms:rights'),rightsHolder:values(item,'dcterms:rightsHolder'),source:values(item,'dcterms:source'),created:values(item,'dcterms:date'),medias:[]};
@@ -19,3 +19,5 @@ for(const id of ids){
   console.log(JSON.stringify(info));
  }catch(e){console.log(JSON.stringify({id,error:String(e)}))}
 }
+
+})().catch(e=>{console.error(e);process.exitCode=1});
