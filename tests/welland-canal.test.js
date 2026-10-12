@@ -79,7 +79,7 @@ test('Maritime Minimalist lock markers are restrained and map-driven',()=>{
  assert.match(js,/const wide=map\.getZoom\(\)<12/);
  assert.match(js,/const combine=map\.getZoom\(\)<14/);
  assert.match(js,/map\.on\('zoomend',renderLockMarkers\)/);
- assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
+ assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false,true\)\)/);
  assert.doesNotMatch(js,/function lockPopup/);
  assert.doesNotMatch(js,/\.bindPopup\(lockPopup/);
  assert.match(css,/\.welland-lock-pin\.is-active \.lock-pin__dot/);
@@ -87,7 +87,7 @@ test('Maritime Minimalist lock markers are restrained and map-driven',()=>{
  assert.match(html,/class="explorer-side"/);
  assert.match(html,/id="lockDetailTitle"/);
  assert.match(html,/id="lockDetailNext"/);
- assert.match(html,/LOCK LANDMARKS/);
+ assert.match(html,/CHOOSE A LOCK/);
  assert.match(html,/class="map-key__lock"/);
 });
 test('Selecting a lock uses a premium evidence-aware detail card',()=>{
@@ -113,10 +113,10 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
  assert.match(js,/function showLockPreview\(lock\)/);
  assert.match(js,/\$\('mapLockPreviewTitle'\)\.textContent=lock\.name\+' · '\+lock\.place/);
- assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=LOCK_STORIES\[lock\.id\]\.explainer/);
+ assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=LOCK_QUICK\[lock\.id\]\.answer/);
  assert.match(js,/\$\('mapLockPreview'\)\.hidden=false/);
  assert.match(js,/if\(fromMap&&lock\)showLockPreview\(lock\);else hideLockPreview\(\)/);
- assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,true,true\)\)/);
+ assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false,true\)\)/);
  assert.doesNotMatch(js,/bindTooltip\(lock\.name/);
  assert.doesNotMatch(js,/title:lock\.name/);
  assert.doesNotMatch(js,/title:'Central locks/);
@@ -174,8 +174,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/\$\('mapLockPreviewImage'\)/);
   assert.match(js,/img\.onerror=/);
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
-  assert.match(html,/welland-canal\.js\?v=20261011-stories1/);
-  assert.match(html,/welland-canal\.css\?v=20261011-stories1/);
+  assert.match(html,/welland-canal\.js\?v=20261011-ux1/);
+  assert.match(html,/welland-canal\.css\?v=20261011-ux1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -187,4 +187,34 @@ test('Every reused image has explicit Wikimedia source, author and licence links
   assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
   assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,5);
   assert.match(photos,/regional image, not Locks 4–6/);
+});
+
+test('One-tap Welland value function meets structural usability, comprehension and truth gates',()=>{
+  const path=require('node:path'),{execFileSync}=require('node:child_process');
+  const result=JSON.parse(execFileSync(process.execPath,[path.join(__dirname,'../scripts/benchmark-welland-usability.cjs')],{encoding:'utf8'}));
+  assert.equal(result.score,100);
+  assert.equal(result.failures.length,0);
+  assert.deepEqual(result.gates,{photoTruth:true,aisTruth:true,credits:true});
+  assert.equal(result.measurement.includes('Static implementation contract'),true);
+});
+test('All eight locks are directly accessible beside the map; one tap explains the role',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  assert.ok(html.indexOf('id="lockRail"')<html.indexOf('id="shipMap"'));
+  assert.equal((html.match(/id="lockRail"/g)||[]).length,1);
+  assert.match(js,/b\.addEventListener\('click',\(\)=>chooseLock\(l\.id,true,true\)\)/);
+  assert.match(js,/b\.setAttribute\('aria-label','Explore '/);
+  assert.match(js,/el\('span',LOCK_QUICK\[l\.id\]\.cue\)/);
+  assert.match(js,/\$\('lockDetailQuick'\)\.textContent=lock\?LOCK_QUICK\[lock\.id\]\.answer/);
+  assert.match(js,/\$\('mapLockPreviewCaption'\)\.textContent=photo\.caption/);
+  assert.match(html,/id="mapLockPreviewCaption"/);
+  assert.match(html,/id="lockDetailQuick"/);
+  assert.match(js,/const zoom=\['4','5','6'\]\.includes\(id\)\?14:12/);
+  assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false,true\)\)/);
+  assert.match(js,/v=>distanceKm\(v,lock\)<=1\.5/);
+  assert.match(css,/\.lock-quick-select \.lock-pill\{[^\n]*min-height:49px/);
+  assert.match(css,/@media\(max-width:690px\)\{/);
+  assert.match(html,/Grouped numbers\? Tap to zoom, or choose any lock above/);
 });
