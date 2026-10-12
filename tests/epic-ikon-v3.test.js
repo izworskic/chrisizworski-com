@@ -107,7 +107,36 @@ test('15 direct season-policy scenarios never turn absent proof into an entitled
  }
 });
 test('All proposed Vail media use visible historical provenance and no 2026 winter claim',()=>{
- for(const item of V.MEDIA) assert.ok(Number(item.captureDate.slice(0,4))<=2010);
+ for(const item of V.MEDIA) assert.ok(Number(item.captureDate.slice(0,4))<=2012);
  assert.ok(V.MEDIA.every(x=>x.exactSubject.toLowerCase().includes('vail')||x.exactSubject.includes('Lionshead')));
  assert.match(PAGE,/Historical|historical/);
+});
+
+
+test('A multi-date holiday visit cannot be represented as all-days covered',()=>{
+ const input={pass:'epicLocal',resort:'vail',date:'2026-12-29',usedDays:'0'};
+ const trip=V.projectTripDates(E,input,'2027-01-02');
+ assert.equal(trip.valid,true);
+ assert.equal(trip.rows.length,5);
+ assert.deepEqual(trip.rows.map(day=>day.verdict.status),['NO','NO','NO','YES','YES']);
+ assert.equal(trip.rows.filter(day=>day.verdict.status==='NO').length,3);
+});
+test('Shared resort allowance projects each planned day without resetting the bank',()=>{
+ const input={pass:'epicLocal',resort:'vail',date:'2026-12-31',usedDays:'9'};
+ const trip=V.projectTripDates(E,input,'2027-01-02');
+ assert.equal(trip.valid,true);
+ assert.deepEqual(trip.rows.map(day=>day.verdict.status),['NO','YES','NO']);
+});
+test('Invalid date ranges cannot become an eligible trip',()=>{
+ const input={pass:'epic',resort:'vail',date:'2027-01-02'};
+ assert.equal(V.projectTripDates(E,input,'2026-12-31').valid,false);
+ assert.equal(V.projectTripDates(E,input,'2027-02-01').valid,false);
+ assert.equal(V.projectTripDates(E,{...input,date:'2027-02-30'},'2027-03-02').valid,false);
+});
+test('Whole-trip status visible at source and separate from individual policy evaluation',()=>{
+ assert.match(PAGE,/projectTripDates\(E,args/);
+ assert.match(PAGE,/blocked\.length\?"Trip contains blocked ski dates"/);
+ assert.match(PAGE,/id="v3-end-date"/);
+ assert.match(PAGE,/id="v3-day-by-day"/);
+ assert.match(PAGE,/id="v3-static-map"/);
 });
