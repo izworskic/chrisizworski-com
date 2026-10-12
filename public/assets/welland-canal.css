@@ -236,3 +236,40 @@
 .welland-camera-other .welland-camera-disclaimer{border-top:1px solid #d6e3e3;padding-top:13px;margin-top:16px;color:#547077;font-size:12px}
 @media(max-width:850px){.welland-camera-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.welland-camera-panel,.welland-camera-other{padding:14px}.welland-camera-heading h3{font-size:21px}.welland-camera-play span{width:58px;height:58px;font-size:23px}.welland-camera-play{font-size:16px}}
+
+/* Premium lock handoff: on phones the editorial preview docks BELOW the map.
+   It never masks AIS freighters, pinch/zoom controls or lock markers. */
+@media(max-width:900px){
+  .map-lock-preview{
+    position:relative;z-index:1;left:auto;right:auto;bottom:auto;
+    display:grid;grid-template-columns:minmax(0,1fr) 100px;
+    grid-template-rows:repeat(5,auto);column-gap:16px;row-gap:3px;
+    width:100%;max-width:none;max-height:none;overflow:visible;
+    margin:0;padding:15px 46px 15px 16px;
+    border:0;border-top:2px solid #d6ae68;border-radius:0;
+    background:#f8fbfa;box-shadow:inset 0 3px 10px rgba(14,55,69,.035);
+  }
+  .map-lock-preview__eyebrow,.map-lock-preview>strong,.map-lock-preview>p,.map-lock-preview__open{grid-column:1;min-width:0}
+  .map-lock-preview__eyebrow{margin:0;color:#986c34}
+  .map-lock-preview>strong{font-size:19px;line-height:1.25}
+  .map-lock-preview p#mapLockPreviewText{margin:5px 0 3px;line-height:1.42}
+  .map-lock-preview p#mapLockPreviewCaption{clear:none;margin:0 0 5px}
+  .map-lock-preview__photo{
+    float:none;grid-column:2;grid-row:1 / span 5;
+    align-self:start;width:100px;height:96px;margin:0;
+    border-radius:5px;
+  }
+  .map-lock-preview__open{justify-self:start;min-height:40px;margin:0;padding:7px 0;font-size:12px}
+  .map-lock-preview__close{top:9px;right:8px;width:32px;height:32px}
+  .map-lock-preview[hidden]{display:none!important}
+}
+@media(max-width:420px){
+  .map-lock-preview{grid-template-columns:minmax(0,1fr) 76px;column-gap:9px;padding:13px 44px 13px 12px}
+  .map-lock-preview__photo{width:76px;height:80px}
+  .map-lock-preview>strong{font-size:17px}
+}
+/* Visual lock markers remain 27px (32px selected), but accept a 44px tap.
+   No oversized shields, tails or permanent callouts. */
+.welland-lock-pin{display:grid;place-items:center;cursor:pointer}
+.welland-lock-pin .lock-pin__dot{pointer-events:none}
+.welland-lock-pin .lock-pin__group{height:27px;pointer-events:none}
