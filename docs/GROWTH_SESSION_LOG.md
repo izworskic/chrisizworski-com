@@ -1,5 +1,12 @@
 # Search Growth + Revenue Session Log
 
+## Welland photo visibility bugfix — October 11, 2026
+
+- **User report:** New Welland lock UX was visually polished but none of its authored photos appeared. The page's image source list pointed entirely at off-site Wikimedia thumbnail URLs. Adobe Stock Welland imagery was offered as an alternative, but stock preview use is not permitted without a separately obtained appropriate licence.
+- **Fix:** Store verified Creative Commons Welland JPEG photos in the repository under `public/assets/welland/photos/`, downloaded from the same allowlisted five Wikimedia Commons source files, and serve those as primary image URLs from our site. Keep the existing Commons URLs only as emergency client fallback. Preserve visible photographer/source/licence credits and exact-vs-representative captions. Importer validates JPEG magic and dimensions; Github Action writes authentic binary files to the branch. A Python/Pillow optimizer resizes to <=1100px and compresses assets for fast mobile use.
+- **Source integrity:** Lock 1, Lock 2 freighter, Lock 3, Lock 7/Thorold and Lock 8 Gateway Park remain the five original CC-licensed photographs; no Adobe previews/watermarked or otherwise unlicensed stock images are used. For Locks 4–6, caption still clearly identifies nearby Lock 7, and for Lock 8 the photo is of Gateway Park, not the chamber.
+- **Guardrails:** No unrelated tool changes, no AIS pipeline changes, no rebuild of the UX, no change to canonical/Person identity/ad placement. Cache-bust Welland JS. Tests assert all five first-party src entries and licensed fallback. CI and production deployed-asset verification required before confirming the problem is solved.
+
 ## Welland one-tap clarity / value-function gate — October 11, 2026
 
 - **Owner goal:** Improve **ease of use and understanding**, not just visual polish, on the established `/welland-canal/` tool.
