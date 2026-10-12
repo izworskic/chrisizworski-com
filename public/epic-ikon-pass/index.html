@@ -23,7 +23,7 @@
 <a class="skip" href="#calculator">Skip to calculator</a>
 <header class="top"><a class="brand" href="/">Chris Izworski <span aria-hidden="true">/</span> National Tools</a><nav aria-label="Main navigation"><a href="/national-tools/">National tools</a><a href="/tools/">Michigan tools</a><a href="/chris-izworski/">About</a></nav></header>
 <main>
-<section class="hero"><div class="hero-inner"><p class="kicker">2026–27 ski season · pass rules decoded</p><h1>Will your ski pass actually work that day?</h1><p>Choose your Epic or Ikon pass, mountain and date. Find the restriction that matters before you book the trip—not at the lift.</p><p class="hint">Official pass-policy sources · No sign-in · No personal pass number · Not a live lift or reservation feed</p></div></section>
+<section class="hero"><div class="hero-inner"><p class="kicker">2026–27 ski season · pass rules and a mountain-day field guide</p><h1>Can you ski that mountain with your pass?</h1><p>Choose your pass, mountain and date. We’ll tell you what the published rules allow, explain the mountain you’re dreaming about and give you the next real step before you commit to the trip.</p><p class="hint">Official pass-policy sources · No sign-in · No personal pass number · Not a live lift or reservation feed</p></div></section>
 <div class="wrap">
 <div class="tool-shell" id="calculator">
 <section class="card selector" aria-labelledby="form-heading"><p class="eyebrow">01 / Your ski plan</p><h2 id="form-heading">Check my pass</h2><p class="muted small">A 2026–27 policy check, not a guarantee that the mountain is operating.</p>
@@ -31,6 +31,7 @@
 <div class="field"><label for="pass">Pass product</label><select id="pass" name="pass" required></select></div>
 <div class="field"><label for="resort">Ski destination</label><select id="resort" name="resort" required></select><span class="hint">Curated North American mountains. Missing resort? Verify directly with the pass provider.</span></div>
 <div class="field"><label for="ski-date">Date you'll ski</label><input id="ski-date" type="date" name="date" min="2026-11-01" max="2027-05-31" value="2026-12-31" required></div>
+<div class="field"><label for="visit-style">What matters about this ski day?</label><select id="visit-style" name="intent"><option value="first">First time at this mountain</option><option value="family">Family or mixed-ability group</option><option value="terrain">Terrain and mountain character</option><option value="flexible">I can change the mountain or dates</option></select><span class="hint">This changes the trip guidance, never the pass eligibility rules.</span></div>
 <div class="grid-two">
 <div class="field"><label for="used-days">Days already used</label><input id="used-days" type="number" min="0" max="366" inputmode="numeric" placeholder="Enter if known"><span id="days-hint" class="hint">If limited, enter days used from the applicable shared or resort pool.</span></div>
 <div class="field"><label for="reservation">Confirmed lift reservation?</label><select id="reservation"><option value="unknown">Not sure</option><option value="yes">Yes, I have one</option><option value="no">No</option></select><span class="hint">We can't verify bookings. Required at certain Ikon destinations.</span></div>
@@ -45,8 +46,26 @@
 </form></section>
 <section class="card decision" data-status="UNKNOWN" id="decision" aria-live="polite" aria-atomic="true"><p class="eyebrow">02 / Your verdict</p><span class="verdict-label" id="verdict-label">Checking pass rules</span><h2 id="verdict-title">Choose your mountain and date</h2><p class="plain" id="verdict-explain">We'll check the season-specific access rules.</p><ul id="caveats"><li>This is not an opening-date, weather, lift-operation or reservation-availability checker.</li></ul><div class="source"><strong>Original policy:</strong> <a id="policy-link" href="https://www.epicpass.com/info/peak-restricted-dates.aspx" target="_blank" rel="noopener noreferrer">Check the provider's published rules &rarr;</a></div><p class="stamp">Policy review: Oct 12, 2026 · Rules can change. Always verify before buying or traveling.</p><p id="next-date" class="small"></p></section>
 </div>
-<section class="card compare" aria-labelledby="compare-heading"><p class="eyebrow">03 / Compare your options</p><h2 id="compare-heading">Other passes at this mountain</h2><p class="small muted">Same destination and date; each pass checked against its own blackout and destination rules. “Needs details” means your purchased days or reservation must be confirmed.</p><div id="matrix" class="matrix" aria-live="polite"></div></section>
-<section class="card compare" aria-labelledby="alternatives-heading"><p class="eyebrow">04 / Same-region alternatives</p><h2 id="alternatives-heading">Other mountains your pass may cover</h2><p class="small muted">Nearby-region options are grouped by state or province, not travel time or distance. Check each resort’s live operating status separately.</p><div id="alternatives-list" class="matrix" aria-live="polite"></div></section>
+<section class="card experience" id="experience" aria-labelledby="experience-heading">
+<div class="experience-top"><div><p class="eyebrow">03 / The day behind the decision</p><h2 id="experience-heading">Picture the mountain, then make the right move.</h2><p class="muted">A ski trip is more than a green checkmark. Understand why this pass works—or why it doesn't—and what to do next.</p></div><span class="verified-ribbon">2026–27 published rules</span></div>
+<div class="experience-main">
+<div class="experience-essay" aria-live="polite">
+<p class="eyebrow" id="guide-eyebrow">Field guide · Your chosen destination</p>
+<h3 id="guide-title">Start with the pass. Stay for the mountain.</h3>
+<p id="guide-intro">The pass you carry determines which mountain you can approach. What makes that mountain worth the trip—and whether your date works—is a separate story.</p>
+<p id="guide-distinctive">Select your pass, mountain and date above. The guide will translate the rule into a practical day plan and point you toward the official next check.</p>
+<p id="guide-why" class="why-note">Published pass access is not a live lift or resort operating report.</p>
+<p id="guide-mood" class="small muted">Tell us whether you are visiting for the first time, traveling with family, seeking terrain or flexible on dates.</p>
+<div class="next-step"><span class="eyebrow">Your first move</span><h4 id="guide-action">Check your date and pass entitlement</h4><p id="guide-action-detail">The tool checks season policy first. Mountain operations come afterward.</p><div class="guide-links"><a id="guide-source" href="https://www.epicpass.com/info/peak-restricted-dates.aspx" target="_blank" rel="noopener noreferrer">Read the official source ↗</a><button id="guide-next-date" class="secondary" type="button" hidden>Try the next non-blackout date</button></div></div>
+<details class="provenance"><summary>How this recommendation was made</summary><p id="guide-provenance">Pass eligibility comes from published 2026–27 rules. The optional JEV editor can prioritize verified next steps but never modify a blackout, allowance or reservation requirement. If unavailable, the guide stays deterministic.</p></details>
+</div>
+<figure id="guide-media" class="place-photo" hidden><img id="guide-photo" loading="lazy" decoding="async" alt=""><figcaption id="guide-photo-credit"></figcaption></figure>
+</div>
+<div class="field-shelf"><h3>What to settle before booking</h3><div class="field-items"><article><span>1</span><strong>Pass and date</strong><p>The mountain, pass tier and holiday are three separate inputs—not an interchangeable “Epic or Ikon” label.</p></article><article><span>2</span><strong>The day bank</strong><p>Aspen Snowmass shares mountain visits. Some passes have a total day pool, not a fresh balance at each resort.</p></article><article><span>3</span><strong>At the mountain</strong><p>Reservations, lift hours and operating terrain come from the official destination, not this entitlement check.</p></article></div></div>
+</section>
+<section class="card trip-examples" aria-labelledby="examples-title"><p class="eyebrow">Try a real decision</p><h2 id="examples-title">Three ski plans, three different answers</h2><div class="example-grid"><button type="button" class="example" data-example="vail"><strong>Vail on New Year’s Eve</strong><span>Epic Local · Dec. 31, 2026</span><small>A holiday restriction changes a dream ski day.</small></button><button type="button" class="example" data-example="snowmass"><strong>Snowmass or Aspen?</strong><span>Ikon Base · Jan. 12, 2027</span><small>Four mountains, not four identical entitlements.</small></button><button type="button" class="example" data-example="jackson"><strong>Jackson Hole in January</strong><span>Ikon Pass · Jan. 12, 2027</span><small>A valid pass still requires a lift reservation.</small></button></div></section>
+<section class="card compare" aria-labelledby="compare-heading"><p class="eyebrow">04 / Compare your options</p><h2 id="compare-heading">Other passes at this mountain</h2><p class="small muted">Same destination and date; each pass checked against its own blackout and destination rules. “Needs details” means your purchased days or reservation must be confirmed.</p><div id="matrix" class="matrix" aria-live="polite"></div></section>
+<section class="card compare" aria-labelledby="alternatives-heading"><p class="eyebrow">05 / Same-region alternatives</p><h2 id="alternatives-heading">Other mountains your pass may cover</h2><p class="small muted">Nearby-region options are grouped by state or province, not travel time or distance. Check each resort’s live operating status separately.</p><div id="alternatives-list" class="matrix" aria-live="polite"></div></section>
 <div class="content">
 <section class="card"><h2>Three questions this tool separates</h2><ul><li><strong>Does this pass include the mountain?</strong> Epic and Ikon have different destination rosters and pass tiers.</li><li><strong>Is this date restricted?</strong> The companies' holiday calendars differ—even around New Year's and Martin Luther King Jr. weekend.</li><li><strong>Are additional steps needed?</strong> Limited visit pools and lift reservations can still prevent your trip.</li></ul></section>
 <section class="card"><h2>Important limitations</h2><p>These are published <strong>pass rules, not live resort conditions</strong>. The engine does not retrieve your pass account, remaining days, resort opening status, sold-out dates, or reservation inventory.</p><p>Only the listed pass products and curated destinations are modeled. Epic regional passes, Ikon specialty products, international partner rules and private-account entitlements need direct confirmation.</p><p><a href="https://www.epicpass.com/info/peak-restricted-dates.aspx">Epic 2026–27 restrictions</a> · <a href="https://www.ikonpass.com/en/compare-passes">Ikon 2026–27 access</a> · <a href="https://www.ikonpass.com/en/how-to-use-your-ikon-pass">Ikon reservation policy</a></p></section>
@@ -64,7 +83,7 @@ const label={YES:"Pass-rule eligible",NO:"Not valid for this visit",CHECK:"Needs
 Object.entries(E.PASS_NAMES).forEach(([value,name])=>pass.add(new Option(name,value)));
 const locations=[...E.resorts].sort((a,b)=>a.name.localeCompare(b.name));
 const showResorts=()=>{const p=pass.value,old=resort.value;resort.replaceChildren();locations.filter(x=>!p||x.brand===(p.startsWith("epic")?"epic":"ikon")).forEach(x=>resort.add(new Option(x.name+" · "+x.region,x.id)));if([...resort.options].some(x=>x.value===old))resort.value=old;};
-const input=()=>({pass:pass.value,resort:resort.value,date:date.value,usedDays:$("used-days").value,reservationMade:$("reservation").value,epicDayTotal:$("epicday-total").value,epicPeak:$("epic-peak").value,sessionTotal:$("session-total").value});
+const input=()=>({pass:pass.value,resort:resort.value,date:date.value,usedDays:$("used-days").value,reservationMade:$("reservation").value,epicDayTotal:$("epicday-total").value,epicPeak:$("epic-peak").value,sessionTotal:$("session-total").value,intent:$("visit-style").value});
 function render(){
 const args=input(),r=E.evaluate(args),container=$("decision");container.dataset.status=r.status;
 $("verdict-label").textContent=label[r.status]||r.status;
@@ -86,7 +105,7 @@ const matches=E.resorts.filter(x=>x.id!==args.resort&&x.region===E.byId[args.res
 const alts=$("alternatives-list");alts.replaceChildren();
 if(!matches.length){const note=document.createElement("p");note.className="muted small";note.textContent="No additional pass-eligible destinations in this selected region and verified roster. Try another date or check the official pass directory.";alts.append(note);}
 else matches.forEach(a=>{const card=document.createElement("article");card.className="mini";card.dataset.status=a.status;const name=document.createElement("strong");name.textContent=a.resort.name+" · "+a.resort.region;card.append(name);const tag=document.createElement("span");tag.className="state";tag.textContent=label[a.status]||a.status;card.append(tag);const detail=document.createElement("p");detail.textContent=a.title;card.append(detail);alts.append(card);});
-if(typeof window.gtag==="function")window.gtag("event","pass_decoder_check",{pass_type:args.pass,resort_id:args.resort,decision:r.status,event_category:"pass-decoder"});
+
 }
 function options(){const p=pass.value;$("epicday-fields").hidden=p!=="epicDay";$("session-fields").hidden=p!=="ikonSession";showResorts();render();}
 pass.value="epicLocal";showResorts();resort.value="vail";
@@ -100,11 +119,105 @@ if(/^[1-7]$/.test(q.get("days")||""))$("epicday-total").value=q.get("days");
 if(["yes","no"].includes(q.get("peak")))$("epic-peak").value=q.get("peak");
 if(["2","3","4"].includes(q.get("session")))$("session-total").value=q.get("session");
 $("epicday-fields").hidden=pass.value!=="epicDay";$("session-fields").hidden=pass.value!=="ikonSession";
-form.addEventListener("submit",e=>{e.preventDefault();render();$("decision").scrollIntoView({behavior:"smooth",block:"nearest"});});
-pass.addEventListener("change",options);resort.addEventListener("change",render);date.addEventListener("change",render);
-["used-days","reservation","epicday-total","epic-peak","session-total"].forEach(id=>$(id).addEventListener("change",render));
+let requestSeq=0,guideController=null;
+const MEDIA={
+ breckenridge:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Snow_mountains_on_Breckenridge_Colorado.JPG?width=960",alt:"The snow-covered mountains of Breckenridge seen from a ski run in January 2015",credit:"Breckenridge ski slopes, Jan. 2015 · Jlfdz · CC BY-SA 4.0",url:"https://commons.wikimedia.org/wiki/File:Snow_mountains_on_Breckenridge_Colorado.JPG"},
+ "jackson-hole":{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Aerial_Tram.jpg?width=960",alt:"Jackson Hole Mountain Resort aerial tram ascending toward Rendezvous Mountain",credit:"Jackson Hole Aerial Tram, 2022 · Sirguh · CC BY-SA 4.0",url:"https://commons.wikimedia.org/wiki/File:Aerial_Tram.jpg"}
+};
+function updatePhoto(id){
+ const m=MEDIA[id],figure=$("guide-media"),photo=$("guide-photo");
+ photo.onload=()=>{if(MEDIA[resort.value]===m)figure.hidden=false;};
+ photo.onerror=()=>{figure.hidden=true;};
+ figure.hidden=true;photo.removeAttribute("src");photo.alt="";
+ if(!m)return;
+ photo.alt=m.alt;const caption=$("guide-photo-credit");caption.replaceChildren();
+ const credit=document.createElement("a");credit.href=m.url;credit.rel="noopener noreferrer";credit.target="_blank";credit.textContent=m.credit;
+ caption.append(credit,document.createTextNode(" · Representative file photo, not current conditions"));
+ photo.src=m.src;
+}
+function guideFallback(){
+ const args=input(),r=E.evaluate(args),mountain=E.byId[args.resort];
+ $("guide-eyebrow").textContent="Your mountain · "+(mountain?.region||"");
+ $("guide-title").textContent=(mountain?.name||"Your mountain")+" — the day behind the decision";
+ $("guide-intro").textContent="Every mountain deserves a specific plan. The published pass rule determines whether this date can work before you consider the terrain, your group or the resort's operating schedule.";
+ $("guide-distinctive").textContent="For this choice, check the exact pass tier, then confirm the mountain's own open lifts, terrain, arrival logistics and any required reservations.";
+ $("guide-why").textContent=r.explanation;
+ $("guide-mood").textContent="Your choices stay on this page; no pass number or account sign-in is requested.";
+ $("guide-action").textContent=r.status==="NO"?"Change or confirm this plan":r.status==="ACTION"?"Secure the required reservation":r.status==="CHECK"?"Count days in the relevant pass pool":r.status==="UNKNOWN"?"Complete missing pass details":"Verify the mountain operating report";
+ $("guide-action-detail").textContent="Pass eligibility is a published-policy decision—not an operating or snow forecast.";
+ $("guide-provenance").textContent="Published 2026–27 pass policies supply the verdict. Optional JEV advice cannot change a restriction. This guide currently uses the deterministic fallback.";
+ $("guide-source").href=r.sourceUrl||(args.pass.startsWith("epic")?E.EPIC_URL:E.IKON_URL);
+ $("guide-source").textContent="Read the official pass policy ↗";
+ $("guide-next-date").hidden=!(r.status==="NO"&&r.reason==="blackout"&&E.nextDate(args,30));
+ updatePhoto(args.resort);
+}
+function renderGuide(data){
+ const s=data.story;if(!s)return;
+ const args=input();
+ $("guide-title").textContent=(E.byId[args.resort]?.name||"Your mountain")+" — "+s.heading;
+ $("guide-intro").textContent=s.intro;
+ $("guide-distinctive").textContent=s.distinctive;
+ $("guide-why").textContent=s.why+(s.pool?" "+s.pool:"");
+ $("guide-mood").textContent=s.mood;
+ $("guide-action").textContent=data.step.title;
+ $("guide-action-detail").textContent=data.step.detail+(data.focus&&data.focus.id!==data.step.id?" Next to consider: "+data.focus.explanation:"");
+ $("guide-source").href=s.sourceUrl;
+ $("guide-source").textContent=s.sourceLabel+" ↗";
+ $("guide-provenance").textContent="Pass eligibility: "+(data.verdict.status||"UNKNOWN")+" from official season policy. Place context: "+s.evidence+" Editorial focus: "+(data.editor==="shared-harness-jev"?"JEV chose from a fixed, safe next-step list.":"deterministic fallback.")+" The editorial layer cannot override the pass rule.";
+ $("guide-next-date").hidden=!(data.verdict.reason==="blackout"&&E.nextDate(args,30));
+ updatePhoto(args.resort);
+}
+async function loadGuide(){
+ const args=input(),seq=++requestSeq;
+ if(guideController)guideController.abort();
+ guideController=new AbortController();
+ const ctrl=guideController,timer=setTimeout(()=>ctrl.abort(),3500);
+ $("guide-action-detail").textContent="Checking the safest next step from the published policy...";
+ try{
+  const response=await fetch("/api/epic-ikon-guide",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(args),signal:ctrl.signal,cache:"no-store"});
+  if(!response.ok)throw Error("Guide response unavailable");
+  const data=await response.json();
+  if(seq!==requestSeq||data.date!==date.value||data.resortId!==resort.value||data.pass!==pass.value)return;
+  if(data.verdict?.status!==E.evaluate(input()).status)throw Error("Guide policy mismatch");
+  renderGuide(data);
+  if(typeof window.gtag==="function")window.gtag("event","pass_decoder_guide_ready",{decision:data.verdict.status,editor:data.editor});
+ }catch(err){
+  if(seq===requestSeq){guideFallback();if(typeof window.gtag==="function")window.gtag("event","pass_decoder_jev_fallback",{reason:"guide_unavailable"});}
+ }finally{clearTimeout(timer);}
+}
+form.addEventListener("submit",e=>{
+ e.preventDefault();render();guideFallback();
+ const a=input(),r=E.evaluate(a);
+ if(typeof window.gtag==="function")window.gtag("event","pass_decoder_check",{pass_type:a.pass,resort_id:a.resort,decision:r.status,event_category:"pass-decoder"});
+ $("decision").scrollIntoView({behavior:"smooth",block:"nearest"});loadGuide();
+});
+$("guide-next-date").addEventListener("click",()=>{
+ const next=E.nextDate(input(),30);if(!next)return;
+ date.value=next.date;render();guideFallback();form.requestSubmit();
+});
+document.querySelectorAll("[data-example]").forEach(btn=>btn.addEventListener("click",()=>{
+ const example=btn.dataset.example,scenarios={
+  vail:{pass:"epicLocal",resort:"vail",date:"2026-12-31",used:"",reservation:"unknown"},
+  snowmass:{pass:"ikonBase",resort:"snowmass",date:"2027-01-12",used:"",reservation:"unknown"},
+  jackson:{pass:"ikon",resort:"jackson-hole",date:"2027-01-12",used:"0",reservation:"no"}
+ };
+ const s=scenarios[example];if(!s)return;
+ pass.value=s.pass;showResorts();resort.value=s.resort;date.value=s.date;
+ $("used-days").value=s.used;$("reservation").value=s.reservation;
+ $("epicday-fields").hidden=pass.value!=="epicDay";$("session-fields").hidden=pass.value!=="ikonSession";
+ form.requestSubmit();
+}));
+$("policy-link").addEventListener("click",()=>{
+ if(typeof window.gtag==="function")window.gtag("event","official_outbound",{source:"pass_policy"});
+});
+$("guide-source").addEventListener("click",()=>{
+ if(typeof window.gtag==="function")window.gtag("event","official_outbound",{source:"mountain_field_guide"});
+});
+pass.addEventListener("change",()=>{requestSeq++;options();guideFallback();});resort.addEventListener("change",()=>{requestSeq++;render();guideFallback();});date.addEventListener("change",()=>{requestSeq++;render();guideFallback();});
+$("visit-style").addEventListener("change",()=>{requestSeq++;guideFallback();});
+["used-days","reservation","epicday-total","epic-peak","session-total"].forEach(id=>$(id).addEventListener("change",()=>{requestSeq++;render();guideFallback();}));
 $("share").addEventListener("click",async()=>{const a=input(),u=new URL(location.pathname,location.origin);["pass","resort","date"].forEach(k=>u.searchParams.set(k,a[k]));if(a.usedDays!=="")u.searchParams.set("used",a.usedDays);if(a.reservationMade!=="unknown")u.searchParams.set("reservation",a.reservationMade);if(a.epicDayTotal)u.searchParams.set("days",a.epicDayTotal);if(a.epicPeak)u.searchParams.set("peak",a.epicPeak);if(a.sessionTotal)u.searchParams.set("session",a.sessionTotal);try{await navigator.clipboard.writeText(u.href);$("copy-status").textContent="Plan link copied. Links contain only the choices entered here.";}catch{$("copy-status").textContent="Copy your plan URL: "+u.href;}});
-render();
+render();guideFallback();
 })();
 </script>
 </body></html>
