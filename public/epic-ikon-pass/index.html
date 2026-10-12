@@ -58,8 +58,9 @@
         <label><span>Where are you arriving from?</span><select id="v3-origin"><option value="fly">Flying in</option><option value="drive">Driving in</option><option value="nearby">Already nearby</option></select></label>
         <label><span>Your group's ski ability</span><select id="v3-ability"><option value="mixed">Mixed abilities / family</option><option value="novice">New skiers or lessons</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
         <label><span>Preferred arrival experience</span><select id="v3-arrival"><option value="uncertain">I want the least confusion</option><option value="town">Vail Village / town</option><option value="transit">Lionshead / transit</option><option value="drive">Arriving by car</option></select></label>
+        <label><span>Last consecutive ski day (optional)</span><input type="date" id="v3-end-date" min="2026-11-01" max="2027-05-31" aria-describedby="v3-range-note"><small id="v3-range-note">A date range assumes skiing every day; choose a single day if you plan rest days.</small></label>
       </div>
-      <div class="v3-commit-block"><strong>Your next non-negotiable action</strong><p id="v3-action">Pass policy precedes all other plans.</p><p id="v3-alternate" class="small muted"></p>
+      <div class="v3-commit-block"><strong>Your ski days, individually checked</strong><div id="v3-day-by-day" aria-live="polite"></div><strong>Your next non-negotiable action</strong><p id="v3-action">Pass policy precedes all other plans.</p><p id="v3-alternate" class="small muted"></p>
         <div class="v3-actions"><button id="v3-changedate" type="button" class="secondary" hidden>Use modeled next date</button><button id="v3-brief" type="button">Copy source-linked trip brief</button></div>
         <p role="status" id="v3-brief-note" class="small muted"></p>
       </div>
@@ -79,6 +80,16 @@
     </div>
     <p id="v3-map-status" class="small muted" role="status">Verified geographic reference points only. This is not a ski trail or road routing map.</p>
     <div id="v3-map-canvas" class="v3-map" aria-label="Geographic planning map with verified reference points"></div>
+    <details id="v3-static-map" class="v3-static-map"><summary>Accessible map fallback: east–west village orientation</summary>
+      <p class="small muted">Schematic geographic order only—no road, lift, trail or walking directions. Verified geocoded area references, not official meeting-point pins.</p>
+      <svg viewBox="0 0 520 155" role="img" aria-labelledby="v3-static-title v3-static-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="v3-static-title">Vail reference areas from west to east</title>
+        <desc id="v3-static-desc">Lionshead area to the west; Vail Village parking area near the middle; Golden Peak Lodge east. Not a route.</desc>
+        <line x1="58" y1="72" x2="462" y2="72" stroke="#b6c4b6" stroke-width="2" stroke-dasharray="6 7"/>
+        <g fill="#2f5947" stroke="white" stroke-width="2"><circle cx="75" cy="72" r="8"/><circle cx="258" cy="72" r="8"/><circle cx="448" cy="72" r="8"/></g>
+        <g fill="#284c3b" font-size="13" text-anchor="middle"><text x="75" y="46">Lionshead</text><text x="258" y="46">Vail Village</text><text x="448" y="46">Golden Peak</text><text x="75" y="99" font-size="11">West</text><text x="258" y="99" font-size="11">Parking area</text><text x="448" y="99" font-size="11">East</text><text x="260" y="140" fill="#64776a" font-size="11">Approximate orientation · Not a travel route</text></g>
+      </svg>
+    </details>
     <div id="v3-terrain-link" class="v3-terrain" hidden><strong>Vail's official terrain maps</strong><p>The operator publishes separate Front Side, Back Bowls and Blue Sky Basin map views. Use those for run layout and open the operator's current lift report before skiing.</p><a href="https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx" target="_blank" rel="noopener noreferrer">Open the operator's trail maps ↗</a></div>
     <div class="v3-pin-notes" aria-live="polite"><strong id="v3-pin-title">Vail Village Parking Structure</strong><p id="v3-pin-description">Named reference points with sources, not walking-time, route or lift-operation claims.</p><a id="v3-pin-source" href="https://mapcarta.com/W432160774" target="_blank" rel="noopener noreferrer">Verify this map point ↗</a></div>
     <p class="v3-static-places">Map not loading? Your physical reference points are Vail Village Parking Structure, Lionshead Village Welcome Center and Golden Peak Lodge. These are not precise gondola or lesson line-up pins. Confirm with <a data-v3-source="arrival" href="https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx">Vail's official arrival instructions</a>.</p>
