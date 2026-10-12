@@ -39,7 +39,7 @@ test('North Shore specialty links are real tools, not duplicate made-up pages',(
   if(id==='isle-royale-ferry')continue;
   assert.ok(fs.existsSync(path.join(root,url,'index.html')),'local canonical exists '+url);
  }
- assert.match(national,/published 2026/i);
+ assert.match(national,/(?:2026 published schedules|published 2026)/i);
  assert.match(national,/future sailings and seats unverified/i);
  assert.match(national,/upper crossing has no bridge/i);
 });
