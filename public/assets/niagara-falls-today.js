@@ -9,27 +9,34 @@ function link(url,label){return '<a href="'+safe(url)+'" target="_blank" rel="no
 function explain(reason){
  return {PUBLISHED_CLOSED:'Operator-published closure for this date',HOURS_NOT_VERIFIED:'Date-specific operator hours cannot be verified',ACCESS_ROUTE_UNVERIFIED:'Full step-free accessibility cannot be confirmed',OVER_BUDGET:'Would exceed your admission budget',PRICE_NOT_VERIFIED:'Cost cannot be verified against your budget',BORDER_NOT_PLANNED:'On the other side of the international border',LOWER_FIT_OR_TIME:'Less suitable for your available time or priorities'}[reason]||reason;
 }
-function mediaFor(id){var root=window.NiagaraFallsMedia;return root&&root.stops&&root.stops[id]||null;}
-function stopMedia(id){
- var m=mediaFor(id);
- if(!m)return '';
- return '<figure class="stop-visual"><img loading="lazy" decoding="async" src="'+safe(m.src)+'" alt="'+safe(m.alt)+'" width="960" height="640"><figcaption>Place-specific photograph: <a href="'+safe(m.page)+'" target="_blank" rel="noopener">'+safe(m.author)+'</a> · <a href="'+safe(m.licenseUrl)+'" target="_blank" rel="noopener">'+safe(m.license)+'</a> · cropped; illustrative, not live</figcaption></figure>';
+function guideFor(id){return window.NiagaraFallsGuide&&window.NiagaraFallsGuide[id]||null;}
+function guideIntro(r,stops){
+ if(!stops.length)return '';
+ var theme=r.priority==='boat'?'You want to get closer to the water. The route only includes a boat if its published hours and your available time allow it.':r.priority==='mist'?'You want to feel the mist. Closeness to the spray depends on wind, season and the stops actually operating.':r.priority==='easy'?'You want a gentler pace, so this visit leaves room to stay with a view instead of hurrying past it.':r.priority==='photos'?'You want to photograph the falls. Each viewpoint below shows a different part of the river, not a repeat of the same shot.':r.priority==='value'?'You prefer good value. Public viewpoints can tell a complete Niagara story without buying an attraction ticket.':r.duration_minutes<=120?'Your visit is short: the goal is to understand one side of Niagara, not cross off a long checklist.':'Follow the river through a changing sequence of viewpoints rather than rushing a checklist.';
+ var intro=r.side==='US'?'In New York, you approach the separate waterfalls from park paths beside the river and the gorge.':'In Ontario, you can stand at the curved brink and then step back to see the wider pattern of falls and islands.';
+ return '<div class="route-introduction"><span class="index">YOUR NIAGARA FIELD GUIDE</span><h4>Here is how your visit unfolds.</h4><p>'+safe(intro+' '+theme)+'</p></div>';
 }
-function bindFilms(){
- document.querySelectorAll('.film-launch[data-video-id]').forEach(function(button){
-  button.addEventListener('click',function(){
-   var id=button.getAttribute('data-video-id');
-   if(!/^[a-zA-Z0-9_-]{11}$/.test(id))return;
-   var iframe=document.createElement('iframe');
-   iframe.title=button.getAttribute('aria-label');
-   iframe.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
-   iframe.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
-   iframe.setAttribute('allowfullscreen','');
-   iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
-   button.replaceWith(iframe);
-   emit('niagara_experience_video_play');
-  },{once:true});
- });
+function stopStory(s,prev,r){
+ var g=guideFor(s.id);if(!g)return '<p>'+safe(s.description)+'</p>';
+ var focus=r.priority==='kids'?'With children: find the line where smooth river becomes white water or look for the islands dividing the falls.':r.priority==='photos'?'For a stronger photograph, show the river and surrounding rock, not only a close crop of white water.':r.priority==='easy'?'Leave room to pause. Walking times and step-free routes have not been independently audited.':r.priority==='value'?'Remember that a free scenic viewpoint and a nearby ticketed activity are different experiences.':'';
+ return '<p class="guide-location">'+safe(g.where)+'</p>'+(prev?'<p class="guide-transition">'+safe(g.transition)+'</p>':'')+'<p class="guide-scene">'+safe(g.scene)+'</p><p class="guide-context">'+safe(g.context)+'</p><p class="guide-notice"><strong>Look for this:</strong> '+safe(g.notice)+'</p><p class="guide-notice"><strong>On the ground:</strong> '+safe(g.tip)+'</p>'+(focus?'<p class="guide-focus">'+safe(focus)+'</p>':'');
+}
+function filmPreview(r,stops){
+ if(r.side!=='CA'||!stops.some(function(s){return s.id==='table';}))return '';
+ return '<aside class="preview-inline"><span class="index">OPTIONAL FIELD FILM</span><h4>What is behind the falling water?</h4><p>At Table Rock, you see the river at the brink. This Niagara Parks film shows the separate, ticketed Journey Behind the Falls experience within the rock. The footage adds context; <strong>it does not mean paid admission is open or included in your route.</strong></p><button type="button" data-niagara-video="DlMgURteL3E">Play the Niagara Parks film ▶</button><p class="preview-links"><a href="https://www.youtube.com/watch?v=DlMgURteL3E" target="_blank" rel="noopener">Official video on YouTube ↗</a> · <a href="https://www.niagaraparks.com/visit/attractions/journey-behind-the-falls/" target="_blank" rel="noopener">Check operator access ↗</a></p></aside>';
+}
+function bindGuideVideo(){
+ body.querySelectorAll('[data-niagara-video]').forEach(function(button){button.addEventListener('click',function(){
+  var id=button.getAttribute('data-niagara-video');if(id!=='DlMgURteL3E')return;
+  var frame=document.createElement('iframe');frame.title='Niagara Parks — Journey Behind the Falls';
+  frame.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
+  frame.referrerPolicy='strict-origin-when-cross-origin';frame.allow='autoplay; encrypted-media; picture-in-picture';frame.allowFullscreen=true;
+  button.replaceWith(frame);emit('niagara_experience_video_play');
+ },{once:true});});
+}
+function updateSideGuide(r){
+ var element=document.getElementById('guide-side');if(!element)return;
+ element.textContent=r.side==='US'?'Starting in New York: Prospect Point faces the American Falls; Goat Island approaches Horseshoe Falls at the brink. The route stays in New York and never assumes a border crossing.':'Starting in Ontario: Table Rock brings you toward Horseshoe Falls at the brink, while Queen Victoria Park opens a wider view toward all three waterfalls. The route stays in Ontario and never assumes a border crossing.';
 }
 function draw(r){
  var stops=r.stops||[],first=stops[0],currency=r.side==='US'?'USD':'CAD';
@@ -38,9 +45,10 @@ function draw(r){
  var out='<div class="result-content"><div class="verdict"><span class="label">'+safe(r.confidence)+' CONFIDENCE · '+safe(r.status.replace(/_/g,' '))+'</span><h3>'+safe(r.verdict)+'</h3><p>Published schedules are not live opening confirmations. No invented queues, weather or border delays.</p></div>';
  if(first)out+='<div class="first"><div><small>YOUR FIRST ACTION</small><b>'+safe(first.name)+'</b><small>Arrive approximately '+safe(first.arrival)+' Eastern · '+safe(r.visit_local_date)+'</small></div><a class="action" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(first.location)+'" target="_blank" rel="noopener">Open directions ↗</a></div>';
  out+='<div class="stats"><div class="stat"><strong>'+stops.length+'</strong><span>Planned stops</span></div><div class="stat"><strong>'+safe(r.timeline.contingency_minutes)+' min</strong><span>Time buffer</span></div><div class="stat"><strong>'+safe(totalLabel)+'</strong><span>'+(unknownPrices?'Known subtotal · more due':'Known admission subtotal')+'</span></div></div>';
- out+='<div class="sectitle">Your route · Eastern local time</div>';
- if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopMedia(s.id)+(mediaFor(s.id)?'<p class="stop-story">'+safe(mediaFor(s.id).experience)+'</p><p class="stop-field-note"><strong>What to notice:</strong> '+safe(mediaFor(s.id).notice)+'</p><p class="stop-field-note"><strong>Field tip:</strong> '+safe(mediaFor(s.id).tip)+'</p>':'<p>'+safe(s.description)+'</p>')+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
+ out+='<div class="sectitle">Your guided route · Eastern local time</div>'+guideIntro(r,stops);
+ if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopStory(s,i?stops[i-1]:null,r)+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
  else out+='<p>There is no safe confirmed stop for this request. Check official park advisories.</p>';
+ out+=filmPreview(r,stops);
  if(r.schedule_feed){
   var sf=r.schedule_feed;
   out+='<div class="caveat"><strong>Niagara Parks date-specific calendar:</strong> '+safe(sf.status.replace(/_/g,' '))+'. '+(sf.checked_at?'Published hours retrieved '+safe(new Date(sf.checked_at).toLocaleString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' Eastern. ':'No current source check available. ')+safe(sf.caveat||'')+' '+link(sf.source_url,'Official hours by date')+'</div>';
@@ -61,7 +69,7 @@ function draw(r){
  out+='<details class="source-details"><summary>Published source status and limitations</summary><p>'+safe(r.what_changed)+'</p><ul>';r.source_health.forEach(function(x){out+='<li>'+safe(x.entity_id)+' — '+safe(x.status)+': '+safe(x.basis)+' ('+safe(x.reviewed)+') '+link(x.source,'operator')+'</li>';});out+='</ul></details>';
  if(r.visit_local_date==='2026-10-12'&&stops.length){out+='<p class="caveat">Tonight: Niagara Parks schedules a 10:00 p.m. fireworks show, <strong>weather permitting</strong>. It is not a verified live event. '+link('https://www.niagaraparks.com/events/event/niagara-falls-fireworks-series','Official fireworks details')+'</p>';}
  out+='<div class="small-links">'+link(r.links_to_official.border,'Bridge status')+link(r.links_to_official.rainbow,'Rainbow timing')+link(r.side==='US'?r.links_to_official.us:r.links_to_official.ca,'Official operating updates')+'</div></div>';
- body.innerHTML=out;body.setAttribute('aria-busy','false');status.textContent='One same-side visit plan; details and alternatives below.';emit(stops.length?'niagara_plan_success':'niagara_plan_no_feasible');
+ body.innerHTML=out;body.setAttribute('aria-busy','false');status.textContent='Your same-side visit, field notes and constraints.';bindGuideVideo();updateSideGuide(r);emit(stops.length?'niagara_plan_success':'niagara_plan_no_feasible');
 }
 async function submit(ev){if(ev)ev.preventDefault();button.disabled=true;body.setAttribute('aria-busy','true');status.textContent='Calculating a conservative route…';emit('niagara_plan_submit');
  var d=new FormData(form);var data={visit_date:d.get('visit_date'),arrival_local:d.get('arrival_local'),duration_minutes:d.get('custom_minutes')?Number(d.get('custom_minutes')):Number(d.get('duration_minutes')),starting_side:d.get('starting_side'),priority:d.get('priority'),adults:Number(d.get('adults')),youth:Number(d.get('youth')),budget:d.get('budget')===''?null:Number(d.get('budget')),step_free:d.has('step_free'),low_walking:d.has('low_walking')};
@@ -69,5 +77,6 @@ async function submit(ev){if(ev)ev.preventDefault();button.disabled=true;body.se
 }
 form.addEventListener('submit',submit);
 document.querySelectorAll('input[name=duration_minutes],input[name=starting_side]').forEach(function(el){el.addEventListener('change',function(){emit('niagara_replan');submit();});});
-bindFilms();emit('niagara_planner_view');submit();
+var hero=document.querySelector('.hero-photo'),img=hero&&hero.querySelector('img');if(img){img.addEventListener('error',function(){hero.classList.add('is-missing');});if(img.complete&&img.naturalWidth===0)hero.classList.add('is-missing');}
+emit('niagara_planner_view');submit();
 })();

@@ -1,0 +1,40 @@
+name: Niagara V3 real-browser image and journey smoke
+on:
+  push:
+    branches:
+      - feature/niagara-experience-rescue-build-20261012
+    paths:
+      - .github/workflows/niagara-visual-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  niagara-browser:
+    if: github.ref == 'refs/heads/feature/niagara-experience-rescue-build-20261012'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install isolated Playwright browser runner
+        run: |
+          npm ci --ignore-scripts
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve repository assets and verify a decoded local Niagara photo at three widths
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory public >/tmp/niagara-static.log 2>&1 &
+          echo $! > /tmp/niagara-static.pid
+          node scripts/niagara-browser-smoke.cjs
+      - name: Upload reviewable 375, 768 and 1440px screenshot pairs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: niagara-v3-viewport-screenshots
+          path: artifacts/niagara-v3-browser/*.png
+          if-no-files-found: ignore
+          retention-days: 7
