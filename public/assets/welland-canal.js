@@ -84,6 +84,26 @@
     '7':{cue:'Thorold views',answer:'The last major lift on the climb. A public viewing centre overlooks Locks 4 through 7.'},
     '8':{cue:'Lake Erie',answer:'The regulating lock near Lake Erie. It adjusts for water-level differences rather than the big climb.'}
   };
+  // Visitor sites and opening advice come from the municipal authorities.
+  // This static data is not a forecast or an AIS-derived lock appointment.
+  const WATCH_SPOTS={
+    '3':{title:'Lock 3 · St. Catharines',
+      description:'The strongest first visit: stand above the working chamber on the museum viewing platform while freighters enter or leave. If no ship comes through, the canal history galleries make the stop worthwhile.',
+      practical:'St. Catharines Museum, 1932 Welland Canals Parkway. Museum normally 9 a.m.–5 p.m. daily, admission by donation. Check holiday closures and current platform access.',
+      directions:'https://www.google.com/maps/search/?api=1&query=St+Catharines+Museum+Welland+Canals+Centre',
+      official:'https://www.stcatharines.ca/arts-culture-and-events/st-catharines-museum-and-welland-canals-centre/visiting-us/'},
+    '7':{title:'Lock 7 · Thorold',
+      description:'For the scale of the Niagara Escarpment climb, head to Thorold. From the established Lock 7 viewing area you can appreciate the layout of the dramatic three-lock flight below.',
+      practical:'Lock 7 Viewing Centre, 50 Chapel Street South, Thorold. Visitor-centre hours may be seasonal; confirm building and exterior viewing access.',
+      directions:'https://www.google.com/maps/search/?api=1&query=Lock+7+Viewing+Centre+50+Chapel+St+S+Thorold',
+      official:'https://www.thorold.ca/recreation-culture-community/canals/lock-7-viewing-centre/'},
+    '8':{title:'Lock 8 · Port Colborne',
+      description:'A waterside watch at the Lake Erie end. The unusually long regulating lock, working bridges and nearby Gateway Park create an entirely different experience from the northern lift locks.',
+      practical:'Lock 8 Gateway Park, Mellanby Avenue near Main Street West, Port Colborne. Use the public viewing platform; verify present-day park access and facilities.',
+      directions:'https://www.google.com/maps/search/?api=1&query=Lock+8+Gateway+Park+Port+Colborne',
+      official:'https://www.portcolborne.ca/en/recreation-and-leisure/Parks__Pavilions__Trails__Fields_and_Green_Spaces.aspx'}
+  };
+  let activeWatchSpot='3';
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
   let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
@@ -159,6 +179,55 @@
       rail.append(b);
     });
   }
+  // Keep the live evidence separate from the human recommendation.
+  // A lack of AIS never asserts the canal, a lock, or a viewing site is empty.
+  function recentNearSpot(id){
+    const lock=LOCKS.find(l=>l.id===id);
+    return lock?vesselData.filter(v=>distanceKm(v,lock)<=2)
+      .sort((a,b)=>distanceKm(a,lock)-distanceKm(b,lock)):[];
+  }
+  function renderShoreWatch(){
+    for(const id of ['3','7','8']){
+      const count=recentNearSpot(id).length;
+      const signal=$('shoreSignal'+id);
+      if(aisState==='loading')signal.textContent='Checking AIS coverage…';
+      else if(aisState==='unavailable')signal.textContent='AIS data unavailable';
+      else signal.textContent=count?count+' recent AIS '+(count===1?'report':'reports')+' within ~2 km':'No recent AIS report within ~2 km';
+    }
+    for(const button of $('shoreWatchChoices').querySelectorAll('[data-spot]')){
+      button.setAttribute('aria-pressed',String(button.dataset.spot===activeWatchSpot));
+    }
+    const spot=WATCH_SPOTS[activeWatchSpot];
+    $('shoreWatchPlace').textContent=spot.title;
+    $('shoreWatchDescription').textContent=spot.description;
+    $('shoreWatchPractical').textContent=spot.practical;
+    $('shoreWatchDirections').href=spot.directions;
+    $('shoreWatchOfficial').href=spot.official;
+    const reports=recentNearSpot(activeWatchSpot),vessels=$('shoreWatchVessels');
+    vessels.replaceChildren();
+    if(aisState==='loading'){
+      $('shoreWatchStatus').textContent='Checking recent vessel positions';
+    }else if(aisState==='unavailable'){
+      $('shoreWatchStatus').textContent='Fresh AIS coverage could not be verified';
+    }else if(!reports.length){
+      $('shoreWatchStatus').textContent='No fresh report nearby—not proof of an empty canal';
+    }else{
+      $('shoreWatchStatus').textContent=reports.length+' recent vessel '+(reports.length===1?'report':'reports')+' near this lock';
+      reports.slice(0,2).forEach(v=>{
+        const btn=el('button',(v.name||'AIS vessel')+' · '+timeLabel(v)+' · find on map','shore-watch__vessel');
+        btn.type='button';
+        btn.addEventListener('click',()=>{
+          if(!map)return;
+          map.setView([v.lat,v.lon],13);
+          const marker=shipMarkers.get(String(v.mmsi));
+          if(marker)marker.openPopup();
+          $('shipMap').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+        });
+        vessels.append(btn);
+      });
+      if(reports.length>2)vessels.append(el('p','+'+(reports.length-2)+' more recent reports near this lock','shore-watch__more'));
+    }
+  }
   function hideLockPreview(){
     $('mapLockPreview').hidden=true;
   }
@@ -201,6 +270,8 @@
     }else if(map&&recenter&&!lock){
       map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
     }
+    if(WATCH_SPOTS[id])activeWatchSpot=id;
+    renderShoreWatch();
     renderInstantAnswer(lock);
     renderLockDetail();
     if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
@@ -391,14 +462,14 @@
       vesselData=data.vessels.filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon)&&minutesOld(v.seen)!==null&&minutesOld(v.seen)<=30);
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
       updated.textContent='Last checked '+when(data.checkedAt)+' · positions at most 30 minutes old';
-      aisState='available';renderList();renderMarkers();renderLockDetail();
+      aisState='available';renderList();renderMarkers();renderLockDetail();renderShoreWatch();
       const credits=$('sourceCredit');credits.replaceChildren();
       (data.attribution||[]).forEach(a=>credits.append(el('span',a.credit||a.source)));
     } catch (_) {
       vesselData=[];
       status.textContent='AIS data unavailable — official vessel schedule remains available below';
       updated.textContent='Unable to verify fresh AIS positions';
-      aisState='unavailable';renderList();renderMarkers();renderLockDetail();
+      aisState='unavailable';renderList();renderMarkers();renderLockDetail();renderShoreWatch();
     } finally {
       busy=false;$('refreshShips').disabled=false;
     }
@@ -424,6 +495,16 @@
   select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
+  $('shoreWatchChoices').addEventListener('click',event=>{
+    const button=event.target.closest('[data-spot]');
+    if(!button)return;
+    activeWatchSpot=button.dataset.spot;
+    chooseLock(activeWatchSpot,false,false);
+  });
+  $('shoreWatchMap').addEventListener('click',()=>{
+    chooseLock(activeWatchSpot,true,false);
+    $('shipMap').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+  });
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
   function openFullLockStory(){
