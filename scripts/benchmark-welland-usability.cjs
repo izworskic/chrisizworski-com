@@ -52,7 +52,7 @@ const checks={
     ['nearby AIS detail count uses same distance',js.includes('v=>distanceKm(v,lock)<=1.5).length')],
     ['AIS freshness gate preserved',js.includes('minutesOld(v.seen)<=30')],
     ['no AIS lock-occupancy claim',js.includes('Not a lock occupancy count.')],
-    ['shared Thorold photo caption is truthful',js.includes("caption:'Lock 7 chamber · Thorold, Ontario'")],
+    ['Lock 7 photo names the correct lock',js.includes("caption:'Lock 7 chamber · Thorold, Ontario'")],
     ['photo creators and licences linked',html.includes('id="lockDetailImageLicense"')&&html.includes('id="lockDetailImageCredit"')],
   ],
   inclusion:[
@@ -69,7 +69,7 @@ const weights={ease:0.30,understanding:0.30,orientation:0.15,trust:0.15,inclusio
 const scores=Object.fromEntries(Object.entries(checks).map(([k,items])=>[k,Math.round(100*items.filter(x=>x[1]).length/items.length)]));
 const raw=Object.keys(weights).reduce((sum,k)=>sum+weights[k]*scores[k],0);
 const veto={
-  photoTruth:checks.trust.find(x=>x[0]==='shared Thorold photo caption is truthful')[1],
+  photoTruth:checks.trust.find(x=>x[0]==='Lock 7 photo names the correct lock')[1],
   aisTruth:checks.trust.find(x=>x[0]==='no AIS lock-occupancy claim')[1]&&checks.trust.find(x=>x[0]==='nearby AIS detail count uses same distance')[1],
   credits:checks.trust.find(x=>x[0]==='photo creators and licences linked')[1],
 };
