@@ -1,0 +1,30 @@
+{
+  "repository": "izworskic/national-ballard-locks",
+  "commit": "761a041de378f1265211122b1395c3968106a94e",
+  "files": {
+    "main": {
+      "file": "main.html",
+      "sourceUrl": "https://raw.githubusercontent.com/izworskic/national-ballard-locks/761a041de378f1265211122b1395c3968106a94e/public/ballard-locks-v2/index.html",
+      "sha256": "e7d5284ab42e653f6c1a055b391bdde18beaeb020a825408e18675459d331074",
+      "bytes": 28294
+    },
+    "tour": {
+      "file": "tour.html",
+      "sourceUrl": "https://raw.githubusercontent.com/izworskic/national-ballard-locks/761a041de378f1265211122b1395c3968106a94e/public/ballard-locks-v2/tour/index.html",
+      "sha256": "5dd8f8cee1bee89922c477fdf79de1eb640de08fb6ea0be8f28aa5abfcc1b8c0",
+      "bytes": 25185
+    },
+    "salmon": {
+      "file": "salmon.html",
+      "sourceUrl": "https://raw.githubusercontent.com/izworskic/national-ballard-locks/761a041de378f1265211122b1395c3968106a94e/public/ballard-locks-v2/salmon-counts/index.html",
+      "sha256": "ae7bda6df72cb568d372bc4fbc507f0267389632a664fa198f089bf2829a6c4f",
+      "bytes": 7266
+    },
+    "api": {
+      "file": "api.js",
+      "sourceUrl": "https://raw.githubusercontent.com/izworskic/national-ballard-locks/761a041de378f1265211122b1395c3968106a94e/api/ballard-live-v2.js",
+      "sha256": "ce6f2da38f49dc21d76045aa738a679d0486b37fb6c0a5629a15838d5fffa913",
+      "bytes": 16895
+    }
+  }
+}

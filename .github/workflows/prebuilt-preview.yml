@@ -1,0 +1,79 @@
+name: Test prebuilt preview deployment
+
+# Deliberately manual: this must not create another automatic deploy trigger.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prebuilt-preview
+  cancel-in-progress: false
+
+env:
+  VERCEL_ORG_ID: team_SibGYOKdlEddaSrq3xHqX8z0
+  VERCEL_PROJECT_ID: prj_F0YwIFaBlvx5G32DXyzIKhrYas5s
+  VERCEL_CLI_VERSION: '63.1.2'
+  VERCEL_TELEMETRY_DISABLED: '1'
+
+jobs:
+  prebuilt-preview:
+    # Tokens are used only with the reviewed main revision, never PR code.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify the reviewed source
+        run: npm run verify:all
+      - name: Install the pinned Vercel CLI outside the repository
+        run: npm install --prefix "$RUNNER_TEMP/vercel-cli" --no-audit --no-fund "vercel@$VERCEL_CLI_VERSION"
+      - name: Pull preview settings for the exact production project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          test -n "$VERCEL_TOKEN" || { echo 'Owner must configure the VERCEL_TOKEN repository secret before this manual test.'; exit 1; }
+          mkdir -p .vercel
+          node -e 'require("fs").writeFileSync(".vercel/project.json", JSON.stringify({orgId:process.env.VERCEL_ORG_ID,projectId:process.env.VERCEL_PROJECT_ID}))'
+          "$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" pull --yes --environment=preview --scope izworski-gmailcoms-projects
+          node -e 'const p=require("./.vercel/project.json"); if(p.orgId!==process.env.VERCEL_ORG_ID || p.projectId!==process.env.VERCEL_PROJECT_ID) process.exit(1)'
+          "$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" project inspect --non-interactive --scope izworski-gmailcoms-projects
+      - name: Package the full site and functions on GitHub
+        run: |
+          "$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" build --standalone --non-interactive
+          node scripts/verify-prebuilt-output.mjs
+      - name: Deploy finished output as a preview only
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          preview_url="$("$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" deploy --prebuilt --yes --scope izworski-gmailcoms-projects)"
+          PREVIEW_URL="$preview_url" node -e 'const u=new URL(process.env.PREVIEW_URL);if(u.protocol!=="https:" || !u.hostname.endsWith(".vercel.app") || u.origin!==process.env.PREVIEW_URL)process.exit(1)'
+          printf 'url=%s\n' "$preview_url" >> "$GITHUB_OUTPUT"
+          printf 'Prebuilt preview: %s\n' "$preview_url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify static pages on the protected preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for route in / /tools/ /national-tools/ice-out/houghton-lake-michigan/; do
+            "$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" curl "$route" --deployment "$PREVIEW_URL" --scope izworski-gmailcoms-projects -- --fail --silent --show-error --output /dev/null
+          done
+      - name: Verify the packaged API without calling paid providers
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          "$RUNNER_TEMP/vercel-cli/node_modules/.bin/vercel" curl /api/epic-ikon-guide --deployment "$PREVIEW_URL" --scope izworski-gmailcoms-projects -- --silent --show-error --dump-header "$RUNNER_TEMP/prebuilt-api-headers.txt" --output "$RUNNER_TEMP/prebuilt-api-body.json"
+          node -e 'const fs=require("fs");const h=fs.readFileSync(process.env.RUNNER_TEMP+"/prebuilt-api-headers.txt","utf8");if(!/HTTP\/\S+ 405\b/.test(h)||!/x-robots-tag:.*noindex/i.test(h))process.exit(1);const b=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/prebuilt-api-body.json","utf8"));if(!b.error)process.exit(1)'
+      # No .vercel env/settings/diagnostics or function bundles are uploaded as
+      # Actions artifacts. No --prod, promotion, or production trigger is enabled.

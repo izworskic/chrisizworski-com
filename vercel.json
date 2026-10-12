@@ -1721,5 +1721,6 @@
   ],
   "alias": [
     "picturedrocks.chrisizworski.com"
-  ]
+  ],
+  "ignoreCommand": "node scripts/ignore-docs-build.mjs"
 }
