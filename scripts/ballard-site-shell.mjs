@@ -38,19 +38,19 @@ function applyBallardCtr(html, route, page) {
     ).join('');
     const faqHtml = '<section class="section wrap" data-ballard-ctr-v1="faq" aria-label="Ballard Locks frequently asked questions" style="padding:1rem 0 2rem"><h2>Ballard Locks questions answered</h2>' + questions + '</section>';
     if (!html.includes('</main>')) throw new Error('Ballard CTR: main landmark missing');
-    html = html.replace('</main>', faqHtml + '</main>');
+    if (!html.includes('data-ballard-ctr-v1="faq"')) html = html.replace('</main>', faqHtml + '</main>');
   }
   if (route === '/ballard-locks/salmon-counts/') {
     const original = 'const best=[...fresh].sort((a,b)=>b.latest.daily-a.latest.daily)[0];';
-    if (!html.includes(original)) throw new Error('Ballard CTR: salmon count presentation contract moved');
+    if (!html.includes(original) && !html.includes('in latest published daily count')) throw new Error('Ballard CTR: salmon count presentation contract moved');
     html = html.replace(original, "const best=[...fresh].sort((a,b)=>b.latest.daily-a.latest.daily)[0]||[...f.species].filter(s=>s.latest?.date).sort((a,b)=>String(b.latest.date).localeCompare(String(a.latest.date)))[0];");
     const oldLead = '${best.species} is the strongest current published signal';
-    if (!html.includes(oldLead)) throw new Error('Ballard CTR: salmon count headline contract moved');
+    if (!html.includes(oldLead) && !html.includes('in latest published daily count')) throw new Error('Ballard CTR: salmon count headline contract moved');
     html = html.replace(oldLead, '${nf.format(best.latest.daily)} ${best.species} in latest published daily count');
   }
   if (route === '/ballard-locks/tour/') {
     const links = '<nav class="wrap" data-ballard-ctr-v1="sibling-links" aria-label="Related Ballard Locks resources" style="padding:1rem 0 2rem"><a href="/ballard-locks/">Ballard Locks today and access</a> · <a href="/ballard-locks/salmon-counts/">Latest fish and salmon counts</a></nav>';
-    html = html.replace('</main>', links + '</main>');
+    if (!html.includes('data-ballard-ctr-v1="sibling-links"')) html = html.replace('</main>', links + '</main>');
   }
   return html;
 }
