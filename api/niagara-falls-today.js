@@ -30,6 +30,29 @@ module.exports=async function handler(req,res){
    result.confidence='LIMITED';
    result.unknowns.push('Official regional weather alerts unavailable.');
   }
+  // The boat is an explicit visitor goal. If arrival is too late, suggest a
+  // confirmed published operating window on a later date, never invent a
+  // same-day boat slot or substitute scenic stops without disclosure.
+  const boat=result.boat_resolution;
+  if(boat?.status==='UNAVAILABLE'&&result.status!=='WEATHER_SAFETY_HOLD'&&!['PRICE_NOT_VERIFIED','OVER_BUDGET','ACCESS_ROUTE_UNVERIFIED','BOAT_NOT_ENOUGH_TIME'].includes(boat.reason_code)){
+   for(let offset=1;offset<=2&&!boat.next_option;offset++){
+    const date=new Date(input.date+'T12:00:00Z');
+    date.setUTCDate(date.getUTCDate()+offset);
+    const dateString=date.toISOString().slice(0,10);
+    const nextHours=input.side==='CA'?await getCanadianHours(dateString):null;
+    // Three sensible next-morning starts, all tested with the full feasibility
+    // engine, so this is a planning opportunity rather than ticket inventory.
+    for(const arrival_local of ['09:00','09:30','10:00','11:00']){
+     const proposed=plan({...body,visit_date:dateString,arrival_local},new Date(),nextHours);
+     if(proposed.boat_resolution?.included){
+      boat.next_option={visit_date:dateString,arrival_local,boat_name:proposed.boat_resolution.boat_name,
+       scheduled_close:proposed.boat_resolution.published_hours?.close||null,
+       source_url:proposed.boat_resolution.operator_url,verification:'PUBLISHED_HOURS_NOT_TICKET_AVAILABILITY'};
+      break;
+     }
+    }
+   }
+  }
   res.statusCode=200;res.end(JSON.stringify(result));
  }catch(error){res.statusCode=400;res.end(JSON.stringify({error:error.message||'Could not make itinerary.'}));}
 };
