@@ -271,6 +271,11 @@
     const visitor=$('lockDetailVisitor');
     visitor.hidden=!lock?.url;
     if(lock?.url)visitor.href=lock.url;else visitor.removeAttribute('href');
+    const archive=$('lockDetailArchive');
+    const archiveUrl=['4','5'].includes(lock?.id)?'https://nfpl.historicniagara.ca/s/All/item/99282':lock?.id==='6'?'https://nfpl.historicniagara.ca/s/All/item/99277':null;
+    archive.hidden=!archiveUrl;
+    if(archiveUrl){archive.href=archiveUrl;archive.textContent=lock.id==='6'?'Historic Lock 6 construction photograph ↗':'Historic Locks 4–5 construction photograph ↗';}
+    else archive.removeAttribute('href');
     const watchCam=$('lockDetailWatchCam');
     watchCam.hidden=lock?.id!=='8';
     const next=lock?(Number(lock.id)%8)+1:1;
