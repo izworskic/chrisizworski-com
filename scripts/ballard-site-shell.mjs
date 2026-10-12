@@ -9,6 +9,49 @@ const publishingTypes = new Set(['WebPage', 'WebSite', 'WebApplication']);
 const keyFor = node => node['@id'] || `${node['@type']}:${node.name || ''}`;
 const escape = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
+
+const ctrTargets = new Set(['/ballard-locks/', '/ballard-locks/salmon-counts/']);
+function applyBallardCtr(html, route, page) {
+  if (ctrTargets.has(route)) {
+    const social = [
+      ['property', 'og:title', page.title],
+      ['property', 'og:description', page.description],
+      ['property', 'og:type', 'website'],
+      ['property', 'og:url', 'https://chrisizworski.com' + route],
+      ['name', 'twitter:card', 'summary'],
+      ['name', 'twitter:title', page.title],
+      ['name', 'twitter:description', page.description],
+    ];
+    for (const [attr, key, value] of social) {
+      const tag = '<meta ' + attr + '="' + key + '" content="' + escape(value) + '">';
+      const existing = new RegExp('<meta\\b(?=[^>]*\\b' + attr + '=["\\x27]' + key + '["\\x27])[^>]*>', 'i');
+      html = existing.test(html) ? html.replace(existing, tag) : html.replace('</head>', tag + '\n</head>');
+    }
+    const faq = page.graph.find(node => node['@type'] === 'FAQPage');
+    if (!faq || !Array.isArray(faq.mainEntity)) throw new Error('Ballard CTR: FAQ missing for ' + route);
+    const questions = faq.mainEntity.map(item =>
+      '<div style="margin-top:1rem"><h3 style="font-size:1.12rem;margin:0 0 .35rem">' + escape(item.name) +
+      '</h3><p style="margin:0;color:#526b70">' + escape(item.acceptedAnswer.text) + '</p></div>'
+    ).join('');
+    const faqHtml = '<section class="section wrap" data-ballard-ctr-v1="faq" aria-label="Ballard Locks frequently asked questions" style="padding:1rem 0 2rem"><h2>Ballard Locks questions answered</h2>' + questions + '</section>';
+    if (!html.includes('</main>')) throw new Error('Ballard CTR: main landmark missing');
+    html = html.replace('</main>', faqHtml + '</main>');
+  }
+  if (route === '/ballard-locks/salmon-counts/') {
+    const original = 'const best=[...fresh].sort((a,b)=>b.latest.daily-a.latest.daily)[0];';
+    if (!html.includes(original)) throw new Error('Ballard CTR: salmon count presentation contract moved');
+    html = html.replace(original, "const best=[...fresh].sort((a,b)=>b.latest.daily-a.latest.daily)[0]||[...f.species].filter(s=>s.latest?.date).sort((a,b)=>String(b.latest.date).localeCompare(String(a.latest.date)))[0];");
+    const oldLead = '${best.species} is the strongest current published signal';
+    if (!html.includes(oldLead)) throw new Error('Ballard CTR: salmon count headline contract moved');
+    html = html.replace(oldLead, '${nf.format(best.latest.daily)} ${best.species} in latest published daily count');
+  }
+  if (route === '/ballard-locks/tour/') {
+    const links = '<nav class="wrap" data-ballard-ctr-v1="sibling-links" aria-label="Related Ballard Locks resources" style="padding:1rem 0 2rem"><a href="/ballard-locks/">Ballard Locks today and access</a> · <a href="/ballard-locks/salmon-counts/">Latest fish and salmon counts</a></nav>';
+    html = html.replace('</main>', links + '</main>');
+  }
+  return html;
+}
+
 export function applyBallardSiteShell(source, route) {
   const page = shell.pages[route];
   if (!page) throw new Error(`Ballard shell: unregistered route ${route}`);
@@ -36,5 +79,6 @@ export function applyBallardSiteShell(source, route) {
   html = html.replace(/<\/head>/i, `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': [...nodes.values()] }).replace(/</g, '\\u003c')}</script>\n</head>`);
   // Reuse an existing quiet footer credit before adding one to child pages.
   html = html.replace(/Built by <a href="https:\/\/chrisizworski\.com\/">Chris Izworski<\/a>/g, 'Built by <a href="https://chrisizworski.com/chris-izworski/" rel="author">Chris Izworski</a>');
+  html = applyBallardCtr(html, route, page);
   return addCreatorAttribution(html);
 }
