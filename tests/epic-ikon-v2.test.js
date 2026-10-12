@@ -118,11 +118,11 @@ test('V2 uses the existing canonical, identity and one deliberate JEV request, w
  assert.match(html,/MEDIA\[resort\.value\]/);
  assert.match(html,/CC BY-SA 4\.0/);
  assert.match(html,/Historical file photo, not current conditions/);
- assert.match(html,/creativecommons.org\\/licenses\\/by\\/2\\.0/);
- assert.match(html,/creativecommons.org\\/licenses\\/by-sa\\/4\\.0/);
+ assert.ok(html.includes('creativecommons.org/licenses/by/2.0/'));
+ assert.ok(html.includes('creativecommons.org/licenses/by-sa/4.0/'));
  assert.match(html,/license.href=m.licenseUrl/);
- assert.match(html,/u.searchParams.set\\("intent",a.intent\\)/);
- assert.match(html,/q.get\\("intent"\\)/);
+ assert.ok(html.includes('u.searchParams.set("intent",a.intent)'));
+ assert.ok(html.includes('q.get("intent")'));
  assert.doesNotMatch(html,/Your choices stay on this page/);
  assert.match(html,/Vail_Ski_Resort_I_/);
  assert.match(html,/Joe Lin/);
