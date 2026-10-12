@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-12",
+  "updated": "2026-10-12T20:20:13.322Z",
+  "briefings": {
+    "new-england": "Within traditional window timing. Snow showers expected with 77% rain chance this weekend.",
+    "great-smoky-mountains": "Within traditional window timing with sunny conditions and 11% rain chance this weekend.",
+    "colorado-aspens": "Past traditional window at timing index 75. Sunny conditions expected this weekend.",
+    "adirondacks": "Within traditional window timing. Snow showers likely with 88% rain chance this weekend.",
+    "north-shore-superior": "Past traditional window at timing index 95. Live weather data unavailable for this region.",
+    "ozarks": "Approaching traditional window at timing index 65. Sunny conditions with minimal rain expected this weekend.",
+    "eastern-sierra": "Within traditional window timing. Sunny conditions with zero rain chance this weekend.",
+    "wasatch": "Within traditional window timing. Sunny conditions with minimal rain expected this weekend.",
+    "columbia-river-gorge": "Within traditional window timing. Partly sunny with 13% rain chance this weekend.",
+    "door-county": "Within traditional window timing. Sunny conditions with minimal rain expected this weekend.",
+    "poconos": "Within traditional window timing. Mostly sunny with 7% rain chance this weekend.",
+    "texas-hill-country": "Approaching traditional window at timing index 5. Mostly sunny conditions expected this weekend.",
+    "west-virginia-highlands": "Within traditional window timing. Chance of snow showers then partly sunny this weekend.",
+    "catskills": "Within traditional window timing. Chance of snow showers then partly sunny this weekend.",
+    "shenandoah": "Within traditional window timing. Mostly sunny with 7% rain chance this weekend."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
