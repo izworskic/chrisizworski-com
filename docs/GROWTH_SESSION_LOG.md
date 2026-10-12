@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## North Shore three independent spot-decision engines — October 12, 2026
+
+- **Approved goal:** Three independent place/itinerary engines, never a generic North Shore weather/driving verdict. Isle Royale ferry has its own owning repo, separate from the Split Rock River trail access and lighthouse ticket/parking engines.
+- **Changes:** `isle-royale-ferry` (repo `izworskic/isle-royale-outdoors`, PR #20) with archival schedule/fee/permit handling and unreleased-future hard gate; `split-rock-river-loop` and `split-rock-lighthouse-visit` (main repo PR #922) with respective bridge-status and admission/event rules. Separate rules, tests and per-component value/loss governance: `docs/NORTH_SHORE_DECISION_ENGINE_VALUE_GATES.md` and owner `docs/GRAND_PORTAGE_FERRY_VALUE_GATES.md`.
+- **Source truth:** 2026 GPIR timetable does not establish 2027 departures or seat availability; SHTA east and west loop sections are reopened but the former bridge is absent; MNHS 2026 regular admission is different from state park vehicle access and Fitzgerald memorial tickets.
+- **SEO/identity/discovery:** Three distinct canonical intents, registry relationships, catalog cards, sitemap, and `/isle-royale-ferry/` rewrite to the owning project's existing Vercel host; stable shared Person ID `https://chrisizworski.com/#person` with homepage as Person `url`; discreet visible author identity and anonymous GA4 planner events. Cross-tool links must not dilute separate keyword intents.
+- **CI and deploy:** Initial PR heads passed unit/structural gates; a Person schema URL inconsistency surfaced in `benchmark:entity` and was corrected, after which Agent branch verification PASSED on SHA `6131be432d27f0304aa2de1fcc8a8b78fe3c2797`, and the Isle Royale owner verification passed SHA `a72b4d8c4a878137d65c7736aab191b7759d3412`. Subsequent catalog/routing changes require the FULL gate to rerun. Owner's Vercel preview reached READY; main-site preview pending re-evaluation. No production deploy or uplift asserted.
+- **GSC/AdSense:** No new measured impressions/clicks/CTR or ad revenue yet; research feasibility and structural gates are not conversion or search evidence.
+- **Exactly one next action:** Finish successful full-gate + preview URL/asset verification for both PRs, then release only verified routes and begin a 7/28-day GSC baseline.
+
+
 ## Niagara Falls Today V3 guided experience release — October 12, 2026
 
 - **Problem repaired:** V2 external Commons thumbnail hero failed and overpopulated gallery repeated the same waterfall imagery. V3 removes 4 static image cards, 8 repeated photo cards and 2 detached film cards; retains one licensed first-party photograph plus operator-sourced route-specific guided text for the eight actual planner stop IDs.

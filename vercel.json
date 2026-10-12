@@ -456,6 +456,18 @@
   ],
   "rewrites": [
     {
+      "source": "/isle-royale-ferry",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
+    },
+    {
+      "source": "/isle-royale-ferry/",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
+    },
+    {
+      "source": "/assets/grand-portage-ferry.js",
+      "destination": "https://isle-royale-outdoors.vercel.app/assets/grand-portage-ferry.js"
+    },
+    {
       "source": "/flight-tracker/share/:token",
       "destination": "/flight-tracker/share/index.html?token=:token"
     },
