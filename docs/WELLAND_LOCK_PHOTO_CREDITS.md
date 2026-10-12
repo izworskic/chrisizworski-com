@@ -19,7 +19,9 @@ Live or seasonal photos are **illustrative, not live cameras**. If Wikimedia fai
 | 7 | Specific Lock 7, Thorold | Gogerr | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Welland Canal Lock 7.jpg](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg) |
 | 8 | Lock 8 Gateway Park, Port Colborne; photo **of the visitor park**, not claimed as a chamber view | Mhsheikholeslami | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Lock 8 Gateway Park-Port Colborne-Ontario-20220317.jpg](https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg) |
 
-These are image references via Wikimedia's public thumbnail servers, rather than copies owned or hosted by the site. Subject-specific images can replace regional references as **separately verified and properly licensed** photography becomes available.
+**Production delivery fix (October 11, 2026):** Browser hotlinks to Wikimedia were not displaying on the live page. To make the cards reliable, the repo now stores reproducibly imported copies of these *same* licensed image files under `public/assets/welland/photos/`. The importer is `scripts/fetch-welland-photos.cjs`. It accepts only authentic JPEG bytes from exact, allowlisted Commons filenames, tries thumbnail and original URLs, and fails rather than quietly publishing an image-free update. The source/photographer/licence links remain visible in every detailed card. Images are cropped to fit the UI; that's disclosed with each credit.
+
+The original Wikimedia URL is a browser fallback only. Files are not owned by the site. New per-lock photography must be separately verified and licensed. **Adobe Stock preview images are not included**; incorporating purchased Adobe assets requires a license and delivery of the authorized originals.
 
 ## Editorial reference set
 

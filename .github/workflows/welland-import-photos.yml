@@ -1,0 +1,63 @@
+name: Import licensed Welland lock photographs
+
+on:
+  push:
+    branches:
+      - fix/welland-local-photo-assets-20261011
+    paths:
+      - .github/workflows/welland-import-photos.yml
+      - scripts/fetch-welland-photos.cjs
+      - scripts/optimize-welland-photos.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: welland-import-photos-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  import-photos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Download the five licensed JPEG assets
+        run: node scripts/fetch-welland-photos.cjs
+      - name: Use Python for photographic optimization
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resize and compress the photos
+        run: |
+          python -m pip install --quiet Pillow
+          python scripts/optimize-welland-photos.py
+      - name: Verify five real JPEGs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for id in north1 north2 north3 thorold south8; do
+            f="public/assets/welland/photos/${id}.jpg"
+            test -s "${f}" || { echo "Missing image: ${f}"; exit 1; }
+            file "${f}" | grep -q 'JPEG image data' || { echo "Not a JPEG: ${f}"; exit 1; }
+            ls -lh "${f}"
+          done
+      - name: Commit assets into the feature branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF_NAME}" = "fix/welland-local-photo-assets-20261011" || { echo "Refuse to write outside review branch"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/welland/photos/
+          if git diff --cached --quiet; then echo "Photos are already committed"; exit 0; fi
+          git commit -m "Bundle licensed Welland photographs locally [skip photo-import]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

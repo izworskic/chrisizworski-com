@@ -174,7 +174,9 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/\$\('mapLockPreviewImage'\)/);
   assert.match(js,/img\.onerror=/);
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
-  assert.match(html,/welland-canal\.js\?v=20261011-ux1/);
+  assert.match(js,/img\.dataset\.photoToken/);
+  assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
+  assert.match(html,/welland-canal\.js\?v=20261011-photos1/);
   assert.match(html,/welland-canal\.css\?v=20261011-ux1/);
 });
 
@@ -182,7 +184,8 @@ test('Every reused image has explicit Wikimedia source, author and licence links
   const fs=require('node:fs'),path=require('node:path');
   const script=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
   const photos=script.slice(script.indexOf('  const LOCK_PHOTOS = {'),script.indexOf('  const LOCK_STORIES = {'));
-  assert.equal((photos.match(/src:'https:\/\/upload\.wikimedia\.org\//g)||[]).length,5);
+  assert.equal((photos.match(/src:'\/assets\/welland\/photos\/[a-z0-9]+\.jpg'/g)||[]).length,5);
+  assert.equal((photos.match(/remote:'https:\/\/upload\.wikimedia\.org\//g)||[]).length,5);
   assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,5);
   assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
   assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,5);
@@ -225,4 +228,20 @@ test('All eight locks are directly accessible beside the map; one tap explains t
   assert.match(css,/\.lock-quick-select \.lock-pill\{[^\n]*min-height:49px/);
   assert.match(css,/@media\(max-width:690px\)\{/);
   assert.match(html,/Grouped numbers\? Tap to zoom, or choose any lock above/);
+});
+
+test('Lock photographs are imported as local first-party static assets, with licensed fallback',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+ const importer=fs.readFileSync(path.join(__dirname,'../scripts/fetch-welland-photos.cjs'),'utf8');
+ const expected=['north1','north2','north3','thorold','south8'];
+ for(const name of expected){
+   assert.match(js,new RegExp("src:'/assets/welland/photos/"+name+"\\.jpg'"));
+   assert.match(importer,new RegExp(name+":'"));
+ }
+ assert.match(js,/fallback\.textContent='Photograph unavailable/);
+ assert.match(importer,/Not a valid JPEG or unsafe size/);
+ assert.match(importer,/Do not silently publish image-free cards/);
+ assert.match(importer,/Special:Redirect\/file/);
+ assert.match(js,/img\.getAttribute\('src'\)!==photo\.src/);
 });
