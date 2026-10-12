@@ -1,0 +1,22 @@
+name: Research Welland exact lock photo rights
+on:
+  push:
+    branches: [research/welland-exact-lock-photos-20261012]
+    paths: [.github/workflows/welland-photo-source-audit.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Research Commons exact lock photographs and media rights
+        run: node scripts/research-welland-photo-sources.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: welland-source-audit
+          path: artifacts/welland-exact-photo-source-audit.json
+          retention-days: 7
