@@ -40,8 +40,9 @@ for (const slug of paths) {
     });
     assert.ok(matched.length >= 3, "FAQ questions must appear visibly on the page");
     const siteMap = read("public/sitemap.xml");
-    assert.ok(siteMap.includes(`<loc>https://chrisizworski.com/${slug}/</loc>\n    <lastmod>2026-10-11</lastmod>`),
+    const editorialLastmod = slug === "northern-lights-michigan" ? "2026-10-12" : "2026-10-11";
+    assert.ok(siteMap.includes(`<loc>https://chrisizworski.com/${slug}/</loc>\n    <lastmod>${editorialLastmod}</lastmod>`),
       "sitemap URL and date");
-    assert.ok(graph.some(item => item.dateModified === "2026-10-11"), "schema dateModified");
+    assert.ok(graph.some(item => item.dateModified === editorialLastmod), "schema dateModified");
   });
 }
