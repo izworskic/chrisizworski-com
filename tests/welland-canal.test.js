@@ -177,7 +177,7 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
   assert.match(html,/welland-canal\.js\?v=20261011-photos1/);
-  assert.match(html,/welland-canal\.css\?v=20261011-ux1/);
+  assert.match(html,/welland-canal\.css\?v=20261011-hero1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -244,4 +244,30 @@ test('Lock photographs are imported as local first-party static assets, with lic
  assert.match(importer,/Do not silently publish image-free cards/);
  assert.match(importer,/Special:Redirect\/file/);
  assert.match(js,/img\.getAttribute\('src'\)!==photo\.src/);
+});
+
+test('Welland hero actually shows a real licensed canal freighter photo and preserves accessibility',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+ const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+ const importer=fs.readFileSync(path.join(__dirname,'../scripts/fetch-welland-hero.cjs'),'utf8');
+ const optimizer=fs.readFileSync(path.join(__dirname,'../scripts/optimize-welland-hero.py'),'utf8');
+ assert.match(html,/<figure class="hero-visual">/);
+ assert.match(html,/<img src="\/assets\/welland\/photos\/hero-algoberta\.jpg"/);
+ assert.match(html,/alt="The freighter Algoberta entering Lock 3 of the Welland Canal/);
+ assert.match(html,/loading="eager" fetchpriority="high"/);
+ assert.match(html,/commons\.wikimedia\.org\/wiki\/File:Algoberta_heading_into_Welland_Canal_Lock_3\.jpeg/);
+ assert.match(html,/creativecommons\.org\/licenses\/by-sa\/4\.0/);
+ assert.match(html,/Photo:.*Dough4872/);
+ assert.match(html,/Cropped<\/figcaption>/);
+ assert.match(html,/property="og:image" content="https:\/\/chrisizworski\.com\/assets\/welland\/photos\/hero-algoberta\.jpg"/);
+ assert.match(html,/name="twitter:image" content="https:\/\/chrisizworski\.com\/assets\/welland\/photos\/hero-algoberta\.jpg"/);
+ assert.match(html,/rel="preload" as="image" href="\/assets\/welland\/photos\/hero-algoberta\.jpg"/);
+ assert.match(css,/\.hero-visual img\{[^}]*object-fit:cover/);
+ assert.match(css,/@media\(max-width:760px\)\{[^}]*\.hero::before/);
+ assert.match(css,/\.hero-visual figcaption a\{/);
+ assert.match(importer,/Algoberta_heading_into_Welland_Canal_Lock_3\.jpeg/);
+ assert.match(importer,/Not JPEG or unsafe bytes/);
+ assert.match(optimizer,/ImageOps\.fit\(image,\(1600,900\)/);
+ assert.doesNotMatch(html,/og:image" content="https:\/\/chrisizworski\.com\/assets\/soo-locks\/freighter\.jpg"/);
 });
