@@ -129,3 +129,63 @@
   .lock-detail__photo-mark{font-size:8px}
   .lock-detail__photo-caption{padding:9px 12px}
 }
+
+/* Welland UX value v1: choice proximity, one-tap clarity and orientation.
+   The numbered selector is at the map, not buried after live vessel results. */
+.lock-quick-select{background:#fff;padding:11px 15px 13px;border-bottom:1px solid #dce7e7}
+.lock-quick-select__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 9px;color:#667f87;font-size:11px}
+.lock-quick-select__head strong{font-size:10px;font-weight:850;letter-spacing:.12em;color:#526b74}
+.lock-quick-select__head span{font-size:11px;color:#718790}
+.lock-quick-select .lock-rail{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.lock-quick-select .lock-pill{display:flex;align-items:center;justify-content:flex-start;gap:7px;min-height:49px;margin:0;padding:7px 10px;border:1px solid #d5e1e1;border-radius:7px;background:#f9fbfb;color:#244959;text-align:left;min-width:0}
+.lock-quick-select .lock-pill:hover{border-color:#a4bbc1;background:#eff6f6}
+.lock-quick-select .lock-pill__number{flex:0 0 28px;width:28px;height:28px;border:1.5px solid #c6a066;border-radius:50%;color:#fff;background:#194659;font:800 13px/1 system-ui,sans-serif}
+.lock-quick-select .lock-pill__copy{display:flex;flex-direction:column;justify-content:center;min-width:0;gap:2px}
+.lock-quick-select .lock-pill__copy strong{font-size:12px;color:#193e50;white-space:nowrap}
+.lock-quick-select .lock-pill__copy>span{display:block;font-size:10px;line-height:1.25;color:#6d828a;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.lock-quick-select .lock-pill[aria-pressed="true"]{background:#f7f0e4;border-color:#bc9763}
+.lock-quick-select .lock-pill[aria-pressed="true"] .lock-pill__number{background:#dab16b;border-color:#dab16b;color:#193e50}
+.lock-quick-select .lock-pill[aria-pressed="true"] .lock-pill__copy strong{color:#15394b}
+.lock-detail__quick{margin:0;padding:0 21px 14px;font-size:15px;line-height:1.5;font-weight:750;color:#163d50}
+.map-lock-preview p#mapLockPreviewText{display:block;-webkit-line-clamp:unset;overflow:visible;margin:7px 0 7px;font-size:13px;line-height:1.42;font-weight:600;color:#254b5b}
+.map-lock-preview p#mapLockPreviewCaption{clear:both;margin:7px 0 10px;font-size:10px;line-height:1.35;font-weight:450;color:#6a7b82}
+.map-lock-preview__open{display:block;min-height:39px;padding:8px 0;margin-top:2px;text-align:left;line-height:1.4}
+.lock-section__return{display:inline-block;padding:8px 0;color:#fee0a2;font-size:13px;font-weight:800}
+@media(max-width:690px){
+  .lock-quick-select{padding:11px 0 12px}
+  .lock-quick-select__head{margin:0 14px 9px}
+  .lock-quick-select .lock-rail{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:0 14px 6px}
+  .lock-quick-select .lock-pill{scroll-snap-align:start;flex:0 0 115px;min-width:115px}
+  .lock-quick-select .lock-pill__copy>span{display:block}
+  .lock-detail__quick{font-size:14px}
+  .map-lock-preview__photo{width:75px;height:65px}
+  .map-lock-preview{max-height:78%;overflow-y:auto}
+}
+@media(min-width:691px) and (max-width:900px){
+  .lock-quick-select .lock-rail{grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}
+  .lock-quick-select .lock-pill{padding:7px 4px;gap:4px;flex-direction:column;justify-content:center;min-height:66px}
+  .lock-quick-select .lock-pill__copy{text-align:center}
+  .lock-quick-select .lock-pill__copy>span{display:block;font-size:9px}
+}
+
+/* Instant answer lives beside the choices, never below a full-height map. */
+.lock-instant-answer[hidden]{display:none!important}
+.lock-instant-answer{display:grid;grid-template-columns:85px minmax(0,1fr) auto;gap:12px;align-items:center;margin:12px 0 0;padding:10px 12px;border:1px solid #d9e4e2;border-left:3px solid #c6a166;border-radius:7px;background:#f4f8f7;color:#1b4050}
+.lock-instant-answer__image{width:85px;height:69px;overflow:hidden;border-radius:5px;background:#164559}
+.lock-instant-answer__image img{display:block;width:100%;height:100%;object-fit:cover}
+.lock-instant-answer__image img[hidden],.lock-instant-answer__image-fallback[hidden]{display:none!important}
+.lock-instant-answer__image-fallback{width:100%;height:100%;background:linear-gradient(130deg,#113d52,#6b9a9b)}
+.lock-instant-answer__copy{min-width:0}
+.lock-instant-answer__copy strong{display:block;font:750 16px/1.25 Georgia,serif;color:#183d4f}
+.lock-instant-answer__copy p{margin:4px 0;color:#31545f;font-size:12px;line-height:1.43}
+.lock-instant-answer__caption{display:block;font-size:10px;color:#637a83;line-height:1.35}
+.lock-instant-answer__more{padding:9px 11px;min-height:44px;border:1px solid #afc5c9;border-radius:5px;background:white;color:#1a5c73;white-space:nowrap;font-size:12px;font-weight:850}
+.lock-instant-answer__more:hover{background:#e7f1f3}
+@media(max-width:690px){
+  .lock-instant-answer{margin:7px 14px 1px;grid-template-columns:64px minmax(0,1fr);gap:9px;padding:9px}
+  .lock-instant-answer__image{width:64px;height:60px}
+  .lock-instant-answer__copy strong{font-size:14px}
+  .lock-instant-answer__copy p{font-size:12px}
+  .lock-instant-answer__caption{font-size:9px}
+  .lock-instant-answer__more{grid-column:2;justify-self:start;min-height:38px;padding:7px 11px}
+}

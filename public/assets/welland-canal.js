@@ -63,6 +63,18 @@
     '7':{photo:'thorold',segment:'THOROLD · ESCARPMENT SUMMIT',explainer:'Lock 7 is the last lift for upbound ships as they reach the high canal level. Thorold’s Lock 7 Viewing Centre sits above the Niagara Escarpment and provides a perspective on ships moving through Locks 4, 5, 6 and 7. It is a strong place to appreciate the whole engineered climb.',tip:'The City of Thorold publishes seasonal Viewing Centre details; confirm hours before visiting.'},
     '8':{photo:'south8',segment:'PORT COLBORNE · LAKE ERIE',explainer:'Lock 8 has a different job from the seven lift locks to its north. At Port Colborne, it helps regulate the connection with Lake Erie, making a comparatively small water-level adjustment depending on conditions. Gateway Park provides a public viewing area near this remarkable, long control lock.',tip:'Gateway Park includes a viewing platform. Check local visitor information for facilities and current access.'}
   };
+  // One-tap explanation contract: a lock always answers WHAT and WHERE
+  // without making the user open another panel or guess at map clusters.
+  const LOCK_QUICK = {
+    '1':{cue:'Lake Ontario',answer:'The first lift. Ships leaving Lake Ontario begin climbing toward Lake Erie here.'},
+    '2':{cue:'Second lift',answer:'Another step upward. This chamber raises or lowers a ship before it enters the next canal reach.'},
+    '3':{cue:'Museum view',answer:'The best documented first viewing stop: watch large ships rise or descend beside the canal museum.'},
+    '4':{cue:'Flight begins',answer:'The first of three connected Thorold flight locks that carry ships up the Niagara Escarpment.'},
+    '5':{cue:'Middle flight',answer:'The middle chamber of the Thorold flight. Ships climb the escarpment one lock at a time.'},
+    '6':{cue:'Flight ends',answer:'The third and final chamber of the Thorold flight, completing most of the steep climb.'},
+    '7':{cue:'Thorold views',answer:'The last major lift on the climb. A public viewing centre overlooks Locks 4 through 7.'},
+    '8':{cue:'Lake Erie',answer:'The regulating lock near Lake Erie. It adjusts for water-level differences rather than the big climb.'}
+  };
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
   let map=null, shipsLayer=null, vesselData=[], selected='all', busy=false;
@@ -97,7 +109,8 @@
   }
   function currentVessels() {
     const term=$('shipSearch').value.trim().toLowerCase();
-    const near=selected==='all'?v=>true:v=>nearest(v).lock.id===selected&&nearest(v).km<=1.5;
+    const lock=LOCKS.find(l=>l.id===selected);
+    const near=lock?v=>distanceKm(v,lock)<=1.5:v=>true;
     return vesselData.filter(v=>near(v)&&(!term||(v.name||v.mmsi).toLowerCase().includes(term)))
       .sort((a,b)=>nearest(a).km-nearest(b).km);
   }
@@ -129,10 +142,11 @@
       const b=el('button',undefined,'lock-pill');b.type='button';b.dataset.lock=l.id;
       const number=el('span',l.id,'lock-pill__number');
       const copy=el('span',undefined,'lock-pill__copy');
-      copy.append(el('strong',l.name),el('span',l.place));
+      copy.append(el('strong',l.name),el('span',LOCK_QUICK[l.id].cue));
       b.append(number,copy);
       b.setAttribute('aria-pressed',String(selected===l.id));
-      b.addEventListener('click',()=>chooseLock(l.id));
+      b.setAttribute('aria-label','Explore '+l.name+': '+LOCK_QUICK[l.id].cue);
+      b.addEventListener('click',()=>chooseLock(l.id,true,false));
       rail.append(b);
     });
   }
@@ -148,23 +162,37 @@
     }
     $('mapLockPreviewNumber').textContent='LOCK '+lock.id;
     $('mapLockPreviewTitle').textContent=lock.name+' · '+lock.place;
-    $('mapLockPreviewText').textContent=LOCK_STORIES[lock.id].explainer;
+    $('mapLockPreviewText').textContent=LOCK_QUICK[lock.id].answer;
     const photo=LOCK_PHOTOS[LOCK_STORIES[lock.id].photo];
     setLockPhoto($('mapLockPreviewImage'),$('mapLockPreviewImageFallback'),photo);
+    $('mapLockPreviewCaption').textContent=photo.caption;
     $('mapLockPreview').hidden=false;
+  }
+  function renderInstantAnswer(lock){
+    const box=$('lockInstantAnswer');
+    box.hidden=!lock;
+    if(!lock)return;
+    const photo=LOCK_PHOTOS[LOCK_STORIES[lock.id].photo];
+    $('lockInstantTitle').textContent=lock.name+' · '+LOCK_QUICK[lock.id].cue;
+    $('lockInstantText').textContent=LOCK_QUICK[lock.id].answer;
+    $('lockInstantPhotoCaption').textContent=photo.caption;
+    setLockPhoto($('lockInstantImage'),$('lockInstantImageFallback'),photo);
   }
   function chooseLock(id,recenter=true,fromMap=false){
     selected=id;select.value=id;
     for(const b of $('lockRail').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
     const lock=LOCKS.find(l=>l.id===id);
     if(map&&recenter&&lock){
-      const zoom=['4','5','6'].includes(id)?15:13;
+      // Preserve context: choose the lowest useful zoom rather than always
+      // jumping to 15 and hiding the surrounding canal.
+      const zoom=['4','5','6'].includes(id)?14:12;
       const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(reduced)map.setView([lock.lat,lock.lon],zoom);
       else map.flyTo([lock.lat,lock.lon],zoom,{duration:0.7});
     }else if(map&&recenter&&!lock){
       map.fitBounds([[42.87,-79.30],[43.26,-79.16]],{padding:[26,26]});
     }
+    renderInstantAnswer(lock);
     renderLockDetail();
     if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
     lockMarkers.forEach((marker,key)=>marker.setIcon(lockIcon(LOCKS.find(l=>l.id===key),selected===key)));
@@ -172,7 +200,7 @@
       const wide=map&&map.getZoom()<12;
       flightMarker.setIcon(flightIcon(wide?['3','4','5','6','7'].includes(selected):['4','5','6'].includes(selected),wide));
     }
-    $('lockMapHint').textContent=lock?'Exploring '+lock.name+' · approximate location':'Select a numbered lock to see its guide';
+    $('lockMapHint').textContent=lock?'Selected '+lock.name+' · '+LOCK_QUICK[lock.id].cue:'Tap a numbered lock once to understand it';
     const focus=$('lockFocus');
     focus.replaceChildren();
     if(lock)focus.append(el('strong',lock.name+' — '+lock.place),el('p',lock.note));
@@ -212,6 +240,7 @@
     $('lockDetailTitle').textContent=lock?lock.name:'Eight locks. One waterway.';
     $('lockDetailPlace').textContent=lock?lock.place:'Lake Ontario → Lake Erie';
     $('lockDetailSegment').textContent=story?story.segment:'LAKE ONTARIO → LAKE ERIE';
+    $('lockDetailQuick').textContent=lock?LOCK_QUICK[lock.id].answer:'The eight locks move freighters between Lake Ontario and Lake Erie. Tap any number above the map to see what that lock does, where it sits, and what its photograph shows.';
     $('lockDetailDescription').textContent=story?story.explainer:'The Welland Canal uses eight locks to connect Lake Ontario and Lake Erie. Select a lock to discover what happens at each stop, see a sourced photograph, and find practical viewing guidance.';
     $('lockDetailTip').textContent=story?story.tip:'Start at Lock 3 for the museum viewing platform or explore the Thorold flight around Locks 4–7.';
     $('lockDetail').classList.toggle('has-selection',Boolean(lock));
@@ -221,7 +250,7 @@
     const next=lock?(Number(lock.id)%8)+1:1;
     $('lockDetailNext').textContent=lock?'Next · Lock '+next+' →':'Explore Lock 1 →';
     $('lockDetailNext').dataset.next=String(next);
-    const count=lock?vesselData.filter(v=>nearest(v).lock.id===lock.id&&nearest(v).km<=1.5).length:vesselData.length;
+    const count=lock?vesselData.filter(v=>distanceKm(v,lock)<=1.5).length:vesselData.length;
     if(aisState==='loading'){
       $('lockDetailAIS').textContent='Checking vessel reports…';
       $('lockDetailAISNote').textContent='Reports refresh from the AIS provider.';
@@ -257,19 +286,19 @@
       const marker=L.marker([lock.lat,lock.lon],{icon:lockIcon(lock,selected===lock.id),keyboard:true,zIndexOffset:750})
         .addTo(lockLayer);
       marker.getElement()?.setAttribute('aria-label',lock.name+', '+lock.place+'. Show lock details');
-      marker.on('click',()=>chooseLock(lock.id,true,true));
+      marker.on('click',()=>chooseLock(lock.id,false,true));
       lockMarkers.set(lock.id,marker);
     });
     if(wide){
       flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['3','4','5','6','7'].includes(selected),true),keyboard:true,zIndexOffset:780})
         .addTo(lockLayer);
       flightMarker.getElement()?.setAttribute('aria-label','Locks 3 to 7. Zoom in to explore');
-      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],12,{duration:0.65});$('lockMapHint').textContent='Zoom in and choose an individual numbered lock';});
+      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],12,{duration:0.65});$('lockMapHint').textContent='Locks 3–7 grouped. Choose any number above for its story.';});
     }else if(combine){
       flightMarker=L.marker([43.1382,-79.1920],{icon:flightIcon(['4','5','6'].includes(selected)),keyboard:true,zIndexOffset:780})
         .addTo(lockLayer);
       flightMarker.getElement()?.setAttribute('aria-label','Locks 4 to 6. Zoom in to explore');
-      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],14,{duration:0.65});$('lockMapHint').textContent='Choose Lock 4, 5, or 6 to explore';});
+      flightMarker.on('click',()=>{hideLockPreview();map.flyTo([43.1382,-79.1920],14,{duration:0.65});$('lockMapHint').textContent='Locks 4–6 grouped. Choose any number above for its story.';});
     }
   }
   function initMap() {
@@ -336,17 +365,19 @@
     }
   }
   $('shipSearch').addEventListener('input',renderList);
-  select.addEventListener('change',()=>chooseLock(select.value));
+  select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
-  $('mapLockPreviewOpen').addEventListener('click',()=>{
+  function openFullLockStory(){
     hideLockPreview();
     const card=$('lockDetail');
     card.scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
     card.focus({preventScroll:true});
-  });
+  }
+  $('mapLockPreviewOpen').addEventListener('click',openFullLockStory);
+  $('lockInstantOpen').addEventListener('click',openFullLockStory);
   renderLocks();chooseLock('all');initMap();refresh();
   window.setInterval(refresh,120000);
 })();

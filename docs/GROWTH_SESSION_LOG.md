@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Welland one-tap clarity / value-function gate — October 11, 2026
+
+- **Owner goal:** Improve **ease of use and understanding**, not just visual polish, on the established `/welland-canal/` tool.
+- **Product assessment:** Prior UX separated lock selection (below the main map/list) from lock exploration, forced repeated zooming for central locks 3–7, placed a long mobile preview at the bottom of a tall map, and used camera jumps that could remove canal context. A lock's AIS card and vessel list applied different proximity logic, creating confusing discrepancies.
+- **Implementation:** Put all eight lock choices, with plain-language purpose cues, immediately above the map. A numbered choice opens an **inline image + one-sentence answer beside the selection** without any second tap or necessary scrolling. A map-marker tap preserves orientation and retains a persistent local preview, now with one-sentence purpose and truthful photo caption. Full narrative and visitor guidance remain an optional action; desktop and phone/tablet retain Maritime Minimalist proportions. Grouped map markers remain for clutter control but are not prerequisites to reading about any lock. Nearby AIS counter/list now use the same 1.5-km radius measured against the selected lock.
+- **Measurable value function:** `V = 100×(0.30 Ease + 0.30 Understanding + 0.15 Orientation + 0.15 Trust + 0.10 Accessibility)`. Hard accuracy gates veto false lock-photo depictions, false occupancy claims and absent credits. Read `docs/WELLAND_UX_VALUE_FUNCTION.md` for persona paths, observational task-success targets and scoring caveats. Deterministic structural acceptance: `node scripts/benchmark-welland-usability.cjs` (CI test). **This is a code-level proxy, not measured user success or a GSC/revenue claim**.
+- **Boundaries:** Preserve existing imagery/licenses, eight long explainers, AIS 30-minute freshness/error rules, freighter silhouettes, Person ID, canonical, fall-color winners and existing page URLs. No speculative SEO expansion, no new paid integrations.
+- **Release gate:** Full existing repository verification and output audit must pass on PR head; then merge and independently verify Vercel's production SHA and public served page.
+- **Next action:** Observe actual first-time users accomplishing Lock 3, Lock 5 and Lock 8 comprehension tasks on phones, then revise the value function against those results.
+
+
 ## Welland lock photo stories — October 11, 2026
 
 - **Request:** Implement the premium lock visual package: real lock/regional photos, distinct 2–4-sentence explanations, useful visiting information in all eight interactive profiles; preserve Maritime Minimalist map hierarchy.
