@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Welland Canal photographic hero — October 11, 2026
+
+- **Request:** Add a strong real photograph to the otherwise solid-colour landing-page hero; protect premium maritime minimalism, map/tool usability and discoverability.
+- **Hero source:** Verified Wikimedia Commons 2024 photograph of **Algoberta entering Welland Canal Lock 3** (Dough4872, CC BY-SA 4.0). Original source, attribution and Creative Commons license are shown directly in the hero, with "cropped" modification disclosed. No Adobe Stock previews or unlicensed images.
+- **Product implementation:** Use local optimized `/assets/welland/photos/hero-algoberta.jpg`, 1600×900, imported and optimized through a guarded one-time GitHub workflow. Desktop hero displays full-height ship-and-lock photography on the right with a left-to-right dark gradient; mobile places a dedicated photo strip after the headline/CTA for clear reading and preserved visual impact. Hero image preload/fetchpriority, reserved dimensions, and static fallback colour prevent unnecessary layout shift. Keep existing map, locks, AIS freshness/accuracy, image cards and visitor links untouched.
+- **Search/social identity:** Replace irrelevant Soo Locks OG/Twitter hero with correct Welland photo. Canonical URL, exact Chris Izworski author and Person ID unchanged. Do not infer CTR or SEO gain from visual improvement alone.
+- **Verification:** `tests/welland-canal.test.js` asserts real licensed photo markup, mobile hero CSS, attribution and share cards. GitHub branch and name-SEO gates, Vercel emitted-HTML build audit and production readiness required for completed rollout.
+- **Next signal:** View desktop and phone hero, monitor image load/LCP, and test first-map-action access remains easy.
+
+
 ## Welland photo visibility bugfix — October 11, 2026
 
 - **User report:** New Welland lock UX was visually polished but none of its authored photos appeared. The page's image source list pointed entirely at off-site Wikimedia thumbnail URLs. Adobe Stock Welland imagery was offered as an alternative, but stock preview use is not permitted without a separately obtained appropriate licence.

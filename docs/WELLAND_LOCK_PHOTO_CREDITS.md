@@ -2,6 +2,19 @@
 
 Date reviewed: 2026-10-11. Page: `/welland-canal/`.
 
+## Main-page hero photograph
+
+The Welland landing-page hero uses a separate, **actual Welland Canal** photo:
+
+- Subject: *Algoberta entering Lock 3*, St. Catharines, July 25, 2024.
+- Photographer: **Dough4872**.
+- File: [Algoberta heading into Welland Canal Lock 3.jpeg](https://commons.wikimedia.org/wiki/File:Algoberta_heading_into_Welland_Canal_Lock_3.jpeg).
+- Licence: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- Site path: `/assets/welland/photos/hero-algoberta.jpg`.
+- Modification: the original image is cropped to 16:9 and resized to 1600×900 JPEG for responsive page use; the visible hero caption discloses the crop and links to the photographer, original and licence.
+- Source integrity: fetch exact Wikimedia Commons file, validate JPEG, optimize in `scripts/optimize-welland-hero.py`, and bundle it into the website; **not a live webcam**, not an Adobe Stock or other unlicensed image.
+- Placement: full-canvas right-dominant desktop photograph, with a dark gradient protecting the headline; on smaller displays, the photo becomes a dedicated strip below the copy for reliable readability. An image preload with high fetch priority improves the odds of early paint. OG/X card imagery references the same source.
+
 ## Image use rules
 
 The map displays real AIS ship silhouettes and lock position markers; the **editorial lock card** displays photos. Images load only as the user explores the page; existing map tile and AIS backends stay independent. Full-size photography is displayed at a 16:9 crop; Commons file originals remain unchanged. Both full-size card and compact mobile preview reuse the same photo. The full card links directly to the original file, photographer and licence. **Do not relabel a regional view as a specific lock.**
