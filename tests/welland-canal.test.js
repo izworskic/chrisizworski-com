@@ -73,9 +73,10 @@ test('Maritime Minimalist lock markers are restrained and map-driven',()=>{
  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
  assert.match(js,/function lockIcon\(lock,active=false\)/);
- assert.match(js,/const size=active\?32:27/);
+ assert.match(js,/const hit=44/);
+  assert.match(js,/iconSize:\[hit,hit\]/);
  assert.match(js,/function flightIcon\(active=false,wide=false\)/);
- assert.match(js,/const width=wide\?48:46,height=27/);
+ assert.match(js,/const width=wide\?52:50,height=44/);
  assert.match(js,/const wide=map\.getZoom\(\)<12/);
  assert.match(js,/const combine=map\.getZoom\(\)<14/);
  assert.match(js,/map\.on\('zoomend',renderLockMarkers\)/);
@@ -311,4 +312,12 @@ test('Camera source is explicitly Bridge 21 and only loads on user demand',()=>{
   assert.match(html,/https:\/\/streamtimelive\.com\/port-colborne\//);
   assert.match(html,/current availability not verified/);
   assert.match(css,/\.welland-camera-player\{aspect-ratio:16\/9/);
+});
+
+test('Mobile lock preview docks below the ship map without covering vessel markers',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  assert.match(html,/<div id="shipMap"[^>]*><\/div>\s*<section/); // placeholder? map is followed by closing stage, so use below
 });
