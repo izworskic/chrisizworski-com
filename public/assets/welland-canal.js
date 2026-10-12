@@ -187,10 +187,10 @@
     img.hidden=false;
     fallback.hidden=true;
     img.alt=photo.alt;
-    img.onload=()=>{fallback.hidden=true;img.hidden=false;};
-    img.onerror=()=>{img.hidden=true;fallback.hidden=false;};
+    img.onload=()=>{if(img.src===photo.src){fallback.hidden=true;img.hidden=false;}};
+    img.onerror=()=>{if(img.src===photo.src){img.hidden=true;fallback.hidden=false;}};
     if(img.src!==photo.src)img.src=photo.src;
-    else if(!img.complete||img.naturalWidth===0){img.hidden=true;fallback.hidden=false;}
+    else if(img.complete&&img.naturalWidth===0){img.hidden=true;fallback.hidden=false;}
   }
   function renderLockPhoto(lock){
     const story=lock?LOCK_STORIES[lock.id]:LOCK_STORIES['3'];
