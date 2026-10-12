@@ -88,7 +88,7 @@ function draw(r){
  var nextButton=body.querySelector('[data-boat-next-date]');
  if(nextButton)nextButton.addEventListener('click',function(){
   var date=nextButton.getAttribute('data-boat-next-date'),arrival=nextButton.getAttribute('data-boat-next-time');
-  if(!/^20\\d{2}-\\d{2}-\\d{2}$/.test(date)||!/^\\d{2}:\\d{2}$/.test(arrival))return;
+  if(!/^20[0-9]{2}-[0-9]{2}-[0-9]{2}$/.test(date)||!/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(arrival))return;
   form.elements.visit_date.value=date;form.elements.arrival_local.value=arrival;
   emit('niagara_boat_next_option');submit();
  });
