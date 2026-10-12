@@ -2,7 +2,7 @@ name: Research Welland exact lock photo rights
 on:
   push:
     branches: [research/welland-exact-lock-photos-20261012]
-    paths: [.github/workflows/welland-photo-source-audit.yml, scripts/research-welland-archive.cjs]
+    paths: [.github/workflows/welland-photo-source-audit.yml, scripts/research-welland-archive.cjs, scripts/research-welland-photo-sources.cjs]
   workflow_dispatch:
 permissions: {contents: read}
 jobs:
