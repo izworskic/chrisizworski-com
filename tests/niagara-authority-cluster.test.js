@@ -95,7 +95,7 @@ test('rainbow detailed timing page stays intentionally consolidated into the fla
 test('Northeast Great Lakes hub links both distinct Niagara intents and the author source guide', () => {
   assert.match(region, /href="\/niagara-border-crossing\/"/);
   assert.match(region, /href="\/national-tools\/niagara-rainbow\/"/);
-  assert.match(region, /numberOfItems":5/);
+  assert.match(region, /numberOfItems":6/);
   assert.match(region, /href="\/chris-izworski\/"/);
   assert.match(region, /href="\/chris-izworski-source-guide\/"/);
 });
@@ -127,8 +127,10 @@ test('Welland canal is discoverable and Niagara specialists link into one decisi
   assert.match(national, /data-tool-id="welland-canal"/);
   assert.match(national, /href="\/welland-canal\/"/);
   assert.match(region, /id="niagara-trip-desk"/);
+  assert.match(region, /href="\/niagara-falls-today\/"/);
+  assert.match(national, /data-tool-id="niagara-falls-today"/);
   assert.match(region, /href="\/welland-canal\/"/);
-  assert.match(region, /numberOfItems":5/);
+  assert.match(region, /numberOfItems":6/);
   assert.match(border, /href="\/welland-canal\/"/);
   assert.match(rainbow, /href="\/welland-canal\/"/);
   assert.match(welland, /href="\/niagara-border-crossing\/"/);

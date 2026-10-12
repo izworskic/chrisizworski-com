@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go');
-function todayEastern(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());var o={};parts.forEach(function(p){o[p.type]=p.value;});return{date:o.year+'-'+o.month+'-'+o.day,hour:Math.min(23,Number(o.hour)+1)};}
+function todayEastern(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now()+3600000));var o={};parts.forEach(function(p){o[p.type]=p.value;});return{date:o.year+'-'+o.month+'-'+o.day,hour:Number(o.hour)};}
 var t=todayEastern();document.getElementById('date').value=t.date;document.getElementById('time').value=String(t.hour).padStart(2,'0')+':00';
 function emit(name){try{if(typeof window.gtag==='function')window.gtag('event',name,{page_id:'niagara-falls-today'});if(typeof window.va==='function')window.va('event',{name:name});}catch(e){}}
 function safe(s){return String(s===null||s===undefined?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
