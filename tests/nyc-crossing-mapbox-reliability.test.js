@@ -37,7 +37,7 @@ function response(status, body) {
 
 function harness(respond = id => response(200, routeBody(id))) {
   const h = {
-    env: { MAPBOX_TOKEN: 'synthetic-secret-token', UPSTASH_REDIS_REST_URL: CACHE_URL, UPSTASH_REDIS_REST_TOKEN: 'synthetic-cache-token' },
+    env: { MAPBOX_TOKEN: 'synthetic-secret-token', TOOL_STATE_URL: CACHE_URL, VERCEL_OIDC_TOKEN: 'synthetic-cache-token' },
     commands: [],
     requests: [],
     cached: null,

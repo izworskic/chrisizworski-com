@@ -27,7 +27,7 @@ test("the only 200 responses are genuine skips and genuine success", () => {
 
 test("one daily Anthropic attempt with deterministic fallback and 5xx failures", () => {
   assert.match(source, /writeModelReport\(snap\)/);
-  assert.match(source, /res\.status\(500\)\.json\(\{ error: "redis-write"/);
+  assert.match(source, /res\.status\(500\)\.json\(\{ error: "state-write"/);
   assert.match(source, /res\.status\(502\)\.json\(\{ error: "empty-model-report"/);
   assert.match(source, /res\.status\(502\)\.json\(\{ error: "conditions-unavailable"/);
   assert.match(source, /ANTHROPIC_API_KEY_FALL_COLOR/);

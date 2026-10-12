@@ -61,7 +61,7 @@ test('historical baseline rows require enough valid observations', () => {
 test('NYC DOT live route receives an 8-week same-hour delay comparison and cache write', async () => {
   _internal.clearMemoryCache();
   let cacheWrite = null;
-  const redisCommandImpl = async command => {
+  const stateCommandImpl = async command => {
     if (command[0] === 'GET') return null;
     if (command[0] === 'SET') cacheWrite = command;
     return 'OK';
@@ -75,7 +75,7 @@ test('NYC DOT live route receives an 8-week same-hour delay comparison and cache
   };
 
   const traffic = liveTraffic();
-  await enrichNycdotBaselines(traffic, { now, fetchImpl, redisCommandImpl, env: {} });
+  await enrichNycdotBaselines(traffic, { now, fetchImpl, stateCommandImpl, env: {} });
   const route = traffic.routes[0];
   assert.equal(route.baselineMinutes, 3);
   assert.equal(route.delayMinutes, 2);
@@ -95,11 +95,11 @@ test('cached NYC baseline avoids another historical data request', async () => {
     kind: BASELINE_KIND,
     byLinkId: { '4456510': { baselineMinutes: 4, samples: 80 } },
   });
-  const redisCommandImpl = async command => command[0] === 'GET' ? cached : 'OK';
+  const stateCommandImpl = async command => command[0] === 'GET' ? cached : 'OK';
   const fetchImpl = async () => { throw new Error('historical fetch should not run'); };
 
   const traffic = liveTraffic();
-  await enrichNycdotBaselines(traffic, { now, fetchImpl, redisCommandImpl, env: {} });
+  await enrichNycdotBaselines(traffic, { now, fetchImpl, stateCommandImpl, env: {} });
   assert.equal(traffic.routes[0].baselineMinutes, 4);
   assert.equal(traffic.routes[0].delayMinutes, 1);
   assert.equal(traffic.routes[0].baselineSamples, 80);
@@ -113,7 +113,7 @@ test('historical baseline outage never erases live authority traffic', async () 
   await enrichNycdotBaselines(traffic, {
     now,
     fetchImpl: async () => { throw new Error('open data unavailable'); },
-    redisCommandImpl: async () => null,
+    stateCommandImpl: async () => null,
     env: {},
   });
   assert.equal(traffic.routes[0].etaMinutes, 5);

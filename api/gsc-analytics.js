@@ -1,3 +1,4 @@
+const { stateReady, stateCommand } = require('../lib/tool-state');
 const { authorizeGscRequest } = require('../lib/gsc/github-actions-oidc.js');
 
 module.exports = async (req, res) => {
@@ -6,9 +7,12 @@ module.exports = async (req, res) => {
   const view = (req.query && req.query.view) || 'health';
 
   if (view === 'health') {
-    const redisReady = Boolean((process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) && (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN));
+    let storageReady = false;
+    if (stateReady()) {
+      try { storageReady = await stateCommand(['PING']) === 'PONG'; } catch {}
+    }
     const gscReady = Boolean(process.env.GSC_SERVICE_ACCOUNT_JSON || (process.env.GSC_CLIENT_EMAIL && process.env.GSC_PRIVATE_KEY));
-    res.status(gscReady && redisReady ? 200 : 503).json({ ok: gscReady && redisReady, gscReady, redisReady, siteUrl: process.env.GSC_SITE_URL || 'sc-domain:chrisizworski.com' });
+    res.status(gscReady && storageReady ? 200 : 503).json({ ok: gscReady && storageReady, gscReady, storageReady, siteUrl: process.env.GSC_SITE_URL || 'sc-domain:chrisizworski.com' });
     return;
   }
 
@@ -23,7 +27,7 @@ module.exports = async (req, res) => {
 
   try {
     const { collectGscAnalytics, compactLogSummary } = await import('../lib/gsc/collector.mjs');
-    const { getLatestReport } = await import('../lib/gsc/redis.mjs');
+    const { getLatestReport } = await import('../lib/gsc/state.mjs');
     if (view === 'collect') {
       const { report, stored } = await collectGscAnalytics();
       console.log(JSON.stringify(compactLogSummary(report)));
