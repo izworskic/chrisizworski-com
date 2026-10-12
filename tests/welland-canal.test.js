@@ -319,5 +319,14 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
   const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
   const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
-  assert.match(html,/<div id="shipMap"[^>]*><\/div>\s*<section/); // placeholder? map is followed by closing stage, so use below
+  const posMap=html.indexOf('id="shipMap"'),posStageEnd=html.indexOf('</div>',posMap),posDock=html.indexOf('id="mapLockPreview"'),posFallback=html.indexOf('id="mapFallback"');
+  assert.ok(posMap>0&&posStageEnd>posMap&&posDock>posStageEnd&&posFallback>posDock,'preview follows closed map stage');
+  assert.match(html,/id="mapLockPreview"[^>]*aria-live="polite"/);
+  assert.match(css,/Premium lock handoff: on phones/);
+  assert.match(css,/\.map-lock-preview\{[\s\S]*?position:relative;z-index:1/);
+  assert.match(css,/\.welland-lock-pin\{display:grid;place-items:center;cursor:pointer\}/);
+  assert.match(js,/const hit=44/);
+  assert.match(js,/iconSize:\[hit,hit\]/);
+  assert.match(html,/welland-canal\.css\?v=20261012-dock1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-dock1/);
 });
