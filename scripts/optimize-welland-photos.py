@@ -15,8 +15,11 @@ for name in FILES:
     if not target.exists():
         raise RuntimeError(f"Missing source photo: {target}")
     with Image.open(target) as original:
-        if original.format != "JPEG":
-            raise RuntimeError(f"Unexpected format: {target}")
+        # Some JPEGs contain extra picture metadata and Pillow reports MPO.
+        if original.format not in ("JPEG", "MPO"):
+            raise RuntimeError(f"Unexpected format: {target} ({original.format})")
+        if original.format == "MPO":
+            original.seek(0)
         img = ImageOps.exif_transpose(original).convert("RGB")
         img.thumbnail((1100, 1100), Image.Resampling.LANCZOS)
         temp = DIR / f"{name}.optimized.jpg"
