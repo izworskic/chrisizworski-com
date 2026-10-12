@@ -41,7 +41,7 @@
     thorold:{kind:'photo',subjectLock:'7',view:'exact',
       src:'/assets/welland/photos/thorold.jpg',remote:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Welland_Canal_Lock_7.jpg/800px-Welland_Canal_Lock_7.jpg',
       alt:'Welland Canal Lock 7 at Thorold, near the twin flight locks',
-      caption:'Nearby Lock 7 at Thorold · regional image, not Locks 4–6',
+      caption:'Lock 7 chamber · Thorold, Ontario',
       credit:'Gogerr',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg'
     },
