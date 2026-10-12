@@ -9,13 +9,35 @@ function link(url,label){return '<a href="'+safe(url)+'" target="_blank" rel="no
 function explain(reason){
  return {PUBLISHED_CLOSED:'Operator-published closure for this date',HOURS_NOT_VERIFIED:'Date-specific operator hours cannot be verified',ACCESS_ROUTE_UNVERIFIED:'Full step-free accessibility cannot be confirmed',OVER_BUDGET:'Would exceed your admission budget',PRICE_NOT_VERIFIED:'Cost cannot be verified against your budget',BORDER_NOT_PLANNED:'On the other side of the international border',LOWER_FIT_OR_TIME:'Less suitable for your available time or priorities'}[reason]||reason;
 }
+function mediaFor(id){var root=window.NiagaraFallsMedia;return root&&root.stops&&root.stops[id]||null;}
+function stopMedia(id){
+ var m=mediaFor(id);
+ if(!m)return '';
+ return '<figure class="stop-visual"><img loading="lazy" decoding="async" src="'+safe(m.src)+'" alt="'+safe(m.alt)+'" width="960" height="640"><figcaption>Place-specific photograph: <a href="'+safe(m.page)+'" target="_blank" rel="noopener">'+safe(m.author)+'</a> · <a href="'+safe(m.licenseUrl)+'" target="_blank" rel="noopener">'+safe(m.license)+'</a> · cropped; illustrative, not live</figcaption></figure>';
+}
+function bindFilms(){
+ document.querySelectorAll('.film-launch[data-video-id]').forEach(function(button){
+  button.addEventListener('click',function(){
+   var id=button.getAttribute('data-video-id');
+   if(!/^[a-zA-Z0-9_-]{11}$/.test(id))return;
+   var iframe=document.createElement('iframe');
+   iframe.title=button.getAttribute('aria-label');
+   iframe.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
+   iframe.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+   iframe.setAttribute('allowfullscreen','');
+   iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+   button.replaceWith(iframe);
+   emit('niagara_experience_video_play');
+  },{once:true});
+ });
+}
 function draw(r){
  var stops=r.stops||[],first=stops[0],currency=r.side==='US'?'USD':'CAD';
  var out='<div class="result-content"><div class="verdict"><span class="label">'+safe(r.confidence)+' CONFIDENCE · '+safe(r.status.replace(/_/g,' '))+'</span><h3>'+safe(r.verdict)+'</h3><p>Published schedules are not live opening confirmations. No invented queues, weather or border delays.</p></div>';
  if(first)out+='<div class="first"><div><small>YOUR FIRST ACTION</small><b>'+safe(first.name)+'</b><small>Arrive approximately '+safe(first.arrival)+' Eastern · '+safe(r.visit_local_date)+'</small></div><a class="action" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(first.location)+'" target="_blank" rel="noopener">Open directions ↗</a></div>';
  out+='<div class="stats"><div class="stat"><strong>'+stops.length+'</strong><span>Planned stops</span></div><div class="stat"><strong>'+safe(r.timeline.contingency_minutes)+' min</strong><span>Time buffer</span></div><div class="stat"><strong>'+safe(currency)+' '+Number(r.costs[0].known_admission_total).toFixed(2)+'</strong><span>Known admission subtotal</span></div></div>';
  out+='<div class="sectitle">Your route · Eastern local time</div>';
- if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4><p>'+safe(s.description)+'</p><div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:'Check park access notices')+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
+ if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopMedia(s.id)+(mediaFor(s.id)?'<p class="stop-story">'+safe(mediaFor(s.id).experience)+'</p><p class="stop-field-note"><strong>What to notice:</strong> '+safe(mediaFor(s.id).notice)+'</p><p class="stop-field-note"><strong>Field tip:</strong> '+safe(mediaFor(s.id).tip)+'</p>':'<p>'+safe(s.description)+'</p>')+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:'Check park access notices')+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
  else out+='<p>There is no safe confirmed stop for this request. Check official park advisories.</p>';
  if(r.weather){
   var w=r.weather;
@@ -41,5 +63,5 @@ async function submit(ev){if(ev)ev.preventDefault();button.disabled=true;body.se
 }
 form.addEventListener('submit',submit);
 document.querySelectorAll('input[name=duration_minutes],input[name=starting_side]').forEach(function(el){el.addEventListener('change',function(){emit('niagara_replan');submit();});});
-emit('niagara_planner_view');submit();
+bindFilms();emit('niagara_planner_view');submit();
 })();
