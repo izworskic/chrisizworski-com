@@ -41,6 +41,10 @@ function draw(r){
  out+='<div class="sectitle">Your route · Eastern local time</div>';
  if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopMedia(s.id)+(mediaFor(s.id)?'<p class="stop-story">'+safe(mediaFor(s.id).experience)+'</p><p class="stop-field-note"><strong>What to notice:</strong> '+safe(mediaFor(s.id).notice)+'</p><p class="stop-field-note"><strong>Field tip:</strong> '+safe(mediaFor(s.id).tip)+'</p>':'<p>'+safe(s.description)+'</p>')+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
  else out+='<p>There is no safe confirmed stop for this request. Check official park advisories.</p>';
+ if(r.schedule_feed){
+  var sf=r.schedule_feed;
+  out+='<div class="caveat"><strong>Niagara Parks date-specific calendar:</strong> '+safe(sf.status.replace(/_/g,' '))+'. '+(sf.checked_at?'Published hours retrieved '+safe(new Date(sf.checked_at).toLocaleString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' Eastern. ':'No current source check available. ')+safe(sf.caveat||'')+' '+link(sf.source_url,'Official hours by date')+'</div>';
+ }
  if(r.weather){
   var w=r.weather;
   out+='<div class="caveat"><strong>Official regional weather:</strong> '+safe(w.status.replace(/_/g,' '))+'. '+safe(w.caveat||'')+' '+link(w.authority_url,'Check official weather');
