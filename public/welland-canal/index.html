@@ -22,8 +22,8 @@
 <link rel="author" href="https://chrisizworski.com/chris-izworski/">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preload" as="image" href="/assets/welland/photos/hero-algoberta.jpg" fetchpriority="high">
-<link rel="stylesheet" href="/assets/welland-canal.css?v=20261011-hero1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ships Today and Live Lock Map","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-10-11","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Live Ships and Eight-Lock Watch Map","url":"https://chrisizworski.com/welland-canal/","description":"Find reported ships near the Welland Canal's eight locks, explore a live AIS map, and check official ship schedules and Lock 3 viewing spots.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
+<link rel="stylesheet" href="/assets/welland-canal.css?v=20261012-media1">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ships Today and Live Lock Map","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-10-12","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Live Ships and Eight-Lock Watch Map","url":"https://chrisizworski.com/welland-canal/","description":"Find reported ships near the Welland Canal's eight locks, explore a live AIS map, and check official ship schedules and Lock 3 viewing spots.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
 </head>
 <body data-analytics-page="welland-canal">
 <a href="#main" class="skip">Skip to canal map</a>
@@ -45,7 +45,7 @@
 <p class="hero-foot">Times are Eastern (Ontario). AIS reports are not confirmed passage appointments or navigational advice.</p>
 </div></section>
 <nav class="quickbar" aria-label="Page sections"><div class="wrap">
-<a href="#ship-watch">Live ships</a><a href="#locks">8 locks</a><a href="#watch-spots">Where to watch</a><a href="#official">Official information</a><a href="#boaters">Pleasure craft</a><a href="#faq">FAQ</a>
+<a href="#ship-watch">Live ships</a><a href="#canal-cameras">Cameras</a><a href="#locks">8 locks</a><a href="#watch-spots">Where to watch</a><a href="#official">Official information</a><a href="#boaters">Pleasure craft</a><a href="#faq">FAQ</a>
 </div></nav>
 <div class="wrap">
 <div class="stats" aria-label="Welland Canal quick facts">
@@ -54,6 +54,25 @@
 <div class="stat"><b>99.5 m</b><span>change in water elevation</span></div>
 <div class="stat"><b>~11 h</b><span>typical complete commercial transit</span></div>
 </div>
+
+<section class="section" id="canal-cameras" aria-labelledby="canal-cameras-title">
+<div class="section-head"><div><p class="kicker">Watch the waterway · third-party feeds</p><h2 id="canal-cameras-title">Welland Canal cameras</h2></div><p>View a canal scene before you go. Camera footage is separate from official vessel schedules and recent AIS reports.</p></div>
+<div class="welland-camera-grid">
+<div class="welland-camera-panel">
+ <div class="welland-camera-heading"><div><p class="welland-camera-tag">PORT COLBORNE · BRIDGE 21 AREA</p><h3>Port Colborne canal camera</h3></div><span class="welland-camera-status">Current stream status unverified</span></div>
+ <p>Shows the Port Colborne waterway and bridge area near Lake Erie. The camera pans and zooms. <strong>This is not a camera inside Lock 8.</strong></p>
+ <div class="welland-camera-player">
+  <button id="canalCameraPlay" class="welland-camera-play" type="button" aria-label="Load Port Colborne camera video"><span aria-hidden="true">▶</span> Load camera video</button>
+  <iframe id="canalCameraFrame" title="Port Colborne Bridge 21 area camera, provided by YouTube" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy" hidden></iframe>
+ </div>
+ <div class="welland-camera-links"><button id="canalCameraStop" type="button" hidden>Stop video</button><a href="https://www.youtube.com/watch?v=yF7XdpkL34w" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a><span>Playback and live availability depend on the publisher.</span></div>
+</div>
+<aside class="welland-camera-other">
+ <p class="welland-camera-tag">MORE CAMERA VIEWS</p><h3>Other canal viewpoints</h3>
+ <p><a href="https://streamtimelive.com/port-colborne/" target="_blank" rel="noopener noreferrer">Canalside / Bridge 21 stream ↗</a> Another Port Colborne camera at the publisher's website. No copying or restreaming.</p>
+ <p><a href="https://www.thoroldtoday.ca/local-news/live-webcam-at-lock-7-brings-the-world-to-thorold-1439543" target="_blank" rel="noopener noreferrer">Lock 7 webcam listing ↗</a> Thorold camera documented in 2019; <strong>current availability not verified</strong>.</p>
+ <p class="welland-camera-disclaimer">A moving camera view cannot establish a ship's next lock, confirmed occupancy, ETA, or official Seaway operating status.</p>
+</aside></div></section>
 <section class="section" id="ship-watch" aria-labelledby="ship-title">
 <div class="section-head"><div><p class="kicker">Vessel watch · positions not appointments</p><h2 id="ship-title">Ships along the canal, right now</h2></div><p>Fresh public AIS vessel reports show where ships were reported recently. Confirm named upcoming traffic using the Seaway's official schedule.</p></div>
 <div class="desk">
@@ -92,7 +111,7 @@
   </div>
   <figcaption class="lock-detail__photo-caption">
     <span id="lockDetailImageCaption">Lock 3 viewing platform</span>
-    <span class="lock-detail__photo-credit"><a id="lockDetailImageCredit" href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Image source</a> · <a id="lockDetailImageLicense" href="https://creativecommons.org/" target="_blank" rel="noopener noreferrer">Photo licence</a> · Display cropped</span>
+    <span class="lock-detail__photo-credit"><a id="lockDetailImageCredit" href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Image source</a> · <a id="lockDetailImageLicense" href="https://creativecommons.org/" target="_blank" rel="noopener noreferrer">Media source</a> <span id="lockDetailImageFormat">· Display cropped</span></span>
   </figcaption>
 </figure>
 <div class="lock-detail__eyebrow"><span>THE WELLAND CANAL</span><span id="lockDetailIndex">01 — 08</span></div>
@@ -105,7 +124,7 @@
 <p id="lockDetailDescription" class="lock-detail__description">The Welland Canal uses eight locks to connect Lake Ontario and Lake Erie. Select a lock for a photograph, explanation and practical viewing guidance.</p>
 <div class="lock-detail__tip"><span class="lock-detail__tip-label">SHORE VIEWING / CONTEXT</span><p id="lockDetailTip">Start at Lock 3 for the museum viewing platform or explore the Thorold flight near Locks 4–7.</p></div>
 <div class="lock-detail__ais"><span class="lock-detail__ais-label"><span class="lock-detail__ais-dot" aria-hidden="true"></span> RECENT AIS COVERAGE</span><strong id="lockDetailAIS">Checking vessel reports…</strong><p id="lockDetailAISNote">Reports refresh from the AIS provider.</p></div>
-<div class="lock-detail__actions"><a id="lockDetailVisitor" class="lock-detail__visitor" hidden target="_blank" rel="noopener noreferrer">Official viewing details ↗</a><button id="lockDetailNext" class="lock-detail__next" data-next="1" type="button">Explore Lock 1 →</button></div>
+<div class="lock-detail__actions"><a id="lockDetailArchive" class="lock-detail__visitor" target="_blank" rel="noopener noreferrer" hidden>View archived historic lock photograph ↗</a><a id="lockDetailWatchCam" class="lock-detail__visitor" href="#canal-cameras" hidden>Nearby Port Colborne camera · Bridge 21, not Lock 8 ↓</a><a id="lockDetailVisitor" class="lock-detail__visitor" hidden target="_blank" rel="noopener noreferrer">Official viewing details ↗</a><button id="lockDetailNext" class="lock-detail__next" data-next="1" type="button">Explore Lock 1 →</button></div>
 <p class="lock-detail__fine">Lock markers are fixed reference locations, not live lock-status indicators.</p>
 </section>
 <aside class="panel ship-panel" aria-label="Recent AIS vessels">
@@ -159,12 +178,12 @@
 <details><summary>How many locks does the canal have?</summary><p>Eight. Locks 1–7 lift or lower vessels through most of the roughly 99.5-metre elevation change. Lock 8 serves as the southern control lock.</p></details>
 <details><summary>Can a 1,000-foot Great Lakes freighter pass through?</summary><p>No. Seaway vessel-length limits are approximately 740 feet, shorter than the 1,000-foot lakers that can navigate the upper Great Lakes.</p></details>
 <details><summary>Is a vessel on the map guaranteed to enter the next lock soon?</summary><p>No. AIS shows reported position and motion, not an operational lock appointment. Ships may wait, berth, turn, or experience operational delays. Official order-of-turn information takes precedence.</p></details>
-<details><summary>Does this map show live cameras?</summary><p>No verified licensed camera embed is included. We do not present an old video or an unrelated stream as live. Use the map and the official viewing guidance until a dependable camera source can be confirmed.</p></details>
+<details><summary>Can I watch a Welland Canal camera here?</summary><p>Yes. The Port Colborne Bridge 21 area camera can be opened on this page by choosing Load camera video. Its stream and uptime are controlled by YouTube and the publisher; it is not a camera inside Lock 8. A second Port Colborne source and historical Thorold Lock 7 camera listing are linked, without claims that they are working now.</p></details>
 </section>
 </div></main>
 <footer class="site-footer"><div class="footer-inner"><span>Independent Welland Canal ship-watching guide. Not affiliated with the St. Lawrence Seaway Management Corporation. For shore viewing only; not for navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Updated October 11, 2026</span></div></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/welland-canal.js?v=20261011-photos1"></script>
+<script defer src="/assets/welland-canal.js?v=20261012-media1"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>

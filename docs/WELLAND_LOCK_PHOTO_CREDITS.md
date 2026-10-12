@@ -21,20 +21,40 @@ The map displays real AIS ship silhouettes and lock position markers; the **edit
 
 Live or seasonal photos are **illustrative, not live cameras**. If Wikimedia fails to serve a photo, the UI shows an honest illustrated-colour fallback with the original caption and author/license links. Do not quietly replace the image with a picture of another waterway. Attribution notices must remain visible on the card.
 
-## Five sourced photographs / eight lock profiles
+## Verified image assignments — media integrity revision, October 12, 2026
 
-| Lock(s) | Actual depiction | Creator | Licence | Commons source |
-|---|---|---|---|---|
-| 1 | Specific Lock 1 at Port Weller | Balcer | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Welland Canal Lock 1 Port Weller.JPG](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_1_Port_Weller.JPG) |
-| 2 | Specific Lock 2 exit with freighter Thunder Bay | Cpfan776 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Thunder Bay out of Lock 2 2013-08-01 IMG 1091.jpg](https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg) |
-| 3 | Specific Lock 3 from the museum observation deck | Dough4872 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Welland Canal Lock 3 from observation deck.jpeg](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_3_from_observation_deck.jpeg) |
-| 4, 5, 6 | **Representative of the Thorold area:** actual photo is Lock 7; **NOT** Locks 4, 5 or 6 | Gogerr | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Welland Canal Lock 7.jpg](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg) |
-| 7 | Specific Lock 7, Thorold | Gogerr | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Welland Canal Lock 7.jpg](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg) |
-| 8 | Lock 8 Gateway Park, Port Colborne; photo **of the visitor park**, not claimed as a chamber view | Mhsheikholeslami | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Lock 8 Gateway Park-Port Colborne-Ontario-20220317.jpg](https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg) |
+All eight selectable lock profiles now use **eight distinct media paths**, without passing a photo of one lock off as another.
 
-**Production delivery fix (October 11, 2026):** Browser hotlinks to Wikimedia were not displaying on the live page. To make the cards reliable, the repo now stores reproducibly imported copies of these *same* licensed image files under `public/assets/welland/photos/`. The importer is `scripts/fetch-welland-photos.cjs`. It accepts only authentic JPEG bytes from exact, allowlisted Commons filenames, tries thumbnail and original URLs, and fails rather than quietly publishing an image-free update. The source/photographer/licence links remain visible in every detailed card. Images are cropped to fit the UI; that's disclosed with each credit.
+| Selected lock | Media | What the user is actually shown | Provenance / disclosure |
+|---|---|---|---|
+| 1 | `north1.jpg` | Lock 1, Port Weller | [Balcer; CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_1_Port_Weller.JPG) |
+| 2 | `north2.jpg` | Thunder Bay emerging from Lock 2 | [Cpfan776; CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg) |
+| 3 | `north3.jpg` | Lock 3 from the viewing platform | [Dough4872; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_3_from_observation_deck.jpeg) |
+| 4 | `flight4-schematic.svg` | **Original Lock 4 interpretive schematic; NOT a photograph** | By Chris Izworski, lift according to [NOAA Coast Pilot 6](https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf), not to scale |
+| 5 | `flight5-schematic.svg` | **Original Lock 5 interpretive schematic; NOT a photograph** | By Chris Izworski, same NOAA reference; not to scale |
+| 6 | `flight6-schematic.svg` | **Original Lock 6 interpretive schematic; NOT a photograph** | By Chris Izworski, same NOAA reference; not to scale |
+| 7 | `thorold.jpg` | Lock 7 in Thorold | [Gogerr; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg) |
+| 8 | `south8.jpg` | **Nearby Lock 8 Gateway Park; NOT the Lock 8 chamber** | [Mhsheikholeslami; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg) |
 
-The original Wikimedia URL is a browser fallback only. Files are not owned by the site. New per-lock photography must be separately verified and licensed. **Adobe Stock preview images are not included**; incorporating purchased Adobe assets requires a license and delivery of the authorized originals.
+The previous published site used the very same Lock 7 photo for **all of Locks 4, 5, 6 and 7**, which was correctly labeled regional imagery but still confusing to visitors. That repetition is now removed from the eight displayed profiles. A separate unused photograph source record remains in code only for image provenance; the media benchmark evaluates **what each lock actually displays**, not how many files happen to exist in the repository.
+
+### Next photographic research, not approved for reproduction
+
+- [Niagara Falls Public Library — Locks 4 and 5 under construction](https://nfpl.historicniagara.ca/s/All/item/99282), item marked Public Domain by archive.
+- [Niagara Falls Public Library — Lock 6 under construction](https://nfpl.historicniagara.ca/s/All/item/99277), item marked Public Domain by archive.
+- [Welland Public Library — flight locks 4–6 historic postcard](https://omeka.wellandlibrary.ca/items/show/9470), rights reserved to E. Ludwig / John Hinde Studios; **do not use without permission**.
+- Need a distinct, exact-chamber photograph of Lock 8 with documented usage permission. The Gateway Park picture can still appear as a *secondary nearby visitor view*.
+- These archive photographs depict **historic construction**, not present-day vessel conditions. If approved for future use, display them with date and status prominently.
+
+The photo benchmark is **`node scripts/benchmark-welland-media.cjs`**. It penalizes context-only images and modestly penalizes original engineering schematics versus verified exact-lock photos while requiring all eight media paths to be unique and honesty/copyright gates to pass.
+
+## Camera source distinction
+
+- [User-supplied Port Colborne video](https://www.youtube.com/watch?v=yF7XdpkL34w), documented as a **Port Colborne Bridge 21 / canal area** PTZ view, not Lock 8. Only loaded after a deliberate click. The video may be offline or the camera may pan away. YouTube publisher controls playback and uptime.
+- [StreamTime Live, Canalside Restaurant, Port Colborne](https://streamtimelive.com/port-colborne/), a separate publisher-hosted camera of the Bridge 21 canal area; their site prohibits unauthorized copying/restreaming; link instead of mirroring.
+- [Thorold News Lock 7 camera report, 2019](https://www.thoroldtoday.ca/local-news/live-webcam-at-lock-7-brings-the-world-to-thorold-1439543), historical evidence a camera was installed, **not** proof it works in 2026.
+
+A live video feed cannot confirm lock occupancy, departure time, Seaway schedules or AIS positions. It supplements but never replaces official Seaway transit reports.
 
 ## Editorial reference set
 

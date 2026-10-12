@@ -153,9 +153,9 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.ok(start>=0&&end>start,'all eight lock editorial stories must exist');
   for(let i=1;i<=8;i++)assert.match(profile,new RegExp("'"+i+"':\\{photo:'[^']+',segment:'[^']+',explainer:'.{110,}"));
   assert.match(profile,/Lock 8 has a different job from the seven lift locks/);
-  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 4 chamber/);
-  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 5 chamber/);
-  assert.match(profile,/This photo shows nearby Lock 7, not the Lock 6 chamber/);
+  assert.match(profile,/This is a Lock 4 engineering schematic, not a photograph/);
+  assert.match(profile,/This is a Lock 5 engineering schematic, not a photograph/);
+  assert.match(profile,/This is a Lock 6 engineering schematic, not a photograph/);
   assert.match(html,/id="lockDetailImage"/);
   assert.match(html,/id="lockDetailImageCaption"/);
   assert.match(html,/id="lockDetailImageCredit"/);
@@ -176,8 +176,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261011-photos1/);
-  assert.match(html,/welland-canal\.css\?v=20261011-hero1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-media1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-media1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -188,8 +188,8 @@ test('Every reused image has explicit Wikimedia source, author and licence links
   assert.equal((photos.match(/remote:'https:\/\/upload\.wikimedia\.org\//g)||[]).length,5);
   assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,5);
   assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
-  assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,5);
-  assert.match(photos,/regional image, not Locks 4–6/);
+  assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,8);
+  assert.match(photos,/Lock 7 chamber · Thorold, Ontario/);
 });
 
 test('One-tap Welland value function meets structural usability, comprehension and truth gates',()=>{
@@ -270,4 +270,45 @@ test('Welland hero actually shows a real licensed canal freighter photo and pres
  assert.match(importer,/Not JPEG or unsafe bytes/);
  assert.match(optimizer,/ImageOps\.fit\(image,\(1600,900\)/);
  assert.doesNotMatch(html,/og:image" content="https:\/\/chrisizworski\.com\/assets\/soo-locks\/freighter\.jpg"/);
+});
+
+
+test('Every lock has a unique, grounded image rather than a repeated wrong Lock 7 photo',()=>{
+  const fs=require('node:fs'),path=require('node:path'),{execFileSync}=require('node:child_process');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const score=JSON.parse(execFileSync(process.execPath,[path.join(__dirname,'../scripts/benchmark-welland-media.cjs')],{encoding:'utf8'}));
+  assert.equal(score.hardViolations.length,0,JSON.stringify(score.hardViolations));
+  assert.ok(score.value>=90,'all lock media must clear the 90-point value benchmark');
+  assert.equal(score.perLock.length,8);
+  assert.equal(new Set(score.perLock.map(x=>x.media)).size,8);
+  assert.deepEqual(score.photosByLock.uniqueEngineeringSchematics,[4,5,6]);
+  for (const n of [4,5,6]){
+    assert.match(js,new RegExp("'"+n+"':\\{photo:'flight"+n+"'"));
+    assert.match(js,new RegExp("flight"+n+"-schematic\\.svg"));
+    assert.ok(score.perLock.find(x=>x.lock===n).subject==='schematic');
+  }
+  assert.equal(score.perLock.find(x=>x.lock===8).subject,'contextual');
+  assert.match(html,/id="lockDetailImageFormat"/);
+  assert.match(js,/photo\.kind==='schematic'\?'Diagram: ':'Photo: '/);
+  assert.doesNotMatch(js,/This photo shows nearby Lock 7, not the Lock [456] chamber/);
+});
+
+test('Camera source is explicitly Bridge 21 and only loads on user demand',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+  assert.match(html,/id="canal-cameras"/);
+  assert.match(html,/PORT COLBORNE · BRIDGE 21 AREA/);
+  assert.match(html,/This is not a camera inside Lock 8/);
+  assert.match(html,/Current stream status unverified/);
+  assert.match(html,/id="canalCameraFrame"[^>]*hidden/);
+  assert.match(html,/id="canalCameraStop"[^>]*hidden/);
+  assert.match(html,/id="lockDetailWatchCam"/);
+  assert.match(js,/cameraFrame\.src='https:\/\/www\.youtube-nocookie\.com\/embed\/yF7XdpkL34w\?autoplay=1/);
+  assert.match(js,/cameraFrame\.removeAttribute\('src'\)/);
+  assert.match(html,/https:\/\/streamtimelive\.com\/port-colborne\//);
+  assert.match(html,/current availability not verified/);
+  assert.match(css,/\.welland-camera-player\{aspect-ratio:16\/9/);
 });
