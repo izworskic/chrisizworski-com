@@ -127,3 +127,33 @@ body[data-v3-resort=vail] .experience-top .verified-ribbon{display:none}
   .v3-map{height:285px}
   .v3-profile label:last-child{grid-column:auto}
 }
+
+
+/* 390px field test: decision must be readable before scrolling, not merely the first label. */
+body[data-v3-resort=vail] #experience{display:none}
+@media(max-width:540px){
+ header.top{gap:6px;padding:7px 11px}
+ header.top .brand{font-size:.85rem;line-height:1.2;max-width:110px}
+ header.top nav{gap:4px 10px;justify-content:flex-end}
+ header.top nav a{font-size:.72rem}
+ .hero-inner{padding:9px 13px 14px}
+ .hero .kicker,.hero p:not(.kicker){display:none}
+ .hero h1{font-size:1.53rem;line-height:1.1;margin:0}
+ .tool-shell{margin-top:-3px}
+ .selector{padding:10px 13px}
+ .selector .eyebrow,.selector h2,.selector .field .hint{display:none}
+ .selector .field{margin-top:5px}
+ .selector .field label{font-size:.74rem;margin-bottom:2px}
+ .selector select,.selector input{min-height:35px;padding:5px 9px}
+ .optional-pass{margin:7px 0 0;padding-top:3px}
+ .optional-pass summary{font-size:.75rem;min-height:22px}
+ .selector .actions{margin-top:6px}
+ .selector .submit{min-height:35px;padding:6px 11px}
+ .decision{padding:12px 14px}
+ .decision .eyebrow{margin-bottom:3px}
+ .decision h2{font-size:1.3rem;margin:6px 0 3px;line-height:1.14}
+ .decision .plain{font-size:.85rem}
+ .decision ul{margin:5px 0;padding-left:16px;font-size:.75rem}
+ .decision .source{font-size:.77rem;margin-top:6px}
+ .decision .stamp{font-size:.7rem;margin:4px 0}
+}
