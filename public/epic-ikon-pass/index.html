@@ -118,12 +118,13 @@ if(["yes","no"].includes(q.get("reservation")))$("reservation").value=q.get("res
 if(/^[1-7]$/.test(q.get("days")||""))$("epicday-total").value=q.get("days");
 if(["yes","no"].includes(q.get("peak")))$("epic-peak").value=q.get("peak");
 if(["2","3","4"].includes(q.get("session")))$("session-total").value=q.get("session");
+if(["first","family","terrain","flexible"].includes(q.get("intent")))$("visit-style").value=q.get("intent");
 $("epicday-fields").hidden=pass.value!=="epicDay";$("session-fields").hidden=pass.value!=="ikonSession";
 let requestSeq=0,guideController=null;
 const MEDIA={
- vail:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Vail_Ski_Resort_I_(33672235356).jpg?width=960",alt:"Ski runs and ridgelines viewed from a trail at Vail Ski Resort in December 2009",credit:"Vail Resort ski trails, Dec. 2009 · Joe Lin · CC BY 2.0",url:"https://commons.wikimedia.org/wiki/File:Vail_Ski_Resort_I_(33672235356).jpg"},
- breckenridge:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Snow_mountains_on_Breckenridge_Colorado.JPG?width=960",alt:"The snow-covered mountains of Breckenridge seen from a ski run in January 2015",credit:"Breckenridge ski slopes, Jan. 2015 · Jlfdz · CC BY-SA 4.0",url:"https://commons.wikimedia.org/wiki/File:Snow_mountains_on_Breckenridge_Colorado.JPG"},
- "jackson-hole":{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Aerial_Tram.jpg?width=960",alt:"Jackson Hole Mountain Resort aerial tram ascending toward Rendezvous Mountain",credit:"Jackson Hole Aerial Tram, 2022 · Sirguh · CC BY-SA 4.0",url:"https://commons.wikimedia.org/wiki/File:Aerial_Tram.jpg"}
+ vail:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Vail_Ski_Resort_I_(33672235356).jpg?width=960",alt:"Ski runs and ridgelines viewed from a trail at Vail Ski Resort in December 2009",credit:"Vail Resort ski trails, Dec. 2009 · Joe Lin",url:"https://commons.wikimedia.org/wiki/File:Vail_Ski_Resort_I_(33672235356).jpg",license:"CC BY 2.0",licenseUrl:"https://creativecommons.org/licenses/by/2.0/"},
+ breckenridge:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Snow_mountains_on_Breckenridge_Colorado.JPG?width=960",alt:"The snow-covered mountains of Breckenridge seen from a ski run in January 2015",credit:"Breckenridge ski slopes, Jan. 2015 · Jlfdz",url:"https://commons.wikimedia.org/wiki/File:Snow_mountains_on_Breckenridge_Colorado.JPG",license:"CC BY-SA 4.0",licenseUrl:"https://creativecommons.org/licenses/by-sa/4.0/"},
+ "jackson-hole":{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Aerial_Tram.jpg?width=960",alt:"Jackson Hole Mountain Resort aerial tram ascending toward Rendezvous Mountain",credit:"Jackson Hole Aerial Tram, 2022 · Sirguh",url:"https://commons.wikimedia.org/wiki/File:Aerial_Tram.jpg",license:"CC BY-SA 4.0",licenseUrl:"https://creativecommons.org/licenses/by-sa/4.0/"}
 };
 function updatePhoto(id){
  const m=MEDIA[id],figure=$("guide-media"),photo=$("guide-photo");
@@ -133,7 +134,8 @@ function updatePhoto(id){
  if(!m)return;
  photo.alt=m.alt;const caption=$("guide-photo-credit");caption.replaceChildren();
  const credit=document.createElement("a");credit.href=m.url;credit.rel="noopener noreferrer";credit.target="_blank";credit.textContent=m.credit;
- caption.append(credit,document.createTextNode(" · Representative file photo, not current conditions"));
+ const license=document.createElement("a");license.href=m.licenseUrl;license.rel="noopener noreferrer license";license.target="_blank";license.textContent=m.license;
+ caption.append(credit,document.createTextNode(" · "),license,document.createTextNode(" · Historical file photo, not current conditions; cropping for layout may apply"));
  photo.src=m.src;
 }
 function guideFallback(){
@@ -143,7 +145,7 @@ function guideFallback(){
  $("guide-intro").textContent="Every mountain deserves a specific plan. The published pass rule determines whether this date can work before you consider the terrain, your group or the resort's operating schedule.";
  $("guide-distinctive").textContent="For this choice, check the exact pass tier, then confirm the mountain's own open lifts, terrain, arrival logistics and any required reservations.";
  $("guide-why").textContent=r.explanation;
- $("guide-mood").textContent="Your choices stay on this page; no pass number or account sign-in is requested.";
+ $("guide-mood").textContent="When you select Check, your pass, mountain, date and optional trip choices are sent to this site’s guide service. No pass number or account sign-in is needed.";
  $("guide-action").textContent=r.status==="NO"?"Change or confirm this plan":r.status==="ACTION"?"Secure the required reservation":r.status==="CHECK"?"Count days in the relevant pass pool":r.status==="UNKNOWN"?"Complete missing pass details":"Verify the mountain operating report";
  $("guide-action-detail").textContent="Pass eligibility is a published-policy decision—not an operating or snow forecast.";
  $("guide-provenance").textContent="Published 2026–27 pass policies supply the verdict. Optional JEV advice cannot change a restriction. This guide currently uses the deterministic fallback.";
@@ -217,7 +219,7 @@ $("guide-source").addEventListener("click",()=>{
 pass.addEventListener("change",()=>{requestSeq++;options();guideFallback();});resort.addEventListener("change",()=>{requestSeq++;render();guideFallback();});date.addEventListener("change",()=>{requestSeq++;render();guideFallback();});
 $("visit-style").addEventListener("change",()=>{requestSeq++;guideFallback();});
 ["used-days","reservation","epicday-total","epic-peak","session-total"].forEach(id=>$(id).addEventListener("change",()=>{requestSeq++;render();guideFallback();}));
-$("share").addEventListener("click",async()=>{const a=input(),u=new URL(location.pathname,location.origin);["pass","resort","date"].forEach(k=>u.searchParams.set(k,a[k]));if(a.usedDays!=="")u.searchParams.set("used",a.usedDays);if(a.reservationMade!=="unknown")u.searchParams.set("reservation",a.reservationMade);if(a.epicDayTotal)u.searchParams.set("days",a.epicDayTotal);if(a.epicPeak)u.searchParams.set("peak",a.epicPeak);if(a.sessionTotal)u.searchParams.set("session",a.sessionTotal);try{await navigator.clipboard.writeText(u.href);$("copy-status").textContent="Plan link copied. Links contain only the choices entered here.";}catch{$("copy-status").textContent="Copy your plan URL: "+u.href;}});
+$("share").addEventListener("click",async()=>{const a=input(),u=new URL(location.pathname,location.origin);["pass","resort","date"].forEach(k=>u.searchParams.set(k,a[k]));if(a.usedDays!=="")u.searchParams.set("used",a.usedDays);if(a.reservationMade!=="unknown")u.searchParams.set("reservation",a.reservationMade);if(a.epicDayTotal)u.searchParams.set("days",a.epicDayTotal);if(a.epicPeak)u.searchParams.set("peak",a.epicPeak);if(a.sessionTotal)u.searchParams.set("session",a.sessionTotal);if(a.intent!=="first")u.searchParams.set("intent",a.intent);try{await navigator.clipboard.writeText(u.href);$("copy-status").textContent="Plan link copied. Links contain only the choices entered here.";}catch{$("copy-status").textContent="Copy your plan URL: "+u.href;}});
 render();guideFallback();
 })();
 </script>
