@@ -91,3 +91,39 @@ body[data-v3-resort=vail] .experience-top .verified-ribbon{display:none}
 @media(max-width:860px){.tool-shell,.v3-columns{grid-template-columns:1fr}.decision{order:0}.v3-guide{grid-template-columns:1fr 1fr}}
 @media(max-width:540px){header.top{padding:10px 13px}.top nav a{font-size:.77rem}.top nav{gap:8px}.hero-inner{padding:15px 14px 29px}.hero h1{font-size:1.98rem}.hero p:not(.kicker):not(.hint){font-size:.84rem}.wrap{padding:0 10px}.tool-shell{margin-top:-9px;gap:8px}.selector,.decision{padding:14px 15px}.selector .field{margin-top:8px}.selector input,.selector select{min-height:40px}.selector .actions{margin-top:10px}.decision h2{font-size:1.5rem}#v3-slice{padding:19px 16px;margin-top:10px}.v3-intro h2{font-size:1.7rem}.v3-gallery{grid-template-columns:1fr}.v3-media-lead{grid-column:1}.v3-guide{grid-template-columns:1fr}.v3-map{height:300px}.v3-profile{grid-template-columns:1fr}.v3-profile label:last-child{grid-column:auto}.matrix{grid-template-columns:1fr}.experience{margin-top:12px}.experience-top h2{font-size:1.42rem}}
 @media print{header.top,footer.site-footer,.hero,.selector,.v3-map-controls,.v3-actions,.compare,.trip-examples{display:none!important}.tool-shell,.v3-columns{display:block}.decision,#v3-slice{border:0;box-shadow:none}.v3-map{height:190px}.v3-gallery .v3-media:not(.v3-media-lead){display:none}}
+
+
+/* V3 trip-span clarity, small-screen first answer and non-map fallback. */
+.v3-profile input[type=date]{width:100%;min-height:41px;border:1px solid #aebbb1;border-radius:6px;padding:7px 9px;max-width:100%;font:inherit;color:var(--ink);background:white}
+.v3-profile small{display:block;font-size:.72rem;font-weight:400;margin-top:5px;color:#627368}
+.v3-date-list{list-style:none;padding:0;margin:8px 0 15px;max-height:280px;overflow-y:auto}
+.v3-date-list li{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:3px 12px;padding:7px 0;border-bottom:1px solid #dce2d8;font-size:.83rem}
+.v3-date-list li strong{font-variant-numeric:tabular-nums;color:#3b5347}
+.v3-date-list li span{color:#5b6a60}
+.v3-date-list li[data-status=NO] span{color:#9c2d2c;font-weight:700}
+.v3-date-list li[data-status=CHECK] span,.v3-date-list li[data-status=ACTION] span,.v3-date-list li[data-status=UNKNOWN] span{color:#845a26}
+.v3-static-map{border:1px solid #d8e0d6;padding:10px 14px;background:#f8faf5;margin-top:8px;border-radius:5px}
+.v3-static-map summary{cursor:pointer;font-weight:650;color:#315944}
+.v3-static-map svg{display:block;width:100%;height:auto;max-height:180px}
+.v3-map-pin:focus-visible,.v3-map-controls button:focus-visible,.v3-actions button:focus-visible{outline:3px solid #dbad4c;outline-offset:3px}
+.v3-gallery .v3-media-lead img{aspect-ratio:2/1}
+@media(max-width:540px){
+  .hero-inner{padding:10px 14px 18px}
+  .hero h1{font-size:1.69rem;line-height:1.12}
+  .hero .hint{font-size:.71rem;margin-top:4px}
+  .kicker{font-size:.65rem}
+  .selector .eyebrow,.decision .eyebrow{font-size:.67rem}
+  .selector>p.muted{display:none}
+  .selector h2{font-size:1.15rem}
+  .selector .field label{font-size:.75rem;margin-bottom:2px}
+  .selector select,.selector input{min-height:37px;font-size:.85rem}
+  .selector .field .hint{font-size:.70rem}
+  .selector .actions .secondary{display:none}
+  .selector .actions{margin-top:8px}
+  .selector .submit{min-height:39px;padding:7px 12px;font-size:.83rem}
+  .decision .source{padding:8px 9px;margin-top:9px}
+  .decision ul{margin:7px 0}
+  .decision h2{font-size:1.36rem}
+  .v3-map{height:285px}
+  .v3-profile label:last-child{grid-column:auto}
+}
