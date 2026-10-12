@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Niagara Falls Today — V3 experience rescue plan — October 12, 2026
+
+- **Owner feedback:** V2 is fragmented, hero image is non-rendering, repetitive waterfall photos, shallow field-note copy. Do not address this with more unverified media.
+- **Code diagnosis:** Remote Wikimedia thumbnails, four static photo cards plus repeated itinerary photos and two detached video tiles. Current tests check URL strings rather than decoded assets. Original product specification demands a feasible visitor answer in <=30 seconds.
+- **Plan:** docs/NIAGARA_EXPERIENCE_RESCUE_PLAN.md. One verified locally hosted hero, eliminate redundant gallery and detached video grid; route-conditional editorial storytelling; at most one verified relevant film; hard licensing, media and mobile QA gates.
+- **Measurement:** No GSC/AdSense claim; defined 100-point weighted quality rubric with hard vetoes; require browser screenshots and first-party image decode.
+- **Rights:** Niagara Parks media library non-commercial restriction requires separate permission on ad-supported pages. Preserve independent PR #921 video correction until reconciled.
+- **Status:** Plan-only branch. No production UI changes or launch claim.
+- **Exactly one next action:** Phase A in a separate small PR: replace failing hero via validated local asset, remove gallery repetition, and inspect a real mobile and desktop rendering.
+
+
 ## Epic / Ikon National Tools mirror sync — October 12, 2026
 
 - PR #918 merged to the public site repository at 9dcf58de; PR #88 merged to the National Tools owning repository at baa07940. Both passed full GitHub verification. Initial automatic site deployment failed with Vercel git_info_fail; a targeted Git-backed production deployment was started, with public availability not yet verified at the time of this commit.
