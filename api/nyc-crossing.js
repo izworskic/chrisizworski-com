@@ -9,6 +9,11 @@ module.exports = async function handler(req, res) {
   // A transient provider failure must not become a cached CDN outage either.
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  if (process.env.VERCEL_GIT_COMMIT_SHA) {
+    res.setHeader('X-Deployment-Sha', process.env.VERCEL_GIT_COMMIT_SHA);
+  }
+  // Release verification checks identity without polling traffic providers.
+  if (req.method === 'HEAD') return res.status(204).end();
   try {
     const q = req.query || {};
     const vehicle = { type: q.vehicle || 'car', heightFt: q.heightFt };

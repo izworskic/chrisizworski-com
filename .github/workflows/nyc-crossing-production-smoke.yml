@@ -17,7 +17,10 @@ on:
 
 permissions:
   contents: read
-  statuses: read
+
+concurrency:
+  group: nyc-crossing-production-smoke
+  cancel-in-progress: true
 
 jobs:
   public-origin:
@@ -25,20 +28,21 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Wait for this commit's production deployment
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           for attempt in $(seq 1 80); do
-            if state=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/status" --jq '[.statuses[] | select(.context == "Vercel" and ((.target_url // "") | contains("/chrisizworski-com/")))] | .[0].state // "pending"'); then
-              case "$state" in
-                success) echo "This commit's production deployment is ready."; exit 0 ;;
-                error|failure) echo "Production deployment failed: $state"; exit 1 ;;
-              esac
+            if EXPECTED_SHA="${GITHUB_SHA}" node --input-type=module -e '
+              const response = await fetch("https://chrisizworski.com/api/nyc-crossing?deployment_smoke=" + process.env.EXPECTED_SHA, {
+                method: "HEAD", redirect: "error", signal: AbortSignal.timeout(15000)
+              });
+              if (response.status !== 204 || response.headers.get("x-deployment-sha") !== process.env.EXPECTED_SHA) process.exit(1);
+            '; then
+              echo "The canonical NYC API is serving this commit."
+              exit 0
             fi
-            echo "Waiting for production deployment ($attempt/80)."
+            echo "Waiting for the exact production commit ($attempt/80)."
             sleep 15
           done
-          echo "Production deployment did not become ready within 20 minutes."
+          echo "The canonical NYC API did not serve this commit within the release window."
           exit 1
       - name: Check out source
         uses: actions/checkout@v4
