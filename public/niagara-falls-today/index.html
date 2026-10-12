@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Niagara Falls Today: Best Visit Plan | Chris Izworski</title>
+<meta name="description" content="Plan 2, 4 or 6 hours at Niagara Falls. See the best feasible stops, seasonal operating rules, last-ticket cutoffs and what to skip.">
+<link rel="canonical" href="https://chrisizworski.com/niagara-falls-today/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Niagara Falls Today — Build Your Best Visit">
+<meta property="og:description" content="A practical, date-aware Niagara Falls visit planner for New York or Ontario, with honest hours and travel buffers.">
+<meta property="og:url" content="https://chrisizworski.com/niagara-falls-today/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Niagara Falls Today — Build Your Best Visit">
+<meta name="twitter:description" content="A date-aware 2–6 hour Niagara itinerary, with honest operating hours and reasons to skip stops.">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/assets/niagara-falls-today.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/chris-izworski/"},
+{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"WebPage","@id":"https://chrisizworski.com/niagara-falls-today/#webpage","url":"https://chrisizworski.com/niagara-falls-today/","name":"Niagara Falls Today: Best Visit Plan","dateModified":"2026-10-12","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/niagara-falls-today/#app"},"author":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"WebApplication","@id":"https://chrisizworski.com/niagara-falls-today/#app","url":"https://chrisizworski.com/niagara-falls-today/","name":"Niagara Falls Today","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"description":"Deterministic time-budget itinerary planner using dated operator-published schedule rules with explicit uncertainty."},
+{"@type":"FAQPage","@id":"https://chrisizworski.com/niagara-falls-today/#faq","mainEntity":[
+{"@type":"Question","name":"How long do I need at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"Two hours suits a short scenic visit on one side. Four hours can allow an attraction plus viewpoints if published hours and travel buffers fit. Six hours offers more flexibility, but admission, queues and weather can change the plan."}},
+{"@type":"Question","name":"Is Maid of the Mist open all year?","acceptedAnswer":{"@type":"Answer","text":"No. The operator publishes a seasonal boating schedule. Check the date-specific schedule and official updates before traveling."}},
+{"@type":"Question","name":"Can I visit the U.S. and Canadian sides in four hours?","acceptedAnswer":{"@type":"Answer","text":"A border crossing takes time and requires appropriate documentation. This planner defaults to a single-country route and does not assume legal eligibility or real-time border clearance."}}
+]}]}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/assets/niagara-falls-today.js"></script>
+</head>
+<body>
+<a class="skip" href="#planner">Skip to the planner</a>
+<header class="top"><a class="brand" href="/">Chris Izworski</a><nav aria-label="Site"><a href="/tools/">Tools</a><a href="/national-tools/">National tools</a><a href="/niagara-border-crossing/">Border waits</a></nav></header>
+<main>
+<section class="hero">
+ <div class="hero-inner">
+ <p class="eyebrow">NIAGARA · THE DECISION DESK <span class="dash">/</span> NEW YORK + ONTARIO</p>
+ <h1>Niagara Falls <em>Today.</em></h1>
+ <p class="lead">Tell us when you arrive and how much time you have. Get a real plan: <strong>where to start, what fits, and what to skip.</strong></p>
+ <div class="hero-points"><span>Season-aware schedules</span><span>Conservative time buffers</span><span>No assumed border crossing</span></div>
+ </div>
+ <div class="hero-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+</section>
+<div class="shell">
+<div class="primary-grid">
+<section class="panel controls" id="planner" aria-labelledby="plan-title">
+ <div class="panel-head"><span class="index">01 / THE BRIEF</span><h2 id="plan-title">Shape your visit</h2><p>Less than 30 seconds to set the essentials.</p></div>
+ <form id="plan-form">
+ <div class="two">
+  <label>Visit date <input type="date" name="visit_date" id="date" required></label>
+  <label>Arrival · Eastern time <input type="time" name="arrival_local" id="time" required value="10:00"></label>
+ </div>
+ <fieldset><legend>How much time?</legend><div class="choices duration">
+  <label><input type="radio" name="duration_minutes" value="120"><span>2 hours</span></label>
+  <label><input type="radio" name="duration_minutes" value="240" checked><span>4 hours</span></label>
+  <label><input type="radio" name="duration_minutes" value="360"><span>6 hours</span></label>
+ </div></fieldset>
+ <fieldset><legend>Where are you starting?</legend><div class="choices sides">
+  <label><input type="radio" name="starting_side" value="US" checked><span>New York · USA</span></label>
+  <label><input type="radio" name="starting_side" value="CA"><span>Ontario · Canada</span></label>
+ </div></fieldset>
+ <label class="full">Your priority <select name="priority">
+  <option value="views">Best waterfall views</option><option value="boat">Boat experience</option><option value="mist">Close-up mist</option><option value="kids">Visiting with kids</option><option value="easy">Easy pace</option><option value="value">Keep it economical</option><option value="photos">Photography</option>
+ </select></label>
+ <details class="details"><summary>Fine-tune your plan <span>party, budget & access</span></summary>
+  <div class="two">
+   <label>Adults <input type="number" name="adults" min="1" max="20" value="2"></label>
+   <label>Youths, when applicable <input type="number" name="youth" min="0" max="20" value="0"></label>
+  </div>
+  <label class="full">Admission budget (same-side currency)<input type="number" name="budget" min="0" step="1" placeholder="Optional — leave blank for no cap"></label>
+  <label class="check"><input type="checkbox" name="low_walking"> Prefer shorter walking distances</label>
+  <label class="check"><input type="checkbox" name="step_free"> Require step-free attractions (route verification still needed)</label>
+ </details>
+ <button type="submit" class="plan-button" id="go">Build my Niagara plan <span aria-hidden="true">→</span></button>
+ </form>
+ <p class="form-note">Schedules are published operator information, <strong>not live admission guarantees</strong>. No account, location sharing or AI subscription.</p>
+</section>
+<section class="panel result" id="result" aria-labelledby="result-title" aria-live="polite">
+ <div class="panel-head"><span class="index">02 / THE ANSWER</span><h2 id="result-title">Your time at the falls</h2><p id="status">Building your same-side visit plan…</p></div>
+ <div id="result-body" aria-busy="true"><div class="empty"><div class="watermark">NF</div><p>Your recommended first stop, route and trade-offs appear here.</p></div></div>
+</section>
+</div>
+<section class="under-grid">
+ <div class="info"><p class="index">03 / DECISION SUPPORT</p><h2>Three things worth checking.</h2><div class="related">
+ <a href="/niagara-border-crossing/"><span>01</span><strong>Crossing between countries?</strong><small>Compare current bridge waits and eligibility before making a border decision.</small><b aria-hidden="true">↗</b></a>
+ <a href="/national-tools/niagara-rainbow/"><span>02</span><strong>Looking for a rainbow?</strong><small>Use the existing sun, mist and weather window forecast to choose a viewpoint.</small><b aria-hidden="true">↗</b></a>
+ <a href="/welland-canal/"><span>03</span><strong>More time in Niagara?</strong><small>See the Welland Canal ship-and-lock viewing tool for a separate excursion.</small><b aria-hidden="true">↗</b></a>
+ </div></div>
+ <aside class="notice"><p class="index">IMPORTANT / BEFORE YOU GO</p><h3>What “feasible” means here</h3><p>Plans use conservative dwell, transfer and entry buffers with at least 15 minutes left over. The published schedule can change. Real-time ticket inventory, queues, route accessibility, parking capacity and live weather cancellations are <strong>not confirmed</strong>.</p><p>Canada-side attraction hours must be verified with <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Niagara Parks</a>. Unverified paid stops are not included in a promised itinerary.</p></aside>
+</section>
+<section class="faq" id="faq"><p class="index">VISITOR QUESTIONS</p><h2>Before you set off</h2>
+ <details><summary>How long do I need at Niagara Falls?</summary><p>Two hours is best used for scenic viewpoints on one side. Four hours may fit a paid attraction plus viewpoints, subject to published hours and transfer buffers. Six hours brings more flexibility. Queue and ticket availability can still change the plan.</p></details>
+ <details><summary>Is Maid of the Mist open all year?</summary><p>No. It operates seasonally. The planner checks the published dates it knows and excludes the boat outside the published season; verify the operator’s current schedule before traveling.</p></details>
+ <details><summary>Can I visit both sides in four hours?</summary><p>A border crossing introduces document requirements and unpredictable delay. For a reliable short visit, this tool plans a single-country route. <a href="/niagara-border-crossing/">Check Niagara border conditions separately.</a></p></details>
+</section>
+</div>
+</main>
+<footer class="footer"><a href="/chris-izworski/">Built by Chris Izworski</a><span>© 2026 Chris Izworski</span><span>Published schedule data reviewed October 12, 2026 · <a href="https://www.niagarafallsstatepark.com/" target="_blank" rel="noopener">New York State Park</a> · <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Niagara Parks</a></span></footer>
+</body></html>
