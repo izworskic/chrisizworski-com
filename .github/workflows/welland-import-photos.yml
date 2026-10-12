@@ -30,6 +30,14 @@ jobs:
           node-version: '24'
       - name: Download the five licensed JPEG assets
         run: node scripts/fetch-welland-photos.cjs
+      - name: Use Python for photographic optimization
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resize and compress the photos
+        run: |
+          python -m pip install --quiet Pillow
+          python scripts/optimize-welland-photos.py
       - name: Verify five real JPEGs
         shell: bash
         run: |
