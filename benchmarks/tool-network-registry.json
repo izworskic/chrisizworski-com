@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-11",
+  "updated": "2026-10-12",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2559,6 +2559,53 @@
         "decisionWindowDays": 28,
         "privacy": "No personal location required; only vessel-name search is local to browser."
       }
+    },
+    {
+      "id": "niagara-falls-today",
+      "name": "Niagara Falls Today",
+      "canonical": "https://chrisizworski.com/niagara-falls-today/",
+      "aliases": [],
+      "kind": "trip-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "what to do at Niagara Falls today within two four or six hours",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "niagara",
+        "new-york",
+        "ontario"
+      ],
+      "personas": [
+        "trip-planner",
+        "family-visitor",
+        "short-stop-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-canonical",
+        "note": "2026-10-12 date-specific same-side Niagara Falls itinerary with cutoff rules. Independent from border-wait and rainbow timing intents. GSC baseline pending."
+      },
+      "measurement": {
+        "search": "GSC 7/28/90 day impressions, non-branded CTR and cannibalization review",
+        "product": "Anonymous planner_submit and official_outbound event counts",
+        "decisionWindowDays": 28,
+        "privacy": "No personal identifiers or exact geolocation required."
+      }
     }
   ],
   "relationships": [
@@ -3593,6 +3640,30 @@
       "strength": "optional",
       "surface": "welland-canal",
       "reason": "Related canal and vessel watching experience."
+    },
+    {
+      "from": "niagara-falls-today",
+      "to": "niagara-border",
+      "type": "trip-dependency",
+      "strength": "strong",
+      "surface": "niagara-planner",
+      "reason": "Check cross-border eligibility and authoritative live waits before choosing a crossing."
+    },
+    {
+      "from": "niagara-falls-today",
+      "to": "welland-canal",
+      "type": "region-follow-up",
+      "strength": "optional",
+      "surface": "niagara-planner",
+      "reason": "Separate Welland Canal ship viewing excursion for travelers with extra time."
+    },
+    {
+      "from": "niagara-border",
+      "to": "niagara-falls-today",
+      "type": "destination-next",
+      "strength": "strong",
+      "surface": "niagara-trip-desk",
+      "reason": "After travel access is established, plan what fits at the Falls."
     }
   ],
   "cannibalizationGroups": [

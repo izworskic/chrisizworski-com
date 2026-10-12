@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Niagara Falls Today P0 build — October 12, 2026
+
+- **Request:** Deliver the attached Niagara Falls Today 1.0 flagship spec: one canonical date-aware visit decision engine, not six SEO satellites.
+- **Changes:** New /niagara-falls-today/ responsive answer-first UI; /api/niagara-falls-today deterministic server planner; source-reviewed October 12 published U.S. attraction season and last-ticket rules; Ontario unpaid-viewpoint fallback with paid-hours unknown until official dated schedule is validated; last-admission, mobility, budget, 15-minute contingency and border hard-gates; 26 focused regression tests; National Tools and regional Niagara trip desk cards; sitemap and registry; Person ID invariant.
+- **Boundaries:** Manual published schedule, not live admission or closure data. No invented Ontario paid hours, real-time queues, parking capacity, weather cancellation, crossing permission or pass calculations. No new paid services or LLM costs.
+- **Measurement:** GSC and AdSense figures not read or asserted in this session. 1M impressions/5% CTR remain network objectives, not outcomes of this launch.
+- **Status:** Feature branch in engineering verification; PR, CI and production deployment must be explicitly confirmed before treating as live.
+- **Next action:** Verify new date fixtures and full repository gates, then merge the approved PR if green and inspect Vercel production.
+
+
 ## Welland Canal photographic hero — October 11, 2026
 
 - **Request:** Add a strong real photograph to the otherwise solid-colour landing-page hero; protect premium maritime minimalism, map/tool usability and discoverability.
