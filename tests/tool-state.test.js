@@ -2,8 +2,22 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
+const { execFileSync } = require('node:child_process');
 const { stateReady, stateCommand, _codec } = require('../lib/tool-state');
 const env = { TOOL_STATE_URL: 'https://state.example', VERCEL_OIDC_TOKEN: 'test-deployment-identity' };
+
+test('source-only production smoke can load traffic parsers without the deployment SDK', () => {
+ execFileSync(process.execPath, ['-e', `
+  const Module = require('node:module');
+  const original = Module._load;
+  Module._load = function (request, ...args) {
+   if (request === '@vercel/oidc') throw new Error('Deployment SDK is absent in the source-only smoke runner');
+   return original.call(this, request, ...args);
+  };
+  const traffic = require('./lib/nyc-crossing/traffic');
+  require('node:assert/strict').equal(typeof traffic.normalizePortAuthority, 'function');
+ `], { cwd: require('node:path').resolve(__dirname, '..') });
+});
 
 test('state keeps cache semantics, compresses large payloads and never sends provider credentials', async () => {
  const values = new Map(), calls=[];
