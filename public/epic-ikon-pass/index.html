@@ -142,9 +142,15 @@ const locations=[...E.resorts].sort((a,b)=>a.name.localeCompare(b.name));
 const showResorts=()=>{const p=pass.value,old=resort.value;resort.replaceChildren();locations.filter(x=>!p||x.brand===(p.startsWith("epic")?"epic":"ikon")).forEach(x=>resort.add(new Option(x.name+" · "+x.region,x.id)));if([...resort.options].some(x=>x.value===old))resort.value=old;};
 const input=()=>({pass:pass.value,resort:resort.value,date:date.value,usedDays:$("used-days").value,reservationMade:$("reservation").value,epicDayTotal:$("epicday-total").value,epicPeak:$("epic-peak").value,sessionTotal:$("session-total").value,intent:$("visit-style").value});
 function render(){
-const args=input(),r=E.evaluate(args),container=$("decision");container.dataset.status=r.status;
-$("verdict-label").textContent=label[r.status]||r.status;
-$("verdict-title").textContent=r.title;$("verdict-explain").textContent=r.explanation;
+const args=input(),r=E.evaluate(args),container=$("decision");
+const range=(window.EpicIkonV3&&args.resort==="vail"&&$("v3-end-date")?.value)?window.EpicIkonV3.projectTripDates(E,args,$("v3-end-date").value):null;
+const blocked=range?.rows?.filter(day=>day.verdict.status==="NO")||[];
+const unresolved=range?.rows?.filter(day=>["UNKNOWN","CHECK","ACTION"].includes(day.verdict.status))||[];
+const rangeStatus=range&&!range.valid?"UNKNOWN":blocked.length?"NO":unresolved.length?unresolved[0].verdict.status:null;
+container.dataset.status=rangeStatus||r.status;
+$("verdict-label").textContent=blocked.length?"Trip contains blocked ski dates":rangeStatus==="UNKNOWN"?"Trip needs a date correction":label[rangeStatus||r.status]||r.status;
+$("verdict-title").textContent=blocked.length?"Do not book this as an all-days pass-covered ski trip.":range&&!range.valid?"Correct the selected ski-day range":r.title;
+$("verdict-explain").textContent=blocked.length?blocked.length+" of "+range.rows.length+" planned ski days are blocked by this pass or allowance. First blocked day: "+blocked[0].date+". Review each day below before committing.":range&&!range.valid?range.message:r.explanation;
 const list=$("caveats");list.replaceChildren();(r.caveats||["This only checks 2026–27 pass policy. Verify resort operations and your account directly."]).forEach(t=>{const li=document.createElement("li");li.textContent=t;list.append(li)});
 $("policy-link").href=r.sourceUrl||(args.pass.startsWith("ikon")?E.IKON_URL:E.EPIC_URL);
 $("policy-link").textContent=r.status==="ACTION"?"Read reservation requirements ↗":"Read official pass policy ↗";
@@ -276,6 +282,7 @@ $("guide-source").addEventListener("click",()=>{
 });
 pass.addEventListener("change",()=>{requestSeq++;options();guideFallback();});resort.addEventListener("change",()=>{requestSeq++;render();guideFallback();});date.addEventListener("change",()=>{requestSeq++;render();guideFallback();});
 $("visit-style").addEventListener("change",()=>{requestSeq++;guideFallback();});
+document.addEventListener("epicikon:span-updated",()=>{requestSeq++;render();guideFallback();});
 ["used-days","reservation","epicday-total","epic-peak","session-total"].forEach(id=>$(id).addEventListener("change",()=>{requestSeq++;render();guideFallback();}));
 $("share").addEventListener("click",async()=>{const a=input(),u=new URL(location.pathname,location.origin);["pass","resort","date"].forEach(k=>u.searchParams.set(k,a[k]));if(a.usedDays!=="")u.searchParams.set("used",a.usedDays);if(a.reservationMade!=="unknown")u.searchParams.set("reservation",a.reservationMade);if(a.epicDayTotal)u.searchParams.set("days",a.epicDayTotal);if(a.epicPeak)u.searchParams.set("peak",a.epicPeak);if(a.sessionTotal)u.searchParams.set("session",a.sessionTotal);if(a.intent!=="first")u.searchParams.set("intent",a.intent);try{await navigator.clipboard.writeText(u.href);$("copy-status").textContent="Plan link copied. Links contain only the choices entered here.";}catch{$("copy-status").textContent="Copy your plan URL: "+u.href;}});
 render();guideFallback();
