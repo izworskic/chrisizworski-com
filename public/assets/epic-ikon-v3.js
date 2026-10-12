@@ -18,7 +18,7 @@
   const MEDIA=Object.freeze([
     {id:'vail-ski-scene-2009',exactSubject:'Vail Ski Resort trails and snowy ridges',season:'WINTER',captureDate:'2009-12-24',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Vail_Ski_Resort_I_(33672235356).jpg?width=1280',alt:'Winter skiing terrain at Vail Ski Resort, photographed in December 2009',photographer:'Joe Lin',sourcePage:'https://commons.wikimedia.org/wiki/File:Vail_Ski_Resort_I_(33672235356).jpg',license:'CC BY 2.0',licenseUrl:'https://creativecommons.org/licenses/by/2.0/',rights:'CC',editorialPurpose:'MOUNTAIN',why:'See a real winter scene at Vail; not evidence of current snow or open lifts'},
     {id:'vail-front-side-2005',exactSubject:'Vail Front Side photographed from Red Sandstone Road',season:'WINTER',captureDate:'2005-02-13',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Vail_front_side.jpg?width=960',alt:'Front Side of Vail Ski Resort rising above the town in February 2005',photographer:'David Benbennick',sourcePage:'https://commons.wikimedia.org/wiki/File:Vail_front_side.jpg',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',rights:'CC',editorialPurpose:'TERRAIN',why:'Shows how the Front Side and the town sit together; historic photograph'},
-    {id:'vail-lionshead-2010',exactSubject:'Condos and shops in Lionshead Village, Vail',season:'SUMMER',captureDate:'2010-08-11',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Lionshead_Vail_Colorado.JPG?width=720',alt:'Pedestrian village of Lionshead at Vail in summer 2010',photographer:'Greg Tally (WineCountryInn)',sourcePage:'https://commons.wikimedia.org/wiki/File:Lionshead_Vail_Colorado.JPG',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',rights:'CC',editorialPurpose:'ARRIVAL',why:'Shows the actual pedestrian village streetscape, explicitly not a winter scene'}
+    {id:'vail-lionshead-2009',exactSubject:'Buildings at Lionshead Village, Vail',season:'SUMMER',captureDate:'2009-08-11',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Buildings_at_Lionshead_Village_(3826589153).jpg?width=720',alt:'Buildings in Lionshead Village at Vail during summer 2009',photographer:'Pattie (Pirate Alice)',sourcePage:'https://commons.wikimedia.org/wiki/File:Buildings_at_Lionshead_Village_(3826589153).jpg',license:'CC BY-SA 2.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/2.0/',rights:'CC',editorialPurpose:'ARRIVAL',why:'Shows the actual pedestrian village streetscape, explicitly not a winter scene'}
   ]);
   const PLACES=Object.freeze([
     {id:'den',kind:'AIRPORT',name:'Denver International Airport (DEN)',lat:39.8608,lon:-104.6727,sourceUrl:'https://mapcarta.com/Denver_International_Airport',note:'A regional flight gateway. I-70 access and transfer arrangements require independent checking; no drive time is assumed.'},
@@ -109,6 +109,8 @@
     section.hidden=args.resort!=='vail';
     document.body.dataset.v3Resort=args.resort;
     if(section.hidden)return;
+    const gallery=document.getElementById('v3-gallery');
+    if(!gallery.dataset.ready){for(const [i,a] of MEDIA.entries())gallery.append(createPhoto(a,i===0));gallery.dataset.ready='1';}
     const c=commitment(verdict),prof=getProfile(),fit=chosenArrival(prof);
     document.getElementById('v3-commit').textContent=c.label;
     document.getElementById('v3-action').textContent=c.next;
@@ -126,8 +128,6 @@
   function init(){
     if(typeof document==='undefined')return;
     const section=document.getElementById('v3-slice');if(!section)return;
-    const gallery=document.getElementById('v3-gallery');
-    for(const [i,a] of MEDIA.entries())gallery.append(createPhoto(a,i===0));
     for(const id of ['v3-origin','v3-ability','v3-arrival'])document.getElementById(id).addEventListener('change',()=>{
       const E=window.PassDecoder;
       const args={pass:document.getElementById('pass').value,resort:document.getElementById('resort').value,date:document.getElementById('ski-date').value,usedDays:document.getElementById('used-days').value,reservationMade:document.getElementById('reservation').value,epicDayTotal:document.getElementById('epicday-total').value,epicPeak:document.getElementById('epic-peak').value,sessionTotal:document.getElementById('session-total').value};
@@ -145,7 +145,7 @@
       const extras={used:'used-days',reservation:'reservation',days:'epicday-total',peak:'epic-peak',session:'session-total',intent:'visit-style',origin:'v3-origin',ability:'v3-ability',arrival:'v3-arrival'};
       for(const [k,id]of Object.entries(extras)){const value=document.getElementById(id).value;if(value&&value!=='unknown'&&value!=='first')u.searchParams.set(k,value);}
       const text=document.getElementById('v3-date-verdict').textContent+'\n'+document.getElementById('v3-commit').textContent+'\n'+document.getElementById('v3-action').textContent+'\n'+document.getElementById('v3-location-copy').textContent+'\nNot a live operation, booking, routing or safety confirmation.\nOfficial sources: '+Object.values(SOURCES).join(' ')+'\n'+u.href;
-      navigator.clipboard?.writeText(text).then(()=>{document.getElementById('v3-brief-note').textContent='Source-linked brief copied. No account or booking details included.';},()=>{document.getElementById('v3-brief-note').textContent='Copy the link from your browser: '+u.href;});
+      if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(()=>{document.getElementById('v3-brief-note').textContent='Source-linked brief copied. No account or booking details included.';}).catch(()=>{document.getElementById('v3-brief-note').textContent='Copy the plan link from your browser: '+u.href;});}else{document.getElementById('v3-brief-note').textContent='Copy the plan link from your browser: '+u.href;}
       window.gtag?.('event','trip_brief_share',{resort_id:'vail'});
     });
     const params=new URLSearchParams(location.search);
