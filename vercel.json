@@ -1047,6 +1047,18 @@
       "destination": "https://national-white-christmas.vercel.app/white-christmas-michigan/"
     },
     {
+      "source": "/isle-royale-ferry",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
+    },
+    {
+      "source": "/isle-royale-ferry/",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
+    },
+    {
+      "source": "/assets/grand-portage-ferry.js",
+      "destination": "https://isle-royale-outdoors.vercel.app/assets/grand-portage-ferry.js"
+    },
+    {
       "source": "/isle-royale-map",
       "destination": "/api/public-tool-shell?tool=isle-royale-map"
     },
