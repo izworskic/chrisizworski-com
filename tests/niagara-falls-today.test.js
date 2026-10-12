@@ -76,3 +76,52 @@ test('Canada hard zero-dollar budget cannot silently include unknown-price paid 
  assert.equal(v.costs[0].prices_complete,true);
  assert.ok(v.excluded.some(s=>s.reason==='PRICE_NOT_VERIFIED'));
 });
+
+test('BOAT-01 boat preference is a required itinerary feature when schedule fits',()=>{
+ const v=p({visit_date:'2026-10-13',arrival_local:'10:00',priority:'boat'});
+ assert.equal(v.boat_resolution.status,'FEASIBLE');
+ assert.equal(v.boat_resolution.included,true);
+ assert.ok(v.stops.some(x=>x.id==='maid'));
+ assert.equal(v.status,'PLANNED_WITH_VERIFICATION');
+});
+test('BOAT-02 late NY arrival explains missed boat and labels scenic fallback honestly',()=>{
+ const v=p({visit_date:'2026-10-13',arrival_local:'20:00',duration_minutes:240,priority:'boat'});
+ assert.equal(v.status,'BOAT_NOT_FEASIBLE');
+ assert.equal(v.boat_resolution.status,'UNAVAILABLE');
+ assert.equal(v.boat_resolution.reason_code,'BOAT_AFTER_OPERATING_WINDOW');
+ assert.ok(v.boat_resolution.reason.includes('17:00'));
+ assert.ok(v.stops.every(x=>x.id!=='maid'));
+ assert.match(v.verdict,/scenic alternative/i);
+});
+test('BOAT-03 arrival before opening waits instead of rejecting the boat',()=>{
+ const v=p({visit_date:'2026-10-13',arrival_local:'08:00',duration_minutes:240,priority:'boat'});
+ assert.equal(v.boat_resolution.status,'FEASIBLE');
+ const boat=v.stops.find(x=>x.id==='maid');assert.ok(boat);
+ assert.ok(boat.waiting_minutes>0);
+ assert.ok(Number(boat.departure.slice(0,2))>=10);
+});
+test('BOAT-04 too little visit time cannot advertise a boat trip',()=>{
+ const v=p({visit_date:'2026-10-13',arrival_local:'10:00',duration_minutes:60,priority:'boat'});
+ assert.equal(v.boat_resolution.included,false);
+ assert.equal(v.boat_resolution.reason_code,'BOAT_NOT_ENOUGH_TIME');
+ assert.ok(v.stops.every(x=>x.id!=='maid'));
+});
+test('BOAT-05 seasonally closed Maid never becomes a boat itinerary',()=>{
+ const v=p({visit_date:'2026-11-09',arrival_local:'10:00',duration_minutes:240,priority:'boat'});
+ assert.equal(v.boat_resolution.status,'UNAVAILABLE');
+ assert.equal(v.boat_resolution.reason_code,'PUBLISHED_CLOSED');
+ assert.ok(v.stops.every(x=>x.id!=='maid'));
+});
+test('BOAT-06 unknown Canadian boat hours cannot be called closed or feasible',()=>{
+ const v=p({visit_date:'2026-10-13',starting_side:'CA',arrival_local:'10:00',priority:'boat'});
+ assert.equal(v.boat_resolution.status,'UNAVAILABLE');
+ assert.equal(v.boat_resolution.reason_code,'HOURS_NOT_VERIFIED');
+ assert.ok(v.stops.every(x=>x.id!=='cruise'));
+});
+test('BOAT-07 boat choice immediately replans in visitor script',()=>{
+ const fs=require('node:fs');
+ const script=fs.readFileSync(require('node:path').join(__dirname,'../public/assets/niagara-falls-today.js'),'utf8');
+ assert.match(script,/form\.addEventListener\('change'/);
+ assert.match(script,/data-boat-next-date/);
+ assert.match(script,/niagara_boat_not_feasible/);
+});

@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go');
+var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go'),requestSeq=0;
 function todayEastern(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now()+3600000));var o={};parts.forEach(function(p){o[p.type]=p.value;});return{date:o.year+'-'+o.month+'-'+o.day,hour:Number(o.hour)};}
 var t=todayEastern();document.getElementById('date').value=t.date;document.getElementById('time').value=String(t.hour).padStart(2,'0')+':00';
 function emit(name){try{if(typeof window.gtag==='function')window.gtag('event',name,{page_id:'niagara-falls-today'});if(typeof window.va==='function')window.va('event',{name:name});}catch(e){}}
@@ -43,7 +43,22 @@ function draw(r){
  var admission=r.costs[0],unknownPrices=!admission.prices_complete;
  var totalLabel=currency+' '+Number(admission.known_admission_total).toFixed(2)+(unknownPrices?' + unknown':'');
  var out='<div class="result-content"><div class="verdict"><span class="label">'+safe(r.confidence)+' CONFIDENCE · '+safe(r.status.replace(/_/g,' '))+'</span><h3>'+safe(r.verdict)+'</h3><p>Published schedules are not live opening confirmations. No invented queues, weather or border delays.</p></div>';
- if(first)out+='<div class="first"><div><small>YOUR FIRST ACTION</small><b>'+safe(first.name)+'</b><small>Arrive approximately '+safe(first.arrival)+' Eastern · '+safe(r.visit_local_date)+'</small></div><a class="action" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(first.location)+'" target="_blank" rel="noopener">Open directions ↗</a></div>';
+ if(r.boat_resolution){
+  var br=r.boat_resolution;
+  if(br.included){
+   out+='<section class="boat-decision boat-success"><strong>Boat ride included in your plan</strong><p>'+safe(br.boat_name)+' fits your chosen time and published operating window. Bookings, tickets and queues are not confirmed.</p></section>';
+  }else{
+   out+='<section class="boat-decision boat-missed" role="status"><strong>Boat ride could not fit this visit</strong><p>'+safe(br.reason)+'</p>';
+   if(br.published_hours&&br.published_hours.open&&br.published_hours.close)out+='<p>Operator-published hours on this date: '+safe(br.published_hours.open)+'–'+safe(br.published_hours.close)+' Eastern.</p>';
+   if(br.next_option){
+    var next=br.next_option;
+    out+='<button type="button" class="boat-next-button" data-boat-next-date="'+safe(next.visit_date)+'" data-boat-next-time="'+safe(next.arrival_local)+'">Plan a boat trip on '+safe(next.visit_date)+' at '+safe(next.arrival_local)+' →</button><p>This is a published operating window, not a reserved ticket or a real-time boat departure.</p>';
+   }else out+='<p>No alternate boat window was verified within the next two days. You can choose another date or check the operator.</p>';
+   if(br.operator_url)out+=link(br.operator_url,'Boat operator and tickets');
+   out+='<p class="fallback-note">The route below is a <strong>scenic alternative, not a boat itinerary</strong>.</p></section>';
+  }
+ }
+ if(first)out+='<div class="first"><div><small>'+(r.boat_resolution&&!r.boat_resolution.included?'SCENIC BACKUP · NOT A BOAT':'YOUR FIRST ACTION')+'</small><b>'+safe(first.name)+'</b><small>Arrive approximately '+safe(first.arrival)+' Eastern · '+safe(r.visit_local_date)+'</small></div><a class="action" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(first.location)+'" target="_blank" rel="noopener">Open directions ↗</a></div>';
  out+='<div class="stats"><div class="stat"><strong>'+stops.length+'</strong><span>Planned stops</span></div><div class="stat"><strong>'+safe(r.timeline.contingency_minutes)+' min</strong><span>Time buffer</span></div><div class="stat"><strong>'+safe(totalLabel)+'</strong><span>'+(unknownPrices?'Known subtotal · more due':'Known admission subtotal')+'</span></div></div>';
  out+='<div class="sectitle">Your guided route · Eastern local time</div>'+guideIntro(r,stops);
  if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopStory(s,i?stops[i-1]:null,r)+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
@@ -69,14 +84,25 @@ function draw(r){
  out+='<details class="source-details"><summary>Published source status and limitations</summary><p>'+safe(r.what_changed)+'</p><ul>';r.source_health.forEach(function(x){out+='<li>'+safe(x.entity_id)+' — '+safe(x.status)+': '+safe(x.basis)+' ('+safe(x.reviewed)+') '+link(x.source,'operator')+'</li>';});out+='</ul></details>';
  if(r.visit_local_date==='2026-10-12'&&stops.length){out+='<p class="caveat">Tonight: Niagara Parks schedules a 10:00 p.m. fireworks show, <strong>weather permitting</strong>. It is not a verified live event. '+link('https://www.niagaraparks.com/events/event/niagara-falls-fireworks-series','Official fireworks details')+'</p>';}
  out+='<div class="small-links">'+link(r.links_to_official.border,'Bridge status')+link(r.links_to_official.rainbow,'Rainbow timing')+link(r.side==='US'?r.links_to_official.us:r.links_to_official.ca,'Official operating updates')+'</div></div>';
- body.innerHTML=out;body.setAttribute('aria-busy','false');status.textContent='Your same-side visit, field notes and constraints.';bindGuideVideo();updateSideGuide(r);emit(stops.length?'niagara_plan_success':'niagara_plan_no_feasible');
+ body.innerHTML=out;body.setAttribute('aria-busy','false');
+ var nextButton=body.querySelector('[data-boat-next-date]');
+ if(nextButton)nextButton.addEventListener('click',function(){
+  var date=nextButton.getAttribute('data-boat-next-date'),arrival=nextButton.getAttribute('data-boat-next-time');
+  if(!/^20[0-9]{2}-[0-9]{2}-[0-9]{2}$/.test(date)||!/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(arrival))return;
+  form.elements.visit_date.value=date;form.elements.arrival_local.value=arrival;
+  emit('niagara_boat_next_option');submit();
+ });
+ status.textContent=r.boat_resolution&&!r.boat_resolution.included?'Boat not feasible for the selected window. Review the next-boat option.':'Your same-side visit, field notes and constraints.';
+ bindGuideVideo();updateSideGuide(r);emit(r.boat_resolution&&!r.boat_resolution.included?'niagara_boat_not_feasible':stops.length?'niagara_plan_success':'niagara_plan_no_feasible');
 }
-async function submit(ev){if(ev)ev.preventDefault();button.disabled=true;body.setAttribute('aria-busy','true');status.textContent='Calculating a conservative route…';emit('niagara_plan_submit');
+async function submit(ev){if(ev)ev.preventDefault();var thisRequest=++requestSeq;button.disabled=true;body.setAttribute('aria-busy','true');status.textContent='Checking your requested experience…';emit('niagara_plan_submit');
  var d=new FormData(form);var data={visit_date:d.get('visit_date'),arrival_local:d.get('arrival_local'),duration_minutes:d.get('custom_minutes')?Number(d.get('custom_minutes')):Number(d.get('duration_minutes')),starting_side:d.get('starting_side'),priority:d.get('priority'),adults:Number(d.get('adults')),youth:Number(d.get('youth')),budget:d.get('budget')===''?null:Number(d.get('budget')),step_free:d.has('step_free'),low_walking:d.has('low_walking')};
- try{var response=await fetch('/api/niagara-falls-today',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});var result=await response.json();if(!response.ok)throw new Error(result.error||'Service unavailable');draw(result);}catch(e){body.innerHTML='<div class="result-content"><div class="caveat"><strong>Planner currently unavailable.</strong> '+safe(e.message)+' No opening claim can be made. Check the <a href="https://www.niagarafallsstatepark.com/" target="_blank" rel="noopener">U.S. operator</a> or <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Canadian hours</a>.</div></div>';body.setAttribute('aria-busy','false');status.textContent='Source check needed.';emit('niagara_source_degraded');}finally{button.disabled=false;}
+ try{var response=await fetch('/api/niagara-falls-today',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});var result=await response.json();if(!response.ok)throw new Error(result.error||'Service unavailable');if(thisRequest!==requestSeq)return;draw(result);}catch(e){if(thisRequest!==requestSeq)return;body.innerHTML='<div class="result-content"><div class="caveat"><strong>Planner currently unavailable.</strong> '+safe(e.message)+' No opening claim can be made. Check the <a href="https://www.niagarafallsstatepark.com/" target="_blank" rel="noopener">U.S. operator</a> or <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Canadian hours</a>.</div></div>';body.setAttribute('aria-busy','false');status.textContent='Source check needed.';emit('niagara_source_degraded');}finally{if(thisRequest===requestSeq)button.disabled=false;}
 }
 form.addEventListener('submit',submit);
-document.querySelectorAll('input[name=duration_minutes],input[name=starting_side]').forEach(function(el){el.addEventListener('change',function(){emit('niagara_replan');submit();});});
+// Recalculate when the actual goal changes. The old code listened only to
+// duration and country, leaving the Boat preference stuck on an old itinerary.
+form.addEventListener('change',function(e){if(e.target&&e.target.name){emit('niagara_replan');submit();}});
 var hero=document.querySelector('.hero-photo'),img=hero&&hero.querySelector('img');if(img){img.addEventListener('error',function(){hero.classList.add('is-missing');});if(img.complete&&img.naturalWidth===0)hero.classList.add('is-missing');}
 emit('niagara_planner_view');submit();
 })();
