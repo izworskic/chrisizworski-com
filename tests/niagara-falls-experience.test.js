@@ -9,10 +9,10 @@ const script=read('public/assets/niagara-falls-today.js');
 const guide=read('public/assets/niagara-falls-guide.js');
 const context={window:{}};vm.runInNewContext(guide,context,{timeout:1000});
 const stops=context.window.NiagaraFallsGuide;
-test('V5 preserves one licensed hero photo and a restrained opt-in film player, not static galleries',()=>{
- assert.equal((html.match(/<img /g)||[]).length,1);
+test('V6 preserves one licensed hero and three compact video thumbnails, not a photo gallery',()=>{
+ assert.equal((html.match(/<img /g)||[]).length,4);
  assert.equal((html.match(/<img src="\/assets\/niagara-falls\/photos\/horseshoe-2026\.jpg"/g)||[]).length,1);
- assert.doesNotMatch(html,/i\.ytimg\.com\/vi\//);
+ assert.equal((html.match(/i\.ytimg\.com\/vi\//g)||[]).length,3);
  assert.match(html,/src="\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg"/);
  assert.match(html,/https:\/\/chrisizworski\.com\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg/);
  assert.doesNotMatch(html,/<section class="experience"|class="scene-grid"|class="film-grid"/);
@@ -49,7 +49,7 @@ test('route story is derived from real selected stops and preserves planner safe
  assert.match(script,/HOURS_NOT_VERIFIED/);
  assert.match(script,/updateSideGuide\(r\)/);
 });
-test('one film player offers three documentary choices without preloaded video or thumbnails',()=>{
+test('one player offers three thumbnail choices without preloaded video',()=>{
  const films=read('public/assets/niagara-visit-films.js');
  assert.doesNotMatch(html,/<iframe/);
  assert.equal((html.match(/data-niagara-clip="/g)||[]).length,3);
@@ -60,6 +60,12 @@ test('one film player offers three documentary choices without preloaded video o
  }
  assert.match(films,/document\.addEventListener\('click'/);
  assert.match(html,/id="niagara-film-stage"/);
+ assert.equal((html.match(/class="film-thumb"/g)||[]).length,3);
+ assert.equal((html.match(/loading="lazy" decoding="async" alt=""/g)||[]).length,3);
+ assert.equal((html.match(/aria-pressed="false"/g)||[]).length,3);
+ assert.match(films,/\.film-thumb img/);
+ assert.match(films,/is-missing/);
+ assert.match(films,/scrollIntoView/);
  assert.match(films,/stage\.replaceChildren\(iframe\)/);
  assert.match(films,/youtube-nocookie\.com\/embed/);
  assert.match(script,/stops\.some\(function\(s\)\{return s\.id==='table';\}\)/);
