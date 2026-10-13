@@ -402,3 +402,24 @@
 .lock-detail__navigation .lock-detail__next{margin:0}
 .lock-detail__navigation button:focus-visible{outline:3px solid #c49b59;outline-offset:2px}
 @media(max-width:420px){.lock-journey{margin:1px 15px 16px}.lock-journey__meta{align-items:flex-start;flex-direction:column;gap:4px}.lock-journey__meta strong{text-align:left}.lock-journey__track{gap:4px}.lock-detail__navigation button{font-size:11px}}
+
+/* Premium lock focus: tiny selected medallion with a 44px Leaflet tap target. */
+.welland-lock-pin.is-active .lock-pin__dot{width:29px;height:29px;background:#d8b16a;border:1.5px solid #f7f3eb;color:#143e50;font-size:13px;box-shadow:0 0 0 1px rgba(123,85,39,.46)}
+.welland-lock-pin.is-flight.is-active .lock-pin__group{box-shadow:0 0 0 1px rgba(123,85,39,.46)}
+/* On tablets and phones the under-map briefing is the only selected-lock answer. */
+@media(max-width:900px){
+  .lock-instant-answer{display:none!important}
+  .map-lock-preview__steps{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 4px;padding:11px 0 0;border-top:1px solid #dce7e5}
+  .map-lock-preview__steps>span{color:#876944;font-size:10px;font-weight:850;letter-spacing:.13em;white-space:nowrap}
+  .map-lock-preview__step-buttons{display:flex;gap:7px;flex-wrap:wrap}
+  .map-lock-preview__step-buttons button{min-height:40px;padding:8px 11px;border:1px solid #becfd1;border-radius:5px;background:#fff;color:#164b60;font-size:12px;font-weight:800;cursor:pointer}
+  .map-lock-preview__step-buttons button:hover:not(:disabled){border-color:#be9c61;background:#f4f8f8}
+  .map-lock-preview__step-buttons button:disabled{opacity:.42;cursor:default}
+  .map-lock-preview__step-buttons button:focus-visible{outline:3px solid #d8b174;outline-offset:2px}
+  .map-lock-preview__open{grid-column:1 / -1;justify-self:start}
+}
+@media(max-width:420px){
+  .map-lock-preview__steps{align-items:flex-start;gap:8px}
+  .map-lock-preview__step-buttons{width:100%}
+  .map-lock-preview__step-buttons button{flex:1 1 112px}
+}
