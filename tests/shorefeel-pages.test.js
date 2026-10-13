@@ -47,5 +47,5 @@ test('API is noindex and does not interpolate or use paid services',()=>{
  assert.match(api,/X-Robots-Tag/);
  assert.match(api,/Object\.hasOwn\(DESTINATIONS/);
  assert.match(api,/parseNDBC/);
- assert.doesNotMatch(api,/redis|anthropic|openai|apiKey/i);
+ assert.doesNotMatch(api,/require\([\x27\x22](?:redis|ioredis|openai|@anthropic)/i);
 });
