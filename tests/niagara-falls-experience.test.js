@@ -9,8 +9,10 @@ const script=read('public/assets/niagara-falls-today.js');
 const guide=read('public/assets/niagara-falls-guide.js');
 const context={window:{}};vm.runInNewContext(guide,context,{timeout:1000});
 const stops=context.window.NiagaraFallsGuide;
-test('V3 uses one actual on-site hero photo and no static gallery',()=>{
- assert.equal((html.match(/<img /g)||[]).length,1);
+test('V4 preserves one licensed hero photo and adds only verified film posters, not static galleries',()=>{
+ assert.equal((html.match(/<img /g)||[]).length,4);
+ assert.equal((html.match(/<img src="\/assets\/niagara-falls\/photos\/horseshoe-2026\.jpg"/g)||[]).length,1);
+ assert.equal((html.match(/i\.ytimg\.com\/vi\/[^"]+\/hqdefault\.jpg/g)||[]).length,3);
  assert.match(html,/src="\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg"/);
  assert.match(html,/https:\/\/chrisizworski\.com\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg/);
  assert.doesNotMatch(html,/<section class="experience"|class="scene-grid"|class="film-grid"/);
@@ -47,13 +49,19 @@ test('route story is derived from real selected stops and preserves planner safe
  assert.match(script,/HOURS_NOT_VERIFIED/);
  assert.match(script,/updateSideGuide\(r\)/);
 });
-test('only one verified optional publisher film appears for relevant Ontario viewpoint',()=>{
+test('three verified films require visitor interaction; original relevant Ontario film remains optional',()=>{
+ const films=read('public/assets/niagara-visit-films.js');
  assert.doesNotMatch(html,/<iframe/);
- assert.doesNotMatch(html,/ytimg\.com|data-video-id/);
+ assert.equal((html.match(/data-niagara-clip="/g)||[]).length,3);
+ for(const id of ['F1D0AUIfKJk','hmQwm0drhGU','l6fu2huqWNE']){
+  assert.match(html,new RegExp('data-niagara-clip="'+id+'"'));
+  assert.match(html,new RegExp('https://www.youtube.com/watch\\?v='+id));
+  assert.match(films,new RegExp(id));
+ }
+ assert.match(films,/document\.addEventListener\('click'/);
+ assert.match(films,/youtube-nocookie\.com\/embed/);
  assert.match(script,/stops\.some\(function\(s\)\{return s\.id==='table';\}\)/);
  assert.match(script,/DlMgURteL3E/);
- assert.match(script,/youtube-nocookie\.com\/embed/);
- assert.match(script,/data-niagara-video/);
 });
 test('source identity and mobile responsiveness remain intact',()=>{
  assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/niagara-falls-today\/"/);

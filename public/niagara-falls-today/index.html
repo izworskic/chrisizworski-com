@@ -18,6 +18,7 @@
 <meta name="twitter:description" content="A date-aware 2–6 hour Niagara itinerary, with honest operating hours and reasons to skip stops.">
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/assets/niagara-falls-today.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
@@ -31,6 +32,9 @@
 ]}]}
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="/assets/niagara-visit-map.js"></script>
+<script defer src="/assets/niagara-visit-films.js"></script>
 <script defer src="/assets/niagara-falls-guide.js"></script>
 <script defer src="/assets/niagara-falls-today.js"></script>
 </head>
@@ -53,6 +57,15 @@
 </section>
 <div class="shell">
 
+<section class="falls-films" id="falls-films" aria-labelledby="falls-films-title">
+ <div class="section-lead"><p class="index">BEFORE YOU PLAN / EXPERIENCE IT</p><h2 id="falls-films-title">Three ways to feel Niagara.</h2><p>A boat travels into the mist. A boardwalk approaches the falling water. A tunnel leads behind the Horseshoe. Watch real visitor footage before you decide what deserves your time.</p></div>
+ <div class="falls-film-grid">
+  <article class="falls-film featured"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="F1D0AUIfKJk" aria-label="Play footage of the Maid of the Mist boat ride"><img src="https://i.ytimg.com/vi/F1D0AUIfKJk/hqdefault.jpg" alt="Maid of the Mist boat ride filmed from the American side" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span><span class="film-duration">WATCH THE BOAT EXPERIENCE</span></button></div><div class="film-caption"><span>01 · RIVER LEVEL</span><h3>Into the thunder.</h3><p>On a boat, the waterfalls stop looking like scenery and start feeling like weather. Watch the actual journey before choosing this experience.</p><small>Explore Niagara · filmed visitor footage · <a href="https://www.youtube.com/watch?v=F1D0AUIfKJk" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a></small></div></article>
+  <article class="falls-film"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="hmQwm0drhGU" aria-label="Play Cave of the Winds walkway footage"><img src="https://i.ytimg.com/vi/hmQwm0drhGU/hqdefault.jpg" alt="Cave of the Winds boardwalk and Hurricane Deck visitor footage" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span></button></div><div class="film-caption"><span>02 · FEEL THE SPRAY</span><h3>Below the falling water.</h3><p>See the paths, railings and exposed decks before committing to a ticket. The outdoor decks vary by season.</p><small>Magellan and Greyhound · <a href="https://www.youtube.com/watch?v=hmQwm0drhGU" target="_blank" rel="noopener noreferrer">Watch separately ↗</a></small></div></article>
+  <article class="falls-film"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="l6fu2huqWNE" aria-label="Play official Niagara Parks Journey Behind the Falls film"><img src="https://i.ytimg.com/vi/l6fu2huqWNE/hqdefault.jpg" alt="Journey Behind the Falls tunnels and viewing platforms" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span></button></div><div class="film-caption"><span>03 · INSIDE THE ROCK</span><h3>Behind the Horseshoe.</h3><p>Descend through bedrock, hear the roar and watch the water through portals. Deck access is subject to current construction.</p><small>Niagara Parks · official footage · <a href="https://www.youtube.com/watch?v=l6fu2huqWNE" target="_blank" rel="noopener noreferrer">Official film ↗</a></small></div></article>
+ </div>
+ <p class="film-disclaimer">These are documentary videos, not current conditions. Playback begins only when selected; if embedding is blocked, each film has a direct YouTube link.</p>
+</section>
 <div class="primary-grid">
 <section class="panel controls" id="planner" aria-labelledby="plan-title">
  <div class="panel-head"><span class="index">01 / THE BRIEF</span><h2 id="plan-title">Find your best route</h2><p>Where will you start, and what would you most like to experience? Your answer shapes the route below.</p></div>
@@ -61,6 +74,12 @@
   <label>Visit date <input type="date" name="visit_date" id="date" required></label>
   <label>Arrival · Eastern time <input type="time" name="arrival_local" id="time" required value="10:00"></label>
  </div>
+ <fieldset><legend>How will you arrive?</legend><div class="choices arrive-modes">
+  <label><input type="radio" name="arrival_mode" value="drive" checked><span>Driving</span></label>
+  <label><input type="radio" name="arrival_mode" value="walk"><span>Walking / drop-off</span></label>
+  <label><input type="radio" name="arrival_mode" value="transit"><span>Transit / shuttle</span></label>
+ </div></fieldset>
+ <p class="form-note">Your chosen start time is when you are ready to sightsee. Driving? Arrive earlier for parking and the walk to your first stop.</p>
  <fieldset><legend>How much time?</legend><div class="choices duration">
   <label><input type="radio" name="duration_minutes" value="120"><span>2 hours</span></label>
   <label><input type="radio" name="duration_minutes" value="240" checked><span>4 hours</span></label>
@@ -92,6 +111,21 @@
  <div id="result-body" aria-busy="true"><div class="empty"><div class="watermark">NF</div><p>Your first action and a guided, realistic route will appear here.</p></div></div>
 </section>
 </div>
+<section class="wayfinding-panel" id="wayfinding" aria-labelledby="wayfinding-title">
+ <div class="wayfinding-heading"><div><p class="index">03 / ARRIVE AND MOVE</p><h2 id="wayfinding-title">See the route. Know where to begin.</h2><p>Each recommendation appears on the map, including a starting parking area when you drive. Your map changes with the itinerary.</p></div><div id="wayfinding-status" class="wayfinding-status" role="status">Choose a plan to see your map.</div></div>
+ <div class="wayfinding-layout">
+  <div class="wayfinding-map-wrap">
+   <div id="niagara-route-map" class="niagara-route-map" role="region" aria-label="Interactive map of Niagara Falls itinerary stops"></div>
+   <div class="wayfinding-map-footer"><span>Numbered pins = stops · P = parking · Dashed connectors show order, <strong>not walking paths</strong>.</span><span>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> · © CARTO</span></div>
+  </div>
+  <div class="wayfinding-side">
+   <div id="arrival-decision" class="arrival-decision"><p>When your itinerary appears, we’ll identify where to start, which parking lot fits, and whether transit could save walking.</p></div>
+   <div class="wayfinding-buttons"><a id="open-route-map" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls%20State%20Park" target="_blank" rel="noopener noreferrer">Open pedestrian directions ↗</a><a id="open-first-stop" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls" target="_blank" rel="noopener noreferrer">Get to first stop ↗</a></div>
+   <ol id="wayfinding-stop-list" class="wayfinding-stop-list" aria-label="Route stops"><li>Your stops and directions will appear after planning.</li></ol>
+   <details class="wayfinding-detail"><summary>What about parking, buses and accessibility?</summary><p>Rates, spaces, queues, accessible paths and current departures are not inferred from a map. Check operator links in the arrival panel. WEGO is for the Canadian side; Niagara Scenic Trolley is separate in New York. If the map fails to load, the linked pedestrian directions and stop list still work.</p></details>
+  </div>
+ </div>
+</section>
 <section class="river-guide" aria-labelledby="river-title">
  <p class="index">KNOW WHAT YOU’RE LOOKING AT</p>
  <h2 id="river-title">One river. Three waterfalls. Two different views.</h2>
@@ -104,14 +138,14 @@
  <p class="river-source">Landscape interpretation: <a href="https://www.niagarafallsstatepark.com/attractions/overlooks-vistas/" target="_blank" rel="noopener">New York State Park</a> · <a href="https://www.niagaraparks.com/" target="_blank" rel="noopener">Niagara Parks</a></p>
 </section>
 <section class="under-grid">
- <div class="info"><p class="index">03 / DECISION SUPPORT</p><h2>Know before you make the turn.</h2><div class="related">
+ <div class="info"><p class="index">04 / DECISION SUPPORT</p><h2>Know before you make the turn.</h2><div class="related">
  <a href="/niagara-border-crossing/"><span>01</span><strong>Crossing between countries?</strong><small>Compare current bridge waits and eligibility before making a border decision.</small><b aria-hidden="true">↗</b></a>
  <a href="/national-tools/niagara-rainbow/"><span>02</span><strong>Looking for a rainbow?</strong><small>Use the existing sun, mist and weather window forecast to choose a viewpoint.</small><b aria-hidden="true">↗</b></a>
  <a href="/welland-canal/"><span>03</span><strong>More time in Niagara?</strong><small>See the Welland Canal ship-and-lock viewing tool for a separate excursion.</small><b aria-hidden="true">↗</b></a>
  </div></div>
  <aside class="notice"><p class="index">IMPORTANT / BEFORE YOU GO</p><h3>What “feasible” means here</h3><p>Plans use conservative dwell, transfer and entry buffers with at least 15 minutes left over. The published schedule can change. Real-time ticket inventory, queues, route accessibility, parking capacity and live weather cancellations are <strong>not confirmed</strong>.</p><p>Canada-side attraction hours must be verified with <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Niagara Parks</a>. Unverified paid stops are not included in a promised itinerary.</p></aside>
 </section>
-<section class="faq" id="faq"><p class="index">FIELD QUESTIONS</p><h2>Before you set off</h2>
+<section class="faq" id="faq"><p class="index">05 / FIELD QUESTIONS</p><h2>Before you set off</h2>
  <details><summary>How long do I need at Niagara Falls?</summary><p>Two hours is best used for scenic viewpoints on one side. Four hours may fit a paid attraction plus viewpoints, subject to published hours and transfer buffers. Six hours brings more flexibility. Queue and ticket availability can still change the plan.</p></details>
  <details><summary>Is Maid of the Mist open all year?</summary><p>No. It operates seasonally. The planner checks the published dates it knows and excludes the boat outside the published season; verify the operator’s current schedule before traveling.</p></details>
  <details><summary>Can I visit both sides in four hours?</summary><p>A border crossing introduces document requirements and unpredictable delay. For a reliable short visit, this tool plans a single-country route. <a href="/niagara-border-crossing/">Check Niagara border conditions separately.</a></p></details>
