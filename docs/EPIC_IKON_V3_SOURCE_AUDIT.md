@@ -53,3 +53,30 @@ See \`public/assets/epic-ikon-v3-media-review.json\`. Real subject, photographer
 - Live conditions/booking claims: **PASS by exclusion: NOT_CONNECTED**.
 - Mobile screenshot, browser runtime and 94/100 scoring: **NOT TESTED**.
 - V3 release decision: **NO GO — staged branch only**.
+
+## Vail vertical-slice acceptance — inspected 2026-10-12
+
+**Evidence reviewed:** GitHub Actions \`Epic Ikon V3 Vail Acceptance\`, browser test on 390×844 and 1440×900 Chromium, full-page screenshots and per-element browser logs. The public production page remains V2 pending final release decision.
+
+- \`node --test\` targeted regression tests and \`npm test\`: PASS on CI run 38324971900.
+- 20,000 seeded policy commitment cross-checks: no false-pass upgrades; entitlement policy blob SHA identical on branch and main.
+- 390px mobile: whole-trip verdict headline bottom 551px in an 844px viewport, no horizontal overflow, no JS errors.
+- Both screens: actual Wikimedia image URLs loaded (\`naturalWidth\` 960, 1280 and 960px); accessible historical captions and licensing visible.
+- MapLibre/OpenFreeMap initialized, showed real tiles, village approach roads, three older reference POIs and coordinates, interactive markers; graceful static schematic available.
+- Two added lower lift station points: **Gondola One** at \`39.639248,-106.373490\`, based on OpenStreetMap way 224523140 and operator confirmation that it serves Vail Village; **Eagle Bahn lower station** at \`39.64263,-106.38813\`, OSM feature 208190093 and operator confirmation it serves Lionshead. These are lower lift stations only, **not** lesson lineup points, ski-in/ski-out proofs or open-lift status.
+- The operator also lists **Cascade Village** as a fourth mountain-access base; its exact POI has not yet been mapped because the location source has not been audited.
+- Verified external source references: https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx , https://www.vail.com/explore-the-resort/about-the-resort/vail-basecamp.aspx , https://mapcarta.com/W208190093 , https://www.openstreetmap.org/way/224523140 .
+
+**Vail pilot reviewer score against the spec (conservative, provisional pending independent production verification):**
+- Eligibility/booking honesty 20/20
+- Place specificity 15/15
+- Media subject/rights/loading 15/15
+- Map/arrival usefulness 13/15 (fourth base unmapped; lesson pickup not pinned)
+- Feasible action and alternatives 14/15 (first changed date yes; distant alternate not invented)
+- Freshness/uncertainty 9/10 (no pretending live operations)
+- Mobile/accessibility/performance 4/5 (mobile screenshot and no overflow verified, Web Vitals not measured)
+- SEO/cost/reuse 5/5 (existing canonical/identity; no new paid calls)
+**Pilot subtotal 95/100 (engineering review, not independent UX study).**
+Production release still requires review of current Vercel preview behavior and the full five-resort product has not been completed; no broad V3 launch claim.
+
+**Important:** prior "NO GO" checklist above records staging state before browser validation and is superseded by this audit for the tested properties only. Missing hotel inventory and official operational feeds remain explicitly not connected.

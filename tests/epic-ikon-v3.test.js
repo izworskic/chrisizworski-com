@@ -45,14 +45,15 @@ test('Media are correctly attributed winter/arrival references with commercial-c
  }
 });
 test('Mapped points are specific verified features, not invented lift entrances',()=>{
- assert.equal(V.PLACES.length,5);
- assert.deepEqual(V.PLACES.map(x=>x.id),['den','ege','vail-parking','lionshead-center','golden-peak']);
+ assert.equal(V.PLACES.length,7);
+ assert.deepEqual(V.PLACES.map(x=>x.id),['den','ege','vail-parking','gondola-one-base','eagle-bahn-base','lionshead-center','golden-peak']);
  for(const p of V.PLACES){
    assert.ok(Number.isFinite(p.lat)&&Number.isFinite(p.lon));
    assert.ok(p.lat>39&&p.lat<41&&p.lon< -104&&p.lon> -108);
    assert.ok(p.sourceUrl&&p.note);
  }
- assert.ok(!V.PLACES.some(x=>/gondola/i.test(x.name)));
+ assert.equal(V.PLACES.filter(x=>/gondola|lower station/i.test(x.name)).length,2);
+ assert.ok(V.PLACES.filter(x=>/gondola|lower station/i.test(x.name)).every(x=>x.note.includes('not')||x.note.includes('separate')));
 });
 test('Arrival advice never turns a group preference into made-up times, routes, lifts or booking inventory',()=>{
  for(const ability of ['novice','intermediate','advanced','mixed']){
