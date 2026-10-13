@@ -52,6 +52,8 @@ jobs:
           printf '\n## Michigan Wine V5 static-export handoff (%s UTC)\n' "$(date -u '+%Y-%m-%d')" >> docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
           printf '\nThe Petoskey V5 source was checked out at commit `%s`, passed the owner source and creator export gates, and was overlaid into the hub without deleting existing cache-addressed files. The sitemap was rebuilt from actual HTML routes. The review PR from this workflow is the publication record.\n' "$(git -C .petoskey-owner rev-parse HEAD)" >> docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
       - name: Open review PR for static output
+        id: open_review_pr
+        continue-on-error: true # GitHub account policies can disallow PR creation; the branch is still pushed.
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,3 +73,8 @@ jobs:
             public/petoskey-wine/**
             public/sitemap-petoskey-wine.xml
             docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
+      - name: Provide manual review PR route when account policy blocks automation
+        if: steps.open_review_pr.outcome == 'failure'
+        run: |
+          echo "::warning::GitHub Actions is not permitted to create pull requests in this repository. The export branch was pushed. Open a pull request manually from automation/petoskey-wine-v5-export."
+          echo "Petoskey V5 export was prepared and pushed to branch \`automation/petoskey-wine-v5-export\`. GitHub Actions is not permitted to open PRs for this repository, so submit the comparison manually: https://github.com/izworskic/chrisizworski-com/compare/main...automation/petoskey-wine-v5-export" >> "$GITHUB_STEP_SUMMARY"
