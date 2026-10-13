@@ -57,7 +57,7 @@ test("the public aurora sitemap indexes only canonical, distinct destination URL
  for(const p of paths){
   const url="https://chrisizworski.com"+p.base+"/";
   assert.ok(matches.includes(url),url+" missing in aurora sitemap");
-  assert.match(sitemap,new RegExp(url.replace(/[.*+?^\$\{\}()|[\]\\]/g,"\\$&").replace(/\\\//g,"/")+"<\\/loc><lastmod>2026-10-13"));
+  assert.ok(sitemap.includes("<loc>"+url+"</loc><lastmod>2026-10-13</lastmod>"),"fresh sitemap lastmod required "+url);
  }
  for(const state of Object.keys(intended)){
   assert.ok(routes.some(r=>r.source==="/national-tools/aurora/"+state+"/"),"existing state hub must remain routed: "+state);
