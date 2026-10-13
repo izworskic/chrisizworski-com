@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
 <link rel="stylesheet" href="/assets/leaflet-1.9.4.css?v=20260927-1">
 <link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-9">
+<link rel="stylesheet" href="/assets/pictured-rocks-v5.css?v=20261013-1">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://picturedrocks.chrisizworski.com/#app","name":"Pictured Rocks Trip Planner","alternateName":"Pictured Rocks National Lakeshore Trip Planner","description":"Interactive Pictured Rocks trip planner with a live map, current weather and access, boat, kayak, hike and drive comparisons, and realistic 1-day or 2-day itineraries.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"url":"https://picturedrocks.chrisizworski.com/","featureList":["Interactive Pictured Rocks map","Current weather and access","1-day and 2-day itinerary builder","Boat, kayak, hike and scenic-drive comparison"],"about":{"@id":"https://picturedrocks.chrisizworski.com/#destination"},"author":{"@id":"https://chrisizworski.com/#person"},"image":{"@id":"https://picturedrocks.chrisizworski.com/#primaryimage"}},{"@type":"TouristDestination","@id":"https://picturedrocks.chrisizworski.com/#destination","name":"Pictured Rocks National Lakeshore","url":"https://www.nps.gov/piro/","sameAs":"https://www.nps.gov/piro/","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}]}</script>
 </head>
 <body>
@@ -83,6 +84,14 @@
     <fieldset><legend>4. Who is coming?</legend><div class="chips"><label><input type="radio" name="party" value="adults" checked><span>Adults</span></label><label><input type="radio" name="party" value="kids"><span>Young kids</span></label><label><input type="radio" name="party" value="dog"><span>Dog</span></label><label><input type="radio" name="party" value="limited"><span>Limited walking</span></label></div></fieldset>
     <fieldset><legend>5. What would make the trip feel worth it?</legend><div class="chips"><label><input type="radio" name="priority" value="cliffs" checked><span>See the big cliffs</span></label><label><input type="radio" name="priority" value="hike"><span>Best hike</span></label><label><input type="radio" name="priority" value="quiet"><span>Avoid the crush</span></label><label><input type="radio" name="priority" value="photo"><span>Photography</span></label><label><input type="radio" name="priority" value="family"><span>Easy family day</span></label></div></fieldset>
     <fieldset><legend>6. How do you want to see the cliffs?</legend><div class="chips"><label><input type="radio" name="water" value="any" checked><span>Best fit</span></label><label><input type="radio" name="water" value="land"><span>Stay on land</span></label><label><input type="radio" name="water" value="cruise"><span>Boat cruise</span></label><label><input type="radio" name="water" value="kayak"><span>Guided kayak</span></label></div></fieldset>
+    <fieldset class="v5-dated-plan" aria-describedby="v5ScheduleState">
+      <legend>7. When is this trip — and which departure fits?</legend>
+      <div class="v5-control-grid">
+        <label class="v5-input-label" for="tripDate"><span>Visit date · Michigan time</span><input id="tripDate" name="tripDate" type="date" required></label>
+        <label class="v5-input-label" for="tourDeparture"><span>Published cruise departure · optional</span><select id="tourDeparture" name="tourDeparture"><option value="">Select a visit date first</option></select></label>
+      </div>
+      <p id="v5ScheduleState" role="status" aria-live="polite">Checking published operator date windows. This planner never checks seats.</p>
+    </fieldset>
     <button class="primary" type="submit">Build my route</button>
   </form>
 </section>
@@ -108,6 +117,15 @@
 
 <section class="section field-notes"><p class="eyebrow">Before you drive H-58</p><h2>Three things worth knowing before service gets weak.</h2><div class="notes"><article><h3>Save the map</h3><p>Download the official NPS map and offline park content before leaving town. This planning map is not navigation.</p></article><article><h3>Water needs its own go/no-go</h3><p>Land weather is context, not permission to paddle Lake Superior. Use the marine forecast and an authorized guide or operator decision.</p></article><article><h3>Access can break a route</h3><p>The live layer removes known blocked stops when it can, but the NPS current-conditions page remains authoritative at departure time.</p></article></div></section>
 
+<section class="section v5-expert" aria-labelledby="v5-expert-title">
+  <p class="eyebrow">Before you reserve or head down H-58</p>
+  <h2 id="v5-expert-title">A better Pictured Rocks day starts with three decisions.</h2>
+  <div class="v5-expert-grid">
+    <article><span class="v5-kicker">01 · Water</span><h3>Reserve a departure, not a vague boat day</h3><p>Pictured Rocks Cruises leaves downtown Munising. Its published October 12–18, 2026 Spray Falls pattern includes daytime trips and a sunset trip; published times are not seat inventory. Allow 30–45 minutes at the dock before departure. The 2026 Spray Falls adult fare is $56, ages 4–12 $19, and under age 4 $1. Prices and departures require operator confirmation for other seasons.</p><a href="https://picturedrocks.com/fares-schedule/" target="_blank" rel="noopener">See published times, prices and bookings ↗</a></article>
+    <article><span class="v5-kicker">02 · Trail</span><h3>Chapel is a commitment, not a photo stop</h3><p>The roughly 10.5-mile Chapel Loop rewards a full hiking day with falls, beach and cliff views. Parking fills, trailheads are remote, and pets are not allowed on Chapel trails and beaches. Choose Chapel or a scheduled cruise as the main event; don't rush both.</p><a href="https://www.nps.gov/piro/planyourvisit/hikes.htm" target="_blank" rel="noopener">NPS hiking and access guidance ↗</a></article>
+    <article><span class="v5-kicker">03 · Lake</span><h3>Shore weather does not approve kayaking</h3><p>The lake can be rough at the cliffs while Munising Bay seems calm. Recreational kayaks and canoes should not be used on Lake Superior. For most visitors, an authorized guided sea-kayak outing is the appropriate choice, subject to guide eligibility and marine conditions.</p><a href="https://www.nps.gov/piro/planyourvisit/kayak-tours.htm" target="_blank" rel="noopener">Compare NPS-listed guides ↗</a></article>
+  </div>
+</section>
 <section class="section sources"><p class="eyebrow">Primary checks</p><h2>Use the planner to decide. Use the official sources to commit.</h2><p>Weather, closures, tour schedules, and shoreline conditions change. The tool degrades to “unknown” instead of inventing a green light when a source is unavailable.</p><div class="source-links"><a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener">NPS current conditions ↗</a><a href="https://www.nps.gov/piro/planyourvisit/maps.htm" target="_blank" rel="noopener">NPS maps ↗</a><a href="https://www.nps.gov/piro/planyourvisit/pets.htm" target="_blank" rel="noopener">NPS pet rules ↗</a><a href="https://www.nps.gov/piro/planyourvisit/kayak-tours.htm" target="_blank" rel="noopener">Authorized kayak guides ↗</a><a href="https://www.nps.gov/piro/planyourvisit/safety.htm" target="_blank" rel="noopener">NPS safety ↗</a></div></section>
 <section class="section related-journeys"><p class="eyebrow">Keep planning</p><h2>Continue your Lake Superior trip</h2><p>Connect this shoreline visit with a wider drive or plan an evening around the sky conditions.</p><div class="source-links"><a href="https://chrisizworski.com/lake-superior-circle-tour/">Lake Superior Circle Tour</a><a href="https://chrisizworski.com/northern-lights-michigan/">Northern Lights Michigan tonight</a></div></section>
 </main>
@@ -115,5 +133,6 @@
 <script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>
 <script src="/assets/pictured-rocks-planner-engine.js"></script>
 <script src="/assets/pictured-rocks-planner-v3.js?v=20260927-9"></script>
+<script src="/assets/pictured-rocks-v5.js?v=20261013-1"></script>
 </body>
 </html>
