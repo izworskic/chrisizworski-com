@@ -78,7 +78,7 @@ const server=http.createServer((req,res)=>{
      }else{
       // Traverse uses the stable first-party shoreline photo and local Leaflet assets.
       await page.waitForFunction(()=>window.L && document.querySelector('#shore-map.leaflet-container'),null,{timeout:7500});
-      assert.match(await page.locator('.hero-photo').getAttribute('src'),/^\\/assets\\/great-lakes-beaches\\/lake-michigan-hero\\.jpg$/);
+      assert.match(await page.locator('.hero-photo').getAttribute('src'),/^\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg$/);
       assert.match(await page.locator('.hero-media figcaption').textContent(),/not a view of Traverse City/);
       assert.ok(await page.locator('#shore-map .leaflet-pane').count()>0,'Traverse real Leaflet map not initialized');
      }
