@@ -14,7 +14,7 @@ test('V6 page puts the actual planning decision above video and wayfinding',()=>
 test('query-first title, canonical and one owner identity are maintained',()=>{
  assert.match(html,/<title>Niagara Falls Today: Boat Rides, Hours &amp; Visit Planner<\/title>/);
  assert.match(html,/Boat Rides, Hours &amp; Visit Planner/);
- assert.match(html,/name="description" content="Planning Niagara Falls today\?/);
+ assert.match(html,/name="description" content="Check Niagara Falls boat rides and hours by date/);
  assert.equal((html.match(/rel="canonical"/g)||[]).length,1);
  assert.equal((html.match(/"@type":"Person"/g)||[]).length,1);
  assert.match(html,/Built by Chris Izworski/);
