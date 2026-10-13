@@ -15,3 +15,7 @@ The Petoskey V5 source was checked out at commit `39a30db8fe9b2d33bc439b5edd597b
 ## Michigan Wine V5 static-export handoff (2026-10-13 UTC)
 
 The Petoskey V5 source was checked out at commit `c82d2049df54652622f1910ee3db2a9ab08cdf42`, passed the owner source and creator export gates, and was overlaid into the hub without deleting existing cache-addressed files. The sitemap was rebuilt from actual HTML routes. The review PR from this workflow is the publication record.
+
+## Michigan Wine V5 static-export handoff (2026-10-13 UTC)
+
+The Petoskey V5 source was checked out at commit `ec905c1e95d171fc9a513bb04a120362cdd128e4`, passed the owner source and creator export gates, and was overlaid into the hub without deleting existing cache-addressed files. The sitemap was rebuilt from actual HTML routes. The review PR from this workflow is the publication record.
