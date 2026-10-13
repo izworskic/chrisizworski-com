@@ -209,3 +209,8 @@
 .result{scroll-margin-top:12px}
 @media(min-width:1051px){.visit-quick-start{grid-template-columns:1fr}}
 @media(max-width:600px){.visit-quick-start{margin:4px 18px 10px}.hero-inner{padding-top:22px;padding-bottom:20px}.hero h1{font-size:40px}.hero-photo{min-height:180px;max-height:180px}.hero-photo img{min-height:180px;height:180px}}
+
+
+.boat-ticket-action{margin:13px 0 0!important}
+.boat-ticket-action a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border-radius:5px;background:#164f5c;color:#fff;font-size:12px;font-weight:800;text-decoration:none}
+.boat-ticket-action a:hover{background:#0d3945}
