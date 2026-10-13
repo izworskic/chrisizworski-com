@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-12",
+  "updated": "2026-10-13",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2777,6 +2777,47 @@
         "decisionWindowDays": 28,
         "privacy": "No login, exact user location or personally identifiable information collected."
       }
+    },
+    {
+      "id": "shorefeel",
+      "name": "ShoreFeel Great Lakes Water Temperature",
+      "canonical": "https://chrisizworski.com/great-lakes-water-temperature/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "great-lakes-conditions",
+      "primaryIntent": "Great Lakes water temperature today and shoreline comfort context",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "beachgoer",
+        "family",
+        "swimmer",
+        "paddler"
+      ],
+      "networkRole": "temperature-decision",
+      "searchTreatment": {
+        "status": "new-pilot",
+        "guardrail": "No thin city pages or false beach measurement claims"
+      },
+      "searchEvidence": {
+        "status": "unmeasured",
+        "volumeInput": "User-supplied Semrush estimate, not live-verified"
+      }
     }
   ],
   "relationships": [
@@ -3891,6 +3932,38 @@
       "strength": "optional",
       "surface": "trail",
       "reason": "Separate MNHS lighthouse admission and access decision."
+    },
+    {
+      "from": "shorefeel",
+      "to": "great-lakes-buoys",
+      "type": "evidence-next",
+      "strength": "strong",
+      "surface": "water-temperature",
+      "reason": "ShoreFeel readers can inspect true station locations and raw marine readings."
+    },
+    {
+      "from": "shorefeel",
+      "to": "beach-report",
+      "type": "safety-next",
+      "strength": "strong",
+      "surface": "water-temperature",
+      "reason": "Beach conditions and official hazards are separate from temperature comfort."
+    },
+    {
+      "from": "great-lakes-buoys",
+      "to": "shorefeel",
+      "type": "explanation-next",
+      "strength": "optional",
+      "surface": "water-conditions",
+      "reason": "A buoy data user can explore shoreline and water thermal interpretation."
+    },
+    {
+      "from": "beach-report",
+      "to": "shorefeel",
+      "type": "interpretation-next",
+      "strength": "optional",
+      "surface": "beach-conditions",
+      "reason": "Visitors can understand why air and water comfort differ without changing hazard verdicts."
     }
   ],
   "cannibalizationGroups": [
