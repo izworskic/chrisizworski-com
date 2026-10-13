@@ -118,7 +118,7 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  assert.match(js,/\$\('mapLockPreviewTitle'\)\.textContent=lock\.name\+' · '\+lock\.place/);
  assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=LOCK_QUICK\[lock\.id\]\.answer/);
  assert.match(js,/\$\('mapLockPreview'\)\.hidden=false/);
- assert.match(js,/if\(fromMap&&lock\)showLockPreview\(lock\);else hideLockPreview\(\)/);
+ assert.match(js,/if\(lock&&\(fromMap\|\|!\$\('mapLockPreview'\)\.hidden\)\)showLockPreview\(lock\);else hideLockPreview\(\)/);
  assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false,true\)\)/);
  assert.doesNotMatch(js,/bindTooltip\(lock\.name/);
  assert.doesNotMatch(js,/title:lock\.name/);
@@ -179,8 +179,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-journey1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-journey1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -331,8 +331,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/iconSize:\[hit,hit\]/);
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
-  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
-  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-journey1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-journey1/);
 });
 
 
@@ -434,4 +434,21 @@ test('Welland offers an independent source-labeled AIS traffic board alongside a
   assert.match(js,/focusVessel\(v\.mmsi,true\)/);
   assert.match(css,/\.traffic-brief__row\{/);
   assert.doesNotMatch(js,/fetch\([^)]*seaway-greatlakes/);
+});
+
+test('Welland premium journey maintains eight-stage orientation and two-way lock navigation',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+  const html=read('public/welland-canal/index.html');
+  const js=read('public/assets/welland-canal.js');
+  const css=read('public/assets/welland-canal.css');
+  assert.match(html,/id="lockJourneyTrack"[^>]*class="lock-journey__track"/);
+  assert.match(html,/id="lockJourneyPosition"/);
+  assert.match(html,/id="lockDetailPrevious"[^>]*disabled/);
+  assert.match(js,/step\.classList\.toggle\('is-current'/);
+  assert.match(js,/previousButton\.disabled=!lock\|\|lock\.id==='1'/);
+  assert.match(js,/Restart · Lock 1/);
+  assert.match(js,/\$\('lockDetailPrevious'\)\.addEventListener\('click'/);
+  assert.match(css,/\.lock-detail__navigation\{display:grid;grid-template-columns:1fr 1fr/);
+  assert.equal((html.match(/<span><\/span>/g)||[]).length>=8,true);
 });
