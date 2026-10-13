@@ -45,6 +45,7 @@ jobs:
           mkdir -p public/petoskey-wine
           cp -a .petoskey-owner/out/. public/petoskey-wine/
           node scripts/build-petoskey-wine-sitemap.mjs
+          node scripts/benchmark-serp-length.mjs
           grep -Fq 'Which wine country day feels right for you?' public/petoskey-wine/index.html
           grep -Fq 'Which stops can actually fit your day?' public/petoskey-wine/index.html
           grep -Fq 'Where should you go wine tasting near Petoskey?' public/petoskey-wine/index.html
