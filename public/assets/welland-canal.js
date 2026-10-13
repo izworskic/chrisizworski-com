@@ -165,6 +165,53 @@
       card.append(title,meta,detail,btn);list.append(card);
     });
   }
+
+  // Independent AIS observation board. Never present distance-sorted AIS as
+  // Seaway order of turn, a confirmed lock assignment, or an arrival forecast.
+  function renderTrafficBrief(){
+    const host=$('trafficBriefRows');
+    if(!host)return;
+    host.replaceChildren();
+    const lock=LOCKS.find(l=>l.id===selected);
+    const state=$('trafficBriefState');
+    if(aisState==='loading'){
+      state.textContent='Checking reported vessel positions';
+      host.append(el('p','Checking available AIS coverage…','traffic-brief__empty'));
+      return;
+    }
+    if(aisState==='unavailable'){
+      state.textContent='AIS coverage unavailable';
+      host.append(el('p','Live vessel positions cannot be verified. The Seaway order of turn remains available at the official source.','traffic-brief__empty'));
+      return;
+    }
+    // A selected lock uses an approximate 5 km radius, never a lock queue.
+    // The whole-canal view is ordered by report recency, not transit priority.
+    const observed=vesselData.map(v=>({v,km:lock?distanceKm(v,lock):nearest(v).km,near:nearest(v).lock}))
+      .filter(item=>!lock||item.km<=5)
+      .sort((a,b)=>lock?a.km-b.km:Date.parse(b.v.seen)-Date.parse(a.v.seen))
+      .slice(0,6);
+    state.textContent=lock?'AIS reports within about 5 km of '+lock.name:'Latest reported vessels across the canal';
+    if(!observed.length){
+      host.append(el('p',lock?'No fresh AIS reports within about 5 km of '+lock.name+'. This is not evidence the lock is empty.':'No recent AIS reports returned. This is not evidence the canal is empty.','traffic-brief__empty'));
+      return;
+    }
+    observed.forEach(({v,km,near})=>{
+      const item=el('article',undefined,'traffic-brief__row');
+      const copy=el('div',undefined,'traffic-brief__row-copy');
+      const name=el('strong',v.name||'Unnamed AIS vessel');
+      const distance=km<0.2?'within about 200 m':km.toFixed(1)+' km away';
+      const location=lock?('Near '+lock.name+' · '+distance):('Nearest mapped lock '+near.id+' · '+distance);
+      copy.append(name,el('span',location+' · '+timeLabel(v),'traffic-brief__meta'));
+      const motion=el('span',heading(v),'traffic-brief__motion');
+      const button=el('button','Show on map','traffic-brief__locate');
+      button.type='button';
+      button.setAttribute('aria-label','Show '+(v.name||'vessel')+' on the Welland map');
+      button.addEventListener('click',()=>focusVessel(v.mmsi,true));
+      item.append(copy,motion,button);
+      host.append(item);
+    });
+  }
+
   function renderLocks() {
     const rail=$('lockRail');rail.replaceChildren();
     LOCKS.forEach(l=>{
@@ -270,6 +317,7 @@
     }
     if(WATCH_SPOTS[id])activeWatchSpot=id;
     renderShoreWatch();
+    renderTrafficBrief();
     renderInstantAnswer(lock);
     renderLockDetail();
     if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
@@ -497,14 +545,14 @@
       vesselData=data.vessels.filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon)&&minutesOld(v.seen)!==null&&minutesOld(v.seen)<=30);
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
       updated.textContent='Last checked '+when(data.checkedAt)+' · positions at most 30 minutes old';
-      aisState='available';renderList();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
+      aisState='available';renderList();renderTrafficBrief();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
       const credits=$('sourceCredit');credits.replaceChildren();
       (data.attribution||[]).forEach(a=>credits.append(el('span',a.credit||a.source)));
     } catch (_) {
       vesselData=[];
       status.textContent='AIS data unavailable — official vessel schedule remains available below';
       updated.textContent='Unable to verify fresh AIS positions';
-      aisState='unavailable';renderList();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
+      aisState='unavailable';renderList();renderTrafficBrief();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
     } finally {
       busy=false;$('refreshShips').disabled=false;
     }
