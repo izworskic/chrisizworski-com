@@ -44,5 +44,5 @@ test('all listed state aurora destinations route to their state owner before the
     assert.ok(index>=0 && index<rewrites.findIndex(r=>r.source==='/national-tools/aurora/:path*'));
     assert.equal(rewrites[index].destination,`https://${state}-aurora-live.vercel.app/:path*`);checked++;
   }
-  assert.equal(checked,16);
+  assert.equal(checked,39);
 });
