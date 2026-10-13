@@ -185,6 +185,20 @@ function updateSelection(id) {
   const link = document.getElementById("mapStopLink");
   link.href = `#stop-${selectedStopId}`;
   link.textContent = "View full stop";
+  // Stop 11 owns the Pictured Rocks decision engine; expose it directly from the map.
+  // Other pins keep the existing stop/detail controls without irrelevant tool links.
+  let planner = document.getElementById("mapPicturedRocksPlanner");
+  if (!planner) {
+    planner = document.createElement("a");
+    planner.id = "mapPicturedRocksPlanner";
+    planner.href = "https://picturedrocks.chrisizworski.com/";
+    planner.textContent = "Plan Pictured Rocks →";
+    planner.dataset.growthCta = "circle-tour-map-pictured-rocks-planner";
+    planner.setAttribute("aria-label", "Open the Pictured Rocks boat, kayak, hike and drive trip planner");
+    planner.addEventListener("click", () => page.track("circle-tour-pictured-rocks-handoff", {stop: 11, surface: "map"}));
+    document.querySelector("#mapSelection .map-selection-actions").appendChild(planner);
+  }
+  planner.hidden = selectedStopId !== "11";
   const toggle = document.getElementById("mapStopToggle");
   toggle.hidden = false;
   const selected = page.hasStop(selectedStopId);
