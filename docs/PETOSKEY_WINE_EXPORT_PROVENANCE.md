@@ -7,3 +7,7 @@ The owner change landed in PR #4 at merge commit `f33ffde110807e086df2da1253d32d
 The main repository overlays those owner-built files into the vendored output and regenerates `public/sitemap-petoskey-wine.xml` from the 33 HTML routes. The sitemap content date is October 6, 2026, matching the owner source build's America/Detroit calendar date. The merge preserves any older hashed static assets already referenced by public cacheable URLs while the new export supplies its current assets.
 
 The shared emitted/live audit checks the registered Petoskey root canonical. The owner repository's page tests cover the source page family; the main creator-entity contract also checks all 33 vendored canonical pages for the canonical Person definition, visible credit, readable heading/text, canonical URL, indexability, Tools discovery link, and sitemap entry. None of these checks measures ranking gains.
+
+## Michigan Wine V5 static-export handoff (2026-10-13 UTC)
+
+The Petoskey V5 source was checked out at commit `39a30db8fe9b2d33bc439b5edd597b4d103ebd8c`, passed the owner source and creator export gates, and was overlaid into the hub without deleting existing cache-addressed files. The sitemap was rebuilt from actual HTML routes. The review PR from this workflow is the publication record.
