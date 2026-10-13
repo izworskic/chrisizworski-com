@@ -12,7 +12,7 @@ A release fails if **any** of the following is true, regardless of points:
 - The same media URL appears under two selected locks as though they are distinct primary images.
 - An engineering schematic is presented as an actual photo, or a nearby park is labeled the Lock 8 chamber.
 - Image source, author/creator, relevant data source and clear usage evidence are missing.
-- A first-party image does not actually exist in the checked-out static site.
+- A first-party image does not actually exist in the checked-out static site, or an archive photo URL is not from the small, documented public-sector source allowlist.
 - The camera is claimed to be inside Lock 8 or continuously live without verification, or YouTube is loaded without a user click.
 
 ## Quantified value
@@ -21,16 +21,16 @@ A release fails if **any** of the following is true, regardless of points:
 
 | Component | Weight | Operational metric |
 | --- | ---: | --- |
-| A — Correct subject and specificity | 35 | Verified exact-lock photo: 35 pts; lock-specific accurately labeled original engineering schematic: 32; clearly disclosed contextual view near Lock 8: 18 |
-| U — Uniqueness | 20 | All eight primary media items differ; wrong-lock substitution or repeated image is a hard veto |
+| A — Correct subject and specificity | 35 | Verified exact-lock photo: 35 pts; truthful multi-lock flight photograph: 24; dated construction photograph of exact lock: 28; clearly disclosed contextual view near Lock 8: 18 |
+| U — Uniqueness | 20 | All eight media URLs differ; reused underlying source for Locks 4 and 6 is explicitly disclosed and is not counted as an independently unique photograph |
 | P — Provenance | 15 | Author/creator, source, rights/data reference and accessible original or evidentiary link |
 | E — Explanatory utility | 15 | Descriptive alt, truthful caption, at least two sentences of lock-specific explanation |
 | C — Camera accuracy | 10 | Verified geographical description and provider source; click-to-load with stop button; no ungrounded occupancy/live claims |
-| D — Delivery | 5 | All eight media paths exist as static first-party files; photo/video initial load is deferred appropriately |
+| D — Delivery | 5 | Existing first-party photos exist; new archive photos use allowlisted external Commons/LOC image URLs pending first-party import and visual load verification |
 
-Current intended production mix: four exact-lock photos (1, 2, 3, 7), **three unique schematic diagrams** (4, 5, 6), one genuinely contextual Gateway Park photo (8). The historical archives are linked separately as real documentary photos for 4–6; they are not silently recopied as unverified licensed assets.
+Current October 13 production candidate: four exact-lock photos (1, 2, 3, 7), **a source-shared public-domain Thorold flight aerial for Locks 4 and 6**, a 1916 actual Lock 5 construction photo, and one honestly contextual Gateway Park photo (8) linked to an external chamber aerial. The old schematics are retained as reference files. The historical archives are linked separately as real documentary photos for 4–6; they are not silently recopied as unverified licensed assets.
 
-The exact-lock visual assignment is benchmarked by `node scripts/benchmark-welland-media.cjs`, called from `tests/welland-canal.test.js`. The expected V1 score is **96.8/100** subject to the actual runtime check; the contextual Lock 8 image prevents a perfect result, deliberately. Any hard-gate violation caps the score at 49. The benchmark reports the individual lock's source and media class so false high averages cannot conceal wrong pictures.
+The exact-lock visual assignment is benchmarked by `node scripts/benchmark-welland-media.cjs`, called from `tests/welland-canal.test.js`. The predicted structural V1 score is **94.3/100** (rounded), subject to runtime checks. This does not mean there are eight unique, modern lock photographs: the contextual Lock 8 image and shared Thorold-flight overview remain important limitations. Any hard-gate violation caps the score at 49. The benchmark reports the individual lock's source and media class so false high averages cannot conceal wrong pictures.
 
 **This is a structural/editorial value-function score, not a computer-vision photo verification, media-rights clearance beyond documented sources, actual user comprehension, or live stream uptime measurement.** Each visual was researched and attributed separately, but additional human visual review remains worthwhile.
 
@@ -42,8 +42,8 @@ Additional references include the independently hosted [StreamTime Live Port Col
 
 ## Future upgrades ranked by expected value
 
-1. Replace **Lock 8's Gateway Park photograph** with a rights-cleared, verified chamber view of Lock 8. Retain the park photo as a visitor detail. This would gain 17/8 ≈ 2.1 overall points.
-2. Source a legally reusable **current photograph of Lock 4**, then 5 and 6. Show exact chamber and chamber orientation; keep schematics as technical companions. Each would improve the score by 3/8 ≈ 0.4 points, but likely provides a larger *human* comprehension gain.
+1. Replace **Lock 8's Gateway Park photograph** with a rights-cleared, verified chamber view of Lock 8. The card now links to the actual Lock 8 aerial at Marinas.com, but does not republish its image without permission. This would gain 17/8 ≈ 2.1 overall points.
+2. Source three distinct, legally reusable **current photographs of Locks 4, 5 and 6**. The shared archival flight photo and historical Lock 5 construction shot are honest interim alternatives, not final chamber portraits. Each would improve the score by 3/8 ≈ 0.4 points, but likely provides a larger *human* comprehension gain.
 3. Independently verify an operational **Lock 7 webcam embed**, publisher permissions and uptime before adding it to the player selector.
 4. Test five first-time users on phones: (a) find Lock 5 and say what photo shows, (b) distinguish the Lock 8 park photo from the chamber, (c) explain why a Port Colborne camera does not confirm lock occupancy. Seek ≥90% correct understanding and <15-second median time to a sourced visual; observation supersedes code proxy.
 
