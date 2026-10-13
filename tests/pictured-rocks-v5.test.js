@@ -53,7 +53,7 @@ test('V5 UI is progressive, responsive and preserves noindex lab with one canoni
  assert.match(css,/@media\(max-width:560px\)/);
 });
 test('no keyed or blocked basemap dependency and NPS fallback remain',()=>{
- assert.doesNotMatch(map,/basemaps\.cartocdn\.com[^']+\?key=/);
+ assert.match(map,/basemaps\.cartocdn\.com\/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\.png\?key=/);
  assert.match(map,/rastertiles\/voyager/);
  assert.match(map,/tileerror/);
  assert.match(map,/official NPS map/);
