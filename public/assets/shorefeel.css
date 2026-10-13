@@ -264,7 +264,12 @@ body[data-place="traverse-city"] .hero .hero-skip { margin-top: 12px; padding: 7
     padding-bottom: 16px;
   }
   body[data-place="traverse-city"] .hero .hero-copy { width: min(670px, 70%); }
-  body[data-place="traverse-city"] .hero h1 { font-size: clamp(28px, 3.55vw, 43px); }
+  body[data-place="traverse-city"] .hero h1 { font-size: clamp(27px, 3vw, 36px); max-width: none; margin: 7px 0 8px; }
+  body[data-place="traverse-city"] .hero .breadcrumbs { display: none; }
+  body[data-place="traverse-city"] .hero .hero-kicker { display: none; }
+  body[data-place="traverse-city"] .hero .hero-copy { width: min(790px, 75%); }
+  body[data-place="traverse-city"] .hero .hero-copy > p { font-size: 14px; line-height: 1.35; max-width: 75ch; }
+  body[data-place="traverse-city"] .hero .hero-layout { min-height: 230px; padding-top: 12px; padding-bottom: 14px; }
   body[data-place="traverse-city"] .hero .hero-kicker { margin-top: 8px; }
   body[data-place="traverse-city"] .hero .hero-skip { margin-top: 9px; }
 }
@@ -309,4 +314,29 @@ body[data-place="traverse-city"] .hero .hero-skip { margin-top: 12px; padding: 7
 }
 @media (prefers-reduced-motion: reduce) {
   body[data-place="traverse-city"] .hero * { animation: none; }
+}
+
+/* Override legacy 390px hero-card limits when photograph is background. The
+   absolute element must fill the viewport, not the 1160px content column. */
+body[data-place="traverse-city"] .hero .hero-media {
+  left: 50%;
+  right: auto;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: none;
+  height: 100%;
+  min-height: 100%;
+  max-height: none;
+  transform: translateX(-50%);
+}
+body[data-place="traverse-city"] .hero .hero-photo {
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  aspect-ratio: auto;
+}
+@media (max-width: 650px) {
+  body[data-place="traverse-city"] .hero .hero-media { width: 100vw; min-width: 100vw; }
 }
