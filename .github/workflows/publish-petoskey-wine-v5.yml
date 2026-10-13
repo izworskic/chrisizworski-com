@@ -1,0 +1,73 @@
+name: Publish Petoskey Wine V5 export
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-petoskey-wine-v5.yml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare-reviewed-export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the hub source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check out the Petoskey owner source
+        uses: actions/checkout@v4
+        with:
+          repository: izworskic/petoskey-wine-region
+          ref: main
+          path: .petoskey-owner
+          persist-credentials: false
+      - name: Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: .petoskey-owner/package-lock.json
+      - name: Verify and build the owner export
+        run: |
+          npm ci --prefix .petoskey-owner
+          npm run --prefix .petoskey-owner check
+          npm run --prefix .petoskey-owner check:creator-export
+      - name: Overlay exported Petoskey pages and refresh sitemap
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d .petoskey-owner/out
+          mkdir -p public/petoskey-wine
+          cp -a .petoskey-owner/out/. public/petoskey-wine/
+          node scripts/build-petoskey-wine-sitemap.mjs
+          grep -Fq 'Which wine country day feels right for you?' public/petoskey-wine/index.html
+          grep -Fq 'We return to Michigan wine country' public/petoskey-wine/index.html
+          grep -Fq 'https://chrisizworski.com/#person' public/petoskey-wine/index.html
+          test "$(find public/petoskey-wine -name index.html | wc -l)" -ge 33
+          printf '\n## Michigan Wine V5 static-export handoff (%s UTC)\n' "$(date -u '+%Y-%m-%d')" >> docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
+          printf '\nThe Petoskey V5 source was checked out at commit `%s`, passed the owner source and creator export gates, and was overlaid into the hub without deleting existing cache-addressed files. The sitemap was rebuilt from actual HTML routes. The review PR from this workflow is the publication record.\n' "$(git -C .petoskey-owner rev-parse HEAD)" >> docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
+      - name: Open review PR for static output
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/petoskey-wine-v5-export
+          base: main
+          delete-branch: true
+          commit-message: "Publish reviewed Petoskey Wine V5 static export"
+          title: "Publish Petoskey Wine V5 pages from canonical source"
+          body: |
+            Source: `izworskic/petoskey-wine-region@main`.
+            This copies the owner-built static export, preserves cached assets,
+            regenerates the exact Petoskey sitemap, and records provenance.
+            Source data, operating-hours semantics, analytics, ads and canonical
+            creator identity remain owned by their original projects.
+            Review the generated diff before merging.
+          add-paths: |
+            public/petoskey-wine/**
+            public/sitemap-petoskey-wine.xml
+            docs/PETOSKEY_WINE_EXPORT_PROVENANCE.md
