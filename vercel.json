@@ -1087,6 +1087,190 @@
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v4"
     },
     {
+      "source": "/national-tools/aurora/montana/bozeman-hyalite",
+      "destination": "https://montana-aurora-live.vercel.app/bozeman-hyalite/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/bozeman-hyalite/",
+      "destination": "https://montana-aurora-live.vercel.app/bozeman-hyalite/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/missoula",
+      "destination": "https://montana-aurora-live.vercel.app/missoula/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/missoula/",
+      "destination": "https://montana-aurora-live.vercel.app/missoula/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/fort-peck-lake",
+      "destination": "https://montana-aurora-live.vercel.app/fort-peck-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/fort-peck-lake/",
+      "destination": "https://montana-aurora-live.vercel.app/fort-peck-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/flathead-lake",
+      "destination": "https://montana-aurora-live.vercel.app/flathead-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/flathead-lake/",
+      "destination": "https://montana-aurora-live.vercel.app/flathead-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/split-rock-lighthouse",
+      "destination": "https://minnesota-aurora-live.vercel.app/split-rock-lighthouse/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/split-rock-lighthouse/",
+      "destination": "https://minnesota-aurora-live.vercel.app/split-rock-lighthouse/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/itasca-state-park",
+      "destination": "https://minnesota-aurora-live.vercel.app/itasca-state-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/itasca-state-park/",
+      "destination": "https://minnesota-aurora-live.vercel.app/itasca-state-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/grand-portage",
+      "destination": "https://minnesota-aurora-live.vercel.app/grand-portage/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/grand-portage/",
+      "destination": "https://minnesota-aurora-live.vercel.app/grand-portage/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/lutsen",
+      "destination": "https://minnesota-aurora-live.vercel.app/lutsen/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/lutsen/",
+      "destination": "https://minnesota-aurora-live.vercel.app/lutsen/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/theodore-roosevelt-national-park",
+      "destination": "https://north-dakota-aurora-live.vercel.app/theodore-roosevelt-national-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/theodore-roosevelt-national-park/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/theodore-roosevelt-national-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/international-peace-garden",
+      "destination": "https://north-dakota-aurora-live.vercel.app/international-peace-garden/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/international-peace-garden/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/international-peace-garden/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/devils-lake",
+      "destination": "https://north-dakota-aurora-live.vercel.app/devils-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/devils-lake/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/devils-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/lake-metigoshe-state-park",
+      "destination": "https://north-dakota-aurora-live.vercel.app/lake-metigoshe-state-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/lake-metigoshe-state-park/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/lake-metigoshe-state-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/pembina-gorge",
+      "destination": "https://north-dakota-aurora-live.vercel.app/pembina-gorge/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/pembina-gorge/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/pembina-gorge/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/katahdin-woods-and-waters",
+      "destination": "https://maine-aurora-live.vercel.app/katahdin-woods-and-waters/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/katahdin-woods-and-waters/",
+      "destination": "https://maine-aurora-live.vercel.app/katahdin-woods-and-waters/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/amc-maine-woods-dark-sky-park",
+      "destination": "https://maine-aurora-live.vercel.app/amc-maine-woods-dark-sky-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/amc-maine-woods-dark-sky-park/",
+      "destination": "https://maine-aurora-live.vercel.app/amc-maine-woods-dark-sky-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/rangeley-lakes",
+      "destination": "https://maine-aurora-live.vercel.app/rangeley-lakes/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/rangeley-lakes/",
+      "destination": "https://maine-aurora-live.vercel.app/rangeley-lakes/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/allagash-wilderness-waterway",
+      "destination": "https://maine-aurora-live.vercel.app/allagash-wilderness-waterway/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/allagash-wilderness-waterway/",
+      "destination": "https://maine-aurora-live.vercel.app/allagash-wilderness-waterway/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/moosehead-lake",
+      "destination": "https://maine-aurora-live.vercel.app/moosehead-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/moosehead-lake/",
+      "destination": "https://maine-aurora-live.vercel.app/moosehead-lake/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/talkeetna",
+      "destination": "https://alaska-aurora-live.vercel.app/talkeetna/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/talkeetna/",
+      "destination": "https://alaska-aurora-live.vercel.app/talkeetna/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/chena-hot-springs",
+      "destination": "https://alaska-aurora-live.vercel.app/chena-hot-springs/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/chena-hot-springs/",
+      "destination": "https://alaska-aurora-live.vercel.app/chena-hot-springs/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/coldfoot-wiseman",
+      "destination": "https://alaska-aurora-live.vercel.app/coldfoot-wiseman/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/coldfoot-wiseman/",
+      "destination": "https://alaska-aurora-live.vercel.app/coldfoot-wiseman/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/nome",
+      "destination": "https://alaska-aurora-live.vercel.app/nome/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/nome/",
+      "destination": "https://alaska-aurora-live.vercel.app/nome/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/juneau",
+      "destination": "https://alaska-aurora-live.vercel.app/juneau/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/juneau/",
+      "destination": "https://alaska-aurora-live.vercel.app/juneau/index.html"
+    },
+    {
       "source": "/national-tools/aurora/alaska/fairbanks",
       "destination": "https://alaska-aurora-live.vercel.app/fairbanks/index.html"
     },
