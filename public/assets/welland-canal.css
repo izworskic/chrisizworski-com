@@ -383,3 +383,22 @@
   .traffic-brief__motion{flex:1 1 auto}
   .traffic-brief__locate{min-height:37px}
 }
+
+/* Eight-lock guided journey: editorial progress, not a live operating-state bar. */
+.lock-journey{margin:1px 21px 19px;padding:13px 13px 11px;border:1px solid #dbe6e6;border-radius:7px;background:#f7faf9}
+.lock-journey__meta,.lock-journey__ends{display:flex;justify-content:space-between;align-items:baseline;gap:9px}
+.lock-journey__meta>span{font-size:9px;font-weight:850;letter-spacing:.12em;color:#8b744d}
+.lock-journey__meta strong{min-width:0;text-align:right;color:#345968;font-size:11px;line-height:1.35;font-weight:800}
+.lock-journey__track{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;margin:12px 0 8px}
+.lock-journey__track span{height:5px;border-radius:3px;background:#dbe5e5;transition:background .16s ease}
+.lock-journey__track span.is-reached{background:#b9cbd0}
+.lock-journey__track span.is-current{background:#c79c51;box-shadow:0 0 0 1px rgba(175,125,55,.22)}
+.lock-journey__ends{font-size:9px;color:#71868b;font-weight:750;letter-spacing:.08em}
+.lock-detail__navigation{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.lock-detail__navigation button{min-height:45px;width:100%;padding:10px 8px;border-radius:6px;font-size:12px;font-weight:800;cursor:pointer}
+.lock-detail__previous{border:1px solid #c4d4d7;background:#fff;color:#1e5265}
+.lock-detail__previous:hover:not(:disabled){background:#edf5f5}
+.lock-detail__previous:disabled{opacity:.45;cursor:default}
+.lock-detail__navigation .lock-detail__next{margin:0}
+.lock-detail__navigation button:focus-visible{outline:3px solid #c49b59;outline-offset:2px}
+@media(max-width:420px){.lock-journey{margin:1px 15px 16px}.lock-journey__meta{align-items:flex-start;flex-direction:column;gap:4px}.lock-journey__meta strong{text-align:left}.lock-journey__track{gap:4px}.lock-detail__navigation button{font-size:11px}}
