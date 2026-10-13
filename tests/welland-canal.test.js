@@ -452,3 +452,19 @@ test('Welland premium journey maintains eight-stage orientation and two-way lock
   assert.match(css,/\.lock-detail__navigation\{display:grid;grid-template-columns:1fr 1fr/);
   assert.equal((html.match(/<span><\/span>/g)||[]).length>=8,true);
 });
+
+test('Welland million-impressions intent path prioritizes AIS decision and official bridge status',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const page=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+  assert.ok(page.indexOf('id="ship-watch"')<page.indexOf('id="canal-cameras"'),'live ship answer should precede camera embeds');
+  assert.equal((page.match(/id="ship-watch"/g)||[]).length,1);
+  assert.equal((page.match(/id="canal-cameras"/g)||[]).length,1);
+  assert.match(page,/id="bridge-status"/);
+  assert.match(page,/href="#bridge-status"/);
+  assert.match(page,/greatlakes-seaway\.com\/en\/recreational-boating\/bridge-status\//);
+  assert.match(page,/How long does a ship take to travel through the Welland Canal\?/);
+  assert.match(page,/How do I check whether a Welland Canal bridge is up\?/);
+  assert.match(page,/These dates apply to the 2026 season only/);
+  assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
+  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/welland-canal\/"/);
+});
