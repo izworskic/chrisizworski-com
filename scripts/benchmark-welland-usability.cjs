@@ -26,7 +26,7 @@ const checks={
     ['a lock requires only one nav tap',js.includes("b.addEventListener('click',()=>chooseLock(l.id,true,false))")],
     ['map click gives instant answer',js.includes("marker.on('click',()=>chooseLock(lock.id,false,true))")],
     ['grouped markers do not block a lock choice',html.includes('Grouped numbers? Tap to zoom, or choose any lock above')],
-    ['map tap opens a persistent on-map answer',js.includes("if(fromMap&&lock)showLockPreview(lock)")],
+    ['map tap opens a persistent below-map answer and retains it during onward browsing',js.includes("if(lock&&(fromMap||!$('mapLockPreview').hidden))showLockPreview(lock)")],
     ['nav tap opens immediate adjacent answer',js.includes("renderInstantAnswer(lock)")&&html.indexOf('id="lockInstantAnswer"')>html.indexOf('id="lockRail"')&&html.indexOf('id="lockInstantAnswer"')<html.indexOf('id="shipMap"')],
     ['reset to overview retained',js.includes("showAllLocks')")],
   ],
@@ -46,6 +46,8 @@ const checks={
     ['overview reset remains available',html.includes('id="showAllLocks"')],
     ['group disclosure and map distinction explicit',html.includes('Grouped numbers?')&&html.includes('Ships on the map are recent AIS reports')],
     ['number selection and current lock synchronized',js.includes("b.setAttribute('aria-pressed',String(b.dataset.lock===id))")],
+    ['guided journey progress locates all eight locks',html.includes('id="lockJourneyTrack"')&&html.includes('id="lockJourneyPosition"')&&js.includes("step.classList.toggle('is-current'")],
+    ['route browsing allows previous and next without losing map context',html.includes('id="lockDetailPrevious"')&&html.includes('id="lockDetailNext"')&&js.includes("previousButton.disabled=!lock||lock.id==='1'")],
   ],
   trust:[
     ['nearby AIS list uses true lock distance',js.includes('v=>distanceKm(v,lock)<=1.5')],
