@@ -183,13 +183,13 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(html,/welland-canal\.css\?v=20261013-lock-handoff1/);
 });
 
-test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
+test('Every Welland image has explicit archival source, author and reuse terms',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const script=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
   const photos=script.slice(script.indexOf('  const LOCK_PHOTOS = {'),script.indexOf('  const LOCK_STORIES = {'));
   assert.equal((photos.match(/src:'\/assets\/welland\/photos\/[a-z0-9]+\.jpg'/g)||[]).length,5);
   assert.equal((photos.match(/remote:'https:\/\/upload\.wikimedia\.org\//g)||[]).length,5);
-  assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,5);
+  assert.equal((photos.match(/source:'https:\/\/commons\.wikimedia\.org\/wiki\/File:/g)||[]).length,8);
   assert.equal((photos.match(/licenseUrl:'https:\/\/creativecommons\.org\/licenses\/by-sa\//g)||[]).length,5);
   assert.equal((photos.match(/credit:'[^']+'/g)||[]).length,8);
   assert.match(photos,/Lock 7 chamber · Thorold, Ontario/);
@@ -285,12 +285,14 @@ test('Every lock has a unique, grounded image rather than a repeated wrong Lock 
   assert.ok(score.value>=90,'all lock media must clear the 90-point value benchmark');
   assert.equal(score.perLock.length,8);
   assert.equal(new Set(score.perLock.map(x=>x.media)).size,8);
-  assert.deepEqual(score.photosByLock.uniqueEngineeringSchematics,[4,5,6]);
+  assert.deepEqual(score.photosByLock.realFlightGroupPhotos,[4,6]);
+  assert.deepEqual(score.photosByLock.historicalConstructionPhoto,[5]);
   for (const n of [4,5,6]){
     assert.match(js,new RegExp("'"+n+"':\\{photo:'flight"+n+"'"));
-    assert.match(js,new RegExp("flight"+n+"-schematic\\.svg"));
-    assert.ok(score.perLock.find(x=>x.lock===n).subject==='schematic');
+    assert.match(js,new RegExp("flight"+n+":\\{kind:'photo'"));
+    assert.equal(score.perLock.find(x=>x.lock===n).subject,n===5?'historical':'flight-group');
   }
+  assert.match(js,/Actual Lock 8 chamber photograph at Marinas.com/);
   assert.equal(score.perLock.find(x=>x.lock===8).subject,'contextual');
   assert.match(html,/id="lockDetailImageFormat"/);
   assert.match(js,/photo\.kind==='schematic'\?'Diagram: ':'Photo: '/);
