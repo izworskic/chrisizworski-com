@@ -57,3 +57,11 @@ Build Lake Michigan and two destinations first. Expand other four lake-specific 
 - Baseline GSC 28-day page/query clicks, impressions, CTR, position, branded split; compare at 7/14/28 days. Track monetization and page experience separately. Never claim improvement from shipping alone.
 
 **Exactly one next action:** Verify the full pilot against required CI, preview, live-source, and mobile acceptance gates; do not merge until these pass.
+
+
+## V1.1 mobile and authentic photography quality pass (2026-10-13)
+- Four current canonical pages keep their search intent and data logic. No new endpoints, paid service or background jobs.
+- One verified location image per place page: Sulven Angela Skeie's 2007 Grand Haven Beach photo (public domain) and Spenceemmett's 2015 Clinch Park Beach photo (CC BY-SA 4.0), each credited and labeled archival. Hub/lake use the already shipped, first-party Lake Michigan photo.
+- Remote Wikimedia images have on-error first-party photo replacement with honest alternative caption and alt. The first-party Lake Michigan photo is used for social media previews. A future build could import optimized versions if file upload tooling permits.
+- Mobile: two-column on wide screens, compact 140-215px photo on phones, accessible jump to current evidence, long number word-wrapping, horizontal table scrolling at small widths, and preserved activity selector.
+- Automated tests enforce photo provenance/fallback, narrow-breakpoint CSS and that decisions remain accessible. Passing static checks is not equivalent to a real device browser audit.

@@ -83,3 +83,18 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   write('feel-decision','Review official water and beach hazard reports before entering the lake.');
  }finally{initMap();}
 })();})();
+
+/* Wikimedia is source-backed but network access can fail. Fall back to existing
+   first-party regional photography, never label it as a particular beach. */
+document.querySelectorAll('img[data-shorefeel-fallback]').forEach(img=>{
+ const fallback=img.getAttribute('data-shorefeel-fallback');
+ if(!fallback||!fallback.startsWith('/assets/'))return;
+ img.addEventListener('error',()=>{
+  if(img.dataset.shorefeelFallbackUsed==='1')return;
+  img.dataset.shorefeelFallbackUsed='1';
+  img.src=fallback;
+  img.alt='Regional Lake Michigan shoreline near Sleeping Bear Dunes, not the selected destination';
+  const cap=img.closest('figure')?.querySelector('figcaption');
+  if(cap)cap.textContent='Destination photograph unavailable. Showing an archival regional Lake Michigan shoreline image instead.';
+ });
+});

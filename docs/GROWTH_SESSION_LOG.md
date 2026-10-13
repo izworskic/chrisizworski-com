@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel V1.1 mobile and destination photography quality pass — October 13, 2026
+
+- **Scope:** Four ShoreFeel URLs unchanged; no new location pages, APIs, paid services, jobs or safety changes.
+- **Visual:** One authentic photo per page. Grand Haven: Sulven Angela Skeie public-domain Grand Haven State Park beach (2007); Traverse City: Spenceemmett CC BY-SA 4.0 Clinch Park Beach (2015); lake/hub: first-party regional Lake Michigan asset. All are archival and correctly attributed. Remote photos fail back to a first-party regional image with corrected caption/alt.
+- **Mobile:** Responsive split editorial hero, smaller phone media, jump straight to actual readings, narrow-screen value wrapping, accessible scrollable five-lake comparison. Tests protect source and critical decision controls.
+- **Metrics:** GSC/GA4/AdSense uplift and real-device field measurements NOT AVAILABLE; full gates, Vercel READY and browser behavior remain to verify in the PR. 1m impressions/5% CTR remain strategic site goals, not release outcomes.
+- **Exactly one next action:** Confirm full PR CI and preview/mobile browser checks before merging; then verify production image responses and ShoreFeel decisions.
+
+
 ## ShoreFeel Great Lakes water temperature V1 pilot — October 13, 2026
 
 - **User problem:** Visitors need to understand how air, sun, wind and water differ for swimming, family outings, paddling, beach relaxing and after-swim cooling rather than reading a single decontextualized temperature.
