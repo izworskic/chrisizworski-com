@@ -23,6 +23,8 @@ test('ShoreFeel has a compact mobile hierarchy without losing user intents or ev
  for(const q of ['@media(max-width:650px)','@media(max-width:380px)','overflow-wrap:anywhere','.table-scroll']) assert.ok(css.includes(q),q);
  assert.match(js,/shorefeelFallbackUsed/);
  assert.match(js,/Destination photograph unavailable/);
+ assert.match(js,/Explore the Lake Michigan shoreline/);
+ assert.match(css,/\.lake-table th:nth-child\(3\),\.lake-table td:nth-child\(3\)\{display:none\}/);
  const hub=fs.readFileSync(path.join(root,pages[0][0]),'utf8');
  assert.match(hub,/class="table-scroll"/);
  for(const [p] of pages.slice(2)){const html=fs.readFileSync(path.join(root,p),'utf8');assert.match(html,/id="shorefeel-now"/);assert.match(html,/data-activity="swim"/);assert.match(html,/data-activity="paddle"/);assert.match(html,/id="local-temp">Unavailable/);}

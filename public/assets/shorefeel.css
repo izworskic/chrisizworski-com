@@ -43,3 +43,20 @@
 .panel,.decision-pane,.aside,.guide{padding:16px}
 .lake-table th,.lake-table td{white-space:normal}
 }
+
+/* Final mobile walkthrough: remove repeated lakewide-source column on phones,
+   preserve it on desktop and in the explanatory text surrounding the table. */
+@media(max-width:650px){
+ .table-scroll .lake-table{min-width:0;width:100%;table-layout:fixed}
+ .lake-table th:nth-child(3),.lake-table td:nth-child(3){display:none}
+ .lake-table th:first-child,.lake-table td:first-child{width:53%}
+ .lake-table th:nth-child(2),.lake-table td:nth-child(2){width:47%;text-align:right}
+ .lake-table td:nth-child(2){font-size:19px}
+}
+.map-fallback{height:100%;display:flex;flex-direction:column;justify-content:center;gap:13px;background:linear-gradient(125deg,#d4edf0,#e9f2ef);padding:22px;color:#183c4b}
+.map-fallback strong{font-size:21px;letter-spacing:-.02em}
+.map-fallback p{margin:0;color:#3d626c;font-size:14px}
+.map-fallback small{font-size:12px;color:#527079}
+.fallback-places{display:flex;gap:9px;flex-wrap:wrap}
+.fallback-places a{padding:8px 12px;border-radius:20px;background:#0d4352;color:#eff8f8;text-decoration:none;font-size:13px;font-weight:800}
+.fallback-places a:hover{background:#146273}
