@@ -156,9 +156,9 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.ok(start>=0&&end>start,'all eight lock editorial stories must exist');
   for(let i=1;i<=8;i++)assert.match(profile,new RegExp("'"+i+"':\\{photo:'[^']+',segment:'[^']+',explainer:'.{110,}"));
   assert.match(profile,/Lock 8 has a different job from the seven lift locks/);
-  assert.match(profile,/This is a Lock 4 engineering schematic, not a photograph/);
-  assert.match(profile,/This is a Lock 5 engineering schematic, not a photograph/);
-  assert.match(profile,/This is a Lock 6 engineering schematic, not a photograph/);
+  assert.match(profile,/photograph shows the full Thorold flight including Lock 4/);
+  assert.match(profile,/photograph documents construction of the actual Lock 5 chamber in 1916/);
+  assert.match(profile,/real aerial photograph shows the whole three-lock flight, including Lock 6/);
   assert.match(html,/id="lockDetailImage"/);
   assert.match(html,/id="lockDetailImageCaption"/);
   assert.match(html,/id="lockDetailImageCredit"/);
