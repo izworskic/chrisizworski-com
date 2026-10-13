@@ -6,6 +6,12 @@
   hmQwm0drhGU:{name:'Cave of the Winds',credit:'Independent visitor footage'},
   l6fu2huqWNE:{name:'Journey Behind the Falls',credit:'Niagara Parks · official footage'}
  });
+ // Failed CDN thumbnails fall back to the branded play tile; no broken-image icons.
+ document.querySelectorAll('.film-thumb img').forEach(function(img){
+  function markMissing(){img.classList.add('is-missing');}
+  img.addEventListener('error',markMissing,{once:true});
+  if(img.complete&&img.naturalWidth===0)markMissing();
+ });
  document.addEventListener('click',function(event){
   var el=event.target.closest&&event.target.closest('[data-niagara-clip]');
   if(!el)return;
@@ -21,6 +27,10 @@
   iframe.setAttribute('allowfullscreen','');
   iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
   stage.replaceChildren(iframe);
+  if(window.matchMedia&&window.matchMedia('(max-width: 640px)').matches){
+   var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   stage.scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'nearest'});
+  }
   try{if(typeof window.gtag==='function')window.gtag('event','niagara_experience_video_play',{video_id:id});}catch(_){}
  });
 })();
