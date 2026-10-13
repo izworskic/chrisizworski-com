@@ -1,6 +1,6 @@
 # Welland Canal lock photography and factual sources
 
-Date reviewed: 2026-10-11. Page: `/welland-canal/`.
+Date reviewed: 2026-10-13. Page: `/welland-canal/`.
 
 ## Main-page hero photograph
 
@@ -23,18 +23,18 @@ Live or seasonal photos are **illustrative, not live cameras**. If Wikimedia fai
 
 ## Verified image assignments — media integrity revision, October 12, 2026
 
-All eight selectable lock profiles now use **eight distinct media paths**, without passing a photo of one lock off as another.
+All eight selectable lock profiles use photographic imagery, but **Locks 4 and 6 deliberately reuse one documented panorama of the three-chamber flight**; each is clearly labeled as a shared overview, not an independent lock portrait. Lock 5 uses an archival construction photograph. The Lock 8 primary card remains the nearby visitor-park photo, with a direct external link to a Lock 8 aerial photograph; reproduction rights for the latter have not been established.
 
 | Selected lock | Media | What the user is actually shown | Provenance / disclosure |
 |---|---|---|---|
 | 1 | `north1.jpg` | Lock 1, Port Weller | [Balcer; CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_1_Port_Weller.JPG) |
 | 2 | `north2.jpg` | Thunder Bay emerging from Lock 2 | [Cpfan776; CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg) |
 | 3 | `north3.jpg` | Lock 3 from the viewing platform | [Dough4872; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_3_from_observation_deck.jpeg) |
-| 4 | `flight4-schematic.svg` | **Original Lock 4 interpretive schematic; NOT a photograph** | By Chris Izworski, lift according to [NOAA Coast Pilot 6](https://nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_C05_WEB.pdf), not to scale |
-| 5 | `flight5-schematic.svg` | **Original Lock 5 interpretive schematic; NOT a photograph** | By Chris Izworski, same NOAA reference; not to scale |
-| 6 | `flight6-schematic.svg` | **Original Lock 6 interpretive schematic; NOT a photograph** | By Chris Izworski, same NOAA reference; not to scale |
+| 4 | USACE flight aerial, served from Commons | **Real photograph of Locks 4–6 as a group, including Lock 4** | [U.S. Army Corps; public domain](https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png) |
+| 5 | Library of Congress historic photograph | **Actual Lock 5 pit under construction in 1916 (not modern appearance)** | [Bain News Service / LOC; no known publication restrictions](https://commons.wikimedia.org/wiki/File:Welland_ship_canal_-_channelled_faces_for_pit_for_lock_no._5_LCCN2007681023.jpg) |
+| 6 | USACE flight aerial, served from Commons | **Real photograph of Locks 4–6 as a group, including Lock 6; same original panorama as Lock 4** | [U.S. Army Corps; public domain](https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png) |
 | 7 | `thorold.jpg` | Lock 7 in Thorold | [Gogerr; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Welland_Canal_Lock_7.jpg) |
-| 8 | `south8.jpg` | **Nearby Lock 8 Gateway Park; NOT the Lock 8 chamber** | [Mhsheikholeslami; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg) |
+| 8 | `south8.jpg` | **Nearby Lock 8 Gateway Park; NOT the Lock 8 chamber. Exact Lock 8 aerial available via external photo link** | [Mhsheikholeslami; CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Lock_8_Gateway_Park-Port_Colborne-Ontario-20220317.jpg); [Lock 8 aerial on Marinas.com](https://marinas.com/view/lock/rvhgd_Welland_Canal_Lock_8_Port_Colborne_ON_Canada), not reused without permission |
 
 The previous published site used the very same Lock 7 photo for **all of Locks 4, 5, 6 and 7**, which was correctly labeled regional imagery but still confusing to visitors. That repetition is now removed from the eight displayed profiles. A separate unused photograph source record remains in code only for image provenance; the media benchmark evaluates **what each lock actually displays**, not how many files happen to exist in the repository.
 
@@ -66,8 +66,12 @@ A live video feed cannot confirm lock occupancy, departure time, Seaway schedule
 
 ## Future image-upgrade priority
 
-1. Source clearly licensed current photos showing **individual** Locks 4, 5 and 6, then replace the honestly labeled Thorold-area representative photo.
+1. Replace the historical Lock 5 construction image and the shared Locks 4/6 flight panorama with three distinct, current, specifically identified, reusable photos of the chambers.
 2. Source a clearly licensed photograph of **Lock 8 chamber** itself rather than the park.
-3. Optimize or serve the Commons images from approved local storage if future performance data shows slow or unavailable loads; preserve all creator/licence attributions and image provenance.
+3. Import or mirror the new approved archive photos as first-party assets after verifying download, exact identity and runtime performance. Current new archive photos are external and may fail or be slow; the old three schematics are retained as reference assets.
 
 No automatic search or AI-generated images were passed off as original location photos.
+
+## October 13 photo upgrade limitations
+
+The user requested actual photography rather than the engineering diagrams. Locks 4–6 now render sourced archive photos on their cards and map previews, while the diagram SVG files remain in the repository. **This is a partial photo upgrade, not proof that every lock now has its own current, independent photograph.** Locks 4 and 6 share a true flight aerial, and Lock 5's dated photo shows construction. The Lock 8 chamber image is currently linked to its external publisher, not copied or embedded without documented reuse rights. External Commons and Library of Congress delivery has not yet been verified on production. The live AIS, ship markers and map mechanics are unchanged.
