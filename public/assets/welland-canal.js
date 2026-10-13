@@ -320,7 +320,7 @@
     renderTrafficBrief();
     renderInstantAnswer(lock);
     renderLockDetail();
-    if(fromMap&&lock)showLockPreview(lock);else hideLockPreview();
+    if(lock&&(fromMap||!$('mapLockPreview').hidden))showLockPreview(lock);else hideLockPreview();
     // Keep existing Leaflet elements mounted while changing selection.
     // Replacing icons on every tap drops keyboard focus and triggers map layout churn.
     lockMarkers.forEach((marker,key)=>{
@@ -384,6 +384,12 @@
     renderLockPhoto(lock);
     $('lockDetailIndex').textContent=lock?String(lock.id).padStart(2,'0')+' / 08':'01 — 08';
     $('lockDetailMedallion').textContent=lock?lock.id:'8';
+    // An eight-step route through the canal, never an invented live lock status.
+    $('lockJourneyPosition').textContent=lock?'Lock '+lock.id+' of 8 · '+LOCK_QUICK[lock.id].cue:'Choose a lock to begin';
+    Array.from($('lockJourneyTrack').children).forEach((step,index)=>{
+      step.classList.toggle('is-reached',Boolean(lock)&&index<Number(lock.id));
+      step.classList.toggle('is-current',Boolean(lock)&&index+1===Number(lock.id));
+    });
     $('lockDetailLabel').textContent=lock?'LOCK PROFILE':'THE CANAL AT A GLANCE';
     $('lockDetailTitle').textContent=lock?lock.name:'Eight locks. One waterway.';
     $('lockDetailPlace').textContent=lock?lock.place:'Lake Ontario → Lake Erie';
@@ -402,8 +408,13 @@
     else archive.removeAttribute('href');
     const watchCam=$('lockDetailWatchCam');
     watchCam.hidden=lock?.id!=='8';
+    const previous=lock?Math.max(1,Number(lock.id)-1):1;
     const next=lock?(Number(lock.id)%8)+1:1;
-    $('lockDetailNext').textContent=lock?'Next · Lock '+next+' →':'Explore Lock 1 →';
+    const previousButton=$('lockDetailPrevious');
+    previousButton.disabled=!lock||lock.id==='1';
+    previousButton.dataset.previous=String(previous);
+    previousButton.textContent=lock&&lock.id!=='1'?'← Lock '+previous:'← Start of route';
+    $('lockDetailNext').textContent=lock?.id==='8'?'Restart · Lock 1 ↻':lock?'Next · Lock '+next+' →':'Explore Lock 1 →';
     $('lockDetailNext').dataset.next=String(next);
     const count=lock?vesselData.filter(v=>distanceKm(v,lock)<=1.5).length:vesselData.length;
     if(aisState==='loading'){
@@ -589,6 +600,7 @@
     chooseLock(activeWatchSpot,true,false);
     $('shipMap').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
   });
+  $('lockDetailPrevious').addEventListener('click',()=>chooseLock($('lockDetailPrevious').dataset.previous));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
   function openFullLockStory(){
