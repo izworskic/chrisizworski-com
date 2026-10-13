@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel Traverse City landscape-tablet visual repair — October 13, 2026
+
+- **User's actual feedback:** On a landscape tablet, the upper two inches still appeared as mostly blue empty space; the previous fix took away the undesirable crowd photo but did not establish an attractive visible replacement. Passing phone/browser tests did not measure image placement on landscape tablets.
+- **Design:** Full-width bay photograph occupies the **entire hero** behind readable, compact overlaid editorial text; NO separate blue-first region. Adds a credited, genuine archival view **of downtown Traverse City from West Grand Traverse Bay** by D. R. Shoup (2009, CC BY 3.0), not another generic beach. Existing local Lake Michigan photo is an in-hero fallback if Wikimedia cannot load. The fallback caption explicitly says it is regional.
+- **Viewport decision:** 1024×768 and 1280×800 tablet-landscape test cases added to existing 320/375/390/768/1440; assert hero height, image coverage, and evidence appearing before y=580px. No global fixed width or overflow hiding.
+- **Data, URL and SEO:** Canonical and NOAA/NDBC/NWS judgments unchanged, metadata and Person ID preserved, no backend/inference or Vercel-build dependency. Real-browser workflow uses intentional remote-image failure; actual external image delivery cannot be assumed from simulated browser tests.
+- **Exactly one next action:** Validate newly added tablet screenshot and full PR CI, merge after green, then inspect the production commit and request owner visual feedback on the same landscape tablet.
+
+
 ## ShoreFeel Traverse City mobile-overflow and hero correction — October 13, 2026
 
 - **User-reported regression:** Traverse City on a real device required left-right scrolling; crowded Clinch Park photo was visually poor. The previous Chrome test blocked external Leaflet entirely and therefore covered map fallback, not the working map.

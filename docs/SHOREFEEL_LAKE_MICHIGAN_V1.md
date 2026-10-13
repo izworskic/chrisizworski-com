@@ -69,3 +69,7 @@ Build Lake Michigan and two destinations first. Expand other four lake-specific 
 
 ## Traverse City responsive/image correction — 2026-10-13
 The owner reported real-device left-right overflow and rejected the crowded Clinch Park scene. Traverse temporarily uses the previously shipped calm Lake Michigan regional shoreline photo, honestly labeled **not a Traverse City photograph**; avoid fabricated local imagery. Traverse now uses local Leaflet CSS/JS and a clipped map viewport, plus scoped flexible grid/card/image/long-text handling. Browser regression deliberately loads working Leaflet and checks zero page overflow after interactive choices at 320, 375, 390, 768, and 1440px. Other destination images unchanged. No source or scoring modifications.
+
+
+## Traverse landscape hero photo repair — 2026-10-13
+Owner observed ~2 inches of plain blue top on landscape tablet despite last photo correction. Use licensed archival actual Traverse skyline viewed from bay (D. R. Shoup, Wikimedia Commons CC BY 3.0) as full hero backdrop; first-party local lake image remains independently visible as CSS fallback and JS image fallback with relabeling. Tablet landscape (1024×768, 1280×800) regression measures hero height, photo footprint, evidence positioning, and no horizontal overflow after activity and map interactions. No data/product logic changes.

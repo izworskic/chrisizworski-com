@@ -14,14 +14,16 @@ test('ShoreFeel shows one genuinely sourced image per destination with accessibl
    assert.match(html,/data-shorefeel-fallback="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
    assert.match(html,/commons\.wikimedia\.org\/wiki\/File:/);
    assert.match(html,/archival photo/);
+  }else if(k==='traverse'){
+   assert.match(html,/src="https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/e\/e0\/DowntownTCfrombay\.JPG"/);
+   assert.match(html,/data-shorefeel-fallback="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
+   assert.match(html,/D\. R\. Shoup/);
+   assert.match(html,/CC BY 3\.0/);
+   assert.doesNotMatch(html,/Traverse_City_Clinch_Park_Beach\.jpg/);
+   assert.match(html,/href="\/assets\/leaflet-1\.9\.4\.css"/);
+   assert.match(html,/src="\/assets\/leaflet-1\.9\.4\.js"/);
   }else{
    assert.match(html,/src="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
-   if(k==='traverse'){
-    assert.doesNotMatch(html,/Traverse_City_Clinch_Park_Beach\.jpg/);
-    assert.match(html,/not a view of Traverse City/);
-    assert.match(html,/href="\/assets\/leaflet-1\.9\.4\.css"/);
-    assert.match(html,/src="\/assets\/leaflet-1\.9\.4\.js"/);
-   }
   }
  }
 });
