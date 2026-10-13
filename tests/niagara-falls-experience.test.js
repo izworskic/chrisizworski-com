@@ -12,7 +12,7 @@ const stops=context.window.NiagaraFallsGuide;
 test('V6 preserves one licensed hero and three compact video thumbnails, not a photo gallery',()=>{
  assert.equal((html.match(/<img /g)||[]).length,4);
  assert.equal((html.match(/<img src="\/assets\/niagara-falls\/photos\/horseshoe-2026\.jpg"/g)||[]).length,1);
- assert.doesNotMatch(html,/i\.ytimg\.com\/vi\//);
+ assert.equal((html.match(/i\.ytimg\.com\/vi\//g)||[]).length,3);
  assert.match(html,/src="\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg"/);
  assert.match(html,/https:\/\/chrisizworski\.com\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg/);
  assert.doesNotMatch(html,/<section class="experience"|class="scene-grid"|class="film-grid"/);
@@ -49,7 +49,7 @@ test('route story is derived from real selected stops and preserves planner safe
  assert.match(script,/HOURS_NOT_VERIFIED/);
  assert.match(script,/updateSideGuide\(r\)/);
 });
-test('one film player offers three documentary choices without preloaded video or thumbnails',()=>{
+test('one player offers three thumbnail choices without preloaded video',()=>{
  const films=read('public/assets/niagara-visit-films.js');
  assert.doesNotMatch(html,/<iframe/);
  assert.equal((html.match(/data-niagara-clip="/g)||[]).length,3);
