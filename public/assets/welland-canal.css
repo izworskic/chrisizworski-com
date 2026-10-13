@@ -352,3 +352,34 @@
   .vessel-spotlight h3{font-size:20px}
   .vessel-spotlight__links{align-items:flex-start}
 }
+
+
+/* Welland traffic brief: source separated, editorial and lightweight.
+   Never style AIS observation rows as an official queue or prediction. */
+.traffic-brief{padding:18px 20px 17px;border-top:1px solid #dce6e6;background:#fbfcfb}
+.traffic-brief__head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:13px}
+.traffic-brief__eyebrow{display:block;color:#7f6238;font-size:10px;font-weight:850;letter-spacing:.14em}
+.traffic-brief__head h3{margin:3px 0;font:700 23px/1.2 Georgia,serif;color:#183e50}
+.traffic-brief__head p{margin:4px 0 0;font-size:12px;color:#59747d}
+.traffic-brief__official{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:10px 13px;border:1px solid #bb965c;border-radius:6px;background:#f9f1e3;color:#624724;text-decoration:none;font-size:12px;font-weight:800;line-height:1.3}
+.traffic-brief__official:hover{background:#f2e4cc;color:#483012}
+.traffic-brief__rows{display:grid;gap:7px}
+.traffic-brief__row{display:flex;align-items:center;gap:12px;border:1px solid #dfe8e8;border-radius:7px;padding:12px 13px;background:white}
+.traffic-brief__row-copy{display:flex;flex:1 1 170px;min-width:0;flex-direction:column;gap:2px}
+.traffic-brief__row-copy strong{font-size:14px;line-height:1.3;color:#153b4f}
+.traffic-brief__meta{color:#667c83;font-size:11px;line-height:1.35}
+.traffic-brief__motion{flex:0 1 155px;font-size:11px;line-height:1.35;color:#4d6874}
+.traffic-brief__locate{flex:0 0 auto;padding:8px 10px;background:#eaf3f4;border:1px solid #bed3d6;border-radius:5px;color:#1c5d70;font-size:11px;font-weight:800}
+.traffic-brief__locate:hover{background:#dcecef}
+.traffic-brief__empty{padding:14px 12px;margin:0;background:#f2f6f5;color:#516971;font-size:13px;border-radius:6px}
+.traffic-brief__disclaimer{margin:13px 0 0;color:#657b82;font-size:11px;line-height:1.55}
+.traffic-brief__disclaimer strong{color:#365866}
+@media(max-width:620px){
+  .traffic-brief{padding:16px 13px}
+  .traffic-brief__head{align-items:stretch}
+  .traffic-brief__official{width:100%;justify-content:center}
+  .traffic-brief__row{gap:8px;flex-wrap:wrap;padding:11px}
+  .traffic-brief__row-copy{flex-basis:calc(100% - 85px)}
+  .traffic-brief__motion{flex:1 1 auto}
+  .traffic-brief__locate{min-height:37px}
+}
