@@ -46,6 +46,10 @@ jobs:
           cp -a .petoskey-owner/out/. public/petoskey-wine/
           node scripts/build-petoskey-wine-sitemap.mjs
           grep -Fq 'Which wine country day feels right for you?' public/petoskey-wine/index.html
+          grep -Fq 'Which stops can actually fit your day?' public/petoskey-wine/index.html
+          for route in petoskey-wine-region-trail walloon-lake-wineries tunnel-of-trees-wine-tour charlevoix-area-wineries; do
+            grep -Fq 'Which stops can actually fit your day?' "public/petoskey-wine/$route/index.html"
+          done
           grep -Fq 'We return to Michigan wine country' public/petoskey-wine/index.html
           grep -Fq 'https://chrisizworski.com/#person' public/petoskey-wine/index.html
           test "$(find public/petoskey-wine -name index.html | wc -l)" -ge 33
