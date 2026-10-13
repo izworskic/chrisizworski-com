@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Five-state aurora million-impressions publication-quality release — October 13, 2026
+
+- **Definition of done:** The owner-requested million-impressions / 5% CTR **publication-quality bar** is not an attainable guarantee of Google impressions. It is now a build-time, binary 100-point gate for every state hub and every local page, plus separate unmeasured actual GSC and mobile-browser outcomes. Full criteria and exact commit ledger: [AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md](AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md).
+- **Coverage:** Five state hubs + 39 named location pages = **44 exact canonical URLs**; no new URL published in this change. Historical sixteen local pages received destination-specific park/tourism sources and unique horizon, planning and access notes. All 39 now have locally responsive five-question FAQ answers and shorter query-first titles. State hubs received shorter distinct titles/snippets, social metadata, shared Person ID and linked visible attribution.
+- **Owned implementation and gates:** PR #9 in each of `izworskic/montana-aurora-live`, `minnesota-aurora-live`, `north-dakota-aurora-live`, `maine-aurora-live` and `alaska-aurora-live` merged after **owner Verify SUCCESS + Vercel preview SUCCESS**. Each build invokes `scripts/audit-aurora-quality.mjs` against final generated HTML; any missing criteria fail `scripts/validate-build.mjs`, and a machine-readable `artifacts/aurora-quality-gate.json` is produced. All 44 pages passed the declared criteria, and all five exact merged production commits were checked **READY**.
+- **No unsupported claims:** Current GSC 28-day impressions and CTR for the network are NOT AVAILABLE. Indexing, search demand, SERP changes, SEO causality, page speed/Core Web Vitals, live WebGL interaction and all third-party URLs have NOT been independently verified in this session. Google ranking and AdSense uplift not claimed. Maps, live scoring, exact model thresholds and state owner URLs were preserved.
+- **Exactly one next action:** Export and compare GSC Web 7/28-day page/query metrics for the 44 canonical URLs, then pick one measurable underperforming near-page-one destination for a surgical improvement.
+
+
 ## Iconic Aurora destination expansion — October 13, 2026
 
 - **Goal and restraint:** Expand the established five-state northern-lights decision network with selective, distinctive outdoor-place and gateway-city queries, rather than templated urban coverage or unsupported numerical SEO forecasts. Target growth mission: 1,000,000 rolling 28-day GSC Web impressions and 5% CTR remains unachieved/unmeasured by this release.
