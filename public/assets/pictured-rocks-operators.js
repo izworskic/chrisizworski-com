@@ -39,7 +39,7 @@ function easternDate(){
 }
 
 function cruiseSchedule(){
-  const d=easternDate();
+  const d=document.getElementById('tripDate')?.value || easternDate();
   if(d>='2026-09-28'&&d<='2026-10-04') return 'Today’s published window: Spray Falls departures at 10 AM, 11 AM, noon, 1 PM, 2 PM, 3 PM and 4 PM; sunset departure 5:45 PM.';
   if(d>='2026-10-05'&&d<='2026-10-11') return 'Published window: Spray Falls departures at 10 AM, 11 AM, 1 PM, 2 PM and 3:30 PM; sunset departure 5:30 PM.';
   if(d>='2026-10-12'&&d<='2026-10-18') return 'Published window: Spray Falls departures at 10 AM, 11 AM, 1 PM, 2 PM and 3:30 PM; sunset departure 5:15 PM.';
@@ -90,7 +90,7 @@ function renderBooking(){
   if(!mode){box.hidden=true;return;}
   box.hidden=false;
   if(mode==='cruise'){
-    box.innerHTML=`<p class="eyebrow">Make the reservation fit the route</p><h3>Pictured Rocks Cruises</h3><p>${cruiseSchedule()} Current late-season trips are Spray Falls cruises, about 2 hours, departing from the Munising City Dock at 100 City Park Drive. Arrive early and verify availability and marine status before treating a departure as fixed.</p><div class="answer-booking-card"><strong>Operator</strong><p>NPS-authorized concessioner · (906) 387-2379</p><a href="${CRUISE_URL}" target="_blank" rel="noopener">See live departures and book ↗</a></div>`;
+    box.innerHTML=`<p class="eyebrow">Make the reservation fit the route</p><h3>Pictured Rocks Cruises</h3><p>${cruiseSchedule()} ${(document.getElementById('tripDate')?.value||easternDate())>='2026-10-12'&&(document.getElementById('tripDate')?.value||easternDate())<='2026-10-18'?'The October 12–18, 2026 published Spray Falls cruises take about 2 hours.':'A future cruise departure is not established until the operator publishes a date-specific timetable.'} All cruises depart from the Munising City Dock at 100 City Park Drive. Allow 30–45 minutes to arrive and check in. Verify actual tickets, weather and the operator before treating a departure as fixed.</p><div class="answer-booking-card"><strong>Operator</strong><p>NPS-authorized concessioner · (906) 387-2379</p><a href="${CRUISE_URL}" target="_blank" rel="noopener">See live departures and book ↗</a></div>`;
     return;
   }
   box.innerHTML=`<p class="eyebrow">Choose the guide that fits this answer</p><h3>NPS-permitted guided kayak options</h3><p>The planner has selected a guided paddle as the water anchor. These are choices, not rankings. Lake Superior conditions can change the operating decision, so confirm the departure with the guide before building the rest of the day around it.</p>${GUIDES.map(g=>`<div class="answer-booking-card"><strong>${g.name}</strong><p>${g.schedule}</p><p>${g.fit}</p><a href="${g.url}" target="_blank" rel="noopener">Check schedule / availability ↗</a></div>`).join('')}<div class="answer-booking-source">Permit verification: <a href="${NPS_GUIDES}" target="_blank" rel="noopener">National Park Service permitted kayak guides ↗</a></div>`;
