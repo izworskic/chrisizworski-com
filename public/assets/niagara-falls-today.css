@@ -196,3 +196,16 @@
  .film-choice .film-thumb{width:92px}
  .film-choice .film-choice-meta strong{font-size:12px}
 }
+
+
+/* V6 growth: decision and result lead; films are a deliberate supporting layer. */
+.visit-quick-start{display:grid;gap:8px;grid-template-columns:1fr;margin:5px 27px 12px}
+.visit-quick-start button{background:#f2f7f5;color:#1d4b55;border:1px solid #c9d9d5;border-radius:6px;text-align:left;cursor:pointer;padding:10px 13px;min-height:57px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.visit-quick-start button strong{font:700 13px/1.35 system-ui,-apple-system,sans-serif}
+.visit-quick-start button small{font:400 11px/1.4 system-ui,-apple-system,sans-serif;color:#5c7375}
+.visit-quick-start button:hover,.visit-quick-start button[aria-pressed="true"]{border-color:#31827f;background:#e4f0ee;box-shadow:inset 3px 0 #31827f}
+.visit-quick-start button:focus-visible{outline:3px solid #c17b32;outline-offset:2px}
+.film-editorial{margin-top:26px;margin-bottom:28px}
+.result{scroll-margin-top:12px}
+@media(min-width:1051px){.visit-quick-start{grid-template-columns:1fr}}
+@media(max-width:600px){.visit-quick-start{margin:4px 18px 10px}.hero-inner{padding-top:22px;padding-bottom:20px}.hero h1{font-size:40px}.hero-photo{min-height:180px;max-height:180px}.hero-photo img{min-height:180px;height:180px}}
