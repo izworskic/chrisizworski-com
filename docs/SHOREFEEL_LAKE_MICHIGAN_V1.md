@@ -65,3 +65,7 @@ Build Lake Michigan and two destinations first. Expand other four lake-specific 
 - Remote Wikimedia images have on-error first-party photo replacement with honest alternative caption and alt. The first-party Lake Michigan photo is used for social media previews. A future build could import optimized versions if file upload tooling permits.
 - Mobile: two-column on wide screens, compact 140-215px photo on phones, accessible jump to current evidence, long number word-wrapping, horizontal table scrolling at small widths, and preserved activity selector.
 - Automated tests enforce photo provenance/fallback, narrow-breakpoint CSS and that decisions remain accessible. Passing static checks is not equivalent to a real device browser audit.
+
+
+## Traverse City responsive/image correction — 2026-10-13
+The owner reported real-device left-right overflow and rejected the crowded Clinch Park scene. Traverse temporarily uses the previously shipped calm Lake Michigan regional shoreline photo, honestly labeled **not a Traverse City photograph**; avoid fabricated local imagery. Traverse now uses local Leaflet CSS/JS and a clipped map viewport, plus scoped flexible grid/card/image/long-text handling. Browser regression deliberately loads working Leaflet and checks zero page overflow after interactive choices at 320, 375, 390, 768, and 1440px. Other destination images unchanged. No source or scoring modifications.

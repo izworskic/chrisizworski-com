@@ -72,13 +72,31 @@ const server=http.createServer((req,res)=>{
     assert.ok(detail.titleVisible,key+' title missing');
     if(key==='hub')assert.match(await page.locator('#lake-michigan').textContent(),/62\.1°F/);
     if(key==='grand'||key==='traverse'){
-     await page.waitForFunction(()=>document.querySelector('.hero-photo')?.dataset.shorefeelFallbackUsed==='1',null,{timeout:6500});
-     assert.match(await page.locator('.hero-media figcaption').textContent(),/Destination photograph unavailable/);
+     if(key==='grand'){
+      await page.waitForFunction(()=>document.querySelector('.hero-photo')?.dataset.shorefeelFallbackUsed==='1',null,{timeout:6500});
+      assert.match(await page.locator('.hero-media figcaption').textContent(),/Destination photograph unavailable/);
+     }else{
+      // Traverse uses the stable first-party shoreline photo and local Leaflet assets.
+      await page.waitForFunction(()=>window.L && document.querySelector('#shore-map.leaflet-container'),null,{timeout:7500});
+      assert.match(await page.locator('.hero-photo').getAttribute('src'),/^\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg$/);
+      assert.match(await page.locator('.hero-media figcaption').textContent(),/not a view of Traverse City/);
+      assert.ok(await page.locator('#shore-map .leaflet-pane').count()>0,'Traverse real Leaflet map not initialized');
+     }
      await page.getByRole('button',{name:'With family'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
      assert.match(await page.locator('#local-source').textContent(),/offshore buoy/);
+     if(key==='traverse'){
+      const dims=await page.evaluate(()=>({
+       documentWidth:document.documentElement.scrollWidth,
+       bodyWidth:document.body.scrollWidth,viewport:innerWidth,
+       mapWidth:document.querySelector('#shore-map')?.getBoundingClientRect().width
+      }));
+      assert.ok(dims.documentWidth<=width+1 && dims.bodyWidth<=width+1,
+        'Traverse must not scroll sideways after live Leaflet/map and activity updates at '+width+'px: '+JSON.stringify(dims));
+      assert.ok(dims.mapWidth<=width+1,'Traverse map wider than viewport');
+     }
     }
     assert.equal(errors.length,0,key+' browser JS exceptions: '+errors.join('; '));
     if(width===375||(width===1440&&key==='lake'))await page.screenshot({path:path.join(OUT,key+'-'+width+'.png'),fullPage:true});
