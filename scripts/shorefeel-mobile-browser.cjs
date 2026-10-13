@@ -50,9 +50,10 @@ const server=http.createServer((req,res)=>{
  const browser=await chromium.launch({headless:true,executablePath:ch,args:['--no-sandbox','--disable-dev-shm-usage']});
  const audit=[];
  try{
-  for(const width of [320,375,390,768,1440]){
+  for(const width of [320,375,390,768,1024,1280,1440]){
    for(const [route,key] of pages){
-    const ctx=await browser.newContext({viewport:{width,height:870},deviceScaleFactor:1,hasTouch:width<769,isMobile:width<769});
+    const height=width===1024?768:width===1280?800:870;
+    const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,hasTouch:width<769,isMobile:width<769});
     const page=await ctx.newPage();
     // Deliberately simulate unavailable external media/tiles to test the fallback.
     await page.route(/(?:upload\.wikimedia\.org|unpkg\.com|tile\.openstreetmap\.org)/,r=>r.abort());
@@ -78,8 +79,9 @@ const server=http.createServer((req,res)=>{
      }else{
       // Traverse uses the stable first-party shoreline photo and local Leaflet assets.
       await page.waitForFunction(()=>window.L && document.querySelector('#shore-map.leaflet-container'),null,{timeout:7500});
+      await page.waitForFunction(()=>document.querySelector('.hero-photo')?.dataset.shorefeelFallbackUsed==='1',null,{timeout:6500});
       assert.match(await page.locator('.hero-photo').getAttribute('src'),/^\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg$/);
-      assert.match(await page.locator('.hero-media figcaption').textContent(),/not a view of Traverse City/);
+      assert.match(await page.locator('.hero-media figcaption').textContent(),/Destination photograph unavailable/);
       assert.ok(await page.locator('#shore-map .leaflet-pane').count()>0,'Traverse real Leaflet map not initialized');
      }
      await page.getByRole('button',{name:'With family'}).click();
@@ -88,6 +90,21 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
      assert.match(await page.locator('#local-source').textContent(),/offshore buoy/);
      if(key==='traverse'){
+      if(width===1024||width===1280){
+       const hero=await page.evaluate(()=>{
+        const section=document.querySelector('.hero').getBoundingClientRect();
+        const image=document.querySelector('.hero-photo').getBoundingClientRect();
+        const evidence=document.querySelector('#shorefeel-now').getBoundingClientRect();
+        const style=getComputedStyle(document.querySelector('.hero-photo'));
+        return {heroHeight:section.height,heroWidth:section.width,imageWidth:image.width,imageHeight:image.height,
+          evidenceY:evidence.y+window.scrollY,objectFit:style.objectFit};
+       });
+       assert.ok(hero.heroHeight<=345,'landscape tablet hero must be compact '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.imageWidth>=width-2 && hero.imageHeight>=hero.heroHeight-2,
+         'real photograph must span the hero '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.evidenceY<580,'shore conditions must appear promptly '+width+': '+JSON.stringify(hero));
+       assert.equal(hero.objectFit,'cover');
+      }
       const dims=await page.evaluate(()=>({
        documentWidth:document.documentElement.scrollWidth,
        bodyWidth:document.body.scrollWidth,viewport:innerWidth,
@@ -99,7 +116,7 @@ const server=http.createServer((req,res)=>{
      }
     }
     assert.equal(errors.length,0,key+' browser JS exceptions: '+errors.join('; '));
-    if(width===375||(width===1440&&key==='lake'))await page.screenshot({path:path.join(OUT,key+'-'+width+'.png'),fullPage:true});
+    if(width===375||(width===1440&&key==='lake')||(key==='traverse'&&(width===1024||width===1280)))await page.screenshot({path:path.join(OUT,key+'-'+width+'.png'),fullPage:true});
     audit.push({page:key,width,overflow:false,photoRendered:true,interaction:key==='grand'||key==='traverse'?'passed':'not applicable'});
     await ctx.close();
    }
