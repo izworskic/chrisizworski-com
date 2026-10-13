@@ -3,7 +3,11 @@
 var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go'),requestSeq=0,presetPending=false;
 function todayEastern(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now()+3600000));var o={};parts.forEach(function(p){o[p.type]=p.value;});return{date:o.year+'-'+o.month+'-'+o.day,hour:Number(o.hour)};}
 var t=todayEastern();document.getElementById('date').value=t.date;document.getElementById('time').value=String(t.hour).padStart(2,'0')+':00';
-function emit(name){try{if(typeof window.gtag==='function')window.gtag('event',name,{page_id:'niagara-falls-today'});if(typeof window.va==='function')window.va('event',{name:name});}catch(e){}}
+function emit(name,dimensions){try{
+ var fields=Object.assign({page_id:'niagara-falls-today'},dimensions||{});
+ if(typeof window.gtag==='function')window.gtag('event',name,fields);
+ if(typeof window.va==='function')window.va('event',Object.assign({name:name},fields));
+}catch(e){}}
 function safe(s){return String(s===null||s===undefined?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function link(url,label){return '<a href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(label)+' ↗</a>';}
 function explain(reason){
@@ -46,7 +50,7 @@ function draw(r){
  if(r.boat_resolution){
   var br=r.boat_resolution;
   if(br.included){
-   out+='<section class="boat-decision boat-success"><strong>Boat ride included in your plan</strong><p>'+safe(br.boat_name)+' fits your chosen time and published operating window. Bookings, tickets and queues are not confirmed.</p></section>';
+   out+='<section class="boat-decision boat-success"><strong>Boat ride included in your plan</strong><p>'+safe(br.boat_name)+' fits your chosen time and published operating window. Bookings, tickets and queues are not confirmed.</p><p class="boat-ticket-action">'+link(r.side==='US'?'https://www.maidofthemist.com/schedule-pricing/':'https://www.cityexperiences.com/niagara/city-cruises/niagara/','Check official boat tickets, prices and departures')+'</p></section>';
   }else{
    out+='<section class="boat-decision boat-missed" role="status"><strong>Boat ride could not fit this visit</strong><p>'+safe(br.reason)+'</p>';
    if(br.published_hours&&br.published_hours.open&&br.published_hours.close)out+='<p>Operator-published hours on this date: '+safe(br.published_hours.open)+'–'+safe(br.published_hours.close)+' Eastern.</p>';
@@ -94,13 +98,22 @@ function draw(r){
  });
  status.textContent=r.boat_resolution&&!r.boat_resolution.included?'Boat not feasible for the selected window. Review the next-boat option.':'Your same-side visit, field notes and constraints.';
  if(window.NiagaraVisitMap&&typeof window.NiagaraVisitMap.render==='function')window.NiagaraVisitMap.render(r);
- bindGuideVideo();updateSideGuide(r);emit(r.boat_resolution&&!r.boat_resolution.included?'niagara_boat_not_feasible':stops.length?'niagara_plan_success':'niagara_plan_no_feasible');
+ bindGuideVideo();updateSideGuide(r);
+ emit(r.boat_resolution&&!r.boat_resolution.included?'niagara_boat_not_feasible':stops.length?'niagara_plan_success':'niagara_plan_no_feasible',{intent:r.priority,side:r.side,stops:stops.length,boat_included:Boolean(r.boat_resolution&&r.boat_resolution.included)});
 }
 async function submit(ev){if(ev)ev.preventDefault();var thisRequest=++requestSeq;button.disabled=true;body.setAttribute('aria-busy','true');status.textContent='Checking your requested experience…';emit('niagara_plan_submit');
  var d=new FormData(form);var data={visit_date:d.get('visit_date'),arrival_local:d.get('arrival_local'),duration_minutes:d.get('custom_minutes')?Number(d.get('custom_minutes')):Number(d.get('duration_minutes')),starting_side:d.get('starting_side'),arrival_mode:d.get('arrival_mode')||'drive',transport_origin:d.get('transport_origin')||'other',wego_included:d.has('wego_included'),rapidsview_included:d.has('rapidsview_included'),priority:d.get('priority'),adults:Number(d.get('adults')),youth:Number(d.get('youth')),budget:d.get('budget')===''?null:Number(d.get('budget')),step_free:d.has('step_free'),low_walking:d.has('low_walking')};
  try{var response=await fetch('/api/niagara-falls-today',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});var result=await response.json();if(!response.ok)throw new Error(result.error||'Service unavailable');if(thisRequest!==requestSeq)return;draw(result);if(presetPending){presetPending=false;var answer=document.getElementById('result');if(answer)answer.scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}}catch(e){if(thisRequest!==requestSeq)return;body.innerHTML='<div class="result-content"><div class="caveat"><strong>Planner currently unavailable.</strong> '+safe(e.message)+' No opening claim can be made. Check the <a href="https://www.niagarafallsstatepark.com/" target="_blank" rel="noopener">U.S. operator</a> or <a href="https://www.niagaraparks.com/hours-of-operations/" target="_blank" rel="noopener">Canadian hours</a>.</div></div>';body.setAttribute('aria-busy','false');status.textContent='Source check needed.';emit('niagara_source_degraded');}finally{if(thisRequest===requestSeq)button.disabled=false;}
 }
 form.addEventListener('submit',submit);
+// Measure the decision-to-action funnel, not only form submissions. These
+// are non-personal event labels, never visitor dates, addresses or budgets.
+body.addEventListener('click',function(event){
+ var a=event.target.closest&&event.target.closest('a[href]');
+ if(!a)return;
+ if(a.closest('.boat-ticket-action'))emit('niagara_official_boat_tickets_click');
+ else if(a.classList.contains('action'))emit('niagara_first_stop_directions_click');
+});
 // Quick starts answer distinct high-intent questions without inventing a boat
 // operating window. Keep the existing visit date, country, and source gates.
 document.querySelectorAll('[data-niagara-preset]').forEach(function(presetButton){
