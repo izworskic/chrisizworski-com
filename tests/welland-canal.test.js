@@ -179,8 +179,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -331,8 +331,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/iconSize:\[hit,hit\]/);
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
-  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
-  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
 });
 
 
@@ -411,4 +411,27 @@ test('Welland search discovery preserves canonical truth and wires high-intent v
   assert.equal(person.length,1,'a single consistent Person identity');
   assert.equal(person[0]['@id'],'https://chrisizworski.com/#person');
   assert.equal(graph.find(item=>item['@type']==='WebPage').mainEntity['@id'],'https://chrisizworski.com/welland-canal/#app');
+});
+
+
+test('Welland offers an independent source-labeled AIS traffic board alongside authoritative Seaway link',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
+  const html=read('public/welland-canal/index.html');
+  const js=read('public/assets/welland-canal.js');
+  const css=read('public/assets/welland-canal.css');
+  assert.match(html,/id="trafficBriefRows"/);
+  assert.match(html,/id="trafficBriefState"/);
+  assert.match(html,/welland-traffic-brief/);
+  assert.match(html,/independent AIS observations, not the official order of turn/i);
+  assert.match(html,/https:\/\/www\.seaway-greatlakes\.com\/vessel-transit\/order-of-turn/);
+  assert.match(js,/function renderTrafficBrief\(\)/);
+  assert.match(js,/item\.km<=5/);
+  assert.match(js,/Date\.parse\(b\.v\.seen\)-Date\.parse\(a\.v\.seen\)/);
+  assert.match(js,/No fresh AIS reports within about 5 km/);
+  assert.match(js,/AIS coverage unavailable/);
+  assert.match(js,/renderTrafficBrief\(\)/);
+  assert.match(js,/focusVessel\(v\.mmsi,true\)/);
+  assert.match(css,/\.traffic-brief__row\{/);
+  assert.doesNotMatch(js,/fetch\([^)]*seaway-greatlakes/);
 });
