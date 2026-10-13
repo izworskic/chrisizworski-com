@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Iconic Aurora destination expansion — October 13, 2026
+
+- **Goal and restraint:** Expand the established five-state northern-lights decision network with selective, distinctive outdoor-place and gateway-city queries, rather than templated urban coverage or unsupported numerical SEO forecasts. Target growth mission: 1,000,000 rolling 28-day GSC Web impressions and 5% CTR remains unachieved/unmeasured by this release.
+- **Research/selection:** Official NPS night-sky and access guidance (Katahdin Woods and Waters, Theodore Roosevelt, Grand Portage, Glacier), DarkSky International (AMC Maine Woods), Minnesota DNR (Itasca, Split Rock, Lutsen), state tourism departments (Montana, North Dakota, Maine) and Travel Alaska guided selection. No unsupported Bortle values or made-up parking coordinates. Twenty-three new URLs: Montana 4; Minnesota 4; North Dakota 5; Maine 5; Alaska 5. Existing 16 local pages and all five state roots preserved, for 39 local pages across the five owners.
+- **Unique visitor value:** Each new location provides 3 genuine viewing-area leads; distinct destination context, a go/no-go caveat, clear-sky/horizon tradeoffs, remote or seasonal access guidance, links to grounded tourism/NPS/DarkSky sources, a labeled regional weather model proxy and explicit Kp non-guarantee. Reuses the key-free interactive regional map, NOAA modeled auroral oval, 72-hour Kp chart, live regional score, moon and NWS clouds. No new scoring algorithm, cron, or extra user-requested API polling.
+- **Owner implementation:** Five authoritative repositories `izworskic/{montana,minnesota,north-dakota,maine,alaska}-aurora-live`, PR #8 each, content sourced through a new `config/seo-locations-expansion.js`; generator adds routes/state links/sitemap and source-led field guide with subtle visible Chris Izworski attribution and shared Person ID. Owner tests and preview checks green before merge on October 13. Owner PRs merged; Vercel exact production readiness checked independently.
+- **Main routing:** `feat/iconic-aurora-destinations-20261013` adds 46 explicit owner rewrites (slash and no-slash forms for 23 canonical pages), all 23 to `public/sitemap-aurora-states.xml` with new `2026-10-13` editorial lastmod and automated route/sitemap assertions; no generic fallback rewrites and no main tool mirrors edited.
+- **Search baselines:** NOT AVAILABLE for these newly published URLs. No ranking, indexation, click, 5% CTR or ad-revenue gain claimed. No new content on existing fall-color winners.
+- **Exactly one next action:** Check full main-site production routing/canonicals and obtain comparable 7/28-day GSC search impressions, clicks, CTR, and position for these specific URLs before further scaling.
+
+
 ## Five existing state aurora pages: local field-guide depth — October 12, 2026
 
 - **Intent and boundaries:** Expand existing Montana, Minnesota, North Dakota, Maine, and Alaska state-root pages, preserving the original canonical URLs, live NOAA/NWS/USNO widget markup, APIs, scoring calculations and page layouts. No new URLs or redesigns.
