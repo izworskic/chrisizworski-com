@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-12",
-  "updated": "2026-10-12T20:20:02.473Z",
-  "body": "The Tip of the Mitt leads Michigan's color display at modeled peak phase with 99 percent, followed by Northeast Lower at 82 percent and Central & Saginaw Bay at 78 percent. Northwest Lower sits at 75 percent peak. Eastern U.P. shows 52 percent in falling phase, while Western U.P. lags at 37 percent falling. Southwest and Southeast Lower remain early, at 34 and 28 percent respectively.\n\nWeekend conditions favor viewing across most regions with highs ranging from 56 to 84 degrees and lows between 44 and 54. Rain is expected over the next few days, which may accelerate leaf drop in peak and falling phases but should not prevent travel. Cooler temperatures in the U.P. contrast sharply with warmer Lower Peninsula conditions.\n\nFor peak color this weekend, the Tunnel of Trees on M-119 from Harbor Springs to Cross Village offers the most advanced display. Alternatively, the River Road Scenic Byway to Lumberman's Monument in Northeast Lower provides strong color at slightly lower elevation. Both routes remain accessible despite incoming rain.",
+  "date": "2026-10-13",
+  "updated": "2026-10-13T18:22:55.767Z",
+  "body": "The Northeast Lower Peninsula leads Michigan's fall color with modeled estimates near 91 percent in peak phase, followed by the Tip of the Mitt at 80 percent falling. Northwest Lower sits at 77 percent peak. The U.P. regions lag significantly, with Eastern U.P. at 45 percent falling and Western U.P. at 37 percent falling. Southern regions remain early, with Southwest and Southeast Lower under 30 percent in green to rising phases.\n\nRain is expected across all regions over the next few days with highs ranging from 51 degrees in the U.P. to 84 degrees in Southeast Lower. The Northeast Lower and Tip of the Mitt offer the best color viewing this weekend despite moisture, with temperatures near 56 to 67 degrees supporting continued display. Cooler U.P. conditions may accelerate leaf drop.\n\nFor peak color viewing this weekend, the River Road Scenic Byway to the Lumberman's Monument in the Northeast Lower offers the highest modeled color concentration at 91 percent. Alternatively, the Tunnel of Trees on M-119 from Harbor Springs to Cross Village in the Tip of the Mitt provides 80 percent modeled color in a scenic drive format.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-12T20:19:58.926Z",
+  "conditionsUpdated": "2026-10-13T18:22:51.865Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -15,16 +15,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "eup",
-      "modeledPercent": 52,
+      "modeledPercent": 45,
       "source": {
         "drivers": [
           "regional climatology",
@@ -32,16 +32,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "tip",
-      "modeledPercent": 99,
+      "modeledPercent": 80,
       "source": {
         "drivers": [
           "regional climatology",
@@ -49,16 +49,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 75,
+      "modeledPercent": 77,
       "source": {
         "drivers": [
           "regional climatology",
@@ -66,16 +66,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 82,
+      "modeledPercent": 91,
       "source": {
         "drivers": [
           "regional climatology",
@@ -83,16 +83,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 78,
+      "modeledPercent": 56,
       "source": {
         "drivers": [
           "regional climatology",
@@ -100,16 +100,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 34,
+      "modeledPercent": 25,
       "source": {
         "drivers": [
           "regional climatology",
@@ -117,11 +117,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     },
     {
@@ -134,11 +134,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -1,
+        "anchorShiftDays": -2,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 29,
-        "satelliteWeight": 0.64
+        "satelliteAgeDays": 30,
+        "satelliteWeight": 0.6
       }
     }
   ],
