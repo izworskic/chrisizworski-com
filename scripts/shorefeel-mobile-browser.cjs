@@ -92,18 +92,23 @@ const server=http.createServer((req,res)=>{
      if(key==='traverse'){
       if(width===1024||width===1280){
        const hero=await page.evaluate(()=>{
-        const section=document.querySelector('.hero').getBoundingClientRect();
-        const image=document.querySelector('.hero-photo').getBoundingClientRect();
+        const head=document.querySelector('.hero').getBoundingClientRect();
+        const photo=document.querySelector('.hero-photo').getBoundingClientRect();
+        const figure=document.querySelector('.hero-media').getBoundingClientRect();
         const evidence=document.querySelector('#shorefeel-now').getBoundingClientRect();
-        const style=getComputedStyle(document.querySelector('.hero-photo'));
-        return {heroHeight:section.height,heroWidth:section.width,imageWidth:image.width,imageHeight:image.height,
-          evidenceY:evidence.y+window.scrollY,objectFit:style.objectFit};
+        const style=getComputedStyle(document.querySelector('.hero'));
+        const after=getComputedStyle(document.querySelector('.hero-media'),'::after');
+        return {heroHeight:head.height,heroWidth:head.width,photoWidth:photo.width,photoHeight:photo.height,
+          figureWidth:figure.width,evidenceY:evidence.y+window.scrollY,background:style.backgroundColor,
+          overlay:after.display};
        });
-       assert.ok(hero.heroHeight<=345,'landscape tablet hero must be compact '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.imageWidth>=width-2 && hero.imageHeight>=hero.heroHeight-2,
-         'real photograph must span the hero '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.evidenceY<580,'shore conditions must appear promptly '+width+': '+JSON.stringify(hero));
-       assert.equal(hero.objectFit,'cover');
+       assert.ok(hero.heroHeight<=300,'Traverse landscape opening must be short '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.photoWidth>width*.27 && hero.photoWidth<width*.52,
+         'Traverse photo must be a separate, visible editorial card '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.photoHeight>=160 && hero.photoHeight<=220,'photo size '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.evidenceY<480,'real readings should be above fold '+width+': '+JSON.stringify(hero));
+       assert.equal(hero.overlay,'none','dark photo overlay must be removed');
+       assert.notEqual(hero.background,'rgb(9, 42, 59)','remove blue full-bleed hero');
       }
       const dims=await page.evaluate(()=>({
        documentWidth:document.documentElement.scrollWidth,

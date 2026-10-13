@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel Traverse City simple photo-and-answer hero preview — October 13, 2026
+
+- **Owner feedback:** Last full-width photographic hero worse on sideways tablet. Do not assume clean screenshot means pleasing actual device UX.
+- **Correction:** Replaced dark full-bleed text-on-image with short, light, side-by-side editorial header. Separate visible picture of Traverse City State Park beach (Oct 2020, Notorious4life, CC0) from verified Wikimedia media; local Lake Michigan fallback remains. Plain background, real photo is not used as faint overlay, water readings immediately after top panel.
+- **Quality controls:** New 1024x768 and 1280x800 browser assertions on visible standalone photo width, height, short hero, evidence position, and absence of dark overlay. Existing 320/375/390 phone and real local Leaflet map checks retained; no NOAA or official hazard logic altered.
+- **Release:** Preview first; do not merge another visual change based solely on synthetic screenshot. Ask owner to judge actual landscape-tablet preview before committing to production. GSC and earnings unmeasured.
+- **Exactly one next action:** Review real 1280x800 preview image and ask owner to approve before merging.
+
+
 ## ShoreFeel Traverse City landscape-tablet visual repair — October 13, 2026
 
 - **User's actual feedback:** On a landscape tablet, the upper two inches still appeared as mostly blue empty space; the previous fix took away the undesirable crowd photo but did not establish an attractive visible replacement. Passing phone/browser tests did not measure image placement on landscape tablets.
