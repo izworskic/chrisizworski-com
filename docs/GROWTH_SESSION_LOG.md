@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Welland Canal intent-first discovery and road-crossing answer — October 13, 2026
+
+- **Baseline:** Connected Search Console query for `/welland-canal/`, October 1–11, returned **zero rows**; this page launched October 11. Do not invent rankings or claimed CTR improvement. Semrush keyword API unavailable owing to insufficient API units, so keyword volumes were not asserted.
+- **User job 1 / decision:** Ship tracker, 8-lock map and sourced photo stories now appear **before** camera feeds in the document and mobile reading order. The working AIS controls, camera player and lock IDs are unchanged.
+- **User job 2 / distinct bridge intent:** Added a well-labeled official Seaway bridge-status path for Niagara motorists, plus schedule/FAQ support. Vessel sightings never imply lift-bridge open/closed status. No new bridge API, cron, scraping or fabricated bridge ETA.
+- **Durable long-tail answers:** Added source-aware end-to-end canal transit-time FAQ (11 hours is an approximate crossing time, never an arrival guarantee) and driver bridge-status FAQ. Pleasure-boat 2026 schedule explicitly expires as a season-specific claim.
+- **Identity and cost gates:** Same canonical URL, site Person `https://chrisizworski.com/#person`, attributed photography and preserved JS/CSS/analytics. No new dependencies, thin city pages, paid APIs or additional runtime requests.
+- **Measurement contract:** Compare GSC Web page/query impressions, clicks, CTR, and position at 7 and 28 days from deployment. No more title rewrites until sufficient query-level impressions exist. Site goal remains 1 million 28-day impressions and 5% CTR, not a Welland-page guarantee.
+- **Next step:** After CI and production deployment, verify the map, lock selection, Bridge Status link, and camera demand loading. Examine GSC impressions for `welland canal ship tracker`, `welland canal ship schedule`, `welland canal ships today`, `welland canal bridge status` only if those queries appear naturally in the property results.
+
+
 ## Five-state aurora million-impressions publication-quality release — October 13, 2026
 
 - **Definition of done:** The owner-requested million-impressions / 5% CTR **publication-quality bar** is not an attainable guarantee of Google impressions. It is now a build-time, binary 100-point gate for every state hub and every local page, plus separate unmeasured actual GSC and mobile-browser outcomes. Full criteria and exact commit ledger: [AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md](AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md).
