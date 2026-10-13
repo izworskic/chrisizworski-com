@@ -28,3 +28,20 @@
 @media(max-width:780px){.v5-expert-grid,.v5-place-grid{grid-template-columns:1fr}.v5-control-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.v5-dated-plan{padding:13px;margin-top:18px}.v5-metrics span{flex:1 1 42%;min-width:0}.v5-commitment{padding:15px}.v5-input-label{font-size:.86rem}.v5-place-grid article{padding:12px}}
 @media print{.v5-dated-plan{display:none}.v5-commitment,.v5-places{break-inside:avoid}}
+
+/* Search-first answer surface is crawlable, editorial, and subordinate to the interactive map. */
+.growth-answer{border-left:3px solid #4b9588;background:#f1f8f5;padding:11px 14px;border-radius:0 8px 8px 0;color:#315154;line-height:1.58;font-size:.94rem;margin:0 0 17px}
+.growth-answer a,.growth-intro a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.growth-answers{scroll-margin-top:14px}
+.growth-intro{max-width:930px;color:#53666a;margin:0 0 15px;font-size:1rem}
+.growth-jumps{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 21px}
+.growth-jumps a{display:inline-block;border:1px solid #aac5bf;border-radius:999px;padding:7px 12px;font-size:.82rem;font-weight:760;color:#0d5359;text-decoration:none;background:#f5faf8}
+.growth-jumps a:focus-visible{outline:3px solid #4eb6bf;outline-offset:2px}
+.growth-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.growth-card-grid article{border:1px solid #d9e2dc;background:#fbfcfa;padding:17px;border-radius:12px;min-width:0;scroll-margin-top:15px}
+.growth-card-grid h3{font-size:1.07rem;line-height:1.3;margin:0 0 8px;color:#173b40}
+.growth-card-grid p{font-size:.91rem;line-height:1.64;margin:0;color:#43585d}
+.growth-card-grid a{font-weight:760;color:#095767;text-decoration:underline;text-underline-offset:2px}
+.growth-source-note{font-size:.77rem;color:#5f7176;margin:14px 0 0}
+@media(max-width:730px){.growth-card-grid{grid-template-columns:1fr}.growth-card-grid article{padding:14px}}
+@media print{.growth-jumps{display:none}}
