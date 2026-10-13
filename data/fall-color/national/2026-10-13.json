@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-13",
+  "updated": "2026-10-13T18:23:07.537Z",
+  "briefings": {
+    "new-england": "Peak timing aligns with traditional window; snow showers expected this weekend with 78% rain chance may impact visibility.",
+    "great-smoky-mountains": "Optimal timing within traditional window with sunny conditions and minimal precipitation expected this weekend.",
+    "colorado-aspens": "Color past peak at 70% timing index; sunny weekend conditions favor viewing remaining aspen displays.",
+    "adirondacks": "Peak timing within traditional window; snow showers with 93% precipitation chance will significantly impact weekend travel.",
+    "north-shore-superior": "Live weather unavailable; region remains within color window at 90% timing index for viewing.",
+    "ozarks": "Approaching peak timing with sunny, dry conditions this weekend ideal for early-season color viewing.",
+    "eastern-sierra": "Peak timing within traditional window; sunny, dry conditions this weekend optimal for aspen viewing.",
+    "wasatch": "Color slightly past peak at 95% timing index; sunny conditions with minimal precipitation favor weekend drives.",
+    "columbia-river-gorge": "Peak timing within traditional window; mostly sunny conditions with low precipitation chance this weekend.",
+    "door-county": "Peak timing within traditional window; sunny, dry conditions this weekend ideal for peninsula color viewing.",
+    "poconos": "Peak timing within traditional window; mostly sunny with minimal precipitation expected this weekend.",
+    "texas-hill-country": "Color still developing at 10% timing index; mostly sunny conditions this weekend as season approaches.",
+    "west-virginia-highlands": "Peak timing within traditional window; chance of rain showers this weekend with partial clearing expected.",
+    "catskills": "Peak timing within traditional window; snow showers possible this weekend with 27% precipitation chance.",
+    "shenandoah": "Peak timing within traditional window; sunny conditions with minimal precipitation this weekend ideal for Skyline Drive."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
