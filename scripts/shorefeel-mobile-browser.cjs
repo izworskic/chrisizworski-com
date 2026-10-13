@@ -97,7 +97,7 @@ const server=http.createServer((req,res)=>{
         const evidence=document.querySelector('#shorefeel-now').getBoundingClientRect();
         const style=getComputedStyle(document.querySelector('.hero-photo'));
         return {heroHeight:section.height,heroWidth:section.width,imageWidth:image.width,imageHeight:image.height,
-          evidenceY:evidence.y,objectFit:style.objectFit};
+          evidenceY:evidence.y+window.scrollY,objectFit:style.objectFit};
        });
        assert.ok(hero.heroHeight<=345,'landscape tablet hero must be compact '+width+': '+JSON.stringify(hero));
        assert.ok(hero.imageWidth>=width-2 && hero.imageHeight>=hero.heroHeight-2,
