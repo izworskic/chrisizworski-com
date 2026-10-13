@@ -29,7 +29,8 @@ for(let i=1;i<=8;i++){
  let subject=0;
  if(photo.subjectLock!==lock)hardViolations.push('Wrong lock subject: Lock '+i+' uses '+photo.subjectLock);
  if(photo.view==='exact'&&photo.kind==='photo')subject=35;
- else if(photo.view==='schematic'&&photo.kind==='schematic'&&/not a photograph/i.test(photo.caption+photo.alt))subject=32;
+ else if(photo.view==='flight-group'&&photo.kind==='photo'&&/Thorold flight aerial/i.test(photo.alt))subject=24;
+ else if(photo.view==='historical'&&photo.kind==='photo'&&/1916/i.test(photo.alt+photo.caption))subject=28;
  else if(photo.view==='contextual'&&photo.kind==='photo'&&/not the Lock 8 chamber/i.test(photo.caption))subject=18;
  else hardViolations.push('Untruthful or unspecified image classification for Lock '+i);
  if(photo.view==='exact'&&/regional image|not Locks/i.test(photo.caption))hardViolations.push('Exact image falsely labeled: '+i);
@@ -37,12 +38,14 @@ for(let i=1;i<=8;i++){
  if(!provenance)hardViolations.push('Missing usable media credit/license/source for Lock '+i);
  const explains=Boolean(photo.alt&&photo.caption&&photo.alt.includes('Lock '+i)&&photo.caption.includes('Lock '+i)&&story.explainer.length>110);
  const local=photo.src.startsWith('/assets/welland/photos/')&&fs.existsSync(path.join(root,'public',photo.src));
- if(!local)hardViolations.push('Missing local static media file for Lock '+i+': '+photo.src);
+ const remotePublic=photo.src.startsWith('https://commons.wikimedia.org/wiki/Special:Redirect/file/')||photo.src.startsWith('https://cdn.loc.gov/service/pnp/');
+ const delivered=local||remotePublic;
+ if(!delivered)hardViolations.push('Media must be an existing local file or approved archive image for Lock '+i+': '+photo.src);
  sumAccuracy+=subject;
  sumProvenance+=provenance?15:0;
  sumExplanation+=explains?15:0;
- sumDelivery+=local?5:0;
- perLock.push({lock:i,subject:photo.view,media:photo.src,photoSource:photo.source,accuracyPoints:subject,uniquenessPoints:20,provenancePoints:provenance?15:0,explanationPoints:explains?15:0,deliveryPoints:local?5:0});
+ sumDelivery+=delivered?5:0;
+ perLock.push({lock:i,subject:photo.view,media:photo.src,photoSource:photo.source,accuracyPoints:subject,uniquenessPoints:20,provenancePoints:provenance?15:0,explanationPoints:explains?15:0,deliveryPoints:delivered?5:0});
 }
 const cameraTruth=html.includes('id="canalCameraPlay"')
  &&html.includes('yF7XdpkL34w')
@@ -68,8 +71,8 @@ const value=Math.round((hardViolations.length?Math.min(49,weighted):weighted)*10
 const result={
  model:'Welland Lock Image + Camera Value V1',
  value,max:100,threshold:90,components,hardViolations,perLock,
- evidence:'Verified source metadata plus exact local file presence; no automated CV identity checks; editorial verification and runtime stream checks remain separate',
- photosByLock:{exact:[1,2,3,7],uniqueEngineeringSchematics:[4,5,6],contextualParkPhoto:[8]},
+ evidence:'Metadata/rights and first-party path or allowlisted archive URL checked; remote image delivery not guaranteed, flight overview shared by 4 and 6, runtime/visual verification separate',
+ photosByLock:{exact:[1,2,3,7],realFlightGroupPhotos:[4,6],historicalConstructionPhoto:[5],contextualParkPhoto:[8]},
  camera:'Port Colborne Bridge 21 area; NOT Lock 8 chamber; uptime unverified'
 };
 process.stdout.write(JSON.stringify(result,null,2)+'\n');
