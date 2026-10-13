@@ -13,6 +13,7 @@
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Epic vs Ikon Pass Blackout Checker">
 <meta name="twitter:description" content="Which pass works at your mountain on your date? Compare 2026–27 rules before you travel.">
 <link rel="stylesheet" href="/assets/epic-ikon-decoder.css">
+<link rel="stylesheet" href="/assets/epic-ikon-v3.css">
 <meta name="google-adsense-account" content="ca-pub-8222782620788075">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
@@ -31,7 +32,7 @@
 <div class="field"><label for="pass">Pass product</label><select id="pass" name="pass" required></select></div>
 <div class="field"><label for="resort">Ski destination</label><select id="resort" name="resort" required></select><span class="hint">Curated North American mountains. Missing resort? Verify directly with the pass provider.</span></div>
 <div class="field"><label for="ski-date">Date you'll ski</label><input id="ski-date" type="date" name="date" min="2026-11-01" max="2027-05-31" value="2026-12-31" required></div>
-<div class="field"><label for="visit-style">What matters about this ski day?</label><select id="visit-style" name="intent"><option value="first">First time at this mountain</option><option value="family">Family or mixed-ability group</option><option value="terrain">Terrain and mountain character</option><option value="flexible">I can change the mountain or dates</option></select><span class="hint">This changes the trip guidance, never the pass eligibility rules.</span></div>
+<details class="optional-pass" id="pass-details"><summary>Trip style, used pass days &amp; reservation details</summary><div class="field"><label for="visit-style">What matters about this ski day?</label><select id="visit-style" name="intent"><option value="first">First time at this mountain</option><option value="family">Family or mixed-ability group</option><option value="terrain">Terrain and mountain character</option><option value="flexible">I can change the mountain or dates</option></select><span class="hint">This changes the trip guidance, never the pass eligibility rules.</span></div>
 <div class="grid-two">
 <div class="field"><label for="used-days">Days already used</label><input id="used-days" type="number" min="0" max="366" inputmode="numeric" placeholder="Enter if known"><span id="days-hint" class="hint">If limited, enter days used from the applicable shared or resort pool.</span></div>
 <div class="field"><label for="reservation">Confirmed lift reservation?</label><select id="reservation"><option value="unknown">Not sure</option><option value="yes">Yes, I have one</option><option value="no">No</option></select><span class="hint">We can't verify bookings. Required at certain Ikon destinations.</span></div>
@@ -41,11 +42,67 @@
 <div class="field"><label for="epic-peak">Includes restricted peak dates?</label><select id="epic-peak"><option value="">Choose peak access</option><option value="yes">Yes</option><option value="no">No</option></select></div>
 </div>
 <div class="field" id="session-fields" hidden><label for="session-total">Ikon Session Pass size</label><select id="session-total"><option value="">Choose days purchased</option><option value="2">2 days total</option><option value="3">3 days total</option><option value="4">4 days total</option></select></div>
+</details>
 <div class="actions"><button type="submit" class="submit">Check my access &rarr;</button><button type="button" class="secondary" id="share">Copy this plan</button></div>
 <p id="copy-status" class="small muted" role="status"></p>
 </form></section>
 <section class="card decision" data-status="UNKNOWN" id="decision" aria-live="polite" aria-atomic="true"><p class="eyebrow">02 / Your verdict</p><span class="verdict-label" id="verdict-label">Checking pass rules</span><h2 id="verdict-title">Choose your mountain and date</h2><p class="plain" id="verdict-explain">We'll check the season-specific access rules.</p><ul id="caveats"><li>This is not an opening-date, weather, lift-operation or reservation-availability checker.</li></ul><div class="source"><strong>Original policy:</strong> <a id="policy-link" href="https://www.epicpass.com/info/peak-restricted-dates.aspx" target="_blank" rel="noopener noreferrer">Check the provider's published rules &rarr;</a></div><p class="stamp">Policy review: Oct 12, 2026 · Rules can change. Always verify before buying or traveling.</p><p id="next-date" class="small"></p></section>
 </div>
+<section class="card" id="v3-slice" aria-labelledby="v3-heading" hidden>
+  <div class="v3-decision-line"><strong id="v3-commit">Trip commitment needs verification</strong><span id="v3-date-verdict">Selected date · pass policy</span></div>
+  <div class="v3-columns">
+    <div class="v3-intake">
+      <p class="eyebrow">03 / Place, not a promise</p>
+      <div class="v3-intro"><h2 id="v3-heading">Vail: choose the right mountain day and the right arrival</h2><p>Vail is not one uniform ski slope above one hotel district. The Front Side rises from the developed village corridor. Seven Back Bowls and Blue Sky Basin make the mountain much larger and more demanding to navigate than a single lift-base itinerary suggests. A pass restriction is decided first; the destination comes second.</p></div>
+      <div class="v3-profile" aria-label="Refine your practical arrival plan">
+        <label><span>Where are you arriving from?</span><select id="v3-origin"><option value="fly">Flying in</option><option value="drive">Driving in</option><option value="nearby">Already nearby</option></select></label>
+        <label><span>Your group's ski ability</span><select id="v3-ability"><option value="mixed">Mixed abilities / family</option><option value="novice">New skiers or lessons</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
+        <label><span>Preferred arrival experience</span><select id="v3-arrival"><option value="uncertain">I want the least confusion</option><option value="town">Vail Village / town</option><option value="transit">Lionshead / transit</option><option value="drive">Arriving by car</option></select></label>
+        <label><span>Last consecutive ski day (optional)</span><input type="date" id="v3-end-date" min="2026-11-01" max="2027-05-31" aria-describedby="v3-range-note"><small id="v3-range-note">A date range assumes skiing every day; choose a single day if you plan rest days.</small></label>
+      </div>
+      <div class="v3-commit-block"><strong>Your ski days, individually checked</strong><div id="v3-day-by-day" aria-live="polite"></div><strong>Your next non-negotiable action</strong><p id="v3-action">Pass policy precedes all other plans.</p><p id="v3-alternate" class="small muted"></p>
+        <div class="v3-actions"><button id="v3-changedate" type="button" class="secondary" hidden>Use modeled next date</button><button id="v3-brief" type="button">Copy source-linked trip brief</button></div>
+        <p role="status" id="v3-brief-note" class="small muted"></p>
+      </div>
+    </div>
+    <div class="v3-place-hero">
+      <h3>The place you're thinking of visiting</h3>
+      <div id="v3-gallery" class="v3-gallery" aria-label="Licensed historical Vail photographs"></div>
+    </div>
+  </div>
+  <div class="v3-journey">
+    <p class="eyebrow">04 / Arrival and evidence</p><h3>Find the village, then the correct lift and lesson meeting point</h3>
+    <p id="v3-arrival-journey">Select your arrival mode to separate airports, resort approach, and base arrival.</p>
+    <div class="v3-map-controls" role="group" aria-label="Geographical planning map views">
+      <button type="button" data-v3-map="region" aria-pressed="false">Region &amp; airports</button>
+      <button type="button" data-v3-map="arrival" aria-pressed="true">Village &amp; arrivals</button>
+      <button type="button" data-v3-map="terrain" aria-pressed="false">Official trail maps</button>
+    </div>
+    <p id="v3-map-status" class="small muted" role="status">Verified geographic reference points only. This is not a ski trail or road routing map.</p>
+    <div id="v3-map-canvas" class="v3-map" aria-label="Geographic planning map with verified reference points"></div>
+    <details id="v3-static-map" class="v3-static-map"><summary>Accessible map fallback: east–west village orientation</summary>
+      <p class="small muted">Schematic geographic order only—no road, lift, trail or walking directions. Verified geocoded area references, not official meeting-point pins.</p>
+      <svg viewBox="0 0 520 155" role="img" aria-labelledby="v3-static-title v3-static-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="v3-static-title">Vail reference areas from west to east</title>
+        <desc id="v3-static-desc">Lionshead area to the west; Vail Village parking area near the middle; Golden Peak Lodge east. Not a route.</desc>
+        <line x1="58" y1="72" x2="462" y2="72" stroke="#b6c4b6" stroke-width="2" stroke-dasharray="6 7"/>
+        <g fill="#2f5947" stroke="white" stroke-width="2"><circle cx="75" cy="72" r="8"/><circle cx="258" cy="72" r="8"/><circle cx="448" cy="72" r="8"/></g>
+        <g fill="#284c3b" font-size="13" text-anchor="middle"><text x="75" y="46">Lionshead</text><text x="258" y="46">Vail Village</text><text x="448" y="46">Golden Peak</text><text x="75" y="99" font-size="11">West</text><text x="258" y="99" font-size="11">Parking area</text><text x="448" y="99" font-size="11">East</text><text x="260" y="140" fill="#64776a" font-size="11">Approximate orientation · Not a travel route</text></g>
+      </svg>
+    </details>
+    <div id="v3-terrain-link" class="v3-terrain" hidden><strong>Vail's official terrain maps</strong><p>The operator publishes separate Front Side, Back Bowls and Blue Sky Basin map views. Use those for run layout and open the operator's current lift report before skiing.</p><a href="https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx" target="_blank" rel="noopener noreferrer">Open the operator's trail maps ↗</a></div>
+    <div class="v3-pin-notes" aria-live="polite"><strong id="v3-pin-title">Vail Village Parking Structure</strong><p id="v3-pin-description">Named reference points with sources, not walking-time, route or lift-operation claims.</p><a id="v3-pin-source" href="https://mapcarta.com/W432160774" target="_blank" rel="noopener noreferrer">Verify this map point ↗</a></div>
+    <p class="v3-static-places">Map not loading? Your physical reference points are Vail Village Parking Structure, Lionshead Village Welcome Center and Golden Peak Lodge. These are not precise gondola or lesson line-up pins. Confirm with <a data-v3-source="arrival" href="https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx">Vail's official arrival instructions</a>.</p>
+    <div class="v3-journey-focus"><h3 id="v3-location-title">Confirm your lesson or lift-base arrival</h3><p id="v3-location-copy">Vail Village, Lionshead and Golden Peak are different arrival decisions.</p><p><a id="v3-location-source" href="https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx" target="_blank" rel="noopener noreferrer">Verify with the official resort source ↗</a></p></div>
+    <div class="v3-links"><a id="v3-trail" data-v3-source="trail" href="https://www.vail.com/the-mountain/about-the-mountain/trail-map.aspx" target="_blank" rel="noopener noreferrer">Vail trail maps ↗</a><a data-v3-source="operations" href="https://www.vail.com/the-mountain/mountain-conditions/terrain-and-lift-status" target="_blank" rel="noopener noreferrer">Operator lift status ↗</a><a data-v3-source="parking" href="https://www.vail.gov/government/departments/transportation-services/parking-information" target="_blank" rel="noopener noreferrer">Town parking ↗</a><a data-v3-source="roads" href="https://www.cotrip.org/" target="_blank" rel="noopener noreferrer">COtrip road checks ↗</a></div>
+  </div>
+  <div class="v3-guide">
+    <article><h3>What this mountain is like</h3><p>Vail's Front Side is the clearest starting geography for a first visit: the developed villages sit below front-facing lifts and groomed terrain. Beyond that, the Back Bowls open into a different, exposed scale of skiing and Blue Sky Basin adds its own terrain network. The official maps distinguish these three areas. That distinction matters when one member of the party is learning and another wants an ambitious day—do not assume they can simply stay together across every bowl and lift.</p><a data-v3-source="mountain" href="https://www.vail.com/the-mountain/about-the-mountain/mountain-info.aspx">Vail mountain facts ↗</a></article>
+    <article><h3>Which area fits your group?</h3><p>Rather than claim one magic route for everyone, plan the novice's real lesson and the experienced skier's terrain ambitions as two different needs. The resort's published terrain mix includes beginner, intermediate and advanced skiing, but those percentages are not a promise that any particular run will be open. Use the operator map to name a practical meeting point after checking ability, lift access and the lesson confirmation.</p><a data-v3-source="lessons" href="https://www.vail.com/plan-your-trip/ski-and-ride-lessons/know-before-you-go.aspx">Check lesson arrivals ↗</a></article>
+    <article><h3>How you reach the lift</h3><p>Vail Village and Lionshead are separate pedestrian areas. Lionshead serves the Eagle Bahn Gondola; Golden Peak is another lesson and mountain-base area. Adult and children's lesson locations are not interchangeable: the resort explicitly warns that a late or wrong-place arrival may cause a missed lesson. Decide where your actual check-in is before comparing lodging neighborhoods. The map above shows verified area references, not route instructions or lift entrance coordinates.</p><a data-v3-source="arrival" href="https://www.vail.com/explore-the-resort/about-the-resort/getting-here.aspx">Official villages and arrivals ↗</a></article>
+    <article><h3>What can change the plan</h3><p>Published pass rules are one gate. The mountain may not yet be open, a lift or bowl may be closed, the resort may change lesson logistics, and Colorado's I-70 corridor may have restrictions. This page does not read live lift, parking, road or reservation availability, and it cannot confirm a transfer or room. Before paying a nonrefundable deposit, return to the resort's status and the official transportation authority. A policy-eligible day is not a final travel clearance.</p><a data-v3-source="roads" href="https://www.cotrip.org/">Colorado official road conditions ↗</a></article>
+  </div>
+</section>
 <section class="card experience" id="experience" aria-labelledby="experience-heading">
 <div class="experience-top"><div><p class="eyebrow">03 / The day behind the decision</p><h2 id="experience-heading">Picture the mountain, then make the right move.</h2><p class="muted">A ski trip is more than a green checkmark. Understand why this pass works—or why it doesn't—and what to do next.</p></div><span class="verified-ribbon">2026–27 published rules</span></div>
 <div class="experience-main">
@@ -85,12 +142,19 @@ const locations=[...E.resorts].sort((a,b)=>a.name.localeCompare(b.name));
 const showResorts=()=>{const p=pass.value,old=resort.value;resort.replaceChildren();locations.filter(x=>!p||x.brand===(p.startsWith("epic")?"epic":"ikon")).forEach(x=>resort.add(new Option(x.name+" · "+x.region,x.id)));if([...resort.options].some(x=>x.value===old))resort.value=old;};
 const input=()=>({pass:pass.value,resort:resort.value,date:date.value,usedDays:$("used-days").value,reservationMade:$("reservation").value,epicDayTotal:$("epicday-total").value,epicPeak:$("epic-peak").value,sessionTotal:$("session-total").value,intent:$("visit-style").value});
 function render(){
-const args=input(),r=E.evaluate(args),container=$("decision");container.dataset.status=r.status;
-$("verdict-label").textContent=label[r.status]||r.status;
-$("verdict-title").textContent=r.title;$("verdict-explain").textContent=r.explanation;
+const args=input(),r=E.evaluate(args),container=$("decision");
+const range=(window.EpicIkonV3&&args.resort==="vail"&&$("v3-end-date")?.value)?window.EpicIkonV3.projectTripDates(E,args,$("v3-end-date").value):null;
+const blocked=range?.rows?.filter(day=>day.verdict.status==="NO")||[];
+const unresolved=range?.rows?.filter(day=>["UNKNOWN","CHECK","ACTION"].includes(day.verdict.status))||[];
+const rangeStatus=range&&!range.valid?"UNKNOWN":blocked.length?"NO":unresolved.length?unresolved[0].verdict.status:null;
+container.dataset.status=rangeStatus||r.status;
+$("verdict-label").textContent=blocked.length?"Trip contains blocked ski dates":rangeStatus==="UNKNOWN"?"Trip needs a date correction":label[rangeStatus||r.status]||r.status;
+$("verdict-title").textContent=blocked.length?"Do not book this as an all-days pass-covered ski trip.":range&&!range.valid?"Correct the selected ski-day range":r.title;
+$("verdict-explain").textContent=blocked.length?blocked.length+" of "+range.rows.length+" planned ski days are blocked by this pass or allowance. First blocked day: "+blocked[0].date+". Review each day below before committing.":range&&!range.valid?range.message:r.explanation;
 const list=$("caveats");list.replaceChildren();(r.caveats||["This only checks 2026–27 pass policy. Verify resort operations and your account directly."]).forEach(t=>{const li=document.createElement("li");li.textContent=t;list.append(li)});
 $("policy-link").href=r.sourceUrl||(args.pass.startsWith("ikon")?E.IKON_URL:E.EPIC_URL);
 $("policy-link").textContent=r.status==="ACTION"?"Read reservation requirements ↗":"Read official pass policy ↗";
+if(window.EpicIkonV3)window.EpicIkonV3.update(args,r);
 const future=(r.status==="NO"&&r.reason==="blackout")?E.nextDate(args,21):null;
 $("next-date").textContent=future?"Next date without this blackout (not a resort-opening guarantee): "+future.date+".":"";
 const matrix=$("matrix");matrix.replaceChildren();E.compare(args).forEach(c=>{
@@ -107,7 +171,7 @@ if(!matches.length){const note=document.createElement("p");note.className="muted
 else matches.forEach(a=>{const card=document.createElement("article");card.className="mini";card.dataset.status=a.status;const name=document.createElement("strong");name.textContent=a.resort.name+" · "+a.resort.region;card.append(name);const tag=document.createElement("span");tag.className="state";tag.textContent=label[a.status]||a.status;card.append(tag);const detail=document.createElement("p");detail.textContent=a.title;card.append(detail);alts.append(card);});
 
 }
-function options(){const p=pass.value;$("epicday-fields").hidden=p!=="epicDay";$("session-fields").hidden=p!=="ikonSession";showResorts();render();}
+function options(){const p=pass.value;if(p==="epicDay"||p==="ikonSession")$("pass-details").open=true;$("epicday-fields").hidden=p!=="epicDay";$("session-fields").hidden=p!=="ikonSession";showResorts();render();}
 pass.value="epicLocal";showResorts();resort.value="vail";
 const q=new URLSearchParams(location.search),valid=key=>Object.hasOwn(E.PASS_NAMES,key);
 if(valid(q.get("pass")))pass.value=q.get("pass");showResorts();
@@ -188,7 +252,7 @@ async function loadGuide(){
   if(seq===requestSeq){guideFallback();if(typeof window.gtag==="function")window.gtag("event","pass_decoder_jev_fallback",{reason:"guide_unavailable"});}
  }finally{clearTimeout(timer);}
 }
-form.addEventListener("submit",e=>{
+form.addEventListener("submit",e=>{if(E.evaluate(input()).status==="UNKNOWN"&&(pass.value==="epicDay"||pass.value==="ikonSession"))$("pass-details").open=true;
  e.preventDefault();render();guideFallback();
  const a=input(),r=E.evaluate(a);
  if(typeof window.gtag==="function")window.gtag("event","pass_decoder_check",{pass_type:a.pass,resort_id:a.resort,decision:r.status,event_category:"pass-decoder"});
@@ -218,9 +282,15 @@ $("guide-source").addEventListener("click",()=>{
 });
 pass.addEventListener("change",()=>{requestSeq++;options();guideFallback();});resort.addEventListener("change",()=>{requestSeq++;render();guideFallback();});date.addEventListener("change",()=>{requestSeq++;render();guideFallback();});
 $("visit-style").addEventListener("change",()=>{requestSeq++;guideFallback();});
+document.addEventListener("epicikon:span-updated",()=>{requestSeq++;render();guideFallback();});
 ["used-days","reservation","epicday-total","epic-peak","session-total"].forEach(id=>$(id).addEventListener("change",()=>{requestSeq++;render();guideFallback();}));
 $("share").addEventListener("click",async()=>{const a=input(),u=new URL(location.pathname,location.origin);["pass","resort","date"].forEach(k=>u.searchParams.set(k,a[k]));if(a.usedDays!=="")u.searchParams.set("used",a.usedDays);if(a.reservationMade!=="unknown")u.searchParams.set("reservation",a.reservationMade);if(a.epicDayTotal)u.searchParams.set("days",a.epicDayTotal);if(a.epicPeak)u.searchParams.set("peak",a.epicPeak);if(a.sessionTotal)u.searchParams.set("session",a.sessionTotal);if(a.intent!=="first")u.searchParams.set("intent",a.intent);try{await navigator.clipboard.writeText(u.href);$("copy-status").textContent="Plan link copied. Links contain only the choices entered here.";}catch{$("copy-status").textContent="Copy your plan URL: "+u.href;}});
 render();guideFallback();
 })();
+</script>
+<script src="/assets/epic-ikon-v3.js"></script>
+<script>
+window.EpicIkonV3?.init();
+(function(){const E=window.PassDecoder,V=window.EpicIkonV3;if(!E||!V)return;const get=id=>document.getElementById(id)?.value||'';const a={pass:get('pass'),resort:get('resort'),date:get('ski-date'),usedDays:get('used-days'),reservationMade:get('reservation'),epicDayTotal:get('epicday-total'),epicPeak:get('epic-peak'),sessionTotal:get('session-total')};V.update(a,E.evaluate(a));document.dispatchEvent(new Event('epicikon:span-updated'));})();
 </script>
 </body></html>
