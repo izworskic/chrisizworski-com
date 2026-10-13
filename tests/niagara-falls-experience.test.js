@@ -9,8 +9,8 @@ const script=read('public/assets/niagara-falls-today.js');
 const guide=read('public/assets/niagara-falls-guide.js');
 const context={window:{}};vm.runInNewContext(guide,context,{timeout:1000});
 const stops=context.window.NiagaraFallsGuide;
-test('V5 preserves one licensed hero photo and a restrained opt-in film player, not static galleries',()=>{
- assert.equal((html.match(/<img /g)||[]).length,1);
+test('V6 preserves one licensed hero and three compact video thumbnails, not a photo gallery',()=>{
+ assert.equal((html.match(/<img /g)||[]).length,4);
  assert.equal((html.match(/<img src="\/assets\/niagara-falls\/photos\/horseshoe-2026\.jpg"/g)||[]).length,1);
  assert.doesNotMatch(html,/i\.ytimg\.com\/vi\//);
  assert.match(html,/src="\/assets\/niagara-falls\/photos\/horseshoe-2026.jpg"/);
@@ -60,6 +60,12 @@ test('one film player offers three documentary choices without preloaded video o
  }
  assert.match(films,/document\.addEventListener\('click'/);
  assert.match(html,/id="niagara-film-stage"/);
+ assert.equal((html.match(/class="film-thumb"/g)||[]).length,3);
+ assert.equal((html.match(/loading="lazy" decoding="async" alt=""/g)||[]).length,3);
+ assert.equal((html.match(/aria-pressed="false"/g)||[]).length,3);
+ assert.match(films,/\.film-thumb img/);
+ assert.match(films,/is-missing/);
+ assert.match(films,/scrollIntoView/);
  assert.match(films,/stage\.replaceChildren\(iframe\)/);
  assert.match(films,/youtube-nocookie\.com\/embed/);
  assert.match(script,/stops\.some\(function\(s\)\{return s\.id==='table';\}\)/);
