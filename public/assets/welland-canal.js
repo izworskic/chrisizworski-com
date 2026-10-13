@@ -65,7 +65,7 @@
   Object.assign(LOCK_PHOTOS,{
     flight4:{kind:'photo',subjectLock:'4',view:'flight-group',
       src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Welland_Canal_locks.png?width=1007',
-      alt:'Actual aerial photograph of the Thorold flight containing Welland Canal Locks 4, 5 and 6',
+      alt:'Actual photograph of Welland Canal Lock 4 within the Thorold flight aerial panorama, also showing Locks 5 and 6',
       caption:'Lock 4 · the lower chamber is part of this real Thorold flight aerial (shared view of Locks 4–6)',
       credit:'U.S. Army Corps of Engineers',license:'Public domain (USGov)',licenseUrl:'https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png'
@@ -79,7 +79,7 @@
     },
     flight6:{kind:'photo',subjectLock:'6',view:'flight-group',
       src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Welland_Canal_locks.png?width=960',
-      alt:'Actual US Army Corps aerial photograph of the Thorold three-lock flight including Welland Canal Lock 6',
+      alt:'Actual photograph of Welland Canal Lock 6 within the Thorold flight aerial panorama, also showing Locks 4 and 5',
       caption:'Lock 6 · visible in this real Thorold flight aerial (same source panorama as Lock 4)',
       credit:'U.S. Army Corps of Engineers',license:'Public domain (USGov)',licenseUrl:'https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png',
       source:'https://commons.wikimedia.org/wiki/File:Welland_Canal_locks.png'
