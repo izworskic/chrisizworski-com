@@ -435,9 +435,9 @@
     visitor.hidden=!lock?.url;
     if(lock?.url)visitor.href=lock.url;else visitor.removeAttribute('href');
     const archive=$('lockDetailArchive');
-    const archiveUrl=['4','5'].includes(lock?.id)?'https://nfpl.historicniagara.ca/s/All/item/99282':lock?.id==='6'?'https://nfpl.historicniagara.ca/s/All/item/99277':null;
+    const archiveUrl=['4','5'].includes(lock?.id)?'https://nfpl.historicniagara.ca/s/All/item/99282':lock?.id==='6'?'https://nfpl.historicniagara.ca/s/All/item/99277':lock?.id==='8'?'https://marinas.com/view/lock/rvhgd_Welland_Canal_Lock_8_Port_Colborne_ON_Canada':null;
     archive.hidden=!archiveUrl;
-    if(archiveUrl){archive.href=archiveUrl;archive.textContent=lock.id==='6'?'Historic Lock 6 construction photograph ↗':'Historic Locks 4–5 construction photograph ↗';}
+    if(archiveUrl){archive.href=archiveUrl;archive.textContent=lock.id==='8'?'Actual Lock 8 chamber photograph at Marinas.com ↗':lock.id==='6'?'Historic Lock 6 construction photograph ↗':'Historic Locks 4–5 construction photograph ↗';}
     else archive.removeAttribute('href');
     const watchCam=$('lockDetailWatchCam');
     watchCam.hidden=lock?.id!=='8';
