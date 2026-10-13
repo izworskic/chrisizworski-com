@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel Great Lakes water temperature V1 pilot — October 13, 2026
+
+- **User problem:** Visitors need to understand how air, sun, wind and water differ for swimming, family outings, paddling, beach relaxing and after-swim cooling rather than reading a single decontextualized temperature.
+- **Scope and ownership:** Main site repository new ShoreFeel tool, PR #959 (https://github.com/izworskic/chrisizworski-com/pull/959), branch `feat/shorefeel-lake-michigan-pilot-20261013`. Five-lake NOAA average contract with four canonical initial URLs: `/great-lakes-water-temperature/`, `/lake-michigan-water-temperature/`, `/lake-michigan-water-temperature/grand-haven/`, and `/lake-michigan-water-temperature/traverse-city/`.
+- **Source truth:** NOAA GLERL GLSEA daily whole-lake satellite mean; NDBC buoy 45029 offshore Grand Haven/Holland and seasonal 45020 Grand Traverse Bay only within 6-hour recency; NWS shoreline hourly air/wind. No interpolated beach temperature, no numerical water “feels-like” claim, no beach-safety all-clear. Missing observations appear as unavailable. Existing `/great-lakes-buoys/` and `/great-lakes-beaches/` remain authoritative for their separate intents.
+- **Visitor and technical experience:** Distinct geography, 4 activity choices, beach/immersion/after-swim interpretations, relative air-and-wind visiting-hour window, 30-day lakewide trend, key-free OSM/Leaflet place map, source labels, mobile-first aesthetic; CDN caching and bounded API calls, no cron, Redis or paid data.
+- **Search:** Four self-canonicals + linked Person `https://chrisizworski.com/#person` + visible author credit, four sitemap entries, directory card, registry node and relationships. Current GSC 28-day impressions/CTR/position, AdSense page revenue and Semrush new keyword research: NOT AVAILABLE; 1,000,000 impressions and 5% CTR targets not measured/achieved.
+- **Validation status:** PR #959 opened. Required full site CI, Vercel preview, live upstream/API smoke, keyboard/mobile/map behavior and merged production READY **NOT YET VERIFIED** as of this log entry. No merge or production launch claimed. See `docs/SHOREFEEL_LAKE_MICHIGAN_V1.md` for 100-point value gate and hard-loss publication blocks.
+- **Exactly one next action:** Finish the full required PR gates and source/browser checks; reconcile branch with latest green `main`, then merge only if passed and verify exact live URLs.
+
+
 ## Five-state aurora million-impressions publication-quality release — October 13, 2026
 
 - **Definition of done:** The owner-requested million-impressions / 5% CTR **publication-quality bar** is not an attainable guarantee of Google impressions. It is now a build-time, binary 100-point gate for every state hub and every local page, plus separate unmeasured actual GSC and mobile-browser outcomes. Full criteria and exact commit ledger: [AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md](AURORA_MILLION_IMPRESSIONS_QUALITY_BAR_2026_10_13.md).
