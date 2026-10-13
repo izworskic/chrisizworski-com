@@ -1,0 +1,38 @@
+name: ShoreFeel mobile browser quality
+on:
+  pull_request:
+    paths:
+      - 'public/assets/shorefeel.*'
+      - 'public/great-lakes-water-temperature/**'
+      - 'public/lake-michigan-water-temperature/**'
+      - 'scripts/shorefeel-mobile-browser.cjs'
+      - '.github/workflows/shorefeel-mobile-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shorefeel-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated lightweight browser driver
+        run: |
+          mkdir -p /tmp/shorefeel-browser
+          npm install --prefix /tmp/shorefeel-browser --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Run Chrome mobile and interaction checks
+        env:
+          NODE_PATH: /tmp/shorefeel-browser/node_modules
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/shorefeel-mobile-browser.cjs
+      - name: Preserve QA screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-mobile-qa
+          path: artifacts/shorefeel-mobile/
+          retention-days: 7
+          if-no-files-found: warn

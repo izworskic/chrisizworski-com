@@ -97,4 +97,6 @@ document.querySelectorAll('img[data-shorefeel-fallback]').forEach(img=>{
   const cap=img.closest('figure')?.querySelector('figcaption');
   if(cap)cap.textContent='Destination photograph unavailable. Showing an archival regional Lake Michigan shoreline image instead.';
  });
+ // If an image failed before the deferred script executed, still recover.
+ if(img.complete && img.naturalWidth===0) img.dispatchEvent(new Event('error'));
 });
