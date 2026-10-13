@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel Traverse City mobile-overflow and hero correction — October 13, 2026
+
+- **User-reported regression:** Traverse City on a real device required left-right scrolling; crowded Clinch Park photo was visually poor. The previous Chrome test blocked external Leaflet entirely and therefore covered map fallback, not the working map.
+- **Fix:** Only the Traverse City hero switches to an existing first-party archival Lake Michigan dunes/shore photo, explicitly labeled regional **not Traverse City**. The crowded Commons image and external Leaflet CDN references are removed on that page, replacing them with existing first-party Leaflet assets.
+- **Responsive scope:** Traverse-specific minimum-width and grid containment, local map viewport clipping, flexible SVG chart, fluid headings and metric values, restrained hero and caption, narrow-width card stack at 320px. No whole-document overflow-x clipping.
+- **Regression:** Browser test must load real local Leaflet on Traverse, verify rendered map and zero document/body horizontal overflow after activity interaction at 320/375/390/768/1440. Grand Haven remote-image fallback remains tested; Traverse photo is first-party. Site logic, NOAA/NDBC/NWS feeds and official hazard separations unchanged.
+- **Measurement:** Prior 20 Chrome cases were synthetic API fixtures, not independent live upstream/browser evidence. User's actual reported device experience takes precedence over prior tests. GSC/ad revenue not measured; no ranking or income claims.
+- **Exactly one next action:** Verify new PR checks and real-map mobile walkthrough, merge on green, then inspect the exact production deployment and invite an actual-phone confirmation.
+
+
 ## ShoreFeel V1.1 mobile and destination photography quality pass — October 13, 2026
 
 - **Scope:** Four ShoreFeel URLs unchanged; no new location pages, APIs, paid services, jobs or safety changes.

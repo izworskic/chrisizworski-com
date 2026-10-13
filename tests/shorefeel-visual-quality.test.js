@@ -10,11 +10,19 @@ test('ShoreFeel shows one genuinely sourced image per destination with accessibl
   assert.match(html,/href="#(?:lake-readings|shorefeel-now)"/,k);
   assert.match(html,/name="twitter:image"/);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
-  if(['grand','traverse'].includes(k)){
+  if(k==='grand'){
    assert.match(html,/data-shorefeel-fallback="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
    assert.match(html,/commons\.wikimedia\.org\/wiki\/File:/);
    assert.match(html,/archival photo/);
-  }else assert.match(html,/src="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
+  }else{
+   assert.match(html,/src="\/assets\/great-lakes-beaches\/lake-michigan-hero\.jpg"/);
+   if(k==='traverse'){
+    assert.doesNotMatch(html,/Traverse_City_Clinch_Park_Beach\.jpg/);
+    assert.match(html,/not a view of Traverse City/);
+    assert.match(html,/href="\/assets\/leaflet-1\.9\.4\.css"/);
+    assert.match(html,/src="\/assets\/leaflet-1\.9\.4\.js"/);
+   }
+  }
  }
 });
 test('ShoreFeel has a compact mobile hierarchy without losing user intents or evidence',()=>{

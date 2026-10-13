@@ -60,3 +60,107 @@
 .fallback-places{display:flex;gap:9px;flex-wrap:wrap}
 .fallback-places a{padding:8px 12px;border-radius:20px;background:#0d4352;color:#eff8f8;text-decoration:none;font-size:13px;font-weight:800}
 .fallback-places a:hover{background:#146273}
+
+
+/* ShoreFeel / Traverse City mobile correction — contain the actual children,
+   not the document. No body-level overflow-x hiding, and no forced fixed widths.
+   Other ShoreFeel destination layouts are intentionally unchanged. */
+body[data-place="traverse-city"] .wrap,
+body[data-place="traverse-city"] .hero-layout,
+body[data-place="traverse-city"] .hero-copy,
+body[data-place="traverse-city"] .hero-media,
+body[data-place="traverse-city"] .hero-data,
+body[data-place="traverse-city"] .columns,
+body[data-place="traverse-city"] .columns > *,
+body[data-place="traverse-city"] .decision,
+body[data-place="traverse-city"] .decision-pane,
+body[data-place="traverse-city"] .aside,
+body[data-place="traverse-city"] .metric,
+body[data-place="traverse-city"] .panel,
+body[data-place="traverse-city"] .guide {
+  min-width: 0;
+  max-width: 100%;
+}
+body[data-place="traverse-city"] .wrap { width: 100%; }
+body[data-place="traverse-city"] .hero-layout h1 { max-width: 18ch; overflow-wrap: anywhere; }
+body[data-place="traverse-city"] .hero-copy > p { max-width: 62ch; }
+body[data-place="traverse-city"] .hero-media {
+  border-radius: 16px;
+  box-shadow: 0 18px 44px rgba(3,24,36,.22);
+}
+body[data-place="traverse-city"] .hero-photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+body[data-place="traverse-city"] .hero-media figcaption {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+body[data-place="traverse-city"] .hero-data {
+  grid-template-columns: minmax(0,1.3fr) repeat(2,minmax(0,1fr));
+}
+body[data-place="traverse-city"] .columns {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+body[data-place="traverse-city"] .metric strong,
+body[data-place="traverse-city"] .metric small,
+body[data-place="traverse-city"] .metric .label,
+body[data-place="traverse-city"] .breadcrumbs,
+body[data-place="traverse-city"] .truth,
+body[data-place="traverse-city"] .decision-pane p,
+body[data-place="traverse-city"] .aside p,
+body[data-place="traverse-city"] .panel p,
+body[data-place="traverse-city"] .guide p,
+body[data-place="traverse-city"] .foot {
+  overflow-wrap: anywhere;
+}
+body[data-place="traverse-city"] #history { min-width: 0; max-width: 100%; }
+body[data-place="traverse-city"] #history .chart {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+body[data-place="traverse-city"] #shore-map,
+body[data-place="traverse-city"] .leaflet-container {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  body[data-place="traverse-city"] .columns { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 650px) {
+  body[data-place="traverse-city"] .hero-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  body[data-place="traverse-city"] .hero-photo {
+    height: 180px;
+    max-height: 180px;
+    object-fit: cover;
+  }
+  body[data-place="traverse-city"] .hero-data {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  body[data-place="traverse-city"] .hero-data .metric:first-child {
+    grid-column: 1 / -1;
+  }
+  body[data-place="traverse-city"] .metric { padding: 12px; }
+  body[data-place="traverse-city"] .top nav { flex-wrap: wrap; gap: 8px; }
+}
+@media (max-width: 380px) {
+  body[data-place="traverse-city"] .hero-data { grid-template-columns: minmax(0,1fr); }
+  body[data-place="traverse-city"] .hero-data .metric:first-child { grid-column: auto; }
+  body[data-place="traverse-city"] .intent-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body[data-place="traverse-city"] .top nav a { min-width: 0; }
+}
