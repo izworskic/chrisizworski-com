@@ -14,7 +14,7 @@ Promise: Choose water, Chapel or land; then turn a date and party into a credibl
 - Outside the verified published window, do not offer a purported departure. State the gap and give west-side land alternatives.
 - Kayak timelines never claim a departure until a permitted guide and marine forecast are confirmed.
 - Contextual ranger notes explain why a stop earned a place; no generic photo carousel.
-- Remove hardcoded CARTO query key; retain CARTO 256px tiles with OSM fallback and a visible NPS official-map path if both basemaps fail.
+- Preserve the required authenticated CARTO raster tile URL; retain 256px tiles with OSM fallback and a visible NPS official-map path if both basemaps fail.
 - Existing responsive UX and keyboard/labelled map controls remain.
 
 ## Source & data truth
