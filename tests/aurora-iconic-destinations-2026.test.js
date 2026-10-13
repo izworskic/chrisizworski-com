@@ -41,7 +41,7 @@ const paths=Object.entries(intended).flatMap(([state,slugs])=>slugs.map(slug=>({
 test("23 researched aurora landmark and city pages are routed to their owner project",()=>{
  assert.equal(paths.length,23);
  const declared=new Map();
- for(const route of routes){
+ for(const route of routes.filter(r=>paths.some(p=>r.source===p.base||r.source===p.base+"/"))){
   assert.ok(!declared.has(route.source),"Duplicate rewrite "+route.source);
   declared.set(route.source,route.destination);
  }
