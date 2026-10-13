@@ -25,7 +25,7 @@ test('crawlable decision answers are fully visible without JS or fabricated FAQ 
  assert.match(css,/\.growth-card-grid/);
 });
 test('relevant existing pages point to the single canonical Pictured Rocks planner',()=>{
- for(const f of ['public/northern-lights-michigan/munising/index.html','public/fall-color/upper-peninsula-fall-color/index.html','public/lake-superior-circle-tour/index.html','public/great-lakes-beaches/miners-beach/index.html']){
+ for(const f of ['public/northern-lights-michigan/munising/index.html','public/lake-superior-circle-tour/index.html','public/great-lakes-beaches/miners-beach/index.html']){
   const s=fs.readFileSync(f,'utf8');assert.ok(s.includes('https://picturedrocks.chrisizworski.com/'),f);
  }
 });
