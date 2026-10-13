@@ -47,6 +47,11 @@ jobs:
           node scripts/build-petoskey-wine-sitemap.mjs
           grep -Fq 'Which wine country day feels right for you?' public/petoskey-wine/index.html
           grep -Fq 'Which stops can actually fit your day?' public/petoskey-wine/index.html
+          grep -Fq 'Where should you go wine tasting near Petoskey?' public/petoskey-wine/index.html
+          grep -Fq 'Can you visit all 14 Petoskey wine trail wineries in a day?' public/petoskey-wine/petoskey-wine-region-trail/index.html
+          grep -Fq 'Which wineries are near Walloon Lake?' public/petoskey-wine/walloon-lake-wineries/index.html
+          grep -Fq 'Can you visit a winery on the Tunnel of Trees drive?' public/petoskey-wine/tunnel-of-trees-wine-tour/index.html
+          grep -Fq 'What wineries can you visit near Charlevoix?' public/petoskey-wine/charlevoix-area-wineries/index.html
           for route in petoskey-wine-region-trail walloon-lake-wineries tunnel-of-trees-wine-tour charlevoix-area-wineries; do
             grep -Fq 'Which stops can actually fit your day?' "public/petoskey-wine/$route/index.html"
           done
