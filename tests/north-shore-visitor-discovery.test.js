@@ -21,7 +21,8 @@ test('National Tools: North Shore is prominent and has the four canonical search
  assert.match(national,/Will I see a freighter/);
  assert.match(national,/Can I hike the loop/);
  assert.match(national,/Which ticket do I need/);
- assert.match(national,/Windigo or Rock Harbor/);
+ assert.match(national,/Which ferry, on what day, for how much/);
+ assert.match(national,/Windigo.*Rock Harbor/i);
  for(const [id,url] of decisions){assert.equal((national.match(new RegExp('data-tool-id="'+id+'"','g'))||[]).length,1,'one filterable '+id);assert.ok(national.includes('href="'+url+'"'),'link '+url);}
  const schemas=siteSchemas(national),list=schemas.find(x=>x['@id']==='https://chrisizworski.com/national-tools/#toollist');
  assert.ok(list);
@@ -40,7 +41,7 @@ test('North Shore specialty links are real tools, not duplicate made-up pages',(
   assert.ok(fs.existsSync(path.join(root,url,'index.html')),'local canonical exists '+url);
  }
  assert.match(national,/(?:2026 published schedules|published 2026)/i);
- assert.match(national,/future sailings and seats unverified/i);
+ assert.match(national,/2027 sailings and seats not yet confirmed/i);
  assert.match(national,/upper crossing has no bridge/i);
 });
 test('Circle Tour: four visitor handoffs, contextual stop placement and unchanged 31-stop route',()=>{

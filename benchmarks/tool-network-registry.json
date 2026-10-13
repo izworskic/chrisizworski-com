@@ -2657,7 +2657,7 @@
       "aliases": [],
       "kind": "decision-engine",
       "cluster": "trip-planning",
-      "primaryIntent": "Grand Portage Isle Royale ferry schedules day trip overnight fees Windigo Rock Harbor permits",
+      "primaryIntent": "Grand Portage Isle Royale ferry cost and schedules, Sea Hunter III and Voyageur II prices, Windigo day trips, Rock Harbor overnight, permits and reservations",
       "seasons": [
         5,
         6,
