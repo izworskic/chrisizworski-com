@@ -179,8 +179,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -331,8 +331,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/iconSize:\[hit,hit\]/);
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
-  assert.match(html,/welland-canal\.css\?v=20261012-vessel1/);
-  assert.match(html,/welland-canal\.js\?v=20261012-vessel1/);
+  assert.match(html,/welland-canal\.css\?v=20261012-traffic1/);
+  assert.match(html,/welland-canal\.js\?v=20261012-traffic1/);
 });
 
 
