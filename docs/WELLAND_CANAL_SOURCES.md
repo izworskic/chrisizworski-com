@@ -47,3 +47,10 @@ Acquire an official *machine-readable and permitted* Seaway order-of-turn feed (
 - **Instrumentation:** Existing `tool-engagement.js` logs visitor clicks on tagged official order-of-turn links (placements hero, guide, resource and FAQ) plus maritime-network handoffs. These are **clicks to sources**, not proved lock transits or purchases.
 - **Decision gate:** Re-read GSC on or after October 19 for initial discovery and after November 9 for ~28-day evidence: page and query impressions, clicks, CTR, average position, branded vs non-branded. Site-wide 5% CTR is an aspiration; first compare this page's actual query mix and discoverability. If no impressions, audit indexing, canonical selection and crawlability before any further title change. If impressions rise with low CTR, review the actual leading queries, displayed Google title and SERP competitors before one surgical rewrite.
 - **Cost guardrails:** All copy/static HTML changes, no new runtime API/LLM calls, no new cron or external assets; one production merge/build.
+
+
+## Native AIS approach board / official order-of-turn boundary — October 12, 2026
+- The interactive Welland lock map now has a compact source-separated AIS traffic brief. Lock selection narrows independent Open Waters reports to an approximate 5-km radius; the all-canal view sorts by most recent report. All results are observational positions only.
+- Official order of turn remains at the primary Seaway source, accessible directly from the board, not duplicated or represented as our data. Official terms do not establish permission for programmatic scraping, republication or commercial automated access. No official schedule/queue ingester, cron, new API or billing dependency was added.
+- No "next ship", lock entry time, claimed official queue, or empty-lock assertion can be inferred from AIS proximity, heading or age. Outages are visibly unavailable, not zero vessels.
+- To offer a first-party rendering of the *official* order later: obtain written permission and a supported licensed machine-readable Seaway feed, document freshness/attribution, then separately design queue-specific acceptance tests and fallbacks.
