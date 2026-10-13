@@ -340,3 +340,35 @@ body[data-place="traverse-city"] .hero .hero-photo {
 @media (max-width: 650px) {
   body[data-place="traverse-city"] .hero .hero-media { width: 100vw; min-width: 100vw; }
 }
+
+/* Actual landscape tablet widths include 1280px, not merely <=1200px. */
+@media (min-width:700px) and (max-width:1366px) and (max-height:900px) and (orientation:landscape) {
+  body[data-place="traverse-city"] .hero .hero-layout {
+    min-height: 232px;
+    padding-top: 12px;
+    padding-bottom: 14px;
+    align-items: center;
+  }
+  body[data-place="traverse-city"] .hero .hero-copy {
+    width: min(950px, 85%);
+  }
+  body[data-place="traverse-city"] .hero .breadcrumbs,
+  body[data-place="traverse-city"] .hero .hero-kicker {
+    display: none;
+  }
+  body[data-place="traverse-city"] .hero h1 {
+    max-width: none;
+    font-size: clamp(27px, 3vw, 40px);
+    margin: 6px 0 8px;
+    line-height: 1.08;
+  }
+  body[data-place="traverse-city"] .hero .hero-copy > p {
+    max-width: 86ch;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  body[data-place="traverse-city"] .hero .hero-skip {
+    margin-top: 9px;
+    padding: 7px 13px;
+  }
+}
