@@ -40,6 +40,7 @@ const intended={
 const paths=Object.entries(intended).flatMap(([state,slugs])=>slugs.map(slug=>({state,slug,base:"/national-tools/aurora/"+state+"/"+slug})));
 test("23 researched aurora landmark and city pages are routed to their owner project",()=>{
  assert.equal(paths.length,23);
+ // Scope duplicate enforcement to the 23 new URLs; unrelated legacy /api/aurora rewrites predate this release.
  const declared=new Map();
  for(const route of routes.filter(r=>paths.some(p=>r.source===p.base||r.source===p.base+"/"))){
   assert.ok(!declared.has(route.source),"Duplicate rewrite "+route.source);
