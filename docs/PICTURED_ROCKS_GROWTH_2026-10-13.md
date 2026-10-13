@@ -10,7 +10,7 @@
 1. Protect V5's decision engine and original canonical. Title and meta snippet experiment remain FROZEN until query-level GSC serving is stable enough to test.
 2. Make direct answers (one day, two days, boat, park pass, without boat, dogs, season and camping) crawlable; each directly links to the relevant NPS/official operator source and deeper planner.
 3. Repair known wrong-host exposure: Google indexed unrelated main-site pages on the Pictured Rocks subdomain. Redirect explicit confirmed foreign-page routes to the primary hostname, retaining existing middleware's narrow matchers to avoid a cost-increasing site-wide function invocation.
-4. Add only two natural internal authority links (Munising aurora and U.P. fall color). Relevant beaches, Lake Superior Circle Tour and /tools already link to the canonical; preserve winners rather than mass-edit.
+4. Add one natural internal authority link from Munising aurora, and update its schema and sitemap freshness. Relevant beaches, Lake Superior Circle Tour and /tools already link to the canonical; preserve protected fall-color winners.
 5. Update true substantial-change dateModified and sitemap lastmod to Oct 13. No invented FAQ rich-results claims, new thin pages, cron, map API cost or unnecessary rebuilds.
 6. Keep shared creator ID https://chrisizworski.com/#person and visible Built by Chris Izworski attribution.
 
