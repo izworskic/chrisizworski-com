@@ -55,7 +55,7 @@ module.exports=async function handler(req,res){
    }
   }
   // Build arrival guidance from the same selected stops, after severe weather veto.
-  result.wayfinding=result.status==='WEATHER_SAFETY_HOLD'?null:wayfinding(result,body.arrival_mode);
+  result.wayfinding=result.status==='WEATHER_SAFETY_HOLD'?null:wayfinding(result,body.arrival_mode,{adults:input.adults,children:input.youth,wegoIncluded:body.wego_included===true,rapidsviewIncluded:body.rapidsview_included===true,origin:body.transport_origin==='rapidsview'?'rapidsview':'other'});
   res.statusCode=200;res.end(JSON.stringify(result));
  }catch(error){res.statusCode=400;res.end(JSON.stringify({error:error.message||'Could not make itinerary.'}));}
 };

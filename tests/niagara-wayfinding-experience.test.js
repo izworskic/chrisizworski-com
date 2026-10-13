@@ -68,3 +68,21 @@ test('Wayfinding does not import external API, paid service, or browser geolocat
  const x=fs.readFileSync(path.join(__dirname,'../lib/niagara-falls/wayfinding.js'),'utf8');
  assert.doesNotMatch(x,/fetch\(|axios|navigator\.geolocation|MAPBOX_TOKEN|process\.env/);
 });
+
+test('editorial film surface uses one photo, one player, and no thumbnail strip',()=>{
+ const html=fs.readFileSync(path.join(__dirname,'../public/niagara-falls-today/index.html'),'utf8');
+ assert.equal((html.match(/<img /g)||[]).length,1);
+ assert.match(html,/id="niagara-film-stage"/);
+ assert.doesNotMatch(html,/ytimg\.com|falls-film-grid/);
+});
+test('arrival mode, pass ownership, and origin choices are bound to actual requests',()=>{
+ const html=fs.readFileSync(path.join(__dirname,'../public/niagara-falls-today/index.html'),'utf8');
+ const js=fs.readFileSync(path.join(__dirname,'../public/assets/niagara-falls-today.js'),'utf8');
+ const map=fs.readFileSync(path.join(__dirname,'../public/assets/niagara-visit-map.js'),'utf8');
+ for(const key of ['wego_included','rapidsview_included','transport_origin']){
+  assert.match(html,new RegExp('name="'+key+'"'));
+  assert.match(js,new RegExp(key.replace(/_/g,'_')));
+ }
+ assert.match(map,/data-travel-choice/);
+ assert.match(map,/form\.requestSubmit\(\)/);
+});
