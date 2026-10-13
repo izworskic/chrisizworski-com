@@ -37,7 +37,7 @@ test('all four indexed examples resolve to deterministic canonical-page checks',
   const verdict=E.evaluate({pass,resort,date});
   assert.notEqual(verdict.status,'UNKNOWN',intent);
  }
- assert.equal((html.match(/data-ski-intent=/g)||[]).length,5); // four anchors and one delegated selector
+ assert.equal((html.match(/data-ski-intent=/g)||[]).length,4); // four first-party decision links, no duplicate anchors
 });
 test('transparent 2026/27 facts and original policy gates remain discoverable',()=>{
  assert.match(html,/Dec 26–31, 2026/);
