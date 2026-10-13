@@ -26,7 +26,7 @@ const checks={
     ['a lock requires only one nav tap',js.includes("b.addEventListener('click',()=>chooseLock(l.id,true,false))")],
     ['map click gives instant answer',js.includes("marker.on('click',()=>chooseLock(lock.id,false,true))")],
     ['grouped markers do not block a lock choice',html.includes('Grouped numbers? Tap to zoom, or choose any lock above')],
-    ['map tap opens a persistent below-map answer and retains it during onward browsing',js.includes("if(lock&&(fromMap||!$('mapLockPreview').hidden))showLockPreview(lock)")],
+    ['every lock choice opens the one persistent map-adjacent answer',js.includes("if(lock)showLockPreview(lock);else hideLockPreview();")&&html.includes('id="mapLockPreviewPosition"')&&html.includes('id="mapLockPreviewPrevious"')&&html.includes('id="mapLockPreviewNext"')&&js.includes("$('mapLockPreviewNext').addEventListener('click'")],
     ['nav tap opens immediate adjacent answer',js.includes("renderInstantAnswer(lock)")&&html.indexOf('id="lockInstantAnswer"')>html.indexOf('id="lockRail"')&&html.indexOf('id="lockInstantAnswer"')<html.indexOf('id="shipMap"')],
     ['reset to overview retained',js.includes("showAllLocks')")],
   ],

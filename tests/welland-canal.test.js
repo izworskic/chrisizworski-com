@@ -118,7 +118,7 @@ test('Touching an individual lock shows persistent useful detail instead of a te
  assert.match(js,/\$\('mapLockPreviewTitle'\)\.textContent=lock\.name\+' · '\+lock\.place/);
  assert.match(js,/\$\('mapLockPreviewText'\)\.textContent=LOCK_QUICK\[lock\.id\]\.answer/);
  assert.match(js,/\$\('mapLockPreview'\)\.hidden=false/);
- assert.match(js,/if\(lock&&\(fromMap\|\|!\$\('mapLockPreview'\)\.hidden\)\)showLockPreview\(lock\);else hideLockPreview\(\)/);
+ assert.ok(js.includes("if(lock)showLockPreview(lock);else hideLockPreview();"));
  assert.match(js,/marker\.on\('click',\(\)=>chooseLock\(lock\.id,false,true\)\)/);
  assert.doesNotMatch(js,/bindTooltip\(lock\.name/);
  assert.doesNotMatch(js,/title:lock\.name/);
@@ -179,8 +179,8 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261012-journey1/);
-  assert.match(html,/welland-canal\.css\?v=20261012-journey1/);
+  assert.match(html,/welland-canal\.js\?v=20261013-lock-handoff1/);
+  assert.match(html,/welland-canal\.css\?v=20261013-lock-handoff1/);
 });
 
 test('Every reused image has explicit Wikimedia source, author and licence links',()=>{
@@ -331,8 +331,8 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/iconSize:\[hit,hit\]/);
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
-  assert.match(html,/welland-canal\.css\?v=20261012-journey1/);
-  assert.match(html,/welland-canal\.js\?v=20261012-journey1/);
+  assert.match(html,/welland-canal\.css\?v=20261013-lock-handoff1/);
+  assert.match(html,/welland-canal\.js\?v=20261013-lock-handoff1/);
 });
 
 
@@ -467,4 +467,20 @@ test('Welland million-impressions intent path prioritizes AIS decision and offic
   assert.match(page,/These dates apply to the 2026 season only/);
   assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
   assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/welland-canal\/"/);
+});
+
+test('All lock choices share a below-map briefing with continuous navigation',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const js=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.js'),'utf8');
+ const css=fs.readFileSync(path.join(__dirname,'../public/assets/welland-canal.css'),'utf8');
+ const html=fs.readFileSync(path.join(__dirname,'../public/welland-canal/index.html'),'utf8');
+ assert.ok(js.includes("if(lock)showLockPreview(lock);else hideLockPreview();"));
+ assert.ok(js.includes("previousButton.disabled=lock.id==='1'"));
+ assert.ok(js.includes("$('mapLockPreviewNext').addEventListener('click'"));
+ assert.ok(js.includes("$('mapLockPreviewPrevious').addEventListener('click'"));
+ for(const id of ['mapLockPreviewPosition','mapLockPreviewPrevious','mapLockPreviewNext'])assert.ok(html.includes('id="'+id+'"'));
+ assert.ok(css.includes('.lock-instant-answer{display:none!important}'));
+ assert.ok(css.includes('.map-lock-preview__steps{grid-column:1 / -1'));
+ assert.ok(css.includes('width:29px;height:29px'));
+ assert.ok(js.includes('const hit=44'));
 });

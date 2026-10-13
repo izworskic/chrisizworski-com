@@ -285,6 +285,15 @@
     const photo=LOCK_PHOTOS[LOCK_STORIES[lock.id].photo];
     setLockPhoto($('mapLockPreviewImage'),$('mapLockPreviewImageFallback'),photo);
     $('mapLockPreviewCaption').textContent=photo.caption;
+    // Stay beside the live map while progressing through all eight locks.
+    $('mapLockPreviewPosition').textContent=String(lock.id).padStart(2,'0')+' / 08';
+    const previous=Math.max(1,Number(lock.id)-1);
+    const next=(Number(lock.id)%8)+1;
+    const previousButton=$('mapLockPreviewPrevious');
+    previousButton.disabled=lock.id==='1';
+    previousButton.dataset.previous=String(previous);
+    $('mapLockPreviewNext').dataset.next=String(next);
+    $('mapLockPreviewNext').textContent=lock.id==='8'?'Start again ↻':'Next lock →';
     $('mapLockPreview').hidden=false;
   }
   function renderInstantAnswer(lock){
@@ -320,7 +329,8 @@
     renderTrafficBrief();
     renderInstantAnswer(lock);
     renderLockDetail();
-    if(lock&&(fromMap||!$('mapLockPreview').hidden))showLockPreview(lock);else hideLockPreview();
+    // One map briefing for rail, map and previous/next lock selection.
+    if(lock)showLockPreview(lock);else hideLockPreview();
     // Keep existing Leaflet elements mounted while changing selection.
     // Replacing icons on every tap drops keyboard focus and triggers map layout churn.
     lockMarkers.forEach((marker,key)=>{
@@ -603,6 +613,8 @@
   $('lockDetailPrevious').addEventListener('click',()=>chooseLock($('lockDetailPrevious').dataset.previous));
   $('lockDetailNext').addEventListener('click',()=>chooseLock($('lockDetailNext').dataset.next));
   $('mapLockPreviewDismiss').addEventListener('click',hideLockPreview);
+  $('mapLockPreviewPrevious').addEventListener('click',()=>chooseLock($('mapLockPreviewPrevious').dataset.previous,true,false));
+  $('mapLockPreviewNext').addEventListener('click',()=>chooseLock($('mapLockPreviewNext').dataset.next,true,false));
   function openFullLockStory(){
     hideLockPreview();
     const card=$('lockDetail');
