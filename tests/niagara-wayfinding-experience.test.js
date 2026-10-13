@@ -69,11 +69,18 @@ test('Wayfinding does not import external API, paid service, or browser geolocat
  assert.doesNotMatch(x,/fetch\(|axios|navigator\.geolocation|MAPBOX_TOKEN|process\.env/);
 });
 
-test('editorial film surface uses one photo, one player, and no thumbnail strip',()=>{
+test('documentary thumbnails are compact and share one opt-in player',()=>{
  const html=fs.readFileSync(path.join(__dirname,'../public/niagara-falls-today/index.html'),'utf8');
- assert.equal((html.match(/<img /g)||[]).length,1);
+ const css=fs.readFileSync(path.join(__dirname,'../public/assets/niagara-falls-today.css'),'utf8');
+ const films=fs.readFileSync(path.join(__dirname,'../public/assets/niagara-visit-films.js'),'utf8');
+ assert.equal((html.match(/<img /g)||[]).length,4);
+ assert.equal((html.match(/class="film-thumb"/g)||[]).length,3);
  assert.match(html,/id="niagara-film-stage"/);
- assert.doesNotMatch(html,/ytimg\.com|falls-film-grid/);
+ assert.match(css,/\.film-choice \.film-thumb\{/);
+ assert.match(css,/width:104px/);
+ assert.match(css,/@media\(max-width:640px\)/);
+ assert.match(films,/stage\.replaceChildren\(iframe\)/);
+ assert.doesNotMatch(html,/falls-film-grid/);
 });
 test('arrival mode, pass ownership, and origin choices are bound to actual requests',()=>{
  const html=fs.readFileSync(path.join(__dirname,'../public/niagara-falls-today/index.html'),'utf8');
