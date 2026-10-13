@@ -57,14 +57,19 @@
 </section>
 <div class="shell">
 
-<section class="falls-films" id="falls-films" aria-labelledby="falls-films-title">
- <div class="section-lead"><p class="index">BEFORE YOU PLAN / EXPERIENCE IT</p><h2 id="falls-films-title">Three ways to feel Niagara.</h2><p>A boat travels into the mist. A boardwalk approaches the falling water. A tunnel leads behind the Horseshoe. Watch real visitor footage before you decide what deserves your time.</p></div>
- <div class="falls-film-grid">
-  <article class="falls-film featured"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="F1D0AUIfKJk" aria-label="Play footage of the Maid of the Mist boat ride"><img src="https://i.ytimg.com/vi/F1D0AUIfKJk/hqdefault.jpg" alt="Maid of the Mist boat ride filmed from the American side" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span><span class="film-duration">WATCH THE BOAT EXPERIENCE</span></button></div><div class="film-caption"><span>01 · RIVER LEVEL</span><h3>Into the thunder.</h3><p>On a boat, the waterfalls stop looking like scenery and start feeling like weather. Watch the actual journey before choosing this experience.</p><small>Explore Niagara · filmed visitor footage · <a href="https://www.youtube.com/watch?v=F1D0AUIfKJk" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a></small></div></article>
-  <article class="falls-film"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="hmQwm0drhGU" aria-label="Play Cave of the Winds walkway footage"><img src="https://i.ytimg.com/vi/hmQwm0drhGU/hqdefault.jpg" alt="Cave of the Winds boardwalk and Hurricane Deck visitor footage" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span></button></div><div class="film-caption"><span>02 · FEEL THE SPRAY</span><h3>Below the falling water.</h3><p>See the paths, railings and exposed decks before committing to a ticket. The outdoor decks vary by season.</p><small>Magellan and Greyhound · <a href="https://www.youtube.com/watch?v=hmQwm0drhGU" target="_blank" rel="noopener noreferrer">Watch separately ↗</a></small></div></article>
-  <article class="falls-film"><div class="film-frame"><button type="button" class="film-play" data-niagara-clip="l6fu2huqWNE" aria-label="Play official Niagara Parks Journey Behind the Falls film"><img src="https://i.ytimg.com/vi/l6fu2huqWNE/hqdefault.jpg" alt="Journey Behind the Falls tunnels and viewing platforms" loading="lazy" decoding="async" width="480" height="360"><span class="film-play-sign" aria-hidden="true">▶</span></button></div><div class="film-caption"><span>03 · INSIDE THE ROCK</span><h3>Behind the Horseshoe.</h3><p>Descend through bedrock, hear the roar and watch the water through portals. Deck access is subject to current construction.</p><small>Niagara Parks · official footage · <a href="https://www.youtube.com/watch?v=l6fu2huqWNE" target="_blank" rel="noopener noreferrer">Official film ↗</a></small></div></article>
+<section class="falls-films film-editorial" id="falls-films" aria-labelledby="falls-films-title">
+ <div class="film-editorial-copy">
+  <p class="index">THE EXPERIENCE · REAL FOOTAGE</p>
+  <h2 id="falls-films-title">Hear the river before you decide.</h2>
+  <p>From the railing, Niagara is an immense sheet of moving water. On the boat, the sound surrounds you and the mist can erase the horizon. At the walkways, you feel the force close up. Compare the three experiences—without a wall of pictures.</p>
+  <div class="film-selectors" role="group" aria-label="Choose one Niagara visitor film">
+   <button class="film-choice" type="button" data-niagara-clip="F1D0AUIfKJk"><span>01</span><strong>Boat · Into the mist</strong><small>Actual boat footage · Explore Niagara</small></button>
+   <button class="film-choice" type="button" data-niagara-clip="hmQwm0drhGU"><span>02</span><strong>Cave of the Winds</strong><small>Walkways and wet decks · Visitor footage</small></button>
+   <button class="film-choice" type="button" data-niagara-clip="l6fu2huqWNE"><span>03</span><strong>Behind the Falls</strong><small>Tunnels and portals · Niagara Parks</small></button>
+  </div>
+  <p class="film-disclaimer">Authentic visitor and operator footage, not live conditions. The player loads only if you choose a film. <a href="https://www.youtube.com/watch?v=F1D0AUIfKJk" target="_blank" rel="noopener noreferrer">Boat film ↗</a> · <a href="https://www.youtube.com/watch?v=hmQwm0drhGU" target="_blank" rel="noopener noreferrer">Cave film ↗</a> · <a href="https://www.youtube.com/watch?v=l6fu2huqWNE" target="_blank" rel="noopener noreferrer">Niagara Parks film ↗</a></p>
  </div>
- <p class="film-disclaimer">These are documentary videos, not current conditions. Playback begins only when selected; if embedding is blocked, each film has a direct YouTube link.</p>
+ <div id="niagara-film-stage" class="film-editorial-stage" role="region" aria-label="Selected Niagara experience film"><div class="film-empty"><span aria-hidden="true">▶</span><strong>Choose an experience to watch.</strong><p>One film plays here. No gallery, no autoplay.</p></div></div>
 </section>
 <div class="primary-grid">
 <section class="panel controls" id="planner" aria-labelledby="plan-title">
@@ -101,6 +106,11 @@
   <label class="full">Admission budget (same-side currency)<input type="number" name="budget" min="0" step="1" placeholder="Optional — leave blank for no cap"></label>
   <label class="check"><input type="checkbox" name="low_walking"> Prefer shorter walking distances</label>
   <label class="check"><input type="checkbox" name="step_free"> Require step-free attractions (route verification still needed)</label>
+  <div class="ontario-pass-options"><p><strong>Already have a Canadian visitor pass?</strong> Avoid paying twice for the same transportation.</p>
+   <label class="check"><input type="checkbox" name="wego_included"> WEGO travel is included in my existing pass</label>
+   <label class="check"><input type="checkbox" name="rapidsview_included"> My online Falls Pass also includes Rapidsview park-and-ride parking</label>
+   <p class="form-note">Canadian fare assumes children entered above are ages 3–12. Children 2 and younger ride WEGO free. Niagara attraction child-price definitions may differ.</p>
+  </div>
  </details>
  <button type="submit" class="plan-button" id="go">Show me my Niagara experience <span aria-hidden="true">→</span></button>
  </form>
@@ -112,7 +122,8 @@
 </section>
 </div>
 <section class="wayfinding-panel" id="wayfinding" aria-labelledby="wayfinding-title">
- <div class="wayfinding-heading"><div><p class="index">03 / ARRIVE AND MOVE</p><h2 id="wayfinding-title">See the route. Know where to begin.</h2><p>Each recommendation appears on the map, including a starting parking area when you drive. Your map changes with the itinerary.</p></div><div id="wayfinding-status" class="wayfinding-status" role="status">Choose a plan to see your map.</div></div>
+ <div class="wayfinding-heading"><div><p class="index">03 / GETTING AROUND</p><h2 id="wayfinding-title">An actual way in, not just a line on a map.</h2><p>Your stops, recommended arrival point and pedestrian directions update with the plan. Bus timetables are never assumed.</p></div><div id="wayfinding-status" class="wayfinding-status" role="status">Choose a plan to see your map.</div></div>
+ <section class="travel-comparison" aria-labelledby="travel-comparison-title"><div class="travel-comparison-intro"><p class="index">THE REAL-WORLD CHOICE</p><h3 id="travel-comparison-title">Where should you park—and is the bus worth it?</h3><p>Compare group cost, time overhead, and operating certainty for this specific visit. Rates never stand in for live parking spaces or bus departures.</p></div><div id="niagara-travel-choices" class="niagara-travel-choices" aria-live="polite"><p>Run a plan to compare your arrival choices.</p></div></section>
  <div class="wayfinding-layout">
   <div class="wayfinding-map-wrap">
    <div id="niagara-route-map" class="niagara-route-map" role="region" aria-label="Interactive map of Niagara Falls itinerary stops"></div>
