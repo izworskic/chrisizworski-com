@@ -59,7 +59,7 @@ function renderPlace(){
 }
 function initMap(){
  const mapEl=get('shore-map');if(!mapEl)return;
- if(!window.L){mapEl.innerHTML='<div class="map-fallback">Map unavailable. <a href="/great-lakes-buoys/">Explore monitored stations</a>.</div>';return;}
+ if(!window.L){mapEl.innerHTML='<div class="map-fallback"><strong>Explore the Lake Michigan shoreline</strong><p>The interactive map is unavailable, but the destination guides still work.</p><div class="fallback-places"><a href="/lake-michigan-water-temperature/grand-haven/">Grand Haven →</a><a href="/lake-michigan-water-temperature/traverse-city/">Traverse City →</a></div><small>For source locations, <a href="/great-lakes-buoys/">see NOAA buoy stations</a>.</small></div>';return;}
  const center=place==='grand-haven'?[43.07,-86.25]:place==='traverse-city'?[44.85,-85.63]:[44.5,-86.55];
  const map=L.map(mapEl,{scrollWheelZoom:false}).setView(center,place?9:6);
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:17}).addTo(map);
@@ -83,3 +83,20 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   write('feel-decision','Review official water and beach hazard reports before entering the lake.');
  }finally{initMap();}
 })();})();
+
+/* Wikimedia is source-backed but network access can fail. Fall back to existing
+   first-party regional photography, never label it as a particular beach. */
+document.querySelectorAll('img[data-shorefeel-fallback]').forEach(img=>{
+ const fallback=img.getAttribute('data-shorefeel-fallback');
+ if(!fallback||!fallback.startsWith('/assets/'))return;
+ img.addEventListener('error',()=>{
+  if(img.dataset.shorefeelFallbackUsed==='1')return;
+  img.dataset.shorefeelFallbackUsed='1';
+  img.src=fallback;
+  img.alt='Regional Lake Michigan shoreline near Sleeping Bear Dunes, not the selected destination';
+  const cap=img.closest('figure')?.querySelector('figcaption');
+  if(cap)cap.textContent='Destination photograph unavailable. Showing an archival regional Lake Michigan shoreline image instead.';
+ });
+ // If an image failed before the deferred script executed, still recover.
+ if(img.complete && img.naturalWidth===0) img.dispatchEvent(new Event('error'));
+});
