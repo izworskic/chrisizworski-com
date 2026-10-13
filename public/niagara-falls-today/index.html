@@ -85,6 +85,10 @@
   <label><input type="radio" name="arrival_mode" value="transit"><span>Transit / shuttle</span></label>
  </div></fieldset>
  <p class="form-note">Your chosen start time is when you are ready to sightsee. Driving? Arrive earlier for parking and the walk to your first stop.</p>
+ <label class="full">If taking Canadian WEGO, where are you joining?
+  <select name="transport_origin"><option value="other">Hotel, station or other stop</option><option value="rapidsview">Rapidsview seasonal park-and-ride</option></select>
+ </label>
+ <p class="form-note">This origin choice affects the arrival plan only; it does not confirm a WEGO stop, a bus departure, or a parking space.</p>
  <fieldset><legend>How much time?</legend><div class="choices duration">
   <label><input type="radio" name="duration_minutes" value="120"><span>2 hours</span></label>
   <label><input type="radio" name="duration_minutes" value="240" checked><span>4 hours</span></label>
