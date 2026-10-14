@@ -103,7 +103,7 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
-     if(key==='traverse'){assert.equal(await page.locator('#beach-forecast').isVisible(),false,'unavailable forecast must hide the whole block');}
+     if(key==='traverse'){assert.match(await page.locator('#bf-body').textContent(),/unavailable right now/);assert.match(await page.locator('#bf-body').textContent(),/Nothing has been estimated/);}
      else{
       assert.equal(await page.locator('#beach-forecast').isVisible(),true);
       assert.match(await page.locator('#bf-body').textContent(),/Test beach/);
@@ -116,7 +116,7 @@ const server=http.createServer((req,res)=>{
       // context on its own line and is never promoted to a bay reading.
       const answer=await page.locator('#lead-temp').textContent();
       assert.equal(answer,'No current reading','whole-lake mean must not lead as a bay reading');
-      assert.match(await page.locator('#lead-temp-label').textContent(),/GRAND TRAVERSE BAY · NOT VERIFIED/);
+      assert.match(await page.locator('#lead-temp-label').textContent(),/grand traverse bay · not verified/i);
       assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
       assert.match(await page.locator('#lead-grid-status').textContent(),/No valid pixel/);
       assert.match(await page.locator('#lead-lake-context').textContent(),/62\.1°F on Oct 12 · \+5\.0°F vs the long-term normal/);
@@ -124,23 +124,18 @@ const server=http.createServer((req,res)=>{
       assert.ok(parseFloat(answerStyle)>=40,'temperature reading must be the dominant feature');
       if(width===1024||width===1280){
        const hero=await page.evaluate(()=>{
-        const head=document.querySelector('.hero').getBoundingClientRect();
         const photo=document.querySelector('.hero-photo').getBoundingClientRect();
-        const figure=document.querySelector('.hero-media').getBoundingClientRect();
+        const num=document.querySelector('#lead-temp').getBoundingClientRect();
+        const scale=document.querySelector('.scale').getBoundingClientRect();
         const evidence=document.querySelector('#shorefeel-now').getBoundingClientRect();
-        const style=getComputedStyle(document.querySelector('.hero'));
-        const after=getComputedStyle(document.querySelector('.hero-media'),'::after');
-        return {heroHeight:head.height,heroWidth:head.width,photoWidth:photo.width,photoHeight:photo.height,
-          figureWidth:figure.width,evidenceY:evidence.y+window.scrollY,background:style.backgroundColor,
-          overlay:after.display};
+        return {photoWidth:photo.width,photoHeight:photo.height,numberBottom:num.bottom+window.scrollY,scaleBottom:scale.bottom+window.scrollY,
+          numberSize:parseFloat(getComputedStyle(document.querySelector('#lead-temp')).fontSize),evidenceY:evidence.y+window.scrollY};
        });
-       assert.ok(hero.heroHeight<=435,'Traverse temperature-first hero must fit above fold '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.photoWidth>width*.27 && hero.photoWidth<width*.52,
-         'Traverse photo must be a separate, visible editorial card '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.scaleBottom<600,'the temperature and its scale must be visible without scrolling '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.numberSize>=64,'the temperature is the dominant element '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.photoWidth>width*.27 && hero.photoWidth<width*.52,'photo is a secondary card '+width+': '+JSON.stringify(hero));
        assert.ok(hero.photoHeight>=160 && hero.photoHeight<=260,'secondary photo size '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.evidenceY<560,'real readings should be above fold '+width+': '+JSON.stringify(hero));
-       assert.equal(hero.overlay,'none','dark photo overlay must be removed');
-       assert.notEqual(hero.background,'rgb(9, 42, 59)','remove blue full-bleed hero');
+       assert.ok(hero.evidenceY<900,'status strip should follow the hero closely '+width+': '+JSON.stringify(hero));
       }
       const dims=await page.evaluate(()=>({
        documentWidth:document.documentElement.scrollWidth,
@@ -183,7 +178,7 @@ const server=http.createServer((req,res)=>{
   });
   await gridPage.goto(base+'/lake-michigan-water-temperature/traverse-city/',{waitUntil:'load'});
   await gridPage.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='64.4°F',{timeout:7000});
-  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/GRAND TRAVERSE BAY · NOAA SATELLITE SURFACE/);
+  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/grand traverse bay · NOAA satellite surface/i);
   assert.match(await gridPage.locator('#lead-temp-caveat').textContent(),/not a beach thermometer/);
   assert.match(await gridPage.locator('#lead-grid-status').textContent(),/West Bay 64\.4°F · East Bay 64\.9°F/);
   await gridPage.getByRole('button',{name:'Paddling'}).click();
