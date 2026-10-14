@@ -21,8 +21,8 @@ if(!list.itemListElement.some(x=>x.url===url)){
  list.itemListElement.splice(idx+1,0,{'@type':'ListItem',position:0,url,name:'Utah Ski Canyon Road & Parking Checker'});
 }
 list.itemListElement.forEach((x,i)=>x.position=i+1);list.numberOfItems=list.itemListElement.length;
-const page=json['@graph'].find(x=>x['@type']==='CollectionPage');
-if(page&&(!page.dateModified||page.dateModified<'2026-10-13'))page.dateModified='2026-10-13';
+// Preserve the existing verified directory collection date; the new Utah page
+// has its own independent 2026-10-13 freshness marker and sitemap entry.
 html=html.replace(m[0],'<script type="application/ld+json">'+JSON.stringify(json)+'</script>');
 html=html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/,'$1'+list.numberOfItems+' tools shown$2');
 const cards=(html.match(/data-search-card/g)||[]).length;
