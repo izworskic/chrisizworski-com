@@ -19,7 +19,7 @@ test('National Tools registration and sitemap are idempotently built',()=>{
 });
 test('First-screen canyon orientation and 2026-27 resort handoffs',()=>{
  assert.match(html,/canyon-map-title/);assert.match(html,/SR-210/);assert.match(html,/SR-190/);
- assert.match(html,/src="\\/images\\/utah-ski\\/utah-cottonwood-canyons-illustrated\\.webp"/);
+ assert.ok(html.includes('src="/images/utah-ski/utah-cottonwood-canyons-illustrated.webp"'));
  assert.match(html,/Snowbird → Alta/);assert.match(html,/Solitude → Brighton/);
  assert.match(html,/class="canyon-art-map"/);
  for(const r of ['Alta','Snowbird','Brighton','Solitude'])assert.ok(html.includes(r));
