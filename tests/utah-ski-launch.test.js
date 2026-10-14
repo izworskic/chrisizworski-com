@@ -39,7 +39,7 @@ test('Utah ski illustration is an optimized binary image asset, not an inline di
  assert.match(html,/class="intro-copy"/);
  assert.match(html,/Tap the map to view it larger/);
 
- assert.match(html,/not exact road alignment or live closures/);
+ assert.match(html,/Routes are illustrated, not to scale/);
 });
 
 test('Utah intro image fits tablet and desktop without cropping or scrolling',()=>{
