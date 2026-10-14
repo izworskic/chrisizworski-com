@@ -150,7 +150,7 @@ function cost(){
   put(c,lines,el('p','cost-total',s.complete?'Estimated subtotal '+money(total):'Known components '+money(total)+' · incomplete'));
   put(c,el('p','small','Rates as recorded Oct 2026; promotions, restrictions, taxes and equipment details are not confirmed. This is a budgeting worksheet, not a booking quote.'));
   const sources=el('div','source-links');
-  put(sources,sourceLink('Confirm tickets ↗',r.tickets),sourceLink('Check lift/trail report ↗',r.official?.url||r.snow));put(c,sources,c);
+  put(sources,sourceLink('Confirm tickets ↗',r.tickets),sourceLink('Check lift/trail report ↗',r.official?.url||r.snow));put(c,sources);
   put(cards,c);
  });put(target,cards);
 }
