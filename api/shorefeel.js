@@ -8,7 +8,7 @@ const BAY_GRID={lat:44.795837,lon:-85.610003,name:'West Grand Traverse Bay offsh
  dataset:'GLSEA_ACSPO_GCS',
  graph:'https://apps.glerl.noaa.gov/erddap/griddap/GLSEA_ACSPO_GCS.graph',
  pointProvenance:'https://www.waterqualitydata.us/provider/STORET/21MICH_WQX/21MICH_WQX-450132/'};
-const BAY_GRID_CSV='https://apps.glerl.noaa.gov/erddap/griddap/GLSEA_ACSPO_GCS.csv?sst[(last-6):1:(last)][(44.795837)][(-85.610003)]';
+const BAY_GRID_CSV='https://apps.glerl.noaa.gov/erddap/griddap/GLSEA_ACSPO_GCS.csv?sst[last-6:1:last][(44.795837)][(-85.610003)]';
 
 const HEADERS={'User-Agent':'ChrisIzworski-ShoreFeel/1.0 (https://chrisizworski.com/great-lakes-water-temperature/)',Accept:'text/plain, application/json'};
 async function textResponse(url,ms=4000){

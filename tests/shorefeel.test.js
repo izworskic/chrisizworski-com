@@ -73,3 +73,12 @@ test('NOAA ACSPO bay pixel: source coordinate, Celsius, recency and unavailable 
  assert.equal(parseGLSEABayGridCsv('time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n2026-10-12T12:00:00Z,44.792,-85.606,-99999',q,now),null);
  assert.equal(parseGLSEABayGridCsv('time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n2026-10-15T12:00:00Z,44.792,-85.606,22',q,now),null);
 });
+
+
+test('NOAA GLSEA ACSPO request uses last seven daily indices, not last-6 seconds',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const api=fs.readFileSync(path.resolve(__dirname,'../api/shorefeel.js'),'utf8');
+ assert.ok(api.includes('GLSEA_ACSPO_GCS.csv?sst[last-6:1:last][(44.795837)][(-85.610003)]'));
+ assert.ok(!api.includes('sst[(last-6):1:(last)]'),
+  'ERDDAP (last-6) is axis-value offset (seconds for time), NOT the last 6 daily observations');
+});

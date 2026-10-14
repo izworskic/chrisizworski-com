@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## GLSEA ACSPO ERA query indexing correction — October 13, 2026
+
+- **Production issue:** The West Grand Traverse Bay request used `sst[(last-6):1:(last)]`, but ERDDAP interprets `(last-6)` as a coordinate-value offset, i.e. approximately six seconds on a time axis, not six daily record indices.
+- **Correction:** Request `sst[last-6:1:last]` for exactly seven daily grid records at the chosen offshore point. The parser's 72-hour age, location, Celsius, and missing-value gates remain unchanged.
+- **Truth limit:** NOAA GLSEA ACSPO's browsable metadata currently ends 2026-06-16, and its ERDDAP API responds with Anubis access denial from automated clients. No valid current Bay pixel was confirmed. The temperature-first hero continues falling back to dated NOAA lakewide measurements when a current bay sample cannot be retrieved.
+- **No cost additions:** No cron, new services, Redis, or new route.
+- **Exactly one next action:** Run full repo/real-browser CI, merge only if green and Vercel preview READY; verify real NOAA availability when accessible.
+
+
 ## Traverse City NOAA ACSPO satellite bay sampling — October 13, 2026
 
 - **User-provided source:** `GLSEA_ACSPO_GCS` NOAA ERDDAP griddap. Unlike a Lake Michigan daily average, its satellite-derived SST grid resolves individual surface cells at approximately 0.014° (~1.4 km). It is not a beach-water thermometer.
