@@ -1,8 +1,21 @@
 (function(){
 'use strict';
-var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go'),requestSeq=0,presetPending=false,activePreset='standard';
-function todayEastern(){var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now()+3600000));var o={};parts.forEach(function(p){o[p.type]=p.value;});return{date:o.year+'-'+o.month+'-'+o.day,hour:Number(o.hour)};}
-var t=todayEastern();document.getElementById('date').value=t.date;document.getElementById('time').value=String(t.hour).padStart(2,'0')+':00';
+var form=document.getElementById('plan-form'),body=document.getElementById('result-body'),status=document.getElementById('status'),button=document.getElementById('go'),requestSeq=0,presetPending=false,activePreset='standard',hasPlanned=false;
+function suggestedVisitEastern(now){
+ var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now||new Date());
+ var p={};parts.forEach(function(x){p[x.type]=x.value;});
+ var date=p.year+'-'+p.month+'-'+p.day,minutes=Number(p.hour)*60+Number(p.minute);
+ if(minutes>=14*60){
+  // Late-afternoon arrivals often cannot fit a boat and 4-hour route.
+  // Suggest tomorrow MORNING explicitly rather than quietly starting at night.
+  var next=new Date(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day)+1,12));
+  return {date:next.toISOString().slice(0,10),time:'10:00',reason:'Suggested: next morning at 10:00 Eastern. Change this if you are already at the Falls.'};
+ }
+ var startMinutes=minutes<9*60?10*60:Math.ceil((minutes+60)/30)*30;
+ return {date,time:String(Math.floor(startMinutes/60)).padStart(2,'0')+':'+String(startMinutes%60).padStart(2,'0'),reason:'Suggested start time, at least an hour ahead. You can change both fields.'};
+}
+var t=suggestedVisitEastern();document.getElementById('date').value=t.date;document.getElementById('time').value=t.time;
+var visitDateNote=document.getElementById('visit-date-note');if(visitDateNote)visitDateNote.textContent=t.reason+' Published hours do not guarantee admission.';
 function emit(name,dimensions){try{
  var fields=Object.assign({page_id:'niagara-falls-today'},dimensions||{});
  if(typeof window.gtag==='function')window.gtag('event',name,fields);
@@ -46,7 +59,9 @@ function draw(r){
  var stops=r.stops||[],first=stops[0],currency=r.side==='US'?'USD':'CAD';
  var admission=r.costs[0],unknownPrices=!admission.prices_complete;
  var totalLabel=currency+' '+Number(admission.known_admission_total).toFixed(2)+(unknownPrices?' + unknown':'');
- var out='<div class="result-content"><div class="verdict"><span class="label">'+safe(r.confidence)+' CONFIDENCE · '+safe(r.status.replace(/_/g,' '))+'</span><h3>'+safe(r.verdict)+'</h3><p>Published schedules are not live opening confirmations. No invented queues, weather or border delays.</p></div>';
+ var boat=r.boat_resolution,sideLabel=r.side==='US'?'New York':'Ontario';
+ var heading=boat&&!boat.included?'Boat not possible for this selected window':boat&&boat.included?'The boat fits your published operating window':r.visit_style==='short'?'Two worthwhile views, no tickets needed':r.visit_style==='family'?'A gentler day at the Falls':first?'Start at '+first.name:'No verified itinerary fits this visit';
+ var out='<div class="result-content"><div class="verdict"><span class="label">'+safe(sideLabel)+' · '+safe(r.visit_local_date)+' · '+safe(r.arrival_local)+' Eastern</span><h3>'+safe(heading)+'</h3><p>'+safe(boat&&!boat.included?'The scenic route below is an alternative, not a boat reservation.':stops.length?'Your plan has '+stops.length+' stop'+(stops.length===1?'':'s')+' and a '+r.timeline.contingency_minutes+'-minute time margin.':'Choose another time or see the operator for current conditions.')+'</p></div>';
  if(r.visit_style==='short'){
   out+='<p class="quick-intent-confirmation"><strong>Two hours · viewpoints only.</strong> No paid attractions or ticket queues assumed. This remains on the selected side of the border.</p>';
  }else if(r.visit_style==='family'){
@@ -68,11 +83,19 @@ function draw(r){
   }
  }
  if(first)out+='<div class="first"><div><small>'+(r.boat_resolution&&!r.boat_resolution.included?'SCENIC BACKUP · NOT A BOAT':'YOUR FIRST ACTION')+'</small><b>'+safe(first.name)+'</b><small>Arrive approximately '+safe(first.arrival)+' Eastern · '+safe(r.visit_local_date)+'</small></div><a class="action" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(first.location)+'" target="_blank" rel="noopener">Open directions ↗</a></div>';
- out+='<div class="stats"><div class="stat"><strong>'+stops.length+'</strong><span>Planned stops</span></div><div class="stat"><strong>'+safe(r.timeline.contingency_minutes)+' min</strong><span>Time buffer</span></div><div class="stat"><strong>'+safe(totalLabel)+'</strong><span>'+(unknownPrices?'Known subtotal · more due':'Known admission subtotal')+'</span></div></div>';
+ if(r.wayfinding&&r.wayfinding.parking)out+='<div class="start-parking"><strong>Driving? Start at '+safe(r.wayfinding.parking.name)+'.</strong><span>'+safe(r.wayfinding.parking.address)+' · Allow roughly 20 minutes before your chosen sightseeing time for parking.</span><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r.wayfinding.parking.address)+'" target="_blank" rel="noopener noreferrer">Navigate to parking ↗</a></div>';
+ out+='<p class="route-map-jump"><a href="#wayfinding">See these stops on the map and open walking directions ↓</a></p>';
+ out+='<div class="compact-trip-facts"><span><strong>'+safe(r.timeline.estimated_walking_m)+' m</strong> estimated walking</span><span><strong>'+safe(r.timeline.contingency_minutes)+' min</strong> spare time</span><span><strong>'+(unknownPrices?'Prices incomplete':safe(totalLabel))+'</strong> known admission subtotal</span></div>';
  out+='<div class="sectitle">Your guided route · Eastern local time</div>'+guideIntro(r,stops);
- if(stops.length)stops.forEach(function(s,i){out+='<article class="stop"><div class="when">'+safe(s.arrival)+'–'+safe(s.departure)+' · stop '+(i+1)+'</div><h4>'+safe(s.name)+'</h4>'+stopStory(s,i?stops[i-1]:null,r)+'<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+safe(s.dwell_minutes)+' min conservative visit · '+(s.type==='paid'?'Paid admission':'Free viewpoint')+'</div><p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Last published ticket cutoff '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction information')+'</article>';});
+ if(stops.length)stops.forEach(function(s,i){
+  out+='<article class="stop compact-stop"><div class="when">STOP '+(i+1)+' · '+safe(s.arrival)+'–'+safe(s.departure)+'</div><h4>'+safe(s.name)+'</h4><p class="stop-summary">'+safe(s.description)+'</p>';
+  out+='<div class="meta">'+safe(s.transfer_minutes)+' min estimated transfer · '+(s.type==='paid'?'Ticketed':'Free viewpoint')+'</div>';
+  out+='<details class="stop-detail"><summary>What you’ll see, and what to check</summary>'+stopStory(s,i?stops[i-1]:null,r);
+  out+='<p><span class="flag">'+safe(s.schedule.status.replace(/_/g,' '))+'</span> '+safe(s.schedule.lastAdmission?'Published last admission '+s.schedule.lastAdmission:(s.schedule.open&&s.schedule.close?'Published hours '+s.schedule.open+'–'+s.schedule.close+'; confirm admission':'Check park access notices'))+'</p>'+link(s.official_url,'Official attraction details')+'</details></article>';
+ });
  else out+='<p>There is no safe confirmed stop for this request. Check official park advisories.</p>';
- out+=filmPreview(r,stops);
+ // The curated three-film player is below the route map; don't duplicate a fourth film in the itinerary.
+ out+='<details class="trip-verification"><summary>Published sources, costs and what cannot be verified</summary>';
  if(r.schedule_feed){
   var sf=r.schedule_feed;
   out+='<div class="caveat"><strong>Niagara Parks date-specific calendar:</strong> '+safe(sf.status.replace(/_/g,' '))+'. '+(sf.checked_at?'Published hours retrieved '+safe(new Date(sf.checked_at).toLocaleString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' Eastern. ':'No current source check available. ')+safe(sf.caveat||'')+' '+link(sf.source_url,'Official hours by date')+'</div>';
@@ -92,6 +115,7 @@ function draw(r){
  if(r.alternatives.length){out+='<details class="source-details"><summary>Other feasible sequences</summary><ul>';r.alternatives.forEach(function(a){out+='<li>'+safe(a.label)+'</li>';});out+='</ul></details>';}
  out+='<details class="source-details"><summary>Published source status and limitations</summary><p>'+safe(r.what_changed)+'</p><ul>';r.source_health.forEach(function(x){out+='<li>'+safe(x.entity_id)+' — '+safe(x.status)+': '+safe(x.basis)+' ('+safe(x.reviewed)+') '+link(x.source,'operator')+'</li>';});out+='</ul></details>';
  if(r.visit_local_date==='2026-10-12'&&stops.length){out+='<p class="caveat">Tonight: Niagara Parks schedules a 10:00 p.m. fireworks show, <strong>weather permitting</strong>. It is not a verified live event. '+link('https://www.niagaraparks.com/events/event/niagara-falls-fireworks-series','Official fireworks details')+'</p>';}
+ out+='</details>';
  out+='<div class="small-links">'+link(r.links_to_official.border,'Bridge status')+link(r.links_to_official.rainbow,'Rainbow timing')+link(r.side==='US'?r.links_to_official.us:r.links_to_official.ca,'Official operating updates')+'</div></div>';
  body.innerHTML=out;body.setAttribute('aria-busy','false');
  var nextButton=body.querySelector('[data-boat-next-date]');
@@ -113,7 +137,7 @@ function draw(r){
  bindGuideVideo();updateSideGuide(r);
  emit(r.boat_resolution&&!r.boat_resolution.included?'niagara_boat_not_feasible':stops.length?'niagara_plan_success':'niagara_plan_no_feasible',{intent:r.priority,side:r.side,stops:stops.length,boat_included:Boolean(r.boat_resolution&&r.boat_resolution.included)});
 }
-async function submit(ev){if(ev)ev.preventDefault();var thisRequest=++requestSeq;button.disabled=true;body.setAttribute('aria-busy','true');
+async function submit(ev){if(ev)ev.preventDefault();hasPlanned=true;var thisRequest=++requestSeq;button.disabled=true;body.setAttribute('aria-busy','true');
  var intentLabel=activePreset==='short'?'Finding scenic stops that fit two hours':activePreset==='family'?'Building a family-paced plan':activePreset==='boat'?'Checking boat operating hours and arrival time':'Checking your requested experience';
  status.textContent=intentLabel+'…';
  body.innerHTML='<div class="result-content"><div class="quick-loading" role="status"><strong>'+safe(intentLabel)+'…</strong><p>Checking your date and the requested side. No tickets or live queue positions are assumed.</p></div></div>';
@@ -163,8 +187,9 @@ form.addEventListener('change',function(e){if(e.target&&e.target.name){
   document.querySelectorAll('[data-niagara-preset]').forEach(function(b){b.setAttribute('aria-pressed','false');});
   var note=document.getElementById('quick-start-note');if(note)note.textContent='';
  }
- emit('niagara_replan');submit();
+ emit('niagara_replan');if(hasPlanned)submit();
 }});
 var hero=document.querySelector('.hero-photo'),img=hero&&hero.querySelector('img');if(img){img.addEventListener('error',function(){hero.classList.add('is-missing');});if(img.complete&&img.naturalWidth===0)hero.classList.add('is-missing');}
-emit('niagara_planner_view');submit();
+emit('niagara_planner_view');
+body.setAttribute('aria-busy','false');status.textContent='Choose your date, side and experience to see a route.';
 })();
