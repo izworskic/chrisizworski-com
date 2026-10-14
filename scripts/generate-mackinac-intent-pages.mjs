@@ -138,7 +138,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 function pageHtml(p){
   const canonical="https://chrisizworski.com/mackinac-island/"+p.slug+"/";
   if(p.slug==="ferry-planner"){
-    p.title="Mackinac Island Ferry Tickets, Prices, Parking & Kids Fares (2026)";
+    p.title="Mackinac Island Ferry Prices & Kids Fares";
     p.description="Compare 2026 Shepler’s and Arnold Mackinac Island ferry ticket prices, kids fares, military discounts, parking, bikes, pets, ports and official booking links.";
     p.h1="Mackinac Island ferry tickets, family prices and parking";
     p.lede="Pick your travel date and compare Shepler’s with Arnold Transit. See kids’ ticket prices, military rates, parking, bikes and the right ferry dock, then buy directly from the operator.";
