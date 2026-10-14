@@ -16,6 +16,11 @@ Grand Haven pages in a real browser at 390x844 and 1280x800 and computes
 | .10 | stability | layout shift after data loads; nothing injected by a third party in the first 1.2 screens |
 | .08 | degraded | with no reading and no forecast the hero stays short and still says why |
 
+Pages scored: Great Lakes, Lake Michigan, Traverse City, Grand Haven. On the two lake pages, which have no beach
+forecast, forecastReach scores a visible path to the beach pages instead. The Great Lakes page answers with five
+numbers, so there each must be at least 28 px (phone) / 44 px (desktop) and they must be the largest type on screen,
+instead of one number dominating at 56 / 72 px. Added Oct 14 after the hub pages regressed unmeasured.
+
 Hard gates (a failure caps V at 0.5): source and time visible on the first screen; the "not a beach thermometer"
 caveat is in the page; any forecast shows a range; no sideways scroll at 320 px.
 

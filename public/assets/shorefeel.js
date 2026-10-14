@@ -106,6 +106,22 @@ function renderLakes(){
  if(status)status.textContent='NOAA GLERL lakewide analysis: '+(l?l.date:'unavailable')+'. '+(selected.status==='recent'?'Recent surface average; not a beach measurement.':'Latest lakewide data is unavailable or stale; no current value shown.');
  for(const [name,v] of Object.entries(payload.lakes||{})){
   const el=get('lake-'+name);if(el)el.textContent=v.status==='recent'?format(v.latest?.tempF):'Unavailable';
+  // Great Lakes hub tiles: whole number, band word, tile coloured by band.
+  const ok=v.status==='recent'&&Number.isFinite(v.latest?.tempF);
+  document.querySelectorAll('[data-lake-temp="'+name+'"]').forEach(n=>{n.textContent=ok?Math.round(v.latest.tempF)+'\u00b0':'\u2013';n.setAttribute('aria-label',ok?Math.round(v.latest.tempF)+' degrees Fahrenheit':'no reading');});
+  document.querySelectorAll('[data-lake-band="'+name+'"]').forEach(n=>n.textContent=ok?(bandOf(v.latest.tempF).key==='shock'?'Cold shock':bandOf(v.latest.tempF).name):'No reading');
+  document.querySelectorAll('[data-lake-tile="'+name+'"]').forEach(n=>n.dataset.band=ok?bandOf(v.latest.tempF).key:'none');
+ }
+ const dates=Object.values(payload.lakes||{}).filter(v=>v.status==='recent'&&v.latest).map(v=>v.latest.date).sort();
+ write('hub-when',dates.length?'NOAA GLERL satellite analysis · '+day(dates[dates.length-1]):'No current NOAA lakewide report. Nothing has been estimated.');
+ // Lake Michigan hub: the lakewide number is the lead, labelled as an average, never a beach reading.
+ const box=get('lead-answer');
+ if(box&&box.dataset.scope==='lake'){
+  const ok=selected.status==='recent'&&Number.isFinite(l?.tempF);
+  write('lead-temp',ok?format(l.tempF):'No current reading');
+  write('lead-temp-label','Whole-lake average'+(normal?', '+(normal.deltaF>=0?'+':'')+normal.deltaF.toFixed(1)+'\u00b0F vs normal for the date':''));
+  write('lead-temp-when',ok?'NOAA GLERL satellite analysis · '+day(l.date):'No current NOAA lakewide report. Nothing has been estimated.');
+  setMarker(ok?l.tempF:NaN);
  }
 }
 function applyActivity(a){
