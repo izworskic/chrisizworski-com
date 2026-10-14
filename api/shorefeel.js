@@ -2,6 +2,8 @@
 // Shared free NOAA lakewide analysis + NOAA satellite grid pixels + NDBC buoys + NWS shoreline weather.
 // No paid API, cron, Redis, geographic interpolation, or AI-generated weather judgments.
 const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,parseGLSEACsv,parseLongTermAverage,parseGLSEAGridCsv,lakeSeries,parseNDBC,waterEvidence,weatherPeriods,nowPeriod,comfort,bestWeatherWindow}=require('../lib/shorefeel/engine.js');
+const BF=require('../lib/shorefeel/beach-forecast.js');
+const BACKTEST=require('../data/shorefeel/backtest-2026-10.json');
 const {observations:NOAA_SNAPSHOT}=require('../data/shorefeel/last-verified-noaa-glsea.json');
 const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt&Year%3E%3D2026';
 const LT_AVG='https://apps.glerl.noaa.gov/erddap/tabledap/glerlLTAvgTemp.csv?lake%2CdayOfYear%2Ctemperature&dayOfYear=';
@@ -33,6 +35,53 @@ async function weatherFor(place){
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
   return weatherPeriods(response?.properties?.periods||[]);
+}
+
+/* Beach-water forecast: measured level (satellite pixel / buoy) + NOAA lake-model change.
+   Every model read is isolated: any failure leaves that part null and the page says so. */
+async function modelBox(cycle,hour,box,ms=3200){
+  return BF.parseBox(await textResponse(cycle.url(hour)+BF.boxQuery(box),ms),box);
+}
+async function buildBeachForecast(placeKey,cells,now){
+  const beaches=BF.BEACHES[placeKey]||[];
+  if(!beaches.length)return null;
+  const box=BF.boxFor(beaches.flatMap(b=>[b.cell,b.ref]));
+  const hoursSince=(cycle,t)=>Math.round((t.getTime()-cycle.time.getTime())/3600000);
+  // Newest model cycle that has actually been published.
+  let cycle=null,nowGrid=null;
+  for(const c of BF.cycleCandidates(now,3)){
+    try{const g=await modelBox(c,hoursSince(c,now),box,2500);if(Object.keys(g).length){cycle=c;nowGrid=g;break;}}catch{}
+  }
+  if(!cycle)return {status:'unavailable',reason:'NOAA lake model cycle not available'};
+  const targets=BF.LEADS.map(lead=>({leadH:lead,when:new Date(now.getTime()+lead*3600000)}));
+  const leadGrids=await Promise.allSettled(targets.map(t=>t.leadH===0?Promise.resolve(nowGrid):modelBox(cycle,hoursSince(cycle,t.when),box)));
+  const leads=targets.map((t,k)=>({leadH:t.leadH,startsAt:new Date(cycle.time.getTime()+hoursSince(cycle,t.when)*3600000).toISOString(),
+    grid:leadGrids[k].status==='fulfilled'?leadGrids[k].value:null})).filter(l=>l.grid&&Object.keys(l.grid).length);
+  // The model's state when the level was observed, so change is measured from the right moment.
+  const refCache=new Map();
+  const refFor=async iso=>{
+    if(!refCache.has(iso)){
+      refCache.set(iso,(async()=>{try{const c=BF.cycleFor(new Date(iso));return await modelBox(c,c.hour,box,3000);}catch{return null;}})());
+    }
+    return refCache.get(iso);
+  };
+  const out=[];
+  for(const b of beaches){
+    const m=cells?.[b.satKey];
+    if(!m||!Number.isFinite(m.tempF))continue;
+    const level={kind:'satellite',tempF:m.tempF,observedAt:m.observedAt};
+    const f=BF.beachForecast(b,level,await refFor(m.observedAt),leads);
+    if(f)out.push(f);
+  }
+  if(!out.length)return {status:'unavailable',reason:'No beach had both a recent measured level and a model reference',cycle:cycle.time.toISOString()};
+  return {status:'available',cycle:cycle.time.toISOString(),beaches:out,
+    source:{name:'NOAA Lake Michigan-Huron Operational Forecast System (LMHOFS)',url:'https://tidesandcurrents.noaa.gov/ofs/lmhofs/lmhofs.html'},
+    method:'Measured level (NOAA satellite pixel) plus the lake model\'s own forecast change. The model\'s absolute temperature is not used: it ran about 3.8°F off buoys.',
+    validation:{period:BACKTEST.period,n24h:BACKTEST.leadResults['24h'].n,
+      errorNowF:BACKTEST.satelliteVsBuoyMAE_F,error24hF:BACKTEST.leadResults['24h'].persistencePlusModelChangeMAE_F,error48hF:BACKTEST.leadResults['48h'].persistencePlusModelChangeMAE_F,
+      coolingWatch:{caughtRealDrops:BACKTEST.coolingWatch.caught,of:BACKTEST.coolingWatch.realDrops3F,precisionPct:BACKTEST.coolingWatch.precisionPct},
+      caveats:BACKTEST.caveats},
+    caveat:'A forecast of the water surface near the beach with an honest range, not a measurement and not swim safety. Shore-side thermometers have not yet been used to check it.'};
 }
 function dayOfYear(dateStr){
   const d=new Date(dateStr+'T00:00:00Z');
@@ -80,23 +129,27 @@ module.exports=async function handler(req,res){
   }
   const lakes=Object.fromEntries(Object.keys(LAKES).map(l=>[l,lakeSeries(rows,l,now)]));
 
-  // Long-term normal for the latest analysis date, so "62°F" has a reference point.
-  let normal=null;
+  // Destination water first: the beach forecast needs the satellite cells.
+  const cells=place&&grid.status==='fulfilled'?parseGLSEAGridCsv(grid.value,place.cells,now):null;
+  // Long-term normal and the beach forecast are independent; run them together.
   const latestDate=lakes[requested]?.latest?.date;
-  if(latestDate){
-    try{
-      const lt=parseLongTermAverage(await textResponse(LT_AVG+dayOfYear(latestDate),3000));
-      if(Number.isFinite(lt[requested])){
-        normal={date:latestDate,tempF:lt[requested],deltaF:Math.round((lakes[requested].latest.tempF-lt[requested])*10)/10,
-          source:'NOAA GLERL long-term daily average surface temperature',url:'https://apps.glerl.noaa.gov/erddap/tabledap/glerlLTAvgTemp.html'};
-      }
-    }catch{normal=null;}
+  const [ltRes,bfRes]=await Promise.allSettled([
+    latestDate?textResponse(LT_AVG+dayOfYear(latestDate),3000):Promise.resolve(null),
+    place?buildBeachForecast(placeKey,cells,now):Promise.resolve(null)
+  ]);
+  let normal=null;
+  if(latestDate&&ltRes.status==='fulfilled'&&ltRes.value){
+    const lt=parseLongTermAverage(ltRes.value);
+    if(Number.isFinite(lt[requested])){
+      normal={date:latestDate,tempF:lt[requested],deltaF:Math.round((lakes[requested].latest.tempF-lt[requested])*10)/10,
+        source:'NOAA GLERL long-term daily average surface temperature',url:'https://apps.glerl.noaa.gov/erddap/tabledap/glerlLTAvgTemp.html'};
+    }
   }
+  const beachForecast=bfRes.status==='fulfilled'?bfRes.value:place?{status:'unavailable',reason:'forecast error'}:null;
 
   // Destination water: buoy (6 h) > nearest valid satellite pixel (3 days) > nothing.
   const buoyStatus=!place?null:nearby.status==='fulfilled'?'reporting':nearby.reason?.status===404?'offline':'unavailable';
   const nearest=place&&nearby.status==='fulfilled'?parseNDBC(nearby.value,now):null;
-  const cells=place&&grid.status==='fulfilled'?parseGLSEAGridCsv(grid.value,place.cells,now):null;
   const water=place?waterEvidence(place,nearest,cells):null;
   const periods=forecast.status==='fulfilled'?forecast.value:[];
   const current=nowPeriod(periods,now);
@@ -118,7 +171,7 @@ module.exports=async function handler(req,res){
   return res.status(200).json({
     product:'ShoreFeel',generatedAt:now.toISOString(),
     source:{name:'NOAA GLERL GLSEA 3',url:analysisUrl,mode:analysisMode,method:'Daily satellite-derived whole-lake surface mean; some pixels may use historical nearby passes or smoothing.'},
-    lake:requested,lakes,normal,
+    lake:requested,lakes,normal,beachForecast,
     water:water?{...water,beach:place.beach.name}:null,
     local,regionalSatellite:satellite,weatherNow:current,assessments,
     weatherWindow:windows?.relax||null,weatherWindows:windows,

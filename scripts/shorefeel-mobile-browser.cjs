@@ -20,6 +20,14 @@ const assessments=Object.fromEntries(activities.map(a=>[a,{
  water:'An offshore buoy observation is not the beach water temperature.',
  after:'Wet skin cools quickly in wind.',decision:'Check official beach safety information separately.',state:'contextual'
 }]));
+function bf(){
+ const pt=(h,t,c)=>({leadH:h,tempF:t,low:Math.round(t-2),high:Math.round(t+2),changeF:c,shallowF:0});
+ return {status:'available',cycle:'2026-10-13T12:00:00.000Z',source:{name:'NOAA LMHOFS'},
+  method:'Measured level plus model change.',caveat:'A forecast with a range, not a measurement.',
+  validation:{error24hF:1.3,error48hF:1.9,caveats:['Six weeks of testing.']},
+  beaches:[{key:'t',name:'Test beach',levelKind:'satellite',levelTempF:58.7,levelObservedAt:'2026-10-12T12:00:00.000Z',now:pt(0,60,0),
+   points:[pt(0,60,0),pt(6,60,0),pt(24,57,-3),pt(48,58,-2)],cooling:{tier:'watch',deltaF:-3,text:'Cooling watch. Test.'},shallowApplied:false}]};
+}
 function fixture(url){
  const place=url.searchParams.get('place');
  return JSON.stringify({product:'ShoreFeel',lake:'michigan',lakes,local:place?{
@@ -32,6 +40,7 @@ function fixture(url){
  water:place==='grand-haven'?{kind:'buoy',tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z',label:'Test offshore buoy 45029',where:'Lake Michigan off Grand Haven',caveat:'A buoy reading is the water at the buoy, not the shallow water at the beach.'}:null,
  regionalSatellite:place?{status:'unavailable',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay',measurement:null}]}:null,
  normal:{date:'2026-10-12',tempF:57.1,deltaF:5},
+ beachForecast:place==='grand-haven'?bf():place?{status:'unavailable',reason:'test'}:null,
  weatherNow:place?{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}:null,
  assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
 }
@@ -94,6 +103,13 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
+     if(key==='traverse'){assert.equal(await page.locator('#beach-forecast').isVisible(),false,'unavailable forecast must hide the whole block');}
+     else{
+      assert.equal(await page.locator('#beach-forecast').isVisible(),true);
+      assert.match(await page.locator('#bf-body').textContent(),/Test beach/);
+      assert.match(await page.locator('#bf-body').textContent(),/Cooling watch/);
+      assert.match(await page.locator('#bf-method').textContent(),/not a measurement/);
+     }
      assert.match(await page.locator('#local-source').textContent(),key==='traverse'?/No buoy observation/:/Buoy 45029 · /);
      if(key==='traverse'){
       // No buoy and no valid bay pixel: the headline says so. The whole-lake mean is

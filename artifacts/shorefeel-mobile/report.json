@@ -1,0 +1,202 @@
+{
+  "tested": "2026-10-14T01:59:39.256Z",
+  "cases": [
+    {
+      "page": "hub",
+      "width": 320,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 320,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 320,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 320,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 375,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 375,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 375,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 375,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 390,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 390,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 390,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 390,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 768,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 768,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 768,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 768,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 1024,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 1024,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 1024,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 1024,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 1280,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 1280,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 1280,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 1280,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "hub",
+      "width": 1440,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "lake",
+      "width": 1440,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "not applicable"
+    },
+    {
+      "page": "grand",
+      "width": 1440,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    },
+    {
+      "page": "traverse",
+      "width": 1440,
+      "overflow": false,
+      "photoRendered": true,
+      "interaction": "passed"
+    }
+  ],
+  "upstreamUnavailable": "passed"
+}
