@@ -101,9 +101,48 @@
     results.innerHTML='<div class="ferry-summary"><h3>Your ferry comparison</h3><p>Ranked '+(val.priority==="price"?"by published base cost":val.priority==="classic"?"for the classic boat experience, then by gateway and cost":"for the mainland gateway on your side of the bridge, then by cost")+'. Prices are for a round trip; the return must be checked for your date. No departure is reserved here.</p></div>'
       +'<div class="ferry-options">'+top.map((o,i)=>card(o,i,val.pets)).join("")+'</div>'
       +(extra.length?'<details class="ferry-more"><summary>Show '+extra.length+' more ferry and port alternatives</summary><div class="ferry-options">'+extra.map((o,i)=>card(o,i+3,val.pets)).join("")+'</div></details>':"")
+      +'<div class="ferry-service"><button type="button" class="ferry-schedule-button" id="ferry-load-schedule">Show published departures, return options &amp; marine conditions</button><div id="ferry-service-data" class="ferry-service-data" aria-live="polite"></div></div>'
       +'<p class="ferry-disclaimer">*The estimate includes Shepler’s $2 fee for all required boarding tickets, including free young-child tickets. Arnold posts “all tickets subject to booking fee” without a flat amount. Prices exclude Mackinac Bridge tolls, lodging, transportation to the port, Island bike rental and any applicable nonstandard luggage charges. Overnight parking is estimated by billed nights; confirm cutoff times. Standard ferry tickets do not guarantee a seat on a specific departure.</p>';
     try{if(typeof root.gtag==="function")root.gtag("event","mackinac_ferry_quote",{event_category:"mackinac_ferry",traveler_count:Number(val.adults)+Number(val.kids)+Number(val.infants)+Number(val.age4),has_kids:Number(val.kids)+Number(val.infants)+Number(val.age4)>0,has_bikes:Number(val.bikes)>0,has_military_rate:val.military});}catch(e){}
   }
+
+  // On-demand only: the existing Mackinac API performs marine/schedule source checks.
+  // Do not call it on every control change; that needlessly raises serverless cost.
+  let activeRequest=0;
+  results.addEventListener("click",async function(event){
+    if(!event.target.closest("#ferry-load-schedule"))return;
+    const val=input(),service=el("ferry-service-data"),button=el("ferry-load-schedule");
+    if(!service||!button)return;
+    const requestId=++activeRequest;
+    const params=new URLSearchParams({trip_date:val.date,trip:val.trip==="day"?"day-trip":"overnight",go:"foot",who:"couple",depart_not_before:"06:00"});
+    if(val.trip==="overnight")params.set("nights",String(whole(val.nights,1,14)));
+    service.textContent="Checking the existing Mackinac ferry timetable and Straits sources…";
+    button.disabled=true;
+    try{
+      const response=await fetch("/api/mackinac-island?"+params.toString(),{headers:{accept:"application/json"}});
+      if(!response.ok)throw new Error("Timetable temporarily unavailable");
+      const data=await response.json();
+      if(requestId!==activeRequest||service!==el("ferry-service-data"))return;
+      const records=Array.isArray(data.ferry?.records)?data.ferry.records:[];
+      if(!records.length){service.textContent="This timetable could not verify departures for the chosen trip date. Use the operator schedule links on each result.";return;}
+      const target=compare(val).options.slice(0,3);
+      const sections=target.map(o=>{
+        const type=o.id==="sheplers"?"shepler":"arnold";
+        const to=records.filter(row=>row.direction==="to-island"&&row.origin_port===o.title&&(row.operator||"").toLowerCase().includes(type));
+        const back=records.filter(row=>row.direction==="from-island"&&row.destination_port===o.title&&(row.operator||"").toLowerCase().includes(type));
+        if(!to.length)return '<div class="ferry-schedule-row"><strong>'+escape(o.r.name+' · '+o.title)+'</strong><span>No published departures found for this provider and date. Check the operator.</span></div>';
+        return '<div class="ferry-schedule-row"><strong>'+escape(o.r.name+' · '+o.title)+'</strong><span><b>To the Island:</b> '+to.slice(0,8).map(x=>escape(x.departure_time||"")).join(" · ")+(to.length>8?" …":"")+'</span><span><b>Return:</b> '+(val.trip==="day"?(back.length?back.slice(-6).map(x=>escape(x.departure_time||"")).join(" · "):"Check official operator schedule"):"Different date: see operator’s return-day timetable")+'</span></div>';
+      }).join("");
+      let weather="";
+      // Observations describe conditions now, not on a future trip; don't mislabel them.
+      const marine=data.marine;
+      if(marine?.available){
+        weather='<p><strong>Current Straits conditions (not a sailing clearance):</strong> '+escape(marine.comfort_label||"Marine conditions available")+' · '+escape(marine.comfort_note||"")+'</p>';
+      }else weather='<p>Marine observations are currently unavailable. Check operator alerts and the <a href="https://marine.weather.gov/MapClick.php?zoneid=LHZ345" target="_blank" rel="noopener">NWS marine forecast ↗</a>.</p>';
+      service.innerHTML='<h4>Published 2026 timetable options for '+escape(val.date)+'</h4>'+sections+weather+'<p class="ferry-service-truth">Times are published schedule records, not live boat positions or confirmed operations. Weather may change sailings; check operator notices and confirm return departures before purchasing.</p>';
+    }catch(err){if(requestId===activeRequest&&service===el("ferry-service-data"))service.textContent="Schedule lookup unavailable. Please use the official schedule links for your operator.";}
+    finally{if(requestId===activeRequest&&button.isConnected)button.disabled=false;}
+  });
   form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
   form.addEventListener("change",render);
   const existing=(()=>{try{return JSON.parse(localStorage.getItem("mackinac-trip-plan-v1")||"{}").plan||null;}catch(e){return null}})();
