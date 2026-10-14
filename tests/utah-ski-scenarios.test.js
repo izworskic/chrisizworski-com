@@ -72,7 +72,7 @@ const pcases=[
  ['Brighton noon switch','brighton','2027-01-09',12,2,'NO_RESERVATION_REQUIRED'],
  ['Solitude 11am switch','solitude','2027-01-09',11,2,'NO_RESERVATION_REQUIRED'],
  ['Solitude holiday requires booking','solitude','2027-01-18',9,2,'RESERVATION_REQUIRED'],
- ['Snowbird no reservation required','snowbird','2027-01-09',9,2,'NO_RESERVATION_REQUIRED']
+ ['Snowbird mixed first-come and reservation-only lot options','snowbird','2027-01-09',9,2,'PARKING_OPTIONS_UNVERIFIED']
 ];
 for(const [name,resort,date,hour,passengers,want] of pcases){
  test('parking: '+name,()=>assert.equal(park(resort,date,hour,passengers).status,want));
@@ -86,7 +86,7 @@ test('parking: four occupants still need Solitude reservation despite free carpo
  assert.equal(r.status,'RESERVATION_REQUIRED');assert.equal(r.publishedStandardPriceUSD,0);
 });
 test('parking: no published reservation rule is NOT a claim that a parking space is vacant',()=>{
- assert.equal(park('snowbird','2027-01-09').reason,'FIRST_COME_PARKING_NOT_GUARANTEED');
+ assert.equal(park('snowbird','2027-01-09').reason,'FREE_FIRST_COME_AND_RESERVED_SPECIFIC_LOTS_2026_27');
 });
 const ad=(resort,date,pass,used={})=>admission({resort,date,pass,...used});
 const acases=[
