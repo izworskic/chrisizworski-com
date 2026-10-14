@@ -35,5 +35,18 @@ test('Utah ski illustration is an optimized binary image asset, not an inline di
  assert.ok(image.length>50000&&image.length<350000,'Map is a readable, reasonably sized WebP');
  assert.doesNotMatch(html,/<figure class="corridor"[^>]*><svg/);
  assert.match(html,/loading="eager"/);
+ assert.match(html,/class="canyon-map-zoom"/);
+ assert.match(html,/class="intro-copy"/);
+ assert.match(html,/Tap the map to view it larger/);
+
  assert.match(html,/not exact road alignment or live closures/);
+});
+
+test('Utah intro image fits tablet and desktop without cropping or scrolling',()=>{
+ const css=fs.readFileSync('public/assets/utah-ski-access.css','utf8');
+ assert.match(css,/@media\(min-width:960px\)/);
+ assert.match(css,/grid-template-columns:minmax\(0,1fr\) minmax\(0,1\.07fr\)/);
+ assert.match(css,/object-fit:contain/);
+ assert.match(css,/max-width:100%/);
+ assert.match(html,/target="_blank" rel="noopener noreferrer" aria-label="Open full-sized illustrated map/);
 });
