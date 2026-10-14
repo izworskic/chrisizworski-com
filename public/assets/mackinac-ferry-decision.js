@@ -77,7 +77,8 @@
     const priceLabel=o.priceUncertain?"Possible 2026 fare range":o.fees===null?"Base subtotal":"Estimated total";
     const displayPrice=o.priceUncertain?(dollar(o.minSubtotal+(o.fees||0))+"–"+dollar(o.total)):dollar(o.total);
     const proof=o.eligible?"<p class=\"ferry-verify\">Military pricing assumes every paid passenger qualifies. Bring military ID; purchase at the operator's ticket booth. Arnold's discount eligibility for non-service members needs confirmation.</p>":"";
-    const infant=o.infants?'<p class="ferry-verify">'+o.infants+' child(ren) ages 0–4: $0 fare. Obtain required free boarding ticket(s). Shepler’s per-ticket fee treatment for free tickets must be confirmed.</p>':"";
+    const infant=o.infants||o.age4?'<p class="ferry-verify">'+(o.infants?o.infants+' child(ren) aged 0–3: no base fare. ':'')+(o.age4?o.age4+' four-year-old(s): free on Shepler’s, unclear on Arnold; verify Arnold’s ticket price. ':'')+'Each passenger needs a boarding ticket. The Shepler’s estimate applies the listed $2 fee to every boarding ticket, including no-fare young children.</p>':"";
+    const mismatch=o.priceUncertain?'<p class="ferry-verify"><strong>Price needs operator verification:</strong> Arnold’s Classic page says ages 5–12 are free, while its 2026 general rates page lists $19. Its published under-four wording also conflicts with other operator notices. Price shown as a conservative range.</p>':"";
     return '<article class="ferry-option'+(index===0?' best':'')+'"><div class="ferry-option-top"><div><div class="ferry-option-kicker">'+(index===0?'Recommended option':'Alternative')+' · '+escape(o.title)+'</div><h3>'+opt+'</h3><p>'+ (o.id==="classic"?"Historic-feeling boat · about 30–40 minutes": "Fast crossing · approximately 20 minutes")+'</p></div><div class="ferry-total"><span>'+priceLabel+'</span><strong>'+displayPrice+'</strong>'+(o.fees===null?'<small>plus unknown booking fee</small>':'<small>2026 round trip + parking</small>')+'</div></div><div class="ferry-costs">'
       +row(o.adults+' adults/teens + '+o.kids+' kids 5–12 + '+o.age4+' age four',o.priceUncertain?dollar(o.passengerMin)+"–"+dollar(o.passenger):dollar(o.passenger))
       +(o.bikes?row(o.bikes+' standard bike(s)',dollar(o.bikeCost)):"")
@@ -85,7 +86,7 @@
       +fees+'</div><div class="ferry-route"><p><strong>Ferry check-in:</strong> '+dock+' <a href="'+maps(o.dock)+'" target="_blank" rel="noopener">Dock directions ↗</a></p>'
       +park+'<p><strong>Arrive:</strong> allow at least '+o.r.minutes+' minutes before your target departure. '+(o.id==="sheplers"?"Shepler's tickets may be purchased online; parking is paid on arrival.":"Arnold tickets can be bought online; military fares require an in-person purchase.")+'</p>'
       +(pets?'<p><strong>Pet:</strong> '+(o.id==="sheplers"?"Leashed pets travel free; keep them at your feet.":"Confirm the current pet and carrier rules with Arnold before travel.")+'</p>':"")
-      +infant+proof+'</div><div class="ferry-actions"><a class="ferry-buy" href="'+o.r.book+'" target="_blank" rel="noopener">Buy on official site ↗</a><a href="'+o.r.schedule+'" target="_blank" rel="noopener">Check departure + return times ↗</a><a href="'+o.r.park+'" target="_blank" rel="noopener">Parking details ↗</a></div></article>';
+      +infant+mismatch+proof+'</div><div class="ferry-actions"><a class="ferry-buy" href="'+o.r.book+'" target="_blank" rel="noopener">Buy on official site ↗</a><a href="'+o.r.schedule+'" target="_blank" rel="noopener">Check departure + return times ↗</a><a href="'+o.r.park+'" target="_blank" rel="noopener">Parking details ↗</a></div></article>';
   }
   function render(){
     const val=input();
