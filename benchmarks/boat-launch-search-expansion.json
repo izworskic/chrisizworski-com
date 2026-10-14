@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "updated": "2026-10-07",
+  "updated": "2026-10-14",
   "id": "boat-launch-search-expansion-2026-08-22",
   "surface": "https://chrisizworski.com/michigan-boat-launches/",
   "status": "ship-and-observe",
-  "strategy": "Expand crawlable, manually reviewed source guidance and internal authority while keeping the current title, meta description, H1, canonical and dynamic statewide finder stable.",
+  "strategy": "Query-led CTR improvement on the existing statewide canonical: near-me public ramp search, DNR source truth, opt-in client-only geolocation and unchanged finder.",
   "evidence": {
     "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
     "exportedThrough": "2026-08-19",
@@ -50,7 +50,7 @@
     "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
   },
   "treatment": {
-    "snippetFrozen": true,
+    "snippetFrozen": false,
     "requiredDiscoveryLinks": [
       "#launch-app",
       "/michigan-boat-launches/saginaw-bay/",
@@ -67,17 +67,37 @@
       "boat launch near you",
       "Michigan DNR boat launch map",
       "Near-me privacy"
+    ],
+    "expectedSearchTreatment": {
+      "title": "Michigan Boat Launch Map: Ramps Near Me | Chris Izworski",
+      "description": "Find Michigan boat launches near you on a DNR-backed map. Use your location or search a city, lake or river; compare ramps, parking and directions.",
+      "h1": "Michigan boat launches near me: DNR-backed ramp map",
+      "ogTitle": "Michigan Boat Launch Map: Find Ramps Near Me"
+    },
+    "intentFocus": [
+      "boat launch near me",
+      "mi dnr boat launch map",
+      "boat ramps near me"
+    ],
+    "changeGuardrails": [
+      "No duplicate near-me canonical",
+      "Opt-in ephemeral in-browser geolocation",
+      "No claim of Michigan DNR sponsorship",
+      "No invented ramp status, fee or water safety"
     ]
   },
   "measurement": {
     "primaryWindowDays": 28,
     "primaryMetrics": [
       "page impressions",
-      "query diversity",
-      "average position"
+      "page CTR",
+      "page clicks",
+      "near-me & DNR query CTR",
+      "average position",
+      "finder engagement"
     ],
     "leadingBaseline": "77 impressions / 0 clicks / position 13.17 over the latest 7 complete days",
-    "successRule": "Look for materially higher impressions and a broader non-duplicate query footprint while average position holds or improves. Do not attribute normal seasonal change to the treatment without a comparable baseline.",
+    "successRule": "Compare complete 28-day pre/post periods after indexing, segment near-me and DNR-map queries, seek better qualified CTR and clicks without sacrificing position, data truth or engagement. No claimed or guaranteed lift.",
     "positionGuardrail": 18,
     "baselineWindowDays": 7,
     "normalizedPrimaryMetric": "average daily page impressions",
@@ -85,26 +105,45 @@
     "comparisonRule": "Compare average daily impressions, not raw 7-day versus 28-day totals; treat seasonal demand as context and preserve the position guardrail."
   },
   "protected": [
-    "title",
-    "metaDescription",
-    "h1",
     "canonical",
     "finderBehavior",
-    "sourceTruth"
+    "sourceTruth",
+    "nearMeLocationPrivacy",
+    "discoveryLinks"
   ],
-  "releaseDateModified": "2026-10-07",
-  "latestMaintenance": "2026-10-07: replace the broken Michigan Outdoors navigation target with the registered live tool. Preserve the title, description, H1, canonical, and finder behavior; align the freshness pin with the actual maintenance date.",
+  "releaseDateModified": "2026-10-14",
+  "latestMaintenance": "2026-10-14: query-led CTR treatment while keeping canonical and finder stable; breakout enhancement preserves source-owned meta and existing opt-in location behavior.",
   "releaseDateModifiedNote": "The dateModified the treated surface must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment stamp-freshness told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running. Same fix as benchmarks/beach-detail-page-one-ctr.json.",
   "latestObserved": {
-    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
-    "exportedThrough": "2026-09-17",
-    "windowDays": 7,
+    "source": "Connected Google Search Console chrisizworski.com (page dimension)",
+    "exportedThrough": "2026-10-11",
+    "windowDays": 30,
     "page": {
-      "impressions": 819,
-      "clicks": 3,
-      "ctr": 0.003663003663003663,
-      "averagePosition": 8.526251526251526
+      "impressions": 1982,
+      "clicks": 11,
+      "ctr": 0.0055,
+      "averagePosition": 8.9591
     },
-    "changeFromLeadingBaseline": "Weekly impressions increased from 77 to 819 while average position improved from 13.17 to 8.53. Treat seasonality as context; preserve the canonical parent and deepen useful publisher content rather than cloning query variants."
+    "querySignals": [
+      {
+        "query": "boat launch near me",
+        "impressions": 72,
+        "clicks": 1,
+        "position": 6.9306
+      },
+      {
+        "query": "mi dnr boat launch map",
+        "impressions": 30,
+        "clicks": 0,
+        "position": 7.0333
+      },
+      {
+        "query": "boat ramps near me",
+        "impressions": 16,
+        "clicks": 0,
+        "position": 7.6875
+      }
+    ],
+    "caution": "Privacy-filtered query data is not exhaustive and must not be summed to match page totals. No post-change impact yet."
   }
 }
