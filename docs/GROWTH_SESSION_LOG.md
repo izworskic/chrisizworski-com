@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Michigan Ski Hills 2026–27 — October 14, 2026
+
+- **Requested scope:** Inventory Utah tool before coding; research 18 Michigan resorts and lake-effect warning/snow source feasibility; build 2026–27 downhill-ski worth-the-drive decision board with 18 hill pages.
+- **Implementation:** Draft PR #999 on feat/michigan-ski-worth-drive-2026-27, new isolated Michigan NWS grid + warning-zone + nearby NWS storm-report endpoint, wind-sector climatology, evidence-limited provisional ranking, Detroit/Grand Rapids drive estimates, ticket references, 19 generated canonical pages and Tools discovery. Utah source unchanged.
+- **Lake-effect research:** NWS Gaylord wind-sector snowbelts (Mancelona NW, Boyne Falls/Gaylord WNW, Harbor Springs WSW), NWS Duluth northerly Lake Superior effects; official warnings distinct from nearby reports and mere favorable wind.
+- **Claims still unverified:** Actual preview and production NWS response coverage; base depth, live operating lifts, on-mountain 24/48h totals, individually routed road drive times, some 2026–27 resort prices, full production latency/rate behavior. Never count prior-year tickets as current. No licensed Open-Meteo key; fallback disabled.
+- **Verification:** Synthetic unit tests passed in first CI; 53/53 full repository steps green at second run; public-output audit found an absent Person publisher connection and branch was corrected. Latest full CI/build audit and live end-to-end verification pending; do not merge until green. No measured GSC/GA4/AdSense change attributable to this work. No Utah live claim.
+- **Exactly one next action:** Complete PR #999 full build and public-output audit, then check live preview for all 18 NWS grids before approval/merge.
+
 ## Mackinac Bridge toll SERP treatment — October 14, 2026
 
 - **Requested scope:** Existing /mackinac-bridge-tolls/ canonical only; replace title and description with owner-specified calculator-led text, synchronize OG/X title/snippet, add FAQPage for five visible questions without editing them, and preserve calculator, fares, payments, worked examples, URL and canonical.
