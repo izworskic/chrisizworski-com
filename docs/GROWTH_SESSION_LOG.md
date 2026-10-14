@@ -1,5 +1,17 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple sap forecast and sugarhouse guide — October 14, 2026
+
+- **Canonical:** https://chrisizworski.com/michigan-maple-sap-run/ — new state-wide spring decision tool on the existing website.
+- **Decision engine:** 31 allowlisted Michigan NWS hourly point forecasts; seven-day freeze/thaw opportunity index, incomplete-hour gate, server cache, seasonal off-state, and independent regional anchor board. The score is heuristic and never described as confirmed sap flow, yield or probability.
+- **Visitor data:** 2027 organizer-confirmed dates for Maple Row (March 13–14 and 20–21) and Shepherd (April 22–25). Midland CNC, Blandford and MSU Tollgate have previously held maple programs but 2027 dates remain unannounced; no invented opening dates or unverified admission fees.
+- **UX:** map with no key, local selector, species-specific cautions, seven-day bars, regional comparison, filtered source-linked sugarhouse directory, source notes, FAQ and mobile breakpoints.
+- **Network:** one registered tool entry, directory card, canonical sitemap entry, consistent Chris Izworski Person identity, build-pipeline ad loader unchanged.
+- **Search/revenue baseline:** GSC and AdSense data for this brand-new URL unavailable, no traffic or ranking uplift claimed. Semrush keyword volume could not be retrieved because there were no API units available.
+- **Status:** Implementation on feature branch feat/michigan-maple-sap-run-2027; full repository CI and deployment verification pending. No claim of release until checks pass.
+- **Exactly one next action:** Run complete CI and verify the protected Vercel preview before promoting or merging.
+
+
 ## Mackinac Bridge toll SERP treatment — October 14, 2026
 
 - **Requested scope:** Existing /mackinac-bridge-tolls/ canonical only; replace title and description with owner-specified calculator-led text, synchronize OG/X title/snippet, add FAQPage for five visible questions without editing them, and preserve calculator, fares, payments, worked examples, URL and canonical.
