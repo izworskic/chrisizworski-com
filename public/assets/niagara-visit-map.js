@@ -70,6 +70,45 @@
    });
   });
  }
+ // Before planning, show verified orientation landmarks, NOT an invented route.
+ function preview(side){
+  var isCanada=side==='CA',name=isCanada?'Ontario · Canada':'New York · USA';
+  var status=el('wayfinding-status'),decision=el('arrival-decision'),list=el('wayfinding-stop-list');
+  var first=el('open-first-stop'),route=el('open-route-map');
+  var spots=isCanada?[
+   {id:'table',name:'Table Rock',lat:43.07896,lng:-79.07816,location:'Table Rock Welcome Centre Niagara Falls Ontario',hint:'Public Horseshoe Falls brink'},
+   {id:'victoria',name:'Queen Victoria Park',lat:43.08334,lng:-79.07827,location:'Queen Victoria Park Niagara Falls Ontario',hint:'Wide panorama'},
+   {id:'cruise',name:'Niagara City Cruises',lat:43.08875,lng:-79.07392,location:'Niagara City Cruises Grand View Marketplace Niagara Falls Ontario',hint:'Canadian boat ticket area (seasonal)'}
+  ]:[
+   {id:'prospect',name:'Prospect Point',lat:43.08623,lng:-79.06987,location:'Prospect Point Niagara Falls New York',hint:'American Falls viewpoint'},
+   {id:'goat',name:'Goat Island',lat:43.08008,lng:-79.07443,location:'Terrapin Point Goat Island Niagara Falls New York',hint:'Horseshoe Falls at the brink'},
+   {id:'maid',name:'Maid of the Mist',lat:43.08694,lng:-79.06881,location:'Maid of the Mist Observation Tower Niagara Falls New York',hint:'New York boat entrance (seasonal)'}
+  ];
+  if(status)status.textContent='Orientation map · '+name+' · choose a goal for a timed route';
+  if(decision)decision.innerHTML='<p class="index">FIRST, GET YOUR BEARINGS</p><h3>'+escapeHtml(name)+'</h3><p>These are landmarks, not planned stops or live admission claims. Select a boat ride, short visit or family route to build a dated itinerary and show numbered stops.</p>';
+  if(list)list.innerHTML=spots.map(function(s,i){
+   return '<li><span class="orientation-list-number">'+(i+1)+'</span><span><strong>'+escapeHtml(s.name)+'</strong><small>'+escapeHtml(s.hint)+'</small></span><a href="'+mapsSearch(s.location)+'" target="_blank" rel="noopener noreferrer">Directions ↗</a></li>';
+  }).join('');
+  if(first)first.href=mapsSearch(spots[0].location);
+  if(route){route.href=mapsSearch(spots[0].location);route.textContent='Choose an experience to build walking directions';}
+  var compared=el('niagara-travel-choices');
+  if(compared)compared.textContent='First select an experience to calculate transport options.';
+  if(!createMap()){
+   var target=el('niagara-route-map');
+   if(target)target.innerHTML='<div class="map-fallback"><strong>Map not available here.</strong><p>Landmarks and linked directions are listed alongside. Choose an experience to see the full itinerary.</p></div>';
+   return;
+  }
+  layers.clearLayers();pins={};
+  var bounds=[];
+  spots.forEach(function(s,i){
+   var pt=[s.lat,s.lng];
+   var marker=L.marker(pt,{icon:pinIcon(String(i+1),'stop')})
+    .bindPopup('<strong>'+escapeHtml(s.name)+'</strong><p>'+escapeHtml(s.hint)+'</p><p>Orientation point, not a reserved or confirmed attraction.</p><a href="'+mapsSearch(s.location)+'" target="_blank" rel="noopener noreferrer">Open directions ↗</a>');
+   pins[s.id]=marker;layers.addLayer(marker);bounds.push(pt);
+  });
+  map.fitBounds(bounds,{padding:[25,25],maxZoom:15});
+  setTimeout(function(){if(map)map.invalidateSize();},0);
+ }
  function render(r){
   var w=r&&r.wayfinding;
   var status=el('wayfinding-status'),decision=el('arrival-decision'),list=el('wayfinding-stop-list');
@@ -124,5 +163,5 @@
   setTimeout(function(){map.invalidateSize();},0);
   try{if(typeof window.gtag==='function')window.gtag('event','niagara_route_map_loaded',{side:w.side,stops:stops.length,mode:w.mode});}catch(_){}
  }
- window.NiagaraVisitMap={render:render,walkingUrl:walkingUrl};
+ window.NiagaraVisitMap={render:render,walkingUrl:walkingUrl,preview:preview};
 })();

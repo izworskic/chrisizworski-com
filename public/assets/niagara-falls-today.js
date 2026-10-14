@@ -55,6 +55,31 @@ function updateSideGuide(r){
  var element=document.getElementById('guide-side');if(!element)return;
  element.textContent=r.side==='US'?'Starting in New York: Prospect Point faces the American Falls; Goat Island approaches Horseshoe Falls at the brink. The route stays in New York and never assumes a border crossing.':'Starting in Ontario: Table Rock brings you toward Horseshoe Falls at the brink, while Queen Victoria Park opens a wider view toward all three waterfalls. The route stays in Ontario and never assumes a border crossing.';
 }
+function showOrientation(side){
+ var canada=side==='CA';
+ var title=canada?'Start at the Horseshoe Falls brink.':'See the American Falls first.';
+ var lead=canada?'Table Rock puts you beside Horseshoe Falls. Queen Victoria Park gives you the wider picture. The Canadian boat boards near Grand View Marketplace, not Table Rock.':'Prospect Point is the easiest introduction to the American Falls. Goat Island looks toward Horseshoe Falls. The Maid of the Mist boards at the Observation Tower on this side.';
+ var stops=canada?[
+  ['Table Rock','Right beside Horseshoe Falls'],
+  ['Queen Victoria Park','Step back for the whole panorama']
+ ]:[
+  ['Prospect Point','Face the American Falls'],
+  ['Goat Island','Approach Horseshoe Falls']
+ ];
+ var linkText=canada?'Directions to Table Rock':'Directions to Prospect Point';
+ var destination=canada?'Table Rock Welcome Centre Niagara Falls Ontario':'Prospect Point Niagara Falls New York';
+ var cards=stops.map(function(s,i){
+  return '<div><small>LANDMARK 0'+(i+1)+'</small><strong>'+safe(s[0])+'</strong><span>'+safe(s[1])+'</span></div>';
+ }).join('');
+ body.innerHTML='<div class="plan-preview"><p class="index">BEFORE YOU PLAN · '+(canada?'ONTARIO':'NEW YORK')+'</p><h3>'+safe(title)+'</h3><p>'+safe(lead)+'</p><div class="preview-places">'+cards+'</div><p class="preview-caution">These are orientation landmarks—not a timed itinerary, verified admission or live ticket status. Choose an experience to build your actual visit.</p><a class="preview-primary" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(destination)+'" target="_blank" rel="noopener noreferrer">'+safe(linkText)+' ↗</a></div>';
+ body.setAttribute('aria-busy','false');
+ status.textContent='Choose your experience to turn these landmarks into a timed itinerary.';
+ if(window.NiagaraVisitMap&&typeof window.NiagaraVisitMap.preview==='function'){
+  try{window.NiagaraVisitMap.preview(side);}catch(error){
+   var mapStatus=document.getElementById('wayfinding-status');if(mapStatus)mapStatus.textContent='Preview map unavailable. Use linked directions below.';
+  }
+ }
+}
 function draw(r){
  var stops=r.stops||[],first=stops[0],currency=r.side==='US'?'USD':'CAD';
  var admission=r.costs[0],unknownPrices=!admission.prices_complete;
@@ -187,9 +212,11 @@ form.addEventListener('change',function(e){if(e.target&&e.target.name){
   document.querySelectorAll('[data-niagara-preset]').forEach(function(b){b.setAttribute('aria-pressed','false');});
   var note=document.getElementById('quick-start-note');if(note)note.textContent='';
  }
- emit('niagara_replan');if(hasPlanned)submit();
+ emit('niagara_replan');
+ if(hasPlanned)submit();
+ else if(field==='starting_side')showOrientation(e.target.value==='CA'?'CA':'US');
 }});
 var hero=document.querySelector('.hero-photo'),img=hero&&hero.querySelector('img');if(img){img.addEventListener('error',function(){hero.classList.add('is-missing');});if(img.complete&&img.naturalWidth===0)hero.classList.add('is-missing');}
 emit('niagara_planner_view');
-body.setAttribute('aria-busy','false');status.textContent='Choose your date, side and experience to see a route.';
+showOrientation(form.elements.starting_side.value==='CA'?'CA':'US');
 })();

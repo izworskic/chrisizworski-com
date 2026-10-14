@@ -285,3 +285,93 @@
 .falls-films{margin-top:27px}
 @media(max-width:900px){.primary-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.hero-inner{padding:21px 20px}.hero h1{font-size:39px}.hero-photo{max-height:180px;min-height:180px}.hero-photo img{height:180px;min-height:180px}.controls form{padding-top:0}.result .result-content{padding:15px}.result .verdict h3{font-size:23px}.compact-trip-facts{gap:9px}.wayfinding-panel{padding:14px 11px}.result .start-parking{padding:10px}.film-editorial{margin-top:20px}}
+
+
+/* Niagara visitor-visible release: the Falls photo and first action share the first screen. */
+.hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);min-height:0;background:#143642;overflow:hidden}
+.hero-inner{padding:27px clamp(20px,5vw,76px);margin:0;width:100%;max-width:none;align-self:center}
+.hero .eyebrow{margin:0 0 7px;color:#c5dfdc;letter-spacing:.1em}
+.hero h1{font-size:clamp(37px,4.1vw,58px);line-height:1.02;margin:7px 0 11px}
+.hero .lead{font:normal clamp(18px,1.8vw,23px)/1.28 Georgia,serif;margin:0 0 8px}
+.hero .hero-sub{font-size:12px;line-height:1.55;max-width:520px;margin:0 0 13px;color:#e3efec}
+.hero .hero-cta{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:10px 14px}
+.hero-photo{margin:0;min-height:278px;height:278px;max-height:278px;align-self:stretch}
+.hero-photo img{width:100%;height:100%;min-height:0;object-fit:cover;object-position:center 53%}
+.hero-photo figcaption{font-size:9px;padding:8px 10px}
+.shell{padding-top:17px}
+.primary-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px}
+.primary-grid>.panel{min-width:0}
+.controls .panel-head,.result .panel-head{padding:17px 20px 5px}
+.controls .panel-head h2,.result .panel-head h2{font-size:25px}
+.controls .panel-head p,.result .panel-head p{font-size:12px;line-height:1.5}
+.controls form{padding:5px 20px 16px}
+.controls .quick-heading{font:normal 17px/1.3 Georgia,serif;margin:9px 0 7px}
+.controls .visit-quick-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 9px}
+.controls .visit-quick-start button{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;padding:11px 10px;min-height:101px;border-radius:7px;border:1px solid #cadbd6;background:#f4f8f6;line-height:1.3}
+.controls .visit-quick-start button .intent-mark{font-size:10px;font-weight:800;color:#6a918e;letter-spacing:.05em}
+.controls .visit-quick-start button strong{font-size:12px;line-height:1.27;color:#204750;display:block}
+.controls .visit-quick-start button small{font-size:10px;line-height:1.32;color:#517277;display:block}
+.controls .visit-quick-start button[aria-pressed="true"]{border:2px solid #236d6d;background:#e2f1ed;padding:10px 9px;box-shadow:none}
+.controls .visit-quick-start button:focus-visible{outline:3px solid #c17b32;outline-offset:2px}
+.controls .two{gap:9px}
+.controls .two input{min-width:0;width:100%}
+.plan-preview{padding:17px 20px 22px}
+.plan-preview .index{margin-bottom:12px}
+.plan-preview h3{font:normal clamp(25px,2.6vw,33px)/1.12 Georgia,serif;margin:0 0 11px;color:#194753}
+.plan-preview>p{font-size:13px;line-height:1.72;color:#395963}
+.plan-preview .preview-places{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0 15px}
+.plan-preview .preview-places>div{border:1px solid #d4e2dd;border-radius:6px;padding:11px 12px;background:#f2f7f5}
+.plan-preview .preview-places small{font-size:10px;color:#608381;letter-spacing:.08em;font-weight:800}
+.plan-preview .preview-places strong{font-size:13px;display:block;margin:5px 0 4px;color:#1b4a57}
+.plan-preview .preview-places span{font-size:11px;line-height:1.5;display:block;color:#50686e}
+.plan-preview .preview-caution{font-size:11px;color:#61787b;line-height:1.6;margin-top:14px}
+.plan-preview .preview-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 15px;background:#1e5d64;color:white;border-radius:5px;font-size:12px;font-weight:750;text-decoration:none}
+.plan-preview .preview-primary:hover{background:#153d4b}
+.niagara-route-map .map-preview-note{font:12px/1.5 system-ui,sans-serif;color:#274b58;background:#f6faf8}
+.wayfinding-panel .wayfinding-heading{margin-bottom:13px}
+.wayfinding-panel .niagara-route-map{height:370px}
+@media(max-width:1024px){.primary-grid{grid-template-columns:1fr}.controls .visit-quick-start button{min-height:87px}.hero-photo{min-height:245px;max-height:245px;height:245px}.wayfinding-panel .niagara-route-map{height:400px}}
+@media(max-width:640px){
+ .hero{display:grid;grid-template-columns:1fr}
+ .hero-inner{padding:16px 20px}
+ .hero h1{font-size:35px;margin:5px 0 6px}
+ .hero .lead{font-size:18px;margin:0 0 6px}
+ .hero .hero-sub{font-size:11px;line-height:1.45;margin:0 0 8px}
+ .hero-photo{height:137px;min-height:137px;max-height:137px}
+ .hero-photo img{height:137px;min-height:0;object-position:center 57%}
+ .shell{padding:12px 10px 42px}
+ .controls .panel-head,.result .panel-head{padding:16px 15px 5px}
+ .controls form{padding:5px 14px 14px}
+ .controls .visit-quick-start{gap:6px}
+ .controls .visit-quick-start button{min-height:97px;padding:10px 7px}
+ .controls .visit-quick-start button strong{font-size:11px}
+ .controls .visit-quick-start button small{font-size:9px}
+ .controls .visit-quick-start button[aria-pressed="true"]{padding:9px 6px}
+ .plan-preview{padding:15px}
+ .plan-preview h3{font-size:26px}
+ .plan-preview .preview-places{gap:6px}
+ .plan-preview .preview-places>div{padding:9px}
+ .wayfinding-panel .niagara-route-map{height:330px}
+}
+
+
+/* Keep the choice itself above the fold on a typical 390×844 phone. */
+@media(max-width:640px){
+ .hero-inner{padding:11px 18px}
+ .hero h1{font-size:32px;line-height:1.02;margin:3px 0 5px}
+ .hero .lead{font-size:16px;margin:0 0 7px}
+ .hero .hero-sub{display:none}
+ .hero .hero-cta{min-height:36px;padding:7px 12px;font-size:12px}
+ .hero-photo{height:104px;min-height:104px;max-height:104px}
+ .hero-photo img{height:104px;min-height:0}
+ .controls .panel-head{padding:13px 14px 3px}
+ .controls .panel-head h2{font-size:23px;margin:0 0 3px}
+ .controls .panel-head p{font-size:11px;line-height:1.35;margin-bottom:4px}
+ .controls form{padding:0 13px 13px}
+ .controls .two{gap:7px;margin-bottom:7px}
+ .controls label{font-size:11px}
+ .controls .visit-date-note{font-size:10px;line-height:1.4;margin:0 0 8px}
+ .controls fieldset{margin-bottom:8px;padding-top:4px;padding-bottom:5px}
+ .controls .quick-heading{margin:6px 0}
+ .controls .visit-quick-start button{min-height:88px}
+}
