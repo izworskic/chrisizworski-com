@@ -40,7 +40,7 @@ test('boat-launch near-me enhancement is explicit, ephemeral and preserves canon
   assert.match(output, /coordinates stay in this browser, are not stored, and are not sent to this site/i);
   assert.doesNotMatch(output, /localStorage|sessionStorage|document\.cookie/);
   assert.match(output, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\/">/);
-  assert.match(output, /<title>Michigan Boat Launch Map: Ramps Near Me \\| Chris Izworski<\\/title>/);
+  assert.match(output, /<title>Michigan Boat Launch Map: Ramps Near Me \| Chris Izworski<\/title>/);
   const description = output.match(/<meta name="description" content="([^"]+)"/)?.[1] || '';
   assert.ok(description.includes('near you') && description.includes('DNR-backed map') && description.includes('Use your location'));
   assert.ok(description.length <= 158, `description is ${description.length} chars`);
