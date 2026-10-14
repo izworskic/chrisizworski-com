@@ -30,7 +30,7 @@ jobs:
           printf '%s' "$clean" | grep -o '<title>[^<]*</title>' | head -1 || true
           printf '%s' "$bust" | grep -o '<title>[^<]*</title>' | head -1 || true
 
-          expected='Mackinac Bridge Toll 2026: $4 for a Passenger Car'
+          expected='Mackinac Bridge Toll Calculator 2026 | Chris Izworski'
           if printf '%s' "$clean" | grep -Fq "$expected"; then
             echo 'CLEAN_URL_UPDATED=true'
           else
@@ -43,3 +43,5 @@ jobs:
           fi
 
           printf '%s' "$bust" | grep -Fq "$expected"
+          printf '%s' "$bust" | grep -Fq "Mackinac Bridge toll is $4 for a car ($2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return."
+          printf '%s' "$bust" | grep -Fq '"@type":"FAQPage"'

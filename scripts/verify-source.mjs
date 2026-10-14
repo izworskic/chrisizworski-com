@@ -26,6 +26,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 14, 2026: owner-approved contextual toll cost link on the U.P. fall-color trip guide.
+  // Keep the live-snapshot difference explicit until the next clean crawl after production release.
+  "/fall-color/upper-peninsula-fall-color/",
   // October 11, 2026: Welland Canal discovery link added to Freighter Central.
   "/freighters/",
   // Oct 7 2026: repair the two dead Michigan Outdoors navigation targets.

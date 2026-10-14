@@ -35,7 +35,7 @@ check(html.includes(experiment?.treatment?.firstAnswer || "__missing__"), "first
 check(html.includes('<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'), "canonical changed");
 check(html.includes(experiment?.officialFareGuardrail?.source || "__missing__"), "official Mackinac Bridge Authority fare source is missing");
 check(html.includes("$4 one way") && html.includes("$8 round trip"), "one-way and round-trip passenger fares are not both explicit");
-const ldJson = [...html.matchAll(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/g)].map((m) => JSON.parse(m[1]));
+const ldJson = [...html.matchAll(new RegExp("<script type=\"application/ld\\+json\">([\\s\\S]*?)</script>", "g"))].map((m) => JSON.parse(m[1]));
 const nodes = ldJson.flatMap((item) => item["@graph"] || [item]);
 const faq = nodes.find((item) => item["@type"] === "FAQPage");
 check(faq?.mainEntity?.length === 5, "five existing toll FAQs must have matching FAQPage schema");
