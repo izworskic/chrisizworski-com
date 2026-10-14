@@ -3,7 +3,7 @@
 // No paid API, cron, Redis, geographic interpolation, or AI-generated weather judgments.
 const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,parseGLSEACsv,lakeSeries,parseNDBC,weatherPeriods,comfort,bestWeatherWindow}=require('../lib/shorefeel/engine.js');
 const {observations:NOAA_SNAPSHOT}=require('../data/shorefeel/last-verified-noaa-glsea.json');
-const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt%26Year%3E%3D2026';
+const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt&Year%3E%3D2026';
 const HEADERS={'User-Agent':'ChrisIzworski-ShoreFeel/1.0 (https://chrisizworski.com/great-lakes-water-temperature/)',Accept:'text/plain, application/json'};
 async function textResponse(url,ms=4000){
   const r=await fetch(url,{headers:HEADERS,signal:AbortSignal.timeout(ms)});
