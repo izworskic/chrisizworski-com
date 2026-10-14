@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## ShoreFeel Traverse temperature-answer-first repair — October 13, 2026
+
+- **Critical user complaint:** Tool showed unavailable and visually prioritized scenery rather than water temperature. Product failure, not merely visual styling.
+- **Verified source truth:** NOAA GLSEA October 12 Lake Michigan daily lakewide temperature **16.72°C / 62.1°F**. NDBC Grand Traverse Bay South buoy 45020 is recovered for winter and has no recent readings (station reports none). Therefore never claim 62.1°F measures Traverse City beach or Grand Traverse Bay water.
+- **Design:** Immediately under H1 display temperature in largest type, exact scope (Lake Michigan lakewide or bay buoy), NOAA date/freshness, caveat and bay-station status. Photograph remains smaller right-side secondary on landscape tablet. No invented local reading. If no fresh source, explicit unavailable including expired fallbacks; no false precision.
+- **Resilience:** Server now checks two official NOAA sources with anti-bot/malformed responses rejected and a separately recorded NOAA October 12 verified snapshot, which expires after 3 UTC days. Client bootstrap uses the same date/temperature and expires automatically. Live source overrides fallback; no stale data presented as current.
+- **Tests:** Real browser checks verify the hero displays source-qualified water temperatures and layout at tablet/phone widths; engine tests guard NOAA source parsing and snapshot expiry.
+- **Measurements:** Search ranking, revenue gains, and independent Vercel upstream fetch are not verified; no uplift claimed.
+- **Exactly one next action:** Complete GitHub PR full verification and exact Vercel preview before release; verify public API and source freshness separately.
+
+
 ## ShoreFeel Traverse City simple photo-and-answer hero preview — October 13, 2026
 
 - **Owner feedback:** Last full-width photographic hero worse on sideways tablet. Do not assume clean screenshot means pleasing actual device UX.

@@ -1,7 +1,9 @@
 'use strict';
 // Shared free NOAA lakewide analysis + NDBC offshore observations + NWS shoreline weather.
 // No paid API, cron, Redis, geographic interpolation, or AI-generated weather judgments.
-const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,lakeSeries,parseNDBC,weatherPeriods,comfort,bestWeatherWindow}=require('../lib/shorefeel/engine.js');
+const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,parseGLSEACsv,lakeSeries,parseNDBC,weatherPeriods,comfort,bestWeatherWindow}=require('../lib/shorefeel/engine.js');
+const {observations:NOAA_SNAPSHOT}=require('../data/shorefeel/last-verified-noaa-glsea.json');
+const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt&Year%3E%3D2026';
 const HEADERS={'User-Agent':'ChrisIzworski-ShoreFeel/1.0 (https://chrisizworski.com/great-lakes-water-temperature/)',Accept:'text/plain, application/json'};
 async function textResponse(url,ms=4000){
   const r=await fetch(url,{headers:HEADERS,signal:AbortSignal.timeout(ms)});
@@ -32,12 +34,33 @@ module.exports=async function handler(req,res){
   res.setHeader('Cache-Control','public, s-maxage=900, stale-while-revalidate=1800');
   if(req.method==='HEAD')return res.status(200).end();
   const place=DESTINATIONS[placeKey]||null;
-  const [analysis,nearby,forecast]=await Promise.allSettled([
+  const [analysis,alternative,nearby,forecast]=await Promise.allSettled([
     textResponse(SOURCE,4500),
+    textResponse(GLSEA_CSV,4500),
     place?textResponse('https://www.ndbc.noaa.gov/data/realtime2/'+place.station+'.txt',3700):Promise.resolve(null),
     place?weatherFor(place):Promise.resolve([])
   ]);
-  const rows=analysis.status==='fulfilled'?parseGLSEA(analysis.value):[];
+  
+  const primary=analysis.status==='fulfilled'?parseGLSEA(analysis.value):[];
+  const secondary=alternative.status==='fulfilled'?parseGLSEACsv(alternative.value):[];
+  const last=a=>a.at(-1)?.date||'';
+  let rows=last(primary)>=last(secondary)?primary:secondary;
+  let analysisMode=rows.length?'official-live':'unavailable';
+  let analysisUrl=rows===secondary&&secondary.length?GLSEA_CSV:SOURCE;
+  // NOAA publishes a dated value even when its endpoints temporarily block
+  // our server. The bundled verified observation expires after 3 calendar days.
+  const published=parseGLSEA(NOAA_SNAPSHOT.join('\n'));
+  if(last(published)>last(rows)){
+    rows=published;
+    analysisMode='dated-official-fallback';
+    analysisUrl=SOURCE;
+  }
+  const fresh=lakeSeries(rows,'michigan');
+  if(analysisMode==='dated-official-fallback'&&fresh.status!=='recent'){
+    rows=[];
+    analysisMode='unavailable';
+  }
+
   const lakes=Object.fromEntries(Object.keys(LAKES).map(l=>[l,lakeSeries(rows,l)]));
   const nearest=place&&nearby.status==='fulfilled'?parseNDBC(nearby.value):null;
   const periods=forecast.status==='fulfilled'?forecast.value:[];
@@ -49,7 +72,7 @@ module.exports=async function handler(req,res){
   const weather=periods.find(p=>p.daylight)||periods[0]||null;
   const assessments=place?Object.fromEntries(['swim','family','paddle','relax'].map(a=>[a,comfort(a,nearest?.tempF??null,weather)])):null;
   return res.status(200).json({
-    product:'ShoreFeel',observedAt:null,generatedAt:new Date().toISOString(),source:{name:'NOAA GLERL GLSEA 3',url:SOURCE,method:'Daily satellite-derived whole-lake surface mean; some pixels may use historical nearby passes or smoothing.'},
+    product:'ShoreFeel',observedAt:null,generatedAt:new Date().toISOString(),source:{name:'NOAA GLERL GLSEA 3',url:analysisUrl,mode:analysisMode,method:'Daily satellite-derived whole-lake surface mean; some pixels may use historical nearby passes or smoothing.'},
     lake:requested,lakes,local,assessments,
     weatherWindow:place?bestWeatherWindow(periods,'relax'):null,
     limitations:['Lakewide surface average is not a beach temperature.','A buoy reading represents its stated location and depth, not nearby sand or harbor water.','Comfort descriptions are qualitative and are not swim-safety determinations.'],

@@ -40,3 +40,21 @@ test('destination station identity and geographic caveats differ',()=>{
  assert.equal(DESTINATIONS['traverse-city'].station,'45020');
  assert.match(DESTINATIONS['traverse-city'].stationCaveat,/Grand Traverse Bay/);
 });
+
+test('ERDDAP secondary NOAA CSV parses named five-lake columns and rejects blocked HTML',()=>{
+ const {parseGLSEACsv}=require('../lib/shorefeel/engine.js');
+ const csv='Year,Day,Sup,Mich,Huron,Erie,Ont\n,,degree_C,degree_C,degree_C,degree_C,degree_C\n2026,285,12.78,16.72,14.93,18.36,16.25';
+ const rows=parseGLSEACsv(csv,new Date('2026-10-13T11:00:00Z'));
+ assert.equal(rows.length,1);
+ assert.equal(lakeSeries(rows,'michigan',new Date('2026-10-13T11:00:00Z')).latest.tempF,62.1);
+ assert.equal(parseGLSEACsv('<html><title>Access denied</title></html>').length,0);
+});
+test('published NOAA fallback is date-stamped, self-expiring, and never a claimed bay temperature',()=>{
+ const json=require('../data/shorefeel/last-verified-noaa-glsea.json');
+ const {parseGLSEA}=require('../lib/shorefeel/engine.js');
+ const raw=json.observations.join('\n');
+ const recent=lakeSeries(parseGLSEA(raw,new Date('2026-10-13T12:00:00Z')),'michigan',new Date('2026-10-13T12:00:00Z'));
+ assert.equal(recent.status,'recent');assert.equal(recent.latest.tempF,62.1);
+ const stale=lakeSeries(parseGLSEA(raw,new Date('2026-10-20T12:00:00Z')),'michigan',new Date('2026-10-20T12:00:00Z'));
+ assert.equal(stale.status,'stale');
+});

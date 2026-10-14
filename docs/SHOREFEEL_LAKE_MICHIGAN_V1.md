@@ -73,3 +73,7 @@ The owner reported real-device left-right overflow and rejected the crowded Clin
 
 ## Traverse landscape hero photo repair — 2026-10-13
 Owner observed ~2 inches of plain blue top on landscape tablet despite last photo correction. Use licensed archival actual Traverse skyline viewed from bay (D. R. Shoup, Wikimedia Commons CC BY 3.0) as full hero backdrop; first-party local lake image remains independently visible as CSS fallback and JS image fallback with relabeling. Tablet landscape (1024×768, 1280×800) regression measures hero height, photo footprint, evidence positioning, and no horizontal overflow after activity and map interactions. No data/product logic changes.
+
+
+## Traverse temperature answer-first (2026-10-13)
+The design must lead with a temperature or a clear unavailable state, then scope/date/source and local sensor status. A lakewide daily average is not an in-bay or beach thermometer. NOAA station 45020 has no recent reports (buoy recovered for winter). A NOAA-verified October 12 Lake Michigan 62.1°F record is available as an explicitly dated last-verified fallback only while <=3 UTC days old. Primary is NOAA GLSEA plain-text, alternative ERDDAP official GLSEA CSV. Do not market short-lived fallback as live. No new paid dependency or cron. Browser tests assert hero behavior; inspect real upstream independently when possible.
