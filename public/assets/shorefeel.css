@@ -1,592 +1,213 @@
-/* ShoreFeel: clear editorial decision experience; maps/graphs remain supporting evidence. */
-:root{color-scheme:light;--ink:#153344;--muted:#4a6570;--navy:#092e41;--teal:#087f83;--sand:#fbf6eb;--line:#dce6e6;--panel:#fff;--warning:#895627;--focus:#ffbf69}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4f8f8;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;line-height:1.58}a{color:#075e6e;text-underline-offset:3px}a:hover{color:#0e7280}a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}button{font:inherit;cursor:pointer}.wrap{max-width:1160px;margin:auto;padding:0 22px}.top{background:#092a3b;color:#edf7f8;border-bottom:1px solid #265165}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px;flex-wrap:wrap}.brand{font-weight:850;font-size:22px;letter-spacing:-.8px;color:white;text-decoration:none}.brand span{color:#7edddc}.top nav{display:flex;gap:18px;align-items:center;font-size:13px}.top a{color:#d8e9ed;text-decoration:none}.top a:hover{text-decoration:underline}.hero{color:#f0f8f8;background:radial-gradient(circle at 83% 11%,rgba(73,175,184,.26),transparent 30%),radial-gradient(circle at 12% 100%,rgba(125,209,183,.18),transparent 36%),linear-gradient(135deg,#123d53,#092a3b 72%);padding:58px 0 52px}.hero .eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:#9dd8d7;font-weight:800}.hero h1{font-size:clamp(36px,5.7vw,70px);letter-spacing:-.055em;line-height:1.06;max-width:940px;margin:15px 0 18px}.hero p{font-size:clamp(17px,2vw,21px);color:#d7e9ec;max-width:790px;margin:0}.hero .breadcrumbs{font-size:13px;margin-bottom:17px;color:#cce0e3}.breadcrumbs a{color:#dbf3f3}.hero-kicker{font-family:Georgia,serif;font-style:italic;font-size:21px;color:#f7dfae;margin-top:28px}.main{padding-top:36px;padding-bottom:60px}.update{padding:12px 16px;border-left:4px solid var(--teal);background:#e4f3f3;font-size:14px;margin-bottom:24px}.hero-data{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-bottom:26px}.metric{min-height:126px;background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 6px 16px rgba(9,46,65,.04)}.metric strong{display:block;font-size:clamp(25px,3vw,38px);letter-spacing:-.04em;line-height:1.2}.metric .label{display:block;color:#4a6671;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}.metric small{display:block;color:var(--muted);margin-top:8px;line-height:1.35}.section{margin:34px 0}.section h2{font-size:clamp(25px,3.4vw,35px);letter-spacing:-.035em;line-height:1.2;margin:0 0 12px}.section-lede{max-width:770px;margin:0 0 20px;color:var(--muted)}.decision{display:grid;grid-template-columns:1fr 330px;gap:22px}.decision-pane{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px}.decision-pane h3{font-family:Georgia,serif;font-size:clamp(24px,3vw,31px);line-height:1.2;margin:8px 0 14px}.decision-pane p{margin:12px 0}.intent-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:20px}.intent-list button{background:#edf5f4;color:#284d57;border:1px solid #d3e4e2;border-radius:11px;padding:13px 9px;font-weight:750;min-height:50px}.intent-list button[aria-pressed=true]{background:#123e50;color:white;border-color:#123e50}.aside{background:var(--sand);border:1px solid #eee2c9;border-radius:18px;padding:24px}.aside h3{margin-top:0}.tag{display:inline-block;background:#d8ece8;color:#0f575b;font-size:11px;text-transform:uppercase;font-weight:800;letter-spacing:.07em;border-radius:20px;padding:4px 10px}.truth{background:#e9f1f2;border-radius:10px;padding:14px 16px;font-size:14px;color:#365861;margin-top:16px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:24px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:23px;overflow:hidden}.panel h3{margin:0 0 7px;font-size:21px}.panel p{color:var(--muted)}.chart{height:225px;width:100%;display:block}.chart text{font-size:12px;fill:#647a82}.chart line{stroke:#dce6e7}.chart path{fill:none;stroke:#0b7c88;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}.no-data{color:#657982;font-style:italic}.map{height:305px;min-height:305px;border-radius:11px;background:linear-gradient(110deg,#dceced,#a5ccd4);margin-top:12px}.map-fallback{font-size:14px;padding:26px}.locations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.loc{display:block;border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff;text-decoration:none}.loc strong{display:block;font-size:20px;color:#143a4c}.loc span{color:#526c75;font-size:14px}.loc:hover{border-color:#249da3;transform:translateY(-1px)}.guide{background:white;border-top:5px solid #0c7984;border-radius:12px;padding:28px 30px;max-width:850px}.guide p{font-size:17px}.guide h3{margin:20px 0 0;font-size:20px}.source-list{font-size:14px;padding-left:21px;color:#536c76}.source-list li{margin:8px 0}.foot{background:#0b3042;color:#d8e8eb;padding:32px 0;font-size:13px}.foot a{color:#c6eeee}.quiet{color:#56707c;font-size:14px}.utility{border-top:1px solid var(--line);margin-top:12px;padding-top:13px;font-size:14px}.status-pill{font-size:12px;font-weight:800;border-radius:20px;padding:4px 9px;background:#e6efec;color:#225b5e}.safety{border-left:4px solid #a76326;background:#fff7eb;padding:16px 18px;margin-top:16px}.lake-table{width:100%;border-collapse:collapse}.lake-table th,.lake-table td{padding:14px 10px;border-bottom:1px solid var(--line);text-align:left}.lake-table th{font-size:13px;color:var(--muted)}.lake-table td:nth-child(2){font-size:21px;font-weight:800}.lake-table a{font-weight:700}.lake-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.lake-link{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 10px;text-decoration:none;color:var(--ink)}.lake-link strong{display:block}.lake-link small{color:var(--muted)}.field-image{width:100%;max-height:370px;object-fit:cover;border-radius:15px;margin:12px 0 2px}.caption{font-size:12px;color:#557078}.leaflet-container{font-family:inherit}.leaflet-control-attribution{font-size:10px!important}@media(max-width:850px){.decision{grid-template-columns:1fr}.hero-data{grid-template-columns:1fr 1fr}.hero-data .metric:first-child{grid-column:1/-1}.columns{grid-template-columns:1fr}.locations{grid-template-columns:1fr 1fr}.lake-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.top .wrap{padding-top:10px;padding-bottom:10px}.top nav{gap:11px}.hero{padding:35px 0 36px}.wrap{padding:0 16px}.decision-pane,.aside,.panel,.guide{padding:18px}.hero-data{gap:9px}.metric{padding:14px;min-height:114px}.metric strong{font-size:28px}.intent-list{gap:7px}.intent-list button{font-size:13px;padding:11px 5px}.locations{grid-template-columns:1fr}.lake-table td,.lake-table th{padding:11px 6px}.lake-grid{grid-template-columns:1fr 1fr}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-/* ShoreFeel V1.1 — one grounded shoreline photograph per page, no photo wall. */
-.hero-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,390px);gap:clamp(22px,4vw,50px);align-items:center}
-.hero-copy,.hero-media,.metric,.panel,.decision-pane,.aside,.columns>*{min-width:0}
-.hero-layout h1{font-size:clamp(34px,4.15vw,60px);overflow-wrap:break-word;max-width:740px}
-.hero-media{margin:0;align-self:center;position:relative;border-radius:17px;overflow:hidden;background:linear-gradient(125deg,#215a6a,#3d8999);box-shadow:0 22px 52px rgba(3,24,36,.28)}
-.hero-photo{display:block;width:100%;height:auto;aspect-ratio:16/11;object-fit:cover;color:white;background:linear-gradient(120deg,#10485b,#4c93a0)}
-.hero-media figcaption{background:#0a2b3e;color:#d9e7e7;font-size:11px;line-height:1.55;padding:10px 14px}
-.hero-media figcaption a{color:#b8ece9}
-.hero-skip{display:inline-flex;align-items:center;gap:10px;color:#123742;background:#bdece4;font-size:14px;font-weight:800;text-decoration:none;border-radius:999px;padding:10px 16px;margin-top:22px}
-.hero-skip:hover{background:#e6fff6;color:#123742}
-.hero-data .metric strong{overflow-wrap:anywhere}
-.decision-pane p,.aside p,.truth{overflow-wrap:break-word}
+/* ShoreFeel. One stylesheet for the hub, lake and beach pages.
+   Idea: the page is an instrument for one question, "what is the water like?".
+   The answer is a number on a cold-to-warm scale; everything else is evidence that
+   stays out of the way until asked for. Band colours follow the cold-water safety
+   bands (below 60, 60-70, 70-77, 77 and up) and are the only saturated colours. */
+:root{
+  color-scheme:light;
+  --ink:#0f2a35;--muted:#4b6470;--faint:#6d838c;
+  --bg:#eef4f4;--paper:#fff;--line:#d5e2e3;--tint:#e3eeee;
+  --shock:#2f4fa8;--cold:#2c88a8;--cool:#2f9e8a;--warm:#df9334;
+  --link:#0a5f70;--focus:#f2a33a;--caution:#fff4e0;--caution-edge:#c47a1c;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --scale:linear-gradient(90deg,var(--shock) 0 42.8%,var(--cold) 42.8% 71.4%,var(--cool) 71.4% 91.4%,var(--warm) 91.4% 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans)}
+a{color:var(--link);text-underline-offset:3px}
+a:hover{color:#0e7a8e}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+button{font:inherit;cursor:pointer}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.15;letter-spacing:-.015em;margin:0}
+p{margin:0}
+.wrap{max-width:1120px;margin:auto;padding:0 24px;min-width:0}
+.quiet{color:var(--muted);font-size:14px}
+
+/* Header */
+.top{background:var(--ink);color:#e6f2f4}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;min-height:60px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-weight:700;font-size:22px;color:#fff;text-decoration:none}
+.brand span{color:#8fe0d6}
+.top nav{display:flex;gap:20px;font-size:14px}
+.top a{color:#d3e6ea;text-decoration:none}
+.top a:hover{color:#fff;text-decoration:underline}
+
+/* Hero: answer on the left, one small photograph on the right */
+.hero{background:var(--paper);border-bottom:1px solid var(--line);padding:24px 0 28px}
+.hero-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,36%);gap:clamp(24px,4vw,56px);align-items:center}
+.hero-copy,.hero-media{min-width:0}
+.breadcrumbs{font-size:14px;color:var(--muted);margin-bottom:12px}
+.breadcrumbs a{color:var(--muted)}
+.eyebrow{font-size:14px;color:var(--muted);margin-bottom:4px}
+.hero h1{font-size:clamp(28px,3.6vw,44px);max-width:26ch;overflow-wrap:anywhere}
+.hero-copy>p{margin-top:14px;max-width:56ch;color:var(--muted)}
+.hero-kicker{font-family:var(--serif);font-size:19px;margin-top:16px}
+.hero-skip{display:inline-block;margin-top:16px;font-size:14px;font-weight:600}
+.hero-media{margin:0}
+.hero-photo{display:block;width:100%;height:clamp(200px,22vw,250px);object-fit:cover;object-position:center 55%;border-radius:12px;background:linear-gradient(120deg,#cfe4e6,#a9cdd2)}
+.hero-media figcaption{font-size:12px;line-height:1.45;color:var(--faint);margin-top:8px}
+.hero-media figcaption a{color:var(--faint)}
+
+/* The answer */
+.temperature-answer{margin-top:16px;max-width:34rem}
+.temperature-answer-label{font-size:15px;font-weight:600;color:var(--muted)}
+.temperature-answer-reading{font-family:var(--serif);font-weight:700;font-size:clamp(56px,7.4vw,84px);line-height:1;letter-spacing:-.03em;margin:4px 0 12px;overflow-wrap:anywhere}
+.scale{position:relative;height:10px;border-radius:5px;background:var(--scale)}
+.scale-marker{position:absolute;top:-6px;left:50%;width:6px;height:22px;margin-left:-3px;border-radius:3px;background:var(--ink);box-shadow:0 0 0 2px var(--paper);transition:left .9s cubic-bezier(.2,.8,.2,1)}
+.scale-key{display:grid;grid-template-columns:42.8% 28.6% 20% 8.6%;font-size:12px;color:var(--faint);margin-top:6px}
+.scale-key span:last-child{text-align:right}
+.temperature-answer[data-band="none"] .scale,.temperature-answer[data-band="none"] .scale-key{opacity:.25}
+.temperature-answer[data-band="none"] .scale-marker{display:none}
+.temperature-answer-when{font-size:15px;margin-top:14px;font-weight:600}
+.temperature-answer-caveat{font-size:15px;color:var(--muted);margin-top:4px;max-width:46ch}
+.evidence{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;font-size:14px;color:var(--muted)}
+.evidence summary{cursor:pointer;font-weight:600;color:var(--link)}
+.temperature-answer-local{margin-top:8px}
+.temperature-answer-local strong{color:var(--ink)}
+.temperature-answer-local:first-of-type{margin-top:10px}
+
+/* Slim status strip (was three tall cards) */
+.main{padding-top:24px;padding-bottom:64px}
+.hero-data{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.metric{background:var(--paper);padding:14px 18px;min-width:0}
+.metric .label{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.metric strong{display:block;font-size:22px;line-height:1.25;overflow-wrap:anywhere}
+.metric small{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:2px}
+.truth{font-size:14px;color:var(--muted);margin-top:14px;max-width:70ch;overflow-wrap:break-word}
+.truth p{margin-top:6px}
+.truth strong{color:var(--ink)}
+.update{font-size:14px;color:var(--muted);margin-bottom:18px}
+
+/* Sections */
+.section{margin:44px 0}
+.section h2{font-size:clamp(26px,3.4vw,34px);margin-bottom:10px}
+.section-lede{max-width:62ch;color:var(--muted);margin-bottom:22px}
+.tag{display:inline-block;font-size:13px;font-weight:600;color:var(--link);margin-bottom:4px}
+
+/* Beach water forecast */
+#beach-forecast[hidden]{display:none}
+.bf-beach+.bf-beach{margin-top:34px}
+.bf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;margin-bottom:6px}
+.bf-head h3{font-size:22px}
+.bf-now{font-size:15px;color:var(--muted)}
+.bf-basis{font-size:14px;color:var(--muted);margin-bottom:14px}
+.bf-slots{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.bf-slot{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 12px 14px;min-width:0}
+.bf-when{font-size:13px;color:var(--muted);font-weight:600}
+.bf-temp{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1.1;margin-top:4px}
+.bf-range{font-size:13px;color:var(--muted);margin-top:2px}
+.bf-bar{position:relative;height:6px;margin-top:12px}
+.bf-bar::before{content:"";position:absolute;inset:0;border-radius:3px;background:var(--scale);opacity:.3}
+.bf-bar i{position:absolute;top:-3px;bottom:-3px;border-radius:3px;background:var(--ink);min-width:4px}
+.bf-callout{display:block;margin-top:14px;background:var(--caution);border-left:4px solid var(--caution-edge);border-radius:0 8px 8px 0;padding:12px 16px;font-size:15px;max-width:70ch}
+.bf-callout strong{display:block}
+.bf-down{background:var(--tint);border-radius:10px;padding:14px 16px;font-size:15px;color:var(--muted);max-width:62ch}
+.bf-method{margin-top:22px;font-size:13px;color:var(--faint);max-width:78ch;line-height:1.5}
+
+/* Activity chooser */
+.decision{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px}
+.decision-pane,.aside{border-radius:14px;padding:26px;min-width:0;overflow-wrap:break-word}
+.decision-pane{background:var(--paper);border:1px solid var(--line)}
+.decision-pane h3{font-size:clamp(23px,3vw,30px);margin:6px 0 14px}
+.decision-pane p{margin:12px 0}
+.intent-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.intent-list button{background:var(--tint);color:var(--ink);border:1px solid transparent;border-radius:999px;padding:9px 18px;min-height:44px;font-weight:600}
+.intent-list button[aria-pressed=true]{background:var(--ink);color:#fff}
+.aside{background:var(--tint)}
+.aside h3{font-size:20px;margin-bottom:8px}
+.safety{border-left:4px solid var(--caution-edge);background:var(--caution);padding:14px 16px;margin-top:16px;font-size:15px;border-radius:0 8px 8px 0}
+.safety p{margin-top:4px}
+
+/* Evidence panels and tables */
+.columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0;overflow:hidden}
+.panel h3{font-size:21px;margin-bottom:6px}
+.panel p{color:var(--muted)}
+.chart{display:block;width:100%;max-width:100%;height:auto}
+.chart text{font-size:12px;fill:var(--faint)}
+.chart line{stroke:var(--line)}
+.chart path{fill:none;stroke:var(--cold);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+#history{min-width:0;max-width:100%}
+.no-data{color:var(--muted);font-style:italic}
+.map{height:305px;min-height:305px;border-radius:10px;background:linear-gradient(110deg,#dceced,#a5ccd4);margin-top:12px;position:relative;width:100%;min-width:0;max-width:100%;overflow:hidden}
+.map-fallback{height:100%;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:22px;font-size:14px;color:var(--ink)}
+.map-fallback strong{font-size:20px}
+.map-fallback small{color:var(--muted)}
+.fallback-places{display:flex;gap:8px;flex-wrap:wrap}
+.fallback-places a{padding:8px 14px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.leaflet-container{font-family:inherit;box-sizing:border-box;max-width:100%}
+.leaflet-control-attribution{font-size:10px!important}
 .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
 .table-scroll .lake-table{min-width:430px}
-.chart{max-width:100%}
-@media(max-width:850px){
-.hero-layout{grid-template-columns:minmax(0,1fr) minmax(220px,36%);gap:20px}
-.hero-layout h1{font-size:clamp(30px,4.9vw,48px)}
-.hero-photo{aspect-ratio:4/5}
+.lake-table{width:100%;border-collapse:collapse}
+.lake-table th,.lake-table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left}
+.lake-table th{font-size:13px;color:var(--muted);font-weight:600}
+.lake-table td:nth-child(2){font-family:var(--serif);font-size:22px;font-weight:700}
+.lake-table a{font-weight:600}
+.status-pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--tint);color:var(--link)}
+.locations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.loc{display:block;border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--paper);text-decoration:none;color:var(--ink)}
+.loc strong{display:block;font-family:var(--serif);font-size:20px}
+.loc span{color:var(--muted);font-size:14px}
+.loc:hover{border-color:var(--cold)}
+.lake-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.lake-link{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 12px;text-decoration:none;color:var(--ink)}
+.lake-link strong{display:block}
+.lake-link small{color:var(--muted)}
+.guide{background:var(--paper);border-radius:14px;padding:28px 30px;max-width:820px;border:1px solid var(--line)}
+.guide p{margin-top:12px}
+.guide h3{font-size:21px;margin-top:24px}
+.source-list{font-size:14px;padding-left:20px;color:var(--muted)}
+.utility{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;font-size:14px}
+.field-image{width:100%;max-height:370px;object-fit:cover;border-radius:12px;margin:12px 0 2px}
+.caption{font-size:12px;color:var(--faint)}
+.foot{background:var(--ink);color:#cfe2e6;padding:32px 0;font-size:14px}
+.foot a{color:#bfeee8}
+.foot p{margin-top:8px}
+
+/* Tablet */
+@media(max-width:900px){
+  .decision,.columns{grid-template-columns:minmax(0,1fr)}
+  .locations{grid-template-columns:1fr 1fr}
+  .lake-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-layout{grid-template-columns:minmax(0,1fr) minmax(0,34%)}
+  .hero-photo{height:clamp(180px,26vw,230px)}
+  .bf-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+/* Phone: answer first, photo shrinks to a strip */
 @media(max-width:650px){
-.hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:17px}
-.hero-layout h1{font-size:clamp(32px,8vw,43px);margin-top:10px}
-.hero-layout .hero-copy p{font-size:16px;line-height:1.45}
-.hero-layout .hero-kicker{margin-top:12px;font-size:18px}
-.hero-photo{width:100%;height:clamp(140px,40vw,215px);aspect-ratio:auto;object-position:center 52%}
-.hero-media figcaption{padding:7px 11px;font-size:10.5px}
-.hero-skip{margin-top:13px}
-.hero{padding-top:25px;padding-bottom:24px}
-.hero-data .metric strong{font-size:clamp(22px,6vw,32px)}
+  .wrap{padding:0 16px}
+  .top .wrap{padding-top:10px;padding-bottom:10px}
+  .top nav{gap:14px}
+  .hero{padding:20px 0 24px}
+  .hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:20px}
+  .hero h1{font-size:clamp(28px,8vw,38px)}
+  .hero-photo{height:132px;object-position:center 58%}
+  .temperature-answer{margin-top:16px}
+  .hero-data{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-data .metric:first-child{grid-column:1/-1}
+  .metric{padding:12px 14px}
+  .metric strong{font-size:20px}
+  .section{margin:36px 0}
+  .decision-pane,.aside,.panel,.guide{padding:18px}
+  .locations{grid-template-columns:1fr}
+  .bf-temp{font-size:26px}
+  .table-scroll .lake-table{min-width:0;width:100%;table-layout:fixed}
+  .lake-table th:nth-child(3),.lake-table td:nth-child(3){display:none}
+  .lake-table th:first-child,.lake-table td:first-child{width:53%}
+  .lake-table th:nth-child(2),.lake-table td:nth-child(2){width:47%;text-align:right;font-size:19px}
 }
 @media(max-width:380px){
-.top .wrap{gap:8px}
-.top nav{width:100%;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.top nav a{font-size:12px}
-.metric{padding:12px}
-.hero-data{grid-template-columns:repeat(2,minmax(0,1fr))}
-.hero-data .metric small{font-size:11px}
-.hero-photo{height:150px}
-.panel,.decision-pane,.aside,.guide{padding:16px}
-.lake-table th,.lake-table td{white-space:normal}
+  .top nav{width:100%;justify-content:space-between;gap:8px}
+  .top nav a{font-size:13px;min-width:0}
+  .hero-data{grid-template-columns:minmax(0,1fr)}
+  .hero-data .metric:first-child{grid-column:auto}
+  .lake-grid{grid-template-columns:1fr 1fr}
+  .panel,.decision-pane,.aside,.guide{padding:16px}
+  .bf-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-
-/* Final mobile walkthrough: remove repeated lakewide-source column on phones,
-   preserve it on desktop and in the explanatory text surrounding the table. */
-@media(max-width:650px){
- .table-scroll .lake-table{min-width:0;width:100%;table-layout:fixed}
- .lake-table th:nth-child(3),.lake-table td:nth-child(3){display:none}
- .lake-table th:first-child,.lake-table td:first-child{width:53%}
- .lake-table th:nth-child(2),.lake-table td:nth-child(2){width:47%;text-align:right}
- .lake-table td:nth-child(2){font-size:19px}
-}
-.map-fallback{height:100%;display:flex;flex-direction:column;justify-content:center;gap:13px;background:linear-gradient(125deg,#d4edf0,#e9f2ef);padding:22px;color:#183c4b}
-.map-fallback strong{font-size:21px;letter-spacing:-.02em}
-.map-fallback p{margin:0;color:#3d626c;font-size:14px}
-.map-fallback small{font-size:12px;color:#527079}
-.fallback-places{display:flex;gap:9px;flex-wrap:wrap}
-.fallback-places a{padding:8px 12px;border-radius:20px;background:#0d4352;color:#eff8f8;text-decoration:none;font-size:13px;font-weight:800}
-.fallback-places a:hover{background:#146273}
-
-
-/* ShoreFeel / Traverse City mobile correction — contain the actual children,
-   not the document. No body-level overflow-x hiding, and no forced fixed widths.
-   Other ShoreFeel destination layouts are intentionally unchanged. */
-body[data-place="traverse-city"] .wrap,
-body[data-place="traverse-city"] .hero-layout,
-body[data-place="traverse-city"] .hero-copy,
-body[data-place="traverse-city"] .hero-media,
-body[data-place="traverse-city"] .hero-data,
-body[data-place="traverse-city"] .columns,
-body[data-place="traverse-city"] .columns > *,
-body[data-place="traverse-city"] .decision,
-body[data-place="traverse-city"] .decision-pane,
-body[data-place="traverse-city"] .aside,
-body[data-place="traverse-city"] .metric,
-body[data-place="traverse-city"] .panel,
-body[data-place="traverse-city"] .guide {
-  min-width: 0;
-  max-width: 100%;
-}
-body[data-place="traverse-city"] .wrap { width: 100%; }
-body[data-place="traverse-city"] .hero-layout h1 { max-width: 18ch; overflow-wrap: anywhere; }
-body[data-place="traverse-city"] .hero-copy > p { max-width: 62ch; }
-body[data-place="traverse-city"] .hero-media {
-  border-radius: 16px;
-  box-shadow: 0 18px 44px rgba(3,24,36,.22);
-}
-body[data-place="traverse-city"] .hero-photo {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-body[data-place="traverse-city"] .hero-media figcaption {
-  overflow-wrap: anywhere;
-  font-size: 11px;
-  line-height: 1.5;
-  padding: 10px 12px;
-}
-body[data-place="traverse-city"] .hero-data {
-  grid-template-columns: minmax(0,1.3fr) repeat(2,minmax(0,1fr));
-}
-body[data-place="traverse-city"] .columns {
-  grid-template-columns: repeat(2,minmax(0,1fr));
-}
-body[data-place="traverse-city"] .metric strong,
-body[data-place="traverse-city"] .metric small,
-body[data-place="traverse-city"] .metric .label,
-body[data-place="traverse-city"] .breadcrumbs,
-body[data-place="traverse-city"] .truth,
-body[data-place="traverse-city"] .decision-pane p,
-body[data-place="traverse-city"] .aside p,
-body[data-place="traverse-city"] .panel p,
-body[data-place="traverse-city"] .guide p,
-body[data-place="traverse-city"] .foot {
-  overflow-wrap: anywhere;
-}
-body[data-place="traverse-city"] #history { min-width: 0; max-width: 100%; }
-body[data-place="traverse-city"] #history .chart {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-body[data-place="traverse-city"] #shore-map,
-body[data-place="traverse-city"] .leaflet-container {
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-}
-@media (max-width: 900px) {
-  body[data-place="traverse-city"] .columns { grid-template-columns: minmax(0,1fr); }
-}
-@media (max-width: 650px) {
-  body[data-place="traverse-city"] .hero-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  body[data-place="traverse-city"] .hero-photo {
-    height: 180px;
-    max-height: 180px;
-    object-fit: cover;
-  }
-  body[data-place="traverse-city"] .hero-data {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-  body[data-place="traverse-city"] .hero-data .metric:first-child {
-    grid-column: 1 / -1;
-  }
-  body[data-place="traverse-city"] .metric { padding: 12px; }
-  body[data-place="traverse-city"] .top nav { flex-wrap: wrap; gap: 8px; }
-}
-@media (max-width: 380px) {
-  body[data-place="traverse-city"] .hero-data { grid-template-columns: minmax(0,1fr); }
-  body[data-place="traverse-city"] .hero-data .metric:first-child { grid-column: auto; }
-  body[data-place="traverse-city"] .intent-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  body[data-place="traverse-city"] .top nav a { min-width: 0; }
-}
-
-
-/* Traverse City V1.3: bring a real shoreline photograph into the first viewport.
-   The original tablet layout consumed ~2 inches of plain gradient before an image.
-   Image covers the short hero; copy sits on top, with a first-party photo behind any
-   network failure. Scoped to Traverse City and without page overflow masking. */
-body[data-place="traverse-city"] .hero {
-  background: #103e50 url('/assets/great-lakes-beaches/lake-michigan-hero.jpg') center 46% / cover no-repeat;
-  padding: 0;
-  overflow: hidden;
-}
-body[data-place="traverse-city"] .hero .hero-layout {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 1160px;
-  min-height: 296px;
-  padding-top: 25px;
-  padding-bottom: 27px;
-}
-body[data-place="traverse-city"] .hero .hero-media {
-  position: absolute;
-  inset: 0 calc((min(100vw, 1160px) - 100vw) / 2);
-  z-index: -1;
-  border: 0;
-  border-radius: 0;
-  margin: 0;
-  box-shadow: none;
-  background: #316575 url('/assets/great-lakes-beaches/lake-michigan-hero.jpg') center 46% / cover no-repeat;
-  overflow: hidden;
-}
-body[data-place="traverse-city"] .hero .hero-media::after {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-    rgba(6, 30, 43, .87) 0%,
-    rgba(7, 35, 48, .72) 36%,
-    rgba(8, 36, 48, .19) 74%,
-    rgba(8, 36, 48, .07) 100%);
-}
-body[data-place="traverse-city"] .hero .hero-photo {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  min-height: 100%;
-  object-fit: cover;
-  object-position: center 52%;
-  aspect-ratio: auto;
-  display: block;
-}
-body[data-place="traverse-city"] .hero .hero-media figcaption {
-  position: absolute;
-  z-index: 1;
-  right: max(15px, calc((100vw - 1120px) / 2));
-  bottom: 9px;
-  left: auto;
-  width: min(410px, 40vw);
-  padding: 6px 8px;
-  font-size: 10px;
-  line-height: 1.4;
-  text-align: right;
-  color: #f0f7f7;
-  background: rgba(5, 25, 34, .58);
-  border-radius: 4px;
-}
-body[data-place="traverse-city"] .hero .hero-media figcaption a { color: #edffff; }
-body[data-place="traverse-city"] .hero .hero-copy {
-  width: min(690px, 66%);
-  max-width: 100%;
-  position: relative;
-  z-index: 2;
-}
-body[data-place="traverse-city"] .hero h1 {
-  font-size: clamp(30px, 3.75vw, 51px);
-  line-height: 1.07;
-  letter-spacing: -.045em;
-  max-width: 22ch;
-  margin: 10px 0 10px;
-}
-body[data-place="traverse-city"] .hero .breadcrumbs { margin-bottom: 9px; }
-body[data-place="traverse-city"] .hero .eyebrow { font-size: 11px; letter-spacing: .13em; }
-body[data-place="traverse-city"] .hero .hero-copy > p {
-  color: #f2faf9;
-  max-width: 56ch;
-  font-size: clamp(14px, 1.45vw, 17px);
-  line-height: 1.4;
-}
-body[data-place="traverse-city"] .hero .hero-kicker { margin-top: 11px; font-size: 16px; }
-body[data-place="traverse-city"] .hero .hero-skip { margin-top: 12px; padding: 7px 12px; font-size: 12px; }
-@media (max-width: 1200px) and (max-height: 860px) and (orientation: landscape) {
-  body[data-place="traverse-city"] .hero .hero-layout {
-    min-height: 258px;
-    padding-top: 15px;
-    padding-bottom: 16px;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy { width: min(670px, 70%); }
-  body[data-place="traverse-city"] .hero h1 { font-size: clamp(27px, 3vw, 36px); max-width: none; margin: 7px 0 8px; }
-  body[data-place="traverse-city"] .hero .breadcrumbs { display: none; }
-  body[data-place="traverse-city"] .hero .hero-kicker { display: none; }
-  body[data-place="traverse-city"] .hero .hero-copy { width: min(790px, 75%); }
-  body[data-place="traverse-city"] .hero .hero-copy > p { font-size: 14px; line-height: 1.35; max-width: 75ch; }
-  body[data-place="traverse-city"] .hero .hero-layout { min-height: 230px; padding-top: 12px; padding-bottom: 14px; }
-  body[data-place="traverse-city"] .hero .hero-kicker { margin-top: 8px; }
-  body[data-place="traverse-city"] .hero .hero-skip { margin-top: 9px; }
-}
-@media (max-width: 650px) {
-  body[data-place="traverse-city"] .hero .hero-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    min-height: 260px;
-    padding-top: 18px;
-    padding-bottom: 19px;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy {
-    width: 100%;
-    padding-right: 0;
-  }
-  body[data-place="traverse-city"] .hero .hero-photo {
-    height: 100%;
-    max-height: none;
-    object-position: 62% center;
-  }
-  body[data-place="traverse-city"] .hero .hero-media::after {
-    background: linear-gradient(90deg, rgba(5,29,40,.9), rgba(5,29,40,.46));
-  }
-  body[data-place="traverse-city"] .hero .hero-media figcaption {
-    width: auto;
-    max-width: 91%;
-    right: 8px;
-    bottom: 5px;
-    font-size: 9px;
-  }
-  body[data-place="traverse-city"] .hero h1 {
-    max-width: 22ch;
-    font-size: clamp(30px, 7vw, 37px);
-  }
-  body[data-place="traverse-city"] .hero .hero-copy > p {
-    font-size: 14px;
-    max-width: 45ch;
-  }
-  body[data-place="traverse-city"] .hero .hero-kicker { font-size: 14px; }
-  body[data-place="traverse-city"] .hero .hero-skip { margin-bottom: 22px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  body[data-place="traverse-city"] .hero * { animation: none; }
-}
-
-/* Override legacy 390px hero-card limits when photograph is background. The
-   absolute element must fill the viewport, not the 1160px content column. */
-body[data-place="traverse-city"] .hero .hero-media {
-  left: 50%;
-  right: auto;
-  top: 0;
-  bottom: 0;
-  width: 100vw;
-  min-width: 100vw;
-  max-width: none;
-  height: 100%;
-  min-height: 100%;
-  max-height: none;
-  transform: translateX(-50%);
-}
-body[data-place="traverse-city"] .hero .hero-photo {
-  height: 100%;
-  min-height: 0;
-  max-height: 100%;
-  aspect-ratio: auto;
-}
-@media (max-width: 650px) {
-  body[data-place="traverse-city"] .hero .hero-media { width: 100vw; min-width: 100vw; }
-}
-
-/* Actual landscape tablet widths include 1280px, not merely <=1200px. */
-@media (min-width:700px) and (max-width:1366px) and (max-height:900px) and (orientation:landscape) {
-  body[data-place="traverse-city"] .hero .hero-layout {
-    min-height: 232px;
-    padding-top: 12px;
-    padding-bottom: 14px;
-    align-items: center;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy {
-    width: min(950px, 85%);
-  }
-  body[data-place="traverse-city"] .hero .breadcrumbs,
-  body[data-place="traverse-city"] .hero .hero-kicker {
-    display: none;
-  }
-  body[data-place="traverse-city"] .hero h1 {
-    max-width: none;
-    font-size: clamp(27px, 3vw, 40px);
-    margin: 6px 0 8px;
-    line-height: 1.08;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy > p {
-    max-width: 86ch;
-    font-size: 14px;
-    line-height: 1.35;
-  }
-  body[data-place="traverse-city"] .hero .hero-skip {
-    margin-top: 9px;
-    padding: 7px 13px;
-  }
-}
-
-
-/* Traverse City photo and answer-first layout, 2026-10-13.
-   Removes the full-bleed dark overlay. Image is an ordinary standalone
-   figure, never an obscured background, and conditions remain immediately
-   beneath the compact hero. Scoped to this one destination. */
-body[data-place="traverse-city"] .hero{
-  background:#f7faf9;
-  color:#163b4d;
-  padding:0;
-  overflow:visible;
-  border-bottom:1px solid #dce7e6;
-}
-body[data-place="traverse-city"] .hero .wrap.hero-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
-  align-items:center;
-  gap:clamp(16px,2.8vw,36px);
-  position:relative;
-  isolation:auto;
-  width:100%;
-  max-width:1160px;
-  min-width:0;
-  min-height:0;
-  margin:0 auto;
-  padding:16px 22px 18px;
-}
-body[data-place="traverse-city"] .hero .hero-copy{
-  position:static;
-  z-index:auto;
-  width:100%;
-  max-width:100%;
-  min-width:0;
-  margin:0;
-  padding:0;
-}
-body[data-place="traverse-city"] .hero .hero-copy .breadcrumbs{
-  display:block;
-  color:#526e79;
-  font-size:11px;
-  margin:0 0 7px;
-  line-height:1.3;
-}
-body[data-place="traverse-city"] .hero .breadcrumbs a{color:#0a5969}
-body[data-place="traverse-city"] .hero .eyebrow{
-  color:#177d85;
-  font-size:11px;
-  line-height:1.3;
-  letter-spacing:.11em;
-}
-body[data-place="traverse-city"] .hero .hero-copy h1{
-  color:#103b4c;
-  font-size:clamp(29px,3vw,39px);
-  line-height:1.08;
-  max-width:23ch;
-  margin:7px 0 9px;
-  letter-spacing:-.042em;
-  overflow-wrap:normal;
-}
-body[data-place="traverse-city"] .hero .hero-copy > p{
-  color:#365762;
-  font-size:clamp(13px,1.25vw,16px);
-  line-height:1.43;
-  max-width:62ch;
-  margin:0;
-}
-body[data-place="traverse-city"] .hero .hero-kicker{display:none}
-body[data-place="traverse-city"] .hero .hero-skip{
-  display:inline-flex;
-  margin:12px 0 0;
-  font-size:12px;
-  background:#d9ecea;
-  color:#124858;
-  padding:7px 12px;
-}
-body[data-place="traverse-city"] .hero .hero-media{
-  position:relative;
-  inset:auto;
-  z-index:auto;
-  left:auto;
-  right:auto;
-  top:auto;
-  bottom:auto;
-  transform:none;
-  width:100%;
-  min-width:0;
-  max-width:100%;
-  min-height:0;
-  height:auto;
-  max-height:none;
-  border-radius:12px;
-  border:1px solid #d2e1e0;
-  background:#e1ecec url('/assets/great-lakes-beaches/lake-michigan-hero.jpg') center / cover no-repeat;
-  box-shadow:none;
-  margin:0;
-  overflow:hidden;
-}
-body[data-place="traverse-city"] .hero .hero-media::after{display:none;content:none}
-body[data-place="traverse-city"] .hero .hero-photo{
-  width:100%;
-  height:clamp(174px,18vw,218px);
-  max-width:100%;
-  min-width:0;
-  min-height:0;
-  max-height:218px;
-  display:block;
-  object-fit:cover;
-  object-position:center 54%;
-  aspect-ratio:auto;
-}
-body[data-place="traverse-city"] .hero .hero-media figcaption{
-  position:static;
-  z-index:auto;
-  display:block;
-  left:auto;
-  right:auto;
-  bottom:auto;
-  width:auto;
-  max-width:100%;
-  color:#43626d;
-  background:#fbfcfa;
-  text-align:left;
-  padding:6px 10px;
-  margin:0;
-  border:0;
-  border-radius:0;
-  font-size:10px;
-  line-height:1.35;
-  overflow-wrap:anywhere;
-}
-body[data-place="traverse-city"] .hero .hero-media figcaption a{
-  color:#1d626d;
-}
-@media (min-width:700px) and (max-height:900px) and (orientation:landscape){
-  body[data-place="traverse-city"] .hero .wrap.hero-layout{
-    display:grid;
-    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
-    min-height:0;
-    padding:13px 22px 14px;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy h1{
-    font-size:clamp(29px,3vw,39px);
-    max-width:24ch;
-    margin:7px 0 8px;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy .breadcrumbs{
-    display:block;
-  }
-  body[data-place="traverse-city"] .hero .hero-photo{
-    height:clamp(162px,18vw,208px);
-    max-height:208px;
-  }
-}
-@media (max-width:650px){
-  body[data-place="traverse-city"] .hero .wrap.hero-layout{
-    display:flex;
-    flex-direction:column;
-    align-items:stretch;
-    gap:14px;
-    min-height:0;
-    padding:16px 16px;
-  }
-  body[data-place="traverse-city"] .hero .hero-copy{width:100%}
-  body[data-place="traverse-city"] .hero .hero-copy h1{
-    font-size:clamp(29px,7vw,36px);
-    max-width:24ch;
-    line-height:1.1;
-  }
-  body[data-place="traverse-city"] .hero .hero-photo{
-    width:100%;
-    height:clamp(136px,38vw,182px);
-    max-height:182px;
-  }
-  body[data-place="traverse-city"] .hero .hero-media figcaption{
-    font-size:9px;
-  }
-}
-
-
-/* Traverse City: actual temperature is first; photo is a small secondary
-   evidence-of-place. Scoped to this page and overrides old editorial hero. */
-body[data-place="traverse-city"] .hero .wrap.hero-layout{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);align-items:start;padding-top:16px;padding-bottom:16px}
-body[data-place="traverse-city"] .hero .hero-copy h1{font-size:clamp(25px,2.25vw,32px);line-height:1.1;max-width:none;margin:6px 0 10px;letter-spacing:-.035em}
-body[data-place="traverse-city"] .hero .hero-skip{margin-top:9px}
-body[data-place="traverse-city"] .hero .hero-photo{height:clamp(170px,19vw,245px);max-height:245px}
-body[data-place="traverse-city"] .hero .hero-media{align-self:center}
-body[data-place] .temperature-answer{background:white;border-left:4px solid #087f83;border-radius:0 12px 12px 0;padding:12px 16px 11px;box-shadow:0 5px 18px rgba(9,46,65,.07);min-width:0}
-body[data-place] .temperature-answer-label{color:#37636a;font-size:11px;letter-spacing:.085em;font-weight:800;line-height:1.2}
-body[data-place] .temperature-answer-reading{font-size:clamp(43px,5.35vw,72px);font-weight:850;letter-spacing:-.058em;line-height:1.07;color:#0d3d4e;overflow-wrap:anywhere;padding:1px 0 3px;font-variant-numeric:tabular-nums}
-body[data-place] .temperature-answer-when{color:#425e67;font-weight:650;font-size:12px;line-height:1.25}
-body[data-place] .temperature-answer-caveat{font-size:12px;line-height:1.3;color:#4c5f67;margin:4px 0!important;max-width:70ch!important}
-body[data-place] .temperature-answer-local{font-size:12px;line-height:1.3;color:#37515d;border-top:1px solid #e2eae9;padding-top:4px;margin-top:4px;overflow-wrap:anywhere}
-body[data-place] .temperature-answer-local strong{color:#8a5020}
-body[data-place] .hero .hero-copy > .temperature-answer p{font-size:12px}
-@media(max-width:900px){
- body[data-place="traverse-city"] .hero .wrap.hero-layout{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:12px}
- body[data-place] .temperature-answer{padding:10px 12px}
- body[data-place] .temperature-answer-reading{font-size:clamp(42px,5.5vw,58px)}
-}
-@media(max-width:650px){
- body[data-place="traverse-city"] .hero .wrap.hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:9px;padding-top:13px;padding-bottom:12px}
- body[data-place="traverse-city"] .hero .hero-photo{height:124px;max-height:124px}
- body[data-place="traverse-city"] .hero .hero-copy h1{font-size:27px;margin:6px 0 9px}
- body[data-place] .temperature-answer-reading{font-size:clamp(42px,11vw,62px)}
- body[data-place="traverse-city"] .hero .hero-media{width:100%;align-self:stretch}
- body[data-place="traverse-city"] .hero .hero-media figcaption{font-size:9px;padding:4px 8px}
- body[data-place="traverse-city"] .hero .hero-skip{margin:8px 0 0}
-}
-
-
-/* West Bay satellite status must not push the answer-first tablet cards down. */
-body[data-place="traverse-city"] .hero .wrap.hero-layout{padding-top:10px;padding-bottom:10px}
-body[data-place] .temperature-answer{padding-top:8px;padding-bottom:7px}
-body[data-place] .temperature-answer-local{padding-top:4px;margin-top:4px}
-body[data-place="traverse-city"] .hero .hero-copy h1{margin-top:5px;margin-bottom:6px}
-@media(max-width:650px){
- body[data-place="traverse-city"] .hero .wrap.hero-layout{padding-top:12px;padding-bottom:11px}
-}
+/* Long text never forces sideways scroll */
+.metric small,.breadcrumbs,.panel p,.guide p,.foot,.decision-pane p,.aside p{overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}

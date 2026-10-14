@@ -48,7 +48,7 @@ test('Traverse City first screen leads with a sourced water temperature, not the
  for(const id of ['lead-temp','lead-temp-label','lead-temp-when','lead-temp-caveat','lead-bay-status']){
   assert.match(hero,new RegExp('id="'+id+'"'));
  }
- assert.match(hero,/GRAND TRAVERSE BAY/);
+ assert.match(hero,/grand traverse bay/i);
  assert.match(hero,/id="lead-lake-context"/);
  assert.doesNotMatch(hero,/LAKE MICHIGAN SURFACE AVERAGE/,'the lead is the bay; the lake average is context only');
  assert.match(hero,/Grand Traverse Bay buoy 45020/);

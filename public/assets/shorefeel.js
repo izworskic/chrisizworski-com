@@ -17,25 +17,32 @@ function setLead(value,label,when,caveat){
  write('lead-temp',value);write('lead-temp-label',label);
  write('lead-temp-when',when);write('lead-temp-caveat',caveat);
 }
+const SCALE_MIN=45,SCALE_MAX=80;
+const pct=t=>Math.max(0,Math.min(100,(t-SCALE_MIN)/(SCALE_MAX-SCALE_MIN)*100));
+function setMarker(t){
+ const box=get('lead-answer'),m=get('lead-marker');if(!box||!m)return;
+ if(Number.isFinite(t)){box.dataset.band='ok';m.style.left=pct(t)+'%';}else box.dataset.band='none';
+}
 function renderLead(){
  if(!place||!payload||!get('lead-temp'))return;
  const water=payload.water,buoy=payload.local,sat=payload.regionalSatellite,whole=payload.lakes?.[lake];
- const upper=s=>String(s||'').toUpperCase();
+ const upper=s=>String(s||'');
  if(water&&Number.isFinite(water.tempF)){
   if(water.kind==='buoy'){
-   setLead(format(water.tempF),upper(water.where)+' · BUOY '+buoy.stationId,
+   setLead(format(water.tempF),upper(water.where)+' · buoy '+buoy.stationId,
     'Measured '+time(water.observedAt)+' · '+buoy.stationName,
     water.caveat);
   }else{
-   setLead(format(water.tempF),upper(water.where)+' · NOAA SATELLITE SURFACE',
+   setLead(format(water.tempF),upper(water.where)+' · NOAA satellite surface',
     'NOAA GLSEA ACSPO · '+time(water.observedAt)+' · '+water.label,
     water.caveat);
   }
  }else{
-  setLead('No current reading',upper(buoy?.waterBody||'water temperature')+' · NOT VERIFIED',
+  setLead('No current reading',upper(buoy?.waterBody||'water temperature')+' · not verified',
    'No buoy report in 6 hours, no valid satellite pixel in 3 days',
    'The lake average below is NOT the measured temperature at this beach.');
  }
+ setMarker(water&&Number.isFinite(water.tempF)?water.tempF:NaN);
  const bm=buoy?.measurement;
  write('lead-bay-status',bm?format(bm.tempF)+' · '+time(bm.observedAt)
   :buoy?.measurementStatus==='offline'?'Not deployed · seasonal buoy recovered for winter'
@@ -117,25 +124,39 @@ function renderBeachForecast(){
  const sec=get('beach-forecast'),host=get('bf-body');if(!sec||!host)return;
  const bf=payload?.beachForecast;
  host.textContent='';
- if(!bf||bf.status!=='available'||!bf.beaches?.length){sec.hidden=true;return;}
+ if(!bf){sec.hidden=true;return;}
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ if(bf.status!=='available'||!bf.beaches?.length){
+  write('bf-lede','');write('bf-method','');
+  const m=el('p','bf-down','The beach forecast is unavailable right now because NOAA\u2019s lake model server is not responding. The measured reading at the top of the page is not affected. Nothing has been estimated in its place.');
+  host.appendChild(m);sec.hidden=false;return;
+ }
  const v=bf.validation||{};
- write('bf-lede','Estimated water temperature at the beach, not a measurement. It starts from a NOAA-measured level and adds the NOAA lake model\u2019s forecast change. Typical error in Sept\u2013Oct 2026 tests: about '+v.error24hF+'\u00b0F at 24 hours and '+v.error48hF+'\u00b0F at 48 hours (ranges below are wider on purpose).');
- const leadName=h=>h===0?'Now':h<24?'+'+h+' h':'+'+h+' h';
+ write('bf-lede','Estimated from a NOAA measurement plus the lake model\u2019s forecast change. Typical error in Sept\u2013Oct 2026 tests: '+v.error24hF+'\u00b0F at 24 hours, '+v.error48hF+'\u00b0F at 48 hours. The ranges are wider on purpose.');
+ const when=h=>h===0?'Now':'In '+h+' h';
  bf.beaches.forEach(b=>{
-  const card=el('article','panel');
-  card.appendChild(el('h3','',b.name));
-  const start=b.points[0];
-  card.appendChild(el('p','',start.low+'\u2013'+start.high+'\u00b0F now (best guess '+start.tempF.toFixed(0)+'\u00b0F)'));
-  card.appendChild(el('p','quiet','Starts from the NOAA '+(b.levelKind==='buoy'?'buoy':'satellite')+' reading of '+b.levelTempF.toFixed(1)+'\u00b0F, '+time(b.levelObservedAt)+'.'));
-  const t=el('table','lake-table');
-  const head=t.createTHead().insertRow();
-  ['When','Range','Best guess'].forEach(x=>head.appendChild(el('th','',x)));
-  const tb=t.createTBody();
-  b.points.slice(1).forEach(p=>{const r=tb.insertRow();[leadName(p.leadH),p.low+'\u2013'+p.high+'\u00b0F',p.tempF.toFixed(0)+'\u00b0F'].forEach(x=>r.insertCell().textContent=x);});
-  card.appendChild(t);
-  if(b.cooling){const c=el('div','safety');c.appendChild(el('strong','',b.cooling.tier==='sharp'?'Sharp cooling watch':'Cooling watch'));c.appendChild(el('p','',b.cooling.text));card.appendChild(c);}
-  host.appendChild(card);
+  const wrap=el('div','bf-beach');
+  const head=el('div','bf-head');
+  head.appendChild(el('h3','',b.name));
+  const n=b.points[0];
+  head.appendChild(el('span','bf-now','Now '+n.low+'\u2013'+n.high+'\u00b0F'));
+  wrap.appendChild(head);
+  wrap.appendChild(el('p','bf-basis','Starts from the NOAA '+(b.levelKind==='buoy'?'buoy':'satellite')+' reading of '+b.levelTempF.toFixed(1)+'\u00b0F, '+time(b.levelObservedAt)+'.'));
+  const list=el('ul','bf-slots');
+  b.points.forEach(p=>{
+   const li=el('li','bf-slot');
+   li.appendChild(el('div','bf-when',when(p.leadH)));
+   li.appendChild(el('div','bf-temp',p.tempF.toFixed(0)+'\u00b0'));
+   li.appendChild(el('div','bf-range',p.low+'\u2013'+p.high+'\u00b0F'));
+   const bar=el('div','bf-bar');bar.setAttribute('aria-hidden','true');
+   const seg=document.createElement('i');
+   seg.style.left=pct(p.low)+'%';seg.style.width=Math.max(2,pct(p.high)-pct(p.low))+'%';
+   bar.appendChild(seg);li.appendChild(bar);
+   list.appendChild(li);
+  });
+  wrap.appendChild(list);
+  if(b.cooling){const c=el('div','bf-callout');c.setAttribute('role','note');const cut=b.cooling.text.indexOf('. ');c.appendChild(el('strong','',cut>0?b.cooling.text.slice(0,cut+1):b.cooling.text));if(cut>0)c.appendChild(document.createTextNode(b.cooling.text.slice(cut+2)));wrap.appendChild(c);}
+  host.appendChild(wrap);
  });
  write('bf-method',bf.method+' '+bf.caveat+' Source: NOAA LMHOFS model run '+time(bf.cycle)+'. '+(v.caveats||[]).join(' '));
  sec.hidden=false;
