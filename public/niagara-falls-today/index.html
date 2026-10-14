@@ -64,10 +64,11 @@
 <section class="panel controls" id="planner" aria-labelledby="plan-title">
  <div class="panel-head"><span class="index">01 / PLAN YOUR VISIT</span><h2 id="plan-title">Can you do what you came for?</h2><p>Pick the goal first. The planner checks the visit date, published operating window, and the time it takes to reach each stop—then shows what fits.</p></div>
  <div class="visit-quick-start" role="group" aria-label="Quick-start a Niagara Falls plan">
-  <button type="button" data-niagara-preset="boat"><strong>Take a boat ride</strong><small>Maid of the Mist or Niagara City Cruises</small></button>
-  <button type="button" data-niagara-preset="short"><strong>I only have 2 hours</strong><small>Best same-side viewpoints</small></button>
-  <button type="button" data-niagara-preset="family"><strong>Visiting with kids</strong><small>Manageable stops and a realistic pace</small></button>
+  <button type="button" data-niagara-preset="boat" aria-controls="result-body" aria-pressed="false"><strong>Take a boat ride</strong><small>Maid of the Mist or Niagara City Cruises</small></button>
+  <button type="button" data-niagara-preset="short" aria-controls="result-body" aria-pressed="false"><strong>I only have 2 hours</strong><small>Best same-side viewpoints</small></button>
+  <button type="button" data-niagara-preset="family" aria-controls="result-body" aria-pressed="false"><strong>Visiting with kids</strong><small>Manageable stops and a realistic pace</small></button>
  </div>
+ <p id="quick-start-note" class="quick-start-note" role="status" aria-live="polite"></p>
  <form id="plan-form">
  <div class="two">
   <label>Visit date <input type="date" name="visit_date" id="date" required></label>

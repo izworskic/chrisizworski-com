@@ -62,7 +62,7 @@ test('one player offers three thumbnail choices without preloaded video',()=>{
  assert.match(html,/id="niagara-film-stage"/);
  assert.equal((html.match(/class="film-thumb"/g)||[]).length,3);
  assert.equal((html.match(/loading="lazy" decoding="async" alt=""/g)||[]).length,3);
- assert.equal((html.match(/aria-pressed="false"/g)||[]).length,3);
+ assert.equal((html.match(/class="film-choice"[^>]*aria-pressed="false"/g)||[]).length,3);
  assert.match(films,/\.film-thumb img/);
  assert.match(films,/is-missing/);
  assert.match(films,/scrollIntoView/);
