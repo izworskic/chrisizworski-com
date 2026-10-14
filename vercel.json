@@ -49,6 +49,9 @@
     "api/manistee-river-weather.js": {
       "maxDuration": 20
     },
+    "api/shorefeel.js": {
+      "maxDuration": 20
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
