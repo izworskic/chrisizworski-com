@@ -58,3 +58,18 @@ test('published NOAA fallback is date-stamped, self-expiring, and never a claime
  const stale=lakeSeries(parseGLSEA(raw,new Date('2026-10-20T12:00:00Z')),'michigan',new Date('2026-10-20T12:00:00Z'));
  assert.equal(stale.status,'stale');
 });
+
+
+test('NOAA ACSPO bay pixel: source coordinate, Celsius, recency and unavailable gates',()=>{
+ const {parseGLSEABayGridCsv}=require('../lib/shorefeel/engine.js');
+ const q={lat:44.795837,lon:-85.610003},now=new Date('2026-10-13T20:00:00Z');
+ const csv='time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n2026-10-11T12:00:00Z,44.792,-85.606,16.5';
+ const s=parseGLSEABayGridCsv(csv,q,now);
+ assert.equal(s.tempF,61.7);
+ assert.equal(s.observedAt,'2026-10-11T12:00:00.000Z');
+ assert.equal(parseGLSEABayGridCsv(csv,q,new Date('2026-10-17T20:00:00Z')),null);
+ assert.equal(parseGLSEABayGridCsv(csv,{lat:45.2,lon:-85.6},now),null);
+ assert.equal(parseGLSEABayGridCsv('<html><h1>Access Denied by Anubis</h1></html>',q,now),null);
+ assert.equal(parseGLSEABayGridCsv('time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n2026-10-12T12:00:00Z,44.792,-85.606,-99999',q,now),null);
+ assert.equal(parseGLSEABayGridCsv('time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n2026-10-15T12:00:00Z,44.792,-85.606,22',q,now),null);
+});
