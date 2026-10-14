@@ -94,6 +94,7 @@ const server=http.createServer((req,res)=>{
       assert.equal(answer,'62.1°F','When Traverse Bay buoy is offline the recent NOAA lakewide mean must lead');
       assert.match(await page.locator('#lead-temp-label').textContent(),/LAKE MICHIGAN/);
       assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
+      assert.match(await page.locator('#lead-grid-status').textContent(),/No recent valid grid/);
       const answerStyle=await page.locator('#lead-temp').evaluate(el=>getComputedStyle(el).fontSize);
       assert.ok(parseFloat(answerStyle)>=40,'temperature reading must be the dominant feature');
       if(width===1024||width===1280){
@@ -141,6 +142,26 @@ const server=http.createServer((req,res)=>{
   await page.waitForFunction(()=>document.querySelector('#feel-title')?.textContent.includes('Evidence unavailable'));
   assert.match(await page.locator('#local-temp').textContent(),/Unavailable/);
   await ctx.close();
+
+  // When the NOAA satellite bay grid is fresh and the seasonal bay buoy is
+  // absent, use the gridded SST ahead of the coarser whole-lake number.
+  const gridCtx=await browser.newContext({viewport:{width:1024,height:768}});
+  const gridPage=await gridCtx.newPage();
+  await gridPage.route(/(?:upload\.wikimedia\.org|tile\.openstreetmap\.org)/,r=>r.abort());
+  await gridPage.route('**/api/shorefeel?*',route=>{
+   const payload=JSON.parse(fixture(new URL('http://localhost/api/shorefeel?lake=michigan&place=traverse-city')));
+   payload.regionalSatellite={status:'recent',measurement:{tempF:64.4,observedAt:'2026-10-13T12:00:00.000Z'}};
+   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(payload)});
+  });
+  await gridPage.goto(base+'/lake-michigan-water-temperature/traverse-city/',{waitUntil:'load'});
+  await gridPage.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='64.4°F',{timeout:7000});
+  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/SATELLITE SURFACE GRID/);
+  assert.match(await gridPage.locator('#lead-temp-caveat').textContent(),/NOT a measured temperature/);
+  assert.match(await gridPage.locator('#lead-grid-status').textContent(),/64.4°F/);
+  await gridPage.getByRole('button',{name:'Paddling'}).click();
+  assert.match(await gridPage.locator('#feel-water').textContent(),/satellite grid estimates/i);
+  await gridCtx.close();
+
   fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({tested:new Date().toISOString(),cases:audit,upstreamUnavailable:'passed'},null,2));
   process.stdout.write('ShoreFeel browser QA passed '+audit.length+' viewports/pages + upstream failure case\n');
  }finally{await browser.close();server.close();}
