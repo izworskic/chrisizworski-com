@@ -16,7 +16,7 @@ let resorts=null,outline=null,selected=null;
 function render(){
  if(!resorts||!outline)return;
  const day=document.getElementById('ski-day')?.value||'saturday';
- const svg=node('svg',{viewBox:'0 0 '+W+' '+H,'aria-label':'Michigan ski area map with NWS forecast snow points',role:'img',class:'michigan-point-svg'});
+ const svg=node('svg',{viewBox:'0 0 '+W+' '+H,'aria-label':'Michigan ski area map with NWS forecast snow points',role:'group',class:'michigan-point-svg'});
  const defs=node('defs');const grad=node('linearGradient',{id:'ski-map-sea',x1:0,y1:0,x2:0,y2:1});
  grad.append(node('stop',{offset:'0%','stop-color':'#dbeaf1'}),node('stop',{offset:'100%','stop-color':'#e9f4f6'}));
  defs.append(grad);svg.append(defs,node('rect',{x:0,y:0,width:W,height:H,rx:15,fill:'url(#ski-map-sea)'}));
