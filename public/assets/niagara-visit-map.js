@@ -20,6 +20,8 @@
   if(map)return true;
   if(!window.L||!el('niagara-route-map'))return false;
   map=L.map('niagara-route-map',{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView([43.0835,-79.075],14);
+  // Overlay layers must exist even if the GL style cannot initialize.
+  layers=L.layerGroup().addTo(map);
   // CARTO's formerly keyless raster tiles became watermarked in 2026.
   // Use OpenFreeMap's explicitly keyless vector map. Leaflet still owns
   // itinerary markers, parking, popups, and stop-order connector overlays.
@@ -35,7 +37,7 @@
    var label=el('niagara-basemap-status');
    if(label)label.textContent='Standard street map · keyless backup';
   }
-  if(typeof L.maplibreGL==='function'&&window.maplibregl&&window.maplibregl.supported()){
+  if(typeof L.maplibreGL==='function'&&window.maplibregl){
    try{
     var tiles=L.maplibreGL({
      style:'https://tiles.openfreemap.org/styles/positron',
@@ -56,7 +58,6 @@
     map.attributionControl.addAttribution('&copy; <a href="https://openfreemap.org/" target="_blank" rel="noopener">OpenFreeMap</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors');
    }catch(error){useStandardFallback();}
   }else useStandardFallback();
-  layers=L.layerGroup().addTo(map);
   setTimeout(function(){if(map)map.invalidateSize();},0);
   return true;
  }
