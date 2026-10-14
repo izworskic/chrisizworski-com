@@ -108,7 +108,7 @@ module.exports=async function handler(req,res){
     caveat:'Daily satellite surface analysis for offshore pixels; not a thermometer at the beach. Shallow water on a sunny afternoon can run warmer.'
   }:null;
   const local=place?{
-    name:place.name,stationId:place.station,stationName:place.stationName,stationOwner:place.stationOwner,lat:place.stationLat,lon:place.stationLon,
+    name:place.name,waterBody:place.water,beach:place.beach.name,stationId:place.station,stationName:place.stationName,stationOwner:place.stationOwner,lat:place.stationLat,lon:place.stationLon,
     caveat:place.stationCaveat,measurement:nearest,
     measurementStatus:nearest?'recent':buoyStatus==='offline'?'offline':'unavailable',
     forecastStatus:periods.length?'available':'unavailable',periods

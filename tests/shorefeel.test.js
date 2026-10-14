@@ -104,7 +104,7 @@ test('grid box: nearest VALID water pixel wins, NaN land mask and far pixels are
  assert.equal(cells['west-bay'].tempF,60.6);assert.equal(cells['west-bay'].observedAt,'2026-10-12T12:00:00.000Z');
  assert.equal(cells['east-bay'].tempF,61);
  const w=waterEvidence(tc,null,cells);
- assert.equal(w.kind,'satellite');assert.equal(w.cellKey,'west-bay');assert.match(w.caveat,/not a thermometer at the beach/);
+ assert.equal(w.kind,'satellite');assert.equal(w.cellKey,'west-bay');assert.match(w.caveat,/not a beach thermometer/);
  assert.ok(w.distanceKm>3&&w.distanceKm<5,'distance is measured from Clinch Park, got '+w.distanceKm);
  const b=waterEvidence(tc,{tempF:58.1,observedAt:'2026-10-13T19:30:00.000Z',ageHours:0.5},cells);
  assert.equal(b.kind,'buoy');assert.equal(b.tempF,58.1);

@@ -23,11 +23,17 @@ const assessments=Object.fromEntries(activities.map(a=>[a,{
 function fixture(url){
  const place=url.searchParams.get('place');
  return JSON.stringify({product:'ShoreFeel',lake:'michigan',lakes,local:place?{
-  name:place,stationId:place==='grand-haven'?'45029':'45020',
+  name:place,waterBody:place==='grand-haven'?'Lake Michigan off Grand Haven':'Grand Traverse Bay',stationId:place==='grand-haven'?'45029':'45020',
   stationName:'Test offshore buoy',lat:43.2,lon:-86.2,caveat:'Station is offshore, not the beach.',
   measurement:place==='traverse-city'?null:{tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z'},
   periods:[{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}],
- }:null,assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
+ }:null,
+ // Evidence ladder: the API resolves `water` (buoy > nearest valid satellite pixel > null).
+ water:place==='grand-haven'?{kind:'buoy',tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z',label:'Test offshore buoy 45029',where:'Lake Michigan off Grand Haven',caveat:'A buoy reading is the water at the buoy, not the shallow water at the beach.'}:null,
+ regionalSatellite:place?{status:'unavailable',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay',measurement:null}]}:null,
+ normal:{date:'2026-10-12',tempF:57.1,deltaF:5},
+ weatherNow:place?{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}:null,
+ assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
 }
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{
@@ -88,13 +94,16 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
-     assert.match(await page.locator('#local-source').textContent(),key==='traverse'?/No buoy observation/:/offshore buoy/);
+     assert.match(await page.locator('#local-source').textContent(),key==='traverse'?/No buoy observation/:/Buoy 45029 · /);
      if(key==='traverse'){
+      // No buoy and no valid bay pixel: the headline says so. The whole-lake mean is
+      // context on its own line and is never promoted to a bay reading.
       const answer=await page.locator('#lead-temp').textContent();
-      assert.equal(answer,'62.1°F','When Traverse Bay buoy is offline the recent NOAA lakewide mean must lead');
-      assert.match(await page.locator('#lead-temp-label').textContent(),/LAKE MICHIGAN/);
+      assert.equal(answer,'No current reading','whole-lake mean must not lead as a bay reading');
+      assert.match(await page.locator('#lead-temp-label').textContent(),/GRAND TRAVERSE BAY · NOT VERIFIED/);
       assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
-      assert.match(await page.locator('#lead-grid-status').textContent(),/No recent valid grid/);
+      assert.match(await page.locator('#lead-grid-status').textContent(),/No valid pixel/);
+      assert.match(await page.locator('#lead-lake-context').textContent(),/62\.1°F on Oct 12 · \+5\.0°F vs the long-term normal/);
       const answerStyle=await page.locator('#lead-temp').evaluate(el=>getComputedStyle(el).fontSize);
       assert.ok(parseFloat(answerStyle)>=40,'temperature reading must be the dominant feature');
       if(width===1024||width===1280){
@@ -150,16 +159,19 @@ const server=http.createServer((req,res)=>{
   await gridPage.route(/(?:upload\.wikimedia\.org|tile\.openstreetmap\.org)/,r=>r.abort());
   await gridPage.route('**/api/shorefeel?*',route=>{
    const payload=JSON.parse(fixture(new URL('http://localhost/api/shorefeel?lake=michigan&place=traverse-city')));
-   payload.regionalSatellite={status:'recent',measurement:{tempF:64.4,observedAt:'2026-10-13T12:00:00.000Z'}};
+   const m={tempF:64.4,observedAt:'2026-10-13T12:00:00.000Z',distanceKm:4.2};
+   payload.regionalSatellite={status:'recent',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay, 4 km north of Clinch Park',measurement:m},{key:'east-bay',short:'East Bay',label:'East Grand Traverse Bay',measurement:{...m,tempF:64.9}}]};
+   payload.water={kind:'satellite',tempF:64.4,observedAt:m.observedAt,label:'West Grand Traverse Bay, 4 km north of Clinch Park',cellKey:'west-bay',where:'Grand Traverse Bay',caveat:'NOAA satellite surface analysis for a pixel 4.2 km from Clinch Park beach, not a beach thermometer; sunlit shallows can run warmer.'};
+   for(const a of activities)payload.assessments[a].water='Cold · 64.4°F at West Grand Traverse Bay, 4 km north of Clinch Park. In the 60s.';
    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(payload)});
   });
   await gridPage.goto(base+'/lake-michigan-water-temperature/traverse-city/',{waitUntil:'load'});
   await gridPage.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='64.4°F',{timeout:7000});
-  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/SATELLITE SURFACE GRID/);
-  assert.match(await gridPage.locator('#lead-temp-caveat').textContent(),/NOT a measured temperature/);
-  assert.match(await gridPage.locator('#lead-grid-status').textContent(),/64.4°F/);
+  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/GRAND TRAVERSE BAY · NOAA SATELLITE SURFACE/);
+  assert.match(await gridPage.locator('#lead-temp-caveat').textContent(),/not a beach thermometer/);
+  assert.match(await gridPage.locator('#lead-grid-status').textContent(),/West Bay 64\.4°F · East Bay 64\.9°F/);
   await gridPage.getByRole('button',{name:'Paddling'}).click();
-  assert.match(await gridPage.locator('#feel-water').textContent(),/satellite grid estimates/i);
+  assert.match(await gridPage.locator('#feel-water').textContent(),/64\.4°F at West Grand Traverse Bay/);
   await gridCtx.close();
 
   fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({tested:new Date().toISOString(),cases:audit,upstreamUnavailable:'passed'},null,2));

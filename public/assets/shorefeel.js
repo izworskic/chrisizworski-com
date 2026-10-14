@@ -32,9 +32,9 @@ function renderLead(){
     water.caveat);
   }
  }else{
-  setLead('No current reading',upper(payload.water?.where||buoy?.name||'water')+' · NOT VERIFIED',
-   'No buoy report in the past 6 hours and no valid satellite pixel in the past 3 days',
-   'The Lake Michigan daily average below is NOT the measured temperature at this beach, and we will not present it as one.');
+  setLead('No current reading',upper(buoy?.waterBody||'water temperature')+' · NOT VERIFIED',
+   'No buoy report in 6 hours, no valid satellite pixel in 3 days',
+   'The lake average below is NOT the measured temperature at this beach.');
  }
  const bm=buoy?.measurement;
  write('lead-bay-status',bm?format(bm.tempF)+' · '+time(bm.observedAt)
