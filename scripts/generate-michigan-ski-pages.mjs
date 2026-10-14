@@ -59,7 +59,7 @@ function details(r){
  'snowriver':'Lake Superior snowbands vary across western Upper Michigan.'})[r.slug]||'There is no verified resort-specific wind-alignment sector in this tool; NWS forecast snowfall and local reports remain the basis.';
  const intro=r.kind==='nordic'?
  'Garland Lodge is included as an outdoor winter option, but is not ranked against downhill lift-served resorts. Confirm trail grooming and availability with the venue.':
- 'This resort is evaluated by the same transparent Michigan weekend framework as other hills. The current NWS forecast is specific to its approximate coordinates, while the snow observations are nearby and may differ from conditions on the mountain.';
+ 'This resort is evaluated by the same transparent Michigan weekend framework as other hills. The NWS Saturday and Sunday snow outlooks use separate 24-hour forecast windows at the hill’s approximate coordinates. Nearby snow observations may differ from conditions on the mountain.';
  const html=[
  '<p class="breadcrumbs"><a href="/michigan-ski-hills/">All Michigan ski hills</a> / '+esc(r.name)+'</p>',
  '<section class="panel"><p class="eyebrow">Live resort comparison</p><h2>Is '+esc(r.name)+' worth the drive this weekend?</h2>',
@@ -91,7 +91,7 @@ function index(){
  '<p class="note">Lake-effect alerts are an early warning of dangerous travel as well as possible snowfall. A matched alert does not prove that a resort received measurable snow. NWS forecast wind alignment is labeled separately from official warnings.</p>',
  '</section>',
  '<section class="panel"><p class="eyebrow">02 / Weekend decision</p><h2>Michigan ski hills ranked by evidence and travel</h2>',
- '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (22), ticket value (14), base depth if confirmed (14), lake-effect warning signal (5), plus warning travel-risk penalty (−12). Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
+ '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (27), ticket value (14), and base depth if confirmed (14). An active winter warning suspends a resort’s rank instead of increasing its powder score. Saturday and Sunday snow outlooks are separate 24-hour NWS forecast windows ending at 4 PM Michigan time. Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
  '<div class="controls"><label>Leaving from<select id="origin"><option value="detroit">Detroit metro</option><option value="grandRapids">Grand Rapids</option></select></label>',
  '<label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
  '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
