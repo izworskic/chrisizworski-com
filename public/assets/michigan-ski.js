@@ -12,7 +12,7 @@ function latest(r,h){const w=r.weather||{},p=h===24?w.report24:w.report48;
  return p?fmt(p.inches,'" reported"')+' · '+p.distanceMiles+' mi away':'No nearby report';}
 function score(r){if(r.kind==='nordic')return null;
  const old=r.ranking?.components?.travelValue??0;
- const newTravel=Math.max(0,Math.round(22-(r.driveMinutes?.[state.origin]||999)/30));
+ const newTravel=Math.max(0,Math.round(27-(r.driveMinutes?.[state.origin]||999)/30));
  const s=r.ranking?.score;
  return Number.isFinite(s)?Math.max(0,Math.min(100,s-old+newTravel)):null;}
 function status(r){
@@ -48,8 +48,9 @@ function card(r,index,detail=false){
  const metrics=node('div','metrics');
  const data=[
  ['Decision index',score(r)===null?'Not ranked':score(r)+'/100*'],
- ['Forecast snow',fmt(r.weather?.forecastSnowInches,'″')],
- ['Recent nearby',r.weather?.report24?fmt(r.weather.report24.inches,'″ reported'):'No 24h report'],
+ ['Sat forecast snow',fmt(r.weather?.skiDays?.saturday?.snowInches,'″')],
+ ['Sun forecast snow',fmt(r.weather?.skiDays?.sunday?.snowInches,'″')],
+ ['Nearby NWS report filed in 24h',r.weather?.report24?fmt(r.weather.report24.inches,'″ report'):'No nearby report'],
  ['Drive · '+(state.origin==='detroit'?'Detroit':'Grand Rapids'),minutes(r.driveMinutes?.[state.origin])],
  ['Adult lift ticket',ticket(r)],['Base depth','Not verified'],
  ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Official alert':
@@ -59,6 +60,8 @@ function card(r,index,detail=false){
  ];
  data.forEach(([label,value])=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(metrics,m);});add(body,metrics);
  add(body,node('p','verdict',status(r)),node('p','source-line',r.note));
+ const preferred=r.weather?.skiDays?.moreSnowForecast;
+ if(preferred==='SATURDAY'||preferred==='SUNDAY')add(body,node('p','note','NWS forecasts more snow in the '+(preferred==='SATURDAY'?'Friday-to-Saturday':'Saturday-to-Sunday')+' 24-hour window. This is not a ski-surface or road-safety recommendation.'));
  if(detail){const links=node('div','source-links');add(links,external('Official snow / resort report ↗',r.snow),
  external('Official tickets ↗',r.tickets));add(body,links);}
  add(box,num,body);return box;
@@ -76,7 +79,7 @@ function warnings(data){
  else add(current,node('p',null,alerted.length+' hills match lake-effect alert zones: '+alerted.map(r=>r.name).join(', ')+'.'));
  add(current,node('p','small','An active warning may mean dangerous winter travel. It does not establish fresh powder.'));
  const obs=node('article');add(obs,node('h3',null,'02 / Snow reported nearby'));
- if(!reported.length)add(obs,node('p',null,'No NWS storm reports inside 35 miles of monitored hills in the past 24 hours.'));
+ if(!reported.length)add(obs,node('p',null,'No NWS storm reports filed within 35 miles of monitored hills in the past 24 hours.'));
  else for(const r of reported)add(obs,node('p','small',r.name+': '+fmt(r.weather.report24.inches,'″')+' reported '+r.weather.report24.distanceMiles+' mi away. Report interval varies.'));
  const steering=node('article');add(steering,node('h3',null,'03 / Where winds favor a snowbelt'));
  if(!aligned.length)add(steering,node('p',null,'No favorable wind-sector matches confirmed from current NWS grid data.'));
