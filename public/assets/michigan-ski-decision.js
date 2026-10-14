@@ -38,7 +38,7 @@ function points(r){const d=dayInfo(r),tags=r.planningTags||[],minutes=r.driveMin
    n=Math.min(48,d.snowInches*7);
    const rpt=r.weather?.report24;
    if(rpt&&rpt.distanceMiles<=25)n+=Math.max(0,10-rpt.distanceMiles/3);
-   if(r.weather?.lakeEffectWind?.status==='WIND_ALIGNED')n+=3;
+   if(d.lakeWindStatus==='FAVORS_SNOWBELT')n+=3;
    if(tags.includes('natural-snow'))n+=4;
    if(d.surfaceSignal==='THAW_FREEZE_RISK'||d.surfaceSignal==='WARM_WET_RISK')n-=16;
    n-=Math.min(32,minutes/23);
@@ -58,7 +58,7 @@ function points(r){const d=dayInfo(r),tags=r.planningTags||[],minutes=r.driveMin
 function explain(r){const d=dayInfo(r),m=r.driveMinutes[S.origin],p=ticket(r),a=[];
  if(S.goal==='powder'){
   a.push(fmt(d.snowInches)+'″ NWS snow expected in selected window');
-  if(r.weather?.lakeEffectWind?.status==='WIND_ALIGNED')a.push('Wind direction favors the broader snowbelt—not proof of a band');
+  if(d.lakeWindStatus==='FAVORS_SNOWBELT')a.push('Selected-day wind favors the broader snowbelt—not proof of a band');
  }else if(S.goal==='family')a.push((r.planningTags||[]).includes('family')?'Family-oriented planning fit':'General terrain candidate; validate beginner access');
  else if(S.goal==='value')a.push(Number.isFinite(p)?money(p)+' posted adult day-session reference':'Date-specific adult price not confirmed');
  else a.push('About '+Math.round(m/60*10)/10+' hours each way (baseline, not road conditions)');
@@ -118,7 +118,7 @@ function cost(){
  const target=$('ski-trip-cost');if(!target||!S.data)return;target.replaceChildren();
  const intro=el('p','note','Compare lift-ticket references and your own trip estimates. Enter round-trip miles and any rental quote; neither is assumed. Hotel, food, road tolls, passes and fees are excluded.');
  put(target,intro);
- const c=candidates();if(!S.compare.length)S.compare=c.slice(0,2).map(r=>r.slug);
+ const c=candidates();if(!S.compare.length)S.compare=(c.length?c:S.data.resorts.filter(r=>['caberfae-peaks','shanty-creek'].includes(r.slug))).slice(0,2).map(r=>r.slug);
  const controls=el('div','cost-controls');
  const gas=chooseNumber('Gasoline $/gal',Math.round(S.gas*100)/100,20,n=>S.gas=n,0.1);gas.lastChild.step='0.01';
  const mpg=chooseNumber('Vehicle MPG',S.mpg,100,n=>S.mpg=n,1);
