@@ -549,3 +549,34 @@ body[data-place="traverse-city"] .hero .hero-media figcaption a{
     font-size:9px;
   }
 }
+
+
+/* Traverse City: actual temperature is first; photo is a small secondary
+   evidence-of-place. Scoped to this page and overrides old editorial hero. */
+body[data-place="traverse-city"] .hero .wrap.hero-layout{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);align-items:start;padding-top:16px;padding-bottom:16px}
+body[data-place="traverse-city"] .hero .hero-copy h1{font-size:clamp(25px,2.25vw,32px);line-height:1.1;max-width:none;margin:6px 0 10px;letter-spacing:-.035em}
+body[data-place="traverse-city"] .hero .hero-skip{margin-top:9px}
+body[data-place="traverse-city"] .hero .hero-photo{height:clamp(170px,19vw,245px);max-height:245px}
+body[data-place="traverse-city"] .hero .hero-media{align-self:center}
+body[data-place="traverse-city"] .temperature-answer{background:white;border-left:4px solid #087f83;border-radius:0 12px 12px 0;padding:12px 16px 11px;box-shadow:0 5px 18px rgba(9,46,65,.07);min-width:0}
+body[data-place="traverse-city"] .temperature-answer-label{color:#37636a;font-size:11px;letter-spacing:.085em;font-weight:800;line-height:1.2}
+body[data-place="traverse-city"] .temperature-answer-reading{font-size:clamp(43px,5.35vw,72px);font-weight:850;letter-spacing:-.058em;line-height:1.07;color:#0d3d4e;overflow-wrap:anywhere;padding:1px 0 3px;font-variant-numeric:tabular-nums}
+body[data-place="traverse-city"] .temperature-answer-when{color:#425e67;font-weight:650;font-size:12px;line-height:1.25}
+body[data-place="traverse-city"] .temperature-answer-caveat{font-size:12px;line-height:1.32;color:#4c5f67;margin:6px 0!important;max-width:60ch!important}
+body[data-place="traverse-city"] .temperature-answer-local{font-size:12px;line-height:1.35;color:#37515d;border-top:1px solid #e2eae9;padding-top:7px;margin-top:7px;overflow-wrap:anywhere}
+body[data-place="traverse-city"] .temperature-answer-local strong{color:#8a5020}
+body[data-place="traverse-city"] .hero .hero-copy > .temperature-answer p{font-size:12px}
+@media(max-width:900px){
+ body[data-place="traverse-city"] .hero .wrap.hero-layout{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:12px}
+ body[data-place="traverse-city"] .temperature-answer{padding:10px 12px}
+ body[data-place="traverse-city"] .temperature-answer-reading{font-size:clamp(42px,5.5vw,58px)}
+}
+@media(max-width:650px){
+ body[data-place="traverse-city"] .hero .wrap.hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:9px;padding-top:13px;padding-bottom:12px}
+ body[data-place="traverse-city"] .hero .hero-photo{height:124px;max-height:124px}
+ body[data-place="traverse-city"] .hero .hero-copy h1{font-size:27px;margin:6px 0 9px}
+ body[data-place="traverse-city"] .temperature-answer-reading{font-size:clamp(42px,11vw,62px)}
+ body[data-place="traverse-city"] .hero .hero-media{width:100%;align-self:stretch}
+ body[data-place="traverse-city"] .hero .hero-media figcaption{font-size:9px;padding:4px 8px}
+ body[data-place="traverse-city"] .hero .hero-skip{margin:8px 0 0}
+}

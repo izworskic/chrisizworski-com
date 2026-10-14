@@ -1,0 +1,11 @@
+{
+  "source": "NOAA GLERL GLSEA 3 published daily whole-lake surface average",
+  "verifiedAt": "2026-10-13T14:00:00Z",
+  "sourceUrl": "https://apps.glerl.noaa.gov/coastwatch/ftp/glsea/avgtemps/glsea-temps_1024_3.dat",
+  "observations": [
+    "2026 278 13.21 17.27 16.05 18.98 17.25 17.49",
+    "2026 284 12.77 16.66 14.88 18.30 16.23 16.74",
+    "2026 285 12.78 16.72 14.93 18.36 16.25 16.85"
+  ],
+  "note": "A dated, already published NOAA observation, not a real-time buoy measurement. Refuse to display if latest observation exceeds three UTC calendar days."
+}

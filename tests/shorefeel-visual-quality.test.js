@@ -39,3 +39,19 @@ test('ShoreFeel has a compact mobile hierarchy without losing user intents or ev
  assert.match(hub,/class="table-scroll"/);
  for(const [p] of pages.slice(2)){const html=fs.readFileSync(path.join(root,p),'utf8');assert.match(html,/id="shorefeel-now"/);assert.match(html,/data-activity="swim"/);assert.match(html,/data-activity="paddle"/);assert.match(html,/id="local-temp">Unavailable/);}
 });
+
+
+test('Traverse City first screen leads with a sourced water temperature, not the photograph',()=>{
+ const html=fs.readFileSync(path.join(root,'lake-michigan-water-temperature/traverse-city/index.html'),'utf8');
+ const hero=html.slice(html.indexOf('<section class="hero">'),html.indexOf('</section>',html.indexOf('<section class="hero">')));
+ assert.ok(hero.indexOf('id="lead-temp"')>0&&hero.indexOf('id="lead-temp"')<hero.indexOf('class="hero-media"'));
+ for(const id of ['lead-temp','lead-temp-label','lead-temp-when','lead-temp-caveat','lead-bay-status']){
+  assert.match(hero,new RegExp('id="'+id+'"'));
+ }
+ assert.match(hero,/LAKE MICHIGAN SURFACE AVERAGE/);
+ assert.match(hero,/Grand Traverse Bay buoy 45020/);
+ const js=fs.readFileSync(path.join(root,'assets/shorefeel.js'),'utf8');
+ assert.match(js,/renderTraverseLead/);
+ assert.match(js,/dated-official-fallback/);
+ assert.match(js,/NOT the measured temperature/);
+});
