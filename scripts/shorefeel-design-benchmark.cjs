@@ -49,12 +49,14 @@ const forecast = place => ({
     points: [pt(0, 61.7, 59, 65, .4, .7), pt(6, 61.4, 58, 64, .2, .6), pt(12, 61.2, 59, 63, .1, .5), pt(24, 60.9, 59, 63, -.1, .4), pt(36, 56.6, 54, 60, -4.3, -.1), pt(48, 59.2, 55, 63, -3.6, 1.8)],
     cooling: { tier: 'watch', deltaF: -1.6, text: 'Cooling watch. The model has the surface cooling about 2°F within a day. In Sept–Oct 2026 tests this signal never missed a drop of 3°F or more, but about two in three watches were smaller.' }, shallowApplied: true }]
 });
+const lk = t => ({ status: 'recent', latest: { date: '2026-10-13', tempF: t }, trend7: -0.4, history: [{ date: '2026-10-12', tempF: t + .2 }, { date: '2026-10-13', tempF: t }] });
 function payload(place, mode) {
   const tc = place === 'traverse-city';
+  if (!place) { const o = { product: 'ShoreFeel', lake: 'michigan', source: { mode: 'live' }, lakes: null, local: null, water: null, regionalSatellite: null, normal: mode === 'degraded' ? null : { date: '2026-10-13', tempF: 57.1, deltaF: 5.2 }, weatherNow: null, assessments: null, beachForecast: null }; o.lakes = payload('traverse-city', mode).lakes; return o; }
   const water = mode === 'degraded' ? null : { kind: 'satellite', tempF: 60.6, observedAt: '2026-10-14T12:00:00.000Z', label: tc ? 'West Grand Traverse Bay, 4 km north of Clinch Park' : 'Lake Michigan off Grand Haven State Park', where: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', caveat: 'NOAA satellite surface analysis for a pixel 4.2 km from the beach, not a beach thermometer; sunlit shallows can run warmer.' };
   return {
     product: 'ShoreFeel', lake: 'michigan', source: { mode: 'live' },
-    lakes: { michigan: { latest: { date: '2026-10-13', tempF: 62.3 }, series: [{ date: '2026-10-12', tempF: 62.1 }, { date: '2026-10-13', tempF: 62.3 }] } },
+    lakes: mode === 'degraded' ? Object.fromEntries(['superior','michigan','huron','erie','ontario'].map(n => [n, { status: 'unavailable', latest: null, history: [] }])) : { superior: lk(54.9), michigan: lk(62.3), huron: lk(59.2), erie: lk(65.7), ontario: lk(61.3) },
     local: { name: place, waterBody: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', stationId: tc ? '45020' : '45029', stationName: 'Test buoy', lat: 44.9, lon: -85.6, caveat: 'A buoy is offshore, not the beach.', measurement: null, measurementStatus: 'offline', periods: [{ startsAt: '2026-10-14T13:00:00-04:00', tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true }] },
     water, regionalSatellite: { status: water ? 'recent' : 'unavailable', cells: water ? [{ key: 'west-bay', short: 'West Bay', label: water.label, measurement: { tempF: 60.6, observedAt: water.observedAt } }] : [] },
     normal: { date: '2026-10-13', tempF: 57.1, deltaF: 5.2 }, weatherNow: { startsAt: '2026-10-14T13:00:00-04:00', tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true },
@@ -83,16 +85,24 @@ function measureInPage() {
   const inFirst = el => { const r = el.getBoundingClientRect(); return r.height > 0 && r.top < vh && r.bottom > 0; };
   const fully = el => { const r = el.getBoundingClientRect(); return r.height > 0 && r.top >= 0 && r.bottom <= vh + 1 && r.left >= -1 && r.right <= vw + 1; };
   const out = { vh, vw };
-  const num = document.querySelector('#lead-temp');
-  out.number = num ? { ...abs(num), font: parseFloat(getComputedStyle(num).fontSize), text: num.textContent.trim() } : null;
+  const answers = [...document.querySelectorAll('[data-answer]')];
+  const num = answers.sort((a, b) => b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom)[0] || null;
+  out.number = num ? { ...abs(num), font: Math.min(...answers.map(a => parseFloat(getComputedStyle(a).fontSize))), text: num.textContent.trim(), many: answers.length } : null;
+  out.kind = document.body.dataset.page;
   const band = document.querySelector('#lead-band'), mk = document.querySelector('#lead-marker'), when = document.querySelector('#lead-temp-when'), lab = document.querySelector('#lead-temp-label');
+  const hubWhen = document.querySelector("#hub-when"), whenEl = when || hubWhen;
+  const bands = band ? [band] : [...document.querySelectorAll('[data-lake-band]')];
   out.parts = {
-    number: !!num && fully(num) && /\d/.test(num.textContent),
-    band: !!band && vis(band) && fully(band) && band.textContent.trim().length > 2,
-    marker: !!mk && vis(mk) && fully(mk),
-    source: !!(when && lab) && fully(when) && /NOAA|buoy/i.test(when.textContent + ' ' + lab.textContent),
-    time: !!when && fully(when) && /\b\d{1,2}:\d{2}\s?(AM|PM)/i.test(when.textContent)
+    number: answers.length > 0 && answers.every(a => fully(a) && /\d/.test(a.textContent)),
+    band: bands.length > 0 && bands.every(b => vis(b) && fully(b) && b.textContent.trim().length > 2),
+    marker: mk ? vis(mk) && fully(mk) : true,
+    source: !!whenEl && fully(whenEl) && /NOAA|buoy/i.test(whenEl.textContent + ' ' + (lab ? lab.textContent : '')),
+    // Beach readings carry a clock time; daily lakewide analyses carry a date.
+    time: !!whenEl && fully(whenEl) && (/\b\d{1,2}:\d{2}\s?(AM|PM)/i.test(whenEl.textContent) || (out.kind !== 'place' && /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w* \d{1,2}\b/.test(whenEl.textContent)))
   };
+  // Hubs have no forecast; their equivalent is a visible way to the beach pages.
+  const beachLink = [...document.querySelectorAll('.places a, .hub-beaches a')].find(a => /traverse-city|grand-haven/.test(a.getAttribute('href')) && fully(a));
+  out.beachPath = !!beachLink;
   const fc = document.querySelector('#bf-body > *');
   const fsec = document.querySelector('#beach-forecast');
   out.forecast = fc && fsec && !fsec.hidden ? { top: abs(fc).top, text: (document.querySelector('#bf-body').textContent || '').slice(0, 400) } : null;
@@ -107,15 +117,16 @@ function measureInPage() {
   out.words = words;
   out.notices = [...document.querySelectorAll('.truth,.safety,.bf-callout,.update,[role=status]')].filter(e => vis(e) && inFirst(e) && e.textContent.trim().length > 20).length;
   // Type hierarchy on the first screen.
-  const sizes = []; const big = [];
+  const sizes = []; const big = []; const others = [];
   for (const el of document.querySelectorAll('body *')) {
     if (!vis(el) || !inFirst(el)) continue;
     const own = [...el.childNodes].some(c => c.nodeType === 3 && c.textContent.trim());
     if (!own) continue; const fs = parseFloat(getComputedStyle(el).fontSize);
     sizes.push(fs); if (fs >= 40) big.push(el.id || el.className || el.tagName);
+    if (!el.hasAttribute('data-answer')) others.push(fs);
   }
   sizes.sort((a, b) => a - b);
-  out.type = { max: sizes[sizes.length - 1] || 0, median: sizes[Math.floor(sizes.length / 2)] || 16, giants: big.length };
+  out.type = { max: sizes[sizes.length - 1] || 0, median: sizes[Math.floor(sizes.length / 2)] || 16, giants: big.length, maxOther: Math.max(0, ...others) };
   // Tap targets and contrast.
   const taps = [...document.querySelectorAll('a[href],button,summary,input,select')].filter(e => vis(e) && inFirst(e));
   out.taps = { total: taps.length, ok: taps.filter(e => { const r = e.getBoundingClientRect(); return r.height >= 44 && r.width >= 44; }).length,
@@ -147,17 +158,20 @@ function score(m, d) {
   const n = m.number;
   if (!n) s.answerSpeed = 0; else {
     const base = clamp01(1 - ((n.bottom - .30 * m.vh) / (.55 * m.vh)));
-    const want = m.vw < 700 ? 56 : 72; s.answerSpeed = base * (n.font >= want ? 1 : .5);
+    // One answer must be big (56/72 px); a page whose answer is several numbers (five lakes) needs 28/44 px each.
+    const want = n.many > 1 ? (m.vw < 700 ? 28 : 44) : (m.vw < 700 ? 56 : 72); s.answerSpeed = base * (n.font >= want ? 1 : .5);
   }
   s.answerComplete = Object.values(m.parts).filter(Boolean).length / 5;
-  s.forecastReach = m.forecast ? clamp01(1 - (m.forecast.top - .80 * m.vh) / (1.7 * m.vh)) : 0;
+  s.forecastReach = m.kind !== 'place' ? (m.beachPath ? 1 : 0) : m.forecast ? clamp01(1 - (m.forecast.top - .80 * m.vh) / (1.7 * m.vh)) : 0;
   s.calm = clamp01(1 - (m.words - 70) / 130) * (m.notices <= 1 ? 1 : Math.max(.5, 1 - .15 * (m.notices - 1)));
-  s.hierarchy = clamp01((m.type.max / (m.type.median || 16)) / 5) * (m.type.giants <= 1 ? 1 : .7);
+  // One answer: it dominates (5x the median type). Several answers: they are the largest type on the screen.
+  s.hierarchy = m.number && m.number.many > 1 ? (m.number.font >= m.type.maxOther ? 1 : .5)
+    : clamp01((m.type.max / (m.type.median || 16)) / 5) * (m.type.giants <= 1 ? 1 : .7);
   const tap = m.taps.total ? m.taps.ok / m.taps.total : 1, con = m.contrast.tested ? m.contrast.passed / m.contrast.tested : 1;
   s.ergonomics = m.overflow > 1 ? 0 : (tap * .5 + con * .5);
   const shift = clamp01(1 - (m.cls - .02) / .23), intr = m.intruders.length ? Math.max(0, 1 - .5 * m.intruders.length) : 1;
   s.stability = shift * intr;
-  s.degraded = d ? clamp01((d.heroH <= .55 * d.vh ? 1 : 1 - (d.heroH - .55 * d.vh) / (.45 * d.vh)) * (/No current reading/i.test(d.numberText || '') ? 1 : .4)) : 0;
+  s.degraded = d ? clamp01((d.heroH <= .55 * d.vh ? 1 : 1 - (d.heroH - .55 * d.vh) / (.45 * d.vh)) * (/No current reading|No reading|No current NOAA/i.test(d.numberText || '') ? 1 : .4)) : 0;
   let v = 0; for (const k of Object.keys(W)) v += W[k] * s[k];
   const gates = { sourceAndTimeVisible: m.parts.source && m.parts.time, caveatInPage: m.caveatInDom, forecastShowsRange: m.rangeOk !== false, noSidewaysScroll: m.overflow <= 1 };
   const gateFail = Object.entries(gates).filter(([, ok]) => !ok).map(([k]) => k);
@@ -169,7 +183,9 @@ async function run() {
   const base = LIVE ? LIVE.replace(/\/$/, '') : 'http://127.0.0.1:' + server.address().port;
   const ch = process.env.CHROME_BIN || ['/opt/pw-browsers/chromium', '/usr/bin/google-chrome', '/usr/bin/chromium'].find(fs.existsSync);
   const browser = await chromium.launch({ headless: true, executablePath: ch, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
-  const pages = [['traverse-city', 'Traverse City'], ['grand-haven', 'Grand Haven']];
+  const pages = [['great-lakes', 'Great Lakes'], ['lake-michigan', 'Lake Michigan'], ['traverse-city', 'Traverse City'], ['grand-haven', 'Grand Haven']];
+  const urlFor = place => place === 'great-lakes' ? '/great-lakes-water-temperature/' : place === 'lake-michigan' ? '/lake-michigan-water-temperature/' : '/lake-michigan-water-temperature/' + place + '/';
+  const apiPlace = place => /great-lakes|lake-michigan/.test(place) ? '' : place;
   const viewports = [['phone', 390, 844], ['desktop', 1280, 800]];
   const results = [];
   for (const [place] of pages) for (const [vname, w, h] of viewports) {
@@ -179,23 +195,23 @@ async function run() {
       await p.addInitScript(() => { window.__cls = 0; new PerformanceObserver(l => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: 'layout-shift', buffered: true }); });
       if (!LIVE) await p.route(/googlesyndication|googletagmanager|doubleclick|openstreetmap|wikimedia/, r => r.abort());
       if (!LIVE || INJECT || mode === 'degraded') await p.route('**/api/shorefeel*', async r => {
-        if (LIVE && mode !== 'degraded') { const real = await r.fetch(); const o = await real.json(); o.beachForecast = forecast(place); return r.fulfill({ response: real, body: JSON.stringify(o), contentType: 'application/json' }); }
-        r.fulfill({ contentType: 'application/json', body: JSON.stringify(payload(place, mode)) });
+        if (LIVE && mode !== 'degraded') { const real = await r.fetch(); const o = await real.json(); if (apiPlace(place)) o.beachForecast = forecast(place); return r.fulfill({ response: real, body: JSON.stringify(o), contentType: 'application/json' }); }
+        r.fulfill({ contentType: 'application/json', body: JSON.stringify(payload(apiPlace(place), mode)) });
       });
-      await p.goto(base + '/lake-michigan-water-temperature/' + place + '/', { waitUntil: LIVE ? 'networkidle' : 'load' }).catch(() => {});
-      await p.waitForFunction(() => { const t = document.querySelector('#lead-temp'); return t && !/Checking/.test(t.textContent); }, null, { timeout: 15000 }).catch(() => {});
+      await p.goto(base + urlFor(place), { waitUntil: LIVE ? 'networkidle' : 'load' }).catch(() => {});
+      await p.waitForFunction(() => { const t = document.querySelector('[data-answer]'); return t && /\d|No /.test(t.textContent) && !/––/.test(t.textContent); }, null, { timeout: 15000 }).catch(() => {});
       await p.waitForTimeout(LIVE ? 4000 : 1500);
       return { p, ctx };
     };
     const main = await open('normal'); const m = await main.p.evaluate(measureInPage); await main.ctx.close();
     const deg = await open('degraded');
-    const dm = await deg.p.evaluate(() => ({ vh: innerHeight, heroH: document.querySelector('.hero').getBoundingClientRect().height, numberText: (document.querySelector('#lead-temp') || {}).textContent }));
+    const dm = await deg.p.evaluate(() => ({ vh: innerHeight, heroH: document.querySelector('.hero').getBoundingClientRect().height, numberText: [...document.querySelectorAll('[data-answer],#hub-when')].map(e => e.textContent).join(' ') }));
     await deg.ctx.close();
     // 320 px gate
     const nc = await browser.newContext({ viewport: { width: 320, height: 700 } }); const np = await nc.newPage();
     if (!LIVE) await np.route(/googlesyndication|googletagmanager|doubleclick|openstreetmap|wikimedia/, r => r.abort());
-    if (!LIVE) await np.route('**/api/shorefeel*', r => r.fulfill({ contentType: 'application/json', body: JSON.stringify(payload(place, 'normal')) }));
-    await np.goto(base + '/lake-michigan-water-temperature/' + place + '/', { waitUntil: 'load' }).catch(() => {}); await np.waitForTimeout(1200);
+    if (!LIVE) await np.route('**/api/shorefeel*', r => r.fulfill({ contentType: 'application/json', body: JSON.stringify(payload(apiPlace(place), 'normal')) }));
+    await np.goto(base + urlFor(place), { waitUntil: 'load' }).catch(() => {}); await np.waitForTimeout(1200);
     const o320 = await np.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth); await nc.close();
     const r = score(m, dm); if (o320 > 1) { r.gates.noSidewaysScroll = false; if (!r.gateFail.includes('noSidewaysScroll')) r.gateFail.push('noSidewaysScroll'); r.v = Math.min(r.v, .5); }
     results.push({ page: place, viewport: vname, ...r, measured: { numberBottom: m.number && Math.round(m.number.bottom), numberFont: m.number && m.number.font, words: m.words, notices: m.notices, forecastTop: m.forecast && Math.round(m.forecast.top), vh: m.vh, cls: +m.cls.toFixed(3), intruders: m.intruders, tapSmall: m.taps.small, contrastFails: m.contrast.fails, heroH: Math.round(m.heroH), parts: m.parts } });
