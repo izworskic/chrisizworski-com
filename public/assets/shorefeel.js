@@ -80,7 +80,7 @@ function applyActivity(a){
 function renderPlace(){
  const d=payload?.local;if(!d)return;
  const station=d.measurement;
- write('local-temp',station?format(station.tempF):'Not available');
+ write('local-temp',station?format(station.tempF):'No recent reading');
  write('local-source',station?'Nearby offshore buoy '+d.stationId+' · '+time(station.observedAt):'No buoy observation from the past six hours');
  write('station-note',d.caveat);
  const w=d.periods?.find(p=>p.daylight)||d.periods?.[0]||null;
@@ -123,6 +123,19 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   payload=await r.json();
   renderLakes();renderPlace();renderTraverseLead();
  }catch(e){
+  // Keep the last verified NOAA observation only for its short validity period.
+  // A failed refresh is never described as a successful live reading.
+  if(place==='traverse-city'){
+   const day='2026-10-12',age=(Date.parse(new Date().toISOString().slice(0,10)+'T00:00:00Z')-Date.parse(day+'T00:00:00Z'))/86400000;
+   if(age>=0&&age<=3){
+    write('lead-temp-when','NOAA GLERL · Oct 12, 2026 · last verified report; live refresh unavailable');
+   }else{
+    setTraverseLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
+      'Official lakewide and local water data unavailable',
+      'No recent water temperature can be verified; expired snapshots are not displayed.',
+      'No verified current bay reading');
+   }
+  }
   renderTraverseLead();
   write('data-status','Live data is temporarily unavailable. The place guide and source links below are still useful; no readings have been estimated.');
   write('feel-title','Evidence unavailable — not an all-clear');
