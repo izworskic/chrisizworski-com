@@ -194,3 +194,11 @@ test('visitor: every resort always discloses unconfirmed inventory and safety',(
  assert.ok(r.every(x=>x.safetyOrInventoryGuaranteed===false));
  assert.ok(r.every(x=>x.unknowns.some(a=>a.code==='PARKING_CAPACITY_UNKNOWN')));
 });
+
+test('visitor: no pass or ticket cannot be mistaken for confirmed ski admission',()=>{
+ const plan=visitor();plan.pass='NONE';
+ const resorts=compare(plan,localNow);
+ assert.equal(resorts.length,4);
+ assert.ok(resorts.every(r=>r.verdict==='TRIP_NOT_FEASIBLE_AS_PLANNED'));
+ assert.ok(resorts.every(r=>r.blockers.some(b=>b.code==='RESORT_ADMISSION_BLOCKED')));
+});

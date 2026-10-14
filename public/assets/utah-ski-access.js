@@ -23,7 +23,7 @@
  const roadNames={CLOSED:'Closure signal — verify with UDOT',UPHILL_RESTRICTED:'Uphill restriction reported',
  PARTIAL_UPHILL_RESTRICTION:'Partial uphill restriction',TRACTION_RESTRICTION:'Traction law signal',
  REVIEW_REQUIRED:'Ambiguous or stale notice',NO_CONFIRMED_BLOCKER:'No blocker detected; not confirmed open',UNKNOWN:'Unverified — check UDOT'};
- let roads={};
+ let roads={},lastSurface={};
  function num(id){const v=$(id).value;return v===''?undefined:Number(v)}
  function parking(resort){const v=$('parking-'+resort).value;return v==='yes'?true:v==='no'?false:undefined}
  function plan(){return {date:$('date').value,hour:Number($('hour').value),travelMode:$('mode').value,
@@ -37,6 +37,9 @@
  function render(){
  const input=plan();if(!input.date)return;let results;try{results=M.compare(input,new Date())}catch(_){return}
  const container=$('cards');container.replaceChildren();
+ const blockers=results.filter(r=>r.verdict==='TRIP_NOT_FEASIBLE_AS_PLANNED').length;
+ const actions=results.filter(r=>r.verdict==='ACTION_REQUIRED').length;
+ $('verdict-summary').textContent=blockers+' destination'+(blockers===1?'':'s')+' with a blocker · '+actions+' requiring an action. Confirm all remaining unknowns before traveling.';
  for(const result of results){
   const card=create('article','resort'),head=create('div','resort-head'),body=create('div','resort-content');
   head.append(create('h3',null,names[result.resort]));
@@ -56,18 +59,32 @@
   links.append(a,u);body.append(links);card.append(body);container.append(card);
  }
  }
- function status(route,id){$(id).textContent=roads[route]?(roadNames[roads[route].status]||'Verify with UDOT'):'Unverified — check UDOT';}
+ function status(route,id){
+ $(id).textContent=roads[route]?(roadNames[roads[route].status]||'Verify with UDOT'):'Unverified — check UDOT';
+ const ctx=$(id+'-context');if(!ctx)return;ctx.replaceChildren();
+ const reports=lastSurface[route]||[];
+ if(!reports.length){ctx.textContent='No recent road-surface observation available.';return;}
+ for(const report of reports.slice(0,2)){
+   const parts=[report.surface&&'Surface: '+report.surface,report.weather&&'Weather: '+report.weather,
+     report.restriction&&'Restriction: '+report.restriction].filter(Boolean);
+   if(parts.length)ctx.append(create('p',null,parts.join(' · ')));
+ }
+}
  async function refresh(){
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),9000);
   try{
-   const response=await fetch('/api/utah-ski-validation',{signal:controller.signal,credentials:'same-origin',cache:'no-store'});
+   const response=await fetch('/api/utah-ski-road',{signal:controller.signal,credentials:'same-origin',cache:'default'});
    if(!response.ok)throw Error('unavailable');const snapshot=await response.json();
    if(!snapshot?.canyons||!snapshot?.apiCoverage)throw Error('invalid');
-   const when=snapshot.observedAt;roads=Object.fromEntries(Object.entries(snapshot.canyons).map(([k,v])=>[k,{status:v.status,reason:v.reason,observedAt:when}]));
+   const when=snapshot.observedAt,age=Date.now()-Date.parse(when);
+   const validTime=Number.isFinite(age)&&age>=-120000&&age<=20*60*1000;
+   roads=validTime?Object.fromEntries(Object.entries(snapshot.canyons).map(([k,v])=>[k,{status:v.status,reason:v.reason,observedAt:when}])):{};
+   lastSurface=validTime?Object.fromEntries(Object.entries(snapshot.canyons).map(([k,v])=>[k,Array.isArray(v.surfaceReports)?v.surfaceReports:[]])):{};
+   if(!validTime)$('observed').textContent='UDOT timestamp is invalid or too old. Road access is UNKNOWN. Check current official canyon notices.';
    const unavailable=Object.entries(snapshot.apiCoverage).filter(([,v])=>v!=='RECEIVED').map(([k,v])=>k+': '+v);
-   $('observed').textContent=(unavailable.length?'Some feeds are unavailable ('+unavailable.join(', ')+'). ':'UDOT feeds received. ')+
-     'Checked '+new Date(when).toLocaleString()+'. This does not verify an open road. Check official UDOT before departure.';
-  }catch(_){$('observed').textContent='The UDOT developer-feed validation is unavailable. Road access remains unverified. Check official Cottonwood Canyon notices before attempting either route.';}
+   if(validTime)$('observed').textContent=(unavailable.length?'UDOT coverage incomplete ('+unavailable.join(', ')+'). ':'UDOT feeds received. ')+
+     'Retrieved '+new Date(when).toLocaleString('en-US',{timeZone:'America/Denver',dateStyle:'medium',timeStyle:'short'})+' Mountain Time · '+Math.floor(Math.max(0,age)/60000)+' minutes old. Not official road-open clearance. Verify with UDOT.';
+  }catch(_){roads={};lastSurface={};$('observed').textContent='UDOT road reporting unavailable. Road access is unverified. Check the official canyon notices before entering either route.';}
   finally{clearTimeout(timer)}status('SR190','sr190');status('SR210','sr210');render();
  }
  const local=new Intl.DateTimeFormat('en-US',{timeZone:'America/Denver',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());

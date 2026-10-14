@@ -5,10 +5,10 @@ const page=fs.readFileSync(path.join(root,'public/utah-ski-access/index.html'),'
 const browser=fs.readFileSync(path.join(root,'public/assets/utah-ski-model-v2.js'),'utf8');
 const app=fs.readFileSync(path.join(root,'public/assets/utah-ski-access.js'),'utf8');
 const D=require('../lib/utah-ski/decision.js');
-test('Utah trip planner stays noindex during source validation',()=>{
- assert.match(page,/<meta name="robots" content="noindex,nofollow">/);
+test('Utah trip planner has canonical SEO and named sources',()=>{
+ assert.match(page,/<meta name="robots" content="index,follow/);
  assert.match(page,/Built by Chris Izworski/);
- assert.match(page,/protected verification preview/);
+ assert.match(page,/UDOT official-source reporting/);
  assert.match(page,/cannot verify parking inventory/i);
 });
 test('browser and Node use exact same policy and decision outputs',()=>{
@@ -23,6 +23,13 @@ test('browser and Node use exact same policy and decision outputs',()=>{
 test('UDOT preview never asserts road-open or a guaranteed parking space',()=>{
  assert.match(app,/not confirmed open/i);
  assert.doesNotMatch(app,/safe to drive|parking available|road is open/i);
- assert.match(app,/api\/utah-ski-validation/);
+ assert.match(app,/api\/utah-ski-road/);
  assert.match(page,/No road-open, safe-to-drive or guaranteed-parking verdict is issued here/);
+});
+
+test('V2 mobile canyon interface and explicit no-guarantee statuses',()=>{
+ assert.match(page,/id="sr190-context"/);assert.match(page,/id="sr210-context"/);
+ assert.match(page,/id="verdict-summary"/);assert.match(page,/canyon-map-title/);
+ assert.match(page,/name="viewport"/);assert.match(page,/application\/ld\+json/);
+ assert.match(app,/20\*60\*1000/);
 });

@@ -61,6 +61,7 @@ function parking({resort,date,hour,passengers,hasReservation}){
 function admission({resort,date,pass,combinedAltaSnowbirdUsed,snowbirdUsed,brightonUsed}){
  if(!CANYON[resort]||!dateValid(date))return {status:'UNKNOWN',reason:'INVALID_TRIP_INPUT'};
  if(pass==='USER_CONFIRMED_TICKET')return {status:'UNVERIFIED_TICKET',reason:'USER_REPORT_NOT_PROVIDER_VERIFIED'};
+ if(pass==='NONE')return {status:'NO_ADMISSION',reason:'NO_PASS_OR_TICKET_SELECTED'};
  if(!['IKON','IKON_BASE'].includes(pass))return {status:'UNKNOWN',reason:'PASS_NOT_MODELED'};
  if(!range(date,'2026-11-01','2027-05-31'))return {status:'UNKNOWN',reason:'OUTSIDE_MODELED_SEASON'};
  if(resort==='alta'&&pass==='IKON_BASE')return {status:'NOT_ELIGIBLE',reason:'IKON_BASE_EXCLUDES_ALTA',source:SOURCES.ikon};
@@ -149,7 +150,7 @@ function evaluate(input,resort,now=new Date()){
  else if(p.status==='RESERVATION_REQUIRED')actions.push(issue('PARKING_RESERVATION_REQUIRED','Reserve parking or adjust arrival time.'));
  else if(['RESERVATION_UNVERIFIED','USER_REPORTS_RESERVATION','PARKING_OPTIONS_UNVERIFIED','UNKNOWN'].includes(p.status))
    unknowns.push(issue('PARKING_RULE_OR_BOOKING_UNVERIFIED','Verify dates, lot and reservation with the resort.'));
- if(['NOT_ELIGIBLE','BLACKOUT','DAYS_EXHAUSTED'].includes(a.status))
+ if(['NOT_ELIGIBLE','BLACKOUT','DAYS_EXHAUSTED','NO_ADMISSION'].includes(a.status))
    blockers.push(issue('RESORT_ADMISSION_BLOCKED','Select another resort or valid admission product.'));
  else unknowns.push(issue('ADMISSION_NOT_VERIFIED','Confirm ticket/pass blackout and day availability.'));
  if(transit)unknowns.push(issue('TRANSIT_SERVICE_AND_BOARDING_UNVERIFIED','Verify scheduled service, stop access, and ability to board; bus positions are not seating inventory.'));
