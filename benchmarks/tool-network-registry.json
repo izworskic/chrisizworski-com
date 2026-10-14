@@ -2852,6 +2852,40 @@
         "status": "unknown",
         "note": "Launched October 2026 for 2027 Wisconsin seasonal searches; traffic not measured. Date-specific observations required for current-stage claims."
       }
+    },
+    {
+      "id": "maple-sap-run",
+      "name": "Michigan Maple Sap Run Forecast & Sugarhouse Guide",
+      "canonical": "https://chrisizworski.com/michigan-maple-sap-run/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "when does maple sap run in Michigan near me and which sugarhouses can I visit",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "backyard-syrup-maker",
+        "spring-trip-planner",
+        "family",
+        "maple-producer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "NWS-modeled sap-flow weather and verified sugarhouse visits; different from freeze/frost and bloom tools"
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New October 2026 launch; keyword volume and CTR not independently measured."
+      }
     }
   ],
   "relationships": [
@@ -4022,6 +4056,22 @@
       "surface": "wisconsin-guide",
       "strength": "strong",
       "reason": "Wisconsin flower travelers can compare the separate Michigan flower season."
+    },
+    {
+      "from": "maple-sap-run",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "maple navigation and footer",
+      "reason": "Late winter maple weather depends on overnight freezing; visitors can inspect the separate Michigan ice conditions tool."
+    },
+    {
+      "from": "maple-sap-run",
+      "to": "bloom-tracker",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "maple header and footer",
+      "reason": "Spring visitors can continue from maple season to the separate Michigan flowering-season decision tool."
     }
   ],
   "cannibalizationGroups": [
