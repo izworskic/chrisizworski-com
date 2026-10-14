@@ -86,7 +86,8 @@
     "benchmark:creator-attribution": "node scripts/inject-creator-attribution.mjs --check",
     "benchmark:ice-out-discovery": "node scripts/benchmark-ice-out-discovery.mjs",
     "profile:build": "node scripts/profile-site-build.mjs",
-    "benchmark:north-shore": "node scripts/benchmark-north-shore-engines.cjs"
+    "benchmark:north-shore": "node scripts/benchmark-north-shore-engines.cjs",
+    "benchmark:niagara-quality": "node scripts/benchmark-niagara-quality.mjs --check"
   },
   "dependencies": {
     "@vercel/oidc": "3.8.8",
