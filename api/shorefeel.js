@@ -42,17 +42,25 @@ async function weatherFor(place){
 async function modelBox(cycle,hour,box,ms=3200){
   return BF.parseBox(await textResponse(cycle.url(hour)+BF.boxQuery(box),ms),box);
 }
+let modelDownUntil=0;
+/* The forecast never holds the page hostage: it gets a fixed time budget, then the page ships without it. */
+function withinBudget(promise,ms,fallback){
+  let timer;
+  return Promise.race([promise,new Promise(res=>{timer=setTimeout(()=>res(fallback),ms);})]).finally(()=>clearTimeout(timer));
+}
 async function buildBeachForecast(placeKey,cells,now){
   const beaches=BF.BEACHES[placeKey]||[];
   if(!beaches.length)return null;
   const box=BF.boxFor(beaches.flatMap(b=>[b.cell,b.ref]));
   const hoursSince=(cycle,t)=>Math.round((t.getTime()-cycle.time.getTime())/3600000);
-  // Newest model cycle that has actually been published.
+  // Newest model cycle that has actually been published. Probe the candidates in parallel:
+  // NOAA's model server can take 10 s to fail, and a sequential probe once cost ~7.5 s per request.
+  if(Date.now()<modelDownUntil)return {status:'unavailable',reason:'NOAA lake model server not responding (checked within the last 10 minutes)'};
+  const cands=BF.cycleCandidates(now,3);
+  const probes=await Promise.allSettled(cands.map(c=>modelBox(c,hoursSince(c,now),box,2500)));
   let cycle=null,nowGrid=null;
-  for(const c of BF.cycleCandidates(now,3)){
-    try{const g=await modelBox(c,hoursSince(c,now),box,2500);if(Object.keys(g).length){cycle=c;nowGrid=g;break;}}catch{}
-  }
-  if(!cycle)return {status:'unavailable',reason:'NOAA lake model cycle not available'};
+  for(let k=0;k<cands.length;k++){const p=probes[k];if(p.status==='fulfilled'&&Object.keys(p.value).length){cycle=cands[k];nowGrid=p.value;break;}}
+  if(!cycle){modelDownUntil=Date.now()+10*60000;return {status:'unavailable',reason:'NOAA lake model server not responding'};}
   const targets=BF.LEADS.map(lead=>({leadH:lead,when:new Date(now.getTime()+lead*3600000)}));
   const leadGrids=await Promise.allSettled(targets.map(t=>t.leadH===0?Promise.resolve(nowGrid):modelBox(cycle,hoursSince(cycle,t.when),box)));
   const leads=targets.map((t,k)=>({leadH:t.leadH,startsAt:new Date(cycle.time.getTime()+hoursSince(cycle,t.when)*3600000).toISOString(),
@@ -96,7 +104,7 @@ module.exports=async function handler(req,res){
   if((placeKey&&!Object.hasOwn(DESTINATIONS,placeKey))||!Object.hasOwn(LAKES,requested)||placeKey&&DESTINATIONS[placeKey].lake!==requested){
     res.setHeader('Cache-Control','no-store');return res.status(400).json({error:'Unsupported lake or destination'});
   }
-  res.setHeader('Cache-Control','public, s-maxage=900, stale-while-revalidate=1800');
+  res.setHeader('Cache-Control','public, s-maxage=900, stale-while-revalidate=86400');
   if(req.method==='HEAD')return res.status(200).end();
   const place=DESTINATIONS[placeKey]||null;
   const now=new Date();
@@ -135,7 +143,7 @@ module.exports=async function handler(req,res){
   const latestDate=lakes[requested]?.latest?.date;
   const [ltRes,bfRes]=await Promise.allSettled([
     latestDate?textResponse(LT_AVG+dayOfYear(latestDate),3000):Promise.resolve(null),
-    place?buildBeachForecast(placeKey,cells,now):Promise.resolve(null)
+    place?withinBudget(buildBeachForecast(placeKey,cells,now),3500,{status:'unavailable',reason:'NOAA lake model server too slow; forecast skipped so the page loads'}):Promise.resolve(null)
   ]);
   let normal=null;
   if(latestDate&&ltRes.status==='fulfilled'&&ltRes.value){

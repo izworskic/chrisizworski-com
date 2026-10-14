@@ -231,9 +231,9 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
 (async()=>{
  try{
   const url='/api/shorefeel?lake='+encodeURIComponent(lake)+(place?'&place='+encodeURIComponent(place):'');
-  const r=await fetch(url,{headers:{Accept:'application/json'}});
-  if(!r.ok)throw new Error('Data service unavailable');
-  payload=await r.json();
+  // One retry before saying anything is unavailable: a single slow upstream should not blank the page.
+  const load=async()=>{const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout?AbortSignal.timeout(15000):undefined});if(!r.ok)throw new Error('Data service unavailable');return r.json();};
+  try{payload=await load();}catch(first){await new Promise(r=>setTimeout(r,1200));payload=await load();}
   renderLakes();renderPlace();renderLead();renderBeachForecast();
  }catch(e){
   // A failed refresh is never described as a successful live reading.
