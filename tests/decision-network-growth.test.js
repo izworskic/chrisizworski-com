@@ -26,9 +26,9 @@ test('boat launch finder is source-first, statewide, map-first, and keeps source
   const api=read('api/boat-launches.js');
   const geocode=read('api/boat-launch-geocode.js');
   const code=js+'\n'+api+'\n'+geocode;
-  assert.match(html,/<title>Michigan Boat Launch Map & Finder \| Chris Izworski<\/title>/);
+  assert.match(html,/<title>Michigan Boat Launch Map: Ramps Near Me \| Chris Izworski<\/title>/);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">'));
-  assert.match(html,/<h1>Michigan boat launches, on one map<\/h1>/);
+  assert.match(html,/<h1>Michigan boat launches near me: DNR-backed ramp map<\/h1>/);
   assert.equal((html.match(/<input[^>]+type="search"/g)||[]).length,1);
   assert.match(html,/assets\/boat-launch-finder\.js/);
   assert.doesNotMatch(html,/id="locdata"|Bay City State Park Launch|"numberOfItems": 42/);

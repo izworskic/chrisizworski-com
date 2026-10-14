@@ -8,10 +8,11 @@ const html = fs.readFileSync(path.join(root, 'public', 'michigan-boat-launches',
 
 const failures = [];
 const requiredFrozen = {
-  title: '<title>Michigan Boat Launch Map & Finder | Chris Izworski</title>',
-  meta: '<meta name="description" content="Explore Michigan public boat launches on one statewide map. Search a city, lake, river or ramp, compare access details, get directions and local NWS weather.">',
+  title: `<title>${config.treatment.expectedSearchTreatment.title}</title>`,
+  meta: `<meta name="description" content="${config.treatment.expectedSearchTreatment.description}">`,
+  ogTitle: `<meta property="og:title" content="${config.treatment.expectedSearchTreatment.ogTitle}">`,
   canonical: '<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">',
-  h1: '<h1>Michigan boat launches, on one map</h1>'
+  h1: `<h1>${config.treatment.expectedSearchTreatment.h1}</h1>`
 };
 for (const [label, value] of Object.entries(requiredFrozen)) {
   if (!html.includes(value)) failures.push(`${label} changed during authority-only expansion`);
@@ -30,13 +31,15 @@ if (!html.includes(`"dateModified":"${config.releaseDateModified}"`)) {
 }
 if (config.evidence.page.impressions !== 77 || config.evidence.page.clicks !== 0 || config.evidence.page.averagePosition !== 13.17) failures.push('leading baseline drift');
 if (!config.evidence.queryAttributionCaution) failures.push('sitewide query attribution caution missing');
-if (!config.treatment.snippetFrozen) failures.push('snippet must remain frozen for this expansion');
+if (config.treatment.snippetFrozen) failures.push('retired authority experiment incorrectly freezes the new CTR snippet');
+if (config.treatment.expectedSearchTreatment.title.length > 60) failures.push('CTR title exceeds 60 characters');
+if (config.treatment.expectedSearchTreatment.description.length > 158) failures.push('CTR description exceeds 158 characters');
 if (config.measurement.primaryWindowDays !== 28) failures.push('measurement window must remain 28 days');
 
 console.log('\nBOAT LAUNCH SEARCH AUTHORITY EXPANSION');
 console.log('='.repeat(72));
 console.log(`Leading signal: ${config.evidence.page.impressions} impressions / ${config.evidence.page.clicks} clicks / position ${config.evidence.page.averagePosition}`);
-console.log('Treatment: crawlable statewide + Saginaw Bay + Lake Michigan + Au Sable discovery; snippet frozen');
+console.log('Treatment: query-led near-me/DNR-map snippet + unchanged canonical, finder and location privacy');
 if (failures.length) {
   for (const failure of failures) console.error(`FAIL: ${failure}`);
   process.exit(1);
