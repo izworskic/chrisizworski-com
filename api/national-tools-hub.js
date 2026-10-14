@@ -19,6 +19,12 @@ function ensureYosemite(html) {
     if (at >= 0) html = html.slice(0, at) + "<article class=\"directory-card\" data-search-card data-tool-id=\"michigan-bloom-tracker\" data-personas=\"event trip garden\" data-tags=\"michigan flowers bloom blossom tulip holland cherry traverse city grand rapids peony ann arbor mackinac lilacs lavender sunflowers peak season map\" data-months=\"4,5,6,7,8,9\"><div class=\"card-top\"><span class=\"kind\">2027 seasonal bloom planning</span><span class=\"season-label\" hidden>Peak windows April–September</span></div><h3>Michigan Bloom Tracker 2027</h3><p class=\"place\">Michigan · 19 flower destinations</p><p class=\"description\">Explore 19 Michigan flower experiences across spring, summer and October, including apple orchards, tulips, wildflowers, lavender and sunflowers. Filter the interactive map and compare visitor logistics; current bloom needs verified dated observations.</p><p class=\"signals\"><strong>Signals:</strong> Destination guidance + dated flower observations when available, not calendar-as-live-data</p><div class=\"card-actions\"><a class=\"primary-action\" href=\"https://phenology.chrisizworski.com/bloom-tracker\">Which Michigan flowers should I visit? &rarr;</a></div></article>\n" + html.slice(at);
   }
 
+  // Owner hub may already supply the Bloom card with an older nine-stop description.
+  // Normalize the single entry rather than inserting a duplicate.
+  html = html.replace('Michigan · Nine flower destinations', 'Michigan · 19 flower destinations');
+  html = html.replace("Compare typical peak weeks, tickets, access and parking at nine Michigan bloom stops. Read fresh source-linked observations when available; no live claim in the off-season.", "Explore 19 Michigan flower experiences across spring, summer and October, including apple orchards, tulips, wildflowers, lavender and sunflowers. Filter the interactive map and compare visitor logistics; current bloom needs verified dated observations.");
+  html = html.replace(/(data-tool-id="michigan-bloom-tracker"[^>]*data-months=")4,5,6,7,8,9(")/, '$14,5,6,7,8,9,10$2');
+  html = html.replace('Peak windows April–September', 'Peak windows April–October');
   const visibleCards = [...html.matchAll(/data-tool-id="([^"]+)"/g)].length;
   html = html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/, `$1${visibleCards} tools shown$2`);
 
