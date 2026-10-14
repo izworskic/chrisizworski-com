@@ -25,7 +25,7 @@ function fixture(url){
  return JSON.stringify({product:'ShoreFeel',lake:'michigan',lakes,local:place?{
   name:place,stationId:place==='grand-haven'?'45029':'45020',
   stationName:'Test offshore buoy',lat:43.2,lon:-86.2,caveat:'Station is offshore, not the beach.',
-  measurement:{tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z'},
+  measurement:place==='traverse-city'?null:{tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z'},
   periods:[{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}],
  }:null,assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
 }
@@ -88,8 +88,14 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
-     assert.match(await page.locator('#local-source').textContent(),/offshore buoy/);
+     assert.match(await page.locator('#local-source').textContent(),key==='traverse'?/No buoy observation/:/offshore buoy/);
      if(key==='traverse'){
+      const answer=await page.locator('#lead-temp').textContent();
+      assert.equal(answer,'62.1°F','When Traverse Bay buoy is offline the recent NOAA lakewide mean must lead');
+      assert.match(await page.locator('#lead-temp-label').textContent(),/LAKE MICHIGAN/);
+      assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
+      const answerStyle=await page.locator('#lead-temp').evaluate(el=>getComputedStyle(el).fontSize);
+      assert.ok(parseFloat(answerStyle)>=40,'temperature reading must be the dominant feature');
       if(width===1024||width===1280){
        const hero=await page.evaluate(()=>{
         const head=document.querySelector('.hero').getBoundingClientRect();
