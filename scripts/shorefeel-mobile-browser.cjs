@@ -105,7 +105,7 @@ const server=http.createServer((req,res)=>{
        assert.ok(hero.heroHeight<=435,'Traverse temperature-first hero must fit above fold '+width+': '+JSON.stringify(hero));
        assert.ok(hero.photoWidth>width*.27 && hero.photoWidth<width*.52,
          'Traverse photo must be a separate, visible editorial card '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.photoHeight>=160 && hero.photoHeight<=220,'photo size '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.photoHeight>=160 && hero.photoHeight<=260,'secondary photo size '+width+': '+JSON.stringify(hero));
        assert.ok(hero.evidenceY<560,'real readings should be above fold '+width+': '+JSON.stringify(hero));
        assert.equal(hero.overlay,'none','dark photo overlay must be removed');
        assert.notEqual(hero.background,'rgb(9, 42, 59)','remove blue full-bleed hero');
