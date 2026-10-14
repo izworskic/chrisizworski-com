@@ -224,3 +224,64 @@
 .quick-loading p{font-size:13px;margin:8px 0 0}
 .quick-intent-confirmation{background:#eff5f1;border:1px solid #d2e0da;border-radius:5px;padding:12px 14px;font-size:12px;line-height:1.6;color:#315760}
 @media(max-width:600px){.quick-start-note{margin:0 18px 11px}}
+
+
+/* V6.3 correction: route-first information hierarchy, not a wall of form fields. */
+.hero-inner{padding-top:24px;padding-bottom:25px}
+.hero h1{font-size:clamp(39px,4.7vw,65px);margin:10px 0 11px}
+.hero .hero-sub{font-size:13px;line-height:1.65;max-width:510px}
+.hero-photo{min-height:230px}
+.hero-photo img{min-height:230px}
+.primary-grid{grid-template-columns:minmax(320px,440px) minmax(0,1fr)}
+.primary-grid .panel-head{padding-bottom:14px}
+.controls form{padding-top:0}
+.visit-date-note{font-size:11px;color:#4c7176;line-height:1.55;margin:0 0 15px}
+.quick-heading{font:normal 20px/1.25 Georgia,serif;color:#1f4951;margin:0 0 8px}
+.controls .visit-quick-start{margin:0 0 12px;gap:7px;grid-template-columns:1fr}
+.controls .visit-quick-start button{min-height:52px;padding:9px 13px}
+.controls .quick-start-note{margin:0 0 13px}
+.controls fieldset{margin-bottom:13px}
+.controls .details{padding-top:7px;margin:10px 0 14px}
+.controls .details .form-note{padding:0;margin:3px 0 11px}
+.controls form>.form-note{padding:0;margin:4px 0 10px}
+.controls .details summary{font-size:13px}
+.controls .plan-button{margin-top:11px}
+.result .result-content{padding-top:16px}
+.result .verdict{padding:16px 18px;margin-bottom:11px}
+.result .verdict h3{font-size:25px;line-height:1.2}
+.result .verdict p{font-size:12px;margin-bottom:0}
+.result .quick-intent-confirmation{font-size:11px;line-height:1.5;margin:8px 0 12px;padding:10px 12px}
+.result .first{padding:10px 0}
+.result .first b{font-size:17px}
+.result .boat-decision{padding:13px 15px;margin:8px 0 13px}
+.result .boat-decision p{font-size:12px}
+.result .start-parking{background:#eef5f2;border:1px solid #d1dfd9;border-radius:5px;margin:10px 0;padding:11px 13px;display:flex;flex-direction:column;gap:4px}
+.result .start-parking strong{font-size:12px;color:#234f55}
+.result .start-parking span{font-size:11px;line-height:1.55;color:#44636b}
+.result .start-parking a{font-size:11px;font-weight:750}
+.route-map-jump{margin:10px 0 11px;font-size:12px;font-weight:750}
+.route-map-jump a{color:#185b69}
+.compact-trip-facts{display:flex;gap:9px 18px;flex-wrap:wrap;border-top:1px solid #e1eae6;border-bottom:1px solid #e1eae6;padding:10px 0;margin:9px 0 16px}
+.compact-trip-facts span{font-size:10px;color:#557078;line-height:1.4}
+.compact-trip-facts strong{color:#244c55;font-size:12px}
+.result .route-introduction{padding:12px 14px;margin:6px 0 16px}
+.result .route-introduction p{font-size:12px}
+.result .compact-stop{padding:0 0 14px 17px;margin-left:7px}
+.result .compact-stop h4{font-size:19px;margin:3px 0 5px}
+.result .stop-summary{font-size:12px;line-height:1.6;margin:5px 0}
+.result .compact-stop .when{font-size:10px;letter-spacing:.07em}
+.result .compact-stop .meta{font-size:10px;line-height:1.6}
+.result .stop-detail{margin:7px 0 0;border-top:1px solid #e5efeb;padding:7px 0 0}
+.result .stop-detail summary{cursor:pointer;color:#1a606b;font-size:11px;font-weight:750;padding:4px 0}
+.result .stop-detail p{font-size:12px;line-height:1.6}
+.result .trip-verification{border:1px solid #d5e0dc;border-radius:5px;margin:14px 0;padding:11px 13px}
+.result .trip-verification summary{font-size:12px;font-weight:800;color:#295865;cursor:pointer}
+.result .trip-verification>.caveat{font-size:11px}
+.result .trip-verification>.sectitle{margin-top:12px}
+.wayfinding-panel{margin-top:20px}
+.travel-details{border-top:1px solid #ccdbd6;margin-top:17px;padding-top:12px}
+.travel-details>summary{font-size:14px;line-height:1.55;font-weight:800;cursor:pointer;padding:10px;color:#1e5862}
+.travel-details[open] .travel-comparison{margin-top:12px}
+.falls-films{margin-top:27px}
+@media(max-width:900px){.primary-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.hero-inner{padding:21px 20px}.hero h1{font-size:39px}.hero-photo{max-height:180px;min-height:180px}.hero-photo img{height:180px;min-height:180px}.controls form{padding-top:0}.result .result-content{padding:15px}.result .verdict h3{font-size:23px}.compact-trip-facts{gap:9px}.wayfinding-panel{padding:14px 11px}.result .start-parking{padding:10px}.film-editorial{margin-top:20px}}
