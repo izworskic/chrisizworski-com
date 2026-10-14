@@ -1,5 +1,17 @@
 # Search Growth + Revenue Session Log
 
+## Traverse City NOAA ACSPO satellite bay sampling — October 13, 2026
+
+- **User-provided source:** `GLSEA_ACSPO_GCS` NOAA ERDDAP griddap. Unlike a Lake Michigan daily average, its satellite-derived SST grid resolves individual surface cells at approximately 0.014° (~1.4 km). It is not a beach-water thermometer.
+- **Sample anchor:** Michigan's Water Quality Portal record for "West Arm Grand Traverse Bay 2 MI from south shore," latitude **44.795837**, longitude **-85.610003**, used as an offshore water coordinate. NOAA ERDDAP samples seven latest daily times at that fixed grid position.
+- **Data truth:** Most recently browsable NOAA metadata ended **2026-06-16** and direct NOAA ERDDAP requests in this session were blocked by Anubis. No current October 2026 Traverse City satellite SST was verified. Thus the feature must not put an old satellite reading in the hero.
+- **Fail-closed criteria:** data must be machine-readable ERDDAP CSV with expected columns and units, physically sensible Celsius range, grid cell within .025° of the offshore location, observation age ≤72 hours, and not future-dated. Masked/stale/blocked/nonwater data remains unavailable.
+- **User-visible priority:** recent Grand Traverse Bay buoy 45020 > recent West Bay satellite SST (labeled gridded offshore surface estimate) > recent NOAA GLSEA Lake Michigan mean (labeled whole-lake) > unavailable. Supporting activities never describe gridded SST as an on-beach sensor.
+- **Architecture/cost:** an optional 3.3-second NOAA text request only for Traverse City, in parallel with existing source calls and existing 15-minute Vercel response cache. No extra paid service, cron, or Redis.
+- **Outcome unknown:** No claim that NOAA currently serves fresh West Bay pixels; no asserted SEO/CTR/AdSense uplift.
+- **Exactly one next action:** Complete repository and Chrome viewport gates, confirm preview deployment and release only when both clean.
+
+
 ## ShoreFeel Traverse temperature-answer-first repair — October 13, 2026
 
 - **Critical user complaint:** Tool showed unavailable and visually prioritized scenery rather than water temperature. Product failure, not merely visual styling.
