@@ -11,3 +11,31 @@
 .corridor .route-key-blue{border-left:4px solid #1f6090}.corridor .route-key-orange{border-left:4px solid #be5d22}
 @media(max-width:700px){.corridor .canyon-route-key{flex-direction:column;gap:7px}.corridor .route-key{flex:1 1 auto;width:100%}.corridor .canyon-art-map{border-radius:9px}}
 @media(max-width:400px){.corridor .route-key{flex-wrap:wrap}.corridor .route-key span{white-space:normal}}
+
+/* Utah ski V2.1: fit the illustration within the tool's opening viewport.
+   Keep native 16:9 content intact: no cropping and no horizontal scroll. */
+.intro{display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:start}
+.intro-copy,.corridor,.canyon-map-zoom{min-width:0}
+.intro .corridor{width:min(100%,720px);max-width:720px;margin:16px auto 0}
+.corridor .canyon-map-zoom{display:block;line-height:0;border-radius:10px;overflow:hidden}
+.corridor .canyon-map-zoom:focus-visible{outline:3px solid #276c8b;outline-offset:3px}
+.corridor .canyon-art-map{width:100%;height:auto;max-height:none;aspect-ratio:16/9;object-fit:contain;object-position:center;display:block}
+.corridor figcaption{font-size:.75rem;line-height:1.45;margin:7px 0 8px}
+.corridor .canyon-route-key{gap:7px;margin-top:6px}
+.corridor .route-key{font-size:.76rem;padding:7px 10px;gap:7px;flex:1 1 240px}
+@media(min-width:960px){
+  .intro{grid-template-columns:minmax(0,1fr) minmax(0,1.07fr);column-gap:26px;align-items:start;padding:24px 0 20px}
+  .intro h1{font-size:clamp(2.25rem,3.6vw,3.15rem);max-width:560px}
+  .intro .lead{font-size:1rem}
+  .intro .corridor{width:100%;max-width:none;margin:0}
+  .intro .caution{font-size:.82rem}
+}
+@media(max-width:959px){
+  .intro .corridor{margin:15px auto 0}
+}
+@media(max-width:700px){
+  .intro{gap:0}
+  .intro .corridor{max-width:100%;margin:12px auto 0}
+  .corridor .route-key{font-size:.76rem;flex:1 1 auto;padding:7px 9px}
+  .corridor figcaption{font-size:.73rem}
+}
