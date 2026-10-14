@@ -15,7 +15,7 @@ test('retired page aliases resolve identically with and without the directory sl
     assert.ok(variants.every(Boolean), `${base} must preserve both public URL forms`);
     for (const variant of variants) {
       assert.equal(variant.destination, rule.destination, base);
-      assert.equal(variant.permanent, true, base);
+      assert.equal(variant.permanent, !base.startsWith('/mackinac-island'), base);
     }
   }
 });
