@@ -102,7 +102,14 @@ function draw(r){
   emit('niagara_boat_next_option');submit();
  });
  status.textContent=r.boat_resolution&&!r.boat_resolution.included?'Boat not feasible for the selected window. Review the next-boat option.':'Your same-side visit, field notes and constraints.';
- if(window.NiagaraVisitMap&&typeof window.NiagaraVisitMap.render==='function')window.NiagaraVisitMap.render(r);
+ // Optional map failure must never erase a valid date-checked itinerary.
+ try{
+  if(window.NiagaraVisitMap&&typeof window.NiagaraVisitMap.render==='function')window.NiagaraVisitMap.render(r);
+ }catch(error){
+  var mStatus=document.getElementById('wayfinding-status');
+  if(mStatus)mStatus.textContent='Map temporarily unavailable. Follow the written itinerary and operator directions.';
+  emit('niagara_map_render_degraded');
+ }
  bindGuideVideo();updateSideGuide(r);
  emit(r.boat_resolution&&!r.boat_resolution.included?'niagara_boat_not_feasible':stops.length?'niagara_plan_success':'niagara_plan_no_feasible',{intent:r.priority,side:r.side,stops:stops.length,boat_included:Boolean(r.boat_resolution&&r.boat_resolution.included)});
 }
