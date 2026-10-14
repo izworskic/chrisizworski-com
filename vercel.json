@@ -34,6 +34,9 @@
     "api/aurora-town-sky.js": {
       "maxDuration": 20
     },
+    "api/michigan-ski.js": {
+      "maxDuration": 60
+    },
     "api/michigan-snow-totals.js": {
       "maxDuration": 25
     },
