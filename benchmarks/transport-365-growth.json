@@ -15,7 +15,7 @@
       "status": "ready-for-release",
       "releaseDate": null,
       "evaluationWindow": null,
-      "hypothesis": "Leading the title, description, H1 and direct answer with the exact passenger-car toll — $4 one way, normally $8 round trip — plus accepted payment methods will better capture the now-material exact 'mackinac bridge toll' query while preserving the calculator for RV, trailer and multi-axle intent.",
+      "hypothesis": "Pair the exact Mackinac Bridge toll head term with a calculator-led title and snippet emphasizing vehicle-specific RV, trailer and round-trip math that a bare-price SERP answer cannot resolve, while preserving the existing fare answer and calculator.",
       "baseline": {
         "impressions": 637,
         "clicks": 1,
@@ -88,12 +88,12 @@
         }
       },
       "target": {
-        "ctr": 0.02,
-        "averagePositionMax": 10
+        "ctr": 0.01,
+        "averagePositionMax": 5
       },
       "treatment": {
-        "title": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
-        "metaDescription": "Mackinac Bridge toll 2026: $4 one way for a passenger car, normally $8 round trip. Pay with cash, cards, Apple Pay, Google Pay or MacPass.",
+        "title": "Mackinac Bridge Toll Calculator 2026 | Chris Izworski",
+        "metaDescription": "Mackinac Bridge toll is $4 for a car ($2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return.",
         "h1": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
         "firstAnswer": "The Mackinac Bridge toll is $4 one way for a standard two-axle passenger car in 2026, or $8 round trip at the standard rate."
       },
@@ -127,8 +127,24 @@
           "from": "Calculator-led title/description treatment",
           "to": "Immediate $4 passenger-car answer plus round-trip and payment intent",
           "rationale": "Fresh GSC evidence changed the decision. The page grew from 3,097 to 5,463 impressions and 8 to 17 clicks with position essentially flat, but exact 'mackinac bridge toll' reached 778 impressions at position 9.98 with one click (0.13% CTR). At this volume the undercapture is no longer noise. Strengthen the existing toll canonical rather than creating another search owner."
+        },
+        {
+          "date": "2026-10-14",
+          "field": "title + metaDescription + FAQPage schema + contextual incoming links",
+          "from": "Bare-price-led title and snippet; no FAQPage schema",
+          "to": "Calculator-led exact requested metadata with five on-page FAQ entities; one trip-context incoming link each on Mackinac Island fall, U.P. fall, and Soo Locks. Bridge Live already links to tolls.",
+          "rationale": "Owner-supplied 6,437 impressions and 15 clicks in 28 days at 8.3 average position; protect answer and calculator while distinguishing vehicle-specific math."
         }
-      ]
+      ],
+      "latest28DayBaseline20261012": {
+        "source": "Owner-supplied GSC Web report, last 28 days through approximately 2026-10-12",
+        "impressions": 6437,
+        "clicks": 15,
+        "ctr": 0.0023,
+        "averagePosition": 8.3,
+        "queryCount": 143,
+        "assessment": "Bare-price query cluster likely has significant zero-click intent; judge on qualified calculator clicks, aiming toward 1% CTR and top-five average position; not guaranteed."
+      }
     },
     {
       "id": "gordie-howe-wait-camera-ctr",

@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Mackinac Bridge toll SERP treatment — October 14, 2026
+
+- **Requested scope:** Existing /mackinac-bridge-tolls/ canonical only; replace title and description with owner-specified calculator-led text, synchronize OG/X title/snippet, add FAQPage for five visible questions without editing them, and preserve calculator, fares, payments, worked examples, URL and canonical.
+- **Important source reality:** Main hero H1 is currently price-led; the question “How much does it cost to cross the Mackinac Bridge?” is the H2 of the instant-answer card, not the H1. Both remain unchanged under the explicit no-H1/no-answer-edit constraint.
+- **Links:** Bridge Live already has three toll destination links, so no duplicate. Add natural toll/cost links from Mackinac Island fall-color, Upper Peninsula fall-color and Soo Locks.
+- **GSC baseline:** Owner-supplied 28-day Web 6,437 impressions, 15 clicks, displayed 0.2% CTR, 8.3 average position, 143 toll-query variants through approximately October 12. Historical experiment baseline retained separately. Aim toward 1%+ CTR and top-five position, not guaranteed bare-price clicks.
+- **Status at authoring:** Changes proposed for PR; full CI, merge, deployment, and production HTML verification pending. Do not claim deployed until confirmed.
+- **Exactly one next action:** Run the full PR gates and merge only when they pass, then fetch production HTML to confirm title, description and FAQPage.
+
+
 ## GLSEA ACSPO ERA query indexing correction — October 13, 2026
 
 - **Production issue:** The West Grand Traverse Bay request used `sst[(last-6):1:(last)]`, but ERDDAP interprets `(last-6)` as a coordinate-value offset, i.e. approximately six seconds on a time axis, not six daily record indices.

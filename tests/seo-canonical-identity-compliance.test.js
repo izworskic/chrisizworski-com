@@ -51,7 +51,7 @@ for(const slug of paths){
    }
   }
   assert.ok(!/\bChris\s+(?:Hisworski|Izworsky|Izworksi)\b/i.test(html),"no identity variants");
-  const editorialLastmod=["tools","northern-lights-michigan/munising"].includes(slug)?"2026-10-13":(["northern-lights-michigan","great-lakes-freighter-tracking","soo-locks"].includes(slug)?"2026-10-12":"2026-10-11");
+  const editorialLastmod=["mackinac-bridge-tolls","soo-locks"].includes(slug)?"2026-10-14":(["tools","northern-lights-michigan/munising"].includes(slug)?"2026-10-13":(["northern-lights-michigan","great-lakes-freighter-tracking"].includes(slug)?"2026-10-12":"2026-10-11"));
   assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialLastmod+"</lastmod>"),"sitemap matches truthful editorial date");
   const inward=paths.filter(s=>s!==slug&&all[s].includes('href="/'+slug+'/"'));
   const outward=[...html.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map(x=>x[1]);
