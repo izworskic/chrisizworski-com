@@ -4,7 +4,7 @@ const pages=[
   ["day-trip","Mackinac Island Day Trip Planner"],
   ["with-kids","Mackinac Island With Kids Planner"],
   ["2-day-itinerary","2-Day Mackinac Island Itinerary Planner"],
-  ["ferry-planner","Mackinac Island Ferry Planner"],
+  ["ferry-planner","Mackinac Island Ferry Prices & Kids Fares"],
   ["from-detroit","Detroit to Mackinac Island Trip Planner"],
   ["from-chicago","Chicago to Mackinac Island Trip Planner"],
   ["from-traverse-city","Traverse City to Mackinac Island"],
