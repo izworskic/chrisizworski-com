@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2818,6 +2818,40 @@
         "status": "unmeasured",
         "volumeInput": "User-supplied Semrush estimate, not live-verified"
       }
+    },
+    {
+      "id": "wisconsin-bloom-tracker",
+      "name": "Wisconsin Bloom Tracker",
+      "canonical": "https://phenology.chrisizworski.com/wisconsin-bloom-tracker",
+      "aliases": [],
+      "kind": "seasonal-trip-planner",
+      "cluster": "natural-year",
+      "primaryIntent": "Wisconsin cherry blossoms, lilacs, lavender and flower fields bloom timing",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "geographies": [
+        "wisconsin-statewide"
+      ],
+      "personas": [
+        "spring-traveler",
+        "flower-gardener",
+        "scenic-road-tripper"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Wisconsin-specific state searches separate from Michigan bloom tracker"
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Launched October 2026 for 2027 Wisconsin seasonal searches; traffic not measured. Date-specific observations required for current-stage claims."
+      }
     }
   ],
   "relationships": [
@@ -3964,6 +3998,30 @@
       "strength": "optional",
       "surface": "beach-conditions",
       "reason": "Visitors can understand why air and water comfort differ without changing hazard verdicts."
+    },
+    {
+      "from": "phenology",
+      "to": "wisconsin-bloom-tracker",
+      "type": "regional-flower-pilot",
+      "surface": "great-lakes-bloom-network",
+      "strength": "strong",
+      "reason": "A natural-year visitor can follow a state-specific Wisconsin field guide without mixing Michigan and Wisconsin stages."
+    },
+    {
+      "from": "bloom-tracker",
+      "to": "wisconsin-bloom-tracker",
+      "type": "state-handoff",
+      "surface": "bloom-trackers",
+      "strength": "strong",
+      "reason": "Michigan visitors may also plan a Wisconsin flower trip while retaining independent evidence."
+    },
+    {
+      "from": "wisconsin-bloom-tracker",
+      "to": "bloom-tracker",
+      "type": "state-handoff",
+      "surface": "wisconsin-guide",
+      "strength": "strong",
+      "reason": "Wisconsin flower travelers can compare the separate Michigan flower season."
     }
   ],
   "cannibalizationGroups": [
