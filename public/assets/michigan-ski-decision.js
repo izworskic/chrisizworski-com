@@ -163,6 +163,12 @@ function render(){
  recap();cost();
 }
 document.addEventListener('michigan-ski:data',ev=>{S.data=ev.detail;render();});
+document.addEventListener('michigan-ski:select',ev=>{
+ if(!S.data||typeof ev.detail!=='string'||!S.data.resorts.some(r=>r.slug===ev.detail))return;
+ S.compare=[ev.detail,...S.compare.filter(x=>x!==ev.detail)].slice(0,2);
+ cost();
+ document.getElementById('ski-trip-cost')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
 for(const id of ['ski-goal','ski-day','ski-adults','ski-kids','ski-rentals','origin'])
  document.getElementById(id)?.addEventListener('change',render);
 })();
