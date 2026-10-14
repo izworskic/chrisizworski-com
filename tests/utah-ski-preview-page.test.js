@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const page=fs.readFileSync(path.join(root,'public/utah-ski-access/index.html'),'utf8');
-const browser=fs.readFileSync(path.join(root,'public/assets/utah-ski-model.js'),'utf8');
+const browser=fs.readFileSync(path.join(root,'public/assets/utah-ski-model-v2.js'),'utf8');
 const app=fs.readFileSync(path.join(root,'public/assets/utah-ski-access.js'),'utf8');
 const D=require('../lib/utah-ski/decision.js');
 test('Utah trip planner stays noindex during source validation',()=>{
