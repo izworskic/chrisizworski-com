@@ -19,6 +19,14 @@ function ensureYosemite(html) {
     if (at >= 0) html = html.slice(0, at) + "<article class=\"directory-card\" data-search-card data-tool-id=\"michigan-bloom-tracker\" data-personas=\"event trip garden\" data-tags=\"michigan flowers bloom blossom tulip holland cherry traverse city grand rapids peony ann arbor mackinac lilacs lavender sunflowers peak season map\" data-months=\"4,5,6,7,8,9\"><div class=\"card-top\"><span class=\"kind\">2027 seasonal bloom planning</span><span class=\"season-label\" hidden>Peak windows April–September</span></div><h3>Michigan Bloom Tracker 2027</h3><p class=\"place\">Michigan · 19 flower destinations</p><p class=\"description\">Explore 19 Michigan flower experiences across spring, summer and October, including apple orchards, tulips, wildflowers, lavender and sunflowers. Filter the interactive map and compare visitor logistics; current bloom needs verified dated observations.</p><p class=\"signals\"><strong>Signals:</strong> Destination guidance + dated flower observations when available, not calendar-as-live-data</p><div class=\"card-actions\"><a class=\"primary-action\" href=\"https://phenology.chrisizworski.com/bloom-tracker\">Which Michigan flowers should I visit? &rarr;</a></div></article>\n" + html.slice(at);
   }
 
+  // Wisconsin is a regional Midwest pilot. Preserve the owner's cards; insert only if absent.
+  if (!html.includes('data-tool-id="wisconsin-bloom-tracker"')) {
+    const wiCard = "<article class=\"directory-card\" data-search-card data-tool-id=\"wisconsin-bloom-tracker\" data-personas=\"event trip garden\" data-tags=\"wisconsin flowers bloom blossom cherry door county madison arboretum lilacs lavender sunflower farm visit map 2027\" data-months=\"4,5,6,7,8,9\"><div class=\"card-top\"><span class=\"kind\">2027 regional bloom planning</span><span class=\"season-label\" hidden>Flowers April–September</span></div><h3>Wisconsin Bloom Tracker 2027</h3><p class=\"place\">Wisconsin · 9 flower destinations</p><p class=\"description\">Door County blossoms, Madison lilacs, island lavender and summer flower fields, with a mapped visit guide, tickets, parking and official evidence links. The calendar is not a live bloom claim.</p><p class=\"signals\"><strong>Signals:</strong> Source-linked seasonal windows + reviewed dated observations when available</p><div class=\"card-actions\"><a class=\"primary-action\" href=\"https://phenology.chrisizworski.com/wisconsin-bloom-tracker\">Where to see Wisconsin flowers &rarr;</a></div></article>\n";
+    const anchor = '<article class="directory-card" data-search-card data-tool-id="fall-color"';
+    const at = html.indexOf(anchor);
+    if (at >= 0) html = html.slice(0, at) + wiCard + html.slice(at);
+  }
+
   // Owner hub may already supply the Bloom card with an older nine-stop description.
   // Normalize the single entry rather than inserting a duplicate.
   html = html.replace('Michigan · Nine flower destinations', 'Michigan · 19 flower destinations');
@@ -52,6 +60,11 @@ function ensureYosemite(html) {
         const bloomUrl = 'https://phenology.chrisizworski.com/bloom-tracker';
         if (!list.itemListElement.some(item => item.url === bloomUrl || item.name === 'Michigan Bloom Tracker 2027')) {
           list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: bloomUrl, name: 'Michigan Bloom Tracker 2027' });
+          changed = true;
+        }
+        const wisconsinUrl = 'https://phenology.chrisizworski.com/wisconsin-bloom-tracker';
+        if (!list.itemListElement.some(item => item.url === wisconsinUrl || item.name === 'Wisconsin Bloom Tracker 2027')) {
+          list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: wisconsinUrl, name: 'Wisconsin Bloom Tracker 2027' });
           changed = true;
         }
         if (changed) {
