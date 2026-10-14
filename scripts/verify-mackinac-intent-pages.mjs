@@ -1,63 +1,17 @@
 import fs from "node:fs";
-const htmlEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const pages=[
-  ["day-trip","Mackinac Island Day Trip Planner"],
-  ["with-kids","Mackinac Island With Kids Planner"],
-  ["2-day-itinerary","2-Day Mackinac Island Itinerary Planner"],
-  ["ferry-planner","Mackinac Island Ferry Prices & Kids Fares"],
-  ["from-detroit","Detroit to Mackinac Island Trip Planner"],
-  ["from-chicago","Chicago to Mackinac Island Trip Planner"],
-  ["from-traverse-city","Traverse City to Mackinac Island"],
-  ["from-grand-rapids","Grand Rapids to Mackinac Island"],
-  ["limited-walking","Mackinac Island With Less Walking Planner"],
-  ["bike-day","Mackinac Island Bike Day & M-185 Planner"],
-  ["fall","Mackinac Island Fall Trip Planner"]
-];
-let fail=false;
-for(const [slug,title] of pages){
-  const file="public/mackinac-island/"+slug+"/index.html";
-  if(!fs.existsSync(file)){console.error("missing",file);fail=true;continue;}
-  const html=fs.readFileSync(file,"utf8");
-  const checks=[
-    [html.includes("<title>"+htmlEsc(title)+" | Chris Izworski</title>"),"unique title"],
-    [html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/'+slug+'/'),"canonical"],
-    [html.includes("data-mackinac-planner-cta")&&html.includes("#trip-intake"),"planner CTA"],
-    [/<p class="truth"><strong>Before you go:<\/strong> \S/.test(html),"truth boundary"],
-    [html.includes("application/ld+json")&&html.includes("FAQPage"),"structured FAQ data"],
-    [html.includes('name="robots" content="index,follow,max-image-preview:large'),"indexing metadata"],
-    [html.includes("Michael Barera / Wikimedia Commons"),"image attribution"],
-    [html.length>7000,"substantive content"],
-    [!html.includes("utm_source"),"clean links"]
-  ];
-  for(const [ok,label] of checks)if(!ok){console.error(slug+" failed "+label);fail=true;}
-}
-const main=fs.readFileSync("public/mackinac-island/index.html","utf8");
-for(const [slug] of pages)if(!main.includes('/mackinac-island/'+slug+'/')){console.error("main missing internal link "+slug);fail=true;}
-const sitemap=fs.readFileSync("public/sitemap.xml","utf8");
-for(const [slug] of pages)if(!sitemap.includes('https://chrisizworski.com/mackinac-island/'+slug+'/')){console.error("sitemap missing "+slug);fail=true;}
-if(fail)process.exit(1);
-console.log("PASS: Mackinac intent pages are substantive, canonical, internally linked and discoverable.");
-
-const ferry=fs.readFileSync("public/mackinac-island/ferry-planner/index.html","utf8");
-if(!ferry.includes("?intent=ferry-planner#trip-intake")){console.error("ferry planner CTA must land on the shared My Trip intake");process.exit(1);}
-if(ferry.includes("#main")){console.error("ferry planner still points at the retired duplicate planner anchor");process.exit(1);}
-
-const originSeeds={
-  "from-detroit":"Detroit%2C%20MI",
-  "from-chicago":"Chicago%2C%20IL",
-  "from-traverse-city":"Traverse%20City%2C%20MI",
-  "from-grand-rapids":"Grand%20Rapids%2C%20MI"
-};
-for(const [slug,encoded] of Object.entries(originSeeds)){
-  const html=fs.readFileSync("public/mackinac-island/"+slug+"/index.html","utf8");
-  if(!html.includes("?intent=ferry-planner&amp;from="+encoded+"#trip-intake")&&!html.includes("?intent=ferry-planner&from="+encoded+"#trip-intake")){
-    console.error(slug+" missing preseeded origin CTA");fail=true;
-  }
-}
-if(fail)process.exit(1);
-
-for(const [slug,needle] of [["limited-walking","Official Mackinac accessibility guide"],["bike-day","Current Mackinac e-bike rules"]]){
-  const html=fs.readFileSync("public/mackinac-island/"+slug+"/index.html","utf8");
-  if(!html.includes(needle)){console.error(slug+" missing source-backed intent content");fail=true;}
-}
-if(fail)process.exit(1);
+const retired=["plan","where-to-stay","dining","things-to-do","events","around-the-straits","day-trip","with-kids","2-day-itinerary","from-detroit","from-chicago","from-traverse-city","from-grand-rapids","limited-walking","bike-day","fall"];
+const html=fs.readFileSync("public/mackinac-island/ferry-planner/index.html","utf8");
+const map=fs.readFileSync("public/sitemap.xml","utf8");
+const redirects=JSON.parse(fs.readFileSync("vercel.json","utf8")).redirects||[];
+const bad=[];const assert=(pass,msg)=>{if(!pass)bad.push(msg)};
+for(const key of ['id="ferry-form"','id="ferry-results"','id="ferry-kids"','id="ferry-age4"','id="ferry-military"','/assets/mackinac-ferry-decision.js','/assets/mackinac-ferry-decision.css','openstreetmap.org','sheplersferry.com','arnoldtransitcompany.com'])assert(html.includes(key),"missing "+key);
+assert(html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/ferry-planner/"'),"ferry canonical mismatch");
+assert(!html.includes('/assets/mackinac-hub.js'),"old hub client still loaded");
+assert(!html.includes('data-mackinac-planner-cta'),"retired trip CTA still loaded");
+assert(!html.includes('href="/mackinac-island/"'),"retired root linked from ferry");
+for(const slug of retired){assert(!fs.existsSync("public/mackinac-island/"+slug+"/index.html"),"retired page present "+slug);assert(!map.includes("<loc>https://chrisizworski.com/mackinac-island/"+slug+"/</loc>"),"retired sitemap entry "+slug)}
+assert(!map.includes("<loc>https://chrisizworski.com/mackinac-island/</loc>"),"retired root sitemap");
+assert(map.includes("<loc>https://chrisizworski.com/mackinac-island/ferry-planner/</loc>"),"ferry sitemap missing");
+assert(redirects.some(r=>r.source.startsWith("/mackinac-island{")&&r.destination==="/mackinac-island/ferry-planner/"),"root redirect missing");
+assert(redirects.some(r=>retired.every(s=>r.source.includes(s))&&r.destination==="/mackinac-island/ferry-planner/"),"retired redirect missing");
+if(bad.length){bad.forEach(x=>console.error("Mackinac ferry-only: "+x));process.exit(1)}console.log("PASS: Mackinac ferry-only release; 16 subpages retired.");

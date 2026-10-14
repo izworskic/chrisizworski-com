@@ -145,14 +145,5 @@
   });
   form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
   form.addEventListener("change",render);
-  const existing=(()=>{try{return JSON.parse(localStorage.getItem("mackinac-trip-plan-v1")||"{}").plan||null;}catch(e){return null}})();
-  if(existing){
-    if(/^\d{4}-\d{2}-\d{2}$/.test(existing.trip_date||""))el("ferry-date").value=existing.trip_date;
-    if(Number.isFinite(Number(existing.adults))&&Number(existing.adults)>=1)el("ferry-adults").value=existing.adults;
-    if(Number.isFinite(Number(existing.children))&&Number(existing.children)>=0)el("ferry-kids").value=existing.children;
-    if(existing.trip==="overnight"){el("ferry-trip").value="overnight";el("ferry-nights").value=whole(existing.nights,1,14);}
-    const from=String(existing.origin_text||"").toLowerCase();
-    if(/marquette|sault|st. ignace|saint ignace|iron mountain|escanaba/.test(from))el("ferry-origin").value="upper";
-  }
   render();
 })(typeof window!=="undefined"?window:globalThis);

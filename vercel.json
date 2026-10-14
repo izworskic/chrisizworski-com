@@ -55,6 +55,16 @@
   },
   "redirects": [
     {
+      "source": "/mackinac-island{/}?",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/:retired(plan|where-to-stay|dining|things-to-do|events|around-the-straits|day-trip|with-kids|2-day-itinerary|from-detroit|from-chicago|from-traverse-city|from-grand-rapids|limited-walking|bike-day|fall){/}?",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
       "source": "/chris-izworski-bay-city-michigan",
       "destination": "/chris-izworski-bay-city/",
       "permanent": true
