@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-10-06",
+  "updated": "2026-10-14",
   "objective": "Keep every serious Chris Izworski tool attached to one canonical Person entity without turning tool interfaces into personal-brand surfaces.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "canonicalProfileUrl": "https://chrisizworski.com/chris-izworski/",
@@ -103,13 +103,14 @@
       "host": "phenology.chrisizworski.com",
       "toolIds": [
         "phenology",
-        "bloom-tracker"
+        "bloom-tracker",
+        "wisconsin-bloom-tracker"
       ],
       "repo": "izworskic/phenology-michigan",
       "status": "verified",
       "personId": "https://chrisizworski.com/#person",
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
-      "evidence": "merge cdc8bc9f52e785132e55467dd635fe59aa7d09f5"
+      "evidence": "Phenology production Wisconsin Bloom Tracker and two 2027 guide pages, GitHub CI verify success at dda8aed78c7499efd4d42b3e7ba70fa655f2dd2a, creator profile remains chrisizworski.com/#person"
     },
     {
       "id": "outdoors-now",
