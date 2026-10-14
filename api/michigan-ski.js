@@ -1,5 +1,6 @@
 'use strict';
 const {RESORTS,assemble,rank}=require('../lib/michigan-ski/engine');
+const {fetchOfficial,SOURCES}=require('../lib/michigan-ski/official-reports');
 const UA='ChrisIzworski Michigan Ski Decision Engine (https://chrisizworski.com/michigan-ski-hills/; contact via website)';
 const CACHE_MS=20*60*1000,FAILED_CACHE_MS=2*60*1000;
 let cached=null,expires=0,inFlight=null;
@@ -28,7 +29,7 @@ async function forResort(r){
     }
     const grid=await json(info.forecastGridData,7000);
     return {zones:{forecastZone:info.forecastZone,county:info.county,fireWeatherZone:info.fireWeatherZone},
-      grid,updatedAt:grid.properties?.updateTime||grid.properties?.validTimes?.split('/')?.[0]||new Date().toISOString()};
+      grid,updatedAt:grid.properties?.updateTime||null};
   }catch(e){return {error:String(e.message||e).slice(0,80),zones:pointCache.get(r.slug)||{},grid:null,updatedAt:null};}
 }
 function parseReport(r){
@@ -47,7 +48,11 @@ async function collect(now=Date.now()){
     json('https://api.weather.gov/alerts/active?area=MI',8500),json(lsrs,8500)]);
   const alerts=alertResponse.status==='fulfilled'?(alertResponse.value.features||[]):[];
   const reports=lsrResponse.status==='fulfilled'?(lsrResponse.value.features||[]).map(parseReport).filter(Boolean):[];
-  const conditions=new Map(),errors=[];
+  const conditions=new Map(),officials=new Map(),errors=[];
+  // Each official report is checked independently; no resort content enters weather forecast fields.
+  const officialChecks=Promise.all(RESORTS.filter(r=>SOURCES[r.slug]).map(async r=>{
+    const value=await fetchOfficial(r.slug);officials.set(r.slug,value);
+  }));
   if(alertResponse.status!=='fulfilled')errors.push('NWS_ALERTS_UNAVAILABLE');
   if(lsrResponse.status!=='fulfilled')errors.push('LOCAL_STORM_REPORTS_UNAVAILABLE');
   let next=0;
@@ -58,16 +63,18 @@ async function collect(now=Date.now()){
       conditions.set(r.slug,w);
     }
   }
-  await Promise.all(Array.from({length:6},worker));
-  const resorts=rank(RESORTS.map(r=>assemble(r,conditions.get(r.slug),alerts,reports,'detroit',now)),'detroit',now);
+  await Promise.all([...Array.from({length:6},worker),officialChecks]);
+  const resorts=rank(RESORTS.map(r=>assemble(r,conditions.get(r.slug),alerts,reports,'detroit',now,officials.get(r.slug))),'detroit',now);
   return {ok:true,generatedAt:new Date(now).toISOString(),season:'2026-27',
     policy:'PROVISIONAL; NO OPEN-LIFT OR SAFE-ROAD ASSURANCE',
     resorts,health:{nwsAlerts:alertResponse.status==='fulfilled'?'RECEIVED':'UNAVAILABLE',
       localStormReports:lsrResponse.status==='fulfilled'?'RECEIVED':'UNAVAILABLE',
       nwsGridAvailable:resorts.filter(r=>r.weather.weatherCoverage==='NWS_GRID_RECEIVED').length,
-      nwsGridTotal:RESORTS.length,errors:errors.slice(0,22)},
+      nwsGridTotal:RESORTS.length,officialReportsChecked:officials.size,
+      officialReportsParsed:[...officials.values()].filter(x=>x.status==='PUBLISHED_OFFICIAL_REPORT').length,
+      errors:errors.slice(0,22)},
     alertsActive:resorts.filter(r=>r.weather.alerts.some(a=>a.isLakeEffect)).length,
-    disclosure:'Recent reports are nearby storm reports with varying accumulation intervals, not 24/48-hour resort snowfall totals. NWS grid snowfall is a forecast, not observed snow. Base depth and lift status are unverified.'};
+    disclosure:'Recent reports are nearby storm reports with varying accumulation intervals, not 24/48-hour resort snowfall totals. NWS grid snowfall is a forecast, not observed snow. Official lift/trail counts are parsed for select resorts; they are page snapshots, not guaranteed opening status for a future weekend. Unknown resorts remain unverified.'};
 }
 function get(){
   const now=Date.now();
