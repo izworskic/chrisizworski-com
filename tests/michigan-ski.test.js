@@ -63,3 +63,38 @@ test('source files and API are Michigan-only, Utah source remains independently 
  const api=fs.readFileSync(path.join(__dirname,'../api/michigan-ski.js'),'utf8');
  assert.match(api,/X-Robots-Tag/);assert.match(api,/CDN-Cache-Control/);
 });
+
+test('Sunday morning keeps the CURRENT ski weekend, Sunday after close advances to next week',()=>{
+ const morning=E.weekendWindow(Date.parse('2027-01-10T15:00:00Z')); // 10 AM Eastern
+ assert.equal(morning.saturday.date,'2027-01-09');
+ assert.equal(morning.sunday.date,'2027-01-10');
+ assert.equal(new Date(morning.end).toISOString(),'2027-01-10T21:00:00.000Z');
+ const evening=E.weekendWindow(Date.parse('2027-01-10T22:00:00Z'));
+ assert.equal(evening.saturday.date,'2027-01-16');
+ assert.equal(evening.sunday.date,'2027-01-17');
+});
+test('Saturday and Sunday NWS snow windows separate snowfall and survive Michigan DST',()=>{
+ const now=Date.parse('2027-03-12T12:00:00Z');
+ const days=E.weekendWindow(now);
+ assert.equal(days.saturday.date,'2027-03-13');
+ assert.equal(days.sunday.date,'2027-03-14');
+ assert.equal(new Date(days.saturday.end).toISOString(),'2027-03-13T21:00:00.000Z');
+ assert.equal(new Date(days.sunday.end).toISOString(),'2027-03-14T20:00:00.000Z');
+ const grid={properties:{snowfallAmount:{values:[
+  {validTime:'2027-03-13T00:00:00Z/PT12H',value:25.4},
+  {validTime:'2027-03-14T00:00:00Z/PT12H',value:50.8}
+ ]}}};
+ const out=E.skiDays(grid,now);
+ assert.equal(out.saturday.snowInches,1);
+ assert.equal(out.sunday.snowInches,2);
+ assert.equal(out.moreSnowForecast,'SUNDAY');
+});
+test('winter warnings suspend ranking and never become ski-powder bonus',()=>{
+ const open=E.scoreResort(boyne,{},'detroit',at);
+ const warned=E.scoreResort(boyne,{alerts:[{event:'Lake Effect Snow Warning',isLakeEffect:true}]},'detroit',at);
+ assert.equal(warned.score,null);
+ assert.equal(warned.verdict,'WEATHER_WARNING_VERIFY_TRAVEL');
+ assert.equal(warned.components.lakeEffectSignal,0);
+ assert.ok(Number.isFinite(open.score));
+ assert.ok(open.missing.includes('LIVE_LIFTS_AND_TRAIL_STATUS'));
+});
