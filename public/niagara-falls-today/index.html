@@ -20,11 +20,12 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/assets/niagara-falls-today.css?v=niagara-visible-20261013a">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
 {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
-{"@type":"WebPage","@id":"https://chrisizworski.com/niagara-falls-today/#webpage","url":"https://chrisizworski.com/niagara-falls-today/","name":"Niagara Falls Today: Boat Rides, Hours & Visit Planner","dateModified":"2026-10-13","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/niagara-falls-today/#app"},"author":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"WebPage","@id":"https://chrisizworski.com/niagara-falls-today/#webpage","url":"https://chrisizworski.com/niagara-falls-today/","name":"Niagara Falls Today: Boat Rides, Hours & Visit Planner","dateModified":"2026-10-14","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/niagara-falls-today/#app"},"author":{"@id":"https://chrisizworski.com/#person"}},
 {"@type":"WebApplication","@id":"https://chrisizworski.com/niagara-falls-today/#app","url":"https://chrisizworski.com/niagara-falls-today/","name":"Niagara Falls Today","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"description":"Deterministic time-budget itinerary planner using dated operator-published schedule rules with explicit uncertainty."},
 {"@type":"FAQPage","@id":"https://chrisizworski.com/niagara-falls-today/#faq","mainEntity":[
 {"@type":"Question","name":"How long do I need at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"Two hours suits a short scenic visit on one side. Four hours can allow an attraction plus viewpoints if published hours and travel buffers fit. Six hours offers more flexibility, but admission, queues and weather can change the plan."}},
@@ -36,7 +37,9 @@
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script defer src="/assets/niagara-visit-map.js?v=niagara-visible-20261013a"></script>
+<script defer src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script defer src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"></script>
+<script defer src="/assets/niagara-visit-map.js?v=niagara-keyless-20261014a"></script>
 <script defer src="/assets/niagara-visit-films.js"></script>
 <script defer src="/assets/niagara-falls-guide.js"></script>
 <script defer src="/assets/niagara-falls-today.js?v=niagara-visible-20261013a"></script>
@@ -133,7 +136,7 @@
  <div class="wayfinding-layout">
   <div class="wayfinding-map-wrap">
    <div id="niagara-route-map" class="niagara-route-map" role="region" aria-label="Interactive map of Niagara Falls itinerary stops"></div>
-   <div class="wayfinding-map-footer"><span>Numbered pins = stops · P = parking · Dashed connectors show order, <strong>not walking paths</strong>.</span><span>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> · © CARTO</span></div>
+   <div class="wayfinding-map-footer"><span>Numbered pins = stops · P = parking · Dashed connectors show order, <strong>not walking paths</strong>.</span><span><span id="niagara-basemap-status">OpenFreeMap · keyless basemap</span> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors</span></div>
   </div>
   <div class="wayfinding-side">
    <div id="arrival-decision" class="arrival-decision"><p>When your itinerary appears, we’ll identify where to start, which parking lot fits, and whether transit could save walking.</p></div>

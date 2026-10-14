@@ -56,7 +56,10 @@ test('Map and video controls are real interactive DOM inputs, not static images'
  assert.match(html,/data-niagara-clip="F1D0AUIfKJk"/);
  assert.match(html,/data-niagara-clip="hmQwm0drhGU"/);
  assert.match(html,/data-niagara-clip="l6fu2huqWNE"/);
- assert.match(map,/L\.tileLayer\('https:\/\/\{s\}\.basemaps\.cartocdn\.com/);
+ assert.match(map,/L\.maplibreGL/);
+ assert.match(map,/https:\/\/tiles\.openfreemap\.org\/styles\/positron/);
+ assert.match(map,/https:\/\/tile\.openstreetmap\.org/);
+ assert.doesNotMatch(map,/basemaps\.cartocdn\.com/);
  assert.match(map,/https:\/\/www\.google\.com\/maps\/dir\/\?api=1/);
  assert.match(map,/not a walking path|not walking paths|not a walkable/i);
  assert.match(films,/youtube-nocookie\.com\/embed/);
