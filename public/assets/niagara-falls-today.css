@@ -353,3 +353,25 @@
  .plan-preview .preview-places>div{padding:9px}
  .wayfinding-panel .niagara-route-map{height:330px}
 }
+
+
+/* Keep the choice itself above the fold on a typical 390×844 phone. */
+@media(max-width:640px){
+ .hero-inner{padding:11px 18px}
+ .hero h1{font-size:32px;line-height:1.02;margin:3px 0 5px}
+ .hero .lead{font-size:16px;margin:0 0 7px}
+ .hero .hero-sub{display:none}
+ .hero .hero-cta{min-height:36px;padding:7px 12px;font-size:12px}
+ .hero-photo{height:104px;min-height:104px;max-height:104px}
+ .hero-photo img{height:104px;min-height:0}
+ .controls .panel-head{padding:13px 14px 3px}
+ .controls .panel-head h2{font-size:23px;margin:0 0 3px}
+ .controls .panel-head p{font-size:11px;line-height:1.35;margin-bottom:4px}
+ .controls form{padding:0 13px 13px}
+ .controls .two{gap:7px;margin-bottom:7px}
+ .controls label{font-size:11px}
+ .controls .visit-date-note{font-size:10px;line-height:1.4;margin:0 0 8px}
+ .controls fieldset{margin-bottom:8px;padding-top:4px;padding-bottom:5px}
+ .controls .quick-heading{margin:6px 0}
+ .controls .visit-quick-start button{min-height:88px}
+}
