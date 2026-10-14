@@ -11,6 +11,14 @@ function ensureYosemite(html) {
     if (at >= 0) html = html.slice(0, at) + card + html.slice(at);
   }
 
+  // Seasonal Michigan bloom follows the same event intent lane as fall color.
+  // The owner directory is proxied, so insert exactly once at response time.
+  if (!html.includes('data-tool-id="michigan-bloom-tracker"')) {
+    const anchor = '<article class="directory-card" data-search-card data-tool-id="fall-color"';
+    const at = html.indexOf(anchor);
+    if (at >= 0) html = html.slice(0, at) + "<article class=\"directory-card\" data-search-card data-tool-id=\"michigan-bloom-tracker\" data-personas=\"event trip garden\" data-tags=\"michigan flowers bloom blossom tulip holland cherry traverse city grand rapids peony ann arbor mackinac lilacs lavender sunflowers peak season map\" data-months=\"4,5,6,7,8,9\"><div class=\"card-top\"><span class=\"kind\">2027 seasonal bloom planning</span><span class=\"season-label\" hidden>Peak windows April–September</span></div><h3>Michigan Bloom Tracker 2027</h3><p class=\"place\">Michigan · Nine flower destinations</p><p class=\"description\">Compare typical peak weeks, tickets, access and parking at nine Michigan bloom stops. Read fresh source-linked observations when available; no live claim in the off-season.</p><p class=\"signals\"><strong>Signals:</strong> Destination guidance + dated flower observations when available, not calendar-as-live-data</p><div class=\"card-actions\"><a class=\"primary-action\" href=\"https://phenology.chrisizworski.com/bloom-tracker\">Which Michigan flowers should I visit? &rarr;</a></div></article>\n" + html.slice(at);
+  }
+
   const visibleCards = [...html.matchAll(/data-tool-id="([^"]+)"/g)].length;
   html = html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/, `$1${visibleCards} tools shown$2`);
 
@@ -33,6 +41,11 @@ function ensureYosemite(html) {
           }
         } else {
           list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: YOSEMITE_URL, name: 'Yosemite Firefall Live' });
+          changed = true;
+        }
+        const bloomUrl = 'https://phenology.chrisizworski.com/bloom-tracker';
+        if (!list.itemListElement.some(item => item.url === bloomUrl || item.name === 'Michigan Bloom Tracker 2027')) {
+          list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: bloomUrl, name: 'Michigan Bloom Tracker 2027' });
           changed = true;
         }
         if (changed) {
