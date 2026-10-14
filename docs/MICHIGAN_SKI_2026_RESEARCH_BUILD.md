@@ -29,3 +29,26 @@ One unparameterized cached GET API; 18 resorts entail 36 NWS requests per cold f
 - Utah source files must remain untouched. Main auto-deploys to production on merge; no merge on failing gates.
 
 SEO observation plan: Search Console Web 28-day query/impression/CTR by hill and lake-effect intent; official-resort outbound use; report weather-source accuracy and Vercel runtime costs. No guaranteed traffic gain.
+
+## Standout v2 — Powder Chase + Worth the Drive (October 14, 2026)
+
+### Independent evidence
+1. **NWS forecast:** all 18 resorts use NWS point grids; Saturday/Sunday have separate 4 PM-to-4 PM resort-local snowfall, temperature and wind windows. Ski Brule, Big Powderhorn and Snowriver use Central Time. No third-party weather credits.
+2. **Snow observed nearby:** NWS Local Storm Reports via Iowa Mesonet show report timestamp and original accumulation amount. Intervals vary: they are NOT 24-hour resort snow totals. The nearest report within 35 miles is used as proximity evidence.
+3. **Official mountain operations:** allowlisted parsers for Caberfae Peaks, Crystal Mountain and Shanty Creek. Both lift and trail counts must parse plausibly, or source status is UNVERIFIED. Checked-at timestamp means page inspection time, not resort report publication time. Current counts do NOT guarantee future weekend operation. Other resorts intentionally show not verified.
+
+### Loss functions
+- **Unsafe false green:** active winter warnings exclude resort from normal shortlist. Wind-sector alignment never implies observed lake-effect bands or safe travel.
+- **Unverified lift claim:** no verified official source means never assert open lifts. Current published zero does not guarantee future closure. No NWS forecast means no powder winner.
+- **Unknown money equals free:** never treat missing adult/child prices, rental rates or fuel mileage as zero. All-in total displays incomplete until the user provides missing quotes and round-trip miles.
+- **Wrong skier:** an expert-only mountain such as Mount Bohemia cannot win the family shortlist. Editorial terrain tags are planning context, not current operating status.
+- **Incorrect time:** Saturday/Sunday and lake-effect wind match the selected day in each resort's time zone, including DST transition and Sunday morning.
+- **Fake map precision:** public US geographic-boundary multipolygon with plotted 18 NWS forecast points; no snowfall interpolation between hills, no map API keys/tiles, marker leader lines mark precise locations when closely spaced.
+- **Misleading shoulder season:** air temperatures <=28F are an NWS snowmaking-cold-air *potential* only. Wet-bulb temperature, equipment operation, snowmaking confirmation and ski opening are unknown. Off-season has no numeric ski-day rank.
+
+### Required release gates
+1. Full repository gates and generated-page authority audits passing.
+2. Regression tests covering official report parser fails closed, DST, Central/Eastern windows, freeze-thaw, snowmaking air-temperature qualification, warnings and no off-season rankings.
+3. Visually check deployed preview on desktop and mobile for map dots, day-switch state, cost changes, navigation, resort page and warning visibility.
+4. Test real NWS response and real official websites. Do not claim successful live parsing until actual page responses are verified. Blocked official sites return UNVERIFIED.
+5. Keep draft PR unmerged until source and browser checks satisfy this gate.
