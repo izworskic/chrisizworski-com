@@ -7,7 +7,7 @@ const { execFileSync } = require('node:child_process');
 const file = 'public/assets/network-ads-v1.js';
 function run({ host = 'whitetail.chrisizworski.com', path = '/', mode, existing = false, localPlacer = false, noindex = false, placementOff = false, manual = true, rules = [] } = {}) {
   let code = fs.readFileSync(file, 'utf8');
-  code = code.replace('"pageExceptions":[]', '"pageExceptions":' + JSON.stringify(rules));
+  code = code.replace(/"pageExceptions":\[[^\]]*\]/, '"pageExceptions":' + JSON.stringify(rules));
   if (manual) code = code.replace('"enabled":false', '"enabled":true');
   if (mode) code = code.replace(/"loaderMode":"[^"]+"/, `"loaderMode":"${mode}"`);
   const added = [], listeners = [];

@@ -120,22 +120,23 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
       assert.match(await page.locator('#lead-grid-status').textContent(),/No valid pixel/);
       assert.match(await page.locator('#lead-lake-context').textContent(),/62\.1°F on Oct 12 · \+5\.0°F vs the long-term normal/);
-      const answerStyle=await page.locator('#lead-temp').evaluate(el=>getComputedStyle(el).fontSize);
-      assert.ok(parseFloat(answerStyle)>=40,'temperature reading must be the dominant feature');
+      const sizes=await page.evaluate(()=>({answer:parseFloat(getComputedStyle(document.querySelector('#lead-temp')).fontSize),h1:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize)}));
+      assert.ok(sizes.answer>=28&&sizes.answer>sizes.h1,'the answer (even when it is the no-reading message) is larger than the page title: '+JSON.stringify(sizes));
       if(width===1024||width===1280){
        const hero=await page.evaluate(()=>{
         const photo=document.querySelector('.hero-photo').getBoundingClientRect();
         const num=document.querySelector('#lead-temp').getBoundingClientRect();
-        const scale=document.querySelector('.scale').getBoundingClientRect();
-        const evidence=document.querySelector('#shorefeel-now').getBoundingClientRect();
-        return {photoWidth:photo.width,photoHeight:photo.height,numberBottom:num.bottom+window.scrollY,scaleBottom:scale.bottom+window.scrollY,
-          numberSize:parseFloat(getComputedStyle(document.querySelector('#lead-temp')).fontSize),evidenceY:evidence.y+window.scrollY};
+        const hero=document.querySelector('.hero').getBoundingClientRect();
+        const fc=document.querySelector('#beach-forecast').getBoundingClientRect();
+        return {photoWidth:photo.width,photoHeight:photo.height,numberBottom:num.bottom+window.scrollY,heroBottom:hero.bottom+window.scrollY,forecastTop:fc.top+window.scrollY,
+          heroBand:getComputedStyle(document.querySelector('.hero')).backgroundColor};
        });
-       assert.ok(hero.scaleBottom<600,'the temperature and its scale must be visible without scrolling '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.numberSize>=64,'the temperature is the dominant element '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.photoWidth>width*.27 && hero.photoWidth<width*.52,'photo is a secondary card '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.photoHeight>=160 && hero.photoHeight<=260,'secondary photo size '+width+': '+JSON.stringify(hero));
-       assert.ok(hero.evidenceY<900,'status strip should follow the hero closely '+width+': '+JSON.stringify(hero));
+       // No reading: the hero says so plainly, stays short, is neutral slate (not a band colour), and the forecast follows at once.
+       assert.ok(hero.numberBottom<420,'the no-reading message is near the top '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.heroBottom<560,'hero stays short without a reading '+width+': '+JSON.stringify(hero));
+       assert.ok(hero.forecastTop<700,'the forecast section follows the hero '+width+': '+JSON.stringify(hero));
+       assert.equal(hero.heroBand,'rgb(61, 82, 92)','unknown water is neutral slate, never a band colour');
+       assert.ok(hero.photoWidth<=width&&hero.photoHeight>=120&&hero.photoHeight<=340,'the photograph is a contained figure lower on the page '+width+': '+JSON.stringify(hero));
       }
       const dims=await page.evaluate(()=>({
        documentWidth:document.documentElement.scrollWidth,
@@ -178,7 +179,9 @@ const server=http.createServer((req,res)=>{
   });
   await gridPage.goto(base+'/lake-michigan-water-temperature/traverse-city/',{waitUntil:'load'});
   await gridPage.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='64.4°F',{timeout:7000});
-  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/grand traverse bay · NOAA satellite surface/i);
+  assert.match(await gridPage.locator('#lead-temp-label').textContent(),/^Grand Traverse Bay$/);
+  assert.match(await gridPage.locator('#lead-temp-when').textContent(),/NOAA satellite · /);
+  assert.equal(await gridPage.locator('#lead-answer').getAttribute('data-band'),'cold','64.4F is cold on the safety bands');
   assert.match(await gridPage.locator('#lead-temp-caveat').textContent(),/not a beach thermometer/);
   assert.match(await gridPage.locator('#lead-grid-status').textContent(),/West Bay 64\.4°F · East Bay 64\.9°F/);
   await gridPage.getByRole('button',{name:'Paddling'}).click();

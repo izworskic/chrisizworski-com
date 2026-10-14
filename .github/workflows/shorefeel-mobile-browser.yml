@@ -6,6 +6,8 @@ on:
       - 'public/great-lakes-water-temperature/**'
       - 'public/lake-michigan-water-temperature/**'
       - 'scripts/shorefeel-mobile-browser.cjs'
+      - 'scripts/shorefeel-design-benchmark.cjs'
+      - 'docs/SHOREFEEL_DESIGN_VALUE_FUNCTION.md'
       - '.github/workflows/shorefeel-mobile-browser.yml'
   workflow_dispatch:
 permissions:
@@ -28,6 +30,11 @@ jobs:
           NODE_PATH: /tmp/shorefeel-browser/node_modules
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/shorefeel-mobile-browser.cjs
+      - name: Design value function (V >= 0.85 at phone and desktop, all gates)
+        env:
+          NODE_PATH: /tmp/shorefeel-browser/node_modules
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/shorefeel-design-benchmark.cjs
       - name: Preserve QA screenshots and report
         if: always()
         uses: actions/upload-artifact@v4

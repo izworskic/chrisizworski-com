@@ -19,9 +19,27 @@ function setLead(value,label,when,caveat){
 }
 const SCALE_MIN=45,SCALE_MAX=80;
 const pct=t=>Math.max(0,Math.min(100,(t-SCALE_MIN)/(SCALE_MAX-SCALE_MIN)*100));
+/* Cold-water safety bands: under 60, 60-70, 70-77, 77 and up. */
+const BANDS=[
+ {max:60,key:'shock',name:'Cold-shock water',note:'Most people gasp on entry. Wade in slowly and stay close to shore.'},
+ {max:70,key:'cold',name:'Cold',note:'Brisk for the acclimated. Most people are out within minutes.'},
+ {max:77,key:'cool',name:'Cool',note:'Comfortable for an active swim.'},
+ {max:Infinity,key:'warm',name:'Warm for the Great Lakes',note:'Comfortable for most people.'}];
+const bandOf=t=>BANDS.find(b=>t<b.max);
 function setMarker(t){
- const box=get('lead-answer'),m=get('lead-marker');if(!box||!m)return;
- if(Number.isFinite(t)){box.dataset.band='ok';m.style.left=pct(t)+'%';}else box.dataset.band='none';
+ const box=get('lead-answer'),hero=document.querySelector('.hero'),num=get('lead-temp');if(!box)return;
+ if(Number.isFinite(t)){
+  const b=bandOf(t);
+  box.dataset.band=b.key;if(hero)hero.dataset.band=b.key;
+  write('lead-band',b.name);write('lead-band-note',b.note);
+  const m=get('lead-marker'),fl=get('lead-fill');
+  if(m)m.style.left=pct(t)+'%';if(fl)fl.style.width=pct(t)+'%';
+  if(num)num.classList.remove('is-empty');
+ }else{
+  box.dataset.band='none';if(hero)hero.dataset.band='none';
+  write('lead-band','');write('lead-band-note','');
+  if(num)num.classList.add('is-empty');
+ }
 }
 function renderLead(){
  if(!place||!payload||!get('lead-temp'))return;
@@ -29,16 +47,16 @@ function renderLead(){
  const upper=s=>String(s||'');
  if(water&&Number.isFinite(water.tempF)){
   if(water.kind==='buoy'){
-   setLead(format(water.tempF),upper(water.where)+' · buoy '+buoy.stationId,
-    'Measured '+time(water.observedAt)+' · '+buoy.stationName,
-    water.caveat);
+   setLead(format(water.tempF),upper(water.where),
+    'Buoy '+buoy.stationId+' · '+time(water.observedAt),
+    buoy.stationName+'. '+water.caveat);
   }else{
-   setLead(format(water.tempF),upper(water.where)+' · NOAA satellite surface',
-    'NOAA GLSEA ACSPO · '+time(water.observedAt)+' · '+water.label,
-    water.caveat);
+   setLead(format(water.tempF),upper(water.where),
+    'NOAA satellite · '+time(water.observedAt),
+    water.label+'. '+water.caveat);
   }
  }else{
-  setLead('No current reading',upper(buoy?.waterBody||'water temperature')+' · not verified',
+  setLead('No current reading',upper(buoy?.waterBody||'Water temperature')+' · not verified',
    'No buoy report in 6 hours, no valid satellite pixel in 3 days',
    'The lake average below is NOT the measured temperature at this beach.');
  }
@@ -120,6 +138,32 @@ function renderPlace(){
 }
 /* Beach water forecast: a range with a stated error, never a single number.
    Built with textContent only. Absent or unavailable forecast hides the whole block. */
+/* Beach water forecast: a range ribbon over a best-guess line, never a lone number. DOM-built (textContent only). */
+const SVGNS='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs,text){const n=document.createElementNS(SVGNS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);if(text!==undefined)n.textContent=text;return n;}
+const wk=iso=>{const d=new Date(iso);return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{weekday:'short',timeZone:'America/Detroit'}):'';};
+const hr=iso=>{const d=new Date(iso);return Number.isFinite(d.getTime())?d.toLocaleTimeString('en-US',{hour:'numeric',timeZone:'America/Detroit'}):'';};
+function forecastChart(b){
+ const W=640,H=230,L=10,R=10,T=34,B=44,pts=b.points;
+ const lo=Math.min(...pts.map(p=>p.low)),hi=Math.max(...pts.map(p=>p.high));
+ let y0=Math.floor(lo-1),y1=Math.ceil(hi+1);if(y1-y0<8){const m=(y0+y1)/2;y0=Math.floor(m-4);y1=y0+8;}
+ const X=h=>L+h/48*(W-L-R),Y=t=>T+(y1-t)/(y1-y0)*(H-T-B);
+ const svg=svgEl('svg',{class:'bf-chart',viewBox:'0 0 '+W+' '+H,role:'img','aria-label':b.name+' water temperature, range and best guess, now to 48 hours ahead'});
+ [60,70].filter(t=>t>y0&&t<y1).forEach(t=>{
+  svg.appendChild(svgEl('line',{class:'ref',x1:L,x2:W-R,y1:Y(t),y2:Y(t)}));
+ });
+ const up=pts.map(p=>X(p.leadH)+','+Y(p.high)),dn=pts.slice().reverse().map(p=>X(p.leadH)+','+Y(p.low));
+ svg.appendChild(svgEl('polygon',{class:'ribbon',points:up.concat(dn).join(' ')}));
+ svg.appendChild(svgEl('polyline',{class:'line',points:pts.map(p=>X(p.leadH)+','+Y(p.tempF)).join(' ')}));
+ pts.forEach(p=>svg.appendChild(svgEl('circle',{class:'dot',cx:X(p.leadH),cy:Y(p.tempF),r:7})));
+ [0,24,48].forEach(h=>{const p=pts.find(q=>q.leadH===h);if(!p)return;
+  const anchor=h===0?'start':h===48?'end':'middle';
+  svg.appendChild(svgEl('text',{x:X(h)+(h===0?2:h===48?-2:0),y:Y(p.high)-12,'text-anchor':anchor,style:'fill:var(--ink);font-size:24px'},Math.round(p.tempF)+'°'));});
+ [0,12,24,36,48].forEach(h=>{const p=pts.find(q=>q.leadH===h);
+  const anchor=h===0?'start':h===48?'end':'middle',x=X(h)+(h===0?2:h===48?-2:0);
+  svg.appendChild(svgEl('text',{x,y:H-30,'text-anchor':anchor},h===0?'Now':'+'+h+' h'));});
+ return svg;
+}
 function renderBeachForecast(){
  const sec=get('beach-forecast'),host=get('bf-body');if(!sec||!host)return;
  const bf=payload?.beachForecast;
@@ -128,37 +172,33 @@ function renderBeachForecast(){
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  if(bf.status!=='available'||!bf.beaches?.length){
   write('bf-lede','');write('bf-method','');
-  const m=el('p','bf-down','The beach forecast is unavailable right now because NOAA\u2019s lake model server is not responding. The measured reading at the top of the page is not affected. Nothing has been estimated in its place.');
-  host.appendChild(m);sec.hidden=false;return;
+  host.appendChild(el('p','bf-down','The beach forecast is unavailable right now because NOAA’s lake model server is not responding. The measured reading at the top of the page is not affected. Nothing has been estimated in its place.'));
+  sec.hidden=false;return;
  }
  const v=bf.validation||{};
- write('bf-lede','Estimated from a NOAA measurement plus the lake model\u2019s forecast change. Typical error in Sept\u2013Oct 2026 tests: '+v.error24hF+'\u00b0F at 24 hours, '+v.error48hF+'\u00b0F at 48 hours. The ranges are wider on purpose.');
- const when=h=>h===0?'Now':'In '+h+' h';
+ write('bf-lede','');
  bf.beaches.forEach(b=>{
-  const wrap=el('div','bf-beach');
-  const head=el('div','bf-head');
-  head.appendChild(el('h3','',b.name));
-  const n=b.points[0];
-  head.appendChild(el('span','bf-now','Now '+n.low+'\u2013'+n.high+'\u00b0F'));
-  wrap.appendChild(head);
-  wrap.appendChild(el('p','bf-basis','Starts from the NOAA '+(b.levelKind==='buoy'?'buoy':'satellite')+' reading of '+b.levelTempF.toFixed(1)+'\u00b0F, '+time(b.levelObservedAt)+'.'));
-  const list=el('ul','bf-slots');
-  b.points.forEach(p=>{
-   const li=el('li','bf-slot');
-   li.appendChild(el('div','bf-when',when(p.leadH)));
-   li.appendChild(el('div','bf-temp',p.tempF.toFixed(0)+'\u00b0'));
-   li.appendChild(el('div','bf-range',p.low+'\u2013'+p.high+'\u00b0F'));
-   const bar=el('div','bf-bar');bar.setAttribute('aria-hidden','true');
-   const seg=document.createElement('i');
-   seg.style.left=pct(p.low)+'%';seg.style.width=Math.max(2,pct(p.high)-pct(p.low))+'%';
-   bar.appendChild(seg);li.appendChild(bar);
-   list.appendChild(li);
+  const card=el('article','bf-card');
+  card.appendChild(el('h3','',b.name));
+  card.appendChild(el('p','bf-basis','Estimated from the NOAA '+(b.levelKind==='buoy'?'buoy':'satellite')+' reading of '+b.levelTempF.toFixed(1)+'°F.'));
+  const heads=el('div','bf-heads');
+  [[0,'Now'],[24,'In a day'],[48,'In two days']].forEach(([h,label])=>{
+   const p=b.points.find(q=>q.leadH===h);if(!p)return;
+   const c=el('div','bf-head');c.appendChild(el('div','bf-when',label));
+   c.appendChild(el('div','bf-temp',Math.round(p.tempF)+'°'));
+   c.appendChild(el('div','bf-range',p.low+'–'+p.high+'°F'));
+   heads.appendChild(c);
   });
-  wrap.appendChild(list);
-  if(b.cooling){const c=el('div','bf-callout');c.setAttribute('role','note');const cut=b.cooling.text.indexOf('. ');c.appendChild(el('strong','',cut>0?b.cooling.text.slice(0,cut+1):b.cooling.text));if(cut>0)c.appendChild(document.createTextNode(b.cooling.text.slice(cut+2)));wrap.appendChild(c);}
-  host.appendChild(wrap);
+  card.appendChild(heads);
+  card.appendChild(forecastChart(b));
+  card.appendChild(el('p','bf-key','Shaded band is the range. Dashed lines mark 60°F and 70°F; below 60°F is cold-shock water.'));
+  const lst=el('ul','sr-only');lst.setAttribute('aria-label',b.name+' water temperature forecast');
+  b.points.forEach(p=>lst.appendChild(el('li','',(p.leadH===0?'Now':'In '+p.leadH+' hours')+': best guess '+Math.round(p.tempF)+'\u00b0F, range '+p.low+' to '+p.high+'\u00b0F')));
+  card.appendChild(lst);
+  if(b.cooling){const c=el('div','bf-callout');c.setAttribute('role','note');const cut=b.cooling.text.indexOf('. ');c.appendChild(el('strong','',cut>0?b.cooling.text.slice(0,cut+1):b.cooling.text));if(cut>0)c.appendChild(document.createTextNode(b.cooling.text.slice(cut+2)));card.appendChild(c);}
+  host.appendChild(card);
  });
- write('bf-method',bf.method+' '+bf.caveat+' Source: NOAA LMHOFS model run '+time(bf.cycle)+'. '+(v.caveats||[]).join(' '));
+ write('bf-method','Typical error in Sept–Oct 2026 tests: '+v.error24hF+'°F at a day, '+v.error48hF+'°F at two days; ranges are wider on purpose. '+bf.method+' '+bf.caveat+' Source: NOAA LMHOFS model run '+time(bf.cycle)+'. '+(v.caveats||[]).join(' '));
  sec.hidden=false;
 }
 function initMap(){

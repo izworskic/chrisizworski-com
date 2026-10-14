@@ -7,7 +7,7 @@ test('ShoreFeel shows one genuinely sourced image per destination with accessibl
   assert.equal((html.match(/class="hero-photo"/g)||[]).length,1,k);
   assert.match(html,/class="hero-photo"[^>]*alt="[^"]{20,}"/,k);
   assert.match(html,/<figcaption>[^]*?<\/figcaption>/,k);
-  assert.match(html,/href="#(?:lake-readings|shorefeel-now)"/,k);
+  assert.match(html,/id="(?:lake-readings|shorefeel-now)"/,k);
   assert.match(html,/name="twitter:image"/);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
   if(k==='grand'){
@@ -44,7 +44,9 @@ test('ShoreFeel has a compact mobile hierarchy without losing user intents or ev
 test('Traverse City first screen leads with a sourced water temperature, not the photograph',()=>{
  const html=fs.readFileSync(path.join(root,'lake-michigan-water-temperature/traverse-city/index.html'),'utf8');
  const hero=html.slice(html.indexOf('<section class="hero">'),html.indexOf('</section>',html.indexOf('<section class="hero">')));
- assert.ok(hero.indexOf('id="lead-temp"')>0&&hero.indexOf('id="lead-temp"')<hero.indexOf('class="hero-media"'));
+ assert.ok(hero.indexOf('id="lead-temp"')>0);
+ assert.equal(hero.indexOf('class="hero-media"'),-1,'the photograph is not part of the answer; it sits lower on the page');
+ assert.ok(html.indexOf('class="hero-media"')>html.indexOf('id="beach-forecast"'),'photo follows the forecast');
  for(const id of ['lead-temp','lead-temp-label','lead-temp-when','lead-temp-caveat','lead-bay-status']){
   assert.match(hero,new RegExp('id="'+id+'"'));
  }

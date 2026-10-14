@@ -10,5 +10,18 @@
     "/about/"
   ],
   "strategy": "auto",
-  "pageExceptions": []
+  "pageExceptions": [
+    {
+      "host": "chrisizworski.com",
+      "path": "/lake-michigan-water-temperature",
+      "match": "section",
+      "reason": "Auto ads placed a 280-390 px unit inside the hero above the water temperature (hero 1,199 px tall on a phone). ShoreFeel's job is the first-screen answer. Review after AdSense Excluded areas protects the hero."
+    },
+    {
+      "host": "chrisizworski.com",
+      "path": "/great-lakes-water-temperature",
+      "match": "exact",
+      "reason": "Same hero displacement as the Lake Michigan ShoreFeel pages."
+    }
+  ]
 }
