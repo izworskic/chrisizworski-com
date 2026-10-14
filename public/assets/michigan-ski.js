@@ -25,7 +25,8 @@ function status(r){
 }
 function chipsFor(r){
  const w=r.weather||{},arr=[];
- if(w.alerts?.some(a=>a.isLakeEffect))arr.push(['Lake-effect alert','lake']);
+ if(w.alerts?.some(a=>a.isLakeEffect))arr.push(['Official lake-effect alert','lake']);
+ if(w.lakeEffectWind?.status==='WIND_ALIGNED')arr.push(['Wind favors lake-effect area · not confirmed snow','lake']);
  if(w.alerts?.some(a=>/Warning/i.test(a.event)))arr.push(['Active winter warning','alert']);
  if(r.kind==='nordic')arr.push(['Nordic / XC','neutral']);
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')arr.push(['Off season','neutral']);
@@ -51,7 +52,9 @@ function card(r,index,detail=false){
  ['Recent nearby',r.weather?.report24?fmt(r.weather.report24.inches,'″ reported'):'No 24h report'],
  ['Drive · '+(state.origin==='detroit'?'Detroit':'Grand Rapids'),minutes(r.driveMinutes?.[state.origin])],
  ['Adult lift ticket',ticket(r)],['Base depth','Not verified'],
- ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Alert active':'No matching alert reported'],
+ ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Official alert':
+   r.weather?.lakeEffectWind?.status==='WIND_ALIGNED'?'Favorable wind only':
+   r.weather?.lakeEffectWind?.status==='NOT_ALIGNED'?'Wind not aligned':'Unverified'],
  ['Operating lifts','Not verified']
  ];
  data.forEach(([label,value])=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(metrics,m);});add(body,metrics);
@@ -62,11 +65,24 @@ function card(r,index,detail=false){
 }
 function warnings(data){
  const target=$('lake-watch');if(!target)return;target.replaceChildren();
- const errors=data.health||{},reported=data.resorts.filter(r=>r.weather?.alerts?.some(a=>a.isLakeEffect));
- if(errors.nwsAlerts!=='RECEIVED'){add(target,node('p','event','NWS alerts are unavailable. Lake-effect warning status cannot be verified.'));return;}
- if(!reported.length){add(target,node('p','small','No NWS lake-effect warning or lake-effect snow alert matched the monitored ski points in the current snapshot. This is not a zero-snowfall claim.'));return;}
- const names=[...new Set(reported.map(r=>r.name))];
- add(target,node('p','event','Lake-effect alerts currently match '+names.length+' destination(s): '+names.join(', ')+'. A warning can mean dangerous travel; check NWS and transportation agencies before leaving.'));
+ const health=data.health||{},alerted=data.resorts.filter(r=>r.weather?.alerts?.some(a=>a.isLakeEffect));
+ const aligned=data.resorts.filter(r=>r.weather?.lakeEffectWind?.status==='WIND_ALIGNED');
+ const reported=data.resorts.filter(r=>r.weather?.report24)
+   .sort((a,b)=>(b.weather.report24.inches||0)-(a.weather.report24.inches||0)).slice(0,5);
+ const lanes=node('div','insights');
+ const current=node('article');add(current,node('h3',null,'01 / Lake-effect warnings'));
+ if(health.nwsAlerts!=='RECEIVED')add(current,node('p',null,'NWS alerts unavailable — cannot verify active lake-effect warnings.'));
+ else if(!alerted.length)add(current,node('p',null,'No matching NWS lake-effect warning or alert for these 18 ski points in this snapshot.'));
+ else add(current,node('p',null,alerted.length+' hills match lake-effect alert zones: '+alerted.map(r=>r.name).join(', ')+'.'));
+ add(current,node('p','small','An active warning may mean dangerous winter travel. It does not establish fresh powder.'));
+ const obs=node('article');add(obs,node('h3',null,'02 / Snow reported nearby'));
+ if(!reported.length)add(obs,node('p',null,'No NWS storm reports inside 35 miles of monitored hills in the past 24 hours.'));
+ else for(const r of reported)add(obs,node('p','small',r.name+': '+fmt(r.weather.report24.inches,'″')+' reported '+r.weather.report24.distanceMiles+' mi away. Report interval varies.'));
+ const steering=node('article');add(steering,node('h3',null,'03 / Where winds favor a snowbelt'));
+ if(!aligned.length)add(steering,node('p',null,'No favorable wind-sector matches confirmed from current NWS grid data.'));
+ else add(steering,node('p',null,aligned.map(r=>r.name).join(', ')+'.'));
+ add(steering,node('p','small','Wind-sector climatology, not a current snowband observation. Forecast snowfall is calculated separately.'));
+ add(lanes,current,obs,steering);add(target,lanes);
 }
 function sortResorts(arr){
  return arr.slice().sort((a,b)=>(score(b)??-1)-(score(a)??-1)||a.name.localeCompare(b.name));
