@@ -214,3 +214,13 @@
 .boat-ticket-action{margin:13px 0 0!important}
 .boat-ticket-action a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border-radius:5px;background:#164f5c;color:#fff;font-size:12px;font-weight:800;text-decoration:none}
 .boat-ticket-action a:hover{background:#0d3945}
+
+
+/* Quick-start choices must show a decision and acknowledgement, not feel inert. */
+.quick-start-note{margin:0 27px 11px;border-left:3px solid #2d7979;background:#edf5f2;color:#244f56;padding:9px 12px;font-size:12px;line-height:1.5}
+.quick-start-note:empty{display:none}
+.quick-loading{border-left:3px solid #2e777a;background:#edf5f3;padding:18px 19px;border-radius:4px;color:#244b53}
+.quick-loading strong{font-size:16px}
+.quick-loading p{font-size:13px;margin:8px 0 0}
+.quick-intent-confirmation{background:#eff5f1;border:1px solid #d2e0da;border-radius:5px;padding:12px 14px;font-size:12px;line-height:1.6;color:#315760}
+@media(max-width:600px){.quick-start-note{margin:0 18px 11px}}
