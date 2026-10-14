@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Utah Ski Access 2026–27 | Chris Izworski</title>
+<meta name="description" content="Plan an Alta, Snowbird, Brighton or Solitude ski day. Separate canyon restrictions, published parking rules and Ikon access before committing.">
+<link rel="stylesheet" href="/assets/utah-ski-access.css"></head><body>
+<a class="skip" href="#trip-form">Skip to trip planner</a>
+<header class="mast"><a href="/">Chris Izworski</a><nav><a href="/epic-ikon-pass/">Epic / Ikon checker</a><a href="/national-tools/">National Tools</a></nav></header>
+<main class="wrap">
+<section class="intro"><p class="kicker">Utah ski access · 2026–27 · protected verification preview</p>
+<h1>Four mountains. Two canyons. One decision.</h1>
+<p class="lead">Alta and Snowbird are reached through Little Cottonwood Canyon. Brighton and Solitude sit in Big Cottonwood Canyon. Your road, parking, and mountain admission are three different promises. Know what is blocked, what needs a reservation, and what still cannot be confirmed.</p>
+<p class="caution"><strong>Live-source validation in progress.</strong> An absent or stale UDOT report is not an open-road signal. We cannot verify parking inventory, lift operations, reservation ownership, bus seats or whether your vehicle meets traction requirements.</p></section>
+<div class="layout"><section class="panel planner"><p class="kicker">01 / Your ski day</p><h2>What are you planning?</h2>
+<form id="trip-form">
+<div class="fields">
+<label>Ski date in Utah <input id="date" type="date" min="2026-11-01" max="2027-05-31" required></label>
+<label>Canyon arrival <select id="hour"><option value="7">7:00 a.m.</option><option value="8">8:00 a.m.</option><option value="9" selected>9:00 a.m.</option><option value="10">10:00 a.m.</option><option value="11">11:00 a.m.</option><option value="12">Noon</option><option value="13">1:00 p.m.</option></select></label>
+<label>Transportation <select id="mode"><option value="DRIVE">My vehicle</option><option value="UTA_BUS">UTA Ski Bus</option><option value="SHUTTLE">Shuttle</option></select></label>
+<label>People in vehicle <select id="people"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+<label>Pass or ticket <select id="pass"><option value="IKON">Full Ikon Pass</option><option value="IKON_BASE">Ikon Base Pass</option><option value="USER_CONFIRMED_TICKET">Separate lift ticket (self-reported)</option><option value="NONE">No confirmed admission</option></select></label>
+<label>Combined Alta + Snowbird days used (full Ikon) <input id="alta-used" type="number" min="0" max="30" placeholder="Unknown"></label>
+<label>Snowbird days used (Ikon Base) <input id="snowbird-used" type="number" min="0" max="30" placeholder="Unknown"></label>
+<label>Brighton days used <input id="brighton-used" type="number" min="0" max="30" placeholder="Unknown"></label>
+</div><fieldset><legend>Parking reservation you hold</legend><p class="small">Choose separately for each resort. A self-reported booking cannot be authenticated here.</p>
+<div class="reserve">
+<label>Alta <select id="parking-alta"><option value="unknown">Not sure</option><option value="yes">I have one</option><option value="no">I need one</option></select></label>
+<label>Snowbird <select id="parking-snowbird"><option value="unknown">Not sure</option><option value="yes">I have one</option><option value="no">No reserved space</option></select></label>
+<label>Brighton <select id="parking-brighton"><option value="unknown">Not sure</option><option value="yes">I have one</option><option value="no">I need one</option></select></label>
+<label>Solitude <select id="parking-solitude"><option value="unknown">Not sure</option><option value="yes">I have one</option><option value="no">I need one</option></select></label>
+</div></fieldset>
+<button type="submit">Compare the four mountains →</button>
+<p class="small">Rules are modeled for the 2026–27 season. No live parking/booking feed.</p>
+</form></section>
+<section class="panel results" aria-live="polite"><p class="kicker">02 / Road, pass, parking</p><h2>Your canyon decision</h2>
+<div class="canyons"><div><strong>Little Cottonwood / SR-210</strong><p id="sr210">UDOT status: checking…</p><small>Alta and Snowbird</small></div>
+<div><strong>Big Cottonwood / SR-190</strong><p id="sr190">UDOT status: checking…</p><small>Brighton and Solitude</small></div></div>
+<p id="observed" class="source">No road is considered open from feed silence. <a href="https://cottonwoodcanyons.udot.utah.gov/" rel="noopener noreferrer" target="_blank">Official UDOT canyon notices ↗</a></p>
+<div id="cards" class="cards"></div></section></div>
+<section class="panel place"><p class="kicker">03 / Understand the place</p><h2>There is no interchangeable “Cottonwoods parking lot.”</h2><div class="place-grid">
+<div><h3>Little Cottonwood — Alta &amp; Snowbird</h3><p>Alta's Wildcat and Albion base areas are distinct from Snowbird's parking system. Upper-canyon travel restrictions may affect the final approach to Alta differently than the road below. Confirm where the restriction begins before assuming you can reach either resort.</p><a href="https://www.alta.com/getting-here/parking-info" rel="noopener noreferrer" target="_blank">Alta parking rules ↗</a> · <a href="https://www.snowbird.com/the-mountain/parking/parking-overview/" rel="noopener noreferrer" target="_blank">Snowbird parking ↗</a></div>
+<div><h3>Big Cottonwood — Brighton &amp; Solitude</h3><p>Solitude's Moonbeam lot and Brighton's parking system have different reservation hours and vehicle-occupancy prices. Four passengers may lower the posted price without removing the reservation requirement. Neither resort's parking is an overflow lot for the other.</p><a href="https://www.brightonresort.com/getting-here-and-parking" rel="noopener noreferrer" target="_blank">Brighton rules ↗</a> · <a href="https://www.solitudemountain.com/discover-solitude/getting-here-parking" rel="noopener noreferrer" target="_blank">Solitude rules ↗</a></div></div>
+<p class="handoff">Before paying for a nonrefundable trip, cross-check <a href="https://cottonwoodcanyons.udot.utah.gov/" target="_blank" rel="noopener noreferrer">UDOT canyon notices</a>, your <a href="/epic-ikon-pass/">exact ski pass</a> and your resort's official parking confirmation. <strong>No road-open, safe-to-drive or guaranteed-parking verdict is issued here.</strong></p></section>
+</main><footer><span>Official source references. Preview-only until real-data validation is complete.</span><a href="/chris-izworski/">Built by Chris Izworski</a></footer>
+<script defer src="/assets/utah-ski-model-v2.js"></script><script defer src="/assets/utah-ski-access.js"></script>
+</body></html>
