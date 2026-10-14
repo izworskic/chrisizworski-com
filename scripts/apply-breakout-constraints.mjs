@@ -96,10 +96,10 @@ const LOCATION_SCRIPT = `
 
 export function enhanceBoatLaunches(html) {
   if (html.includes(`data-breakout-location="${MARK}"`)) return html;
-  const oldDescription = 'Explore Michigan public boat launches on one statewide map. Search a city, lake, river or ramp, compare access details, get directions and local NWS weather.';
-  const newDescription = 'Find Michigan boat launches near you on one statewide map. Use your location or search a city, lake or river; compare access, directions and NWS weather.';
-  if (!html.includes(oldDescription)) throw new Error('Breakout enhancer: boat-launch meta description anchor changed');
-  let out = html.replace(oldDescription, newDescription);
+  // The page owns its search snippet; the production enhancement adds location UI only.
+  const expectedDescription = 'Find Michigan boat launches near you on a DNR-backed map. Use your location or search a city, lake or river; compare ramps, parking and directions.';
+  if (!html.includes(`<meta name="description" content="${expectedDescription}">`)) throw new Error('Breakout enhancer: boat-launch CTR meta description missing');
+  let out = html;
   const formCloseNeedle = '    </form>\n    <div class="filter-row">';
   if (!out.includes(formCloseNeedle)) throw new Error('Breakout enhancer: boat-launch search form anchor changed');
   out = out.replace(formCloseNeedle, `    </form>${LOCATION_UI}\n    <div class="filter-row">`);
