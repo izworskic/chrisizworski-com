@@ -15,7 +15,7 @@ function boot(withWebGL){
   tileLayer(url,options){requested.push({kind:'raster',url,options});return {addTo(){return this}};},
   maplibreGL:withWebGL?function(options){requested.push({kind:'vector',style:options.style});return {addTo(){return this;},getMaplibreMap(){return {once(){},on(){},isStyleLoaded(){return true;}}}};}:undefined
  };
- const ctx={window:{L,maplibregl:{supported:()=>withWebGL}},L,document:{getElementById:id=>nodes[id]||null},setTimeout(){}};
+ const ctx={window:{L,maplibregl:withWebGL?{}:null},L,document:{getElementById:id=>nodes[id]||null},setTimeout(){}};
  vm.runInNewContext(mapjs,ctx,{timeout:1000});
  return {...ctx,requested,nodes};
 }
