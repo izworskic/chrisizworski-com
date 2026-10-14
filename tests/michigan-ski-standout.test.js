@@ -89,3 +89,21 @@ test('October has no ski-day score even with a positive NWS snow forecast',()=>{
  assert.equal(score.score,null);
  assert.equal(score.verdict,'OFF_SEASON_PLANNING');
 });
+
+test('generated Michigan decision experience includes keyless map, selection controls, and safe source labels',()=>{
+ const fs=require('node:fs'),path=require('node:path'),base=path.join(__dirname,'..');
+ const script=fs.readFileSync(path.join(base,'scripts/generate-michigan-ski-pages.mjs'),'utf8');
+ const decision=fs.readFileSync(path.join(base,'public/assets/michigan-ski-decision.js'),'utf8');
+ const map=fs.readFileSync(path.join(base,'public/assets/michigan-ski-map.js'),'utf8');
+ const source=JSON.parse(fs.readFileSync(path.join(base,'public/assets/michigan-ski-outline.json'),'utf8'));
+ for(const required of ['id="ski-goal"','id="ski-day"','id="ski-point-map"','id="ski-trip-cost"',
+ '/assets/michigan-ski-map.js','/assets/michigan-ski-decision.js'])assert.ok(script.includes(required),required);
+ assert.equal(source.type,'MultiPolygon');
+ assert.equal(source.coordinates.length,4);
+ assert.ok(map.includes('ski-map-selected'));
+ assert.ok(map.includes('michigan-ski:select'));
+ assert.ok(decision.includes('r.official'));
+ assert.ok(decision.includes('adultDayPrice2026'));
+ assert.ok(!map.includes('mapboxgl')&&!map.includes('google.maps'));
+ assert.ok(!script.includes('MAPBOX_TOKEN'));
+});
