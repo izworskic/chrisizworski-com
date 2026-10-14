@@ -36,7 +36,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
- '<script defer src="/assets/michigan-ski.js"></script></body></html>'
+ '<script defer src="/assets/michigan-ski.js"></script><script defer src="/assets/michigan-ski-decision.js"></script></body></html>'
  ].join('\n');
 }
 function details(r){
@@ -59,7 +59,7 @@ function details(r){
  'snowriver':'Lake Superior snowbands vary across western Upper Michigan.'})[r.slug]||'There is no verified resort-specific wind-alignment sector in this tool; NWS forecast snowfall and local reports remain the basis.';
  const intro=r.kind==='nordic'?
  'Garland Lodge is included as an outdoor winter option, but is not ranked against downhill lift-served resorts. Confirm trail grooming and availability with the venue.':
- 'This resort is evaluated by the same transparent Michigan weekend framework as other hills. The NWS Saturday and Sunday snow outlooks use separate 24-hour forecast windows at the hill’s approximate coordinates. Nearby snow observations may differ from conditions on the mountain.';
+ 'This resort is evaluated by the same transparent Michigan weekend framework as other hills. Saturday and Sunday have separate NWS 4 PM-to-4 PM forecast windows, including freeze/thaw indicators. Official resort status is displayed only where a verifiable source can be parsed.';
  const html=[
  '<p class="breadcrumbs"><a href="/michigan-ski-hills/">All Michigan ski hills</a> / '+esc(r.name)+'</p>',
  '<section class="panel"><p class="eyebrow">Live resort comparison</p><h2>Is '+esc(r.name)+' worth the drive this weekend?</h2>',
@@ -90,8 +90,18 @@ function index(){
  '<div id="lake-watch" aria-live="polite"><p class="small">Checking official NWS forecast zones and alert polygons…</p></div>',
  '<p class="note">Lake-effect alerts are an early warning of dangerous travel as well as possible snowfall. A matched alert does not prove that a resort received measurable snow. NWS forecast wind alignment is labeled separately from official warnings.</p>',
  '</section>',
- '<section class="panel"><p class="eyebrow">02 / Weekend decision</p><h2>Michigan ski hills ranked by evidence and travel</h2>',
- '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (27), ticket value (14), and base depth if confirmed (14). An active winter warning suspends a resort’s rank instead of increasing its powder score. Saturday and Sunday snow outlooks are separate 24-hour NWS forecast windows ending at 4 PM Michigan time. Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
+ '<section class="panel decision-workspace" id="ski-decision"><p class="eyebrow">02 / Powder Chase + Worth the Drive</p><h2>Find your best ski-day candidate</h2>',
+ '<p>Decide whether to chase forecast snow, take the family, save on tickets or ski close to home. NWS conditions inform the shortlist; official operating status and actual checkout prices remain separate checks.</p>',
+ '<div class="controls decision-filters"><label>What matters most?<select id="ski-goal"><option value="powder">Fresh snow / powder potential</option><option value="family">Family &amp; beginner terrain</option><option value="value">Ticket &amp; drive value</option><option value="local">Shortest drive</option></select></label>',
+ '<label>Which day?<select id="ski-day"><option value="saturday">Saturday</option><option value="sunday">Sunday</option></select></label>',
+ '<label>Adults<select id="ski-adults"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>',
+ '<label>Kids age 8 and under<select id="ski-kids"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>',
+ '<label>Rentals needed<select id="ski-rentals"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label></div>',
+ '<div id="ski-decision-results" aria-live="polite"><p class="small">Checking NWS snow windows and operating evidence…</p></div>',
+ '<div class="trip-tool"><h3>Trip cost: compare two hills</h3><div id="ski-trip-cost"><p>Waiting for live source results…</p></div></div>',
+ '<p class="small">Shortlist is an explanatory planning fit, not a guaranteed powder day, lift opening, road safety or ticket checkout price. Unverified price and travel inputs are never silently replaced with estimates.</p></section>',
+'<section class="panel"><p class="eyebrow">03 / All monitored hills</p><h2>Michigan ski hills ranked by evidence and travel</h2>',
+ '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (27), ticket value (14), and base depth if confirmed (14). An active winter warning suspends a resort’s rank instead of increasing its powder score. Saturday and Sunday snow outlooks use separate 4 PM-to-4 PM Michigan local-time intervals. Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
  '<div class="controls"><label>Leaving from<select id="origin"><option value="detroit">Detroit metro</option><option value="grandRapids">Grand Rapids</option></select></label>',
  '<label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
  '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
