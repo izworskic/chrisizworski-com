@@ -20,11 +20,42 @@
   if(map)return true;
   if(!window.L||!el('niagara-route-map'))return false;
   map=L.map('niagara-route-map',{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView([43.0835,-79.075],14);
-  var tiles=L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-   subdomains:'abcd',maxZoom:19,maxNativeZoom:18,
-   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-  });
-  tiles.addTo(map);
+  // CARTO's formerly keyless raster tiles became watermarked in 2026.
+  // Use OpenFreeMap's explicitly keyless vector map. Leaflet still owns
+  // itinerary markers, parking, popups, and stop-order connector overlays.
+  // If WebGL or its adapter is unavailable, show the OSM Standard fallback.
+  function useStandardFallback(){
+   if(map._niagaraFallback)return;
+   map._niagaraFallback=true;
+   if(map._niagaraVector){map.removeLayer(map._niagaraVector);map._niagaraVector=null;}
+   map._niagaraStandard=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+   }).addTo(map);
+   var label=el('niagara-basemap-status');
+   if(label)label.textContent='Standard street map · keyless backup';
+  }
+  if(typeof L.maplibreGL==='function'&&window.maplibregl&&window.maplibregl.supported()){
+   try{
+    var tiles=L.maplibreGL({
+     style:'https://tiles.openfreemap.org/styles/positron',
+     interactive:false,attributionControl:false
+    }).addTo(map);
+    map._niagaraVector=tiles;
+    var vector=tiles.getMaplibreMap();
+    vector.once('load',function(){
+     var label=el('niagara-basemap-status');
+     if(label)label.textContent='OpenFreeMap · free, keyless vector map';
+    });
+    vector.on('error',function(event){
+     // An unavailable style or blocked vector host must not blank the map.
+     if(!map._niagaraFallback)useStandardFallback();
+    });
+    // Network hangs and blocked workers may not emit an error.
+    setTimeout(function(){if(!map._niagaraFallback&&!vector.isStyleLoaded())useStandardFallback();},6500);
+    map.attributionControl.addAttribution('&copy; <a href="https://openfreemap.org/" target="_blank" rel="noopener">OpenFreeMap</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors');
+   }catch(error){useStandardFallback();}
+  }else useStandardFallback();
   layers=L.layerGroup().addTo(map);
   setTimeout(function(){if(map)map.invalidateSize();},0);
   return true;
