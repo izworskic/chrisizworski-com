@@ -21,6 +21,9 @@ function status(r){
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')return 'Off-season · 2026–27 planning only';
  if(a.some(x=>/Warning/i.test(x.event)))return 'Winter warning · verify safe travel and lift openings';
  if(!r.weather||r.weather.weatherCoverage!=='NWS_GRID_RECEIVED')return 'Forecast unavailable · verify official sources';
+ if(r.official?.status==='PUBLISHED_OFFICIAL_REPORT')return r.official.lifts.open===0?
+ 'Official report currently shows no operating lifts · future ski day unconfirmed':
+ 'Official page reports '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts currently · confirm weekend operation';
  return 'Provisional comparison · verify lifts, snow base and ticket';
 }
 function chipsFor(r){
@@ -90,7 +93,13 @@ function warnings(data){
  if(!aligned.length)add(steering,node('p',null,'No favorable wind-sector matches confirmed from current NWS grid data.'));
  else add(steering,node('p',null,aligned.map(r=>r.name).join(', ')+'.'));
  add(steering,node('p','small','Wind-sector climatology, not a current snowband observation. Forecast snowfall is calculated separately.'));
- add(lanes,current,obs,steering);add(target,lanes);
+ const cold=node('article');add(cold,node('h3',null,'04 / Early-season snowmaking cold-air watch'));
+ const candidates=data.resorts.filter(r=>r.kind==='downhill'&&r.weather?.snowmaking?.status==='COLD_AIR_WINDOW')
+   .sort((a,b)=>(b.weather.snowmaking.hours||0)-(a.weather.snowmaking.hours||0)).slice(0,5);
+ if(candidates.length)for(const r of candidates)add(cold,node('p','small',r.name+': approximately '+r.weather.snowmaking.hours+' forecast hours at or below 28°F in the coming seven days.'));
+ else add(cold,node('p','small','No qualifying eight-hour cold-air window is identified from the available NWS temperature grids. Missing grid data remains unknown.'));
+ add(cold,node('p','small','Air-temperature opportunity only. Humidity, wet-bulb temperature, resort snowmaking plans and open lifts are NOT verified.'));
+ add(lanes,current,obs,steering,cold);add(target,lanes);
 }
 function sortResorts(arr){
  return arr.slice().sort((a,b)=>(score(b)??-1)-(score(a)??-1)||a.name.localeCompare(b.name));
