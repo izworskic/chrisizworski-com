@@ -23,11 +23,11 @@ test('NDBC observation parsing checks WTMP column and refuses stale or placehold
 });
 test('no fresh local station means no imaginary local water-feel certainty',()=>{
  const bad=comfort('swim',null,{tempF:80,windMph:17,summary:'Sunny'});
- assert.equal(bad.state,'limited');assert.match(bad.water,/No recent destination-relevant/);
+ assert.equal(bad.state,'limited');assert.match(bad.water,/No recent measurement/);assert.match(bad.water,/will not guess from the whole-lake average/);
  const family=comfort('family',58,{tempF:76,windMph:10,summary:'Mostly Sunny'});
  assert.match(family.decision,/Children/);assert.match(family.water,/cold/);
  const paddle=comfort('paddle',56,{tempF:84,windMph:20,summary:'Sunny'});
- assert.match(paddle.decision,/protective gear/);
+ assert.match(paddle.decision,/immersion/);assert.equal(paddle.band,'cold-shock');
 });
 test('weather-only best window excludes unsupported/non-daylight or hazard assertions',()=>{
  const p=weatherPeriods([{startTime:'2026-07-20T09:00:00-04:00',temperature:72,temperatureUnit:'F',windSpeed:'10 to 13 mph',shortForecast:'Sunny',isDaytime:true,probabilityOfPrecipitation:{value:0}}]);
@@ -75,10 +75,53 @@ test('NOAA ACSPO bay pixel: source coordinate, Celsius, recency and unavailable 
 });
 
 
-test('NOAA GLSEA ACSPO request uses last seven daily indices, not last-6 seconds',()=>{
+test('NOAA GLSEA ACSPO request is a small box with an index time range, never a single land pixel',()=>{
+ // The earlier single-pixel request (44.795837,-85.610003) snapped onto the land mask and
+ // returned NaN every day, so Traverse City never got a bay reading. The API now asks for
+ // a small box around each destination's cells and the engine picks the nearest valid
+ // water pixel. This assertion was rewritten for that reason.
  const fs=require('node:fs'),path=require('node:path');
  const api=fs.readFileSync(path.resolve(__dirname,'../api/shorefeel.js'),'utf8');
- assert.ok(api.includes('GLSEA_ACSPO_GCS.csv?sst[last-6:1:last][(44.795837)][(-85.610003)]'));
- assert.ok(!api.includes('sst[(last-6):1:(last)]'),
-  'ERDDAP (last-6) is axis-value offset (seconds for time), NOT the last 6 daily observations');
+ assert.ok(api.includes('sst[last-3:1:last]'));
+ assert.ok(!api.includes('sst[(last-6):1:(last)]'),'ERDDAP (last-6) is axis-value offset (seconds for time), NOT the last daily observations');
+ assert.ok(!api.includes('[(44.795837)][(-85.610003)]'),'single land-masked pixel request must not return');
+ const tc=DESTINATIONS['traverse-city'];
+ assert.equal(tc.cells.length,2);
+ assert.ok(tc.cells.every(c=>c.maxKm<=4));
+});
+
+test('grid box: nearest VALID water pixel wins, NaN land mask and far pixels are ignored',()=>{
+ const {parseGLSEAGridCsv,waterEvidence}=require('../lib/shorefeel/engine.js');
+ const now=new Date('2026-10-13T20:00:00Z');
+ const csv=['time,latitude,longitude,sst','UTC,degrees_north,degrees_east,degree_C',
+  '2026-10-12T12:00:00Z,44.7895,-85.6084,NaN',      // land-masked pixel the old code requested
+  '2026-10-12T12:00:00Z,44.8036,-85.6224,15.9',     // West Bay water
+  '2026-10-11T12:00:00Z,44.8036,-85.6224,16.4',     // older day for the same pixel: ignored
+  '2026-10-12T12:00:00Z,44.7615,-85.5664,16.1',     // East Bay water
+  '2026-10-12T12:00:00Z,45.1000,-85.6000,14.0'].join('\n'); // far away
+ const tc=DESTINATIONS['traverse-city'];
+ const cells=parseGLSEAGridCsv(csv,tc.cells,now);
+ assert.equal(cells['west-bay'].tempF,60.6);assert.equal(cells['west-bay'].observedAt,'2026-10-12T12:00:00.000Z');
+ assert.equal(cells['east-bay'].tempF,61);
+ const w=waterEvidence(tc,null,cells);
+ assert.equal(w.kind,'satellite');assert.equal(w.cellKey,'west-bay');assert.match(w.caveat,/not a beach thermometer/);
+ assert.ok(w.distanceKm>3&&w.distanceKm<5,'distance is measured from Clinch Park, got '+w.distanceKm);
+ const b=waterEvidence(tc,{tempF:58.1,observedAt:'2026-10-13T19:30:00.000Z',ageHours:0.5},cells);
+ assert.equal(b.kind,'buoy');assert.equal(b.tempF,58.1);
+ assert.equal(waterEvidence(tc,null,parseGLSEAGridCsv(csv,tc.cells,new Date('2026-10-20T20:00:00Z'))),null,'stale pixels never become a reading');
+ assert.equal(waterEvidence(tc,null,parseGLSEAGridCsv('<html>Access Denied</html>',tc.cells,now)),null);
+});
+
+test('comfort uses the best water evidence, names its source, and never the whole-lake mean',()=>{
+ const {comfort,waterBand,nowPeriod,parseLongTermAverage}=require('../lib/shorefeel/engine.js');
+ const sat={kind:'satellite',tempF:60.6,label:'West Grand Traverse Bay, 4 km north of Clinch Park',where:'Grand Traverse Bay'};
+ const c=comfort('swim',sat,{tempF:56,windMph:5,summary:'Patchy Fog'});
+ assert.equal(c.state,'contextual');assert.equal(c.band,'cold');
+ assert.match(c.water,/60\.6°F at West Grand Traverse Bay/);
+ assert.match(c.after,/56°F air and 5 mph wind/);
+ assert.equal(waterBand(59.9).key,'cold-shock');assert.equal(waterBand(70).key,'cool');assert.equal(waterBand(77).key,'warm');assert.equal(waterBand(null),null);
+ const periods=[{startsAt:'2026-10-13T20:00:00-04:00',daylight:false},{startsAt:'2026-10-13T21:00:00-04:00',daylight:false},{startsAt:'2026-10-14T08:00:00-04:00',daylight:true}];
+ assert.equal(nowPeriod(periods,new Date('2026-10-14T01:30:00Z')).startsAt,'2026-10-13T21:00:00-04:00','now is the hour containing now, not the first daylight hour');
+ const lt=parseLongTermAverage('lake,dayOfYear,temperature\n,count,degrees_C\ne,285,16.5978\nm,285,13.9243\ns,285,10.1922');
+ assert.equal(lt.michigan,57.1);assert.equal(lt.erie,61.9);assert.equal(lt.huron,undefined);
 });

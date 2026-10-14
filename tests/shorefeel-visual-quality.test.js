@@ -48,10 +48,13 @@ test('Traverse City first screen leads with a sourced water temperature, not the
  for(const id of ['lead-temp','lead-temp-label','lead-temp-when','lead-temp-caveat','lead-bay-status']){
   assert.match(hero,new RegExp('id="'+id+'"'));
  }
- assert.match(hero,/LAKE MICHIGAN SURFACE AVERAGE/);
+ assert.match(hero,/GRAND TRAVERSE BAY/);
+ assert.match(hero,/id="lead-lake-context"/);
+ assert.doesNotMatch(hero,/LAKE MICHIGAN SURFACE AVERAGE/,'the lead is the bay; the lake average is context only');
  assert.match(hero,/Grand Traverse Bay buoy 45020/);
  const js=fs.readFileSync(path.join(root,'assets/shorefeel.js'),'utf8');
- assert.match(js,/renderTraverseLead/);
+ assert.match(js,/renderLead/);
+ assert.doesNotMatch(js,/2026-10-12|62\.1°F/,'no hard-coded dated snapshot in the client');
  assert.match(js,/dated-official-fallback/);
  assert.match(js,/NOT the measured temperature/);
 });

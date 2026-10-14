@@ -6,51 +6,54 @@ const positions=[{label:'Grand Haven',lat:43.0631,lon:-86.2284,url:root+'grand-h
 const get=id=>document.getElementById(id);
 const write=(id,value)=>{const n=get(id);if(n)n.textContent=value;};
 const format=n=>Number.isFinite(n)?n.toFixed(1)+'°F':'Unavailable';
+const day=s=>{const d=new Date(s+'T12:00:00Z');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}):s;};
 const time=s=>{if(!s)return 'time unavailable';const d=new Date(s);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit',timeZoneName:'short'}):'time unavailable';};
 let payload=null,activity='swim';
 
-/* Water temperature is the product. A dated lakewide number is useful context,
-   but must never masquerade as an in-bay or beach thermometer. */
-function setTraverseLead(value,label,when,caveat,localText){
- if(place!=='traverse-city')return;
+/* Water temperature is the product. The lead shows the destination's own water
+   (buoy, else nearest valid satellite pixel in that water). The whole-lake daily
+   average is context on the page, never promoted to a beach or bay reading. */
+function setLead(value,label,when,caveat){
  write('lead-temp',value);write('lead-temp-label',label);
  write('lead-temp-when',when);write('lead-temp-caveat',caveat);
- write('lead-bay-status',localText);
- const grid=payload?.regionalSatellite;
- write('lead-grid-status',grid?.status==='recent'&&Number.isFinite(grid.measurement?.tempF)
-  ?format(grid.measurement.tempF)+' · '+time(grid.measurement.observedAt)+' (offshore satellite surface)'
-  :'No recent valid grid value');
 }
-function renderTraverseLead(){
- if(place!=='traverse-city'||!payload)return;
- const buoy=payload.local?.measurement,whole=payload.lakes?.michigan;
- const grid=payload.regionalSatellite?.status==='recent'?payload.regionalSatellite.measurement:null;
- const gridCurrent=Number.isFinite(grid?.tempF);
- const lakeCurrent=whole?.status==='recent'&&Number.isFinite(whole?.latest?.tempF);
- const buoyCurrent=Number.isFinite(buoy?.tempF);
- if(buoyCurrent){
-  setTraverseLead(format(buoy.tempF),'GRAND TRAVERSE BAY · OFFSHORE BUOY 45020',
-   'Measured '+time(buoy.observedAt)+' · buoy location, not the beach',
-   'An in-bay buoy reading is more relevant than a whole-lake average but does not measure shallow beach water.',
-   format(buoy.tempF)+' · '+time(buoy.observedAt));
- }else if(gridCurrent){
-  setTraverseLead(format(grid.tempF),'WEST GRAND TRAVERSE BAY · SATELLITE SURFACE GRID',
-   'NOAA GLSEA ACSPO · '+time(grid.observedAt)+' · offshore grid cell',
-   'Satellite-derived surface estimate near West Grand Traverse Bay, NOT a measured temperature at a Traverse City beach.',
-   'Not reporting · station 45020');
- }else if(lakeCurrent){
-  const fallback=payload.source?.mode==='dated-official-fallback';
-  setTraverseLead(format(whole.latest.tempF),'LAKE MICHIGAN · DAILY SURFACE AVERAGE',
-   'NOAA GLERL · '+whole.latest.date+(fallback?' · last independently verified report':' · latest published report'),
-   'This is the average of all Lake Michigan, NOT the measured temperature at a Traverse City beach or inside Grand Traverse Bay.',
-   'Not reporting · station 45020');
+function renderLead(){
+ if(!place||!payload||!get('lead-temp'))return;
+ const water=payload.water,buoy=payload.local,sat=payload.regionalSatellite,whole=payload.lakes?.[lake];
+ const upper=s=>String(s||'').toUpperCase();
+ if(water&&Number.isFinite(water.tempF)){
+  if(water.kind==='buoy'){
+   setLead(format(water.tempF),upper(water.where)+' · BUOY '+buoy.stationId,
+    'Measured '+time(water.observedAt)+' · '+buoy.stationName,
+    water.caveat);
+  }else{
+   setLead(format(water.tempF),upper(water.where)+' · NOAA SATELLITE SURFACE',
+    'NOAA GLSEA ACSPO · '+time(water.observedAt)+' · '+water.label,
+    water.caveat);
+  }
  }else{
-  setTraverseLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
-   'NOAA lakewide analysis unavailable or older than 3 days',
-   'No recent in-bay buoy or current lakewide average. We will not substitute old or estimated beach water data.',
-   'Not reporting · station 45020');
+  setLead('No current reading',upper(buoy?.waterBody||'water temperature')+' · NOT VERIFIED',
+   'No buoy report in 6 hours, no valid satellite pixel in 3 days',
+   'The lake average below is NOT the measured temperature at this beach.');
+ }
+ const bm=buoy?.measurement;
+ write('lead-bay-status',bm?format(bm.tempF)+' · '+time(bm.observedAt)
+  :buoy?.measurementStatus==='offline'?'Not deployed · seasonal buoy recovered for winter'
+  :'Not reporting · station '+(buoy?.stationId||''));
+ const cells=(sat?.cells||[]).filter(c=>Number.isFinite(c.measurement?.tempF));
+ write('lead-grid-status',cells.length
+  ?cells.map(c=>(cells.length>1?(c.short||c.key)+' ':'')+format(c.measurement.tempF)).join(' · ')+' · '+time(cells[0].measurement.observedAt)
+  :'No valid pixel in the past 3 days');
+ if(whole?.latest){
+  const fallback=payload.source?.mode==='dated-official-fallback';
+  const normal=payload.normal;
+  write('lead-lake-context','Lake Michigan daily average '+format(whole.latest.tempF)+' on '+day(whole.latest.date)
+   +(normal&&Number.isFinite(normal.deltaF)?' · '+(normal.deltaF>=0?'+':'')+normal.deltaF.toFixed(1)+'°F vs the long-term normal for this date':'')
+   +(fallback?' · last independently verified NOAA report':''));
  }
 }
+/* Kept name for older integrations/tests. */
+function renderTraverseLead(){renderLead();}
 
 function drawChart(points){
  const container=get('history');if(!container)return;
@@ -70,7 +73,9 @@ function renderLakes(){
  const selected=payload.lakes[lake]||{},l=selected.latest;
  write('lake-temp',selected.status==='recent'?format(l?.tempF):'Unavailable');
  write('lake-observed',l?(l.date+' · '+(selected.status==='recent'?'recent':'stale; not used as current')):'No current lakewide report');
- write('lake-trend',selected.trend7===null||selected.trend7===undefined?'Seven-day comparison unavailable':(selected.trend7>0?'+':'')+selected.trend7.toFixed(1)+'°F over seven days');
+ const normal=payload.normal&&payload.normal.date===l?.date?payload.normal:null;
+ write('lake-trend',(selected.trend7===null||selected.trend7===undefined?'Seven-day comparison unavailable':(selected.trend7>0?'+':'')+selected.trend7.toFixed(1)+'°F over seven days')
+  +(normal?' · '+(normal.deltaF>=0?'+':'')+normal.deltaF.toFixed(1)+'°F vs the long-term normal for '+day(normal.date):''));
  drawChart(selected.history||[]);
  const status=get('data-status');
  if(status)status.textContent='NOAA GLERL lakewide analysis: '+(l?l.date:'unavailable')+'. '+(selected.status==='recent'?'Recent surface average; not a beach measurement.':'Latest lakewide data is unavailable or stale; no current value shown.');
@@ -84,26 +89,26 @@ function applyActivity(a){
  const v=payload.assessments[a];if(!v)return;
  write('feel-title',v.heading);
  write('feel-beach',v.beach);
- const satellite=place==='traverse-city'&&!payload.local?.measurement&&payload.regionalSatellite?.status==='recent'
-  ?payload.regionalSatellite.measurement:null;
- write('feel-water',Number.isFinite(satellite?.tempF)
-  ?'NOAA satellite grid estimates an offshore West Grand Traverse Bay surface of '+format(satellite.tempF)+
-   '. This is not a beach water measurement, and shallow-water conditions may differ.'
-  :v.water);
+ write('feel-water',v.water);
  write('feel-after',v.after);
  write('feel-decision',v.decision);
+ const win=payload.weatherWindows?.[a]||payload.weatherWindow;
+ write('weather-window',win?'Best air-and-wind hour for '+({swim:'a swim',family:'the family',paddle:'paddling',relax:'the sand'})[a]+': '+time(win.startsAt)
+  +(Number.isFinite(win.tempF)?' · '+Math.round(win.tempF)+'°F':'')+(Number.isFinite(win.windMph)?', '+win.windMph+' mph':'')+(win.summary?', '+win.summary.toLowerCase():'')
+  +'. Weather comfort only; not a water or swimming-safety prediction.':'No reliable daylight weather window can be selected.');
 }
 function renderPlace(){
  const d=payload?.local;if(!d)return;
  const station=d.measurement;
- write('local-temp',station?format(station.tempF):'No recent reading');
- write('local-source',station?'Nearby offshore buoy '+d.stationId+' · '+time(station.observedAt):'No buoy observation from the past six hours');
+ write('local-temp',station?format(station.tempF):d.measurementStatus==='offline'?'Not deployed':'No recent reading');
+ write('local-source',station?'Buoy '+d.stationId+' · '+time(station.observedAt)
+  :d.measurementStatus==='offline'?'Station '+d.stationId+' is seasonal and has been recovered for winter'
+  :'No buoy observation from the past six hours');
  write('station-note',d.caveat);
- const w=d.periods?.find(p=>p.daylight)||d.periods?.[0]||null;
+ const w=payload.weatherNow||d.periods?.[0]||null;
  write('air-temp',Number.isFinite(w?.tempF)?Math.round(w.tempF)+'°F':'Unavailable');
  write('wind-now',Number.isFinite(w?.windMph)?w.windMph+' mph':'Unavailable');
- write('weather-detail',w?'NWS forecast for '+time(w.startsAt)+' · '+w.summary:'NWS forecast currently unavailable');
- write('weather-window',payload.weatherWindow?'Relative air-and-wind comfort: '+time(payload.weatherWindow.startsAt)+'. This is not a water or swimming-safety prediction.':'No reliable hourly weather window can be selected.');
+ write('weather-detail',w?'NWS hourly forecast · '+time(w.startsAt)+' · '+w.summary:'NWS forecast currently unavailable');
  applyActivity(activity);
 }
 function initMap(){
@@ -116,20 +121,6 @@ function initMap(){
  if(payload?.local){L.circleMarker([payload.local.lat,payload.local.lon],{radius:6,color:'#874f22',fillColor:'#ffcc87',fillOpacity:1,weight:2}).addTo(map).bindPopup('Buoy '+payload.local.stationId+' — offshore observation location, not the beach');}
 }
 
-// Avoid an empty first impression if NOAA upstream is momentarily unavailable.
-// October 12 daily NOAA observation is bundled only while <=3 UTC days old;
-// the API always takes priority when a newer verified observation appears.
-if(place==='traverse-city'){
- const dt='2026-10-12';
- const age=(Date.parse(new Date().toISOString().slice(0,10)+'T00:00:00Z')-Date.parse(dt+'T00:00:00Z'))/86400000;
- if(age>=0&&age<=3){
-  setTraverseLead('62.1°F','LAKE MICHIGAN · DAILY SURFACE AVERAGE',
-   'NOAA GLERL · Oct 12, 2026 · last independently verified report; checking for updates',
-   'Lake Michigan-wide average, NOT Grand Traverse Bay beach water.',
-   'Not reporting · station 45020');
- }
-}
-
 document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('click',()=>applyActivity(b.dataset.activity)));
 (async()=>{
  try{
@@ -137,22 +128,13 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   const r=await fetch(url,{headers:{Accept:'application/json'}});
   if(!r.ok)throw new Error('Data service unavailable');
   payload=await r.json();
-  renderLakes();renderPlace();renderTraverseLead();
+  renderLakes();renderPlace();renderLead();
  }catch(e){
-  // Keep the last verified NOAA observation only for its short validity period.
   // A failed refresh is never described as a successful live reading.
-  if(place==='traverse-city'){
-   const day='2026-10-12',age=(Date.parse(new Date().toISOString().slice(0,10)+'T00:00:00Z')-Date.parse(day+'T00:00:00Z'))/86400000;
-   if(age>=0&&age<=3){
-    write('lead-temp-when','NOAA GLERL · Oct 12, 2026 · last verified report; live refresh unavailable');
-   }else{
-    setTraverseLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
-      'Official lakewide and local water data unavailable',
-      'No recent water temperature can be verified; expired snapshots are not displayed.',
-      'No verified current bay reading');
-   }
-  }
-  renderTraverseLead();
+  if(get('lead-temp'))setLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
+    'Official lakewide and local water data unavailable',
+    'No recent water temperature can be verified; nothing has been estimated.');
+  write('lead-bay-status','No verified current reading');write('lead-grid-status','Unavailable');
   write('data-status','Live data is temporarily unavailable. The place guide and source links below are still useful; no readings have been estimated.');
   write('feel-title','Evidence unavailable — not an all-clear');
   write('feel-beach','We cannot assess current shoreline weather. Check the official forecast before traveling.');
