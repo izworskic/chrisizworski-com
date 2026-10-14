@@ -55,7 +55,7 @@
 .ferry-map-meta strong{font-size:20px;font-family:var(--serif,Georgia,serif)}
 .ferry-map-meta span{font-size:13px;line-height:1.6;color:#54666d}
 .ferry-map-meta a{font-size:13px;font-weight:700;color:#165877}
-.ferry-images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ferry-images{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .ferry-images figure{min-width:0;margin:0;background:#fff;border:1px solid #e0e2d8;border-radius:13px;overflow:hidden}
 .ferry-images img{display:block;width:100%;height:220px;object-fit:cover}
 .ferry-images figcaption{padding:11px 13px;font-size:12px;line-height:1.5;color:#4b6069}
@@ -68,3 +68,7 @@
 @media(max-width:970px){.ferry-options{grid-template-columns:1fr 1fr}.ferry-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.ferry-option-top{flex-direction:row;justify-content:space-between}.ferry-total{flex-shrink:0}.ferry-intro{display:block}}
 @media(max-width:650px){.ferry-lab,.ferry-journey{margin-block:16px 32px}.ferry-options,.ferry-images,.ferry-help-grid{grid-template-columns:1fr}.ferry-map-wrap{grid-template-columns:1fr}.ferry-map-wrap iframe{height:240px}.ferry-images img{height:210px}.ferry-option-top{flex-direction:column}.ferry-form{padding:14px}.ferry-subtle-link{display:block;margin-bottom:12px}}
 @media(max-width:370px){.ferry-fields{grid-template-columns:1fr}.ferry-lab{padding:12px}.ferry-submit{width:100%}}
+
+#ferry-nights-label[hidden]{display:none!important}
+@media(max-width:970px){.ferry-images{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.ferry-images{grid-template-columns:1fr}}
