@@ -144,13 +144,9 @@ document.querySelectorAll('[data-niagara-preset]').forEach(function(presetButton
   var custom=form.querySelector('[name="custom_minutes"]');if(custom)custom.value='';
   var select=form.querySelector('select[name="priority"]');if(select)select.value=priority;
   activePreset=id;
-  if(id==='family'){
-   // A usable child-visit example, clearly disclosed and editable. Never infer age.
-   var youths=form.querySelector('[name="youth"]');if(youths&&Number(youths.value)===0)youths.value='1';
-  }
   document.querySelectorAll('[data-niagara-preset]').forEach(function(b){b.setAttribute('aria-pressed',String(b===presetButton));});
   var note=document.getElementById('quick-start-note');
-  if(note)note.textContent=id==='boat'?'Checking your selected side and visit date. Boat ticket availability is not live.':id==='short'?'Planning up to two hours of public viewpoints, without paid attractions.':'Planning a family-paced route. The example assumes at least one child; adjust party size under Fine-tune.';
+  if(note)note.textContent=id==='boat'?'Checking your selected side and visit date. Boat ticket availability is not live.':id==='short'?'Planning up to two hours of public viewpoints, without paid attractions.':'Planning a family-paced route. Enter your actual child count under Fine-tune before relying on price estimates.';
   emit('niagara_preset_'+id);
   presetPending=true;
   submit();
