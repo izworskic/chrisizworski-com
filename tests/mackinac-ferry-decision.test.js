@@ -70,6 +70,6 @@ test("page generator imports standalone HTML module; HTML contains family fields
  const generator=fs.readFileSync(path.join(__dirname,"../scripts/generate-mackinac-intent-pages.mjs"),"utf8");
  const experience=fs.readFileSync(path.join(__dirname,"../scripts/mackinac-ferry-experience.mjs"),"utf8");
  assert.match(generator,/ferryExperienceMarkup/);
- assert.match(generator,/mackinac-ferry-decision\.js/);
+ assert.match(fs.readFileSync(path.join(__dirname,"../public/mackinac-island/ferry-planner/index.html"),"utf8"),/mackinac-ferry-decision\.js/);
  for(const pattern of [/id="ferry-age4"/,/id="ferry-infants"/,/id="ferry-kids"/,/id="ferry-military"/,/openstreetmap\.org/,/marine\.weather\.gov/])assert.match(experience,pattern);
 });

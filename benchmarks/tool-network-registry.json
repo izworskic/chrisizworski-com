@@ -2256,10 +2256,10 @@
     },
     {
       "id": "mackinac-island",
-      "name": "Mackinac Island Live",
-      "canonical": "https://chrisizworski.com/mackinac-island/",
+      "name": "Mackinac Island Ferry Planner",
+      "canonical": "https://chrisizworski.com/mackinac-island/ferry-planner/",
       "aliases": [],
-      "kind": "trip-planner",
+      "kind": "ferry-decision",
       "cluster": "trip-planning",
       "primaryIntent": "Mackinac Island ferry and day trip planning",
       "seasons": [
