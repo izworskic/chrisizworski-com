@@ -62,41 +62,48 @@
 
 <div class="primary-grid">
 <section class="panel controls" id="planner" aria-labelledby="plan-title">
- <div class="panel-head"><span class="index">01 / PLAN YOUR VISIT</span><h2 id="plan-title">Can you do what you came for?</h2><p>Pick the goal first. The planner checks the visit date, published operating window, and the time it takes to reach each stop—then shows what fits.</p></div>
- <div class="visit-quick-start" role="group" aria-label="Quick-start a Niagara Falls plan">
-  <button type="button" data-niagara-preset="boat" aria-controls="result-body" aria-pressed="false"><strong>Take a boat ride</strong><small>Maid of the Mist or Niagara City Cruises</small></button>
-  <button type="button" data-niagara-preset="short" aria-controls="result-body" aria-pressed="false"><strong>I only have 2 hours</strong><small>Best same-side viewpoints</small></button>
-  <button type="button" data-niagara-preset="family" aria-controls="result-body" aria-pressed="false"><strong>Visiting with kids</strong><small>Manageable stops and a realistic pace</small></button>
- </div>
- <p id="quick-start-note" class="quick-start-note" role="status" aria-live="polite"></p>
+ <div class="panel-head"><span class="index">01 / PLAN YOUR VISIT</span><h2 id="plan-title">Build a day that actually works.</h2><p>Choose your side, the time you can start, and the experience you want. We’ll handle the stops and the way in.</p></div>
  <form id="plan-form">
  <div class="two">
   <label>Visit date <input type="date" name="visit_date" id="date" required></label>
   <label>Arrival · Eastern time <input type="time" name="arrival_local" id="time" required value="10:00"></label>
  </div>
+ <p class="visit-date-note" id="visit-date-note">Choose your date and a realistic start time. All times are Eastern.</p>
+  <fieldset><legend>Where are you starting?</legend><div class="choices sides">
+  <label><input type="radio" name="starting_side" value="US" checked><span>New York · USA</span></label>
+  <label><input type="radio" name="starting_side" value="CA"><span>Ontario · Canada</span></label>
+ </div></fieldset>
+
+ <h3 class="quick-heading">What brings you to Niagara?</h3>
+  <div class="visit-quick-start" role="group" aria-label="Quick-start a Niagara Falls plan">
+  <button type="button" data-niagara-preset="boat" aria-controls="result-body" aria-pressed="false"><strong>Take a boat ride</strong><small>Maid of the Mist or Niagara City Cruises</small></button>
+  <button type="button" data-niagara-preset="short" aria-controls="result-body" aria-pressed="false"><strong>I only have 2 hours</strong><small>Best same-side viewpoints</small></button>
+  <button type="button" data-niagara-preset="family" aria-controls="result-body" aria-pressed="false"><strong>Visiting with kids</strong><small>Manageable stops and a realistic pace</small></button>
+ </div>
+ <p id="quick-start-note" class="quick-start-note" role="status" aria-live="polite"></p>
+
+ <fieldset><legend>How much time?</legend><div class="choices duration">
+  <label><input type="radio" name="duration_minutes" value="120"><span>2 hours</span></label>
+  <label><input type="radio" name="duration_minutes" value="240" checked><span>4 hours</span></label>
+  <label><input type="radio" name="duration_minutes" value="360"><span>6 hours</span></label>
+ </div></fieldset>
  <fieldset><legend>How will you arrive?</legend><div class="choices arrive-modes">
   <label><input type="radio" name="arrival_mode" value="drive" checked><span>Driving</span></label>
   <label><input type="radio" name="arrival_mode" value="walk"><span>Walking / drop-off</span></label>
   <label><input type="radio" name="arrival_mode" value="transit"><span>Transit / shuttle</span></label>
  </div></fieldset>
  <p class="form-note">Your chosen start time is when you are ready to sightsee. Driving? Arrive earlier for parking and the walk to your first stop.</p>
- <label class="full">If taking Canadian WEGO, where are you joining?
+
+ <details class="details"><summary>Fine-tune your plan <span>interests, transit, budget & access</span></summary>
+  <label class="full">Your priority <select name="priority">
+  <option value="views">Best waterfall views</option><option value="boat">Boat experience</option><option value="mist">Close-up mist</option><option value="kids">Visiting with kids</option><option value="easy">Easy pace</option><option value="value">Keep it economical</option><option value="photos">Photography</option>
+ </select></label>
+
+  <label class="full">If taking Canadian WEGO, where are you joining?
   <select name="transport_origin"><option value="other">Hotel, station or other stop</option><option value="rapidsview">Rapidsview seasonal park-and-ride</option></select>
  </label>
  <p class="form-note">This origin choice affects the arrival plan only; it does not confirm a WEGO stop, a bus departure, or a parking space.</p>
- <fieldset><legend>How much time?</legend><div class="choices duration">
-  <label><input type="radio" name="duration_minutes" value="120"><span>2 hours</span></label>
-  <label><input type="radio" name="duration_minutes" value="240" checked><span>4 hours</span></label>
-  <label><input type="radio" name="duration_minutes" value="360"><span>6 hours</span></label>
- </div></fieldset>
- <fieldset><legend>Where are you starting?</legend><div class="choices sides">
-  <label><input type="radio" name="starting_side" value="US" checked><span>New York · USA</span></label>
-  <label><input type="radio" name="starting_side" value="CA"><span>Ontario · Canada</span></label>
- </div></fieldset>
- <label class="full">Your priority <select name="priority">
-  <option value="views">Best waterfall views</option><option value="boat">Boat experience</option><option value="mist">Close-up mist</option><option value="kids">Visiting with kids</option><option value="easy">Easy pace</option><option value="value">Keep it economical</option><option value="photos">Photography</option>
- </select></label>
- <details class="details"><summary>Fine-tune your plan <span>party, budget & access</span></summary>
+
   <div class="two">
    <label>Custom visit minutes (60–720) <input type="number" name="custom_minutes" min="60" max="720" step="15" placeholder="Use instead of 2 / 4 / 6 hours"></label>
   <label>Adults <input type="number" name="adults" min="1" max="20" value="2"></label>
@@ -111,16 +118,35 @@
    <p class="form-note">Canadian fare assumes children entered above are ages 3–12. Children 2 and younger ride WEGO free. Niagara attraction child-price definitions may differ.</p>
   </div>
  </details>
- <button type="submit" class="plan-button" id="go">Show me my Niagara experience <span aria-hidden="true">→</span></button>
+ <button type="submit" class="plan-button" id="go">Show my Niagara plan <span aria-hidden="true">→</span></button>
  </form>
  <p class="form-note">Schedules are published operator information, <strong>not live admission guarantees</strong>. No account, location sharing or AI subscription.</p>
 </section>
 <section class="panel result" id="result" aria-labelledby="result-title" aria-live="polite">
- <div class="panel-head"><span class="index">02 / YOUR ANSWER</span><h2 id="result-title">Your day at Niagara</h2><p id="status">Checking published hours and travel allowances…</p></div>
+ <div class="panel-head"><span class="index">02 / YOUR ROUTE</span><h2 id="result-title">Your plan, in order</h2><p id="status">Checking published hours and travel allowances…</p></div>
  <div id="result-body" aria-busy="true"><div class="empty"><div class="watermark">NF</div><p>Your first action and a guided, realistic route will appear here.</p></div></div>
 </section>
 </div>
 
+<section class="wayfinding-panel" id="wayfinding" aria-labelledby="wayfinding-title">
+ <div class="wayfinding-heading"><div><p class="index">03 / GETTING AROUND</p><h2 id="wayfinding-title">Where you start and how you get there.</h2><p>See the numbered stops and a practical way in. Map directions follow real paths; dashed lines show stop order only.</p></div><div id="wayfinding-status" class="wayfinding-status" role="status">Choose a plan to see your map.</div></div>
+ <div class="wayfinding-layout">
+  <div class="wayfinding-map-wrap">
+   <div id="niagara-route-map" class="niagara-route-map" role="region" aria-label="Interactive map of Niagara Falls itinerary stops"></div>
+   <div class="wayfinding-map-footer"><span>Numbered pins = stops · P = parking · Dashed connectors show order, <strong>not walking paths</strong>.</span><span>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> · © CARTO</span></div>
+  </div>
+  <div class="wayfinding-side">
+   <div id="arrival-decision" class="arrival-decision"><p>When your itinerary appears, we’ll identify where to start, which parking lot fits, and whether transit could save walking.</p></div>
+   <div class="wayfinding-buttons"><a id="open-route-map" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls%20State%20Park" target="_blank" rel="noopener noreferrer">Open pedestrian directions ↗</a><a id="open-first-stop" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls" target="_blank" rel="noopener noreferrer">Get to first stop ↗</a></div>
+   <ol id="wayfinding-stop-list" class="wayfinding-stop-list" aria-label="Route stops"><li>Your stops and directions will appear after planning.</li></ol>
+   <details class="wayfinding-detail"><summary>What about parking, buses and accessibility?</summary><p>Rates, spaces, queues, accessible paths and current departures are not inferred from a map. Check operator links in the arrival panel. WEGO is for the Canadian side; Niagara Scenic Trolley is separate in New York. If the map fails to load, the linked pedestrian directions and stop list still work.</p></details>
+  </div>
+ </div>
+ <details class="travel-details"><summary>Compare parking, walking and WEGO costs</summary>
+ <section class="travel-comparison" aria-labelledby="travel-comparison-title"><div class="travel-comparison-intro"><p class="index">THE REAL-WORLD CHOICE</p><h3 id="travel-comparison-title">Where should you park—and is the bus worth it?</h3><p>Compare group cost, time overhead, and operating certainty for this specific visit. Rates never stand in for live parking spaces or bus departures.</p></div><div id="niagara-travel-choices" class="niagara-travel-choices" aria-live="polite"><p>Run a plan to compare your arrival choices.</p></div></section>
+
+ </details>
+</section>
 <section class="falls-films film-editorial" id="falls-films" aria-labelledby="falls-films-title">
  <div class="film-editorial-copy">
   <p class="index">THE EXPERIENCE · REAL FOOTAGE</p>
@@ -143,22 +169,6 @@
   <p class="film-disclaimer">Authentic visitor and operator footage, not live conditions. The player loads only if you choose a film. <a href="https://www.youtube.com/watch?v=F1D0AUIfKJk" target="_blank" rel="noopener noreferrer">Boat film ↗</a> · <a href="https://www.youtube.com/watch?v=hmQwm0drhGU" target="_blank" rel="noopener noreferrer">Cave film ↗</a> · <a href="https://www.youtube.com/watch?v=l6fu2huqWNE" target="_blank" rel="noopener noreferrer">Niagara Parks film ↗</a></p>
  </div>
  <div id="niagara-film-stage" class="film-editorial-stage" role="region" aria-label="Selected Niagara experience film"><div class="film-empty"><span aria-hidden="true">▶</span><strong>Choose an experience to watch.</strong><p>One video plays here. Nothing autoplays.</p></div></div>
-</section>
-<section class="wayfinding-panel" id="wayfinding" aria-labelledby="wayfinding-title">
- <div class="wayfinding-heading"><div><p class="index">03 / GETTING AROUND</p><h2 id="wayfinding-title">An actual way in, not just a line on a map.</h2><p>Your stops, recommended arrival point and pedestrian directions update with the plan. Bus timetables are never assumed.</p></div><div id="wayfinding-status" class="wayfinding-status" role="status">Choose a plan to see your map.</div></div>
- <section class="travel-comparison" aria-labelledby="travel-comparison-title"><div class="travel-comparison-intro"><p class="index">THE REAL-WORLD CHOICE</p><h3 id="travel-comparison-title">Where should you park—and is the bus worth it?</h3><p>Compare group cost, time overhead, and operating certainty for this specific visit. Rates never stand in for live parking spaces or bus departures.</p></div><div id="niagara-travel-choices" class="niagara-travel-choices" aria-live="polite"><p>Run a plan to compare your arrival choices.</p></div></section>
- <div class="wayfinding-layout">
-  <div class="wayfinding-map-wrap">
-   <div id="niagara-route-map" class="niagara-route-map" role="region" aria-label="Interactive map of Niagara Falls itinerary stops"></div>
-   <div class="wayfinding-map-footer"><span>Numbered pins = stops · P = parking · Dashed connectors show order, <strong>not walking paths</strong>.</span><span>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> · © CARTO</span></div>
-  </div>
-  <div class="wayfinding-side">
-   <div id="arrival-decision" class="arrival-decision"><p>When your itinerary appears, we’ll identify where to start, which parking lot fits, and whether transit could save walking.</p></div>
-   <div class="wayfinding-buttons"><a id="open-route-map" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls%20State%20Park" target="_blank" rel="noopener noreferrer">Open pedestrian directions ↗</a><a id="open-first-stop" href="https://www.google.com/maps/search/?api=1&amp;query=Niagara%20Falls" target="_blank" rel="noopener noreferrer">Get to first stop ↗</a></div>
-   <ol id="wayfinding-stop-list" class="wayfinding-stop-list" aria-label="Route stops"><li>Your stops and directions will appear after planning.</li></ol>
-   <details class="wayfinding-detail"><summary>What about parking, buses and accessibility?</summary><p>Rates, spaces, queues, accessible paths and current departures are not inferred from a map. Check operator links in the arrival panel. WEGO is for the Canadian side; Niagara Scenic Trolley is separate in New York. If the map fails to load, the linked pedestrian directions and stop list still work.</p></details>
-  </div>
- </div>
 </section>
 <section class="river-guide" aria-labelledby="river-title">
  <p class="index">KNOW WHAT YOU’RE LOOKING AT</p>
