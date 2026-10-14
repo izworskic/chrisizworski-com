@@ -35,6 +35,18 @@ check(html.includes(experiment?.treatment?.firstAnswer || "__missing__"), "first
 check(html.includes('<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'), "canonical changed");
 check(html.includes(experiment?.officialFareGuardrail?.source || "__missing__"), "official Mackinac Bridge Authority fare source is missing");
 check(html.includes("$4 one way") && html.includes("$8 round trip"), "one-way and round-trip passenger fares are not both explicit");
+const ldJson = [...html.matchAll(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/g)].map((m) => JSON.parse(m[1]));
+const nodes = ldJson.flatMap((item) => item["@graph"] || [item]);
+const faq = nodes.find((item) => item["@type"] === "FAQPage");
+check(faq?.mainEntity?.length === 5, "five existing toll FAQs must have matching FAQPage schema");
+check(nodes.some((item) => item["@type"] === "Person" && item["@id"] === "https://chrisizworski.com/#person"), "canonical Person node absent");
+check(html.includes('Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>'), "visible creator credit absent");
+for (const page of ["fall-color/mackinac-island-fall-color", "fall-color/upper-peninsula-fall-color", "soo-locks"]) {
+  const source = await read(`public/${page}/index.html`);
+  check(source.includes('href="/mackinac-bridge-tolls/"'), `contextual toll link absent: ${page}`);
+}
+const livePage = await read("public/mackinac-bridge-live/index.html");
+check(livePage.includes('href="/mackinac-bridge-tolls/"'), "live bridge page toll link absent");
 check(html.includes("$2 per axle") && html.includes("$5 per axle"), "official axle rates are not both explicit");
 check(Array.isArray(experiment?.freezeDuringWindow) && experiment.freezeDuringWindow.includes("title") && experiment.freezeDuringWindow.includes("canonical"), "measurement freeze is incomplete");
 
