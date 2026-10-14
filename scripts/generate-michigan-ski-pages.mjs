@@ -12,7 +12,7 @@ function person(){return {'@type':'Person','@id':P,name:'Chris Izworski',url:'ht
 function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  if(title.length>60||description.length>158)throw Error('Search snippet length: '+title+' '+description);
  const json=[
- person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:today,author:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
+ person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:today,author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
  {'@type':'SoftwareApplication','@id':url+'#tool',name:h1,applicationCategory:'TravelApplication',operatingSystem:'Web',
  url,isAccessibleForFree:true,creator:{'@id':P},offers:{'@type':'Offer',price:0,priceCurrency:'USD'}}
  ];
