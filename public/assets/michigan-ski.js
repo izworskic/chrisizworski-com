@@ -32,6 +32,7 @@ function chipsFor(r){
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')arr.push(['Off season','neutral']);
  if(w.forecastSnowInches!==null&&Number.isFinite(w.forecastSnowInches))arr.push([fmt(w.forecastSnowInches,'"″')+' forecast weekend snow','lake']);
  if(w.weatherCoverage!=='NWS_GRID_RECEIVED')arr.push(['NWS grid unavailable','neutral']);
+ if(r.official?.status==='PUBLISHED_OFFICIAL_REPORT')arr.push(['Official hill report checked','neutral']);
  return arr;
 }
 function ticket(r){
@@ -40,7 +41,7 @@ function ticket(r){
  return '$'+price.sat+' Sat / $'+(price.sun||price.sat)+' Sun';
 }
 function card(r,index,detail=false){
- const box=node('article','hill'),num=node('div','rank',r.kind==='nordic'?'XC':(index+1)),body=node('div');
+ const box=node('article','hill'),num=node('div','rank',r.kind==='nordic'?'XC':score(r)===null?'–':(index+1)),body=node('div');
  const name=node('h3'),a=node('a',null,r.name);
  a.href='/michigan-ski-hills/'+r.slug+'/';add(name,a);
  add(body,name,node('p','subtitle',r.location+' · '+r.region.replaceAll('-',' ') ));
@@ -49,19 +50,23 @@ function card(r,index,detail=false){
  const data=[
  ['Decision index',score(r)===null?'Not ranked':score(r)+'/100*'],
  ['Sat forecast snow',fmt(r.weather?.skiDays?.saturday?.snowInches,'″')],
+ ['Sat NWS temperature',Number.isFinite(r.weather?.skiDays?.saturday?.lowF)?r.weather.skiDays.saturday.lowF+'–'+r.weather.skiDays.saturday.highF+'°F':'Unavailable'],
  ['Sun forecast snow',fmt(r.weather?.skiDays?.sunday?.snowInches,'″')],
+ ['Sun NWS temperature',Number.isFinite(r.weather?.skiDays?.sunday?.lowF)?r.weather.skiDays.sunday.lowF+'–'+r.weather.skiDays.sunday.highF+'°F':'Unavailable'],
  ['Nearby NWS report filed in 24h',r.weather?.report24?fmt(r.weather.report24.inches,'″ report'):'No nearby report'],
  ['Drive · '+(state.origin==='detroit'?'Detroit':'Grand Rapids'),minutes(r.driveMinutes?.[state.origin])],
- ['Adult lift ticket',ticket(r)],['Base depth','Not verified'],
+ ['Adult lift ticket',ticket(r)],['Official base depth',Number.isFinite(r.weather?.baseDepthInches)?fmt(r.weather.baseDepthInches,'″ reported'):'Not verified'],
  ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Official alert':
    r.weather?.lakeEffectWind?.status==='WIND_ALIGNED'?'Favorable wind only':
    r.weather?.lakeEffectWind?.status==='NOT_ALIGNED'?'Wind not aligned':'Unverified'],
- ['Operating lifts','Not verified']
+ ['Current operating lifts',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.lifts.open+'/'+r.official.lifts.total+' (as posted)':'Not verified'],
+ ['Current open trails',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.trails.open+'/'+r.official.trails.total+' (as posted)':'Not verified']
  ];
  data.forEach(([label,value])=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(metrics,m);});add(body,metrics);
  add(body,node('p','verdict',status(r)),node('p','source-line',r.note));
  const preferred=r.weather?.skiDays?.moreSnowForecast;
  if(preferred==='SATURDAY'||preferred==='SUNDAY')add(body,node('p','note','NWS forecasts more snow in the '+(preferred==='SATURDAY'?'Friday-to-Saturday':'Saturday-to-Sunday')+' 24-hour window. This is not a ski-surface or road-safety recommendation.'));
+ if(detail&&r.official?.status==='PUBLISHED_OFFICIAL_REPORT')add(body,node('p','note','Official mountain page checked '+new Date(r.official.checkedAt).toLocaleString('en-US',{timeZone:'America/Detroit',dateStyle:'medium',timeStyle:'short'})+' ET. This is a site snapshot, not confirmation lifts will be open on your weekend.'));
  if(detail){const links=node('div','source-links');add(links,external('Official snow / resort report ↗',r.snow),
  external('Official tickets ↗',r.tickets));add(body,links);}
  add(box,num,body);return box;
@@ -126,7 +131,7 @@ async function load(){
    const res=await fetch('/api/michigan-ski',{signal:ctl.signal,cache:'default'});
    if(!res.ok)throw Error('The live report is temporarily unavailable');
    const data=await res.json();if(!data.ok||!Array.isArray(data.resorts)||data.resorts.length!==18)throw Error('Incomplete report');
-   state.data=data;render();
+   state.data=data;render();document.dispatchEvent(new CustomEvent('michigan-ski:data',{detail:data}));
  }catch(e){
    if($('updated'))$('updated').textContent='Live conditions unavailable. The static resort directory and official source links below are still usable; no conditions are verified.';
    if($('hill-live'))$('hill-live').append(node('p','event','Live conditions could not be verified. Use the official resort and NWS links below.'));
