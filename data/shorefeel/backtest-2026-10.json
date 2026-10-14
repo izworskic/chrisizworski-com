@@ -1,0 +1,19 @@
+{
+  "title": "ShoreFeel beach-water forecast backtest",
+  "period": "2026-09-01 to 2026-10-13",
+  "method": "NOAA LMHOFS t00z surface temperature (f000, f024, f048 at the node nearest each buoy) versus NDBC buoy water temperature. Forecast = buoy temperature at t0 + model change from t0 to t0+lead. Persistence = buoy temperature at t0.",
+  "buoys": ["45029 Holland/Port Sheldon", "45161 Muskegon", "45183 Sleeping Bear Dunes", "45002 North Michigan"],
+  "caveats": ["Six weeks, four open-water buoys, one season of late-summer to early-fall weather.", "No test yet against thermometers at the swim line, so the shallow-water adjustment is unvalidated.", "No test yet in June to August heat."],
+  "leadResults": {
+    "24h": {"n": 115, "persistenceMAE_F": 1.45, "persistencePlusModelChangeMAE_F": 1.31, "modelAbsoluteMAE_F": 3.8},
+    "48h": {"n": 110, "persistenceMAE_F": 2.19, "persistencePlusModelChangeMAE_F": 1.87, "modelAbsoluteMAE_F": 3.88}
+  },
+  "satelliteVsBuoyMAE_F": 0.9,
+  "coolingWatch": {
+    "rule": "model surface change over the next 24 h <= -1.5 F",
+    "flagged": 22, "of": 115, "realDrops3F": 7, "caught": 7, "precisionPct": 32,
+    "sharpRule": "model change <= -3 F", "sharpFlagged": 10, "sharpCaught": 5, "sharpPrecisionPct": 50
+  },
+  "warmingSkill": "weak: the model signalled the right direction on about half of the 3 F-or-greater warm-ups, so no warming alert is shown",
+  "rangeRule": "half-width = 1.5 x mean absolute error at that lead, rounded up (2 F through 24 h, 3 F at 36 to 48 h), plus 1 F when the shallow adjustment exceeds 0.5 F"
+}

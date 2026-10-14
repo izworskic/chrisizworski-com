@@ -111,6 +111,35 @@ function renderPlace(){
  write('weather-detail',w?'NWS hourly forecast · '+time(w.startsAt)+' · '+w.summary:'NWS forecast currently unavailable');
  applyActivity(activity);
 }
+/* Beach water forecast: a range with a stated error, never a single number.
+   Built with textContent only. Absent or unavailable forecast hides the whole block. */
+function renderBeachForecast(){
+ const sec=get('beach-forecast'),host=get('bf-body');if(!sec||!host)return;
+ const bf=payload?.beachForecast;
+ host.textContent='';
+ if(!bf||bf.status!=='available'||!bf.beaches?.length){sec.hidden=true;return;}
+ const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ const v=bf.validation||{};
+ write('bf-lede','Estimated water temperature at the beach, not a measurement. It starts from a NOAA-measured level and adds the NOAA lake model\u2019s forecast change. Typical error in Sept\u2013Oct 2026 tests: about '+v.error24hF+'\u00b0F at 24 hours and '+v.error48hF+'\u00b0F at 48 hours (ranges below are wider on purpose).');
+ const leadName=h=>h===0?'Now':h<24?'+'+h+' h':'+'+h+' h';
+ bf.beaches.forEach(b=>{
+  const card=el('article','panel');
+  card.appendChild(el('h3','',b.name));
+  const start=b.points[0];
+  card.appendChild(el('p','',start.low+'\u2013'+start.high+'\u00b0F now (best guess '+start.tempF.toFixed(0)+'\u00b0F)'));
+  card.appendChild(el('p','quiet','Starts from the NOAA '+(b.levelKind==='buoy'?'buoy':'satellite')+' reading of '+b.levelTempF.toFixed(1)+'\u00b0F, '+time(b.levelObservedAt)+'.'));
+  const t=el('table','lake-table');
+  const head=t.createTHead().insertRow();
+  ['When','Range','Best guess'].forEach(x=>head.appendChild(el('th','',x)));
+  const tb=t.createTBody();
+  b.points.slice(1).forEach(p=>{const r=tb.insertRow();[leadName(p.leadH),p.low+'\u2013'+p.high+'\u00b0F',p.tempF.toFixed(0)+'\u00b0F'].forEach(x=>r.insertCell().textContent=x);});
+  card.appendChild(t);
+  if(b.cooling){const c=el('div','safety');c.appendChild(el('strong','',b.cooling.tier==='sharp'?'Sharp cooling watch':'Cooling watch'));c.appendChild(el('p','',b.cooling.text));card.appendChild(c);}
+  host.appendChild(card);
+ });
+ write('bf-method',bf.method+' '+bf.caveat+' Source: NOAA LMHOFS model run '+time(bf.cycle)+'. '+(v.caveats||[]).join(' '));
+ sec.hidden=false;
+}
 function initMap(){
  const mapEl=get('shore-map');if(!mapEl)return;
  if(!window.L){mapEl.innerHTML='<div class="map-fallback"><strong>Explore the Lake Michigan shoreline</strong><p>The interactive map is unavailable, but the destination guides still work.</p><div class="fallback-places"><a href="/lake-michigan-water-temperature/grand-haven/">Grand Haven →</a><a href="/lake-michigan-water-temperature/traverse-city/">Traverse City →</a></div><small>For source locations, <a href="/great-lakes-buoys/">see NOAA buoy stations</a>.</small></div>';return;}
@@ -128,7 +157,7 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   const r=await fetch(url,{headers:{Accept:'application/json'}});
   if(!r.ok)throw new Error('Data service unavailable');
   payload=await r.json();
-  renderLakes();renderPlace();renderLead();
+  renderLakes();renderPlace();renderLead();renderBeachForecast();
  }catch(e){
   // A failed refresh is never described as a successful live reading.
   if(get('lead-temp'))setLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
