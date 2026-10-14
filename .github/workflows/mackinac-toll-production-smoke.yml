@@ -42,6 +42,6 @@ jobs:
             echo 'CACHE_BUSTED_URL_UPDATED=false'
           fi
 
-          printf '%s' "$bust" | grep -Fq "$expected"
-          printf '%s' "$bust" | grep -Fq "Mackinac Bridge toll is $4 for a car ($2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return."
-          printf '%s' "$bust" | grep -Fq '"@type":"FAQPage"'
+          grep -Fq "$expected" <<< "$bust"
+          grep -Fq "Mackinac Bridge toll is \$4 for a car (\$2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return." <<< "$bust"
+          grep -Fq '"@type":"FAQPage"' <<< "$bust"
