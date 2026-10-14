@@ -4,6 +4,7 @@ import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {navHtml} from "./mackinac-site-architecture.mjs";
 import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,guideSections,HUB_JS,TRUTH_LABEL,AD_BREAK} from "./mackinac-page-chrome.mjs";
 import {INTENT_COPY} from "./mackinac-guide-copy.mjs";
+import {ferryExperienceMarkup} from "./mackinac-ferry-experience.mjs";
 
 const root="public/mackinac-island";
 const hero="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG";
@@ -136,26 +137,34 @@ const related={
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function pageHtml(p){
   const canonical="https://chrisizworski.com/mackinac-island/"+p.slug+"/";
+  if(p.slug==="ferry-planner"){
+    p.title="Mackinac Island Ferry Prices & Kids Fares";
+    p.description="Compare 2026 Shepler’s and Arnold Mackinac Island ferry ticket prices, kids fares, military discounts, parking, bikes, pets, ports and official booking links.";
+    p.h1="Mackinac Island ferry tickets, family prices and parking";
+    p.lede="Pick your travel date and compare Shepler’s with Arnold Transit. See kids’ ticket prices, military rates, parking, bikes and the right ferry dock, then buy directly from the operator.";
+  }
   const plannerTarget="#trip-intake";
   const originParam=p.origin?"&from="+encodeURIComponent(p.origin):"";
   const planner="/mackinac-island/?intent="+encodeURIComponent(p.intent)+originParam+plannerTarget;
-  const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-29","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},{"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island Planner","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}]});
+  const heroTarget=p.slug==="ferry-planner"?"#ferry-compare":planner;
+  const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":p.slug==="ferry-planner"?"2026-10-14":"2026-09-29","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},{"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island Planner","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}]});
   const tone=(p.intent==="ferry-planner")?"ferries":(p.slug==="2-day-itinerary"?"plan":"explore");
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(p.title)} | Chris Izworski</title><meta name="description" content="${esc(p.description)}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><meta name="author" content="Chris Izworski">
 <link rel="canonical" href="${canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${hero}">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${hero}">${headAssets()}<script type="application/ld+json">${jsonLd}</script></head>
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${hero}">${headAssets()}${p.slug==="ferry-planner"?'<link rel="stylesheet" href="/assets/mackinac-ferry-decision.css?v=20261014-1">':""}<script type="application/ld+json">${jsonLd}</script></head>
 <body data-mackinac-intent="${esc(p.analyticsIntent||p.intent)}">${siteHeader(navHtml("/mackinac-island/"+p.slug+"/"))}
-<main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:planner,primaryLabel:p.cta||"Use My Trip"})}
+<main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:heroTarget,primaryLabel:p.slug==="ferry-planner"?"Compare ferry fares":(p.cta||"Use My Trip")})}
 ${decisionStrip(p.decisions)}
 ${focusSlot()}
+${p.slug==="ferry-planner"?ferryExperienceMarkup():""}
 ${guideSections(p.guide)}
 ${AD_BREAK}<section class="hub-section"><div class="shell"><div class="section-head"><div class="eyebrow">How to plan it</div><h2>${esc(p.stepsTitle||"Plan it in three steps")}</h2></div><div class="steps">${p.steps.map(x=>`<div class="step"><div><strong>${esc(x[0])}</strong><p>${esc(x[1])}</p></div></div>`).join("")}</div></div></section>
 ${AD_BREAK}<section class="hub-section tint"><div class="shell"><div class="section-head"><div class="eyebrow">Good to know</div><h2>${esc(p.cardsTitle||"Local knowledge worth having")}</h2></div><div class="grid">${p.cards.map(x=>`<article class="card"><h3>${esc(x[0])}</h3><p>${esc(x[1])}</p></article>`).join("")}</div><p class="truth"><strong>${TRUTH_LABEL}</strong> ${esc(p.truth)}</p></div></section>
 ${AD_BREAK}${faqSection(p.faq,"Before you go")}
 <section class="hub-section closing"><div class="shell">${plannerBand({title:"Make it your trip",body:"Tell My Trip where you’re driving from and this guide becomes your plan: the boat you can make, the hours you’ll have and what to do with them.",href:planner,label:p.cta||"Build my trip"})}<div class="section-head"><div class="eyebrow">Keep exploring</div><h2>More Mackinac guides</h2></div><div class="related">${(p.related||related[p.slug]||[]).map(x=>`<a href="${x[1]}">${esc(x[0])}</a>`).join("")}<a href="/mackinac-island/">My Trip</a></div><p class="sources"><strong>Primary planning references:</strong> ${p.sourceLinks.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section></main>
-${siteFooter("Live agencies, attraction operators and ferry companies remain authoritative for their own schedules and conditions.")}<script src="${HUB_JS}" defer></script><script src="/assets/mackinac-intent.js?v=20260920-intent2" defer></script></body></html>`;
+${siteFooter("Live agencies, attraction operators and ferry companies remain authoritative for their own schedules and conditions.")}<script src="${HUB_JS}" defer></script><script src="/assets/mackinac-intent.js?v=20260920-intent2" defer></script>${p.slug==="ferry-planner"?'<script src="/assets/mackinac-ferry-decision.js?v=20261014-1" defer></script>':""}</body></html>`;
 }
 
 for(const p of pages){const c=INTENT_COPY[p.slug];if(!c)throw new Error("Missing guide copy for "+p.slug);Object.assign(p,c);}
