@@ -36,7 +36,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
- '<script defer src="/assets/michigan-ski.js"></script><script defer src="/assets/michigan-ski-decision.js"></script></body></html>'
+ '<script defer src="/assets/michigan-ski.js"></script><script defer src="/assets/michigan-ski-decision.js"></script><script defer src="/assets/michigan-ski-map.js"></script></body></html>'
  ].join('\n');
 }
 function details(r){
@@ -97,6 +97,10 @@ function index(){
  '<label>Adults<select id="ski-adults"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>',
  '<label>Kids age 8 and under<select id="ski-kids"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>',
  '<label>Rentals needed<select id="ski-rentals"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label></div>',
+ '<section class="map-section" aria-label="Michigan snow forecast point map"><div class="map-heading"><h3>Michigan ski snowfall map</h3><p class="small">Actual resort coordinates and NWS point forecasts. Dots are NOT an interpolated snow accumulation map.</p></div>',
+ '<div class="ski-map-key"><span class="key-dot" style="background:#d3e0e5"></span> 0″ <span class="key-dot" style="background:#a1d6d4"></span> Under 1″ <span class="key-dot" style="background:#39a7ad"></span> 1–3″ <span class="key-dot" style="background:#187b9b"></span> 3–6″ <span class="key-dot" style="background:#12456d"></span> 6″+ <span class="key-dot" style="background:#889aa4"></span> Unavailable <span class="key-warning">◌</span> Winter warning</div>',
+ '<div id="ski-point-map" class="ski-point-map"><p class="small">Preparing Michigan forecast map…</p></div><div id="ski-map-selected" aria-live="polite"></div>',
+ '<p class="small">Nearby dots are spread slightly for touch access, with leader lines to actual locations. Outline: <a href="https://github.com/PublicaMundi/MappingAPI/blob/master/data/geojson/us-states.json" rel="noopener noreferrer">public US state GeoJSON</a>. No paid map tiles or API keys.</p></section>',
  '<div id="ski-decision-results" aria-live="polite"><p class="small">Checking NWS snow windows and operating evidence…</p></div>',
  '<div class="trip-tool"><h3>Trip cost: compare two hills</h3><div id="ski-trip-cost"><p>Waiting for live source results…</p></div></div>',
  '<p class="small">Shortlist is an explanatory planning fit, not a guaranteed powder day, lift opening, road safety or ticket checkout price. Unverified price and travel inputs are never silently replaced with estimates.</p></section>',
