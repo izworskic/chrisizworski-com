@@ -23,3 +23,19 @@
 .cost-total{border-top:1px solid #d3e2e9;padding-top:10px;font-weight:800;font-size:1.08rem}
 @media(max-width:920px){.decision-candidates{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.decision-candidates{grid-template-columns:minmax(0,1fr)}.decision-filters label{flex-basis:42%}.decision-filters label:first-child{flex-basis:100%}.decision-metrics span{font-size:.75rem}.trip-tool{padding-top:11px}}
+
+.map-section{border:1px solid #d2e5ea;background:#f7fbfc;border-radius:12px;padding:12px 14px;margin:15px 0}
+.map-heading h3{font-size:1.09rem;margin:3px 0}.map-heading .small{margin:0 0 11px}
+.ski-map-key{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.72rem;color:#436073;padding:5px 0 11px}
+.key-dot{display:inline-block;width:13px;height:13px;border:1px solid #4c7a86;border-radius:50%;margin-left:3px}
+.key-warning{color:#ac5926;font-size:1.3rem;line-height:10px}
+.ski-point-map{width:100%;background:#dbeaf1;border-radius:11px;overflow:hidden}
+.michigan-point-svg{display:block;width:100%;height:auto;max-height:465px;min-height:280px}
+.ski-map-water{fill:#7095a5;font-size:19px;letter-spacing:.06em;font-style:italic}
+.ski-dot{cursor:pointer;outline:none}.ski-dot:hover circle:last-of-type,.ski-dot:focus circle:last-of-type,.ski-dot.selected circle:last-of-type{stroke-width:4;stroke:#e99a33}
+.ski-dot:focus-visible{outline:2px solid #e99a33}
+.map-selection{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:white;border:1px solid #d0e0e8;padding:10px 13px;border-radius:9px;margin-top:10px}
+.map-selection h3{flex-basis:100%;margin:0;font-size:1.04rem}
+.map-selection p{margin:0;font-size:.86rem;flex:1 1 290px}
+.map-selection a{font-weight:700;font-size:.85rem}
+@media(max-width:640px){.map-section{padding:10px 8px}.ski-map-key{gap:5px;font-size:.68rem}.michigan-point-svg{min-height:220px}.ski-map-water{font-size:17px}}
