@@ -19,7 +19,21 @@ test('National Tools registration and sitemap are idempotently built',()=>{
 });
 test('First-screen canyon orientation and 2026-27 resort handoffs',()=>{
  assert.match(html,/canyon-map-title/);assert.match(html,/SR-210/);assert.match(html,/SR-190/);
+ assert.ok(html.includes('src="/images/utah-ski/utah-cottonwood-canyons-illustrated.webp"'));
+ assert.match(html,/Snowbird → Alta/);assert.match(html,/Solitude → Brighton/);
+ assert.match(html,/class="canyon-art-map"/);
  for(const r of ['Alta','Snowbird','Brighton','Solitude'])assert.ok(html.includes(r));
  assert.match(html,/No road-open, safe-to-drive or guaranteed-parking verdict/);
  assert.match(html,/id="sr210-context"/);assert.match(html,/id="sr190-context"/);
+});
+
+test('Utah ski illustration is an optimized binary image asset, not an inline diagram',()=>{
+ const path='public/images/utah-ski/utah-cottonwood-canyons-illustrated.webp';
+ const image=fs.readFileSync(path);
+ assert.equal(image.subarray(0,4).toString(),'RIFF');
+ assert.equal(image.subarray(8,12).toString(),'WEBP');
+ assert.ok(image.length>50000&&image.length<350000,'Map is a readable, reasonably sized WebP');
+ assert.doesNotMatch(html,/<figure class="corridor"[^>]*><svg/);
+ assert.match(html,/loading="eager"/);
+ assert.match(html,/not exact road alignment or live closures/);
 });
