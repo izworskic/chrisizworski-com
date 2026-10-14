@@ -9,7 +9,7 @@ test('Utah trip planner stays noindex during source validation',()=>{
  assert.match(page,/<meta name="robots" content="noindex,nofollow">/);
  assert.match(page,/Built by Chris Izworski/);
  assert.match(page,/protected verification preview/);
- assert.match(page,/does not verify.*parking/i);
+ assert.match(page,/cannot verify parking inventory/i);
 });
 test('browser and Node use exact same policy and decision outputs',()=>{
  const window={};vm.runInNewContext(browser,{window,Intl,Date});
