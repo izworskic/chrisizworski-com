@@ -41,5 +41,5 @@ test("Mackinac ferry survives while legacy itinerary routes are retired",()=>{
  const current=readdirSync(base,{withFileTypes:true}).filter(d=>d.isDirectory()&&existsSync(path.join(base,d.name,"index.html"))).map(d=>d.name);
  assert.deepEqual(current,["ferry-planner"]);
  const config=JSON.parse(readFileSync(path.join(root,"vercel.json"),"utf8"));
- assert.ok(config.redirects.some(r=>r.source.includes(":retired")&&r.destination==="/mackinac-island/ferry-planner/"));
+ assert.ok(config.redirects.some(r=>r.source==="/mackinac-island/day-trip/"&&r.destination==="/mackinac-island/ferry-planner/"));
 });

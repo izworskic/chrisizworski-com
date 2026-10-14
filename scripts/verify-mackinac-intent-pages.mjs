@@ -12,6 +12,6 @@ assert(!html.includes('href="/mackinac-island/"'),"retired root linked from ferr
 for(const slug of retired){assert(!fs.existsSync("public/mackinac-island/"+slug+"/index.html"),"retired page present "+slug);assert(!map.includes("<loc>https://chrisizworski.com/mackinac-island/"+slug+"/</loc>"),"retired sitemap entry "+slug)}
 assert(!map.includes("<loc>https://chrisizworski.com/mackinac-island/</loc>"),"retired root sitemap");
 assert(map.includes("<loc>https://chrisizworski.com/mackinac-island/ferry-planner/</loc>"),"ferry sitemap missing");
-assert(redirects.some(r=>r.source.startsWith("/mackinac-island{")&&r.destination==="/mackinac-island/ferry-planner/"),"root redirect missing");
-assert(redirects.some(r=>retired.every(s=>r.source.includes(s))&&r.destination==="/mackinac-island/ferry-planner/"),"retired redirect missing");
+assert(redirects.some(r=>r.source==="/mackinac-island/"&&r.destination==="/mackinac-island/ferry-planner/"),"root redirect missing");
+for(const slug of retired)assert(redirects.some(r=>r.source==="/mackinac-island/"+slug+"/"&&r.destination==="/mackinac-island/ferry-planner/"),"retired redirect missing "+slug);
 if(bad.length){bad.forEach(x=>console.error("Mackinac ferry-only: "+x));process.exit(1)}console.log("PASS: Mackinac ferry-only release; 16 subpages retired.");

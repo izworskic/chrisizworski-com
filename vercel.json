@@ -55,12 +55,172 @@
   },
   "redirects": [
     {
-      "source": "/mackinac-island{/}?",
+      "source": "/mackinac-island",
       "destination": "/mackinac-island/ferry-planner/",
       "permanent": false
     },
     {
-      "source": "/mackinac-island/:retired(plan|where-to-stay|dining|things-to-do|events|around-the-straits|day-trip|with-kids|2-day-itinerary|from-detroit|from-chicago|from-traverse-city|from-grand-rapids|limited-walking|bike-day|fall){/}?",
+      "source": "/mackinac-island/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/plan",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/plan/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/where-to-stay",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/where-to-stay/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/dining",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/dining/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/things-to-do",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/things-to-do/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/events",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/events/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/around-the-straits",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/around-the-straits/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/day-trip",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/day-trip/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/with-kids",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/with-kids/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/2-day-itinerary",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/2-day-itinerary/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-detroit",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-detroit/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-chicago",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-chicago/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-traverse-city",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-traverse-city/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-grand-rapids",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/from-grand-rapids/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/limited-walking",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/limited-walking/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/bike-day",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/bike-day/",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/fall",
+      "destination": "/mackinac-island/ferry-planner/",
+      "permanent": false
+    },
+    {
+      "source": "/mackinac-island/fall/",
       "destination": "/mackinac-island/ferry-planner/",
       "permanent": false
     },
