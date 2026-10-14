@@ -4056,6 +4056,22 @@
       "surface": "wisconsin-guide",
       "strength": "strong",
       "reason": "Wisconsin flower travelers can compare the separate Michigan flower season."
+    },
+    {
+      "from": "maple-sap-run",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "maple navigation and footer",
+      "reason": "Late winter maple weather depends on overnight freezing; visitors can inspect the separate Michigan ice conditions tool."
+    },
+    {
+      "from": "maple-sap-run",
+      "to": "bloom-tracker",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "maple header and footer",
+      "reason": "Spring visitors can continue from maple season to the separate Michigan flowering-season decision tool."
     }
   ],
   "cannibalizationGroups": [
