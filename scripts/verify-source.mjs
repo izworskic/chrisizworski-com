@@ -9,6 +9,23 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalRetirements = new Set([
+  // Oct 14, 2026: owner-approved Mackinac itinerary-network retirement, ferry-only survivor.
+  "/mackinac-island/plan/",
+  "/mackinac-island/where-to-stay/",
+  "/mackinac-island/dining/",
+  "/mackinac-island/things-to-do/",
+  "/mackinac-island/events/",
+  "/mackinac-island/around-the-straits/",
+  "/mackinac-island/day-trip/",
+  "/mackinac-island/with-kids/",
+  "/mackinac-island/2-day-itinerary/",
+  "/mackinac-island/from-detroit/",
+  "/mackinac-island/from-chicago/",
+  "/mackinac-island/from-traverse-city/",
+  "/mackinac-island/from-grand-rapids/",
+  "/mackinac-island/limited-walking/",
+  "/mackinac-island/bike-day/",
+  "/mackinac-island/fall/",
   // Aug 26 2026: same-day rollback of six experimental decision tools. These paths
   // are intentionally absent from source while the clean-live audit still remembers
   // their pre-retirement 200 responses. After the next production crawl no record

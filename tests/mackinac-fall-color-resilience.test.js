@@ -35,21 +35,11 @@ test("the fall-color source is read through the resilient wrapper, not raw", () 
 });
 
 // Salvaged from PR #435: its 404 fix landed via #436/#437, but its regression guard did not.
-test("every navigable Mackinac route is materialized in the repo", () => {
-  const routes = [
-    "plan", "ferry-planner", "where-to-stay", "dining", "things-to-do", "events",
-    "around-the-straits", "day-trip", "with-kids", "2-day-itinerary",
-    "from-detroit", "from-chicago", "from-traverse-city", "from-grand-rapids",
-    "limited-walking", "bike-day", "fall",
-  ];
-  const base = path.join(root, "public/mackinac-island");
-  assert.ok(existsSync(path.join(base, "index.html")), "missing /mackinac-island/index.html");
-  for (const r of routes) {
-    const file = path.join(base, r, "index.html");
-    assert.ok(existsSync(file), `missing materialized route /mackinac-island/${r}/`);
-  }
-  const onDisk = readdirSync(base).filter((n) => !n.endsWith(".html"));
-  for (const dir of onDisk) {
-    assert.ok(routes.includes(dir), `unguarded Mackinac route on disk: ${dir}`);
-  }
+test("Mackinac ferry survives while legacy itinerary routes are retired",()=>{
+ const base=path.join(root,"public/mackinac-island");
+ assert.ok(existsSync(path.join(base,"ferry-planner","index.html")));
+ const current=readdirSync(base,{withFileTypes:true}).filter(d=>d.isDirectory()&&existsSync(path.join(base,d.name,"index.html"))).map(d=>d.name);
+ assert.deepEqual(current,["ferry-planner"]);
+ const config=JSON.parse(readFileSync(path.join(root,"vercel.json"),"utf8"));
+ assert.ok(config.redirects.some(r=>r.source==="/mackinac-island/day-trip/"&&r.destination==="/mackinac-island/ferry-planner/"));
 });

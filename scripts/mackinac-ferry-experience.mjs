@@ -2,7 +2,7 @@
 // No timetable or live-operations claim is made by this page.
 export function ferryExperienceMarkup(){
   return `<section class="shell ferry-lab" id="ferry-compare" aria-labelledby="ferry-lab-title">
-  <div class="ferry-intro"><div><div class="eyebrow">2026 ferry decision engine</div><h2 id="ferry-lab-title">Find the right boat, parking lot and total family fare</h2><p>Compare Shepler's and Arnold Transit from Mackinaw City and St. Ignace. Include children, bikes, military discounts and the cost of leaving your vehicle on the mainland. Start with the trip, not a ticket ad.</p></div><a class="ferry-subtle-link" href="/mackinac-island/#trip-intake">Need an Island itinerary? Open My Trip →</a></div>
+  <div class="ferry-intro"><div><div class="eyebrow">2026 ferry decision engine</div><h2 id="ferry-lab-title">Find the right boat, parking lot and total family fare</h2><p>Compare Shepler's and Arnold Transit from Mackinaw City and St. Ignace. Include children, bikes, military discounts and the cost of leaving your vehicle on the mainland. Start with the trip, not a ticket ad.</p></div><a class="ferry-subtle-link" href="/tools/">More Michigan tools →</a></div>
   <form id="ferry-form" class="ferry-form" autocomplete="off">
     <div class="ferry-fields">
       <label>When are you going?<input id="ferry-date" type="date" value="2026-10-17" min="2026-01-01" required></label>

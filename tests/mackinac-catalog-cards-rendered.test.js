@@ -17,17 +17,10 @@ const SURFACES = [
   ["around-the-straits", REGIONAL],
 ];
 
-for (const [slug, catalog] of SURFACES) {
-  test(`/${slug}/ renders a rankable card for every catalog entry`, () => {
-    const html = page(slug);
-    assert.ok(html.includes("catalog-grid"), `${slug} lost its catalog grid container`);
-    for (const item of catalog) {
-      assert.ok(
-        html.includes(`data-place-id="${item.id}"`),
-        `${slug} is stale: no rankable card for catalog entry "${item.id}". Run npm run benchmark:mackinac-hub and commit the output.`
-      );
-    }
-  });
+for(const [slug] of SURFACES){
+ test(`Retired Mackinac catalog route /${slug}/ is not materialized`,()=>{
+  assert.equal(require("node:fs").existsSync(path.join(root,"public/mackinac-island",slug,"index.html")),false);
+ });
 }
 
 test("Mackinac generated pages hold no em dashes", () => {
