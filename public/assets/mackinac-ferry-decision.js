@@ -9,7 +9,7 @@
   function whole(n,min,max){n=Number(n);return Number.isFinite(n)?Math.max(min,Math.min(max,Math.floor(n))):min;}
   function compare(input){
     const date=String(input.date||"");
-    const adults=whole(input.adults,1,30),kids=whole(input.kids,0,30),infants=whole(input.infants,0,30),bikes=whole(input.bikes,0,30);
+    const adults=whole(input.adults,1,30),kids=whole(input.kids,0,30),infants=whole(input.infants,0,30),age4=whole(input.age4,0,30),bikes=whole(input.bikes,0,30);
     const nights=input.trip==="overnight"?whole(input.nights,1,14):0;
     const parking=input.parking!=="none";
     const eligible=!!input.military;
@@ -27,14 +27,20 @@
         const title=port==="mackinaw"?"Mackinaw City":"St. Ignace";
         const dock=id==="sheplers"?(port==="mackinaw"?"556 E. Central Avenue, Mackinaw City, MI 49701":"601 N. State Street, St. Ignace, MI 49781"):id==="classic"?"99 N. State Street, St. Ignace, MI 49781":port==="mackinaw"?"801 S. Huron Street, Mackinaw City, MI 49701":"587 N. State Street, St. Ignace, MI 49781";
         const parkAddress=!parking?null:id==="sheplers"?(port==="mackinaw"?(nights?"199 Wendell Street, Mackinaw City, MI 49701":"311 S. Nicolet Street, Mackinaw City, MI 49701"):(nights?"736 N. State Street, St. Ignace, MI 49781":"601 N. State Street, St. Ignace, MI 49781")):null;
-        const passenger=(eligible?r.militaryAdult:r.adult)*adults+(eligible?r.militaryKid:r.kid)*kids;
+        const adultCost=(eligible?r.militaryAdult:r.adult)*adults;
+        const childRate=eligible?r.militaryKid:r.kid;
+        const passenger=adultCost+childRate*kids+(id==="sheplers"?0:childRate*age4);
+        // Conflicting Classic rate pages and age-four eligibility require bounded estimates.
+        const passengerMin=adultCost+(id==="classic"?0:childRate*kids);
+        const priceUncertain=(id==="classic"&&kids>0)||(id!=="sheplers"&&age4>0);
         const bikeCost=bikes*r.bike;
         const parkCost=parking?(nights?r.nightPark*nights:r.dayPark):0;
         const subtotal=passenger+bikeCost+parkCost;
-        const fees=r.feePerPaidTicket===null?null:r.feePerPaidTicket*(adults+kids);
+        const minSubtotal=passengerMin+bikeCost+parkCost;
+        const fees=r.feePerPaidTicket===null?null:r.feePerPaidTicket*(adults+kids+infants+age4);
         const total=subtotal+(fees||0);
         const natural=input.origin==="lower"&&port==="mackinaw"||input.origin==="upper"&&port==="stignace"||input.origin==="either";
-        options.push({id,port,title,dock,parkAddress,r,passenger,bikeCost,parkCost,subtotal,fees,total,natural,infants,adults,kids,bikes,nights,parking,eligible});
+        options.push({id,port,title,dock,parkAddress,r,passenger,passengerMin,priceUncertain,bikeCost,parkCost,subtotal,minSubtotal,fees,total,natural,infants,age4,adults,kids,bikes,nights,parking,eligible});
       }
     }
     const priority=input.priority||"balanced";
@@ -54,7 +60,7 @@
   const maps=address=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(address);
   const escape=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function input(){
-    return {date:el("ferry-date").value,origin:el("ferry-origin").value,trip:el("ferry-trip").value,nights:el("ferry-nights").value,adults:el("ferry-adults").value,kids:el("ferry-kids").value,infants:el("ferry-infants").value,bikes:el("ferry-bikes").value,parking:el("ferry-parking").value,priority:el("ferry-priority").value,military:el("ferry-military").checked,pets:el("ferry-pets").checked};
+    return {date:el("ferry-date").value,origin:el("ferry-origin").value,trip:el("ferry-trip").value,nights:el("ferry-nights").value,adults:el("ferry-adults").value,kids:el("ferry-kids").value,infants:el("ferry-infants").value,age4:el("ferry-age4").value,bikes:el("ferry-bikes").value,parking:el("ferry-parking").value,priority:el("ferry-priority").value,military:el("ferry-military").checked,pets:el("ferry-pets").checked};
   }
   function stat(text){return '<div class="ferry-flag">'+text+"</div>";}
   function row(label,value){return '<div class="ferry-cost-row"><span>'+label+"</span><strong>"+value+"</strong></div>";}
@@ -68,11 +74,12 @@
     const fees=o.fees===null
       ?row("Booking fee","Extra · confirm at checkout")
       :row("Published booking fee estimate",dollar(o.fees)+(o.infants?"*":""));
-    const priceLabel=o.fees===null?"Base subtotal":"Estimated total";
+    const priceLabel=o.priceUncertain?"Possible 2026 fare range":o.fees===null?"Base subtotal":"Estimated total";
+    const displayPrice=o.priceUncertain?(dollar(o.minSubtotal+(o.fees||0))+"–"+dollar(o.total)):dollar(o.total);
     const proof=o.eligible?"<p class=\"ferry-verify\">Military pricing assumes every paid passenger qualifies. Bring military ID; purchase at the operator's ticket booth. Arnold's discount eligibility for non-service members needs confirmation.</p>":"";
     const infant=o.infants?'<p class="ferry-verify">'+o.infants+' child(ren) ages 0–4: $0 fare. Obtain required free boarding ticket(s). Shepler’s per-ticket fee treatment for free tickets must be confirmed.</p>':"";
-    return '<article class="ferry-option'+(index===0?' best':'')+'"><div class="ferry-option-top"><div><div class="ferry-option-kicker">'+(index===0?'Recommended option':'Alternative')+' · '+escape(o.title)+'</div><h3>'+opt+'</h3><p>'+ (o.id==="classic"?"Historic-feeling boat · about 30–40 minutes": "Fast crossing · approximately 20 minutes")+'</p></div><div class="ferry-total"><span>'+priceLabel+'</span><strong>'+dollar(o.total)+'</strong>'+(o.fees===null?'<small>plus booking fee</small>':'<small>2026 round trip + parking</small>')+'</div></div><div class="ferry-costs">'
-      +row(o.adults+' adults/teens + '+o.kids+' kids 5–12',dollar(o.passenger))
+    return '<article class="ferry-option'+(index===0?' best':'')+'"><div class="ferry-option-top"><div><div class="ferry-option-kicker">'+(index===0?'Recommended option':'Alternative')+' · '+escape(o.title)+'</div><h3>'+opt+'</h3><p>'+ (o.id==="classic"?"Historic-feeling boat · about 30–40 minutes": "Fast crossing · approximately 20 minutes")+'</p></div><div class="ferry-total"><span>'+priceLabel+'</span><strong>'+displayPrice+'</strong>'+(o.fees===null?'<small>plus unknown booking fee</small>':'<small>2026 round trip + parking</small>')+'</div></div><div class="ferry-costs">'
+      +row(o.adults+' adults/teens + '+o.kids+' kids 5–12 + '+o.age4+' age four',o.priceUncertain?dollar(o.passengerMin)+"–"+dollar(o.passenger):dollar(o.passenger))
       +(o.bikes?row(o.bikes+' standard bike(s)',dollar(o.bikeCost)):"")
       +(o.parking?row(o.nights?'Parking, '+o.nights+' night(s)':'Standard day parking',dollar(o.parkCost)):"")
       +fees+'</div><div class="ferry-route"><p><strong>Ferry check-in:</strong> '+dock+' <a href="'+maps(o.dock)+'" target="_blank" rel="noopener">Dock directions ↗</a></p>'
@@ -93,8 +100,8 @@
     results.innerHTML='<div class="ferry-summary"><h3>Your ferry comparison</h3><p>Ranked '+(val.priority==="price"?"by published base cost":val.priority==="classic"?"for the classic boat experience, then by gateway and cost":"for the mainland gateway on your side of the bridge, then by cost")+'. Prices are for a round trip; the return must be checked for your date. No departure is reserved here.</p></div>'
       +'<div class="ferry-options">'+top.map((o,i)=>card(o,i,val.pets)).join("")+'</div>'
       +(extra.length?'<details class="ferry-more"><summary>Show '+extra.length+' more ferry and port alternatives</summary><div class="ferry-options">'+extra.map((o,i)=>card(o,i+3,val.pets)).join("")+'</div></details>':"")
-      +'<p class="ferry-disclaimer">*Where applicable, a free child’s boarding ticket may incur an additional fee. Arnold posts “all tickets subject to booking fee” without a flat amount. Prices exclude Mackinac Bridge tolls, lodging, transportation to the port, Island bike rental and any applicable nonstandard luggage charges. Overnight parking is estimated by billed nights; confirm cutoff times. Standard ferry tickets do not guarantee a seat on a specific departure.</p>';
-    try{if(typeof root.gtag==="function")root.gtag("event","mackinac_ferry_quote",{event_category:"mackinac_ferry",traveler_count:Number(val.adults)+Number(val.kids)+Number(val.infants),has_kids:Number(val.kids)+Number(val.infants)>0,has_bikes:Number(val.bikes)>0,has_military_rate:val.military});}catch(e){}
+      +'<p class="ferry-disclaimer">*The estimate includes Shepler’s $2 fee for all required boarding tickets, including free young-child tickets. Arnold posts “all tickets subject to booking fee” without a flat amount. Prices exclude Mackinac Bridge tolls, lodging, transportation to the port, Island bike rental and any applicable nonstandard luggage charges. Overnight parking is estimated by billed nights; confirm cutoff times. Standard ferry tickets do not guarantee a seat on a specific departure.</p>';
+    try{if(typeof root.gtag==="function")root.gtag("event","mackinac_ferry_quote",{event_category:"mackinac_ferry",traveler_count:Number(val.adults)+Number(val.kids)+Number(val.infants)+Number(val.age4),has_kids:Number(val.kids)+Number(val.infants)+Number(val.age4)>0,has_bikes:Number(val.bikes)>0,has_military_rate:val.military});}catch(e){}
   }
   form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
   form.addEventListener("change",render);
