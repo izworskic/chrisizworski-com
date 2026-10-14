@@ -16,10 +16,16 @@ function setTraverseLead(value,label,when,caveat,localText){
  write('lead-temp',value);write('lead-temp-label',label);
  write('lead-temp-when',when);write('lead-temp-caveat',caveat);
  write('lead-bay-status',localText);
+ const grid=payload?.regionalSatellite;
+ write('lead-grid-status',grid?.status==='recent'&&Number.isFinite(grid.measurement?.tempF)
+  ?format(grid.measurement.tempF)+' · '+time(grid.measurement.observedAt)+' (offshore satellite surface)'
+  :'No recent valid grid value');
 }
 function renderTraverseLead(){
  if(place!=='traverse-city'||!payload)return;
  const buoy=payload.local?.measurement,whole=payload.lakes?.michigan;
+ const grid=payload.regionalSatellite?.status==='recent'?payload.regionalSatellite.measurement:null;
+ const gridCurrent=Number.isFinite(grid?.tempF);
  const lakeCurrent=whole?.status==='recent'&&Number.isFinite(whole?.latest?.tempF);
  const buoyCurrent=Number.isFinite(buoy?.tempF);
  if(buoyCurrent){
@@ -27,6 +33,11 @@ function renderTraverseLead(){
    'Measured '+time(buoy.observedAt)+' · buoy location, not the beach',
    'An in-bay buoy reading is more relevant than a whole-lake average but does not measure shallow beach water.',
    format(buoy.tempF)+' · '+time(buoy.observedAt));
+ }else if(gridCurrent){
+  setTraverseLead(format(grid.tempF),'WEST GRAND TRAVERSE BAY · SATELLITE SURFACE GRID',
+   'NOAA GLSEA ACSPO · '+time(grid.observedAt)+' · offshore grid cell',
+   'Satellite-derived surface estimate near West Grand Traverse Bay, NOT a measured temperature at a Traverse City beach.',
+   'Not reporting · station 45020');
  }else if(lakeCurrent){
   const fallback=payload.source?.mode==='dated-official-fallback';
   setTraverseLead(format(whole.latest.tempF),'LAKE MICHIGAN · DAILY SURFACE AVERAGE',
@@ -73,7 +84,12 @@ function applyActivity(a){
  const v=payload.assessments[a];if(!v)return;
  write('feel-title',v.heading);
  write('feel-beach',v.beach);
- write('feel-water',v.water);
+ const satellite=place==='traverse-city'&&!payload.local?.measurement&&payload.regionalSatellite?.status==='recent'
+  ?payload.regionalSatellite.measurement:null;
+ write('feel-water',Number.isFinite(satellite?.tempF)
+  ?'NOAA satellite grid estimates an offshore West Grand Traverse Bay surface of '+format(satellite.tempF)+
+   '. This is not a beach water measurement, and shallow-water conditions may differ.'
+  :v.water);
  write('feel-after',v.after);
  write('feel-decision',v.decision);
 }
