@@ -59,3 +59,33 @@ test('real operating lift data never converts into guaranteed future opening',()
  assert.equal(a.weather.baseDepthInches,0);
  assert.notEqual(a.ranking.verdict,'CONFIRMED_OPEN');
 });
+
+test('Central-time ski areas get Saturday/Sunday windows in resort time, not Detroit time',()=>{
+ const now=Date.parse('2027-01-08T12:00:00Z');
+ const west=E.RESORTS.find(x=>x.slug==='snowriver');
+ const output=E.assemble(west,{},[],[],'detroit',now);
+ assert.equal(output.weather.weekend.timeZone,'America/Chicago');
+ assert.equal(new Date(output.weather.weekend.saturday.end).toISOString(),'2027-01-09T22:00:00.000Z');
+ const boyne=E.assemble(E.RESORTS.find(x=>x.slug==='boyne-mountain'),{},[],[],'detroit',now);
+ assert.equal(boyne.weather.weekend.timeZone,'America/Detroit');
+ assert.equal(new Date(boyne.weather.weekend.saturday.end).toISOString(),'2027-01-09T21:00:00.000Z');
+});
+test('snowmaking cold-air monitor uses NWS only and never asserts operations',()=>{
+ const now=Date.parse('2026-10-14T12:00:00Z');
+ const grid={properties:{temperature:{values:[
+  {validTime:'2026-10-14T12:00:00Z/PT10H',value:-4},
+  {validTime:'2026-10-14T22:00:00Z/PT12H',value:6}
+ ]}}};
+ const cold=E.snowmakingColdAir(grid,now);
+ assert.equal(cold.status,'COLD_AIR_WINDOW');
+ assert.equal(cold.hours,10);
+ assert.equal(cold.firstAt,'2026-10-14T12:00:00.000Z');
+ assert.match(cold.disclaimer,/NOT wet-bulb/);
+ assert.equal(E.snowmakingColdAir({},now).status,'UNAVAILABLE');
+});
+test('October has no ski-day score even with a positive NWS snow forecast',()=>{
+ const boyne=E.RESORTS.find(x=>x.slug==='boyne-mountain');
+ const score=E.scoreResort(boyne,{forecastSnowInches:10},'grandRapids',Date.parse('2026-10-14T16:00:00Z'));
+ assert.equal(score.score,null);
+ assert.equal(score.verdict,'OFF_SEASON_PLANNING');
+});
