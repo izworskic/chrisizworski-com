@@ -140,10 +140,13 @@ function pageHtml(p){
   if(p.slug==="ferry-planner"){
     p.title="Mackinac Island Ferry Tickets, Prices, Parking & Kids Fares (2026)";
     p.description="Compare 2026 Shepler’s and Arnold Mackinac Island ferry ticket prices, kids fares, military discounts, parking, bikes, pets, ports and official booking links.";
+    p.h1="Mackinac Island ferry tickets, family prices and parking";
+    p.lede="Pick your travel date and compare Shepler’s with Arnold Transit. See kids’ ticket prices, military rates, parking, bikes and the right ferry dock, then buy directly from the operator.";
   }
   const plannerTarget="#trip-intake";
   const originParam=p.origin?"&from="+encodeURIComponent(p.origin):"";
   const planner="/mackinac-island/?intent="+encodeURIComponent(p.intent)+originParam+plannerTarget;
+  const heroTarget=p.slug==="ferry-planner"?"#ferry-compare":planner;
   const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":p.slug==="ferry-planner"?"2026-10-14":"2026-09-29","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},{"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island Planner","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}]});
   const tone=(p.intent==="ferry-planner")?"ferries":(p.slug==="2-day-itinerary"?"plan":"explore");
   return `<!doctype html>
@@ -152,7 +155,7 @@ function pageHtml(p){
 <link rel="canonical" href="${canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${hero}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${hero}">${headAssets()}${p.slug==="ferry-planner"?'<link rel="stylesheet" href="/assets/mackinac-ferry-decision.css?v=20261014-1">':""}<script type="application/ld+json">${jsonLd}</script></head>
 <body data-mackinac-intent="${esc(p.analyticsIntent||p.intent)}">${siteHeader(navHtml("/mackinac-island/"+p.slug+"/"))}
-<main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:planner,primaryLabel:p.cta||"Use My Trip"})}
+<main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:heroTarget,primaryLabel:p.slug==="ferry-planner"?"Compare ferry fares":(p.cta||"Use My Trip")})}
 ${decisionStrip(p.decisions)}
 ${focusSlot()}
 ${p.slug==="ferry-planner"?ferryExperienceMarkup():""}
