@@ -26,7 +26,7 @@ test('source query is statewide rather than Great-Lakes gated',()=>{
 
 test('finder has exactly one search box and maps the full filtered inventory',()=>{
   assert.equal((html.match(/<input[^>]+type="search"/g)||[]).length,1);
-  assert.match(html,/Michigan boat launches, on one map/);
+  assert.match(html,/Michigan boat launches near me: DNR-backed ramp map/);
   assert.match(js,/markerClusterGroup/);
   assert.match(js,/for\(const a of mapSet\(\)\)/);
   assert.match(js,/const markerById=new Map\(\)/);
