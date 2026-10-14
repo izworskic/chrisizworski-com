@@ -1,0 +1,118 @@
+(function(){'use strict';
+const $=id=>document.getElementById(id),root=document.querySelector('[data-ski-page]');
+if(!root)return;
+const slug=root.getAttribute('data-resort');
+const state={data:null,origin:'detroit',region:'all'};
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e;}
+function add(parent,...children){children.forEach(x=>x&&parent.appendChild(x));return parent;}
+function external(label,url){const a=node('a',null,label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;}
+function fmt(x,unit=''){return Number.isFinite(x)?Number(x).toFixed(1).replace(/\.0$/,'')+unit:'Not verified';}
+function minutes(n){if(!Number.isFinite(n))return 'Unknown';return Math.floor(n/60)?Math.floor(n/60)+'h '+String(n%60).padStart(2,'0')+'m':n+'m';}
+function latest(r,h){const w=r.weather||{},p=h===24?w.report24:w.report48;
+ return p?fmt(p.inches,'" reported"')+' · '+p.distanceMiles+' mi away':'No nearby report';}
+function score(r){if(r.kind==='nordic')return null;
+ const old=r.ranking?.components?.travelValue??0;
+ const newTravel=Math.max(0,Math.round(22-(r.driveMinutes?.[state.origin]||999)/30));
+ const s=r.ranking?.score;
+ return Number.isFinite(s)?Math.max(0,Math.min(100,s-old+newTravel)):null;}
+function status(r){
+ const a=r.weather?.alerts||[];
+ if(r.kind==='nordic')return 'Nordic only — excluded from downhill ranking';
+ if(r.ranking?.verdict==='OFF_SEASON_PLANNING')return 'Off-season · 2026–27 planning only';
+ if(a.some(x=>/Warning/i.test(x.event)))return 'Winter warning · verify safe travel and lift openings';
+ if(!r.weather||r.weather.weatherCoverage!=='NWS_GRID_RECEIVED')return 'Forecast unavailable · verify official sources';
+ return 'Provisional comparison · verify lifts, snow base and ticket';
+}
+function chipsFor(r){
+ const w=r.weather||{},arr=[];
+ if(w.alerts?.some(a=>a.isLakeEffect))arr.push(['Lake-effect alert','lake']);
+ if(w.alerts?.some(a=>/Warning/i.test(a.event)))arr.push(['Active winter warning','alert']);
+ if(r.kind==='nordic')arr.push(['Nordic / XC','neutral']);
+ if(r.ranking?.verdict==='OFF_SEASON_PLANNING')arr.push(['Off season','neutral']);
+ if(w.forecastSnowInches!==null&&Number.isFinite(w.forecastSnowInches))arr.push([fmt(w.forecastSnowInches,'"″')+' forecast weekend snow','lake']);
+ if(w.weatherCoverage!=='NWS_GRID_RECEIVED')arr.push(['NWS grid unavailable','neutral']);
+ return arr;
+}
+function ticket(r){
+ const price=r.adultDayPrice2026;
+ if(!price?.sat)return r.priceNote||'See current pricing';
+ return '$'+price.sat+' Sat / $'+(price.sun||price.sat)+' Sun';
+}
+function card(r,index,detail=false){
+ const box=node('article','hill'),num=node('div','rank',r.kind==='nordic'?'XC':(index+1)),body=node('div');
+ const name=node('h3'),a=node('a',null,r.name);
+ a.href='/michigan-ski-hills/'+r.slug+'/';add(name,a);
+ add(body,name,node('p','subtitle',r.location+' · '+r.region.replaceAll('-',' ') ));
+ const chips=node('div','chips');chipsFor(r).forEach(([s,c])=>add(chips,node('span','chip '+c,s)));add(body,chips);
+ const metrics=node('div','metrics');
+ const data=[
+ ['Decision index',score(r)===null?'Not ranked':score(r)+'/100*'],
+ ['Forecast snow',fmt(r.weather?.forecastSnowInches,'″')],
+ ['Recent nearby',r.weather?.report24?fmt(r.weather.report24.inches,'″ reported'):'No 24h report'],
+ ['Drive · '+(state.origin==='detroit'?'Detroit':'Grand Rapids'),minutes(r.driveMinutes?.[state.origin])],
+ ['Adult lift ticket',ticket(r)],['Base depth','Not verified'],
+ ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Alert active':'No matching alert reported'],
+ ['Operating lifts','Not verified']
+ ];
+ data.forEach(([label,value])=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(metrics,m);});add(body,metrics);
+ add(body,node('p','verdict',status(r)),node('p','source-line',r.note));
+ if(detail){const links=node('div','source-links');add(links,external('Official snow / resort report ↗',r.snow),
+ external('Official tickets ↗',r.tickets));add(body,links);}
+ add(box,num,body);return box;
+}
+function warnings(data){
+ const target=$('lake-watch');if(!target)return;target.replaceChildren();
+ const errors=data.health||{},reported=data.resorts.filter(r=>r.weather?.alerts?.some(a=>a.isLakeEffect));
+ if(errors.nwsAlerts!=='RECEIVED'){add(target,node('p','event','NWS alerts are unavailable. Lake-effect warning status cannot be verified.'));return;}
+ if(!reported.length){add(target,node('p','small','No NWS lake-effect warning or lake-effect snow alert matched the monitored ski points in the current snapshot. This is not a zero-snowfall claim.'));return;}
+ const names=[...new Set(reported.map(r=>r.name))];
+ add(target,node('p','event','Lake-effect alerts currently match '+names.length+' destination(s): '+names.join(', ')+'. A warning can mean dangerous travel; check NWS and transportation agencies before leaving.'));
+}
+function sortResorts(arr){
+ return arr.slice().sort((a,b)=>(score(b)??-1)-(score(a)??-1)||a.name.localeCompare(b.name));
+}
+function render(){
+ if(!state.data)return;
+ if($('origin'))state.origin=$('origin').value;
+ if($('region'))state.region=$('region').value;
+ const info=state.data,stamp=$('updated');
+ if(stamp)stamp.textContent='NWS and storm-report snapshot '+new Date(info.generatedAt).toLocaleString('en-US',{timeZone:'America/Detroit',dateStyle:'medium',timeStyle:'short'})+' ET · Published prices dated October 2026 · Drive times estimated.';
+ warnings(info);
+ const target=$('resort-list');if(target){
+   const filtered=sortResorts(info.resorts.filter(r=>state.region==='all'||r.region===state.region));
+   target.replaceChildren();filtered.forEach((r,i)=>add(target,card(r,i)));
+   if($('count'))$('count').textContent=filtered.length+' destinations · '+filtered.filter(x=>x.kind==='downhill').length+' downhill hills. Ranked for the selected origin; missing data receives no positive points.';
+ }
+ const one=$('hill-live');
+ if(one){one.replaceChildren();const r=info.resorts.find(x=>x.slug===slug);
+   if(r){add(one,card(r,0,true));const comments=node('p','note','* Index is a provisional conditions-and-value comparison, not a confirmed go/no-go. Base depth, operating lifts and resort-specific 24/48h snowfall remain unverified. NWS point forecasts use approximate resort coordinates.');
+     add(one,comments);
+     for(const alert of r.weather.alerts){const ev=node('div','event');add(ev,node('strong',null,alert.event+' · '+(alert.headline||'Official weather warning')),node('p','small','This alert matched the resort forecast/county zone or warning polygon.'));add(ev,external('Open official alert ↗',alert.url));add(one,ev);}
+     const source=node('div','insights');
+     const old=node('article');add(old,node('h3',null,'Reported snowfall ≠ forecast'));
+     const rpt=r.weather.report48;
+     add(old,node('p',null,rpt?fmt(rpt.inches,'″')+' was reported '+rpt.distanceMiles+' miles from the resort at '+new Date(rpt.reportedAt).toLocaleString()+'.':'No NWS local storm report within 35 miles over 48 hours.'));
+     if(rpt)add(old,node('p','small','Reporting window unspecified. '+rpt.remark));
+     const upcoming=node('article');add(upcoming,node('h3',null,'Weekend snowfall forecast'),
+       node('p',null,fmt(r.weather.forecastSnowInches,'″')+' from the NWS digital forecast grid, not a measured resort total.'),
+       node('p','small','Snow predictions and alert zones can shift quickly. Resort and road authorities make operational decisions.'));
+     add(source,old,upcoming);add(one,source);
+   }else add(one,node('p','event','Hill not found in the current live response.'));
+ }
+}
+async function load(){
+ if($('updated'))$('updated').textContent='Checking NWS forecasts and reported snow…';
+ const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),45000);
+ try{
+   const res=await fetch('/api/michigan-ski',{signal:ctl.signal,cache:'default'});
+   if(!res.ok)throw Error('The live report is temporarily unavailable');
+   const data=await res.json();if(!data.ok||!Array.isArray(data.resorts)||data.resorts.length!==18)throw Error('Incomplete report');
+   state.data=data;render();
+ }catch(e){
+   if($('updated'))$('updated').textContent='Live conditions unavailable. The static resort directory and official source links below are still usable; no conditions are verified.';
+   if($('hill-live'))$('hill-live').append(node('p','event','Live conditions could not be verified. Use the official resort and NWS links below.'));
+ }finally{clearTimeout(tm);}
+}
+for(const id of ['origin','region'])if($(id))$(id).addEventListener('change',render);
+load();
+})();
