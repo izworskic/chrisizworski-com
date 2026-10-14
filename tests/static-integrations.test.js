@@ -102,7 +102,7 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   assert.ok(visibleUrls.length >= 43, "retain the existing catalog");
   assert.equal(itemList.numberOfItems, visibleUrls.length);
   assert.deepEqual(itemList.itemListElement.map(entry => entry.item.url), visibleUrls);
-  assert.ok(visibleUrls.includes("https://chrisizworski.com/mackinac-island/"));
+  assert.ok(visibleUrls.includes("https://chrisizworski.com/mackinac-island/ferry-planner/"));
   assert.ok(html.indexOf('id="finder"') < html.indexOf('class="winter-router"'), "finder precedes seasonal routing");
   // Derived from git, so pin the shape not the day.
   assert.match(collection.dateModified, /^\d{4}-\d{2}-\d{2}$/);

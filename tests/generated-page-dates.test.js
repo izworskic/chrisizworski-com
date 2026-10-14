@@ -36,10 +36,10 @@ test('unchanged output is not rewritten', async () => {
   assert.equal(fs.readFileSync(file, 'utf8'), '<p>"dateModified":"2026-09-23"</p>');
 });
 
-test('the Mackinac generators write through the date-preserving helper', () => {
-  for (const f of ['generate-mackinac-hub-pages.mjs', 'generate-mackinac-intent-pages.mjs']) {
-    const src = fs.readFileSync(path.join(__dirname, '..', 'scripts', f), 'utf8');
-    assert.match(src, /writeGeneratedPage\(/, f);
-    assert.doesNotMatch(src, /fs\.writeFileSync\(path\.join\(dir,\s*"index\.html"\)/, f);
-  }
+test('retired Mackinac generators cannot recreate the trip-planner hub', () => {
+ for(const name of ['generate-mackinac-hub-pages.mjs','generate-mackinac-intent-pages.mjs']){
+  const src=fs.readFileSync(path.join(__dirname,'..','scripts',name),'utf8');
+  assert.doesNotMatch(src,/writeGeneratedPage\(/,name);
+  assert.match(src,/retired|Retired|Preserving/,name);
+ }
 });
