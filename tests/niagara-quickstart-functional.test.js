@@ -11,7 +11,7 @@ test('QSTART-01: two-hour button means public viewpoints ONLY (US and Canada)',(
   const r=run({trip_style:'short',priority:'views',duration_minutes:120,starting_side:side});
   assert.equal(r.visit_style,'short');
   assert.ok(r.stops.length>0,'no view route for '+side);
-  assert.ok(r.stops.length<=2);
+  assert.equal(r.stops.length,2,'two distinct public viewpoints fit with a 15-minute buffer on '+side);
   assert.ok(r.stops.every(s=>s.type==='view'),'a paid stop was slipped into '+side+' scenic plan');
   assert.equal(r.costs[0].known_admission_total,0);
   assert.match(r.verdict,/Short scenic visit/);
