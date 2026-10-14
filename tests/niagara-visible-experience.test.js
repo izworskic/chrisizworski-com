@@ -34,3 +34,13 @@ test('map preview adds real pins without polylines and never fabricates boat acc
  assert.doesNotMatch(before,/L\.polyline|dashArray/);
  assert.match(before,/mapsSearch\(s\.location\)/);
 });
+
+test('visible releases bypass stale four-hour browser asset cache',()=>{
+ const manifest=JSON.parse(read('vercel.json'));
+ for(const asset of ['niagara-falls-today.css','niagara-falls-today.js','niagara-visit-map.js']){
+  assert.match(html,new RegExp('/assets/'+asset.replace('.','\\.')+'\\?v=niagara-visible-20261013a'));
+ }
+ const rules=manifest.headers.filter(h=>/niagara-falls-today|niagara-visit-map/.test(h.source));
+ assert.equal(rules.length,2);
+ for(const rule of rules)assert.ok(rule.headers.some(h=>h.key==='Cache-Control'&&h.value.includes('max-age=0')));
+});
