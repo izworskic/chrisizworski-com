@@ -3,12 +3,15 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const html=read('public/niagara-falls-today/index.html');
 const js=read('public/assets/niagara-falls-today.js');
-test('V6 page puts the actual planning decision above video and wayfinding',()=>{
+test('route-first layout puts planner, mapped directions, then video',()=>{
  const planner=html.indexOf('<div class="primary-grid">');
- const film=html.indexOf('<section class="falls-films');
  const map=html.indexOf('<section class="wayfinding-panel"');
- assert.ok(planner>0&&film>planner&&map>film);
- assert.ok(html.indexOf('id="plan-form"')<film);
+ const film=html.indexOf('<section class="falls-films');
+ assert.ok(planner>0&&map>planner&&film>map);
+ assert.ok(html.indexOf('id="plan-form"')<map);
+ assert.ok(html.indexOf('name="starting_side"')<html.indexOf('data-niagara-preset="boat"'));
+ assert.ok(html.indexOf('data-niagara-preset="boat"')<html.indexOf('name="arrival_mode"'));
+ assert.match(html,/<details class="travel-details">/);
  assert.equal((html.match(/<img /g)||[]).length,4,'one hero and three compact film thumbnails');
 });
 test('query-first title, canonical and one owner identity are maintained',()=>{
