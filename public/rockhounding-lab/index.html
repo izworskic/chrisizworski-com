@@ -137,8 +137,26 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
  </div>
  <p class="privacy">Historical source: NOAA NDBC THREDDS 45004h9999, significant wave height (meters), sampled approximately every 3 hours. Missing readings omitted and shown as gaps. Wave direction and local stone observations are not included in this dataset.</p>
 </section>
+<section class="panel pad" id="charted-geography" aria-labelledby="charted-geography-title">
+ <div class="subhead"><h2 id="charted-geography-title">Why the shoreline matters</h2><p>Actual NOAA charted geography checked against independent Great Lakes water/land mapping. These findings are not live surf or a rock-finding forecast.</p></div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-top:16px">
+  <div style="border:1px solid #d5e0dc;border-radius:12px;padding:17px;background:#f6faf8">
+   <div class="kicker">AGATE BEACH · OPEN LAKE</div>
+   <div style="font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.18;margin-top:8px">337° <span style="font-size:16px;font-weight:600;color:#44645e">NNW</span></div>
+   <p style="font-size:14px">Historic NOAA coastline tangent suggests a northwest-facing research shoreline. Six independent water/land tests agreed with the lakeward side.</p>
+   <small style="display:block;color:#5c7069">2014 chart source · research bearing only, not a surveyed 2026 shoreline normal.</small>
+  </div>
+  <div style="border:1px solid #d5e0dc;border-radius:12px;padding:17px;background:#f6faf8">
+   <div class="kicker">BAYSHORE PARK · PROTECTED HARBOR</div>
+   <div style="font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.18;margin-top:8px">2 <span style="font-size:16px;font-weight:600;color:#44645e">charted piers</span></div>
+   <p style="font-size:14px">NOAA charts two substantial harbor-entrance piers. A mapped pier does not tell us how much the waves diminish behind it.</p>
+   <small style="display:block;color:#5c7069">Chart geometry from 2004–2014; condition, depth and wave attenuation remain unverified.</small>
+  </div>
+ </div>
+ <p style="font-size:13px;margin-top:14px;color:#536b67">Source: <a href="https://gis.charttools.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer" target="_blank" rel="noopener noreferrer">NOAA ENC Direct</a>, checked against <a href="https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Great_Lakes_MAP_ALL__5/FeatureServer/0" target="_blank" rel="noopener noreferrer">GLAHF mapped water</a>. <strong>Neither beach has a validated wave or safety verdict.</strong></p>
+</section>
 <div class="notice"><strong>Rock collecting and public access:</strong> Public beach access does not by itself authorize removing rocks from every segment. Check posted township rules and seasonal access notices. National Park Service beaches can prohibit collection. This design does not provide directions to unverified parking gates.</div>
-<p class="privacy">Prototype only. All example wave values are embedded in this page and are not fetched from NOAA. No device location, personal data, account, tracking, or map key is needed.</p>
+<p class="privacy">Prototype only. Simulated wave scenarios are embedded in this page; the separate historical buoy chart loads dated NOAA observations. The shoreline summary is historic NOAA chart research, not live beach weather. No device location, personal data, account, tracking, or map key is needed.</p>
 </main>
 <footer class="foot"><div class="wrap"><div><strong>Michigan Rockhounding / Post-Storm Lab</strong><div style="font-size:12px;margin-top:5px">A decision-engine concept built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</div></div><small>Sources for the future engine: NOAA Great Lakes waves, NOAA buoy observations, NWS marine warnings, Michigan EGLE and public shoreline access records. Nothing on this prototype constitutes a safety assessment.</small></div></footer>
 <script>

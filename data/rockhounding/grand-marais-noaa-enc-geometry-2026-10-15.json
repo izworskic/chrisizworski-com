@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "grand-marais-noaa-enc-geometry-v1",
+  "observedAtUTC": "2026-10-15T22:59:00Z",
+  "modelDataSource": "NOAA_OFFICE_OF_COAST_SURVEY_ENC_DIRECT_TO_GIS",
+  "source": {
+    "mapServer": "https://gis.charttools.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer",
+    "coastlineLayer": 84,
+    "coastlineObjectId": 1938304,
+    "pierLayer": 85,
+    "pierObjectIds": [
+      2496904,
+      2496908
+    ],
+    "chartName": "Chart 14962",
+    "dataset": "US5MI77M.000",
+    "originalFeatureSourceDateRange": "2004-02 / 2014-01",
+    "sourceCoordinatesCRS": "EPSG:4326",
+    "independentWaterSide": "https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Great_Lakes_MAP_ALL__5/FeatureServer/0",
+    "externalVerificationRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38820785757",
+    "latestOfficialHarborContext": "https://lre-ops.usace.army.mil/OandM/factsheets/GrandMaraisHarborMI.pdf",
+    "sourceGeometryNotSurveyedCurrent": true
+  },
+  "agate": {
+    "siteId": "grand-marais-agate",
+    "studyAnchor": {
+      "lat": 46.676,
+      "lon": -85.9853
+    },
+    "nearestChartLinePoint": {
+      "lat": 46.6767279,
+      "lon": -85.9856576
+    },
+    "studyAnchorToChartLineMeters": 85.5,
+    "researchOutwardBearingDeg": 336.74,
+    "compassSector": "NNW",
+    "bearingMethod": "Historical 2014 NOAA ENC shoreline, 200m centered coastline tangent; choose normal by independent GLAHF mapped water-land probes",
+    "tangentSmoothingWindowMeters": [
+      55,
+      100,
+      175
+    ],
+    "windowResearchBearingsDeg": [
+      336.73,
+      336.74,
+      335.08
+    ],
+    "observedSmoothingSpreadDeg": [
+      335.08,
+      336.74
+    ],
+    "experimentalSourceBearingUncertaintyStatus": "NOT_ESTIMATED_FROM_GEODETIC_SURVEY_OR_RECENT_WATERLINE",
+    "independentGISWaterSideConfirmed": true,
+    "independentSideProbeDistancesMeters": [
+      120,
+      200,
+      350
+    ],
+    "waterSideProbes": [
+      {
+        "distanceM": 120,
+        "lon": -85.986278,
+        "lat": 46.6777183,
+        "class": "WATER"
+      },
+      {
+        "distanceM": 200,
+        "lon": -85.9866916,
+        "lat": 46.6783785,
+        "class": "WATER"
+      },
+      {
+        "distanceM": 350,
+        "lon": -85.987467,
+        "lat": 46.6796165,
+        "class": "WATER"
+      }
+    ],
+    "landSideProbes": [
+      {
+        "distanceM": 120,
+        "lon": -85.9850372,
+        "lat": 46.6757375,
+        "class": "LAND"
+      },
+      {
+        "distanceM": 200,
+        "lon": -85.9846236,
+        "lat": 46.6750773,
+        "class": "LAND"
+      },
+      {
+        "distanceM": 350,
+        "lon": -85.9838482,
+        "lat": 46.6738393,
+        "class": "LAND"
+      }
+    ],
+    "waveFacingResearchOnly": true,
+    "approvedToPopulateReviewedWaterlineBearing": false,
+    "currentWaterlineSurveyed": false,
+    "lakewardWaveTransformationValidated": false
+  },
+  "bayshore": {
+    "siteId": "grand-marais-harbor",
+    "pierInfrastructure": "TWO_NOAA_ENC_CHARTED_HARBOR_PIERS",
+    "piers": [
+      {
+        "sourceId": 2496904,
+        "sourceDate": "200402",
+        "chartedCategory": "pier",
+        "northEnd": {
+          "lat": 46.6808034,
+          "lon": -85.9695341
+        },
+        "southEnd": {
+          "lat": 46.6763501,
+          "lon": -85.96877
+        },
+        "northSouthSpanMeters": 496,
+        "isPierCenterlineLength": false
+      },
+      {
+        "sourceId": 2496908,
+        "sourceDate": "201401",
+        "chartedCategory": "pier",
+        "northEnd": {
+          "lat": 46.6838439,
+          "lon": -85.9719051
+        },
+        "southEnd": {
+          "lat": 46.6763835,
+          "lon": -85.971219
+        },
+        "northSouthSpanMeters": 830,
+        "isPierCenterlineLength": false
+      }
+    ],
+    "chartPiersAreNotProofOfOperative2026StructureCondition": true,
+    "hydrodynamicAttenuationModeled": false,
+    "assessedWaveShelterFactor": null,
+    "breakwaterTransmissionFactor": null,
+    "verifiedHarborDepthContours": false,
+    "canUseAgateOpenLakeWaveCell": false
+  },
+  "verification": {
+    "noRealTimeConditionsClaim": true,
+    "sourceFeatureIdsChecked": true,
+    "sameLocationGISHistoricWaterSideChecked": true,
+    "canClaimHarborCalm": false,
+    "canPublishNearshoreWaves": false,
+    "canClaimNewStoneExposure": false,
+    "canPublishPostStormVisitWindow": false,
+    "canClaimSafeWater": false,
+    "canClaimRockCollectingPermission": false
+  },
+  "status": "HISTORIC_NOAA_ENC_NORMAL_CANDIDATE_AND_CHARTED_HARBOR_PIERS_NO_SURF_VERDICT"
+}

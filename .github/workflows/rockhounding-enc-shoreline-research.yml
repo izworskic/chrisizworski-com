@@ -1,0 +1,45 @@
+name: Rockhounding NOAA ENC Grand Marais shoreline and harbor geometry
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-noaa-enc-shore-20261015
+    paths:
+      - .github/workflows/rockhounding-enc-shoreline-research.yml
+
+permissions:
+  contents: read
+
+jobs:
+  remote-noaa-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax-check NOAA ENC geometry adapter before external requests
+        run: python3 -m py_compile scripts/rockhounding/verify-noaa-enc-shoreline.py
+      - name: Verify charted NOAA shoreline, harbor piers, and six independent GLAHF transect probes
+        run: |
+          python3 scripts/rockhounding/verify-noaa-enc-shoreline.py \
+            --out artifacts/grand-marais-noaa-enc-2026-research.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run rockhounding safety, ENC orientation, and public research-page regression suite
+        run: node --test tests/rockhounding*.test.js
+      - name: Run Python geometry and NOAA source integrity tests
+        run: |
+          python3 -m py_compile scripts/rockhounding/*.py
+          python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
+      - name: Retain authentic NOAA ENC and independent GLAHF chart-normal research artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-noaa-enc-shoreline-and-piers
+          path: artifacts/grand-marais-noaa-enc-2026-research.json
+          retention-days: 30
+          if-no-files-found: warn

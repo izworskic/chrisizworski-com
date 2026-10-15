@@ -35,3 +35,13 @@ test('visual preview remains keyless and does not insert native ad scripts or a 
  assert.doesNotMatch(html,/<link rel="canonical"/);
  assert.ok((html.match(/<script>/g)||[]).length>=2);
 });
+
+test('research page labels the source-backed NNW chart normal and two piers without asserting beach safety',()=>{
+ assert.match(html,/id="charted-geography"/);
+ assert.match(html,/337°/);
+ assert.match(html,/2 <span[^>]*>charted piers<\/span>/);
+ assert.match(html,/not a surveyed 2026 shoreline normal/);
+ assert.match(html,/Neither beach has a validated wave or safety verdict/);
+ assert.match(html,/No device location, personal data/);
+ assert.doesNotMatch(html,/guaranteed.*agate|harbor is safe/i);
+});
