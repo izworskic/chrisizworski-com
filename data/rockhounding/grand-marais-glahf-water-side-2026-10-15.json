@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "grand-marais-glahf-water-side-v1",
+  "retrievedAt": "2026-10-15T22:40:22Z",
+  "source": {
+    "url": "https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Great_Lakes_MAP_ALL__5/FeatureServer/0",
+    "dataDescription": "GLAHF Great Lakes water polygons based in part on NHD 1:24,000 and EPA bays",
+    "derivationVintage": "2013-2014; NOT surveyed 2026 wetline",
+    "datum": "EPSG:4326",
+    "method": "Individual ArcGIS REST point intersections; count 1 = polygon water, count 0 = outside polygon",
+    "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38818672200"
+  },
+  "sites": {
+    "grand-marais-agate": {
+      "label": "Agate Beach",
+      "anchor": {
+        "lat": 46.676,
+        "lon": -85.9853
+      }
+    },
+    "grand-marais-harbor": {
+      "label": "Bayshore Park",
+      "anchor": {
+        "lat": 46.6719,
+        "lon": -85.9839
+      }
+    }
+  },
+  "sampledLocations": [
+    {
+      "id": "agate_north_450m",
+      "siteId": "grand-marais-agate",
+      "role": "OPEN_NORTH_REFERENCE",
+      "coordinate": {
+        "lat": 46.68,
+        "lon": -85.9853
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "agate_north_900m",
+      "siteId": "grand-marais-agate",
+      "role": "FAR_OPEN_NORTH",
+      "coordinate": {
+        "lat": 46.6841,
+        "lon": -85.9853
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "agate_south_350m",
+      "siteId": "grand-marais-agate",
+      "role": "BEHIND_BEACH_LAND",
+      "coordinate": {
+        "lat": 46.67285,
+        "lon": -85.9853
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "agate_south_650m",
+      "siteId": "grand-marais-agate",
+      "role": "FAR_BEHIND_BEACH_LAND",
+      "coordinate": {
+        "lat": 46.67015,
+        "lon": -85.9853
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "agate_500m_wave_candidate",
+      "siteId": "grand-marais-agate",
+      "role": "NOAA_500M_WET_CELL",
+      "coordinate": {
+        "lat": 46.68,
+        "lon": -85.984978
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "agate_2p5km_north_candidate",
+      "siteId": "grand-marais-agate",
+      "role": "NOAA_2P5KM_OPEN_SIDE_CANDIDATE",
+      "coordinate": {
+        "lat": 46.688341,
+        "lon": -85.976613
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "agate_2p5km_south_nearest",
+      "siteId": "grand-marais-agate",
+      "role": "REJECTED_SOUTH_OF_AGATE_GIS_LAND_MODEL_DISAGREEMENT",
+      "coordinate": {
+        "lat": 46.667276,
+        "lon": -85.978659
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "bayshore_east_750m",
+      "siteId": "grand-marais-harbor",
+      "role": "HARBOR_EAST_WATER",
+      "coordinate": {
+        "lat": 46.6719,
+        "lon": -85.9741
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "bayshore_east_1100m",
+      "siteId": "grand-marais-harbor",
+      "role": "EAST_OPEN_WATER_UNVERIFIED_HARBOR_ROUTE",
+      "coordinate": {
+        "lat": 46.6719,
+        "lon": -85.9695
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "bayshore_west_500m",
+      "siteId": "grand-marais-harbor",
+      "role": "BEHIND_HARBOR_LAND",
+      "coordinate": {
+        "lat": 46.6719,
+        "lon": -85.9904
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "bayshore_west_850m",
+      "siteId": "grand-marais-harbor",
+      "role": "FAR_BEHIND_HARBOR_LAND",
+      "coordinate": {
+        "lat": 46.6719,
+        "lon": -85.995
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "bayshore_500m_wave_candidate",
+      "siteId": "grand-marais-harbor",
+      "role": "NOAA_500M_NEARBY_MODEL_CELL",
+      "coordinate": {
+        "lat": 46.673,
+        "lon": -85.974978
+      },
+      "expectedResearchClass": "WATER",
+      "gisClass": "WATER"
+    },
+    {
+      "id": "bayshore_north_500m",
+      "siteId": "grand-marais-harbor",
+      "role": "HARBOR_NORTH_GIS_LAND_CROSS_CHECK",
+      "coordinate": {
+        "lat": 46.6764,
+        "lon": -85.9839
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    },
+    {
+      "id": "bayshore_south_500m",
+      "siteId": "grand-marais-harbor",
+      "role": "SOUTH_LAND_CONTEXT",
+      "coordinate": {
+        "lat": 46.6674,
+        "lon": -85.9839
+      },
+      "expectedResearchClass": "LAND",
+      "gisClass": "LAND"
+    }
+  ],
+  "gates": {
+    "agateLakewardWaterSideSupported": true,
+    "harborSeparatelyMappedWaterSideSupported": true,
+    "allTransectExpectationsMet": true,
+    "unexpectedClassifications": [],
+    "shorelineBearingSurveyed": false,
+    "hydrodynamicOpenLakeFetchVerified": false,
+    "harborBreakwaterShelterQuantified": false,
+    "gisSnapshotPermitsSurfForecast": false,
+    "gisSnapshotPermitsRockExposureClaims": false
+  },
+  "status": "RESEARCH_GIS_WATER_SIDE_ONLY",
+  "canRecommendVisit": false,
+  "canInferCollectingPermission": false,
+  "canMeasureAgateBeachWaves": false,
+  "canInferShelteredHarborWaveHeight": false,
+  "importantConflicts": [
+    {
+      "id": "GLWU_COARSE_MODEL_CELL_VS_GLAHF_WATER_MASK",
+      "pointId": "agate_2p5km_south_nearest",
+      "explanation": "NOAA 2.5km wave model treated this geographic nearest point as valid water while older GLAHF NHD-derived polygon places its center outside mapped open water. Do not model Agate surf from it."
+    }
+  ],
+  "warnings": [
+    "Historic GLAHF water polygon and approximate shore site coordinates do not survey current waterline or grant access.",
+    "A water cell north of Agate is necessary but not sufficient for local surf or storm exposure.",
+    "A mapped harbor-side water cell is not proof of calm conditions or quantified breakwater protection."
+  ]
+}
