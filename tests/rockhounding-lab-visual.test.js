@@ -5,7 +5,7 @@ const evidence=require('../public/rockhounding-lab/ndbc-45004-2026.json');
 test('noindex research page maintains source-vs-simulation labeling',()=>{
  assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
  assert.match(html,/NOT LIVE WEATHER/);
- assert.match(html,/REAL STORMS|Real storms/);
+ assert.match(html,/Observed offshore wave events/);
  assert.match(html,/not.*waves measured at Agate Beach/i);
 });
 test('historical visible view has three selectable NOAA episodes',()=>{
