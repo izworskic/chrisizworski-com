@@ -26,11 +26,17 @@ jobs:
         run: |
           python scripts/rockhounding/audit-usace-2026-deliverable.py \
             --out artifacts/grand-marais-usace-2026-survey-deliverable-audit.json
+      - name: Inspect original bounded 4MB USACE survey ZIP, XYZ and accompanying datum metadata
+        run: |
+          python scripts/rockhounding/inspect-usace-2026-zip.py \
+            --out artifacts/grand-marais-usace-2026-survey-archive-metadata.json
       - name: Keep source and coverage audit with no assumed safe depth
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rockhounding-usace-2026-deliverable-source-audit
-          path: artifacts/grand-marais-usace-2026-survey-deliverable-audit.json
+          path: |
+            artifacts/grand-marais-usace-2026-survey-deliverable-audit.json
+            artifacts/grand-marais-usace-2026-survey-archive-metadata.json
           retention-days: 30
           if-no-files-found: warn
