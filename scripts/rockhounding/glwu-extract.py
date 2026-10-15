@@ -23,7 +23,7 @@ SITES=(
 def url_for(day,cycle,grid='2p5km'):
  if len(day)!=8 or not day.isdigit():raise ValueError('Need YYYYMMDD')
  dt.datetime.strptime(day,'%Y%m%d')
- if cycle not in ('00','06','12','18'):raise ValueError('Need 00/06/12/18 UTC')
+ if cycle not in tuple(f'{h:02d}' for h in range(24)):raise ValueError('Need an hourly 00-23 UTC cycle')
  if grid not in GRIDS:raise ValueError('Unrecognized GLWU grid')
  q={'file':f'{GRIDS[grid]}.t{cycle}z.grib2','var_HTSGW':'on',
  'var_WVPER':'on','var_WVHGT':'on','var_WVDIR':'on','lev_surface':'on',
@@ -109,7 +109,7 @@ def extract(path,grid='2p5km'):
 def main(argv=None):
  ap=argparse.ArgumentParser(description=__doc__)
  ap.add_argument('--date',required=True,help='YYYYMMDD UTC')
- ap.add_argument('--cycle',required=True,choices=('00','06','12','18'))
+ ap.add_argument('--cycle',required=True,choices=tuple(f'{h:02d}' for h in range(24)))
  ap.add_argument('--grid',choices=tuple(GRIDS),default='2p5km',help='2.5 km Great Lakes or 500 m Great Lakes product; neither certifies harbor waves')
  mode=ap.add_mutually_exclusive_group(required=True)
  mode.add_argument('--grib-file')
