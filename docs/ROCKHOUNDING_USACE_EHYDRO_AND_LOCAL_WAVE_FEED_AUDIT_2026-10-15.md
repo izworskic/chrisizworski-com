@@ -21,7 +21,7 @@ Research milestone: **October 15, 2026**. This is a **source-discovery and prove
 
 ## Remaining hard gates
 
-- Inspect the live bounded eHydro catalog audit artifact. If survey jobs are returned, review the actual attached deliverables, survey date and geographic coverage before calling the bathymetry current. A survey catalog entry alone does not validate depth or wave attenuation.
+- **Verified October 15 live USACE eHydro catalog:** 10 named matching Grand Marais Harbor survey jobs were returned. Most recent survey job: **July 30, 2026** (USACE CELRE, catalog OBJECTID 125722, survey type CS), uploaded September 11, 2026. Additional verified yearly survey jobs: 2025, 2024, 2023, 2022 and 2021, plus earlier entries. [Source workflow and full archived response](https://github.com/izworskic/chrisizworski-com/actions/runs/38824773510). The bounded audit is frozen in `data/rockhounding/grand-marais-usace-ehydro-survey-catalog-2026-10-15.json`. **Next:** inspect actual 2026 survey deliverable, datum and geographic coverage before claiming current bathymetry. A survey catalog entry alone does not validate depth or wave attenuation. A survey catalog entry alone does not validate depth or wave attenuation.
 - **Measured local harbor wave observation or calibrated sheltered-harbor numerical wave model remains missing.** Neither 45172 nor GRMM4 fills that gap.
 - Validate observed post-storm reshuffling/rock finds, shore access/collecting permissions, nearshore hazards and ice. **Never publish "best time to rockhound", "safe beach" or "fresh agates" until these independent gates are satisfied.**
 
