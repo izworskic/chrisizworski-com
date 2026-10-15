@@ -106,4 +106,6 @@ The access benchmark now includes eight deterministic access/geometry tests plus
 
 Run `node --test tests/rockhounding-m1*.test.js` as a focused suite and `npm run verify:all` before merge. CI on the existing draft PR is the authoritative check; no public deployment or Search Console effect is claimed.
 
-**Exactly one next action:** Confirm township and park operator-specific collecting rules plus a verified legal parking-to-shore access route at Grand Marais Agate Beach and Bayshore Park, then independently digitize the waterline normal for the pair before any live wave conclusion.
+**Superseding research direction, October 15:** Burt Township's 2026 recreation plan documents Agate Beach as a public rockhounding site with boardwalk parking. The user approved proceeding without an operator email. Location discovery may use source-backed general arrival guidance, retaining posted-rule caveats and never inventing an exact parking pin or collection permit. See `docs/ROCKHOUNDING_PUBLIC_DESTINATION_AND_WAVE_PROTOTYPE_2026-10-15.md`.
+
+**Exactly one next action:** Implement and validate NOAA GLWU nearshore wet-cell sampling and exposed/sheltered shoreline bearings for the Grand Marais pair; the township email is not a prerequisite.
