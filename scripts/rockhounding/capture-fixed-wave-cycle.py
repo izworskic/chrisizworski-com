@@ -65,7 +65,7 @@ def capture(day,cycle):
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
  ap.add_argument('--date',required=True,help='YYYYMMDD UTC')
- ap.add_argument('--cycle',required=True,choices=('00','06','12','18'))
+ ap.add_argument('--cycle',required=True,choices=tuple(f'{h:02d}' for h in range(24)))
  ap.add_argument('--output',required=True)
  args=ap.parse_args()
  snapshot=capture(args.date,args.cycle)
