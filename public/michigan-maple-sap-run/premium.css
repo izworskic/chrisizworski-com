@@ -72,3 +72,21 @@ footer{margin-top:43px}
 @media(max-width:760px){.hero-grid{grid-template-columns:1fr;padding:0}.hero-copy{padding:33px 18px 26px}.hero-photo{min-height:205px}.hero-facts{margin-top:15px}.decision-grid,.layout-two{grid-template-columns:1fr}.process-wrap{grid-template-columns:1fr}.process-photo{min-height:220px}.process-equation{grid-template-columns:1fr 22px 1fr 22px 1fr}.venue-visual{height:144px}}
 @media(max-width:550px){header .top{padding:12px 15px}header nav{gap:10px}.brand{font-size:15px}.hero-copy{padding:25px 15px}.hero-photo{min-height:180px}.hero h1{font-size:34px}.hero p{font-size:14px}.hero-cta{gap:8px}.hero-cta a{font-size:12px}.hero-facts span{font-size:10px}.panel-pad{padding:16px}.readout{padding:18px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.process-wrap{display:block}.process-photo{margin-top:12px;height:190px}.process-step .process-icon{width:43px;height:43px;font-size:22px}.process-step strong{font-size:10px}.process-step small{font-size:9px}.venue-visual{height:180px}.map-frame{height:320px}#sapForecastChart{margin-left:-6px;width:calc(100% + 12px)}}
 @media(prefers-reduced-motion:reduce){.board button{transition:none}}
+
+/* Do not hide or alter advertising. Put the answer above any placement chosen by Auto ads.
+   Ads inserted inside the old kicker previously pushed the H1 below the first mobile viewport. */
+.hero-grid{align-items:stretch}
+.hero-copy{display:block;min-height:0;align-self:start;padding-top:42px;padding-bottom:36px}
+.hero-copy h1{margin-top:0}
+.hero-kicker{display:block;font:750 10px/1.5 system-ui,-apple-system,sans-serif;letter-spacing:.16em;color:#f0c18b;margin-bottom:18px}
+.hero-photo{align-self:stretch;min-height:375px}
+@media(max-width:760px){
+  .hero-photo{order:-1;min-height:190px;height:190px}
+  .hero-copy{padding-top:20px;padding-bottom:20px}
+  .hero-kicker{margin-bottom:10px}
+}
+@media(max-width:550px){
+  .hero-photo{height:170px;min-height:170px}
+  .hero-copy h1{font-size:32px;margin-bottom:12px}
+  .hero-copy{padding:19px 15px 24px}
+}
