@@ -51,3 +51,12 @@ test('Grand Marais geometry separates documented open and sheltered beach resear
  assert.ok(coordsH.some(p=>p[1]<46.672));
 });
 
+
+test('OSM footpaths are candidate geometry and cannot be published as legal parking-to-shore directions',()=>{
+ const routes=JSON.parse(require('node:fs').readFileSync(require('node:path').join(__dirname,'../data/rockhounding/grand-marais-route-candidates.geojson'),'utf8'));
+ assert.equal(routes.features.length,3);
+ assert.ok(routes.features.every(f=>f.properties.routeStatus==='OSM_CANDIDATE_CURRENT_ACCESS_UNVERIFIED'&&!f.properties.legalPublicUseVerified));
+ assert.ok(routes.features.every(f=>f.geometry.type==='LineString'&&f.geometry.coordinates.length>=2));
+ assert.ok(routes.features.some(f=>f.properties.osmWayId===369178056&&f.properties.siteId==='grand-marais-agate'));
+ assert.ok(routes.features.some(f=>f.properties.tags.highway==='steps'));
+});
