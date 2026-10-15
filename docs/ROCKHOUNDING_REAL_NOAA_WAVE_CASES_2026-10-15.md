@@ -49,6 +49,17 @@ python3 scripts/rockhounding/glwu-extract.py --date 20261015 --cycle 12 --grid 5
 
 Do not poll NOAA per visitor. Download a bounded subset on a schedule and cache for all site users, honoring NOAA's grib-filter fair-use guidance.
 
+
+## Local Grand Marais wind source (not wave height)
+
+NOAA/NDBC publishes **GRMM4** at 46.684 N, 85.972 W, owned and maintained by NWS Marquette. Its standard meteorological feed provides actual local wind direction, speed and gusts, generally much closer to the shoreline than open-water buoy 45004. **Its WVHT (wave height) field is unavailable, so this station must never become a local beach wave-height observation.**
+
+- Source: https://www.ndbc.noaa.gov/station_realtime.php?station=GRMM4
+- Raw source: https://www.ndbc.noaa.gov/data/realtime2/GRMM4.txt
+- Implementation: `lib/rockhounding/grand-marais-local-wind.cjs` parses this source and returns `OBSERVED_LOCAL_WIND_NOT_WAVES` only when recent data is sufficiently present. Missing, sparse or stale data do not produce an all-clear. `WDIR` means **wind from**; never substitute it for GLWU `WVDIR` (**wave from**).
+- `tests/rockhounding-local-wind.test.js` covers fresh, sparse, stale, unavailable and wind-vs-wave errors. This is currently an independent backend adapter and not a live visitor verdict.
+
+
 ## Release and research gates
 
 1. **Before any site-specific post-storm verdict:** decode both GLWU grids and measure valid wet cells, direction, timestamps and proximity to *each* target; inspect shoreline exposure and harbor sheltering independently.
