@@ -25,6 +25,15 @@ jobs:
         run: |
           python3 scripts/rockhounding/validate-grand-marais-water-side.py \
             --out artifacts/grand-marais-water-side-glahf.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify geological-source trust boundaries and model-cell exclusions
+        run: node --test tests/rockhounding*.test.js
+      - name: Check source sampling syntax and pure NOAA parser tests
+        run: |
+          python3 -m py_compile scripts/rockhounding/*.py
+          python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
       - name: Preserve source-stamped, no-key geographic data for audit
         if: always()
         uses: actions/upload-artifact@v4
