@@ -20,8 +20,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run rockhounding source, survey and public-noindex regression tests
+        run: |
+          node --test tests/rockhounding*.test.js
+          python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
       - name: Check research source/parser syntax
-        run: python -m py_compile scripts/rockhounding/audit-usace-2026-deliverable.py
+        run: python -m py_compile scripts/rockhounding/audit-usace-2026-deliverable.py scripts/rockhounding/inspect-usace-2026-zip.py
       - name: Check 2026 original USACE eHydro ZIP, chart source and survey footprint
         run: |
           python scripts/rockhounding/audit-usace-2026-deliverable.py \
