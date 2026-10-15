@@ -13,8 +13,56 @@ const wind=val=>val==='FAVORS_SNOWBELT'?'Wind direction supports a broad lake-ef
  val==='NOT_ALIGNED'?'Wind direction not in the established snowbelt sector':'Wind alignment unverified';
 const color=inches=>!Number.isFinite(inches)?'#889aa4':inches>=6?'#12456d':inches>=3?'#187b9b':inches>=1?'#39a7ad':inches>=0.1?'#a1d6d4':'#d3e0e5';
 let resorts=null,outline=null,selected=null;
+function snowChart(day){
+ const pane=document.getElementById('ski-snow-bars');if(!pane||!resorts)return;
+ pane.replaceChildren();
+ const rows=resorts.filter(r=>r.kind==='downhill'&&Number.isFinite(r.weather?.skiDays?.[day]?.snowInches))
+   .sort((a,b)=>b.weather.skiDays[day].snowInches-a.weather.skiDays[day].snowInches||a.name.localeCompare(b.name)).slice(0,6);
+ const max=Math.max(1,...rows.map(r=>r.weather.skiDays[day].snowInches));
+ const heading=text('p','small',rows.length&&rows[0].weather.skiDays[day].snowInches<0.5?
+   'Little or no snow forecast at the sampled hills. These are still the six largest available point forecasts.':
+   'Highest available NWS point forecasts for '+day+'. Forecast only, not an on-hill measurement.');
+ pane.append(heading);
+ if(!rows.length){pane.append(text('p','event','Forecast snowfall unavailable. Do not infer zero snow.'));return;}
+ for(const r of rows){
+   const v=r.weather.skiDays[day].snowInches,button=document.createElement('button');
+   button.type='button';button.className='snow-chart-row'+(r.slug===selected?' is-selected':'');
+   button.setAttribute('aria-label','Select '+r.name+', '+safe(v)+' inches '+day+' forecast');
+   const cap=document.createElement('span');cap.className='snow-chart-cap';
+   const name=document.createElement('span');name.className='snow-chart-name';name.textContent=r.name;
+   const amt=document.createElement('strong');amt.textContent=safe(v)+'″';
+   cap.append(name,amt);
+   const track=document.createElement('span');track.className='snow-chart-track';
+   const fill=document.createElement('span');fill.className='snow-chart-fill';
+   fill.style.width=(100*v/max).toFixed(1)+'%';track.append(fill);
+   button.append(cap,track);
+   button.addEventListener('click',()=>{selected=r.slug;render();});
+   pane.append(button);
+ }
+}
+function selectedForecast(day){
+ const r=resorts?.find(x=>x.slug===selected);
+ if(!r)return;
+ const panel=document.getElementById('ski-day-bars');if(!panel)return;
+ panel.replaceChildren();
+ const entries=[['Saturday',r.weather?.skiDays?.saturday?.snowInches],['Sunday',r.weather?.skiDays?.sunday?.snowInches]];
+ const max=Math.max(1,...entries.map(x=>Number.isFinite(x[1])?x[1]:0));
+ for(const [label,v]of entries){
+   const row=document.createElement('div');row.className='ski-day-bar'+(label.toLowerCase()===day?' is-current':'');
+   const top=document.createElement('div');top.className='ski-day-bar-cap';
+   top.append(text('span',null,label),text('strong',null,Number.isFinite(v)?safe(v)+'″':'Unavailable'));
+   const track=document.createElement('span');track.className='ski-day-bar-track';
+   const bar=document.createElement('span');bar.className='ski-day-bar-fill';bar.style.width=Number.isFinite(v)?(v/max*100)+'%':'0%';
+   track.append(bar);row.append(top,track);panel.append(row);
+ }
+}
+
 function render(){
  if(!resorts||!outline)return;
+ if(!selected){const withoutWarning=resorts.filter(r=>r.kind==='downhill'&&!(r.weather?.alerts||[]).some(a=>/Warning/i.test(a.event)));
+   const eligible=withoutWarning.filter(r=>Number.isFinite(r.weather?.skiDays?.saturday?.snowInches));
+   selected=(eligible.sort((a,b)=>b.weather.skiDays.saturday.snowInches-a.weather.skiDays.saturday.snowInches)[0]||withoutWarning[0]||resorts[0])?.slug||null;
+ }
  const day=document.getElementById('ski-day')?.value||'saturday';
  const svg=node('svg',{viewBox:'0 0 '+W+' '+H,'aria-label':'Michigan ski area map with NWS forecast snow points',role:'group',class:'michigan-point-svg'});
  const defs=node('defs');const grad=node('linearGradient',{id:'ski-map-sea',x1:0,y1:0,x2:0,y2:1});
@@ -50,6 +98,7 @@ function render(){
   svg.append(g);
  }
  mount.replaceChildren(svg);
+ snowChart(day);
  const panel=document.getElementById('ski-map-selected');if(panel){
   panel.replaceChildren();
   const r=resorts.find(x=>x.slug===selected);
@@ -64,7 +113,8 @@ function render(){
    const a=document.createElement('a');a.href='/michigan-ski-hills/'+r.slug+'/';a.textContent='View hill details ↗';
    const btn=document.createElement('button');btn.type='button';btn.textContent='Compare this hill';btn.className='outline-button';
    btn.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('michigan-ski:select',{detail:r.slug})));
-   box.append(title,detail,disclaimer,a,btn);panel.append(box);
+   const dayCompare=document.createElement('div');dayCompare.id='ski-day-bars';dayCompare.className='ski-day-bars';
+   box.append(title,dayCompare,detail,disclaimer,a,btn);panel.append(box);selectedForecast(day);
   }else panel.append(text('p','small','Select a mountain point to see its forecast, warnings and official operating-source coverage.'));
  }
 }
