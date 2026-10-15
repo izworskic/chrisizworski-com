@@ -1,0 +1,34 @@
+name: Rockhounding July 2026 USACE source validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-usace-2026-survey-deliverables-20261015
+
+permissions:
+  contents: read
+jobs:
+  validate-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Offline regression tests
+        run: |
+          node --test tests/rockhounding*.test.js
+          python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
+      - name: Validate official USACE feature metadata
+        run: python3 scripts/rockhounding/verify-usace-2026-source.py --out artifacts/usace-2026-evidence.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: usace-2026-evidence
+          path: artifacts/usace-2026-evidence.json
+          retention-days: 30
