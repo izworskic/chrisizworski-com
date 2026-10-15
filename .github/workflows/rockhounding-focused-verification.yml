@@ -28,6 +28,6 @@ jobs:
         run: node --test tests/rockhounding*.test.js
       - name: Syntax-check NOAA Python sampler and grid-validation script
         run: python3 -m py_compile scripts/rockhounding/*.py
-      # Includes saved real NOAA cycle rows, one missing hour, proximity choice and 6-hour cadence.
+      # Includes original issue-time forecast persistence, revision matching and NOAA data-source constraints.
       - name: Test shoreline-side candidate selection with mocked wave input
         run: python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
