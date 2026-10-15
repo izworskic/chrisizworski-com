@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Rockhounding public destination approval + NOAA offshore wave adapter — October 15, 2026
+
+- Owner explicitly declined township email and approved practical, source-backed assumptions to continue building. No user-private location/familiarity data stored in repository. Historical email draft remains unsent; not a development dependency.
+- New stronger primary evidence: Burt Township 2026 recreation plan explicitly documents Agate Beach as public rockhounding area **with public parking at its boardwalk**; older township plan independently calls it a public beach popular with agate/rock collectors. Bayshore Park remains confirmed public sheltered harbor beach, not an agate deposit claim.
+- Added **separate public destination planning tier** to Grand Marais gate: Agate Beach may appear as rockhounding location and display official general arrival wording without exact invented parking GPS. Bayshore Park may appear as public beach/sheltered control only. Local collection permission, ADA construction completion, site-specific safety and GPS remain visibly unverified and never treated as authoritative.
+- Implemented no-key NOAA NDBC East Superior station 45004 offshore reference adapter with format/freshness checks and clear regional-only labeling. Does **not** derive local beach waves from distant station. Four additional destination-tier tests and six adapter tests added to the fourteen existing tests (24 proposed tests total). GitHub branch CI still required; no production release or evidence of current search/ads performance.
+- Source/contract handoff: `docs/ROCKHOUNDING_PUBLIC_DESTINATION_AND_WAVE_PROTOTYPE_2026-10-15.md`; draft PR #1001. No changes to ads, canonical, site URL, static tools or sitemap.
+- Exactly one next action: validate GLWU model wet cells/shoreline bearings for Grand Marais exposed and sheltered beach pair and backtest a dated high-wave episode.
+
 ## Rockhounding Grand Marais operator verification gate — October 15, 2026
 
 - **Documentary review complete, collecting/route clearance still blocked.** Burt Township confirms both public beaches. Agate Beach boardwalk (operator page), Bayshore Park facilities and public parking (operator page/Michigan Water Trails), and Michigan EGLE general 25-pound rule have been reviewed against the township's posted ordinance index; none affirm exact municipal collecting permission or owner-certified parking/walk routing.
