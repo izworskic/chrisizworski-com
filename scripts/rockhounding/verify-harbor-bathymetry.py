@@ -50,8 +50,8 @@ def remote_features(layer,box,opener=urllib.request.urlopen):
                                                 "Accept":"application/json"})
    with opener(request,timeout=30) as res: body=res.read(250000)
    data=json.loads(body)
-   if data.get("error") or not isinstance(data.get("features"),list) or
-      data.get("exceededTransferLimit") or len(data["features"])>500:
+   if (data.get("error") or not isinstance(data.get("features"),list) or
+       data.get("exceededTransferLimit") or len(data["features"])>500):
     raise ValueError("NOAA ENC features unavailable, excessive or truncated")
    return data["features"]
   except (ValueError,urllib.error.URLError,TimeoutError) as exc:
