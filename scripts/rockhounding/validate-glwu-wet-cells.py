@@ -14,6 +14,10 @@ MODULE=pathlib.Path(__file__).with_name('glwu-extract.py')
 spec=importlib.util.spec_from_file_location('rockhounding_glwu',MODULE)
 glwu=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(glwu)
+CELL_MODULE=pathlib.Path(__file__).with_name('wave-cell-research.py')
+cell_spec=importlib.util.spec_from_file_location('rockhounding_open_cell',CELL_MODULE)
+cell_research=importlib.util.module_from_spec(cell_spec)
+cell_spec.loader.exec_module(cell_research)
 
 def field_diagnostics(path):
     """Show first-wave-field nearest neighbors, even when full 4-field records cannot form."""
@@ -84,6 +88,12 @@ def diagnose_grid(day,cycle,grid):
             dest.write_bytes(raw)
             result=glwu.extract(dest,grid)
             diagnostics=field_diagnostics(dest)
+            try:
+                fixed_cell=cell_research.analyze_fixed_open_cell(dest,grid)
+            except Exception as ex:
+                fixed_cell={'grid':grid,'status':'DIRECTIONAL_FIXED_CELL_EXTRACTION_FAILED',
+                    'errorType':type(ex).__name__,'reason':str(ex)[:240],
+                    'canPublishSiteWaveVerdict':False,'canPublishRockExposure':False}
         except Exception as err:
             return {'grid':grid,'status':'SOURCE_OR_DECODE_FAILED',
                 'failureType':type(err).__name__,'reason':str(err)[:300],
@@ -112,7 +122,8 @@ def diagnose_grid(day,cycle,grid):
         'source':url,'decodedGribBytes':len(raw),'validCompleteWaveRows':len(arr),
         'sharedWetCellIds':sorted(shared),'sameCell':bool(shared),
         'bothSitesHaveWavePoints':all(s['validCompleteWaveRows']>0 for s in sites),
-        'sites':sites,'fieldDiagnostics':diagnostics,'canPredictLocalSurf':False,
+        'sites':sites,'fieldDiagnostics':diagnostics,
+        'openNorthAgateFourFieldResearch':fixed_cell,'canPredictLocalSurf':False,
         'warning':'Model point is not a beach surf report. A distinct 500m grid cell does not prove harbor shelter.'}
 
 def main():
