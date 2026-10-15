@@ -1,0 +1,47 @@
+name: Rockhounding USACE eHydro contemporary-source research
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-usace-ehydro-gate-20261015
+    paths:
+      - .github/workflows/rockhounding-usace-ehydro.yml
+      - scripts/rockhounding/verify-usace-ehydro.py
+      - lib/rockhounding/contemporary-harbor-evidence.cjs
+      - data/rockhounding/grand-marais-contemporary-source-register-2026-10-15.json
+      - tests/test_rockhounding_usace_ehydro.py
+      - tests/rockhounding-contemporary-harbor-evidence.test.js
+
+permissions:
+  contents: read
+
+jobs:
+  research-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Research source integrity tests (offline)
+        run: |
+          python3 -m py_compile scripts/rockhounding/*.py
+          python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
+          node --test tests/rockhounding*.test.js
+      - name: Query actual bounded USACE eHydro SurveyJob catalog (research only)
+        run: |
+          python3 scripts/rockhounding/verify-usace-ehydro.py \
+            --out artifacts/grand-marais-usace-ehydro-survey-catalog.json
+      - name: Retain catalog research and source provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-grand-marais-usace-catalog-audit
+          path: artifacts/grand-marais-usace-ehydro-survey-catalog.json
+          retention-days: 30
+          if-no-files-found: warn
