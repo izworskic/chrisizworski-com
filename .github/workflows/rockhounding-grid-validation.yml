@@ -1,0 +1,45 @@
+name: Rockhounding NOAA Great Lakes grid validation (research only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-m1-20261014
+    paths:
+      - .github/workflows/rockhounding-grid-validation.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rockhounding-glwu-validation
+  cancel-in-progress: true
+
+jobs:
+  validate-wet-cells:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install GRIB decoder
+        run: python -m pip install -r scripts/rockhounding/requirements.txt
+      - name: Check NOAA 2.5 km and 500 m Great Lakes wave cells
+        run: |
+          python scripts/rockhounding/validate-glwu-wet-cells.py \
+            --date 20261015 --cycle 18 \
+            --out artifacts/rockhounding-glwu-cell-validation.json
+      - name: Retain source-grounded diagnostics (never model data as live beach verdict)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-noaa-wet-cell-validation
+          path: artifacts/rockhounding-glwu-cell-validation.json
+          if-no-files-found: warn
+          retention-days: 14
