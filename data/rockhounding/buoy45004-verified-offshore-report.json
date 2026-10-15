@@ -4,24 +4,24 @@
   "modelGrid": "2p5km",
   "sourceBuoy": "https://www.ndbc.noaa.gov/data/realtime2/45004.txt",
   "sourceModel": "NOAA_GLWU_GRIB2",
-  "asOfISO": "2026-10-15T22:09:48.000Z",
+  "asOfISO": "2026-10-15T22:13:00.000Z",
   "toleranceMinutes": 30,
   "maxLeadHours": 24,
-  "observedSamplesAvailable": 3139,
-  "eligibleForecastRows": 10,
-  "matchedPairs": 9,
+  "observedSamplesAvailable": 3140,
+  "eligibleForecastRows": 12,
+  "matchedPairs": 11,
   "unmatchedForecastRows": 1,
   "distinctModelCells": [
     {
       "cell": "47.578791,-86.573970",
-      "matches": 9
+      "matches": 11
     }
   ],
-  "status": "PRELIMINARY_TOO_FEW_PAIRS",
+  "status": "PRELIMINARY_OFFSHORE_PAIRS_NOT_CALIBRATED",
   "metrics": {
-    "maeM": 0.1022,
-    "rmseM": 0.1136,
-    "meanBiasM": 0.0089
+    "maeM": 0.1055,
+    "rmseM": 0.1161,
+    "meanBiasM": 0.0291
   },
   "matches": [
     {
@@ -149,6 +149,34 @@
       "observedHeightM": 0.6,
       "timeOffsetMinutes": -10,
       "modelMinusObservedM": 0.11
+    },
+    {
+      "issueAt": "2026-10-15T20:00:00.000Z",
+      "forecastValidAt": "2026-10-15T21:00:00.000Z",
+      "buoyObservedAt": "2026-10-15T21:10:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 1,
+      "modelHeightM": 0.76,
+      "observedHeightM": 0.6,
+      "timeOffsetMinutes": 10,
+      "modelMinusObservedM": 0.16
+    },
+    {
+      "issueAt": "2026-10-15T12:00:00.000Z",
+      "forecastValidAt": "2026-10-15T22:00:00.000Z",
+      "buoyObservedAt": "2026-10-15T21:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 10,
+      "modelHeightM": 0.68,
+      "observedHeightM": 0.6,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.08
     }
   ],
   "isIndependentOffshoreBuoyComparison": true,
