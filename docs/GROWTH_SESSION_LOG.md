@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple sap map follow-up — October 15, 2026
+
+- **User-reported regression:** Map still appears blank after earlier OSM-only repair; prior live scrape showed mixed raster tile rendering and markers present in the DOM. Do not mistake marker DOM presence for a usable map.
+- **Vercel configuration research:** The owning `chrisizworski-com` Vercel project does not currently list a CARTO environment variable (it does have production/preview `MAPBOX_KEY`). The separately owned Wisconsin Bloom Tracker publicly embeds a working CARTO `rastertiles/voyager` browser key; the same keyed tile was verified against both site referrers. Reused that existing public map client key rather than creating a paid provider or exposing a secret Vercel credential.
+- **Fix:** Switch from OSM-only to keyed CARTO Voyager tiles, remove map's lazy IntersectionObserver initialization, invalidate Leaflet size after layout, retain all 31 interactive markers, and fall back to no-key OSM if tile errors or timeout occur. No change to NWS forecasts, directory, identity, canonical or ads.
+- **Evidence gates:** Code regression checks, rendered production map imagery (not only DOM), Github CI and Vercel release all required; status is pending until verified.
+- **Search and business:** No measured GSC/AdSense changes, and no claim of uplift.
+- **Exactly one next action:** Validate real CARTO and marker imagery on the production page after passing CI and deployment.
+
+
 ## Michigan maple sap basemap repair — October 15, 2026
 
 - **Incident:** Real page map tiles displayed “API KEY REQUIRED” from CARTO's keyless `light_all` endpoint; weather selectors, source forecast, and 31 locations remained independent and working.
