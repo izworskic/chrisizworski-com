@@ -19,7 +19,7 @@ jobs:
   validate-wet-cells:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Second research run additionally inspects raw GRIB parameter masks.
+    # Third research run checks nearest valid wet height cells outside masked shoreline neighbors.
     steps:
       - name: Checkout research branch
         uses: actions/checkout@v4
