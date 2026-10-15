@@ -2,7 +2,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const survey=require('../data/rockhounding/grand-marais-usace-survey-coverage-guard-2026-10-15.json');
-const beaches=require('../data/rockhounding/grand-marais-research-footprints.geojson');
+const beaches=JSON.parse(require('node:fs').readFileSync(require('node:path').join(__dirname,'../data/rockhounding/grand-marais-research-footprints.geojson'),'utf8'));
 const {validateSource,boxesDisjoint,polygonBox,siteSurveyCoverage}=
   require('../lib/rockhounding/usace-survey-coverage.cjs');
 test('one official 2026 entrance survey cannot cover either beach study polygon',()=>{
