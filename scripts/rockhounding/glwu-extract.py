@@ -14,7 +14,7 @@ import urllib.request
 from collections import defaultdict
 
 BASE='https://nomads.ncep.noaa.gov/cgi-bin/filter_glwu.pl'
-GRIDS={'2p5km':'glwu.grlc_2p5km_sr','500m-coastal':'glwu.grlr_500m_lc'}
+GRIDS={'2p5km':'glwu.grlc_2p5km_sr','500m-greatlakes':'glwu.grlr_500m'}
 PARAMS={3:'HTSGW',4:'WVDIR',5:'WVHGT',6:'WVPER'}
 SITES=(
  {'id':'grand-marais-agate','lat':46.6760,'lon':-85.9853},
@@ -99,7 +99,7 @@ def main(argv=None):
  ap=argparse.ArgumentParser(description=__doc__)
  ap.add_argument('--date',required=True,help='YYYYMMDD UTC')
  ap.add_argument('--cycle',required=True,choices=('00','06','12','18'))
- ap.add_argument('--grid',choices=tuple(GRIDS),default='2p5km',help='2.5 km regional or experimental 500 m coastal product; neither certifies harbor waves')
+ ap.add_argument('--grid',choices=tuple(GRIDS),default='2p5km',help='2.5 km Great Lakes or 500 m Great Lakes product; neither certifies harbor waves')
  mode=ap.add_mutually_exclusive_group(required=True)
  mode.add_argument('--grib-file')
  mode.add_argument('--download',action='store_true')
