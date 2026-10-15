@@ -1,0 +1,97 @@
+name: Rockhounding offshore NOAA buoy 45004 comparison (research only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-m1-20261014
+    paths:
+      - .github/workflows/rockhounding-buoy-verification.yml
+  # Scheduling intentionally NOT enabled for this first research validation.
+  # An observation-backed cadence can be integrated after tests pass.
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-45004-buoy-verification
+  cancel-in-progress: false
+
+jobs:
+  compare-offshore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout independent research data branch
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-wave-data
+          path: wave-history
+          persist-credentials: true
+
+      - name: Prepare free NOAA GRIB2 decoder
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r scripts/rockhounding/requirements.txt
+
+      - name: Download NOAA October 15 12Z buoy-colocated model wave fields
+        run: |
+          mkdir -p artifacts
+          python scripts/rockhounding/capture-buoy45004-model.py \
+            --date 20261015 --cycle 12 \
+            --output artifacts/ndbc45004-colocated-model-20261015T12Z.json
+
+      - name: Fetch real NOAA NDBC 45004 observations (not a model estimate)
+        run: |
+          curl --fail --silent --show-error --location \
+            --max-time 35 --retry 2 \
+            'https://www.ndbc.noaa.gov/data/realtime2/45004.txt' \
+            --output artifacts/ndbc45004-observations.txt
+          test -s artifacts/ndbc45004-observations.txt
+          head -n 1 artifacts/ndbc45004-observations.txt | grep -q 'WVHT'
+
+      - name: Prepare test runner
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Compute strict date-matched independent offshore comparison
+        run: |
+          node scripts/rockhounding/verify-buoy45004-model.cjs \
+            --model artifacts/ndbc45004-colocated-model-20261015T12Z.json \
+            --buoy-text artifacts/ndbc45004-observations.txt \
+            --ledger wave-history/data/rockhounding/buoy45004-issued-model-ledger.json \
+            --report wave-history/data/rockhounding/buoy45004-verified-offshore-report.json \
+            --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+
+      - name: Save research-only source model and matched report on data branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C wave-history config user.name "Rockhounding Research Bot"
+          git -C wave-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C wave-history add data/rockhounding/buoy45004-issued-model-ledger.json data/rockhounding/buoy45004-verified-offshore-report.json
+          if git -C wave-history diff --cached --quiet; then
+            echo "Independent buoy verification unchanged"
+          else
+            git -C wave-history commit -m "data(rockhounding): compare NOAA GLWU and observed buoy 45004"
+            git -C wave-history push origin HEAD:research/rockhounding-wave-data
+          fi
+
+      - name: Retain original model and NOAA observation evidence securely as run artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ndbc45004-offshore-wave-verification
+          path: |
+            artifacts/ndbc45004-colocated-model-20261015T12Z.json
+            artifacts/ndbc45004-observations.txt
+            wave-history/data/rockhounding/buoy45004-verified-offshore-report.json
+          retention-days: 14
+          if-no-files-found: warn

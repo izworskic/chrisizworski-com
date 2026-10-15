@@ -1,0 +1,114 @@
+{
+  "type": "FeatureCollection",
+  "name": "Grand Marais candidate walking connections (not verified legal routes)",
+  "metadata": {
+    "license": "ODbL",
+    "attribution": "© OpenStreetMap contributors",
+    "retrieved": "2026-10-14",
+    "purpose": "Public boardwalks and harbor footpaths identified from crowd-sourced geometry only; parking connections and legal use unverified"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "osm-footway-361081154",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -85.9841635,
+            46.6725487
+          ],
+          [
+            -85.9842033,
+            46.6725147
+          ],
+          [
+            -85.9838973,
+            46.6720712
+          ],
+          [
+            -85.9836148,
+            46.6716563
+          ],
+          [
+            -85.9836667,
+            46.6716333
+          ],
+          [
+            -85.983696,
+            46.6716228
+          ]
+        ]
+      },
+      "properties": {
+        "osmWayId": 361081154,
+        "tags": {
+          "highway": "footway"
+        },
+        "siteId": "grand-marais-harbor",
+        "routeStatus": "OSM_CANDIDATE_CURRENT_ACCESS_UNVERIFIED",
+        "legalPublicUseVerified": false,
+        "sourceUrl": "https://www.openstreetmap.org/way/361081154"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "osm-footway-361081155",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -85.983696,
+            46.6716228
+          ],
+          [
+            -85.9838222,
+            46.6715803
+          ]
+        ]
+      },
+      "properties": {
+        "osmWayId": 361081155,
+        "tags": {
+          "highway": "steps"
+        },
+        "siteId": "grand-marais-harbor",
+        "routeStatus": "OSM_CANDIDATE_CURRENT_ACCESS_UNVERIFIED",
+        "legalPublicUseVerified": false,
+        "sourceUrl": "https://www.openstreetmap.org/way/361081155"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "osm-footway-369178056",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -85.9851697,
+            46.6756472
+          ],
+          [
+            -85.9852857,
+            46.6759191
+          ],
+          [
+            -85.9854092,
+            46.6762137
+          ]
+        ]
+      },
+      "properties": {
+        "osmWayId": 369178056,
+        "tags": {
+          "highway": "footway",
+          "structure": "bridge"
+        },
+        "siteId": "grand-marais-agate",
+        "routeStatus": "OSM_CANDIDATE_CURRENT_ACCESS_UNVERIFIED",
+        "legalPublicUseVerified": false,
+        "sourceUrl": "https://www.openstreetmap.org/way/369178056"
+      }
+    }
+  ]
+}

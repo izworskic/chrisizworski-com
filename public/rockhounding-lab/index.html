@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#173c4c">
+<title>Rockhounding Post-Storm Lab | Interactive Preview</title>
+<meta name="description" content="Interactive, clearly simulated Michigan post-storm rockhounding experience concept. No live conditions, safety or collecting permission claims.">
+<style>
+:root{--navy:#173947;--ink:#223d44;--sea:#276478;--sea2:#427f89;--mist:#ecf4f3;--sand:#f8f5ee;--gold:#ba8543;--palegold:#f8eddb;--muted:#64767b;--line:#d9e5e5;--white:#fff;--red:#a04a36;--green:#2c725e;--shadow:0 15px 43px rgba(22,63,74,.075)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f8f8;color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,a{font:inherit}button{cursor:pointer}a{color:var(--sea)}a:hover{text-decoration-thickness:2px}button:focus-visible,a:focus-visible{outline:3px solid #daac53;outline-offset:3px}.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:-500vw}.skip:focus{left:10px;top:10px;z-index:1000;background:#fff;padding:10px}
+header{background:#153744;color:#fff}header .wrap{min-height:59px;display:flex;align-items:center;justify-content:space-between;gap:14px}.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:730;letter-spacing:.025em}.logo svg{width:30px;height:30px}.headright{display:flex;align-items:center;gap:15px;font-size:12px;color:#e0e9ec}.headright a{color:#eff7f9;text-decoration:none}.headright a:hover{text-decoration:underline}.headtag{border:1px solid #63818a;border-radius:6px;padding:3px 8px;letter-spacing:.04em}
+.hero{background:linear-gradient(107deg,#eff6f5 0%,#faf9f3 61%,#f4e8d5 110%);border-bottom:1px solid #dee6e2;padding:33px 0 32px}.hero-grid{display:grid;grid-template-columns:1.26fr .74fr;gap:24px;align-items:center}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#3f7885}.hero h1{font:500 clamp(31px,4.2vw,54px)/1.07 Georgia,"Times New Roman",serif;letter-spacing:-.035em;margin:11px 0 14px;color:#183d4b;max-width:760px}.hero p{max-width:690px;font-size:16px;color:#51686b;margin:0 0 16px}.pills{display:flex;flex-wrap:wrap;gap:7px}.pill{border:1px solid #c5d8d7;border-radius:20px;padding:5px 10px;color:#45666b;background:#fff9;font-size:11px;font-weight:720}.pill:before{content:"•";color:#ab7c43;margin-right:5px}.heroArt{min-height:190px;position:relative;border:1px solid #bdd3d0;border-radius:17px;background:linear-gradient(165deg,#b9d7d8 0 46%,#dfeae6 47% 52%,#e3d3b8 53% 76%,#aa9781 76%);overflow:hidden;box-shadow:var(--shadow)}.heroArt:after{content:"";position:absolute;width:140%;height:75px;top:43%;left:-20%;background:repeating-radial-gradient(ellipse at 50% 0%,transparent 0 11px,#f0f8f2b0 12px 14px,transparent 15px 24px);opacity:.8;transform:rotate(-7deg)}.heroArt .stone{position:absolute;width:45px;height:30px;border-radius:49% 51% 48% 52%;background:#a29883;box-shadow:inset 5px -7px #817e75,2px 6px 8px #0001;bottom:13%;left:27%;transform:rotate(-16deg)}.heroArt .stone.two{left:59%;bottom:25%;width:24px;height:20px;background:#d4bca0}.heroArt .stone.three{left:75%;bottom:9%;width:53px;height:39px;background:#808986}.heroArt .caption{position:absolute;left:15px;top:13px;z-index:1;font-size:11px;font-weight:800;letter-spacing:.08em;color:#214d58;text-transform:uppercase;background:#ffffffe0;padding:5px 8px;border-radius:6px}
+main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:15px;overflow:hidden}.pad{padding:23px}.barhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.barhead h2,.subhead h2{margin:0;color:var(--ink);font:500 26px/1.18 Georgia,serif}.subhead{margin:0 0 13px}.subhead p{margin:5px 0 0;color:var(--muted);font-size:13px}.reviewBanner{display:flex;align-items:center;gap:10px;background:#fff7e8;border:1px solid #efddbd;color:#715a30;border-radius:11px;padding:11px 14px;font-size:12px;margin-bottom:17px}.reviewBanner strong{font-size:12px}.reviewBanner svg{flex:none;width:22px;height:22px}.label{font-size:11px;letter-spacing:.085em;text-transform:uppercase;color:#627c82;font-weight:800;display:block;margin:0 0 9px}.pickerBar{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}.seg{display:flex;gap:5px;padding:5px;background:#f1f5f4;border:1px solid #d7e5e3;border-radius:10px;width:100%}.seg button{border:0;border-radius:7px;background:transparent;color:#536e75;padding:10px 11px;font-weight:700;font-size:12px;flex:1;min-width:0;transition:background .12s}.seg button[aria-pressed=true]{background:#fff;color:#1e4c5d;box-shadow:0 1px 5px #1b536522}.seg button:hover{color:#204956}
+.decision{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px}.verdict{padding:22px 24px;border-radius:12px;border:1px solid #d9e8e6;background:linear-gradient(140deg,#f2f8f6,#ffffff 84%);min-height:220px}.verdict .kicker{font-size:10px;font-weight:800;letter-spacing:.13em;color:#4d7180;text-transform:uppercase}.verdict h2{font:500 clamp(26px,3vw,39px)/1.12 Georgia,serif;letter-spacing:-.02em;margin:9px 0 11px;color:#204956}.verdict p{max-width:550px;color:#526d73;margin:0;font-size:14px}.verdict .status{margin:14px 0 0;display:inline-flex;border:1px solid #d7e2df;background:#ffffffc0;padding:6px 10px;border-radius:7px;font-size:11px;font-weight:800;color:#46656d}.verdict[data-state=wait]{background:linear-gradient(140deg,#fff4e9,#fff)}.verdict[data-state=wait] h2{color:#80553b}.verdict[data-state=unknown]{background:linear-gradient(140deg,#f0f2f4,#fff)}.verdict[data-state=unknown] h2{color:#53626a}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{border:1px solid #e0e9e7;background:#fbfdfc;border-radius:11px;padding:17px;min-width:0}.metric b{display:block;font:550 27px/1.2 Georgia,serif;margin:7px 0 4px;color:#20495a}.metric span{font-size:11px;color:#697c81}.metric .label{margin:0;font-size:10px}.metric small{font-size:10px;color:#698084}
+.two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:16px}.chartArea{min-width:0}.chartTop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:#60767c}.legend i{display:inline-block;width:17px;height:4px;border-radius:3px;vertical-align:middle;margin-right:6px;background:#266678}.legend .forecast{background:#be884b;border-style:dashed}.chart{width:100%;height:auto;display:block;margin-top:14px;overflow:visible}.chart text{font:11px system-ui,sans-serif;fill:#708289}.chart .gridline{stroke:#e3eceb;stroke-width:1}.chart .line{stroke:#267187;fill:none;stroke-width:3.1;stroke-linecap:round;stroke-linejoin:round}.chart .future{stroke:#b88749;stroke-width:2.5;stroke-dasharray:6 5;fill:none}.chart .area{fill:url(#areaShade)}.chart circle{stroke:#fff;stroke-width:2;fill:#2b6d80}.chart .markerLine{stroke:#b88749;stroke-dasharray:3 5}.chart .annotation{font-weight:700;fill:#385d69;font-size:11px}.chartFooter{font-size:12px;color:#6b8085;padding-top:3px}.infoPanel{border:1px solid #dce6e6;border-radius:11px;background:#f9fbfa;padding:17px}.infoPanel h3{font:550 19px Georgia,serif;margin:0 0 9px}.infoPanel ol{padding-left:19px;margin:5px 0 0;color:#526a6f;font-size:13px}.infoPanel li{margin-bottom:10px}.infoPanel li strong{color:#2a515d}.infoPanel small{display:block;color:#71858a;margin-top:4px}.placeGrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.place{padding:18px;border:1px solid #dae5e4;border-radius:11px;background:#fff}.place.active{border-color:#649199;box-shadow:inset 0 0 0 1px #8cb8bb}.place .top{display:flex;gap:10px;align-items:start;justify-content:space-between}.place h3{font:500 22px Georgia,serif;margin:3px 0 8px}.place p{font-size:13px;color:#5a7076;margin:0 0 14px}.place .type{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#4a7782;font-weight:800}.place .flag{font-size:10px;font-weight:800;border:1px solid #d6e4e2;background:#f2f7f5;border-radius:20px;padding:5px 9px;white-space:nowrap;color:#3d6e67}.place a{font-weight:740;font-size:12px}.schematic{position:relative;min-height:258px;border-radius:12px;border:1px solid #ccdadd;overflow:hidden;background:linear-gradient(180deg,#cee4e6,#e5f2f0)}.schematic svg{width:100%;height:258px;display:block}.schematic .mapNote{position:absolute;bottom:12px;left:12px;right:12px;background:#fffef0e8;border:1px solid #dfd9c8;border-radius:7px;padding:7px 10px;font-size:10px;color:#69777b}.diagramLegend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#667e82;margin-top:10px}.diagramLegend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ba8550;margin-right:5px}.diagramLegend .b{background:#2d7684}
+.notice{padding:13px 15px;border-radius:10px;border:1px solid #d7e4e3;background:#f3f8f7;color:#506b70;font-size:12px}.foot{background:#183c4b;padding:25px 0;color:#d7e5e8}.foot .wrap{display:flex;gap:15px;justify-content:space-between;flex-wrap:wrap}.foot a{color:#eef6f7}.foot small{max-width:640px;color:#abc8cd}.privacy{font-size:11px;color:#6d8187;margin-top:11px}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr 250px}.decision,.two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(4,1fr)}}@media(max-width:740px){.hero-grid{grid-template-columns:1fr}.heroArt{min-height:145px;max-height:145px}.pickerBar,.placeGrid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.wrap{padding:0 16px}.hero{padding:22px 0}.pad{padding:17px}.hero h1{font-size:38px}.barhead h2{font-size:24px}}@media(max-width:430px){.headright a{display:none}.seg button{padding:10px 5px;font-size:11px}.hero h1{font-size:33px}.metrics .metric{padding:12px}.metric b{font-size:25px}.heroArt{display:none}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Archived NOAA cases: measured offshore height only, separate from simulations. */
+.observedHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.observedHead .subhead{max-width:730px}
+.studyButtons{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0 13px}
+.studyButtons button{background:#f0f6f5;color:#245763;border:1px solid #cddfde;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:750}
+.studyButtons button[aria-pressed=true]{background:#204d60;color:#fff;border-color:#204d60}
+.observedGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.observedChart{width:100%;height:auto;border:1px solid #dbe6e7;background:#fafdfc;border-radius:10px}
+.observedChart .axis{stroke:#d6e2e3;stroke-width:1}
+.observedChart .trace{fill:none;stroke:#2c7182;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.observedChart .peak{fill:#b7803d;stroke:#fff;stroke-width:2}
+.observedSummary{border:1px solid #e2e8e6;border-radius:10px;padding:15px;background:#f8faf9}
+.observedSummary h3{font:500 21px Georgia,serif;margin:0 0 8px}
+.observedSummary p{font-size:13px;color:#566d73}
+.observedStats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.observedStats div{padding:10px;border:1px solid #e0e9e8;background:white;border-radius:8px}
+.observedStats b{display:block;font:550 23px Georgia,serif;color:#204959}
+.observedStats small{font-size:10px;color:#607980}
+@media(max-width:720px){.observedGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the interactive prototype</a>
+<header><div class="wrap"><a class="logo" href="https://chrisizworski.com/" aria-label="Chris Izworski home">
+<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M2 23Q11 12 19 18T35 15" fill="none" stroke="#94c5cd" stroke-width="3" stroke-linecap="round"/><path d="M5 30l11-15 9 16z" fill="#e6dcc5"/><path d="M18 30l8-12 8 12z" fill="#bcab8d"/></svg>
+<span>Michigan Rockhounding <span style="font-weight:400;opacity:.72">/ Post-Storm</span></span></a>
+<div class="headright"><span class="headtag">DESIGN PREVIEW</span><a href="#how">How it works</a></div></div></header>
+<div class="hero"><div class="wrap hero-grid"><div>
+<div class="eyebrow">Michigan shoreline opportunity engine · Prototype</div>
+<h1>After the storm.<br>Before you go.</h1>
+<p>What happened to the waves, have they settled, and which shoreline might be worth researching? A better decision starts with the storm—not a generic beach score.</p>
+<div class="pills"><span class="pill">72-hour wave history</span><span class="pill">Open coast vs. sheltered bay</span><span class="pill">NWS warning veto</span></div>
+</div><div class="heroArt" role="img" aria-label="Stylized Lake Superior shoreline and stones, not a photograph"><span class="caption">Great Lakes / Shoreline</span><i class="stone"></i><i class="stone two"></i><i class="stone three"></i></div></div></div>
+<main id="main" class="wrap">
+<div class="reviewBanner" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="#a57935" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7v1"/></svg><div><strong>INTERACTIVE DESIGN DEMO — NOT LIVE WEATHER.</strong> Every wave number and storm timeline below is an illustrative test scenario. No beach has been declared safe, newly exposed, or legally cleared for collection.</div></div>
+<section class="panel pad">
+<div class="barhead" style="margin-bottom:20px"><h2>Explore a post-storm decision</h2><span style="font-size:11px;color:#6b8085">Grand Marais, Lake Superior · UI study</span></div>
+<div class="pickerBar">
+<div><span class="label" id="beachlabel">Choose shoreline</span><div class="seg" role="group" aria-labelledby="beachlabel"><button type="button" id="beach-agate" data-beach="agate" aria-pressed="true">Agate Beach</button><button type="button" id="beach-bay" data-beach="bay" aria-pressed="false">Bayshore Park</button></div></div>
+<div><span class="label" id="scenariolabel">Explore example conditions</span><div class="seg" role="group" aria-labelledby="scenariolabel"><button type="button" data-scenario="settling" aria-pressed="true">Settling</button><button type="button" data-scenario="rough" aria-pressed="false">Still rough</button><button type="button" data-scenario="rebuild" aria-pressed="false">Rebuilding</button><button type="button" data-scenario="missing" aria-pressed="false">No data</button></div></div>
+</div>
+<div class="decision">
+<div id="verdict" class="verdict" data-state="settling" aria-live="polite"><div class="kicker" id="decisionLabel">EXAMPLE · RESEARCH SIGNAL</div><h2 id="decisionTitle">Waves have settled from a recent peak.</h2><p id="decisionBody">The simulated open-coast wave record shows recent disturbance followed by a sustained decline. A real result would still require verified shoreline exposure, hazards, and observations.</p><span class="status" id="decisionStatus">Illustrative candidate · not a visit recommendation</span></div>
+<div class="metrics">
+<div class="metric"><span class="label">Recent peak</span><b id="metricPeak">6.1 ft</b><span id="metricPeakNote">Simulated offshore height</span></div>
+<div class="metric"><span class="label">Current modeled</span><b id="metricNow">1.4 ft</b><span id="metricNowNote">Simulated · not at shore</span></div>
+<div class="metric"><span class="label">Since the peak</span><b id="metricDrop">−77%</b><span id="metricDropNote">Illustrative wave height drop</span></div>
+<div class="metric"><span class="label">Next 12 hours</span><b id="metricFuture">Lower</b><span id="metricFutureNote">Simulated directional outlook</span></div>
+</div></div>
+</section>
+<section class="two">
+<div class="panel pad chartArea">
+<div class="chartTop"><div class="subhead"><h2>What changed in the water?</h2><p>72-hour example history and following 12-hour example forecast</p></div><div class="legend"><span><i></i>Past wave height</span><span><i class="forecast"></i>Example outlook</span></div></div>
+<svg id="waveChart" class="chart" viewBox="0 0 640 263" role="img" aria-label="Illustrative 72 hour offshore wave-height chart and 12-hour outlook"><defs><linearGradient id="areaShade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a5d6dd" stop-opacity=".52"/><stop offset="1" stop-color="#e8f5f5" stop-opacity=".08"/></linearGradient></defs><g id="chartMarks"></g></svg>
+<div class="chartFooter" id="chartCaption">Example data only. Source integration planned: NOAA Great Lakes wave model.</div>
+</div>
+<div class="panel pad" id="how"><div class="subhead"><h2>Three questions, in order</h2><p>The engine must clear each stage before showing an opportunity.</p></div>
+<div class="infoPanel"><ol>
+<li><strong>Did a meaningful disturbance happen?</strong><small>Compare recent wave forcing to a seasonal site baseline, using direction and period—not height alone.</small></li>
+<li><strong>Have conditions moderated?</strong><small>Check the time since the peak and whether the next forecast period is rebuilding.</small></li>
+<li><strong>Is it sensible to consider a visit?</strong><small>Marine warnings, ice, access changes and insufficient evidence can veto the decision.</small></li>
+</ol></div>
+<div class="notice" style="margin-top:12px"><strong>What we won't claim:</strong> A storm does not guarantee fresh stones. No buoy or offshore model alone establishes safe shoreline access.</div>
+</div></section>
+<section class="panel pad">
+<div class="subhead"><h2>Two beaches, different wave exposure</h2><p>Documented public sites around Grand Marais. Location roles are evidence-based; the wave readouts above are simulations.</p></div>
+<div class="placeGrid">
+<div class="place active" id="card-agate"><div class="top"><span class="type">Open Lake Superior · Search lead</span><span class="flag">Documented destination</span></div><h3>Agate Beach</h3><p>Burt Township identifies this as a public rockhounding beach and documents parking by the boardwalk. Open-lake exposure makes it the primary site for future storm research.</p><a href="https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/" target="_blank" rel="noopener noreferrer">Township beach details ↗</a></div>
+<div class="place" id="card-bay"><div class="top"><span class="type">Protected harbor · Comparison</span><span class="flag">Public beach</span></div><h3>Bayshore Park</h3><p>Public swimming beach inside Grand Marais harbor. Useful to demonstrate why the same offshore waves cannot automatically be assigned to a sheltered shoreline. Not an independently documented agate deposit.</p><a href="https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/" target="_blank" rel="noopener noreferrer">Township park details ↗</a></div>
+</div>
+<div class="two" style="margin-top:16px"><div>
+<div class="subhead"><h2>Shoreline comparison</h2><p>A simple orientation sketch, not a navigable map.</p></div>
+<div class="schematic"><svg viewBox="0 0 570 258" role="img" aria-label="Conceptual diagram of open Lake Superior shoreline above sheltered Grand Marais harbor">
+<rect width="570" height="258" fill="#cde5e7"/><g opacity=".28" stroke="#72a7ad" fill="none"><path d="M0 42Q110 24 214 57T570 33"/><path d="M0 78Q125 54 220 89T570 64"/><path d="M0 116Q108 98 207 120T570 102"/></g>
+<path d="M0 164C100 140 151 160 240 166C284 169 296 150 325 168C351 183 360 199 391 200C423 198 455 166 489 168C510 173 536 166 570 180L570 258H0Z" fill="#d9d0b5" stroke="#b59e73" stroke-width="5"/>
+<path d="M240 166C275 180 285 210 323 215C352 219 359 193 396 195C427 194 438 222 466 222" fill="none" stroke="#f7f9e9" stroke-width="10" opacity=".75"/>
+<path d="M365 197C385 190 397 171 411 164C433 165 453 175 464 192" fill="none" stroke="#8e9f9b" stroke-width="13" stroke-linecap="round"/>
+<path d="M375 196C389 191 399 173 411 170C430 171 447 179 458 193" fill="none" stroke="#cde5e7" stroke-width="7" stroke-linecap="round"/>
+<g><circle cx="185" cy="157" r="10" fill="#bd8451" stroke="#fff" stroke-width="4"/><path d="M185 147L185 103" stroke="#a97440" stroke-width="2" stroke-dasharray="3 3"/><rect x="113" y="80" width="147" height="25" rx="7" fill="#fff"/><text x="125" y="97" font-size="12" fill="#254b56" font-weight="700">Agate Beach / exposed</text></g>
+<g><circle cx="398" cy="215" r="10" fill="#2d7684" stroke="#fff" stroke-width="4"/><path d="M408 213L458 239" stroke="#2d7684" stroke-width="2"/><rect x="423" y="222" width="138" height="26" rx="7" fill="#fff"/><text x="434" y="239" font-size="12" fill="#254b56" font-weight="700">Bayshore / sheltered</text></g>
+<text x="21" y="26" font-size="12" letter-spacing="1.5" font-weight="750" fill="#447d89">LAKE SUPERIOR</text>
+</svg><div class="mapNote">Schematic, not geographic coastline geometry. The NOAA regional grid may not resolve the harbor.</div></div>
+<div class="diagramLegend"><span><i></i>Exposed research site</span><span><i class="b"></i>Sheltered comparison</span></div></div>
+<div><div class="subhead"><h2>What this screen will show later</h2><p>The live version must make uncertainty visible rather than hide it.</p></div>
+<div class="infoPanel"><ol>
+<li><strong>Real source timestamps</strong><small>Archived NOAA analysis versus upcoming modeled forecasts.</small></li>
+<li><strong>A site-specific evidence label</strong><small>Offshore reference, modeled nearby water, or unverified harbor shelter.</small></li>
+<li><strong>A useful verdict—or no verdict</strong><small>Disturbance detected, still active, settling, rebounding, hazard veto or insufficient information.</small></li>
+</ol></div></div></div>
+</section>
+
+<section class="panel pad" id="historical-evidence" aria-labelledby="historical-title">
+ <div class="observedHead"><div class="subhead">
+  <h2 id="historical-title">Observed offshore wave events</h2>
+  <p>Three dated wave episodes from NOAA buoy 45004 in eastern Lake Superior. These are actual observations—not simulated data and <strong>not</strong> waves measured at Agate Beach.</p>
+ </div><span class="pill">NOAA NDBC · historical evidence</span></div>
+ <div class="reviewBanner"><strong>Location warning:</strong>&nbsp; The buoy is approximately 111 km from Grand Marais. This data confirms offshore disturbances only; it cannot establish shoreline conditions, newly exposed rocks, or safe collecting.</div>
+ <div class="studyButtons" id="observedCaseButtons" role="group" aria-label="Select a historical NOAA wave event">
+  <button type="button" data-case-index="0" aria-pressed="true">October 10, 2026</button>
+  <button type="button" data-case-index="1" aria-pressed="false">September 13, 2026</button>
+  <button type="button" data-case-index="2" aria-pressed="false">September 20, 2026</button>
+ </div>
+ <div class="observedGrid">
+  <div><svg id="observedChart" class="observedChart" viewBox="0 0 640 264" role="img" aria-label="Historical NOAA wave-height measurements around the selected storm event"></svg>
+   <div class="chartFooter" id="observedChartCaption">Connecting to the archived NOAA record. Gaps are not interpolated.</div>
+  </div>
+  <div class="observedSummary" aria-live="polite">
+   <div class="label">Measured offshore event · Not a beach verdict</div>
+   <h3 id="observedTitle">Loading observed wave evidence</h3>
+   <p id="observedDescription">All data points were sampled from NOAA's archived East Superior station record.</p>
+   <div class="observedStats"><div><small>Observed peak</small><b id="observedPeak">—</b></div><div><small>Later wave height</small><b id="observedAfter">—</b></div></div>
+   <p id="observedCoverage" style="font-size:12px">Checking observation coverage.</p>
+   <a href="https://www.ndbc.noaa.gov/station_page.php?station=45004" target="_blank" rel="noopener noreferrer">NOAA buoy source ↗</a>
+  </div>
+ </div>
+ <p class="privacy">Historical source: NOAA NDBC THREDDS 45004h9999, significant wave height (meters), sampled approximately every 3 hours. Missing readings omitted and shown as gaps. Wave direction and local stone observations are not included in this dataset.</p>
+</section>
+<div class="notice"><strong>Rock collecting and public access:</strong> Public beach access does not by itself authorize removing rocks from every segment. Check posted township rules and seasonal access notices. National Park Service beaches can prohibit collection. This design does not provide directions to unverified parking gates.</div>
+<p class="privacy">Prototype only. All example wave values are embedded in this page and are not fetched from NOAA. No device location, personal data, account, tracking, or map key is needed.</p>
+</main>
+<footer class="foot"><div class="wrap"><div><strong>Michigan Rockhounding / Post-Storm Lab</strong><div style="font-size:12px;margin-top:5px">A decision-engine concept built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</div></div><small>Sources for the future engine: NOAA Great Lakes waves, NOAA buoy observations, NWS marine warnings, Michigan EGLE and public shoreline access records. Nothing on this prototype constitutes a safety assessment.</small></div></footer>
+<script>
+(()=>{'use strict';
+const scenarios={
+ settling:{label:'SIMULATED · POST-STORM RESEARCH',title:'The wave pattern is settling.',body:'A strong modeled disturbance is followed by a meaningful decline. This could be worth checking after the hazards and shoreline conditions are verified—not a promise of newly exposed stones.',status:'Illustrative settling signal · not a visit recommendation',peak:'6.1 ft',now:'1.4 ft',drop:'−77%',future:'Lower',type:'settling',values:[.7,.9,1.1,1.8,3.2,4.4,5.8,6.1,5.2,4.1,3.2,2.3,1.9,1.6,1.4],forward:[1.3,1.2,1.0]},
+ rough:{label:'SIMULATED · NO SETTLING WINDOW',title:'Waves are still working the shore.',body:'The most recent example waves remain near the event peak. Even if rocks are being rearranged, this is not the time to send someone into hazardous shoreline conditions.',status:'Keep waiting · no opportunity window',peak:'6.1 ft',now:'5.4 ft',drop:'−11%',future:'High',type:'wait',values:[.7,.8,.9,1.1,1.4,1.6,2.5,3.5,4.7,5.5,6.1,5.9,5.6,5.5,5.4],forward:[5.1,4.8,4.3]},
+ rebuild:{label:'SIMULATED · FORECAST REBOUND',title:'The calm spell may not last.',body:'The example waves declined, but the upcoming forecast climbs again. The engine holds off rather than treating a brief lull as a genuine post-storm search window.',status:'Forecast rebound · hold off',peak:'6.1 ft',now:'1.6 ft',drop:'−74%',future:'Rebuilds',type:'wait',values:[.7,1.0,1.3,1.8,3.0,4.8,6.1,5.3,4.5,3.4,2.5,2.0,1.8,1.7,1.6],forward:[2.8,4.1,5.0]},
+ missing:{label:'SIMULATED · INCOMPLETE SOURCE',title:'Not enough reliable wave history.',body:'When model analyses, timestamps, or the site’s directional exposure are missing, we should say so plainly—not manufacture a low-risk or high-opportunity score.',status:'Insufficient evidence · no verdict',peak:'—',now:'—',drop:'—',future:'Unknown',type:'unknown',values:[null,null,null,1.3,null,null,4.1,null,null,null,2.3,null,null,null,null],forward:[null,null,null]}
+};
+let beach='agate',scenario='settling';
+const $$=sel=>[...document.querySelectorAll(sel)];
+const $=id=>document.getElementById(id);
+function point(x,i,range=18){return [49+i*(550/(range-1)),217-x/7*158]}
+function chartLine(values,start=0,part=false){
+ let d='',inSegment=false;
+ values.forEach((value,i)=>{if(value===null){inSegment=false;return}const [x,y]=point(value,i+start);d+=(inSegment?'L':'M')+x.toFixed(1)+','+y.toFixed(1)+' ';inSegment=true;});
+ return d;
+}
+function draw(values,forward){
+ const group=$('chartMarks');while(group.firstChild)group.removeChild(group.firstChild);
+ const NS='http://www.w3.org/2000/svg';
+ const add=(tag,attrs,text)=>{const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,String(v));if(text)e.textContent=text;group.appendChild(e);return e;};
+ [0,2,4,6].forEach(n=>{let y=217-n/7*158;add('line',{x1:49,y1:y,x2:606,y2:y,class:'gridline'});add('text',{x:30,y:y+4,'text-anchor':'end'},String(n));});
+ add('line',{x1:49,y1:217,x2:606,y2:217,stroke:'#d0dfde'});
+ add('line',{x1:49+14*550/17,y1:30,x2:49+14*550/17,y2:218,class:'markerLine'});
+ ['72h ago','48h','24h','Now','+12h'].forEach((s,i)=>{const x=[49,49+4.65*550/17,49+9.4*550/17,49+14*550/17,600][i];add('text',{x,y:244,'text-anchor':i===0?'start':i===4?'end':'middle'},s);});
+ add('text',{x:40,y:30},'feet');
+ const hist=chartLine(values,0);
+ if(values.every(v=>v!==null)){let area=hist+' L '+(49+14*550/17).toFixed(1)+',217 L 49,217 Z';add('path',{d:area,class:'area'});}
+ add('path',{d:hist,class:'line'});
+ if(values[14]!=null&&forward.every(v=>v!=null))add('path',{d:chartLine([values[14],...forward],14),class:'future'});
+ let vals=values.map((v,i)=>({v,i})).filter(p=>p.v!==null);
+ if(vals.length){let peak=vals.reduce((a,b)=>a.v>b.v?a:b);const [x,y]=point(peak.v,peak.i);
+ add('circle',{cx:x,cy:y,r:5});if(x<485)add('text',{x:x+9,y:Math.max(27,y-12),class:'annotation'},'Event peak');}
+ add('text',{x:49+14*550/17+7,y:40},'NOW');
+}
+function render(){
+ const s=scenarios[scenario],isBay=beach==='bay';
+ const title=isBay?'Harbor shelter changes the picture.':s.title;
+ const body=isBay?'Bayshore Park sits inside the sheltered Grand Marais harbor. These example open-lake waves cannot be transferred directly to this beach. A separate nearshore/shelter method is required.':s.body;
+ $('decisionTitle').textContent=title;$('decisionBody').textContent=body;
+ $('decisionLabel').textContent=isBay?'PUBLIC HARBOR · MODEL LIMITATION':s.label;
+ $('decisionStatus').textContent=isBay?'Harbor wave response not resolved by regional model':s.status;
+ $('verdict').dataset.state=isBay?'unknown':s.type;
+ $('metricPeak').textContent=isBay?'N/A':s.peak;
+ $('metricNow').textContent=isBay?'N/A':s.now;
+ $('metricDrop').textContent=isBay?'N/A':s.drop;
+ $('metricFuture').textContent=isBay?'Unknown':s.future;
+ $('metricPeakNote').textContent=isBay?'Open-lake reference only':'Example offshore peak';
+ $('metricNowNote').textContent=isBay?'Harbor surf not modeled here':'Simulated · not at shore';
+ $('metricDropNote').textContent=isBay?'No site-specific comparison':'Illustrative height change';
+ $('metricFutureNote').textContent=isBay?'Shelter unresolved':'Example modeled outlook';
+ $('chartCaption').textContent=isBay?'Illustrative open-lake wave series only. Not a Bayshore harbor forecast.':scenario==='missing'?'Missing example wave records; no interpolation or wave score.':'Example data only. The live engine will require NOAA model records and validated nearby wet cells.';
+ draw(s.values,s.forward);
+ $$('button[data-beach]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.beach===beach)));
+ $$('button[data-scenario]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===scenario)));
+ $('card-agate').classList.toggle('active',!isBay);$('card-bay').classList.toggle('active',isBay);
+}
+$$('button[data-beach]').forEach(b=>b.addEventListener('click',()=>{beach=b.dataset.beach;render();}));
+$$('button[data-scenario]').forEach(b=>b.addEventListener('click',()=>{scenario=b.dataset.scenario;render();}));
+render();
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const urls='/rockhounding-lab/ndbc-45004-2026.json';
+ const els={svg:document.getElementById('observedChart'),title:document.getElementById('observedTitle'),
+ description:document.getElementById('observedDescription'),peak:document.getElementById('observedPeak'),
+ after:document.getElementById('observedAfter'),coverage:document.getElementById('observedCoverage'),
+ caption:document.getElementById('observedChartCaption')};
+ const buttons=[...document.querySelectorAll('[data-case-index]')];
+ let dataset=null,selected=0;
+ const H=3600000,NS='http://www.w3.org/2000/svg';
+ const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+ const draw=()=>{
+  if(!dataset)return;
+  const ev=dataset.events[selected],t=Date.parse(ev.peakAt),pts=dataset.samples.filter(p=>Math.abs(Date.parse(p.t)-t)<=72*H).sort((a,b)=>a.t.localeCompare(b.t));
+  const peak=ev.peakSignificantWaveHeightM;const last=pts.filter(p=>Date.parse(p.t)>t).at(-1);
+  els.title.textContent=dateFmt.format(t)+' · East Superior';
+  els.peak.textContent=peak.toFixed(1)+' m';
+  els.after.textContent=last?last.hM.toFixed(1)+' m':'Unavailable';
+  els.description.textContent='The buoy measured a peak of '+peak.toFixed(1)+' m, then '+(last?'a later '+last.hM.toFixed(1)+' m reading.':'no later usable reading.')+' This documents offshore wave change only.';
+  els.coverage.textContent=ev.beforeSampleCount+' observations before, '+ev.afterSampleCount+' after the peak within ±72 hours. No on-beach rock or safety outcome recorded.';
+  els.caption.textContent='Measured NOAA observations within ±72 hours of '+dateFmt.format(t)+'. Connecting lines break for gaps over 9 hours. Sampled interval about 3 hours.';
+  buttons.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===selected)));
+  const svg=els.svg;while(svg.firstChild)svg.removeChild(svg.firstChild);
+  const add=(type,attrs,txt)=>{
+   const node=document.createElementNS(NS,type);
+   Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,String(v)));
+   if(txt)node.textContent=txt;svg.appendChild(node);return node;
+  };
+  const xmin=48,xmax=610,ymin=217,scale=Math.max(1,Math.ceil(peak+0.6));
+  const px=stamp=>xmin+(stamp-t+72*H)/(144*H)*(xmax-xmin);
+  const py=v=>ymin-(v/scale)*172;
+  for(let level=0;level<=scale;level++){
+   let y=py(level);add('line',{x1:xmin,y1:y,x2:xmax,y2:y,class:'axis'});
+   add('text',{x:37,y:y+4,fill:'#71858b','font-size':11,'text-anchor':'end'},String(level));
+  }
+  const tx=px(t);add('line',{x1:tx,y1:35,x2:tx,y2:ymin,stroke:'#a77d43','stroke-dasharray':'4 4'});
+  let path='',prev=null;
+  for(const p of pts){
+   const stamp=Date.parse(p.t);
+   if(!Number.isFinite(stamp)||!Number.isFinite(p.hM))continue;
+   const x=px(stamp),y=py(p.hM);
+   path+=(prev&&stamp-prev<=(9*H)?'L':'M')+x.toFixed(1)+','+y.toFixed(1)+' ';
+   prev=stamp;
+  }
+  add('path',{d:path,class:'trace'});
+  add('circle',{cx:px(t),cy:py(peak),r:5,class:'peak'});
+  add('text',{x:tx+8,y:27,fill:'#8b6236','font-size':11,'font-weight':750},'Offshore peak');
+  for(const [label,stamp] of [['−72h',t-72*H],['Peak',t],['+72h',t+72*H]])add('text',{x:px(stamp),y:242,fill:'#70838a','font-size':11,'text-anchor':'middle'},label);
+ };
+ buttons.forEach(b=>b.addEventListener('click',()=>{selected=Number(b.dataset.caseIndex);draw();}));
+ fetch(urls,{credentials:'same-origin'}).then(r=>{if(!r.ok)throw Error('NOAA archive unavailable');return r.json()}).then(d=>{
+  if(!Array.isArray(d.samples)||d.events?.length!==3||d.station?.id!=='45004')throw Error('Archive missing or invalid');
+  dataset=d;draw();
+ }).catch(()=>{
+  els.title.textContent='Historical source currently unavailable';
+  els.description.textContent='The archived NOAA data file could not be loaded. No estimates are substituted.';
+  els.coverage.textContent='Choose the simulation above to explore the interface, or consult NOAA directly.';
+  els.caption.textContent='Historical chart unavailable; no values inferred.';
+ });
+})();
+</script>
+</body></html>

@@ -1,0 +1,150 @@
+name: Rockhounding NOAA issued-cycle research archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-m1-20261014
+    paths:
+      - .github/workflows/rockhounding-issued-archive.yml
+  # Research replay also checks latest-issued-per-valid-hour buoy matching without double-counting.
+  # On the draft research branch, the push below provides an immediate test.
+  schedule:
+    - cron: '35 2,8,14,20 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-issued-wave-archive
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout independent research-data branch
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-wave-data
+          path: wave-history
+          persist-credentials: true
+
+      - name: Prepare free NOAA decoder
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install only GRIB decoding dependency
+        run: python -m pip install -r scripts/rockhounding/requirements.txt
+
+      - name: Select issued NOAA cycle (six-hour schedule; one-hour research smoke test)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_REF_NAME" == "research/rockhounding-m1-20261014" ]]; then
+            # Research branch bootstrap: one already-issued hourly model cycle
+            # so a genuinely distinct issue can be matched before merge.
+            DAY="$(date -u -d '90 minutes ago' +%Y%m%d)"
+            CYCLE="$(date -u -d '90 minutes ago' +%H)"
+          else
+            DAY="$(date -u -d '2 hours ago' +%Y%m%d)"
+            HOUR="$(date -u -d '2 hours ago' +%H)"
+            CYCLE="$(printf '%02d' "$((10#$HOUR/6*6))")"
+          fi
+          echo "NOAA_DAY=$DAY" >> "$GITHUB_ENV"
+          echo "NOAA_CYCLE=$CYCLE" >> "$GITHUB_ENV"
+          echo "Running bounded NOAA Great Lakes model issue ${DAY} ${CYCLE}Z"
+
+      - name: Fetch one NOAA 500m Great Lakes GRIB and extract exact fixed research cell
+        run: |
+          mkdir -p artifacts
+          python scripts/rockhounding/capture-fixed-wave-cycle.py \
+            --date "$NOAA_DAY" --cycle "$NOAA_CYCLE" \
+            --output artifacts/grand-marais-noaa-cycle.json
+
+      - name: Pause between NOAA GRIB subset requests
+        run: sleep 12
+
+      - name: Capture independently validated offshore buoy 45004 grid-point model
+        run: |
+          python scripts/rockhounding/capture-buoy45004-model.py \
+            --date "$NOAA_DAY" --cycle "$NOAA_CYCLE" \
+            --output artifacts/ndbc45004-colocated-model.json
+
+      - name: Download independent NDBC measured wave observations
+        run: |
+          curl --fail --silent --show-error --location --max-time 35 --retry 2 \
+            'https://www.ndbc.noaa.gov/data/realtime2/45004.txt' \
+            --output artifacts/ndbc45004-observations.txt
+          test -s artifacts/ndbc45004-observations.txt
+          head -n 1 artifacts/ndbc45004-observations.txt | grep -q 'WVHT'
+
+      - name: Set up Node for issue-time model ledger
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Bootstrap authentic October 15 model evidence only if archive absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f wave-history/data/rockhounding/issued-cycle-ledger.json ]; then
+            node scripts/rockhounding/rolling-cycle-ledger.cjs \
+              --input data/rockhounding/grand-marais-glwu-model-cycle-20261015T18Z.json \
+              --ledger wave-history/data/rockhounding/issued-cycle-ledger.json \
+              --report artifacts/bootstrap-report.json \
+              --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+          fi
+
+      - name: Append original NOAA forecast issue, preserving older forecasts
+        run: |
+          node scripts/rockhounding/rolling-cycle-ledger.cjs \
+            --input artifacts/grand-marais-noaa-cycle.json \
+            --ledger wave-history/data/rockhounding/issued-cycle-ledger.json \
+            --report wave-history/data/rockhounding/issued-cycle-research-report.json \
+            --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+
+      - name: Verify GLWU model forecast against actual offshore buoy observations
+        run: |
+          node scripts/rockhounding/verify-buoy45004-model.cjs \
+            --model artifacts/ndbc45004-colocated-model.json \
+            --buoy-text artifacts/ndbc45004-observations.txt \
+            --ledger wave-history/data/rockhounding/buoy45004-issued-model-ledger.json \
+            --report wave-history/data/rockhounding/buoy45004-verified-offshore-report.json \
+            --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+
+      - name: Commit research-only archive to data branch, never main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C wave-history config user.name "Rockhounding Research Bot"
+          git -C wave-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C wave-history add data/rockhounding/issued-cycle-ledger.json data/rockhounding/issued-cycle-research-report.json data/rockhounding/buoy45004-issued-model-ledger.json data/rockhounding/buoy45004-verified-offshore-report.json
+          if git -C wave-history diff --cached --quiet; then
+            echo "No archive change."
+          else
+            git -C wave-history commit -m "data(rockhounding): retain NOAA issue ${NOAA_DAY} ${NOAA_CYCLE}Z"
+            git -C wave-history push origin HEAD:research/rockhounding-wave-data
+          fi
+
+      - name: Retain a copy of NOAA evidence and archive research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-issued-wave-research
+          path: |
+            artifacts/grand-marais-noaa-cycle.json
+            artifacts/bootstrap-report.json
+            artifacts/ndbc45004-colocated-model.json
+            artifacts/ndbc45004-observations.txt
+            wave-history/data/rockhounding/issued-cycle-research-report.json
+            wave-history/data/rockhounding/buoy45004-verified-offshore-report.json
+          if-no-files-found: warn
+          retention-days: 21
