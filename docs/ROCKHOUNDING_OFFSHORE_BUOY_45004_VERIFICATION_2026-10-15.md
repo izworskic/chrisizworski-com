@@ -24,7 +24,7 @@ Original **October 15, 2026, 12Z model issue**: the GRIB2 file returned **49 mod
 | Root mean square error | **0.1136 m** |
 | Mean bias (model minus buoy) | **+0.0089 m** |
 
-Sample positive and negative errors both occur; the aggregate masks day/lead effects. The later integrated run, also storing a genuine NOAA **20Z** model issue, recorded **11 pairs** across **two issues**, all from the same day; its report will be recalculated after the explicit latest-issued-per-hour selection rule was added. Neither result is a meaningful *seasonal* model skill estimate, much less a shoreline prediction.
+Sample positive and negative errors both occur; the aggregate masks day/lead effects. The later integrated run, also storing a genuine NOAA **20Z** model issue, initially counted 11 candidates from two issues, but the **corrected latest-issued-per-valid-hour report has 10 unique matched observations** from the same calendar day, with **MAE 0.1100 m, RMSE 0.1211 m and bias +0.0260 m**. Source cycle count 2, independent observed dates 1; no calibrated seasonal model skill. Neither result is a meaningful *seasonal* model skill estimate, much less a shoreline prediction.
 
 ## Honest matching and leakage prevention
 
