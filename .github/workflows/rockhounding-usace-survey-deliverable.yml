@@ -26,7 +26,7 @@ jobs:
         run: |
           python scripts/rockhounding/audit-usace-2026-deliverable.py \
             --out artifacts/grand-marais-usace-2026-survey-deliverable-audit.json
-      - name: Inspect original bounded 4MB USACE survey ZIP, XYZ and accompanying datum metadata
+      - name: Scan original USACE XYZ coordinates and complete datum/source metadata
         run: |
           python scripts/rockhounding/inspect-usace-2026-zip.py \
             --out artifacts/grand-marais-usace-2026-survey-archive-metadata.json
