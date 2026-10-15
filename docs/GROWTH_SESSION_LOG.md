@@ -1,5 +1,13 @@
 # Search Growth + Revenue Session Log
 
+## Michigan rockhounding M1 access-route and beach geometry review — October 14, 2026
+
+- Draft PR #1001 research branch, no production changes: added nine official public-facility reviews with owner/source URLs, exact-route and parking uncertainty, EGLE collecting limits vs location-specific authority, and explicit closure/season controls.
+- Added sourced Grand Marais Agate Beach and Bayshore Park candidate beach polygons (OpenStreetMap ways 434583711 and 929622678, ODbL attribution) to a research-only GeoJSON. These are not waterlines, legal paths, approved collecting zones or verified exposure normals. Neither can feed a public wave verdict.
+- Added fail-closed source auditing module and seven deterministic access tests; original six NOAA/direction tests retained. Park addresses, third-party candidate pin and public-site GPS cannot be promoted to surveyed parking entrances. As of this review, **9 documented public facilities, 0 verified complete legal parking-to-shore collection routes, 0 approved collection recommendations**.
+- Technical owners/source details: `docs/ROCKHOUNDING_M1_2026-10-14.md`. No search-facing pages, ad implementation, routes, sitemap or creator identity modified. No GSC/GA4/AdSense measurements or measurable traffic gains; draft CI must pass before merge.
+- Exactly one next action: Validate Agate Beach and Bayshore Park site-specific collecting rules and legal parking-to-shore paths with Burt Township, then survey the actual shoreline-waterward bearings for NOAA model sampling.
+
 ## Rockhounding M1 access-and-wave research — October 14, 2026
 
 - Research-only additive branch `research/rockhounding-m1-20261014`: 15 shoreline candidates, nine priority pilots, two explicit NPS no-collection controls; all exact entrance/permission/exposure fields fail closed. Not a new published page or canonical.
