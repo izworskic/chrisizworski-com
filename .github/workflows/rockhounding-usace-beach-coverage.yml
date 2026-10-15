@@ -1,0 +1,27 @@
+name: Rockhounding USACE survey-to-beach footprint exclusion
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-usace-beach-coverage-gate-20261015
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assert both beaches remain excluded from the channel survey
+        run: |
+          node --test tests/rockhounding-usace-survey-coverage.test.js
+          node --test tests/rockhounding-harbor-bathymetry.test.js
+          node --test tests/rockhounding*.test.js
+      - name: Verify page still labels modeled conditions as research
+        run: node --test tests/rockhounding-lab-visual.test.js

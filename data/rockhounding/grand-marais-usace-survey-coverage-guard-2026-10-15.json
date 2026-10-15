@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "rockhounding-usace-2026-survey-footprint-guard-v1",
+  "capturedUTC": "2026-10-15",
+  "survey": {
+    "provider": "US Army Corps of Engineers eHydro",
+    "jobId": "GR_01_MAS_20260730_CS",
+    "objectId": 125722,
+    "surveyDateUTC": "2026-07-30",
+    "catalogFeatureURL": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0/query?where=OBJECTID%3D125722&outFields=*&returnGeometry=true&outSR=4326&f=json",
+    "coverageType": "SURVEY_JOB_POLYGON_ENVELOPE_NOT_XYZ_DENSITY",
+    "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38826041981",
+    "originalGeometry": {
+      "ringCount": 1,
+      "vertexCount": 161,
+      "boundsWgs84": [
+        -85.971734,
+        46.675899,
+        -85.969027,
+        46.685841
+      ],
+      "dataProjection": "NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet",
+      "preciseSurveyPolygonNotEmbedded": true
+    },
+    "sampledOriginalXYZ": {
+      "archiveSHA256": "6dce01ac993dd991219be0da4718fd90b83f3e465099c67e1b3186394081ac5c",
+      "archiveBytes": 4062569,
+      "xyzPreviewRows": 1500,
+      "xyzFullSurveyRowsValidated": false,
+      "xyzGeoreferencingIndependentlyChecked": false
+    }
+  },
+  "siteInputs": {
+    "source": "OSM_2026_10_14_RESEARCH_FOOTPRINTS_NOT_LEGAL_WATERLINE",
+    "geoJSONPath": "data/rockhounding/grand-marais-research-footprints.geojson",
+    "siteIds": [
+      "grand-marais-agate",
+      "grand-marais-harbor"
+    ],
+    "normalOrAccessSurveyed": false
+  },
+  "meaning": {
+    "boundingBoxesCanRejectDisjointCoverage": true,
+    "boundingBoxesCannotProveCoveredWater": true,
+    "bathymetryDoesNotMeasureWaves": true,
+    "canClaimSiteDepthFromSurvey": false,
+    "canPublishHarborSurf": false,
+    "canPredictNewStones": false,
+    "canPublishVisitWindow": false,
+    "canClaimSafeAccess": false
+  }
+}
