@@ -11,8 +11,8 @@ test('no-key NOAA GRIB2 URL includes a small bbox, height, wave-from direction a
  assert.equal(url.searchParams.get('dir'),'/glwu.20261015');
  for(const field of ['HTSGW','WVHGT','WVPER','WVDIR'])assert.equal(url.searchParams.get('var_'+field),'on');
 });
-test('unsupported UTC model cycles are rejected without network access',()=>{
- const p=spawnSync('python3',[script,'--date','20261015','--cycle','05','--print-url'],{encoding:'utf8',timeout:10000});
+test('UTC model hours outside 00-23 are rejected without network access',()=>{
+ const p=spawnSync('python3',[script,'--date','20261015','--cycle','24','--print-url'],{encoding:'utf8',timeout:10000});
  assert.notEqual(p.status,0);assert.match(p.stderr,/invalid choice/);
 });
 
