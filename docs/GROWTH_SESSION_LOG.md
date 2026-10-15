@@ -1,5 +1,13 @@
 # Search Growth + Revenue Session Log
 
+## Rockhounding M1 access-and-wave research — October 14, 2026
+
+- Research-only additive branch `research/rockhounding-m1-20261014`: 15 shoreline candidates, nine priority pilots, two explicit NPS no-collection controls; all exact entrance/permission/exposure fields fail closed. Not a new published page or canonical.
+- Verified official DNR/EGLE/NPS information includes Fisherman's Island temporary vehicle access closure, Lakeport day-use seasonal window, Grand Marais exposed/protected paired sites, Tawas Point bay/open-lake split, and EGLE post-storm safety guidance. Source URLs and limitations captured in `docs/ROCKHOUNDING_M1_2026-10-14.md`.
+- NDBC standard-met observation parser, UTC freshness gate and uncalibrated wave-angle test added with six deterministic tests; no NOAA GRIB ingestion, full backtest, official entrance routing or collecting-ready site yet. No deployed behavior, ad, SEO or analytics changes.
+- No live GSC, GA4, AdSense, traffic or ranking uplift measurement; impact unknown. At start, main's latest Agent branch verification was green at 6e04df4; separate State Aurora Production Smoke was failing, unrelated to this research branch. Draft PR/remote CI/production verification pending.
+- Exactly one next action: Verify the nine pilot shoreline entries and location-specific collecting rules, then trace beach segment geometry for Grand Marais exposed/sheltered comparison.
+
 ## Michigan maple sap forecast and sugarhouse guide — October 14, 2026
 
 - **Canonical:** https://chrisizworski.com/michigan-maple-sap-run/ — new state-wide spring decision tool on the existing website.
