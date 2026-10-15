@@ -95,6 +95,13 @@ EGLE: `https://www.michigan.gov/egle/public/learn/geology/rockhounding` and `...
 
 These are not the changing waterline, a legal right-of-way, a validated exposure normal or an authoritative boundary. Both set `shorelineWaterwardNormalDeg: null`, so the experimental wave comparison **must not** use them as production geometry. They do allow distinct map footprint layers and manual review without drawing arbitrary rectangles as if they were shorelines. See `lib/rockhounding/pilot-audit.cjs`.
 
+
+### Candidate pedestrian connections
+
+`data/rockhounding/grand-marais-route-candidates.geojson` adds OSM way **369178056** (Agate Beach boardwalk-style footway/bridge near north Lake Avenue), way **361081154** (Bayshore Park footpath) and **361081155** (steps at harbor access). These three lines were acquired via Overpass with ODbL attribution; they are **crowd-mapped connections and not verified legal entry routes or confirmation of current ramp/step accessibility**. The source facility already documents a township public beach, but current closure, lot-to-footway connectivity, operator permission and shoreline transit still require independent checking.
+
+The access benchmark now includes eight deterministic access/geometry tests plus the original six wave parser/directional tests.
+
 ### Testing and release status
 
 Run `node --test tests/rockhounding-m1*.test.js` as a focused suite and `npm run verify:all` before merge. CI on the existing draft PR is the authoritative check; no public deployment or Search Console effect is claimed.
