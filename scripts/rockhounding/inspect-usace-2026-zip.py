@@ -14,6 +14,7 @@ import pathlib
 import re
 import urllib.request
 import zipfile
+import xml.etree.ElementTree as ET
 
 SOURCE="https://ehydroprod.blob.core.usgovcloudapi.net/ehydro-surveys/CELRE/CELRE_DIS_GR_01_MAS_20260730_CS.ZIP"
 MAX_DOWNLOAD=16*1024*1024
@@ -74,6 +75,29 @@ def inspect_zip(raw):
     if len(hits)>=65:break
    snippets.append({"file":name,"textBytes":len(text),"relevantMetadataExcerpts":hits,
                     "matchedTextIsNotProofOfReconciledVerticalDatum":True})
+  # USACE FGDC XML states Z is an elevation referred to IGLD 85,
+  # in US SURVEY FEET. This does not reconcile time-varying lake level.
+  survey_xml=next((name for name in xml if name.lower().endswith("_cs.xml")),None)
+  if not survey_xml:raise ValueError("Missing definitive USACE original FGDC survey XML")
+  with archive.open(survey_xml) as stream:
+   original_xml=stream.read(MAX_TEXT_READ+1)
+  if len(original_xml)>MAX_TEXT_READ:raise ValueError("Original survey XML too large")
+  root=ET.fromstring(original_xml)
+  vertical=root.findtext(".//spref/vertdef/altsys/altdatum")
+  elevation_units=root.findtext(".//spref/vertdef/altsys/altunits")
+  depth_units=root.findtext(".//spref/vertdef/depthsys/depthdu")
+  if vertical!="IGLD 85" or elevation_units!="US Survey Foot" or depth_units!="US Survey Foot":
+   raise ValueError("USACE original vertical metadata differed from IGLD85 US survey feet")
+  result["reportedCoordinateReference"]={
+   "horizontal":"NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet",
+   "horizontalUnits":"US Survey Foot",
+   "horizontalCRSCodeCandidate":"ESRI:102688",
+   "horizontalCRSCodeIndependentlyTransformed":False,
+   "verticalDatumReportedByOriginalXML":vertical,
+   "ZUnitsReportedByOriginalXML":elevation_units,
+   "depthUnitsReportedByOriginalXML":depth_units,
+   "isZAnElevationRatherThanCurrentWaterDepth":True,
+   "waterLevelTimeAndIGLD85StationNotJoined":True}
   xyz_summaries=[]
   for name in xyz[:3]:
    info=archive.getinfo(name)
@@ -129,6 +153,7 @@ def main():
  print("USACE_2026_SURVEY_ZIP "+json.dumps({
   "sha256":data["sha256"],"archiveBytes":data["archiveBytes"],
   "files":data["memberCount"],"xyz":data["xyzNumericPreview"],
+  "originalDatum":data["reportedCoordinateReference"],
   "metadataExtract":data["sourceMetadataSnippets"],
   "safeDepth":False,"shelter":False},separators=(",",":")))
 if __name__=="__main__":main()
