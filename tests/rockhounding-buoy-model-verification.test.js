@@ -83,3 +83,19 @@ test('model issue expiry retains forecasts until the issue itself falls outside 
  const later=mergeOffshoreModelIssues(original,model(),{nowISO:'2026-11-19T20:00:00Z'});
  assert.equal(later.counts.cycles,0);
 });
+
+test('overlapping issue cycles select latest nominal NOAA forecast once per target hour',()=>{
+ const old=model(),base=mergeOffshoreModelIssues(null,old,{nowISO:'2026-10-15T20:00:00Z'});
+ const later={...model(),issueAt:iso(1),modelRecords:[
+  {issueAt:iso(1),validAt:iso(3),leadHours:2,phase:'MODEL_FORECAST',modelSignificantWaveHeightM:1.5}
+ ]};
+ const merged=mergeOffshoreModelIssues(base,later,{nowISO:'2026-10-15T20:00:00Z'});
+ const check=verifyAgainstBuoy(merged,text(),{asOfISO:'2026-10-15T20:00:00Z'});
+ assert.equal(check.matchedPairs,5);
+ assert.equal(check.forecastSelectionPolicy,'LATEST_NOMINAL_ISSUE_PER_VALID_HOUR');
+ assert.equal(check.supersededForecastCandidates,1);
+ const target=check.matches.find(x=>x.forecastValidAt===iso(3));
+ assert.equal(target.issueAt,iso(1));
+ assert.equal(target.modelHeightM,1.5);
+ assert.equal(check.nominalIssueDoesNotProvePublicationAvailability,true);
+});
