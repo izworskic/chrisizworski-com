@@ -99,3 +99,13 @@ test('overlapping issue cycles select latest nominal NOAA forecast once per targ
  assert.equal(target.modelHeightM,1.5);
  assert.equal(check.nominalIssueDoesNotProvePublicationAvailability,true);
 });
+
+test('nine or more hourly measurements from one calendar day are not seasonal model validation',()=>{
+ const base=mergeOffshoreModelIssues(null,model(),{nowISO:'2026-10-15T20:00:00Z'});
+ const report=verifyAgainstBuoy(base,text(),{asOfISO:'2026-10-15T20:00:00Z'});
+ assert.deepEqual(report.distinctObservationDays,['2026-10-15']);
+ assert.deepEqual(report.issueCyclesRepresented,[issue]);
+ assert.equal(report.evidenceSufficiency.distinctObservedDaysAtLeast3,false);
+ assert.equal(report.evidenceSufficiency.distinctIssuedCyclesAtLeast3,false);
+ assert.equal(report.evidenceSufficiency.sufficientForSeasonalSkill,false);
+});
