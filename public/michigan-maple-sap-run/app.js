@@ -122,20 +122,49 @@ function markSites(){
   marker.setIcon(window.L.divIcon({className:'',html:'<span class="leaf-marker '+level+(id===current?' selected':'')+'"></span>',iconSize:[22,22],iconAnchor:[11,11]}));
  });
 }
+// Normal viewport-only use of the OSM public raster tile server; no API key.
+// Respect OSM tile policy: attribution, browser caching/Referer and no background prefetch.
 function initMap(locations){
- if(typeof window.L==='undefined'){$('mapFallback').hidden=false;return;}
- try{
-  map=window.L.map('map',{scrollWheelZoom:false,attributionControl:true}).setView([44.78,-85.58],6);
-  window.L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-   maxZoom:17}).addTo(map);
-  locations.forEach(function(x){
+ const host=$('map'),fallback=$('mapFallback');
+ function reportFailure(){
+  fallback.hidden=false;
+  fallback.textContent='Map tiles are unavailable right now. Use the Michigan location selector or statewide board to explore forecasts.';
+ }
+ if(typeof window.L==='undefined'){reportFailure();return;}
+ let initialized=false;
+ function mount(){
+  if(initialized)return;
+  initialized=true;
+  try{
+   map=window.L.map('map',{scrollWheelZoom:false,attributionControl:true,preferCanvas:true}).setView([44.78,-85.58],6);
+   const tiles=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
+    minZoom:4,maxZoom:13,maxNativeZoom:13,updateWhenIdle:true,keepBuffer:1,
+    detectRetina:false
+   });
+   let errors=0;
+   tiles.on('tileerror',function(){if(++errors>=3)reportFailure();});
+   tiles.on('tileload',function(){errors=0;fallback.hidden=true;});
+   tiles.addTo(map);
+   locations.forEach(function(x){
     const m=window.L.marker([x.lat,x.lon],{title:x.name});
     m.addTo(map).bindTooltip(x.name);
-    m.on('click',function(){selectSite(x.id);});markers.set(x.id,m);
-  });
-  markSites();
- }catch(e){$('mapFallback').hidden=false;}
+    m.on('click',function(){selectSite(x.id);});
+    markers.set(x.id,m);
+   });
+   markSites();
+   window.setTimeout(function(){if(map)map.invalidateSize();},60);
+  }catch(e){reportFailure();}
+ }
+ if('IntersectionObserver' in window){
+  const observer=new window.IntersectionObserver(function(entries){
+   if(entries.some(function(entry){return entry.isIntersecting;})){
+    observer.disconnect();
+    mount();
+   }
+  },{rootMargin:'180px'});
+  observer.observe(host);
+ }else mount();
 }
 function renderVenues(){
  const region=$('venueRegion').value,type=$('venueType').value;
