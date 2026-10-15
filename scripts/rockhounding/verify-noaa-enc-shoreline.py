@@ -173,9 +173,19 @@ def build_snapshot(coast,pier_data,water_side):
  valid_piers=[chart_pier_summary(x) for x in pier_data.values()]
  if len(valid_piers)!=2 or any(p['northSouthSpanM']<200 for p in valid_piers):
   raise ValueError('Two charted major harbor entrance piers not established')
- water_bearings=[x['twoNormalsDeg'][1] for x in windows.values()]
- # The shoreline has curvature; spread is a diagnostic rather than a survey CI.
- spread=(min(water_bearings),max(water_bearings))
+ # Window tangent direction may reverse across NOAA source edits. Select the
+ # normal closest to the independently GIS-backed 200m research bearing.
+ chosen_bearing=orientation['researchBearingDeg']
+ def angdiff(a,b):return abs((a-b+180)%360-180)
+ water_bearings=[]
+ if chosen_bearing is not None:
+  for sample in windows.values():
+   choices=sample['twoNormalsDeg']
+   closest=min(choices,key=lambda b:angdiff(b,chosen_bearing))
+   sample['waterwardStudyBearingDeg']=closest
+   water_bearings.append(closest)
+ # Local tangent curvature spread is NOT survey precision or a confidence CI.
+ spread=(min(water_bearings),max(water_bearings)) if water_bearings else None
  return {'schemaVersion':'grand-marais-noaa-enc-geometry-v1',
   'collectedAtUTC':dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00','Z'),
   'source':{'url':ENC,'chart':SOURCE_CHART,'harborLineLayer':PIER_LAYER,
@@ -189,6 +199,7 @@ def build_snapshot(coast,pier_data,water_side):
    'researchBearingDeg':orientation['researchBearingDeg'],
    'method':'NOAA shoreline centered 200m tangent; perpendicular normal chosen using six independent GLAHF water/land ray probes',
    'orientation':orientation,'windowNormals':windows,
+   'sourceTangentWindowBearingRangeDeg':list(spread) if spread else None,
    'notASurveyedCurrentShorelineNormal':True,
    'notAValidatedBeachWaveDirection':True},
   'bayshore':{'studyAnchor':{'lat':BAYSHORE_ANCHOR[1],'lon':BAYSHORE_ANCHOR[0]},
