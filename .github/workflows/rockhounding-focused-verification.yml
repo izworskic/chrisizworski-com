@@ -1,0 +1,30 @@
+name: Rockhounding focused research verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-m1-20261014
+    paths:
+      - .github/workflows/rockhounding-focused-verification.yml
+
+permissions:
+  contents: read
+
+jobs:
+  rockhounding-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Check out research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run all independent rockhounding engine and UI tests
+        run: node --test tests/rockhounding*.test.js
+      - name: Syntax-check NOAA Python sampler and grid-validation script
+        run: python3 -m py_compile scripts/rockhounding/*.py
