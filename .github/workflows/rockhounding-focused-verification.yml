@@ -28,6 +28,6 @@ jobs:
         run: node --test tests/rockhounding*.test.js
       - name: Syntax-check NOAA Python sampler and grid-validation script
         run: python3 -m py_compile scripts/rockhounding/*.py
-      # Includes independent 45004 buoy time matching, offshore modeled wet cells, 21d issue retention and revision matching.
+      # Also tests latest-issued forecast selection per buoy-valid hour without double counting measurements.
       - name: Test shoreline-side candidate selection with mocked wave input
         run: python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
