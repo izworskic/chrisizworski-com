@@ -4,7 +4,7 @@
   "modelGrid": "2p5km",
   "sourceBuoy": "https://www.ndbc.noaa.gov/data/realtime2/45004.txt",
   "sourceModel": "NOAA_GLWU_GRIB2",
-  "asOfISO": "2026-10-15T22:29:36.000Z",
+  "asOfISO": "2026-10-15T22:30:46.000Z",
   "toleranceMinutes": 30,
   "maxLeadHours": 24,
   "observedSamplesAvailable": 3140,
@@ -54,37 +54,37 @@
     "elevationIsNotNwsHazardThreshold": true,
     "leadTime": {
       "1-6h": {
-        "pairs": 12,
+        "pairs": 14,
         "distinctDays": [
           "2026-10-14",
           "2026-10-15"
         ],
-        "maeM": 0.08,
-        "rmseM": 0.0977,
-        "meanBiasM": 0.0183,
+        "maeM": 0.0807,
+        "rmseM": 0.0991,
+        "meanBiasM": 0.0036,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
       "7-12h": {
-        "pairs": 7,
+        "pairs": 8,
         "distinctDays": [
           "2026-10-14",
           "2026-10-15"
         ],
-        "maeM": 0.0629,
-        "rmseM": 0.0754,
-        "meanBiasM": 0.0314,
+        "maeM": 0.0563,
+        "rmseM": 0.0706,
+        "meanBiasM": 0.0287,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
       "13-24h": {
-        "pairs": 11,
+        "pairs": 12,
         "distinctDays": [
           "2026-10-15"
         ],
-        "maeM": 0.03,
-        "rmseM": 0.0358,
-        "meanBiasM": 0.0045,
+        "maeM": 0.0317,
+        "rmseM": 0.0372,
+        "meanBiasM": 0.0083,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       }
