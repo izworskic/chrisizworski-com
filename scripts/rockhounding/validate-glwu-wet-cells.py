@@ -17,10 +17,11 @@ spec.loader.exec_module(glwu)
 
 def field_diagnostics(path):
     """Show first-wave-field nearest neighbors, even when full 4-field records cannot form."""
-    from eccodes import codes_grib_new_from_file,codes_grib_find_nearest,codes_get,codes_release
+    from eccodes import codes_grib_new_from_file,codes_grib_find_nearest,codes_get,codes_get_array,codes_release
     wanted={3:'HTSGW',4:'WVDIR',5:'WVHGT',6:'WVPER'}
     counts={k:0 for k in wanted.values()}
     preview={}
+    wet_neighbors={}
     with open(path,'rb') as fp:
         while True:
             gid=codes_grib_new_from_file(fp)
@@ -32,6 +33,28 @@ def field_diagnostics(path):
                 if name is None:continue
                 counts[name]+=1
                 if name in preview:continue
+                if name=='HTSGW':
+                    latitudes=codes_get_array(gid,'latitudes')
+                    longitudes=codes_get_array(gid,'longitudes')
+                    heights=codes_get_array(gid,'values')
+                    for site in glwu.SITES:
+                        valid=[]
+                        for la,lo,h in zip(latitudes,longitudes,heights):
+                            val=float(h)
+                            if not 0<=val<=18:continue
+                            la,lo=float(la),float(lo)
+                            if lo>180:lo-=360
+                            dist=glwu.km(site['lat'],site['lon'],la,lo)
+                            if dist<=7:valid.append((dist,la,lo,val))
+                        valid.sort(key=lambda x:x[0])
+                        wet_neighbors[site['id']]={
+                          'validWaveHeightCellsWithin7km':len(valid),
+                          'closestValidWaveHeightCells':[
+                            {'distanceKm':round(p[0],3),'lat':round(p[1],6),
+                             'lon':round(p[2],6),'heightM':round(p[3],3)}
+                             for p in valid[:6]
+                           ],
+                          'note':'HTSGW-only wet heights, not complete wave records or certified beach water'}
                 out=[]
                 for site in glwu.SITES:
                     points=codes_grib_find_nearest(gid,site['lat'],site['lon'],npoints=4)
@@ -49,7 +72,8 @@ def field_diagnostics(path):
                     out.append({'siteId':site['id'],'nearest4':neighbors})
                 preview[name]=out
             finally:codes_release(gid)
-    return {'fieldMessageCounts':counts,'firstMessageNearest4':preview}
+    return {'fieldMessageCounts':counts,'firstMessageNearest4':preview,
+            'firstAnalysisWaveHeightWetNeighborhood':wet_neighbors}
 
 def diagnose_grid(day,cycle,grid):
     url=glwu.url_for(day,cycle,grid)
