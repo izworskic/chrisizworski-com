@@ -48,6 +48,18 @@ The standing pilot config in \`data/rockhounding/grand-marais-wave-pilot.json\` 
 - \`tests/rockhounding-glwu-cli.test.js\`: NOAA URL parameters and invalid cycles, no live network.
 - Earlier public-access/rock collecting permission tests remain unchanged. Run \`node --test tests/rockhounding*test.js\` and repository \`npm run verify:all\` before updating or merging PR.
 
+
+## NWS marine and shoreline warning veto (added)
+
+\`lib/rockhounding/nws-shore-hazards.cjs\` queries three public NWS API endpoints: nearshore marine zones **LSZ250** (Munising–Grand Marais), **LSZ251** (Grand Marais–Whitefish Point), plus a Grand Marais shoreline point. The three feeds are combined with conservative tri-state rules: \`ACTIVE\` when any relevant alert is found, even if another feed fails; \`UNKNOWN\` if one or more feeds fail without a confirmed active alert; \`CLEAR\` only when all returned valid empty/current non-hazardous results. **CLEAR means no relevant NWS alerts in these feeds, not safe shore conditions.** Advisory and warning types include gale, small craft, hazardous seas, beach hazards, high surf, wind, dense fog, thunderstorms and winter weather. Active alerts are a hard veto in the post-storm research decision.
+
+- NWS alerts documentation: https://www.weather.gov/documentation/services-web-alerts
+- NWS LSZ250 nearshore: https://marine.weather.gov/MapClick.php?zoneid=LSZ250
+- NWS LSZ251 nearshore: https://marine.weather.gov/MapClick.php?zoneid=LSZ251
+- The adapter is **not yet connected to a deployed live route** or a broader local closure/ice/surf hazard system; no visitor-safe claim is made.
+
+\`tests/rockhounding-nws-hazards.test.js\` covers active warnings, small craft advisories, expired warnings, degraded feeds and failure handling.
+
 ## Failure taxonomy
 
 \`CELL_NOT_VERIFIED\`, \`SHORE_ORIENTATION_UNVERIFIED\`, \`BAY_NOT_RESOLVED_BY_GRID\`, \`HAZARD_VETO\`, \`INSUFFICIENT_HISTORY\`, \`STALE_MODEL_ANALYSIS\`, \`INSUFFICIENT_BASELINE\`, \`NO_RELATIVE_DISTURBANCE_SIGNAL\`, \`MODEL_DISTURBANCE_ONGOING\`, \`SETTLING_CANDIDATE_FORECAST_INCOMPLETE\`, \`WAVES_MAY_REBUILD\`, \`SETTLING_CANDIDATE_HAZARDS_UNKNOWN\`, \`RESEARCH_SETTLING_CANDIDATE\`. All remain research-only.
