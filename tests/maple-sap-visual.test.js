@@ -38,7 +38,7 @@ test('Graph handles a weather outage without inventing a score',()=>{
 });
 test('Visual page keeps provider-linked truth labels, crawlable content and single canonical',()=>{
  const html=file('public/michigan-maple-sap-run/index.html');
- assert.match(html,/<h1>When will the maple sap run\?<\/h1>/);
+ assert.match(html,/<h1><span class="hero-kicker">[^<]+<\/span>When will the maple sap run\?<\/h1>/);
  assert.match(html,/id="sapForecastChart"/);assert.match(html,/id="chartState"/);
  assert.match(html,/id="venueRegion"/);assert.match(html,/id="venueType"/);
  assert.match(html,/id="forecastDays"/);assert.match(html,/id="regionalBoard"/);
