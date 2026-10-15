@@ -71,3 +71,16 @@ test('Reference images are hosted at credited Wikimedia originals; no incomplete
  assert.match(css,/@media\(max-width:550px\)/);
  assert.match(css,/\.hero-photo/);assert.match(css,/\.sap-svg/);
 });
+
+test('Map uses keyless OpenStreetMap tiles, visible attribution, and viewport-only loading',()=>{
+ const app=file('public/michigan-maple-sap-run/app.js');
+ assert.match(app,/https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
+ assert.doesNotMatch(app,/basemaps\.cartocdn\.com|api\.mapbox\.com|maptiler\.com/);
+ assert.match(app,/OpenStreetMap contributors/);
+ assert.match(app,/IntersectionObserver/);
+ assert.match(app,/rootMargin:'180px'/);
+ assert.match(app,/tiles\.on\('tileerror'/);
+ assert.match(app,/fallback\.hidden=false/);
+ assert.match(app,/m\.on\('click',function\(\)\{selectSite\(x\.id\);\}\)/);
+ assert.match(app,/markers\.set\(x\.id,m\)/);
+});
