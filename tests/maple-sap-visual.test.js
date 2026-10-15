@@ -42,6 +42,8 @@ test('Visual page keeps provider-linked truth labels, crawlable content and sing
  assert.match(html,/id="sapForecastChart"/);assert.match(html,/id="chartState"/);
  assert.match(html,/id="venueRegion"/);assert.match(html,/id="venueType"/);
  assert.match(html,/id="forecastDays"/);assert.match(html,/id="regionalBoard"/);
+ const forecast=html.slice(html.indexOf('id="forecast-tool"'),html.indexOf('class="decision-grid"'));
+ assert.ok(forecast.indexOf('class="controls"')<forecast.indexOf('class="section-head"'),'Location controls must precede the auto-ad-eligible heading');
  assert.match(html,/2027 confirmed|2027 dates confirmed/);
  assert.match(html,/Reference photo, not a live Michigan view/);
  assert.match(html,/Dave Pape, public domain/);
