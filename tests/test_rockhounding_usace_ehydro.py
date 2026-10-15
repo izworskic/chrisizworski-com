@@ -64,7 +64,8 @@ class EhydroTests(unittest.TestCase):
         doc = json.loads((ROOT/'data/rockhounding/grand-marais-contemporary-source-register-2026-10-15.json').read_text())
         self.assertEqual([s['id'] for s in doc['observationStations']],['GRMM4','45172','45004'])
         self.assertTrue(all(s['confirmedHarborWaveSensor'] is False for s in doc['observationStations']))
-        self.assertIsNone(doc['hydrographicSurvey']['latestSurveyEndUTC'])
+        self.assertEqual(doc['hydrographicSurvey']['latestSurveyEndUTC'], '2026-07-30')
+        self.assertTrue(doc['hydrographicSurvey']['recentMatchingSurveyJobVerified'])
         self.assertFalse(doc['publicStatements']['canPredictFreshAgates'])
 
 if __name__ == '__main__':
