@@ -44,6 +44,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  '<main id="ski-main" class="wrap"><div class="hero"><p class="eyebrow">Michigan ski decisions · 2026–27 season · NWS sources</p>',
  '<div class="hero-copy"><h1>'+esc(h1)+'</h1><p class="lede">'+esc(subtitle)+'</p>',
  '<p class="answer">A ski weekend is worth considering when snow, operating lifts, price, and travel fit your plans. This tool compares the evidence; it does not certify that any resort is open.</p>',
+ '<p class="hero-live" id="ski-hero-live" aria-live="polite">Saturday/Sunday forecasts · NWS point data</p>',
  '<p class="update" id="updated" aria-live="polite">Loading the latest official signals…</p></div>',
  heroPhoto(slug),'</div>',
  content,
