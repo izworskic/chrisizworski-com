@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "grand-marais-wave-pilot-v1",
+  "purpose": "NOAA GLWU study targets; not navigable entrance pins, legal collection boundaries, or nearshore forecasts",
+  "source": "https://nomads.ncep.noaa.gov/gribfilter.php?ds=glwu",
+  "pilotSites": [
+    {
+      "id": "grand-marais-agate",
+      "name": "Agate Beach",
+      "researchSamplingCoordinate": {
+        "lat": 46.676,
+        "lon": -85.9853,
+        "status": "APPROXIMATE_UNSURVEYED"
+      },
+      "shore": {
+        "outwardBearingDeg": null,
+        "reviewStatus": "UNVERIFIED_WATERLINE"
+      },
+      "sheltering": "OPEN_EXPOSURE_CANDIDATE",
+      "modelCell": null,
+      "publicDestinationEvidence": "https://burttownshipacmi.gov/wp-content/uploads/2026/01/Burt-Twp-Rec-Plan-FINAL-1-9-26-comp.pdf"
+    },
+    {
+      "id": "grand-marais-harbor",
+      "name": "Bayshore Park harbor beach",
+      "researchSamplingCoordinate": {
+        "lat": 46.6719,
+        "lon": -85.9839,
+        "status": "APPROXIMATE_UNSURVEYED"
+      },
+      "shore": {
+        "outwardBearingDeg": null,
+        "reviewStatus": "UNVERIFIED_WATERLINE"
+      },
+      "sheltering": "SHELTERED_BAY_UNRESOLVED",
+      "modelCell": null,
+      "publicDestinationEvidence": "https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/"
+    }
+  ],
+  "studyWarnings": [
+    "The approximately 2.5km regional GLWU grid may give both beaches the same wet cell",
+    "The sheltered harbor requires local transformation that the offshore grid may not represent",
+    "A single model cycle does not supply prior 72 hours of analyses; retain source-stamped analysis snapshots",
+    "Neither modeled wave changes nor user familiarity establish safe collecting or newly exposed stones"
+  ]
+}
