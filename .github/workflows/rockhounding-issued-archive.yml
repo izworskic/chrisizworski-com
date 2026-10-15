@@ -1,0 +1,114 @@
+name: Rockhounding NOAA issued-cycle research archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-m1-20261014
+    paths:
+      - .github/workflows/rockhounding-issued-archive.yml
+  # Scheduled workflows run only after this file reaches the default branch.
+  # On the draft research branch, the push below provides an immediate test.
+  schedule:
+    - cron: '35 2,8,14,20 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-issued-wave-archive
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout independent research-data branch
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-wave-data
+          path: wave-history
+          persist-credentials: true
+
+      - name: Prepare free NOAA decoder
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install only GRIB decoding dependency
+        run: python -m pip install -r scripts/rockhounding/requirements.txt
+
+      - name: Determine last completed six-hour NOAA cycle
+        shell: bash
+        run: |
+          set -euo pipefail
+          DAY="$(date -u -d '2 hours ago' +%Y%m%d)"
+          HOUR="$(date -u -d '2 hours ago' +%H)"
+          CYCLE="$(printf '%02d' "$((10#$HOUR/6*6))")"
+          echo "NOAA_DAY=$DAY" >> "$GITHUB_ENV"
+          echo "NOAA_CYCLE=$CYCLE" >> "$GITHUB_ENV"
+          echo "Running bounded Grand Marais sample for ${DAY} ${CYCLE}Z"
+
+      - name: Fetch one NOAA 500m Great Lakes GRIB and extract exact fixed research cell
+        run: |
+          mkdir -p artifacts
+          python scripts/rockhounding/capture-fixed-wave-cycle.py \
+            --date "$NOAA_DAY" --cycle "$NOAA_CYCLE" \
+            --output artifacts/grand-marais-noaa-cycle.json
+
+      - name: Set up Node for issue-time model ledger
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Bootstrap authentic October 15 model evidence only if archive absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f wave-history/data/rockhounding/issued-cycle-ledger.json ]; then
+            node scripts/rockhounding/rolling-cycle-ledger.cjs \
+              --input data/rockhounding/grand-marais-glwu-model-cycle-20261015T18Z.json \
+              --ledger wave-history/data/rockhounding/issued-cycle-ledger.json \
+              --report artifacts/bootstrap-report.json \
+              --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+          fi
+
+      - name: Append original NOAA forecast issue, preserving older forecasts
+        run: |
+          node scripts/rockhounding/rolling-cycle-ledger.cjs \
+            --input artifacts/grand-marais-noaa-cycle.json \
+            --ledger wave-history/data/rockhounding/issued-cycle-ledger.json \
+            --report wave-history/data/rockhounding/issued-cycle-research-report.json \
+            --now "$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')"
+
+      - name: Commit research-only archive to data branch, never main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C wave-history config user.name "Rockhounding Research Bot"
+          git -C wave-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C wave-history add data/rockhounding/issued-cycle-ledger.json data/rockhounding/issued-cycle-research-report.json
+          if git -C wave-history diff --cached --quiet; then
+            echo "No archive change."
+          else
+            git -C wave-history commit -m "data(rockhounding): retain NOAA issue ${NOAA_DAY} ${NOAA_CYCLE}Z"
+            git -C wave-history push origin HEAD:research/rockhounding-wave-data
+          fi
+
+      - name: Retain a copy of NOAA evidence and archive research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-issued-wave-research
+          path: |
+            artifacts/grand-marais-noaa-cycle.json
+            artifacts/bootstrap-report.json
+            wave-history/data/rockhounding/issued-cycle-research-report.json
+          if-no-files-found: warn
+          retention-days: 21
