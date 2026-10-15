@@ -32,6 +32,13 @@ class ShoreCellSelectorTests(unittest.TestCase):
     def test_far_side_of_lake_rejected(self):
         self.assertFalse(mod.in_open_north_study_sector(47.00,-85.98))
         self.assertFalse(mod.in_open_north_study_sector(46.680,-85.5))
+    def test_prefers_nearer_cell_when_temporal_coverage_is_almost_equal(self):
+        near=(0,{"distanceKm":0.445,"lat":46.68},[(i,{}) for i in range(48)])
+        far=(1,{"distanceKm":1.114,"lat":46.6835},[(i,{}) for i in range(49)])
+        self.assertEqual(mod.choose_best_candidate([far,near])[0],0)
+        sparse=(2,{"distanceKm":0.21,"lat":46.68},[(i,{}) for i in range(10)])
+        self.assertEqual(mod.choose_best_candidate([sparse,far,near])[0],0)
+        self.assertIsNone(mod.choose_best_candidate([]))
     def test_not_harbor_validation(self):
         self.assertEqual(mod.HARBOR['id'],'grand-marais-harbor')
         self.assertGreater(mod.MIN_NORTH_DELTA_DEG,0)
