@@ -85,6 +85,14 @@ def _grib_field_by_time(path,candidates):
             finally:codes_release(gid)
     return seen,sorted(cycle_set),dict(field_counts)
 
+def choose_best_candidate(ranking):
+    """Prefer nearest cells with >=90% of best four-field temporal coverage."""
+    if not ranking:return None
+    highest=max(len(item[2]) for item in ranking)
+    threshold=max(3,math.ceil(highest*0.9))
+    eligible=[item for item in ranking if len(item[2])>=threshold]
+    return min(eligible,key=lambda item:(item[1]["distanceKm"],-len(item[2]),-item[1]["lat"]))
+
 def analyze_fixed_open_cell(path,grid):
     """Runs on an already downloaded NOAA GRIB subset; no new HTTP requests."""
     from eccodes import codes_get,codes_get_array,codes_grib_new_from_file,codes_release
@@ -127,9 +135,10 @@ def analyze_fixed_open_cell(path,grid):
         result["candidatesConsidered"].append(coverage)
         if full:ranking.append((i,c,full))
     if not ranking:return {**result,"status":"NO_COMPLETE_FOUR_FIELD_FIXED_CELL"}
-    # First prefer sufficient temporal coverage, then proximity.
-    ranking.sort(key=lambda x:(-len(x[2]),x[1]["distanceKm"],-x[1]["lat"]))
-    index,cell,full=ranking[0]
+    # Do not select a distant cell for one extra timestamp when the closer
+    # open-north water cell already has >=90% of the best available coverage.
+    index,cell,full=choose_best_candidate(ranking)
+    result["selectionRule"]="NEAREST_NORTH_SECTOR_CELL_WITHIN_90PCT_OF_MAX_COMPLETE_FOUR_FIELD_COVERAGE"
     sample=[]
     for when,values in full:
         cycle=values["cycle"]
