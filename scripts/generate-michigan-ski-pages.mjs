@@ -6,6 +6,18 @@ const {RESORTS}=require('../lib/michigan-ski/resorts');
 const base='https://chrisizworski.com/michigan-ski-hills/';
 const P='https://chrisizworski.com/#person';
 const today='2026-10-14';
+
+const PHOTO_BOYNE={url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Boyne_Mountain.JPG/960px-Boyne_Mountain.JPG',source:'https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG',credit:'American Eagle',place:'Boyne Mountain chairlift, Michigan'};
+const PHOTO_CRYSTAL={url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Crystal_Mountain_-_Cheers_Chair.jpg/960px-Crystal_Mountain_-_Cheers_Chair.jpg',source:'https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg',credit:'Jhansonxi',place:'Crystal Mountain ski trails, Michigan'};
+function heroPhoto(slug){
+ const pic=slug==='boyne-mountain'||slug===null?PHOTO_BOYNE:slug==='crystal-mountain'?PHOTO_CRYSTAL:null;
+ if(!pic)return '';
+ return '<figure class="hero-photo"><img src="'+pic.url+'" width="960" height="720" alt="'+esc(pic.place)+
+ '" loading="'+(slug===null?'eager':'lazy')+'" decoding="async" referrerpolicy="no-referrer">'+
+ '<figcaption>'+esc(pic.place)+' · Photo: <a href="'+pic.source+'" rel="noopener noreferrer">'+esc(pic.credit)+
+ '</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener noreferrer">CC BY-SA 3.0</a> · Historical photograph, not a live conditions image</figcaption></figure>';
+}
+
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 function dataTag(objects){return '<script type="application/ld+json">'+JSON.stringify({'@context':'https://schema.org','@graph':objects}).replace(/</g,'\\u003c')+'</script>';}
 function person(){return {'@type':'Person','@id':P,name:'Chris Izworski',url:'https://chrisizworski.com/'};}
@@ -30,9 +42,10 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  '<a class="skip" href="#ski-main">Skip to ski decision</a>',
  '<header class="mast"><a href="/"><strong>Chris Izworski</strong></a><nav><a href="/michigan-ski-hills/">Michigan Ski Hills</a><a href="/michigan-snow-totals/">Snow Totals</a><a href="/utah-ski-access/">Utah Ski Access</a><a href="/tools/">All Tools</a></nav></header>',
  '<main id="ski-main" class="wrap"><div class="hero"><p class="eyebrow">Michigan ski decisions · 2026–27 season · NWS sources</p>',
- '<h1>'+esc(h1)+'</h1><p class="lede">'+esc(subtitle)+'</p>',
+ '<div class="hero-copy"><h1>'+esc(h1)+'</h1><p class="lede">'+esc(subtitle)+'</p>',
  '<p class="answer">A ski weekend is worth considering when snow, operating lifts, price, and travel fit your plans. This tool compares the evidence; it does not certify that any resort is open.</p>',
  '<p class="update" id="updated" aria-live="polite">Loading the latest official signals…</p></div>',
+ heroPhoto(slug),'</div>',
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
@@ -86,28 +99,30 @@ function index(){
  const url=base;
  const links=RESORTS.map(r=>'<li><a href="/michigan-ski-hills/'+r.slug+'/">'+esc(r.name)+'</a> — '+esc(r.location)+' ('+esc(r.region.replaceAll('-',' '))+')</li>').join('');
  const html=[
- '<section class="panel"><p class="eyebrow">01 / Lake-effect watch</p><h2>Where are the lake-effect alerts right now?</h2>',
- '<div id="lake-watch" aria-live="polite"><p class="small">Checking official NWS forecast zones and alert polygons…</p></div>',
- '<p class="note">Lake-effect alerts are an early warning of dangerous travel as well as possible snowfall. A matched alert does not prove that a resort received measurable snow. NWS forecast wind alignment is labeled separately from official warnings.</p>',
- '</section>',
- '<section class="panel decision-workspace" id="ski-decision"><p class="eyebrow">02 / Powder Chase + Worth the Drive</p><h2>Find your best ski-day candidate</h2>',
+ '<section class="panel decision-workspace" id="ski-decision"><p class="eyebrow">01 / Powder Chase + Worth the Drive</p><h2>Find your best ski-day candidate</h2>',
  '<p>Decide whether to chase forecast snow, take the family, save on tickets or ski close to home. NWS conditions inform the shortlist; official operating status and actual checkout prices remain separate checks.</p>',
  '<div class="controls decision-filters"><label>What matters most?<select id="ski-goal"><option value="powder">Fresh snow / powder potential</option><option value="family">Family &amp; beginner terrain</option><option value="value">Ticket &amp; drive value</option><option value="local">Shortest drive</option></select></label>',
  '<label>Which day?<select id="ski-day"><option value="saturday">Saturday</option><option value="sunday">Sunday</option></select></label>',
- '<label>Adults<select id="ski-adults"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>',
+ '<label>Leaving from<select id="origin"><option value="detroit">Detroit metro</option><option value="grandRapids">Grand Rapids</option></select></label>',
+ '<details class="trip-options"><summary>Trip details (adults, kids, rentals)</summary><div class="controls cost-party"><label>Adults<select id="ski-adults"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>',
  '<label>Kids age 8 and under<select id="ski-kids"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>',
- '<label>Rentals needed<select id="ski-rentals"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label></div>',
+ '<label>Rentals needed<select id="ski-rentals"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label></div></details></div>',
  '<section class="map-section" aria-label="Michigan snow forecast point map"><div class="map-heading"><h3>Michigan ski snowfall map</h3><p class="small">Actual resort coordinates and NWS point forecasts. Dots are NOT an interpolated snow accumulation map.</p></div>',
  '<div class="ski-map-key"><span class="key-dot" style="background:#d3e0e5"></span> 0″ <span class="key-dot" style="background:#a1d6d4"></span> Under 1″ <span class="key-dot" style="background:#39a7ad"></span> 1–3″ <span class="key-dot" style="background:#187b9b"></span> 3–6″ <span class="key-dot" style="background:#12456d"></span> 6″+ <span class="key-dot" style="background:#889aa4"></span> Unavailable <span class="key-warning">◌</span> Winter warning</div>',
- '<div id="ski-point-map" class="ski-point-map"><p class="small">Preparing Michigan forecast map…</p></div><div id="ski-map-selected" aria-live="polite"></div>',
+ '<div class="map-story-grid"><div class="map-primary"><div id="ski-point-map" class="ski-point-map"><p class="small">Preparing Michigan forecast map…</p></div><div id="ski-map-selected" aria-live="polite"></div></div>',
+ '<div class="map-story-aside"><h4>Forecast snowfall leaders</h4><div id="ski-snow-bars" aria-live="polite"><p class="small">Checking NWS points…</p></div><p class="small">Forecast at each hill, not snowfall measured on a mountain. Missing values are excluded, not zero.</p></div></div>',
  '<p class="small">Nearby dots are spread slightly for touch access, with leader lines to actual locations. Outline: <a href="https://github.com/PublicaMundi/MappingAPI/blob/master/data/geojson/us-states.json" rel="noopener noreferrer">public US state GeoJSON</a>. No paid map tiles or API keys.</p></section>',
  '<div id="ski-decision-results" aria-live="polite"><p class="small">Checking NWS snow windows and operating evidence…</p></div>',
  '<div class="trip-tool"><h3>Trip cost: compare two hills</h3><div id="ski-trip-cost"><p>Waiting for live source results…</p></div></div>',
  '<p class="small">Shortlist is an explanatory planning fit, not a guaranteed powder day, lift opening, road safety or ticket checkout price. Unverified price and travel inputs are never silently replaced with estimates.</p></section>',
-'<section class="panel"><p class="eyebrow">03 / All monitored hills</p><h2>Michigan ski hills ranked by evidence and travel</h2>',
+ '<section class="panel"><p class="eyebrow">02 / Lake-effect watch</p><h2>Where are the lake-effect alerts right now?</h2>',
+ '<div id="lake-watch" aria-live="polite"><p class="small">Checking official NWS forecast zones and alert polygons…</p></div>',
+ '<p class="note">Lake-effect alerts are an early warning of dangerous travel as well as possible snowfall. A matched alert does not prove that a resort received measurable snow. NWS forecast wind alignment is labeled separately from official warnings.</p>',
+ '</section>',
+
+'<section class="panel"><p class="eyebrow">03 / All monitored hills</p><h2>Complete Michigan hill comparison</h2>',
  '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (27), ticket value (14), and base depth if confirmed (14). An active winter warning suspends a resort’s rank instead of increasing its powder score. Saturday and Sunday snow outlooks use separate 4 PM-to-4 PM Michigan local-time intervals. Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
- '<div class="controls"><label>Leaving from<select id="origin"><option value="detroit">Detroit metro</option><option value="grandRapids">Grand Rapids</option></select></label>',
- '<label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
+ '<div class="controls"><label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
  '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
  '<div id="resort-list" class="ranking" aria-live="polite"><p>Requesting NWS conditions…</p></div></section>',
  '<section class="panel"><h2>All 18 mountain and winter-ski pages</h2><p>Each destination has its own forecast coordinates, matching NWS zones, ticket link, terrain context and travel comparisons.</p><ul>'+links+'</ul></section>',
