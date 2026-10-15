@@ -118,7 +118,9 @@ def diagnose_grid(day,cycle,grid):
             'lastValidAt':rows[-1]['validAt'] if rows else None
         })
     shared=set(sites[0]['wetCellIds'])&set(sites[1]['wetCellIds'])
-    return {'grid':grid,'status':'SOURCE_DECODED' if arr else 'NO_VALID_COMPLETE_WAVE_ROWS',
+    diagnostic_ok=fixed_cell.get('status')=='FIXED_NORTH_SECTOR_FOUR_FIELDS_AVAILABLE'
+    status='SOURCE_DECODED' if arr else ('OPEN_NORTH_FOUR_FIELDS_AVAILABLE' if diagnostic_ok else 'NO_VALID_FOUR_FIELD_CELLS_AT_TESTED_POINTS')
+    return {'grid':grid,'status':status,
         'source':url,'decodedGribBytes':len(raw),'validCompleteWaveRows':len(arr),
         'sharedWetCellIds':sorted(shared),'sameCell':bool(shared),
         'bothSitesHaveWavePoints':all(s['validCompleteWaveRows']>0 for s in sites),
