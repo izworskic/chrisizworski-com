@@ -7,7 +7,7 @@ on:
       - research/rockhounding-m1-20261014
     paths:
       - .github/workflows/rockhounding-issued-archive.yml
-  # Scheduled workflows run only after this file reaches the default branch.
+  # Research replay also checks latest-issued-per-valid-hour buoy matching without double-counting.
   # On the draft research branch, the push below provides an immediate test.
   schedule:
     - cron: '35 2,8,14,20 * * *'
