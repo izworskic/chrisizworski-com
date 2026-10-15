@@ -229,3 +229,8 @@ footer{margin-top:43px}
  .sap-field-board__result .readout{min-height:210px}
  .sap-workspace__body #state-map .map-frame{min-height:315px}
 }
+
+/* Keep the live read visually attached to the hero, not as a new page break. */
+.hero>.sap-live-strip{background:#e8f0e6;border:0;border-bottom:1px solid #b9d0be;position:relative;z-index:1;padding-top:9px;padding-bottom:9px}
+.sap-field-board__result .decision-grid>.notice{grid-column:1/-1;margin:0;align-self:start}
+.sap-field-board__result .decision-grid{align-items:stretch}
