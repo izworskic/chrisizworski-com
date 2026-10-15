@@ -51,3 +51,38 @@ test('authority source must come from municipality, not tourism or mapping sites
  site.ownerVerifiedParkingGate.sourceUrl='https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/';
  assert.equal(assessSite(site).exactLegalParkingAndEntryVerified,true);
 });
+
+test('official town recreation plan unlocks agate beach as a destination without a collection permit',()=>{
+ const [agate,harbor]=assessAll();
+ assert.equal(agate.canListPublicBeachForVisitPlanning,true);
+ assert.equal(agate.canListRockhoundingDestinationLead,true);
+ assert.equal(agate.canGiveGeneralArrivalAdvice,true);
+ assert.match(agate.generalArrivalAdvice,/parking at the Agate Beach boardwalk/);
+ assert.equal(agate.collectionRuleDisplay,'CHECK_POSTED_LOCAL_RULES');
+ assert.equal(agate.canPublishCollectingRecommendation,false);
+ assert.equal(harbor.canListPublicBeachForVisitPlanning,true);
+ assert.equal(harbor.canListRockhoundingDestinationLead,false);
+ assert.equal(harbor.canGiveGeneralArrivalAdvice,true);
+});
+test('unknown municipal restrictions do not prevent research but prevent legal and wave verdicts',()=>{
+ for(const s of assessAll()){
+  assert.equal(s.researchExposureModelMayProceed,true);
+  assert.equal(s.canPublishCollectingRecommendation,false);
+  assert.equal(s.canPublishWaveBasedRecommendation,false);
+  assert.equal(s.exactLegalParkingAndEntryVerified,false);
+ }
+});
+test('tourism text alone cannot upgrade an unrecognized site to official rockhounding status',()=>{
+ const fake=structuredClone(snapshot.sites.find(x=>x.siteId==='grand-marais-harbor'));
+ fake.researchDestinationType='ROCKHOUNDING_LOCATION';
+ fake.rockhoundingContext='TOWNSHIP_RECREATION_PLAN_IDENTIFIES_PUBLIC_ROCKHOUNDING_DESTINATION';
+ assert.equal(assessSite(fake).canListRockhoundingDestinationLead,false);
+});
+test('arrival guidance must be from a township source and must not include invented exact GPS',()=>{
+ const s=structuredClone(snapshot.sites[0]);
+ s.arrivalGuidance.sourceId='CHAMBER_DIRECTIONS';
+ assert.equal(assessSite(s).canGiveGeneralArrivalAdvice,false);
+ s.arrivalGuidance.sourceId='TOWNSHIP_2026_RECREATION_PLAN';
+ s.arrivalGuidance.exactParkingGps={lat:46.675,lon:-85.985};
+ assert.equal(assessSite(s).canGiveGeneralArrivalAdvice,false);
+});
