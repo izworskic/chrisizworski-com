@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Exercise every rockhounding engine and offshore error-bin regression
+      - name: Exercise every rockhounding engine and inclusive lead-hour error-bin regression
         run: node --test tests/rockhounding*.test.js
       - name: Test Python sample coordinate and source-mask constraints
         run: |
