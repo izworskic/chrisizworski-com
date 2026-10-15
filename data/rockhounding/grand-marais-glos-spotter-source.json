@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "grand-marais-glos-spotter-v1",
+  "provider": "Great Lakes Observing System (GLOS) Seagull",
+  "institution": "Superior Watershed Partnership",
+  "stationName": "Grand Marais Spotter Buoy",
+  "datasetId": "obs_140",
+  "spotterId": "SPOT-1361",
+  "sourceDataset": "https://seagull-erddap.glos.org/erddap/info/obs_140/index.html",
+  "archiveIndex": "https://seagull-erddap.glos.org/erddap/files/SPOT-1361_archive/",
+  "tabledap": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
+  "siteReference": {
+    "lat": 46.69567108154297,
+    "lon": -86.00379943847656,
+    "positionType": "SOURCE_OBSERVED_OCT_14_2026",
+    "allowableCoordinateDriftDegrees": 0.04
+  },
+  "fields": {
+    "time": "time",
+    "latitude": "latitude",
+    "longitude": "longitude",
+    "waveHeight": "sea_surface_wave_significant_height",
+    "waveFrom": "sea_surface_wave_from_direction",
+    "wavePeriod": "sea_surface_wave_mean_period"
+  },
+  "units": {
+    "waveHeight": "m",
+    "waveFrom": "degree clockwise from true north",
+    "wavePeriod": "s"
+  },
+  "primaryObservationDateUTC": "2026-10-14",
+  "sourceRole": "NEAR_GRAND_MARAIS_OPEN_LAKE_OBSERVED_WAVE_CONTEXT",
+  "isLocalBreakingSurfSensor": false,
+  "isProtectedHarborWaveSensor": false,
+  "buoyWindDerivedFromWaveMeasurements": true,
+  "actualShorelineNormalSurveyed": false,
+  "publicClaims": {
+    "canClaimSafeShore": false,
+    "canPredictNewStones": false,
+    "canClaimHarborWaveHeights": false,
+    "canPublishVisitWindow": false
+  }
+}
