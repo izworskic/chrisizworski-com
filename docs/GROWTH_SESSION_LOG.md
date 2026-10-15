@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple sap basemap repair — October 15, 2026
+
+- **Incident:** Real page map tiles displayed “API KEY REQUIRED” from CARTO's keyless `light_all` endpoint; weather selectors, source forecast, and 31 locations remained independent and working.
+- **Change:** Switch only `public/michigan-maple-sap-run/app.js` Leaflet basemap to `https://tile.openstreetmap.org/{z}/{x}/{y}.png`, include visible OSM copyright attribution and no API key. Load tiles only once the map enters or approaches the viewport (IntersectionObserver), using ordinary browser caching and Referer; do not prefetch, proxy or use no-cache requests. Tile errors now surface a text fallback directing users to the still-working location selector and regional board.
+- **Safeguards:** Preserve all 31 map markers, city click navigation, forecast logic, sugarhouse directory, canonical URL, FAQ, and Auto ads. Regression check prevents reintroducing CARTO's blocked URL. OpenStreetMap public tile servers have limited, best-effort capacity; reassess a dedicated hosted/self-hosted provider if future map views become heavy.
+- **Status at authoring:** Repair in PR on feature branch; CI, preview, production release and rendered tile check pending.
+- **Traffic and revenue:** New change does not establish gains; GSC and AdSense measurements unavailable in this session.
+- **Exactly one next action:** Verify real map tiles and location markers on the deployed production map after green CI and merge.
+
+
 ## Michigan maple sap visual V2 — October 14, 2026
 
 - **Scope:** Upgrade `/michigan-maple-sap-run/` in its existing owning repo; no changes to NWS API, freeze/thaw scoring, canonical URL, creator ID, network advertisements or prior event records.
