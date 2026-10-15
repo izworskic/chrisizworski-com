@@ -29,3 +29,10 @@ test('unsupported NOAA model resolution is rejected before any download',()=>{
  assert.notEqual(p.status,0);
  assert.match(p.stderr,/invalid choice/);
 });
+
+test('NOAA also publishes hourly Great Lakes research issues without requiring a six-hour boundary',()=>{
+ const p=spawnSync('python3',[script,'--date','20261015','--cycle','21','--grid','500m-greatlakes','--print-url'],{encoding:'utf8',timeout:10000});
+ assert.equal(p.status,0,p.stderr);
+ const url=new URL(p.stdout.trim());
+ assert.equal(url.searchParams.get('file'),'glwu.grlr_500m.t21z.grib2');
+});
