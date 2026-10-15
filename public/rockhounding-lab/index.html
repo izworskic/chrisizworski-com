@@ -169,6 +169,16 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   </div>
   <p style="font-size:12px;margin-top:10px;color:#536b67">Underlying NOAA ENC sounding source dates: 2004–2020. The contour records provide no individual survey dates. Charts cannot establish current harbor depths, navigable clearance, wave shelter, or whether rocks have been exposed.</p>
  </details>
+ <details style="margin-top:12px;border:1px solid #d5e0dc;border-radius:12px;padding:13px 16px;background:#fbfdfc">
+  <summary style="cursor:pointer;font-weight:750">New research: where current harbor observations could come from</summary>
+  <p style="font-size:13px;color:#536b67">A recent USACE harbor survey record is now confirmed, while none of these sources establishes measured waves inside Grand Marais Harbor.</p>
+  <ul style="font-size:13px;color:#536b67;padding-left:20px;line-height:1.75">
+   <li><a href="https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0" target="_blank" rel="noopener noreferrer">USACE eHydro SurveyJob</a> — authoritative survey <em>catalog metadata</em>, not a live wave gauge. Live source lookup confirmed <strong>10 Grand Marais survey jobs</strong>, with the most recent survey dated <strong>July 30, 2026</strong>. Downloaded depths and harbor wave conditions still require separate validation.</li>
+   <li><a href="https://www.ndbc.noaa.gov/station_page.php?station=GRMM4" target="_blank" rel="noopener noreferrer">GRMM4</a> — nearby observed wind; available station rows do not show measured wave heights.</li>
+   <li><a href="https://www.ndbc.noaa.gov/station_page.php?station=45172" target="_blank" rel="noopener noreferrer">45172 Grand Marais buoy</a> — offshore seasonal station, reported recovered for winter as of October 15, 2026. Not a sheltered-harbor wave measurement.</li>
+  </ul>
+  <p style="font-size:12px;color:#536b67"><strong>Decision-engine status:</strong> historic harbor structures documented; actual harbor wave heights, wave transmission, beach safety and new-stone exposure not verified. This prototype does not convert wind or survey dates into wave predictions.</p>
+ </details>
  <p style="font-size:13px;margin-top:14px;color:#536b67">Source: <a href="https://gis.charttools.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer" target="_blank" rel="noopener noreferrer">NOAA ENC Direct</a>, checked against <a href="https://services.arcgis.com/cJ9YHowT8TU7DUyn/ArcGIS/rest/services/Great_Lakes_MAP_ALL__5/FeatureServer/0" target="_blank" rel="noopener noreferrer">GLAHF mapped water</a>. <strong>Neither beach has a validated wave or safety verdict.</strong></p>
 </section>
 <div class="notice"><strong>Rock collecting and public access:</strong> Public beach access does not by itself authorize removing rocks from every segment. Check posted township rules and seasonal access notices. National Park Service beaches can prohibit collection. This design does not provide directions to unverified parking gates.</div>

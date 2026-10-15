@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "grand-marais-contemporary-source-register-v1",
+  "researchDateUTC": "2026-10-15",
+  "sites": [
+    "grand-marais-harbor",
+    "grand-marais-agate"
+  ],
+  "hydrographicSurvey": {
+    "provider": "US Army Corps of Engineers",
+    "projectPage": "https://www.lrd.usace.army.mil/Missions/Projects/Article/3639890/grand-marais-harbor-michigan/",
+    "listedPreviousPCSYears": [
+      2021,
+      2022,
+      2023
+    ],
+    "eHydroCatalog": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0",
+    "catalogLayer": "SurveyJob",
+    "recentMatchingSurveyJobVerified": true,
+    "latestSurveyEndUTC": "2026-07-30",
+    "mostRecentBathymetricDeliverableDownloadedAndReviewed": false,
+    "currentNavigableDepthVerified": false,
+    "sourceCaveat": "USACE project page links prior project condition surveys; eHydro catalog results and downloads require separate live verification. Catalog metadata and a PCS are not measurements of harbor wave shelter.",
+    "lastCatalogVerificationRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38824773510"
+  },
+  "observationStations": [
+    {
+      "id": "GRMM4",
+      "name": "Grand Marais shore weather station",
+      "provider": "NOAA NDBC/NWS",
+      "lat": 46.684,
+      "lon": -85.972,
+      "role": "LOCAL_WIND_CONTEXT_ONLY",
+      "link": "https://www.ndbc.noaa.gov/station_page.php?station=GRMM4",
+      "confirmedHarborWaveSensor": false,
+      "asOfDate": "2026-10-15",
+      "note": "Accessible standard meteorological station rows have missing wave-height/period/direction observations; do not transform local winds into measured waves."
+    },
+    {
+      "id": "45172",
+      "name": "Grand Marais offshore buoy",
+      "provider": "NOAA NDBC/Northern Michigan University",
+      "lat": 46.74,
+      "lon": -85.98,
+      "role": "OFFSHORE_SEASONAL_WAVE_CONTEXT",
+      "link": "https://www.ndbc.noaa.gov/station_page.php?station=45172",
+      "confirmedHarborWaveSensor": false,
+      "asOfDate": "2026-10-15",
+      "note": "Station page reports recovered for winter and no recent reports; approximately 6 km north of harbor, not measured harbor surf."
+    },
+    {
+      "id": "45004",
+      "name": "East Superior open-lake buoy",
+      "provider": "NOAA NDBC",
+      "role": "DISTANT_OFFSHORE_EVENT_CONTEXT",
+      "link": "https://www.ndbc.noaa.gov/station_page.php?station=45004",
+      "confirmedHarborWaveSensor": false,
+      "asOfDate": "2026-10-15",
+      "note": "Existing real offshore event archive is far from Grand Marais; not local surf or harbor wave attenuation."
+    }
+  ],
+  "independentLocalHarborWaveObservationsVerified": false,
+  "harborTransmissionCalibrationAvailable": false,
+  "collectingPermissionIndependentlyCleared": false,
+  "publicStatements": {
+    "canPublishObservedHarborWaveHeight": false,
+    "canPublishPredictedHarborSurf": false,
+    "canPublishVisitWindow": false,
+    "canPredictFreshAgates": false,
+    "canClaimSafeConditions": false,
+    "canClaimCurrentNavigationDepth": false
+  },
+  "status": "USACE_2026_SURVEY_JOB_METADATA_VERIFIED_LOCAL_WAVE_SENSOR_UNVERIFIED"
+}
