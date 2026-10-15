@@ -90,3 +90,28 @@ test('Map defaults to working CARTO-keyed Voyager tiles and has OSM fallback',()
  assert.match(app,/markers\.set\(x\.id,m\)/);
  assert.match(wisconsin,/id="map"/);
 });
+
+test('Michigan overview has a deterministic vector map even without third-party tiles',()=>{
+ const page=file('public/michigan-maple-sap-run/index.html');
+ const vector=file('public/michigan-maple-sap-run/map-vector.js');
+ const app=file('public/michigan-maple-sap-run/app.js');
+ const css=file('public/michigan-maple-sap-run/premium.css');
+ assert.match(page,/id="mapVector"/);
+ assert.match(page,/id="mapOverviewBtn"/);
+ assert.match(page,/id="mapStreetBtn"/);
+ assert.match(page,/map-vector\.js\?v=1/);
+ assert.match(page,/app\.js\?v=4/);
+ assert.match(vector,/PublicaMundi\/MappingAPI/);
+ assert.match(vector,/Michigan/);
+ assert.match(vector,/map-vector-land/);
+ assert.match(vector,/mapVectorPins/);
+ assert.match(vector,/addEventListener\('click'/);
+ assert.match(vector,/addEventListener\('keydown'/);
+ assert.match(app,/window\.MapleVectorMap\.init\(locations,selectSite\)/);
+ assert.match(app,/window\.MapleVectorMap\.update\(boardData,current\)/);
+ assert.match(app,/overview\.hidden=detailed/);
+ assert.match(app,/street\.hidden=!detailed/);
+ assert.match(css,/map-frame #map\[hidden\]/);
+ assert.match(css,/map-forecast-pin/);
+ assert.doesNotMatch(vector,/https?:\/\/tile\./);
+});

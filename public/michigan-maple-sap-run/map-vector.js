@@ -1,0 +1,47 @@
+/* Michigan vector forecast map. State outlines from PublicaMundi MappingAPI
+   https://github.com/PublicaMundi/MappingAPI/blob/master/data/geojson/us-states.json */
+(function(root){
+'use strict';
+const ns='http://www.w3.org/2000/svg';
+const shapes=[{"name":"Illinois","d":"M101.0,534.0L277.3,535.5L371.1,535.5L368.0,552.9L382.6,573.3L397.8,606.5L397.2,820.5L386.8,836.9L398.8,856.3L400.4,872.2L388.4,885.1L385.2,897.0L368.0,916.4L357.1,917.9L359.7,929.3L352.4,933.8L346.6,955.1L349.8,961.1L337.2,974.0L346.1,989.9L307.0,998.3L303.3,1007.8L312.2,1019.7L300.2,1027.1L265.3,1013.2L254.3,1014.2L239.7,1030.1L244.4,1035.1L229.3,1034.1L207.9,1008.3L215.7,1002.3L207.9,984.9L207.9,971.0L177.1,951.6L166.7,953.6L156.2,941.7L128.1,923.3L128.6,908.9L144.8,885.6L142.2,877.2L151.6,866.2L138.0,859.8L117.1,855.8L106.2,864.2L98.9,858.8L92.6,829.0L60.8,809.6L31.6,786.3L19.6,758.5L18.5,740.1L26.9,727.2L28.4,710.8L55.1,700.9L57.7,687.0L70.2,678.0L71.7,662.1L56.1,649.2L62.4,633.3L99.4,628.9L129.1,617.4L132.3,603.5L144.8,597.6L148.4,580.2L145.8,568.8L124.4,559.8L121.8,550.4L101.0,534.0Z"},{"name":"Indiana","d":"M543.8,602.1L656.5,602.1L656.5,608.0L657.0,716.3L655.4,842.9L648.1,846.9L656.0,871.7L639.3,872.2L621.5,880.6L597.0,876.7L598.1,894.5L581.9,902.0L575.6,913.4L558.9,917.9L550.1,940.7L539.1,946.7L517.7,938.2L514.1,927.8L493.2,939.2L494.8,949.2L473.4,952.6L467.1,943.7L443.1,952.6L435.3,962.1L411.3,948.7L398.8,951.6L390.4,945.2L382.6,951.6L358.6,952.6L349.8,961.1L346.6,955.1L352.4,933.8L359.7,929.3L357.1,917.9L368.0,916.4L385.2,897.0L388.4,885.1L400.4,872.2L398.8,856.3L386.8,836.9L397.2,820.5L397.8,606.5L407.1,612.5L436.4,612.5L464.5,602.1L543.8,602.1Z"},{"name":"Ohio","d":"M1064.9,582.2L1064.9,703.8L1050.8,708.8L1057.6,718.7L1057.1,732.7L1044.0,754.5L1035.2,787.8L998.1,817.1L986.1,821.0L975.7,815.1L964.7,828.0L953.8,827.5L941.8,844.9L944.4,855.3L934.5,863.7L920.4,849.8L902.7,871.7L907.4,885.6L895.9,890.6L892.2,902.5L867.2,904.5L854.2,892.1L843.2,889.6L839.0,874.2L825.5,877.2L815.0,886.1L779.1,879.1L763.9,885.6L742.5,873.2L712.8,869.7L711.2,861.8L691.9,842.9L655.4,842.9L657.0,716.3L656.5,608.0L785.3,604.5L822.3,616.9L834.9,624.4L844.3,617.4L865.1,631.8L878.2,636.3L922.5,624.4L948.6,626.9L976.7,610.0L1018.0,593.6L1064.9,582.2L1064.9,582.2Z"},{"name":"Wisconsin","d":"M122.3,166.1L140.1,171.5L150.5,186.9L248.6,205.3L289.3,218.7L301.8,215.7L342.5,224.7L353.4,236.1L373.2,247.0L372.2,262.9L363.3,275.3L385.8,277.3L376.9,290.2L391.5,299.6L387.8,310.6L369.6,312.5L353.9,333.4L348.2,347.8L359.2,350.3L373.8,340.9L389.4,323.0L409.2,316.0L424.9,293.2L444.7,288.2L443.1,300.1L429.6,311.1L403.0,348.8L395.7,369.7L396.2,384.6L386.3,389.5L377.4,409.9L380.5,427.3L372.2,438.7L360.7,467.0L363.3,489.3L374.8,509.2L371.1,535.5L277.3,535.5L101.0,534.0L94.2,522.6L60.3,512.2L53.0,497.8L49.8,477.4L61.3,466.5L47.2,457.5L46.2,444.1L41.0,433.7L43.6,419.3L25.3,399.4L10.2,396.0L-16.9,380.6L-21.6,368.7L-50.8,358.7L-60.7,348.8L-80.6,347.3L-105.6,330.9L-98.8,297.7L-100.9,282.3L-90.0,268.4L-102.0,256.9L-112.9,255.9L-111.3,243.0L-89.4,223.7L-62.3,216.2L-56.6,210.7L-56.6,157.1L-37.3,149.7L-30.0,153.6L-8.6,154.6L57.7,139.2L82.2,130.8L90.5,137.3L77.5,149.2L108.8,164.6L122.3,166.1Z"},{"name":"Minnesota","d":"M-30.0,153.6L-37.3,149.7L-56.6,157.1L-56.6,210.7L-62.3,216.2L-89.4,223.7L-111.3,243.0L-112.9,255.9L-102.0,256.9L-90.0,268.4L-100.9,282.3L-98.8,297.7L-105.6,330.9L-80.6,347.3L-60.7,348.8L-50.8,358.7L-21.6,368.7L-16.9,380.6L10.2,396.0L25.3,399.4L43.6,419.3L41.0,433.7L46.2,444.1L31.6,444.1L-452.5,444.1L-452.5,281.3L-474.4,270.8L-491.1,253.5L-465.0,234.1L-462.9,223.7L-466.6,187.4L-478.0,178.0L-485.9,158.1L-484.3,133.8L-487.9,129.8L-491.1,71.7L-509.9,40.9L-517.2,23.5L-520.3,-13.2L-514.0,-25.6L-526.5,-54.4L-328.9,-54.4L-328.9,-89.2L-310.1,-88.2L-297.6,-81.2L-285.0,-34.1L-275.1,-28.6L-243.8,-27.1L-240.2,-22.6L-203.7,-20.7L-199.5,-10.7L-168.2,-13.2L-168.2,-17.2L-143.7,-22.1L-122.3,-20.2L-97.8,-12.7L-91.0,-3.3L-76.9,-4.3L-63.9,16.1L-57.6,7.7L-33.6,3.7L-29.4,12.1L-1.3,18.1L-1.3,26.0L12.8,32.5L41.5,29.0L58.7,20.1L82.2,14.6L90.5,28.0L106.7,25.0L126.0,28.0L148.4,26.0L174.0,37.4L198.5,35.5L196.4,40.4L164.6,51.8L120.3,60.8L91.6,70.2L50.4,93.6L32.6,108.0L5.5,124.3L-37.3,146.2L-30.0,153.6Z"},{"name":"Michigan","d":"M785.3,604.5L656.5,608.0L656.5,602.1L543.8,602.1L464.5,602.1L483.8,590.1L496.9,569.8L508.9,557.4L517.7,540.0L522.9,515.2L520.9,488.3L492.7,435.7L501.6,415.8L495.3,392.0L517.2,367.7L521.9,347.3L518.8,336.4L534.4,331.9L536.5,317.0L561.0,313.0L579.8,296.7L578.2,329.4L588.1,330.9L600.7,314.5L601.2,286.7L609.0,279.8L635.1,275.3L626.7,255.9L644.0,239.6L665.3,238.6L689.3,249.0L712.8,250.5L724.3,263.4L742.0,264.4L771.7,276.3L782.2,275.8L798.4,295.2L785.3,305.6L797.8,319.0L802.5,334.4L796.8,368.2L777.5,376.6L772.8,394.0L749.8,399.9L737.3,420.8L742.0,428.7L765.0,436.2L782.7,424.8L803.6,401.4L836.4,392.5L852.6,399.4L862.5,412.4L872.4,450.1L874.0,469.0L884.4,491.8L874.5,524.6L858.9,529.6L858.3,517.6L847.9,521.1L835.9,548.4L816.6,558.8L810.9,579.7L786.9,597.1L785.3,604.5ZM589.7,242.0L591.3,253.0L578.8,254.9L584.0,239.6L589.7,242.0ZM391.5,299.6L376.9,290.2L385.8,277.3L363.3,275.3L372.2,262.9L373.2,247.0L353.4,236.1L342.5,224.7L301.8,215.7L289.3,218.7L248.6,205.3L150.5,186.9L140.1,171.5L122.3,166.1L159.4,156.6L176.1,145.7L217.8,141.2L244.9,127.8L257.4,127.3L267.9,117.9L297.6,104.5L312.7,93.1L335.2,85.6L356.5,92.1L319.0,119.9L310.1,129.3L310.6,146.2L328.9,133.3L361.8,135.3L387.3,144.2L410.3,169.0L422.8,173.5L446.8,169.5L452.5,175.0L476.5,178.0L527.6,157.1L554.2,155.1L589.7,156.1L613.7,149.2L632.0,148.7L635.6,174.0L654.4,177.5L673.2,173.5L681.0,179.5L693.5,172.0L721.2,169.5L721.7,201.3L734.2,214.7L753.0,218.2L755.1,209.3L773.3,209.3L783.2,218.7L774.9,225.6L722.7,219.7L697.7,223.7L670.6,212.7L662.7,222.7L666.4,231.1L654.4,229.1L636.7,216.7L605.9,209.3L590.2,208.8L575.1,220.7L550.1,223.7L522.9,221.2L512.0,226.1L509.4,236.1L479.6,244.5L481.2,232.6L468.2,230.1L463.0,242.5L441.0,243.0L431.1,248.5L416.5,269.8L389.4,297.2L391.5,299.6ZM275.7,38.4L251.7,49.9L239.2,51.3L240.2,41.9L300.2,20.6L288.7,35.5L275.7,38.4Z"}];
+const project=(lat,lon)=>({x:(lon+91.7)*1000/10.5,y:(48.4-lat)*680/7.5});
+let pins=new Map();
+function init(locations,select){
+ const el=document.getElementById('mapVector');
+ if(!el)return;
+ el.innerHTML='<svg viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid meet" class="map-vector-svg" role="group" aria-label="Michigan counties and forecast point map">'+
+ '<defs><linearGradient id="mapBlue" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#d0e7e8"/><stop offset="1" stop-color="#b4d6de"/></linearGradient></defs>'+
+ '<rect width="1000" height="680" fill="url(#mapBlue)"/>'+
+ shapes.map(s=>'<path class="map-vector-land '+(s.name==='Michigan'?'michigan':'nearby')+'" d="'+s.d+'"><title>'+s.name+'</title></path>').join('')+
+ '<g class="map-vector-water" aria-hidden="true"><text x="450" y="112">LAKE SUPERIOR</text><text x="824" y="336">LAKE HURON</text><text transform="translate(409 545) rotate(-85)">LAKE MICHIGAN</text></g>'+
+ '<g class="map-vector-labels" aria-hidden="true"><text x="257" y="444">WISCONSIN</text><text x="555" y="616">INDIANA</text><text x="800" y="622">OHIO</text><text x="596" y="262">MICHIGAN</text></g>'+
+ '<g id="mapVectorPins" aria-label="Select a forecast location"></g></svg>'+
+ '<div class="map-vector-credit">Michigan forecast locations · <a href="https://github.com/PublicaMundi/MappingAPI" target="_blank" rel="noopener noreferrer">Boundary source</a> · Not actual sap observations</div>';
+ const group=document.getElementById('mapVectorPins');pins=new Map();
+ for(const site of locations){
+  const p=project(site.lat,site.lon),g=document.createElementNS(ns,'g');
+  g.setAttribute('class','map-forecast-pin');g.setAttribute('transform','translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+')');
+  g.setAttribute('tabindex','0');g.setAttribute('role','button');g.setAttribute('aria-label','View '+site.name+' sap-weather forecast');
+  const addCircle=(cls,r)=>{const c=document.createElementNS(ns,'circle');c.setAttribute('r',r);c.setAttribute('class',cls);g.appendChild(c);};
+  addCircle('pin-touch',19);addCircle('pin-ring',10);addCircle('pin-center',5.7);
+  const tip=document.createElementNS(ns,'title');tip.textContent='View '+site.name+' forecast';g.appendChild(tip);
+  if(['detroit','bay-city','traverse-city','marquette','gaylord','houghton','escanaba','petoskey','lansing','sault-ste-marie'].includes(site.id)){
+   const label=document.createElementNS(ns,'text');label.setAttribute('class','pin-city');label.setAttribute('x','10');label.setAttribute('y','-9');label.textContent=site.name;g.appendChild(label);
+  }
+  g.addEventListener('click',()=>select(site.id));
+  g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(site.id);}});
+  group.appendChild(g);pins.set(site.id,g);
+ }
+ update([], 'bay-city');
+}
+function update(board,current){
+ const byId=new Map((board||[]).map(r=>[r.site.id,r]));
+ pins.forEach((g,id)=>{
+  const row=byId.get(id);
+  const level=row?.phase==='UNAVAILABLE'?'unavailable':row?.phase==='OFF_SEASON'?'off':(row?.summary?.bestLevel||'off').toLowerCase();
+  g.setAttribute('class','map-forecast-pin '+level+(id===current?' selected':''));
+  g.setAttribute('aria-pressed',id===current?'true':'false');
+ });
+}
+root.MapleVectorMap={init,update};
+})(window);

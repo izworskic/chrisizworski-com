@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple map deterministic overview — October 15, 2026
+
+- **Issue:** Following a keyless OSM repair and a keyed CARTO repair, the real map screenshot still showed partly unpainted tiles while DOM reported loaded raster images and all 31 Leaflet markers. This is not an acceptable visual verification; do not claim the raster layer alone is fixed.
+- **Solution:** Ship a bundled, deterministic SVG Michigan overview as the default map. The locally bundled state outlines derive from PublicaMundi MappingAPI GeoJSON, and all 31 forecast points render as keyboard-/pointer-selectable pins. No remote tile fetch is required for the primary map. Preserve the existing keyed CARTO street basemap as an optional, user-selected detailed mode with the no-key OSM fallback.
+- **Additional cache correction:** Explicitly bump map JavaScript/CSS asset versions, because previous fixes reused `app.js?v=2`, risking clients continuing to run old cached map code.
+- **Preserved contracts:** NWS forecast endpoint, opportunity scores, canonical URL, Person attribution, event records, Auto ads, and full location selection.
+- **Cost:** Primary SVG adds no per-tile API charges. CARTO loads only when the visitor selects Detailed street map, limiting client-key use. GSC and AdSense outcome unmeasured.
+- **Status at writing:** Branch under verification; deployment and rendered mobile/desktop validation required before release.
+- **Exactly one next action:** Verify production Michigan SVG outline and clickable pins visibly render on mobile/desktop after green CI and merge.
+
+
 ## Michigan maple sap map follow-up — October 15, 2026
 
 - **User-reported regression:** Map still appears blank after earlier OSM-only repair; prior live scrape showed mixed raster tile rendering and markers present in the DOM. Do not mistake marker DOM presence for a usable map.

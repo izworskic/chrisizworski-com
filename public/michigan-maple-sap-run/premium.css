@@ -90,3 +90,32 @@ footer{margin-top:43px}
   .hero-copy h1{font-size:32px;margin-bottom:12px}
   .hero-copy{padding:19px 15px 24px}
 }
+
+/* Deterministic statewide vector map: usable even without external raster tile painting. */
+.map-mode-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.map-mode-button{border:1px solid #c4d3c4;background:#f6f8f3;color:#385a42;border-radius:9px;padding:8px 12px;font:700 12px system-ui,sans-serif;cursor:pointer}
+.map-mode-button.active{background:#245b41;border-color:#245b41;color:#fff}
+.map-mode-button:focus-visible{outline:3px solid #a87834;outline-offset:2px}
+.map-frame #map[hidden],.map-frame #mapVector[hidden]{display:none!important}
+.map-vector{width:100%;height:100%;background:#c9e2e6;overflow:hidden;position:relative}
+.map-vector-svg{width:100%;height:100%;display:block}
+.map-vector-land{stroke:#789c8e;stroke-width:1.7;vector-effect:non-scaling-stroke}
+.map-vector-land.nearby{fill:#e9ede2;stroke:#b9c9b9}
+.map-vector-land.michigan{fill:#b9d2b0;stroke:#3b7456;stroke-width:2.1}
+.map-vector-water text{fill:#5a929c;font:italic 16px Georgia,serif;letter-spacing:.12em;opacity:.8}
+.map-vector-labels text{fill:#6e887a;font:700 12px system-ui,sans-serif;letter-spacing:.16em;opacity:.8}
+.map-forecast-pin{cursor:pointer;outline:none}
+.map-forecast-pin .pin-touch{fill:transparent;stroke:transparent}
+.map-forecast-pin .pin-ring{fill:#f9faf5;stroke:#487753;stroke-width:2.5}
+.map-forecast-pin .pin-center{fill:#4e8065}
+.map-forecast-pin.selected .pin-ring{fill:#fdf7e8;stroke:#d69034;stroke-width:4}
+.map-forecast-pin.selected .pin-center{fill:#c47c27}
+.map-forecast-pin.favorable .pin-center{fill:#258a4b}
+.map-forecast-pin.possible .pin-center{fill:#d19132}
+.map-forecast-pin.unavailable .pin-center{fill:#7e7b77}
+.map-forecast-pin:focus .pin-ring{stroke:#bd862f;stroke-width:6}
+.map-forecast-pin:hover .pin-ring{stroke:#b77b2e;stroke-width:4}
+.pin-city{font:700 12px system-ui,sans-serif;fill:#183f2c;paint-order:stroke;stroke:#d9ebe3;stroke-width:3.5;stroke-linejoin:round;pointer-events:none}
+.map-vector-credit{position:absolute;left:9px;bottom:6px;right:9px;display:flex;gap:7px;justify-content:space-between;flex-wrap:wrap;color:#234f55;font:10px/1.3 system-ui,sans-serif;background:rgba(250,255,255,.85);padding:4px 6px;border-radius:6px}
+.map-vector-credit a{color:#204a57}
+@media(max-width:650px){.map-mode-button{flex:1;padding:9px 7px}.map-vector-credit{font-size:8px}.map-vector-water text{font-size:13px}.pin-city{font-size:13px}}
