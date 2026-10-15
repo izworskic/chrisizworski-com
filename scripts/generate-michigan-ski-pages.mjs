@@ -147,7 +147,7 @@ function index(){
  '<div class="controls"><label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
  '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
  '<div id="resort-list" class="ranking" aria-live="polite"><p>Requesting NWS conditions…</p></div></section>',
- '<section class="panel photo-reference-panel"><div class="photo-reference-heading"><h2>Know the mountains</h2><p class="small">Four actual Michigan resort views. These are dated archival photographs, not today's conditions.</p></div>',
+ '<section class="panel photo-reference-panel"><div class="photo-reference-heading"><h2>Know the mountains</h2><p class="small">Four actual Michigan resort views. These are dated archival photographs, not current conditions.</p></div>',
  '<div class="ski-photo-strip">'+['caberfae-peaks','crystal-mountain','boyne-mountain','mt-bohemia'].map(k=>photoFigure(k,'strip')).join('')+'</div></section>',
  '<section class="panel"><h2>All 18 mountain and winter-ski pages</h2><p>Each destination has its own forecast coordinates, matching NWS zones, ticket link, terrain context and travel comparisons.</p><ul>'+links+'</ul></section>',
  '<section class="panel faq"><h2>Michigan ski and lake-effect questions</h2>',
