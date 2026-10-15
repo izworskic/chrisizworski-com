@@ -1,0 +1,564 @@
+{
+  "version": "M1-2026-10-14",
+  "status": "RESEARCH_ONLY_NO_COLLECTION_RECOMMENDATIONS",
+  "sourceSeed": "chrisizworski-com/data/beaches.json (beach-area anchors only); official source links in each record",
+  "warning": "Source-listed public facility is NOT a verified legal entrance or rock-collecting permission",
+  "sites": [
+    {
+      "id": "petoskey-state-park",
+      "name": "Petoskey State Park",
+      "lake": "Michigan",
+      "area": "Little Traverse Bay",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 45.4083,
+        "lon": -84.9092,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [
+        "Petoskey stone"
+      ],
+      "stoneEvidence": "LOCATION_MENTIONED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/petoskey",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "DNR describes Petoskey-stone hunting; buoy 45022 is reference only",
+      "priority": "pilot"
+    },
+    {
+      "id": "fishermans-island",
+      "name": "Fisherman's Island State Park",
+      "lake": "Michigan",
+      "area": "Charlevoix",
+      "operator": "Michigan DNR",
+      "siteAnchor": null,
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [
+        "Petoskey stone"
+      ],
+      "stoneEvidence": "LOCATION_MENTIONED",
+      "waveModelCell": null,
+      "accessAlert": "VEHICLE_DAY_USE_TEMPORARY_CLOSURE_AT_REVIEW",
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/fishermans",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "DNR temporary closure to vehicle access for culvert works; shore and trails reportedly remain foot-accessible; alternative parking unverified",
+      "priority": "pilot"
+    },
+    {
+      "id": "frankfort-beach",
+      "name": "Frankfort Public Beach",
+      "lake": "Michigan",
+      "area": "Frankfort",
+      "operator": "City of Frankfort",
+      "siteAnchor": {
+        "lat": 44.6353,
+        "lon": -86.2419,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [
+        "Petoskey stone",
+        "marine fossils"
+      ],
+      "stoneEvidence": "LOCATION_MENTIONED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/egle/public/learn/geology/rockhounding/fossils",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "EGLE describes public Frankfort beach as fossil locality; municipal entrance unverified",
+      "priority": "pilot"
+    },
+    {
+      "id": "grand-marais-agate",
+      "name": "Agate Beach, Grand Marais",
+      "lake": "Superior",
+      "area": "Grand Marais",
+      "operator": "operator unverified",
+      "siteAnchor": null,
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [
+        "Lake Superior agate"
+      ],
+      "stoneEvidence": "LOCATION_MENTIONED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Chamber calls it agate-hunting beach; exact entrance and operator to confirm",
+      "priority": "pilot"
+    },
+    {
+      "id": "grand-marais-harbor",
+      "name": "Grand Marais Harbor Beach",
+      "lake": "Superior",
+      "area": "Grand Marais",
+      "operator": "operator unverified",
+      "siteAnchor": {
+        "lat": 46.6731,
+        "lon": -85.9778,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Chamber describes protected beach; negative-control for open-lake wave exposure",
+      "priority": "pilot"
+    },
+    {
+      "id": "mclain",
+      "name": "F.J. McLain State Park",
+      "lake": "Superior",
+      "area": "Keweenaw",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 47.2356,
+        "lon": -88.6075,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/mclain",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "DNR explicitly describes rockhounding and rocky/sandy beach",
+      "priority": "pilot"
+    },
+    {
+      "id": "bay-city",
+      "name": "Bay City State Park",
+      "lake": "Huron",
+      "area": "Saginaw Bay",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 43.6731,
+        "lon": -83.9203,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/baycity",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "DNR: shallow sandy beach; negative-control for presumed stone exposure",
+      "priority": "pilot"
+    },
+    {
+      "id": "tawas-point",
+      "name": "Tawas Point State Park",
+      "lake": "Huron",
+      "area": "Tawas Bay and Lake Huron",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 44.2533,
+        "lon": -83.435,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/tawaspoint",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Separate lake-facing and bay-facing segments required",
+      "priority": "pilot"
+    },
+    {
+      "id": "lakeport-day-use",
+      "name": "Lakeport State Park day-use",
+      "lake": "Huron",
+      "area": "Lakeport",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 43.105475,
+        "lon": -82.488804,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": "DAY_USE_MEMORIAL_DAY_TO_LABOR_DAY",
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/lakeport",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "DNR day-use AREA coordinate only; day use Memorial Day–Labor Day; rocky shore",
+      "priority": "pilot"
+    },
+    {
+      "id": "port-crescent",
+      "name": "Port Crescent State Park",
+      "lake": "Huron",
+      "area": "Port Austin",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 43.8678,
+        "lon": -83.0594,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/portcrescent",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Separate day-use and campground entrances two miles apart",
+      "priority": "candidate"
+    },
+    {
+      "id": "wilderness",
+      "name": "Wilderness State Park",
+      "lake": "Michigan",
+      "area": "Tip of the Mitt",
+      "operator": "Michigan DNR",
+      "siteAnchor": {
+        "lat": 45.7472,
+        "lon": -84.9183,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/recsearch/parks/wilderness",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Sensitive piping plover habitat; segment-specific review required",
+      "priority": "candidate"
+    },
+    {
+      "id": "whitefish-point",
+      "name": "Whitefish Point",
+      "lake": "Superior",
+      "area": "Whitefish Point",
+      "operator": "mixed museum/refuge",
+      "siteAnchor": {
+        "lat": 46.7706,
+        "lon": -84.9572,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Owner boundaries, restrictions and entrance unverified",
+      "priority": "candidate"
+    },
+    {
+      "id": "presque-isle-marquette",
+      "name": "Presque Isle Park",
+      "lake": "Superior",
+      "area": "Marquette",
+      "operator": "City of Marquette",
+      "siteAnchor": {
+        "lat": 46.5775,
+        "lon": -87.3789,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "UNVERIFIED",
+        "sourceUrl": null
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Official operator/collecting source still required",
+      "priority": "candidate"
+    },
+    {
+      "id": "pictured-rocks-sand-point",
+      "name": "Sand Point, Pictured Rocks National Lakeshore",
+      "lake": "Superior",
+      "area": "Munising",
+      "operator": "NPS",
+      "siteAnchor": {
+        "lat": 46.4458,
+        "lon": -86.6011,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "PROHIBITED",
+        "sourceUrl": "https://www.nps.gov/piro/getinvolved/supportyourpark/leavenotrace.htm"
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.nps.gov/piro/getinvolved/supportyourpark/leavenotrace.htm",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Observation-only; collecting prohibited",
+      "priority": "candidate"
+    },
+    {
+      "id": "sleeping-bear-glen-haven",
+      "name": "Glen Haven, Sleeping Bear Dunes",
+      "lake": "Michigan",
+      "area": "Sleeping Bear",
+      "operator": "NPS",
+      "siteAnchor": {
+        "lat": 44.8956,
+        "lon": -86.0419,
+        "accuracy": "approximate_site_anchor_not_entrance"
+      },
+      "publicEntry": {
+        "status": "UNVERIFIED",
+        "parkingStatus": "UNVERIFIED",
+        "walkRouteStatus": "UNVERIFIED",
+        "coordinates": null
+      },
+      "shoreSegment": {
+        "geometry": null,
+        "outwardBearingDeg": null,
+        "substrate": "UNVERIFIED"
+      },
+      "collectionPermission": {
+        "status": "PROHIBITED",
+        "sourceUrl": "https://www.nps.gov/subjects/geology/permits.htm"
+      },
+      "rockTargets": [],
+      "stoneEvidence": "NOT_VERIFIED",
+      "waveModelCell": null,
+      "accessAlert": null,
+      "source": {
+        "url": "https://www.nps.gov/subjects/geology/permits.htm",
+        "reviewed": "2026-10-14"
+      },
+      "researchNotes": "Observation-only; collecting prohibited",
+      "priority": "candidate"
+    }
+  ]
+}
