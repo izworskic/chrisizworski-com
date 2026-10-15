@@ -116,6 +116,7 @@ function colorFor(row){
  return v==='FAVORABLE'?'favorable':v==='POSSIBLE'?'possible':'low';
 }
 function markSites(){
+ if(window.MapleVectorMap)window.MapleVectorMap.update(boardData,current);
  const reports=new Map(boardData.map(function(row){return [row.site.id,row];}));
  markers.forEach(function(marker,id){
   const level=colorFor(reports.get(id));
@@ -125,6 +126,22 @@ function markSites(){
 // Normal viewport-only use of the OSM public raster tile server; no API key.
 // Respect OSM tile policy: attribution, browser caching/Referer and no background prefetch.
 function initMap(locations){
+ const overview=$('mapVector'),street=$('map'),overviewBtn=$('mapOverviewBtn'),streetBtn=$('mapStreetBtn');
+ if(window.MapleVectorMap)window.MapleVectorMap.init(locations,selectSite);
+ function setMode(detailed){
+  overview.hidden=detailed;street.hidden=!detailed;
+  overviewBtn.classList.toggle('active',!detailed);streetBtn.classList.toggle('active',detailed);
+  overviewBtn.setAttribute('aria-pressed',String(!detailed));streetBtn.setAttribute('aria-pressed',String(detailed));
+  if(detailed){
+   if(!map)initDetailMap(locations);
+   if(map){window.requestAnimationFrame(()=>map.invalidateSize({pan:false}));window.setTimeout(()=>map.invalidateSize({pan:false}),180);}
+  }
+ }
+ overviewBtn.addEventListener('click',()=>setMode(false));
+ streetBtn.addEventListener('click',()=>setMode(true));
+ setMode(false);markSites();
+}
+function initDetailMap(locations){
  const host=$('map'),fallback=$('mapFallback');
  if(typeof window.L==='undefined'){
   fallback.hidden=false;
@@ -220,6 +237,7 @@ function renderVenues(){
  if($('venueCount'))$('venueCount').textContent=shown.length+' of '+filtered.length+' locations shown';
 }
 async function start(){
+ if(window.MapleVectorMap)window.MapleVectorMap.init([],function(){});
  renderVenues();seasonNote();
  $('venueRegion').addEventListener('change',function(){showAllVenues=false;renderVenues();});
  $('venueType').addEventListener('change',function(){showAllVenues=false;renderVenues();});
