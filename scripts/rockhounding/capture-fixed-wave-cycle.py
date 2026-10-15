@@ -19,8 +19,38 @@ glwu=import_script('glwu-extract.py','rockhounding_grid_cycle')
 cell_research=import_script('wave-cell-research.py','rockhounding_cell_cycle')
 ANCHOR=(46.680000,-85.984978)
 GRID='500m-greatlakes'
+GIS_SOURCE=HERE.parents[1]/'data'/'rockhounding'/'grand-marais-glahf-water-side-2026-10-15.json'
+
+def independent_water_side_preflight(evidence_path=GIS_SOURCE):
+ """Historic GLAHF water polygon corroborates model point; no surf permission."""
+ data=json.loads(pathlib.Path(evidence_path).read_text(encoding='utf8'))
+ if (data.get('schemaVersion')!='grand-marais-glahf-water-side-v1'
+     or not data.get('source',{}).get('url','').startswith(
+       'https://services.arcgis.com/cJ9YHowT8TU7DUyn/')
+     or data.get('gates',{}).get('shorelineBearingSurveyed') is not False
+     or data.get('gates',{}).get('gisSnapshotPermitsSurfForecast') is not False
+     or data.get('canRecommendVisit') is not False):
+  raise ValueError('Independent historic water-side evidence missing or misrepresented')
+ pts={p.get('id'):p for p in data.get('sampledLocations',[])}
+ expected=[('agate_north_450m','WATER'),('agate_south_350m','LAND'),
+           ('agate_500m_wave_candidate','WATER'),
+           ('agate_2p5km_south_nearest','LAND')]
+ for ident,cls in expected:
+  p=pts.get(ident)
+  if not p or p.get('gisClass')!=cls or p.get('expectedResearchClass')!=cls:
+   raise ValueError('GLAHF point changed or unverified: '+ident)
+ candidate=pts['agate_500m_wave_candidate']['coordinate']
+ if abs(candidate['lat']-ANCHOR[0])>0.000001 or abs(candidate['lon']-ANCHOR[1])>0.000001:
+  raise ValueError('NOAA research anchor diverged from independently mapped water point')
+ return {'source':'HISTORIC_GLAHF_NHD_WATER_POLYGON',
+   'fixedResearchCellWaterSideCorroborated':True,
+   'shorelineOutwardBearingMeasured':False,
+   'harborHydrodynamicShelterModeled':False,
+   'canPublishBeachSurf':False}
+
 
 def capture(day,cycle):
+ independent_water_side_preflight()
  url=glwu.url_for(day,cycle,GRID)
  with tempfile.TemporaryDirectory(prefix='rockhounding-cycle-') as directory:
   path=pathlib.Path(directory)/'wave.grib2'
@@ -54,6 +84,7 @@ def capture(day,cycle):
   'canPublishBeachWaveForecast':False,'canClaimSafeShore':False,
   'canClaimFreshExposedStones':False,'harbor':'NOT_RESOLVED',
   'beachWaterConnectivityValidated':False,
+  'independentHistoricWaterSideReview':independent_water_side_preflight(),
   'datasets':[{'grid':GRID,'file':f'glwu.grlr_500m.t{cycle}z.grib2',
     'modelCycleAt':expected,'sourceUrl':url,'cell':selected,
     'selectionRule':'PERSISTENT_EXACT_FIXED_MODEL_CELL',
