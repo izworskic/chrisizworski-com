@@ -25,7 +25,7 @@ jobs:
           node-version: '22'
       - name: Check Python syntax before requesting NOAA chart service
         run: python3 -m py_compile scripts/rockhounding/*.py
-      - name: Run all rockhounding geometry, surf-gate and source-integrity tests
+      - name: Run rockhounding geometry, dated depth evidence, and research lab regression tests
         run: |
           node --test tests/rockhounding*.test.js
           python3 -m unittest discover -s tests -p 'test_rockhounding_*.py' -v
