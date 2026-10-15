@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Rockhounding Grand Marais operator verification gate — October 15, 2026
+
+- **Documentary review complete, collecting/route clearance still blocked.** Burt Township confirms both public beaches. Agate Beach boardwalk (operator page), Bayshore Park facilities and public parking (operator page/Michigan Water Trails), and Michigan EGLE general 25-pound rule have been reviewed against the township's posted ordinance index; none affirm exact municipal collecting permission or owner-certified parking/walk routing.
+- **New construction evidence:** Sept 15, 2026 **draft** board minutes report township Mobi-mat installed, beach bathhouse operating, stairs expected by month's end, but do not identify which beach or prove ramp/stair completion. February 2026 Agate boardwalk bid explicitly proposed steps-to-ramps conversion; no owner proof of completed step-free route. Neither public accessibility status promoted.
+- Added `data/rockhounding/grand-marais-operator-gate-2026-10-15.json` with nine documentary sources and two site records, `lib/rockhounding/grand-marais-verification.cjs` with fail-closed public/parking/walk/collection/ADA/wave eligibility and seven tests. No live route or stone-exposure recommendation, API, page, sitemap, ads or canonical changes. Prior research GeoJSON continues to be sourced but non-navigable and no validated wave normal or NOAA model wet cell.
+- Prepared **unsent** Gmail inquiry draft for office@burttownshipacmi.gov; no external response received. Municipality must confirm beach-specific rock-removal, exact legal parking/path and 2026 construction/accessibility. Current previous CI verification was green at older commit 39946826; latest branch checks pending. No GSC, GA4 or AdSense effect, production unchanged.
+- See `docs/ROCKHOUNDING_GRAND_MARAIS_VERIFICATION_2026-10-15.md` for source URLs and exact pending questions.
+- Exactly one next action: secure township's attributable written response for both beach rules/access, then only after clearance verify shoreline normals and NOAA model wet-cell comparisons.
+
 ## Michigan rockhounding M1 access-route and beach geometry review — October 14, 2026
 
 - Draft PR #1001 research branch, no production changes: added nine official public-facility reviews with owner/source URLs, exact-route and parking uncertainty, EGLE collecting limits vs location-specific authority, and explicit closure/season controls.
