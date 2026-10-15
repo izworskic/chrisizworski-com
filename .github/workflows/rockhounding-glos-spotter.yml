@@ -1,0 +1,31 @@
+name: Rockhounding Grand Marais GLOS observed waves
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-glos-spotter-wave-evidence-20261015
+permissions:
+  contents: read
+jobs:
+  verify-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test observed-only GLOS Spotter source and complete rockhounding science
+        run: node --test tests/rockhounding*.test.js
+      - name: Fetch real recent GLOS SPOT-1361 wave observations once
+        run: |
+          node scripts/rockhounding/capture-glos-grand-marais-spotter.cjs \
+            --out artifacts/grand-marais-spotter-observed-wave-research.json
+      - name: Keep original research metadata and observed records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-grand-marais-spotter-actual-observations
+          path: artifacts/grand-marais-spotter-observed-wave-research.json
+          retention-days: 30
+          if-no-files-found: warn
