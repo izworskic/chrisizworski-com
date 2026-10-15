@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "grand-marais-noaa-grid-validation-v1",
+  "runDateUTC": "2026-10-15",
+  "modelCycleUTC": "2026-10-15T18:00:00.000Z",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38808981322",
+  "dataStatus": "REAL_NOAA_MODEL_SNAPSHOT_RESEARCH_ONLY",
+  "origin": "NOAA NOMADS operational GLWU Great Lakes GRIB2 filtered source, decoded using ecCodes on GitHub Actions",
+  "validForVisitorForecast": false,
+  "validForRockExposureOutcome": false,
+  "samplingCoordinateStatus": "APPROXIMATE_STUDY_POINTS_NOT_PUBLIC_ENTRANCES",
+  "analysisNotBuoyObservation": true,
+  "studies": [
+    {
+      "id": "grand-marais-agate",
+      "label": "Agate Beach",
+      "studyPoint": {
+        "lat": 46.676,
+        "lon": -85.9853
+      },
+      "northOpenLakeCandidateNotVerified": true
+    },
+    {
+      "id": "grand-marais-harbor",
+      "label": "Bayshore Park",
+      "studyPoint": {
+        "lat": 46.6719,
+        "lon": -85.9839
+      },
+      "harborShelterNotVerified": true
+    }
+  ],
+  "models": [
+    {
+      "grid": "2p5km",
+      "file": "glwu.grlc_2p5km_sr.t18z.grib2",
+      "decodedBytes": 78739,
+      "sourceVariables": [
+        "HTSGW",
+        "WVDIR",
+        "WVHGT",
+        "WVPER"
+      ],
+      "gribMessagesPerVariable": 49,
+      "nearestFourMethod": {
+        "completeWaveRows": 64,
+        "sitesShareSingleCell": true,
+        "cell": {
+          "lat": 46.667276,
+          "lon": -85.978659
+        },
+        "modelHtsgwMAtFirstAnalysis": 0.03,
+        "distancesKm": {
+          "agate": 1.094,
+          "harbor": 0.651
+        },
+        "warning": "One shared nearest cell is south of the exposed Agate Beach beachline. Nearest by distance may be on wrong side of shore; cannot use it to represent Agate Beach surf."
+      },
+      "firstAnalysisHeightCandidates": [
+        {
+          "siteId": "grand-marais-agate",
+          "northwardCandidate": {
+            "lat": 46.688341,
+            "lon": -85.976613,
+            "distanceKm": 1.524,
+            "modelHtsgwM": 0.16
+          },
+          "label": "North-lake open-water research alternative, shoreline connection unverified"
+        },
+        {
+          "siteId": "grand-marais-harbor",
+          "nearestValidModelHeight": {
+            "lat": 46.667276,
+            "lon": -85.978659,
+            "distanceKm": 0.651,
+            "modelHtsgwM": 0.03
+          },
+          "label": "Harbor-side research cell, site-level harbor prediction unverified"
+        }
+      ]
+    },
+    {
+      "grid": "500m-greatlakes",
+      "file": "glwu.grlr_500m.t18z.grib2",
+      "decodedBytes": 1335838,
+      "sourceVariables": [
+        "HTSGW",
+        "WVDIR",
+        "WVHGT",
+        "WVPER"
+      ],
+      "gribMessagesPerVariable": 49,
+      "nearestFourMethod": {
+        "completeWaveRows": 0,
+        "reason": "NO_NEAREST_FOUR_COMPLETE_RECORDS_MASKED_SHORELINE",
+        "allFourNearestCellsMaskedBy9999AtEachPoint": true,
+        "warning": "9999 is missing grid data, not a calm reading or forecast."
+      },
+      "firstAnalysisHeightCandidates": [
+        {
+          "siteId": "grand-marais-agate",
+          "nearestValidHtSgwOnly": {
+            "lat": 46.68,
+            "lon": -85.984978,
+            "distanceKm": 0.445,
+            "modelHtsgwM": 0.12
+          },
+          "validHeightCellsWithin7Km": 510,
+          "shorelineConnection": "OPEN_NORTH_LAKE_CANDIDATE_UNVERIFIED"
+        },
+        {
+          "siteId": "grand-marais-harbor",
+          "nearestValidHtSgwOnly": {
+            "lat": 46.673,
+            "lon": -85.974978,
+            "distanceKm": 0.692,
+            "modelHtsgwM": 0
+          },
+          "validHeightCellsWithin7Km": 466,
+          "shorelineConnection": "HARBOR_WATER_CONNECTION_UNVERIFIED_DO_NOT_TREAT_AS_CALM_SURF"
+        }
+      ],
+      "canDeriveDirectionalNearshoreStormSignal": false,
+      "why": "HTSGW-only nearby wet-cell values found; full HTSGW+WVHGT+WVPER+WVDIR at same site-side cell/time has not been validated."
+    }
+  ],
+  "historicalComparison": {
+    "buoy": "NOAA NDBC 45004",
+    "historicalDates": [
+      "2026-09-13",
+      "2026-09-20",
+      "2026-10-10"
+    ],
+    "available": "OBSERVED_OFFSHORE_WAVE_HEIGHTS_ONLY",
+    "historicalGLWUAnalysesAvailableFromThisNOMADSQuery": false,
+    "matchedModelVersusBuoySkillScore": null,
+    "validationOutcome": "NO_OVERLAPPING_MODEL_ARCHIVE_SO_CANNOT_CLAIM_BACKTEST",
+    "reason": "October 15 operational GLWU cycle does not reproduce the September or October 10 model analyses. Do not match different dates."
+  },
+  "notes": [
+    "This is one live 18Z model run, not an independent beach measurement or a current sea-state claim.",
+    "An exposed beach and sheltered harbor can be separated conceptually, but coastal fetch/breakwater connectivity and directional wave cells require further research.",
+    "No model cell has been approved for public shoreline search timing, collecting suitability or water safety.",
+    "The suffix _lc in glwu.grlr_500m_lc describes Lake Champlain; the corrected Lake Superior source is glwu.grlr_500m."
+  ]
+}
