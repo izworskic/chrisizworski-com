@@ -29,7 +29,7 @@ These are **three distinct observed offshore wave events**, spaced by more than 
 
 ## Higher-resolution wave model finding
 
-NOAA's official Great Lakes wave distribution also offers the **500 m coastal short-range research product** `glwu.grlr_500m_lc.tCCz.grib2`, alongside `glwu.grlc_2p5km_sr.tCCz.grib2`. The NOMADS filter returned GRIB2 content (the `GRIB` magic header) for a small subset of both model products on October 15, 2026, but the remote tool truncated the large binary response, so **no numeric 500 m grid-cell sample has been decoded or verified**.
+NOAA's official Great Lakes wave distribution also offers the **500 m Great Lakes short-range research product** `glwu.grlr_500m.tCCz.grib2`, alongside `glwu.grlc_2p5km_sr.tCCz.grib2`. The NOMADS filter returned GRIB2 content (the `GRIB` magic header) for a small subset of both model products on October 15, 2026, but the remote tool truncated the large binary response, so **no numeric 500 m grid-cell sample has been decoded or verified**.
 
 Official sources:
 - https://www.weather.gov/media/notification/pdfs/scn17-75glwu.pdf
@@ -37,18 +37,21 @@ Official sources:
 - https://www.nco.ncep.noaa.gov/pmb/products/wave/glwu.grlc_2p5km_sr.t00z.grib2.shtml
 - https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2-10-0.shtml
 
-The existing no-key sampler `scripts/rockhounding/glwu-extract.py` now supports `--grid 2p5km` (default) or `--grid 500m-coastal` (explicit research mode). Both use `HTSGW`, `WVHGT`, `WVPER`, `WVDIR` and produce a sampled cell ID that identifies its grid resolution. It is **not known whether 500 m actually resolves the protected Grand Marais harbor**; even if it does, nearby water depth, breakwaters, bathymetric refraction, land mask and setup remain unvalidated.
+The existing no-key sampler `scripts/rockhounding/glwu-extract.py` now supports `--grid 2p5km` (default) or `--grid 500m-greatlakes` (explicit research mode). Both use `HTSGW`, `WVHGT`, `WVPER`, `WVDIR` and produce a sampled cell ID that identifies its grid resolution. It is **not known whether 500 m actually resolves the protected Grand Marais harbor**; even if it does, nearby water depth, breakwaters, bathymetric refraction, land mask and setup remain unvalidated.
 
 Examples (run only from a network-permitted machine, at low request frequency):
 
 ```bash
-python3 scripts/rockhounding/glwu-extract.py --date 20261015 --cycle 12 --grid 500m-coastal --print-url
+python3 scripts/rockhounding/glwu-extract.py --date 20261015 --cycle 12 --grid 500m-greatlakes --print-url
 python3 -m pip install -r scripts/rockhounding/requirements.txt
-python3 scripts/rockhounding/glwu-extract.py --date 20261015 --cycle 12 --grid 500m-coastal --download --output /tmp/grand-marais-500m-research.json
+python3 scripts/rockhounding/glwu-extract.py --date 20261015 --cycle 12 --grid 500m-greatlakes --download --output /tmp/grand-marais-500m-research.json
 ```
 
 Do not poll NOAA per visitor. Download a bounded subset on a schedule and cache for all site users, honoring NOAA's grib-filter fair-use guidance.
 
+
+
+**Correction on October 15 (critical):** Earlier research identified a `*_500m_lc` grid as Great Lakes coastal. NOAA's 2023 service change notice identifies `_lc` as **Lake Champlain**. The actual Great Lakes 500 m file is `glwu.grlr_500m.tCCz.grib2`. The code and URL tests have now been corrected. Earlier GRIB2-header responses for `_lc` prove only Lake Champlain data existed, not Michigan wet-cell coverage. <https://www.weather.gov/media/notification/pdf_2023_24/scn23-35_glwu_v2.0_aaa.pdf> and <https://www.nco.ncep.noaa.gov/pmb/products/wave/>.
 
 ## Local Grand Marais wind source (not wave height)
 
