@@ -1,6 +1,6 @@
 {
   "schemaVersion": "glwu-research-cycle-summary-v1",
-  "generatedAt": "2026-10-15T21:56:46.000Z",
+  "generatedAt": "2026-10-15T21:59:57.000Z",
   "status": "COLLECTING_MODEL_CYCLES",
   "source": "NOAA_GLWU_MODEL_OUTPUT",
   "modelCycleCounts": {
@@ -12,9 +12,9 @@
       "readyFor14DayBaseline": false
     },
     "500m-greatlakes": {
-      "cycles": 1,
-      "analysis": 1,
-      "issuedForecasts": 47,
+      "cycles": 2,
+      "analysis": 2,
+      "issuedForecasts": 94,
       "distinctCells": 1,
       "readyFor14DayBaseline": false
     }
@@ -42,14 +42,30 @@
     },
     "500m-greatlakes": {
       "grid": "500m-greatlakes",
-      "matchedPairs": 0,
-      "unmatchedForecastRows": 47,
-      "matches": [],
-      "leadBuckets": {},
+      "matchedPairs": 1,
+      "unmatchedForecastRows": 93,
+      "matches": [
+        {
+          "issuedAt": "2026-10-15T18:00:00.000Z",
+          "validAt": "2026-10-15T20:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 2,
+          "predictedWaveHeightM": 0.08,
+          "laterModelInitialHeightM": 0.08,
+          "deltaM": 0
+        }
+      ],
+      "leadBuckets": {
+        "1-6h": {
+          "pairs": 1,
+          "meanAbsoluteChangeM": 0,
+          "meanSignedChangeM": 0
+        }
+      },
       "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
       "isIndependentBuoyVerification": false,
       "isBeachForecastSkill": false,
-      "status": "INSUFFICIENT_MATCHED_CYCLES",
+      "status": "MODEL_REVISION_SAMPLE_NOT_OBSERVATIONAL_SKILL",
       "canPublishRockhoundingWindow": false
     }
   },
