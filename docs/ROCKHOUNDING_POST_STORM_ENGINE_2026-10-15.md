@@ -60,6 +60,23 @@ The standing pilot config in \`data/rockhounding/grand-marais-wave-pilot.json\` 
 
 \`tests/rockhounding-nws-hazards.test.js\` covers active warnings, small craft advisories, expired warnings, degraded feeds and failure handling.
 
+
+## Runnable integrated diagnostic (added)
+
+After producing NOAA-decoded point records in \`./wave-samples.json\`, run the standalone local research pipeline:
+
+\`\`\`bash
+node scripts/rockhounding/poststorm-report.cjs \
+  --input ./wave-samples.json \
+  --archive /tmp/rockhounding-wave-archive.json \
+  --output /tmp/rockhounding-poststorm-research.json \
+  --now 2026-10-15T12:00:00.000Z
+\`\`\`
+
+With \`--check-nws\`, the process makes three live NWS active-alert requests (LSZ250, LSZ251, Grand Marais point). Without that flag the hazard state is UNKNOWN, **not CLEAR**. The script reads, deduplicates and atomically writes the archive and a separate two-beach diagnostic report. Never point these research outputs at a public site route; they are not validated shore-wave advice. Before running against real data, fill \`modelCell\` and \`shore\` review fields only after evidence supports them; leaving them unknown correctly produces \`CELL_NOT_VERIFIED\`.
+
+\`tests/rockhounding-poststorm-pipeline.test.js\` verifies the whole runner/archiver pipeline, including that unverified sites yield no user-facing search windows.
+
 ## Failure taxonomy
 
 \`CELL_NOT_VERIFIED\`, \`SHORE_ORIENTATION_UNVERIFIED\`, \`BAY_NOT_RESOLVED_BY_GRID\`, \`HAZARD_VETO\`, \`INSUFFICIENT_HISTORY\`, \`STALE_MODEL_ANALYSIS\`, \`INSUFFICIENT_BASELINE\`, \`NO_RELATIVE_DISTURBANCE_SIGNAL\`, \`MODEL_DISTURBANCE_ONGOING\`, \`SETTLING_CANDIDATE_FORECAST_INCOMPLETE\`, \`WAVES_MAY_REBUILD\`, \`SETTLING_CANDIDATE_HAZARDS_UNKNOWN\`, \`RESEARCH_SETTLING_CANDIDATE\`. All remain research-only.
