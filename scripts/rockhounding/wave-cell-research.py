@@ -93,7 +93,7 @@ def choose_best_candidate(ranking):
     eligible=[item for item in ranking if len(item[2])>=threshold]
     return min(eligible,key=lambda item:(item[1]["distanceKm"],-len(item[2]),-item[1]["lat"]))
 
-def analyze_fixed_open_cell(path,grid):
+def analyze_fixed_open_cell(path,grid,required_cell=None):
     """Runs on an already downloaded NOAA GRIB subset; no new HTTP requests."""
     from eccodes import codes_get,codes_get_array,codes_grib_new_from_file,codes_release
     first=None
@@ -135,10 +135,17 @@ def analyze_fixed_open_cell(path,grid):
         result["candidatesConsidered"].append(coverage)
         if full:ranking.append((i,c,full))
     if not ranking:return {**result,"status":"NO_COMPLETE_FOUR_FIELD_FIXED_CELL"}
+    if required_cell is not None:
+        anchor_lat,anchor_lon=required_cell
+        ranking=[r for r in ranking if abs(r[1]["lat"]-anchor_lat)<.00001
+                 and abs(r[1]["lon"]-anchor_lon)<.00001]
+        if not ranking:
+            return {**result,"status":"ANCHORED_FIXED_CELL_MISSING_OR_INCOMPLETE",
+                    "requiredCell":{"lat":anchor_lat,"lon":anchor_lon}}
     # Do not select a distant cell for one extra timestamp when the closer
     # open-north water cell already has >=90% of the best available coverage.
     index,cell,full=choose_best_candidate(ranking)
-    result["selectionRule"]="NEAREST_NORTH_SECTOR_CELL_WITHIN_90PCT_OF_MAX_COMPLETE_FOUR_FIELD_COVERAGE"
+    result["selectionRule"]="PERSISTENT_EXACT_FIXED_MODEL_CELL" if required_cell else "NEAREST_NORTH_SECTOR_CELL_WITHIN_90PCT_OF_MAX_COMPLETE_FOUR_FIELD_COVERAGE"
     sample=[]
     for when,values in full:
         cycle=values["cycle"]
