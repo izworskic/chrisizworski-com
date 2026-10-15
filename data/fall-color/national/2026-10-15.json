@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-15",
+  "updated": "2026-10-15T15:38:58.136Z",
+  "briefings": {
+    "new-england": "Peak fall color timing aligns with the traditional window across New England's iconic drives this weekend.",
+    "great-smoky-mountains": "Smoky Mountains reach traditional peak timing; rain showers likely but foliage remains at seasonal expectations.",
+    "colorado-aspens": "Aspen color has passed peak timing; conditions are conditional for viewing on scenic drives.",
+    "adirondacks": "Adirondacks show strong color retention past traditional peak; snow showers possible with mostly sunny conditions.",
+    "north-shore-superior": "Live weather data unavailable; North Shore color window remains open past traditional timing.",
+    "ozarks": "Ozarks approach traditional peak timing with sunny conditions ideal for scenic byway drives.",
+    "eastern-sierra": "Eastern Sierra aspens retain strong color past traditional peak with sunny, dry conditions.",
+    "wasatch": "Wasatch color persists past traditional peak; sunny conditions favor viewing on alpine drives.",
+    "columbia-river-gorge": "Gorge foliage aligns with traditional peak timing; mostly sunny weekend ahead with minimal rain.",
+    "door-county": "Door County reaches traditional peak color timing with sunny, dry conditions this weekend.",
+    "poconos": "Poconos display peak fall color within traditional window; mostly sunny weekend with minimal rain.",
+    "texas-hill-country": "Hill Country color remains early; plan ahead as foliage approaches traditional timing.",
+    "west-virginia-highlands": "Highlands reach traditional peak timing but heavy rain showers (85% chance) expected this weekend.",
+    "catskills": "Catskills display peak fall color within traditional window; partly sunny conditions favor viewing.",
+    "shenandoah": "Skyline Drive reaches traditional peak timing; rain showers likely but mostly sunny conditions follow."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
