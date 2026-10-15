@@ -63,7 +63,7 @@ Run locally: `node --test tests/rockhounding-m1.test.js`. Six deterministic test
 
 **Completed:** pilot research inventory with primary-source links; specific closure/season risk annotations; fail-closed wave parser and geometry comparator; six tests. **Not completed:** 20–30 verified *entrances*, site-specific collection authorizations, GIS shoreline segments, NOAA GRIB extraction, field validation or live backtests. No SEO or revenue changes claimed; no live public feature.
 
-**Exactly one next action:** Verify the nine pilot facilities' exact legal shoreline entry routes and collecting rules with operator sources, then map exposed versus sheltered segment geometries for the Grand Marais pair.
+**Original next gate (research advanced):** See the continuation below for the now-completed nine-facility documentary review and the narrower remaining on-the-ground verification.
 
 
 ## Milestone 1 continuation: nine access reviews and the Grand Marais spatial pair
