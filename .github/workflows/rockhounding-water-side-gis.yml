@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Check 14 real GLAHF lake/harbor water-body intersections
+      - name: Reconfirm all 14 actual GLAHF mapped water and land positions
         shell: bash
         run: |
           python3 scripts/rockhounding/validate-grand-marais-water-side.py \
