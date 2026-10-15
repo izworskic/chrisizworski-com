@@ -33,6 +33,6 @@ The adapter checks for HTTP errors, invalid format, missing data, freshness, UTC
 
 - User-facing discovery assumption: **APPROVED FOR RESEARCH PROTOTYPE**, not an official legal permit or guaranteed open/accessible status.
 - Grand Marais beaches: **two public visit locations**, **one officially described rockhounding lead**, **one sheltered control**, **zero certified rock-removal permissions**, **zero beach-level live wave verdicts**.
-- New tests: four discovery-tier tests in `rockhounding-grand-marais-verification.test.js` and six NDBC-adapter tests in `rockhounding-superior-wave.test.js`. Original fourteen research tests remain.
+- New tests: four discovery-tier tests in `rockhounding-grand-marais-verification.test.js` and six NDBC-adapter tests in `rockhounding-superior-wave.test.js`. The previously committed twenty-one research tests (six wave parser, eight access/geometry, seven municipal gate) remain; the branch now has **31** deterministic tests in total.
 - PR #1001 remains draft, no production deployment or SEO claim.
 - **Exactly one next development priority:** build a NOAA GLWU small-area wet-cell sampler and compare exposed Agate Beach to sheltered Bayshore Park for a dated storm episode, with independent local shoreline normals and explicit missing-data handling. No municipality email required.
