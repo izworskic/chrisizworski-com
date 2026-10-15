@@ -112,11 +112,41 @@ def capture():
     "waveShelterValidity":"NOT_CALIBRATED"}
  return result
 
+def check_against_reviewed_snapshot(live,reviewed):
+ if live.get("schemaVersion")!=reviewed.get("schemaVersion"):
+  raise ValueError("NOAA harbor chart schema and research snapshot differ")
+ if (live.get("source",{}).get("chartDataset")!=reviewed.get("source",{}).get("dataset")
+     or set(live.get("zones",{}))!=set(reviewed.get("zones",{}))):
+  raise ValueError("NOAA ENC source dataset or harbor zone list has drifted")
+ for key,actual in live["zones"].items():
+  prior=reviewed["zones"][key]
+  if tuple(actual["bbox"])!=tuple(prior["bbox"]):
+   raise ValueError("Changed Grand Marais harbor study zone bounds")
+  a,b=actual["soundings"],actual["contours"]
+  checks=[
+   (a["featureCount"],prior["soundings"]["count"]),
+   (b["featureCount"],prior["contours"]["count"]),
+   ([a["chartValueMin"],a["chartValueMax"]],prior["soundings"]["chartedZValueRange"]),
+   ([b["chartValueMin"],b["chartValueMax"]],prior["contours"]["chartedContourValueRange"]),
+   (a["sourceDates"],prior["soundings"]["sourceDates"]),
+  ]
+  if any(x!=y for x,y in checks):
+   raise ValueError("Official NOAA ENC harbor chart evidence changed in "+key+
+                    "; manual research source review required")
+ if reviewed.get("safety",{}).get("canPublishHarborWaveHeight") is not False:
+  raise ValueError("Uncalibrated harbor study cannot publish surf")
+ return True
+
 def main():
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument("--out",required=True)
+ parser.add_argument("--expect",help="Compare live NOAA source with reviewed research JSON, fail closed on drift")
  args=parser.parse_args()
- data=capture();dest=pathlib.Path(args.out)
+ data=capture()
+ if args.expect:
+  reviewed=json.loads(pathlib.Path(args.expect).read_text(encoding="utf-8"))
+  check_against_reviewed_snapshot(data,reviewed)
+ dest=pathlib.Path(args.out)
  dest.parent.mkdir(parents=True,exist_ok=True)
  dest.write_text(json.dumps(data,indent=2)+"\n",encoding="utf-8")
  print("NOAA_ENC_HARBOR_DEPTH "+json.dumps({
