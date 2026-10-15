@@ -14,16 +14,18 @@ import urllib.request
 from collections import defaultdict
 
 BASE='https://nomads.ncep.noaa.gov/cgi-bin/filter_glwu.pl'
+GRIDS={'2p5km':'glwu.grlc_2p5km_sr','500m-coastal':'glwu.grlr_500m_lc'}
 PARAMS={3:'HTSGW',4:'WVDIR',5:'WVHGT',6:'WVPER'}
 SITES=(
  {'id':'grand-marais-agate','lat':46.6760,'lon':-85.9853},
  {'id':'grand-marais-harbor','lat':46.6719,'lon':-85.9839},
 )
-def url_for(day,cycle):
+def url_for(day,cycle,grid='2p5km'):
  if len(day)!=8 or not day.isdigit():raise ValueError('Need YYYYMMDD')
  dt.datetime.strptime(day,'%Y%m%d')
  if cycle not in ('00','06','12','18'):raise ValueError('Need 00/06/12/18 UTC')
- q={'file':f'glwu.grlc_2p5km_sr.t{cycle}z.grib2','var_HTSGW':'on',
+ if grid not in GRIDS:raise ValueError('Unrecognized GLWU grid')
+ q={'file':f'{GRIDS[grid]}.t{cycle}z.grib2','var_HTSGW':'on',
  'var_WVPER':'on','var_WVHGT':'on','var_WVDIR':'on','lev_surface':'on',
  'subregion':'','leftlon':'-86.20','rightlon':'-85.77','toplat':'46.87',
  'bottomlat':'46.53','dir':f'/glwu.{day}'}
@@ -40,7 +42,7 @@ def retrieve(url):
  if len(raw)>12_000_000:raise ValueError('Subset too large')
  if not raw.startswith(b'GRIB'):raise ValueError('Not GRIB2; possible unavailable file or rate limit')
  return raw
-def extract(path):
+def extract(path,grid='2p5km'):
  try:
   from eccodes import codes_grib_new_from_file,codes_get,codes_grib_find_nearest,codes_release
  except ImportError as e:raise RuntimeError('pip install eccodes is required to decode GRIB2') from e
@@ -63,14 +65,14 @@ def extract(path):
      if not neighbors:continue
      n=min(neighbors,key=lambda x:km(site['lat'],site['lon'],float(x['lat']),float(x['lon'])))
      lat,lon=round(float(n['lat']),5),round(float(n['lon']),5)
-     cell_id=f'glwu:{lat:.5f}:{lon:.5f}'
+     cell_id=f'glwu:{grid}:{lat:.5f}:{lon:.5f}'
      item=groups[(site['id'],valid,cell_id)]
      item.update({'source':'NOAA_GLWU','phase':'MODEL_ANALYSIS' if valid==cycle else 'MODEL_FORECAST',
        'validAt':valid,'modelCycleAt':cycle,'cellId':cell_id,'sampleTargetId':site['id'],
        'sampleTargetType':'APPROXIMATE_RESEARCH_TARGET_NOT_ENTRANCE',
        'cellLat':lat,'cellLon':lon,
        'cellDistanceKm':round(km(site['lat'],site['lon'],lat,lon),3),
-       'modelGridType':'GLWU_GRLC_2P5KM_SR','exposure':'REGIONAL_MODEL_POINT_NOT_BEACH_WAVE'})
+       'modelGridType':GRIDS[grid],'exposure':'MODEL_POINT_NOT_BEACH_WAVE'})
      item[parameter]=float(n['value']);cells[site['id']].add(cell_id)
    finally:codes_release(gid)
  records=[]
@@ -91,25 +93,27 @@ def extract(path):
  'directionConvention':'WVDIR_IS_WAVE_FROM_NOT_WIND_FROM',
  'sharedCellBetweenOpenBeachAndHarbor':bool(common),
  'canInferShelteredHarborSurf':False,'canPublishSearchWindow':False,
+ 'gridName':grid,'verifiedShorelineWetCell':False,
  'siteSampleChecks':bysite,'records':records}
 def main(argv=None):
  ap=argparse.ArgumentParser(description=__doc__)
  ap.add_argument('--date',required=True,help='YYYYMMDD UTC')
  ap.add_argument('--cycle',required=True,choices=('00','06','12','18'))
+ ap.add_argument('--grid',choices=tuple(GRIDS),default='2p5km',help='2.5 km regional or experimental 500 m coastal product; neither certifies harbor waves')
  mode=ap.add_mutually_exclusive_group(required=True)
  mode.add_argument('--grib-file')
  mode.add_argument('--download',action='store_true')
  mode.add_argument('--print-url',action='store_true')
  ap.add_argument('--output')
- args=ap.parse_args(argv);url=url_for(args.date,args.cycle)
+ args=ap.parse_args(argv);url=url_for(args.date,args.cycle,args.grid)
  if args.print_url:print(url);return 0
  if args.download:
   import tempfile
   with tempfile.TemporaryDirectory(prefix='glwu-') as directory:
    path=pathlib.Path(directory)/'subset.grib2'
    path.write_bytes(retrieve(url))
-   result=extract(path)
- else:result=extract(pathlib.Path(args.grib_file))
+   result=extract(path,args.grid)
+ else:result=extract(pathlib.Path(args.grib_file),args.grid)
  result.update({'modelCycleDate':args.date,'modelCycleHourUTC':args.cycle,
   'filterUrl':url,'retrievedAt':dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds').replace('+00:00','Z')})
  output=json.dumps(result,indent=2,sort_keys=True)+'\n'
