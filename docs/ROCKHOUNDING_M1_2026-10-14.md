@@ -64,3 +64,39 @@ Run locally: `node --test tests/rockhounding-m1.test.js`. Six deterministic test
 **Completed:** pilot research inventory with primary-source links; specific closure/season risk annotations; fail-closed wave parser and geometry comparator; six tests. **Not completed:** 20–30 verified *entrances*, site-specific collection authorizations, GIS shoreline segments, NOAA GRIB extraction, field validation or live backtests. No SEO or revenue changes claimed; no live public feature.
 
 **Exactly one next action:** Verify the nine pilot facilities' exact legal shoreline entry routes and collecting rules with operator sources, then map exposed versus sheltered segment geometries for the Grand Marais pair.
+
+
+## Milestone 1 continuation: nine access reviews and the Grand Marais spatial pair
+
+**Completed, research stage — October 14, 2026.** Adds `data/rockhounding/pilot-access-reviews.json`: nine official facility/access evaluations linked by site ID to the original pilot list. The corresponding `lib/rockhounding/pilot-audit.cjs` performs explicit eligibility checks; `tests/rockhounding-m1-access.test.js` verifies data integrity. **All nine have documented public beach facilities; zero have an independently proven precise navigable entrance + complete pedestrian route + site-specific collecting authorization.** None are eligible for collection guidance or a turn-by-turn parking pin.
+
+### Evidence levels from primary sources
+
+- **Petoskey State Park:** DNR provides 2475 M-119 Hwy, day-use beach, accessible waterfront walkway, and explicit Petoskey-stone searching. `https://www.michigan.gov/recsearch/parks/petoskey`
+- **Fisherman's Island:** DNR describes Bell's Bay Road, rockhounding, and current closure of day-use areas to vehicles during culvert repairs; shoreline and trails may be reached **on foot**. No alternative parking route substantiated. `https://www.michigan.gov/recsearch/parks/fishermans`
+- **Frankfort Public Beach:** City recreation plan confirms public west-Main-Street beach and pedestrian walkways; EGLE identifies local fossils. Specific current municipal gathering rule, parking gate and walking-line coordinates still require owner confirmation. `https://cms3.revize.com/revize/frankfortmi/REC%20PLAN%202022-2026%20FINAL.pdf`
+- **Grand Marais Agate Beach:** Burt Township identifies its public beach/boardwalk. Chamber gives directional access via north end of main street. A *third-party candidate* pin at 46.675556,-85.985176 is recorded but NOT exposed as navigable. Township's 2026 boardwalk renovation bid proposed changing steps to ramps; completion/closure **not verified**. `https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/`
+- **Grand Marais Bayshore Park:** Township confirms municipal harbor swim beach with parking. Michigan Water Trails publishes 46°40.36740′, -85°59.00880′ = 46.672790,-85.983480 as **park/site GPS**, not an exact parking entrance. `https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/`, `https://www.michiganwatertrails.org/location.asp?aid=4911&ait=av`
+- **F.J. McLain:** DNR provides 18350 Hwy M-203, a public Lake Superior beach, an accessible waterfront walkway and explicit rockhounding. Exact park-to-water route still untraced. `https://www.michigan.gov/recsearch/parks/mclain`
+- **Bay City:** DNR provides 3582 State Park Drive, boardwalk and seasonal accessible beach mat. Predominantly sandy, with no sourced rock-deposit claim; retains **negative-control** status. `https://www.michigan.gov/recsearch/parks/baycity`
+- **Tawas Point:** DNR provides 686 Tawas Beach Road and documented day-use parking next to the *Lake Huron side*. Tawas Bay is a separate shore; do not share wave exposure from one side. `https://www.michigan.gov/recsearch/parks/tawaspoint`
+- **Lakeport day-use:** DNR specifically publishes day-use **area** at 43.105475,-82.488804; the campground address is about a mile away. Day-use season Memorial Day–Labor Day. The published point is not an exact parking gate. `https://www.michigan.gov/recsearch/parks/lakeport`
+
+### Legal distinction
+
+EGLE: `https://www.michigan.gov/egle/public/learn/geology/rockhounding` and `.../fossils` state general annual 25-pound rock/fossil/mineral limitation on state land/public-trust shores, subject to specific restrictions. Public park status and this general allowance do **not** prove a particular beach segment authorizes collection. Municipal parks may have separate rules. Our software does not turn `GENERAL_EGLE_LIMIT` or `SITE_ROCKHOUNDING_RECOGNIZED` into `EXPLICIT_SITE_PERMISSION`.
+
+### Two sourced beach-area polygons
+
+`data/rockhounding/grand-marais-research-footprints.geojson` holds **two closed OpenStreetMap beach polygons (research only)**, with copyright attribution and ODbL license recorded, acquired via Overpass on October 14, 2026:
+
+- open-Lake-Superior Agate Beach study footprint: OSM way 434583711, clipped around the candidate N. Lake Avenue access area (the original way is a broader beach polygon);
+- sheltered harbor Bayshore Park beach footprint: OSM way 929622678.
+
+These are not the changing waterline, a legal right-of-way, a validated exposure normal or an authoritative boundary. Both set `shorelineWaterwardNormalDeg: null`, so the experimental wave comparison **must not** use them as production geometry. They do allow distinct map footprint layers and manual review without drawing arbitrary rectangles as if they were shorelines. See `lib/rockhounding/pilot-audit.cjs`.
+
+### Testing and release status
+
+Run `node --test tests/rockhounding-m1*.test.js` as a focused suite and `npm run verify:all` before merge. CI on the existing draft PR is the authoritative check; no public deployment or Search Console effect is claimed.
+
+**Exactly one next action:** Confirm township and park operator-specific collecting rules plus a verified legal parking-to-shore access route at Grand Marais Agate Beach and Bayshore Park, then independently digitize the waterline normal for the pair before any live wave conclusion.
