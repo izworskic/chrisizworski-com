@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "rockhounding-ehydro-survey-catalog-audit-v1",
+  "collectedAtUTC": "2026-10-15T23:38:31.840852Z",
+  "source": {
+    "provider": "US Army Corps of Engineers",
+    "catalogLayer": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0",
+    "queryBbox": [
+      -86.01,
+      46.65,
+      -85.94,
+      46.71
+    ],
+    "queryType": "bounded_geographic_catalog_lookup",
+    "individualSourceFieldsValidated": [
+      "OBJECTID",
+      "surveyjobidpk",
+      "sdsfeaturename",
+      "surveytype",
+      "surveydatestart",
+      "surveydateend",
+      "dateuploaded",
+      "usacedistrictcode",
+      "sourcedatalocation"
+    ],
+    "verificationRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38824773510"
+  },
+  "matchingSurveyJobs": [
+    {
+      "objectId": 125722,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2026-07-30",
+      "surveyEndUTC": "2026-07-30",
+      "uploadedUTC": "2026-09-11",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 52182,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2025-07-29",
+      "surveyEndUTC": "2025-07-29",
+      "uploadedUTC": "2025-09-22",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 110382,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2024-07-31",
+      "surveyEndUTC": "2024-07-31",
+      "uploadedUTC": "2024-10-18",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 56308,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2023-05-31",
+      "surveyEndUTC": "2023-05-31",
+      "uploadedUTC": "2023-06-08",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 46444,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2022-06-02",
+      "surveyEndUTC": "2022-06-22",
+      "uploadedUTC": "2022-06-22",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 81337,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2021-09-02",
+      "surveyEndUTC": "2021-09-08",
+      "uploadedUTC": "2021-09-08",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 31364,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2020-08-06",
+      "surveyEndUTC": "2020-08-07",
+      "uploadedUTC": "2020-08-07",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 100657,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2018-07-31",
+      "surveyEndUTC": "2019-12-16",
+      "uploadedUTC": "2019-12-16",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 77449,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2016-10-04",
+      "surveyEndUTC": "2019-12-16",
+      "uploadedUTC": "2019-12-16",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    },
+    {
+      "objectId": 62100,
+      "catalogName": "Grand Marais Harbor",
+      "surveyType": "CS",
+      "surveyStartUTC": "2019-08-02",
+      "surveyEndUTC": "2019-12-16",
+      "uploadedUTC": "2019-12-16",
+      "district": "CELRE",
+      "hasSourceDownloadReference": true,
+      "fullBathymetricSurveyDownloadedAndValidated": false,
+      "validatesPresentHarborWaveHeight": false
+    }
+  ],
+  "catalogFinding": "MATCHING_SURVEY_JOB_METADATA",
+  "absenceOfSurveyProven": false,
+  "currentBathymetryIndependentlyValidated": false,
+  "measuredHarborWaveObservationsAvailable": false,
+  "harborWaveTransmissionCalibrated": false,
+  "canPublishHarborSurf": false,
+  "canClaimNewStones": false,
+  "canPublishRockhoundingWindow": false
+}
