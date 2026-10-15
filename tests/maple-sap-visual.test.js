@@ -72,15 +72,21 @@ test('Reference images are hosted at credited Wikimedia originals; no incomplete
  assert.match(css,/\.hero-photo/);assert.match(css,/\.sap-svg/);
 });
 
-test('Map uses keyless OpenStreetMap tiles, visible attribution, and viewport-only loading',()=>{
+test('Map defaults to working CARTO-keyed Voyager tiles and has OSM fallback',()=>{
  const app=file('public/michigan-maple-sap-run/app.js');
+ const wisconsin=file('public/michigan-maple-sap-run/index.html');
+ assert.match(app,/basemaps\.cartocdn\.com\/rastertiles\/voyager/);
+ assert.match(app,/\.png\?key=cb1_/);
  assert.match(app,/https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
- assert.doesNotMatch(app,/basemaps\.cartocdn\.com|api\.mapbox\.com|maptiler\.com/);
+ assert.match(app,/CARTO<\/a>/);
  assert.match(app,/OpenStreetMap contributors/);
- assert.match(app,/IntersectionObserver/);
- assert.match(app,/rootMargin:'180px'/);
- assert.match(app,/tiles\.on\('tileerror'/);
+ assert.doesNotMatch(app,/new window\.IntersectionObserver\s*\(|observer\.observe\(host\)/);
+ assert.match(app,/window\.requestAnimationFrame\(size\)/);
+ assert.match(app,/ResizeObserver/);
+ assert.match(app,/tileLayer\.on\('tileerror'/);
+ assert.match(app,/map\.removeLayer\(tileLayer\)/);
  assert.match(app,/fallback\.hidden=false/);
  assert.match(app,/m\.on\('click',function\(\)\{selectSite\(x\.id\);\}\)/);
  assert.match(app,/markers\.set\(x\.id,m\)/);
+ assert.match(wisconsin,/id="map"/);
 });
