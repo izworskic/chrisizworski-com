@@ -1,0 +1,197 @@
+{
+  "schemaVersion": "gm-verification-v1",
+  "checkedOn": "2026-10-15",
+  "status": "DOCUMENTARY_GATE_COMPLETE_OPERATOR_CONFIRMATION_OUTSTANDING",
+  "governance": {
+    "operator": "Burt Township, Alger County, Michigan",
+    "officeUrl": "https://burttownshipacmi.gov/departments/township-office/",
+    "publishedOrdinanceIndex": "https://burttownshipacmi.gov/departments/planning-zoning/ordinances/",
+    "michiganEgleRules": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+    "generalWeightRule": "25 pounds per person per year on qualifying state-owned/public-trust lands; not a municipal beach collecting permit",
+    "mandatoryPublicationRule": "Collection guidance requires affirmative operator-specific rules and verified site boundaries. Missing evidence remains UNKNOWN; public beach access cannot imply collection rights."
+  },
+  "sources": [
+    {
+      "id": "TOWNSHIP_AGATE",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/",
+      "establishes": [
+        "Public Lake Superior beach",
+        "Township-maintained boardwalk originally built in 2005"
+      ],
+      "doesNotEstablish": [
+        "Current beach-level entry after renovation",
+        "Rock removal permission",
+        "Exact parking gate"
+      ]
+    },
+    {
+      "id": "TOWNSHIP_BAYSHORE",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/",
+      "establishes": [
+        "Public downtown harbor beach",
+        "Handicap parking, pavilion, bathhouse, stairs/path facilities"
+      ],
+      "doesNotEstablish": [
+        "Rock collecting permission",
+        "Exact parking location and route coordinates"
+      ]
+    },
+    {
+      "id": "TOWNSHIP_BID_FEB2026",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/wp-content/uploads/2026/02/Bid-boardwalk-renovate.pdf",
+      "documentDate": "2026-02-01",
+      "establishes": [
+        "Agate Beach boardwalk had steps to beach",
+        "Proposed replacement with accessible ramps and Mobi-mat compatibility",
+        "2026 desired completion"
+      ],
+      "doesNotEstablish": [
+        "Project award",
+        "Accessible ramp completion",
+        "Uninterrupted 2026 use"
+      ]
+    },
+    {
+      "id": "TOWNSHIP_MINUTES_SEPT2026",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/wp-content/uploads/2026/09/09-15-26-regular-meeting-minutes.pdf",
+      "documentDate": "2026-09-15",
+      "documentStatus": "DRAFT",
+      "establishes": [
+        "A Mobi-mat installed somewhere at township beach as of Sept 15",
+        "New beach stairs expected by end of September",
+        "Beach bathhouse operating at that time"
+      ],
+      "doesNotEstablish": [
+        "Installation location unequivocally",
+        "Stair completion after Sept 15",
+        "A fully step-free beach route"
+      ]
+    },
+    {
+      "id": "TOWNSHIP_ORDINANCE_INDEX",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/departments/planning-zoning/ordinances/",
+      "establishes": [
+        "Index does not enumerate a beach-specific rock collecting ordinance"
+      ],
+      "doesNotEstablish": [
+        "Absence of posted restrictions",
+        "Permission to collect on municipal park property"
+      ]
+    },
+    {
+      "id": "MICHIGAN_WATER_TRAILS_BAYSHORE",
+      "owner": "Michigan Water Trails",
+      "url": "https://www.michiganwatertrails.org/location.asp?aid=4911&ait=av",
+      "establishes": [
+        "Site GPS reference 46.672790,-85.983480",
+        "Parking and access distance under 50 yards reported",
+        "On-street and lot parking listed"
+      ],
+      "doesNotEstablish": [
+        "Operator-surveyed parking gate",
+        "A public sidewalk route to a legal collecting segment"
+      ]
+    },
+    {
+      "id": "CHAMBER_DIRECTIONS",
+      "owner": "Grand Marais Chamber of Commerce",
+      "url": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+      "establishes": [
+        "Agate Beach described as straight north from main street",
+        "Harbor swimming beach described with parking near Bayshore Market",
+        "Agate Beach promoted for rockhounding"
+      ],
+      "doesNotEstablish": [
+        "Municipal collecting permission",
+        "Legal curbside parking boundaries"
+      ]
+    },
+    {
+      "id": "OSM_GEOMETRY",
+      "owner": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "establishes": [
+        "Research-only beach polygons and mapped footpaths, ODbL"
+      ],
+      "doesNotEstablish": [
+        "Legal easement",
+        "Current closure status",
+        "Surveyed waterline or shoreline normal"
+      ]
+    },
+    {
+      "id": "NCEP_GLWU",
+      "owner": "NOAA NCEP",
+      "url": "https://nomads.ncep.noaa.gov/gribfilter.php?ds=glwu",
+      "establishes": [
+        "Operational Great Lakes wave model advertises wave height and direction products"
+      ],
+      "doesNotEstablish": [
+        "A verified wet model cell for each beach",
+        "Validated exposure direction",
+        "Live shore-level agate visibility"
+      ]
+    }
+  ],
+  "sites": [
+    {
+      "siteId": "grand-marais-agate",
+      "publicFacility": "OWNER_CONFIRMED",
+      "beachAreaGeometry": "OSM_CANDIDATE_POLYGON",
+      "accessApproach": "CHAMBER_MAIN_STREET_DIRECTION_PLUS_OWNER_BOARDWALK",
+      "ownerVerifiedParkingGate": null,
+      "legalParkingToShoreLine": null,
+      "rockCollectionRule": "AWAIT_OPERATOR_CONFIRMATION",
+      "rockhoundingContext": "CHAMBER_DOCUMENTED_AS_TARGET_NOT_COLLECTION_PERMIT",
+      "accessConstruction": "FEB_2026_BID_STEPS_TO_RAMPS_UNVERIFIED_COMPLETION",
+      "recentTownshipUpdate": "SEPT_2026_DRAFT_MINUTES_MOBIMAT_AND_STAIRS_SITE_UNASSIGNED",
+      "wheelchairAccessToSand": "UNKNOWN",
+      "shorelineNormalDeg": null,
+      "modelWetCell": null,
+      "sourceIds": [
+        "TOWNSHIP_AGATE",
+        "TOWNSHIP_BID_FEB2026",
+        "TOWNSHIP_MINUTES_SEPT2026",
+        "CHAMBER_DIRECTIONS",
+        "TOWNSHIP_ORDINANCE_INDEX",
+        "OSM_GEOMETRY",
+        "NCEP_GLWU"
+      ]
+    },
+    {
+      "siteId": "grand-marais-harbor",
+      "publicFacility": "OWNER_CONFIRMED",
+      "beachAreaGeometry": "OSM_CANDIDATE_POLYGON",
+      "accessApproach": "OWNER_CONFIRMED_DOWNTOWN_PARK_AND_WATER_TRAILS_AREA_GPS",
+      "ownerVerifiedParkingGate": null,
+      "legalParkingToShoreLine": null,
+      "rockCollectionRule": "AWAIT_OPERATOR_CONFIRMATION",
+      "rockhoundingContext": "NOT_ESTABLISHED_AS_AGATE_DEPOSIT",
+      "accessConstruction": "DRAFT_MINUTES_SITE_ATTRIBUTION_UNKNOWN",
+      "recentTownshipUpdate": "SEPT_2026_DRAFT_MINUTES_MOBIMAT_AND_STAIRS_SITE_UNASSIGNED",
+      "wheelchairAccessToSand": "UNKNOWN",
+      "shorelineNormalDeg": null,
+      "modelWetCell": null,
+      "sourceIds": [
+        "TOWNSHIP_BAYSHORE",
+        "TOWNSHIP_MINUTES_SEPT2026",
+        "MICHIGAN_WATER_TRAILS_BAYSHORE",
+        "TOWNSHIP_ORDINANCE_INDEX",
+        "OSM_GEOMETRY",
+        "NCEP_GLWU"
+      ]
+    }
+  ],
+  "openOperatorQuestions": [
+    "At Agate Beach, is hobby collection/removal of loose stones and agates permitted from township-managed beach property? Are there limits, protected areas, seasonal closures, and boundaries?",
+    "At Bayshore Park, may visitors remove stones from the municipal beach, or is collection prohibited?",
+    "What are the currently permitted public parking entrance/coordinates, posted restrictions, and lawful pedestrian route to Agate Beach and to Bayshore Park?",
+    "Are the Agate Beach boardwalk stairs and ramp/Mobi-mat upgrades finished and open as of October 2026? Which beach received the installation noted in the September 15 draft minutes?",
+    "Are there posted or unpublished park rules on nighttime use, digging/raking, or wildlife-sensitive shoreline areas?"
+  ]
+}
