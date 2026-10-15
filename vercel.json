@@ -4,7 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
-    "api/maple-sap.js": { "maxDuration": 35 },
+    "api/maple-sap.js": {
+      "maxDuration": 35
+    },
     "api/border-crossings.js": {
       "maxDuration": 20
     },
@@ -52,6 +54,9 @@
     },
     "api/shorefeel.js": {
       "maxDuration": 20
+    },
+    "api/michigan-ski.js": {
+      "maxDuration": 60
     },
     "api/**/*.js": {
       "maxDuration": 10

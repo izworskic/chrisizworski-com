@@ -1,0 +1,135 @@
+/* Michigan Ski Hills — lightweight, mobile-first decision interface */
+:root{color-scheme:light;--ink:#14283a;--muted:#4c6171;--line:#d6e2e9;--bg:#f3f7f9;--blue:#11395a;--ice:#edf6fa;--warn:#815318;--warnbg:#fff6e5;--lake:#08788b;--green:#145b44}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:#075b83}a:hover{text-decoration-thickness:2px}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #eea331;outline-offset:3px}.skip{position:absolute;top:-70px;left:10px;background:white;padding:10px;z-index:100}.skip:focus{top:10px}.mast{background:#12334b;color:white;padding:14px max(18px,calc((100vw - 1120px)/2));display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.mast a{color:white;text-decoration:none}.mast strong{font-size:1.02rem}.mast nav{display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem}.wrap{max-width:1120px;margin:auto;padding:22px 18px 64px}.hero{padding:24px 0 18px;display:grid;gap:8px;max-width:890px}.eyebrow{font-size:.77rem;color:#38738a;letter-spacing:.095em;text-transform:uppercase;font-weight:800;margin:0}.hero h1{font-size:clamp(1.9rem,4vw,3.35rem);line-height:1.13;letter-spacing:-.035em;margin:5px 0 8px}.hero .lede{font-size:1.13rem;max-width:780px;color:#3d5666;margin:0}.hero .answer{background:#e9f2f5;border-left:5px solid var(--lake);padding:14px 17px;font-size:1rem;font-weight:620;max-width:780px;margin-top:12px;border-radius:0 9px 9px 0}.bar{display:flex;gap:13px;flex-wrap:wrap;margin-top:6px;font-size:.83rem;color:var(--muted)}.bar span{border-right:1px solid #beced7;padding-right:14px}.bar span:last-child{border:0}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end;padding:15px 0 17px}.controls label{display:grid;gap:5px;color:#365164;font-size:.82rem;font-weight:750}.controls select{padding:10px 34px 10px 11px;border:1px solid #abbeca;border-radius:8px;background:white;min-height:44px;font:inherit;color:var(--ink)}.controls a{font-size:.84rem;align-self:center}.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:20px;margin:16px 0;box-shadow:0 2px 13px rgba(18,51,75,.035)}.panel h2{font-size:1.32rem;margin:0 0 10px;letter-spacing:-.02em}.panel h3{font-size:1.07rem;margin:.2em 0}.small{font-size:.84rem;color:var(--muted)}.small strong{color:var(--ink)}.update{min-height:26px;font-size:.85rem;color:#466075}.event{background:var(--warnbg);border:1px solid #e6b968;border-left:5px solid #ad6622;border-radius:9px;padding:12px 15px;margin:12px 0}.event strong{color:#784116}.event a{color:#834217}.ranking{display:grid;gap:12px}.hill{display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px;border:1px solid #d8e3e9;border-radius:11px;padding:16px;background:white}.hill:hover{border-color:#9ebdcb}.hill .rank{display:grid;place-items:center;align-self:start;width:43px;height:43px;background:#eaf2f6;border-radius:9px;color:#224962;font-weight:800}.hill h3{margin:0 0 3px}.hill h3 a{text-decoration:none;color:var(--ink)}.hill h3 a:hover{text-decoration:underline}.hill .subtitle{margin:0;font-size:.83rem;color:var(--muted)}.hill .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 8px}.chip{font-size:.75rem;font-weight:700;border-radius:5px;padding:4px 7px;background:#eef3f6;color:#36546a}.chip.lake{background:#e0f5f7;color:#126476}.chip.alert{background:#fff0d9;color:#874917}.chip.neutral{background:#f0f0f0;color:#515f64}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.metric{padding:9px 8px;background:#f4f8fa;border-radius:7px}.metric small{display:block;font-size:.7rem;color:#537084}.metric strong{display:block;font-size:.95rem;line-height:1.35}.verdict{font-size:.86rem;margin:9px 0;color:#6f531f;font-weight:600}.source-line{font-size:.79rem;margin:8px 0 0;color:#627583}.note{font-size:.89rem;color:#456072}.resort-panel{margin-top:8px}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.insights article{padding:15px;background:#f4f8fa;border:1px solid #dce7ed;border-radius:9px}.insights p{margin:6px 0}.source-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.source-links a{display:inline-block;padding:8px 11px;border:1px solid #adc8d7;border-radius:7px;text-decoration:none;font-size:.85rem;font-weight:690}.source-links a:hover{background:var(--ice)}.details-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}.details-grid .panel{margin:0}.faq details{border-top:1px solid var(--line);padding:11px 0}.faq summary{font-weight:700;cursor:pointer}.faq p{margin:8px 0 4px}.breadcrumbs{font-size:.84rem;margin-top:9px;color:var(--muted)}.breadcrumbs a{color:#2e647f}.foot{border-top:1px solid #cbdde7;margin-top:28px;padding-top:15px;font-size:.82rem;color:#516875}.foot a{color:#35667e}.mono{font-variant-numeric:tabular-nums}.hidden{display:none!important}.count{font-size:.83rem;color:var(--muted);margin:2px 0 12px}.badge{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--lake);font-weight:850}
+@media(max-width:730px){.wrap{padding:14px 13px 45px}.mast{padding:12px 14px}.panel{padding:15px;border-radius:10px}.hill{padding:12px;gap:10px}.hill .rank{width:34px;height:34px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.insights,.details-grid{grid-template-columns:1fr}.hero{padding-top:18px}.hero .lede{font-size:1rem}.controls{gap:9px}.controls label{flex:1;min-width:125px}.controls select{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Ski-day decision workspace: contained, touch-friendly, no paid map tiles. */
+.decision-workspace{border-top:4px solid #08788b;background:linear-gradient(160deg,#f9fdff,#fff 35%)}
+.decision-filters{align-items:end}.decision-filters label{flex:1 1 155px;min-width:0}.decision-filters label:first-child{flex:2 1 220px}
+.decision-candidates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.decision-candidate{background:#fff;border:1px solid #cbdee8;border-radius:11px;padding:15px;min-width:0;overflow-wrap:anywhere;box-shadow:0 2px 10px rgba(0,37,74,.04)}
+.decision-candidate:first-child{border-color:#5295aa;box-shadow:0 3px 14px rgba(0,68,92,.1)}.decision-candidate h4{font-size:1.15rem;margin:2px 0 5px}
+.decision-candidate .eyebrow{margin:0 0 6px}.decision-candidate .small{margin:7px 0}
+.decision-metrics{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.decision-metrics span{background:#eaf5f7;border-radius:5px;padding:5px 7px;font-size:.78rem;font-weight:700;color:#135a70}
+.risk-summary{font-size:.8rem;color:#785122;border-top:1px solid #e6d7be;padding-top:9px}
+.outline-button{border:1px solid #247b92;border-radius:7px;background:#fff;color:#075673;padding:10px 12px;font:inherit;font-weight:700;cursor:pointer;min-height:42px}
+.outline-button:hover{background:#e6f4f7}.trip-tool{margin-top:18px;padding:16px 0 0;border-top:1px solid var(--line)}
+.trip-tool h3{font-size:1.2rem;margin:0 0 8px}.cost-controls{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
+.cost-controls label,.decision-candidate label{display:grid;gap:5px;font-size:.8rem;font-weight:690;color:#405c6d;margin:9px 0}
+.cost-controls label{min-width:145px;flex:1 1 145px}.cost-controls input,.decision-candidate input{width:100%;max-width:260px;min-height:44px;border:1px solid #afc5d1;border-radius:7px;background:#fff;color:var(--ink);padding:9px;font:inherit}
+.price-lines{background:#f4f9fb;border-radius:9px;padding:9px 12px;margin-top:8px}.price-lines p{margin:6px 0;font-size:.86rem}
+.cost-total{border-top:1px solid #d3e2e9;padding-top:10px;font-weight:800;font-size:1.08rem}
+@media(max-width:920px){.decision-candidates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.decision-candidates{grid-template-columns:minmax(0,1fr)}.decision-filters label{flex-basis:42%}.decision-filters label:first-child{flex-basis:100%}.decision-metrics span{font-size:.75rem}.trip-tool{padding-top:11px}}
+
+.map-section{border:1px solid #d2e5ea;background:#f7fbfc;border-radius:12px;padding:12px 14px;margin:15px 0}
+.map-heading h3{font-size:1.09rem;margin:3px 0}.map-heading .small{margin:0 0 11px}
+.ski-map-key{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.72rem;color:#436073;padding:5px 0 11px}
+.key-dot{display:inline-block;width:13px;height:13px;border:1px solid #4c7a86;border-radius:50%;margin-left:3px}
+.key-warning{color:#ac5926;font-size:1.3rem;line-height:10px}
+.ski-point-map{width:100%;background:#dbeaf1;border-radius:11px;overflow:hidden}
+.michigan-point-svg{display:block;width:100%;height:auto;max-height:465px;min-height:280px}
+.ski-map-water{fill:#7095a5;font-size:19px;letter-spacing:.06em;font-style:italic}
+.ski-dot{cursor:pointer;outline:none}.ski-dot:hover circle:last-of-type,.ski-dot:focus circle:last-of-type,.ski-dot.selected circle:last-of-type{stroke-width:4;stroke:#e99a33}
+.ski-dot:focus-visible{outline:2px solid #e99a33}
+.map-selection{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:white;border:1px solid #d0e0e8;padding:10px 13px;border-radius:9px;margin-top:10px}
+.map-selection h3{flex-basis:100%;margin:0;font-size:1.04rem}
+.map-selection p{margin:0;font-size:.86rem;flex:1 1 290px}
+.map-selection a{font-weight:700;font-size:.85rem}
+@media(max-width:640px){.map-section{padding:10px 8px}.ski-map-key{gap:5px;font-size:.68rem}.michigan-point-svg{min-height:220px}.ski-map-water{font-size:17px}}
+
+/* V3 editorial polish: one map, two charts, one decision — no chart library or map tiles. */
+body{background:#edf3f6;background-image:linear-gradient(180deg,#e6f0f5 0,#f6f9fa 560px)}
+.wrap{max-width:1190px}
+.mast{background:#102f48;box-shadow:0 2px 10px rgba(12,42,60,.12)}
+.hero{max-width:900px;margin:0;padding:20px 0 12px}
+.hero.has-photo{max-width:none;display:grid;grid-template-columns:minmax(0,1.06fr) minmax(300px,.78fr);grid-template-rows:auto 1fr;gap:10px 23px;min-height:250px}
+.hero.has-photo>.eyebrow{grid-column:1;grid-row:1;align-self:end}
+.hero-copy{min-width:0}
+.hero.has-photo .hero-copy{grid-column:1;grid-row:2}
+.hero h1{font-size:clamp(2rem,3.6vw,3.2rem);line-height:1.12}
+.hero .answer{background:rgba(255,255,255,.85);box-shadow:0 2px 9px rgba(24,63,90,.05);font-weight:570;max-width:740px}
+.hero-photo{grid-column:2;grid-row:1 / span 2;align-self:stretch;position:relative;min-width:0;margin:0;border-radius:15px;overflow:hidden;min-height:235px;max-height:310px;background:linear-gradient(145deg,#476a7a,#cde4ee);box-shadow:0 12px 28px rgba(15,48,67,.14)}
+.hero-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 52%}
+.hero-photo:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(8,29,43,.73));pointer-events:none}
+.hero-photo figcaption{position:absolute;bottom:0;left:0;right:0;padding:24px 12px 10px;color:#fff;font-size:.66rem;line-height:1.4;z-index:1}
+.hero-photo a{color:#fff;text-underline-offset:2px}
+.decision-workspace{margin-top:6px;border:1px solid #c6d9e3;border-top:5px solid #1a8297;box-shadow:0 10px 30px rgba(20,66,85,.065);padding:23px}
+.decision-workspace>h2{font-size:clamp(1.3rem,2.5vw,1.65rem);margin:0 0 5px}
+.decision-workspace>p{margin:7px 0;color:#466271}
+.decision-filters{margin:10px 0;padding:10px 12px;background:#ecf5f8;border:1px solid #d2e5eb;border-radius:11px}
+.decision-filters>label{flex:1 1 185px}.decision-filters>label:first-child{flex:1.7 1 225px}
+.trip-options{flex:1 1 100%;border-top:1px solid #cddfe7;padding:9px 0 0}
+.trip-options summary{font-size:.83rem;color:#235d74;cursor:pointer;font-weight:760}
+.trip-options .cost-party{margin:3px 0 0;padding:5px 0 0}
+.trip-options .cost-party label{min-width:120px;flex:1}
+.map-section{margin:10px 0 16px;padding:16px;border:1px solid #d5e6ec;background:#f7fbfd}
+.map-heading h3{font-size:1.22rem}
+.map-story-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(255px,.85fr);gap:14px;align-items:start}
+.map-primary{min-width:0}
+.ski-point-map{min-width:0;box-shadow:inset 0 0 0 1px #bad0dd}
+.michigan-point-svg{max-height:415px;min-height:0;aspect-ratio:920/620}
+.map-story-aside{border:1px solid #d7e5ea;background:#fff;border-radius:10px;padding:12px;min-width:0}
+.map-story-aside h4{font-size:.95rem;margin:1px 0 7px}
+.map-story-aside>.small{font-size:.75rem;line-height:1.45}
+.snow-chart-row{display:block;width:100%;text-align:left;border:0;background:none;border-radius:7px;padding:8px 4px;cursor:pointer}
+.snow-chart-row:hover,.snow-chart-row:focus-visible,.snow-chart-row.is-selected{background:#edf5f8}
+.snow-chart-cap,.ski-day-bar-cap{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.79rem;line-height:1.28}
+.snow-chart-name{max-width:75%;font-weight:660}
+.snow-chart-track,.ski-day-bar-track{display:block;height:9px;border-radius:99px;background:#e3edf1;overflow:hidden;margin-top:6px}
+.snow-chart-fill,.ski-day-bar-fill{display:block;height:100%;min-width:0;border-radius:99px;background:linear-gradient(90deg,#36a4b2,#155377);transition:width .22s ease}
+.snow-chart-row.is-selected .snow-chart-fill{background:#0d455c}
+.map-selection{display:block;padding:11px 13px}
+.map-selection h3{margin:0 0 6px}
+.map-selection p{margin:6px 0}
+.map-selection .outline-button{display:inline-block;margin:7px 0 0}
+.map-selection a{margin:0 14px 0 0;display:inline-block}
+.ski-day-bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.ski-day-bar{min-width:0}.ski-day-bar-cap{color:#365567}
+.ski-day-bar.is-current .ski-day-bar-cap{font-weight:800;color:#134f66}
+.ski-day-bar.is-current .ski-day-bar-fill{background:#146889}
+.decision-candidates{gap:10px}.decision-candidate{box-shadow:0 3px 10px rgba(25,68,88,.045)}
+.decision-candidate:first-child{border-color:#478ea4}
+.decision-candidate h4{line-height:1.24}
+.hill{box-shadow:0 2px 9px rgba(13,54,75,.03);padding:13px}
+.hill .metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hill-extra{margin:10px 0 0;font-size:.81rem}
+.hill-extra summary{cursor:pointer;color:#245c73;font-weight:740}
+.hill-extra .metrics{margin:10px 0;grid-template-columns:repeat(3,minmax(0,1fr))}
+.ranking{gap:10px}
+@media(max-width:870px){.map-story-grid{grid-template-columns:1fr}.map-story-aside{margin-top:0}.hero.has-photo{grid-template-columns:minmax(0,1fr) minmax(240px,.7fr);gap:13px}.hero-photo{min-height:220px}}
+@media(max-width:650px){.hero.has-photo{display:flex;flex-direction:column;gap:7px}.hero.has-photo>.eyebrow{align-self:stretch}.hero-photo{width:100%;height:142px;min-height:142px;max-height:142px;order:2}.hero-photo figcaption{font-size:.58rem}.hero .lede{font-size:1.01rem}.hero .answer{margin:8px 0 0;padding:10px 13px}.decision-workspace{padding:13px;margin-top:9px}.decision-filters{padding:8px}.decision-filters>label,.decision-filters>label:first-child{flex:1 1 100%}.trip-options .cost-party{gap:8px}.trip-options .cost-party label{flex:1 1 44%}.map-section{padding:9px 8px}.map-story-aside{padding:9px}.map-selection{padding:8px}.hill .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.hill-extra .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.decision-candidates{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.snow-chart-fill,.ski-day-bar-fill{transition:none}}
+
+.hero-live{display:inline-flex;align-items:center;background:#e4f0f3;border:1px solid #b8d5dd;color:#1c586d;border-radius:999px;padding:5px 11px;font-size:.77rem;font-weight:740;margin:11px 0 0;max-width:100%}
+
+/* Image placement correction: no photograph occupies hero or above-the-fold map space. */
+.hero{max-width:1080px;min-height:0;padding:12px 0 8px;gap:5px}
+.hero .hero-copy{max-width:940px}
+.hero .lede{max-width:900px}
+.hero .answer{max-width:880px;margin-top:8px}
+.photo-reference-panel{padding:18px 20px}
+.photo-reference-heading{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.photo-reference-heading h2{margin:0}
+.photo-reference-heading p{margin:0}
+.ski-photo-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.verified-photo{margin:0;min-width:0}
+.verified-photo-card{border:1px solid #d7e5ea;border-radius:10px;overflow:hidden;background:#f8fbfc}
+.verified-photo-image{display:block;width:100%;height:118px;overflow:hidden;background:#e2edf2}
+.verified-photo-image img{display:block;width:100%;height:100%;object-fit:cover}
+.verified-photo figcaption{padding:8px 9px 9px;font-size:.74rem;color:#3c5765;line-height:1.4}
+.verified-photo figcaption strong{display:block;font-size:.86rem;color:#193a4c}
+.verified-photo figcaption span{display:block;margin-top:2px}
+.verified-photo figcaption small{display:block;margin-top:5px;font-size:.65rem;line-height:1.5;color:#536c79}
+.verified-photo figcaption a{color:#12607f}
+.resort-context-photo{float:right;width:min(37%,230px);margin:0 0 11px 18px;border:1px solid #d4e4ea;border-radius:9px;overflow:hidden;background:#f7fafc}
+.resort-context-photo .verified-photo-image{height:126px}
+.resort-context-photo figcaption{padding:7px}
+.resort-context-photo figcaption span{display:none}
+.resort-context-photo figcaption small{margin-top:3px}
+@media(max-width:860px){.ski-photo-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.verified-photo-image{height:130px}}
+@media(max-width:650px){.hero{padding:9px 0 3px}.hero h1{font-size:clamp(1.75rem,7.2vw,2.35rem)}.hero .answer{padding:9px 11px}
+ .photo-reference-panel{padding:12px}.ski-photo-strip{gap:8px}.verified-photo-image{height:105px}.verified-photo figcaption{padding:6px}.verified-photo figcaption small{font-size:.61rem}
+ .resort-context-photo{float:none;width:100%;max-width:285px;margin:0 0 12px}.resort-context-photo .verified-photo-image{height:155px}}

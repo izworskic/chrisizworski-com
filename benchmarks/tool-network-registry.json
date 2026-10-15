@@ -2886,6 +2886,38 @@
         "status": "unknown",
         "note": "New October 2026 launch; keyword volume and CTR not independently measured."
       }
+    },
+    {
+      "id": "michigan-ski-hills",
+      "name": "Michigan Ski Hills: Worth the Drive",
+      "canonical": "https://chrisizworski.com/michigan-ski-hills/",
+      "aliases": [],
+      "kind": "live-decision",
+      "cluster": "winter-recreation",
+      "primaryIntent": "Which Michigan ski hill is worth the drive this weekend based on lake-effect snow, forecast, cost and distance",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "downhill-skier",
+        "ski-weekend-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New product: establish GSC 28-day baseline after deployment"
+      }
     }
   ],
   "relationships": [
@@ -4072,6 +4104,30 @@
       "strength": "strong",
       "surface": "maple header and footer",
       "reason": "Spring visitors can continue from maple season to the separate Michigan flowering-season decision tool."
+    },
+    {
+      "from": "michigan-ski-hills",
+      "to": "michigan-snow-totals",
+      "type": "source-context",
+      "strength": "strong",
+      "surface": "winter-ski",
+      "reason": "Ski weekend decisions need nearby reported snowfall provenance and state-wide snow context."
+    },
+    {
+      "from": "michigan-ski-hills",
+      "to": "xc-planning",
+      "type": "winter-activity-alternative",
+      "strength": "optional",
+      "surface": "winter-ski",
+      "reason": "Nordic skiing is a different visitor decision and should route to the cross-country trail authority."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "michigan-ski-hills",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-snow",
+      "reason": "Snow totals readers can continue to a resort-specific weekend ski decision rather than infer operating lifts."
     }
   ],
   "cannibalizationGroups": [
