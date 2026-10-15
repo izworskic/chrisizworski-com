@@ -24,7 +24,8 @@ test('no hero photo; factual archival image strip appears after decision and mat
  assert.ok(g.includes("photoFigure(r.slug)"));
  assert.ok(g.includes("photoFigure(k,'strip')"));
  assert.ok(i.indexOf('ski-photo-strip')>i.indexOf('ski-decision-results'));
- assert.ok(i.indexOf('ski-photo-strip')>i.indexOf('resort-list'));
+ assert.ok(i.indexOf('ski-photo-strip')<i.indexOf('resort-list'));
+ assert.ok(i.indexOf('ski-photo-strip')>i.indexOf('ski-decision-results'));
  for(const name of ['Boyne_Mountain.JPG','Crystal_Mountain_-_Cheers_Chair.jpg','Caberfae_Peaks.jpg','Looking_over_Lac_La_Belle.jpg'])assert.ok(g.includes(name));
  for(const term of ['CC BY-SA 3.0','CC BY-SA 4.0','creativecommons.org','Historical photo, cropped to fit; not live'])assert.ok(g.includes(term),term);
  assert.ok(!g.includes('PHOTO_BOYNE'));
