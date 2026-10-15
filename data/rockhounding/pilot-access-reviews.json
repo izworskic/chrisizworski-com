@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "M1-access-review-2026-10-14",
+  "status": "EVIDENCE_RESEARCH_ONLY",
+  "reviewed": "2026-10-14",
+  "policy": {
+    "generalRulesUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+    "annualMichiganPublicLandPounds": 25,
+    "disclaimer": "EGLE guidance is a general collection limit, not proof that a specific operator/shoreline segment permits taking rocks. Verify posted and local regulations. Never route through private land.",
+    "stateDayUseRulesUrl": "https://www.michigan.gov/dnr/places/state-parks/rules",
+    "accessPolicies": "Park address or beach centroid is NOT an exact entrance/parking route."
+  },
+  "pilotReviews": [
+    {
+      "id": "petoskey-state-park",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/petoskey",
+      "accessDescription": "2475 M-119 Hwy; public park day-use beach house, beach and accessible waterfront walkway documented by DNR.",
+      "entryType": "PARK_DAY_USE_DOCUMENTED",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "parking": "State-park day-use, Recreation Passport required for vehicle entry. Day-use lot coordinate not yet owner-verified.",
+      "walking": "DNR documents accessible walkway to waterfront from day-use area; no georeferenced route yet.",
+      "rockCollecting": "SITE_ROCKHOUNDING_RECOGNIZED_GENERAL_EGLE_LIMIT_LOCAL_RESTRICTIONS_UNVERIFIED",
+      "rockEvidenceUrl": "https://www.michigan.gov/recsearch/parks/petoskey",
+      "constraints": [
+        "Piping-plover closures may affect shore sections",
+        "Beach and swimming areas require segment review"
+      ],
+      "verificationNeed": "Verify entrance and parking lot coordinate, usable beach segment and current local collecting restrictions."
+    },
+    {
+      "id": "fishermans-island",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/fishermans",
+      "accessDescription": "Bell's Bay Road, Charlevoix; DNR shoreline and trails on foot, but day-use areas closed to vehicle traffic during culvert repairs.",
+      "entryType": "FOOT_ACCESS_ONLY_WHILE_CLOSURE",
+      "entryStatus": "FOOT_ACCESS_CONFIRMED_ALTERNATIVE_ENTRANCE_UNVERIFIED",
+      "entryCoordinate": null,
+      "parking": "No legal alternate parking point verified while vehicle closure remains; do not give turn-by-turn.",
+      "walking": "DNR reports trails and shoreline still accessible by foot; length and entry from legal parking unverified.",
+      "rockCollecting": "SITE_ROCKHOUNDING_RECOGNIZED_GENERAL_EGLE_LIMIT_LOCAL_RESTRICTIONS_UNVERIFIED",
+      "rockEvidenceUrl": "https://www.michigan.gov/recsearch/parks/fishermans",
+      "constraints": [
+        "Temporary vehicle closure at day-use areas",
+        "Primitive park sections and sensitive shore zones",
+        "Check DNR notice before travel"
+      ],
+      "verificationNeed": "Ask park to verify legal roadside parking/access during culvert works, reopening status and site-specific collecting constraints."
+    },
+    {
+      "id": "frankfort-beach",
+      "authority": "City of Frankfort",
+      "facilityUrl": "https://cms3.revize.com/revize/frankfortmi/REC%20PLAN%202022-2026%20FINAL.pdf",
+      "accessDescription": "City-operated public Lake Michigan beach at west end of Main Street, Frankfort. City 2022–2026 recreation plan documents ADA walkways.",
+      "entryType": "MUNICIPAL_BEACH_FROM_MAIN_STREET",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "parking": "City planning materials describe beach parking off Main Street / Father Marquette Drive; exact present lot and regulations require current confirmation.",
+      "walking": "Public access from west end of Main Street; no surveyed path coordinates.",
+      "rockCollecting": "MUNICIPAL_COLLECTION_PERMISSION_UNKNOWN",
+      "rockEvidenceUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding/fossils",
+      "constraints": [
+        "Rock/fossil occurrence mentioned by EGLE, not permission for extraction",
+        "Pier is not a safe rock search route"
+      ],
+      "verificationNeed": "Confirm current city beach parking, municipal collecting ordinance and path to legitimate beach segment."
+    },
+    {
+      "id": "grand-marais-agate",
+      "authority": "Burt Township",
+      "facilityUrl": "https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/",
+      "accessDescription": "Official township public Agate Beach, accessible via N. Lake Avenue at the end of downtown's main street; township maintains boardwalk/deck.",
+      "entryType": "TOWNSHIP_BEACH_BOARDWALK",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "thirdPartyCandidateCoordinate": {
+        "lat": 46.675556,
+        "lon": -85.985176,
+        "status": "THIRD_PARTY_NOT_ROUTABLE",
+        "sourceUrl": "https://maps.campendium.com/us/grand-marais-mi/nature/agate-beach-grand-marais-mi--0"
+      },
+      "parking": "Township planning documents discuss existing paved beach parking; legal/current lot details must be verified with township.",
+      "walking": "Public boardwalk to lake confirmed by township; 2026 renovation bid contemplated replacing steps with accessible ramp. Do not assert ramp is complete.",
+      "rockCollecting": "TOWNSHIP_SITE_SPECIFIC_RULE_UNKNOWN",
+      "rockEvidenceUrl": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+      "constraints": [
+        "Agate Beach access deck 2026 renovation status unknown",
+        "No ADA ramp completion confirmation",
+        "Collecting must not extend into NPS shoreline without separate rule"
+      ],
+      "verificationNeed": "Confirm parking entrance/gate pin and completion/closure of deck renovation and current municipal collection rules."
+    },
+    {
+      "id": "grand-marais-harbor",
+      "authority": "Burt Township",
+      "facilityUrl": "https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/",
+      "accessDescription": "Official Bayshore Park at Grand Marais harbor; municipal beach/bathhouse/parking/playground.",
+      "entryType": "TOWNSHIP_HARBOR_BAYSHORE_PARK",
+      "entryStatus": "PUBLISHED_PARK_ACCESS_POINT_NOT_ROUTE",
+      "entryCoordinate": {
+        "lat": 46.67279,
+        "lon": -85.98348,
+        "coordinateType": "PARK_ACCESS_AREA_GPS_NOT_EXACT_GATE",
+        "sourceUrl": "https://www.michiganwatertrails.org/location.asp?aid=4911&ait=av"
+      },
+      "parking": "Township confirms public park; Michigan Water Trails lists parking, public restrooms and shore access under 50 yards; specific space unknown.",
+      "walking": "Direct park-to-beach walking access described; exact trail and shore segment not georeferenced.",
+      "rockCollecting": "TOWNSHIP_SITE_SPECIFIC_RULE_UNKNOWN",
+      "rockEvidenceUrl": null,
+      "constraints": [
+        "Municipal swimming beach, not independently validated as agate deposit",
+        "Sheltered harbor is negative control; waves on open coast must not be inferred here"
+      ],
+      "verificationNeed": "Confirm municipality collecting allowance; do not use park GPS as parking entrance. Trace shoreline beyond mapped beach polygon."
+    },
+    {
+      "id": "mclain",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/mclain",
+      "accessDescription": "18350 Highway M-203 Hancock; state park public Lake Superior beach and day-use waterfront.",
+      "entryType": "STATE_PARK_PUBLIC_BEACH",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "parking": "Recreation Passport for vehicle access; DNR does not identify exact research-area parking in source.",
+      "walking": "DNR's accessibility guide confirms accessible waterfront walkway; route geometry not yet traced.",
+      "rockCollecting": "SITE_ROCKHOUNDING_RECOGNIZED_GENERAL_EGLE_LIMIT_LOCAL_RESTRICTIONS_UNVERIFIED",
+      "rockEvidenceUrl": "https://www.michigan.gov/recsearch/parks/mclain",
+      "constraints": [
+        "No validated rock-specific section or shoreline normal",
+        "Lake Superior safety hazards may override conditions"
+      ],
+      "verificationNeed": "Identify DNR parking-to-water exact path, segment accessibility, and local collecting exclusions."
+    },
+    {
+      "id": "bay-city",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/baycity",
+      "accessDescription": "3582 State Park Drive Bay City; day-use swim beach and seasonal coastal boardwalk/beach mat.",
+      "entryType": "STATE_PARK_DAY_USE_BEACH",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "parking": "Recreation Passport for vehicle access; park day-use parking exists, exact entrance unverified.",
+      "walking": "DNR confirms coastal boardwalk and seasonal mat to buoyed beach; route not digitized.",
+      "rockCollecting": "GENERAL_EGLE_LIMIT_ONLY_NO_STONE_OCCURRENCE_EVIDENCE",
+      "rockEvidenceUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+      "constraints": [
+        "Wetland habitat around Tobico Marsh",
+        "Primarily sandy Saginaw Bay shore negative-control",
+        "Seasonal beach mat not year-round"
+      ],
+      "verificationNeed": "Verify accessible beach entry, collecting exclusions and rock-bearing sediment evidence (currently absent)."
+    },
+    {
+      "id": "tawas-point",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/tawaspoint",
+      "accessDescription": "686 Tawas Beach Road East Tawas; day-use parking and Lake Huron beach house; Tawas Bay campground-side shore separate.",
+      "entryType": "STATE_PARK_DAY_USE_TWO_SIDES",
+      "entryStatus": "PUBLIC_BEACH_DOCUMENTED_EXACT_GATE_NOT_MAPPED",
+      "entryCoordinate": null,
+      "parking": "DNR day-use lot close to Lake Huron shoreline; Recreation Passport required.",
+      "walking": "Day-use Lake Huron beach and Tawas Bay-side beach documented; no mapped entrances/path coordinates.",
+      "rockCollecting": "GENERAL_EGLE_LIMIT_SITE_RESTRICTIONS_UNVERIFIED",
+      "rockEvidenceUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+      "constraints": [
+        "Lighthouse/headland habitat and shore access may vary",
+        "Lake Huron and Tawas Bay must be separate geospatial segments"
+      ],
+      "verificationNeed": "Digitize both shore sides, check local rules and map lot to each segment."
+    },
+    {
+      "id": "lakeport-day-use",
+      "authority": "Michigan DNR",
+      "facilityUrl": "https://www.michigan.gov/recsearch/parks/lakeport",
+      "accessDescription": "DNR day-use area coordinate 43.105475,-82.488804, separated ~1 mile from campground street address at 7605 Lakeshore Road.",
+      "entryType": "STATE_PARK_SEPARATE_DAY_USE",
+      "entryStatus": "PUBLISHED_DAY_USE_AREA_NOT_PARKING_GATE",
+      "entryCoordinate": {
+        "lat": 43.105475,
+        "lon": -82.488804,
+        "coordinateType": "DAY_USE_AREA_CENTER_NOT_PARKING_GATE",
+        "sourceUrl": "https://www.michigan.gov/recsearch/parks/lakeport"
+      },
+      "parking": "Day-use area operates Memorial Day–Labor Day. Campground entrance cannot be substituted for day-use navigation.",
+      "walking": "DNR describes a pedestrian overpass, a rocky Lake Huron shore and an accessible walkway; route not digitized.",
+      "rockCollecting": "GENERAL_EGLE_LIMIT_SITE_RESTRICTIONS_UNVERIFIED",
+      "rockEvidenceUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+      "constraints": [
+        "Day-use area seasonal closure outside Memorial Day–Labor Day",
+        "Campground and day-use locations different"
+      ],
+      "verificationNeed": "Confirm any off-season public shore entrance, day-use gate pin, parking and site-specific collecting rule."
+    }
+  ]
+}
