@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "grand-marais-usace-2026-survey-source-v1",
+  "verifiedAtUTC": "2026-10-15",
+  "source": {
+    "provider": "US Army Corps of Engineers, Detroit District",
+    "usaceProject": "Grand Marais Harbor, Michigan",
+    "catalogLayer": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0",
+    "objectId": 125722,
+    "surveyJobId": "GR_01_MAS_20260730_CS",
+    "channelAreaId": "CELRE_GR_01_MAS",
+    "district": "CELRE",
+    "sourceAgency": "CELRE_DIS",
+    "surveyType": "CS",
+    "surveyStartUTC": "2026-07-30",
+    "surveyEndUTC": "2026-07-30",
+    "catalogUploadUTC": "2026-09-11",
+    "sourceArchiveURL": "https://ehydroprod.blob.core.usgovcloudapi.net/ehydro-surveys/CELRE/CELRE_DIS_GR_01_MAS_20260730_CS.ZIP",
+    "publicPlotPDFURL": "https://ehydroprod.blob.core.usgovcloudapi.net/ehydro-surveys-pdf/CELRE/CELRE_DIS_GR_01_MAS_20260730_CS.PDF",
+    "sourceDataContent": [
+      "GR_01_MAS_20260730_CS.XYZ",
+      "GR_01_MAS_20260730_CS.XML",
+      "GR_01_MAS_20260730_CS.GEN",
+      "GR_01_MAS_20260730_CS_SCCR.txt",
+      "GR_01_MAS_20260730_CS.PDF",
+      "GR_01_MAS_20260730_CS.DAT",
+      "ReadMe_Survey_Data_Format.txt",
+      "GR_01_MAS_20260730_CS.gdb",
+      "GR_01_MAS_20260730_CS_tin"
+    ],
+    "catalogProjection": "NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet",
+    "sourcesVerified": {
+      "surveyMetadataFromOfficialFeatureService": true,
+      "plotPDFPubliclyOpenedAndTextInspected": true,
+      "sourceArchiveAdvertisedByUSACE": true,
+      "sourceArchiveContentsIndependentlyDownloadedAndChecked": false
+    }
+  },
+  "surveyPlotNotes": {
+    "surveyDateUTC": "2026-07-30",
+    "source": "USACE linked original survey plot PDF, NOTES section",
+    "elevationAndSoundingDatum": "INTERNATIONAL_GREAT_LAKES_DATUM_1985_IGLD85",
+    "lowWaterDatumFeet": 601.1,
+    "depthUnits": "feet",
+    "sonarInstrument": "R2SONIC 2024 MULTIBEAM SONAR",
+    "horizontalSurveyMethod": "RTK GPS",
+    "horizontalGrid": "NAD83 Michigan State Plane North Zone 2111",
+    "horizontalGridUnits": "US survey feet",
+    "positioningCorrections": "Michigan CORS",
+    "plotScale": "1 inch = 100 feet",
+    "navigationAidsAreNotForNavigation": true
+  },
+  "interpretation": {
+    "actualSurveyPlotExists": true,
+    "aDatedHarborSurveyIsVerified": true,
+    "surveyFootprintIndependentlyCheckedAgainstBeaches": false,
+    "rawXYZBathymetryParsedAndQCed": false,
+    "bathymetryDatumConversionToEarlierNOAAENCPerformed": false,
+    "currentNavigableDepthNotCertified": true,
+    "measuredHarborWaveHeightM": null,
+    "numericalWaveAttenuationFactor": null,
+    "freshStonesProbability": null,
+    "canPredictHarborWaves": false,
+    "canPublishSafeShoreConditions": false,
+    "canPredictFreshAgates": false,
+    "canPublishRockhoundingVisitWindow": false,
+    "canClaimCollectingPermission": false
+  }
+}
