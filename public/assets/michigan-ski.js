@@ -65,7 +65,16 @@ function card(r,index,detail=false){
  ['Current operating lifts',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.lifts.open+'/'+r.official.lifts.total+' (as posted)':'Not verified'],
  ['Current open trails',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.trails.open+'/'+r.official.trails.total+' (as posted)':'Not verified']
  ];
- data.forEach(([label,value])=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(metrics,m);});add(body,metrics);
+ const keep=data.filter(([label])=>label==='Sat forecast snow'||label==='Sun forecast snow'||label.startsWith('Drive ·')||label==='Adult lift ticket');
+ const other=data.filter(([label])=>!keep.some(([name])=>name===label));
+ const metric=(parent,label,value)=>{const m=node('div','metric');add(m,node('small',null,label),node('strong','mono',value));add(parent,m);};
+ if(detail){data.forEach(([label,value])=>metric(metrics,label,value));add(body,metrics);}
+ else{
+   keep.forEach(([label,value])=>metric(metrics,label,value));add(body,metrics);
+   const more=node('details','hill-extra'),summary=node('summary',null,'Conditions, operating evidence and source checks');
+   const expanded=node('div','metrics');other.forEach(([label,value])=>metric(expanded,label,value));
+   add(more,summary,expanded);add(body,more);
+ }
  add(body,node('p','verdict',status(r)),node('p','source-line',r.note));
  const preferred=r.weather?.skiDays?.moreSnowForecast;
  if(preferred==='SATURDAY'||preferred==='SUNDAY')add(body,node('p','note','NWS forecasts more snow in the '+(preferred==='SATURDAY'?'Friday-to-Saturday':'Saturday-to-Sunday')+' 24-hour window. This is not a ski-surface or road-safety recommendation.'));
