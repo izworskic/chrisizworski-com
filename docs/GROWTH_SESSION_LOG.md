@@ -1,5 +1,26 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple map deterministic overview — October 15, 2026
+
+- **Issue:** Following a keyless OSM repair and a keyed CARTO repair, the real map screenshot still showed partly unpainted tiles while DOM reported loaded raster images and all 31 Leaflet markers. This is not an acceptable visual verification; do not claim the raster layer alone is fixed.
+- **Solution:** Ship a bundled, deterministic SVG Michigan overview as the default map. The locally bundled state outlines derive from PublicaMundi MappingAPI GeoJSON, and all 31 forecast points render as keyboard-/pointer-selectable pins. No remote tile fetch is required for the primary map. Preserve the existing keyed CARTO street basemap as an optional, user-selected detailed mode with the no-key OSM fallback.
+- **Additional cache correction:** Explicitly bump map JavaScript/CSS asset versions, because previous fixes reused `app.js?v=2`, risking clients continuing to run old cached map code.
+- **Preserved contracts:** NWS forecast endpoint, opportunity scores, canonical URL, Person attribution, event records, Auto ads, and full location selection.
+- **Cost:** Primary SVG adds no per-tile API charges. CARTO loads only when the visitor selects Detailed street map, limiting client-key use. GSC and AdSense outcome unmeasured.
+- **Status at writing:** Branch under verification; deployment and rendered mobile/desktop validation required before release.
+- **Exactly one next action:** Verify production Michigan SVG outline and clickable pins visibly render on mobile/desktop after green CI and merge.
+
+
+## Michigan maple sap map follow-up — October 15, 2026
+
+- **User-reported regression:** Map still appears blank after earlier OSM-only repair; prior live scrape showed mixed raster tile rendering and markers present in the DOM. Do not mistake marker DOM presence for a usable map.
+- **Vercel configuration research:** The owning `chrisizworski-com` Vercel project does not currently list a CARTO environment variable (it does have production/preview `MAPBOX_KEY`). The separately owned Wisconsin Bloom Tracker publicly embeds a working CARTO `rastertiles/voyager` browser key; the same keyed tile was verified against both site referrers. Reused that existing public map client key rather than creating a paid provider or exposing a secret Vercel credential.
+- **Fix:** Switch from OSM-only to keyed CARTO Voyager tiles, remove map's lazy IntersectionObserver initialization, invalidate Leaflet size after layout, retain all 31 interactive markers, and fall back to no-key OSM if tile errors or timeout occur. No change to NWS forecasts, directory, identity, canonical or ads.
+- **Evidence gates:** Code regression checks, rendered production map imagery (not only DOM), Github CI and Vercel release all required; status is pending until verified.
+- **Search and business:** No measured GSC/AdSense changes, and no claim of uplift.
+- **Exactly one next action:** Validate real CARTO and marker imagery on the production page after passing CI and deployment.
+
+
 ## Michigan maple sap basemap repair — October 15, 2026
 
 - **Incident:** Real page map tiles displayed “API KEY REQUIRED” from CARTO's keyless `light_all` endpoint; weather selectors, source forecast, and 31 locations remained independent and working.
@@ -609,10 +630,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Read-only production checks confirm homepage HTTP 200 and NYC HEAD HTTP 204/no-store/noindex at the existing f79e831e5eb244ab825791f452c7cd367afae91b production SHA. This cost pass has not been merged or deployed. Dashboard tier changes and an authenticated prebuilt preview remain blocked by owner/admin access.
 - Exactly one next action: obtain owner approval for PR #936 and dashboard access, then run the guarded prebuilt preview before selecting a single automatic production deployment route.
 
-## Rockhounding milestone-one research handoff — October 15, 2026 (branch PR #1001)
+## Rockhounding post-storm model implementation — October 15, 2026
 
-- This branch adds a 15-site Michigan Great Lakes rockhounding research registry (nine pilots), official-source public beach access/collecting review, provisional ODbL-backed Grand Marais beach/footpath geometries, historical source references, and strict permission/safety gates. No public page/route/ads/canonical/sitemap change; no production deploy or GSC/GA4/AdSense uplift claimed.
-- User requested to proceed without contacting Burt Township. Official 2026 Burt Township recreation plan identifies Agate Beach as a public rockhounding site with public boardwalk parking; older plan corroborates rock/agate hunting. Consequently Agate Beach is **eligible as a source-backed rockhounding destination lead and approximate arrival advice**. Bayshore Park is eligible as a public sheltered-harbor comparison, not an agate source. No user travel details stored.
-- Site-specific stone-removal permissions, exact parking-gate coordinates, legal walking-line survey, 2026 boardwalk accessibility completion, current weather hazards and precise beach wave forecasts remain unverified; strict `canPublishCollectingRecommendation` and `canPublishWaveBasedRecommendation` gates remain false. No operator email is needed for research or planning-tier discovery.
-- Added NOAA NDBC buoy 45004 live-fetch *regional offshore context* adapter with UTC staleness/format/HTTP failure handling; station is roughly 111 km from Grand Marais, **not a beach wave observation**. No local post-storm verdict or GLWU wet-cell sampling yet. 31 deterministic research/test cases committed, latest head CI not yet confirmed. See `docs/ROCKHOUNDING_PUBLIC_DESTINATION_AND_WAVE_PROTOTYPE_2026-10-15.md` and prior milestone documents.
-- Exactly one next action: build and verify the NOAA GLWU nearshore wet-cell and shoreline-bearing comparison for exposed Agate Beach and sheltered Bayshore Park using historical storm windows.
+- Draft PR #1001 extends the research-only rockhounding effort: added NOAA GLWU GRIB2 regional subset/point sampling CLI (`scripts/rockhounding/glwu-extract.py`, optional free ecCodes decoder), UTC analysis/forecast provenance, 19-day model-analysis archive, directional H²×period prototype, and a 72-hour anomaly/settling decision engine. No per-user NOAA polling, purchased APIs, public page or production release.
+- Input fields: NOAA HTSGW, WVHGT, WVPER, **WVDIR (wave from direction)**. NOAA/NOMADS grib-filter source and rate guidance documented. Post-storm heuristic is *uncalibrated*; output does not claim safe conditions, fresh deposits, or eligible collecting. Bayshore Park unresolved in approximate 2.5 km model, and unreviewed shoreline normals and model wet cells fail closed. Wave-research configuration retains approximate sampling targets only, not visitor navigation.
+- Added 19 deterministic Node checks for waves, baseline/history/forecast separation, hazard precedence, stale/missing source, shared grid cells, protected bay and NOAA URL generation. Prior 31 tests remain. `node --test tests/rockhounding*test.js` and full `npm run verify:all` must be inspected at PR head. Python script URL generation does not require paid services; live GRIB data extraction and episode backtests are **not yet completed**.
+- Latest working notes and sources: `docs/ROCKHOUNDING_POST_STORM_ENGINE_2026-10-15.md`; PR #1001 remains draft. Main GSC/revenue snapshots unavailable; no measured traffic or revenue effect.
+- Exactly one next action: ingest live NOAA GLWU data and backtest the exposed Agate Beach versus sheltered Grand Marais harbor model-cell suitability against dated wave episodes before producing a user-facing opportunity signal.
