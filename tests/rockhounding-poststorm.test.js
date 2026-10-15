@@ -80,3 +80,12 @@ test('same grid cell warning prevents independent harbor resolution',()=>{
  assert.ok(r.notes.some(s=>s.includes('share model wet cell')));
  assert.equal(r.canPublishSearchWindow,false);
 });
+
+test('72h hourly model study accepts a six-hour analysis cadence rather than requiring 15 samples',()=>{
+ const d=fixture();
+ d.history=d.history.filter((_,i)=>i%2===0);
+ assert.equal(d.history.length,13);
+ const r=assessPostStorm(d);
+ assert.equal(r.status,'RESEARCH_SETTLING_CANDIDATE');
+ assert.equal(r.canPublishSearchWindow,false);
+});
