@@ -55,11 +55,11 @@
     "api/shorefeel.js": {
       "maxDuration": 20
     },
-    "api/**/*.js": {
-      "maxDuration": 10
-    },
     "api/michigan-ski.js": {
       "maxDuration": 60
+    },
+    "api/**/*.js": {
+      "maxDuration": 10
     }
   },
   "redirects": [
