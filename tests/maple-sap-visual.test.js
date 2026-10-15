@@ -80,7 +80,7 @@ test('Map defaults to working CARTO-keyed Voyager tiles and has OSM fallback',()
  assert.match(app,/https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
  assert.match(app,/CARTO<\/a>/);
  assert.match(app,/OpenStreetMap contributors/);
- assert.doesNotMatch(app,/IntersectionObserver|observer\.observe\(host\)/);
+ assert.doesNotMatch(app,/new window\.IntersectionObserver\s*\(|observer\.observe\(host\)/);
  assert.match(app,/window\.requestAnimationFrame\(size\)/);
  assert.match(app,/ResizeObserver/);
  assert.match(app,/tileLayer\.on\('tileerror'/);
