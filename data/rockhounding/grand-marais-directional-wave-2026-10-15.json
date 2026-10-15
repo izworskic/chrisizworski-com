@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "rockhounding-directional-open-lake-validation-v1",
+  "runDateUTC": "2026-10-15",
+  "modelCycleUTC": "2026-10-15T18:00:00.000Z",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38810842690",
+  "sourceSystem": "NOAA_NOMADS_GLWU_GRIB2_ECCODES",
+  "purpose": "Verify complete same-cell same-UTC-valid-time wave height, wave direction and period at north-of-Agate model candidate. RESEARCH ONLY.",
+  "site": {
+    "id": "grand-marais-agate",
+    "studyLat": 46.676,
+    "studyLon": -85.9853,
+    "orientation": "NORTHERN_SECTOR_APPROXIMATION",
+    "waterConnectivityVerified": false,
+    "shorelineNormalVerified": false,
+    "operatorPermissionRequiredForResearch": false
+  },
+  "results": [
+    {
+      "grid": "2p5km",
+      "file": "glwu.grlc_2p5km_sr.t18z.grib2",
+      "selectedCell": {
+        "lat": 46.688341,
+        "lon": -85.976613,
+        "distanceKm": 1.524
+      },
+      "fourFieldUtcCoverage": {
+        "complete": 49,
+        "totalInFile": 49,
+        "firstAt": "2026-10-15T18:00:00.000Z",
+        "lastAt": "2026-10-17T18:00:00.000Z"
+      },
+      "firstCycleSample": {
+        "waveHeightM": 0.16,
+        "windWaveHeightM": 0.1,
+        "windWavePeriodS": 1.44,
+        "waveFromDeg": 143.52
+      },
+      "note": "North-sector research point, not validated breaking-wave level at Agate Beach"
+    },
+    {
+      "grid": "500m-greatlakes",
+      "file": "glwu.grlr_500m.t18z.grib2",
+      "recommendedResearchCell": {
+        "lat": 46.68,
+        "lon": -85.984978,
+        "distanceKm": 0.445,
+        "firstHtSgwM": 0.12
+      },
+      "fourFieldUtcCoverage": {
+        "complete": 48,
+        "totalInFile": 49,
+        "firstAt": "2026-10-15T18:00:00.000Z",
+        "lastAt": "2026-10-17T18:00:00.000Z"
+      },
+      "fallbackResearchCell": {
+        "lat": 46.6835,
+        "lon": -85.994978,
+        "distanceKm": 1.114,
+        "completeFourFieldUtcTimestamps": 49,
+        "firstHtSgwM": 0.16
+      },
+      "note": "Closer cell qualifies if it has >=90% of best complete four-field temporal coverage; one missing timestamp remains unfilled. No fixed shoreline wave forecast authorized"
+    }
+  ],
+  "harbor": {
+    "siteId": "grand-marais-harbor",
+    "status": "UNRESOLVED_SHELTERED_BREAKWATER_BATHYMETRY",
+    "canUseOpenLakeAgateCell": false,
+    "canPublishHarborWaveHeight": false
+  },
+  "provenanceAndLimits": {
+    "waveDirectionDefinition": "NOAA WVDIR wave from direction, NOT WDIR local wind",
+    "sameFixedCellAtEachTimestamp": true,
+    "modelForecastNotObservedSurf": true,
+    "cycleZeroLeadIsModelInitialFieldNotIndependentBuoyMeasurement": true,
+    "archived72hModelAnalysisAvailable": false,
+    "matchedBuoyBacktestSampleCount": 0,
+    "newStoneExposureOutcomeLabels": 0,
+    "canPublishRockhoundingWindow": false,
+    "canClaimSafeBeach": false,
+    "outputStatus": "DIRECTIONAL_OFFSHORE_MODEL_INPUT_READY_FOR_RESEARCH_NOT_VISITOR_FORECAST"
+  },
+  "nextPriority": "Collect multiple consecutive cycles, independently verify open-water orientation/land-water connectivity and evaluate NOAA model height against date-matched offshore buoy observations. Harbor must remain separate."
+}
