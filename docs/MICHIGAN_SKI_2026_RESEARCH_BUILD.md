@@ -52,3 +52,18 @@ SEO observation plan: Search Console Web 28-day query/impression/CTR by hill and
 3. Visually check deployed preview on desktop and mobile for map dots, day-switch state, cost changes, navigation, resort page and warning visibility.
 4. Test real NWS response and real official websites. Do not claim successful live parsing until actual page responses are verified. Blocked official sites return UNVERIFIED.
 5. Keep draft PR unmerged until source and browser checks satisfy this gate.
+
+
+## Image-source review / layout correction (2026-10-15)
+- Removed the oversized Boyne Mountain hero image from the hub and all resort page heroes. The NWS map, forecasts, and decision controls now receive first-screen priority.
+- Reuse-checked the original file pages, names, photographer and Creative Commons license; current direct image URLs were tested through Context.dev web scraping. Several naive 640-pixel thumbnail URL variants were not available, so the published URLs use working Wikimedia CDN 1280-pixel thumbs (lazy loaded) and the original 604-pixel Archimedo Bohemia file.
+- Small photo strip intentionally goes after decision and comparison content (not before the map); on individual matching resort pages the photograph sits inside a concise explanatory box. Unknown resort photographs are OMITTED rather than replaced with lookalike stock.
+
+| Hill | Verified original source (Wikimedia Commons) | Author | License | Historical date |
+| --- | --- | --- | --- | --- |
+| Caberfae Peaks | https://commons.wikimedia.org/wiki/File:Caberfae_Peaks.jpg | RomanKahler | CC BY-SA 4.0 | 2017 |
+| Crystal Mountain (Michigan) | https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg | Jhansonxi | CC BY-SA 3.0 | 2010 |
+| Boyne Mountain | https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG | American Eagle | CC BY-SA 3.0 | 2009 |
+| Mount Bohemia chairlift | https://commons.wikimedia.org/wiki/File:Looking_over_Lac_La_Belle.jpg | Archimedo | CC BY-SA 3.0 | 2008 |
+
+Photographs have explicit individual attribution and source/license links, with dates, a crop disclosure, and a historical-not-live label. They are never evidence of current ski operation, snow depth, or a forecast.
