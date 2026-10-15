@@ -61,10 +61,19 @@ def extract(path,grid='2p5km'):
     if elapsed<0 or elapsed>60*3600:continue
     for site in SITES:
      samples=codes_grib_find_nearest(gid,site['lat'],site['lon'],npoints=4)
-     neighbors=[x for x in samples if math.isfinite(float(x['value'])) and km(site['lat'],site['lon'],float(x['lat']),float(x['lon']))<=7]
+     def valid_field_value(x):
+      val=float(x['value'])
+      if not math.isfinite(val):return False
+      if parameter=='WVDIR':return 0<=val<360
+      if parameter=='WVPER':return 0<val<=30
+      return 0<=val<=18
+     neighbors=[x for x in samples if valid_field_value(x) and km(site['lat'],site['lon'],float(x['lat']),float(x['lon']))<=7]
      if not neighbors:continue
      n=min(neighbors,key=lambda x:km(site['lat'],site['lon'],float(x['lat']),float(x['lon'])))
-     lat,lon=round(float(n['lat']),5),round(float(n['lon']),5)
+     lat=round(float(n['lat']),5)
+     lon=float(n['lon'])
+     if lon>180:lon-=360
+     lon=round(lon,5)
      cell_id=f'glwu:{grid}:{lat:.5f}:{lon:.5f}'
      item=groups[(site['id'],valid,cell_id)]
      item.update({'source':'NOAA_GLWU','phase':'MODEL_ANALYSIS' if valid==cycle else 'MODEL_FORECAST',
@@ -72,6 +81,7 @@ def extract(path,grid='2p5km'):
        'sampleTargetType':'APPROXIMATE_RESEARCH_TARGET_NOT_ENTRANCE',
        'cellLat':lat,'cellLon':lon,
        'cellDistanceKm':round(km(site['lat'],site['lon'],lat,lon),3),
+       'waterSideStatus':'UNVERIFIED_NEAREST_GEOGRAPHIC_CELL_MAY_CROSS_LAND',
        'modelGridType':GRIDS[grid],'exposure':'MODEL_POINT_NOT_BEACH_WAVE'})
      item[parameter]=float(n['value']);cells[site['id']].add(cell_id)
    finally:codes_release(gid)
@@ -94,6 +104,7 @@ def extract(path,grid='2p5km'):
  'sharedCellBetweenOpenBeachAndHarbor':bool(common),
  'canInferShelteredHarborSurf':False,'canPublishSearchWindow':False,
  'gridName':grid,'verifiedShorelineWetCell':False,
+ 'waterSideConnectivityChecked':False,
  'siteSampleChecks':bysite,'records':records}
 def main(argv=None):
  ap=argparse.ArgumentParser(description=__doc__)
