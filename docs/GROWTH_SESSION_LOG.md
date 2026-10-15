@@ -9,6 +9,60 @@
 - **Verification:** Synthetic unit tests passed in first CI; 53/53 full repository steps green at second run; public-output audit found an absent Person publisher connection and branch was corrected. Latest full CI/build audit and live end-to-end verification pending; do not merge until green. No measured GSC/GA4/AdSense change attributable to this work. No Utah live claim.
 - **Exactly one next action:** Complete PR #999 full build and public-output audit, then check live preview for all 18 NWS grids before approval/merge.
 
+## Michigan maple map deterministic overview — October 15, 2026
+
+- **Issue:** Following a keyless OSM repair and a keyed CARTO repair, the real map screenshot still showed partly unpainted tiles while DOM reported loaded raster images and all 31 Leaflet markers. This is not an acceptable visual verification; do not claim the raster layer alone is fixed.
+- **Solution:** Ship a bundled, deterministic SVG Michigan overview as the default map. The locally bundled state outlines derive from PublicaMundi MappingAPI GeoJSON, and all 31 forecast points render as keyboard-/pointer-selectable pins. No remote tile fetch is required for the primary map. Preserve the existing keyed CARTO street basemap as an optional, user-selected detailed mode with the no-key OSM fallback.
+- **Additional cache correction:** Explicitly bump map JavaScript/CSS asset versions, because previous fixes reused `app.js?v=2`, risking clients continuing to run old cached map code.
+- **Preserved contracts:** NWS forecast endpoint, opportunity scores, canonical URL, Person attribution, event records, Auto ads, and full location selection.
+- **Cost:** Primary SVG adds no per-tile API charges. CARTO loads only when the visitor selects Detailed street map, limiting client-key use. GSC and AdSense outcome unmeasured.
+- **Status at writing:** Branch under verification; deployment and rendered mobile/desktop validation required before release.
+- **Exactly one next action:** Verify production Michigan SVG outline and clickable pins visibly render on mobile/desktop after green CI and merge.
+
+
+## Michigan maple sap map follow-up — October 15, 2026
+
+- **User-reported regression:** Map still appears blank after earlier OSM-only repair; prior live scrape showed mixed raster tile rendering and markers present in the DOM. Do not mistake marker DOM presence for a usable map.
+- **Vercel configuration research:** The owning `chrisizworski-com` Vercel project does not currently list a CARTO environment variable (it does have production/preview `MAPBOX_KEY`). The separately owned Wisconsin Bloom Tracker publicly embeds a working CARTO `rastertiles/voyager` browser key; the same keyed tile was verified against both site referrers. Reused that existing public map client key rather than creating a paid provider or exposing a secret Vercel credential.
+- **Fix:** Switch from OSM-only to keyed CARTO Voyager tiles, remove map's lazy IntersectionObserver initialization, invalidate Leaflet size after layout, retain all 31 interactive markers, and fall back to no-key OSM if tile errors or timeout occur. No change to NWS forecasts, directory, identity, canonical or ads.
+- **Evidence gates:** Code regression checks, rendered production map imagery (not only DOM), Github CI and Vercel release all required; status is pending until verified.
+- **Search and business:** No measured GSC/AdSense changes, and no claim of uplift.
+- **Exactly one next action:** Validate real CARTO and marker imagery on the production page after passing CI and deployment.
+
+
+## Michigan maple sap basemap repair — October 15, 2026
+
+- **Incident:** Real page map tiles displayed “API KEY REQUIRED” from CARTO's keyless `light_all` endpoint; weather selectors, source forecast, and 31 locations remained independent and working.
+- **Change:** Switch only `public/michigan-maple-sap-run/app.js` Leaflet basemap to `https://tile.openstreetmap.org/{z}/{x}/{y}.png`, include visible OSM copyright attribution and no API key. Load tiles only once the map enters or approaches the viewport (IntersectionObserver), using ordinary browser caching and Referer; do not prefetch, proxy or use no-cache requests. Tile errors now surface a text fallback directing users to the still-working location selector and regional board.
+- **Safeguards:** Preserve all 31 map markers, city click navigation, forecast logic, sugarhouse directory, canonical URL, FAQ, and Auto ads. Regression check prevents reintroducing CARTO's blocked URL. OpenStreetMap public tile servers have limited, best-effort capacity; reassess a dedicated hosted/self-hosted provider if future map views become heavy.
+- **Status at authoring:** Repair in PR on feature branch; CI, preview, production release and rendered tile check pending.
+- **Traffic and revenue:** New change does not establish gains; GSC and AdSense measurements unavailable in this session.
+- **Exactly one next action:** Verify real map tiles and location markers on the deployed production map after green CI and merge.
+
+
+## Michigan maple sap visual V2 — October 14, 2026
+
+- **Scope:** Upgrade `/michigan-maple-sap-run/` in its existing owning repo; no changes to NWS API, freeze/thaw scoring, canonical URL, creator ID, network advertisements or prior event records.
+- **Experience:** Public-domain Wikimedia-hosted maple photographs with on-page creator/provenance and explicit non-live, non-venue labels; photographic split hero, live NWS low/high/index SVG chart, honest labeled hypothetical freeze/thaw teaching graph when no current forecast exists, process explainer, two verified 2027 event timeline entries, and 23 sourced directory listings with compact historical-producer disclosures.
+- **Truth gates:** No 2027 producer visit claims for historical 2026 hosts; no fake forecast in October; no invented OPEN NOW. Automated checks cover chart source states, source-label persistence, images, 31-location UI selector and mobile presentation assets.
+- **Sources:** Dave Pape, public-domain file photographs of buckets and evaporator (Beaver Meadow Audubon Center, NY); Oven Fresh, public-domain traditional bucket photograph. Referenced photography is not of Michigan venues and not live. Wisconsin Bloom Tracker credited reference-photo pattern consulted.
+- **Cost and growth:** No new paid services. Live GSC, CTR, AdSense effect unknown; no gain claimed. Existing seasonal search title, metadata and Person identity preserved.
+- **Status at authoring:** Code committed to feature branch pending complete GitHub gate, Vercel preview and release verification.
+- **Exactly one next action:** Complete full repository gates and production page/API verification before claiming visual V2 live.
+
+
+## Michigan maple sap forecast and sugarhouse guide — October 14, 2026
+
+- **Canonical:** https://chrisizworski.com/michigan-maple-sap-run/ — new state-wide spring decision tool on the existing website.
+- **Decision engine:** 31 allowlisted Michigan NWS hourly point forecasts; seven-day freeze/thaw opportunity index, incomplete-hour gate, server cache, seasonal off-state, and independent regional anchor board. The score is heuristic and never described as confirmed sap flow, yield or probability.
+- **Visitor data:** 2027 organizer-confirmed dates for Maple Row (March 13–14 and 20–21) and Shepherd (April 22–25). Midland CNC, Blandford and MSU Tollgate have previously held maple programs but 2027 dates remain unannounced; no invented opening dates or unverified admission fees.
+- **UX:** map with no key, local selector, species-specific cautions, seven-day bars, regional comparison, filtered source-linked sugarhouse directory, source notes, FAQ and mobile breakpoints.
+- **Network:** one registered tool entry, directory card, canonical sitemap entry, consistent Chris Izworski Person identity, build-pipeline ad loader unchanged.
+- **Search/revenue baseline:** GSC and AdSense data for this brand-new URL unavailable, no traffic or ranking uplift claimed. Semrush keyword volume could not be retrieved because there were no API units available.
+- **Status:** Implementation on feature branch feat/michigan-maple-sap-run-2027; full repository CI and deployment verification pending. No claim of release until checks pass.
+- **Exactly one next action:** Run complete CI and verify the protected Vercel preview before promoting or merging.
+
+
 ## Mackinac Bridge toll SERP treatment — October 14, 2026
 
 - **Requested scope:** Existing /mackinac-bridge-tolls/ canonical only; replace title and description with owner-specified calculator-led text, synchronize OG/X title/snippet, add FAQPage for five visible questions without editing them, and preserve calculator, fares, payments, worked examples, URL and canonical.
