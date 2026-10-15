@@ -18,6 +18,14 @@ The initial four closest cells *at the beach coordinate* were masked with NOAA m
 
 Example **2.5 km** first-cycle model field at the north-side candidate: significant wave height **0.16 m**, wind-wave height **0.10 m**, wind-wave period **1.44 seconds**, wave-from direction **143.52°**. These are *model values* in the lake, not wave observations at Agate Beach. Wave-from cannot be substituted from the GRMM4 meteorological `WDIR`.
 
+## Full machine-readable NOAA model cycle retained
+
+The final fixed-cell selection rerun completed successfully in [NOAA GRIB validation run #38811484783](https://github.com/izworskic/chrisizworski-com/actions/runs/38811484783). The complete same-time directional source series is now committed at `data/rockhounding/grand-marais-glwu-model-cycle-20261015T18Z.json`: **49 regional records and 48 coastal records**, each with NOAA model cycle UTC, valid UTC, model field type, stable fixed-cell ID, significant height, wind-wave height, wave period, and wave-from direction. The 500 m series has exactly **one missing hourly timestamp**, deliberately not interpolated.
+
+The GRIB source result now reports `OPEN_NORTH_FOUR_FIELDS_AVAILABLE` for the 500 m source even though the original *nearest four shoreline cells* remain masked. This removes a misleading "no complete waves" diagnostic without claiming a real shoreline forecast.
+
+The initial cycle-zero model field and future forecasts are retained **as model output**, not observations. The **single zero-lead field is not a substitute for a real 72-hour archived analysis**. Research tests in `tests/rockhounding-real-glwu-cycle.test.js` check source identity, complete variable sets, gaps and prohibited harbor/safety claims. The selected grid-cell coordinate still lacks independent water-connectivity certification.
+
 ## What is still unknown
 
 1. **Physical open-water connectivity** of the selected north-sector cells and independent shoreline normal — no reliable refraction or fetch calibration, no proven beach wave heights. The research half-plane can avoid obviously southern cells but is not a GIS proof of connected water or wave exposure.
