@@ -7,15 +7,35 @@ const base='https://chrisizworski.com/michigan-ski-hills/';
 const P='https://chrisizworski.com/#person';
 const today='2026-10-14';
 
-const PHOTO_BOYNE={url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Boyne_Mountain.JPG/960px-Boyne_Mountain.JPG',source:'https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG',credit:'American Eagle',place:'Boyne Mountain chairlift, Michigan'};
-const PHOTO_CRYSTAL={url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Crystal_Mountain_-_Cheers_Chair.jpg/960px-Crystal_Mountain_-_Cheers_Chair.jpg',source:'https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg',credit:'Jhansonxi',place:'Crystal Mountain ski trails, Michigan'};
-function heroPhoto(slug){
- const pic=slug==='boyne-mountain'||slug===null?PHOTO_BOYNE:slug==='crystal-mountain'?PHOTO_CRYSTAL:null;
- if(!pic)return '';
- return '<figure class="hero-photo"><img src="'+pic.url+'" width="960" height="720" alt="'+esc(pic.place)+
- '" loading="'+(slug===null?'eager':'lazy')+'" decoding="async" referrerpolicy="no-referrer">'+
- '<figcaption>'+esc(pic.place)+' · Photo: <a href="'+pic.source+'" rel="noopener noreferrer">'+esc(pic.credit)+
- '</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener noreferrer">CC BY-SA 3.0</a> · Historical photograph, not a live conditions image</figcaption></figure>';
+// Curated geographically verified archival photography, NOT live conditions or forecasts.
+// License + authors verified against each Wikimedia Commons file's source page on 2026-10-15.
+// Do not replace images with generic stock or an unlicensed resort marketing photo.
+const PHOTO_LIBRARY=Object.freeze({
+ 'boyne-mountain':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Boyne_Mountain.JPG/640px-Boyne_Mountain.JPG',
+  source:'https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG',
+  credit:'American Eagle',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
+  place:'Boyne Mountain',subject:'Six-person chairlift at Boyne Mountain',year:2009,width:640,height:480},
+ 'crystal-mountain':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Crystal_Mountain_-_Cheers_Chair.jpg/640px-Crystal_Mountain_-_Cheers_Chair.jpg',
+  source:'https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg',
+  credit:'Jhansonxi',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
+  place:'Crystal Mountain',subject:'Cheers chairlift and ski trails at Crystal Mountain, Michigan',year:2010,width:640,height:480},
+ 'caberfae-peaks':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Caberfae_Peaks.jpg/640px-Caberfae_Peaks.jpg',
+  source:'https://commons.wikimedia.org/wiki/File:Caberfae_Peaks.jpg',
+  credit:'RomanKahler',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
+  place:'Caberfae Peaks',subject:'Aerial view of Caberfae Peaks ski resort in Michigan',year:2017,width:640,height:360},
+ 'mt-bohemia':{url:'https://upload.wikimedia.org/wikipedia/commons/e/e0/Looking_over_Lac_La_Belle.jpg',
+  source:'https://commons.wikimedia.org/wiki/File:Looking_over_Lac_La_Belle.jpg',
+  credit:'Archimedo',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
+  place:'Mount Bohemia',subject:'Lac La Belle as seen from Mount Bohemia chairlift',year:2008,width:604,height:404}
+});
+function photoFigure(slug,context='detail'){
+ const p=PHOTO_LIBRARY[slug];if(!p)return '';
+ return '<figure class="verified-photo '+(context==='detail'?'resort-context-photo':'verified-photo-card')+'">'+
+ '<a class="verified-photo-image" href="/michigan-ski-hills/'+slug+'/">'+
+ '<img src="'+p.url+'" width="'+p.width+'" height="'+p.height+'" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="'+esc(p.subject)+'"></a>'+
+ '<figcaption><strong>'+esc(p.place)+'</strong><span>'+esc(p.subject)+' ('+p.year+')</span>'+
+ '<small>Photo: <a href="'+p.source+'" target="_blank" rel="noopener noreferrer">'+esc(p.credit)+'</a> · '+
+ '<a href="'+p.licenseUrl+'" target="_blank" rel="noopener noreferrer">'+esc(p.license)+'</a> · Historical, not live</small></figcaption></figure>';
 }
 
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -46,7 +66,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  '<p class="answer">A ski weekend is worth considering when snow, operating lifts, price, and travel fit your plans. This tool compares the evidence; it does not certify that any resort is open.</p>',
  '<p class="hero-live" id="ski-hero-live" aria-live="polite">Saturday/Sunday forecasts · NWS point data</p>',
  '<p class="update" id="updated" aria-live="polite">Loading the latest official signals…</p></div>',
- heroPhoto(slug),'</div>',
+ '</div>',
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
@@ -79,7 +99,8 @@ function details(r){
  '<section class="panel"><p class="eyebrow">Live resort comparison</p><h2>Is '+esc(r.name)+' worth the drive this weekend?</h2>',
  '<p>'+esc(intro)+'</p><div class="controls"><label>Compare from<select id="origin"><option value="detroit">Detroit metro</option><option value="grandRapids">Grand Rapids</option></select></label></div>',
  '<div id="hill-live" aria-live="polite"><p class="small">Requesting NWS snowfall grid and warning matches…</p></div></section>',
- '<div class="details-grid"><section class="panel"><h2>Why this mountain can be different</h2><p>'+esc(r.note)+'. '+esc(wind)+'</p>',
+ '<div class="details-grid"><section class="panel"><h2>Why this mountain can be different</h2>',
+ photoFigure(r.slug),'<p>'+esc(r.note)+'. '+esc(wind)+'</p>',
  '<p><strong>Drive-time planning:</strong> approximately '+minutes(r.driveMinutes.detroit)+' from Detroit metro, or '+minutes(r.driveMinutes.grandRapids)+' from Grand Rapids. These are baseline estimates, not live traffic or winter road guarantees.</p>',
  '<p><strong>Ticket planning:</strong> '+(r.adultDayPrice2026.sat?'Published day-session adult weekend reference: $'+r.adultDayPrice2026.sat+' Saturday; $'+(r.adultDayPrice2026.sun||r.adultDayPrice2026.sat)+' Sunday. Verify date and availability.':'Price varies or is not independently confirmed for a specific weekend. Do not assume a fixed ticket rate.')+'</p>',
  '<div class="source-links"><a href="'+esc(r.tickets)+'" rel="noopener noreferrer" target="_blank">Official tickets ↗</a><a href="'+esc(r.snow)+'" rel="noopener noreferrer" target="_blank">Official resort / conditions ↗</a></div></section>',
@@ -126,6 +147,8 @@ function index(){
  '<div class="controls"><label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
  '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
  '<div id="resort-list" class="ranking" aria-live="polite"><p>Requesting NWS conditions…</p></div></section>',
+ '<section class="panel photo-reference-panel"><div class="photo-reference-heading"><h2>Know the mountains</h2><p class="small">Four actual Michigan resort views. These are dated archival photographs, not today's conditions.</p></div>',
+ '<div class="ski-photo-strip">'+['caberfae-peaks','crystal-mountain','boyne-mountain','mt-bohemia'].map(k=>photoFigure(k,'strip')).join('')+'</div></section>',
  '<section class="panel"><h2>All 18 mountain and winter-ski pages</h2><p>Each destination has its own forecast coordinates, matching NWS zones, ticket link, terrain context and travel comparisons.</p><ul>'+links+'</ul></section>',
  '<section class="panel faq"><h2>Michigan ski and lake-effect questions</h2>',
  '<details><summary>Where is Michigan getting lake-effect snow right now?</summary><p>Active NWS warning zones show where hazardous lake-effect conditions are expected or occurring. Actual snowfall observations are a different evidence layer, and ski-base depth must come from the resort.</p></details>',
