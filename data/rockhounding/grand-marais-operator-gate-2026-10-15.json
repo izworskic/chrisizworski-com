@@ -1,14 +1,16 @@
 {
-  "schemaVersion": "gm-verification-v1",
+  "schemaVersion": "gm-verification-v2",
   "checkedOn": "2026-10-15",
-  "status": "DOCUMENTARY_GATE_COMPLETE_OPERATOR_CONFIRMATION_OUTSTANDING",
+  "status": "PUBLIC_DESTINATION_RESEARCH_APPROVED_STILL_NO_EXPLICIT_COLLECTING_CLEARANCE",
   "governance": {
     "operator": "Burt Township, Alger County, Michigan",
     "officeUrl": "https://burttownshipacmi.gov/departments/township-office/",
     "publishedOrdinanceIndex": "https://burttownshipacmi.gov/departments/planning-zoning/ordinances/",
     "michiganEgleRules": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
     "generalWeightRule": "25 pounds per person per year on qualifying state-owned/public-trust lands; not a municipal beach collecting permit",
-    "mandatoryPublicationRule": "Collection guidance requires affirmative operator-specific rules and verified site boundaries. Missing evidence remains UNKNOWN; public beach access cannot imply collection rights."
+    "mandatoryPublicationRule": "Collection guidance requires affirmative operator-specific rules and verified site boundaries. Missing evidence remains UNKNOWN; public beach access cannot imply collection rights.",
+    "planningPolicy": "Officially recognized public recreation/rockhounding locations may appear as destination leads with source-backed arrival advice without an email. Do not imply a collecting permit, current openness, accessibility, safe waves or turn-by-turn directions to estimated pins.",
+    "ownerResponseRequirement": "An operator email is not a prerequisite for a public destination prototype. Only claim a specific legal collecting permission with cited site-specific authority."
   },
   "sources": [
     {
@@ -136,6 +138,37 @@
         "Validated exposure direction",
         "Live shore-level agate visibility"
       ]
+    },
+    {
+      "id": "TOWNSHIP_2026_RECREATION_PLAN",
+      "owner": "Burt Township",
+      "url": "https://burttownshipacmi.gov/wp-content/uploads/2026/01/Burt-Twp-Rec-Plan-FINAL-1-9-26-comp.pdf",
+      "documentDate": "2026-01-09",
+      "establishes": [
+        "Agate Beach is a township-owned public beach and a rockhounding destination",
+        "Public parking is available at Agate Beach boardwalk",
+        "Woodland Park Campground connects to Agate Beach area"
+      ],
+      "doesNotEstablish": [
+        "Unrestricted stone removal on any parcel",
+        "A geocoded exact parking gate",
+        "Current completion of 2026 boardwalk modifications"
+      ]
+    },
+    {
+      "id": "TOWNSHIP_2021_RECREATION_PLAN",
+      "owner": "Burt Township",
+      "url": "https://www.burttownship.com/wp-content/uploads/2022/08/Final-Recreation-Plan-2021-2025.pdf",
+      "documentDate": "2021",
+      "establishes": [
+        "Agate Beach public beach popular with rock and agate collectors",
+        "Bayshore Park has open access to sheltered swimming beach and municipal recreational facilities"
+      ],
+      "doesNotEstablish": [
+        "Beach-specific rock-taking permit",
+        "Currently surveyed entrance GPS",
+        "Waterline orientation or safe post-storm access"
+      ]
     }
   ],
   "sites": [
@@ -147,7 +180,7 @@
       "ownerVerifiedParkingGate": null,
       "legalParkingToShoreLine": null,
       "rockCollectionRule": "AWAIT_OPERATOR_CONFIRMATION",
-      "rockhoundingContext": "CHAMBER_DOCUMENTED_AS_TARGET_NOT_COLLECTION_PERMIT",
+      "rockhoundingContext": "TOWNSHIP_RECREATION_PLAN_IDENTIFIES_PUBLIC_ROCKHOUNDING_DESTINATION",
       "accessConstruction": "FEB_2026_BID_STEPS_TO_RAMPS_UNVERIFIED_COMPLETION",
       "recentTownshipUpdate": "SEPT_2026_DRAFT_MINUTES_MOBIMAT_AND_STAIRS_SITE_UNASSIGNED",
       "wheelchairAccessToSand": "UNKNOWN",
@@ -160,8 +193,18 @@
         "CHAMBER_DIRECTIONS",
         "TOWNSHIP_ORDINANCE_INDEX",
         "OSM_GEOMETRY",
-        "NCEP_GLWU"
-      ]
+        "NCEP_GLWU",
+        "TOWNSHIP_2021_RECREATION_PLAN",
+        "TOWNSHIP_2026_RECREATION_PLAN"
+      ],
+      "planningMode": "DESTINATION_LEAD_WITH_POSTED_RULES_CHECK",
+      "arrivalGuidance": {
+        "type": "OPERATOR_DESCRIBED_NOT_ROUTE",
+        "description": "Burt Township's recreation plan documents public parking at the Agate Beach boardwalk near Woodland Park Campground. Follow posted signs and current conditions.",
+        "sourceId": "TOWNSHIP_2026_RECREATION_PLAN",
+        "exactParkingGps": null
+      },
+      "researchDestinationType": "ROCKHOUNDING_LOCATION"
     },
     {
       "siteId": "grand-marais-harbor",
@@ -183,15 +226,24 @@
         "MICHIGAN_WATER_TRAILS_BAYSHORE",
         "TOWNSHIP_ORDINANCE_INDEX",
         "OSM_GEOMETRY",
-        "NCEP_GLWU"
-      ]
+        "NCEP_GLWU",
+        "TOWNSHIP_2021_RECREATION_PLAN"
+      ],
+      "planningMode": "DESTINATION_LEAD_WITH_POSTED_RULES_CHECK",
+      "arrivalGuidance": {
+        "type": "OPERATOR_DESCRIBED_NOT_ROUTE",
+        "description": "Bayshore Park is a public sheltered harbor beach with public parking in downtown Grand Marais. Follow posted signs; no exact gate pin verified.",
+        "sourceId": "TOWNSHIP_BAYSHORE",
+        "exactParkingGps": null
+      },
+      "researchDestinationType": "WAVE_SHELTER_COMPARISON"
     }
   ],
-  "openOperatorQuestions": [
-    "At Agate Beach, is hobby collection/removal of loose stones and agates permitted from township-managed beach property? Are there limits, protected areas, seasonal closures, and boundaries?",
-    "At Bayshore Park, may visitors remove stones from the municipal beach, or is collection prohibited?",
-    "What are the currently permitted public parking entrance/coordinates, posted restrictions, and lawful pedestrian route to Agate Beach and to Bayshore Park?",
-    "Are the Agate Beach boardwalk stairs and ramp/Mobi-mat upgrades finished and open as of October 2026? Which beach received the installation noted in the September 15 draft minutes?",
-    "Are there posted or unpublished park rules on nighttime use, digging/raking, or wildlife-sensitive shoreline areas?"
+  "openOperatorQuestions": [],
+  "unverifiedOnSiteDetails": [
+    "Beach-specific stone-removal restrictions (check posted rules)",
+    "Exact surveyed parking and legal shoreline boundaries",
+    "2026 boardwalk modification completion / step-free access",
+    "Current posted seasonal or wildlife restrictions"
   ]
 }
