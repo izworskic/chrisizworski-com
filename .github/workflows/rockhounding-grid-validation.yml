@@ -19,7 +19,7 @@ jobs:
   validate-wet-cells:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Fourth study: join four wave fields on one fixed northern open-lake candidate cell.
+    # Fifth study: prefer closest open-north cell with >=90% same-cell wave-field coverage; retain report artifact.
     steps:
       - name: Checkout research branch
         uses: actions/checkout@v4
