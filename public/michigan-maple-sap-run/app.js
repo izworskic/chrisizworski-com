@@ -143,11 +143,11 @@ function renderVenues(){
  const canExpand=region==='all'&&type==='all'&&filtered.length>8;
  const shown=canExpand&&!showAllVenues?filtered.slice(0,8):filtered;
  const imgByRank=[
- {src:'/michigan-maple-sap-run/images/syrup-evaporator.jpg',alt:'Reference photograph of a wood-fired maple syrup evaporator, not this Michigan venue'},
- {src:'/michigan-maple-sap-run/images/tree-bucket.jpg',alt:'Historic photograph of tapped maple with collection bucket, not this Michigan festival'},
- {src:'/michigan-maple-sap-run/images/sugarbush-buckets.jpg',alt:'Historic reference maple collection buckets; not Chippewa Nature Center'},
- {src:'/michigan-maple-sap-run/images/syrup-evaporator.jpg',alt:'Reference photograph of maple syrup production; not Blandford Nature Center'},
- {src:'/michigan-maple-sap-run/images/tree-bucket.jpg',alt:'Reference photograph of a tapped maple; not MSU Tollgate Farm'}
+ {src:'https://commons.wikimedia.org/wiki/Special:FilePath/Maple_syrup_evaporator_-_Beaver_Meadow_Audubon_Center.jpg?width=960',alt:'Reference photograph of a wood-fired maple syrup evaporator, not this Michigan venue'},
+ {src:'https://commons.wikimedia.org/wiki/Special:FilePath/Maple_syrup_bucket.jpg?width=960',alt:'Historic photograph of tapped maple with collection bucket, not this Michigan festival'},
+ {src:'https://commons.wikimedia.org/wiki/Special:FilePath/Maple_sap_buckets_-_Beaver_Meadow_Audubon_Center.jpg?width=960',alt:'Historic reference maple collection buckets; not Chippewa Nature Center'},
+ {src:'https://commons.wikimedia.org/wiki/Special:FilePath/Maple_syrup_evaporator_-_Beaver_Meadow_Audubon_Center.jpg?width=960',alt:'Reference photograph of maple syrup production; not Blandford Nature Center'},
+ {src:'https://commons.wikimedia.org/wiki/Special:FilePath/Maple_syrup_bucket.jpg?width=960',alt:'Reference photograph of a tapped maple; not MSU Tollgate Farm'}
  ];
  $('venues').innerHTML=shown.length?shown.map(function(v){
   const archive=!!v.sourceYear;

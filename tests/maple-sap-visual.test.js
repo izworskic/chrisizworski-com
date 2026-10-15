@@ -58,13 +58,14 @@ test('Frontend keeps one fetch per site and source-linked sugarhouse cards, not 
  assert.match(app,/Reference photo · not this venue/);
  assert.doesNotMatch(app,/OPEN NOW|THIS WEEKEND/);
 });
-test('Real image files are tracked and a chart stylesheet is present',()=>{
- for(const x of ['sugarbush-buckets.jpg','syrup-evaporator.jpg','tree-bucket.jpg']){
-  const data=fs.readFileSync(path.join(root,'public/michigan-maple-sap-run/images',x));
-  assert.ok(data.length>15000);
-  assert.equal(data[0],0xff);assert.equal(data[1],0xd8);
- }
+test('Reference images are hosted at credited Wikimedia originals; no incomplete local images',()=>{
+ const html=file('public/michigan-maple-sap-run/index.html');
+ const app=file('public/michigan-maple-sap-run/app.js');
  const css=file('public/michigan-maple-sap-run/premium.css');
+ assert.match(html,/https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Maple_sap_buckets/);
+ assert.match(html,/https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Maple_syrup_evaporator/);
+ assert.match(app,/Special:FilePath\/Maple_syrup_bucket/);
+ assert.match(html,/Dave Pape, public domain/);
  assert.match(css,/@media\(max-width:550px\)/);
  assert.match(css,/\.hero-photo/);assert.match(css,/\.sap-svg/);
 });
