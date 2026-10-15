@@ -126,45 +126,68 @@ function markSites(){
 // Respect OSM tile policy: attribution, browser caching/Referer and no background prefetch.
 function initMap(locations){
  const host=$('map'),fallback=$('mapFallback');
- function reportFailure(){
+ if(typeof window.L==='undefined'){
   fallback.hidden=false;
-  fallback.textContent='Map tiles are unavailable right now. Use the Michigan location selector or statewide board to explore forecasts.';
+  fallback.textContent='The interactive map is not available. Select a Michigan location above to view its forecast.';
+  return;
  }
- if(typeof window.L==='undefined'){reportFailure();return;}
- let initialized=false;
- function mount(){
-  if(initialized)return;
-  initialized=true;
-  try{
-   map=window.L.map('map',{scrollWheelZoom:false,attributionControl:true,preferCanvas:true}).setView([44.78,-85.58],6);
-   const tiles=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+ let hasMapTile=false,usingFallback=false,errors=0;
+ let tileLayer=null;
+ function fallbackTiles(){
+  if(!map||usingFallback)return;
+  usingFallback=true;errors=0;
+  if(tileLayer)map.removeLayer(tileLayer);
+  tileLayer=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
-    minZoom:4,maxZoom:13,maxNativeZoom:13,updateWhenIdle:true,keepBuffer:1,
-    detectRetina:false
-   });
-   let errors=0;
-   tiles.on('tileerror',function(){if(++errors>=3)reportFailure();});
-   tiles.on('tileload',function(){errors=0;fallback.hidden=true;});
-   tiles.addTo(map);
-   locations.forEach(function(x){
-    const m=window.L.marker([x.lat,x.lon],{title:x.name});
-    m.addTo(map).bindTooltip(x.name);
-    m.on('click',function(){selectSite(x.id);});
-    markers.set(x.id,m);
-   });
-   markSites();
-   window.setTimeout(function(){if(map)map.invalidateSize();},60);
-  }catch(e){reportFailure();}
+    maxZoom:13,maxNativeZoom:13,updateWhenIdle:true,keepBuffer:1,detectRetina:false
+  }).addTo(map);
+  attachHandlers();
  }
- if('IntersectionObserver' in window){
-  const observer=new window.IntersectionObserver(function(entries){
-   if(entries.some(function(entry){return entry.isIntersecting;})){
-    observer.disconnect();
-    mount();
-   }
-  },{rootMargin:'180px'});
-  observer.observe(host);
- }else mount();
+ function showFailure(){
+  if(!hasMapTile){fallback.hidden=false;
+   fallback.textContent='Map tiles are temporarily unavailable. The location selector and statewide forecast board still work.';}
+ }
+ function attachHandlers(){
+  tileLayer.on('tileload',function(){hasMapTile=true;fallback.hidden=true;});
+  tileLayer.on('tileerror',function(){
+   errors+=1;
+   if(errors>=2&&!usingFallback)fallbackTiles();
+   else if(errors>=2)showFailure();
+  });
+ }
+ try{
+  // Same working CARTO client-side Voyager basemap used by Wisconsin Bloom Tracker.
+  // The browser-facing key is already published in that tool; NWS forecast and events do not depend on tiles.
+  map=window.L.map('map',{scrollWheelZoom:false,attributionControl:true,preferCanvas:true,
+    zoomControl:true}).setView([44.65,-85.70],6);
+  tileLayer=window.L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88",{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>',
+    maxZoom:17,updateWhenIdle:true,keepBuffer:1,detectRetina:false
+  }).addTo(map);
+  attachHandlers();
+  locations.forEach(function(x){
+   const m=window.L.marker([x.lat,x.lon],{title:x.name,alt:'View '+x.name+' maple sap weather'});
+   m.addTo(map).bindTooltip(x.name,{direction:'top',opacity:.96});
+   m.on('click',function(){selectSite(x.id);});
+   markers.set(x.id,m);
+  });
+  markSites();
+  // Initialize immediately. Lazy IntersectionObserver initialization previously left blank
+  // tiles in off-screen map containers for some visitors and screenshot clients.
+  const size=function(){if(map)map.invalidateSize({pan:false});};
+  window.requestAnimationFrame(size);
+  window.setTimeout(size,300);
+  if(typeof window.ResizeObserver==='function'){
+   const ro=new window.ResizeObserver(size);ro.observe(host);
+  }
+  if(window.matchMedia('(max-width: 760px)').matches){
+   map.fitBounds([[41.7,-90.6],[47.8,-82.2]],{padding:[10,10],maxZoom:7});
+  }
+  window.setTimeout(function(){if(!hasMapTile){if(!usingFallback)fallbackTiles();else showFailure();}},8000);
+ }catch(e){
+  fallback.hidden=false;
+  fallback.textContent='Could not draw the interactive map. Use the Michigan location selector and regional board.';
+ }
 }
 function renderVenues(){
  const region=$('venueRegion').value,type=$('venueType').value;
