@@ -11,15 +11,9 @@ function activeRisk(r){return (r.weather?.alerts||[]).some(a=>/Warning/i.test(a.
 function dayInfo(r){return r.weather?.skiDays?.[S.day]||{};}
 function chosenDayDate(){return S.data?.resorts?.[0]?.weather?.skiDays?.[S.day]?.date||null;}
 function ticket(r){
- const special=['2026-12-27','2027-01-17','2027-02-14'].includes(chosenDayDate());
- const holidaySunday=special&&['shanty-creek','caberfae-peaks'].includes(r.slug);
- return r.adultDayPrice2026?.[S.day==='saturday'||holidaySunday?'sat':'sun']??null;
+ return r.adultDayPrice2026?.[S.day==='saturday'?'sat':'sun']??null;
 }
-function childTicket(r){
- if(['shanty-creek','caberfae-peaks'].includes(r.slug))return 10;
- if(r.slug==='porcupine-mountains')return 40;
- return null;
-}
+function childTicket(){return null; /* No date/age-confirmed child rate ingested; never invent one. */}
 function sessionRisk(r){const d=dayInfo(r),events=[];
  if(activeRisk(r))events.push('Winter warning: travel risk; excluded from shortlist');
  if(d.surfaceSignal==='THAW_FREEZE_RISK')events.push('Thaw/refreeze temperatures forecast: surface may firm up');
@@ -78,13 +72,16 @@ function chooseNumber(name,value,max,callback,min=0){
 }
 function recap(){
  const target=$('ski-decision-results');if(!target||!S.data)return;target.replaceChildren();
- const dt=chosenDayDate(),c=candidates(),seasonMonth=new Date(S.data.generatedAt).getUTCMonth()+1;
+ const dt=chosenDayDate(),seasonMonth=new Date(S.data.generatedAt).getUTCMonth()+1;
  const offSeason=![11,12,1,2,3,4].includes(seasonMonth);
+ const c=offSeason&&S.goal==='powder'?[]:candidates();
  const title=el('h3',null,offSeason?'Planning mode · not an open-slope recommendation':S.goal==='powder'?'Where the NWS snow forecast leads':S.goal==='family'?'Family-friendly planning shortlist':S.goal==='value'?'Day-ticket and drive-value shortlist':'Closest useful slopes');
  const subtitle=el('p','note',dt?'Selected '+(S.day==='saturday'?'Saturday':'Sunday')+', '+dt+' · '+(S.origin==='detroit'?'Detroit metro':'Grand Rapids')+' departures · NWS forecasts may change.':'Upcoming date unavailable');
+ const quick=$('ski-hero-live');if(quick)quick.textContent=(offSeason?'Early-season planning · no open-slope claim':'In-season comparison · verify resort operations')+
+ ' · '+(S.day==='saturday'?'Saturday':'Sunday')+' forecast · '+(S.origin==='detroit'?'Detroit metro':'Grand Rapids');
  put(target,title,subtitle);
  if(!c.length){
-  const msg=S.goal==='powder'?'No monitored hill has ≥0.5″ of verified NWS grid snowfall in the selected window without a matched winter warning. That is NOT a statewide claim of no snow.':'No suitable hill can be ranked with current source evidence.';
+  const msg=offSeason&&S.goal==='powder'?'Ski season is not established yet. Look at the NWS early-season cold-air watch below; forecast snow or cold temperatures do not mean lifts are open.':S.goal==='powder'?'No monitored hill has at least 0.5 inches of NWS grid snowfall in the selected window without a matched winter warning. This does not mean all of Michigan has no snow.':'No suitable hill can be ranked with current source evidence.';
   put(target,el('p','event',msg));return;
  }
  const group=el('div','decision-candidates');c.slice(0,3).forEach((r,i)=>{
