@@ -15,11 +15,12 @@
     ],
     "eHydroCatalog": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0",
     "catalogLayer": "SurveyJob",
-    "recentMatchingSurveyJobVerified": null,
-    "latestSurveyEndUTC": null,
+    "recentMatchingSurveyJobVerified": true,
+    "latestSurveyEndUTC": "2026-07-30",
     "mostRecentBathymetricDeliverableDownloadedAndReviewed": false,
     "currentNavigableDepthVerified": false,
-    "sourceCaveat": "USACE project page links prior project condition surveys; eHydro catalog results and downloads require separate live verification. Catalog metadata and a PCS are not measurements of harbor wave shelter."
+    "sourceCaveat": "USACE project page links prior project condition surveys; eHydro catalog results and downloads require separate live verification. Catalog metadata and a PCS are not measurements of harbor wave shelter.",
+    "lastCatalogVerificationRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38824773510"
   },
   "observationStations": [
     {
@@ -68,5 +69,5 @@
     "canClaimSafeConditions": false,
     "canClaimCurrentNavigationDepth": false
   },
-  "status": "RECENT_USACE_CATALOG_DISCOVERY_PENDING_LOCAL_WAVE_SENSOR_UNVERIFIED"
+  "status": "USACE_2026_SURVEY_JOB_METADATA_VERIFIED_LOCAL_WAVE_SENSOR_UNVERIFIED"
 }
