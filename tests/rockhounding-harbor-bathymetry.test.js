@@ -24,6 +24,10 @@ test('survey-source date provenance is 2004–2020 and depth units/datum are not
 test('Bayshore harbor research reports real chart data, no numerical attenuation or safe-water claim',()=>{
  const out=harborStudyGate();
  assert.equal(out.chartedPierCount,2);
+ assert.equal(out.recentUSACESurveyPlotStatus,'JULY_2026_USACE_PLOT_DATUM_VERIFIED_DEPTH_GRID_UNREVIEWED');
+ assert.equal(out.recentUSACEPlotDepthDatum,'IGLD85');
+ assert.equal(out.recentUSACEPlotSoundingUnits,'feet');
+ assert.equal(out.recentUSACEXYZGridParsed,false);
  assert.equal(out.chartedSpotSoundingPresence,true);
  assert.equal(out.chartedDepthContourPresence,true);
  assert.equal(out.waveTransmissionFactor,null);
