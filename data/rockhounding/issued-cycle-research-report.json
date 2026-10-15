@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "glwu-research-cycle-summary-v1",
+  "generatedAt": "2026-10-15T21:56:46.000Z",
+  "status": "COLLECTING_MODEL_CYCLES",
+  "source": "NOAA_GLWU_MODEL_OUTPUT",
+  "modelCycleCounts": {
+    "2p5km": {
+      "cycles": 1,
+      "analysis": 1,
+      "issuedForecasts": 48,
+      "distinctCells": 1,
+      "readyFor14DayBaseline": false
+    },
+    "500m-greatlakes": {
+      "cycles": 1,
+      "analysis": 1,
+      "issuedForecasts": 47,
+      "distinctCells": 1,
+      "readyFor14DayBaseline": false
+    }
+  },
+  "gridCells": {
+    "2p5km": [
+      "glwu:2p5km:46.68834:-85.97661"
+    ],
+    "500m-greatlakes": [
+      "glwu:500m-greatlakes:46.68000:-85.98498"
+    ]
+  },
+  "comparisons": {
+    "2p5km": {
+      "grid": "2p5km",
+      "matchedPairs": 0,
+      "unmatchedForecastRows": 48,
+      "matches": [],
+      "leadBuckets": {},
+      "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
+      "isIndependentBuoyVerification": false,
+      "isBeachForecastSkill": false,
+      "status": "INSUFFICIENT_MATCHED_CYCLES",
+      "canPublishRockhoundingWindow": false
+    },
+    "500m-greatlakes": {
+      "grid": "500m-greatlakes",
+      "matchedPairs": 0,
+      "unmatchedForecastRows": 47,
+      "matches": [],
+      "leadBuckets": {},
+      "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
+      "isIndependentBuoyVerification": false,
+      "isBeachForecastSkill": false,
+      "status": "INSUFFICIENT_MATCHED_CYCLES",
+      "canPublishRockhoundingWindow": false
+    }
+  },
+  "independentBuoyObservationsIncluded": false,
+  "siteSpecificWaveConditionsValidated": false,
+  "canPublishRockhoundingOpportunity": false,
+  "warning": "Forecast-versus-later-model-initial compares two model outputs, NOT NOAA buoy wave observations, and NOT stones exposed on the shore"
+}
