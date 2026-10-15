@@ -4,7 +4,7 @@ const $=function(id){return document.getElementById(id);};
 const safe=function(s){return String(s??'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 const asDate=function(v){return new Date(v+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});};
 const sites=new Map(), markers=new Map();
-let current='bay-city', map=null, boardData=[];
+let current='bay-city', map=null, boardData=[], showAllVenues=false;
 const places=[
  {name:'Maple Row Sugarhouse Festival',city:'Jones',region:'Southern Lower',address:'12646 Born Street, Jones, MI 49061',url:'https://www.michiganmaplefestival.com/plan-your-visit',date:'March 13–14 & 20–21, 2027',confirmed:true,description:'Four festival days with sugarhouse tours and maple demonstrations. Saturday 9–4, Sunday 10–3.',tags:['demonstration','family','pancakes'],fee:'Official festival details and food prices',rank:0},
  {name:'Shepherd Maple Syrup Festival',city:'Shepherd',region:'Central Lower',address:'Shepherd, MI 48883',url:'https://www.shepherdmaplesyrupfest.org/',date:'April 22–25, 2027',confirmed:true,description:'Village-wide maple celebration, pancake and sausage meals, crafts and events. Check the festival for individual venues.',tags:['family','pancakes'],fee:'Food and activity prices vary',rank:1},
@@ -69,6 +69,7 @@ function renderSite(data){
   renderDays(data.daily||[]);
   $('daysSub').textContent='National Weather Service hourly forecast for '+data.site.name+', interpreted in local Michigan time.';
  }
+ if(window.MapleSapCharts)window.MapleSapCharts.render(phase==='WEATHER_WINDOW'?(data.daily||[]):[],phase,data.site?.name||sites.get(current)?.name||'Michigan');
  seasonNote();
 }
 function renderDays(days){
@@ -139,19 +140,38 @@ function initMap(locations){
 function renderVenues(){
  const region=$('venueRegion').value,type=$('venueType').value;
  const filtered=places.filter(function(x){return (region==='all'||x.region===region)&&(type==='all'||x.tags.includes(type));});
- $('venues').innerHTML=filtered.length?filtered.map(function(v){
+ const canExpand=region==='all'&&type==='all'&&filtered.length>8;
+ const shown=canExpand&&!showAllVenues?filtered.slice(0,8):filtered;
+ const imgByRank=[
+ {src:'/michigan-maple-sap-run/images/syrup-evaporator.jpg',alt:'Reference photograph of a wood-fired maple syrup evaporator, not this Michigan venue'},
+ {src:'/michigan-maple-sap-run/images/tree-bucket.jpg',alt:'Historic photograph of tapped maple with collection bucket, not this Michigan festival'},
+ {src:'/michigan-maple-sap-run/images/sugarbush-buckets.jpg',alt:'Historic reference maple collection buckets; not Chippewa Nature Center'},
+ {src:'/michigan-maple-sap-run/images/syrup-evaporator.jpg',alt:'Reference photograph of maple syrup production; not Blandford Nature Center'},
+ {src:'/michigan-maple-sap-run/images/tree-bucket.jpg',alt:'Reference photograph of a tapped maple; not MSU Tollgate Farm'}
+ ];
+ $('venues').innerHTML=shown.length?shown.map(function(v){
+  const archive=!!v.sourceYear;
+  // Archive producer search links use town and venue name, not an invented street address.
   const dir='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v.address);
-  return '<article class="venue"><div class="statusline"><span class="tag '+(v.confirmed?'good':'off')+'">'+(v.confirmed?'2027 confirmed':'Date not announced')+'</span></div>'+
-   '<h3 style="margin-top:12px">'+safe(v.name)+'</h3><div class="place">'+safe(v.city+', '+v.region)+'</div>'+
-   '<div class="date">'+safe(v.date)+'</div><p>'+safe(v.description)+'</p>'+
-   '<div class="evidence">'+safe(v.fee)+'</div><div class="links"><a target="_blank" rel="noopener noreferrer" href="'+safe(v.url)+'">'+(v.confirmed?"2027 event details ↗":v.sourceYear===2026?"2026 host record ↗":"Organizer & updates ↗")+'</a>'+
-   '<a target="_blank" rel="noopener noreferrer" href="'+safe(dir)+'">Directions ↗</a></div></article>';
- }).join(''):'<p class="evidence">No matching verified venues in this starter directory. Change the filters to see more.</p>';
+  const ref=archive?null:imgByRank[v.rank];
+  const image=ref?'<div class="venue-visual"><img src="'+safe(ref.src)+'" alt="'+safe(ref.alt)+'" loading="lazy" decoding="async"><span class="ref-label">Reference photo · not this venue</span></div>':'';
+  return '<article class="venue '+(archive?'venue-archive':'venue-featured')+'">'+image+'<div class="venue-body">'+
+   '<div class="statusline"><span class="tag '+(v.confirmed?'good':'off')+'">'+(v.confirmed?'2027 dates confirmed':archive?'2026 participating producer':'2027 date not announced')+'</span></div>'+
+   '<h3>'+safe(v.name)+'</h3><div class="place">'+safe(v.city+', '+v.region)+'</div>'+
+   '<div class="date">'+safe(v.date)+'</div><p>'+safe(archive?'Participated in Michigan Maple Weekend 2026. Check the organizer for public access, visiting dates and demonstrations in 2027.':v.description)+'</p>'+
+   '<div class="venue-meta">'+safe(v.fee)+'</div>'+
+   '<div class="links"><a target="_blank" rel="noopener noreferrer" href="'+safe(v.url)+'">'+(v.confirmed?'2027 event details ↗':archive?'2026 producer source ↗':'Organizer & updates ↗')+'</a>'+
+   '<a target="_blank" rel="noopener noreferrer" href="'+safe(dir)+'">Location map ↗</a></div></div></article>';
+ }).join(''):'<p class="evidence">No listings match these filters. Try another region or experience type. Unverified 2027 tours are not offered as confirmed experiences.</p>';
+ const toggle=$('toggleAllVenues');
+ if(toggle){toggle.hidden=!canExpand;toggle.setAttribute('aria-expanded',String(showAllVenues));toggle.textContent=showAllVenues?'Show fewer sugarhouses':'See all '+filtered.length+' statewide listings';}
+ if($('venueCount'))$('venueCount').textContent=shown.length+' of '+filtered.length+' locations shown';
 }
 async function start(){
  renderVenues();seasonNote();
- $('venueRegion').addEventListener('change',renderVenues);
- $('venueType').addEventListener('change',renderVenues);
+ $('venueRegion').addEventListener('change',function(){showAllVenues=false;renderVenues();});
+ $('venueType').addEventListener('change',function(){showAllVenues=false;renderVenues();});
+ $('toggleAllVenues').addEventListener('click',function(){showAllVenues=!showAllVenues;renderVenues();});
  $('speciesPicker').addEventListener('change',seasonNote);
  $('sitePicker').addEventListener('change',function(){selectSite(this.value);});
  $('refreshWeather').addEventListener('click',loadSite);
@@ -180,6 +200,7 @@ async function start(){
   $('seasonPhase').textContent='Weather unavailable';$('mapFallback').hidden=false;
   $('regionalBoard').innerHTML='<p class="evidence">Could not load statewide locations.</p>';
   $('forecastDays').innerHTML='<p class="evidence">Live weather unavailable.</p>';
+  if(window.MapleSapCharts)window.MapleSapCharts.render([], 'UNAVAILABLE', 'Michigan');
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
