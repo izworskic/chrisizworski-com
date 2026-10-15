@@ -27,9 +27,9 @@ test('map and graph respond to day selection and preserve keyboard operation',()
  const map=read('public/assets/michigan-ski-map.js');
  const d=read('public/assets/michigan-ski-decision.js');
  const board=read('public/assets/michigan-ski.js');
- for(const k of ['snowChart(day)','selectedForecast(day)','snow-chart-row','ski-day-bar','addEventListener(\\'keydown\\''])assert.ok(map.includes(k),k);
+ for(const k of ['snowChart(day)','selectedForecast(day)','snow-chart-row','ski-day-bar',"addEventListener('keydown'"])assert.ok(map.includes(k),k);
  assert.ok(map.includes("document.getElementById('ski-day')?.addEventListener('change',render)"));
- assert.ok(d.includes('offSeason&&S.goal===\\'powder\\'?[]:candidates()'));
+ assert.ok(d.includes("offSeason&&S.goal==='powder'?[]:candidates()"));
  assert.match(d,/function childTicket\(\)\{return null/);
  assert.ok(board.includes('hill-extra'));
  assert.ok(board.includes("document.dispatchEvent(new CustomEvent('michigan-ski:data'"));
