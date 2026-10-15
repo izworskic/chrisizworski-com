@@ -33,6 +33,12 @@ Other independent place descriptions:
 
 The original real-GIS query run is https://github.com/izworskic/chrisizworski-com/actions/runs/38818672200; every GIS query returned, but the initial study failed its validation gate **correctly** because the GLAHF polygon disagreed with two unverified assumptions. Those assumptions have now been corrected; the current workflow repeats all 14 live source checks and its tests. This is a scientific correction, not an environment failure.
 
+## Verified second source pass
+
+After correcting two contradicted assumptions rather than forcing the GIS to fit the model, the [second real GLAHF test run #38819009460](https://github.com/izworskic/chrisizworski-com/actions/runs/38819009460) **passed all 14 point classifications** and the original full Node/Python research tests. This verifies the stored 14-point snapshot against remote geographic data rather than accepting a hand-drawn illustration.
+
+The NOAA sampling script `capture-fixed-wave-cycle.py` now performs an **offline, source-stamped historical GIS preflight** against that snapshot before it makes its NOAA request. If the independent water classification of the actual 500m research cell changes to land, its coordinate drifts, or someone silently promotes the research geometry into a surveyed normal, the capture refuses to run. It still does not turn any cell into a surf report.
+
 ## Code
 
 - `scripts/rockhounding/validate-grand-marais-water-side.py`: no-key, bounded ArcGIS REST source-point intersections; explicit model-cell comparisons; retry/fail closed. Saves source-stamped response JSON as a GitHub Actions artifact.
