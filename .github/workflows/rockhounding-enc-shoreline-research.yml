@@ -29,7 +29,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run rockhounding safety and evidence regression suite
+      - name: Run rockhounding safety, ENC orientation, and public research-page regression suite
         run: node --test tests/rockhounding*.test.js
       - name: Run Python geometry and NOAA source integrity tests
         run: |
