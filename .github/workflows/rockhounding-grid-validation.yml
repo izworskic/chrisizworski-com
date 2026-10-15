@@ -19,7 +19,7 @@ jobs:
   validate-wet-cells:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Third research run checks nearest valid wet height cells outside masked shoreline neighbors.
+    # Fourth study: join four wave fields on one fixed northern open-lake candidate cell.
     steps:
       - name: Checkout research branch
         uses: actions/checkout@v4
