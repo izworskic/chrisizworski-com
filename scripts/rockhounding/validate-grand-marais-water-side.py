@@ -31,13 +31,13 @@ POINTS=[
  ("agate_south_650m","grand-marais-agate","FAR_BEHIND_BEACH_LAND",46.67015,-85.9853,"LAND"),
  ("agate_500m_wave_candidate","grand-marais-agate","NOAA_500M_WET_CELL",46.6800,-85.984978,"WATER"),
  ("agate_2p5km_north_candidate","grand-marais-agate","NOAA_2P5KM_OPEN_SIDE_CANDIDATE",46.688341,-85.976613,"WATER"),
- ("agate_2p5km_south_nearest","grand-marais-agate","REJECTED_HARBOR_SIDE_2P5KM",46.667276,-85.978659,"WATER"),
+ ("agate_2p5km_south_nearest","grand-marais-agate","REJECTED_SOUTH_OF_AGATE_GIS_LAND_MODEL_DISAGREEMENT",46.667276,-85.978659,"LAND"),
  ("bayshore_east_750m","grand-marais-harbor","HARBOR_EAST_WATER",46.6719,-85.9741,"WATER"),
  ("bayshore_east_1100m","grand-marais-harbor","EAST_OPEN_WATER_UNVERIFIED_HARBOR_ROUTE",46.6719,-85.9695,"WATER"),
  ("bayshore_west_500m","grand-marais-harbor","BEHIND_HARBOR_LAND",46.6719,-85.9904,"LAND"),
  ("bayshore_west_850m","grand-marais-harbor","FAR_BEHIND_HARBOR_LAND",46.6719,-85.9950,"LAND"),
  ("bayshore_500m_wave_candidate","grand-marais-harbor","NOAA_500M_NEARBY_MODEL_CELL",46.673,-85.974978,"WATER"),
- ("bayshore_north_500m","grand-marais-harbor","INNER_WATER_CONTEXT_NOT_SURF",46.6764,-85.9839,"WATER"),
+ ("bayshore_north_500m","grand-marais-harbor","HARBOR_NORTH_GIS_LAND_CROSS_CHECK",46.6764,-85.9839,"LAND"),
  ("bayshore_south_500m","grand-marais-harbor","SOUTH_LAND_CONTEXT",46.6674,-85.9839,"LAND"),
 ]
 
