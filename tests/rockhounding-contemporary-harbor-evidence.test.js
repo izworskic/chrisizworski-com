@@ -1,6 +1,7 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const register=require('../data/rockhounding/grand-marais-contemporary-source-register-2026-10-15.json');
+const liveVerified=require('../data/rockhounding/grand-marais-usace-ehydro-survey-catalog-2026-10-15.json');
 const {validateSourceRegister,contemporaryHarborGate}=
  require('../lib/rockhounding/contemporary-harbor-evidence.cjs');
 function job(){
@@ -20,6 +21,16 @@ function catalog(jobs=[job()]){
  measuredHarborWaveObservationsAvailable:false,harborWaveTransmissionCalibrated:false,
  canPublishHarborSurf:false,canClaimNewStones:false,canPublishRockhoundingWindow:false};
 }
+test('frozen real USACE catalog confirms 10 jobs with July 2026 survey date, but no local waves',()=>{
+ assert.equal(liveVerified.matchingSurveyJobs.length,10);
+ assert.equal(liveVerified.matchingSurveyJobs[0].objectId,125722);
+ assert.equal(liveVerified.matchingSurveyJobs[0].surveyEndUTC,'2026-07-30');
+ const out=contemporaryHarborGate({catalog:liveVerified});
+ assert.equal(out.usaceCatalogFinding,'MATCHING_SURVEY_JOB_METADATA');
+ assert.equal(out.mostRecentSurveyEndUTC,'2026-07-30');
+ assert.equal(out.measuredHarborWaveHeightM,null);
+ assert.equal(out.canPublishVisitWindow,false);
+});
 test('missing eHydro catalog stays unknown rather than becoming a current observation',()=>{
  assert.equal(validateSourceRegister(),true);
  const g=contemporaryHarborGate();
