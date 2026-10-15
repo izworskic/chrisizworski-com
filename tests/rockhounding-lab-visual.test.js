@@ -45,3 +45,13 @@ test('research page labels the source-backed NNW chart normal and two piers with
  assert.match(html,/No device location, personal data/);
  assert.doesNotMatch(html,/guaranteed.*agate|harbor is safe/i);
 });
+
+test('historic harbor depth evidence is explicitly labeled as dated overlapping chart coverage, not current safe surf',()=>{
+ assert.match(html,/What NOAA actually charts beneath the harbor/);
+ assert.match(html,/Inner southwest harbor/);
+ assert.match(html,/Depth contours/);
+ assert.match(html,/2004–2020/);
+ assert.match(html,/record counts cannot be added together/);
+ assert.match(html,/cannot establish current harbor depths, navigable clearance, wave shelter/);
+ assert.doesNotMatch(html,/safe for swimming today|guaranteed agates after storms/i);
+});
