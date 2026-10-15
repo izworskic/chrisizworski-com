@@ -11,15 +11,15 @@ const today='2026-10-14';
 // License + authors verified against each Wikimedia Commons file's source page on 2026-10-15.
 // Do not replace images with generic stock or an unlicensed resort marketing photo.
 const PHOTO_LIBRARY=Object.freeze({
- 'boyne-mountain':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Boyne_Mountain.JPG/640px-Boyne_Mountain.JPG',
+ 'boyne-mountain':{url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Boyne_Mountain.JPG/1280px-Boyne_Mountain.JPG',
   source:'https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG',
   credit:'American Eagle',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
   place:'Boyne Mountain',subject:'Six-person chairlift at Boyne Mountain',year:2009,width:640,height:480},
- 'crystal-mountain':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Crystal_Mountain_-_Cheers_Chair.jpg/640px-Crystal_Mountain_-_Cheers_Chair.jpg',
+ 'crystal-mountain':{url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Crystal_Mountain_-_Cheers_Chair.jpg/1280px-Crystal_Mountain_-_Cheers_Chair.jpg',
   source:'https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg',
   credit:'Jhansonxi',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/',
   place:'Crystal Mountain',subject:'Cheers chairlift and ski trails at Crystal Mountain, Michigan',year:2010,width:640,height:480},
- 'caberfae-peaks':{url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Caberfae_Peaks.jpg/640px-Caberfae_Peaks.jpg',
+ 'caberfae-peaks':{url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Caberfae_Peaks.jpg/1280px-Caberfae_Peaks.jpg',
   source:'https://commons.wikimedia.org/wiki/File:Caberfae_Peaks.jpg',
   credit:'RomanKahler',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
   place:'Caberfae Peaks',subject:'Aerial view of Caberfae Peaks ski resort in Michigan',year:2017,width:640,height:360},
