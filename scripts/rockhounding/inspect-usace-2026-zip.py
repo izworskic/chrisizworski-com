@@ -64,22 +64,24 @@ def inspect_zip(raw):
     continue
    with archive.open(info) as stream:
     text=stream.read(MAX_TEXT_READ+1).decode("utf8","replace")
-   lines=text.splitlines()
    hits=[]
-   for idx,line in enumerate(lines):
-    if re.search(RESEARCH_RE,line,re.I):
-     # Source excerpt only: matching a keyword does NOT verify a geodetic datum.
-     hits.append({"sourceLine":idx+1,"excerpt":line.strip()[:220]})
-    if len(hits)>=38:break
+   # FGDC XML metadata is partly minified into a single long source line.
+   # Match useful original spans without truncating that entire line.
+   for m in re.finditer(RESEARCH_RE,text,re.I):
+    excerpt=re.sub(r"\s+"," ",text[max(0,m.start()-85):m.end()+165]).strip()
+    if not hits or excerpt!=hits[-1]["excerpt"]:
+     hits.append({"term":m.group(0).lower(),"excerpt":excerpt[:260]})
+    if len(hits)>=65:break
    snippets.append({"file":name,"textBytes":len(text),"relevantMetadataExcerpts":hits,
-                    "notAnEstablishedVerticalDatum":True})
+                    "matchedTextIsNotProofOfReconciledVerticalDatum":True})
   xyz_summaries=[]
   for name in xyz[:3]:
    info=archive.getinfo(name)
-   rows=[];invalid=0
+   parsed=0;invalid=0;first=[];low=[math.inf]*3;high=[-math.inf]*3
+   count_capped=False
    with archive.open(info) as stream:
     for i,line in enumerate(stream):
-     if i>=1500:break
+     if i>=150000:count_capped=True;break
      txt=line.decode("ascii","replace").strip()
      if not txt or txt.startswith(("#","!",";")):continue
      v=re.split(r"[,\s]+",txt)
@@ -87,14 +89,20 @@ def inspect_zip(raw):
       numbers=[float(x) for x in v[:3]]
       if len(numbers)<3 or not all(math.isfinite(x) for x in numbers):
        invalid+=1;continue
-      rows.append(numbers)
-     except (ValueError,TypeError): invalid+=1
+      parsed+=1
+      if len(first)<3:first.append(numbers)
+      for n in range(3):
+       low[n]=min(low[n],numbers[n]);high[n]=max(high[n],numbers[n])
+     except (ValueError,TypeError):invalid+=1
    xyz_summaries.append({"file":name,"uncompressedBytes":info.file_size,
-      "parsedFirstRows":len(rows),"skippedNonNumericRows":invalid,
-      "firstThreeNumericRows":rows[:3],
-      "first1500RowNumericColumnRanges":[[round(min(row[i] for row in rows),3),
-          round(max(row[i] for row in rows),3)] for i in range(3)] if rows else None,
-      "rowsNotGeoreferencedUntilHorizontalDatumAndUnitValidated":True,
+      "parsedNumericRows":parsed,"skippedNonNumericRows":invalid,
+      "recordScanWasCapped":count_capped,
+      "firstThreeNumericRows":first,
+      "rawStatePlaneFeetXYZRanges":[[round(low[i],3),round(high[i],3)]
+          for i in range(3)] if parsed else None,
+      "rawZIsElevationNotAHarborWaveObservation":True,
+      "horizontalCRSMetadataName":"NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet",
+      "horizontalCRSEquivalenceRequiresSourceWKTVerification":True,
       "zValuesNotInterpretedAsCurrentHarborDepth":True})
   result.update({"memberCount":len(entries),"totalUncompressedBytes":total,
     "manifest":[e for e in entries if not e["name"].lower().startswith("__macosx")][:180],
