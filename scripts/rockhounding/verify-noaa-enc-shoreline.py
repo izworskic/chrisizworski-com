@@ -61,8 +61,8 @@ def validated_features(data,ids,layer):
   ident=f.get('id')
   if ident not in ids or ident in seen:raise ValueError('Wrong NOAA feature ID')
   p=f.get('properties') or {}
-  if p.get('DSNM')!=SOURCE_CHART or p.get('SORDAT') not in ('201401','200402') or
-      'Chart 14962' not in str(p.get('SORIND')):
+  if (p.get('DSNM')!=SOURCE_CHART or p.get('SORDAT') not in ('201401','200402') or
+      'Chart 14962' not in str(p.get('SORIND'))):
    raise ValueError('NOAA ENC source chart/provenance changed')
   if layer==PIER_LAYER and p.get('CATSLC')!='pier':
    raise ValueError('Selected harbor structure not chart-classified as pier')
