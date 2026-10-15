@@ -70,10 +70,10 @@ test('buoy verification rejects relaxed timestamp tolerances and different cell 
  const a=mergeOffshoreModelIssues(null,model(),{nowISO:'2026-10-15T20:00:00Z'});
  assert.throws(()=>verifyAgainstBuoy(a,text(),{asOfISO:'2026-10-15T20:00:00Z',toleranceMinutes:90}),/Invalid comparison/);
  const next=structuredClone(model());
- next.issueAt=iso(1);next.cell={lat:47.5900,lon:-86.59,distanceKm:.86};
- next.modelRecords=[{issueAt:iso(1),validAt:iso(2),leadHours:1,phase:'MODEL_FORECAST',modelSignificantWaveHeightM:.5}];
+ next.issueAt=iso(2);next.cell={lat:47.5900,lon:-86.59,distanceKm:.86};
+ next.modelRecords=[{issueAt:iso(2),validAt:iso(6),leadHours:4,phase:'MODEL_FORECAST',modelSignificantWaveHeightM:.5}];
  const combined=mergeOffshoreModelIssues(a,next,{nowISO:'2026-10-15T20:00:00Z'});
- const report=verifyAgainstBuoy(combined,text(),{asOfISO:'2026-10-15T20:00:00Z'});
+ const report=verifyAgainstBuoy(combined,text([.3,.4,.7,.8,1,.9]),{asOfISO:'2026-10-15T20:00:00Z'});
  assert.equal(report.distinctModelCells.length,2);
  assert.equal(report.status,'MULTIPLE_MODEL_CELLS_NO_AGGREGATE_SKILL');
  assert.equal(report.metrics.maeM,null);
