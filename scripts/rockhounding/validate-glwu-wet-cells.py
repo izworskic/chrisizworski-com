@@ -15,6 +15,42 @@ spec=importlib.util.spec_from_file_location('rockhounding_glwu',MODULE)
 glwu=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(glwu)
 
+def field_diagnostics(path):
+    """Show first-wave-field nearest neighbors, even when full 4-field records cannot form."""
+    from eccodes import codes_grib_new_from_file,codes_grib_find_nearest,codes_get,codes_release
+    wanted={3:'HTSGW',4:'WVDIR',5:'WVHGT',6:'WVPER'}
+    counts={k:0 for k in wanted.values()}
+    preview={}
+    with open(path,'rb') as fp:
+        while True:
+            gid=codes_grib_new_from_file(fp)
+            if gid is None:break
+            try:
+                if int(codes_get(gid,'discipline'))!=10 or int(codes_get(gid,'parameterCategory'))!=0:
+                    continue
+                name=wanted.get(int(codes_get(gid,'parameterNumber')))
+                if name is None:continue
+                counts[name]+=1
+                if name in preview:continue
+                out=[]
+                for site in glwu.SITES:
+                    points=codes_grib_find_nearest(gid,site['lat'],site['lon'],npoints=4)
+                    neighbors=[]
+                    for v in points:
+                        num=float(v['value'])
+                        lat=float(v['lat'])
+                        lon=float(v['lon'])
+                        if lon>180:lon-=360
+                        neighbors.append({
+                          'lat':round(lat,6),'lon':round(lon,6),
+                          'km':round(glwu.km(site['lat'],site['lon'],lat,lon),3),
+                          'value':round(num,5) if abs(num)<1e10 else 'MISSING_OR_HUGE'
+                        })
+                    out.append({'siteId':site['id'],'nearest4':neighbors})
+                preview[name]=out
+            finally:codes_release(gid)
+    return {'fieldMessageCounts':counts,'firstMessageNearest4':preview}
+
 def diagnose_grid(day,cycle,grid):
     url=glwu.url_for(day,cycle,grid)
     with tempfile.TemporaryDirectory(prefix='rockhound-noaa-') as folder:
@@ -23,6 +59,7 @@ def diagnose_grid(day,cycle,grid):
             raw=glwu.retrieve(url)
             dest.write_bytes(raw)
             result=glwu.extract(dest,grid)
+            diagnostics=field_diagnostics(dest)
         except Exception as err:
             return {'grid':grid,'status':'SOURCE_OR_DECODE_FAILED',
                 'failureType':type(err).__name__,'reason':str(err)[:300],
@@ -51,7 +88,7 @@ def diagnose_grid(day,cycle,grid):
         'source':url,'decodedGribBytes':len(raw),'validCompleteWaveRows':len(arr),
         'sharedWetCellIds':sorted(shared),'sameCell':bool(shared),
         'bothSitesHaveWavePoints':all(s['validCompleteWaveRows']>0 for s in sites),
-        'sites':sites,'canPredictLocalSurf':False,
+        'sites':sites,'fieldDiagnostics':diagnostics,'canPredictLocalSurf':False,
         'warning':'Model point is not a beach surf report. A distinct 500m grid cell does not prove harbor shelter.'}
 
 def main():
