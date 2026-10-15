@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Michigan maple sap visual V2 — October 14, 2026
+
+- **Scope:** Upgrade `/michigan-maple-sap-run/` in its existing owning repo; no changes to NWS API, freeze/thaw scoring, canonical URL, creator ID, network advertisements or prior event records.
+- **Experience:** Public-domain Wikimedia-hosted maple photographs with on-page creator/provenance and explicit non-live, non-venue labels; photographic split hero, live NWS low/high/index SVG chart, honest labeled hypothetical freeze/thaw teaching graph when no current forecast exists, process explainer, two verified 2027 event timeline entries, and 23 sourced directory listings with compact historical-producer disclosures.
+- **Truth gates:** No 2027 producer visit claims for historical 2026 hosts; no fake forecast in October; no invented OPEN NOW. Automated checks cover chart source states, source-label persistence, images, 31-location UI selector and mobile presentation assets.
+- **Sources:** Dave Pape, public-domain file photographs of buckets and evaporator (Beaver Meadow Audubon Center, NY); Oven Fresh, public-domain traditional bucket photograph. Referenced photography is not of Michigan venues and not live. Wisconsin Bloom Tracker credited reference-photo pattern consulted.
+- **Cost and growth:** No new paid services. Live GSC, CTR, AdSense effect unknown; no gain claimed. Existing seasonal search title, metadata and Person identity preserved.
+- **Status at authoring:** Code committed to feature branch pending complete GitHub gate, Vercel preview and release verification.
+- **Exactly one next action:** Complete full repository gates and production page/API verification before claiming visual V2 live.
+
+
 ## Michigan maple sap forecast and sugarhouse guide — October 14, 2026
 
 - **Canonical:** https://chrisizworski.com/michigan-maple-sap-run/ — new state-wide spring decision tool on the existing website.
