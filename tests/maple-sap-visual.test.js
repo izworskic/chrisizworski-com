@@ -42,8 +42,17 @@ test('Visual page keeps provider-linked truth labels, crawlable content and sing
  assert.match(html,/id="sapForecastChart"/);assert.match(html,/id="chartState"/);
  assert.match(html,/id="venueRegion"/);assert.match(html,/id="venueType"/);
  assert.match(html,/id="forecastDays"/);assert.match(html,/id="regionalBoard"/);
- const forecast=html.slice(html.indexOf('id="forecast-tool"'),html.indexOf('class="decision-grid"'));
- assert.ok(forecast.indexOf('class="controls"')<forecast.indexOf('class="section-head"'),'Location controls must precede the auto-ad-eligible heading');
+ const forecast=html.slice(html.indexOf('id="forecast-tool"'));
+ const controls=forecast.indexOf('class="controls"');
+ const legacyHeading=forecast.indexOf('class="section-head"');
+ const integratedResult=forecast.indexOf('class="sap-field-board__result"');
+ assert.ok(controls>=0,'Location and tree controls must be present');
+ if(integratedResult>=0){
+   assert.ok(controls<integratedResult,'Unified maple field board must place controls before forecast result');
+   assert.ok(forecast.indexOf('id="forecast-heading"')<integratedResult,'Heading stays inside the controls-and-result field board');
+ }else{
+   assert.ok(legacyHeading>=0&&controls<legacyHeading,'Legacy maple layout keeps controls before the standalone heading');
+ }
  assert.match(html,/2027 confirmed|2027 dates confirmed/);
  assert.match(html,/Reference photo, not a live Michigan view/);
  assert.match(html,/Dave Pape, public domain/);
