@@ -126,6 +126,22 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 <p style="font-size:13px;color:#536b67">A new source-verified rolling archive retained 142 original readings from October 12–14, including one sustained elevated-wave episode (83 related measurements, not 83 separate storms). This offshore wave change is promising input for the future post-storm engine, <strong>not a validated collecting opportunity, a protected-harbor wave estimate, or a current shore hazard assessment</strong>.</p>
  <p style="font-size:12px;margin-bottom:0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">GLOS Grand Marais Spotter original data ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38826852138" target="_blank" rel="noopener noreferrer">Original source verification ↗</a></p>
 </section>
+<section class="panel pad" id="spotter-season-archive" aria-labelledby="spotter-season-title">
+  <div class="observedHead"><div class="subhead">
+    <h2 id="spotter-season-title">2026 Lake Superior storm history</h2>
+    <p>Research-only wave history from <strong>5,243 original Grand Marais Spotter readings across 111 UTC days</strong>, June 26 to October 14. These are open-lake measurements, not conditions at a collecting beach.</p>
+  </div><span class="pill">GLOS · historical research</span></div>
+  <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:15px 0">
+    <div><small>Original GLOS observations</small><b>5,243</b><small>Sixteen source-verified time windows</small></div>
+    <div><small>Elevated-wave episode groups</small><b>11</b><small>At least 48h separation needed for new groups</small></div>
+    <div><small>Episodes with enough measurements</small><b>8</b><small>Independently measured offshore, not rock finds</small></div>
+  </div>
+  <div style="min-width:0"><svg id="spotterSeasonChart" class="observedChart" viewBox="0 0 700 270" role="img" aria-label="Historical offshore maximum wave heights in 11 Grand Marais GLOS Spotter episode groups, July through October 2026"></svg></div>
+  <div id="spotterSeasonCaption" class="chartFooter" aria-live="polite">Loading actual archived source-stamped storm episode peaks. No missing measurements are interpolated.</div>
+  <p style="font-size:13px;color:#536b67;margin:14px 0 9px"><strong>Interpretation:</strong> An episode means related elevated buoy readings, not a separate meteorological storm. A peak, falling wave height, or 48-hour observation record does not establish beach safety, shoreline changes or fresh agates.</p>
+  <ol id="spotterSeasonEpisodes" style="padding-left:21px;font-size:13px;color:#4f6770" aria-label="Strongest qualified historical offshore wave episodes"><li>The historical event table is loading. No rock exposure is inferred.</li></ol>
+  <p style="font-size:12px;margin:12px 0 0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS measurements ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38833508075" target="_blank" rel="noopener noreferrer">112-day source audit ↗</a></p>
+</section>
 <section class="panel pad" id="historical-evidence" aria-labelledby="historical-title">
  <div class="observedHead"><div class="subhead">
   <h2 id="historical-title">Observed offshore wave events</h2>
@@ -345,6 +361,56 @@ render();
   [['Oct 12',lo],['Oct 13',lo+24*H],['Oct 14',lo+48*H]].forEach(([name,t])=>add('text',{x:xx(t),y:243,'font-size':11,fill:'#637e83','text-anchor':'middle'},name));
   cap.textContent='Measured GLOS offshore wave heights, October 12–14, 2026 UTC. Lines break for gaps over 90 minutes. Historical source became stale; this is not a current storm or rock exposure forecast.';
  }).catch(()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);cap.textContent='Original GLOS historical record unavailable; no wave values inferred.';});
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const svg=document.getElementById('spotterSeasonChart'),caption=document.getElementById('spotterSeasonCaption'),list=document.getElementById('spotterSeasonEpisodes');
+ if(!svg||!caption||!list)return;
+ const ns='http://www.w3.org/2000/svg';
+ const add=(tag,a,label)=>{const e=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,String(v)));if(label)e.textContent=label;svg.appendChild(e);return e;};
+ const labelDate=t=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(t));
+ fetch('/rockhounding-lab/glos-season-2026-research.json',{credentials:'same-origin'}).then(r=>{if(!r.ok)throw Error('Archive unavailable');return r.json()}).then(d=>{
+  if(d.schemaVersion!=='rockhounding-glos-season-2026-archived-storms-v1'||d.source!=='GLOS_SEAGULL_OBS_140_SPOT_1361'||
+   d.actualObservedWaveRecords!==5243||d.measuredElevatedEpisodeGroups!==11||
+   d.qualifyingMeasuredOffshoreEpisodes!==8||d.actualRockExposureFieldObservations!==0||
+   d.canPredictNewAgates!==false||d.canClaimSafeShore!==false||d.canPublishRockhoundingWindow!==false||
+   !Array.isArray(d.rows)||d.rows.length!==11)throw Error('Unverified research-only snapshot');
+  const rows=d.rows;
+  if(rows.some(x=>!Number.isFinite(Date.parse(x.peakObservedAt))||
+    !Number.isFinite(x.peakWaveHeightM)||x.peakWaveHeightM<0||x.peakWaveHeightM>18||
+    typeof x.qualifyingOffshoreEpisode!=='boolean'||x.measuredBeachStoneOutcomes!==0))
+   throw Error('Bad original episode provenance');
+  const max=Math.max(3,Math.ceil(Math.max(...rows.map(r=>r.peakWaveHeightM))));
+  for(let n=0;n<=max;n++){
+   const y=215-n/max*170;
+   add('line',{x1:51,y1:y,x2:674,y2:y,stroke:'#e0eae9'});
+   add('text',{x:42,y:y+4,'text-anchor':'end','font-size':11,fill:'#658087'},String(n));
+  }
+  add('text',{x:12,y:25,'font-size':11,fill:'#55707a'},'peak wave · m');
+  const w=38,gap=(612-rows.length*w)/(rows.length-1);
+  rows.forEach((e,i)=>{
+   const x=55+i*(w+gap),h=e.peakWaveHeightM/max*170,y=215-h;
+   const rect=add('rect',{x,y,width:w,height:h,rx:4,fill:e.qualifyingOffshoreEpisode?'#337d8b':'#a9bdc2',opacity:.95});
+   const title=document.createElementNS(ns,'title');
+   title.textContent=labelDate(e.peakObservedAt)+': '+e.peakWaveHeightM.toFixed(2)+' m observed offshore peak; '+(e.qualifyingOffshoreEpisode?'meets sample requirements':'too few source observations')+'. No beach-rock outcome.';
+   rect.appendChild(title);
+   add('text',{x:x+w/2,y:232,'font-size':10,fill:'#68818a','text-anchor':'middle'},new Date(e.peakObservedAt).getUTCMonth()+1+'/'+new Date(e.peakObservedAt).getUTCDate());
+  });
+  caption.textContent='Original 2026 GLOS Spotter episode maxima (meters), not breaking surf. Dark bars have sufficient within-episode sample coverage; pale bars are unqualified. Last measured record Oct 14, 2026; chart is not live.';
+  while(list.firstChild)list.removeChild(list.firstChild);
+  const strong=rows.filter(x=>x.qualifyingOffshoreEpisode).sort((a,b)=>b.peakWaveHeightM-a.peakWaveHeightM).slice(0,5);
+  strong.forEach(e=>{
+   const li=document.createElement('li');
+   const status=e.renewedAfterDrop?'waves rose again after initial decline':e.completed==='OBSERVED_THROUGH_48H_POST_EVENT'?'48h post-event observation coverage':'end unconfirmed';
+   li.textContent=labelDate(e.peakObservedAt)+' — '+e.peakWaveHeightM.toFixed(2)+' m offshore peak; '+status+'. No measured fresh-stone outcome.';
+   li.style.marginBottom='5px';list.appendChild(li);
+  });
+ }).catch(()=>{
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+  while(list.firstChild)list.removeChild(list.firstChild);
+  caption.textContent='Historical GLOS source unavailable. No episode magnitudes or collecting advice substituted.';
+ });
 })();
 </script>
 </body></html>
