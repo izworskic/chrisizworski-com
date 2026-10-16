@@ -7,6 +7,8 @@ on:
       - research/rockhounding-glos-season-backfill-20261015
     paths:
       - .github/workflows/rockhounding-glos-history-backfill.yml
+      - scripts/rockhounding/backfill-glos-spotter.cjs
+      - tests/rockhounding-glos-season-backfill.test.js
 
 permissions:
   contents: write
