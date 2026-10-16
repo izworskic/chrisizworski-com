@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "rockhounding-repeat-photo-audit-v1",
+  "reviewedUTC": "2026-10-16",
+  "siteId": "grand-marais-agate",
+  "availableOriginalPubliclyReusableHistoricalPhotos": 2,
+  "gpsAnchoredLicensed2026AgateBaseline": 1,
+  "archivalLandmarkPatternCandidates": 1,
+  "historicalOpenHorizonNegativeControls": 1,
+  "cameraMatchedBeforeAfterPairs": 0,
+  "dateMatchedPrePost2026WavePairs": 0,
+  "empiricallyVerifiedNewAgates": 0,
+  "outcomes": [
+    {
+      "pairId": "2014-cliff-to-2026-gps-beach",
+      "eligibility": "POSSIBLE_LANDSCAPE_LANDMARK_FAMILY_NO_COMMON_CAMERA_STATION",
+      "sourceBefore": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-grand-marais-superior-shoreline.jpg",
+      "sourceAfter": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "cameraSeparationMeters": null,
+      "beforeDay": "2014-05-31",
+      "afterDay": "2026-07-05",
+      "matchedStableGeometry": false,
+      "stormBracketingConfirmed": false,
+      "verifiedShorelineChange": false,
+      "canPublishVisitWindow": false
+    },
+    {
+      "pairId": "2014-horizon-to-2026-gps-beach",
+      "eligibility": "NO_REPEAT_VIEW_OPEN_HORIZON_CONTROL",
+      "sourceBefore": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-lake-superior-shoreline-to-the-horizon.jpg",
+      "sourceAfter": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "cameraSeparationMeters": null,
+      "beforeDay": "2014-05-31",
+      "afterDay": "2026-07-05",
+      "matchedStableGeometry": false,
+      "stormBracketingConfirmed": false,
+      "verifiedShorelineChange": false,
+      "canPublishVisitWindow": false
+    }
+  ],
+  "sourceImages": [
+    {
+      "id": "2014-05-31-grand-marais-cliff-shore",
+      "source": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-grand-marais-superior-shoreline.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Gfp-michigan-grand-marais-superior-shoreline.jpg/960px-Gfp-michigan-grand-marais-superior-shoreline.jpg",
+      "creator": "Yinan Chen",
+      "license": "PUBLIC_DOMAIN_DEDICATION",
+      "captureDay": "2014-05-31",
+      "siteGpsAvailable": false,
+      "lensMm": 55,
+      "rights": "Yinan Chen / Wikimedia Commons (public domain dedication)"
+    },
+    {
+      "id": "2014-05-31-grand-marais-horizon",
+      "source": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-lake-superior-shoreline-to-the-horizon.jpg",
+      "thumbnail": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Gfp-michigan-lake-superior-shoreline-to-the-horizon.jpg/960px-Gfp-michigan-lake-superior-shoreline-to-the-horizon.jpg",
+      "creator": "Yinan Chen",
+      "license": "PUBLIC_DOMAIN_DEDICATION",
+      "captureDay": "2014-05-31",
+      "siteGpsAvailable": false,
+      "lensMm": 18,
+      "rights": "Yinan Chen / Wikimedia Commons (public domain dedication)"
+    },
+    {
+      "id": "2026-07-05-agate-beach-gps",
+      "source": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Grand_Marais_Agate_Beach.jpg/960px-Grand_Marais_Agate_Beach.jpg",
+      "creator": "TCP04",
+      "license": "CC_BY_4_0",
+      "captureDay": "2026-07-05",
+      "siteGpsAvailable": true,
+      "lensMm": 78,
+      "rights": "TCP04 / Wikimedia Commons · CC BY 4.0"
+    }
+  ],
+  "canClaimShorelineChange": false,
+  "canClaimStormCausedChange": false,
+  "canPredictNewAgates": false,
+  "canPublishVisitWindow": false,
+  "canClaimSafeConditions": false,
+  "canInferRockExposureProbability": false
+}
