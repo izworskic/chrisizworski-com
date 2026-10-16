@@ -55,3 +55,11 @@ test('historic harbor depth evidence is explicitly labeled as dated overlapping 
  assert.match(html,/cannot establish current harbor depths, navigable clearance, wave shelter/);
  assert.doesNotMatch(html,/safe for swimming today|guaranteed agates after storms/i);
 });
+
+test('original USACE 2026 17,804 XYZ elevation rows are explicitly not portrayed as current beach depths',()=>{
+ assert.match(html,/17,804 numerical XYZ elevations/);
+ assert.match(html,/IGLD 1985/);
+ assert.match(html,/not current water depths/);
+ assert.match(html,/outside both Agate Beach and Bayshore Park research footprints/);
+ assert.match(html,/Neither beach has a validated wave or safety verdict/);
+});
