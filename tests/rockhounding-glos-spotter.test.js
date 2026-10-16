@@ -68,6 +68,9 @@ test('missing measurements, duplicate timestamp conflicts and changed physical u
  ]));
  assert.equal(x.rows.length,1);
  assert.equal(x.rejectedRows,1);
+ const blank=parseSpotterCSV(csv([sampleRow('2026-10-14T01:16:01Z','',321,3.6)]));
+ assert.equal(blank.rows.length,0);
+ assert.equal(blank.rejectedRows,1);
  assert.throws(()=>parseSpotterCSV(csv([
   sampleRow('2026-10-14T00:16:01Z',1,326,3.4),
   sampleRow('2026-10-14T00:16:01Z',2,326,3.4)
