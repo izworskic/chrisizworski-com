@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "rockhounding-commons-photo-review-inbox-v1",
+  "siteId": "grand-marais-agate",
+  "source": "WIKIMEDIA_COMMONS_ORIGINAL_CAMERA_GEOTAG_METADATA",
+  "lastSourceCheckUTC": null,
+  "reviewStatus": "RESEARCH_CANDIDATES_ONLY",
+  "sourceCameraLocationDoesNotProveAgateBeachView": true,
+  "uploadTimeIsNotOriginalCaptureTime": true,
+  "verifiedBeforeAfterStormPairs": 0,
+  "validatedShorelineChangeOutcomes": 0,
+  "verifiedFreshAgates": 0,
+  "canPredictNewAgates": false,
+  "canClaimSafeShore": false,
+  "canPublishVisitWindow": false,
+  "entries": []
+}
