@@ -1,0 +1,38 @@
+name: Rockhounding photo-free measured wave activity
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-measured-wave-activity-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: glos-original-archive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify independent offshore proxy calculation and safety boundaries
+        run: |
+          node --test tests/rockhounding-photo-free-wave-activity.test.js
+          node --test tests/rockhounding-photo-free-storm-pulse.test.js
+      - name: Calculate from all authentic archived Grand Marais buoy rows
+        env:
+          ROCKHOUNDING_EMIT_SOURCE_JSON: '1'
+        run: |
+          node scripts/rockhounding/build-photo-free-wave-activity.cjs \
+            --ledger glos-original-archive/data/rockhounding/spotter-observed-wave-ledger.json \
+            --out artifacts/photo-free-measured-wave-activity.json
+      - name: Retain source-derived activity comparison audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-photo-free-activity-research
+          path: artifacts/photo-free-measured-wave-activity.json
+          retention-days: 30
