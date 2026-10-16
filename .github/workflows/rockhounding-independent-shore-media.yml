@@ -19,7 +19,8 @@ jobs:
           node-version: '22'
       - name: Validate independent media metadata vs 2026 actual GLOS events
         run: |
-          node --test tests/rockhounding-shoreline-photo-evidence.test.js
+          node --test tests/rockhounding-shoreline-photo-evidence.test.js tests/rockhounding-shoreline-evidence-lab.test.js
+          node scripts/rockhounding/audit-shoreline-photo-evidence.cjs --check public/rockhounding-lab/shoreline-evidence-2026.json
           node --test tests/rockhounding-glos-season-visual.test.js tests/rockhounding-glos-event*.test.js
       - name: Audit all rockhounding science regressions and source provenance
         run: node --test tests/rockhounding*.test.js
