@@ -205,6 +205,19 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
  </details>
  <p style="font-size:12px;color:#5f7a81;margin:10px 0 0" id="repeatViewAuditText">Checking the local licensed-source comparison audit. No additional image matching or live-wave claims are supplied if it is unavailable.</p>
  <p style="font-size:12px;color:#59727a;margin:8px 0 0"><strong>Repeat-photo target, for future remotely sourced imagery:</strong> match the 2026 camera's position, identifiable bluffs/tree landmarks and view direction; verify both capture clocks, water level, lighting and wave runup. A historical landscape match cannot replace a storm-bracketing pair.</p>
+<details id="agate-camera-repeat-discovery" style="border:1px solid #d7e3e2;border-radius:12px;padding:13px 16px;margin:15px 0;background:#f6faf9">
+ <summary style="cursor:pointer;font-weight:700;color:#214a55">Can we compare the same shoreline view? <span style="font-weight:400;color:#697f84">Historical camera-location audit</span></summary>
+ <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:14px 0">
+  <div><small>Nearby geotagged Commons files</small><b id="agateCameraNearby">6</b><small>Within 2 km of Agate Beach</small></div>
+  <div><small>Two shore-labeled camera points</small><b id="agateCameraDistance">192 m apart</b><small>Far too different for a matched frame</small></div>
+  <div><small>Reviewed same-view before/after pairs</small><b id="agateCameraPairs">0</b><small>No certified beach sediment shift</small></div>
+ </div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+  <div><strong>October 5, 2016 · nearby Lake Superior shore</strong><p style="font-size:12px;margin:4px 0 0">Original camera geotag, CC BY-SA 2.0. A dated earlier lake-coast photograph, not the same surveyed viewpoint. <a href="https://commons.wikimedia.org/wiki/File:Lake_Superior_Coast_-_Grand_Marais,_Michigan_(31671044725).jpg" target="_blank" rel="noopener noreferrer">View original Wikimedia photo ↗</a></p></div>
+  <div><strong>July 5, 2026 · Agate Beach</strong><p style="font-size:12px;margin:4px 0 0">Original camera geotag, CC BY 4.0. Both sources have upload dates later than their original photo dates. <a href="https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg" target="_blank" rel="noopener noreferrer">View original Agate photo ↗</a></p></div>
+ </div>
+ <p id="agateCameraAuditCaption" style="font-size:12px;color:#617881;margin:12px 0 0">The source data were checked in October 2026. Neither photograph brackets a measured 2026 wave event from the same fixed camera location. Dated source ≠ documented exposed rocks.</p>
+</details>
 </section>
 <section class="panel pad" id="historical-evidence" aria-labelledby="historical-title">
  <div class="observedHead"><div class="subhead">
@@ -526,6 +539,31 @@ render();
     throw Error('Unverified repeat-photo registry');
   text.textContent='Original-source comparison checked October 16, 2026: 2 older licensed scenes, 1 geolocated 2026 Agate baseline, 1 possible geographic landmark family, and zero common-camera, storm-bracketing or new-stone exposure pairs. Research only.';
  }).catch(()=>{text.textContent='Repeat-view source audit unavailable; no shoreline-change, safe access or new-stone claims can be inferred.';});
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const count=document.getElementById('agateCameraNearby'),dist=document.getElementById('agateCameraDistance'),
+ pairs=document.getElementById('agateCameraPairs'),cap=document.getElementById('agateCameraAuditCaption');
+ if(!count||!dist||!pairs||!cap)return;
+ fetch('/rockhounding-lab/commons-geotagged-repeat-views-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Original dated camera source digest unavailable');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-grand-marais-repeat-photo-proximity-audit-v1'||
+   d.sourceNearbyFiles!==6||d.independentlyTaggedShoreCandidates!==2||
+   Math.abs(d.historicalCameraDistanceMeters-192.08)>.1||
+   d.camerasAreNotSameVantage!==true||
+   d.spatiallyAndTemporallyPotentialPairs?.length!==0||
+   d.sameVantageReviewedPairs!==0||d.verifiedStormToSedimentChanges!==0||
+   d.verifiedFreshAgates!==0||d.canPredictNewAgates!==false||
+   d.canClaimSafeConditions!==false||d.canPublishVisitWindow!==false)
+   throw Error('Unsafe original camera comparison');
+  count.textContent=d.sourceNearbyFiles;
+  dist.textContent=Math.round(d.historicalCameraDistanceMeters)+' m apart';
+  pairs.textContent=d.sameVantageReviewedPairs;
+  cap.textContent='Source-verified Wikimedia geosearch archive (October 2026): 6 independent geotagged files nearby, 2 shoreline-titled photos from 2016 and 2026, camera positions 192 m apart. No before/after source images from the same frame around any measured storm. Not current beach conditions.';
+ })
+ .catch(()=>{count.textContent='—';dist.textContent='Unverified';pairs.textContent='—';cap.textContent='Original geotag comparison unavailable. No shoreline change or rock exposure claims substituted.';});
 })();
 </script>
 </body></html>

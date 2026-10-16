@@ -1,0 +1,36 @@
+name: Rockhounding weekly Commons camera evidence discovery
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 11 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rockhounding-weekly-public-camera-metadata
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Assert source timestamps do not imply fresh stones or beach safety
+        run: |
+          node --test tests/rockhounding-commons-camera-discovery.test.js tests/rockhounding-commons-camera-watch.test.js
+      - name: One Wikimedia geotag metadata request to identify new Agate Beach photo candidates
+        run: node scripts/rockhounding/watch-commons-camera-sources.cjs --report artifacts/commons-camera-nearby-weekly-review.json
+      - name: Save review-only evidence of new original media
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-weekly-commons-camera-review
+          path: artifacts/commons-camera-nearby-weekly-review.json
+          retention-days: 30
+          if-no-files-found: warn
