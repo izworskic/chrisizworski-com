@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "rockhounding-grand-marais-shoreline-evidence-register-v1",
+  "reviewedOnUTC": "2026-10-16",
+  "studySite": "grand-marais-agate",
+  "siteGeometry": "data/rockhounding/grand-marais-research-footprints.geojson",
+  "studyPurpose": "Independently dated photos or media that might document the beach; original photos alone cannot prove storm-caused shoreline change or new agate exposure.",
+  "acquisitionConstraints": {
+    "noOnsiteVisitRequired": true,
+    "noUserGeneratedContentScrapingOrEmbedding": true,
+    "noRightsTransferImplied": true,
+    "noVisitorTimeExternalAPICalls": true,
+    "knownStableVantagePairs": 0,
+    "vettedBeforeAfterMorphologyChanges": 0,
+    "verifiedNewAgateExposures": 0
+  },
+  "publicClaims": {
+    "canPredictFreshAgates": false,
+    "canClaimRecentlyExposedRocks": false,
+    "canPublishVisitWindow": false,
+    "canClaimBeachSafety": false,
+    "canInferHarborWaves": false
+  },
+  "observations": [
+    {
+      "evidenceId": "commons-agate-beach-july-5-2026",
+      "siteId": "grand-marais-agate",
+      "sourceClass": "WIKIMEDIA_COMMONS",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "description": "Independently published Nikon D3400 Agate Beach photograph; page lists photo date July 5 2026 and GPS camera location.",
+      "authorCredit": "TCP04 / Wikimedia Commons",
+      "rights": "CC-BY-4.0; attribution and source/license link required for display",
+      "captureDateEvidence": "EXIF_DAY_WITH_UNKNOWN_LOCAL_TIMEZONE",
+      "captureWindowStartUTC": "2026-07-05T00:00:00Z",
+      "captureWindowEndUTC": "2026-07-06T00:00:00Z",
+      "publishedDateUTC": "2026-07-12",
+      "publicationDateEvidence": "WIKIMEDIA_FILE_HISTORY",
+      "photoGeo": {
+        "lat": 46.67519,
+        "lon": -85.98748,
+        "provenance": "WIKIMEDIA_CAMERA_POSITION"
+      },
+      "namedSiteVerifiedInCaption": true,
+      "sameFrameSceneKey": null,
+      "shorelineEdgeMeasured": false,
+      "fixedLandmarksAligned": false,
+      "imagePairManuallyReviewed": false,
+      "cameraViewDirectionDeg": null,
+      "reportedVisibleRockExposure": null,
+      "observedNewAgates": false,
+      "claimScope": "DATED_SITE_SCENE_BASELINE_ONLY"
+    },
+    {
+      "evidenceId": "flickr-agate-beach-july-4-2026",
+      "siteId": "grand-marais-agate",
+      "sourceClass": "FLICKR",
+      "sourceUrl": "https://www.flickr.com/photos/cowofchange/55385027738",
+      "description": "Public Flickr page labels Agate Beach, Grand Marais, photo taken July 4 2026, uploaded July 10.",
+      "authorCredit": "Cow of Change / Flickr",
+      "rights": "All rights reserved; link to source only, do not copy or embed",
+      "captureDateEvidence": "SOURCE_STATED_DAY_NO_GPS",
+      "captureWindowStartUTC": "2026-07-04T00:00:00Z",
+      "captureWindowEndUTC": "2026-07-05T00:00:00Z",
+      "publishedDateUTC": "2026-07-10",
+      "publicationDateEvidence": "FLICKR_UPLOAD_DAY",
+      "photoGeo": null,
+      "namedSiteVerifiedInCaption": true,
+      "sameFrameSceneKey": null,
+      "shorelineEdgeMeasured": false,
+      "fixedLandmarksAligned": false,
+      "imagePairManuallyReviewed": false,
+      "cameraViewDirectionDeg": null,
+      "reportedVisibleRockExposure": null,
+      "observedNewAgates": false,
+      "claimScope": "DATED_SITE_SCENE_BASELINE_ONLY"
+    },
+    {
+      "evidenceId": "reddit-agate-beach-july-24-2026-approx",
+      "siteId": "grand-marais-agate",
+      "sourceClass": "REDDIT_SELF_REPORTED_MEDIA",
+      "sourceUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+      "description": "July 26 2026 r/rockhounds post includes user statement 'Agate Beach, Grand Marais, Michigan two days ago' alongside video; exact original video metadata and fixed viewpoint not verified.",
+      "authorCredit": "Reddit contributor (handle deliberately not retained)",
+      "rights": "Unknown retained license; link to public post only, do not copy or embed",
+      "captureDateEvidence": "APPROXIMATE_DAY_FROM_JULY_26_RELATIVE_STATEMENT",
+      "captureWindowStartUTC": "2026-07-23T00:00:00Z",
+      "captureWindowEndUTC": "2026-07-26T00:00:00Z",
+      "publishedDateUTC": "2026-07-26",
+      "publicationDateEvidence": "REDDIT_POST_DATE",
+      "photoGeo": null,
+      "namedSiteVerifiedInCaption": true,
+      "sameFrameSceneKey": null,
+      "shorelineEdgeMeasured": false,
+      "fixedLandmarksAligned": false,
+      "imagePairManuallyReviewed": false,
+      "cameraViewDirectionDeg": null,
+      "reportedVisibleRockExposure": null,
+      "observedNewAgates": false,
+      "claimScope": "CANDIDATE_AFTER_EVENT_SCENE_UNCONFIRMED_TIME_AND_LOCATION"
+    }
+  ],
+  "evaluatedRemoteSources": [
+    {
+      "source": "Sentinel-2 multispectral imagery",
+      "primarySource": "https://www.usgs.gov/centers/eros/science/usgs-eros-archive-sentinel-2",
+      "documentedResolutionMeters": 10,
+      "minimumResolvableLooseStonesMeters": null,
+      "suitability": "BROAD_SHORELINE_WATERLINE_CONTEXT_ONLY",
+      "automaticallyValidatesPebbleExposure": false,
+      "limitation": "10 m pixels and variable waterline position cannot resolve new small cobbles or agates."
+    },
+    {
+      "source": "USDA NAIP aerial imagery",
+      "primarySource": "https://www.usgs.gov/faqs/how-often-orthoimagery-national-map-updated-and-what-are-acquisition-dates",
+      "documentedResolutionMeters": 1,
+      "typicalUpdateCadenceYears": 3,
+      "suitability": "LONG_TERM_SHORELINE_BASELINE_ONLY",
+      "automaticallyValidatesStormToStormChange": false,
+      "limitation": "Multi-year acquisitions, not dated before and after each offshore storm."
+    },
+    {
+      "source": "Grand Marais Michigan Chamber webcams",
+      "primarySource": "https://grandmaraismichigan.com/webcams/",
+      "suitability": "HARBOR_AND_STREET_CONTEXT_NOT_VERIFIED_AGATE_SHORELINE_VIEW",
+      "automaticallyValidatesAgateChanges": false,
+      "historicalCaptureArchiveVerified": false,
+      "limitation": "Chamber identifies Bay View, Marina View and North Street View; no comparable archived pre/post Agate beach framing established."
+    }
+  ]
+}

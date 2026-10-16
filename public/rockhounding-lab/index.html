@@ -142,6 +142,38 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <ol id="spotterSeasonEpisodes" style="padding-left:21px;font-size:13px;color:#4f6770" aria-label="Strongest qualified historical offshore wave episodes"><li>The historical event table is loading. No rock exposure is inferred.</li></ol>
   <p style="font-size:12px;margin:12px 0 0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS measurements ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38833508075" target="_blank" rel="noopener noreferrer">112-day source audit ↗</a></p>
 </section>
+<section class="panel pad" id="shoreline-observation-evidence" aria-labelledby="shoreline-observation-title">
+ <div class="observedHead"><div class="subhead">
+  <h2 id="shoreline-observation-title">Did the storm change the actual beach?</h2>
+  <p>Independent dated photographs are the missing piece. We can now document a real Agate Beach scene and investigate a later report, but <strong>we cannot yet verify new stones were exposed by a particular storm.</strong></p>
+ </div><span class="pill">Shoreline evidence · research only</span></div>
+ <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:14px 0 19px">
+  <div><small>Independently dated beach media</small><b id="shoreEvidenceScenes">3</b><small>July 2026 source records</small></div>
+  <div><small>Possible storm-to-photo date links</small><b id="shoreEvidenceCandidates">1</b><small>Capture time and viewpoint unverified</small></div>
+  <div><small>Verified same-vantage change pairs</small><b id="shoreEvidenceVerified">0</b><small>No measured new-agate exposure</small></div>
+ </div>
+ <div class="two" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start">
+  <figure style="margin:0;min-width:0">
+   <a href="https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg" target="_blank" rel="noopener noreferrer" aria-label="See original July 5, 2026 Agate Beach source photograph">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Grand_Marais_Agate_Beach.jpg/960px-Grand_Marais_Agate_Beach.jpg" alt="Dated July 5, 2026 Agate Beach photo looking along Lake Superior shoreline; independently documented single scene, not storm before and after" loading="lazy" decoding="async" width="960" height="640" style="display:block;width:100%;height:auto;max-height:290px;object-fit:cover;border:1px solid #dbe7e4;border-radius:11px">
+   </a>
+   <figcaption style="font-size:11px;color:#5c777d;margin-top:7px">Agate Beach · July 5, 2026. Photo: <a href="https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg" target="_blank" rel="noopener noreferrer">TCP04 / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Published camera GPS; original photo clock timezone not confirmed.</figcaption>
+  </figure>
+  <div style="min-width:0">
+   <h3 style="font:500 19px Georgia,serif;margin:0 0 12px;color:#214b58">What the evidence actually shows</h3>
+   <div class="infoPanel" style="padding:14px">
+    <div style="display:grid;gap:12px">
+     <div><strong>July 4–5 · before</strong><small>Two independent Agate Beach photos from <a href="https://www.flickr.com/photos/cowofchange/55385027738" target="_blank" rel="noopener noreferrer">Flickr</a> and <a href="https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>. Too old and not same-camera registered to serve as a July 21 storm baseline.</small></div>
+     <div><strong>July 21–22 · measured lake disturbance</strong><small>The Grand Marais Spotter recorded a <strong>1.62 m offshore peak</strong> July 21 at 23:46 UTC. Wave height is not a measurement of beach sediment movement.</small></div>
+     <div><strong>Approximately July 24 · possible later beach media</strong><small>A <a href="https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/" target="_blank" rel="noopener noreferrer">July 26 public post</a> described Agate Beach two days earlier. The precise capture timestamp, GPS, exact shoreline segment, and comparable camera framing are unverified.</small></div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="reviewBanner" style="margin:17px 0 12px"><strong>Current conclusion:</strong>&nbsp; One tentative post-event media date, but <strong>zero validated before/after shoreline-change pairs</strong> and zero verified newly exposed agates. We will not transform a photo date or general satellite pixel into a collecting probability.</div>
+ <p id="shorelineObservationProof" style="font-size:12px;color:#617981;margin:0">Source-audit registry: independent photo metadata, exact GLOS July event timestamps, unreviewed OSM pilot geometry, and separate marine hazard controls. Loading local verification summary.</p>
+ <p style="font-size:12px;margin:9px 0 0"><a href="https://www.usgs.gov/centers/eros/science/usgs-eros-archive-sentinel-2" target="_blank" rel="noopener noreferrer">Why 10 m satellite images cannot resolve new pebbles ↗</a> · <a href="https://www.usgs.gov/faqs/how-often-orthoimagery-national-map-updated-and-what-are-acquisition-dates" target="_blank" rel="noopener noreferrer">Why NAIP cannot capture every storm ↗</a></p>
+</section>
 <section class="panel pad" id="historical-evidence" aria-labelledby="historical-title">
  <div class="observedHead"><div class="subhead">
   <h2 id="historical-title">Observed offshore wave events</h2>
@@ -410,6 +442,33 @@ render();
   while(svg.firstChild)svg.removeChild(svg.firstChild);
   while(list.firstChild)list.removeChild(list.firstChild);
   caption.textContent='Historical GLOS source unavailable. No episode magnitudes or collecting advice substituted.';
+ });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const ids={scenes:document.getElementById('shoreEvidenceScenes'),
+  candidates:document.getElementById('shoreEvidenceCandidates'),
+  verified:document.getElementById('shoreEvidenceVerified'),
+  proof:document.getElementById('shorelineObservationProof')};
+ fetch('/rockhounding-lab/shoreline-evidence-2026.json',{credentials:'same-origin'}).then(r=>{
+  if(!r.ok)throw Error('Dated source digest unavailable');return r.json();
+ }).then(d=>{
+  if(d.schemaVersion!=='rockhounding-shoreline-visual-crosscheck-2026-v1'||
+   d.independentDatedBeachMediaSources!==3||d.geolocatedSingleScenes!==1||
+   d.episodesWithApproximatePostSceneCandidate!==1||
+   d.reviewedSameVantageBeforeAfterPairs!==0||d.observedBeachShorelineChanges!==0||
+   d.newlyExposedAgateRecords!==0||d.canPredictNewAgates!==false||
+   d.canClaimRecentlyExposedRocks!==false||d.canClaimBeachSafety!==false||
+   d.canPublishVisitWindow!==false||!Array.isArray(d.photoSources)||
+   d.photoSources.length!==3)throw Error('Unsafe or outdated media evidence');
+  ids.scenes.textContent=d.independentDatedBeachMediaSources;
+  ids.candidates.textContent=d.episodesWithApproximatePostSceneCandidate;
+  ids.verified.textContent=d.reviewedSameVantageBeforeAfterPairs;
+  ids.proof.textContent='Verified source inventory · 3 July 2026 dated media entries; 1 GPS-located single scene; 1 uncertain July 21 event follow-up; no comparable beach change or new agate measurements. This is dated 2026 research, not live conditions.';
+ }).catch(()=>{
+  ids.scenes.textContent='—';ids.candidates.textContent='—';ids.verified.textContent='—';
+  ids.proof.textContent='Independent research source audit unavailable. No shoreline-change or collecting opportunity claims are substituted.';
  });
 })();
 </script>
