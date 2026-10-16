@@ -1,0 +1,23 @@
+name: Rockhounding photo-free live conditions verification
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-live-photo-free-conditions-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test open-lake measured wave stages and independent real NWS hazard veto
+        run: node --test tests/rockhounding-live-photo-free-pulse.test.js
+      - name: Verify actual current original GLOS and NWS source availability, preserving missing-data status
+        run: node scripts/rockhounding/probe-live-photo-free-pulse.cjs
+      - name: Ensure all other rockhounding work still passes
+        run: node --test tests/rockhounding*.test.js
