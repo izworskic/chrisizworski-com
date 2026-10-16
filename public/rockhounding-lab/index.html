@@ -364,6 +364,25 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 <p style="font-size:13px;color:#536b67">A new source-verified rolling archive retained 142 original readings from October 12–14, including one sustained elevated-wave episode (83 related measurements, not 83 separate storms). This offshore wave change is promising input for the future post-storm engine, <strong>not a validated collecting opportunity, a protected-harbor wave estimate, or a current shore hazard assessment</strong>.</p>
  <p style="font-size:12px;margin-bottom:0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">GLOS Grand Marais Spotter original data ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38826852138" target="_blank" rel="noopener noreferrer">Original source verification ↗</a></p>
 </section>
+<section class="panel pad" id="photo-free-observed-storm-strength" aria-labelledby="photo-free-storm-title">
+ <div class="observedHead"><div class="subhead">
+  <h2 id="photo-free-storm-title">Which measured storms worked the lake hardest?</h2>
+  <p>Compare observed offshore wave activity using <strong>height, mean period, and sustained duration</strong> rather than just the tallest wave. <strong>No photographs needed.</strong> This ranks what the buoy measured—not agate discoveries or measured movement on the beach.</p>
+ </div><span class="pill">Actual measured waves · 2026 research</span></div>
+ <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:13px 0 17px">
+  <div><small>Original 2026 wave observations</small><b>5,291</b><small>GLOS SPOT-1361 · archived</small></div>
+  <div><small>Coverage-qualified episodes</small><b>8</b><small>11 original offshore episode groups</small></div>
+  <div><small>Independent measured pebble outcomes</small><b>0</b><small>Wave signal alone cannot verify agates</small></div>
+ </div>
+ <div class="reviewBanner"><strong>Historical source:</strong>&nbsp; Computed from original wave records available October 16, 2026 at 12:27 UTC. The buoy was <strong>stale</strong> and the independent NWS alert check was <strong>active</strong> at that research time. This is not a live shore-condition or safety clearance.</div>
+ <div style="min-width:0;overflow:hidden">
+  <svg id="photoFreeActivityChart" viewBox="0 0 700 360" role="img" aria-label="Ranked original 2026 Grand Marais offshore storm relative wave activity for eight measured events; higher means greater observed height, wave period and sampled duration, not better agate opportunities" style="display:block;width:100%;height:auto"></svg>
+ </div>
+ <p id="photoFreeActivityCaption" aria-live="polite" style="font-size:12px;color:#56717a;margin:12px 0 0">Checking source-stamped relative offshore wave observations…</p>
+ <p style="font-size:12px;color:#566f74;margin:12px 0 0"><strong>What the numbers mean:</strong> We integrate actual observations of significant wave height squared × observed mean wave period × measured elapsed hours. The output is a <em>relative wave-activity proxy</em>, not calibrated wave power or beach sediment movement. Gaps larger than 90 minutes are not filled; sparse episodes are not ranked. The 2014 charted shore direction is not a surveyed current wave-exposure factor.</p>
+ <p style="font-size:12px;color:#566f74;margin:8px 0 0"><strong>Why duration changes the ranking:</strong> The October 5 offshore peak reached 2.51 m, yet accumulated more measured wave activity over its episode than the October 12 event that peaked at 2.57 m. <strong>Neither result predicts exposed agates, safe access or protected Bayshore Park waves.</strong></p>
+ <p style="font-size:12px;margin:9px 0 0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original Grand Marais buoy ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38936042512" target="_blank" rel="noopener noreferrer">5,291-reading calculation and tests ↗</a></p>
+</section>
 <section class="panel pad" id="spotter-season-archive" aria-labelledby="spotter-season-title">
   <div class="observedHead"><div class="subhead">
     <h2 id="spotter-season-title">2026 Lake Superior storm history</h2>
@@ -1547,6 +1566,59 @@ render();
   ['qualityWaveRecords','qualityReplayCount','qualitySourcePct','qualityTrendPct'].forEach(id=>ids(id).textContent='—');
   ['qualityObsFill','qualityTrendFill'].forEach(id=>ids(id).style.width='0%');
   ids('qualitySourceDetail').textContent='Historical source-quality verification is unavailable. No wave, rock-exposure or beach safety conclusion is substituted.';
+ });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const chart=document.getElementById('photoFreeActivityChart');
+ const caption=document.getElementById('photoFreeActivityCaption');
+ if(!chart||!caption)return;
+ const NS='http://www.w3.org/2000/svg';
+ const add=(tag,attrs,label)=>{
+  const el=document.createElementNS(NS,tag);
+  for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));
+  if(label!==undefined)el.textContent=label;
+  chart.appendChild(el);return el;
+ };
+ fetch('/rockhounding-lab/photo-free-offshore-wave-activity-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Original offshore research unavailable');return r.json()})
+ .then(data=>{
+  if(data.schemaVersion!=='rockhounding-photo-free-offshore-wave-history-2026-v1'||
+   data.observedDataProvider!=='GLOS_SPOT1361_GRAND_MARAIS_OPEN_LAKE'||
+   data.sourceRows!==5291||data.originalEpisodeGroups!==11||
+   data.researchComparableEpisodes!==8||
+   data.sourceObservationStaleAtComputation!==true||
+   data.shoreSafetyCertified!==false||data.calibratedToAgateExposure!==false||
+   data.canPredictFreshAgates!==false||
+   data.canRecommendACollectingWindow!==false||
+   data.canInferBayshoreHarborSurf!==false||
+   !Array.isArray(data.sourcePeriodsAndPeaks)||data.sourcePeriodsAndPeaks.length!==11)
+   throw Error('Offshore source/safety provenance changed');
+  const events=data.sourcePeriodsAndPeaks.filter(e=>
+    e.status==='RESEARCH_COMPARABLE_OBSERVED_OFFSHORE_ACTIVITY'&&
+    Number.isFinite(e.observedWaveActivityProxy)&&e.observedWaveActivityProxy>0&&
+    Number.isFinite(Date.parse(e.observedPeakUTC))&&e.beachSedimentObserved===false&&
+    e.canPredictFreshAgates===false
+  ).sort((a,b)=>b.observedWaveActivityProxy-a.observedWaveActivityProxy);
+  if(events.length!==8)throw Error('Unverified episode sampling or shape');
+  const date=s=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(s));
+  const max=events[0].observedWaveActivityProxy;
+  add('text',{x:190,y:17,fill:'#587580','font-size':11},'Original offshore wave activity • relative 2026 comparison');
+  events.forEach((e,i)=>{
+    const y=29+i*39,h=22,w=430*e.observedWaveActivityProxy/max;
+    add('text',{x:174,y:y+16,fill:'#365862','font-size':12,'text-anchor':'end'},date(e.observedPeakUTC));
+    add('rect',{x:190,y,width:430,height:h,rx:4,fill:'#ecf2f1'});
+    const bar=add('rect',{x:190,y,width:w,height:h,rx:4,fill:i===0?'#95744d':'#397b8a'});
+    const title=document.createElementNS(NS,'title');
+    title.textContent=date(e.observedPeakUTC)+': wave peak '+e.offshorePeakM.toFixed(2)+' m; relative wave-activity proxy '+e.observedWaveActivityProxy.toFixed(1)+'; no observed beach sediment outcome.';
+    bar.appendChild(title);
+    add('text',{x:Math.min(635,202+w),y:y+16,'font-size':12,fill:'#3d6068'},String(Math.round(e.observedWaveActivityProxy)));
+  });
+  caption.textContent='Eight independently measured, coverage-qualified storm groups. The relative index uses actual source timestamps; unqualified or gappy groups are excluded. Last source computation: '+data.generatedFromOriginalDataAsOfUTC.replace('T',' ').slice(0,16)+' UTC. No photo, new-stone or safety model is implied.';
+ }).catch(()=>{
+  while(chart.firstChild)chart.removeChild(chart.firstChild);
+  caption.textContent='Original historic offshore activity comparison unavailable. No measured rock change or safe collecting claim can be inferred.';
  });
 })();
 </script>
