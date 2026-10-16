@@ -5,6 +5,7 @@ const {requestUrl,parseSpotterCSV}=require('../lib/rockhounding/glos-spotter.cjs
 const {assessAlerts,URLS}=require('../lib/rockhounding/nws-shore-hazards.cjs');
 const {analyzeObserved}=require('../lib/rockhounding/live-photo-free-pulse.cjs');
 const {rollingWaveTendency}=require('../lib/rockhounding/rolling-offshore-wave-tendency.cjs');
+const {memoryOfLastStorm}=require('../lib/rockhounding/seven-day-offshore-storm-memory.cjs');
 const {compareToBaseline}=require('../lib/rockhounding/offshore-activity-percentiles.cjs');
 const baseline=require('../data/rockhounding/spotter-2026-24h-offshore-reference.json');
 const {sourceURL,toRows,waterLevelContext}=require('../lib/rockhounding/noaa-marquette-water-level.cjs');
@@ -13,7 +14,7 @@ const UA='ChrisIzworskiRockhoundingWave/1.0 (https://chrisizworski.com/rockhound
 const H=3600000;
 const iso=ms=>new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');
 async function getGLOS(fetchFn,now){
- const url=requestUrl({startISO:iso(now-72*H),endISO:iso(now)});
+ const url=requestUrl({startISO:iso(now-7*24*H),endISO:iso(now)});
  const res=await fetchFn(url,{headers:{Accept:'text/csv','User-Agent':UA},
   signal:AbortSignal.timeout(8000)});
  if(!res?.ok)throw Error('Wave provider unavailable');
@@ -62,9 +63,11 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  const signal=analyzeObserved(parsed?.rows||[],{nowISO,hazardStatus});
  const waveTendency48h=rollingWaveTendency(parsed?.rows||[],{nowISO,hazardStatus});
  const offshoreSeasonalContext=compareToBaseline(waveTendency48h,{baseline,hazardStatus});
+ const sevenDayStormMemory=memoryOfLastStorm(parsed?.rows||[],{nowISO,hazardStatus});
  const result={
   ...signal,
   offshoreSeasonalContext,
+  sevenDayStormMemory,
   dataSourceAvailable:!!parsed,
   waveTendency48h,
   lakeSuperiorLevelContext:remoteLevel.status==='fulfilled'?remoteLevel.value:{
