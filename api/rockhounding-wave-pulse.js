@@ -8,6 +8,7 @@ const {rollingWaveTendency}=require('../lib/rockhounding/rolling-offshore-wave-t
 const {compareToBaseline}=require('../lib/rockhounding/offshore-activity-percentiles.cjs');
 const baseline=require('../data/rockhounding/spotter-2026-24h-offshore-reference.json');
 const {sourceURL,toRows,waterLevelContext}=require('../lib/rockhounding/noaa-marquette-water-level.cjs');
+const {conditionReading}=require('../lib/rockhounding/photo-free-condition-reading.cjs');
 const UA='ChrisIzworskiRockhoundingWave/1.0 (https://chrisizworski.com/rockhounding-lab/)';
 const H=3600000;
 const iso=ms=>new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');
@@ -61,7 +62,7 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  const signal=analyzeObserved(parsed?.rows||[],{nowISO,hazardStatus});
  const waveTendency48h=rollingWaveTendency(parsed?.rows||[],{nowISO,hazardStatus});
  const offshoreSeasonalContext=compareToBaseline(waveTendency48h,{baseline,hazardStatus});
- return {
+ const result={
   ...signal,
   offshoreSeasonalContext,
   dataSourceAvailable:!!parsed,
@@ -89,6 +90,7 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
   upstreamCostClass:'PUBLIC_NO_KEY_OBSERVATIONS_AND_NWS',
   provenance:'NO_PHOTOS_USED'
  };
+ return {...result,photoFreeConditionReading:conditionReading(result,{nowISO})};
 }
 async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
