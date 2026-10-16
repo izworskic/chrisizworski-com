@@ -81,7 +81,7 @@ test('API calls only source-constrained original GLOS wave fields and three offi
   throw Error('Unexpected provider URL '+url);
  };
  const result=await currentPulse({nowISO:now,fetchFn:f});
- assert.equal(urls.length,5);
+ assert.equal(urls.length,6);
  assert.equal(urls.filter(x=>x.includes('station=9099018')).length,1);
  assert.equal(result.lakeSuperiorLevelContext.status,'REMOTE_LAKE_LEVEL_OBSERVED_24H_CHANGE');
  assert.equal(result.lakeSuperiorLevelContext.measuredAtAgateBeach,false);
