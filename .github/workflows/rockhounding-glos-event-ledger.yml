@@ -7,6 +7,11 @@ on:
       - research/rockhounding-spotter-event-history-20261015
     paths:
       - .github/workflows/rockhounding-glos-event-ledger.yml
+      - lib/rockhounding/glos-spotter-event-ledger.cjs
+      - scripts/rockhounding/rolling-glos-spotter-events.cjs
+      - tests/rockhounding-glos-event-*.test.js
+      - public/rockhounding-lab/index.html
+      - public/rockhounding-lab/glos-spotter-oct2026.json
   # Scheduled from main only, four bounded original GLOS queries per day in season.
   # Do not poll while offshore Spotter is normally removed in midwinter.
   schedule:
@@ -42,7 +47,7 @@ jobs:
 
       - name: Verify storm episode, source integrity and NWS hazard gates
         run: |
-          node --test tests/rockhounding-glos-event*.test.js
+          node --test tests/rockhounding-glos-event*.test.js tests/rockhounding-lab-visual.test.js
           node --test tests/rockhounding-glos-spotter.test.js tests/rockhounding-nws-hazards.test.js
 
       - name: Append authentic original GLOS wave observations and separate NWS alert snapshot
