@@ -1,0 +1,24 @@
+name: Rockhounding independent post-storm shoreline image evidence
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-shoreline-imagery-evidence-20261015
+permissions:
+  contents: read
+jobs:
+  science:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify primary-source satellite scene catalog, dated photos and no-claim storm pairing
+        run: |
+          node --test tests/rockhounding-shoreline-imagery-evidence.test.js
+          node --test tests/rockhounding*.test.js
+      - name: Demonstrate actual 2026 pre/post research pair count (NOT measured beach changes)
+        run: |
+          node -e "const r=require('./lib/rockhounding/shoreline-photo-evidence.cjs').shoreChangeResearch(); console.log(JSON.stringify({pairCandidates:r.pairedResearchEvents,verifiedShorelineChanges:r.independentlyVerifiedBeachChanges,rockExposureScore:r.rockhoundingOpportunityScore,publish:false}))"
