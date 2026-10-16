@@ -17,6 +17,11 @@
       return new Intl.DateTimeFormat('en-US', {weekday: 'short', hour: 'numeric', timeZone: tz || 'America/Detroit'}).format(new Date(t * 1000));
     } catch (e) { return new Date(t * 1000).toLocaleString(); }
   }
+  function hourAt(t, tz) {
+    try { return +new Intl.DateTimeFormat('en-US', {hour: 'numeric', hourCycle: 'h23', timeZone: tz || 'America/Detroit'}).format(new Date(t * 1000)); }
+    catch (e) { return 12; }
+  }
+  function windowText(t, tz) { var h = hourAt(t, tz); return when(t, tz) + (h >= 19 || h < 7 ? ', so go at first light' : ''); }
   function clock(t, tz) {
     try { return new Intl.DateTimeFormat('en-US', {hour: 'numeric', minute: '2-digit', timeZone: tz || 'America/Detroit'}).format(new Date(t * 1000)); }
     catch (e) { return ''; }
@@ -55,7 +60,7 @@
     if (site.now) f.push(['Wind now', site.now.windMph + ' mph from the ' + (site.now.from || '?') + (site.now.gustMph ? ', gusts ' + site.now.gustMph : '')]);
     if (site.storm && site.storm.peakWindMph) f.push(['Strongest onshore blow', site.storm.peakWindMph + ' mph from the ' + site.storm.peakFrom + ', ' + when(site.storm.peakAt, tz)]);
     if (site.buoy) f.push(['Open-lake waves', site.buoy.wvhtFt + ' ft at buoy ' + site.buoy.id + ' (' + site.buoy.km + ' km)']);
-    if (site.nextWindow) f.push(['Next after-storm window', when(site.nextWindow.t, tz)]);
+    if (site.nextWindow) f.push(['Next after-storm window', windowText(site.nextWindow.t, tz)]);
     if (site.sunrise) f.push(['Sunrise', clock(site.sunrise, tz)]);
     card.querySelector('[data-facts]').innerHTML = f.map(function (p) { return '<div><dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]) + '</dd></div>'; }).join('');
     var notes = (site.alerts || []).map(function (a) {
@@ -96,7 +101,7 @@
     var tzOf = function (s) { return document.getElementById(s.id).getAttribute('data-tz'); };
     var upcoming = pool.filter(function (s) { return s.nextWindow && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; })
       .sort(function (a, b) { return a.nextWindow.t - b.nextWindow.t; })[0];
-    var windowLine = upcoming ? ' The next after-storm window opens around ' + esc(when(upcoming.nextWindow.t, tzOf(upcoming))) + ' at ' + link(upcoming) + '.' : '';
+    var windowLine = upcoming ? ' The next after-storm window opens around ' + esc(windowText(upcoming.nextWindow.t, tzOf(upcoming))) + ' at ' + link(upcoming) + '.' : '';
     var html, code;
     if (!pool.length) { html = 'No beach matches that filter.'; code = 'UNAVAILABLE'; }
     else if (go.length) {
