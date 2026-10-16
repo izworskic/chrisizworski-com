@@ -116,13 +116,14 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <h2 id="spotter-evidence-title">Measured waves near Grand Marais</h2>
   <p>A closer source than East Superior: GLOS Seagull Grand Marais Spotter <strong>SPOT-1361</strong>, operated by Superior Watershed Partnership. These are <strong>real offshore observations</strong>, not beach surf or predicted exposed stones.</p>
  </div><span class="pill">GLOS · archived observations</span></div>
- <div class="reviewBanner"><strong>Observation freshness:</strong>&nbsp; The verified 2026 source sample ended <strong>October 14 at 23:46 UTC</strong>. It was already stale at the October 15 research check. Missing or delayed observations cannot be interpreted as calm water.</div>
+ <div class="reviewBanner"><strong>Observation freshness:</strong>&nbsp; The original 2026 source sample ended <strong>October 14 at 23:46 UTC</strong>. It was stale at the October 15 research check. Storm completion remains unverified; missing or delayed observations cannot be interpreted as calm water.</div>
  <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:17px 0">
-  <div><small>Highest observed height in study window</small><b>1.57 m</b><small>Actual source readings, not Agate surf</small></div>
+  <div><small>Highest observed height in study window</small><b>2.57 m</b><small>Oct 12 · 14:46 UTC · not Agate surf</small></div>
   <div><small>Last observed height</small><b>0.95 m</b><small>2026-10-14 23:46 UTC</small></div>
   <div><small>Last observed wave-from direction</small><b>329°</b><small>Wave direction, not wind direction</small></div>
  </div>
- <p style="font-size:13px;color:#536b67">Independent GLOS data verification returned 144 original observation records from October 12–14. This offshore wave change is promising input for the future post-storm engine, <strong>not a validated collecting opportunity, a protected-harbor wave estimate, or a current shore hazard assessment</strong>.</p>
+ <div style="margin:16px 0;min-width:0"><svg id="spotterHistoryChart" class="observedChart" viewBox="0 0 700 270" role="img" aria-label="Actual offshore GLOS wave heights October 12 to 14, 2026"></svg><div class="chartFooter" id="spotterHistoryCaption" aria-live="polite">Loading dated original GLOS readings. No gaps are interpolated.</div></div>
+<p style="font-size:13px;color:#536b67">A new source-verified rolling archive retained 142 original readings from October 12–14, including one sustained elevated-wave episode (83 related measurements, not 83 separate storms). This offshore wave change is promising input for the future post-storm engine, <strong>not a validated collecting opportunity, a protected-harbor wave estimate, or a current shore hazard assessment</strong>.</p>
  <p style="font-size:12px;margin-bottom:0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">GLOS Grand Marais Spotter original data ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38826852138" target="_blank" rel="noopener noreferrer">Original source verification ↗</a></p>
 </section>
 <section class="panel pad" id="historical-evidence" aria-labelledby="historical-title">
@@ -320,6 +321,30 @@ render();
   els.coverage.textContent='Choose the simulation above to explore the interface, or consult NOAA directly.';
   els.caption.textContent='Historical chart unavailable; no values inferred.';
  });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const svg=document.getElementById('spotterHistoryChart'),cap=document.getElementById('spotterHistoryCaption');
+ if(!svg||!cap)return;
+ const NS='http://www.w3.org/2000/svg',H=3600000;
+ const add=(tag,attrs,label)=>{const el=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,String(v)));if(label)el.textContent=label;svg.appendChild(el);return el;};
+ fetch('/rockhounding-lab/glos-spotter-oct2026.json',{credentials:'same-origin'}).then(r=>{if(!r.ok)throw Error('Missing historical source');return r.json()}).then(d=>{
+  if(d.schemaVersion!=='grand-marais-glos-historical-visual-v1'||d.station!=='SPOT-1361'||!Array.isArray(d.samples)||d.samples.length!==142||d.completeness!=='SOURCE_WAS_STALE_STORM_END_NOT_VERIFIED')throw Error('Source provenance unverified');
+  const rows=d.samples.map(s=>({t:Date.parse(s.t),h:s.hM})).sort((a,b)=>a.t-b.t);
+  if(rows.some(s=>!Number.isFinite(s.t)||!Number.isFinite(s.h)||s.h<0||s.h>18)||rows.at(-1).t<=rows[0].t)throw Error('Invalid wave row');
+  const lo=rows[0].t,hi=rows.at(-1).t,max=Math.ceil((Math.max(...rows.map(r=>r.h))+.2)*2)/2;
+  const xx=t=>55+(t-lo)/(hi-lo)*610,yy=h=>213-h/max*170;
+  for(let n=0;n<=max;n+=.5){add('line',{x1:55,x2:665,y1:yy(n),y2:yy(n),stroke:'#e1eae9'});if(Number.isInteger(n))add('text',{x:41,y:yy(n)+4,'font-size':11,fill:'#687f85','text-anchor':'end'},String(n));}
+  add('text',{x:12,y:25,'font-size':11,fill:'#53727c'},'m · observed offshore');
+  let path='',prev=null;for(const row of rows){path+=(prev!==null&&row.t-prev<=1.5*H?'L':'M')+xx(row.t).toFixed(1)+','+yy(row.h).toFixed(1)+' ';prev=row.t;}
+  add('path',{d:path,fill:'none',stroke:'#287186','stroke-width':2.7,'stroke-linejoin':'round'});
+  const top=rows.reduce((a,b)=>a.h>=b.h?a:b);
+  add('circle',{cx:xx(top.t),cy:yy(top.h),r:5,fill:'#b18142',stroke:'#fff','stroke-width':2});
+  add('text',{x:Math.min(570,xx(top.t)+9),y:Math.max(31,yy(top.h)-12),'font-size':12,fill:'#946b36','font-weight':700},'2.57 m peak');
+  [['Oct 12',lo],['Oct 13',lo+24*H],['Oct 14',lo+48*H]].forEach(([name,t])=>add('text',{x:xx(t),y:243,'font-size':11,fill:'#637e83','text-anchor':'middle'},name));
+  cap.textContent='Measured GLOS offshore wave heights, October 12–14, 2026 UTC. Lines break for gaps over 90 minutes. Historical source became stale; this is not a current storm or rock exposure forecast.';
+ }).catch(()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);cap.textContent='Original GLOS historical record unavailable; no wave values inferred.';});
 })();
 </script>
 </body></html>
