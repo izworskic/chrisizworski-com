@@ -104,6 +104,11 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div class="pulseStat"><small>Measured last 48h peak</small><strong id="liveOffshorePeak">—</strong><span id="liveOffshorePeakDate">Source-stamped offshore reading</span></div>
   <div class="pulseStat"><small>NWS marine alert check</small><strong id="liveOffshoreHazards" style="font-size:20px;line-height:1.3">Checking</strong><span id="liveOffshoreAlertNote">Alerts checked separately from buoy waves</span></div>
  </div>
+ <div id="liveWaveTendencyPanel" class="infoPanel" style="margin:13px 0 15px;padding:14px 17px" aria-labelledby="liveWaveTendencyTitle">
+  <div class="chartTop"><strong id="liveWaveTendencyTitle" style="color:#204f5e;font-size:14px">Has offshore wave activity changed since yesterday?</strong><span style="font-size:11px;color:#607b80">Measured buoy height × mean period × time</span></div>
+  <div id="liveWaveTendencyLabel" role="status" aria-live="polite" style="color:#2e6371;font-size:20px;font-weight:750;margin:7px 0 4px">Checking two 24-hour windows…</div>
+  <p id="liveWaveTendencyDetail" style="font-size:12px;color:#536d73;margin:0">This is an observed offshore activity comparison, not wave power or measured movement of agates at the beach. Photographs are not required.</p>
+ </div>
  <div class="pulseStats" aria-label="Independent regional Lake Superior level context from NOAA Marquette Michigan" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:10px">
   <div class="pulseStat"><small>Lake Superior level · Marquette gauge</small><strong id="liveRemoteLakeLevel" style="font-size:23px">Checking</strong><span id="liveRemoteLakeAge">NOAA measured water elevation, IGLD 1985</span></div>
   <div class="pulseStat"><small>Measured change over 24 hours</small><strong id="liveRemoteLakeDelta" style="font-size:23px">—</strong><span>Remote lake-level context, not beach height</span></div>
@@ -1057,6 +1062,8 @@ render();
   explanation:byId('liveOffshoreExplanation'),details:byId('liveOffshoreDetails'),
   warnings:byId('liveOffshoreWarnings'),
   remoteLake:byId('liveRemoteLakeLevel'),remoteLakeAge:byId('liveRemoteLakeAge'),
+  waveTendency:byId('liveWaveTendencyLabel'),
+  waveTendencyDetail:byId('liveWaveTendencyDetail'),
   remoteLakeDelta:byId('liveRemoteLakeDelta'),
   remoteLakeExplanation:byId('liveRemoteLakeExplanation')};
  const labels={
@@ -1108,6 +1115,30 @@ render();
      throw Error('Original GLOS evidence validation unavailable');
    const age=r.latestMeasuredAtUTC?(Date.now()-Date.parse(r.latestMeasuredAtUTC))/3600000:null;
    const phase=age!==null&&age>3?'OFFSHORE_SENSOR_STALE':r.status;
+   const waveTrend=r.waveTendency48h;
+   const trendOK=waveTrend?.schemaVersion==='rockhounding-photo-free-48h-wave-tendency-v1'&&
+     waveTrend.source==='ORIGINAL_GLOS_SPOT1361_OFFSHORE_OBSERVATIONS'&&
+     waveTrend.photosRequired===false&&waveTrend.canForecastNewStones===false&&
+     waveTrend.canPublishVisitWindow===false&&waveTrend.canClaimBeachSafe===false&&
+     waveTrend.physicalWavePowerKWPerM===null&&waveTrend.probabilityFreshAgates===null;
+   const trendAge=waveTrend?.latestObservedUTC?(Date.now()-Date.parse(waveTrend.latestObservedUTC))/3600000:null;
+   const comparable=trendOK&&trendAge!==null&&trendAge>=-.1&&trendAge<=3&&
+     ['OBSERVED_WAVE_ACTIVITY_LOWER_VS_PRIOR_24H','OBSERVED_WAVE_ACTIVITY_HIGHER_VS_PRIOR_24H',
+      'OBSERVED_WAVE_ACTIVITY_SIMILAR_VS_PRIOR_24H'].includes(waveTrend.status)&&
+     Number.isFinite(waveTrend.changePercentVsPrior24h)&&
+     Array.isArray(waveTrend.comparedWindowCoveragePct)&&
+     waveTrend.comparedWindowCoveragePct.every(x=>Number.isFinite(x)&&x>=90);
+   if(comparable){
+    const delta=waveTrend.changePercentVsPrior24h;
+    refs.waveTendency.textContent=Math.abs(delta)<1?'Offshore wave activity roughly unchanged':
+       'Offshore wave activity '+(delta<0?'down ':'up ')+Math.abs(delta).toFixed(0)+'%';
+    refs.waveTendencyDetail.textContent='Compared with the preceding 24 hours, using original GLOS wave height, mean period and time with at least 90% measured coverage in both windows. '+(r.hazardStatus==='ACTIVE'?
+      'NWS marine warnings/advisories are active. ':'')+
+      'Not physical wave power, breaking surf, measured gravel movement, safe conditions or odds of finding agates.';
+   }else{
+    refs.waveTendency.textContent='48-hour comparison unavailable';
+    refs.waveTendencyDetail.textContent='Original buoy observations are stale, missing, or too gappy to compare two full 24-hour periods. No calm-water, beach-safety or rock-exposure inference was made.';
+   }
    const water=r.lakeSuperiorLevelContext;
    if(water?.stationId==='9099018'&&water?.gaugeMeaning==='REMOTE_LAKE_SUPERIOR_LEVEL_CONTEXT_ONLY'&&
       water?.measuredAtAgateBeach===false&&water?.canPredictNewAgates===false&&
@@ -1145,6 +1176,8 @@ render();
    draw(r.latest48hObservedSeries);
   }catch{
    refs.phase.textContent='Live data unavailable';
+   refs.waveTendency.textContent='48-hour comparison unavailable';
+   refs.waveTendencyDetail.textContent='Original measurements or weather verification unavailable. No offshore trend or safe shoreline inferred.';
    refs.explanation.textContent='The current buoy or weather source could not be verified. The historical chart below still contains measured observations; no current lake or beach conditions have been inferred.';
    refs.remoteLake.textContent='Level unavailable';
    refs.remoteLakeDelta.textContent='—';
