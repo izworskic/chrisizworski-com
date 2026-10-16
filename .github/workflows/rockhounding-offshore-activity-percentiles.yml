@@ -10,6 +10,9 @@ on:
       - lib/rockhounding/offshore-activity-percentiles.cjs
       - scripts/rockhounding/build-offshore-activity-percentiles.cjs
       - tests/rockhounding-offshore-activity-percentiles.test.js
+      - tests/rockhounding-seasonal-activity-ui.test.js
+      - api/rockhounding-wave-pulse.js
+      - public/rockhounding-lab/index.html
 
 permissions:
   contents: write
@@ -44,6 +47,10 @@ jobs:
           node scripts/rockhounding/build-offshore-activity-percentiles.cjs \
             --ledger original-gios-ledger/data/rockhounding/spotter-observed-wave-ledger.json \
             --out data/rockhounding/spotter-2026-24h-offshore-reference.json
+      - name: Verify reference and page/API wiring against real source data
+        run: |
+          node --test tests/rockhounding-seasonal-activity-ui.test.js
+          node --test tests/rockhounding-live-photo-free-ui.test.js tests/rockhounding-photo-free-48h-wave-ui.test.js
       - name: Commit static source-derived baseline onto research branch only
         run: |
           set -euo pipefail
