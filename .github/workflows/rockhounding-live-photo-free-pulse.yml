@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/rockhounding-live-photo-free-conditions-20261016
+      - feature/rockhounding-live-photo-free-integrated-20261016
 permissions:
   contents: read
 jobs:
