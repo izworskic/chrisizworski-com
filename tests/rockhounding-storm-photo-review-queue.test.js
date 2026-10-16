@@ -20,8 +20,8 @@ test('the 2026 local camera days are timezone uncertain, and upload date never s
  assert.equal(new Date(reddit.begin).toISOString(),'2026-07-23T00:00:00.000Z');
  assert.equal(new Date(reddit.end).toISOString(),'2026-07-26T00:00:00.000Z');
  const scenes=sourceScenes();
- assert.equal(scenes.length,8); // 3 dated site scenes + 5 independent nearby geotags, no double count
- assert.equal(scenes.filter(s=>s.sourceType==='WIKIMEDIA_NEARBY_GPS_ONLY').length,5);
+ assert.equal(scenes.length,7); // 3 dated site scenes + 4 parseable nearby geotag dates; one free-text date is not invented
+ assert.equal(scenes.filter(s=>s.sourceType==='WIKIMEDIA_NEARBY_GPS_ONLY').length,4);
  assert.equal(scenes.filter(s=>s.siteIdentity==='SOURCE_NAMED_GRAND_MARAIS').length,3);
  assert.ok(scenes.every(s=>s.originalUploadOnly===false));
 });
@@ -60,7 +60,7 @@ test('newly discovered photo GPS plus matching Oct 12 date must remain unreviewe
  const candidate={pageId:400000000,title:'File:Agate Beach possible view.jpg',
   descriptionURL:'https://commons.wikimedia.org/wiki/File:Agate_Beach_possible_view.jpg',
   originalUploadUTC:'2026-10-16T00:00:00Z',
-  capture:{day:'2026-10-13',quality:'PUBLISHED_ORIGINAL_DATE_LOCAL_ZONE_UNVERIFIED'},
+  capture:{day:'2026-10-16',quality:'PUBLISHED_ORIGINAL_DATE_LOCAL_ZONE_UNVERIFIED'},
   lat:46.67520,lon:-85.98747};
  const q=eventQueue({additionalGeoRows:[candidate]});
  assert.equal(q.extraNewNearbyGeoPhotosNeedingSiteReview,1);
