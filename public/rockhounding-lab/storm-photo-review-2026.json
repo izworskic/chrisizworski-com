@@ -1,0 +1,268 @@
+{
+  "schemaVersion": "rockhounding-grand-marais-storm-photo-triage-v1",
+  "referenceDateUTC": "2026-10-16",
+  "site": "grand-marais-agate",
+  "waveInput": "ORIGINAL_GLOS_SPOT1361_OFFSHORE_EPISODES",
+  "originalWaveRows": 5243,
+  "eligibleIndependentMeasuredOffshoreEpisodes": 8,
+  "sourceNamedGrandMaraisMedia": 3,
+  "nearbyCommonsGeotaggedFileCount": 6,
+  "extraNewNearbyGeoPhotosNeedingSiteReview": 0,
+  "eventsWithDatedNamedSiteMedia": 1,
+  "eventsWithUncertainPostScene": 1,
+  "matchedSameVantageBeforeAfterStormPairs": 0,
+  "measuredWaveAttributedSedimentChanges": 0,
+  "verifiedNewAgates": 0,
+  "wrongPlaceNameExample": {
+    "source": "https://www.reddit.com/r/Michigan/comments/1uuwj6n/agate_beach_upper_peninsula_just_before_sunset/",
+    "label": "Agate Beach, Stanton Township / Toivola, Houghton County, Michigan",
+    "originalPhotoDay": "2026-07-07",
+    "postedOn": "2026-07-13",
+    "siteId": "stanton-township-toivola-agate-beach",
+    "proof": "Poster clarified that this Agate Beach is in Stanton Township outside Toivola, Keweenaw region—not Grand Marais.",
+    "useAsGrandMaraisObservation": false,
+    "validForEventPairing": false
+  },
+  "outputIsResearchQueueNotFindProbability": true,
+  "stormCandidateWindows": [
+    {
+      "eventId": "SPOT1361-2026-10-12T14:46:01Z",
+      "firstElevatedUTC": "2026-10-08T01:16:01Z",
+      "lastElevatedUTC": "2026-10-14T22:46:01Z",
+      "observedOffshorePeakAtUTC": "2026-10-12T14:46:01Z",
+      "observedOffshorePeakM": 2.57,
+      "windowBefore": {
+        "startUTC": "2026-10-06T01:16:01.000Z",
+        "endUTC": "2026-10-08T01:16:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-10-14T22:46:01Z",
+        "endUTC": "2026-10-17T22:46:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-10-05T07:16:01Z",
+      "firstElevatedUTC": "2026-10-01T19:46:01Z",
+      "lastElevatedUTC": "2026-10-05T21:46:01Z",
+      "observedOffshorePeakAtUTC": "2026-10-05T07:16:01Z",
+      "observedOffshorePeakM": 2.51,
+      "windowBefore": {
+        "startUTC": "2026-09-29T19:46:01.000Z",
+        "endUTC": "2026-10-01T19:46:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-10-05T21:46:01Z",
+        "endUTC": "2026-10-08T21:46:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-08-23T22:16:01Z",
+      "firstElevatedUTC": "2026-08-23T00:46:01Z",
+      "lastElevatedUTC": "2026-08-24T21:46:01Z",
+      "observedOffshorePeakAtUTC": "2026-08-23T22:16:01Z",
+      "observedOffshorePeakM": 1.94,
+      "windowBefore": {
+        "startUTC": "2026-08-21T00:46:01.000Z",
+        "endUTC": "2026-08-23T00:46:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-08-24T21:46:01Z",
+        "endUTC": "2026-08-27T21:46:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-09-14T01:16:01Z",
+      "firstElevatedUTC": "2026-09-12T23:46:01Z",
+      "lastElevatedUTC": "2026-09-16T06:46:01Z",
+      "observedOffshorePeakAtUTC": "2026-09-14T01:16:01Z",
+      "observedOffshorePeakM": 1.94,
+      "windowBefore": {
+        "startUTC": "2026-09-10T23:46:01.000Z",
+        "endUTC": "2026-09-12T23:46:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-09-16T06:46:01Z",
+        "endUTC": "2026-09-19T06:46:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-09-09T22:16:01Z",
+      "firstElevatedUTC": "2026-09-09T21:16:01Z",
+      "lastElevatedUTC": "2026-09-10T07:16:01Z",
+      "observedOffshorePeakAtUTC": "2026-09-09T22:16:01Z",
+      "observedOffshorePeakM": 1.91,
+      "windowBefore": {
+        "startUTC": "2026-09-07T21:16:01.000Z",
+        "endUTC": "2026-09-09T21:16:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-09-10T07:16:01Z",
+        "endUTC": "2026-09-13T07:16:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-07-21T23:46:01Z",
+      "firstElevatedUTC": "2026-07-21T16:16:01Z",
+      "lastElevatedUTC": "2026-07-22T07:16:01Z",
+      "observedOffshorePeakAtUTC": "2026-07-21T23:46:01Z",
+      "observedOffshorePeakM": 1.62,
+      "windowBefore": {
+        "startUTC": "2026-07-19T16:16:01.000Z",
+        "endUTC": "2026-07-21T16:16:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-07-22T07:16:01Z",
+        "endUTC": "2026-07-25T07:16:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 1,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [
+        {
+          "id": "reddit-agate-beach-july-24-2026-approx",
+          "source": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+          "timeRole": "POSSIBLE_POST_WINDOW_OVERLAP_UNCERTAIN",
+          "sourceDatePrecision": "APPROXIMATE_DAY_FROM_JULY_26_RELATIVE_STATEMENT",
+          "agateSceneConfirmed": true,
+          "sameCameraAndLandmarksVerified": false,
+          "confirmsSedimentChange": false
+        }
+      ],
+      "blocker": "LACKS_CLOSE_PRE_STORM_BEACH_SCENE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-09-20T19:46:01Z",
+      "firstElevatedUTC": "2026-09-20T12:16:01Z",
+      "lastElevatedUTC": "2026-09-21T08:46:01Z",
+      "observedOffshorePeakAtUTC": "2026-09-20T19:46:01Z",
+      "observedOffshorePeakM": 1.58,
+      "windowBefore": {
+        "startUTC": "2026-09-18T12:16:01.000Z",
+        "endUTC": "2026-09-20T12:16:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-09-21T08:46:01Z",
+        "endUTC": "2026-09-24T08:46:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    },
+    {
+      "eventId": "SPOT1361-2026-08-27T04:46:01Z",
+      "firstElevatedUTC": "2026-08-27T04:46:01Z",
+      "lastElevatedUTC": "2026-08-27T17:16:01Z",
+      "observedOffshorePeakAtUTC": "2026-08-27T04:46:01Z",
+      "observedOffshorePeakM": 1.24,
+      "windowBefore": {
+        "startUTC": "2026-08-25T04:46:01.000Z",
+        "endUTC": "2026-08-27T04:46:01Z"
+      },
+      "windowAfter": {
+        "startUTC": "2026-08-27T17:16:01Z",
+        "endUTC": "2026-08-30T17:16:01.000Z"
+      },
+      "namedSitePreCandidates": 0,
+      "namedSitePostCandidates": 0,
+      "nearbyGeoOnlyNeedsSceneReview": 0,
+      "sourceCandidates": [],
+      "blocker": "NO_DATED_GRAND_MARAIS_SHORE_MEDIA_NEAR_THIS_EPISODE",
+      "independentlyVerifiedBeforeAfterPairs": 0,
+      "measuredShorelineChange": false,
+      "actualFreshAgatesObserved": false,
+      "canPredictNewAgates": false,
+      "canClaimExposedStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimSafeShore": false,
+      "calibratedToRockOutcomes": false
+    }
+  ],
+  "canPredictNewAgates": false,
+  "canClaimExposedStones": false,
+  "canPublishVisitWindow": false,
+  "canClaimSafeShore": false,
+  "calibratedToRockOutcomes": false
+}

@@ -142,6 +142,25 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <ol id="spotterSeasonEpisodes" style="padding-left:21px;font-size:13px;color:#4f6770" aria-label="Strongest qualified historical offshore wave episodes"><li>The historical event table is loading. No rock exposure is inferred.</li></ol>
   <p style="font-size:12px;margin:12px 0 0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS measurements ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38833508075" target="_blank" rel="noopener noreferrer">112-day source audit ↗</a></p>
 </section>
+<section class="panel pad" id="storm-photo-review-queue" aria-labelledby="storm-photo-review-title">
+ <div class="observedHead"><div class="subhead">
+  <h2 id="storm-photo-review-title">Which measured storms have matching beach photographs?</h2>
+  <p>An event-by-event review of <strong>eight real Grand Marais offshore wave episodes</strong>. Photo dates come from independent sources; this panel does not estimate exposed stones, safe shoreline conditions, or visit windows.</p>
+ </div><span class="pill">2026 source audit · photo matching</span></div>
+ <div class="observedStats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:14px 0 19px">
+  <div><small>Sampling-qualified offshore episodes</small><b>8</b><small>Measured GLOS buoy data, not forecasts</small></div>
+  <div><small>Possible dated post-scene links</small><b>1</b><small>July 21 wave event; capture time uncertain</small></div>
+  <div><small>Validated repeated camera pairs</small><b>0</b><small>No measured beach sediment outcome</small></div>
+ </div>
+ <div class="infoPanel" style="padding:14px;min-width:0">
+  <label for="stormPhotoSelect" style="font-size:13px;font-weight:750;display:block;margin-bottom:6px">Inspect a measured 2026 offshore wave event</label>
+  <select id="stormPhotoSelect" style="display:block;width:100%;max-width:100%;background:#fff;border:1px solid #b9cecf;border-radius:9px;padding:10px;color:#173947;font-size:14px" aria-describedby="stormPhotoStatus"><option value="">Source-stamped storm evidence loading…</option></select>
+  <div id="stormPhotoStatus" role="status" aria-live="polite" style="font-size:13px;color:#395a65;margin-top:12px">Source review only; no photo can certify a fresh-agate opportunity.</div>
+  <div id="stormPhotoEventDetails" style="font-size:13px;color:#536e74;margin-top:8px;min-width:0"></div>
+ </div>
+ <p style="font-size:12px;color:#59727a;margin:13px 0 0"><strong>Location trap:</strong> Another Agate Beach is near Toivola in <strong>Stanton Township</strong>. A <a href="https://www.reddit.com/r/Michigan/comments/1uuwj6n/agate_beach_upper_peninsula_just_before_sunset/" target="_blank" rel="noopener noreferrer">July 2026 photo</a> was explicitly identified there, <strong>not</strong> at Grand Marais. It is excluded from this evidence queue. Photos shot during a storm cannot be labeled “after.”</p>
+ <p style="font-size:12px;color:#59727a;margin:7px 0 0">Evidence audit uses existing publicly dated images and the archived <a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">GLOS Grand Marais Spotter</a> records. The existing weekly Wikimedia check reuses one bounded metadata request, not additional per-visitor calls.</p>
+</section>
 <section class="panel pad" id="shoreline-observation-evidence" aria-labelledby="shoreline-observation-title">
  <div class="observedHead"><div class="subhead">
   <h2 id="shoreline-observation-title">Did the storm change the actual beach?</h2>
@@ -564,6 +583,67 @@ render();
   cap.textContent='Source-verified Wikimedia geosearch archive (October 2026): 6 independent geotagged files nearby, 2 shoreline-titled photos from 2016 and 2026, camera positions 192 m apart. No before/after source images from the same frame around any measured storm. Not current beach conditions.';
  })
  .catch(()=>{count.textContent='—';dist.textContent='Unverified';pairs.textContent='—';cap.textContent='Original geotag comparison unavailable. No shoreline change or rock exposure claims substituted.';});
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const select=document.getElementById('stormPhotoSelect');
+ const status=document.getElementById('stormPhotoStatus');
+ const details=document.getElementById('stormPhotoEventDetails');
+ if(!select||!status||!details)return;
+ const date=t=>new Date(t).toLocaleString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+ const setDetails=(e)=>{
+  if(!e){status.textContent='Choose an observed offshore episode.';details.textContent='';return;}
+  status.textContent=e.blocker==='LACKS_CLOSE_PRE_STORM_BEACH_SCENE'?
+   'Possible later media exists, but no matching close pre-storm photograph. Original timing is uncertain.':
+   e.blocker==='UNREVIEWED_GPS_MEDIA_NOT_PROVEN_AGATE_VIEW'?
+   'Near-beach photo coordinates exist, but the source is not verified as an Agate Beach view.':
+   'No independently dated Grand Marais beach photograph found within the strict before/after research windows.';
+  while(details.firstChild)details.removeChild(details.firstChild);
+  const p=document.createElement('p');
+  p.textContent='Measured offshore wave peak: '+e.observedOffshorePeakM.toFixed(2)+' m, '+date(e.observedOffshorePeakAtUTC)+' UTC. Photo research windows (not safe access times): 48h before start, 72h after end.';
+  details.appendChild(p);
+  const n=document.createElement('p');
+  n.textContent='Candidate site scenes: '+e.namedSitePreCandidates+' before / '+e.namedSitePostCandidates+
+   ' after; verified same-camera change pairs: 0. These observations do not measure Agate Beach breaking surf or newly exposed agates.';
+  details.appendChild(n);
+  for(const c of e.sourceCandidates){
+   const line=document.createElement('p'),a=document.createElement('a');
+   a.href=c.source;a.target='_blank';a.rel='noopener noreferrer';
+   a.textContent='Open independently published candidate source';
+   line.appendChild(a);
+   const note=document.createElement('span');
+   note.textContent=' — '+c.timeRole.replaceAll('_',' ').toLowerCase()+'; no paired camera registration or sediment change.';
+   line.appendChild(note);details.appendChild(line);
+  }
+ };
+ fetch('/rockhounding-lab/storm-photo-review-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('dated storm photo audit unavailable');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-grand-marais-storm-photo-triage-v1'||
+   d.site!=='grand-marais-agate'||d.originalWaveRows!==5243||
+   d.eligibleIndependentMeasuredOffshoreEpisodes!==8||
+   d.eventsWithDatedNamedSiteMedia!==1||d.eventsWithUncertainPostScene!==1||
+   d.matchedSameVantageBeforeAfterStormPairs!==0||d.verifiedNewAgates!==0||
+   d.canPredictNewAgates!==false||d.canClaimSafeShore!==false||
+   d.canPublishVisitWindow!==false||!Array.isArray(d.stormCandidateWindows)||
+   d.stormCandidateWindows.length!==8||
+   d.wrongPlaceNameExample?.useAsGrandMaraisObservation!==false)
+    throw Error('Source research identity or safe-publication control changed');
+  select.replaceChildren();
+  d.stormCandidateWindows.forEach((e,i)=>{
+   const opt=document.createElement('option');
+   opt.value=String(i);
+   opt.textContent=date(e.observedOffshorePeakAtUTC)+' UTC · '+e.observedOffshorePeakM.toFixed(2)+' m offshore peak';
+   select.appendChild(opt);
+  });
+  select.addEventListener('change',()=>setDetails(d.stormCandidateWindows[Number(select.value)]));
+  select.value='0';setDetails(d.stormCandidateWindows[0]);
+ }).catch(()=>{
+  select.replaceChildren();const opt=document.createElement('option');opt.textContent='Research records unavailable';select.appendChild(opt);
+  status.textContent='Original storm/media source verification unavailable; no stone-exposure, current wave or safe-beach result is inferred.';
+  details.textContent='';
+ });
 })();
 </script>
 </body></html>

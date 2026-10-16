@@ -60,5 +60,29 @@ test('one full original-provider metadata query is sufficient; outages cannot fa
  assert.equal(calls,1);
  assert.equal(r.checkedAtUTC,'2026-10-16T14:00:00Z');
  assert.equal(r.unreviewedNewSourceCount,0);
+ assert.equal(r.stormPhotoResearch.sourceQualifiedOffshoreEvents,8);
+ assert.equal(r.stormPhotoResearch.priorNamedSitePotentialPhotoDateLinks,1);
+ assert.equal(r.stormPhotoResearch.newGeoPhotosNeedingHumanSceneReview,0);
+ assert.equal(r.stormPhotoResearch.stormEventsWithNewNearbyDatedMedia.length,0);
+ assert.equal(r.stormPhotoResearch.namedBeachCollisionFromToivolaExcluded,true);
+ assert.equal(r.stormPhotoResearch.canPublishVisitWindow,false);
  await assert.rejects(()=>watch({fetchFn:async()=>({ok:false,status:429})}),/429/);
+});
+
+test('one existing weekly source request also annotates UNREVIEWED during-storm dated geotags without converting them to after-storm changes',async()=>{
+ let calls=0;
+ const q=await watch({nowISO:'2026-10-16T16:00:00Z',fetchFn:async()=>{
+  calls++;
+  return {ok:true,status:200,text:async()=>JSON.stringify(provider({plus:true}))};
+ }});
+ assert.equal(calls,1);
+ assert.equal(q.unreviewedNewSourceCount,1);
+ assert.equal(q.stormPhotoResearch.newGeoPhotosNeedingHumanSceneReview,1);
+ assert.equal(q.stormPhotoResearch.stormEventsWithNewNearbyDatedMedia.length,1);
+ const photo=q.stormPhotoResearch.stormEventsWithNewNearbyDatedMedia[0].media[0];
+ assert.equal(photo.timeRole,'CAPTURE_INTERVAL_OVERLAPS_ACTIVE_OFFSHORE_EPISODE_NOT_POST');
+ assert.equal(photo.agateSceneConfirmed,false);
+ assert.equal(photo.confirmsSedimentChange,false);
+ assert.equal(q.stormPhotoResearch.calibratedAgateExposure,false);
+ assert.equal(q.stormPhotoResearch.retrospectivelyMeasuredSedimentChanges,0);
 });

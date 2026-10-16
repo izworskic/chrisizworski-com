@@ -1,0 +1,25 @@
+name: Rockhounding real storm photo evidence packets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-event-photo-packets-20261016
+permissions:
+  contents: read
+jobs:
+  packets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify observed 2026 offshore event-scoped media triage and wrong Agate Beach exclusion
+        run: |
+          node --test tests/rockhounding-storm-photo-review-queue.test.js tests/rockhounding-storm-photo-preview.test.js
+          node scripts/rockhounding/build-storm-photo-queue.cjs --verify public/rockhounding-lab/storm-photo-review-2026.json
+          node --test tests/rockhounding-commons-camera-watch.test.js tests/rockhounding-shoreline-photo-evidence.test.js
+      - name: Verify all prior rockhounding science and preview assertions
+        run: node --test tests/rockhounding*.test.js
