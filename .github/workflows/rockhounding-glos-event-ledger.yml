@@ -1,0 +1,81 @@
+name: Rockhounding rolling Grand Marais GLOS observed storm history
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-spotter-event-history-20261015
+    paths:
+      - .github/workflows/rockhounding-glos-event-ledger.yml
+      - lib/rockhounding/glos-spotter-event-ledger.cjs
+      - scripts/rockhounding/rolling-glos-spotter-events.cjs
+      - tests/rockhounding-glos-event-*.test.js
+      - public/rockhounding-lab/index.html
+      - public/rockhounding-lab/glos-spotter-oct2026.json
+  # Scheduled from main only, four bounded original GLOS queries per day in season.
+  # Do not poll while offshore Spotter is normally removed in midwinter.
+  schedule:
+    - cron: '15 1,7,13,19 * 3-12 *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-glos-spotter-durable-history
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out source (never modify main)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Check out dedicated observed-data branch
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: observed-history
+          persist-credentials: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify storm episode, source integrity and NWS hazard gates
+        run: |
+          node --test tests/rockhounding-glos-event*.test.js tests/rockhounding-lab-visual.test.js
+          node --test tests/rockhounding-glos-spotter.test.js tests/rockhounding-nws-hazards.test.js
+
+      - name: Append authentic original GLOS wave observations and separate NWS alert snapshot
+        run: |
+          node scripts/rockhounding/rolling-glos-spotter-events.cjs \
+            --ledger observed-history/data/rockhounding/spotter-observed-wave-ledger.json \
+            --report observed-history/data/rockhounding/spotter-offshore-event-research.json
+
+      - name: Persist results on research-data branch ONLY
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C observed-history config user.name "Rockhounding Research Bot"
+          git -C observed-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C observed-history add data/rockhounding/spotter-observed-wave-ledger.json data/rockhounding/spotter-offshore-event-research.json
+          if git -C observed-history diff --cached --quiet; then
+            echo "No source-stamped archive changes."
+          else
+            git -C observed-history commit -m "data(rockhounding): archive measured GLOS SPOT-1361 events"
+            git -C observed-history push origin HEAD:research/rockhounding-glos-observed-data
+          fi
+
+      - name: Retain a dated independent offshore research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-glos-spotter-rolling-storm-events
+          path: |
+            observed-history/data/rockhounding/spotter-offshore-event-research.json
+          if-no-files-found: warn
+          retention-days: 28
