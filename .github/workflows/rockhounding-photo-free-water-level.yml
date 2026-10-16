@@ -7,7 +7,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: rockhounding-photo-free-water-level-research
+  group: rockhounding-glos-spotter-durable-history
   cancel-in-progress: false
 jobs:
   verify:
@@ -27,7 +27,8 @@ jobs:
           node-version: '22'
       - name: Run no-photo measured-water and NWS physics gates
         run: |
-          node --test tests/rockhounding-photo-free-conditions.test.js
+          node --test tests/rockhounding-photo-free-conditions.test.js tests/rockhounding-photo-free-two-gauge-ui.test.js
+          node --test tests/rockhounding*.test.js
           node --test tests/rockhounding-glos-event-ledger.test.js tests/rockhounding-nws-hazards.test.js
       - name: Fetch official NOAA IGLD water levels at two distant context stations
         run: |
