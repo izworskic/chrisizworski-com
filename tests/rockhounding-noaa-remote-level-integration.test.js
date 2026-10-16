@@ -34,7 +34,7 @@ test('lake-level context enriches wave API without overriding source wave signal
   throw Error('unexpected source');
  };
  const x=await currentPulse({fetchFn,nowISO:NOW});
- assert.equal(urls.length,5);
+ assert.equal(urls.length,6);
  assert.equal(x.dataSourceAvailable,true);
  assert.equal(x.status,'LOWER_OFFSHORE_WAVE_ACTIVITY');
  assert.equal(x.hazardStatus,'CLEAR');
