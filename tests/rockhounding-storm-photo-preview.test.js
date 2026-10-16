@@ -1,0 +1,32 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const {eventQueue}=require('../lib/rockhounding/storm-photo-review-queue.cjs');
+const frozen=require('../public/rockhounding-lab/storm-photo-review-2026.json');
+const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
+test('eight genuine GLOS storm evidence packets remain exactly reproducible from independently dated shoreline sources',()=>{
+ assert.deepEqual(frozen,eventQueue());
+ assert.equal(frozen.eligibleIndependentMeasuredOffshoreEpisodes,8);
+ assert.equal(frozen.eventsWithUncertainPostScene,1);
+ assert.equal(frozen.matchedSameVantageBeforeAfterStormPairs,0);
+ assert.equal(frozen.measuredWaveAttributedSedimentChanges,0);
+ assert.equal(frozen.verifiedNewAgates,0);
+ assert.ok(frozen.stormCandidateWindows.every(e=>e.independentlyVerifiedBeforeAfterPairs===0));
+});
+test('interactive mobile-friendly 8-storm review shows data, linked candidate and wrong Toivola Agate Beach exclusion',()=>{
+ assert.match(html,/id="storm-photo-review-queue"/);
+ assert.match(html,/id="storm-photo-review-title"/);
+ assert.match(html,/id="stormPhotoSelect"/);
+ assert.match(html,/id="stormPhotoStatus"/);
+ assert.match(html,/id="stormPhotoEventDetails"/);
+ assert.match(html,/storm-photo-review-2026\.json/);
+ assert.match(html,/Eight real Grand Marais offshore wave episodes|eight real Grand Marais offshore wave episodes/);
+ assert.match(html,/Possible dated post-scene links/);
+ assert.match(html,/Stanton Township/);
+ assert.match(html,/Toivola/);
+ assert.match(html,/Photos shot during a storm cannot be labeled/);
+ assert.match(html,/newly exposed agates/);
+ assert.match(html,/canPublishVisitWindow!==false/);
+ assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
+ assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
+});
