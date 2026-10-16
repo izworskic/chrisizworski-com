@@ -37,7 +37,7 @@ test('photo visual is the actual geolocated 2026 Wikimedia scene with required C
  assert.match(html,/id="shoreEvidenceVerified"/);
  assert.match(html,/id="shorelineObservationProof"/);
  assert.match(html,/shoreline-evidence-2026\.json/);
- assert.match(html,/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
+ assert.match(html,/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
  assert.match(html,/TCP04 \/ Wikimedia Commons/);
  assert.match(html,/creativecommons\.org\/licenses\/by\/4\.0/);
  assert.match(html,/no comparable beach change or new agate measurements/);
