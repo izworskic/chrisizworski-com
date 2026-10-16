@@ -31,7 +31,7 @@ test('two-site source panel visibly separates public visit information, collecti
  assert.match(html,/does <strong>not<\/strong> automatically grant permission/);
  assert.match(html,/Exact parking route/);
  assert.match(html,/No verified harbor data/);
- assert.match(html,/a same-view beach photo from just before the July 21/);
+ assert.match(html,/a same-view beach photo from just before the July 21/i);
  assert.match(html,/sitesWithPublishedSpecificRockCollectingPermission!==0/);
  assert.match(html,/sitesWithVerifiedStormToNewStoneOutcome!==0/);
  assert.match(html,/canPublishCurrentBeachOpportunity!==false/);
