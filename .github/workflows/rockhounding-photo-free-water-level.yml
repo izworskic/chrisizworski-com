@@ -1,0 +1,54 @@
+name: Rockhounding no-photo measured Lake Superior water-level signal
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-photo-free-water-level-20261016
+permissions:
+  contents: write
+concurrency:
+  group: rockhounding-photo-free-water-level-research
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: observed-history
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run no-photo measured-water and NWS physics gates
+        run: |
+          node --test tests/rockhounding-photo-free-conditions.test.js
+          node --test tests/rockhounding-glos-event-ledger.test.js tests/rockhounding-nws-hazards.test.js
+      - name: Fetch official NOAA IGLD water levels at two distant context stations
+        run: |
+          node scripts/rockhounding/capture-photo-free-poststorm.cjs \
+            --ledger observed-history/data/rockhounding/spotter-observed-wave-ledger.json \
+            --out observed-history/data/rockhounding/photo-free-poststorm-signal.json
+      - name: Persist original-source research digest on separate data branch only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C observed-history config user.name "Rockhounding Research Bot"
+          git -C observed-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C observed-history add data/rockhounding/photo-free-poststorm-signal.json
+          if ! git -C observed-history diff --cached --quiet; then
+            git -C observed-history commit -m "data(rockhounding): source-stamped NOAA levels and GLOS photo-free wave activity"
+            git -C observed-history push origin HEAD:research/rockhounding-glos-observed-data
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rockhounding-photo-free-original-level-and-wave-research
+          path: observed-history/data/rockhounding/photo-free-poststorm-signal.json
+          retention-days: 30
+          if-no-files-found: warn
