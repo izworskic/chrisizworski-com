@@ -111,6 +111,16 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div class="pulseStat"><small>Measured last 48h peak</small><strong id="liveOffshorePeak">—</strong><span id="liveOffshorePeakDate">Source-stamped offshore reading</span></div>
   <div class="pulseStat"><small>NWS marine alert check</small><strong id="liveOffshoreHazards" style="font-size:20px;line-height:1.3">Checking</strong><span id="liveOffshoreAlertNote">Alerts checked separately from buoy waves</span></div>
  </div>
+ <div id="grandMaraisMeasuredWindPanel" class="infoPanel" style="padding:13px 17px;margin:13px 0 15px" aria-labelledby="grandMaraisMeasuredWindTitle">
+  <div class="chartTop"><strong id="grandMaraisMeasuredWindTitle" style="font-size:14px;color:#204f5e">What is the wind doing on shore?</strong><span style="font-size:11px;color:#607b80">Independent NWS Grand Marais anemometer · not wave-derived wind</span></div>
+  <div class="pulseStats" style="grid-template-columns:repeat(auto-fit,minmax(175px,1fr));margin:11px 0 7px">
+    <div class="pulseStat"><small>Measured wind speed</small><strong id="grandMaraisWindSpeed" style="font-size:23px">Checking</strong><span id="grandMaraisWindSourceAge">NDBC GRMM4 · original station observations</span></div>
+    <div class="pulseStat"><small>Local wind-from direction</small><strong id="grandMaraisWindDirection" style="font-size:23px">—</strong><span id="grandMaraisWindDirectionDetail">Compass degrees true north</span></div>
+    <div class="pulseStat"><small>Peak recent measured gust</small><strong id="grandMaraisWindGust" style="font-size:23px">—</strong><span>Recent 3-hour station record · meters/second</span></div>
+  </div>
+  <p id="grandMaraisWindWaveContext" style="font-size:12px;color:#536d74;margin:8px 0 0">GRMM4 reports actual wind but no measured wave heights. Offshore waves are independently observed by GLOS SPOT-1361. Wind and wave directions can differ because of swell and fetch.</p>
+  <p style="font-size:11px;color:#647f84;margin:7px 0 0"><a href="https://www.ndbc.noaa.gov/station_page.php?station=GRMM4" rel="noopener noreferrer" target="_blank">NOAA GRMM4 original station ↗</a> · A stronger or calmer measured wind is not a prediction of newly exposed stones or a beach safety clearance.</p>
+ </div>
  <div id="sevenDayStormMemoryPanel" class="infoPanel" aria-labelledby="sevenDayStormMemoryTitle" style="margin:13px 0 15px;padding:15px 17px">
   <div class="chartTop"><strong id="sevenDayStormMemoryTitle" style="color:#204f5e;font-size:14px">When was the last sustained offshore wave activity?</strong><span style="font-size:11px;color:#607b80">Up to 7 days · original Grand Marais buoy</span></div>
   <div id="sevenDayStormMemoryHeadline" role="status" aria-live="polite" style="font-size:20px;font-weight:750;color:#2e6371;margin:7px 0 4px">Checking seven-day wave measurements…</div>
@@ -1141,6 +1151,10 @@ render();
   alertNote:byId('liveOffshoreAlertNote'),caption:byId('liveOffshoreChartCaption'),
   explanation:byId('liveOffshoreExplanation'),details:byId('liveOffshoreDetails'),
   warnings:byId('liveOffshoreWarnings'),
+  windSpeed:byId('grandMaraisWindSpeed'),windDirection:byId('grandMaraisWindDirection'),
+  windGust:byId('grandMaraisWindGust'),windAge:byId('grandMaraisWindSourceAge'),
+  windDirectionDetail:byId('grandMaraisWindDirectionDetail'),
+  windWaveContext:byId('grandMaraisWindWaveContext'),
   remoteLake:byId('liveRemoteLakeLevel'),remoteLakeAge:byId('liveRemoteLakeAge'),
   stormMemoryHeadline:byId('sevenDayStormMemoryHeadline'),
   stormMemoryDetails:byId('sevenDayStormMemoryDetails'),
@@ -1359,6 +1373,36 @@ render();
      refs.seasonMeter.setAttribute('aria-valuenow','0');
      refs.seasonDetail.textContent='The latest buoy source is stale, interrupted, or lacks complete 24-hour observations. No seasonal wave percentile or safe-rockhounding inference is shown.';
    }
+   // Direct GRMM4 anemometer wind is NOT the GLOS Spotter's wave-estimated wind.
+   const wind=r.independentlyMeasuredGrandMaraisWind;
+   const verifiedWind=wind?.schemaVersion==='rockhounding-independent-grmm4-measured-wind-v1'&&
+     wind.stationId==='GRMM4'&&wind.ndbcWaveHeightAvailable===false&&
+     wind.windMeasurementIsNotBeachSurf===true&&wind.canClaimNewlyExposedStones===false&&
+     wind.canPublishVisitWindow===false&&wind.canClaimSafeBeach===false&&
+     wind.currentNWSAlertStatusNotReplaced===true&&
+     wind.sourceStatus==='OBSERVED_STATION_WIND_RECENT'&&
+     Number.isFinite(wind.latestObservedWindMps)&&
+     Number.isFinite(wind.latestObservedWindFromDeg)&&
+     wind.latestSourceAgeHours>=-.1&&wind.latestSourceAgeHours<=3;
+   if(verifiedWind){
+     refs.windSpeed.textContent=wind.latestObservedWindMps.toFixed(1)+' m/s';
+     refs.windDirection.textContent=Math.round(wind.latestObservedWindFromDeg)+'°';
+     refs.windGust.textContent=Number.isFinite(wind.peakObservedGustPast3hMps)?
+       wind.peakObservedGustPast3hMps.toFixed(1)+' m/s':'—';
+     refs.windAge.textContent='Last original GRMM4 wind reading '+fmt(wind.latestObservedAtUTC);
+     refs.windDirectionDetail.textContent='Direction wind comes from, degrees true north';
+     refs.windWaveContext.textContent=Number.isFinite(wind.waveFromVsLocalWindFromSeparationDeg)&&
+       wind.offshoreWaveAndLocalWindFresh===true?
+       'Local wind-from and offshore wave-from differ by '+wind.waveFromVsLocalWindFromSeparationDeg.toFixed(0)+
+       '°. Wind measured at GRMM4; offshore waves at SPOT-1361. Different directions can occur in swell and do not measure beach surf.':
+       'Local wind is measured independently of offshore waves. The wave buoy is stale, its direction is missing, or it cannot be compared right now.';
+   }else{
+     refs.windSpeed.textContent='Wind unavailable';refs.windDirection.textContent='—';
+     refs.windGust.textContent='—';
+     refs.windAge.textContent='GRMM4 observations missing, stale or insufficient';
+     refs.windDirectionDetail.textContent='No current local wind-from direction established';
+     refs.windWaveContext.textContent='The independent GRMM4 wind sensor has insufficient fresh observations. This does not mean calm winds, low waves or safe collecting.';
+   }
    const water=r.lakeSuperiorLevelContext;
    if(water?.stationId==='9099018'&&water?.gaugeMeaning==='REMOTE_LAKE_SUPERIOR_LEVEL_CONTEXT_ONLY'&&
       water?.measuredAtAgateBeach===false&&water?.canPredictNewAgates===false&&
@@ -1395,6 +1439,10 @@ render();
     r.hazardCaveat;
    draw(r.latest48hObservedSeries);
   }catch{
+   refs.windSpeed.textContent='Wind unavailable';refs.windDirection.textContent='—';
+   refs.windGust.textContent='—';refs.windAge.textContent='Original local wind measurement unavailable';
+   refs.windDirectionDetail.textContent='No current direction established';
+   refs.windWaveContext.textContent='GRMM4 or other research data could not be verified; no calm wind, wave or safe shoreline is assumed.';
    refs.conditionHeadline.textContent='Current offshore evidence unavailable';
    refs.conditionQuality.textContent='Source verification failed';
    refs.conditionDetail.textContent='Original buoy, NWS or API readings could not be verified. No beach-exposure or safe-visit decision is available.';
