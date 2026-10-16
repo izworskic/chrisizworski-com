@@ -111,6 +111,12 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div class="pulseStat"><small>Measured last 48h peak</small><strong id="liveOffshorePeak">—</strong><span id="liveOffshorePeakDate">Source-stamped offshore reading</span></div>
   <div class="pulseStat"><small>NWS marine alert check</small><strong id="liveOffshoreHazards" style="font-size:20px;line-height:1.3">Checking</strong><span id="liveOffshoreAlertNote">Alerts checked separately from buoy waves</span></div>
  </div>
+ <div id="sevenDayStormMemoryPanel" class="infoPanel" aria-labelledby="sevenDayStormMemoryTitle" style="margin:13px 0 15px;padding:15px 17px">
+  <div class="chartTop"><strong id="sevenDayStormMemoryTitle" style="color:#204f5e;font-size:14px">When was the last sustained offshore wave activity?</strong><span style="font-size:11px;color:#607b80">Up to 7 days · original Grand Marais buoy</span></div>
+  <div id="sevenDayStormMemoryHeadline" role="status" aria-live="polite" style="font-size:20px;font-weight:750;color:#2e6371;margin:7px 0 4px">Checking seven-day wave measurements…</div>
+  <p id="sevenDayStormMemoryDetails" style="font-size:12px;color:#526c72;margin:0 0 7px">This is the timing of measured offshore waves, not a prediction of fresh agates, safe access or beach wave height.</p>
+  <p id="sevenDayStormMemorySource" style="font-size:11px;color:#607b80;margin:0">No photographs required; source gaps cannot be treated as calm conditions.</p>
+ </div>
  <div id="liveWaveTendencyPanel" class="infoPanel" style="margin:13px 0 15px;padding:14px 17px" aria-labelledby="liveWaveTendencyTitle">
   <div class="chartTop"><strong id="liveWaveTendencyTitle" style="color:#204f5e;font-size:14px">Has offshore wave activity changed since yesterday?</strong><span style="font-size:11px;color:#607b80">Measured buoy height × mean period × time</span></div>
   <div id="liveWaveTendencyLabel" role="status" aria-live="polite" style="color:#2e6371;font-size:20px;font-weight:750;margin:7px 0 4px">Checking two 24-hour windows…</div>
@@ -1084,6 +1090,9 @@ render();
   explanation:byId('liveOffshoreExplanation'),details:byId('liveOffshoreDetails'),
   warnings:byId('liveOffshoreWarnings'),
   remoteLake:byId('liveRemoteLakeLevel'),remoteLakeAge:byId('liveRemoteLakeAge'),
+  stormMemoryHeadline:byId('sevenDayStormMemoryHeadline'),
+  stormMemoryDetails:byId('sevenDayStormMemoryDetails'),
+  stormMemorySource:byId('sevenDayStormMemorySource'),
   waveTendency:byId('liveWaveTendencyLabel'),
   waveTendencyDetail:byId('liveWaveTendencyDetail'),
   seasonPercentile:byId('offshoreSeasonPercentileValue'),
@@ -1167,6 +1176,45 @@ render();
      (watch.alertStatus==='ACTIVE'?' NWS marine or shoreline warning/advisory currently active.':'');
    const age=r.latestMeasuredAtUTC?(Date.now()-Date.parse(r.latestMeasuredAtUTC))/3600000:null;
    const phase=age!==null&&age>3?'OFFSHORE_SENSOR_STALE':r.status;
+   const memory=r.sevenDayStormMemory;
+   const memoryOK=memory?.schemaVersion==='rockhounding-seven-day-observed-offshore-storm-memory-v1'&&
+     memory.source==='ORIGINAL_GLOS_SPOT1361_WAVE_MEASUREMENTS'&&
+     memory.stationId==='SPOT-1361'&&memory.lookbackDays===7&&
+     memory.canPredictNewAgates===false&&memory.canClaimBeachSafe===false&&
+     memory.canPublishVisitWindow===false&&memory.agateExposureProbability===null&&
+     memory.measuredAtAgateBeach===false&&memory.beachBreakingWaveHeightM===null&&
+     memory.hazardStatus===r.hazardStatus;
+   const memoryAge=memory?.newestObservedAtUTC?(Date.now()-Date.parse(memory.newestObservedAtUTC))/3600000:null;
+   if(memoryOK&&memoryAge!==null&&memoryAge>=-.1&&memoryAge<=3){
+     const e=memory.lastMeasuredEpisode;
+     const fmtTime=t=>new Date(t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit'});
+     if(e&&e.sampleQualified){
+       refs.stormMemoryHeadline.textContent=memory.status==='OBSERVED_OFFSHORE_EASING_18H'?
+         'Offshore waves remained lower after the last elevated spell':
+         memory.status==='OFFSHORE_ELEVATED_RECENTLY'?'Elevated offshore waves observed recently':
+         'Last elevated offshore wave spell recorded';
+       refs.stormMemoryDetails.textContent='Measured peak '+e.peakSignificantWaveHeightM.toFixed(2)+' m on '+
+        fmtTime(e.measuredPeakAtUTC)+' Michigan time; last elevated reading '+Math.round(e.hoursSinceLastElevated)+' hours ago. '+
+        (e.eighteenHourBelowResearchThresholdConfirmed?'At least 18 hours of uninterrupted below-threshold offshore samples. ':
+        'A sustained post-event decline is not confirmed by continuous source readings. ')+
+        'Does not establish breaking surf, new agates or safe access.';
+       refs.stormMemorySource.textContent='Source: original GLOS SPOT-1361 · '+memory.sourceSampleCount+
+         ' measured samples over up to 7 days · NWS alerts: '+r.hazardStatus.toLowerCase()+
+         '. One-meter wave bin is descriptive, not a transport or safety threshold.';
+     }else if(memory.status==='NO_ELEVATED_OFFSHORE_SAMPLES_IN_7D'){
+       refs.stormMemoryHeadline.textContent='No elevated buoy readings detected in this seven-day sample';
+       refs.stormMemoryDetails.textContent='A week of measurements without an elevated one-meter offshore sample is not proof of calm beach conditions or lack of rock movement.';
+       refs.stormMemorySource.textContent='Original GLOS buoy records · '+memory.sourceSampleCount+' source samples. No stone-exposure prediction.';
+     }else{
+       refs.stormMemoryHeadline.textContent='Seven-day storm-history interpretation limited';
+       refs.stormMemoryDetails.textContent='Recent source readings may be too short or interrupted to confirm an elevated offshore episode or its decline. No safe shoreline or new-stone claim.';
+       refs.stormMemorySource.textContent='Original buoy timing · '+memory.status.replaceAll('_',' ').toLowerCase();
+     }
+   }else{
+     refs.stormMemoryHeadline.textContent='Seven-day storm history unavailable';
+     refs.stormMemoryDetails.textContent='The original offshore station is delayed, missing or cannot be verified. No past storm ending, fresh stone or safe-access conclusion.';
+     refs.stormMemorySource.textContent='No reliable near-current GLOS source coverage; marine hazards checked separately.';
+   }
    const waveTrend=r.waveTendency48h;
    const trendOK=waveTrend?.schemaVersion==='rockhounding-photo-free-48h-wave-tendency-v1'&&
      waveTrend.source==='ORIGINAL_GLOS_SPOT1361_OFFSHORE_OBSERVATIONS'&&
@@ -1188,7 +1236,10 @@ render();
       'NWS marine warnings/advisories are active. ':'')+
       'Not physical wave power, breaking surf, measured gravel movement, safe conditions or odds of finding agates.';
    }else{
-    refs.waveTendency.textContent='48-hour comparison unavailable';
+    refs.stormMemoryHeadline.textContent='Seven-day storm history unavailable';
+   refs.stormMemoryDetails.textContent='No verified current offshore measurements; no storm-end or rock-exposure conclusion.';
+   refs.stormMemorySource.textContent='Marine safety and access must be checked independently.';
+   refs.waveTendency.textContent='48-hour comparison unavailable';
     refs.waveTendencyDetail.textContent='Original buoy observations are stale, missing, or too gappy to compare two full 24-hour periods. No calm-water, beach-safety or rock-exposure inference was made.';
    }
    const season=r.offshoreSeasonalContext;
