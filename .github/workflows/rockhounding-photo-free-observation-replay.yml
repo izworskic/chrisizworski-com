@@ -1,0 +1,43 @@
+name: Rockhounding photo-free actual-data signal replay
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-photo-free-observation-replay-20261016
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out authentic original observed wave archive
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: real-wave-archive
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify stale, missing, and actual source-only phase controls
+        run: node --test tests/rockhounding-photo-free-observation-replay.test.js
+      - name: Replay the photo-free environmental engine over source-dated 2026 checkpoints
+        run: |
+          node scripts/rockhounding/replay-photo-free-observations.cjs \
+            --ledger real-wave-archive/data/rockhounding/spotter-observed-wave-ledger.json \
+            --out artifacts/rockhounding-photo-free-source-replay-2026.json
+      - name: Run all existing rockhounding safety and visitor-preview gates
+        run: node --test tests/rockhounding*.test.js
+      - name: Preserve complete walk-forward source proof
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-marais-photo-free-observed-wave-backtest
+          path: artifacts/rockhounding-photo-free-source-replay-2026.json
+          retention-days: 30
+          if-no-files-found: warn
