@@ -90,6 +90,40 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 <div class="pills"><span class="pill">5,243 measured wave readings</span><span class="pill">Storm rise & recovery</span><span class="pill">Two shoreline settings</span></div>
 </div><div class="heroArt" role="img" aria-label="Stylized Lake Superior shoreline and stones, not a photograph"><span class="caption">Great Lakes / Shoreline</span><i class="stone"></i><i class="stone two"></i><i class="stone three"></i></div></div></div>
 <main id="main" class="wrap">
+<section class="panel pad" id="live-offshore-pulse" aria-labelledby="live-offshore-title">
+ <div class="photoFreeHead">
+  <div><span class="eyebrow">Near-current measurements · No photos required</span>
+   <h2 id="live-offshore-title">What's Lake Superior doing now?</h2>
+   <p>Actual open-lake waves north of Grand Marais, plus independently checked NWS marine warnings. This describes offshore conditions, not rock exposure or beach safety.</p>
+  </div>
+  <button type="button" id="liveOffshoreRefresh" style="align-self:start;border:1px solid #bfd5d6;border-radius:9px;padding:9px 14px;background:#f3faf8;color:#23596a;font-weight:700;font-size:13px">Refresh readings</button>
+ </div>
+ <div class="pulseStats" aria-label="Latest measured offshore wave and marine source report">
+  <div class="pulseStat"><small>Grand Marais buoy status</small><strong id="liveOffshorePhase" style="font-size:20px;line-height:1.3">Checking source</strong><span id="liveOffshoreAge">Original station timestamps</span></div>
+  <div class="pulseStat"><small>Last offshore wave height</small><strong id="liveOffshoreHeight">—</strong><span>Significant wave height · meters</span></div>
+  <div class="pulseStat"><small>Measured last 48h peak</small><strong id="liveOffshorePeak">—</strong><span id="liveOffshorePeakDate">Source-stamped offshore reading</span></div>
+  <div class="pulseStat"><small>NWS marine alert check</small><strong id="liveOffshoreHazards" style="font-size:20px;line-height:1.3">Checking</strong><span id="liveOffshoreAlertNote">Alerts checked separately from buoy waves</span></div>
+ </div>
+ <div class="pulseColumns">
+  <div class="pulseChartShell">
+   <div class="chartTop"><strong style="font-size:14px;color:#204f5e">Observed offshore wave trend</strong><span style="font-size:11px;color:#6a858a">Up to 48h of measured wave heights</span></div>
+   <svg id="liveOffshoreChart" viewBox="0 0 640 190" role="img" aria-label="Source-observed Lake Superior wave heights over the latest 48-hour sample, with gaps left unconnected"></svg>
+   <p class="pulseSummary" id="liveOffshoreChartCaption">Checking original Grand Marais Spotter observations. Gaps will not be filled.</p>
+  </div>
+  <div class="pulseChoice">
+   <strong style="display:block;font-size:14px;color:#204f5e;margin:0 0 10px">What the measurements mean</strong>
+   <div id="liveOffshoreExplanation" style="font-size:14px;line-height:1.65;color:#395f69" role="status" aria-live="polite">Checking whether recent measurements are available.</div>
+   <p class="pulseSummary" id="liveOffshoreDetails">Measured waves describe the open lake. The sheltered Bayshore Park harbor is not instrumented by this buoy.</p>
+   <div id="liveOffshoreWarnings" style="font-size:12px;color:#8a4a36;margin-top:12px"></div>
+  </div>
+ </div>
+ <div class="reviewBanner" style="margin-top:16px"><strong>What this does not claim:</strong> Offshore disturbance and wave decline can be detected without photos. Neither measurement proves fresh agates, wave height breaking on the beach, collecting permission, or a safe visit. Lower waves are not an all-clear.</div>
+ <div class="pulseLinks">
+  <a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS buoy measurements ↗</a>
+  <a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener noreferrer">NWS Marquette weather ↗</a>
+  <a href="https://api.weather.gov/alerts/active?zone=LSZ250" target="_blank" rel="noopener noreferrer">Current marine alerts ↗</a>
+ </div>
+</section>
 <section class="panel pad" id="photo-free-storm-pulse" aria-labelledby="photoFreeStormTitle">
  <div class="photoFreeHead">
   <div><span class="eyebrow">Observed lake conditions · Historical research</span>
@@ -1004,6 +1038,94 @@ render();
   explanation.textContent='No values, rock exposure estimates or safe-visit advice substituted.';
   bar.style.width='0%';all.replaceChildren();
  });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const byId=id=>document.getElementById(id);
+ const button=byId('liveOffshoreRefresh'),chart=byId('liveOffshoreChart');
+ if(!button||!chart)return;
+ const refs={phase:byId('liveOffshorePhase'),age:byId('liveOffshoreAge'),
+  height:byId('liveOffshoreHeight'),peak:byId('liveOffshorePeak'),
+  peakDate:byId('liveOffshorePeakDate'),hazards:byId('liveOffshoreHazards'),
+  alertNote:byId('liveOffshoreAlertNote'),caption:byId('liveOffshoreChartCaption'),
+  explanation:byId('liveOffshoreExplanation'),details:byId('liveOffshoreDetails'),
+  warnings:byId('liveOffshoreWarnings')};
+ const labels={
+  OFFSHORE_WAVES_REBUILDING:'Waves rebuilding',
+  OFFSHORE_WAVES_ELEVATED:'Waves elevated',
+  OFFSHORE_WAVES_EASING:'Waves easing',
+  RECENT_OFFSHORE_WAVE_ACTIVITY:'Recent wave activity',
+  LOWER_OFFSHORE_WAVE_ACTIVITY:'Lower offshore activity',
+  OFFSHORE_SENSOR_STALE:'Buoy data stale',
+  OFFSHORE_OBSERVATIONS_GAPPY:'Wave data incomplete',
+  NO_RECENT_WAVE_CONTEXT:'Recent data unavailable',
+  NO_OFFSHORE_SOURCE_OBSERVATIONS:'No wave observations',
+  OFFSHORE_SOURCE_UNAVAILABLE:'Source unavailable'
+ };
+ const fmt=t=>new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(t));
+ const ns='http://www.w3.org/2000/svg';
+ const add=(tag,attrs,label)=>{const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));if(label)e.textContent=label;chart.appendChild(e);return e;};
+ function draw(rows){
+  chart.replaceChildren();
+  if(!Array.isArray(rows)||rows.length<2){refs.caption.textContent='No continuous recent source measurements; no waves have been inferred.';return;}
+  const pts=rows.map(r=>({t:Date.parse(r.t),h:r.h})).filter(r=>Number.isFinite(r.t)&&Number.isFinite(r.h)&&r.h>=0&&r.h<=18).sort((a,b)=>a.t-b.t);
+  if(pts.length<2||pts.at(-1).t<=pts[0].t){refs.caption.textContent='No valid recent source timeline.';return;}
+  const lo=pts[0].t,hi=pts.at(-1).t,max=Math.max(1,Math.ceil(Math.max(...pts.map(r=>r.h))+.25));
+  const xx=t=>48+(t-lo)/(hi-lo)*555,yy=h=>147-h/max*112;
+  for(let i=0;i<=max;i++){
+   const y=yy(i);add('line',{x1:48,x2:603,y1:y,y2:y,stroke:'#dfebea'});
+   add('text',{x:38,y:y+4,'font-size':11,fill:'#6c8388','text-anchor':'end'},String(i));
+  }
+  add('text',{x:9,y:21,'font-size':11,fill:'#587580'},'wave height · m');
+  let prev=null,d='';
+  for(const p of pts){d+=(prev!==null&&p.t-prev<=1.5*3600000?'L':'M')+xx(p.t).toFixed(1)+','+yy(p.h).toFixed(1)+' ';prev=p.t;}
+  add('path',{d,stroke:'#2e7f8c','stroke-width':2.5,fill:'none','stroke-linejoin':'round'});
+  for(const [t,lab] of [[lo,'48h sample start'],[hi,'Latest reading']])
+   add('text',{x:xx(t),y:170,'font-size':10,fill:'#6c858a','text-anchor':t===lo?'start':'end'},lab);
+  refs.caption.textContent='Source-stamped original measurements. Source gaps longer than 90 minutes break the line; no missing wave heights are estimated.';
+ }
+ let active=false;
+ async function load(){
+  if(active)return;active=true;button.disabled=true;button.textContent='Checking…';
+  try{
+   const response=await fetch('/api/rockhounding-wave-pulse',{credentials:'same-origin'});
+   if(!response.ok)throw Error('Live source unavailable');
+   const r=await response.json();
+   if(r.schemaVersion!=='rockhounding-photo-free-live-offshore-pulse-v1'||
+     r.stationId!=='SPOT-1361'||r.photosRequired!==false||
+     r.canPredictNewAgates!==false||r.canClaimBeachSafety!==false||
+     r.canPublishSafeVisitWindow!==false||r.rockExposureScore!==null||
+     !Array.isArray(r.latest48hObservedSeries))
+     throw Error('Original GLOS evidence validation unavailable');
+   const age=r.latestMeasuredAtUTC?(Date.now()-Date.parse(r.latestMeasuredAtUTC))/3600000:null;
+   const phase=age!==null&&age>3?'OFFSHORE_SENSOR_STALE':r.status;
+   refs.phase.textContent=labels[phase]||'Measurement status unavailable';
+   refs.age.textContent=r.latestMeasuredAtUTC?'Last actual buoy reading '+fmt(r.latestMeasuredAtUTC):'No latest buoy timestamp';
+   refs.height.textContent=r.latestOffshoreSignificantWaveHeightM===null?'—':r.latestOffshoreSignificantWaveHeightM.toFixed(2)+' m';
+   refs.peak.textContent=r.peakLast48hM===null?'—':r.peakLast48hM.toFixed(2)+' m';
+   refs.peakDate.textContent=r.peakLast48hUTC?'Peak measured '+fmt(r.peakLast48hUTC):'Original provider not current';
+   refs.hazards.textContent=r.hazardStatus==='ACTIVE'?'Active alerts':r.hazardStatus==='CLEAR'?'No matched alert':'Alert status unknown';
+   refs.alertNote.textContent=r.hazardStatus==='CLEAR'?'Checked feeds only — not a safety clearance':
+      r.hazardStatus==='ACTIVE'?'Current official NWS marine or shoreline warning/advisory':
+      'One or more weather alert sources unavailable';
+   refs.explanation.textContent=phase==='OFFSHORE_SENSOR_STALE'?
+    'Original buoy readings are too old to interpret conditions now. No calm-water or rock-exposure claim can be made.':r.explanation;
+   refs.details.textContent='Observed '+r.observedSampleCount+' unique open-lake readings, '+r.recent12hCount+' in the most recent 12h; original last 48h peak/decline context. NWS alerts are independently checked. Bayshore Park harbor wave conditions are NOT measured by the Spotter.';
+   refs.warnings.textContent=r.hazardStatus==='ACTIVE'?
+    'NWS warnings/advisories: '+(r.matchedNWSAlerts.map(a=>a.event).join(', ')||'Active marine/shoreline hazard reported'):
+    r.hazardCaveat;
+   draw(r.latest48hObservedSeries);
+  }catch{
+   refs.phase.textContent='Live data unavailable';
+   refs.explanation.textContent='The current buoy or weather source could not be verified. The historical chart below still contains measured observations; no current lake or beach conditions have been inferred.';
+   refs.hazards.textContent='Alert status unknown';
+   refs.height.textContent='—';refs.peak.textContent='—';
+   refs.caption.textContent='No current source-verified readings; no line shown.';
+   chart.replaceChildren();
+  }finally{active=false;button.disabled=false;button.textContent='Refresh readings';}
+ }
+ button.addEventListener('click',load);load();
 })();
 </script>
 </body></html>
