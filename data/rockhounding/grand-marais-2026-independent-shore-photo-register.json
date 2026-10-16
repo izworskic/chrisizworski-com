@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "grand-marais-independent-2026-shore-photo-register-v1",
+  "verifiedDateUTC": "2026-10-16",
+  "siteId": "grand-marais-agate",
+  "rule": "PHOTOGRAPH_EXISTENCE_AND_DATE_ARE_NOT_PROOF_OF_STORM_CAUSED_BEACH_CHANGE",
+  "photoRecords": [
+    {
+      "id": "commons-20260705-agate-shore",
+      "sourceClass": "WIKIMEDIA_COMMONS_AUTHOR_PHOTO",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "originalReportedCaptureDate": "2026-07-05",
+      "dateConfidence": "CAMERA_EXIF_SELF_DECLARED_UNAUDITED",
+      "uploadDate": "2026-07-12",
+      "geolocationWgs84": [
+        -85.98748,
+        46.67519
+      ],
+      "geolocationConfidence": "SOURCE_STRUCTURED_COORDINATES_NOT_GROUND_SURVEY",
+      "siteNameFromOriginal": "Grand Marais Agate Beach",
+      "independentPerspectiveCompared": false,
+      "originalImagePixelChangeReviewed": false,
+      "visibleNewlyExposedRocksVerified": false,
+      "rockDepositChangeMeters": null,
+      "usableAsPostStormOutcome": false
+    },
+    {
+      "id": "flickr-20260704-agate-photo",
+      "sourceClass": "FLICKR_AUTHOR_PHOTO",
+      "sourceUrl": "https://www.flickr.com/photos/cowofchange/55385027738",
+      "originalReportedCaptureDate": "2026-07-04",
+      "dateConfidence": "PHOTO_PAGE_TAKEN_ON_SELF_DECLARED",
+      "uploadDate": "2026-07-10",
+      "geolocationWgs84": null,
+      "geolocationConfidence": "LOCATION_TEXT_ONLY_NOT_EXACT_VANTAGE",
+      "siteNameFromOriginal": "Agate Beach Grand Marais Michigan",
+      "independentPerspectiveCompared": false,
+      "originalImagePixelChangeReviewed": false,
+      "visibleNewlyExposedRocksVerified": false,
+      "rockDepositChangeMeters": null,
+      "usableAsPostStormOutcome": false
+    },
+    {
+      "id": "reddit-20260724-agate-photo-post",
+      "sourceClass": "PUBLIC_COMMUNITY_SELF_REPORT",
+      "sourceUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+      "originalReportedCaptureDate": "2026-07-24",
+      "dateConfidence": "AUTHOR_RELATIVE_DATE_APPROXIMATE",
+      "uploadDate": "2026-07-26",
+      "geolocationWgs84": null,
+      "geolocationConfidence": "SITE_SELF_REPORT_NO_COORDINATES",
+      "siteNameFromOriginal": "Agate Beach Grand Marais Michigan",
+      "independentPerspectiveCompared": false,
+      "originalImagePixelChangeReviewed": false,
+      "visibleNewlyExposedRocksVerified": false,
+      "rockDepositChangeMeters": null,
+      "usableAsPostStormOutcome": false
+    }
+  ],
+  "noPairSameVantageVerified": true,
+  "fieldValidatedShorelineChangeCount": 0,
+  "licensePolicy": "LINK_TO_ORIGINAL_SOURCES_ONLY_DO_NOT_COPY_LICENSED_PHOTOS",
+  "canPublishNewRockExposure": false,
+  "canPublishRockhoundingVisitWindow": false,
+  "canClaimSafeAccess": false
+}

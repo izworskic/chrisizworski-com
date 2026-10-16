@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "rockhounding-agate-poststorm-independent-evidence-digest-v1",
+  "sourceWaveHistory": "GLOS_SEAGULL_OBS_140_SPOT_1361",
+  "sentinelCatalogSource": "ELEMENT84_EARTH_SEARCH_STAC_SENTINEL2_C1_L2A",
+  "originalWaveReadingCount": 5243,
+  "measuredOffshoreEpisodes": 11,
+  "qualifiedOffshoreEpisodes": 8,
+  "independentlyDatedSatelliteScenes": 9,
+  "nominalSceneResolutionMeters": 10,
+  "cloudMetadata": "WHOLE_SCENE_NOT_LOCAL_BEACH_CLOUDS",
+  "independentlyDatedOnBeachPhotoSources": 3,
+  "datedMetadataSceneCandidates": 4,
+  "visuallyInspectedRegisteredBeforeAfterPairs": 0,
+  "measuredShorelineChangeEvents": 0,
+  "verifiedStormCausedRockExposureOutcomes": 0,
+  "canClaimSafeBeach": false,
+  "canPredictNewRocks": false,
+  "canPublishRockhoundingVisitWindow": false,
+  "pairs": [
+    {
+      "offshorePeakUTC": "2026-07-12T21:46:01Z",
+      "offshorePeakWaveM": 1,
+      "offshoreEventSamplesQualified": false,
+      "classification": "UNQUALIFIED_OR_BAD_OFFSHORE_EPISODE",
+      "pre": null,
+      "post": null,
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-07-18T15:16:01Z",
+      "offshorePeakWaveM": 1.06,
+      "offshoreEventSamplesQualified": false,
+      "classification": "UNQUALIFIED_OR_BAD_OFFSHORE_EPISODE",
+      "pre": null,
+      "post": null,
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-07-21T23:46:01Z",
+      "offshorePeakWaveM": 1.62,
+      "offshoreEventSamplesQualified": true,
+      "classification": "NO_QUALIFYING_PRE_STORM_SCENE",
+      "pre": null,
+      "post": null,
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-08-16T20:46:01Z",
+      "offshorePeakWaveM": 1.14,
+      "offshoreEventSamplesQualified": false,
+      "classification": "UNQUALIFIED_OR_BAD_OFFSHORE_EPISODE",
+      "pre": null,
+      "post": null,
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-08-23T22:16:01Z",
+      "offshorePeakWaveM": 1.94,
+      "offshoreEventSamplesQualified": true,
+      "classification": "NO_QUALIFYING_PRE_STORM_SCENE",
+      "pre": null,
+      "post": {
+        "sceneId": "S2B_T16TES_20260827T164204_L2A",
+        "acquiredUTC": "2026-08-27T16:50:37.107Z",
+        "sceneCloudPercent": 5.758717,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20260827T164204_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-08-27T04:46:01Z",
+      "offshorePeakWaveM": 1.24,
+      "offshoreEventSamplesQualified": true,
+      "classification": "NO_QUALIFYING_PRE_STORM_SCENE",
+      "pre": null,
+      "post": {
+        "sceneId": "S2B_T16TES_20260906T164812_L2A",
+        "acquiredUTC": "2026-09-06T16:50:37.280Z",
+        "sceneCloudPercent": 0.306874,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20260906T164812_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-09-09T22:16:01Z",
+      "offshorePeakWaveM": 1.91,
+      "offshoreEventSamplesQualified": true,
+      "classification": "DATED_IMAGERY_PAIR_CANDIDATE_NOT_REVIEWED",
+      "pre": {
+        "sceneId": "S2B_T16TES_20260906T164812_L2A",
+        "acquiredUTC": "2026-09-06T16:50:37.280Z",
+        "sceneCloudPercent": 0.306874,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20260906T164812_L2A"
+      },
+      "post": {
+        "sceneId": "S2C_T16TES_20260911T164343_L2A",
+        "acquiredUTC": "2026-09-11T16:50:37.922Z",
+        "sceneCloudPercent": 14.970376,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2C_T16TES_20260911T164343_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-09-14T01:16:01Z",
+      "offshorePeakWaveM": 1.94,
+      "offshoreEventSamplesQualified": true,
+      "classification": "DATED_IMAGERY_PAIR_CANDIDATE_NOT_REVIEWED",
+      "pre": {
+        "sceneId": "S2C_T16TES_20260911T164343_L2A",
+        "acquiredUTC": "2026-09-11T16:50:37.922Z",
+        "sceneCloudPercent": 14.970376,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2C_T16TES_20260911T164343_L2A"
+      },
+      "post": {
+        "sceneId": "S2B_T16TES_20260916T164846_L2A",
+        "acquiredUTC": "2026-09-16T16:50:38.380Z",
+        "sceneCloudPercent": 18.040119,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20260916T164846_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-09-20T19:46:01Z",
+      "offshorePeakWaveM": 1.58,
+      "offshoreEventSamplesQualified": true,
+      "classification": "DATED_IMAGERY_PAIR_CANDIDATE_NOT_REVIEWED",
+      "pre": {
+        "sceneId": "S2B_T16TES_20260916T164846_L2A",
+        "acquiredUTC": "2026-09-16T16:50:38.380Z",
+        "sceneCloudPercent": 18.040119,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20260916T164846_L2A"
+      },
+      "post": {
+        "sceneId": "S2A_T16TES_20260923T164703_L2A",
+        "acquiredUTC": "2026-09-23T16:50:53.625Z",
+        "sceneCloudPercent": 1.068016,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2A_T16TES_20260923T164703_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-10-05T07:16:01Z",
+      "offshorePeakWaveM": 2.51,
+      "offshoreEventSamplesQualified": true,
+      "classification": "DATED_IMAGERY_PAIR_CANDIDATE_NOT_REVIEWED",
+      "pre": {
+        "sceneId": "S2A_T16TES_20260923T164703_L2A",
+        "acquiredUTC": "2026-09-23T16:50:53.625Z",
+        "sceneCloudPercent": 1.068016,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2A_T16TES_20260923T164703_L2A"
+      },
+      "post": {
+        "sceneId": "S2B_T16TES_20261006T164645_L2A",
+        "acquiredUTC": "2026-10-06T16:50:39.698Z",
+        "sceneCloudPercent": 32.683313,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20261006T164645_L2A"
+      },
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    },
+    {
+      "offshorePeakUTC": "2026-10-12T14:46:01Z",
+      "offshorePeakWaveM": 2.57,
+      "offshoreEventSamplesQualified": true,
+      "classification": "NO_QUALIFYING_POST_STORM_SCENE",
+      "pre": {
+        "sceneId": "S2B_T16TES_20261006T164645_L2A",
+        "acquiredUTC": "2026-10-06T16:50:39.698Z",
+        "sceneCloudPercent": 32.683313,
+        "itemUrl": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T16TES_20261006T164645_L2A"
+      },
+      "post": null,
+      "localBeachChangeObserved": false,
+      "siteSpecificStormRockOutcomeValidated": false
+    }
+  ],
+  "knownPhotoSourceLinks": [
+    {
+      "recordId": "commons-20260705-agate-shore",
+      "captureDate": "2026-07-05",
+      "dateConfidence": "CAMERA_EXIF_SELF_DECLARED_UNAUDITED",
+      "originalUrl": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "partOfRegisteredBeforeAfterPair": false
+    },
+    {
+      "recordId": "flickr-20260704-agate-photo",
+      "captureDate": "2026-07-04",
+      "dateConfidence": "PHOTO_PAGE_TAKEN_ON_SELF_DECLARED",
+      "originalUrl": "https://www.flickr.com/photos/cowofchange/55385027738",
+      "partOfRegisteredBeforeAfterPair": false
+    },
+    {
+      "recordId": "reddit-20260724-agate-photo-post",
+      "captureDate": "2026-07-24",
+      "dateConfidence": "AUTHOR_RELATIVE_DATE_APPROXIMATE",
+      "originalUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+      "partOfRegisteredBeforeAfterPair": false
+    }
+  ],
+  "assembledDateUTC": "2026-10-16"
+}
