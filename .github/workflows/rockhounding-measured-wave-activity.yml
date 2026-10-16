@@ -21,7 +21,8 @@ jobs:
           node-version: '22'
       - name: Verify independent offshore proxy calculation and safety boundaries
         run: |
-          node --test tests/rockhounding-photo-free-wave-activity.test.js
+          node --test tests/rockhounding-photo-free-wave-activity.test.js tests/rockhounding-photo-free-activity-ui.test.js
+          node --test tests/rockhounding-photo-free-storm-pulse.test.js tests/rockhounding-lab-visual.test.js
           node --test tests/rockhounding-photo-free-storm-pulse.test.js
       - name: Calculate from all authentic archived Grand Marais buoy rows
         env:
@@ -29,7 +30,8 @@ jobs:
         run: |
           node scripts/rockhounding/build-photo-free-wave-activity.cjs \
             --ledger glos-original-archive/data/rockhounding/spotter-observed-wave-ledger.json \
-            --out artifacts/photo-free-measured-wave-activity.json
+            --out artifacts/photo-free-measured-wave-activity.json \
+            --check public/rockhounding-lab/photo-free-wave-activity-2026.json
       - name: Retain source-derived activity comparison audit
         uses: actions/upload-artifact@v4
         with:
