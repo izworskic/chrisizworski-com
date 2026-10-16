@@ -25,8 +25,10 @@ jobs:
           node-version: '22'
       - name: Test source observation, direction and NWS hazard no-safety boundaries
         run: |
-          node --test tests/rockhounding-photo-free-wave-pulse.test.js
+          node --test tests/rockhounding-photo-free-wave-pulse.test.js tests/rockhounding-photo-free-history-preview.test.js
           node --test tests/rockhounding-glos-event-ledger.test.js tests/rockhounding-glos-event-capture.test.js tests/rockhounding-nws-hazards.test.js
+      - name: Verify existing rockhounding research and prototype safeguards
+        run: node --test tests/rockhounding*.test.js
       - name: Compute genuine 2026 lake wave activity from all original GLOS records
         run: |
           node scripts/rockhounding/build-photo-free-wave-pulse.cjs \
