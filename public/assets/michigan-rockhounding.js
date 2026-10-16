@@ -89,10 +89,14 @@
     if (!d) return;
     var pool = d.ranked.map(function (id) { return d.sites.find(function (s) { return s.id === id; }); })
       .filter(function (s) { var c = document.getElementById(s.id); return c && visible(c); });
+    var link = function (s) { return '<a href="#' + s.id + '">' + esc(nameOf(s.id)) + '</a>'; };
     var go = pool.filter(function (s) { return s.verdict.code === 'PRIME' && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; });
     var good = pool.filter(function (s) { return s.verdict.code === 'GOOD' && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; });
-    var storm = pool.filter(function (s) { return s.verdict.code === 'STORM' || s.verdict.code === 'BUILDING'; });
-    var link = function (s) { return '<a href="#' + s.id + '">' + esc(nameOf(s.id)) + '</a>'; };
+    var storm = pool.filter(function (s) { return s.verdict.code === 'STORM'; }).concat(pool.filter(function (s) { return s.verdict.code === 'BUILDING'; }));
+    var tzOf = function (s) { return document.getElementById(s.id).getAttribute('data-tz'); };
+    var upcoming = pool.filter(function (s) { return s.nextWindow && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; })
+      .sort(function (a, b) { return a.nextWindow.t - b.nextWindow.t; })[0];
+    var windowLine = upcoming ? ' The next after-storm window opens around ' + esc(when(upcoming.nextWindow.t, tzOf(upcoming))) + ' at ' + link(upcoming) + '.' : '';
     var html, code;
     if (!pool.length) { html = 'No beach matches that filter.'; code = 'UNAVAILABLE'; }
     else if (go.length) {
@@ -101,18 +105,15 @@
         (go.length > 1 ? ' Also freshly worked: ' + go.slice(1, 4).map(link).join(', ') + '.' : '');
     } else if (storm.length && !good.length) {
       code = 'STORM';
-      var nw = storm.filter(function (s) { return s.nextWindow; })[0];
-      html = 'Storm on: ' + storm.slice(0, 3).map(link).join(', ') + (storm.length > 3 ? ' and more are' : storm.length > 1 ? ' are' : ' is') + ' getting hit right now. Wait for it to pass' +
-        (nw ? '; the first after-storm window looks like ' + esc(when(nw.nextWindow.t, document.getElementById(nw.id).getAttribute('data-tz'))) + ' at ' + link(nw) : '') + '.';
+      html = 'Storm on: ' + storm.slice(0, 3).map(link).join(', ') + (storm.length > 3 ? ' and more are' : storm.length > 1 ? ' are' : ' is') + ' getting hit right now. Wait for it to pass.' + windowLine;
     } else if (good.length) {
       code = 'GOOD';
       html = 'No fresh storm beaches today. ' + link(good[0]) + ' had the most recent stir' + (good.length > 1 ? ', then ' + good.slice(1, 3).map(link).join(', ') : '') + '.' +
-        (storm.length ? ' Stay off ' + storm.slice(0, 2).map(link).join(' and ') + ' until it calms.' : '');
+        (storm.length ? ' Stay off ' + storm.slice(0, 2).map(link).join(' and ') + (storm.length > 2 ? ' and the other storm beaches' : '') + ' until it calms.' + windowLine : '');
     } else {
       code = 'QUIET';
-      var nxt = pool.filter(function (s) { return s.nextWindow; })[0];
       html = 'Quiet lakes: no beach on this list has had real wave action in three days, so expect picked-over gravel.' +
-        (nxt ? ' The next blow should turn over ' + link(nxt) + ' by ' + esc(when(nxt.nextWindow.t, document.getElementById(nxt.id).getAttribute('data-tz'))) + '.' : ' Hunt early and work the wet edge.');
+        (upcoming ? ' The next blow should turn over ' + link(upcoming) + ' by ' + esc(when(upcoming.nextWindow.t, tzOf(upcoming))) + '.' : ' Hunt early and work the wet edge.');
     }
     answer.innerHTML = html;
     answer.setAttribute('data-code', code);

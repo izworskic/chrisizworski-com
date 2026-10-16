@@ -46,6 +46,8 @@ test('geometry: only wind from the lake toward the beach counts, scaled by fetch
   assert.ok(Math.abs(onshore(30, 50, 350, 233) - 15) < 0.01);
   assert.ok(fetchFactor(17) < fetchFactor(233));
   assert.equal(fetchFactor(500), 1);
+  // A point with 250 degrees of open water takes a wind 58 degrees off its axis nearly head-on.
+  assert.ok(onshore(28, 0, 58, 211, 250) > onshore(28, 0, 58, 211, 180) * 1.5);
 });
 
 test('a strong onshore blow that has eased reads as freshly worked', () => {

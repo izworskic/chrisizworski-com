@@ -60,9 +60,9 @@ h3{font-size:1.12rem;line-height:1.25;margin:0}
 .strip-axis span{position:absolute;top:.1rem}
 .strip-axis span:first-child{left:0}.strip-axis span:last-child{right:0}
 .strip-axis span:nth-child(2){transform:translateX(-50%);font-weight:700;color:var(--ink)}
-.facts{display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;margin:.4rem 0;font-size:.9rem}
-.facts div{display:flex;gap:.35rem}
-.facts dt{color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem 1.4rem;margin:.5rem 0;font-size:.9rem}
+.facts div{display:block}
+.facts dt{color:var(--muted);font-size:.8rem}
 .facts dd{margin:0;font-weight:650;font-variant-numeric:tabular-nums}
 .notes{margin:.3rem 0;padding-left:1.1rem;font-size:.9rem}
 .notes:empty{display:none}
