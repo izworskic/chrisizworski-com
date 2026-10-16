@@ -61,7 +61,7 @@ test('API calls only source-constrained original GLOS wave fields and three offi
  const table=[
   fields.join(','),
   'UTC,degrees_east,degrees_north,m,degree,s',
-  ...series(ago=>ago<3?.6:ago<10?1.4:.45).map(x=>
+  ...series(ago=>ago<=3?.6:ago<10?1.4:.45).map(x=>
    [x.time,x.lon,x.lat,x.waveHeightM,x.waveFromDeg,x.meanPeriodS].join(','))
  ].join('\n');
  const urls=[];
