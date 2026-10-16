@@ -18,7 +18,8 @@ jobs:
       - name: Check out authentic original observed wave archive
         uses: actions/checkout@v4
         with:
-          ref: research/rockhounding-glos-observed-data
+          # Immutable as-of-October-16 research data: live research branch continues growing.
+          ref: 35f480d073de3dc1ff38000d62aaed23c8b579c7
           path: real-wave-archive
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -34,6 +35,12 @@ jobs:
           node scripts/rockhounding/replay-photo-free-observations.cjs \
             --ledger real-wave-archive/data/rockhounding/spotter-observed-wave-ledger.json \
             --out artifacts/rockhounding-photo-free-source-replay-2026.json
+      - name: Confirm exact replay values and prove no future, fake historical alert or stone outcomes
+        run: |
+          node scripts/rockhounding/check-photo-free-replay-summary.cjs \
+            artifacts/rockhounding-photo-free-source-replay-2026.json \
+            public/rockhounding-lab/wave-signal-quality-2026.json
+          node --test tests/rockhounding-photo-free-quality-ui.test.js
       - name: Run all existing rockhounding safety and visitor-preview gates
         run: node --test tests/rockhounding*.test.js
       - name: Preserve complete walk-forward source proof
