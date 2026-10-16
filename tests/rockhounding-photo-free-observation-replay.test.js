@@ -7,7 +7,7 @@ function sourceRows(){
  const rows=[];
  for(let n=336;n>=0;n--){
   const t=END-n*H/2;
-  const height=n>130?1.25:n>45?.72:.45;
+  const height=n>130?1.25:n>45?1.7:.45;
   rows.push({time:new Date(t).toISOString().replace('.000Z','Z'),
    waveHeightM:height,waveFromDeg:329.11,meanPeriodS:4.1,
    source:'GLOS_SPOT_1361_OBSERVED_OPEN_LAKE',phase:'OBSERVATION',
