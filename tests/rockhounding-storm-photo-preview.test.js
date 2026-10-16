@@ -24,6 +24,8 @@ test('interactive mobile-friendly 8-storm review shows data, linked candidate an
  assert.match(html,/Possible dated post-scene links/);
  assert.match(html,/Stanton Township/);
  assert.match(html,/Toivola/);
+ assert.match(html,/research\/rockhounding-photo-review-inbox\/data\/rockhounding\/commons-photo-review-inbox\.json/);
+ assert.match(html,/Missing photos, unverified beach views/);
  assert.match(html,/Photos shot during a storm cannot be labeled/);
  assert.match(html,/newly exposed agates/);
  assert.match(html,/canPublishVisitWindow!==false/);
