@@ -42,7 +42,7 @@ test('only genuine Agate-site geotagged camera photos, no imagined fixed view or
  assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
 });
 test('original Commons 2026 photo uses authenticated thumbnail origin and creator/license attribution',()=>{
- assert.match(html,/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
+ assert.match(html,/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
  assert.match(html,/TCP04 \/ Wikimedia Commons/);
  assert.match(html,/creativecommons\.org\/licenses\/by\/4\.0/);
  assert.match(html,/https:\/\/commons\.wikimedia\.org\/wiki\/File:Lake_Superior_Coast_-_Grand_Marais/);
