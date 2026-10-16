@@ -1,0 +1,21 @@
+name: Rockhounding seven-day photo-free storm memory
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-photo-free-7day-storm-memory-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify measured seven-day source, stale and renewed-wave gates
+        run: node --test tests/rockhounding-photo-free-7day-storm-memory.test.js
+      - name: Preserve all existing photo-free waveform and user-facing checks
+        run: node --test tests/rockhounding*.test.js
