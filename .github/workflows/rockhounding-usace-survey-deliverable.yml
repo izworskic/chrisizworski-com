@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - research/rockhounding-usace-survey-deliverable-20261015
+      - research/rockhounding-usace-original-xyz-rebased-20261015
     paths:
       - .github/workflows/rockhounding-usace-survey-deliverable.yml
 
