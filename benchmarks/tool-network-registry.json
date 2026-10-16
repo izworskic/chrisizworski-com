@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-14",
+  "updated": "2026-10-16",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2918,6 +2918,46 @@
         "status": "unknown",
         "note": "New product: establish GSC 28-day baseline after deployment"
       }
+    },
+    {
+      "id": "michigan-rockhounding",
+      "name": "Michigan Rockhounding Conditions",
+      "canonical": "https://chrisizworski.com/michigan-rockhounding/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "great-lakes-shore",
+      "primaryIntent": "Where to hunt Michigan agates, Petoskey stones and fossils after a storm",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan-statewide",
+        "upper-peninsula",
+        "northern-lower-michigan"
+      ],
+      "personas": [
+        "rockhound",
+        "beachgoer",
+        "michigan-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "emerging-demand"
+      }
     }
   ],
   "relationships": [
@@ -3980,7 +4020,7 @@
     {
       "from": "epic-ikon-pass",
       "to": "national-snow",
-      "type": "trip-context",
+      "type": "geographic-handoff",
       "surface": "winter-recreation",
       "strength": "optional",
       "reason": "After confirming pass-rule eligibility, visitors can separately inspect national snow conditions without implying resort operations."
@@ -4128,6 +4168,38 @@
       "strength": "strong",
       "surface": "winter-snow",
       "reason": "Snow totals readers can continue to a resort-specific weekend ski decision rather than infer operating lifts."
+    },
+    {
+      "from": "michigan-rockhounding",
+      "to": "great-lakes-buoys",
+      "type": "evidence-depth",
+      "strength": "strong",
+      "surface": "after-the-storm",
+      "reason": "The open-lake buoy behind each beach reading lives on the buoy dashboard."
+    },
+    {
+      "from": "michigan-rockhounding",
+      "to": "beach-report",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "beach-day",
+      "reason": "Beach notices and hazards for the same shoreline."
+    },
+    {
+      "from": "michigan-rockhounding",
+      "to": "circle-tour",
+      "type": "geographic-handoff",
+      "strength": "optional",
+      "surface": "agate-trip",
+      "reason": "A U.P. agate trip usually rides the Lake Superior shore."
+    },
+    {
+      "from": "great-lakes-buoys",
+      "to": "michigan-rockhounding",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "after-the-storm",
+      "reason": "Buoy watchers after a blow want to know which beaches it turned over."
     }
   ],
   "cannibalizationGroups": [
@@ -4303,6 +4375,15 @@
         "white-christmas-michigan"
       ],
       "rule": "Snow Totals owns reported snowfall (how much fell, where, when) from NWS Local Storm Reports. National Snow owns measured snowpack depth and SWE on the ground. Snowmobile and XC own trail rideability and skiability. Do not create county or city snowfall doorway pages."
+    },
+    {
+      "intent": "Michigan rockhounding conditions and where to hunt stones",
+      "owner": "michigan-rockhounding",
+      "supports": [
+        "great-lakes-buoys",
+        "beach-report"
+      ],
+      "rule": "Rockhounding owns the after-storm hunt decision and collecting rules per beach. Buoys own raw station observations; the Beach Report owns swim notices and hazards. Do not create per-stone or per-beach doorway pages without distinct data."
     }
   ],
   "expansionOpportunities": [

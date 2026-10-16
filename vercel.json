@@ -4,6 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/michigan-rockhounding.js": {
+      "maxDuration": 20
+    },
     "api/maple-sap.js": {
       "maxDuration": 35
     },

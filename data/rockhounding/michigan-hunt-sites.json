@@ -1,0 +1,791 @@
+{
+ "version": "2026-10-16",
+ "method": "Shore-facing direction (facesDeg) is the circular mean of the directions that reach open lake water within 3 km of the beach, and fetchKm the open-water distance along it, both computed from the OpenStreetMap lake outlines (ODbL). NWS zones were resolved from api.weather.gov for each beach. Wave stations are the nearest NDBC stations on the same lake that report wave height.",
+ "rules": {
+  "state": {
+   "label": "Collecting allowed: 25 lb per year",
+   "short": "25 lb/yr",
+   "detail": "State-owned land. Michigan limits rock, mineral and fossil collecting to 25 pounds per person per year, total, for personal use. Follow posted park rules.",
+   "source": "https://www.michigan.gov/egle/public/learn/geology/rockhounding"
+  },
+  "local": {
+   "label": "Public beach: follow posted rules",
+   "short": "Posted rules",
+   "detail": "Local public beach. EGLE says to check for local rock collecting rules; the state 25 pound annual limit applies on public property.",
+   "source": "https://www.michigan.gov/egle/public/learn/geology/rockhounding"
+  },
+  "usfs": {
+   "label": "National forest: small amounts",
+   "short": "Small amounts",
+   "detail": "National forest land. Small amounts for personal use with hand tools; follow posted Forest Service rules.",
+   "source": "https://www.fs.usda.gov/ottawa"
+  },
+  "nps": {
+   "label": "No collecting: look only",
+   "short": "Look only",
+   "detail": "National Park Service land. Removing rocks, minerals or fossils is prohibited under federal law. Look, photograph and leave them.",
+   "source": "https://www.nps.gov/subjects/geology/permits.htm"
+  }
+ },
+ "sites": [
+  {
+   "id": "agate-beach-grand-marais",
+   "name": "Agate Beach, Grand Marais",
+   "lake": "Superior",
+   "region": "Eastern U.P.",
+   "pin": [
+    46.6756,
+    -85.9852
+   ],
+   "stones": [
+    "agate",
+    "jasper"
+   ],
+   "rule": "local",
+   "owner": "Burt Township",
+   "access": "Township public beach with boardwalk parking off the north end of Grand Marais. Burt Township lists it as a public rockhounding destination.",
+   "source": "https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/",
+   "sourceLabel": "Burt Township: Agate Beach",
+   "tip": "The classic Lake Superior agate beach. Work the wet gravel band right at the waterline and the fresh windrows a storm leaves.",
+   "shore": {
+    "lat": 46.67696,
+    "lon": -85.98559,
+    "facesDeg": 350,
+    "openWaterArcDeg": 195,
+    "fetchKm": 233
+   },
+   "waveStations": [
+    {
+     "id": "45211",
+     "km": 55
+    },
+    {
+     "id": "45004",
+     "km": 111
+    },
+    {
+     "id": "45213",
+     "km": 111
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ006",
+     "MIC003"
+    ],
+    "marineZones": [
+     "LSZ250"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "muskallonge-lake-state-park",
+   "name": "Muskallonge Lake State Park",
+   "lake": "Superior",
+   "region": "Eastern U.P.",
+   "pin": [
+    46.6762,
+    -85.6294
+   ],
+   "stones": [
+    "agate",
+    "jasper",
+    "yooperlite"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park on County Road 407 between Grand Marais and Deer Park. Lake Superior beach across the road from the campground. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/muskallonge",
+   "sourceLabel": "Michigan DNR: Muskallonge Lake",
+   "tip": "The shore from here east toward Whitefish Point is Yooperlite country. Hunt it after dark with a 365 nm UV light.",
+   "shore": {
+    "lat": 46.67894,
+    "lon": -85.62931,
+    "facesDeg": 5,
+    "openWaterArcDeg": 185,
+    "fetchKm": 137
+   },
+   "waveStations": [
+    {
+     "id": "45211",
+     "km": 79
+    },
+    {
+     "id": "45004",
+     "km": 124
+    },
+    {
+     "id": "45213",
+     "km": 124
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ007",
+     "MIC095"
+    ],
+    "marineZones": [
+     "LSZ251"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "crisp-point",
+   "name": "Crisp Point Lighthouse beach",
+   "lake": "Superior",
+   "region": "Eastern U.P.",
+   "pin": [
+    46.7503,
+    -85.2614
+   ],
+   "stones": [
+    "agate",
+    "jasper",
+    "yooperlite"
+   ],
+   "rule": "local",
+   "owner": "Luce County and the Crisp Point Light Historical Society",
+   "access": "Remote: a long drive on sand and gravel county roads north of M-123. Check road conditions before you go and expect no services.",
+   "source": "https://www.crisppointlighthouse.org/",
+   "sourceLabel": "Crisp Point Light Historical Society",
+   "tip": "Long, lightly hunted open shoreline. Remote enough that conditions after a blow can stay good for days.",
+   "shore": {
+    "lat": 46.7519,
+    "lon": -85.26185,
+    "facesDeg": 342,
+    "openWaterArcDeg": 190,
+    "fetchKm": 111
+   },
+   "waveStations": [
+    {
+     "id": "45211",
+     "km": 102
+    },
+    {
+     "id": "45004",
+     "km": 136
+    },
+    {
+     "id": "45213",
+     "km": 137
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ007",
+     "MIC095"
+    ],
+    "marineZones": [
+     "LSZ251"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "mclain-state-park",
+   "name": "F.J. McLain State Park",
+   "lake": "Superior",
+   "region": "Keweenaw",
+   "pin": [
+    47.2356,
+    -88.6075
+   ],
+   "stones": [
+    "agate",
+    "jasper"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park on M-203 north of Hancock. DNR notes rockhounding along its sandy and rocky Lake Superior shoreline. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/mclain",
+   "sourceLabel": "Michigan DNR: F.J. McLain",
+   "tip": "Keweenaw gravel mixes agates with basalt and other volcanic beach stones. Look for the waxy, translucent ones.",
+   "shore": {
+    "lat": 47.23922,
+    "lon": -88.60792,
+    "facesDeg": 335,
+    "openWaterArcDeg": 185,
+    "fetchKm": 75
+   },
+   "waveStations": [
+    {
+     "id": "45023",
+     "km": 3
+    },
+    {
+     "id": "45025",
+     "km": 34
+    },
+    {
+     "id": "45216",
+     "km": 68
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ003",
+     "MIC061"
+    ],
+    "marineZones": [
+     "LSZ242"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "presque-isle-park",
+   "name": "Presque Isle Park, Marquette",
+   "lake": "Superior",
+   "region": "Central U.P.",
+   "pin": [
+    46.5775,
+    -87.3789
+   ],
+   "stones": [
+    "agate",
+    "jasper"
+   ],
+   "rule": "local",
+   "owner": "City of Marquette",
+   "access": "City park at the north end of Lakeshore Boulevard in Marquette. Follow posted park rules and stay off the high rock edges in rough water.",
+   "source": "https://www.marquettemi.gov/",
+   "sourceLabel": "City of Marquette",
+   "tip": "Faces east and northeast, so it gets worked by northeast blows that leave west-facing beaches calm.",
+   "shore": {
+    "lat": 46.57983,
+    "lon": -87.38112,
+    "facesDeg": 58,
+    "openWaterArcDeg": 250,
+    "fetchKm": 211
+   },
+   "waveStations": [
+    {
+     "id": "45211",
+     "km": 76
+    },
+    {
+     "id": "45025",
+     "km": 89
+    },
+    {
+     "id": "45023",
+     "km": 121
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ005",
+     "MIC103"
+    ],
+    "marineZones": [
+     "LSZ248"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "black-river-harbor",
+   "name": "Black River Harbor",
+   "lake": "Superior",
+   "region": "Western U.P.",
+   "pin": [
+    46.6611,
+    -90.0464
+   ],
+   "stones": [
+    "agate",
+    "jasper"
+   ],
+   "rule": "usfs",
+   "owner": "Ottawa National Forest",
+   "access": "U.S. Forest Service recreation area at the end of the Black River Scenic Byway (CR 513) north of Bessemer.",
+   "source": "https://www.fs.usda.gov/ottawa",
+   "sourceLabel": "Ottawa National Forest",
+   "tip": "A western U.P. option that turns over in north and northwest storms.",
+   "shore": {
+    "lat": 46.66709,
+    "lon": -90.04838,
+    "facesDeg": 335,
+    "openWaterArcDeg": 165,
+    "fetchKm": 117
+   },
+   "waveStations": [
+    {
+     "id": "45216",
+     "km": 59
+    },
+    {
+     "id": "45006",
+     "km": 77
+    },
+    {
+     "id": "45023",
+     "km": 128
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ009",
+     "MIC053"
+    ],
+    "marineZones": [
+     "LSZ240"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Menominee"
+  },
+  {
+   "id": "miners-beach",
+   "name": "Miners Beach, Pictured Rocks",
+   "lake": "Superior",
+   "region": "Central U.P.",
+   "pin": [
+    46.4919,
+    -86.5478
+   ],
+   "stones": [
+    "agate",
+    "jasper"
+   ],
+   "rule": "nps",
+   "owner": "National Park Service",
+   "access": "Pictured Rocks National Lakeshore, off Miners Castle Road east of Munising.",
+   "source": "https://www.nps.gov/subjects/geology/permits.htm",
+   "sourceLabel": "NPS: rock and fossil collecting",
+   "tip": "Beautiful beach stones, but this is a national lakeshore: look, photograph and leave them.",
+   "shore": {
+    "lat": 46.49484,
+    "lon": -86.5479,
+    "facesDeg": 312,
+    "openWaterArcDeg": 190,
+    "fetchKm": 141
+   },
+   "waveStations": [
+    {
+     "id": "45211",
+     "km": 53
+    },
+    {
+     "id": "45004",
+     "km": 121
+    },
+    {
+     "id": "45213",
+     "km": 122
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ006",
+     "MIC003"
+    ],
+    "marineZones": [
+     "LSZ250"
+    ],
+    "office": "MQT"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "petoskey-state-park",
+   "name": "Petoskey State Park",
+   "lake": "Michigan",
+   "region": "Little Traverse Bay",
+   "pin": [
+    45.404,
+    -84.909
+   ],
+   "stones": [
+    "petoskey",
+    "fossils"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park at 2475 M-119 north of Petoskey, with a day-use beach on Little Traverse Bay. DNR describes Petoskey stone hunting here. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/petoskey",
+   "sourceLabel": "Michigan DNR: Petoskey State Park",
+   "tip": "Petoskey stones show their pattern best wet. Hunt the swash zone, or carry a spray bottle.",
+   "shore": {
+    "lat": 45.4036,
+    "lon": -84.91294,
+    "facesDeg": 272,
+    "openWaterArcDeg": 90,
+    "fetchKm": 71
+   },
+   "waveStations": [
+    {
+     "id": "45022",
+     "km": 14
+    },
+    {
+     "id": "45194",
+     "km": 45
+    },
+    {
+     "id": "45183",
+     "km": 86
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ016",
+     "MIC047"
+    ],
+    "marineZones": [
+     "LMZ342"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "fishermans-island-state-park",
+   "name": "Fisherman's Island State Park",
+   "lake": "Michigan",
+   "region": "Charlevoix",
+   "pin": [
+    45.2645,
+    -85.361
+   ],
+   "stones": [
+    "petoskey",
+    "charlevoix",
+    "fossils"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park on Bell's Bay Road south of Charlevoix with miles of undeveloped shoreline. DNR has reported day-use areas closed to vehicles during culvert repairs, with the shore still reachable on foot. Check the park page for current access.",
+   "source": "https://www.michigan.gov/recsearch/parks/fishermans",
+   "sourceLabel": "Michigan DNR: Fisherman's Island",
+   "tip": "Long, rocky stretches. DNR names rockhounding here; Petoskey and Charlevoix stones both turn up.",
+   "shore": {
+    "lat": 45.27393,
+    "lon": -85.36767,
+    "facesDeg": 308,
+    "openWaterArcDeg": 210,
+    "fetchKm": 97
+   },
+   "waveStations": [
+    {
+     "id": "45022",
+     "km": 26
+    },
+    {
+     "id": "45183",
+     "km": 49
+    },
+    {
+     "id": "45194",
+     "km": 74
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ099",
+     "MIC029"
+    ],
+    "marineZones": [
+     "LMZ342"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "vans-beach-leland",
+   "name": "Van's Beach, Leland",
+   "lake": "Michigan",
+   "region": "Leelanau",
+   "pin": [
+    45.023,
+    -85.763
+   ],
+   "stones": [
+    "leland-blue",
+    "petoskey"
+   ],
+   "rule": "local",
+   "owner": "Leland Township",
+   "access": "Public beach just north of the Leland harbor and Fishtown. Follow posted township rules.",
+   "source": "https://mynorth.com/2022/07/where-to-find-leland-blues-local-rock-hunting-laws-to-know/",
+   "sourceLabel": "MyNorth: where to find Leland Blues",
+   "tip": "Leland Blue is slag glass from the 1800s iron smelter. Van's Beach and North Beach are the usual starting points.",
+   "shore": {
+    "lat": 45.023,
+    "lon": -85.7636,
+    "facesDeg": 290,
+    "openWaterArcDeg": 185,
+    "fetchKm": 17
+   },
+   "waveStations": [
+    {
+     "id": "45183",
+     "km": 7
+    },
+    {
+     "id": "45022",
+     "km": 68
+    },
+    {
+     "id": "45194",
+     "km": 115
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ020",
+     "MIC089"
+    ],
+    "marineZones": [
+     "LMZ344"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "glen-haven",
+   "name": "Glen Haven, Sleeping Bear Dunes",
+   "lake": "Michigan",
+   "region": "Leelanau",
+   "pin": [
+    44.8956,
+    -86.0419
+   ],
+   "stones": [
+    "petoskey"
+   ],
+   "rule": "nps",
+   "owner": "National Park Service",
+   "access": "Sleeping Bear Dunes National Lakeshore, on Sleeping Bear Bay at the historic Glen Haven village.",
+   "source": "https://www.nps.gov/slbe/learn/nature/beaches.htm",
+   "sourceLabel": "NPS: Sleeping Bear beaches",
+   "tip": "Petoskey stones are common here, and the Park Service says it is illegal under federal law to remove stones from the National Lakeshore.",
+   "shore": {
+    "lat": 44.90802,
+    "lon": -86.03037,
+    "facesDeg": 2,
+    "openWaterArcDeg": 210,
+    "fetchKm": 17
+   },
+   "waveStations": [
+    {
+     "id": "45183",
+     "km": 18
+    },
+    {
+     "id": "45022",
+     "km": 92
+    },
+    {
+     "id": "45024",
+     "km": 111
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ020",
+     "MIC089"
+    ],
+    "marineZones": [
+     "LMZ344"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "frankfort-beach",
+   "name": "Frankfort Public Beach",
+   "lake": "Michigan",
+   "region": "Benzie",
+   "pin": [
+    44.634,
+    -86.2467
+   ],
+   "stones": [
+    "petoskey",
+    "fossils"
+   ],
+   "rule": "local",
+   "owner": "City of Frankfort",
+   "access": "City beach at the west end of Main Street by the north breakwater. Follow posted city rules.",
+   "source": "https://www.michigan.gov/egle/public/learn/geology/rockhounding/fossils",
+   "sourceLabel": "EGLE: Michigan fossils (names Frankfort)",
+   "tip": "EGLE names the Frankfort public beach as a known Petoskey stone and fossil locality.",
+   "shore": {
+    "lat": 44.63395,
+    "lon": -86.24687,
+    "facesDeg": 250,
+    "openWaterArcDeg": 185,
+    "fetchKm": 109
+   },
+   "waveStations": [
+    {
+     "id": "45183",
+     "km": 51
+    },
+    {
+     "id": "45024",
+     "km": 77
+    },
+    {
+     "id": "45210",
+     "km": 91
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ025",
+     "MIC019"
+    ],
+    "marineZones": [
+     "LMZ346"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "wilderness-state-park",
+   "name": "Wilderness State Park",
+   "lake": "Michigan",
+   "region": "Straits",
+   "pin": [
+    45.719,
+    -84.9077
+   ],
+   "stones": [
+    "petoskey",
+    "fossils"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park west of Mackinaw City with 26 miles of Lake Michigan shoreline. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/wilderness",
+   "sourceLabel": "Michigan DNR: Wilderness State Park",
+   "tip": "So much shoreline that you can usually find a stretch nobody has walked since the last blow.",
+   "shore": {
+    "lat": 45.74668,
+    "lon": -84.90519,
+    "facesDeg": 7,
+    "openWaterArcDeg": 140,
+    "fetchKm": 17
+   },
+   "waveStations": [
+    {
+     "id": "45194",
+     "km": 11
+    },
+    {
+     "id": "45022",
+     "km": 41
+    },
+    {
+     "id": "45183",
+     "km": 112
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ016",
+     "MIC047"
+    ],
+    "marineZones": [
+     "LMZ342"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "hoeft-state-park",
+   "name": "P.H. Hoeft State Park",
+   "lake": "Huron",
+   "region": "Northeast Lower",
+   "pin": [
+    45.4519,
+    -83.8728
+   ],
+   "stones": [
+    "fossils"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "access": "State park on US-23 just north of Rogers City, with a mile of Lake Huron beach. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/hoeft",
+   "sourceLabel": "Michigan DNR: P.H. Hoeft",
+   "tip": "This is Devonian limestone country. Look for brachiopods, crinoid stems and coral fragments in the beach cobble.",
+   "shore": {
+    "lat": 45.45437,
+    "lon": -83.87136,
+    "facesDeg": 37,
+    "openWaterArcDeg": 180,
+    "fetchKm": 59
+   },
+   "waveStations": [
+    {
+     "id": "45175",
+     "km": 81
+    },
+    {
+     "id": "45212",
+     "km": 81
+    },
+    {
+     "id": "45154",
+     "km": 116
+    }
+   ],
+   "nws": {
+    "landZones": [
+     "MIZ018",
+     "MIC141"
+    ],
+    "marineZones": [
+     "LHZ347"
+    ],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  },
+  {
+   "id": "rockport-state-recreation-area",
+   "name": "Rockport State Recreation Area",
+   "lake": "Huron",
+   "region": "Northeast Lower",
+   "pin": [
+    45.2,
+    -83.4
+   ],
+   "stones": [
+    "fossils"
+   ],
+   "rule": "state",
+   "owner": "Michigan DNR",
+   "inland": true,
+   "access": "Former limestone quarry north of Alpena off US-23. DNR lists searching for fossils among its activities. Recreation Passport required.",
+   "source": "https://www.michigan.gov/recsearch/parks/rockport",
+   "sourceLabel": "Michigan DNR: Rockport",
+   "tip": "Quarry hunting is not wave-dependent. Any dry day works, and the loose limestone is full of Devonian brachiopods and corals.",
+   "shore": null,
+   "nws": {
+    "landZones": [
+     "MIZ024",
+     "MIC007"
+    ],
+    "marineZones": [],
+    "office": "APX"
+   },
+   "timezone": "America/Detroit"
+  }
+ ]
+}
