@@ -85,7 +85,7 @@ test('real Oct 2026 GLOS 142-reading audit ends in observed waves / unfinished, 
   lat:46.695671,lon:-86.003799}));
  const checkpoint='2026-10-14T23:46:01Z';
  const v=memoryOfLastStorm(original,{nowISO:checkpoint,hazardStatus:'ACTIVE'});
- assert.equal(v.lastMeasuredEpisode.peakSignificantWaveHeightM,2.57);
+ assert.equal(v.lastMeasuredEpisode.peakSignificantWaveHeightM,1.57); // 142-row short-window sample; full 2026 source has earlier 2.57 m peak
  assert.equal(v.lastMeasuredEpisode.eighteenHourBelowResearchThresholdConfirmed,false);
  assert.equal(v.canPredictNewAgates,false);
  assert.equal(v.hazardStatus,'ACTIVE');
