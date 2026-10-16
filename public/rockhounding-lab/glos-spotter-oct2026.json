@@ -1,0 +1,868 @@
+{
+  "schemaVersion": "grand-marais-glos-historical-visual-v1",
+  "station": "SPOT-1361",
+  "source": "GLOS_SEAGULL_OBS_140",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38831824791",
+  "capturedAtUTC": "2026-10-16T00:51:15.267Z",
+  "fromUTC": "2026-10-12T01:16:01Z",
+  "toUTC": "2026-10-14T23:46:01Z",
+  "samples": [
+    {
+      "t": "2026-10-12T01:16:01Z",
+      "hM": 0.46,
+      "waveFromDeg": 219.68,
+      "periodS": 2.42
+    },
+    {
+      "t": "2026-10-12T01:46:01Z",
+      "hM": 0.43,
+      "waveFromDeg": 216.42,
+      "periodS": 2.36
+    },
+    {
+      "t": "2026-10-12T02:16:01Z",
+      "hM": 0.46,
+      "waveFromDeg": 216.16,
+      "periodS": 2.36
+    },
+    {
+      "t": "2026-10-12T02:46:01Z",
+      "hM": 0.49,
+      "waveFromDeg": 217.47,
+      "periodS": 2.38
+    },
+    {
+      "t": "2026-10-12T03:16:01Z",
+      "hM": 0.44,
+      "waveFromDeg": 224.06,
+      "periodS": 2.38
+    },
+    {
+      "t": "2026-10-12T03:46:01Z",
+      "hM": 0.42,
+      "waveFromDeg": 234.86,
+      "periodS": 2.4
+    },
+    {
+      "t": "2026-10-12T04:16:01Z",
+      "hM": 0.36,
+      "waveFromDeg": 251.07,
+      "periodS": 2.46
+    },
+    {
+      "t": "2026-10-12T04:46:01Z",
+      "hM": 0.32,
+      "waveFromDeg": 260.12,
+      "periodS": 2.48
+    },
+    {
+      "t": "2026-10-12T05:16:01Z",
+      "hM": 0.3,
+      "waveFromDeg": 272.82,
+      "periodS": 2.5
+    },
+    {
+      "t": "2026-10-12T05:46:01Z",
+      "hM": 0.28,
+      "waveFromDeg": 278.26,
+      "periodS": 2.42
+    },
+    {
+      "t": "2026-10-12T06:16:01Z",
+      "hM": 0.3,
+      "waveFromDeg": 261.3,
+      "periodS": 2.38
+    },
+    {
+      "t": "2026-10-12T06:46:01Z",
+      "hM": 0.31,
+      "waveFromDeg": 260.26,
+      "periodS": 2.38
+    },
+    {
+      "t": "2026-10-12T07:16:01Z",
+      "hM": 0.3,
+      "waveFromDeg": 267.66,
+      "periodS": 2.46
+    },
+    {
+      "t": "2026-10-12T07:46:01Z",
+      "hM": 0.26,
+      "waveFromDeg": 278.38,
+      "periodS": 2.46
+    },
+    {
+      "t": "2026-10-12T08:16:01Z",
+      "hM": 0.24,
+      "waveFromDeg": 291.86,
+      "periodS": 2.56
+    },
+    {
+      "t": "2026-10-12T08:46:01Z",
+      "hM": 0.22,
+      "waveFromDeg": 305.85,
+      "periodS": 2.68
+    },
+    {
+      "t": "2026-10-12T09:16:01Z",
+      "hM": 0.24,
+      "waveFromDeg": 312.4,
+      "periodS": 2.98
+    },
+    {
+      "t": "2026-10-12T09:46:01Z",
+      "hM": 0.26,
+      "waveFromDeg": 306.04,
+      "periodS": 2.62
+    },
+    {
+      "t": "2026-10-12T10:16:01Z",
+      "hM": 0.27,
+      "waveFromDeg": 288.55,
+      "periodS": 2.38
+    },
+    {
+      "t": "2026-10-12T10:46:01Z",
+      "hM": 0.25,
+      "waveFromDeg": 302.08,
+      "periodS": 2.52
+    },
+    {
+      "t": "2026-10-12T11:16:01Z",
+      "hM": 0.22,
+      "waveFromDeg": 308.38,
+      "periodS": 2.44
+    },
+    {
+      "t": "2026-10-12T11:46:01Z",
+      "hM": 0.3,
+      "waveFromDeg": 5.43,
+      "periodS": 2.32
+    },
+    {
+      "t": "2026-10-12T12:16:01Z",
+      "hM": 0.67,
+      "waveFromDeg": 5.87,
+      "periodS": 2.98
+    },
+    {
+      "t": "2026-10-12T12:46:01Z",
+      "hM": 1.08,
+      "waveFromDeg": 7.12,
+      "periodS": 3.8
+    },
+    {
+      "t": "2026-10-12T13:16:01Z",
+      "hM": 1.36,
+      "waveFromDeg": 11.58,
+      "periodS": 4.34
+    },
+    {
+      "t": "2026-10-12T13:46:01Z",
+      "hM": 1.66,
+      "waveFromDeg": 13.75,
+      "periodS": 4.92
+    },
+    {
+      "t": "2026-10-12T14:16:01Z",
+      "hM": 2.02,
+      "waveFromDeg": 17.02,
+      "periodS": 5.36
+    },
+    {
+      "t": "2026-10-12T14:46:01Z",
+      "hM": 2.57,
+      "waveFromDeg": 14.93,
+      "periodS": 8.32
+    },
+    {
+      "t": "2026-10-12T15:16:01Z",
+      "hM": 1.71,
+      "waveFromDeg": 17.75,
+      "periodS": 4.96
+    },
+    {
+      "t": "2026-10-12T15:46:01Z",
+      "hM": 1.73,
+      "waveFromDeg": 18.34,
+      "periodS": 5.02
+    },
+    {
+      "t": "2026-10-12T16:16:01Z",
+      "hM": 1.61,
+      "waveFromDeg": 18.94,
+      "periodS": 4.86
+    },
+    {
+      "t": "2026-10-12T16:46:01Z",
+      "hM": 1.72,
+      "waveFromDeg": 18.84,
+      "periodS": 5.02
+    },
+    {
+      "t": "2026-10-12T17:16:01Z",
+      "hM": 1.68,
+      "waveFromDeg": 18.23,
+      "periodS": 4.92
+    },
+    {
+      "t": "2026-10-12T17:46:01Z",
+      "hM": 1.71,
+      "waveFromDeg": 20.97,
+      "periodS": 4.9
+    },
+    {
+      "t": "2026-10-12T18:16:01Z",
+      "hM": 1.56,
+      "waveFromDeg": 23.78,
+      "periodS": 4.66
+    },
+    {
+      "t": "2026-10-12T18:46:01Z",
+      "hM": 1.67,
+      "waveFromDeg": 23.27,
+      "periodS": 4.92
+    },
+    {
+      "t": "2026-10-12T19:16:01Z",
+      "hM": 1.51,
+      "waveFromDeg": 27,
+      "periodS": 4.8
+    },
+    {
+      "t": "2026-10-12T19:46:01Z",
+      "hM": 1.54,
+      "waveFromDeg": 27.3,
+      "periodS": 4.82
+    },
+    {
+      "t": "2026-10-12T20:16:01Z",
+      "hM": 1.54,
+      "waveFromDeg": 28.79,
+      "periodS": 4.74
+    },
+    {
+      "t": "2026-10-12T20:46:01Z",
+      "hM": 1.52,
+      "waveFromDeg": 32.36,
+      "periodS": 4.7
+    },
+    {
+      "t": "2026-10-12T21:16:01Z",
+      "hM": 1.45,
+      "waveFromDeg": 36.2,
+      "periodS": 4.62
+    },
+    {
+      "t": "2026-10-12T21:46:01Z",
+      "hM": 1.43,
+      "waveFromDeg": 37.02,
+      "periodS": 4.58
+    },
+    {
+      "t": "2026-10-12T22:16:01Z",
+      "hM": 1.34,
+      "waveFromDeg": 38.03,
+      "periodS": 4.42
+    },
+    {
+      "t": "2026-10-12T22:46:01Z",
+      "hM": 1.41,
+      "waveFromDeg": 37.54,
+      "periodS": 4.64
+    },
+    {
+      "t": "2026-10-12T23:16:01Z",
+      "hM": 1.38,
+      "waveFromDeg": 35.97,
+      "periodS": 4.58
+    },
+    {
+      "t": "2026-10-12T23:46:01Z",
+      "hM": 1.39,
+      "waveFromDeg": 35.22,
+      "periodS": 4.72
+    },
+    {
+      "t": "2026-10-13T00:16:01Z",
+      "hM": 1.29,
+      "waveFromDeg": 35.67,
+      "periodS": 4.62
+    },
+    {
+      "t": "2026-10-13T00:46:01Z",
+      "hM": 1.23,
+      "waveFromDeg": 39.55,
+      "periodS": 4.52
+    },
+    {
+      "t": "2026-10-13T01:16:01Z",
+      "hM": 1.2,
+      "waveFromDeg": 35.45,
+      "periodS": 4.58
+    },
+    {
+      "t": "2026-10-13T01:46:01Z",
+      "hM": 1.2,
+      "waveFromDeg": 38.33,
+      "periodS": 4.48
+    },
+    {
+      "t": "2026-10-13T02:16:01Z",
+      "hM": 1.15,
+      "waveFromDeg": 37.32,
+      "periodS": 4.36
+    },
+    {
+      "t": "2026-10-13T02:46:01Z",
+      "hM": 1.23,
+      "waveFromDeg": 36.62,
+      "periodS": 4.52
+    },
+    {
+      "t": "2026-10-13T03:16:01Z",
+      "hM": 1.21,
+      "waveFromDeg": 34.17,
+      "periodS": 4.64
+    },
+    {
+      "t": "2026-10-13T03:46:01Z",
+      "hM": 1.09,
+      "waveFromDeg": 31.94,
+      "periodS": 4.58
+    },
+    {
+      "t": "2026-10-13T04:16:01Z",
+      "hM": 1.12,
+      "waveFromDeg": 33.63,
+      "periodS": 4.54
+    },
+    {
+      "t": "2026-10-13T04:46:01Z",
+      "hM": 1.05,
+      "waveFromDeg": 32.02,
+      "periodS": 4.48
+    },
+    {
+      "t": "2026-10-13T05:16:01Z",
+      "hM": 1.09,
+      "waveFromDeg": 32.87,
+      "periodS": 4.66
+    },
+    {
+      "t": "2026-10-13T05:46:01Z",
+      "hM": 1.09,
+      "waveFromDeg": 37.69,
+      "periodS": 4.56
+    },
+    {
+      "t": "2026-10-13T06:16:01Z",
+      "hM": 1.06,
+      "waveFromDeg": 33.14,
+      "periodS": 4.68
+    },
+    {
+      "t": "2026-10-13T06:46:01Z",
+      "hM": 1.09,
+      "waveFromDeg": 32.8,
+      "periodS": 4.68
+    },
+    {
+      "t": "2026-10-13T07:16:01Z",
+      "hM": 1.03,
+      "waveFromDeg": 39.64,
+      "periodS": 4.28
+    },
+    {
+      "t": "2026-10-13T07:46:01Z",
+      "hM": 1.01,
+      "waveFromDeg": 37.97,
+      "periodS": 4.26
+    },
+    {
+      "t": "2026-10-13T08:16:01Z",
+      "hM": 1.02,
+      "waveFromDeg": 38.79,
+      "periodS": 4.34
+    },
+    {
+      "t": "2026-10-13T08:46:01Z",
+      "hM": 0.99,
+      "waveFromDeg": 37.7,
+      "periodS": 4.38
+    },
+    {
+      "t": "2026-10-13T09:16:01Z",
+      "hM": 0.97,
+      "waveFromDeg": 39.9,
+      "periodS": 4.32
+    },
+    {
+      "t": "2026-10-13T09:46:01Z",
+      "hM": 0.95,
+      "waveFromDeg": 38.47,
+      "periodS": 4.3
+    },
+    {
+      "t": "2026-10-13T10:16:01Z",
+      "hM": 0.9,
+      "waveFromDeg": 41.15,
+      "periodS": 4.18
+    },
+    {
+      "t": "2026-10-13T10:46:11Z",
+      "hM": 0.9,
+      "waveFromDeg": 40.75,
+      "periodS": 4.3
+    },
+    {
+      "t": "2026-10-13T11:16:11Z",
+      "hM": 0.87,
+      "waveFromDeg": 43.21,
+      "periodS": 4.28
+    },
+    {
+      "t": "2026-10-13T11:46:01Z",
+      "hM": 0.79,
+      "waveFromDeg": 41.55,
+      "periodS": 4.22
+    },
+    {
+      "t": "2026-10-13T12:16:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 43.38,
+      "periodS": 4.02
+    },
+    {
+      "t": "2026-10-13T12:46:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 41.66,
+      "periodS": 4.04
+    },
+    {
+      "t": "2026-10-13T13:16:01Z",
+      "hM": 0.76,
+      "waveFromDeg": 39.72,
+      "periodS": 3.98
+    },
+    {
+      "t": "2026-10-13T13:46:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 40.92,
+      "periodS": 4.08
+    },
+    {
+      "t": "2026-10-13T14:16:01Z",
+      "hM": 0.76,
+      "waveFromDeg": 37.11,
+      "periodS": 4.16
+    },
+    {
+      "t": "2026-10-13T14:46:01Z",
+      "hM": 0.73,
+      "waveFromDeg": 36.9,
+      "periodS": 4.12
+    },
+    {
+      "t": "2026-10-13T15:16:01Z",
+      "hM": 0.73,
+      "waveFromDeg": 33.11,
+      "periodS": 4.08
+    },
+    {
+      "t": "2026-10-13T15:46:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 31.84,
+      "periodS": 4.16
+    },
+    {
+      "t": "2026-10-13T16:16:01Z",
+      "hM": 0.75,
+      "waveFromDeg": 30.98,
+      "periodS": 4.06
+    },
+    {
+      "t": "2026-10-13T16:46:01Z",
+      "hM": 0.79,
+      "waveFromDeg": 27.86,
+      "periodS": 3.76
+    },
+    {
+      "t": "2026-10-13T17:16:01Z",
+      "hM": 0.81,
+      "waveFromDeg": 28.45,
+      "periodS": 3.76
+    },
+    {
+      "t": "2026-10-13T17:46:01Z",
+      "hM": 0.8,
+      "waveFromDeg": 27.47,
+      "periodS": 3.72
+    },
+    {
+      "t": "2026-10-13T18:16:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 26.38,
+      "periodS": 3.66
+    },
+    {
+      "t": "2026-10-13T18:46:01Z",
+      "hM": 0.73,
+      "waveFromDeg": 25.23,
+      "periodS": 3.6
+    },
+    {
+      "t": "2026-10-13T19:16:01Z",
+      "hM": 0.69,
+      "waveFromDeg": 22.25,
+      "periodS": 3.46
+    },
+    {
+      "t": "2026-10-13T19:46:01Z",
+      "hM": 0.74,
+      "waveFromDeg": 17.55,
+      "periodS": 3.5
+    },
+    {
+      "t": "2026-10-13T20:16:01Z",
+      "hM": 0.72,
+      "waveFromDeg": 10.54,
+      "periodS": 3.32
+    },
+    {
+      "t": "2026-10-13T20:46:01Z",
+      "hM": 0.71,
+      "waveFromDeg": 5.87,
+      "periodS": 3.32
+    },
+    {
+      "t": "2026-10-13T21:16:01Z",
+      "hM": 0.74,
+      "waveFromDeg": 7.88,
+      "periodS": 3.4
+    },
+    {
+      "t": "2026-10-13T21:46:01Z",
+      "hM": 1.28,
+      "waveFromDeg": 344.91,
+      "periodS": 6.86
+    },
+    {
+      "t": "2026-10-13T22:16:01Z",
+      "hM": 0.78,
+      "waveFromDeg": 353.15,
+      "periodS": 3.3
+    },
+    {
+      "t": "2026-10-13T22:46:01Z",
+      "hM": 1,
+      "waveFromDeg": 332.25,
+      "periodS": 4.86
+    },
+    {
+      "t": "2026-10-13T23:16:01Z",
+      "hM": 0.91,
+      "waveFromDeg": 339.45,
+      "periodS": 3.34
+    },
+    {
+      "t": "2026-10-13T23:46:01Z",
+      "hM": 0.98,
+      "waveFromDeg": 330.79,
+      "periodS": 3.44
+    },
+    {
+      "t": "2026-10-14T00:16:01Z",
+      "hM": 1.05,
+      "waveFromDeg": 326.9,
+      "periodS": 3.52
+    },
+    {
+      "t": "2026-10-14T00:46:01Z",
+      "hM": 1.06,
+      "waveFromDeg": 320.53,
+      "periodS": 3.64
+    },
+    {
+      "t": "2026-10-14T01:16:01Z",
+      "hM": 1.04,
+      "waveFromDeg": 317.13,
+      "periodS": 3.68
+    },
+    {
+      "t": "2026-10-14T01:46:01Z",
+      "hM": 1.06,
+      "waveFromDeg": 316.63,
+      "periodS": 3.72
+    },
+    {
+      "t": "2026-10-14T02:16:01Z",
+      "hM": 1.05,
+      "waveFromDeg": 319.46,
+      "periodS": 3.76
+    },
+    {
+      "t": "2026-10-14T02:46:01Z",
+      "hM": 1.03,
+      "waveFromDeg": 318.07,
+      "periodS": 3.8
+    },
+    {
+      "t": "2026-10-14T03:16:01Z",
+      "hM": 0.96,
+      "waveFromDeg": 321.39,
+      "periodS": 3.72
+    },
+    {
+      "t": "2026-10-14T03:46:01Z",
+      "hM": 1.03,
+      "waveFromDeg": 323.5,
+      "periodS": 3.74
+    },
+    {
+      "t": "2026-10-14T04:16:01Z",
+      "hM": 0.95,
+      "waveFromDeg": 326.12,
+      "periodS": 3.72
+    },
+    {
+      "t": "2026-10-14T04:46:01Z",
+      "hM": 0.95,
+      "waveFromDeg": 322.38,
+      "periodS": 3.62
+    },
+    {
+      "t": "2026-10-14T05:16:01Z",
+      "hM": 1.05,
+      "waveFromDeg": 319.25,
+      "periodS": 3.76
+    },
+    {
+      "t": "2026-10-14T05:46:01Z",
+      "hM": 1.02,
+      "waveFromDeg": 321.96,
+      "periodS": 3.7
+    },
+    {
+      "t": "2026-10-14T06:16:01Z",
+      "hM": 0.97,
+      "waveFromDeg": 323.77,
+      "periodS": 3.7
+    },
+    {
+      "t": "2026-10-14T06:46:01Z",
+      "hM": 1.01,
+      "waveFromDeg": 321.3,
+      "periodS": 3.74
+    },
+    {
+      "t": "2026-10-14T07:16:01Z",
+      "hM": 0.97,
+      "waveFromDeg": 321.97,
+      "periodS": 3.6
+    },
+    {
+      "t": "2026-10-14T07:46:01Z",
+      "hM": 1.07,
+      "waveFromDeg": 317.9,
+      "periodS": 3.68
+    },
+    {
+      "t": "2026-10-14T08:16:01Z",
+      "hM": 1.25,
+      "waveFromDeg": 319.86,
+      "periodS": 3.86
+    },
+    {
+      "t": "2026-10-14T08:46:01Z",
+      "hM": 1.23,
+      "waveFromDeg": 317,
+      "periodS": 3.98
+    },
+    {
+      "t": "2026-10-14T09:16:01Z",
+      "hM": 1.22,
+      "waveFromDeg": 320.12,
+      "periodS": 3.98
+    },
+    {
+      "t": "2026-10-14T09:46:01Z",
+      "hM": 1.22,
+      "waveFromDeg": 322.13,
+      "periodS": 3.96
+    },
+    {
+      "t": "2026-10-14T10:16:01Z",
+      "hM": 1.27,
+      "waveFromDeg": 320.4,
+      "periodS": 4.08
+    },
+    {
+      "t": "2026-10-14T10:46:01Z",
+      "hM": 1.4,
+      "waveFromDeg": 320.62,
+      "periodS": 4.34
+    },
+    {
+      "t": "2026-10-14T11:16:01Z",
+      "hM": 1.37,
+      "waveFromDeg": 319.56,
+      "periodS": 4.28
+    },
+    {
+      "t": "2026-10-14T11:46:01Z",
+      "hM": 1.3,
+      "waveFromDeg": 319.55,
+      "periodS": 4.32
+    },
+    {
+      "t": "2026-10-14T12:16:01Z",
+      "hM": 1.28,
+      "waveFromDeg": 318.85,
+      "periodS": 4.34
+    },
+    {
+      "t": "2026-10-14T12:46:01Z",
+      "hM": 1.35,
+      "waveFromDeg": 317.76,
+      "periodS": 4.4
+    },
+    {
+      "t": "2026-10-14T13:16:01Z",
+      "hM": 1.29,
+      "waveFromDeg": 321.51,
+      "periodS": 4.34
+    },
+    {
+      "t": "2026-10-14T13:46:01Z",
+      "hM": 1.38,
+      "waveFromDeg": 324.6,
+      "periodS": 4.38
+    },
+    {
+      "t": "2026-10-14T14:16:01Z",
+      "hM": 1.43,
+      "waveFromDeg": 323.77,
+      "periodS": 4.4
+    },
+    {
+      "t": "2026-10-14T14:46:01Z",
+      "hM": 1.41,
+      "waveFromDeg": 326.9,
+      "periodS": 4.44
+    },
+    {
+      "t": "2026-10-14T15:16:01Z",
+      "hM": 1.45,
+      "waveFromDeg": 330.11,
+      "periodS": 4.48
+    },
+    {
+      "t": "2026-10-14T15:46:01Z",
+      "hM": 1.55,
+      "waveFromDeg": 327.47,
+      "periodS": 4.54
+    },
+    {
+      "t": "2026-10-14T16:16:01Z",
+      "hM": 1.54,
+      "waveFromDeg": 332.65,
+      "periodS": 4.6
+    },
+    {
+      "t": "2026-10-14T16:46:01Z",
+      "hM": 1.5,
+      "waveFromDeg": 330.17,
+      "periodS": 4.54
+    },
+    {
+      "t": "2026-10-14T17:16:01Z",
+      "hM": 1.5,
+      "waveFromDeg": 332.08,
+      "periodS": 4.56
+    },
+    {
+      "t": "2026-10-14T17:46:01Z",
+      "hM": 1.57,
+      "waveFromDeg": 333.16,
+      "periodS": 4.7
+    },
+    {
+      "t": "2026-10-14T18:16:01Z",
+      "hM": 1.32,
+      "waveFromDeg": 332.86,
+      "periodS": 4.42
+    },
+    {
+      "t": "2026-10-14T18:46:01Z",
+      "hM": 1.24,
+      "waveFromDeg": 333.08,
+      "periodS": 4.4
+    },
+    {
+      "t": "2026-10-14T19:16:01Z",
+      "hM": 1.21,
+      "waveFromDeg": 331.5,
+      "periodS": 4.3
+    },
+    {
+      "t": "2026-10-14T19:46:01Z",
+      "hM": 1.16,
+      "waveFromDeg": 329.27,
+      "periodS": 4.2
+    },
+    {
+      "t": "2026-10-14T20:16:01Z",
+      "hM": 1.19,
+      "waveFromDeg": 331.18,
+      "periodS": 4.28
+    },
+    {
+      "t": "2026-10-14T20:46:01Z",
+      "hM": 1.16,
+      "waveFromDeg": 331.07,
+      "periodS": 4.3
+    },
+    {
+      "t": "2026-10-14T21:16:01Z",
+      "hM": 1.1,
+      "waveFromDeg": 327.84,
+      "periodS": 4.12
+    },
+    {
+      "t": "2026-10-14T21:46:01Z",
+      "hM": 1.07,
+      "waveFromDeg": 331.51,
+      "periodS": 4.14
+    },
+    {
+      "t": "2026-10-14T22:16:01Z",
+      "hM": 1.08,
+      "waveFromDeg": 329.98,
+      "periodS": 4.2
+    },
+    {
+      "t": "2026-10-14T22:46:01Z",
+      "hM": 1,
+      "waveFromDeg": 329.04,
+      "periodS": 4.2
+    },
+    {
+      "t": "2026-10-14T23:16:01Z",
+      "hM": 0.95,
+      "waveFromDeg": 332.29,
+      "periodS": 4.1
+    },
+    {
+      "t": "2026-10-14T23:46:01Z",
+      "hM": 0.95,
+      "waveFromDeg": 329.11,
+      "periodS": 4.1
+    }
+  ],
+  "elevatedResearchThresholdM": 1,
+  "observedStormEpisodes": 1,
+  "independentBeachRockOutcomes": 0,
+  "completeness": "SOURCE_WAS_STALE_STORM_END_NOT_VERIFIED",
+  "notes": "FROZEN 2026 historical GLOS open-lake sample only. Not current, not measured beach surf, not a storm end, and not an agate/safety recommendation."
+}
