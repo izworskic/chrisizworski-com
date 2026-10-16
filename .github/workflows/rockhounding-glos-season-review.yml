@@ -1,0 +1,29 @@
+name: Rockhounding GLOS full historical season research check
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-glos-season-backfill-20261015
+    paths:
+      - .github/workflows/rockhounding-glos-season-review.yml
+      - public/rockhounding-lab/index.html
+      - public/rockhounding-lab/glos-season-2026-research.json
+      - tests/rockhounding-glos-season-visual.test.js
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-visual-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run all rockhounding source, historical-episode and noindex visual tests
+        run: |
+          node --test tests/rockhounding*.test.js
+          node --test tests/rockhounding-glos-season-backfill.test.js tests/rockhounding-glos-season-visual.test.js

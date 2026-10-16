@@ -1,0 +1,80 @@
+name: Rockhounding one-time 2026 Grand Marais Spotter historic backfill
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-glos-season-backfill-20261015
+    paths:
+      - .github/workflows/rockhounding-glos-history-backfill.yml
+      - scripts/rockhounding/backfill-glos-spotter.cjs
+      - tests/rockhounding-glos-season-backfill.test.js
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-glos-spotter-durable-history
+  cancel-in-progress: false
+
+jobs:
+  original-source-backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Check out code without rights to modify default branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout historical-wave data branch exclusively
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: observed-history
+          persist-credentials: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify historic backfill, event science, anti-leakage and source schemas
+        run: |
+          node --test tests/rockhounding-glos-season-backfill.test.js
+          node --test tests/rockhounding-glos-event*.test.js tests/rockhounding-glos-spotter.test.js tests/rockhounding-nws-hazards.test.js
+
+      - name: Query 16 consecutive authentic GLOS history windows and retain prior data
+        run: |
+          node scripts/rockhounding/backfill-glos-spotter.cjs \
+            --ledger observed-history/data/rockhounding/spotter-observed-wave-ledger.json \
+            --report observed-history/data/rockhounding/spotter-offshore-event-research.json \
+            --audit observed-history/data/rockhounding/spotter-offshore-backfill-audit.json \
+            --days 112
+
+      - name: Commit archive only to the dedicated research-data branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C observed-history config user.name "Rockhounding Research Bot"
+          git -C observed-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C observed-history add \
+            data/rockhounding/spotter-observed-wave-ledger.json \
+            data/rockhounding/spotter-offshore-event-research.json \
+            data/rockhounding/spotter-offshore-backfill-audit.json
+          if git -C observed-history diff --cached --quiet; then
+            echo "No historical source update."
+          else
+            git -C observed-history commit -m "data(rockhounding): verified 2026 GLOS historical storm episodes"
+            git -C observed-history push origin HEAD:research/rockhounding-glos-observed-data
+          fi
+
+      - name: Retain source-window audit and independent offshore report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glos-2026-actual-observation-backfill-audit
+          path: |
+            observed-history/data/rockhounding/spotter-offshore-backfill-audit.json
+            observed-history/data/rockhounding/spotter-offshore-event-research.json
+          retention-days: 30
+          if-no-files-found: warn
