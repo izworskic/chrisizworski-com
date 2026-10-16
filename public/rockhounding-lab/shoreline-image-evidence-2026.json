@@ -1,6 +1,5 @@
 {
   "schemaVersion": "rockhounding-agate-poststorm-independent-evidence-digest-v1",
-  "generatedResearchUTC": "2026-10-15T23:45:00Z",
   "sourceWaveHistory": "GLOS_SEAGULL_OBS_140_SPOT_1361",
   "sentinelCatalogSource": "ELEMENT84_EARTH_SEARCH_STAC_SENTINEL2_C1_L2A",
   "originalWaveReadingCount": 5243,
@@ -206,5 +205,6 @@
       "originalUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
       "partOfRegisteredBeforeAfterPair": false
     }
-  ]
+  ],
+  "assembledDateUTC": "2026-10-16"
 }
