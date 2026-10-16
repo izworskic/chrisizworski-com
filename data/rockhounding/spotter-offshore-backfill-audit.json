@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "rockhounding-glos-2026-historical-backfill-audit-v1",
+  "runAtUTC": "2026-10-16T01:08:53.734Z",
+  "station": "SPOT-1361",
+  "source": "GLOS_SEAGULL_OBS_140",
+  "originalProviderEndpoint": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
+  "daysRequested": 112,
+  "independentSourceWindows": 16,
+  "noSourceResultWindows": 0,
+  "totalOriginalRowsReceived": 5243,
+  "originalRowsRejected": 0,
+  "dedupedStoredRecords": 5243,
+  "firstRetainedUTC": "2026-06-26T01:16:01Z",
+  "lastRetainedUTC": "2026-10-14T23:46:01Z",
+  "sourceUtcDays": 111,
+  "distinctOffshoreEpisodeGroups": 11,
+  "qualifiedDistinctMeasuredEpisodes": 8,
+  "trueStormEndedOrBeachSurveyVerified": false,
+  "noHistoricallyReconstructedNwsWarnings": true,
+  "notLiveBeachWaves": true,
+  "noStoneProbability": true,
+  "canPublishVisitWindow": false,
+  "canClaimSafeConditions": false,
+  "requestedWindows": [
+    {
+      "fromISO": "2026-06-26T01:08:53Z",
+      "toISO": "2026-07-03T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "49c70adb9570a056221f537b9a849972d89d024f2094974a6123cca953fdc1b6"
+    },
+    {
+      "fromISO": "2026-07-03T01:08:53Z",
+      "toISO": "2026-07-10T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 266,
+      "rejectedRows": 0,
+      "sha256": "a147e37253995b12df49c652fd2dcb676a14f3f4d2f86ecde3573cd2a4638f24"
+    },
+    {
+      "fromISO": "2026-07-10T01:08:53Z",
+      "toISO": "2026-07-17T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "1030fceb5a6ad78cbbf469482f85704ad9c2c0cfeb9ce5f9e659fc425d310bbf"
+    },
+    {
+      "fromISO": "2026-07-17T01:08:53Z",
+      "toISO": "2026-07-24T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "8a9ed5f12ab304aee7a9d7f32d2f2ff903a706c57245583051972b4a5ae78d48"
+    },
+    {
+      "fromISO": "2026-07-24T01:08:53Z",
+      "toISO": "2026-07-31T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "141e1712fd6d2641bf011f1179acbf581ea23238adbbb1408f97a462478b1a35"
+    },
+    {
+      "fromISO": "2026-07-31T01:08:53Z",
+      "toISO": "2026-08-07T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 334,
+      "rejectedRows": 0,
+      "sha256": "dbfb90aaf3b186e8c6f1892c680194740b5e4cd093ffbb8c54bcc1267e87da67"
+    },
+    {
+      "fromISO": "2026-08-07T01:08:53Z",
+      "toISO": "2026-08-14T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "1709f3096d564b4059d4d5494315b57def6d7dd6ccbdd8877362e5424c2e853a"
+    },
+    {
+      "fromISO": "2026-08-14T01:08:53Z",
+      "toISO": "2026-08-21T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "4f71dc9e8bf01eb4641f876b74cf692b95560c12e91b3a407b3289807b8d7d1d"
+    },
+    {
+      "fromISO": "2026-08-21T01:08:53Z",
+      "toISO": "2026-08-28T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "41c788015c988c3bfaa108e6147a594a57282b82e74ed06150094ba6c7bc6dde"
+    },
+    {
+      "fromISO": "2026-08-28T01:08:53Z",
+      "toISO": "2026-09-04T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 331,
+      "rejectedRows": 0,
+      "sha256": "f491a9eba8b1afe0746930cb18227280c8b3fa39cec66218399a76ae18cfb79d"
+    },
+    {
+      "fromISO": "2026-09-04T01:08:53Z",
+      "toISO": "2026-09-11T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 334,
+      "rejectedRows": 0,
+      "sha256": "d90b21273bfc2bef315deeabbafdbfcb8e1354aeedc462d6a6b082d1aeff9e71"
+    },
+    {
+      "fromISO": "2026-09-11T01:08:53Z",
+      "toISO": "2026-09-18T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "3f0a82b018b1aef1edc018dd4cab90ec50899a717e8e241386f36b3f5f8e92e3"
+    },
+    {
+      "fromISO": "2026-09-18T01:08:53Z",
+      "toISO": "2026-09-25T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "b6158dc2864c51470a3b86c054d6f74d9f88e7bf13193b23744af466b0e6d428"
+    },
+    {
+      "fromISO": "2026-09-25T01:08:53Z",
+      "toISO": "2026-10-02T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 336,
+      "rejectedRows": 0,
+      "sha256": "1f8f00e440b77b91245e027d0c2d3d3c81626ae3919c9d1007bdaa6a46d60b9d"
+    },
+    {
+      "fromISO": "2026-10-02T01:08:53Z",
+      "toISO": "2026-10-09T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 332,
+      "rejectedRows": 0,
+      "sha256": "f178d478894d575ad5918353ef97655cd3e349d8ec4a552c42b9a907fdee008d"
+    },
+    {
+      "fromISO": "2026-10-09T01:08:53Z",
+      "toISO": "2026-10-16T01:08:53Z",
+      "status": "ORIGINAL_OBSERVATIONS_RECEIVED",
+      "rows": 286,
+      "rejectedRows": 0,
+      "sha256": "7be078cb501759477ba64482d588c90c941feabb55a2ca93e96276c9e6353aec"
+    }
+  ]
+}
