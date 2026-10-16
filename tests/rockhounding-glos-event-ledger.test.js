@@ -37,7 +37,7 @@ test('distinct events need >48h separation, enough observations and no long gaps
  assert.equal(x.eventHistory[0].completeness,'EVENT_END_UNCONFIRMED_OR_SOURCE_GAPPY');
 });
 test('actual observed sustained post-peak drop is descriptive and never a visit recommendation',()=>{
- const a=Array.from({length:100},(_,i)=>row(i*.5,i<10?1.6:.5));
+ const a=Array.from({length:110},(_,i)=>row(i*.5,i<10?1.6:.5));
  const ledger=mergeSpotterLedger(null,parsed(a),{nowISO:now});
  const x=offshoreEvents(ledger,{nowISO:now});
  assert.equal(x.eventCount,1);
@@ -78,7 +78,7 @@ test('tampered prior ledger, wrong buoy, future data and inflated claims are rej
 });
 test('retention prunes older but not recent records, with explicit freshness state',()=>{
  const a=mergeSpotterLedger(null,parsed([row(0),row(1),row(2)]),{nowISO:now,retentionDays:30});
- const q=mergeSpotterLedger(a,parsed([row(10)]),{nowISO:'2026-11-14T00:00:00.000Z',retentionDays:30});
+ const q=mergeSpotterLedger(a,parsed([row(10)]),{nowISO:'2026-10-31T05:00:00.000Z',retentionDays:30});
  assert.equal(q.records.length,1);
  assert.equal(q.diagnostics.expired,3);
  const x=offshoreEvents(q,{nowISO:'2026-11-14T00:00:00.000Z'});
