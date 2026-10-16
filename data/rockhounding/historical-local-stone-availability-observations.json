@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "rockhounding-historical-ground-observations-2026-10-v1",
+  "reviewedAtUTC": "2026-10-16",
+  "interpretation": "Independent, older first-person/local observation only. Evidence that rock availability can increase, decrease, or remain blocked; not Agate Beach storm-specific 2026 field validation.",
+  "verified2026MeasuredStoneExposureOutcomes": 0,
+  "matching2026CameraPairs": 0,
+  "actualObserved2026OffshoreWaveRows": 5243,
+  "localObserver": "Karen Brzys, Grand Marais rockhound and longtime Gitche Gumee Museum operator",
+  "observations": [
+    {
+      "id": "grand-marais-spring-2012-ice-redistribution",
+      "originalUrl": "https://agatelady.blogspot.com/2012/03/spring-beach-post-2-plus-magnified.html",
+      "sourcePublishedDate": "2012-03-22",
+      "observedWindow": "2012-03-21 through 2012-03-22 (approximate, blog reporting)",
+      "namedReach": "Grand Marais-area Lake Superior beaches; site and segment vary in article",
+      "agateBeachGrandMaraisSameSegmentVerified": false,
+      "exposureClass": "ICE_MOVEMENT_LOCAL_ROCK_REDEPOSITION_REPORTED",
+      "directionOfRockAccessibility": "INCREASE_REPORTED_ON_SOME_SEGMENTS",
+      "reportSummary": "Local observer documented places where melting or moving shore ice brought rocks to the surface; other portions retained ice and soft sediment.",
+      "exactMaterialVolumeQuantified": false,
+      "observationCausallyLinkedToGLOS2026": false,
+      "provesNewAgateDeposit": false
+    },
+    {
+      "id": "woodland-park-august-2013-rock-depletion",
+      "originalUrl": "https://www.agatelady.com/photo-gallery-customer-agate-finds-november2013.html",
+      "sourcePublishedDate": "2013-11",
+      "observedWindow": "early August 2013; exact capture/report dates unavailable",
+      "namedReach": "Woodland Park shoreline, Grand Marais, Michigan",
+      "agateBeachGrandMaraisSameSegmentVerified": false,
+      "exposureClass": "STORM_PERIOD_WASHOUT_OR_SAND_BURIAL_REPORTED",
+      "directionOfRockAccessibility": "DECREASE_REPORTED",
+      "reportSummary": "Local rockhound reported that after repeated Lake Superior storms some formerly rocky shore segments, including Woodland Park in early August, had almost no exposed rock; waves could move material offshore or cover stones in sand.",
+      "exactMaterialVolumeQuantified": false,
+      "observationCausallyLinkedToGLOS2026": false,
+      "provesNewAgateDeposit": false
+    },
+    {
+      "id": "grand-marais-march-2009-2014-ice-access-variation",
+      "originalUrl": "https://agatelady.blogspot.com/2014/03/year-to-year-differences-in-grand.html",
+      "sourcePublishedDate": "2014-03-29",
+      "observedWindow": "late March 2009–2014, historical photo comparison; not continuous measurements",
+      "namedReach": "Grand Marais-area shoreline; each photo's segment not georegistered",
+      "agateBeachGrandMaraisSameSegmentVerified": false,
+      "exposureClass": "ANNUAL_SHORE_ICE_ACCESSIBILITY_VARIABLE",
+      "directionOfRockAccessibility": "MIXED_AND_SEASON_DEPENDENT",
+      "reportSummary": "Firsthand seasonal photo retrospective showed late-March dates ranging from open rockhounding beaches to predominantly ice-covered shoreline, depending on year.",
+      "exactMaterialVolumeQuantified": false,
+      "observationCausallyLinkedToGLOS2026": false,
+      "provesNewAgateDeposit": false
+    }
+  ],
+  "reviewFinding": "A larger offshore wave event is not automatically a better rockhounding day. Positive or negative exposure requires independent location-matched outcome evidence.",
+  "unsupportedClaims": {
+    "hasVerified2026AgateExposure": false,
+    "canCalibrateStormToStoneProbability": false,
+    "canPredictFreshAgates": false,
+    "canPublishSafeVisitWindow": false
+  }
+}
