@@ -1,0 +1,21 @@
+name: Rockhounding historical rock-availability outcome guard
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-beach-outcome-contradictions-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate historical outcomes versus non-calibrated 2026 buoy evidence
+        run: |
+          node --test tests/rockhounding-historical-stone-outcomes.test.js
+          node --test tests/rockhounding*.test.js
