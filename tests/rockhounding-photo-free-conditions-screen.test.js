@@ -67,8 +67,9 @@ test('original research panel remains untouched and the new page is noindex beta
 });
 
 test('photo-free browser app script parses as standalone Javascript and contains no third party runtime requests',()=>{
- const m=html.match(/<script>([\\s\\S]*?)<\\/script>/);
- assert.ok(m,'script exists');
- assert.doesNotThrow(()=>new vm.Script(m[1]));
+ const begin=html.indexOf('<script>');
+ const end=html.indexOf('</script>',begin);
+ assert.ok(begin>=0&&end>begin,'script exists');
+ assert.doesNotThrow(()=>new vm.Script(html.slice(begin+8,end)));
  assert.equal((html.match(/<script>/g)||[]).length,1);
 });
