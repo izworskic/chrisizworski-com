@@ -1,0 +1,224 @@
+{
+  "schemaVersion": "rockhounding-photo-free-storm-pulse-v1",
+  "asOfOriginalArchiveUTC": "2026-10-16T01:08:53.734Z",
+  "dataPeriod": {
+    "firstUTC": "2026-06-26T01:16:01Z",
+    "lastUTC": "2026-10-14T23:46:01Z"
+  },
+  "stationName": "Grand Marais Spotter",
+  "stationId": "SPOT-1361",
+  "stationContext": "Open Lake Superior north of Grand Marais",
+  "sourceUrl": "https://seagull-erddap.glos.org/erddap/info/obs_140/index.html",
+  "historicObservationCount": 5243,
+  "observedDays": 111,
+  "allElevatedGroups": 11,
+  "wellSampledEpisodes": 8,
+  "historyLabel": "Summer–fall 2026 wave history",
+  "visitorLead": "See when Lake Superior waves built, peaked, eased, and returned.",
+  "episodes": [
+    {
+      "id": "2026-10-12T14:46:01Z",
+      "peakAtUTC": "2026-10-12T14:46:01Z",
+      "firstElevatedUTC": "2026-10-08T01:16:01Z",
+      "lastElevatedUTC": "2026-10-14T22:46:01Z",
+      "observedPeakHeightM": 2.57,
+      "phaseKey": "WAVES_RETURNED",
+      "phaseLabel": "Waves built again",
+      "explanation": "After an observed decline, elevated offshore waves returned. This episode had more than one wave pulse.",
+      "sequence": [
+        "Storm activity",
+        "Temporary decline",
+        "Renewed waves"
+      ],
+      "hasObservedPostEventCoverage": false,
+      "hasWaveRebuild": true,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-10-05T07:16:01Z",
+      "peakAtUTC": "2026-10-05T07:16:01Z",
+      "firstElevatedUTC": "2026-10-01T19:46:01Z",
+      "lastElevatedUTC": "2026-10-05T21:46:01Z",
+      "observedPeakHeightM": 2.51,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-09-20T19:46:01Z",
+      "peakAtUTC": "2026-09-20T19:46:01Z",
+      "firstElevatedUTC": "2026-09-20T12:16:01Z",
+      "lastElevatedUTC": "2026-09-21T08:46:01Z",
+      "observedPeakHeightM": 1.58,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-09-14T01:16:01Z",
+      "peakAtUTC": "2026-09-14T01:16:01Z",
+      "firstElevatedUTC": "2026-09-12T23:46:01Z",
+      "lastElevatedUTC": "2026-09-16T06:46:01Z",
+      "observedPeakHeightM": 1.94,
+      "phaseKey": "WAVES_RETURNED",
+      "phaseLabel": "Waves built again",
+      "explanation": "After an observed decline, elevated offshore waves returned. This episode had more than one wave pulse.",
+      "sequence": [
+        "Storm activity",
+        "Temporary decline",
+        "Renewed waves"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": true,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-09-09T22:16:01Z",
+      "peakAtUTC": "2026-09-09T22:16:01Z",
+      "firstElevatedUTC": "2026-09-09T21:16:01Z",
+      "lastElevatedUTC": "2026-09-10T07:16:01Z",
+      "observedPeakHeightM": 1.91,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-08-27T04:46:01Z",
+      "peakAtUTC": "2026-08-27T04:46:01Z",
+      "firstElevatedUTC": "2026-08-27T04:46:01Z",
+      "lastElevatedUTC": "2026-08-27T17:16:01Z",
+      "observedPeakHeightM": 1.24,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-08-23T22:16:01Z",
+      "peakAtUTC": "2026-08-23T22:16:01Z",
+      "firstElevatedUTC": "2026-08-23T00:46:01Z",
+      "lastElevatedUTC": "2026-08-24T21:46:01Z",
+      "observedPeakHeightM": 1.94,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    },
+    {
+      "id": "2026-07-21T23:46:01Z",
+      "peakAtUTC": "2026-07-21T23:46:01Z",
+      "firstElevatedUTC": "2026-07-21T16:16:01Z",
+      "lastElevatedUTC": "2026-07-22T07:16:01Z",
+      "observedPeakHeightM": 1.62,
+      "phaseKey": "OBSERVED_EASING",
+      "phaseLabel": "Waves eased afterward",
+      "explanation": "The buoy measured a drop after the peak, with additional observation coverage after elevated waves subsided.",
+      "sequence": [
+        "Storm peak",
+        "Wave heights declined",
+        "Post-event readings"
+      ],
+      "hasObservedPostEventCoverage": true,
+      "hasWaveRebuild": false,
+      "observedDecline": true,
+      "sampleQualified": true,
+      "measuredAt": "GLOS Grand Marais Spotter / Lake Superior offshore"
+    }
+  ],
+  "latestArchivedSample": {
+    "atUTC": "2026-10-14T23:46:01Z",
+    "significantWaveHeightM": 0.95,
+    "waveFromDeg": 329.11,
+    "wavePeriodS": 4.1,
+    "peakInOct12to14M": 2.57,
+    "sourceWindow": "2026-10-12 to 2026-10-14 UTC"
+  },
+  "historicDirectionComparison": {
+    "measuredWaveFromDeg": 329.11,
+    "chartedAgateFacingDeg": 336.74,
+    "separationDeg": 7.63,
+    "observedAtUTC": "2026-10-14T23:46:01Z",
+    "role": "Orientation illustration based on original buoy waves and a historical NOAA chart",
+    "physicallyModeledWaveHeightAtBeachM": null
+  },
+  "siteContext": [
+    {
+      "id": "grand-marais-agate",
+      "label": "Agate Beach",
+      "setting": "Open Lake Superior shoreline",
+      "description": "Faces the open lake. Use the measured offshore storm history to understand periods of stronger lake activity.",
+      "officialSource": "https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/",
+      "settingLabel": "Open coast"
+    },
+    {
+      "id": "grand-marais-harbor",
+      "label": "Bayshore Park",
+      "setting": "Downtown harbor beach",
+      "description": "Sits in the sheltered harbor. Look at local forecasts and marine alerts separately from open-lake observations.",
+      "officialSource": "https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/",
+      "settingLabel": "Harbor"
+    }
+  ],
+  "currentConditionsLink": "https://www.weather.gov/mqt/",
+  "currentMarineAlertsLink": "https://api.weather.gov/alerts/active?zone=LSZ250",
+  "originalPhotosUsed": false,
+  "photoVerificationRequiredForWaveHistory": false,
+  "visitorGuidance": "Explore measured wave history, compare shoreline settings, and check current NWS marine advisories and local rules before a visit.",
+  "canForecastAgateDiscoveries": false,
+  "canApproveCollecting": false,
+  "canLabelShoreSafe": false,
+  "canForecastBreakingSurf": false,
+  "isLiveNow": false
+}
