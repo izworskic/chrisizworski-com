@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-16",
+  "updated": "2026-10-16T15:24:50.024Z",
+  "body": "The Northeast Lower Peninsula leads the state at peak color with 94 percent modeled fall foliage, while Northwest Lower follows at 80 percent in the falling phase. Central and Saginaw Bay regions show 67 percent, still rising. The Western and Eastern U.P., along with Southwest and Southeast Lower areas, remain well behind at 24 to 34 percent, mostly in early falling or green phases.\n\nRain expected over the next few days across all regions will accelerate leaf drop, particularly where color is already advanced. Highs near 57 to 68 degrees and lows near 31 to 38 degrees support continued transition. This weekend offers the best window for viewing peak color in the Northeast Lower and Northwest Lower before moisture increases leaf fall rates.\n\nFor optimal viewing this weekend, the River Road Scenic Byway to the Lumberman's Monument in the Northeast Lower provides peak foliage conditions. Alternatively, Pierce Stocking Scenic Drive at Sleeping Bear Dunes in the Northwest Lower offers substantial color at 80 percent with slightly warmer temperatures near 57 degrees.",
+  "generationMethod": "AI-generated model summary",
+  "conditionsUpdated": "2026-10-16T15:24:46.583Z",
+  "sourceEvidence": [
+    {
+      "region": "wup",
+      "modeledPercent": 26,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "eup",
+      "modeledPercent": 34,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "tip",
+      "modeledPercent": 61,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "nwl",
+      "modeledPercent": 80,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "nel",
+      "modeledPercent": 94,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "cen",
+      "modeledPercent": 67,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "swl",
+      "modeledPercent": 25,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    },
+    {
+      "region": "sel",
+      "modeledPercent": 24,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -5,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 33,
+        "satelliteWeight": 0.48
+      }
+    }
+  ],
+  "publisher": "Chris Izworski",
+  "disclosure": "AI-generated summary of regional model estimates and weather inputs, published by Chris Izworski. This is not a firsthand field report; compare the current regional readings and their source dates."
+}
