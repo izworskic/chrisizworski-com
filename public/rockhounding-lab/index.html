@@ -98,6 +98,13 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   </div>
   <button type="button" id="liveOffshoreRefresh" style="align-self:start;border:1px solid #bfd5d6;border-radius:9px;padding:9px 14px;background:#f3faf8;color:#23596a;font-weight:700;font-size:13px">Refresh readings</button>
  </div>
+ <div id="photoFreeConditionReading" class="infoPanel" style="padding:16px 18px;margin:15px 0;border-left:4px solid #467e83" aria-labelledby="photoFreeConditionTitle">
+  <div class="chartTop" style="gap:8px"><strong id="photoFreeConditionTitle" style="font-size:13px;color:#23515d">Photo-free offshore storm reading</strong><span id="photoFreeConditionQuality" style="font-size:11px;color:#637980">Checking observation coverage</span></div>
+  <div id="photoFreeConditionHeadline" role="status" aria-live="polite" style="font-size:clamp(19px,2.7vw,27px);font-weight:750;color:#205267;margin:8px 0 4px">Checking the buoy and marine alerts…</div>
+  <p id="photoFreeConditionDetail" style="font-size:13px;color:#4a6b74;margin:0 0 9px">Measured offshore conditions only; no photographs needed.</p>
+  <div id="photoFreeConditionFlags" style="font-size:12px;color:#596e72">Agate Beach: exposed to open Lake Superior. Bayshore Park: sheltered harbor, not measured by this offshore buoy.</div>
+  <p style="font-size:11px;color:#657b7d;margin:9px 0 0"><strong>Important:</strong> A reported wave decline is not proof of newly exposed rocks or safe access. The remote Marquette water-level gauge cannot certify Grand Marais beach exposure.</p>
+ </div>
  <div class="pulseStats" aria-label="Latest measured offshore wave and marine source report">
   <div class="pulseStat"><small>Grand Marais buoy status</small><strong id="liveOffshorePhase" style="font-size:20px;line-height:1.3">Checking source</strong><span id="liveOffshoreAge">Original station timestamps</span></div>
   <div class="pulseStat"><small>Last offshore wave height</small><strong id="liveOffshoreHeight">—</strong><span>Significant wave height · meters</span></div>
@@ -1067,6 +1074,10 @@ render();
  const button=byId('liveOffshoreRefresh'),chart=byId('liveOffshoreChart');
  if(!button||!chart)return;
  const refs={phase:byId('liveOffshorePhase'),age:byId('liveOffshoreAge'),
+  conditionHeadline:byId('photoFreeConditionHeadline'),
+  conditionDetail:byId('photoFreeConditionDetail'),
+  conditionQuality:byId('photoFreeConditionQuality'),
+  conditionFlags:byId('photoFreeConditionFlags'),
   height:byId('liveOffshoreHeight'),peak:byId('liveOffshorePeak'),
   peakDate:byId('liveOffshorePeakDate'),hazards:byId('liveOffshoreHazards'),
   alertNote:byId('liveOffshoreAlertNote'),caption:byId('liveOffshoreChartCaption'),
@@ -1128,6 +1139,32 @@ render();
      r.canPublishSafeVisitWindow!==false||r.rockExposureScore!==null||
      !Array.isArray(r.latest48hObservedSeries))
      throw Error('Original GLOS evidence validation unavailable');
+   // Unified condition reading comes from the SAME cached wave/NOAA/NWS
+   // response, never another visitor-side request.
+   const watch=r.photoFreeConditionReading;
+   if(!watch||watch.schemaVersion!=='rockhounding-photo-free-condition-reading-v1'||
+      watch.source!=='GLOS_MEASURED_OFFSHORE_PLUS_NWS_ALERTS'||
+      watch.stationId!=='SPOT-1361'||watch.photosRequired!==false||
+      watch.canPredictNewAgates!==false||watch.canClaimBeachSafe!==false||
+      watch.canPublishVisitWindow!==false||watch.canClaimNewRocksExposed!==false||
+      watch.newAgateProbability!==null||watch.modeledBeachWaveHeightM!==null||
+      watch.remoteGaugeCannotEstablishLocalExposure!==true||
+      watch.alertStatus!==r.hazardStatus)
+    throw Error('Independent no-photo wave context failed source verification');
+   const watchAge=watch.sourceObservedAtUTC?(Date.now()-Date.parse(watch.sourceObservedAtUTC))/3600000:null;
+   const watchStale=watchAge===null||watchAge>3||watchAge<-.1;
+   refs.conditionHeadline.textContent=watchStale?
+     (watch.alertStatus==='ACTIVE'?'Marine warning or advisory active':'Current offshore evidence unavailable'):
+     watch.headline;
+   refs.conditionDetail.textContent=watchStale?
+     'Original Grand Marais buoy readings have gone stale since the cached report was issued. Missing data cannot establish wave easing, safe access or newly exposed stones.':
+     watch.explanation;
+   refs.conditionQuality.textContent=watchStale?'Original buoy source stale':
+     watch.evidenceGrade==='FRESH_OFFSHORE_WAVES_AND_COMPLETE_48H_TREND'?
+       'Fresh source · 48-hour trend covered':'Fresh buoy source · trend limited';
+   refs.conditionFlags.textContent='Agate Beach: offshore wave context only. Bayshore Park: protected-harbor wave response unmeasured.'+
+     (watch.alertStatus==='UNKNOWN'?' Current marine alerts could not be verified.':'')+
+     (watch.alertStatus==='ACTIVE'?' NWS marine or shoreline warning/advisory currently active.':'');
    const age=r.latestMeasuredAtUTC?(Date.now()-Date.parse(r.latestMeasuredAtUTC))/3600000:null;
    const phase=age!==null&&age>3?'OFFSHORE_SENSOR_STALE':r.status;
    const waveTrend=r.waveTendency48h;
@@ -1222,6 +1259,10 @@ render();
     r.hazardCaveat;
    draw(r.latest48hObservedSeries);
   }catch{
+   refs.conditionHeadline.textContent='Current offshore evidence unavailable';
+   refs.conditionQuality.textContent='Source verification failed';
+   refs.conditionDetail.textContent='Original buoy, NWS or API readings could not be verified. No beach-exposure or safe-visit decision is available.';
+   refs.conditionFlags.textContent='Agate Beach: offshore proxy only. Bayshore Park: harbor waves not measured.';
    refs.phase.textContent='Live data unavailable';
    refs.waveTendency.textContent='48-hour comparison unavailable';
    refs.waveTendencyDetail.textContent='Original measurements or weather verification unavailable. No offshore trend or safe shoreline inferred.';
