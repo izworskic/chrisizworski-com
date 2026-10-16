@@ -1,0 +1,25 @@
+name: Rockhounding independent Agate Beach dated shoreline evidence audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-remote-shoreline-evidence-20261015
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate independent media metadata vs 2026 actual GLOS events
+        run: |
+          node --test tests/rockhounding-shoreline-photo-evidence.test.js
+          node --test tests/rockhounding-glos-season-visual.test.js tests/rockhounding-glos-event*.test.js
+      - name: Audit all rockhounding science regressions and source provenance
+        run: node --test tests/rockhounding*.test.js
