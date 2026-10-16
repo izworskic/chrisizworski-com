@@ -18,7 +18,7 @@ jobs:
           node-version: '22'
       - name: Verify original camera geotag and independent 2026 GLOS event matching
         run: |
-          node --test tests/rockhounding-commons-camera-discovery.test.js
+          node --test tests/rockhounding-commons-camera-discovery.test.js tests/rockhounding-commons-camera-watch.test.js tests/rockhounding-commons-photo-lab.test.js
           node --test tests/rockhounding-shoreline*.test.js
       - name: Retrieve actual Wikimedia geosearch results once in research CI
         run: node scripts/rockhounding/discover-commons-repeat-views.cjs --out artifacts/commons-grand-marais-geotagged-camera-research.json
