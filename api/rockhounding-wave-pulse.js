@@ -10,6 +10,7 @@ const {compareToBaseline}=require('../lib/rockhounding/offshore-activity-percent
 const baseline=require('../data/rockhounding/spotter-2026-24h-offshore-reference.json');
 const {sourceURL,toRows,waterLevelContext}=require('../lib/rockhounding/noaa-marquette-water-level.cjs');
 const {conditionReading}=require('../lib/rockhounding/photo-free-condition-reading.cjs');
+const {URL:GRMM4_URL,parseGRMM4,describeGRMM4,missingWind}=require('../lib/rockhounding/ndbc-grand-marais-wind.cjs');
 const UA='ChrisIzworskiRockhoundingWave/1.0 (https://chrisizworski.com/rockhounding-lab/)';
 const H=3600000;
 const iso=ms=>new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');
@@ -49,13 +50,25 @@ async function getMarquetteLevel(fetchFn,nowISO){
   throw Error('NOAA water-level source too large');
  return waterLevelContext(toRows(JSON.parse(body)),{nowISO});
 }
+async function getGrandMaraisWind(fetchFn){
+ const res=await fetchFn(GRMM4_URL,{
+  headers:{Accept:'text/plain','User-Agent':UA},
+  signal:AbortSignal.timeout(7500)});
+ if(!res?.ok)throw Error('NDBC directly measured Grand Marais wind unavailable');
+ const length=Number(res.headers?.get?.('content-length'));
+ if(Number.isFinite(length)&&length>1500000)throw Error('NDBC GRMM4 source exceeds research limit');
+ const body=await res.text();
+ if(typeof body!=='string'||body.length>1500000)throw Error('NDBC source body invalid or oversized');
+ return parseGRMM4(body);
+}
 async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  const now=Date.parse(nowISO);
  if(!Number.isFinite(now))throw Error('Invalid clock');
- const [g,nws,remoteLevel]=await Promise.allSettled([
+ const [g,nws,remoteLevel,localWind]=await Promise.allSettled([
   getGLOS(fetchFn,now),
   getNWS(fetchFn,nowISO),
-  getMarquetteLevel(fetchFn,nowISO)
+  getMarquetteLevel(fetchFn,nowISO),
+  getGrandMaraisWind(fetchFn)
  ]);
  const parsed=g.status==='fulfilled'?g.value:null;
  const alerts=nws.status==='fulfilled'?nws.value:{status:'UNKNOWN'};
@@ -70,6 +83,8 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
   sevenDayStormMemory,
   dataSourceAvailable:!!parsed,
   waveTendency48h,
+  independentlyMeasuredGrandMaraisWind:localWind.status==='fulfilled'?
+   describeGRMM4(localWind.value,{nowISO,waveObservation:signal}):missingWind(nowISO),
   lakeSuperiorLevelContext:remoteLevel.status==='fulfilled'?remoteLevel.value:{
    status:'REMOTE_LEVEL_SOURCE_UNAVAILABLE',
    stationId:'9099018',stationName:'Marquette C.G., MI',
@@ -118,4 +133,4 @@ async function handler(req,res){
  }
 }
 module.exports=handler;
-module.exports._test={getGLOS,getNWS,getMarquetteLevel,currentPulse};
+module.exports._test={getGLOS,getNWS,getMarquetteLevel,getGrandMaraisWind,currentPulse};
