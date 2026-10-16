@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "rockhounding-shoreline-visual-crosscheck-2026-v1",
+  "reviewedOnUTC": "2026-10-16",
+  "siteId": "grand-marais-agate",
+  "independentDatedBeachMediaSources": 3,
+  "geolocatedSingleScenes": 1,
+  "independentlyMeasuredOffshoreWaveRecords": 5243,
+  "sourceGroupedWaveEpisodes": 11,
+  "qualifyingSampledWaveEpisodes": 8,
+  "episodesWithApproximatePostSceneCandidate": 1,
+  "reviewedSameVantageBeforeAfterPairs": 0,
+  "observedBeachShorelineChanges": 0,
+  "newlyExposedAgateRecords": 0,
+  "status": "INDEPENDENT_MEDIA_EXISTS_BUT_NO_VALID_BEFORE_AFTER_CHANGE_PAIR",
+  "photoSources": [
+    {
+      "id": "commons-agate-beach-july-5-2026",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Marais_Agate_Beach.jpg",
+      "sourceClass": "WIKIMEDIA_COMMONS",
+      "dateStartUTC": "2026-07-05T00:00:00Z",
+      "dateEndUTC": "2026-07-06T00:00:00Z",
+      "dateQuality": "EXIF_DAY_WITH_UNKNOWN_LOCAL_TIMEZONE",
+      "sourceStatus": "GEOLOCATED_DATED_SINGLE_SCENE_BASELINE",
+      "rights": "CC-BY-4.0; attribution and source/license link required for display"
+    },
+    {
+      "id": "flickr-agate-beach-july-4-2026",
+      "sourceUrl": "https://www.flickr.com/photos/cowofchange/55385027738",
+      "sourceClass": "FLICKR",
+      "dateStartUTC": "2026-07-04T00:00:00Z",
+      "dateEndUTC": "2026-07-05T00:00:00Z",
+      "dateQuality": "SOURCE_STATED_DAY_NO_GPS",
+      "sourceStatus": "DATED_SITE_MEDIA_NO_GPS",
+      "rights": "All rights reserved; link to source only, do not copy or embed"
+    },
+    {
+      "id": "reddit-agate-beach-july-24-2026-approx",
+      "sourceUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+      "sourceClass": "REDDIT_SELF_REPORTED_MEDIA",
+      "dateStartUTC": "2026-07-23T00:00:00Z",
+      "dateEndUTC": "2026-07-26T00:00:00Z",
+      "dateQuality": "APPROXIMATE_DAY_FROM_JULY_26_RELATIVE_STATEMENT",
+      "sourceStatus": "APPROXIMATE_DATED_SITE_MEDIA_NO_GPS",
+      "rights": "Unknown retained license; link to public post only, do not copy or embed"
+    }
+  ],
+  "candidateConnections": [
+    {
+      "offshoreWavePeakAtUTC": "2026-07-21T23:46:01Z",
+      "offshoreWavePeakHeightM": 1.62,
+      "sourceQualifiedOffshoreEpisode": true,
+      "postEventMediaCandidates": [
+        {
+          "photoId": "reddit-agate-beach-july-24-2026-approx",
+          "sourceUrl": "https://www.reddit.com/r/rockhounds/comments/1v6qg50/happiness_is/",
+          "temporalStatus": "POST_EVENT_POSSIBLE_TIME_OVERLAP_UNCERTAIN"
+        }
+      ],
+      "noConfirmedStormLinkedShorelineChange": true
+    }
+  ],
+  "reviewedShorelineChangeImagePairs": 0,
+  "nWSAlertsNotReconstructedForHistory": true,
+  "cameraLocationsDoNotDefineLegalAccess": true,
+  "sourcePhotoAloneNotBeachMaterialRearrangement": true,
+  "calibratedRockExposureScoreAvailable": false,
+  "canPredictNewAgates": false,
+  "canClaimRecentlyExposedRocks": false,
+  "canClaimBeachSafety": false,
+  "canPublishVisitWindow": false
+}
