@@ -23,6 +23,7 @@ jobs:
         run: |
           node --test tests/rockhounding-photo-free-wave-activity.test.js tests/rockhounding-photo-free-activity-ui.test.js
           node --test tests/rockhounding-photo-free-storm-pulse.test.js tests/rockhounding-lab-visual.test.js
+          node --test tests/rockhounding*.test.js
           node --test tests/rockhounding-photo-free-storm-pulse.test.js
       - name: Calculate from all authentic archived Grand Marais buoy rows
         env:
