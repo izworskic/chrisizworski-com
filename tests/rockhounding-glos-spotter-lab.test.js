@@ -5,7 +5,7 @@ const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index
 const study=require('../data/rockhounding/grand-marais-glos-spotter-observed-run-2026-10-15.json');
 test('GLOS near Grand Marais observations are clearly separate from all illustrative scenarios',()=>{
  assert.match(html,/id="grand-marais-spotter-evidence"/);
- assert.match(html,/GLOS original data/);
+ assert.match(html,/GLOS (Grand Marais Spotter )?original data/);
  assert.match(html,/interactive storm picker uses illustrative scenarios/);
  assert.match(html,/142 original readings/);
  assert.match(html,/October 14 at 23:46 UTC|2026-10-14 23:46 UTC/);
