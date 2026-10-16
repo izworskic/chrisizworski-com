@@ -7,7 +7,7 @@ const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-conditions/index.html'),'utf8');
 const old=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
 test('photo-free conditions page is a deliberate simple primary interface, no photo/scraper/ads requirement',()=>{
- assert.match(html,/<title>Grand Marais Rockhounding Conditions/);
+ assert.match(html,/<title>Grand Marais Rockhounding \| Lake Superior Wave Pulse/);
  assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
  assert.match(html,/No photos needed/);
  assert.match(html,/id="current"/);
