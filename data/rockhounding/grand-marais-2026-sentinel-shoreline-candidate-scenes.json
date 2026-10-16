@@ -1,6 +1,5 @@
 {
   "schemaVersion": "rockhounding-grand-marais-sentinel-scene-catalog-v1",
-  "verifiedAtUTC": "2026-10-15T23:30:00Z",
   "source": "ELEMENT84_EARTH_SEARCH_STAC_SENTINEL2_C1_L2A",
   "catalogUrl": "https://earth-search.aws.element84.com/v1",
   "collection": "sentinel-2-c1-l2a",
@@ -151,5 +150,6 @@
     "canClaimNewRocks": false,
     "canPublishRockhoundingVisitWindow": false,
     "canClaimShoreSafety": false
-  }
+  },
+  "sourceRetrievedDateUTC": "2026-10-16"
 }
