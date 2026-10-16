@@ -51,7 +51,7 @@ test('tampered source wave rows or missing provenance fail before any publicatio
  const fake=structuredClone(archive);
  fake.episodes=3;
  fake.rows.find(x=>x.qualifyingOffshoreEpisode).peakWaveHeightM=22;
- assert.throws(()=>buildStormPulse({a:fake}),/episode/);
+ assert.throws(()=>buildStormPulse({a:fake}),/wave height changed/);
  const fake2=structuredClone(archive);
  fake2.actualObservedWaveRecords=1200;
  assert.throws(()=>buildStormPulse({a:fake2}),/provenance/);
