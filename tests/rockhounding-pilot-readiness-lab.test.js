@@ -25,7 +25,7 @@ test('two-site source panel visibly separates public visit information, collecti
  assert.match(html,/Bayshore Park/);
  assert.match(html,/Agate Beach/);
  assert.match(html,/5,243 regional offshore readings/);
- assert.match(html,/Burt Township documents/);
+ assert.match(html,/Burt Township confirms/);
  assert.match(html,/municipal|township/i);
  assert.match(html,/25-pound annual limit/);
  assert.match(html,/does <strong>not<\/strong> automatically grant permission/);
