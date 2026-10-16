@@ -1,0 +1,24 @@
+name: Rockhounding photo-free measured wave Storm Pulse
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-photo-free-storm-pulse-20261016
+permissions:
+  contents: read
+jobs:
+  verify-wave-product:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recompute original-source wave pulse without photos
+        run: |
+          node scripts/rockhounding/build-photo-free-storm-pulse.cjs --check public/rockhounding-lab/storm-pulse-2026.json
+          node --test tests/rockhounding-photo-free-storm-pulse.test.js
+      - name: Run full original rockhounding safety / source / visual checks
+        run: node --test tests/rockhounding*.test.js
