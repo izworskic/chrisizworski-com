@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-16T00:55:18.166Z",
+  "calculatedAtUTC": "2026-10-16T00:55:52.097Z",
   "recordCount": 142,
   "latestObservedAt": "2026-10-14T23:46:01Z",
-  "latestAgeHours": 25.15,
+  "latestAgeHours": 25.16,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -26,6 +26,10 @@
       "observedOffshoreDeclineAfterPeak": true,
       "observedDeclineSampleAt": "2026-10-14T02:46:01Z",
       "observedDeclineHeightM": 1.03,
+      "elevatedReadingsAfterRecordedDecline": 35,
+      "offshoreHeightRenewedAtLeast30PercentAfterDecline": true,
+      "lifecycleStatus": "OFFSHORE_WAVES_ELEVATED_AGAIN_AFTER_DROP",
+      "offshoreSettlingWindowValidated": false,
       "completeness": "EVENT_END_UNCONFIRMED_OR_SOURCE_GAPPY",
       "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
       "riskThresholdOrAlert": false,
@@ -44,7 +48,7 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-16T00:55:18.166Z",
+    "checkedAtUTC": "2026-10-16T00:55:52.097Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
@@ -71,8 +75,8 @@
     "coverageNote": "Current selected NWS point/nearshore-zone alerts only; no alert is NOT a beach safety clearance",
     "noPresentDayMarineSafetyCertification": true
   },
-  "sourceQueryStartUTC": "2026-10-12T00:55:18Z",
-  "sourceQueryEndUTC": "2026-10-16T00:55:18Z",
+  "sourceQueryStartUTC": "2026-10-12T00:55:52Z",
+  "sourceQueryEndUTC": "2026-10-16T00:55:52Z",
   "sourceRecordCount": 142,
   "rejectedOriginalRows": 0,
   "originalCsvSha256": "a360f3632f0833d104abed13a34e9d417ecfb401912e4216b989a22fe0814803",
