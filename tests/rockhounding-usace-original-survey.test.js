@@ -27,12 +27,13 @@ test('original 2026 USACE polygon excludes BOTH approximate rockhounding beach p
 });
 test('actual survey at entrance is not a measured harbor wave, a surface water level or a stone result',()=>{
  const harbor=harborStudyGate();
- assert.equal(harbor.latestUSACE2026OriginalSurveyArchivedAndChecked,true);
- assert.equal(harbor.latestUSACE2026StudySiteCovered,false);
- assert.equal(harbor.latestUSACE2026VerticalDatum,'IGLD 85');
+ assert.equal(harbor.originalUSACE2026ArchiveSHA256Validated,true);
+ assert.equal(harbor.originalUSACE2026NumericXYZRecordsReviewed,17804);
+ assert.equal(harbor.originalUSACE2026SurveyContainsBayshorePark,false);
+ assert.equal(harbor.originalUSACE2026IGLD85Datum,'IGLD 85');
  assert.equal(harbor.waveTransmissionFactor,null);
  assert.equal(harbor.predictedHarborWaveHeightM,null);
- assert.equal(harbor.currentUSACE2026DepthVerified,false);
+ assert.equal(harbor.originalUSACE2026XYZGeoreferencedAsBeachGrid,false);
  assert.equal(harbor.canPublishVisitWindow,false);
  assert.equal(harbor.canClaimNewStones,false);
 });
