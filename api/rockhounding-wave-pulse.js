@@ -5,6 +5,8 @@ const {requestUrl,parseSpotterCSV}=require('../lib/rockhounding/glos-spotter.cjs
 const {assessAlerts,URLS}=require('../lib/rockhounding/nws-shore-hazards.cjs');
 const {analyzeObserved}=require('../lib/rockhounding/live-photo-free-pulse.cjs');
 const {rollingWaveTendency}=require('../lib/rockhounding/rolling-offshore-wave-tendency.cjs');
+const {compareToBaseline}=require('../lib/rockhounding/offshore-activity-percentiles.cjs');
+const baseline=require('../data/rockhounding/spotter-2026-24h-offshore-reference.json');
 const {sourceURL,toRows,waterLevelContext}=require('../lib/rockhounding/noaa-marquette-water-level.cjs');
 const UA='ChrisIzworskiRockhoundingWave/1.0 (https://chrisizworski.com/rockhounding-lab/)';
 const H=3600000;
@@ -58,8 +60,10 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  const hazardStatus=['ACTIVE','CLEAR','UNKNOWN'].includes(alerts.status)?alerts.status:'UNKNOWN';
  const signal=analyzeObserved(parsed?.rows||[],{nowISO,hazardStatus});
  const waveTendency48h=rollingWaveTendency(parsed?.rows||[],{nowISO,hazardStatus});
+ const offshoreSeasonalContext=compareToBaseline(waveTendency48h,{baseline,hazardStatus});
  return {
   ...signal,
+  offshoreSeasonalContext,
   dataSourceAvailable:!!parsed,
   waveTendency48h,
   lakeSuperiorLevelContext:remoteLevel.status==='fulfilled'?remoteLevel.value:{

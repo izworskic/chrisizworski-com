@@ -109,6 +109,17 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div id="liveWaveTendencyLabel" role="status" aria-live="polite" style="color:#2e6371;font-size:20px;font-weight:750;margin:7px 0 4px">Checking two 24-hour windows…</div>
   <p id="liveWaveTendencyDetail" style="font-size:12px;color:#536d73;margin:0">This is an observed offshore activity comparison, not wave power or measured movement of agates at the beach. Photographs are not required.</p>
  </div>
+ <div id="offshoreSeasonPercentilePanel" class="infoPanel" aria-labelledby="offshoreSeasonPercentileTitle" style="margin:12px 0 15px;padding:15px 17px">
+  <div class="chartTop">
+   <strong id="offshoreSeasonPercentileTitle" style="font-size:14px;color:#204f5e">How unusual are today's offshore waves?</strong>
+   <span style="font-size:11px;color:#607b80">Compared with measured summer–fall 2026</span>
+  </div>
+  <div id="offshoreSeasonPercentileValue" role="status" aria-live="polite" style="font-size:21px;font-weight:750;color:#305f70;margin:8px 0 5px">Checking historical measurements…</div>
+  <div role="meter" id="offshoreSeasonPercentileMeter" aria-label="Percentile of observed 24-hour offshore wave activity compared with 2026 source windows" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="height:11px;background:#dce8e8;border-radius:8px;overflow:hidden;margin:9px 0">
+   <div id="offshoreSeasonPercentileFill" style="height:100%;width:0;background:#367586;border-radius:8px"></div>
+  </div>
+  <p id="offshoreSeasonPercentileDetail" style="font-size:12px;color:#526b74;margin:8px 0 0">This compares the buoy's latest complete 24-hour wave-activity measurement with its own 2026 June–October archive. A percentile is not the likelihood of finding agates or a safety rating.</p>
+ </div>
  <div class="pulseStats" aria-label="Independent regional Lake Superior level context from NOAA Marquette Michigan" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:10px">
   <div class="pulseStat"><small>Lake Superior level · Marquette gauge</small><strong id="liveRemoteLakeLevel" style="font-size:23px">Checking</strong><span id="liveRemoteLakeAge">NOAA measured water elevation, IGLD 1985</span></div>
   <div class="pulseStat"><small>Measured change over 24 hours</small><strong id="liveRemoteLakeDelta" style="font-size:23px">—</strong><span>Remote lake-level context, not beach height</span></div>
@@ -1064,6 +1075,10 @@ render();
   remoteLake:byId('liveRemoteLakeLevel'),remoteLakeAge:byId('liveRemoteLakeAge'),
   waveTendency:byId('liveWaveTendencyLabel'),
   waveTendencyDetail:byId('liveWaveTendencyDetail'),
+  seasonPercentile:byId('offshoreSeasonPercentileValue'),
+  seasonDetail:byId('offshoreSeasonPercentileDetail'),
+  seasonFill:byId('offshoreSeasonPercentileFill'),
+  seasonMeter:byId('offshoreSeasonPercentileMeter'),
   remoteLakeDelta:byId('liveRemoteLakeDelta'),
   remoteLakeExplanation:byId('liveRemoteLakeExplanation')};
  const labels={
@@ -1139,6 +1154,38 @@ render();
     refs.waveTendency.textContent='48-hour comparison unavailable';
     refs.waveTendencyDetail.textContent='Original buoy observations are stale, missing, or too gappy to compare two full 24-hour periods. No calm-water, beach-safety or rock-exposure inference was made.';
    }
+   const season=r.offshoreSeasonalContext;
+   const seasonOK=comparable&&
+     season?.schemaVersion==='rockhounding-photo-free-offshore-seasonal-comparison-v1'&&
+     season.reference==='ORIGINAL_GLOS_SPOT1361_JUNE_TO_OCTOBER_2026'&&
+     season.stationId==='SPOT-1361'&&
+     season.windowsInReference===421&&
+     season.canPredictNewAgates===false&&
+     season.canPublishCollectingWindow===false&&
+     season.canClaimBeachSafe===false&&
+     season.calibratedNewAgateProbability===null&&
+     season.physicalWavePowerKWPerM===null&&
+     season.percentileIsFrequencyOfMeasuredActivityNotRockFinds===true&&
+     season.sourceStaleOrGappy===false&&
+     Number.isFinite(season.historicalPercentileOf24hActivity)&&
+     season.historicalPercentileOf24hActivity>=0&&
+     season.historicalPercentileOf24hActivity<=100;
+   if(seasonOK){
+     const percentile=season.historicalPercentileOf24hActivity;
+     refs.seasonPercentile.textContent='Offshore wave activity in the '+Math.max(1,Math.round(percentile))+
+       (Math.round(percentile)%100>=11&&Math.round(percentile)%100<=13?'th':
+         Math.round(percentile)%10===1?'st':Math.round(percentile)%10===2?'nd':
+           Math.round(percentile)%10===3?'rd':'th')+' percentile';
+     refs.seasonFill.style.width=percentile.toFixed(1)+'%';
+     refs.seasonMeter.setAttribute('aria-valuenow',String(Math.round(percentile)));
+     refs.seasonDetail.textContent='This is the rank of the latest complete 24-hour offshore Hs² × mean-period measurement against 421 sufficiently sampled, overlapping 24-hour windows in the original June–October 2026 Grand Marais buoy archive. '+(r.hazardStatus==='ACTIVE'?'NWS marine warnings/advisories are active. ':'')+
+       'Not long-term climate, beach wave power, newly exposed stones, agate probability or a safe-visiting recommendation.';
+   }else{
+     refs.seasonPercentile.textContent='Historical comparison unavailable';
+     refs.seasonFill.style.width='0%';
+     refs.seasonMeter.setAttribute('aria-valuenow','0');
+     refs.seasonDetail.textContent='The latest buoy source is stale, interrupted, or lacks complete 24-hour observations. No seasonal wave percentile or safe-rockhounding inference is shown.';
+   }
    const water=r.lakeSuperiorLevelContext;
    if(water?.stationId==='9099018'&&water?.gaugeMeaning==='REMOTE_LAKE_SUPERIOR_LEVEL_CONTEXT_ONLY'&&
       water?.measuredAtAgateBeach===false&&water?.canPredictNewAgates===false&&
@@ -1178,6 +1225,10 @@ render();
    refs.phase.textContent='Live data unavailable';
    refs.waveTendency.textContent='48-hour comparison unavailable';
    refs.waveTendencyDetail.textContent='Original measurements or weather verification unavailable. No offshore trend or safe shoreline inferred.';
+   refs.seasonPercentile.textContent='Historical comparison unavailable';
+   refs.seasonFill.style.width='0%';
+   refs.seasonMeter.setAttribute('aria-valuenow','0');
+   refs.seasonDetail.textContent='Live offshore measurements could not be verified; no seasonal percentile, rock-exposure or safety conclusion is available.';
    refs.explanation.textContent='The current buoy or weather source could not be verified. The historical chart below still contains measured observations; no current lake or beach conditions have been inferred.';
    refs.remoteLake.textContent='Level unavailable';
    refs.remoteLakeDelta.textContent='—';

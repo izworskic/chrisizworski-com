@@ -1,0 +1,53 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const baseline=require('../data/rockhounding/spotter-2026-24h-offshore-reference.json');
+const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
+const api=fs.readFileSync(path.join(__dirname,'../api/rockhounding-wave-pulse.js'),'utf8');
+test('real 2026 GLOS source reference describes 421 independently complete but overlapping 24h offshore windows',()=>{
+ assert.equal(baseline.schemaVersion,'rockhounding-photo-free-24h-offshore-baseline-2026-v1');
+ assert.equal(baseline.stationId,'SPOT-1361');
+ assert.equal(baseline.sourceOriginalObservationCount,5243);
+ assert.equal(baseline.periodFromUTC,'2026-06-26T01:16:01Z');
+ assert.equal(baseline.periodToUTC,'2026-10-14T23:46:01Z');
+ assert.equal(baseline.windowsExamined,439);
+ assert.equal(baseline.windowsAccepted,421);
+ assert.equal(baseline.q25,1.51);
+ assert.equal(baseline.q50,4.275);
+ assert.equal(baseline.q75,21.346);
+ assert.equal(baseline.q90,108.155);
+ assert.equal(baseline.orderedMeasuredValues.length,421);
+ assert.equal(baseline.overlappingWindowsNotIndependentStorms,true);
+ assert.equal(baseline.sourceIndependentWindowCount,null);
+ assert.equal(baseline.regionalBuoyNotBeachWaves,true);
+ assert.equal(baseline.calibratedNewAgateProbability,null);
+ assert.equal(baseline.canPredictNewAgates,false);
+ assert.equal(baseline.canClaimBeachSafe,false);
+});
+test('live photo-free route calculates same cached-source 24h metric before source-verified historical percentile, no new provider calls',()=>{
+ assert.match(api,/require\('\.\.\/lib\/rockhounding\/offshore-activity-percentiles\.cjs'\)/);
+ assert.match(api,/require\('\.\.\/data\/rockhounding\/spotter-2026-24h-offshore-reference\.json'\)/);
+ assert.match(api,/compareToBaseline\(waveTendency48h,\{baseline,hazardStatus\}\)/);
+ assert.match(api,/offshoreSeasonalContext,/);
+ assert.equal((api.match(/getGLOS\(fetchFn,now\)/g)||[]).length,2); // one definition, one call
+ assert.equal((api.match(/getMarquetteLevel\(fetchFn,nowISO\)/g)||[]).length,2);
+ assert.match(api,/Promise\.allSettled/);
+});
+test('photo-free seasonal percentile is prominent, truly relative, inaccessible if stale and never promises agates',()=>{
+ assert.match(html,/id="offshoreSeasonPercentilePanel"/);
+ assert.match(html,/id="offshoreSeasonPercentileTitle"/);
+ assert.match(html,/id="offshoreSeasonPercentileValue"/);
+ assert.match(html,/id="offshoreSeasonPercentileMeter"/);
+ assert.match(html,/id="offshoreSeasonPercentileFill"/);
+ assert.match(html,/id="offshoreSeasonPercentileDetail"/);
+ assert.match(html,/season\?\.schemaVersion==='rockhounding-photo-free-offshore-seasonal-comparison-v1'/);
+ assert.match(html,/season\.windowsInReference===421/);
+ assert.match(html,/sourceStaleOrGappy===false/);
+ assert.match(html,/NWS marine warnings\/advisories are active/);
+ assert.match(html,/Not long-term climate, beach wave power, newly exposed stones, agate probability or a safe-visiting recommendation/);
+ assert.match(html,/Historical comparison unavailable/);
+ assert.match(html,/No seasonal wave percentile or safe-rockhounding inference/i);
+ assert.ok(html.indexOf('id="offshoreSeasonPercentilePanel"')<html.indexOf('id="photo-free-storm-pulse"'));
+ assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
+ assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
+});
