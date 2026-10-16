@@ -104,6 +104,11 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div class="pulseStat"><small>Measured last 48h peak</small><strong id="liveOffshorePeak">—</strong><span id="liveOffshorePeakDate">Source-stamped offshore reading</span></div>
   <div class="pulseStat"><small>NWS marine alert check</small><strong id="liveOffshoreHazards" style="font-size:20px;line-height:1.3">Checking</strong><span id="liveOffshoreAlertNote">Alerts checked separately from buoy waves</span></div>
  </div>
+ <div class="pulseStats" aria-label="Independent regional Lake Superior level context from NOAA Marquette Michigan" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:10px">
+  <div class="pulseStat"><small>Lake Superior level · Marquette gauge</small><strong id="liveRemoteLakeLevel" style="font-size:23px">Checking</strong><span id="liveRemoteLakeAge">NOAA measured water elevation, IGLD 1985</span></div>
+  <div class="pulseStat"><small>Measured change over 24 hours</small><strong id="liveRemoteLakeDelta" style="font-size:23px">—</strong><span>Remote lake-level context, not beach height</span></div>
+  <div class="pulseStat" style="grid-column:auto"><small>What this tells us</small><span id="liveRemoteLakeExplanation" style="display:block;font-size:12px">Marquette is not Grand Marais. Regional lake water level does not measure wave runup or exposed stones at Agate Beach.</span><a href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9099018" target="_blank" rel="noopener noreferrer" style="font-size:12px;display:inline-block;margin-top:7px">NOAA Marquette gauge ↗</a></div>
+ </div>
  <div class="pulseColumns">
   <div class="pulseChartShell">
    <div class="chartTop"><strong style="font-size:14px;color:#204f5e">Observed offshore wave trend</strong><span style="font-size:11px;color:#6a858a">Up to 48h of measured wave heights</span></div>
@@ -1050,7 +1055,10 @@ render();
   peakDate:byId('liveOffshorePeakDate'),hazards:byId('liveOffshoreHazards'),
   alertNote:byId('liveOffshoreAlertNote'),caption:byId('liveOffshoreChartCaption'),
   explanation:byId('liveOffshoreExplanation'),details:byId('liveOffshoreDetails'),
-  warnings:byId('liveOffshoreWarnings')};
+  warnings:byId('liveOffshoreWarnings'),
+  remoteLake:byId('liveRemoteLakeLevel'),remoteLakeAge:byId('liveRemoteLakeAge'),
+  remoteLakeDelta:byId('liveRemoteLakeDelta'),
+  remoteLakeExplanation:byId('liveRemoteLakeExplanation')};
  const labels={
   OFFSHORE_WAVES_REBUILDING:'Waves rebuilding',
   OFFSHORE_WAVES_ELEVATED:'Waves elevated',
@@ -1100,6 +1108,25 @@ render();
      throw Error('Original GLOS evidence validation unavailable');
    const age=r.latestMeasuredAtUTC?(Date.now()-Date.parse(r.latestMeasuredAtUTC))/3600000:null;
    const phase=age!==null&&age>3?'OFFSHORE_SENSOR_STALE':r.status;
+   const water=r.lakeSuperiorLevelContext;
+   if(water?.stationId==='9099018'&&water?.gaugeMeaning==='REMOTE_LAKE_SUPERIOR_LEVEL_CONTEXT_ONLY'&&
+      water?.measuredAtAgateBeach===false&&water?.canPredictNewAgates===false&&
+      water?.canClaimBeachSafety===false&&water?.beachWaterlineElevationM===null){
+    const age=water.dateUTC?(Date.now()-Date.parse(water.dateUTC))/3600000:null;
+    const fresh=age!==null&&age<=3&&age>=-0.1&&
+      ['REMOTE_LAKE_LEVEL_OBSERVED_24H_CHANGE','REMOTE_LAKE_LEVEL_RECENT_BUT_24H_COMPARISON_GAPPY'].includes(water.status);
+    refs.remoteLake.textContent=fresh&&Number.isFinite(water.gaugeWaterLevelM)?
+      water.gaugeWaterLevelM.toFixed(3)+' m':'Level unavailable';
+    refs.remoteLakeDelta.textContent=fresh&&Number.isFinite(water.delta24hCm)?
+      (water.delta24hCm>0?'+':'')+water.delta24hCm.toFixed(1)+' cm':'—';
+    refs.remoteLakeAge.textContent=fresh&&water.dateUTC?
+      'NOAA Marquette '+fmt(water.dateUTC)+' · IGLD 1985':'No fresh regional gauge reading';
+    refs.remoteLakeExplanation.textContent='Measured at Marquette, Michigan, not Grand Marais. Remote lake-level trend only; not local wave runup, local beach waterline or a rock-exposure forecast.';
+   }else{
+    refs.remoteLake.textContent='Level unavailable';refs.remoteLakeDelta.textContent='—';
+    refs.remoteLakeAge.textContent='Separate NOAA lake-level source unavailable';
+    refs.remoteLakeExplanation.textContent='No independent regional level context; the GLOS wave record and NWS alerts are assessed separately.';
+   }
    refs.phase.textContent=labels[phase]||'Measurement status unavailable';
    refs.age.textContent=r.latestMeasuredAtUTC?'Last actual buoy reading '+fmt(r.latestMeasuredAtUTC):'No latest buoy timestamp';
    refs.height.textContent=r.latestOffshoreSignificantWaveHeightM===null?'—':r.latestOffshoreSignificantWaveHeightM.toFixed(2)+' m';
@@ -1119,6 +1146,10 @@ render();
   }catch{
    refs.phase.textContent='Live data unavailable';
    refs.explanation.textContent='The current buoy or weather source could not be verified. The historical chart below still contains measured observations; no current lake or beach conditions have been inferred.';
+   refs.remoteLake.textContent='Level unavailable';
+   refs.remoteLakeDelta.textContent='—';
+   refs.remoteLakeAge.textContent='Lake-level context unavailable';
+   refs.remoteLakeExplanation.textContent='No verified regional level reading; no lake-level or rock-exposure conclusion substituted.';
    refs.hazards.textContent='Alert status unknown';
    refs.height.textContent='—';refs.peak.textContent='—';
    refs.caption.textContent='No current source-verified readings; no line shown.';
