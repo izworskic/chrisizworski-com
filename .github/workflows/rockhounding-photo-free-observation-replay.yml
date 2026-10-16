@@ -26,6 +26,9 @@ jobs:
           node-version: '22'
       - name: Verify stale, missing, and actual source-only phase controls
         run: node --test tests/rockhounding-photo-free-observation-replay.test.js
+      - name: Inspect live research ledger dates without copying original raw source rows
+        run: |
+          node -e "const a=require('./real-wave-archive/data/rockhounding/spotter-observed-wave-ledger.json');console.log('ORIGINAL_GLOS_LEDGER_COVERAGE '+JSON.stringify({schema:a.schemaVersion,station:a.stationId,rows:a.records?.length,first:a.records?.[0]?.time,last:a.records?.at(-1)?.time,generated:a.generatedAtUTC}))"
       - name: Replay the photo-free environmental engine over source-dated 2026 checkpoints
         run: |
           node scripts/rockhounding/replay-photo-free-observations.cjs \
