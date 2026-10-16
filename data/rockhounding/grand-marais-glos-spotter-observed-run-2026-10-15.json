@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "grand-marais-glos-spotter-source-verification-v1",
+  "verificationAtUTC": "2026-10-16T00:00:00Z",
+  "source": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
+  "station": "SPOT-1361",
+  "stationRegistry": "data/rockhounding/grand-marais-glos-spotter-source.json",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38826852138",
+  "sourceCollection": {
+    "retrievedObservations": 144,
+    "sourceFirstAtUTC": "2026-10-12T00:16:01Z",
+    "sourceLatestAtUTC": "2026-10-14T23:46:01Z",
+    "observedPeakWaveHeightM": 1.57,
+    "latestObservedWaveHeightM": 0.95,
+    "latestObservedWaveFromDeg": 329.11,
+    "statusAtVerification": "STALE_OBSERVATIONS",
+    "sourceHasObservedWaveHeight": true,
+    "sourceHasObservedWaveFromDirection": true,
+    "sourceHasObservedMeanPeriod": true,
+    "sourceIsNotBeachSurfSensor": true,
+    "pastSampleNotContemporaneousCondition": true
+  },
+  "publicClaims": {
+    "canClaimSafeConditions": false,
+    "canPredictNewStones": false,
+    "canPublishVisitWindow": false,
+    "canClaimHarborWaves": false
+  },
+  "researchNextStep": "Accumulate source-stamped observed storm and settling episodes, validate relative direction to historic NOAA chart bearing, calibrate with dated independent beach outcome observations."
+}
