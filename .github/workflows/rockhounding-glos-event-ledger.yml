@@ -49,6 +49,7 @@ jobs:
         run: |
           node --test tests/rockhounding-glos-event*.test.js tests/rockhounding-lab-visual.test.js
           node --test tests/rockhounding-glos-spotter.test.js tests/rockhounding-nws-hazards.test.js
+          node --test tests/rockhounding-photo-free-conditions.test.js
 
       - name: Append authentic original GLOS wave observations and separate NWS alert snapshot
         run: |
@@ -56,13 +57,19 @@ jobs:
             --ledger observed-history/data/rockhounding/spotter-observed-wave-ledger.json \
             --report observed-history/data/rockhounding/spotter-offshore-event-research.json
 
+      - name: Record regional NOAA IGLD levels alongside source-stamped GLOS and NWS
+        run: |
+          node scripts/rockhounding/capture-photo-free-poststorm.cjs \
+            --ledger observed-history/data/rockhounding/spotter-observed-wave-ledger.json \
+            --out observed-history/data/rockhounding/photo-free-poststorm-signal.json
+
       - name: Persist results on research-data branch ONLY
         shell: bash
         run: |
           set -euo pipefail
           git -C observed-history config user.name "Rockhounding Research Bot"
           git -C observed-history config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C observed-history add data/rockhounding/spotter-observed-wave-ledger.json data/rockhounding/spotter-offshore-event-research.json
+          git -C observed-history add data/rockhounding/spotter-observed-wave-ledger.json data/rockhounding/spotter-offshore-event-research.json data/rockhounding/photo-free-poststorm-signal.json
           if git -C observed-history diff --cached --quiet; then
             echo "No source-stamped archive changes."
           else
@@ -77,5 +84,6 @@ jobs:
           name: grand-marais-glos-spotter-rolling-storm-events
           path: |
             observed-history/data/rockhounding/spotter-offshore-event-research.json
+            observed-history/data/rockhounding/photo-free-poststorm-signal.json
           if-no-files-found: warn
           retention-days: 28
