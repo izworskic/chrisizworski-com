@@ -71,10 +71,21 @@ test('API calls only source-constrained original GLOS wave fields and three offi
    return {ok:true,text:async()=>table,headers:{get:()=>null}};
   if(url.startsWith('https://api.weather.gov/alerts/active?'))
    return {ok:true,json:async()=>({features:[]})};
+  if(url.startsWith('https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?'))
+   return {ok:true,headers:{get:()=>null},text:async()=>JSON.stringify({
+    metadata:{id:'9099018',name:'Marquette C.G.',lat:'46.5456',lon:'-87.3786'},
+    data:Array.from({length:280},(_,i)=>({
+     t:new Date(Date.parse(now)-27*H+i*6*60000).toISOString().slice(0,16).replace('T',' '),
+     v:(183.41+i*.0002).toFixed(3),q:'p',f:'0,0,0,0'
+    }))})};
   throw Error('Unexpected provider URL '+url);
  };
  const result=await currentPulse({nowISO:now,fetchFn:f});
- assert.equal(urls.length,4);
+ assert.equal(urls.length,5);
+ assert.equal(urls.filter(x=>x.includes('station=9099018')).length,1);
+ assert.equal(result.lakeSuperiorLevelContext.status,'REMOTE_LAKE_LEVEL_OBSERVED_24H_CHANGE');
+ assert.equal(result.lakeSuperiorLevelContext.measuredAtAgateBeach,false);
+ assert.equal(result.lakeSuperiorLevelContext.canPredictNewAgates,false);
  assert.equal(urls.filter(x=>x.startsWith('https://api.weather.gov/')).length,3);
  assert.equal(result.status,'OFFSHORE_WAVES_EASING');
  assert.equal(result.hazardStatus,'CLEAR');
@@ -91,6 +102,8 @@ test('GLOS provider outage and NWS failures are reported independently with unkn
  assert.equal(r.sourceFresh,false);
  assert.equal(r.rockExposureScore,null);
  assert.equal(r.canPublishSafeVisitWindow,false);
+ assert.equal(r.lakeSuperiorLevelContext.status,'REMOTE_LEVEL_SOURCE_UNAVAILABLE');
+ assert.equal(r.lakeSuperiorLevelContext.gaugeWaterLevelM,null);
 });
 test('NWS active marine warning veto does not rewrite actual measured wave status',async()=>{
  const tab=[
