@@ -3,6 +3,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
+const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-conditions/index.html'),'utf8');
 const old=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
 test('photo-free conditions page is a deliberate simple primary interface, no photo/scraper/ads requirement',()=>{
@@ -63,4 +64,11 @@ test('original research panel remains untouched and the new page is noindex beta
  assert.match(old,/id="live-offshore-pulse"/);
  assert.match(old,/id="research-archive"/);
  assert.match(html,/href="\/rockhounding-lab\/"/);
+});
+
+test('photo-free browser app script parses as standalone Javascript and contains no third party runtime requests',()=>{
+ const m=html.match(/<script>([\\s\\S]*?)<\\/script>/);
+ assert.ok(m,'script exists');
+ assert.doesNotThrow(()=>new vm.Script(m[1]));
+ assert.equal((html.match(/<script>/g)||[]).length,1);
 });
