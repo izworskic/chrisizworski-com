@@ -1,6 +1,6 @@
 {
   "schemaVersion": "rockhounding-no-photo-poststorm-conditions-v1",
-  "evaluatedAtUTC": "2026-10-16T13:56:02.303Z",
+  "evaluatedAtUTC": "2026-10-16T13:56:14.152Z",
   "site": "grand-marais-agate",
   "state": "NWS_ALERTS_ACTIVE",
   "activityNotRockProbability": true,
@@ -34,7 +34,7 @@
   "regionalLakeLevelContext": {
     "schemaVersion": "rockhounding-regional-water-level-research-v1",
     "measuredAtTwoDistantNOAAStations": true,
-    "summaryClockUTC": "2026-10-16T13:56:02.303Z",
+    "summaryClockUTC": "2026-10-16T13:56:14.152Z",
     "stations": [
       {
         "station": "9099018",
@@ -43,7 +43,7 @@
         "recordCount": 58,
         "unreliableSensorRows": 0,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
-        "ageHours": 0.23,
+        "ageHours": 0.24,
         "longestSourceGapMinutes": 6,
         "latestMeasuredIGLD85M": 183.539,
         "observedRangeM": 0.113,
@@ -65,7 +65,7 @@
         "recordCount": 58,
         "unreliableSensorRows": 1,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
-        "ageHours": 0.23,
+        "ageHours": 0.24,
         "longestSourceGapMinutes": 6,
         "latestMeasuredIGLD85M": 183.463,
         "observedRangeM": 0.083,
@@ -119,8 +119,8 @@
   "measuredAgateBeachBreakingSurf": false,
   "validatedRockExposureModel": false,
   "sourceQueryUTC": {
-    "from": "2026-10-13T13:56:02.303Z",
-    "to": "2026-10-16T13:56:02.303Z"
+    "from": "2026-10-13T13:56:14.152Z",
+    "to": "2026-10-16T13:56:14.152Z"
   },
   "noaaSourceAudit": [
     {
