@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "rockhounding-lake-superior-regional-water-level-v1",
+  "provider": "NOAA Center for Operational Oceanographic Products and Services (CO-OPS)",
+  "api": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter",
+  "product": "water_level",
+  "datum": "IGLD",
+  "timeZone": "gmt",
+  "units": "metric",
+  "format": "json",
+  "dataCadenceMinutes": 6,
+  "maximumQueryHours": 96,
+  "siteAnchor": {
+    "name": "Agate Beach, Grand Marais, Michigan",
+    "lat": 46.67519,
+    "lon": -85.98748
+  },
+  "stations": [
+    {
+      "id": "9099018",
+      "name": "Marquette C.G., MI",
+      "lat": 46.5456,
+      "lon": -87.3786,
+      "url": "https://tidesandcurrents.noaa.gov/stationhome.html?id=9099018",
+      "role": "WESTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE"
+    },
+    {
+      "id": "9099004",
+      "name": "Point Iroquois, MI",
+      "lat": 46.485,
+      "lon": -84.631,
+      "url": "https://tidesandcurrents.noaa.gov/stationhome.html?id=9099004",
+      "role": "EASTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE"
+    }
+  ],
+  "documentedSource": "https://api.tidesandcurrents.noaa.gov/api/prod/",
+  "physicalCaveats": [
+    "Both instruments measure water level far from Grand Marais; they do not measure waterline height, wave runup or flooded beach access at Agate Beach.",
+    "Wind setup and Lake Superior seiches can redistribute water after waves ease and create geographically different fluctuations.",
+    "Preliminary values have NOAA quality flag q=p; verified values q=v. Rate, flat and range flags invalidate an observation here.",
+    "One isolated NOAA gauge fluctuation cannot be interpreted as exact height or timing of exposed gravel at the pilot shoreline."
+  ],
+  "rightsOrUse": "Public NOAA observations; original timestamp and source preserved; no API key or per-visitor external requests.",
+  "publication": {
+    "canDeriveGrandMaraisWaterline": false,
+    "canClaimSafeShore": false,
+    "canPredictExposedAgates": false,
+    "canPublishBestVisitTime": false,
+    "waterLevelsAreLocal": false,
+    "mayDisplayObservedRegionalContext": true
+  }
+}
