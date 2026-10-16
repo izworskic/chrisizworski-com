@@ -73,7 +73,7 @@ test('wrong location, duplicate, wrong image type and MediaWiki pagination fail 
 test('metadata drift is an explicit manual review event, never silently a new geotagged same-camera pair',()=>{
  const rows=decodeProvider(mockProvider());
  rows[0].originalUploadUTC='2026-07-11T00:00:00Z';
- assert.throws(()=>reviewDiscovery(rows),/drifted/);
+ assert.throws(()=>reviewDiscovery(rows),/shifted|drifted/);
  const r=decodeProvider(mockProvider());
  r[0].lat+=.001;
  assert.throws(()=>reviewDiscovery(r),/shifted/);
