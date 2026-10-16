@@ -1,0 +1,30 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
+const observed=require('../public/rockhounding-lab/glos-spotter-oct2026.json');
+test('dated GLOS Storm record is drawn from actual 142-row source and never treated as current',()=>{
+ assert.equal(observed.station,'SPOT-1361');
+ assert.equal(observed.schemaVersion,'grand-marais-glos-historical-visual-v1');
+ assert.equal(observed.samples.length,142);
+ assert.equal(observed.samples[0].t,'2026-10-12T01:16:01Z');
+ assert.equal(observed.samples.at(-1).t,'2026-10-14T23:46:01Z');
+ assert.equal(Math.max(...observed.samples.map(s=>s.hM)),2.57);
+ assert.equal(observed.observedStormEpisodes,1);
+ assert.equal(observed.independentBeachRockOutcomes,0);
+ assert.equal(observed.completeness,'SOURCE_WAS_STALE_STORM_END_NOT_VERIFIED');
+});
+test('historical GLOS SVG shows measured provider data separately from illustrative simulator',()=>{
+ assert.match(html,/id="spotterHistoryChart"/);
+ assert.match(html,/glos-spotter-oct2026\.json/);
+ assert.match(html,/142 original observation records|142 dated original offshore readings|142 original readings/i);
+ assert.match(html,/2\.57 m/);
+ assert.match(html,/83 related measurements/);
+ assert.match(html,/Storm completion remains unverified/);
+ assert.match(html,/Historical source became stale/);
+ assert.match(html,/Lines break for gaps over 90 minutes/);
+ assert.match(html,/NOT LIVE WEATHER/);
+ assert.match(html,/no wave values inferred/);
+ assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
+ assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
+});
