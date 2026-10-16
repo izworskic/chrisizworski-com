@@ -114,7 +114,7 @@ test('same API fetch count: one 7-day GLOS request, 3 NWS alert checks and remot
   if(url.includes('api.tidesandcurrents.noaa.gov'))return {ok:false};
   throw Error('unexpected upstream');
  }});
- assert.equal(urls.length,5);
+ assert.equal(urls.length,6);
  const g=urls.filter(u=>u.includes('seagull-erddap.glos.org'));
  assert.equal(g.length,1);
  assert.match(g[0],/time>=2026-10-09T12:00:00Z/);

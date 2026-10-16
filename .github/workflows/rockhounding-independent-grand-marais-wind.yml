@@ -1,0 +1,24 @@
+name: Rockhounding independently measured Grand Marais wind (no photos)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-independent-grmm4-wind-20261016
+permissions:
+  contents: read
+jobs:
+  wind-and-wave-science:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Original NDBC direct measured wind parser and station identity
+        run: node --test tests/rockhounding-independent-grmm4-wind.test.js
+      - name: Existing no-photo wave, wind, lake-level and NWS source integrations
+        run: |
+          node --test tests/rockhounding-independent-grmm4-api.test.js tests/rockhounding-live-photo-free-pulse.test.js tests/rockhounding-noaa-remote-level-integration.test.js tests/rockhounding-photo-free-7day-storm-memory.test.js tests/rockhounding-photo-free-condition-reading.test.js
+      - name: Preserve all research source and noindex visual regressions
+        run: node --test tests/rockhounding*.test.js

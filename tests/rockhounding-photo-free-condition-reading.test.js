@@ -115,8 +115,8 @@ test('one existing API wave/NWS/level call produces unified summary with NO extr
    return {ok:false,status:503};
   throw Error('unexpected request');
  }});
- assert.equal(urls.length,5);
- assert.equal(new Set(urls).size,5);
+ assert.equal(urls.length,6);
+ assert.equal(new Set(urls).size,6);
  assert.equal(fetched.photoFreeConditionReading.alertStatus,'ACTIVE');
  assert.equal(fetched.photoFreeConditionReading.state,'MARINE_ALERT_ACTIVE');
  assert.equal(fetched.photoFreeConditionReading.sourceObservedAtUTC,nowISO);
