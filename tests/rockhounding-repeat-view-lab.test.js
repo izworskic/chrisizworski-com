@@ -17,6 +17,8 @@ test('local photograph candidate digest can be exactly rebuilt from genuine 2014
 test('repeat-view visuals present two genuinely licensed images with source/photographer rights',()=>{
  assert.match(html,/id="repeat-view-research"/);
  assert.match(html,/id="repeat-view-title"/);
+ assert.doesNotMatch(html,/grid-template-columns:repeat\(2,minmax\(0,1fr\)\);align-items:start/);
+ assert.match(html,/<div class="two" style="align-items:start;gap:18px">/);
  assert.match(html,/id="repeatViewAuditText"/);
  assert.match(html,/repeat-view-candidates-2026\.json/);
  assert.match(html,/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
