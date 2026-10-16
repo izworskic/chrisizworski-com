@@ -25,6 +25,11 @@ test('real source October 14 sample is observed wave-from, not buoy wind',()=>{
  assert.equal(x.rows[0].waveHeightM,1.05);
  assert.equal(x.observedNotForecast,true);
  assert.equal(x.windDirectionNotSubstitutedForWaves,true);
+ // The live GLOS CSV really emits a quoted literal "\\u00b0" token, not
+ // the unescaped unit symbol shown in ERDDAP metadata.
+ const originalUnits=csv([sampleRow('2026-10-14T00:16:01Z')])
+   .replace(',m,degree,s',String.raw`,m,"\u00b0",s`);
+ assert.equal(parseSpotterCSV(originalUnits).rows.length,1);
 });
 test('72h measured offshore wave decline is not a publishing or agate verdict',()=>{
  const start=Date.parse('2026-10-14T00:00:00Z');
