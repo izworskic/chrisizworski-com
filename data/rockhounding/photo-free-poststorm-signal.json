@@ -1,13 +1,13 @@
 {
   "schemaVersion": "rockhounding-no-photo-poststorm-conditions-v1",
-  "evaluatedAtUTC": "2026-10-16T13:53:47.377Z",
+  "evaluatedAtUTC": "2026-10-16T13:54:10.512Z",
   "site": "grand-marais-agate",
   "state": "NWS_ALERTS_ACTIVE",
   "activityNotRockProbability": true,
   "originalOffshoreWaveEvidence": {
     "status": "STALE_BUOY_SOURCE",
     "latestAt": "2026-10-15T23:46:01Z",
-    "ageHours": 14.13,
+    "ageHours": 14.14,
     "peak36hM": 0.8,
     "peakAt": "2026-10-15T02:46:01Z",
     "latestSignificantWaveM": 0.37,
@@ -34,13 +34,13 @@
   "regionalLakeLevelContext": {
     "schemaVersion": "rockhounding-regional-water-level-research-v1",
     "measuredAtTwoDistantNOAAStations": true,
-    "summaryClockUTC": "2026-10-16T13:53:47.377Z",
+    "summaryClockUTC": "2026-10-16T13:54:10.512Z",
     "stations": [
       {
         "station": "9099018",
         "name": "Marquette C.G., MI",
         "sourceRole": "WESTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE",
-        "recordCount": 59,
+        "recordCount": 58,
         "unreliableSensorRows": 0,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
         "ageHours": 0.2,
@@ -49,7 +49,7 @@
         "observedRangeM": 0.113,
         "observedMinimumM": 183.456,
         "observedMaximumM": 183.569,
-        "observedNetChangeM": 0.05,
+        "observedNetChangeM": 0.065,
         "dataStatus": "OBSERVED_REGIONAL_WATER_LEVEL_VARIABILITY",
         "qcNote": "Original CO-OPS data q=p is preliminary; abnormal flat/rate/limit flags were excluded.",
         "signalClass": "REGIONAL_LAKE_SUPERIOR_CONTEXT_NOT_AGATE_BEACH_STAGE",
@@ -62,7 +62,7 @@
         "station": "9099004",
         "name": "Point Iroquois, MI",
         "sourceRole": "EASTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE",
-        "recordCount": 59,
+        "recordCount": 58,
         "unreliableSensorRows": 1,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
         "ageHours": 0.2,
@@ -71,7 +71,7 @@
         "observedRangeM": 0.083,
         "observedMinimumM": 183.453,
         "observedMaximumM": 183.536,
-        "observedNetChangeM": -0.034,
+        "observedNetChangeM": -0.015,
         "dataStatus": "OBSERVED_REGIONAL_WATER_LEVEL_VARIABILITY",
         "qcNote": "Original CO-OPS data q=p is preliminary; abnormal flat/rate/limit flags were excluded.",
         "signalClass": "REGIONAL_LAKE_SUPERIOR_CONTEXT_NOT_AGATE_BEACH_STAGE",
@@ -119,13 +119,13 @@
   "measuredAgateBeachBreakingSurf": false,
   "validatedRockExposureModel": false,
   "sourceQueryUTC": {
-    "from": "2026-10-13T13:53:47.377Z",
-    "to": "2026-10-16T13:53:47.377Z"
+    "from": "2026-10-13T13:54:10.512Z",
+    "to": "2026-10-16T13:54:10.512Z"
   },
   "noaaSourceAudit": [
     {
       "station": "9099018",
-      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A53&end_date=2026-10-16+13%3A53&station=9099018&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
+      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A54&end_date=2026-10-16+13%3A54&station=9099018&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
       "sourceResult": "ORIGINAL_OBSERVATIONS",
       "sourceRecords": 719,
       "accepted": 719,
@@ -134,7 +134,7 @@
     },
     {
       "station": "9099004",
-      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A53&end_date=2026-10-16+13%3A53&station=9099004&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
+      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A54&end_date=2026-10-16+13%3A54&station=9099004&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
       "sourceResult": "ORIGINAL_OBSERVATIONS",
       "sourceRecords": 719,
       "accepted": 718,
