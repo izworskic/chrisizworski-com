@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#173c4c">
-<title>Rockhounding Post-Storm Lab | Interactive Preview</title>
-<meta name="description" content="Interactive, clearly simulated Michigan post-storm rockhounding experience concept. No live conditions, safety or collecting permission claims.">
+<title>Grand Marais Rockhounding Storm Pulse | Observed Lake Superior Waves</title>
+<meta name="description" content="Explore measured Lake Superior wave peaks, storm recovery, and open-coast versus harbor settings near Grand Marais, Michigan.">
 <style>
 :root{--navy:#173947;--ink:#223d44;--sea:#276478;--sea2:#427f89;--mist:#ecf4f3;--sand:#f8f5ee;--gold:#ba8543;--palegold:#f8eddb;--muted:#64767b;--line:#d9e5e5;--white:#fff;--red:#a04a36;--green:#2c725e;--shadow:0 15px 43px rgba(22,63,74,.075)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f8f8;color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,a{font:inherit}button{cursor:pointer}a{color:var(--sea)}a:hover{text-decoration-thickness:2px}button:focus-visible,a:focus-visible{outline:3px solid #daac53;outline-offset:3px}.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
@@ -39,6 +39,42 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 .observedStats b{display:block;font:550 23px Georgia,serif;color:#204959}
 .observedStats small{font-size:10px;color:#607980}
 @media(max-width:720px){.observedGrid{grid-template-columns:1fr}}
+
+/* Photo-free primary wave intelligence: the historical research remains an optional appendix. */
+.photoFreeHead{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.photoFreeHead h2{font:500 clamp(28px,3.8vw,39px)/1.11 Georgia,serif;color:#1c4654;margin:7px 0 10px}
+.photoFreeHead p{font-size:14px;color:#5b7478;max-width:780px;margin:0 0 10px}
+.pulseTag{font-size:11px;color:#406675;border:1px solid #c2d8d6;background:#f1f8f7;border-radius:999px;padding:7px 12px;font-weight:750}
+.pulseStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:19px 0}
+.pulseStat{border:1px solid #dce7e5;background:#f9fcfb;border-radius:10px;padding:14px;min-width:0}
+.pulseStat small{font-size:11px;color:#59747a;display:block}
+.pulseStat strong{font:550 27px/1.3 Georgia,serif;display:block;color:#204e5c;margin:4px 0}
+.pulseStat span{font-size:11px;color:#6c8082}
+.pulseColumns{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:17px}
+.pulseChartShell{padding:14px;border-radius:12px;border:1px solid #dce7e4;background:#fff;min-width:0}
+.pulseChartShell svg{width:100%;height:auto;min-width:0;display:block}
+.pulseChoice{border:1px solid #d9e6e4;padding:17px;border-radius:11px;background:linear-gradient(165deg,#f1f8f6,#fff)}
+.pulseChoice label{display:block;color:#516e75;font-size:12px;font-weight:800;margin:0 0 8px}
+.pulseChoice select{width:100%;background:#fff;border:1px solid #afcacc;border-radius:8px;padding:10px;min-width:0;font-size:14px;color:#214d58}
+.pulsePattern{font:500 26px/1.2 Georgia,serif;color:#205a68;margin:15px 0 8px}
+.pulseSteps{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 5px}
+.pulseSteps span{padding:6px 8px;border:1px solid #cde0dd;border-radius:7px;background:#fff;font-size:11px;color:#396674;font-weight:650}
+.pulseSteps span+span:before{content:'→ ';color:#b48648}
+.pulseSites{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.pulseSite{border:1px solid #d6e4e2;border-radius:12px;padding:17px;background:#f9fcfb}
+.pulseSite h3{font:500 23px Georgia,serif;color:#215160;margin:4px 0 8px}
+.pulseSite p{color:#536d72;font-size:13px;margin:0 0 10px}
+.pulseSite a{font-size:12px;font-weight:700}
+.pulseBadge{font-size:10px;color:#56777a;text-transform:uppercase;letter-spacing:.09em;font-weight:800}
+.pulseLinks{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.pulseLinks a{display:inline-block;text-decoration:none;border:1px solid #b8d4d1;border-radius:8px;background:#f0f7f5;padding:10px 13px;font-weight:720;font-size:13px}
+.pulseSummary{font-size:12px;color:#617a7d;margin:11px 0 0}
+.researchShelf{border:1px solid #d6e5e2;border-radius:12px;background:#fff;margin:0 0 22px;overflow:hidden}
+.researchShelf>summary{padding:17px 20px;cursor:pointer;font-size:14px;font-weight:780;color:#2c5967;list-style:revert;background:#f4f9f8}
+.researchShelf[open]>summary{border-bottom:1px solid #e0eaea}
+.researchShelf .shelfInterior{padding:18px}
+@media(max-width:920px){.pulseColumns{grid-template-columns:1fr}.pulseStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.pulseSites{grid-template-columns:1fr}.pulseStat strong{font-size:24px}.pulseStats{gap:7px}.pulseStat{padding:11px}.pulseLinks a{flex:1;text-align:center}.researchShelf .shelfInterior{padding:10px}}
 </style>
 </head>
 <body>
@@ -46,14 +82,69 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 <header><div class="wrap"><a class="logo" href="https://chrisizworski.com/" aria-label="Chris Izworski home">
 <svg viewBox="0 0 36 36" aria-hidden="true"><path d="M2 23Q11 12 19 18T35 15" fill="none" stroke="#94c5cd" stroke-width="3" stroke-linecap="round"/><path d="M5 30l11-15 9 16z" fill="#e6dcc5"/><path d="M18 30l8-12 8 12z" fill="#bcab8d"/></svg>
 <span>Michigan Rockhounding <span style="font-weight:400;opacity:.72">/ Post-Storm</span></span></a>
-<div class="headright"><span class="headtag">DESIGN PREVIEW</span><a href="#how">How it works</a></div></div></header>
+<div class="headright"><span class="headtag">WAVE HISTORY</span><a href="#how">How it works</a></div></div></header>
 <div class="hero"><div class="wrap hero-grid"><div>
-<div class="eyebrow">Michigan shoreline opportunity engine · Prototype</div>
+<div class="eyebrow">Grand Marais · Lake Superior · Observed waves</div>
 <h1>After the storm.<br>Before you go.</h1>
-<p>What happened to the waves, have they settled, and which shoreline might be worth researching? A better decision starts with the storm—not a generic beach score.</p>
-<div class="pills"><span class="pill">72-hour wave history</span><span class="pill">Open coast vs. sheltered bay</span><span class="pill">NWS warning veto</span></div>
+<p>See the storm peak, follow the waves as they ease or build again, and compare the open shoreline with the protected harbor. Built from real Lake Superior buoy measurements.</p>
+<div class="pills"><span class="pill">5,243 measured wave readings</span><span class="pill">Storm rise & recovery</span><span class="pill">Two shoreline settings</span></div>
 </div><div class="heroArt" role="img" aria-label="Stylized Lake Superior shoreline and stones, not a photograph"><span class="caption">Great Lakes / Shoreline</span><i class="stone"></i><i class="stone two"></i><i class="stone three"></i></div></div></div>
 <main id="main" class="wrap">
+<section class="panel pad" id="photo-free-storm-pulse" aria-labelledby="photoFreeStormTitle">
+ <div class="photoFreeHead">
+  <div><span class="eyebrow">Observed lake conditions · Historical research</span>
+   <h2 id="photoFreeStormTitle">Read the lake's storm story</h2>
+   <p>How high did the waves get? Did they ease off, or rise again? Explore the measured wave history that helps explain when Lake Superior has been active around Grand Marais.</p>
+  </div><span class="pulseTag" id="pulseDataPeriod">2026 summer–fall observations</span>
+ </div>
+ <div class="pulseStats" aria-label="Historical offshore wave measurements">
+  <div class="pulseStat"><small>Original wave readings</small><strong id="pulseReadings">5,243</strong><span>Grand Marais Spotter</span></div>
+  <div class="pulseStat"><small>Days in the record</small><strong id="pulseDays">111</strong><span>June to October 2026</span></div>
+  <div class="pulseStat"><small>Well-sampled wave episodes</small><strong id="pulseEpisodes">8</strong><span>Grouped from actual measurements</span></div>
+  <div class="pulseStat"><small>Waves built again</small><strong id="pulseRebuilds">2</strong><span>Multiple elevated-wave pulses</span></div>
+ </div>
+ <div class="pulseColumns">
+  <div class="pulseChartShell">
+    <div class="chartTop"><strong style="font-size:14px;color:#204f5e">Measured offshore wave peaks</strong><span style="font-size:11px;color:#6a858a">Significant wave height · meters</span></div>
+    <svg id="pulseEventChart" viewBox="0 0 620 300" role="img" aria-label="Historical 2026 offshore wave peak heights for eight well-sampled wave episodes"></svg>
+    <p class="pulseSummary" id="pulseChartCaption">Eight observed wave episodes between July and October 2026, grouped from original buoy readings.</p>
+  </div>
+  <div class="pulseChoice">
+    <label for="pulseEventSelect">Explore one storm's wave pattern</label>
+    <select id="pulseEventSelect"><option>Loading wave history…</option></select>
+    <div class="pulsePattern" id="pulsePhaseTitle">Storm and recovery</div>
+    <p id="pulsePhaseDescription" style="font-size:13px;color:#526d73;margin:0">Pick a measured episode to follow the lake's rise and recovery.</p>
+    <div class="pulseSteps" id="pulsePhaseSteps" aria-label="Observed offshore wave sequence"></div>
+    <p class="pulseSummary" id="pulsePeakDetail" aria-live="polite">Wave observations are shown with their recorded UTC dates.</p>
+    <div style="border-top:1px solid #d9e6e4;margin-top:14px;padding-top:12px">
+     <strong style="font-size:12px;color:#205768">Wave direction snapshot</strong>
+     <p style="font-size:12px;color:#607a7f;margin:7px 0 0" id="pulseDirection">October 14 buoy waves traveled from roughly NNW, near the historical Agate Beach shoreline-facing direction.</p>
+    </div>
+  </div>
+ </div>
+ <div class="pulseSites" aria-label="Two Grand Marais shoreline settings">
+  <article class="pulseSite">
+    <span class="pulseBadge">Open Lake Superior coast</span>
+    <h3>Agate Beach</h3>
+    <p>Faces the big lake. Use the offshore wave record to see when the lake experienced stronger storm activity and how the waves changed afterward.</p>
+    <a href="https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/" rel="noopener noreferrer" target="_blank">Burt Township beach information ↗</a>
+  </article>
+  <article class="pulseSite">
+    <span class="pulseBadge">Sheltered harbor setting</span>
+    <h3>Bayshore Park</h3>
+    <p>Inside the Grand Marais harbor. Its protected setting makes local marine conditions and harbor-specific information especially useful to check.</p>
+    <a href="https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/" rel="noopener noreferrer" target="_blank">Burt Township park information ↗</a>
+  </article>
+ </div>
+ <div class="pulseLinks">
+  <a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener noreferrer">Current NWS weather ↗</a>
+  <a href="https://api.weather.gov/alerts/active?zone=LSZ250" target="_blank" rel="noopener noreferrer">Current marine alerts ↗</a>
+  <a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original wave measurements ↗</a>
+ </div>
+ <p class="pulseSummary">Historical wave observations through October 14, 2026, not a live beach reading. Use the current forecast, posted access conditions and local collecting rules when planning a visit.</p>
+</section>
+<details class="researchShelf" id="research-archive"><summary>Explore the research archive, charts and original source studies</summary><div class="shelfInterior">
+
 <div class="reviewBanner" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="#a57935" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7v1"/></svg><div><strong>INTERACTIVE DESIGN DEMO — NOT LIVE WEATHER.</strong> The interactive storm picker uses illustrative scenarios; the separately labeled GLOS and NOAA observation panels below use dated authentic measurements. No beach has been declared safe, newly exposed, or legally cleared for collection.</div></div>
 <section class="panel pad">
 <div class="barhead" style="margin-bottom:20px"><h2>Explore a post-storm decision</h2><span style="font-size:11px;color:#6b8085">Grand Marais, Lake Superior · UI study</span></div>
@@ -369,6 +460,7 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
 </section>
 <div class="notice"><strong>Rock collecting and public access:</strong> Public beach access does not by itself authorize removing rocks from every segment. Check posted township rules and seasonal access notices. National Park Service beaches can prohibit collection. This design does not provide directions to unverified parking gates.</div>
 <p class="privacy">Prototype only. Simulated wave scenarios are embedded in this page; the separate historical buoy chart loads dated NOAA observations. The shoreline summary is historic NOAA chart research, not live beach weather. No device location, personal data, account, tracking, or map key is needed.</p>
+</div></details>
 </main>
 <footer class="foot"><div class="wrap"><div><strong>Michigan Rockhounding / Post-Storm Lab</strong><div style="font-size:12px;margin-top:5px">A decision-engine concept built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</div></div><small>Sources for the future engine: NOAA Great Lakes waves, NOAA buoy observations, NWS marine warnings, Michigan EGLE and public shoreline access records. Nothing on this prototype constitutes a safety assessment.</small></div></footer>
 <script>
@@ -738,6 +830,95 @@ render();
  }).catch(()=>{
   proof.textContent='Official pilot source audit unavailable. Public access does not certify rock collection, safe shore conditions or fresh-agate exposure.';
   priority.textContent='Research next: verify a matching before/after Agate shoreline photo pair and separate township collection rules. No public recommendation.';
+ });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const svg=document.getElementById('pulseEventChart'),pick=document.getElementById('pulseEventSelect');
+ const caption=document.getElementById('pulseChartCaption'),phase=document.getElementById('pulsePhaseTitle');
+ const desc=document.getElementById('pulsePhaseDescription'),steps=document.getElementById('pulsePhaseSteps');
+ const detail=document.getElementById('pulsePeakDetail'),direction=document.getElementById('pulseDirection');
+ if(!svg||!pick||!caption||!phase||!desc||!steps||!detail||!direction)return;
+ const ns='http://www.w3.org/2000/svg';
+ const add=(tag,attrs,txt,parent=svg)=>{
+  const item=document.createElementNS(ns,tag);
+  for(const [key,value] of Object.entries(attrs))item.setAttribute(key,String(value));
+  if(txt!==undefined&&txt!==null)item.textContent=String(txt);
+  parent.appendChild(item);return item;
+ };
+ const fmt=utc=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'UTC'}).format(new Date(utc));
+ const short=utc=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(utc));
+ function draw(d,chosen){
+  svg.replaceChildren();
+  const data=d.episodes.slice().reverse(),left=56,right=598,top=34,baseline=230,barWidth=38;
+  const limit=3,maxHeight=172;
+  add('text',{x:12,y:22,fill:'#678289','font-size':11},'m · open lake');
+  [0,1,2,3].forEach(n=>{
+   const y=baseline-n/limit*maxHeight;
+   add('line',{x1:left,x2:right,y1:y,y2:y,stroke:'#deebe8','stroke-width':1});
+   add('text',{x:43,y:y+4,'text-anchor':'end','font-size':11,fill:'#71868b'},n);
+  });
+  const gap=(right-left-barWidth*data.length)/(data.length-1);
+  data.forEach((e,i)=>{
+   const x=left+i*(barWidth+gap),h=e.observedPeakHeightM/limit*maxHeight;
+   const rect=add('rect',{x,y:baseline-h,width:barWidth,height:h,rx:4,
+    fill:e.id===chosen?'#bd8846':e.hasWaveRebuild?'#447e91':'#75a4aa'});
+   const title=document.createElementNS(ns,'title');
+   title.textContent=short(e.peakAtUTC)+': '+e.observedPeakHeightM.toFixed(2)+' m observed offshore; '+e.phaseLabel+'.';
+   rect.appendChild(title);
+   add('text',{x:x+barWidth/2,y:251,'text-anchor':'middle','font-size':10,fill:'#667c80'},short(e.peakAtUTC));
+   if(e.id===chosen)add('line',{x1:x+barWidth/2,x2:x+barWidth/2,y1:baseline-h-12,y2:baseline-h-5,
+    stroke:'#bd8846','stroke-width':2});
+  });
+ }
+ const choose=(d,index)=>{
+  const e=d.episodes[index];if(!e)return;
+  phase.textContent=e.phaseLabel;
+  desc.textContent=e.explanation;
+  detail.textContent=e.observedPeakHeightM.toFixed(2)+' m measured peak · '+fmt(e.peakAtUTC)+' UTC. Elevated-wave period: '+short(e.firstElevatedUTC)+'–'+short(e.lastElevatedUTC)+'.';
+  steps.replaceChildren();
+  for(const label of e.sequence){
+   const item=document.createElement('span');item.textContent=label;steps.appendChild(item);
+  }
+  draw(d,e.id);
+ };
+ fetch('/rockhounding-lab/storm-pulse-2026.json',{credentials:'same-origin'}).then(r=>{
+  if(!r.ok)throw Error('Historical source unavailable');return r.json();
+ }).then(d=>{
+  if(d.schemaVersion!=='rockhounding-photo-free-storm-pulse-v1'||
+   d.stationId!=='SPOT-1361'||d.historicObservationCount!==5243||
+   d.observedDays!==111||d.wellSampledEpisodes!==8||d.photoVerificationRequiredForWaveHistory!==false||
+   d.originalPhotosUsed!==false||d.isLiveNow!==false||
+   d.canForecastAgateDiscoveries!==false||d.canLabelShoreSafe!==false||
+   d.canForecastBreakingSurf!==false||!Array.isArray(d.episodes)||
+   d.episodes.length!==8||d.episodes.some(x=>x.sampleQualified!==true||
+    !Number.isFinite(x.observedPeakHeightM)||!Number.isFinite(Date.parse(x.peakAtUTC))))
+   throw Error('Invalid observed wave metadata');
+  document.getElementById('pulseReadings').textContent=d.historicObservationCount.toLocaleString('en-US');
+  document.getElementById('pulseDays').textContent=d.observedDays;
+  document.getElementById('pulseEpisodes').textContent=d.wellSampledEpisodes;
+  document.getElementById('pulseRebuilds').textContent=d.episodes.filter(x=>x.hasWaveRebuild).length;
+  document.getElementById('pulseDataPeriod').textContent='Original readings through '+short(d.dataPeriod.lastUTC)+', 2026';
+  pick.replaceChildren();
+  d.episodes.forEach((e,i)=>{
+   const opt=document.createElement('option');opt.value=String(i);
+   opt.textContent=short(e.peakAtUTC)+' · '+e.observedPeakHeightM.toFixed(2)+' m · '+e.phaseLabel;
+   pick.appendChild(opt);
+  });
+  pick.addEventListener('change',()=>choose(d,Number(pick.value)));
+  pick.value='0';choose(d,0);
+  const orient=d.historicDirectionComparison;
+  direction.textContent=short(orient.observedAtUTC)+': wave-from '+orient.measuredWaveFromDeg.toFixed(1)+'° (NNW), '+orient.separationDeg.toFixed(1)+'° from the historical charted Agate-facing direction. A helpful orientation comparison for this dated offshore reading.';
+  caption.textContent='Eight original, sample-qualified 2026 offshore wave episodes. Bar heights show measured peaks; darker bars show episodes with renewed elevated waves.';
+ }).catch(()=>{
+  svg.replaceChildren();pick.replaceChildren();
+  const opt=document.createElement('option');opt.textContent='Open original wave measurements';pick.appendChild(opt);
+  phase.textContent='Explore the original lake record';
+  desc.textContent='The GLOS Grand Marais Spotter archive has the measured wave series.';
+  detail.textContent='Use the source and current NWS links below for lake conditions.';
+  direction.textContent='Open the original station record for observed wave direction.';
+  caption.textContent='Source history available from GLOS Grand Marais Spotter.';
  });
 })();
 </script>
