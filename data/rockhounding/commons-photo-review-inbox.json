@@ -2,7 +2,7 @@
   "schemaVersion": "rockhounding-commons-photo-review-inbox-v1",
   "siteId": "grand-marais-agate",
   "source": "WIKIMEDIA_COMMONS_ORIGINAL_CAMERA_GEOTAG_METADATA",
-  "lastSourceCheckUTC": null,
+  "lastSourceCheckUTC": "2026-10-16T02:28:33.021Z",
   "reviewStatus": "RESEARCH_CANDIDATES_ONLY",
   "sourceCameraLocationDoesNotProveAgateBeachView": true,
   "uploadTimeIsNotOriginalCaptureTime": true,
