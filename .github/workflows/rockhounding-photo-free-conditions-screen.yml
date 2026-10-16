@@ -1,0 +1,23 @@
+name: Rockhounding photo-free conditions screen
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-photo-free-conditions-screen-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test standalone source-aware no-photo conditions screen and prior wave-data gates
+        run: |
+          node --test tests/rockhounding-photo-free-conditions-screen.test.js
+          node --test tests/rockhounding-live-photo-free-pulse.test.js tests/rockhounding-photo-free-condition-reading.test.js tests/rockhounding-photo-free-7day-storm-memory.test.js
+      - name: Verify no regressions across rockhounding research
+        run: node --test tests/rockhounding*.test.js

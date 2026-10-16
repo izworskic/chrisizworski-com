@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#143a47">
+<title>Grand Marais Rockhounding | Lake Superior Wave Pulse</title>
+<meta name="description" content="Measured waves near Grand Marais, post-storm trends, seven-day history, remote lake levels and independent NWS alerts. No photos needed.">
+<style>
+:root{--navy:#153d4c;--deep:#102e3a;--teal:#247684;--muted:#55727a;--line:#d8e4e4;--sand:#f8f5eb;--rust:#aa583c;--bg:#f5f8f8;--white:#fff;--gold:#ab7b40}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#193a44;font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:#1c687c}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #d09c4b;outline-offset:3px}
+.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.sitebar{background:var(--deep);color:#e9f4f5}.sitebar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:13px;padding-bottom:13px}.sitebar a{color:#e9f4f5;text-decoration:none;font-weight:750}.sitebar small{color:#b7d2d8}
+.hero{background:linear-gradient(116deg,#e8f2f1 0%,#f8f8f1 70%,#f4e8d6 100%);border-bottom:1px solid var(--line)}.hero .wrap{padding-top:39px;padding-bottom:32px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,.7fr);gap:22px;align-items:center}.eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#477481}h1{font:500 clamp(34px,5vw,54px)/1.08 Georgia,serif;letter-spacing:-.028em;margin:11px 0;color:var(--navy)}.hero p{max-width:620px;color:#506970;margin:0 0 15px}.hero strong{color:#305964}.landscape{height:192px;border:1px solid #b7d1d0;border-radius:16px;position:relative;overflow:hidden;background:linear-gradient(180deg,#d7e9e8 0 37%,#6799a5 38%,#417788 62%,#dfd4bf 63%,#ded2b8 82%,#c4b498 100%)}.landscape:after{content:"";position:absolute;left:-10%;top:55%;width:130%;height:50px;transform:rotate(-4deg);background:repeating-radial-gradient(ellipse at center,#ffffff7a 0 2px,#ffffff1c 4px 13px,transparent 15px 32px)}.landscape span{position:absolute;z-index:2;top:13px;left:14px;background:#ffffffe0;border-radius:7px;padding:5px 9px;font-size:11px;color:#326778;font-weight:750}
+main{padding:24px 0 40px}.surface{background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px #12394108;border-radius:14px;padding:23px;margin-bottom:17px}.topline{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap}.kicker{font-size:11px;letter-spacing:.09em;font-weight:800;text-transform:uppercase;color:#557780}.reading{font:500 clamp(26px,3vw,36px)/1.15 Georgia,serif;color:var(--navy);margin:7px 0 10px}.explain{color:#4d6972;margin:0;max-width:760px}.meta{font-size:12px;color:#567078;margin:11px 0 0}.button{border:1px solid #b9d1d0;color:#255d6b;background:#fff;padding:9px 16px;border-radius:8px;font-weight:750}.button:hover{background:#eff8f6}.button[disabled]{opacity:.65;cursor:wait}.stamp{display:inline-block;padding:5px 9px;background:#e7f1ef;color:#2b685b;border-radius:7px;font-size:11px;font-weight:800}.stamp[data-tone=warn]{background:#fbeedc;color:#855128}.stamp[data-tone=bad]{background:#f7e4de;color:#934730}.stamp[data-tone=unknown]{background:#ebeeee;color:#56686e}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:20px}.metric{padding:17px 15px;border:1px solid var(--line);border-radius:10px;background:#fcfdfc;min-width:0}.metric dt{font-size:11px;font-weight:800;color:#55717c;letter-spacing:.035em}.metric dd{margin:5px 0 4px;font:550 27px Georgia,serif;overflow-wrap:anywhere}.metric small{display:block;color:#617984;font-size:11px}
+h2{font:500 25px Georgia,serif;margin:0 0 7px;color:var(--navy)}.intro{color:#5e757c;font-size:13px;margin:0 0 17px}.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:17px}.plotbox{border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}.plotbox svg{display:block;width:100%;height:auto}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}.seg{display:inline-flex;gap:4px;background:#edf4f3;border-radius:8px;padding:4px}.seg button{font-size:12px;border:0;background:transparent;padding:6px 10px;border-radius:6px;color:#436974}.seg button[aria-pressed=true]{background:#fff;box-shadow:0 1px 5px #17404d16;color:#155468;font-weight:800}.context{background:#f1f7f6;border:1px solid var(--line);padding:17px;border-radius:12px}.context h3{font:500 21px Georgia,serif;margin:0 0 12px}.context p{font-size:13px;color:#476570;margin:8px 0}.context b{color:#1d5969}.advisory{margin-top:14px;padding:12px 14px;background:#f9eee8;color:#804b38;border:1px solid #ecd0be;border-radius:8px;font-size:13px}.advisory[data-type=unknown]{background:#f1f4f4;color:#4e6268;border-color:#d8e3e3}.advisory[data-type=quiet]{background:#f4f8f7;color:#46665b;border-color:#d5e5e0}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.steps>div{border:1px solid var(--line);border-radius:10px;padding:15px}.steps b{display:block;margin-bottom:4px}.steps p{font-size:12px;color:#5a747b;margin:0}.muted{color:#667e85;font-size:12px}.foot{font-size:12px;color:#63757c;padding:12px 0 26px}.links{display:flex;gap:15px;flex-wrap:wrap;margin-top:14px}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:780px){.hero .wrap{grid-template-columns:1fr}.landscape{height:115px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.steps{grid-template-columns:1fr}}@media(max-width:390px){.grid{grid-template-columns:1fr 1fr}.metric{padding:12px 9px}.metric dd{font-size:24px}.surface{padding:17px}.sitebar small{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="sr" href="#content">Skip to current readings</a>
+<div class="sitebar"><div class="wrap"><a href="https://chrisizworski.com/">Chris Izworski <span aria-hidden="true">/</span> Outdoor Tools</a><small>Grand Marais, Michigan · Lake Superior</small></div></div>
+<header class="hero"><div class="wrap"><div><span class="eyebrow">Grand Marais · Michigan</span><h1>Rockhounding storm conditions</h1><p>Did Lake Superior have a strong wave spell—and are those offshore waves still building or easing? Read the measurements first. <strong>No photos needed.</strong></p><div class="links"><a href="#current">Today's buoy measurements ↓</a><a href="#storm">Recent storm history ↓</a></div></div><div class="landscape" role="img" aria-label="Stylized Lake Superior water and gravel beach, not a current scene"><span>Open Lake Superior · schematic</span></div></div></header>
+<main class="wrap" id="content">
+<section id="current" class="surface" aria-labelledby="currentTitle">
+<div class="topline"><div><span class="kicker">Measured offshore · automatic source checks</span><h2 class="reading" id="currentTitle">Checking Lake Superior observations</h2><p class="explain" id="currentExplanation">No current wave or rock exposure conclusion is available until source timestamps and sensor coverage are verified.</p><p class="meta" id="freshness">Checking GLOS SPOT-1361 and NWS…</p></div><div><span class="stamp" id="sourceBadge" data-tone="unknown">Checking source</span> <button class="button" id="refresh" type="button">Refresh</button></div></div>
+<dl class="grid"><div class="metric"><dt>Latest measured offshore wave</dt><dd id="waveHeight">—</dd><small id="waveDetail">GLOS Spotter, not beach breakers</small></div><div class="metric"><dt>Highest measured, past 48 h</dt><dd id="wavePeak">—</dd><small>Only if recent source is complete</small></div><div class="metric"><dt>Wave activity vs. prior 24 h</dt><dd id="trend">—</dd><small id="trendDetail">Requires two well-sampled windows</small></div><div class="metric"><dt>Marquette lake-level change</dt><dd id="levelChange">—</dd><small>24 h · remote NOAA gauge, not local waterline</small></div></dl>
+<div class="advisory" id="advisory" data-type="unknown" role="status" aria-live="polite">NWS marine alert status pending. No buoy reading is a shore-safety clearance.</div>
+</section>
+<div class="two" id="storm">
+<section class="surface" aria-labelledby="wavePlotTitle"><div class="toolbar"><div><h2 id="wavePlotTitle">How waves changed</h2><p class="intro" id="chartDesc">Original observations, with gaps left visible.</p></div><div class="seg" role="group" aria-label="Measured wave history range"><button type="button" id="btn48" aria-pressed="true">48 hours</button><button type="button" id="btn7" aria-pressed="false">7 days</button></div></div><div class="plotbox"><svg id="chart" viewBox="0 0 700 270" role="img" aria-label="Measured offshore significant wave height over time"></svg></div><p class="muted" id="chartCaption">No historical source substituted for missing current readings.</p></section>
+<section class="surface" aria-labelledby="memoryTitle"><h2 id="memoryTitle">The last wave spell</h2><p class="intro">Measured open-lake wave activity, not a beach-change forecast.</p><div class="context"><h3 id="memoryState">Checking seven-day history</h3><p id="memoryText">Evidence coverage is being checked.</p><p id="memoryPeak"></p></div><p class="muted" style="margin-top:15px">Lake Superior's next wave pulse may rebuild after a temporary decline. A low reading doesn't establish that gravel was freshly exposed or that shore access is safe.</p></section>
+</div>
+<section class="surface" aria-labelledby="nextTitle"><h2 id="nextTitle">How to use these readings</h2><p class="intro">The most useful signals do not require photographs. They do need careful interpretation.</p><div class="steps"><div><b>1 · A real disturbance</b><p>Look for a sourced wave peak and good observation coverage—not an invented numerical "agate score."</p></div><div><b>2 · A sustained change</b><p>Compare recent wave heights and the preceding 24 hours. If waves rebuild, the offshore lull has not persisted.</p></div><div><b>3 · Independent hazards</b><p>Check NWS alerts and local shoreline conditions before a visit. Offshore easing doesn't authorize water entry or collecting.</p></div></div><p class="muted" style="margin:15px 0 0">Agate Beach faces open Lake Superior. Bayshore Park lies in the harbor; this buoy does <strong>not</strong> measure Bayshore's sheltered-water waves. The water-level gauge is at Marquette, not Grand Marais.</p><div class="links"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS wave data ↗</a><a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener noreferrer">NWS Marquette ↗</a><a href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9099018" target="_blank" rel="noopener noreferrer">NOAA Marquette gauge ↗</a><a href="/rockhounding-lab/">Full research and sources ↗</a></div></section>
+</main>
+<footer class="wrap foot">Research preview · No photos or external map keys · Actual buoy measurements are offshore, not observed new stones. This page does not certify beach safety, access permissions, or agate finds.</footer>
+<script>
+(()=>{'use strict';
+ const $=id=>document.getElementById(id);
+ const H=3600000;
+ let data=null,range='48',busy=false;
+ const fmtUTC=s=>{try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(s))}catch{return 'unknown'}};
+ const m=n=>typeof n==='number'&&Number.isFinite(n)?n.toFixed(2)+' m':'—';
+ function showEmpty(){
+   $('waveHeight').textContent='—';$('wavePeak').textContent='—';$('trend').textContent='—';$('levelChange').textContent='—';
+   $('waveDetail').textContent='No verified current offshore reading';
+   $('trendDetail').textContent='Current comparison unavailable';
+ }
+ function warn(message,type){
+   $('advisory').dataset.type=type;$('advisory').textContent=message;
+ }
+ const safeNumber=n=>typeof n==='number'&&Number.isFinite(n);
+ function renderReport(d){
+   data=d;
+   const c=d?.photoFreeConditionReading,p=d?.sevenDayStormMemory,level=d?.lakeSuperiorLevelContext;
+   const time=d?.latestMeasuredAtUTC?Date.parse(d.latestMeasuredAtUTC):NaN;
+   const age=Number.isFinite(time)?(Date.now()-time)/H:null;
+   const sensorFresh=Number.isFinite(age)&&age>=-.1&&age<=3&&d.sourceFresh===true&&d.recentMeasurementCoverageSufficient===true&&d.dataSourceAvailable===true;
+   const hazard=['ACTIVE','CLEAR','UNKNOWN'].includes(d.hazardStatus)?d.hazardStatus:'UNKNOWN';
+   const trustworthy=c?.schemaVersion==='rockhounding-photo-free-condition-reading-v1'&&
+     c.stationId==='SPOT-1361'&&c.photosRequired===false&&
+     c.canPredictNewAgates===false&&c.canClaimBeachSafe===false&&
+     c.canPublishVisitWindow===false&&
+     d.schemaVersion==='rockhounding-photo-free-live-offshore-pulse-v1'&&
+     d.stationId==='SPOT-1361'&&d.canPredictNewAgates===false&&d.canClaimBeachSafety===false&&
+     d.measuredBreakingSurfM===null&&d.rockExposureScore===null;
+   if(!trustworthy)throw Error('Original source or safety rules unverified');
+   const valid=sensorFresh&&c.waveStatus!=='SOURCE_STALE_GAPPY_OR_UNAVAILABLE';
+   $('freshness').textContent='Last original buoy measurement: '+(d.latestMeasuredAtUTC?fmtUTC(d.latestMeasuredAtUTC):'unavailable')+
+     ' · '+(Number.isFinite(age)?age.toFixed(1)+' h old':'timestamp unknown')+' · open Lake Superior, not Agate Beach surf';
+   $('sourceBadge').textContent=valid?'Fresh measurements':d.dataSourceAvailable?'Stale or incomplete':'Provider unavailable';
+   $('sourceBadge').dataset.tone=valid?'ok':'unknown';
+   const blocked=hazard==='ACTIVE'||hazard==='UNKNOWN';
+   $('currentTitle').textContent=valid?(c.waveHeadline||'Observed offshore waves'):'Current offshore evidence unavailable';
+   $('currentExplanation').textContent=valid?(c.explanation||'Measured lake activity only.'):'The buoy has missing, delayed, or incomplete readings. Past storm readings are not a substitute for current conditions.';
+   showEmpty();
+   if(valid){
+     $('waveHeight').textContent=m(d.latestOffshoreSignificantWaveHeightM);
+     $('wavePeak').textContent=m(d.peakLast48hM);
+     $('waveDetail').textContent='GLOS SPOT-1361 · offshore significant height';
+     const tr=d.waveTendency48h;
+     if(c.comparedTwoComplete24hWindows===true&&tr?.latestObservedUTC===d.latestMeasuredAtUTC&&
+       safeNumber(c.comparedObservedOffshoreWaveActivityPct)){
+       const v=c.comparedObservedOffshoreWaveActivityPct;
+       $('trend').textContent=(v>0?'+':'')+v.toFixed(1)+'%';
+       $('trendDetail').textContent='Observed wave activity proxy · not stone probability';
+     }
+   }
+   if(level?.schemaVersion==='rockhounding-remote-lake-level-context-v1'&&
+     level.stationId==='9099018'&&level.status==='REMOTE_LAKE_LEVEL_OBSERVED_24H_CHANGE'&&
+     level.measuredAtAgateBeach===false&&level.canPredictNewAgates===false&&safeNumber(level.delta24hCm)&&
+     Number.isFinite(Date.parse(level.dateUTC))&&Date.now()-Date.parse(level.dateUTC)<=3*H){
+       const n=level.delta24hCm;
+       $('levelChange').textContent=(n>0?'+':'')+n.toFixed(1)+' cm';
+   }
+   if(hazard==='ACTIVE'){
+     $('sourceBadge').dataset.tone='bad';
+     const alerts=Array.isArray(d.matchedNWSAlerts)?d.matchedNWSAlerts.map(x=>x.event).filter(x=>typeof x==='string').slice(0,4):[];
+     warn('NWS marine/shoreline alert active'+(alerts.length?': '+alerts.join(', '):'')+'. Do not treat offshore wave declines as safe conditions.','warn');
+   }else if(blocked)warn('NWS alerts could not be verified. Treat beach hazards as unknown, even when the buoy reports lower offshore waves.','unknown');
+   else warn('No relevant alert was returned by the checked NWS feeds. This is NOT confirmation of safe beach access or surf.','quiet');
+   renderMemory(p,valid);
+   renderChart(d);
+ }
+ function renderMemory(p,fresh){
+   if(!p||p.schemaVersion!=='rockhounding-seven-day-observed-offshore-storm-memory-v1'||
+     p.canPredictNewAgates!==false||p.canClaimBeachSafe!==false){
+      $('memoryState').textContent='History unavailable';$('memoryText').textContent='No verified 7-day source coverage.';$('memoryPeak').textContent='';return;
+   }
+   const labels={
+    OBSERVED_OFFSHORE_EASING_18H:'Observed offshore easing',
+    OFFSHORE_ELEVATED_RECENTLY:'Offshore waves recently elevated',
+    OFFSHORE_EVENT_END_UNCONFIRMED:'Offshore wave episode end unconfirmed',
+    POST_EPISODE_OBSERVATION_GAP:'Observation gap after wave spell',
+    NO_ELEVATED_OFFSHORE_SAMPLES_IN_7D:'No elevated samples in a covered week',
+    PARTIAL_SEVEN_DAY_SOURCE_HISTORY:'Incomplete seven-day source history',
+    SOURCE_STALE_OR_CLOCK_INVALID:'Historical source only',
+    SOURCE_UNAVAILABLE:'No verified recent event data'
+   };
+   $('memoryState').textContent=labels[p.status]||'Recent offshore event history';
+   const e=p.lastMeasuredEpisode;
+   $('memoryText').textContent=fresh?
+     (e?.sampleQualified?'Sampled wave episode confirmed by the buoy; no beach sediment outcome was measured.':
+       'The recent offshore history is incomplete or did not contain enough qualifying high-wave samples.'):
+     'The current buoy reading is stale or incomplete. Historical high waves do not describe the shore right now.';
+   $('memoryPeak').textContent=e&&safeNumber(e.peakSignificantWaveHeightM)?
+     'Last sampled peak: '+m(e.peakSignificantWaveHeightM)+' · '+fmtUTC(e.measuredPeakAtUTC):'No qualified recent offshore peak to display.';
+ }
+ function renderChart(d){
+   const svg=$('chart'),ns='http://www.w3.org/2000/svg';
+   while(svg.firstChild)svg.removeChild(svg.firstChild);
+   const add=(tag,a,txt)=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,String(v)));if(txt!==undefined)el.textContent=txt;svg.appendChild(el);return el};
+   let samples=range==='48'?d?.latest48hObservedSeries:d?.sevenDayStormMemory?.sevenDayObservedWaveSeries;
+   samples=Array.isArray(samples)?samples.filter(x=>x&&typeof x.t==='string'&&safeNumber(x.h??x.hM)&&Date.parse(x.t)<=Date.now()+300000).map(x=>({t:Date.parse(x.t),h:x.h??x.hM})).filter(x=>Number.isFinite(x.t)&&x.h>=0&&x.h<=18).sort((a,b)=>a.t-b.t):[];
+   if(samples.length<2){$('chartCaption').textContent='No usable original '+(range==='48'?'48-hour':'seven-day')+' observed wave series. No line is invented.';return;}
+   const t0=samples[0].t,t1=samples.at(-1).t,max=Math.max(1,Math.ceil(Math.max(...samples.map(x=>x.h))*2)/2);
+   if(t1<=t0){$('chartCaption').textContent='Invalid source timestamps. No line drawn.';return}
+   const xx=t=>57+((t-t0)/(t1-t0))*612,yy=h=>221-h/max*178;
+   for(let v=0;v<=max+.01;v+=.5){
+     const y=yy(v);add('line',{x1:57,y1:y,x2:669,y2:y,stroke:'#e2eaea'});
+     if(Number.isInteger(v))add('text',{x:45,y:y+4,'font-size':11,'text-anchor':'end',fill:'#6b8086'},v.toFixed(0));
+   }
+   let path='',last=null,gaps=0;
+   for(const x of samples){
+     const contiguous=last!==null&&x.t-last<=1.5*H;
+     if(!contiguous&&last!==null)gaps++;
+     path+=(contiguous?'L':'M')+xx(x.t).toFixed(2)+','+yy(x.h).toFixed(2)+' ';
+     last=x.t;
+   }
+   add('path',{d:path,stroke:'#266f84','stroke-width':3,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'});
+   const peak=samples.reduce((a,b)=>b.h>a.h?b:a);
+   add('circle',{cx:xx(peak.t),cy:yy(peak.h),r:4.5,fill:'#ba8543'});
+   add('text',{x:Math.min(585,xx(peak.t)+8),y:Math.max(27,yy(peak.h)-10),'font-size':12,'font-weight':750,fill:'#8d6437'},peak.h.toFixed(2)+' m');
+   add('text',{x:57,y:252,'font-size':11,fill:'#667b83'},fmtUTC(new Date(t0).toISOString()));
+   add('text',{x:669,y:252,'text-anchor':'end','font-size':11,fill:'#667b83'},fmtUTC(new Date(t1).toISOString()));
+   $('chartCaption').textContent=samples.length+' direct GLOS observations · '+gaps+' disconnected source gap'+(gaps===1?'':'s')+' (>90 min). No interpolation. Times shown in Michigan local time.';
+ }
+ async function load(){
+   if(busy)return;
+   busy=true;$('refresh').disabled=true;$('refresh').textContent='Checking…';
+   try{
+     const controller=new AbortController();
+     const timeout=setTimeout(()=>controller.abort(),12500);
+     let res;
+     try{res=await fetch('/api/rockhounding-wave-pulse',{headers:{Accept:'application/json'},signal:controller.signal})}finally{clearTimeout(timeout)}
+     if(!res.ok)throw Error('Original sources unavailable');
+     const d=await res.json();renderReport(d);
+   }catch{
+     data=null;showEmpty();$('currentTitle').textContent='Current data unavailable';
+     $('currentExplanation').textContent='The original offshore observations or alert check could not be verified. No current conditions or rock exposure conclusions are available.';
+     $('freshness').textContent='Current buoy coverage not confirmed';
+     $('sourceBadge').dataset.tone='unknown';$('sourceBadge').textContent='Unavailable';
+     warn('Current data could not be verified. Check NWS and local posted warnings; missing readings do not mean calm water.','unknown');
+     $('memoryState').textContent='Historical context only';$('memoryText').textContent='No recent verified sensor history';$('memoryPeak').textContent='';
+     renderChart(null);
+   }finally{busy=false;$('refresh').disabled=false;$('refresh').textContent='Refresh'}
+ }
+ function switchRange(n){
+   range=n;$('btn48').setAttribute('aria-pressed',String(n==='48'));
+   $('btn7').setAttribute('aria-pressed',String(n==='7'));
+   if(data)renderChart(data);
+ }
+ $('btn48').addEventListener('click',()=>switchRange('48'));
+ $('btn7').addEventListener('click',()=>switchRange('7'));
+ $('refresh').addEventListener('click',load);
+ load();
+})();
+</script>
+</body>
+</html>
