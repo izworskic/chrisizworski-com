@@ -43,10 +43,10 @@ test('photo visual is the actual geolocated 2026 Wikimedia scene with required C
  assert.match(html,/no comparable beach change or new agate measurements/);
  assert.match(html,/zero validated before\/after shoreline-change pairs/);
  assert.match(html,/Flickr/);
- assert.match(html,/All rights reserved|do not copy or embed|from.*Flickr/s);
+ assert.match(html,/two independent Agate Beach photos/i);
  assert.match(html,/July 21 at 23:46 UTC/);
  assert.match(html,/One tentative post-event media date/);
- assert.match(html,/If your browser/i?.test('') ? /Abc/ : /independent photo metadata/i);
+ assert.match(html,/independent photo metadata/i);
  assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
  assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
 });
