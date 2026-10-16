@@ -1209,7 +1209,6 @@ render();
      const left=add('text',{x:45,y:137,'font-size':10,fill:'#687f82'});left.textContent='7-day sample start';
      const right=add('text',{x:605,y:137,'font-size':10,fill:'#687f82','text-anchor':'end'});right.textContent='Last measured UTC';
    }
-   renderSevenDayChart(memory?.sevenDayObservedWaveSeries);
    const memoryOK=memory?.schemaVersion==='rockhounding-seven-day-observed-offshore-storm-memory-v1'&&
      memory.source==='ORIGINAL_GLOS_SPOT1361_WAVE_MEASUREMENTS'&&
      memory.stationId==='SPOT-1361'&&memory.lookbackDays===7&&
@@ -1219,6 +1218,7 @@ render();
      memory.hazardStatus===r.hazardStatus;
    const memoryAge=memory?.newestObservedAtUTC?(Date.now()-Date.parse(memory.newestObservedAtUTC))/3600000:null;
    if(memoryOK&&memoryAge!==null&&memoryAge>=-.1&&memoryAge<=3){
+     renderSevenDayChart(memory.sevenDayObservedWaveSeries);
      const e=memory.lastMeasuredEpisode;
      const fmtTime=t=>new Date(t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit'});
      if(e&&e.sampleQualified){
@@ -1245,7 +1245,7 @@ render();
      }
    }else{
      refs.stormMemoryChart.replaceChildren();
-   refs.stormMemoryHeadline.textContent='Seven-day storm history unavailable';
+     refs.stormMemoryHeadline.textContent='Seven-day storm history unavailable';
      refs.stormMemoryDetails.textContent='The original offshore station is delayed, missing or cannot be verified. No past storm ending, fresh stone or safe-access conclusion.';
      refs.stormMemorySource.textContent='No reliable near-current GLOS source coverage; marine hazards checked separately.';
    }
