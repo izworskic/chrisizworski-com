@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "rockhounding-no-photo-dated-two-gauge-source-v1",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38910972246",
+  "originalMeasuredUTC": "2026-10-16T13:50:43.287Z",
+  "observationsAsOfThisTimeOnly": true,
+  "originalGLOSStatusAtResearch": "STALE_BUOY_SOURCE",
+  "lastOriginalGLOSObservationUTC": "2026-10-15T23:46:01Z",
+  "lastOffshoreHeightM": 0.37,
+  "independentNwsAlertStateAtResearch": "ACTIVE",
+  "noaa": {
+    "datum": "IGLD 1985",
+    "units": "meters",
+    "stationType": "DISTANT_LAKE_SUPERIOR_LEVEL_CONTEXT",
+    "gauges": [
+      {
+        "station": "9099018",
+        "name": "Marquette C.G., MI",
+        "sourceRole": "WESTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE",
+        "sourceTimeUTC": "2026-10-16T13:42:00Z",
+        "measuredElevationM": 183.539,
+        "last6hObservedRangeM": 0.113,
+        "last6hObservedNetChangeM": 0.05,
+        "originalQuality": "PRELIMINARY_NOAA_OCT_2026",
+        "original6MinSourceRows": 719,
+        "originalSourceSHA256": "acad0523f243bc2a47388f0ab660c3f4464c390addae4689db0a95dfa2e5f7ee",
+        "sourceURL": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A50&end_date=2026-10-16+13%3A50&station=9099018&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch"
+      },
+      {
+        "station": "9099004",
+        "name": "Point Iroquois, MI",
+        "sourceRole": "EASTERN_LAKE_SUPERIOR_CONTEXT_NOT_GRAND_MARAIS_WATERLINE",
+        "sourceTimeUTC": "2026-10-16T13:42:00Z",
+        "measuredElevationM": 183.463,
+        "last6hObservedRangeM": 0.083,
+        "last6hObservedNetChangeM": -0.034,
+        "originalQuality": "PRELIMINARY_NOAA_OCT_2026",
+        "original6MinSourceRows": 719,
+        "originalSourceSHA256": "32ee6d62fa674a07bb981d50a54def443003cfc63f4eeef71302a5089c27535c",
+        "sourceURL": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A50&end_date=2026-10-16+13%3A50&station=9099004&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch"
+      }
+    ]
+  },
+  "canClaimCurrentWaterlineGrandMarais": false,
+  "canClaimSafeBeach": false,
+  "canPredictNewAgates": false,
+  "canPublishPostStormVisitTime": false,
+  "sourceNotLiveClientData": true
+}
