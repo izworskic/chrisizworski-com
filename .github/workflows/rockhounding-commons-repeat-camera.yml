@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - research/rockhounding-commons-repeat-camera-discovery-20261016
+      - research/rockhounding-commons-camera-integrated-20261016
 permissions:
   contents: read
 jobs:
