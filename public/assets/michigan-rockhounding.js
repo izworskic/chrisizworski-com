@@ -1,8 +1,8 @@
 (function () {
   'use strict';
   var API = '/api/michigan-rockhounding';
-  var RANK = {PRIME: 0, GOOD: 1, ANYTIME: 2, QUIET: 3, STORM: 4, UNAVAILABLE: 5};
-  var COLORS = {PRIME: '#1e6b55', GOOD: '#4f8794', QUIET: '#8b918e', STORM: '#b23f1c', ANYTIME: '#6d5f8d', UNAVAILABLE: '#a7adaa'};
+  var RANK = {PRIME: 0, GOOD: 1, ANYTIME: 2, QUIET: 3, BUILDING: 4, STORM: 5, UNAVAILABLE: 6};
+  var COLORS = {PRIME: '#1e6b55', GOOD: '#4f8794', QUIET: '#8b918e', STORM: '#b23f1c', BUILDING: '#b97a14', ANYTIME: '#6d5f8d', UNAVAILABLE: '#a7adaa'};
   var list = document.getElementById('beachList');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.beach'));
   var answer = document.getElementById('answer');
@@ -91,7 +91,7 @@
       .filter(function (s) { var c = document.getElementById(s.id); return c && visible(c); });
     var go = pool.filter(function (s) { return s.verdict.code === 'PRIME' && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; });
     var good = pool.filter(function (s) { return s.verdict.code === 'GOOD' && document.getElementById(s.id).getAttribute('data-rule') !== 'nps'; });
-    var storm = pool.filter(function (s) { return s.verdict.code === 'STORM'; });
+    var storm = pool.filter(function (s) { return s.verdict.code === 'STORM' || s.verdict.code === 'BUILDING'; });
     var link = function (s) { return '<a href="#' + s.id + '">' + esc(nameOf(s.id)) + '</a>'; };
     var html, code;
     if (!pool.length) { html = 'No beach matches that filter.'; code = 'UNAVAILABLE'; }

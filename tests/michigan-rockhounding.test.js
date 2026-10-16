@@ -87,6 +87,11 @@ test('rough open-lake waves headed at the beach mean stay off; waves headed else
   assert.equal(assessSite(agate, {hourly: hourly(blowThenCalm), alerts: null, buoys: stale, nowS: NOW}).buoy, null);
 });
 
+test('moderate onshore wind right now reads as building, not quiet', () => {
+  const r = assessSite(agate, {hourly: hourly(i => i < -3 ? [6, 200] : [18, agate.shore.facesDeg]), alerts: null, buoys: {}, nowS: NOW});
+  assert.equal(r.verdict.code, 'BUILDING');
+});
+
 test('a forecast blow produces the next after-storm window', () => {
   const r = assessSite(agate, {hourly: hourly(i => i > 4 && i < 26 ? [32, agate.shore.facesDeg] : [7, 200]), alerts: null, buoys: {}, nowS: NOW});
   assert.equal(r.verdict.code, 'QUIET');
