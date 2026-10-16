@@ -1,0 +1,32 @@
+name: Rockhounding Wikimedia Agate repeat-camera image discovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-commons-repeat-camera-discovery-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original camera geotag and independent 2026 GLOS event matching
+        run: |
+          node --test tests/rockhounding-commons-camera-discovery.test.js tests/rockhounding-commons-camera-watch.test.js tests/rockhounding-commons-photo-lab.test.js
+          node --test tests/rockhounding-shoreline*.test.js
+      - name: Retrieve actual Wikimedia geosearch results once in research CI
+        run: node scripts/rockhounding/discover-commons-repeat-views.cjs --out artifacts/commons-grand-marais-geotagged-camera-research.json
+      - name: Retain provenance and honest no-fixed-view results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-wikimedia-geotagged-camera-study
+          path: artifacts/commons-grand-marais-geotagged-camera-research.json
+          if-no-files-found: warn
+          retention-days: 30
