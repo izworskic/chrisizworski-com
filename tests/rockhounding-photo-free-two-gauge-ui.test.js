@@ -38,7 +38,7 @@ test('real 2-gauge contextual panel is distinct from already existing LIVE GLOS/
  assert.match(html,/id="noPhotoIroquoisRange"/);
  assert.match(html,/no-photo-regional-lake-stage-oct2026\.json/);
  assert.match(html,/The current Marquette reading above is separate/);
- assert.match(html,/an archived October 16, 2026 original-source example/);
+ assert.match(html,/archived October 16, 2026 original-source example/);
  assert.match(html,/The lake can slosh after waves ease/);
  assert.match(html,/sourceNotLiveClientData!==true/);
  assert.match(html,/was stale/);
