@@ -1,0 +1,23 @@
+name: Rockhounding photo-free unified offshore condition reading
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/rockhounding-photo-free-condition-reading-20261016
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-verified no-photo lake reading and one upstream request path
+        run: |
+          node --test tests/rockhounding-photo-free-condition-reading.test.js
+          node --test tests/rockhounding-live-photo-free-pulse.test.js tests/rockhounding-noaa-remote-level-integration.test.js
+      - name: Preserve all rockhounding science and page regressions
+        run: node --test tests/rockhounding*.test.js
