@@ -122,6 +122,23 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
     </div>
   </div>
  </div>
+ <div id="photoFreeMeasuredActivity" style="border-top:1px solid #e1eae9;padding-top:19px;margin:19px 0 18px" aria-labelledby="photoFreeActivityTitle">
+  <div class="chartTop">
+   <strong id="photoFreeActivityTitle" style="font-size:16px;color:#204f5e">Which storm stayed active the longest?</strong>
+   <span style="font-size:11px;color:#688087">Measured height × period × time · historical comparison</span>
+  </div>
+  <p style="font-size:13px;color:#587278;margin:8px 0 13px">Peak height isn't the whole story. This comparison uses <strong>observed wave height, mean period, direction and duration</strong> from the same Grand Marais buoy. It's <strong>not</strong> a chance of finding agates, a beach-wave prediction, or a safe-visit signal.</p>
+  <div id="pulseActivityHeadline" style="font-size:14px;color:#335e6b;font-weight:700" aria-live="polite">Reading the actual 2026 wave measurements…</div>
+  <div style="height:9px;background:#e5edec;border-radius:10px;overflow:hidden;margin:10px 0 5px">
+   <div id="pulseActivityBar" style="height:100%;background:#397e8d;border-radius:10px;width:0%;transition:width .2s" role="img" aria-label="Source-verified relative offshore-wave activity"></div>
+  </div>
+  <p id="pulseActivityExplain" style="font-size:12px;color:#617b80;margin:5px 0 13px">Only original buoy readings, with observation gaps excluded.</p>
+  <details id="pulseActivityCompare" style="border:1px solid #dce6e5;border-radius:10px;padding:12px 14px;background:#f9fbfa">
+   <summary style="cursor:pointer;color:#2f5b69;font-weight:700;font-size:13px">Compare all eight storms by measured activity</summary>
+   <div id="pulseActivityAll" style="display:grid;gap:9px;margin-top:13px"><span style="font-size:12px">Loading archived research data.</span></div>
+   <p style="font-size:11px;color:#657d82;margin:12px 0 0">Relative to the strongest sufficiently sampled 2026 offshore episode only. The index integrates Hs² × recorded <em>mean</em> period over observed intervals of 90 minutes or less; it is <strong>not</strong> absolute wave power (kW/m), sediment transport, or agate exposure. The historical shoreline-facing direction is not a surveyed modern beach bearing.</p>
+  </details>
+ </div>
  <div class="pulseSites" aria-label="Two Grand Marais shoreline settings">
   <article class="pulseSite">
     <span class="pulseBadge">Open Lake Superior coast</span>
@@ -919,6 +936,73 @@ render();
   detail.textContent='Use the source and current NWS links below for lake conditions.';
   direction.textContent='Open the original station record for observed wave direction.';
   caption.textContent='Source history available from GLOS Grand Marais Spotter.';
+ });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const select=document.getElementById('pulseEventSelect');
+ const headline=document.getElementById('pulseActivityHeadline');
+ const bar=document.getElementById('pulseActivityBar');
+ const explanation=document.getElementById('pulseActivityExplain');
+ const all=document.getElementById('pulseActivityAll');
+ if(!select||!headline||!bar||!explanation||!all)return;
+ const date=t=>new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+ fetch('/rockhounding-lab/photo-free-wave-activity-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Observed activity record unavailable');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-photo-free-measured-activity-v1'||
+   d.source!=='GLOS_SEAGULL_OBS_140_SPOT_1361'||d.baseSourceOriginalRows!==5243||
+   d.episodeTotal!==8||d.episodesWithSufficientCoverage!==8||
+   d.photoEvidenceRequired!==false||d.canPredictNewStones!==false||
+   d.canClaimSafeAccess!==false||d.canPublishVisitWindow!==false||
+   d.physicalPowerKWPerMeter!==undefined||!Array.isArray(d.entries)||d.entries.length!==8||
+   d.entries.some(e=>!Number.isFinite(e.observedWaveActivityProxy)||
+    !Number.isFinite(e.relativeToLargestMeasured2026EpisodePct)||
+    e.relativeToLargestMeasured2026EpisodePct<0||
+    e.relativeToLargestMeasured2026EpisodePct>100||
+    e.enoughCoverageForRelativeComparison!==true||
+    e.newRockExposureProbability!==null||e.physicalPowerKWPerMeter!==null))
+    throw Error('Unverified offshore activity evidence or safety claim');
+  const render=()=>{
+   const idx=Number(select.value);
+   const period=document.getElementById('pulseEventSelect').options[idx];
+   if(!period)return;
+   const key=period.textContent;
+   const entry=d.entries.find(e=>key.includes(date(e.peakAtUTC)));
+   if(!entry)return;
+   headline.textContent=date(entry.peakAtUTC)+' · '+entry.relativeToLargestMeasured2026EpisodePct.toFixed(1)+'% of the largest measured 2026 offshore activity episode';
+   bar.style.width=entry.relativeToLargestMeasured2026EpisodePct+'%';
+   bar.setAttribute('aria-label','Relative measured offshore activity '+entry.relativeToLargestMeasured2026EpisodePct.toFixed(1)+'% of the largest sampled 2026 episode');
+   explanation.textContent=entry.observedTimeCoveragePct.toFixed(1)+'% of its source interval covered by real observations; '+
+    entry.historicFacingSharePct.toFixed(1)+'% of the descriptive proxy aligned with the old NOAA-chart lakeward direction. '+
+    (entry.recordedWaveRebuild?'Waves rebuilt after an initial fall. ':'')+
+    'Nothing here confirms new rocks on shore.';
+  };
+  select.addEventListener('change',render);
+  const ranked=[...d.entries].sort((a,b)=>b.observedWaveActivityProxy-a.observedWaveActivityProxy);
+  all.replaceChildren();
+  ranked.forEach(e=>{
+   const row=document.createElement('div');
+   row.style.display='grid';row.style.gridTemplateColumns='minmax(92px,125px) minmax(0,1fr) 49px';
+   row.style.alignItems='center';row.style.gap='8px';
+   const l=document.createElement('span');l.style.fontSize='12px';l.textContent=date(e.peakAtUTC);
+   const track=document.createElement('div');
+   track.style.height='10px';track.style.background='#e5edec';
+   track.style.borderRadius='9px';track.style.overflow='hidden';
+   const fill=document.createElement('div');fill.style.height='100%';fill.style.borderRadius='9px';
+   fill.style.width=e.relativeToLargestMeasured2026EpisodePct+'%';
+   fill.style.background=e.recordedWaveRebuild?'#aa8450':'#397e8d';
+   track.appendChild(fill);
+   const v=document.createElement('span');v.style.fontSize='12px';v.style.textAlign='right';
+   v.textContent=e.relativeToLargestMeasured2026EpisodePct.toFixed(1)+'%';
+   row.append(l,track,v);all.appendChild(row);
+  });
+  render();
+ }).catch(()=>{
+  headline.textContent='Original measured activity comparison unavailable.';
+  explanation.textContent='No values, rock exposure estimates or safe-visit advice substituted.';
+  bar.style.width='0%';all.replaceChildren();
  });
 })();
 </script>
