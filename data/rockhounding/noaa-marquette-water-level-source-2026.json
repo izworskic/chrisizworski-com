@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "rockhounding-lake-superior-remote-water-level-source-v1",
+  "provider": "NOAA CO-OPS Tides & Currents",
+  "stationId": "9099018",
+  "stationName": "Marquette C.G., MI",
+  "stationURL": "https://tidesandcurrents.noaa.gov/stationhome.html?id=9099018",
+  "apiBase": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter",
+  "sourceCoordinates": {
+    "lat": 46.5456,
+    "lon": -87.3786
+  },
+  "sourceDatum": "IGLD",
+  "sourceDatumVersion": "IGLD 1985",
+  "units": "metric",
+  "product": "water_level",
+  "timeZone": "gmt",
+  "apiOutputFormat": "json",
+  "verification": {
+    "reviewedAtUTC": "2026-10-16",
+    "originalProviderResponseDate": "2026-10-14",
+    "hasOriginal2026PreliminaryMeasurements": true,
+    "rawFields": [
+      "t",
+      "v",
+      "s",
+      "f",
+      "q"
+    ],
+    "originalObservedLevelExampleM": 183.424,
+    "exampleQualityFlag": "p",
+    "source": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=20261014&end_date=20261015&station=9099018&product=water_level&datum=IGLD&units=metric&time_zone=gmt&format=json&application=ChrisIzworskiRockhounding"
+  },
+  "interpretation": {
+    "stationIsGrandMaraisMichigan": false,
+    "stationIsNearAgateBeach": false,
+    "representsLakeWideLevelContextOnly": true,
+    "notMeasuredBeachWaterline": true,
+    "notMeasuredBeachWaves": true,
+    "notTidalPrediction": true,
+    "notInstantLocalSeiche": true,
+    "provisionalReadingsPossible": true,
+    "doNotUseStation9099090": true,
+    "station9099090IsInMinnesota": true,
+    "canInferNewRockExposure": false,
+    "canClaimSafeConditions": false,
+    "canPublishVisitWindow": false
+  }
+}
