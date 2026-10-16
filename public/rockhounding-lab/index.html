@@ -142,6 +142,45 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <ol id="spotterSeasonEpisodes" style="padding-left:21px;font-size:13px;color:#4f6770" aria-label="Strongest qualified historical offshore wave episodes"><li>The historical event table is loading. No rock exposure is inferred.</li></ol>
   <p style="font-size:12px;margin:12px 0 0"><a href="https://seagull-erddap.glos.org/erddap/info/obs_140/index.html" target="_blank" rel="noopener noreferrer">Original GLOS measurements ↗</a> · <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38833508075" target="_blank" rel="noopener noreferrer">112-day source audit ↗</a></p>
 </section>
+<section class="panel pad" id="pilot-launch-readiness" aria-labelledby="pilot-launch-title">
+ <div class="observedHead"><div class="subhead">
+  <h2 id="pilot-launch-title">Two Grand Marais beaches. Very different evidence.</h2>
+  <p>Burt Township confirms both public waterfront destinations. That does not make both agate-producing beaches, allow rock removal, or establish safe post-storm conditions. This research gate keeps each claim separate.</p>
+ </div><span class="pill">Official sources · not live conditions</span></div>
+ <div class="two" style="align-items:stretch;gap:16px;margin:16px 0">
+  <article style="background:#f8fbfa;border:1px solid #c9dddd;border-radius:12px;padding:17px;min-width:0">
+   <p class="eyebrow" style="margin:0 0 7px">Open Lake Superior shoreline</p>
+   <h3 style="font:500 24px Georgia,serif;margin:0 0 8px;color:#1d4350">Agate Beach</h3>
+   <p style="font-size:13px;color:#4f6b73;margin:0 0 12px">Township public beach and historic boardwalk; the Chamber describes the town's traditional rockhounding destination.</p>
+   <div style="display:grid;gap:8px;font-size:13px;color:#3d6066">
+    <div><strong>Beach exists:</strong> <span>Township documented</span></div>
+    <div><strong>Measured wave history:</strong> <span>5,243 regional offshore readings—not surf at the beach</span></div>
+    <div><strong>Newly exposed stones:</strong> <span>Not verified</span></div>
+    <div><strong>Township collecting permission:</strong> <span>Unverified</span></div>
+    <div><strong>Exact parking route:</strong> <span>Not independently mapped</span></div>
+   </div>
+   <p style="font-size:12px;margin:14px 0 0"><a href="https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/" target="_blank" rel="noopener noreferrer">Burt Township beach record ↗</a> · <a href="https://grandmaraismichigan.com/visit-us/attractions/beaches/" target="_blank" rel="noopener noreferrer">Chamber general directions ↗</a></p>
+  </article>
+  <article style="background:#f8fbfa;border:1px solid #c9dddd;border-radius:12px;padding:17px;min-width:0">
+   <p class="eyebrow" style="margin:0 0 7px">Sheltered Grand Marais harbor</p>
+   <h3 style="font:500 24px Georgia,serif;margin:0 0 8px;color:#1d4350">Bayshore Park</h3>
+   <p style="font-size:13px;color:#4f6b73;margin:0 0 12px">Township swimming beach with bathhouse, parking and playground. Not an independently verified agate deposit.</p>
+   <div style="display:grid;gap:8px;font-size:13px;color:#3d6066">
+    <div><strong>Public park:</strong> <span>Township documented</span></div>
+    <div><strong>Measured harbor waves:</strong> <span>No verified harbor data—cannot reuse open-lake buoy heights</span></div>
+    <div><strong>Agate-bearing substrate:</strong> <span>Not verified</span></div>
+    <div><strong>Township collecting permission:</strong> <span>Unverified</span></div>
+    <div><strong>Exact parking route:</strong> <span>Not independently mapped</span></div>
+   </div>
+   <p style="font-size:12px;margin:14px 0 0"><a href="https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/" target="_blank" rel="noopener noreferrer">Burt Township park record ↗</a> · <a href="https://grandmaraismichigan.com/visit-us/attractions/beaches/" target="_blank" rel="noopener noreferrer">Chamber general directions ↗</a></p>
+  </article>
+ </div>
+ <div class="reviewBanner"><strong>Collecting rules ≠ public beach access:</strong>&nbsp;
+ <a href="https://www.michigan.gov/egle/public/learn/geology/rockhounding" target="_blank" rel="noopener noreferrer">EGLE's 25-pound annual limit</a> for applicable state-owned/public-trust lands does <strong>not</strong> automatically grant permission to collect rocks at either township beach. Local/posted restrictions and separate NWS hazard checks are still required.</div>
+ <p id="pilotReadinessProof" role="status" aria-live="polite" style="font-size:13px;color:#536f75;margin:13px 0 7px">Loading locally sourced pilot readiness audit. No current surf, collecting clearance or rock-exposure claim is made.</p>
+ <p id="pilotReadinessPriority" style="font-size:13px;color:#48666a;margin:0"><strong>Research priority:</strong> A same-view beach photo from just before the July 21, 2026 observed offshore event. That event has an uncertain later photo date but no comparable earlier frame.</p>
+ <p style="font-size:12px;color:#71848a;margin:10px 0 0">These are historical, noindex research disclosures. A shoreline or legal-collecting clearance will not appear until independently verified; no wave or photo status here is a current invitation to enter the water.</p>
+</section>
 <section class="panel pad" id="storm-photo-review-queue" aria-labelledby="storm-photo-review-title">
  <div class="observedHead"><div class="subhead">
   <h2 id="storm-photo-review-title">Which measured storms have matching beach photographs?</h2>
@@ -663,6 +702,42 @@ render();
   select.replaceChildren();const opt=document.createElement('option');opt.textContent='Research records unavailable';select.appendChild(opt);
   status.textContent='Original storm/media source verification unavailable; no stone-exposure, current wave or safe-beach result is inferred.';
   details.textContent='';
+ });
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const proof=document.getElementById('pilotReadinessProof');
+ const priority=document.getElementById('pilotReadinessPriority');
+ if(!proof||!priority)return;
+ fetch('/rockhounding-lab/pilot-readiness-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Source audit unavailable');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-grand-marais-publication-readiness-v1'||
+    d.townshipsPublicBeachSitesDocumented!==2||
+    d.sitesWithPublishedSpecificRockCollectingPermission!==0||
+    d.sitesWithSurveyedExactParkingEntrance!==0||
+    d.sitesWithValidatedLocalBreakingWaveMeasurements!==0||
+    d.sitesWithVerifiedStormToNewStoneOutcome!==0||
+    d.sourceBackedRegionalObservedWaveRecords!==5243||
+    d.samplingQualifiedOriginalOffshoreEpisodeGroups!==8||
+    d.originalEGLEStateLandRule?.thisNumberDoesNotAuthorizeTownshipCollection!==true||
+    d.canPublishCurrentBeachOpportunity!==false||
+    d.canPublishStoneFindProbability!==false||
+    d.canPublishSiteSafeVerdict!==false||
+    !Array.isArray(d.sites)||d.sites.length!==2||
+    d.sites[0].siteId!=='grand-marais-agate'||
+    d.sites[1].siteId!=='grand-marais-harbor'||
+    d.sites.some(s=>s.canApproveMunicipalRockRemoval!==false||
+      s.canRecommendRockhoundingNow!==false||s.currentNwsQueryRun!==false||
+      !s.unresolvedEvidenceGates.includes('COLLECTION_PERMISSION')||
+      !s.unresolvedEvidenceGates.includes('CURRENT_HAZARDS')))
+   throw Error('Unsafe or inconsistent township source readiness');
+  proof.textContent='Official source gate verified: 2 public destinations; 0 proven collecting permissions; 0 independently measured beach or harbor breaking-wave series; 0 verified newly exposed agates. Research-only, not current conditions.';
+  priority.textContent='Best next evidence task: independently dated matching Agate Beach views around the July 21 offshore episode. That event has a possible later scene but no close comparable pre-storm image. This is not the best time to look for agates.';
+ }).catch(()=>{
+  proof.textContent='Official pilot source audit unavailable. Public access does not certify rock collection, safe shore conditions or fresh-agate exposure.';
+  priority.textContent='Research next: verify a matching before/after Agate shoreline photo pair and separate township collection rules. No public recommendation.';
  });
 })();
 </script>

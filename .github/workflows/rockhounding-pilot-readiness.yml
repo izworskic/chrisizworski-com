@@ -1,0 +1,51 @@
+name: Rockhounding Grand Marais pilot evidence readiness
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-pilot-evidence-readiness-20261016
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-agate-bayshore-readiness-research
+  cancel-in-progress: false
+
+jobs:
+  source-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check official-source permissions and Wave versus Harbor safety boundaries
+        run: |
+          node --test tests/rockhounding-pilot-publication-readiness.test.js
+          node --test tests/rockhounding*.test.js
+      - name: Generate independent noindex two-beach evidence-readiness snapshot
+        run: |
+          node scripts/rockhounding/generate-pilot-readiness.cjs --write public/rockhounding-lab/pilot-readiness-2026.json
+          node scripts/rockhounding/generate-pilot-readiness.cjs --check public/rockhounding-lab/pilot-readiness-2026.json
+      - name: Save reviewed snapshot on PR research branch only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Rockhounding Research Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rockhounding-lab/pilot-readiness-2026.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research(rockhounding): freeze two-source official pilot readiness"
+            git push origin HEAD:research/rockhounding-pilot-evidence-readiness-20261016
+          else
+            echo "Official-source research digest unchanged."
+          fi
+      - name: Preserve independent source and claim readiness audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-official-agate-bayshore-source-readiness
+          path: public/rockhounding-lab/pilot-readiness-2026.json
+          retention-days: 30
