@@ -5,9 +5,10 @@
 const fs=require('node:fs'),path=require('node:path');
 const baseline=require('../../data/rockhounding/grand-marais-commons-geosearch-2026-10-16.json');
 const {eventQueue}=require('../../lib/rockhounding/storm-photo-review-queue.cjs');
+const {mergeInbox}=require('../../lib/rockhounding/commons-photo-review-inbox.cjs');
 const {mediaWikiUrl,decodeProvider,discoverSourceChanges}=
  require('../../lib/rockhounding/commons-camera-discovery.cjs');
-async function watch({fetchFn=fetch,nowISO=new Date().toISOString()}={}){
+async function watch({fetchFn=fetch,nowISO=new Date().toISOString(),previousInbox=null}={}){
  if(!Number.isFinite(Date.parse(nowISO)))throw Error('Invalid discovery check clock');
  const r=await fetchFn(mediaWikiUrl(),{
   headers:{'Accept':'application/json',
@@ -38,7 +39,9 @@ async function watch({fetchFn=fetch,nowISO=new Date().toISOString()}={}){
   retrospectivelyMeasuredSedimentChanges:0,calibratedAgateExposure:false,
   canPublishVisitWindow:false
  };
- return {...compared,stormPhotoResearch,checkedAtUTC:nowISO};
+ const archive=mergeInbox(previousInbox,rows,{nowISO});
+ return {...compared,stormPhotoResearch,photoReviewInbox:archive.inbox,
+  photoReviewInboxDiagnostics:archive.diagnostics,checkedAtUTC:nowISO};
 }
 async function main(args=process.argv.slice(2)){
  if(args.length!==2||args[0]!=='--report'||!args[1])

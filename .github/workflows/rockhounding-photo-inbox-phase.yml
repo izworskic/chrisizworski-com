@@ -1,0 +1,54 @@
+name: Rockhounding persistent original camera-photo review inbox verification
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-photo-evidence-inbox-20261016
+permissions:
+  contents: write
+concurrency:
+  group: rockhounding-weekly-public-camera-metadata
+  cancel-in-progress: false
+jobs:
+  verify-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-photo-review-inbox
+          path: photo-inbox
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test source metadata, persistence, negative geographic controls and all rockhounding science
+        run: |
+          node --test tests/rockhounding-commons-photo-review-inbox.test.js tests/rockhounding-commons-camera-watch.test.js tests/rockhounding-storm-photo-review-queue.test.js
+          node --test tests/rockhounding*.test.js
+      - name: Check one live original Wikimedia geotag request and append research inbox
+        run: |
+          node scripts/rockhounding/archive-commons-photo-review-inbox.cjs \
+            --inbox photo-inbox/data/rockhounding/commons-photo-review-inbox.json \
+            --report artifacts/commons-original-storm-photo-inbox-source.json
+      - name: Commit source-stamped review-only metadata on dedicated branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C photo-inbox config user.name "Rockhounding Research Bot"
+          git -C photo-inbox config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C photo-inbox add data/rockhounding/commons-photo-review-inbox.json
+          if ! git -C photo-inbox diff --cached --quiet; then
+            git -C photo-inbox commit -m "data(rockhounding): source-checked original Commons photo review inbox"
+            git -C photo-inbox push origin HEAD:research/rockhounding-photo-review-inbox
+          fi
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-original-camera-storm-review-source
+          path: artifacts/commons-original-storm-photo-inbox-source.json
+          retention-days: 30
+          if-no-files-found: warn
