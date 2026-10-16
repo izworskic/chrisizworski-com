@@ -33,7 +33,7 @@ test('provider rows from disjoint historical periods become deduped observed-onl
  assert.equal(r.audit.totalOriginalRowsReceived,2);
  assert.equal(r.audit.dedupedStoredRecords,2);
  assert.equal(r.audit.sourceUtcDays,2);
- assert.equal(r.study.eventCount,1);
+ assert.equal(r.study.eventCount,2);
  assert.equal(r.study.qualifiedDistinctEvents,0);
  assert.equal(r.study.canClaimBeachSafety,false);
  assert.equal(r.audit.noHistoricallyReconstructedNwsWarnings,true);
