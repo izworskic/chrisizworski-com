@@ -6,6 +6,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {requestUrl,parseSpotterCSV,observedSpotterStudy}=
  require('../../lib/rockhounding/glos-spotter.cjs');
+const {compareSpotterToHistoricShore}=require('../../lib/rockhounding/glos-spotter-facing.cjs');
 const HOUR=3600000;
 function utcSeconds(ms){return new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');}
 async function main(){
@@ -21,7 +22,11 @@ async function main(){
  const csv=await response.text();
  const parsed=parseSpotterCSV(csv);
  const report=observedSpotterStudy(parsed,{nowISO});
+ const directionStudy=parsed.rows.length
+   ? compareSpotterToHistoricShore({observation:parsed.rows.at(-1),sourceFreshness:report.status})
+   : null;
  const evidence={...report,collectedAtUTC:nowISO,
+   historicAgateDirectionComparisonResearchOnly:directionStudy,
    sourceDataEndpoint:'https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv',
    sourceQueryFromUTC:startISO,sourceQueryToUTC:endISO,
    sourceRowCount:parsed.rows.length,
@@ -39,6 +44,7 @@ async function main(){
    firstObservedAt:evidence.firstObservedAt,lastObservedAt:evidence.lastObservedAt,
    peakObservedWaveM:evidence.peakObservedWaveM,latestWaveM:evidence.latestWaveM,
    latestWaveFromDeg:evidence.latestWaveFromDeg,
+   historicResearchRelativeAngleDeg:directionStudy?.relativeWaveFromAngleDeg??null,
    measuredOffshoreOnly:true,siteSafety:false,rockExposure:false})+'\n');
 }
 main().catch(e=>{process.stderr.write('GLOS_SPOTTER_UNAVAILABLE '+(e?.message||e)+'\n');process.exitCode=1;});
