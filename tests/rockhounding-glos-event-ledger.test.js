@@ -92,3 +92,23 @@ test('unknown and zero evidence is not taken to mean calm or safe',()=>{
  assert.equal(s.eventCount,0);
  assert.equal(s.canClaimBeachSafety,false);
 });
+
+test('the actual October 2026 Spotter episode must not be called settled after a partial drop',()=>{
+ const frozen=require('../public/rockhounding-lab/glos-spotter-oct2026.json');
+ const actual=frozen.samples.map(p=>({
+  time:p.t,waveHeightM:p.hM,waveFromDeg:p.waveFromDeg,meanPeriodS:p.periodS,
+  source:'GLOS_SPOT_1361_OBSERVED_OPEN_LAKE',phase:'OBSERVATION',
+  lat:46.695671,lon:-86.003799
+ }));
+ const checkpoint='2026-10-16T00:51:15.267Z';
+ const history=offshoreEvents(mergeSpotterLedger(null,parsed(actual),{nowISO:checkpoint}),{nowISO:checkpoint});
+ assert.equal(history.recordCount,142);
+ assert.equal(history.eventCount,1);
+ assert.equal(history.eventHistory[0].peakSignificantWaveHeightM,2.57);
+ assert.equal(history.eventHistory[0].observedOffshoreDeclineAfterPeak,true);
+ assert.ok(history.eventHistory[0].elevatedReadingsAfterRecordedDecline>0);
+ assert.equal(history.eventHistory[0].lifecycleStatus,'OFFSHORE_WAVES_ELEVATED_AGAIN_AFTER_DROP');
+ assert.equal(history.eventHistory[0].offshoreSettlingWindowValidated,false);
+ assert.equal(history.eventHistory[0].completeness,'EVENT_END_UNCONFIRMED_OR_SOURCE_GAPPY');
+ assert.equal(history.canPublishVisitWindow,false);
+});
