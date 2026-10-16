@@ -1,0 +1,61 @@
+name: Rockhounding 2026 measured offshore wave percentile reference
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-photo-free-historical-baseline-20261016
+    paths:
+      - .github/workflows/rockhounding-offshore-activity-percentiles.yml
+      - lib/rockhounding/offshore-activity-percentiles.cjs
+      - scripts/rockhounding/build-offshore-activity-percentiles.cjs
+      - tests/rockhounding-offshore-activity-percentiles.test.js
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rockhounding-partial-season-baseline-builder
+  cancel-in-progress: false
+
+jobs:
+  original-gios-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-photo-free-historical-baseline-20261016
+          persist-credentials: true
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: original-gios-ledger
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify photo-free source and relative wave activity interpretation
+        run: |
+          node --test tests/rockhounding-offshore-activity-percentiles.test.js
+          node --test tests/rockhounding-photo-free-wave-activity.test.js tests/rockhounding-photo-free-48h-wave-tendency.test.js
+      - name: Build seasonal observed activity distribution from original GLOS archive
+        run: |
+          node scripts/rockhounding/build-offshore-activity-percentiles.cjs \
+            --ledger original-gios-ledger/data/rockhounding/spotter-observed-wave-ledger.json \
+            --out data/rockhounding/spotter-2026-24h-offshore-reference.json
+      - name: Commit static source-derived baseline onto research branch only
+        run: |
+          set -euo pipefail
+          git config user.name "Rockhounding Research Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rockhounding/spotter-2026-24h-offshore-reference.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(rockhounding): source-verified 2026 offshore wave activity distribution"
+            git push origin HEAD:research/rockhounding-photo-free-historical-baseline-20261016
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rockhounding-source-observed-2026-seasonal-wave-reference
+          path: data/rockhounding/spotter-2026-24h-offshore-reference.json
+          retention-days: 30
