@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "grand-marais-usace-2026-original-survey-evidence-v1",
+  "researchAsOf": "2026-10-15",
+  "source": {
+    "catalog": "https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/eHydro_Survey_Data/FeatureServer/0",
+    "catalogObjectId": 125722,
+    "surveyName": "Grand Marais Harbor",
+    "surveyEndUTC": "2026-07-30",
+    "surveyMetadataUploadedUTC": "2026-09-11",
+    "originalArchive": "https://ehydroprod.blob.core.usgovcloudapi.net/ehydro-surveys/CELRE/CELRE_DIS_GR_01_MAS_20260730_CS.ZIP",
+    "originalArchiveBytes": 4062569,
+    "originalArchiveSHA256": "6dce01ac993dd991219be0da4718fd90b83f3e465099c67e1b3186394081ac5c",
+    "originalSurveyedFootprintCRS": "EPSG:4326",
+    "downloadSourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/38826206365"
+  },
+  "archiveEvidence": {
+    "archiveValidZIP": true,
+    "archiveEntries": 144,
+    "originalXYZFile": "GR_01_MAS_20260730_CS.XYZ",
+    "originalFGDCXMLFile": "GR_01_MAS_20260730_CS.XML",
+    "numericXYZRecords": 17804,
+    "parsedWholeXYZ": true,
+    "rawCoordinateRanges": {
+      "easting": [
+        26504721.31,
+        26505416.15
+      ],
+      "northing": [
+        691800.03,
+        695425.11
+      ],
+      "zElevation": [
+        -29.96,
+        -7.48
+      ]
+    },
+    "rawXYZHorizontalUnits": "US Survey Foot",
+    "rawZUnits": "US Survey Foot",
+    "sourceHorizontalProjectionName": "NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet",
+    "sourceProjectionCodeCandidate": "ESRI:102688",
+    "horizontalTransformerIndependentlyVerified": false,
+    "sourceVerticalDatum": "IGLD 85",
+    "originalFGDCVertDatumValue": "IGLD 85",
+    "zElevationIsNotContemporaneousHarborWaterDepth": true,
+    "currentDepthRequiresDatedIGLD85WaterLevelReference": true,
+    "actualWaterLevelMatched": false
+  },
+  "surveyCoverage": {
+    "originalArcGISSuppliedPolygonVertices": 161,
+    "ringCount": 1,
+    "boundsWGS84": [
+      -85.971734,
+      46.675899,
+      -85.969027,
+      46.685841
+    ],
+    "verifiedPointInSurveyPolygon": {
+      "grand-marais-harbor": false,
+      "grand-marais-agate": false,
+      "inner-harbor-center": false,
+      "entrance-channel-approx": true
+    },
+    "spatialVerdict": "ENTRANCE_CHANNEL_ONLY_UNVERIFIED_AT_BOTH_BEACH_STUDY_POINTS",
+    "coverageIsSurveyExtentNotAllBottomSoundings": true
+  },
+  "constraints": {
+    "surveyMeasuresHarborWaves": false,
+    "harborWaveAttenuationMeasured": false,
+    "currentNavigableDepthValidated": false,
+    "canPredictSafeSwimming": false,
+    "canPredictNewlyExposedAgates": false,
+    "canPublishRockhoundingVisitWindow": false,
+    "canClaimCollectionPermission": false
+  },
+  "status": "ORIGINAL_2026_USACE_ENTRANCE_SURVEY_DELIVERABLE_AUTHENTICATED_DATUM_AND_COVERAGE_RESEARCH_ONLY"
+}
