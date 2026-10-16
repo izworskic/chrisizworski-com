@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
+  "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
+  "calculatedAtUTC": "2026-10-16T00:51:15.267Z",
+  "recordCount": 142,
+  "latestObservedAt": "2026-10-14T23:46:01Z",
+  "latestAgeHours": 25.09,
+  "sourceStatus": "STALE_OBSERVATIONS",
+  "thresholdM": 1,
+  "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
+  "episodeSeparationHours": 48,
+  "eventCount": 1,
+  "qualifiedDistinctEvents": 1,
+  "eventHistory": [
+    {
+      "id": "SPOT1361-20261012T124601Z",
+      "firstElevatedAt": "2026-10-12T12:46:01Z",
+      "lastElevatedAt": "2026-10-14T22:46:01Z",
+      "peakObservedAt": "2026-10-12T14:46:01Z",
+      "peakSignificantWaveHeightM": 2.57,
+      "elevatedObservationCount": 83,
+      "observedSpanHours": 58,
+      "gapWithinElevatedSpanHours": 0.5,
+      "qualifiesAsDistinctMeasuredOffshoreEpisode": true,
+      "timeSeparatedFromPriorGroupByHours": 48,
+      "observedOffshoreDeclineAfterPeak": true,
+      "observedDeclineSampleAt": "2026-10-14T02:46:01Z",
+      "observedDeclineHeightM": 1.03,
+      "completeness": "EVENT_END_UNCONFIRMED_OR_SOURCE_GAPPY",
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "riskThresholdOrAlert": false,
+      "actualBeachRockOutcomeObserved": false,
+      "canPredictFreshStones": false,
+      "canPublishVisitWindow": false,
+      "canClaimBeachSafety": false,
+      "canInferHarborWaveHeight": false
+    }
+  ],
+  "sourceOnlyNoBeachOutcome": true,
+  "calibratedToActualRockExposure": false,
+  "sufficientForRockExposurePrediction": false,
+  "canPredictFreshStones": false,
+  "canPublishVisitWindow": false,
+  "canClaimBeachSafety": false,
+  "canInferHarborWaveHeight": false,
+  "hazardSnapshot": {
+    "checkedAtUTC": "2026-10-16T00:51:15.267Z",
+    "status": "ACTIVE",
+    "matchedAlertEvents": [
+      {
+        "event": "Small Craft Advisory",
+        "severity": "Minor",
+        "expiresAtUTC": "2026-10-16T06:00:00-04:00"
+      },
+      {
+        "event": "Gale Warning",
+        "severity": "Moderate",
+        "expiresAtUTC": "2026-10-16T23:00:00-04:00"
+      },
+      {
+        "event": "Gale Warning",
+        "severity": "Moderate",
+        "expiresAtUTC": "2026-10-16T23:00:00-04:00"
+      }
+    ],
+    "sources": [
+      "https://api.weather.gov/alerts/active?zone=LSZ250",
+      "https://api.weather.gov/alerts/active?zone=LSZ251",
+      "https://api.weather.gov/alerts/active?point=46.675,-85.985"
+    ],
+    "coverageNote": "Current selected NWS point/nearshore-zone alerts only; no alert is NOT a beach safety clearance",
+    "noPresentDayMarineSafetyCertification": true
+  },
+  "sourceQueryStartUTC": "2026-10-12T00:51:15Z",
+  "sourceQueryEndUTC": "2026-10-16T00:51:15Z",
+  "sourceRecordCount": 142,
+  "rejectedOriginalRows": 0,
+  "originalCsvSha256": "a360f3632f0833d104abed13a34e9d417ecfb401912e4216b989a22fe0814803",
+  "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
+  "observedWaveEventsNotModeledForecasts": true,
+  "dailyObservationsNotIndependentStorms": true,
+  "measuredBeachBreakingWaveHeightM": null,
+  "calibratedToRockFindings": false,
+  "canClaimHazardFreeVisit": false,
+  "canPublishRockhoundingWindow": false,
+  "canClaimCollectingPermission": false,
+  "summary": "Actual offshore Spotter observations and separate current NWS alerts. Not a beach wave, fresh-stone, access or safety forecast."
+}
