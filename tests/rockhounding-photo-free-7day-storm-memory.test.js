@@ -69,6 +69,14 @@ test('a single isolated measurement over one meter does not become a sustained s
  assert.equal(v.lastMeasuredEpisode.sampleQualified,false);
  assert.equal(v.lastMeasuredEpisode.eighteenHourBelowResearchThresholdConfirmed,false);
 });
+test('few low readings cannot claim an entire storm-free week when earlier source days are missing',()=>{
+ const s=data(()=>.3).filter(r=>Date.parse(r.time)>=now-18*HOUR);
+ const v=memoryOfLastStorm(s,{nowISO:NOW});
+ assert.equal(v.status,'PARTIAL_SEVEN_DAY_SOURCE_HISTORY');
+ assert.equal(v.sevenDayAbsenceSourceCovered,false);
+ assert.equal(v.measuredNoElevatedReadingsNotNoStoneChange,true);
+ assert.equal(v.canPublishVisitWindow,false);
+});
 test('source splices, duplicate value conflicts, station swap and future sample fail closed',()=>{
  const a=data(()=>.5);
  for(const changed of [[{...a[0],source:'other'}],[row(-4,2)],
