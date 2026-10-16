@@ -1,0 +1,28 @@
+name: Rockhounding GLOS wave from versus historic NOAA Agate facing
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-glos-historic-facing-20261015
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test GLOS and all rockhounding physical-geography science boundaries
+        run: node --test tests/rockhounding*.test.js
+      - name: Fetch one bounded original-provider Spotter observation sample
+        run: node scripts/rockhounding/capture-glos-grand-marais-spotter.cjs --out artifacts/glos-historic-facing-research.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-marais-spotter-direction-versus-noaa-historic-chart-research
+          path: artifacts/glos-historic-facing-research.json
+          retention-days: 30
+          if-no-files-found: warn
