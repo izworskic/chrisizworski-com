@@ -4,6 +4,7 @@
 const {requestUrl,parseSpotterCSV}=require('../lib/rockhounding/glos-spotter.cjs');
 const {assessAlerts,URLS}=require('../lib/rockhounding/nws-shore-hazards.cjs');
 const {analyzeObserved}=require('../lib/rockhounding/live-photo-free-pulse.cjs');
+const {sourceURL,toRows,waterLevelContext}=require('../lib/rockhounding/noaa-marquette-water-level.cjs');
 const UA='ChrisIzworskiRockhoundingWave/1.0 (https://chrisizworski.com/rockhounding-lab/)';
 const H=3600000;
 const iso=ms=>new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');
@@ -30,12 +31,26 @@ async function getNWS(fetchFn,nowISO){
  }));
  return assessAlerts(responses,nowISO);
 }
+async function getMarquetteLevel(fetchFn,nowISO){
+ const url=sourceURL(nowISO);
+ const res=await fetchFn(url,{
+  headers:{Accept:'application/json','User-Agent':UA},
+  signal:AbortSignal.timeout(7000)});
+ if(!res?.ok)throw Error('NOAA remote water level unavailable');
+ const length=Number(res.headers?.get?.('content-length'));
+ if(Number.isFinite(length)&&length>260000)throw Error('Oversized NOAA level response');
+ const body=await res.text();
+ if(typeof body!=='string'||body.length>260000)
+  throw Error('NOAA water-level source too large');
+ return waterLevelContext(toRows(JSON.parse(body)),{nowISO});
+}
 async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  const now=Date.parse(nowISO);
  if(!Number.isFinite(now))throw Error('Invalid clock');
- const [g,nws]=await Promise.allSettled([
+ const [g,nws,remoteLevel]=await Promise.allSettled([
   getGLOS(fetchFn,now),
-  getNWS(fetchFn,nowISO)
+  getNWS(fetchFn,nowISO),
+  getMarquetteLevel(fetchFn,nowISO)
  ]);
  const parsed=g.status==='fulfilled'?g.value:null;
  const alerts=nws.status==='fulfilled'?nws.value:{status:'UNKNOWN'};
@@ -44,6 +59,17 @@ async function currentPulse({nowISO=new Date().toISOString(),fetchFn=fetch}={}){
  return {
   ...signal,
   dataSourceAvailable:!!parsed,
+  lakeSuperiorLevelContext:remoteLevel.status==='fulfilled'?remoteLevel.value:{
+   status:'REMOTE_LEVEL_SOURCE_UNAVAILABLE',
+   stationId:'9099018',stationName:'Marquette C.G., MI',
+   gaugeMeaning:'REMOTE_LAKE_SUPERIOR_LEVEL_CONTEXT_ONLY',
+   levelDatum:'IGLD 1985',dateUTC:null,
+   gaugeWaterLevelM:null,delta24hCm:null,
+   measuredAtAgateBeach:false,beachWaterlineElevationM:null,
+   canPredictNewAgates:false,canClaimBeachSafety:false,
+   canPublishVisitWindow:false,
+   caveat:'Marquette NOAA lake-level source unavailable. No local Grand Marais beach elevation inferred.'
+  },
   // If original provider failed, distinguish an outage from a genuine
   // successful empty source response. Neither is evidence of calm water.
   status:parsed?signal.status:'OFFSHORE_SOURCE_UNAVAILABLE',
@@ -80,4 +106,4 @@ async function handler(req,res){
  }
 }
 module.exports=handler;
-module.exports._test={getGLOS,getNWS,currentPulse};
+module.exports._test={getGLOS,getNWS,getMarquetteLevel,currentPulse};
