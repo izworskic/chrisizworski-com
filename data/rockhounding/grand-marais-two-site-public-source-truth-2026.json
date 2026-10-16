@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "rockhounding-grand-marais-two-site-source-truth-v1",
+  "reviewedUTC": "2026-10-16",
+  "scope": "TWO_BURT_TOWNSHIP_BEACHES_WITH_DIFFERENT_EXPOSURE_AND_ACCESS",
+  "sourcePolicy": {
+    "egleUrl": "https://www.michigan.gov/egle/public/learn/geology/rockhounding",
+    "stateOwnedAnnualPersonalCollectionLimitPounds": 25,
+    "limitScope": "STATE_OWNED_AND_APPLICABLE_PUBLIC_TRUST_LANDS_PER_EGLE_NOT_A_TOWNSHIP_PERMIT",
+    "siteSpecificExceptionsStillApply": true,
+    "sourceAuthorityCannotAuthorizeTownshipCollecting": true,
+    "noPresentDayStormSafetyVerdict": true,
+    "localRestrictionsStillUnverified": true
+  },
+  "sites": [
+    {
+      "id": "grand-marais-agate",
+      "name": "Agate Beach",
+      "setting": "OPEN_LAKE_SUPERIOR_BEACH",
+      "operator": "Burt Township",
+      "townshipSource": "https://burttownshipacmi.gov/recreation/agate-beach-lake-superior/",
+      "chamberSource": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+      "townshipPublicBeach": true,
+      "townshipMentionsBoardwalk": true,
+      "publicApproachFromChamber": "Head north from downtown's main street to Lake Superior; general orientation only.",
+      "exactParkingEntranceSurveyed": false,
+      "parkFacilityCoordinatesAreNotEntrancePin": true,
+      "boardwalkPresentHistorically": true,
+      "current2026BoardwalkOrRampConditionVerified": false,
+      "municipalRockCollectingRuleVerified": false,
+      "collectingPermittedAtExactShoreSegment": null,
+      "adjacentPrivateOrNationalLakeshoreBoundaryVerified": false,
+      "original2026RegionalGLOSMeasurements": true,
+      "measuredActualBreakingSurfAtThisBeach": false,
+      "independent2026OriginalWaveRecords": 5243,
+      "qualified2026OffshoreWaveEpisodeGroups": 8,
+      "candidatePostStormMediaDateLinks": 1,
+      "sameCameraBeforeAfterStormPairs": 0,
+      "measuredNewlyExposedAgates": 0,
+      "actionableFutureProof": [
+        "ORIGINAL_SAME_VIEW_PRE_POST_BEACH_PHOTOS",
+        "LOCAL_COLLECTION_RULE_AND_SEGMENT_PERMISSION",
+        "CURRENT_SHORE_HAZARD_CHECK",
+        "PARKING_OR_PATH_VALIDATION"
+      ],
+      "sourceHighlights": [
+        "Township calls Agate Beach a Lake Superior public beach and documents a boardwalk added in 2005.",
+        "Chamber calls it the area's rockhound/agate destination and describes a northward approach from main street.",
+        "Neither source establishes precise 2026 parking gate, completed accessibility renovations or explicit collecting permission."
+      ]
+    },
+    {
+      "id": "grand-marais-harbor",
+      "name": "Bayshore Park",
+      "setting": "SHELTERED_HARBOR_SWIMMING_BEACH",
+      "operator": "Burt Township",
+      "townshipSource": "https://burttownshipacmi.gov/recreation/bayshore-park-public-swimming-areas/",
+      "chamberSource": "https://grandmaraismichigan.com/visit-us/attractions/beaches/",
+      "townshipPublicBeach": true,
+      "townshipMentionsBoardwalk": false,
+      "publicApproachFromChamber": "Downtown harbor area; Chamber describes turning right just north of Bayshore Market. General orientation only.",
+      "exactParkingEntranceSurveyed": false,
+      "parkFacilityCoordinatesAreNotEntrancePin": true,
+      "townshipMentionsParking": true,
+      "townshipMentionsBathhouse": true,
+      "townshipMentionsPlayground": true,
+      "municipalRockCollectingRuleVerified": false,
+      "collectingPermittedAtExactShoreSegment": null,
+      "adjacentPrivateOrNationalLakeshoreBoundaryVerified": false,
+      "original2026RegionalGLOSMeasurements": false,
+      "offshoreGLOSDataCannotBeTransmittedIntoHarborWithoutValidation": true,
+      "measuredActualBreakingSurfAtThisBeach": false,
+      "independent2026OriginalWaveRecords": 0,
+      "qualified2026OffshoreWaveEpisodeGroups": 0,
+      "candidatePostStormMediaDateLinks": 0,
+      "sameCameraBeforeAfterStormPairs": 0,
+      "measuredNewlyExposedAgates": 0,
+      "confirmedAgateBearingDeposit": false,
+      "actionableFutureProof": [
+        "INDEPENDENT_HARBOR_WAVE_MEASUREMENT_OR_VALIDATED_TRANSFORM",
+        "ROCK_SUBSTRATE_OUTCOME_EVIDENCE",
+        "LOCAL_COLLECTION_RULE_AND_SEGMENT_PERMISSION",
+        "CURRENT_SHORE_HAZARD_CHECK"
+      ],
+      "sourceHighlights": [
+        "Township documents a downtown public swimming beach with bathhouse, play court, handicap parking and playground.",
+        "Chamber describes the harbor as protected; no relevant harbor-wave buoy has been verified.",
+        "Neither source says this swimming beach is a productive agate location or grants permission to remove stones."
+      ]
+    }
+  ],
+  "publicationPolicy": {
+    "publicDestinationDirectoryCanStateVerifiedBeachExistence": true,
+    "publicRockhoundingWindowAuthorized": false,
+    "allowPersonalCollectionAdviceForEitherSite": false,
+    "canClaimBeachSafeFromAbsenceOfNwsAlerts": false,
+    "canApplyGeneral25PoundRuleAsMunicipalPermit": false,
+    "canTransferOpenCoastOffshoreWaveHeightsToHarbor": false
+  }
+}
