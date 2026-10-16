@@ -1,0 +1,45 @@
+name: Rockhounding photo-free observed Lake Superior wave pulse
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-photo-free-lake-pulse-20261016
+
+permissions:
+  contents: read
+
+jobs:
+  verify-observed-waves:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout separate source-stamped 2026 GLOS research archive
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-glos-observed-data
+          path: observed-archive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test source observation, direction and NWS hazard no-safety boundaries
+        run: |
+          node --test tests/rockhounding-photo-free-wave-pulse.test.js tests/rockhounding-photo-free-history-preview.test.js
+          node --test tests/rockhounding-glos-event-ledger.test.js tests/rockhounding-glos-event-capture.test.js tests/rockhounding-nws-hazards.test.js
+      - name: Verify existing rockhounding research and prototype safeguards
+        run: node --test tests/rockhounding*.test.js
+      - name: Compute genuine 2026 lake wave activity from all original GLOS records
+        run: |
+          node scripts/rockhounding/build-photo-free-wave-pulse.cjs \
+            --ledger observed-archive/data/rockhounding/spotter-observed-wave-ledger.json \
+            --report observed-archive/data/rockhounding/spotter-offshore-event-research.json \
+            --out artifacts/grand-marais-photo-free-offshore-pulse-2026.json
+      - name: Preserve actual wave-activity source audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grand-marais-photo-free-observed-wave-pulse
+          path: artifacts/grand-marais-photo-free-offshore-pulse-2026.json
+          retention-days: 30
+          if-no-files-found: warn
