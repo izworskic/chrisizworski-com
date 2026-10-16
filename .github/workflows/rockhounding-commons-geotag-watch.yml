@@ -6,7 +6,7 @@ on:
     - cron: '23 11 * * 1'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: rockhounding-weekly-public-camera-metadata
@@ -17,15 +17,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 7
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source without push credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check out dedicated source-photo review inbox
+        uses: actions/checkout@v4
+        with:
+          ref: research/rockhounding-photo-review-inbox
+          path: photo-inbox
+          persist-credentials: true
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Assert source timestamps do not imply fresh stones or beach safety
         run: |
-          node --test tests/rockhounding-commons-camera-discovery.test.js tests/rockhounding-commons-camera-watch.test.js
-      - name: One Wikimedia geotag metadata request to identify new Agate Beach photo candidates
-        run: node scripts/rockhounding/watch-commons-camera-sources.cjs --report artifacts/commons-camera-nearby-weekly-review.json
+          node --test tests/rockhounding-commons-camera-discovery.test.js tests/rockhounding-commons-camera-watch.test.js tests/rockhounding-commons-photo-review-inbox.test.js tests/rockhounding-storm-photo-review-queue.test.js
+      - name: One original Wikimedia metadata query, merge persistent storm-photo candidate inbox
+        run: |
+          node scripts/rockhounding/archive-commons-photo-review-inbox.cjs \
+            --inbox photo-inbox/data/rockhounding/commons-photo-review-inbox.json \
+            --report artifacts/commons-camera-nearby-weekly-review.json
+      - name: Commit metadata-only review evidence on dedicated nonpublic research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C photo-inbox config user.name "Rockhounding Research Bot"
+          git -C photo-inbox config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C photo-inbox add data/rockhounding/commons-photo-review-inbox.json
+          if git -C photo-inbox diff --cached --quiet; then
+            echo "No new review metadata."
+          else
+            git -C photo-inbox commit -m "data(rockhounding): preserve original Commons camera photo review findings"
+            git -C photo-inbox push origin HEAD:research/rockhounding-photo-review-inbox
+          fi
       - name: Save review-only evidence of new original media
         if: always()
         uses: actions/upload-artifact@v4
