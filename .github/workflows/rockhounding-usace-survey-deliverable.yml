@@ -1,4 +1,4 @@
-name: Rockhounding original USACE 2026 survey deliverable and footprint
+name: Rockhounding USACE 2026 original XYZ and beach exclusion audit
 
 on:
   workflow_dispatch:
@@ -33,7 +33,7 @@ jobs:
         run: |
           python scripts/rockhounding/audit-usace-2026-deliverable.py \
             --out artifacts/grand-marais-usace-2026-survey-deliverable-audit.json
-      - name: Scan original USACE XYZ coordinates and complete datum/source metadata
+      - name: Verify full original USACE 2026 XYZ and IGLD85 research source against excluded public beach locations
         run: |
           python scripts/rockhounding/inspect-usace-2026-zip.py \
             --out artifacts/grand-marais-usace-2026-survey-archive-metadata.json
