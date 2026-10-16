@@ -1,13 +1,13 @@
 {
   "schemaVersion": "rockhounding-no-photo-poststorm-conditions-v1",
-  "evaluatedAtUTC": "2026-10-16T13:55:19.930Z",
+  "evaluatedAtUTC": "2026-10-16T13:56:02.303Z",
   "site": "grand-marais-agate",
   "state": "NWS_ALERTS_ACTIVE",
   "activityNotRockProbability": true,
   "originalOffshoreWaveEvidence": {
     "status": "STALE_BUOY_SOURCE",
     "latestAt": "2026-10-15T23:46:01Z",
-    "ageHours": 14.16,
+    "ageHours": 14.17,
     "peak36hM": 0.8,
     "peakAt": "2026-10-15T02:46:01Z",
     "latestSignificantWaveM": 0.37,
@@ -34,7 +34,7 @@
   "regionalLakeLevelContext": {
     "schemaVersion": "rockhounding-regional-water-level-research-v1",
     "measuredAtTwoDistantNOAAStations": true,
-    "summaryClockUTC": "2026-10-16T13:55:19.930Z",
+    "summaryClockUTC": "2026-10-16T13:56:02.303Z",
     "stations": [
       {
         "station": "9099018",
@@ -43,7 +43,7 @@
         "recordCount": 58,
         "unreliableSensorRows": 0,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
-        "ageHours": 0.22,
+        "ageHours": 0.23,
         "longestSourceGapMinutes": 6,
         "latestMeasuredIGLD85M": 183.539,
         "observedRangeM": 0.113,
@@ -65,7 +65,7 @@
         "recordCount": 58,
         "unreliableSensorRows": 1,
         "latestTimeUTC": "2026-10-16T13:42:00Z",
-        "ageHours": 0.22,
+        "ageHours": 0.23,
         "longestSourceGapMinutes": 6,
         "latestMeasuredIGLD85M": 183.463,
         "observedRangeM": 0.083,
@@ -119,13 +119,13 @@
   "measuredAgateBeachBreakingSurf": false,
   "validatedRockExposureModel": false,
   "sourceQueryUTC": {
-    "from": "2026-10-13T13:55:19.930Z",
-    "to": "2026-10-16T13:55:19.930Z"
+    "from": "2026-10-13T13:56:02.303Z",
+    "to": "2026-10-16T13:56:02.303Z"
   },
   "noaaSourceAudit": [
     {
       "station": "9099018",
-      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A55&end_date=2026-10-16+13%3A55&station=9099018&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
+      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A56&end_date=2026-10-16+13%3A56&station=9099018&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
       "sourceResult": "ORIGINAL_OBSERVATIONS",
       "sourceRecords": 718,
       "accepted": 718,
@@ -134,7 +134,7 @@
     },
     {
       "station": "9099004",
-      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A55&end_date=2026-10-16+13%3A55&station=9099004&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
+      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=2026-10-13+13%3A56&end_date=2026-10-16+13%3A56&station=9099004&product=water_level&datum=IGLD&time_zone=gmt&units=metric&format=json&application=ChrisIzworskiRockhoundingResearch",
       "sourceResult": "ORIGINAL_OBSERVATIONS",
       "sourceRecords": 718,
       "accepted": 717,
