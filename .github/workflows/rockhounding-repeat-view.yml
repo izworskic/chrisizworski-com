@@ -1,0 +1,25 @@
+name: Rockhounding original Commons repeat-photo research validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/rockhounding-repeat-view-2014-2026-20261016
+permissions:
+  contents: read
+
+jobs:
+  verify-repeat-view:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify candidate cameras, uncertain geography, source attribution and no-image-pair safety rules
+        run: |
+          node --test tests/rockhounding-repeat-view-photos.test.js tests/rockhounding-repeat-view-lab.test.js
+          node scripts/rockhounding/audit-repeat-view-photos.cjs --check public/rockhounding-lab/repeat-view-candidates-2026.json
+      - name: Run all existing rockhounding regressions
+        run: node --test tests/rockhounding*.test.js

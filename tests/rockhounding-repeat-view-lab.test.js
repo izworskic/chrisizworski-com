@@ -1,0 +1,48 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const {auditAll}=require('../lib/rockhounding/repeat-view-photos.cjs');
+const digest=require('../public/rockhounding-lab/repeat-view-candidates-2026.json');
+const html=fs.readFileSync(path.join(__dirname,'../public/rockhounding-lab/index.html'),'utf8');
+test('local photograph candidate digest can be exactly rebuilt from genuine 2014/2026 Commons metadata',()=>{
+ assert.deepEqual(digest,auditAll());
+ assert.equal(digest.cameraMatchedBeforeAfterPairs,0);
+ assert.equal(digest.dateMatchedPrePost2026WavePairs,0);
+ assert.equal(digest.empiricallyVerifiedNewAgates,0);
+ assert.equal(digest.outcomes[0].eligibility,'POSSIBLE_LANDSCAPE_LANDMARK_FAMILY_NO_COMMON_CAMERA_STATION');
+ assert.equal(digest.outcomes[1].eligibility,'NO_REPEAT_VIEW_OPEN_HORIZON_CONTROL');
+ assert.equal(digest.canClaimStormCausedChange,false);
+ assert.equal(digest.canPublishVisitWindow,false);
+});
+test('repeat-view visuals present two genuinely licensed images with source/photographer rights',()=>{
+ assert.match(html,/id="repeat-view-research"/);
+ assert.match(html,/id="repeat-view-title"/);
+ assert.doesNotMatch(html,/grid-template-columns:repeat\(2,minmax\(0,1fr\)\);align-items:start/);
+ assert.match(html,/<div class="two" style="align-items:start;gap:18px">/);
+ assert.match(html,/id="repeatViewAuditText"/);
+ assert.match(html,/repeat-view-candidates-2026\.json/);
+ assert.match(html,/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/b\/b9\/Grand_Marais_Agate_Beach\.jpg/);
+ assert.match(html,/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\/3\/35\/Gfp-michigan-grand-marais-superior-shoreline\.jpg/);
+ assert.match(html,/Yinan Chen \/ Wikimedia Commons/);
+ assert.match(html,/TCP04 \/ Wikimedia Commons/);
+ assert.match(html,/creativecommons\.org\/licenses\/by\/4\.0/);
+ assert.match(html,/public-domain dedication/);
+ assert.match(html,/78 mm lens/);
+ assert.match(html,/55 mm lens/);
+ assert.match(html,/camera GPS unavailable/);
+ assert.match(html,/camera GPS 46\.675190/);
+ assert.match(html,/No waterline shift, new rock exposure, or storm causality has been measured/);
+ assert.match(html,/same view/i);
+ assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
+ assert.doesNotMatch(html,/adsbygoogle|googlesyndication/);
+});
+test('same-day horizon image is a scientific mismatch control and is not reused as 2026 shoreline',()=>{
+ assert.match(html,/only six minutes after the coastal scene/);
+ assert.match(html,/Gfp-michigan-lake-superior-shoreline-to-the-horizon\.jpg/);
+ assert.match(html,/lacks the same bluffs and trees/);
+ assert.equal(digest.sourceImages[1].lensMm,18);
+ assert.equal(digest.sourceImages[1].siteGpsAvailable,false);
+ assert.equal(digest.sourceImages[2].siteGpsAvailable,true);
+ assert.equal(digest.sourceImages[0].captureDay,'2014-05-31');
+ assert.equal(digest.sourceImages[2].captureDay,'2026-07-05');
+});
