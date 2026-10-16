@@ -6,6 +6,7 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const {requestUrl,parseSpotterCSV}=require('../../lib/rockhounding/glos-spotter.cjs');
 const {mergeSpotterLedger,offshoreEvents}=require('../../lib/rockhounding/glos-spotter-event-ledger.cjs');
 const {loadGrandMaraisHazards,URLS}=require('../../lib/rockhounding/nws-shore-hazards.cjs');
+const {photoFreeWaveHistory}=require('../../lib/rockhounding/photo-free-wave-pulse.cjs');
 const H=3600000;
 function isoUTC(ms){return new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');}
 async function capture({previous=null,nowISO=new Date().toISOString(),fetchFn=fetch,hazardsFn=loadGrandMaraisHazards}={}){
@@ -42,7 +43,9 @@ async function capture({previous=null,nowISO=new Date().toISOString(),fetchFn=fe
   coverageNote:'Current selected NWS point/nearshore-zone alerts only; no alert is NOT a beach safety clearance',
   noPresentDayMarineSafetyCertification:true
  };
+ const photoFreeLakePulse=photoFreeWaveHistory(ledger,{nowISO,hazardSnapshot:hazard});
  const report={...analysis,hazardSnapshot:hazard,
+  photoFreeLakePulse,
   sourceQueryStartUTC:start,sourceQueryEndUTC:end,
   sourceRecordCount:parsed.rows.length,rejectedOriginalRows:parsed.rejectedRows,
   originalCsvSha256:crypto.createHash('sha256').update(csv,'utf8').digest('hex'),
