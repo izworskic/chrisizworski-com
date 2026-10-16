@@ -50,7 +50,7 @@ test('observed storm-recovery classifications never become rock discovery or vis
 test('tampered source wave rows or missing provenance fail before any publication snapshot',()=>{
  const fake=structuredClone(archive);
  fake.episodes=3;
- fake.rows[0].peakWaveHeightM=22;
+ fake.rows.find(x=>x.qualifyingOffshoreEpisode).peakWaveHeightM=22;
  assert.throws(()=>buildStormPulse({a:fake}),/episode/);
  const fake2=structuredClone(archive);
  fake2.actualObservedWaveRecords=1200;
