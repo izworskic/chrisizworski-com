@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-16T01:08:53.734Z",
+  "calculatedAtUTC": "2026-10-16T05:53:02.860Z",
   "recordCount": 5243,
   "latestObservedAt": "2026-10-14T23:46:01Z",
-  "latestAgeHours": 25.38,
+  "latestAgeHours": 30.12,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -318,7 +318,7 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-16T01:08:53.734Z",
+    "checkedAtUTC": "2026-10-16T05:53:02.860Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
@@ -345,11 +345,11 @@
     "coverageNote": "Current selected NWS point/nearshore-zone alerts only; no alert is NOT a beach safety clearance",
     "noPresentDayMarineSafetyCertification": true
   },
-  "sourceQueryStartUTC": "2026-10-12T01:08:53Z",
-  "sourceQueryEndUTC": "2026-10-16T01:08:53Z",
-  "sourceRecordCount": 142,
+  "sourceQueryStartUTC": "2026-10-12T05:53:02Z",
+  "sourceQueryEndUTC": "2026-10-16T05:53:02Z",
+  "sourceRecordCount": 132,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "a360f3632f0833d104abed13a34e9d417ecfb401912e4216b989a22fe0814803",
+  "originalCsvSha256": "d91c4a8b13fa78acbdf034e2c88dda6c83de392851bc02abc6c8b725cdb45b48",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
@@ -358,15 +358,5 @@
   "canClaimHazardFreeVisit": false,
   "canPublishRockhoundingWindow": false,
   "canClaimCollectingPermission": false,
-  "summary": "Actual offshore Spotter observations and separate current NWS alerts. Not a beach wave, fresh-stone, access or safety forecast.",
-  "historicalBackfillAudit": {
-    "runAtUTC": "2026-10-16T01:08:53.734Z",
-    "daysRequested": 112,
-    "originalQueryWindows": 16,
-    "sourceDayCount": 111,
-    "sampleCount": 5243,
-    "distinctOffshoreEpisodeGroups": 11,
-    "noHistoricNwsAlertReconstruction": true,
-    "canPublishVisitWindow": false
-  }
+  "summary": "Actual offshore Spotter observations and separate current NWS alerts. Not a beach wave, fresh-stone, access or safety forecast."
 }
