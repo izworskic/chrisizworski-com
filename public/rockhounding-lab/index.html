@@ -183,6 +183,33 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <a href="https://api.weather.gov/alerts/active?zone=LSZ250" target="_blank" rel="noopener noreferrer">Current marine alerts ↗</a>
  </div>
 </section>
+<section class="panel pad" id="wave-signal-quality-2026" aria-labelledby="wave-quality-title">
+ <div class="photoFreeHead">
+  <div><span class="eyebrow">Measured-source quality</span>
+   <h2 id="wave-quality-title">How well does the wave tracker hold up?</h2>
+   <p>We ran the photo-free environmental engine repeatedly across the original 2026 Grand Marais Spotter records. These figures describe <strong>how often sufficient buoy data were available</strong>—not whether stones appeared on the beach.</p>
+  </div>
+  <span class="pulseTag">Summer–fall 2026 · historical replay</span>
+ </div>
+ <div class="pulseStats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+  <div class="pulseStat"><small>Original measured readings</small><strong id="qualityWaveRecords">5,291</strong><span>GLOS offshore buoy</span></div>
+  <div class="pulseStat"><small>Past-only checks</small><strong id="qualityReplayCount">209</strong><span>Every 12 hours</span></div>
+  <div class="pulseStat"><small>Usable current wave data</small><strong id="qualitySourcePct">98.1%</strong><span>Source freshness and coverage</span></div>
+  <div class="pulseStat"><small>Complete two-day comparisons</small><strong id="qualityTrendPct">93.3%</strong><span>Two adequately sampled 24h windows</span></div>
+ </div>
+ <div class="infoPanel" style="padding:13px 16px">
+  <div style="display:grid;gap:8px">
+   <div><div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#476a73"><strong>Fresh usable offshore observations</strong><span id="qualityObsLabel">98.1% of checkpoints</span></div>
+    <div role="img" aria-label="Usable source observations: 98.1 percent of past-only checkpoints" style="height:10px;background:#dce9e7;border-radius:20px;overflow:hidden;margin-top:5px"><span id="qualityObsFill" style="display:block;width:98.1%;height:100%;background:#2d7887"></span></div>
+   </div>
+   <div><div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#476a73"><strong>Both 24-hour wave windows complete</strong><span id="qualityTrendLabel">93.3% of checkpoints</span></div>
+    <div role="img" aria-label="Complete two-day wave comparison: 93.3 percent of past-only checkpoints" style="height:10px;background:#dce9e7;border-radius:20px;overflow:hidden;margin-top:5px"><span id="qualityTrendFill" style="display:block;width:93.3%;height:100%;background:#a57d4a"></span></div>
+   </div>
+  </div>
+  <p id="qualitySourceDetail" style="font-size:12px;color:#5c7579;margin:12px 0 0">In this 2026 replay, three observation checkpoints showed renewed offshore waves; three had stale readings and one had a recent reporting gap. Those checks are <strong>not independent storms</strong>. Missing readings did not become calm-beach or safe-access claims.</p>
+ </div>
+ <p style="font-size:12px;color:#637c80;margin:10px 0 0">Original-source <a href="https://github.com/izworskic/chrisizworski-com/actions/runs/38918731473" target="_blank" rel="noopener noreferrer">walk-forward verification and tests</a>. The replay did not use photos, pretend to know historic NWS warnings, validate gravel movement, or estimate odds of finding agates. Current lake conditions appear in the live observations above, not these dated percentages.</p>
+</section>
 <section class="panel pad" id="photo-free-storm-pulse" aria-labelledby="photoFreeStormTitle">
  <div class="photoFreeHead">
   <div><span class="eyebrow">Observed lake conditions · Historical research</span>
@@ -1435,6 +1462,44 @@ render();
   nodes.noPhotoIroquoisBar.style.width=Math.min(100,gauges[1].last6hObservedRangeM/largest*100).toFixed(1)+'%';
   nodes.noPhotoWaterLevelSourceNote.textContent='Original NOAA CO-OPS data, 6-minute measurements through Oct 16, 2026 at 13:42 UTC (IGLD 1985). Regional gauge context only; Oct 16 research NWS alerts were active and the local offshore buoy was stale. This is a historical example, not live shore or safety information.';
  }).catch(fail);
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const ids=id=>document.getElementById(id);
+ const fields=['qualityWaveRecords','qualityReplayCount','qualitySourcePct',
+  'qualityTrendPct','qualityObsLabel','qualityTrendLabel','qualityObsFill','qualityTrendFill','qualitySourceDetail'];
+ if(!fields.every(id=>ids(id)))return;
+ fetch('/rockhounding-lab/wave-signal-quality-2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Measured-source replay unavailable');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-photo-free-wave-replay-quality-v1'||
+     d.originalMeasuredRows!==5291||d.walkForwardCheckpoints!==209||
+     d.checkpointsWithValidCurrentWaveSample!==205||
+     d.checkpointsWithFullPrior24hAndRecent24h!==195||
+     d.validCurrentWaveSamplePct!==98.1||d.completeTwoDayComparisonPct!==93.3||
+     d.sourceWavePhases?.OFFSHORE_WAVES_REBUILDING!==3||
+     d.sourceWavePhases?.OFFSHORE_SENSOR_STALE!==3||
+     d.sourceWavePhases?.OFFSHORE_OBSERVATIONS_GAPPY!==1||
+     d.photographsNeeded!==false||d.historicNWSAlertsReconstructed!==false||
+     d.siteBeachSedimentGroundTruthAvailable!==false||
+     d.canPredictNewAgates!==false||d.canClaimSafeConditions!==false||
+     d.canPublishVisitWindow!==false)
+    throw Error('Unverified environmental source replay data');
+  ids('qualityWaveRecords').textContent=d.originalMeasuredRows.toLocaleString('en-US');
+  ids('qualityReplayCount').textContent=String(d.walkForwardCheckpoints);
+  ids('qualitySourcePct').textContent=d.validCurrentWaveSamplePct.toFixed(1)+'%';
+  ids('qualityTrendPct').textContent=d.completeTwoDayComparisonPct.toFixed(1)+'%';
+  ids('qualityObsLabel').textContent=d.checkpointsWithValidCurrentWaveSample+' / '+d.walkForwardCheckpoints;
+  ids('qualityTrendLabel').textContent=d.checkpointsWithFullPrior24hAndRecent24h+' / '+d.walkForwardCheckpoints;
+  ids('qualityObsFill').style.width=d.validCurrentWaveSamplePct+'%';
+  ids('qualityTrendFill').style.width=d.completeTwoDayComparisonPct+'%';
+  ids('qualitySourceDetail').textContent='Actual 2026 data-availability replay: '+d.sourceWavePhases.OFFSHORE_WAVES_REBUILDING+' checkpoints showed wave rebuilding; '+d.sourceWavePhases.OFFSHORE_SENSOR_STALE+' had stale readings, and '+d.sourceWavePhases.OFFSHORE_OBSERVATIONS_GAPPY+' had insufficient current sampling. Replay checkpoints overlap in time and are not independent storms or beach-outcome observations.';
+ }).catch(()=>{
+  ['qualityWaveRecords','qualityReplayCount','qualitySourcePct','qualityTrendPct'].forEach(id=>ids(id).textContent='—');
+  ['qualityObsFill','qualityTrendFill'].forEach(id=>ids(id).style.width='0%');
+  ids('qualitySourceDetail').textContent='Historical source-quality verification is unavailable. No wave, rock-exposure or beach safety conclusion is substituted.';
+ });
 })();
 </script>
 </body></html>
