@@ -1,0 +1,21 @@
+name: Rockhounding no-photo measured 48h wave tendency
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/rockhounding-photo-free-48h-wave-tendency-20261016
+permissions:
+  contents: read
+jobs:
+  source-and-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify two adjacent observed buoy days and fail-closed gap/safety/shoreline requirements
+        run: node --test tests/rockhounding-photo-free-48h-wave-tendency.test.js tests/rockhounding-photo-free-48h-wave-ui.test.js
+      - name: Verify the existing live API and all prior rockhounding science
+        run: node --test tests/rockhounding*.test.js
