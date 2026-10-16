@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-16T00:51:15.267Z",
+  "calculatedAtUTC": "2026-10-16T00:55:18.166Z",
   "recordCount": 142,
   "latestObservedAt": "2026-10-14T23:46:01Z",
-  "latestAgeHours": 25.09,
+  "latestAgeHours": 25.15,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -44,7 +44,7 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-16T00:51:15.267Z",
+    "checkedAtUTC": "2026-10-16T00:55:18.166Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
@@ -71,8 +71,8 @@
     "coverageNote": "Current selected NWS point/nearshore-zone alerts only; no alert is NOT a beach safety clearance",
     "noPresentDayMarineSafetyCertification": true
   },
-  "sourceQueryStartUTC": "2026-10-12T00:51:15Z",
-  "sourceQueryEndUTC": "2026-10-16T00:51:15Z",
+  "sourceQueryStartUTC": "2026-10-12T00:55:18Z",
+  "sourceQueryEndUTC": "2026-10-16T00:55:18Z",
   "sourceRecordCount": 142,
   "rejectedOriginalRows": 0,
   "originalCsvSha256": "a360f3632f0833d104abed13a34e9d417ecfb401912e4216b989a22fe0814803",
