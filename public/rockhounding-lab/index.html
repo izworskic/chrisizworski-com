@@ -139,6 +139,30 @@ main{padding:26px 0 42px}section{margin:0 0 25px}.panel{background:#fff;border:1
   <div class="pulseStat"><small>Measured change over 24 hours</small><strong id="liveRemoteLakeDelta" style="font-size:23px">—</strong><span>Remote lake-level context, not beach height</span></div>
   <div class="pulseStat" style="grid-column:auto"><small>What this tells us</small><span id="liveRemoteLakeExplanation" style="display:block;font-size:12px">Marquette is not Grand Marais. Regional lake water level does not measure wave runup or exposed stones at Agate Beach.</span><a href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9099018" target="_blank" rel="noopener noreferrer" style="font-size:12px;display:inline-block;margin-top:7px">NOAA Marquette gauge ↗</a></div>
  </div>
+ <details id="noPhotoWaterLevelRegional" style="border:1px solid #d6e4e3;border-radius:10px;padding:12px 15px;margin:13px 0 16px;background:#fbfdfc">
+  <summary style="font-size:14px;color:#245665;font-weight:750;cursor:pointer">What happens to Lake Superior water levels after a storm? <span style="font-size:11px;font-weight:500;color:#688088">Two distant NOAA gauges · dated source study</span></summary>
+  <p style="font-size:12px;color:#52717b;margin:10px 0 12px">The current Marquette reading above is separate. The following side-by-side comparison is an <strong>archived October 16, 2026 original-source example</strong> from two Lake Superior water-level sensors. Neither gauge measures actual shoreline height, water runup, or new stones at Agate Beach.</p>
+  <div class="pulseStats" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px" aria-label="Dated NOAA IGLD 1985 regional water level observations">
+   <div class="pulseStat" style="background:#f4f8f7">
+    <small>Marquette C.G. · western context</small>
+    <strong id="noPhotoMarquetteRange" style="font-size:25px">—</strong>
+    <span>Observed six-hour level range</span>
+    <span id="noPhotoMarquetteDelta" style="display:block;font-size:11px;margin-top:6px">Dated source snapshot loading…</span>
+   </div>
+   <div class="pulseStat" style="background:#f4f8f7">
+    <small>Point Iroquois · eastern context</small>
+    <strong id="noPhotoIroquoisRange" style="font-size:25px">—</strong>
+    <span>Observed six-hour level range</span>
+    <span id="noPhotoIroquoisDelta" style="display:block;font-size:11px;margin-top:6px">Dated source snapshot loading…</span>
+   </div>
+  </div>
+  <div style="display:grid;gap:7px;margin-top:13px">
+   <div style="height:8px;background:#e7eeee;border-radius:9px;overflow:hidden"><div id="noPhotoMarquetteBar" style="height:100%;width:0;background:#3d7e8d;border-radius:9px"></div></div>
+   <div style="height:8px;background:#e7eeee;border-radius:9px;overflow:hidden"><div id="noPhotoIroquoisBar" style="height:100%;width:0;background:#9d8469;border-radius:9px"></div></div>
+  </div>
+  <p id="noPhotoWaterLevelSourceNote" style="font-size:12px;color:#59737a;margin:11px 0 8px">Checking original NOAA station/time provenance. This is not a current waterline reading at Grand Marais.</p>
+  <p style="font-size:12px;color:#617982;margin:0"><strong>Why it matters:</strong> The lake can slosh after waves ease. A gauge reading hundreds of kilometers along the shore cannot tell us how many inches of pebble beach are exposed in Grand Marais. <a href="https://www.glerl.noaa.gov/blog/2025/07/18/june-21-2025-storm-causes-significant-meteotsunami-and-seiche-on-lake-superior/" target="_blank" rel="noopener noreferrer">NOAA's Lake Superior seiche research ↗</a></p>
+ </details>
  <div class="pulseColumns">
   <div class="pulseChartShell">
    <div class="chartTop"><strong style="font-size:14px;color:#204f5e">Observed offshore wave trend</strong><span style="font-size:11px;color:#6a858a">Up to 48h of measured wave heights</span></div>
@@ -1367,6 +1391,50 @@ render();
   }finally{active=false;button.disabled=false;button.textContent='Refresh readings';}
  }
  button.addEventListener('click',load);load();
+})();
+</script>
+<script>
+(()=>{'use strict';
+ const ids=['noPhotoMarquetteRange','noPhotoIroquoisRange','noPhotoMarquetteDelta','noPhotoIroquoisDelta','noPhotoWaterLevelSourceNote','noPhotoMarquetteBar','noPhotoIroquoisBar'];
+ const nodes=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
+ if(ids.some(id=>!nodes[id]))return;
+ const fail=()=>{
+  nodes.noPhotoWaterLevelSourceNote.textContent='Dated regional source snapshot unavailable. No beach waterline or safe-condition interpretation is available.';
+  nodes.noPhotoMarquetteRange.textContent='—';
+  nodes.noPhotoIroquoisRange.textContent='—';
+ };
+ fetch('/rockhounding-lab/no-photo-regional-lake-stage-oct2026.json',{credentials:'same-origin'})
+ .then(r=>{if(!r.ok)throw Error('Missing research observation');return r.json()})
+ .then(d=>{
+  if(d.schemaVersion!=='rockhounding-no-photo-dated-two-gauge-source-v1'||
+   d.observationsAsOfThisTimeOnly!==true||
+   d.originalMeasuredUTC!=='2026-10-16T13:50:43.287Z'||
+   d.noaa?.datum!=='IGLD 1985'||d.noaa?.units!=='meters'||
+   !Array.isArray(d.noaa.gauges)||d.noaa.gauges.length!==2||
+   d.noaa.gauges[0].station!=='9099018'||
+   d.noaa.gauges[1].station!=='9099004'||
+   d.canClaimCurrentWaterlineGrandMarais!==false||
+   d.canClaimSafeBeach!==false||d.canPredictNewAgates!==false||
+   d.canPublishPostStormVisitTime!==false||d.sourceNotLiveClientData!==true)
+   throw Error('Provider research source not verified');
+  const gauges=d.noaa.gauges;
+  if(gauges.some(x=>!Number.isFinite(x.last6hObservedRangeM)||
+   !Number.isFinite(x.last6hObservedNetChangeM)||
+   x.last6hObservedRangeM<0||x.last6hObservedRangeM>3||
+   !/^[0-9a-f]{64}$/.test(x.originalSourceSHA256)))
+   throw Error('Bad regional gauge observations');
+  [nodes.noPhotoMarquetteRange,nodes.noPhotoIroquoisRange].forEach((n,i)=>{
+    n.textContent=Math.round(gauges[i].last6hObservedRangeM*1000)+' mm';
+  });
+  [nodes.noPhotoMarquetteDelta,nodes.noPhotoIroquoisDelta].forEach((n,i)=>{
+    const c=gauges[i].last6hObservedNetChangeM*100;
+    n.textContent=(c>=0?'+':'')+c.toFixed(1)+' cm net change · preliminary NOAA data';
+  });
+  const largest=Math.max(.15,...gauges.map(x=>x.last6hObservedRangeM));
+  nodes.noPhotoMarquetteBar.style.width=Math.min(100,gauges[0].last6hObservedRangeM/largest*100).toFixed(1)+'%';
+  nodes.noPhotoIroquoisBar.style.width=Math.min(100,gauges[1].last6hObservedRangeM/largest*100).toFixed(1)+'%';
+  nodes.noPhotoWaterLevelSourceNote.textContent='Original NOAA CO-OPS data, 6-minute measurements through Oct 16, 2026 at 13:42 UTC (IGLD 1985). Regional gauge context only; Oct 16 research NWS alerts were active and the local offshore buoy was stale. This is a historical example, not live shore or safety information.';
+ }).catch(fail);
 })();
 </script>
 </body></html>
