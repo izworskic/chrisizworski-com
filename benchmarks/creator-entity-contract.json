@@ -18,7 +18,10 @@
       "toolIds": [
         "trout-report",
         "trout-map",
-        "salmon-run"
+        "salmon-run",
+        "michigan-mayfly-hatches",
+        "ausable-mayfly-hatches",
+        "great-lakes-mayflies"
       ],
       "repo": "izworskic/michigan-trout-report",
       "status": "verified",
@@ -104,7 +107,14 @@
       "toolIds": [
         "phenology",
         "bloom-tracker",
-        "wisconsin-bloom-tracker"
+        "wisconsin-bloom-tracker",
+        "lake-smoke",
+        "salamander-migration",
+        "woodcock-sky-dance",
+        "frog-chorus",
+        "michigan-trillium",
+        "hummingbird-tracker",
+        "firefly-tracker"
       ],
       "repo": "izworskic/phenology-michigan",
       "status": "verified",

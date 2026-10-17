@@ -2958,6 +2958,323 @@
       "searchEvidence": {
         "status": "emerging-demand"
       }
+    },
+    {
+      "id": "lake-smoke",
+      "name": "Great Lakes Lake Smoke Forecast",
+      "canonical": "https://phenology.chrisizworski.com/lake-smoke",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "great-lakes-shore",
+      "primaryIntent": "Compare cold air, lake temperatures and hourly viewing outlooks at 15 Great Lakes shore locations. See data availability and the conditions that favor steam fog without a guaranteed sighting.",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "salamander-migration",
+      "name": "Michigan Salamander Migration Tracker",
+      "canonical": "https://phenology.chrisizworski.com/salamander-migration",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Watch for warm-rain Big Night conditions with seven-night regional forecasts, spring timing and privacy-safe observation trends. Includes responsible viewing guidance.",
+      "seasons": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "woodcock-sky-dance",
+      "name": "Michigan Woodcock Sky Dance Forecast",
+      "canonical": "https://phenology.chrisizworski.com/woodcock-sky-dance",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Find spring evening display windows using regional timing, sunset-based listening times and a seven-night weather outlook. Learn the peent call and aerial display sounds.",
+      "seasons": [
+        3,
+        4,
+        5
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "frog-chorus",
+      "name": "Michigan Frog Chorus Forecast & Sound Guide",
+      "canonical": "https://phenology.chrisizworski.com/frog-chorus",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Compare nine regional seven-night calling outlooks, explore the seasonal calendar and match spring peepers, wood frogs and other Michigan species with frog calls and identification guidance.",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "michigan-trillium",
+      "name": "Michigan Trillium Bloom Tracker",
+      "canonical": "https://phenology.chrisizworski.com/michigan-trillium",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Follow spring heat buildup, regional timing, flowering reports and seven-day weather context. Explore ten documented public trails and distinguish modeled readiness from confirmed blooms.",
+      "seasons": [
+        4,
+        5,
+        6
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "hummingbird-tracker",
+      "name": "Michigan Hummingbird Arrival Tracker",
+      "canonical": "https://phenology.chrisizworski.com/hummingbird-tracker",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Explore nine regional arrival windows, feeder timing, a migration map, spring weather clues and clearly labeled iNaturalist sightings. Seasonal guidance stays separate from confirmed arrivals.",
+      "seasons": [
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "firefly-tracker",
+      "name": "Michigan Firefly Emergence & Viewing Forecast",
+      "canonical": "https://phenology.chrisizworski.com/firefly-tracker",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Explore regional lightning-bug season timing, a seven-night NWS viewing outlook, historical warmth context and places to watch. Weather suitability does not confirm fireflies are flashing.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "michigan-mayfly-hatches",
+      "name": "Michigan Mayfly Hatch Predictor",
+      "canonical": "https://michigantroutreport.com/michigan-mayfly-hatches.html",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "rivers-fishing",
+      "primaryIntent": "Compare the Au Sable, Manistee, Pere Marquette, Muskegon and Boardman using USGS water temperatures, seven-day weather and seasonal Hex, Hendrickson, Brown Drake and Sulphur windows.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "ausable-mayfly-hatches",
+      "name": "Au Sable Mayfly Hatch Predictor & Identification",
+      "canonical": "https://michigantroutreport.com/mayfly-hatches.html",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "rivers-fishing",
+      "primaryIntent": "Explore ten Au Sable mayflies with identification images, live river conditions and seasonal hatch windows. Match the fly you see and check temperature and weather context before fishing.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
+    },
+    {
+      "id": "great-lakes-mayflies",
+      "name": "Great Lakes Mayfly Atlas & Hatch Insights",
+      "canonical": "https://michigantroutreport.com/great-lakes-mayflies.html",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "great-lakes-shore",
+      "primaryIntent": "Explore sourced mayfly habitat across all five Great Lakes, available buoy monitoring, historical hatch records and charts. Keep seasonal readiness, shoreline observations and reviewed events distinct.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "nature-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Existing published specialist; directory discovery only. Forecast suitability is distinct from confirmed observations."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
+      }
     }
   ],
   "relationships": [
@@ -4200,6 +4517,86 @@
       "strength": "optional",
       "surface": "after-the-storm",
       "reason": "Buoy watchers after a blow want to know which beaches it turned over."
+    },
+    {
+      "from": "lake-smoke",
+      "to": "great-lakes-buoys",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "salamander-migration",
+      "to": "phenology",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "woodcock-sky-dance",
+      "to": "birding",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "frog-chorus",
+      "to": "phenology",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "michigan-trillium",
+      "to": "bloom-tracker",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "hummingbird-tracker",
+      "to": "birding",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "firefly-tracker",
+      "to": "phenology",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "michigan-mayfly-hatches",
+      "to": "trout-report",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "ausable-mayfly-hatches",
+      "to": "trout-report",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "great-lakes-mayflies",
+      "to": "trout-report",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
     }
   ],
   "cannibalizationGroups": [
