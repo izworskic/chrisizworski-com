@@ -675,3 +675,12 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Independent [NOAA source and focused science validation run #38822906325](https://github.com/izworskic/chrisizworski-com/actions/runs/38822906325) passed **148 Node + 28 Python tests**, plus 8 live NOAA queries matching all four reviewed zones. Full source report in `docs/ROCKHOUNDING_HARBOR_CHART_DEPTH_EVIDENCE_2026-10-15.md`.
 - Next priority: discover any contemporary, independent USACE harbor bathymetry or local wave observations, while continuing NOAA wave storm sampling for exposed shoreline. Do NOT promise specific sheltered wave heights or rock exposure from historical nautical chart counts.
 
+
+## New-tool directory discovery — October 17, 2026
+
+- **Scope:** Connect existing published tools to the correct directory category. Added ten missing cards: lake smoke, salamander migration, Woodcock Sky Dance (interpreting the user's “woodworking” as the recently built woodcock tool), frog chorus, trillium, hummingbirds, fireflies, and three distinct mayfly pages (statewide rivers, Au Sable identification, Great Lakes atlas). Materialized the existing Michigan Ski Hills discovery generator. Rockhounding, maple and Mackinac ferry cards already existed; Epic/Ikon was verified present on the live national directory.
+- **Ownership:** Directory-only edits in `izworskic/chrisizworski-com`; specialist content remains in its owning repositories. No destination URLs, titles, canonicals or ad behavior changed. No pages or links removed. Visible cards and ItemList entries increased from 60 to 71.
+- **Integrity:** Registered all ten specialist canonical URLs and related-tool relationships; updated exact-host creator contracts for Phenology and Michigan Trout Report. Reconciled directory schema, generated entity references, editorial date, sitemap and pinned editorial-date test. Every added destination returned HTTP 200 on October 17; separate national Epic/Ikon card also verified.
+- **Measurement:** Current GSC/GA4/AdSense data NOT AVAILABLE. No traffic, ranking or revenue uplift claimed.
+- **Release:** Branch `feat/new-tools-directory-oct17`. Quick gate passed. Initial full gate identified only the tools editorial-date fixture and generated entity references; corrected both. Final full gate and PR status recorded in PR. Production unchanged pending owner merge under AGENTS.md section 7.
+- **Exactly one next action:** After green verification, review and merge the directory PR, then confirm all eleven added/materialized cards in production.
