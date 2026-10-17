@@ -3275,6 +3275,43 @@
         "status": "unknown",
         "note": "Canonical returned HTTP 200 on October 17, 2026; GSC and revenue not measured."
       }
+    },
+    {
+      "id": "frosty-mornings",
+      "name": "Michigan Frosty Morning Predictor",
+      "canonical": "https://phenology.chrisizworski.com/frosty-mornings",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "natural-year",
+      "primaryIntent": "Which upcoming Michigan morning offers weather favorable for photographing frost and hoarfrost?",
+      "seasons": [
+        9,
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "nature-watcher",
+        "photographer",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Distinct dawn frost and hoarfrost viewing conditions, not gardening frost dates, freeze risk, NWS frost advisories, confirmed sightings or lake smoke."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "First release October 17, 2026; search traffic and observed frost accuracy not measured."
+      }
     }
   ],
   "relationships": [
@@ -4597,6 +4634,22 @@
       "strength": "strong",
       "surface": "tools-directory",
       "reason": "The directory groups this specialist with its broader conditions or seasonal planning tool."
+    },
+    {
+      "from": "frosty-mornings",
+      "to": "phenology",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "The Michigan living calendar is the relevant hub for seasonal weather phenomena."
+    },
+    {
+      "from": "frosty-mornings",
+      "to": "lake-smoke",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "tools-directory",
+      "reason": "Cold morning Great Lakes photography depends on distinct frost versus steam-fog atmospheric mechanisms."
     }
   ],
   "cannibalizationGroups": [
