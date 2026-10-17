@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-17",
+  "updated": "2026-10-17T14:16:34.010Z",
+  "briefings": {
+    "new-england": "New England foliage is at traditional peak timing. Chance snow showers expected with 33% rain probability.",
+    "great-smoky-mountains": "Great Smoky Mountains foliage is at traditional peak timing. Rain showers likely (48% chance) followed by partial clearing.",
+    "colorado-aspens": "Colorado aspen color has passed traditional peak. Sunny conditions expected with minimal precipitation.",
+    "adirondacks": "Adirondacks foliage is past traditional peak but still present. Chance snow showers then mostly sunny conditions.",
+    "north-shore-superior": "Minnesota North Shore foliage is past traditional peak. Live weather data unavailable for this region.",
+    "ozarks": "Ozarks foliage is approaching traditional peak timing. Sunny conditions expected with no precipitation.",
+    "eastern-sierra": "Eastern Sierra aspen color has passed traditional peak. Sunny conditions with no precipitation expected.",
+    "wasatch": "Wasatch foliage is past traditional peak but still visible. Sunny conditions with no precipitation expected.",
+    "columbia-river-gorge": "Columbia River Gorge foliage is at traditional peak timing. Rain possible (44% chance) then partly sunny.",
+    "door-county": "Door County foliage is at traditional peak timing. Sunny conditions with minimal precipitation (1% chance).",
+    "poconos": "Poconos foliage is at traditional peak timing. Partly sunny with low precipitation chance (12%).",
+    "texas-hill-country": "Texas Hill Country foliage is approaching traditional peak. Sunny conditions with no precipitation expected.",
+    "west-virginia-highlands": "West Virginia Highlands foliage is at traditional peak timing. Slight chance rain and snow showers then partly sunny.",
+    "catskills": "Catskills foliage is at traditional peak timing. Isolated rain and snow showers then mostly sunny.",
+    "shenandoah": "Shenandoah Skyline Drive foliage is at traditional peak timing. Slight chance rain showers then partly sunny."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
