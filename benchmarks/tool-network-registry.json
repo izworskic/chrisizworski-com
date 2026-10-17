@@ -4647,7 +4647,7 @@
       "from": "frosty-mornings",
       "to": "lake-smoke",
       "type": "related-tool",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "tools-directory",
       "reason": "Cold morning Great Lakes photography depends on distinct frost versus steam-fog atmospheric mechanisms."
     }
