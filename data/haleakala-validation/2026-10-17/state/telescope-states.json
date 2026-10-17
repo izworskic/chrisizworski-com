@@ -1,0 +1,108 @@
+{
+  "ogg.clma.0m4a": [
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: all sky cloud monitor",
+      "start": "2026-10-17T15:50:02Z",
+      "end": "2026-10-17T15:57:38.798000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-17T15:57:38.798000Z",
+      "end": "2026-10-17T16:24:55.429000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-17T16:24:55.429000Z",
+      "end": "2026-10-17T16:40:02Z"
+    }
+  ],
+  "ogg.clma.0m4b": [
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: all sky cloud monitor",
+      "start": "2026-10-17T15:50:02Z",
+      "end": "2026-10-17T15:57:38.809000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-17T15:57:38.809000Z",
+      "end": "2026-10-17T16:24:55.285000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-17T16:24:55.285000Z",
+      "end": "2026-10-17T16:40:02Z"
+    }
+  ],
+  "ogg.clma.0m4c": [
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: all sky cloud monitor",
+      "start": "2026-10-17T15:50:02Z",
+      "end": "2026-10-17T15:57:38.785000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-17T15:57:38.785000Z",
+      "end": "2026-10-17T16:24:55.228000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-17T16:24:55.228000Z",
+      "end": "2026-10-17T16:40:02Z"
+    }
+  ],
+  "ogg.clma.2m0a": [
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: all sky cloud monitor",
+      "start": "2026-10-17T15:50:02Z",
+      "end": "2026-10-17T15:57:38.785000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-17T15:57:38.785000Z",
+      "end": "2026-10-17T15:57:56.320000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_AVAILABLE",
+      "event_reason": "Unknown",
+      "start": "2026-10-17T15:57:56.320000Z",
+      "end": "2026-10-17T15:59:36.559000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-10-17T15:59:36.559000Z",
+      "end": "2026-10-17T16:24:56.173000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-10-17T16:24:56.173000Z",
+      "end": "2026-10-17T16:40:02Z"
+    }
+  ]
+}
