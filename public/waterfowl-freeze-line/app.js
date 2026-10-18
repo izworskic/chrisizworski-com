@@ -16,7 +16,9 @@ var LOCATIONS=[
  ['illinois-river','Illinois River Valley','IL',40.25,-90.24,'Floodplain lakes and seasonally flooded wetlands'],
  ['kankakee','Kankakee Marsh Region','IN',41.18,-86.85,'Wetland remnants, rivers and farm fields'],
  ['swan-lake','Swan Lake & Grand River','MO',39.53,-93.23,'Refuges, river corridors and agricultural fields'],
- ['reelfoot','Reelfoot Lake','TN',36.37,-89.36,'Large shallow lake and flooded timber']
+ ['reelfoot','Reelfoot Lake','TN',36.37,-89.36,'Large shallow lake and flooded timber'],
+ ['west-michigan','Muskegon & Lake Michigan Shore','MI',43.24,-86.23,'Managed wastewater wetland complex, Muskegon Lake and offshore Lake Michigan'],
+ ['southwest-michigan','Fennville & Southwest Michigan Shore','MI',42.58,-86.11,'Fennville managed farmland and shallow wetlands with nearby Lake Michigan shoreline']
 ].map(function(a){return {id:a[0],name:a[1],state:a[2],lat:a[3],lon:a[4],habitat:a[5],weather:{status:'unavailable'},surface:{status:'unavailable'},lakeIce:{status:'unavailable'},snowDepth:{status:'unavailable'},habitatShift:{status:'insufficient_evidence'}};});
 var byId=new Map(LOCATIONS.map(function(r){return [r.id,r]}));
 var selected='saginaw-bay',overviewDone=false,request=0;
@@ -232,7 +234,7 @@ async function selectRegion(id){
  }catch(e){if(token===request)setText('sighting-status','The selected region could not be loaded. Other locations remain available; no sighting inference can be made.');}
 }
 async function loadOverview(){
- setText('overview-status','Checking up to 14 NWS regional hourly forecasts. Some locations may be unavailable.');
+ setText('overview-status','Checking up to 16 NWS regional hourly forecasts. Some locations may be unavailable.');
  $('refresh').disabled=true;
  try{
   var data=await getJson(ENDPOINT+'?mode=overview');
