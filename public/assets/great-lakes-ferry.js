@@ -28,7 +28,7 @@
     return{state:"unknown",text:"The 2026 timetable is date-specific. Consult the operator calendar for a confirmed departure."};
   }
   function eligibleOption(o,date){
-    if(config.id==="toronto"&&date>="2026-10-14"&&o.id!=="wards")return false;
+    if(config.id==="toronto"&&(date>="2026-10-14"||date<="2026-04-15")&&o.id!=="wards")return false;
     return true;
   }
   function tariff(o,date){
@@ -37,6 +37,7 @@
     if(o.priceStart&&date<o.priceStart)return null;
     if(o.priceEnd&&date>o.priceEnd)return null;
     if(o.id==="badger"&&dateIn(date,"2026-06-19","2026-09-07"))return o.summerPricing||o.pricing;
+    if(config.id==="toronto"&&dateIn(date,"2026-08-01","2026-08-31"))return {...o.pricing,childRT:0};
     return o.pricing;
   }
   function estimate(o,date,adults,kids,vehicle,roundtrip){
@@ -55,6 +56,7 @@
     let html='<div class="result '+(outside?'warning':'')+'"><h3>'+ (outside?'Outside the published season':seasonInfo.state==="unknown"?'Schedule verification needed':'Your crossing outlook')+'</h3><p>'+escapeHtml(seasonInfo.text)+'</p></div>';
     if(config.id==="isle-royale"&&roundtrip)html+='<div class="note">Ranger III cannot provide a same-day round trip. Island visits require matching inbound and outbound dates; the calculator does not verify ferry inventory.</div>';
     if(config.id==="put-in-bay"&&vehicle)html+='<div class="note">Miller Ferry transports vehicles; Jet Express is passenger-only. For a vehicle, only Miller is a possible option. Island car traffic can be restricted on busy weekends.</div>';
+    if(config.id==="toronto"&&dateIn(date,"2026-08-01","2026-08-31"))html+='<div class="note">Toronto City Council waived children, youth and older-adult round-trip ferry fares for August 2026. The junior (ages 2–14) category is discounted to free here; youth/senior ticket types require operator selection.</div>';
     if(config.id==="pelee"&&date.slice(0,4)==="2026")html+='<div class="note">Pelee–Sandusky international trips use distinct fares, specific travel dates and border documents. This estimate is for the Canadian mainland–Pelee crossing only.</div>';
     if(config.id==="lake-express"&&date.slice(0,4)==="2026")html+='<div class="note">The published 2026 rates shown here took effect August 11. Late-season sailings end October 19 and have weekday exceptions. Verify the exact date and remaining space.</div>';
     if(config.id==="ss-badger"&&date.slice(0,4)==="2026")html+='<div class="note">Ludington is in Eastern Time and Manitowoc is in Central Time. Crossing time is four hours, not the wall-clock difference between published departure and arrival.</div>';
