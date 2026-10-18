@@ -231,6 +231,7 @@ function pick(s){
  text("selected-region",window.EaglePlanning?.regionDetails(reg).label||"Midwest");
  renderPurpose();
  text("why-water",s.water);text("where-look",s.look);text("access-note",s.access);
+ text("site-evidence","Evidence level: "+(s.evidence||"Operator-published habitat/access information; no location-specific live eagle count")+". Historical context is not a current sighting.");
  el("directions").href=s.map;el("operator-link").href=s.source;
  const report=el("count-source");
  if(s.count){report.href="https://www.mvr.usace.army.mil/"+(s.count==="starved"?"illinoiswaterway":"mississippiriver")+"/eagle-watching/";report.textContent="Open the original Corps count report ↗"}
@@ -307,6 +308,15 @@ el("region-filter").addEventListener("change",()=>{
  // the seasonal lens and its NWS forecast, not just hidden map markers.
  if(matches.length&&!matches.some(s=>s.id===selected.id))pick(matches[0]);
  else renderList();
+});
+el("show-upper-peninsula").addEventListener("click",()=>{
+ el("region-filter").value="upper-peninsula";
+ el("state-filter").value="MI";
+ el("type-filter").value="all";
+ el("saved-filter").checked=false;
+ const preferred=spots.find(s=>s.id==="soo-rotary");
+ if(preferred)pick(preferred);else renderList();
+ const mapSection=el("finder");if(mapSection&&typeof mapSection.scrollIntoView==="function")mapSection.scrollIntoView({behavior:"smooth",block:"start"});
 });
 el("state-filter").addEventListener("change",renderList);el("type-filter").addEventListener("change",renderList);el("saved-filter").addEventListener("change",renderList);
 el("saved-toggle").addEventListener("click",()=>{if(saved.has(selected.id))saved.delete(selected.id);else saved.add(selected.id);try{localStorage.setItem("eagle-saved-v1",JSON.stringify([...saved]))}catch{}renderList();el("saved-toggle").textContent=saved.has(selected.id)?"Saved ✓":"Save spot"});
