@@ -1,3 +1,16 @@
+## Great Lakes ferry eight-tool expansion — October 18, 2026 (release handoff)
+
+- **Owner intent:** Build eight independent, destination-specific Great Lakes ferry planners plus a single directory, preserving the existing Mackinac Island ferry planner, existing Grand Portage ferry planner and their canonical ownership.
+- **GitHub delivery:** Draft PR **#1064** (https://github.com/izworskic/chrisizworski-com/pull/1064) on branch `feature/great-lakes-ferry-eight-planners`. Eight new pages: `/put-in-bay-ferry/`, `/lake-michigan-ferry/lake-express/`, `/lake-michigan-ferry/ss-badger/`, `/isle-royale-ferry-comparison/`, `/chi-cheemaun-ferry/`, `/pelee-island-ferry/`, `/beaver-island-ferry/`, and `/toronto-islands-ferry/`; directory `/great-lakes-ferries/`.
+- **Data and interaction:** Shared browser-side calculation engine, 2026 fare/season reference with explicit unsupported-category withholding, terminal/route differentiation and historical/published operator source links. Improved 2026 Miller car fares and Chi-Cheemaun off-peak/peak low-car plus passenger pricing. Optional keyless NWS eight-hour U.S. *near-shore terminal* hourly outlook with no claims about offshore conditions, cancellations, marine safety or current capacity. All Canadian shore forecasts require official Environment Canada review; no false live availability, ticket purchases or 2027 fare claims.
+- **Ownership:** Existing `/isle-royale-ferry/` remains owned by extracted `izworskic/isle-royale-outdoors` (Grand Portage Sea Hunter III/Voyageur II). The distinct four-operator Isle Royale comparison owns `/isle-royale-ferry-comparison/`. Existing `/mackinac-island/ferry-planner/` remains untouched.
+- **Network and release integration:** New directory, main /tools/ cards and ItemList, registered canonical nodes and relationships, sitemap entries, source URL disclosures, canonical Person/publisher identity, ad-loader build injection compatibility and dedicated browser-engine/serverless endpoint tests.
+- **Verification status:** GitHub CI run `39153365112` passed all 53 `verify:all` steps and all three existing governance jobs (the prior run on this branch); emitted production tool-authority audit initially identified canonical Person/publisher metadata missing on nine new pages. That defect was corrected on the branch after the failed run. **The subsequent emitted build, preview smoke test, and final PR checks are NOT YET VERIFIED.** The Vercel preview GitHub status previously reported failure; connected Vercel account cannot currently read this site's project, so no live release or preview success is claimed. No production deployment or merge performed. The feature branch also started behind moving main and must be reconciled before merge.
+- **GSC/AdSense/GA4 metrics:** Current measured effects unavailable; zero claims of ranking, traffic or revenue lift.
+- **Exactly one next action:** Validate the latest PR CI and Vercel preview after canonical publisher metadata fixes, reconcile concurrent main changes, and merge only after all release and mobile smoke-test checks are green.
+
+# Search Growth + Revenue Session Log
+
 # Search Growth + Revenue Session Log
 
 ## Winter Eagle Watching evidence adapter — October 18, 2026
