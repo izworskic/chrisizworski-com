@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Winter Eagle Watching — public Upper Peninsula route expansion — October 18, 2026
+
+- **Intent:** The user asked to extend Michigan winter eagle congregations and territorial/flight-display planning to the Upper Peninsula, without implying this is a Lower Peninsula-only event.
+- **Research/public access:** Existing live page already included LSSU Freshwater Center Sault river corridor and Menominee River Piers Gorge. This release adds St. Marys River Rotary Park (Shore to Shore Birding Trail directly reports river eagles), Soo Locks Canal Park (USACE year-round public grounds; seasonal closed visitor center), Escanaba River North Shore Boat Launch (Visit Escanaba explicitly documents bald eagles and some open winter river water), and Seney NWR winter trails (USFWS documents eagles and year-round trails but explicitly no verified winter flock); total nineteen sites and six UP public areas. Seney icon is regional reference, not the winter trailhead; operator directions govern access.
+- **Biology/evidence:** Michigan Sea Grant 2023 documented >45 eagles near Dafter Landfill and older observations near the Sault hydropower. Dafter remains a dated, non-public historic report, never a map pin or current sighting claim. Mapped public sites are viewing *leads*, not observed flocks, and winter flights do not prove courtship. Continue separate winter-food/open-water and breeding/territorial flight-planning engines.
+- **Implementation:** Added four named public sites with source URLs, directions, winter closure details; updated map/list filter and evidence-level explanation in selected site; linked one-click "Show UP viewing spots" to the UP-only map and its local regional calendar/weather, with six public UP leads. Updated 19-site copy in directory and page, frontend cache versions. Native map requires no external tiles or new map API key.
+- **Validation:** DOM VM interaction tests added for UP-only six markers, site selection, regional disclosure, specific closure copy and no restricted Dafter landfill pin. Full CI, public output, Vercel production and real desktop/mobile map smoke checks pending. No quantified visits, predicted eagle counts or display probabilities.
+- **Exactly one next action:** Pass CI and deploy, then verify UP-only map pins and local seven-day NWS outlook on desktop and mobile.
+
+
 ## Mackinac Island Christmas-tree ice bridge seasonal watch — October 18, 2026
 
 - **User goal:** Publish a first-party, interpretive Mackinac ice-formation experience showing when the Straits are freezing and the history of island Christmas-tree markers, not a crossing or snowmobile safety predictor.
