@@ -94,6 +94,6 @@ test("Vehicle restriction and incomplete fares do not produce false totals",()=>
  assert.doesNotMatch(pib,/Jet Express from Port Clinton/);
  assert.match(pib,/complete quote/i);
  const royale=interact("isle-royale-ferry-comparison","2026-07-01");
- assert.match(royale,/no same-day round trip/i);
+ assert.match(royale,/cannot provide a same-day round trip/i);
  assert.match(royale,/Published fare lookup required/);
 });
