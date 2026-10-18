@@ -56,3 +56,24 @@ test('Discovery, sitemap and registry connect with Michigan Ice Report', () => {
   assert.ok(registry.relationships.some(r => r.from === 'mackinac-ice-bridge' && r.to === 'michigan-ice'));
   assert.ok(registry.relationships.some(r => r.from === 'mackinac-ice-bridge' && r.to === 'mackinac-island'));
 });
+
+test('Ice bridge experience has multiple credited real photos, interpreted data tabs and keyless tile fallback', () => {
+  const css = read('public/assets/mackinac-ice-bridge-experience.css');
+  assert.match(page,/id="winter-gallery"/);
+  assert.equal((page.match(/class="photo-card"/g)||[]).length,3);
+  assert.match(page,/U\.S\. Coast Guard/);
+  assert.match(page,/NASA Earth Observatory/);
+  assert.match(page,/Fish &amp; Wildlife Service/);
+  assert.match(page,/id="photoDialog"/);
+  assert.match(page,/id="mapStatus"/);
+  assert.match(page,/data-signal="wind"/);
+  assert.match(ui,/function addTiles/);
+  assert.match(ui,/tileerror/);
+  assert.match(ui,/tile\.openstreetmap\.org/);
+  assert.match(ui,/function renderSignal/);
+  assert.match(ui,/lastData\.forecast\.next72h/);
+  assert.match(ui,/ice\.stale/);
+  assert.match(ui,/function setupGallery/);
+  assert.match(css,/prefers-reduced-motion/);
+  assert.doesNotMatch(page,/mapbox|google\.maps|MAPBOX_ACCESS_TOKEN|GOOGLE_MAPS_API_KEY/i);
+});

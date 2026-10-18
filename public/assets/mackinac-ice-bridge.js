@@ -4,7 +4,56 @@
   var API = '/api/ice-now?region=mackinac-straits';
   var ICE = 'https://mapservices.weather.noaa.gov/vector/rest/services/obs/usnic_greatlakes_ice_chart/MapServer';
   var BOUNDS = [[45.76, -84.81], [45.96, -84.52]];
-  var map = null, overlay = null, iceVisible = true, iceReady = false, overlayTimer = null;
+  var map = null, overlay = null, tiles = null, iceVisible = true, iceReady = false, overlayTimer = null;
+  var tileErrors = 0, fallbackStarted = false, lastData = null, currentSignal = 'cold', photoIndex = 0;
+  var PHOTOS = [
+    {src:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Ice_forms_in_the_Straits_of_Mackinac%2C_underneath_the_Mackinac_Bridge%2C_near_St_120124-G-JL323-038.jpg/960px-Ice_forms_in_the_Straits_of_Mackinac%2C_underneath_the_Mackinac_Bridge%2C_near_St_120124-G-JL323-038.jpg", caption:'Ice forming beneath the Mackinac Bridge near St. Ignace, January 2012. Photograph by U.S. Coast Guard PA3 George Degener (public domain).'},
+    {src:"https://eoimages.gsfc.nasa.gov/images/imagerecords/5000/5444/ISS010-E-23748_lrg.jpg", caption:'NASA astronaut photograph of spring thaw in the Straits, April 2005 (public domain).'},
+    {src:"https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1312/1079859/2000w_q95.jpg", caption:'Coast Guard cutter Katmai Bay moving through ice. Archival Coast Guard photograph (public domain).'}
+  ];
+  function mapMessage(message,status) {
+    var node = document.getElementById('mapStatus');
+    if (node) { node.dataset.status = status || 'ready'; }
+    var words = document.getElementById('mapStatusText');
+    if (words) words.textContent = message;
+  }
+  function updateIceButton(){
+    var btn=document.getElementById('toggleIce');
+    if (!btn) return;
+    btn.disabled=!iceReady;
+    btn.setAttribute('aria-pressed',String(iceReady && iceVisible));
+    btn.textContent=iceReady ? (iceVisible ? 'NOAA ice overlay on':'NOAA ice overlay off') : 'NOAA overlay unavailable';
+  }
+  function addTiles(url, fallback) {
+    if (!map || !window.L) return;
+    if (tiles) map.removeLayer(tiles);
+    tileErrors=0;
+    tiles = window.L.tileLayer(url,{maxZoom:16,subdomains:'abcd',attribution:fallback?'&copy; OpenStreetMap contributors':'&copy; OpenStreetMap contributors &copy; CARTO'});
+    tiles.on('tileload',function(){if(!fallback)mapMessage('CARTO geography map ready · no API key required','ready');});
+    tiles.on('tileerror',function(){
+      tileErrors+=1;
+      if (tileErrors>=3 && !fallbackStarted) {
+        fallbackStarted=true;
+        mapMessage('CARTO tiles unavailable. Switching to OpenStreetMap—no API key required.','fallback');
+        addTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png',true);
+      } else if (tileErrors>=3 && fallback) {
+        mapMessage('Map tiles unavailable on this connection. Official ice and weather text remain available.','error');
+      }
+    });
+    tiles.addTo(map);
+  }
+  function addLandmarks() {
+    if(!map||!window.L)return;
+    var places=[
+      {lat:45.8756,lon:-84.7323,name:'St. Ignace',message:'Mainland town. This point is for orientation only; it is not a crossing start.'},
+      {lat:45.8492,lon:-84.6179,name:'Mackinac Island',message:'Year-round island community. No travel route or safe ice is indicated.'},
+      {lat:45.8174,lon:-84.7278,name:'Mackinac Bridge',message:'The highway bridge crosses the Straits farther west; it is not the Christmas-tree ice bridge.'}
+    ];
+    places.forEach(function(p){
+      window.L.circleMarker([p.lat,p.lon],{radius:6,color:'#f6f9f5',fillColor:'#185b66',weight:2,fillOpacity:1})
+        .bindPopup('<strong>'+p.name+'</strong>'+p.message,{autoPan:true,maxWidth:245}).addTo(map);
+    });
+  }
   var el = function (id) { return document.getElementById(id); };
   function text(id, value) { var node = el(id); if (node) node.textContent = value == null ? '—' : String(value); }
   function dateText(iso, opts) {
@@ -17,7 +66,8 @@
   }
   function setMapFailure() {
     el('mapPanel').classList.add('map-fail');
-    text('iceContext', 'If the map is unavailable, use the direct NOAA ice analysis source below. No conditions are inferred from the missing map.');
+    mapMessage('Interactive map unavailable. Use the official source links below. No API key is required.','error');
+    text('iceContext', 'The interactive map is unavailable; no conditions are inferred from a missing layer.');
   }
   function drawIce() {
     if (!map || !iceReady || !iceVisible) {
@@ -41,9 +91,8 @@
     if (!window.L || !el('map')) { setMapFailure(); return; }
     try {
       map = window.L.map('map', {scrollWheelZoom:false, attributionControl:true, zoomControl:true});
-      window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        subdomains:'abcd',maxZoom:16,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
-      }).addTo(map);
+      addTiles('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',false);
+      addLandmarks();
       map.fitBounds(BOUNDS,{padding:[20,20]});
       window.L.control.scale({imperial:true,metric:false}).addTo(map);
       map.on('moveend resize',scheduleIce);
@@ -69,7 +118,9 @@
     text('iceContext', iceReady
       ? 'The map shows NOAA polygon shading across the Straits. Regional concentration describes surface coverage, never ice thickness or a travel route.'
       : 'The basemap is geographic context only. Without a recent NOAA analysis, no ice conditions are depicted.');
+    updateIceButton();
     scheduleIce();
+    renderSignal();
   }
   function selectDay(day, button) {
     Array.prototype.forEach.call(el('days').querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',b === button ? 'true':'false');});
@@ -119,6 +170,7 @@
       b.addEventListener('click',function(){selectDay(day,b);});container.appendChild(b);
     });
     selectDay(days[0],container.querySelector('button'));
+    renderSignal();
   }
   async function refresh() {
     var button=el('refresh');button.disabled=true;text('refresh','Refreshing…');
@@ -128,9 +180,13 @@
       if (!response.ok) throw new Error('HTTP '+response.status);
       var data=await response.json();
       if (!data || !data.ok) throw new Error('Invalid response');
+      lastData=data;
       observation(data);forecast(data);
+      renderSignal();
     } catch(e) {
+      lastData=null;
       observation(null);forecast(null);
+      renderSignal();
       text('iceTitle','Unable to check NOAA right now');
       text('iceDescription','The official data request failed. No current ice conditions can be reported. Please open the source links below.');
       text('observationSource','Source fetch failed · current conditions unknown');
@@ -138,10 +194,86 @@
   }
   el('refresh').addEventListener('click',refresh);
   el('toggleIce').addEventListener('click',function(){
-    iceVisible=!iceVisible;this.setAttribute('aria-pressed',iceVisible?'true':'false');
-    this.textContent=iceVisible?'NOAA ice layer on':'NOAA ice layer off';scheduleIce();
+    if(!iceReady)return;
+    iceVisible=!iceVisible;updateIceButton();scheduleIce();
   });
   el('fitMap').addEventListener('click',function(){if(map)map.fitBounds(BOUNDS,{padding:[20,20]});});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setupMap();refresh();});
-  else {setupMap();refresh();}
+
+  // Three condition-driven explanations, not a fabricated prediction of ice integrity.
+  function renderSignal() {
+    var t=lastData && lastData.forecast && lastData.forecast.next72h;
+    var ice=lastData && lastData.observed && lastData.observed.regions && lastData.observed.regions['mackinac-straits'];
+    var title='',story='',value='—',unit='',pct=0,eyebrow='';
+    if(currentSignal==='cold') {
+      eyebrow='01 · Air-temperature signal';
+      title='Does the cold last, or does the thaw interrupt?';
+      unit='hours at or below 32°F';
+      if(t) {
+        value=t.freezeHours;
+        pct=Math.min(100,100*(t.freezeHours||0)/Math.max(1,t.hours||72));
+        story='The St. Ignace NWS grid expects '+t.freezeHours+' freezing hour(s) and '+t.thawHours+' thawing hour(s) over '+t.hours+' forecast hours. Repeated cold is a useful seasonal clue, not a measurement of ice thickness or continuity.';
+      } else story='The hourly forecast is currently unavailable. The tracker does not infer a freeze-up from the calendar.';
+    } else if(currentSignal==='wind') {
+      eyebrow='02 · Wind-driven movement';
+      title='Even solid-looking ice can move';
+      unit='maximum forecast mph';
+      if(t) {
+        value=t.maxWindMph == null?'—':t.maxWindMph;
+        pct=Math.min(100,100*(t.maxWindMph||0)/50);
+        story='NWS forecasts a peak wind of '+(t.maxWindMph==null?'unknown speed':t.maxWindMph+' mph')+' in the coming '+t.hours+' hours. Shifting winds, currents and vessel traffic can break or rearrange ice. This wind number is context, not a pressure-ridge or route forecast.';
+      } else story='No usable NWS wind forecast was returned. The Straits can have moving ice even during calm weather.';
+    } else {
+      eyebrow='03 · Observed NOAA analysis';
+      title='A chart sees coverage, not a crossing';
+      unit='water samples';
+      if(ice && ice.available && !ice.stale && ice.validAt){
+        value=(ice.samplesMatched||0)+'/'+(ice.samplesExpected||0);
+        pct=100*(ice.samplesMatched||0)/Math.max(1,ice.samplesExpected||1);
+        story='Fresh NOAA regional ice analysis is available, last valid '+dateText(ice.validAt)+'. Its polygons classify how much water surface is covered in broad areas, not thickness, cracks or safe travel.';
+      } else {
+        value='—';pct=0;
+        story='No current, usable local NOAA ice chart is available'+(ice && ice.validAt?' (last chart: '+dateText(ice.validAt)+')':'')+'. No ice state is inferred and the map shows geography only.';
+      }
+    }
+    text('signalEyebrow',eyebrow);text('signalTitle',title);text('signalValue',value);text('signalUnit',unit);text('signalStory',story);
+    var fill=el('signalFill');if(fill)fill.style.width=Math.round(pct)+'%';
+  }
+  function setupSignals(){
+    document.querySelectorAll('.signal-tab').forEach(function(b){
+      b.addEventListener('click',function(){
+        currentSignal=this.dataset.signal;
+        document.querySelectorAll('.signal-tab').forEach(function(x){
+          var active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active));
+        });
+        renderSignal();
+      });
+    });
+    renderSignal();
+  }
+  function openPhoto(index){
+    var modal=el('photoDialog');if(!modal || typeof modal.showModal!=='function')return;
+    photoIndex=(index+PHOTOS.length)%PHOTOS.length;
+    var p=PHOTOS[photoIndex];
+    el('photoLarge').src=p.src;el('photoLarge').alt=p.caption; text('photoCaption',p.caption);text('photoNumber',(photoIndex+1)+' of '+PHOTOS.length);
+    if(!modal.open)modal.showModal();
+  }
+  function setupGallery(){
+    document.querySelectorAll('button.photo-open').forEach(function(b){b.addEventListener('click',function(){openPhoto(Number(b.dataset.photo)||0);});});
+    var close=el('closePhoto'),prev=el('photoPrev'),next=el('photoNext'),modal=el('photoDialog');
+    if(close)close.addEventListener('click',function(){modal.close();});
+    if(prev)prev.addEventListener('click',function(){openPhoto(photoIndex-1);});
+    if(next)next.addEventListener('click',function(){openPhoto(photoIndex+1);});
+    if(modal)modal.addEventListener('click',function(ev){if(ev.target===modal)modal.close();});
+    document.querySelectorAll('.photo-card img').forEach(function(img){
+      img.addEventListener('error',function(){
+        var card=img.closest('.photo-card');
+        if(!card)return;
+        var b=card.querySelector('.photo-open');if(b){b.disabled=true;b.style.background='#e7f0f0';b.textContent='Photo unavailable — use credited source below';}
+      });
+    });
+  }
+  function initialize(){setupGallery();setupSignals();setupMap();refresh();}
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initialize);
+  else initialize();
 }());
