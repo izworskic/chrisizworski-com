@@ -46,6 +46,10 @@ jobs:
           cache: npm
       - name: Install pinned dependencies
         run: npm ci
+      - name: Validate waterfowl chart and engine JavaScript syntax
+        run: |
+          node --check public/waterfowl-freeze-line/app.js
+          node --check lib/waterfowl-snow-surveys.js
       - name: Test NOAA and DNR parsers plus habitat decisions
         run: node --test tests/waterfowl-freeze-line.test.js tests/waterfowl-noaa.test.js tests/waterfowl-marsh-lake.test.js
       - name: Observe NOAA and Michigan DNR upstream source response (nonblocking)
