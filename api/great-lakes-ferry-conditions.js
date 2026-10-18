@@ -14,6 +14,7 @@ async function json(url){
  finally{clearTimeout(timer)}
 }
 export default async function handler(req,res){
+ res.setHeader("X-Robots-Tag","noindex");
  if(req.method!=="GET"){res.setHeader("Allow","GET");return res.status(405).json({error:"Method not allowed"})}
  const id=String(req.query?.id||"");const port=PORTS[id];
  if(!port)return res.status(400).json({error:"No supported U.S. gateway for that route"});
