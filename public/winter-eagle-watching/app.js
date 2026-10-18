@@ -27,8 +27,8 @@ const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
 function seasonLabel(s){return s.type==="resident"?"Year-round resident habitat":inWinter?"Within typical winter watching season":"Outside typical winter gathering season"}
 function renderList(){
- const state=el("state-filter").value,kind=el("type-filter").value,savedOnly=el("saved-filter").checked;
- const matches=spots.filter(s=>(state==="all"||s.state===state)&&(kind==="all"||s.type===kind)&&(!savedOnly||saved.has(s.id)));
+ const state=el("state-filter").value,kind=el("type-filter").value,region=el("region-filter").value,savedOnly=el("saved-filter").checked;
+ const matches=spots.filter(s=>(state==="all"||s.state===state)&&(kind==="all"||s.type===kind)&&(region==="all"||window.EaglePlanning.regionForSpot(s)===region)&&(!savedOnly||saved.has(s.id)));
  const list=el("spot-list");list.replaceChildren();
  matches.forEach(s=>{const i=spots.indexOf(s)+1,b=document.createElement("button");b.type="button";b.className="spot"+(s.id===selected.id?" active":"");b.setAttribute("aria-pressed",String(s.id===selected.id));
  const n=document.createElement("span");n.className="number";n.textContent=String(i).padStart(2,"0");
@@ -47,7 +47,10 @@ function renderList(){
 function renderPlanner(){
  const E=window.EaglePlanning;
  if(!E)return;
- const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth);
+ const region=E.regionForSpot(selected),context=E.regionDetails(region);
+ const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth,region);
+ text("region-heading",context.label);
+ text("region-context",context.note);
  ["gather","display"].forEach(m=>{const btn=el("mode-"+m);if(!btn)return;btn.classList.toggle("active",m===plannerMode);btn.setAttribute("aria-pressed",String(m===plannerMode))});
  text("season-mode-label",display?"AERIAL DISPLAYS / NOT A DAILY PREDICTION":"WINTER GATHERINGS / OPEN WATER");
  text("season-headline",display?"Look for flights and territorial displays—not just groups.":"Follow the open water and accessible prey.");
@@ -59,14 +62,14 @@ function renderPlanner(){
  "Field cue: sustained circling, pair flights and energetic chases may be more visible during the breeding period. The weather can improve watching comfort, but cannot predict a cartwheel. Never approach a nest or follow eagles to one.":
  "Field cue: winter concentrations may gather at open water, below dams or around prey and safe roosts. In early spring they can shift toward retreating river ice edges. Check fresh dated counts where they exist.");
  const calendar=el("annual-calendar");calendar.replaceChildren();
- for(const m of E.calendar(plannerMode)){
+ for(const m of E.calendar(plannerMode,region)){
   const b=document.createElement("button");b.type="button";b.className="season-month level-"+m.level+(m.index===plannerMonth?" chosen":"");
   b.setAttribute("aria-pressed",String(m.index===plannerMonth));b.setAttribute("aria-label",m.month+": "+m.label+"; select month");
   const name=document.createElement("strong");name.textContent=m.month;const line=document.createElement("span");line.className="month-intensity";
   line.setAttribute("aria-hidden","true");b.append(name,line);
   b.addEventListener("click",()=>{plannerMonth=m.index;renderPlanner()});calendar.append(b);
  }
- const assess=E.summary(plannerMode,month,plannerDays);
+ const assess=E.summary(plannerMode,month,plannerDays,region);
  const label=el("setup-label");label.className="status"+(plannerDays.length?"":" muted");
  text("setup-label",plannerDays.length?assess.headline:"Live NWS forecast not yet available");
  text("setup-explanation",plannerDays.length?assess.why:"Check the NWS outlook for the selected public viewing spot. Current wildlife presence and river ice remain unconfirmed.");
@@ -177,7 +180,10 @@ function markerUpdate(){moveMapToSelected();}
 
 function pick(s){
  selected=s;history.replaceState(null,"","#"+s.id);renderList();markerUpdate();
- text("selected-place",s.name);text("selected-city",s.city+", "+s.state);text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");
+ text("selected-place",s.name);text("selected-city",s.city+", "+s.state);
+ const reg=window.EaglePlanning?.regionForSpot(s);
+ text("selected-region",window.EaglePlanning?.regionDetails(reg).label||"Midwest");
+ text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");
  text("why-water",s.water);text("where-look",s.look);text("access-note",s.access);
  el("directions").href=s.map;el("operator-link").href=s.source;
  const report=el("count-source");
@@ -247,12 +253,13 @@ async function loadCount(s){
   if(data.stale){const q=document.createElement("p");q.textContent="This observation is older than 14 days. Do not use it as evidence of activity today.";field.append(q)}
  }catch{if(selected.id===s.id)p.textContent="Published counts are temporarily unavailable. Use the source link; no count is assumed."}
 }
+el("region-filter").addEventListener("change",()=>{el("state-filter").value="all";renderList()});
 el("state-filter").addEventListener("change",renderList);el("type-filter").addEventListener("change",renderList);el("saved-filter").addEventListener("change",renderList);
 el("saved-toggle").addEventListener("click",()=>{if(saved.has(selected.id))saved.delete(selected.id);else saved.add(selected.id);try{localStorage.setItem("eagle-saved-v1",JSON.stringify([...saved]))}catch{}renderList();el("saved-toggle").textContent=saved.has(selected.id)?"Saved ✓":"Save spot"});
 el("refresh-weather").addEventListener("click",()=>loadWeather(selected));
 el("copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);el("copy-link").textContent="Copied";setTimeout(()=>text("copy-link","Copy spot link"),1800)}catch{el("copy-link").textContent="Copy URL from address bar"}});
 el("nearest").addEventListener("click",()=>{if(!navigator.geolocation){text("location-help","Location not supported in this browser.");return}
- navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
+ navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("region-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
 el("mode-gather").addEventListener("click",()=>switchMode("gather"));
 el("mode-display").addEventListener("click",()=>switchMode("display"));
 initMap();renderPlanner();pick(selected);
