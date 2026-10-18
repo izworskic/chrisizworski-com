@@ -59,6 +59,10 @@ test('Michigan DNR survey reports parse two independently dated tables and ignor
  assert.equal(v.geese.count,650);
  assert.equal(v.geese.change,250);
  assert.equal(v.ducks.previous.date,'2026-10-04');
+ assert.deepEqual(v.ducks.history.map(r=>r.date),['2026-10-04','2026-10-11']);
+ assert.deepEqual(v.ducks.history.map(r=>r.count),[3610,4525]);
+ assert.equal(v.ducks.history.some(r=>r.date==='2026-10-18'),false);
+ assert.deepEqual(v.geese.history.map(r=>r.count),[400,650]);
 });
 test('Official Michigan surveys retain separately reported dabbling and diving ducks',()=>{
  const table='<table><thead><tr><th>Week Ending:</th><th>Total ducks:</th><th>Total dabblers:</th><th>Total divers:</th></tr></thead>'+
@@ -69,6 +73,24 @@ test('Official Michigan surveys retain separately reported dabbling and diving d
  assert.equal(r.ducks.dabblers,4400);
  assert.equal(r.ducks.divers,125);
  assert.equal(r.geese,null);
+ assert.equal(r.ducks.history.length,1);
+ assert.equal(r.ducks.history[0].dabblers,4400);
+ assert.equal(r.ducks.history[0].divers,125);
+});
+
+test('survey history retains observed gaps and caps the UI series to 12 reported weeks',()=>{
+ const dates=Array.from({length:16},(_,i)=>{
+  const day=new Date(Date.UTC(2026,5,1+i*7));
+  return (day.getUTCMonth()+1)+'/'+day.getUTCDate()+'/'+day.getUTCFullYear();
+ });
+ const rows=dates.map((date,i)=>row(date,(100+i*100).toLocaleString('en-US')));
+ const gaps=rows.filter((_,i)=>i!==5&&i!==8);
+ const survey=snow.parseDNR(table('ducks',gaps),Date.parse('2026-10-18T12:00:00Z'));
+ assert.equal(survey.status,'stale');
+ assert.equal(survey.ducks.history.length,12);
+ assert.equal(survey.ducks.history.at(-1).count,1600);
+ assert.equal(survey.ducks.history.some(r=>r.date===new Date(Date.UTC(2026,5,1+8*7)).toISOString().slice(0,10)),false);
+ assert.equal(survey.ducks.history.every(r=>r.dabblers===null&&r.divers===null),true);
 });
 test('A negative survey change is not treated as observed lakeward migration',()=>{
  const surveys={sites:[{status:'reported',ducks:{change:-100,count:1000}}]};
@@ -103,4 +125,8 @@ test('UI and API expose source-separated habitat, NOHRSC and DNR, not invented l
  for(const id of ['habitat-headline','snow-depth','survey-list','map-layer'])assert.ok(html.includes('id="'+id+'"'));
  assert.match(app,/renderSurveys/);assert.match(app,/renderSnowDepth/);assert.match(app,/renderHabitat/);
  assert.match(html,/marsh-to-big-water/);
+ for(const id of ['survey-timeline-title','survey-site-select','survey-metric-select','survey-trend-chart','survey-trend-caption'])
+   assert.ok(html.includes('id="'+id+'"'),id+' should exist');
+ assert.match(app,/drawSurveyTimeline/);
+ assert.match(app,/Missing|Gaps are not filled/);
 });
