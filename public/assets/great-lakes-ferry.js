@@ -46,7 +46,7 @@
     if(t["adult"+s]==null||(kids>0&&t["child"+s]==null)||(vehicle>0&&t["vehicle"+s]==null)){
       return {text:"A complete quote needs operator pricing",complete:false};
     }
-    const base=adults*t["adult"+s]+kids*t["child"+s]+vehicle*t["vehicle"+s];
+    const base=adults*t["adult"+s]+(kids ? kids*t["child"+s] : 0)+(vehicle ? vehicle*t["vehicle"+s] : 0);
     const surcharge=(t["feePerson"+s]||0)*(adults+kids)+(t["feeVehicle"+s]||0)*vehicle;
     return {text:currency(base+surcharge,config.currency),complete:true,base,fee:surcharge};
   }
