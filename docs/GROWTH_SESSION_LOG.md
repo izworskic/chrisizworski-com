@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Michigan shed antler search window — October 18, 2026
+
+- **User goal:** Add a winter-focused shed-antler planning tool answering "Is this the week I should go?" specifically for weather and finding already-dropped antlers, never claiming to predict precise buck antler casting dates.
+- **Sources:** NWS hourly forecasts via official API; NOAA/NOHRSC National Snow Analyses as a separately labeled regional existing-snow reference; Michigan DNR on deer wintering complexes and stress. Ground cover is explicitly user-supplied rather than invented from NWS snowfall.
+- **Implementation on branch `feature/shed-antler-search-conditions`:** `/michigan-shed-antlers/`, `/api/shed-antlers`, conservative regional 7-day weather/visibility heuristic, native keyless Midwest map, real USFWS antler photograph with source/license link, mobile chart, comparison links, UP and deep-snow deer-disturbance caution. Initial coverage 14 Michigan forecast points plus six nearby WI/MN/OH points. No mapped deer yards, shed hotspots, exact-drop probability or false observed snow depth. Integrates ads standard loader, author identity, sitemaps, tools/registry links and focused tests.
+- **Measurement:** October 18 GSC/GA4/AdSense baseline NOT AVAILABLE. No claim of increased search clicks, ad income or shed-finding success.
+- **Quality/release:** Code committed on feature branch; full `npm run verify:all`, GitHub CI, production deployment and rendered mobile/map/weather smoke tests are **NOT YET VERIFIED**. Do not merge over red CI or call the site live until these pass.
+- **Exactly one next action:** Run required CI/full verification, fix any failures, then merge and smoke-test the public page and NWS responses.
+
+
+
 ## Winter eagle Woodcock-style in-flight field interpretation — October 18, 2026
 
 - **User intent:** Bring the successful American Woodcock Sky Dance's experiential explanation pattern into the first-party `/winter-eagle-watching/` page, specifically to teach what eagles are doing in flight.
