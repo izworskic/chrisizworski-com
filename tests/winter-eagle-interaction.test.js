@@ -50,7 +50,7 @@ function makeBrowser(){
  };
  const window={addEventListener(){},EaglePlanning:undefined};
  const sandbox={document,window,fetch,location:{hash:''},history:{replaceState(){}},
-   localStorage:{getItem(){return null},setItem(){}},navigator:{},Intl,Date,Math,Number,Set,Map,Array,Promise,
+   localStorage:{getItem(){return null},setItem(){}},navigator:{},Intl,Date,Math,Number,Set,Map,Array,Promise,AbortController,
    console,setTimeout,clearTimeout};
  vm.runInNewContext(fs.readFileSync(path.join(dir,'planning.js'),'utf8'),sandbox,{filename:'planning.js'});
  vm.runInNewContext(fs.readFileSync(path.join(dir,'app.js'),'utf8'),sandbox,{filename:'app.js'});
