@@ -3346,6 +3346,42 @@
         "status": "unknown",
         "note": "New first-party seasonal tool in October 2026; no measured GSC, usage or revenue effect yet."
       }
+    },
+    {
+      "id": "waterfowl-freeze-line",
+      "name": "Waterfowl Freeze-Line Tracker",
+      "canonical": "https://chrisizworski.com/waterfowl-freeze-line/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "nature-birding",
+      "primaryIntent": "Where is forecast freezing pressure increasing for ducks and geese in the Great Lakes and Mississippi Flyway, and what dated waterfowl observations exist nearby?",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "great-lakes",
+        "upper-midwest",
+        "mississippi-flyway"
+      ],
+      "personas": [
+        "hunter",
+        "birder",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Forecaster of subfreezing air exposure and map of dated waterfowl observations; separate from general birding, actual flock surveys, measured wetland ice, and bald eagle viewing."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New first-party tool October 18, 2026; no GSC, AdSense or usage claims."
+      }
     }
   ],
   "relationships": [
@@ -4700,6 +4736,22 @@
       "strength": "optional",
       "surface": "winter",
       "reason": "Midwest winter eagle travel requires different habitat and public-access planning than Michigan birding sighting maps."
+    },
+    {
+      "from": "waterfowl-freeze-line",
+      "to": "birding",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "waterfowl-evidence",
+      "reason": "For additional Michigan eBird bird observations; weather exposure and actual bird records are distinct."
+    },
+    {
+      "from": "winter-eagle-watching",
+      "to": "waterfowl-freeze-line",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "winter-field-guide",
+      "reason": "Visitors watching river ice and open water may also follow waterfowl freeze-pressure conditions."
     }
   ],
   "cannibalizationGroups": [
