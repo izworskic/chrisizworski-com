@@ -243,7 +243,8 @@ function forecastDaily(periods) {
   });
   for (const hour of periods.slice(0, 168)) {
     if (!hour.startTime || !Number.isFinite(Date.parse(hour.startTime))) continue;
-    const date = fmt.format(new Date(hour.startTime));
+    const p = Object.fromEntries(fmt.formatToParts(new Date(hour.startTime)).map(item => [item.type,item.value]));
+    const date = p.year + '-' + p.month + '-' + p.day;
     if (!days.has(date)) days.set(date, []);
     days.get(date).push(hour);
   }
