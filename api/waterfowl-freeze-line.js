@@ -18,6 +18,7 @@ const REGIONS=Object.freeze([
 ]);
 const NOAA_SNOW='https://www.nohrsc.noaa.gov/nsa/';
 const OBS='https://api.inaturalist.org/v1/observations';
+const {surfaceFor,lakeIceFor}=require('../lib/waterfowl-surface.js');
 const H={'Accept':'application/geo+json, application/json','User-Agent':'WaterfowlFreezeLine/1.0 (https://chrisizworski.com/waterfowl-freeze-line/)'};
 const cache=new Map();
 async function json(url,ms=6500,headers=H){
@@ -28,7 +29,7 @@ async function json(url,ms=6500,headers=H){
 function cacheGet(key){const v=cache.get(key);return v&&v.until>Date.now()?v.body:null;}
 function cacheSet(key,body,ttl){cache.set(key,{body,until:Date.now()+ttl});return body;}
 function summarizeWeather(periods,now=Date.now()){
- const hours=(Array.isArray(periods)?periods:[]).filter(p=>p&&Number.isFinite(Number(p.temperature))&&Date.parse(p.startTime)>=now-90*60*1000).slice(0,72);
+ const hours=(Array.isArray(periods)?periods:[]).filter(p=>p&&p.temperature!==null&&p.temperature!==undefined&&Number.isFinite(Number(p.temperature))&&Number.isFinite(Date.parse(p.startTime))&&Date.parse(p.startTime)>=now-90*60*1000).slice(0,72);
  if(hours.length<16)return {status:'unavailable',note:'Too few valid NWS forecast hours'};
  function fahrenheit(p){return p.temperatureUnit==='C'?Number(p.temperature)*9/5+32:Number(p.temperature);}
  const values=hours.map(fahrenheit),early=values.slice(0,6),next=values.slice(6,42);
@@ -36,8 +37,22 @@ function summarizeWeather(periods,now=Date.now()){
  const first24=Math.min(...early),later=next.length?Math.min(...next):first24,drop=Math.max(0,Math.round(first24-later));
  const trend=drop>=12?'notable cooling forecast':drop>=6?'cooling forecast':'no sharp cooling forecast';
  const pressure=freeze72>=42?'strong':freeze72>=18?'building':'limited';
+ // Hourly NWS periods: this is forecast cold exposure, not past freezing-degree days.
+ const forecastColdDegreeHours=Math.round(values.reduce((s,t)=>s+Math.max(0,32-t),0));
+ let longestFreezingRunHours=0,run=0;
+ for(const t of values){run=t<=32?run+1:0;longestFreezingRunHours=Math.max(run,longestFreezingRunHours);}
+ const winds=hours.map(p=>{
+  const direction=String(p.windDirection||'').toUpperCase();
+  const raw=typeof p.windSpeed==='number'?p.windSpeed:String(p.windSpeed||'').match(/\d+(?:\.\d+)?/)?.[0];
+  const speed=raw===undefined?null:Number(raw);
+  return {direction,speedMph:Number.isFinite(speed)?speed:null,time:p.startTime};
+ });
+ const northerly=winds.filter(w=>/^(N|NNW|NNE|NW|NE)$/.test(w.direction)&&w.speedMph!==null&&w.speedMph>=10);
+ const northWindHours=northerly.length;
+ const northWindStart=northerly[0]?.time||null;
+ const windSignal=northWindHours>=8?'sustained northerly forecast':northWindHours>=3?'brief northerly window':'no verified northerly window';
  return {status:'forecast',issuedAt:hours[0].startTime,validHours:hours.length,freezingHours24:freeze24,freezingHours72:freeze72,
-  firstTemperatureF:Math.round(values[0]),lowestTemperatureF:Math.round(Math.min(...values)),temperatureDropF:drop,trend,pressure,
+  firstTemperatureF:Math.round(values[0]),lowestTemperatureF:Math.round(Math.min(...values)),temperatureDropF:drop,trend,pressure,forecastColdDegreeHours,longestFreezingRunHours,northWindHours,northWindStart,windSignal,
   series:hours.filter((_,i)=>i%6===0).map(p=>({time:p.startTime,tempF:Math.round(fahrenheit(p))})),
   snowCover:'not measured',wetlandIce:'not measured',birdMovement:'not predicted'};
 }
@@ -77,17 +92,20 @@ async function sightingsFor(r,now=Date.now()){
 async function pool(items,n,fn){let index=0;const output=new Array(items.length);await Promise.all(Array.from({length:n},async()=>{while(index<items.length){const i=index++;output[i]=await fn(items[i]);}}));return output;}
 function base(r){return {id:r.id,name:r.name,state:r.state,lat:r.lat,lon:r.lon,habitat:r.habitat};}
 async function overview(){
- const regions=await pool(REGIONS,5,async r=>({...base(r),weather:await weatherFor(r)}));
+ const regions=await pool(REGIONS,5,async r=>{
+  const [weather,surface,lakeIce]=await Promise.all([weatherFor(r),surfaceFor(r),lakeIceFor(r)]);
+  return {...base(r),weather,surface,lakeIce};
+ });
  return {generatedAt:new Date().toISOString(),mode:'overview',regions,forecastCoverage:regions.filter(r=>r.weather.status==='forecast').length,
-  interpretation:'Weather forecast exposure only. Not a confirmed freeze line, open-water map, migration prediction or bird concentration ranking.',
-  sources:{weather:'National Weather Service hourly forecast',snow:'NOAA NOHRSC snow analysis (reference map; not yet scored)',observations:'iNaturalist (on selected region)'},
+  interpretation:'NWS weather pressure is modeled. USNIC 1-km mapped surface class and dated Great Lakes ice-chart polygon are independent observed analyses, not regional wetland ice or bird concentration.',
+  sources:{weather:'National Weather Service hourly forecast',snowIce:'NOAA USNIC daily IMS 1-km mapped snow and ice class',greatLakesIce:'NOAA USNIC dated Great Lakes GIS ice-chart polygons',snowDepth:'NOAA NOHRSC depth analysis (official reference, no unit-verified numerical sampling)',observations:'iNaturalist (on selected region)'},
   nohrsc:NOAA_SNOW};
 }
 async function detail(r){
- const results=await Promise.all([weatherFor(r),sightingsFor(r)]);
- return {generatedAt:new Date().toISOString(),mode:'region',region:base(r),weather:results[0],sightings:results[1],
-  snow:{status:'not_sourced_for_point',source:NOAA_SNOW,note:'Review the official NOAA snow-depth map. No local snow-depth value is used in this model.'},
-  ice:{status:'unverified',note:'NWS air forecasts are not a wetland ice sensor. Ice remains unverified.'}};
+ const [weather,sightings,surface,lakeIce]=await Promise.all([weatherFor(r),sightingsFor(r),surfaceFor(r),lakeIceFor(r)]);
+ return {generatedAt:new Date().toISOString(),mode:'region',region:base(r),weather,sightings,surface,lakeIce,
+  snow:{status:'official_reference',source:NOAA_SNOW,note:'NOHRSC snow-depth map is an official supplementary reference. No depth value is inferred from the IMS snow/no-snow class.'},
+  ice:{status:'region_unverified',note:'NOAA regional map pixels and dated Great Lakes chart polygons do not verify conditions at an individual inland marsh.'}};
 }
 async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
