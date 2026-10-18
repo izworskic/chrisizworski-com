@@ -92,7 +92,7 @@ test("Vehicle restriction and incomplete fares do not produce false totals",()=>
  const pib=interact("put-in-bay-ferry","2026-10-18",{vehicle:1});
  assert.match(pib,/Miller Ferry/);
  assert.doesNotMatch(pib,/Jet Express from Port Clinton/);
- assert.match(pib,/complete quote/i);
+ assert.match(pib,/\$82\.00/); // Two adults round trip, plus a $23 each-way vehicle fare.
  const royale=interact("isle-royale-ferry-comparison","2026-07-01");
  assert.match(royale,/cannot provide a same-day round trip/i);
  assert.match(royale,/Published fare lookup required/);
