@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Mackinac Island Christmas-tree ice bridge seasonal watch — October 18, 2026
+
+- **User goal:** Publish a first-party, interpretive Mackinac ice-formation experience showing when the Straits are freezing and the history of island Christmas-tree markers, not a crossing or snowmobile safety predictor.
+- **Source contracts:** Existing NOAA/NWS USNIC Great Lakes ice chart polygons and source timestamps through `/api/ice-now?region=mackinac-straits`; St. Ignace NWS hourly forecast provides next-72-hour freezing and thawing aggregates plus up to seven local-calendar daily buckets. CARTO map with NOAA chart export overlay is keyless. Source gaps and stale observations produce explicit unknown states; no route line, official opening claim or ice-thickness forecast.
+- **Implementation branch:** `feature/mackinac-ice-bridge-watch`. New `/mackinac-ice-bridge/` page and JS; mobile responsive NOAA map, expandable seven-day air-temperature outlook, three interpretive field clues, island Christmas-tree tradition, historical 2026 Coast Guard maritime milestones, source links and safety limitations. Registered in Michigan tools directory, JSON-LD ItemList, tool-network registry/relationships and main XML sitemap, plus focused Node.js contract tests.
+- **SEO and integrity:** Distinct canonical intent is Mackinac Island ice-bridge formation/tradition, separate from Michigan Ice Report and Mackinac Island ferry planner. Maintains `https://chrisizworski.com/#person` and visible author attribution. No search volume, CTR, rank changes or ad earnings inferred; current GSC/AdSense baseline unavailable.
+- **Quality/release:** Files committed to branch; connected Vercel generated preview jobs, but full `npm run verify:all`, GitHub CI checks, live NOAA/NWS behavior, map rendering and production promotion have **not yet been certified**. Do not claim production is live until full gates pass. Main's Agent branch verification was green before this work.
+- **Exactly one next action:** Obtain a complete successful GitHub CI/full verification and smoke-test the latest preview before approving a merge to main.
+
 ## “Is this the week I should go?” portfolio pilot — October 18, 2026
 
 - **User direction:** Turn the condition-driven outing question into a reusable, growing portfolio, without homogenizing distinct scientific evidence or claiming exact event timing.
