@@ -258,7 +258,7 @@ test('pickup share state contains traveler fields and excludes tail and methodol
   })}));
   const serialized=JSON.stringify(share);
   assert.equal(share.flightNumber,'DL107');
-  assert.match(share.statusText,/In flight/);
+  assert.match(share.statusText,/In the air/);
   assert.match(share.whereText,/landing around/);
   assert.doesNotMatch(serialized,/N861NW|tail|ADS-B|ADSB|methodology/i);
   assert.doesNotMatch(shareHtml,/N861NW|tail number|ADS-B|ADSB|methodology/i);
