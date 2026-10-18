@@ -45,17 +45,23 @@ test('unknown site cannot become an arbitrary upstream request',async()=>{
  const res=response();await handler({method:'GET',query:{site:'https://example.com'}},res);
  assert.equal(res.code,400);assert.equal(res.body.available,false);
 });
-test('site serves a canonical page, usable keyless fallback map, and truthfulness guardrails',()=>{
+test('site serves a self-hosted interactive map without external tile dependencies',()=>{
  const root=path.join(__dirname,'..','public','winter-eagle-watching');
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  const js=fs.readFileSync(path.join(root,'app.js'),'utf8');
  assert.match(html,/https:\/\/chrisizworski.com\/winter-eagle-watching\//);
  assert.match(html,/G-Y5D2V2W7HN/);
  assert.match(html,/ca-pub-8222782620788075/);
- assert.ok(js.includes('tile.openstreetmap.org/{z}/{x}/{y}.png'));
- assert.ok(js.includes('api.mapbox.com/styles/v1/mapbox/light-v11/tiles/256/'));
- assert.ok(js.includes('tileerror'));
- assert.ok(!js.includes('basemaps.cartocdn.com/light_all'));
+ assert.ok(js.includes('/winter-eagle-watching/midwest-vector-map.svg'));
+ assert.ok(js.includes('L.imageOverlay'));
+ assert.ok(js.includes('native-pin'));
+ assert.ok(!js.includes('api.mapbox.com/styles/'));
+ assert.ok(!js.includes('tile.openstreetmap.org/'));
+ assert.ok(!js.includes('basemaps.cartocdn.com/'));
+ const bg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
+ assert.ok(bg.startsWith('<svg'));
+ for(const name of ['MICHIGAN','MINNESOTA','WISCONSIN','Lake Superior','Lake Erie']) assert.ok(bg.includes(name));
+ assert.ok(bg.includes('Natural Earth'));
  assert.match(html,/Unconfirmed/);
  assert.match(js,/api.weather.gov\/points/);
  assert.ok(html.includes('Bald_Eagle_%2850983412142%29'));
