@@ -14,8 +14,7 @@
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Bald_Eagle_%2850983412142%29.jpg/1280px-Bald_Eagle_%2850983412142%29.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="google-adsense-account" content="ca-pub-8222782620788075">
-<link rel="preconnect" href="https://api.mapbox.com">
-<link rel="preconnect" href="https://tile.openstreetmap.org">
+<link rel="preload" href="/winter-eagle-watching/midwest-vector-map.svg" as="image">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoYyAtF/x9uJzA=" crossorigin="">
@@ -37,7 +36,7 @@
 ]}]}
 </script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/winter-eagle-watching/app.js?v=2"></script>
+<script defer src="/winter-eagle-watching/app.js?v=3"></script>
 </head>
 <body>
 <a class="skip" href="#finder">Skip to eagle finder</a>
@@ -67,7 +66,7 @@
 <p class="source-note" id="location-help">Location is requested only when you select “Find nearest.” Distance is straight-line, not driving distance.</p>
 <div class="layout">
 <div class="panel panel-pad"><div id="spot-list" class="spots" role="group" aria-label="Eagle watching locations"></div><p id="no-spots" hidden>No locations match these filters. Try all spots.</p></div>
-<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading interactive map…</p></div><p id="map-provider" class="map-caption">Numbered markers show public viewing locations, not nests or roosts. Mapbox Light when available; OpenStreetMap fallback.</p></div>
+<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading local interactive map…</p></div><p id="map-provider" class="map-caption">Numbered markers show public viewing locations, not nests or roosts. Self-hosted geographic map; no API keys or remote map tiles.</p></div>
 </div></section>
 <section class="detail-grid" aria-label="Selected eagle viewing destination">
 <article class="panel panel-pad"><div class="eyebrow">Your river · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span><div class="fact-grid">
