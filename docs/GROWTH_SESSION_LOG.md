@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Waterfowl freeze-line first-party launch work — October 18, 2026
+
+- **Intent:** Build a Michigan and Great Lakes / Mississippi Flyway weather-and-observation explorer rather than a seasonal duck migration map. First-party URL: /waterfowl-freeze-line/.
+- **Implemented on feature branch:** Accessible self-hosted vector map, selectable regional board, NWS 24/72-hour hourly air-temperature cold-exposure analysis, dated iNaturalist Anatidae research-grade observations on demand, NOAA NOHRSC snow-depth official handoff, source limits, no-key map, real public-domain FWS mallard photograph, canonical structured data, GA4 and one Auto ads loader; main tools directory, sitemap and network registry entries.
+- **Critical claim boundaries:** Air-temperature forecast does NOT measure wetland ice, open water, or bird presence. NOAA snow is a contextual map and is NOT scored; a numerical snow model and historical verification are future work. A research-grade citizen-science report is not a flock count and sampling is effort-biased. No claim to Ducks Unlimited's data feed. Forecast categories are exploratory, not calibrated migration predictions.
+- **Validation:** Branch tests, full verify:all CI, Vercel preview/mobile rendering and live upstream availability are pending. Production is not verified. GSC, ad delivery and revenue effects unknown; do not claim improvement.
+- **Exactly one next action:** Run branch CI plus live preview desktop/mobile data and map QA, fix any failures, then merge only when the full repository gate passes.
+
+
 ## Winter eagle native-map interaction fix — October 18, 2026
 
 - **Production visual result:** The first-party SVG geographic map rendered but retained a blank region and invisible/unclickable Leaflet markers in the desktop browser screenshot. This was still not an acceptable visitor map.
