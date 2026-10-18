@@ -17,12 +17,16 @@ var LOCATIONS=[
  ['kankakee','Kankakee Marsh Region','IN',41.18,-86.85,'Wetland remnants, rivers and farm fields'],
  ['swan-lake','Swan Lake & Grand River','MO',39.53,-93.23,'Refuges, river corridors and agricultural fields'],
  ['reelfoot','Reelfoot Lake','TN',36.37,-89.36,'Large shallow lake and flooded timber']
-].map(function(a){return {id:a[0],name:a[1],state:a[2],lat:a[3],lon:a[4],habitat:a[5],weather:{status:'unavailable'},surface:{status:'unavailable'},lakeIce:{status:'unavailable'}};});
+].map(function(a){return {id:a[0],name:a[1],state:a[2],lat:a[3],lon:a[4],habitat:a[5],weather:{status:'unavailable'},surface:{status:'unavailable'},lakeIce:{status:'unavailable'},snowDepth:{status:'unavailable'},habitatShift:{status:'insufficient_evidence'}};});
 var byId=new Map(LOCATIONS.map(function(r){return [r.id,r]}));
 var selected='saginaw-bay',overviewDone=false,request=0;
 var $=function(id){return document.getElementById(id)};
 function label(r){return r.weather.status!=='forecast'?'Unverified':r.weather.pressure==='strong'?'Strong freeze pressure':r.weather.pressure==='building'?'Building freeze pressure':'Limited forecast freezing';}
 function pressure(r){
+ if($('map-layer').value==='habitat'){
+  return ({lake_refuge_possible:'lake-refuge',marsh_freeze_watch:'marsh-watch',
+    big_water_icing:'water-iced',limited_freezing:'limited'})[r.habitatShift?.status]||'unknown';
+ }
  if($('map-layer').value==='surface'){
   if(r.surface?.status!=='observed_analysis')return 'unknown';
   return ({1:'water',2:'bare',3:'ice',4:'snow'})[r.surface.classCode]||'unknown';
@@ -30,9 +34,10 @@ function pressure(r){
  return r.weather.status==='forecast'?r.weather.pressure:'unknown';
 }
 function updateMapLegend(){
- var surface=$('map-layer').value==='surface',holder=$('map-legend');
+ var mode=$('map-layer').value,surface=mode==='surface',habitat=mode==='habitat',holder=$('map-legend');
  holder.replaceChildren();
- var entries=surface?[['snow','Snow land'],['ice','Mapped ice'],['bare','Snow-free land'],['water','Water class'],['unknown','No recent data']]:
+ var entries=habitat?[['lake-refuge','Open-water potential'],['marsh-watch','Marsh freeze watch'],['water-iced','Big water icing'],['limited','Limited pressure'],['unknown','Unverified']]:
+ surface?[['snow','Snow land'],['ice','Mapped ice'],['bare','Snow-free land'],['water','Water class'],['unknown','No recent data']]:
  [['strong','Strong'],['building','Building'],['limited','Limited'],['unknown','Unavailable']];
  entries.forEach(function(x){var span=DOM('span','legend-pair');span.appendChild(DOM('i','swatch '+x[0]));span.appendChild(document.createTextNode(' '+x[1]));holder.appendChild(span);});
 }
@@ -76,6 +81,8 @@ function renderBoard(){
  arr.forEach(function(r){
   var b=DOM('button','region-item');b.type='button';b.setAttribute('aria-pressed',r.id===selected?'true':'false');
   var left=DOM('div');left.appendChild(DOM('strong','',r.name));left.appendChild(DOM('small','',r.state+' · '+label(r)));if(r.surface?.status==='observed_analysis')left.appendChild(DOM('small','satellite-line','NOAA cell: '+r.surface.description));
+  if(r.snowDepth?.status==='modeled')left.appendChild(DOM('small','satellite-line','Snow-depth band: '+r.snowDepth.description));
+  if(r.habitatShift?.status==='lake_refuge_possible')left.appendChild(DOM('small','satellite-line','Possible big-water refuge'));
   var right=DOM('div','hours');right.appendChild(DOM('strong','',r.weather.status==='forecast'?String(r.weather.freezingHours72)+'h':'—'));
   right.appendChild(DOM('span','', 'next 72h'));
   b.append(left,right);b.addEventListener('click',function(){selectRegion(r.id)});holder.appendChild(b);
@@ -139,6 +146,49 @@ function renderNOAA(r){
   setText('ice-valid',lake.validAt?textDate(lake.validAt):'No recent official chart polygon');
  }
 }
+function renderSnowDepth(value){
+ var d=value||{};
+ if(d.status==='modeled'){
+  setText('snow-depth',d.description);
+  setText('snow-depth-date',textDate(d.validAt)+' · NOAA modelled reference pixel (depth bands in inches)');
+ }else{
+  setText('snow-depth',d.status==='stale'?'Snow-depth analysis stale':'Snow depth unavailable');
+  setText('snow-depth-date',d.reason||'No current valid NOAA model depth at this reference point');
+ }
+}
+function renderHabitat(value){
+ var h=value||{};
+ var labels={lake_refuge_possible:'Big-water refuge possible',marsh_freeze_watch:'Marsh freezing watch',
+  big_water_icing:'Big water also icing',limited_freezing:'Limited freezing',insufficient_evidence:'Evidence incomplete'};
+ setText('habitat-status',labels[h.status]||labels.insufficient_evidence);
+ setText('habitat-headline',h.headline||'Insufficient regional evidence to infer a marsh-to-lake shift.');
+ setText('marsh-pressure',h.marshPressure||'Unknown');
+ setText('bigwater-status',h.openWaterPotential==='chart_contains_low_ice_area'?'Low ice at chart point':
+  h.openWaterPotential==='charted_heavy_ice'?'Heavy charted ice':'Unverified');
+ setText('official-survey-count',Number.isInteger(h.surveySitesWithCurrentCount)?String(h.surveySitesWithCurrentCount):'—');
+ setText('habitat-evidence',((h.evidenceNote||'')+' '+(h.caveat||'')).trim()||'Regional model confidence is limited without independent lake surveys.');
+}
+function renderSurveys(value){
+ var reports=Array.isArray(value?.sites)?value.sites:[],holder=$('survey-list');holder.replaceChildren();
+ if(!reports.length){
+  setText('survey-summary','No Michigan DNR Wetland Wonders survey is directly assigned to this region. Citizen reports and forecasts are not a substitute.');
+  return;
+ }
+ var valid=reports.filter(s=>s.status==='reported');
+ setText('survey-summary',valid.length+' of '+reports.length+' mapped Michigan DNR site surveys have recent dated totals. Counts describe managed areas, not lakewide flocks.');
+ reports.forEach(function(s){
+  var row=DOM('div','survey-row'),head=DOM('div','survey-top');
+  var a=DOM('a','survey-site-link',s.name+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';head.appendChild(a);row.appendChild(head);
+  if(s.status==='reported'){
+   [ ['Ducks',s.ducks],['Geese',s.geese] ].forEach(function(it){
+     var p=it[1];if(!p)return;
+     var delta=Number.isFinite(p.change)?' ('+(p.change>=0?'+':'')+p.change.toLocaleString()+' vs previous week)':'';
+     row.appendChild(DOM('p','survey-count',it[0]+': '+p.count.toLocaleString()+' · '+p.date+delta));
+   });
+  }else row.appendChild(DOM('p','survey-count',s.status==='stale'?'Latest survey is older than 28 days':'Official site report unavailable or not yet numeric'));
+  holder.appendChild(row);
+ });
+}
 function renderSightings(s){
  var holder=$('sightings');holder.replaceChildren();
  if(!s||s.status!=='reported'){
@@ -164,7 +214,7 @@ async function selectRegion(id){
  var r=byId.get(id),token=++request;
  setText('detail-title',r.name);setText('region-habitat',r.habitat);
  renderOverview();
- renderWeather(r.weather);renderNOAA(r);
+ renderWeather(r.weather);renderNOAA(r);renderSnowDepth(r.snowDepth);renderHabitat(r.habitatShift);renderSurveys(r.surveys);
  setText('sighting-status','Loading dated public waterfowl observations for '+r.name+'…');
  $('sightings').replaceChildren();
  if(typeof gtag==='function')gtag('event','waterfowl_region_select',{region:id});
@@ -174,6 +224,9 @@ async function selectRegion(id){
   if(data.weather)r.weather=data.weather;
   if(data.surface)r.surface=data.surface;
   if(data.lakeIce)r.lakeIce=data.lakeIce;
+  if(data.snowDepth)r.snowDepth=data.snowDepth;
+  if(data.habitatShift)r.habitatShift=data.habitatShift;
+  if(data.surveys)r.surveys=data.surveys;
   renderWeather(r.weather);renderNOAA(r);renderOverview();
   renderSightings(data.sightings);
  }catch(e){if(token===request)setText('sighting-status','The selected region could not be loaded. Other locations remain available; no sighting inference can be made.');}
@@ -189,11 +242,13 @@ async function loadOverview(){
    if(r.weather)local.weather=r.weather;
    if(r.surface)local.surface=r.surface;
    if(r.lakeIce)local.lakeIce=r.lakeIce;
+   if(r.snowDepth)local.snowDepth=r.snowDepth;
+   if(r.habitatShift)local.habitatShift=r.habitatShift;
   });
   var usable=LOCATIONS.filter(function(r){return r.weather.status==='forecast'}).length;
-  setText('overview-status',usable+' of '+LOCATIONS.length+' regional NWS forecasts available · Updated '+new Date(data.generatedAt).toLocaleString()+'. All colors reflect forecast freezing exposure, not observed bird movement.');
+  setText('overview-status',usable+' of '+LOCATIONS.length+' regional NWS forecasts available · Updated '+new Date(data.generatedAt).toLocaleString()+'. Use the layer selector: NWS forecast freezing, NOAA mapped surface, or marsh-to-big-water conditions. No layer tracks birds.');
  }catch(e){setText('overview-status','Regional forecast feed unavailable. Select a place for a separate check. A missing forecast is not evidence of open water or birds.');}
- finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);renderNOAA(byId.get(selected));}
+ finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);renderNOAA(byId.get(selected));renderSnowDepth(byId.get(selected).snowDepth);renderHabitat(byId.get(selected).habitatShift);}
 }
 ['region-search','state','sort','map-layer'].forEach(function(id){$(id).addEventListener(id==='region-search'?'input':'change',renderOverview)});
 $('refresh').addEventListener('click',loadOverview);
