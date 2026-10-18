@@ -331,10 +331,93 @@ test('Vercel schedules one five-minute watch cron and routes share tokens', () =
   assert.ok(swHeaders.headers.some(h=>h.key==='Cache-Control' && /no-store/.test(h.value)));
 });
 
-test('share tokens use cryptographic randomness and expire six hours after arrival', () => {
-  assert.match(apiSource,/randomToken\(24\)/);
+test('pickup links use HMAC, expire six hours after scheduled arrival and never persist a share record', () => {
+  assert.match(apiSource,/createHmac\('sha256'/);
+  assert.match(apiSource,/timingSafeEqual/);
   assert.match(apiSource,/const SHARE_AFTER_ARRIVAL_MS = 6 \* 60 \* 60 \* 1000/);
-  assert.match(apiSource,/Date\.now\(\) > expiresAtMs/);
+  const portion=apiSource.slice(apiSource.indexOf('async function createShare('),apiSource.indexOf('function isInternationalLeg('));
+  assert.doesNotMatch(portion,/stateSetJson|stateGetJson|storeCommand|SHARE_PREFIX|Upstash/);
+  assert.match(apiSource,/fetchUnifiedFlight\(identity,\{recordHistory:false\}\)/);
+});
+
+test('signed pickup token round-trip, tampering and scheduled expiration', () => {
+  const env={SHARE_LINK_SECRET:'test-only-64-char-random-replacement-do-not-use-as-a-real-key-1234'};
+  const now=Date.now();
+  const arrival=now+3*60*60*1000;
+  const fallback=v3.simpleShareState(state());
+  const claims={
+    v:1,flight:'DL107',resolved:'DL107',date:'2026-10-18',
+    flightId:null,origin:'FRA',destination:'JFK',
+    createdAt:now,scheduledArrival:arrival,expiresAt:arrival+6*60*60*1000,
+    fallback
+  };
+  const token=v3.signShareClaims(claims,env);
+  assert.match(token,/^v1\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/);
+  assert.equal(v3.verifyShareToken(token,env,now).ok,true);
+  const sig=token.at(-1)==='A'?'B':'A';
+  assert.equal(v3.verifyShareToken(token.slice(0,-1)+sig,env,now).code,'invalid');
+  assert.equal(v3.verifyShareToken(token,env,claims.expiresAt+1).code,'expired');
+  assert.equal(v3.verifyShareToken(token,{SHARE_LINK_SECRET:''},now).code,'not-configured');
+  assert.equal(v3.verifyShareToken('garbage',env,now).code,'invalid');
+  assert.equal(v3.verifyShareToken(v3.signShareClaims({...claims,expiresAt:arrival+7*60*60*1000},env),env,now).code,'invalid');
+});
+
+test('pickup creation succeeds without storage; opening re-fetches live flight and falls back honestly', async () => {
+  const oldSecret=process.env.SHARE_LINK_SECRET;
+  const oldFetch=global.fetch;
+  process.env.SHARE_LINK_SECRET='test-only-64-char-random-replacement-do-not-use-as-a-real-key-1234';
+  const now=Date.now();
+  const scheduledArrival=new Date(now+4*60*60*1000).toISOString();
+  const original=state({
+    generatedAt:new Date(now).toISOString(),
+    assignment:assignment({schedule:{
+      scheduledDepartureUTC:new Date(now-60*60*1000).toISOString(),
+      scheduledArrivalUTC:scheduledArrival,estimatedArrivalUTC:scheduledArrival
+    }})
+  });
+  const arrived=state({
+    generatedAt:new Date(now+60*1000).toISOString(),
+    assignment:assignment({
+      schedule:{
+        scheduledDepartureUTC:new Date(now-60*60*1000).toISOString(),
+        scheduledArrivalUTC:scheduledArrival,actualArrivalUTC:new Date(now+60*1000).toISOString()
+      },
+      flightStatus:{canceled:false,airborne:false,landed:true,arrivalDelayMinutes:0}
+    })
+  });
+  let lookups=0;
+  let response=original;
+  try {
+    global.fetch=async () => {
+      lookups++;
+      if (response instanceof Error) throw response;
+      return {ok:true,json:async()=>response};
+    };
+    const created=await v3.createShare({flight:'DL107',date:'2026-10-18'});
+    assert.equal(created.ok,true);
+    assert.equal(created.expiresAt,new Date(Date.parse(scheduledArrival)+6*60*60*1000).toISOString());
+    assert.match(created.url,/\/flight-tracker\/share\/v1\./);
+    response=arrived;
+    const opened=await v3.getShare(created.token);
+    assert.equal(opened.ok,true);
+    assert.equal(opened.stale,false);
+    assert.match(opened.share.statusText,/Landed/);
+    assert.equal(opened.share.airline,'Delta Air Lines');
+    response=new Error('Temporary provider outage');
+    const stale=await v3.getShare(created.token);
+    assert.equal(stale.ok,true);
+    assert.equal(stale.stale,true);
+    assert.equal(stale.share.updatedAt,original.generatedAt);
+    assert.equal(stale.share.statusText,v3.simpleShareState(original).statusText);
+    assert.equal(lookups,3);
+    const badToken=created.token.slice(0,-2)+(created.token.at(-2)==='A'?'B':'A')+created.token.at(-1);
+    assert.equal((await v3.getShare(badToken)).code,'invalid');
+    assert.equal(lookups,3,'invalid token must not fetch flight data');
+  } finally {
+    global.fetch=oldFetch;
+    if(oldSecret===undefined)delete process.env.SHARE_LINK_SECRET;
+    else process.env.SHARE_LINK_SECRET=oldSecret;
+  }
 });
 
 test('V3 preserves the deterministic V2 state as the only aircraft truth source', () => {
