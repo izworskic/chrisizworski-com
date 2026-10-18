@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle Woodcock-style in-flight field interpretation — October 18, 2026
+
+- **User intent:** Bring the successful American Woodcock Sky Dance's experiential explanation pattern into the first-party `/winter-eagle-watching/` page, specifically to teach what eagles are doing in flight.
+- **Reference inspected:** `izworskic/phenology-michigan/components/WoodcockSoundExperience.js`. Its staged trajectory diagram, play controls, stage cards and identification exercise teach the actual behavior before the visitor plans a trip. The eagle implementation borrows the *interaction pattern*, not code, illustrations, or audio recordings.
+- **Research guardrails:** USFWS details soaring, thermals and hunting; Cornell describes talon-lock cartwheeling as courtship; Smithsonian identifies territorial-aggression cartwheels; Audubon also identifies both interpretations. The correct visitor lesson is to report the observed movement but not infer courtship, aggression, sex, a nest location or mating from a short sighting.
+- **Implementation:** Four **separate**, selectable first-party SVG illustrated paths: soaring/circling, coordinated pair flight, chasing/diving and talon-locked cartwheel. Each has play/pause/replay and a field explanation split into what can be observed, what it might mean, good public viewing context and what not to assume. Adds four-scenario recognition quiz with explanations, keyboard-accessible real buttons, reduced-motion static mode, no synthetic wildlife sounds, no unlicensed footage/video embed and no animation autoplay. Adds a jump from the live seasonal planner. No change to the map, weather, count source, ads or primary canonical.
+- **QA:** New `tests/winter-eagle-flight-guide.test.js` exercises real JS in a DOM VM: stage selection, accessible state, reduced-motion and quiz. CI and live mobile/desktop rendering to verify before considering production complete; no claims of engagement or SEO outcomes.
+- **Next one action:** Pass GitHub full gate and public output audit; deploy and inspect desktop/mobile animated diagram and quiz controls.
+
+
 ## Upper Peninsula and northern Lower Michigan eagle expansion — October 18, 2026
 
 - **User goal:** Extend the Winter Bald Eagle Watching tool beyond Lower Michigan to help people plan for both eagle feeding congregations and dramatic aerial flight displays anywhere in Michigan.
