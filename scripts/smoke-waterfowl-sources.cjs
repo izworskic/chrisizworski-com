@@ -2,6 +2,7 @@
 // Diagnostic, not a build gate: upstream NOAA / Michigan DNR availability can vary.
 // Reads only public data, prints source status, never private precise observation locations.
 const handler=require('../api/waterfowl-freeze-line.js');
+const {parseDNR}=require('../lib/waterfowl-snow-surveys.js');
 const sourceUrl='https://www.michigan.gov/dnr/things-to-do/hunting/where/wetland-wonders/shiawassee-river-sga/waterfowl-counts';
 function summarizeResponse(body){
  if(!body||body.error)return {error:body?.error||'invalid response'};
@@ -28,8 +29,14 @@ function summarizeResponse(body){
   try{
    const response=await fetch(sourceUrl,{headers:{'User-Agent':'WaterfowlFreezeLineSourceCheck/1.0','Accept':'text/html'},signal:ctl.signal});
    const html=await response.text();
+   const parsed=parseDNR(html);
+   const first=(html.match(/<table\b[^>]*>[\s\S]*?<\/table>/i)||[])[0]||'';
+   const header=(first.match(/<thead\b[^>]*>[\s\S]*?<\/thead>/i)||[])[0]||'';
    raw={httpStatus:response.status,bytes:html.length,tableElements:(html.match(/<table\b/gi)||[]).length,
-     includesDatedRows:/Week Ending|Total ducks|0[9-9]\/\d{2}\/2026/i.test(html)};
+     includesDatedRows:/Week Ending|Total ducks|(?:09|10|11)\/\d{2}\/2026/i.test(html),
+     parsedStatus:parsed.status,duckDate:parsed.ducks?.date||null,duckCount:parsed.ducks?.count??null,
+     firstTableHeader:header.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').slice(0,220),
+     tableRowCount:(first.match(/<tr\b/gi)||[]).length};
   }finally{clearTimeout(timer)}
  }catch(e){raw={...raw,error:e.name||'request error'}}
  process.stdout.write('MICHIGAN_DNR_RAW_HTML '+JSON.stringify(raw)+'\n');
