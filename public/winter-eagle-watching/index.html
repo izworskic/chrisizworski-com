@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
 <link rel="stylesheet" href="/winter-eagle-watching/style.css?v=4">
+<link rel="stylesheet" href="/winter-eagle-watching/flight-guide.css?v=1">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
 <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
@@ -36,6 +37,7 @@
 </script>
 <script defer src="/winter-eagle-watching/planning.js?v=2"></script>
 <script defer src="/winter-eagle-watching/app.js?v=6"></script>
+<script defer src="/winter-eagle-watching/flight-guide.js?v=1"></script>
 </head>
 <body>
 <a class="skip" href="#finder">Skip to eagle finder</a>
@@ -70,6 +72,7 @@
  <div class="region-note" aria-live="polite"><strong id="region-heading">Regional field context</strong><p id="region-context">Your selected viewing destination determines this month-by-month planning lens.</p></div>
 <div class="season-legend"><span><i class="season-swatch peak"></i>Main seasonal window</span><span><i class="season-swatch common"></i>Common</span><span><i class="season-swatch possible"></i>Possible</span><span><i class="season-swatch quiet"></i>Less typical</span></div>
  <div class="annual-months" id="annual-calendar" role="list" aria-label="Illustrative Midwest eagle activity season by month"></div>
+ <p class="flight-jump-note"><a href="#read-the-sky">See what the aerial displays look like in flight ↓</a></p>
  <p class="source-note">Regional seasonal guide, not a measured sighting forecast. Year-to-year timing varies with ice, food and local breeding calendars. Tap a month for seasonal guidance; the 7-day forecast below always reflects the current forecast, not a past or future month.</p>
  <div class="season-tip" id="behavior-guide" aria-live="polite">Winter concentrations reflect food, open water and roost habitat. A group of eagles does not by itself indicate courtship.</div>
  </section>
@@ -132,13 +135,67 @@
 <div class="panel"><strong>02 · Time your visit</strong><h3>Morning and late day</h3><p>Wisconsin DNR recommends early morning, roughly 8–11 a.m., and the period before dusk. Conditions and feeding activity vary.</p></div>
 <div class="panel"><strong>03 · Keep your distance</strong><h3>Let wild birds stay wild</h3><p>Watch from designated public overlooks or your parked vehicle. Never bait eagles, approach roosts or walk onto river ice; leave if birds react to you.</p></div>
 </div></section>
-<section class="panel behavior-science" aria-labelledby="behavior-title"><div class="eyebrow">Field identification</div>
-<h2 id="behavior-title">What did you see in the sky?</h2>
-<div class="behavior-grid"><article><h3>Pair-flight displays</h3><p>Two adults soaring, circling, chasing, or performing steep aerial maneuvers may reinforce a pair bond during the breeding period. A display cannot be guaranteed by weather.</p></article>
-<article><h3>Talon-grappling cartwheels</h3><p>Two eagles may lock talons and tumble dramatically. <strong>Do not assume this is mating.</strong> The Smithsonian describes the familiar cartwheel as territorial aggression; context and individual behavior matter.</p></article>
-<article><h3>Food-driven gatherings</h3><p>Many eagles feeding or roosting around open winter water is usually about prey, shelter and ice access—not a nesting ceremony. These concentrations may shift within hours or days.</p></article></div>
-<p class="source-note">Sources: <a href="https://nationalzoo.si.edu/animals/bald-eagle" target="_blank" rel="noopener">Smithsonian National Zoo</a> · <a href="https://www.fws.gov/species/bald-eagle-haliaeetus-leucocephalus" target="_blank" rel="noopener">USFWS species ecology</a> · <a href="https://www.michigan.gov/dnr/things-to-do/wildlife-viewing/birding/winter" target="_blank" rel="noopener">Michigan DNR winter birding</a>.</p>
-<div class="notice"><strong>Watch without disturbance:</strong> Public overlooks only. Do not publish or approach sensitive nest/roost locations, bait eagles, cross closed refuge trails, or go onto ice to get closer.</div>
+<section class="panel flight-field-guide" id="read-the-sky" aria-labelledby="flight-heading">
+ <div class="eyebrow">05 / Learn the flight · Woodcock-style field interpretation</div>
+ <div class="flight-heading">
+  <div><h2 id="flight-heading">Read the sky: what are the eagles doing?</h2>
+   <p class="lead">Learn four distinct flight patterns before you go. Select a behavior, play an <strong>illustrated trajectory</strong>, and discover what you can—and cannot—conclude from the birds' movements.</p></div>
+  <a href="https://www.allaboutbirds.org/guide/Bald_Eagle/lifehistory" target="_blank" rel="noopener" class="flight-research-link">Cornell field reference ↗</a>
+ </div>
+ <div class="flight-experience" id="flight-experience">
+ <div class="flight-stage-tabs" role="group" aria-label="Choose an eagle flight pattern">
+  <button type="button" data-flight-stage="soar" class="active" aria-pressed="true"><span>01</span> Soar &amp; circle</button>
+  <button type="button" data-flight-stage="pair" aria-pressed="false"><span>02</span> Pair flight</button>
+  <button type="button" data-flight-stage="chase" aria-pressed="false"><span>03</span> Chase &amp; dive</button>
+  <button type="button" data-flight-stage="cartwheel" aria-pressed="false"><span>04</span> Talon cartwheel</button>
+ </div>
+ <div class="flight-stage-shell">
+  <div class="flight-visual">
+   <div class="flight-sky-caption"><span>FIELD SILHOUETTE / EDUCATIONAL DIAGRAM</span><span id="eagle-flight-label">One eagle or several</span></div>
+   <svg id="eagle-flight-scene" class="eagle-flight-scene" viewBox="0 0 640 340" role="img" aria-label="Illustrated eagle soaring along a curved path. Not actual footage." xmlns="http://www.w3.org/2000/svg">
+    <defs>
+     <linearGradient id="eagle-sky-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#304d63"/><stop offset=".62" stop-color="#a1bcc2"/><stop offset="1" stop-color="#e9d4aa"/></linearGradient>
+     <linearGradient id="eagle-horizon-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#507873"/><stop offset="1" stop-color="#193a39"/></linearGradient>
+    </defs>
+    <rect width="640" height="340" fill="url(#eagle-sky-gradient)"/>
+    <circle cx="548" cy="71" r="39" fill="#fff0c6" opacity=".56"/>
+    <path d="M0 288 C65 269 116 292 177 272 C255 248 306 290 388 265 C495 236 568 275 640 248 L640 340 H0 Z" fill="#527b77" opacity=".49"/>
+    <path d="M0 312 C98 279 147 323 249 301 C312 282 364 319 435 296 C531 269 579 304 640 285 L640 340 H0 Z" fill="url(#eagle-horizon-gradient)"/>
+    <path d="M0 320 C190 311 291 329 424 308 C503 304 574 314 640 303" fill="none" stroke="#c4e5dc" stroke-opacity=".38" stroke-width="3"/>
+    <path id="eagle-flight-route" d="M75 230 C130 260 170 204 138 164 C105 118 160 71 228 87 C305 105 293 199 227 200 C171 204 178 110 271 91 C347 73 410 115 447 83 C477 53 506 55 554 73" fill="none" stroke="#fff5d7" stroke-width="3.2" stroke-dasharray="9 8" stroke-linecap="round" opacity=".92"/>
+    <path id="eagle-flight-route-b" d="" fill="none" stroke="#d0edf0" stroke-width="2.8" stroke-dasharray="5 8" stroke-linecap="round" opacity=".84"/>
+    <g id="eagle-bird-a" transform="translate(75 230) scale(1.15)">
+     <path d="M-35 -1 C-23 -14 -15 -18 -7 -9 Q0 -6 8 -10 C18 -16 25 -13 36 -2 L25 0 35 10 C18 8 12 6 5 3 L0 13 L-8 4 C-17 8 -25 11 -35 -1Z" fill="#233029" stroke="#d0cfb8" stroke-width="1"/>
+     <path d="M9 -10 Q19 -13 23 -4 L17 0 12 -2Z" fill="#f1efe1"/><path d="M22 -7 L29 -4 22 -2Z" fill="#dfae5c"/>
+    </g>
+    <g id="eagle-bird-b" transform="translate(95 245)" visibility="hidden">
+     <path d="M-35 -1 C-23 -14 -15 -18 -7 -9 Q0 -6 8 -10 C18 -16 25 -13 36 -2 L25 0 35 10 C18 8 12 6 5 3 L0 13 L-8 4 C-17 8 -25 11 -35 -1Z" fill="#3c3431" stroke="#d0cfb8" stroke-width="1"/>
+     <path d="M9 -10 Q19 -13 23 -4 L17 0 12 -2Z" fill="#f1efe1"/><path d="M22 -7 L29 -4 22 -2Z" fill="#dfae5c"/>
+    </g>
+    <text x="20" y="320" font-family="system-ui,sans-serif" font-size="12" fill="#f5f3e3">Illustration · movement simplified, not a real sighting</text>
+   </svg>
+   <div class="flight-play-row"><button type="button" class="flight-main-button" id="eagle-flight-play" aria-pressed="false">Play flight</button><button type="button" id="eagle-flight-replay" class="flight-plain-button">↻ Replay</button><span>Animated flight sketch · sound-free</span></div>
+   <div class="flight-play-progress" aria-hidden="true"><i id="eagle-flight-progress"></i></div>
+  </div>
+  <div class="flight-observation">
+   <div class="eyebrow">Watch for</div><h3 id="eagle-flight-name">Soaring and circling</h3>
+   <p id="eagle-flight-watch">One eagle holds its broad wings almost level, circles upward, or glides for long stretches without flapping.</p>
+   <div class="flight-clue"><strong>What it may mean</strong><p id="eagle-flight-meaning">Usually travel, hunting, or riding rising air. Soaring by itself is not courtship.</p></div>
+   <div class="flight-clue"><strong>Where to watch</strong><p id="eagle-flight-where">Scan high above rivers, lakes and ridgelines.</p></div>
+   <div class="flight-guard"><strong>Don't assume</strong><p id="eagle-flight-caution">A bird circling overhead does not prove a nest is nearby.</p></div>
+  </div>
+ </div>
+ <p class="flight-method">Four separate flight behaviors—not four required stages of a courtship ritual. Movement paths are educational illustrations, not videos of wild birds and not predictions. Animation pauses on request and honors reduced-motion settings.</p>
+ <div class="flight-quiz" id="eagle-flight-quiz"><div class="flight-quiz-intro"><span class="eyebrow">Field exercise / identify the movement</span><h3>What did you just witness?</h3>
+ <p>Practice naming the visible behavior without guessing what the birds intend.</p></div>
+ <div class="flight-quiz-inner"><small id="eagle-flight-quiz-progress">Example 1 of 4</small><p id="eagle-flight-quiz-question">One bird circles with wings outstretched. What can you report?</p>
+ <div class="flight-quiz-choices" role="group" aria-label="Choose the movement you observed">
+ <button type="button" data-flight-answer="soar">Soaring</button><button type="button" data-flight-answer="pair">Pair flight</button><button type="button" data-flight-answer="chase">Chasing</button><button type="button" data-flight-answer="cartwheel">Cartwheel</button>
+ </div><p class="flight-quiz-feedback" id="eagle-flight-quiz-feedback" role="status" aria-live="polite"></p><button type="button" id="eagle-flight-quiz-next" class="flight-main-button" hidden>Next example →</button>
+ </div></div>
+ </div>
+ <div class="flight-sources"><strong>Why the cartwheel explanation is cautious</strong><p>Cornell describes talon-locked descents as a courtship display; the Smithsonian emphasizes the same behavior as territorial fighting. Audubon and field biologists recognize more than one context. A visitor can reliably identify the movement without claiming to know the birds' motivation. <a href="https://www.allaboutbirds.org/guide/Bald_Eagle/lifehistory" target="_blank" rel="noopener">Cornell ↗</a> · <a href="https://nationalzoo.si.edu/animals/bald-eagle" target="_blank" rel="noopener">Smithsonian ↗</a> · <a href="https://www.audubon.org/magazine/two-bald-eagles-tangle" target="_blank" rel="noopener">Audubon ↗</a> · <a href="https://www.fws.gov/species/bald-eagle-haliaeetus-leucocephalus" target="_blank" rel="noopener">USFWS species guidance ↗</a></p></div>
+ <div class="notice"><strong>Watch without disturbance:</strong> Observe from public overlooks. Do not approach nests or roosts, bait eagles, publish sensitive nest locations, or walk onto river ice. Use binoculars rather than moving closer.</div>
 </section>
 <section class="panel faq" aria-labelledby="faq-title"><div class="eyebrow">06 / Field questions</div><h2 id="faq-title">Before you set out</h2>
 <details><summary>When is the best season for winter eagle gatherings?</summary><p>Many Midwest sites have a winter gathering window from mid-December through early March. River ice, flow and weather can shift the timing. Resident eagles can be visible all year.</p></details>
