@@ -157,6 +157,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:title" content="Michigan &amp; Great Lakes Live Tools | Chris Izworski">
 <meta name="twitter:description" content="Free Michigan and Great Lakes live tools for ships, Mackinac Bridge, beaches, aurora, rivers, ice, border waits, fishing, gardening and trip planning.">
+<link rel="stylesheet" href="/assets/this-week.css?v=1">
 </head>
 <body data-analytics-page="tools">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -170,6 +171,64 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Tools</div>
 <h1 class="page-title">Michigan &amp; Great Lakes Live Tools</h1>
 <p class="sub">Free live maps, forecasts, planners, calculators, and field guides for Michigan and the Great Lakes, built by Chris Izworski.</p>
+
+<section class="week-explorer" id="this-week" aria-labelledby="this-week-title">
+  <div class="week-header"><div>
+    <p class="week-eyebrow">A living calendar of outdoor opportunities</p>
+    <h2 id="this-week-title">Is this the week I should go?</h2>
+    <p class="week-intro">Four different outdoor questions; four distinct evidence standards. Compare favorable conditions, reasons to wait, and what would change the answer. These are not forecasts of wildlife appearances, antler shedding, sap flow or guaranteed finds.</p>
+  </div><div class="week-actions">
+    <label for="week-region">Local forecast region
+      <select id="week-region"><option value="bay-city">Bay City / Saginaw Bay</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette / Upper Peninsula</option></select>
+    </label>
+    <button id="week-refresh" type="button">Check live conditions</button>
+  </div></div>
+  <div class="week-grid"><article class="week-card" id="week-shed" aria-label="Shed antlers weekly planning">
+  <h3>Shed antlers</h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>Snow can hide already-dropped sheds; don’t push wintering deer.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Snow cover retreats enough for legal, low-disturbance walking.</span></p>
+  <p class="week-scope" data-week-scope>Search conditions, not antler-drop dates</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-shed-antlers/" data-placement="this-week" data-track-tool="shed-antler-search">Explore the full shed antlers tool &rarr;</a>
+</article>
+<article class="week-card" id="week-maple" aria-label="Maple sap weather weekly planning">
+  <h3>Maple sap weather</h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>A forecast signal alone cannot tell whether any tree is producing sap.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Overnight freezing and daytime thawing return; verify tree readiness.</span></p>
+  <p class="week-scope" data-week-scope>Freeze/thaw, not measured sap flow</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-maple-sap-run/" data-placement="this-week" data-track-tool="maple-sap-run">Explore the full maple sap weather tool &rarr;</a>
+</article>
+<article class="week-card" id="week-rock" aria-label="Rockhounding weekly planning">
+  <h3>Rockhounding</h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>The wave engine evaluates the last 72 hours, not a literal seven-day rock forecast.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Onshore winds work gravel, then waves ease and access is safe.</span></p>
+  <p class="week-scope" data-week-scope>Recently worked beaches, not finds</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-rockhounding/" data-placement="this-week" data-track-tool="michigan-rockhounding">Explore the full rockhounding tool &rarr;</a>
+</article>
+<article class="week-card" id="week-eagle" aria-label="Winter eagle watching weekly planning">
+  <h3>Winter eagle watching</h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>Winter open-water feeding concentrations and aerial displays are different behaviors.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Check open-water access, weather and dated reports at a public overlook.</span></p>
+  <p class="week-scope" data-week-scope>Weather and public viewing, not sightings</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/winter-eagle-watching/" data-placement="this-week" data-track-tool="winter-eagle-watching">Explore the full winter eagle watching tool &rarr;</a>
+</article></div>
+  <div class="week-meta"><span id="week-updated" role="status" aria-live="polite">Load live NWS, NOAA and shoreline conditions near this section. Eagle field guidance is interpretive.</span><span>Current season is context, not proof. <a href="/tools/#nature-tools">Explore the full tool library</a>.</span></div>
+</section>
 
 <div class="finder" id="finder" hidden>
   <label for="tool-search"><strong>Find a tool by place or activity</strong></label><label class="sr-only" for="tool-search">Search tools by name or topic</label>
@@ -980,5 +1039,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
 <nav aria-label="Site information" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:20px;font:inherit"><a href="/connect/">Contact</a>
 <a href="/privacy/">Privacy Policy</a>
 <a href="/terms/">Terms of Use</a></nav>
-<footer style="padding:1rem;text-align:center"><span class="seo-author-credit" style="display:inline-block;margin-inline-start:.6rem;font-size:.8rem;opacity:.76">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer></body>
+<footer style="padding:1rem;text-align:center"><span class="seo-author-credit" style="display:inline-block;margin-inline-start:.6rem;font-size:.8rem;opacity:.76">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer><script defer src="/assets/this-week-engine.js?v=1"></script>
+<script defer src="/assets/this-week.js?v=1"></script>
+</body>
 </html>
