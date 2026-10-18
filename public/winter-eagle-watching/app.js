@@ -25,14 +25,21 @@ let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
 const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
-function seasonLabel(s){return s.type==="resident"?"Year-round resident habitat":inWinter?"Within typical winter watching season":"Outside typical winter gathering season"}
+function seasonLabel(s){
+ if(plannerMode==="display"){
+  const reg=window.EaglePlanning?.regionForSpot(s);
+  const stage=window.EaglePlanning?.seasonalStage("display",month,reg);
+  return stage?.level>=3?"Within broad regional flight-display season":"Aerial display season varies · not a confirmed show site";
+ }
+ return s.type==="resident"?"Year-round resident habitat":inWinter?"Within typical winter watching season":"Outside typical winter gathering season";
+}
 function renderList(){
  const state=el("state-filter").value,kind=el("type-filter").value,region=el("region-filter").value,savedOnly=el("saved-filter").checked;
  const matches=spots.filter(s=>(state==="all"||s.state===state)&&(kind==="all"||s.type===kind)&&(region==="all"||window.EaglePlanning.regionForSpot(s)===region)&&(!savedOnly||saved.has(s.id)));
  const list=el("spot-list");list.replaceChildren();
  matches.forEach(s=>{const i=spots.indexOf(s)+1,b=document.createElement("button");b.type="button";b.className="spot"+(s.id===selected.id?" active":"");b.setAttribute("aria-pressed",String(s.id===selected.id));
  const n=document.createElement("span");n.className="number";n.textContent=String(i).padStart(2,"0");
- const c=document.createElement("span");const title=document.createElement("strong");title.textContent=s.name;const where=document.createElement("small");where.textContent=s.city+", "+s.state;const kind=document.createElement("span");kind.className="viewing-kind";kind.textContent=s.type==="winter"?"Winter gathering corridor":s.type==="habitat"?"Public habitat lead · not a confirmed gathering":"Resident eagle habitat";c.append(title,where,kind);b.append(n,c);
+ const c=document.createElement("span");const title=document.createElement("strong");title.textContent=s.name;const where=document.createElement("small");where.textContent=s.city+", "+s.state;const kind=document.createElement("span");kind.className="viewing-kind";kind.textContent=plannerMode==="display"?"Public sky-viewing lead · aerial activity unverified":s.type==="winter"?"Winter gathering corridor":s.type==="habitat"?"Habitat lead · not a confirmed gathering":"Resident eagle habitat";c.append(title,where,kind);b.append(n,c);
  b.addEventListener("click",()=>pick(s));list.append(b)});
  text("spot-count",matches.length+" viewing locations");el("no-spots").hidden=matches.length>0;
  // Native map buttons, not Leaflet markers: keep map/list filters synchronized.
@@ -44,11 +51,42 @@ function renderList(){
    b.setAttribute("aria-hidden",String(!shown));
  });
 }
+function renderPurpose(){
+ const s=selected,flight=plannerMode==="display",winter=s.type==="winter";
+ ["gather","display"].forEach(mode=>{
+  const b=el("finder-"+mode);if(!b)return;
+  const active=(flight?"display":"gather")===mode;
+  b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
+ });
+ const season=seasonLabel(s);
+ text("season-pill",season);
+ el("season-pill").className="status"+(flight||!inWinter?" muted":"");
+ if(flight){
+  text("finder-purpose","Aerial displays: select a public overlook with a broad view of sky and eagle habitat. No mapped site is a confirmed cartwheel location; no daily display prediction exists.");
+  text("site-purpose-heading","An open-sky observation point — not a known cartwheel venue");
+  text("site-purpose-text","From this public-access location, look above the water and treeline for birds soaring, circling together or interacting in flight during the regional breeding season. Their presence, pair status and displays here are not verified. Always check site hours, safety and closures.");
+  text("where-look-label","Where to stand and scan the sky");
+  text("week-lead","For aerial watching, compare forecast wind and precipitation at the selected overlook. Calmer, drier periods help people follow distant birds; they do not predict courtship or cartwheels.");
+  text("weekly-key-primary","Bar = forecast hours without rain/snow in the published hourly descriptions");
+  text("weekly-key-note","Weather affects visibility and comfort, not whether eagles will display.");
+ }else{
+  text("finder-purpose","Winter gatherings: compare publicly accessible river viewing areas, documented historical counts and freezing-air context. Open water and eagle presence still require verification.");
+  text("site-purpose-heading",winter?"Documented winter eagle-watching corridor":s.type==="resident"?"Resident eagle viewing habitat":"Habitat lead · no confirmed gathering");
+  text("site-purpose-text",winter?
+    "This is a known winter-watching corridor, not proof of eagles here today. Look toward moving water, prey and distant perches. Where counts exist, check their original survey dates before traveling.":
+    "This public location has eagle habitat or a feeding-water lead, but no verified current congregation. Scout open water and distant perches only from permitted access; do not infer a flock from freezing air.");
+  text("where-look-label","Where to stand and scan the water");
+  text("week-lead","For winter gatherings, compare subfreezing air forecasts and published eagle counts. River ice, available prey and current eagle numbers are not measured by this forecast.");
+  text("weekly-key-primary","Bar = forecast hours at or below 32°F air temperature");
+  text("weekly-key-note","Freezing air is context only—neither measured river ice nor eagle counts.");
+ }
+}
 function renderPlanner(){
  const E=window.EaglePlanning;
  if(!E)return;
  const region=E.regionForSpot(selected),context=E.regionDetails(region);
  const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth,region);
+ renderPurpose();
  text("region-heading",context.label);
  text("region-context",context.note);
  ["gather","display"].forEach(m=>{const btn=el("mode-"+m);if(!btn)return;btn.classList.toggle("active",m===plannerMode);btn.setAttribute("aria-pressed",String(m===plannerMode))});
@@ -85,13 +123,17 @@ function renderPlanner(){
   title.textContent=stamp.toLocaleDateString("en-US",{timeZone:"UTC",weekday:"short",month:"short",day:"numeric"});
   const t=document.createElement("span");t.className="day-temp";t.textContent=d.low+"°–"+d.high+"°F";
   const descriptor=document.createElement("p");descriptor.textContent=display?d.comfort:d.condition;
-  const bar=document.createElement("div");bar.className="freeze-track";bar.title=d.coldHours+" of "+d.hours+" forecast air hours at or below 32°F";
-  const filled=document.createElement("i");filled.style.width=Math.round(100*d.coldHours/Math.max(1,d.hours))+"%";bar.append(filled);
-  const detail=document.createElement("small");detail.textContent=d.coldHours+" freezing air hrs · "+(d.windMph==null?"Wind n/a":d.windMph+" mph avg wind");
+  const bar=document.createElement("div");bar.className="freeze-track"+(display?" dry-bar":"");
+  bar.title=display?"Forecast hours without named precipitation (based on short forecast descriptions)":d.coldHours+" of "+d.hours+" forecast air hours at or below 32°F";
+  const filled=document.createElement("i");
+  filled.style.width=(display?d.dryFraction:Math.round(100*d.coldHours/Math.max(1,d.hours)))+"%";bar.append(filled);
+  const detail=document.createElement("small");
+  detail.textContent=display?(d.wetHours+" forecast precipitation hrs · "+(d.windMph==null?"Wind unavailable":d.windMph+" mph avg wind")):
+   d.coldHours+" freezing air hrs · "+(d.windMph==null?"Wind n/a":d.windMph+" mph avg wind");
   card.append(title,t,descriptor,bar,detail);cards.append(card);
  }
 }
-function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner()}
+function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner();renderList()}
 function initMap(){
  const holder=el("map"),caption=el("map-provider");
  holder.replaceChildren();
@@ -183,7 +225,7 @@ function pick(s){
  text("selected-place",s.name);text("selected-city",s.city+", "+s.state);
  const reg=window.EaglePlanning?.regionForSpot(s);
  text("selected-region",window.EaglePlanning?.regionDetails(reg).label||"Midwest");
- text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");
+ renderPurpose();
  text("why-water",s.water);text("where-look",s.look);text("access-note",s.access);
  el("directions").href=s.map;el("operator-link").href=s.source;
  const report=el("count-source");
@@ -270,5 +312,7 @@ el("nearest").addEventListener("click",()=>{if(!navigator.geolocation){text("loc
  navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("region-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
 el("mode-gather").addEventListener("click",()=>switchMode("gather"));
 el("mode-display").addEventListener("click",()=>switchMode("display"));
+el("finder-gather").addEventListener("click",()=>switchMode("gather"));
+el("finder-display").addEventListener("click",()=>switchMode("display"));
 initMap();renderPlanner();pick(selected);
 })();

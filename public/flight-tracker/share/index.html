@@ -28,7 +28,7 @@
     <div class="status" id="status"></div>
     <p class="where" id="where"></p>
     <div class="arrival">
-      <div class="cell"><span>Arrival</span><strong id="arrival-time">—</strong></div>
+      <div class="cell"><span id="arrival-label">Lands at</span><strong id="arrival-time">—</strong></div>
       <div class="cell"><span>Terminal</span><strong id="terminal">—</strong></div>
       <div class="cell"><span>Gate</span><strong id="gate">—</strong></div>
     </div>
@@ -39,26 +39,34 @@
 </main>
 <script>
 (async()=>{
-  const token=location.pathname.split('/').filter(Boolean).pop()||new URLSearchParams(location.search).get('token')||'';
+  const segments=location.pathname.split('/').filter(Boolean);
+  const token=new URLSearchParams(location.search).get('token')||(segments.length >= 3 ? segments[segments.length-1] : '');
   const message=document.getElementById('message');
   try{
     const r=await fetch('/api/flight-assignment?flightV3=1&action=share&token='+encodeURIComponent(token),{headers:{accept:'application/json'}});
     const data=await r.json();
     if(!data.ok||!data.share){
-      message.textContent=data.code==='expired'?'This pickup link has expired.':'This pickup link is unavailable.';
+      message.textContent=data.code==='expired'
+        ? 'This pickup link has expired. Ask the traveler to send a new update.'
+        : 'This pickup link is no longer valid. Ask the traveler for a new link.';
       return;
     }
     const s=data.share;
-    document.getElementById('flight').textContent=s.flightNumber||'Flight update';
+    document.getElementById('flight').textContent=[s.airline,s.flightNumber].filter(Boolean).join(' · ')||'Flight update';
     document.getElementById('route').textContent=[s.route?.origin,s.route?.destination].filter(Boolean).join(' → ');
     document.getElementById('status').textContent=s.statusText||'Status unavailable';
     document.getElementById('where').textContent=s.whereText||'Current location unavailable.';
+    document.getElementById('arrival-label').textContent=/^Landed/.test(s.statusText||'')?'Landed at':'Lands at';
     document.getElementById('arrival-time').textContent=s.arrival?.time||'Not published';
     document.getElementById('terminal').textContent=s.arrival?.terminal||'Not published';
     document.getElementById('gate').textContent=s.arrival?.gate||'Not published';
-    document.getElementById('updated').textContent=(data.stale?'Last saved update · ':'Updated · ')+new Date(s.updatedAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    const updatedAt=Date.parse(s.updatedAt||'');
+    document.getElementById('updated').textContent=(data.stale?'Last confirmed when this link was shared':'Latest reported update')+
+      (Number.isFinite(updatedAt)?' · '+new Date(updatedAt).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):' · time unavailable')+
+      (data.stale?' · Live updates are temporarily unavailable.':'');
+    if(data.notice){message.textContent=data.notice;message.hidden=false;}
     document.getElementById('card').hidden=false;
-    message.hidden=true;
+    if(!data.notice)message.hidden=true;
   }catch{
     message.textContent='The latest flight update is temporarily unavailable.';
   }
