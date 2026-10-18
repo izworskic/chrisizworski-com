@@ -55,4 +55,9 @@ test('site serves a canonical page, free CARTO tiles, and truthfulness guardrail
  assert.match(js,/basemaps.cartocdn.com\/light_all/);
  assert.match(html,/Unconfirmed/);
  assert.match(js,/api.weather.gov\/points/);
+ assert.ok(html.includes('Bald_Eagle_%2850983412142%29'));
+ assert.ok(html.includes('Karl Fleming'));
+ assert.ok(html.includes('Ottawa National Wildlife Refuge'));
+ assert.ok(html.includes('Historical photo, not a current sighting'));
+ assert.ok(!html.includes('images.unsplash.com/photo-1641917743953'));
 });
