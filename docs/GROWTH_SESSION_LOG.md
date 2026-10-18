@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle basemap API watermark repair — October 18, 2026
+
+- **Observed defect:** Real production browser capture of `/winter-eagle-watching/` shows CARTO basemap tiles stamped “API KEY REQUIRED”. CARTO introduced per-tile `?key=` requirements; the page's historic keyless `light_all` URL does not satisfy this. This was not a missing eagle-location dataset.
+- **Environment investigation:** Main Vercel project exposes existing `MAPBOX_KEY` as a *sensitive* variable; no CARTO key was present in its available env names. The value was not revealed or copied into GitHub.
+- **Implementation:** Replace the watermarked CARTO tile URL with readable OpenStreetMap standard tiles as an immediate fallback. Add a tiny same-origin map-config endpoint: it shares only public `pk.` Mapbox browser tokens from the server environment, never `sk.` tokens. Upgrade to Mapbox Light when available and automatically revert to OSM if Mapbox tiles error. Remove perpetual “Loading CARTO map” text after map initialization. Keep existing nine viewing pins, geolocation, markers and attributions.
+- **Verification:** Full branch CI, production deploy and mobile map capture pending at handoff; verify real tiles load and no watermarks after release. No paid CARTO subscription or new key is required for the fallback; provider usage quotas still apply.
+- **Exactly one next action:** Finish build + live map QA and merge only after checks green.
+
+
 ## Winter eagle real-image correction — October 18, 2026
 
 - **User request:** Replace generated/stylized eagle imagery with an authentic mature bald eagle photograph on the canonical winter eagle guide.

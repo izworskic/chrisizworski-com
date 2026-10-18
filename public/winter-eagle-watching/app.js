@@ -33,10 +33,29 @@ function renderList(){
 function initMap(){
  const holder=el("map");
  if(!window.L){holder.innerHTML='<p class="fallback">Interactive map unavailable. Use the location list and directions links to plan your visit.</p>';return}
+ // The former CARTO raster URL now serves watermarked 'API key required' tiles.
+ // Start with a real readable basemap and optionally upgrade to Mapbox Light
+ // when the existing Vercel MAPBOX_KEY contains a browser-safe public token.
+ const fallback=holder.querySelector(".fallback");if(fallback)fallback.remove();
  map=L.map("map",{scrollWheelZoom:false}).setView([41.1,-90.3],5);
- L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+ const osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+ const caption=el("map-provider");
+ if(caption)caption.textContent="OpenStreetMap base layer. Locations mark public viewing destinations, not eagle nests or roosts.";
+ osm.on("tileerror",()=>{if(caption)caption.textContent="Basemap tiles temporarily unavailable. The location list and directions remain usable."});
  spots.forEach((s,i)=>{const icon=L.divIcon({html:'<span class="pin '+(s.id===selected.id?"chosen":"")+'">'+(i+1)+'</span>',className:"",iconSize:[27,27],iconAnchor:[13,13]});
  const marker=L.marker([s.lat,s.lon],{icon}).addTo(map);marker.bindTooltip(s.name+" · "+s.state);marker.on("click",()=>pick(s));markers.push({spot:s,marker})});
+ fetch("/api/winter-eagle-map-config",{headers:{Accept:"application/json"}})
+  .then(r=>{if(!r.ok)throw Error("config unavailable");return r.json()})
+  .then(cfg=>{
+   if(!cfg.enabled||typeof cfg.token!=="string"||!cfg.token.startsWith("pk."))return;
+   const url="https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/256/{z}/{x}/{y}?access_token="+encodeURIComponent(cfg.token);
+   const mb=L.tileLayer(url,{maxZoom:18,attribution:'&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+   let failed=false;
+   mb.on("tileerror",()=>{if(failed)return;failed=true;map.removeLayer(mb);if(!map.hasLayer(osm))osm.addTo(map);if(caption)caption.textContent="OpenStreetMap fallback · Mapbox tiles unavailable. Public viewing destinations remain selectable."});
+   mb.on("load",()=>{if(failed)return;if(map.hasLayer(osm))map.removeLayer(osm);if(caption)caption.textContent="Mapbox Light basemap · U.S. Midwest public eagle viewing destinations. Markers are not eagle sightings."});
+   mb.addTo(map);
+  })
+  .catch(()=>{if(caption)caption.textContent="OpenStreetMap basemap · No Mapbox configuration loaded. Locations remain usable."});
 }
 function markerUpdate(){
  for(const {marker,spot} of markers){const n=spots.indexOf(spot)+1;marker.setIcon(L.divIcon({html:'<span class="pin '+(spot.id===selected.id?"chosen":"")+'">'+n+'</span>',className:"",iconSize:[27,27],iconAnchor:[13,13]}))}
