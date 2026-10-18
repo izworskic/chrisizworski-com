@@ -1,5 +1,17 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle map failure and biological seasonal planning — October 18, 2026
+
+- **User report:** After multiple map repairs, the Winter Eagle Watching map still did not work; user additionally wants to time actual congregations and observed aerial “dance” behavior for real trips.
+- **Verified root cause:** The live production `app.js` still contained `markers.forEach(...)` inside `renderList()`. Leaflet's `markers` variable had been removed when the page migrated to its native SVG map. The first `pick(selected)` call executed `renderList` and threw a `ReferenceError`, preventing selected spot/details setup and downstream interactions. Removed this call and now explicitly synchronizes the **native** map button DOM with list filters and ARIA state; a selection is shown immediately on the map itself.
+- **Research guardrail:** Winter feeding/communal concentrations near open water and accessible fish are separate from pair-bonding and territorial aerial activity. USFWS/Michigan DNR document winter concentrations. Smithsonian clarifies that the familiar talon-locked “cartwheel” is often territorial aggression, not necessarily courtship. These events cannot be turned into an honest day-by-day sighting probability using NWS data alone.
+- **Product:** Two distinct experience modes (congregations and aerial displays), 12-month illustrative Midwest seasonal windows, a 7-day regional NWS hourly-derived weather / observer suitability outlook with labeled freezing hours, a field identification guide, linked USFWS/Smithsonian/DNR methods, and **two more sourced Michigan public viewing leads**, Shiawassee NWR Ferguson Bayou Trail and Croton Dam. Shiawassee's winter vehicle tour is not available and special hunt closures must be checked; no site is labeled as an observed flock unless actual counts support it.
+- **Validation:** Added actual production-script DOM VM regression tests asserting successful initial map/list render, clicking location pins, changes after state filters, month/mode interactions and hourly weather-derived seven-day cards. This catches startup errors static string tests missed. Maintains first-party site/GitHub deployment and no ad implementation changes.
+- **Other baseline gate:** Niagara search-growth test on current main was already stale relative to that script's query-first title/H1 change and made main CI fail independently; updated only the test expectation, preserving page code unchanged.
+- **Launch:** PR #1055; CI, public-output audit and live smoke verification pending. No predicted sightings, ice measurement, cartwheel probability, or measured revenue/SEO outcome is asserted.
+- **Exactly one next action:** Validate production map interaction and both seasonal modes in live desktop/mobile render after CI/merge.
+
+
 ## Winter eagle native-map interaction fix — October 18, 2026
 
 - **Production visual result:** The first-party SVG geographic map rendered but retained a blank region and invisible/unclickable Leaflet markers in the desktop browser screenshot. This was still not an acceptable visitor map.
