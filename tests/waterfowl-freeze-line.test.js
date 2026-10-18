@@ -57,6 +57,13 @@ test('page, map, API and tool discovery remain source-honest',()=>{
  assert.match(html,/midwest-vector-map\.svg/);
  assert.doesNotMatch(js,/cartocdn|mapbox|tile\.openstreetmap|demonstration flock/i);
  assert.match(css,/map-pin\.selected/);
+ assert.match(html,/id="map-layer"/);
+ assert.match(html,/id="noaa-surface"/);
+ assert.match(html,/id="noaa-lake-ice"/);
+ assert.match(html,/id="cold-hours"/);
+ assert.match(html,/id="north-wind"/);
+ assert.match(js,/renderNOAA/);
+ assert.match(js,/updateMapLegend/);
  for(const r of REGIONS)assert.ok(js.includes("'"+r.id+"'"),r.id+' must be mapped');
  assert.match(tool,/data-tool-id="waterfowl-freeze-line"/);
  assert.match(sitemap,/https:\/\/chrisizworski.com\/waterfowl-freeze-line\//);
