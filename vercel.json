@@ -4,6 +4,7 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/great-lakes-ferry-conditions.js": { "maxDuration": 20 },
     "api/michigan-rockhounding.js": {
       "maxDuration": 20
     },
@@ -66,9 +67,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/great-lakes-ferry-conditions.js": {
-      "maxDuration": 20
     }
   },
   "redirects": [
