@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle first-party basemap reliability correction — October 18, 2026
+
+- **Incident:** Despite the preceding CARTO → Mapbox/OSM migration, an actual browser screenshot showed missing/off-color tile squares and the page reported that Mapbox tiles were unavailable. Visitors correctly reported the eagle map as broken.
+- **Root cause and chosen correction:** The page depended on several remote tiles with provider throttling/authorization/network availability. Replaced the base entirely with one same-origin SVG derived from Natural Earth public-domain admin-1 state outlines, major Great Lakes and Mississippi River geometry. The map is served as `/winter-eagle-watching/midwest-vector-map.svg`; no remote map tiles, key, subscription, backend config or tileserver are needed. Leaflet still supplies pan, zoom and selectable pins; if Leaflet fails to load, a native HTML/CSS same-origin map with clickable numbered spots renders instead.
+- **Implementation:** Added map asset; switched `app.js` to `L.imageOverlay` with bounds on actual geographic coordinates; retained all nine eagle destinations, filters, NWS forecast and dated counts; added keyboard-supported native map marker fallback; updated map attribution and tests. Removed now-unused `api/winter-eagle-map-config.js` endpoint and Mapbox token test.
+- **Verification:** Full CI, production build and live rendered browser screenshots pending at initial handoff. No claim of complete working map until verified on live desktop and mobile.
+- **Exactly one next action:** Complete full CI, merge when green, and visually verify the full map including all nine markers on desktop and narrow mobile.
+
+
 ## Winter eagle basemap API watermark repair — October 18, 2026
 
 - **Observed defect:** Real production browser capture of `/winter-eagle-watching/` shows CARTO basemap tiles stamped “API KEY REQUIRED”. CARTO introduced per-tile `?key=` requirements; the page's historic keyless `light_all` URL does not satisfy this. This was not a missing eagle-location dataset.
