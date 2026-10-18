@@ -22,7 +22,20 @@ var byId=new Map(LOCATIONS.map(function(r){return [r.id,r]}));
 var selected='saginaw-bay',overviewDone=false,request=0;
 var $=function(id){return document.getElementById(id)};
 function label(r){return r.weather.status!=='forecast'?'Unverified':r.weather.pressure==='strong'?'Strong freeze pressure':r.weather.pressure==='building'?'Building freeze pressure':'Limited forecast freezing';}
-function pressure(r){return r.weather.status==='forecast'?r.weather.pressure:'unknown';}
+function pressure(r){
+ if($('map-layer').value==='surface'){
+  if(r.surface?.status!=='observed_analysis')return 'unknown';
+  return ({1:'water',2:'bare',3:'ice',4:'snow'})[r.surface.classCode]||'unknown';
+ }
+ return r.weather.status==='forecast'?r.weather.pressure:'unknown';
+}
+function updateMapLegend(){
+ var surface=$('map-layer').value==='surface',holder=$('map-legend');
+ holder.replaceChildren();
+ var entries=surface?[['snow','Snow land'],['ice','Mapped ice'],['bare','Snow-free land'],['water','Water class'],['unknown','No recent data']]:
+ [['strong','Strong'],['building','Building'],['limited','Limited'],['unknown','Unavailable']];
+ entries.forEach(function(x){var span=DOM('span','legend-pair');span.appendChild(DOM('i','swatch '+x[0]));span.appendChild(document.createTextNode(' '+x[1]));holder.appendChild(span);});
+}
 function visible(r){
  var q=$('region-search').value.trim().toLowerCase(),state=$('state').value;
  return (state==='all'||r.state===state)&&(!q||(r.name+' '+r.state+' '+r.habitat).toLowerCase().includes(q));
@@ -46,8 +59,8 @@ function renderPins(){
  LOCATIONS.forEach(function(r,i){
   var b=DOM('button','map-pin '+pressure(r)+(selected===r.id?' selected':''),String(i+1));
   b.type='button';b.style.left=((r.lon+101)/24*100)+'%';b.style.top=((50-r.lat)/16.5*100)+'%';
-  b.title=r.name+' — '+label(r)+' | NOAA: '+(r.surface?.status==='observed_analysis'?r.surface.description:'not verified');
-  b.setAttribute('aria-label','View '+r.name+'. '+label(r));
+  b.title=r.name+' — '+($('map-layer').value==='surface'?(r.surface?.status==='observed_analysis'?'NOAA '+r.surface.description:'NOAA mapped class unavailable'):label(r));
+  b.setAttribute('aria-label','View '+r.name+'. '+b.title);
   b.setAttribute('aria-pressed',selected===r.id?'true':'false');
   b.hidden=!visible(r);
   b.addEventListener('click',function(){selectRegion(r.id)});
@@ -68,7 +81,7 @@ function renderBoard(){
   b.append(left,right);b.addEventListener('click',function(){selectRegion(r.id)});holder.appendChild(b);
  });
 }
-function renderOverview(){renderPins();renderBoard();}
+function renderOverview(){updateMapLegend();renderPins();renderBoard();}
 function setText(id,txt){$(id).textContent=txt;}
 function renderWeather(w){
  $('pressure-badge').className='tag '+(w.status==='forecast'?w.pressure:'');
@@ -182,7 +195,7 @@ async function loadOverview(){
  }catch(e){setText('overview-status','Regional forecast feed unavailable. Select a place for a separate check. A missing forecast is not evidence of open water or birds.');}
  finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);renderNOAA(byId.get(selected));}
 }
-['region-search','state','sort'].forEach(function(id){$(id).addEventListener(id==='region-search'?'input':'change',renderOverview)});
+['region-search','state','sort','map-layer'].forEach(function(id){$(id).addEventListener(id==='region-search'?'input':'change',renderOverview)});
 $('refresh').addEventListener('click',loadOverview);
 renderOverview();
 selectRegion(selected);
