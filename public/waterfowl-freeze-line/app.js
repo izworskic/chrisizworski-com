@@ -17,7 +17,7 @@ var LOCATIONS=[
  ['kankakee','Kankakee Marsh Region','IN',41.18,-86.85,'Wetland remnants, rivers and farm fields'],
  ['swan-lake','Swan Lake & Grand River','MO',39.53,-93.23,'Refuges, river corridors and agricultural fields'],
  ['reelfoot','Reelfoot Lake','TN',36.37,-89.36,'Large shallow lake and flooded timber']
-].map(function(a){return {id:a[0],name:a[1],state:a[2],lat:a[3],lon:a[4],habitat:a[5],weather:{status:'unavailable'}};});
+].map(function(a){return {id:a[0],name:a[1],state:a[2],lat:a[3],lon:a[4],habitat:a[5],weather:{status:'unavailable'},surface:{status:'unavailable'},lakeIce:{status:'unavailable'}};});
 var byId=new Map(LOCATIONS.map(function(r){return [r.id,r]}));
 var selected='saginaw-bay',overviewDone=false,request=0;
 var $=function(id){return document.getElementById(id)};
@@ -46,7 +46,7 @@ function renderPins(){
  LOCATIONS.forEach(function(r,i){
   var b=DOM('button','map-pin '+pressure(r)+(selected===r.id?' selected':''),String(i+1));
   b.type='button';b.style.left=((r.lon+101)/24*100)+'%';b.style.top=((50-r.lat)/16.5*100)+'%';
-  b.title=r.name+' — '+label(r);
+  b.title=r.name+' — '+label(r)+' | NOAA: '+(r.surface?.status==='observed_analysis'?r.surface.description:'not verified');
   b.setAttribute('aria-label','View '+r.name+'. '+label(r));
   b.setAttribute('aria-pressed',selected===r.id?'true':'false');
   b.hidden=!visible(r);
@@ -62,7 +62,7 @@ function renderBoard(){
  if(!arr.length){holder.appendChild(DOM('p','explain','No regions match. Clear your filters.'));return;}
  arr.forEach(function(r){
   var b=DOM('button','region-item');b.type='button';b.setAttribute('aria-pressed',r.id===selected?'true':'false');
-  var left=DOM('div');left.appendChild(DOM('strong','',r.name));left.appendChild(DOM('small','',r.state+' · '+label(r)));
+  var left=DOM('div');left.appendChild(DOM('strong','',r.name));left.appendChild(DOM('small','',r.state+' · '+label(r)));if(r.surface?.status==='observed_analysis')left.appendChild(DOM('small','satellite-line','NOAA cell: '+r.surface.description));
   var right=DOM('div','hours');right.appendChild(DOM('strong','',r.weather.status==='forecast'?String(r.weather.freezingHours72)+'h':'—'));
   right.appendChild(DOM('span','', 'next 72h'));
   b.append(left,right);b.addEventListener('click',function(){selectRegion(r.id)});holder.appendChild(b);
@@ -78,6 +78,10 @@ function renderWeather(w){
  setText('low-temp',w.status==='forecast'?w.lowestTemperatureF+'°F':'—');
  setText('front-trend',w.status==='forecast'?(w.temperatureDropF>=6?w.temperatureDropF+'°F drop':'No marked drop'):'—');
  setText('front-note',w.status==='forecast'?w.trend:'No valid forecast available');
+ setText('cold-hours',w.status==='forecast'&&Number.isFinite(w.forecastColdDegreeHours)?w.forecastColdDegreeHours+'°F·h':'—');
+ setText('north-wind',w.status==='forecast'&&Number.isFinite(w.northWindHours)?w.northWindHours+'h':'—');
+ setText('wind-note',w.status==='forecast'?(w.windSignal||'Wind direction unavailable'):'N/NE/NW at least 10 mph');
+ setText('freeze-run',w.status==='forecast'&&Number.isFinite(w.longestFreezingRunHours)?'Longest freeze run '+w.longestFreezingRunHours+'h':'At or below 32°F');
  setText('forecast-date',w.status==='forecast'?'Starting '+new Date(w.issuedAt).toLocaleString([], {month:'short',day:'numeric',hour:'numeric'}):'Unavailable');
  renderChart(w);
 }
@@ -98,6 +102,29 @@ function renderChart(w){
  markup+='</svg>';
  holder.innerHTML=markup;
  holder.setAttribute('aria-label','NWS temperatures every six hours from '+pts[0].tempF+' to '+pts[pts.length-1].tempF+' Fahrenheit. '+w.freezingHours72+' of '+w.validHours+' forecast hours at or below 32 degrees.');
+}
+function textDate(value){if(!value)return 'Dated analysis unavailable';const d=new Date(value);return isNaN(d.getTime())?'Dated analysis unavailable':'Analysis file '+d.toLocaleString([],{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});}
+function renderNOAA(r){
+ var surface=r.surface||{},lake=r.lakeIce||{};
+ if(surface.status==='observed_analysis'){
+  setText('noaa-surface',surface.description);
+  setText('surface-valid',textDate(surface.validAt)+' · NOAA ~1 km reference cell');
+  setText('surface-explain','NOAA mapped '+surface.description.toLowerCase()+' at one regional reference-grid cell. This does not establish percent snow cover, how deep snow is, whether the refuge is accessible, or whether local wetlands have frozen.');
+ }else{
+  setText('noaa-surface',surface.status==='stale'?'Stale NOAA analysis — not used':'NOAA coverage unavailable');
+  setText('surface-valid',surface.validAt?textDate(surface.validAt):'No recent verified file date');
+  setText('surface-explain','No current valid 1-km class is available. This is NOT snow-free or ice-free evidence.');
+ }
+ if(lake.status==='observed_chart'){
+  setText('noaa-lake-ice',lake.description);
+  setText('ice-valid',textDate(lake.validAt)+' · '+(lake.reference||'official chart polygon'));
+ }else if(lake.status==='not_applicable'){
+  setText('noaa-lake-ice','Not a Great Lakes reference point');
+  setText('ice-valid','Great Lakes chart is not used for inland marshes.');
+ }else{
+  setText('noaa-lake-ice',lake.status==='stale'?'Latest ice chart is stale':'No current ice chart at this point');
+  setText('ice-valid',lake.validAt?textDate(lake.validAt):'No recent official chart polygon');
+ }
 }
 function renderSightings(s){
  var holder=$('sightings');holder.replaceChildren();
@@ -124,14 +151,17 @@ async function selectRegion(id){
  var r=byId.get(id),token=++request;
  setText('detail-title',r.name);setText('region-habitat',r.habitat);
  renderOverview();
- renderWeather(r.weather);
+ renderWeather(r.weather);renderNOAA(r);
  setText('sighting-status','Loading dated public waterfowl observations for '+r.name+'…');
  $('sightings').replaceChildren();
  if(typeof gtag==='function')gtag('event','waterfowl_region_select',{region:id});
  try{
   var data=await getJson(ENDPOINT+'?mode=region&region='+encodeURIComponent(id));
   if(token!==request)return;
-  if(data.weather){r.weather=data.weather;renderWeather(data.weather);renderOverview();}
+  if(data.weather)r.weather=data.weather;
+  if(data.surface)r.surface=data.surface;
+  if(data.lakeIce)r.lakeIce=data.lakeIce;
+  renderWeather(r.weather);renderNOAA(r);renderOverview();
   renderSightings(data.sightings);
  }catch(e){if(token===request)setText('sighting-status','The selected region could not be loaded. Other locations remain available; no sighting inference can be made.');}
 }
@@ -141,11 +171,16 @@ async function loadOverview(){
  try{
   var data=await getJson(ENDPOINT+'?mode=overview');
   var records=Array.isArray(data.regions)?data.regions:[];
-  records.forEach(function(r){if(byId.has(r.id)&&r.weather)byId.get(r.id).weather=r.weather;});
+  records.forEach(function(r){
+   if(!byId.has(r.id))return;var local=byId.get(r.id);
+   if(r.weather)local.weather=r.weather;
+   if(r.surface)local.surface=r.surface;
+   if(r.lakeIce)local.lakeIce=r.lakeIce;
+  });
   var usable=LOCATIONS.filter(function(r){return r.weather.status==='forecast'}).length;
   setText('overview-status',usable+' of '+LOCATIONS.length+' regional NWS forecasts available · Updated '+new Date(data.generatedAt).toLocaleString()+'. All colors reflect forecast freezing exposure, not observed bird movement.');
  }catch(e){setText('overview-status','Regional forecast feed unavailable. Select a place for a separate check. A missing forecast is not evidence of open water or birds.');}
- finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);}
+ finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);renderNOAA(byId.get(selected));}
 }
 ['region-search','state','sort'].forEach(function(id){$(id).addEventListener(id==='region-search'?'input':'change',renderOverview)});
 $('refresh').addEventListener('click',loadOverview);
