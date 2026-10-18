@@ -5,7 +5,7 @@ import vm from "node:vm";
 
 const routes=[
  "put-in-bay-ferry","lake-michigan-ferry/lake-express","lake-michigan-ferry/ss-badger",
- "isle-royale-ferry","chi-cheemaun-ferry","pelee-island-ferry","beaver-island-ferry","toronto-islands-ferry"
+ "isle-royale-ferry-comparison","chi-cheemaun-ferry","pelee-island-ferry","beaver-island-ferry","toronto-islands-ferry"
 ];
 const base="https://chrisizworski.com/";
 const configs=new Map();
@@ -93,7 +93,7 @@ test("Vehicle restriction and incomplete fares do not produce false totals",()=>
  assert.match(pib,/Miller Ferry/);
  assert.doesNotMatch(pib,/Jet Express from Port Clinton/);
  assert.match(pib,/complete quote/i);
- const royale=interact("isle-royale-ferry","2026-07-01");
+ const royale=interact("isle-royale-ferry-comparison","2026-07-01");
  assert.match(royale,/no same-day round trip/i);
  assert.match(royale,/Published fare lookup required/);
 });
