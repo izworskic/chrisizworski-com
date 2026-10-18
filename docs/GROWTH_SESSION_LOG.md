@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## “Is this the week I should go?” portfolio pilot — October 18, 2026
+
+- **User direction:** Turn the condition-driven outing question into a reusable, growing portfolio, without homogenizing distinct scientific evidence or claiming exact event timing.
+- **Source/owner inventory:** Main first-party repo owns shed antlers, maple sap, Michigan rockhounding and winter eagle watching. Dedicated national/phenology tools retain their independent owning repositories. Existing endpoint fields were inspected; no new indexable canonical or cross-domain scoring engine.
+- **Implemented:** Reusable, tested `public/assets/this-week-engine.js` adapters plus live, independent fetch/orchestration and scoped CSS. New /tools/ near-top "Is this the week?" experience with Bay City / Traverse City / Marquette forecast selector, source/recency, why-to-wait, trigger-to-watch, canonical specialist links. Rockhounding is explicitly statewide/72-hour recent wind, not seven-day; shed/maple are regional/seasonal; eagle is an interpretive guide, not observed activity. Linkbacks from all four specialist tools. Species-specific caveats and National Park Service collecting sites excluded from shortlist. Detailed repeatable adoption standard in `docs/THIS_WEEK_OUTDOOR_DECISIONS.md`.
+- **No false conclusions:** NO "GO" solely from NOAA modeled snow; no predicted shed drop or eagle cartwheel; no asserted sap yield; no statewide beach safety guarantee. Missing/stale NWS/NOAA/NDBC or NWS alert coverage cannot become a favorable signal.
+- **Baseline:** GSC, GA4 weekly revisit and AdSense revenue NOT AVAILABLE. No measured uplift or event outcomes are asserted.
+- **Release:** Feature branch `feature/is-this-the-week-portfolio` created. Full CI, public-output audit, live production and browser behavior verification pending at initial handoff.
+- **Exactly one next action:** Clear full CI and public-output audit, then merge and verify live weekly cards and off-season/missing-data states.
+
+
 ## Michigan shed antler search window — October 18, 2026
 
 - **User goal:** Add a winter-focused shed-antler planning tool answering "Is this the week I should go?" specifically for weather and finding already-dropped antlers, never claiming to predict precise buck antler casting dates.
