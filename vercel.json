@@ -664,6 +664,22 @@
   ],
   "rewrites": [
     {
+      "source": "/national-tools/meteor-shower/_api/live",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/api/meteor-viewing"
+    },
+    {
+      "source": "/national-tools/meteor-shower",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/meteor-shower/"
+    },
+    {
+      "source": "/national-tools/meteor-shower/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/meteor-shower/"
+    },
+    {
+      "source": "/national-tools/meteor-shower/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/meteor-shower/:path*"
+    },
+    {
       "source": "/isle-royale-ferry",
       "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
     },
