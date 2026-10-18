@@ -22,9 +22,9 @@ function parseIce(text,lake,now=Date.now()){
   const parts=line.trim().split(/\s+/);
   if(parts.length!==9||!/^20\d\d$/.test(parts[0])||!/^\d{1,3}$/.test(parts[1]))continue;
   const year=Number(parts[0]),day=Number(parts[1]),utc=Date.UTC(year,0,day);
-  if(day<1||day>(new Date(Date.UTC(year+1,0,0))).getUTCDate()+365)continue;
+  if(day<1||day>(Date.UTC(year+1,0,1)-Date.UTC(year,0,1))/86400000)continue;
   if(new Date(utc).getUTCFullYear()!==year)continue;
-  if(utc>Date.now()+86400000)continue;
+  if(utc>now+86400000)continue;
   const pct=Number(parts[index]);
   if(!Number.isFinite(pct)||pct<0||pct>100)continue;
   rows.push({date:new Date(utc).toISOString().slice(0,10),pct:Math.round(pct*100)/100,time:utc});
