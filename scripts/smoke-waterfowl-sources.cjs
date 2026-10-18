@@ -40,5 +40,15 @@ function summarizeResponse(body){
   }finally{clearTimeout(timer)}
  }catch(e){raw={...raw,error:e.name||'request error'}}
  process.stdout.write('MICHIGAN_DNR_RAW_HTML '+JSON.stringify(raw)+'\n');
+ const overviewResponse={statusCode:200,body:null,setHeader(){return this},status(n){this.statusCode=n;return this},json(x){this.body=x;return this}};
+ const overviewStart=Date.now();
+ await handler({method:'GET',query:{mode:'overview'}},overviewResponse);
+ const overview=overviewResponse.body||{},regions=Array.isArray(overview.regions)?overview.regions:[];
+ process.stdout.write('WATERFOWL_OVERVIEW '+JSON.stringify({httpStatus:overviewResponse.statusCode,elapsedMs:Date.now()-overviewStart,
+  regions:regions.length,nwsReady:regions.filter(r=>r.weather?.status==='forecast').length,
+  imsReady:regions.filter(r=>r.surface?.status==='observed_analysis').length,
+  nohrscReady:regions.filter(r=>r.snowDepth?.status==='modeled').length,
+  iceChartsReady:regions.filter(r=>r.lakeIce?.status==='observed_chart').length,
+  error:overview.error||null})+'\n');
  // A missing upstream result is a warning here; source status is carried into UI as unavailable.
 })().catch(e=>{console.error('Source probe failed:',e.message);process.exitCode=1});
