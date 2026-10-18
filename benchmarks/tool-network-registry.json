@@ -4789,14 +4789,6 @@
       "reason": "Transition from hunting-season deer conditions to winter shed-search planning."
     },
     {
-      "from": "michigan-ice",
-      "to": "mackinac-ice-bridge",
-      "type": "decision-next",
-      "strength": "strong",
-      "surface": "michigan-ice",
-      "reason": "Michigan ice watchers can study the distinctive Straits freeze-up."
-    },
-    {
       "from": "mackinac-ice-bridge",
       "to": "michigan-ice",
       "type": "decision-next",
