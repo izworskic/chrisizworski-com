@@ -116,3 +116,11 @@ test('frontend uses date-aware evidence and includes no individual observation p
  assert.match(page,/id="eagle-ice-date"/);
  assert.match(page,/one submitted report/i);
 });
+
+test('stale NOAA measurements do not present a current ice headline and missing sightings remain unknown',()=>{
+ const js=fs.readFileSync(path.join(__dirname,'../public/winter-eagle-watching/app.js'),'utf8');
+ assert.match(js,/No current ice data/);
+ assert.match(js,/Last season only:/);
+ assert.match(js,/Regional observation feed unavailable · eagle activity unknown/);
+ assert.match(js,/No qualifying regional reports in this search window/);
+});
