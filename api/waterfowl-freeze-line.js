@@ -19,6 +19,8 @@ const REGIONS=Object.freeze([
 const NOAA_SNOW='https://www.nohrsc.noaa.gov/nsa/';
 const OBS='https://api.inaturalist.org/v1/observations';
 const {surfaceFor,lakeIceFor}=require('../lib/waterfowl-surface.js');
+const {snowFor,surveysFor,SURVEY_REGIONS}=require('../lib/waterfowl-snow-surveys.js');
+const {habitatShift}=require('../lib/waterfowl-habitat.js');
 const H={'Accept':'application/geo+json, application/json','User-Agent':'WaterfowlFreezeLine/1.0 (https://chrisizworski.com/waterfowl-freeze-line/)'};
 const cache=new Map();
 async function json(url,ms=6500,headers=H){
@@ -93,19 +95,22 @@ async function pool(items,n,fn){let index=0;const output=new Array(items.length)
 function base(r){return {id:r.id,name:r.name,state:r.state,lat:r.lat,lon:r.lon,habitat:r.habitat};}
 async function overview(){
  const regions=await pool(REGIONS,5,async r=>{
-  const [weather,surface,lakeIce]=await Promise.all([weatherFor(r),surfaceFor(r),lakeIceFor(r)]);
-  return {...base(r),weather,surface,lakeIce};
+  const [weather,surface,lakeIce,snowDepth]=await Promise.all([weatherFor(r),surfaceFor(r),lakeIceFor(r),snowFor(r)]);
+  return {...base(r),weather,surface,lakeIce,snowDepth,habitatShift:habitatShift({weather,lakeIce,snowDepth}),surveySitesAvailable:(SURVEY_REGIONS[r.id]||[]).length};
  });
  return {generatedAt:new Date().toISOString(),mode:'overview',regions,forecastCoverage:regions.filter(r=>r.weather.status==='forecast').length,
   interpretation:'NWS weather pressure is modeled. USNIC 1-km mapped surface class and dated Great Lakes ice-chart polygon are independent observed analyses, not regional wetland ice or bird concentration.',
-  sources:{weather:'National Weather Service hourly forecast',snowIce:'NOAA USNIC daily IMS 1-km mapped snow and ice class',greatLakesIce:'NOAA USNIC dated Great Lakes GIS ice-chart polygons',snowDepth:'NOAA NOHRSC depth analysis (official reference, no unit-verified numerical sampling)',observations:'iNaturalist (on selected region)'},
+  sources:{weather:'National Weather Service hourly forecast',snowIce:'NOAA USNIC daily IMS 1-km mapped snow and ice class',greatLakesIce:'NOAA USNIC dated Great Lakes GIS ice-chart polygons',snowDepth:'NOAA NOHRSC model snow-depth map, single reference cell (inches range by legend)',observations:'iNaturalist (on selected region)'},
   nohrsc:NOAA_SNOW};
 }
 async function detail(r){
- const [weather,sightings,surface,lakeIce]=await Promise.all([weatherFor(r),sightingsFor(r),surfaceFor(r),lakeIceFor(r)]);
+ const [weather,sightings,surface,lakeIce,snowDepth,surveys]=await Promise.all([
+   weatherFor(r),sightingsFor(r),surfaceFor(r),lakeIceFor(r),snowFor(r),surveysFor(r)
+ ]);
  return {generatedAt:new Date().toISOString(),mode:'region',region:base(r),weather,sightings,surface,lakeIce,
-  snow:{status:'official_reference',source:NOAA_SNOW,note:'NOHRSC snow-depth map is an official supplementary reference. No depth value is inferred from the IMS snow/no-snow class.'},
-  ice:{status:'region_unverified',note:'NOAA regional map pixels and dated Great Lakes chart polygons do not verify conditions at an individual inland marsh.'}};
+  snowDepth,surveys,habitatShift:habitatShift({weather,lakeIce,snowDepth,surveys}),
+  snow:{status:snowDepth.status,source:NOAA_SNOW,note:'Numerical snow depth is a NOAA modelled point reading; not an on-the-ground station measurement or regional blanket coverage.'},
+  ice:{status:'region_unverified',note:'NOAA point pixels and official large-water chart polygons do not verify ice at each marsh. Opening on larger lakes depends on mapped chart date, water depth, currents and weather.'}};
 }
 async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
