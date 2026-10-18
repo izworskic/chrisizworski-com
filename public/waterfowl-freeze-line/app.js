@@ -174,6 +174,7 @@ function renderSurveys(value){
  var reports=Array.isArray(value?.sites)?value.sites:[],holder=$('survey-list');holder.replaceChildren();
  if(!reports.length){
   setText('survey-summary','No Michigan DNR Wetland Wonders survey is directly assigned to this region. Citizen reports and forecasts are not a substitute.');
+  renderSurveyTimeline([]);
   return;
  }
  var valid=reports.filter(s=>s.status==='reported');
@@ -196,6 +197,63 @@ function renderSurveys(value){
   }else row.appendChild(DOM('p','survey-count',s.status==='stale'?'Latest survey is older than 28 days':'Official site report unavailable or not yet numeric'));
   holder.appendChild(row);
  });
+ renderSurveyTimeline(reports);
+}
+var surveyedSites=[];
+function renderSurveyTimeline(reports){
+ surveyedSites=(reports||[]).filter(function(s){
+  return (s.status==='reported'||s.status==='stale')&&
+   ((Array.isArray(s.ducks?.history)&&s.ducks.history.length)||(Array.isArray(s.geese?.history)&&s.geese.history.length));
+ });
+ var selector=$('survey-site-select'),previous=selector.value;
+ selector.replaceChildren();
+ surveyedSites.forEach(function(site){
+  var option=DOM('option','',site.name);
+  option.value=site.id;selector.appendChild(option);
+ });
+ selector.disabled=!surveyedSites.length;
+ selector.value=surveyedSites.some(function(s){return s.id===previous})?previous:(surveyedSites[0]?.id||'');
+ $('survey-metric-select').disabled=!surveyedSites.length;
+ drawSurveyTimeline();
+}
+function drawSurveyTimeline(){
+ var chart=$('survey-trend-chart');chart.replaceChildren();
+ var site=surveyedSites.find(function(s){return s.id===$('survey-site-select').value});
+ var metric=$('survey-metric-select').value;
+ var names={ducks:'All ducks',dabblers:'Dabbling ducks',divers:'Diving ducks',geese:'Geese'};
+ if(!site){setText('survey-trend-caption','No dated Michigan DNR managed-area survey history is available for this region.');chart.setAttribute('aria-label','No dated survey history available');return;}
+ var source=metric==='geese'?site.geese:site.ducks;
+ var valueKey=metric==='geese'||metric==='ducks'?'count':metric;
+ var points=(source?.history||[]).filter(function(x){return /^\d{4}-\d{2}-\d{2}$/.test(x.date)&&Number.isSafeInteger(x[valueKey])&&x[valueKey]>=0;})
+  .map(function(x){return {date:x.date,value:x[valueKey],ms:Date.parse(x.date+'T12:00:00Z')}});
+ if(!points.length){setText('survey-trend-caption',site.name+': no separately reported '+names[metric].toLowerCase()+' history available. Missing data are not zero.');
+  chart.setAttribute('aria-label','No '+names[metric].toLowerCase()+' historical series for '+site.name);return;}
+ // X spacing follows calendar time, so missing survey weeks are visible as gaps.
+ var W=690,H=248,L=48,R=18,T=24,B=40,limit=Math.max(1,...points.map(function(p){return p.value;}));
+ var lo=points[0].ms,hi=points[points.length-1].ms;
+ function xx(p){return hi===lo?(L+(W-L-R)/2):L+(p.ms-lo)/(hi-lo)*(W-L-R);}
+ function yy(p){return T+(limit-p.value)/limit*(H-T-B);}
+ function fmt(x){return Number(x.toFixed(1));}
+ var pieces=['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" aria-hidden="true">'];
+ [0,.5,1].forEach(function(level){
+  var value=Math.round(limit*level),y=fmt(T+(1-level)*(H-T-B));
+  pieces.push('<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" class="survey-gridline"/>');
+  pieces.push('<text x="'+(L-9)+'" y="'+(y+4)+'" class="survey-axis-label" text-anchor="end">'+value.toLocaleString('en-US')+'</text>');
+ });
+ points.forEach(function(p,i){
+  if(i>0&&p.ms-points[i-1].ms<=9*86400000){
+   var prev=points[i-1];
+   pieces.push('<path d="M'+fmt(xx(prev))+' '+fmt(yy(prev))+' L'+fmt(xx(p))+' '+fmt(yy(p))+'" class="survey-data-line"/>');
+  }
+  pieces.push('<circle cx="'+fmt(xx(p))+'" cy="'+fmt(yy(p))+'" r="4.5" class="survey-point"/>');
+  if(i===0||i===points.length-1||i%2===0)pieces.push('<text x="'+fmt(xx(p))+'" y="'+(H-14)+'" text-anchor="middle" class="survey-axis-label">'+p.date.slice(5).replace('-','/')+'</text>');
+ });
+ pieces.push('</svg>');
+ chart.innerHTML=pieces.join('');
+ var begin=points[0],end=points[points.length-1],change=points.length>1?end.value-begin.value:null;
+ chart.setAttribute('aria-label',names[metric]+' DNR survey: '+points.length+' dated counts at '+site.name+' from '+begin.date+' to '+end.date+'. Latest '+end.value.toLocaleString('en-US')+' birds.');
+ setText('survey-trend-caption',site.name+' · '+names[metric]+' · '+points.length+' actual reported weeks ('+begin.date+' to '+end.date+'). Latest '+end.value.toLocaleString('en-US')+(change===null?'':', '+(change>=0?'+':'')+change.toLocaleString('en-US')+' vs earliest shown')+'. '+
+  (site.status==='stale'?'The latest site survey is older than 28 days. ':'')+'Gaps are not filled; this is not a lakewide census or evidence of where birds relocated.');
 }
 function renderSightings(s){
  var holder=$('sightings');holder.replaceChildren();
@@ -258,6 +316,8 @@ async function loadOverview(){
  }catch(e){setText('overview-status','Regional forecast feed unavailable. Select a place for a separate check. A missing forecast is not evidence of open water or birds.');}
  finally{overviewDone=true;$('refresh').disabled=false;renderOverview();renderWeather(byId.get(selected).weather);renderNOAA(byId.get(selected));renderSnowDepth(byId.get(selected).snowDepth);renderHabitat(byId.get(selected).habitatShift);}
 }
+$('survey-site-select').addEventListener('change',drawSurveyTimeline);
+$('survey-metric-select').addEventListener('change',drawSurveyTimeline);
 ['region-search','state','sort','map-layer'].forEach(function(id){$(id).addEventListener(id==='region-search'?'input':'change',renderOverview)});
 $('refresh').addEventListener('click',loadOverview);
 renderOverview();
