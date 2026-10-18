@@ -28,7 +28,14 @@ function renderList(){
  const c=document.createElement("span");const title=document.createElement("strong");title.textContent=s.name;const where=document.createElement("small");where.textContent=s.city+", "+s.state;const kind=document.createElement("span");kind.className="viewing-kind";kind.textContent=s.type==="winter"?"Documented winter gathering area":"Resident viewing";c.append(title,where,kind);b.append(n,c);
  b.addEventListener("click",()=>pick(s));list.append(b)});
  text("spot-count",matches.length+" viewing locations");el("no-spots").hidden=matches.length>0;
- markers.forEach(({marker,spot})=>{if(marker)marker.setOpacity(matches.includes(spot)?1:.28)});
+ // Native map buttons, not Leaflet markers: keep map/list filters synchronized.
+ const visible=new Set(matches.map(s=>s.id));
+ document.querySelectorAll("#map .native-pin").forEach(b=>{
+   const shown=visible.has(b.dataset.spot);
+   b.hidden=!shown;
+   b.disabled=!shown;
+   b.setAttribute("aria-hidden",String(!shown));
+ });
 }
 function initMap(){
  const holder=el("map"),caption=el("map-provider");
