@@ -209,8 +209,8 @@ function patchEligibilityLabels() {
 function patchSearchGrowth() {
   const file = 'public/niagara-border-crossing/index.html';
   let html = fs.readFileSync(file, 'utf8');
-  const title = 'Niagara Border Wait Times Live | Peace, Rainbow &amp; Lewiston';
-  const description = 'Live Niagara border wait times for Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston. Compare both directions, cameras, rules and the right bridge.';
+  const title = 'Niagara Border Wait Times Today | Live Bridge Comparison';
+  const description = 'See live wait times for Peace, Rainbow and Lewiston–Queenston, plus Whirlpool Rapids NEXUS-only restrictions and wait context. Compare before you drive.';
   const ogDescription = 'Live Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston waits with cameras, rules and a traveler-first bridge decision.';
 
   html = html.replace(/<title>[^<]+<\/title>/, `<title>${title}</title>`);
@@ -228,7 +228,7 @@ function patchSearchGrowth() {
 
   html = html.replace(
     '<h1>Which Niagara bridge should you take right now?</h1>',
-    '<h1>Niagara Border Wait Times Live</h1>\n      <p class="hero-question">Which Niagara bridge should you take right now?</p>',
+    '<h1>Niagara Border Wait Times Today — Compare 4 Bridges</h1>\n      <p class="hero-question">Which Niagara bridge should you take right now?</p>',
   );
   html = html.replace(
     'Cross Niagara without guessing. See which bridge fits your trip, what traffic is doing there, and what you will encounter from the approach road to the other side.',
