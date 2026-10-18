@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Waterfowl marsh-to-lake + NOAA snow depth + DNR counts — October 18, 2026
+
+- **Implementation:** Added lib/waterfowl-snow-surveys.js, lib/waterfowl-habitat.js, and tests/waterfowl-marsh-lake.test.js to draft PR #1054. NOAA NOHRSC Snow Depth MapServer/0 identify uses source-provided image classified pixel value (reported as inches with bounded legend bands) and the NOAA source valid-time field, subject to a 72-hour staleness gate. Results are modeled point estimates, never on-site snow gauge readings or whole-region snow statistics.
+- **Official waterfowl evidence:** Michigan DNR public weekly Wetland Wonders duck and goose tables are parsed per named site with dates, NA/future rows ignored, and week-over-week change calculated separately for ducks and geese. Correct mappings include Fish Point, Nayanquing, Shiawassee, Harsens Island, Pointe Mouillee, Muskegon and Fennville. The last two gain geographically separate West Michigan and Southwest Michigan tracker regions, raising total regional coverage to 16.
+- **Habitat shift interpretation:** Sustained NWS forecast cold degree-hours and consecutive freezing hours measure heuristic marsh-freezing pressure. Official NOAA USNIC Great Lakes chart concentration at specific lake reference points determines whether low-ice big-water refuge is possible or if the chart itself is heavily iced. Declining managed-marsh survey counts are shown as dated observations, NEVER recoded into lake arrivals or causal displacement. The engine never promises a forecast flock count.
+- **Visitor experience:** Three selectable map layers (NWS forecast freeze exposure, NOAA IMS 1-km mapped surface classes, conditional marsh-to-big-water opportunity), dated NOAA snow-depth card, actual DNR site survey cards, habitat comparison, and existing iNaturalist reports remain independently sourced. All 7 DNR official managed survey sites are mapped to five Michigan tracker regions.
+- **Cost / constraints:** Public NWS, NOAA ArcGIS, and state DNR reports require no paid API keys. Sources can fail or be stale; data remain unavailable instead of zero. No CARTO or Mapbox tile dependency, no ad loader changes, no evidence of site traffic/revenue gains.
+- **Verification:** New tests and latest branch full CI / Vercel preview need final gate results. Prior CI had a non-waterfowl Niagara test failure; do not assume branch is merge ready, and do not claim production has been deployed.
+- **Exactly one next action:** Clear current repository CI including public-output audit and inspect a working authenticated Vercel preview (data, map, mobile, official counts) before merging to main.
+
+
 ## Waterfowl freeze-line NOAA + NWS engine v2 — October 18, 2026
 
 - **Ownership / status:** GitHub draft PR #1054, branch feat/waterfowl-freeze-line-2026, first-party canonical /waterfowl-freeze-line/. The Vercel preview still lacks an accessible verified live deployment; do not merge on the assumption that the page works in production.
