@@ -53,7 +53,8 @@ test('site serves a self-hosted interactive map without external tile dependenci
  assert.match(html,/G-Y5D2V2W7HN/);
  assert.match(html,/ca-pub-8222782620788075/);
  assert.ok(js.includes('/winter-eagle-watching/midwest-vector-map.svg'));
- assert.ok(js.includes('L.imageOverlay'));
+ assert.ok(js.includes('native-map-canvas'));
+ assert.ok(js.includes('moveMapToSelected'));
  assert.ok(js.includes('native-pin'));
  assert.ok(!js.includes('api.mapbox.com/styles/'));
  assert.ok(!js.includes('tile.openstreetmap.org/'));
@@ -76,9 +77,17 @@ test('vector map stays functional with no external basemap token or tile request
  const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
  const page=fs.readFileSync(path.join(root,'index.html'),'utf8');
  const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
- assert.ok(app.includes('L.imageOverlay(mapImage,bounds'));
+ assert.ok(app.includes('holder.replaceChildren()'));
+ assert.ok(app.includes('map.className')===false);
+ assert.ok(app.includes('holder.addEventListener("pointermove"'));
+ assert.ok(app.includes('add("Zoom in"'));
+ assert.ok(app.includes('add("Zoom out"'));
+ assert.ok(!app.includes('L.imageOverlay'));
+ assert.ok(!page.includes('leaflet@1.9.4'));
+ assert.ok(svg.includes('preserveAspectRatio="none"'));
+ assert.ok(app.includes('art.src="/winter-eagle-watching/midwest-vector-map.svg"'))
  assert.ok(app.includes('b.addEventListener("click",()=>pick(s))'));
- assert.ok(app.includes('marker.on("click",()=>pick(s))'));
+ assert.ok(app.includes('b.dataset.spot=s.id'));
  assert.ok(page.includes('midwest-vector-map.svg'));
  assert.match(svg,/<path/);
  assert.ok(!app.includes('winter-eagle-map-config'));
