@@ -128,3 +128,10 @@
  .intro p{font-size:13px;line-height:1.4}
  .intro .truth{font-size:10.5px;padding:5px 9px}
 }
+
+/* UP field guide: observable evidence and public river access first. */
+.up-field-kicker{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:5px 0 18px}
+.up-field-kicker span{color:#547061;font-size:13px;max-width:540px}
+.site-evidence{font-size:12px;color:#335d47;background:#f1f6ef;border-left:3px solid #6e967d;border-radius:5px;padding:10px 12px;margin:14px 0}
+.up-evidence-method{font-size:13px;color:#385e4b;padding:12px 14px;border:1px solid #d7e7d8;border-radius:9px;background:#f4f8f3;margin:16px 0}
+@media(max-width:670px){.up-field-kicker .button{width:100%}}
