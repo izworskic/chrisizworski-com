@@ -79,4 +79,28 @@
   $("ferry-form").addEventListener("submit",event=>{event.preventDefault();render();$("ferry-results").scrollIntoView({behavior:"smooth",block:"nearest"});});
   for(const input of $("ferry-form").querySelectorAll("input,select"))input.addEventListener("change",render);
   render();
+
+  // Optional near-port NWS context: never treated as a ferry go/no-go recommendation.
+  const weatherHost=$("shore-outlook");
+  if(weatherHost){
+    const supported=new Set(["put-in-bay","lake-express","ss-badger","isle-royale","beaver"]);
+    const official=config.currency==="CAD"?"https://weather.gc.ca/marine/":"https://www.weather.gov/marine/";
+    if(supported.has(config.id)&&typeof fetch==="function"){
+      weatherHost.innerHTML='<h3>Near-port wind outlook</h3><p class="fine">Loading NWS conditions near the U.S. mainland terminal…</p>';
+      fetch("/api/great-lakes-ferry-conditions?id="+encodeURIComponent(config.id),{headers:{Accept:"application/json"}})
+      .then(r=>{if(!r.ok)throw Error("Forecast unavailable");return r.json()})
+      .then(data=>{
+        if(data.type!=="shore-hourly-forecast"||!Array.isArray(data.periods)||!data.periods.length)throw Error("Invalid forecast");
+        const entries=data.periods.slice(0,8).map(p=>{
+          const time=new Intl.DateTimeFormat("en-US",{timeZone:"America/Detroit",hour:"numeric"}).format(new Date(p.starts));
+          const temp=Number.isFinite(p.temperature)?p.temperature+"°"+(p.temperatureUnit||"F"):"";
+          return '<div class="wind-hour"><strong>'+escapeHtml(time)+'</strong><span>'+escapeHtml(p.windSpeed)+'</span><small>'+escapeHtml(p.windDirection||"")+' · '+escapeHtml(temp)+'</small></div>'
+        }).join("");
+        weatherHost.innerHTML='<h3>NWS shore forecast · next 8 hours</h3><p class="fine">Near '+escapeHtml(data.gateway)+'; Eastern Time. This is land-port weather, <strong>not</strong> a marine crossing forecast or a ferry cancellation notice.</p><div class="wind-strip">'+entries+'</div><p class="fine">Source: National Weather Service hourly forecast · <a href="'+official+'" target="_blank" rel="noopener noreferrer">Official marine forecasts and warnings ↗</a></p>';
+      })
+      .catch(()=>{weatherHost.innerHTML='<h3>Near-port weather</h3><p class="fine">NWS hourly forecast is currently unavailable. Check <a href="'+official+'" target="_blank" rel="noopener noreferrer">official marine forecasts and warnings</a> and operator advisories before traveling.</p>'});
+    }else{
+      weatherHost.innerHTML='<h3>Marine weather and sailing decisions</h3><p class="fine">No verified near-port hourly feed is connected for this route. Check the <a href="'+official+'" target="_blank" rel="noopener noreferrer">official Canadian marine forecast</a> and operator sailing alerts. Forecast weather is not a ferry cancellation announcement.</p>';
+    }
+  }
 })();
