@@ -45,7 +45,9 @@ test('iNaturalist summary treats research-grade uploads as reports, not actual e
  assert.equal(s.observationsSampled,2);
  assert.equal(s.latestObservedOn,'2026-02-19');
  assert.equal(s.hasObservations,true);
- assert.ok(!JSON.stringify(s).includes('lat'));
+ assert.equal(Object.hasOwn(s,'lat'),false);
+ assert.equal(Object.hasOwn(s,'latitude'),false);
+ assert.equal(Object.hasOwn(s,'coordinates'),false);
  assert.ok(!JSON.stringify(s).includes('username'));
  assert.equal(P.summarizeObservations({results:[]},asOf),null);
 });
