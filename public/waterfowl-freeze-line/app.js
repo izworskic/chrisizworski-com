@@ -227,7 +227,7 @@ async function selectRegion(id){
   if(data.snowDepth)r.snowDepth=data.snowDepth;
   if(data.habitatShift)r.habitatShift=data.habitatShift;
   if(data.surveys)r.surveys=data.surveys;
-  renderWeather(r.weather);renderNOAA(r);renderOverview();
+  renderWeather(r.weather);renderNOAA(r);renderSnowDepth(r.snowDepth);renderHabitat(r.habitatShift);renderSurveys(r.surveys);renderOverview();
   renderSightings(data.sightings);
  }catch(e){if(token===request)setText('sighting-status','The selected region could not be loaded. Other locations remain available; no sighting inference can be made.');}
 }
