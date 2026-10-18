@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle watching first-party migration — October 18, 2026
+
+- **User instruction:** Eagle watching must be a first-party tool on chrisizworski.com, source-controlled in GitHub; a ChatGPT-hosted prototype is not the production destination.
+- **Implementation:** Draft PR #1049 on `feat/winter-eagle-watching-site-2026`. New `/winter-eagle-watching/` field guide contains nine public Midwest destinations, source/access references, keyless CARTO/OSM map, selected-location NWS hourly forecast and temperature chart, saved spots and geolocation opt-in. A USACE read-only count endpoint preserves reported survey dates and treats missing or no-report rows as unknown. New tests cover these trust boundaries.
+- **Discovery and identity:** New card in the main Tools directory + ItemList, one node and two relationships in tool-network registry, main sitemap entry, canonical, Person identity, GA4 and standard AdSense loader. No redirect to ChatGPT-hosted site.
+- **Verification:** PR opened October 18; CI running at handoff. Preview, production, exact USACE scrape fidelity, maps on actual devices and build-output loader multiplicity **not yet verified**. Main route not yet live. No measured GSC/GA4/AdSense effects available; no ranking, earnings or eagle-sighting claim.
+- **Exactly one next action:** Complete PR #1049 full CI and live preview audit; fix any failures, then merge only when green and confirm the chrisizworski.com route.
+
+
 ## Michigan Ski Hills 2026–27 — October 14, 2026
 
 - **Requested scope:** Inventory Utah tool before coding; research 18 Michigan resorts and lake-effect warning/snow source feasibility; build 2026–27 downhill-ski worth-the-drive decision board with 18 hill pages.
