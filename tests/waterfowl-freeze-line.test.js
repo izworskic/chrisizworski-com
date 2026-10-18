@@ -54,7 +54,7 @@ test('page, map, API and tool discovery remain source-honest',()=>{
  assert.match(html,/NOAA snow-depth analysis/);
  assert.match(html,/ca-pub-8222782620788075/);
  assert.equal((html.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g)||[]).length,1);
- assert.match(js,/midwest-vector-map\.svg/);
+ assert.match(html,/midwest-vector-map\.svg/);
  assert.doesNotMatch(js,/cartocdn|mapbox|tile\.openstreetmap|demonstration flock/i);
  assert.match(css,/map-pin\.selected/);
  for(const r of REGIONS)assert.ok(js.includes("'"+r.id+"'"),r.id+' must be mapped');
