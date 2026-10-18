@@ -51,7 +51,7 @@
   const all=document.createElement("button");all.type="button";all.textContent="View all";all.setAttribute("aria-label","Show all matching eagle watching spots");
   const focus=document.createElement("button");focus.type="button";focus.textContent="Focus spot";focus.setAttribute("aria-label","Zoom to the currently selected eagle watching destination");
   buttons.append(all,focus);holder.append(buttons);
-  const notice=document.createElement("div");notice.className="eagle-map-key";notice.textContent="Map locations mark publicly described viewing opportunities—not nests, cartwheels or current sightings.";
+  const notice=document.createElement("div");notice.className="eagle-map-key";notice.textContent="Green = grouped viewing locations · Blue = individual spot · Amber = selected spot. Numbers are location IDs or groups, NOT eagle counts.";
   holder.append(notice);
   function updateOverlay(){
     const s=byId.get(selectedId);if(!s)return;
@@ -98,7 +98,7 @@
     map.addLayer({id:"eagle-pin-halo",type:"circle",source:"eagle-sites",filter:["!",["has","point_count"]],
       paint:{
        "circle-radius":["case",["boolean",["get","selected"],false],14,11],
-       "circle-color":["case",["boolean",["get","selected"],false],"#c78a37","#255841"],
+       "circle-color":["case",["boolean",["get","selected"],false],"#a86119","#286382"],
        "circle-stroke-color":"#ffffff","circle-stroke-width":2.5
       }});
     map.addLayer({id:"eagle-pin-number",type:"symbol",source:"eagle-sites",filter:["!",["has","point_count"]],
