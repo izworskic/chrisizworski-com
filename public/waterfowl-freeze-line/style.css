@@ -10,3 +10,12 @@
 @media(max-width:900px){.noaa-observations{grid-template-columns:1fr}}
 @media(max-width:940px){.metric-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:670px){.metric-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* The two map color schemes never imply a bird count. */
+.map-pin.snow,.swatch.snow{background:#f4f9fc;color:#1a567d;border-color:#2d83b1}
+.map-pin.ice,.swatch.ice{background:#4075b4}
+.map-pin.bare,.swatch.bare{background:#9f8554}
+.map-pin.water,.swatch.water{background:#429b90}
+.map-footer #map-legend{gap:10px}
+.map-footer .legend-pair{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.map-footer .legend-pair .swatch{flex-shrink:0}
