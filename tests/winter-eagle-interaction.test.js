@@ -174,3 +174,17 @@ test('aerial-flight intent changes location guidance and weather without treatin
  assert.match(node('site-purpose-heading').textContent,/lead|habitat/i);
  assert.match(node('finder-purpose').textContent,/freezing-air context/i);
 });
+
+test('mobile hero keeps real credited eagle photo and routes visitors into flight guide before the map',()=>{
+ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+ const css=fs.readFileSync(path.join(dir,'style.css'),'utf8');
+ const hero=html.slice(html.indexOf('<section class="hero"'),html.indexOf('</section>',html.indexOf('<section class="hero"')));
+ assert.ok(hero.includes('See eagles gather. Learn their aerial dance.'));
+ assert.ok(hero.includes('href="#read-the-sky"'));
+ assert.ok(hero.includes('href="#finder"'));
+ assert.ok(hero.indexOf('href="#read-the-sky"')<hero.indexOf('href="#finder"'));
+ assert.ok(hero.includes('Karl Fleming'));
+ assert.ok(hero.includes('Bald_Eagle_%2850983412142%29'));
+ assert.ok(css.includes('.hero img{height:165px'));
+ assert.ok(css.includes('.hero-actions{display:grid;grid-template-columns:1fr 1fr'));
+});
