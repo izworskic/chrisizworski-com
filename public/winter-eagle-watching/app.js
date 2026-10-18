@@ -26,6 +26,7 @@ const spots=[
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
 let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
 let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/Detroit";
+let evidenceToken=0;
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
 const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
@@ -240,7 +241,81 @@ function pick(s){
  text("open-water","Unconfirmed");text("eagle-present","Unconfirmed");
  plannerDays=[];renderPlanner();
  el("saved-toggle").textContent=saved.has(s.id)?"Saved ✓":"Save spot";
- loadWeather(s);loadCount(s);
+ loadWeather(s);loadCount(s);loadEvidence(s);
+}
+async function loadEvidence(s){
+ const token=++evidenceToken;
+ for(const [id,msg] of [
+  ["eagle-reports-number","Checking…"],["eagle-reports-detail","Checking dated eagle reports within 40 km…"],
+  ["eagle-reports-date","Latest observation date: checking"],
+  ["eagle-ice-number","Checking…"],["eagle-ice-detail","Checking NOAA's lake-wide ice record…"],
+  ["eagle-ice-date","Measurement date: checking"],
+  ["eagle-evidence-conclusion","Checking published evidence…"],
+  ["eagle-evidence-why","Checking the source date before offering an interpretation."],
+  ["eagle-evidence-asof","Results may be cached for up to six hours."]
+ ])text(id,msg);
+ const inatLink=el("eagle-reports-source"),iceLink=el("eagle-ice-source");
+ inatLink.href="https://www.inaturalist.org/taxa/5305-Haliaeetus-leucocephalus";
+ iceLink.href="https://www.glerl.noaa.gov/data/ice/index.html";
+ try{
+  const response=await fetch("/api/winter-eagle-evidence?site="+encodeURIComponent(s.id),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw Error("Evidence adapter unavailable");
+  const result=await response.json();
+  if(token!==evidenceToken||selected.id!==s.id)return;
+  if(!result.available||result.site!==s.id)throw Error("Mismatched evidence");
+  const obs=result.observations||{},ice=result.ice||{};
+  if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.inaturalist.org/"))inatLink.href=obs.searchUrl;
+  if(ice.sourceUrl&&ice.sourceUrl.startsWith("https://apps.glerl.noaa.gov/"))iceLink.href=ice.sourceUrl;
+  if(obs.status==="ok"){
+    const n=Number(obs.observationsSampled)||0;
+    text("eagle-reports-number",n+" dated "+(n===1?"report":"reports"));
+    text("eagle-reports-detail",
+      "Research-grade iNaturalist entries sampled from a 40 km region over the past 30 days. "+
+      (obs.moreRecords?"Only the newest records were sampled; this is NOT a complete count.":"This is not the number of individual eagles.")
+    );
+    text("eagle-reports-date",obs.latestObservedOn?"Most recent observed: "+obs.latestObservedOn+" ("+obs.ageDays+" days ago).":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
+  }else{
+    text("eagle-reports-number","Unavailable");
+    text("eagle-reports-detail","The community observation feed could not be checked. Bird activity is unknown; see the original source.");
+    text("eagle-reports-date","No verified fresh report date.");
+  }
+  if(ice.status==="not_applicable"){
+    text("eagle-ice-number","Not applicable");
+    text("eagle-ice-detail","This is an inland river or refuge; lake-wide percentages are not a meaningful local ice measurement.");
+    text("eagle-ice-date","For local open water, use verified operator reports and observation.");
+  }else if(["recent","historical"].includes(ice.status)&&Number.isFinite(Number(ice.percent))){
+    const recent=ice.status==="recent";
+    text("eagle-ice-number",Number(ice.percent).toFixed(1)+"% "+(recent?"ice":"(historic)"));
+    const lake=String(ice.lake||"lake");const change=Number.isFinite(ice.deltaPctPoints)?" Over the prior 5–10 days: "+(ice.deltaPctPoints>0?"+":"")+ice.deltaPctPoints.toFixed(1)+" percentage points.":"";
+    text("eagle-ice-detail",(recent?"Latest NOAA":"Historical NOAA")+" lake-wide "+lake+" ice concentration."+change+" Not the selected river's ice.");
+    text("eagle-ice-date","Measured "+ice.date+" · "+ice.ageDays+" days old · "+(recent?"recent":"NOT CURRENT")+".");
+  }else{
+    text("eagle-ice-number","Unavailable");
+    text("eagle-ice-detail","NOAA has no usable current-season lake-wide measurement for this selected region. Do not infer open river water.");
+    text("eagle-ice-date","Measurement date unavailable.");
+  }
+  const recentSighting=obs.status==="ok"&&obs.latestObservedOn&&Number(obs.ageDays)<=7;
+  const olderSighting=obs.status==="ok"&&obs.latestObservedOn;
+  if(recentSighting){
+    text("eagle-evidence-conclusion","Recent bald eagle reports exist in the broader viewing region");
+    text("eagle-evidence-why","Community reports within 40 km are a useful reason to investigate this corridor, not proof eagles are gathering at "+s.name+". Check access and weather, and watch without disturbing nests or roosts.");
+  }else if(olderSighting){
+    text("eagle-evidence-conclusion","Older reports exist; current activity is unconfirmed");
+    text("eagle-evidence-why","The latest eligible observation is "+obs.ageDays+" days old. Local water openings and eagle gatherings still require on-site or operator confirmation.");
+  }else{
+    text("eagle-evidence-conclusion","No recent regional eagle activity confirmed by this feed");
+    text("eagle-evidence-why","Missing or empty community observations are not evidence of absence. The seasonal calendar and NWS forecast remain planning context only.");
+  }
+  text("eagle-evidence-asof","Feeds checked "+new Date(result.asOf).toLocaleString()+". Source reporting can lag, and responses may be cached. Exact eagle observation locations are never displayed.");
+ }catch{
+  if(token!==evidenceToken||selected.id!==s.id)return;
+  text("eagle-reports-number","Unavailable");text("eagle-reports-detail","Recent observation feed could not be verified.");
+  text("eagle-reports-date","No observation date verified.");
+  text("eagle-ice-number","Unavailable");text("eagle-ice-detail","Current ice record could not be verified.");text("eagle-ice-date","No measurement date verified.");
+  text("eagle-evidence-conclusion","Live evidence could not be verified");
+  text("eagle-evidence-why","No observation or ice condition is being assumed. Seasonal guidance and NWS weather can still help plan a trip.");
+  text("eagle-evidence-asof","Open the linked source pages to check directly.");
+ }
 }
 async function getJson(url,signal){
  const r=await fetch(url,{headers:{Accept:"application/geo+json, application/json"},signal,cache:"no-store"});

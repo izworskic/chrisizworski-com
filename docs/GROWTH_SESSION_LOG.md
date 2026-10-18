@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Winter Eagle Watching evidence adapter — October 18, 2026
+
+- **User intent:** Advance beyond editorial seasonal windows to recent, dated, geographically relevant eagle observations and measured winter ice, without claiming cartwheel predictions or eagle flock forecasts.
+- **Research:** iNaturalist's modern public observations API supports Bald Eagle taxon 5305, research-grade filtering, 40 km geographic searches and 30-day observation windows. API guidelines request ~1 request/second and no more than about 10k/day. NOAA GLERL publishes its daily lake-wide ice concentration in `gYYYY_YYYY_ice.dat`, with individual Superior, Michigan, Huron, Erie and Ontario coverage columns; NOAA explicitly does not claim this measures river ice. NOAA lake-wide data outside an active ice season is historical, not current. Legacy USGS water services retire in early 2027; avoided building a new dependency on them.
+- **Implementation:** Adds `/api/winter-eagle-evidence?site=<known-id>` for 19 whitelisted public viewing coordinates, aggregating broad nearby research-grade Bald Eagle reports and NOAA lake-wide ice percentages with exact observation dates, source links, age and a five-to-ten-day lake ice difference if supplied. Uses CDN 6-hour shared cache for rate discipline; each source independently reports unavailable rather than zero if it fails. No individual bird observation coordinates, roost or nest pins, usernames, or raw observer records exposed; Dafter landfill remains a historic non-public reference.
+- **Website:** Adds a date-stamped two-card evidence view and plain-language field interpretation beneath the selected site and its NWS forecast. Shows counts as *community report records* rather than number of eagles; lake-wide ice never asserts river open water. The current live NWS daily forecast and gathering-versus-aerial seasonal planning remain separate.
+- **Validation:** New independent parsing/API tests cover NOAA dates and historical gates, source failure behavior, iNat report semantics, privacy/whitelist and 19-site parity; CI and production browser/source smoke tests pending. iNaturalist API response must be verified on production, and if blocked must remain unavailable, not fabricated.
+- **Exactly one next action:** Confirm 4 PR checks and inspect live evidence panels at Upper Peninsula and inland sites for successful source timestamps/accurate fallbacks before declaring deployed.
+
+
 ## Winter Eagle Watching — public Upper Peninsula route expansion — October 18, 2026
 
 - **Intent:** The user asked to extend Michigan winter eagle congregations and territorial/flight-display planning to the Upper Peninsula, without implying this is a Lower Peninsula-only event.
