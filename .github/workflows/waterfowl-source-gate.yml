@@ -46,6 +46,9 @@ jobs:
         run: npm ci
       - name: Test NOAA and DNR parsers plus habitat decisions
         run: node --test tests/waterfowl-freeze-line.test.js tests/waterfowl-noaa.test.js tests/waterfowl-marsh-lake.test.js
+      - name: Observe NOAA and Michigan DNR upstream source response (nonblocking)
+        continue-on-error: true
+        run: node scripts/smoke-waterfowl-sources.cjs
       - name: Validate canonical tool entity relationships
         run: node scripts/generate-tool-entity-graph.mjs --check
       - name: Check search-snippet length
