@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle cartographic upgrade — October 18, 2026
+
+- **User request:** Replace the poor stretched first-party SVG on `/winter-eagle-watching/` with a real interactive CARTO map.
+- **Verified blocker:** CARTO changed its Basemaps terms September 23, 2026. Every CARTO vector style, tile, glyph and sprite requires a Basemaps-specific user-issued key. Missing credentials produce raster "API KEY REQUIRED" watermarks. Vercel project `chrisizworski-com` has `MAPBOX_KEY` but **no CARTO key** (checked env names October 18); those providers' credentials are not interchangeable. This site contains ads, so review CARTO's commercial quotas and costs before activating. No key was invented, reused from another project, purchased or added.
+- **Implementation:** Added MapLibre GL JS vector map adapter; prefers **CARTO Voyager vector** when a user-managed, browser-public, hostname-restricted `CARTO_BASEMAP_PUBLIC_KEY` is present in Vercel. Same-origin `/api/eagle-basemap-config` explicitly accepts only that public basemap key, not platform or Mapbox secrets; `transformRequest` adds its key to every CARTO-hosted style/tile/glyph/sprite request. Without the key, OpenFreeMap Liberty is a *real interactive* vector basemap with pan, zoom, clustered public viewing markers, labels, filtering, selected-site focus, readable attribution and no API-key watermarks. A free static SVG stays only as last-resort accessible fallback when MapLibre/browser WebGL fails.
+- **Scope:** Preserved all original site records, user mode/calendar, NWS/weather, verified dated eagle observations, wildlife ethics, real eagle photograph, ads and canonical. No unapproved paid infrastructure.
+- **New tests:** `winter-eagle-carto-map.test.js` checks safe key handling and coverage of source URLs, vector markers/filters/focus/cluster, no-key Liberty rendering. Updated evergreen page contract test.
+- **Verification:** Full CI, production HTML, and real desktop/mobile basemap browser screenshots required before claiming live. Actual CARTO basemap cannot be verified on production until user issues a CARTO Basemaps key and places it as `CARTO_BASEMAP_PUBLIC_KEY` (with referer restriction to chrisizworski.com). The no-key vector fallback is useful in the meantime.
+- **One next action:** Run checks + deploy only after green, verify the fallback map visually, then ask user to authorize creating/installing a CARTO key through the official dashboard after reviewing usage tiers.
+
+
 ## Winter Eagle Watching evidence adapter — October 18, 2026
 
 - **User intent:** Advance beyond editorial seasonal windows to recent, dated, geographically relevant eagle observations and measured winter ice, without claiming cartwheel predictions or eagle flock forecasts.
