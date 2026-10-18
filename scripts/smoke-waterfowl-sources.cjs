@@ -15,7 +15,7 @@ function summarizeResponse(body){
   snowDepthInches:body.snowDepth?.approximateDepthInches??null,
   snowRawMeters:body.snowDepth?.rawSnowDepthMeters??null,
   marshLakeOutlook:body.habitatShift?.status,
-  dnr:(body.surveys?.sites||[]).map(s=>({site:s.id,status:s.status,duckDate:s.ducks?.date||null,ducks:s.ducks?.count??null,geese:s.geese?.count??null})),
+  dnr:(body.surveys?.sites||[]).map(s=>({site:s.id,status:s.status,duckDate:s.ducks?.date||null,ducks:s.ducks?.count??null,geese:s.geese?.count??null,reason:s.reason||null})),
   sightings:body.sightings?.status
  };
 }
