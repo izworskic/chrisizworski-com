@@ -53,6 +53,6 @@ test('Discovery, sitemap and registry connect with Michigan Ice Report', () => {
   assert.match(tools, /data-tool-id="mackinac-ice-bridge"/);
   assert.match(sitemap, /https:\/\/chrisizworski.com\/mackinac-ice-bridge\//);
   assert.ok(registry.tools.some(t => t.id === 'mackinac-ice-bridge' && t.canonical === 'https://chrisizworski.com/mackinac-ice-bridge/'));
-  assert.ok(registry.relationships.some(r => r.from === 'michigan-ice' && r.to === 'mackinac-ice-bridge'));
+  assert.ok(registry.relationships.some(r => r.from === 'mackinac-ice-bridge' && r.to === 'michigan-ice'));
   assert.ok(registry.relationships.some(r => r.from === 'mackinac-ice-bridge' && r.to === 'mackinac-island'));
 });
