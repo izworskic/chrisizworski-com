@@ -160,7 +160,7 @@ test('aerial-flight intent changes location guidance and weather without treatin
  assert.match(node('site-purpose-heading').textContent,/not a known cartwheel venue/i);
  assert.match(node('where-look-label').textContent,/scan the sky/i);
  assert.match(node('week-lead').textContent,/wind and precipitation/i);
- assert.match(node('weekly-key-primary').textContent,/without rain\\/snow/i);
+ assert.ok(node('weekly-key-primary').textContent.includes('without rain/snow'));
  const at=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
  at.click();
  assert.match(node('site-purpose-text').textContent,/not verified/i);
