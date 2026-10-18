@@ -71,26 +71,15 @@ test('site serves a self-hosted interactive map without external tile dependenci
  assert.ok(!html.includes('images.unsplash.com/photo-1641917743953'));
 });
 
-const mapConfig=require('../api/winter-eagle-map-config.js');
-async function readMapConfig(method,key){
- const prev=process.env.MAPBOX_KEY;
- if(key===undefined)delete process.env.MAPBOX_KEY;else process.env.MAPBOX_KEY=key;
- try{const res=response();await mapConfig({method},res);return res}
- finally{if(prev===undefined)delete process.env.MAPBOX_KEY;else process.env.MAPBOX_KEY=prev}
-}
-test('map config shares browser-safe Mapbox public tokens only',async()=>{
- const publicToken='pk.'+'a'.repeat(24);
- const yes=await readMapConfig('GET',publicToken);
- assert.equal(yes.code,200);assert.equal(yes.body.enabled,true);assert.equal(yes.body.token,publicToken);
- assert.match(yes.headers['X-Robots-Tag'],/noindex/);
- const secret=await readMapConfig('GET','sk.'+'b'.repeat(24));
- assert.equal(secret.body.enabled,false);assert.equal(secret.body.token,undefined);
- const missing=await readMapConfig('GET',undefined);
- assert.equal(missing.body.enabled,false);assert.equal(missing.body.token,undefined);
- const unsafe=await readMapConfig('GET','sk.SomePrivateKey');
- assert.equal(unsafe.body.token,undefined);
-});
-test('non-GET map config is blocked',async()=>{
- const denied=await readMapConfig('POST','pk.'+'a'.repeat(24));
- assert.equal(denied.code,405);
+test('vector map stays functional with no external basemap token or tile requests',()=>{
+ const root=path.join(__dirname,'..','public','winter-eagle-watching');
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ const page=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
+ assert.ok(app.includes('L.imageOverlay(mapImage,bounds'));
+ assert.ok(app.includes('b.addEventListener("click",()=>pick(s))'));
+ assert.ok(app.includes('marker.on("click",()=>pick(s))'));
+ assert.ok(page.includes('midwest-vector-map.svg'));
+ assert.match(svg,/<path/);
+ assert.ok(!app.includes('winter-eagle-map-config'));
 });
