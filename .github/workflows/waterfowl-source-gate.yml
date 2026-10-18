@@ -37,6 +37,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
@@ -49,3 +50,7 @@ jobs:
         run: node scripts/generate-tool-entity-graph.mjs --check
       - name: Check search-snippet length
         run: npm run benchmark:serp-length
+      - name: Run full repository gate
+        run: npm run verify:all
+      - name: Build production output without deploying
+        run: npm run profile:build -- build-profile.json
