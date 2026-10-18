@@ -369,6 +369,7 @@ test('pickup creation succeeds without storage; opening re-fetches live flight a
   const now=Date.now();
   const scheduledArrival=new Date(now+4*60*60*1000).toISOString();
   const original=state({
+    status:'found',
     generatedAt:new Date(now).toISOString(),
     assignment:assignment({schedule:{
       scheduledDepartureUTC:new Date(now-60*60*1000).toISOString(),
@@ -376,6 +377,7 @@ test('pickup creation succeeds without storage; opening re-fetches live flight a
     }})
   });
   const arrived=state({
+    status:'found',
     generatedAt:new Date(now+60*1000).toISOString(),
     assignment:assignment({
       schedule:{
