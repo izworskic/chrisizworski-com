@@ -1,6 +1,6 @@
 {
   "schemaVersion": "glwu-research-cycle-summary-v1",
-  "generatedAt": "2026-10-18T12:47:02.000Z",
+  "generatedAt": "2026-10-18T17:30:46.000Z",
   "status": "MULTIPLE_ISSUES_AVAILABLE_FOR_RESEARCH",
   "source": "NOAA_GLWU_MODEL_OUTPUT",
   "modelCycleCounts": {
@@ -12,9 +12,9 @@
       "readyFor14DayBaseline": false
     },
     "500m-greatlakes": {
-      "cycles": 11,
-      "analysis": 11,
-      "issuedForecasts": 493,
+      "cycles": 12,
+      "analysis": 12,
+      "issuedForecasts": 531,
       "distinctCells": 1,
       "readyFor14DayBaseline": false
     }
@@ -42,8 +42,8 @@
     },
     "500m-greatlakes": {
       "grid": "500m-greatlakes",
-      "matchedPairs": 50,
-      "unmatchedForecastRows": 443,
+      "matchedPairs": 57,
+      "unmatchedForecastRows": 474,
       "matches": [
         {
           "issuedAt": "2026-10-15T18:00:00.000Z",
@@ -361,6 +361,15 @@
           "deltaM": 0.02
         },
         {
+          "issuedAt": "2026-10-16T12:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 48,
+          "predictedWaveHeightM": 0.24,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": -0.08
+        },
+        {
           "issuedAt": "2026-10-16T18:00:00.000Z",
           "validAt": "2026-10-17T00:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -406,6 +415,15 @@
           "deltaM": 0.04
         },
         {
+          "issuedAt": "2026-10-16T18:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 42,
+          "predictedWaveHeightM": 0.24,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": -0.08
+        },
+        {
           "issuedAt": "2026-10-17T00:00:00.000Z",
           "validAt": "2026-10-17T06:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -442,6 +460,15 @@
           "deltaM": 0.04
         },
         {
+          "issuedAt": "2026-10-17T00:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 36,
+          "predictedWaveHeightM": 0.24,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": -0.08
+        },
+        {
           "issuedAt": "2026-10-17T06:00:00.000Z",
           "validAt": "2026-10-17T18:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -469,6 +496,15 @@
           "deltaM": 0.04
         },
         {
+          "issuedAt": "2026-10-17T06:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 30,
+          "predictedWaveHeightM": 0.24,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": -0.08
+        },
+        {
           "issuedAt": "2026-10-17T18:00:00.000Z",
           "validAt": "2026-10-18T00:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -487,6 +523,15 @@
           "deltaM": 0.01
         },
         {
+          "issuedAt": "2026-10-17T18:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 18,
+          "predictedWaveHeightM": 0.33,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": 0.01
+        },
+        {
           "issuedAt": "2026-10-18T00:00:00.000Z",
           "validAt": "2026-10-18T06:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -494,28 +539,46 @@
           "predictedWaveHeightM": 0.23,
           "laterModelInitialHeightM": 0.23,
           "deltaM": 0
+        },
+        {
+          "issuedAt": "2026-10-18T00:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 12,
+          "predictedWaveHeightM": 0.28,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": -0.04
+        },
+        {
+          "issuedAt": "2026-10-18T06:00:00.000Z",
+          "validAt": "2026-10-18T12:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 6,
+          "predictedWaveHeightM": 0.32,
+          "laterModelInitialHeightM": 0.32,
+          "deltaM": 0
         }
       ],
       "leadBuckets": {
         "1-6h": {
-          "pairs": 10,
-          "meanAbsoluteChangeM": 0.001,
-          "meanSignedChangeM": 0.001
+          "pairs": 11,
+          "meanAbsoluteChangeM": 0.0009,
+          "meanSignedChangeM": 0.0009
         },
         "7-12h": {
-          "pairs": 8,
-          "meanAbsoluteChangeM": 0.0037,
-          "meanSignedChangeM": 0.0013
+          "pairs": 9,
+          "meanAbsoluteChangeM": 0.0078,
+          "meanSignedChangeM": -0.0033
         },
         "13-24h": {
-          "pairs": 14,
-          "meanAbsoluteChangeM": 0.0086,
-          "meanSignedChangeM": 0
+          "pairs": 15,
+          "meanAbsoluteChangeM": 0.0087,
+          "meanSignedChangeM": 0.0007
         },
         "25-48h": {
-          "pairs": 18,
-          "meanAbsoluteChangeM": 0.0167,
-          "meanSignedChangeM": 0.0056
+          "pairs": 22,
+          "meanAbsoluteChangeM": 0.0282,
+          "meanSignedChangeM": -0.01
         }
       },
       "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
