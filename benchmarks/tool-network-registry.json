@@ -4808,7 +4808,7 @@
       "from": "mackinac-ice-bridge",
       "to": "mackinac-island",
       "type": "decision-next",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "mackinac-ice-bridge",
       "reason": "Readers learning winter island life can explore ordinary Mackinac Island travel options."
     }
