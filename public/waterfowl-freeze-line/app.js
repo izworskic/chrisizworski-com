@@ -186,6 +186,12 @@ function renderSurveys(value){
      var p=it[1];if(!p)return;
      var delta=Number.isFinite(p.change)?' ('+(p.change>=0?'+':'')+p.change.toLocaleString()+' vs previous week)':'';
      row.appendChild(DOM('p','survey-count',it[0]+': '+p.count.toLocaleString()+' · '+p.date+delta));
+     if(it[0]==='Ducks'&&(Number.isInteger(p.dabblers)||Number.isInteger(p.divers))){
+      var groups=[];
+      if(Number.isInteger(p.dabblers))groups.push('Dabblers '+p.dabblers.toLocaleString());
+      if(Number.isInteger(p.divers))groups.push('Divers '+p.divers.toLocaleString());
+      row.appendChild(DOM('p','survey-count survey-groups',groups.join(' · ')+' · official species-group totals'));
+     }
    });
   }else row.appendChild(DOM('p','survey-count',s.status==='stale'?'Latest survey is older than 28 days':'Official site report unavailable or not yet numeric'));
   holder.appendChild(row);
