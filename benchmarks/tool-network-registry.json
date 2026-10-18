@@ -3320,7 +3320,7 @@
       "aliases": [],
       "kind": "seasonal-decision-engine",
       "cluster": "nature-birding",
-      "primaryIntent": "Where are public winter bald eagle watching spots in the Midwest, and what are the weather and dated observation conditions?",
+      "primaryIntent": "Where and when should I watch winter bald eagle gatherings or seasonal aerial displays in either Michigan peninsula or along Midwest river corridors?",
       "seasons": [
         11,
         12,
@@ -3340,11 +3340,11 @@
       "networkRole": "destination",
       "searchTreatment": {
         "status": "active",
-        "intentSeparation": "Public viewing and weather-context tool. Dated winter eagle surveys are evidence with their observation dates; no claim of live eagle counts or measured river ice. Distinct from Michigan-wide bird sightings or general birding weather."
+        "intentSeparation": "Regional field-planning of eagle concentrations and aerial behavior, illustrated by dated historic reporting and public viewing corridors, distinct from a live sighting alert or nest map. NWS forecast measures viewing weather; no claim of current eagle presence or ice."
       },
       "searchEvidence": {
         "status": "unknown",
-        "note": "New first-party seasonal tool in October 2026; no measured GSC, usage or revenue effect yet."
+        "note": "Seasonal expansion October 18, 2026. No observed GSC outcome, conversion impact, or locally validated eagle display probability."
       }
     }
   ],

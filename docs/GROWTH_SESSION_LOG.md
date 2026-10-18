@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Upper Peninsula and northern Lower Michigan eagle expansion — October 18, 2026
+
+- **User goal:** Extend the Winter Bald Eagle Watching tool beyond Lower Michigan to help people plan for both eagle feeding congregations and dramatic aerial flight displays anywhere in Michigan.
+- **Research:** Michigan Sea Grant's Jan. 2023 eastern UP report observed >45 bald eagles at the Dafter Landfill. Its Jan. 2026 report documented roughly 30+; these are historic, not current real-time counts or open-access destinations. Michigan DNR confirms winter eagles may group near food such as open water or carrion. LSSU publishes CFRE opening times. Michigan DNR identifies bald eagles as common along Menominee River State Recreation Area and documents Tippy Dam access. Michigan tourism documents year-round Highbanks public viewing and summer nest ecology; no nest locations are exposed.
+- **Implemented:** Four additional public-oriented viewing leads: St. Marys River at LSSU CFRE (access restricted to posted hours), Menominee River Piers Gorge (winter trail caution), Tippy Dam/Manistee River (plausible food opportunity, no guaranteed aggregation), and Au Sable Highbanks (resident-eagle watch, not current activity). Total 15 mapped public corridors, no landfill/detailed nest pins.
+- **Timing:** Region-differentiated seasonal guidance for UP, northern Lower MI, southern Lower MI, and other upper Midwest sites. Winter gathering and territorial/aerial-display windows are separate, *editorial seasonal emphasis*, not observationally fitted scores or event forecasts. Region filter selects a real site and updates the live seven-day NWS forecast. No current measured river ice, current bird presence, or cartwheel probability claims.
+- **Discovery:** Updated main tools catalog/ItemList and intent registry without changing canonical, Person identity, metadata loader count or ads.
+- **QA:** Needs full GitHub gates and production browser check of region filter, all 15 pins, mobile calendar and forecast. No SEO, ad, seasonal accuracy, revenue gain or better sighting rate measured yet.
+- **Next one action:** Clear CI and rendered production spot/region check, then consider adding official ice/source-observation telemetry rather than inventing a freeze score.
+
+
 ## Winter eagle map failure and biological seasonal planning — October 18, 2026
 
 - **User report:** After multiple map repairs, the Winter Eagle Watching map still did not work; user additionally wants to time actual congregations and observed aerial “dance” behavior for real trips.

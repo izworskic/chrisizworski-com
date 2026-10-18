@@ -7,14 +7,34 @@
 })(typeof window!=="undefined"?window:null,function(){
  "use strict";
  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
- const gathering=[4,4,3,1,0,0,0,0,0,1,2,3];
- const display=[2,3,4,3,1,0,0,0,0,0,1,2];
- function seasonalStage(mode,month){
-  const n=Number(month);if(!Number.isInteger(n)||n<1||n>12)return {level:"unknown",label:"Month unknown"};
-  const level=(mode==="display"?display:gathering)[n-1];
-  return {level,label:level===4?"Main regional window":level===3?"Common seasonal window":level===2?"Possible seasonal window":level===1?"Less typical":"Outside typical seasonal window",month:months[n-1]};
+ // Heuristic *editorial seasonality*, not derived from location-specific sightings.
+ // Northern spring progression generally lags southern Michigan; actual breeding
+ // and freeze timing varies yearly and must never be represented as a probability.
+ const regions={
+  "southern-lower":{label:"Southern Lower Michigan",gather:[4,4,3,1,0,0,0,0,0,1,2,3],display:[2,3,4,3,1,0,0,0,0,0,1,2],
+   note:"Southern Michigan can develop early open-water and territorial activity, but the actual season follows available food, river ice and individual breeding territories."},
+  "northern-lower":{label:"Northern Lower Michigan",gather:[4,4,3,2,0,0,0,0,0,1,2,3],display:[1,2,4,3,2,0,0,0,0,0,1,1],
+   note:"Winter can persist longer in northern Lower Michigan. Eagle flight activity and nesting calendars are variable; this regional emphasis is illustrative, not a local count."},
+  "upper-peninsula":{label:"Upper Peninsula",gather:[3,4,4,2,0,0,0,0,0,1,2,3],display:[1,1,3,4,2,0,0,0,0,0,0,1],
+   note:"In the UP, deeper snow and later thaw can shift winter feeding and breeding-related watching later than southern Michigan. Open St. Marys River currents or carrion can concentrate birds regardless of the regional calendar."},
+  "upper-midwest":{label:"Upper Mississippi & Midwest",gather:[4,4,3,1,0,0,0,0,0,1,2,3],display:[2,3,4,3,1,0,0,0,0,0,1,2],
+   note:"These Midwest locations span different latitudes and rivers. Seasonal bars summarize broad regional ecology; published survey dates are stronger evidence than the calendar."}
+ };
+ function regionForSpot(spot){
+  if(!spot||spot.state!=="MI")return "upper-midwest";
+  const lat=Number(spot.lat);
+  if(!Number.isFinite(lat))return "southern-lower";
+  if(lat>=45.5)return "upper-peninsula";
+  if(lat>=43.9)return "northern-lower";
+  return "southern-lower";
  }
- function calendar(mode){return months.map((month,i)=>({month,index:i+1,...seasonalStage(mode,i+1)}));}
+ function regionDetails(code){return regions[code]||regions["upper-midwest"]}
+ function seasonalStage(mode,month,regionCode){
+  const n=Number(month);if(!Number.isInteger(n)||n<1||n>12)return {level:"unknown",label:"Month unknown"};
+  const level=regionDetails(regionCode)[mode==="display"?"display":"gather"][n-1];
+  return {level,label:level===4?"Main illustrative window":level===3?"Common seasonal window":level===2?"Possible seasonal window":level===1?"Less typical":"Outside typical seasonal window",month:months[n-1]};
+ }
+ function calendar(mode,region){return months.map((month,i)=>({month,index:i+1,...seasonalStage(mode,i+1,region)}));}
  const dateKey=(value,zone)=>{
   const parts=new Intl.DateTimeFormat("en-US",{timeZone:zone||"America/Detroit",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(value));
   const get=type=>parts.find(p=>p.type===type)?.value||"00";
@@ -54,8 +74,8 @@
    };
   });
  }
- function summary(mode,month,days){
-  const stage=seasonalStage(mode,month);
+ function summary(mode,month,days,region){
+  const stage=seasonalStage(mode,month,region);
   if(mode==="display"){
     return {stage,headline:stage.level>=3?"Breeding-season display watching is seasonally relevant":stage.level===2?"Possible display season; timing varies locally":"Outside the usual Midwest display-watching window",
      why:"Search the open sky above broad public viewing corridors, not nest sites. Clearer, less windy periods improve observation—not the odds that birds will perform an aerial display.",
@@ -67,5 +87,5 @@
     why:"Open water, accessible prey and safe roosts are the biological drivers. Cold air is context, not measured river ice.",
     evidence:"Without a dated count or direct water/ice observation, eagle concentration and open water both remain unconfirmed."};
  }
- return {calendar,seasonalStage,dateKey,summarizeHourly,summary,mph,isWet};
+ return {calendar,seasonalStage,regionForSpot,regionDetails,dateKey,summarizeHourly,summary,mph,isWet};
 });

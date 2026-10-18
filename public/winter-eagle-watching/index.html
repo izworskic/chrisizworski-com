@@ -17,7 +17,7 @@
 <link rel="preload" href="/winter-eagle-watching/midwest-vector-map.svg" as="image">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=3">
+<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=4">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
 <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
@@ -34,8 +34,8 @@
 {"@type":"Question","name":"Can a young bald eagle be entirely brown?","acceptedAnswer":{"@type":"Answer","text":"Yes. Immature bald eagles are brown and mottled before they gradually develop an adult's white head and tail. The adult appearance generally develops over several years."}}
 ]}]}
 </script>
-<script defer src="/winter-eagle-watching/planning.js?v=1"></script>
-<script defer src="/winter-eagle-watching/app.js?v=5"></script>
+<script defer src="/winter-eagle-watching/planning.js?v=2"></script>
+<script defer src="/winter-eagle-watching/app.js?v=6"></script>
 </head>
 <body>
 <a class="skip" href="#finder">Skip to eagle finder</a>
@@ -44,15 +44,15 @@
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Bald_Eagle_%2850983412142%29.jpg/1280px-Bald_Eagle_%2850983412142%29.jpg" width="1280" height="853" alt="Real wildlife photograph of a mature bald eagle with white head and tail perched on a bare tree branch at Ottawa National Wildlife Refuge in Ohio in February 2021" fetchpriority="high">
 <div class="hero-inner">
 <div class="eyebrow">The winter field guide · Michigan &amp; the Midwest</div>
-<h1 id="hero-heading">Follow the open water. Find the eagles.</h1>
-<p>When rivers freeze, bald eagles can gather where fish remain accessible. Find public viewing locations, check the latest weather, and read actual observations when available.</p>
+<h1 id="hero-heading">Find where eagles gather. Watch the winter sky.</h1>
+<p>Across both Michigan peninsulas, watch for winter feeding concentrations and spectacular territorial or pair flights. Explore public viewing areas, seasonal patterns, dated observations and local weather.</p>
 <a class="button light" href="#finder">Explore eagle watching spots ↓</a>
 <p class="credit">Actual wildlife photograph: Karl Fleming / U.S. Fish &amp; Wildlife Service · Ottawa National Wildlife Refuge, Ohio · February 26, 2021. <a style="color:inherit" href="https://commons.wikimedia.org/wiki/File:Bald_Eagle_(50983412142).jpg" target="_blank" rel="noopener">Source and public-domain license ↗</a> · Historical photo, not a current sighting.</p>
 </div></section>
 <main class="wrap" id="main">
 <div class="intro">
 <p><strong>Real places. Dated evidence. No invented eagle forecasts.</strong> Air temperatures and seasonal windows help with trip planning but do not tell us whether the water is open or how many eagles are present.</p>
-<span class="truth">11 public viewing destinations · 6 Midwest states</span>
+<span class="truth">15 public viewing destinations · 6 Midwest states</span>
 </div>
 <section id="eagle-season-planner" class="panel seasonal-planner" aria-labelledby="planner-title">
  <div class="eyebrow">01 / The living eagle calendar</div>
@@ -67,14 +67,16 @@
   <p id="season-explainer">Bald eagles can concentrate where freeze-up restricts access to fish. Watch public river overlooks below locks, dams and ice edges. Weather is only a clue.</p></div>
   <div class="season-phase"><strong id="season-level">Checking season…</strong><small id="season-month">Month-specific field context</small></div>
  </div>
- <div class="season-legend"><span><i class="season-swatch peak"></i>Main seasonal window</span><span><i class="season-swatch common"></i>Common</span><span><i class="season-swatch possible"></i>Possible</span><span><i class="season-swatch quiet"></i>Less typical</span></div>
+ <div class="region-note" aria-live="polite"><strong id="region-heading">Regional field context</strong><p id="region-context">Your selected viewing destination determines this month-by-month planning lens.</p></div>
+<div class="season-legend"><span><i class="season-swatch peak"></i>Main seasonal window</span><span><i class="season-swatch common"></i>Common</span><span><i class="season-swatch possible"></i>Possible</span><span><i class="season-swatch quiet"></i>Less typical</span></div>
  <div class="annual-months" id="annual-calendar" role="list" aria-label="Illustrative Midwest eagle activity season by month"></div>
  <p class="source-note">Regional seasonal guide, not a measured sighting forecast. Year-to-year timing varies with ice, food and local breeding calendars. Tap a month for seasonal guidance; the 7-day forecast below always reflects the current forecast, not a past or future month.</p>
  <div class="season-tip" id="behavior-guide" aria-live="polite">Winter concentrations reflect food, open water and roost habitat. A group of eagles does not by itself indicate courtship.</div>
  </section>
 <section id="finder" aria-labelledby="finder-title">
-<div class="section-head"><div><div class="eyebrow">02 / Find your public viewing corridor</div><h2 id="finder-title">Where should you go?</h2><p>Choose a location to see its public access, winter habitat and local hourly weather.</p></div><span id="spot-count" class="status muted">11 viewing locations</span></div>
+<div class="section-head"><div><div class="eyebrow">02 / Find your public viewing corridor</div><h2 id="finder-title">Where should you go?</h2><p>Choose a location to see its public access, winter habitat and local hourly weather.</p></div><span id="spot-count" class="status muted">15 viewing locations</span></div>
 <div class="controls">
+<div class="field"><label for="region-filter">Planning region</label><select id="region-filter"><option value="all">All Midwest regions</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower MI</option><option value="southern-lower">Southern Lower MI</option><option value="upper-midwest">Other Midwest states</option></select></div>
 <div class="field"><label for="state-filter">State</label><select id="state-filter"><option value="all">All six states</option><option value="MI">Michigan</option><option value="WI">Wisconsin</option><option value="MN">Minnesota</option><option value="IA">Iowa</option><option value="IL">Illinois</option><option value="MO">Missouri</option></select></div>
 <div class="field"><label for="type-filter">Viewing type</label><select id="type-filter"><option value="all">All viewing spots</option><option value="winter">Documented winter corridors</option><option value="habitat">Public habitat leads</option><option value="resident">Resident habitat</option></select></div>
 <div class="field"><label for="saved-filter">My spots</label><label style="min-height:42px;display:flex;gap:8px;align-items:center;font-size:13px;text-transform:none;letter-spacing:0"><input type="checkbox" id="saved-filter"> Saved only</label></div>
@@ -86,7 +88,7 @@
 <div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading local interactive map…</p></div><p id="map-provider" class="map-caption">Numbered markers show public viewing locations, not nests or roosts. Self-hosted geographic map; no API keys or remote map tiles.</p></div>
 </div></section>
 <section class="detail-grid" aria-label="Selected eagle viewing destination">
-<article id="location-details" class="panel panel-pad"><div class="eyebrow">Your river · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span><div class="fact-grid">
+<article id="location-details" class="panel panel-pad"><div class="eyebrow"><span id="selected-region">Regional context</span> · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span><div class="fact-grid">
 <div class="fact"><span>Open water now</span><strong id="open-water">Unconfirmed</strong><p>Weather cannot verify ice coverage.</p></div>
 <div class="fact"><span>Eagles here now</span><strong id="eagle-present">Unconfirmed</strong><p>Recent verified counts are separate.</p></div>
 </div><div class="notes"><h3>Why this spot?</h3><p id="why-water">Winter water and feeding habitat.</p><h3>Where to look</h3><p id="where-look">Stay at the public overlook and scan distant trees.</p><h3>Before you go</h3><p id="access-note">Check operator access details before driving.</p></div>
@@ -112,6 +114,14 @@
   <div class="mini-key"><span><i class="cold-legend"></i>Hours with air at or below 32°F</span><span>Weather describes viewing opportunity, not eagle behavior.</span></div>
   <div class="notice"><strong>No invented eagle percentages.</strong> A favorable viewing day means conditions for a person to watch, not a forecast that an eagle gathering or aerial display will occur. For actual sightings, check dated observations and local observers.</div>
  </section>
+<section class="panel regional-evidence" aria-labelledby="up-evidence-title">
+<div class="eyebrow">Upper Peninsula · Evidence worth knowing</div>
+<h2 id="up-evidence-title">The UP has real winter eagle concentrations</h2>
+<div class="case-study-grid"><div><p><strong>A documented feeding aggregation:</strong> Michigan Sea Grant reported more than <strong>45 eagles at once</strong> near the Dafter Landfill in its January 2023 report, and <strong>upwards of 30</strong> in a January 2026 winter report. These are dated historical observations—not live counts or predictions.</p>
+<p><strong>Why it matters:</strong> eagles can concentrate at food sources such as carrion as well as fish in open river channels. A river-ice model alone would miss this behavior.</p></div>
+<div class="case-safety"><strong>Important: not an unrestricted viewing location</strong><p>The landfill requires operator permission and check-in; access to its active disposal area is prohibited. Do not enter, follow eagle flights to roosts, or expect access based on an old report. For a public-oriented trip, start with the St. Marys River or a managed recreation area.</p></div></div>
+<p class="source-note">Original dated sources: <a href="https://www.michiganseagrant.org/blog/2023/01/10/upper-peninsula-birding-report/" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2023</a> · <a href="https://msu-prod.dotcmscloud.com/news/eastern-upper-peninsula-birding-update-what-to-see-and-where-msg24-nelson24" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2026</a> · <a href="https://www.michigan.gov/dnr/things-to-do/wildlife-viewing/birding/winter" target="_blank" rel="noopener">Michigan DNR winter eagle guidance</a>.</p>
+</section>
 <section class="panel counts" aria-labelledby="count-title"><div class="eyebrow">04 / Evidence, not a forecast</div><h2 id="count-title">What are observers actually counting?</h2>
 <p class="lead">Select a supported lock-and-dam location for the latest machine-readable Corps count. Counts are snapshots from the observation date—never a promise about today.</p>
 <div id="count-live" class="count-summary" aria-live="polite">Select a location for dated eagle activity.</div><a id="count-source" href="https://www.nationaleaglecenter.org/eagle-count/" target="_blank" rel="noopener">Open this location's original count report ↗</a>
