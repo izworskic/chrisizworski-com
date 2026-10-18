@@ -9,6 +9,59 @@
 - **GSC/AdSense/GA4 metrics:** Current measured effects unavailable; zero claims of ranking, traffic or revenue lift.
 - **Exactly one next action:** Validate the latest PR CI and Vercel preview after canonical publisher metadata fixes, reconcile concurrent main changes, and merge only after all release and mobile smoke-test checks are green.
 
+# Search Growth + Revenue Session Log
+
+## Winter Eagle Watching evidence adapter — October 18, 2026
+
+- **User intent:** Advance beyond editorial seasonal windows to recent, dated, geographically relevant eagle observations and measured winter ice, without claiming cartwheel predictions or eagle flock forecasts.
+- **Research:** iNaturalist's modern public observations API supports Bald Eagle taxon 5305, research-grade filtering, 40 km geographic searches and 30-day observation windows. API guidelines request ~1 request/second and no more than about 10k/day. NOAA GLERL publishes its daily lake-wide ice concentration in `gYYYY_YYYY_ice.dat`, with individual Superior, Michigan, Huron, Erie and Ontario coverage columns; NOAA explicitly does not claim this measures river ice. NOAA lake-wide data outside an active ice season is historical, not current. Legacy USGS water services retire in early 2027; avoided building a new dependency on them.
+- **Implementation:** Adds `/api/winter-eagle-evidence?site=<known-id>` for 19 whitelisted public viewing coordinates, aggregating broad nearby research-grade Bald Eagle reports and NOAA lake-wide ice percentages with exact observation dates, source links, age and a five-to-ten-day lake ice difference if supplied. Uses CDN 6-hour shared cache for rate discipline; each source independently reports unavailable rather than zero if it fails. No individual bird observation coordinates, roost or nest pins, usernames, or raw observer records exposed; Dafter landfill remains a historic non-public reference.
+- **Website:** Adds a date-stamped two-card evidence view and plain-language field interpretation beneath the selected site and its NWS forecast. Shows counts as *community report records* rather than number of eagles; lake-wide ice never asserts river open water. The current live NWS daily forecast and gathering-versus-aerial seasonal planning remain separate.
+- **Validation:** New independent parsing/API tests cover NOAA dates and historical gates, source failure behavior, iNat report semantics, privacy/whitelist and 19-site parity; CI and production browser/source smoke tests pending. iNaturalist API response must be verified on production, and if blocked must remain unavailable, not fabricated.
+- **Exactly one next action:** Confirm 4 PR checks and inspect live evidence panels at Upper Peninsula and inland sites for successful source timestamps/accurate fallbacks before declaring deployed.
+
+
+## Winter Eagle Watching — public Upper Peninsula route expansion — October 18, 2026
+
+- **Intent:** The user asked to extend Michigan winter eagle congregations and territorial/flight-display planning to the Upper Peninsula, without implying this is a Lower Peninsula-only event.
+- **Research/public access:** Existing live page already included LSSU Freshwater Center Sault river corridor and Menominee River Piers Gorge. This release adds St. Marys River Rotary Park (Shore to Shore Birding Trail directly reports river eagles), Soo Locks Canal Park (USACE year-round public grounds; seasonal closed visitor center), Escanaba River North Shore Boat Launch (Visit Escanaba explicitly documents bald eagles and some open winter river water), and Seney NWR winter trails (USFWS documents eagles and year-round trails but explicitly no verified winter flock); total nineteen sites and six UP public areas. Seney icon is regional reference, not the winter trailhead; operator directions govern access.
+- **Biology/evidence:** Michigan Sea Grant 2023 documented >45 eagles near Dafter Landfill and older observations near the Sault hydropower. Dafter remains a dated, non-public historic report, never a map pin or current sighting claim. Mapped public sites are viewing *leads*, not observed flocks, and winter flights do not prove courtship. Continue separate winter-food/open-water and breeding/territorial flight-planning engines.
+- **Implementation:** Added four named public sites with source URLs, directions, winter closure details; updated map/list filter and evidence-level explanation in selected site; linked one-click "Show UP viewing spots" to the UP-only map and its local regional calendar/weather, with six public UP leads. Updated 19-site copy in directory and page, frontend cache versions. Native map requires no external tiles or new map API key.
+- **Validation:** DOM VM interaction tests added for UP-only six markers, site selection, regional disclosure, specific closure copy and no restricted Dafter landfill pin. Full CI, public output, Vercel production and real desktop/mobile map smoke checks pending. No quantified visits, predicted eagle counts or display probabilities.
+- **Exactly one next action:** Pass CI and deploy, then verify UP-only map pins and local seven-day NWS outlook on desktop and mobile.
+
+
+## Mackinac Island Christmas-tree ice bridge seasonal watch — October 18, 2026
+
+- **User goal:** Publish a first-party, interpretive Mackinac ice-formation experience showing when the Straits are freezing and the history of island Christmas-tree markers, not a crossing or snowmobile safety predictor.
+- **Source contracts:** Existing NOAA/NWS USNIC Great Lakes ice chart polygons and source timestamps through `/api/ice-now?region=mackinac-straits`; St. Ignace NWS hourly forecast provides next-72-hour freezing and thawing aggregates plus up to seven local-calendar daily buckets. CARTO map with NOAA chart export overlay is keyless. Source gaps and stale observations produce explicit unknown states; no route line, official opening claim or ice-thickness forecast.
+- **Implementation branch:** `feature/mackinac-ice-bridge-watch`. New `/mackinac-ice-bridge/` page and JS; mobile responsive NOAA map, expandable seven-day air-temperature outlook, three interpretive field clues, island Christmas-tree tradition, historical 2026 Coast Guard maritime milestones, source links and safety limitations. Registered in Michigan tools directory, JSON-LD ItemList, tool-network registry/relationships and main XML sitemap, plus focused Node.js contract tests.
+- **SEO and integrity:** Distinct canonical intent is Mackinac Island ice-bridge formation/tradition, separate from Michigan Ice Report and Mackinac Island ferry planner. Maintains `https://chrisizworski.com/#person` and visible author attribution. No search volume, CTR, rank changes or ad earnings inferred; current GSC/AdSense baseline unavailable.
+- **Quality/release:** Files committed to branch; connected Vercel generated preview jobs, but full `npm run verify:all`, GitHub CI checks, live NOAA/NWS behavior, map rendering and production promotion have **not yet been certified**. Do not claim production is live until full gates pass. Main's Agent branch verification was green before this work.
+- **Exactly one next action:** Obtain a complete successful GitHub CI/full verification and smoke-test the latest preview before approving a merge to main.
+
+## “Is this the week I should go?” portfolio pilot — October 18, 2026
+
+- **User direction:** Turn the condition-driven outing question into a reusable, growing portfolio, without homogenizing distinct scientific evidence or claiming exact event timing.
+- **Source/owner inventory:** Main first-party repo owns shed antlers, maple sap, Michigan rockhounding and winter eagle watching. Dedicated national/phenology tools retain their independent owning repositories. Existing endpoint fields were inspected; no new indexable canonical or cross-domain scoring engine.
+- **Implemented:** Reusable, tested `public/assets/this-week-engine.js` adapters plus live, independent fetch/orchestration and scoped CSS. New /tools/ near-top "Is this the week?" experience with Bay City / Traverse City / Marquette forecast selector, source/recency, why-to-wait, trigger-to-watch, canonical specialist links. Rockhounding is explicitly statewide/72-hour recent wind, not seven-day; shed/maple are regional/seasonal; eagle is an interpretive guide, not observed activity. Linkbacks from all four specialist tools. Species-specific caveats and National Park Service collecting sites excluded from shortlist. Detailed repeatable adoption standard in `docs/THIS_WEEK_OUTDOOR_DECISIONS.md`.
+- **No false conclusions:** NO "GO" solely from NOAA modeled snow; no predicted shed drop or eagle cartwheel; no asserted sap yield; no statewide beach safety guarantee. Missing/stale NWS/NOAA/NDBC or NWS alert coverage cannot become a favorable signal.
+- **Baseline:** GSC, GA4 weekly revisit and AdSense revenue NOT AVAILABLE. No measured uplift or event outcomes are asserted.
+- **Release:** Feature branch `feature/is-this-the-week-portfolio` created. Full CI, public-output audit, live production and browser behavior verification pending at initial handoff.
+- **Exactly one next action:** Clear full CI and public-output audit, then merge and verify live weekly cards and off-season/missing-data states.
+
+
+
+## Eagle watching field-first information architecture — October 18, 2026
+
+- **User request:** Bring the Woodcock-inspired “Read the Sky” animated guide near the start of `/winter-eagle-watching/`. Play devil's advocate: make it easier for someone to understand the flight and know where and when to watch in the field.
+- **UX critique:** Flight teaching was buried below seasonal charts, map, weather, historical counts and caveats; a visitor could mistake a feeding-concentration pin for a guaranteed courtship/cartwheel spot. Display mode still gave a freezing-hours bar, which is not the principal human viewing-weather consideration for skywatching. An optional four-question quiz extended the scroll before trip planning.
+- **Implementation:** New field journey under hero (Recognize → Find public overlook → Check timing), full interactive field flight stage near the top, concise “The sky is the stage—not one marked spot” explanation with distinct wide-sky vs winter-food viewing advice, and clear CTA to public map. Optional quiz collapsed behind native `details`; existing animation, source credits and interpretive content retained. Finder follows, then selected location weather, regional seasonal calendar and seven-day forecast; dated evidence and safety remain below. Mode buttons appear beside locations, aligned to the calendar; current site presents source-level evidence and an explicit statement no map pin is a confirmed cartwheel venue. Aerial viewing now uses predicted wind and precipitation as *human viewability context*, while winter gathering mode keeps freezing-air context. No claim of live birds, exact ice, guaranteed flight display, nesting site, or quantified event odds.
+- **Sources:** Wisconsin DNR winter feeding/time-of-day advice; Cornell and Smithsonian for behavioral ambiguity; USFWS eagle disturbance guidelines. No new destination claims and no new external API.
+- **Verification:** Tests added for visual order, unique IDs, purpose selection, selected-site interpretation, regional mode synchronization and mode-correct weather charts. CI and desktop/mobile production preview required before calling production live.
+- **Exactly one next action:** Clear full GitHub verification, merge and inspect real page ordering, site/location selection and mobile flight area, then confirm deployment.
+
+
 ## Michigan shed antler search window — October 18, 2026
 
 - **User goal:** Add a winter-focused shed-antler planning tool answering "Is this the week I should go?" specifically for weather and finding already-dropped antlers, never claiming to predict precise buck antler casting dates.

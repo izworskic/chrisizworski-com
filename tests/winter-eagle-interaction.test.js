@@ -58,8 +58,8 @@ function makeBrowser(){
 }
 test('real production JS initializes interactive map and location list without ReferenceError',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
- assert.equal(node('spot-list').children.length,15);
- assert.equal(node('map').querySelectorAll('.native-pin').length,15);
+ assert.equal(node('spot-list').children.length,19);
+ assert.equal(node('map').querySelectorAll('.native-pin').length,19);
  assert.equal(node('annual-calendar').children.length,12);
  assert.match(node('selected-place').textContent,/Detroit/);
  assert.match(node('map').children.at(-1).children[0].textContent,/Detroit/);
@@ -70,10 +70,10 @@ test('real production JS initializes interactive map and location list without R
  assert.equal(croton.getAttribute('aria-pressed'),'true');
  assert.match(node('map').children.at(-1).children[0].textContent,/Croton Dam/);
  node('state-filter').value='MI';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,7);
- assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,7);
+ assert.equal(node('spot-list').children.length,11);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,11);
  node('state-filter').value='all';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,15);
+ assert.equal(node('spot-list').children.length,19);
 });
 test('monthly gathering and cartwheel modes remain distinct and are clickable',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
@@ -111,8 +111,8 @@ test('season engine has no display-probability model and distinguishes winter vs
 test('UP-only filter and selected-place seasonal context actually update the live map',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
  node('region-filter').value='upper-peninsula';node('region-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,2);
- assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,2);
+ assert.equal(node('spot-list').children.length,6);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,6);
  const soo=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
  soo.click();
  assert.match(node('selected-place').textContent,/St. Marys/);
@@ -187,4 +187,35 @@ test('mobile hero keeps real credited eagle photo and routes visitors into fligh
  assert.ok(hero.includes('Bald_Eagle_%2850983412142%29'));
  assert.ok(css.includes('.hero img{height:165px'));
  assert.ok(css.includes('.hero-actions{display:grid;grid-template-columns:1fr 1fr'));
+});
+
+test('UP map action shows six public access leads and keeps Dafter outside the map',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('show-upper-peninsula').click();
+ assert.equal(node('region-filter').value,'upper-peninsula');
+ assert.equal(node('state-filter').value,'MI');
+ assert.equal(node('spot-list').children.length,6);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,6);
+ assert.match(node('selected-place').textContent,/Rotary Park/);
+ assert.match(node('site-evidence').textContent,/St. Marys River/);
+ for(const id of ['soo-rotary','soo-locks','escanaba-north','seney','menominee','soo-cfre']){
+  const pin=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot===id);
+  assert.ok(pin,'Missing UP map pin '+id);
+  assert.equal(pin.hidden,false);
+  pin.click();assert.ok(node('selected-place').textContent.length>8);
+ }
+ const all=node('map').querySelectorAll('.native-pin').map(x=>x.dataset.spot);
+ assert.ok(!all.includes('dafter'),'Historic restricted landfill is not a public viewing destination');
+});
+test('UP site access disclosures stay truthful when selecting winter destinations',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ const pins=node('map').querySelectorAll('.native-pin');
+ pins.find(x=>x.dataset.spot==='seney').click();
+ assert.match(node('access-note').textContent,/closed after October 20/i);
+ assert.match(node('site-evidence').textContent,/not a documented winter flock site/i);
+ pins.find(x=>x.dataset.spot==='soo-locks').click();
+ assert.match(node('access-note').textContent,/November–April/);
+ pins.find(x=>x.dataset.spot==='escanaba-north').click();
+ assert.match(node('why-water').textContent,/open water in winter/i);
+ assert.match(node('eagle-present').textContent,/Unconfirmed/);
 });

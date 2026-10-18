@@ -128,3 +128,25 @@
  .intro p{font-size:13px;line-height:1.4}
  .intro .truth{font-size:10.5px;padding:5px 9px}
 }
+
+/* UP field guide: observable evidence and public river access first. */
+.up-field-kicker{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:5px 0 18px}
+.up-field-kicker span{color:#547061;font-size:13px;max-width:540px}
+.site-evidence{font-size:12px;color:#335d47;background:#f1f6ef;border-left:3px solid #6e967d;border-radius:5px;padding:10px 12px;margin:14px 0}
+.up-evidence-method{font-size:13px;color:#385e4b;padding:12px 14px;border:1px solid #d7e7d8;border-radius:9px;background:#f4f8f3;margin:16px 0}
+@media(max-width:670px){.up-field-kicker .button{width:100%}}
+
+/* Fresh field evidence is kept apart from seasonal inference and bird predictions. */
+.evidence-panel{padding:22px;margin:20px 0}
+.evidence-panel>.lead{max-width:850px}
+.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:17px 0}
+.evidence-card{padding:18px;border:1px solid #d5e4d9;border-radius:13px;background:#f9fcf8;display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+.evidence-card h3{font-size:20px;margin:0}
+.evidence-kicker{font-size:11px;font-weight:760;letter-spacing:.09em;text-transform:uppercase;color:#52765e}
+.evidence-number{font-size:clamp(21px,2.4vw,30px);font-family:Georgia,serif;font-weight:650;line-height:1.2;color:#254c38}
+.evidence-card p{font-size:13px;color:#52695a;margin:4px 0;min-height:3.5em}
+.evidence-subtle{display:block;font-size:12px;color:#607769}
+.evidence-card a{font-size:12px;margin-top:auto;font-weight:750}
+.evidence-interpretation{background:#eef4ed;border-radius:11px;padding:15px 17px;border-left:4px solid #608d72;margin:13px 0}
+.evidence-interpretation strong{display:block;font-size:16px}.evidence-interpretation p{font-size:13px;color:#48634f;margin:6px 0 0}
+@media(max-width:670px){.evidence-panel{padding:15px}.evidence-grid{grid-template-columns:1fr}.evidence-card p{min-height:0}}

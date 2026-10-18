@@ -3381,6 +3381,36 @@
       }
     },
     {
+      "id": "mackinac-ice-bridge",
+      "name": "Mackinac Island Christmas Tree Ice Bridge Watch",
+      "canonical": "https://chrisizworski.com/mackinac-ice-bridge/",
+      "aliases": [],
+      "kind": "seasonal-live",
+      "cluster": "winter-water",
+      "primaryIntent": "Mackinac Island Christmas tree ice bridge formation and ice cover",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "straits-of-mackinac"
+      ],
+      "personas": [
+        "lake-watcher",
+        "winter-traveler",
+        "history-curious"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unverified-seasonal-demand"
+      }
+    },
+    {
       "id": "great-lakes-ferries",
       "name": "Great Lakes Ferry Planner Directory",
       "canonical": "https://chrisizworski.com/great-lakes-ferries/",
@@ -5099,6 +5129,22 @@
       "strength": "optional",
       "surface": "tools-directory",
       "reason": "Transition from hunting-season deer conditions to winter shed-search planning."
+    },
+    {
+      "from": "mackinac-ice-bridge",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "mackinac-ice-bridge",
+      "reason": "Visitors wanting statewide comparison can use the Michigan Ice Report."
+    },
+    {
+      "from": "mackinac-ice-bridge",
+      "to": "mackinac-island",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "mackinac-ice-bridge",
+      "reason": "Readers learning winter island life can explore ordinary Mackinac Island travel options."
     },
     {
       "from": "great-lakes-ferries",

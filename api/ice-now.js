@@ -13,6 +13,16 @@ const UA = { 'User-Agent': 'michigan-ice-report (chrisizworski.com/michigan-ice/
 const USNIC = 'https://mapservices.weather.noaa.gov/vector/rest/services/obs/usnic_greatlakes_ice_chart/MapServer/0/query';
 
 const REGIONS = {
+  'mackinac-straits': {
+    name: 'Straits of Mackinac · St. Ignace to Mackinac Island waters', lake: 'huron',
+    // Broad water sampling region. These are not waypoints or a suggested crossing route.
+    bbox: [-84.81, 45.76, -84.52, 45.96],
+    forecast: [45.8668, -84.7311],
+    samples: [
+      [-84.719, 45.855], [-84.692, 45.837], [-84.666, 45.873],
+      [-84.644, 45.837], [-84.607, 45.886]
+    ]
+  },
   'saginaw-bay': {
     name: 'Saginaw Bay', lake: 'huron',
     bbox: [-84.10, 43.52, -82.55, 44.55],
@@ -226,6 +236,21 @@ async function regionalObservation(slug, region, now) {
   };
 }
 
+function forecastDaily(periods) {
+  const days = new Map();
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit'
+  });
+  for (const hour of periods.slice(0, 168)) {
+    if (!hour.startTime || !Number.isFinite(Date.parse(hour.startTime))) continue;
+    const p = Object.fromEntries(fmt.formatToParts(new Date(hour.startTime)).map(item => [item.type,item.value]));
+    const date = p.year + '-' + p.month + '-' + p.day;
+    if (!days.has(date)) days.set(date, []);
+    days.get(date).push(hour);
+  }
+  return Array.from(days, ([date, rows]) => ({ date, ...summarizePeriods(rows, rows.length) })).slice(0, 8);
+}
+
 function maxWindMph(text) {
   if (!text) return null;
   const nums = String(text).match(/\d+/g);
@@ -275,6 +300,7 @@ async function forecastFor(region, now) {
     issuedAt: hourly && hourly.properties ? hourly.properties.generatedAt || hourly.properties.updateTime || null : null,
     startsAt: first,
     next24h: summarizePeriods(periods, 24), next72h: summarizePeriods(periods, 72),
+    next7Days: forecastDaily(periods),
     limitation: 'This is forecast weather forcing, not a forecast of local ice thickness, cracks, movement, or safety.'
   };
 }
