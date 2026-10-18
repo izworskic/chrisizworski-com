@@ -58,8 +58,8 @@ function makeBrowser(){
 }
 test('real production JS initializes interactive map and location list without ReferenceError',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
- assert.equal(node('spot-list').children.length,11);
- assert.equal(node('map').querySelectorAll('.native-pin').length,11);
+ assert.equal(node('spot-list').children.length,15);
+ assert.equal(node('map').querySelectorAll('.native-pin').length,15);
  assert.equal(node('annual-calendar').children.length,12);
  assert.match(node('selected-place').textContent,/Detroit/);
  assert.match(node('map').children.at(-1).children[0].textContent,/Detroit/);
@@ -70,10 +70,10 @@ test('real production JS initializes interactive map and location list without R
  assert.equal(croton.getAttribute('aria-pressed'),'true');
  assert.match(node('map').children.at(-1).children[0].textContent,/Croton Dam/);
  node('state-filter').value='MI';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,3);
- assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,3);
+ assert.equal(node('spot-list').children.length,7);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,7);
  node('state-filter').value='all';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,11);
+ assert.equal(node('spot-list').children.length,15);
 });
 test('monthly gathering and cartwheel modes remain distinct and are clickable',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
@@ -106,4 +106,35 @@ test('season engine has no display-probability model and distinguishes winter vs
  const d=E.summarizeHourly([{startTime:new Date(Date.now()+3600000).toISOString(),temperature:27,windSpeed:'5 mph',shortForecast:'Clear'}],'America/Detroit');
  assert.equal(d[0].coldHours,1);
  assert.equal(d[0].windMph,5);
+});
+ 
+test('UP-only filter and selected-place seasonal context actually update the live map',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('region-filter').value='upper-peninsula';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,2);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,2);
+ const soo=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
+ soo.click();
+ assert.match(node('selected-place').textContent,/St. Marys/);
+ assert.match(node('selected-region').textContent,/Upper Peninsula/);
+ assert.match(node('region-context').textContent,/snow|thaw/i);
+ node('mode-display').click();
+ assert.match(node('region-heading').textContent,/Upper Peninsula/);
+ assert.equal(node('annual-calendar').children.length,12);
+ node('region-filter').value='northern-lower';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,2);
+ node('region-filter').value='southern-lower';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,3);
+});
+test('UP seasonal emphasis reflects geographic context without presenting a calculated eagle probability',()=>{
+ const E=require('../public/winter-eagle-watching/planning.js');
+ assert.equal(E.regionForSpot({state:'MI',lat:46.49}),'upper-peninsula');
+ assert.equal(E.regionForSpot({state:'MI',lat:44.43}),'northern-lower');
+ assert.equal(E.regionForSpot({state:'MI',lat:42.11}),'southern-lower');
+ assert.equal(E.regionForSpot({state:'WI',lat:43.3}),'upper-midwest');
+ assert.equal(E.seasonalStage('display',4,'upper-peninsula').level,4);
+ assert.equal(E.seasonalStage('display',4,'southern-lower').level,3);
+ assert.equal(E.seasonalStage('gather',3,'upper-peninsula').level,4);
+ assert.match(E.regionDetails('upper-peninsula').note,/ice|river|snow/i);
+ assert.ok(!JSON.stringify(E.regionDetails('upper-peninsula')).match(/probability|odds|sighting rate/i));
 });
