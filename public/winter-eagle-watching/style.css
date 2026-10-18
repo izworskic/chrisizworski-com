@@ -80,3 +80,15 @@
 .native-map-glance strong{font-size:13px;color:#203e32}
 .native-map-glance span{font-size:12px;color:#607268}
 .native-map-glance a{font-size:12px;font-weight:750;margin-top:3px}
+
+/* Geographic differentiation without presenting pseudo-precise sighting predictions. */
+.region-note{background:#eef3ea;border:1px solid #d5e1d4;padding:10px 13px;border-radius:9px;margin:14px 0}
+.region-note strong{display:block;font-size:13px;color:#26523d}
+.region-note p{margin:4px 0 0;font-size:13px;color:#557060}
+.regional-evidence{padding:21px;margin:20px 0}
+.case-study-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:16px;align-items:start}
+.case-study-grid p{font-size:14px;color:#506757;line-height:1.65}
+.case-safety{border-left:3px solid #b38440;padding:13px;background:#f8f3e9;border-radius:6px}
+.case-safety strong{display:block;font-size:14px;color:#67482d}
+.case-safety p{margin:7px 0 0;font-size:13px;color:#68533b}
+@media(max-width:670px){.regional-evidence{padding:14px}.case-study-grid{grid-template-columns:1fr}}
