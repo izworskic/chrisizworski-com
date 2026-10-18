@@ -6,6 +6,20 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const json = async file => JSON.parse(await readFile(path.join(root, file), 'utf8'));
 
+test('explicit API function overrides precede the catch-all so Vercel can use them', async () => {
+  const { functions } = await json('vercel.json');
+  const patterns = Object.keys(functions);
+  const fallback = patterns.indexOf('api/**/*.js');
+  assert.ok(fallback >= 0, 'retain the default API timeout');
+  for (const [index, pattern] of patterns.entries()) {
+    if (/^api\/[\w/-]+\.js$/.test(pattern)) {
+      assert.ok(index < fallback, `${pattern} is shadowed by api/**/*.js; Vercel uses the first match`);
+      await readFile(path.join(root, pattern));
+    }
+  }
+  assert.equal(functions['api/waterfowl-freeze-line.js'].maxDuration, 40);
+});
+
 test('the site build is explicit and cannot become a per-function Vercel build hook', async () => {
   const config = await json('vercel.json');
   const pkg = await json('package.json');
