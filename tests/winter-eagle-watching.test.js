@@ -72,23 +72,27 @@ test('site serves a self-hosted interactive map without external tile dependenci
  assert.ok(!html.includes('images.unsplash.com/photo-1641917743953'));
 });
 
-test('vector map stays functional with no external basemap token or tile requests',()=>{
+test('CARTO-ready map page keeps accessible local map fallback if MapLibre is blocked',()=>{
  const root=path.join(__dirname,'..','public','winter-eagle-watching');
  const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
  const page=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ const map=fs.readFileSync(path.join(root,'eagle-map.js'),'utf8');
  const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
+ assert.ok(page.includes('maplibre-gl@5.16.0/dist/maplibre-gl.js'));
+ assert.ok(page.includes('/winter-eagle-watching/eagle-map.js?v=1'));
+ assert.ok(app.includes('window.EagleMap.init'));
+ assert.ok(app.includes('updateMapMatches(matches)'));
+ assert.ok(map.includes('CARTO_STYLE'));
+ assert.ok(map.includes('FALLBACK_STYLE'));
+ assert.ok(map.includes('cluster:true'));
+ assert.ok(map.includes('getClusterExpansionZoom'));
+ assert.ok(map.includes('cartoResourceUrl(url,key)'));
+ // The static visual map remains a functional accessible fallback.
  assert.ok(app.includes('holder.replaceChildren()'));
- assert.ok(app.includes('map.className')===false);
  assert.ok(app.includes('holder.addEventListener("pointermove"'));
- assert.ok(app.includes('add("Zoom in"'));
- assert.ok(app.includes('add("Zoom out"'));
- assert.ok(!app.includes('L.imageOverlay'));
- assert.ok(!page.includes('leaflet@1.9.4'));
- assert.ok(svg.includes('preserveAspectRatio="none"'));
- assert.ok(app.includes('art.src="/winter-eagle-watching/midwest-vector-map.svg"'))
  assert.ok(app.includes('b.addEventListener("click",()=>pick(s))'));
  assert.ok(app.includes('b.dataset.spot=s.id'));
- assert.ok(page.includes('midwest-vector-map.svg'));
- assert.match(svg,/<path/);
- assert.ok(!app.includes('winter-eagle-map-config'));
+ assert.ok(svg.includes('preserveAspectRatio="none"'));
+ assert.ok(!app.includes('basemaps.cartocdn.com/light_all'));
+ assert.ok(!app.includes('tile.openstreetmap.org/'));
 });
