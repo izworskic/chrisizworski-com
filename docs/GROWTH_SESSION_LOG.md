@@ -11,6 +11,8 @@
 
 # Search Growth + Revenue Session Log
 
+# Search Growth + Revenue Session Log
+
 ## Winter Eagle Watching evidence adapter — October 18, 2026
 
 - **User intent:** Advance beyond editorial seasonal windows to recent, dated, geographically relevant eagle observations and measured winter ice, without claiming cartwheel predictions or eagle flock forecasts.
@@ -835,3 +837,20 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Measurement:** Current GSC/GA4/AdSense data NOT AVAILABLE. No traffic, ranking or revenue uplift claimed.
 - **Release:** Branch `feat/new-tools-directory-oct17`. Quick gate passed. Initial full gate identified only the tools editorial-date fixture and generated entity references; corrected both. Final full gate and PR status recorded in PR. Production unchanged pending owner merge under AGENTS.md section 7.
 - **Exactly one next action:** After green verification, review and merge the directory PR, then confirm all eleven added/materialized cards in production.
+
+
+## Waterfowl Vercel preview configuration repair — October 18, 2026
+
+- **Failure verified:** PR #1054 head `53468d34` failed before building with `unused_function`: the `api/waterfowl-freeze-line.js` function pattern did not match. The file exists; its specific timeout entry was placed after `api/**/*.js`. Vercel's first-match resolver consumed it with the fallback and then rejected the unused override.
+- **Repair:** move the Waterfowl 40-second override before the 10-second API fallback. Keep the complete build pipeline and all product behavior. Add a deployment regression check that explicit API paths exist and precede the catch-all.
+- **Validation:** reproduced the exact rejection locally using Vercel CLI 63.1.2's actual `detectBuilders`; the corrected configuration resolves 89 API builders with no errors and assigns Waterfowl its 40-second limit. All 24 focused deployment/Waterfowl tests pass. The full repository gate passed all 53 steps; `npm run build:site` exited 0. One replacement Vercel preview will be triggered by the atomic three-file repair commit; its final status belongs in the release handoff.
+- **Measurement:** GSC/AdSense data unavailable and not relevant to this configuration-only repair. No traffic, revenue or billed-savings claims.
+- **Next action:** verify the replacement preview reaches READY and serves the Waterfowl page and region API before merging PR #1054.
+
+
+## Waterfowl final review and production merge — October 18, 2026
+
+- **Release follow-up:** final review of PR #1054 identified a slow-upstream overview deadline, late-overview overwrite of detail habitat evidence, independently dated DNR freshness, copyright-footer and external-image-loading issues. These are corrected together before the owner-requested merge.
+- **Behavior:** overview requests share a 22-second abort deadline, preserve completed source results and return unavailable states for queued or timed-out inputs. Each duck/goose group carries its own age/status, stale duck declines are excluded from current habitat evidence, and the UI labels historical groups. Late overview results preserve loaded detail evidence. The footer carries the copyright year and external hero image loads lazily.
+- **Validation:** focused tests cover stalled upstreams and cancellation, preserved partial results, duck/goose freshness in both directions and overview/detail response order. Full gate, final preview, merge and production deployment results are recorded in the PR handoff. Actual GSC/AdSense measurements unavailable; no ranking, revenue or billed-savings claim.
+- **Exactly one next action:** after this checked revision is merged, verify the canonical production Waterfowl page and its live Saginaw Bay data.
