@@ -3320,7 +3320,7 @@
       "aliases": [],
       "kind": "seasonal-decision-engine",
       "cluster": "nature-birding",
-      "primaryIntent": "Where are public winter bald eagle watching spots in the Midwest, and what are the weather and dated observation conditions?",
+      "primaryIntent": "Where and when should I watch winter bald eagle gatherings or seasonal aerial displays in either Michigan peninsula or along Midwest river corridors?",
       "seasons": [
         11,
         12,
@@ -3340,11 +3340,74 @@
       "networkRole": "destination",
       "searchTreatment": {
         "status": "active",
-        "intentSeparation": "Public viewing and weather-context tool. Dated winter eagle surveys are evidence with their observation dates; no claim of live eagle counts or measured river ice. Distinct from Michigan-wide bird sightings or general birding weather."
+        "intentSeparation": "Regional field-planning of eagle concentrations and aerial behavior, illustrated by dated historic reporting and public viewing corridors, distinct from a live sighting alert or nest map. NWS forecast measures viewing weather; no claim of current eagle presence or ice."
       },
       "searchEvidence": {
         "status": "unknown",
-        "note": "New first-party seasonal tool in October 2026; no measured GSC, usage or revenue effect yet."
+        "note": "Seasonal expansion October 18, 2026. No observed GSC outcome, conversion impact, or locally validated eagle display probability."
+      }
+    },
+    {
+      "id": "shed-antler-search",
+      "name": "Michigan Shed Antler Search Conditions",
+      "canonical": "https://chrisizworski.com/michigan-shed-antlers/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "hunting",
+      "primaryIntent": "Is this week good for shed antler hunting in Michigan based on snow and weather conditions?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide",
+        "upper-midwest-regional"
+      ],
+      "personas": [
+        "shed-hunter",
+        "outdoor-walker",
+        "wildlife-observer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "note": "Condition-driven winter shed search window; no antler-drop forecasts."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Initial build October 18, 2026; demand and outcome not yet measured."
+      }
+    },
+    {
+      "id": "mackinac-ice-bridge",
+      "name": "Mackinac Island Christmas Tree Ice Bridge Watch",
+      "canonical": "https://chrisizworski.com/mackinac-ice-bridge/",
+      "aliases": [],
+      "kind": "seasonal-live",
+      "cluster": "winter-water",
+      "primaryIntent": "Mackinac Island Christmas tree ice bridge formation and ice cover",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "straits-of-mackinac"
+      ],
+      "personas": [
+        "lake-watcher",
+        "winter-traveler",
+        "history-curious"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unverified-seasonal-demand"
       }
     },
     {
@@ -4736,6 +4799,46 @@
       "strength": "optional",
       "surface": "winter",
       "reason": "Midwest winter eagle travel requires different habitat and public-access planning than Michigan birding sighting maps."
+    },
+    {
+      "from": "shed-antler-search",
+      "to": "whitetail",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "shed-antler-search",
+      "reason": "Whitetail behavior and hunting context differ from a snow-driven shed search window."
+    },
+    {
+      "from": "shed-antler-search",
+      "to": "michigan-snow-totals",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "shed-antler-search",
+      "reason": "Separate official snowfall reporting from existing ground-cover visibility."
+    },
+    {
+      "from": "whitetail",
+      "to": "shed-antler-search",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "tools-directory",
+      "reason": "Transition from hunting-season deer conditions to winter shed-search planning."
+    },
+    {
+      "from": "mackinac-ice-bridge",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "mackinac-ice-bridge",
+      "reason": "Visitors wanting statewide comparison can use the Michigan Ice Report."
+    },
+    {
+      "from": "mackinac-ice-bridge",
+      "to": "mackinac-island",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "mackinac-ice-bridge",
+      "reason": "Readers learning winter island life can explore ordinary Mackinac Island travel options."
     },
     {
       "from": "waterfowl-freeze-line",

@@ -58,8 +58,8 @@ function makeBrowser(){
 }
 test('real production JS initializes interactive map and location list without ReferenceError',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
- assert.equal(node('spot-list').children.length,11);
- assert.equal(node('map').querySelectorAll('.native-pin').length,11);
+ assert.equal(node('spot-list').children.length,19);
+ assert.equal(node('map').querySelectorAll('.native-pin').length,19);
  assert.equal(node('annual-calendar').children.length,12);
  assert.match(node('selected-place').textContent,/Detroit/);
  assert.match(node('map').children.at(-1).children[0].textContent,/Detroit/);
@@ -70,10 +70,10 @@ test('real production JS initializes interactive map and location list without R
  assert.equal(croton.getAttribute('aria-pressed'),'true');
  assert.match(node('map').children.at(-1).children[0].textContent,/Croton Dam/);
  node('state-filter').value='MI';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,3);
- assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,3);
- node('state-filter').value='all';node('state-filter').dispatch('change');
  assert.equal(node('spot-list').children.length,11);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,11);
+ node('state-filter').value='all';node('state-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,19);
 });
 test('monthly gathering and cartwheel modes remain distinct and are clickable',()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
@@ -106,4 +106,116 @@ test('season engine has no display-probability model and distinguishes winter vs
  const d=E.summarizeHourly([{startTime:new Date(Date.now()+3600000).toISOString(),temperature:27,windSpeed:'5 mph',shortForecast:'Clear'}],'America/Detroit');
  assert.equal(d[0].coldHours,1);
  assert.equal(d[0].windMph,5);
+});
+ 
+test('UP-only filter and selected-place seasonal context actually update the live map',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('region-filter').value='upper-peninsula';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,6);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,6);
+ const soo=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
+ soo.click();
+ assert.match(node('selected-place').textContent,/St. Marys/);
+ assert.match(node('selected-region').textContent,/Upper Peninsula/);
+ assert.match(node('region-context').textContent,/snow|thaw/i);
+ node('mode-display').click();
+ assert.match(node('region-heading').textContent,/Upper Peninsula/);
+ assert.equal(node('annual-calendar').children.length,12);
+ node('region-filter').value='northern-lower';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,2);
+ node('region-filter').value='southern-lower';node('region-filter').dispatch('change');
+ assert.equal(node('spot-list').children.length,3);
+});
+test('UP seasonal emphasis reflects geographic context without presenting a calculated eagle probability',()=>{
+ const E=require('../public/winter-eagle-watching/planning.js');
+ assert.equal(E.regionForSpot({state:'MI',lat:46.49}),'upper-peninsula');
+ assert.equal(E.regionForSpot({state:'MI',lat:44.43}),'northern-lower');
+ assert.equal(E.regionForSpot({state:'MI',lat:42.11}),'southern-lower');
+ assert.equal(E.regionForSpot({state:'WI',lat:43.3}),'upper-midwest');
+ assert.equal(E.seasonalStage('display',4,'upper-peninsula').level,4);
+ assert.equal(E.seasonalStage('display',4,'southern-lower').level,3);
+ assert.equal(E.seasonalStage('gather',3,'upper-peninsula').level,4);
+ assert.match(E.regionDetails('upper-peninsula').note,/ice|river|snow/i);
+ assert.ok(!JSON.stringify(E.regionDetails('upper-peninsula')).match(/probability|odds|sighting rate/i));
+});
+
+test('field-first page order is flight guide, public places, then site-specific timing',()=>{
+ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+ const markers=['id="read-the-sky"','id="finder"','id="location-details"','id="eagle-season-planner"','id="weekly-day-cards"'];
+ const order=markers.map(s=>html.indexOf(s));
+ assert.ok(order.every(n=>n>0),'Every field-plan element must exist');
+ assert.ok(order.every((n,i)=>i===0||n>order[i-1]),'The useful field steps must appear in order');
+ assert.ok(html.includes('id="show-locations"'));
+ assert.ok(html.includes('none of our map pins is a verified cartwheel venue'));
+ assert.ok(html.includes('class="flight-quiz-disclosure"'),'The optional quiz must not dominate the trip-planning page');
+ const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(ids.length,new Set(ids).size,'Duplicate IDs break controls and tracking');
+});
+test('aerial-flight intent changes location guidance and weather without treating venues as confirmed displays',async()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('finder-display').click();
+ assert.equal(node('finder-display').getAttribute('aria-pressed'),'true');
+ assert.equal(node('mode-display').getAttribute('aria-pressed'),'true');
+ assert.match(node('finder-purpose').textContent,/No mapped site is a confirmed cartwheel location/i);
+ assert.match(node('site-purpose-heading').textContent,/not a known cartwheel venue/i);
+ assert.match(node('where-look-label').textContent,/scan the sky/i);
+ assert.match(node('week-lead').textContent,/wind and precipitation/i);
+ assert.ok(node('weekly-key-primary').textContent.includes('without rain/snow'));
+ const at=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
+ at.click();
+ assert.match(node('site-purpose-text').textContent,/not verified/i);
+ assert.equal(node('finder-display').getAttribute('aria-pressed'),'true');
+ for(let i=0;i<6;i++)await new Promise(r=>setImmediate(r));
+ assert.ok(node('weekly-day-cards').children.length>=6);
+ assert.ok(node('weekly-day-cards').children.some(x=>x.children.some(y=>y.className.includes('dry-bar'))));
+ node('finder-gather').click();
+ assert.equal(node('mode-gather').getAttribute('aria-pressed'),'true');
+ assert.match(node('weekly-key-primary').textContent,/32°F/);
+ assert.match(node('site-purpose-heading').textContent,/lead|habitat/i);
+ assert.match(node('finder-purpose').textContent,/freezing-air context/i);
+});
+
+test('mobile hero keeps real credited eagle photo and routes visitors into flight guide before the map',()=>{
+ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+ const css=fs.readFileSync(path.join(dir,'style.css'),'utf8');
+ const hero=html.slice(html.indexOf('<section class="hero"'),html.indexOf('</section>',html.indexOf('<section class="hero"')));
+ assert.ok(hero.includes('See eagles gather. Learn their aerial dance.'));
+ assert.ok(hero.includes('href="#read-the-sky"'));
+ assert.ok(hero.includes('href="#finder"'));
+ assert.ok(hero.indexOf('href="#read-the-sky"')<hero.indexOf('href="#finder"'));
+ assert.ok(hero.includes('Karl Fleming'));
+ assert.ok(hero.includes('Bald_Eagle_%2850983412142%29'));
+ assert.ok(css.includes('.hero img{height:165px'));
+ assert.ok(css.includes('.hero-actions{display:grid;grid-template-columns:1fr 1fr'));
+});
+
+test('UP map action shows six public access leads and keeps Dafter outside the map',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('show-upper-peninsula').click();
+ assert.equal(node('region-filter').value,'upper-peninsula');
+ assert.equal(node('state-filter').value,'MI');
+ assert.equal(node('spot-list').children.length,6);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,6);
+ assert.match(node('selected-place').textContent,/Rotary Park/);
+ assert.match(node('site-evidence').textContent,/St. Marys River/);
+ for(const id of ['soo-rotary','soo-locks','escanaba-north','seney','menominee','soo-cfre']){
+  const pin=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot===id);
+  assert.ok(pin,'Missing UP map pin '+id);
+  assert.equal(pin.hidden,false);
+  pin.click();assert.ok(node('selected-place').textContent.length>8);
+ }
+ const all=node('map').querySelectorAll('.native-pin').map(x=>x.dataset.spot);
+ assert.ok(!all.includes('dafter'),'Historic restricted landfill is not a public viewing destination');
+});
+test('UP site access disclosures stay truthful when selecting winter destinations',()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ const pins=node('map').querySelectorAll('.native-pin');
+ pins.find(x=>x.dataset.spot==='seney').click();
+ assert.match(node('access-note').textContent,/closed after October 20/i);
+ assert.match(node('site-evidence').textContent,/not a documented winter flock site/i);
+ pins.find(x=>x.dataset.spot==='soo-locks').click();
+ assert.match(node('access-note').textContent,/November–April/);
+ pins.find(x=>x.dataset.spot==='escanaba-north').click();
+ assert.match(node('why-water').textContent,/open water in winter/i);
+ assert.match(node('eagle-present').textContent,/Unconfirmed/);
 });

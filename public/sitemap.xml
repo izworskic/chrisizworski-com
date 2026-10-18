@@ -1278,13 +1278,20 @@
   <url><loc>https://chrisizworski.com/lake-michigan-water-temperature/</loc><lastmod>2026-10-13</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://chrisizworski.com/lake-michigan-water-temperature/grand-haven/</loc><lastmod>2026-10-13</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://chrisizworski.com/lake-michigan-water-temperature/traverse-city/</loc><lastmod>2026-10-13</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chrisizworski.com/michigan-maple-sap-run/</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chrisizworski.com/michigan-maple-sap-run/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url>
     <loc>https://chrisizworski.com/michigan-rockhounding/</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url><loc>https://chrisizworski.com/winter-eagle-watching/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-shed-antlers/</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url><loc>https://chrisizworski.com/mackinac-ice-bridge/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://chrisizworski.com/waterfowl-freeze-line/</loc><lastmod>2026-10-18</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 </urlset>

@@ -7,6 +7,9 @@
     "api/michigan-rockhounding.js": {
       "maxDuration": 20
     },
+    "api/shed-antlers.js": {
+      "maxDuration": 25
+    },
     "api/maple-sap.js": {
       "maxDuration": 35
     },

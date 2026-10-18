@@ -6,6 +6,14 @@ const spots=[
 {id:"detroit",name:"Detroit River Refuge Gateway",city:"Trenton",state:"MI",lat:42.1105,lon:-83.1847,type:"resident",water:"The broad Detroit River supports resident eagles, but ice and feeding locations can change quickly.",look:"Use the public fishing pier and river overlooks; scan opposite-shore trees and passing birds.",access:"5437 W Jefferson Avenue. Outdoor refuge grounds are generally accessible during daylight; check the operator for exceptions.",source:"https://www.fws.gov/refuge/detroit-river/visit-us",map:"https://www.google.com/maps/search/?api=1&query=5437+W+Jefferson+Ave+Trenton+MI"},
 {id:"shiawassee",name:"Shiawassee Refuge · Ferguson Bayou Trail",city:"Saginaw",state:"MI",lat:43.32515,lon:-84.0327,type:"habitat",water:"This protected wetland and river complex hosts bald eagles. Late-fall birds arrive to feed, but neither current ice nor a gathering is confirmed at this trail.",look:"Watch high above the wetlands and river corridors from public dikes, observation decks and permitted trails; never search for nests.",access:"6000 Bishop Road. Trails normally open sunrise to sunset but close during refuge hunting dates, flooding and other restrictions. Winter wildlife drive is CLOSED; do not plan on driving it.",source:"https://www.fws.gov/refuge/shiawassee/visit-us",map:"https://www.google.com/maps/search/?api=1&query=Ferguson+Bayou+Trail+6000+Bishop+Road+Saginaw+MI"},
 {id:"croton",name:"Croton Dam · Muskegon River Public Access",city:"Croton",state:"MI",lat:43.435561,lon:-85.66678,type:"habitat",water:"A flowing tailwater below Croton Dam provides a plausible winter open-water search lead; no systematic eagle congregation counts are connected here.",look:"Observe the river from the barrier-free public fishing platform and signed shore access. Scan open water and distant trees without approaching wildlife.",access:"Charles Besemer Muskegon River Park / Croton Dam public shore-fishing access. Ice, snow and access conditions must be checked; dam releases and currents can be dangerous.",source:"https://www.michigan.gov/dnr/managing-resources/fisheries/units/c-michigan",map:"https://www.google.com/maps/search/?api=1&query=Croton+Dam+Charles+Besemer+Muskegon+River+Park+Michigan"},
+{id:"soo-cfre",name:"St. Marys River · LSSU Freshwater Center",city:"Sault Ste. Marie",state:"MI",lat:46.4904,lon:-84.3546,type:"habitat",water:"Michigan Sea Grant documents bald eagles fishing in the St. Marys River near the Sault Ste. Marie powerhouse. Flowing channels and salmon can provide winter food; this is NOT a live eagle count.",look:"Scan the public St. Marys River corridor from the approved research-center deck during open hours. Look over open water without approaching roost or nesting areas.",access:"100 Salmon Run Way. LSSU lists limited Discovery Center winter hours (typically first and third Saturday, 10 a.m.–2 p.m. from November through May). Verify current hours; the second-floor deck is not unrestricted public access.",source:"https://www.lssu.edu/centers/cfre/overview/",map:"https://www.google.com/maps/search/?api=1&query=100+Salmon+Run+Way+Sault+Ste+Marie+MI"},
+{id:"menominee",name:"Menominee River · Piers Gorge Overlook",city:"Norway",state:"MI",lat:45.7597,lon:-87.9390,type:"habitat",water:"Michigan DNR identifies bald eagles as common sightings in the Menominee River State Recreation Area, which includes swift rapids and river corridors. No winter gathering count is available for this overlook.",look:"Scan the rapids and distant pines from the official public hiking viewpoints; do not enter water or approach wildlife.",access:"Piers Gorge trail access is off Highway 8 and Piers Gorge Road. Winter trails can be icy, snowy and ungroomed. Confirm seasonal road and walking access before travel.",source:"https://www.michigan.gov/recsearch/parks/Menominee",map:"https://www.google.com/maps/search/?api=1&query=Piers+Gorge+Trail+Michigan"},
+{id:"tippy",name:"Tippy Dam · Manistee River",city:"Brethren",state:"MI",lat:44.26841,lon:-85.93562,type:"habitat",water:"The public Manistee River tailwater supports salmon, steelhead and trout. It is a plausible food-and-open-water viewing lead, NOT an established eagle congregation with connected counts.",look:"Observe from signed public river access near the recreation area and scan trees above the tailwater without interfering with anglers.",access:"1500 Dilling Road. Michigan DNR lists year-round recreation and winter activities; park entry may require a Recreation Passport. River currents and snow conditions can be dangerous.",source:"https://www.michigan.gov/recsearch/parks/tippydam",map:"https://www.google.com/maps/search/?api=1&query=Tippy+Dam+Recreation+Area+Brethren+Michigan"},
+{id:"ausable",name:"Au Sable River · Highbanks Overlook",city:"Oscoda",state:"MI",lat:44.43592,lon:-83.62381,type:"resident",water:"The Au Sable River supports bald eagles and cold-season foraging habitat. This public scenic overlook offers broad views, but distant eagles are not guaranteed on any day.",look:"Watch the sky and river from the Lumberman's Monument/Highbanks public overlooks, staying well away from nesting birds or riverbank hazards.",access:"5401 Monument Road. Grounds and nearby Highbanks Trail have winter opportunities; visitor-center buildings are seasonal. Trails, stairs and snow conditions may limit access.",source:"https://www.michigan.org/property/highbanks-river-trail",map:"https://www.google.com/maps/search/?api=1&query=Lumbermans+Monument+5401+Monument+Road+Oscoda+Michigan"},
+{id:"soo-rotary",name:"St. Marys River · Rotary Park",city:"Sault Ste. Marie",state:"MI",lat:46.48378,lon:-84.30077,type:"habitat",peninsula:"up",evidence:"Documented St. Marys River eagle-watching corridor; no current site count",water:"This St. Marys River shoreline is a documented public eagle-watching area. Michigan Sea Grant has described adults fishing near the Sault hydroelectric powerhouse, farther upstream. Open water and actual eagles at Rotary Park today are not confirmed.",look:"Scan the river and far-shore trees from the public Rotary Park shoreline; watch for eagles over the channel, waterfowl and fish. Do not follow birds to nests.",access:"Public Rotary Park near the Sugar Island ferry. Check City of Sault Ste. Marie winter parking and snow conditions; do not enter ferry loading areas, hydro plant property or ice.",source:"https://www.shoretoshorebirdingtrail.org/sites-2/rotary-park",map:"https://www.google.com/maps/search/?api=1&query=Rotary+Park+Sault+Ste+Marie+Michigan"},
+{id:"soo-locks",name:"St. Marys River · Soo Locks Canal Park",city:"Sault Ste. Marie",state:"MI",lat:46.5025,lon:-84.3484,type:"habitat",peninsula:"up",evidence:"Public winter river viewpoint near documented Sault feeding activity; no site count",water:"Moving water and historical eagle observations make the Sault river corridor worth scouting, but Soo Locks Canal Park itself is not a verified winter congregation or open-water measurement.",look:"Scan the visible St. Marys River from the designated park and viewing platform, not the restricted lock structure. Bring binoculars; distance across the channel is substantial.",access:"Soo Locks Canal Park is open in winter (USACE lists November–April 9 a.m.–6 p.m.); the visitor center is seasonal May–October. No entry to active locks or restricted works.",source:"https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/",map:"https://www.google.com/maps/search/?api=1&query=Soo+Locks+Canal+Park+Sault+Ste+Marie+MI"},
+{id:"escanaba-north",name:"Escanaba River · North Shore Boat Launch",city:"Wells / Escanaba",state:"MI",lat:45.77807,lon:-87.06436,type:"habitat",peninsula:"up",evidence:"Local visitor bureau explicitly documents eagle habitat and winter flowing water",water:"Visit Escanaba identifies bald eagles here year-round and explains that Escanaba River current maintains open water in winter. Today's ice conditions and number of eagles remain unconfirmed.",look:"Observe the Escanaba River and mouth into Little Bay de Noc from public fishing piers or shoreline. Scan branches and moving water without venturing onto the ice.",access:"City-managed North Shore Boat Launch; check winter pier, walkway, parking and weather conditions. Boat launching requires a permit in season; never assume docks are ice-free.",source:"https://visitescanaba.com/things-to-see-and-do/experience-nature/birdwatch",map:"https://www.google.com/maps/search/?api=1&query=North+Shore+Boat+Launch+Wells+Michigan"},
+{id:"seney",name:"Seney Refuge · Winter Trail Planning Area",city:"Germfask / Seney",state:"MI",lat:46.21635,lon:-85.96977,type:"habitat",peninsula:"up",evidence:"Verified bald eagle refuge habitat, not a documented winter flock site",water:"Seney National Wildlife Refuge has established eagle habitat among marshes, rivers and pools. It should be treated as a general wildlife-watching option, NOT a predicted winter eagle congregation.",look:"Use approved public roads and year-round nature trails; watch distant open sky and wetlands. Winter trail access is for skiing and snowshoeing, not driving the closed auto tour.",access:"The refuge Marshland Wildlife Drive and Fishing Loop are seasonally closed after October 20. Approved year-round trails include Northern Hardwoods off Robinson Road (not the visitor-center coordinate used for regional weather). This map pin is a regional weather-reference point, NOT the winter trailhead. Use the operator directions to find legal trail access and verify closures.",source:"https://www.fws.gov/refuge/seney/visit-us/trails",map:"https://www.google.com/maps/search/?api=1&query=Seney+National+Wildlife+Refuge+Robinson+Road+trail+Germfask+MI"},
 {id:"prairie",name:"Prairie du Sac Eagle Overlook",city:"Prairie du Sac",state:"WI",lat:43.2896,lon:-89.7215,type:"winter",water:"Wisconsin River tailwater below the Prairie du Sac dam offers a winter feeding area where open water persists.",look:"Use the dedicated public overlook at 490 Water Street; scan the water and tall riverside trees.",access:"490 Water Street, Prairie du Sac. Verify winter event hours and any current access restrictions.",source:"https://dnr.wisconsin.gov/newsroom/release/116966",map:"https://www.google.com/maps/search/?api=1&query=490+Water+St+Prairie+du+Sac+WI"},
 {id:"red-wing",name:"Colvill Park",city:"Red Wing",state:"MN",lat:44.5595,lon:-92.5160,type:"winter",water:"Open reaches of the Upper Mississippi support winter eagle activity. The National Eagle Center publishes dated counts at this location.",look:"Scan the Mississippi channel from public park overlooks and watch high perches without approaching birds.",access:"Use published park access; winter parking and paths may change.",source:"https://www.nationaleaglecenter.org/eagle-count/",map:"https://www.google.com/maps/search/?api=1&query=Colvill+Park+Red+Wing+MN"},
 {id:"wabasha",name:"Wabasha Riverfront",city:"Wabasha",state:"MN",lat:44.3836,lon:-92.0313,type:"winter",water:"Wabasha and nearby Mississippi reaches are covered by the National Eagle Center's winter count program.",look:"Observe from public riverfront access; bring a spotting scope for distant river traffic and perches.",access:"Check public riverfront access before travel. National Eagle Center visitor hours differ from shore access.",source:"https://www.nationaleaglecenter.org/eagle-count/",map:"https://www.google.com/maps/search/?api=1&query=Wabasha+Minnesota+riverfront"},
@@ -18,17 +26,25 @@ const spots=[
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
 let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
 let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/Detroit";
+let evidenceToken=0;
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
 const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
-function seasonLabel(s){return s.type==="resident"?"Year-round resident habitat":inWinter?"Within typical winter watching season":"Outside typical winter gathering season"}
+function seasonLabel(s){
+ if(plannerMode==="display"){
+  const reg=window.EaglePlanning?.regionForSpot(s);
+  const stage=window.EaglePlanning?.seasonalStage("display",month,reg);
+  return stage?.level>=3?"Within broad regional flight-display season":"Aerial display season varies · not a confirmed show site";
+ }
+ return s.type==="resident"?"Year-round resident habitat":inWinter?"Within typical winter watching season":"Outside typical winter gathering season";
+}
 function renderList(){
- const state=el("state-filter").value,kind=el("type-filter").value,savedOnly=el("saved-filter").checked;
- const matches=spots.filter(s=>(state==="all"||s.state===state)&&(kind==="all"||s.type===kind)&&(!savedOnly||saved.has(s.id)));
+ const state=el("state-filter").value,kind=el("type-filter").value,region=el("region-filter").value,savedOnly=el("saved-filter").checked;
+ const matches=spots.filter(s=>(state==="all"||s.state===state)&&(kind==="all"||s.type===kind)&&(region==="all"||window.EaglePlanning.regionForSpot(s)===region)&&(!savedOnly||saved.has(s.id)));
  const list=el("spot-list");list.replaceChildren();
  matches.forEach(s=>{const i=spots.indexOf(s)+1,b=document.createElement("button");b.type="button";b.className="spot"+(s.id===selected.id?" active":"");b.setAttribute("aria-pressed",String(s.id===selected.id));
  const n=document.createElement("span");n.className="number";n.textContent=String(i).padStart(2,"0");
- const c=document.createElement("span");const title=document.createElement("strong");title.textContent=s.name;const where=document.createElement("small");where.textContent=s.city+", "+s.state;const kind=document.createElement("span");kind.className="viewing-kind";kind.textContent=s.type==="winter"?"Winter gathering corridor":s.type==="habitat"?"Public habitat lead · not a confirmed gathering":"Resident eagle habitat";c.append(title,where,kind);b.append(n,c);
+ const c=document.createElement("span");const title=document.createElement("strong");title.textContent=s.name;const where=document.createElement("small");where.textContent=s.city+", "+s.state;const kind=document.createElement("span");kind.className="viewing-kind";kind.textContent=plannerMode==="display"?"Public sky-viewing lead · aerial activity unverified":s.type==="winter"?"Winter gathering corridor":s.type==="habitat"?"Habitat lead · not a confirmed gathering":"Resident eagle habitat";c.append(title,where,kind);b.append(n,c);
  b.addEventListener("click",()=>pick(s));list.append(b)});
  text("spot-count",matches.length+" viewing locations");el("no-spots").hidden=matches.length>0;
  // Native map buttons, not Leaflet markers: keep map/list filters synchronized.
@@ -40,10 +56,44 @@ function renderList(){
    b.setAttribute("aria-hidden",String(!shown));
  });
 }
+function renderPurpose(){
+ const s=selected,flight=plannerMode==="display",winter=s.type==="winter";
+ ["gather","display"].forEach(mode=>{
+  const b=el("finder-"+mode);if(!b)return;
+  const active=(flight?"display":"gather")===mode;
+  b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
+ });
+ const season=seasonLabel(s);
+ text("season-pill",season);
+ el("season-pill").className="status"+(flight||!inWinter?" muted":"");
+ if(flight){
+  text("finder-purpose","Aerial displays: select a public overlook with a broad view of sky and eagle habitat. No mapped site is a confirmed cartwheel location; no daily display prediction exists.");
+  text("site-purpose-heading","An open-sky observation point — not a known cartwheel venue");
+  text("site-purpose-text","From this public-access location, look above the water and treeline for birds soaring, circling together or interacting in flight during the regional breeding season. Their presence, pair status and displays here are not verified. Always check site hours, safety and closures.");
+  text("where-look-label","Where to stand and scan the sky");
+  text("week-lead","For aerial watching, compare forecast wind and precipitation at the selected overlook. Calmer, drier periods help people follow distant birds; they do not predict courtship or cartwheels.");
+  text("weekly-key-primary","Bar = forecast hours without rain/snow in the published hourly descriptions");
+  text("weekly-key-note","Weather affects visibility and comfort, not whether eagles will display.");
+ }else{
+  text("finder-purpose","Winter gatherings: compare publicly accessible river viewing areas, documented historical counts and freezing-air context. Open water and eagle presence still require verification.");
+  text("site-purpose-heading",winter?"Documented winter eagle-watching corridor":s.type==="resident"?"Resident eagle viewing habitat":"Habitat lead · no confirmed gathering");
+  text("site-purpose-text",winter?
+    "This is a known winter-watching corridor, not proof of eagles here today. Look toward moving water, prey and distant perches. Where counts exist, check their original survey dates before traveling.":
+    "This public location has eagle habitat or a feeding-water lead, but no verified current congregation. Scout open water and distant perches only from permitted access; do not infer a flock from freezing air.");
+  text("where-look-label","Where to stand and scan the water");
+  text("week-lead","For winter gatherings, compare subfreezing air forecasts and published eagle counts. River ice, available prey and current eagle numbers are not measured by this forecast.");
+  text("weekly-key-primary","Bar = forecast hours at or below 32°F air temperature");
+  text("weekly-key-note","Freezing air is context only—neither measured river ice nor eagle counts.");
+ }
+}
 function renderPlanner(){
  const E=window.EaglePlanning;
  if(!E)return;
- const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth);
+ const region=E.regionForSpot(selected),context=E.regionDetails(region);
+ const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth,region);
+ renderPurpose();
+ text("region-heading",context.label);
+ text("region-context",context.note);
  ["gather","display"].forEach(m=>{const btn=el("mode-"+m);if(!btn)return;btn.classList.toggle("active",m===plannerMode);btn.setAttribute("aria-pressed",String(m===plannerMode))});
  text("season-mode-label",display?"AERIAL DISPLAYS / NOT A DAILY PREDICTION":"WINTER GATHERINGS / OPEN WATER");
  text("season-headline",display?"Look for flights and territorial displays—not just groups.":"Follow the open water and accessible prey.");
@@ -55,14 +105,14 @@ function renderPlanner(){
  "Field cue: sustained circling, pair flights and energetic chases may be more visible during the breeding period. The weather can improve watching comfort, but cannot predict a cartwheel. Never approach a nest or follow eagles to one.":
  "Field cue: winter concentrations may gather at open water, below dams or around prey and safe roosts. In early spring they can shift toward retreating river ice edges. Check fresh dated counts where they exist.");
  const calendar=el("annual-calendar");calendar.replaceChildren();
- for(const m of E.calendar(plannerMode)){
+ for(const m of E.calendar(plannerMode,region)){
   const b=document.createElement("button");b.type="button";b.className="season-month level-"+m.level+(m.index===plannerMonth?" chosen":"");
   b.setAttribute("aria-pressed",String(m.index===plannerMonth));b.setAttribute("aria-label",m.month+": "+m.label+"; select month");
   const name=document.createElement("strong");name.textContent=m.month;const line=document.createElement("span");line.className="month-intensity";
   line.setAttribute("aria-hidden","true");b.append(name,line);
   b.addEventListener("click",()=>{plannerMonth=m.index;renderPlanner()});calendar.append(b);
  }
- const assess=E.summary(plannerMode,month,plannerDays);
+ const assess=E.summary(plannerMode,month,plannerDays,region);
  const label=el("setup-label");label.className="status"+(plannerDays.length?"":" muted");
  text("setup-label",plannerDays.length?assess.headline:"Live NWS forecast not yet available");
  text("setup-explanation",plannerDays.length?assess.why:"Check the NWS outlook for the selected public viewing spot. Current wildlife presence and river ice remain unconfirmed.");
@@ -78,13 +128,17 @@ function renderPlanner(){
   title.textContent=stamp.toLocaleDateString("en-US",{timeZone:"UTC",weekday:"short",month:"short",day:"numeric"});
   const t=document.createElement("span");t.className="day-temp";t.textContent=d.low+"°–"+d.high+"°F";
   const descriptor=document.createElement("p");descriptor.textContent=display?d.comfort:d.condition;
-  const bar=document.createElement("div");bar.className="freeze-track";bar.title=d.coldHours+" of "+d.hours+" forecast air hours at or below 32°F";
-  const filled=document.createElement("i");filled.style.width=Math.round(100*d.coldHours/Math.max(1,d.hours))+"%";bar.append(filled);
-  const detail=document.createElement("small");detail.textContent=d.coldHours+" freezing air hrs · "+(d.windMph==null?"Wind n/a":d.windMph+" mph avg wind");
+  const bar=document.createElement("div");bar.className="freeze-track"+(display?" dry-bar":"");
+  bar.title=display?"Forecast hours without named precipitation (based on short forecast descriptions)":d.coldHours+" of "+d.hours+" forecast air hours at or below 32°F";
+  const filled=document.createElement("i");
+  filled.style.width=(display?d.dryFraction:Math.round(100*d.coldHours/Math.max(1,d.hours)))+"%";bar.append(filled);
+  const detail=document.createElement("small");
+  detail.textContent=display?(d.wetHours+" forecast precipitation hrs · "+(d.windMph==null?"Wind unavailable":d.windMph+" mph avg wind")):
+   d.coldHours+" freezing air hrs · "+(d.windMph==null?"Wind n/a":d.windMph+" mph avg wind");
   card.append(title,t,descriptor,bar,detail);cards.append(card);
  }
 }
-function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner()}
+function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner();renderList()}
 function initMap(){
  const holder=el("map"),caption=el("map-provider");
  holder.replaceChildren();
@@ -173,8 +227,12 @@ function markerUpdate(){moveMapToSelected();}
 
 function pick(s){
  selected=s;history.replaceState(null,"","#"+s.id);renderList();markerUpdate();
- text("selected-place",s.name);text("selected-city",s.city+", "+s.state);text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");
+ text("selected-place",s.name);text("selected-city",s.city+", "+s.state);
+ const reg=window.EaglePlanning?.regionForSpot(s);
+ text("selected-region",window.EaglePlanning?.regionDetails(reg).label||"Midwest");
+ renderPurpose();
  text("why-water",s.water);text("where-look",s.look);text("access-note",s.access);
+ text("site-evidence","Evidence level: "+(s.evidence||"Operator-published habitat/access information; no location-specific live eagle count")+". Historical context is not a current sighting.");
  el("directions").href=s.map;el("operator-link").href=s.source;
  const report=el("count-source");
  if(s.count){report.href="https://www.mvr.usace.army.mil/"+(s.count==="starved"?"illinoiswaterway":"mississippiriver")+"/eagle-watching/";report.textContent="Open the original Corps count report ↗"}
@@ -183,7 +241,84 @@ function pick(s){
  text("open-water","Unconfirmed");text("eagle-present","Unconfirmed");
  plannerDays=[];renderPlanner();
  el("saved-toggle").textContent=saved.has(s.id)?"Saved ✓":"Save spot";
- loadWeather(s);loadCount(s);
+ loadWeather(s);loadCount(s);loadEvidence(s);
+}
+async function loadEvidence(s){
+ const token=++evidenceToken;
+ for(const [id,msg] of [
+  ["eagle-reports-number","Checking…"],["eagle-reports-detail","Checking dated eagle reports within 40 km…"],
+  ["eagle-reports-date","Latest observation date: checking"],
+  ["eagle-ice-number","Checking…"],["eagle-ice-detail","Checking NOAA's lake-wide ice record…"],
+  ["eagle-ice-date","Measurement date: checking"],
+  ["eagle-evidence-conclusion","Checking published evidence…"],
+  ["eagle-evidence-why","Checking the source date before offering an interpretation."],
+  ["eagle-evidence-asof","Results may be cached for up to six hours."]
+ ])text(id,msg);
+ const inatLink=el("eagle-reports-source"),iceLink=el("eagle-ice-source");
+ inatLink.href="https://www.inaturalist.org/taxa/5305-Haliaeetus-leucocephalus";
+ iceLink.href="https://www.glerl.noaa.gov/data/ice/index.html";
+ try{
+  const response=await fetch("/api/winter-eagle-evidence?site="+encodeURIComponent(s.id),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw Error("Evidence adapter unavailable");
+  const result=await response.json();
+  if(token!==evidenceToken||selected.id!==s.id)return;
+  if(!result.available||result.site!==s.id)throw Error("Mismatched evidence");
+  const obs=result.observations||{},ice=result.ice||{};
+  if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.inaturalist.org/"))inatLink.href=obs.searchUrl;
+  if(ice.sourceUrl&&ice.sourceUrl.startsWith("https://apps.glerl.noaa.gov/"))iceLink.href=ice.sourceUrl;
+  if(obs.status==="ok"){
+    const n=Number(obs.observationsSampled)||0;
+    text("eagle-reports-number",n+" dated "+(n===1?"report":"reports"));
+    text("eagle-reports-detail",
+      "Research-grade iNaturalist entries sampled from a 40 km region over the past 30 days. "+
+      (obs.moreRecords?"Only the newest records were sampled; this is NOT a complete count.":"This is not the number of individual eagles.")
+    );
+    text("eagle-reports-date",obs.latestObservedOn?"Most recent observed: "+obs.latestObservedOn+" ("+obs.ageDays+" days ago).":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
+  }else{
+    text("eagle-reports-number","Unavailable");
+    text("eagle-reports-detail","The community observation feed could not be checked. Bird activity is unknown; see the original source.");
+    text("eagle-reports-date","No verified fresh report date.");
+  }
+  if(ice.status==="not_applicable"){
+    text("eagle-ice-number","Not applicable");
+    text("eagle-ice-detail","This is an inland river or refuge; lake-wide percentages are not a meaningful local ice measurement.");
+    text("eagle-ice-date","For local open water, use verified operator reports and observation.");
+  }else if(["recent","historical"].includes(ice.status)&&Number.isFinite(Number(ice.percent))){
+    const recent=ice.status==="recent";
+    text("eagle-ice-number",recent?Number(ice.percent).toFixed(1)+"% lake ice":"No current ice data");
+    const lake=String(ice.lake||"lake");const change=Number.isFinite(ice.deltaPctPoints)?" Over the prior 5–10 days: "+(ice.deltaPctPoints>0?"+":"")+ice.deltaPctPoints.toFixed(1)+" percentage points.":"";
+    text("eagle-ice-detail",(recent?"Latest NOAA lake-wide "+lake+" ice concentration: ":"Last season only: NOAA measured "+lake+" lake-wide ice at ")+Number(ice.percent).toFixed(1)+"% on "+ice.date+"."+change+" Not the selected river's ice.");
+    text("eagle-ice-date","Measured "+ice.date+" · "+ice.ageDays+" days old · "+(recent?"recent":"NOT CURRENT")+".");
+  }else{
+    text("eagle-ice-number","Unavailable");
+    text("eagle-ice-detail","NOAA has no usable current-season lake-wide measurement for this selected region. Do not infer open river water.");
+    text("eagle-ice-date","Measurement date unavailable.");
+  }
+  const recentSighting=obs.status==="ok"&&obs.latestObservedOn&&Number(obs.ageDays)<=7;
+  const olderSighting=obs.status==="ok"&&obs.latestObservedOn;
+  if(recentSighting){
+    text("eagle-evidence-conclusion","Recent bald eagle reports exist in the broader viewing region");
+    text("eagle-evidence-why","Community reports within 40 km are a useful reason to investigate this corridor, not proof eagles are gathering at "+s.name+". Check access and weather, and watch without disturbing nests or roosts.");
+  }else if(olderSighting){
+    text("eagle-evidence-conclusion","Older reports exist; current activity is unconfirmed");
+    text("eagle-evidence-why","The latest eligible observation is "+obs.ageDays+" days old. Local water openings and eagle gatherings still require on-site or operator confirmation.");
+  }else if(obs.status!=="ok"){
+    text("eagle-evidence-conclusion","Regional observation feed unavailable · eagle activity unknown");
+    text("eagle-evidence-why","No fresh community observation data could be retrieved. This is not evidence for or against an eagle gathering. Check the linked source, site access and forecast.");
+  }else{
+    text("eagle-evidence-conclusion","No qualifying regional reports in this search window");
+    text("eagle-evidence-why","Missing or empty community observations are not evidence of absence. The seasonal calendar and NWS forecast remain planning context only.");
+  }
+  text("eagle-evidence-asof","Feeds checked "+new Date(result.asOf).toLocaleString()+". Source reporting can lag, and responses may be cached. Exact eagle observation locations are never displayed.");
+ }catch{
+  if(token!==evidenceToken||selected.id!==s.id)return;
+  text("eagle-reports-number","Unavailable");text("eagle-reports-detail","Recent observation feed could not be verified.");
+  text("eagle-reports-date","No observation date verified.");
+  text("eagle-ice-number","Unavailable");text("eagle-ice-detail","Current ice record could not be verified.");text("eagle-ice-date","No measurement date verified.");
+  text("eagle-evidence-conclusion","Live evidence could not be verified");
+  text("eagle-evidence-why","No observation or ice condition is being assumed. Seasonal guidance and NWS weather can still help plan a trip.");
+  text("eagle-evidence-asof","Open the linked source pages to check directly.");
+ }
 }
 async function getJson(url,signal){
  const r=await fetch(url,{headers:{Accept:"application/geo+json, application/json"},signal,cache:"no-store"});
@@ -243,13 +378,33 @@ async function loadCount(s){
   if(data.stale){const q=document.createElement("p");q.textContent="This observation is older than 14 days. Do not use it as evidence of activity today.";field.append(q)}
  }catch{if(selected.id===s.id)p.textContent="Published counts are temporarily unavailable. Use the source link; no count is assumed."}
 }
+el("region-filter").addEventListener("change",()=>{
+ el("state-filter").value="all";
+ const region=el("region-filter").value;
+ const matches=spots.filter(s=>region==="all"||window.EaglePlanning.regionForSpot(s)===region);
+ // Changing the region updates the *actual selected site*, and therefore
+ // the seasonal lens and its NWS forecast, not just hidden map markers.
+ if(matches.length&&!matches.some(s=>s.id===selected.id))pick(matches[0]);
+ else renderList();
+});
+el("show-upper-peninsula").addEventListener("click",()=>{
+ el("region-filter").value="upper-peninsula";
+ el("state-filter").value="MI";
+ el("type-filter").value="all";
+ el("saved-filter").checked=false;
+ const preferred=spots.find(s=>s.id==="soo-rotary");
+ if(preferred)pick(preferred);else renderList();
+ const mapSection=el("finder");if(mapSection&&typeof mapSection.scrollIntoView==="function")mapSection.scrollIntoView({behavior:"smooth",block:"start"});
+});
 el("state-filter").addEventListener("change",renderList);el("type-filter").addEventListener("change",renderList);el("saved-filter").addEventListener("change",renderList);
 el("saved-toggle").addEventListener("click",()=>{if(saved.has(selected.id))saved.delete(selected.id);else saved.add(selected.id);try{localStorage.setItem("eagle-saved-v1",JSON.stringify([...saved]))}catch{}renderList();el("saved-toggle").textContent=saved.has(selected.id)?"Saved ✓":"Save spot"});
 el("refresh-weather").addEventListener("click",()=>loadWeather(selected));
 el("copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);el("copy-link").textContent="Copied";setTimeout(()=>text("copy-link","Copy spot link"),1800)}catch{el("copy-link").textContent="Copy URL from address bar"}});
 el("nearest").addEventListener("click",()=>{if(!navigator.geolocation){text("location-help","Location not supported in this browser.");return}
- navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
+ navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("region-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
 el("mode-gather").addEventListener("click",()=>switchMode("gather"));
 el("mode-display").addEventListener("click",()=>switchMode("display"));
+el("finder-gather").addEventListener("click",()=>switchMode("gather"));
+el("finder-display").addEventListener("click",()=>switchMode("display"));
 initMap();renderPlanner();pick(selected);
 })();
