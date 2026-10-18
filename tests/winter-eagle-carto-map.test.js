@@ -64,8 +64,10 @@ class E {
  click(){this.listeners.click?.()}
  setAttribute(k,v){this.attrs[k]=v}
 }
-function browserMap(configPayload){
- const prior=global.fetch;global.fetch=async()=>({ok:true,json:async()=>configPayload});
+function browserMap(configPayload,hash=""){
+ const prior=global.fetch,priorLocation=global.location;
+ global.location={hash};
+ global.fetch=async()=>({ok:true,json:async()=>configPayload});
  const made=[];
  class FakeMap {
   constructor(o){this.opts=o;this.events={};this.sources={};this.layers=[];this.zoom=5;this.moves=[];made.push(this)}
@@ -87,14 +89,16 @@ function browserMap(configPayload){
   {id:'detroit',lon:-83.18,lat:42.1,name:'Detroit',city:'Trenton',state:'MI',type:'resident'},
   {id:'soo',lon:-84.35,lat:46.5,name:'Soo',city:'Sault Ste. Marie',state:'MI',type:'habitat'}
  ];
- let selected=spots[0];
+ let selected=spots.find(x=>"#"+x.id===hash)||spots[0];
  const holder=new E(),caption={textContent:''};
  const controller=EagleMap.init({holder,caption,spots,maplibregl:{Map:FakeMap,NavigationControl:class{},AttributionControl:class{}},getSelected:()=>selected,onSelect:(s)=>{selected=s;controller.select(s)}});
  const settle=async()=>{
   for(let n=0;n<5;n++)await new Promise(resolve=>setImmediate(resolve));
   const m=made.at(-1);m?.emit('load');return m;
  };
- const restore=()=>{global.fetch=prior;global.document=documentPrior;controller?.dispose()};
+ const restore=()=>{global.fetch=prior;global.document=documentPrior;
+   if(priorLocation===undefined)delete global.location;else global.location=priorLocation;
+   controller?.dispose()};
  return {made,controller,spots,holder,caption,settle,restore};
 }
 test('CARTO map loads clustered selectable sites, filters pins, zooms into location and supports view all',async()=>{
@@ -121,5 +125,23 @@ test('missing key uses full interactive Liberty map (not the old stretched SVG)'
   assert.equal(m.opts.style,EagleMap.FALLBACK_STYLE);
   assert.ok(t.caption.textContent.includes('OpenFreeMap Liberty'));
   assert.ok(m.layers.some(l=>l.id==='eagle-pin-halo'));
+ }finally{t.restore()}
+});
+
+test('ordinary page visit defaults to full regional overview despite script-generated URL hash',async()=>{
+ const t=browserMap({provider:'openfreemap',enabled:false,styleUrl:EagleMap.FALLBACK_STYLE});
+ try{
+  // Existing app.js writes #detroit after initialization, before async map load.
+  global.location.hash='#detroit';
+  const map=await t.settle();
+  assert.equal(map.moves[0]?.kind,'fit','must fit the region, not zoom to Detroit');
+ }finally{t.restore()}
+});
+test('a user opening a pre-existing shared link still receives a focused site map',async()=>{
+ const t=browserMap({provider:'openfreemap',enabled:false,styleUrl:EagleMap.FALLBACK_STYLE},'#soo');
+ try{
+  const map=await t.settle();
+  assert.equal(map.moves[0]?.kind,'focus');
+  assert.deepEqual(map.moves[0]?.center,[-84.35,46.5]);
  }finally{t.restore()}
 });
