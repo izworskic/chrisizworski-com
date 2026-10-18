@@ -1,5 +1,16 @@
 # Search Growth + Revenue Session Log
 
+## Waterfowl freeze-line NOAA + NWS engine v2 — October 18, 2026
+
+- **Ownership / status:** GitHub draft PR #1054, branch feat/waterfowl-freeze-line-2026, first-party canonical /waterfowl-freeze-line/. The Vercel preview still lacks an accessible verified live deployment; do not merge on the assumption that the page works in production.
+- **Verified upstream product contracts:** NOAA USNIC IMS 1-km ImageServer /identify returns class 1 (water), 2 (snow-free land), 3 (mapped ice), 4 (snow-covered land) plus idp_filedate in the catalog item; NOAA USNIC Great Lakes Ice Chart MapServer/0/query returns chart polygons with dated SIGRID-3 total-concentration codes. Source/units documented on USNIC and NSIDC sites. NOAA NOHRSC snow-depth MapServer identifies raster cells but no stable independently verified depth-unit conversion has been introduced.
+- **Implemented:** Two NOAA adapters with fixed official hosts, explicit per-cell reference coordinates, 72-hour file-staleness gate, off-season/stale/error veto, WMO SIGRID-3 code decoding. NWS hourly engine now returns forecast cold-degree-hours, longest uninterrupted freezing run, and count/timing of northerly 10+ mph wind forecast hours, in addition to existing 24/72h freezing exposure and cooling signals. UI has independent NOAA 1-km / NWS map-color modes, NOAA observed-analysis evidence cards with dates, weather timeline and observation context. Source-labeled weather and sightings remain unblended.
+- **Boundaries:** One NOAA IMS pixel is NOT a regional percentage, whole-marsh freeze state, snow depth, safe ice reading or species count. Great Lakes polygon does NOT assess interior wetland ice. NOAA service date fields indicate file date, not necessarily satellite acquisition time. Cold exposure thresholds are illustrative heuristic categories, not calibrated migration probabilities; iNaturalist reports are effort-biased and do not count birds.
+- **Tests:** Added tests/waterfowl-noaa.test.js and new UI evidence assertions. An earlier GitHub full 53-step repository gate passed at commit a92d6cb; after UI/map layering, an unrelated Niagara-script assertion failed in one site-wide run despite the expected expressions existing in the source. A rerun was requested; overall final branch gates and public-output audit must be checked at newest commit before merge. Name SERP protection and Detroit discovery governance were green on the preceding run.
+- **Search outcomes:** No measured GSC, GA4, AdSense, or rankings impact; never claim uplift.
+- **Exactly one next action:** Verify the newest branch's full GitHub CI plus Vercel preview/live NOAA/NWS response and desktop/mobile map, fix any failures, and merge only after all gates are green and the canonical URL has a verified deployment path.
+
+
 ## Waterfowl freeze-line first-party launch work — October 18, 2026
 
 - **Intent:** Build a Michigan and Great Lakes / Mississippi Flyway weather-and-observation explorer rather than a seasonal duck migration map. First-party URL: /waterfowl-freeze-line/.
