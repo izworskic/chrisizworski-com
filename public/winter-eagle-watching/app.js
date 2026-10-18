@@ -25,6 +25,7 @@ const spots=[
 ];
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
 let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
+let updateMapMatches=()=>{};
 let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/Detroit";
 let evidenceToken=0;
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
@@ -49,6 +50,7 @@ function renderList(){
  text("spot-count",matches.length+" viewing locations");el("no-spots").hidden=matches.length>0;
  // Native map buttons, not Leaflet markers: keep map/list filters synchronized.
  const visible=new Set(matches.map(s=>s.id));
+ updateMapMatches(matches);
  document.querySelectorAll("#map .native-pin").forEach(b=>{
    const shown=visible.has(b.dataset.spot);
    b.hidden=!shown;
@@ -141,6 +143,19 @@ function renderPlanner(){
 function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner();renderList()}
 function initMap(){
  const holder=el("map"),caption=el("map-provider");
+ // CARTO Voyager when a public domain-restricted CARTO key is configured;
+ // otherwise a fully interactive OpenFreeMap vector style, never key watermarks.
+ if(window.EagleMap&&window.maplibregl){
+   const controller=window.EagleMap.init({
+      holder,caption,spots,getSelected:()=>selected,onSelect:pick,maplibregl:window.maplibregl
+   });
+   if(controller){
+     moveMapToSelected=()=>controller.select(selected);
+     updateMapMatches=matches=>controller.filter(matches);
+     return;
+   }
+ }
+ // Accessible self-hosted geographic diagram only when WebGL/MapLibre cannot run.
  holder.replaceChildren();
  holder.classList.add("native-map");
  // First-party SVG with Natural Earth shapes; no CDN, external map tiles or API keys.
