@@ -51,5 +51,5 @@ test('page has first-party map, provenance, snow selector, required author ident
  assert.match(html,/rel="canonical"/);
  assert.match(app,/aria-pressed/);
  assert.match(api,/X-Robots-Tag/);
- assert.doesNotMatch(html,/predict.*when.*deer.*drop/i);
+ assert.match(html,/cannot tell you when a specific buck dropped/i);
 });
