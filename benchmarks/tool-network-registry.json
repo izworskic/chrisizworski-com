@@ -3535,11 +3535,11 @@
     {
       "id": "ferry-isle-royale",
       "name": "Isle Royale Ferry Planner",
-      "canonical": "https://chrisizworski.com/isle-royale-ferry/",
+      "canonical": "https://chrisizworski.com/isle-royale-ferry-comparison/",
       "aliases": [],
       "kind": "route-decision-planner",
       "cluster": "trip-planning",
-      "primaryIntent": "Compare Isle Royale ferry gateways",
+      "primaryIntent": "Compare four Isle Royale mainland ferry gateways and Rock Harbor versus Windigo",
       "seasons": [
         1,
         2,
@@ -3564,7 +3564,7 @@
       "networkRole": "destination",
       "searchTreatment": {
         "status": "active",
-        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+        "intentSeparation": "Four-operator island-access comparison, separate from the already-owned Grand Portage Sea Hunter III/Voyageur II fare and permit planner."
       },
       "searchEvidence": {
         "status": "unknown"
