@@ -110,7 +110,7 @@
    tabs.forEach(button=>{const active=button.dataset.flightStage===s.id;button.setAttribute("aria-pressed",String(active));button.classList.toggle("active",active)});
    play.textContent=reduced?"Show still diagram":"Play flight";
    scene.setAttribute("aria-label","Illustrated flight path: "+s.name+". "+s.watch+" Not footage or a documented observation.");
-   display(reduced?.48:0);
+   display(reduced ? 0.48 : 0);
   }
   tabs.forEach(tab=>tab.addEventListener("click",()=>{choose(tab.dataset.flightStage); if(!reduced)start()}));
   play.addEventListener("click",start);
