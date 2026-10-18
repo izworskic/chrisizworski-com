@@ -9,6 +9,7 @@ on:
       - 'lib/waterfowl-*.js'
       - 'public/waterfowl-freeze-line/**'
       - 'tests/waterfowl-*.test.js'
+      - 'scripts/smoke-waterfowl-sources.cjs'
       - '.github/workflows/waterfowl-source-gate.yml'
   pull_request:
     branches: [main]
@@ -17,6 +18,7 @@ on:
       - 'lib/waterfowl-*.js'
       - 'public/waterfowl-freeze-line/**'
       - 'tests/waterfowl-*.test.js'
+      - 'scripts/smoke-waterfowl-sources.cjs'
       - 'public/tools/index.html'
       - 'public/sitemap.xml'
       - '.github/workflows/waterfowl-source-gate.yml'
