@@ -79,7 +79,7 @@ test('CARTO-ready map page keeps accessible local map fallback if MapLibre is bl
  const map=fs.readFileSync(path.join(root,'eagle-map.js'),'utf8');
  const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
  assert.ok(page.includes('maplibre-gl@5.16.0/dist/maplibre-gl.js'));
- assert.ok(page.includes('/winter-eagle-watching/eagle-map.js?v=2'));
+ assert.ok(page.includes('/winter-eagle-watching/eagle-map.js?v=3'));
  assert.ok(app.includes('window.EagleMap.init'));
  assert.ok(app.includes('updateMapMatches(matches)'));
  assert.ok(map.includes('CARTO_STYLE'));
