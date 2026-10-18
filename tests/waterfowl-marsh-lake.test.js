@@ -55,6 +55,16 @@ test('Michigan DNR survey reports parse two independently dated tables and ignor
  assert.equal(v.geese.change,250);
  assert.equal(v.ducks.previous.date,'2026-10-04');
 });
+test('Official Michigan surveys retain separately reported dabbling and diving ducks',()=>{
+ const table='<table><thead><tr><th>Week Ending:</th><th>Total ducks:</th><th>Total dabblers:</th><th>Total divers:</th></tr></thead>'+
+ '<tbody><tr><td>10/11/2026</td><td>4,525</td><td>4,400</td><td>125</td></tr></tbody></table>';
+ const r=snow.parseDNR(table,NOW);
+ assert.equal(r.status,'reported');
+ assert.equal(r.ducks.count,4525);
+ assert.equal(r.ducks.dabblers,4400);
+ assert.equal(r.ducks.divers,125);
+ assert.equal(r.geese,null);
+});
 test('A negative survey change is not treated as observed lakeward migration',()=>{
  const surveys={sites:[{status:'reported',ducks:{change:-100,count:1000}}]};
  const weather={status:'forecast',longestFreezingRunHours:35,forecastColdDegreeHours:260};
