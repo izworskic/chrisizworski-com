@@ -138,3 +138,53 @@ test('UP seasonal emphasis reflects geographic context without presenting a calc
  assert.match(E.regionDetails('upper-peninsula').note,/ice|river|snow/i);
  assert.ok(!JSON.stringify(E.regionDetails('upper-peninsula')).match(/probability|odds|sighting rate/i));
 });
+
+test('field-first page order is flight guide, public places, then site-specific timing',()=>{
+ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+ const markers=['id="read-the-sky"','id="finder"','id="location-details"','id="eagle-season-planner"','id="weekly-day-cards"'];
+ const order=markers.map(s=>html.indexOf(s));
+ assert.ok(order.every(n=>n>0),'Every field-plan element must exist');
+ assert.ok(order.every((n,i)=>i===0||n>order[i-1]),'The useful field steps must appear in order');
+ assert.ok(html.includes('id="show-locations"'));
+ assert.ok(html.includes('none of our map pins is a verified cartwheel venue'));
+ assert.ok(html.includes('class="flight-quiz-disclosure"'),'The optional quiz must not dominate the trip-planning page');
+ const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(ids.length,new Set(ids).size,'Duplicate IDs break controls and tracking');
+});
+test('aerial-flight intent changes location guidance and weather without treating venues as confirmed displays',async()=>{
+ const {document}=makeBrowser(),node=id=>document.getElementById(id);
+ node('finder-display').click();
+ assert.equal(node('finder-display').getAttribute('aria-pressed'),'true');
+ assert.equal(node('mode-display').getAttribute('aria-pressed'),'true');
+ assert.match(node('finder-purpose').textContent,/No mapped site is a confirmed cartwheel location/i);
+ assert.match(node('site-purpose-heading').textContent,/not a known cartwheel venue/i);
+ assert.match(node('where-look-label').textContent,/scan the sky/i);
+ assert.match(node('week-lead').textContent,/wind and precipitation/i);
+ assert.ok(node('weekly-key-primary').textContent.includes('without rain/snow'));
+ const at=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='soo-cfre');
+ at.click();
+ assert.match(node('site-purpose-text').textContent,/not verified/i);
+ assert.equal(node('finder-display').getAttribute('aria-pressed'),'true');
+ for(let i=0;i<6;i++)await new Promise(r=>setImmediate(r));
+ assert.ok(node('weekly-day-cards').children.length>=6);
+ assert.ok(node('weekly-day-cards').children.some(x=>x.children.some(y=>y.className.includes('dry-bar'))));
+ node('finder-gather').click();
+ assert.equal(node('mode-gather').getAttribute('aria-pressed'),'true');
+ assert.match(node('weekly-key-primary').textContent,/32°F/);
+ assert.match(node('site-purpose-heading').textContent,/lead|habitat/i);
+ assert.match(node('finder-purpose').textContent,/freezing-air context/i);
+});
+
+test('mobile hero keeps real credited eagle photo and routes visitors into flight guide before the map',()=>{
+ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+ const css=fs.readFileSync(path.join(dir,'style.css'),'utf8');
+ const hero=html.slice(html.indexOf('<section class="hero"'),html.indexOf('</section>',html.indexOf('<section class="hero"')));
+ assert.ok(hero.includes('See eagles gather. Learn their aerial dance.'));
+ assert.ok(hero.includes('href="#read-the-sky"'));
+ assert.ok(hero.includes('href="#finder"'));
+ assert.ok(hero.indexOf('href="#read-the-sky"')<hero.indexOf('href="#finder"'));
+ assert.ok(hero.includes('Karl Fleming'));
+ assert.ok(hero.includes('Bald_Eagle_%2850983412142%29'));
+ assert.ok(css.includes('.hero img{height:165px'));
+ assert.ok(css.includes('.hero-actions{display:grid;grid-template-columns:1fr 1fr'));
+});
