@@ -150,3 +150,33 @@
 .evidence-interpretation{background:#eef4ed;border-radius:11px;padding:15px 17px;border-left:4px solid #608d72;margin:13px 0}
 .evidence-interpretation strong{display:block;font-size:16px}.evidence-interpretation p{font-size:13px;color:#48634f;margin:6px 0 0}
 @media(max-width:670px){.evidence-panel{padding:15px}.evidence-grid{grid-template-columns:1fr}.evidence-card p{min-height:0}}
+
+
+/* CARTO Voyager vector map / OpenFreeMap vector fallback.
+   Preserve native SVG only if MapLibre/WebGL unavailable. */
+#map.eagle-vector-map{position:relative;overflow:hidden;height:510px;background:#dbe8e3;cursor:grab;border:1px solid #cbd9d2}
+#map .eagle-vector-viewport{position:absolute;inset:0;width:100%;height:100%}
+#map.eagle-vector-map .maplibregl-canvas{display:block}
+#map.eagle-vector-map .maplibregl-ctrl-top-right{top:52px;right:9px}
+#map.eagle-vector-map .maplibregl-ctrl-group{border:1px solid #cbdad0;border-radius:9px;box-shadow:0 2px 7px rgba(18,55,37,.18);overflow:hidden}
+#map.eagle-vector-map .maplibregl-ctrl button{min-width:33px;min-height:33px}
+#map .maplibregl-ctrl-attrib{font-size:10px!important}
+.eagle-map-overlay{position:absolute;left:12px;bottom:29px;z-index:3;max-width:min(78%,325px);border:1px solid rgba(214,227,214,.95);border-radius:11px;background:rgba(255,255,253,.97);padding:11px 13px;box-shadow:0 5px 16px rgba(12,44,27,.20);pointer-events:auto}
+.eagle-map-overlay strong,.eagle-map-overlay span,.eagle-map-overlay a{display:block;line-height:1.35}
+.eagle-map-overlay strong{font-size:14px;color:#1e4635}
+.eagle-map-overlay span{font-size:12px;color:#526f60;margin-top:3px}
+.eagle-map-overlay a{font-size:12px;font-weight:800;margin-top:6px}
+.eagle-map-extra-controls{position:absolute;z-index:3;right:9px;top:9px;display:flex;gap:6px}
+.eagle-map-extra-controls button{font-size:12px;color:#174831;background:#fff;border:1px solid #b9cfc1;border-radius:8px;font-weight:800;min-height:35px;padding:7px 9px;box-shadow:0 2px 8px rgba(15,55,32,.15)}
+.eagle-map-extra-controls button:focus-visible{outline:3px solid #b68036;outline-offset:2px}
+.eagle-map-key{position:absolute;pointer-events:none;top:55px;left:12px;max-width:58%;background:rgba(255,255,255,.91);border:1px solid #d7e4d8;padding:7px 9px;border-radius:6px;font-size:11px;color:#42614d;line-height:1.4;z-index:2}
+@media(max-width:980px){#map.eagle-vector-map{height:440px}}
+@media(max-width:670px){
+ #map.eagle-vector-map{height:385px}
+ .eagle-map-extra-controls{top:8px;right:8px}
+ .eagle-map-extra-controls button{font-size:11px;padding:6px 7px;min-height:36px}
+ .eagle-map-key{top:53px;left:8px;max-width:60%;font-size:10px;line-height:1.3;padding:6px}
+ .eagle-map-overlay{left:8px;bottom:24px;max-width:80%;padding:9px 11px}
+ .eagle-map-overlay strong{font-size:12px}
+ .eagle-map-overlay span,.eagle-map-overlay a{font-size:11px}
+}
