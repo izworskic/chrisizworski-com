@@ -70,8 +70,8 @@ test('real production JS initializes interactive map and location list without R
  assert.equal(croton.getAttribute('aria-pressed'),'true');
  assert.match(node('map').children.at(-1).children[0].textContent,/Croton Dam/);
  node('state-filter').value='MI';node('state-filter').dispatch('change');
- assert.equal(node('spot-list').children.length,7);
- assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,7);
+ assert.equal(node('spot-list').children.length,11);
+ assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,11);
  node('state-filter').value='all';node('state-filter').dispatch('change');
  assert.equal(node('spot-list').children.length,19);
 });
