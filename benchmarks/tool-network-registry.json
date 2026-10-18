@@ -3379,6 +3379,348 @@
         "status": "unknown",
         "note": "Initial build October 18, 2026; demand and outcome not yet measured."
       }
+    },
+    {
+      "id": "great-lakes-ferries",
+      "name": "Great Lakes Ferry Planner Directory",
+      "canonical": "https://chrisizworski.com/great-lakes-ferries/",
+      "aliases": [],
+      "kind": "directory",
+      "cluster": "trip-planning",
+      "primaryIntent": "Choose among Great Lakes ferry crossings",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-put-in-bay",
+      "name": "Put-in-Bay Ferry Planner",
+      "canonical": "https://chrisizworski.com/put-in-bay-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Miller vs Jet Express ferry Put-in-Bay",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-lake-express",
+      "name": "Lake Express Ferry Planner",
+      "canonical": "https://chrisizworski.com/lake-michigan-ferry/lake-express/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Muskegon Milwaukee Lake Express ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-ss-badger",
+      "name": "S.S. Badger Ferry Planner",
+      "canonical": "https://chrisizworski.com/lake-michigan-ferry/ss-badger/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Ludington Manitowoc SS Badger ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-isle-royale",
+      "name": "Isle Royale Ferry Planner",
+      "canonical": "https://chrisizworski.com/isle-royale-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Compare Isle Royale ferry gateways",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-chi-cheemaun",
+      "name": "Chi-Cheemaun Ferry Planner",
+      "canonical": "https://chrisizworski.com/chi-cheemaun-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Tobermory Manitoulin Island Chi Cheemaun ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-pelee",
+      "name": "Pelee Island Ferry Planner",
+      "canonical": "https://chrisizworski.com/pelee-island-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Pelee Island ferry Kingsville Leamington",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-beaver",
+      "name": "Beaver Island Ferry Planner",
+      "canonical": "https://chrisizworski.com/beaver-island-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Charlevoix Beaver Island ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "ferry-toronto",
+      "name": "Toronto Islands Ferry Planner",
+      "canonical": "https://chrisizworski.com/toronto-islands-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Toronto Centre Ward Hanlans Island ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Route-specific 2026 source-based ferry planning; no live capacity or cancellation guarantee."
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
     }
   ],
   "relationships": [
@@ -4757,6 +5099,142 @@
       "strength": "optional",
       "surface": "tools-directory",
       "reason": "Transition from hunting-season deer conditions to winter shed-search planning."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-put-in-bay",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-put-in-bay",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-lake-express",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-lake-express",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-ss-badger",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-ss-badger",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-isle-royale",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-isle-royale",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-chi-cheemaun",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-chi-cheemaun",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-pelee",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-pelee",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-beaver",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-beaver",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-toronto",
+      "type": "route-directory",
+      "strength": "essential",
+      "surface": "ferry-hub",
+      "reason": "Visitors choose an individual ferry planner for this destination."
+    },
+    {
+      "from": "ferry-toronto",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Route-specific planners return visitors to the five-lake directory."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "mackinac-island",
+      "type": "related-destination",
+      "strength": "strong",
+      "surface": "ferry-hub",
+      "reason": "Mackinac has an existing independent ferry decision product."
     }
   ],
   "cannibalizationGroups": [
