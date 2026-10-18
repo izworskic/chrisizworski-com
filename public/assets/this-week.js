@@ -6,7 +6,7 @@ if(!root||!E)return;
 const $=id=>document.getElementById(id);
 const cards={shed:$('week-shed'),maple:$('week-maple'),rock:$('week-rock'),eagle:$('week-eagle')};
 const scopes={shed:'Local forecast + regional modeled snow',maple:'Local forecast, not measured sap',rock:'Statewide beaches, NOT the selected town',eagle:'Public viewing corridors, not sightings'};
-let sequence=0,started=false;
+let sequence=0,started=false,rockCache=null;
 function readable(t){
  if(!t)return 'Seasonal / interpretive information';
  const d=new Date(t);return Number.isNaN(+d)?'Source time unavailable':'Source updated '+d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
@@ -21,7 +21,7 @@ function show(item){
  card.querySelector('[data-week-trigger]').textContent=item.trigger;
  card.querySelector('[data-week-scope]').textContent=item.scope||scopes[item.id];
  card.querySelector('[data-week-source]').textContent=item.source+' · '+readable(item.updated);
- if(item.details)card.querySelector('[data-week-detail]').textContent=item.details;
+ card.querySelector('[data-week-detail]').textContent=item.details||'';
 }
 function unavailable(id){
  const item={
@@ -52,7 +52,7 @@ async function refresh(){
  const requests=[
   lookup('/api/shed-antlers?mode=forecast&site='+encodeURIComponent(region),ac.signal),
   lookup('/api/maple-sap?mode=site&site='+encodeURIComponent(region),ac.signal),
-  lookup('/api/michigan-rockhounding',ac.signal)
+  rockCache&&Date.now()-rockCache.at<600000?Promise.resolve(rockCache.data):lookup('/api/michigan-rockhounding',ac.signal).then(data=>{rockCache={at:Date.now(),data};return data;})
  ];
  // Independent settles let valid tools work when one external provider fails.
  const results=await Promise.allSettled(requests);
