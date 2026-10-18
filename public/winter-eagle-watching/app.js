@@ -132,6 +132,11 @@ function initMap(){
  add("Zoom out","−",()=>changeZoom(zoom-.5));
  add("Reset map view","⤢",()=>{zoom=1;panX=0;panY=0;apply()});
  holder.append(nav);
+ // Immediate feedback matters: selected location is visible on the map itself.
+ const glance=document.createElement("div");glance.className="native-map-glance";glance.setAttribute("aria-live","polite");
+ const spotName=document.createElement("strong");const spotCity=document.createElement("span");
+ const more=document.createElement("a");more.href="#location-details";more.textContent="See location details ↓";
+ glance.append(spotName,spotCity,more);holder.append(glance);
  let dragging=false,atX=0,atY=0;
  holder.addEventListener("pointerdown",e=>{
    if(e.target.closest("button"))return;
@@ -150,7 +155,8 @@ function initMap(){
  window.addEventListener("resize",apply);
  // Selecting a spot from the list makes that marker visible if zoomed.
  moveMapToSelected=()=>{
-   holder.querySelectorAll(".native-pin").forEach(b=>b.classList.toggle("chosen",b.dataset.spot===selected.id));
+   spotName.textContent=selected.name;spotCity.textContent=selected.city+", "+selected.state;
+   holder.querySelectorAll(".native-pin").forEach(b=>{b.classList.toggle("chosen",b.dataset.spot===selected.id);b.setAttribute("aria-pressed",String(b.dataset.spot===selected.id))});
    if(zoom>1){
      const sx=lonPercent(selected.lon)/100*holder.clientWidth;
      const sy=latPercent(selected.lat)/100*holder.clientHeight;
