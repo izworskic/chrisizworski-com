@@ -14,7 +14,7 @@ const spots=[
 {id:"clarksville",name:"Clarksville Riverfront · Lock & Dam 24",city:"Clarksville",state:"MO",lat:39.3696,lon:-90.9020,type:"winter",water:"The Mississippi River near Lock and Dam 24 is a known winter eagle-watching corridor.",look:"Stay on the public riverfront and scan moving water and mature trees from a safe distance.",access:"Check flood, road and riverfront access restrictions with the operator before driving.",source:"https://www.mvs.usace.army.mil/Missions/Recreation/",map:"https://www.google.com/maps/search/?api=1&query=Clarksville+Missouri+riverfront"}
 ];
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
-let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],map,markers=[],forecastController=null,fetchToken=0;
+let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
 const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
@@ -31,48 +31,85 @@ function renderList(){
  markers.forEach(({marker,spot})=>{if(marker)marker.setOpacity(matches.includes(spot)?1:.28)});
 }
 function initMap(){
- const holder=el("map");
- const bounds=[[33.5,-101],[50,-77]];
- const mapImage="/winter-eagle-watching/midwest-vector-map.svg";
- const caption=el("map-provider");
- if(!window.L){
-   // Working keyboard-accessible map even if the Leaflet CDN is blocked.
-   // The map image and all 9 markers are first-party and require no tile API.
-   holder.replaceChildren();
-   holder.classList.add("native-map");
-   holder.style.backgroundImage='url("'+mapImage+'")';
-   const merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
-   for(const s of spots){
-     const b=document.createElement("button");b.type="button";b.className="native-pin";
-     b.textContent=String(spots.indexOf(s)+1);
-     b.style.left=(((s.lon+101)/24)*100).toFixed(3)+"%";
-     b.style.top=(((merc(50)-merc(s.lat))/(merc(50)-merc(33.5)))*100).toFixed(3)+"%";
-     b.setAttribute("aria-label","Select "+s.name);
-     b.addEventListener("click",()=>pick(s));holder.append(b);
-   }
-   if(caption)caption.textContent="Interactive map · first-party Natural Earth geographic basemap. No map API or remote tiles.";
-   return;
+ const holder=el("map"),caption=el("map-provider");
+ holder.replaceChildren();
+ holder.classList.add("native-map");
+ // First-party SVG with Natural Earth shapes; no CDN, external map tiles or API keys.
+ // All markers are real, accessible HTML buttons aligned to Mercator coordinates.
+ const canvas=document.createElement("div");
+ canvas.className="native-map-canvas";
+ const art=document.createElement("img");
+ art.className="native-map-art";
+ art.src="/winter-eagle-watching/midwest-vector-map.svg";
+ art.alt="Geographic reference map of Midwest states, Great Lakes and Mississippi River";
+ art.loading="eager";art.draggable=false;
+ canvas.append(art);
+ const merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
+ const latPercent=lat=>100*(merc(50)-merc(lat))/(merc(50)-merc(33.5));
+ const lonPercent=lon=>100*(lon+101)/24;
+ for(const [i,s] of spots.entries()){
+   const b=document.createElement("button");
+   b.type="button";b.className="native-pin";b.dataset.spot=s.id;
+   b.textContent=String(i+1);
+   b.style.left=lonPercent(s.lon).toFixed(3)+"%";
+   b.style.top=latPercent(s.lat).toFixed(3)+"%";
+   b.setAttribute("aria-label","View "+s.name+", "+s.state);
+   b.title=s.name+" · "+s.state;
+   b.addEventListener("click",()=>pick(s));
+   canvas.append(b);
  }
- const loading=holder.querySelector(".fallback");if(loading)loading.remove();
- map=L.map("map",{scrollWheelZoom:false,minZoom:4,maxZoom:10}).setView([41.1,-90.3],5);
- const basemap=L.imageOverlay(mapImage,bounds,{interactive:false,alt:"Midwest map with state boundaries, the Great Lakes, and Mississippi River"});
- basemap.on("error",()=>{
-   if(caption)caption.textContent="Basemap image unavailable; pins and public viewing locations remain selectable.";
+ holder.append(canvas);
+ const nav=document.createElement("div");nav.className="native-map-controls";
+ const add=(label,symbol,fn)=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-label",label);b.textContent=symbol;b.addEventListener("click",fn);nav.append(b);return b};
+ let zoom=1,panX=0,panY=0;
+ const apply=()=>{
+   const maxX=holder.clientWidth*(zoom-1)/2, maxY=holder.clientHeight*(zoom-1)/2;
+   panX=Math.max(-maxX,Math.min(maxX,panX));panY=Math.max(-maxY,Math.min(maxY,panY));
+   canvas.style.transform="translate("+panX+"px,"+panY+"px) scale("+zoom+")";
+   canvas.style.setProperty("--inverse-map-scale",String(1/zoom));
+ };
+ const changeZoom=next=>{
+   const old=zoom;zoom=Math.max(1,Math.min(3,Math.round(next*10)/10));
+   if(old!==zoom){panX*=zoom/old;panY*=zoom/old}
+   apply();
+ };
+ add("Zoom in","+ ",()=>changeZoom(zoom+.5));
+ add("Zoom out","−",()=>changeZoom(zoom-.5));
+ add("Reset map view","⤢",()=>{zoom=1;panX=0;panY=0;apply()});
+ holder.append(nav);
+ let dragging=false,atX=0,atY=0;
+ holder.addEventListener("pointerdown",e=>{
+   if(e.target.closest("button"))return;
+   dragging=true;atX=e.clientX;atY=e.clientY;
+   if(holder.setPointerCapture)holder.setPointerCapture(e.pointerId);
+   holder.classList.add("dragging");
  });
- basemap.addTo(map);
- if(caption)caption.textContent="Interactive first-party Midwest reference map · Natural Earth public-domain boundaries · no keys, tile servers or subscriptions.";
- spots.forEach((s,i)=>{
-   const icon=L.divIcon({html:'<span class="pin '+(s.id===selected.id?"chosen":"")+'">'+(i+1)+'</span>',className:"",iconSize:[27,27],iconAnchor:[13,13]});
-   const marker=L.marker([s.lat,s.lon],{icon,title:s.name,keyboard:true}).addTo(map);
-   marker.bindTooltip(s.name+" · "+s.state);
-   marker.on("click",()=>pick(s));markers.push({spot:s,marker});
+ holder.addEventListener("pointermove",e=>{
+   if(!dragging)return;
+   panX+=e.clientX-atX;panY+=e.clientY-atY;atX=e.clientX;atY=e.clientY;
+   apply();
  });
+ const stop=()=>{dragging=false;holder.classList.remove("dragging")};
+ holder.addEventListener("pointerup",stop);
+ holder.addEventListener("pointercancel",stop);
+ window.addEventListener("resize",apply);
+ // Selecting a spot from the list makes that marker visible if zoomed.
+ moveMapToSelected=()=>{
+   holder.querySelectorAll(".native-pin").forEach(b=>b.classList.toggle("chosen",b.dataset.spot===selected.id));
+   if(zoom>1){
+     const sx=lonPercent(selected.lon)/100*holder.clientWidth;
+     const sy=latPercent(selected.lat)/100*holder.clientHeight;
+     panX=zoom*(holder.clientWidth/2-sx);
+     panY=zoom*(holder.clientHeight/2-sy);
+     apply();
+   }
+ };
+ art.addEventListener("error",()=>{if(caption)caption.textContent="Reference map image unavailable. Numbered destination pins and the location list still work."});
+ if(caption)caption.textContent="Drag to pan · +/− to zoom · tap numbered destinations. Map drawn from Natural Earth public-domain boundaries, with no API key or remote tiles.";
+ apply();moveMapToSelected();
 }
-function markerUpdate(){
- for(const {marker,spot} of markers){const n=spots.indexOf(spot)+1;marker.setIcon(L.divIcon({html:'<span class="pin '+(spot.id===selected.id?"chosen":"")+'">'+n+'</span>',className:"",iconSize:[27,27],iconAnchor:[13,13]}))}
- if(map)map.panTo([selected.lat,selected.lon],{animate:false});
- else document.querySelectorAll(".native-pin").forEach((b,i)=>b.classList.toggle("chosen",spots[i].id===selected.id));
-}
+function markerUpdate(){moveMapToSelected();}
+
 function pick(s){
  selected=s;history.replaceState(null,"","#"+s.id);renderList();markerUpdate();
  text("selected-place",s.name);text("selected-city",s.city+", "+s.state);text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");

@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle native-map interaction fix — October 18, 2026
+
+- **Production visual result:** The first-party SVG geographic map rendered but retained a blank region and invisible/unclickable Leaflet markers in the desktop browser screenshot. This was still not an acceptable visitor map.
+- **Remediation:** Remove Leaflet entirely from `/winter-eagle-watching/`. A single same-origin SVG serves as the entire map background with `preserveAspectRatio="none"`; nine numbered real HTML `button` markers are placed in the same scalable canvas using geographic Mercator projection. Drag pans and +/− zooms; a reset button restores whole-region view. Clicking any numbered marker updates the existing viewing location, access/directions, and weather/count panel. Selecting a card keeps its marker highlighted and visible. No map API, externally hosted JavaScript, basemap raster tile, Leaflet, or token is needed.
+- **Scope:** NWS weather, dated survey counts, real bald eagle photo, ad setup and catalog unchanged. Updated source tests to assert actual map interaction code.
+- **Verification:** Full CI and production browser desktop/mobile screenshot are pending until new PR merges; do not claim resolved until visual evidence shows markers on an edge-to-edge map.
+- **Exactly one next action:** Pass CI and audit, merge, then visually confirm map image and markers on desktop and mobile.
+
+
 ## Winter eagle first-party basemap reliability correction — October 18, 2026
 
 - **Incident:** Despite the preceding CARTO → Mapbox/OSM migration, an actual browser screenshot showed missing/off-color tile squares and the page reported that Mapbox tiles were unavailable. Visitors correctly reported the eagle map as broken.
