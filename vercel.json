@@ -66,6 +66,9 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
+    },
+    "api/great-lakes-ferry-conditions.js": {
+      "maxDuration": 20
     }
   },
   "redirects": [
