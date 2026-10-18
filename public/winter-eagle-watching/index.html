@@ -17,7 +17,7 @@
 <link rel="preload" href="/winter-eagle-watching/midwest-vector-map.svg" as="image">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=7">
+<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=8">
 <link rel="stylesheet" href="/winter-eagle-watching/flight-guide.css?v=2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
@@ -36,7 +36,7 @@
 ]}]}
 </script>
 <script defer src="/winter-eagle-watching/planning.js?v=2"></script>
-<script defer src="/winter-eagle-watching/app.js?v=8"></script>
+<script defer src="/winter-eagle-watching/app.js?v=9"></script>
 <script defer src="/winter-eagle-watching/flight-guide.js?v=1"></script>
 </head>
 <body>
@@ -171,6 +171,32 @@
 <div id="weather-steps" class="timeline"></div>
 <p id="weather-updated" class="source-note"></p><div class="notice"><strong>The open-water rule:</strong><p>Cold air can create an opportunity for concentrations near flowing water. It never proves river ice, a dam tailwater opening or an eagle sighting.</p></div>
 </article></section>
+<section id="eagle-evidence" class="panel evidence-panel" aria-labelledby="evidence-title">
+ <div class="eyebrow">03 / Recorded evidence · independently dated</div>
+ <h2 id="evidence-title">Are eagles being reported around this region?</h2>
+ <p class="lead">Compare community reports from the surrounding area with measured lake ice where appropriate. Both are observations of the past—not a forecast or a count at this public overlook.</p>
+ <div class="evidence-grid">
+  <article class="evidence-card">
+   <span class="evidence-kicker">iNaturalist · past 30 days</span>
+   <h3>Community bald eagle reports</h3>
+   <strong id="eagle-reports-number" class="evidence-number">Checking…</strong>
+   <p id="eagle-reports-detail" aria-live="polite">Reading dated, research-grade public reports within 40 km of the selected public viewing area.</p>
+   <span id="eagle-reports-date" class="evidence-subtle">Latest observation date: not available yet.</span>
+   <a id="eagle-reports-source" href="https://www.inaturalist.org/taxa/5305-Haliaeetus-leucocephalus" rel="noopener" target="_blank">See source and original observation search ↗</a>
+  </article>
+  <article class="evidence-card">
+   <span class="evidence-kicker">NOAA GLERL · lake-wide satellite ice analysis</span>
+   <h3>Measured Great Lakes ice</h3>
+   <strong id="eagle-ice-number" class="evidence-number">Checking…</strong>
+   <p id="eagle-ice-detail" aria-live="polite">A lake-wide measurement may be available. It cannot tell us whether the selected river or marsh is open.</p>
+   <span id="eagle-ice-date" class="evidence-subtle">Measurement date: not available yet.</span>
+   <a id="eagle-ice-source" href="https://www.glerl.noaa.gov/data/ice/index.html" rel="noopener" target="_blank">NOAA Great Lakes ice source ↗</a>
+  </article>
+ </div>
+ <div class="evidence-interpretation"><strong id="eagle-evidence-conclusion">Checking published evidence…</strong><p id="eagle-evidence-why">Even when eagles have recently been recorded somewhere in a 40 km area, the chosen viewing point and its ice remain unconfirmed.</p></div>
+ <p class="source-note" id="eagle-evidence-asof">Results are cached to respect source limits and stamped with their check time.</p>
+ <div class="notice"><strong>What is and is not counted:</strong><p>One community observation is one submitted report, <em>not</em> one eagle and not proof of a congregation. Dated sightings can be delayed or missing. The map deliberately never plots eagle, nest, or roost observation coordinates. NOAA ice percentages cover an entire Great Lake, not the local river, shoreline or marsh. Aerial cartwheels cannot be forecast from either feed.</p></div>
+</section>
 <section id="eagle-season-planner" class="panel seasonal-planner" aria-labelledby="planner-title">
  <div class="eyebrow">04 / Seasonal timing by location</div>
  <h2 id="planner-title">When is the season right?</h2>
@@ -233,7 +259,7 @@
 <details><summary>Is open river water guaranteed below every dam?</summary><p>No. Tailwaters often offer feeding habitat in winter, but hydraulic conditions, ice and access are site-dependent. Check the facility operator before travel.</p></details>
 <details><summary>Why does a bald eagle look brown rather than white-headed?</summary><p>Young bald eagles can be mottled brown with irregular white patches. The familiar white head and tail develop with maturity. Do not mistake an immature bald eagle for another species based on head color alone.</p></details>
 </section>
-<section class="panel sources" aria-labelledby="method-title"><div class="eyebrow">Sources &amp; method</div><h2 id="method-title">Know what is measured</h2><p>Viewing destinations and seasonal habitat guidance are sourced to U.S. Fish &amp; Wildlife Service, Michigan DNR, Michigan Sea Grant, regional tourism and access authorities, the National Eagle Center, and U.S. Army Corps of Engineers. Directory reviewed October 18, 2026. Visitor access and hours can change without notice.</p><p>Hourly weather is fetched directly from the National Weather Service and labeled with its issue time. River ice, eagle presence and crowd size are not inferred from air temperatures. Historical counts display their specific survey date when available; missing observations remain unknown.</p><p>Further reading: <a href="https://dnr.wisconsin.gov/topic/WildlifeHabitat/baldeagle" rel="noopener" target="_blank">Wisconsin DNR eagle advice</a> · <a href="https://www.fws.gov/refuge/detroit-river/visit-us" rel="noopener" target="_blank">Detroit River refuge</a> · <a href="https://www.nationaleaglecenter.org/eagle-count/" rel="noopener" target="_blank">National Eagle Center counts</a> · <a href="https://www.mvr.usace.army.mil/mississippiriver/eagle-watching/" rel="noopener" target="_blank">Corps winter counts</a></p>
+<section class="panel sources" aria-labelledby="method-title"><div class="eyebrow">Sources &amp; method</div><h2 id="method-title">Know what is measured</h2><p>Viewing destinations and seasonal habitat guidance are sourced to U.S. Fish &amp; Wildlife Service, Michigan DNR, Michigan Sea Grant, regional tourism and access authorities, the National Eagle Center, and U.S. Army Corps of Engineers. Directory reviewed October 18, 2026. Visitor access and hours can change without notice.</p><p>Recent broad-area bald eagle reports are read from the public iNaturalist observations API (40 km radius, 30-day search window, research-grade observations) and presented only as aggregate counts with dates, never individual bird locations. Measured ice is sourced from NOAA GLERL's daily lake-wide ice data and labeled historical when stale. Hourly weather is fetched directly from the National Weather Service and labeled with its issue time. River ice, eagle presence and crowd size are not inferred from air temperatures. Historical counts display their specific survey date when available; missing observations remain unknown.</p><p>Further reading: <a href="https://dnr.wisconsin.gov/topic/WildlifeHabitat/baldeagle" rel="noopener" target="_blank">Wisconsin DNR eagle advice</a> · <a href="https://www.fws.gov/refuge/detroit-river/visit-us" rel="noopener" target="_blank">Detroit River refuge</a> · <a href="https://www.nationaleaglecenter.org/eagle-count/" rel="noopener" target="_blank">National Eagle Center counts</a> · <a href="https://www.mvr.usace.army.mil/mississippiriver/eagle-watching/" rel="noopener" target="_blank">Corps winter counts</a></p>
 <p><strong>Related tools:</strong> <a href="/tools/">Michigan &amp; Great Lakes tools</a> · <a href="https://michiganbirdingreport.com/">Michigan Birding Report</a> · <a href="/national-tools/">National outdoor tools</a></p>
 </section></main>
 <footer><div class="wrap footer-inner"><span>© 2026 Chris Izworski · <a href="/chris-izworski/" rel="author">Built by Chris Izworski</a></span><span><a href="/privacy/">Privacy</a> · <a href="/tools/">Tools</a> · <a href="/tools/#this-week">Compare outdoor windows this week</a></span></div></footer>
