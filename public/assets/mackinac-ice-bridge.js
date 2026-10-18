@@ -77,7 +77,7 @@
     var thaw = Number(day.thawHours) || 0;
     var range = (day.minTempF == null || day.maxTempF == null) ? 'temperature range unavailable'
       : day.minTempF + '°–' + day.maxTempF + '°F';
-    text('dayTitle', dateText(day.date,{weekday:'long',month:'long',day:'numeric',year:undefined}) + ' · ' + range);
+    text('dayTitle', dateText(day.date + 'T12:00:00Z',{weekday:'long',month:'long',day:'numeric'}) + ' · ' + range);
     var story = freeze > thaw * 2 ? 'Mostly below-freezing mainland air temperatures: favorable for cooling at the surface.'
       : thaw > freeze * 2 ? 'Mostly above-freezing mainland air temperatures: a thawing air-temperature signal.'
       : 'A mixed freeze/thaw day: the air alternates across the freezing point.';
