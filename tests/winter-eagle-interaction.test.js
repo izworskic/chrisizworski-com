@@ -84,7 +84,7 @@ test('monthly gathering and cartwheel modes remain distinct and are clickable',(
  assert.match(node('season-month').textContent,/Mar/);
  node('mode-gather').click();
  assert.equal(node('mode-gather').getAttribute('aria-pressed'),'true');
- assert.match(node('season-explainer').textContent,/open water/i);
+ assert.match(node('season-explainer').textContent,/tailwaters|ice edges/i);
 });
 test('7-day NWS planner is derived from actual hourly air forecasts, never synthetic wildlife predictions',async()=>{
  const {document}=makeBrowser(),node=id=>document.getElementById(id);
