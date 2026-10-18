@@ -25,10 +25,15 @@ test('NOHRSC model snow-depth ranges use official inch-bounded legend, not obser
  assert.equal(none.inchesRange.min,0);
  assert.equal(none.inchesRange.max,0.39);
  assert.match(none.referenceType,/modelled/);
- const deeper=snow.parseSnow(nohrsc(7),NOW);
+ const deeper=snow.parseSnow(nohrsc(0.1778),NOW); // GRIB2 snow depth in meters = about 7 inches
  assert.equal(deeper.status,'modeled');
  assert.deepEqual(deeper.inchesRange,{min:3.9,max:9.8});
  assert.equal(deeper.approximateDepthInches,7);
+ assert.equal(deeper.rawUnit,'m (GRIB2 SNOD)');
+ const observedPixel=snow.parseSnow(nohrsc(0.09),NOW);
+ assert.equal(observedPixel.status,'modeled');
+ assert.deepEqual(observedPixel.inchesRange,{min:2,max:3.9});
+ assert.equal(observedPixel.approximateDepthInches,3.54);
 });
 test('NOHRSC missing pixels, future analysis, stale analysis are never snow-free',()=>{
  for(const invalid of [null,'',undefined,-1,'NoData',900]){
