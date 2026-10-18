@@ -66,7 +66,7 @@
  }
  async function loadForecast(){
   const id=++state.request;const region=state.site;
-  state.data=null;state.day=0;setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
+  state.data=null;state.day=0;$('noaa-summary').textContent='NOAA modeled snow: loading regional analysis…';setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18000);
   try{
    const r=await fetch('/api/shed-antlers?mode=forecast&site='+encodeURIComponent(region),{signal:controller.signal,headers:{'Accept':'application/json'}});
@@ -74,8 +74,11 @@
    const json=await r.json();
    if(id!==state.request)return;
    if(!Array.isArray(json.daily)||json.daily.length<3)throw Error('Incomplete forecast');
-   state.data=json;setStatus('NWS forecast loaded · '+fmt(new Date().toISOString().slice(0,10)),'good');render();
-  }catch(err){if(id!==state.request)return;state.data=null;setStatus('NWS data unavailable','unavailable');render();$('provenance').textContent='No rating or best day is issued when the weather feed is unavailable.';$('days').textContent='Live forecast unavailable. Try updating again or choose a different region.';}
+   state.data=json;
+   const noaa=json.snowDepth;
+   $('noaa-summary').textContent='NOAA modeled snow: '+(noaa?.description||'Not available')+(noaa?.validTime?' · Analysis '+noaa.validTime:'')+'. This is a regional model point, not measured field snow.';
+   setStatus('NWS forecast loaded · '+fmt(new Date().toISOString().slice(0,10)),'good');render();
+  }catch(err){if(id!==state.request)return;state.data=null;$('noaa-summary').textContent='NOAA modeled snow: unavailable without current forecast data.';setStatus('NWS data unavailable','unavailable');render();$('provenance').textContent='No rating or best day is issued when the weather feed is unavailable.';$('days').textContent='Live forecast unavailable. Try updating again or choose a different region.';}
   finally{clearTimeout(timer);}
  }
  function pick(id){
