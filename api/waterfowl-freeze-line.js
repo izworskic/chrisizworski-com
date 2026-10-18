@@ -14,7 +14,9 @@ const REGIONS=Object.freeze([
  {id:'illinois-river',name:'Illinois River Valley',state:'IL',lat:40.25,lon:-90.24,habitat:'Floodplain lakes and seasonally flooded wetlands'},
  {id:'kankakee',name:'Kankakee Marsh Region',state:'IN',lat:41.18,lon:-86.85,habitat:'Wetland remnants, rivers and farm fields'},
  {id:'swan-lake',name:'Swan Lake & Grand River',state:'MO',lat:39.53,lon:-93.23,habitat:'Refuges, river corridors and agricultural fields'},
- {id:'reelfoot',name:'Reelfoot Lake',state:'TN',lat:36.37,lon:-89.36,habitat:'Large shallow lake and flooded timber'}
+ {id:'reelfoot',name:'Reelfoot Lake',state:'TN',lat:36.37,lon:-89.36,habitat:'Large shallow lake and flooded timber'},
+ {id:'west-michigan',name:'Muskegon & Lake Michigan Shore',state:'MI',lat:43.24,lon:-86.23,habitat:'Managed wastewater wetland complex, Muskegon Lake and offshore Lake Michigan'},
+ {id:'southwest-michigan',name:'Fennville & Southwest Michigan Shore',state:'MI',lat:42.58,lon:-86.11,habitat:'Fennville managed farmland and shallow wetlands with nearby Lake Michigan shoreline'}
 ]);
 const NOAA_SNOW='https://www.nohrsc.noaa.gov/nsa/';
 const OBS='https://api.inaturalist.org/v1/observations';
