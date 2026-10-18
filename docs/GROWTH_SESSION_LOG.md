@@ -1,5 +1,14 @@
 # Search Growth + Revenue Session Log
 
+## Winter eagle real-image correction — October 18, 2026
+
+- **User request:** Replace generated/stylized eagle imagery with an authentic mature bald eagle photograph on the canonical winter eagle guide.
+- **Research:** Selected genuine adult bald eagle photo by Karl Fleming/USFWS, taken February 26, 2021 at Ottawa National Wildlife Refuge, Ohio. Wikimedia Commons confirms U.S. federal-government public domain status: `https://commons.wikimedia.org/wiki/File:Bald_Eagle_(50983412142).jpg`.
+- **Implementation:** Changed the hero image and Open Graph preview to the original wildlife photograph (Wikimedia thumbnail), linked visible photo/source/date credit, used a side-by-side desktop photo layout and a full-width unobscured mobile image; updated hero regression assertions. Eagle counts, map, forecasts and navigation unchanged.
+- **Verification:** Branch build/CI and live production image retrieval not yet verified at handoff. No search, revenue or photography effects measured.
+- **Exactly one next action:** Verify and merge the photo PR once green, then confirm production hero shows the real adult eagle.
+
+
 ## Winter eagle watching first-party migration — October 18, 2026
 
 - **User instruction:** Eagle watching must be a first-party tool on chrisizworski.com, source-controlled in GitHub; a ChatGPT-hosted prototype is not the production destination.
