@@ -1,3 +1,14 @@
+## Great Lakes ferry eight-tool expansion — October 18, 2026
+
+- **Owner request:** Extend the existing Mackinac-only ferry planner into eight independent Great Lakes route tools and an indexable ferry directory; preserve existing Mackinac URL and content.
+- **Branch and source:** `feature/great-lakes-ferry-eight-planners` in `izworskic/chrisizworski-com`. Eight individual routes: Put-in-Bay, Lake Express, S.S. Badger, Isle Royale, Chi-Cheemaun, Pelee Island, Beaver Island and Toronto Islands. Nine new public pages including `/great-lakes-ferries/` as directory.
+- **Data provenance:** Ferry operators' published 2026 schedules/prices where available, NPS Isle Royale transportation guidance and Toronto city schedules. Selected-date comparisons deliberately withhold fares for uncatalogued categories or later years. Corrected Toronto winter Ward's-only routing and August 2026 free junior-fare policy, Pelee's July 29 mainland-port switch, Badger's October 11 season end, Lake Express's October 19 cutoff and post-August 11 surcharge calculation. Do not claim live schedules, prices, booking availability, verified cancellations or a captain's decision.
+- **Dynamic layer:** Added `/api/great-lakes-ferry-conditions?id=...` as an optional 8-hour NWS shore-gateway forecast for five U.S. routes, with explicit not-open-water/not-cancellation disclaimers. Canadian routes point to authoritative Canadian marine guidance pending source validation. No paid mapping key or third-party scraping service introduced.
+- **Network & SEO:** Canonicals, ItemList/TravelApplication structured data, nine Tools cards, registry nodes and relationships, sitemap entries, one existing Mackinac cross-link. New CSS/JS shared across all eight products.
+- **Measurement:** Fresh Search Console, Analytics and AdSense figures NOT AVAILABLE; no verified search, revenue or click-through gains.
+- **Release state:** Changes committed on feature branch. Focused Node tests for planner scenarios and NWS endpoint added, but full `npm run verify:all`, production-build validation, PR checks, preview browser smoke tests and deployment have NOT BEEN VERIFIED; do not claim the pages are live or merge without green gates. Revisit Isle Royale extraction/ownership boundary during review.
+- **Exactly one next action:** Run repository CI and the complete verification gate against this branch, resolve any failure, then merge only after preview checkout and mobile verification.
+
 # Search Growth + Revenue Session Log
 
 ## Michigan shed antler search window — October 18, 2026
