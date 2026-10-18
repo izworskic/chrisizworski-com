@@ -34,6 +34,9 @@
   const byId=new Map(spots.map((s,i)=>[s.id,{...s,number:i+1}]));
   let visible=[...byId.values()],selectedId=getSelected()?.id||spots[0].id, map=null,ready=false,started=false;
   let provider="openfreemap",key="",loadTimer=null,retired=false,failedOver=false;
+  // Capture the URL before app.js calls pick(), which writes an initial #detroit hash.
+  // Only incoming shared links should auto-zoom; ordinary visits need a full-region view.
+  const incomingDeepLink=typeof location!=="undefined" && location.hash ? location.hash.slice(1) : "";
   let latestFocus=selectedId,focusedOnce=false;
   holder.replaceChildren();
   holder.classList.add("eagle-vector-map");
@@ -151,7 +154,7 @@
       try{
        addSiteLayers();ready=true;redraw();
        if(caption)caption.textContent=(isCarto?"CARTO Voyager":"OpenFreeMap Liberty")+" vector map · zoom, drag or tap numbered eagle watching locations. © OpenStreetMap contributors"+(isCarto?", © CARTO":", OpenMapTiles")+".";
-       if(!focusedOnce&&typeof location!=="undefined"&&location.hash&&byId.has(location.hash.slice(1))){focusedOnce=true;centerSelected()}
+       if(!focusedOnce&&incomingDeepLink&&byId.has(incomingDeepLink)){focusedOnce=true;centerSelected()}
        else fitAll();
       }catch(err){if(isCarto)degrade("Map layer setup failed");else if(caption)caption.textContent="Map points unavailable. Choose a location from the accessible list."}
     });
