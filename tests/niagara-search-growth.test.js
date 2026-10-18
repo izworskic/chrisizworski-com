@@ -16,8 +16,8 @@ const routes = [
 ];
 
 test('Niagara flagship build owns broad live wait intent', () => {
-  assert.match(build, /Niagara Border Wait Times Live \| Peace, Rainbow &amp; Lewiston/);
-  assert.match(build, /<h1>Niagara Border Wait Times Live<\/h1>/);
+  assert.match(build, /Niagara Border Wait Times Today \| Live Bridge Comparison/);
+  assert.match(build, /<h1>Niagara Border Wait Times Today — Compare 4 Bridges<\/h1>/);
   assert.match(build, /Which Niagara bridge should you take right now\?/);
   assert.match(build, /Peace Bridge wait times/);
   assert.match(build, /Rainbow Bridge wait times/);
