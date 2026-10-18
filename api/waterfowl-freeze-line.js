@@ -25,9 +25,10 @@ const {snowFor,surveysFor,SURVEY_REGIONS}=require('../lib/waterfowl-snow-surveys
 const {habitatShift}=require('../lib/waterfowl-habitat.js');
 const H={'Accept':'application/geo+json, application/json','User-Agent':'WaterfowlFreezeLine/1.0 (https://chrisizworski.com/waterfowl-freeze-line/)'};
 const cache=new Map();
-async function json(url,ms=6500,headers=H){
+async function json(url,ms=6500,headers=H,requestSignal){
+ requestSignal?.throwIfAborted();
  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),ms);
- try{const response=await fetch(url,{headers,signal:ctl.signal});if(!response.ok)throw Error('Upstream '+response.status);return await response.json();}
+ try{const response=await fetch(url,{headers,signal:requestSignal?AbortSignal.any([ctl.signal,requestSignal]):ctl.signal});if(!response.ok)throw Error('Upstream '+response.status);return await response.json();}
  finally{clearTimeout(timer);}
 }
 function cacheGet(key){const v=cache.get(key);return v&&v.until>Date.now()?v.body:null;}
@@ -60,12 +61,12 @@ function summarizeWeather(periods,now=Date.now()){
   series:hours.filter((_,i)=>i%6===0).map(p=>({time:p.startTime,tempF:Math.round(fahrenheit(p))})),
   snowCover:'not measured',wetlandIce:'not measured',birdMovement:'not predicted'};
 }
-async function weatherFor(region){
+async function weatherFor(region,signal){
  try{
-  const point=await json('https://api.weather.gov/points/'+region.lat+','+region.lon,5800);
+  const point=await json('https://api.weather.gov/points/'+region.lat+','+region.lon,5800,H,signal);
   const path=point&&point.properties&&point.properties.forecastHourly;
   if(!path||!/^https:\/\/api\.weather\.gov\//.test(path))throw Error('No valid hourly grid link');
-  const forecast=await json(path,6900);
+  const forecast=await json(path,6900,H,signal);
   return summarizeWeather(forecast&&forecast.properties&&forecast.properties.periods);
  }catch(e){return {status:'unavailable',note:'NWS hourly forecast could not be retrieved'};}
 }
@@ -95,15 +96,19 @@ async function sightingsFor(r,now=Date.now()){
 }
 async function pool(items,n,fn){let index=0;const output=new Array(items.length);await Promise.all(Array.from({length:n},async()=>{while(index<items.length){const i=index++;output[i]=await fn(items[i]);}}));return output;}
 function base(r){return {id:r.id,name:r.name,state:r.state,lat:r.lat,lon:r.lon,habitat:r.habitat};}
-async function overview(){
+async function overview({deadlineMs=22000}={}){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),deadlineMs);
+ const signal=controller.signal,now=Date.now();
+ try{
  const regions=await pool(REGIONS,5,async r=>{
-  const [weather,surface,lakeIce,snowDepth]=await Promise.all([weatherFor(r),surfaceFor(r),lakeIceFor(r),snowFor(r)]);
+  const [weather,surface,lakeIce,snowDepth]=await Promise.all([weatherFor(r,signal),surfaceFor(r,now,signal),lakeIceFor(r,now,signal),snowFor(r,now,signal)]);
   return {...base(r),weather,surface,lakeIce,snowDepth,habitatShift:habitatShift({weather,lakeIce,snowDepth}),surveySitesAvailable:(SURVEY_REGIONS[r.id]||[]).length};
  });
  return {generatedAt:new Date().toISOString(),mode:'overview',regions,forecastCoverage:regions.filter(r=>r.weather.status==='forecast').length,
   interpretation:'NWS weather pressure is modeled. USNIC 1-km mapped surface class and dated Great Lakes ice-chart polygon are independent observed analyses, not regional wetland ice or bird concentration.',
   sources:{weather:'National Weather Service hourly forecast',snowIce:'NOAA USNIC daily IMS 1-km mapped snow and ice class',greatLakesIce:'NOAA USNIC dated Great Lakes GIS ice-chart polygons',snowDepth:'NOAA NOHRSC model snow-depth map, single reference cell (inches range by legend)',observations:'iNaturalist (on selected region)'},
   nohrsc:NOAA_SNOW};
+ }finally{clearTimeout(timer);}
 }
 async function detail(r){
  const [weather,sightings,surface,lakeIce,snowDepth,surveys]=await Promise.all([
@@ -130,4 +135,4 @@ async function handler(req,res){
  catch(e){return res.status(503).json({error:'Regional data temporarily unavailable',generatedAt:new Date().toISOString()});}
 }
 module.exports=handler;
-module.exports._test={REGIONS,summarizeWeather,cleanReport};
+module.exports._test={REGIONS,summarizeWeather,cleanReport,overview};

@@ -833,3 +833,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Validation:** reproduced the exact rejection locally using Vercel CLI 63.1.2's actual `detectBuilders`; the corrected configuration resolves 89 API builders with no errors and assigns Waterfowl its 40-second limit. All 24 focused deployment/Waterfowl tests pass. The full repository gate passed all 53 steps; `npm run build:site` exited 0. One replacement Vercel preview will be triggered by the atomic three-file repair commit; its final status belongs in the release handoff.
 - **Measurement:** GSC/AdSense data unavailable and not relevant to this configuration-only repair. No traffic, revenue or billed-savings claims.
 - **Next action:** verify the replacement preview reaches READY and serves the Waterfowl page and region API before merging PR #1054.
+
+
+## Waterfowl final review and production merge — October 18, 2026
+
+- **Release follow-up:** final review of PR #1054 identified a slow-upstream overview deadline, late-overview overwrite of detail habitat evidence, independently dated DNR freshness, copyright-footer and external-image-loading issues. These are corrected together before the owner-requested merge.
+- **Behavior:** overview requests share a 22-second abort deadline, preserve completed source results and return unavailable states for queued or timed-out inputs. Each duck/goose group carries its own age/status, stale duck declines are excluded from current habitat evidence, and the UI labels historical groups. Late overview results preserve loaded detail evidence. The footer carries the copyright year and external hero image loads lazily.
+- **Validation:** focused tests cover stalled upstreams and cancellation, preserved partial results, duck/goose freshness in both directions and overview/detail response order. Full gate, final preview, merge and production deployment results are recorded in the PR handoff. Actual GSC/AdSense measurements unavailable; no ranking, revenue or billed-savings claim.
+- **Exactly one next action:** after this checked revision is merged, verify the canonical production Waterfowl page and its live Saginaw Bay data.

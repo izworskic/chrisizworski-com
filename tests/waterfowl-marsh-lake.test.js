@@ -93,7 +93,7 @@ test('survey history retains observed gaps and caps the UI series to 12 reported
  assert.equal(survey.ducks.history.every(r=>r.dabblers===null&&r.divers===null),true);
 });
 test('A negative survey change is not treated as observed lakeward migration',()=>{
- const surveys={sites:[{status:'reported',ducks:{change:-100,count:1000}}]};
+ const surveys={sites:[{status:'reported',ducks:{status:'reported',change:-100,count:1000}}]};
  const weather={status:'forecast',longestFreezingRunHours:35,forecastColdDegreeHours:260};
  const open={status:'observed_chart',code:'00'};
  const v=habitatShift({weather,lakeIce:open,surveys});

@@ -185,8 +185,8 @@ function renderSurveys(value){
   if(s.status==='reported'){
    [ ['Ducks',s.ducks],['Geese',s.geese] ].forEach(function(it){
      var p=it[1];if(!p)return;
-     var delta=Number.isFinite(p.change)?' ('+(p.change>=0?'+':'')+p.change.toLocaleString()+' vs previous week)':'';
-     row.appendChild(DOM('p','survey-count',it[0]+': '+p.count.toLocaleString()+' · '+p.date+delta));
+     var delta=p.status!=='stale'&&Number.isFinite(p.change)?' ('+(p.change>=0?'+':'')+p.change.toLocaleString()+' vs previous week)':'';
+     row.appendChild(DOM('p','survey-count',it[0]+(p.status==='stale'?' (historical, older than 28 days)':'')+': '+p.count.toLocaleString()+' · '+p.date+delta));
      if(it[0]==='Ducks'&&(Number.isInteger(p.dabblers)||Number.isInteger(p.divers))){
       var groups=[];
       if(Number.isInteger(p.dabblers))groups.push('Dabblers '+p.dabblers.toLocaleString());
@@ -253,7 +253,7 @@ function drawSurveyTimeline(){
  var begin=points[0],end=points[points.length-1],change=points.length>1?end.value-begin.value:null;
  chart.setAttribute('aria-label',names[metric]+' DNR survey: '+points.length+' dated counts at '+site.name+' from '+begin.date+' to '+end.date+'. Latest '+end.value.toLocaleString('en-US')+' birds.');
  setText('survey-trend-caption',site.name+' · '+names[metric]+' · '+points.length+' actual reported weeks ('+begin.date+' to '+end.date+'). Latest '+end.value.toLocaleString('en-US')+(change===null?'':', '+(change>=0?'+':'')+change.toLocaleString('en-US')+' vs earliest shown')+'. '+
-  (site.status==='stale'?'The latest site survey is older than 28 days. ':'')+'Gaps are not filled; this is not a lakewide census or evidence of where birds relocated.');
+  (source?.status==='stale'||site.status==='stale'?'The latest survey for this bird group is older than 28 days. ':'')+'Gaps are not filled; this is not a lakewide census or evidence of where birds relocated.');
 }
 function renderSightings(s){
  var holder=$('sightings');holder.replaceChildren();
@@ -309,7 +309,7 @@ async function loadOverview(){
    if(r.surface)local.surface=r.surface;
    if(r.lakeIce)local.lakeIce=r.lakeIce;
    if(r.snowDepth)local.snowDepth=r.snowDepth;
-   if(r.habitatShift)local.habitatShift=r.habitatShift;
+   if(r.habitatShift&&!local.surveys)local.habitatShift=r.habitatShift;
   });
   var usable=LOCATIONS.filter(function(r){return r.weather.status==='forecast'}).length;
   setText('overview-status',usable+' of '+LOCATIONS.length+' regional NWS forecasts available · Updated '+new Date(data.generatedAt).toLocaleString()+'. Use the layer selector: NWS forecast freezing, NOAA mapped surface, or marsh-to-big-water conditions. No layer tracks birds.');
