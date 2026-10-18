@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-16",
+  "updated": "2026-10-18",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -3312,6 +3312,40 @@
         "status": "unknown",
         "note": "First release October 17, 2026; search traffic and observed frost accuracy not measured."
       }
+    },
+    {
+      "id": "winter-eagle-watching",
+      "name": "Winter Bald Eagle Watching — Midwest Eagle Finder",
+      "canonical": "https://chrisizworski.com/winter-eagle-watching/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "nature-birding",
+      "primaryIntent": "Where are public winter bald eagle watching spots in the Midwest, and what are the weather and dated observation conditions?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "great-lakes",
+        "upper-midwest"
+      ],
+      "personas": [
+        "nature-watcher",
+        "photographer",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Public viewing and weather-context tool. Dated winter eagle surveys are evidence with their observation dates; no claim of live eagle counts or measured river ice. Distinct from Michigan-wide bird sightings or general birding weather."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New first-party seasonal tool in October 2026; no measured GSC, usage or revenue effect yet."
+      }
     }
   ],
   "relationships": [
@@ -4650,6 +4684,22 @@
       "strength": "optional",
       "surface": "tools-directory",
       "reason": "Cold morning Great Lakes photography depends on distinct frost versus steam-fog atmospheric mechanisms."
+    },
+    {
+      "from": "winter-eagle-watching",
+      "to": "birding",
+      "type": "species-to-live-sightings",
+      "strength": "strong",
+      "surface": "winter-eagle-field-guide",
+      "reason": "Michigan Birding Report covers current observations; the eagle tool covers source-backed public winter aggregation destinations and dated counts."
+    },
+    {
+      "from": "birding",
+      "to": "winter-eagle-watching",
+      "type": "seasonal-destination-handoff",
+      "strength": "optional",
+      "surface": "winter",
+      "reason": "Midwest winter eagle travel requires different habitat and public-access planning than Michigan birding sighting maps."
     }
   ],
   "cannibalizationGroups": [
