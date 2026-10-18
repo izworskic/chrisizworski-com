@@ -285,9 +285,9 @@ async function loadEvidence(s){
     text("eagle-ice-date","For local open water, use verified operator reports and observation.");
   }else if(["recent","historical"].includes(ice.status)&&Number.isFinite(Number(ice.percent))){
     const recent=ice.status==="recent";
-    text("eagle-ice-number",Number(ice.percent).toFixed(1)+"% "+(recent?"ice":"(historic)"));
+    text("eagle-ice-number",recent?Number(ice.percent).toFixed(1)+"% lake ice":"No current ice data");
     const lake=String(ice.lake||"lake");const change=Number.isFinite(ice.deltaPctPoints)?" Over the prior 5–10 days: "+(ice.deltaPctPoints>0?"+":"")+ice.deltaPctPoints.toFixed(1)+" percentage points.":"";
-    text("eagle-ice-detail",(recent?"Latest NOAA":"Historical NOAA")+" lake-wide "+lake+" ice concentration."+change+" Not the selected river's ice.");
+    text("eagle-ice-detail",(recent?"Latest NOAA lake-wide "+lake+" ice concentration: ":"Last season only: NOAA measured "+lake+" lake-wide ice at ")+Number(ice.percent).toFixed(1)+"% on "+ice.date+"."+change+" Not the selected river's ice.");
     text("eagle-ice-date","Measured "+ice.date+" · "+ice.ageDays+" days old · "+(recent?"recent":"NOT CURRENT")+".");
   }else{
     text("eagle-ice-number","Unavailable");
@@ -302,8 +302,11 @@ async function loadEvidence(s){
   }else if(olderSighting){
     text("eagle-evidence-conclusion","Older reports exist; current activity is unconfirmed");
     text("eagle-evidence-why","The latest eligible observation is "+obs.ageDays+" days old. Local water openings and eagle gatherings still require on-site or operator confirmation.");
+  }else if(obs.status!=="ok"){
+    text("eagle-evidence-conclusion","Regional observation feed unavailable · eagle activity unknown");
+    text("eagle-evidence-why","No fresh community observation data could be retrieved. This is not evidence for or against an eagle gathering. Check the linked source, site access and forecast.");
   }else{
-    text("eagle-evidence-conclusion","No recent regional eagle activity confirmed by this feed");
+    text("eagle-evidence-conclusion","No qualifying regional reports in this search window");
     text("eagle-evidence-why","Missing or empty community observations are not evidence of absence. The seasonal calendar and NWS forecast remain planning context only.");
   }
   text("eagle-evidence-asof","Feeds checked "+new Date(result.asOf).toLocaleString()+". Source reporting can lag, and responses may be cached. Exact eagle observation locations are never displayed.");
