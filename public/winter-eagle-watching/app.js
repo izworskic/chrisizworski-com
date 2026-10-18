@@ -17,6 +17,7 @@ const spots=[
 ];
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
 let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
+let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/Detroit";
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
 const text=(id,value)=>{const x=el(id);if(x)x.textContent=value};
 const fmtDate=v=>{if(!v)return "Date unavailable";const d=new Date(v);return isNaN(d)?"Date unavailable":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"America/Chicago"})};
@@ -39,6 +40,51 @@ function renderList(){
    b.setAttribute("aria-hidden",String(!shown));
  });
 }
+function renderPlanner(){
+ const E=window.EaglePlanning;
+ if(!E)return;
+ const display=plannerMode==="display",stage=E.seasonalStage(plannerMode,plannerMonth);
+ ["gather","display"].forEach(m=>{const btn=el("mode-"+m);if(!btn)return;btn.classList.toggle("active",m===plannerMode);btn.setAttribute("aria-pressed",String(m===plannerMode))});
+ text("season-mode-label",display?"AERIAL DISPLAYS / NOT A DAILY PREDICTION":"WINTER GATHERINGS / OPEN WATER");
+ text("season-headline",display?"Look for flights and territorial displays—not just groups.":"Follow the open water and accessible prey.");
+ text("season-explainer",display?
+  "Around the breeding period, pairs may soar together and perform aerial maneuvers. Dramatic talon-locked cartwheels can be territorial aggression, not proof of mating. Watch from public corridors, never near mapped nest sites.":
+  "When still water freezes, eagles can shift toward flowing tailwaters and ice edges, especially where fish or other food remains accessible. Cold air is a clue, not an observed congregation.");
+ text("season-level",stage.label);text("season-month",stage.month+" · Regional seasonality only");
+ text("behavior-guide",display?
+ "Field cue: sustained circling, pair flights and energetic chases may be more visible during the breeding period. The weather can improve watching comfort, but cannot predict a cartwheel. Never approach a nest or follow eagles to one.":
+ "Field cue: winter concentrations may gather at open water, below dams or around prey and safe roosts. In early spring they can shift toward retreating river ice edges. Check fresh dated counts where they exist.");
+ const calendar=el("annual-calendar");calendar.replaceChildren();
+ for(const m of E.calendar(plannerMode)){
+  const b=document.createElement("button");b.type="button";b.className="season-month level-"+m.level+(m.index===plannerMonth?" chosen":"");
+  b.setAttribute("aria-pressed",String(m.index===plannerMonth));b.setAttribute("aria-label",m.month+": "+m.label+"; select month");
+  const name=document.createElement("strong");name.textContent=m.month;const line=document.createElement("span");line.className="month-intensity";
+  line.setAttribute("aria-hidden","true");b.append(name,line);
+  b.addEventListener("click",()=>{plannerMonth=m.index;renderPlanner()});calendar.append(b);
+ }
+ const assess=E.summary(plannerMode,month,plannerDays);
+ const label=el("setup-label");label.className="status"+(plannerDays.length?"":" muted");
+ text("setup-label",plannerDays.length?assess.headline:"Live NWS forecast not yet available");
+ text("setup-explanation",plannerDays.length?assess.why:"Check the NWS outlook for the selected public viewing spot. Current wildlife presence and river ice remain unconfirmed.");
+ text("planning-provenance",assess.evidence+" Forecast in selected location's local time. Seven-day rows describe weather, not wildlife counts.");
+ const cards=el("weekly-day-cards");cards.replaceChildren();
+ if(!plannerDays.length){
+  const p=document.createElement("p");p.className="lead";p.textContent="Forecast days load when the National Weather Service returns local hourly data. No synthetic forecast is shown.";cards.append(p);return
+ }
+ for(const d of plannerDays){
+  const card=document.createElement("article");card.className="planning-day";
+  const title=document.createElement("strong");
+  const stamp=new Date(d.date+"T12:00:00Z");
+  title.textContent=stamp.toLocaleDateString("en-US",{timeZone:"UTC",weekday:"short",month:"short",day:"numeric"});
+  const t=document.createElement("span");t.className="day-temp";t.textContent=d.low+"°–"+d.high+"°F";
+  const descriptor=document.createElement("p");descriptor.textContent=display?d.comfort:d.condition;
+  const bar=document.createElement("div");bar.className="freeze-track";bar.title=d.coldHours+" of "+d.hours+" forecast air hours at or below 32°F";
+  const filled=document.createElement("i");filled.style.width=Math.round(100*d.coldHours/Math.max(1,d.hours))+"%";bar.append(filled);
+  const detail=document.createElement("small");detail.textContent=d.coldHours+" freezing air hrs · "+(d.windMph==null?"Wind n/a":d.windMph+" mph avg wind");
+  card.append(title,t,descriptor,bar,detail);cards.append(card);
+ }
+}
+function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner()}
 function initMap(){
  const holder=el("map"),caption=el("map-provider");
  holder.replaceChildren();
@@ -129,6 +175,7 @@ function pick(s){
  else if(["red-wing","wabasha"].includes(s.id)){report.href="https://www.nationaleaglecenter.org/eagle-count/";report.textContent="Open National Eagle Center regional count history ↗"}
  else {report.href=s.source;report.textContent="Open viewing-site operator guidance (no local count) ↗"}
  text("open-water","Unconfirmed");text("eagle-present","Unconfirmed");
+ plannerDays=[];renderPlanner();
  el("saved-toggle").textContent=saved.has(s.id)?"Saved ✓":"Save spot";
  loadWeather(s);loadCount(s);
 }
@@ -160,6 +207,7 @@ async function loadWeather(s){
   const data=await getJson(hourlyUrl,signal);
   if(token!==fetchToken)return;
   const hours=(data.properties&&data.properties.periods||[]).filter(p=>Number.isFinite(Number(p.temperature))&&p.startTime);
+  plannerZone=point.properties?.timeZone||"America/Detroit";plannerDays=window.EaglePlanning?window.EaglePlanning.summarizeHourly(hours,plannerZone):[];renderPlanner();
   if(!hours.length)throw new Error("No hourly values published");
   const next=hours.slice(0,48),temps=next.map(x=>Number(x.temperature)),cold=next.filter(x=>Number(x.temperature)<=32).length;
   text("air-now",Math.round(Number(hours[0].temperature))+"°F");
@@ -173,7 +221,7 @@ async function loadWeather(s){
   drawChart(next);
   const four=[0,12,24,36];const grid=el("weather-steps");
   four.forEach(i=>{const p=next[i];if(!p)return;const box=document.createElement("div"),a=document.createElement("strong"),b=document.createElement("small");a.textContent=Math.round(p.temperature)+"°F";b.textContent=new Date(p.startTime).toLocaleString("en-US",{weekday:"short",hour:"numeric"});box.append(a,b);grid.append(box)});
- }catch(e){if(e.name==="AbortError"||token!==fetchToken)return;text("weather-status","Live NWS forecast unavailable. No weather-driven eagle or open-water assessment can be made.");text("weather-updated","Check the National Weather Service before traveling.");text("chart-label","No live chart available");}
+ }catch(e){if(e.name==="AbortError"||token!==fetchToken)return;plannerDays=[];renderPlanner();text("weather-status","Live NWS forecast unavailable. No weather-driven eagle or open-water assessment can be made.");text("weather-updated","Check the National Weather Service before traveling.");text("chart-label","No live chart available");}
 }
 async function loadCount(s){
  const field=el("count-live");field.replaceChildren();
@@ -195,5 +243,7 @@ el("refresh-weather").addEventListener("click",()=>loadWeather(selected));
 el("copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);el("copy-link").textContent="Copied";setTimeout(()=>text("copy-link","Copy spot link"),1800)}catch{el("copy-link").textContent="Copy URL from address bar"}});
 el("nearest").addEventListener("click",()=>{if(!navigator.geolocation){text("location-help","Location not supported in this browser.");return}
  navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
-initMap();pick(selected);
+el("mode-gather").addEventListener("click",()=>switchMode("gather"));
+el("mode-display").addEventListener("click",()=>switchMode("display"));
+initMap();renderPlanner();pick(selected);
 })();
