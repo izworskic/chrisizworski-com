@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-17",
-  "updated": "2026-10-17T14:16:23.317Z",
-  "body": "The Upper Peninsula lags significantly behind the Lower Peninsula. Western and Eastern U.P. regions show minimal color at 8 percent modeled, still in early decline. The Tip of the Mitt reaches 27 percent. Lower Peninsula color peaks in the northwest and central regions at 84 and 82 percent respectively, with northeast at 70 percent. Southwest and southeast lower regions trail at 60 and 55 percent, still rising.\n\nThis weekend's mixed skies and cool temperatures—highs near 59 to 67 degrees, lows near 28 to 34—will slow further color change. The falling phase dominates northern and central lower regions, while southwest and southeast remain in rising phases. Overnight lows in the upper 20s to low 30s may accelerate decline in already-peaked areas but won't dramatically shift the overall pattern over two days.\n\nFor peak color viewing this weekend, Pierce Stocking Scenic Drive in Sleeping Bear Dunes offers the most advanced display at 84 percent modeled color in the falling phase. Alternatively, the River Road Scenic Byway toward Lumberman's Monument in the northeast provides 70 percent color with slightly warmer conditions. Both routes feature mixed skies typical across the state.",
+  "date": "2026-10-18",
+  "updated": "2026-10-18T14:39:31.747Z",
+  "body": "The Upper Peninsula lags significantly behind the Lower Peninsula. Western and Eastern U.P. regions show minimal color at 8 percent modeled, still in early decline. The Tip of the Mitt displays 21 percent, while Northwest Lower leads statewide at 86 percent modeled. Central and Southwest Lower regions follow closely at 84 and 70 percent respectively, both in active fall phases.\n\nThis weekend's mostly clear skies across northern regions favor viewing, particularly the Tip of the Mitt and Northwest Lower with highs near 62-64 degrees. Mixed skies dominate southern and central areas, though temperatures remain mild in the mid-60s. Cool overnight lows ranging from 34 to 44 degrees may enhance color intensity where foliage is advanced.\n\nFor optimal weekend viewing, consider Pierce Stocking Scenic Drive in Sleeping Bear Dunes, where Northwest Lower's 86 percent modeled color and mostly clear conditions align. Alternatively, the River Road Scenic Byway in the Northeast offers 54 percent modeled color with mixed skies and similar temperatures, providing a less-crowded option with developing fall displays.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-17T14:16:19.460Z",
+  "conditionsUpdated": "2026-10-18T14:39:28.027Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -18,8 +18,8 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     },
     {
@@ -35,13 +35,13 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     },
     {
       "region": "tip",
-      "modeledPercent": 27,
+      "modeledPercent": 21,
       "source": {
         "drivers": [
           "regional climatology",
@@ -52,12 +52,46 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     },
     {
       "region": "nwl",
+      "modeledPercent": 86,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -3,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
+      }
+    },
+    {
+      "region": "nel",
+      "modeledPercent": 54,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor",
+          "MODIS canopy greenness"
+        ],
+        "anchorShiftDays": -3,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-09-14",
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
+      }
+    },
+    {
+      "region": "cen",
       "modeledPercent": 84,
       "source": {
         "drivers": [
@@ -69,12 +103,12 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     },
     {
-      "region": "nel",
+      "region": "swl",
       "modeledPercent": 70,
       "source": {
         "drivers": [
@@ -86,47 +120,13 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
-      }
-    },
-    {
-      "region": "cen",
-      "modeledPercent": 82,
-      "source": {
-        "drivers": [
-          "regional climatology",
-          "recent weather",
-          "canopy camera anchor",
-          "MODIS canopy greenness"
-        ],
-        "anchorShiftDays": -3,
-        "anchorConfidence": "low",
-        "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
-      }
-    },
-    {
-      "region": "swl",
-      "modeledPercent": 60,
-      "source": {
-        "drivers": [
-          "regional climatology",
-          "recent weather",
-          "canopy camera anchor",
-          "MODIS canopy greenness"
-        ],
-        "anchorShiftDays": -3,
-        "anchorConfidence": "low",
-        "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 55,
+      "modeledPercent": 64,
       "source": {
         "drivers": [
           "regional climatology",
@@ -137,8 +137,8 @@
         "anchorShiftDays": -3,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 34,
-        "satelliteWeight": 0.44
+        "satelliteAgeDays": 35,
+        "satelliteWeight": 0.4
       }
     }
   ],
