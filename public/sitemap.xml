@@ -1257,7 +1257,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chrisizworski.com/isle-royale-ferry-comparison/</loc>
+    <loc>https://chrisizworski.com/isle-royale-ferry/</loc>
     <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -1300,4 +1300,5 @@
   <url><loc>https://chrisizworski.com/pelee-island-ferry/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://chrisizworski.com/beaver-island-ferry/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://chrisizworski.com/toronto-islands-ferry/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chrisizworski.com/isle-royale-ferry-comparison/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
