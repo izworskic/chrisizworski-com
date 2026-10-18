@@ -9,6 +9,28 @@
 - **Quality/release:** Files committed to branch; connected Vercel generated preview jobs, but full `npm run verify:all`, GitHub CI checks, live NOAA/NWS behavior, map rendering and production promotion have **not yet been certified**. Do not claim production is live until full gates pass. Main's Agent branch verification was green before this work.
 - **Exactly one next action:** Obtain a complete successful GitHub CI/full verification and smoke-test the latest preview before approving a merge to main.
 
+## “Is this the week I should go?” portfolio pilot — October 18, 2026
+
+- **User direction:** Turn the condition-driven outing question into a reusable, growing portfolio, without homogenizing distinct scientific evidence or claiming exact event timing.
+- **Source/owner inventory:** Main first-party repo owns shed antlers, maple sap, Michigan rockhounding and winter eagle watching. Dedicated national/phenology tools retain their independent owning repositories. Existing endpoint fields were inspected; no new indexable canonical or cross-domain scoring engine.
+- **Implemented:** Reusable, tested `public/assets/this-week-engine.js` adapters plus live, independent fetch/orchestration and scoped CSS. New /tools/ near-top "Is this the week?" experience with Bay City / Traverse City / Marquette forecast selector, source/recency, why-to-wait, trigger-to-watch, canonical specialist links. Rockhounding is explicitly statewide/72-hour recent wind, not seven-day; shed/maple are regional/seasonal; eagle is an interpretive guide, not observed activity. Linkbacks from all four specialist tools. Species-specific caveats and National Park Service collecting sites excluded from shortlist. Detailed repeatable adoption standard in `docs/THIS_WEEK_OUTDOOR_DECISIONS.md`.
+- **No false conclusions:** NO "GO" solely from NOAA modeled snow; no predicted shed drop or eagle cartwheel; no asserted sap yield; no statewide beach safety guarantee. Missing/stale NWS/NOAA/NDBC or NWS alert coverage cannot become a favorable signal.
+- **Baseline:** GSC, GA4 weekly revisit and AdSense revenue NOT AVAILABLE. No measured uplift or event outcomes are asserted.
+- **Release:** Feature branch `feature/is-this-the-week-portfolio` created. Full CI, public-output audit, live production and browser behavior verification pending at initial handoff.
+- **Exactly one next action:** Clear full CI and public-output audit, then merge and verify live weekly cards and off-season/missing-data states.
+
+
+
+## Eagle watching field-first information architecture — October 18, 2026
+
+- **User request:** Bring the Woodcock-inspired “Read the Sky” animated guide near the start of `/winter-eagle-watching/`. Play devil's advocate: make it easier for someone to understand the flight and know where and when to watch in the field.
+- **UX critique:** Flight teaching was buried below seasonal charts, map, weather, historical counts and caveats; a visitor could mistake a feeding-concentration pin for a guaranteed courtship/cartwheel spot. Display mode still gave a freezing-hours bar, which is not the principal human viewing-weather consideration for skywatching. An optional four-question quiz extended the scroll before trip planning.
+- **Implementation:** New field journey under hero (Recognize → Find public overlook → Check timing), full interactive field flight stage near the top, concise “The sky is the stage—not one marked spot” explanation with distinct wide-sky vs winter-food viewing advice, and clear CTA to public map. Optional quiz collapsed behind native `details`; existing animation, source credits and interpretive content retained. Finder follows, then selected location weather, regional seasonal calendar and seven-day forecast; dated evidence and safety remain below. Mode buttons appear beside locations, aligned to the calendar; current site presents source-level evidence and an explicit statement no map pin is a confirmed cartwheel venue. Aerial viewing now uses predicted wind and precipitation as *human viewability context*, while winter gathering mode keeps freezing-air context. No claim of live birds, exact ice, guaranteed flight display, nesting site, or quantified event odds.
+- **Sources:** Wisconsin DNR winter feeding/time-of-day advice; Cornell and Smithsonian for behavioral ambiguity; USFWS eagle disturbance guidelines. No new destination claims and no new external API.
+- **Verification:** Tests added for visual order, unique IDs, purpose selection, selected-site interpretation, regional mode synchronization and mode-correct weather charts. CI and desktop/mobile production preview required before calling production live.
+- **Exactly one next action:** Clear full GitHub verification, merge and inspect real page ordering, site/location selection and mobile flight area, then confirm deployment.
+
+
 ## Michigan shed antler search window — October 18, 2026
 
 - **User goal:** Add a winter-focused shed-antler planning tool answering "Is this the week I should go?" specifically for weather and finding already-dropped antlers, never claiming to predict precise buck antler casting dates.
