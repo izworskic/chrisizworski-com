@@ -45,17 +45,23 @@ test('unknown site cannot become an arbitrary upstream request',async()=>{
  const res=response();await handler({method:'GET',query:{site:'https://example.com'}},res);
  assert.equal(res.code,400);assert.equal(res.body.available,false);
 });
-test('site serves a canonical page, usable keyless fallback map, and truthfulness guardrails',()=>{
+test('site serves a self-hosted interactive map without external tile dependencies',()=>{
  const root=path.join(__dirname,'..','public','winter-eagle-watching');
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  const js=fs.readFileSync(path.join(root,'app.js'),'utf8');
  assert.match(html,/https:\/\/chrisizworski.com\/winter-eagle-watching\//);
  assert.match(html,/G-Y5D2V2W7HN/);
  assert.match(html,/ca-pub-8222782620788075/);
- assert.ok(js.includes('tile.openstreetmap.org/{z}/{x}/{y}.png'));
- assert.ok(js.includes('api.mapbox.com/styles/v1/mapbox/light-v11/tiles/256/'));
- assert.ok(js.includes('tileerror'));
- assert.ok(!js.includes('basemaps.cartocdn.com/light_all'));
+ assert.ok(js.includes('/winter-eagle-watching/midwest-vector-map.svg'));
+ assert.ok(js.includes('L.imageOverlay'));
+ assert.ok(js.includes('native-pin'));
+ assert.ok(!js.includes('api.mapbox.com/styles/'));
+ assert.ok(!js.includes('tile.openstreetmap.org/'));
+ assert.ok(!js.includes('basemaps.cartocdn.com/'));
+ const bg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
+ assert.ok(bg.startsWith('<svg'));
+ for(const name of ['MICHIGAN','MINNESOTA','WISCONSIN','Lake Superior','Lake Erie']) assert.ok(bg.includes(name));
+ assert.ok(bg.includes('Natural Earth'));
  assert.match(html,/Unconfirmed/);
  assert.match(js,/api.weather.gov\/points/);
  assert.ok(html.includes('Bald_Eagle_%2850983412142%29'));
@@ -65,26 +71,15 @@ test('site serves a canonical page, usable keyless fallback map, and truthfulnes
  assert.ok(!html.includes('images.unsplash.com/photo-1641917743953'));
 });
 
-const mapConfig=require('../api/winter-eagle-map-config.js');
-async function readMapConfig(method,key){
- const prev=process.env.MAPBOX_KEY;
- if(key===undefined)delete process.env.MAPBOX_KEY;else process.env.MAPBOX_KEY=key;
- try{const res=response();await mapConfig({method},res);return res}
- finally{if(prev===undefined)delete process.env.MAPBOX_KEY;else process.env.MAPBOX_KEY=prev}
-}
-test('map config shares browser-safe Mapbox public tokens only',async()=>{
- const publicToken='pk.'+'a'.repeat(24);
- const yes=await readMapConfig('GET',publicToken);
- assert.equal(yes.code,200);assert.equal(yes.body.enabled,true);assert.equal(yes.body.token,publicToken);
- assert.match(yes.headers['X-Robots-Tag'],/noindex/);
- const secret=await readMapConfig('GET','sk.'+'b'.repeat(24));
- assert.equal(secret.body.enabled,false);assert.equal(secret.body.token,undefined);
- const missing=await readMapConfig('GET',undefined);
- assert.equal(missing.body.enabled,false);assert.equal(missing.body.token,undefined);
- const unsafe=await readMapConfig('GET','sk.SomePrivateKey');
- assert.equal(unsafe.body.token,undefined);
-});
-test('non-GET map config is blocked',async()=>{
- const denied=await readMapConfig('POST','pk.'+'a'.repeat(24));
- assert.equal(denied.code,405);
+test('vector map stays functional with no external basemap token or tile requests',()=>{
+ const root=path.join(__dirname,'..','public','winter-eagle-watching');
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ const page=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
+ assert.ok(app.includes('L.imageOverlay(mapImage,bounds'));
+ assert.ok(app.includes('b.addEventListener("click",()=>pick(s))'));
+ assert.ok(app.includes('marker.on("click",()=>pick(s))'));
+ assert.ok(page.includes('midwest-vector-map.svg'));
+ assert.match(svg,/<path/);
+ assert.ok(!app.includes('winter-eagle-map-config'));
 });
