@@ -1,5 +1,15 @@
 # Search Growth + Revenue Session Log
 
+## Eagle watching field-first information architecture — October 18, 2026
+
+- **User request:** Bring the Woodcock-inspired “Read the Sky” animated guide near the start of `/winter-eagle-watching/`. Play devil's advocate: make it easier for someone to understand the flight and know where and when to watch in the field.
+- **UX critique:** Flight teaching was buried below seasonal charts, map, weather, historical counts and caveats; a visitor could mistake a feeding-concentration pin for a guaranteed courtship/cartwheel spot. Display mode still gave a freezing-hours bar, which is not the principal human viewing-weather consideration for skywatching. An optional four-question quiz extended the scroll before trip planning.
+- **Implementation:** New field journey under hero (Recognize → Find public overlook → Check timing), full interactive field flight stage near the top, concise “The sky is the stage—not one marked spot” explanation with distinct wide-sky vs winter-food viewing advice, and clear CTA to public map. Optional quiz collapsed behind native `details`; existing animation, source credits and interpretive content retained. Finder follows, then selected location weather, regional seasonal calendar and seven-day forecast; dated evidence and safety remain below. Mode buttons appear beside locations, aligned to the calendar; current site presents source-level evidence and an explicit statement no map pin is a confirmed cartwheel venue. Aerial viewing now uses predicted wind and precipitation as *human viewability context*, while winter gathering mode keeps freezing-air context. No claim of live birds, exact ice, guaranteed flight display, nesting site, or quantified event odds.
+- **Sources:** Wisconsin DNR winter feeding/time-of-day advice; Cornell and Smithsonian for behavioral ambiguity; USFWS eagle disturbance guidelines. No new destination claims and no new external API.
+- **Verification:** Tests added for visual order, unique IDs, purpose selection, selected-site interpretation, regional mode synchronization and mode-correct weather charts. CI and desktop/mobile production preview required before calling production live.
+- **Exactly one next action:** Clear full GitHub verification, merge and inspect real page ordering, site/location selection and mobile flight area, then confirm deployment.
+
+
 ## Michigan shed antler search window — October 18, 2026
 
 - **User goal:** Add a winter-focused shed-antler planning tool answering "Is this the week I should go?" specifically for weather and finding already-dropped antlers, never claiming to predict precise buck antler casting dates.
