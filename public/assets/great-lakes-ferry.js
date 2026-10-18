@@ -37,6 +37,7 @@
     if(o.priceStart&&date<o.priceStart)return null;
     if(o.priceEnd&&date>o.priceEnd)return null;
     if(o.id==="badger"&&dateIn(date,"2026-06-19","2026-09-07"))return o.summerPricing||o.pricing;
+    if(o.id==="chi"&&dateIn(date,"2026-06-19","2026-09-07"))return o.summerPricing||o.pricing;
     if(config.id==="toronto"&&dateIn(date,"2026-08-01","2026-08-31"))return {...o.pricing,childRT:0};
     return o.pricing;
   }
