@@ -1,0 +1,51 @@
+name: Waterfowl source gate
+
+on:
+  push:
+    branches:
+      - feat/waterfowl-freeze-line-2026
+    paths:
+      - 'api/waterfowl-freeze-line.js'
+      - 'lib/waterfowl-*.js'
+      - 'public/waterfowl-freeze-line/**'
+      - 'tests/waterfowl-*.test.js'
+      - '.github/workflows/waterfowl-source-gate.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'api/waterfowl-freeze-line.js'
+      - 'lib/waterfowl-*.js'
+      - 'public/waterfowl-freeze-line/**'
+      - 'tests/waterfowl-*.test.js'
+      - 'public/tools/index.html'
+      - 'public/sitemap.xml'
+      - '.github/workflows/waterfowl-source-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: waterfowl-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  waterfowl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Test NOAA and DNR parsers plus habitat decisions
+        run: node --test tests/waterfowl-freeze-line.test.js tests/waterfowl-noaa.test.js tests/waterfowl-marsh-lake.test.js
+      - name: Validate canonical tool entity relationships
+        run: node scripts/generate-tool-entity-graph.mjs --check
+      - name: Check search-snippet length
+        run: npm run benchmark:serp-length
