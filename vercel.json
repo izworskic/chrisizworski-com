@@ -63,6 +63,9 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
+    },
+    "api/waterfowl-freeze-line.js": {
+      "maxDuration": 40
     }
   },
   "redirects": [
