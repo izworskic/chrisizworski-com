@@ -88,6 +88,13 @@ test("Winter and seasonal gates are conservative",()=>{
  assert.doesNotMatch(future,/\$67\.00/);
 });
 
+test("Chi-Cheemaun published 2026 fares change with peak season",()=>{
+ const offpeak=interact("chi-cheemaun-ferry","2026-10-18",{adults:2,vehicle:1});
+ assert.match(offpeak,/\$149\.70/);
+ const peak=interact("chi-cheemaun-ferry","2026-07-18",{adults:2,vehicle:1});
+ assert.match(peak,/\$170\.40/);
+});
+
 test("Vehicle restriction and incomplete fares do not produce false totals",()=>{
  const pib=interact("put-in-bay-ferry","2026-10-18",{vehicle:1});
  assert.match(pib,/Miller Ferry/);
