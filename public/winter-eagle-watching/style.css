@@ -16,3 +16,61 @@
 .native-map-controls button{width:38px;height:38px;border:1px solid #c5d3c8;border-radius:8px;background:#fff;color:#1c4836;font-size:24px;font-weight:700;box-shadow:0 1px 6px #132f2455}
 .native-map-controls button:last-child{font-size:19px}
 .native-map-controls button:focus-visible{outline:3px solid #b57726}
+
+/* Evidence-first living calendar and separate observational flight-weather windows. */
+.seasonal-planner{padding:22px;margin:22px 0 8px}
+.mode-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.mode-tab{border:1px solid #bed2c4;border-radius:10px;padding:12px 16px;background:#f3f7f1;color:#254c38;font-weight:750;text-align:left}
+.mode-tab.active{color:white;border-color:#21523a;background:#21523a}
+.mode-tab:focus-visible,.season-month:focus-visible{outline:3px solid #bc8c3e;outline-offset:2px}
+.season-callout{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;border:1px solid #d6e2d7;background:#f7faf6;border-radius:13px;padding:17px}
+.season-callout h3{margin:6px 0}
+.season-callout p{color:#4a6556;font-size:14px;margin:0}
+.season-phase{width:200px;border-radius:9px;background:#e5efe6;padding:12px}
+.season-phase strong,.season-phase small{display:block}
+.season-phase small{margin-top:5px;color:#5b7465}
+.season-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;margin:15px 0 9px;color:#556e5d}
+.season-legend>span{display:flex;gap:6px;align-items:center}
+.season-swatch{width:12px;height:12px;display:inline-block;border-radius:3px;background:#e3e8e2}
+.season-swatch.peak{background:#2f7250}.season-swatch.common{background:#78a98b}.season-swatch.possible{background:#bed3c4}.season-swatch.quiet{background:#dce4db}
+.annual-months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px}
+.season-month{border:1px solid #d8e5d7;border-radius:8px;background:#f4f7f3;padding:9px 3px;display:grid;gap:8px;color:#315244;justify-items:center}
+.season-month.chosen{box-shadow:0 0 0 2px #bb8f48;border-color:#bb8f48}
+.month-intensity{width:90%;height:18px;display:block;border-radius:5px;background:#dfe7dd}
+.level-4 .month-intensity{background:#2f7250}.level-3 .month-intensity{background:#78a98b}.level-2 .month-intensity{background:#bed3c4}.level-1 .month-intensity{background:#dde7dd}
+.season-tip{background:#f4eee3;border-left:3px solid #b77a2c;padding:12px 14px;margin-top:12px;border-radius:5px;font-size:13px;color:#655033}
+.planning-week{padding:22px;margin:19px 0}
+.field-conditions{border:1px solid #d6e0d6;background:#f8faf7;border-radius:11px;padding:13px 15px;margin:13px 0}
+.field-conditions p{margin:9px 0 4px}
+.weekly-cards{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}
+.planning-day{border:1px solid #dbe6dc;border-radius:11px;padding:12px;background:#fcfdfb;min-width:0}
+.planning-day strong{font-weight:800;display:block}
+.planning-day .day-temp{font-size:17px;font-weight:750;color:#1e4d37;display:block;margin:5px 0}
+.planning-day p{font-size:12px;margin:0 0 10px;color:#506c58;min-height:3.7em}
+.planning-day small{font-size:11px;color:#68796d}
+.freeze-track{height:8px;background:#e4e9ed;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.freeze-track i{display:block;height:100%;background:#5687a8}
+.mini-key{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;color:#6a756e;margin:10px 0}
+.cold-legend{width:11px;height:11px;background:#5687a8;display:inline-block;border-radius:2px;margin-right:6px}
+.behavior-science{padding:21px;margin:20px 0}
+.behavior-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0}
+.behavior-grid article{padding:13px;border:1px solid #dce5da;border-radius:11px;background:#fbfcfa}
+.behavior-grid h3{font-size:19px}.behavior-grid p{font-size:13px;color:#526958}
+/* Non-working previous map hid all spots after a stale Leaflet renderList() call.
+   Keep native overlay map pins clickable and ensure hidden filters don't absorb taps. */
+.native-pin[hidden]{display:none!important}
+.native-map-canvas{touch-action:none}
+.native-pin{touch-action:manipulation}
+@media(max-width:980px){
+ .weekly-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .behavior-grid{grid-template-columns:1fr}
+}
+@media(max-width:670px){
+ .seasonal-planner,.planning-week,.behavior-science{padding:14px}
+ .season-callout{grid-template-columns:1fr;gap:10px}
+ .season-phase{width:100%}
+ .annual-months{grid-template-columns:repeat(6,minmax(0,1fr))}
+ .weekly-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .mode-tab{flex:1 1 140px}
+ .planning-day p{min-height:0}
+}
