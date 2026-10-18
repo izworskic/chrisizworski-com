@@ -253,7 +253,15 @@ async function loadCount(s){
   if(data.stale){const q=document.createElement("p");q.textContent="This observation is older than 14 days. Do not use it as evidence of activity today.";field.append(q)}
  }catch{if(selected.id===s.id)p.textContent="Published counts are temporarily unavailable. Use the source link; no count is assumed."}
 }
-el("region-filter").addEventListener("change",()=>{el("state-filter").value="all";renderList()});
+el("region-filter").addEventListener("change",()=>{
+ el("state-filter").value="all";
+ const region=el("region-filter").value;
+ const matches=spots.filter(s=>region==="all"||window.EaglePlanning.regionForSpot(s)===region);
+ // Changing the region updates the *actual selected site*, and therefore
+ // the seasonal lens and its NWS forecast, not just hidden map markers.
+ if(matches.length&&!matches.some(s=>s.id===selected.id))pick(matches[0]);
+ else renderList();
+});
 el("state-filter").addEventListener("change",renderList);el("type-filter").addEventListener("change",renderList);el("saved-filter").addEventListener("change",renderList);
 el("saved-toggle").addEventListener("click",()=>{if(saved.has(selected.id))saved.delete(selected.id);else saved.add(selected.id);try{localStorage.setItem("eagle-saved-v1",JSON.stringify([...saved]))}catch{}renderList();el("saved-toggle").textContent=saved.has(selected.id)?"Saved ✓":"Save spot"});
 el("refresh-weather").addEventListener("click",()=>loadWeather(selected));
