@@ -7,7 +7,7 @@ const handler=require('../api/waterfowl-freeze-line.js');
 const {REGIONS,summarizeWeather,cleanReport}=handler._test;
 function res(){return {statusCode:200,headers:{},body:null,setHeader(k,v){this.headers[k]=v;return this},status(n){this.statusCode=n;return this},json(x){this.body=x;return this}};}
 test('regional locations are unique and have safe reference coordinates',()=>{
- assert.equal(REGIONS.length,14);
+ assert.equal(REGIONS.length,16);
  assert.equal(new Set(REGIONS.map(r=>r.id)).size,REGIONS.length);
  for(const r of REGIONS){assert.ok(r.lat>=33.5&&r.lat<=50);assert.ok(r.lon>=-101&&r.lon<=-77);}
 });
