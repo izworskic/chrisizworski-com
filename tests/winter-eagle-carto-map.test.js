@@ -145,3 +145,11 @@ test('a user opening a pre-existing shared link still receives a focused site ma
   assert.deepEqual(map.moves[0]?.center,[-84.35,46.5]);
  }finally{t.restore()}
 });
+
+test('cluster numbers are explicitly identified as viewing locations, not eagle counts',()=>{
+ const script=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/winter-eagle-watching/eagle-map.js'),'utf8');
+ assert.ok(script.includes('NOT eagle counts'));
+ assert.ok(script.includes('Green = grouped viewing locations'));
+ assert.ok(script.includes('"#286382"'));
+ assert.ok(script.includes('"#a86119"'));
+});
