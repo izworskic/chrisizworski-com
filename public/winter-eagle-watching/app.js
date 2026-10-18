@@ -46,7 +46,11 @@ function pick(s){
  selected=s;history.replaceState(null,"","#"+s.id);renderList();markerUpdate();
  text("selected-place",s.name);text("selected-city",s.city+", "+s.state);text("season-pill",seasonLabel(s));el("season-pill").className="status"+(inWinter?"":" muted");
  text("why-water",s.water);text("where-look",s.look);text("access-note",s.access);
- el("directions").href=s.map;el("operator-link").href=s.source;el("count-source").href=s.count?"https://www.mvr.usace.army.mil/"+(s.count==="starved"?"illinoiswaterway":"mississippiriver")+"/eagle-watching/":"https://www.nationaleaglecenter.org/eagle-count/";
+ el("directions").href=s.map;el("operator-link").href=s.source;
+ const report=el("count-source");
+ if(s.count){report.href="https://www.mvr.usace.army.mil/"+(s.count==="starved"?"illinoiswaterway":"mississippiriver")+"/eagle-watching/";report.textContent="Open the original Corps count report ↗"}
+ else if(["red-wing","wabasha"].includes(s.id)){report.href="https://www.nationaleaglecenter.org/eagle-count/";report.textContent="Open National Eagle Center regional count history ↗"}
+ else {report.href=s.source;report.textContent="Open viewing-site operator guidance (no local count) ↗"}
  text("open-water","Unconfirmed");text("eagle-present","Unconfirmed");
  el("saved-toggle").textContent=saved.has(s.id)?"Saved ✓":"Save spot";
  loadWeather(s);loadCount(s);
