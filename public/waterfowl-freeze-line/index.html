@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Waterfowl Freeze-Line Tracker | Duck Migration Weather | Chris Izworski</title>
+<meta name="description" content="Track freeze pressure, incoming cold and recent duck and goose reports across Michigan and the Mississippi Flyway. Live NWS forecasts, NOAA snow map and dated sightings.">
+<link rel="canonical" href="https://chrisizworski.com/waterfowl-freeze-line/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski">
+<meta property="og:title" content="Waterfowl Freeze-Line Tracker | Chris Izworski">
+<meta property="og:description" content="Follow cold-front pressure from the Great Lakes toward the Mississippi Flyway. Distinguish forecast freezing conditions from observed duck and goose reports.">
+<meta property="og:url" content="https://chrisizworski.com/waterfowl-freeze-line/">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Mallard_drake_flight.jpg/1280px-Mallard_drake_flight.jpg">
+<meta name="google-adsense-account" content="ca-pub-8222782620788075">
+<link rel="stylesheet" href="/waterfowl-freeze-line/style.css?v=1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
+<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+{"@type":"WebApplication","@id":"https://chrisizworski.com/waterfowl-freeze-line/#app","name":"Waterfowl Freeze-Line Tracker","url":"https://chrisizworski.com/waterfowl-freeze-line/","description":"Compare National Weather Service hourly freezing forecasts across 14 Midwest waterfowl regions and inspect dated public iNaturalist observations without equating forecast ice risk with actual bird concentrations.","applicationCategory":"WeatherApplication","isAccessibleForFree":true,"dateModified":"2026-10-18","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"WebPage","@id":"https://chrisizworski.com/waterfowl-freeze-line/#page","url":"https://chrisizworski.com/waterfowl-freeze-line/","name":"Waterfowl Freeze-Line Tracker | Chris Izworski","mainEntity":{"@id":"https://chrisizworski.com/waterfowl-freeze-line/#app"},"author":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Waterfowl Freeze-Line Tracker","item":"https://chrisizworski.com/waterfowl-freeze-line/"}]}
+]}
+</script>
+<script defer src="/waterfowl-freeze-line/app.js?v=1"></script>
+</head>
+<body>
+<a class="skip" href="#explore">Skip to tracker</a>
+<header class="site-header"><div class="nav wrap"><a class="brand" href="/">Chris Izworski</a><nav aria-label="Site navigation"><a href="/tools/">Michigan &amp; Great Lakes tools</a><a href="https://michiganbirdingreport.com/">Michigan Birding Report</a></nav></div></header>
+<section class="hero">
+<div class="wrap hero-grid">
+<div class="hero-content"><p class="eyebrow">A living natural calendar · Fall &amp; winter</p>
+<h1>Follow the freeze.<br><em>Find the next open water.</em></h1>
+<p class="hero-copy">Where could ducks and geese move as northern wetlands cool? Compare changing weather across 14 Great Lakes and Mississippi Flyway regions, then examine actual, dated waterfowl observations.</p>
+<a class="button button-primary" href="#explore">Explore the freeze-pressure map <span aria-hidden="true">↘</span></a>
+<p class="fine">A weather-based scouting and birdwatching companion — not a bird-count survey, hunting-access map or verified marsh-ice report.</p>
+</div>
+<figure class="hero-photo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Mallard_drake_flight.jpg/1280px-Mallard_drake_flight.jpg" alt="Authentic U.S. Fish and Wildlife Service photograph of a mallard drake flying" width="1280" height="842" loading="eager"><figcaption>Mallard in flight · U.S. Fish &amp; Wildlife Service / Erwin and Peggy Bauer · <a href="https://commons.wikimedia.org/wiki/File:Mallard_drake_flight.jpg" target="_blank" rel="noopener">Public-domain photograph</a>. Not a current sighting.</figcaption></figure>
+</div></section>
+<main class="wrap" id="explore">
+<div class="lede"><span class="indicator-dot" aria-hidden="true"></span><div><strong>Current condition outlook</strong><p id="overview-status" role="status" aria-live="polite">Checking live National Weather Service hourly forecasts at 14 regional reference points…</p></div><button class="button button-light" id="refresh" type="button">Refresh forecasts</button></div>
+<section aria-labelledby="map-title" class="section">
+<div class="section-head"><div><p class="eyebrow">01 / The regional picture</p><h2 id="map-title">Where is freezing pressure building?</h2><p>Map markers and the regional board respond together. Forecast hours at or below 32°F indicate cold exposure, not confirmed wetland freezing.</p></div></div>
+<div class="toolbar">
+<div class="input-group"><label for="region-search">Find a region</label><input id="region-search" type="search" placeholder="Saginaw Bay, Mississippi, Horicon…" autocomplete="off"></div>
+<div class="input-group"><label for="sort">Order regions</label><select id="sort"><option value="north">North to south</option><option value="pressure">Most forecast freezing</option><option value="south">South to north</option></select></div>
+<div class="input-group"><label for="state">State</label><select id="state"><option value="all">All states</option><option>MI</option><option>WI</option><option>MN</option><option>IA</option><option>IL</option><option>IN</option><option>OH</option><option>MO</option><option>TN</option></select></div>
+</div>
+<div class="explorer">
+<div class="map-frame"><div class="map-img" role="group" aria-label="Regional map with selectable weather outlook markers"><img src="/winter-eagle-watching/midwest-vector-map.svg" alt="Geographic orientation map of the Midwest and Great Lakes, with state lines and the Mississippi River" width="1400" height="1020"><div id="map-pins" class="map-pins"></div></div><div class="map-footer"><span>Local, self-hosted geographic map · No tiles or API keys</span><span><i class="swatch strong"></i> Strong <i class="swatch building"></i> Building <i class="swatch limited"></i> Limited <i class="swatch unknown"></i> Unavailable</span></div><p class="tiny">Colors describe modeled <strong>forecast freeze pressure</strong> only. They are not reported waterfowl concentrations or a literal freeze boundary.</p></div>
+<div class="board-frame"><div class="board-top"><h3>Regional conditions</h3><span id="board-count">14 regions</span></div><div id="region-board" class="region-board" role="group" aria-label="Select a region"></div></div>
+</div>
+</section>
+<section aria-labelledby="detail-title" class="section detail">
+<div class="section-head"><div><p class="eyebrow">02 / A closer look</p><h2 id="detail-title">Saginaw Bay &amp; Shiawassee Flats</h2><p id="region-habitat">Shallow bays, coastal marshes and refuge wetlands.</p></div><span id="pressure-badge" class="tag">Loading forecast</span></div>
+<div class="metric-row" aria-label="Forecast metrics">
+<div class="metric"><span>Freezing hours · next 24h</span><strong id="freeze24">—</strong><small>NWS forecast air, not water</small></div>
+<div class="metric"><span>Freezing hours · next 72h</span><strong id="freeze72">—</strong><small>At or below 32°F</small></div>
+<div class="metric"><span>Lowest forecast air temperature</span><strong id="low-temp">—</strong><small>Next 72h</small></div>
+<div class="metric"><span>Incoming cooling signal</span><strong id="front-trend">—</strong><small id="front-note">First hours vs. next 36h</small></div>
+</div>
+<div class="evidence-grid">
+<article class="panel chart-panel"><div class="panel-top"><div><p class="eyebrow">Weather / NOAA NWS</p><h3>Cold exposure ahead</h3></div><span class="meta" id="forecast-date">Forecast pending</span></div><div id="temp-chart" class="chart" role="img" aria-label="72 hour temperature forecast in six-hour steps"></div><p class="explain">The dashed line is 32°F. More subfreezing forecast hours can increase freeze pressure on shallow wetlands. Water depth, currents, wind and local conditions change the outcome. There is no calibrated prediction of marsh ice here.</p></article>
+<article class="panel sightings-panel"><div class="panel-top"><div><p class="eyebrow">Observations / iNaturalist</p><h3>Recently reported ducks &amp; geese</h3></div><span class="meta">Last 14 days</span></div><p id="sighting-status" role="status" aria-live="polite">Choose a region to retrieve recent public observations.</p><div id="sightings"></div><p class="explain">One observation is one submitted record, <strong>not one bird</strong>. Sightings are incomplete, may be reported late and reflect observer effort. Coordinates are intentionally not republished.</p><a href="https://michiganbirdingreport.com/" target="_blank" rel="noopener" class="text-link">Explore Michigan Birding Report's eBird observations ↗</a></article>
+</div>
+<div class="snow-panel"><div><p class="eyebrow">03 / Snow and ice reality check</p><h3>Snow cover matters. But snow and ice are different.</h3><p>Snow can limit access to waste grain; cold can freeze shallow wetlands. The official NOAA snow-depth analysis is available for checking the regional situation. It is <strong>not yet sampled into the numerical forecast-pressure signal</strong>. No local marsh-ice or open-water measurement is currently integrated.</p></div><div class="snow-links"><a class="button button-light" href="https://www.nohrsc.noaa.gov/nsa/" target="_blank" rel="noopener">NOAA snow-depth analysis ↗</a><a class="button button-light" href="https://www.ducks.org/migrationmap" target="_blank" rel="noopener">Ducks Unlimited field reports ↗</a></div></div>
+</section>
+<section class="section guide" aria-labelledby="guide-title"><p class="eyebrow">04 / Read the movement</p><h2 id="guide-title">How to use the freeze line without being fooled by it</h2>
+<div class="guide-grid"><article><span class="step">01</span><h3>Watch northern pressure</h3><p>A run of subfreezing hours points to possible habitat changes, especially in shallow sheltered waters. It cannot establish ice cover by itself.</p></article><article><span class="step">02</span><h3>Look for available habitat</h3><p>Ducks and geese may move south, east or west to find feeding habitat and open water. Rivers, deeper lakes and managed wetland units respond differently.</p></article><article><span class="step">03</span><h3>Check actual evidence</h3><p>Review the dates and species of reports before visiting. A report does not verify a flock remains there or that the area is open to visitors or hunters.</p></article></div>
+<div class="source-strip"><strong>Methods &amp; sources</strong><p><a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> · <a href="https://www.nohrsc.noaa.gov/nsa/" target="_blank" rel="noopener">NOAA National Snow Analyses</a> · <a href="https://www.inaturalist.org/pages/api+recommended+practices" target="_blank" rel="noopener">iNaturalist public observations</a> · <a href="https://www.ducks.org/hunting/waterfowl-hunting-tips/hunting-the-freeze-line" target="_blank" rel="noopener">Ducks Unlimited on hunting the freeze line</a>. The simple freeze-pressure categories are exploratory heuristics, not a validated migration model. This page does not redistribute Ducks Unlimited reports.</p></div>
+</section>
+</main>
+<footer class="footer"><div class="wrap">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · <a href="/tools/">All tools</a> · <a href="/privacy/">Privacy</a> · Wildlife forecasts are not hunting-season, access or ice-safety advice.</div></footer>
+</body></html>
