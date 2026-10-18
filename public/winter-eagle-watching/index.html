@@ -17,8 +17,8 @@
 <link rel="preload" href="/winter-eagle-watching/midwest-vector-map.svg" as="image">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=4">
-<link rel="stylesheet" href="/winter-eagle-watching/flight-guide.css?v=1">
+<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=5">
+<link rel="stylesheet" href="/winter-eagle-watching/flight-guide.css?v=2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
 <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
@@ -36,7 +36,7 @@
 ]}]}
 </script>
 <script defer src="/winter-eagle-watching/planning.js?v=2"></script>
-<script defer src="/winter-eagle-watching/app.js?v=6"></script>
+<script defer src="/winter-eagle-watching/app.js?v=7"></script>
 <script defer src="/winter-eagle-watching/flight-guide.js?v=1"></script>
 </head>
 <body>
@@ -56,87 +56,14 @@
 <p><strong>Real places. Dated evidence. No invented eagle forecasts.</strong> Air temperatures and seasonal windows help with trip planning but do not tell us whether the water is open or how many eagles are present.</p>
 <span class="truth">15 public viewing destinations · 6 Midwest states</span>
 </div>
-<section id="eagle-season-planner" class="panel seasonal-planner" aria-labelledby="planner-title">
- <div class="eyebrow">01 / The living eagle calendar</div>
- <h2 id="planner-title">What are you hoping to see?</h2>
- <p class="lead">Two different natural events, two different ways to plan. Seasonal habitat, actual dated bird counts and forecast viewing conditions are kept separate.</p>
- <div class="mode-tabs" role="group" aria-label="Eagle watching behavior">
-  <button type="button" id="mode-gather" aria-pressed="true" class="mode-tab active">Winter eagle gatherings</button>
-  <button type="button" id="mode-display" aria-pressed="false" class="mode-tab">Aerial displays &amp; cartwheels</button>
- </div>
- <div class="season-callout">
-  <div><span id="season-mode-label" class="eyebrow">WINTER GATHERINGS</span><h3 id="season-headline">Follow the open water and food.</h3>
-  <p id="season-explainer">Bald eagles can concentrate where freeze-up restricts access to fish. Watch public river overlooks below locks, dams and ice edges. Weather is only a clue.</p></div>
-  <div class="season-phase"><strong id="season-level">Checking season…</strong><small id="season-month">Month-specific field context</small></div>
- </div>
- <div class="region-note" aria-live="polite"><strong id="region-heading">Regional field context</strong><p id="region-context">Your selected viewing destination determines this month-by-month planning lens.</p></div>
-<div class="season-legend"><span><i class="season-swatch peak"></i>Main seasonal window</span><span><i class="season-swatch common"></i>Common</span><span><i class="season-swatch possible"></i>Possible</span><span><i class="season-swatch quiet"></i>Less typical</span></div>
- <div class="annual-months" id="annual-calendar" role="list" aria-label="Illustrative Midwest eagle activity season by month"></div>
- <p class="flight-jump-note"><a href="#read-the-sky">See what the aerial displays look like in flight ↓</a></p>
- <p class="source-note">Regional seasonal guide, not a measured sighting forecast. Year-to-year timing varies with ice, food and local breeding calendars. Tap a month for seasonal guidance; the 7-day forecast below always reflects the current forecast, not a past or future month.</p>
- <div class="season-tip" id="behavior-guide" aria-live="polite">Winter concentrations reflect food, open water and roost habitat. A group of eagles does not by itself indicate courtship.</div>
- </section>
-<section id="finder" aria-labelledby="finder-title">
-<div class="section-head"><div><div class="eyebrow">02 / Find your public viewing corridor</div><h2 id="finder-title">Where should you go?</h2><p>Choose a location to see its public access, winter habitat and local hourly weather.</p></div><span id="spot-count" class="status muted">15 viewing locations</span></div>
-<div class="controls">
-<div class="field"><label for="region-filter">Planning region</label><select id="region-filter"><option value="all">All Midwest regions</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower MI</option><option value="southern-lower">Southern Lower MI</option><option value="upper-midwest">Other Midwest states</option></select></div>
-<div class="field"><label for="state-filter">State</label><select id="state-filter"><option value="all">All six states</option><option value="MI">Michigan</option><option value="WI">Wisconsin</option><option value="MN">Minnesota</option><option value="IA">Iowa</option><option value="IL">Illinois</option><option value="MO">Missouri</option></select></div>
-<div class="field"><label for="type-filter">Viewing type</label><select id="type-filter"><option value="all">All viewing spots</option><option value="winter">Documented winter corridors</option><option value="habitat">Public habitat leads</option><option value="resident">Resident habitat</option></select></div>
-<div class="field"><label for="saved-filter">My spots</label><label style="min-height:42px;display:flex;gap:8px;align-items:center;font-size:13px;text-transform:none;letter-spacing:0"><input type="checkbox" id="saved-filter"> Saved only</label></div>
-<button id="nearest" type="button" class="button">Find nearest listed spot</button>
-</div>
-<p class="source-note" id="location-help">Location is requested only when you select “Find nearest.” Distance is straight-line, not driving distance.</p>
-<div class="layout">
-<div class="panel panel-pad"><div id="spot-list" class="spots" role="group" aria-label="Eagle watching locations"></div><p id="no-spots" hidden>No locations match these filters. Try all spots.</p></div>
-<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading local interactive map…</p></div><p id="map-provider" class="map-caption">Numbered markers show public viewing locations, not nests or roosts. Self-hosted geographic map; no API keys or remote map tiles.</p></div>
-</div></section>
-<section class="detail-grid" aria-label="Selected eagle viewing destination">
-<article id="location-details" class="panel panel-pad"><div class="eyebrow"><span id="selected-region">Regional context</span> · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span><div class="fact-grid">
-<div class="fact"><span>Open water now</span><strong id="open-water">Unconfirmed</strong><p>Weather cannot verify ice coverage.</p></div>
-<div class="fact"><span>Eagles here now</span><strong id="eagle-present">Unconfirmed</strong><p>Recent verified counts are separate.</p></div>
-</div><div class="notes"><h3>Why this spot?</h3><p id="why-water">Winter water and feeding habitat.</p><h3>Where to look</h3><p id="where-look">Stay at the public overlook and scan distant trees.</p><h3>Before you go</h3><p id="access-note">Check operator access details before driving.</p></div>
-<div class="actions"><a id="directions" href="https://www.google.com/maps" target="_blank" rel="noopener" class="button">Directions ↗</a><a id="operator-link" href="https://www.fws.gov/refuge/detroit-river/visit-us" target="_blank" rel="noopener" class="button ghost">Operator &amp; access ↗</a><button type="button" id="saved-toggle" class="button ghost">Save spot</button><button type="button" id="copy-link" class="button ghost">Copy spot link</button></div>
-</article>
-<article class="panel panel-pad" aria-labelledby="weather-title"><div class="weather-head"><div><div class="eyebrow">Live NWS hourly forecast</div><h2 id="weather-title">What is the river weather doing?</h2></div><button type="button" class="refresh" id="refresh-weather">Refresh ↻</button></div>
-<p id="weather-status" class="lead" role="status" aria-live="polite">Checking local NWS forecast…</p>
-<div class="weather-stats"><div><strong id="air-now">—</strong><span>Next forecast air temp</span></div><div><strong id="air-low">—</strong><span>Lowest in 48h</span></div><div><strong id="air-wind">—</strong><span>Forecast wind</span></div></div>
-<div class="chart"><svg id="temperature-chart" viewBox="0 0 600 165" aria-label="Hourly temperature forecast"></svg><p class="source-note" id="chart-label">Hourly forecast is loading.</p></div>
-<div id="weather-steps" class="timeline"></div>
-<p id="weather-updated" class="source-note"></p><div class="notice"><strong>The open-water rule:</strong><p>Cold air can create an opportunity for concentrations near flowing water. It never proves river ice, a dam tailwater opening or an eagle sighting.</p></div>
-</article></section>
-<section class="panel planning-week" aria-labelledby="week-title">
-  <div class="eyebrow">03 / Current seven-day outlook</div>
-  <h2 id="week-title">Which days are worth watching?</h2>
-  <p id="week-lead" class="lead">Pick a public viewing spot above. Daily freezing-hours context and viewing weather appear as the NWS hourly forecast loads.</p>
-  <div class="field-conditions">
-   <span id="setup-label" class="status muted">Awaiting NWS forecast</span>
-   <p id="setup-explanation">No weather forecast is an eagle sighting.</p>
-   <small id="planning-provenance" class="source-note">Based on dated NWS hourly forecasts only. No measured river ice or observed aerial activity.</small>
-  </div>
-  <div id="weekly-day-cards" class="weekly-cards" aria-live="polite"></div>
-  <div class="mini-key"><span><i class="cold-legend"></i>Hours with air at or below 32°F</span><span>Weather describes viewing opportunity, not eagle behavior.</span></div>
-  <div class="notice"><strong>No invented eagle percentages.</strong> A favorable viewing day means conditions for a person to watch, not a forecast that an eagle gathering or aerial display will occur. For actual sightings, check dated observations and local observers.</div>
- </section>
-<section class="panel regional-evidence" aria-labelledby="up-evidence-title">
-<div class="eyebrow">Upper Peninsula · Evidence worth knowing</div>
-<h2 id="up-evidence-title">The UP has real winter eagle concentrations</h2>
-<div class="case-study-grid"><div><p><strong>A documented feeding aggregation:</strong> Michigan Sea Grant reported more than <strong>45 eagles at once</strong> near the Dafter Landfill in its January 2023 report, and <strong>upwards of 30</strong> in a January 2026 winter report. These are dated historical observations—not live counts or predictions.</p>
-<p><strong>Why it matters:</strong> eagles can concentrate at food sources such as carrion as well as fish in open river channels. A river-ice model alone would miss this behavior.</p></div>
-<div class="case-safety"><strong>Important: not an unrestricted viewing location</strong><p>The landfill requires operator permission and check-in; access to its active disposal area is prohibited. Do not enter, follow eagle flights to roosts, or expect access based on an old report. For a public-oriented trip, start with the St. Marys River or a managed recreation area.</p></div></div>
-<p class="source-note">Original dated sources: <a href="https://www.michiganseagrant.org/blog/2023/01/10/upper-peninsula-birding-report/" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2023</a> · <a href="https://msu-prod.dotcmscloud.com/news/eastern-upper-peninsula-birding-update-what-to-see-and-where-msg24-nelson24" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2026</a> · <a href="https://www.michigan.gov/dnr/things-to-do/wildlife-viewing/birding/winter" target="_blank" rel="noopener">Michigan DNR winter eagle guidance</a>.</p>
-</section>
-<section class="panel counts" aria-labelledby="count-title"><div class="eyebrow">04 / Evidence, not a forecast</div><h2 id="count-title">What are observers actually counting?</h2>
-<p class="lead">Select a supported lock-and-dam location for the latest machine-readable Corps count. Counts are snapshots from the observation date—never a promise about today.</p>
-<div id="count-live" class="count-summary" aria-live="polite">Select a location for dated eagle activity.</div><a id="count-source" href="https://www.nationaleaglecenter.org/eagle-count/" target="_blank" rel="noopener">Open this location's original count report ↗</a>
-<div class="count-lines"><article><strong>Upper Mississippi · Minnesota &amp; Wisconsin</strong><p>National Eagle Center staff and volunteers count winter eagles weekly at 13 Upper Mississippi locations. Reports can be affected by visibility and survey timing.</p><a href="https://www.nationaleaglecenter.org/eagle-count/" rel="noopener" target="_blank">National Eagle Center count history ↗</a></article><article><strong>Mississippi &amp; Illinois rivers · Corps surveys</strong><p>U.S. Army Corps of Engineers surveys near locks and dams provide dated adult and juvenile counts; “no report” is not zero birds.</p><a href="https://www.mvr.usace.army.mil/mississippiriver/eagle-watching/" rel="noopener" target="_blank">Mississippi counts ↗</a> · <a href="https://www.mvr.usace.army.mil/illinoiswaterway/eagle-watching/" rel="noopener" target="_blank">Illinois counts ↗</a></article></div>
-</section>
-<section aria-labelledby="guide-title"><div class="section-head"><div><div class="eyebrow">05 / Read the conditions</div><h2 id="guide-title">A better winter eagle outing</h2></div></div><div class="guide">
-<div class="panel"><strong>01 · Follow the squeeze</strong><h3>Moving water matters</h3><p>When still water freezes, eagles may hunt near open river reaches, dams and confluences. A cold forecast alone cannot identify those openings.</p></div>
-<div class="panel"><strong>02 · Time your visit</strong><h3>Morning and late day</h3><p>Wisconsin DNR recommends early morning, roughly 8–11 a.m., and the period before dusk. Conditions and feeding activity vary.</p></div>
-<div class="panel"><strong>03 · Keep your distance</strong><h3>Let wild birds stay wild</h3><p>Watch from designated public overlooks or your parked vehicle. Never bait eagles, approach roosts or walk onto river ice; leave if birds react to you.</p></div>
-</div></section>
+<nav class="eagle-journey" aria-label="Plan your eagle watching trip">
+ <span class="journey-lead">Plan your outing</span>
+ <a href="#read-the-sky"><strong>1</strong> Recognize the flight</a>
+ <a href="#finder"><strong>2</strong> Find a public overlook</a>
+ <a href="#eagle-season-planner"><strong>3</strong> Check the timing</a>
+ </nav>
 <section class="panel flight-field-guide" id="read-the-sky" aria-labelledby="flight-heading">
- <div class="eyebrow">05 / Learn the flight · Woodcock-style field interpretation</div>
+ <div class="eyebrow">01 / Recognize an eagle's flight</div>
  <div class="flight-heading">
   <div><h2 id="flight-heading">Read the sky: what are the eagles doing?</h2>
    <p class="lead">Learn four distinct flight patterns before you go. Select a behavior, play an <strong>illustrated trajectory</strong>, and discover what you can—and cannot—conclude from the birds' movements.</p></div>
@@ -186,7 +113,16 @@
   </div>
  </div>
  <p class="flight-method">Four separate flight behaviors—not four required stages of a courtship ritual. Movement paths are educational illustrations, not videos of wild birds and not predictions. Animation pauses on request and honors reduced-motion settings.</p>
- <div class="flight-quiz" id="eagle-flight-quiz"><div class="flight-quiz-intro"><span class="eyebrow">Field exercise / identify the movement</span><h3>What did you just witness?</h3>
+<div class="flight-where-guide" id="show-locations">
+ <div><span class="eyebrow">Where does the aerial show happen?</span><h3>The sky is the stage—not one marked spot.</h3><p>Look across open sky from a lawful public riverfront, wetland overlook or scenic bluff. Territorial and pair flights may occur over broad eagle habitat; <strong>none of our map pins is a verified cartwheel venue</strong>. We do not map nest or roost locations.</p></div>
+ <div class="flight-where-tiles">
+ <article><strong>To watch aerial displays</strong><p>Look for eagles interacting overhead during the local breeding-season window. Watch the treeline and wide sky from a public vantage, without approaching nests.</p></article>
+ <article><strong>To watch winter gatherings</strong><p>Watch open water and feeding corridors from established public viewing areas. Wisconsin DNR suggests early morning or the last hours before dusk for winter feeding and roost movements.</p></article>
+ </div>
+ <a href="#finder" class="button">See public viewing locations ↓</a>
+ <p class="source-note">A public viewing area is a place to observe safely, not a promise of eagles or a staged performance. <a href="https://dnr.wisconsin.gov/topic/WildlifeHabitat/baldeagle" target="_blank" rel="noopener">Wisconsin DNR viewing guidance ↗</a></p>
+ </div>
+ <details class="flight-quiz-disclosure"><summary>Try the field quiz: identify the movement <span>4 quick examples · optional</span></summary><div class="flight-quiz" id="eagle-flight-quiz"><div class="flight-quiz-intro"><span class="eyebrow">Field exercise / identify the movement</span><h3>What did you just witness?</h3>
  <p>Practice naming the visible behavior without guessing what the birds intend.</p></div>
  <div class="flight-quiz-inner"><small id="eagle-flight-quiz-progress">Example 1 of 4</small><p id="eagle-flight-quiz-question">One bird circles with wings outstretched. What can you report?</p>
  <div class="flight-quiz-choices" role="group" aria-label="Choose the movement you observed">
@@ -194,10 +130,100 @@
  </div><p class="flight-quiz-feedback" id="eagle-flight-quiz-feedback" role="status" aria-live="polite"></p><button type="button" id="eagle-flight-quiz-next" class="flight-main-button" hidden>Next example →</button>
  </div></div>
  </div>
+ </details>
  <div class="flight-sources"><strong>Why the cartwheel explanation is cautious</strong><p>Cornell describes talon-locked descents as a courtship display; the Smithsonian emphasizes the same behavior as territorial fighting. Audubon and field biologists recognize more than one context. A visitor can reliably identify the movement without claiming to know the birds' motivation. <a href="https://www.allaboutbirds.org/guide/Bald_Eagle/lifehistory" target="_blank" rel="noopener">Cornell ↗</a> · <a href="https://nationalzoo.si.edu/animals/bald-eagle" target="_blank" rel="noopener">Smithsonian ↗</a> · <a href="https://www.audubon.org/magazine/two-bald-eagles-tangle" target="_blank" rel="noopener">Audubon ↗</a> · <a href="https://www.fws.gov/species/bald-eagle-haliaeetus-leucocephalus" target="_blank" rel="noopener">USFWS species guidance ↗</a></p></div>
  <div class="notice"><strong>Watch without disturbance:</strong> Observe from public overlooks. Do not approach nests or roosts, bait eagles, publish sensitive nest locations, or walk onto river ice. Use binoculars rather than moving closer.</div>
 </section>
-<section class="panel faq" aria-labelledby="faq-title"><div class="eyebrow">06 / Field questions</div><h2 id="faq-title">Before you set out</h2>
+
+
+<section id="finder" aria-labelledby="finder-title">
+<div class="section-head"><div><div class="eyebrow">03 / Find your public viewing corridor</div><h2 id="finder-title">Where can I watch?</h2><p>These pins identify public observation opportunities, not nests, roosts or confirmed aerial-show locations. Select a place to see exactly where to stand, what to scan and when it might be worth visiting.</p></div><span id="spot-count" class="status muted">15 viewing locations</span></div>
+<div class="finder-intent" aria-label="Choose the experience you want to plan">
+ <span>I'm hoping to see</span>
+ <button id="finder-gather" type="button" aria-pressed="true">Winter feeding gatherings</button>
+ <button id="finder-display" type="button" aria-pressed="false">Eagles interacting in flight</button>
+ </div>
+ <p class="finder-explain" id="finder-purpose" role="status" aria-live="polite">Winter gatherings: use documented public viewing corridors and verify open water, access and dated reports. No guaranteed sightings.</p>
+ <div class="controls">
+<div class="field"><label for="region-filter">Planning region</label><select id="region-filter"><option value="all">All Midwest regions</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower MI</option><option value="southern-lower">Southern Lower MI</option><option value="upper-midwest">Other Midwest states</option></select></div>
+<div class="field"><label for="state-filter">State</label><select id="state-filter"><option value="all">All six states</option><option value="MI">Michigan</option><option value="WI">Wisconsin</option><option value="MN">Minnesota</option><option value="IA">Iowa</option><option value="IL">Illinois</option><option value="MO">Missouri</option></select></div>
+<div class="field"><label for="type-filter">Viewing type</label><select id="type-filter"><option value="all">All viewing spots</option><option value="winter">Documented winter corridors</option><option value="habitat">Public habitat leads</option><option value="resident">Resident habitat</option></select></div>
+<div class="field"><label for="saved-filter">My spots</label><label style="min-height:42px;display:flex;gap:8px;align-items:center;font-size:13px;text-transform:none;letter-spacing:0"><input type="checkbox" id="saved-filter"> Saved only</label></div>
+<button id="nearest" type="button" class="button">Find nearest listed spot</button>
+</div>
+<p class="source-note" id="location-help">Location is requested only when you select “Find nearest.” Distance is straight-line, not driving distance.</p>
+<div class="layout">
+<div class="panel panel-pad"><div id="spot-list" class="spots" role="group" aria-label="Eagle watching locations"></div><p id="no-spots" hidden>No locations match these filters. Try all spots.</p></div>
+<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading local interactive map…</p></div><p id="map-provider" class="map-caption">Numbered markers are public viewing access points, not nest sites, cartwheel reports or promises of sightings. Self-hosted map; no API keys.</p></div>
+</div></section>
+<section class="detail-grid" aria-label="Selected eagle viewing destination">
+<article id="location-details" class="panel panel-pad"><div class="eyebrow"><span id="selected-region">Regional context</span> · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span>
+<div class="site-purpose" id="site-purpose" aria-live="polite"><strong id="site-purpose-heading">Why this public location?</strong><p id="site-purpose-text">Choose a viewing goal to see what this location can—and cannot—tell you.</p></div><div class="fact-grid">
+<div class="fact"><span>Open water now</span><strong id="open-water">Unconfirmed</strong><p>Weather cannot verify ice coverage.</p></div>
+<div class="fact"><span>Eagles here now</span><strong id="eagle-present">Unconfirmed</strong><p>Recent verified counts are separate.</p></div>
+</div><div class="notes"><h3>Why this spot?</h3><p id="why-water">Winter water and feeding habitat.</p><h3 id="where-look-label">Where to look</h3><p id="where-look">Stay at the public overlook and scan distant trees.</p><h3>Public access — verify before travel</h3><p id="access-note">Check operator access details before driving.</p></div>
+<div class="actions"><a id="directions" href="https://www.google.com/maps" target="_blank" rel="noopener" class="button">Directions ↗</a><a id="operator-link" href="https://www.fws.gov/refuge/detroit-river/visit-us" target="_blank" rel="noopener" class="button ghost">Operator &amp; access ↗</a><button type="button" id="saved-toggle" class="button ghost">Save spot</button><button type="button" id="copy-link" class="button ghost">Copy spot link</button></div>
+</article>
+<article class="panel panel-pad" aria-labelledby="weather-title"><div class="weather-head"><div><div class="eyebrow">Live NWS hourly forecast</div><h2 id="weather-title">What is the weather at this overlook?</h2></div><button type="button" class="refresh" id="refresh-weather">Refresh ↻</button></div>
+<p id="weather-status" class="lead" role="status" aria-live="polite">Checking local NWS forecast…</p>
+<div class="weather-stats"><div><strong id="air-now">—</strong><span>Next forecast air temp</span></div><div><strong id="air-low">—</strong><span>Lowest in 48h</span></div><div><strong id="air-wind">—</strong><span>Forecast wind</span></div></div>
+<div class="chart"><svg id="temperature-chart" viewBox="0 0 600 165" aria-label="Hourly temperature forecast"></svg><p class="source-note" id="chart-label">Hourly forecast is loading.</p></div>
+<div id="weather-steps" class="timeline"></div>
+<p id="weather-updated" class="source-note"></p><div class="notice"><strong>The open-water rule:</strong><p>Cold air can create an opportunity for concentrations near flowing water. It never proves river ice, a dam tailwater opening or an eagle sighting.</p></div>
+</article></section>
+<section id="eagle-season-planner" class="panel seasonal-planner" aria-labelledby="planner-title">
+ <div class="eyebrow">04 / Seasonal timing by location</div>
+ <h2 id="planner-title">When is the season right?</h2>
+ <p class="lead">Choose a viewing goal, then review the seasonal window for the selected region. The calendar is ecological guidance, not a forecast of when eagles will perform.</p>
+ <div class="mode-tabs" role="group" aria-label="Eagle watching behavior">
+  <button type="button" id="mode-gather" aria-pressed="true" class="mode-tab active">Winter eagle gatherings</button>
+  <button type="button" id="mode-display" aria-pressed="false" class="mode-tab">Aerial displays &amp; cartwheels</button>
+ </div>
+ <div class="season-callout">
+  <div><span id="season-mode-label" class="eyebrow">WINTER GATHERINGS</span><h3 id="season-headline">Follow the open water and food.</h3>
+  <p id="season-explainer">Bald eagles can concentrate where freeze-up restricts access to fish. Watch public river overlooks below locks, dams and ice edges. Weather is only a clue.</p></div>
+  <div class="season-phase"><strong id="season-level">Checking season…</strong><small id="season-month">Month-specific field context</small></div>
+ </div>
+ <div class="region-note" aria-live="polite"><strong id="region-heading">Regional field context</strong><p id="region-context">Your selected viewing destination determines this month-by-month planning lens.</p></div>
+<div class="season-legend"><span><i class="season-swatch peak"></i>Main seasonal window</span><span><i class="season-swatch common"></i>Common</span><span><i class="season-swatch possible"></i>Possible</span><span><i class="season-swatch quiet"></i>Less typical</span></div>
+ <div class="annual-months" id="annual-calendar" role="list" aria-label="Illustrative Midwest eagle activity season by month"></div>
+ <p class="flight-jump-note"><a href="#read-the-sky">Review the flight behaviors ↑</a></p>
+ <p class="source-note">Regional seasonal guide, not a measured sighting forecast. Year-to-year timing varies with ice, food and local breeding calendars. Tap a month for seasonal guidance; the 7-day forecast below always reflects the current forecast, not a past or future month.</p>
+ <div class="season-tip" id="behavior-guide" aria-live="polite">Winter concentrations reflect food, open water and roost habitat. A group of eagles does not by itself indicate courtship.</div>
+ </section>
+<section class="panel planning-week" aria-labelledby="week-title">
+  <div class="eyebrow">05 / Current seven-day outlook</div>
+  <h2 id="week-title">Which days have better viewing weather?</h2>
+  <p id="week-lead" class="lead">Pick a public viewing spot above. Daily freezing-hours context and viewing weather appear as the NWS hourly forecast loads.</p>
+  <div class="field-conditions">
+   <span id="setup-label" class="status muted">Awaiting NWS forecast</span>
+   <p id="setup-explanation">No weather forecast is an eagle sighting.</p>
+   <small id="planning-provenance" class="source-note">Based on dated NWS hourly forecasts only. No measured river ice or observed aerial activity.</small>
+  </div>
+  <div id="weekly-day-cards" class="weekly-cards" aria-live="polite"></div>
+  <div class="mini-key"><span><i class="cold-legend"></i>Hours with air at or below 32°F</span><span>Weather describes viewing opportunity, not eagle behavior.</span></div>
+  <div class="notice"><strong>No invented eagle percentages.</strong> A favorable viewing day means conditions for a person to watch, not a forecast that an eagle gathering or aerial display will occur. For actual sightings, check dated observations and local observers.</div>
+ </section>
+<section class="panel regional-evidence" aria-labelledby="up-evidence-title">
+<div class="eyebrow">Upper Peninsula · Evidence worth knowing</div>
+<h2 id="up-evidence-title">The UP has real winter eagle concentrations</h2>
+<div class="case-study-grid"><div><p><strong>A documented feeding aggregation:</strong> Michigan Sea Grant reported more than <strong>45 eagles at once</strong> near the Dafter Landfill in its January 2023 report, and <strong>upwards of 30</strong> in a January 2026 winter report. These are dated historical observations—not live counts or predictions.</p>
+<p><strong>Why it matters:</strong> eagles can concentrate at food sources such as carrion as well as fish in open river channels. A river-ice model alone would miss this behavior.</p></div>
+<div class="case-safety"><strong>Important: not an unrestricted viewing location</strong><p>The landfill requires operator permission and check-in; access to its active disposal area is prohibited. Do not enter, follow eagle flights to roosts, or expect access based on an old report. For a public-oriented trip, start with the St. Marys River or a managed recreation area.</p></div></div>
+<p class="source-note">Original dated sources: <a href="https://www.michiganseagrant.org/blog/2023/01/10/upper-peninsula-birding-report/" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2023</a> · <a href="https://msu-prod.dotcmscloud.com/news/eastern-upper-peninsula-birding-update-what-to-see-and-where-msg24-nelson24" target="_blank" rel="noopener">Michigan Sea Grant · Jan 2026</a> · <a href="https://www.michigan.gov/dnr/things-to-do/wildlife-viewing/birding/winter" target="_blank" rel="noopener">Michigan DNR winter eagle guidance</a>.</p>
+</section>
+<section class="panel counts" aria-labelledby="count-title"><div class="eyebrow">06 / Evidence, not a forecast</div><h2 id="count-title">What are observers actually counting?</h2>
+<p class="lead">Select a supported lock-and-dam location for the latest machine-readable Corps count. Counts are snapshots from the observation date—never a promise about today.</p>
+<div id="count-live" class="count-summary" aria-live="polite">Select a location for dated eagle activity.</div><a id="count-source" href="https://www.nationaleaglecenter.org/eagle-count/" target="_blank" rel="noopener">Open this location's original count report ↗</a>
+<div class="count-lines"><article><strong>Upper Mississippi · Minnesota &amp; Wisconsin</strong><p>National Eagle Center staff and volunteers count winter eagles weekly at 13 Upper Mississippi locations. Reports can be affected by visibility and survey timing.</p><a href="https://www.nationaleaglecenter.org/eagle-count/" rel="noopener" target="_blank">National Eagle Center count history ↗</a></article><article><strong>Mississippi &amp; Illinois rivers · Corps surveys</strong><p>U.S. Army Corps of Engineers surveys near locks and dams provide dated adult and juvenile counts; “no report” is not zero birds.</p><a href="https://www.mvr.usace.army.mil/mississippiriver/eagle-watching/" rel="noopener" target="_blank">Mississippi counts ↗</a> · <a href="https://www.mvr.usace.army.mil/illinoiswaterway/eagle-watching/" rel="noopener" target="_blank">Illinois counts ↗</a></article></div>
+</section>
+<section aria-labelledby="guide-title"><div class="section-head"><div><div class="eyebrow">07 / Read the conditions</div><h2 id="guide-title">A better winter eagle outing</h2></div></div><div class="guide">
+<div class="panel"><strong>01 · Follow the squeeze</strong><h3>Moving water matters</h3><p>When still water freezes, eagles may hunt near open river reaches, dams and confluences. A cold forecast alone cannot identify those openings.</p></div>
+<div class="panel"><strong>02 · Time your visit</strong><h3>Morning and late day</h3><p>Wisconsin DNR recommends early morning, roughly 8–11 a.m., and the period before dusk. Conditions and feeding activity vary.</p></div>
+<div class="panel"><strong>03 · Keep your distance</strong><h3>Let wild birds stay wild</h3><p>Watch from designated public overlooks or your parked vehicle. Never bait eagles, approach roosts or walk onto river ice; leave if birds react to you.</p></div>
+</div></section>
+
+<section class="panel faq" aria-labelledby="faq-title"><div class="eyebrow">08 / Field questions</div><h2 id="faq-title">Before you set out</h2>
 <details><summary>When is the best season for winter eagle gatherings?</summary><p>Many Midwest sites have a winter gathering window from mid-December through early March. River ice, flow and weather can shift the timing. Resident eagles can be visible all year.</p></details>
 <details><summary>Can this page tell me if eagles are there right now?</summary><p>No. It shows public viewing options, live NWS weather and historical dated surveys at supported locations. An unreported day or missing count cannot be interpreted as zero or as a sighting.</p></details>
 <details><summary>Is open river water guaranteed below every dam?</summary><p>No. Tailwaters often offer feeding habitat in winter, but hydraulic conditions, ice and access are site-dependent. Check the facility operator before travel.</p></details>
