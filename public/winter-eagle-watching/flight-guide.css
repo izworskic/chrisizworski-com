@@ -50,3 +50,22 @@
 @media(max-width:960px){.flight-stage-shell{grid-template-columns:1fr}.flight-observation{padding:17px}.flight-quiz{grid-template-columns:1fr}.flight-stage-tabs button{font-size:13px}}
 @media(max-width:640px){.flight-field-guide{padding:13px}.flight-stage-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.flight-stage-tabs button{min-height:46px;padding:10px 8px}.flight-visual{padding:9px}.flight-play-row span{width:100%;margin:0}.flight-observation h3{font-size:23px}.flight-sky-caption{font-size:9px}.flight-quiz-intro,.flight-quiz-inner{padding:13px}}
 @media(prefers-reduced-motion:reduce){.flight-play-progress i{transition:none}}
+
+/* The viewing destination explanation is adjacent to the flight itself. */
+.flight-where-guide{margin:14px 0 17px;border:1px solid #d5e2d6;border-radius:12px;padding:17px;background:#f2f7ee}
+.flight-where-guide h3{font-size:25px;margin:6px 0}
+.flight-where-guide>div:first-child p{font-size:14px;color:#45644c;line-height:1.6;max-width:930px;margin:0 0 10px}
+.flight-where-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:12px 0}
+.flight-where-tiles article{border:1px solid #d3e2d5;border-radius:10px;padding:13px;background:white}
+.flight-where-tiles strong{display:block;font-size:13px;color:#244d36}
+.flight-where-tiles p{font-size:13px;color:#536a58;margin:7px 0 0;line-height:1.52}
+.flight-where-guide>.source-note{margin:10px 0 0;max-width:950px}
+.flight-quiz-disclosure{margin:12px 0 17px;border:1px solid #cbdccb;border-radius:11px;overflow:hidden}
+.flight-quiz-disclosure>summary{list-style:none;cursor:pointer;padding:13px 15px;font-weight:800;color:#28533c;background:#e9f1e6;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:10px}
+.flight-quiz-disclosure>summary::-webkit-details-marker{display:none}
+.flight-quiz-disclosure>summary::before{content:"+";display:inline-grid;place-items:center;background:#25523b;color:#fff;border-radius:50%;width:24px;height:24px;margin-right:4px;font-size:18px;line-height:1}
+.flight-quiz-disclosure[open]>summary::before{content:"−"}
+.flight-quiz-disclosure>summary span{font-size:11px;color:#5e775f;font-weight:650}
+.flight-quiz-disclosure>summary:focus-visible{outline:3px solid #bd8e43;outline-offset:-3px}
+.flight-quiz-disclosure .flight-quiz{border:none;border-top:1px solid #cbdccb;border-radius:0}
+@media(max-width:690px){.flight-where-guide{padding:13px}.flight-where-tiles{grid-template-columns:1fr}.flight-where-guide h3{font-size:22px}.flight-quiz-disclosure>summary span{width:100%;padding-left:32px}}
