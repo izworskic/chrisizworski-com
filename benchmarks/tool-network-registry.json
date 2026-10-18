@@ -3346,6 +3346,39 @@
         "status": "unknown",
         "note": "Seasonal expansion October 18, 2026. No observed GSC outcome, conversion impact, or locally validated eagle display probability."
       }
+    },
+    {
+      "id": "shed-antler-search",
+      "name": "Michigan Shed Antler Search Conditions",
+      "canonical": "https://chrisizworski.com/michigan-shed-antlers/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "hunting",
+      "primaryIntent": "Is this week good for shed antler hunting in Michigan based on snow and weather conditions?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide",
+        "upper-midwest-regional"
+      ],
+      "personas": [
+        "shed-hunter",
+        "outdoor-walker",
+        "wildlife-observer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "note": "Condition-driven winter shed search window; no antler-drop forecasts."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Initial build October 18, 2026; demand and outcome not yet measured."
+      }
     }
   ],
   "relationships": [
@@ -4700,6 +4733,30 @@
       "strength": "optional",
       "surface": "winter",
       "reason": "Midwest winter eagle travel requires different habitat and public-access planning than Michigan birding sighting maps."
+    },
+    {
+      "from": "shed-antler-search",
+      "to": "whitetail",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "shed-antler-search",
+      "reason": "Whitetail behavior and hunting context differ from a snow-driven shed search window."
+    },
+    {
+      "from": "shed-antler-search",
+      "to": "michigan-snow-totals",
+      "type": "related-tool",
+      "strength": "strong",
+      "surface": "shed-antler-search",
+      "reason": "Separate official snowfall reporting from existing ground-cover visibility."
+    },
+    {
+      "from": "whitetail",
+      "to": "shed-antler-search",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "tools-directory",
+      "reason": "Transition from hunting-season deer conditions to winter shed-search planning."
     }
   ],
   "cannibalizationGroups": [
