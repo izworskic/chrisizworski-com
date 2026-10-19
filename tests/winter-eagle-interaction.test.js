@@ -62,13 +62,18 @@ test('real production JS initializes interactive map and location list without R
  assert.equal(node('map').querySelectorAll('.native-pin').length,19);
  assert.equal(node('annual-calendar').children.length,12);
  assert.match(node('selected-place').textContent,/Detroit/);
- assert.match(node('map').children.at(-1).children[0].textContent,/Detroit/);
+ const callout=node('map').querySelector('.native-map-glance');
+ assert.ok(callout,'selected-place callout exists inside the geographic canvas');
+ assert.equal(callout.parentNode.className,'native-map-canvas');
+ assert.match(callout.children[0].textContent,/Detroit/);
  // This used to throw ReferenceError (obsolete Leaflet markers array).
  const croton=node('map').querySelectorAll('.native-pin').find(x=>x.dataset.spot==='croton');
  croton.click();
  assert.match(node('selected-place').textContent,/Croton Dam/);
  assert.equal(croton.getAttribute('aria-pressed'),'true');
- assert.match(node('map').children.at(-1).children[0].textContent,/Croton Dam/);
+ assert.match(callout.children[0].textContent,/Croton Dam/);
+ assert.match(callout.style.left,/%$/);
+ assert.match(callout.style.top,/%$/);
  node('state-filter').value='MI';node('state-filter').dispatch('change');
  assert.equal(node('spot-list').children.length,11);
  assert.equal(node('map').querySelectorAll('.native-pin').filter(x=>!x.hidden).length,11);
