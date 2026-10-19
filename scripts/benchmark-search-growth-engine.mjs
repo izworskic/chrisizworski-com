@@ -38,10 +38,11 @@ check(
 );
 
 const frozen = baseline.pages.filter((page) => page.state === "frozen-active-experiment");
-check("Existing search experiments are explicitly frozen", frozen.length >= 5, 10, `${frozen.length} pages`);
+const experimentLedger = JSON.parse(await read("benchmarks/growth-experiments.json"));
+check("Historical high-priority cohort retained; experiments are retired", frozen.length >= 5 && experimentLedger.status === "retired" && experimentLedger.operatingMode === "ship-and-observe" && experimentLedger.activeExperiments.length === 0, 10, `${frozen.length} historical pages`);
 
 const exactTitles = {
-  "/northern-lights-michigan/": ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Live | Chris Izworski"],
+  "/northern-lights-michigan/": ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Can You See Them?"],
   "/soo-locks/": ["public/soo-locks/index.html", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski"],
   "/when-to-plant-tomatoes-michigan/": ["public/when-to-plant-tomatoes-michigan/index.html", "When to Plant Tomatoes in Michigan: 2026 Dates by Region"],
   "/michigan-frost-dates/": ["public/michigan-frost-dates/index.html", "Michigan Last Frost Dates by City: 2026 Planting Calendar"],
@@ -54,7 +55,7 @@ for (const page of frozen) {
   const html = await read(spec[0]);
   if (html.includes(`<title>${spec[1]}</title>`)) frozenTitles += 1;
 }
-check("Frozen treatments retain their exact titles", frozenTitles === frozen.length, 10, `${frozenTitles}/${frozen.length}`);
+check("Historical priority pages retain their currently approved titles", frozenTitles === frozen.length, 10, `${frozenTitles}/${frozen.length}`);
 
 const weekend = await read("public/fall-color/this-weekend/index.html");
 check(
@@ -130,7 +131,7 @@ console.log("=".repeat(72));
 console.log(`Score: ${score}/100`);
 console.log(`28-day baseline: ${current.impressions.toLocaleString()} impressions · ${current.clicks} clicks · ${(current.ctr * 100).toFixed(2)}% CTR`);
 console.log(`Same-impression modeled click headroom: +${clickHeadroom}`);
-console.log(`Frozen active experiments protected: ${frozen.length}`);
+console.log(`Historical high-priority pages checked: ${frozen.length}`);
 if (failures.length) {
   console.log("Failures:");
   for (const failure of failures) console.log(` - ${failure}`);
