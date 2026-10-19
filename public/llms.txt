@@ -218,6 +218,7 @@ Current role: Solutions Consultant at Prepared.
 
 - Built and maintained by Chris Izworski; Person ID: https://chrisizworski.com/#person.
 - Statewide canonical: https://chrisizworski.com/snowmobile/
+- Rules companion: https://chrisizworski.com/snowmobile/what-you-need/ (Michigan DNR trail permit, registration, safety certificate and gear rules, each tied to its DNR source and a check date; not legal advice)
 - Purpose: compare seven U.P. and northern Lower Michigan riding regions by road time and trail evidence; plan multi-stop mapped routes with leg-by-leg mileage.
 - Sources: Michigan DNR trail geometry and closures, local club report links, NWS weather and NOAA NOHRSC snowpack context. Independent planning tool, not an official authority product.
 - Truth rule: snow depth and snowfall do not establish trail base or grooming; positive riding verdicts need current local surface evidence. Off-season results are future-trip planning.
