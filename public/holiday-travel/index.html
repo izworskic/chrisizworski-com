@@ -49,7 +49,7 @@
 <div class="trip-inputs" style="margin-top:18px">
 <div class="field" id="airport-field"><label for="airport">3 · Departure airport</label><select id="airport">
 <option value="DTW">Detroit Metro (DTW)</option><option value="ORD">Chicago O'Hare (ORD)</option><option value="ATL">Atlanta (ATL)</option><option value="DFW">Dallas–Fort Worth (DFW)</option><option value="DEN">Denver (DEN)</option><option value="JFK">New York JFK (JFK)</option><option value="LGA">New York LaGuardia (LGA)</option><option value="EWR">Newark (EWR)</option><option value="LAX">Los Angeles (LAX)</option><option value="SFO">San Francisco (SFO)</option><option value="MCO">Orlando (MCO)</option><option value="MIA">Miami (MIA)</option><option value="LAS">Las Vegas (LAS)</option><option value="SEA">Seattle (SEA)</option><option value="BOS">Boston (BOS)</option><option value="MSP">Minneapolis–St. Paul (MSP)</option><option value="PHX">Phoenix (PHX)</option><option value="CLT">Charlotte (CLT)</option><option value="other">Another U.S. airport</option></select><p class="fine" id="airport-note">National checkpoint counts are not airport wait times.</p></div>
-<div class="field hidden" id="city-field"><label for="city">3 · Starting city</label><input id="city" type="text" placeholder="e.g. Bay City, MI" autocomplete="address-level2" maxlength="80"><p class="fine">City is for your own reference; choose its gas region below.</p></div>
+<div class="field hidden" id="city-field"><label for="city">3 · Starting city</label><input id="city" type="text" placeholder="e.g. Bay City, MI" autocomplete="address-level2" maxlength="80"><p class="fine">Enter city and state (such as Bay City, MI) to suggest an EIA gas region. Holiday traffic guidance remains national.</p></div>
 <div class="field hidden" id="region-field"><label for="region">Fuel price region</label><select id="region"><option value="midwest">Midwest</option><option value="east">East Coast</option><option value="gulf">Gulf Coast</option><option value="rocky">Rocky Mountain</option><option value="west">West Coast</option><option value="us">U.S. average</option></select></div>
 <div class="field hidden" id="miles-field"><label for="miles">One-way trip distance (miles)</label><input type="number" id="miles" inputmode="numeric" min="1" max="10000" step="1" value="300"></div>
 <div class="field hidden" id="mpg-field"><label for="mpg">Your vehicle (miles per gallon)</label><input type="number" id="mpg" inputmode="decimal" min="5" max="150" step=".1" value="28"></div>
@@ -130,6 +130,12 @@ function tier(score){return score<=1?'best':score>=3?'avoid':'caution'}
 function tierLabel(score){return score<=1?'Better choice':score>=3?'Try another day':'Plan extra time'}
 function buffer(score){return score>=3?'3 hours':score===2?'2½ hours':'2 hours'}
 function delayInfo(){var a=doc('airport').value,st=airports[a],idx=holiday==='thanksgiving'?1:2;if(st)return {value:st[idx].toFixed(2)+'%',name:st[0]+' · 2025 '+(idx===1?'November':'December')+' airport delay history',scope:'Specific airport monthly history, NOT that day’s delay likelihood'};return {value:(idx===1?'19.40':'26.45')+'%',name:'U.S. 2025 '+(idx===1?'November':'December')+' monthly delayed-flight history (BTS)',scope:'Airport-specific comparison not verified; national baseline only'}}
+function suggestRegion(city){
+ var match=String(city||'').toUpperCase().match(/(?:,|\\s)\\s*([A-Z]{2})\\s*$/);
+ if(!match)return;
+ var states={east:'CT DE DC FL GA ME MD MA NH NJ NY NC PA RI SC VT VA WV',midwest:'IL IN IA KS KY MI MN MO NE ND OH OK SD TN WI',gulf:'AL AR LA MS NM TX',rocky:'CO ID MT UT WY',west:'AK AZ CA HI NV OR WA'};
+ for(var region in states){if((' '+states[region]+' ').includes(' '+match[1]+' ')){doc('region').value=region;break}}
+}
 function config(kind,offset){var road=kind==='thanksgiving'?roadT:roadC;return road[String(offset)]||[2,'Before midday','General estimate; exact local route congestion is not available.']}
 function item(offset){var date=dateFor(offset), c=crowd(offset), r=config(holiday,offset),s=mode==='fly'?c.score:r[0];var holidayDay=offset===0;var note=holidayDay?'Holiday itself':offset<0?Math.abs(offset)+' days before':offset+' days after';return {date:date,offset:offset,c:c,r:r,s:s,tier:tier(s),note:note}}
 function metric(title,value,sub){return '<div class="metric"><small>'+title+'</small><b>'+value+'</b><small>'+sub+'</small></div>'}
@@ -143,7 +149,7 @@ function render(){
  var entries=offsets.map(item).sort(function(a,b){return a.s-b.s||Math.abs(a.offset)-Math.abs(b.offset)||a.offset-b.offset});
  var best=entries[0];doc('callout-tag').textContent='Estimated first choice · '+(mode==='fly'?'fly':'drive');doc('best-label').textContent=fullDate(best.date);
  doc('best-reason').textContent=mode==='fly'?'This date has one of the lighter anticipated national screening loads. Allow '+buffer(best.s)+' before a domestic flight (planning estimate), confirm your local airport instructions and check the weather.':'Lower expected congestion than the major holiday departure and return peaks. Suggested window: '+best.r[1]+'. This is a 2026 estimate built from the last published AAA/INRIX pattern.';
- doc('rank-heading').textContent=(mode==='fly'?'Flying':'Driving')+' days, ranked: '+d.name+' '+year;
+ doc('rank-heading').textContent=(mode==='fly'?'Flying':'Driving')+' days, ranked: '+d.name+' '+year+(mode==='drive'&&doc('city').value.trim()?' · From '+doc('city').value.trim():'');
  doc('rank-intro').textContent='Ordered from relatively easier to harder days (estimate). The rank considers '+(mode==='fly'?'national security-screening volume; airport delay history is a separate monthly baseline':'historical holiday road timing, not real-time traffic')+'. A more crowded day can still work with planning.';
  doc('results').innerHTML=entries.map(function(e,n){
  var f=mode==='fly';var label=tierLabel(e.s);
@@ -157,7 +163,8 @@ function render(){
 function switchOption(group,value){if(group==='holiday')holiday=value;else mode=value;['thanksgiving','christmas','fly','drive'].forEach(function(id){doc(id).setAttribute('aria-pressed',String(id===(group==='holiday'?holiday:mode) || id===(group==='holiday'?mode:holiday)))});var driving=mode==='drive';['airport-field'].forEach(function(x){doc(x).classList.toggle('hidden',driving)});['city-field','region-field','miles-field','mpg-field'].forEach(function(x){doc(x).classList.toggle('hidden',!driving)});render()}
 doc('thanksgiving').addEventListener('click',function(){switchOption('holiday','thanksgiving')});doc('christmas').addEventListener('click',function(){switchOption('holiday','christmas')});
 doc('fly').addEventListener('click',function(){switchOption('mode','fly')});doc('drive').addEventListener('click',function(){switchOption('mode','drive')});
-['airport','city','region','miles','mpg'].forEach(function(id){doc(id).addEventListener('input',render);doc(id).addEventListener('change',render)});
+['airport','region','miles','mpg'].forEach(function(id){doc(id).addEventListener('input',render);doc(id).addEventListener('change',render)});
+doc('city').addEventListener('input',function(){suggestRegion(doc('city').value);render()});
 switchOption('holiday','thanksgiving');
 })();
 </script>
