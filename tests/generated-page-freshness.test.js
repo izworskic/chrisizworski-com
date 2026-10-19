@@ -88,3 +88,21 @@ test('full-history freshness catches a generator-only change without tracked chi
     assert.equal(stamp(true).status, 0);
   } finally { await fs.rm(workspace, { recursive: true, force: true }); }
 });
+
+test('new specialist sitemap is discovered without updating a hand-maintained list', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'specialist-freshness-'));
+  const write = async (name, text) => { await fs.mkdir(path.dirname(path.join(dir,name)),{recursive:true});await fs.writeFile(path.join(dir,name),text); };
+  const git = args => execFileSync('git',args,{cwd:dir,stdio:'pipe'});
+  try {
+    git(['init','-q','--initial-branch=main']);git(['config','user.name','Freshness Fixture']);git(['config','user.email','fixture@example.invalid']);
+    await write('scripts/stamp-freshness.mjs',await fs.readFile(path.join(root,'scripts/stamp-freshness.mjs'),'utf8'));
+    await write('public/example/index.html','<script type="application/ld+json">{"dateModified":"2026-10-10"}</script>');
+    await write('public/sitemap-new-specialist.xml','<urlset><url><loc>https://chrisizworski.com/example/</loc><lastmod>2026-09-01</lastmod></url></urlset>');
+    git(['add','.']);execFileSync('git',['commit','-qm','Content'],{cwd:dir,stdio:'pipe',env:{...process.env,GIT_AUTHOR_DATE:'2026-10-10T12:00:00-04:00',GIT_COMMITTER_DATE:'2026-10-10T12:00:00-04:00'}});
+    const run = check => spawnSync(process.execPath,['scripts/stamp-freshness.mjs',...(check?['--check']:[])],{cwd:dir,encoding:'utf8'});
+    assert.notEqual(run(true).status,0);
+    assert.equal(run(false).status,0);
+    assert.equal(run(true).status,0);
+    assert.match(await fs.readFile(path.join(dir,'public/sitemap-new-specialist.xml'),'utf8'),/2026-10-10/);
+  } finally { await fs.rm(dir,{recursive:true,force:true}); }
+});

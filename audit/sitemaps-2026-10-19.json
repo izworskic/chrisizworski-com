@@ -1,0 +1,721 @@
+{
+  "checkedAt": "2026-10-19T11:10:12.570092+00:00",
+  "scope": "Owned active root/subdomain sitemaps found through robots and two known routed fall-color maps; excluded third-party GitHub profile sitemap probe.",
+  "robots": [
+    {
+      "url": "https://aibreakdown5.wordpress.com/robots.txt",
+      "status": 200,
+      "final": "https://aibreakdown5.wordpress.com/robots.txt"
+    },
+    {
+      "url": "https://ausable.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://ausable.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://daily.michiganbirdingreport.com/robots.txt",
+      "status": 200,
+      "final": "https://daily.michiganbirdingreport.com/robots.txt"
+    },
+    {
+      "url": "https://daily.michigantroutreport.com/robots.txt",
+      "status": 200,
+      "final": "https://daily.michigantroutreport.com/robots.txt"
+    },
+    {
+      "url": "https://freighterviewfarms.com/robots.txt",
+      "status": 200,
+      "final": "https://freighterviewfarms.com/robots.txt"
+    },
+    {
+      "url": "https://greatlakeslevels.org/robots.txt",
+      "status": 200,
+      "final": "https://greatlakeslevels.org/robots.txt"
+    },
+    {
+      "url": "https://izworskic.github.io/robots.txt",
+      "status": 200,
+      "final": "https://izworskic.github.io/robots.txt"
+    },
+    {
+      "url": "https://lawn.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://lawn.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://michiganbirdingreport.com/robots.txt",
+      "status": 200,
+      "final": "https://michiganbirdingreport.com/robots.txt"
+    },
+    {
+      "url": "https://michiganoutdoorsnow.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://michiganoutdoorsnow.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://michigantroutreport.com/robots.txt",
+      "status": 200,
+      "final": "https://michigantroutreport.com/robots.txt"
+    },
+    {
+      "url": "https://morel.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://morel.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://phenology.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://phenology.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://picturedrocks.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://picturedrocks.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://saginawbay.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://saginawbay.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://tcwine.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://tcwine.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://weekend.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://weekend.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://whitetail.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://whitetail.chrisizworski.com/robots.txt"
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/robots.txt",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/robots.txt"
+    }
+  ],
+  "sitemaps": [
+    {
+      "url": "https://aibreakdown5.wordpress.com/news-sitemap.xml",
+      "status": 200,
+      "final": "https://aibreakdown5.wordpress.com/news-sitemap.xml",
+      "root": "urlset",
+      "count": 0
+    },
+    {
+      "url": "https://aibreakdown5.wordpress.com/sitemap.xml",
+      "status": 200,
+      "final": "https://aibreakdown5.wordpress.com/sitemap.xml",
+      "root": "urlset",
+      "count": 23
+    },
+    {
+      "url": "https://ausable.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://ausable.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://chrisizworski.com/fall-color/destinations-sitemap.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/fall-color/destinations-sitemap.xml",
+      "root": "urlset",
+      "count": 30
+    },
+    {
+      "url": "https://chrisizworski.com/fall-color/national-sitemap.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/fall-color/national-sitemap.xml",
+      "root": "urlset",
+      "count": 16
+    },
+    {
+      "url": "https://chrisizworski.com/fall-color/sitemap.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/fall-color/sitemap.xml",
+      "root": "urlset",
+      "count": 16
+    },
+    {
+      "url": "https://chrisizworski.com/image-sitemap.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/image-sitemap.xml",
+      "root": "urlset",
+      "count": 353
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-aurora-states.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-aurora-states.xml",
+      "root": "urlset",
+      "count": 49
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-beaches.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-beaches.xml",
+      "root": "urlset",
+      "count": 52
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-blue-spring.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-blue-spring.xml",
+      "root": "urlset",
+      "count": 4
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-breakout-live.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-breakout-live.xml",
+      "root": "urlset",
+      "count": 12
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-cbbt.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-cbbt.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-fall.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-fall.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-ice-out.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-ice-out.xml",
+      "root": "urlset",
+      "count": 9
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-manistee.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-manistee.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-melvin-price.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-melvin-price.xml",
+      "root": "urlset",
+      "count": 4
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-niagara-border.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-niagara-border.xml",
+      "root": "urlset",
+      "count": 5
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-niagara-rainbow.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-niagara-rainbow.xml",
+      "root": "urlset",
+      "count": 2
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-nyc-crossing.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-nyc-crossing.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-petoskey-wine.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-petoskey-wine.xml",
+      "root": "urlset",
+      "count": 33
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-reputation.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-reputation.xml",
+      "root": "urlset",
+      "count": 37
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-white-christmas.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-white-christmas.xml",
+      "root": "urlset",
+      "count": 65
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap-winter.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap-winter.xml",
+      "root": "urlset",
+      "count": 92
+    },
+    {
+      "url": "https://chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 326
+    },
+    {
+      "url": "https://daily.michiganbirdingreport.com/sitemap.xml",
+      "status": 200,
+      "final": "https://daily.michiganbirdingreport.com/sitemap.xml",
+      "root": "urlset",
+      "count": 9
+    },
+    {
+      "url": "https://daily.michigantroutreport.com/sitemap.xml",
+      "status": 200,
+      "final": "https://daily.michigantroutreport.com/sitemap.xml",
+      "root": "urlset",
+      "count": 99
+    },
+    {
+      "url": "https://freighterviewfarms.com/news-sitemap.xml",
+      "status": 200,
+      "final": "https://freighterviewfarms.com/news-sitemap.xml",
+      "root": "urlset",
+      "count": 0
+    },
+    {
+      "url": "https://freighterviewfarms.com/sitemap.xml",
+      "status": 200,
+      "final": "https://freighterviewfarms.com/sitemap.xml",
+      "root": "urlset",
+      "count": 262
+    },
+    {
+      "url": "https://greatlakeslevels.org/sitemap.xml",
+      "status": 200,
+      "final": "https://greatlakeslevels.org/sitemap.xml",
+      "root": "urlset",
+      "count": 58
+    },
+    {
+      "url": "https://izworskic.github.io/sitemap.xml",
+      "status": 200,
+      "final": "https://izworskic.github.io/sitemap.xml",
+      "root": "urlset",
+      "count": 6
+    },
+    {
+      "url": "https://lawn.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://lawn.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 40
+    },
+    {
+      "url": "https://michiganbirdingreport.com/sitemap-authored.xml",
+      "status": 200,
+      "final": "https://michiganbirdingreport.com/sitemap-authored.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://michiganbirdingreport.com/sitemap.xml",
+      "status": 200,
+      "final": "https://michiganbirdingreport.com/sitemap.xml",
+      "root": "urlset",
+      "count": 107
+    },
+    {
+      "url": "https://michiganoutdoorsnow.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://michiganoutdoorsnow.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 124
+    },
+    {
+      "url": "https://michigantroutreport.com/sitemap-authored.xml",
+      "status": 200,
+      "final": "https://michigantroutreport.com/sitemap-authored.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://michigantroutreport.com/sitemap.xml",
+      "status": 200,
+      "final": "https://michigantroutreport.com/sitemap.xml",
+      "root": "urlset",
+      "count": 126
+    },
+    {
+      "url": "https://morel.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://morel.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 10
+    },
+    {
+      "url": "https://phenology.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://phenology.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 14
+    },
+    {
+      "url": "https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml",
+      "status": 200,
+      "final": "https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://saginawbay.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://saginawbay.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 11
+    },
+    {
+      "url": "https://tcwine.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://tcwine.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 81
+    },
+    {
+      "url": "https://weekend.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://weekend.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 7
+    },
+    {
+      "url": "https://whitetail.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://whitetail.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 8
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/forecast-sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/forecast-sitemap.xml",
+      "root": "urlset",
+      "count": 8
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/midwest/sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/midwest/sitemap.xml",
+      "root": "urlset",
+      "count": 1
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/minnesota/intent-sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/minnesota/intent-sitemap.xml",
+      "root": "urlset",
+      "count": 4
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/minnesota/sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/minnesota/sitemap.xml",
+      "root": "urlset",
+      "count": 70
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/sitemap-index.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/sitemap-index.xml",
+      "root": "sitemapindex",
+      "count": 7
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/sitemap.xml",
+      "root": "urlset",
+      "count": 74
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/wisconsin/intent-sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/wisconsin/intent-sitemap.xml",
+      "root": "urlset",
+      "count": 4
+    },
+    {
+      "url": "https://xcski.chrisizworski.com/wisconsin/sitemap.xml",
+      "status": 200,
+      "final": "https://xcski.chrisizworski.com/wisconsin/sitemap.xml",
+      "root": "urlset",
+      "count": 61
+    }
+  ],
+  "pageAudit": {
+    "requested": 1617,
+    "finalHttp200": 1617,
+    "method": "Bounded HTTP GET with redirects, initial HTML canonical and robots meta parsing. Response-header noindex and Google-selected canonicals were not inspected. HTTP 200 does not prove valid live data, indexing, or ranking.",
+    "strictStringDifferences": [
+      {
+        "url": "https://aibreakdown5.wordpress.com",
+        "status": 200,
+        "final": "https://aibreakdown5.wordpress.com/",
+        "canonical": [],
+        "robots": [
+          "max-image-preview:large"
+        ]
+      },
+      {
+        "url": "https://chrisizworski.com/chris-izworski-bay-city-michigan/",
+        "status": 200,
+        "final": "https://chrisizworski.com/chris-izworski-bay-city/",
+        "canonical": [
+          "https://chrisizworski.com/chris-izworski-bay-city/"
+        ],
+        "robots": []
+      },
+      {
+        "url": "https://chrisizworski.com/chris-izworski-speaking/",
+        "status": 200,
+        "final": "https://chrisizworski.com/speaking/",
+        "canonical": [
+          "https://chrisizworski.com/speaking/"
+        ],
+        "robots": []
+      },
+      {
+        "url": "https://chrisizworski.com/mackinac-island/",
+        "status": 200,
+        "final": "https://chrisizworski.com/mackinac-island/ferry-planner/",
+        "canonical": [
+          "https://chrisizworski.com/mackinac-island/ferry-planner/"
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+        ]
+      },
+      {
+        "url": "https://chrisizworski.com/national-tools/yosemite-firefall-live/",
+        "status": 200,
+        "final": "https://chrisizworski.com/yosemite-firefall-live/",
+        "canonical": [
+          "https://chrisizworski.com/yosemite-firefall-live/"
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ]
+      },
+      {
+        "url": "https://daily.michigantroutreport.com",
+        "status": 200,
+        "final": "https://daily.michigantroutreport.com/",
+        "canonical": [
+          "https://daily.michigantroutreport.com"
+        ],
+        "robots": []
+      },
+      {
+        "url": "https://freighterviewfarms.com",
+        "status": 200,
+        "final": "https://freighterviewfarms.com/",
+        "canonical": [
+          "https://freighterviewfarms.com/"
+        ],
+        "robots": [
+          "max-image-preview:large"
+        ]
+      },
+      {
+        "url": "https://freighterviewfarms.com/blog/",
+        "status": 200,
+        "final": "https://freighterviewfarms.com/blog/",
+        "canonical": [],
+        "robots": [
+          "max-image-preview:large"
+        ]
+      },
+      {
+        "url": "https://freighterviewfarms.com/seed-shop/",
+        "status": 200,
+        "final": "https://freighterviewfarms.com/seed-shop/",
+        "canonical": [
+          "https://freighterviewfarms.com/seed-shop/"
+        ],
+        "robots": [
+          "max-image-preview:large",
+          "noindex"
+        ]
+      },
+      {
+        "url": "https://greatlakeslevels.org/",
+        "status": 200,
+        "final": "https://greatlakeslevels.org/",
+        "canonical": [
+          "https://greatlakeslevels.org"
+        ],
+        "robots": [
+          "index, follow"
+        ]
+      },
+      {
+        "url": "https://lawn.chrisizworski.com",
+        "status": 200,
+        "final": "https://lawn.chrisizworski.com/",
+        "canonical": [
+          "https://lawn.chrisizworski.com"
+        ],
+        "robots": []
+      },
+      {
+        "url": "https://michiganbirdingreport.com/",
+        "status": 200,
+        "final": "https://michiganbirdingreport.com/",
+        "canonical": [
+          "https://michiganbirdingreport.com"
+        ],
+        "robots": []
+      },
+      {
+        "url": "https://michiganoutdoorsnow.chrisizworski.com",
+        "status": 200,
+        "final": "https://michiganoutdoorsnow.chrisizworski.com/",
+        "canonical": [
+          "https://michiganoutdoorsnow.chrisizworski.com"
+        ],
+        "robots": [
+          "index, follow"
+        ]
+      },
+      {
+        "url": "https://tcwine.chrisizworski.com/",
+        "status": 200,
+        "final": "https://tcwine.chrisizworski.com/",
+        "canonical": [
+          "https://tcwine.chrisizworski.com"
+        ],
+        "robots": [
+          "index, follow",
+          "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+        ]
+      }
+    ],
+    "coverageAdditions": [
+      {
+        "file": "public/michigan-snow-depth/index.html",
+        "url": "https://chrisizworski.com/michigan-snow-depth/",
+        "date": "2026-10-07"
+      },
+      {
+        "file": "public/ontario-fishing-lake-finder/index.html",
+        "url": "https://chrisizworski.com/ontario-fishing-lake-finder/",
+        "date": null
+      },
+      {
+        "file": "public/old-sow-live/index.html",
+        "url": "https://chrisizworski.com/old-sow-live/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/yellowstone-geysers/index.html",
+        "url": "https://chrisizworski.com/national-tools/yellowstone-geysers/",
+        "date": "2026-09-26"
+      },
+      {
+        "file": "public/synced-national-tools/northeast-great-lakes/index.html",
+        "url": "https://chrisizworski.com/national-tools/northeast-great-lakes/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/great-plains/index.html",
+        "url": "https://chrisizworski.com/national-tools/great-plains/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/columbia-salmon-run/index.html",
+        "url": "https://chrisizworski.com/national-tools/columbia-salmon-run/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/florida-red-tide/index.html",
+        "url": "https://chrisizworski.com/national-tools/florida-red-tide/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/rockies/index.html",
+        "url": "https://chrisizworski.com/national-tools/rockies/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/pacific-northwest/index.html",
+        "url": "https://chrisizworski.com/national-tools/pacific-northwest/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/space-coast-launch/index.html",
+        "url": "https://chrisizworski.com/national-tools/space-coast-launch/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/southeast/index.html",
+        "url": "https://chrisizworski.com/national-tools/southeast/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/appalachia/index.html",
+        "url": "https://chrisizworski.com/national-tools/appalachia/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/bird-migration/index.html",
+        "url": "https://chrisizworski.com/national-tools/bird-migration/",
+        "date": null
+      },
+      {
+        "file": "public/synced-national-tools/trail-ridge-road/index.html",
+        "url": "https://chrisizworski.com/national-tools/trail-ridge-road/",
+        "date": "2026-09-26"
+      },
+      {
+        "file": "public/national-tools/elk-rut/index.html",
+        "url": "https://chrisizworski.com/national-tools/elk-rut/",
+        "date": null
+      },
+      {
+        "file": "public/national-tools/coastal/oregon/index.html",
+        "url": "https://chrisizworski.com/national-tools/coastal/oregon/",
+        "date": null
+      },
+      {
+        "file": "public/national-tools/coastal/oregon/hug-point/index.html",
+        "url": "https://chrisizworski.com/national-tools/coastal/oregon/hug-point/",
+        "date": null
+      },
+      {
+        "file": "public/national-tools/coastal/oregon/thors-well/index.html",
+        "url": "https://chrisizworski.com/national-tools/coastal/oregon/thors-well/",
+        "date": null
+      },
+      {
+        "file": "public/national-tools/coastal/oregon/yaquina-head/index.html",
+        "url": "https://chrisizworski.com/national-tools/coastal/oregon/yaquina-head/",
+        "date": null
+      },
+      {
+        "file": "public/national-tools/coastal/oregon/haystack-rock/index.html",
+        "url": "https://chrisizworski.com/national-tools/coastal/oregon/haystack-rock/",
+        "date": null
+      }
+    ]
+  }
+}

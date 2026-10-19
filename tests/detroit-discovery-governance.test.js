@@ -74,9 +74,10 @@ test("Detroit discovery report and canonical audit are wired as repeatable comma
   assert.match(report,/REVIEW_QUERY_GAP/);
   assert.match(report,/STRENGTHEN_EXISTING/);
   assert.match(report,/position 4–15 Detroit opportunities/i);
-  assert.match(audit,/missing-canonical/);
-  assert.match(audit,/canonical-mismatch/);
-  assert.match(audit,/duplicateCanonicals/);
+  // Actual missing-file/canonical/noindex/duplicate behavior is exercised by
+  // sitemap-audit.test.js; source variable names are not an audit contract.
+  assert.match(audit,/checkedLocalEntries/);
+  assert.match(audit,/deferredEntries/);
 });
 
 test("Detroit discovery pilot is a durable search-strategy source",()=>{

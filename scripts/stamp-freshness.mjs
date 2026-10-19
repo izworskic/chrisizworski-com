@@ -130,7 +130,19 @@ const SITEMAPS = [
   "sitemap-manistee.xml",
   "sitemap-winter.xml",
   "sitemap-breakout-live.xml",
+  // Discover every root page sitemap so new specialist maps cannot escape this check.
+  // Images and sitemap indexes are not page-date ledgers. Remote/delegated pages
+  // have no dateByRoute entry here and remain their owning repository's responsibility.
 ];
+for (const name of readdirSync(publicRoot).filter(name => /sitemap.*\.xml$/.test(name) && !/image|index/.test(name))) {
+  if (!SITEMAPS.includes(name)) SITEMAPS.push(name);
+}
+// These exported families are authored elsewhere and currently do not expose
+// dateModified on all children. Sync any available dates, but require their owning
+// generators to add the missing stamps; do not manufacture dates in deployment mirrors.
+const DELEGATED_DATE_SCHEMAS = new Set([
+  "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml",
+]);
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
   const mismatches = [];
@@ -266,6 +278,7 @@ if (CHECK) {
   // have none; a sitemap-listed one is not, because its lastmod would then have nothing to agree with.
   const listed = new Set();
   for (const name of SITEMAPS) {
+    if (DELEGATED_DATE_SCHEMAS.has(name)) continue;
     let xml;
     try { xml = await readFile(path.join(publicRoot, name), "utf8"); } catch { continue; }
     for (const m of xml.matchAll(/<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>/g)) listed.add(m[1]);

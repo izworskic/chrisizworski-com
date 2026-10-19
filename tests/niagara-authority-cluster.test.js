@@ -117,7 +117,8 @@ test('Niagara flagship author graph resolves to the shared Person and related Mi
     assert.equal(node.publisher?.['@id'], person['@id'], type);
   }
   assert.ok(border.includes('https://chrisizworski.com/michigan-border-wait-times/'));
-  assert.ok(sitemap.includes("<loc>https://chrisizworski.com/niagara-border-crossing/</loc><lastmod>2026-10-06</lastmod>"));
+  const modified = border.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)[1];
+  assert.ok(sitemap.includes(`<loc>https://chrisizworski.com/niagara-border-crossing/</loc><lastmod>${modified}</lastmod>`));
 });
 
 
