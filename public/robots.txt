@@ -25,3 +25,4 @@ Sitemap: https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml
 Sitemap: https://chrisizworski.com/sitemap-nyc-crossing.xml
 Sitemap: https://chrisizworski.com/fall-color/destinations-sitemap.xml
 Sitemap: https://chrisizworski.com/sitemap-index.xml
+Sitemap: https://chrisizworski.com/national-tools/dark-sky/sitemap.xml

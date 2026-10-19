@@ -4,7 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
-    "api/great-lakes-ferry-conditions.js": { "maxDuration": 20 },
+    "api/great-lakes-ferry-conditions.js": {
+      "maxDuration": 20
+    },
     "api/michigan-rockhounding.js": {
       "maxDuration": 20
     },
@@ -673,6 +675,26 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/national-tools/dark-sky/_api/forecast",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/api/dark-sky-canada"
+    },
+    {
+      "source": "/national-tools/dark-sky/sitemap.xml",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/sitemap.xml"
+    },
+    {
+      "source": "/national-tools/dark-sky",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/"
+    },
+    {
+      "source": "/national-tools/dark-sky/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/"
+    },
+    {
+      "source": "/national-tools/dark-sky/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/:path*"
+    },
     {
       "source": "/national-tools/meteor-shower/_api/live",
       "destination": "https://national-outdoor-tools-hub.vercel.app/api/meteor-viewing"
