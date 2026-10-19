@@ -4,9 +4,9 @@
 const E=window.ThisWeekEngine,root=document.getElementById('this-week');
 if(!root||!E)return;
 const $=id=>document.getElementById(id);
-const cards={shed:$('week-shed'),maple:$('week-maple'),rock:$('week-rock'),eagle:$('week-eagle')};
-const scopes={shed:'Local forecast + regional modeled snow',maple:'Local forecast, not measured sap',rock:'Statewide beaches, NOT the selected town',eagle:'Public viewing corridors, not sightings'};
-let sequence=0,started=false,rockCache=null;
+const cards={shed:$('week-shed'),maple:$('week-maple'),rock:$('week-rock'),eagle:$('week-eagle'),waterfowl:$('week-waterfowl')};
+const scopes={shed:'Local forecast + regional modeled snow',maple:'Local forecast, not measured sap',rock:'Statewide beaches, NOT the selected town',eagle:'Public viewing corridors, not sightings',waterfowl:'Midwest wetlands and large-water reference points'};
+let sequence=0,started=false,rockCache=null,waterfowlCache=new Map();
 function readable(t){
  if(!t)return 'Seasonal / interpretive information';
  const d=new Date(t);return Number.isNaN(+d)?'Source time unavailable':'Source updated '+d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
@@ -41,24 +41,27 @@ async function refresh(){
  started=true;const request=++sequence;const region=$('week-region').value;
  const name=E.REGION_OPTIONS.find(x=>x.id===region)?.name||'Bay City';
  const btn=$('week-refresh');btn.disabled=true;btn.textContent='Checking sources…';
- $('week-updated').textContent='Checking three independently sourced tools. A missing source never becomes a favorable result.';
- for(const id of ['shed','maple','rock']){
+ $('week-updated').textContent='Checking four independently sourced tools. A missing source never becomes a favorable result.';
+ for(const id of ['shed','maple','rock','waterfowl']){
   const c=cards[id];c.querySelector('[data-week-state]').textContent='Checking source…';
   c.querySelector('[data-week-headline]').textContent='Gathering condition evidence';
   c.querySelector('[data-week-reason]').textContent='No recommendation until this feed returns.';
  }
  show(E.eagle());
  const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),17500);
+ const birdRegion=({'bay-city':'saginaw-bay','traverse-city':'northern-lower','marquette':'upper-peninsula'})[region]||'saginaw-bay';
+ const birdHit=waterfowlCache.get(birdRegion);
  const requests=[
   lookup('/api/shed-antlers?mode=forecast&site='+encodeURIComponent(region),ac.signal),
   lookup('/api/maple-sap?mode=site&site='+encodeURIComponent(region),ac.signal),
-  rockCache&&Date.now()-rockCache.at<600000?Promise.resolve(rockCache.data):lookup('/api/michigan-rockhounding',ac.signal).then(data=>{rockCache={at:Date.now(),data};return data;})
+  rockCache&&Date.now()-rockCache.at<600000?Promise.resolve(rockCache.data):lookup('/api/michigan-rockhounding',ac.signal).then(data=>{rockCache={at:Date.now(),data};return data;}),
+  birdHit&&Date.now()-birdHit.at<600000?Promise.resolve(birdHit.data):lookup('/api/waterfowl-freeze-line?mode=region&region='+encodeURIComponent(birdRegion),ac.signal).then(data=>{waterfowlCache.set(birdRegion,{data,at:Date.now()});return data;})
  ];
  // Independent settles let valid tools work when one external provider fails.
  const results=await Promise.allSettled(requests);
  clearTimeout(timer);if(request!==sequence)return;
- const interpret=[d=>E.shed(d,Date.now(),name),d=>E.maple(d,Date.now(),name),d=>E.rock(d,Date.now())];
- ['shed','maple','rock'].forEach((id,i)=>{
+ const interpret=[d=>E.shed(d,Date.now(),name),d=>E.maple(d,Date.now(),name),d=>E.rock(d,Date.now()),d=>E.waterfowl(d,Date.now())];
+ ['shed','maple','rock','waterfowl'].forEach((id,i)=>{
    if(results[i].status==='fulfilled'){try{show(interpret[i](results[i].value))}catch{unavailable(id)}}
    else unavailable(id);
  });
