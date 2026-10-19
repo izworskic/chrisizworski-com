@@ -102,7 +102,8 @@ test("new aurora landings are meaningful linked pages, not misleading copied reg
     assert.equal(json["@context"],"https://schema.org");
     const graph=json["@graph"];
     assert.equal(graph.find(x=>x["@type"]==="WebPage")?.url,url);
-    assert.equal(graph.find(x=>x["@type"]==="WebPage")?.dateModified,"2026-10-11");
+    const editorialDate=slug==="paradise-whitefish-point"?"2026-10-19":"2026-10-11"; // Added contextual ice-viewing handoff.
+    assert.equal(graph.find(x=>x["@type"]==="WebPage")?.dateModified,editorialDate);
     assert.ok(graph.find(x=>x["@type"]==="BreadcrumbList"));
     const faqs=graph.find(x=>x["@type"]==="FAQPage")?.mainEntity||[];
     assert.ok(faqs.length>=3);
@@ -110,7 +111,7 @@ test("new aurora landings are meaningful linked pages, not misleading copied reg
       assert.ok(page.includes("<summary"+ "") && page.includes(q.name.replaceAll("&","&amp;")),q.name);
       assert.ok(q.acceptedAnswer.text.length>45);
     }
-    assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>2026-10-11</lastmod>"));
+    assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialDate+"</lastmod>"));
     const anchor='href="/northern-lights-michigan/'+slug+'/"';
     assert.ok(hub.includes(anchor));
     assert.ok(tools.includes(anchor));

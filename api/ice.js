@@ -1,3 +1,5 @@
+import { acisRange, afddFrom } from '../lib/michigan-ice/thermal.mjs';
+import { cavesResponse } from '../lib/michigan-ice/caves.mjs';
 // /api/ice — server-side aggregation for the Michigan Ice Report.
 //
 // Upstreams:
@@ -88,26 +90,6 @@ async function climatology(lakeCode, now) {
   return null;
 }
 
-async function acisRange(sid, sdate, edate) {
-  const r = await fetch('https://data.rcc-acis.org/StnData', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sid, sdate, edate, elems: 'maxt,mint' })
-  });
-  if (!r.ok) return null;
-  const j = await r.json();
-  return (j && j.data) || null;
-}
-function afddFrom(rows) {
-  if (!rows) return null;
-  let a = 0;
-  for (const [, mx, mn] of rows) {
-    const hi = parseFloat(mx), lo = parseFloat(mn);
-    if (!isFinite(hi) || !isFinite(lo)) continue;
-    a = Math.max(0, a + (32 - (hi + lo) / 2));
-  }
-  return Math.round(a);
-}
 function afddChange(rows, days, current) {
   if (!rows || current === null) return null;
   const previous = afddFrom(rows.slice(0, Math.max(0, rows.length - days)));
@@ -118,6 +100,8 @@ async function coldFor(region, now) {
   const sy = seasonStartYear(now);
   const start = sy + '-11-01';
   const today = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());
+  if (today < start) return { slug: region.slug, station: region.acis, seasonStart: start,
+    afdd: null, normal: null, normalYears: 0, latestDate: null, change24h: null, change72h: null, change7d: null, preSeason: true };
   const currentRows = await acisRange(region.acis, start, today);
   const cur = afddFrom(currentRows);
 
@@ -141,7 +125,8 @@ async function coldFor(region, now) {
   };
 }
 
-export default async function handler() {
+export default async function handler(req) {
+  if (req && new URL(req.url).searchParams.get('view') === 'caves') return cavesResponse(req);
   const now = new Date();
   const out = {
     ok: true,

@@ -68,6 +68,9 @@
     "api/waterfowl-freeze-line.js": {
       "maxDuration": 40
     },
+    "api/ice.js": {
+      "maxDuration": 30
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }

@@ -39,12 +39,12 @@ test("the Michigan Ice root freshness signal is generated and matches the sitema
   const page = graph.find((node) => node["@type"] === "WebPage");
   const sitemap = read("public/sitemap.xml");
   const generator = read("scripts/ice/gen_site.py");
-  const generatedDate = generator.match(/ICE_ROOT_DATE_MODIFIED = "(\d{4}-\d{2}-\d{2})"/)?.[1];
+  const generatedDate = generator.match(/ICE_HUB_DATE_MODIFIED = "(\d{4}-\d{2}-\d{2})"/)?.[1];
 
-  assert.ok(generatedDate, "Michigan Ice generator is missing its root freshness date");
+  assert.ok(generatedDate, "Michigan Ice generator is missing its hub freshness date");
   assert.equal(page.dateModified, generatedDate);
   assert.equal(sitemapLastmod(sitemap, "/michigan-ice/"), page.dateModified);
-  assert.match(generator, /"dateModified": ICE_ROOT_DATE_MODIFIED/);
+  assert.match(generator, /"dateModified": ICE_HUB_DATE_MODIFIED/);
 });
 
 test("the reputation sitemap uses a pinned source hash, not a parity exemption", () => {

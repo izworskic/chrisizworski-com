@@ -43,6 +43,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 19: ice-viewing companion links on the two local aurora destinations.
+  "/northern-lights-michigan/munising/",
+  "/northern-lights-michigan/paradise-whitefish-point/",
   // October 14, 2026: owner-approved contextual toll cost link on the U.P. fall-color trip guide.
   // Keep the live-snapshot difference explicit until the next clean crawl after production release.
   "/fall-color/upper-peninsula-fall-color/",
