@@ -195,21 +195,23 @@
   var pagePicker = document.getElementById('regionSelect');
   function syncRegion() { if (pagePicker && REGIONS[pagePicker.value]) { state.region = pagePicker.value; els.region.value = pagePicker.value; update(); } }
   if (pagePicker) pagePicker.addEventListener('change', syncRegion);
-  var peakEl = document.getElementById('swKpPeak');
   var touched = false;
   els.kp.addEventListener('input', function () { touched = true; });
+  // The page renders its live peak into #swKpPeak .sw-val once NOAA data arrives.
   function readPeak() {
-    if (!peakEl) return;
-    var k = parseFloat(peakEl.textContent);
-    if (isFinite(k) && k >= 0 && k <= 9) {
-      state.liveKp = Math.round(k * 10) / 10;
-      els.tonight.hidden = false;
-      els.tonight.textContent = 'Use tonight\'s forecast peak (Kp ' + fmtKp(state.liveKp) + ')';
-      if (!touched) { state.kp = state.liveKp; els.kp.value = state.liveKp; update(); }
-    }
+    var node = document.querySelector('#swKpPeak .sw-val') || document.getElementById('swKpPeak');
+    if (!node) return false;
+    var m = String(node.textContent).match(/\d+(?:\.\d+)?/);
+    var k = m ? parseFloat(m[0]) : NaN;
+    if (!(isFinite(k) && k >= 0 && k <= 9)) return false;
+    state.liveKp = Math.round(k * 10) / 10;
+    els.tonight.hidden = false;
+    els.tonight.textContent = 'Use tonight\'s forecast peak (Kp ' + fmtKp(state.liveKp) + ')';
+    if (!touched) { state.kp = state.liveKp; els.kp.value = state.liveKp; update(); }
+    return true;
   }
-  if (peakEl && window.MutationObserver) new MutationObserver(readPeak).observe(peakEl, {childList: true, characterData: true, subtree: true});
-  readPeak();
+  var tries = 0;
+  (function poll() { if (readPeak() || ++tries > 40) return; setTimeout(poll, 1500); })();
   syncRegion();
   update();
   if (!reduce) requestAnimationFrame(loop);
