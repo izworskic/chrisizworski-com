@@ -68,7 +68,15 @@ function browserMap(configPayload,hash=""){
  const prior=global.fetch,priorLocation=global.location;
  global.location={hash};
  global.fetch=async()=>({ok:true,json:async()=>configPayload});
- const made=[];
+ const made=[],opened=[];let selectionCalls=0;
+ class FakePopup {
+  constructor(options){this.options=options;this.handlers={};opened.push(this)}
+  setLngLat(coords){this.coords=coords;return this}
+  setDOMContent(content){this.content=content;return this}
+  addTo(m){this.map=m;return this}
+  on(event,fn){this.handlers[event]=fn;return this}
+  remove(){this.removed=true;this.handlers.close?.();return this}
+ }
  class FakeMap {
   constructor(o){this.opts=o;this.events={};this.sources={};this.layers=[];this.zoom=5;this.moves=[];made.push(this)}
   on(...a){this.events[a.length===2?a[0]:a[0]+':'+a[1]]=a.at(-1)}
@@ -87,12 +95,12 @@ function browserMap(configPayload,hash=""){
  const documentPrior=global.document;
  global.document={createElement:()=>new E()};
  const spots=[
-  {id:'detroit',lon:-83.18,lat:42.1,name:'Detroit',city:'Trenton',state:'MI',type:'resident'},
-  {id:'soo',lon:-84.35,lat:46.5,name:'Soo',city:'Sault Ste. Marie',state:'MI',type:'habitat'}
+  {id:'detroit',lon:-83.18,lat:42.1,name:'Detroit',city:'Trenton',state:'MI',type:'resident',look:'Watch the river from public access',source:'https://www.fws.gov/refuge/detroit-river/visit-us'},
+  {id:'soo',lon:-84.35,lat:46.5,name:'Soo',city:'Sault Ste. Marie',state:'MI',type:'habitat',look:'Scan St Marys River and shoreline trees',source:'https://www.lssu.edu/centers/cfre/overview/'}
  ];
  let selected=spots.find(x=>"#"+x.id===hash)||spots[0];
  const holder=new E(),caption={textContent:''};
- const controller=EagleMap.init({holder,caption,spots,maplibregl:{Map:FakeMap,NavigationControl:class{},AttributionControl:class{}},getSelected:()=>selected,onSelect:(s)=>{selected=s;controller.select(s)},onLocate:()=>{holder.nearMeRequested=true},onFatal:()=>{holder.nativeFallbackRequested=true}});
+ const controller=EagleMap.init({holder,caption,spots,maplibregl:{Map:FakeMap,Popup:FakePopup,NavigationControl:class{},AttributionControl:class{}},getSelected:()=>selected,onSelect:(s)=>{selectionCalls++;selected=s;controller.select(s)},onLocate:()=>{holder.nearMeRequested=true},onFatal:()=>{holder.nativeFallbackRequested=true}});
  const settle=async()=>{
   for(let n=0;n<5;n++)await new Promise(resolve=>setImmediate(resolve));
   const m=made.at(-1);m?.emit('load');return m;
@@ -100,7 +108,7 @@ function browserMap(configPayload,hash=""){
  const restore=()=>{global.fetch=prior;global.document=documentPrior;
    if(priorLocation===undefined)delete global.location;else global.location=priorLocation;
    controller?.dispose()};
- return {made,controller,spots,holder,caption,settle,restore};
+ return {made,opened,getSelectionCalls:()=>selectionCalls,controller,spots,holder,caption,settle,restore};
 }
 test('CARTO map loads clustered selectable sites, filters pins, zooms into location and supports view all',async()=>{
  const t=browserMap({provider:'carto',enabled:true,key:'public-basemap-key',styleUrl:EagleMap.CARTO_STYLE});
@@ -196,5 +204,39 @@ test('failed CARTO style retries independent vector source; failed backup reques
   assert.equal(t.made.length,2);
   const free=t.made[1];free.emit('error');
   assert.equal(t.holder.nativeFallbackRequested,true);
+ }finally{t.restore()}
+});
+
+test('marker text is attached to selected coordinates and links to correct field guide',async()=>{
+ const t=browserMap({provider:'carto',enabled:true,key:'public-basemap-key'});
+ try{
+  const m=await t.settle();
+  assert.equal(t.opened.length,0,'No popup overlays the initial region map');
+  const pointer={};
+  const event={features:[{properties:{id:'soo'}}],originalEvent:pointer};
+  m.events['click:eagle-pin-halo'](event);
+  m.events['click:eagle-pin-number'](event);
+  assert.equal(t.getSelectionCalls(),1,'A single dot click must not double-fetch forecast/evidence');
+  const pop=t.opened.at(-1);
+  assert.deepEqual(pop.coords,[-84.35,46.5]);
+  assert.equal(pop.content.children[0].textContent,'Soo');
+  assert.equal(pop.content.children[2].textContent,'Scan St Marys River and shoreline trees');
+  assert.equal(pop.content.children[3].children[0].href,'#location-details');
+  assert.equal(pop.content.children[3].children[1].href,'https://www.lssu.edu/centers/cfre/overview/');
+  assert.equal(m.getSource('eagle-sites').data.features[1].properties.selected,true);
+ }finally{t.restore()}
+});
+test('selected popup follows list changes and disappears if spot is filtered out',async()=>{
+ const t=browserMap({provider:'openfreemap',enabled:false});
+ try{
+  await t.settle();
+  t.controller.select(t.spots[1]);
+  assert.deepEqual(t.opened.at(-1).coords,[-84.35,46.5]);
+  t.controller.filter([t.spots[0]]);
+  assert.equal(t.opened.at(-1).removed,true);
+  t.controller.select(t.spots[0]);
+  assert.deepEqual(t.opened.at(-1).coords,[-83.18,42.1]);
+  t.holder.children[2].children[0].click();
+  assert.equal(t.opened.at(-1).removed,true);
  }finally{t.restore()}
 });

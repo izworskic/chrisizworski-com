@@ -209,7 +209,7 @@ function initMap(forceNative=false){
  const glance=document.createElement("div");glance.className="native-map-glance";glance.setAttribute("aria-live","polite");
  const spotName=document.createElement("strong");const spotCity=document.createElement("span");
  const more=document.createElement("a");more.href="#location-details";more.textContent="See location details ↓";
- glance.append(spotName,spotCity,more);holder.append(glance);
+ glance.append(spotName,spotCity,more);canvas.append(glance);
  let dragging=false,atX=0,atY=0;
  holder.addEventListener("pointerdown",e=>{
    if(e.target.closest("button"))return;
@@ -229,6 +229,9 @@ function initMap(forceNative=false){
  // Selecting a spot from the list makes that marker visible if zoomed.
  moveMapToSelected=()=>{
    spotName.textContent=selected.name;spotCity.textContent=selected.city+", "+selected.state;
+   glance.style.left=Math.min(76,Math.max(24,lonPercent(selected.lon)))+"%";
+   glance.style.top=latPercent(selected.lat).toFixed(3)+"%";
+   glance.classList.toggle("below",latPercent(selected.lat)<45);
    holder.querySelectorAll(".native-pin").forEach(b=>{b.classList.toggle("chosen",b.dataset.spot===selected.id);b.setAttribute("aria-pressed",String(b.dataset.spot===selected.id))});
    if(zoom>1){
      const sx=lonPercent(selected.lon)/100*holder.clientWidth;
