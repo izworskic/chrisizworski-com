@@ -12,6 +12,7 @@
  const CARTO_HOST="basemaps.cartocdn.com";
  const CARTO_STYLE="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
  const FALLBACK_STYLE="https://tiles.openfreemap.org/styles/liberty";
+ const CARTO_DARK_STYLE="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
  function cartoResourceUrl(url,key){
   if(!key||typeof url!=="string")return url;
   try{
@@ -34,6 +35,7 @@
   const byId=new Map(spots.map((s,i)=>[s.id,{...s,number:i+1}]));
   let visible=[...byId.values()],selectedId=getSelected()?.id||spots[0].id, map=null,ready=false,started=false;
   let provider="openfreemap",key="",loadTimer=null,retired=false,failedOver=false;
+  let userLocation=null,activeStyle="day",handlersBound=false,errorCount=0;
   // Capture the URL before app.js calls pick(), which writes an initial #detroit hash.
   // Only incoming shared links should auto-zoom; ordinary visits need a full-region view.
   const incomingDeepLink=typeof location!=="undefined" && location.hash ? location.hash.slice(1) : "";
@@ -50,12 +52,24 @@
   const buttons=document.createElement("div");buttons.className="eagle-map-extra-controls";
   const all=document.createElement("button");all.type="button";all.textContent="View all";all.setAttribute("aria-label","Show all matching eagle watching spots");
   const focus=document.createElement("button");focus.type="button";focus.textContent="Focus spot";focus.setAttribute("aria-label","Zoom to the currently selected eagle watching destination");
-  buttons.append(all,focus);holder.append(buttons);
+  const near=document.createElement("button");near.type="button";near.textContent="Near me";near.setAttribute("aria-label","Find the nearest listed public eagle viewing location using your location");
+  const theme=document.createElement("button");theme.type="button";theme.textContent="Night map";theme.setAttribute("aria-label","Switch CARTO between day and night basemaps");theme.hidden=true;
+  buttons.append(all,focus,near,theme);holder.append(buttons);
   const notice=document.createElement("div");notice.className="eagle-map-key";notice.textContent="Green = grouped viewing locations · Blue = individual spot · Amber = selected spot. Numbers are location IDs or groups, NOT eagle counts.";
   holder.append(notice);
+  const positionNote=document.createElement("div");positionNote.className="eagle-location-note";positionNote.setAttribute("role","status");positionNote.hidden=true;holder.append(positionNote);
+  const milesBetween=(a,b)=>{
+    const rad=n=>n*Math.PI/180,dlat=rad(a.lat-b.lat),dlon=rad(a.lon-b.lon);
+    const h=Math.sin(dlat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dlon/2)**2;
+    return 3958.76*2*Math.asin(Math.min(1,Math.sqrt(h)));
+  };
   function updateOverlay(){
     const s=byId.get(selectedId);if(!s)return;
     strong.textContent=s.name;sub.textContent=s.city+", "+s.state;
+    if(userLocation){
+      const miles=Math.round(milesBetween({lat:userLocation.latitude,lon:userLocation.longitude},s));
+      positionNote.hidden=false;positionNote.textContent="Your position (approx.) · "+miles+" mi straight-line to selected overlook. Not driving distance.";
+    }
   }
   function featureCollection(){
     return placeData(visible.map(s=>({...s,selected:s.id===selectedId})));
@@ -83,6 +97,25 @@
     const s=byId.get(selectedId);if(s)map.easeTo({center:[s.lon,s.lat],zoom:Math.max(8.3,map.getZoom()),duration:550});
   }
   all.addEventListener("click",fitAll);focus.addEventListener("click",centerSelected);
+  near.addEventListener("click",()=>{if(typeof opts.onLocate==="function")opts.onLocate()});
+  theme.addEventListener("click",()=>{
+    if(!ready||provider!=="carto"||!map||typeof map.setStyle!=="function")return;
+    activeStyle=activeStyle==="day"?"night":"day";
+    theme.textContent=activeStyle==="day"?"Night map":"Day map";
+    try{map.setStyle(cartoResourceUrl(activeStyle==="day"?CARTO_STYLE:CARTO_DARK_STYLE,key))}
+    catch{degrade("CARTO style switch failed")}
+  });
+  function addUserLocation(){
+    if(!map||!userLocation)return;
+    const geo={type:"FeatureCollection",features:[{type:"Feature",geometry:{type:"Point",coordinates:[userLocation.longitude,userLocation.latitude]},properties:{}}]};
+    const source=map.getSource("eagle-visitor");
+    if(source){source.setData(geo);return}
+    map.addSource("eagle-visitor",{type:"geojson",data:geo});
+    map.addLayer({id:"eagle-visitor-ring",type:"circle",source:"eagle-visitor",
+      paint:{"circle-radius":14,"circle-color":"#fff","circle-opacity":.48,"circle-stroke-color":"#183f73","circle-stroke-width":2}});
+    map.addLayer({id:"eagle-visitor-center",type:"circle",source:"eagle-visitor",
+      paint:{"circle-radius":5,"circle-color":"#163e8d","circle-stroke-color":"#fff","circle-stroke-width":2}});
+  }
   function addSiteLayers(){
     if(!map||map.getSource("eagle-sites"))return;
     map.addSource("eagle-sites",{type:"geojson",data:featureCollection(),cluster:true,clusterMaxZoom:12,clusterRadius:43});
@@ -104,6 +137,7 @@
     map.addLayer({id:"eagle-pin-number",type:"symbol",source:"eagle-sites",filter:["!",["has","point_count"]],
       layout:{"text-field":["get","number"],"text-size":11,"text-font":["Noto Sans Bold","Arial Unicode MS Bold"]},
       paint:{"text-color":"#ffffff"}});
+    if(!handlersBound){
     map.on("click","eagle-pin-halo",e=>{
       const feature=e.features?.[0];const id=feature?.properties?.id,s=byId.get(id);
       if(s)onSelect(s);
@@ -115,22 +149,32 @@
         if(!retired)map.easeTo({center:feature.geometry.coordinates,zoom:z,duration:350});
       }).catch(()=>{});
     });
+    handlersBound=true;
     for(const id of ["eagle-pin-halo","eagle-cluster"]){
       map.on("mouseenter",id,()=>{map.getCanvas().style.cursor="pointer"});
       map.on("mouseleave",id,()=>{map.getCanvas().style.cursor=""});
     }
+    }
+    addUserLocation();
   }
   function stopTimer(){if(loadTimer){clearTimeout(loadTimer);loadTimer=null}}
+  function failNative(){
+    if(retired)return;
+    stopTimer();ready=false;
+    if(map){map.remove();map=null}
+    if(caption)caption.textContent="Basemap unavailable. Using the accessible local reference map and location list.";
+    if(typeof opts.onFatal==="function"){retired=true;opts.onFatal()}
+  }
   function degrade(reason){
     if(failedOver||retired)return;failedOver=true;stopTimer();
     if(map){map.remove();map=null}
-    ready=false;provider="openfreemap";key="";
+    ready=false;provider="openfreemap";key="";activeStyle="day";theme.hidden=true;
     if(caption)caption.textContent="OpenFreeMap vector map (CARTO temporarily unavailable). Zoom, pan and select public viewing spots.";
     load(FALLBACK_STYLE,false);
   }
   function load(style,isCarto){
     if(retired)return;
-    ready=false;started=true;
+    ready=false;started=true;handlersBound=false;errorCount=0;
     const MapConstructor=MapGL.Map;
     let instance;
     try{
@@ -141,12 +185,19 @@
       });
     }catch(err){if(isCarto){degrade("CARTO initialization failed");return}if(caption)caption.textContent="Interactive map unavailable. Use the location list and directions below.";return}
     map=instance;
+    theme.hidden=!isCarto;
     map.addControl(new MapGL.NavigationControl({showCompass:false,visualizePitch:false}),"top-right");
     map.addControl(new MapGL.AttributionControl({compact:true}),"bottom-right");
-    if(isCarto){loadTimer=setTimeout(()=>{if(!ready)degrade("CARTO timeout")},12000)}
+    loadTimer=setTimeout(()=>{if(!ready){if(isCarto)degrade("CARTO timeout");else failNative()}},12000);
     instance.on("error",()=>{
-      if(isCarto){degrade("CARTO vector request failed")}
-      else if(!ready&&caption)caption.textContent="Basemap is loading slowly. The location list and driving directions remain usable.";
+      if(retired||map!==instance)return;
+      if(isCarto){degrade("CARTO vector request failed");return}
+      errorCount++;
+      if(!ready||errorCount>=3)failNative();
+    });
+    instance.on("style.load",()=>{
+      if(retired||map!==instance||!ready)return;
+      try{addSiteLayers();redraw()}catch{if(isCarto)degrade("CARTO restyle failed");else failNative()}
     });
     instance.on("load",()=>{
       if(retired||map!==instance)return;
@@ -156,13 +207,19 @@
        if(caption)caption.textContent=(isCarto?"CARTO Voyager":"OpenFreeMap Liberty")+" vector map · zoom, drag or tap numbered eagle watching locations. © OpenStreetMap contributors"+(isCarto?", © CARTO":", OpenMapTiles")+".";
        if(!focusedOnce&&incomingDeepLink&&byId.has(incomingDeepLink)){focusedOnce=true;centerSelected()}
        else fitAll();
-      }catch(err){if(isCarto)degrade("Map layer setup failed");else if(caption)caption.textContent="Map points unavailable. Choose a location from the accessible list."}
+      }catch(err){if(isCarto)degrade("Map layer setup failed");else failNative()}
     });
   }
   function select(s){
     if(!s||!byId.has(s.id))return;
     const changed=selectedId!==s.id;selectedId=s.id;latestFocus=s.id;updateOverlay();redraw();
     if(changed&&ready)centerSelected();
+  }
+  function showUserLocation(coords){
+    if(retired||!coords||!Number.isFinite(coords.latitude)||!Number.isFinite(coords.longitude))return;
+    if(Math.abs(coords.latitude)>90||Math.abs(coords.longitude)>180)return;
+    userLocation={latitude:coords.latitude,longitude:coords.longitude};
+    updateOverlay();if(ready){try{addUserLocation()}catch{}}
   }
   function filter(matching){
     const set=new Set((matching||[]).map(s=>s.id));
@@ -181,7 +238,7 @@
        provider="carto";key=cfg.key;load(cartoResourceUrl(CARTO_STYLE,key),true);
      }else load(FALLBACK_STYLE,false);
    }).catch(()=>{if(!retired)load(FALLBACK_STYLE,false)});
-  return {select,filter,fitAll,focus:centerSelected,getProvider:()=>provider,dispose:()=>{retired=true;stopTimer();if(map)map.remove()}};
+  return {select,filter,fitAll,focus:centerSelected,showUserLocation,getProvider:()=>provider,dispose:()=>{retired=true;stopTimer();if(map)map.remove()}};
  }
- return {init,cartoResourceUrl,placeData,CARTO_STYLE,FALLBACK_STYLE};
+ return {init,cartoResourceUrl,placeData,CARTO_STYLE,CARTO_DARK_STYLE,FALLBACK_STYLE};
 });
