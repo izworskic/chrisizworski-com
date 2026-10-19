@@ -1,3 +1,14 @@
+## “Is this the week?” snow-retreat + waterfowl expansion — October 18, 2026
+
+- **User request:** Continue meaningful expansions of the portfolio weekly planning experience and the shed planner.
+- **Evidence research:** NOAA NOHRSC Snow_Analysis MapServer is **not time-enabled**, so a NOAA 14-day point-history would have been unsupported. Open-Meteo forecast endpoint independently verified to provide a 14-day recent hourly `snow_depth` series with meters units and Detroit-local timestamps. It is a numerical **model**, not NOAA historical measurements or a parcel observation.
+- **Implementation:** New tested pure `lib/shed-snow-retreat.cjs` identifies seven-day modeled bare, two-day recent retreat, brief thaw, thinning, still covered and unavailable. Strict unit, valid daily-noon sample and staleness guards; existing `/api/shed-antlers` now includes independent `snowTrend` with no coupling to NWS availability. Shed planner displays 14-day scrollable bars and explicit provider disagreement. Existing ground input remains authoritative and no shed date forecast is claimed.
+- **Portfolio expansion:** Added fifth Waterfowl Freeze-Line card to /tools/ using the existing source-owned `/api/waterfowl-freeze-line?mode=region` and independently scoped Saginaw Bay / Northern Lower / Upper Peninsula. It interprets NWS freeze exposure, dated NOAA chart context and optional source limitations, never migratory bird counts or proven field ice. Cached/isolated from other lanes. Waterfowl specialist links back to comparison; responsive rail recalibrated.
+- **Quality:** `tests/snow-retreat-weekly.test.js` verifies modeled retreat, missing/incorrect unit history, waterfowl semantics and render wiring. Added documentation. No GSC/AdSense/GA4 numerical outcomes available, no measured performance uplift claimed.
+- **Release status:** Feature branch `feature/snow-retreat-waterfowl-week` in progress; independent CI/public output and production smoke verification required before declaring the release live.
+- **Exactly one next action:** Run/clear complete CI and public output audit, merge safely, smoke-test the live trend chart and fifth card.
+
+
 ## Great Lakes ferry eight-tool expansion — October 18, 2026 (release handoff)
 
 - **Owner intent:** Build eight independent, destination-specific Great Lakes ferry planners plus a single directory, preserving the existing Mackinac Island ferry planner, existing Grand Portage ferry planner and their canonical ownership.
