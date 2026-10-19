@@ -25,7 +25,7 @@ const spots=[
 ];
 const el=id=>document.getElementById(id), month=new Date().getMonth()+1, inWinter=[12,1,2,3].includes(month);
 let selected=spots.find(s=>location.hash==="#"+s.id)||spots[0],moveMapToSelected=()=>{},forecastController=null,fetchToken=0;
-let updateMapMatches=()=>{};
+let updateMapMatches=()=>{},eagleMapController=null;
 let plannerMode="gather",plannerMonth=month,plannerDays=[],plannerZone="America/Detroit";
 let evidenceToken=0;
 let saved=new Set();try{saved=new Set(JSON.parse(localStorage.getItem("eagle-saved-v1")||"[]"))}catch{}
@@ -141,21 +141,25 @@ function renderPlanner(){
  }
 }
 function switchMode(mode){plannerMode=mode==="display"?"display":"gather";plannerMonth=month;renderPlanner();renderList()}
-function initMap(){
+function initMap(forceNative=false){
  const holder=el("map"),caption=el("map-provider");
  // CARTO Voyager when a public domain-restricted CARTO key is configured;
  // otherwise a fully interactive OpenFreeMap vector style, never key watermarks.
- if(window.EagleMap&&window.maplibregl){
+ if(!forceNative&&window.EagleMap&&window.maplibregl){
    const controller=window.EagleMap.init({
-      holder,caption,spots,getSelected:()=>selected,onSelect:pick,maplibregl:window.maplibregl
+      holder,caption,spots,getSelected:()=>selected,onSelect:pick,maplibregl:window.maplibregl,
+      onLocate:()=>el("nearest").click(),
+      onFatal:()=>{eagleMapController=null;initMap(true);renderList()}
    });
    if(controller){
+     eagleMapController=controller;
      moveMapToSelected=()=>controller.select(selected);
      updateMapMatches=matches=>controller.filter(matches);
      return;
    }
  }
- // Accessible self-hosted geographic diagram only when WebGL/MapLibre cannot run.
+ // Accessible self-hosted geographic diagram on WebGL failure or when both vector maps fail.
+ eagleMapController=null;updateMapMatches=()=>{};
  holder.replaceChildren();
  holder.classList.add("native-map");
  // First-party SVG with Natural Earth shapes; no CDN, external map tiles or API keys.
@@ -421,7 +425,7 @@ el("saved-toggle").addEventListener("click",()=>{if(saved.has(selected.id))saved
 el("refresh-weather").addEventListener("click",()=>loadWeather(selected));
 el("copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);el("copy-link").textContent="Copied";setTimeout(()=>text("copy-link","Copy spot link"),1800)}catch{el("copy-link").textContent="Copy URL from address bar"}});
 el("nearest").addEventListener("click",()=>{if(!navigator.geolocation){text("location-help","Location not supported in this browser.");return}
- navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("region-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
+ navigator.geolocation.getCurrentPosition(({coords})=>{const rad=d=>d*Math.PI/180;const dist=s=>{const a=Math.sin(rad(s.lat-coords.latitude)/2)**2+Math.cos(rad(coords.latitude))*Math.cos(rad(s.lat))*Math.sin(rad(s.lon-coords.longitude)/2)**2;return 3959*2*Math.asin(Math.min(1,Math.sqrt(a)))};const closest=[...spots].sort((a,b)=>dist(a)-dist(b))[0];el("state-filter").value="all";el("region-filter").value="all";el("type-filter").value="all";el("saved-filter").checked=false;eagleMapController?.showUserLocation(coords);pick(closest);text("location-help","Closest listed spot: "+Math.round(dist(closest))+" straight-line miles. Location is not stored or sent to our server.")},()=>text("location-help","Location not available; you can still select a spot manually."),{timeout:7000})});
 el("mode-gather").addEventListener("click",()=>switchMode("gather"));
 el("mode-display").addEventListener("click",()=>switchMode("display"));
 el("finder-gather").addEventListener("click",()=>switchMode("gather"));
