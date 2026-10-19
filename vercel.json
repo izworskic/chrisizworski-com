@@ -676,6 +676,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/breakout-live",
+      "destination": "https://national-outdoor-core.vercel.app/api/breakout-live"
+    },
+    {
       "source": "/national-tools/dark-sky/_api/forecast",
       "destination": "https://national-outdoor-tools-hub.vercel.app/api/dark-sky-canada"
     },
