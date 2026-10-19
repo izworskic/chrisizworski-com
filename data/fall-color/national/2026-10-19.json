@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-19",
+  "updated": "2026-10-19T17:34:28.199Z",
+  "briefings": {
+    "new-england": "Peak foliage timing aligns with traditional window; sunny conditions expected for weekend drives.",
+    "great-smoky-mountains": "Foliage at traditional peak timing with sunny, dry conditions ideal for scenic loop roads.",
+    "colorado-aspens": "Aspen color has passed peak; chance snow showers possible on weekend drives.",
+    "adirondacks": "Foliage remains visible past traditional peak; sunny weekend conditions favor scenic highway drives.",
+    "north-shore-superior": "Foliage past traditional window; live weather data unavailable for weekend planning.",
+    "ozarks": "Foliage at traditional peak with mostly sunny conditions for scenic byway exploration.",
+    "eastern-sierra": "Aspen color fading past peak; sunny conditions support Bishop Creek and June Lake drives.",
+    "wasatch": "Aspen color declining past peak; mostly sunny weekend conditions with light precipitation chance.",
+    "columbia-river-gorge": "Foliage at traditional peak; rain and snow likely on weekend, affecting visibility.",
+    "door-county": "Foliage at traditional peak with partly sunny conditions for peninsula scenic drives.",
+    "poconos": "Foliage at traditional peak with sunny, dry conditions ideal for weekend exploration.",
+    "texas-hill-country": "Foliage approaching traditional window; partly sunny conditions expected for hill country drives.",
+    "west-virginia-highlands": "Foliage at traditional peak with sunny, dry conditions perfect for scenic highway drives.",
+    "catskills": "Foliage at traditional peak with sunny conditions ideal for mountain scenic byway drives.",
+    "shenandoah": "Foliage at traditional peak with sunny conditions throughout Skyline Drive districts."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
