@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Michigan Aurora",
+    "file": "public/northern-lights-michigan/index.html",
+    "canonical": "https://chrisizworski.com/northern-lights-michigan/",
+    "identity": "chris-izworski"
+  },
+  {
+    "name": "Niagara Border Crossing",
+    "file": "public/niagara-border-crossing/index.html",
+    "canonical": "https://chrisizworski.com/niagara-border-crossing/",
+    "identity": "chris-izworski"
+  },
+  {
+    "name": "Holiday Travel Picker",
+    "file": "public/holiday-travel/index.html",
+    "canonical": "https://chrisizworski.com/holiday-travel/",
+    "identity": "chris-izworski"
+  }
+]
