@@ -180,3 +180,17 @@
  .eagle-map-overlay strong{font-size:12px}
  .eagle-map-overlay span,.eagle-map-overlay a{font-size:11px}
 }
+
+/* Eagle CARTO field navigation: keep controls usable down to 320px. */
+#map.eagle-vector-map .eagle-map-extra-controls{left:9px;right:9px;max-width:calc(100% - 18px);flex-wrap:wrap;justify-content:flex-end;pointer-events:none}
+#map.eagle-vector-map .eagle-map-extra-controls button{pointer-events:auto;white-space:nowrap;min-height:39px}
+#map.eagle-vector-map .eagle-map-extra-controls button[hidden]{display:none!important}
+#map .eagle-location-note{position:absolute;z-index:3;top:105px;right:9px;max-width:min(58%,280px);border:1px solid #c7d7de;background:rgba(251,253,255,.97);color:#214967;border-radius:8px;padding:8px 10px;font-size:11px;line-height:1.4;font-weight:750;box-shadow:0 2px 8px rgba(25,53,70,.13);pointer-events:none}
+#map .eagle-location-note[hidden]{display:none!important}
+@media(max-width:670px){
+ #map.eagle-vector-map .eagle-map-extra-controls{top:7px;gap:4px}
+ #map.eagle-vector-map .eagle-map-extra-controls button{font-size:10.5px;padding:6px 7px;min-height:38px}
+ #map.eagle-vector-map .eagle-map-key{top:102px;left:8px;max-width:53%;font-size:10px}
+ #map .eagle-location-note{top:102px;right:8px;max-width:43%;font-size:10px}
+ #map.eagle-vector-map .maplibregl-ctrl-top-right{top:52px}
+}
