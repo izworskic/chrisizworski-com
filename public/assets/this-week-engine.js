@@ -78,8 +78,29 @@
     if(sites.some(s=>s.verdict?.code==='QUIET'||s.verdict?.code==='ANYTIME'))return make('rock','check','No strong fresh-stone signal','The sampled shoreline data does not show a standout post-storm window.','Watch the next onshore blow and a subsequent safe lull.',source,when,scope);
     return make('rock','unavailable','No dependable shore readout','The returned shoreline assessments were incomplete.','Recheck the source and NWS advisories.',source,when,scope);
   }
+  function waterfowl(data,now=Date.now()){
+    const source='NWS 72-hour freeze exposure + NOAA mapped ice context (where dated)';
+    const place=data?.region?.name||'Selected Midwest wetland region';
+    const when=data?.generatedAt||null;
+    if(!data||data.error||!fresh(when,now,120))
+      return make('waterfowl','unavailable','Freeze-line evidence unavailable','Current regional inputs are absent or stale. No migration conclusion is possible.','Use the full waterfowl tracker for independently dated surveys.',source,when,place);
+    const weather=data.weather,shift=data.habitatShift||{};
+    if(weather?.status!=='forecast'||!Number.isFinite(weather.longestFreezingRunHours)||!Number.isFinite(weather.forecastColdDegreeHours))
+      return make('waterfowl','unavailable','NWS freeze signal missing','A current, complete hourly forecast is needed before interpreting marsh-freeze pressure.','Retry forecast and inspect nearby wetland reports.',source,when,place);
+    const chart=shift.lakeChartStatus==='dated_official_chart';
+    if(shift.marshPressure==='high'||shift.marshPressure==='building'){
+      if(shift.status==='big_water_icing')
+        return make('waterfowl','check','Marsh freeze and big-water icing','The modeled cold exposure is significant and the reference large-water chart shows heavy ice. Actual birds may move to rivers or farther along the flyway.','Check official access and recent dated bird counts, not assumed concentrations.',source,when,place,'Wetland ice is not directly observed in this summary.');
+      const open=shift.status==='lake_refuge_possible'&&chart;
+      return make('waterfowl','check',open?'Shallow-marsh freeze, mapped open-water potential':'Marsh-freezing pressure is building',
+        'Forecast freezing: '+weather.longestFreezingRunHours+' consecutive hours, '+weather.forecastColdDegreeHours+' cold-degree hours. '+(open?'A NOAA lake chart identifies lower-ice conditions at a reference point.':'Actual marsh ice and bird concentrations remain unverified.'),
+        'Look for dated local counts and publicly accessible large water; do not infer duck numbers from weather.',source,when,place,
+        '72-hour forecast exposure, not an observed migration or confirmed marsh ice.');
+    }
+    return make('waterfowl','context','Limited marsh-freezing pressure in forecast','The coming 72 hours do not show a strong modeled shallow-marsh freeze. That does not indicate birds are absent.', 'Watch the next cold front and independent dated wetland observations.',source,when,place,'No regional bird count or migration probability is inferred.');
+  }
   function eagle(){
     return make('eagle','context','Plan habitat, not eagle sightings','Open-water feeding concentrations and aerial displays are different behaviors. Live weather alone does not confirm either is happening.','Choose a public viewing corridor, check access and weather, and look for dated observed counts.', 'NWS viewing weather + source-dated survey observations in the field tool',null,'Michigan / Upper Midwest');
   }
-  return {REGION_OPTIONS,ROCK_NAMES,ageMinutes,fresh,shed,maple,rock,eagle};
+  return {REGION_OPTIONS,ROCK_NAMES,ageMinutes,fresh,shed,maple,rock,waterfowl,eagle};
 });
