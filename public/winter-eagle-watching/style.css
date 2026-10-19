@@ -194,3 +194,19 @@
  #map .eagle-location-note{top:102px;right:8px;max-width:43%;font-size:10px}
  #map.eagle-vector-map .maplibregl-ctrl-top-right{top:52px}
 }
+
+/* Each viewing note is connected to its mapped dot, not a floating corner panel. */
+#map .eagle-map-overlay,#map .eagle-location-note{display:none!important}
+#map .maplibregl-popup.eagle-pin-popup{z-index:12;max-width:min(300px,82vw)!important}
+#map .eagle-pin-popup .maplibregl-popup-content{background:#fffef8;color:#214534;border:1px solid #c8d9c9;border-radius:12px;box-shadow:0 8px 27px rgba(18,45,31,.24);padding:14px 15px;max-height:min(290px,54vh);overflow-y:auto;overflow-wrap:anywhere}
+#map .eagle-pin-popup .maplibregl-popup-close-button{right:3px;top:2px;font-size:21px;min-width:33px;min-height:33px;color:#274936}
+#map .eagle-pin-card{display:grid;gap:6px;min-width:0;padding-right:10px}
+#map .eagle-pin-card strong{font-size:15px;line-height:1.2;color:#183d2d}
+#map .eagle-pin-card small{font-size:11px;color:#52745f}
+#map .eagle-pin-card p{font-size:12px;line-height:1.45;margin:4px 0;color:#385544}
+#map .eagle-pin-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:5px}
+#map .eagle-pin-links a{font-size:11px;font-weight:800;color:#245d3e;background:#eaf2e7;border:1px solid #c8ddc8;text-decoration:none;border-radius:7px;padding:7px 8px}
+#map .eagle-pin-links a:focus-visible{outline:3px solid #aa792f;outline-offset:2px}
+#map .native-map-glance{left:auto;bottom:auto;position:absolute;z-index:20;width:min(220px,65%);max-width:65%;padding:9px 11px;box-sizing:border-box;transform:translate(-50%,calc(-100% - 19px)) scale(var(--inverse-map-scale,1));transform-origin:center bottom}
+#map .native-map-glance.below{transform:translate(-50%,18px) scale(var(--inverse-map-scale,1));transform-origin:center top}
+@media(max-width:670px){#map .eagle-pin-popup .maplibregl-popup-content{max-height:220px;padding:11px 12px}#map .eagle-pin-card strong{font-size:13px}#map .eagle-pin-card p{font-size:11px}}

@@ -71,6 +71,34 @@
       positionNote.hidden=false;positionNote.textContent="Your position (approx.) · "+miles+" mi straight-line to selected overlook. Not driving distance.";
     }
   }
+
+  // MapLibre popup follows the actual map coordinate, unlike the fixed overlay.
+  let popup=null,showSelectedPopup=false;
+  function clearPopup(){const old=popup;popup=null;if(old)old.remove()}
+  function markerPopup(){
+    if(!ready||!map||!showSelectedPopup||typeof MapGL.Popup!=="function")return;
+    const s=byId.get(selectedId);
+    if(!s||!visible.some(v=>v.id===s.id)){clearPopup();return}
+    clearPopup();
+    const card=document.createElement("div");card.className="eagle-pin-card";
+    const heading=document.createElement("strong");heading.textContent=s.name;
+    const where=document.createElement("small");where.textContent=s.city+", "+s.state+" · public viewing site";
+    const guidance=document.createElement("p");guidance.textContent=s.look||s.water||"Check posted access information before visiting.";
+    card.append(heading,where,guidance);
+    if(userLocation){
+      const dist=document.createElement("small");
+      dist.textContent=Math.round(milesBetween({lat:userLocation.latitude,lon:userLocation.longitude},s))+" straight-line miles from your location";
+      card.append(dist);
+    }
+    const links=document.createElement("div");links.className="eagle-pin-links";
+    const details=document.createElement("a");details.href="#location-details";details.textContent="Full spot guide ↓";
+    const official=document.createElement("a");official.href=s.source||"#location-details";official.textContent="Official access ↗";official.target="_blank";official.rel="noopener";
+    links.append(details,official);card.append(links);
+    const active=new MapGL.Popup({closeButton:true,closeOnClick:false,className:"eagle-pin-popup",offset:22,maxWidth:"300px"})
+      .setLngLat([s.lon,s.lat]).setDOMContent(card).addTo(map);
+    popup=active;
+    if(typeof active.on==="function")active.on("close",()=>{if(popup===active){popup=null;showSelectedPopup=false}});
+  }
   function featureCollection(){
     return placeData(visible.map(s=>({...s,selected:s.id===selectedId})));
   }
@@ -87,16 +115,16 @@
     },[[180,85],[-180,-85]]);
   }
   function fitAll(){
-    if(!ready||!map)return;
+    if(!ready||!map||!visible.length)return;
     const b=allBounds();
     if(b[0][0]===b[1][0]){map.easeTo({center:b[0],zoom:8});return}
     map.fitBounds(b,{padding:{top:54,bottom:126,left:36,right:36},maxZoom:8,duration:500});
   }
   function centerSelected(){
     if(!ready||!map)return;
-    const s=byId.get(selectedId);if(s)map.easeTo({center:[s.lon,s.lat],zoom:Math.max(8.3,map.getZoom()),duration:550});
+    const s=byId.get(selectedId);if(s)map.easeTo({center:[s.lon,s.lat],zoom:Math.max(8.3,map.getZoom()),offset:[0,70],duration:450});
   }
-  all.addEventListener("click",fitAll);focus.addEventListener("click",centerSelected);
+  all.addEventListener("click",()=>{showSelectedPopup=false;clearPopup();fitAll()});focus.addEventListener("click",()=>{showSelectedPopup=true;centerSelected();markerPopup()});
   near.addEventListener("click",()=>{if(typeof opts.onLocate==="function")opts.onLocate()});
   theme.addEventListener("click",()=>{
     if(!ready||provider!=="carto"||!map||typeof map.setStyle!=="function")return;
@@ -138,11 +166,11 @@
       layout:{"text-field":["get","number"],"text-size":11,"text-font":["Noto Sans Bold","Arial Unicode MS Bold"]},
       paint:{"text-color":"#ffffff"}});
     if(!handlersBound){
-    map.on("click","eagle-pin-halo",e=>{
-      const feature=e.features?.[0];const id=feature?.properties?.id,s=byId.get(id);
-      if(s)onSelect(s);
-    });
+    const tapPin=e=>{const id=e.features?.[0]?.properties?.id,s=byId.get(id);if(s)onSelect(s)};
+    map.on("click","eagle-pin-halo",tapPin);
+    map.on("click","eagle-pin-number",tapPin);
     map.on("click","eagle-cluster",e=>{
+      showSelectedPopup=false;clearPopup();
       const feature=e.features?.[0],clusterId=feature?.properties?.cluster_id;
       const source=map.getSource("eagle-sites");if(clusterId==null||!source)return;
       source.getClusterExpansionZoom(clusterId).then(z=>{
@@ -150,7 +178,7 @@
       }).catch(()=>{});
     });
     handlersBound=true;
-    for(const id of ["eagle-pin-halo","eagle-cluster"]){
+    for(const id of ["eagle-pin-halo","eagle-pin-number","eagle-cluster"]){
       map.on("mouseenter",id,()=>{map.getCanvas().style.cursor="pointer"});
       map.on("mouseleave",id,()=>{map.getCanvas().style.cursor=""});
     }
@@ -160,13 +188,13 @@
   function stopTimer(){if(loadTimer){clearTimeout(loadTimer);loadTimer=null}}
   function failNative(){
     if(retired)return;
-    stopTimer();ready=false;
+    clearPopup();stopTimer();ready=false;
     if(map){map.remove();map=null}
     if(caption)caption.textContent="Basemap unavailable. Using the accessible local reference map and location list.";
     if(typeof opts.onFatal==="function"){retired=true;opts.onFatal()}
   }
   function degrade(reason){
-    if(failedOver||retired)return;failedOver=true;stopTimer();
+    if(failedOver||retired)return;failedOver=true;clearPopup();stopTimer();
     if(map){map.remove();map=null}
     ready=false;provider="openfreemap";key="";activeStyle="day";theme.hidden=true;
     if(caption)caption.textContent="OpenFreeMap vector map (CARTO temporarily unavailable). Zoom, pan and select public viewing spots.";
@@ -183,7 +211,7 @@
        attributionControl:false,dragRotate:false,pitchWithRotate:false,
        transformRequest:(url)=>({url:isCarto?cartoResourceUrl(url,key):url})
       });
-    }catch(err){if(isCarto){degrade("CARTO initialization failed");return}if(caption)caption.textContent="Interactive map unavailable. Use the location list and directions below.";return}
+    }catch(err){if(isCarto)degrade("CARTO initialization failed");else failNative();return}
     map=instance;
     theme.hidden=!isCarto;
     map.addControl(new MapGL.NavigationControl({showCompass:false,visualizePitch:false}),"top-right");
@@ -197,7 +225,7 @@
     });
     instance.on("style.load",()=>{
       if(retired||map!==instance||!ready)return;
-      try{addSiteLayers();redraw()}catch{if(isCarto)degrade("CARTO restyle failed");else failNative()}
+      try{addSiteLayers();redraw();markerPopup()}catch{if(isCarto)degrade("CARTO restyle failed");else failNative()}
     });
     instance.on("load",()=>{
       if(retired||map!==instance)return;
@@ -205,26 +233,28 @@
       try{
        addSiteLayers();ready=true;redraw();
        if(caption)caption.textContent=(isCarto?"CARTO Voyager":"OpenFreeMap Liberty")+" vector map · zoom, drag or tap numbered eagle watching locations. © OpenStreetMap contributors"+(isCarto?", © CARTO":", OpenMapTiles")+".";
-       if(!focusedOnce&&incomingDeepLink&&byId.has(incomingDeepLink)){focusedOnce=true;centerSelected()}
-       else fitAll();
+       if(!focusedOnce&&incomingDeepLink&&byId.has(incomingDeepLink)){focusedOnce=true;showSelectedPopup=true;centerSelected();markerPopup()}
+       else{fitAll();markerPopup()}
       }catch(err){if(isCarto)degrade("Map layer setup failed");else failNative()}
     });
   }
   function select(s){
     if(!s||!byId.has(s.id))return;
     const changed=selectedId!==s.id;selectedId=s.id;latestFocus=s.id;updateOverlay();redraw();
-    if(changed&&ready)centerSelected();
+    if(ready){showSelectedPopup=true;if(changed)centerSelected();markerPopup()}
   }
   function showUserLocation(coords){
     if(retired||!coords||!Number.isFinite(coords.latitude)||!Number.isFinite(coords.longitude))return;
     if(Math.abs(coords.latitude)>90||Math.abs(coords.longitude)>180)return;
     userLocation={latitude:coords.latitude,longitude:coords.longitude};
-    updateOverlay();if(ready){try{addUserLocation()}catch{}}
+    updateOverlay();if(ready){try{addUserLocation()}catch{}markerPopup()}
   }
   function filter(matching){
     const set=new Set((matching||[]).map(s=>s.id));
     visible=[...byId.values()].filter(s=>set.has(s.id));
     redraw();
+    if(!visible.some(s=>s.id===selectedId)){showSelectedPopup=false;clearPopup()}
+    else if(showSelectedPopup)markerPopup();
     if(ready&&visible.length)fitAll();
   }
   updateOverlay();
@@ -238,7 +268,7 @@
        provider="carto";key=cfg.key;load(cartoResourceUrl(CARTO_STYLE,key),true);
      }else load(FALLBACK_STYLE,false);
    }).catch(()=>{if(!retired)load(FALLBACK_STYLE,false)});
-  return {select,filter,fitAll,focus:centerSelected,showUserLocation,getProvider:()=>provider,dispose:()=>{retired=true;stopTimer();if(map)map.remove()}};
+  return {select,filter,fitAll,focus:centerSelected,showUserLocation,getProvider:()=>provider,dispose:()=>{retired=true;stopTimer();clearPopup();if(map)map.remove()}};
  }
  return {init,cartoResourceUrl,placeData,CARTO_STYLE,CARTO_DARK_STYLE,FALLBACK_STYLE};
 });
