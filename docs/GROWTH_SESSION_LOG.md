@@ -1,3 +1,11 @@
+## Holiday Travel evergreen calendar — October 19, 2026
+
+- **Owner direction:** The Holiday Travel Day Picker must not become a stale "2026" page each January. Keep the canonical URL and search title evergreen. Calculate every actual Thanksgiving/Christmas date per chosen travel year.
+- **Implementation:** Browser JavaScript now chooses the next upcoming occurrence by default (retains post-holiday return days), offers the current calendar year plus three forward years, adapts the Christmas driving pattern to the real weekday for that year, and recalculates all 11/13 day rankings. Every date card includes the year. The initial non-JavaScript HTML no longer hardcodes the current holiday date.
+- **Source integrity:** The 2025 AAA/TSA/BTS comparisons and Oct 12 2026 EIA sample do *not* update themselves. Source dates are preserved, and the page explicitly warns that selected-year model rankings and fuel estimates are not actual live data.
+- **Verification:** Tests added for calendar rollover in December/January, correct 2027–2029 holiday weekdays, year-selector changes, and historical-data labeling. Full repository CI and production deployment require checking before release; performance and revenue uplift remain unverified.
+- **Exactly one next action:** Validate the feature branch via `npm run verify:all`, then merge only if green and verify production deployment.
+
 ## Holiday Travel Day Picker — October 19, 2026
 
 - **Owner intent:** Build one canonical national Thanksgiving/Christmas departure-day decision tool at `/holiday-travel/`, flying/driving modes, source-traced numerical claims, mobile-first JavaScript interaction, no fares or booking.
