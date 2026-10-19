@@ -22,6 +22,7 @@
     "priorityThreshold": 85
   },
   "tools": [
+    {"id":"michigan-ice-caves","name":"Michigan Ice Caves & Frozen Waterfalls","canonical":"https://chrisizworski.com/michigan-ice-caves/","aliases":[],"kind":"flagship-live","cluster":"winter-water","primaryIntent":"Are Michigan ice caves formed and is the viewing trip worth planning?","seasons":[11,12,1,2,3,4],"geographies":["michigan-statewide"],"personas":["winter-hiker","photographer","trip-planner"],"networkRole":"destination","searchTreatment":{"status":"active"},"searchEvidence":{"status":"preseason"}},
     {
       "id": "trout-report",
       "name": "Michigan Trout Report",
@@ -3829,6 +3830,9 @@
     }
   ],
   "relationships": [
+    {"from":"michigan-ice-caves","to":"snowmobile","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Regional winter trip context does not create access to curtains."},
+    {"from":"michigan-ice-caves","to":"michigan-snow-totals","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Check snowfall context for winter access and the drive."},
+    {"from":"michigan-ice-caves","to":"michigan-ice","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Separate lake-ice and cold context from confirmed land-based curtain viewing."},
     {
       "from": "fall-color",
       "to": "aurora",

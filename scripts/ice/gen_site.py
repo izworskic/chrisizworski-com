@@ -11,6 +11,7 @@ OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice
 # Moved forward 2026-10-06: root and regional pages gained publisher references to the
 # existing canonical Person entity. This identity metadata changed on those seven pages.
 ICE_ROOT_DATE_MODIFIED = "2026-10-06"
+ICE_HUB_DATE_MODIFIED = "2026-10-19" # Land-based ice-viewing handoff added.
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
@@ -249,7 +250,7 @@ def build_index():
          "name": "Michigan Ice Report: Accumulated Cold and Great Lakes Ice Cover",
          "description": "Live Michigan ice conditions across six waters using accumulated freezing degree days, "
                         "ten-year station normals, and a 54-year Great Lakes ice climatology.",
-         "dateModified": ICE_ROOT_DATE_MODIFIED,
+         "dateModified": ICE_HUB_DATE_MODIFIED,
          "inLanguage": "en-US", "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", url)]),
@@ -334,6 +335,7 @@ def build_index():
         '<p>Each page states what is observed and what is only inferred.</p></div>'
         '<div class="seasonal-water-picker__links">' + water_picker + '</div></section>'
 
+        + '<p class="note"><a href="/michigan-ice-caves/">Michigan ice caves &amp; frozen waterfalls: are they formed yet?</a> Compare Eben, mainland Grand Island views and winter waterfalls; weather is separate from confirmed formation.</p>'
         + top_stats() +
         '<p class="lede">Ice is not weather, it is history. A cold morning tells you almost nothing. What matters is '
         'how much cold has accumulated since freeze up, and whether this winter is running ahead of or behind normal. '

@@ -1,37 +1,11 @@
 'use strict';
 const {RESORTS,assemble,rank}=require('../lib/michigan-ski/engine');
 const {fetchOfficial,SOURCES}=require('../lib/michigan-ski/official-reports');
-const UA='ChrisIzworski Michigan Ski Decision Engine (https://chrisizworski.com/michigan-ski-hills/; contact via website)';
 const CACHE_MS=20*60*1000,FAILED_CACHE_MS=2*60*1000;
 let cached=null,expires=0,inFlight=null;
-const pointCache=new Map();
 function iso(ms){return new Date(ms).toISOString().replace(/\.\d{3}Z$/,'Z');}
-async function json(url,timeout=6000){
-  const parsed=new URL(url);
-  if(!['api.weather.gov','mesonet.agron.iastate.edu'].includes(parsed.hostname))throw Error('UNTRUSTED_SOURCE');
-  const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),timeout);
-  try{
-    const response=await fetch(url,{signal:ac.signal,headers:{Accept:'application/geo+json, application/json', 'User-Agent':UA}});
-    if(!response.ok)throw Error('UPSTREAM_'+response.status);
-    return await response.json();
-  } finally {clearTimeout(timer);}
-}
-async function forResort(r){
-  try{
-    let info=pointCache.get(r.slug);
-    if(!info||Date.now()-info.at>24*3600000){
-      const p=await json('https://api.weather.gov/points/'+r.lat+','+r.lon,5500);
-      const properties=p.properties||{};
-      if(!properties.forecastGridData)throw Error('NO_GRID_ENDPOINT');
-      info={at:Date.now(),forecastGridData:properties.forecastGridData,
-        forecastZone:properties.forecastZone,county:properties.county,fireWeatherZone:properties.fireWeatherZone};
-      pointCache.set(r.slug,info);
-    }
-    const grid=await json(info.forecastGridData,7000);
-    return {zones:{forecastZone:info.forecastZone,county:info.county,fireWeatherZone:info.fireWeatherZone},
-      grid,updatedAt:grid.properties?.updateTime||null};
-  }catch(e){return {error:String(e.message||e).slice(0,80),zones:pointCache.get(r.slug)||{},grid:null,updatedAt:null};}
-}
+const {fetchJson:json,gridAt}=require('../lib/nws-grid.cjs');
+async function forResort(r){return gridAt(r);}
 function parseReport(r){
   const p=r.properties||r,lat=Number(p.lat),lon=Number(p.lon),inches=Number.parseFloat(p.magnitude);
   const t=Date.parse(p.valid);
