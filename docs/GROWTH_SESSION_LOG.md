@@ -1,3 +1,11 @@
+# Tool Quality Factory v1 — October 19, 2026
+
+- **User direction:** Make HTML/JavaScript search readiness repeatable across many separately owned web tools, integrated into GitHub rather than one-off edits. Existing growth playbook, creator attribution, tool-network registry, product experience contracts, and independent source ownership remain authoritative.
+- **Change:** Created a zero-dependency initial-HTML audit engine with deterministic error/warning findings and JSON output, three pilot pages (Michigan Aurora, Niagara Border Crossing, Holiday Travel), a Node regression-test suite, documentation and a reusable GitHub Actions workflow for tool repositories. Workflow audits without Vercel builds or third-party paid services; no automatic changes to product content or metadata.
+- **Scope and truth:** This is a source-response readiness screen, not a full rendered-browser/JavaScript usability test, Google indexing confirmation, site-traffic forecast, or Search Console measurement. Word-count and snippet-length guidance is advisory, not Google's ranking rule.
+- **Validation/release:** Source changes are on feature/tool-quality-factory-v1 only. Node tests are committed but have not run in CI; full repository verification, PR creation, merge, deployment and production validation have NOT happened. A direct repository clone is unavailable from this runtime. No GSC, GA4, AdSense, or uplift readings were obtained.
+- **Exactly one next action:** Run the standalone Node regression tests and pilot audit in a CI environment without initiating a production build, review any failures, and only then consider PR/release.
+
 ## Holiday Travel airport selection — October 19, 2026
 
 - **Owner-reported defect:** Changing departure airport updated no meaningful figures for almost all airports. Only ORD had a hardcoded historical rate; every other airport silently inherited an identical U.S. baseline. The dates were national TSA rankings; user understandably expected airport data to respond to selection.
