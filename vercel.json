@@ -692,6 +692,14 @@
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/"
     },
     {
+      "source": "/national-tools/dark-sky/:slug(headlands|keweenaw|lawless|beaver|lake-hudson|negwegon|port-crescent|rockport|thompsons-harbor|wilderness|newport|voyageurs|bwca|middlefork|geauga|beverly|cherry|quetico|superior-on|killarney|point-pelee|bruce|fathom|torrance)/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/dark-sky/:slug(headlands|keweenaw|lawless|beaver|lake-hudson|negwegon|port-crescent|rockport|thompsons-harbor|wilderness|newport|voyageurs|bwca|middlefork|geauga|beverly|cherry|quetico|superior-on|killarney|point-pelee|bruce|fathom|torrance)",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/:slug/index.html"
+    },
+    {
       "source": "/national-tools/dark-sky/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/:path*"
     },
