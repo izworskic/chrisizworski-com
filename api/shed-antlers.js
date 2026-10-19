@@ -1,5 +1,6 @@
 'use strict';
 const E=require('../lib/shed-window.cjs');
+const RETREAT=require('../lib/shed-snow-retreat.cjs');
 const NWS='https://api.weather.gov';
 const UA='ShedAntlerSearchWindow/1.0 (+https://chrisizworski.com/michigan-shed-antlers/; contact: https://chrisizworski.com/)';
 const SOURCES={
@@ -54,6 +55,14 @@ async function noaaSnow(site){
  }
 }
 
+async function modeledSnowHistory(site){
+ try{
+  const r=await fetch(RETREAT.sourceUrl(site),{headers:{Accept:'application/json','User-Agent':UA},signal:AbortSignal.timeout(6500)});
+  if(!r.ok)throw Error('History source unavailable');
+  return RETREAT.analyze(await r.json());
+ }catch{return RETREAT.missing('Recent model-depth history cannot be verified right now.');}
+}
+
 module.exports=async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
  res.setHeader('Content-Type','application/json; charset=utf-8');
@@ -66,7 +75,7 @@ module.exports=async function handler(req,res){
  if(!site)return res.status(400).json({error:'Unknown forecast location'});
  const season=E.phase();
  try{
-  const [forecast,snowAnalysis]=await Promise.all([nwsHourly(site),noaaSnow(site)]);
+  const [forecast,snowAnalysis,snowTrend]=await Promise.all([nwsHourly(site),noaaSnow(site),modeledSnowHistory(site)]);
   const daily=E.dailyFromHourly(forecast.periods);
   if(daily.length<3)throw new Error('Too few complete forecast days');
   return res.status(200).json({
@@ -74,7 +83,8 @@ module.exports=async function handler(req,res){
    forecastUpdatedAt:forecast.updatedAt,
    sources:{...SOURCES,nwsForecast:forecast.url},
    snowDepth:{...snowAnalysis,valueInches:null},
-   caveat:'NWS forecast is weather only. Snow on the ground must be checked locally. This does not predict antler shedding, deer location, or odds of finding a shed.'
+   snowTrend,
+   caveat:'NWS forecast is weather only. Open-Meteo model-history and NOAA current snow analysis are independent grids, never a measured field history. Snow on the ground must be checked locally. This does not predict antler shedding, deer location, or odds of finding a shed.'
   });
  }catch(err){
   return res.status(503).json({error:'NWS forecast unavailable',location:site,season,detail:'Do not infer field conditions from unavailable data.',sources:SOURCES});
