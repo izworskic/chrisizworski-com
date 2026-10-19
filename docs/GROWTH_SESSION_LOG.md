@@ -1,3 +1,11 @@
+## Michigan ice caves: HTML/JavaScript research continuation — October 19, 2026
+
+- **Owner direction:** Continue needed research and use interactive scripting with HTML. Interpreted “Java” as browser JavaScript. Continued on the existing `feature/michigan-ice-caves-2026` branch; original Phase 1 review boundary remains in place.
+- **Deliverable:** Added `docs/ICE_CAVES_INTERACTION_SPEC_2026.md` and linked it from the research report: coordinated cold/thaw/date exploration, up-to-three destination comparison, weekend/origin context, a schematic formation stepper and shareable choices. Native HTML plus JavaScript/inline SVG; dated report and access evidence remain separate from modeled weather. Includes stale/missing-data behavior, response-race protection, Back/Forward, touch/keyboard/reduced-motion paths and future acceptance cases.
+- **Additional evidence:** Reviewed the official township's 2024–2028 draft recreation plan, printed page 8. It confirms the roadside Alger listing and Wagner DNR identity but does not settle Alger permission/winter stopping or Wagner winter maintenance. Munising's NPS closure remains on the fetched official page. These sites' earlier conditions/exclusions remain unchanged. Primary MDN/W3C references support the browser interaction design; existing eagle SVG/stepper patterns were inspected for stack fit.
+- **Status/validation:** Documentation only; no visitor code, new provider, runtime URL, PR, merge or production deployment. Main remains at audited `e1151cf8`; prior research is on remote commit `e170a59c`. This update is validated for documentation diff, local links and source-reference consistency; no application behavior or performance result is claimed. No new GSC/GA4/AdSense metrics or search uplift available.
+- **Exactly one next action:** Review the report-led formation contract, GO roster and HTML/JavaScript interaction specification before Phase 2 implementation.
+
 ## Michigan ice caves: Phase 1 research only — October 19, 2026
 
 - **Owner scope:** Research the 2026–27 Michigan Ice Caves & Frozen Waterfalls Tracker, write `docs/ICE_CAVES_RESEARCH_2026.md`, then stop for review. One branch, `feature/michigan-ice-caves-2026`; no sibling winter builds, runtime changes, merge or deployment.

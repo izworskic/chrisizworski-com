@@ -315,4 +315,12 @@ All sources checked October 19, 2026 unless the probe table specifies an exact t
 
 Research and a documentation-only feature-branch change are the deliverables. No new API, visitor page, sitemap URL, runtime status, merge or deployment is authorised by completion of this phase. GSC/GA4/AdSense outcomes and numeric keyword volumes remain unavailable. The unresolved model/status-contract decision and site exclusions are explicit above.
 
-**Exactly one next action:** Chris reviews this report's report-led fallback, safety gates and destination GO/NO-GO decisions before Phase 2 begins.
+**Exactly one next action:** Chris reviews this report's report-led fallback, safety gates, destination GO/NO-GO decisions and the linked HTML/JavaScript specification before Phase 2 begins.
+
+## 11. Continued research and HTML/JavaScript direction — October 19
+
+Chris requested further needed research and interactive scripting alongside HTML. Interpret “Java” as **JavaScript** for browser interaction. The concrete [HTML/JavaScript interaction specification](ICE_CAVES_INTERACTION_SPEC_2026.md) now covers a linked cold/thaw timeline, date inspection, destination comparison, weekend/origin controls, a formation-explanation stepper and shareable choices. It specifies evidence states, browser-history behavior, mobile/keyboard access, reduced motion and later acceptance cases. This continues Phase 1; it does not claim a built or deployed interface.
+
+Additional primary-source access research checked the [Munising Township draft recreation plan for 2024–2028](https://www.munisingtownship.org/wp-content/uploads/2023/10/Draft-Recreation-Plan.pdf), printed page 8 (PDF page 10). It identifies Alger Falls as visible from M-28 and Wagner as a DNR scenic site, but does **not** establish Alger's current parcel manager/permission or a legal maintained winter stopping area. It also does not document Wagner's winter parking/trail maintenance. The document is a **draft**, not proof of adoption or current operations. These gaps therefore remain explicit; no destination is promoted to GO on that evidence. The current NPS waterfall page was also rechecked and still carries the Munising Falls trail closure.
+
+Implementation fit was checked against the existing vanilla-JavaScript SVG chart/stepper patterns in `public/winter-eagle-watching/app.js` and `flight-guide.js`, and primary MDN/W3C documentation linked in the specification. The proposed layer reuses the site's HTML and browser scripting conventions; it needs no Java service, frontend-framework migration or additional external data API. No runtime code or visitor URL changed in this research update.
