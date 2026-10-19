@@ -24,23 +24,59 @@
     btn.setAttribute('aria-pressed',String(iceReady && iceVisible));
     btn.textContent=iceReady ? (iceVisible ? 'NOAA ice overlay on':'NOAA ice overlay off') : 'NOAA overlay unavailable';
   }
+  // CARTO's 2026 key requirement is enforced even when a raster tile returns HTTP 200.
+  // The site's CARTO_BASEMAP_PUBLIC_KEY is intended for browser tile requests; never
+  // include private Vercel tokens or other map providers' secrets in this response.
+  var OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   function addTiles(url, fallback) {
     if (!map || !window.L) return;
     if (tiles) map.removeLayer(tiles);
-    tileErrors=0;
-    tiles = window.L.tileLayer(url,{maxZoom:16,subdomains:'abcd',attribution:fallback?'&copy; OpenStreetMap contributors':'&copy; OpenStreetMap contributors &copy; CARTO'});
-    tiles.on('tileload',function(){if(!fallback)mapMessage('CARTO geography map ready · no API key required','ready');});
-    tiles.on('tileerror',function(){
-      tileErrors+=1;
-      if (tileErrors>=3 && !fallbackStarted) {
-        fallbackStarted=true;
-        mapMessage('CARTO tiles unavailable. Switching to OpenStreetMap—no API key required.','fallback');
-        addTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png',true);
-      } else if (tileErrors>=3 && fallback) {
-        mapMessage('Map tiles unavailable on this connection. Official ice and weather text remain available.','error');
+    tileErrors = 0;
+    tiles = window.L.tileLayer(url, {
+      maxZoom: 16, subdomains: 'abcd',
+      attribution: fallback ? '&copy; OpenStreetMap contributors' : '&copy; OpenStreetMap contributors &copy; CARTO'
+    });
+    tiles.on('tileload', function () {
+      if (!fallback) mapMessage('CARTO Voyager basemap loaded · licensed key configured','ready');
+    });
+    tiles.on('tileerror', function () {
+      tileErrors += 1;
+      if (tileErrors < 3) return;
+      if (!fallback && !fallbackStarted) {
+        fallbackStarted = true;
+        mapMessage('CARTO tiles could not load. Using OpenStreetMap as a temporary fallback.','fallback');
+        addTiles(OSM_TILES, true);
+      } else if (fallback) {
+        mapMessage('Basemap tiles are unavailable on this connection. Forecast and NOAA text remain accessible.','error');
       }
     });
     tiles.addTo(map);
+  }
+  async function loadCartoBasemap() {
+    // Keep the published key in Vercel; fetch it from our own edge endpoint.
+    // Do not hardcode a key in the source or attempt a keyless CARTO tile URL.
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 8000);
+    try {
+      mapMessage('Connecting to the CARTO basemap using the site’s configured key…','pending');
+      var response = await fetch('/api/carto-basemap-config', {
+        method: 'GET', credentials: 'same-origin', signal: controller.signal
+      });
+      if (!response.ok) throw new Error('CARTO map configuration unavailable');
+      var config = await response.json();
+      if (!config || typeof config.key !== 'string' || !config.key.trim()) {
+        throw new Error('CARTO public basemap key is missing');
+      }
+      var tilesUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='
+        + encodeURIComponent(config.key.trim());
+      addTiles(tilesUrl, false);
+    } catch (error) {
+      fallbackStarted = true;
+      mapMessage('CARTO configuration unavailable. Showing OpenStreetMap until it returns.','fallback');
+      addTiles(OSM_TILES, true);
+    } finally {
+      clearTimeout(timer);
+    }
   }
   function addLandmarks() {
     if(!map||!window.L)return;
@@ -66,7 +102,7 @@
   }
   function setMapFailure() {
     el('mapPanel').classList.add('map-fail');
-    mapMessage('Interactive map unavailable. Use the official source links below. No API key is required.','error');
+    mapMessage('Interactive map unavailable. Use the official source links below.','error');
     text('iceContext', 'The interactive map is unavailable; no conditions are inferred from a missing layer.');
   }
   function drawIce() {
@@ -91,7 +127,7 @@
     if (!window.L || !el('map')) { setMapFailure(); return; }
     try {
       map = window.L.map('map', {scrollWheelZoom:false, attributionControl:true, zoomControl:true});
-      addTiles('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',false);
+      loadCartoBasemap();
       addLandmarks();
       map.fitBounds(BOUNDS,{padding:[20,20]});
       window.L.control.scale({imperial:true,metric:false}).addTo(map);
