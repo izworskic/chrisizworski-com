@@ -96,7 +96,13 @@ for (const [key, expected] of Object.entries(expectedCanonicals)) {
   if (pages[key].canonical !== expected) {
     failures.push(`${key}: canonical changed from ${expected} to ${pages[key].canonical || "missing"}`);
   }
-  if (!pages[key].title.includes("Chris Izworski")) failures.push(`${key}: title is missing Chris Izworski attribution`);
+  // Explicitly approved on Oct 19: keep this query-first aurora title exact.
+  // The Person identity, canonical profile link and visible byline must all remain.
+  const approvedAuroraTitle = key === "northernLights" &&
+    pages[key].title === "Northern Lights Michigan Tonight: Can You See Them?" &&
+    html.northernLights.includes('"@id": "https://chrisizworski.com/#person"') &&
+    html.northernLights.includes('Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>');
+  if (!pages[key].title.includes("Chris Izworski") && !approvedAuroraTitle) failures.push(`${key}: title is missing Chris Izworski attribution or verified approved aurora exception`);
   if (pages[key].titleCharacters > 60) failures.push(`${key}: title is likely to truncate at ${pages[key].titleCharacters} characters`);
   if (pages[key].descriptionCharacters < 120 || pages[key].descriptionCharacters > 160) {
     failures.push(`${key}: description is outside the 120-160 character benchmark at ${pages[key].descriptionCharacters}`);

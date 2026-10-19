@@ -9,7 +9,7 @@ const priorityPages = [
   ["public/soo-locks/index.html", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski"],
   ["public/great-lakes-freighter-tracking/index.html", "Great Lakes Ship Tracker Live Now | Chris Izworski"],
   ["public/fall-color/index.html", "Michigan Fall Color Map 2026: Live Peak Color Forecast"],
-  ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Live | Chris Izworski"],
+  ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Can You See Them?"],
   ["public/mackinac-bridge-live/index.html", "Mackinac Bridge Conditions Today: Live Status &amp; Wind"],
   ["public/mackinac-bridge-tolls/index.html", "Mackinac Bridge Toll Calculator 2026 | Chris Izworski"]
 ];

@@ -94,7 +94,7 @@ for `npm run verify:all`. On a shallow clone it skips the freshness step and say
 because freshness reads git history and reports false failures without it.
 
 `benchmark:seo` (`scripts/measure-discovery.mjs`) is the brand guardrail. It
-fails if the `<title>` of these pages does not contain "Chris Izworski":
+checks the title and creator identity for these priority pages (including the explicitly approved October 19 Michigan aurora query-first title, whose Person schema, canonical and visible byline must remain intact):
 
 - `/soo-locks/`
 - `/northern-lights-michigan/`
