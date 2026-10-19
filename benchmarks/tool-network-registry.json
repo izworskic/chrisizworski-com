@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-18",
+  "updated": "2026-10-19",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -22,7 +22,38 @@
     "priorityThreshold": 85
   },
   "tools": [
-    {"id":"michigan-ice-caves","name":"Michigan Ice Caves & Frozen Waterfalls","canonical":"https://chrisizworski.com/michigan-ice-caves/","aliases":[],"kind":"flagship-live","cluster":"winter-water","primaryIntent":"Are Michigan ice caves formed and is the viewing trip worth planning?","seasons":[11,12,1,2,3,4],"geographies":["michigan-statewide"],"personas":["winter-hiker","photographer","trip-planner"],"networkRole":"destination","searchTreatment":{"status":"active"},"searchEvidence":{"status":"preseason"}},
+    {
+      "id": "michigan-ice-caves",
+      "name": "Michigan Ice Caves & Frozen Waterfalls",
+      "canonical": "https://chrisizworski.com/michigan-ice-caves/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-water",
+      "primaryIntent": "Are Michigan ice caves formed and is the viewing trip worth planning?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-hiker",
+        "photographer",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "preseason"
+      }
+    },
     {
       "id": "trout-report",
       "name": "Michigan Trout Report",
@@ -3827,12 +3858,65 @@
         "status": "unknown",
         "note": "Owner requested omission repair and destination-specific depth. No traffic or revenue evidence claimed."
       }
+    },
+    {
+      "id": "holiday-travel",
+      "name": "Holiday Travel Day Picker",
+      "canonical": "https://chrisizworski.com/holiday-travel/",
+      "aliases": [],
+      "kind": "calendar-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "best day to travel Thanksgiving Christmas fly drive crowds traffic departure times",
+      "seasons": [
+        10,
+        11,
+        12,
+        1
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "air-traveler",
+        "road-trip-planner",
+        "family-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Compare holiday date and departure timing across driving and flying; distinct from live flight tracking and fare booking."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Research-supported utility proposal; no verified GSC query volume or uplift."
+      }
     }
   ],
   "relationships": [
-    {"from":"michigan-ice-caves","to":"snowmobile","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Regional winter trip context does not create access to curtains."},
-    {"from":"michigan-ice-caves","to":"michigan-snow-totals","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Check snowfall context for winter access and the drive."},
-    {"from":"michigan-ice-caves","to":"michigan-ice","type":"decision-next","strength":"strong","surface":"winter-ice-viewing","reason":"Separate lake-ice and cold context from confirmed land-based curtain viewing."},
+    {
+      "from": "michigan-ice-caves",
+      "to": "snowmobile",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-ice-viewing",
+      "reason": "Regional winter trip context does not create access to curtains."
+    },
+    {
+      "from": "michigan-ice-caves",
+      "to": "michigan-snow-totals",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-ice-viewing",
+      "reason": "Check snowfall context for winter access and the drive."
+    },
+    {
+      "from": "michigan-ice-caves",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-ice-viewing",
+      "reason": "Separate lake-ice and cold context from confirmed land-based curtain viewing."
+    },
     {
       "from": "fall-color",
       "to": "aurora",
@@ -5392,6 +5476,14 @@
       "strength": "strong",
       "surface": "individual-ferry",
       "reason": "Manitou is a distinct Sleeping Bear Dunes access and island-choice decision, with its own planner."
+    },
+    {
+      "from": "holiday-travel",
+      "to": "flight-tracker",
+      "type": "trip-continuation",
+      "strength": "optional",
+      "surface": "holiday-travel-tool",
+      "reason": "Once a holiday travel day is chosen, air travelers may track an actual flight using the separate live tool."
     }
   ],
   "cannibalizationGroups": [
