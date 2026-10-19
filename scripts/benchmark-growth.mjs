@@ -121,7 +121,7 @@ const pageChecks = [
   {
     file: "public/northern-lights-michigan/index.html",
     path: "/northern-lights-michigan/",
-    title: "Northern Lights Michigan Tonight: Live | Chris Izworski",
+    title: "Northern Lights Michigan Tonight: Can You See Them?",
     marker: 'id="aurora-static-answer"',
   },
   {
