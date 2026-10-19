@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preload" as="image" href="/assets/welland/photos/hero-algoberta.jpg" fetchpriority="high">
 <link rel="stylesheet" href="/assets/welland-canal.css?v=20261013-lock-handoff1">
+<link rel="stylesheet" href="/assets/welland-lock-sim.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ship Tracker Today: Live Ships and Lock Schedule","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-10-13","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Ship Tracker, Live Lock Map and Schedule Guide","url":"https://chrisizworski.com/welland-canal/","description":"Track recently reported ships on the Welland Canal live AIS map, check the official Seaway lock order of turn and choose shore viewing spots at Locks 3, 7 and 8.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
 </head>
 <body data-analytics-page="welland-canal">
@@ -197,6 +198,36 @@
 <p class="eyebrow">One route · eight locks</p><h2 id="lock-title">Follow a ship up or down the escarpment</h2>
 <p>Upbound ships travel south from Lake Ontario toward Lake Erie; downbound ships travel north. Each chamber changes a ship’s water level one step at a time. Lock markers identify the chambers; they do not indicate whether a ship is passing right now.</p><p><a class="lock-section__return" href="#ship-watch">Return to map and choose any numbered lock ↑</a></p>
 <div class="lock-note" id="lockFocus" role="status">Choose a lock for viewing guidance.</div>
+<div class="wl-sim" id="welland-lock-sim" data-no-ads>
+  <div class="wl-sim-head">
+    <h3>Ride a ship over the Niagara Escarpment</h3>
+    <p>A time-lapse of a whole Welland Canal transit: about 11 hours, 43.5 km and eight locks that lift a ship 99.5 m, the height of a 30-storey building, between Lake Ontario and Lake Erie. Start the climb, tap any lock to jump to it, and watch how tightly a Seaway-size ship fits.</p>
+  </div>
+  <div class="wl-bar">
+    <button type="button" class="wl-play" data-wl-play aria-pressed="false">Start the climb</button>
+    <div class="wl-seg" role="radiogroup" aria-label="Direction">
+      <label><input type="radio" name="wl-dir" value="up" checked>Upbound to Lake Erie</label>
+      <label><input type="radio" name="wl-dir" value="down">Downbound to Lake Ontario</label>
+    </div>
+    <label class="wl-pick">Ship <select name="wl-ship"><option value="max">Seaway-max laker</option><option value="saltie">Ocean saltie</option><option value="small">Small cargo ship</option><option value="thousand">1,000-footer</option></select></label>
+    <label class="wl-pick">Time-lapse <select name="wl-rate"><option value="9">11 h in about 75 s</option><option value="20">11 h in about 35 s</option><option value="4">Slow</option></select></label>
+    <button type="button" class="wl-ghost" data-wl-flight>Jump to the Thorold flight</button>
+  </div>
+  <div class="wl-stage"><svg data-wl-svg viewBox="0 0 1000 340" role="img" aria-label="Elevation profile of the Welland Canal from Lake Ontario to Lake Erie with the ship's position"></svg></div>
+  <div class="wl-read" aria-live="polite">
+    <div>Where<strong data-wl-lock></strong></div>
+    <div>Height<strong data-wl-height></strong></div>
+    <div>Trip clock<strong data-wl-clock></strong></div>
+  </div>
+  <p class="wl-say" data-wl-say aria-live="polite"></p>
+  <button type="button" class="wl-live" data-wl-live hidden></button>
+  <div class="wl-fit">
+    <h4>How tight is the fit?</h4>
+    <svg data-wl-fit viewBox="0 0 1000 150" role="img" aria-label="Plan view of a Welland lock chamber with the selected ship"></svg>
+    <p data-wl-fittext></p>
+  </div>
+</div>
+
 </div></section>
 <div class="wrap">
 <section id="watch-spots" class="section" aria-labelledby="watch-title">
@@ -257,6 +288,7 @@
 <footer class="site-footer"><div class="footer-inner"><span>Independent Welland Canal ship-watching guide. Not affiliated with the St. Lawrence Seaway Management Corporation. For shore viewing only; not for navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Updated October 13, 2026</span></div></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/welland-canal.js?v=20261013-lock-handoff1"></script>
+<script defer src="/assets/welland-lock-sim.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>

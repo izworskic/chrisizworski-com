@@ -69,3 +69,31 @@ test('both interactive modules are on their pages, loaded once, and free of em d
   const sooSec = soo.slice(soo.indexOf('id="soo-lock-sim"'), soo.indexOf('Navigation Season: When'));
   assert.ok(!nlSec.includes('—') && !sooSec.includes('—'));
 });
+
+const wlSrc = read('public/assets/welland-lock-sim.js');
+const wl = new Function('window', wlSrc.slice(wlSrc.indexOf('var ONTARIO'), wlSrc.indexOf('var state')) + ';return {LOCKS, SHIPS, CHAMBER, plan, ONTARIO, TOTAL_RISE};')({});
+
+test('Welland ride: eight locks in canal order, 99.5 m from Lake Ontario to Lake Erie', () => {
+  assert.equal(wl.LOCKS.length, 8);
+  for (let i = 1; i < 8; i++) assert.ok(wl.LOCKS[i].km > wl.LOCKS[i - 1].km, 'lock order');
+  assert.ok(wl.LOCKS[6].km < 15 && wl.LOCKS[7].km > 35, 'seven lift locks in the north, Lock 8 at Port Colborne');
+  const rise = wl.LOCKS[7].above - wl.ONTARIO;
+  assert.ok(Math.abs(rise - 99.5) < 0.01);
+  for (const l of wl.LOCKS.slice(0, 7)) assert.ok(l.lift >= 13 && l.lift <= 15, 'Seaway range 13 to 15 m');
+  assert.ok(wl.LOCKS[7].lift < 2, 'Lock 8 only regulates');
+});
+
+test('Welland ride: the trip clock is about 11 hours each way and only Seaway-size ships fit', () => {
+  for (const dir of ['up', 'down']) {
+    const t = wl.plan(dir);
+    assert.ok(Math.abs(t.total - 660) < 1, dir + ' total ' + t.total);
+    assert.equal(t.events.filter(e => e.kind === 'water').length, 8);
+    for (let i = 1; i < t.events.length; i++) assert.ok(Math.abs(t.events[i].t0 - (t.events[i - 1].t0 + t.events[i - 1].dur)) < 1e-6, 'contiguous');
+  }
+  for (const s of Object.values(wl.SHIPS)) assert.equal(s.fits, s.len <= 740 && s.beam <= 78, s.name);
+  assert.ok(wl.CHAMBER.len === 766 && wl.CHAMBER.beam === 80);
+  const html = read('public/welland-canal/index.html');
+  assert.equal((html.match(/id="welland-lock-sim"/g) || []).length, 1);
+  assert.equal((html.match(/src="\/assets\/welland-lock-sim\.js"/g) || []).length, 1);
+  assert.ok(!wlSrc.includes('—') && !read('public/assets/welland-lock-sim.css').includes('—'));
+});
