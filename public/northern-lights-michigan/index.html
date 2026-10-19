@@ -18,6 +18,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/aurora-sky-sim.css">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
 <script type="application/ld+json">{
@@ -50,7 +51,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-10-12",
+      "dateModified": "2026-10-19",
       "inLanguage": "en-US",
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
@@ -436,7 +437,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
   <span class="notification-note">Alerts work while this page is open.</span>
 </section>
 
-<nav class="forecast-nav" aria-label="Explore the aurora forecast"><a href="#regional-outlook">Compare regions</a><a href="#viewing-locations">Viewing map</a><a href="#aurora-guide">How to read this forecast</a></nav>
+<nav class="forecast-nav" aria-label="Explore the aurora forecast"><a href="#regional-outlook">Compare regions</a><a href="#viewing-locations">Viewing map</a><a href="#aurora-guide">How to read this forecast</a><a href="#aurora-sky-sim">Preview your sky</a></nav>
 
 <details class="forecast-guide" id="aurora-guide"><summary>How to read this Michigan aurora forecast</summary>
 <div class="static-answer" id="aurora-static-answer"><strong>Use this Michigan guide while the live NOAA verdict updates:</strong> Kp below 5 usually means low odds; Kp 5 to 6 favors dark northern Upper Peninsula locations; Kp 7 or higher can bring the aurora farther into the Lower Peninsula when skies are clear. Check cloud cover and the official NOAA watch before driving, and never treat a forecast as a visibility guarantee.</div>
@@ -533,6 +534,44 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
   <div class="oval-caption">Updated every 5 minutes. Green band shows current aurora oval position. Brighter = more active.</div>
 </div>
 
+<section class="sky-sim" id="aurora-sky-sim" aria-labelledby="sky-sim-title" data-no-ads>
+  <div class="sky-sim-head">
+    <h2 id="sky-sim-title">See what Kp looks like from your sky</h2>
+    <p>Kp is a number. This shows the picture: drag the Kp, pick your region and the conditions, and watch how high the aurora climbs over the northern horizon and whether your eyes or only your camera will catch it. It starts at tonight's forecast peak.</p>
+  </div>
+  <canvas role="img" aria-label="Animated northern horizon showing the aurora height and brightness for the chosen settings"></canvas>
+  <div class="sky-sim-read" aria-live="polite">
+    <p class="sky-sim-verdict" data-sim-verdict>Loading the sky</p>
+    <p class="sky-sim-detail" data-sim-detail></p>
+  </div>
+  <div class="sky-sim-controls">
+    <div>
+      <label for="sim-kp">Kp index <output data-sim-kp>5.0</output></label>
+      <input id="sim-kp" name="sim-kp" type="range" min="0" max="9" step="0.1" value="5">
+      <div class="sky-sim-scale" data-sim-scale aria-hidden="true"><span data-k="0">0</span><span data-k="1">1</span><span data-k="2">2</span><span data-k="3">3</span><span data-k="4">4</span><span data-k="5">G1</span><span data-k="6">G2</span><span data-k="7">G3</span><span data-k="8">G4</span><span data-k="9">G5</span></div>
+    </div>
+    <div>
+      <label for="sim-region">Where you are</label>
+      <select id="sim-region" name="sim-region">
+        <option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option>
+      </select>
+    </div>
+    <div>
+      <label for="sim-clouds">Cloud cover <output data-sim-clouds>0%</output></label>
+      <input id="sim-clouds" name="sim-clouds" type="range" min="0" max="100" step="5" value="0">
+    </div>
+    <div class="sky-sim-toggles">
+      <div class="sky-sim-seg" role="radiogroup" aria-label="How you are looking">
+        <label><input type="radio" name="sim-view" value="eye" checked><span>Your eyes</span></label>
+        <label><input type="radio" name="sim-view" value="camera"><span>Phone camera</span></label>
+      </div>
+      <label><input type="checkbox" name="sim-dark" checked> Dark spot away from town</label>
+      <label><input type="checkbox" name="sim-moon"> Bright moon up</label>
+      <button type="button" class="sky-sim-tonight" data-sim-tonight hidden>Use tonight's forecast peak</button>
+    </div>
+  </div>
+  <p class="sky-sim-note">How it is drawn: the aurora oval's southern edge moves toward Michigan as Kp rises, and curtains glow from about 110 to 300 km up, so plain geometry gives how far above your horizon they appear; brightness fades with distance from the oval. It illustrates the forecast. Real nights vary with the solar wind, the hour and local sky.</p>
+</section>
 <h2 class="sh">The Kp Scale</h2>
 <p>The Kp index measures geomagnetic disturbance on a 0 to 9 scale. Higher Kp means the aurora oval has expanded south. The current peak forecast Kp is highlighted below.</p>
 <div class="kp-scale" id="kpScale">
@@ -1392,5 +1431,6 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 <aside id="national-aurora-handoff" style="margin:32px 0 8px;padding:18px 20px;border:1px solid #d7ded9;border-radius:6px;background:#f7faf8"><strong>Watching from outside Michigan?</strong><p style="margin:6px 0 0">Use the <a href="/national-tools/aurora/">U.S. Northern Lights forecast</a> for live sky conditions, or choose a state-specific guide with local viewing spots, seasonal hours and regional Kp planning benchmarks:</p><nav aria-label="Northern lights forecasts in other states" style="display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:10px;font:600 14px/1.8 system-ui,sans-serif"><a href="/national-tools/aurora/montana/">Montana northern lights</a><a href="/national-tools/aurora/minnesota/">Minnesota northern lights</a><a href="/national-tools/aurora/north-dakota/">North Dakota northern lights</a><a href="/national-tools/aurora/maine/">Maine northern lights</a><a href="/national-tools/aurora/alaska/">Alaska northern lights</a></nav></aside>
+<script defer src="/assets/aurora-sky-sim.js"></script>
 <footer class="seo-identity-credit" style="padding:1rem;text-align:center;color:inherit"><span class="seo-author-credit" style="display:inline-block;margin-inline-start:.6rem;font-size:.8rem;line-height:1.5;opacity:.76">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer></body>
 </html>
