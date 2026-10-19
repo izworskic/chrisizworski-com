@@ -1,0 +1,40 @@
+name: Ferry destination browser smoke
+on:
+  pull_request:
+    paths:
+      - 'data/ferry-planners.json'
+      - 'scripts/generate-ferry-planners.mjs'
+      - 'scripts/ferry-browser-smoke.cjs'
+      - 'public/assets/ferry-*.js'
+      - 'public/assets/ferry-*.css'
+      - 'public/assets/great-lakes-ferry*'
+      - '.github/workflows/ferry-experience-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ferry-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated pinned browser tooling
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ferry-browser" --ignore-scripts --no-package-lock playwright@1.56.1
+          node "$RUNNER_TEMP/ferry-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Check nine individual planners at phone and desktop widths
+        env:
+          FERRY_QA_OUTPUT: ferry-browser-qa
+        run: FERRY_PLAYWRIGHT_MODULE="$RUNNER_TEMP/ferry-browser/node_modules/playwright" node scripts/ferry-browser-smoke.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ferry-browser-qa
+          path: ferry-browser-qa/
+          retention-days: 7

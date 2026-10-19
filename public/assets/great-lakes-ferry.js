@@ -15,6 +15,7 @@
   if(config.note)$("individual-note").textContent=config.note;
   const dateIn=(date,start,end)=>date>=start&&date<=end;
   function season(date){
+    if(config.id==="manitou")return{state:date.slice(0,4)==="2026"?"no":"unknown",text:date.slice(0,4)==="2026"?"No regular ferry service to North or South Manitou in 2026. NPS dock construction prevents service. No current fare or sailing is offered.":"Manitou ferry restart, timetable and fares are not confirmed here. NPS expects dock reopening in 2027; confirm with NPS and the ferry operator."};
     if(!/^2026-\d{2}-\d{2}$/.test(date))return{state:"unknown",text:"This tool currently has verified 2026 reference information only. For another year, check the operator before traveling."};
     if(config.id==="toronto"){return{state:"yes",text:date>="2026-10-14"?"Winter service: Ward’s Island only on the city's published winter schedule; Centre and Hanlan’s routes are seasonal.":"Toronto Islands summer routes operate seasonally; check the city’s exact sailing calendar."}};
     if(config.id==="pelee"){
@@ -86,7 +87,9 @@
   if(weatherHost){
     const supported=new Set(["put-in-bay","lake-express","ss-badger","isle-royale","beaver"]);
     const official=config.currency==="CAD"?"https://weather.gc.ca/marine/":"https://www.weather.gov/marine/";
-    if(supported.has(config.id)&&typeof fetch==="function"){
+    if(config.id==="manitou"){
+      weatherHost.innerHTML='<h3>Access comes first</h3><p class="fine">Regular ferry service is suspended for 2026. Check the NPS access notice and ferry operator before considering weather for a future crossing.</p>';
+    }else if(supported.has(config.id)&&typeof fetch==="function"){
       weatherHost.innerHTML='<h3>Near-port wind outlook</h3><p class="fine">Loading NWS conditions near the U.S. mainland terminal…</p>';
       fetch("/api/great-lakes-ferry-conditions?id="+encodeURIComponent(config.id),{headers:{Accept:"application/json"}})
       .then(r=>{if(!r.ok)throw Error("Forecast unavailable");return r.json()})

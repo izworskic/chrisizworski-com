@@ -1,0 +1,1680 @@
+{
+  "beaver": {
+    "id": "beaver",
+    "path": "beaver-island-ferry",
+    "name": "Beaver Island Ferry Planner",
+    "lake": "Lake Michigan",
+    "route": "Charlevoix ↔ St. James, Beaver Island, Michigan",
+    "headline": "Plan the Beaver Island boat and return crossing",
+    "intro": "A northern Lake Michigan island trip is a calendar decision. See passenger and standard vehicle fares, sailing-season variability and why car reservations matter.",
+    "duration": "about 2 hours",
+    "portA": "Charlevoix",
+    "portB": "Beaver Island",
+    "currency": "USD",
+    "childLabel": "Children ages 5–12",
+    "notes": [
+      "Beaver Island Boat Company publishes a date-by-date 2026 calendar with one to four departures depending on the day. There is no safe single 'daily ferry time'.",
+      "All vehicles and trailers require reservations; passenger reservations are generally not required.",
+      "Vehicle quote below covers only a standard vehicle under 7 ft 6 in high and no more than 16 ft long. Oversize cars, trailers, bikes and kayaks have separate published rates."
+    ],
+    "steps": [
+      "Open the dated sailing calendar to identify the actual Charlevoix boat for your travel date.",
+      "Decide whether to take a standard-size car or arrange island transport; reserve all vehicles.",
+      "Verify the return boat, particularly in fall when departures are less frequent."
+    ],
+    "options": [
+      {
+        "id": "beaver",
+        "name": "Beaver Island Boat Company",
+        "description": "2026 published standard passenger and vehicle fares; standard-size vehicle only.",
+        "tripTime": "roughly 2 hours",
+        "pricing": {
+          "adultOW": 33.5,
+          "adultRT": 67,
+          "childOW": 21,
+          "childRT": 42,
+          "vehicleOW": 110,
+          "vehicleRT": 220
+        },
+        "notice": "Small children ages 4 and under sail free; senior promotional travel periods and ticket policies are separate."
+      }
+    ],
+    "sources": [
+      [
+        "Beaver Island date-specific ferry schedules",
+        "https://www.bibco.com/ferry-schedules/"
+      ],
+      [
+        "Beaver Island 2026 rates and vehicle rules",
+        "https://www.bibco.com/know-before-you-go/rates/"
+      ]
+    ],
+    "meta": "Plan Charlevoix to Beaver Island by ferry: 2026 adult and child fares, standard-car pricing, vehicle reservations and exact sailing-date calendar.",
+    "experience": {
+      "accent": "#2b7466",
+      "kicker": "Charlevoix → St. James · Northern Lake Michigan",
+      "plannerTitle": "Build a Beaver Island visit that fits the boats",
+      "question": "A harbor day or time to explore the island?",
+      "answer": "The crossing takes about two hours each way. A day trip needs a usable return; a longer visit also needs a plan for getting beyond St. James.",
+      "photo": {
+        "url": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/iotd/2026/america%E2%80%99s-emerald-isle/beaverisland_oli2_20240802_lrg.jpg",
+        "author": "NASA Earth Observatory / Wanmei Liang, USGS Landsat data",
+        "license": "NASA Earth imagery",
+        "source": "https://science.nasa.gov/earth/earth-observatory/americas-emerald-isle/",
+        "licenseUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+        "caption": "Beaver Island and its neighbors, Landsat 9, August 2, 2024. Satellite image; not a current conditions view."
+      },
+      "routes": [
+        {
+          "id": "charlevoix",
+          "name": "Charlevoix → St. James",
+          "a": {
+            "name": "Charlevoix",
+            "lat": 45.32,
+            "lon": -85.26,
+            "address": "103 Bridge Park Drive, Charlevoix, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "St. James / Beaver Island",
+            "lat": 45.747,
+            "lon": -85.522,
+            "address": "Beaver Island Boat Company Dock, St. James, MI",
+            "zone": "America/Detroit"
+          },
+          "minutes": 120,
+          "why": "Two hours on the lake each way. Vehicle space and passenger tickets follow different rules.",
+          "buffer": 60,
+          "bufferKind": "operator",
+          "reverse": true
+        }
+      ],
+      "decisions": [
+        [
+          "Passengers are first-come",
+          "The company does not take passenger reservations. Arrive early enough to buy tickets, handle bags and park."
+        ],
+        [
+          "Vehicle space is separate",
+          "Reserve a car well ahead. The operator requires earlier check-in for vehicles than the basic passenger allowance."
+        ],
+        [
+          "Watch the time ashore",
+          "Four hours of round-trip sailing can leave a short island visit. Enter two real sailings and see the remaining window."
+        ]
+      ],
+      "guide": [
+        [
+          "A day around St. James",
+          "Keep the plan close to the arrival harbor unless you have confirmed an island tour or transport. The whole island will not fit into a short gap between boats."
+        ],
+        [
+          "Staying overnight",
+          "Arrange lodging and mainland overnight parking. The parking shuttle is for drivers; drop passengers and luggage at the dock first."
+        ],
+        [
+          "Exploring beyond the harbor",
+          "Choose a rental, tour or your own reserved vehicle before you arrive. Match what you carry to the operator’s luggage and freight categories."
+        ]
+      ],
+      "checklist": [
+        "Check that both boats run on your chosen dates",
+        "Reserve vehicle space if taking a car",
+        "Arrange overnight parking if leaving the car",
+        "Confirm island transport for destinations beyond St. James"
+      ],
+      "extraSources": [
+        [
+          "Beaver Island passenger FAQ and parking",
+          "https://www.bibco.com/know-before-you-go/frequently-asked-questions/"
+        ],
+        [
+          "Beaver Island vehicle reservations",
+          "https://www.bibco.com/know-before-you-go/reservations/"
+        ],
+        [
+          "Beaver Island dock addresses",
+          "https://www.bibco.com/know-before-you-go/dock-location-and-weather/"
+        ]
+      ],
+      "faq": [
+        [
+          "Can I reserve seats for the family?",
+          "The operator says passenger travel is first-come, first-served rather than reserved. Vehicle transport does require separate arrangements."
+        ],
+        [
+          "How early should I check in?",
+          "The passenger FAQ asks for at least an hour. Vehicle reservations require at least 90 minutes, with additional time for some racks or freight situations. The timeline adjusts its allowance when a vehicle is selected."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "put-in-bay": {
+    "id": "put-in-bay",
+    "path": "put-in-bay-ferry",
+    "name": "Put-in-Bay Ferry Planner",
+    "lake": "Lake Erie",
+    "route": "Port Clinton or Catawba → South Bass Island, Ohio",
+    "headline": "Which Put-in-Bay ferry should you take?",
+    "intro": "Compare Miller Ferry and Jet Express by price, vehicle access and island arrival dock. Choose the right ferry for the kind of visit you want.",
+    "duration": "18–30 min",
+    "portA": "Catawba / Port Clinton",
+    "portB": "South Bass Island",
+    "currency": "USD",
+    "childLabel": "Children ages 6–11",
+    "vehicleAllowed": true,
+    "season": null,
+    "notes": [
+      "Miller lands at Lime Kiln on the south end of the island; Jet Express docks downtown in Put-in-Bay.",
+      "Jet Express is passenger-only. Miller accepts vehicles but recommends leaving cars on the mainland for most day trips.",
+      "Jet Express has a date-specific calendar; do not assume its late-night schedule is available on your date."
+    ],
+    "steps": [
+      "Choose the mainland dock: Catawba for Miller, Port Clinton for Jet Express.",
+      "Decide whether you need a vehicle or want to arrive downtown on foot.",
+      "Check the final boat on your exact date before making dinner or lodging plans."
+    ],
+    "options": [
+      {
+        "id": "miller",
+        "name": "Miller Ferry from Catawba",
+        "description": "Lower-priced 2026 passenger crossing to the island's Lime Kiln dock; vehicle transport available.",
+        "tripTime": "approximately 18 minutes",
+        "pricing": {
+          "adultOW": 9,
+          "adultRT": 18,
+          "childOW": 1.5,
+          "childRT": 3,
+          "vehicleOW": 23,
+          "vehicleRT": 46
+        },
+        "notice": "2026 personal vehicle fare $23 each way, plus separate passenger fare; trailer and oversize pricing varies."
+      },
+      {
+        "id": "jet",
+        "name": "Jet Express from Port Clinton",
+        "description": "Passenger-only high-speed ferry arriving downtown; 2026 fare for standard Port Clinton–Put-in-Bay route.",
+        "tripTime": "approximately 25–30 minutes",
+        "noVehicle": true,
+        "pricing": {
+          "adultOW": 26.5,
+          "adultRT": 41.99,
+          "childRT": 8
+        },
+        "notice": "Jet Express youth ages 12–16 have a separate published category, not modeled here."
+      }
+    ],
+    "sources": [
+      [
+        "Miller 2026 fare & island information",
+        "https://millerferry.com/put-in-bay/"
+      ],
+      [
+        "Miller dated sailing schedule",
+        "https://millerferry.com/put-in-bay/put-in-bay-schedule/"
+      ],
+      [
+        "Jet Express official 2026 fares PDF",
+        "https://jet-express.com/wp-content/uploads/sites/7109/2026/03/2026-Jet-Express-Pricing.pdf"
+      ],
+      [
+        "Jet Express official site",
+        "https://jet-express.com/"
+      ]
+    ],
+    "meta": "Compare 2026 Miller Ferry and Jet Express prices, Put-in-Bay terminals, vehicles and return planning. Source-linked; not live booking.",
+    "experience": {
+      "accent": "#146965",
+      "kicker": "South Bass Island · Lake Erie",
+      "plannerTitle": "Choose your landing, then build your island day",
+      "question": "The cheapest ticket or a downtown arrival?",
+      "answer": "Miller gets you across from Catawba to Lime Kiln. Jet Express brings foot passengers from Port Clinton into downtown. The landing changes how your whole day begins.",
+      "photo": {
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Miller_Ferry_%28South_Bass_Island%2C_Lake_Erie%2C_Ohio%2C_USA%29_1_%2848633526843%29.jpg/1280px-Miller_Ferry_%28South_Bass_Island%2C_Lake_Erie%2C_Ohio%2C_USA%29_1_%2848633526843%29.jpg",
+        "author": "James St. John",
+        "license": "CC BY 2.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Miller_Ferry_%28South_Bass_Island%2C_Lake_Erie%2C_Ohio%2C_USA%29_1_%2848633526843%29.jpg",
+        "caption": "Miller Ferry at South Bass Island, 2007. Historical vessel photograph.",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "routes": [
+        {
+          "id": "miller",
+          "name": "Miller · Catawba → Lime Kiln",
+          "a": {
+            "name": "Catawba / Miller",
+            "lat": 41.572,
+            "lon": -82.856,
+            "address": "5174 E Water Street, Port Clinton, OH",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Lime Kiln dock",
+            "lat": 41.635,
+            "lon": -82.842,
+            "address": "Miller Ferry Lime Kiln Dock, Put-in-Bay, OH",
+            "zone": "America/Detroit"
+          },
+          "minutes": 18,
+          "why": "For a lower passenger fare or necessary vehicle transport. Plan the onward trip from Lime Kiln.",
+          "buffer": 45,
+          "bufferKind": "planning",
+          "reverse": false
+        },
+        {
+          "id": "jet",
+          "name": "Jet Express · Port Clinton → downtown",
+          "a": {
+            "name": "Port Clinton / Jet Express",
+            "lat": 41.514,
+            "lon": -82.943,
+            "address": "3 N Monroe Street, Port Clinton, OH",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Downtown Put-in-Bay",
+            "lat": 41.654,
+            "lon": -82.819,
+            "address": "Jet Express Put-in-Bay Dock, Ohio",
+            "zone": "America/Detroit"
+          },
+          "minutes": 30,
+          "why": "For walking straight into the village. Compare the dated return calendar before choosing nightlife plans.",
+          "buffer": 45,
+          "bufferKind": "planning",
+          "reverse": false
+        }
+      ],
+      "decisions": [
+        [
+          "Lime Kiln is a different arrival",
+          "Miller lands about two miles from downtown. Build in a bus, taxi, bike or cart connection rather than treating both ferries as the same trip."
+        ],
+        [
+          "Leave the car if the day allows",
+          "A passenger fare and a vehicle fare are separate purchases. For a day in the village, first compare leaving the car on the mainland."
+        ],
+        [
+          "The last boat sets your day",
+          "Choose your actual return before booking a late dinner. The planner can work backward from the sailing you enter; it does not supply a live timetable."
+        ]
+      ],
+      "guide": [
+        [
+          "A village-first visit",
+          "If shops, food and the harbor are the point of the day, the arrival location may matter more than a few minutes on the lake. Compare both total plans, including the transfer from Lime Kiln."
+        ],
+        [
+          "A bike or family outing",
+          "Start with the child age bands and decide whether bikes come with you or are rented after arrival. Keep a layer and something to drink in the day bag."
+        ],
+        [
+          "A vehicle that really needs to go",
+          "Select Miller, review vehicle rules and allow for a queue. An eligible vehicle is not a reserved space just because the calculator can price it."
+        ]
+      ],
+      "checklist": [
+        "Check the correct mainland dock for your operator",
+        "Check your return sailing on the same operator calendar",
+        "Arrange the Lime Kiln transfer if using Miller",
+        "Check bike, pet and vehicle rules with your operator"
+      ],
+      "extraSources": [
+        [
+          "Miller island transport and travel tips",
+          "https://millerferry.com/travel-tips/"
+        ],
+        [
+          "Miller vehicle rules",
+          "https://millerferry.com/put-in-bay/put-in-bay-vehicle-guidelines/"
+        ]
+      ],
+      "faq": [
+        [
+          "Does Miller arrive in downtown Put-in-Bay?",
+          "No. Its Lime Kiln dock is on the south end of South Bass Island; allow for the connection to the village."
+        ],
+        [
+          "Does a ticket reserve my sailing?",
+          "Use the chosen operator’s current rules. Do not treat a calculated fare as a departure reservation or a guarantee of vehicle space."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "chi": {
+    "id": "chi",
+    "path": "chi-cheemaun-ferry",
+    "name": "Chi-Cheemaun Ferry Planner",
+    "lake": "Lake Huron / Georgian Bay",
+    "route": "Tobermory ↔ South Baymouth, Manitoulin Island",
+    "headline": "Take the Chi-Cheemaun—or drive around Georgian Bay?",
+    "intro": "A seasonal car-ferry crossing that changes a Lake Huron road trip. Plan the right Tobermory or Manitoulin departure, vehicle size and onward drive.",
+    "duration": "1¾–2 hours",
+    "portA": "Tobermory",
+    "portB": "South Baymouth",
+    "currency": "CAD",
+    "childLabel": "Children ages 5–11",
+    "season": [
+      "2026-05-01",
+      "2026-10-18"
+    ],
+    "notes": [
+      "2026 adult fare is CAD $18.05 each way. Standard low vehicles up to 20 ft are CAD $38.75 off-peak or $49.10 peak, each direction. Vehicle fees are separate from each passenger.",
+      "The 2026 sailing season runs May 1–October 18. Future-year dates need the next published timetable.",
+      "Tobermory and South Baymouth terminal parking has published daily fees for park-and-ride ferry customers.",
+      "Vehicle dimensions and reservation inventory matter. Comparing the ferry to a road-only itinerary needs actual origins and destinations; no universal 'hours saved' applies."
+    ],
+    "steps": [
+      "Decide which side of Georgian Bay you will approach and your onward destination.",
+      "Check the sailing date and 2026 departure window on the official operator schedule.",
+      "Quote passengers, vehicle length/height and reservations directly with the operator; compare with driving around Georgian Bay."
+    ],
+    "options": [
+      {
+        "id": "chi",
+        "name": "MS Chi-Cheemaun vehicle / passenger ferry",
+        "description": "Published 2026 adult, child, and standard low-car fare; switches between peak (Jun 19–Sep 7) and off-peak seasons.",
+        "tripTime": "approximately 1 hour 45 minutes",
+        "pricing": {
+          "adultOW": 18.05,
+          "adultRT": 36.1,
+          "childOW": 9,
+          "childRT": 18,
+          "vehicleOW": 38.75,
+          "vehicleRT": 77.5
+        },
+        "summerPricing": {
+          "adultOW": 18.05,
+          "adultRT": 36.1,
+          "childOW": 9,
+          "childRT": 18,
+          "vehicleOW": 49.1,
+          "vehicleRT": 98.2
+        },
+        "notice": "Car under 8 ft 6 in high and up to 20 ft long. Round-trip estimate assumes the return crosses in the same peak/off-peak period. Excludes oversized vehicles, parking and reservation-specific adjustments."
+      }
+    ],
+    "sources": [
+      [
+        "Official 2026 Chi-Cheemaun schedule",
+        "https://www.ontarioferries.com/ms-chi-cheemaun/schedule-overview/"
+      ],
+      [
+        "Official passenger and vehicle fares",
+        "https://www.ontarioferries.com/ms-chi-cheemaun/fares/"
+      ],
+      [
+        "Ontario Ferries operating information",
+        "https://www.ontarioferries.com/"
+      ]
+    ],
+    "meta": "Plan the MS Chi-Cheemaun ferry between Tobermory and Manitoulin Island: seasonal calendar, vehicles, parking and driving around Georgian Bay.",
+    "experience": {
+      "accent": "#735332",
+      "kicker": "Tobermory ↔ South Baymouth · Georgian Bay",
+      "plannerTitle": "Fit the ferry into your Manitoulin journey",
+      "question": "Will the crossing fit your drive and check-in?",
+      "answer": "Start with the port, vehicle dimensions and time at the booth. Chi-Cheemaun connects the Bruce Peninsula with Manitoulin Island; it is not the ferry to Michigan’s Manitou Islands.",
+      "photo": {
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Chi_Cheemaun_Ferry_-_panoramio_%281%29.jpg/1280px-Chi_Cheemaun_Ferry_-_panoramio_%281%29.jpg",
+        "author": "Francine Pallister",
+        "license": "CC BY-SA 3.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Chi_Cheemaun_Ferry_-_panoramio_%281%29.jpg",
+        "caption": "Chi-Cheemaun in Tobermory, 2012. Historical paint scheme.",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "routes": [
+        {
+          "id": "northbound",
+          "name": "Tobermory → South Baymouth",
+          "a": {
+            "name": "Tobermory",
+            "lat": 45.258,
+            "lon": -81.665,
+            "address": "8 Eliza Street, Tobermory, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "South Baymouth",
+            "lat": 45.558,
+            "lon": -82.012,
+            "address": "41 Water Street, South Baymouth, Ontario",
+            "zone": "America/Detroit"
+          },
+          "minutes": 120,
+          "why": "Allow about two hours off-peak; the operator describes about 1¾ hours in peak season.",
+          "buffer": 60,
+          "bufferKind": "operator",
+          "reverse": true,
+          "peakMinutes": 105
+        },
+        {
+          "id": "southbound",
+          "name": "South Baymouth → Tobermory",
+          "a": {
+            "name": "South Baymouth",
+            "lat": 45.558,
+            "lon": -82.012,
+            "address": "41 Water Street, South Baymouth, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Tobermory",
+            "lat": 45.258,
+            "lon": -81.665,
+            "address": "8 Eliza Street, Tobermory, Ontario",
+            "zone": "America/Detroit"
+          },
+          "minutes": 120,
+          "why": "Both shores use Eastern Time; match the crossing to your onward Highway 6 drive.",
+          "buffer": 60,
+          "bufferKind": "operator",
+          "reverse": true,
+          "peakMinutes": 105
+        }
+      ],
+      "decisions": [
+        [
+          "Book the right vehicle",
+          "Measure length and height with attachments. The simple fare reference is for the standard low-car category; other sizes need a fresh operator quote."
+        ],
+        [
+          "Be checked in an hour ahead",
+          "The operator requires reservation holders to check in at the booth at least one hour before departure. Parking at the terminal is not the same as checking in."
+        ],
+        [
+          "Match both ends of Highway 6",
+          "A ferry booking needs a land plan on both sides. Leave room after arrival before another time-sensitive stop."
+        ]
+      ],
+      "guide": [
+        [
+          "A Manitoulin road trip",
+          "South Baymouth is the arrival point, not every island destination. Add your own onward driving allowance and avoid building the day around an assumed immediate departure."
+        ],
+        [
+          "Foot passengers",
+          "Think through transport after arrival. Confirm the correct sailing and any terminal parking charge before leaving your vehicle behind."
+        ],
+        [
+          "RVs, propane and pets",
+          "Use the operator’s current size and dangerous-goods rules, including propane limits. Ask about pet areas and boarding assistance when booking."
+        ]
+      ],
+      "checklist": [
+        "Reserve with Ontario Ferries for the correct direction",
+        "Check vehicle size and current recall or propane notices",
+        "Reach the ticket booth at least one hour before sailing",
+        "Check the day’s operator public notices"
+      ],
+      "extraSources": [
+        [
+          "Chi-Cheemaun check-in, parking and vehicle information",
+          "https://www.ontarioferries.com/ms-chi-cheemaun/"
+        ]
+      ],
+      "faq": [
+        [
+          "Is this the Manitou Island ferry from Leland?",
+          "No. Chi-Cheemaun serves Manitoulin Island in Ontario. North and South Manitou are separate islands in Michigan’s Sleeping Bear Dunes National Lakeshore."
+        ],
+        [
+          "Is the crossing always 1 hour 45 minutes?",
+          "The operator describes about 1 hour 45 minutes in peak season and about 2 hours off-peak. The timeline uses that seasonal distinction."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "toronto": {
+    "id": "toronto",
+    "path": "toronto-islands-ferry",
+    "name": "Toronto Islands Ferry Planner",
+    "lake": "Lake Ontario",
+    "route": "Jack Layton Ferry Terminal → Centre / Ward’s / Hanlan’s",
+    "headline": "Choose the right Toronto Islands ferry dock",
+    "intro": "Toronto's three island ferry destinations are not interchangeable, and in winter only Ward's Island operates. Pick the landing that fits your visit and calculate published city ticket costs.",
+    "duration": "about 15 minutes",
+    "portA": "Jack Layton Terminal",
+    "portB": "Toronto Islands",
+    "currency": "CAD",
+    "childLabel": "Junior ages 2–14",
+    "vehicleAllowed": false,
+    "note": "This public passenger planner does not provide general automobile transport. Teenagers ages 15–19 and seniors have separate fares; use the official city pricing for those categories.",
+    "notes": [
+      "Mid-April to mid-October typically serves Centre Island, Ward's Island and Hanlan's Point. Toronto's 2026 winter schedule begins October 14 on Ward's only.",
+      "Tickets include the return journey. Last boats vary by landing and season; confirm city schedule, especially after dusk.",
+      "The city warns of long peak-season queues. Online tickets provide an express entrance line, not a reserved departure seat."
+    ],
+    "steps": [
+      "Select the island destination by your itinerary, not simply the shortest line.",
+      "Choose the date: winter sailings only reach Ward's Island on the published seasonal schedule.",
+      "Check departure and last-return times; allow queue time on sunny summer weekends."
+    ],
+    "options": [
+      {
+        "id": "centre",
+        "name": "Centre Island ferry",
+        "description": "Popular amusement, beaches and family activity approach; seasonal route.",
+        "tripTime": "about 15 minutes",
+        "pricing": {
+          "adultRT": 9.57,
+          "childRT": 4.51
+        }
+      },
+      {
+        "id": "wards",
+        "name": "Ward's Island ferry",
+        "description": "Year-round access and the winter ferry destination.",
+        "tripTime": "about 15 minutes",
+        "pricing": {
+          "adultRT": 9.57,
+          "childRT": 4.51
+        }
+      },
+      {
+        "id": "hanlans",
+        "name": "Hanlan's Point ferry",
+        "description": "Seasonal west-island landing for Hanlan's Point and western beaches.",
+        "tripTime": "about 15 minutes",
+        "pricing": {
+          "adultRT": 9.57,
+          "childRT": 4.51
+        }
+      }
+    ],
+    "sources": [
+      [
+        "Toronto city route schedules",
+        "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/"
+      ],
+      [
+        "City ferry ticket categories and 2026 prices",
+        "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-ticket-passenger-information/"
+      ]
+    ],
+    "meta": "Choose Centre, Ward's or Hanlan's Point Toronto Island ferry using seasonal routing, 2026 ticket prices and last-return planning.",
+    "experience": {
+      "accent": "#3d6587",
+      "kicker": "Three island docks · Toronto Harbour",
+      "plannerTitle": "Choose the landing that matches your island day",
+      "question": "Centre, Ward’s or Hanlan’s?",
+      "answer": "The same city ferry ticket can cover different island docks. Start with what you want to do, then check which routes are actually running on your date.",
+      "photo": {
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Toronto_as_seen_from_Toronto_Islands_ferry%2C_2026_%2802%29.jpg/1280px-Toronto_as_seen_from_Toronto_Islands_ferry%2C_2026_%2802%29.jpg",
+        "author": "Chicken4War",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Toronto_as_seen_from_Toronto_Islands_ferry%2C_2026_%2802%29.jpg",
+        "caption": "Toronto skyline from an island ferry, August 2026.",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "routes": [
+        {
+          "id": "centre",
+          "name": "Jack Layton → Centre Island",
+          "a": {
+            "name": "Jack Layton terminal",
+            "lat": 43.641,
+            "lon": -79.376,
+            "address": "9 Queens Quay West, Toronto, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Centre Island",
+            "lat": 43.619,
+            "lon": -79.373,
+            "address": "Centre Island Ferry Dock, Toronto",
+            "zone": "America/Detroit"
+          },
+          "minutes": 15,
+          "why": "For the central park area. This is the busiest city-ferry route; allow for queues.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false,
+          "seasonal": true
+        },
+        {
+          "id": "wards",
+          "name": "Jack Layton → Ward’s Island",
+          "a": {
+            "name": "Jack Layton terminal",
+            "lat": 43.641,
+            "lon": -79.376,
+            "address": "9 Queens Quay West, Toronto, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Ward’s Island",
+            "lat": 43.627,
+            "lon": -79.356,
+            "address": "Wards Island Ferry Dock, Toronto",
+            "zone": "America/Detroit"
+          },
+          "minutes": 15,
+          "why": "For the eastern island arrival and published winter service. Centre Island is about a 35-minute walk away.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false
+        },
+        {
+          "id": "hanlans",
+          "name": "Jack Layton → Hanlan’s Point",
+          "a": {
+            "name": "Jack Layton terminal",
+            "lat": 43.641,
+            "lon": -79.376,
+            "address": "9 Queens Quay West, Toronto, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Hanlan’s Point",
+            "lat": 43.627,
+            "lon": -79.394,
+            "address": "Hanlans Point Ferry Dock, Toronto",
+            "zone": "America/Detroit"
+          },
+          "minutes": 15,
+          "why": "For the western island landing. Confirm seasonal service before choosing this route.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false,
+          "seasonal": true
+        }
+      ],
+      "decisions": [
+        [
+          "A ticket is not a reserved place",
+          "Buying online can save time in the ticket line, but does not make a crowded ferry a guaranteed departure."
+        ],
+        [
+          "Return from a different dock",
+          "City tickets cover the return from any operating island dock. Build a walk across the islands if the timetable supports it."
+        ],
+        [
+          "Winter changes the map",
+          "The published winter period uses Ward’s Island. Centre and Hanlan’s should not appear as available simply because their docks exist."
+        ]
+      ],
+      "guide": [
+        [
+          "A family day near Centre",
+          "Pick the dock for the places you actually want to visit, and check those attractions separately. Keep a margin for the return queue."
+        ],
+        [
+          "A quieter arrival at Ward’s",
+          "Consider the longer walk before choosing an alternate dock. A shorter queue is not a promise, and a longer walk may not suit every group."
+        ],
+        [
+          "A skyline and shoreline walk",
+          "Use one dock outward and another for the return only after checking that both operate. Keep the departure terminal and island dock names in your saved plan."
+        ]
+      ],
+      "checklist": [
+        "Check which island routes operate on your date",
+        "Use Jack Layton terminal, not the island-airport ferry",
+        "Allow for ticket, boarding and island return queues",
+        "Choose a return dock that fits the day’s walking"
+      ],
+      "extraSources": [
+        [
+          "Toronto island route schedules",
+          "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/"
+        ]
+      ],
+      "faq": [
+        [
+          "Do I need to return from the same dock?",
+          "No. The city says its tickets include the return from any island dock. That dock still needs to have service when you want to leave."
+        ],
+        [
+          "Is the Billy Bishop airport ferry the same service?",
+          "No. This planner is for the city’s Toronto Island ferries departing from Jack Layton Ferry Terminal."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your island dock"
+    }
+  },
+  "pelee": {
+    "id": "pelee",
+    "path": "pelee-island-ferry",
+    "name": "Pelee Island Ferry Planner",
+    "lake": "Lake Erie",
+    "route": "Leamington / Kingsville / Sandusky → Pelee Island",
+    "headline": "Which mainland port serves Pelee Island on your date?",
+    "intro": "One of the Great Lakes' trickiest seasonal crossings: Canadian mainland terminals change, an international Sandusky route operates on select dates, and vehicles need reservations.",
+    "duration": "about 90 min",
+    "portA": "Leamington / Kingsville",
+    "portB": "Pelee Island",
+    "currency": "CAD",
+    "childLabel": "Children ages 6–12",
+    "season": [
+      "2026-04-01",
+      "2026-12-07"
+    ],
+    "notes": [
+      "Canadian mainland service uses Leamington earlier in the season, switching principally to Kingsville July 29–December 7, 2026.",
+      "The mainland–Pelee calculator uses 2026 published fares in Canadian dollars. Sandusky is an international route with separate fares and limited dates.",
+      "The final planned 2026 sailing is December 7; winter island air service is a different system."
+    ],
+    "steps": [
+      "Choose a date before driving: the Canadian mainland boarding location changes during the season.",
+      "Check Sandusky eligibility and border requirements separately if coming from the United States.",
+      "Confirm vehicle dimensions and round-trip availability; reserve exact sailings before departure."
+    ],
+    "options": [
+      {
+        "id": "pelee",
+        "name": "Canadian mainland ↔ Pelee Island",
+        "description": "2026 basic one-way or round-trip fare arithmetic for adults 13–64, children 6–12 and one low vehicle under 20 ft / 7 ft 6 in.",
+        "tripTime": "approximately 1 hour 30 minutes",
+        "pricing": {
+          "adultOW": 7.5,
+          "adultRT": 15,
+          "childOW": 3.75,
+          "childRT": 7.5,
+          "vehicleOW": 16.5,
+          "vehicleRT": 33
+        },
+        "notice": "Larger/higher vehicles, seniors, Sandusky trips, bikes and special sailings need operator pricing."
+      }
+    ],
+    "sources": [
+      [
+        "Pelee Island 2026 day-by-day schedule",
+        "https://www.ontarioferries.com/pelee-island-ferries/schedule-overview/"
+      ],
+      [
+        "2026 operator passenger and vehicle fares",
+        "https://www.ontarioferries.com/pelee-island-ferries/fares/"
+      ],
+      [
+        "Ontario Ferries home and advisories",
+        "https://www.ontarioferries.com/"
+      ]
+    ],
+    "meta": "Plan a Pelee Island ferry trip with the right mainland dock, 2026 fare references, vehicle choices, check-in and return planning. Check official sailings.",
+    "experience": {
+      "accent": "#477244",
+      "kicker": "Canada’s Lake Erie island",
+      "plannerTitle": "Find the correct mainland dock for your date",
+      "question": "Leamington, Kingsville or the international route?",
+      "answer": "The mainland gateway changes through the season. Start with your travel date, then confirm the exact departure terminal in the operator’s day-by-day calendar.",
+      "photo": {
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Pelee_Islander_II_docked_in_Leamington%2C_Ontario%2C_2025-08-02_03.jpg/1280px-Pelee_Islander_II_docked_in_Leamington%2C_Ontario%2C_2025-08-02_03.jpg",
+        "author": "Chris Woodrich",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Pelee_Islander_II_docked_in_Leamington%2C_Ontario%2C_2025-08-02_03.jpg",
+        "caption": "Pelee Islander II at Leamington, August 2025. Historical terminal photograph.",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "routes": [
+        {
+          "id": "canada",
+          "name": "Canadian mainland → Pelee Island",
+          "a": {
+            "name": "Leamington",
+            "lat": 42.027,
+            "lon": -82.599,
+            "address": "500 Erie Street South, Leamington, Ontario",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Pelee Island West Dock",
+            "lat": 41.755,
+            "lon": -82.687,
+            "address": "Pelee Island West Dock, Ontario",
+            "zone": "America/Detroit"
+          },
+          "minutes": 90,
+          "why": "The date selects Leamington or Kingsville as a planning reference. Special sailings can differ.",
+          "buffer": 60,
+          "bufferKind": "operator",
+          "reverse": true,
+          "seasonalGateway": true
+        }
+      ],
+      "decisions": [
+        [
+          "Read the port on the booking",
+          "The 2026 calendar shifts the regular mainland gateway to Kingsville from July 29. Special sailings can still differ."
+        ],
+        [
+          "Reserve the return as well",
+          "Pelee requires reservations for foot passengers and vehicles. A trip to the island is not a guaranteed ride back."
+        ],
+        [
+          "Canada and Sandusky are different trips",
+          "Sandusky is an international crossing with different sailing dates, fares and document requirements. The fare calculator here covers the Canadian-mainland route."
+        ]
+      ],
+      "guide": [
+        [
+          "A day on two wheels",
+          "Decide how you will reach the places you want to see before you choose a walk-on ticket. Pack for exposure to wind and sun, and leave a return margin."
+        ],
+        [
+          "Taking a vehicle",
+          "Reserve the actual vehicle and passenger group. Let the operator know if you need boarding assistance or a vessel with an elevator."
+        ],
+        [
+          "An international visit",
+          "Use the dedicated Sandusky schedule and current border guidance. Do not use a Canadian-mainland fare as an international quote."
+        ]
+      ],
+      "checklist": [
+        "Read the terminal name on each direction of the booking",
+        "Reserve both outward and return travel",
+        "Check in at the booth at least one hour before sailing",
+        "For Sandusky, verify the international timetable and documents"
+      ],
+      "extraSources": [
+        [
+          "Pelee reservation, check-in and accessibility information",
+          "https://www.ontarioferries.com/pelee-island-ferries/"
+        ]
+      ],
+      "faq": [
+        [
+          "Why did the planner change my mainland port?",
+          "The regular 2026 schedule uses Leamington earlier in the season and Kingsville from July 29. Verify your exact sailing because exceptions exist."
+        ],
+        [
+          "Does this estimate cover Sandusky?",
+          "No. It covers the Canadian mainland–Pelee route only. Sandusky has distinct international fares, dates and border requirements."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "isle-royale": {
+    "id": "isle-royale",
+    "path": "isle-royale-ferry-comparison",
+    "name": "Isle Royale Ferry Planner",
+    "lake": "Lake Superior",
+    "route": "Houghton, Copper Harbor or Grand Portage → Isle Royale",
+    "headline": "Which ferry gets you to the right side of Isle Royale?",
+    "intro": "Compare four ferries, three mainland gateways and two major island entry points. For wilderness trips, your return sailing matters as much as your outbound boat.",
+    "duration": "90 min–6 hours",
+    "portA": "Three mainland gateways",
+    "portB": "Rock Harbor / Windigo",
+    "currency": "USD",
+    "childLabel": "Children requiring tickets",
+    "vehicleAllowed": false,
+    "note": "Vehicles cannot be transported to Isle Royale. Reserve your island departure and return with the actual operator; park vehicles on the mainland.",
+    "notes": [
+      "Ranger III (Houghton) crosses to Rock Harbor in about six hours; some special dates go to Windigo.",
+      "Queen IV departs Copper Harbor for Rock Harbor in about 3.5 hours. Sea Hunter III is oriented to Windigo; Voyageur II serves multiple island landing points.",
+      "There are no car ferries. NPS requires matching inbound/outbound transportation and appropriate national park permits."
+    ],
+    "steps": [
+      "Choose your arrival: Rock Harbor suits eastern Isle Royale; Windigo suits western itineraries.",
+      "Choose a gateway based on driving distance, trip length, and whether a round trip can fit your dates.",
+      "Reserve transport and any campsites before driving to the remote Upper Peninsula or Minnesota departure port."
+    ],
+    "options": [
+      {
+        "id": "ranger",
+        "name": "Ranger III — Houghton to Rock Harbor / some Windigo",
+        "description": "NPS-operated ferry; normally approximately 6 hours and no same-day return.",
+        "tripTime": "about 6 hours"
+      },
+      {
+        "id": "queen",
+        "name": "Isle Royale Queen IV — Copper Harbor to Rock Harbor",
+        "description": "Shortest Michigan mainland ferry crossing into the east end of the island.",
+        "tripTime": "about 3.5 hours"
+      },
+      {
+        "id": "voyageur",
+        "name": "Voyageur II — Grand Portage to multiple island ports",
+        "description": "Useful for west/east itinerary planning; route and intermediate stops depend on date."
+      },
+      {
+        "id": "hunter",
+        "name": "Sea Hunter III — Grand Portage to Windigo",
+        "description": "Minnesota gateway to Isle Royale's western landing."
+      }
+    ],
+    "sources": [
+      [
+        "NPS four official ferry services",
+        "https://www.nps.gov/isro/planyourvisit/ferry-transportation-services.htm"
+      ],
+      [
+        "NPS Ranger III dates & rules",
+        "https://home.nps.gov/isro/planyourvisit/ranger-iii-schedule.htm"
+      ],
+      [
+        "NPS gateway directions and durations",
+        "https://home.nps.gov/isro/planyourvisit/directions.htm"
+      ]
+    ],
+    "meta": "Compare Ranger III, Queen IV, Voyageur II and Sea Hunter III for Isle Royale: gateway, Rock Harbor versus Windigo, trip duration and return planning.",
+    "experience": {
+      "accent": "#37584e",
+      "kicker": "Four ferry choices · One wilderness island",
+      "plannerTitle": "Pick the island end before choosing the boat",
+      "question": "Rock Harbor or Windigo—and how many nights?",
+      "answer": "The mainland you depart from decides where you arrive. Match the boat to your lodge, trailhead and return date before trying to compare fares.",
+      "photo": {
+        "url": "https://www.nps.gov/common/uploads/grid_builder/isro/crop1_1/E6F1FC7B-FE23-C312-8F8472BA2CD19F5D.jpg?format=webp&mode=crop&quality=80&width=1200",
+        "author": "National Park Service",
+        "license": "NPS photograph; see source credit",
+        "source": "https://www.nps.gov/isro/planyourvisit/ranger-iii-info.htm",
+        "licenseUrl": "",
+        "caption": "Ranger III near Isle Royale. NPS reference photograph; not today’s sailing."
+      },
+      "routes": [
+        {
+          "id": "ranger",
+          "name": "Ranger III · Houghton → Rock Harbor",
+          "a": {
+            "name": "Houghton",
+            "lat": 47.122,
+            "lon": -88.565,
+            "address": "800 E Lakeshore Drive, Houghton, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Rock Harbor",
+            "lat": 48.146,
+            "lon": -88.484,
+            "address": "Rock Harbor, Isle Royale National Park",
+            "zone": "America/Detroit"
+          },
+          "minutes": 360,
+          "why": "An overnight-trip gateway. Do not plan a same-day out-and-back on Ranger III.",
+          "buffer": 90,
+          "bufferKind": "planning",
+          "reverse": false,
+          "sameDay": false
+        },
+        {
+          "id": "queen",
+          "name": "Queen IV · Copper Harbor → Rock Harbor",
+          "a": {
+            "name": "Copper Harbor",
+            "lat": 47.467,
+            "lon": -87.886,
+            "address": "Isle Royale Queen IV Dock, Copper Harbor, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Rock Harbor",
+            "lat": 48.146,
+            "lon": -88.484,
+            "address": "Rock Harbor, Isle Royale National Park",
+            "zone": "America/Detroit"
+          },
+          "minutes": 210,
+          "why": "The Michigan north-shore gateway to the island’s east end. Verify any day-trip window with the operator.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false
+        },
+        {
+          "id": "sea-hunter",
+          "name": "Sea Hunter III · Grand Portage → Windigo",
+          "a": {
+            "name": "Grand Portage",
+            "lat": 47.963,
+            "lon": -89.685,
+            "address": "Isle Royale Boats Dock, Grand Portage, MN",
+            "zone": "America/Chicago"
+          },
+          "b": {
+            "name": "Windigo",
+            "lat": 47.913,
+            "lon": -89.157,
+            "address": "Windigo, Isle Royale National Park",
+            "zone": "America/Detroit"
+          },
+          "minutes": 90,
+          "why": "A western-island arrival. Minnesota and island clocks differ by one hour.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false
+        },
+        {
+          "id": "voyageur",
+          "name": "Voyageur II · Grand Portage → Windigo",
+          "a": {
+            "name": "Grand Portage",
+            "lat": 47.963,
+            "lon": -89.685,
+            "address": "Isle Royale Boats Dock, Grand Portage, MN",
+            "zone": "America/Chicago"
+          },
+          "b": {
+            "name": "Windigo",
+            "lat": 47.913,
+            "lon": -89.157,
+            "address": "Windigo, Isle Royale National Park",
+            "zone": "America/Detroit"
+          },
+          "minutes": 120,
+          "why": "This timeline models only the first Windigo leg. Rock Harbor and intermediate stops require the operator’s multi-leg itinerary.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false,
+          "sameDay": false
+        }
+      ],
+      "decisions": [
+        [
+          "Choose the arrival end first",
+          "Rock Harbor and Windigo are at opposite ends of a wilderness island. There is no road transfer between them."
+        ],
+        [
+          "Hold a matching way home",
+          "Outbound space alone is not a trip. Book the return date and island departure dock alongside your first crossing."
+        ],
+        [
+          "A day trip is boat-specific",
+          "A round-trip fare does not mean both legs happen on the same day. Ranger III and the Voyageur II circuit need different planning."
+        ]
+      ],
+      "guide": [
+        [
+          "Rock Harbor or a lodge stay",
+          "Begin with the actual lodge and transport dates. A boat to Windigo does not deliver you to a Rock Harbor reservation."
+        ],
+        [
+          "A backpacking route",
+          "Work backward from the return dock and ferry date. Keep trail and campsite plans separate from a ferry timetable; this calculator does not assess hiking feasibility."
+        ],
+        [
+          "A short visit to Windigo",
+          "Check the Sea Hunter’s dated day-trip operation. Use the operator’s time-zone convention and verify the island return before committing."
+        ]
+      ],
+      "checklist": [
+        "Match the ferry to your arrival and return ends",
+        "Book the complete outward and return itinerary",
+        "Arrange park fees, permits and any lodging separately",
+        "Verify baggage, fuel, canoe or kayak rules for your boat"
+      ],
+      "extraSources": [
+        [
+          "NPS island access and directions",
+          "https://www.nps.gov/isro/planyourvisit/directions.htm"
+        ],
+        [
+          "NPS Ranger III information",
+          "https://www.nps.gov/isro/planyourvisit/ranger-iii-info.htm"
+        ],
+        [
+          "Grand Portage ferry planning tool",
+          "https://chrisizworski.com/isle-royale-ferry/"
+        ]
+      ],
+      "faq": [
+        [
+          "Can I take a car to Isle Royale?",
+          "No. NPS lists passenger services, not car ferries. Leave the vehicle on the mainland."
+        ],
+        [
+          "Does Voyageur II stop only at Windigo?",
+          "No. Its service includes additional island stops and Rock Harbor. This comparison’s simple timeline covers only Grand Portage–Windigo; use the operator for a complete multi-leg plan."
+        ]
+      ],
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your gateway and island end"
+    }
+  },
+  "lake-express": {
+    "id": "lake-express",
+    "path": "lake-michigan-ferry/lake-express",
+    "name": "Lake Express Ferry Planner",
+    "lake": "Lake Michigan",
+    "route": "Muskegon, MI ↔ Milwaukee, WI",
+    "headline": "Is Lake Express the smarter Lake Michigan crossing?",
+    "intro": "Compare the time saved, passenger fares, standard vehicle charges and local time-zone change before buying a high-speed ferry ticket.",
+    "duration": "2.5 hours",
+    "portA": "Muskegon · Eastern",
+    "portB": "Milwaukee · Central",
+    "currency": "USD",
+    "childLabel": "Children ages 5–17",
+    "season": [
+      "2026-05-01",
+      "2026-10-19"
+    ],
+    "notes": [
+      "All departure and arrival times are local: Milwaukee is Central; Muskegon is Eastern.",
+      "2026 rates effective August 11 exclude optional extras; posted $6 fuel and $9 port/security charges per paying person and standard vehicle, per crossing, are included in our estimate.",
+      "The published 2026 October schedule has Tuesday restrictions and Saturday-specific departures. Allow 45 minutes before departure; boarding closes 15 minutes prior."
+    ],
+    "steps": [
+      "Choose your date: high-speed ferry sailing frequency varies across spring, summer and fall.",
+      "Enter passengers and whether a standard automobile goes aboard; motorcycles and oversize vehicles need separate quotes.",
+      "Compare the full journey, including boarding time and driving to the ferry terminal, against driving around Lake Michigan."
+    ],
+    "options": [
+      {
+        "id": "lake",
+        "name": "Lake Express — classic cabin",
+        "description": "Muskegon–Milwaukee 2026 classic fare with standard auto price and published fuel/port fees.",
+        "tripTime": "2 hours 30 minutes",
+        "priceStart": "2026-08-11",
+        "priceEnd": "2026-10-19",
+        "pricing": {
+          "adultOW": 124.5,
+          "adultRT": 219,
+          "childOW": 68,
+          "childRT": 124,
+          "vehicleOW": 134,
+          "vehicleRT": 256,
+          "feePersonOW": 15,
+          "feePersonRT": 30,
+          "feeVehicleOW": 15,
+          "feeVehicleRT": 30
+        },
+        "notice": "Children under 5 ride free; this calculator does not model infants, Premier seating or summer-only promotions."
+      }
+    ],
+    "sources": [
+      [
+        "Lake Express 2026 schedule",
+        "https://www.lake-express.com/plan-your-trip/schedule/"
+      ],
+      [
+        "Lake Express 2026 rates and fees",
+        "https://www.lake-express.com/plan-your-trip/rates/"
+      ],
+      [
+        "Official terminal directions",
+        "https://www.lake-express.com/plan-your-trip/"
+      ]
+    ],
+    "meta": "Plan the Muskegon to Milwaukee Lake Express ferry: 2026 seasonal sailings, published fares, vehicle charges, time zones and driving trade-offs.",
+    "experience": {
+      "accent": "#166a87",
+      "kicker": "Muskegon ↔ Milwaukee · Lake Michigan",
+      "plannerTitle": "Build the crossing around your road trip",
+      "question": "What time do you really reach the other shore?",
+      "answer": "The lake crossing is about 2½ hours. The clocks change by one hour between Michigan and Wisconsin, and check-in plus unloading belong in the plan too.",
+      "photo": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Lake_express.jpg",
+        "author": "Jeff Dean",
+        "license": "Attribution permission",
+        "source": "https://commons.wikimedia.org/wiki/File:Lake_express.jpg",
+        "caption": "Lake Express on Lake Michigan. Historical photograph; not a live view.",
+        "licenseUrl": ""
+      },
+      "routes": [
+        {
+          "id": "east-west",
+          "name": "Muskegon → Milwaukee",
+          "a": {
+            "name": "Muskegon",
+            "lat": 43.228,
+            "lon": -86.335,
+            "address": "1918 Lakeshore Drive, Muskegon, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Milwaukee",
+            "lat": 43.005,
+            "lon": -87.886,
+            "address": "2330 S Lincoln Memorial Drive, Milwaukee, WI",
+            "zone": "America/Chicago"
+          },
+          "minutes": 150,
+          "why": "Michigan departure in Eastern Time; Wisconsin arrival in Central Time.",
+          "buffer": 90,
+          "bufferKind": "planning",
+          "reverse": true
+        },
+        {
+          "id": "west-east",
+          "name": "Milwaukee → Muskegon",
+          "a": {
+            "name": "Milwaukee",
+            "lat": 43.005,
+            "lon": -87.886,
+            "address": "2330 S Lincoln Memorial Drive, Milwaukee, WI",
+            "zone": "America/Chicago"
+          },
+          "b": {
+            "name": "Muskegon",
+            "lat": 43.228,
+            "lon": -86.335,
+            "address": "1918 Lakeshore Drive, Muskegon, MI",
+            "zone": "America/Detroit"
+          },
+          "minutes": 150,
+          "why": "Wisconsin departure in Central Time; Michigan arrival in Eastern Time.",
+          "buffer": 90,
+          "bufferKind": "planning",
+          "reverse": true
+        }
+      ],
+      "decisions": [
+        [
+          "Watch the clock labels",
+          "Westbound arrival looks one hour earlier on the clock; eastbound looks one hour later. Travel duration stays the same."
+        ],
+        [
+          "Make room before sailing",
+          "Boarding opens roughly 90 minutes ahead and gates close 15 minutes before sailing. This planner starts with a 90-minute arrival allowance."
+        ],
+        [
+          "Passengers and car are separate",
+          "Taking a vehicle does not include the people inside it. Check the actual vehicle dimensions, including racks."
+        ]
+      ],
+      "guide": [
+        [
+          "Taking the car across",
+          "Measure the vehicle with its attachments. Move medication, a warm layer and anything needed during the crossing into your carry-on before leaving the vehicle deck."
+        ],
+        [
+          "Walking on for a city break",
+          "Plan onward transport on both shores. A ferry terminal is a starting point, not automatically a downtown hotel stop."
+        ],
+        [
+          "Compare the whole travel day",
+          "Enter your own drive-around time below to compare it with check-in, sailing and unloading. This is elapsed-time arithmetic, not a live road-traffic estimate."
+        ]
+      ],
+      "checklist": [
+        "Book passengers and vehicle separately as needed",
+        "Bring government-issued photo identification",
+        "Verify vehicle size, including roof and rear racks",
+        "Put needed items in your carry-on before boarding"
+      ],
+      "extraSources": [
+        [
+          "Lake Express boarding, parking and passenger rules",
+          "https://www.lake-express.com/plan-your-trip/travel-faqs/"
+        ]
+      ],
+      "faq": [
+        [
+          "Do Lake Express schedules use local time?",
+          "Read each port’s local-time label. Muskegon is Eastern Time; Milwaukee is Central Time. The planner displays both."
+        ],
+        [
+          "Can I go back to my car while underway?",
+          "Lake Express says passengers cannot access the vehicle deck during the crossing. Bring what you need into the cabin."
+        ]
+      ],
+      "roadCompare": true,
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "ss-badger": {
+    "id": "ss-badger",
+    "path": "lake-michigan-ferry/ss-badger",
+    "name": "S.S. Badger Ferry Planner",
+    "lake": "Lake Michigan",
+    "route": "Ludington, MI ↔ Manitowoc, WI",
+    "headline": "Plan the four-hour S.S. Badger crossing",
+    "intro": "Navigate the Lake Michigan car ferry's seasonal calendar, fare tiers, boarding logistics and an easily overlooked Eastern/Central time change.",
+    "duration": "4 hours",
+    "portA": "Ludington · Eastern",
+    "portB": "Manitowoc · Central",
+    "currency": "USD",
+    "childLabel": "Children ages 5–15",
+    "season": [
+      "2026-05-15",
+      "2026-10-11"
+    ],
+    "notes": [
+      "The 2026 Badger season ended October 11. The operator now also publishes future schedules, which must not be mistaken for 2026 sailings.",
+      "Departure 9:00 a.m. Eastern from Ludington reaches Manitowoc around noon Central after four hours aboard.",
+      "Passenger tickets are separate from vehicle tickets; the calculator only quotes standard adult passenger fares when all entered traveler and vehicle categories are covered."
+    ],
+    "steps": [
+      "Pick a departure season; spring/fall and summer 2026 adult fare tiers differ.",
+      "Decide whether your automobile travels with you. Obtain vehicle, oversized and child quotes from the operator.",
+      "Account for the hour change and terminal loading time when scheduling onward driving."
+    ],
+    "options": [
+      {
+        "id": "badger",
+        "name": "S.S. Badger published adult passenger fare",
+        "description": "2026 standard spring/fall fares, with summer June 19–September 7 adult prices applied automatically.",
+        "tripTime": "4 hours",
+        "pricing": {
+          "adultOW": 78,
+          "adultRT": 156
+        },
+        "summerPricing": {
+          "adultOW": 89,
+          "adultRT": 178
+        },
+        "notice": "Vehicle and child amounts intentionally require the current official fare table; adult passenger-only arithmetic is displayed when applicable."
+      }
+    ],
+    "sources": [
+      [
+        "S.S. Badger current operator timetable",
+        "https://ssbadger.com/schedule/"
+      ],
+      [
+        "2026 S.S. Badger schedule archive",
+        "https://ssbadger.getanchor.io/schedule/index.html"
+      ],
+      [
+        "2026 S.S. Badger fares",
+        "https://ssbadger.getanchor.io/fares/index.html"
+      ]
+    ],
+    "meta": "Plan the S.S. Badger between Ludington and Manitowoc: the four-hour crossing, 2026 seasons, adult fare tiers, vehicles and time-zone adjustment.",
+    "experience": {
+      "accent": "#8a4930",
+      "kicker": "Ludington ↔ Manitowoc · Historic lake crossing",
+      "plannerTitle": "Plan the day around four hours on the lake",
+      "question": "A road-trip connection or the voyage itself?",
+      "answer": "Give the Badger room in your trip. This is a four-hour Lake Michigan crossing between Ludington and Manitowoc, with a time-zone change and a different pace from the fast ferry.",
+      "photo": {
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/SS_Badger_May_2026.jpg/1280px-SS_Badger_May_2026.jpg",
+        "author": "WMrapids",
+        "license": "CC0",
+        "source": "https://commons.wikimedia.org/wiki/File:SS_Badger_May_2026.jpg",
+        "caption": "S.S. Badger in Ludington, May 2026.",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "routes": [
+        {
+          "id": "east-west",
+          "name": "Ludington → Manitowoc",
+          "a": {
+            "name": "Ludington",
+            "lat": 43.951,
+            "lon": -86.453,
+            "address": "701 Maritime Drive, Ludington, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "Manitowoc",
+            "lat": 44.089,
+            "lon": -87.652,
+            "address": "900 South Lakeview Drive, Manitowoc, WI",
+            "zone": "America/Chicago"
+          },
+          "minutes": 240,
+          "why": "A four-hour crossing; Wisconsin arrival is shown in Central Time.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": true
+        },
+        {
+          "id": "west-east",
+          "name": "Manitowoc → Ludington",
+          "a": {
+            "name": "Manitowoc",
+            "lat": 44.089,
+            "lon": -87.652,
+            "address": "900 South Lakeview Drive, Manitowoc, WI",
+            "zone": "America/Chicago"
+          },
+          "b": {
+            "name": "Ludington",
+            "lat": 43.951,
+            "lon": -86.453,
+            "address": "701 Maritime Drive, Ludington, MI",
+            "zone": "America/Detroit"
+          },
+          "minutes": 240,
+          "why": "A four-hour crossing; Michigan arrival is shown in Eastern Time.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": true
+        }
+      ],
+      "decisions": [
+        [
+          "Four hours really means four",
+          "The clock difference can disguise the duration. Treat the ship as a substantial part of the travel day."
+        ],
+        [
+          "Choose a pace, not just a fare",
+          "Badger and Lake Express depart from different cities. Compare the land connections and the kind of crossing you want."
+        ],
+        [
+          "Keep the shore plan flexible",
+          "A published season is not confirmation of today’s operation. Check the operator before driving to either terminal."
+        ]
+      ],
+      "guide": [
+        [
+          "Make a voyage of it",
+          "Keep a layer, your camera and a small day bag with you. Leave room to settle into the crossing rather than filling every arrival minute with another commitment."
+        ],
+        [
+          "Taking your vehicle",
+          "Confirm the operator’s current vehicle handling and oversize rules. Include a realistic unload-and-depart allowance before scheduling the onward drive."
+        ],
+        [
+          "Arriving without a car",
+          "Start with the terminal address and arrange the next leg before you board. Use the route map to understand which side of each town you are arriving on."
+        ]
+      ],
+      "checklist": [
+        "Check the exact date on the Badger calendar",
+        "Verify your departure port and its time zone",
+        "Confirm vehicle handling and any special dimensions",
+        "Leave room after arrival for unloading and onward travel"
+      ],
+      "extraSources": [
+        [
+          "Badger terminal addresses",
+          "https://ssbadger.com/contact/"
+        ],
+        [
+          "Badger experience and trip information",
+          "https://ssbadger.com/"
+        ]
+      ],
+      "faq": [
+        [
+          "Is the westbound trip only three hours?",
+          "No. The crossing is about four hours. Wisconsin clocks are one hour behind Michigan clocks."
+        ],
+        [
+          "Is Badger the same ferry as Lake Express?",
+          "No. Badger connects Ludington and Manitowoc. Lake Express connects Muskegon and Milwaukee. The ports and crossing experiences differ."
+        ]
+      ],
+      "roadCompare": true,
+      "checked": "2026-10-18",
+      "routesLabel": "Choose your crossing"
+    }
+  },
+  "manitou": {
+    "id": "manitou",
+    "path": "manitou-island-ferry",
+    "name": "Manitou Island Ferry Planner",
+    "lake": "Lake Michigan",
+    "route": "Leland → North or South Manitou Island",
+    "headline": "Plan your Manitou Island trip—with the access facts first",
+    "intro": "Choose North or South Manitou, understand the 2026 ferry suspension, and build a careful plan for a future visit.",
+    "duration": "Service suspended in 2026",
+    "portA": "Leland / Fishtown",
+    "portB": "North / South Manitou",
+    "currency": "USD",
+    "vehicleAllowed": false,
+    "childLabel": "Children",
+    "season": null,
+    "notes": [
+      "Ferry service to both islands is suspended for the entire 2026 season.",
+      "NPS expects dock and village reopening in 2027; no confirmed ferry restart date is implied.",
+      "Dock and utility closures do not mean every acre of either island is closed. Consult NPS for exact access boundaries."
+    ],
+    "steps": [
+      "Read the dated NPS access notice.",
+      "Compare North and South Manitou for the kind of visit you want.",
+      "Wait for an operator sailing calendar before committing to ferry travel."
+    ],
+    "options": [
+      {
+        "id": "south",
+        "name": "South Manitou · future service",
+        "description": "A future ferry visit must wait for an operator restart announcement. No current fare or sailing is offered.",
+        "noVehicle": true
+      },
+      {
+        "id": "north",
+        "name": "North Manitou · future service",
+        "description": "Backcountry-oriented trip planning; transport and permits need independent confirmation.",
+        "noVehicle": true
+      }
+    ],
+    "sources": [
+      [
+        "NPS 2026 island access and dock project",
+        "https://www.nps.gov/slbe/planyourvisit/the-manitou-islands.htm"
+      ],
+      [
+        "Manitou Island Transit service notice",
+        "https://manitoutransit.com/"
+      ],
+      [
+        "NPS South Manitou trip information",
+        "https://www.nps.gov/slbe/planyourvisit/southmanitouisland.htm"
+      ],
+      [
+        "NPS North Manitou trip information",
+        "https://www.nps.gov/slbe/planyourvisit/northmanitouisland.htm"
+      ]
+    ],
+    "meta": "Check Manitou Island ferry access, compare North and South Manitou, and plan around the 2026 service suspension and unconfirmed 2027 restart.",
+    "experience": {
+      "accent": "#697543",
+      "kicker": "North & South Manitou · Sleeping Bear Dunes",
+      "plannerTitle": "Which island belongs in your future trip?",
+      "question": "South Manitou’s history or North Manitou’s backcountry?",
+      "answer": "Start by choosing the experience. In 2026 the regular ferry cannot take you to either island. A future trip needs confirmed dock access and an actual operator restart.",
+      "photo": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Southmanitoulighthouse.jpg",
+        "author": "Geoffrey George",
+        "license": "Public domain",
+        "source": "https://commons.wikimedia.org/wiki/File:Southmanitoulighthouse.jpg",
+        "caption": "South Manitou Island lighthouse, August 2004. The lighthouse is closed in the 2026 access notice.",
+        "licenseUrl": ""
+      },
+      "routes": [
+        {
+          "id": "south",
+          "name": "South Manitou · future ferry planning",
+          "a": {
+            "name": "Leland / Fishtown",
+            "lat": 45.023,
+            "lon": -85.76,
+            "address": "207 W River Street, Leland, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "South Manitou: island area",
+            "lat": 45.024,
+            "lon": -86.108,
+            "address": "South Manitou Island, Michigan",
+            "zone": "America/Detroit"
+          },
+          "minutes": 90,
+          "why": "For a future visit combining island history and hiking. Historical travel duration only; no current ferry service.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false,
+          "historical": true
+        },
+        {
+          "id": "north",
+          "name": "North Manitou · future backcountry planning",
+          "a": {
+            "name": "Leland / Fishtown",
+            "lat": 45.023,
+            "lon": -85.76,
+            "address": "207 W River Street, Leland, MI",
+            "zone": "America/Detroit"
+          },
+          "b": {
+            "name": "North Manitou: island area",
+            "lat": 45.122,
+            "lon": -85.995,
+            "address": "North Manitou Island, Michigan",
+            "zone": "America/Detroit"
+          },
+          "minutes": 50,
+          "why": "For a self-sufficient backcountry visit. Historical travel duration only; no current ferry service.",
+          "buffer": 60,
+          "bufferKind": "planning",
+          "reverse": false,
+          "historical": true
+        }
+      ],
+      "decisions": [
+        [
+          "2026: no regular ferry",
+          "Manitou Island Transit says no trips to either island in 2026 while NPS relocates the docks. Do not drive to Leland expecting a departure."
+        ],
+        [
+          "2027: expected is not confirmed",
+          "NPS anticipates reopening the docks and villages in 2027. A construction target is not a ferry timetable, fare or ticket."
+        ],
+        [
+          "Private access has its own limits",
+          "NPS describes offshore landings and authorized charter access, with no dock or protected anchoring. This tool does not recommend a private-boat substitute."
+        ]
+      ],
+      "guide": [
+        [
+          "South Manitou: history and a bounded island visit",
+          "The lighthouse and village help explain why people came to this island. Their 2026 closure matters to the experience, even if a visitor has a permitted way ashore. Use the South Manitou NPS page to check precisely what reopens."
+        ],
+        [
+          "North Manitou: room for a backcountry stay",
+          "Choose it for the kind of trip you prepare for rather than a quick photo stop. Transport, a backcountry permit and a water plan are separate pieces of preparation."
+        ],
+        [
+          "Build a future plan without buying certainty",
+          "Save your preferred island and trip style now. Confirm the NPS reopening notice, then the ferry operator’s new schedule, then any permit or campsite arrangements before making a nonrefundable commitment."
+        ]
+      ],
+      "checklist": [
+        "Read the current NPS access and closure notice",
+        "Wait for the ferry operator’s actual restart calendar",
+        "Confirm your park pass and any camping permit separately",
+        "Verify water availability and open facilities for your dates"
+      ],
+      "extraSources": [
+        [
+          "NPS backcountry access and camping information",
+          "https://www.nps.gov/slbe/planyourvisit/backcountrycamping.htm"
+        ],
+        [
+          "Historical ferry durations, not a current timetable",
+          "https://www.manitoutransit.com/islands/boat.html"
+        ]
+      ],
+      "faq": [
+        [
+          "Is the entire island closed in 2026?",
+          "NPS describes limited access and specific closures, including docks, villages and potable water; South Manitou has additional facility closures. The regular ferry does not operate. Consult the current NPS notice for exact boundaries."
+        ],
+        [
+          "Can I book the 2027 ferry now?",
+          "This planner has no verified 2027 ferry timetable or fares. NPS’s expected dock reopening is not an operator restart confirmation."
+        ],
+        [
+          "Is Manitoulin the same place?",
+          "No. Ontario’s Manitoulin Island is served by Chi-Cheemaun. Michigan’s North and South Manitou Islands are part of Sleeping Bear Dunes National Lakeshore."
+        ]
+      ],
+      "closure2026": true,
+      "checked": "2026-10-18",
+      "routesLabel": "Choose an island"
+    },
+    "modified": "2026-10-19"
+  }
+}

@@ -3787,6 +3787,45 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "ferry-manitou",
+      "name": "Manitou Island Ferry Planner",
+      "canonical": "https://chrisizworski.com/manitou-island-ferry/",
+      "aliases": [],
+      "kind": "route-decision-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "North versus South Manitou ferry access and trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "traveler",
+        "island-visitor"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Manitou Islands in Sleeping Bear Dunes: NPS dock closure and suspended 2026 ferry, future island choice and unconfirmed restart. Separate from Ontario Manitoulin and Chi-Cheemaun."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Owner requested omission repair and destination-specific depth. No traffic or revenue evidence claimed."
+      }
     }
   ],
   "relationships": [
@@ -5333,6 +5372,22 @@
       "strength": "strong",
       "surface": "ferry-hub",
       "reason": "Mackinac has an existing independent ferry decision product."
+    },
+    {
+      "from": "great-lakes-ferries",
+      "to": "ferry-manitou",
+      "type": "route-directory",
+      "strength": "strong",
+      "surface": "ferry-hub",
+      "reason": "Manitou is a distinct Sleeping Bear Dunes access and island-choice decision, with its own planner."
+    },
+    {
+      "from": "ferry-manitou",
+      "to": "great-lakes-ferries",
+      "type": "browse-related",
+      "strength": "strong",
+      "surface": "individual-ferry",
+      "reason": "Manitou is a distinct Sleeping Bear Dunes access and island-choice decision, with its own planner."
     }
   ],
   "cannibalizationGroups": [
