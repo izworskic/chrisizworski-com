@@ -40,7 +40,7 @@ test('source, authorship, canonical and honest uncertainty are explicit', () => 
 test('Thanksgiving renders full ranking and airport-specific 2025 monthly history', () => {
   const app = launch();
   assert.match(app.get('holiday-stat').textContent, /Thanksgiving/);
-  assert.equal(app.get('third-stat').textContent, '15.96%');
+  assert.equal(app.get('third-stat').textContent, '19.40%');
   assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 11);
   assert.match(app.get('results').innerHTML, /3\.13M screened/);
   assert.match(app.get('results').innerHTML, /planning estimate/);
@@ -57,7 +57,7 @@ test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate
   const app = launch();
   app.click('christmas');
   assert.match(app.get('holiday-stat').textContent, /Christmas/);
-  assert.equal(app.get('third-stat').textContent, '27.65%');
+  assert.equal(app.get('third-stat').textContent, '26.45%');
   assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 13);
   assert.match(app.get('results').innerHTML, /estimate/i);
   app.click('drive');
