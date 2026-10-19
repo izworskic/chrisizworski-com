@@ -20,12 +20,34 @@
   L.polyline([[r.a.lat,r.a.lon],[r.b.lat,r.b.lon]],{color:'#1a6775',weight:3,dashArray:'7 8'}).addTo(mapLayer);
   map.fitBounds([[r.a.lat,r.a.lon],[r.b.lat,r.b.lon]],{padding:[40,35],maxZoom:11});
  }
+ async function loadBasemap(){
+  const L=globalThis.L,message=$('map-message');let tiles=null,timer=null,usingFallback=false;
+  const note=' Markers show approximate areas; dashed lines are schematic, not navigation tracks.';
+  function addTiles(url,provider){
+   if(tiles){tiles.off();map.removeLayer(tiles);}clearTimeout(timer);let loaded=false,errors=0;
+   message.dataset.provider=provider;message.dataset.tiles='loading';
+   message.textContent=(provider==='carto'?'CARTO map loading.':'OpenStreetMap fallback loading.')+note;
+   tiles=L.tileLayer(url,{subdomains:'abcd',maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'+(provider==='carto'?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')});
+   tiles.on('tileload',()=>{loaded=true;clearTimeout(timer);message.dataset.tiles='ready';message.textContent=(provider==='carto'?'CARTO map.':'OpenStreetMap fallback map.')+note;});
+   tiles.on('tileerror',()=>{if(++errors>=3){if(!usingFallback)fallback();else if(!loaded){message.dataset.tiles='unavailable';message.textContent='Map tiles are unavailable. Use the terminal directions below.'+note;}}});
+   timer=setTimeout(()=>{if(!loaded){if(!usingFallback)fallback();else{message.dataset.tiles='unavailable';message.textContent='Map tiles are unavailable. Use the terminal directions below.'+note;}}},10000);
+   tiles.addTo(map);
+  }
+  function fallback(){if(usingFallback)return;usingFallback=true;addTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png','openstreetmap');}
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),8000);
+  try{
+   const response=await fetch('/api/carto-basemap-config',{signal:controller.signal,credentials:'same-origin'});
+   if(!response.ok)throw new Error('Basemap configuration unavailable');
+   const config=await response.json(),key=typeof config.key==='string'?config.key.trim():'';
+   if(!key)throw new Error('Basemap configuration missing');
+   addTiles('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key),'carto');
+  }catch{fallback();}finally{clearTimeout(timeout);}
+ }
  function startMap(){
   if(mapPromise)return mapPromise;
   $('map-load').textContent='Loading map…';mapPromise=new Promise((resolve,reject)=>{if(globalThis.L)return resolve();const s=document.createElement('script');s.src='/assets/leaflet-1.9.4.js';s.onload=resolve;s.onerror=reject;document.head.append(s);}).then(()=>{
    const L=globalThis.L;$('ferry-map').textContent='';map=L.map('ferry-map',{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false});mapLayer=L.layerGroup().addTo(map);
-   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}).on('tileerror',()=>{$('map-message').textContent='Some map tiles are unavailable. The terminal directions below still work. Markers show approximate areas; dashed lines are schematic.';}).addTo(map);
-   $('map-load').textContent='Reset route view';updateMap(lastPlan.route);
+   $('map-load').textContent='Reset route view';updateMap(lastPlan.route);return loadBasemap();
   }).catch(()=>{$('map-message').textContent='The interactive map could not load. Use the terminal directions below.';$('map-load').textContent='Retry map';mapPromise=null;});return mapPromise;
  }
  $('map-load').addEventListener('click',()=>{if(map)updateMap(lastPlan.route);else startMap();});
