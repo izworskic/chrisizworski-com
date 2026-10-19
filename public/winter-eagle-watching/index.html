@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=11">
+<link rel="stylesheet" href="/winter-eagle-watching/style.css?v=12">
 <link rel="stylesheet" href="/winter-eagle-watching/flight-guide.css?v=2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-Y5D2V2W7HN");</script>
@@ -39,8 +39,8 @@
 </script>
 <script defer src="/winter-eagle-watching/planning.js?v=2"></script>
 <script defer src="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js"></script>
-<script defer src="/winter-eagle-watching/eagle-map.js?v=3"></script>
-<script defer src="/winter-eagle-watching/app.js?v=11"></script>
+<script defer src="/winter-eagle-watching/eagle-map.js?v=4"></script>
+<script defer src="/winter-eagle-watching/app.js?v=12"></script>
 <script defer src="/winter-eagle-watching/flight-guide.js?v=1"></script>
 </head>
 <body>
@@ -158,7 +158,7 @@
 <p class="source-note" id="location-help">Location is requested only when you select “Find nearest.” Distance is straight-line, not driving distance.</p>
 <div class="layout">
 <div class="panel panel-pad"><div id="spot-list" class="spots" role="group" aria-label="Eagle watching locations"></div><p id="no-spots" hidden>No locations match these filters. Try all spots.</p></div>
-<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading interactive geographic map…</p></div><p id="map-provider" class="map-caption" aria-live="polite">Full interactive vector map with public eagle-watching locations. CARTO Voyager activates with its Basemaps key; otherwise a vector fallback is used. Pins are not nests or reported cartwheel locations.</p></div>
+<div class="panel panel-pad"><div id="map" class="map" role="region" aria-label="Map of public winter eagle viewing destinations"><p class="fallback">Loading interactive geographic map…</p></div><p id="map-provider" class="map-caption" aria-live="polite">Interactive CARTO Voyager map with day/night styles, a nearby-spot finder, and a visitor-location marker on request. A backup map remains available if tiles fail. Pins identify public overlooks, not nests or live sightings.</p></div>
 </div></section>
 <section class="detail-grid" aria-label="Selected eagle viewing destination">
 <article id="location-details" class="panel panel-pad"><div class="eyebrow"><span id="selected-region">Regional context</span> · <span id="selected-city">Trenton, MI</span></div><h2 id="selected-place">Detroit River Refuge Gateway</h2><span id="season-pill" class="status muted">Outside typical winter gathering season</span>
