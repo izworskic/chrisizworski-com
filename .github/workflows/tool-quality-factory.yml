@@ -1,0 +1,85 @@
+name: Tool Quality Factory
+
+on:
+  workflow_call:
+    inputs:
+      manifest:
+        type: string
+        required: false
+        default: config/tool-quality-pilots.json
+      fail_on:
+        type: string
+        required: false
+        default: error
+  workflow_dispatch:
+    inputs:
+      manifest:
+        description: "Manifest path in the target repository"
+        type: string
+        required: false
+        default: config/tool-quality-pilots.json
+      url:
+        description: "Optional single public HTTPS URL instead of the manifest"
+        type: string
+        required: false
+      fail_on:
+        description: "error (default), warning, or never"
+        type: choice
+        options: [error, warning, never]
+        default: error
+  pull_request:
+    paths:
+      - "scripts/tool-quality-factory.mjs"
+      - "tests/tool-quality-factory.test.js"
+      - "config/tool-quality-pilots.json"
+      - ".github/workflows/tool-quality-factory.yml"
+      - "docs/TOOL_QUALITY_FACTORY.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-factory-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller tool repository
+        uses: actions/checkout@v4
+      - name: Checkout shared quality engine
+        uses: actions/checkout@v4
+        with:
+          repository: izworskic/chrisizworski-com
+          ref: ${{ github.repository == 'izworskic/chrisizworski-com' && (github.head_ref || github.ref_name) || 'main' }}
+          path: .quality-factory
+          sparse-checkout: |
+            scripts/tool-quality-factory.mjs
+            tests/tool-quality-factory.test.js
+          persist-credentials: false
+      - name: Use Node 22 without installing dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test the reusable quality engine
+        run: node --test .quality-factory/tests/tool-quality-factory.test.js
+      - name: Audit initial HTML without building or deploying
+        env:
+          QUALITY_MANIFEST: ${{ inputs.manifest || 'config/tool-quality-pilots.json' }}
+          QUALITY_URL: ${{ inputs.url || '' }}
+          QUALITY_FAIL_ON: ${{ inputs.fail_on || 'error' }}
+        run: |
+          if [ -n "$QUALITY_URL" ]; then
+            node .quality-factory/scripts/tool-quality-factory.mjs --url="$QUALITY_URL" --out=tool-quality-report.json --fail-on="$QUALITY_FAIL_ON"
+          else
+            node .quality-factory/scripts/tool-quality-factory.mjs --manifest="$QUALITY_MANIFEST" --out=tool-quality-report.json --fail-on="$QUALITY_FAIL_ON"
+          fi
+      - name: Upload scorecard even on audit failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-quality-report
+          path: tool-quality-report.json
+          if-no-files-found: warn
+          retention-days: 7
