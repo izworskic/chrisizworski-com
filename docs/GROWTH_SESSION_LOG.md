@@ -1,3 +1,11 @@
+## Holiday Travel airport selection — October 19, 2026
+
+- **Owner-reported defect:** Changing departure airport updated no meaningful figures for almost all airports. Only ORD had a hardcoded historical rate; every other airport silently inherited an identical U.S. baseline. The dates were national TSA rankings; user understandably expected airport data to respond to selection.
+- **Fix:** Add 18 airport-specific November and December 2025 domestic departures-on-time and cancellation percent records. Data source is BTS reporting-carrier domestic departures as independently tabulated by On-Time Report; each airport/month links to the corresponding detailed source. The summary, context panel, first-choice explanation, card metrics and source link update on airport change; the unspecified-airport option explicitly shows the national BTS baseline.
+- **Truth boundary:** National TSA holiday-relative date rankings stay national for all airports because no authenticated airport/day-specific traffic dataset is available; never fake airport-specific TSA crowds or imply a monthly airport percentage is the selected date's flight delay probability. Airline on-time history, cancellation rate and month are clearly labeled 2025, with no paid data calls or new runtime API keys.
+- **Tests and release status:** Focused regression test iterates all 18 airport codes in both months, checks dynamic cancellation and source links, verifies unspecified-airport fallback, and protects the unchanged national-day ranking. Full CI, merge and Vercel production verification pending at time of branch creation; GSC and AdSense lift not measured.
+- **Exactly one next action:** Run full PR verification; merge only after passing and confirm the correct Vercel production commit.
+
 ## Holiday Travel evergreen calendar — October 19, 2026
 
 - **Owner direction:** The Holiday Travel Day Picker must not become a stale "2026" page each January. Keep the canonical URL and search title evergreen. Calculate every actual Thanksgiving/Christmas date per chosen travel year.
