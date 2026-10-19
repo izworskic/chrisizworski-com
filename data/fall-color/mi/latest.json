@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-18",
-  "updated": "2026-10-18T14:39:31.747Z",
-  "body": "The Upper Peninsula lags significantly behind the Lower Peninsula. Western and Eastern U.P. regions show minimal color at 8 percent modeled, still in early decline. The Tip of the Mitt displays 21 percent, while Northwest Lower leads statewide at 86 percent modeled. Central and Southwest Lower regions follow closely at 84 and 70 percent respectively, both in active fall phases.\n\nThis weekend's mostly clear skies across northern regions favor viewing, particularly the Tip of the Mitt and Northwest Lower with highs near 62-64 degrees. Mixed skies dominate southern and central areas, though temperatures remain mild in the mid-60s. Cool overnight lows ranging from 34 to 44 degrees may enhance color intensity where foliage is advanced.\n\nFor optimal weekend viewing, consider Pierce Stocking Scenic Drive in Sleeping Bear Dunes, where Northwest Lower's 86 percent modeled color and mostly clear conditions align. Alternatively, the River Road Scenic Byway in the Northeast offers 54 percent modeled color with mixed skies and similar temperatures, providing a less-crowded option with developing fall displays.",
+  "date": "2026-10-19",
+  "updated": "2026-10-19T17:34:17.768Z",
+  "body": "The Upper Peninsula lags significantly behind the Lower Peninsula. Western and Eastern U.P. regions show minimal color at 8 percent modeled, still in early decline. The Tip of the Mitt reaches 21 percent falling. Lower Peninsula color varies widely: Northwest and Central regions lead at 86-88 percent falling, while Northeast sits at 54 percent falling. Southwest and Southeast Lower show 63-71 percent, with color still rising in those areas.\n\nThis weekend's mixed skies and mild temperatures—highs near 62-68 degrees—will support continued leaf drop across all regions without disruption. Cooler overnight lows ranging from 35-43 degrees may slow color transitions slightly but won't halt the process. The consistent weather pattern favors steady progression rather than dramatic changes through Sunday.\n\nFor peak color viewing this weekend, head to the Northwest Lower Peninsula and drive Pierce Stocking Scenic Drive at Sleeping Bear Dunes, where modeled color reaches 88 percent in falling phase. Alternatively, explore Central Michigan's river road through Chippewa Nature Center near Midland, also at 86 percent falling with slightly warmer highs near 68 degrees.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-18T14:39:28.027Z",
+  "conditionsUpdated": "2026-10-19T17:34:14.041Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -15,11 +15,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
@@ -32,11 +32,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
@@ -49,16 +49,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 86,
+      "modeledPercent": 88,
       "source": {
         "drivers": [
           "regional climatology",
@@ -66,11 +66,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
@@ -83,16 +83,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 84,
+      "modeledPercent": 86,
       "source": {
         "drivers": [
           "regional climatology",
@@ -100,16 +100,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 70,
+      "modeledPercent": 71,
       "source": {
         "drivers": [
           "regional climatology",
@@ -117,16 +117,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 64,
+      "modeledPercent": 63,
       "source": {
         "drivers": [
           "regional climatology",
@@ -134,11 +134,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -3,
+        "anchorShiftDays": -4,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 35,
-        "satelliteWeight": 0.4
+        "satelliteAgeDays": 36,
+        "satelliteWeight": 0.36
       }
     }
   ],
