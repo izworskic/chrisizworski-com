@@ -28,10 +28,10 @@
     return l;
   });
   var SHIPS = {
-    max: {name: 'Seaway-max laker', len: 740, beam: 78, fits: true},
-    saltie: {name: 'Ocean saltie', len: 656, beam: 78, fits: true},
-    small: {name: 'Small cargo ship', len: 450, beam: 60, fits: true},
-    thousand: {name: '1,000-footer (Paul R. Tregurtha)', len: 1013.5, beam: 105, fits: false}
+    max: {name: 'Seaway-max laker', len: 740, beam: 78, fits: true, type: 'aft-ender', hull: '#7a2b22', stack: ['#1c1c1c', '#c8402f', '#f1ede3']},
+    saltie: {name: 'Ocean saltie', len: 656, beam: 78, fits: true, type: 'saltie', hull: '#1f3e66', stack: ['#111111', '#f2c230', '#1f3e66']},
+    small: {name: 'Small cargo ship', len: 450, beam: 60, fits: true, type: 'classic', hull: '#3d5a3a', stack: ['#1c1c1c', '#e2e2e2', '#3d5a3a']},
+    thousand: {name: '1,000-footer (Paul R. Tregurtha)', len: 1013.5, beam: 105, fits: false, type: 'aft-ender', hull: '#7a2b22'}
   };
   var CHAMBER = {len: 766, beam: 80};
   var SPEED_KMH = 11; // a laden ship in the canal reaches, roughly 6 knots
@@ -66,6 +66,8 @@
   var state = {dir: 'up', ship: 'max', t: 0, playing: false, last: null, rate: 9};
   var trip = plan('up');
   var svg = root.querySelector('[data-wl-svg]');
+  var close = root.querySelector('[data-wl-close]');
+  var clock = 0, visible = true;
   var fit = root.querySelector('[data-wl-fit]');
   var out = {
     say: root.querySelector('[data-wl-say]'), lock: root.querySelector('[data-wl-lock]'),
@@ -142,6 +144,7 @@
     html += '<g transform="translate(' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ') scale(1.6)' + flip + '">' +
       '<path d="M-22 -2 L16 -2 L22 -8 L22 -1 L18 4 L-20 4 Z" fill="#c8402f"/><rect x="-21" y="-12" width="9" height="10" fill="#f2efe6"/><rect x="-19" y="-16" width="3" height="4" fill="#111"/></g>';
     svg.innerHTML = html;
+    renderClose(s, ship);
     // On narrow screens the profile scrolls sideways; keep the ship in view.
     var stage = svg.parentNode;
     if (stage.scrollWidth > stage.clientWidth + 4) {
@@ -179,6 +182,61 @@
     if (watchId) { out.live.textContent = 'See ships near Lock ' + watchId + ' on the live map'; out.live.setAttribute('data-lock', watchId); }
   }
 
+
+  // Close-up camera on the lock the ship is in or heading for: the ship eases in,
+  // the gates swing shut, water boils in (or drains out) and she rises or falls with it.
+  var CW = 1000, CH = 280, CCX = 200, CCW = 600, CK = 1.25, C_UP = 100;
+  function renderClose(s, ship) {
+    if (!close || !window.LockShipArt) return;
+    var e = s.e, up = state.dir === 'up';
+    var lock = e.lock || (trip.events.filter(function (x) { return x.lock && x.t0 >= state.t; })[0] || {}).lock;
+    if (!lock) { lock = up ? LOCKS[7] : LOCKS[0]; }
+    var liftPx = Math.max(2, lock.lift * 3.281 * CK);
+    var upY = C_UP, lowY = C_UP + liftPx;
+    var scale = CCW / CHAMBER.len, L = ship.len * scale;
+    var inX = CCX + (CCW - L) / 2;
+    // Upbound ships rise, so they enter from the low side (right) and leave to the high side (left).
+    var outsideIn = up ? CCX + CCW + 16 : CCX - 16 - L, offIn = up ? CW + 30 : -L - 30, offOut = up ? -L - 30 : CW + 30;
+    var p = s.p, k = e.kind, x, y, mv = 0, level, upGate = 0, lowGate = 0;
+    var start = up ? lowY : upY, end = up ? upY : lowY;
+    var entryGate = function (v) { if (up) lowGate = v; else upGate = v; };
+    var exitGate = function (v) { if (up) upGate = v; else lowGate = v; };
+    if (k === 'sail') {
+      var gone = e.lock == null && e.t0 > 0 && trip.events.indexOf(e) === trip.events.length - 1;
+      level = start; entryGate(1);
+      var q = Math.max(0, (p - 0.55) / 0.45);
+      x = gone ? offOut : offIn + (outsideIn - offIn) * q; y = start; mv = q > 0 ? 0.8 : 0;
+      if (gone) { level = start; }
+    } else {
+      level = k === 'enter' || k === 'close' ? start : k === 'water' ? start + (end - start) * ease(p) : end;
+      if (k === 'enter') { entryGate(1); x = outsideIn + (inX - outsideIn) * ease(p); mv = 0.6 * (1 - p) + 0.1; }
+      else if (k === 'close') { entryGate(1 - p); x = inX; }
+      else if (k === 'water') { x = inX; }
+      else if (k === 'open') { exitGate(p); x = inX; }
+      else { exitGate(1); x = inX + (offOut - inX) * ease(p); mv = 0.2 + 0.7 * p; }
+      y = level;
+    }
+    var html = window.LockShipArt.scene({
+      W: CW, H: CH, cx: CCX, cw: CCW, upY: upY, lowY: lowY, level: level, upGate: upGate, lowGate: lowGate,
+      flow: k === 'water' && p > 0 && p < 1 ? (up ? 1 : -1) : 0,
+      ship: ship.fits ? ship : null, shipX: x, shipY: y, shipL: L, k: CK, t: clock / 1000, moving: mv,
+      moored: k === 'close' || k === 'water' || k === 'open', flip: up
+    });
+    html += '<rect x="10" y="10" width="190" height="26" rx="13" fill="rgba(7,28,44,.78)"/><text x="105" y="28" text-anchor="middle" class="wl-cl">Lock ' + lock.id + ' close-up</text>' +
+      '<text x="14" y="' + (CH - 30) + '" class="wl-cw">toward Lake Erie</text>' +
+      '<text x="' + (CW - 14) + '" y="' + (CH - 30) + '" text-anchor="end" class="wl-cw">toward Lake Ontario</text>' +
+      '<path d="M' + (CCX + 24) + ' ' + upY + ' l0 ' + liftPx + '" stroke="#fee0a2" stroke-width="1.5" stroke-dasharray="3 3"/>' +
+      '<text x="' + (CCX + 30) + '" y="' + (upY + liftPx / 2 + 4) + '" class="wl-cl">' + (lock.id === '8' ? 'small lift' : 'about 14 m') + '</text>';
+    close.innerHTML = html;
+    follow(close, x + L / 2, CW);
+  }
+  function follow(svgEl, cx, width) {
+    var box = svgEl.parentNode;
+    if (box.scrollWidth <= box.clientWidth + 4) return;
+    var px = Math.max(0, Math.min(width, cx)) / width * box.scrollWidth;
+    if (px < box.scrollLeft + 40 || px > box.scrollLeft + box.clientWidth - 40) box.scrollLeft = Math.max(0, px - box.clientWidth / 2);
+  }
+  function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function renderFit() {
     var ship = SHIPS[state.ship];
     var w = 1000, h = 150, s = 1.2;
@@ -199,6 +257,7 @@
   }
 
   function tick(now) {
+    clock = now;
     if (!state.playing) return;
     if (state.last != null) state.t = Math.min(trip.total, state.t + (now - state.last) / 1000 * state.rate);
     state.last = now; render();
@@ -234,5 +293,13 @@
     var map = document.getElementById('ship-watch'); if (map) map.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
   });
   reset();
+  if (!reduce) {
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(root);
+    var lastAmb = 0;
+    (function ambient(now) {
+      if (visible && !state.playing && now - lastAmb > 60) { clock = now; render(); lastAmb = now; }
+      requestAnimationFrame(ambient);
+    })(0);
+  }
   root._plan = plan; root._locks = LOCKS;
 })();

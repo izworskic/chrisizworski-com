@@ -30,4 +30,8 @@
 .wl-fit svg{display:block;width:100%;height:auto;border-radius:8px}
 .wl-fit .wl-t{font:600 15px system-ui,sans-serif;fill:#c9dbe1}
 .lock-section .wl-fit p{margin:8px 0 0;color:#c9dbe1;max-width:none}
-@media (max-width:640px){.wl-stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.wl-stage svg{min-width:780px}.wl-bar,.wl-read,.wl-fit,.wl-sim-head{padding-left:14px;padding-right:14px}.lock-section .wl-sim p.wl-say{margin-left:14px;margin-right:14px}}
+@media (max-width:640px){.wl-stage,.wl-close{overflow-x:auto;-webkit-overflow-scrolling:touch}.wl-stage svg{min-width:780px}.wl-close svg{min-width:720px}.wl-bar,.wl-read,.wl-fit,.wl-sim-head{padding-left:14px;padding-right:14px}.lock-section .wl-sim p.wl-say{margin-left:14px;margin-right:14px}}
+.wl-close svg{display:block;width:100%;height:auto}
+.wl-close .wl-cl{font:800 13px system-ui,sans-serif;fill:#fee0a2}
+.wl-close .wl-cw{font:700 13px system-ui,sans-serif;fill:#fff}
+.wl-close .wl-cn{font:700 12px system-ui,sans-serif;fill:#071c2c}
