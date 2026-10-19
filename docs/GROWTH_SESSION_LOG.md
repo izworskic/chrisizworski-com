@@ -1,3 +1,9 @@
+## Ferry directory Mackinac card consistency — October 19, 2026
+
+- **Owner request:** Make the Mackinac Island ferry listing card look like the other ferry cards.
+- **Change:** Move Mackinac into the shared directory card grid with the same region label, title, description and route-planner action. Remove its separate oversized panel. Update the directory count and ItemList to include all ten tools; keep the destination URL unchanged. The generator preserves the layout during builds. No canonical URL or identity link is removed.
+- **Validation/release:** Full repository gate and exact-commit CI required before release. Visual production review and final deployment result belong in the PR handoff.
+
 ## Ferry destination rebuild + Manitou omission repair — October 19, 2026
 
 - **Owner intent:** Finish individual ferry products at the Mackinac planner's depth, including the omitted Manitou Islands; do not start another generic batch.
