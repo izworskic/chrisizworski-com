@@ -5,6 +5,7 @@
 const SITES={"detroit":{"lat":42.1105,"lon":-83.1847,"lake":"erie"},"shiawassee":{"lat":43.32515,"lon":-84.0327,"lake":"huron"},"croton":{"lat":43.435561,"lon":-85.66678},"soo-cfre":{"lat":46.4904,"lon":-84.3546,"lake":"superior"},"menominee":{"lat":45.7597,"lon":-87.939,"lake":"michigan"},"tippy":{"lat":44.26841,"lon":-85.93562},"ausable":{"lat":44.43592,"lon":-83.62381,"lake":"huron"},"soo-rotary":{"lat":46.48378,"lon":-84.30077,"lake":"superior"},"soo-locks":{"lat":46.5025,"lon":-84.3484,"lake":"superior"},"escanaba-north":{"lat":45.77807,"lon":-87.06436,"lake":"michigan"},"seney":{"lat":46.21635,"lon":-85.96977},"prairie":{"lat":43.2896,"lon":-89.7215},"red-wing":{"lat":44.5595,"lon":-92.516},"wabasha":{"lat":44.3836,"lon":-92.0313},"fulton":{"lat":41.9001,"lon":-90.1566},"pleasant":{"lat":41.5632,"lon":-90.4041},"starved":{"lat":41.3187,"lon":-88.9708},"riverlands":{"lat":38.8812,"lon":-90.1866},"clarksville":{"lat":39.3696,"lon":-90.902}};
 const NOAA_BASE='https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/';
 const INAT_BASE='https://api.inaturalist.org/v1/observations';
+const GBIF_BASE='https://api.gbif.org/v1/occurrence/search';
 const ICE_SOURCE='https://www.glerl.noaa.gov/data/ice/index.html';
 const INAT_SOURCE='https://www.inaturalist.org/pages/api+recommended+practices';
 const COL={superior:2,michigan:3,huron:4,erie:5,ontario:6,'st-clair':7,basin:8};
@@ -66,17 +67,75 @@ async function fetchChecked(url,kind){
   return kind==='text'?body:JSON.parse(body);
  }finally{clearTimeout(timer)}
 }
+
+function distanceKm(lat1,lon1,lat2,lon2){
+ const rad=n=>n*Math.PI/180;
+ const a=Math.sin(rad(lat2-lat1)/2)**2+
+  Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(rad(lon2-lon1)/2)**2;
+ return 6371.0088*2*Math.asin(Math.min(1,Math.sqrt(a)));
+}
+function summarizeGbif(json,site,now=Date.now()){
+ if(!json||!Array.isArray(json.results)||!Number.isSafeInteger(json.count))return null;
+ const starts=now-31*86400000,ends=now+86400000,seen=new Set(),dates=[];
+ for(const o of json.results){
+  if(o?.basisOfRecord!=='HUMAN_OBSERVATION')continue;
+  if(!/\bHaliaeetus leucocephalus\b/i.test([o.species,o.scientificName].filter(Boolean).join(' ')))continue;
+  const lat=Number(o.decimalLatitude),lon=Number(o.decimalLongitude);
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||!(-90<=lat&&lat<=90)||!(-180<=lon&&lon<=180))continue;
+  if(distanceKm(site.lat,site.lon,lat,lon)>40)continue;
+  const d=dateOnly(o.eventDate?.slice(0,10));
+  const eventTime=d?Date.parse(d+'T12:00:00Z'):NaN;
+  const id=String(o.key||'');
+  if(!d||!Number.isFinite(eventTime)||eventTime<starts||eventTime>ends||!id||seen.has(id))continue;
+  seen.add(id);dates.push(d);
+ }
+ dates.sort((a,b)=>b.localeCompare(a));
+ const observed=dates[0]||null;
+ return {observationsSampled:dates.length,latestObservedOn:observed,
+  ageDays:observed?Math.max(0,Math.floor((now-Date.parse(observed+'T12:00:00Z'))/86400000)):null,
+  returnedRows:json.results.length,moreRecords:Number(json.count)>json.results.length,
+  sourceTotalReported:json.count,hasObservations:dates.length>0};
+}
+async function gbifObservations(site,now,start,end){
+ // Bounding rectangle gets filtered server-side down to a genuine 40 km
+ // haversine radius; never export the underlying records or coordinates.
+ const deltaLat=40/111.2,deltaLon=40/(111.2*Math.cos(site.lat*Math.PI/180));
+ const u=new URL(GBIF_BASE);
+ for(const [k,v] of Object.entries({
+  scientificName:'Haliaeetus leucocephalus',basisOfRecord:'HUMAN_OBSERVATION',
+  hasCoordinate:'true',eventDate:start+','+end,
+  decimalLatitude:[site.lat-deltaLat,site.lat+deltaLat].map(v=>v.toFixed(4)).join(','),
+  decimalLongitude:[site.lon-deltaLon,site.lon+deltaLon].map(v=>v.toFixed(4)).join(','),
+  limit:'25'
+ }))u.searchParams.set(k,String(v));
+ const data=summarizeGbif(await fetchChecked(u.href,'json'),site,now);
+ if(!data)throw Error('Invalid GBIF occurrence response');
+ return {
+  source:'GBIF',sourceDescription:'GBIF indexed human-observation records',
+  scope:'40 km surrounding public viewing area',windowStart:start,windowEnd:end,
+  searchUrl:'https://www.gbif.org/occurrence/search?'+u.searchParams.toString(),
+  status:'ok',...data,
+  note:'GBIF records can be published or indexed late, can duplicate reports, and are not necessarily research-grade. Latest date is the most recent of the records sampled; not a complete bird count.'
+ };
+}
+
 async function observations(site,now){
  const start=toDate(now-30*86400000),end=toDate(now);
  const u=new URL(INAT_BASE);
  for(const [k,v] of Object.entries({taxon_id:'5305',quality_grade:'research',verifiable:'true',lat:site.lat,lng:site.lon,radius:'40',d1:start,d2:end,per_page:'80',order_by:'observed_on',order:'desc'}))u.searchParams.set(k,String(v));
- // These are **broad 40 km corridor** reports, not observations at the trailhead.
  const base={source:'iNaturalist',scope:'40 km surrounding public viewing area',windowStart:start,windowEnd:end,searchUrl:'https://www.inaturalist.org/observations?'+u.searchParams.toString()};
- try{
-  const data=summarizeObservations(await fetchChecked(u.href,'json'),now);
-  if(!data)return {...base,status:'unavailable',reason:'Invalid community observation response'};
-  return {...base,status:'ok',...data};
- }catch{return {...base,status:'unavailable',reason:'Community observation feed temporarily unavailable'}}
+ // Start both sources concurrently so a slow iNaturalist failure does not
+ // force a second full upstream timeout on a Vercel function invocation.
+ const [inat,gbif]=await Promise.allSettled([
+  fetchChecked(u.href,'json'),
+  gbifObservations(site,now,start,end)
+ ]);
+ if(inat.status==='fulfilled'){
+  const data=summarizeObservations(inat.value,now);
+  if(data)return {...base,status:'ok',sourceDescription:'iNaturalist research-grade community reports',...data};
+ }
+ if(gbif.status==='fulfilled')return gbif.value;
+ return {...base,status:'unavailable',reason:'Both iNaturalist and GBIF regional observation feeds unavailable'};
 }
 async function ice(site,now){
  if(!site.lake)return {status:'not_applicable',reason:'No lake-wide measurement is a valid proxy for this inland river location.',sourceUrl:ICE_SOURCE};
@@ -105,4 +164,4 @@ async function handler(req,res){
  ]});
 }
 module.exports=handler;
-module.exports._test={winterSeason,parseIce,summarizeObservations,SITES};
+module.exports._test={winterSeason,parseIce,summarizeObservations,summarizeGbif,distanceKm,SITES};
