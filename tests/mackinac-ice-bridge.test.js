@@ -29,7 +29,7 @@ test('No travel safety promise or route appears in map and content', () => {
   assert.match(ui, /iceReady = !!\(o && o.available && !o.stale && o.validAt\)/);
   assert.doesNotMatch(ui, /(?:polyline|routingControl|drawRoute)\s*\(/);
 });
-test('Map uses keyless CARTO and the official NOAA chart, with failure state', () => {
+test('Map uses configured CARTO key and the official NOAA chart, with fallback', () => {
   assert.match(ui, /basemaps\.cartocdn\.com/);
   assert.match(ui, /mapservices\.weather\.noaa\.gov/);
   assert.match(ui, /L\.imageOverlay\(/);
@@ -57,7 +57,7 @@ test('Discovery, sitemap and registry connect with Michigan Ice Report', () => {
   assert.ok(registry.relationships.some(r => r.from === 'mackinac-ice-bridge' && r.to === 'mackinac-island'));
 });
 
-test('Ice bridge experience has multiple credited real photos, interpreted data tabs and keyless tile fallback', () => {
+test('Ice bridge experience has multiple credited real photos, interpreted data tabs and OSM tile fallback', () => {
   const css = read('public/assets/mackinac-ice-bridge-experience.css');
   assert.match(page,/id="winter-gallery"/);
   assert.equal((page.match(/class="photo-card"/g)||[]).length,3);
@@ -76,4 +76,22 @@ test('Ice bridge experience has multiple credited real photos, interpreted data 
   assert.match(ui,/function setupGallery/);
   assert.match(css,/prefers-reduced-motion/);
   assert.doesNotMatch(page,/mapbox|google\.maps|MAPBOX_ACCESS_TOKEN|GOOGLE_MAPS_API_KEY/i);
+});
+
+test('CARTO basemap uses the public Vercel key and never requests keyless CARTO tiles', () => {
+  const endpoint = read('api/carto-basemap-config.js');
+  assert.match(endpoint, /process\.env\.CARTO_BASEMAP_PUBLIC_KEY/);
+  assert.match(endpoint, /runtime: 'edge'/);
+  assert.match(endpoint, /status: 503/);
+  assert.match(endpoint, /no-store/);
+  assert.doesNotMatch(endpoint, /MAPBOX_KEY|OPENAI_API_KEY|UPSTASH/i);
+  assert.match(ui, /fetch\('\/api\/carto-basemap-config'/);
+  assert.match(ui, /rastertiles\/voyager/);
+  assert.match(ui, /\.png\?key='/);
+  assert.match(ui, /encodeURIComponent\(config\.key\.trim\(\)\)/);
+  assert.doesNotMatch(ui, /basemaps\.cartocdn\.com\/light_all/);
+  assert.match(ui, /loadCartoBasemap\(\)/);
+  assert.match(ui, /tile\.openstreetmap\.org/);
+  assert.match(page, /CARTO Voyager map using the site’s configured basemap key/);
+  assert.doesNotMatch(page, /Loading the keyless map/);
 });
