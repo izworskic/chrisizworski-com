@@ -64,9 +64,34 @@
   }
   if(!days.length)holder.textContent='No seven-day forecast is available.';
  }
+ function renderRetreat(trend,noaa){
+  const summary=$('retreat-summary'),holder=$('retreat-chart');
+  holder.replaceChildren();
+  if(!trend||trend.status==='unavailable'||!Array.isArray(trend.days)||!trend.days.length){
+   summary.textContent='Snow retreat history unavailable: '+(trend?.reason||'The model feed did not return valid completed days')+'. This cannot be interpreted as bare ground.';
+   holder.textContent='No defensible 14-day model history. NOAA latest snow and your local observation remain separate.';
+   return;
+  }
+  const labels={persistently_bare:'Modeled bare for at least seven days',recent_retreat:'Recent modeled snow retreat',possible_brief_thaw:'Bare in one recent model snapshot — persistence unverified',thinning:'Modeled snow is thinning',covered:'Modeled snow remains'};
+  summary.textContent=(labels[trend.status]||'Modeled history')+' · through '+trend.throughDate+'. '+trend.reason+' No observed ground condition or antler timing is inferred.';
+  const disagreement=(noaa?.status==='modeled-cover'&&['persistently_bare','recent_retreat','possible_brief_thaw'].includes(trend.status))||
+   (noaa?.status==='modeled-bare'&&['covered','thinning'].includes(trend.status));
+  if(disagreement)summary.textContent+=' Current NOAA analysis and the separate historical model disagree. Treat the ground as unknown and inspect locally.';
+  const max=Math.max(.025,...trend.days.map(d=>d.depthM));
+  for(const d of trend.days){
+   const column=document.createElement('div');column.className='retreat-col';column.dataset.bare=String(d.depthM<=.005);
+   const val=document.createElement('span');val.className='retreat-magnitude';val.textContent=d.depthM<=.005?'≈0':(d.depthM*100).toFixed(0)+' cm';
+   const rail=document.createElement('div');rail.className='retreat-bar-space';
+   const bar=document.createElement('div');bar.className='retreat-bar';bar.style.height=Math.max(3,Math.round(96*d.depthM/max))+'px';
+   bar.title=d.date+' · modeled snow depth '+(d.depthM*100).toFixed(1)+' cm';
+   rail.append(bar);
+   const time=document.createElement('time');time.dateTime=d.date;time.textContent=fmt(d.date);
+   column.append(val,rail,time);holder.append(column);
+  }
+ }
  async function loadForecast(){
   const id=++state.request;const region=state.site;
-  state.data=null;state.day=0;$('noaa-summary').textContent='NOAA modeled snow: loading regional analysis…';setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
+  state.data=null;state.day=0;$('noaa-summary').textContent='NOAA modeled snow: loading regional analysis…';$('retreat-summary').textContent='Checking model history…';$('retreat-chart').textContent='Waiting for model samples…';setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18000);
   try{
    const r=await fetch('/api/shed-antlers?mode=forecast&site='+encodeURIComponent(region),{signal:controller.signal,headers:{'Accept':'application/json'}});
@@ -77,8 +102,9 @@
    state.data=json;
    const noaa=json.snowDepth;
    $('noaa-summary').textContent='NOAA modeled snow: '+(noaa?.description||'Not available')+(noaa?.validTime?' · Analysis '+noaa.validTime:'')+'. This is a regional model point, not measured field snow.';
+   renderRetreat(json.snowTrend,noaa);
    setStatus('NWS forecast loaded · '+fmt(new Date().toISOString().slice(0,10)),'good');render();
-  }catch(err){if(id!==state.request)return;state.data=null;$('noaa-summary').textContent='NOAA modeled snow: unavailable without current forecast data.';setStatus('NWS data unavailable','unavailable');render();$('provenance').textContent='No rating or best day is issued when the weather feed is unavailable.';$('days').textContent='Live forecast unavailable. Try updating again or choose a different region.';}
+  }catch(err){if(id!==state.request)return;state.data=null;$('noaa-summary').textContent='NOAA modeled snow: unavailable without current forecast data.';renderRetreat(null,null);setStatus('NWS data unavailable','unavailable');render();$('provenance').textContent='No rating or best day is issued when the weather feed is unavailable.';$('days').textContent='Live forecast unavailable. Try updating again or choose a different region.';}
   finally{clearTimeout(timer);}
  }
  function pick(id){
