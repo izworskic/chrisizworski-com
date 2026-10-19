@@ -2103,6 +2103,22 @@
       "destination": "/synced-national-tools/yellowstone-geysers/:path*"
     },
     {
+      "source": "/national-tools/big-sur-highway-1",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
+    },
+    {
+      "source": "/national-tools/big-sur-highway-1/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
+    },
+    {
+      "source": "/national-tools/sierra-pass-status",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
+    },
+    {
+      "source": "/national-tools/sierra-pass-status/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
+    },
+    {
       "source": "/national-tools/live-decisions",
       "destination": "/synced-national-tools/live-decisions/index.html"
     },
@@ -2189,22 +2205,6 @@
     {
       "source": "/national-tools/lake-powell-ramp-status/",
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
-    },
-    {
-      "source": "/national-tools/big-sur-highway-1",
-      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
-    },
-    {
-      "source": "/national-tools/big-sur-highway-1/",
-      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
-    },
-    {
-      "source": "/national-tools/sierra-pass-status",
-      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
-    },
-    {
-      "source": "/national-tools/sierra-pass-status/",
-      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
     },
     {
       "source": "/national-tools/:path*",
