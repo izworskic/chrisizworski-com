@@ -166,7 +166,14 @@
       layout:{"text-field":["get","number"],"text-size":11,"text-font":["Noto Sans Bold","Arial Unicode MS Bold"]},
       paint:{"text-color":"#ffffff"}});
     if(!handlersBound){
-    const tapPin=e=>{const id=e.features?.[0]?.properties?.id,s=byId.get(id);if(s)onSelect(s)};
+    let lastNativeClick=null;
+    const tapPin=e=>{
+      // Number label and circle are separate GL layers but one pointer action.
+      if(e.originalEvent&&e.originalEvent===lastNativeClick)return;
+      if(e.originalEvent)lastNativeClick=e.originalEvent;
+      const id=e.features?.[0]?.properties?.id,s=byId.get(id);
+      if(s)onSelect(s);
+    };
     map.on("click","eagle-pin-halo",tapPin);
     map.on("click","eagle-pin-number",tapPin);
     map.on("click","eagle-cluster",e=>{
