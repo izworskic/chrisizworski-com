@@ -1,98 +1,206 @@
-/* Holiday Travel odds engine. Pure functions over public/holiday-travel/data/national.json
+/* Holiday Travel "Will I make it?" engine.
+ * Pure functions over public/holiday-travel/data/national.json and routes/<ORIGIN>.json
  * (built by scripts/holiday-travel/build-flight-history.py from BTS flight records).
- * "Major disruption" = cancelled, diverted, or left 60+ minutes late.
- * All rates here are fractions 0..1. Nothing in this file touches the DOM or the network. */
+ * Times are minutes from 00:00 local on the holiday (Thanksgiving Thursday or Dec 25):
+ * offset * 1440 + clock minutes. Probabilities are fractions 0..1.
+ * No DOM, no network: the page fetches data and NWS responses and passes them in. */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.HolidayTravelEngine = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var ROUGH = 0.2; // a season counts as "rough" for a trip when its disruption chance reaches 20%
-  var CAP = 0.95;
-  var CONVENTIONAL = { th: { out: -1, ret: 3 }, xm: { out: -2, ret: 3 } }; // Wed->Sun; Dec 23->Dec 28
+  var MCT = 35; // minutes: a typical domestic minimum connection
+  var CAP = 0.97;
+  var DAY = 1440;
+  var HAZARDS = ['Blizzard Warning', 'Winter Storm Warning', 'Winter Storm Watch', 'Ice Storm Warning', 'Winter Weather Advisory',
+    'Lake Effect Snow Warning', 'Lake Effect Snow Watch', 'High Wind Warning', 'High Wind Watch', 'Dense Fog Advisory',
+    'Freezing Rain Advisory', 'Severe Thunderstorm Warning', 'Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning',
+    'Extreme Cold Warning', 'Wind Chill Warning', 'Flood Warning', 'Flash Flood Warning'];
+  var SEVERE = /blizzard|winter storm|ice storm|lake effect|hurricane|tropical storm|tornado/i;
+  var WX_WORDS = /snow|blizzard|freezing|ice|sleet|thunderstorm|fog|heavy rain|high wind/i;
 
-  function median(values) {
-    var v = values.filter(function (x) { return x !== null && isFinite(x); }).sort(function (a, b) { return a - b; });
+  function clamp01(x) { return Math.max(0, Math.min(CAP, x)); }
+
+  // Survival curve lookup with log-linear interpolation between grid points.
+  function interp(grid, vals, x, scale) {
+    if (x <= grid[0]) return vals[0] / scale;
+    for (var i = 1; i < grid.length; i++) {
+      if (x <= grid[i]) {
+        var a = vals[i - 1] / scale, b = vals[i] / scale, t = (x - grid[i - 1]) / (grid[i] - grid[i - 1]);
+        if (a <= 0 || b <= 0) return a + (b - a) * t;
+        return Math.exp(Math.log(a) + (Math.log(b) - Math.log(a)) * t);
+      }
+    }
+    return vals[vals.length - 1] / scale;
+  }
+
+  function median(v) {
+    v = v.filter(function (x) { return x !== null && isFinite(x); }).sort(function (a, b) { return a - b; });
     if (!v.length) return null;
     var m = v.length >> 1;
     return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
   }
-  function mean(values) {
-    var v = values.filter(function (x) { return x !== null && isFinite(x); });
-    return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null;
-  }
-  function combine(a, b) { return a === null || b === null ? null : 1 - (1 - a) * (1 - b); }
 
-  function create(data) {
-    var byCode = {};
-    data.airports.forEach(function (a) { byCode[a.code] = a; });
-    var groups = data.meta.bandGroups;
-    var seasons = data.meta.seasons;
+  function create(nat) {
+    var meta = nat.meta, S = meta.scale, X = meta.xgrid, H = meta.hgrid, edges = meta.bandEdges, groups = meta.bandGroups;
+    var byCode = {}, shards = {};
+    nat.airports.forEach(function (a) { byCode[a.code] = a; });
 
-    function factor(code, hol, band, metric) {
-      var a = code && byCode[code];
-      return a ? a.f[hol][metric][groups[band]] : 1;
+    function band(clock) {
+      var h = Math.floor(((clock % DAY) + DAY) % DAY / 60);
+      for (var i = 0; i < edges.length - 1; i++) if (h >= edges[i] && h < edges[i + 1]) return i;
+      return edges.length - 1;
+    }
+    function dayOf(t) { return Math.floor(t / DAY); }
+    function clockOf(t) { return ((t % DAY) + DAY) % DAY; }
+
+    function addShard(shard) { shards[shard.origin] = shard; }
+    function hasShard(code) { return !!shards[code]; }
+    function route(o, d) { var s = shards[o]; return s && s.routes[d] ? s.routes[d] : null; }
+    function nonstopExists(o, d) { return (nat.routes[o] || []).indexOf(d) >= 0; }
+    function hubs(o, d, limit) {
+      var out = (nat.routes[o] || []).filter(function (h) { return h !== d && (nat.routes[h] || []).indexOf(d) >= 0; });
+      out.sort(function (a, b) { return (byCode[b] ? byCode[b].flights : 0) - (byCode[a] ? byCode[a].flights : 0); });
+      return out.slice(0, limit || 6);
     }
 
-    // One flight leg: chance of a major disruption (plus late/cancel means) for a given
-    // holiday-relative day, scheduled-departure band and departure airport.
-    function leg(hol, offset, band, code) {
-      var i = offset + 6, nat = data.holidays[hol].nat;
-      if (i < 0 || i >= 13) throw new RangeError('offset out of window: ' + offset);
-      var fMajor = factor(code, hol, band, 'major');
-      var out = {
-        major: Math.min(CAP, nat.major[i][band] / 100 * fMajor),
-        late: Math.min(CAP, nat.late[i][band] / 100 * factor(code, hol, band, 'late')),
-        cancel: Math.min(CAP, nat.cancel[i][band] / 100 * factor(code, hol, band, 'cancel')),
-        seasons: nat.majorSeason[i][band].map(function (v) { return v === null ? null : Math.min(CAP, v / 100 * fMajor); }),
-        factor: fMajor
+    // National surfaces for one holiday-relative day and band, either averaged over seasons or one season.
+    function surface(hol, off, b, season) {
+      var list = nat.holidays[hol].seasons, i = Math.max(-6, Math.min(6, off)) + 6;
+      var use = season === null || season === undefined ? list : [list[season]];
+      var cd = 0, sop = X.map(function () { return 0; });
+      use.forEach(function (s) {
+        cd += s.cd[i][b] / S;
+        for (var k = 0; k < X.length; k++) sop[k] += s.sop[i][b][k];
+      });
+      return { cd: cd / use.length, sop: sop.map(function (v) { return v / use.length; }) };
+    }
+
+    // One flight leg leaving `o` for `d` at absolute time t.
+    function leg(hol, o, d, t, season) {
+      var r = route(o, d);
+      if (!r) return null;
+      var b = band(clockOf(t)), a = byCode[o];
+      var f = (a ? a.f[hol][groups[b]] : 1) * r.r;
+      var s = surface(hol, dayOf(t), b, season);
+      var cd = clamp01(s.cd * f);
+      var sop = s.sop.map(function (v) { return v * f; });
+      var room = 1 - cd;
+      if (sop[0] / S > room) { var k = room / (sop[0] / S); sop = sop.map(function (v) { return v * k; }); }
+      return {
+        from: o, to: d, depart: t, arrive: t + r.shift, band: b, factor: f, route: r,
+        cd: cd,
+        late: function (min) { return interp(X, sop, min, S); },
+        rec: function (hours) { var g = r.rec[groups[b]]; return hours <= 0 ? 1 : interp(H, g.surv, hours, S); },
+        recInfo: r.rec[groups[b]]
       };
+    }
+
+    // P(arrive after the deadline) for one plan, for one season (index) or the season average (null).
+    function missOnce(p, season) {
+      if (!p.via) {
+        var l = leg(p.hol, p.from, p.to, p.depart, season);
+        if (!l) return null;
+        var slack = p.deadline - l.arrive;
+        if (slack < 0) return { p: 1, tooLate: true, arrive: l.arrive, slack: slack, legs: [l], parts: { cancel: 0, delay: 0, misconnect: 0 } };
+        var c = l.cd * l.rec(slack / 60), dl = l.late(slack);
+        return { p: Math.min(1, c + dl), arrive: l.arrive, slack: slack, legs: [l], parts: { cancel: c, delay: dl, misconnect: 0 } };
+      }
+      var l1 = leg(p.hol, p.from, p.via, p.depart, season);
+      if (!l1) return null;
+      var t2 = l1.arrive + p.layover, l2 = leg(p.hol, p.via, p.to, t2, season);
+      if (!l2) return null;
+      var sl = p.deadline - l2.arrive;
+      if (sl < 0) return { p: 1, tooLate: true, arrive: l2.arrive, slack: sl, legs: [l1, l2], parts: { cancel: 0, delay: 0, misconnect: 0 } };
+      var h = sl / 60;
+      var mis = l1.late(Math.max(0, p.layover - MCT));
+      var made = Math.max(0, 1 - l1.cd - mis);
+      var cancel = l1.cd * Math.max(l1.rec(h), l2.rec(h)) + made * l2.cd * l2.rec(h);
+      var misconnect = mis * l2.rec(h);
+      var delay = made * l2.late(sl);
+      return { p: Math.min(1, cancel + misconnect + delay), arrive: l2.arrive, slack: sl, legs: [l1, l2], misconnectChance: mis, parts: { cancel: cancel, delay: delay, misconnect: misconnect } };
+    }
+
+    function evaluate(p) {
+      var avg = missOnce(p, null);
+      if (!avg) return null;
+      var perSeason = meta.seasons.map(function (_, k) { var r = missOnce(p, k); return r ? r.p : null; });
+      var first = avg.legs[0];
+      return {
+        plan: p, p: avg.p, tooLate: !!avg.tooLate, arrive: avg.arrive, slack: avg.slack, parts: avg.parts, legs: avg.legs,
+        misconnectChance: avg.misconnectChance || 0,
+        perSeason: perSeason, median: median(perSeason),
+        worst: Math.max.apply(null, perSeason.filter(function (x) { return x !== null; })),
+        worstSeason: meta.seasons[perSeason.indexOf(Math.max.apply(null, perSeason.filter(function (x) { return x !== null; })))],
+        ifCancelled: { optimisticHours: first.recInfo.opt, realisticHours: first.recInfo.real, overnight: first.recInfo.night / S, perDay: first.route.perDay, carriers: first.route.carriers }
+      };
+    }
+
+    // Cheapest changes that lower the chance of missing the deadline.
+    function fixes(p, base) {
+      base = base || evaluate(p);
+      if (!base) return [];
+      var dayStart = Math.floor(p.depart / DAY) * DAY, clock = clockOf(p.depart), out = [];
+      function tryPlan(change, kind, label) {
+        var q = {}; for (var k in p) q[k] = p[k];
+        for (var c in change) q[c] = change[c];
+        if (Math.floor(q.depart / DAY) < -6) return null;
+        if (q.via && !(route(q.from, q.via) && route(q.via, q.to))) return null;
+        if (!q.via && !route(q.from, q.to)) return null;
+        var e = evaluate(q);
+        if (!e || e.tooLate) return null;
+        return { kind: kind, label: label, plan: q, result: e, p: e.p, gain: base.p - e.p };
+      }
+      function best(list) { list = list.filter(Boolean).filter(function (x) { return x.gain >= 0.01 && x.p < base.p * 0.85; }); list.sort(function (a, b) { return a.p - b.p; }); return list[0] || null; }
+      var sameDay = [360, 420, 480, 540, 600, 720, 840, 960, 1080, 1200].filter(function (c) { return c !== clock; })
+        .map(function (c) { return tryPlan({ depart: dayStart + c }, 'time', c); });
+      var earlier = [1, 2].map(function (n) {
+        return [420, clock].map(function (c) { return tryPlan({ depart: dayStart - n * DAY + c }, 'day', n); });
+      }).reduce(function (a, b) { return a.concat(b); }, []);
+      var routing = [];
+      if (p.via && route(p.from, p.to)) routing.push(tryPlan({ via: null }, 'route', null));
+      hubs(p.from, p.to, 6).forEach(function (h) {
+        if (h !== p.via && shards[h]) routing.push(tryPlan({ via: h, layover: Math.max(p.layover || 0, 75) }, 'route', h));
+      });
+      [best(sameDay), best(earlier), best(routing)].forEach(function (x) { if (x) out.push(x); });
+      out.sort(function (a, b) { return a.p - b.p; });
       return out;
     }
 
-    // A round trip: outbound leg from `from`, return leg from `to` (the destination airport).
-    function trip(o) {
-      var out = leg(o.hol, o.outOffset, o.outBand, o.from);
-      var ret = leg(o.hol, o.retOffset, o.retBand, o.to);
-      var perSeason = out.seasons.map(function (v, k) { return combine(v, ret.seasons[k]); });
-      var known = perSeason.filter(function (x) { return x !== null; });
-      return {
-        hol: o.hol, outOffset: o.outOffset, retOffset: o.retOffset, outBand: o.outBand, retBand: o.retBand,
-        mean: combine(out.major, ret.major),
-        late: combine(out.late, ret.late),
-        cancel: combine(out.cancel, ret.cancel),
-        perSeason: perSeason,
-        median: median(perSeason),
-        worst: known.length ? Math.max.apply(null, known) : null,
-        rough: known.filter(function (x) { return x >= ROUGH; }).length,
-        seasonsUsed: known.length,
-        out: out, ret: ret
-      };
-    }
-
-    // Every outbound day that leaves room for `len` nights inside the observed window.
-    function rank(o) {
-      var list = [];
-      for (var d = -6; d + o.len <= 6; d++) {
-        list.push(trip({ hol: o.hol, from: o.from, to: o.to, outOffset: d, retOffset: d + o.len, outBand: o.outBand, retBand: o.retBand }));
-      }
-      list.sort(function (a, b) { return a.mean - b.mean || a.worst - b.worst || a.outOffset - b.outOffset; });
-      return list;
-    }
-
-    function conventional(o) {
-      var c = CONVENTIONAL[o.hol];
-      return trip({ hol: o.hol, from: o.from, to: o.to, outOffset: c.out, retOffset: c.ret, outBand: o.outBand, retBand: o.retBand });
+    function firstFlight(code, clock) {
+      var b = band(clock), n = meta.firstFlightNational.byBand[b], a = byCode[code];
+      return { band: b, troubleFirst: n[0] / S, troubleLater: n[1] / S, shareNational: n[2] / S,
+        shareHere: a && a.firstShare[b] !== null ? a.firstShare[b] / S : null,
+        byBand: meta.firstFlightNational.byBand.map(function (r, i) { return { band: i, first: r[0] / S, later: r[1] / S, share: r[2] / S, shareHere: a && a.firstShare[i] !== null ? a.firstShare[i] / S : null }; }) };
     }
 
     return {
-      leg: leg, trip: trip, rank: rank, conventional: conventional,
-      airport: function (code) { return byCode[code] || null; },
-      airports: data.airports, seasons: seasons, bands: data.meta.bands, meta: data.meta,
-      anchor: function (hol, season) { return data.holidays[hol].anchors[String(season)]; }
+      evaluate: evaluate, fixes: fixes, firstFlight: firstFlight, route: route, nonstopExists: nonstopExists, hubs: hubs,
+      addShard: addShard, hasShard: hasShard, band: band, airport: function (c) { return byCode[c] || null; },
+      airports: nat.airports, seasons: meta.seasons, bands: meta.bands, meta: meta, MCT: MCT
     };
   }
 
-  return { create: create, median: median, mean: mean, combine: combine, ROUGH: ROUGH, CONVENTIONAL: CONVENTIONAL };
+  /* ---------- live layer: National Weather Service responses ---------- */
+  // alerts: api.weather.gov/alerts/active?point=lat,lon JSON. Keep hazards overlapping [startISO, endISO).
+  function hazards(alerts, startISO, endISO) {
+    var s = Date.parse(startISO), e = Date.parse(endISO);
+    return ((alerts && alerts.features) || []).map(function (f) { return f.properties || {}; }).filter(function (p) {
+      if (HAZARDS.indexOf(p.event) < 0) return false;
+      var on = Date.parse(p.onset || p.effective || p.sent), off = Date.parse(p.ends || p.expires);
+      return (isNaN(on) || on < e) && (isNaN(off) || off > s);
+    }).map(function (p) { return { event: p.event, headline: p.headline || p.event, severe: SEVERE.test(p.event), ends: p.ends || p.expires || null }; });
+  }
+  // forecast: api.weather.gov/gridpoints/.../forecast JSON. Periods that start on dateISO (YYYY-MM-DD, local).
+  function forecastFor(forecast, dateISO) {
+    var periods = ((forecast && forecast.properties && forecast.properties.periods) || []).filter(function (p) { return String(p.startTime).slice(0, 10) === dateISO; });
+    return periods.map(function (p) { return { name: p.name, text: p.shortForecast, detail: p.detailedForecast || '', flag: WX_WORDS.test(p.shortForecast + ' ' + (p.detailedForecast || '')) }; });
+  }
+  function liveState(todayISO, travelISO) {
+    var d = Math.round((Date.parse(travelISO + 'T12:00:00Z') - Date.parse(todayISO + 'T12:00:00Z')) / 864e5);
+    return { daysUntil: d, active: d >= 0 && d <= 7, past: d < 0 };
+  }
+
+  return { create: create, hazards: hazards, forecastFor: forecastFor, liveState: liveState, interp: interp, median: median, MCT: MCT, HAZARDS: HAZARDS };
 });

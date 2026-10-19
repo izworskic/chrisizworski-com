@@ -5,67 +5,104 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const Engine = require('../public/assets/holiday-travel-engine.js');
-const data = JSON.parse(fs.readFileSync('public/holiday-travel/data/national.json', 'utf8'));
-const eng = Engine.create(data);
-const base = { hol: 'th', len: 4, outBand: 1, retBand: 1 };
+const dir = 'public/holiday-travel/data';
+const nat = JSON.parse(fs.readFileSync(dir + '/national.json', 'utf8'));
+const shard = code => JSON.parse(fs.readFileSync(`${dir}/routes/${code}.json`, 'utf8'));
+const eng = Engine.create(nat);
+for (const c of ['DTW', 'ORD', 'ATL', 'MBS', 'MCO', 'MSP', 'DEN', 'SLC']) eng.addShard(shard(c));
+const at = (day, hour) => day * 1440 + hour * 60;
 
-test('dataset is complete and covers the documented seasons', () => {
-  assert.deepEqual(data.meta.seasons, [2018, 2019, 2022, 2023, 2024, 2025]);
-  assert.ok(data.airports.length >= 60);
-  assert.ok(data.meta.windowDepartures > 2_500_000);
-  for (const hol of ['th', 'xm']) for (const m of ['major', 'late', 'cancel']) {
-    assert.equal(data.holidays[hol].nat[m].length, 13);
-    assert.ok(data.holidays[hol].nat[m].every(r => r.length === 6 && r.every(Number.isFinite)));
+test('dataset: six seasons, route-level shards, coordinates for the live check', () => {
+  assert.deepEqual(nat.meta.seasons, [2018, 2019, 2022, 2023, 2024, 2025]);
+  assert.ok(nat.meta.windowFlights > 2_500_000);
+  assert.ok(nat.meta.routes > 2000);
+  assert.equal(nat.meta.xgrid[0], 0);
+  const files = fs.readdirSync(dir + '/routes');
+  assert.equal(files.length, Object.keys(nat.routes).length, 'one shard per origin in the adjacency list');
+  for (const a of nat.airports) assert.ok(Number.isFinite(a.lat) && Number.isFinite(a.lon), a.code + ' needs coordinates');
+  for (const [o, dests] of Object.entries(nat.routes)) {
+    const s = shard(o);
+    for (const d of dests) assert.ok(s.routes[d], `${o}->${d} listed but missing from shard`);
   }
 });
 
-test('ranking depends on the airport (the old page ranked identically for all airports)', () => {
-  const a = eng.rank({ ...base, from: 'ATL', to: 'ATL' })[0];
-  const o = eng.rank({ ...base, from: 'ORD', to: 'ORD' })[0];
-  assert.ok(o.mean > a.mean * 1.5, 'ORD should be materially riskier than ATL');
-  const none = eng.rank({ ...base, from: 'ZZZ', to: 'ZZZ' })[0].mean;
-  assert.ok(a.mean < none && none < o.mean, 'unknown-airport national baseline sits between ATL and ORD');
+test('route matters, not just the airport', () => {
+  const p = to => eng.evaluate({ hol: 'xm', from: 'DTW', to, via: null, depart: at(-2, 17), deadline: at(-2, 23) }).p;
+  assert.ok(p('ORD') > p('SLC') * 1.5, 'DTW->ORD is much riskier than DTW->SLC on the same evening');
 });
 
-test('time of day changes the odds a lot', () => {
-  const morning = eng.trip({ hol: 'th', from: 'DTW', to: 'DTW', outOffset: 3, retOffset: 3, outBand: 0, retBand: 0 }).out.major;
-  const evening = eng.trip({ hol: 'th', from: 'DTW', to: 'DTW', outOffset: 3, retOffset: 3, outBand: 4, retBand: 4 }).out.major;
-  assert.ok(evening > morning * 2);
+test('a tight deadline is riskier than a loose one, and an impossible one says so', () => {
+  const base = { hol: 'th', from: 'DTW', to: 'MCO', via: null, depart: at(-1, 17) };
+  const tight = eng.evaluate({ ...base, deadline: at(-1, 21) });
+  const loose = eng.evaluate({ ...base, deadline: at(0, 14) });
+  assert.ok(tight.p > loose.p * 5);
+  const late = eng.evaluate({ ...base, deadline: at(-1, 18) });
+  assert.equal(late.tooLate, true);
+  assert.equal(late.p, 1);
 });
 
-test('Thanksgiving Sunday evening is rough and the holiday morning is calm', () => {
-  const sun = eng.leg('th', 3, 4, null).major, thu = eng.leg('th', 0, 0, null).major;
-  assert.ok(sun > 0.15 && thu < 0.04);
+test('one-stop trips add misconnect risk and use the hub airport for leg two', () => {
+  const r = eng.evaluate({ hol: 'xm', from: 'MBS', to: 'MCO', via: 'DTW', layover: 60, depart: at(-1, 7), deadline: at(-1, 20) });
+  assert.equal(r.legs.length, 2);
+  assert.equal(r.legs[1].from, 'DTW');
+  assert.ok(r.parts.misconnect > 0 && r.misconnectChance > 0);
+  const tighter = eng.evaluate({ ...r.plan, layover: 45 });
+  assert.ok(tighter.misconnectChance > r.misconnectChance, 'shorter layover, more misconnects');
+  assert.ok(Math.abs(r.p - (r.parts.cancel + r.parts.delay + r.parts.misconnect)) < 1e-9);
 });
 
-test('trip risk combines legs and respects trip length', () => {
-  const t = eng.trip({ hol: 'xm', from: 'ORD', to: 'DEN', outOffset: -3, retOffset: 2, outBand: 1, retBand: 2 });
-  const expect = 1 - (1 - t.out.major) * (1 - t.ret.major);
-  assert.ok(Math.abs(t.mean - expect) < 1e-12);
-  assert.ok(t.mean > t.out.major && t.mean > t.ret.major);
-  const r = eng.rank({ hol: 'xm', len: 5, from: 'ORD', to: 'DEN', outBand: 1, retBand: 1 });
-  assert.ok(r.every(x => x.retOffset - x.outOffset === 5 && x.retOffset <= 6));
-  assert.equal(r.length, 8);
-  for (let i = 1; i < r.length; i++) assert.ok(r[i - 1].mean <= r[i].mean);
+test('stranding: a rare regional route recovers far more slowly than a busy trunk route', () => {
+  const regional = eng.evaluate({ hol: 'xm', from: 'MBS', to: 'DTW', via: null, depart: at(-1, 7), deadline: at(-1, 20) }).ifCancelled;
+  const trunk = eng.evaluate({ hol: 'xm', from: 'ATL', to: 'MCO', via: null, depart: at(-1, 7), deadline: at(-1, 20) }).ifCancelled;
+  assert.ok(regional.realisticHours > trunk.realisticHours * 2);
+  assert.ok(regional.perDay < trunk.perDay);
+  const evening = eng.evaluate({ hol: 'xm', from: 'ATL', to: 'MCO', via: null, depart: at(-1, 19), deadline: at(0, 12) }).ifCancelled;
+  assert.ok(evening.overnight > trunk.overnight, 'a cancelled evening flight strands you overnight more often');
 });
 
-test('reports spread and worst season, not just an average', () => {
-  const t = eng.trip({ hol: 'xm', from: 'ORD', to: 'ORD', outOffset: -2, retOffset: 2, outBand: 4, retBand: 4 });
-  assert.equal(t.perSeason.length, 6);
-  assert.ok(t.worst >= t.median && t.median > 0);
-  assert.ok(t.worst > t.mean, 'Dec 2022 storm should make the worst season exceed the average');
-  assert.ok(t.rough >= 1);
+test('reports the spread across seasons, with 2022 as a bad Christmas', () => {
+  const r = eng.evaluate({ hol: 'xm', from: 'MBS', to: 'MCO', via: 'ORD', layover: 60, depart: at(-1, 7), deadline: at(-1, 20) });
+  assert.equal(r.perSeason.length, 6);
+  assert.ok(r.worst > r.median && r.worst > r.p);
+  assert.equal(r.worstSeason, 2022);
 });
 
-test('unknown airport falls back to the national rate without throwing', () => {
-  const a = eng.leg('th', 1, 2, 'ZZZ'), b = eng.leg('th', 1, 2, null);
-  assert.equal(a.major, b.major);
-  assert.equal(a.factor, 1);
-  assert.throws(() => eng.leg('th', 9, 0, null), RangeError);
+test('fixes only offer real improvements and never a plan that already misses', () => {
+  const plan = { hol: 'xm', from: 'MBS', to: 'MCO', via: 'ORD', layover: 60, depart: at(-1, 7), deadline: at(-1, 20) };
+  const base = eng.evaluate(plan);
+  const fx = eng.fixes(plan, base);
+  assert.ok(fx.length >= 2);
+  for (const f of fx) { assert.ok(f.p < base.p); assert.equal(f.result.tooLate, false); }
+  assert.ok(fx.some(f => f.kind === 'route' && f.plan.via === 'DTW'), 'suggests the safer hub');
+  assert.ok(fx.some(f => f.kind === 'day'), 'suggests leaving earlier');
 });
 
-test('the conventional trip is a benchmark the best choice should beat or equal', () => {
-  const best = eng.rank({ ...base, from: 'DTW', to: 'DTW', len: 4 })[0];
-  const conv = eng.conventional({ ...base, from: 'DTW', to: 'DTW' });
-  assert.ok(best.mean <= conv.mean);
+test('first flight of the day: early departures are first trips and the least disrupted', () => {
+  const ff = eng.firstFlight('DTW', 6 * 60);
+  assert.ok(ff.shareHere > 0.9);
+  assert.ok(ff.troubleFirst < ff.troubleLater);
+  assert.equal(ff.byBand.length, 6);
+});
+
+test('live layer: only travel-window hazards count, forecasts match the travel date', () => {
+  const alerts = { features: [
+    { properties: { event: 'Winter Storm Watch', headline: 'Winter Storm Watch from Tue evening', onset: '2026-11-24T18:00:00-05:00', ends: '2026-11-26T06:00:00-05:00' } },
+    { properties: { event: 'Special Weather Statement', onset: '2026-11-24T18:00:00-05:00', ends: '2026-11-26T06:00:00-05:00' } },
+    { properties: { event: 'Dense Fog Advisory', onset: '2026-11-20T00:00:00-05:00', ends: '2026-11-20T10:00:00-05:00' } }
+  ] };
+  const h = Engine.hazards(alerts, '2026-11-25T00:00:00-05:00', '2026-11-26T00:00:00-05:00');
+  assert.deepEqual(h.map(x => x.event), ['Winter Storm Watch']);
+  assert.equal(h[0].severe, true);
+  const fc = { properties: { periods: [
+    { name: 'Tuesday', startTime: '2026-11-24T06:00:00-05:00', shortForecast: 'Sunny' },
+    { name: 'Wednesday', startTime: '2026-11-25T06:00:00-05:00', shortForecast: 'Heavy Snow' },
+    { name: 'Wednesday Night', startTime: '2026-11-25T18:00:00-05:00', shortForecast: 'Mostly Cloudy' }
+  ] } };
+  const f = Engine.forecastFor(fc, '2026-11-25');
+  assert.deepEqual(f.map(x => x.name), ['Wednesday', 'Wednesday Night']);
+  assert.equal(f[0].flag, true);
+  assert.equal(f[1].flag, false);
+  assert.equal(Engine.liveState('2026-11-19', '2026-11-25').active, true);
+  assert.equal(Engine.liveState('2026-10-19', '2026-11-25').active, false);
+  assert.equal(Engine.liveState('2026-11-27', '2026-11-25').past, true);
 });
