@@ -165,13 +165,16 @@ function produce(file,content){
 }
 produce('public/michigan-ski-hills/index.html',index());
 for(const r of RESORTS)produce('public/michigan-ski-hills/'+r.slug+'/index.html',details(r));
-const sitemap='public/sitemap.xml';
-let xml=fs.readFileSync(sitemap,'utf8');
+// Keep the specialist winter map complete as well as the general page map.
+// Preserve existing editorial dates; adding discovery is not a content update.
 const urls=[base,...RESORTS.map(r=>base+r.slug+'/')];
+for(const sitemap of ['public/sitemap.xml','public/sitemap-winter.xml']){
+let xml=fs.readFileSync(sitemap,'utf8');
 for(const url of urls){
  if(xml.includes('<loc>'+url+'</loc>'))continue;
  xml=xml.replace('</urlset>','  <url><loc>'+url+'</loc><lastmod>'+today+'</lastmod><changefreq>daily</changefreq><priority>'+ (url===base?'0.8':'0.6')+'</priority></url>\n</urlset>');
 }
 if(dry){if(fs.readFileSync(sitemap,'utf8')!==xml)throw Error('Sitemap out of date');}
 else fs.writeFileSync(sitemap,xml);
+}
 console.log('Michigan ski: '+urls.length+' pages, canonical and sitemap entries '+(dry?'verified':'generated'));

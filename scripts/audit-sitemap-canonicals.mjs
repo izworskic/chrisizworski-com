@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import { readFile, readdir, access } from 'node:fs/promises';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { RESORTS } = require('../lib/michigan-ski/resorts.js');
+// These exact routes are emitted by generate-michigan-ski-pages.mjs during build.
+// Source checks may defer them; --built must find and inspect every document.
+const generatedSkiRoutes = new Set(RESORTS.map(r => `/michigan-ski-hills/${r.slug}/`));
 const root = path.resolve(import.meta.dirname, '..');
 const publicRoot = path.join(root, 'public');
 const origin = 'https://chrisizworski.com';
@@ -43,6 +49,9 @@ for (const file of files) {
       deferred.push({ sitemap: file, url, reason: 'delegated-route' }); continue;
     }
     if (!await exists(document)) {
+      if (!process.argv.includes('--built') && generatedSkiRoutes.has(route)) {
+        deferred.push({ sitemap: file, url, reason: 'ski-manifest-generated-at-build' }); continue;
+      }
       const family = config.rewrites.find(r => r.source.includes(':') && route.startsWith(r.source.split(':')[0]));
       if (family) deferred.push({ sitemap: file, url, reason: 'routed-family-requires-live-check' });
       else issues.push(`${file}: missing published document ${url}`);
