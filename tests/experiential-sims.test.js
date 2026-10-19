@@ -57,11 +57,11 @@ test('Soo lock: ships go to the lock that fits them, from the chamber sizes on t
 test('both interactive modules are on their pages, loaded once, and free of em dashes', () => {
   const nl = read('public/northern-lights-michigan/index.html');
   assert.equal((nl.match(/id="aurora-sky-sim"/g) || []).length, 1);
-  assert.equal((nl.match(/src="\/assets\/aurora-sky-sim\.js"/g) || []).length, 1);
+  assert.equal((nl.match(/src="\/assets\/aurora-sky-sim\.js(?:\?v=[^"]*)?"/g) || []).length, 1);
   assert.ok(nl.includes('href="#aurora-sky-sim"'));
   const soo = read('public/soo-locks/index.html');
   assert.equal((soo.match(/id="soo-lock-sim"/g) || []).length, 1);
-  assert.equal((soo.match(/src="\/assets\/soo-lock-sim\.js"/g) || []).length, 1);
+  assert.equal((soo.match(/src="\/assets\/soo-lock-sim\.js(?:\?v=[^"]*)?"/g) || []).length, 1);
   for (const f of ['public/assets/aurora-sky-sim.js', 'public/assets/aurora-sky-sim.css', 'public/assets/soo-lock-sim.js', 'public/assets/soo-lock-sim.css']) {
     assert.ok(!read(f).includes('—'), f);
   }
@@ -94,14 +94,14 @@ test('Welland ride: the trip clock is about 11 hours each way and only Seaway-si
   assert.ok(wl.CHAMBER.len === 766 && wl.CHAMBER.beam === 80);
   const html = read('public/welland-canal/index.html');
   assert.equal((html.match(/id="welland-lock-sim"/g) || []).length, 1);
-  assert.equal((html.match(/src="\/assets\/welland-lock-sim\.js"/g) || []).length, 1);
+  assert.equal((html.match(/src="\/assets\/welland-lock-sim\.js(?:\?v=[^"]*)?"/g) || []).length, 1);
   assert.ok(!wlSrc.includes('—') && !read('public/assets/welland-lock-sim.css').includes('—'));
 });
 
 test('shared ship art: both lock simulators load the drawing kit before themselves', () => {
   for (const [page, sim] of [['public/soo-locks/index.html', 'soo-lock-sim'], ['public/welland-canal/index.html', 'welland-lock-sim']]) {
     const html = read(page);
-    const art = html.indexOf('src="/assets/lock-ship-art.js"'), own = html.indexOf('src="/assets/' + sim + '.js"');
+    const art = html.indexOf('src="/assets/lock-ship-art.js?v='), own = html.indexOf('src="/assets/' + sim + '.js?v=');
     assert.ok(art > 0 && own > art, page);
   }
   const art = read('public/assets/lock-ship-art.js');
