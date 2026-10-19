@@ -1,0 +1,38 @@
+.lock-sim{margin:26px 0 30px;border:1px solid #c9d3da;border-radius:12px;background:#f7f9fa;overflow:hidden}
+.lock-sim-head{padding:18px 20px 6px}
+#soo-lock-sim h2{margin:0 0 6px;font-size:1.4rem;color:#16324a}
+#soo-lock-sim .lock-sim-head p{margin:0;color:#41525e;font-size:.95rem;line-height:1.55;max-width:66ch}
+.lock-ships{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding:12px 20px}
+.lock-ships label{position:relative;display:block;border:1.5px solid #c9d3da;border-radius:10px;padding:9px 11px;background:#fff;cursor:pointer;font-size:.88rem;line-height:1.3;min-height:56px}
+.lock-ships input{position:absolute;opacity:0;pointer-events:none}
+.lock-ships b{display:block;color:#16324a;font-size:.95rem}
+.lock-ships small{color:#5b6a74}
+.lock-ships label:has(input:checked){border-color:#16324a;background:#e3eef5;box-shadow:inset 0 0 0 1px #16324a}
+.lock-ships label:focus-within{outline:3px solid #f2a33a;outline-offset:1px}
+.lock-stage{background:#e9eef1}
+.lock-stage svg{display:block;width:100%;height:auto}
+.lock-stage .lsl{font:600 13px system-ui,sans-serif;fill:#16324a}
+.lock-stage .lsf{font:600 12px system-ui,sans-serif;fill:#fff}
+.lock-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 20px}
+.lock-play{font:inherit;font-weight:700;font-size:.95rem;background:#16324a;color:#fff;border:0;border-radius:999px;padding:0 20px;min-height:44px;cursor:pointer}
+.lock-play:focus-visible,.lock-steps button:focus-visible{outline:3px solid #f2a33a;outline-offset:2px}
+.lock-dir{display:inline-flex;border:1px solid #c9d3da;border-radius:999px;overflow:hidden;background:#fff}
+.lock-dir label{display:flex;align-items:center;padding:0 14px;min-height:40px;cursor:pointer;font-size:.88rem;color:#41525e;margin:0}
+.lock-dir input{position:absolute;opacity:0;pointer-events:none}
+.lock-dir label:has(input:checked){background:#16324a;color:#fff;font-weight:700}
+.lock-dir label:focus-within{outline:3px solid #f2a33a;outline-offset:-3px}
+.lock-speed{font-size:.88rem;color:#41525e;display:flex;gap:6px;align-items:center}
+.lock-speed select{font:inherit;min-height:40px;border-radius:8px;border:1px solid #c9d3da;background:#fff;padding:0 8px}
+.lock-steps{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0 20px 4px}
+.lock-steps button{font:inherit;font-size:.82rem;border:1px solid #c9d3da;background:#fff;color:#41525e;border-radius:999px;padding:0 12px;min-height:34px;cursor:pointer}
+.lock-steps button.on{background:#f2a33a;border-color:#f2a33a;color:#1c1c1c;font-weight:700}
+.lock-steps button.done{color:#16324a;border-color:#16324a}
+#soo-lock-sim .lock-say{margin:8px 20px 12px;font-size:1.02rem;line-height:1.5;color:#16324a;font-weight:600;min-height:3em}
+.lock-fit{padding:4px 20px 18px}
+#soo-lock-sim .lock-fit h3{margin:6px 0 6px;font-size:1rem;color:#16324a}
+#soo-lock-sim .lock-fit p.kind{margin:0 0 6px;color:#5b6a74;font-size:.88rem}
+.lock-fit svg{display:block;width:100%;height:auto;border:1px solid #d7dfe4;border-radius:8px}
+.lock-fit .lsl{font:600 12px system-ui,sans-serif;fill:#41525e}
+.lock-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 18px;margin:10px 0 0}
+.lock-facts dt{font-size:.78rem;color:#5b6a74}
+.lock-facts dd{margin:0;font-weight:650;color:#16324a;font-size:.92rem}

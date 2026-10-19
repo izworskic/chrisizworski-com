@@ -17,6 +17,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/soo-lock-sim.css">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
@@ -405,6 +406,43 @@ figure.fig.hero{margin:6px 0 28px}
 
 <p>That single-point-of-failure problem is the reason for the new lock currently under construction on the site of the decommissioned Davis and Sabin Locks. The replacement, often called the New Poe or simply the New Lock at the Soo, will match the Poe's 1,200-foot length and 110-foot width, providing redundancy for the 1,000-footers. Construction began in 2020. The U.S. Army Corps of Engineers projects an operational date in the mid-2030s.</p>
 
+<section class="lock-sim" id="soo-lock-sim" aria-labelledby="lock-sim-title" data-no-ads>
+  <div class="lock-sim-head">
+    <h2 id="lock-sim-title">Lock a freighter through the Soo</h2>
+    <p>Pick a ship and a direction, then lock her through. Everything is to scale: the chamber, the hull and the 21-foot drop between Lake Superior and the lower St. Marys River. Watch which lock she needs and how little room a 1,000-footer has.</p>
+  </div>
+  <fieldset class="lock-ships" style="border:0;margin:0">
+    <legend class="sr-only" style="position:absolute;left:-9999px">Choose a ship</legend>
+    <label><input type="radio" name="lock-ship" value="tregurtha" checked><b>Paul R. Tregurtha</b><small>1,013.5 ft, 1,000-footer</small></label>
+    <label><input type="radio" name="lock-ship" value="anderson"><b>Arthur M. Anderson</b><small>767 ft laker</small></label>
+    <label><input type="radio" name="lock-ship" value="saltie"><b>Ocean saltie</b><small>740 ft Seaway size</small></label>
+    <label><input type="radio" name="lock-ship" value="fitzgerald"><b>Edmund Fitzgerald</b><small>729 ft, historic</small></label>
+    <label><input type="radio" name="lock-ship" value="mackinaw"><b>USCGC Mackinaw</b><small>240 ft icebreaker</small></label>
+  </fieldset>
+  <div class="lock-stage"><svg data-lock-svg viewBox="0 0 1000 300" role="img" aria-label="Side view of a Soo lock chamber with the selected ship"></svg></div>
+  <div class="lock-bar">
+    <button type="button" class="lock-play" data-lock-play aria-pressed="false">Lock her through</button>
+    <div class="lock-dir" role="radiogroup" aria-label="Direction">
+      <label><input type="radio" name="lock-dir" value="down" checked>Downbound, 21 ft down</label>
+      <label><input type="radio" name="lock-dir" value="up">Upbound, 21 ft up</label>
+    </div>
+    <label class="lock-speed">Speed <select name="lock-speed"><option value="1">Normal</option><option value="2">Fast</option><option value="0.5">Slow</option></select></label>
+  </div>
+  <ol class="lock-steps" aria-label="Lockage steps">
+    <li><button type="button" data-lock-step>1 Ease in</button></li>
+    <li><button type="button" data-lock-step>2 Gates close</button></li>
+    <li><button type="button" data-lock-step>3 Water moves</button></li>
+    <li><button type="button" data-lock-step>4 Gates open</button></li>
+    <li><button type="button" data-lock-step>5 Sail out</button></li>
+  </ol>
+  <p class="lock-say" data-lock-say aria-live="polite"></p>
+  <div class="lock-fit">
+    <h3>Will she fit?</h3>
+    <p class="kind" data-lock-kind></p>
+    <svg data-lock-plan viewBox="0 0 1000 200" role="img" aria-label="Plan view of the Poe and MacArthur chambers with the selected hull"></svg>
+    <dl class="lock-facts" data-lock-facts></dl>
+  </div>
+</section>
 <h2 class="sh">Navigation Season: When the Shipping Season Opens and Closes</h2>
 
 <div class="stat-row">
@@ -614,5 +652,6 @@ figure.fig.hero{margin:6px 0 28px}
 <script defer src="/assets/field-camera.js"></script>
 <section aria-label="How this tool was built" style="max-width:900px;margin:28px auto;padding:18px;overflow-wrap:anywhere"><p><a href="https://izworskic.github.io/projects/#soo-locks-method">See how channel distance becomes an arrival window</a>, with a worked example and public code. Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</p></section>
 <section aria-labelledby="soo-visit-companions" style="max-width:900px;margin:26px auto;padding:18px;border:1px solid #cbdad0;border-radius:8px"><h2 id="soo-visit-companions">Plan a visit around actual vessel activity</h2><p><a href="/soo-locks/plan-your-visit/">Plan your Soo Locks visit</a> with the official Visitor Center season, parking and realistic 45-, 90- and 180-minute itineraries. Or compare <a href="/great-lakes-ship-watching-spots/">Great Lakes freighter-watching viewpoints</a> for a broader shore trip.</p><p>Driving north from Lower Michigan via I-75? <a href="/mackinac-bridge-tolls/">Estimate the Mackinac Bridge toll for your vehicle and return trip</a> before heading to Sault Ste. Marie.</p></section>
+<script defer src="/assets/soo-lock-sim.js"></script>
 </body>
 </html>

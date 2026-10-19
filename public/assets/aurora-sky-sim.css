@@ -1,0 +1,29 @@
+.sky-sim{margin:28px 0 34px;background:#0b1424;color:#e6edf5;border-radius:14px;overflow:hidden;border:1px solid #1d2b44}
+#aurora-sky-sim h2{color:#f3f7fb;font-family:inherit;font-size:1.45rem;margin:0 0 6px}
+.sky-sim-head{padding:20px 22px 8px}
+#aurora-sky-sim .sky-sim-head p{margin:0;color:#b8c5d6;font-size:.95rem;line-height:1.55;max-width:62ch}
+.sky-sim canvas{display:block;width:100%;height:300px;background:#04070f}
+.sky-sim-read{padding:14px 22px 4px}
+#aurora-sky-sim .sky-sim-verdict{color:#f3f7fb;font-size:1.25rem;font-weight:700;margin:0 0 6px;padding-left:12px;border-left:5px solid #56607a}
+#aurora-sky-sim .sky-sim-verdict[data-tone="strong"]{border-color:#3fe08f}#aurora-sky-sim .sky-sim-verdict[data-tone="fair"]{border-color:#8fd3a8}#aurora-sky-sim .sky-sim-verdict[data-tone="faint"]{border-color:#c9a64b}
+#aurora-sky-sim .sky-sim-detail{margin:0;color:#c9d4e2;font-size:.95rem;line-height:1.55;max-width:70ch}
+.sky-sim-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 22px;padding:16px 22px 20px}
+#aurora-sky-sim .sky-sim-controls label{display:block;font-size:.85rem;color:#c9d4e2;margin-bottom:4px}
+.sky-sim-controls output{color:#fff;font-weight:700;font-variant-numeric:tabular-nums}
+.sky-sim-controls select{width:100%;min-height:42px;border-radius:8px;border:1px solid #33435f;background:#111d33;color:#f3f7fb;padding:0 10px;font:inherit}
+.sky-sim-controls input[type=range]{width:100%;accent-color:#3fe08f;min-height:32px}
+.sky-sim-scale{display:flex;justify-content:space-between;font-size:.72rem;color:#7f8ea6;margin-top:2px}
+.sky-sim-scale span.on{color:#3fe08f;font-weight:700}
+.sky-sim-toggles{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.sky-sim-toggles label{display:flex;gap:6px;align-items:center;margin:0;color:#e6edf5;font-size:.9rem;min-height:36px;cursor:pointer}
+.sky-sim-seg{display:inline-flex;border:1px solid #33435f;border-radius:999px;overflow:hidden}
+.sky-sim-seg label{margin:0;padding:0 14px;min-height:38px;display:flex;align-items:center;cursor:pointer;color:#c9d4e2;font-size:.9rem}
+.sky-sim-seg input{position:absolute;opacity:0;pointer-events:none}
+.sky-sim-seg input:checked+span{color:#0b1424}
+.sky-sim-seg label:has(input:checked){background:#3fe08f;color:#0b1424;font-weight:700}
+.sky-sim-seg label:focus-within{outline:3px solid #8fd3a8;outline-offset:-3px}
+.sky-sim-tonight{font:inherit;font-size:.88rem;font-weight:700;background:transparent;color:#3fe08f;border:1px solid #3fe08f;border-radius:999px;padding:0 14px;min-height:38px;cursor:pointer}
+#aurora-sky-sim .sky-sim-note{padding:0 22px 18px;margin:0;font-size:.8rem;color:#9aa8bd;line-height:1.5}
+@media (max-width:600px){.sky-sim canvas{height:240px}.sky-sim-head,.sky-sim-read,.sky-sim-controls{padding-left:16px;padding-right:16px}.sky-sim-note{padding:0 16px 16px}}
+#aurora-sky-sim .sky-sim-seg label{display:flex;margin:0;padding:0 14px;min-height:38px;align-items:center}
+#aurora-sky-sim .sky-sim-toggles>label{display:flex;margin:0}
