@@ -43,27 +43,32 @@ test('source, authorship, canonical and honest uncertainty are explicit', () => 
   assert.doesNotMatch(page, /booking widget|price comparison|buy flight|purchase flights/i);
 });
 
-test('Thanksgiving renders full ranking and airport-specific 2025 monthly history', () => {
+test('Thanksgiving renders national date ranking with separately selected 2025 airport records', () => {
   const app = launch();
   assert.match(app.get('holiday-stat').textContent, /Thanksgiving/);
-  assert.equal(app.get('third-stat').textContent, '19.40%');
+  assert.equal(app.get('third-stat').textContent, '79.4%');
   assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 11);
   assert.match(app.get('results').innerHTML, /3\.13M screened/);
   assert.match(app.get('results').innerHTML, /planning estimate/);
   app.get('airport').value = 'ORD';
   app.get('airport').handlers.change();
-  assert.equal(app.get('third-stat').textContent, '23.11%');
+  assert.equal(app.get('third-stat').textContent, '71.3%');
+  assert.match(app.get('airport-context-cancellation').textContent, /5\.6%/);
+  assert.match(app.get('airport-history-link').href, /\/ORD\/2025-11\//);
   app.get('airport').value = 'SEA';
   app.get('airport').handlers.change();
-  assert.equal(app.get('third-stat').textContent, '19.40%');
-  assert.match(app.get('third-note').textContent, /U\.S\./);
+  assert.equal(app.get('third-stat').textContent, '82.1%');
+  assert.match(app.get('airport-context-cancellation').textContent, /1\.7%/);
+  assert.match(app.get('rank-heading').textContent, /Seattle \(SEA\)/);
+  assert.match(app.get('third-note').textContent, /SEA/);
+  assert.match(app.get('rank-intro').textContent, /not airport-level daily passenger counts/);
 });
 
 test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate without reload', () => {
   const app = launch();
   app.click('christmas');
   assert.match(app.get('holiday-stat').textContent, /Christmas/);
-  assert.equal(app.get('third-stat').textContent, '26.45%');
+  assert.equal(app.get('third-stat').textContent, '66.2%');
   assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 13);
   assert.match(app.get('results').innerHTML, /estimate/i);
   app.click('drive');
@@ -140,4 +145,54 @@ test('manual travel-year selection recalculates dates, road weekday guidance, an
   app.get('travel-year').value = 'auto';
   app.get('travel-year').handlers.change();
   assert.equal(app.get('holiday-stat').textContent, 'Thanksgiving 2026');
+});
+
+test('all listed airports have distinct, sourced November and December departure history, with honest national fallback', () => {
+  const airports = {
+    DTW: [79.4, 66.2, 2.6, 2.5], ORD: [71.3, 63.1, 5.6, 2.5],
+    ATL: [78.7, 70.7, 2.5, 2.4], DFW: [70.9, 69.1, 3.5, 0.6],
+    DEN: [81.9, 71.9, 1.4, 0.6], JFK: [77.9, 67.2, 2.8, 4.0],
+    LGA: [71.2, 64.9, 3.6, 4.8], EWR: [75.3, 70.9, 4.4, 2.6],
+    LAX: [79.1, 75.3, 1.8, 0.9], SFO: [78.3, 73.9, 1.9, 1.1],
+    MCO: [77.4, 69.0, 1.9, 1.4], MIA: [75.9, 73.6, 2.0, 1.1],
+    LAS: [76.7, 74.6, 1.7, 0.6], SEA: [82.1, 72.0, 1.7, 1.0],
+    BOS: [77.6, 71.7, 2.8, 1.7], MSP: [82.3, 68.3, 2.2, 2.3],
+    PHX: [75.2, 75.6, 2.2, 0.5], CLT: [79.6, 71.7, 1.5, 0.8]
+  };
+  const app = launch();
+  const initialNationalDays = [...app.get('results').innerHTML.matchAll(/#\d+ · ([^<]+)<\/div>/g)].map(x => x[1]);
+  for (const [code, values] of Object.entries(airports)) {
+    app.get('airport').value = code;
+    app.get('airport').handlers.change();
+    assert.equal(app.get('third-stat').textContent, values[0].toFixed(1) + '%', code + ' Thanksgiving on time');
+    assert.ok(app.get('airport-context-cancellation').textContent.includes(values[2].toFixed(1) + '%'));
+    assert.ok(app.get('airport-history-link').href.endsWith('/' + code + '/2025-11/'));
+    assert.ok(app.get('best-reason').textContent.includes('At '), 'airport informs first-choice context');
+    assert.ok(app.get('results').innerHTML.includes('Selected airport on-time rate</small><b>' + values[0].toFixed(1) + '%'));
+    const days = [...app.get('results').innerHTML.matchAll(/#\d+ · ([^<]+)<\/div>/g)].map(x => x[1]);
+    assert.deepEqual(days, initialNationalDays, 'do not fabricate locally different TSA ranking');
+  }
+  app.click('christmas');
+  for (const [code, values] of Object.entries(airports)) {
+    app.get('airport').value = code;
+    app.get('airport').handlers.change();
+    assert.equal(app.get('third-stat').textContent, values[1].toFixed(1) + '%', code + ' December on time');
+    assert.ok(app.get('airport-context-cancellation').textContent.includes(values[3].toFixed(1) + '%'));
+    assert.ok(app.get('airport-history-link').href.endsWith('/' + code + '/2025-12/'));
+  }
+  app.get('airport').value = 'other';
+  app.get('airport').handlers.change();
+  assert.equal(app.get('third-stat').textContent, '72.0%');
+  assert.ok(app.get('airport-context-advice').textContent.includes('Choose a specific listed airport'));
+  assert.equal(app.get('airport-history-link').href, 'https://www.bts.gov/topics/airline-time-tables');
+  app.click('drive');
+  assert.equal(app.get('airport-context').hidden, true, 'do not show flight context while driving');
+});
+
+test('airport historical figures are not mislabeled as local TSA queues or daily delay probabilities', () => {
+  assert.match(page, /NOT a day-specific delay forecast or airport security wait/);
+  assert.match(page, /Selecting another airport changes the real 2025 monthly/);
+  assert.match(page, /national TSA holiday screening patterns, not airport-level daily passenger counts/);
+  assert.match(page, /BTS reporting-carrier domestic flight records/);
+  assert.doesNotMatch(page, /23\.11|34\.41|19\.40|26\.45/);
 });
