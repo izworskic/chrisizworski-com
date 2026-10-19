@@ -124,3 +124,53 @@ test('stale NOAA measurements do not present a current ice headline and missing 
  assert.match(js,/Regional observation feed unavailable · eagle activity unknown/);
  assert.match(js,/No qualifying regional reports in this search window/);
 });
+
+test('when iNaturalist fails, dated GBIF human observations provide fallback, not imaginary birds',async()=>{
+ const oldFetch=global.fetch,oldNow=Date.now;Date.now=()=>asOf;
+ const queried=[];
+ const gbif={count:4,results:[
+  {key:10001,basisOfRecord:'HUMAN_OBSERVATION',species:'Haliaeetus leucocephalus',decimalLatitude:46.48,decimalLongitude:-84.31,eventDate:'2026-02-19T15:45:00'},
+  {key:10002,basisOfRecord:'HUMAN_OBSERVATION',species:'Haliaeetus leucocephalus',decimalLatitude:45.3,decimalLongitude:-84.31,eventDate:'2026-02-20T12:00:00'},
+  {key:10003,basisOfRecord:'PRESERVED_SPECIMEN',species:'Haliaeetus leucocephalus',decimalLatitude:46.48,decimalLongitude:-84.31,eventDate:'2026-02-20T12:00:00'},
+  {key:10004,basisOfRecord:'HUMAN_OBSERVATION',species:'Falco peregrinus',decimalLatitude:46.48,decimalLongitude:-84.31,eventDate:'2026-02-20T12:00:00'}
+ ]};
+ global.fetch=async url=>{
+  queried.push(String(url));
+  if(String(url).includes('inaturalist'))return {ok:false,status:502,text:async()=>''};
+  if(String(url).includes('gbif'))return {ok:true,text:async()=>JSON.stringify(gbif)};
+  return {ok:true,text:async()=>rows};
+ };
+ try{
+  const r=res();await adapter({method:'GET',query:{site:'soo-rotary'}},r);
+  assert.equal(r.code,200);
+  assert.equal(r.body.observations.status,'ok');
+  assert.equal(r.body.observations.source,'GBIF');
+  assert.equal(r.body.observations.observationsSampled,1);
+  assert.equal(r.body.observations.latestObservedOn,'2026-02-19');
+  assert.equal(r.body.observations.moreRecords,false);
+  assert.match(r.body.observations.note,/indexed late/i);
+  assert.equal(r.body.ice.percent,33.2);
+  assert.ok(queried.some(u=>u.includes('api.gbif.org/v1/occurrence/search')));
+  assert.ok(queried.some(u=>u.includes('eventDate=')));
+  assert.ok(queried.some(u=>u.includes('decimalLatitude=')));
+  assert.equal(r.body.observations.results,undefined);
+  assert.equal(r.body.observations.coordinates,undefined);
+  assert.equal(r.body.observations.records,undefined);
+ }finally{global.fetch=oldFetch;Date.now=oldNow}
+});
+test('GBIF fallback does not treat invalid or unavailable observations as eagle sightings',async()=>{
+ const oldFetch=global.fetch;
+ global.fetch=async url=>{
+  if(String(url).includes('inaturalist'))return {ok:false,status:429,text:async()=>''};
+  if(String(url).includes('gbif'))return {ok:true,text:async()=>JSON.stringify({count:0,results:[]})};
+  return {ok:true,text:async()=>rows};
+ };
+ try{
+  const r=res();await adapter({method:'GET',query:{site:'croton'}},r);
+  assert.equal(r.body.observations.status,'ok');
+  assert.equal(r.body.observations.source,'GBIF');
+  assert.equal(r.body.observations.observationsSampled,0);
+  assert.equal(r.body.observations.latestObservedOn,null);
+  assert.equal(r.body.ice.status,'not_applicable');
+ }finally{global.fetch=oldFetch}
+});

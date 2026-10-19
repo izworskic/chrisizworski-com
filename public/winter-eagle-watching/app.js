@@ -280,15 +280,20 @@ async function loadEvidence(s){
   if(!result.available||result.site!==s.id)throw Error("Mismatched evidence");
   const obs=result.observations||{},ice=result.ice||{};
   if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.inaturalist.org/"))inatLink.href=obs.searchUrl;
+  if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.gbif.org/"))inatLink.href=obs.searchUrl;
+  const gbif=obs.source==="GBIF";
+  text("eagle-observation-source",gbif?"GBIF indexed observations · past 30 days":"iNaturalist · past 30 days");
+  inatLink.textContent=gbif?"Open GBIF occurrence search ↗":"Open original iNaturalist observation search ↗";
   if(ice.sourceUrl&&ice.sourceUrl.startsWith("https://apps.glerl.noaa.gov/"))iceLink.href=ice.sourceUrl;
   if(obs.status==="ok"){
     const n=Number(obs.observationsSampled)||0;
     text("eagle-reports-number",n+" dated "+(n===1?"report":"reports"));
     text("eagle-reports-detail",
-      "Research-grade iNaturalist entries sampled from a 40 km region over the past 30 days. "+
-      (obs.moreRecords?"Only the newest records were sampled; this is NOT a complete count.":"This is not the number of individual eagles.")
+      (gbif?"GBIF human-observation records indexed within a 40 km corridor over the last 30 days. Publishing may lag and records are not independently research-grade. ":
+       "Research-grade iNaturalist entries sampled from a 40 km region over the past 30 days. ")+
+      (obs.moreRecords?"Only part of the source records were sampled; the number may be incomplete.":"These are reports, not individual birds.")
     );
-    text("eagle-reports-date",obs.latestObservedOn?"Most recent observed: "+obs.latestObservedOn+" ("+obs.ageDays+" days ago).":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
+    text("eagle-reports-date",obs.latestObservedOn?(gbif?"Latest date in indexed sample: ":"Most recent observed: ")+obs.latestObservedOn+" ("+obs.ageDays+" days ago).":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
   }else{
     text("eagle-reports-number","Unavailable");
     text("eagle-reports-detail","The community observation feed could not be checked. Bird activity is unknown; see the original source.");
