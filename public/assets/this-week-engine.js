@@ -43,10 +43,19 @@
     if(!fresh(when,now))return make('shed','unavailable','Forecast needs refreshing','The NWS forecast timestamp is absent or outside the freshness window.','Refresh the dedicated shed search planner.',source,when,place);
     if(!Array.isArray(data.daily)||data.daily.length<3)return make('shed','unavailable','No usable seven-day outlook','Not enough complete forecast days.','Check official forecast and actual snow cover.',source,when,place);
     const snowy=data.snowDepth?.status;
+    const trend=data.snowTrend?.status;
+    const retreats=['persistently_bare','recent_retreat','possible_brief_thaw'];
+    const disagrees=(snowy==='modeled-cover'&&retreats.includes(trend))||
+      (snowy==='modeled-bare'&&['covered','thinning'].includes(trend));
+    const trendNote=disagrees?'NOAA and the separate model history disagree; treat local snow as unknown.':
+      trend==='persistently_bare'?'The historical model has been near zero for at least seven days, but shaded cover may differ.':
+      trend==='recent_retreat'?'The separate historical model shows recent retreat; persistence remains uncertain.':
+      trend==='possible_brief_thaw'?'The model shows a possible one-day thaw, not proven exposed ground.':
+      trend==='thinning'?'The historical model shows thinning, not necessarily exposed ground.':'The 14-day model history is unavailable or not decisive.';
     const tomorrow=data.daily.slice(0,4);
     const thaw=tomorrow.some(d=>Number.isFinite(d.thawHours)&&d.thawHours>=5);
-    if(snowy==='modeled-cover')return make('shed','check','Snow still modeled on the ground','NOAA shows snow at the regional sampling point. It can hide sheds, and deer in winter cover should not be disturbed.',thaw?'A thaw is forecast, but verify exposed ground before walking.':'Wait for retreating snow or exposed ground; do not push deer in deep cover.',source,when,place,'Regional model only; shaded timber may differ.');
-    if(snowy==='modeled-bare')return make('shed','check','Possible exposed-ground window','NOAA shows no snow at the sampled regional point, but sheds and access remain unverified.','Inspect the actual property for clear ground and avoid winter deer concentrations.',source,when,place,'A clear snow grid cell never proves an antler is present.');
+    if(snowy==='modeled-cover')return make('shed','check','Snow still modeled on the ground','NOAA shows snow at the regional sampling point. It can hide sheds, and deer in winter cover should not be disturbed.',thaw?'A thaw is forecast, but verify exposed ground before walking.':'Wait for retreating snow or exposed ground; do not push deer in deep cover.',source,when,place,'Regional models only; shaded timber may differ. '+trendNote);
+    if(snowy==='modeled-bare')return make('shed','check','Possible exposed-ground window','NOAA shows no snow at the sampled regional point, but sheds and access remain unverified.','Inspect the actual property for clear ground and avoid winter deer concentrations.',source,when,place,'A clear snow grid cell never proves an antler is present. '+trendNote);
     return make('shed','check','Check the snow before deciding','Existing snow cover is unknown; the weather forecast cannot reconstruct it.','Inspect NOAA snow depth and actual ground conditions.',source,when,place);
   }
   function maple(data,now=Date.now(),place='Bay City'){
