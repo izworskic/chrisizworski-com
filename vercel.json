@@ -676,6 +676,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/california-roads",
+      "destination": "https://national-outdoor-core.vercel.app/api/california-roads"
+    },
+    {
       "source": "/api/breakout-live",
       "destination": "https://national-outdoor-core.vercel.app/api/breakout-live"
     },
@@ -2185,6 +2189,22 @@
     {
       "source": "/national-tools/lake-powell-ramp-status/",
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
+    },
+    {
+      "source": "/national-tools/big-sur-highway-1",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
+    },
+    {
+      "source": "/national-tools/big-sur-highway-1/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/big-sur-highway-1/"
+    },
+    {
+      "source": "/national-tools/sierra-pass-status",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
+    },
+    {
+      "source": "/national-tools/sierra-pass-status/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/sierra-pass-status/"
     },
     {
       "source": "/national-tools/:path*",
