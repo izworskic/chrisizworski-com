@@ -47,7 +47,8 @@ export function auditHtml(html, o = {}) {
   if (!pageCanonical) err('canonical-missing','Missing canonical URL');
   else try {
     const found = new URL(pageCanonical,o.url || o.canonical || 'https://example.invalid/').href;
-    if (o.canonical && found !== new URL(o.canonical).href) err('canonical-mismatch','Found ' + found + '; expected ' + o.canonical);
+    const expectedCanonical = o.canonical || o.url;
+    if (expectedCanonical && found !== new URL(expectedCanonical).href) err('canonical-mismatch','Found ' + found + '; expected ' + expectedCanonical);
   } catch { err('canonical-invalid','Canonical URL is invalid'); }
   if (!h1s.length) err('h1-missing','Missing readable H1');
   else if (h1s.length > 1) warn('multiple-h1','Found ' + h1s.length + ' H1 headings');
