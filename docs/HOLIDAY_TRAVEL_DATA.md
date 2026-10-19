@@ -37,6 +37,10 @@ Times are minutes from 00:00 local on the holiday (Thanksgiving Thursday or Dec 
 8. **First flight of the day**: tail-number sequences per day give whether a departure was the aircraft's first trip. National trouble rates by band for first vs later trips, and each airport's share of first trips by band.
 9. **Live layer**: active only 0-7 days before the departure date. Lists NWS hazards (winter storm, blizzard, ice, lake effect, high wind, fog, tropical, etc.) overlapping the travel day and the forecast periods for that date at origin, hub and destination. It does not change the odds; with a significant hazard it points the traveler to the worst-season figure and airline travel waivers.
 
+## Example plan
+
+Before a visitor changes anything the page shows Chicago O'Hare (ORD) to New York LaGuardia (LGA): there on the after-work flight the day before (Thanksgiving Wed 5 PM, deadline 11 PM; Christmas Dec 23 5 PM, deadline Christmas Eve noon), home on the evening flight with an 11 PM deadline. It is labeled as an example.
+
 ## Shareable plans
 
 Every plan a visitor builds is written to the query string (`h`, `m`, `d`, `from`, `to`, `via`, `lay`, `dep`, `due`, optional `y`), and "Copy link to this plan" copies it. The untouched example plan keeps the bare URL. Invalid parameters are ignored. The canonical URL is unchanged.

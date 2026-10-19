@@ -102,16 +102,16 @@ var holiday='thanksgiving',mode='fly',dir='there',eng=null,loadState='loading',r
 var Eng=typeof HolidayTravelEngine!=='undefined'?HolidayTravelEngine:null;
 var DATA='/holiday-travel/data/';
 var shardReq={},nwsCache={};
-var trip={home:'MBS',away:'MCO',routing:'auto',layover:60,example:true};
+var trip={home:'ORD',away:'LGA',routing:'auto',layover:60,example:true};
 var data={
  thanksgiving:{name:'Thanksgiving',total:'81.8 million',car:'73 million driving',air:'6 million flying',year:2025,source:'AAA 2025 national Thanksgiving forecast'},
  christmas:{name:'Christmas',total:'122.4 million',car:'109.5 million driving',air:'8.03 million flying',year:2025,source:'AAA 2025 year-end forecast (Christmas–New Year period)'}
 };
-// Example plans shown before anyone changes a field: a Michigan regional airport connecting to Florida,
-// leaving the day before with an evening deadline. Chosen because they show every part of the tool.
+// Example plans shown before anyone changes a field: Chicago O'Hare to New York LaGuardia on the
+// classic after-work departures, so a national visitor sees a familiar trip with real, fixable risk.
 var defaults={
- thanksgiving:{there:{dep:[-1,12],due:[-1,23]},home:{dep:[3,13],due:[4,8]}},
- christmas:{there:{dep:[-2,12],due:[-1,18]},home:{dep:[2,13],due:[3,8]}}
+ thanksgiving:{there:{dep:[-1,17],due:[-1,23]},home:{dep:[3,17],due:[3,23]}},
+ christmas:{there:{dep:[-2,17],due:[-1,12]},home:{dep:[2,17],due:[2,23]}}
 };
 var BANDS=[[0.01,'under 1%'],[0.03,'1–3%'],[0.05,'3–5%'],[0.10,'5–10%'],[0.15,'10–15%'],[0.20,'15–20%'],[0.30,'20–30%'],[0.50,'30–50%'],[0.75,'50–75%'],[2,'over 75%']];
 var gas={us:4.331,east:4.118,midwest:4.145,gulf:3.851,rocky:4.439,west:5.639};

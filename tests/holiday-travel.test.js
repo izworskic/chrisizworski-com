@@ -93,21 +93,22 @@ test('source, authorship, canonical and honest uncertainty are explicit', () => 
 test('flying stress-tests an example plan against a deadline, in bands, using route data', async () => {
   const app = await launch();
   assert.equal(app.fetchedUrls[0], '/holiday-travel/data/national.json');
-  assert.ok(app.fetchedUrls.includes('/holiday-travel/data/routes/MBS.json'), 'origin shard loaded');
+  assert.ok(app.fetchedUrls.includes('/holiday-travel/data/routes/ORD.json'), 'origin shard loaded');
   assert.match(app.get('best-label').textContent, /chance you miss your Wed 11 PM deadline/);
-  assert.match(app.get('rank-intro').textContent, /Saginaw.*Detroit \(DTW\).*Orlando/, 'auto routing picks the lower-risk hub');
+  assert.match(app.get('rank-intro').textContent, /Chicago.*\(ORD\) → New York.*\(LGA\)/, 'national example: nonstop when one exists');
   assert.match(app.get('rank-intro').textContent, /example plan/);
   assert.match(app.get('third-stat').textContent, /^(under 1%|over 75%|\d+–\d+%)$/, 'shown as a band, not a decimal');
   assert.doesNotMatch(app.get('best-reason').textContent, /\d\.\d%/, 'no false precision in the headline');
   assert.equal(app.urls.length, 0, 'example plan keeps the bare URL');
   const html = app.get('results').innerHTML;
-  for (const part of ['Where the risk comes from', 'If it’s cancelled', 'flights a day', 'Ways to lower the odds', 'First flight of the day', '/flight-tracker/', 'class="strip"', 'Missed connection']) assert.ok(html.includes(part), part);
+  for (const part of ['Where the risk comes from', 'If it’s cancelled', 'flights a day', 'Ways to lower the odds', 'First flight of the day', '/flight-tracker/', 'class="strip"']) assert.ok(html.includes(part), part);
+  assert.doesNotMatch(html, /Missed connection/, 'nonstop has no connection risk');
   assert.doesNotMatch(html, /TSA|screened|\d\.\d%/);
 });
 
 test('deadline, departure time, route and connection all move the odds', async () => {
   const app = await launch();
-  await app.change('home', 'DTW');
+  await app.change('home', 'DTW'); await app.change('away', 'MCO');
   assert.match(app.get('rank-intro').textContent, /Detroit.*Orlando/);
   assert.doesNotMatch(app.get('rank-intro').textContent, /example plan/, 'any edit ends example mode');
   assert.ok(app.urls.at(-1).includes('from=DTW') && app.urls.at(-1).includes('via=nonstop'), 'plan written to the URL');
@@ -135,14 +136,16 @@ test('deadline, departure time, route and connection all move the odds', async (
 test('getting home swaps the direction and defaults to the return deadline', async () => {
   const app = await launch();
   await app.click('dir-home');
-  assert.match(app.get('best-label').textContent, /your Mon 8 AM deadline/);
-  assert.match(app.get('rank-intro').textContent, /Orlando.*→.*Saginaw/);
+  assert.match(app.get('best-label').textContent, /your Sun 11 PM deadline/);
+  assert.match(app.get('rank-intro').textContent, /New York.*→.*Chicago/);
   assert.equal(app.get('due-label').textContent, 'Must be home by');
 });
 
 test('Christmas plans use Christmas history and offer fixes for a fragile plan', async () => {
   const app = await launch();
   await app.click('christmas');
+  assert.match(app.get('best-label').textContent, /your Christmas Eve 12 PM deadline/);
+  await app.change('home', 'MBS'); await app.change('away', 'MCO');
   await app.change('routing', 'ORD');
   await app.change('dep-day', '-1'); await app.change('dep-time', '7');
   await app.change('due-day', '-1'); await app.change('due-time', '20');
@@ -182,7 +185,7 @@ test('a shared link restores the exact plan, and copying produces that link', as
   assert.equal(app.copied.length, 1);
   assert.equal(app.copied[0], 'https://chrisizworski.com/holiday-travel/' + q);
   const bad = await launch('2026-10-19', { search: '?from=<script>&dep=x&h=zz' });
-  assert.match(bad.get('rank-intro').textContent, /Saginaw/, 'junk parameters are ignored');
+  assert.match(bad.get('rank-intro').textContent, /Chicago.*LGA/, 'junk parameters are ignored');
 });
 
 test('a failed data load says so instead of inventing numbers, and driving still works', async () => {
