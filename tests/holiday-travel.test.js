@@ -33,7 +33,7 @@ test('source, authorship, canonical and honest uncertainty are explicit', () => 
   assert.match(page, /Built by <a href="\/chris-izworski\/">Chris Izworski/);
   for (const source of ['tsa.gov', 'newsroom.aaa.com', 'transtats.bts.gov', 'eia.gov']) assert.ok(page.includes(source), source + ' source link missing');
   assert.match(page, /not airport wait times/);
-  assert.match(page, /2026 estimates/);
+  assert.match(page, /2026 estimate/);
   assert.doesNotMatch(page, /booking widget|price comparison|buy flight|purchase flights/i);
 });
 
