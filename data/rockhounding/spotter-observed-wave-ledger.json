@@ -2,7 +2,7 @@
   "schemaVersion": "rockhounding-glos-spotter-observed-ledger-v1",
   "stationId": "SPOT-1361",
   "source": "GLOS_SEAGULL_OBS_140",
-  "generatedAtUTC": "2026-10-19T14:42:09.759Z",
+  "generatedAtUTC": "2026-10-19T22:54:36.720Z",
   "retentionDays": 120,
   "thresholdM": 1,
   "originalObservationsOnly": true,
@@ -54365,13 +54365,13 @@
   "canInferHarborWaveHeight": false,
   "lastSourceSampleAtUTC": "2026-10-18T23:46:01Z",
   "diagnostics": {
-    "incoming": 163,
-    "added": 48,
+    "incoming": 146,
+    "added": 0,
     "expired": 0,
     "retained": 5435,
     "firstAt": "2026-06-26T01:16:01Z",
     "lastAt": "2026-10-18T23:46:01Z",
     "distinctUtcDays": 115,
-    "lastObservationAgeHours": 14.94
+    "lastObservationAgeHours": 23.14
   }
 }
