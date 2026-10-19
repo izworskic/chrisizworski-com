@@ -63,6 +63,15 @@ test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate
   app.click('drive');
   assert.match(app.get('rank-heading').textContent, /Driving/);
   assert.equal(app.get('third-stat').textContent, '$44.41');
+  app.get('city').value = 'Los Angeles, CA';
+  app.get('city').handlers.input();
+  assert.equal(app.get('region').value, 'west');
+  assert.match(app.get('rank-heading').textContent, /Los Angeles, CA/);
+  assert.equal(app.get('third-stat').textContent, '$60.42');
+  app.get('city').value = 'Bay City, MI';
+  app.get('city').handlers.input();
+  assert.equal(app.get('region').value, 'midwest');
+  assert.equal(app.get('third-stat').textContent, '$44.41');
   app.get('miles').value = '600';
   app.get('miles').handlers.input();
   assert.equal(app.get('third-stat').textContent, '$88.82');
