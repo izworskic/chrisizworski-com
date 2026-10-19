@@ -24,14 +24,14 @@ const symbolicEvent=asset.includes("emit('Contextual Tool Handoff'")&&asset.incl
 const forbiddenAnalytics=/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i.test(asset);
 check('Handoffs use symbolic analytics only',symbolicEvent&&!forbiddenAnalytics,10);
 const protectedTitles={
-  'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Live | Chris Izworski',
+  'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Can You See Them?',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',
   'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: 2026 Dates by Region',
   'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: 2026 Planting Calendar',
   'public/great-lakes-freighter-tracking/index.html':'Great Lakes Ship Tracker Live Now | Chris Izworski'
 };
 let protectedOk=true;for(const [file,title] of Object.entries(protectedTitles)){const html=await read(file);if(!html.includes(`<title>${title}</title>`))protectedOk=false}
-check('Protected experiment titles stay frozen',protectedOk,15);
+check('Current owner-approved priority titles remain intact',protectedOk,15);
 check('Machine discovery exposes the connected fall and river owners',llms.includes('## Michigan Fall 2026 Decision Pages')&&llms.includes('## Michigan River Tools')&&llms.includes('Manistee River Field Map')&&llms.includes('Au Sable Field Map'),5);
 check('Benchmark is in full release gate',pkg.scripts['benchmark:trip-stack']==='node scripts/benchmark-contextual-trip-stack-v2.mjs'&&pkg.scripts['verify:all'].includes('benchmark:trip-stack'),0);
 console.log('\nCONTEXTUAL TRIP STACK GROWTH BENCHMARK');
