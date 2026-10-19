@@ -21,7 +21,7 @@
 <style>
 :root{color-scheme:light;--ink:#142d37;--muted:#56727a;--teal:#137b76;--deep:#0e303b;--paper:#f4f8f7;--line:#d6e5e3;--gold:#f8b95b;--good:#087660;--warn:#a85a1e;--bad:#a23434}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}a{color:#126c72;text-underline-offset:3px}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #d18b2c;outline-offset:3px}button:disabled{opacity:.5;cursor:not-allowed}
-.top{background:var(--deep);color:#e8faf8}.nav{max-width:1100px;margin:auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}.nav a{color:#e6f5f0;text-decoration:none}.nav .brand{font-weight:800;letter-spacing:.02em}.hero{max-width:1100px;margin:auto;padding:38px 20px 48px;display:grid;gap:22px}.eyebrow{font-size:.77rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#c7e8dc}.hero h1{font-family:Georgia,serif;font-size:clamp(2.25rem,6vw,4.25rem);line-height:1.08;max-width:850px;margin:12px 0}.hero p{color:#d8e8e5;max-width:720px;margin:12px 0;font-size:1.08rem}.hero .promise{background:#19414a;border:1px solid #34616b;border-radius:14px;padding:14px 18px;font-size:.92rem;color:#f4f7ed;max-width:780px}.wrap{width:min(1100px,100% - 32px);margin:0 auto}.picker{position:relative;margin-top:-22px;background:white;border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 40px #173b4020;padding:22px}.controls{display:grid;gap:16px}.field{display:grid;gap:6px}.field label,.small-label{font-size:.77rem;text-transform:uppercase;font-weight:800;letter-spacing:.08em;color:#42616a}.field input,.field select{width:100%;border:1px solid #b7d0cb;background:#fcfffe;padding:12px 14px;border-radius:10px;color:#17313a;min-height:48px}.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{border:1px solid #b7d2cf;background:#f0f8f5;color:#16414a;padding:10px 16px;border-radius:999px;font-weight:750;min-height:44px;flex:1}.seg button[aria-pressed=true]{background:#136b69;border-color:#136b69;color:white}.trip-inputs{display:grid;gap:14px}.fine{font-size:.82rem;color:var(--muted);margin:4px 0 0}.hidden{display:none!important}.pair{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:0 0 14px}.card h3{margin:0 0 10px;font:700 1.15rem/1.3 Georgia,serif}.card p{margin:8px 0}.card.verdict.best{border-left:6px solid var(--good)}.card.verdict.caution{border-left:6px solid var(--warn)}.card.verdict.avoid{border-left:6px solid var(--bad)}.part{display:grid;grid-template-columns:minmax(0,1fr) 110px 64px;gap:10px;align-items:center;margin:6px 0;font-size:.92rem}.part .bar{height:10px;background:#e7efed;border-radius:6px;overflow:hidden}.part .bar i{display:block;height:100%;background:var(--teal)}.part b{text-align:right}.fixes{margin:6px 0;padding-left:20px}.fixes li{margin:6px 0}.fixes li b{float:right;margin-left:10px;color:var(--good)}.ff{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}.ff th,.ff td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left}.ff tr.here td{background:#eef7f3;font-weight:700}.live{background:#fff8ec;border:1px solid #efd6a8;border-radius:16px;padding:16px 20px;margin:18px 0}.live:empty{display:none}.live h3{margin:0 0 6px;font:700 1.1rem/1.3 Georgia,serif}.live ul{margin:6px 0;padding-left:18px}.warn{color:var(--bad);font-weight:700}@media(max-width:560px){.part{grid-template-columns:minmax(0,1fr) 70px 56px}.ff{font-size:.8rem}}.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0 4px}.strip .yr{background:#f0f8f5;border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:.82rem;line-height:1.25}.strip .yr b{display:block;font-size:.72rem;color:var(--muted);font-weight:700}.strip .yr.rough{background:#fbeceb;border-color:#e3b3b0;color:var(--bad);font-weight:700}@media(max-width:520px){.strip{grid-template-columns:repeat(3,1fr)}}
+.top{background:var(--deep);color:#e8faf8}.nav{max-width:1100px;margin:auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}.nav a{color:#e6f5f0;text-decoration:none}.nav .brand{font-weight:800;letter-spacing:.02em}.hero{max-width:1100px;margin:auto;padding:38px 20px 48px;display:grid;gap:22px}.eyebrow{font-size:.77rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#c7e8dc}.hero h1{font-family:Georgia,serif;font-size:clamp(2.25rem,6vw,4.25rem);line-height:1.08;max-width:850px;margin:12px 0}.hero p{color:#d8e8e5;max-width:720px;margin:12px 0;font-size:1.08rem}.hero .promise{background:#19414a;border:1px solid #34616b;border-radius:14px;padding:14px 18px;font-size:.92rem;color:#f4f7ed;max-width:780px}.wrap{width:min(1100px,100% - 32px);margin:0 auto}.picker{position:relative;margin-top:-22px;background:white;border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 40px #173b4020;padding:22px}.controls{display:grid;gap:16px}.field{display:grid;gap:6px}.field label,.small-label{font-size:.77rem;text-transform:uppercase;font-weight:800;letter-spacing:.08em;color:#42616a}.field input,.field select{width:100%;border:1px solid #b7d0cb;background:#fcfffe;padding:12px 14px;border-radius:10px;color:#17313a;min-height:48px}.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{border:1px solid #b7d2cf;background:#f0f8f5;color:#16414a;padding:10px 16px;border-radius:999px;font-weight:750;min-height:44px;flex:1}.seg button[aria-pressed=true]{background:#136b69;border-color:#136b69;color:white}.trip-inputs{display:grid;gap:14px}.fine{font-size:.82rem;color:var(--muted);margin:4px 0 0}.hidden{display:none!important}.share-row{margin:6px 0 0}.share{border:1px solid #136b69;background:#fff;color:#136b69;font-weight:750;border-radius:999px;padding:8px 16px;min-height:40px}.share:hover{background:#136b69;color:#fff}.pair{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:0 0 14px}.card h3{margin:0 0 10px;font:700 1.15rem/1.3 Georgia,serif}.card p{margin:8px 0}.card.verdict.best{border-left:6px solid var(--good)}.card.verdict.caution{border-left:6px solid var(--warn)}.card.verdict.avoid{border-left:6px solid var(--bad)}.part{display:grid;grid-template-columns:minmax(0,1fr) 110px 86px;gap:10px;align-items:center;margin:6px 0;font-size:.92rem}.part .bar{height:10px;background:#e7efed;border-radius:6px;overflow:hidden}.part .bar i{display:block;height:100%;background:var(--teal)}.part b{text-align:right}.fixes{margin:6px 0;padding-left:20px}.fixes li{margin:6px 0}.fixes li b{float:right;margin-left:10px;color:var(--good)}.ff{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}.ff th,.ff td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left}.ff tr.here td{background:#eef7f3;font-weight:700}.live{background:#fff8ec;border:1px solid #efd6a8;border-radius:16px;padding:16px 20px;margin:18px 0}.live:empty{display:none}.live h3{margin:0 0 6px;font:700 1.1rem/1.3 Georgia,serif}.live ul{margin:6px 0;padding-left:18px}.warn{color:var(--bad);font-weight:700}@media(max-width:560px){.part{grid-template-columns:minmax(0,1fr) 70px 56px}.ff{font-size:.8rem}}.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0 4px}.strip .yr{background:#f0f8f5;border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:.82rem;line-height:1.25}.strip .yr b{display:block;font-size:.72rem;color:var(--muted);font-weight:700}.strip .yr.rough{background:#fbeceb;border-color:#e3b3b0;color:var(--bad);font-weight:700}@media(max-width:520px){.strip{grid-template-columns:repeat(3,1fr)}}
 .summary{margin:28px 0 20px;display:grid;grid-template-columns:1fr;gap:12px}.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0}.stat .k{font-size:.77rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:800}.stat .v{font-size:1.24rem;font-weight:800;letter-spacing:-.015em}.stat .s{font-size:.83rem;color:var(--muted)}.section-title{margin:34px 0 8px;font-family:Georgia,serif;font-size:1.85rem;line-height:1.18}.intro{margin:0 0 20px;color:var(--muted);max-width:800px}.callout{border:1px solid #a7cdc3;background:#e9f5f0;border-radius:18px;padding:22px;display:grid;gap:8px}.callout h2{margin:0;font:700 1.55rem/1.25 Georgia,serif}.callout p{margin:0}.callout strong{color:#075c52}.callout .tag{font-size:.75rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#226b5a}
 .legend{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}.legend span{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:#4d636c}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot.good{background:#168169}.dot.mid{background:#c88f30}.dot.bad{background:#bf4d4c}
 .rank-list{display:grid;gap:11px}.day{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;display:grid;gap:12px}.day.best{border-left:5px solid var(--good)}.day.caution{border-left:5px solid var(--warn)}.day.avoid{border-left:5px solid var(--bad)}.day-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.day .date{font-size:1.13rem;font-weight:850}.day .sub{font-size:.78rem;color:var(--muted)}.pill{font-size:.75rem;font-weight:800;border-radius:999px;padding:5px 11px;background:#eef3f1;color:#33666a;white-space:nowrap}.pill.best{background:#d9f3e8;color:#09654a}.pill.avoid{background:#fae6e4;color:#96382e}.pill.caution{background:#fff0d9;color:#895313}.metrics{display:grid;grid-template-columns:1fr;gap:8px}.metric{background:#f4f8f7;border-radius:9px;padding:10px 12px;min-width:0}.metric b{display:block;font-size:.92rem}.metric small{display:block;font-size:.72rem;color:#5c747a}.meter{height:7px;background:#e3eeeb;border-radius:8px;overflow:hidden;margin-top:8px}.meter i{display:block;height:100%;background:#16806f;border-radius:8px}.day.caution .meter i{background:#c98f35}.day.avoid .meter i{background:#c3534d}.why{font-size:.9rem;color:#49616a;margin:0}.airport-facts{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px 19px;margin:20px 0;display:grid;gap:6px}.airport-facts[hidden]{display:none}.airport-facts h2{font:700 1.18rem/1.3 Georgia,serif;margin:0}.airport-facts p{margin:0;font-size:.9rem;color:var(--muted)}.airport-facts a{font-size:.86rem;font-weight:700}.sources{margin:38px 0 34px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px}.sources h2{font-family:Georgia,serif;font-size:1.45rem;margin:0 0 12px}.sources ul{padding-left:21px;margin:10px 0}.sources li{margin:10px 0}.sources p{font-size:.88rem;color:#4d676e}.sources strong{color:#263d48}.footer{border-top:1px solid #cbdeda;padding:23px 0 36px;color:#557077;font-size:.86rem;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
@@ -62,7 +62,7 @@
 </div>
 </section>
 <div class="summary" aria-live="polite"><div class="stat"><div class="k">Holiday</div><div class="v" id="holiday-stat">Next Thanksgiving</div><div class="s" id="date-stat">Dates calculated automatically</div></div><div class="stat"><div class="k" id="volume-label">Historical travel comparison</div><div class="v" id="volume-stat">81.8 million</div><div class="s" id="volume-note">AAA 2025 national forecast, all modes</div></div><div class="stat"><div class="k" id="third-label">Flight delay history</div><div class="v" id="third-stat">Loading…</div><div class="s" id="third-note">Bureau of Transportation Statistics, 2025</div></div></div>
-<div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Our estimated first choice</span><h2 id="best-label">Reviewing travel days</h2><p id="best-reason">Loading historical patterns.</p></div>
+<div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Will you make it?</span><h2 id="best-label">Checking your plan</h2><p id="best-reason">Loading six seasons of holiday flight records.</p><p class="share-row"><button type="button" id="share-plan" class="share">Copy link to this plan</button></p></div>
 <h2 class="section-title" id="rank-heading">Travel days, ranked</h2>
 <p class="intro" id="rank-intro">Ranked by observed odds of a cancellation or long delay.</p>
 <section class="live" id="live-panel" aria-live="polite"></section>
@@ -74,8 +74,9 @@
 <ul>
 <li><strong>Your deadline, not a delay rate:</strong> the question is whether you arrive before the time you set. A two-hour delay is harmless with a day to spare and fatal with an hour to spare, so the same flight gets very different odds depending on your plans.</li>
 <li><strong>Route and time:</strong> for each holiday-relative day and departure window, the page uses how often flights were cancelled, diverted, or arrived later than your buffer. Each season counts equally, so one terrible year cannot hide. Your airport and route then adjust that baseline, pulled toward average when a route has few flights. In tests that held out one season at a time, the route-level estimate ranked routes better than an airport-only estimate in every season.</li>
-<li><strong>If it’s cancelled:</strong> for every flight on your route, the data shows when the next two flights on the same airline actually left. Holiday flights are full, so the odds assume you get on the second one, not the first.</li>
-<li><strong>Connections:</strong> the first leg must land in time to make your layover with 35 minutes to spare. If it doesn’t, you need a later flight from the hub.</li>
+<li><strong>If it’s cancelled:</strong> for every flight on your route, the data shows when later flights on the same airline actually left. Holiday flights are full, so the odds assume you get on the second one, not the first, and that everyone cancelled on that route in the previous 24 hours is ahead of you in line (one more flight for each). On a meltdown day like December 2022 that queue is long, and each season is scored with its own rebooking conditions.</li>
+<li><strong>Ranges, not decimals:</strong> results are shown in bands (under 1%, 1–3%, 3–5%, 5–10% and so on) because the model is not precise enough to justify more digits.</li>
+<li><strong>Connections:</strong> the first leg must land in time to make your layover with 35 minutes to spare. If it doesn’t, you need a later flight from the hub. A single missed connection is assumed to get the next flight with a seat (you are one passenger, not a full cancelled plane), stretched in bad seasons like any rebooking.</li>
 <li><strong>First flight of the day:</strong> tail numbers show whether each departure was the aircraft’s first trip that day.</li>
 <li><strong>Live check:</strong> in the seven days before your flight, the page asks the <a href="https://www.weather.gov/documentation/services-web-api" rel="noopener noreferrer">National Weather Service</a> for forecasts and active warnings at each airport on your trip. It does not change the historical odds. It tells you when the worst-season figure is the one to plan around.</li>
 <li><strong>Source data:</strong> <a href="https://www.transtats.bts.gov/Tables.asp?QO_VQ=EFD&amp;QO_anzr=Nv4%20Pn44vr4%20Fgngvfgvpf%20-%20Fvar%201987" rel="noopener noreferrer">BTS Reporting Carrier On-Time Performance</a> (flight-level records) and <a href="https://ourairports.com/data/" rel="noopener noreferrer">OurAirports</a> for airport locations. The build script and method notes are in the project repository (<code>scripts/holiday-travel/</code>, <code>docs/HOLIDAY_TRAVEL_DATA.md</code>).</li>
@@ -101,15 +102,18 @@ var holiday='thanksgiving',mode='fly',dir='there',eng=null,loadState='loading',r
 var Eng=typeof HolidayTravelEngine!=='undefined'?HolidayTravelEngine:null;
 var DATA='/holiday-travel/data/';
 var shardReq={},nwsCache={};
-var trip={home:'DTW',away:'MCO',routing:'auto',layover:60,touched:{}};
+var trip={home:'MBS',away:'MCO',routing:'auto',layover:60,example:true};
 var data={
  thanksgiving:{name:'Thanksgiving',total:'81.8 million',car:'73 million driving',air:'6 million flying',year:2025,source:'AAA 2025 national Thanksgiving forecast'},
  christmas:{name:'Christmas',total:'122.4 million',car:'109.5 million driving',air:'8.03 million flying',year:2025,source:'AAA 2025 year-end forecast (Christmas–New Year period)'}
 };
+// Example plans shown before anyone changes a field: a Michigan regional airport connecting to Florida,
+// leaving the day before with an evening deadline. Chosen because they show every part of the tool.
 var defaults={
- thanksgiving:{there:{dep:[-1,17],due:[0,14],dueName:'Thanksgiving dinner'},home:{dep:[3,15],due:[4,8],dueName:'Monday morning'}},
- christmas:{there:{dep:[-2,17],due:[-1,18],dueName:'Christmas Eve'},home:{dep:[2,15],due:[3,8],dueName:'your first day back'}}
+ thanksgiving:{there:{dep:[-1,12],due:[-1,23]},home:{dep:[3,13],due:[4,8]}},
+ christmas:{there:{dep:[-2,12],due:[-1,18]},home:{dep:[2,13],due:[3,8]}}
 };
+var BANDS=[[0.01,'under 1%'],[0.03,'1–3%'],[0.05,'3–5%'],[0.10,'5–10%'],[0.15,'10–15%'],[0.20,'15–20%'],[0.30,'20–30%'],[0.50,'30–50%'],[0.75,'50–75%'],[2,'over 75%']];
 var gas={us:4.331,east:4.118,midwest:4.145,gulf:3.851,rocky:4.439,west:5.639};
 var roadT={
  '-5':[1,'Before midday','Early-start estimate; no route-specific traffic forecast.'],
@@ -170,12 +174,16 @@ function metric(title,value,sub){return '<div class="metric"><small>'+title+'</s
 /* ---------- flying: "Will I make it?" stress test ---------- */
 function pct(x){if(x===null||x===undefined||!isFinite(x))return 'n/a';var v=x*100;if(v<0.5)return v<0.05?'under 0.1%':v.toFixed(1)+'%';return (v<10?v.toFixed(1):String(Math.round(v)))+'%'}
 function oneIn(x){if(x>=0.5)return 'more likely than not';if(x<0.002)return 'fewer than 1 in 500';var n=1/x;n=n<20?Math.round(n):n<100?Math.round(n/5)*5:Math.round(n/50)*50;return 'about 1 in '+Math.max(2,n)}
+function bandIndex(p){for(var i=0;i<BANDS.length;i++)if(p<BANDS[i][0])return i;return BANDS.length-1}
+function band(p){return p===null||p===undefined||!isFinite(p)?'n/a':BANDS[bandIndex(p)][1]}
+function rate(x){return x===null||x===undefined?'n/a':Math.round(x*100)+'%'}
 function verdict(p){return p<0.02?['best','Solid plan']:p<0.08?['caution','Some risk']:p<0.2?['avoid','Fragile plan']:['avoid','Likely trouble']}
 function code(c){return eng&&eng.airport(c)?c:null}
 function cityOf(c){var a=eng&&eng.airport(c);return a?a.city.replace(/\/.*?,/,',')+' ('+c+')':c}
 function shortCity(c){var a=eng&&eng.airport(c);return a?a.city.split(/[,/]/)[0]+' ('+c+')':c}
 function legsFromTo(){return dir==='there'?{from:trip.home,to:trip.away}:{from:trip.away,to:trip.home}}
-function dueName(){return defaults[holiday][dir].dueName}
+function dayName(off){if(holiday==='christmas'&&off===-1)return 'Christmas Eve';if(off===0)return holiday==='christmas'?'Christmas Day':'Thanksgiving';return dateFor(off).toLocaleDateString('en-US',{timeZone:'UTC',weekday:'short'})}
+function dueName(p){var off=Math.floor(p.deadline/1440);return 'your '+dayName(off)+' '+clockLabel(p.deadline)+' deadline'}
 function readTimes(){
  var d=defaults[holiday][dir];
  function v(id,fb){var n=Number(doc(id).value);return doc(id).value!==''&&isFinite(n)?n:fb}
@@ -205,19 +213,26 @@ function routingOptions(from,to){
 function currentPlan(){
  var lf=legsFromTo(),t=readTimes(),opts=routingOptions(lf.from,lf.to);
  if(!opts.length)return {error:'No nonstop or one-stop route between '+cityOf(lf.from)+' and '+cityOf(lf.to)+' had enough holiday flights to measure. Try a nearby larger airport.',opts:opts};
- var r=trip.routing;if(!opts.some(function(o){return o.v===r}))r=opts[0].v;
- return {opts:opts,routing:r,plan:{hol:holiday==='thanksgiving'?'th':'xm',from:lf.from,to:lf.to,via:r==='nonstop'?null:r,layover:Number(doc('layover').value)||trip.layover,depart:t.depDay*1440+t.depHour*60,deadline:t.dueDay*1440+t.dueHour*60}};
+ var base={hol:holiday==='thanksgiving'?'th':'xm',from:lf.from,to:lf.to,via:null,layover:Number(doc('layover').value)||trip.layover,depart:t.depDay*1440+t.depHour*60,deadline:t.dueDay*1440+t.dueHour*60};
+ var r=trip.routing;
+ if(!opts.some(function(o){return o.v===r})){
+  // Not chosen yet: nonstop when it exists, otherwise the connection with the best odds.
+  if(opts[0].v==='nonstop')r='nonstop';
+  else{var best=null;opts.forEach(function(o){var q={};for(var k in base)q[k]=base[k];q.via=o.v;var e=eng.evaluate(q);var score=e?(e.tooLate?2:e.p):3;if(!best||score<best.s)best={v:o.v,s:score}});r=best.v}
+ }
+ base.via=r==='nonstop'?null:r;
+ return {opts:opts,routing:r,plan:base};
 }
-function partBar(label,v,total){var w=total>0?Math.round(v/total*100):0;return '<div class="part"><span>'+label+'</span><span class="bar"><i style="width:'+w+'%"></i></span><b>'+pct(v)+'</b></div>'}
+function partBar(label,v,total){var w=total>0?Math.round(v/total*100):0;return '<div class="part"><span>'+label+'</span><span class="bar"><i style="width:'+w+'%"></i></span><b>'+band(v)+'</b></div>'}
 function fixLabel(f,plan){
  if(f.kind==='time')return 'Same day, leave at '+clockLabel(f.plan.depart);
  if(f.kind==='day')return 'Leave '+pretty(dateFor(Math.floor(f.plan.depart/1440)))+' at '+clockLabel(f.plan.depart);
  return f.plan.via?'Connect in '+shortCity(f.plan.via)+' instead'+(plan.via?'':' of flying nonstop'):'Fly nonstop instead';
 }
-function strip(r){return '<div class="strip" aria-label="Chance of missing the deadline with this plan in each past season">'+eng.seasons.map(function(s,k){var v=r.perSeason[k];return '<span class="yr'+(v!==null&&v>=0.2?' rough':'')+'"><b>'+s+'</b>'+pct(v)+'</span>'}).join('')+'</div>'}
+function strip(r){return '<div class="strip" aria-label="Chance of missing the deadline with this plan in each past season">'+eng.seasons.map(function(s,k){var v=r.perSeason[k];return '<span class="yr'+(v!==null&&v>=0.2?' rough':'')+'"><b>'+s+'</b>'+band(v)+'</span>'}).join('')+'</div>'}
 function firstFlightCard(plan){
  var ff=eng.firstFlight(plan.from,plan.depart%1440<0?plan.depart%1440+1440:plan.depart%1440);
- var rows=ff.byBand.map(function(b,i){return '<tr'+(i===ff.band?' class="here"':'')+'><td>'+eng.bands[i]+'</td><td>'+(b.shareHere===null?'n/a':Math.round(b.shareHere*100)+'%')+'</td><td>'+pct(b.first)+'</td><td>'+pct(b.later)+'</td></tr>'}).join('');
+ var rows=ff.byBand.map(function(b,i){return '<tr'+(i===ff.band?' class="here"':'')+'><td>'+eng.bands[i]+'</td><td>'+(b.shareHere===null?'n/a':Math.round(b.shareHere*100)+'%')+'</td><td>'+rate(b.first)+'</td><td>'+rate(b.later)+'</td></tr>'}).join('');
  return '<article class="card"><h3>First flight of the day</h3><p>A plane starting its day at your airport has not had time to pick up delays. Across all holiday flights, morning departures that were the aircraft’s first trip had the least trouble. Mid-day “first flights” are rare and often spare aircraft, so the edge fades later in the day.</p><table class="ff"><thead><tr><th>Departs</th><th>Share that are first trips at '+esc(plan.from)+'</th><th>Trouble, first trip</th><th>Trouble, later trip</th></tr></thead><tbody>'+rows+'</tbody></table><p class="fine">Trouble = cancelled, diverted or arrived 60+ minutes late (national, holiday windows). On the day, <a href="/flight-tracker/">Where Is My Plane?</a> shows which aircraft is flying your flight and where it is now.</p></article>';
 }
 function renderFly(d,year){
@@ -236,32 +251,68 @@ function renderFly(d,year){
   doc('routing').value=cp.routing;doc('layover-field').classList.toggle('hidden',cp.routing==='nonstop');
   var p=cp.plan,r=eng.evaluate(p);
   if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';return}
-  var due=whenLabel(p.deadline),name=dueName();
+  writeUrl(cp);
+  var due=whenLabel(p.deadline),name=dueName(p);
   doc('rank-heading').textContent='Your plan, stress-tested: '+d.name+' '+year;
-  doc('rank-intro').textContent=cityOf(p.from)+(p.via?' → '+shortCity(p.via):'')+' → '+cityOf(p.to)+', leaving '+whenLabel(p.depart)+'. Scheduled to land about '+whenLabel(r.arrive)+' (local), '+(r.tooLate?'after':'with '+Math.round(r.slack/60*10)/10+' hours to spare before')+' '+due+'.';
+  doc('rank-intro').textContent=cityOf(p.from)+(p.via?' → '+shortCity(p.via):'')+' → '+cityOf(p.to)+', leaving '+whenLabel(p.depart)+'. Scheduled to land about '+whenLabel(r.arrive)+' (local), '+(r.tooLate?'after':'with '+Math.round(r.slack/60*10)/10+' hours to spare before')+' '+due+'.'+(trip.example?' This is an example plan: pick your own airports and times above.':'');
   if(r.tooLate){
    doc('callout-tag').textContent='Will you make it? · fly';doc('best-label').textContent='This flight lands after your deadline';
    doc('best-reason').textContent='Even on time, it is scheduled to arrive about '+whenLabel(r.arrive)+'. Leave earlier or move the deadline.';
-   doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent='100%';doc('third-note').textContent='Scheduled arrival is after the deadline';
+   doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent='100%';doc('third-stat').setAttribute('data-p','1');doc('third-note').textContent='Scheduled arrival is after the deadline';
    results.innerHTML='';renderLive(p,my);return;
   }
   var v=verdict(r.p);
   doc('callout-tag').textContent='Will you make it? · fly';
-  doc('best-label').textContent=v[1]+': '+pct(r.p)+' chance you miss '+name;
+  doc('best-label').textContent=v[1]+': '+band(r.p)+' chance you miss '+name;
   var ic=r.ifCancelled;
-  doc('best-reason').textContent='Averaged over six holiday seasons this plan fails '+oneIn(r.p)+' times. In a typical year it was '+pct(r.median)+'; in the worst ('+r.worstSeason+') '+pct(r.worst)+'. '+(r.parts.cancel>=r.parts.delay+r.parts.misconnect?'Most of the risk is a cancellation you cannot recover from in time, not a delay.':r.parts.misconnect>r.parts.delay?'Most of the risk is missing your connection.':'Most of the risk is a long delay eating your buffer.');
-  doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent=pct(r.p);doc('third-note').textContent='Typical year '+pct(r.median)+' · worst of six seasons '+pct(r.worst)+' ('+r.worstSeason+')';
+  doc('best-reason').textContent='Averaged over six holiday seasons this plan fails '+oneIn(r.p)+' times. In a typical year: '+band(r.median)+'. In the worst ('+r.worstSeason+'): '+band(r.worst)+'. '+(r.parts.cancel>=r.parts.delay+r.parts.misconnect?'Most of the risk is a cancellation you cannot recover from in time, not a delay.':r.parts.misconnect>r.parts.delay?'Most of the risk is missing your connection.':'Most of the risk is a long delay eating your buffer.');
+  doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent=band(r.p);doc('third-stat').setAttribute('data-p',String(r.p));doc('third-note').textContent='Typical year '+band(r.median)+' · worst of six seasons '+band(r.worst)+' ('+r.worstSeason+')';
   var total=r.parts.cancel+r.parts.misconnect+r.parts.delay;
   var cards=[];
   cards.push('<article class="card verdict '+v[0]+'"><h3>Where the risk comes from</h3>'+partBar('Cancelled or diverted, no seat in time',r.parts.cancel,total)+(p.via?partBar('Missed connection in '+p.via+', no seat in time',r.parts.misconnect,total):'')+partBar('Flies, but arrives too late',r.parts.delay,total)+strip(r)+'<p class="fine">Each box is how this exact plan would have done in that holiday season. 2020 and 2021 are left out.</p></article>');
   var carriers=ic.carriers.map(function(c){return c[0]+' '+c[1]+'%'}).join(', ');
-  cards.push('<article class="card"><h3>If it’s cancelled</h3><p>'+cityOf(p.from)+' to '+(p.via?shortCity(p.via):cityOf(p.to))+' has about <strong>'+ic.perDay+' flights a day</strong> at the holidays ('+esc(carriers)+'). If yours is cancelled at this time of day, the next flight on your airline usually gets you there about <strong>'+ic.optimisticHours+' hours late</strong>, but holiday flights are full, so plan on the one after: about <strong>'+ic.realisticHours+' hours late</strong>. That pushed travelers to the next day '+Math.round(ic.overnight*100)+'% of the time.</p>'+(p.via?'<p>Your connection: with a '+p.layover+'-minute layover, the first flight arrived too late to connect '+pct(r.misconnectChance)+' of the time.</p>':'')+'</article>');
-  var fx=eng.fixes(p,r);
-  cards.push('<article class="card"><h3>'+(fx.length?'Ways to lower the odds':'Already near the best option')+'</h3>'+(fx.length?'<ol class="fixes">'+fx.map(function(f){return '<li><span>'+esc(fixLabel(f,p))+'</span><b>'+pct(r.p)+' → '+pct(f.p)+'</b></li>'}).join('')+'</ol><p class="fine">Changes tested: other departure times that day, leaving one or two days earlier, and other routings. Fares and seat availability are not checked.</p>':'<p>No same-day time, earlier day or other routing lowered the odds meaningfully.</p>')+'</article>');
+  cards.push('<article class="card"><h3>If it’s cancelled</h3><p>'+cityOf(p.from)+' to '+(p.via?shortCity(p.via):cityOf(p.to))+' has about <strong>'+ic.perDay+' flights a day</strong> at the holidays ('+esc(carriers)+'). If yours is cancelled at this time of day, the next flight on your airline usually gets you there about <strong>'+ic.optimisticHours+' hours late</strong>, but holiday flights are full, so plan on the one after: about <strong>'+ic.realisticHours+' hours late</strong>. That pushed travelers to the next day '+Math.round(ic.overnight*100)+'% of the time.</p>'+(ic.worstStretch>=1.5?'<p>Bad years are worse: when many flights were cancelled at once, rebooking from '+esc(p.from)+' around that date took about <strong>'+(Math.round(ic.worstStretch*10)/10)+' times as long</strong> in '+ic.worstStretchSeason+', because everyone already cancelled was ahead of you. The odds above include that.</p>':'')+(p.via?'<p>Your connection: with a '+p.layover+'-minute layover, the first flight arrived too late to connect '+band(r.misconnectChance)+' of the time.</p>':'')+'</article>');
+  var fx=eng.fixes(p,r).filter(function(f){return bandIndex(f.p)<bandIndex(r.p)});
+  cards.push('<article class="card"><h3>'+(fx.length?'Ways to lower the odds':'Already near the best option')+'</h3>'+(fx.length?'<ol class="fixes">'+fx.map(function(f){return '<li><span>'+esc(fixLabel(f,p))+'</span><b>'+band(r.p)+' → '+band(f.p)+'</b></li>'}).join('')+'</ol><p class="fine">Changes tested: other departure times that day, leaving one or two days earlier, and other routings. Fares and seat availability are not checked.</p>':'<p>No same-day time, earlier day or other routing lowered the odds meaningfully.</p>')+'</article>');
   cards.push(firstFlightCard(p));
   results.innerHTML=cards.join('');
   renderLive(p,my);
  });
+}
+/* ---------- shareable plan links ---------- */
+function readUrl(){
+ if(typeof location==='undefined'||!location.search)return null;
+ var q={};location.search.slice(1).split('&').forEach(function(kv){var i=kv.indexOf('=');if(i>0)q[decodeURIComponent(kv.slice(0,i))]=decodeURIComponent(kv.slice(i+1))});
+ var codeRe=/^[A-Z0-9]{3}$/,timeRe=/^-?\d{1,2}\.\d{1,2}$/,out={};
+ if(q.h==='th'||q.h==='xm')out.holiday=q.h==='th'?'thanksgiving':'christmas';
+ if(q.m==='fly'||q.m==='drive')out.mode=q.m;
+ if(q.d==='there'||q.d==='home')out.dir=q.d;
+ if(codeRe.test(q.from||''))out.home=q.from;
+ if(codeRe.test(q.to||''))out.away=q.to;
+ if(q.via==='nonstop'||codeRe.test(q.via||''))out.routing=q.via;
+ if(/^\d{2,3}$/.test(q.lay||''))out.layover=q.lay;
+ if(timeRe.test(q.dep||''))out.dep=q.dep.split('.').map(Number);
+ if(timeRe.test(q.due||''))out.due=q.due.split('.').map(Number);
+ if(/^\d{4}$/.test(q.y||''))out.year=q.y;
+ return Object.keys(out).length?out:null;
+}
+function planQuery(cp){
+ var t=readTimes(),parts=['h='+(holiday==='thanksgiving'?'th':'xm'),'m='+mode];
+ if(mode==='fly')parts=parts.concat(['d='+dir,'from='+trip.home,'to='+trip.away,'via='+(cp?cp.routing:(doc('routing').value||trip.routing)),'lay='+(Number(doc('layover').value)||trip.layover),'dep='+t.depDay+'.'+t.depHour,'due='+t.dueDay+'.'+t.dueHour]);
+ if(/^\d{4}$/.test(doc('travel-year').value))parts.push('y='+doc('travel-year').value);
+ return '?'+parts.join('&');
+}
+function writeUrl(cp){
+ if(typeof history==='undefined'||!history.replaceState||typeof location==='undefined')return;
+ if(trip.example&&!location.search)return; // keep the bare URL until someone builds their own plan
+ try{history.replaceState(null,'',location.pathname+planQuery(cp))}catch(e){}
+}
+function sharePlan(){
+ var btn=doc('share-plan'),url=(typeof location!=='undefined'?location.origin+location.pathname:'https://chrisizworski.com/holiday-travel/')+planQuery();
+ trip.example=false;writeUrl();
+ var done=function(ok){btn.textContent=ok?'Link copied':'Copy failed: the link is in your address bar';setTimeout(function(){btn.textContent='Copy link to this plan'},2500)};
+ if(typeof navigator!=='undefined'&&navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){done(true)},function(){done(false)});else done(false);
+ return url;
 }
 function nws(url){if(!nwsCache[url])nwsCache[url]=fetch(url,{headers:{Accept:'application/geo+json'}}).then(function(r){if(!r.ok)throw new Error(String(r.status));return r.json()});return nwsCache[url]}
 function renderLive(p,my){
@@ -293,7 +344,7 @@ function renderLive(p,my){
    return '<li><b>'+esc(shortCity(x.code))+'</b>: '+(hz.length?'<span class="warn">'+hz.map(function(h){return esc(h.event)}).join(', ')+'</span>. ':'No active warnings for that day. ')+(fc.length?fc.map(function(f){return esc(f.name)+': '+esc(f.text)}).join('; '):'Forecast does not reach that day yet.')+'</li>';
   }).join('');
   var r=eng.evaluate(p);
-  var note=anySevere?'A significant winter or tropical hazard overlaps your travel day. Expect odds closer to the worst past season ('+pct(r?r.worst:null)+') than the typical one. Check your airline for a travel waiver: they often allow free changes before a big storm.':anyFlag?'Some weather in the forecast. The typical-season odds may understate risk; keep an eye on updates.':'Nothing notable in the forecast for your airports that day.';
+  var note=anySevere?'A significant winter or tropical hazard overlaps your travel day. Expect odds closer to the worst past season ('+band(r?r.worst:null)+') than the typical one. Check your airline for a travel waiver: they often allow free changes before a big storm.':anyFlag?'Some weather in the forecast. The typical-season odds may understate risk; keep an eye on updates.':'Nothing notable in the forecast for your airports that day.';
   panel.innerHTML='<h3>Live weather check · '+pretty(dateFor(depDay))+'</h3><ul>'+rows+'</ul><p class="'+(anySevere?'warn':'')+'">'+note+'</p><p class="fine">Source: <a href="https://www.weather.gov/" rel="noopener noreferrer">National Weather Service</a>, fetched '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. On the day, use <a href="/flight-tracker/">Where Is My Plane?</a> to follow your inbound aircraft.</p>';
  });
 }
@@ -339,15 +390,29 @@ function switchOption(group,value){
 doc('thanksgiving').addEventListener('click',function(){switchOption('holiday','thanksgiving')});doc('christmas').addEventListener('click',function(){switchOption('holiday','christmas')});
 doc('fly').addEventListener('click',function(){switchOption('mode','fly')});doc('drive').addEventListener('click',function(){switchOption('mode','drive')});
 doc('dir-there').addEventListener('click',function(){switchOption('dir','there')});doc('dir-home').addEventListener('click',function(){switchOption('dir','home')});
-function onAirport(){trip.home=doc('home').value||trip.home;trip.away=doc('away').value||trip.away;trip.routing='auto';render()}
+function onAirport(){trip.example=false;trip.home=doc('home').value||trip.home;trip.away=doc('away').value||trip.away;trip.routing='auto';render()}
 ['home','away'].forEach(function(id){doc(id).addEventListener('change',onAirport)});
-doc('routing').addEventListener('change',function(){trip.routing=doc('routing').value;doc('layover-field').classList.toggle('hidden',trip.routing==='nonstop');render()});
-['layover','dep-day','dep-time','due-day','due-time','region','miles','mpg'].forEach(function(id){doc(id).addEventListener('change',render);doc(id).addEventListener('input',render)});
+doc('routing').addEventListener('change',function(){trip.example=false;trip.routing=doc('routing').value;doc('layover-field').classList.toggle('hidden',trip.routing==='nonstop');render()});
+['layover','dep-day','dep-time','due-day','due-time'].forEach(function(id){var f=function(){trip.example=false;render()};doc(id).addEventListener('change',f);doc(id).addEventListener('input',f)});
+['region','miles','mpg'].forEach(function(id){doc(id).addEventListener('change',render);doc(id).addEventListener('input',render)});
+doc('share-plan').addEventListener('click',sharePlan);
 doc('city').addEventListener('input',function(){suggestRegion(doc('city').value);render()});
 doc('travel-year').addEventListener('change',function(){setTimes();render()});
 populateYears();
+var fromUrl=readUrl();
+if(fromUrl){
+ trip.example=false;
+ if(fromUrl.holiday)holiday=fromUrl.holiday;if(fromUrl.dir)dir=fromUrl.dir;if(fromUrl.mode)mode=fromUrl.mode;
+ if(fromUrl.home)trip.home=fromUrl.home;if(fromUrl.away)trip.away=fromUrl.away;if(fromUrl.routing)trip.routing=fromUrl.routing;
+ if(fromUrl.year)doc('travel-year').value=fromUrl.year;
+}
 setTimes();
-switchOption('holiday','thanksgiving');
+if(fromUrl){
+ if(fromUrl.layover)doc('layover').value=fromUrl.layover;
+ if(fromUrl.dep){doc('dep-day').value=String(fromUrl.dep[0]);doc('dep-time').value=String(fromUrl.dep[1])}
+ if(fromUrl.due){doc('due-day').value=String(fromUrl.due[0]);doc('due-time').value=String(fromUrl.due[1])}
+}
+switchOption('mode',mode);
 var ready=fetch(DATA+'national.json').then(function(r){if(!r.ok)throw new Error(String(r.status));return r.json()}).then(function(json){eng=Eng.create(json);fillAirports();loadState='ready';render();return Promise.all([loadShard(trip.home)].concat(eng.hubs(trip.home,trip.away,6).map(loadShard)))}).catch(function(){loadState='error';render()});
 if(typeof globalThis!=='undefined')globalThis.__holidayTravelReady=ready;
 if(typeof globalThis!=='undefined')globalThis.__holidayTravelSettle=function(){return new Promise(function(res){setTimeout(res,0)}).then(function(){return Promise.all(Object.keys(shardReq).map(function(k){return shardReq[k]}).concat(Object.keys(nwsCache).map(function(k){return nwsCache[k].catch(function(){})})))}).then(function(){return new Promise(function(res){setTimeout(res,0)})})};

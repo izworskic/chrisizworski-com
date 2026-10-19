@@ -27,13 +27,19 @@ Times are minutes from 00:00 local on the holiday (Thanksgiving Thursday or Dec 
 2. **Factors** on "trouble" (cancelled, diverted, or arrived 60+ min late): origin airport per holiday and time group, `(obs+25)/(exp+25)`; then a pooled route residual `(obs+15)/(exp_airport+15)`; clamped 0.3-3.5. Leg rates = national x airport x route.
    Leave-one-season-out check (Spearman rank correlation of predicted vs actual route trouble, routes with 100+ held-out flights): route model 0.53 / 0.45 / 0.13 / 0.34 / 0.33 / 0.44 for 2018 / 2019 / 2022 / 2023 / 2024 / 2025, versus airport-only 0.36 / 0.33 / 0.05 / 0.23 / 0.20 / 0.34. Storm years (2022) are weakly predictable, which is why the worst season is always shown.
 3. **Scheduled arrival** = departure + the route's median (local arrival clock - local departure clock).
-4. **Stranding** (per route and time group): for each flight, if it had been cancelled, how late you would arrive on the *second* later operated flight of the same airline on the same route (holiday flights are full; the first is shown as the optimistic case). Stored as a survival curve over hours, plus the share where that flight left on a later calendar day.
+4. **Stranding** (per route and time group): for each flight, if it had been cancelled, how late you would arrive on the (2 + q)-th later operated flight of the same airline on the same route, where q = flights on that airline and route cancelled in the previous 24 hours (each one's passengers use roughly one later flight's spare seats; holiday loads leave little room). The next operated flight is kept as the optimistic case. Stored as a survival curve over hours, plus the share that slipped to a later calendar day.
+   **Season stretch** (`recScale` in each origin shard): mean rebooking delay at that origin on each holiday-relative day of each season divided by the origin's all-season mean (0.5-6, day +6 reuses day +5). The engine scores every season with its own stretch, so meltdown years (MDW around Dec 23, 2022: ~2.5x) count fully. The headline is the mean of the six per-season results.
 5. **Miss probability**, slack S = deadline - scheduled arrival:
    - Nonstop: `cd x P(rebooking > S) + P(operated and arrival delay > S)`.
    - One stop with layover L (minimum connection 35 min): misconnect `m = P(leg-1 arrives > L-35 late)`; `P = cd1 x max(rec1, rec2)(S) + m x rec2(S) + (1-cd1-m) x [cd2 x rec2(S) + late2(S)]`.
-6. **Fixes** tested: other departure times the same day, one or two days earlier (7 AM and the same time), nonstop vs other hubs. Shown only when they cut the odds by at least 15% and 1 point.
-7. **First flight of the day**: tail-number sequences per day give whether a departure was the aircraft's first trip. National trouble rates by band for first vs later trips, and each airport's share of first trips by band.
-8. **Live layer**: active only 0-7 days before the departure date. Lists NWS hazards (winter storm, blizzard, ice, lake effect, high wind, fog, tropical, etc.) overlapping the travel day and the forecast periods for that date at origin, hub and destination. It does not change the odds; with a significant hazard it points the traveler to the worst-season figure and airline travel waivers.
+6. **Display**: probabilities are shown in bands (under 1%, 1-3%, 3-5%, 5-10%, 10-15%, 15-20%, 20-30%, 30-50%, 50-75%, over 75%). Fixes are listed only if they move the plan into a lower band.
+7. **Fixes** tested: other departure times the same day, one or two days earlier (7 AM and the same time), nonstop vs other hubs. Shown only when they cut the odds by at least 15% and 1 point.
+8. **First flight of the day**: tail-number sequences per day give whether a departure was the aircraft's first trip. National trouble rates by band for first vs later trips, and each airport's share of first trips by band.
+9. **Live layer**: active only 0-7 days before the departure date. Lists NWS hazards (winter storm, blizzard, ice, lake effect, high wind, fog, tropical, etc.) overlapping the travel day and the forecast periods for that date at origin, hub and destination. It does not change the odds; with a significant hazard it points the traveler to the worst-season figure and airline travel waivers.
+
+## Shareable plans
+
+Every plan a visitor builds is written to the query string (`h`, `m`, `d`, `from`, `to`, `via`, `lay`, `dep`, `due`, optional `y`), and "Copy link to this plan" copies it. The untouched example plan keeps the bare URL. Invalid parameters are ignored. The canonical URL is unchanged.
 
 ## Known limits
 

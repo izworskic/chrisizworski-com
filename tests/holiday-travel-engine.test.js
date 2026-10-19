@@ -9,7 +9,7 @@ const dir = 'public/holiday-travel/data';
 const nat = JSON.parse(fs.readFileSync(dir + '/national.json', 'utf8'));
 const shard = code => JSON.parse(fs.readFileSync(`${dir}/routes/${code}.json`, 'utf8'));
 const eng = Engine.create(nat);
-for (const c of ['DTW', 'ORD', 'ATL', 'MBS', 'MCO', 'MSP', 'DEN', 'SLC']) eng.addShard(shard(c));
+for (const c of ['DTW', 'ORD', 'ATL', 'MBS', 'MCO', 'MSP', 'DEN', 'SLC', 'MDW']) eng.addShard(shard(c));
 const at = (day, hour) => day * 1440 + hour * 60;
 
 test('dataset: six seasons, route-level shards, coordinates for the live check', () => {
@@ -49,6 +49,8 @@ test('one-stop trips add misconnect risk and use the hub airport for leg two', (
   const tighter = eng.evaluate({ ...r.plan, layover: 45 });
   assert.ok(tighter.misconnectChance > r.misconnectChance, 'shorter layover, more misconnects');
   assert.ok(Math.abs(r.p - (r.parts.cancel + r.parts.delay + r.parts.misconnect)) < 1e-9);
+  const l2 = r.legs[1];
+  for (const h of [2, 4, 8, 16]) assert.ok(l2.recOne(h) <= l2.rec(h) + 1e-12, 'one stranded passenger rebooks no slower than a cancelled planeload');
 });
 
 test('stranding: a rare regional route recovers far more slowly than a busy trunk route', () => {
@@ -58,6 +60,17 @@ test('stranding: a rare regional route recovers far more slowly than a busy trun
   assert.ok(regional.perDay < trunk.perDay);
   const evening = eng.evaluate({ hol: 'xm', from: 'ATL', to: 'MCO', via: null, depart: at(-1, 19), deadline: at(0, 12) }).ifCancelled;
   assert.ok(evening.overnight > trunk.overnight, 'a cancelled evening flight strands you overnight more often');
+});
+
+test('rebooking slows down in meltdown years (queue behind earlier cancellations)', () => {
+  const plan = { hol: 'xm', from: 'MDW', to: 'DEN', via: null, depart: at(-2, 17), deadline: at(-1, 18) };
+  const r = eng.evaluate(plan);
+  assert.ok(r.ifCancelled.worstStretch >= 2, 'MDW rebooking around Dec 23, 2022 took 2x+ longer');
+  assert.equal(r.ifCancelled.worstStretchSeason, 2022);
+  assert.ok(r.worst > 0.2 && r.median < 0.02, 'calm most years, very bad in 2022');
+  const mdw = shard('MDW');
+  assert.equal(mdw.recScale.xm.length, 6);
+  assert.ok(mdw.recScale.xm.every(row => row.length === 13 && row.every(v => v >= 0.5 && v <= 6)));
 });
 
 test('reports the spread across seasons, with 2022 as a bad Christmas', () => {

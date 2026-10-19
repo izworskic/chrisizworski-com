@@ -21,7 +21,7 @@ function nwsFixture({ storm = false } = {}) {
   };
 }
 
-async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture() } = {}) {
+async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture(), search = '' } = {}) {
   const SimulatedDate = class extends Date {
     constructor(...args) { super(...(args.length ? args : [today + 'T12:00:00Z'])); }
     static now() { return new Date(today + 'T12:00:00Z').getTime(); }
@@ -54,7 +54,12 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
     const body = nws(url);
     return body ? { ok: true, json: async () => body } : { ok: false, status: 404 };
   };
-  const context = { document, fetch, setTimeout, Date: SimulatedDate, Number, String, Math };
+  const location = { search, pathname: '/holiday-travel/', origin: 'https://chrisizworski.com' };
+  const urls = [];
+  const history = { replaceState(_s, _t, url) { urls.push(url); const i = url.indexOf('?'); location.search = i >= 0 ? url.slice(i) : ''; } };
+  const copied = [];
+  const navigator = { clipboard: { writeText: async text => { copied.push(text); } } };
+  const context = { document, fetch, setTimeout, location, history, navigator, decodeURIComponent, Date: SimulatedDate, Number, String, Math };
   vm.createContext(context);
   vm.runInContext(engineSource, context);
   vm.runInContext(script, context, { timeout: 2000 });
@@ -65,7 +70,8 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
     get: id => document.getElementById(id), fetchedUrls, settle,
     click: async id => { document.getElementById(id).handlers.click(); await settle(); },
     change: async (id, value) => { const n = document.getElementById(id); n.value = value; n.handlers.change(); await settle(); },
-    pct: () => parseFloat(document.getElementById('third-stat').textContent)
+    pct: () => Number(document.getElementById('third-stat')['data-p']),
+    urls, copied, location
   };
   return app;
 }
@@ -84,31 +90,34 @@ test('source, authorship, canonical and honest uncertainty are explicit', () => 
 
 // The flying side is a "will I make it?" stress test (route + departure + deadline). Earlier versions ranked
 // national crowd days and then six-season airport odds; those assertions were replaced, not relaxed.
-test('flying stress-tests a concrete plan against a deadline using route data', async () => {
+test('flying stress-tests an example plan against a deadline, in bands, using route data', async () => {
   const app = await launch();
   assert.equal(app.fetchedUrls[0], '/holiday-travel/data/national.json');
-  assert.ok(app.fetchedUrls.includes('/holiday-travel/data/routes/DTW.json'), 'origin shard loaded');
-  assert.match(app.get('best-label').textContent, /chance you miss Thanksgiving dinner/);
-  assert.match(app.get('rank-intro').textContent, /Detroit.*Orlando/);
-  assert.match(app.get('rank-intro').textContent, /hours to spare/);
+  assert.ok(app.fetchedUrls.includes('/holiday-travel/data/routes/MBS.json'), 'origin shard loaded');
+  assert.match(app.get('best-label').textContent, /chance you miss your Wed 11 PM deadline/);
+  assert.match(app.get('rank-intro').textContent, /Saginaw.*Detroit \(DTW\).*Orlando/, 'auto routing picks the lower-risk hub');
+  assert.match(app.get('rank-intro').textContent, /example plan/);
+  assert.match(app.get('third-stat').textContent, /^(under 1%|over 75%|\d+–\d+%)$/, 'shown as a band, not a decimal');
+  assert.doesNotMatch(app.get('best-reason').textContent, /\d\.\d%/, 'no false precision in the headline');
+  assert.equal(app.urls.length, 0, 'example plan keeps the bare URL');
   const html = app.get('results').innerHTML;
-  assert.match(html, /Where the risk comes from/);
-  assert.match(html, /If it’s cancelled/);
-  assert.match(html, /flights a day/);
-  assert.match(html, /First flight of the day/);
-  assert.match(html, /\/flight-tracker\//);
-  assert.match(html, /class="strip"/);
-  assert.doesNotMatch(html, /TSA|screened/);
+  for (const part of ['Where the risk comes from', 'If it’s cancelled', 'flights a day', 'Ways to lower the odds', 'First flight of the day', '/flight-tracker/', 'class="strip"', 'Missed connection']) assert.ok(html.includes(part), part);
+  assert.doesNotMatch(html, /TSA|screened|\d\.\d%/);
 });
 
 test('deadline, departure time, route and connection all move the odds', async () => {
   const app = await launch();
+  await app.change('home', 'DTW');
+  assert.match(app.get('rank-intro').textContent, /Detroit.*Orlando/);
+  assert.doesNotMatch(app.get('rank-intro').textContent, /example plan/, 'any edit ends example mode');
+  assert.ok(app.urls.at(-1).includes('from=DTW') && app.urls.at(-1).includes('via=nonstop'), 'plan written to the URL');
   await app.change('dep-day', '-1'); await app.change('dep-time', '17');
   await app.change('due-day', '0'); await app.change('due-time', '14');
   const loose = app.pct();
   await app.change('due-day', '-1'); await app.change('due-time', '22');
   const tight = app.pct();
   assert.ok(tight > loose * 3, `tight ${tight} vs loose ${loose}`);
+  assert.ok(loose >= 0 && loose < 0.05 && tight > 0, 'numbers available for comparison');
   await app.change('due-time', '18');
   assert.match(app.get('best-label').textContent, /lands after your deadline/);
   await app.change('due-time', '23');
@@ -126,19 +135,20 @@ test('deadline, departure time, route and connection all move the odds', async (
 test('getting home swaps the direction and defaults to the return deadline', async () => {
   const app = await launch();
   await app.click('dir-home');
-  assert.match(app.get('best-label').textContent, /Monday morning/);
-  assert.match(app.get('rank-intro').textContent, /Orlando.*→.*Detroit/);
+  assert.match(app.get('best-label').textContent, /your Mon 8 AM deadline/);
+  assert.match(app.get('rank-intro').textContent, /Orlando.*→.*Saginaw/);
   assert.equal(app.get('due-label').textContent, 'Must be home by');
 });
 
 test('Christmas plans use Christmas history and offer fixes for a fragile plan', async () => {
   const app = await launch();
   await app.click('christmas');
-  await app.change('home', 'MBS');
+  await app.change('routing', 'ORD');
   await app.change('dep-day', '-1'); await app.change('dep-time', '7');
   await app.change('due-day', '-1'); await app.change('due-time', '20');
-  assert.match(app.get('best-label').textContent, /Christmas Eve/);
-  assert.ok(app.pct() > 5);
+  assert.match(app.get('best-label').textContent, /your Christmas Eve 8 PM deadline/);
+  assert.ok(app.pct() > 0.05);
+  assert.match(app.get('results').innerHTML, /times as long<\/strong> in 2022/, 'meltdown-year rebooking is called out');
   assert.match(app.get('results').innerHTML, /Ways to lower the odds/);
   assert.match(app.get('results').innerHTML, /<ol class="fixes">/);
 });
@@ -157,6 +167,22 @@ test('live NWS panel stays off until the final week, then reports hazards on the
   await storm.change('away', 'ORD');
   assert.match(storm.get('live-panel').innerHTML, /Winter Storm Warning/);
   assert.match(storm.get('live-panel').innerHTML, /worst past season/);
+});
+
+test('a shared link restores the exact plan, and copying produces that link', async () => {
+  const q = '?h=xm&m=fly&d=home&from=DTW&to=LGA&via=nonstop&lay=60&dep=2.18&due=3.8';
+  const app = await launch('2026-10-19', { search: q });
+  assert.match(app.get('holiday-stat').textContent, /Christmas/);
+  assert.equal(app.get('due-label').textContent, 'Must be home by');
+  assert.match(app.get('rank-intro').textContent, /New York.*LGA.*→.*Detroit/);
+  assert.match(app.get('rank-intro').textContent, /6 PM/);
+  assert.doesNotMatch(app.get('rank-intro').textContent, /example plan/);
+  app.get('share-plan').handlers.click();
+  await app.settle();
+  assert.equal(app.copied.length, 1);
+  assert.equal(app.copied[0], 'https://chrisizworski.com/holiday-travel/' + q);
+  const bad = await launch('2026-10-19', { search: '?from=<script>&dep=x&h=zz' });
+  assert.match(bad.get('rank-intro').textContent, /Saginaw/, 'junk parameters are ignored');
 });
 
 test('a failed data load says so instead of inventing numbers, and driving still works', async () => {

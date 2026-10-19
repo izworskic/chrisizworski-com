@@ -82,6 +82,8 @@
       var r = route(o, d);
       if (!r) return null;
       var b = band(clockOf(t)), a = byCode[o];
+      var di = Math.max(-6, Math.min(6, dayOf(t))) + 6, sh = shards[o];
+      var stretch = season !== null && season !== undefined && sh && sh.recScale ? sh.recScale[hol][season][di] : 1;
       var f = (a ? a.f[hol][groups[b]] : 1) * r.r;
       var s = surface(hol, dayOf(t), b, season);
       var cd = clamp01(s.cd * f);
@@ -92,7 +94,11 @@
         from: o, to: d, depart: t, arrive: t + r.shift, band: b, factor: f, route: r,
         cd: cd,
         late: function (min) { return interp(X, sop, min, S); },
-        rec: function (hours) { var g = r.rec[groups[b]]; return hours <= 0 ? 1 : interp(H, g.surv, hours, S); },
+        rec: function (hours) { var g = r.rec[groups[b]]; return hours <= 0 ? 1 : interp(H, g.surv, hours / stretch, S); },
+        // One stranded passenger (a missed connection) usually gets the next flight with a seat;
+        // a whole cancelled planeload queues (rec). Both stretch in bad seasons.
+        recOne: function (hours) { var g = r.rec[groups[b]]; return hours <= 0 ? 1 : interp(H, g.survOpt || g.surv, hours / stretch, S); },
+        stretch: stretch,
         recInfo: r.rec[groups[b]]
       };
     }
@@ -117,23 +123,27 @@
       var mis = l1.late(Math.max(0, p.layover - MCT));
       var made = Math.max(0, 1 - l1.cd - mis);
       var cancel = l1.cd * Math.max(l1.rec(h), l2.rec(h)) + made * l2.cd * l2.rec(h);
-      var misconnect = mis * l2.rec(h);
+      var misconnect = mis * l2.recOne(h);
       var delay = made * l2.late(sl);
       return { p: Math.min(1, cancel + misconnect + delay), arrive: l2.arrive, slack: sl, legs: [l1, l2], misconnectChance: mis, parts: { cancel: cancel, delay: delay, misconnect: misconnect } };
     }
 
+    // Each past season is evaluated with its own day-by-day rates and its own rebooking conditions;
+    // the headline is the average across seasons, so a meltdown year counts fully once.
     function evaluate(p) {
-      var avg = missOnce(p, null);
-      if (!avg) return null;
-      var perSeason = meta.seasons.map(function (_, k) { var r = missOnce(p, k); return r ? r.p : null; });
-      var first = avg.legs[0];
+      var runs = meta.seasons.map(function (_, k) { return missOnce(p, k); });
+      if (runs.some(function (r) { return !r; })) return null;
+      var perSeason = runs.map(function (r) { return r.p; });
+      var avg = function (f) { return runs.reduce(function (a, r) { return a + f(r); }, 0) / runs.length; };
+      var worst = Math.max.apply(null, perSeason), r0 = missOnce(p, null), first = r0.legs[0];
       return {
-        plan: p, p: avg.p, tooLate: !!avg.tooLate, arrive: avg.arrive, slack: avg.slack, parts: avg.parts, legs: avg.legs,
-        misconnectChance: avg.misconnectChance || 0,
-        perSeason: perSeason, median: median(perSeason),
-        worst: Math.max.apply(null, perSeason.filter(function (x) { return x !== null; })),
-        worstSeason: meta.seasons[perSeason.indexOf(Math.max.apply(null, perSeason.filter(function (x) { return x !== null; })))],
-        ifCancelled: { optimisticHours: first.recInfo.opt, realisticHours: first.recInfo.real, overnight: first.recInfo.night / S, perDay: first.route.perDay, carriers: first.route.carriers }
+        plan: p, p: avg(function (r) { return r.p; }), tooLate: !!r0.tooLate, arrive: r0.arrive, slack: r0.slack, legs: r0.legs,
+        parts: { cancel: avg(function (r) { return r.parts.cancel; }), delay: avg(function (r) { return r.parts.delay; }), misconnect: avg(function (r) { return r.parts.misconnect; }) },
+        misconnectChance: avg(function (r) { return r.misconnectChance || 0; }),
+        perSeason: perSeason, median: median(perSeason), worst: worst, worstSeason: meta.seasons[perSeason.indexOf(worst)],
+        ifCancelled: { optimisticHours: first.recInfo.opt, realisticHours: first.recInfo.real, overnight: first.recInfo.night / S, perDay: first.route.perDay, carriers: first.route.carriers,
+          worstStretch: Math.max.apply(null, runs.map(function (r) { return r.legs[0].stretch; })),
+          worstStretchSeason: meta.seasons[runs.map(function (r) { return r.legs[0].stretch; }).indexOf(Math.max.apply(null, runs.map(function (r) { return r.legs[0].stretch; })))] }
       };
     }
 

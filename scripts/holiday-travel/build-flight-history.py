@@ -40,6 +40,7 @@ BAND_GROUP = [0, 0, 1, 1, 2, 2]
 XGRID = [0, 15, 30, 60, 90, 120, 180, 240, 360, 480, 720, 1080, 1440]  # minutes of arrival delay
 HGRID = [1, 2, 3, 4, 6, 9, 12, 18, 24, 36, 48]  # hours of rebooking delay
 REC_CAP_H = 72.0
+REC_SCALE_MIN, REC_SCALE_MAX = 0.5, 6.0
 MIN_ROUTE_FLIGHTS = 300
 K_AIRPORT, K_ROUTE = 25.0, 15.0
 F_MIN, F_MAX = 0.3, 3.5
@@ -136,31 +137,52 @@ def shrink(o, e, k):
 
 
 def recovery(full):
-    """For each flight: hours late you would arrive if it were cancelled and you took the second later
-    operated flight of the same airline on the same route (first later one: optimistic)."""
+    """For each flight: hours late you would arrive if it were cancelled.
+
+    optimistic: the next later operated flight of the same airline on the same route.
+    realistic:  holiday flights are nearly full, so you queue behind everyone already displaced.
+                You need the (2 + q)-th later operated flight, where q is the number of flights on the
+                same airline and route cancelled in the 24 hours before yours (each one's passengers
+                use up roughly one later flight's spare seats). On a meltdown day q is large, which
+                is what stranded travelers for days in December 2022. Capped at REC_CAP_H.
+    """
     f = full.sort_values(["Reporting_Airline", "Origin", "Dest", "hol", "season", "FlightDate", "dep_min"]).reset_index(drop=True)
     key = f.Reporting_Airline + f.Origin + f.Dest + f.hol + f.season.astype(str)
-    t = (f.FlightDate - pd.Timestamp("2000-01-01")).dt.days.values * 1440 + f.dep_min.values
-    pos = np.arange(len(f), dtype=float)
-    op_pos = pd.Series(np.where(~f.cd.values, pos, np.nan))
-    nxt = op_pos.groupby(key.values).shift(-1)  # next row position within group (operated or nan)
-    nxt = nxt.groupby(key.values).bfill()  # next operated position strictly after this row
-    nxt_arr = nxt.values
-    second = np.full(len(f), np.nan)
-    ok = ~np.isnan(nxt_arr)
-    second[ok] = nxt_arr[nxt_arr[ok].astype(int)]
-    def late_hours(idx):
-        h = np.full(len(f), REC_CAP_H)
-        m = ~np.isnan(idx)
-        j = idx[m].astype(int)
-        h[m] = np.minimum(REC_CAP_H, (t[j] - t[m] + np.maximum(0, f.arr.values[j])) / 60.0)
+    g = pd.factorize(key)[0].astype(np.int64)
+    t = ((f.FlightDate - pd.Timestamp("2000-01-01")).dt.days.values * 1440 + f.dep_min.values).astype(np.int64)
+    canc = f.cd.values.astype(np.int64)
+    op = 1 - canc
+    n = len(f)
+    cpre = np.concatenate([[0], np.cumsum(canc)])  # cancelled rows in [0, k)
+    opre = np.concatenate([[0], np.cumsum(op)])  # operated rows in [0, k)
+    big = np.int64(10 ** 8)
+    sk = g * big + t
+    j0 = np.searchsorted(sk, g * big + t - 1440, side="right")
+    idx = np.arange(n)
+    q = cpre[idx] - cpre[j0]
+
+    def nth_operated_after(k):
+        target = opre[idx + 1] + k
+        j = np.searchsorted(opre, target, side="left") - 1
+        valid = (j < n) & (j > idx)
+        jj = np.where(valid, j, 0)
+        valid &= g[jj] == g
+        return np.where(valid, jj, -1)
+
+    def late_hours(j):
+        h = np.full(n, REC_CAP_H)
+        m = j >= 0
+        jj = j[m]
+        h[m] = np.minimum(REC_CAP_H, (t[jj] - t[m] + np.maximum(0, f.arr.values[jj])) / 60.0)
         return h
-    f["rec_opt"] = late_hours(nxt_arr)
-    f["rec_real"] = late_hours(second)
+
+    first = nth_operated_after(np.ones(n, dtype=np.int64))
+    queued = nth_operated_after(2 + q)
+    f["rec_opt"] = late_hours(first)
+    f["rec_real"] = late_hours(queued)
+    f["queue"] = q
     day_of = (f.FlightDate - pd.Timestamp("2000-01-01")).dt.days.values
-    sec_day = np.full(len(f), np.inf)
-    sec_day[~np.isnan(second)] = day_of[second[~np.isnan(second)].astype(int)]
-    f["overnight"] = sec_day > day_of
+    f["overnight"] = np.where(queued >= 0, day_of[np.maximum(queued, 0)] > day_of, True)
     return f
 
 
@@ -250,7 +272,7 @@ def build(raw_dir, airports_csv, out_dir):
             "cd": "cancelled or diverted: you need a different flight",
             "sop": "flight operated and arrived more than x minutes after its scheduled arrival",
             "trouble": "cancelled, diverted, or arrived 60+ minutes late (used to estimate airport and route factors)",
-            "rec": "if cancelled: hours later you would arrive taking the second later operated flight on the same airline and route",
+            "rec": "if cancelled: hours later you would arrive, queuing behind passengers from flights on the same airline and route cancelled in the prior 24 hours (the (2+q)-th later operated flight)",
         },
         "factors": {"kAirport": K_AIRPORT, "kRoute": K_ROUTE, "min": F_MIN, "max": F_MAX, "minRouteFlights": MIN_ROUTE_FLIGHTS},
         "firstFlightNational": {"columns": ["troubleFirst", "troubleLater", "shareFirst"], "byBand": nat_first},
@@ -272,7 +294,9 @@ def build(raw_dir, airports_csv, out_dir):
             if len(x) < 40:
                 x = r
             rr = x.rec_real.values
+            ro = x.rec_opt.values
             rec.append({"surv": [round(float((rr > h).mean()) * SCALE) for h in HGRID],
+                        "survOpt": [round(float((ro > h).mean()) * SCALE) for h in HGRID],
                         "opt": round(float(np.median(x.rec_opt.values)), 1), "real": round(float(np.median(rr)), 1),
                         "night": round(float(x.overnight.mean()) * SCALE)})
         cs = carriers.loc[(o, d)].sort_values(ascending=False)
@@ -284,6 +308,25 @@ def build(raw_dir, airports_csv, out_dir):
             "carriers": [[c, round(v / n * 100)] for c, v in cs.items() if v / n >= 0.03],
             "rec": rec,
         }
+
+    # How much slower rebooking was at each origin on each holiday-relative day of each season, relative to
+    # that origin's all-season average. Meltdown days (Dec 2022) get large values; the page stretches the
+    # route's rebooking curve by this factor when it evaluates that season.
+    pooled = win.groupby(["Origin", "hol"]).rec_real.mean()
+    daily = win.groupby(["Origin", "hol", "season", "off"]).rec_real.mean()
+    for o, sh in shards.items():
+        sh["recScale"] = {}
+        for hol in ("th", "xm"):
+            base = pooled.get((o, hol), np.nan)
+            grid = []
+            for season in SEASONS:
+                row = []
+                for off in OFFSETS:
+                    v = daily.get((o, hol, season, off), np.nan)
+                    row.append(round(float(min(REC_SCALE_MAX, max(REC_SCALE_MIN, v / base))), 2) if base > 0 and v == v else 1.0)
+                row[-1] = row[-2]  # day +6 has too few later days loaded to measure; reuse day +5
+                grid.append(row)
+            sh["recScale"][hol] = grid
 
     os.makedirs(os.path.join(out_dir, "routes"), exist_ok=True)
     for old in glob.glob(os.path.join(out_dir, "routes", "*.json")):
