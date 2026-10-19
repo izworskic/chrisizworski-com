@@ -28,7 +28,9 @@ test("the demand towns are present in the served HTML, not only in the API respo
 
 test("both halves of the synonym are covered: northern lights and aurora borealis", () => {
   assert.match(html, /<title>[^<]*Northern Lights[^<]*<\/title>/i, "the title keeps the head term");
-  assert.match(html, /name="description" content="[^"]*aurora borealis/i, "the description carries the synonym");
+  // The Oct 19 owner-approved short search snippet omits the synonym; it remains in OG metadata.
+  assert.match(html, /<meta name="description" content="Live Kp, cloud cover and moon data show whether the northern lights are visible over Michigan tonight, plus the best viewing hours and darkest spots\."/i, "approved search snippet remains intact");
+  assert.match(html, /<meta property="og:description" content="[^"]*aurora borealis/i, "the social description still carries the synonym");
 });
 
 test("the regional decision engine uses authoritative sky factors without hard-coded promises", () => {
