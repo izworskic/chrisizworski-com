@@ -680,6 +680,10 @@
       "destination": "https://national-outdoor-tools-hub.vercel.app/api/dark-sky-canada"
     },
     {
+      "source": "/national-tools/dark-sky/sitemap.xml",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/sitemap.xml"
+    },
+    {
       "source": "/national-tools/dark-sky",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/dark-sky/"
     },
