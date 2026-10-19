@@ -79,6 +79,7 @@ function browserMap(configPayload,hash=""){
   getCanvas(){return {style:{}}}
   getZoom(){return this.zoom}
   fitBounds(b,o){this.moves.push({kind:'fit',b,o})}
+  setStyle(style){this.opts.style=style;this.sources={};this.layers=[];this.events['style.load']?.()}
   easeTo(o){this.moves.push({kind:'focus',...o})}
   remove(){this.removed=true}
   emit(k){this.events[k]?.()}
@@ -91,7 +92,7 @@ function browserMap(configPayload,hash=""){
  ];
  let selected=spots.find(x=>"#"+x.id===hash)||spots[0];
  const holder=new E(),caption={textContent:''};
- const controller=EagleMap.init({holder,caption,spots,maplibregl:{Map:FakeMap,NavigationControl:class{},AttributionControl:class{}},getSelected:()=>selected,onSelect:(s)=>{selected=s;controller.select(s)}});
+ const controller=EagleMap.init({holder,caption,spots,maplibregl:{Map:FakeMap,NavigationControl:class{},AttributionControl:class{}},getSelected:()=>selected,onSelect:(s)=>{selected=s;controller.select(s)},onLocate:()=>{holder.nearMeRequested=true},onFatal:()=>{holder.nativeFallbackRequested=true}});
  const settle=async()=>{
   for(let n=0;n<5;n++)await new Promise(resolve=>setImmediate(resolve));
   const m=made.at(-1);m?.emit('load');return m;
@@ -152,4 +153,48 @@ test('cluster numbers are explicitly identified as viewing locations, not eagle 
  assert.ok(script.includes('Green = grouped viewing locations'));
  assert.ok(script.includes('"#286382"'));
  assert.ok(script.includes('"#a86119"'));
+});
+
+test('map-level nearby control requests location only on tap; coordinates are not sent to the server',async()=>{
+ const t=browserMap({provider:'carto',enabled:true,key:'public-basemap-key'});
+ try{
+  const m=await t.settle();
+  assert.equal(t.holder.nearMeRequested,undefined);
+  t.holder.children[2].children[2].click();
+  assert.equal(t.holder.nearMeRequested,true);
+  t.controller.showUserLocation({latitude:43.6,longitude:-84.2});
+  assert.deepEqual(m.getSource('eagle-visitor').data.features[0].geometry.coordinates,[-84.2,43.6]);
+  assert.ok(m.layers.some(x=>x.id==='eagle-visitor-center'));
+  assert.match(t.holder.children[4].textContent,/straight-line/);
+  assert.doesNotMatch(t.holder.children[1].children[1].textContent,/exact.*coordinates/);
+ }finally{t.restore()}
+});
+test('CARTO night basemap carries public key and retains selected location and visitor dot',async()=>{
+ const t=browserMap({provider:'carto',enabled:true,key:'public-basemap-key'});
+ try{
+  const m=await t.settle();
+  t.controller.showUserLocation({latitude:44,longitude:-85});
+  t.controller.select(t.spots[1]);
+  const night=t.holder.children[2].children[3];
+  assert.equal(night.hidden,false);
+  night.click();
+  assert.match(m.opts.style,/dark-matter-gl-style/);
+  assert.match(m.opts.style,/key=public-basemap-key/);
+  assert.equal(m.getSource('eagle-sites').data.features.length,2);
+  assert.equal(m.getSource('eagle-sites').data.features[1].properties.selected,true);
+  assert.ok(m.getSource('eagle-visitor'),'Visitor marker restored after CARTO style change');
+  night.click();
+  assert.match(m.opts.style,/voyager-gl-style/);
+ }finally{t.restore()}
+});
+test('failed CARTO style retries independent vector source; failed backup requests native map',async()=>{
+ const t=browserMap({provider:'carto',enabled:true,key:'public-basemap-key'});
+ try{
+  const carto=await t.settle();
+  carto.emit('error');
+  for(let n=0;n<4;n++)await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(t.made.length,2);
+  const free=t.made[1];free.emit('error');
+  assert.equal(t.holder.nativeFallbackRequested,true);
+ }finally{t.restore()}
 });
