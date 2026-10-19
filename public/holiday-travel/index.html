@@ -127,7 +127,6 @@ function tier(score){return score<=1?'best':score>=3?'avoid':'caution'}
 function tierLabel(score){return score<=1?'Better choice':score>=3?'Try another day':'Plan extra time'}
 function buffer(score){return score>=3?'3 hours':score===2?'2½ hours':'2 hours'}
 function delayInfo(){var a=doc('airport').value,st=airports[a],idx=holiday==='thanksgiving'?1:2;if(st)return {value:st[idx].toFixed(2)+'%',name:st[0]+' · 2025 '+(idx===1?'November':'December')+' airport delay history',scope:'Specific airport monthly history, NOT that day’s delay likelihood'};return {value:(idx===1?'19.40':'26.45')+'%',name:'U.S. 2025 '+(idx===1?'November':'December')+' monthly delayed-flight history (BTS)',scope:'Airport-specific comparison not verified; national baseline only'}}
-}
 function config(kind,offset){var road=kind==='thanksgiving'?roadT:roadC;return road[String(offset)]||[2,'Before midday','General estimate; exact local route congestion is not available.']}
 function item(offset){var date=dateFor(offset), c=crowd(offset), r=config(holiday,offset),s=mode==='fly'?c.score:r[0];var holidayDay=offset===0;var note=holidayDay?'Holiday itself':offset<0?Math.abs(offset)+' days before':offset+' days after';return {date:date,offset:offset,c:c,r:r,s:s,tier:tier(s),note:note}}
 function metric(title,value,sub){return '<div class="metric"><small>'+title+'</small><b>'+value+'</b><small>'+sub+'</small></div>'}
