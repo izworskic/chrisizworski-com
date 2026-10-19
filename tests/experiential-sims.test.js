@@ -97,3 +97,21 @@ test('Welland ride: the trip clock is about 11 hours each way and only Seaway-si
   assert.equal((html.match(/src="\/assets\/welland-lock-sim\.js"/g) || []).length, 1);
   assert.ok(!wlSrc.includes('—') && !read('public/assets/welland-lock-sim.css').includes('—'));
 });
+
+test('shared ship art: both lock simulators load the drawing kit before themselves', () => {
+  for (const [page, sim] of [['public/soo-locks/index.html', 'soo-lock-sim'], ['public/welland-canal/index.html', 'welland-lock-sim']]) {
+    const html = read(page);
+    const art = html.indexOf('src="/assets/lock-ship-art.js"'), own = html.indexOf('src="/assets/' + sim + '.js"');
+    assert.ok(art > 0 && own > art, page);
+  }
+  const art = read('public/assets/lock-ship-art.js');
+  assert.ok(!art.includes('—'));
+  // Draw a ship and a scene with a stub window and check the SVG is well formed enough to parse.
+  const win = {};
+  new Function('window', art)(win);
+  const svg = win.LockShipArt.scene({W: 1000, H: 300, cx: 200, cw: 600, upY: 120, lowY: 190, level: 150, upGate: 0, lowGate: 1, flow: 1,
+    ship: {name: 'Test', len: 740, beam: 78, type: 'aft-ender', hull: '#7a2b22'}, shipX: 300, shipY: 150, shipL: 370, k: 1, t: 2, moving: 0.5, moored: true, flip: true, platform: true});
+  assert.ok(svg.length > 2000 && !/NaN|undefined/.test(svg), 'no NaN or undefined in the drawing');
+  assert.equal((svg.match(/<g/g) || []).length, (svg.match(/<\/g>/g) || []).length);
+  assert.match(svg, /transform="scale\(-1 1\)"[^>]*>TEST</, 'a left-facing ship keeps its name readable');
+});

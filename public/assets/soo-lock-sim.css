@@ -36,3 +36,4 @@
 .lock-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 18px;margin:10px 0 0}
 .lock-facts dt{font-size:.78rem;color:#5b6a74}
 .lock-facts dd{margin:0;font-weight:650;color:#16324a;font-size:.92rem}
+@media (max-width:640px){.lock-stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.lock-stage svg{min-width:720px}}
