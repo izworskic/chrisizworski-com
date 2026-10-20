@@ -35,17 +35,6 @@ on:
         type: choice
         options: [error, warning, never]
         default: error
-  pull_request:
-    paths:
-      - "scripts/tool-quality-factory.mjs"
-      - "scripts/growth-quality-hub.mjs"
-      - "tests/tool-quality-factory.test.js"
-      - "tests/growth-quality-hub.test.js"
-      - "config/tool-quality-pilots.json"
-      - ".github/workflows/tool-quality-factory.yml"
-      - "docs/TOOL_QUALITY_FACTORY.md"
-      - "docs/GROWTH_QUALITY_HUB.md"
-
 permissions:
   contents: read
 
