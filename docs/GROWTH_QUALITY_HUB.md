@@ -44,18 +44,16 @@ The input is the full JSON produced by `collectGscAnalytics({persist:false})` or
 
 **A good technical score is not a Google ranking prediction.** It also does not prove the JavaScript maps, location search, source updates, responsive UI, live answers or actual search intent work.
 
-## Single GitHub workflow
+## Single GitHub workflow — manual/opt-in only
 
-`.github/workflows/tool-quality-factory.yml` retains its existing stable workflow filename, but is now titled **Million Impressions — Growth & Quality Hub**. It checks out the caller repository, the central implementation, runs focused Node tests and produces the combined `growth-quality-report.json` and `growth-quality-report.md` artifacts. No npm install, web scraping, Vercel build or paid data APIs. Manual run also supports a single `url` and optional `gsc_snapshot` file path. No current Google credentials needed.
+`.github/workflows/tool-quality-factory.yml` retains its filename and is titled **Million Impressions — Growth & Quality Hub**. It runs only through **manual `workflow_dispatch`** or an **explicit `workflow_call`** from an opting-in repository. It has no `push`, `pull_request`, or `schedule` trigger; normal commits, merges, and deployments cannot start this workflow directly. It checks out the caller repository, runs focused Node tests, and creates `growth-quality-report.json` and `growth-quality-report.md`. No npm install, Vercel build, paid data API, or current Google credentials are required. Manual runs can target one public `url`, a manifest, or a supplied `gsc_snapshot` file.
 
-A separate tool repository can call it:
+A separate tool repository can opt into **manual runs only** using this caller workflow (add it only on request):
 
 ```yaml
-name: Growth and tool quality
+name: Run growth and quality audit
 on:
   workflow_dispatch:
-  pull_request:
-    paths: ['public/**', 'config/tool-quality-pilots.json']
 permissions:
   contents: read
 jobs:
@@ -65,6 +63,8 @@ jobs:
       manifest: config/tool-quality-pilots.json
       fail_on: error
 ```
+
+**Do not attach this workflow to push, pull_request, merge queues, or cron schedules.** `workflow_call` is an interface, not a recurring trigger by itself. A caller could still schedule it if someone deliberately changed that repository's configuration; the policy is to keep every caller manual unless the owner explicitly requests automation.
 
 Create the manifest in that repository; use full public URL entries for SSR sites lacking generated HTML. Pin the reusable workflow to a tested immutable SHA or tag when it is proven and released. Be aware GitHub Actions minutes may still be billable; this workflow does not invoke the Vercel build pipeline.
 
