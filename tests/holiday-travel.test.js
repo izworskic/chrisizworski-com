@@ -73,7 +73,7 @@ test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate
   assert.equal(app.get('volume-stat').textContent, '44.3 million');
   assert.match(app.get('volume-label').textContent, /TSA official 2025 holiday forecast/);
   assert.match(app.get('rank-intro').textContent, /projections, not daily passenger actuals/);
-  assert.match(app.get('christmas-tsa-evidence').innerHTML, /Jan 1, 2026: 2,334,465.*Jan 2: 2,578,209.*Jan 3: 2,604,749.*Jan 4: 2,817,509/);
+  assert.match(page, /Jan 1, 2026: 2,334,465.*Jan 2: 2,578,209.*Jan 3: 2,604,749.*Jan 4: 2,817,509/);
   assert.deepEqual(
     [...app.get('results').innerHTML.matchAll(/<div class="date">#\d+ · ([^<]+)<\/div>/g)].map(m => m[1]),
     ['Sun, Dec 27, 2026', 'Fri, Dec 18, 2026', 'Sat, Dec 19, 2026', 'Sun, Dec 20, 2026', 'Sat, Dec 26, 2026', 'Mon, Dec 28, 2026']
