@@ -1,5 +1,7 @@
 # Tool Quality Factory — reusable HTML and search-readiness gate
 
+> The technical audit is now one layer of the [Million Impressions — Growth & Quality Hub](GROWTH_QUALITY_HUB.md). Use `scripts/growth-quality-hub.mjs` for the unified technical/GSC/priority report; `scripts/tool-quality-factory.mjs` remains its reusable implementation detail. The GitHub Actions workflow has the unified title but keeps its original filename for compatibility.
+
 **Repository:** izworskic/chrisizworski-com
 **Purpose:** Machine-checkable standards for multiple apps without replacing their specialized tests or triggering Vercel builds.
 
