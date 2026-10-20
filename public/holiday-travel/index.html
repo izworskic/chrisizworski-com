@@ -60,14 +60,18 @@
 <div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Our estimated first choice</span><h2 id="best-label">Reviewing travel days</h2><p id="best-reason">Loading historical patterns.</p></div>
 <h2 class="section-title" id="rank-heading">Travel days, ranked</h2>
 <p class="intro" id="rank-intro">National crowd-based rankings, with separately labeled airport history.</p>
+<div class="intro" id="christmas-tsa-evidence" hidden>
+<p><strong>Christmas TSA forecast:</strong> 44.3 million travelers projected for Dec 19, 2025–Jan 4, 2026. TSA ranked six dates as busiest in its official 2025 forecast. The <span id="christmas-projection-year">2026</span> flying dates below are calendar-shifted projections—not actual counts or guarantees. No unverified Dec 19–31, 2025 daily counts are shown. Thanksgiving uses daily TSA actuals.</p>
+<p><strong>Verified TSA actual screenings:</strong> Jan 1, 2026: 2,334,465 · Jan 2: 2,578,209 · Jan 3: 2,604,749 · Jan 4: 2,817,509.</p>
+</div>
 <section class="airport-facts" id="airport-context" aria-live="polite"><h2 id="airport-context-title">Selected airport history</h2><p id="airport-context-comparison">Departure reliability for the selected airport will appear here.</p><p id="airport-context-cancellation"></p><p id="airport-context-advice"></p><a id="airport-history-link" href="https://www.bts.gov/topics/airline-time-tables" target="_blank" rel="noopener noreferrer">Review source data</a></section>
-<div class="legend"><span><i class="dot good"></i> Better window</span><span><i class="dot mid"></i> Crowded</span><span><i class="dot bad"></i> Try to avoid</span></div>
+<div class="legend" id="travel-legend"><span><i class="dot good"></i> Better window</span><span><i class="dot mid"></i> Crowded</span><span><i class="dot bad"></i> Try to avoid</span></div>
 <div id="results" class="rank-list" aria-live="polite"></div>
 <section class="sources" aria-label="Data sources and interpretation">
 <h2>What goes into the day picker</h2>
 <p>These are historical planning patterns, not a promise about conditions or a forecast of checkpoint minutes. Holiday dates and weekday-aware rankings update for the selected year, but the 2025 travel comparisons and October 2026 fuel-price snapshot are historical and are not automatically refreshed.</p>
 <ul>
-<li><strong>Airport crowd patterns:</strong> <a href="https://www.tsa.gov/travel/passenger-volumes/2025" rel="noopener noreferrer">TSA 2025 national checkpoint counts</a>. Thanksgiving totals are actual 2025 screenings, transferred to the matching holiday-relative day in the planner. Christmas crowds are qualitative estimates; no day count is invented. National screenings cannot reveal the security queue at a particular airport.</li>
+<li><strong>Airport crowd patterns:</strong> <a href="https://www.tsa.gov/travel/passenger-volumes/2025" rel="noopener noreferrer">TSA 2025 national checkpoint counts</a>. Thanksgiving totals are actual 2025 screenings, transferred to the matching holiday-relative day in the planner. Christmas's <a href="https://www.tsa.gov/news/press/releases/2025/12/22/tsa-prepares-for-holiday-travel-season-cap-record-year" rel="noopener noreferrer">official TSA 2025 holiday forecast</a> projected 44.3 million screenings from Dec 19, 2025 to Jan 4, 2026 and ranked six busiest dates. The Christmas flying dates shown are projections from that forecast, not measured daily counts. Verified Jan 1–4, 2026 actuals appear above; none are claimed for Dec 19–31, 2025. National screenings cannot reveal the security queue at a particular airport.</li>
 <li><strong>Holiday travel size and road windows:</strong> <a href="https://newsroom.aaa.com/2025/11/aaa-thanksgiving-travel-forecast-2025/" rel="noopener noreferrer">AAA Thanksgiving 2025</a> and <a href="https://newsroom.aaa.com/2025/12/aaa-year-end-holiday-travel-forecast/" rel="noopener noreferrer">AAA Christmas/year-end 2025</a>. AAA's road timing guidance draws on INRIX. Selected-year departures are modeled from those past calendars, not observed traffic for the year you chose.</li>
 <li><strong>Airport-specific history:</strong> Airport departures on time and cancellation shares come from BTS reporting-carrier domestic flight records for November and December 2025, independently tabulated by <a href="https://ontimereport.com/airport/DTW/2025-11/" rel="noopener noreferrer">On-Time Report</a>. The link in the airport comparison updates to that exact airport and month. The U.S. averages are 78.1% on-time / 2.5% canceled (November) and 72.0% / 1.5% (December). These monthly airport records do not describe one holiday day or local TSA lines.</li>
 <li><strong>Flight delays:</strong> <a href="https://www.transtats.bts.gov/airports.asp" rel="noopener noreferrer">Bureau of Transportation Statistics airport facts</a> and <a href="https://www.transtats.bts.gov/Marketing_Monthly.aspx" rel="noopener noreferrer">monthly airline on-time tables</a>. The displayed figures are historical 2025 <em>monthly</em> departure on-time and cancellation percentages, never a probability that your exact travel day will depart on time. The unspecified-airport option uses a clearly labeled U.S. monthly baseline. Date rankings still rely on national TSA crowds, not invented local passenger counts.</li>
@@ -292,6 +296,16 @@ var airportHistory={
 };
 var nationalHistory={nov:[78.1,2.5],dec:[72.0,1.5]};
 var tsaThanksgiving={ '-4':2617142,'-3':2563877,'-2':2675261,'-1':2753036,'0':1559165,'1':2392036,'2':2696816,'3':3134613,'4':2893451 };
+// Official TSA Christmas 2025 holiday forecast, NOT observed daily passenger counts.
+// Rank order in 2025: Sun Dec 28; Fri Dec 19; Sat Dec 20; Sun Dec 21; Sat Dec 27; Mon Dec 29.
+var tsaChristmasForecast={total:44300000,busiestOffsets:[3,-6,-5,-4,2,4]};
+function tsaChristmasRanks(year){
+ var shift=(holidayDate('christmas',year).getUTCDay()-4+7)%7;
+ if(shift>3)shift-=7;
+ var ranks={};
+ tsaChristmasForecast.busiestOffsets.forEach(function(offset,i){ranks[String(offset-shift)]=i+1});
+ return ranks;
+}
 var gas={us:4.331,east:4.118,midwest:4.145,gulf:3.851,rocky:4.439,west:5.639};
 var roadT={
  '-5':[1,'Before midday','Early-start estimate; no route-specific traffic forecast.'],
@@ -327,7 +341,9 @@ function millions(n){return (n/1000000).toFixed(2)+'M'}
 function crowd(offset){
  if(holiday==='thanksgiving'&&Number.isFinite(tsaThanksgiving[offset])){var v=tsaThanksgiving[offset];return {score:Math.max(0,Math.min(4,Math.round((v-1500000)/400000))),value:millions(v)+' screened',detail:'2025 TSA national actual (same holiday-relative day)',valueNum:v}}
  if(holiday==='thanksgiving'){return {score:offset<-2?2:1,value:'Estimated crowds',detail:'Outside verified TSA comparison days',valueNum:null}}
- var scores={'-6':3,'-5':3,'-4':2,'-3':3,'-2':3,'-1':1,'0':0,'1':3,'2':3,'3':4,'4':3,'5':2,'6':1};var s=scores[offset]===undefined?2:scores[offset];return {score:s,value: s>=4?'Very busy (estimate)':s>=3?'Busy (estimate)':s>=2?'Moderate (estimate)':'Lighter (estimate)',detail:'Selected-year estimate based on dated 2025 TSA and AAA seasonal patterns',valueNum:null};
+ var rank=tsaChristmasRanks(planningYear('christmas'))[String(offset)];
+ if(rank)return {score:rank===1?4:3,value:'#'+rank+' of six projected busiest',detail:'Calendar-shifted official TSA 2025 forecast, NOT verified '+planningYear('christmas')+' actual screenings',valueNum:null,forecastRank:rank};
+ return {score:2,value:'Not ranked by TSA',detail:'No verified daily actuals or forecast rank for this date',valueNum:null,forecastRank:null};
 }
 function tier(score){return score<=1?'best':score>=3?'avoid':'caution'}
 function tierLabel(score){return score<=1?'Better choice':score>=3?'Try another day':'Plan extra time'}
@@ -365,6 +381,14 @@ function render(){
   doc('planning-banner').textContent=d.name+' '+year+' travel planning · dates and weekday-aware estimates recalculate automatically; historical source figures stay dated.';
   doc('yearly-source-note').textContent='Travel days and Christmas weekday estimates are generated for '+year+'. Source evidence: TSA/AAA/BTS 2025 and EIA Oct 12, 2026. Figures are historical comparisons, not automatically updated '+year+' data.';
  doc('volume-label').textContent='AAA '+d.year+' travel forecast';doc('volume-stat').textContent=d.total;doc('volume-note').textContent=d.source+' · '+d.car+'; '+d.air+' · not a '+year+' count';
+ doc('christmas-tsa-evidence').hidden=holiday!=='christmas';
+ doc('christmas-projection-year').textContent=year;
+ doc('travel-legend').hidden=holiday==='christmas'&&mode==='fly';
+ if(holiday==='christmas'&&mode==='fly'){
+  doc('volume-label').textContent='TSA official 2025 holiday forecast';
+  doc('volume-stat').textContent='44.3 million';
+  doc('volume-note').textContent='Projected checkpoint screenings, Dec 19, 2025–Jan 4, 2026 · not '+year+' actuals';
+ }
  var dl=delayInfo();
  doc('airport-context').hidden=mode!=='fly';
  doc('airport-context-title').textContent=dl.label+' · '+(holiday==='thanksgiving'?'November':'December')+' 2025';
@@ -376,17 +400,29 @@ function render(){
  if(mode==='fly'){doc('third-label').textContent=dl.local?'Airport flights on time':'U.S. flights on time';doc('third-stat').textContent=dl.value;doc('third-note').textContent=dl.name+' · BTS 2025';doc('airport-note').textContent=dl.scope+'. Check the airport and airline for live guidance.'}
  else{var region=doc('region').value,mi=Number(doc('miles').value),mpg=Number(doc('mpg').value);var valid=Number.isFinite(mi)&&mi>0&&mi<=10000&&Number.isFinite(mpg)&&mpg>=5&&mpg<=150;doc('third-label').textContent='Estimated one-way fuel';doc('third-stat').textContent=valid?'$'+(mi/mpg*gas[region]).toFixed(2):'Enter valid miles / MPG';doc('third-note').textContent='EIA '+region.replace('us','U.S.')+' regular $'+gas[region].toFixed(3)+'/gal · Oct 12, 2026 (historical price illustration)';}
  var offsets=holiday==='thanksgiving'?[-5,-4,-3,-2,-1,0,1,2,3,4,5]:[-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6];
+ if(holiday==='christmas'&&mode==='fly')offsets=Object.keys(tsaChristmasRanks(year)).map(Number);
  var entries=offsets.map(item).sort(function(a,b){return a.s-b.s||Math.abs(a.offset)-Math.abs(b.offset)||a.offset-b.offset});
+ if(holiday==='christmas'&&mode==='fly')entries.sort(function(a,b){return a.c.forecastRank-b.c.forecastRank});
  var best=entries[0];doc('callout-tag').textContent='Estimated first choice · '+(mode==='fly'?'fly':'drive');doc('best-label').textContent=fullDate(best.date);
  doc('best-reason').textContent=mode==='fly'?'National TSA comparisons suggest relatively lighter crowds on this date. At '+dl.label+', '+dl.value+' of departures were on time and '+dl.cancel+' were canceled in '+(holiday==='thanksgiving'?'November':'December')+' 2025; these monthly airport facts are not a date-specific forecast. Allow '+buffer(best.s)+' before a domestic flight (planning estimate) and check current airline guidance.':'Lower expected congestion than the major holiday departure and return peaks. Suggested window: '+best.r[1]+'. This is a '+year+' estimate based on 2025 AAA/INRIX patterns, adjusted for the calendar.';
+ if(holiday==='christmas'&&mode==='fly'){
+  doc('callout-tag').textContent='Projected busiest flying day · TSA forecast pattern';
+  doc('best-reason').textContent='This is a projected peak day to avoid if you can, not a recommended first choice. TSA did not identify the least-busy dates. The '+year+' ranking is a weekday-shifted projection from the official 2025 forecast, not an actual count or guarantee.';
+ }
  doc('rank-heading').textContent=(mode==='fly'?'Flying days (national crowd ranking)':'Driving days')+', ranked: '+d.name+' '+year+(mode==='fly'?' · '+dl.label:doc('city').value.trim()?' · From '+doc('city').value.trim():'');
+ if(holiday==='christmas'&&mode==='fly')doc('rank-heading').textContent='Flying days, projected busiest first: Christmas '+year+' · '+dl.label;
  doc('rank-intro').textContent=mode==='fly'?'Dates are ordered using national TSA holiday screening patterns, not airport-level daily passenger counts. Selecting another airport changes the real 2025 monthly on-time/cancellation evidence and comparison; it cannot truthfully change the national date ranking.':'Dates are ordered from less to more congested (estimate), using historical holiday road timing, not live route-specific traffic.';
+ if(holiday==='christmas'&&mode==='fly')doc('rank-intro').textContent='Six busiest dates from TSA’s official 2025 forecast, shifted to the '+year+' calendar. These are projections, not daily passenger actuals. Dates not listed were not ranked by TSA, and are not guaranteed lighter. Airport selection changes monthly flight history, not the national ranking.';
  doc('results').innerHTML=entries.map(function(e,n){
  var f=mode==='fly';var label=tierLabel(e.s);
+ if(f&&holiday==='christmas')label='Projected busiest #'+e.c.forecastRank;
  var m1=f?metric('National checkpoint crowds',e.c.value,e.c.detail):metric('Expected road traffic',e.s<=1?'Light (estimate)':e.s===2?'Moderate (estimate)':'Heavy (estimate)','Not a live route-specific forecast');
+ if(f&&holiday==='christmas')m1=metric('TSA forecast-pattern rank',e.c.value,e.c.detail);
  var m2=f?metric(dl.local?'Selected airport on-time rate':'U.S. on-time rate',dl.value,dl.name+' · '+dl.cancel+' canceled'):metric('Recommended departure',e.r[1],year+' timing estimate using 2025 AAA/INRIX');
  var m3=f?metric('Airport arrival allowance',buffer(e.s)+' before flight','Domestic · planning estimate; not TSA queue time'):metric('Fuel cost, one way',doc('third-stat').textContent,'Based on your mileage and EIA snapshot');
  var why=f?(e.c.valueNum?'TSA counted '+e.c.value+' nationally on the comparable '+pretty(new Date(Date.UTC(2025,10,27+e.offset,12)))+' in 2025. ':'Crowd level is modeled, not a measured '+year+' count. ')+(e.s>=3?'Allow room for larger security crowds and disruptions.':'A comparatively quieter historical pattern; verify local flights and security.'):(e.r[2]+' Departure: '+e.r[1]+'.');
+ if(f&&holiday==='christmas')why='TSA’s official forecast placed '+pretty(new Date(Date.UTC(2025,11,25+tsaChristmasForecast.busiestOffsets[e.c.forecastRank-1],12)))+' at rank #'+e.c.forecastRank+'. This '+year+' date is a weekday-shifted projection, not a measured passenger count.';
+ if(f&&holiday==='christmas')return '<article class="day '+e.tier+'"><div class="day-head"><div><div class="date">#'+(n+1)+' · '+pretty(e.date)+'</div><div class="sub">'+e.note+'</div></div><span class="pill '+e.tier+'">'+label+'</span></div><div class="metrics">'+m1+m2+m3+'</div><p class="why">'+why+'</p></article>';
  return '<article class="day '+e.tier+'"><div class="day-head"><div><div class="date">#'+(n+1)+' · '+pretty(e.date)+'</div><div class="sub">'+e.note+'</div></div><span class="pill '+e.tier+'">'+label+'</span></div><div class="meter" aria-label="Estimated relative crowd or traffic severity '+(e.s+1)+' out of 5"><i style="width:'+((e.s+1)*20)+'%"></i></div><div class="metrics">'+m1+m2+m3+'</div><p class="why">'+why+'</p></article>'
  }).join('');
 }
