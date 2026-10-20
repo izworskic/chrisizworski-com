@@ -46,16 +46,14 @@ The initial pilot manifest includes Aurora, Niagara Border Crossing and Holiday 
 
 This repository includes .github/workflows/tool-quality-factory.yml. It supports:
 - Manual workflow dispatch: enter one HTTPS URL, or audit the manifest.
-- Factory-only pull-request checks on changes to the shared engine and its documents.
-- Cross-repository workflow_call: each tool's owning repository checks out its own files and calls the central shared quality workflow.
+- No automatic pull-request, merge, push or scheduled runs. It is intentionally excluded from routine CI.
+- Cross-repository workflow_call only when another owning repository explicitly opts in, using a manual-only caller.
 
 An owning tool repository may add this workflow:
 
 ~~~yaml
 name: Tool quality baseline
 on:
-  pull_request:
-    paths: ['public/**', 'config/tool-quality-pilots.json']
   workflow_dispatch:
 permissions:
   contents: read
@@ -67,7 +65,7 @@ jobs:
       fail_on: error
 ~~~
 
-Create a matching manifest within that caller repository. Once stable, pin the reusable workflow to a tagged release or immutable SHA. GitHub Actions runs this small Node audit without npm install, Vercel builds, paid APIs or secrets. The output JSON is uploaded as an artifact.
+Create a matching manifest within that caller repository only when requested. Never attach the audit to routine PRs or merges. Once stable, pin the reusable workflow to a tagged release or immutable SHA. GitHub Actions runs this small Node audit without npm install, Vercel builds, paid APIs or secrets. The output JSON is uploaded as an artifact.
 
 ## Boundaries and future expansion
 
