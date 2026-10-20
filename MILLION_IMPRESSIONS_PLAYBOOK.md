@@ -8,6 +8,8 @@
 
 > **Read this document and [the growth session log](docs/GROWTH_SESSION_LOG.md) at the start of every search, growth, or monetization development session. Update the log when the session ends.** This is the cross-context-window project handoff, not an instruction to open endless projects or publish thin content.
 
+**Unified execution entry point:** [Growth & Quality Hub](docs/GROWTH_QUALITY_HUB.md) combines the Tool Quality Factory's technical HTML audits with the existing native GSC collector/classifier into one report and evidence-backed priority queue. This adds no second metric authority and does not replace any full release gate.
+
 ## 1. What success actually means
 
 | Metric | Long-term goal | Important definition |
