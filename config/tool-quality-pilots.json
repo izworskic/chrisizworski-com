@@ -16,5 +16,11 @@
     "file": "public/holiday-travel/index.html",
     "canonical": "https://chrisizworski.com/holiday-travel/",
     "identity": "chris-izworski"
+  },
+  {
+    "name": "Monarch Migration Live",
+    "url": "https://chrisizworski.com/national-tools/monarch-migration-live",
+    "canonical": "https://chrisizworski.com/national-tools/monarch-migration-live",
+    "identity": "chris-izworski"
   }
 ]
