@@ -1,3 +1,13 @@
+## Monarch Migration Live — source-HTML quality audit (October 20, 2026)
+
+- **User direction:** Run the Monarch tool through the updated 1 Million Impressions + 5% CTR GitHub quality framework, keeping the unified hub manual/opt-in only.
+- **Baseline:** Owning repo `public/index.html` scored **72/100 FAIL** using the hub's `auditHtml` source checks: missing canonical Person ID (error), missing visible byline (warning), and a 75-character search title (warning). No dated native 28-day GSC report was supplied; Google impressions/clicks/CTR/revenue are **NOT AVAILABLE**.
+- **Fix in owning repo:** PR [monarch-migration-live#12](https://github.com/izworskic/monarch-migration-live/pull/12) merged at `59c93ee79dfcd6b29a4de32e20075792c10e5440`. Intent-first 54-character title, aligned social titles, shared Person author/publisher schema and discreet “Built by Chris Izworski” link. Retained all Monarch model/map/source/fieldbook/advertising logic.
+- **Verification:** Re-applied hub HTML checks to post-merge source: **100/100 PASS**, zero errors/warnings. Monarch CI and production smoke passed ([run 39467998400](https://github.com/izworskic/monarch-migration-live/actions/runs/39467998400)); Vercel production deployment `dpl_3NRcM6dkArYCbR9ZPya3HM1nDaYv` READY at matching SHA.
+- **Hub registration:** Appended canonical public Monarch URL to `config/tool-quality-pilots.json` on the still-unmerged `feature/tool-quality-factory-v1` branch. No automatic workflow triggers were added. The shared GitHub Actions workflow **has not been dispatched**; this is a separately executed source-HTML checklist, not its generated artifact.
+- **Report:** [`docs/MONARCH_MIGRATION_GROWTH_AUDIT_2026-10-20.md`](MONARCH_MIGRATION_GROWTH_AUDIT_2026-10-20.md). A 100/100 technical score does not establish indexing, search ranking, CTR gains or revenue.
+- **Exactly one next action:** Validate/ship the shared growth-hub feature branch and manually dispatch its one-off audit with finalized GSC data when available.
+
 ## Million Impressions hub — manual execution policy (October 19, 2026)
 
 - **Owner constraint:** Do NOT run the SEO/quality factory on every merge, push, or pull request. It is an on-demand inspection tool, not another routine CI or deployment cost.
