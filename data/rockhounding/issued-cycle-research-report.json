@@ -1,6 +1,6 @@
 {
   "schemaVersion": "glwu-research-cycle-summary-v1",
-  "generatedAt": "2026-10-19T23:54:59.000Z",
+  "generatedAt": "2026-10-20T07:53:44.000Z",
   "status": "MULTIPLE_ISSUES_AVAILABLE_FOR_RESEARCH",
   "source": "NOAA_GLWU_MODEL_OUTPUT",
   "modelCycleCounts": {
@@ -12,9 +12,9 @@
       "readyFor14DayBaseline": false
     },
     "500m-greatlakes": {
-      "cycles": 16,
-      "analysis": 16,
-      "issuedForecasts": 666,
+      "cycles": 17,
+      "analysis": 17,
+      "issuedForecasts": 712,
       "distinctCells": 1,
       "readyFor14DayBaseline": false
     }
@@ -42,8 +42,8 @@
     },
     "500m-greatlakes": {
       "grid": "500m-greatlakes",
-      "matchedPairs": 82,
-      "unmatchedForecastRows": 584,
+      "matchedPairs": 84,
+      "unmatchedForecastRows": 628,
       "matches": [
         {
           "issuedAt": "2026-10-15T18:00:00.000Z",
@@ -782,18 +782,36 @@
           "predictedWaveHeightM": 0.3,
           "laterModelInitialHeightM": 0.3,
           "deltaM": 0
+        },
+        {
+          "issuedAt": "2026-10-19T12:00:00.000Z",
+          "validAt": "2026-10-20T00:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 12,
+          "predictedWaveHeightM": 0.26,
+          "laterModelInitialHeightM": 0.27,
+          "deltaM": -0.01
+        },
+        {
+          "issuedAt": "2026-10-19T18:00:00.000Z",
+          "validAt": "2026-10-20T00:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 6,
+          "predictedWaveHeightM": 0.26,
+          "laterModelInitialHeightM": 0.27,
+          "deltaM": -0.01
         }
       ],
       "leadBuckets": {
         "1-6h": {
-          "pairs": 14,
-          "meanAbsoluteChangeM": 0.0029,
-          "meanSignedChangeM": -0.0014
+          "pairs": 15,
+          "meanAbsoluteChangeM": 0.0033,
+          "meanSignedChangeM": -0.002
         },
         "7-12h": {
-          "pairs": 12,
+          "pairs": 13,
           "meanAbsoluteChangeM": 0.0092,
-          "meanSignedChangeM": -0.0042
+          "meanSignedChangeM": -0.0046
         },
         "13-24h": {
           "pairs": 22,
