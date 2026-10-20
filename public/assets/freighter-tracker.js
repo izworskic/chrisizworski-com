@@ -114,9 +114,9 @@
   var sourceCredits = document.getElementById("freighterCredits");
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
   function vesselMatchesSearch(vessel,rawQuery) {
-    var query=String(rawQuery||"").trim().toLowerCase().replace(/\\s+/g," ");
+    var query=String(rawQuery||"").trim().toLowerCase().replace(/\s+/g," ");
     if(!query)return true;
-    return String(vessel.name||"").toLowerCase().replace(/\\s+/g," ").includes(query)
+    return String(vessel.name||"").toLowerCase().replace(/\s+/g," ").includes(query)
       || String(vessel.mmsi==null?"":vessel.mmsi).includes(query);
   }
   function renderVessels() {
