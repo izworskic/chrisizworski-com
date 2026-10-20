@@ -1,3 +1,11 @@
+## Million Impressions hub — manual execution policy (October 19, 2026)
+
+- **Owner constraint:** Do NOT run the SEO/quality factory on every merge, push, or pull request. It is an on-demand inspection tool, not another routine CI or deployment cost.
+- **Implemented:** Removed `pull_request` trigger from `.github/workflows/tool-quality-factory.yml`. Only `workflow_dispatch` (manual Actions run) and `workflow_call` (explicitly invoked reusable workflow) remain. Changed both cross-repository examples to manual-only, and documented that future callers must not add automated triggers without separate owner approval.
+- **Scope:** Existing main website release gates, including `agent-branch-verify.yml`, remain untouched. No change to production routing, Vercel build configuration, SEO metadata, or GSC data collection.
+- **Verification/release:** Confirmed from edited workflow source that `push`, `pull_request`, and `schedule` triggers are absent. The changes are only on `feature/tool-quality-factory-v1`; no PR, merge, production deployment, or GitHub Actions execution claimed.
+- **Exactly one next action:** Run a deliberate manual pilot audit from GitHub Actions after the feature branch is released, and review its JSON and Markdown report before any broader rollout.
+
 ## One Million Impressions + Tool Quality unification — October 19, 2026
 
 - **Direction:** SEO, the Million Impressions goal, and technical/JavaScript tool-quality program should be one repeatable GitHub system, not competing one-off projects.
