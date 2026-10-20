@@ -1,4 +1,4 @@
-name: Tool Quality Factory
+name: Million Impressions — Growth & Quality Hub
 
 on:
   workflow_call:
@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: config/tool-quality-pilots.json
+      gsc_snapshot:
+        type: string
+        required: false
+        default: ''
       fail_on:
         type: string
         required: false
@@ -14,41 +18,50 @@ on:
   workflow_dispatch:
     inputs:
       manifest:
-        description: "Manifest path in the target repository"
+        description: "Manifest path in repository"
         type: string
         required: false
         default: config/tool-quality-pilots.json
       url:
-        description: "Optional single public HTTPS URL instead of the manifest"
+        description: "Optional public HTTPS URL to inspect instead of manifest"
+        type: string
+        required: false
+      gsc_snapshot:
+        description: "Optional native GSC report JSON file path (no data = unavailable)"
         type: string
         required: false
       fail_on:
-        description: "error (default), warning, or never"
+        description: "error, warning, or never"
         type: choice
         options: [error, warning, never]
         default: error
   pull_request:
     paths:
       - "scripts/tool-quality-factory.mjs"
+      - "scripts/growth-quality-hub.mjs"
       - "tests/tool-quality-factory.test.js"
+      - "tests/growth-quality-hub.test.js"
       - "config/tool-quality-pilots.json"
       - ".github/workflows/tool-quality-factory.yml"
       - "docs/TOOL_QUALITY_FACTORY.md"
+      - "docs/GROWTH_QUALITY_HUB.md"
 
 permissions:
   contents: read
 
 concurrency:
-  group: quality-factory-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: growth-quality-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   audit:
+    name: One growth and tool-quality scorecard
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Checkout caller tool repository
+      - name: Checkout owning tool repository
         uses: actions/checkout@v4
-      - name: Checkout shared quality engine
+      - name: Checkout shared quality and growth engine
         uses: actions/checkout@v4
         with:
           repository: izworskic/chrisizworski-com
@@ -56,30 +69,40 @@ jobs:
           path: .quality-factory
           sparse-checkout: |
             scripts/tool-quality-factory.mjs
+            scripts/growth-quality-hub.mjs
             tests/tool-quality-factory.test.js
+            tests/growth-quality-hub.test.js
           persist-credentials: false
-      - name: Use Node 22 without installing dependencies
+      - name: Node 22, no npm install or Vercel build
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - name: Test the reusable quality engine
-        run: node --test .quality-factory/tests/tool-quality-factory.test.js
-      - name: Audit initial HTML without building or deploying
+          node-version: '22'
+      - name: Test shared auditing and measurement logic
+        run: node --test .quality-factory/tests/tool-quality-factory.test.js .quality-factory/tests/growth-quality-hub.test.js
+      - name: Produce unified technical and growth scorecards
         env:
           QUALITY_MANIFEST: ${{ inputs.manifest || 'config/tool-quality-pilots.json' }}
           QUALITY_URL: ${{ inputs.url || '' }}
+          GSC_SNAPSHOT: ${{ inputs.gsc_snapshot || '' }}
           QUALITY_FAIL_ON: ${{ inputs.fail_on || 'error' }}
         run: |
+          args=(--out=growth-quality-report.json --markdown=growth-quality-report.md --fail-on="$QUALITY_FAIL_ON")
           if [ -n "$QUALITY_URL" ]; then
-            node .quality-factory/scripts/tool-quality-factory.mjs --url="$QUALITY_URL" --out=tool-quality-report.json --fail-on="$QUALITY_FAIL_ON"
+            args+=(--url="$QUALITY_URL")
           else
-            node .quality-factory/scripts/tool-quality-factory.mjs --manifest="$QUALITY_MANIFEST" --out=tool-quality-report.json --fail-on="$QUALITY_FAIL_ON"
+            args+=(--manifest="$QUALITY_MANIFEST")
           fi
-      - name: Upload scorecard even on audit failure
+          if [ -n "$GSC_SNAPSHOT" ]; then
+            args+=(--gsc="$GSC_SNAPSHOT")
+          fi
+          node .quality-factory/scripts/growth-quality-hub.mjs "${args[@]}"
+      - name: Retain combined JSON and readable report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tool-quality-report
-          path: tool-quality-report.json
+          name: million-impressions-quality-scorecard
+          path: |
+            growth-quality-report.json
+            growth-quality-report.md
           if-no-files-found: warn
           retention-days: 7
