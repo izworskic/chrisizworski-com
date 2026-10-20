@@ -106,13 +106,30 @@
   if (map) L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
   else mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";
   var reports = null, busy = false, lastFailed = false;
+  var vesselSearch = document.getElementById("freighterNameSearch");
+  var vesselSearchStatus = document.getElementById("freighterSearchStatus");
+  var searchAllButton = document.getElementById("freighterSearchAll");
+  var clearSearchButton = document.getElementById("freighterClearSearch");
   var vesselList = document.getElementById("freighterVessels");
   var sourceCredits = document.getElementById("freighterCredits");
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
+  function vesselMatchesSearch(vessel,rawQuery) {
+    var query=String(rawQuery||"").trim().toLowerCase().replace(/\\s+/g," ");
+    if(!query)return true;
+    return String(vessel.name||"").toLowerCase().replace(/\\s+/g," ").includes(query)
+      || String(vessel.mmsi==null?"":vessel.mmsi).includes(query);
+  }
   function renderVessels() {
     if (!reports) return;
     var view=views[activeView];
-    var vessels=reports.vessels.filter(function(v){return Date.now()-Date.parse(v.seen)<=1800000 && (activeView === "overview" || distanceMiles(view.lat,view.lng,v.lat,v.lon)<= (activeView === "saginaw" ? 60 : 35));});
+    var current=reports.vessels.filter(function(v){return Date.now()-Date.parse(v.seen)<=1800000 && (activeView === "overview" || distanceMiles(view.lat,view.lng,v.lat,v.lon)<= (activeView === "saginaw" ? 60 : 35));});
+    var query=vesselSearch.value.trim();
+    var vessels=current.filter(function(v){return vesselMatchesSearch(v,query);});
+    if(query){
+      vesselSearchStatus.textContent=vessels.length+" of "+current.length+" recent "+view.label+" AIS reports match “"+query+"”. Search only includes reports received within 30 minutes.";
+    }else{
+      vesselSearchStatus.textContent=current.length+" recent AIS reports available in "+view.label+". Enter a ship name or MMSI to narrow the map.";
+    }
     vesselList.replaceChildren(); if(layer) layer.clearLayers();
     vessels.forEach(function(v){
       var name=v.name || "Vessel " + v.mmsi;
@@ -126,7 +143,9 @@
       }else item.append(node("strong",name));
       item.append(node("span",detail));vesselList.append(item);
     });
-    if(!vessels.length) vesselList.append(node("li","No recent reports returned for this view. This does not mean there are no ships; check the passage source below."));
+    if(!vessels.length) vesselList.append(node("li",query
+      ? "No matching recent AIS reports in "+view.label+". Try All Great Lakes, a different name, or the passage source below. A missing report is not evidence the ship is absent."
+      : "No recent reports returned for this view. This does not mean there are no ships; check the passage source below."));
     setStatus((lastFailed?"Refresh unavailable; retained ":"")+vessels.length+" recent reports · "+view.label+" · checked "+new Date(reports.checkedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"})+(map?"":" · map unavailable"),lastFailed?"slow":vessels.length?"loaded":"");
     sourceCredits.textContent="Source credits: "+reports.attribution.map(function(a){return a.credit;}).join(" · ");
   }
@@ -136,7 +155,7 @@
       var r=await fetch("/api/freighter-ais",{signal:AbortSignal.timeout(12000)}), data=await r.json();
       if(!r.ok||!data.ok||!Array.isArray(data.vessels))throw new Error("AIS unavailable");
       reports=data;lastFailed=false;renderVessels();
-    }catch(_){lastFailed=true;if(reports)renderVessels();else{setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));}}
+    }catch(_){lastFailed=true;if(reports)renderVessels();else{setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
     finally{busy=false;refreshButton.disabled=false;}
   }
 
@@ -306,6 +325,9 @@
     if (settings.track !== false) trackView(key);
   }
 
+  vesselSearch.addEventListener("input", function () {if(reports)renderVessels();});
+  clearSearchButton.addEventListener("click",function(){vesselSearch.value="";if(reports)renderVessels();vesselSearch.focus();});
+  searchAllButton.addEventListener("click",function(){selectView("overview",{updateHash:true,track:true});});
   refreshButton.addEventListener("click", function () {loadVessels(); stationsPromise=null;renderNearestCondition(activeView);});
   setInterval(function(){if(!document.hidden)loadVessels();},60000);
 
