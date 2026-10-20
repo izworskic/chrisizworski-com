@@ -4,21 +4,21 @@
   "modelGrid": "2p5km",
   "sourceBuoy": "https://www.ndbc.noaa.gov/data/realtime2/45004.txt",
   "sourceModel": "NOAA_GLWU_GRIB2",
-  "asOfISO": "2026-10-20T07:53:44.000Z",
+  "asOfISO": "2026-10-20T13:48:53.000Z",
   "toleranceMinutes": 30,
   "maxLeadHours": 24,
-  "observedSamplesAvailable": 3077,
-  "eligibleForecastRows": 139,
-  "totalIssuedForecastCandidates": 399,
-  "supersededForecastCandidates": 260,
+  "observedSamplesAvailable": 3092,
+  "eligibleForecastRows": 145,
+  "totalIssuedForecastCandidates": 423,
+  "supersededForecastCandidates": 278,
   "forecastSelectionPolicy": "LATEST_NOMINAL_ISSUE_PER_VALID_HOUR",
   "nominalIssueDoesNotProvePublicationAvailability": true,
-  "matchedPairs": 139,
+  "matchedPairs": 145,
   "unmatchedForecastRows": 0,
   "distinctModelCells": [
     {
       "cell": "47.578791,-86.573970",
-      "matches": 139
+      "matches": 145
     }
   ],
   "distinctObservationDays": [
@@ -48,7 +48,8 @@
     "2026-10-19T06:00:00.000Z",
     "2026-10-19T12:00:00.000Z",
     "2026-10-19T18:00:00.000Z",
-    "2026-10-20T00:00:00.000Z"
+    "2026-10-20T00:00:00.000Z",
+    "2026-10-20T06:00:00.000Z"
   ],
   "evidenceSufficiency": {
     "matchedPairsAtLeast30": true,
@@ -58,11 +59,11 @@
   },
   "status": "PRELIMINARY_OFFSHORE_PAIRS_NOT_CALIBRATED",
   "metrics": {
-    "maeM": 0.1362,
-    "rmseM": 0.1986,
-    "meanBiasM": 0.0664
+    "maeM": 0.1361,
+    "rmseM": 0.1968,
+    "meanBiasM": 0.0692
   },
-  "matchedPairsInRawPreview": 139,
+  "matchedPairsInRawPreview": 145,
   "matchesPreviewTruncated": false,
   "stratifiedOffshoreEvidence": {
     "schemaVersion": "offshore-buoy45004-stratified-research-v1",
@@ -74,7 +75,7 @@
     "elevationIsNotNwsHazardThreshold": true,
     "leadTime": {
       "1-6h": {
-        "pairs": 106,
+        "pairs": 112,
         "distinctDays": [
           "2026-10-14",
           "2026-10-15",
@@ -84,9 +85,9 @@
           "2026-10-19",
           "2026-10-20"
         ],
-        "maeM": 0.1548,
-        "rmseM": 0.2176,
-        "meanBiasM": 0.0795,
+        "maeM": 0.1519,
+        "rmseM": 0.2135,
+        "meanBiasM": 0.0806,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
@@ -99,9 +100,9 @@
           "2026-10-19",
           "2026-10-20"
         ],
-        "maeM": 0.1019,
-        "rmseM": 0.1462,
-        "meanBiasM": 0.0333,
+        "maeM": 0.1119,
+        "rmseM": 0.1532,
+        "meanBiasM": 0.0433,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
@@ -119,15 +120,15 @@
     },
     "observedHeight": {
       "below-0.5m": {
-        "pairs": 20,
+        "pairs": 26,
         "distinctDays": [
           "2026-10-15",
           "2026-10-19",
           "2026-10-20"
         ],
-        "maeM": 0.043,
-        "rmseM": 0.0602,
-        "meanBiasM": 0.008,
+        "maeM": 0.0642,
+        "rmseM": 0.0885,
+        "meanBiasM": 0.0373,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
@@ -230,13 +231,13 @@
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
       "2026-10-20": {
-        "pairs": 7,
+        "pairs": 13,
         "distinctDays": [
           "2026-10-20"
         ],
-        "maeM": 0.0257,
-        "rmseM": 0.037,
-        "meanBiasM": -0.0229,
+        "maeM": 0.0762,
+        "rmseM": 0.1041,
+        "meanBiasM": 0.05,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       }
@@ -250,7 +251,7 @@
       }
     ],
     "evidence": {
-      "matchedPairs": 139,
+      "matchedPairs": 145,
       "distinctObservedDays": 7,
       "highWaveObservedThresholdM": 1,
       "separatedElevatedWaveEpisodes": 1,
@@ -2200,18 +2201,102 @@
       "modelMinusObservedM": -0.01
     },
     {
-      "issueAt": "2026-10-20T00:00:00.000Z",
+      "issueAt": "2026-10-20T06:00:00.000Z",
       "forecastValidAt": "2026-10-20T07:00:00.000Z",
       "buoyObservedAt": "2026-10-20T06:50:00.000Z",
       "buoyStation": "45004",
       "modelGrid": "2p5km",
       "modelCell": "47.578791,-86.573970",
       "modelCellDistanceKm": 1.016,
-      "leadHours": 7,
+      "leadHours": 1,
       "modelHeightM": 0.2,
       "observedHeightM": 0.2,
       "timeOffsetMinutes": -10,
       "modelMinusObservedM": 0
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T08:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T07:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 2,
+      "modelHeightM": 0.23,
+      "observedHeightM": 0.2,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.03
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T09:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T08:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 3,
+      "modelHeightM": 0.29,
+      "observedHeightM": 0.2,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.09
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T10:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T09:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 4,
+      "modelHeightM": 0.34,
+      "observedHeightM": 0.2,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.14
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T11:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T10:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 5,
+      "modelHeightM": 0.39,
+      "observedHeightM": 0.2,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.19
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T12:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T11:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 6,
+      "modelHeightM": 0.45,
+      "observedHeightM": 0.3,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.15
+    },
+    {
+      "issueAt": "2026-10-20T06:00:00.000Z",
+      "forecastValidAt": "2026-10-20T13:00:00.000Z",
+      "buoyObservedAt": "2026-10-20T12:50:00.000Z",
+      "buoyStation": "45004",
+      "modelGrid": "2p5km",
+      "modelCell": "47.578791,-86.573970",
+      "modelCellDistanceKm": 1.016,
+      "leadHours": 7,
+      "modelHeightM": 0.51,
+      "observedHeightM": 0.3,
+      "timeOffsetMinutes": -10,
+      "modelMinusObservedM": 0.21
     }
   ],
   "isIndependentOffshoreBuoyComparison": true,
