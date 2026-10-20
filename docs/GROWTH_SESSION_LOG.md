@@ -1,3 +1,12 @@
+## Great Lakes Freighter Tracker — direct vessel search (October 20, 2026)
+
+- **Owner directive:** Update the next measured growth opportunity after the White Christmas forecast, without rewriting existing winning snippets or altering ad placements.
+- **Measured GSC baseline:** Search Console Web, worldwide, `sc-domain:chrisizworski.com`, September 20–October 17 (28 days): `/great-lakes-freighter-tracking/` 9,294 impressions, 143 clicks, 1.54% CTR, average position 7.29. Leading queries: “great lakes ship tracker” 1,196 impressions/7 clicks, and “great lakes freighter tracker” 618/3. Verified before change; no post-change result claimed.
+- **UX improvement:** Add accessible ship name/MMSI search immediately above the existing AIS map; filter the already retrieved last-30-minute observations to match both map markers and vessel list; select a result to zoom, or reset to All Great Lakes. An empty or degraded feed is never reported as proof of zero vessel traffic. No additional provider/API calls, paid services, title/description/canonical changes, or advertising configuration changes.
+- **SEO integrity:** Updated this modified page’s `dateModified` and matching sitemap `lastmod` from Oct 12 to Oct 20 to satisfy the complete 55-step repository freshness gate without inventing dates for unrelated pages. Existing creator attribution preserved.
+- **Release status at authoring:** PR [#1098](https://github.com/izworskic/chrisizworski-com/pull/1098) on `feature/freighter-name-search-20261020`; full CI rerun, merge and production verification **pending**. Measured CTR lift, Google canonical selection and page revenue **NOT AVAILABLE**.
+- **Exactly one next action:** Pass `npm run verify:all` on the final branch SHA, then merge and verify the canonical production page and map input.
+
 ## Holiday Travel airport selection — October 19, 2026
 
 - **Owner-reported defect:** Changing departure airport updated no meaningful figures for almost all airports. Only ORD had a hardcoded historical rate; every other airport silently inherited an identical U.S. baseline. The dates were national TSA rankings; user understandably expected airport data to respond to selection.
