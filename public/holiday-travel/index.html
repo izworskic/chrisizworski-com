@@ -383,7 +383,7 @@ function render(){
  doc('volume-label').textContent='AAA '+d.year+' travel forecast';doc('volume-stat').textContent=d.total;doc('volume-note').textContent=d.source+' · '+d.car+'; '+d.air+' · not a '+year+' count';
  doc('christmas-tsa-evidence').hidden=holiday!=='christmas';
  doc('christmas-projection-year').textContent=year;
- doc('travel-legend').hidden=holiday==='christmas'&&mode==='fly';
+ doc('travel-legend').classList.toggle('hidden',holiday==='christmas'&&mode==='fly');
  if(holiday==='christmas'&&mode==='fly'){
   doc('volume-label').textContent='TSA official 2025 holiday forecast';
   doc('volume-stat').textContent='44.3 million';
