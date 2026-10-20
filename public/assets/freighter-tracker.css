@@ -204,3 +204,14 @@ button,a{-webkit-tap-highlight-color:transparent}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 
 #freighterMap{z-index:0}.map-tools{z-index:500}.vessel-results{padding:20px}.vessel-results ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;max-height:360px;overflow:auto}.vessel-results li{border:1px solid #cdd9da;padding:10px}.vessel-results button{background:none;border:0;text-decoration:underline;color:#146c86;font:inherit;cursor:pointer}.vessel-results span{display:block;font-size:12px}.vessel-results p{font-size:13px;overflow-wrap:anywhere}.vessel-results button:focus-visible{outline:2px solid #146c86}
+
+/* Search within fresh AIS reports; never imply that absence from a feed is absence on a lake. */
+.vessel-search{margin:17px 0 13px;padding:15px 17px;background:#edf5f6;border:1px solid #bdd2d6;border-radius:9px}
+.vessel-search label{display:block;font-size:.86rem;font-weight:800;color:#164453;margin-bottom:7px}
+.vessel-search-controls{display:flex;flex-wrap:wrap;gap:8px}
+.vessel-search-controls input{flex:1 1 220px;min-width:0;min-height:43px;border:1px solid #86a5ae;border-radius:7px;padding:10px 12px;background:#fff;color:#172b34;font:inherit}
+.vessel-search-controls button{border:1px solid #1b6177;border-radius:7px;background:#fff;color:#165269;font:inherit;font-size:.84rem;font-weight:750;padding:9px 13px;cursor:pointer}
+.vessel-search-controls button:hover{background:#d9eef3}
+.vessel-search-controls input:focus-visible,.vessel-search-controls button:focus-visible{outline:3px solid #daaa4a;outline-offset:2px}
+.vessel-search-status{font-size:.83rem;color:#3c6069;line-height:1.4;margin:9px 0 0}
+@media(max-width:520px){.vessel-search-controls{display:grid;grid-template-columns:1fr 1fr}.vessel-search-controls input{grid-column:1/-1;width:100%}.vessel-search-controls button{font-size:.8rem}}

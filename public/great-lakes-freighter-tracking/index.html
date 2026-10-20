@@ -51,7 +51,7 @@
       "applicationCategory": "TravelApplication",
       "operatingSystem": "Any web browser",
       "isAccessibleForFree": true,
-      "dateModified": "2026-10-12",
+      "dateModified": "2026-10-20",
       "inLanguage": "en-US",
       "author": {
         "@id": "https://chrisizworski.com/#person"
@@ -235,6 +235,7 @@
         </div>
       </div>
 
+      <div class="vessel-search" role="search" aria-label="Search recent vessel reports"><label for="freighterNameSearch">Ship name or MMSI</label><div class="vessel-search-controls"><input id="freighterNameSearch" type="search" placeholder="e.g., a vessel name or MMSI" autocomplete="off" spellcheck="false"><button type="button" id="freighterSearchAll">Search all five lakes</button><button type="button" id="freighterClearSearch">Clear</button></div><p id="freighterSearchStatus" class="vessel-search-status" role="status" aria-live="polite">Search recent AIS reports; no vessel positions are guaranteed.</p></div>
       <div class="map-stage">
         <div id="freighterMap" role="region" aria-label="Live Great Lakes vessel map"></div>
         <div class="map-tools">
@@ -246,7 +247,7 @@
         <p class="map-disclaimer">JavaScript is required for corridor switching. You can still use the <a href="https://ais.boatnerd.com/">BoatNerd Great Lakes map</a> or <a href="https://www.myshiptracking.com/">MyShipTracking</a>.</p>
       </noscript>
 
-      <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Recent vessel reports</h3><p>Tap a name to see its position. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
+      <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Find a Great Lakes freighter by name</h3><p>Search the latest available AIS vessel reports by ship name or MMSI, or choose a corridor above. Tap a name to find that ship on the map. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
       <div class="tracker-context">
         <div class="corridor-panel">
           <p class="context-label" id="corridorLabel">Current map: All Great Lakes</p>
