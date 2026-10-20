@@ -69,9 +69,19 @@ test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate
   app.click('christmas');
   assert.match(app.get('holiday-stat').textContent, /Christmas/);
   assert.equal(app.get('third-stat').textContent, '66.2%');
-  assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 13);
-  assert.match(app.get('results').innerHTML, /estimate/i);
+  assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 6, 'only official TSA forecast peak dates may be ranked');
+  assert.equal(app.get('volume-stat').textContent, '44.3 million');
+  assert.match(app.get('volume-label').textContent, /TSA official 2025 holiday forecast/);
+  assert.match(app.get('rank-intro').textContent, /projections, not daily passenger actuals/);
+  assert.match(app.get('christmas-tsa-evidence').innerHTML, /Jan 1, 2026: 2,334,465.*Jan 2: 2,578,209.*Jan 3: 2,604,749.*Jan 4: 2,817,509/);
+  assert.deepEqual(
+    [...app.get('results').innerHTML.matchAll(/<div class="date">#\\d+ · ([^<]+)<\\/div>/g)].map(m => m[1]),
+    ['Sun, Dec 27, 2026', 'Fri, Dec 18, 2026', 'Sat, Dec 19, 2026', 'Sun, Dec 20, 2026', 'Sat, Dec 26, 2026', 'Mon, Dec 28, 2026']
+  );
+  assert.doesNotMatch(app.get('results').innerHTML, /Very busy \\(estimate\\)|Moderate \\(estimate\\)|2026 actual screenings/);
   app.click('drive');
+  assert.equal(app.get('volume-stat').textContent, '122.4 million');
+  assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 13);
   assert.match(app.get('rank-heading').textContent, /Driving/);
   assert.equal(app.get('third-stat').textContent, '$44.41');
   app.get('city').value = 'Los Angeles, CA';
@@ -94,6 +104,20 @@ test('Christmas, driving, fuel arithmetic, invalid miles and toggles recalculate
   assert.equal(app.get('fly')['aria-pressed'], 'true');
 });
 
+
+test('Christmas future-year ranks use a calendar shift, not invented counts', () => {
+  const app = launch('2026-10-19');
+  app.click('christmas');
+  app.get('travel-year').value = '2027';
+  app.get('travel-year').handlers.change();
+  assert.equal(app.get('christmas-projection-year').textContent, 2027);
+  assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 6);
+  assert.match(app.get('rank-intro').textContent, /2027 calendar/);
+  assert.doesNotMatch(app.get('results').innerHTML, /2027 actual screenings/);
+  app.click('thanksgiving');
+  assert.equal(app.get('christmas-tsa-evidence').hidden, true);
+  assert.equal((app.get('results').innerHTML.match(/<article class="day /g) || []).length, 11);
+});
 
 test('automatically rolls between 2026 and future holidays without editing page text', () => {
   const app = launch('2026-10-19');
