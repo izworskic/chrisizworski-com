@@ -342,7 +342,7 @@ function crowd(offset){
  if(holiday==='thanksgiving'&&Number.isFinite(tsaThanksgiving[offset])){var v=tsaThanksgiving[offset];return {score:Math.max(0,Math.min(4,Math.round((v-1500000)/400000))),value:millions(v)+' screened',detail:'2025 TSA national actual (same holiday-relative day)',valueNum:v}}
  if(holiday==='thanksgiving'){return {score:offset<-2?2:1,value:'Estimated crowds',detail:'Outside verified TSA comparison days',valueNum:null}}
  var rank=tsaChristmasRanks(planningYear('christmas'))[String(offset)];
- if(rank)return {score:rank===1?4:3,value:'#'+rank+' of six projected busiest',detail:'Calendar-shifted official TSA 2025 forecast, NOT verified '+planningYear('christmas')+' actual screenings',valueNum:null,forecastRank:rank};
+ if(rank)return {score:rank===1?4:3,value:'#'+rank+' of six projected busiest',detail:'Calendar-shifted TSA 2025 official forecast · '+planningYear('christmas')+' projection only (no daily count)',valueNum:null,forecastRank:rank};
  return {score:2,value:'Not ranked by TSA',detail:'No verified daily actuals or forecast rank for this date',valueNum:null,forecastRank:null};
 }
 function tier(score){return score<=1?'best':score>=3?'avoid':'caution'}
