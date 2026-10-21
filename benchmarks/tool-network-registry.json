@@ -3890,6 +3890,46 @@
         "status": "unknown",
         "note": "Research-supported utility proposal; no verified GSC query volume or uplift."
       }
+    },
+    {
+      "id": "lake-effect-snow",
+      "name": "Great Lakes Lake-Effect Snow Decision Engine",
+      "canonical": "https://chrisizworski.com/lake-effect-snow/",
+      "aliases": [],
+      "kind": "regional-forecast-decision",
+      "cluster": "winter-snow",
+      "primaryIntent": "lake effect snow forecast snowbelt hour-by-hour where will lake effect snow fall",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan",
+        "wisconsin",
+        "ohio",
+        "pennsylvania",
+        "new-york"
+      ],
+      "personas": [
+        "winter-traveler",
+        "snowbelt-resident",
+        "skier",
+        "snowmobiler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "pending-release",
+        "intentSeparation": "Upcoming lake-effect setup and timing from NWS hourly evidence. Not observed snow depth, totals, or exact snowband track."
+      },
+      "searchEvidence": {
+        "status": "prelaunch",
+        "note": "Demand and CTR not yet verified by GSC for the new canonical."
+      }
     }
   ],
   "relationships": [
@@ -5484,6 +5524,30 @@
       "strength": "optional",
       "surface": "holiday-travel-tool",
       "reason": "Once a holiday travel day is chosen, air travelers may track an actual flight using the separate live tool."
+    },
+    {
+      "from": "lake-effect-snow",
+      "to": "national-snow",
+      "type": "weather-to-snowpack",
+      "strength": "strong",
+      "surface": "lake-effect-tool",
+      "reason": "Lake-effect forecast setup is distinct from observed current snow depth and snowpack."
+    },
+    {
+      "from": "lake-effect-snow",
+      "to": "michigan-snow-totals",
+      "type": "forecast-to-reports",
+      "strength": "strong",
+      "surface": "lake-effect-tool",
+      "reason": "After a lake-effect event, use official reported snowfall rather than forecast wind alignment."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "lake-effect-snow",
+      "type": "reports-to-outlook",
+      "strength": "optional",
+      "surface": "snow-totals-tool",
+      "reason": "Transition from past storm reports to upcoming snowbelt forecast context."
     }
   ],
   "cannibalizationGroups": [

@@ -18,6 +18,7 @@ const expected = new Map(Object.entries({
   "/api/national-fall-observations": "https://national-fall-color.vercel.app/api/national-fall-observations",
   "/api/national-coastal": "https://national-coastal-water.vercel.app/api/national-coastal",
   "/api/national-snow": "https://national-snowpack-melt.vercel.app/api/national-snow",
+  "/api/lake-effect": "https://national-snowpack-melt.vercel.app/api/lake-effect",
   "/api/national-white-christmas": "https://national-white-christmas.vercel.app/api/national-white-christmas",
   "/api/isle-royale": "https://isle-royale-outdoors.vercel.app/api/isle-royale",
   "/api/isle-royale-route-weather": "https://isle-royale-outdoors.vercel.app/api/isle-royale-route-weather",
