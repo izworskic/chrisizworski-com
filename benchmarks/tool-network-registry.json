@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-19",
+  "updated": "2026-10-21",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -3890,6 +3890,47 @@
         "status": "unknown",
         "note": "Research-supported utility proposal; no verified GSC query volume or uplift."
       }
+    },
+    {
+      "id": "lake-effect-snow",
+      "name": "Great Lakes Lake-Effect Snow Decision Engine",
+      "canonical": "https://chrisizworski.com/lake-effect-snow/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "winter-snow",
+      "primaryIntent": "Which Great Lakes snowbelts could see lake-effect snow and when do the official hourly forecasts and warnings indicate impacts?",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "great-lakes",
+        "MI",
+        "WI",
+        "OH",
+        "PA",
+        "NY"
+      ],
+      "personas": [
+        "winter-traveler",
+        "driver",
+        "ski-trip-planner",
+        "snowmobiler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "pre-release",
+        "intentSeparation": "Future lake-effect atmospheric snow potential and alert context. Distinct from measured snow depth on the ground, historical new snow totals, groomed trails and winter route status."
+      },
+      "searchEvidence": {
+        "status": "unverified",
+        "note": "No verified GSC traffic or position for this newly proposed national snowbelt query intent."
+      }
     }
   ],
   "relationships": [
@@ -5484,6 +5525,30 @@
       "strength": "optional",
       "surface": "holiday-travel-tool",
       "reason": "Once a holiday travel day is chosen, air travelers may track an actual flight using the separate live tool."
+    },
+    {
+      "from": "lake-effect-snow",
+      "to": "national-snow",
+      "type": "evidence-depth",
+      "strength": "strong",
+      "surface": "lake-effect-verdict",
+      "reason": "Follow a prospective lake-effect setup to measured snowpack and snow depth; future snowfall is not ground truth."
+    },
+    {
+      "from": "lake-effect-snow",
+      "to": "snowmobile",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "lake-effect-verdict",
+      "reason": "A snow-bearing wind forecast does not establish legal trail opening or riding quality."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "lake-effect-snow",
+      "type": "seasonal-decision-next",
+      "strength": "strong",
+      "surface": "snow-observation",
+      "reason": "Move from reported storm totals to forthcoming region-level NWS snow and wind forecast evidence."
     }
   ],
   "cannibalizationGroups": [
