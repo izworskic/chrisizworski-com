@@ -676,6 +676,22 @@
   ],
   "rewrites": [
     {
+      "source": "/lake-effect-snow",
+      "destination": "https://national-snowpack-melt.vercel.app/lake-effect-snow/index.html"
+    },
+    {
+      "source": "/lake-effect-snow/",
+      "destination": "https://national-snowpack-melt.vercel.app/lake-effect-snow/index.html"
+    },
+    {
+      "source": "/api/lake-effect",
+      "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect"
+    },
+    {
+      "source": "/assets/lake-effect.js",
+      "destination": "https://national-snowpack-melt.vercel.app/assets/lake-effect.js"
+    },
+    {
       "source": "/api/california-roads",
       "destination": "https://national-outdoor-core.vercel.app/api/california-roads"
     },
