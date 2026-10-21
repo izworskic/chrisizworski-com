@@ -76,6 +76,9 @@ test('breakout sync copies verified pages and routes without owning the national
   fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-10-03"}</script>');
   installBreakoutLive(core,site);
   assert.match(fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8'),/<lastmod>2026-10-03<\/lastmod>/,'repeat sync must follow the current page date');
+  fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-09-01"}</script>');
+  installBreakoutLive(core,site);
+  assert.match(fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8'),/<lastmod>2026-10-03<\/lastmod>/,'sitemap lastmod must never move backwards');
   fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{}</script>');
   assert.throws(()=>installBreakoutLive(core,site),/Kilauea page dateModified missing/);
   fs.rmSync(tmp,{recursive:true,force:true});
