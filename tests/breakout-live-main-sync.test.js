@@ -9,14 +9,14 @@ const ADS='ca-pub-8222782620788075';
 const tools=['zion-narrows-conditions','grand-canyon-access','going-to-the-sun-road-status','haleakala-sunrise','yellowstone-road-status','tioga-road-status','cadillac-mountain-sunrise','mount-rainier-road-status','lake-mead-access','lake-powell-ramp-status'];
 
 test('breakout sync copies verified pages and routes without owning the national directory',async()=>{
-  const {installBreakoutLive,BREAKOUT_SLUGS}=await import('../scripts/sync-breakout-live-main.mjs');
+  const {installBreakoutLive,BREAKOUT_SLUGS,EXTRA_SLUGS}=await import('../scripts/sync-breakout-live-main.mjs');
   const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'breakout-main-sync-'));
   const core=path.join(tmp,'core');
   const site=path.join(tmp,'site');
   fs.mkdirSync(path.join(core,'config'),{recursive:true});
   fs.mkdirSync(path.join(site,'public','synced-national-tools'),{recursive:true});
   fs.writeFileSync(path.join(core,'config','breakout-live-pages.json'),JSON.stringify(Object.fromEntries(tools.map(x=>[x,{}]))));
-  for(const slug of BREAKOUT_SLUGS){
+  for(const slug of [...BREAKOUT_SLUGS,...EXTRA_SLUGS]){
     const dir=path.join(core,'public','national-tools',slug);
     fs.mkdirSync(dir,{recursive:true});
     if(slug==='live-decisions'){
@@ -27,7 +27,7 @@ test('breakout sync copies verified pages and routes without owning the national
       const regions='<section class="decision-region"><div class="decision-region-head"><p class="eyebrow">Southwest &amp; Colorado Plateau</p></div><div class="decision-link-grid"><a class="decision-link-card" href="/national-tools/zion-narrows-conditions/"><span>Zion</span></a></div></section><section class="decision-region"><div class="decision-region-head"><p class="eyebrow">Hawaii</p></div><div class="decision-link-grid"><a class="decision-link-card" href="/national-tools/haleakala-sunrise/"><span>Haleakala</span></a></div></section>';
       fs.writeFileSync(path.join(dir,'index.html'),`<link rel="canonical" href="https://chrisizworski.com/national-tools/${slug}/"><script>${GA4}</script><meta name="google-adsense-account" content="${ADS}"><script type="application/ld+json">${JSON.stringify(liveSchema)}</script><h1>Start with where you're going.</h1>${regions}`);
     }else{
-      fs.writeFileSync(path.join(dir,'index.html'),`<link rel="canonical" href="https://chrisizworski.com/national-tools/${slug}/"><script>${GA4}</script><meta name="google-adsense-account" content="${ADS}">`);
+      fs.writeFileSync(path.join(dir,'index.html'),`<link rel="canonical" href="https://chrisizworski.com/national-tools/${slug}/"><script>${GA4}</script><meta name="google-adsense-account" content="${ADS}"><script type="application/ld+json">{"dateModified":"2026-10-21"}</script>`);
     }
   }
   const directory='<html><body><p id="directory-owner">hub owns this directory</p></body></html>';
@@ -39,11 +39,11 @@ test('breakout sync copies verified pages and routes without owning the national
   fs.writeFileSync(path.join(site,'vercel.json'),JSON.stringify({rewrites:[{source:'/national-tools/existing',destination:'/existing.html'},{source:'/national-tools/:path*',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/:path*'}]}));
 
   const result=installBreakoutLive(core,site);
-  assert.deepEqual(result,{pages:11,routes:22});
+  assert.deepEqual(result,{pages:12,routes:24});
   const v=JSON.parse(fs.readFileSync(path.join(site,'vercel.json'),'utf8'));
   const catchAll=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
   assert.ok(catchAll>0);
-  for(const slug of BREAKOUT_SLUGS){
+  for(const slug of [...BREAKOUT_SLUGS,...EXTRA_SLUGS]){
     for(const slash of ['', '/']){
       const source=`/national-tools/${slug}${slash}`;
       const rows=v.rewrites.filter(r=>r.source===source);
@@ -72,6 +72,9 @@ test('breakout sync copies verified pages and routes without owning the national
   const sitemap=fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8');
   assert.equal((sitemap.match(/https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//g)||[]).length,1,'Kilauea sitemap URL must be unique');
   assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc><lastmod>2026-09-29<\/lastmod>/);
+
+  assert.equal((sitemap.match(/national-tools\/mauna-kea-tonight\//g)||[]).length,1,'Mauna Kea sitemap URL must be unique');
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/national-tools\/mauna-kea-tonight\/<\/loc><lastmod>2026-10-21<\/lastmod>/);
 
   fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-10-03"}</script>');
   installBreakoutLive(core,site);
