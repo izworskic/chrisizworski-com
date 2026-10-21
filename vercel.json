@@ -2207,6 +2207,14 @@
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
     },
     {
+      "source": "/national-tools/mauna-kea-tonight",
+      "destination": "/synced-national-tools/mauna-kea-tonight/index.html"
+    },
+    {
+      "source": "/national-tools/mauna-kea-tonight/",
+      "destination": "/synced-national-tools/mauna-kea-tonight/index.html"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
