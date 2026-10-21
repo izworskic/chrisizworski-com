@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-21T12:57:13.966Z",
+  "calculatedAtUTC": "2026-10-21T18:04:30.545Z",
   "recordCount": 5531,
   "latestObservedAt": "2026-10-20T23:46:01Z",
-  "latestAgeHours": 13.19,
+  "latestAgeHours": 18.31,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -318,7 +318,7 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-21T12:57:13.966Z",
+    "checkedAtUTC": "2026-10-21T18:04:30.545Z",
     "status": "CLEAR",
     "matchedAlertEvents": [],
     "sources": [
@@ -331,7 +331,7 @@
   },
   "photoFreeLakePulse": {
     "schemaVersion": "rockhounding-photo-free-offshore-pulse-v1",
-    "computedAtUTC": "2026-10-21T12:57:13.966Z",
+    "computedAtUTC": "2026-10-21T18:04:30.545Z",
     "station": "SPOT-1361",
     "sourceRows": 5531,
     "originalWaveSampleFromUTC": "2026-06-26T01:16:01Z",
@@ -743,11 +743,11 @@
     "canPublishCollectingWindow": false,
     "canTransferIntoBayshoreHarbor": false
   },
-  "sourceQueryStartUTC": "2026-10-17T12:57:13Z",
-  "sourceQueryEndUTC": "2026-10-21T12:57:13Z",
-  "sourceRecordCount": 166,
+  "sourceQueryStartUTC": "2026-10-17T18:04:30Z",
+  "sourceQueryEndUTC": "2026-10-21T18:04:30Z",
+  "sourceRecordCount": 156,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "3ab90542adf5a3fd019dd12da4b5595a146e99130ff2812643923a5c658c4949",
+  "originalCsvSha256": "82483bb7740bd344bbd5b606069818254f5739278976d3aea2f1fc79e57eb58d",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
