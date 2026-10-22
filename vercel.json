@@ -2222,6 +2222,14 @@
       "destination": "/synced-national-tools/mauna-kea-tonight/index.html"
     },
     {
+      "source": "/national-tools/big-island-beach-day",
+      "destination": "/synced-national-tools/big-island-beach-day/index.html"
+    },
+    {
+      "source": "/national-tools/big-island-beach-day/",
+      "destination": "/synced-national-tools/big-island-beach-day/index.html"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
