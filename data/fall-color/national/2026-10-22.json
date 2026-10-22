@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-22",
+  "updated": "2026-10-22T15:55:55.959Z",
+  "briefings": {
+    "new-england": "Season is waning with limited foliage remaining; sunny conditions this weekend offer clear views of what persists on Kancamagus Highway and Smugglers' Notch.",
+    "great-smoky-mountains": "Peak timing aligns with this weekend's sunny forecast, making Newfound Gap Road and Cades Cove Loop ideal for viewing vibrant fall colors.",
+    "colorado-aspens": "Aspen season has largely concluded; snow showers and 88% rain chance this weekend create challenging conditions for Maroon Creek Road and Kebler Pass.",
+    "adirondacks": "Foliage is fading past peak; sunny skies this weekend provide clear conditions for viewing remaining color on Whiteface Veterans' Memorial Highway and NY-86.",
+    "north-shore-superior": "Live weather data unavailable; season is declining with limited foliage expected on North Shore Scenic Drive and Gunflint Trail.",
+    "ozarks": "Peak timing coincides with this weekend's mostly sunny forecast, offering excellent conditions for Arkansas Scenic Byway 7 and Pig Trail Scenic Byway.",
+    "eastern-sierra": "Season is past peak with moderate foliage remaining; sunny conditions this weekend suit Bishop Creek Canyon and June Lake Loop for viewing.",
+    "wasatch": "Foliage is fading with some color persisting; partly sunny skies and 34% rain chance this weekend create mixed conditions for Alpine Loop and Guardsman Pass.",
+    "columbia-river-gorge": "Peak timing aligns with mostly sunny skies this weekend, making Historic Columbia River Highway and WA-14 excellent for fall color viewing.",
+    "door-county": "Peak timing matches this weekend's partly sunny forecast with minimal rain, ideal for WI-42 north peninsula and Peninsula State Park Scenic Drive.",
+    "poconos": "Peak timing coincides with frost and sunny conditions this weekend, perfect for Delaware Water Gap and PA-402 Lake Wallenpaupack corridor.",
+    "texas-hill-country": "Season is approaching peak with mostly cloudy skies this weekend; FM-337 and FM-187 Lost Maples approach offer emerging fall color.",
+    "west-virginia-highlands": "Peak timing aligns with sunny conditions this weekend, making Highland Scenic Highway and US-48 Corridor H ideal for vibrant foliage viewing.",
+    "catskills": "Peak timing matches sunny skies this weekend, offering excellent conditions for Catskill Mountains Scenic Byway and NY-23A Kaaterskill Clove.",
+    "shenandoah": "Peak timing coincides with sunny conditions this weekend, making Skyline Drive North and Central Districts prime for viewing fall colors."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
