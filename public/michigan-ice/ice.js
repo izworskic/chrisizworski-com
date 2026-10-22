@@ -518,13 +518,13 @@
       var slug = regionEl.getAttribute('data-region');
       var reg = REGIONS.filter(function (r) { return r.slug === slug; })[0];
       Promise.all([fetchServer(), fetchNow(slug), reg ? fetchObs(reg) : Promise.resolve(null)])
-        .then(function (res) { renderRegion(slug, res[0], res[1], res[2]); window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
+        .then(function (res) { renderRegion(slug, res[0], res[1], res[2]); window.__michiganIceNow = res[1]; window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
       return;
     }
 
     if (isIndex) {
       Promise.all([fetchServer(), fetchNow(), Promise.all(REGIONS.map(fetchObs))])
-        .then(function (res) { renderIndex(res[0], res[1], res[2]); window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
+        .then(function (res) { renderIndex(res[0], res[1], res[2]); window.__michiganIceNow = res[1]; window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
       return;
     }
 
