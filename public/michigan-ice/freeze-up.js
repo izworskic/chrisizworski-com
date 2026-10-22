@@ -33,8 +33,9 @@
   var MAP_SERVICE = 'https://mapservices.weather.noaa.gov/vector/rest/services/obs/usnic_greatlakes_ice_chart/MapServer/export';
   var LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
   var LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  var currentSlug = (location.pathname.match(/\/regions\/([a-z-]+)\.html$/) || [])[1] || 'saginaw-bay';
-  if (!REGIONS[currentSlug]) currentSlug = 'saginaw-bay';
+  var regionPath = (location.pathname.match(/\/regions\/([a-z-]+)\.html$/) || [])[1];
+  if (regionPath && !REGIONS[regionPath]) return; // inland lakes lack mapped NOAA data
+  var currentSlug = regionPath || 'saginaw-bay';
   var root, select, map, overlay, loadingLeaflet, activeData = null, datasets = {}, layerStamp = null;
   var playTimer = null, chartSeries = [], currentIndex = 0, mapRequest = 0;
   var mapReady = false;
