@@ -219,7 +219,6 @@
     ++mapRequest;
     if(overlay){map.removeLayer(overlay);overlay=null;}
     map.fitBounds(REGIONS[currentSlug].bounds,{padding:[12,12],animate:false});
-    updateMap();
   }
   function onRegionChange(slug) {
     if(!REGIONS[slug]) return;
@@ -232,6 +231,13 @@
     link.textContent='Explore '+REGIONS[slug].name+' conditions';
     drawChart();
     if(map) setRegionMap();
+    // Reuse a previously fetched regional snapshot, with its own age checks.
+    if (datasets[slug] && activeData && !regionData(slug)) {
+      activeData = datasets[slug];
+      drawChart();
+      updateMap();
+      return;
+    }
     // One-water lookup when the parent page did not already fetch this water.
     if(activeData && !regionData(slug)){
       var requested=slug;
@@ -260,7 +266,7 @@
     datasets[currentSlug]=data;
     drawChart();
     initMap();
-    updateMap();
+    if (map) updateMap();
   }
   function setup() {
     if(document.getElementById('ice-freeze-explorer')) return;
@@ -310,8 +316,9 @@
       '<span><i style="background:#0064ff"></i>Ice free</span>',
       '<span><i style="background:#8cffa0"></i>1–3 tenths</span>',
       '<span><i style="background:#ffff00"></i>4–6 tenths</span>',
-      '<span><i style="background:#ff9700"></i>7–8 tenths</span>',
-      '<span><i style="background:#d00040"></i>9–10 tenths</span>',
+      '<span><i style="background:#ff7d07"></i>7–8 tenths</span>',
+      '<span><i style="background:#ff0000"></i>9–10 tenths</span>',
+      '<span><i style="background:#969696"></i>Fast ice (anchored)</span>',
       '</div>',
       '<p class="ice-ex-caption" id="ice-ex-map-stamp" aria-live="polite">Awaiting NOAA data. Map colors are not ice thickness.</p>',
       '<div class="ice-ex-chartbox">',
@@ -352,6 +359,7 @@
     document.addEventListener('visibilitychange',function(){if(document.hidden)stopPlayback();});
     onRegionChange(currentSlug);
     window.addEventListener('michigan-ice-data',function(evt){render(evt.detail);},{once:true});
+    if (window.__michiganIceNow) render(window.__michiganIceNow);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
   else setup();
