@@ -1,0 +1,93 @@
+{
+  "readAt": "2026-10-22",
+  "description": "Read-only official NWS forecast and NOAA raster RESPONSE SHAPES for retrospective parsing tests. Not current forecasts, not field trail readings.",
+  "coordinates": {
+    "lat": 44.65728,
+    "lon": -85.44774,
+    "meaning": "DNR recreation point, not winter parking"
+  },
+  "tripDate": "2026-10-24",
+  "sources": {
+    "nws": "https://api.weather.gov/gridpoints/APX/35,42/forecast/hourly",
+    "noaa": "https://www.nohrsc.noaa.gov/nsa/",
+    "alerts": "https://api.weather.gov/alerts/active?point=44.65728%2C-85.44774"
+  },
+  "nowForTesting": "2026-10-22T20:30:00Z",
+  "nws": {
+    "properties": {
+      "updateTime": "2026-10-22T20:12:34+00:00",
+      "periods": [
+        {
+          "startTime": "2026-10-24T10:00:00-04:00",
+          "temperature": 51,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Partly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T11:00:00-04:00",
+          "temperature": 57,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T12:00:00-04:00",
+          "temperature": 61,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T13:00:00-04:00",
+          "temperature": 64,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T14:00:00-04:00",
+          "temperature": 66,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T15:00:00-04:00",
+          "temperature": 68,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        },
+        {
+          "startTime": "2026-10-24T16:00:00-04:00",
+          "temperature": 68,
+          "temperatureUnit": "F",
+          "windSpeed": "5 mph",
+          "shortForecast": "Mostly Sunny"
+        }
+      ]
+    }
+  },
+  "noaa": {
+    "results": [
+      {
+        "layerId": 2,
+        "layerName": "Footprint",
+        "attributes": {
+          "idp_validtime": "10/22/2026 12:00:00 PM"
+        }
+      },
+      {
+        "layerId": 3,
+        "layerName": "Image",
+        "attributes": {
+          "Service Pixel Value": "0"
+        }
+      }
+    ]
+  },
+  "alerts": {
+    "features": []
+  }
+}
