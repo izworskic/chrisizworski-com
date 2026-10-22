@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-22T17:59:43.559Z",
+  "calculatedAtUTC": "2026-10-22T22:21:43.541Z",
   "recordCount": 5579,
   "latestObservedAt": "2026-10-21T23:46:10Z",
-  "latestAgeHours": 18.23,
+  "latestAgeHours": 22.59,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -318,13 +318,13 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-22T17:59:43.559Z",
+    "checkedAtUTC": "2026-10-22T22:21:43.541Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
         "event": "Dense Fog Advisory",
-        "severity": "Minor",
-        "expiresAtUTC": "2026-10-22T14:00:00-04:00"
+        "severity": "Moderate",
+        "expiresAtUTC": "2026-10-23T09:00:00-04:00"
       }
     ],
     "sources": [
@@ -337,7 +337,7 @@
   },
   "photoFreeLakePulse": {
     "schemaVersion": "rockhounding-photo-free-offshore-pulse-v1",
-    "computedAtUTC": "2026-10-22T17:59:43.559Z",
+    "computedAtUTC": "2026-10-22T22:21:43.541Z",
     "station": "SPOT-1361",
     "sourceRows": 5579,
     "originalWaveSampleFromUTC": "2026-06-26T01:16:01Z",
@@ -749,11 +749,11 @@
     "canPublishCollectingWindow": false,
     "canTransferIntoBayshoreHarbor": false
   },
-  "sourceQueryStartUTC": "2026-10-18T17:59:43Z",
-  "sourceQueryEndUTC": "2026-10-22T17:59:43Z",
-  "sourceRecordCount": 156,
+  "sourceQueryStartUTC": "2026-10-18T22:21:43Z",
+  "sourceQueryEndUTC": "2026-10-22T22:21:43Z",
+  "sourceRecordCount": 147,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "7d1095236524a71227d67d3808e2d0576cbfb5129c6d4d94330282fee3bf126c",
+  "originalCsvSha256": "765f39745c8c3015329c7edfb5f1e1fef810d6b270285f66ececa2be24ee8c6b",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
