@@ -120,3 +120,33 @@ test('source-level real DNR closure is not confused with a site-wide closure',()
  const d=E.interpret(dest,{closure:r.closure});
  assert.equal(d.state,'verify');assert.equal(d.blockers.length,0);
 });
+
+const officialShape=require('../data/winter-hike/official-live-shape-2026-10-22.json');
+const Live=require('../lib/winter-hike-live.cjs');
+test('dated official NWS October weekend period shape covers seven hours; NOAA zero is a valid modeled point',()=>{
+ const now=Date.parse(officialShape.nowForTesting);
+ const f=Live.parseHourly(officialShape.nws,officialShape.tripDate,now);
+ const snow=Live.parseNoaa(officialShape.noaa,now);
+ const alerts=Live.parseAlerts(officialShape.alerts,officialShape.tripDate,now);
+ assert.equal(f.targetCovered,true);assert.equal(f.hours,7);
+ assert.equal(snow.kind,'modeled');assert.equal(snow.depthInches,0);
+ assert.equal(alerts.status,'verified');
+});
+test('official sourced zero-snow weekend favors hiking check, not a verified drive recommendation',async()=>{
+ const site=E.normalizePoint(candidate.records.find(r=>r.Title==='Muncie Lake Pathway'));
+ const source=officialShape;
+ const fetchJson=async url=>{
+  if(url.includes('NOHRSC_Snow_Analysis'))return source.noaa;
+  if(url.includes('/points/'))return {properties:{forecastHourly:source.sources.nws}};
+  if(url.includes('/forecast/hourly'))return source.nws;
+  if(url.includes('/alerts/active'))return source.alerts;
+  throw Error('Unexpected URL');
+ };
+ const r=await Trip.evaluateTrip(site,source.tripDate,{
+  fetchJson,cache:new Map(),now:Date.parse(source.nowForTesting)
+ });
+ assert.equal(r.decision.activity,'hike');
+ assert.equal(r.decision.state,'verify');
+ assert.equal(r.navigation.ready,false);
+ assert.equal(r.weather.snow.depthInches,0);
+});
