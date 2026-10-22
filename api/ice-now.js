@@ -159,7 +159,7 @@ async function lakeTrends(now, previousCompleted = false) {
     current,
     seasonStartYear: y,
     // Chronological whole-lake observations, never geographically specific bay ice.
-    series: rows.slice(-45).map(r => ({
+    series: rows.slice(-180).map(r => ({
       date: isoFromYearDay(r.year, r.dayOfYear).slice(0, 10),
       superior: r.superior, michigan: r.michigan, huron: r.huron,
       erie: r.erie, ontario: r.ontario, stclair: r.stclair, total: r.total
