@@ -101,3 +101,16 @@ test('an excluded trail cannot outrank a candidate',()=>{
  const ranked=E.rankDestinations([d,second],{'trail-1':{access:{...access,trail:'closed'},snow,forecast},b:{access,snow,forecast}},'either',now);
  assert.equal(ranked[0].destination.id,'b');
 });
+
+test('legacy GIS path is not presented as a verified official public URL',()=>{
+ assert.equal(d.officialPageCandidate,null);
+ assert.equal(d.legacyPagePath,raw.PageURL);
+});
+const managerEvidence=require('../data/winter-hike/michigan-manager-evidence.json');
+test('manager evidence preserves winter parking as unverified and records partial closure',()=>{
+ assert.ok(managerEvidence.records.length>=3);
+ assert.ok(managerEvidence.records.every(r=>r.winterParking.status==='unverified'));
+ const x=managerEvidence.records.find(r=>r.id==='090650cb-9a90-4507-92c0-7520eca49af7');
+ assert.equal(x.trailStatus,'partially-closed');
+ assert.equal(run({access:{...access,trail:'partial-closure'}}).state,'verify');
+});

@@ -32,3 +32,11 @@
 ## Scope and release
 
 This is a research-only branch. Changes consist of a source snapshot, pure interpreter, tests and a handoff document; no public page, API routing, sitemap, advertising or deployment configuration is changed. Keep the PR draft until official winter-access and weather-source integration passes.
+
+## October 22 source-reconciliation update
+
+The DNR GIS `PageURL` values are historical content paths. Spot checks did not establish that synthesized `https://www.michigan.gov` + `PageURL` is navigable. The interpreter now exposes `legacyPagePath` solely as an audit clue and leaves `officialPageCandidate: null` until a public URL is individually verified. `data/winter-hike/michigan-manager-evidence.json` records independently checked **public** manager pages and route guidance; it is **not live status**.
+
+**Critical closure finding:** the Hartwick Pines park page reports part of the Au Sable River Trail indefinitely closed because of bridge problems; it requires an out-and-back rather than a through route. This evidence must be considered even when DNR GIS layers show other segments as `Open`.
+
+**Activity conflict:** the Muncie Lake park page permits snowshoeing beside groomed classic ski tracks. Tahquamenon Falls winter maps instruct visitors not to walk on groomed tracks and show distinct snowshoe and packed walking routes. Check rules per trail instead of applying one assumed statewide groomed-track policy. Historical winter map features do not prove current road plowing.
