@@ -103,7 +103,7 @@
      'No complete digitally mapped route. The official PDF or manager description is the source.')+'</p>';
   view+='<p class="source-line">No official trailhead GPS or directions are available. NOAA snow is modeled landscape context; future warnings can change.</p>';
   $('weather-output').innerHTML=view;
-  visuals?.rememberTimeline($('weather-output'),f);
+  visuals?.rememberTimeline($('detail'),f);
   drawLines(data.sourceGeometry?.overlay?.features||[]);
  }
  async function check(){
@@ -208,7 +208,7 @@
  }
  async function init(){
   day();
-  window.WinterHikeVisuals?.bind($('weather-output'),{
+  window.WinterHikeVisuals?.bind($('detail'),{
    onDayChange(value){
     const input=$('day');
     if(value<input.min||value>input.max||value===input.value)return;
