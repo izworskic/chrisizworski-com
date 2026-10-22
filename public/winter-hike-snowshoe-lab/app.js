@@ -157,6 +157,15 @@
   }))};
   const s=state.map.getSource('winter-areas');if(s)s.setData(geo);
  }
+ function drawUserLocation(){
+  if(!state.mapLoaded||!state.geolocation)return;
+  const loc=state.geolocation;
+  if(loc.lat<41||loc.lat>49||loc.lon< -91||loc.lon> -82)return;
+  const source=state.map.getSource('winter-user');
+  if(source)source.setData({type:'FeatureCollection',features:[{
+    type:'Feature',geometry:{type:'Point',coordinates:[loc.lon,loc.lat]},properties:{}
+  }]});
+ }
  function drawLines(features){
   if(!state.mapLoaded)return;
   const safe=(Array.isArray(features)?features:[]).filter(f=>f.type==='Feature'&&
@@ -202,7 +211,11 @@
      });
      map.on('mouseenter','winter-area-ring',()=>map.getCanvas().style.cursor='pointer');
      map.on('mouseleave','winter-area-ring',()=>map.getCanvas().style.cursor='');
-     drawAreas();
+     map.addSource('winter-user',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+     map.addLayer({id:'winter-user-dot',type:'circle',source:'winter-user',
+       paint:{'circle-radius':7,'circle-color':'#1752b0',
+         'circle-stroke-color':'#fff','circle-stroke-width':3}});
+     drawAreas();drawUserLocation();
     });
     map.on('error',()=>{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}});
    }catch{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}else mapFallback('Map failed to initialize')}
@@ -228,7 +241,14 @@
    navigator.geolocation.getCurrentPosition(pos=>{
     state.geolocation={lat:pos.coords.latitude,lon:pos.coords.longitude};filtered();
     $('map-status').textContent='Sorted by straight-line distance from your device, NOT by driving time or winter road access.';
-    if(state.mapLoaded)state.map.easeTo({center:[pos.coords.longitude,pos.coords.latitude],zoom:6.5,duration:550});
+    if(state.mapLoaded) {
+     drawUserLocation();
+     // An out-of-state user still gets Michigan results. Don't pan the map
+     // thousands of miles away from its useful trail pins.
+     if(pos.coords.latitude>=41&&pos.coords.latitude<=49 &&
+        pos.coords.longitude>=-91&&pos.coords.longitude<=-82)
+       state.map.easeTo({center:[pos.coords.longitude,pos.coords.latitude],zoom:6.5,duration:550});
+    }
    },()=>{$('map-status').textContent='Device location not shared; you can browse all routes normally.'},{timeout:10000,enableHighAccuracy:false,maximumAge:300000});
   });
   try{
