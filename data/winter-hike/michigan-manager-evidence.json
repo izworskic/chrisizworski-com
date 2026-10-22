@@ -1,0 +1,72 @@
+{
+  "status": "RESEARCH_EVIDENCE_ONLY_NO_CURRENT_ACCESS_VERIFICATION",
+  "checkedDate": "2026-10-22",
+  "warning": "Official static trail descriptions and historical winter maps do NOT confirm current winter parking, road plowing, open route or trail surface. Evidence must be refreshed and manager confirmed for an actual trip date.",
+  "records": [
+    {
+      "id": "090650cb-9a90-4507-92c0-7520eca49af7",
+      "name": "Hartwick Pines - Au Sable River Trail",
+      "trailStatus": "partially-closed",
+      "trailStatement": "The DNR reports a section closed indefinitely owing to five footpath bridges. Remaining trail requires an out-and-back instead of the former through route.",
+      "routeMiles": null,
+      "officialPublicPage": "https://www.michigan.gov/recsearch/parks/hartwick",
+      "sourceType": "land-manager-current-webpage",
+      "winterParking": {
+        "status": "unverified",
+        "lat": null,
+        "lon": null
+      },
+      "checkNeeded": "Verify closure extent, safe winter parking and actual winter trail surface before any itinerary."
+    },
+    {
+      "id": "aee2c187-4fb0-4568-bb0e-615cb7a1ca5f",
+      "name": "Hartwick Pines - Old Growth Forest Trail",
+      "trailStatus": "no-current-route-closure-confirmed",
+      "trailStatement": "DNR describes a 1.25-mile paved Old Growth Forest loop and park snowshoeing. This is a historical/manager route description, not a live winter condition report.",
+      "routeMiles": 1.25,
+      "routeMilesMeaning": "Manager-reported loop length, not derived from GIS segment totals",
+      "officialPublicPage": "https://www.michigan.gov/recsearch/parks/hartwick",
+      "additionalSource": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "sourceType": "land-manager-static-webpage",
+      "winterParking": {
+        "status": "unverified",
+        "lat": null,
+        "lon": null
+      },
+      "checkNeeded": "Validate plowed winter visitor-center/loop parking and any ice on paved surfaces."
+    },
+    {
+      "id": "ab8b28dc-14da-4d7e-86ca-d221e0da3466",
+      "name": "Muncie Lake Pathway",
+      "trailStatus": "no-current-route-closure-confirmed",
+      "trailStatement": "DNR says snowshoeing is permitted alongside groomed Nordic tracks, without disturbing classic-ski tracks. The 9.8 miles describe the pathway system, not a verified single outing route.",
+      "routeMiles": null,
+      "networkMiles": 9.8,
+      "officialPublicPage": "https://www.michigan.gov/recsearch/trails/muncie-lake-pathway",
+      "sourceType": "land-manager-static-webpage",
+      "winterParking": {
+        "status": "unverified",
+        "lat": null,
+        "lon": null
+      },
+      "checkNeeded": "Verify plowed access from regional roads and choose a precise marked loop or out-and-back."
+    },
+    {
+      "id": "9cc746d1-61b3-4fc6-b4c6-e196944253b3",
+      "name": "Tahquamenon Falls - Wilderness Loop (supplementary destination)",
+      "trailStatus": "winter-route-unverified",
+      "trailStatement": "Park confirms marked snowshoe opportunities in Upper/Lower Falls areas. A historical winter route map also documents separate snowshoe and packed/plowed walking routes; this individual wilderness-loop trail is not thereby verified as the best or safest route.",
+      "routeMiles": null,
+      "officialPublicPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "historicWinterMap": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/TF-2020-Winter-Trail-Maps.pdf",
+      "sourceType": "land-manager-park-guidance-and-historical-winter-map",
+      "includedInCurrentSample": false,
+      "winterParking": {
+        "status": "unverified",
+        "lat": null,
+        "lon": null
+      },
+      "checkNeeded": "Obtain current winter trail and parking information; map indicates historical routes, not today's plowed status."
+    }
+  ]
+}

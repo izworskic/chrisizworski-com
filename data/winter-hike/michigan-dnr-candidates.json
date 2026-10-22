@@ -1,0 +1,660 @@
+{
+  "source": "Michigan DNR Recreation Search Points OPENDATA / FeatureServer / 0",
+  "sourceUrl": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRRecreationSearchPointsOPENDATA/FeatureServer/0",
+  "queriedDate": "2026-10-22",
+  "status": "RESEARCH_CANDIDATES_NOT_VERIFIED_FOR_WINTER_ACCESS",
+  "selection": "Bounded, stratified-by-alphabetic-index sample of DNR hiking/snowshoe nonmotorized trail points. NOT a statewide exhaustive collection. Offsets in this snapshot: 0,70,140,210,280,350. Individual trail distances, year-round access and winter parking must be validated independently.",
+  "licenseNote": "DNR public read-only geographic data; verify downstream reuse terms and retain source attribution.",
+  "records": [
+    {
+      "ID": "9443ae58-d707-48cb-9fa2-ae484720302d",
+      "Title": "Algonac - Blazing Star Trail",
+      "Latitude": 42.65270445,
+      "Longitude": -82.51830472,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/algonac---blazing-star-trail",
+      "City": null
+    },
+    {
+      "ID": "a875d12d-cc53-4c17-b637-91c6708a7288",
+      "Title": "Algonac - Oak Savanna Trail",
+      "Latitude": 42.65226257,
+      "Longitude": -82.51725329,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/algonac---oak-savanna-trail",
+      "City": null
+    },
+    {
+      "ID": "e9689b53-2b97-4da4-827f-59bdae55f07b",
+      "Title": "Algonquin Pathway",
+      "Latitude": 46.47803,
+      "Longitude": -84.406243,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/algonquin-pathway",
+      "City": null
+    },
+    {
+      "ID": "933bac6f-6eed-4365-a672-1a4404d69d25",
+      "Title": "Anderson Lake Pathway",
+      "Latitude": 46.229591,
+      "Longitude": -87.48498,
+      "ActivitiesTags": "Hiking, Mountain biking, Equestrian, Cross-country skiing, Snowshoeing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/anderson-lake-pathway",
+      "City": null
+    },
+    {
+      "ID": "5adec2f1-0e18-4afa-a439-8ee7a116e6b9",
+      "Title": "Bald Mountain - North Unit Trails",
+      "Latitude": 42.78296131,
+      "Longitude": -83.1969513,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bald-mountain---north-unit-trails",
+      "City": null
+    },
+    {
+      "ID": "fecf5473-930c-45a4-adc7-e72d943e9a91",
+      "Title": "Bald Mountain - South Unit Trails",
+      "Latitude": 42.74283304,
+      "Longitude": -83.23512448,
+      "ActivitiesTags": "Hiking, Mountain biking, Snowmobiling",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bald-mountain---south-unit-trails",
+      "City": null
+    },
+    {
+      "ID": "e4897090-f4c8-4a79-a5aa-070d44b6b609",
+      "Title": "Baraga - Nature Trail",
+      "Latitude": 46.76200185,
+      "Longitude": -88.50095048,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/baraga---nature-trail",
+      "City": null
+    },
+    {
+      "ID": "d2d429b0-7f87-41d1-830c-652ca70338cc",
+      "Title": "Baraga State Park",
+      "Latitude": 46.76081586,
+      "Longitude": -88.50035182,
+      "ActivitiesTags": "Paddling, Hiking, Snowmobiling, ORV trails and route, Cross-country skiing, Metal detecting, Snowshoeing",
+      "LocationTypeTags": "State park, State park campground, Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/parks/baraga-state-park",
+      "City": "Baraga"
+    },
+    {
+      "ID": "8200b92e-de14-49cd-85f8-8d077a959aa6",
+      "Title": "Bass River - Multiuse Equestrian Trail",
+      "Latitude": 43.020076,
+      "Longitude": -86.03968,
+      "ActivitiesTags": "Hiking, Equestrian, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bass-river---multiuse-equestrian-trail",
+      "City": null
+    },
+    {
+      "ID": "662a17e4-f13f-4347-af3c-b2ecec3d49f2",
+      "Title": "Bass River - Multiuse Mountain Bike Trail",
+      "Latitude": 43.0053335,
+      "Longitude": -86.01425433,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bass-river---multiuse-mountain-bike-trail",
+      "City": null
+    },
+    {
+      "ID": "c8c2d348-fe44-40b5-8c79-05343e1471f0",
+      "Title": "Bass River Recreation Area",
+      "Latitude": 43.01964681,
+      "Longitude": -86.04578018,
+      "ActivitiesTags": "Hunting, Fishing, Paddling, Hiking, Mountain biking, Equestrian, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "State park, Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/parks/bass-river-recreation-area",
+      "City": null
+    },
+    {
+      "ID": "6bd5568e-96c8-4db1-9aee-27e64cc63865",
+      "Title": "Bay City - Andersen Nature Trail",
+      "Latitude": 43.656829,
+      "Longitude": -83.897931,
+      "ActivitiesTags": "Biking, Hiking, Cross-country skiing, Cross-country skiing (groomed), Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bay-city---andersen-nature-trail",
+      "City": null
+    },
+    {
+      "ID": "6e8e7fc1-2371-494a-a986-508f2d9cc640",
+      "Title": "Bay City - Tobico Lagoon Trail",
+      "Latitude": 43.671315,
+      "Longitude": -83.912055,
+      "ActivitiesTags": "Hiking, Biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bay-city---tobico-lagoon-trail",
+      "City": null
+    },
+    {
+      "ID": "4c602909-9986-486b-9537-08c7f9e5a6ad",
+      "Title": "Bay City - Tobico Marsh Trail",
+      "Latitude": 43.67513896,
+      "Longitude": -83.92288523,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing, Biking, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/bay-city---tobico-marsh-trail",
+      "City": null
+    },
+    {
+      "ID": "7c3826ae-b731-44db-9353-c137b61a2575",
+      "Title": "Belle Isle - Driker Trail",
+      "Latitude": 42.343602,
+      "Longitude": -82.959163,
+      "ActivitiesTags": "Biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/belle-isle---driker-trail",
+      "City": null
+    },
+    {
+      "ID": "d5f516e7-a79c-4cbc-a4ae-6269ec634ce7",
+      "Title": "Belle Isle - Nashua Canal Trail ",
+      "Latitude": 42.34017,
+      "Longitude": -82.97957,
+      "ActivitiesTags": "Biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/belle-isle---nashua-canal-trail",
+      "City": null
+    },
+    {
+      "ID": "74f329b1-362b-467b-b006-2726bfe9ee39",
+      "Title": "Belle Isle - Ralph C. Wilson, Jr. Trail",
+      "Latitude": 42.342971,
+      "Longitude": -82.959455,
+      "ActivitiesTags": "Biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/belle-isle---ralph-c-wilson-jr-trail",
+      "City": null
+    },
+    {
+      "ID": "5fb8882e-32b4-44f8-994f-eb7f166de580",
+      "Title": "Belle Isle - Trout Lily Trail",
+      "Latitude": 42.347333,
+      "Longitude": -82.965688,
+      "ActivitiesTags": "Biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/belle-isle---trout-lily-trail",
+      "City": null
+    },
+    {
+      "ID": "59407270-ea7e-4150-ad57-9cf5fcbd8397",
+      "Title": "Gemini Lake Pathway",
+      "Latitude": 46.48159,
+      "Longitude": -86.304638,
+      "ActivitiesTags": "Hiking, Snowshoeing, Cross-country skiing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/gemini-lake-pathway",
+      "City": null
+    },
+    {
+      "ID": "93c27c90-e144-48e3-b71a-92e727263aac",
+      "Title": "Gene's Pond Pathway",
+      "Latitude": 46.07264304,
+      "Longitude": -87.86584083,
+      "ActivitiesTags": "Hiking, Mountain biking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/genes-pond-pathway",
+      "City": null
+    },
+    {
+      "ID": "22d1677f-0f94-48e1-b93e-b368fe9b99fa",
+      "Title": "Grand Mere - Dune Trail",
+      "Latitude": 42.003826,
+      "Longitude": -86.542784,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/grand-mere---dune-trail",
+      "City": null
+    },
+    {
+      "ID": "5582a40d-aedf-463f-b817-b3945914bfed",
+      "Title": "Grand Mere - Paved Trail",
+      "Latitude": 42.003826,
+      "Longitude": -86.542784,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/grand-mere---paved-trail",
+      "City": null
+    },
+    {
+      "ID": "83f300b9-8529-4644-8d73-4e00f8b1ee6e",
+      "Title": "Green Pine Lake Pathway",
+      "Latitude": 43.9261518,
+      "Longitude": -85.0122837,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/green-pine-lake-pathway",
+      "City": null
+    },
+    {
+      "ID": "821cb384-0f6e-48aa-8193-9a127665b9ca",
+      "Title": "Harrisville - Cedar Run Nature Trail",
+      "Latitude": 44.64916144,
+      "Longitude": -83.29431528,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/harrisville---cedar-run-nature-trail",
+      "City": null
+    },
+    {
+      "ID": "9b715c05-f5ab-4b31-917c-a807aad81684",
+      "Title": "Harrisville - Heritage Trail",
+      "Latitude": 44.64916144,
+      "Longitude": -83.29431528,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/harrisville---heritage-trail",
+      "City": null
+    },
+    {
+      "ID": "090650cb-9a90-4507-92c0-7520eca49af7",
+      "Title": "Hartwick Pines - Au Sable River Trail",
+      "Latitude": 44.74278,
+      "Longitude": -84.646189,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hartwick-pines---au-sable-river-trail",
+      "City": null
+    },
+    {
+      "ID": "38a86a2c-d6e9-4da3-a0d8-4c3c5492fbef",
+      "Title": "Hartwick Pines - Bright and Glory Lakes Trail",
+      "Latitude": 44.7315065,
+      "Longitude": -84.68362884,
+      "ActivitiesTags": "Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hartwick-pines---bright-and-glory-lakes-trail",
+      "City": null
+    },
+    {
+      "ID": "7a52619e-aaf6-4e37-8c18-5c99a50405b1",
+      "Title": "Hartwick Pines - Hartwick Pines Trail",
+      "Latitude": 44.743464,
+      "Longitude": -84.66544,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hartwick-pines---hartwick-pines-trail",
+      "City": null
+    },
+    {
+      "ID": "7044963f-2af5-45e3-bd20-86486e62b198",
+      "Title": "Hartwick Pines - Mertz Grade Trail",
+      "Latitude": 44.740392,
+      "Longitude": -84.652566,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hartwick-pines---mertz-grade-trail",
+      "City": null
+    },
+    {
+      "ID": "aee2c187-4fb0-4568-bb0e-615cb7a1ca5f",
+      "Title": "Hartwick Pines - Old Growth Forest Trail",
+      "Latitude": 44.741629,
+      "Longitude": -84.661305,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hartwick-pines---old-growth-forest-trail",
+      "City": null
+    },
+    {
+      "ID": "36cc3736-5bca-4c23-a596-b971d2d0b710",
+      "Title": "Hayes - Red and Blue Trail",
+      "Latitude": 42.068372,
+      "Longitude": -84.132322,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/hayes---red-and-blue-trail",
+      "City": null
+    },
+    {
+      "ID": "c5a453c0-de37-4d63-889d-38f5d3c3e707",
+      "Title": "Haywire Grade Trail",
+      "Latitude": 45.97555441,
+      "Longitude": -86.24587119,
+      "ActivitiesTags": "Snowmobiling, ORV trails and route, Mountain biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/haywire-grade-trail",
+      "City": null
+    },
+    {
+      "ID": "91457d48-28a9-4ff1-bac2-5f0dc3313d66",
+      "Title": "High Country Pathway",
+      "Latitude": 45.156007,
+      "Longitude": -84.46581,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/high-country-pathway",
+      "City": null
+    },
+    {
+      "ID": "6592deb5-408d-4c2d-9739-a9486b4572ec",
+      "Title": "Highland - Cedar Creek Trail",
+      "Latitude": 42.641997,
+      "Longitude": -83.554754,
+      "ActivitiesTags": "Hiking, Mountain biking, Equestrian, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/highland---cedar-creek-trail",
+      "City": null
+    },
+    {
+      "ID": "5dab5002-11fd-416e-8497-5b8bb1e0217e",
+      "Title": "Highland - Equestrian Trails",
+      "Latitude": 42.63464824,
+      "Longitude": -83.55152588,
+      "ActivitiesTags": "Hiking, Equestrian, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/highland---equestrian-trails",
+      "City": null
+    },
+    {
+      "ID": "1deaabd3-591b-44ea-b637-b1b002fb6955",
+      "Title": "Highland - Mountain Bike Trails",
+      "Latitude": 42.6384728,
+      "Longitude": -83.57805539,
+      "ActivitiesTags": "Hiking, Mountain biking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-a-k/highland---mountain-bike-trails",
+      "City": null
+    },
+    {
+      "ID": "3f9cf786-8dc2-4459-a0d2-f7fbf2a527af",
+      "Title": "Menominee River - Piers Gorge Scenic Hiking Trail",
+      "Latitude": 45.759112,
+      "Longitude": -87.941737,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/menominee-river---piers-gorge-scenic-hiking-trail",
+      "City": null
+    },
+    {
+      "ID": "bd94b4d7-cd5a-4163-b36b-66168bc36c9f",
+      "Title": "Menominee River - Travelling Riverside Blues Trail",
+      "Latitude": 45.759112,
+      "Longitude": -87.941737,
+      "ActivitiesTags": "Mountain biking, Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/menominee-river---travelling-riverside-blues-trail",
+      "City": null
+    },
+    {
+      "ID": "7d2bcee1-9489-4f1c-9b70-467370f53ad2",
+      "Title": "Merriman East Pathway",
+      "Latitude": 45.940072,
+      "Longitude": -87.930887,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Equestrian, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/merriman-east-pathway",
+      "City": null
+    },
+    {
+      "ID": "596b6b9c-23d0-4c4c-bb69-280ddd26edbf",
+      "Title": "Metamora-Hadley - Nature Trails",
+      "Latitude": 42.94656173,
+      "Longitude": -83.34822444,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/metamora-hadley---nature-trails",
+      "City": null
+    },
+    {
+      "ID": "3fc4e3d2-68f0-400d-9974-2e9d817fffdb",
+      "Title": "Mike Levine Lakelands Trail",
+      "Latitude": 42.460781,
+      "Longitude": -83.94458,
+      "ActivitiesTags": "Hiking, Biking, Cross-country skiing, Equestrian",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/mike-levine-lakelands-trail",
+      "City": null
+    },
+    {
+      "ID": "20bb878e-f389-4d21-8bc3-4dc143640d01",
+      "Title": "Mike Levine Lakelands Trail State Park",
+      "Latitude": 42.46564,
+      "Longitude": -83.876271,
+      "ActivitiesTags": "Biking, Equestrian, Cross-country skiing, Snowshoeing, Hiking",
+      "LocationTypeTags": "State park, Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/parks/mike-levine-lakelands-trail-state-park",
+      "City": null
+    },
+    {
+      "ID": "c37e3ac4-9fb1-4aee-86ac-1221cc221302",
+      "Title": "Mitchell - Heritage Nature Trail",
+      "Latitude": 44.24543963,
+      "Longitude": -85.44808966,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/mitchell---heritage-nature-trail",
+      "City": null
+    },
+    {
+      "ID": "ab8b28dc-14da-4d7e-86ca-d221e0da3466",
+      "Title": "Muncie Lake Pathway",
+      "Latitude": 44.65728,
+      "Longitude": -85.44774,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing, Cross-country skiing (groomed)",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muncie-lake-pathway",
+      "City": null
+    },
+    {
+      "ID": "41c89b2a-5f92-49bf-ae13-0bd4ed257dfb",
+      "Title": "Muskallonge - Hiking Trail",
+      "Latitude": 46.67806325,
+      "Longitude": -85.62783131,
+      "ActivitiesTags": "Hiking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskallonge---hiking-trail",
+      "City": null
+    },
+    {
+      "ID": "4c2a8403-c17a-4800-94ad-dcc5f8ee18f5",
+      "Title": "Muskegon - Devil's Kitchen Trail",
+      "Latitude": 43.24492784,
+      "Longitude": -86.33781549,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---devils-kitchen-trail",
+      "City": null
+    },
+    {
+      "ID": "38c03760-1688-42b8-a2da-aeb7c23adcce",
+      "Title": "Muskegon - Dune Ridge Trail",
+      "Latitude": 43.23214684,
+      "Longitude": -86.3342205,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---dune-ridge-trail",
+      "City": null
+    },
+    {
+      "ID": "f8bfa595-22b6-4c71-bf32-45f16dc8aca4",
+      "Title": "Muskegon - Hearty Hiker Trail",
+      "Latitude": 43.25230684,
+      "Longitude": -86.34778949,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---hearty-hiker-trail",
+      "City": null
+    },
+    {
+      "ID": "5657a007-b72c-4bb3-bc3d-7a02b46388fa",
+      "Title": "Muskegon - Loop-to-Loop Trail",
+      "Latitude": 43.26401484,
+      "Longitude": -86.34960449,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---loop-to-loop-trail",
+      "City": null
+    },
+    {
+      "ID": "ed6b00fa-83dd-4695-a40c-06f81c8dab52",
+      "Title": "Muskegon - Lost Lake Trail",
+      "Latitude": 43.25343884,
+      "Longitude": -86.34359149,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---lost-lake-trail",
+      "City": null
+    },
+    {
+      "ID": "356d7221-7e19-4f17-a1b2-36060224fffe",
+      "Title": "Muskegon - Scenic Ridge Trail",
+      "Latitude": 43.25448384,
+      "Longitude": -86.34562149,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/muskegon---scenic-ridge-trail",
+      "City": null
+    },
+    {
+      "ID": "c46d3e70-63b6-46f5-bc70-d8f120cbbc52",
+      "Title": "Musketawa Trail",
+      "Latitude": 43.183881,
+      "Longitude": -85.946975,
+      "ActivitiesTags": "Biking, Hiking, Snowmobiling, Equestrian, Cross-country skiing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/musketawa-trail",
+      "City": null
+    },
+    {
+      "ID": "29f5ed2c-0dcf-4da4-a6ac-28dc7ff05dc4",
+      "Title": "Negwegon - Algonquin Trail",
+      "Latitude": 44.85642302,
+      "Longitude": -83.32423451,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/negwegon---algonquin-trail",
+      "City": null
+    },
+    {
+      "ID": "69372d57-af8a-4adc-93b6-bfc070914350",
+      "Title": "Negwegon - Chippewa Trail",
+      "Latitude": 44.85642302,
+      "Longitude": -83.32423451,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/negwegon---chippewa-trail",
+      "City": null
+    },
+    {
+      "ID": "ae0c5b0c-4e8a-470c-adb5-917114049098",
+      "Title": "Porcupine Mountain Wilderness - Whitetail Path",
+      "Latitude": 46.82274449,
+      "Longitude": -89.64000506,
+      "ActivitiesTags": "Hiking, Cross-country skiing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/porcupine-mountain-wilderness---whitetail-path",
+      "City": null
+    },
+    {
+      "ID": "2ec73909-cc41-49b0-9839-b1a9e778c72c",
+      "Title": "Port Crescent - Day-Use Trail",
+      "Latitude": 44.00019854,
+      "Longitude": -83.07019142,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/port-crescent---day-use-trail",
+      "City": null
+    },
+    {
+      "ID": "c9a1f3e6-2911-4b09-aaa5-db069394955c",
+      "Title": "Port Crescent - Dunes Nature Trail",
+      "Latitude": 44.00958254,
+      "Longitude": -83.05316942,
+      "ActivitiesTags": "Hiking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/port-crescent---dunes-nature-trail",
+      "City": null
+    },
+    {
+      "ID": "3f1bd185-0a8f-4c63-9f20-4392ad18ad4e",
+      "Title": "Port Crescent - Organization Area Trail",
+      "Latitude": 44.00019854,
+      "Longitude": -83.07019142,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/port-crescent---organization-area-trail",
+      "City": null
+    },
+    {
+      "ID": "20c0b619-fe7a-426d-9200-6a8bae960310",
+      "Title": "Pretty Lake Pathway",
+      "Latitude": 46.603455,
+      "Longitude": -85.659451,
+      "ActivitiesTags": "Hiking, Mountain biking, Dog sledding, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/pretty-lake-pathway",
+      "City": null
+    },
+    {
+      "ID": "15300b16-5bbd-4f00-8642-5306508ccf35",
+      "Title": "Proud Lake - Equestrian / Biking Trails",
+      "Latitude": 42.57413981,
+      "Longitude": -83.5768104,
+      "ActivitiesTags": "Hiking, Mountain biking, Equestrian, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/proud-lake---equestrian-and-biking-trails",
+      "City": null
+    },
+    {
+      "ID": "92f2fd6e-7475-4b87-a268-295e73a584e2",
+      "Title": "Proud Lake - Foot Trails",
+      "Latitude": 42.57390681,
+      "Longitude": -83.54771441,
+      "ActivitiesTags": "Hiking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-l-p/proud-lake---foot-trails",
+      "City": null
+    },
+    {
+      "ID": "b3c8d76c-2d29-4406-a1a8-d77332dcd289",
+      "Title": "Red Pine Natural Area Pathway",
+      "Latitude": 44.49374,
+      "Longitude": -84.400832,
+      "ActivitiesTags": "Hiking, Mountain biking",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-q-z/red-pine-natural-area-pathway",
+      "City": null
+    },
+    {
+      "ID": "4925a9c3-ad34-4328-ba7c-63782dbc5757",
+      "Title": "Rifle River - Multi-use Trail",
+      "Latitude": 44.38675052,
+      "Longitude": -84.03298308,
+      "ActivitiesTags": "Hiking, Mountain biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-q-z/rifle-river---multi-use-trail",
+      "City": null
+    },
+    {
+      "ID": "1f0aaf37-8c6d-4077-b10a-84ee511b5f2e",
+      "Title": "Rockport - Trails",
+      "Latitude": 45.207188,
+      "Longitude": -83.408289,
+      "ActivitiesTags": "Cross-country skiing, Equestrian, Hiking, Mountain biking, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-q-z/rockport---trails",
+      "City": null
+    },
+    {
+      "ID": "8cf70a0f-08cc-4de1-9bdc-249349f2ec0e",
+      "Title": "Sand Lakes Quiet Area Pathway",
+      "Latitude": 44.723278,
+      "Longitude": -85.373219,
+      "ActivitiesTags": "Hunting, Fishing, Hiking, Mountain biking, Cross-country skiing, Snowshoeing",
+      "LocationTypeTags": "Nonmotorized trail",
+      "PageURL": "/recsearch/data/locations/trails-q-z/sand-lakes-quiet-area-pathway",
+      "City": null
+    }
+  ]
+}

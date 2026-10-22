@@ -67,6 +67,9 @@
     "api/michigan-ski.js": {
       "maxDuration": 60
     },
+    "api/winter-hike-lab.js": {
+      "maxDuration": 30
+    },
     "api/waterfowl-freeze-line.js": {
       "maxDuration": 40
     },

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Michigan Winter Hiking &amp; Snowshoe Route Lab</title>
+<meta name="description" content="Research preview comparing named Michigan winter hiking and snowshoe trails with NOAA and NWS weather. Parking and winter route access are not verified.">
+<link rel="canonical" href="https://chrisizworski.com/winter-hike-snowshoe-lab/">
+<link rel="author" href="https://chrisizworski.com/chris-izworski/">
+<meta property="og:type" content="website"><meta property="og:url" content="https://chrisizworski.com/winter-hike-snowshoe-lab/">
+<meta property="og:title" content="Michigan Winter Hiking & Snowshoe Route Lab">
+<meta property="og:description" content="Research preview: named winter routes, NOAA modeled snow, NWS forecast, and access verification.">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=1">
+</head><body>
+<a class="skip" href="#routes">Skip to named routes</a>
+<header class="mast"><div class="shell mast-inner"><a href="/" class="brand">Chris Izworski <span>Outdoor decision tools</span></a><a href="/michigan-snow-depth/" class="other">Michigan snow depth ↗</a></div></header>
+<main class="shell">
+<section class="hero"><p class="eyebrow">Michigan trail research • Preview</p><h1>Is this the weekend to hike or snowshoe?</h1>
+<p class="lede">Find a <em>real, named trail</em>. Then see what NOAA snow depth and the National Weather Service can—and cannot—tell you about the conditions.</p>
+<div class="trust"><strong>Research preview, not trip clearance.</strong> No destination shown here has a confirmed plowed winter trailhead or safe route. Map pins are general DNR reference areas, not driving directions. Check the land manager before departure.</div></section>
+<section class="workbench" aria-label="Trip planning controls">
+<div class="ctrl"><label for="activity">Activity</label><select id="activity"><option value="either">Hiking or snowshoeing</option><option value="snowshoe">Snowshoe only</option><option value="hike">Boot hiking</option></select></div>
+<div class="ctrl"><label for="region">Part of Michigan</label><select id="region"><option value="all">Entire state</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower Peninsula</option><option value="southern-lower">Southern Lower Peninsula</option></select></div>
+<div class="ctrl"><label for="day">Day to check</label><input type="date" id="day" required aria-describedby="date-note"><small id="date-note">NWS hourly outlook: next 7 days</small></div>
+<div class="ctrl"><label for="search">Trail or park</label><input id="search" type="search" placeholder="e.g., Tahquamenon, Vasa" autocomplete="off"></div>
+</section>
+<section class="explore"><div class="topline"><div><p class="eyebrow">Explore the official route inventory</p><h2>Where should I investigate?</h2><p class="muted">Location points represent recreation areas, not winter parking. Click a map area to filter its routes.</p></div>
+<div class="map-actions"><button type="button" id="nearby">Use my location</button><button type="button" id="all-map">Show all Michigan</button></div></div>
+<div class="map-frame"><div id="map" role="region" aria-label="Map of Michigan route reference areas"></div><div class="map-fallback" id="map-status" aria-live="polite">Preparing route map…</div></div>
+<p class="map-note">Map: CARTO when configured, otherwise OpenFreeMap. Lines are *partial official GIS segments*, not promised complete routes. Red indicates a mapped closure. Never navigate to a reference dot.</p></section>
+<section class="results" id="routes"><div class="routes"><div class="topline"><div><h2>Named trails</h2><p id="result-count" class="muted" role="status">Loading official inventory…</p></div><button id="clear" type="button" class="subtle">Clear park filter</button></div>
+<div id="cards" class="cards" aria-live="polite"></div></div>
+<aside class="detail" id="detail"><div class="detail-head"><p class="eyebrow">Select a named route</p><h2 id="detail-title">Weather and access report</h2><p id="detail-intro" class="muted">Choose a trail card to review official route description, weekend forecast, modeled snow, and unresolved safety checks.</p></div>
+<div id="detail-body"></div></aside></section>
+<section class="explain"><h2>How to read this evidence</h2>
+<div class="explain-grid"><article><h3>Snow on the landscape</h3><p>NOAA/NOHRSC provides modeled grid-cell snow depth, not a measurement on the trail. Conditions under trees, on boardwalks and in wind-exposed areas can be very different.</p></article>
+<article><h3>Forecast where you’ll walk</h3><p>NWS supplies daytime temperatures, wind, freeze-thaw potential, precipitation and current warnings. It cannot tell you whether a specific bridge or footpath is passable.</p></article>
+<article><h3>Know before you drive</h3><p>The land manager must confirm winter road maintenance, actual plowed trailhead parking and route status. Groomed cross-country ski tracks must not be damaged by hikers or snowshoes.</p></article></div>
+</section>
+</main><footer class="foot"><div class="shell">An independent, source-attributed planning project. <a href="/chris-izworski/">Built by Chris Izworski</a> · <a href="/michigan-snow-depth/">Snow depth finder</a> · This preview is excluded from search indexing.</div></footer>
+<script defer src="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js"></script>
+<script defer src="/winter-hike-snowshoe-lab/visuals.js?v=2"></script>
+<script defer src="/winter-hike-snowshoe-lab/app.js?v=2"></script>
+</body></html>
