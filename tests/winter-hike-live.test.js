@@ -176,3 +176,18 @@ test('snapshot cannot invent new snowfall or temporal depth history',async()=>{
  assert.equal(r.newSnowfall.status,'unavailable');
  assert.ok(!('depthTrend' in r));
 });
+
+test('duplicate hourly periods cannot masquerade as full daytime forecast coverage',()=>{
+ const b=hours();
+ b.properties.periods=Array.from({length:7},()=>({...b.properties.periods[12]}));
+ const r=Live.parseHourly(b,date,fixed);
+ assert.equal(r.targetCovered,false);
+});
+test('malformed active alert timestamps are unknown, never silently no warnings',async()=>{
+ const broken={features:[{properties:{event:'Winter Storm Warning',onset:null,expires:null}}]};
+ const p=Live.parseAlerts(broken,date,fixed);
+ assert.equal(p.status,'unavailable');assert.deepEqual(p.events,['Winter Storm Warning']);
+ const trip=await Trip.evaluateTrip(site,date,{fetchJson:mockFetch({alerts:broken}),cache:new Map(),now:fixed});
+ assert.equal(trip.decision.state,'weather-hold');
+ assert.equal(trip.navigation.ready,false);
+});
