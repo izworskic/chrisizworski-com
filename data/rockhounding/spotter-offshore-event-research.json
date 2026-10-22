@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-10-22T12:59:24.258Z",
+  "calculatedAtUTC": "2026-10-22T17:59:43.559Z",
   "recordCount": 5579,
   "latestObservedAt": "2026-10-21T23:46:10Z",
-  "latestAgeHours": 13.22,
+  "latestAgeHours": 18.23,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -318,18 +318,13 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-10-22T12:59:24.258Z",
+    "checkedAtUTC": "2026-10-22T17:59:43.559Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
         "event": "Dense Fog Advisory",
         "severity": "Minor",
         "expiresAtUTC": "2026-10-22T14:00:00-04:00"
-      },
-      {
-        "event": "Dense Fog Advisory",
-        "severity": "Moderate",
-        "expiresAtUTC": "2026-10-22T10:00:00-05:00"
       }
     ],
     "sources": [
@@ -342,7 +337,7 @@
   },
   "photoFreeLakePulse": {
     "schemaVersion": "rockhounding-photo-free-offshore-pulse-v1",
-    "computedAtUTC": "2026-10-22T12:59:24.258Z",
+    "computedAtUTC": "2026-10-22T17:59:43.559Z",
     "station": "SPOT-1361",
     "sourceRows": 5579,
     "originalWaveSampleFromUTC": "2026-06-26T01:16:01Z",
@@ -754,11 +749,11 @@
     "canPublishCollectingWindow": false,
     "canTransferIntoBayshoreHarbor": false
   },
-  "sourceQueryStartUTC": "2026-10-18T12:59:24Z",
-  "sourceQueryEndUTC": "2026-10-22T12:59:24Z",
-  "sourceRecordCount": 166,
+  "sourceQueryStartUTC": "2026-10-18T17:59:43Z",
+  "sourceQueryEndUTC": "2026-10-22T17:59:43Z",
+  "sourceRecordCount": 156,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "6eaf713ad3233cd5d8ae38af61c44744847490ca53fd0dc3492b323e6b8e5c29",
+  "originalCsvSha256": "7d1095236524a71227d67d3808e2d0576cbfb5129c6d4d94330282fee3bf126c",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
