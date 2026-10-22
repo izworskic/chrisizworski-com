@@ -676,6 +676,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/lake-effect",
+      "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect"
+    },
+    {
       "source": "/api/california-roads",
       "destination": "https://national-outdoor-core.vercel.app/api/california-roads"
     },

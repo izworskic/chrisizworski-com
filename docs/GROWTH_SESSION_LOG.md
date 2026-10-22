@@ -1,3 +1,11 @@
+## Lake-effect snow website integration — October 21, 2026
+
+- **Owner:** national-snowpack-melt source PR #12; this site-shell branch holds ONLY its public canonical HTML mirror, an API rewrite, catalog/registry/sitemap routing and a related Snow Finder link.
+- **Separate intents:** /lake-effect-snow/ future regional setup; /michigan-snow-depth/ snow on ground; /michigan-snow-totals/ official recent reports. No duplicated physics or ranking in site shell.
+- **Release:** NOT MERGED. Source preview built but is auth-protected; live NWS and GLSEA checks and browser acceptance remain required. This branch must pass the site's full verification before merge; main production not changed. No new cron or paid service.
+- **Search measurements:** GSC, GA4 and AdSense attributable results NOT AVAILABLE. 1m impressions and 5% organic CTR remain targets only.
+- **Exactly one next action:** Validate the source API on an accessible preview with NWS and NOAA feed freshness, then finish source and shell browser/CI gates before merging in order.
+
 ## Great Lakes Freighter Tracker — direct vessel search (October 20, 2026)
 
 - **Owner directive:** Update the next measured growth opportunity after the White Christmas forecast, without rewriting existing winning snippets or altering ad placements.
