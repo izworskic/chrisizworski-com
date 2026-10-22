@@ -110,7 +110,7 @@ test('current manager report staleness blocks even three otherwise open statuses
  const outdated=verified.map(x=>({...x,checkedAt:'2026-12-01T10:00:00Z'}));
  assert.equal(Access.accessFromChecks(dest.id,outdated,now).managerConfirmed,false);
 });
-test('manager's explicit closed parking cannot be overridden by model snow',()=>{
+test('manager closed parking cannot be overridden by model snow',()=>{
  const checks=[check('trail'),check('parking',{status:'closed'}),check('road')];
  const a=Access.accessFromChecks(dest.id,checks,now);
  assert.equal(E.interpret(dest,{access:a}).state,'excluded');
