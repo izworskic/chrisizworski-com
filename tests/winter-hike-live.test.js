@@ -139,3 +139,40 @@ test('cache key distinguishes destination and local outing date',async()=>{
  await Live.getTripEvidence(site,'2026-12-13',{now:fixed,fetchJson:read,cache:c});
  assert.equal(c.size,2);assert.equal(read.urls.length,8);
 });
+
+const parking=require('../data/winter-hike/michigan-winter-parking-audit.json');
+test('official winter parking research entries remain unverified, not navigation pins',()=>{
+ assert.ok(parking.places.length>=4);
+ for(const p of parking.places){
+  assert.equal(p.routingReady,false);
+  assert.equal(p.winterParking.status,'unverified');
+  assert.equal(p.winterParking.latitude,null);
+  assert.equal(p.winterParking.longitude,null);
+  assert.ok(p.officialLink.startsWith('https://www.michigan.gov/'));
+ }
+});
+test('visitor center address and historical plowed road map never equal winter lot status',()=>{
+ const h=parking.places.find(x=>x.key==='hartwick-old-growth');
+ assert.match(h.facilityAddress,/Monarch Drive/);
+ assert.equal(h.facilityHoursNotParking,true);
+ for(const p of parking.places.filter(x=>x.key.startsWith('tahquamenon'))){
+  assert.equal(p.winterParking.plowed,'historical-map-only');
+  assert.equal(p.routingReady,false);
+ }
+});
+test('ordinary rain with mild outing weather keeps modeled snowshoe decision in verification',()=>{
+ const dest=E.normalizePoint({...raw.records.find(x=>x.Title==='Muncie Lake Pathway'),ActivitiesTags:'Hiking, Snowshoeing'});
+ const dt=Date.parse('2026-12-12T15:00:00Z');
+ const access={trail:'open',road:'open',parking:'open',managerConfirmed:true,winterSpecific:true,
+  checkedAt:'2026-12-12T14:00:00Z',sourceUrl:'https://www.michigan.gov/dnr'};
+ const snow={kind:'modeled',depthInches:8,validAt:'2026-12-12T12:00:00Z'};
+ const forecast={targetCovered:true,updatedAt:'2026-12-12T14:00:00Z',
+  tempMaxF:45,rainOrFreezingRain:true,windMph:10};
+ const r=E.interpret(dest,{access,snow,forecast},dt);
+ assert.equal(r.state,'verify');assert.match(r.verification.join(' '),/Rain and mild temperatures/);
+});
+test('snapshot cannot invent new snowfall or temporal depth history',async()=>{
+ const r=await Live.getTripEvidence(site,date,{fetchJson:mockFetch(),cache:new Map(),now:fixed});
+ assert.equal(r.newSnowfall.status,'unavailable');
+ assert.ok(!('depthTrend' in r));
+});
