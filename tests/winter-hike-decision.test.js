@@ -77,7 +77,7 @@ test('manager closures and closed winter access exclude even in good snow',()=>{
 test('only confirmed matching closure geometry excludes a candidate',()=>{
  assert.equal(run({closure:{active:true,geometryVerified:true,matchesDestination:true,routeAffected:true}}).state,'excluded');
  const r=run({closure:{active:true,geometryVerified:false,matchesDestination:true}});
- assert.equal(r.state,'verify');assert.match(r.verification.join(' '),/geometry/);
+ assert.equal(r.state,'verify');assert.match(r.verification.join(' '),/mapped closure/);
 });
 test('severe warnings or extreme winter conditions put routine trip rankings on hold',()=>{
  assert.equal(run({forecast:{...forecast,alerts:['Blizzard Warning']}}).state,'weather-hold');
