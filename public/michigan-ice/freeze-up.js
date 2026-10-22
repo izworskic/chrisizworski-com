@@ -254,7 +254,8 @@
       }).catch(function(){
         if(currentSlug===requested) text('ice-ex-map-stamp','Regional ice data unavailable. Never interpret missing coverage as open water.');
       });
-    } else if(activeData) updateMap();
+    }
+    // Map fitBounds fires moveend; do not request the same NOAA image twice.
   }
   function render(data) {
     if(!data || !data.observed || !data.ok) {
@@ -314,6 +315,7 @@
       '<div id="ice-ex-map" role="region" aria-label="Current NOAA ice concentration on interactive CARTO map"></div>',
       '<div class="ice-ex-legend" aria-label="NOAA concentration category colors">',
       '<span><i style="background:#0064ff"></i>Ice free</span>',
+      '<span><i style="background:#96c8ff"></i>Less than 1 tenth</span>',
       '<span><i style="background:#8cffa0"></i>1–3 tenths</span>',
       '<span><i style="background:#ffff00"></i>4–6 tenths</span>',
       '<span><i style="background:#ff7d07"></i>7–8 tenths</span>',
