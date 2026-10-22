@@ -80,22 +80,6 @@
   if(matchMedia('(max-width:850px)').matches)$('routes').scrollIntoView({behavior:'smooth'});
  }
  function warningBox(list){return '<div class="verification"><strong>Must verify before traveling</strong><ul class="evidence-list">'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'}
- function timelineChart(timeline){
-  if(!Array.isArray(timeline)||!timeline.length)return '<p class="muted">The source did not return usable hourly chart points.</p>';
-  const rows=timeline.filter(x=>Number.isFinite(x.temperatureF));
-  if(!rows.length)return '<p class="muted">Hourly readings unavailable.</p>';
-  const w=410,h=160,l=35,right=14,top=12,bottom=31;const hi=Math.max(...rows.map(r=>r.temperatureF))+5,lo=Math.min(...rows.map(r=>r.temperatureF))-5;
-  const x=i=>l+(w-l-right)*(rows.length===1?.5:i/(rows.length-1));
-  const y=t=>top+(hi-t)/(hi-lo)*(h-top-bottom);
-  const path=rows.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.temperatureF).toFixed(1)).join(' ');
-  const pts=rows.map((r,i)=>'<circle cx="'+x(i)+'" cy="'+y(r.temperatureF)+'" r="4" fill="#206c54"/>'+
-    '<text x="'+x(i)+'" y="'+(y(r.temperatureF)-10)+'" text-anchor="middle" fill="#244c42" font-size="11">'+r.temperatureF+'°</text>'+
-    '<text x="'+x(i)+'" y="151" text-anchor="middle" fill="#526a61" font-size="10">'+esc(r.hourLocal.slice(0,2))+'</text>').join('');
-  return '<div class="chart-container"><svg viewBox="0 0 410 160" role="img" aria-label="Hourly NWS forecast temperature from 10 AM through 4 PM">'+
-    '<path d="M35 12V129H396" fill="none" stroke="#d0dfd7" stroke-width="1"/>'+
-    '<path d="'+path+'" fill="none" stroke="#237c60" stroke-width="3" stroke-linecap="round"/>'+pts+
-    '</svg><div class="chart-label">NWS air temperature (°F), destination-local hours. Forecast, not a trail observation.</div></div>';
- }
  function drawEvidence(data){
   if(!state.selected || data.selected?.id!==state.selected.id)return;
   const e=data.sourceWeather||{},snow=e.snow||{},f=e.forecast||{},a=e.alerts||{};
@@ -105,14 +89,11 @@
   let view='<p class="subhead">Daytime evidence · '+esc(data.tripDate)+'</p>'+
     '<p class="status"><strong>'+esc(weatherMode)+'</strong> · '+esc(outcome.state||'verify')+
     ' — never an open-trail approval</p>';
-  view+='<div class="evidence-grid"><div class="metric"><b>'+esc(snow.kind==='modeled'?snow.depthInches+' in':'Unknown')+
-    '</b><small>NOAA grid snow · '+esc(snow.validDate||'date unavailable')+'</small></div>'+
-    '<div class="metric"><b>'+esc(f.targetCovered?f.tempMinF+'–'+f.tempMaxF+'°F':'Unknown')+
-    '</b><small>NWS day range · '+esc(f.hours||0)+' hourly periods</small></div></div>';
-  view+='<p class="subhead">Hourly air temperature</p>'+timelineChart(f.timeline);
-  view+='<p class="source-line">Wind up to '+esc(f.windMph??'unknown')+' mph · '+
-    esc(a.status==='verified'?'Checked active warnings: '+a.events.length+' at request time':'Alert service unavailable')+
-    ' · Source checked '+esc(e.checkedAt||'unknown')+'</p>';
+  const visuals=window.WinterHikeVisuals;
+  view+=visuals?visuals.render({snow,forecast:f,alerts:a,selectedDate:data.tripDate}):
+    '<div class="wx-no-data">Interactive weather graphics could not be loaded. Check the NWS and NOAA source directly.</div>';
+  view+='<p class="source-line">Official evidence requested '+esc(e.checkedAt||'date unknown')+
+    '. Forecast and modeled snow do not establish trail access.</p>';
   const checks=[...(outcome.verification||[]),...(outcome.blockers||[])];
   if(!checks.length)checks.push('Specific winter lot, access road and walking route still require direct land-manager confirmation');
   if(a.status!=='verified'&&!checks.some(x=>/alert/i.test(x)))checks.push('Current NWS alert check failed');
@@ -122,6 +103,7 @@
      'No complete digitally mapped route. The official PDF or manager description is the source.')+'</p>';
   view+='<p class="source-line">No official trailhead GPS or directions are available. NOAA snow is modeled landscape context; future warnings can change.</p>';
   $('weather-output').innerHTML=view;
+  visuals?.rememberTimeline($('weather-output'),f);
   drawLines(data.sourceGeometry?.overlay?.features||[]);
  }
  async function check(){
@@ -225,7 +207,15 @@
    .catch(()=>start(FREE,false));
  }
  async function init(){
-  day();['activity','region','search'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{
+  day();
+  window.WinterHikeVisuals?.bind($('weather-output'),{
+   onDayChange(value){
+    const input=$('day');
+    if(value<input.min||value>input.max||value===input.value)return;
+    input.value=value;
+    if(state.selected){pick(state.selected.id);check()}
+   }
+  });['activity','region','search'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{
    if(id==='activity'&&state.selected&&!['either',...state.selected.activities].includes($('activity').value)){
     state.selected=null;$('detail-title').textContent='Choose an allowed route';$('detail-body').replaceChildren();
    }

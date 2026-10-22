@@ -136,7 +136,6 @@
    const trend=forecast.weekTrend||{};
    const week=weekChart(trend,selectedDate),hour=hourlyChart(forecast.timeline);
    const summary=trendAnalysis(trend);
-   const detail=f'=>';
    return '<div class="wx-viz" data-wx-viz="1">'+
     '<section class="wx-panel wx-panel-large" aria-labelledby="wx-week-title">'+
     '<div class="wx-panel-head"><div><p class="wx-eyebrow">What is changing?</p><h3 id="wx-week-title">Next seven days: NWS temperature outlook</h3></div>'+
