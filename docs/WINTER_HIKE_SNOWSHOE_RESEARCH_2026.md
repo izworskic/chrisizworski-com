@@ -58,3 +58,19 @@ Active NWS alerts are filtered to a conservative Detroit-local outing-date envel
 Tests: `node --test tests/winter-hike-decision.test.js tests/winter-hike-live.test.js` (expected 28 prior + 23 live/parking tests). The live-feed unit suite uses deterministic mocked upstream responses and does **not** claim an end-to-end paid/production deployment, field trail check, full NOAA history, or verified maintained winter parking. Do not publish or merge without the remaining gate.
 
 **Fail-closed hardening:** duplicated hourly periods no longer count as complete forecast coverage. NWS active alert features with missing/invalid start or expiration dates retain their warning name and return `status: unavailable`, rather than being silently interpreted as `no warnings`.
+
+## Phase 3: route geometry, winter access and official-source integration — October 22, 2026
+
+Status: code and research validation complete on draft PR #1110; not an operational trail recommender and not a public release.
+
+Official GIS: DNR Trails OPENDATA layers 0, 2, 6 were queried for WGS84 geometry and stored in data/winter-hike/hartwick-spatial-fixture.json. Hartwick Au Sable River temporary closure OBJECTID 2043 matches an actual co-located hiking geometry segment. Hiking segment 1864 is a separately mapped portion; Mertz Grade segment 2091 shares a DNR recreation ID but has a different trail name. ID alone is not a closure join.
+
+lib/winter-hike-spatial.cjs detects segment-level closure with matching DNR OBJECTID and trail name, at least 40 m of co-located geometry and at least 80% close-path overlap. A selected route containing 2043 is excluded; an unknown route or adjacent open-labeled segment is not certified open. lib/winter-hike-arcgis.cjs reads complete paginated official layers using a curated UUID, fails closed when any layer is missing, caches bounded complete layer snapshots for 20 minutes, and recalculates the closure decision for each selected route.
+
+Winter access: lib/winter-hike-access.cjs requires independent manager evidence for trail, road and parking, each on official HTTPS land-manager domains, date-checked within 72 hours, winter-specific. Plowed parking and a parking-entrance coordinate are distinct requirements; a park address, DNR point or historic map cannot supply a routable waypoint. Four parking research records remain explicitly unverified; no public driving directions were added.
+
+Real-source shape test: a NOAA October 22, 2026 dated modeled grid cell at the Muncie Lake destination reference was 0 inches; NWS October 24 selected 10 AM–4 PM weather contained seven distinct periods, 51–68 F and 5 mph wind. The NWS active-alert point query was empty at check time. This is dated screening context, not observed ground conditions, a current forecast in perpetuity, or proof of weekend trail access. Sample is preserved under data/winter-hike/official-live-shape-2026-10-22.json.
+
+Tests: 75/75 passed in the current-turn source-level JavaScript harness using exact GitHub branch files, including official geometry and weather response fixtures, synthetic failure states and time-bounded cache behavior. Three native node:test files are committed. An independent full native Node test run and production deployment smoke have NOT been completed. No website page, sitemap, public API route, ad behavior, or production configuration changed.
+
+Unfinished launch gates: independently confirm specific winter trailhead and road access at destinations; curate actual chosen routes with vetted lengths and permissions; run full Node and live upstream integration tests; test user-facing CARTO/HTML/JS UX on mobile; reconcile current main branch before considering publication. Neither a GPS route nor a positive winter visit verdict may be issued from static point data.
