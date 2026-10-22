@@ -7,6 +7,7 @@ const base=path.join(__dirname,'../public/winter-hike-snowshoe-lab');
 const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
 const js=fs.readFileSync(path.join(base,'app.js'),'utf8');
 const css=fs.readFileSync(path.join(base,'style.css'),'utf8');
+const visuals=fs.readFileSync(path.join(base,'visuals.js'),'utf8');
 const vercel=require('../vercel.json');
 test('lab is deliberately noindex and uses distinct, self-referencing canonical',()=>{
  assert.match(html,/name="robots" content="noindex,nofollow"/);
@@ -51,4 +52,31 @@ test('the page groups content in few substantial sections and avoids inline ad s
 });
 test('the isolated preview API has enough runtime for bounded NOAA/NWS and DNR requests',()=>{
  assert.equal(vercel.functions['api/winter-hike-lab.js'].maxDuration,30);
+});
+
+test('visualization module loads before main UI and uses keyboard-accessible native buttons',()=>{
+ const a=html.indexOf('/winter-hike-snowshoe-lab/visuals.js?v=2');
+ const b=html.indexOf('/winter-hike-snowshoe-lab/app.js?v=2');
+ assert.ok(a>0&&b>a);
+ assert.match(visuals,/data-wx-day/);assert.match(visuals,/aria-pressed/);
+ assert.match(visuals,/data-wx-hour/);
+});
+test('live dashboard binds its chart events to the persistent detail area, not a future child',()=>{
+ assert.match(js,/WinterHikeVisuals\?\.bind\(\$\('detail'\)/);
+ assert.match(js,/rememberTimeline\(\$\('detail'\),f\)/);
+ assert.match(js,/onDayChange\(value\)/);
+ assert.ok(!js.includes("bind($('weather-output')"));
+});
+test('snow gauge uses physically accurate tick locations for the displayed scale',()=>{
+ assert.match(css,/wx-snow-ticks span:nth-child\(2\)\{left:16\.6667%\}/);
+ assert.match(css,/wx-snow-ticks span:nth-child\(3\)\{left:50%\}/);
+ assert.match(visuals,/12″\+/);
+ assert.match(visuals,/not a trail measurement/);
+});
+test('charts describe source coverage and never replace missing NOAA data with a fabricated time series',()=>{
+ assert.match(visuals,/Seven-day outlook unavailable/);
+ assert.match(visuals,/NOAA MODEL SNAPSHOT/);
+ assert.match(visuals,/FORECAST · NOT HISTORY/);
+ assert.match(visuals,/ALL UNVERIFIED/);
+ assert.ok(!visuals.includes('snowDepthHistory'));
 });
