@@ -72,16 +72,16 @@ test('GIS layer URLs accept only official curated DNR UUID and fixed layer names
  assert.throws(()=>GIS.url('bad',dest.id));
 });
 test('complete live DNR layer lookup preserves partial closure and mismatched names',async()=>{
- const r=await GIS.lookup(dest,{fetchJson:dnrMock,routeObjectIds:[2043]});
+ const r=await GIS.lookup(dest,{fetchJson:dnrMock,routeObjectIds:[2043],cache:new Map()});
  assert.equal(r.status,'fetched');assert.equal(r.spatial.closure.routeAffected,true);
  assert.deepEqual(r.spatial.identityConflicts,[2091]);
 });
 test('failed DNR closure layer leaves spatial result unavailable',async()=>{
- const r=await GIS.lookup(dest,{fetchJson:u=>u.includes('/0/query')?Promise.reject(Error('offline')):dnrMock(u)});
+ const r=await GIS.lookup(dest,{fetchJson:u=>u.includes('/0/query')?Promise.reject(Error('offline')):dnrMock(u),cache:new Map()});
  assert.equal(r.status,'unavailable');assert.deepEqual(r.missingLayers,['closure']);
 });
 test('pagination failure never certifies the absence of closure',async()=>{
- const r=await GIS.lookup(dest,{fetchJson:u=>u.includes('/0/query')?{features:[],exceededTransferLimit:true}:dnrMock(u)});
+ const r=await GIS.lookup(dest,{fetchJson:u=>u.includes('/0/query')?{features:[],exceededTransferLimit:true}:dnrMock(u),cache:new Map()});
  assert.equal(r.status,'unavailable');
 });
 test('official source host is required for every status check',()=>{
