@@ -39,9 +39,10 @@ test('map line coloring distinguishes official mapped closures from unverified s
  assert.match(html,/Lines are \*partial official GIS segments\*/);
 });
 test('weather charts are explicitly sourced as NWS forecasts, never surface observations',()=>{
- assert.match(js,/function timelineChart/);
- assert.match(js,/Hourly NWS forecast temperature/);
- assert.match(js,/Forecast, not a trail observation/);
+ assert.match(visuals,/function hourlyChart/);
+ assert.match(visuals,/NWS hourly temperature line/);
+ assert.match(visuals,/FORECAST · NOT HISTORY/);
+ assert.match(visuals,/not a trail measurement/);
 });
 test('the page groups content in few substantial sections and avoids inline ad slots',()=>{
  assert.match(html,/class="hero"/);assert.match(html,/class="workbench"/);
