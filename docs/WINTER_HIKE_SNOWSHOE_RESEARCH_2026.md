@@ -40,3 +40,9 @@ The DNR GIS `PageURL` values are historical content paths. Spot checks did not e
 **Critical closure finding:** the Hartwick Pines park page reports part of the Au Sable River Trail indefinitely closed because of bridge problems; it requires an out-and-back rather than a through route. This evidence must be considered even when DNR GIS layers show other segments as `Open`.
 
 **Activity conflict:** the Muncie Lake park page permits snowshoeing beside groomed classic ski tracks. Tahquamenon Falls winter maps instruct visitors not to walk on groomed tracks and show distinct snowshoe and packed walking routes. Check rules per trail instead of applying one assumed statewide groomed-track policy. Historical winter map features do not prove current road plowing.
+
+## October 22 ArcGIS closure-join adversarial fixture
+
+Live DNR GIS queries showed the Au Sable River Trail point ID `090650cb-9a90-4507-92c0-7520eca49af7` appears in closure **layer 0** as `Hartwick Pines Au Sable River Trail`, OBJECTID `2043`, with status `Temporarily Closed Due To Bridge Maintenance Or Repair` and public comment `11/2022: Closed due to unsafe bridge conditions.` In snowshoe **layer 6**, the **same** `RecreationSearchTrailID` appeared as `Hartwick Pines Mertz Grade Trail`, OBJECTID `2091`, with status `Open`. These are two differently named line features, not a clean one-to-one identity join.
+
+The observed mismatch is retained in `data/winter-hike/hartwick-closure-source-fixture.json` and verified with `lib/winter-hike-gis.cjs`. A shared identifier, the literal GIS `Open` field and a place-name similarity cannot establish a cleared/accessible winter route. For an official closure: exact trail identity **and** intersecting geometry **and** manager context are needed before asserting a *specific segment* closure. Ambiguous matching stays `verify`. The active Hartwick bridge closure remains independently documented on the park manager's public page.

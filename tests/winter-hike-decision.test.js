@@ -114,3 +114,29 @@ test('manager evidence preserves winter parking as unverified and records partia
  assert.equal(x.trailStatus,'partially-closed');
  assert.equal(run({access:{...access,trail:'partial-closure'}}).state,'verify');
 });
+
+const GIS=require('../lib/winter-hike-gis.cjs');
+const gisFixture=require('../data/winter-hike/hartwick-closure-source-fixture.json');
+test('closure layer matches Au Sable ID/name yet never claims geometry confirmed',()=>{
+ const r=GIS.assess(gisFixture.destination,gisFixture);
+ assert.equal(r.closure.active,true);
+ assert.equal(r.closure.geometryVerified,false);
+ assert.deepEqual(r.matchedClosureSegments,[2043]);
+});
+test('snowshoe layer shares Au Sable ID with different Mertz Grade name: identity conflict',()=>{
+ const r=GIS.assess(gisFixture.destination,gisFixture);
+ assert.equal(r.identityConflict,true);
+ const gated=E.interpret(d,{access,forecast,snow,closure:r.closure,gisIdentityConflict:r.identityConflict},now);
+ assert.equal(gated.state,'verify');assert.equal(gated.score,null);
+});
+test('matching DNR ID with mismatched closure name is NOT evidence of closure',()=>{
+ const mismatch={...gisFixture.closures[0],TrailNamePrimary:'Completely Different Trail'};
+ const r=GIS.assess(gisFixture.destination,{closures:[mismatch],snowshoe:[]});
+ assert.equal(r.identityConflict,true);assert.equal(r.closure.active,false);
+});
+test('absence of closure rows is not confirmation of open/access/plowing',()=>{
+ const r=GIS.assess(gisFixture.destination);
+ assert.equal(r.closure.active,false);
+ assert.equal(r.closure.geometryVerified,false);
+ assert.match(r.reason,/does not establish an open trail/);
+});
