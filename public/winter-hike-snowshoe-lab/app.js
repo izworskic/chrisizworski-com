@@ -1,0 +1,244 @@
+'use strict';
+/* Route research preview. NOAA/NWS are checked for one selected route at a time.
+ * Geographic dots = recreation reference areas, NEVER winter parking.
+ * No route grades or "go" recommendations until live manager confirmation.
+ */
+(() => {
+ const $=id=>document.getElementById(id),state={
+  routes:[],filtered:[],selected:null,parkFilter:null,geolocation:null,
+  map:null,mapLoaded:false,areas:[],routeSource:null,request:null,cache:new Map()
+ };
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const distance=(a,b)=>{const rad=Math.PI/180,dLat=(a.lat-b.lat)*rad,dLon=(a.lon-b.lon)*rad;
+  const v=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;
+  return 3958.8*2*Math.atan2(Math.sqrt(v),Math.sqrt(Math.max(0,1-v)))};
+ function day() {
+  const d=new Date();d.setHours(12,0,0,0);
+  const start=new Date(d),end=new Date(d);end.setDate(d.getDate()+6);
+  const toIso=t=>t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+  $('day').min=toIso(start);$('day').max=toIso(end);
+  const saturday=new Date(d);saturday.setDate(d.getDate()+(6-d.getDay()+7)%7);
+  $('day').value=toIso(saturday<=end?saturday:d);
+ }
+ function areaPins(routes) {
+  const map=new Map();
+  for(const r of routes)if(!map.has(r.group))map.set(r.group,{id:r.group,title:r.group.replace(/-/g,' '),
+    lat:r.point.lat,lon:r.point.lon,count:0});
+  for(const r of routes)map.get(r.group).count++;
+  return [...map.values()];
+ }
+ function filtered(){
+  const query=$('search').value.trim().toLowerCase(),mode=$('activity').value,region=$('region').value;
+  let list=state.routes.filter(r=>(mode==='either'||r.activities.includes(mode)) &&
+    (region==='all'||r.region===region) && (!state.parkFilter||r.group===state.parkFilter) &&
+    (!query||(r.title+' '+r.group).toLowerCase().includes(query)));
+  if(state.geolocation)list.sort((a,b)=>distance(state.geolocation,a.point)-distance(state.geolocation,b.point));
+  state.filtered=list;renderCards();
+  drawAreas();
+ }
+ function routeCard(r){
+  const active=r.id===state.selected?.id;
+  const doc=r.mileageStatus==='historical_official'?'historic miles':r.mileageStatus==='approximate_official'?'approx. miles':r.miles===null?'length unverified':'mapped miles';
+  const near=state.geolocation?' · '+Math.round(distance(state.geolocation,r.point))+' mi straight-line':'';
+  return '<button type="button" class="route-card'+(active?' active':'')+'" data-route="'+esc(r.id)+'" aria-pressed="'+active+'">'+
+   '<span class="r-top"><span class="r-name">'+esc(r.title)+'</span><span class="pill">'+esc(r.miles===null?'Length unknown':r.miles+' mi')+'</span></span>'+
+   '<span class="r-summary">'+esc(r.summary||'Officially named trail; the current winter surface and access must be checked.')+'</span>'+
+   '<span class="r-meta"><span>'+esc(r.region.replace(/-/g,' '))+'</span><span>'+esc(r.activities.join(' & '))+
+   '</span><span>'+esc(doc)+esc(near)+'</span></span></button>';
+ }
+ function renderCards(){
+  $('result-count').textContent=state.filtered.length+' of '+state.routes.length+' documented routes'+
+    (state.parkFilter?' · '+state.parkFilter.replace(/-/g,' '):'')+
+    (state.geolocation?' · straight-line distance order (not drive time)':'');
+  $('cards').innerHTML=state.filtered.length?state.filtered.map(routeCard).join(''):
+    '<div class="empty">No documented routes match these filters. Try another region or activity.</div>';
+  $('clear').hidden=!state.parkFilter;
+ }
+ function pick(id,scroll=false){
+  const route=state.routes.find(r=>r.id===id);if(!route)return;
+  state.selected=route;renderCards();drawAreas();drawLines([]);
+  $('detail-title').textContent=route.title;
+  $('detail-intro').textContent=(route.summary||'Named official route.')+' Snow, road and parking conditions are checked separately.';
+  let caveats=(route.caveats||[]).map(t=>'<li>'+esc(t)+'</li>').join('');
+  $('detail-body').innerHTML=
+   '<div class="evidence-grid"><div class="metric"><b>'+esc(route.miles===null?'—':route.miles+' mi')+'</b><small>'+
+    esc(route.mileageStatus==='historical_official'?'Historic documented length':route.mileageStatus==='not_verified'?'No verified mileage':'Official named-route length')+
+   '</small></div><div class="metric"><b>'+esc(route.activities.join(' / '))+'</b><small>Documented activity, not current access</small></div></div>'+
+   '<p class="subhead">Trail-specific cautions</p><ul class="evidence-list">'+(caveats||'<li>Winter ground and parking status unavailable</li>')+'</ul>'+
+   '<div class="verification"><strong>Winter access not verified</strong><p>Trail open: unknown · Road plowing: unknown · Lot plowing: unknown. This pin is not a safe GPS destination.</p></div>'+
+   '<div class="detail-links"><a href="'+esc(route.officialUrl)+'" target="_blank" rel="noopener">Official manager page ↗</a>'+
+   (route.mapUrl?'<a href="'+esc(route.mapUrl)+'" target="_blank" rel="noopener">Official route map ↗</a>':'')+'</div>'+
+   '<button type="button" class="action-primary" id="check-weather">Check '+esc($('day').value)+' weather for this route</button>'+
+   '<p class="source-line">No driving directions will be provided without a validated winter trailhead.</p>'+
+   '<div id="weather-output" aria-live="polite"></div>';
+  $('check-weather').addEventListener('click',check);
+  if(scroll && matchMedia('(max-width:850px)').matches)$('detail').scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ function selectGroup(group){
+  state.parkFilter=group;$('search').value='';filtered();
+  const first=state.filtered[0];if(first)pick(first.id);
+  if(matchMedia('(max-width:850px)').matches)$('routes').scrollIntoView({behavior:'smooth'});
+ }
+ function warningBox(list){return '<div class="verification"><strong>Must verify before traveling</strong><ul class="evidence-list">'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'}
+ function timelineChart(timeline){
+  if(!Array.isArray(timeline)||!timeline.length)return '<p class="muted">The source did not return usable hourly chart points.</p>';
+  const rows=timeline.filter(x=>Number.isFinite(x.temperatureF));
+  if(!rows.length)return '<p class="muted">Hourly readings unavailable.</p>';
+  const w=410,h=160,l=35,right=14,top=12,bottom=31;const hi=Math.max(...rows.map(r=>r.temperatureF))+5,lo=Math.min(...rows.map(r=>r.temperatureF))-5;
+  const x=i=>l+(w-l-right)*(rows.length===1?.5:i/(rows.length-1));
+  const y=t=>top+(hi-t)/(hi-lo)*(h-top-bottom);
+  const path=rows.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.temperatureF).toFixed(1)).join(' ');
+  const pts=rows.map((r,i)=>'<circle cx="'+x(i)+'" cy="'+y(r.temperatureF)+'" r="4" fill="#206c54"/>'+
+    '<text x="'+x(i)+'" y="'+(y(r.temperatureF)-10)+'" text-anchor="middle" fill="#244c42" font-size="11">'+r.temperatureF+'°</text>'+
+    '<text x="'+x(i)+'" y="151" text-anchor="middle" fill="#526a61" font-size="10">'+esc(r.hourLocal.slice(0,2))+'</text>').join('');
+  return '<div class="chart-container"><svg viewBox="0 0 410 160" role="img" aria-label="Hourly NWS forecast temperature from 10 AM through 4 PM">'+
+    '<path d="M35 12V129H396" fill="none" stroke="#d0dfd7" stroke-width="1"/>'+
+    '<path d="'+path+'" fill="none" stroke="#237c60" stroke-width="3" stroke-linecap="round"/>'+pts+
+    '</svg><div class="chart-label">NWS air temperature (°F), destination-local hours. Forecast, not a trail observation.</div></div>';
+ }
+ function drawEvidence(data){
+  if(!state.selected || data.selected?.id!==state.selected.id)return;
+  const e=data.sourceWeather||{},snow=e.snow||{},f=e.forecast||{},a=e.alerts||{};
+  const outcome=data.outcome||{};
+  const weatherMode=outcome.mode==='snowshoe'?'Snowshoe conditions worth investigating':
+    outcome.mode==='hike'?'Boot hiking may fit the modeled snow':'No clear activity fit';
+  let view='<p class="subhead">Daytime evidence · '+esc(data.tripDate)+'</p>'+
+    '<p class="status"><strong>'+esc(weatherMode)+'</strong> · '+esc(outcome.state||'verify')+
+    ' — never an open-trail approval</p>';
+  view+='<div class="evidence-grid"><div class="metric"><b>'+esc(snow.kind==='modeled'?snow.depthInches+' in':'Unknown')+
+    '</b><small>NOAA grid snow · '+esc(snow.validDate||'date unavailable')+'</small></div>'+
+    '<div class="metric"><b>'+esc(f.targetCovered?f.tempMinF+'–'+f.tempMaxF+'°F':'Unknown')+
+    '</b><small>NWS day range · '+esc(f.hours||0)+' hourly periods</small></div></div>';
+  view+='<p class="subhead">Hourly air temperature</p>'+timelineChart(f.timeline);
+  view+='<p class="source-line">Wind up to '+esc(f.windMph??'unknown')+' mph · '+
+    esc(a.status==='verified'?'Checked active warnings: '+a.events.length+' at request time':'Alert service unavailable')+
+    ' · Source checked '+esc(e.checkedAt||'unknown')+'</p>';
+  const checks=[...(outcome.verification||[]),...(outcome.blockers||[])];
+  if(!checks.length)checks.push('Specific winter lot, access road and walking route still require direct land-manager confirmation');
+  if(a.status!=='verified'&&!checks.some(x=>/alert/i.test(x)))checks.push('Current NWS alert check failed');
+  view+=warningBox([...new Set(checks)]);
+  view+='<p class="subhead">DNR route geometry</p>'+
+    '<p class="muted">'+esc(data.sourceGeometry?.overlay?.note||
+     'No complete digitally mapped route. The official PDF or manager description is the source.')+'</p>';
+  view+='<p class="source-line">No official trailhead GPS or directions are available. NOAA snow is modeled landscape context; future warnings can change.</p>';
+  $('weather-output').innerHTML=view;
+  drawLines(data.sourceGeometry?.overlay?.features||[]);
+ }
+ async function check(){
+  const route=state.selected;if(!route)return;
+  const date=$('day').value,activity=$('activity').value;
+  if(!$('day').validity.valid){$('weather-output').textContent='Choose a date in the next seven days.';return}
+  const chosen=activity==='either'?'either':route.activities.includes(activity)?activity:'either';
+  const key=[route.id,date,chosen].join('|');
+  const cached=state.cache.get(key);
+  if(cached && Date.now()-cached.savedAt<8*60*1000){drawEvidence(cached.result);return}
+  if(state.request)state.request.abort();
+  const request=new AbortController();state.request=request;
+  $('weather-output').innerHTML='<p class="status">Reading NOAA snow depth, NWS forecast and DNR trail-line evidence…</p>';
+  $('check-weather').disabled=true;
+  try{
+   const q=new URLSearchParams({mode:'preview',route:route.id,date,activity:chosen});
+   const r=await fetch('/api/winter-hike-lab?'+q.toString(),{signal:request.signal,headers:{Accept:'application/json'}});
+   const d=await r.json();if(!r.ok)throw Error(d.error||'Official data request unavailable');
+   state.cache.set(key,{savedAt:Date.now(),result:d});
+   if(state.selected?.id===route.id && $('day').value===date)drawEvidence(d);
+  }catch(error){
+   if(error.name!=='AbortError'&&state.selected?.id===route.id)
+    $('weather-output').innerHTML='<div class="verification">Official data is unavailable for this date. Try again later and check the park manager. No conditions have been inferred from the missing result.</div>';
+  }finally{if(state.request===request)state.request=null;
+   if(state.selected?.id===route.id&&$('check-weather'))$('check-weather').disabled=false}
+ }
+ function drawAreas(){
+  if(!state.mapLoaded)return;
+  const visible=new Set(state.filtered.map(r=>r.group));
+  const geo={type:'FeatureCollection',features:state.areas.filter(a=>visible.has(a.id)).map(a=>({
+   type:'Feature',geometry:{type:'Point',coordinates:[a.lon,a.lat]},
+   properties:{id:a.id,name:a.title,count:a.count,selected:a.id===state.selected?.group?1:0}
+  }))};
+  const s=state.map.getSource('winter-areas');if(s)s.setData(geo);
+ }
+ function drawLines(features){
+  if(!state.mapLoaded)return;
+  const safe=(Array.isArray(features)?features:[]).filter(f=>f.type==='Feature'&&
+    f.geometry?.type==='LineString'&&Array.isArray(f.geometry.coordinates));
+  const s=state.map.getSource('winter-lines');if(s)s.setData({type:'FeatureCollection',features:safe});
+ }
+ function mapFallback(reason){$('map-status').textContent=reason+'. The route list remains available below.'}
+ function initMap(){
+  if(!window.maplibregl){mapFallback('Map script unavailable');return}
+  const lib=window.maplibregl;const CARTO='https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
+  const FREE='https://tiles.openfreemap.org/styles/liberty';
+  let cartoKey='',hasFallback=false,map=null;
+  const resource=u=>{try{const url=new URL(u);if(url.hostname==='basemaps.cartocdn.com'&&cartoKey)url.searchParams.set('key',cartoKey);return url.toString()}catch{return u}};
+  const start=(style,carto)=>{
+   try{
+    if(map){map.remove();state.map=null;state.mapLoaded=false}
+    map=new lib.Map({container:'map',style,center:[-86.9,44.4],zoom:5.2,minZoom:3,maxZoom:13,
+      dragRotate:false,pitchWithRotate:false,attributionControl:false,
+      transformRequest:request=>({url:carto?resource(request):request})});
+    state.map=map;let timeout=setTimeout(()=>{if(!state.mapLoaded){if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}else mapFallback('Map tiles unavailable')}},12000);
+    map.addControl(new lib.NavigationControl({showCompass:false}),'top-right');
+    map.addControl(new lib.AttributionControl({compact:true}),'bottom-right');
+    map.on('load',()=>{
+     clearTimeout(timeout);state.mapLoaded=true;$('map-status').textContent=carto?'CARTO map · dots mark reference areas':'Fallback map · dots mark reference areas';
+     map.addSource('winter-areas',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+     map.addLayer({id:'winter-area-ring',type:'circle',source:'winter-areas',paint:{
+      'circle-radius':['case',['==',['get','selected'],1],17,12],
+      'circle-color':['case',['==',['get','selected'],1],'#e1f09c','#267f60'],
+      'circle-stroke-color':'#fff','circle-stroke-width':2.5}});
+     map.addLayer({id:'winter-area-label',type:'symbol',source:'winter-areas',layout:{
+       'text-field':['to-string',['get','count']],'text-size':12,'text-allow-overlap':true},
+       paint:{'text-color':['case',['==',['get','selected'],1],'#1b4333','#fff']}});
+     map.addSource('winter-lines',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+     map.addLayer({id:'winter-lines-normal',type:'line',source:'winter-lines',
+       filter:['!=',['get','kind'],'closed-segment'],
+       paint:{'line-color':'#673c9b','line-width':4,'line-opacity':.85}});
+     map.addLayer({id:'winter-lines-closed',type:'line',source:'winter-lines',
+       filter:['==',['get','kind'],'closed-segment'],
+       paint:{'line-color':'#ad3030','line-width':5,'line-dasharray':[1,1]}});
+     map.on('click','winter-area-ring',event=>{
+      const id=event.features?.[0]?.properties?.id;if(!id)return;
+      selectGroup(id);
+     });
+     map.on('mouseenter','winter-area-ring',()=>map.getCanvas().style.cursor='pointer');
+     map.on('mouseleave','winter-area-ring',()=>map.getCanvas().style.cursor='');
+     drawAreas();
+    });
+    map.on('error',()=>{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}});
+   }catch{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}else mapFallback('Map failed to initialize')}
+  };
+  fetch('/api/carto-basemap-config',{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null)
+   .then(cfg=>{if(cfg?.provider==='CARTO'&&typeof cfg.key==='string'&&cfg.key.length>=10){cartoKey=cfg.key;start(resource(CARTO),true)}else start(FREE,false)})
+   .catch(()=>start(FREE,false));
+ }
+ async function init(){
+  day();['activity','region','search'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{
+   if(id==='activity'&&state.selected&&!['either',...state.selected.activities].includes($('activity').value)){
+    state.selected=null;$('detail-title').textContent='Choose an allowed route';$('detail-body').replaceChildren();
+   }
+   filtered();
+  }));
+  $('day').addEventListener('change',()=>{if(state.selected)pick(state.selected.id)});
+  $('clear').addEventListener('click',()=>{state.parkFilter=null;filtered()});
+  $('all-map').addEventListener('click',()=>{state.parkFilter=null;filtered();if(state.mapLoaded)state.map.easeTo({center:[-86.9,44.4],zoom:5.2,duration:400})});
+  $('cards').addEventListener('click',e=>{const b=e.target.closest('[data-route]');if(b)pick(b.dataset.route,true)});
+  $('nearby').addEventListener('click',()=>{
+   if(!navigator.geolocation){$('map-status').textContent='Geolocation unavailable; filter by region.';return}
+   $('map-status').textContent='Requesting your device location…';
+   navigator.geolocation.getCurrentPosition(pos=>{
+    state.geolocation={lat:pos.coords.latitude,lon:pos.coords.longitude};filtered();
+    $('map-status').textContent='Sorted by straight-line distance from your device, NOT by driving time or winter road access.';
+    if(state.mapLoaded)state.map.easeTo({center:[pos.coords.longitude,pos.coords.latitude],zoom:6.5,duration:550});
+   },()=>{$('map-status').textContent='Device location not shared; you can browse all routes normally.'},{timeout:10000,enableHighAccuracy:false,maximumAge:300000});
+  });
+  try{
+   const r=await fetch('/api/winter-hike-lab?mode=catalog',{headers:{Accept:'application/json'}});
+   if(!r.ok)throw Error('Catalog service is unavailable');
+   const json=await r.json();
+   if(!Array.isArray(json.routes)||!json.routes.length)throw Error('Catalog is empty');
+   state.routes=json.routes;state.areas=areaPins(json.routes);
+   filtered();initMap();
+  }catch(e){$('result-count').textContent='Inventory unavailable';$('cards').innerHTML='<div class="empty">The official route catalog could not be loaded. No substitute or fabricated trails have been added.</div>';mapFallback('Route catalog unavailable')}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
