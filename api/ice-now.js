@@ -127,8 +127,8 @@ async function fetchJson(url, options) {
   return r.json();
 }
 
-async function lakeTrends(now) {
-  const y = seasonStartYear(now);
+async function lakeTrends(now, previousCompleted = false) {
+  const y = previousCompleted ? now.getUTCFullYear() - 1 : seasonStartYear(now);
   const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/g' +
     y + '_' + (y + 1) + '_ice.dat';
   const r = await fetch(url, { headers: UA });
@@ -157,6 +157,13 @@ async function lakeTrends(now) {
     source: 'NOAA GLERL current-season daily Great Lakes ice concentration',
     observedAt, ageHours: ah, stale: ah !== null && ah > 48,
     current,
+    seasonStartYear: y,
+    // Chronological whole-lake observations, never geographically specific bay ice.
+    series: rows.slice(-180).map(r => ({
+      date: isoFromYearDay(r.year, r.dayOfYear).slice(0, 10),
+      superior: r.superior, michigan: r.michigan, huron: r.huron,
+      erie: r.erie, ontario: r.ontario, stclair: r.stclair, total: r.total
+    })),
     change24h: delta(at(1)), change72h: delta(at(3)), change7d: delta(at(7))
   };
 }
@@ -319,6 +326,8 @@ export default async function handler(req) {
       lakeWide: null, regions: {}
     },
     forecast: null,
+    // Prior completed winter is distinct from the live observation feed.
+    historical: null,
     sources: {
       regionalIce: 'NOAA/NWS North American Ice Service / USNIC Great Lakes daily ice analysis',
       lakeWideIce: 'NOAA GLERL current-season daily Great Lakes ice concentration',
@@ -327,6 +336,8 @@ export default async function handler(req) {
     safety: 'No remote product here measures the ice under a person. Nothing returned by this endpoint is a safety rating.'
   };
   const tasks = [lakeTrends(now).then(v => { out.observed.lakeWide = v; }).catch(() => { out.observed.lakeWide = null; })];
+  if (!isIceSeason(now)) tasks.push(lakeTrends(now, true)
+    .then(v => { out.historical = v; }).catch(() => { out.historical = null; }));
   for (const slug of regionSlugs) {
     const r = REGIONS[slug];
     tasks.push(regionalObservation(slug, r, now)

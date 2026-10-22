@@ -11,7 +11,7 @@ OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice
 # Moved forward 2026-10-06: root and regional pages gained publisher references to the
 # existing canonical Person entity. This identity metadata changed on those seven pages.
 ICE_ROOT_DATE_MODIFIED = "2026-10-06"
-ICE_HUB_DATE_MODIFIED = "2026-10-19" # Land-based ice-viewing handoff added.
+ICE_HUB_DATE_MODIFIED = "2026-10-22" # Land-based ice-viewing handoff added.
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
@@ -410,14 +410,13 @@ def build_index():
         'miles apart sit at completely different stages in the same week, and why a single statewide ice number '
         'would be worse than none at all.</p>'
         '<h3>Which Michigan lakes have satellite ice cover data?</h3>'
-        '<p>Only the Great Lakes waters have a satellite product, and the data used here is lake-wide rather than '
-        'bay-specific. Saginaw Bay displays the Lake Huron average and Grand Traverse Bay displays the Lake Michigan '
-        'average, so each is a directional parent-lake signal rather than an observation of that bay. Inland lakes '
-        'have no comparable product. '
-        'Nobody flies a satellite ice analysis over Houghton Lake or Mullett Lake, so for those waters the '
-        'accumulated cold figure and the ten year station comparison are all there is. This is the most important '
-        'limitation to understand about this page. On the Great Lakes it can describe whole-lake ice conditions. On '
-        'inland lakes it can only say whether the weather has been cold enough that ice ought to have formed.</p>'
+        '<p>NOAA provides two distinct Great Lakes products: a daily whole-lake GLERL ice-cover percentage, and '
+        'a mapped NOAA/NWS USNIC ice-concentration analysis for selected waters including Saginaw Bay, '
+        'Lake St. Clair, Little Bay de Noc, and Grand Traverse Bay. The regional chart describes geographic '
+        'ice-cover categories, not measured ice thickness. Charts can be missing or too old to present as live. '
+        'Houghton Lake and Burt and Mullett Lakes have no comparable NOAA regional chart, so their pages use '
+        'observed nearby weather and accumulated cold, not remotely observed lake ice. Never apply a '
+        'parent-lake average to a particular bay or shoreline.</p>'
 
         '<h2>More from the network</h2>'
         '<div class="anchor-list">'

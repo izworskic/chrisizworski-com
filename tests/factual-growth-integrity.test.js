@@ -34,15 +34,17 @@ test("Soo Locks copy distinguishes gravity-fed level change from complete vessel
   assert.ok(!soo.includes("roughly fifteen minutes"));
 });
 
-test("Michigan Ice separates ten-year accumulated cold from lake-wide ice climatology", () => {
+test("Michigan Ice separates thermal, regional NOAA, and whole-lake ice data", () => {
   const api = read("api/ice.js");
   const generator = read("scripts/ice/gen_site.py");
   const index = read("public/michigan-ice/index.html");
   assert.match(api, /slug: 'saginaw-bay', acis: 'KMBS', lake: 'huron'/);
   assert.match(api, /slug: 'grand-traverse-bay', acis: 'KTVC', lake: 'michigan'/);
   assert.ok(index.includes("ten year station normal"));
-  assert.ok(index.includes("Saginaw Bay displays the Lake Huron average"));
-  assert.ok(index.includes("directional parent-lake signal rather than an observation of that bay"));
+  assert.ok(index.includes("daily whole-lake GLERL ice-cover percentage"));
+  assert.ok(index.includes("mapped NOAA/NWS USNIC ice-concentration analysis"));
+  assert.ok(index.includes("The regional chart describes geographic ice-cover categories, not measured ice thickness"));
+  assert.ok(index.includes("Never apply a parent-lake average to a particular bay or shoreline"));
   assert.ok(index.includes("54 year ice-cover climatology"));
   assert.ok(!generator.includes("there is an actual observation of how much of the surface is frozen"));
   assert.ok(!generator.includes("accumulated cold figure and the 54 year comparison"));
