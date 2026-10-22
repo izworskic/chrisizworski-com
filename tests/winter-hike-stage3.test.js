@@ -150,3 +150,22 @@ test('official sourced zero-snow weekend favors hiking check, not a verified dri
  assert.equal(r.navigation.ready,false);
  assert.equal(r.weather.snow.depthInches,0);
 });
+
+test('DNR geometry cache reuses layer fetches but reruns the selected-route closure evaluation',async()=>{
+ const cache=new Map();let calls=0;
+ const fetchJson=async u=>{calls++;return dnrMock(u)};
+ const first=await GIS.lookup(dest,{fetchJson,cache,now,routeObjectIds:[2043]});
+ const second=await GIS.lookup(dest,{fetchJson,cache,now:now+1000,routeObjectIds:[1864]});
+ assert.equal(calls,3);
+ assert.equal(first.spatial.closure.routeAffected,true);
+ assert.equal(second.spatial.closure.routeAffected,false);
+});
+test('expired geometry cache requires fresh source and fails unknown if it cannot refresh',async()=>{
+ const cache=new Map();let calls=0;
+ const fetchJson=async u=>{calls++;return dnrMock(u)};
+ await GIS.lookup(dest,{fetchJson,cache,now});
+ const next=await GIS.lookup(dest,{fetchJson:async()=>{calls++;throw Error('offline')},
+   cache,now:now+21*60*1000});
+ assert.equal(next.status,'unavailable');
+ assert.ok(calls>3);
+});
