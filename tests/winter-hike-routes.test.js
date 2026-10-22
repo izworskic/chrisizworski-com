@@ -111,3 +111,38 @@ test('invalid official website host, missing provenance or fake navigation fails
  const duplicate={...data,routes:[seed,seed]};
  assert.equal(Routes.auditCatalog(duplicate).ok,false);
 });
+
+const accessResearch=require('../data/winter-hike/michigan-route-access-research.json');
+test('all 13 curated route areas preserve manager-sourced winter-access caveats',()=>{
+ const groups=new Set(routes.map(r=>r.placeGroup));
+ assert.equal(groups.size,13);
+ assert.equal(accessResearch.records.length,13);
+ for(const record of accessResearch.records) {
+  assert.ok(groups.has(record.group));
+  assert.equal(record.navigationReady,false);
+  assert.equal(record.currentWinterParkingConfirmed,false);
+  assert.equal(record.currentAccessRoadConfirmed,false);
+  assert.equal(record.verifiedWinterParkingCoordinates,null);
+  assert.match(record.officialSource,/^https:\/\/www\.michigan\.gov\//);
+ }
+});
+test('Vasa parking address is only a research hint, not winter-access approval',()=>{
+ const v=Routes.listRoutes({placeGroup:'vasa'});
+ assert.equal(v.length,4);assert.ok(v.every(r=>r.navigationReady===false));
+ assert.ok(v.every(r=>r.accessResearch?.restriction.includes('parking hint')));
+});
+test('Port Crescent separate entrances and Hartwick partial closure remain first-class card cautions',()=>{
+ const p=Routes.listRoutes({placeGroup:'port'});
+ assert.ok(p.every(r=>r.accessResearch?.restriction.includes('Wrong-entrance')));
+ const h=Routes.listRoutes({placeGroup:'hartwick'});
+ assert.ok(h.every(r=>r.accessResearch?.restriction.includes('Au Sable River')));
+});
+test('all public route cards remain research-only even if route length and map are known',()=>{
+ for(const r of Routes.listRoutes()){
+  assert.equal(r.accessStatus,'requires-current-check');
+  assert.equal(r.navigationReady,false);
+  assert.equal(r.parking,null);
+  assert.equal(r.routeGeometryStatus,'not-verified');
+  assert.equal(r.accessResearch.winterParkingConfirmed,false);
+ }
+});
