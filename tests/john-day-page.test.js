@@ -16,7 +16,7 @@ test('four immediate mission controls, accessible switching and fallbacks',()=>{
  for(const mode of ['watch','boat','how','river']){
   assert.match(html,new RegExp('id="tab-'+mode+'"'));assert.match(html,new RegExp('id="panel-'+mode+'"'));
  }
- assert.match(js,/ArrowLeft/);assert.match(js,/aria-selected/);assert.match(js,/createElement\('h3'\)/);
+ assert.match(html,/aria-label="Explore John Day"/);assert.match(html,/id="tab-how" data-mode="how" href="#panel-how"/);assert.match(js,/createElement\('h3'\)/);
  assert.match(css,/prefers-reduced-motion/);assert.match(css,/focus-visible/);
  assert.match(html,/Current published John Day lock control/);
  assert.match(html,/USACE federal lock inventory/);
@@ -40,10 +40,10 @@ test('John Day corridor map has real federal coordinates, obvious source and no 
  assert.match(map,/lon:-120\.697630,lat:45\.719149/);
  assert.match(map,/lon:-121\.947259,lat:45\.638124/);
  assert.match(map,/NAVSTR|PMSNAME|Lock Characteristics|historic lock inventory/i);
- assert.match(map,/maplibre-gl@6\.3\.0/);
+ assert.match(html,/vendor\/leaflet\/leaflet.js/);assert.match(map,/L\.circleMarker/);
  assert.match(map,/carto-basemap-config/);
- assert.match(map,/tiles\.openfreemap\.org\/styles\/liberty/);
- assert.match(map,/hostname==='basemaps\.cartocdn\.com'/);
+ assert.match(map,/rastertiles\/voyager/);assert.doesNotMatch(map,/new GL\.Map/);
+ assert.match(map,/basemaps\.cartocdn\.com/);
  assert.doesNotMatch(map,/api\/eagle-basemap-config/);
  assert.match(html,/id="lockMapSelection"/);
  assert.match(html,/not public dam entrances or safe nautical waypoints/);
@@ -53,11 +53,19 @@ test('John Day corridor map has real federal coordinates, obvious source and no 
  assert.match(map,/fitBounds/);
 });
 
-test('AIS evidence is on demand and explicitly separate from LPMS lock queue',()=>{
+test('AIS evidence loads automatically and stays separate from LPMS lock queue',()=>{
  const ais=fs.readFileSync(path.join(root,'public/assets/john-day-ais.js'),'utf8');
  const map=fs.readFileSync(path.join(root,'public/assets/john-day-map.js'),'utf8');
  assert.match(html,/id="aisLoad"/);assert.match(html,/id="aisStatus"/);
- assert.match(ais,/john-day-ais-observations/);assert.match(map,/john-day-ais-markers/);
+ assert.match(ais,/john-day-ais-observations/);assert.match(map,/aisShipMarker/);assert.match(ais,/check\(\);/);assert.match(ais,/setInterval/);
  assert.match(html,/coverage unverified/);assert.match(map,/not a lock-queue record/i);
  assert.match(ais,/AIS vessel observation/);assert.match(ais,/not evidence of an empty river/i);
+});
+
+test('map and ships lead the page, with visible animation and linked viewing cards',()=>{
+ assert.ok(html.indexOf('id="panel-watch"')<html.indexOf('id="visit-desk"'));
+ assert.ok(html.indexOf('id="lockMapSurface"')<html.indexOf('id="aisVessels"'));
+ assert.match(html, /id="panel-how" data-permanent/);
+ assert.match(html, /id="cyclePlay"/);assert.match(html,/id="cycleSvg"/);
+ assert.match(html,/data-view-place="giles"/);assert.match(html,/data-view-place="lepage"/);
 });
