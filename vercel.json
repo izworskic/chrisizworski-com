@@ -2230,6 +2230,14 @@
       "destination": "/synced-national-tools/big-island-beach-day/index.html"
     },
     {
+      "source": "/national-tools/kona-manta-ray-night",
+      "destination": "/synced-national-tools/kona-manta-ray-night/index.html"
+    },
+    {
+      "source": "/national-tools/kona-manta-ray-night/",
+      "destination": "/synced-national-tools/kona-manta-ray-night/index.html"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
