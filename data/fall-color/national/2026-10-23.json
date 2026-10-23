@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-23",
+  "updated": "2026-10-23T15:47:12.103Z",
+  "briefings": {
+    "new-england": "Season is waning with limited foliage remaining. Sunny conditions this weekend offer clear views of what persists.",
+    "great-smoky-mountains": "Peak timing is here with optimal foliage display. Sunny skies this weekend provide ideal viewing conditions.",
+    "colorado-aspens": "Aspen color has largely passed. High storm chance (83%) this weekend complicates viewing plans.",
+    "adirondacks": "Color is fading past its prime window. Mostly sunny conditions this weekend suit remaining foliage viewing.",
+    "north-shore-superior": "Season is declining past its peak. Live weather data unavailable for weekend planning.",
+    "ozarks": "Foliage is at peak timing with strong display. Mostly sunny conditions this weekend are excellent for viewing.",
+    "eastern-sierra": "Color has passed its traditional window. Sunny conditions this weekend suit viewing remaining aspens.",
+    "wasatch": "Foliage is fading past peak timing. Mostly sunny conditions this weekend work for viewing.",
+    "columbia-river-gorge": "Peak timing is active with strong foliage display. Partly sunny conditions this weekend support viewing.",
+    "door-county": "Foliage is at peak timing with optimal display. Partly sunny conditions this weekend are favorable for viewing.",
+    "poconos": "Peak timing is here with strong foliage display. Sunny conditions this weekend provide excellent viewing.",
+    "texas-hill-country": "Color is approaching its traditional window. Partly sunny conditions this weekend suit early-season viewing.",
+    "west-virginia-highlands": "Foliage remains near peak despite passing the traditional window. Sunny conditions this weekend offer excellent viewing.",
+    "catskills": "Peak timing is active with strong foliage display. Mostly sunny conditions this weekend provide ideal viewing.",
+    "shenandoah": "Peak timing is here with optimal foliage display. Sunny conditions this weekend offer excellent Skyline Drive viewing."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
