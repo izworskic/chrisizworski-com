@@ -39,7 +39,7 @@
   var root, select, map, overlay, loadingLeaflet, activeData = null, datasets = {}, layerStamp = null;
   var playTimer = null, chartSeries = [], currentIndex = 0, mapRequest = 0;
   var mapReady = false;
-  var basemap = null, basemapFailed = false;
+  var basemap = null, basemapFailed = false, apiFailed = false;
   var pendingMapUpdate = null, resizeObserver = null;
 
   function el(tag, className, text) {
@@ -154,8 +154,10 @@
   function updateMap() {
     if (!map) return;
     if (!activeData) {
-      text('ice-ex-map-stamp','Basemap available for orientation. Waiting for NOAA ice observations.');
-      text('ice-ex-map-hud','Map for orientation · NOAA data loading');
+      text('ice-ex-map-stamp',apiFailed
+        ? 'NOAA ice data unavailable. Basemap remains usable for shoreline orientation; no ice safety rating.'
+        : 'Basemap available for orientation. Waiting for NOAA ice observations.');
+      text('ice-ex-map-hud',apiFailed ? 'NOAA data unavailable · basemap only' : 'Map for orientation · NOAA data loading');
       return;
     }
     var r=regionData(currentSlug);
@@ -345,11 +347,13 @@
   }
   function render(data) {
     if(!data || !data.observed || !data.ok) {
+      apiFailed = true;
       text('ice-ex-map-stamp','NOAA ice data unavailable. The map remains usable for viewing shorelines; it does not rate ice safety.');
       text('ice-ex-map-hud','NOAA ice data unavailable · basemap only');
       text('ice-ex-chart-value','NOAA time series unavailable.');
       return;
     }
+    apiFailed = false;
     activeData=data;
     datasets[currentSlug]=data;
     drawChart();
