@@ -41,17 +41,30 @@
   try{
    if(!window.L)throw Error('Map library unavailable');
    map=L.map('lockMapSurface',{scrollWheelZoom:false,zoomControl:true}).setView([45.72,-120.695],12);
-   // Public CARTO raster tiles do not require WebGL or expose a private API key.
-   // /api/carto-basemap-config is only needed for the prior vector basemap.
-   const tiles=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
-   tiles.on('tileerror',()=>{status.textContent='Some CARTO tiles could not load. Lock, park and vessel markers remain selectable; use the cards and directions below.'});
-   tiles.on('load',()=>{status.textContent='CARTO map · round dots: locks · purple arrows: AIS vessels · green circles: river recreation. Facility pins are not visitor entrances or navigation waypoints.'});
+   // Use the site's existing PUBLIC CARTO basemap key for every raster tile.
+   // Keep markers usable while key lookup runs; OSM is the no-key outage fallback.
+   const instance=map;
+   async function loadTiles(){
+    let key='';
+    try{const r=await fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(8000)});if(r.ok){const d=await r.json();if(d.provider==='CARTO'&&typeof d.key==='string')key=d.key}}catch{}
+    if(map!==instance)return;
+    let fallback=false;
+    function add(provider){
+     const carto=provider==='CARTO';
+     const url=carto?'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+     const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')});
+     layer.on('tileerror',()=>{if(carto&&!fallback){fallback=true;instance.removeLayer(layer);add('OpenStreetMap')}else status.textContent='Some map tiles are unavailable. Lock, park and vessel markers remain selectable; use the cards and directions below.'});
+     layer.on('load',()=>{status.textContent=provider+' map · round dots: locks · purple arrows: AIS vessels · green circles: river recreation. Facility pins are not visitor entrances or navigation waypoints.'});
+     layer.addTo(instance);
+    }
+    add(key?'CARTO':'OpenStreetMap');
+   }
    shipsLayer=L.layerGroup().addTo(map);
    for(const s of LOCKS){const marker=L.circleMarker([s.lat,s.lon],{radius:s.id===selected?11:8,color:'#fff',weight:3,fillColor:s.id===selected?'#be7130':'#126277',fillOpacity:1}).addTo(map);marker.bindTooltip(s.name,{direction:'top'});marker.on('click',()=>{pendingAIS=null;lockDetail(s);marker.bindPopup(text('strong',s.name+' · river mile '+s.mile)).openPopup()});lockMarkers.set(s.id,marker)}
    for(const p of PARKS){const marker=L.circleMarker([p.lat,p.lon],{radius:9,color:'#fff',weight:3,fillColor:'#34814e',fillOpacity:1}).addTo(map).bindTooltip(p.name,{direction:'top'}).bindPopup(parkContent(p),{maxWidth:280});parkMarkers.set(p.id,marker)}
    $('mapRecover').hidden=true;
    status.textContent='Loading CARTO tiles. Lock dots, recreation circles and AIS positions are ready to explore.';
-   drawAIS();focusVessel();
+   drawAIS();focusVessel();void loadTiles();
   }catch(_){map=null;$('mapRecover').hidden=false;status.textContent='Map could not start. Use the lock selectors, named viewing-area cards and directions while retrying.'}
  }
  window.addEventListener('john-day-ais-observations',e=>{
