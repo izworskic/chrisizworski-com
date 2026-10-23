@@ -11,7 +11,7 @@ const item=(mmsi,lon,lat,ageMins,kind='vessel',seen=true)=>({
   source:'example-receiver',sog:3.2,cog:90
  }});
 test('query box uses Open Waters lat lon order and <=30 minutes',()=>{
- assert.deepEqual(BBOX,[45.45,-121.3,45.95,-120]);assert.equal(AIS_URL,'https://ais.openwaters.io/v1/vessels?bbox='+BBOX.join(','));
+ assert.deepEqual(BBOX,[45.45,-121.3,45.95,-120]);assert.equal(AIS_URL,'https://ais.openwaters.io/v1/vessels?bbox='+BBOX.join(',')+'&max_age=30m&kind=vessel');
 });
 test('fresh AIS is reported as observation only; stale and out-of-area excluded',()=>{
  const data={type:'FeatureCollection',features:[
