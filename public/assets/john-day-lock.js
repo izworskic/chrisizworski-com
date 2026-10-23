@@ -2,21 +2,13 @@
 // Progressive experience: the page and source links remain useful with JS disabled.
 (function(){
  const $=id=>document.getElementById(id);
- const tabs=[...document.querySelectorAll('[role="tab"]')];
- const panels=[...document.querySelectorAll('[role="tabpanel"]')];
+ const tabs=[...document.querySelectorAll('[data-mode]')];
+ const panels=['watch','boat','how','river'].map(m=>$('panel-'+m));
  function activate(mode){
-  for(const t of tabs){const active=t.dataset.mode===mode;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;}
-  for(const p of panels)p.hidden=p.id!=='panel-'+mode;
+  for(const p of panels)if(!p.hasAttribute('data-permanent'))p.hidden=p.id!=='panel-'+mode;
   if(mode==='river'&&!autoLoaded){autoLoaded=true;refreshReport();}
  }
- tabs.forEach((t,i)=>{
-  t.addEventListener('click',()=>activate(t.dataset.mode));
-  t.addEventListener('keydown',e=>{
-   if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
-   e.preventDefault();const j=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
-   tabs[j].focus();activate(tabs[j].dataset.mode);
-  });
- });
+ tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.mode)));
  function localDate(){
   const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
   const o=Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
@@ -82,6 +74,7 @@
   const upper=passageStep===0?!up:up;
   $('passageOutside').style.left=upper?'77%':'3%';$('passageOutside').style.bottom=upper?'73%':'19%';
   move((passageStep<3)===up?10:95);
+  if(window.johnDayRenderCycle)window.johnDayRenderCycle([0,.18,.30,.70,1][passageStep]);
  }
  $('passageNext').addEventListener('click',()=>{passageStep=Math.min(4,passageStep+1);showPassage()});
  $('passageBack').addEventListener('click',()=>{passageStep=Math.max(0,passageStep-1);showPassage()});
@@ -89,6 +82,7 @@
  // Manual experiments are visibly separate from the selected passage stage.
  function freeExplore(){ boat.hidden=false;$('passageOutside').hidden=true; $('passageCount').textContent='Free exploration · illustrative water level';$('passageTitle').textContent='Try raising and lowering the water.';$('passageStory').textContent='You are adjusting the illustration directly. Use Restart to return to the five passage stages.';$('simGate').textContent='Manual water exploration';[...$('passageTrack').children].forEach(el=>el.removeAttribute('aria-current')); }
  level.addEventListener('input',freeExplore);$('fillBtn').addEventListener('click',freeExplore);$('drainBtn').addEventListener('click',freeExplore);
+ window.johnDaySetPassage=step=>{passageStep=Math.max(0,Math.min(4,step));showPassage()};
  showPassage();
  // Exact USACE data from July 10, 2026. Historical example, never presented as a live measurement.
  const history=[

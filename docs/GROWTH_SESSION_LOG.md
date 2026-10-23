@@ -1022,3 +1022,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner requested completion and release of PR #1118. Added deferred vessel focus after lazy map loading, cleared selections when reports disappear, and separated approach/departure vessels from the chamber illustration. Added regression tests for both review findings; all 39 focused John Day tests pass. Full gate and exact remote release status are retained in the PR.
 - Preview is browser-accessible. Final revision will be checked there before the authorized merge; live checks follow deployment. No current GSC/AdSense measurements or uplift claims.
 - Exactly one next action: verify the production planner, map and passage controls after the checked merge deploys.
+
+## John Day map-first correction — October 22, 2026
+
+- Owner rejected the prior release's buried map, hidden demonstration, optional AIS loading and weak viewing/incoming surfaces. Rebuilt the primary experience as compact header → CARTO raster map with lock dots and automatic adjacent vessel cards → linked shore-viewing cards → visible play/pause/scrub/reverse SVG lockage. Trip planning and background detail follow the experience. Leaflet removes the WebGL2 dependency.
+- Both live site AIS and its provider returned zero features during the source check. The empty state identifies missing receiver observations and unknown incoming traffic, with official queue/alternate AIS actions; no invented ships, ETA or public chamber viewpoint. Course labels are explicitly geometric context, not a lock queue.
+- Acceptance/source ledger: `docs/JOHN_DAY_MAP_FIRST_REVIEW.md`. Focused tests cover fresh/stale vessel interpretation, raster-map selection, page ordering and animated geometry/reduced motion. Required full gate and deployed browser results recorded in the review PR. GSC/GA4/AdSense data NOT AVAILABLE.
+- Exactly one next action: inspect the deployed map-first preview against the owner's specific ship/map/animation/viewing requirements before releasing this correction.
