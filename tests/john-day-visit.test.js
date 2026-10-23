@@ -10,7 +10,7 @@ test('short and longer scenery stops lead to different real destinations',()=>{
 });
 test('ship-only intent never invents a John Day platform or a passage appointment',()=>{
  for(const time of [30,90,180]){
-  const p=plan('ships',time);assert.match(p.title,/Do not make a dedicated/);
+  const p=plan('ships',time);assert.match(p.title,/Make the river the outing/);
   assert.match(p.reason,/no confirmed public close-up/);assert.match(p.reason,/seasonal/);
   assert.match(p.steps.join(' '),new RegExp(time+' minutes'));assert.match(p.official,/usace\.army\.mil/);
  }

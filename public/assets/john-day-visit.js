@@ -7,18 +7,18 @@
   const minutes=[30,90,180].includes(Number(duration))?Number(duration):30;
   if(goal==='ships')return {
    kicker:'Lock-watching · verify before a special trip',
-   title:'Do not make a dedicated lock-watching drive on this evidence alone.',
-   reason:'John Day has no confirmed public close-up chamber viewpoint in this guide, and recent AIS positions do not establish a lockage. Bonneville has an officially described seasonal lock visitor area; check whether it is operating for your date.',
+   title:'Make the river the outing; let a passing tow be the bonus.',
+   reason:'There is no confirmed public close-up chamber viewpoint at John Day in this guide, and a nearby AIS signal cannot promise a lockage. For a closer look at lock engineering, explore Bonneville’s seasonal lock visitor area and check access for your date.',
    steps:['Open Corps Locks and navigation notices to look for named traffic and outages.','Confirm Bonneville visitor access and hours if you want to see a chamber close up.','If you stay near John Day, choose a public river stop and treat any tow sighting as a bonus—even with '+minutes+' minutes available.'],
    destination:'Bonneville navigation-lock visitor area',query:'Bonneville Navigation Lock Visitor Area Oregon',official:BONNEVILLE};
   const family=goal==='family',long=minutes===180;
   return {
    kicker:family?'Family stop · a river story to discover':'Best fit · river landscape',
-   title:long?'Make LePage Park the anchor for a longer river outing.':'Make Giles French Park your first check.',
-   reason:long?'Choose the confluence of the John Day and Columbia rivers for time beside the water. This is a separate recreation stop, not a lock-chamber viewpoint. Check seasonal facilities, fees and access before travelling.':'The Corps lists this Oregon-side recreation area near John Day Dam. It is a place to plan a river stop, not a confirmed close-up view into the navigation chamber.',
+   title:long?'Give the rivers time to tell their story at LePage Park.':'Start with the big river view at Giles French Park.',
+   reason:long?'A confluence is a meeting of rivers. At LePage Park, make that meeting the heart of a longer outing beside the John Day and Columbia. You will be exploring the river landscape, not looking into the lock chamber. Check seasonal facilities, fees and access before setting out.':'Begin on the Oregon side near John Day Dam. Take in the broad river, look for passing traffic, and use the dam’s scale to imagine the water lift you explored here. This park is a river stop, not a confirmed close-up chamber viewpoint.',
    steps:[long?'Check Recreation.gov for LePage Park facilities and seasonal availability.':'Check the Corps recreation page for access changes before leaving I-84.',
     family?'Try the lock demonstration together before arriving. At the river, look for the dam, moving water and any passing tow from permitted public areas.':long?'Allow time to watch the confluence and the river landscape from public areas.':'Navigate to Giles French Park near Rufus, rather than an operational dam entrance.',
-    minutes===30?'Keep it a short scenery stop. Do not spend the whole visit waiting for a vessel.':minutes===90?'Use the extra time to look for river traffic with binoculars and explore the engineering story. There is no promised ship arrival.':'If you also want a dam-area stop, consider Giles French separately after checking access; driving time is outside this suggested time budget.'],
+    minutes===30?'Take in the river first. Do not spend the whole visit waiting for a vessel; a short scenery stop can be rewarding on its own.':minutes===90?'Use the extra time to look for river traffic with binoculars and explore the engineering story. There is no promised ship arrival.':'If you also want a dam-area stop, consider Giles French separately after checking access; driving time is outside this suggested time budget.'],
    destination:long?'LePage Park':'Giles French Park',query:long?'LePage Park Rufus Oregon':'Giles French Park Rufus Oregon',official:long?'https://www.recreation.gov/camping/campgrounds/233536':PARK};
  }
  if(typeof module==='object'&&module.exports)module.exports={plan};

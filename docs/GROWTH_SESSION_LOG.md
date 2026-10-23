@@ -1045,3 +1045,8 @@ This is an operational journal, not a record of proven ranking lift unless measu
 
 - Owner requested the proposed heading in the live tool: ‘The river’s moving. We’re waiting for a signal.’ Updated the existing no-report heading and bumped its script cache version. Supporting receiver-gap explanation and AIS behavior remain unchanged. Prior AIS correction #1121 is merged and deployed as 683d1cb6 with green main verification. Current copy release checks pending; GSC/AdSense unavailable.
 - Exactly one next action: deploy and verify the requested wording after repository checks pass.
+
+### John Day interpretive language pass — October 22, 2026
+
+- Owner requested a National Parks ranger-style experience throughout John Day. Rewrote the welcome, AIS interpretation and empty/error states, shore stops and itineraries, water-lift teaching narrative, river-chart explanation, commerce/ecology/history chapters and source guidance. Each invites observation and explains a next step without promising ships, access or operating clearance. Preserved dated rules, contacts, dimensions, report data and user controls. Updated existing copy-sensitive benchmark assertions to the equivalent visible wording; no new empirical usability or growth claims. Prior release #1122 deployed as 4d03725b; current release checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify and release the interpretive copy in the browser after green repository checks.

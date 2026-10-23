@@ -11,8 +11,8 @@
   {id:'mcnary',name:'McNary Lock',lon:-119.300560,lat:45.940161,mile:292.0,lift:103}
  ];
  const PARKS=[
-  {id:'giles',name:'Giles French Park',lat:45.709987,lon:-120.695347,query:'Giles French Park Rufus Oregon',text:'Oregon shore below the dam. River and dam landscape; not a confirmed close-up lock-chamber viewpoint.',source:'https://corpslakes.erdc.dren.mil/visitors/projects.cfm?Id=G208480'},
-  {id:'lepage',name:'LePage Park',lat:45.7283972,lon:-120.6512639,query:'LePage Park Rufus Oregon',text:'John Day River confluence upstream of the dam. River recreation; no lock-chamber view. Check seasonal access.',source:'https://www.recreation.gov/camping/campgrounds/233536'}
+  {id:'giles',name:'Giles French Park',lat:45.709987,lon:-120.695347,query:'Giles French Park Rufus Oregon',text:'Pause on the Oregon shore below the dam for the broad river-and-dam landscape. Look for passing traffic; a close-up lock-chamber view is not confirmed here.',source:'https://corpslakes.erdc.dren.mil/visitors/projects.cfm?Id=G208480'},
+  {id:'lepage',name:'LePage Park',lat:45.7283972,lon:-120.6512639,query:'LePage Park Rufus Oregon',text:'Discover where the John Day River meets the Columbia, upstream of the dam. Come for river recreation, not a lock-chamber view. Check seasonal access before setting out.',source:'https://www.recreation.gov/camping/campgrounds/233536'}
  ];
  const SOURCE='https://services7.arcgis.com/n1YM8pTrFmm7L4hs/ArcGIS/rest/services/Locks/FeatureServer/0';
  let map=null,selected='john-day',reports=[],pendingAIS=null,shipsLayer=null,parkMarkers=new Map(),lockMarkers=new Map(),shipMarkers=new Map();
@@ -24,8 +24,8 @@
   for(const b of document.querySelectorAll('[data-river-lock]'))b.setAttribute('aria-pressed',String(b.dataset.riverLock===site.id));
   for(const [id,m] of lockMarkers)m.setStyle({fillColor:id===selected?'#be7130':'#126277',radius:id===selected?11:8});
  }
- function parkContent(p){const div=document.createElement('div');div.append(text('h3',p.name),text('p',p.text),link('Directions to the named park ↗','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.query)),document.createElement('br'),link('Official access information ↗',p.source));return div}
- function vesselContent(v){const div=document.createElement('div');div.append(text('h3',v.name||'AIS vessel '+v.mmsi),text('p','Last heard '+new Date(v.seen).toLocaleString()+(Number.isFinite(v.speedKnots)?' · '+v.speedKnots.toFixed(1)+' knots':'')),text('p','Recent AIS position, not a lock-queue record or arrival promise.'));return div}
+ function parkContent(p){const div=document.createElement('div');div.append(text('h3',p.name),text('p',p.text),link('Find your way to the park ↗','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.query)),document.createElement('br'),link('Official access information ↗',p.source));return div}
+ function vesselContent(v){const div=document.createElement('div');div.append(text('h3',v.name||'AIS vessel '+v.mmsi),text('p','Last heard '+new Date(v.seen).toLocaleString()+(Number.isFinite(v.speedKnots)?' · '+v.speedKnots.toFixed(1)+' knots':'')),text('p','A glimpse of this vessel’s journey: its last reported position, not a lock-queue record or a promised arrival.'));return div}
  function focusVessel(){const marker=shipMarkers.get(pendingAIS);if(!map||!marker)return;map.setView(marker.getLatLng(),Math.max(11,map.getZoom()),{animate:false});marker.openPopup()}
  function drawAIS(){
   if(!map||!shipsLayer)return;shipsLayer.clearLayers();shipMarkers.clear();
@@ -53,7 +53,7 @@
      const carto=provider==='CARTO';
      const url=carto?'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
      const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')});
-     layer.on('tileerror',()=>{if(carto&&!fallback){fallback=true;instance.removeLayer(layer);add('OpenStreetMap')}else status.textContent='Some map tiles are unavailable. Lock, park and vessel markers remain selectable; use the cards and directions below.'});
+     layer.on('tileerror',()=>{if(carto&&!fallback){fallback=true;instance.removeLayer(layer);add('OpenStreetMap')}else status.textContent='Part of the map is taking a break. You can still select the lock, park and vessel markers, or follow the cards and park directions below.'});
      layer.on('load',()=>{status.textContent=provider+' map · round dots: locks · purple arrows: AIS vessels · green circles: river recreation. Facility pins are not visitor entrances or navigation waypoints.'});
      layer.addTo(instance);
     }
@@ -63,9 +63,9 @@
    for(const s of LOCKS){const marker=L.circleMarker([s.lat,s.lon],{radius:s.id===selected?11:8,color:'#fff',weight:3,fillColor:s.id===selected?'#be7130':'#126277',fillOpacity:1}).addTo(map);marker.bindTooltip(s.name,{direction:'top'});marker.on('click',()=>{pendingAIS=null;lockDetail(s);marker.bindPopup(text('strong',s.name+' · river mile '+s.mile)).openPopup()});lockMarkers.set(s.id,marker)}
    for(const p of PARKS){const marker=L.circleMarker([p.lat,p.lon],{radius:9,color:'#fff',weight:3,fillColor:'#34814e',fillOpacity:1}).addTo(map).bindTooltip(p.name,{direction:'top'}).bindPopup(parkContent(p),{maxWidth:280});parkMarkers.set(p.id,marker)}
    $('mapRecover').hidden=true;
-   status.textContent='Loading CARTO tiles. Lock dots, recreation circles and AIS positions are ready to explore.';
+   status.textContent='Unfolding the river map. Select a lock dot, a green park circle, or a vessel arrow to begin exploring.';
    drawAIS();focusVessel();void loadTiles();
-  }catch(_){map=null;$('mapRecover').hidden=false;status.textContent='Map could not start. Use the lock selectors, named viewing-area cards and directions while retrying.'}
+  }catch(_){map=null;$('mapRecover').hidden=false;status.textContent='The map could not open. Keep exploring with the lock buttons and park cards below, then try the map again.'}
  }
  window.addEventListener('john-day-ais-observations',e=>{
   reports=(e.detail?.observations||[]).filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon));

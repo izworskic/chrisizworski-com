@@ -35,13 +35,13 @@
    verdict.append(kicker,title,message);
    if(d.times.length){const times=document.createElement('p');const strong=document.createElement('strong');strong.textContent='Published time slots: ';times.append(strong,document.createTextNode(d.times.join(' · ')));verdict.append(times);}
    const ul=document.createElement('ul');for(const s of d.limitations){const li=document.createElement('li');li.textContent=s;ul.append(li);}verdict.append(ul);
-   const note=document.createElement('p');note.className='micro';note.textContent='This is never permission to navigate. Present-day lock operating status is unknown to this website.';
+   const note=document.createElement('p');note.className='micro';note.textContent='Use this as your planning checklist. For today’s availability and permission to enter, speak with lock control.';
    verdict.append(note);
-   if(d.source){const link=document.createElement('a');link.href=d.source;link.target='_blank';link.rel='noopener';link.textContent='Read the controlling published source ↗';verdict.append(link);}
+   if(d.source){const link=document.createElement('a');link.href=d.source;link.target='_blank';link.rel='noopener';link.textContent='Read the official notice behind this guidance ↗';verdict.append(link);}
   }catch(_){
    if(id!==requestId)return;
    verdict.className='verdict warning';verdict.replaceChildren();
-   const title=document.createElement('h3');title.textContent='Automated lookup unavailable';
+   const title=document.createElement('h3');title.textContent='Let’s go straight to the source.';
    const p=document.createElement('p');p.textContent='Use the linked USACE winter and summer notices and contact lock control before travelling. No navigation clearance can be inferred.';
    verdict.append(title,p);
   }
@@ -51,16 +51,16 @@
  function move(n){
   const v=Math.min(95,Math.max(10,Number(n)||10));level.value=v;
   water.style.height=v+'%';boat.style.bottom='calc('+v+'% - 13px)';number.textContent=v+'%';
-  if(v<30){title.textContent='Near the lower river';explain.textContent='With the chamber drained to the lower water level, the vessel floats near the downstream elevation.';}
-  else if(v<75){title.textContent='Water enters the chamber';explain.textContent='Rising water displaces the floating vessel upward, without a mechanical hoist.';}
-  else{title.textContent='Near the upper reservoir';explain.textContent='The boat approaches upstream water elevation. Only the lock crew can safely operate the real gates.';}
+  if(v<30){title.textContent='Near the lower river';explain.textContent='Start low and watch the hull. It floats on the same water level as the downstream river.';}
+  else if(v<75){title.textContent='Water enters the chamber';explain.textContent='Here is the clever part: add water, and the floating boat rises with it. No hoist lifts the hull.';}
+  else{title.textContent='Near the upper reservoir';explain.textContent='The boat is nearly level with the upstream reservoir. In the real lock, the crew checks conditions and controls the gates.';}
  }
  level.addEventListener('input',()=>move(level.value));$('fillBtn').addEventListener('click',()=>move(95));$('drainBtn').addEventListener('click',()=>move(10));move(10);
  // One deliberate step per action: no animation timer, no simulated operational ETA.
  let passageStep=0;
  const passageCopy={
-  up:[['Start at the lower river.','A vessel approaches from downstream. The chamber must match that lower water level before entry.'],['Enter at the lower level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Rise with the water.','Water enters the chamber and the vessel rises with it toward Lake Umatilla. The boat is floating, not being hoisted.'],['Leave at the upper level.','After levels match and the crew permits departure, the vessel continues upstream into the reservoir.']],
-  down:[['Start at the upper reservoir.','A vessel approaches from Lake Umatilla. The chamber must match the upper water level before entry.'],['Enter at the upper level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Descend with the water.','Water leaves the chamber and the vessel settles toward the lower river level. Its weight remains supported by water.'],['Leave at the lower level.','After levels match and the crew permits departure, the vessel continues downstream toward The Dalles.']]
+  up:[['Start at the lower river.','A vessel approaches from downstream. The chamber must match that lower water level before entry.'],['Enter at the lower level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Rise with the water.','Keep your eye on the hull as water enters. The tow floats upward toward Lake Umatilla; the water itself does the lifting.'],['Leave at the upper level.','With water levels matched and departure permitted by the crew, the tow continues into Lake Umatilla. One step in the river’s staircase is complete.']],
+  down:[['Start at the upper reservoir.','A vessel approaches from Lake Umatilla. The chamber must match the upper water level before entry.'],['Enter at the upper level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Descend with the water.','Watch the waterline fall. As water leaves the chamber, the tow floats down toward the lower river—supported by water all the way.'],['Leave at the lower level.','With water levels matched and departure permitted by the crew, the tow continues downstream toward The Dalles. The next stretch of river awaits.']]
  };
  function showPassage(){
   const up=$('passageDirection').value==='up',copy=passageCopy[up?'up':'down'][passageStep];
