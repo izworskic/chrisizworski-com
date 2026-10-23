@@ -77,6 +77,12 @@ async function run(){
     await page.locator('#ice-freeze-explorer').waitFor({timeout:15000});
     await page.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'));
     await page.locator('#ice-ex-reset').click();
+    await page.locator('#ice-ex-fullscreen').click();
+    await page.waitForFunction(()=>document.fullscreenElement?.id==='ice-ex-map-shell',{timeout:7000});
+    const fullMap=await page.locator('#ice-ex-map').boundingBox();
+    assert.ok(fullMap&&fullMap.height>500,'Fullscreen map did not expand over page overlays');
+    await page.locator('#ice-ex-fullscreen').click();
+    await page.waitForFunction(()=>document.fullscreenElement===null,{timeout:7000});
     await page.waitForFunction(()=>document.querySelector('#ice-ex-chart-value')?.textContent?.includes('2026') ||
       document.querySelector('#ice-ex-chart-value')?.textContent?.includes('2027'),{timeout:12000});
     assert.equal(errors.length,0,'Page JS error at '+width+' '+season+': '+errors.join('\n'));

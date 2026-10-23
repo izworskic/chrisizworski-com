@@ -377,6 +377,10 @@
       '#ice-freeze-explorer input[type=range]{width:100%;accent-color:#087889;min-height:35px}',
       '#ice-ex-map{width:100%;height:390px;max-height:50vh;background:#dce8e7;border:1px solid #a9c9d1;border-radius:11px;isolation:isolate}',
       '#ice-ex-map-shell{position:relative}',
+      '#ice-ex-fullscreen{position:absolute;z-index:1100;top:9px;right:9px;min-height:40px;background:rgba(255,255,255,.96);color:#153845;border:1px solid #97b7c0;border-radius:8px;padding:8px 11px;font:600 12px/1.3 ui-sans-serif,system-ui,sans-serif;box-shadow:0 1px 7px rgba(0,0,0,.13)}',
+      '#ice-ex-map-shell:fullscreen{height:100dvh;width:100vw;min-height:100vh;background:#dce8e7}',
+      '#ice-ex-map-shell:fullscreen #ice-ex-map{height:100%;max-height:none;border:0;border-radius:0}',
+      '#ice-ex-map-shell:fullscreen #ice-ex-map-hud{bottom:30px}',
       '#ice-ex-map-hud{position:absolute;bottom:24px;right:8px;z-index:750;max-width:65%;font-size:11px;font-weight:650;color:#153845;background:rgba(255,255,255,.94);border:1px solid #cbdfe2;border-radius:7px;padding:6px 8px;pointer-events:none;line-height:1.3}',
       '#ice-ex-map .leaflet-control-container{font-size:12px}',
       '#ice-freeze-explorer .ice-ex-caption{font-size:12px;line-height:1.5;color:#375965;margin:8px 0}',
@@ -405,9 +409,11 @@
       '</select></div>',
       '<p class="ice-ex-caption" id="ice-ex-context"></p>',
       '<div id="ice-ex-map-shell"><div id="ice-ex-map" role="region" aria-label="Interactive shoreline map with NOAA regional ice concentration when current data are available"></div>',
-      '<span id="ice-ex-map-hud" role="status">Loading map · NOAA data separate</span></div>',
+      '<span id="ice-ex-map-hud" role="status">Loading map · NOAA data separate</span>',
+      '<button type="button" id="ice-ex-fullscreen" aria-label="Expand map to full screen" aria-expanded="false">Expand map</button></div>',
       '<button type="button" id="ice-ex-reset">Reset map to selected water</button>',
       '<p class="ice-ex-caption" id="ice-ex-basemap-status" aria-live="polite">Connecting to the public CARTO basemap…</p>',
+      '<p class="ice-ex-caption">Use Expand map for a larger interactive map without page overlays. NOAA ice is overlaid only when recent regional observations are available.</p>',
       '<div class="ice-ex-legend" aria-label="NOAA concentration category colors">',
       '<span><i style="background:#0064ff"></i>Ice free</span>',
       '<span><i style="background:#96c8ff"></i>Less than 1 tenth</span>',
@@ -441,6 +447,30 @@
     select.addEventListener('change',function(){onRegionChange(select.value);});
     root.querySelector('#ice-ex-reset').addEventListener('click',function() {
       if (map) { setRegionMap(); map.invalidateSize({pan:false}); }
+    });
+    // Native fullscreen places the map above viewport-anchored page overlays on mobile.
+    // No advertising configuration or AdSense behavior is modified.
+    var shell = root.querySelector('#ice-ex-map-shell');
+    var expand = root.querySelector('#ice-ex-fullscreen');
+    expand.addEventListener('click',function() {
+      if (document.fullscreenElement === shell) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(function() {});
+      } else if (shell.requestFullscreen) {
+        shell.requestFullscreen().catch(function() {
+          text('ice-ex-basemap-status','Full-screen map is unavailable in this browser. Map zoom and reset remain available.');
+        });
+      } else {
+        text('ice-ex-basemap-status','Full-screen map is unavailable in this browser. Map zoom and reset remain available.');
+      }
+    });
+    document.addEventListener('fullscreenchange',function() {
+      var full = document.fullscreenElement === shell;
+      expand.textContent = full ? 'Close map' : 'Expand map';
+      expand.setAttribute('aria-expanded',String(full));
+      expand.setAttribute('aria-label',full ? 'Close full-screen map' : 'Expand map to full screen');
+      requestAnimationFrame(function() {
+        if (map) map.invalidateSize({pan:false,debounceMoveend:true});
+      });
     });
     root.querySelector('#ice-ex-play').addEventListener('click',function(){
       if(playTimer!==null) {stopPlayback();return;}
