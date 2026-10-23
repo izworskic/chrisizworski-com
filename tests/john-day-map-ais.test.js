@@ -26,3 +26,13 @@ test('browser requests the public provider directly without a shared API proxy',
  assert.doesNotMatch(js,/fetch\('\/api\/john-day-map-ais/);
  assert.match(js,/visibleReports\(reports,viewportReports,viewBounds\(\)\)/);
 });
+
+test('retained tiles cannot replace a newer local observation',()=>{
+ const now=Date.now(),b={west:-122,east:-119,south:45,north:47};
+ const local={mmsi:'123456789',lat:45.72,lon:-120.8,speedKnots:3,course:90,seen:new Date(now-60000).toISOString()};
+ const tile={...local,lon:-121.2,seen:new Date(now-10*60000).toISOString()};
+ const [v]=visibleReports([local],[tile],b,now);assert.equal(v.lon,local.lon);
+ const {describe}=require('../public/assets/john-day-vessels');assert.equal(describe(v,now).kind,'toward');
+ const newer={...local,course:270,seen:new Date(now-30000).toISOString()};
+ const [updated]=visibleReports([local],[newer],b,now);assert.equal(describe(updated,now).kind,'nearby');
+});
