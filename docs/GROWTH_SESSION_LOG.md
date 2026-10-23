@@ -1035,3 +1035,8 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner requested the existing Soo/Great Lakes AIS path. Confirmed Soo, Great Lakes and Welland use Open Waters bbox requests and the shared Soo normalizer. Removed John Day's extra upstream kind/max_age parameters and mandatory kind field, which could discard otherwise valid shared-format vessel reports. Explicit non-vessel objects remain excluded; shared 30-minute freshness, attribution and location checks remain. Added a missing-kind compatibility regression.
 - Main verification passed before edits. Release checks pending; no coverage or incoming-ship claims. GSC/AdSense data unavailable.
 - Exactly one next action: complete the full gate and deploy the AIS compatibility correction.
+
+### Shared AIS review correction — October 22, 2026
+
+- PR #1120 merged as 3438319 and production deployed successfully. Late review identified that bbox-only requests can include non-vessel objects and older reports; restoring documented upstream kind and 30-minute bounds while preserving shared-parser compatibility for absent optional kind fields. No claims that the prior zero-report result proves an empty river. Focused tests and full gate rerun before follow-up release. GSC/AdSense unavailable.
+- Exactly one next action: release the reviewed source-filter correction after green checks.
