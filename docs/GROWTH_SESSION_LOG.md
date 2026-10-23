@@ -1029,3 +1029,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Both live site AIS and its provider returned zero features during the source check. The empty state identifies missing receiver observations and unknown incoming traffic, with official queue/alternate AIS actions; no invented ships, ETA or public chamber viewpoint. Course labels are explicitly geometric context, not a lock queue.
 - Acceptance/source ledger: `docs/JOHN_DAY_MAP_FIRST_REVIEW.md`. Focused tests cover fresh/stale vessel interpretation, raster-map selection, page ordering and animated geometry/reduced motion. Required full gate and deployed browser results recorded in the review PR. GSC/GA4/AdSense data NOT AVAILABLE.
 - Exactly one next action: inspect the deployed map-first preview against the owner's specific ship/map/animation/viewing requirements before releasing this correction.
+
+## John Day shared AIS compatibility — October 22, 2026
+
+- Owner requested the existing Soo/Great Lakes AIS path. Confirmed Soo, Great Lakes and Welland use Open Waters bbox requests and the shared Soo normalizer. Removed John Day's extra upstream kind/max_age parameters and mandatory kind field, which could discard otherwise valid shared-format vessel reports. Explicit non-vessel objects remain excluded; shared 30-minute freshness, attribution and location checks remain. Added a missing-kind compatibility regression.
+- Main verification passed before edits. Release checks pending; no coverage or incoming-ship claims. GSC/AdSense data unavailable.
+- Exactly one next action: complete the full gate and deploy the AIS compatibility correction.

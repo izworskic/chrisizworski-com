@@ -11,7 +11,7 @@ const item=(mmsi,lon,lat,ageMins,kind='vessel',seen=true)=>({
   source:'example-receiver',sog:3.2,cog:90
  }});
 test('query box uses Open Waters lat lon order and <=30 minutes',()=>{
- assert.deepEqual(BBOX,[45.45,-121.3,45.95,-120]);assert.match(AIS_URL,/max_age=30m&kind=vessel/);
+ assert.deepEqual(BBOX,[45.45,-121.3,45.95,-120]);assert.equal(AIS_URL,'https://ais.openwaters.io/v1/vessels?bbox='+BBOX.join(','));
 });
 test('fresh AIS is reported as observation only; stale and out-of-area excluded',()=>{
  const data={type:'FeatureCollection',features:[
@@ -52,4 +52,11 @@ test('endpoint exposes source attribution and cache without navigation claims',a
 });
 test('unsafe HTTP methods do not fetch the upstream',async()=>{
  const res=response();await handler({method:'POST'},res);assert.equal(res.code,405);
+});
+
+test('Soo-compatible reports without optional kind reach John Day cards',()=>{
+ const feature=item(367111111,-120.7,45.73,4);delete feature.properties.kind;
+ const raw={type:'FeatureCollection',features:[feature]};
+ const shared=require('../lib/soo-ais').normalize(raw,NOW,BBOX);
+ assert.deepEqual(assess(raw,NOW).vessels,shared.vessels);
 });
