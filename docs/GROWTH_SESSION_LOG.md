@@ -1040,3 +1040,8 @@ This is an operational journal, not a record of proven ranking lift unless measu
 
 - PR #1120 merged as 3438319 and production deployed successfully. Late review identified that bbox-only requests can include non-vessel objects and older reports; restoring documented upstream kind and 30-minute bounds while preserving shared-parser compatibility for absent optional kind fields. No claims that the prior zero-report result proves an empty river. Focused tests and full gate rerun before follow-up release. GSC/AdSense unavailable.
 - Exactly one next action: release the reviewed source-filter correction after green checks.
+
+### John Day AIS empty-state wording — October 22, 2026
+
+- Owner requested the proposed heading in the live tool: ‘The river’s moving. We’re waiting for a signal.’ Updated the existing no-report heading and bumped its script cache version. Supporting receiver-gap explanation and AIS behavior remain unchanged. Prior AIS correction #1121 is merged and deployed as 683d1cb6 with green main verification. Current copy release checks pending; GSC/AdSense unavailable.
+- Exactly one next action: deploy and verify the requested wording after repository checks pass.
