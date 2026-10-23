@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/michigan-ice-freeze-up-explorer-2026
+      - fix/michigan-ice-map-resilience-20261022
     paths:
       - scripts/ice-freeze-browser-smoke.cjs
       - .github/workflows/ice-freeze-browser-smoke.yml

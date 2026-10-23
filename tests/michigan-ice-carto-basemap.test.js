@@ -9,8 +9,14 @@ test('Great Lakes freeze-up map uses public CARTO config, never keyless CARTO, a
   assert.match(source,/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key=/);
   assert.match(source,/encodeURIComponent\(config\.key\.trim\(\)\)/);
   assert.match(source,/tile\.openstreetmap\.org/);
-  assert.match(source,/basemap\.on\('tileerror'/);
-  assert.match(source,/CARTO basemap unavailable; showing OpenStreetMap instead/);
+  assert.match(source,/preferred\.on\('tileerror'/);
+  assert.match(source,/preferred\.on\('tileload'/);
+  assert.match(source,/CARTO tile service unavailable; showing OpenStreetMap/);
+  assert.match(source,/Map ready \(OpenStreetMap\)/);
   assert.doesNotMatch(source,/basemaps\.cartocdn\.com\/light_all/);
   assert.match(source,/Not a safe-ice assessment/);
+  assert.match(source,/root\.querySelector\('#ice-ex-reset'\)\.addEventListener\('click'/);
+  assert.match(source,/ResizeObserver/);
+  assert.match(source,/initMap\(\); \/\/ Never wait for \/api\/ice-now/);
+  assert.match(source,/NOAA ice data unavailable\. The map remains usable/);
 });
