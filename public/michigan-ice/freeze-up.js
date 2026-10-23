@@ -40,6 +40,7 @@
   var playTimer = null, chartSeries = [], currentIndex = 0, mapRequest = 0;
   var mapReady = false;
   var basemap = null, basemapFailed = false;
+  var pendingMapUpdate = null, resizeObserver = null;
 
   function el(tag, className, text) {
     var n = document.createElement(tag);
@@ -151,10 +152,18 @@
     return Math.log(Math.tan(Math.PI/4+bounded*Math.PI/360))*20037508.342789244/Math.PI;
   }
   function updateMap() {
-    if (!map || !activeData) return;
+    if (!map) return;
+    if (!activeData) {
+      text('ice-ex-map-stamp','Basemap available for orientation. Waiting for NOAA ice observations.');
+      text('ice-ex-map-hud','Map for orientation · NOAA data loading');
+      return;
+    }
     var r=regionData(currentSlug);
     if (!isFreshRegion(r)) {
+      ++mapRequest; // invalidate any NOAA image still loading
       if (overlay) {map.removeLayer(overlay);overlay=null;}
+      text('ice-ex-map-hud',activeData.iceSeason
+        ? 'No recent NOAA regional ice image' : 'Off season · map for orientation only');
       text('ice-ex-map-stamp',activeData.iceSeason
         ? 'Regional chart unavailable or older than 48 hours. Ice overlay withheld.'
         : 'Off season. Current ice overlay withheld; use the historical chart below.');
@@ -174,17 +183,22 @@
       f: 'image'
     });
     var request=++mapRequest;
+    text('ice-ex-map-hud','Loading NOAA regional ice analysis…');
     var next=window.L.imageOverlay(MAP_SERVICE+'?'+args.toString(),bounds,{opacity:.79});
     next.on('load',function(){
       if(request!==mapRequest){map.removeLayer(next);return;}
       if(overlay) map.removeLayer(overlay);
       overlay=next;
+      text('ice-ex-map-hud','NOAA ice concentration · not thickness');
       text('ice-ex-map-stamp','NOAA/NWS USNIC regional chart valid ' +dateOnly(r.validAt)+
         '. Coverage categories, not local thickness. Zoom/pan to inspect geographic patterns.');
     });
     next.on('error',function(){
       map.removeLayer(next);
-      if(request===mapRequest) text('ice-ex-map-stamp','NOAA map image unavailable. Regional observation and the separate timeline remain available.');
+      if(request===mapRequest) {
+        text('ice-ex-map-hud','NOAA map image unavailable');
+        text('ice-ex-map-stamp','NOAA map image unavailable. The basemap and regional observations remain accessible.');
+      }
     });
     next.addTo(map);
   }
@@ -201,59 +215,93 @@
     });
     return loadingLeaflet;
   }
-  // Reuse the site's existing PUBLIC, domain-restricted CARTO basemap key.
-  // Keyless CARTO rasters return an HTTP 200 watermark instead of proper map tiles.
-  // All NOAA observations and charts remain independent of basemap availability.
+  // Map and NOAA data are independent: the basemap must work even if /api/ice-now fails.
+  // Keyless CARTO URLs return a watermarked image with HTTP 200; never request them.
   function installBasemap(L) {
-    function openMapFallback() {
-      if (basemapFailed) return;
-      basemapFailed = true;
-      if (basemap) { map.removeLayer(basemap); basemap = null; }
-      basemap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom:19, attribution:'&copy; OpenStreetMap contributors'
-      }).addTo(map);
-      text('ice-ex-basemap-status','CARTO basemap unavailable; showing OpenStreetMap instead.');
-    }
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19, attribution:'&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    basemap = osm;
+    var osmFailures = 0;
+    osm.on('tileerror',function() {
+      if (++osmFailures >= 3 && basemap === osm)
+        text('ice-ex-basemap-status','Basemap tiles unavailable on this connection. Map controls still work; try again later.');
+    });
+    text('ice-ex-basemap-status','Map ready (OpenStreetMap). Connecting to CARTO…');
     var controller = new AbortController();
-    var timeout = setTimeout(function () { controller.abort(); }, 8000);
+    var timeout = setTimeout(function() { controller.abort(); }, 6000);
     fetch('/api/carto-basemap-config', {method:'GET',credentials:'same-origin',signal:controller.signal})
       .then(function(response) {
         if (!response.ok) throw new Error('Public CARTO basemap configuration unavailable');
         return response.json();
       }).then(function(config) {
         if (!config || typeof config.key !== 'string' || !config.key.trim())
-          throw new Error('No public CARTO basemap key');
-        var tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='
+          throw new Error('CARTO public basemap key missing');
+        var url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='
           + encodeURIComponent(config.key.trim());
-        var failures = 0;
-        basemap = L.tileLayer(tileUrl, {
-          maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+        var preferred = L.tileLayer(url, {maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
+        var failed = 0, activated = false;
+        preferred.on('tileload',function() {
+          if (basemapFailed || activated) return;
+          activated = true;
+          // Keep OSM visible until at least one authenticated CARTO tile loads.
+          basemap = preferred;
+          map.removeLayer(osm);
+          text('ice-ex-basemap-status','Map baselayer: CARTO Voyager.');
         });
-        basemap.on('tileerror',function() {
-          failures++;
-          if (failures >= 3) openMapFallback();
+        preferred.on('tileerror',function() {
+          if (++failed >= 3 && !basemapFailed) {
+            basemapFailed = true;
+            map.removeLayer(preferred);
+            basemap = osm;
+            if (!map.hasLayer(osm)) osm.addTo(map);
+            text('ice-ex-basemap-status','CARTO tile service unavailable; showing OpenStreetMap.');
+          }
         });
-        basemap.addTo(map);
-        text('ice-ex-basemap-status','Map baselayer: CARTO Voyager.');
-      }).catch(function () { openMapFallback(); })
-      .finally(function () { clearTimeout(timeout); });
+        preferred.addTo(map);
+      }).catch(function() {
+        text('ice-ex-basemap-status','CARTO configuration unavailable; OpenStreetMap is ready.');
+      }).finally(function() { clearTimeout(timeout); });
+  }
+  function scheduleMapUpdate() {
+    if (pendingMapUpdate !== null) clearTimeout(pendingMapUpdate);
+    pendingMapUpdate = setTimeout(function() {
+      pendingMapUpdate = null;
+      updateMap();
+    }, 180);
   }
   function initMap() {
     if (mapReady) return;
-    mapReady=true;
+    mapReady = true;
     loadLeaflet().then(function(L) {
-      map=L.map('ice-ex-map',{scrollWheelZoom:false,maxZoom:12,minZoom:5});
+      map = L.map('ice-ex-map', {scrollWheelZoom:false,maxZoom:12,minZoom:5});
+      // The map must be useful even while CARTO credentials or NOAA data load.
       installBasemap(L);
-      map.on('moveend',updateMap);
+      map.on('moveend',scheduleMapUpdate);
       setRegionMap();
-    }).catch(function () {
-      text('ice-ex-map-stamp','Map library unavailable. See the dated NOAA chart source below.');
-      text('ice-ex-basemap-status','Map controls unavailable.');
-      root.querySelector('#ice-ex-map').textContent='Interactive map unavailable; the NOAA coverage chart and water-specific report remain accessible.';
+      if (window.ResizeObserver) {
+        resizeObserver = new ResizeObserver(function() {
+          if (!map || !root || !root.isConnected) return;
+          map.invalidateSize({pan:false,debounceMoveend:true});
+        });
+        resizeObserver.observe(root.querySelector('#ice-ex-map'));
+      }
+      window.addEventListener('resize',function() {
+        if (map) map.invalidateSize({pan:false,debounceMoveend:true});
+      },{passive:true});
+      // Delayed layout shifts (including advertisements) must not leave blank tiles.
+      requestAnimationFrame(function() {
+        if (map) map.invalidateSize({pan:false,debounceMoveend:true});
+      });
+    }).catch(function() {
+      text('ice-ex-map-hud','Map controls unavailable');
+      text('ice-ex-map-stamp','Map library unavailable. See the NOAA data and dated chart below.');
+      text('ice-ex-basemap-status','Map controls unavailable; the ice report below still works.');
     });
   }
   function setRegionMap() {
     if (!map) return;
+    text('ice-ex-map-hud',!activeData || !activeData.iceSeason ? 'Off season · map for orientation only' : 'Regional NOAA data pending');
     ++mapRequest;
     if(overlay){map.removeLayer(overlay);overlay=null;}
     map.fitBounds(REGIONS[currentSlug].bounds,{padding:[12,12],animate:false});
@@ -297,14 +345,14 @@
   }
   function render(data) {
     if(!data || !data.observed || !data.ok) {
-      text('ice-ex-map-stamp','No current NOAA data available. The map does not provide an ice assessment.');
+      text('ice-ex-map-stamp','NOAA ice data unavailable. The map remains usable for viewing shorelines; it does not rate ice safety.');
+      text('ice-ex-map-hud','NOAA ice data unavailable · basemap only');
       text('ice-ex-chart-value','NOAA time series unavailable.');
       return;
     }
     activeData=data;
     datasets[currentSlug]=data;
     drawChart();
-    initMap();
     if (map) updateMap();
   }
   function setup() {
@@ -324,6 +372,8 @@
       '#ice-freeze-explorer button:disabled{cursor:not-allowed;opacity:.6}',
       '#ice-freeze-explorer input[type=range]{width:100%;accent-color:#087889;min-height:35px}',
       '#ice-ex-map{width:100%;height:390px;max-height:50vh;background:#dce8e7;border:1px solid #a9c9d1;border-radius:11px;isolation:isolate}',
+      '#ice-ex-map-shell{position:relative}',
+      '#ice-ex-map-hud{position:absolute;bottom:24px;right:8px;z-index:750;max-width:65%;font-size:11px;font-weight:650;color:#153845;background:rgba(255,255,255,.94);border:1px solid #cbdfe2;border-radius:7px;padding:6px 8px;pointer-events:none;line-height:1.3}',
       '#ice-ex-map .leaflet-control-container{font-size:12px}',
       '#ice-freeze-explorer .ice-ex-caption{font-size:12px;line-height:1.5;color:#375965;margin:8px 0}',
       '#ice-freeze-explorer .ice-ex-legend{display:flex;flex-wrap:wrap;gap:7px 13px;font-size:12px;margin-top:10px}',
@@ -350,7 +400,9 @@
       '<option value="little-bay-de-noc">Little Bay de Noc</option><option value="grand-traverse-bay">Grand Traverse Bay</option>',
       '</select></div>',
       '<p class="ice-ex-caption" id="ice-ex-context"></p>',
-      '<div id="ice-ex-map" role="region" aria-label="Current NOAA ice concentration over a CARTO or OpenStreetMap basemap"></div>',
+      '<div id="ice-ex-map-shell"><div id="ice-ex-map" role="region" aria-label="Interactive shoreline map with NOAA regional ice concentration when current data are available"></div>',
+      '<span id="ice-ex-map-hud" role="status">Loading map · NOAA data separate</span></div>',
+      '<button type="button" id="ice-ex-reset">Reset map to selected water</button>',
       '<p class="ice-ex-caption" id="ice-ex-basemap-status" aria-live="polite">Connecting to the public CARTO basemap…</p>',
       '<div class="ice-ex-legend" aria-label="NOAA concentration category colors">',
       '<span><i style="background:#0064ff"></i>Ice free</span>',
@@ -383,6 +435,9 @@
     select=root.querySelector('#ice-ex-region');
     select.value=currentSlug;
     select.addEventListener('change',function(){onRegionChange(select.value);});
+    root.querySelector('#ice-ex-reset').addEventListener('click',function() {
+      if (map) { setRegionMap(); map.invalidateSize({pan:false}); }
+    });
     root.querySelector('#ice-ex-play').addEventListener('click',function(){
       if(playTimer!==null) {stopPlayback();return;}
       if(chartSeries.length<2) return;
@@ -399,6 +454,7 @@
     root.querySelector('#ice-ex-slider').addEventListener('pointerdown',stopPlayback);
     document.addEventListener('visibilitychange',function(){if(document.hidden)stopPlayback();});
     onRegionChange(currentSlug);
+    initMap(); // Never wait for /api/ice-now to start CARTO or OSM.
     window.addEventListener('michigan-ice-data',function(evt){render(evt.detail);},{once:true});
     if (window.__michiganIceNow) render(window.__michiganIceNow);
   }
