@@ -22,21 +22,21 @@
   const items=(Array.isArray(result.vessels)?result.vessels:[]).map(v=>window.JohnDayVessels.describe(v)).filter(Boolean).sort((a,b)=>a.km-b.km);
   // This is a source coverage statement and cannot be mistaken for USACE queue data.
   if(!items.length){
-   setStatus('unknown','No AIS vessel positions reported in this area in the previous 30 minutes. Receiver coverage is unverified, so boats may still be present.');
+   setStatus('unknown','No recent vessel signals have reached this feed for the John Day area. Boats may still be on the river; receiver coverage has gaps.');
   }else if(result.observationState==='recent-reports'){
    setStatus('evidence',items.length+' recent AIS vessel observation'+(items.length===1?'':'s')+
-    ' within the broad John Day area. These are NOT confirmed vessels entering the lock.');
+    ' around John Day. Select a card to explore; these positions do not confirm a place in the lock queue.');
   }else{
    setStatus('unknown','Public AIS observations are not available.');
   }
   const checked=elt('span','Feed checked '+clock(result.checkedAt)+' · Open Waters AIS, last 30 minutes');
-  const source=elt('a','Source and report definitions ↗');
+  const source=elt('a','How these vessel signals work ↗');
   source.href=result.provider||'https://openwaters.io/api/ais/';source.target='_blank';source.rel='noopener';
-  const caveat=elt('span','No lock ETA, queue, transit confirmation or navigation clearance is inferred.');
+  const caveat=elt('span','A radio report is a glimpse of a journey, not a lock booking or permission to navigate.');
   meta.append(checked,source,caveat);
   if(!items.length){
    const card=elt('article','','shipEmpty');
-   card.append(elt('span','AIS COVERAGE GAP','smallcaps'),elt('h4','The river’s moving. We’re waiting for a signal.'),elt('p','The provider returned no usable reports from the past 30 minutes. Incoming traffic is unknown—not zero. Open the official queue or compare another AIS network below.'));list.append(card);
+   card.append(elt('span','Listening for the next report','smallcaps'),elt('h4','The river’s moving. We’re waiting for a signal.'),elt('p','Our shared AIS feed has no usable vessel reports here from the past 30 minutes. That leaves incoming traffic unknown, not zero. While we listen, explore the river stops below, or check the Corps queue and another AIS network for a second view.'));list.append(card);
   }
   for(const v of items){
    const row=elt('button','','aisVessel');row.type='button';
@@ -69,7 +69,7 @@
  }
  async function check(){
   if(pending)return;pending=true;button.disabled=true;
-  button.textContent='Checking AIS reports…';setStatus('loading','Reading the Open Waters vessel observation feed…');
+  button.textContent='Checking AIS reports…';setStatus('loading','Listening for vessel reports from Open Waters AIS…');
   try{
    const r=await fetch('/api/john-day-ais',{signal:AbortSignal.timeout(12000)});
    const data=await r.json();
@@ -79,7 +79,7 @@
   }catch{
    // Do not leave stale markers or positions on screen pretending to be current.
    lastData=null;list.replaceChildren();meta.replaceChildren();
-   const card=elt('article','','shipEmpty');card.append(elt('h4','Vessel feed unavailable'),elt('p','Incoming ships cannot be verified from this receiver. The official traffic and alternate AIS links remain available below.'));list.append(card);
+   const card=elt('article','','shipEmpty');card.append(elt('h4','The ship signals are taking a break.'),elt('p','We could not reach the vessel feed. Try again in a moment, or use the Corps traffic reports and alternate AIS map below to keep exploring.'));list.append(card);
    window.dispatchEvent(new CustomEvent('john-day-ais-observations',{detail:{observations:[],checkedAt:null}}));
    setStatus('unknown','Recent AIS feed unavailable. This is not evidence of an empty river. Check the official lock reports; do not infer an ETA or navigation clearance.');
    button.textContent='Retry AIS check';

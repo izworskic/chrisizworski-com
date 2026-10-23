@@ -8,7 +8,7 @@ const r=read('lib/john-day-rules.js'),w=read('lib/john-day-water.js'),a=read('ap
 const checks={
  decision:[
   ['four user missions', ['watch','boat','how','river'].every(m=>h.includes('id="tab-'+m+'"')&&h.includes('id="panel-'+m+'"'))],
-  ['current-status truth',h.includes('Not independently verified here')&&h.includes('No fabricated AIS approach time')],
+  ['current-status truth',h.includes('Not independently verified here')&&h.includes('A dot tells you where a vessel was heard, not when the gates will open for it.')],
   ['operator action visible',h.includes('541-739-1050')&&h.includes('channel 14')],
   ['authoritative notice link',h.includes('notices/navigation-notices')],
   ['source-backed historical sample',h.includes('July 10, 2026')],
@@ -37,7 +37,7 @@ const checks={
   ['one-tap mode changes',j.includes("t.addEventListener('click',()=>activate(t.dataset.mode))")],
   ['interactive lock levels',j.includes('move(95)')&&j.includes('move(10)')],
   ['interpretive chapters',h.includes('Salmon moving against the current')&&h.includes('A changed landscape')],
-  ['source ledger',h.includes('Sources, evidence and limitations')],
+  ['source ledger',h.includes('Keep exploring · sources behind the guide')],
   ['federal chamber dimensions and provenance',h.includes('675 ft overall')&&h.includes('84 ft usable')&&h.toLowerCase().includes('federal lock characteristics inventory')],
   ['Columbia lock comparative map',h.includes('id="lockMapSelection"')&&h.includes('data-river-lock="mcnary"')],
   ['AIS observation query is on demand',h.includes('id="aisLoad"')&&h.includes('id="aisStatus"')],
