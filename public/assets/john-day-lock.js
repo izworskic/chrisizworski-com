@@ -77,13 +77,17 @@
   $('simGate').textContent=['Approach','Enter','Entry gate closed','Water level changes','Depart'][passageStep];
   [...$('passageTrack').children].forEach((el,i)=>{if(i===passageStep)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});
   $('passageBack').disabled=passageStep===0;$('passageNext').disabled=passageStep===4;
+  const outside=passageStep===0||passageStep===4;
+  boat.hidden=outside;$('passageOutside').hidden=!outside;
+  const upper=passageStep===0?!up:up;
+  $('passageOutside').style.left=upper?'77%':'3%';$('passageOutside').style.bottom=upper?'73%':'19%';
   move((passageStep<3)===up?10:95);
  }
  $('passageNext').addEventListener('click',()=>{passageStep=Math.min(4,passageStep+1);showPassage()});
  $('passageBack').addEventListener('click',()=>{passageStep=Math.max(0,passageStep-1);showPassage()});
  for(const id of ['passageReset','passageDirection'])$(id).addEventListener(id==='passageDirection'?'change':'click',()=>{passageStep=0;showPassage()});
  // Manual experiments are visibly separate from the selected passage stage.
- function freeExplore(){ $('passageCount').textContent='Free exploration · illustrative water level';$('passageTitle').textContent='Try raising and lowering the water.';$('passageStory').textContent='You are adjusting the illustration directly. Use Restart to return to the five passage stages.';$('simGate').textContent='Manual water exploration';[...$('passageTrack').children].forEach(el=>el.removeAttribute('aria-current')); }
+ function freeExplore(){ boat.hidden=false;$('passageOutside').hidden=true; $('passageCount').textContent='Free exploration · illustrative water level';$('passageTitle').textContent='Try raising and lowering the water.';$('passageStory').textContent='You are adjusting the illustration directly. Use Restart to return to the five passage stages.';$('simGate').textContent='Manual water exploration';[...$('passageTrack').children].forEach(el=>el.removeAttribute('aria-current')); }
  level.addEventListener('input',freeExplore);$('fillBtn').addEventListener('click',freeExplore);$('drainBtn').addEventListener('click',freeExplore);
  showPassage();
  // Exact USACE data from July 10, 2026. Historical example, never presented as a live measurement.

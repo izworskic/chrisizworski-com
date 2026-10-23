@@ -24,3 +24,16 @@ test('downstream reverses water movement and manual control leaves narrative mod
  assert.ok(get('passageTrack').children.every(el=>!el.attrs['aria-current']));
  act('passageReset');assert.equal(get('lift').value,95);assert.match(get('passageCount').textContent,/Step 1/);
 });
+
+test('approach and departure place the vessel outside, while chamber stages and manual exploration put it inside',()=>{
+ for(const direction of ['up','down']){
+  const {get,act}=fixture();get('passageDirection').value=direction;act('passageDirection','change');
+  assert.equal(get('boatShape').hidden,true);assert.equal(get('passageOutside').hidden,false);
+  assert.equal(get('passageOutside').style.left,direction==='up'?'3%':'77%');
+  act('passageNext');assert.equal(get('boatShape').hidden,false);assert.equal(get('passageOutside').hidden,true);
+  for(let i=0;i<3;i++)act('passageNext');
+  assert.equal(get('boatShape').hidden,true);assert.equal(get('passageOutside').hidden,false);
+  assert.equal(get('passageOutside').style.left,direction==='up'?'77%':'3%');
+  act('fillBtn');assert.equal(get('boatShape').hidden,false);assert.equal(get('passageOutside').hidden,true);
+ }
+});

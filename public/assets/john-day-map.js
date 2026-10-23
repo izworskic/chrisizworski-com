@@ -53,7 +53,7 @@
   const source=map.getSource('reference-locks');if(source)source.setData(geo());
  }
  function select(id,fromMap=false){
-  const s=byId.get(id);if(!s)return;selected=id;describe(s);draw();
+  const s=byId.get(id);if(!s)return;pendingAIS=null;selected=id;describe(s);draw();
   // A marker already being in view never causes a surprise camera jump.
   if(!fromMap&&map&&loaded)map.easeTo({center:[s.lon,s.lat],zoom:Math.max(7,map.getZoom()),duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:400});
  }
@@ -77,7 +77,7 @@
 
  // AIS observations remain independent of the official static lock inventory.
  // Never infer queue, lock status, or estimated transit from these markers.
- let aisReports=[],aisPopup=null;
+ let aisReports=[],aisPopup=null,pendingAIS=null;
  function aisData(){
   return {type:'FeatureCollection',features:aisReports.map(v=>({type:'Feature',
    geometry:{type:'Point',coordinates:[v.lon,v.lat]},
@@ -109,11 +109,15 @@
  window.addEventListener('john-day-ais-observations',e=>{
   aisReports=Array.isArray(e.detail?.observations)?e.detail.observations.filter(v=>Number.isFinite(v.lon)&&Number.isFinite(v.lat)):[];
   if(aisPopup){aisPopup.remove();aisPopup=null}
+  if(!aisReports.some(v=>v.mmsi===pendingAIS))pendingAIS=null;
   drawAIS();
  });
+ function focusPendingAIS(){
+  const v=aisReports.find(v=>v.mmsi===pendingAIS);
+  if(v&&map&&loaded)map.easeTo({center:[v.lon,v.lat],zoom:Math.max(9,map.getZoom()),duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:350});
+ }
  window.addEventListener('john-day-ais-select',e=>{
-  const v=aisReports.find(v=>v.mmsi===e.detail?.mmsi);
-  if(v&&map&&loaded)map.easeTo({center:[v.lon,v.lat],zoom:Math.max(9,map.getZoom()),duration:350});
+  pendingAIS=e.detail?.mmsi;focusPendingAIS();
  });
 
  function ifUser(){
@@ -127,6 +131,7 @@
   }});
  }
  function fit(){
+  pendingAIS=null;
   if(map&&loaded)map.fitBounds([[-122.05,45.47],[-119.12,46.03]],{padding:45,maxZoom:8,duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:350});
  }
  function cleanMap(){
@@ -158,7 +163,7 @@
    instance.on('load',()=>{
     if(map!==instance)return;
     clearTimeout(watchdog);
-    try{loaded=true;renderLayers();ifUser();drawAIS();
+    try{loaded=true;renderLayers();ifUser();drawAIS();focusPendingAIS();
      announce(candidate+' map · verified federal lock locations only. Pin = facility position, not a public visitor entrance or nautical waypoint.');
     }catch{if(isCarto)fallback('CARTO map layers failed');else fail('Map layers unavailable')}
    });
@@ -194,7 +199,7 @@
   announce('Asking your device for your approximate location (used only on this map)…');
   navigator.geolocation.getCurrentPosition(
    pos=>{
-    user={latitude:pos.coords.latitude,longitude:pos.coords.longitude};
+    pendingAIS=null;user={latitude:pos.coords.latitude,longitude:pos.coords.longitude};
     ifUser();if(map&&loaded)map.easeTo({center:[user.longitude,user.latitude],zoom:7,duration:350});
     announce('Location shown when the map is ready. No location is stored by this website; the map provider receives ordinary map-tile requests. No road route or navigation advice is calculated.');
    },

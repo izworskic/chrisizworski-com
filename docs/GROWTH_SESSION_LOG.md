@@ -1016,3 +1016,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Validation:** 37 focused John Day tests pass, including real planner outcome causality, both passage directions/reset/manual-state behavior, offline API handling and existing rules/water/AIS contracts. Full clean-source repository gate passes all 55 steps; production build exited 0, including emitted-output audits. Build-generated files were removed before the final clean-source gate. Local visual/browser QA unavailable: cloud browser could not reach the executor's loopback server (connection refused). No visual/mobile certification claimed. Current GSC/GA4/AdSense data NOT AVAILABLE; no ranking or revenue uplift claim.
 - **Release:** review branch only; no merge or production deployment claimed. AGENTS.md §7 reserves merges for the owner.
 - **Exactly one next action:** inspect the deployed review preview on phone and desktop against the visitor scenarios before approving release.
+
+### John Day release completion — October 22, 2026
+
+- Owner requested completion and release of PR #1118. Added deferred vessel focus after lazy map loading, cleared selections when reports disappear, and separated approach/departure vessels from the chamber illustration. Added regression tests for both review findings; all 39 focused John Day tests pass. Full gate and exact remote release status are retained in the PR.
+- Preview is browser-accessible. Final revision will be checked there before the authorized merge; live checks follow deployment. No current GSC/AdSense measurements or uplift claims.
+- Exactly one next action: verify the production planner, map and passage controls after the checked merge deploys.
