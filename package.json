@@ -90,14 +90,20 @@
     "benchmark:niagara-quality": "node scripts/benchmark-niagara-quality.mjs --check",
     "benchmark:shorefeel-design": "node scripts/shorefeel-design-benchmark.cjs",
     "generate:sitemap-index": "node scripts/build-sitemap-index.mjs",
-    "verify:sitemap-index": "node scripts/build-sitemap-index.mjs --check"
+    "verify:sitemap-index": "node scripts/build-sitemap-index.mjs --check",
+    "build:john-day-map-tiles": "esbuild lib/john-day-map-ais.js --bundle --platform=browser --format=iife --global-name=JohnDayMapTiles --outfile=public/assets/john-day-map-tiles.js --minify --legal-comments=eof"
   },
   "dependencies": {
+    "@mapbox/vector-tile": "^2.0.4",
     "@vercel/oidc": "3.8.8",
     "national-ballard-locks": "github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108",
-    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#d569e47823058b5b95fd55a0700254e8b5f633f8"
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#d569e47823058b5b95fd55a0700254e8b5f633f8",
+    "pbf": "^4.0.1"
   },
   "engines": {
     "node": "22.x"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12"
   }
 }

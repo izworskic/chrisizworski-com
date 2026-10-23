@@ -1055,3 +1055,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 
 - Owner requested ships that look like ships. Replaced map triangles with a local SVG overhead cargo-vessel silhouette: pointed bow, rounded stern, cargo hatches, wheelhouse and funnel. Course rotation retained with reported-heading fallback; map/card selection remains unchanged. Matching legend and map instructions updated; larger marker hitbox and cache versions included. No synthetic AIS observations added. Prior ranger release #1123 is merged/deployed as 60150b25; main verify job passed, public propagation audit running. GSC/AdSense unavailable. Current release checks pending.
 - Exactly one next action: verify and release the ship-marker update after green checks.
+
+### John Day viewport AIS repair — October 23, 2026
+
+- Owner found no ships even after zooming to the US. Confirmed the prior map only consumed the fixed John Day card query; panning never requested map-area vessels. Connected a separate viewport-driven AIS layer to the provider's documented vector-tile service, with server-side decoding, fixed validated tile coordinates, vessel/freshness filtering, CDN caching, bounded request fanout and stale-request protection. Local incoming cards remain explicitly John Day-only. Added map scope/count/loading/partial-state guidance and source links. No synthetic live positions.
+- Live source evidence: John Day GeoJSON remains empty, while a real North America vector tile returned 51 ship reports, decoded successfully. Added captured-public-tile regression and endpoint validation tests; fixture is test-only. Prior #1124 deployed as 1fbe5361 with green main CI. Current release checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify real ships appear when panning the deployed map, then release after green checks.
+
+- Review follow-up: handle world-wrap longitudes and derive counts from the same fresh deduplicated local/tile union as markers. Removed the shared API proxy: browser requests public CORS-enabled Open Waters tiles directly, with no site token and no shared Vercel/provider quota. Bundled local decoder is reproducible with `npm run build:john-day-map-tiles`; fixture and wrap/count regressions retained.

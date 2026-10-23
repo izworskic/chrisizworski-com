@@ -15,6 +15,7 @@
   {id:'lepage',name:'LePage Park',lat:45.7283972,lon:-120.6512639,query:'LePage Park Rufus Oregon',text:'Discover where the John Day River meets the Columbia, upstream of the dam. Come for river recreation, not a lock-chamber view. Check seasonal access before setting out.',source:'https://www.recreation.gov/camping/campgrounds/233536'}
  ];
  const SOURCE='https://services7.arcgis.com/n1YM8pTrFmm7L4hs/ArcGIS/rest/services/Locks/FeatureServer/0';
+ let viewportReports=[],mapRequest=0,mapTimer=null;
  let map=null,selected='john-day',reports=[],pendingAIS=null,shipsLayer=null,parkMarkers=new Map(),lockMarkers=new Map(),shipMarkers=new Map();
  const panel=$('lockMapSelection'),status=$('lockMapStatus');
  const text=(tag,value)=>{const el=document.createElement(tag);el.textContent=value;return el};
@@ -25,22 +26,47 @@
   for(const [id,m] of lockMarkers)m.setStyle({fillColor:id===selected?'#be7130':'#126277',radius:id===selected?11:8});
  }
  function parkContent(p){const div=document.createElement('div');div.append(text('h3',p.name),text('p',p.text),link('Find your way to the park ↗','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.query)),document.createElement('br'),link('Official access information ↗',p.source));return div}
- function vesselContent(v){const div=document.createElement('div');div.append(text('h3',v.name||'AIS vessel '+v.mmsi),text('p','Last heard '+new Date(v.seen).toLocaleString()+(Number.isFinite(v.speedKnots)?' · '+v.speedKnots.toFixed(1)+' knots':'')),text('p','A glimpse of this vessel’s journey: its last reported position, not a lock-queue record or a promised arrival.'));return div}
- function focusVessel(){const marker=shipMarkers.get(pendingAIS);if(!map||!marker)return;map.setView(marker.getLatLng(),Math.max(11,map.getZoom()),{animate:false});marker.openPopup()}
+ function vesselContent(v){const div=document.createElement('div');div.append(text('h3',v.name||'AIS vessel '+v.mmsi),text('p','Last heard '+new Date(v.seen).toLocaleString()+(Number.isFinite(v.speedKnots)?' · '+v.speedKnots.toFixed(1)+' knots':'')),text('p','A glimpse of this vessel’s journey: its last reported position, not a lock-queue record or a promised arrival. Map tiles simplify positions at wide zooms; zoom in for detail.'),link('Report details and source credits ↗','https://ais.openwaters.io/v1/vessels/'+encodeURIComponent(v.mmsi)));return div}
+ function focusVessel(){if(!map)return;let marker=shipMarkers.get(pendingAIS);if(!marker){const v=[...reports,...viewportReports].find(v=>v.mmsi===pendingAIS);if(v){map.setView([v.lat,v.lon],12,{animate:false});drawAIS();marker=shipMarkers.get(pendingAIS)}}if(!marker)return;map.setView(marker.getLatLng(),Math.max(11,map.getZoom()),{animate:false});marker.openPopup()}
+ function viewBounds(){const b=map.getBounds();return {west:b.getWest(),east:b.getEast(),south:b.getSouth(),north:b.getNorth()}}
  function drawAIS(){
   if(!map||!shipsLayer)return;shipsLayer.clearLayers();shipMarkers.clear();
-  for(const v of reports){
-   const rotation=Number.isFinite(v.course)?v.course:Number.isFinite(v.heading)?v.heading:0;
+  const visible=window.JohnDayMapTiles.visibleReports(reports,viewportReports,viewBounds());
+  const countLabel=$('mapAISStatus');if(typeof countLabel.textContent==='string'&&/^\d+ recent vessel reports?/.test(countLabel.textContent))countLabel.textContent=countLabel.textContent.replace(/^\d+ recent vessel reports?/,visible.length+' recent vessel report'+(visible.length===1?'':'s'));
+  for(const v of visible){
+   const rotation=Number.isFinite(v.heading)?v.heading:Number.isFinite(v.course)?v.course:0;
    const icon=L.divIcon({className:'aisShipMarker',html:'<img src="/assets/john-day-ship.svg" width="36" height="52" alt="" aria-hidden="true" style="transform:rotate('+rotation+'deg)">',iconSize:[44,60],iconAnchor:[22,30]});
    const marker=L.marker([v.lat,v.lon],{icon,title:(v.name||v.mmsi)+' · recent AIS vessel',keyboard:true}).addTo(shipsLayer).bindPopup(vesselContent(v),{maxWidth:280});
    marker.on('click',()=>window.dispatchEvent(new CustomEvent('john-day-ais-focus',{detail:{mmsi:v.mmsi}})));shipMarkers.set(v.mmsi,marker);
   }
  }
+ async function loadViewport(){
+  if(!map)return;const request=++mapRequest,b=map.getBounds(),z=Math.min(14,Math.max(0,Math.floor(map.getZoom()))),n=2**z;
+  const row=lat=>{const r=Math.max(-85.0511,Math.min(85.0511,lat))*Math.PI/180;return Math.max(0,Math.min(n-1,Math.floor((1-Math.asinh(Math.tan(r))/Math.PI)/2*n)))};
+  const columns=new Set();const first=Math.floor((b.getWest()+180)/360*n),last=Math.floor((b.getEast()+180)/360*n);
+  for(let raw=first;raw<=Math.min(last,first+n-1);raw++)columns.add(((raw%n)+n)%n);
+  const tiles=[];for(const x of columns)for(let y=row(b.getNorth());y<=row(b.getSouth());y++)tiles.push({z,x,y});
+  const label=$('mapAISStatus');label.textContent='Looking for vessel signals in this map view…';
+  // Public browser tile service: each visitor uses their own provider quota. No site token or shared server proxy.
+  const responses=await Promise.allSettled(tiles.slice(0,16).map(async t=>{
+   const r=await fetch('https://ais.openwaters.io/v1/vessels/tiles/'+t.z+'/'+t.x+'/'+t.y+'?kind=vessel&max_age=28m',{signal:AbortSignal.timeout(12000)});
+   if(!r.ok)throw Error('Map AIS unavailable');const bytes=new Uint8Array(await r.arrayBuffer());if(bytes.byteLength>2e6)throw Error('Oversized tile');return window.JohnDayMapTiles.decodeTile(bytes,t);
+  }));
+  if(request!==mapRequest)return;
+  const loaded=responses.filter(r=>r.status==='fulfilled');
+  const fresh=window.JohnDayMapTiles.visibleReports([],loaded.flatMap(r=>r.value.vessels||[]),viewBounds());
+  viewportReports=fresh.slice(0,600);
+  const partial=tiles.length>16||fresh.length>600||responses.some(r=>r.status==='rejected'||r.value?.truncated);
+  if(!loaded.length){drawAIS();label.textContent='The map vessel feed could not be reached. Pan, zoom or wait for the next refresh to try again. This is not a report of an empty waterway.';return}
+  drawAIS();const count=window.JohnDayMapTiles.visibleReports(reports,viewportReports,viewBounds()).length;
+  label.textContent=count+' recent vessel report'+(count===1?'':'s')+' in this map view. '+(partial?'Some reports could not be loaded. ':'')+'Pan or zoom to explore. Wide views are sampled and positions simplified; the cards beside the map stay focused on John Day.';
+ }
+ function queueViewport(){++mapRequest;if(viewportReports.length){viewportReports=[];drawAIS()}clearTimeout(mapTimer);mapTimer=setTimeout(loadViewport,400)}
  function start(){
   if(map)return;
   try{
    if(!window.L)throw Error('Map library unavailable');
-   map=L.map('lockMapSurface',{scrollWheelZoom:false,zoomControl:true}).setView([45.72,-120.695],12);
+   map=L.map('lockMapSurface',{scrollWheelZoom:false,zoomControl:true,worldCopyJump:true}).setView([45.72,-120.695],12);
    // Use the site's existing PUBLIC CARTO basemap key for every raster tile.
    // Keep markers usable while key lookup runs; OSM is the no-key outage fallback.
    const instance=map;
@@ -60,6 +86,9 @@
     add(key?'CARTO':'OpenStreetMap');
    }
    shipsLayer=L.layerGroup().addTo(map);
+   map.on('moveend',queueViewport);queueViewport();
+   setInterval(()=>{if(!document.hidden)loadViewport()},120000);
+   setInterval(drawAIS,30000);
    for(const s of LOCKS){const marker=L.circleMarker([s.lat,s.lon],{radius:s.id===selected?11:8,color:'#fff',weight:3,fillColor:s.id===selected?'#be7130':'#126277',fillOpacity:1}).addTo(map);marker.bindTooltip(s.name,{direction:'top'});marker.on('click',()=>{pendingAIS=null;lockDetail(s);marker.bindPopup(text('strong',s.name+' · river mile '+s.mile)).openPopup()});lockMarkers.set(s.id,marker)}
    for(const p of PARKS){const marker=L.circleMarker([p.lat,p.lon],{radius:9,color:'#fff',weight:3,fillColor:'#34814e',fillOpacity:1}).addTo(map).bindTooltip(p.name,{direction:'top'}).bindPopup(parkContent(p),{maxWidth:280});parkMarkers.set(p.id,marker)}
    $('mapRecover').hidden=true;
