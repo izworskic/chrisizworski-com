@@ -8,6 +8,9 @@
   let region=document.body.dataset.defaultRegion||'all',selectedLock='eisenhower',selectedView='eisenhower-center',selectedShip=null;
   let map=null,shipsLayer=null,requestId=0,loading=false,location=null,playing=false,frameId=null,lastFrame=null,progress=0;
   const svgNS='http://www.w3.org/2000/svg',reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+  const focusable='a[href],button,[tabindex]';
+  function focusIndex(root){return [...root.querySelectorAll(focusable)].indexOf(document.activeElement);}
+  function restoreFocus(root,index){if(index>=0&&!root.contains(document.activeElement))root.querySelectorAll(focusable)[index]?.focus({preventScroll:true});}
   function el(tag,value,cls){const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;}
   function a(label,url){const n=el('a',label);n.href=url;n.target='_blank';n.rel='noopener noreferrer';return n;}
   function svg(tag,attrs={},value){const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(value!==undefined)n.textContent=value;return n;}
@@ -77,13 +80,14 @@
     const selected=reportFor(selectedShip);$('useShipDimensions').disabled=!(selected?.lengthMeters&&selected?.beamMeters);
   }
   function updateRegionReports(){
-    const container=$('regionReports');container.replaceChildren();
+    const container=$('regionReports'),focused=focusIndex(container);container.replaceChildren();
     for(const r of D.regions){
       const record=data()?.regions?.find(x=>x.id===r.id),button=el('button',undefined,'region-report');button.type='button';button.append(el('strong',r.name));
       const count=C.visible(data()?.vessels||[],r.id).length;
       button.append(el('span',!record?'Choose to check reports':record.state==='unavailable'?'Source unavailable':count?count+' received report'+(count===1?'':'s')+(record.truncated?' · partial':''):'No fresh reports received'));
       button.setAttribute('aria-label',r.name+': '+button.lastChild.textContent);button.addEventListener('click',()=>setRegion(r.id,true));container.append(button);
     }
+    restoreFocus(container,focused);
   }
   function mapMessage(){if(!map)return;const count=reports().filter(v=>map.getBounds().contains([v.lat,v.lon])).length;$('mapStatus').textContent=count+' loaded ship report'+(count===1?'':'s')+' in this map view. Ships stay scoped to the selected region; choose another stretch to load its reports. Dots are approximate lock landmarks.';}
   function shipIcon(v){
@@ -179,7 +183,7 @@
     const side=$('viewingSide').value,allowed=D.viewpoints.filter(v=>side==='all'||v.country===side);
     if(!allowed.some(v=>v.id===selectedView)&&allowed.length)selectedView=allowed[0].id;
     for(const b of document.querySelectorAll('#viewingChoices [data-viewpoint]')){const v=viewById.get(b.dataset.viewpoint);b.hidden=side!=='all'&&v.country!==side;b.setAttribute('aria-pressed',String(v.id===selectedView));}
-    const v=viewById.get(selectedView),panel=$('viewingDetail');
+    const v=viewById.get(selectedView),panel=$('viewingDetail'),focused=focusIndex(panel);
     panel.replaceChildren(el('p',v.tag,'eyebrow'),el('h3',v.name+' · '+v.place),el('p',v.description),el('p',v.practical));
     const nearby=C.visible(data()?.vessels||[],'all').filter(ship=>C.distance(v,ship)<=5),activity=el('div',undefined,'local-activity');
     const checked=data()?.regions?.some(r=>r.id===v.region&&r.state!=='unavailable');
@@ -188,7 +192,7 @@
     if(location)panel.append(el('p',C.distance(location,v).toFixed(0)+' km straight-line distance from your location. Check road directions; this is not driving distance.','fine'));
     const links=el('div',undefined,'link-row');links.append(a('Directions to public viewing ↗',directions(v)),a('Official access & visitor information ↗',v.source));
     if(v.detailUrl&&window.location.pathname!==v.detailUrl){const link=el('a','Full Eisenhower Lock visiting guide →');link.href=v.detailUrl;links.append(link);}
-    const explore=el('button','Check ships in this region','button secondary');explore.type='button';explore.addEventListener('click',()=>setRegion(v.region,true));links.append(explore);panel.append(links);renderViewMarkers();
+    const explore=el('button','Check ships in this region','button secondary');explore.type='button';explore.addEventListener('click',()=>setRegion(v.region,true));links.append(explore);panel.append(links);restoreFocus(panel,focused);renderViewMarkers();
   }
   function chooseView(id,focus=true){
     const v=viewById.get(id);if(!v)return;
@@ -226,7 +230,7 @@
     if(progress>=100){pauseModel();return;}frameId=requestAnimationFrame(animateModel);
   }
   function drawProfile(){
-    const target=$('liftProfile'),width=Math.max(300,target.clientWidth||900),height=240,left=42,right=15,top=25,bottom=height-39,span=(width-left-right)/7;
+    const target=$('liftProfile'),focused=focusIndex(target),width=Math.max(300,target.clientWidth||900),height=240,left=42,right=15,top=25,bottom=height-39,span=(width-left-right)/7;
     const s=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-labelledby':'profileTitle profileDesc'});s.append(svg('title',{id:'profileTitle'},'Cumulative reference lift through seven Seaway locks'),svg('desc',{id:'profileDesc'},'The chart adds lock lifts only. Natural river gradients are omitted. Equal horizontal steps do not represent distance.'));
     const y=v=>bottom-v/70*(bottom-top);for(const n of [0,20,40,60]){s.append(svg('line',{x1:left,y1:y(n),x2:width-right,y2:y(n),class:'chart-grid'}),svg('text',{x:left-8,y:y(n)+4,'text-anchor':'end',class:'chart-label'},n+' m'));}
     let sum=0,path='M'+left+' '+y(0);const points=[];
@@ -236,7 +240,7 @@
       const g=svg('g',{tabindex:0,role:'button','aria-label':l.name+': '+sum.toFixed(1)+' metres cumulative reference lift','aria-pressed':String(l.id===selectedLock)});g.append(svg('circle',{cx:x,cy:yy,r:19,fill:'transparent'}),svg('circle',{cx:x,cy:yy,r:l.id===selectedLock?7:5,class:'profile-step'+(l.id===selectedLock?' is-selected':'')}),svg('text',{x,y:yy-14,'text-anchor':'middle',class:'chart-value'},sum.toFixed(1)),svg('text',{x,y:bottom+22,'text-anchor':'middle',class:'chart-label'},String(l.number)));
       const select=()=>{chooseLock(l.id);$('profileReadout').textContent='Lock '+l.number+' · '+l.name+': '+l.lift.toFixed(1)+' m '+(l.variableLift?'illustrative adjustment':'reference lift')+'; '+sum.toFixed(1)+' m summed lock lift. This is not elevation above sea level.';};g.addEventListener('click',select);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});s.append(g);
     });
-    target.replaceChildren(s);
+    target.replaceChildren(s);restoreFocus(target,focused);
   }
   function renderFit(source='Illustrative ship dimensions. Not a selected ship or a clearance approval.'){
     const length=$('fitLength').valueAsNumber,beam=$('fitBeam').valueAsNumber,fit=C.fit(length,beam);$('fitSource').textContent=source;
