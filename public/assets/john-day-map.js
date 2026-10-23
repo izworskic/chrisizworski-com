@@ -141,7 +141,7 @@
   try{
    const instance=new GL.Map({
     container:el,style:isCarto?escapeUrl(style,key):style,
-    center:[-120.8,45.76],zoom:6.9,minZoom:3,maxZoom:16,
+    center:[-120.697630,45.719149],zoom:11,minZoom:3,maxZoom:16,
     attributionControl:false,dragRotate:false,pitchWithRotate:false,
     transformRequest:url=>({url:isCarto?escapeUrl(url,key):url})
    });
@@ -158,7 +158,7 @@
    instance.on('load',()=>{
     if(map!==instance)return;
     clearTimeout(watchdog);
-    try{loaded=true;renderLayers();ifUser();drawAIS();fit();
+    try{loaded=true;renderLayers();ifUser();drawAIS();
      announce(candidate+' map · verified federal lock locations only. Pin = facility position, not a public visitor entrance or nautical waypoint.');
     }catch{if(isCarto)fallback('CARTO map layers failed');else fail('Map layers unavailable')}
    });
