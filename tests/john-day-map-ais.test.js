@@ -1,7 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
-const {tileAddress,decodeTile}=require('../lib/john-day-map-ais');
-const handler=require('../api/john-day-map-ais');
+const {tileAddress,decodeTile,visibleReports}=require('../lib/john-day-map-ais');
 const fixture=require('./fixtures/john-day-map-tile.json');
 test('map tiles support country-wide zoom without an unbounded bbox proxy',()=>{
  assert.deepEqual(tileAddress({z:'0',x:'0',y:'0'}),{z:0,x:0,y:0});
@@ -14,10 +13,16 @@ test('actual provider vector tile becomes recent named ship markers',async()=>{
  for(const v of d.vessels){assert.ok(v.lat>=0&&v.lat<=67);assert.ok(v.lon>=-136&&v.lon<=-89);assert.ok(now-Date.parse(v.seen)<=28*60000)}
  assert.ok(d.overview);
 });
-test('endpoint rejects invalid tiles before fetching and decodes upstream bytes',async()=>{
- const make=()=>({headers:{},setHeader(k,v){this.headers[k]=v},status(n){this.code=n;return this},json(d){this.body=d;return this}});
- const old=global.fetch;let calls=0;global.fetch=async url=>{calls++;assert.match(url,/tiles\/3\/1\/2\?kind=vessel&max_age=28m$/);return {ok:true,arrayBuffer:async()=>Buffer.from(fixture.base64,'base64')}};
- try{const bad=make();await handler({method:'GET',query:{z:'bad'}},bad);assert.equal(bad.code,400);assert.equal(calls,0);
- const good=make();await handler({method:'GET',query:{z:'3',x:'1',y:'2'}},good);assert.equal(good.code,200);assert.ok(good.body.vessels.length);assert.match(good.headers['Cache-Control'],/s-maxage=30/);
- }finally{global.fetch=old}
+test('wrapped reports and older local cards share the same visible union',()=>{
+ const now=Date.now(),b={west:150,east:210,south:40,north:70};
+ const v={mmsi:'123456789',lat:55,lon:-179,seen:new Date(now-29*60000).toISOString()};
+ const result=visibleReports([v],[{...v}],b,now);
+ assert.equal(result.length,1);assert.equal(result[0].lon,181);
+ assert.equal(visibleReports([{...v,seen:new Date(now-31*60000).toISOString()}],[],b,now).length,0);
+});
+test('browser requests the public provider directly without a shared API proxy',()=>{
+ const fs=require('node:fs'),js=fs.readFileSync('public/assets/john-day-map.js','utf8');
+ assert.match(js,/https:\/\/ais.openwaters.io\/v1\/vessels\/tiles\//);
+ assert.doesNotMatch(js,/fetch\('\/api\/john-day-map-ais/);
+ assert.match(js,/visibleReports\(reports,viewportReports,viewBounds\(\)\)/);
 });

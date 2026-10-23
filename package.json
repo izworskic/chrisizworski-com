@@ -90,7 +90,8 @@
     "benchmark:niagara-quality": "node scripts/benchmark-niagara-quality.mjs --check",
     "benchmark:shorefeel-design": "node scripts/shorefeel-design-benchmark.cjs",
     "generate:sitemap-index": "node scripts/build-sitemap-index.mjs",
-    "verify:sitemap-index": "node scripts/build-sitemap-index.mjs --check"
+    "verify:sitemap-index": "node scripts/build-sitemap-index.mjs --check",
+    "build:john-day-map-tiles": "esbuild lib/john-day-map-ais.js --bundle --platform=browser --format=iife --global-name=JohnDayMapTiles --outfile=public/assets/john-day-map-tiles.js --minify --legal-comments=eof"
   },
   "dependencies": {
     "@mapbox/vector-tile": "^2.0.4",
@@ -101,5 +102,8 @@
   },
   "engines": {
     "node": "22.x"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12"
   }
 }

@@ -4,7 +4,7 @@ test('raster map starts without WebGL, uses lock dots, and retains vessel select
  const els=new Map(),events={},moves=[],markers=[],circles=[];
  function el(){return {listeners:{},hidden:false,append(){},replaceChildren(){},setAttribute(){},addEventListener(k,f){this.listeners[k]=f}}}
  const get=id=>{if(!els.has(id))els.set(id,el());return els.get(id)};
- const map={setView(v){moves.push(v);return this},getZoom(){return 12},fitBounds(){},on(){}};
+ const map={setView(v){moves.push(v);return this},getZoom(){return 12},fitBounds(){},on(){},getBounds(){return {getWest:()=>-180,getEast:()=>180,getSouth:()=>-90,getNorth:()=>90}}};
  const L={map(){return map},tileLayer(){return {addTo(){return this},on(){return this}}},layerGroup(){return {addTo(){return this},clearLayers(){}}},divIcon:o=>o,
  circleMarker(pos){circles.push(pos);return {addTo(){return this},bindTooltip(){return this},bindPopup(){return this},on(){return this},setStyle(){}}},
  marker(pos){const m={addTo(){return this},bindPopup(){return this},on(){return this},getLatLng(){return pos},openPopup(){this.open=true}};markers.push(m);return m}};
@@ -13,7 +13,7 @@ test('raster map starts without WebGL, uses lock dots, and retains vessel select
  vm.runInNewContext(fs.readFileSync('public/assets/john-day-map.js','utf8'),context);
  assert.equal(get('mapRecover').hidden,false);
  events['john-day-ais-observations']({detail:{observations:[{mmsi:'123',lon:-120.6,lat:45.7,seen:new Date().toISOString()}]}});
- context.window.L=L;events['john-day-ais-select']({detail:{mmsi:'123'}});
+ context.window.L=L;context.window.JohnDayMapTiles=require('../lib/john-day-map-ais');events['john-day-ais-select']({detail:{mmsi:'123'}});
  assert.equal(get('mapRecover').hidden,true);assert.equal(circles.length,6);assert.equal(markers.length,1);
  assert.equal(moves.at(-1)[1],-120.6);assert.equal(markers[0].open,true);
  events['john-day-ais-observations']({detail:{observations:[]}});
