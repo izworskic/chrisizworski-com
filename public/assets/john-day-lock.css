@@ -8,3 +8,27 @@
 .metricTab{border:1px solid #8bb0b2;background:#fff;color:#1a4d56;border-radius:9px;padding:10px 14px;min-height:44px;font-weight:800;font-size:.81rem}
 .metricTab[aria-pressed=true]{background:#0b515c;color:#fff;border-color:#0b515c}
 .flowStory{background:#eef6f3;border-left:4px solid #0a777b;color:#244851;padding:15px 17px;border-radius:9px;font-size:.91rem;margin-bottom:15px;max-width:790px}
+
+/* Columbia corridor interpretive map. Not a GPS route or access planner. */
+.corridor{margin:36px 0 6px;padding-top:26px;border-top:1px solid var(--line)}
+.corridorChoices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:15px 0}
+.corridorChoices button{display:grid;gap:4px;background:#f7faf8;text-align:left;border:1px solid #c7d9d4;border-radius:9px;min-height:54px;padding:10px;color:#234c53}
+.corridorChoices button span{font-size:.71rem;color:#58777a}.corridorChoices button[aria-pressed=true]{background:#0b515c;border-color:#0b515c;color:#fff}
+.corridorChoices button[aria-pressed=true] span{color:#cbe2e4}
+.corridorLayout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.8fr);min-height:395px;gap:11px}
+.corridorMapWrap{position:relative;background:#d8e5e6;border-radius:12px;overflow:hidden;min-height:395px}
+.corridorMap{height:395px;width:100%;position:relative}
+.corridorDetail{border:1px solid #bed5d4;border-radius:12px;padding:20px;background:#f5f9f7}
+.corridorDetail h3{font-size:1.65rem}.corridorDetail p{font-size:.87rem;color:#4f6d72}
+.corridorDetail a{font-size:.82rem;font-weight:750}
+.mapButtons{position:absolute;z-index:4;bottom:10px;left:10px;display:flex;flex-wrap:wrap;gap:7px}
+.mapButtons button{background:#fdfdfd;color:#174b51;border:1px solid #9bb3b3;border-radius:8px;padding:9px 11px;min-height:44px;font-size:.75rem;font-weight:850;box-shadow:0 2px 7px #2446}
+.mapRecover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#d8e5e6;text-align:center;gap:10px}
+.mapRecover button{padding:13px 18px;background:#0b535e;color:#fff;border:0;border-radius:10px;font-size:.91rem;font-weight:800}
+.mapRecover p{font-size:.74rem;max-width:230px;margin:0}
+.corridorMapWrap:not(.map-unavailable):has(.maplibregl-map) .mapRecover{display:none}
+.corridorMapWrap.map-unavailable .mapRecover{display:flex}
+.corridorMapWrap .maplibregl-ctrl-bottom-left,.corridorMapWrap .maplibregl-ctrl-bottom-right{max-width:85%}
+.mapCaption{margin-top:12px}
+@media(max-width:900px){.corridorLayout{grid-template-columns:1fr}.corridorDetail{min-height:180px}.corridorChoices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.corridorMap,.corridorMapWrap{height:340px;min-height:340px}.corridorChoices button{padding:9px}.mapButtons{right:10px}.mapButtons button{flex:1}}

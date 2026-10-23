@@ -19,6 +19,7 @@ test('four immediate mission controls, accessible switching and fallbacks',()=>{
  assert.match(js,/ArrowLeft/);assert.match(js,/aria-selected/);assert.match(js,/createElement\('h3'\)/);
  assert.match(css,/prefers-reduced-motion/);assert.match(css,/focus-visible/);
  assert.match(html,/Current published John Day lock control/);
+ assert.match(html,/USACE federal lock inventory/);
  assert.match(html,/not an advertised lock-chamber viewpoint/);
 });
 test('historical data and simulator are labeled, with no real-time leap from chart',()=>{
@@ -32,4 +33,20 @@ test('historical data and simulator are labeled, with no real-time leap from cha
 test('no unverified map access and no paid API dependencies',()=>{
  assert.doesNotMatch(html,/Google Maps directions to a public platform|mapbox\.com\/directions/);
  assert.doesNotMatch(js,/REDIS_URL|OPENAI_API_KEY|ANTHROPIC_API_KEY|CARTO_API_KEY/);
+});
+
+test('John Day corridor map has real federal coordinates, obvious source and no access promise',()=>{
+ const map=fs.readFileSync(path.join(root,'public/assets/john-day-map.js'),'utf8');
+ assert.match(map,/lon:-120\.697630,lat:45\.719149/);
+ assert.match(map,/lon:-121\.947259,lat:45\.638124/);
+ assert.match(map,/NAVSTR|PMSNAME|Lock Characteristics|historic lock inventory/i);
+ assert.match(map,/maplibre-gl@6\.3\.0/);
+ assert.match(map,/carto-basemap-config/);
+ assert.match(map,/tiles\.openfreemap\.org\/styles\/liberty/);
+ assert.match(map,/hostname==='basemaps\.cartocdn\.com'/);
+ assert.doesNotMatch(map,/api\/eagle-basemap-config/);
+ assert.match(html,/id="lockMapSelection"/);
+ assert.match(html,/not public dam entrances or safe nautical waypoints/);
+ assert.match(map,/getCurrentPosition/);
+ assert.match(map,/fitBounds/);
 });

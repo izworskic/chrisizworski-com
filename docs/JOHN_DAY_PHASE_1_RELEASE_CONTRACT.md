@@ -48,3 +48,6 @@ Hard vetoes: bad safety advice, unverified lock status/queue/ETA, fabricated riv
 - node --test tests/john-day-*.test.js
 - node scripts/benchmark-john-day.cjs (>=90, zero truth veto)
 - npm run verify:all; live fetch through Vercel preview and 390px browser walkthrough
+
+## Source-verified federal lock-characteristics context
+USACE/ArcGIS NDC Lock Characteristics FeatureServer (static inventory, NOT current status): https://services7.arcgis.com/n1YM8pTrFmm7L4hs/ArcGIS/rest/services/Locks/FeatureServer/0 . John Day feature NDCCODE 9021540001 is [-120.697630,45.719149], mile 216.5, overall chamber 675 ft x 86 ft, published usable chamber 650 ft x 84 ft, LIFT inventory field 110 ft, opened 1968. The project page separately lists maximum 113 ft. Feature STATUS=1 is static catalog data; DO NOT convert that code into 'open now'. Equivalent verified source coordinates: Bonneville [-121.947259,45.638124], The Dalles [-121.139626,45.614994], McNary [-119.300560,45.940161]. Geographic map is explicitly a river-lock reference, NEVER a road/access route or navigation chart. Four lock cards remain useful even if CARTO, OpenFreeMap or MapLibre fails. Preferred keyed CARTO via existing /api/carto-basemap-config; no new keys or paid sources. Need mobile browser validation of map and location.

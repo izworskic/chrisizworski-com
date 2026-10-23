@@ -38,6 +38,8 @@ const checks={
   ['interactive lock levels',j.includes('move(95)')&&j.includes('move(10)')],
   ['interpretive chapters',h.includes('Salmon moving against the current')&&h.includes('A changed landscape')],
   ['source ledger',h.includes('Sources, evidence and limitations')],
+  ['federal chamber dimensions and provenance',h.includes('675 ft overall')&&h.includes('84 ft usable')&&h.toLowerCase().includes('federal lock characteristics inventory')],
+  ['Columbia lock comparative map',h.includes('id="lockMapSelection"')&&h.includes('data-river-lock="mcnary"')],
   ['flow chart values and units',h.includes('thousand cubic feet/sec')&&h.includes('Forebay')],
   ['three-way series selector',h.includes('data-flow-series="outflowKcfs"')&&h.includes('data-flow-series="generationKcfs"')&&h.includes('data-flow-series="spillKcfs"')],
   ['dated auto-load when river mode opened',j.includes("autoLoaded=true;refreshReport()")],
