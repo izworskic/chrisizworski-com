@@ -128,10 +128,11 @@
  function fail(message){
   cleanMap();inFlight=false;
   announce(message+'. The lock selection list and federal source remain available without a map.');
-  stage.classList.add('map-unavailable');
+  stage.querySelector('.corridorMapWrap')?.classList.add('map-unavailable');
  }
  async function start(){
   if(inFlight)return;inFlight=true;
+  stage.querySelector('.corridorMapWrap')?.classList.remove('map-unavailable');
   announce('Preparing the Columbia River reference map…');
   try{
    const s=document.createElement('link');s.rel='stylesheet';s.href='https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.css';document.head.append(s);
@@ -152,7 +153,7 @@
    pos=>{
     user={latitude:pos.coords.latitude,longitude:pos.coords.longitude};
     ifUser();if(map&&loaded)map.easeTo({center:[user.longitude,user.latitude],zoom:7,duration:350});
-    announce('Location shown, if map loaded. Coordinates are not transmitted to this website; no road route or navigation advice is calculated.');
+    announce('Location shown when the map is ready. No location is stored by this website; the map provider receives ordinary map-tile requests. No road route or navigation advice is calculated.');
    },
    ()=>announce('Device location denied or unavailable. Select a lock above to explore.'),{enableHighAccuracy:false,timeout:9000,maximumAge:300000}
   );

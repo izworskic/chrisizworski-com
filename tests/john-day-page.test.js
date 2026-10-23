@@ -48,5 +48,7 @@ test('John Day corridor map has real federal coordinates, obvious source and no 
  assert.match(html,/id="lockMapSelection"/);
  assert.match(html,/not public dam entrances or safe nautical waypoints/);
  assert.match(map,/getCurrentPosition/);
+ assert.match(map,/map provider receives ordinary map-tile requests/);
+ assert.match(js,/Previously loaded data remain displayed/);
  assert.match(map,/fitBounds/);
 });

@@ -149,7 +149,7 @@
    $('hour').value=0;render();summarize(d);
    button.textContent='Refresh USACE observations';
   }catch(_){
-   $('reportNote').textContent='Newer validated data unavailable. The chart below still shows July 10, 2026 observations—not current river conditions.';
+   $('reportNote').textContent='Newer observations could not be verified. Previously loaded data remain displayed; check the report date above. These are not current navigation-lock conditions.';
    button.textContent='Retry official report';
   }finally{loadingReport=false;button.disabled=false;}
  }
