@@ -1,5 +1,5 @@
 'use strict';
-/* CARTO raster / Leaflet. Screen-stable circular lock and park markers; AIS arrows.
+/* CARTO raster / Leaflet. Screen-stable circular lock and park markers; AIS ship silhouettes.
    USACE historic lock inventory / Lock Characteristics positions are facility references,
    not public dam entrances or safe nautical waypoints. WGS84, [lat, lon] in Leaflet. */
 (()=>{
@@ -30,8 +30,8 @@
  function drawAIS(){
   if(!map||!shipsLayer)return;shipsLayer.clearLayers();shipMarkers.clear();
   for(const v of reports){
-   const rotation=Number.isFinite(v.course)?v.course:0;
-   const icon=L.divIcon({className:'aisShipMarker',html:'<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" style="transform:rotate('+rotation+'deg)"><path d="M16 2L27 27 16 22 5 27Z" fill="#803ba0" stroke="#fff" stroke-width="2.5"/></svg>',iconSize:[32,32],iconAnchor:[16,16]});
+   const rotation=Number.isFinite(v.course)?v.course:Number.isFinite(v.heading)?v.heading:0;
+   const icon=L.divIcon({className:'aisShipMarker',html:'<img src="/assets/john-day-ship.svg" width="36" height="52" alt="" aria-hidden="true" style="transform:rotate('+rotation+'deg)">',iconSize:[44,60],iconAnchor:[22,30]});
    const marker=L.marker([v.lat,v.lon],{icon,title:(v.name||v.mmsi)+' · recent AIS vessel',keyboard:true}).addTo(shipsLayer).bindPopup(vesselContent(v),{maxWidth:280});
    marker.on('click',()=>window.dispatchEvent(new CustomEvent('john-day-ais-focus',{detail:{mmsi:v.mmsi}})));shipMarkers.set(v.mmsi,marker);
   }
@@ -54,7 +54,7 @@
      const url=carto?'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
      const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')});
      layer.on('tileerror',()=>{if(carto&&!fallback){fallback=true;instance.removeLayer(layer);add('OpenStreetMap')}else status.textContent='Part of the map is taking a break. You can still select the lock, park and vessel markers, or follow the cards and park directions below.'});
-     layer.on('load',()=>{status.textContent=provider+' map · round dots: locks · purple arrows: AIS vessels · green circles: river recreation. Facility pins are not visitor entrances or navigation waypoints.'});
+     layer.on('load',()=>{status.textContent=provider+' map · round dots: locks · purple ships: AIS vessels · green circles: river recreation. Facility pins are not visitor entrances or navigation waypoints.'});
      layer.addTo(instance);
     }
     add(key?'CARTO':'OpenStreetMap');
@@ -63,7 +63,7 @@
    for(const s of LOCKS){const marker=L.circleMarker([s.lat,s.lon],{radius:s.id===selected?11:8,color:'#fff',weight:3,fillColor:s.id===selected?'#be7130':'#126277',fillOpacity:1}).addTo(map);marker.bindTooltip(s.name,{direction:'top'});marker.on('click',()=>{pendingAIS=null;lockDetail(s);marker.bindPopup(text('strong',s.name+' · river mile '+s.mile)).openPopup()});lockMarkers.set(s.id,marker)}
    for(const p of PARKS){const marker=L.circleMarker([p.lat,p.lon],{radius:9,color:'#fff',weight:3,fillColor:'#34814e',fillOpacity:1}).addTo(map).bindTooltip(p.name,{direction:'top'}).bindPopup(parkContent(p),{maxWidth:280});parkMarkers.set(p.id,marker)}
    $('mapRecover').hidden=true;
-   status.textContent='Unfolding the river map. Select a lock dot, a green park circle, or a vessel arrow to begin exploring.';
+   status.textContent='Unfolding the river map. Select a lock dot, a green park circle, or a ship silhouette to begin exploring.';
    drawAIS();focusVessel();void loadTiles();
   }catch(_){map=null;$('mapRecover').hidden=false;status.textContent='The map could not open. Keep exploring with the lock buttons and park cards below, then try the map again.'}
  }
