@@ -104,9 +104,13 @@ async function run(){
       await page.waitForTimeout(850);
       assert.ok(exports.length>0,'Current NOAA map image not requested');
       const zoom=page.locator('#ice-ex-map .leaflet-control-zoom-in');
+      const beforeZoom = exports.length;
       await zoom.click();
-      await page.waitForTimeout(350);
-      assert.ok(exports.length>1,'Map zoom failed to regenerate the mapped concentration extent');
+      // Leaflet zoom animation (~250ms) + NOAA request debounce (180ms) + image load.
+      await page.waitForTimeout(1050);
+      const currentZoom = await page.locator('#ice-ex-map').evaluate(el=>el.classList.contains('leaflet-container'));
+      assert.equal(currentZoom,true,'Leaflet controls lost the map container');
+      assert.ok(exports.length>beforeZoom,'Map zoom did not request a new NOAA extent; '+JSON.stringify({beforeZoom,afterZoom:exports.length}));
     }else{
       assert.equal(exports.length,0,'An off-season historical chart must not load live mapped ice');
       assert.match(await page.locator('#ice-ex-map-stamp').textContent(),/Off season/);
