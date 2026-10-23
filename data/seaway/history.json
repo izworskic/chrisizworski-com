@@ -1,0 +1,238 @@
+{
+  "source": "https://data.bts.gov/resource/swpm-impx.json",
+  "metadata": "https://data.bts.gov/api/views/swpm-impx.json",
+  "retrievedAt": "2026-10-23",
+  "scope": "BTS Great Lakes St. Lawrence Seaway Performance monthly series; not individual lock counts or arrivals",
+  "years": [
+    2022,
+    2023,
+    2024
+  ],
+  "rows": [
+    {
+      "month": "2022-01-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2022-02-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2022-03-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2022-04-01T00:00:00.000",
+      "reliability_rate": "0.999",
+      "tonnage_metric_tons": "3912000",
+      "tonnage_short_tons": "4312236.72000",
+      "vessel_transits": "251"
+    },
+    {
+      "month": "2022-05-01T00:00:00.000",
+      "reliability_rate": "1",
+      "tonnage_metric_tons": "4151000",
+      "tonnage_short_tons": "4575688.81000",
+      "vessel_transits": "241"
+    },
+    {
+      "month": "2022-06-01T00:00:00.000",
+      "reliability_rate": "0.991",
+      "tonnage_metric_tons": "4242000",
+      "tonnage_short_tons": "4675999.02000",
+      "vessel_transits": "244"
+    },
+    {
+      "month": "2022-07-01T00:00:00.000",
+      "reliability_rate": "0.999",
+      "tonnage_metric_tons": "3837000",
+      "tonnage_short_tons": "4229563.47000",
+      "vessel_transits": "247"
+    },
+    {
+      "month": "2022-08-01T00:00:00.000",
+      "reliability_rate": "0.999",
+      "tonnage_metric_tons": "3464000",
+      "tonnage_short_tons": "3818401.84000",
+      "vessel_transits": "232"
+    },
+    {
+      "month": "2022-09-01T00:00:00.000",
+      "reliability_rate": "0.997",
+      "tonnage_metric_tons": "4176000",
+      "tonnage_short_tons": "4603246.56000",
+      "vessel_transits": "224"
+    },
+    {
+      "month": "2022-10-01T00:00:00.000",
+      "reliability_rate": "0.994",
+      "tonnage_metric_tons": "4195000",
+      "tonnage_short_tons": "4624190.45000",
+      "vessel_transits": "292"
+    },
+    {
+      "month": "2022-11-01T00:00:00.000",
+      "reliability_rate": "1",
+      "tonnage_metric_tons": "3980000",
+      "tonnage_short_tons": "4387193.80000",
+      "vessel_transits": "244"
+    },
+    {
+      "month": "2022-12-01T00:00:00.000",
+      "reliability_rate": "0.987",
+      "tonnage_metric_tons": "4735000",
+      "tonnage_short_tons": "5219437.85000",
+      "vessel_transits": "258"
+    },
+    {
+      "month": "2023-01-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2023-02-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2023-03-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2023-04-01T00:00:00.000",
+      "reliability_rate": "0.998",
+      "tonnage_metric_tons": "3667000",
+      "tonnage_short_tons": "4042170.77000",
+      "vessel_transits": "257"
+    },
+    {
+      "month": "2023-05-01T00:00:00.000",
+      "reliability_rate": "0.998",
+      "tonnage_metric_tons": "4300000",
+      "tonnage_short_tons": "4739933.00000",
+      "vessel_transits": "253"
+    },
+    {
+      "month": "2023-06-01T00:00:00.000",
+      "reliability_rate": "0.985",
+      "tonnage_metric_tons": "4103000",
+      "tonnage_short_tons": "4522777.93000",
+      "vessel_transits": "232"
+    },
+    {
+      "month": "2023-07-01T00:00:00.000",
+      "reliability_rate": "0.999",
+      "tonnage_metric_tons": "3601000",
+      "tonnage_short_tons": "3969418.31000",
+      "vessel_transits": "221"
+    },
+    {
+      "month": "2023-08-01T00:00:00.000",
+      "reliability_rate": "1",
+      "tonnage_metric_tons": "4222000",
+      "tonnage_short_tons": "4653952.82000",
+      "vessel_transits": "246"
+    },
+    {
+      "month": "2023-09-01T00:00:00.000",
+      "reliability_rate": "0.928",
+      "tonnage_metric_tons": "4467000",
+      "tonnage_short_tons": "4924018.77000",
+      "vessel_transits": "247"
+    },
+    {
+      "month": "2023-10-01T00:00:00.000",
+      "reliability_rate": "0.733",
+      "tonnage_metric_tons": "3327000",
+      "tonnage_short_tons": "3667385.37000",
+      "vessel_transits": "204"
+    },
+    {
+      "month": "2023-11-01T00:00:00.000",
+      "reliability_rate": "1",
+      "tonnage_metric_tons": "4947000",
+      "tonnage_short_tons": "5453127.57000",
+      "vessel_transits": "298"
+    },
+    {
+      "month": "2023-12-01T00:00:00.000",
+      "reliability_rate": "0.989",
+      "tonnage_metric_tons": "4929000",
+      "tonnage_short_tons": "5433285.99000",
+      "vessel_transits": "271"
+    },
+    {
+      "month": "2024-01-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2024-02-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2024-03-01T00:00:00.000",
+      "note": "The St. Lawrence Seaway is closed.  Opening and closing dates vary from year to year."
+    },
+    {
+      "month": "2024-04-01T00:00:00.000",
+      "reliability_rate": "0.995",
+      "tonnage_metric_tons": "3900000",
+      "tonnage_short_tons": "4299009.00000",
+      "vessel_transits": "226"
+    },
+    {
+      "month": "2024-05-01T00:00:00.000",
+      "reliability_rate": "0.994",
+      "tonnage_metric_tons": "4499000",
+      "tonnage_short_tons": "4959292.69000",
+      "vessel_transits": "252"
+    },
+    {
+      "month": "2024-06-01T00:00:00.000",
+      "reliability_rate": "0.998",
+      "tonnage_metric_tons": "3803000",
+      "tonnage_short_tons": "4192084.93000",
+      "vessel_transits": "230"
+    },
+    {
+      "month": "2024-07-01T00:00:00.000",
+      "reliability_rate": "0.988",
+      "tonnage_metric_tons": "3755000",
+      "tonnage_short_tons": "4139174.05000",
+      "vessel_transits": "204"
+    },
+    {
+      "month": "2024-08-01T00:00:00.000",
+      "reliability_rate": "0.999",
+      "tonnage_metric_tons": "3526000",
+      "tonnage_short_tons": "3886745.06000",
+      "vessel_transits": "224"
+    },
+    {
+      "month": "2024-09-01T00:00:00.000",
+      "reliability_rate": "0.982",
+      "tonnage_metric_tons": "4138000",
+      "tonnage_short_tons": "4561358.78000",
+      "vessel_transits": "238"
+    },
+    {
+      "month": "2024-10-01T00:00:00.000",
+      "reliability_rate": "0.996",
+      "tonnage_metric_tons": "4398000",
+      "tonnage_short_tons": "4847959.38000",
+      "vessel_transits": "279"
+    },
+    {
+      "month": "2024-11-01T00:00:00.000",
+      "reliability_rate": "0.996",
+      "tonnage_metric_tons": "4283000",
+      "tonnage_short_tons": "4721193.73000",
+      "vessel_transits": "274"
+    },
+    {
+      "month": "2024-12-01T00:00:00.000",
+      "reliability_rate": "1",
+      "tonnage_metric_tons": "4768000",
+      "tonnage_short_tons": "5255814.08000",
+      "vessel_transits": "290"
+    }
+  ]
+}

@@ -4,6 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/st-lawrence-seaway.js": {
+      "maxDuration": 15
+    },
     "api/great-lakes-ferry-conditions.js": {
       "maxDuration": 20
     },
