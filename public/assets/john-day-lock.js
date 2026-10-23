@@ -64,6 +64,32 @@
   else{title.textContent='Near the upper reservoir';explain.textContent='The boat approaches upstream water elevation. Only the lock crew can safely operate the real gates.';}
  }
  level.addEventListener('input',()=>move(level.value));$('fillBtn').addEventListener('click',()=>move(95));$('drainBtn').addEventListener('click',()=>move(10));move(10);
+ // One deliberate step per action: no animation timer, no simulated operational ETA.
+ let passageStep=0;
+ const passageCopy={
+  up:[['Start at the lower river.','A vessel approaches from downstream. The chamber must match that lower water level before entry.'],['Enter at the lower level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Rise with the water.','Water enters the chamber and the vessel rises with it toward Lake Umatilla. The boat is floating, not being hoisted.'],['Leave at the upper level.','After levels match and the crew permits departure, the vessel continues upstream into the reservoir.']],
+  down:[['Start at the upper reservoir.','A vessel approaches from Lake Umatilla. The chamber must match the upper water level before entry.'],['Enter at the upper level.','With water levels equalized and entry permitted by the crew, the vessel enters the chamber.'],['Enclose the chamber.','The entry gate is closed before the water level changes. The vessel stays afloat inside the chamber.'],['Descend with the water.','Water leaves the chamber and the vessel settles toward the lower river level. Its weight remains supported by water.'],['Leave at the lower level.','After levels match and the crew permits departure, the vessel continues downstream toward The Dalles.']]
+ };
+ function showPassage(){
+  const up=$('passageDirection').value==='up',copy=passageCopy[up?'up':'down'][passageStep];
+  $('passageCount').textContent='Step '+(passageStep+1)+' of 5 · '+(up?'upstream':'downstream');
+  $('passageTitle').textContent=copy[0];$('passageStory').textContent=copy[1]+' Simplified illustration, not operating guidance.';
+  $('simGate').textContent=['Approach','Enter','Entry gate closed','Water level changes','Depart'][passageStep];
+  [...$('passageTrack').children].forEach((el,i)=>{if(i===passageStep)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});
+  $('passageBack').disabled=passageStep===0;$('passageNext').disabled=passageStep===4;
+  const outside=passageStep===0||passageStep===4;
+  boat.hidden=outside;$('passageOutside').hidden=!outside;
+  const upper=passageStep===0?!up:up;
+  $('passageOutside').style.left=upper?'77%':'3%';$('passageOutside').style.bottom=upper?'73%':'19%';
+  move((passageStep<3)===up?10:95);
+ }
+ $('passageNext').addEventListener('click',()=>{passageStep=Math.min(4,passageStep+1);showPassage()});
+ $('passageBack').addEventListener('click',()=>{passageStep=Math.max(0,passageStep-1);showPassage()});
+ for(const id of ['passageReset','passageDirection'])$(id).addEventListener(id==='passageDirection'?'change':'click',()=>{passageStep=0;showPassage()});
+ // Manual experiments are visibly separate from the selected passage stage.
+ function freeExplore(){ boat.hidden=false;$('passageOutside').hidden=true; $('passageCount').textContent='Free exploration · illustrative water level';$('passageTitle').textContent='Try raising and lowering the water.';$('passageStory').textContent='You are adjusting the illustration directly. Use Restart to return to the five passage stages.';$('simGate').textContent='Manual water exploration';[...$('passageTrack').children].forEach(el=>el.removeAttribute('aria-current')); }
+ level.addEventListener('input',freeExplore);$('fillBtn').addEventListener('click',freeExplore);$('drainBtn').addEventListener('click',freeExplore);
+ showPassage();
  // Exact USACE data from July 10, 2026. Historical example, never presented as a live measurement.
  const history=[
  [131,79.2,50.9,263.62,160.72,102.90],[132.9,79.2,50.9,263.52,160.32,103.20],

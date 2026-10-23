@@ -43,6 +43,7 @@
    row.append(name,t,src);
    row.addEventListener('click',()=>{
     window.dispatchEvent(new CustomEvent('john-day-ais-select',{detail:{mmsi:v.mmsi}}));
+    document.getElementById('lockMap')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
     for(const el of list.querySelectorAll('button'))el.setAttribute('aria-pressed',String(el===row));
    });
    row.setAttribute('aria-pressed','false');list.append(row);
