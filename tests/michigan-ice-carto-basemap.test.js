@@ -15,6 +15,12 @@ test('Great Lakes freeze-up map uses public CARTO config, never keyless CARTO, a
   assert.match(source,/Map ready \(OpenStreetMap\)/);
   assert.doesNotMatch(source,/basemaps\.cartocdn\.com\/light_all/);
   assert.match(source,/Not a safe-ice assessment/);
+  assert.match(source,/id=\"ice-ex-fullscreen\"/);
+  assert.match(source,/shell\.requestFullscreen\(\)/);
+  assert.match(source,/document\.exitFullscreen\(\)/);
+  assert.match(source,/fullscreenchange/);
+  assert.match(source,/:fullscreen #ice-ex-map/);
+  assert.doesNotMatch(source,/adsbygoogle|google_ad_client|data-ad-slot/);
   assert.match(source,/root\.querySelector\('#ice-ex-reset'\)\.addEventListener\('click'/);
   assert.match(source,/ResizeObserver/);
   assert.match(source,/initMap\(\); \/\/ Never wait for \/api\/ice-now/);
