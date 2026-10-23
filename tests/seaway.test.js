@@ -20,6 +20,10 @@ test('reported dimensions follow the newest duplicate position, not array order'
   const r=assess(collection([feature(316000001,{beam:24,length:200}),feature(316000001,{beam:5,length:40,seen:'2026-10-23T12:50:00Z'})]),'massena',now);
   assert.equal(r.vessels[0].lengthMeters,200);assert.equal(r.vessels[0].beamMeters,24);
 });
+test('rejected future and out-of-region duplicates cannot supply selected ship dimensions',()=>{
+  const r=assess(collection([feature(316000001,{beam:24,length:200}),feature(316000001,{beam:5,length:40,seen:'2026-10-23T13:10:00Z'}),feature(316000001,{beam:7,length:60,seen:'2026-10-23T13:00:00Z'},[-73.5,45.5])]),'massena',now);
+  assert.equal(r.vessels.length,1);assert.equal(r.vessels[0].lengthMeters,200);assert.equal(r.vessels[0].beamMeters,24);
+});
 test('a provider limit is disclosed and incomplete regional success survives an outage',()=>{
   const raw=collection(Array.from({length:51},(_,i)=>feature(316000000+i)));
   const good=assess(raw,'massena',now);assert.equal(good.vessels.length,50);assert.equal(good.truncated,true);
