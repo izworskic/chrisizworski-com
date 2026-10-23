@@ -39,6 +39,7 @@
   var root, select, map, overlay, loadingLeaflet, activeData = null, datasets = {}, layerStamp = null;
   var playTimer = null, chartSeries = [], currentIndex = 0, mapRequest = 0;
   var mapReady = false;
+  var basemap = null, basemapFailed = false;
 
   function el(tag, className, text) {
     var n = document.createElement(tag);
@@ -200,18 +201,54 @@
     });
     return loadingLeaflet;
   }
+  // Reuse the site's existing PUBLIC, domain-restricted CARTO basemap key.
+  // Keyless CARTO rasters return an HTTP 200 watermark instead of proper map tiles.
+  // All NOAA observations and charts remain independent of basemap availability.
+  function installBasemap(L) {
+    function openMapFallback() {
+      if (basemapFailed) return;
+      basemapFailed = true;
+      if (basemap) { map.removeLayer(basemap); basemap = null; }
+      basemap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom:19, attribution:'&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      text('ice-ex-basemap-status','CARTO basemap unavailable; showing OpenStreetMap instead.');
+    }
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 8000);
+    fetch('/api/carto-basemap-config', {method:'GET',credentials:'same-origin',signal:controller.signal})
+      .then(function(response) {
+        if (!response.ok) throw new Error('Public CARTO basemap configuration unavailable');
+        return response.json();
+      }).then(function(config) {
+        if (!config || typeof config.key !== 'string' || !config.key.trim())
+          throw new Error('No public CARTO basemap key');
+        var tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='
+          + encodeURIComponent(config.key.trim());
+        var failures = 0;
+        basemap = L.tileLayer(tileUrl, {
+          maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+        });
+        basemap.on('tileerror',function() {
+          failures++;
+          if (failures >= 3) openMapFallback();
+        });
+        basemap.addTo(map);
+        text('ice-ex-basemap-status','Map baselayer: CARTO Voyager.');
+      }).catch(function () { openMapFallback(); })
+      .finally(function () { clearTimeout(timeout); });
+  }
   function initMap() {
     if (mapReady) return;
     mapReady=true;
     loadLeaflet().then(function(L) {
       map=L.map('ice-ex-map',{scrollWheelZoom:false,maxZoom:12,minZoom:5});
-      L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
-        maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
-      }).addTo(map);
+      installBasemap(L);
       map.on('moveend',updateMap);
       setRegionMap();
     }).catch(function () {
       text('ice-ex-map-stamp','Map library unavailable. See the dated NOAA chart source below.');
+      text('ice-ex-basemap-status','Map controls unavailable.');
       root.querySelector('#ice-ex-map').textContent='Interactive map unavailable; the NOAA coverage chart and water-specific report remain accessible.';
     });
   }
@@ -313,7 +350,8 @@
       '<option value="little-bay-de-noc">Little Bay de Noc</option><option value="grand-traverse-bay">Grand Traverse Bay</option>',
       '</select></div>',
       '<p class="ice-ex-caption" id="ice-ex-context"></p>',
-      '<div id="ice-ex-map" role="region" aria-label="Current NOAA ice concentration on interactive CARTO map"></div>',
+      '<div id="ice-ex-map" role="region" aria-label="Current NOAA ice concentration over a CARTO or OpenStreetMap basemap"></div>',
+      '<p class="ice-ex-caption" id="ice-ex-basemap-status" aria-live="polite">Connecting to the public CARTO basemap…</p>',
       '<div class="ice-ex-legend" aria-label="NOAA concentration category colors">',
       '<span><i style="background:#0064ff"></i>Ice free</span>',
       '<span><i style="background:#96c8ff"></i>Less than 1 tenth</span>',
