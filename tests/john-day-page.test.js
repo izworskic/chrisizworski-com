@@ -19,11 +19,15 @@ test('four immediate mission controls, accessible switching and fallbacks',()=>{
  assert.match(js,/ArrowLeft/);assert.match(js,/aria-selected/);assert.match(js,/createElement\('h3'\)/);
  assert.match(css,/prefers-reduced-motion/);assert.match(css,/focus-visible/);
  assert.match(html,/Current published John Day lock control/);
+ assert.match(html,/not an advertised lock-chamber viewpoint/);
 });
 test('historical data and simulator are labeled, with no real-time leap from chart',()=>{
  assert.match(html,/SIMULATED LOCK/);assert.match(html,/ILLUSTRATIVE CROSS-SECTION/);
  assert.match(html,/July 10, 2026/);assert.match(html,/not the current river state/);
  assert.match(js,/Historical example, never presented as a live measurement/);
+ assert.match(js,/function summarize\(report\)/);
+ for(const k of ['outflowKcfs','generationKcfs','spillKcfs'])assert.match(html,new RegExp('data-flow-series="'+k+'"'));
+ assert.match(html,/id="reportSourceLink"/);
 });
 test('no unverified map access and no paid API dependencies',()=>{
  assert.doesNotMatch(html,/Google Maps directions to a public platform|mapbox\.com\/directions/);

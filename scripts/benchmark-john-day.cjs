@@ -23,11 +23,15 @@ const checks={
  ],
  water:[
   ['bounds and numeric validation',w.includes('outflow>1500')&&w.includes('spill>1500')],
-  ['missing observations are discarded',w.includes('if(vals.some(x=>x===null))continue')],
-  ['unrecognized report fails closed',w.includes("throw Error('no recognized hourly observations')")],
+  ['missing observations are discarded',w.includes('if(values.some(v=>v===null))continue')],
+  ['unrecognized report fails closed',w.includes("throw Error('Insufficient valid hourly records")],
   ['HTTP outage explicit',a.includes("state:'unavailable'")],
   ['local observation date',w.includes("America/Los_Angeles")],
   ['chart historical truth',h.includes('not the current river state')&&j.includes('Historical example')],
+  ['report date matched to source',w.includes("embeddedDate!==requestedDate")],
+  ['official complete-day fixture covered',w.includes("observations.length<20")],
+  ['conditional narrative derived from data',j.includes("function summarize(report)")],
+  ['exact-source report link',h.includes('id="reportSourceLink"')],
  ],
  comprehension:[
   ['one-tap mode changes',j.includes("t.addEventListener('click',()=>activate(t.dataset.mode))")],
@@ -35,6 +39,8 @@ const checks={
   ['interpretive chapters',h.includes('Salmon moving against the current')&&h.includes('A changed landscape')],
   ['source ledger',h.includes('Sources, evidence and limitations')],
   ['flow chart values and units',h.includes('thousand cubic feet/sec')&&h.includes('Forebay')],
+  ['three-way series selector',h.includes('data-flow-series="outflowKcfs"')&&h.includes('data-flow-series="generationKcfs"')&&h.includes('data-flow-series="spillKcfs"')],
+  ['dated auto-load when river mode opened',j.includes("autoLoaded=true;refreshReport()")],
  ],
  inclusiveness:[
   ['keyboard tabs',j.includes('ArrowLeft')&&j.includes('ArrowRight')],
@@ -42,6 +48,7 @@ const checks={
   ['mobile layout',c.includes('@media(max-width:390px)')],
   ['semantic labelled diagram',h.includes('aria-label="Schematic cross-section')],
   ['content and outbound sources without JS',h.includes('Current navigation notices')&&h.includes('Columbia DART')],
+  ['public recreation is not identified as lock access',h.includes('not an advertised lock-chamber viewpoint')],
  ]
 };
 const weights={decision:.25,safety:.30,water:.20,comprehension:.15,inclusiveness:.10};

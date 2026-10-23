@@ -7,6 +7,7 @@
  function activate(mode){
   for(const t of tabs){const active=t.dataset.mode===mode;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;}
   for(const p of panels)p.hidden=p.id!=='panel-'+mode;
+  if(mode==='river'&&!autoLoaded){autoLoaded=true;refreshReport();}
  }
  tabs.forEach((t,i)=>{
   t.addEventListener('click',()=>activate(t.dataset.mode));
@@ -80,26 +81,31 @@
  ];
  let measurements=history.map((v,i)=>({hour:i+1,outflowKcfs:v[0],generationKcfs:v[1],spillKcfs:v[2],forebayFt:v[3],tailwaterFt:v[4],headFt:v[5]}));
  const ns='http://www.w3.org/2000/svg',g=$('grid');
+ let autoLoaded=false,loadingReport=false,flowMetric='outflowKcfs';
+ const flowTitles={outflowKcfs:'Total river outflow',generationKcfs:'Generation water flow',spillKcfs:'Spill flow'};
  function svgEl(tag,attrs,text){
   const el=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs||{}))el.setAttribute(k,String(v));
   if(text!==undefined)el.textContent=text;return el;
  }
  const x=i=>65+i*29.8;
  function render(){
-  const valid=measurements.filter(v=>Number.isFinite(v.outflowKcfs));if(!valid.length)return;
-  const min=Math.max(0,Math.floor(Math.min(...valid.map(v=>v.outflowKcfs))/25)*25-25);
-  const max=Math.ceil(Math.max(...valid.map(v=>v.outflowKcfs))/25)*25+25;
+  const valid=measurements.filter(v=>Number.isFinite(v[flowMetric]));if(!valid.length)return;
+  const values=valid.map(v=>v[flowMetric]);const peak=Math.max(...values);
+  const step=peak<10?2:peak<50?10:25;
+  const min=Math.max(0,Math.floor(Math.min(...values)/step)*step-step);
+  const max=Math.ceil(peak/step)*step+step;
+  $('chartTitle').textContent=flowTitles[flowMetric]+' by reported hour';
   const y=n=>250-((n-min)/(max-min))*210;
   g.replaceChildren();
   for(let i=0;i<5;i++){const n=min+(max-min)*i/4,yy=y(n);
    g.append(svgEl('line',{x1:57,y1:yy,x2:754,y2:yy,stroke:'#d2e0dd','stroke-width':1}),svgEl('text',{x:5,y:yy+4},n.toFixed(0)));}
-  const points=measurements.filter(v=>Number.isFinite(v.outflowKcfs)).map(v=>x(v.hour-1)+','+y(v.outflowKcfs)).join(' ');
+  const points=measurements.filter(v=>Number.isFinite(v[flowMetric])).map(v=>x(v.hour-1)+','+y(v[flowMetric])).join(' ');
   $('flowLine').setAttribute('points',points);
   function update(){
    let i=Number($('hour').value);i=Math.min(i,measurements.length-1);
    const v=measurements[i];$('hourLabel').textContent='Hour '+v.hour;
    $('cursorLine').setAttribute('x1',x(v.hour-1));$('cursorLine').setAttribute('x2',x(v.hour-1));
-   $('cursorDot').setAttribute('cx',x(v.hour-1));$('cursorDot').setAttribute('cy',y(v.outflowKcfs));
+   $('cursorDot').setAttribute('cx',x(v.hour-1));$('cursorDot').setAttribute('cy',y(v[flowMetric]));
    const fields=[['flowValue','outflowKcfs',1],['genValue','generationKcfs',1],['spillValue','spillKcfs',1],['foreValue','forebayFt',2],['tailValue','tailwaterFt',2],['headValue','headFt',2]];
    for(const [id,key,digits] of fields)$(id).textContent=Number.isFinite(v[key])?v[key].toFixed(digits):'—';
   }
@@ -108,18 +114,44 @@
  }
  $('hour').addEventListener('input',()=>{if(window.johnDayUpdateHour)window.johnDayUpdateHour()});
  render();
- $('loadReport').addEventListener('click',async()=>{
-  const button=$('loadReport');button.disabled=true;button.textContent='Checking USACE…';
+ document.querySelectorAll('[data-flow-series]').forEach(button=>button.addEventListener('click',()=>{
+  flowMetric=button.dataset.flowSeries;
+  document.querySelectorAll('[data-flow-series]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  render();
+ }));
+ function summarize(report){
+  const list=report.observations;
+  const low=list.reduce((a,b)=>b.outflowKcfs<a.outflowKcfs?b:a);
+  const high=list.reduce((a,b)=>b.outflowKcfs>a.outflowKcfs?b:a);
+  const mean=(list.reduce((n,v)=>n+v.outflowKcfs,0)/list.length).toFixed(1);
+  const spillMean=(list.reduce((n,v)=>n+v.spillKcfs,0)/list.length).toFixed(1);
+  $('flowStory').textContent='On '+report.reportDate+', reported outflow ranged from '+low.outflowKcfs.toFixed(1)+
+    ' thousand cfs (hour '+low.hour+') to '+high.outflowKcfs.toFixed(1)+' thousand cfs (hour '+high.hour+
+    '). The sampled-day average was '+mean+' thousand cfs; mean spill was '+spillMean+
+    ' thousand cfs. These are observations, not a river-level forecast or a navigation clearance.';
+ }
+ summarize({reportDate:'2026-07-10',observations:measurements});
+ async function refreshReport(){
+  if(loadingReport)return;
+  loadingReport=true;
+  const button=$('loadReport');button.disabled=true;button.textContent='Checking USACE report…';
   try{
-   const r=await fetch('/api/john-day-water',{signal:AbortSignal.timeout(12000)});const d=await r.json();
-   if(!r.ok||!d.ok||!Array.isArray(d.observations)||!d.observations.length)throw Error('no validated observations');
+   const response=await fetch('/api/john-day-water',{signal:AbortSignal.timeout(12000)});
+   const d=await response.json();
+   if(!response.ok||!d.ok||!Array.isArray(d.observations)||d.observations.length<20||
+      !d.observations.every(v=>Number.isFinite(v.outflowKcfs)&&Number.isFinite(v.generationKcfs)&&Number.isFinite(v.spillKcfs)))
+    throw Error('No validated completed-day report');
    measurements=d.observations;
-   $('reportDate').textContent=d.reportDate+' · completed-day USACE report';
-   $('reportNote').textContent='Reported hourly observations, not real-time flow or navigation clearance. Checked '+new Date(d.checkedAt).toLocaleString()+'.';
-   $('hour').value=0;render();button.textContent='Reload official report';
+   $('reportDate').textContent=d.reportDate+' · USACE completed-day data ('+d.observedHours+'/24 hours)';
+   $('reportNote').textContent='Dated provisional hourly observations. Checked '+new Date(d.checkedAt).toLocaleString()+
+     '. Not real-time flow, lock status, or navigation clearance.';
+   $('reportSourceLink').href=d.sourceUrl;
+   $('hour').value=0;render();summarize(d);
+   button.textContent='Refresh USACE observations';
   }catch(_){
-   $('reportNote').textContent='USACE report unavailable or format not validated. Chart still shows July 10, 2026 historical source data; not a live reading.';
-   button.textContent='Try official report again';
-  }finally{button.disabled=false;}
- });
+   $('reportNote').textContent='Newer validated data unavailable. The chart below still shows July 10, 2026 observations—not current river conditions.';
+   button.textContent='Retry official report';
+  }finally{loadingReport=false;button.disabled=false;}
+ }
+ $('loadReport').addEventListener('click',refreshReport);
 })();

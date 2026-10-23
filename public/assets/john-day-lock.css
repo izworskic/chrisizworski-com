@@ -2,3 +2,9 @@
 @media(max-width:860px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.mastInner{flex-wrap:wrap;padding:13px 0}.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.diagramLayout{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr}.hero,.heroTint{min-height:430px}.hero h1{font-size:3.1rem}}
 @media(max-width:620px){.wrap{width:calc(100% - 28px)}.mast nav{gap:10px}.mast nav a{font-size:.74rem}.wordmark span{display:none}.tabs{gap:7px}.tab{min-height:122px;padding:11px;font-size:.87rem}.tab small{font-size:.7rem}.double,.evidence,.sourceGrid{grid-template-columns:1fr}.reportBar{display:block}.reportBar .actions{margin-top:14px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.storyRow{grid-template-columns:1fr;gap:5px}.hero{background-position:56% center}.heroTint{background:linear-gradient(90deg,rgba(7,30,38,.98),rgba(7,30,38,.64))}.hero h1{font-size:2.75rem}.diagram{height:300px}.upper{right:8px}.lower{left:7px}.facts strong{font-size:1.5rem}.facts>div{padding:14px}}
 @media(max-width:390px){.metrics{grid-template-columns:1fr}.tab{font-size:.81rem}.sourceSection{padding:18px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* John Day verified-data interpretation controls */
+.chartTools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.metricTab{border:1px solid #8bb0b2;background:#fff;color:#1a4d56;border-radius:9px;padding:10px 14px;min-height:44px;font-weight:800;font-size:.81rem}
+.metricTab[aria-pressed=true]{background:#0b515c;color:#fff;border-color:#0b515c}
+.flowStory{background:#eef6f3;border-left:4px solid #0a777b;color:#244851;padding:15px 17px;border-radius:9px;font-size:.91rem;margin-bottom:15px;max-width:790px}

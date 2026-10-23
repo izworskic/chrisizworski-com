@@ -33,3 +33,18 @@ Hard vetoes: bad safety advice, unverified lock status/queue/ETA, fabricated riv
 - Check branded/metadata canonical, photo credits and links, JS disabled, accessibility keyboard, 375px/390px, reduced motion.
 - Check current navigation notices specifically for outages/amendments, and test published John Day LPMS data retrieval and real AIS reach. If not verified remain explicitly unavailable.
 - Run repository verification and ONE Vercel preview, fix errors on branch; do not merge with red checks. No automatic deploy from this plan.
+
+## October 22 second development — actual USACE report validation
+- Official USACE John Day original hourly HTML for July 10, 2026 fetched and the 24 published hourly rows preserved in tests/fixtures/john-day-2026-07-10.html; published original: https://www.nwd-wc.usace.army.mil/dd/nwdp/project_hourly/webexec/rep?date=7%2F10%2F2026&r=jda
+- Cross-checked Oct 21, 2026 official report: average outflow 73.20 kcfs; peak hourly outflow 98.60 kcfs; average head 105.79 ft. https://www.nwd-wc.usace.army.mil/dd/nwdp/project_hourly/webexec/rep?date=10%2F21%2F2026&r=jda
+- Parser checks exact date and project, named columns, >=20 numerically plausible hours, and head consistency; incomplete reports flagged partial, too-short reports unavailable.
+- Chart now switches total outflow / generation flow / spill, labels exact date and source, and summarizes daily low/peak/average rather than forecasting.
+- Lazy-load once on the river tab, cache server responses for 30 minutes; no new cron or paid services.
+- USACE and Recreation.gov document LePage Park and Plymouth Park; these are recreation destinations, NOT verified lock chamber viewpoints.
+- LPMS advertises daily status and queue but linked reports redirect to homepage in automated retrieval. John Day machine-readable feed remains UNVERIFIED; no claimed live status or AIS lock schedule.
+- DART fish counts could be future phase after exact John Day endpoint and reproduction rights confirmed.
+- Photo publisher URL accessible as real JPEG; preview UI still protected by Vercel authentication for browser inspection.
+### Next gate
+- node --test tests/john-day-*.test.js
+- node scripts/benchmark-john-day.cjs (>=90, zero truth veto)
+- npm run verify:all; live fetch through Vercel preview and 390px browser walkthrough
