@@ -1063,3 +1063,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Exactly one next action: verify real ships appear when panning the deployed map, then release after green checks.
 
 - Review follow-up: handle world-wrap longitudes and derive counts from the same fresh deduplicated local/tile union as markers. Removed the shared API proxy: browser requests public CORS-enabled Open Waters tiles directly, with no site token and no shared Vercel/provider quota. Bundled local decoder is reproducible with `npm run build:john-day-map-tiles`; fixture and wrap/count regressions retained.
+
+### John Day Duluth-style ships and stable refresh — October 23, 2026
+
+- Owner rejected purple overhead vessels and flashing. Matched Duluth's blue side-profile freighter glyph and 38×22 local / 50×26 approach / 64×30 selected sizing, with stopped/selected colors and matching legend. Replaced layer-wide clear/rebuild with MMSI-keyed updates: move existing markers, update changed icons/popups only, remove only stale or off-view reports. Keep fresh reports while replacement tiles load or partially fail. No icon rotation or ship pulse.
+- Added regression checks for same marker and popup across repeated reports and map movement, no layer clearing, position updates in place and stale removal. Prior #1125 is merged/deployed as 1dce0a96 with green main CI; current checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify the stable Duluth-style ship layer in the deployed browser and release after green checks.
+
+- Review corrections: deduplicate retained/current sources by newest `seen`, recompute approach classification from the selected observation, and immediately redraw when clearing a ship selection. Added newest-report/approach and immediate lock-selection regressions; rebuild bundled helper before release.
