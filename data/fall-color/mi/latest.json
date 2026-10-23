@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-22",
-  "updated": "2026-10-22T15:55:42.110Z",
-  "body": "The Upper Peninsula lags significantly behind southern Michigan. Western and Eastern U.P. regions show minimal color at 8 percent, while the Tip of the Mitt reaches 14 percent. Central and Southwest Lower Michigan lead the state at 91 and 87 percent respectively, with Northeast Lower and Southeast Lower in the 45-80 percent range.\n\nThis weekend's mixed skies and mild temperatures—highs near 65-69 degrees across most regions—should sustain the falling phase without accelerating leaf drop. Cooler lows in the upper 30s to low 40s may intensify color slightly, particularly in Northeast Lower where temperatures dip to 34 degrees.\n\nFor peak color viewing this weekend, Central and Saginaw Bay offers the most advanced display at 91 percent. The river road through Chippewa Nature Center in Midland combines accessibility with near-peak foliage. Southwest Lower's Blue Star Highway along the Saugatuck dunes provides an alternative with 87 percent color and scenic coastal backdrop.",
+  "date": "2026-10-23",
+  "updated": "2026-10-23T15:46:57.266Z",
+  "body": "The Upper Peninsula shows minimal color change at eight percent across all three regions, still in early decline phase. Central and Southeast Lower Michigan lead the state at 93-94 percent, near or at peak fall color. Northwest Lower Michigan sits at 56 percent in the falling phase, while Northeast Lower trails at 36 percent, also falling.\n\nThis weekend's mixed skies favor viewing across most regions, with temperatures ranging from highs near 60-73 degrees and lows in the upper 30s to low 40s. Eastern U.P. faces some rain in coming days, which may impact conditions there. Elsewhere, dry mixed skies should provide good visibility for color observation through the weekend.\n\nFor peak foliage viewing this weekend, Southeast Lower Michigan along US-12 through the Irish Hills offers the best display at peak phase with 93 percent color. If seeking earlier-season scenery, Northwest Lower's Pierce Stocking Scenic Drive at Sleeping Bear Dunes provides 56 percent color with pleasant mixed skies and moderate temperatures ideal for a drive.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-22T15:55:38.744Z",
+  "conditionsUpdated": "2026-10-23T15:46:53.657Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -18,8 +18,8 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
@@ -35,13 +35,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "tip",
-      "modeledPercent": 14,
+      "modeledPercent": 8,
       "source": {
         "drivers": [
           "regional climatology",
@@ -52,13 +52,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 65,
+      "modeledPercent": 56,
       "source": {
         "drivers": [
           "regional climatology",
@@ -69,13 +69,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 45,
+      "modeledPercent": 36,
       "source": {
         "drivers": [
           "regional climatology",
@@ -86,13 +86,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 91,
+      "modeledPercent": 94,
       "source": {
         "drivers": [
           "regional climatology",
@@ -103,13 +103,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 87,
+      "modeledPercent": 90,
       "source": {
         "drivers": [
           "regional climatology",
@@ -120,13 +120,13 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 80,
+      "modeledPercent": 93,
       "source": {
         "drivers": [
           "regional climatology",
@@ -137,8 +137,8 @@
         "anchorShiftDays": -6,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 39,
-        "satelliteWeight": 0.24
+        "satelliteAgeDays": 40,
+        "satelliteWeight": 0.2
       }
     }
   ],
