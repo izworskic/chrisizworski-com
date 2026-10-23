@@ -36,3 +36,14 @@ test('retained tiles cannot replace a newer local observation',()=>{
  const newer={...local,course:270,seen:new Date(now-30000).toISOString()};
  const [updated]=visibleReports([local],[newer],b,now);assert.equal(describe(updated,now).kind,'nearby');
 });
+
+test('country groups conserve loaded report counts and selected ships remain visible',()=>{
+ const {groupReports}=require('../lib/john-day-map-ais');
+ const ships=[{mmsi:'a',lat:47.6,lon:-122.3},{mmsi:'b',lat:47.6001,lon:-122.3001},{mmsi:'c',lat:43,lon:-83}];
+ const groups=groupReports(ships,4);
+ assert.equal(groups.reduce((sum,g)=>sum+g.count,0),3);assert.ok(groups.some(g=>g.count===2));
+ assert.deepEqual(groupReports([...ships].reverse(),4).map(g=>[g.key,g.lat,g.lon]).sort(),groups.map(g=>[g.key,g.lat,g.lon]).sort());
+ const selected=groupReports(ships,4,'a');assert.ok(selected.some(g=>g.type==='ship'&&g.key==='a'));
+ assert.equal(selected.filter(g=>g.type==='group').reduce((sum,g)=>sum+g.count,0),2);
+ assert.equal(groupReports(ships,6).filter(g=>g.type==='ship').length,3);
+});

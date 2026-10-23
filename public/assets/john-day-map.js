@@ -16,7 +16,7 @@
  ];
  const SOURCE='https://services7.arcgis.com/n1YM8pTrFmm7L4hs/ArcGIS/rest/services/Locks/FeatureServer/0';
  let viewportReports=[],mapRequest=0,mapTimer=null;
- let map=null,selected='john-day',reports=[],pendingAIS=null,shipsLayer=null,parkMarkers=new Map(),lockMarkers=new Map(),shipMarkers=new Map();
+ let map=null,selected='john-day',reports=[],pendingAIS=null,shipsLayer=null,parkMarkers=new Map(),lockMarkers=new Map(),shipMarkers=new Map(),groupMarkers=new Map();
  const panel=$('lockMapSelection'),status=$('lockMapStatus');
  const text=(tag,value)=>{const el=document.createElement(tag);el.textContent=value;return el};
  function link(label,url){const a=text('a',label);a.href=url;a.target='_blank';a.rel='noopener';return a}
@@ -32,7 +32,7 @@
  function clearShipSelection(){if(pendingAIS!==null){pendingAIS=null;drawAIS()}}
  function shipIcon(v){
   const selected=v.mmsi===pendingAIS,stopped=Number.isFinite(v.speedKnots)&&v.speedKnots<.5;
-  const width=selected?64:v.kind==='toward'?50:38,height=selected?30:v.kind==='toward'?26:22;
+  const zoom=map.getZoom(),width=selected?64:zoom<=5?18:zoom<=9?24:v.kind==='toward'?50:38,height=selected?30:zoom<=5?12:zoom<=9?14:v.kind==='toward'?26:22;
   const key=[selected,stopped,width,height].join(':');
   const icon=L.divIcon({className:'aisShipMarker'+(selected?' is-selected':'')+(stopped?' is-stopped':''),html:'<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>',iconSize:[width,height],iconAnchor:[Math.round(width/2),Math.round(height/2)],popupAnchor:[0,-Math.round(height/2)]});
   return {icon,key};
@@ -40,10 +40,24 @@
  function drawAIS(){
   if(!map||!shipsLayer)return;
   const visible=window.JohnDayMapTiles.visibleReports(reports,viewportReports,viewBounds()).map(v=>window.JohnDayVessels.describe(v)).filter(Boolean);
-  const ids=new Set(visible.map(v=>v.mmsi));
+  const overview=window.JohnDayMapTiles.groupReports(visible,map.getZoom(),pendingAIS);
+  const ships=overview.filter(item=>item.type==='ship').map(item=>item.vessel),groups=overview.filter(item=>item.type==='group');
+  const ids=new Set(ships.map(v=>v.mmsi)),groupIds=new Set(groups.map(g=>g.key));
+  for(const [id,marker] of groupMarkers)if(!groupIds.has(id)){shipsLayer.removeLayer(marker);groupMarkers.delete(id)}
+  for(const g of groups){
+   let marker=groupMarkers.get(g.key);
+   if(!marker){
+    marker=L.marker([g.lat,g.lon],{icon:L.divIcon({className:'aisVesselGroup',html:'<span>'+g.count+'</span>',iconSize:[36,36],iconAnchor:[18,18]}),title:g.count+' loaded vessel reports · select to zoom in',keyboard:true}).addTo(shipsLayer);
+    marker.on('click',()=>{clearShipSelection();map.fitBounds(marker._jdMembers.map(v=>[v.lat,v.lon]),{padding:[45,45],maxZoom:10,animate:false})});groupMarkers.set(g.key,marker);
+   }else if(marker._jdCount!==g.count){
+    marker.setIcon(L.divIcon({className:'aisVesselGroup',html:'<span>'+g.count+'</span>',iconSize:[36,36],iconAnchor:[18,18]}));
+    const el=marker.getElement();if(el)el.setAttribute('title',g.count+' loaded vessel reports · select to zoom in');
+   }
+   marker._jdMembers=g.members;marker._jdCount=g.count;
+  }
   for(const [id,marker] of shipMarkers)if(!ids.has(id)){shipsLayer.removeLayer(marker);shipMarkers.delete(id)}
   const countLabel=$('mapAISStatus');if(typeof countLabel.textContent==='string'&&/^\d+ recent vessel reports?/.test(countLabel.textContent))countLabel.textContent=countLabel.textContent.replace(/^\d+ recent vessel reports?/,visible.length+' recent vessel report'+(visible.length===1?'':'s'));
-  for(const v of visible){
+  for(const v of ships){
    let marker=shipMarkers.get(v.mmsi);const glyph=shipIcon(v);
    const stamp=[v.name,v.seen,v.speedKnots,v.lat,v.lon].join('|');
    if(!marker){

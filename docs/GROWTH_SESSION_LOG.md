@@ -1071,3 +1071,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Exactly one next action: verify the stable Duluth-style ship layer in the deployed browser and release after green checks.
 
 - Review corrections: deduplicate retained/current sources by newest `seen`, recompute approach classification from the selected observation, and immediately redraw when clearing a ship selection. Added newest-report/approach and immediate lock-selection regressions; rebuild bundled helper before release.
+
+### John Day ship-map decluttering — October 23, 2026
+
+- Owner requested the identified crowding fix. Country/world views (zoom ≤5) now use stable, clickable 64-pixel-grid report counts; selecting a count zooms to its actual member reports. Regional views (zoom 6–9) use 24×14 freighters, with existing Duluth-style detail sizing at zoom 10+. Selected ships stay visible and highlighted. Counts explicitly represent loaded/sampled reports, not a complete vessel census. Existing keyed updates and popup stability preserved.
+- Added count conservation, stable grouping, selected-vessel bypass and detail-zoom regressions. Prior #1126 merged/deployed as 3a2da1fd with green main CI. Current release checks pending; GSC/AdSense unavailable.
+- Exactly one next action: verify country groups, group selection and regional/detail sizes in the deployed browser, then release after green checks.
