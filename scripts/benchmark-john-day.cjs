@@ -40,6 +40,8 @@ const checks={
   ['source ledger',h.includes('Sources, evidence and limitations')],
   ['federal chamber dimensions and provenance',h.includes('675 ft overall')&&h.includes('84 ft usable')&&h.toLowerCase().includes('federal lock characteristics inventory')],
   ['Columbia lock comparative map',h.includes('id="lockMapSelection"')&&h.includes('data-river-lock="mcnary"')],
+  ['AIS observation query is on demand',h.includes('id="aisLoad"')&&h.includes('id="aisStatus"')],
+  ['AIS is not a traffic queue',h.includes('coverage unverified')&&h.includes('not establish local receiver coverage')],
   ['flow chart values and units',h.includes('thousand cubic feet/sec')&&h.includes('Forebay')],
   ['three-way series selector',h.includes('data-flow-series="outflowKcfs"')&&h.includes('data-flow-series="generationKcfs"')&&h.includes('data-flow-series="spillKcfs"')],
   ['dated auto-load when river mode opened',j.includes("autoLoaded=true;refreshReport()")],

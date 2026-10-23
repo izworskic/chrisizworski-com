@@ -74,6 +74,48 @@
   map.on('mouseleave','reference-lock-points',()=>{map.getCanvas().style.cursor=''});
   map.on('click','reference-lock-names',e=>{const id=e.features?.[0]?.properties?.id;if(id)select(id,true)});
  }
+
+ // AIS observations remain independent of the official static lock inventory.
+ // Never infer queue, lock status, or estimated transit from these markers.
+ let aisReports=[],aisPopup=null;
+ function aisData(){
+  return {type:'FeatureCollection',features:aisReports.map(v=>({type:'Feature',
+   geometry:{type:'Point',coordinates:[v.lon,v.lat]},
+   properties:{mmsi:v.mmsi,name:v.name||'Unidentified AIS vessel',seen:v.seen,source:v.source||'unknown',speedKnots:v.speedKnots}}))};
+ }
+ function drawAIS(){
+  if(!map||!loaded||!map.isStyleLoaded())return;
+  let source=map.getSource('recent-ais');
+  if(source){source.setData(aisData());return}
+  map.addSource('recent-ais',{type:'geojson',data:aisData()});
+  map.addLayer({id:'john-day-ais-markers',type:'circle',source:'recent-ais',paint:{
+   'circle-radius':8,'circle-color':'#8536a8','circle-stroke-width':3,'circle-stroke-color':'#fff'
+  }});
+  map.on('click','john-day-ais-markers',e=>{
+   const feature=e.features?.[0],props=feature?.properties||{},point=feature?.geometry?.coordinates;
+   if(!point||!Array.isArray(point))return;
+   if(aisPopup){aisPopup.remove();aisPopup=null}
+   const div=document.createElement('div');
+   const name=document.createElement('strong');name.textContent=props.name||'AIS vessel';
+   const note=document.createElement('p');note.textContent='AIS last heard '+(props.seen||'unknown')+
+    '. This is not a lock-queue record, arrival prediction, or real-time navigation report.';
+   div.append(name,note);
+   if(typeof GL.Popup==='function')aisPopup=new GL.Popup({closeButton:true,maxWidth:'300px',offset:18})
+    .setLngLat(point).setDOMContent(div).addTo(map);
+  });
+  map.on('mouseenter','john-day-ais-markers',()=>{map.getCanvas().style.cursor='pointer'});
+  map.on('mouseleave','john-day-ais-markers',()=>{map.getCanvas().style.cursor=''});
+ }
+ window.addEventListener('john-day-ais-observations',e=>{
+  aisReports=Array.isArray(e.detail?.observations)?e.detail.observations.filter(v=>Number.isFinite(v.lon)&&Number.isFinite(v.lat)):[];
+  if(aisPopup){aisPopup.remove();aisPopup=null}
+  drawAIS();
+ });
+ window.addEventListener('john-day-ais-select',e=>{
+  const v=aisReports.find(v=>v.mmsi===e.detail?.mmsi);
+  if(v&&map&&loaded)map.easeTo({center:[v.lon,v.lat],zoom:Math.max(9,map.getZoom()),duration:350});
+ });
+
  function ifUser(){
   if(!map||!user)return;
   const pt={type:'Feature',geometry:{type:'Point',coordinates:[user.longitude,user.latitude]},properties:{}};
@@ -88,6 +130,7 @@
   if(map&&loaded)map.fitBounds([[-122.05,45.47],[-119.12,46.03]],{padding:45,maxZoom:8,duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:350});
  }
  function cleanMap(){
+  if(aisPopup){aisPopup.remove();aisPopup=null}
   if(map){try{map.remove()}catch{ }map=null}
   loaded=false;
  }
@@ -115,7 +158,7 @@
    instance.on('load',()=>{
     if(map!==instance)return;
     clearTimeout(watchdog);
-    try{loaded=true;renderLayers();ifUser();fit();
+    try{loaded=true;renderLayers();ifUser();drawAIS();fit();
      announce(candidate+' map · verified federal lock locations only. Pin = facility position, not a public visitor entrance or nautical waypoint.');
     }catch{if(isCarto)fallback('CARTO map layers failed');else fail('Map layers unavailable')}
    });

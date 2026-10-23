@@ -52,3 +52,12 @@ test('John Day corridor map has real federal coordinates, obvious source and no 
  assert.match(js,/Previously loaded data remain displayed/);
  assert.match(map,/fitBounds/);
 });
+
+test('AIS evidence is on demand and explicitly separate from LPMS lock queue',()=>{
+ const ais=fs.readFileSync(path.join(root,'public/assets/john-day-ais.js'),'utf8');
+ const map=fs.readFileSync(path.join(root,'public/assets/john-day-map.js'),'utf8');
+ assert.match(html,/id="aisLoad"/);assert.match(html,/id="aisStatus"/);
+ assert.match(ais,/john-day-ais-observations/);assert.match(map,/john-day-ais-markers/);
+ assert.match(html,/coverage unverified/);assert.match(map,/not a lock-queue record/i);
+ assert.match(ais,/AIS vessel observation/);assert.match(ais,/not evidence of an empty river/i);
+});

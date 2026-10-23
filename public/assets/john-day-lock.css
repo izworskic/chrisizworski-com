@@ -32,3 +32,16 @@
 .mapCaption{margin-top:12px}
 @media(max-width:900px){.corridorLayout{grid-template-columns:1fr}.corridorDetail{min-height:180px}.corridorChoices{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.corridorMap,.corridorMapWrap{height:340px;min-height:340px}.corridorChoices button{padding:9px}.mapButtons{right:10px}.mapButtons button{flex:1}}
+
+.aisSection{margin:8px 0 20px;border:1px solid #cbdedc;border-radius:14px;background:#f8fbfa;padding:22px}
+.aisHeader{display:flex;align-items:center;gap:24px;justify-content:space-between;flex-wrap:wrap}
+.aisHeader>div{max-width:690px}.aisHeader h3{font-size:1.7rem}.aisHeader p:last-child{color:#4c666c;font-size:.9rem}
+.aisState{font-size:.9rem;font-weight:760;padding:13px 15px;border-left:4px solid #a87434;background:#fcf4e6;border-radius:7px}
+.aisState.evidence{display:block;background:#eaf6f2;border-left-color:#0b777c}.aisState.loading{background:#ecf2f3;border-left-color:#5e8991}
+.aisList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+.aisVessel{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;background:#fff;color:#214852;border:1px solid #cbd9d7;border-radius:10px;padding:13px;min-height:70px;width:100%}
+.aisVessel:hover,.aisVessel[aria-pressed=true]{border-color:#126f74;background:#e6f3f0}
+.aisVessel span{font-size:.79rem;color:#49676a}.aisVessel small{font-size:.68rem;color:#628084}
+.aisFoot{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.74rem;color:#4a6268;margin:10px 0}
+.aisFoot a{font-weight:850}.aisCredit{font-style:italic}
+@media(max-width:700px){.aisList{grid-template-columns:1fr}.aisSection{padding:15px}}
