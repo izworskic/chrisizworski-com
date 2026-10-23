@@ -1050,3 +1050,8 @@ This is an operational journal, not a record of proven ranking lift unless measu
 
 - Owner requested a National Parks ranger-style experience throughout John Day. Rewrote the welcome, AIS interpretation and empty/error states, shore stops and itineraries, water-lift teaching narrative, river-chart explanation, commerce/ecology/history chapters and source guidance. Each invites observation and explains a next step without promising ships, access or operating clearance. Preserved dated rules, contacts, dimensions, report data and user controls. Updated existing copy-sensitive benchmark assertions to the equivalent visible wording; no new empirical usability or growth claims. Prior release #1122 deployed as 4d03725b; current release checks pending. GSC/AdSense unavailable.
 - Exactly one next action: verify and release the interpretive copy in the browser after green repository checks.
+
+### John Day recognizable AIS ships — October 22, 2026
+
+- Owner requested ships that look like ships. Replaced map triangles with a local SVG overhead cargo-vessel silhouette: pointed bow, rounded stern, cargo hatches, wheelhouse and funnel. Course rotation retained with reported-heading fallback; map/card selection remains unchanged. Matching legend and map instructions updated; larger marker hitbox and cache versions included. No synthetic AIS observations added. Prior ranger release #1123 is merged/deployed as 60150b25; main verify job passed, public propagation audit running. GSC/AdSense unavailable. Current release checks pending.
+- Exactly one next action: verify and release the ship-marker update after green checks.
