@@ -1,3 +1,13 @@
+## Kilauea Episode Watch, plus charts on Beach Day and Manta Night - October 23, 2026
+
+- **Owner direction:** More single-purpose public Hawaii tools (not tied to one trip); chose Kilauea viewing. Asked for charts and graphs to explain the tools, and asked that the new tool cost nothing on Vercel.
+- **Existing-site check:** the hub already has Kilauea Live (go/no-go right now). This tool answers a different question: the USGS forecast window for the next episode, how often episodes have started, and whether the summit is clear. Titles differ ("Kilauea Next Episode: USGS Forecast Window" vs "Kilauea Live: Should You Go Now?") and the new page links to Kilauea Live. This was found after the build, not before; the overlap was caught before the hub sync.
+- **Owning repo:** `izworskic/national-outdoor-core` (core PRs #38 and #39, merge abdaa0c). This shell holds the mirrored page, two route rewrites and a sitemap entry, and the refreshed Beach Day and Manta pages that now carry two inline-SVG charts each.
+- **Decision fixed:** is an episode expected soon, and can you see anything from the overlook. Reads the USGS HVO daily update (status and forecast window, shown in HVO's words), Open-Meteo summit weather by hour, and a 16-episode 2026 record parsed from HVO notices (clock-timed starts and ends only). No server function: USGS and Open-Meteo allow browser calls, so the engine runs in the visitor's browser.
+- **Honest limits:** nobody can give an episode start time; the weather cutoffs are unvalidated; USGS windows have been missed (episode 55 by about 5 weeks), listed as two hand-checked cases, not a hit rate. Open-Meteo's free tier is for non-commercial use and this site shows ads: a risk to resolve before heavy traffic.
+- **Verification:** core suite 213/213; verified in a real browser against the live USGS and Open-Meteo sources. GSC, GA4 and AdSense for the new URL: NOT AVAILABLE.
+- **Exactly one next action:** Capture a GSC baseline for the Kilauea URL 7 and 28 days after deploy and compare against Kilauea Live to confirm the two do not cannibalize each other.
+
 ## Kona Manta Night Snorkel conditions - October 22, 2026
 
 - **Owner direction:** More single-purpose Hawaii tools. Chose Kona manta ray night from four options after an autocomplete breadth check (about 139 phrasings for "kona manta ray", the widest of the candidates; breadth, not volume). Chris travels to Kailua-Kona Dec 23 2026 to Jan 1 2027.

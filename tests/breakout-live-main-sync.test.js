@@ -39,7 +39,7 @@ test('breakout sync copies verified pages and routes without owning the national
   fs.writeFileSync(path.join(site,'vercel.json'),JSON.stringify({rewrites:[{source:'/national-tools/existing',destination:'/existing.html'},{source:'/national-tools/:path*',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/:path*'}]}));
 
   const result=installBreakoutLive(core,site);
-  assert.deepEqual(result,{pages:14,routes:28});
+  assert.deepEqual(result,{pages:15,routes:30});
   const v=JSON.parse(fs.readFileSync(path.join(site,'vercel.json'),'utf8'));
   const catchAll=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
   assert.ok(catchAll>0);
@@ -78,6 +78,7 @@ test('breakout sync copies verified pages and routes without owning the national
 
   assert.equal((sitemap.match(/national-tools\/big-island-beach-day\//g)||[]).length,1,'Beach Day sitemap URL must be unique');
   assert.equal((sitemap.match(/national-tools\/kona-manta-ray-night\//g)||[]).length,1,'Manta sitemap URL must be unique');
+  assert.equal((sitemap.match(/national-tools\/kilauea-episode-watch\//g)||[]).length,1,'Kilauea Episode Watch sitemap URL must be unique');
   fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-10-03"}</script>');
   installBreakoutLive(core,site);
   assert.match(fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8'),/<lastmod>2026-10-03<\/lastmod>/,'repeat sync must follow the current page date');

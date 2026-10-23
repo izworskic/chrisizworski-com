@@ -2238,6 +2238,14 @@
       "destination": "/synced-national-tools/kona-manta-ray-night/index.html"
     },
     {
+      "source": "/national-tools/kilauea-episode-watch",
+      "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-episode-watch/",
+      "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }

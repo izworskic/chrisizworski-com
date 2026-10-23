@@ -18,7 +18,7 @@ export const BREAKOUT_SLUGS = [
 
 // Single-purpose tools built outside the breakout-live portfolio config. They are mirrored and routed the same way
 // but are not part of the exactly-ten portfolio check below.
-export const EXTRA_SLUGS = ['mauna-kea-tonight','big-island-beach-day','kona-manta-ray-night'];
+export const EXTRA_SLUGS = ['mauna-kea-tonight','big-island-beach-day','kona-manta-ray-night','kilauea-episode-watch'];
 const ALL_SLUGS=[...BREAKOUT_SLUGS,...EXTRA_SLUGS];
 const TOOL_SLUGS=BREAKOUT_SLUGS.filter(x=>x!=='live-decisions');
 const CANONICAL_ORIGIN='https://chrisizworski.com';

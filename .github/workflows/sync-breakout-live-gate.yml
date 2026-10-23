@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: 11f588b92a5eea7efdecfb656001582221cd76aa
+      CORE_COMMIT: abdaa0c93a1a8dc77e17cfdcff22b65fc43a2e86
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,6 +43,7 @@ jobs:
           node "$CORE_DIR/scripts/generate-mauna-kea-page.mjs"
           node "$CORE_DIR/scripts/generate-big-island-beach-day-page.mjs"
           node "$CORE_DIR/scripts/generate-kona-manta-ray-night-page.mjs"
+          node "$CORE_DIR/scripts/generate-kilauea-episode-watch-page.mjs"
           node "$CORE_DIR/scripts/inject-network-analytics.js"
 
       - name: Install canonical pages and explicit main routes
@@ -70,6 +71,7 @@ jobs:
             mauna-kea-tonight
             big-island-beach-day
             kona-manta-ray-night
+            kilauea-episode-watch
           )
           for slug in "${slugs[@]}"; do
             file="public/synced-national-tools/$slug/index.html"
@@ -90,6 +92,8 @@ jobs:
           grep -q 'The rules, published' public/synced-national-tools/big-island-beach-day/index.html
           grep -q 'assets/kona-manta-ray-night.js' public/synced-national-tools/kona-manta-ray-night/index.html
           grep -q 'The rules, published' public/synced-national-tools/kona-manta-ray-night/index.html
+          grep -q 'assets/kilauea-engine.js' public/synced-national-tools/kilauea-episode-watch/index.html
+          grep -q 'The rules, published' public/synced-national-tools/kilauea-episode-watch/index.html
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
           grep -q 'CollectionPage' public/synced-national-tools/live-decisions/index.html
@@ -102,7 +106,7 @@ jobs:
           node - <<'NODE'
           const fs=require('fs');
           const v=JSON.parse(fs.readFileSync('vercel.json','utf8'));
-          const slugs=['live-decisions','zion-narrows-conditions','grand-canyon-access','going-to-the-sun-road-status','haleakala-sunrise','yellowstone-road-status','tioga-road-status','cadillac-mountain-sunrise','mount-rainier-road-status','lake-mead-access','lake-powell-ramp-status','mauna-kea-tonight','big-island-beach-day','kona-manta-ray-night'];
+          const slugs=['live-decisions','zion-narrows-conditions','grand-canyon-access','going-to-the-sun-road-status','haleakala-sunrise','yellowstone-road-status','tioga-road-status','cadillac-mountain-sunrise','mount-rainier-road-status','lake-mead-access','lake-powell-ramp-status','mauna-kea-tonight','big-island-beach-day','kona-manta-ray-night','kilauea-episode-watch'];
           const catchAll=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
           if(catchAll<0) throw new Error('national-tools catch-all missing');
           for(const slug of slugs){
@@ -127,7 +131,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add vercel.json public/synced-national-tools/live-decisions public/synced-national-tools/zion-narrows-conditions public/synced-national-tools/grand-canyon-access public/synced-national-tools/going-to-the-sun-road-status public/synced-national-tools/haleakala-sunrise public/synced-national-tools/yellowstone-road-status public/synced-national-tools/tioga-road-status public/synced-national-tools/cadillac-mountain-sunrise public/synced-national-tools/mount-rainier-road-status public/synced-national-tools/lake-mead-access public/synced-national-tools/lake-powell-ramp-status public/synced-national-tools/mauna-kea-tonight public/synced-national-tools/big-island-beach-day public/synced-national-tools/kona-manta-ray-night public/sitemap-breakout-live.xml
+          git add vercel.json public/synced-national-tools/live-decisions public/synced-national-tools/zion-narrows-conditions public/synced-national-tools/grand-canyon-access public/synced-national-tools/going-to-the-sun-road-status public/synced-national-tools/haleakala-sunrise public/synced-national-tools/yellowstone-road-status public/synced-national-tools/tioga-road-status public/synced-national-tools/cadillac-mountain-sunrise public/synced-national-tools/mount-rainier-road-status public/synced-national-tools/lake-mead-access public/synced-national-tools/lake-powell-ramp-status public/synced-national-tools/mauna-kea-tonight public/synced-national-tools/big-island-beach-day public/synced-national-tools/kona-manta-ray-night public/synced-national-tools/kilauea-episode-watch public/sitemap-breakout-live.xml
           if git diff --cached --quiet; then
             echo 'Breakout live production sync already current.'
             exit 0
