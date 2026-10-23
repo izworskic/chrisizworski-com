@@ -36,7 +36,7 @@
   meta.append(checked,source,caveat);
   if(!items.length){
    const card=elt('article','','shipEmpty');
-   card.append(elt('span','AIS COVERAGE GAP','smallcaps'),elt('h4','No vessel cards from this receiver right now'),elt('p','The provider returned no usable reports from the past 30 minutes. Incoming traffic is unknown—not zero. Open the official queue or compare another AIS network below.'));list.append(card);
+   card.append(elt('span','AIS COVERAGE GAP','smallcaps'),elt('h4','The river’s moving. We’re waiting for a signal.'),elt('p','The provider returned no usable reports from the past 30 minutes. Incoming traffic is unknown—not zero. Open the official queue or compare another AIS network below.'));list.append(card);
   }
   for(const v of items){
    const row=elt('button','','aisVessel');row.type='button';
