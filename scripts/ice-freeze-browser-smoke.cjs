@@ -47,6 +47,7 @@ async function run(){
     const inWinter=season==='winter';
     await page.route('**/api/ice-now**',route=>route.fulfill(asJSON(data(inWinter))));
     await page.route('**/api/ice',route=>route.fulfill(asJSON(cold)));
+    await page.route('**/api/carto-basemap-config',route=>route.fulfill(asJSON({provider:'CARTO',key:'test-public-key'})));
     await page.route('https://api.weather.gov/**',route=>route.fulfill({status:503,body:'Unavailable'}));
     // Local pinned Leaflet exactly matches production 1.9.4 without CDN dependency.
     await page.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',route=>route.fulfill({
@@ -69,10 +70,13 @@ async function run(){
       return route.abort();
     });
     await page.route('https://basemaps.cartocdn.com/**',route=>route.fulfill({status:200,contentType:'image/png',body:png}));
+    await page.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:png}));
     await page.route('https://fonts.googleapis.com/**',route=>route.abort());
     await page.route('https://fonts.gstatic.com/**',route=>route.abort());
     await page.goto('http://127.0.0.1:8126/michigan-ice/',{waitUntil:'domcontentloaded'});
     await page.locator('#ice-freeze-explorer').waitFor({timeout:15000});
+    await page.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'));
+    await page.locator('#ice-ex-reset').click();
     await page.waitForFunction(()=>document.querySelector('#ice-ex-chart-value')?.textContent?.includes('2026') ||
       document.querySelector('#ice-ex-chart-value')?.textContent?.includes('2027'),{timeout:12000});
     assert.equal(errors.length,0,'Page JS error at '+width+' '+season+': '+errors.join('\n'));
@@ -119,10 +123,18 @@ async function run(){
   const failed=await browser.newPage({viewport:{width:390,height:820}});
   await failed.route('**/api/ice-now**',route=>route.fulfill({status:503,body:'Unavailable'}));
   await failed.route('**/api/ice',route=>route.fulfill(asJSON(cold)));
+  await failed.route('**/api/carto-basemap-config',route=>route.fulfill({status:503,body:'Map key unavailable'}));
+  await failed.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',route=>route.fulfill({status:200,contentType:'application/javascript',body:fs.readFileSync(require.resolve('leaflet/dist/leaflet.js'),'utf8')}));
+  await failed.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',route=>route.fulfill({status:200,contentType:'text/css',body:fs.readFileSync(require.resolve('leaflet/dist/leaflet.css'),'utf8')}));
+  await failed.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/RRkAAAAASUVORK5CYII=','base64')}));
   await failed.route('https://api.weather.gov/**',route=>route.fulfill({status:503,body:'Unavailable'}));
   await failed.goto('http://127.0.0.1:8126/michigan-ice/',{waitUntil:'domcontentloaded'});
   await failed.locator('#ice-freeze-explorer').waitFor({timeout:10000});
-  await failed.waitForFunction(()=>/No current NOAA data available/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),{timeout:10000});
+  await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),{timeout:10000});
+  await failed.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'),{timeout:10000});
+  await failed.waitForFunction(()=>/OpenStreetMap/.test(document.querySelector('#ice-ex-basemap-status')?.textContent||''),{timeout:10000});
+  await failed.locator('#ice-ex-reset').click();
+  assert.equal(await failed.locator('#ice-ex-map .leaflet-control-zoom-in').count(),1,'Map must work while NOAA and CARTO are unavailable');
   assert.match(await failed.locator('#ice-freeze-explorer').textContent(),/Not a safe-ice assessment/);
   await failed.close();
   console.log(JSON.stringify({result:'PASS',cases:log,missingData:'PASS'},null,2));
