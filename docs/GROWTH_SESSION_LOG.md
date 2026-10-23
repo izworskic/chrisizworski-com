@@ -1,3 +1,12 @@
+## Kona Manta Night Snorkel conditions - October 22, 2026
+
+- **Owner direction:** More single-purpose Hawaii tools. Chose Kona manta ray night from four options after an autocomplete breadth check (about 139 phrasings for "kona manta ray", the widest of the candidates; breadth, not volume). Chris travels to Kailua-Kona Dec 23 2026 to Jan 1 2027.
+- **Owning repo:** `izworskic/national-outdoor-core` (core PR #36, merge 11f588b). This shell holds only the mirrored page, two route rewrites and a sitemap entry.
+- **Decision fixed:** how rough the sea is at the two manta sites (Garden Eel Cove near the airport, Manta Village at Keauhou Bay) for 6-9 pm HST on each of the next four nights, from NWS alerts, the NWS Surf Zone Forecast, the PacIOOS SWAN wave model judged against each site's own 2016-2025 evening record (plus absolute 0.4 m / 0.8 m floors because Garden Eel Cove is very sheltered), wind, rain and 24 h runoff.
+- **Honest limits:** no sighting prediction (plankton drives sightings and no source measures it); operators publish no cancellation cutoffs, so rules are unvalidated and confidence never exceeds MODERATE; tides and currents excluded. Sources read: Wikipedia (sites, plankton, year-round tours), snorkeling-report.com (rough sea, rain, wind, swell, current, tides degrade conditions).
+- **Verification:** core suite 198/198; hub `npm run verify:all` run on this branch before merge. GSC, GA4 and AdSense for the new URL: NOT AVAILABLE.
+- **Exactly one next action:** Capture a GSC baseline for this URL 7 and 28 days after deploy, then compare predicted sea ratings against what operators actually ran on a few nights before raising confidence.
+
 ## Hawaii Island decision tools: Mauna Kea Tonight and Big Island Beach Day - October 22, 2026
 
 - **Owner direction:** Build single-purpose Hawaii tools where large sites are weak, then run all three Hawaii tools (Haleakala Sunrise, Mauna Kea Tonight, Big Island Beach Day) through this playbook before merging. Chris travels to Kailua-Kona Dec 23 2026 to Jan 1 2027.
