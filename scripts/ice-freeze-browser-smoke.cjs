@@ -178,7 +178,9 @@ async function run(){
 
     await slider.fill('0');
     assert.match(await page.locator('#ice-ex-chart-value').textContent(),/4%/);
-    await page.waitForFunction(()=>/not provided|unavailable/i.test(document.querySelector('#ice-ex-daily-status')?.textContent||''),{timeout:10000});
+    await page.waitForTimeout(850);
+    console.log('archive-return-to-latest',JSON.stringify({season,day:await page.locator('#ice-ex-chart-value').textContent(),status:await page.locator('#ice-ex-daily-status').textContent(),image:await frame.getAttribute('src'),hidden:await frame.isHidden(),source:await page.locator('#ice-ex-daily-source').isVisible()}));
+    await page.waitForFunction(()=>/not provided|unavailable/i.test(document.querySelector('#ice-ex-daily-status')?.textContent||''),null,{timeout:3000});
     assert.equal(await frame.isVisible(),false,'A missing NOAA daily image must not show a previous date frame');
     assert.equal(await page.locator('#ice-ex-daily-source').isVisible(),false);
     await page.locator('#ice-ex-region').selectOption('lake-st-clair');
