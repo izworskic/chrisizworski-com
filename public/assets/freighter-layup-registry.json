@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "updatedOn": "2026-10-24",
-  "description": "Curated historic 2025–26 layup evidence in Superior, Sturgeon Bay and Milwaukee. Ten vessel records, not a complete five-lake fleet directory. One lower-confidence community report remains clearly labeled; none is a live position.",
+  "description": "Curated historical layup archive; 2024–25 and 2025–26 source-dated records in US and Canadian Great Lakes harbors. Incomplete samples, with explicit evidence status and no inferred current positions.",
   "harbors": [
     {
       "id": "superior",
@@ -11,7 +11,8 @@
       "lat": 46.724,
       "lon": -92.086,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Map marker identifies the Superior harbor area only. Individual docks are listed in each vessel record; no vessel is placed at an invented berth coordinate."
+      "note": "Map marker identifies the Superior harbor area only. Individual docks are listed in each vessel record; no vessel is placed at an invented berth coordinate.",
+      "country": "US"
     },
     {
       "id": "sturgeon-bay",
@@ -21,7 +22,8 @@
       "lat": 44.832,
       "lon": -87.378,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Harbor-wide reference near Sturgeon Bay. Vessel dry-dock positions and private shipyard access are NOT represented by map coordinates; berths can change during maintenance."
+      "note": "Harbor-wide reference near Sturgeon Bay. Vessel dry-dock positions and private shipyard access are NOT represented by map coordinates; berths can change during maintenance.",
+      "country": "US"
     },
     {
       "id": "milwaukee",
@@ -31,7 +33,30 @@
       "lat": 43.014,
       "lon": -87.883,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Approximate Milwaukee harbor reference; the Stewart J. Cort's winter berth and access permissions were not documented. Do not treat the marker as a ship position or driving destination."
+      "note": "Approximate Milwaukee harbor reference; the Stewart J. Cort's winter berth and access permissions were not documented. Do not treat the marker as a ship position or driving destination.",
+      "country": "US"
+    },
+    {
+      "id": "owen-sound",
+      "name": "Owen Sound, Ontario",
+      "display": "Owen Sound harbor / Georgian Bay",
+      "country": "CA",
+      "lake": "Lake Huron / Georgian Bay",
+      "lat": 44.578,
+      "lon": -80.944,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Reference for Owen Sound inner harbor only; not a private berth or dockside public access point. Icebreaking can temporarily disturb shoreline ice."
+    },
+    {
+      "id": "toledo",
+      "name": "Toledo, Ohio",
+      "display": "Port of Toledo / Maumee Bay",
+      "country": "US",
+      "lake": "Lake Erie",
+      "lat": 41.669,
+      "lon": -83.485,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Toledo harbor context point only. Source does not identify an individual berth or shipyard; do not present this as an actual vessel position."
     }
   ],
   "seasons": [
@@ -44,11 +69,103 @@
       "records": []
     },
     {
+      "id": "2024-25",
+      "label": "Winter 2024–25",
+      "state": "historical_snapshot",
+      "asOf": "2025-01-31",
+      "note": "A deliberately incomplete older archive: two separately reported Owen Sound winter berths. The Algoma Compass record links to the same vessel identity as in 2025–26; no claim of continuous winter occupancy or complete fleet coverage.",
+      "records": [
+        {
+          "identity": {
+            "key": "algoma-compass",
+            "imo": "7326245",
+            "mmsi": null,
+            "matchPolicy": "verified_imo_and_curated_aliases"
+          },
+          "aliases": [
+            "Roger M. Kyes",
+            "Adam E. Cornelius (1989–2018)"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "berth": "Owen Sound harbor — exact berth not verified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2025-01-31",
+          "evidenceClass": "local_maritime_museum",
+          "evidence": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "title": "The Algoma Compass Arrives for Winter Layup (reviews previous winters)",
+            "publisher": "Community Waterfront Heritage Centre",
+            "published": "2026-01-24"
+          },
+          "summary": "Local waterfront historians identify Owen Sound as a 2025 winter stop for Algoma Compass. A January 2026 local news report captions a photograph taken after its January 31, 2025 docking. Those retrospective sources establish the earlier season but do not independently verify a precise berth.",
+          "events": [
+            {
+              "date": "2025-01-31",
+              "type": "historical_arrival",
+              "text": "A later news report dates a photograph of the ship after docking at Owen Sound to January 31, 2025; the local maritime museum confirms a 2025 winter stay.",
+              "source": "https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/",
+              "sourceClass": "journalistic_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "A year before the icebreaker-assisted 2026 arrival, the ship also used Owen Sound for its winter stay.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "oakglen",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "aliases": [
+            "M/V Oakglen"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "oakglen",
+          "name": "Oakglen",
+          "harborId": "owen-sound",
+          "berth": "East side of Owen Sound harbor — individual berth unverified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2024-12-31",
+          "evidenceClass": "operator_statement",
+          "evidence": {
+            "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+            "title": "MV Oakglen Stays In Owen Sound For Winter",
+            "publisher": "Bayshore Broadcasting quoting CSL Ships director of communications",
+            "published": "2024-12-31"
+          },
+          "summary": "On December 31, 2024, the Oakglen reached Owen Sound from Port Colborne for winter layup. CSL confirmed plans for general maintenance before the next shipping season. The 1980-built gearless freighter relies on shore equipment rather than its own unloading gear.",
+          "events": [
+            {
+              "date": "2024-12-31",
+              "type": "arrival",
+              "text": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+              "sourceClass": "operator_statement"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Built in 1980, approximately 222 metres long, and described by CSL as a gearless bulk carrier.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "2025-26",
       "label": "Winter 2025–26",
       "state": "historical_snapshot",
       "asOf": "2026-01-30",
-      "note": "Ten source-dated historical vessel layup records across Superior, Sturgeon Bay and Milwaukee. Nine port-authority or maritime-historian verified, one labeled community-reported. This curated sample is NOT a complete Great Lakes fleet roster. A historical layup record does not prove where a ship is now.",
+      "note": "Twelve 2025–26 historical reports across Superior, Sturgeon Bay, Milwaukee, Owen Sound (Ontario) and Toledo: 10 source-confirmed, 2 explicitly reported. No claim of full Great Lakes coverage; dates and berths remain source-specific.",
       "records": [
         {
           "evidence": {
@@ -485,6 +602,100 @@
             {
               "text": "First thousand-foot commercial freighter on the Great Lakes, entering service in 1972; its wheelhouse and living quarters are forward.",
               "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "algoma-compass",
+            "imo": "7326245",
+            "mmsi": null,
+            "matchPolicy": "verified_imo_and_curated_aliases"
+          },
+          "aliases": [
+            "Roger M. Kyes",
+            "Adam E. Cornelius (1989–2018)"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "berth": "Owen Sound harbor — specific berth not verified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-24",
+          "evidenceClass": "local_maritime_museum",
+          "evidence": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "title": "The Algoma Compass Arrives for Winter Layup",
+            "publisher": "Community Waterfront Heritage Centre",
+            "published": "2026-01-24"
+          },
+          "summary": "The Compass finally reached Owen Sound on January 19 after waiting offshore for a Canadian Coast Guard icebreaker to open the harbor. The 1973-built bulk carrier's recurring winter visits make it a natural ship to follow from one winter to the next.",
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "icebreak_assistance",
+              "text": "CCGS Judy LaMarsh entered Owen Sound to break harbor ice so the waiting Compass could come in.",
+              "source": "https://waterfrontheritage.ca/ccgs-judy-lamarsh-breaks-the-ice/",
+              "sourceClass": "local_maritime_museum"
+            },
+            {
+              "date": "2026-01-19",
+              "type": "arrival",
+              "text": "The Compass tied up for winter layup following a second day of harbor icebreaking.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+              "sourceClass": "local_maritime_museum"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Built in 1973; earlier names were Roger M. Kyes and Adam E. Cornelius, before becoming Algoma Compass.",
+              "source": "https://www.boatnerd.com/vessels/lakers/algoma-central/algoma-compass/"
+            },
+            {
+              "text": "The operator lists Algoma Compass as a Canadian-flagged River Class bulk carrier built in 1973.",
+              "source": "https://www.algonet.com/ship/algoma-compass/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "american-spirit",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "aliases": [
+            "M/V American Spirit"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "american-spirit",
+          "name": "American Spirit",
+          "harborId": "toledo",
+          "berth": "Port of Toledo — specific berth not verified",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-22",
+          "evidenceClass": "journalistic_report",
+          "evidence": {
+            "url": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+            "title": "USCG Icebreakers Aid Great Lakes Shipping as Arctic Front Ices the Lakes",
+            "publisher": "The Maritime Executive",
+            "published": "2026-01-22"
+          },
+          "summary": "The thousand-foot American Spirit reached Toledo on January 21 after the Coast Guard cutter Neah Bay assisted its progress through ice on Lake Erie. Contemporary reporting described Toledo as the vessel's destination for winter layup, but did not identify a dock or subsequent berth confirmation.",
+          "events": [
+            {
+              "date": "2026-01-21",
+              "type": "reported_layup_arrival",
+              "text": "Media reporting says Neah Bay escorted American Spirit through Lake Erie ice and it reached Toledo intending winter layup; specific berth unconfirmed.",
+              "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+              "sourceClass": "journalistic_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "A roughly 1,004-foot bulk carrier operating on the Great Lakes since 1978.",
+              "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
             }
           ]
         }

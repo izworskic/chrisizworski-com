@@ -12,7 +12,7 @@
     confirmed_historical:{label:'Verified historical layup',weight:2},
     reported_historical:{label:'Community-reported historical layup',weight:1}
   });
-  const CLASSES=Object.freeze(['port_authority','maritime_historical_society','community_report','operator','official_agency']);
+  const CLASSES=Object.freeze(['port_authority','maritime_historical_society','local_maritime_museum','operator_statement','journalistic_report','community_report','operator','official_agency']);
   function normalizeName(value){
     return String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('en-US')
       .replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
