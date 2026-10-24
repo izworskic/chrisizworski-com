@@ -61,6 +61,8 @@
   var basemap = null, basemapFailed = false, apiFailed = false;
   var pendingMapUpdate = null, resizeObserver = null;
   var largeMapLake = 'all';
+  var selectedSeason = 'auto', archivedSeasons = {}, seasonRequest = 0, archiveLoading = false;
+  var archiveError = null;
   var dailyFrameRequest = 0, frameMode = 'focus';
   var dailyFrameCache = new Map(); // bounded client-only NOAA image load outcomes
 
@@ -95,6 +97,74 @@
   function regionData(slug) {
     return activeData && activeData.observed && activeData.observed.regions &&
       activeData.observed.regions[slug] || null;
+  }
+  // Archive dates and selection are scoped to whole-lake charts only.
+  // Live NOAA/USNIC chart on CARTO never changes with historic controls.
+  function latestSeasonStart() {
+    var now = new Date();
+    return now.getUTCFullYear() - (now.getUTCMonth() + 1 < 11 ? 1 : 0);
+  }
+  function seasonLabel(y) {
+    return y+'–'+String(y+1).slice(2);
+  }
+  function archiveForSelection() {
+    return selectedSeason === 'auto' ? null : archivedSeasons[selectedSeason];
+  }
+  function seasonMenuOptions() {
+    var latest = latestSeasonStart();
+    var options = [{value:'auto',label:'Latest · '+seasonLabel(latest)}];
+    for(var y=latest; y>=Math.max(2015,latest-10);y--)
+      options.push({value:String(y),label:'Winter '+seasonLabel(y)});
+    return options;
+  }
+  function syncSeasonMenus() {
+    var opts = seasonMenuOptions();
+    ['ice-ex-season','ice-ex-modal-season'].forEach(function(id) {
+      var el = root.querySelector('#'+id);
+      if (!el) return;
+      if (el.options.length !== opts.length ||
+          el.options[0].textContent !== opts[0].label) {
+        el.replaceChildren();
+        opts.forEach(function(p) {
+          var option=document.createElement('option');
+          option.value=p.value;option.textContent=p.label;el.appendChild(option);
+        });
+      }
+      el.value=selectedSeason;
+    });
+  }
+  function setSeason(value) {
+    var allowed=seasonMenuOptions().some(function(p){return p.value===value;});
+    if (!allowed) return;
+    stopPlayback();
+    selectedSeason=value;
+    archiveError=null;
+    archiveLoading=false;
+    ++seasonRequest; // invalidates late responses when visitor changes winter
+    syncSeasonMenus();
+    if (value==='auto') {drawChart();return;}
+    if (archivedSeasons[value]) {drawChart();return;}
+    archiveLoading=true;
+    drawChart(); // clear the old graph/image before requesting a different winter
+    var ticket=seasonRequest;
+    fetch('/api/ice-history?season='+encodeURIComponent(value)).then(function(r) {
+      if(!r.ok) throw Error('NOAA archive not available');
+      return r.json();
+    }).then(function(data) {
+      if(!data||!data.ok||!Array.isArray(data.series)||!data.series.length||
+          data.seasonStartYear!==Number(value)) throw Error('NOAA archive has no usable series');
+      archivedSeasons[value]=data;
+      if(ticket!==seasonRequest || selectedSeason!==value) return;
+      archiveLoading=false;
+      archiveError=null;
+      drawChart();
+    }).catch(function() {
+      if(ticket!==seasonRequest || selectedSeason!==value) return;
+      archiveLoading=false;
+      archiveError='NOAA daily coverage unavailable for winter '+seasonLabel(Number(value))+
+        '. Choose a different winter; nothing has been estimated.';
+      drawChart();
+    });
   }
   function seriesFor(lakeData) {
     return (lakeData && Array.isArray(lakeData.series) ? lakeData.series : []).filter(function (r) {
@@ -285,18 +355,30 @@
     svg.replaceChildren();
     var available = activeData && activeData.observed && activeData.observed.lakeWide;
     var historic = !activeData || !activeData.iceSeason;
-    var source = historic ? activeData && activeData.historical : available;
+    var source = selectedSeason === 'auto'
+      ? (historic ? activeData && activeData.historical : available)
+      : archiveForSelection();
+    var archiveYear = selectedSeason === 'auto' ? null : Number(selectedSeason);
+    if(archiveYear !== null) historic = true;
     chartSeries = seriesFor(source);
     slider.max = String(Math.max(0, chartSeries.length - 1));
     slider.disabled = chartSeries.length < 2;
     root.querySelector('#ice-ex-play').disabled = chartSeries.length < 2;
     var lakeName = REGIONS[currentSlug].lakeName;
     text('ice-ex-chart-heading', lakeName + ' — whole-lake ice cover');
-    text('ice-ex-timeline-note', historic
-      ? 'Historical observations from the last completed winter. These are not current conditions.'
-      : 'This season: observed whole-lake coverage, not a measurement of the selected bay.');
+    text('ice-ex-timeline-note', archiveYear !== null
+      ? 'Winter '+seasonLabel(archiveYear)+' · archived NOAA GLERL whole-lake observations. Not current conditions.'
+      : historic
+        ? 'Latest completed winter · historical NOAA observations, not current conditions.'
+        : 'Current winter · NOAA observations as published, not measurements of the selected bay.');
+    text('ice-ex-season-status', archiveLoading
+      ? 'Loading NOAA daily records for winter '+seasonLabel(archiveYear)+'…'
+      : archiveError || (archiveYear !== null
+          ? 'Viewing archived winter '+seasonLabel(archiveYear)+'. The CARTO map above remains current-only.'
+          : 'Automatically follows the most recent ice season. Select another winter to compare.'));
     if (!chartSeries.length) {
-      text('ice-ex-chart-value', 'No NOAA daily series is available. No values have been estimated.');
+      text('ice-ex-chart-value', archiveLoading ? 'Loading the selected NOAA season…' :
+        archiveError || 'No NOAA daily series is available for this selection. No values have been estimated.');
       syncDailyFrame();
       return;
     }
@@ -674,6 +756,9 @@
       '<div class="ice-ex-chartbox">',
       '<div class="ice-ex-kicker">Daily progression · distinct from the map</div>',
       '<h3 id="ice-ex-chart-heading">Whole-lake ice cover</h3>',
+      '<div class="ice-ex-controls"><label for="ice-ex-season"><strong>Choose winter</strong></label>',
+      '<select id="ice-ex-season" aria-label="Choose a winter for historical NOAA ice coverage"></select></div>',
+      '<p class="ice-ex-caption" role="status" aria-live="polite" id="ice-ex-season-status">Select a winter to inspect.</p>',
       '<p id="ice-ex-timeline-note" class="ice-ex-caption">Loading the dated NOAA GLERL series…</p>',
       '<div id="ice-ex-daily-panel" aria-label="NOAA historical daily ice map playback">',
       '<div id="ice-ex-daily-header"><h4>Watch the ice spread and retreat</h4>',
@@ -699,6 +784,8 @@
       '<img id="ice-ex-modal-image" alt="NOAA Great Lakes daily ice-concentration chart" hidden decoding="async">',
       '</div>',
       '<p id="ice-ex-modal-metric" aria-live="polite">Loading dated NOAA ice data…</p>',
+      '<div class="ice-ex-controls"><label for="ice-ex-modal-season"><strong>Winter</strong></label>',
+      '<select id="ice-ex-modal-season" aria-label="Choose historical ice winter in expanded map"></select></div>',
       '<div id="ice-ex-modal-controls"><label for="ice-ex-modal-slider">Date</label>',
       '<input id="ice-ex-modal-slider" type="range" min="0" max="0" value="0" step="1" disabled>',
       '<button type="button" id="ice-ex-modal-play">Play daily maps</button></div>',
@@ -723,6 +810,13 @@
     select=root.querySelector('#ice-ex-region');
     select.value=currentSlug;
     select.addEventListener('change',function(){onRegionChange(select.value);});
+    ['ice-ex-season','ice-ex-modal-season'].forEach(function(id) {
+      root.querySelector('#'+id).addEventListener('change',function(){setSeason(this.value);});
+    });
+    var yearFromURL=new URLSearchParams(location.search).get('ice-season');
+    if(yearFromURL && seasonMenuOptions().some(function(p){return p.value===yearFromURL;}))
+      selectedSeason=yearFromURL;
+    syncSeasonMenus();
     root.querySelector('#ice-ex-reset').addEventListener('click',function() {
       if (map) { setRegionMap(); map.invalidateSize({pan:false}); }
     });
@@ -803,6 +897,7 @@
     });
     document.addEventListener('visibilitychange',function(){if(document.hidden)stopPlayback();});
     onRegionChange(currentSlug);
+    if(selectedSeason!=='auto') setSeason(selectedSeason);
     initMap(); // Never wait for /api/ice-now to start CARTO or OSM.
     window.addEventListener('michigan-ice-data',function(evt){render(evt.detail);},{once:true});
     // Even a settled null response must reach the map: a failed NOAA request
