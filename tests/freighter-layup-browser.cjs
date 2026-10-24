@@ -50,7 +50,9 @@ async function run(){
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
       // The test intentionally blocks external Wikimedia images. Ship identity must remain
       // visually represented, and a failed photo may not retain a misleading photo badge.
-      const photo=page.locator('.ship-art img').first();
+      const photo=page.locator('.ship-art:has(img)').first();
+      // The image may already be hidden by its error handler. Scroll its visible
+      // art container, then assert the image fallback rather than scrolling hidden content.
       await photo.scrollIntoViewIfNeeded();
       await page.waitForFunction(()=>[...document.querySelectorAll('.ship-art img')].some(i=>i.hidden),{timeout:5000});
       const imageFallback=await page.evaluate(()=>{
@@ -60,7 +62,28 @@ async function run(){
       check(imageFallback,size.name+': image outage reveals branded ship illustration');
 
 
-      await page.locator('#harbor-filter').selectOption('sturgeon-bay');
+      // Adversarial sequence: history restoration must control the close destination.
+      await page.locator('[data-ship="lee-a-tregurtha"]').click();
+      await page.locator('[data-ship="james-r-barker"]').click();
+      await page.goBack();
+      check(await page.locator('#detail-title').textContent()==='Lee A. Tregurtha',size.name+': Back restores the previous ship');
+      await page.locator('#detail-close').click();
+      check(await page.evaluate(()=>document.activeElement?.dataset.ship)==='lee-a-tregurtha',size.name+': Close focuses the restored ship');
+      await page.locator('#ship-search').fill('Oakglen');
+      check(await page.locator('#focus-harbor').isDisabled(),size.name+': cannot fit zero matching records');
+      check(await page.locator('#season').inputValue()==='2025-26',size.name+': no automatic cross-winter switch');
+      await page.locator('[data-action="other-winter"][data-season="2024-25"]').click();
+      check(await page.locator('[data-ship]').count()===1,size.name+': earlier-winter match stays specific');
+      check(await page.locator('[data-ship="oakglen"]').count()===1,size.name+': correct earlier-winter ship');
+      check(await page.locator('#ship-search').inputValue()==='Oakglen',size.name+': search retained across winters');
+      check(await page.evaluate(()=>document.activeElement?.id)==='fleet-title',size.name+': cross-winter action leaves useful keyboard focus');
+      await page.locator('#season').selectOption('2025-26');
+      await page.waitForFunction(()=>/Basemap unavailable/.test(document.getElementById('tile-status').textContent),{timeout:10000});
+      check((await page.locator('#tile-status').textContent()).includes('lists still work'),size.name+': failed tiles are not labeled as a working basemap');
+
+      if(size.name==='mobile')await page.locator('.refinement-panel summary').click();
+      const harborFilter=page.locator(size.name==='mobile'?'#harbor-filter-mobile':'#harbor-filter');
+      await harborFilter.selectOption('sturgeon-bay');
       check(await page.locator('[data-ship]').count()===3,size.name+': Sturgeon Bay harbor filter');
       await page.locator('#focus-harbor').click();
       await page.locator('#ship-search').fill('James R Barker');
@@ -71,7 +94,7 @@ async function run(){
       check(await page.locator('#detail-body a[href*="/vessels/james-r-barker/"]').count()===1,size.name+': biography link in detail');
       await page.locator('#clear-filters').click();
       check(await page.locator('[data-ship]').count()===12,size.name+': clear restores fleet');
-      await page.locator('#harbor-filter').selectOption('milwaukee');
+      await harborFilter.selectOption('milwaukee');
       check(await page.locator('[data-ship]').count()===1,size.name+': Milwaukee filter');
 
       await page.locator('#season').selectOption('2024-25');
