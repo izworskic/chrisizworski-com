@@ -62,6 +62,25 @@ async function run(){
       check(imageFallback,size.name+': image outage reveals branded ship illustration');
 
 
+      // Adversarial sequence: history restoration must control the close destination.
+      await page.locator('[data-ship="lee-a-tregurtha"]').click();
+      await page.locator('[data-ship="james-r-barker"]').click();
+      await page.goBack();
+      check(await page.locator('#detail-title').textContent()==='Lee A. Tregurtha',size.name+': Back restores the previous ship');
+      await page.locator('#detail-close').click();
+      check(await page.evaluate(()=>document.activeElement?.dataset.ship)==='lee-a-tregurtha',size.name+': Close focuses the restored ship');
+      await page.locator('#ship-search').fill('Oakglen');
+      check(await page.locator('#focus-harbor').isDisabled(),size.name+': cannot fit zero matching records');
+      check(await page.locator('#season').inputValue()==='2025-26',size.name+': no automatic cross-winter switch');
+      await page.locator('[data-action="other-winter"][data-season="2024-25"]').click();
+      check(await page.locator('[data-ship]').count()===1,size.name+': earlier-winter match stays specific');
+      check(await page.locator('[data-ship="oakglen"]').count()===1,size.name+': correct earlier-winter ship');
+      check(await page.locator('#ship-search').inputValue()==='Oakglen',size.name+': search retained across winters');
+      check(await page.evaluate(()=>document.activeElement?.id)==='fleet-title',size.name+': cross-winter action leaves useful keyboard focus');
+      await page.locator('#season').selectOption('2025-26');
+      await page.waitForFunction(()=>/Basemap unavailable/.test(document.getElementById('tile-status').textContent),{timeout:10000});
+      check((await page.locator('#tile-status').textContent()).includes('lists still work'),size.name+': failed tiles are not labeled as a working basemap');
+
       if(size.name==='mobile')await page.locator('.refinement-panel summary').click();
       const harborFilter=page.locator(size.name==='mobile'?'#harbor-filter-mobile':'#harbor-filter');
       await harborFilter.selectOption('sturgeon-bay');

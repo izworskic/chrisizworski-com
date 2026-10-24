@@ -207,3 +207,9 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
  .refinements label[for=berth-filter]{flex:1 1 100%}
 }
 .atlas .leaflet-container a.leaflet-popup-close-button{width:44px;height:44px;line-height:44px;padding:0}
+
+.atlas .other-winters{margin-top:12px;padding:17px;border:1px solid #abc5c5;border-radius:6px;background:#edf4ef}
+.atlas .other-winters h3{margin:0 0 8px;font:500 23px Georgia,serif}
+.atlas .other-winters p{font-size:13px;margin:8px 0 14px}
+.atlas .winter-jump{min-height:44px}
+.atlas #fleet-title:focus-visible{outline:3px solid #eaa23d;outline-offset:4px}

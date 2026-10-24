@@ -4,7 +4,7 @@ const fs=require('node:fs'),vm=require('node:vm');
 const model=require('../../public/assets/freighter-layup-model.js');
 const registry=JSON.parse(fs.readFileSync('public/assets/freighter-layup-registry.json','utf8'));
 const bios=JSON.parse(fs.readFileSync('public/assets/freighter-vessel-biographies.json','utf8'));
-async function fixture({url='https://chrisizworski.com/great-lakes-freighter-winter-layup/',failures=0,stallBios=false}={}){
+async function fixture({url='https://chrisizworski.com/great-lakes-freighter-winter-layup/',failures=0,stallBios=false,map=false,carto=false}={}){
  const all=[],nodes=new Map(),listeners={};let active=null;
  class Node{
   constructor(tag='div',attrs={}){this.tagName=tag;this.attrs={};this.dataset={};this.children=[];this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.textContent='';all.push(this);for(const [k,v]of Object.entries(attrs))this.setAttribute(k,v);}
@@ -34,15 +34,27 @@ async function fixture({url='https://chrisizworski.com/great-lakes-freighter-win
  const history={pushState(_a,_b,u){entries.splice(++position);entries.push(String(u));location.href=String(u);},replaceState(_a,_b,u){entries[position]=String(u);location.href=String(u);}};
  const document={readyState:'loading',getElementById:get,createElement:t=>new Node(t),createElementNS:(_ns,t)=>new Node(t),querySelectorAll:s=>all.filter(n=>n.matches(s)),addEventListener:(k,f)=>listeners[k]=f};
  const window={FreighterLayupModel:model,addEventListener:(k,f)=>listeners[k]=f};
- const ctx={document,window,location,history,URL,Date,AbortSignal,matchMedia:()=>({matches:true}),navigator:{},fetch:async u=>{
+ const tiles=[],markers=[],geo=[];
+ const mapState={views:[],popup:null,setView(ll,z){this.views.push({ll,z});return this;},fitBounds(bounds){this.bounds=bounds;return this;},closePopup(){this.popup=null;},removeLayer(layer){layer.removed=true;}};
+ const leaflet={
+  map:()=>mapState,divIcon:o=>o,
+  layerGroup:()=>({addTo(){return this;},clearLayers(){markers.length=0;}}),
+  marker:(ll,opts)=>{const m={ll,opts,handlers:{},addTo(){markers.push(this);return this;},bindPopup(p){this.popup=p;return this;},on(k,f){this.handlers[k]=f;return this;},setIcon(icon){this.icon=icon;},getLatLng(){return this.ll;},fire(k){if(k==='click')mapState.popup=this.popup;this.handlers[k]?.();}};return m;},
+  circleMarker:()=>({addTo(){return this;},bindPopup(){return this;}}),
+  tileLayer:url=>{const layer={url,handlers:{},addTo(){tiles.push(this);return this;},on(k,f){this.handlers[k]=f;return this;},fire(k){this.handlers[k]?.();}};return layer;}
+ };
+ if(map)window.L=leaflet;
+ const ctx={document,window,location,history,URL,Date,AbortSignal,matchMedia:()=>({matches:true}),navigator:map?{geolocation:{getCurrentPosition:(ok,error)=>geo.push({ok,error})}}:{},fetch:async u=>{
+  if(u.includes('basemap-config'))return {ok:carto,json:async()=>({provider:'CARTO',key:'fixture-public-key'})};
   if(u.includes('biographies'))return stallBios?new Promise(()=>{}):{ok:true,json:async()=>bios};
   requests++;return requests<=failures?{ok:false}:{ok:true,json:async()=>structuredClone(registry)};
  }};
+ if(map)ctx.L=leaflet;
  vm.runInNewContext(fs.readFileSync('public/assets/freighter-layup.js','utf8'),ctx);listeners.DOMContentLoaded();
  const settle=()=>new Promise(r=>setImmediate(r));await settle();
  const event=async(id,type,value)=>{if(value!==undefined)get(id).value=value;get(id).listeners[type]({target:get(id)});await settle();};
  const click=async(id,attrs)=>{const n=attrs?new Node('button',attrs):get(id);get(id).listeners.click({target:n});await settle();};
- return {work:async i=>{all.find(n=>n.dataset.workStep===String(i)).listeners.click();await settle();},get,model,registry,location,entries,event,click,focused:()=>active,requests:()=>requests,
+ return {tiles,markers,geo,map:mapState,chooseHarbor:async id=>{get('harbor-panel').children.find(n=>n.className==='harbor-comparison').children.find(n=>n.attrs['aria-label'].startsWith(registry.harbors.find(h=>h.id===id).name+' ·')).listeners.click();await settle();},work:async i=>{all.find(n=>n.dataset.workStep===String(i)).listeners.click();await settle();},get,model,registry,location,entries,event,click,focused:()=>active,requests:()=>requests,
   ship:async id=>click('ship-grid',{'data-ship':id}),back:async()=>{if(position){location.href=entries[--position];listeners.popstate();await settle();}},
   forward:async()=>{if(position+1<entries.length){location.href=entries[++position];listeners.popstate();await settle();}},
   read:()=>model.readState(registry,location.href),settle};

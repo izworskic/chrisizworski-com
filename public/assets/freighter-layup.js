@@ -4,7 +4,7 @@
  'use strict';
  const $=id=>document.getElementById(id), policy=()=>window.FreighterLayupModel;
  const state={archive:null,biographies:null,map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
- let renderedSeason=null,loading=false,returnVessel=null;
+ let renderedSeason=null,loading=false,locationRequest=0,renderedListKey=null;
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text=(tag,content)=>{const el=document.createElement(tag);el.textContent=content;return el;};
  const seasonData=()=>state.archive.seasons.find(s=>s.id===state.season);
@@ -16,8 +16,10 @@
    const u=policy().stateURL(state.archive,state,location.href);
    if(u.href!==location.href)history[mode==='replace'?'replaceState':'pushState'](null,'',u.href);
  }
- function change(patch,{mode='push',fit=false}={}){
+ function change(patch,{mode='push',fit=false,keepPopup=false}={}){
    if(!state.archive)return;
+   locationRequest++;
+   if(!keepPopup&&state.map)state.map.closePopup();
    Object.assign(state,policy().normalizeState(state.archive,{...state,...patch}));
    render();writeURL(mode);
    if(fit)focusHarbor();
@@ -44,19 +46,25 @@
    const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
    options('berth-filter',[['all','All documented berths'],...[...new Set(list.map(v=>v.berth))].map(b=>[b,b])],state.berth);
    $('evidence-filter').value=state.evidence;$('sort-order').value=state.sort;
-   $('refinement-summary').textContent='Refine results'+(state.berth!=='all'?' · berth selected':'')+(state.evidence!=='all'?' · '+state.evidence+' only':'')+(state.sort==='recent'?' · newest source first':'');
+   $('focus-harbor').disabled=!state.map||!filtered().length;
+   $('refinement-summary').textContent='Refine results'+(state.activeHarbor!=='all'?' · '+harbor(state.activeHarbor).name:'')+(state.berth!=='all'?' · berth selected':'')+(state.evidence!=='all'?' · '+state.evidence+' only':'')+(state.sort==='recent'?' · newest record first':'');
    const upcoming=seasonData().state==='upcoming_unconfirmed';
    for(const id of ['harbor-filter','harbor-filter-mobile','berth-filter','evidence-filter','sort-order'])$(id).disabled=upcoming;
  }
  function renderCards(){
-   const list=filtered(),confirmed=list.filter(v=>v.status==='confirmed_historical').length;
+   const list=filtered(),key=state.season+'|'+list.map(v=>v.id).join('|');
+   const previousScroll=renderedListKey===key?$('ship-grid').scrollTop:0;
+   const suggestions=policy().otherWinterMatches(state.archive,state);
+   const other=suggestions.length?'<div class="other-winters"><h3>Found in another winter</h3><p>These matches come from a different archive. Open one to keep your search and change winters.</p><div class="winter-links">'+suggestions.map(s=>'<button type="button" class="winter-jump" data-action="other-winter" data-season="'+esc(s.id)+'">'+esc(s.label)+' · '+s.count+' matching '+(s.count===1?'record':'records')+'</button>').join('')+'</div></div>':'';
+   const confirmed=list.filter(v=>v.status==='confirmed_historical').length;
    const scope=state.activeHarbor==='all'?'all documented harbors':harbor(state.activeHarbor).name;
    $('count-note').textContent=seasonData().state==='upcoming_unconfirmed'?'No sourced layup locations for '+seasonData().label+'.':
      list.length+' of '+records().length+' records · '+scope+' · '+confirmed+' verified / '+(list.length-confirmed)+' reported in these results.';
    $('ship-grid').innerHTML=seasonData().state==='upcoming_unconfirmed'?
-     '<div class="current-empty"><h3>'+esc(seasonData().label)+' is still being written.</h3><p>No sourced winter berths are recorded here yet. A quiet transmitter does not establish layup.</p><button type="button" data-action="archive" class="small-button">Explore the latest documented archive →</button></div>':
+     '<div class="current-empty"><h3>'+esc(seasonData().label)+' is still being written.</h3><p>No sourced winter berths are recorded here yet. A quiet transmitter does not establish layup.</p><button type="button" data-action="archive" class="small-button">Explore the latest documented archive →</button></div>'+other:
      list.length?list.map(vesselCard).join(''):
-     '<div class="empty"><h3>No ships match this view.</h3><p>Try a shorter name, or widen the berth or evidence filter. Your selected winter stays the same.</p><button type="button" class="small-button" data-action="clear-search">Clear search &amp; refinements</button> <button type="button" class="small-button" data-action="reset">Reset all filters</button></div>';
+     '<div class="empty"><h3>No ships match this view.</h3><p>Try a shorter name, or widen the berth or evidence filter. Your selected winter stays the same.</p><button type="button" class="small-button" data-action="clear-search">Clear search &amp; refinements</button> <button type="button" class="small-button" data-action="reset">Reset all filters</button></div>'+other;
+   $('ship-grid').scrollTop=previousScroll||0;renderedListKey=key;
  }
  function renderStats(){
    const s=seasonData(),count=policy().totals(s),upcoming=s.state==='upcoming_unconfirmed';
@@ -64,6 +72,8 @@
    $('stat-year').textContent=upcoming?'Pending':count.confirmed+' / '+count.reported;
    $('season-note').textContent=upcoming?'Not confirmed yet. Last winter’s berth does not predict this winter’s.':'Partial historical sample · not live ship positions.';
    $('coverage-method').textContent=s.note+' Sources have different dates; a documented berth does not establish continued occupancy.';
+   const upcomingArchive=state.archive.seasons.filter(s=>s.state==='upcoming_unconfirmed').sort((a,b)=>b.id.localeCompare(a.id))[0];
+   $('upcoming-status').textContent=upcomingArchive?upcomingArchive.label+': no records in this archive yet.':'Source-dated archives · not live positions.';
    $('map-title').textContent=upcoming?'A new winter is taking shape':'Where the ships spent winter';
    $('map-intro').textContent=upcoming?'Geographic context only; no locations are confirmed for this winter.':'Harbor areas, not live ship positions.';
  }
@@ -96,20 +106,21 @@
  }
  function selectShip(id,scroll=true){
    if(!filtered().some(v=>v.id===id))return;
-   returnVessel=id;change({selected:id});
+   change({selected:id});
    const v=records().find(v=>v.id===id),h=harbor(v.harborId);
    if(state.map)state.map.setView([h.lat,h.lon],9,{animate:false});
    if(scroll){scrollTo($('ship-detail'),'start');$('ship-detail').focus({preventScroll:true});}
  }
  function closeDetail(){
-   const id=returnVessel||state.selected;change({selected:null});
+   const id=state.selected;change({selected:null});
    const origin=id&&$('ship-grid').querySelector('[data-ship="'+id+'"]');
    if(origin){origin.focus({preventScroll:true});scrollTo(origin);}else $('ship-search').focus();
  }
  function setSeason(id,selected=null){
    change({season:id,activeHarbor:'all',query:'',berth:'all',evidence:'all',sort:'name',selected},{fit:true});
  }
- function setHarbor(id,zoom=true){change({activeHarbor:id,berth:'all',selected:null},{fit:zoom});}
+ function setHarbor(id,zoom=true,keepPopup=false){change({activeHarbor:id,berth:'all',selected:null},{fit:zoom,keepPopup});}
+ function focusFleet(){scrollTo($('fleet-title'));$('fleet-title').focus({preventScroll:true});}
  function resetAll(){change({query:'',berth:'all',activeHarbor:'all',selected:null,evidence:'all',sort:'name'});if(state.map){state.map.closePopup();fitLakes();}}
  function clearSearch(){change({query:'',berth:'all',evidence:'all',selected:null});$('ship-search').focus();}
  function renderHarborPanel(){
@@ -121,11 +132,11 @@
      const chart=document.createElement('div');chart.className='harbor-comparison';
      const max=Math.max(...counts.map(h=>h.count));
      for(const h of counts){
-       const b=text('button','');b.type='button';b.className='harbor-bar';b.setAttribute('aria-label',h.name+' · '+h.count+' documented records');
+       const b=text('button','');b.type='button';b.className='harbor-bar';b.setAttribute('data-harbor',h.id);b.setAttribute('aria-label',h.name+' · '+h.count+' documented records');
        const name=text('span',h.name);name.className='harbor-name';
        const graphic=document.createElementNS('http://www.w3.org/2000/svg','svg');graphic.setAttribute('viewBox','0 0 100 10');graphic.setAttribute('aria-hidden','true');
        const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('width',String(100*h.count/max));rect.setAttribute('height','10');rect.setAttribute('rx','2');graphic.append(rect);
-       b.append(name,graphic,text('strong',String(h.count)));b.addEventListener('click',()=>setHarbor(h.id,true));chart.append(b);
+       b.append(name,graphic,text('strong',String(h.count)));b.addEventListener('click',()=>{setHarbor(h.id,true);focusFleet();});chart.append(b);
      }
      box.append(chart);return;
    }
@@ -134,7 +145,7 @@
    const foot=document.createElement('div');foot.className='harbor-links';
    const src=text('a','Harbor evidence ↗');src.href=list[0].evidence.url;src.target='_blank';src.rel='noopener';
    const publicMap=text('a','Find public waterfront locations ↗');publicMap.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('public waterfront parks '+h.name);publicMap.target='_blank';publicMap.rel='noopener';
-   const all=text('button','Show all harbors');all.type='button';all.addEventListener('click',resetAll);foot.append(src,publicMap,all);box.append(foot);
+   const all=text('button','Show all harbors');all.type='button';all.addEventListener('click',()=>{resetAll();focusFleet();});foot.append(src,publicMap,all);box.append(foot);
  }
  function shipIcon(count,active=false){
    return L.divIcon({className:'layup-pin'+(active?' is-active':''),html:'<span>'+count+'</span>',iconSize:[44,44],iconAnchor:[22,22]});
@@ -150,14 +161,19 @@
      const point=harbor(h.id),list=records().filter(v=>v.harborId===h.id),verified=list.filter(v=>v.status==='confirmed_historical').length;
      const marker=L.marker([point.lat,point.lon],{icon:shipIcon(h.count),title:h.name+' · '+h.count+' historical records; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
      const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',seasonData().label+' · '+verified+' verified / '+(list.length-verified)+' reported. Approximate harbor reference, not a ship position.'));
-     const b=text('button','Explore this harbor');b.type='button';b.addEventListener('click',()=>{setHarbor(h.id,true);scrollTo($('fleet'));});pop.append(b);
-     marker.bindPopup(pop,{maxWidth:260});marker.on('click',()=>setHarbor(h.id,false));state.markers.push({id:h.id,count:h.count,marker});
+     const b=text('button','Explore this harbor');b.type='button';b.addEventListener('click',()=>{setHarbor(h.id,true);focusFleet();});pop.append(b);
+     marker.bindPopup(pop,{maxWidth:260});marker.on('click',()=>setHarbor(h.id,false,true));state.markers.push({id:h.id,count:h.count,marker});
    }
+   renderMapStatus();
+ }
+ function renderMapStatus(){
+   if(!state.map||!state.markerLayer)return;
    $('map-status').textContent=state.markers.length?'All '+state.markers.length+' harbor references for this winter remain visible; filters narrow the ship list.':'No sourced locations for this winter; map is context only.';
  }
  function fitLakes(){if(state.map)state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false});}
  function focusHarbor(){
    if(!state.map)return;
+   locationRequest++;renderMapStatus();
    state.map.closePopup();
    const ids=new Set(filtered().map(v=>v.harborId)),pins=state.markers.filter(m=>ids.has(m.id));
    if(pins.length===1)state.map.setView(pins[0].marker.getLatLng(),9,{animate:false});
@@ -173,8 +189,19 @@
      const url=carto?'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
      const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')}).addTo(state.map);
      state.tiles=layer;
-     layer.on('tileerror',()=>{if(carto&&!failed){failed=true;state.map.removeLayer(layer);add(false)}});
-     layer.on('load',()=>{$('tile-status').textContent=(carto?'CARTO':'OpenStreetMap')+' basemap'});
+     let successes=0,errors=0;
+     const status=()=>{
+       if(state.tiles!==layer)return;
+       $('tile-status').textContent=!successes?'Basemap unavailable · harbor and ship lists still work':
+         errors?'Partial basemap · some tiles unavailable':(carto?'CARTO':'OpenStreetMap')+' basemap';
+     };
+     layer.on('tileload',()=>{successes++;status();});
+     layer.on('tileerror',()=>{
+       if(state.tiles!==layer)return;
+       errors++;
+       if(carto&&!failed){failed=true;state.map.removeLayer(layer);add(false);}else status();
+     });
+     layer.on('load',status);
    };
    add(Boolean(key));
  }
@@ -182,13 +209,15 @@
  function locate(){
    if(!state.map){$('map-status').textContent='Map unavailable. Choose a documented harbor from the list.';return;}
    if(!navigator.geolocation){$('map-status').textContent='Location unavailable in this browser. Choose a harbor instead.';return;}
+   const request=++locationRequest;
    $('map-status').textContent='Waiting for your location…';
    navigator.geolocation.getCurrentPosition(p=>{
+     if(request!==locationRequest)return;
      const ll=[p.coords.latitude,p.coords.longitude];
      if(state.locMarker)state.map.removeLayer(state.locMarker);
      state.locMarker=L.circleMarker(ll,{radius:7,color:'#fff',weight:2,fillColor:'#a64b29',fillOpacity:1}).addTo(state.map).bindPopup('Your approximate location; not a verified ship-viewing site.');
      state.map.setView(ll,9,{animate:false});$('map-status').textContent='Your location shown. Harbor pins remain historical references.';
-   },()=>{$('map-status').textContent='Location not shared. Choose a harbor or All Great Lakes instead.';},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+   },()=>{if(request!==locationRequest)return;$('map-status').textContent='Location not shared. Choose a harbor or All Great Lakes instead.';},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
  }
  function initMap(){
    if(!window.L){$('map-status').textContent='Map unavailable. All source-dated records remain in the harbor and ship lists.';$('layup-map').querySelector('.map-loading').textContent='Use the harbor comparison and ship list below.';return;}
@@ -201,7 +230,7 @@
    const seasonChanged=renderedSeason!==state.season;
    renderControls();renderStats();renderCards();renderDetail();renderHarborPanel();appendBiographyLinks();
    if(seasonChanged){renderMapPins();renderedSeason=state.season;}
-   syncMapSelection();
+   syncMapSelection();renderMapStatus();
  }
  async function loadBiographies(){
    try{
@@ -245,11 +274,12 @@
    $('ship-grid').addEventListener('click',e=>{
      const b=e.target.closest('button');if(!b)return;
      if(b.dataset.ship)selectShip(b.dataset.ship);
-     if(b.dataset.action==='reset')resetAll();
+     if(b.dataset.action==='reset'){resetAll();focusFleet();}
      if(b.dataset.action==='clear-search')clearSearch();
-     if(b.dataset.action==='archive')setSeason(policy().defaultSeason(state.archive));
+     if(b.dataset.action==='archive'){setSeason(policy().defaultSeason(state.archive));focusFleet();}
+     if(b.dataset.action==='other-winter'&&policy().otherWinterMatches(state.archive,state).some(s=>s.id===b.dataset.season)){change({season:b.dataset.season,activeHarbor:'all',berth:'all',evidence:'all',selected:null},{fit:true});focusFleet();}
    });
-   $('detail-body').addEventListener('click',e=>{const b=e.target.closest('[data-winter]');if(!b)return;setSeason(b.dataset.winter,b.dataset.vessel);returnVessel=b.dataset.vessel;scrollTo($('ship-detail'),'start');$('ship-detail').focus({preventScroll:true});});
+   $('detail-body').addEventListener('click',e=>{const b=e.target.closest('[data-winter]');if(!b)return;setSeason(b.dataset.winter,b.dataset.vessel);scrollTo($('ship-detail'),'start');$('ship-detail').focus({preventScroll:true});});
    window.addEventListener('popstate',()=>{if(!state.archive)return;Object.assign(state,policy().readState(state.archive,location.href));render();focusHarbor();});
    document.querySelectorAll('[data-work-step]').forEach(b=>b.addEventListener('click',()=>winterWork(Number(b.dataset.workStep))));
    boot();

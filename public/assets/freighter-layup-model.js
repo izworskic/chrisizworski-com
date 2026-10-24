@@ -130,9 +130,15 @@
     if(u.hash==='#ship-detail'&&!s.selected)u.hash='';
     return u;
   }
+  function otherWinterMatches(data,state){
+    if(normalizeName(state.query).length<2)return [];
+    return data.seasons.filter(s=>s.id!==state.season&&s.state==='historical_snapshot')
+      .map(s=>({id:s.id,label:s.label,count:s.records.filter(v=>matchesSearch(v,state.query)).length}))
+      .filter(s=>s.count).sort((a,b)=>b.id.localeCompare(a.id));
+  }
   function harborCounts(data,seasonId){
     const list=data.seasons.find(s=>s.id===seasonId)?.records||[];
     return data.harbors.map(h=>({id:h.id,name:h.name,count:list.filter(v=>v.harborId===h.id).length})).filter(h=>h.count).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name));
   }
-  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals,defaultSeason,selectRecords,normalizeState,readState,stateURL,harborCounts});
+  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals,defaultSeason,selectRecords,normalizeState,readState,stateURL,harborCounts,otherWinterMatches});
 });
