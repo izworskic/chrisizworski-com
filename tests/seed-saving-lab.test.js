@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'../public/seed-saving-lab/index.html'),'utf8');
-const chunks=Array.from(html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g),m=>m[1]);
+const chunks=html.split('<script>').slice(1).map(x=>x.split('</script>')[0]);
 const source=chunks.filter(s=>s.includes('SeedLabData = data')||s.includes('SeedLabEngine=api'));
 const ctx=vm.createContext({});
 for(const s of source)vm.runInContext(s,ctx,{timeout:1000});
@@ -16,7 +16,7 @@ test('Seed Saving Lab — discoverable static route and valid schema',()=>{
  assert.match(html,/https:\/\/chrisizworski.com\/seed-saving-lab\//);
  assert.match(html,/id="whole-garden"/);
  assert.match(html,/https:\/\/chrisizworski.com\/#person/);
- const json=JSON.parse(html.match(/<script type="application\/ld\+json">([\\s\\S]*?)<\\/script>/)[1]);
+ const json=JSON.parse(html.split('<script type="application/ld+json">')[1].split('</script>')[0]);
  assert.equal(json['@graph'][0]['@id'],'https://chrisizworski.com/#person');
 });
 test('Seed Saving Lab — curated vegetable and flower inventory',()=>{
