@@ -74,6 +74,7 @@ test('both canonical pages carry working asset references, differentiated static
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=fs.readFileSync('public/'+slug+'/index.html','utf8');assert.match(html,new RegExp('https://chrisizworski.com/'+slug+'/'));
     const graph=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];assert.ok(graph.some(x=>x['@type']==='Person'&&x['@id']==='https://chrisizworski.com/#person'));
+    assert.match(html, /id="resetMap"[^>]*>View entire Seaway<\/button>/);
     assert.match(html,/not live telemetry/);assert.match(html,/not a water-surface elevation profile/);assert.match(html,/not counts at this selected lock/);assert.match(html,/Not reported/);
     for(const name of ['seaway.css','seaway-reference.js','seaway-core.js','seaway.js'])assert.ok(html.includes('/assets/'+name));
     const title=html.match(/<title>(.*?)<\/title>/)[1].replace(/&amp;/g,'&');assert.ok(title.length<=60,title);assert.ok(html.match(/<meta name="description" content="([^"]+)/)[1].length<=158);

@@ -1139,3 +1139,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Resolved stale pair results by recalculating all field edits; added immediate initial answer, two-mode hero navigation, accessible common/botanical plant-name filters, concise live announcements, priority-first whole-garden action, faster additions and one-click flagged-pair drill-down. Preserved species-first scientific caveats and existing page canonical.
 - Node benchmark `scripts/benchmark-seed-lab-usability.mjs` registered in required `verify:all`. User research, GSC, GA4 and AdSense results NOT AVAILABLE; no conversion, revenue, SEO or human satisfaction improvement claimed.
 - Exactly one next action: verify complete branch CI and preview interaction gates, then merge and inspect actual production deployment.
+
+
+### Seaway return to full map — October 23, 2026
+
+- Owner could not find a way back to the entire mapped Seaway. Replaced “Fit selected region” with an always-visible “View entire Seaway” map button on both canonical pages. It selects all five researched regions (Montreal to Lake Ontario), fits their bounds, clears ship name/type filters and selected ship, closes the popup, and restores the map overview. The button also works when the region is already “all” but a lock/ship or manual zoom has narrowed the map. The regional selector now calls its wide option “Entire Seaway.” Existing locks, camera panel and viewing plans remain available.
+- Based on main ed6b6fab; full gate, latest main verification, PR and deployed interaction evidence will be recorded in the release PR. GSC/GA4/AdSense metrics NOT AVAILABLE; no search or revenue uplift claimed.
+- Exactly one next action: verify and release the full-map return from regional, filtered and zoomed-in map states on both pages.
