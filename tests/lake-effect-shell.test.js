@@ -9,6 +9,9 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.equal(route?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect");
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/">/);
  assert.match(html,/national-snowpack-melt\.vercel\.app\/assets\/lake-effect\.js/);
+ assert.match(html,/id="radar-basemap-status"/);
+ assert.match(html,/lake-effect-radar\.js\?v=20261024-2/);
+ assert.match(read("api/carto-basemap-config.js"),/CARTO_BASEMAP_PUBLIC_KEY/);
  assert.match(html,/chrisizworski.com\/#person/);
  assert.match(html,/Built by <a href="https:\/\/chrisizworski.com\/chris-izworski\//);
  assert.match(html,/dateModified":"2026-10-24"/);
