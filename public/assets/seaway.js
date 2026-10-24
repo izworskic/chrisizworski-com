@@ -50,7 +50,7 @@
   function shipDetail(v){
     const div=el('div');div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
     if(v.lengthMeters)div.append(el('p','Reported length '+v.lengthMeters+' m'+(v.beamMeters?' · beam '+v.beamMeters+' m':'')));
-    div.append(el('p','A recent position, not a lock appointment. AIS destination text is not a verified itinerary.'),a('Check official lock order of turn ↗',D.officialQueue),el('br'),a('Original ship reports & source ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));return div;
+    div.append(el('p','A radio postcard from the ship: where it reported, and when. It does not reserve a turn at a lock. AIS destination text is not a verified itinerary.'),a('Check official lock order of turn ↗',D.officialQueue),el('br'),a('Original ship reports & source ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));return div;
   }
   function updateReportLine(){
     const d=data(),has=C.visible(d?.vessels||[],region).length,regionResult=d?.regions?.find(r=>r.id===region);
@@ -59,7 +59,7 @@
     if(unavailable&&has)label+=' · recent saved reports remain below';
     $('reportState').textContent=label;$('reportState').parentElement.dataset.state=unavailable?'unavailable':state||'loading';
     $('reportTime').textContent=d?.checkedAt?'Last successful source check '+time(d.checkedAt):'Report ages appear with each ship.';
-    $('regionContext').textContent=region==='all'?'Five researched areas from Montreal toward Lake Ontario. These are received reports, not a complete census or a list of confirmed Seaway transits.':regionById.get(region).note;
+    $('regionContext').textContent=region==='all'?'Follow five stretches from Montreal toward Lake Ontario. Each symbol is a recent radio postcard from a ship, not a complete traffic census or a confirmed Seaway transit.':regionById.get(region).note;
   }
   function updateList(){
     const ships=reports(),container=$('shipList'),keep=new Set(ships.map(v=>v.mmsi));
@@ -126,12 +126,12 @@
   }
   function chooseShip(id,focus){
     const v=reportFor(id);if(!v)return;
-    selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','This position does not establish the next lock or an arrival time.'));
+    selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','Start with the report’s age, then look at its place on the river. This position does not establish the next lock or an arrival time.'));
     const links=el('div',undefined,'link-row');links.append(a('Official transit information ↗',D.officialQueue),a('Original ship reports ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));panel.append(links);
     if(focus&&map){map.setView([v.lat,v.lon],Math.max(11,map.getZoom()),{animate:false});markers.get(id)?.openPopup();}
     track('select_ship','reported-vessel');
   }
-  function render(){updateReportLine();updateList();updateRegionReports();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Choose a current ship card or consult the official transit information.'));}}
+  function render(){updateReportLine();updateList();updateRegionReports();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Pick another recent ship report, or check the official transit information to keep following the journey.'));}}
   async function loadReports(){
     if(document.hidden)return;
     const id=++requestId,scope=region;loading=true;updateReportLine();updateList();$('refreshReports').disabled=true;
@@ -150,7 +150,7 @@
   }
   function resetMapSelection(){
     map?.closePopup();const panel=$('mapSelection');panel.dataset.selection='overview';
-    panel.replaceChildren(el('strong','Seven steps between Montreal and Lake Ontario.'),el('p','Tap a numbered lock, a viewing marker or a ship to explore its story. Lock dots are approximate landmarks, not visitor entrances.'));
+    panel.replaceChildren(el('strong','Seven steps between Montreal and Lake Ontario.'),el('p','Choose a ship for its recent radio postcard, or a numbered lock for the story behind the step. Lock dots are approximate landmarks, not visitor entrances.'));
   }
   function showShipWatch(){$('ship-watch').scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});}
   function applyShipFilters(){
@@ -221,7 +221,7 @@
     const nearby=C.visible(data(v.region)?.vessels||[],'all').filter(ship=>C.distance(v,ship)<=5),activity=el('div',undefined,'local-activity');
     const checked=!errors.has(v.region)&&data(v.region)?.regions?.some(r=>r.id===v.region&&r.state!=='unavailable');
     activity.append(el('strong',nearby.length?nearby.length+' recent report'+(nearby.length===1?'':'s')+' within about 5 km':!checked?'Check this region for recent signals':'No fresh reports received within about 5 km'));
-    activity.append(el('p',nearby.length?nearby.map(x=>x.name||x.mmsi).join(' · ')+'. Proximity does not establish a lock arrival or visibility from this spot.':'Consult the official order of turn before timing your visit. Coverage gaps can leave passing ships unreported.'));panel.append(activity,el('p',v.fallback),el('p',v.access));
+    activity.append(el('p',nearby.length?nearby.map(x=>x.name||x.mmsi).join(' · ')+'. Proximity does not establish a lock arrival or visibility from this spot.':'The river does not promise an encore on our timetable. Check the official order of turn before timing your visit; gaps in radio coverage can leave passing ships unreported.'));panel.append(activity,el('p',v.fallback),el('p',v.access));
     if(location)panel.append(el('p',C.distance(location,v).toFixed(0)+' km straight-line distance from your location. Check road directions; this is not driving distance.','fine'));
     const links=el('div',undefined,'link-row');links.append(a('Google Maps directions ↗',directions(v)),a('Official access & visitor information ↗',v.source));
     if(v.detailUrl&&window.location.pathname!==v.detailUrl){const link=el('a','Full Eisenhower Lock visiting guide →');link.href=v.detailUrl;links.append(link);}
@@ -243,7 +243,7 @@
     if(focus){selectedShip=null;map?.closePopup();setRegion(lock.region,true);if(map)map.setView([lock.lat,lock.lon],13,{animate:false});const panel=$('mapSelection');panel.dataset.selection='lock';panel.replaceChildren(el('strong','Lock '+lock.number+' · '+lock.name),el('p',lock.story),el('p',lock.access));if(lock.viewpoint)panel.append(a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
     if(focus){updateList();drawShips();}writeURL(focus);track('select_lock',id);
   }
-  const stages=['Enter the chamber at the starting water level.','Secure the ship. Both gates close.','Change the water level by gravity.','Match the water level on the departure side.','Open the departure gate and continue the journey.'];
+  const stages=['Enter the water elevator. The chamber matches the water level on the ship’s approach.','Close the doors. The ship is secured and both gates shut before the water changes level.','Let gravity do the work. Valves let water flow from the higher side toward the lower side; the ship stays afloat.','Match the levels. The chamber and the departure side must be level before the exit gate opens.','Open the way ahead. The ship floats out at its new level, ready for the next reach of river.'];
   function renderModel(){
     const lock=lockById.get(selectedLock),down=$('modelDirection').value==='down',frame=C.lockFrame(progress,lock.lift,down);
     $('modelProgress').value=progress;$('modelLockName').textContent=lock.name+' · '+(lock.variableLift?'illustrative adjustment ':'reference lift ')+lock.lift.toFixed(1)+' m';
@@ -301,7 +301,7 @@
       const select=()=>{for(const bar of s.querySelectorAll('.history-bar'))bar.classList.remove('is-selected');g.querySelector('.history-bar')?.classList.add('is-selected');$('historyReadout').textContent=label+'. Historical Seaway series, not this lock or today’s arrivals.';track('history_month',String(i+1));};g.addEventListener('click',select);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});s.append(g);
     });
     if(width<500)s.append(svg('text',{x:width/2,y:height-7,'text-anchor':'middle',class:'chart-label'},'Month number · January 1 → December 12'));
-    target.replaceChildren(s);$('historyReadout').textContent=year+' · '+(field==='vessel_transits'?'commercial vessel transits':'commercial tonnage, metric tons')+'. Select a month to read its value.';
+    target.replaceChildren(s);$('historyReadout').textContent=year+' · '+(field==='vessel_transits'?'commercial vessel transits':'commercial tonnage, metric tons')+'. Choose a month to open that page of the logbook.';
     const table=el('table'),head=el('thead'),tr=el('tr');tr.append(el('th','Month · '+year),el('th',field==='vessel_transits'?'Commercial vessel transits':'Commercial metric tons'));head.append(tr);const body=el('tbody');for(const r of rows){const row=el('tr');row.append(el('th',new Date(Date.UTC(year,r.month-1,1)).toLocaleString('en-US',{month:'long',timeZone:'UTC'})),el('td',r.value===null?'Not reported':r.value.toLocaleString('en-US')));body.append(row);}table.append(head,body);$('historyTable').replaceChildren(table);
   }
   $('regionSelect').addEventListener('change',e=>setRegion(e.target.value,true));
