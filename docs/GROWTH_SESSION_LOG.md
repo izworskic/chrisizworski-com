@@ -1206,3 +1206,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Manual before scores on main: planting calendar ~60, frost dates ~44, matchmaker ~45, tomatoes ~36, seed starting ~36. After, on the automated gate: 100 each. Defects fixed: tomato and matchmaker pages scrolled sideways on phones; seed starting intro rendered inside the site header and zone 6a frost dates were out of order; matchmaker no longer calls a Vercel function.
 - Protected titles, H1s, canonicals, `tomato-quick-answer`, `frost-quick-answer` and the zone direct-answer sentence unchanged. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: owner reviews the preview and decides on merge.
+
+### What to Plant Now in Michigan: engine on the hub, October 24, 2026
+
+- Owner said "get all this done". Built the station-based, rule-based engine (`lib/plant-now`, `public/assets/garden-tools/plant-now.js`) on `/michigan-gardening/` with MSU rules quoted on the page; 11 crops live, lettuce, potatoes, garlic, basil, cilantro and harvest NOT REPORTED. Corrected conflicting frost values on the hub and `/michigan-last-spring-freeze/`. No new URLs, no server functions.
+- Chrome extension was not reachable from the session, so the MSU source pack is still unread. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: read the MSU source pack in a browser and move sourced crops out of NOT REPORTED.
