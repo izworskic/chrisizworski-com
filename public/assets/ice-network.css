@@ -1,0 +1,15 @@
+/* Static, crawlable navigation between independent ice tools; no JS or ad slots. */
+.ice-network{box-sizing:border-box;max-width:1060px;margin:26px auto 22px;padding:clamp(16px,3vw,24px);border:1px solid #bad0d7;border-radius:15px;background:#f4f9fa;color:#17333e;font:400 15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.ice-network *{box-sizing:border-box}
+.ice-network__intro h2{font:700 clamp(19px,2.5vw,25px)/1.23 system-ui,sans-serif;margin:0 0 6px;color:#113f51}
+.ice-network__intro p{margin:0 0 15px;max-width:72ch;color:#355767}
+.ice-network__links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ice-network__item{display:flex;flex-direction:column;gap:7px;min-width:0;padding:14px;border:1px solid #c3d9de;border-radius:10px;background:#fff;color:#17485c!important;text-decoration:none!important;box-shadow:none}
+.ice-network__item strong{font-weight:700;font-size:15px;line-height:1.3}
+.ice-network__item span{font-size:13px;line-height:1.5;color:#3f5d68}
+.ice-network__item .ice-network__action{font-size:13px;font-weight:700;color:#166584;margin-top:auto}
+.ice-network__item:hover,.ice-network__item:focus-visible{background:#e9f5f7;border-color:#438aa0}
+.ice-network__item:focus-visible{outline:3px solid #226f86;outline-offset:2px}
+.ice-network__safety{border-top:1px solid #d4e4e8;padding-top:10px;margin:15px 0 0;font-size:12px;color:#4b616b}
+@media(max-width:700px){.ice-network__links{grid-template-columns:1fr}.ice-network{margin:22px auto 18px;padding:16px}.ice-network__item{padding:14px}.ice-network__intro p{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.ice-network__item{transition:none}}
