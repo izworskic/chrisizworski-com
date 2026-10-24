@@ -36,7 +36,7 @@
  }
  function renderCards(){
    const list=filtered(),total=policy().totals(seasonData());
-   const scope=state.activeHarbor==='all'?'both sampled harbors':harbor(state.activeHarbor)?.name||'selected harbor';
+   const scope=state.activeHarbor==='all'?'all sampled harbors':harbor(state.activeHarbor)?.name||'selected harbor';
    $('count-note').textContent=state.season==='2026-27'?'No confirmed 2026–27 layups yet. Previous-season docks are not forecasts.':
     list.length+' of '+total.documented+' sourced vessel records · '+scope+' · '+total.confirmed+' verified / '+total.reported+' community-reported overall.';
    $('ship-grid').innerHTML=state.season==='2026-27'?
@@ -52,7 +52,7 @@
    $('stat-year').textContent=s.state==='historical_snapshot'?count.confirmed+' / '+count.reported:'Pending';
    $('season-note').textContent=s.note;
    $('map-intro').textContent=s.state==='historical_snapshot'?
-      'Explore a partial historical roster from Superior and Sturgeon Bay. Map markers identify approximate harbors, not specific dock positions or live vessels.':
+      'Explore a partial historical roster from Superior, Sturgeon Bay and Milwaukee. Map markers identify approximate harbors, not dock positions or live vessels.':
       'No layup locations have been confirmed for this winter. Map is geographic context only; last year’s berth does not predict this year’s.';
  }
  function selectShip(id,scroll){
@@ -84,7 +84,7 @@
    const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
    if(!records().length){box.append(text('h3','The new winter has not been confirmed'),text('p','The 2025–26 archive remains available through the season selector. The map never assigns a past berth to the new season.'));return}
    if(state.activeHarbor==='all'){
-     box.append(text('h3','Winter harbors · select a coast'),text('p','Compare source-dated records in Superior and Sturgeon Bay. The registry is partial, and each harbor point is approximate. Select a harbor marker or filter to see its fleet.'));
+     box.append(text('h3','Winter harbors · select a harbor'),text('p','Compare source-dated records in Superior, Sturgeon Bay and Milwaukee. This is a partial archive: every harbor marker is approximate. Select a harbor marker or filter to see its fleet.'));
      const wrap=document.createElement('div');wrap.className='harbor-chip';
      for(const id of [...new Set(records().map(v=>v.harborId))]){
        const h=harbor(id),ships=records().filter(v=>v.harborId===id),button=text('button',h.name+' · '+ships.length+' ships');
@@ -124,7 +124,7 @@
      const button=text('button','Explore this harbor');button.type='button';button.addEventListener('click',()=>{setHarbor(id,true);$('fleet').scrollIntoView({behavior:'smooth',block:'start'})});pop.append(button);
      marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});
    }
-   $('map-status').textContent=ids.length?ids.length+' historical harbor references · 0 vessel positions implied · one community-reported record clearly labeled':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
+   $('map-status').textContent=ids.length?ids.length+' historical harbor references · no vessel positions implied · community reports labeled separately':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
  }
  function fitLakes(){if(!state.map)return;state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false})}
  function focusHarbor(){const ids=state.markers;if(!state.map)return;if(ids.length)state.map.setView(ids[0].marker.getLatLng(),10,{animate:false});else fitLakes()}
