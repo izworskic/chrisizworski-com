@@ -56,16 +56,17 @@ tr:nth-child(even) td{background:#fbfaf7}
 .src{font-size:12.5px;color:#777;margin-top:26px}
 .credit{font-size:12.5px;color:#777;margin-top:8px}
 @media print{
-  .site-nav,.tool,.tool-strip,#printWrap{display:none}
+  .site-nav,.tool,.tool-strip,#printWrap,.gk-actions,.gk-controls{display:none}
   #thisWeek{display:none}
   body{font-size:11px}
   h1{font-size:20px}
   table{font-size:10px}
   th,td{padding:4px 5px}
 }
-@media(max-width:640px){table{display:block;overflow-x:auto}}
+@media(max-width:640px){table{display:block;overflow-x:auto}h1{font-size:26px;line-height:1.25}}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-frost-dates/","url":"https://chrisizworski.com/michigan-frost-dates/","name":"Michigan Last Frost Dates by City: 2026 Planting Calendar","description":"Find Michigan's last frost date by city using 78 station probability records, then open a 2026 planting calendar with crop-specific sowing dates.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-07","inLanguage":"en-US","breadcrumb":{"@id":"https://chrisizworski.com/michigan-frost-dates/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/michigan-frost-dates/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Frost Dates","item":"https://chrisizworski.com/michigan-frost-dates/"}]},{"@type":"Dataset","@id":"https://chrisizworski.com/michigan-frost-dates/#dataset","name":"Michigan last spring frost probabilities, 78 stations","description":"Probability dates for a temperature of 32F or lower occurring on or after the given date, for 78 Michigan stations: earliest recorded, 75 percent, 50 percent (median), 25 percent, and latest recorded. Compiled from the Michigan State Climatologist Office table published by MSU Extension, with typical first fall frost dates from NOAA 1991 to 2020 climate normals.","creator":{"@id":"https://chrisizworski.com/#person"},"isBasedOn":"https://www.canr.msu.edu/resources/frost-free-dates","license":"https://creativecommons.org/licenses/by/4.0/","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-08-03"}]}</script>
+<link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-frost-dates/","url":"https://chrisizworski.com/michigan-frost-dates/","name":"Michigan Last Frost Dates by City: 2026 Planting Calendar","description":"Find Michigan's last frost date by city using 78 station probability records, then open a 2026 planting calendar with crop-specific sowing dates.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-10-24","inLanguage":"en-US","breadcrumb":{"@id":"https://chrisizworski.com/michigan-frost-dates/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/michigan-frost-dates/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Frost Dates","item":"https://chrisizworski.com/michigan-frost-dates/"}]},{"@type":"Dataset","@id":"https://chrisizworski.com/michigan-frost-dates/#dataset","name":"Michigan last spring frost probabilities, 78 stations","description":"Probability dates for a temperature of 32F or lower occurring on or after the given date, for 78 Michigan stations: earliest recorded, 75 percent, 50 percent (median), 25 percent, and latest recorded. Compiled from the Michigan State Climatologist Office table published by MSU Extension, with typical first fall frost dates from NOAA 1991 to 2020 climate normals.","creator":{"@id":"https://chrisizworski.com/#person"},"isBasedOn":"https://www.canr.msu.edu/resources/frost-free-dates","license":"https://creativecommons.org/licenses/by/4.0/","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-08-03"}]}</script>
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
@@ -89,6 +90,38 @@ tr:nth-child(even) td{background:#fbfaf7}
 
 <div class="answer-card" id="frost-quick-answer"><strong>Michigan's last spring frost varies by eight weeks:</strong> the station medians in this table run from April 24 in Detroit's city core to June 20 near Vanderbilt. Bay City's median is May 2 and its cautious 25 percent date is May 9. Search your nearest station below, then open its planting calendar.</div>
 
+<div class="gk" id="frost-tool">
+<div class="gk-card">
+  <div class="gk-field"><label for="stationSel">Your nearest station</label><select id="stationSel"><option value="bay-city">Bay City (May 2)</option></select></div>
+  <div class="gk-answer" id="frostCard">
+    <span class="gk-badge" id="frostBadge">Your frost dates</span>
+    <h2 id="frostTitle">In Bay City, plant tender crops after May 9.</h2>
+    <p id="frostWhy">Half of springs still see a frost after May 2. By May 9 only one spring in four does. The latest freeze on record was May 26.</p>
+    <dl class="gk-facts" id="frostFacts"></dl>
+    <div class="gk-actions"><a class="gk-btn" id="calLink" href="/zone-6a-planting-calendar/?city=bay-city">Open the Bay City planting calendar</a><a class="gk-link" id="tomatoLink" href="/when-to-plant-tomatoes-michigan/">When to plant tomatoes here</a></div>
+    <span class="gk-visually-hidden" id="frostLive" role="status" aria-live="polite"></span>
+  </div>
+  <div class="gk-controls" style="margin-top:16px"><div class="gk-field"><label for="plantDate">Is it safe to plant on&hellip;</label><input type="date" id="plantDate"></div></div>
+  <div class="gk-answer info" id="riskCard">
+    <span class="gk-badge" id="riskBadge">Frost risk</span>
+    <h3 class="gk-title" id="riskTitle"></h3>
+    <p id="riskWhy"></p>
+  </div>
+  <div class="gk-chart">
+    <h3>How the frost risk falls through spring</h3>
+    <p class="gk-note" id="riskNote">The chance that a freeze still comes after each date. Points are the published 75, 50 and 25 percent dates and the latest freeze on record. The line between them is an estimate, and the dashed parts reach past what the table covers.</p>
+    <svg id="riskChart" role="img" aria-labelledby="riskNote riskTitle"></svg>
+  </div>
+  <div class="gk-chart">
+    <h3>Where your station sits in Michigan</h3>
+    <p class="gk-note" id="stripNote">Each dot is one of 78 stations, placed at its typical last frost. Tap a dot to switch to that station.</p>
+    <svg id="stationStrip" role="group" aria-labelledby="stripNote"></svg>
+  </div>
+  <div class="gk-actions"><button type="button" class="gk-link" id="shareBtn">Copy link to this answer</button><button type="button" class="gk-link" id="icsBtn">Add these frost dates to my calendar (.ics)</button></div>
+  <input id="shareOut" class="gk-out" readonly hidden aria-label="Link to this answer">
+</div>
+</div>
+
 <aside class="commercial-invite" aria-label="Related Michigan planting guides">
   <p class="commercial-eyebrow">Turn your frost date into a planting plan</p>
   <p>Use the station result with the Michigan gardening calendar and Chris's field-tested Zone 6a tomato guidance from Freighter View Farms.</p>
@@ -101,7 +134,7 @@ tr:nth-child(even) td{background:#fbfaf7}
 <p class="note">Reading it: at Bay City the median is May 2, meaning half of springs still frost after that date. The cautious 25 percent date is May 9. The latest freeze on record is May 26, which is why the old timers wait for Memorial Day. Source: Michigan State Climatologist Office, published by <a href="https://www.canr.msu.edu/resources/frost-free-dates" rel="noopener">MSU Extension</a>.</p>
 
 <div class="tool"><div class="row">
-<label>Find your station:&nbsp;<input type="text" id="stationFilter" placeholder="type a city or region"></label>
+<label for="stationFilter">Find your station:</label>&nbsp;<input type="text" id="stationFilter" placeholder="type a city or region">
 <button type="button" id="sortMedian">Sort by median</button>
 </div></div>
 
@@ -315,6 +348,111 @@ tr:nth-child(even) td{background:#fbfaf7}
 <div class="src">Sources: Michigan State Climatologist Office frost probability table via MSU Extension (spring); NOAA 1991 to 2020 climate normals, curated typical medians (fall); USDA Plant Hardiness Zone Map, 2023 update.</div>
 <div class="credit">Data compiled and maintained by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist, and gardener based in Bay City, Michigan.</div>
 </div>
+<script src="/assets/garden-tools/garden-kit.js"></script>
+<script src="/assets/garden-tools/michigan-frost.js"></script>
+<script>
+/* Frost dates: pick a station, read its dates in plain words, check a planting date against the
+ * published probabilities, and see where it sits among Michigan's 78 stations. Browser only. */
+(function(){
+  'use strict';
+  var K=window.GardenKit,F=window.MIFrost,h=K.h,s=K.s,el=function(id){return document.getElementById(id)};
+  var sel=el('stationSel'),dateIn=el('plantDate');
+  var state={st:'bay-city',date:null};
+  sel.replaceChildren();
+  var regions={};F.STATIONS.forEach(function(x){(regions[x.r]=regions[x.r]||[]).push(x)});
+  Object.keys(regions).sort().forEach(function(r){sel.append(h('optgroup',{label:r},regions[r].map(function(x){return h('option',{value:x.s},x.n+' ('+x.p50+')')})))});
+
+  function station(){return F.station(state.st)||F.station('bay-city')}
+  function pct(p){return Math.round(p*100)+'%'}
+  function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
+
+  function renderStation(st){
+    var a=F.anchors(st,'typical');
+    el('frostTitle').textContent='In '+st.n+', plant tender crops after '+st.p25+'.';
+    el('frostWhy').textContent='Half of springs still see a frost after '+st.p50+'. By '+st.p25+' only one spring in four does. The latest freeze on record was '+st.lx+'. The first fall frost usually comes around '+st.ff+'.';
+    var fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]};
+    el('frostFacts').replaceChildren.apply(el('frostFacts'),[].concat(
+      fx('3 springs in 4 frost after',st.p75),fx('Half of springs frost after',st.p50+' (the median)'),fx('1 spring in 4 frosts after',st.p25+' (the cautious date)'),
+      fx('Latest freeze on record',st.lx),fx('Typical first fall frost',st.ff),fx('Frost-free season',K.days(a.fall-a.median)+', median to median')));
+    el('calLink').textContent='Open the '+st.n+' planting calendar';el('calLink').href='/zone-6a-planting-calendar/?city='+st.s;
+    el('tomatoLink').href='/when-to-plant-tomatoes-michigan/?station='+st.s+'#tomato-check';
+  }
+
+  function renderRisk(st,d){
+    var a=F.anchors(st,'typical'),p=F.risk(st,d),card=el('riskCard'),badge,title,why;
+    var label=state.date===null?'Today, '+K.fmt(d):K.fmt(d);
+    if(d>a.latest&&d<a.fall-30){badge='Past spring frost';card.className='gk-answer';title=label+': no spring on record has frozen this late in '+st.n+'.';why='Tender plants are safe from spring frost now. The next worry is fall: the first frost usually arrives around '+st.ff+', '+K.days(((a.fall-d)%365+365)%365)+' away.'}
+    else if(d>a.fall){badge='Past first fall frost';card.className='gk-answer info';title=label+': past the typical first fall frost in '+st.n+', '+st.ff+'.';why='Frost can come any clear night now. Spring planting starts again after '+st.p50+' in a typical year, or '+st.p25+' to be cautious.'}
+    else if(d>=a.fall-30){badge='Fall frost is close';card.className='gk-answer wait';title=label+': the first fall frost usually comes in '+K.days(a.fall-d)+', around '+st.ff+'.';why='Cover tender crops on clear, still nights, and pick what you can before the first hard freeze.'}
+    else if(d<a.early-28){badge='Winter';card.className='gk-answer info';title=label+': still frost season in '+st.n+'.';why='Start planning: spring planting waits for '+st.p50+' in a typical year, '+st.p25+' to be cautious. Some seeds start indoors weeks before that.'}
+    else if(p>=0.5){badge='Too early for tender plants';card.className='gk-answer no';title=label+': a frost still comes later in '+F.odds(p)+'.';why='Hardy crops like peas, spinach and onions can go in. Tomatoes, peppers, beans and squash should wait until at least '+st.p25+'.'}
+    else if(p>=0.25){badge='Risky';card.className='gk-answer wait';title=label+': a frost still comes later in '+F.odds(p)+'.';why='Hardy and half-hardy crops are fine. Plant tender crops only with frost cloth ready, or wait until '+st.p25+'.'}
+    else if(p>=0.08){badge='Some risk';card.className='gk-answer wait';title=label+': a frost still comes later in '+F.odds(p)+'.';why='Most springs are past frost by now. Keep an eye on the forecast for a week after planting and cover tender plants on a clear, cold night.'}
+    else{badge='Safe in most springs';card.className='gk-answer';title=label+': a later frost is rare here, '+F.odds(p)+'.';why='Plant tender crops now. The latest freeze on record in '+st.n+' was '+st.lx+'.'}
+    el('riskBadge').textContent=badge;el('riskTitle').textContent=title;el('riskWhy').textContent=why;
+    drawRisk(st,d,p);
+    return title;
+  }
+
+  function drawRisk(st,d,p){
+    var svg=el('riskChart'),W=Math.round(Math.max(300,Math.min(900,K.width(svg,760)))),narrow=W<520,H=narrow?210:230;
+    var a=F.anchors(st,'typical'),d0=a.early-28,d1=a.latest+14,L=narrow?34:44,R=W-12,T=18,B=H-34;
+    var X=function(x){return L+(x-d0)/(d1-d0)*(R-L)},Y=function(v){return B-v*(B-T)};
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var k=[],pts=[];
+    [0,.25,.5,.75,1].forEach(function(v){k.push(s('line',{x1:L,y1:Y(v),x2:R,y2:Y(v),class:'rk-grid'}),s('text',{x:L-6,y:Y(v)+4,'text-anchor':'end',class:'rk-axis'},Math.round(v*100)+'%'))});
+    for(var x=d0;x<=d1;x+=1)pts.push(X(x).toFixed(1)+' '+Y(F.risk(st,x)).toFixed(1));
+    // Solid where the table speaks (75 percent date to the record); dashed where it is extended.
+    var i0=a.early-d0,i1=a.latest-d0;
+    k.push(s('path',{d:'M'+X(d0)+' '+B+' L'+pts.join(' L')+' L'+X(d1)+' '+B+' Z',class:'rk-area'}),s('path',{d:'M'+pts.slice(0,i0+1).join(' L'),class:'rk-curve','stroke-dasharray':'5 5'}),s('path',{d:'M'+pts.slice(i0,i1+1).join(' L'),class:'rk-curve'}),s('path',{d:'M'+pts.slice(i1).join(' L'),class:'rk-curve','stroke-dasharray':'5 5'}));
+    for(var t=d0;t<=d1;t++)if(K.fmt(t).split(' ')[1]==='1'||(!narrow&&K.fmt(t).split(' ')[1]==='15'))k.push(s('text',{x:X(t),y:B+18,'text-anchor':'middle',class:'rk-axis'},K.fmt(t)));
+    [[st.p75,.75,'3 in 4'],[st.p50,.5,'1 in 2'],[st.p25,.25,'1 in 4'],[st.lx,.02,'record']].forEach(function(q){var x=X(K.parse(q[0]));k.push(s('circle',{cx:x,cy:Y(q[1]),r:5,class:'rk-pt'}),s('text',{x:x+8,y:Y(q[1])-8,class:'rk-pt-label'},q[0]+(narrow?'':' · '+q[2])))});
+    if(d>=d0&&d<=d1){var ux=X(d);k.push(s('line',{x1:ux,y1:T,x2:ux,y2:B,class:'rk-you'}),s('circle',{cx:ux,cy:Y(p),r:6,class:'rk-you-dot'}),s('text',{x:Math.min(R-4,Math.max(L+4,ux)),y:T-4,'text-anchor':ux>R-80?'end':ux<L+80?'start':'middle',class:'rk-you-label'},(state.date===null?'Today ':'')+K.fmt(d)+': '+pct(p)))}
+    else k.push(s('text',{x:R,y:T,'text-anchor':'end',class:'rk-axis'},K.fmt(d)+' is outside the spring frost season'));
+    svg.replaceChildren.apply(svg,k);
+  }
+
+  // Every station at its median: stacked dots by week, the chosen one in rust and labelled.
+  function drawStrip(st){
+    var svg=el('stationStrip'),W=Math.round(Math.max(300,Math.min(900,K.width(svg,760)))),L=14,R=W-14;
+    var days=F.STATIONS.map(function(x){return K.parse(x.p50)}),d0=Math.min.apply(null,days)-4,d1=Math.max.apply(null,days)+4;
+    var X=function(x){return L+(x-d0)/(d1-d0)*(R-L)},stack={},r=W<520?5:6,gap=r*2+2,maxN=0;
+    var dots=F.STATIONS.map(function(x){var d=K.parse(x.p50),b=Math.round(d/3);stack[b]=(stack[b]||0)+1;maxN=Math.max(maxN,stack[b]);return {x:x,d:d,n:stack[b]-1}});
+    var base=24+maxN*gap,H=base+40;svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var k=[];
+    for(var t=d0;t<=d1;t++)if(K.fmt(t).split(' ')[1]==='1'||K.fmt(t).split(' ')[1]==='15')k.push(s('text',{x:X(t),y:base+22,'text-anchor':'middle',class:'st-axis'},K.fmt(t)));
+    dots.forEach(function(o){
+      var on=o.x.s===st.s,c=s('circle',{cx:X(Math.round(o.d/3)*3).toFixed(1),cy:base-o.n*gap,r:on?r+2:r,class:'st-dot'+(on?' on':''),tabindex:'0',role:'button','aria-label':o.x.n+', '+o.x.r+': typical last frost '+o.x.p50+(on?', selected':'')});
+      c.addEventListener('click',function(){pick(o.x.s)});
+      c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){if(e.preventDefault)e.preventDefault();pick(o.x.s)}});
+      k.push(c);
+    });
+    var me=dots.filter(function(o){return o.x.s===st.s})[0],mx=X(Math.round(me.d/3)*3);
+    var earlier=F.STATIONS.filter(function(x){return K.parse(x.p50)<me.d}).length;
+    k.push(s('text',{x:Math.min(R,Math.max(L,mx)),y:12,'text-anchor':mx>R-90?'end':mx<L+90?'start':'middle',class:'st-label'},st.n+' · '+st.p50));
+    svg.replaceChildren.apply(svg,k);
+    var later=F.STATIONS.filter(function(x){return K.parse(x.p50)>me.d}).length;
+    el('stripNote').textContent='Each dot is one of 78 stations, placed at its typical last frost. '+(earlier<=later?st.n+'’s comes earlier than '+later+' of them.':st.n+'’s comes later than '+earlier+' of them.')+' Tap a dot to switch to that station.';
+  }
+
+  function query(){var q=new URLSearchParams();q.set('station',state.st);if(state.date!==null)q.set('date',dateIn.value);return '?'+q.toString()}
+  function render(){
+    var st=station(),d=state.date===null?K.today():state.date;
+    renderStation(st);var t=renderRisk(st,d);drawStrip(st);
+    el('frostLive').textContent=el('frostTitle').textContent+' '+t;
+    if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
+  }
+  function pick(slug){state.st=slug;sel.value=slug;render()}
+  sel.addEventListener('change',function(){pick(sel.value)});
+  dateIn.addEventListener('change',function(){state.date=K.fromISO(dateIn.value);render()});
+  el('icsBtn').addEventListener('click',function(){var st=station(),P=K.parse;K.ics([{from:P(st.p75),to:P(st.p75),title:'Frost risk easing: 3 springs in 4 still frost after today',note:st.n+' station.'},{from:P(st.p50),to:P(st.p50),title:'Typical last frost: half of springs frost after today',note:st.n+'. Hardy and half-hardy crops are fine; tender crops wait a little longer.'},{from:P(st.p25),to:P(st.p25),title:'Cautious date: tender crops can go out',note:'Only 1 spring in 4 frosts after today in '+st.n+'.'},{from:P(st.ff),to:P(st.ff),title:'Typical first fall frost',note:'Cover tender crops on clear, still nights around now. '+st.n+'.'}],'frost-dates-'+st.s+'.ics')});
+  el('shareBtn').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query()+'#frost-tool',el('shareBtn'),el('shareOut'))});
+  var q=new URLSearchParams(location.search);
+  if(F.station(q.get('station')))state.st=q.get('station');else if(F.station(q.get('city')))state.st=q.get('city');
+  if(K.fromISO(q.get('date'))!==null){state.date=K.fromISO(q.get('date'));dateIn.value=q.get('date')}
+  sel.value=state.st;render();
+})();
+</script>
 <script>
 (function(){
   var f=document.getElementById("stationFilter"), rows=[].slice.call(document.querySelectorAll("#springTable tbody tr"));

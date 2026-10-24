@@ -35,7 +35,7 @@
         "url": "https://chrisizworski.com/"
       },
       "datePublished": "2026-03-11",
-      "dateModified": "2026-10-06",
+      "dateModified": "2026-10-24",
       "about": {
         "@type": "Thing",
         "name": "Tomato Gardening Michigan"
@@ -190,7 +190,9 @@ tr:last-child td{border-bottom:none}
 .nav-cluster{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px;padding-top:24px;border-top:1px solid #eee}
 .nav-cluster a{font-size:.85rem;padding:7px 14px;border:1px solid #ddd;border-radius:4px;color:#2c5f2d}
 .nav-cluster a:hover{background:#f7fbf7;text-decoration:none}
+@media(max-width:640px){table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}h1{font-size:1.6rem}.byline{margin-bottom:14px;padding-bottom:12px}.lede{font-size:1.02rem;line-height:1.6;margin-bottom:12px}.label{margin-bottom:6px}}
 </style>
+<link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 
 
 
@@ -236,6 +238,39 @@ tr:last-child td{border-bottom:none}
 <div class="byline">By <a href="https://chrisizworski.com">Chris Izworski</a>, Freighter View Farms, Bay City, Michigan, Zone 6a, Updated August 2026</div>
 
 <p class="lede" id="tomato-quick-answer"><strong>2026 short answer:</strong> transplant tomatoes around May 15 in southwest Michigan, May 20 in the central Lower Peninsula, May 25 near Bay City and Saginaw Bay, and June 5 in the northern Lower Peninsula. Wait until nights stay above 50°F, soil reaches at least 60°F, and the 10-day forecast has no hard freeze.</p>
+
+<div class="gk" id="tomato-check">
+<div class="gk-card">
+  <div class="gk-field"><label for="tStation">Your nearest frost station</label><select id="tStation"><option value="bay-city">Bay City (May 2)</option></select></div>
+  <div class="gk-answer" id="tCard">
+    <span class="gk-badge" id="tBadge">Tomato check</span>
+    <h2 id="tTitle">Bay City: plant tomatoes out May 16 to May 30.</h2>
+    <p id="tWhy">Once the soil reads 60&deg;F and nights stay above 50&deg;F.</p>
+    <ul class="gk-steps" id="tSteps"></ul>
+    <span class="gk-visually-hidden" id="tLive" role="status" aria-live="polite"></span>
+  </div>
+  <p class="gk-sub" id="tReadings">Check another day, or add your readings</p>
+  <p class="gk-note">Got a soil thermometer or a forecast? Add them and the answer turns into a plain go or wait.</p>
+  <div class="gk-controls">
+    <div class="gk-field"><label for="tDate">Planting day</label><input type="date" id="tDate"></div>
+    <div class="gk-field"><label for="tSoil">Soil at 4 inches, &deg;F</label><input type="number" id="tSoil" inputmode="numeric" min="20" max="100" placeholder="for example 58"></div>
+    <div class="gk-field"><label for="tLow">Coldest night in the 10-day forecast, &deg;F</label><input type="number" id="tLow" inputmode="numeric" min="-20" max="90" placeholder="for example 46"></div>
+  </div>
+  <div class="gk-chart">
+    <h3>Your tomato season</h3>
+    <p class="gk-note">Seed starting, hardening off and planting out, worked out from your station's cautious frost date. The shaded band is the frost-free season.</p>
+    <div id="tLegend"></div>
+    <svg id="tTimeline" role="group" aria-label="Tomato season timeline"></svg>
+  </div>
+  <div class="gk-actions">
+    <button type="button" class="gk-link" id="tShare">Copy link to this answer</button>
+    <button type="button" class="gk-link" id="tIcs">Add the tomato dates to my calendar (.ics)</button>
+    <a class="gk-link" id="tCal" href="/zone-6a-planting-calendar/?city=bay-city&amp;mode=cautious&amp;crop=tomatoes">Every crop for this station</a>
+  </div>
+  <input id="tShareOut" class="gk-out" readonly hidden aria-label="Link to this answer">
+</div>
+</div>
+
 
 <p>Every April, the same question circulates in garden centers and backyard conversations across the state: is it time yet? The honest answer is never just a calendar date. It is a reading of soil temperature, night temperatures, frost risk, and plant readiness all at once.</p>
 
@@ -411,5 +446,79 @@ Sources: NOAA Climate Normals 1991&ndash;2020; Michigan State University Extensi
 <div style="text-align:center;padding:32px 20px 0;font-size:13px;">
   <a href="/michigan-gardening/" style="color:#2c5f2d;text-decoration:none;">&#8592; Back to Michigan Gardening</a>
 </div>
+<script src="/assets/garden-tools/garden-kit.js"></script>
+<script src="/assets/garden-tools/michigan-frost.js"></script>
+<script>
+/* Tomato check: is today the day? Station frost dates set the windows; your soil and forecast
+ * readings, when you have them, decide the last step. Browser only; nothing is stored. */
+(function(){
+  'use strict';
+  var K=window.GardenKit,F=window.MIFrost,h=K.h,el=function(id){return document.getElementById(id)};
+  var sel=el('tStation'),dateIn=el('tDate'),soilIn=el('tSoil'),lowIn=el('tLow');
+  var state={st:'bay-city',date:null};
+  sel.replaceChildren();
+  var regions={};F.STATIONS.forEach(function(x){(regions[x.r]=regions[x.r]||[]).push(x)});
+  Object.keys(regions).sort().forEach(function(r){sel.append(h('optgroup',{label:r},regions[r].map(function(x){return h('option',{value:x.s},x.n+' ('+x.p50+')')})))});
+  el('tLegend').append(K.legend(['indoor','harden','transplant']));
+
+  // Tomato windows from the cautious (25 percent) date: the calendar's tomato offsets, 7 to 21 days after it.
+  function plan(st){
+    var a=F.anchors(st,'cautious'),tom=F.crop('Tomatoes'),out=a.spring+tom.t[0],end=a.spring+tom.t[1];
+    return {a:a,seed:[a.spring+tom.i[0],a.spring+tom.i[1]],harden:[out-10,out-1],out:[out,end],late:end+21,lastPlant:a.fall-75};
+  }
+  function num(x){var v=x.value===''?NaN:Number(x.value);return isFinite(v)?v:null}
+  function inDays(n){return n===0?'today':n===1?'tomorrow':'in '+n+' days'}
+
+  function render(){
+    var st=F.station(state.st)||F.station('bay-city'),P=plan(st),d=state.date===null?K.today():state.date,t=state.date===null?'Today':K.fmt(d);
+    var soil=num(soilIn),low=num(lowIn),badge,title,why,cls='gk-answer',steps=[];
+    var risk=F.risk(st,d);
+    var go='Plant out '+K.range(P.out[0],P.out[1])+' near '+st.n+'.';
+    if(d<P.seed[0]-1&&d>P.lastPlant+30||d<P.seed[0]){
+      badge='Plan ahead';cls='gk-answer info';title=st.n+': start tomato seeds indoors '+K.range(P.seed[0],P.seed[1])+'.';
+      why='That gives them six to eight weeks under lights before they go out '+K.range(P.out[0],P.out[1])+'. '+(d<P.seed[0]?'Seed starting opens '+inDays(P.seed[0]-d)+'.':'');
+    }else if(d<=P.seed[1]){
+      badge='Start seeds now';title=t+': start tomato seeds indoors near '+st.n+'.';why='The seed-starting window runs to '+K.fmt(P.seed[1])+'. '+go;
+    }else if(d<P.harden[0]){
+      badge='Growing on';cls='gk-answer info';title=t+': keep the seedlings growing under lights.';why='Start hardening them off '+K.fmt(P.harden[0])+', '+inDays(P.harden[0]-d)+'. '+go;
+    }else if(d<P.out[0]){
+      badge='Harden off now';cls='gk-answer wait';title=t+': start hardening off your tomatoes.';why='An hour outside in shade on day one, a little more sun and wind each day, in at night when it drops below 50°F. '+go;
+    }else if(d<=P.late){
+      // In the window: the readings decide.
+      if(low!==null&&low<=32){badge='Wait';cls='gk-answer no';title=t+': wait. The forecast has a frost.';why='A '+low+'°F night kills tomato leaves. Plant after it passes, and keep frost cloth ready.'}
+      else if(soil!==null&&soil<60){badge='Wait for warmer soil';cls='gk-answer wait';title=t+': wait for the soil to warm.';why=soil+'°F at 4 inches is too cold. Tomatoes sit and sulk below 60°F, and a week of patience beats a month of sulking. Black plastic or a warm, sunny week will get it there.'}
+      else if(low!==null&&low<50){badge='Getting close';cls='gk-answer wait';title=t+': close, but nights are still cool.';why='Nights near '+low+'°F slow tomatoes down. Plant now only under row cover or wall-o-water, or wait for nights above 50°F.'}
+      else if(soil!==null&&low!==null){badge='Plant today';title=t+': go ahead and plant your tomatoes.';why='Soil at '+soil+'°F and nights above 50°F. This is the day the whole spring was waiting for.'}
+      else{badge='In the window';title=t+': it is tomato planting time near '+st.n+'.';why='Plant once the soil reads 60°F at 4 inches and nights stay above 50°F. Add your readings below and this will say go or wait.'}
+      steps.push('Frost risk after '+K.fmt(d)+': '+(risk<=0?'none in the record':F.odds(risk))+'.');
+    }else if(d<=P.lastPlant&&d<P.a.fall-30){
+      badge='Late, but there is time';cls='gk-answer info';var left=P.a.fall-d;title=t+': still time for tomatoes, if you choose fast ones.';why='The first fall frost here usually comes around '+st.ff+', '+K.days(left)+' away. Pick a variety that ripens in under '+Math.max(45,left-10)+' days from transplant, and buy sturdy starts rather than seed.';
+    }else{
+      var before=d<P.a.fall&&d>P.out[0];badge=before?'Too late to plant':'Next season';cls='gk-answer info';
+      title=before?t+': too late to plant new tomatoes near '+st.n+' this year.':t+': tomato season is over near '+st.n+'.';
+      why=(before?'Plants already in the ground keep ripening until the first fall frost, around '+st.ff+'. Cover them on cold, clear nights. ':'')+'Next spring, start seeds indoors '+K.range(P.seed[0],P.seed[1])+' and plant out '+K.range(P.out[0],P.out[1])+'.';
+    }
+    steps.unshift('Start seeds: '+K.range(P.seed[0],P.seed[1]),'Harden off: '+K.range(P.harden[0],P.harden[1]),'Plant out: '+K.range(P.out[0],P.out[1])+', once soil is 60°F');
+    el('tCard').className=cls;el('tBadge').textContent=badge;el('tTitle').textContent=title;el('tWhy').textContent=why;
+    el('tSteps').replaceChildren.apply(el('tSteps'),steps.map(function(x){var i=x.indexOf(': ');return h('li',null,h('b',null,x.slice(0,i)),x.slice(i+2))}));
+    el('tLive').textContent=badge+'. '+title;
+    K.timeline(el('tTimeline'),[{id:'seed',label:'Start seeds',bars:[{kind:'indoor',from:P.seed[0],to:P.seed[1]}]},{id:'harden',label:'Harden off',bars:[{kind:'harden',from:P.harden[0],to:P.harden[1]}]},{id:'out',label:'Plant out',bars:[{kind:'transplant',from:P.out[0],to:P.out[1]}]}],{spring:P.a.median,fall:P.a.fall,today:d,from:K.parse('Feb 15'),to:Math.min(364,P.a.fall+20)});
+    el('tCal').href='/zone-6a-planting-calendar/?city='+st.s+'&mode=cautious&crop=tomatoes';
+    if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
+  }
+  function query(){var q=new URLSearchParams();q.set('station',state.st);if(state.date!==null)q.set('date',dateIn.value);if(soilIn.value!=='')q.set('soil',soilIn.value);if(lowIn.value!=='')q.set('low',lowIn.value);return '?'+q.toString()}
+  sel.addEventListener('change',function(){state.st=sel.value;render()});
+  dateIn.addEventListener('change',function(){state.date=K.fromISO(dateIn.value);render()});
+  [soilIn,lowIn].forEach(function(x){x.addEventListener('input',render)});
+  el('tShare').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query()+'#tomato-check',el('tShare'),el('tShareOut'))});
+  el('tIcs').addEventListener('click',function(){var st=F.station(state.st),P=plan(st);K.ics([{from:P.seed[0],to:P.seed[1],title:'Start tomato seeds indoors',note:'Six to eight weeks before planting out near '+st.n+'.'},{from:P.harden[0],to:P.harden[1],title:'Harden off tomatoes',note:'A little more sun and wind each day.'},{from:P.out[0],to:P.out[1],title:'Plant tomatoes out',note:'Once soil reads 60F at 4 inches and nights stay above 50F.'}],'tomato-dates-'+st.s+'.ics')});
+  var q=new URLSearchParams(location.search);
+  if(F.station(q.get('station')))state.st=q.get('station');
+  if(K.fromISO(q.get('date'))!==null){state.date=K.fromISO(q.get('date'));dateIn.value=q.get('date')}
+  if(/^-?\d{1,3}$/.test(q.get('soil')||''))soilIn.value=q.get('soil');
+  if(/^-?\d{1,3}$/.test(q.get('low')||''))lowIn.value=q.get('low');
+  sel.value=state.st;render();
+})();
+</script>
 </body>
 </html>

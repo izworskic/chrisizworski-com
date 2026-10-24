@@ -1200,3 +1200,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Same gate on main a87d7ecc: mean 80.7, lowest 50 (What to do). After: 100 on every feature. Fixes: plain words across all 2,601 pair answers, biennial season notes, hybrid seed warning, garden "saving seed / eating only" toggle with a "No seed at stake" group, plant-specific garden steps and CSV, unclipped chart labels, fifth example, phone verdict at 702 px.
 - Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: owner reviews the preview; then the other garden tools get the same treatment (in progress).
+### Garden tools up to the Seed Saving Lab bar, October 24, 2026
+
+- Owner asked to review the other garden tools against the Seed Saving Lab and bring them up to par. Added a shared value function (`scripts/benchmark-garden-tools.mjs`, eight behaviours, gate every tool >= 90), a garden-tool harness and shared assets in `public/assets/garden-tools/`.
+- Manual before scores on main: planting calendar ~60, frost dates ~44, matchmaker ~45, tomatoes ~36, seed starting ~36. After, on the automated gate: 100 each. Defects fixed: tomato and matchmaker pages scrolled sideways on phones; seed starting intro rendered inside the site header and zone 6a frost dates were out of order; matchmaker no longer calls a Vercel function.
+- Protected titles, H1s, canonicals, `tomato-quick-answer`, `frost-quick-answer` and the zone direct-answer sentence unchanged. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and decides on merge.

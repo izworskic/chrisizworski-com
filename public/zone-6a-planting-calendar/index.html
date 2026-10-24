@@ -55,16 +55,16 @@ tr:nth-child(even) td{background:#fbfaf7}
 .src{font-size:12.5px;color:#777;margin-top:26px}
 .credit{font-size:12.5px;color:#777;margin-top:8px}
 @media print{
-  .site-nav,.tool,.tool-strip,#printWrap{display:none}
-  #thisWeek{display:none}
+  .site-nav,.tool-strip,.gk-card{display:none}
   body{font-size:11px}
   h1{font-size:20px}
   table{font-size:10px}
   th,td{padding:4px 5px}
 }
-@media(max-width:640px){table{display:block;overflow-x:auto}}
+@media(max-width:640px){table{display:block;overflow-x:auto}h1{font-size:26px;line-height:1.25}}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/zone-6a-planting-calendar/","url":"https://chrisizworski.com/zone-6a-planting-calendar/","name":"Michigan Zone 6a Planting Calendar by City | Chris Izworski","description":"Michigan Zone 6a planting calendar by city. Get indoor seed-starting, transplant, direct-sow and fall-sow dates for 47 crops from 78 frost stations.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-22","inLanguage":"en-US","breadcrumb":{"@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Planting Calendar","item":"https://chrisizworski.com/zone-6a-planting-calendar/"}]},{"@type":"WebApplication","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#app","name":"Michigan Planting Calendar","url":"https://chrisizworski.com/zone-6a-planting-calendar/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Thing","name":"Vegetable, herb, and flower planting dates for Michigan"}},{"@type":"Dataset","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#dataset","name":"Michigan planting windows for 47 crops across 78 frost stations","description":"Computed indoor seed starting, transplant, direct sow, and fall sowing windows for 47 vegetables, herbs, and flowers, anchored to Michigan State Climatologist Office last spring frost probabilities for 78 Michigan stations.","creator":{"@id":"https://chrisizworski.com/#person"},"license":"https://creativecommons.org/licenses/by/4.0/","isBasedOn":"https://www.canr.msu.edu/resources/frost-free-dates","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-07-02"}]}</script>
+<link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/zone-6a-planting-calendar/","url":"https://chrisizworski.com/zone-6a-planting-calendar/","name":"Michigan Zone 6a Planting Calendar by City | Chris Izworski","description":"Michigan Zone 6a planting calendar by city. Get indoor seed-starting, transplant, direct-sow and fall-sow dates for 47 crops from 78 frost stations.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-10-24","inLanguage":"en-US","breadcrumb":{"@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Planting Calendar","item":"https://chrisizworski.com/zone-6a-planting-calendar/"}]},{"@type":"WebApplication","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#app","name":"Michigan Planting Calendar","url":"https://chrisizworski.com/zone-6a-planting-calendar/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Thing","name":"Vegetable, herb, and flower planting dates for Michigan"}},{"@type":"Dataset","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#dataset","name":"Michigan planting windows for 47 crops across 78 frost stations","description":"Computed indoor seed starting, transplant, direct sow, and fall sowing windows for 47 vegetables, herbs, and flowers, anchored to Michigan State Climatologist Office last spring frost probabilities for 78 Michigan stations.","creator":{"@id":"https://chrisizworski.com/#person"},"license":"https://creativecommons.org/licenses/by/4.0/","isBasedOn":"https://www.canr.msu.edu/resources/frost-free-dates","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-07-02"}]}</script>
 </head>
 <body>
 <header class="site-header">
@@ -79,23 +79,55 @@ tr:nth-child(even) td{background:#fbfaf7}
 </nav>
 <div class="wrap">
 <h1>Michigan Zone 6a Planting Calendar by City</h1>
-<p class="sub">Interactive dates for 47 vegetables, herbs, and flowers, computed from Michigan State Climatologist frost probabilities for 78 stations. Built by Chris Izworski in Zone 6a, Bay City, and tuned for every corner of the state.</p>
 
 <p><strong>Pick your nearest Michigan city and this calendar computes indoor seed-starting, transplant, direct-sow, and fall-sow dates for 47 crops from local frost probabilities.</strong> Zone 6a gardeners around Bay City start from a median May 2 last spring frost, while colder Michigan locations run weeks later, so every crop recalculates instead of relying on one statewide date.</p>
 
-<div class="tool" id="printWrapTop">
-  <div class="row">
-    <label>Nearest station:&nbsp;<select id="citySel"></select></label>
-    <label class="chk"><input type="checkbox" id="safeChk"> Use the cautious date (25% frost risk instead of 50%)</label>
-    <label>Or a custom last frost date:&nbsp;<input type="date" id="customLF"></label>
-    <button id="printBtn" type="button">Print this calendar</button>
+<div class="gk" id="planner">
+<div class="gk-card">
+  <div class="gk-field"><label for="citySel">Nearest frost station</label><select id="citySel"><option value="bay-city">Bay City (May 2)</option></select></div>
+  <div class="gk-answer" id="weekCard">
+    <span class="gk-badge" id="weekBadge">This week</span>
+    <h2 id="weekTitle">Bay City: last spring frost May 2, first fall frost Oct 3.</h2>
+    <p id="weekWhy">Every date below is printed for Bay City. Turn on JavaScript to pick another station.</p>
+    <ul class="gk-steps" id="weekNow"></ul>
+    <p class="gk-sub" id="soonTitle" hidden>Coming up in the next two weeks</p>
+    <ul class="gk-steps" id="weekSoon"></ul>
+    <dl class="gk-facts" id="frostFacts"></dl>
+    <span class="gk-visually-hidden" id="weekLive" role="status" aria-live="polite"></span>
   </div>
-  <p class="readout" id="lfOut">Median (50%) last spring frost: May 2 · latest ever recorded: May 26</p>
-  <p class="readout2" id="ffOut">Typical first fall frost: Oct 3</p>
-</div>
-<p class="note">The 50% date is the median: one spring in two still frosts after it. Check the cautious box to plan against the 25% date, roughly a week later, or enter the date you trust from your own records. Fall dates are typical medians from 1991 to 2020 climate normals and can swing a week either way, more in the cold pockets.</p>
+  <div class="gk-controls" style="margin-top:16px">
+    <fieldset class="gk-seg"><legend>Plan on</legend><label><input type="radio" name="mode" value="typical" checked><span>Typical date</span></label><label><input type="radio" name="mode" value="cautious"><span>Cautious date</span></label></fieldset>
+    <div class="gk-field"><label for="customLF">Or your own last frost date</label><input type="date" id="customLF"></div>
+  </div>
+  <p class="note" id="modeNote">The typical date is the median: one spring in two still frosts after it. The cautious date leaves only one spring in four, roughly a week later. Fall dates are typical medians from 1991 to 2020 climate normals and can swing a week either way, more in the cold pockets.</p>
 
-<div id="thisWeek"><strong>In the window this week near Bay City:</strong> loading, or enable JavaScript; every date below is printed for Bay City either way.</div>
+  <div class="gk-controls"><div class="gk-field"><label for="cropSel">When do I plant&hellip;</label><select id="cropSel"></select></div></div>
+  <div class="gk-answer info" id="cropCard">
+    <span class="gk-badge" id="cropBadge">Crop</span>
+    <h3 class="gk-title" id="cropTitle"></h3>
+    <p id="cropNow"></p>
+    <ul class="gk-steps" id="cropSteps"></ul>
+    <p id="cropNote"></p>
+  </div>
+
+  <div class="gk-chart" id="timelineCard">
+    <h3>Your season at a glance</h3>
+    <p class="gk-note">Each bar is a window, worked out from your frost dates. The shaded band is the frost-free season. Tap a crop to see its dates.</p>
+    <div class="gk-filter" id="catFilter" role="group" aria-label="Show crops">
+      <button type="button" data-cat="veg" aria-pressed="true">Vegetables</button><button type="button" data-cat="herb" aria-pressed="false">Herbs</button><button type="button" data-cat="flower" aria-pressed="false">Flowers</button><button type="button" data-cat="all" aria-pressed="false">Everything</button>
+    </div>
+    <div id="legend"></div>
+    <svg id="timeline" role="group" aria-label="Planting windows by crop; the same dates are in the tables below"></svg>
+  </div>
+  <div class="gk-actions">
+    <button type="button" class="gk-link" id="shareBtn">Copy link to this calendar</button>
+    <button type="button" class="gk-link" id="icsBtn">Add these dates to my calendar (.ics)</button>
+    <button type="button" class="gk-link" id="printBtn">Print this calendar</button>
+  </div>
+  <input id="shareOut" class="gk-out" readonly hidden aria-label="Link to this calendar">
+</div>
+</div>
+<p class="sub">Interactive dates for 47 vegetables, herbs, and flowers, computed from Michigan State Climatologist frost probabilities for 78 stations. Built by Chris Izworski in Zone 6a, Bay City, and tuned for every corner of the state.</p>
 
 <h2>Vegetables</h2>
 <table><thead><tr><th>Crop</th><th>Start indoors</th><th>Transplant out</th><th>Direct sow</th><th>Fall sow</th><th>Soil temp</th><th>Notes</th></tr></thead><tbody id="tb-veg">
@@ -188,76 +220,119 @@ tr:nth-child(even) td{background:#fbfaf7}
 <div class="src">Sources: Michigan State Climatologist Office frost probability table via MSU Extension; NOAA 1991 to 2020 climate normals for typical fall frost dates; USDA Plant Hardiness Zone Map, 2023 update; Freighter View Farms field records, Bay City, Michigan.</div>
 <div class="credit">Data compiled and maintained by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist, and gardener based in Bay City, Michigan.</div>
 </div>
-<script>const STATIONS=[{"s":"adrian","n":"Adrian","r":"Southeast","p50":"May 3","p25":"May 9","lx":"May 23","ff":"Oct 5"},{"s":"allegan","n":"Allegan","r":"Southwest","p50":"May 6","p25":"May 14","lx":"Jun 12","ff":"Oct 8"},{"s":"alma","n":"Alma","r":"Central","p50":"May 10","p25":"May 17","lx":"May 27","ff":"Sep 28"},{"s":"alpena-wso","n":"Alpena WSO","r":"Northeast Lower","p50":"May 31","p25":"Jun 8","lx":"Jun 21","ff":"Sep 25"},{"s":"alpena","n":"Alpena","r":"Northeast Lower","p50":"May 8","p25":"May 15","lx":"May 29","ff":"Sep 25"},{"s":"ann-arbor","n":"Ann Arbor","r":"Southeast","p50":"Apr 29","p25":"May 6","lx":"May 27","ff":"Oct 12"},{"s":"atlanta","n":"Atlanta","r":"Northeast Lower","p50":"Jun 2","p25":"Jun 11","lx":"Jul 6","ff":"Sep 8"},{"s":"bad-axe","n":"Bad Axe","r":"Thumb","p50":"May 15","p25":"May 22","lx":"Jun 8","ff":"Oct 3"},{"s":"battle-creek","n":"Battle Creek","r":"Southwest","p50":"May 5","p25":"May 11","lx":"May 27","ff":"Oct 6"},{"s":"bay-city","n":"Bay City","r":"Saginaw Valley","p50":"May 2","p25":"May 9","lx":"May 26","ff":"Oct 3"},{"s":"big-rapids","n":"Big Rapids","r":"West Central","p50":"May 20","p25":"May 26","lx":"Jun 12","ff":"Sep 22"},{"s":"bloomingdale","n":"Bloomingdale","r":"Southwest","p50":"May 10","p25":"May 19","lx":"Jun 12","ff":"Oct 8"},{"s":"cadillac","n":"Cadillac","r":"Northwest Lower","p50":"Jun 1","p25":"Jun 12","lx":"Jul 11","ff":"Sep 18"},{"s":"caro","n":"Caro","r":"Thumb","p50":"May 23","p25":"May 31","lx":"Jun 22","ff":"Oct 3"},{"s":"charlotte","n":"Charlotte","r":"Central","p50":"May 13","p25":"May 21","lx":"Jun 12","ff":"Oct 3"},{"s":"chatham","n":"Chatham","r":"Upper Peninsula","p50":"Jun 11","p25":"Jun 21","lx":"Jul 31","ff":"Sep 25"},{"s":"cheboygan","n":"Cheboygan","r":"Northeast Lower","p50":"May 17","p25":"May 24","lx":"Jun 21","ff":"Sep 28"},{"s":"coldwater","n":"Coldwater","r":"South Central","p50":"May 7","p25":"May 14","lx":"May 27","ff":"Oct 5"},{"s":"detroit-city","n":"Detroit city","r":"Southeast","p50":"Apr 24","p25":"Apr 30","lx":"May 12","ff":"Oct 25"},{"s":"detroit-metro","n":"Detroit Metro","r":"Southeast","p50":"May 3","p25":"May 11","lx":"May 29","ff":"Oct 15"},{"s":"east-jordan","n":"East Jordan","r":"Northwest Lower","p50":"May 30","p25":"Jun 6","lx":"Jun 22","ff":"Sep 8"},{"s":"east-tawas","n":"East Tawas","r":"Northeast Lower","p50":"May 22","p25":"May 30","lx":"Jun 14","ff":"Oct 3"},{"s":"eau-claire","n":"Eau Claire","r":"Southwest","p50":"May 2","p25":"May 9","lx":"May 29","ff":"Oct 15"},{"s":"escanaba","n":"Escanaba","r":"Upper Peninsula","p50":"May 11","p25":"May 17","lx":"May 30","ff":"Oct 3"},{"s":"fayette","n":"Fayette","r":"Upper Peninsula","p50":"May 16","p25":"May 23","lx":"Jun 8","ff":"Oct 3"},{"s":"fife-lake","n":"Fife Lake","r":"Northwest Lower","p50":"Jun 7","p25":"Jun 17","lx":"Jul 6","ff":"Sep 18"},{"s":"flint","n":"Flint","r":"East Central","p50":"May 8","p25":"May 15","lx":"May 27","ff":"Oct 5"},{"s":"frankfort","n":"Frankfort","r":"Northwest Lower","p50":"May 18","p25":"May 26","lx":"Jun 23","ff":"Oct 8"},{"s":"gladwin","n":"Gladwin","r":"North Central","p50":"May 20","p25":"May 28","lx":"Jun 22","ff":"Sep 22"},{"s":"grand-haven","n":"Grand Haven","r":"Lakeshore","p50":"May 1","p25":"May 8","lx":"May 18","ff":"Oct 15"},{"s":"grand-marais","n":"Grand Marais","r":"Upper Peninsula","p50":"Jun 4","p25":"Jun 15","lx":"Jul 20","ff":"Sep 12"},{"s":"grand-rapids","n":"Grand Rapids","r":"West","p50":"May 2","p25":"May 10","lx":"May 27","ff":"Oct 8"},{"s":"grayling","n":"Grayling","r":"North Central","p50":"May 31","p25":"Jun 10","lx":"Jul 21","ff":"Sep 12"},{"s":"greenville","n":"Greenville","r":"West","p50":"May 9","p25":"May 18","lx":"Jun 12","ff":"Oct 8"},{"s":"gull-lake","n":"Gull Lake","r":"Southwest","p50":"May 7","p25":"May 13","lx":"May 29","ff":"Oct 8"},{"s":"hale-loud-dam","n":"Hale Loud Dam","r":"Northeast Lower","p50":"May 23","p25":"May 30","lx":"Jun 20","ff":"Oct 3"},{"s":"harbor-beach","n":"Harbor Beach","r":"Thumb","p50":"May 9","p25":"May 16","lx":"May 26","ff":"Oct 3"},{"s":"harrisville","n":"Harrisville","r":"Northeast Lower","p50":"May 23","p25":"Jun 1","lx":"Jun 25","ff":"Sep 25"},{"s":"hart","n":"Hart","r":"Lakeshore","p50":"May 20","p25":"May 27","lx":"Jun 13","ff":"Oct 10"},{"s":"hastings","n":"Hastings","r":"Southwest","p50":"May 13","p25":"May 21","lx":"Jun 12","ff":"Oct 8"},{"s":"hillsdale","n":"Hillsdale","r":"South Central","p50":"May 12","p25":"May 20","lx":"Jun 12","ff":"Oct 5"},{"s":"holland","n":"Holland","r":"Lakeshore","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 12"},{"s":"houghton","n":"Houghton","r":"Upper Peninsula","p50":"May 23","p25":"May 31","lx":"Jul 10","ff":"Sep 28"},{"s":"houghton-lake","n":"Houghton Lake","r":"North Central","p50":"Jun 2","p25":"Jun 14","lx":"Jun 20","ff":"Sep 15"},{"s":"iron-mountain","n":"Iron Mountain","r":"Upper Peninsula","p50":"May 30","p25":"Jun 6","lx":"Jun 22","ff":"Sep 18"},{"s":"ironwood","n":"Ironwood","r":"Upper Peninsula","p50":"May 24","p25":"May 31","lx":"Jun 14","ff":"Sep 15"},{"s":"ishpeming","n":"Ishpeming","r":"Upper Peninsula","p50":"May 28","p25":"Jun 4","lx":"Jun 18","ff":"Oct 1"},{"s":"jackson","n":"Jackson","r":"South Central","p50":"May 8","p25":"May 15","lx":"May 31","ff":"Oct 5"},{"s":"kalamazoo","n":"Kalamazoo","r":"Southwest","p50":"May 3","p25":"May 11","lx":"May 27","ff":"Oct 8"},{"s":"lake-city","n":"Lake City","r":"North Central","p50":"May 29","p25":"Jun 8","lx":"Jul 11","ff":"Sep 18"},{"s":"lansing","n":"Lansing","r":"Central","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 3"},{"s":"lapeer","n":"Lapeer","r":"East Central","p50":"May 14","p25":"May 23","lx":"Jun 8","ff":"Oct 5"},{"s":"ludington","n":"Ludington","r":"Lakeshore","p50":"May 13","p25":"May 22","lx":"Jun 14","ff":"Oct 10"},{"s":"manistee","n":"Manistee","r":"Lakeshore","p50":"May 11","p25":"May 18","lx":"May 31","ff":"Oct 10"},{"s":"marquette-wso","n":"Marquette WSO","r":"Upper Peninsula","p50":"May 13","p25":"May 19","lx":"May 29","ff":"Oct 1"},{"s":"midland","n":"Midland","r":"Saginaw Valley","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 1"},{"s":"milford","n":"Milford","r":"Southeast","p50":"May 8","p25":"May 15","lx":"May 30","ff":"Oct 10"},{"s":"mio","n":"Mio","r":"Northeast Lower","p50":"Jun 1","p25":"Jun 10","lx":"Jun 21","ff":"Sep 12"},{"s":"monroe","n":"Monroe","r":"Southeast","p50":"Apr 26","p25":"May 2","lx":"May 13","ff":"Oct 15"},{"s":"mt-clemens","n":"Mt. Clemens","r":"Southeast","p50":"Apr 27","p25":"May 5","lx":"May 23","ff":"Oct 18"},{"s":"mt-pleasant","n":"Mt. Pleasant","r":"Central","p50":"May 14","p25":"May 21","lx":"May 30","ff":"Sep 28"},{"s":"munising","n":"Munising","r":"Upper Peninsula","p50":"Jun 10","p25":"Jun 17","lx":"Jul 4","ff":"Sep 25"},{"s":"muskegon","n":"Muskegon","r":"Lakeshore","p50":"May 6","p25":"May 14","lx":"Jun 12","ff":"Oct 12"},{"s":"newaygo","n":"Newaygo","r":"West Central","p50":"May 26","p25":"Jun 3","lx":"Jun 22","ff":"Sep 22"},{"s":"newberry","n":"Newberry","r":"Upper Peninsula","p50":"May 26","p25":"Jun 2","lx":"Jun 18","ff":"Sep 12"},{"s":"onaway","n":"Onaway","r":"Northeast Lower","p50":"May 25","p25":"Jun 1","lx":"Jun 15","ff":"Sep 28"},{"s":"owosso","n":"Owosso","r":"Central","p50":"May 12","p25":"May 19","lx":"May 30","ff":"Oct 3"},{"s":"paw-paw","n":"Paw Paw","r":"Southwest","p50":"May 11","p25":"May 19","lx":"Jun 12","ff":"Oct 8"},{"s":"pontiac","n":"Pontiac","r":"Southeast","p50":"May 6","p25":"May 13","lx":"May 25","ff":"Oct 10"},{"s":"port-huron","n":"Port Huron","r":"Thumb","p50":"May 3","p25":"May 11","lx":"Jun 5","ff":"Oct 12"},{"s":"saginaw","n":"Saginaw","r":"Saginaw Valley","p50":"May 4","p25":"May 11","lx":"May 28","ff":"Oct 5"},{"s":"sault-ste-marie","n":"Sault Ste. Marie","r":"Upper Peninsula","p50":"May 22","p25":"May 29","lx":"Jun 21","ff":"Sep 22"},{"s":"south-haven","n":"South Haven","r":"Southwest","p50":"May 3","p25":"May 9","lx":"May 23","ff":"Oct 15"},{"s":"three-rivers","n":"Three Rivers","r":"Southwest","p50":"May 8","p25":"May 15","lx":"May 29","ff":"Oct 8"},{"s":"traverse-city","n":"Traverse City","r":"Northwest Lower","p50":"May 23","p25":"Jun 1","lx":"Jul 6","ff":"Oct 8"},{"s":"vanderbilt","n":"Vanderbilt","r":"North Central","p50":"Jun 20","p25":"Jun 30","lx":"Jul 31","ff":"Sep 8"},{"s":"west-branch","n":"West Branch","r":"North Central","p50":"May 27","p25":"Jun 4","lx":"Jun 18","ff":"Sep 18"},{"s":"willis","n":"Willis","r":"Southeast","p50":"May 10","p25":"May 17","lx":"May 29","ff":"Oct 12"}];
-const CROPS=[{"n":"Tomatoes","c":"veg","i":[-56,-42],"t":[7,21],"d":null,"f":null,"s":60,"o":"Wait for 60F soil and settled nights; a week of patience beats a month of sulking"},{"n":"Peppers","c":"veg","i":[-63,-49],"t":[14,21],"d":null,"f":null,"s":65,"o":"Slower than tomatoes at every stage; never rush them out"},{"n":"Eggplant","c":"veg","i":[-63,-49],"t":[14,21],"d":null,"f":null,"s":65,"o":"The most cold-sensitive transplant in the garden"},{"n":"Broccoli","c":"veg","i":[-49,-35],"t":[-21,-7],"d":null,"f":[-95,-80],"s":45,"o":"Spring and fall crop; fall heads are sweeter"},{"n":"Cabbage","c":"veg","i":[-49,-35],"t":[-28,-14],"d":null,"f":[-100,-85],"s":45,"o":"Takes light frost at both ends of the season"},{"n":"Cauliflower","c":"veg","i":[-42,-28],"t":[-14,0],"d":null,"f":[-95,-80],"s":50,"o":"Fussier than broccoli; steady water or it buttons"},{"n":"Brussels sprouts","c":"veg","i":[-28,-14],"t":[0,14],"d":null,"f":null,"s":50,"o":"One long season; sprouts sweeten after fall frost"},{"n":"Kale","c":"veg","i":[-42,-28],"t":[-28,-14],"d":[-28,-14],"f":[-75,-55],"s":45,"o":"Nearly indestructible; fall kale after frost is the best kale"},{"n":"Lettuce","c":"veg","i":[-35,-21],"t":[-21,-7],"d":[-28,7],"f":[-60,-30],"s":40,"o":"Sow a short row every 2 weeks; bolts in July heat"},{"n":"Spinach","c":"veg","i":null,"t":null,"d":[-42,-21],"f":[-50,-35],"s":40,"o":"Cold soil is fine; summer sowings bolt"},{"n":"Swiss chard","c":"veg","i":[-35,-21],"t":[-7,7],"d":[-14,7],"f":[-70,-55],"s":50,"o":"One sowing cuts all season"},{"n":"Peas","c":"veg","i":null,"t":null,"d":[-42,-28],"f":null,"s":40,"o":"As soon as soil crumbles; heat ends them by July"},{"n":"Green beans","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Resow every 2 to 3 weeks into early July for a steady picking"},{"n":"Sweet corn","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Cold soil rots the seed; blocks beat rows for pollination"},{"n":"Cucumbers","c":"veg","i":[-21,-14],"t":[14,21],"d":[7,21],"f":null,"s":65,"o":"Direct sowing usually catches up to transplants"},{"n":"Zucchini","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Two plants feed a neighborhood; resow in late June for fresh fall plants"},{"n":"Winter squash","c":"veg","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"Needs the full season; get it in promptly"},{"n":"Pumpkins","c":"veg","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"In the ground by mid-June even up north"},{"n":"Melons","c":"veg","i":[-28,-21],"t":[14,28],"d":null,"f":null,"s":70,"o":"Michigan melons want black plastic or a very warm site"},{"n":"Watermelon","c":"veg","i":[-28,-21],"t":[14,28],"d":null,"f":null,"s":70,"o":"Short-season varieties only; heat is everything"},{"n":"Carrots","c":"veg","i":null,"t":null,"d":[-21,14],"f":[-85,-70],"s":45,"o":"Slow to germinate; keep the row damp for 2 weeks"},{"n":"Beets","c":"veg","i":null,"t":null,"d":[-28,7],"f":[-70,-55],"s":45,"o":"Each seed is a cluster; thin without mercy"},{"n":"Radishes","c":"veg","i":null,"t":null,"d":[-35,0],"f":[-45,-25],"s":40,"o":"3 weeks seed to salad; sow small and often"},{"n":"Turnips","c":"veg","i":null,"t":null,"d":[-28,-7],"f":[-65,-50],"s":45,"o":"The fall sowing is the good one"},{"n":"Onions from seed","c":"veg","i":[-70,-56],"t":[-28,-14],"d":null,"f":null,"s":45,"o":"Start early or buy plants; day length ends bulbing in July"},{"n":"Onion sets","c":"veg","i":null,"t":null,"d":[-28,-14],"f":null,"s":45,"o":"The easy path; plant when soil works"},{"n":"Potatoes","c":"veg","i":null,"t":null,"d":[-14,7],"f":null,"s":45,"o":"Sprouts take a light frost and regrow"},{"n":"Garlic","c":"veg","i":null,"t":null,"d":null,"f":[0,21],"s":null,"o":"Plant in fall, after first light frost and before the ground freezes; harvest next July"},{"n":"Basil","c":"herb","i":[-42,-28],"t":[7,14],"d":[14,21],"f":null,"s":65,"o":"Sulks below 50F nights; the last thing out the door"},{"n":"Parsley","c":"herb","i":[-70,-56],"t":[-14,0],"d":[-21,0],"f":null,"s":50,"o":"Painfully slow germination; soak seed overnight"},{"n":"Cilantro","c":"herb","i":null,"t":null,"d":[-14,7],"f":[-55,-40],"s":50,"o":"Bolts fast in heat; sow every 3 weeks and again for fall"},{"n":"Dill","c":"herb","i":null,"t":null,"d":[-14,7],"f":null,"s":50,"o":"Direct sow only; resents transplanting"},{"n":"Chives","c":"herb","i":[-56,-42],"t":[-14,0],"d":null,"f":null,"s":45,"o":"Perennial; one planting lasts decades"},{"n":"Oregano","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial in most of Michigan with snow cover"},{"n":"Thyme","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial; wants sharp drainage more than warmth"},{"n":"Sage","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial; woody plants shrug off Zone 5 winters"},{"n":"Rosemary","c":"herb","i":[-70,-56],"t":[14,21],"d":null,"f":null,"s":60,"o":"Not hardy here; pot it and bring it in by October"},{"n":"Zinnias","c":"flower","i":[-28,-21],"t":[7,14],"d":[7,14],"f":null,"s":60,"o":"Direct sowing works fine; cut hard for more blooms"},{"n":"Marigolds","c":"flower","i":[-42,-28],"t":[7,14],"d":[7,14],"f":null,"s":60,"o":"Foolproof from seed either way"},{"n":"Sunflowers","c":"flower","i":null,"t":null,"d":[0,21],"f":null,"s":55,"o":"Sow every 2 weeks for a rolling show"},{"n":"Cosmos","c":"flower","i":null,"t":null,"d":[0,14],"f":null,"s":55,"o":"Thrives on neglect and poor soil"},{"n":"Nasturtiums","c":"flower","i":null,"t":null,"d":[0,14],"f":null,"s":55,"o":"Soak the big seeds; lean soil means more flowers"},{"n":"Sweet peas","c":"flower","i":null,"t":null,"d":[-35,-21],"f":null,"s":45,"o":"Cold-lovers; plant with the edible peas"},{"n":"Snapdragons","c":"flower","i":[-70,-56],"t":[-14,0],"d":null,"f":null,"s":45,"o":"Take light frost; among the first out"},{"n":"Petunias","c":"flower","i":[-70,-56],"t":[7,14],"d":null,"f":null,"s":60,"o":"Tiny seed on the surface, light to germinate"},{"n":"Calendula","c":"flower","i":null,"t":null,"d":[-21,0],"f":null,"s":50,"o":"Self-sows once you have it"},{"n":"Morning glories","c":"flower","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"Nick and soak seed; do not start early or it strangles the shelf"}];</script>
+<script src="/assets/garden-tools/garden-kit.js"></script>
+<script src="/assets/garden-tools/michigan-frost.js"></script>
 <script>
+/* Michigan planting calendar: your station's frost dates turned into this week's jobs, a crop lookup,
+ * a season timeline and the full tables. All in the browser; nothing is stored or sent anywhere. */
 (function(){
-  var MO={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-  var MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  function pd(s){var p=s.split(" ");return new Date(2025,MO[p[0]],+p[1]);}
-  function fd(d){return MN[d.getMonth()]+" "+d.getDate();}
-  function add(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
-  function win(base,off){return fd(add(base,off[0]))+" to "+fd(add(base,off[1]));}
-  function inWin(base,off,today){var a=add(base,off[0]),b=add(base,off[1]);var t=new Date(2025,today.getMonth(),today.getDate());return t>=a&&t<=b;}
+  'use strict';
+  var K=window.GardenKit,F=window.MIFrost,h=K.h,el=function(id){return document.getElementById(id)};
+  var sel=el('citySel'),custom=el('customLF'),cropSel=el('cropSel');
+  var state={city:'bay-city',mode:'typical',lf:null,crop:'Tomatoes',cat:'veg'};
 
-  var sel=document.getElementById("citySel"), safe=document.getElementById("safeChk"),
-      lfOut=document.getElementById("lfOut"), ffOut=document.getElementById("ffOut"),
-      week=document.getElementById("thisWeek"), custom=document.getElementById("customLF");
+  // Station picker, grouped by region; crop picker, grouped by kind.
+  sel.replaceChildren();
+  var regions={};F.STATIONS.forEach(function(st){(regions[st.r]=regions[st.r]||[]).push(st)});
+  Object.keys(regions).sort().forEach(function(r){sel.append(h('optgroup',{label:r},regions[r].map(function(st){return h('option',{value:st.s},st.n+' ('+st.p50+')')})))});
+  ['veg','herb','flower'].forEach(function(c){cropSel.append(h('optgroup',{label:F.CAT[c]},F.CROPS.filter(function(x){return x.c===c}).map(function(x){return h('option',{value:x.n},x.n)})))});
+  el('legend').append(K.legend(['indoor','transplant','sow','fall']));
 
-  // populate select grouped by region
-  var regions={};
-  STATIONS.forEach(function(s){(regions[s.r]=regions[s.r]||[]).push(s);});
-  Object.keys(regions).sort().forEach(function(r){
-    var og=document.createElement("optgroup");og.label=r;
-    regions[r].forEach(function(s){
-      var o=document.createElement("option");o.value=s.s;o.textContent=s.n+" ("+s.p50+")";og.appendChild(o);
+  function current(){var st=F.station(state.city)||F.station('bay-city');return {st:st,a:F.anchors(st,state.mode,state.lf)}}
+  function left(n){return n===0?'last day today':n===1?'1 day left':n+' days left'}
+  function soonWords(n){return n===0?'today':n===1?'tomorrow':'in '+n+' days'}
+  function lower(t){return t.charAt(0).toLowerCase()+t.slice(1)}
+
+  function renderWeek(c,today){
+    var p=F.plan(c.a,today,14),name=c.st.n;
+    var card=el('weekCard'),n=p.now.length;
+    if(n){
+      card.className='gk-answer';el('weekBadge').textContent='In season now';
+      el('weekTitle').textContent=n===1?p.now[0].text+' this week near '+name+'.':n+' jobs are in their window this week near '+name+'.';
+      el('weekWhy').textContent=state.lf!==null?'Worked out from your own last frost date, '+K.fmt(c.a.spring)+'.':'Worked out from '+name+'’s '+(state.mode==='cautious'?'cautious':'typical')+' last spring frost, '+K.fmt(c.a.spring)+', and first fall frost, '+K.fmt(c.a.fall)+'.';
+    }else{
+      var next=F.plan(c.a,today,365).soon[0];
+      card.className='gk-answer wait';el('weekBadge').textContent='A quiet week';
+      el('weekTitle').textContent='Nothing to sow or plant this week near '+name+'.';
+      el('weekWhy').textContent=next?'Next up: '+lower(next.text)+' on '+K.fmt(next.w.from)+', '+soonWords(next.inDays)+'. Until then, tend what is growing and order seed.':'Tend what is growing.';
+    }
+    var item=function(x){return h('li',null,h('b',null,x.text),'Window '+K.range(x.w.from,x.w.to)+' · '+left(x.left))};
+    // Most urgent first; the rest fold away so the refinements stay close.
+    el('weekNow').replaceChildren.apply(el('weekNow'),p.now.slice(0,4).map(item).concat(n>4?[h('li',{class:'gk-more'},h('details',null,h('summary',null,'Show '+(n-4)+' more this week'),h('ul',{class:'gk-steps'},p.now.slice(4).map(item))))]:[]));
+    el('soonTitle').hidden=!p.soon.length;
+    el('weekSoon').replaceChildren.apply(el('weekSoon'),p.soon.slice(0,4).map(function(x){return h('li',null,h('b',null,x.text),'Opens '+K.fmt(x.w.from)+', '+soonWords(x.inDays))}));
+    var a=c.a,fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]};
+    el('frostFacts').replaceChildren.apply(el('frostFacts'),[].concat(
+      fx('Typical last frost',c.st.p50+' · 1 spring in 2 frosts later'),
+      fx('Cautious date',c.st.p25+' · 1 spring in 4 frosts later'),
+      fx('Latest on record',c.st.lx),
+      fx('First fall frost',c.st.ff+' (typical)'),
+      fx('Frost-free season',K.days(a.fall-a.median))));
+    el('weekLive').textContent=name+': '+el('weekTitle').textContent;
+  }
+
+  var LABEL={indoor:'Start indoors',transplant:'Plant out',sow:'Sow outside',fall:'Sow for fall'};
+  function renderCrop(c,today){
+    var cr=F.crop(state.crop)||F.CROPS[0],ws=F.windows(cr,c.a);
+    el('cropTitle').textContent=cr.n+' near '+c.st.n;
+    el('cropSteps').replaceChildren.apply(el('cropSteps'),ws.map(function(w){return h('li',null,h('b',null,LABEL[w.kind]+': '+K.range(w.from,w.to)),w.kind==='transplant'||w.kind==='sow'?(cr.s?'Once the soil reads '+cr.s+'°F or warmer.':''):w.kind==='indoor'?'Under lights, '+Math.round(((cr.t||cr.d)[0]-cr.i[1])/7)+' to '+Math.round(((cr.t||cr.d)[0]-cr.i[0])/7)+' weeks before it goes outside.':'Counted back from the first fall frost.')}));
+    var on=ws.filter(function(w){return F.inside(today,w)})[0];
+    var next=ws.map(function(w){return {w:w,n:((w.from-today)%365+365)%365}}).sort(function(x,y){return x.n-y.n})[0];
+    el('cropNow').textContent=on?'Right now: '+LABEL[on.kind].toLowerCase()+' window, open until '+K.fmt(on.to)+'.':next?'Next: '+LABEL[next.w.kind].toLowerCase()+' on '+K.fmt(next.w.from)+', '+soonWords(next.n)+'.':'';
+    el('cropBadge').textContent=on?'In its window':'Not yet';
+    el('cropCard').className='gk-answer '+(on?'':'info');
+    el('cropNote').textContent=cr.o.charAt(0).toUpperCase()+cr.o.slice(1)+'.';
+  }
+
+  function renderTimeline(c,today){
+    var rows=F.CROPS.filter(function(x){return state.cat==='all'||x.c===state.cat}).map(function(x){return {id:x.n,label:x.n,bars:F.windows(x,c.a)}});
+    K.timeline(el('timeline'),rows,{spring:c.a.spring,fall:c.a.fall,today:today,active:state.crop,onRow:function(id){state.crop=id;cropSel.value=id;render();el('cropCard').scrollIntoView({block:'nearest'})}});
+    document.querySelectorAll('#catFilter button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-cat')===state.cat))});
+  }
+
+  function renderTables(c){
+    ['veg','herb','flower'].forEach(function(cat){
+      var tb=el('tb-'+cat);if(!tb)return;
+      tb.replaceChildren.apply(tb,F.CROPS.filter(function(x){return x.c===cat}).map(function(cr){
+        var ws=F.windows(cr,c.a),get=function(k){var w=ws.filter(function(x){return x.kind===k})[0];return w?K.range(w.from,w.to):''};
+        return h('tr',null,h('td',null,cr.n),h('td',null,get('indoor')),h('td',null,get('transplant')),h('td',null,get('sow')),h('td',null,get('fall')),h('td',null,cr.s?cr.s+'F+':''),h('td',null,cr.o));
+      }));
     });
-    sel.appendChild(og);
+  }
+
+  function query(){
+    var q=new URLSearchParams();q.set('city',state.city);if(state.mode==='cautious')q.set('mode','cautious');
+    if(state.lf!==null)q.set('lf',custom.value);if(state.crop!=='Tomatoes')q.set('crop',F.slugify(state.crop));if(state.cat!=='veg')q.set('cat',state.cat);
+    return '?'+q.toString();
+  }
+  function render(){
+    var c=current(),today=K.today();
+    renderWeek(c,today);renderCrop(c,today);renderTimeline(c,today);renderTables(c);
+    if(window.history&&history.replaceState)history.replaceState(null,'',query());
+  }
+
+  sel.addEventListener('change',function(){state.city=sel.value;custom.value='';state.lf=null;render()});
+  document.querySelectorAll('input[name="mode"]').forEach(function(r){r.addEventListener('change',function(){state.mode=r.value;custom.value='';state.lf=null;render()})});
+  custom.addEventListener('change',function(){state.lf=K.fromISO(custom.value);render()});
+  cropSel.addEventListener('change',function(){state.crop=cropSel.value;render()});
+  document.querySelectorAll('#catFilter button').forEach(function(b){b.addEventListener('click',function(){state.cat=b.getAttribute('data-cat');var cr=F.crop(state.crop);if(state.cat!=='all'&&cr&&cr.c!==state.cat)state.crop=F.CROPS.filter(function(x){return x.c===state.cat})[0].n,cropSel.value=state.crop;render()})});
+  el('printBtn').addEventListener('click',function(){window.print()});
+  el('shareBtn').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query(),el('shareBtn'),el('shareOut'))});
+  el('icsBtn').addEventListener('click',function(){
+    var c=current(),ev=[];
+    F.CROPS.filter(function(x){return state.cat==='all'||x.c===state.cat}).forEach(function(cr){F.windows(cr,c.a).forEach(function(w){ev.push({from:w.from,to:w.to,title:F.verb(w.kind,cr.n),note:cr.n+' near '+c.st.n+': '+cr.o+'. From chrisizworski.com/zone-6a-planting-calendar/'})})});
+    K.ics(ev,'planting-calendar-'+c.st.s+'.ics');
   });
 
-  function current(){
-    var s=STATIONS.find(function(x){return x.s===sel.value;})||STATIONS.find(function(x){return x.s==="bay-city";});
-    var lf = custom.value ? new Date(2025, +custom.value.slice(5,7)-1, +custom.value.slice(8,10)) : pd(safe.checked?s.p25:s.p50);
-    return {s:s, lf:lf, ff:pd(s.ff)};
-  }
-
-  function render(){
-    var c=current();
-    lfOut.textContent=(custom.value?"Custom":"Median ("+(safe.checked?"cautious, 25%":"50%")+")")+" last spring frost: "+fd(c.lf)+(custom.value?"":" \u00b7 latest ever recorded: "+c.s.lx);
-    ffOut.textContent="Typical first fall frost: "+c.s.ff;
-    ["veg","herb","flower"].forEach(function(cat){
-      var tb=document.getElementById("tb-"+cat);
-      var html="";
-      CROPS.forEach(function(cr){
-        if(cr.c!==cat)return;
-        html+="<tr><td>"+cr.n+"</td><td>"+(cr.i?win(c.lf,cr.i):"")+"</td><td>"+(cr.t?win(c.lf,cr.t):"")+"</td><td>"+(cr.d?win(c.lf,cr.d):"")+"</td><td>"+(cr.f?win(c.ff,cr.f):"")+"</td><td>"+(cr.s?cr.s+"F+":"")+"</td><td>"+cr.o+"</td></tr>";
-      });
-      tb.innerHTML=html;
-    });
-    // this week
-    var now=new Date(), tasks=[];
-    CROPS.forEach(function(cr){
-      if(cr.i&&inWin(c.lf,cr.i,now))tasks.push("Start "+cr.n.toLowerCase()+" indoors");
-      if(cr.t&&inWin(c.lf,cr.t,now))tasks.push("Transplant "+cr.n.toLowerCase()+" outside");
-      if(cr.d&&inWin(c.lf,cr.d,now))tasks.push("Direct sow "+cr.n.toLowerCase());
-      if(cr.f&&inWin(c.ff,cr.f,now))tasks.push("Fall sow "+cr.n.toLowerCase());
-    });
-    week.innerHTML = tasks.length
-      ? "<strong>In the window this week near "+c.s.n+":</strong> "+tasks.slice(0,14).join("; ")+(tasks.length>14?"; and "+(tasks.length-14)+" more":"")
-      : "<strong>This week near "+c.s.n+":</strong> nothing is in a sowing or transplant window right now. Up north that means tend what is growing; in late fall it means order seed.";
-    var q="?city="+c.s.s+(safe.checked?"&safe=1":"");
-    history.replaceState(null,"",q);
-  }
-
-  sel.addEventListener("change",function(){custom.value="";render();});
-  safe.addEventListener("change",function(){custom.value="";render();});
-  custom.addEventListener("change",render);
-  document.getElementById("printBtn").addEventListener("click",function(){window.print();});
-
+  // Links: ?city=&mode=cautious&lf=YYYY-MM-DD&crop=&cat=. Older links used safe=1 for the cautious date.
   var q=new URLSearchParams(location.search);
-  var city=q.get("city");
-  if(city&&STATIONS.some(function(s){return s.s===city;}))sel.value=city;else sel.value="bay-city";
-  if(q.get("safe")==="1")safe.checked=true;
+  if(F.station(q.get('city')))state.city=q.get('city');
+  if(q.get('mode')==='cautious'||q.get('safe')==='1')state.mode='cautious';
+  if(K.fromISO(q.get('lf'))!==null){state.lf=K.fromISO(q.get('lf'));custom.value=q.get('lf')}
+  var cq=F.crop(q.get('crop')||'');if(cq)state.crop=cq.n;
+  if(['veg','herb','flower','all'].indexOf(q.get('cat'))>=0)state.cat=q.get('cat');
+  sel.value=state.city;cropSel.value=state.crop;
+  document.querySelectorAll('input[name="mode"]').forEach(function(r){r.checked=r.value===state.mode});
   render();
 })();
 </script>
