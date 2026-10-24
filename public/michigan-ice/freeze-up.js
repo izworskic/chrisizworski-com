@@ -886,9 +886,12 @@
       });
     });
     root.querySelector('#ice-ex-modal-slider').addEventListener('input',function(){
+      // stopPlayback synchronizes the modal controls and would overwrite the
+      // user's new slider position. Capture it before ending playback.
+      var selectedDay=this.value;
       stopPlayback();
       var slider=root.querySelector('#ice-ex-slider');
-      slider.value=String(this.value);
+      slider.value=selectedDay;
       if(slider.oninput)slider.oninput();
     });
     root.querySelector('#ice-ex-modal-play').addEventListener('click',function(){
