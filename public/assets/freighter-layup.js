@@ -169,10 +169,11 @@
    }catch(e){$('map-status').textContent='Map could not load; the documented vessel list below is still available.'}
  }
  async function boot(){
+   let archive;
    try{
      const res=await fetch('/assets/freighter-layup-registry.json',{signal:AbortSignal.timeout(9000)});
      if(!res.ok)throw new Error('Archive not available');
-     const archive=await res.json();
+     archive=await res.json();
      if(archive.schemaVersion!==2||!Array.isArray(archive.seasons)||!Array.isArray(archive.harbors))throw new Error('Unexpected archive format');
      if(!policy()||policy().validateRegistry(archive).length)throw new Error('Layup integrity check failed');
      state.archive=archive;
