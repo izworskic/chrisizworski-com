@@ -60,6 +60,8 @@
   var mapReady = false;
   var basemap = null, basemapFailed = false, apiFailed = false;
   var pendingMapUpdate = null, resizeObserver = null;
+  var dailyFrameRequest = 0, frameMode = 'focus';
+  var dailyFrameCache = new Map(); // bounded client-only NOAA image load outcomes
 
   function el(tag, className, text) {
     var n = document.createElement(tag);
@@ -99,10 +101,120 @@
         r[REGIONS[currentSlug].lake] >= 0 && r[REGIONS[currentSlug].lake] <= 100;
     });
   }
+  // NOAA GLERL publishes a true daily concentration map across the entire
+  // basin, not a historical version of the current CARTO/USNIC overlay.
+  // Ice seasons are archived by their END year: Dec 2025 and Feb 2026 = 2026.
+  function glMultiLakeFrameUrl(day) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return null;
+    var d = new Date(day + 'T12:00:00Z');
+    if (Number.isNaN(d.valueOf()) || d.toISOString().slice(0, 10) !== day) return null;
+    var month = d.getUTCMonth() + 1;
+    var endYear = d.getUTCFullYear() + (month >= 11 ? 1 : 0);
+    if (month >= 6 && month <= 10) return null; // outside published Nov–May ice charts
+    return 'https://www.glerl.noaa.gov/data/ice/glicd/jpgs/' + endYear +
+      '/' + day.replace(/-/g,'') + '.jpg';
+  }
+  var PHOTO_FOCUS = {
+    superior: {x:0.31,y:0.27,scale:2.10},
+    michigan: {x:0.40,y:0.65,scale:2.05},
+    huron: {x:0.61,y:0.57,scale:2.10},
+    erie: {x:0.69,y:0.81,scale:2.25},
+    ontario: {x:0.83,y:0.67,scale:2.20}
+  };
+  function dailyChartPerspective() {
+    var lake = REGIONS[currentSlug].lake;
+    var focus = PHOTO_FOCUS[lake];
+    // NOAA basin chart cannot resolve Lake St. Clair or a particular bay.
+    if (frameMode === 'all' || !focus) return {scale:1,x:0,y:0};
+    return {scale:focus.scale,
+      x:50 - focus.x*focus.scale*100,
+      y:50 - focus.y*focus.scale*100};
+  }
+  function styleDailyFrame() {
+    if (!root) return;
+    var picture = root.querySelector('#ice-ex-daily-image');
+    var view = root.querySelector('#ice-ex-daily-mode');
+    var lake = REGIONS[currentSlug].lakeName || REGIONS[currentSlug].name;
+    if (view) {
+      view.disabled = !PHOTO_FOCUS[REGIONS[currentSlug].lake];
+      view.textContent = frameMode === 'focus' && !view.disabled
+        ? 'Show all five lakes' : 'Focus on ' + lake;
+    }
+    if (!picture) return;
+    var p = dailyChartPerspective();
+    picture.style.transformOrigin = 'top left';
+    picture.style.transform = 'translate('+p.x.toFixed(1)+'%,'+p.y.toFixed(1)+'%) scale('+p.scale+')';
+  }
+  function syncDailyFrame() {
+    var img = root && root.querySelector('#ice-ex-daily-image');
+    if (!img) return;
+    var status = root.querySelector('#ice-ex-daily-status');
+    var source = root.querySelector('#ice-ex-daily-source');
+    var item = chartSeries[currentIndex];
+    var ticket = ++dailyFrameRequest;
+    styleDailyFrame();
+    if (!item) {
+      img.removeAttribute('src'); img.hidden = true;
+      status.textContent = 'No dated NOAA ice analysis available to display.';
+      source.hidden = true;
+      return;
+    }
+    var url = glMultiLakeFrameUrl(item.date);
+    var name = REGIONS[currentSlug].lakeName || REGIONS[currentSlug].name;
+    if (!url) {
+      img.removeAttribute('src'); img.hidden = true;
+      status.textContent = 'No NOAA geographic chart is expected for '+dateOnly(item.date)+'. The measured whole-lake percentage remains in the graph.';
+      source.hidden = true;
+      return;
+    }
+    // Clear the previous day immediately: never display yesterday's map
+    // underneath today's date if the new NOAA image is missing or slow.
+    img.hidden = true;
+    img.removeAttribute('src');
+    status.textContent = 'Loading NOAA geographic ice chart for '+dateOnly(item.date)+'…';
+    source.hidden = true;
+    var cached = dailyFrameCache.get(url);
+    if (cached === false) {
+      status.textContent = 'NOAA did not provide a geographic image for '+dateOnly(item.date)+'. No ice map has been invented.';
+      return;
+    }
+    function applySuccess() {
+      if (ticket !== dailyFrameRequest || !root.isConnected) return;
+      img.alt = 'NOAA GLERL daily Great Lakes ice concentration map dated '+dateOnly(item.date)+
+        '. '+name+' is highlighted when focus is active. This is not ice thickness or safety data.';
+      img.src = url;
+      img.hidden = false;
+      styleDailyFrame();
+      source.href = url;
+      source.hidden = false;
+      status.textContent = dateOnly(item.date)+' · actual NOAA GLERL daily mapped ice concentration. '+
+        (REGIONS[currentSlug].scope === 'lake-overview'
+          ? name+' is selected. '
+          : 'This basin-wide source does not measure '+REGIONS[currentSlug].name+' separately. ')+
+        'The CARTO location map above remains a different, current-only product.';
+    }
+    if (cached === true) { applySuccess(); return; }
+    var probe = new Image();
+    probe.onload = function() {
+      dailyFrameCache.set(url,true);
+      if (dailyFrameCache.size > 20) dailyFrameCache.delete(dailyFrameCache.keys().next().value);
+      applySuccess();
+    };
+    probe.onerror = function() {
+      dailyFrameCache.set(url,false);
+      if (dailyFrameCache.size > 20) dailyFrameCache.delete(dailyFrameCache.keys().next().value);
+      if (ticket !== dailyFrameRequest || !root.isConnected) return;
+      img.removeAttribute('src'); img.hidden = true;
+      source.hidden = true;
+      status.textContent = 'NOAA daily ice-map image unavailable for '+dateOnly(item.date)+
+        '. The measured GLERL whole-lake chart is still available. No substitute map is shown.';
+    };
+    probe.src = url;
+  }
   function stopPlayback() {
     if (playTimer !== null) { clearInterval(playTimer); playTimer = null; }
     var b = root && root.querySelector('#ice-ex-play');
-    if (b) b.textContent = 'Play daily progression';
+    if (b) b.textContent = 'Play ice maps day by day';
   }
   function svgNode(tag, attributes) {
     var n = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -126,6 +238,7 @@
       : 'This season: observed whole-lake coverage, not a measurement of the selected bay.');
     if (!chartSeries.length) {
       text('ice-ex-chart-value', 'No NOAA daily series is available. No values have been estimated.');
+      syncDailyFrame();
       return;
     }
     currentIndex = chartSeries.length - 1;
@@ -155,13 +268,14 @@
     svg.setAttribute('viewBox','0 0 '+width+' '+height);
     svg.setAttribute('role','img');
     svg.setAttribute('aria-label','NOAA GLERL whole-lake daily ice coverage chart for '+lakeName+
-      '. Use the date slider to inspect daily observations; the geographic map remains latest-only.');
+      '. Use the date slider to inspect daily observations and matching NOAA basin ice maps. The CARTO geographic map remains latest-only.');
     slider.oninput=function () {
       currentIndex=Math.max(0,Math.min(chartSeries.length-1,Number(slider.value)||0));
       focus.setAttribute('cx',x(currentIndex));
       focus.setAttribute('cy',y(val(currentIndex)));
       text('ice-ex-chart-value',dateOnly(chartSeries[currentIndex].date)+': '+percent(val(currentIndex))+
         ' of '+lakeName+' covered by ice (whole-lake mean).');
+      syncDailyFrame();
     };
     slider.oninput();
   }
@@ -422,6 +536,16 @@
       '#ice-freeze-explorer .ice-ex-chartbox{margin-top:15px;border-top:1px solid #cbdfe2;padding-top:12px}',
       '#ice-ex-chart{display:block;width:100%;max-height:230px;background:#fff;border:1px solid #dae5e8;border-radius:10px}',
       '#ice-ex-chart-heading{font-size:17px;margin:4px 0}',
+      '#ice-ex-daily-panel{margin:13px 0 14px}',
+      '#ice-ex-daily-header{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}',
+      '#ice-ex-daily-header h4{margin:0;font-size:16px;line-height:1.3}',
+      '#ice-ex-daily-mode{min-height:38px!important;padding:6px 10px!important}',
+      '#ice-ex-daily-frame{position:relative;aspect-ratio:1.30;max-width:720px;overflow:hidden;background:#eaf2f4;border:1px solid #c5dce0;border-radius:10px}',
+      '#ice-ex-daily-image{width:100%;height:100%;object-fit:fill;display:block;transform-origin:top left;transition:transform .2s ease}',
+      '#ice-ex-daily-image[hidden]{display:none}',
+      '#ice-ex-daily-placeholder{display:flex;align-items:center;justify-content:center;min-height:130px;padding:20px;text-align:center;color:#486772;font-size:14px}',
+      '#ice-ex-daily-source[hidden]{display:none}',
+      '@media(prefers-reduced-motion:reduce){#ice-ex-daily-image{transition:none}}',
       '#ice-ex-chart-value{min-height:22px;font-weight:650;font-variant-numeric:tabular-nums}',
       '#ice-freeze-explorer .ice-ex-limit{margin-top:14px;padding:10px 12px;border-left:4px solid #a54a32;background:#fff5ef;font-size:13px;line-height:1.5}',
       '#ice-freeze-explorer a{color:#095c72;text-underline-offset:3px}',
@@ -471,12 +595,21 @@
       '<div class="ice-ex-kicker">Daily progression · distinct from the map</div>',
       '<h3 id="ice-ex-chart-heading">Whole-lake ice cover</h3>',
       '<p id="ice-ex-timeline-note" class="ice-ex-caption">Loading the dated NOAA GLERL series…</p>',
+      '<div id="ice-ex-daily-panel" aria-label="NOAA historical daily ice map playback">',
+      '<div id="ice-ex-daily-header"><h4>Watch the ice spread and retreat</h4>',
+      '<button type="button" id="ice-ex-daily-mode" aria-label="Toggle NOAA basin chart focus">Show all five lakes</button></div>',
+      '<div id="ice-ex-daily-frame"><img id="ice-ex-daily-image" alt="" hidden decoding="async" referrerpolicy="no-referrer">',
+      '<span id="ice-ex-daily-placeholder">Select a day in the timeline below to display its original NOAA ice map.</span></div>',
+      '<p id="ice-ex-daily-status" class="ice-ex-caption" role="status">Waiting for NOAA daily ice records.</p>',
+      '<p class="ice-ex-caption"><a id="ice-ex-daily-source" href="https://www.glerl.noaa.gov/data/ice/glicd.php" target="_blank" rel="noopener" hidden>Open original dated NOAA ice map</a></p>',
+      '<p class="ice-ex-caption">Genuine NOAA GLERL archived ice-concentration maps, not a forecast or simulated freeze-up. The focus is a zoom of the same Great Lakes-wide source; bays are not independently resolved.</p>',
+      '</div>',
       '<svg id="ice-ex-chart" viewBox="0 0 680 220"></svg>',
       '<label for="ice-ex-slider"><strong>Inspect a day</strong></label>',
       '<input id="ice-ex-slider" type="range" min="0" max="0" step="1" value="0" disabled>',
       '<p id="ice-ex-chart-value" aria-live="polite">Loading historic ice coverage…</p>',
-      '<button type="button" id="ice-ex-play" disabled>Play daily progression</button>',
-      '<p class="ice-ex-caption">The slider changes only the whole-lake chart. NOAA’s current ice map has no historic date control. Bay conditions must not be inferred from a lake-wide percentage.</p>',
+      '<button type="button" id="ice-ex-play" disabled>Play ice maps day by day</button>',
+      '<p class="ice-ex-caption">The date slider synchronizes the GLERL whole-lake percentage and a genuine archived GLERL daily ice map. It does not change the current-only CARTO/USNIC chart above. A lake-wide percentage is never a local bay observation.</p>',
       '</div>',
       '<p class="ice-ex-limit"><strong>Not a safe-ice assessment.</strong> Ice concentration is the fraction of a mapped area covered by ice—not ice thickness, stability, quality, or a recommendation to walk, fish, snowmobile or drive on it. Wind, current and cracks can change locally without warning.</p>',
       '<p class="ice-ex-caption"><a href="https://mapservices.weather.noaa.gov/vector/rest/services/obs/usnic_greatlakes_ice_chart/MapServer" target="_blank" rel="noopener">NOAA/NWS USNIC mapped ice analysis</a> · ',
@@ -519,7 +652,7 @@
       if(playTimer!==null) {stopPlayback();return;}
       if(chartSeries.length<2) return;
       if(currentIndex>=chartSeries.length-1) currentIndex=-1;
-      root.querySelector('#ice-ex-play').textContent='Pause daily progression';
+      root.querySelector('#ice-ex-play').textContent='Pause daily maps';
       playTimer=setInterval(function(){
         if(!root || !root.isConnected){stopPlayback();return;}
         currentIndex+=1;
@@ -529,6 +662,10 @@
       },800);
     });
     root.querySelector('#ice-ex-slider').addEventListener('pointerdown',stopPlayback);
+    root.querySelector('#ice-ex-daily-mode').addEventListener('click',function(){
+      frameMode = frameMode === 'all' ? 'focus' : 'all';
+      styleDailyFrame();
+    });
     document.addEventListener('visibilitychange',function(){if(document.hidden)stopPlayback();});
     onRegionChange(currentSlug);
     initMap(); // Never wait for /api/ice-now to start CARTO or OSM.
