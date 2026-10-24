@@ -28,6 +28,7 @@
 
 
 /* Usability: active decision, accessible plant lookup, and actionable garden priorities */
+.pair-inline-readout{display:none;margin:4px 0 24px;padding:16px 17px;background:#e8eee2;border-left:4px solid #be9458;font-size:13px}.pair-inline-readout strong{display:block;font-size:12px;color:#34533e}.pair-inline-readout p{margin:6px 0 8px;color:#4d6556}.pair-inline-readout a{font-weight:700;text-underline-offset:3px}@media(max-width:950px){.pair-inline-readout{display:block}}
 .search-caption{display:block!important;color:#65736a;font-weight:400!important;font-size:11px!important;margin-bottom:5px!important}.field .plant-search{min-height:44px;margin-bottom:8px;border-color:#bac9bd;background:#fffdf5}.search-feedback{display:block;font-size:11px;color:#667869;min-height:15px}.instant-note{font-size:12px;color:#486755;margin:0 0 12px}.garden-priority{border-left:4px solid #aa7b3f;background:#f7f0e1;padding:16px 18px;margin:15px 0 18px;font-size:13px;color:#354d3a}.garden-priority strong{display:block;font-size:12px;color:#664d29;margin-bottom:5px}.garden-priority p{margin:0}.garden-drill{display:inline-block;margin-top:8px;color:#244f39;font-size:12px;font-weight:750;text-underline-offset:3px}.garden-priority .garden-drill{margin-top:12px}.hero-actions{gap:18px}.hero-actions a{min-height:44px;display:inline-flex;align-items:center}.demo-link,.garden-remove{min-height:34px}.result-card{scroll-margin-top:18px}@media(max-width:650px){.hero-actions{gap:12px}.garden-priority{padding:13px}.plant-search{font-size:16px!important}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebApplication","name":"Cross-Pollination Explorer","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"Compare seed-saving plant species and explore seed isolation decisions","isAccessibleForFree":true,"dateModified":"2026-10-23","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@type":"Organization","name":"Freighter View Farms","url":"https://freighterviewfarms.com/"},"url":"https://chrisizworski.com/seed-saving-lab/"}]}</script>
@@ -71,6 +72,7 @@
     <div class="field"><label for="plant-a">01 — The plant you want to save seed from</label><label class="search-caption" for="search-plant-a">Find a plant by common or botanical name</label><input id="search-plant-a" class="plant-search" type="search" autocomplete="off" placeholder="Type e.g. zucchini or Brassica" aria-controls="plant-a"><span id="search-a-feedback" class="search-feedback" role="status"></span><select id="plant-a" name="plant-a" required></select><div id="botanical-a" class="botanical">Scientific name appears here.</div></div>
     <div class="connector" aria-hidden="true"><span>⇄</span><i></i><small>POLLEN CONNECTION</small><i></i></div>
     <div class="field"><label for="plant-b">02 — Another plant flowering nearby</label><label class="search-caption" for="search-plant-b">Find a plant by common or botanical name</label><input id="search-plant-b" class="plant-search" type="search" autocomplete="off" placeholder="Type e.g. pumpkin or zinnia" aria-controls="plant-b"><span id="search-b-feedback" class="search-feedback" role="status"></span><select id="plant-b" name="plant-b" required></select><div id="botanical-b" class="botanical">Scientific name appears here.</div></div>
+    <div class="pair-inline-readout"><strong>YOUR LIVE ANSWER: <span id="pair-inline-summary">Select plants</span></strong><p id="pair-inline-next"></p><a href="#results">Full explanation and next steps ↓</a></div>
     <hr class="softline">
     <div class="card-kicker">WHAT'S HAPPENING IN YOUR GARDEN?</div>
     <div class="mini-grid">
@@ -375,7 +377,7 @@
        select.append(group);
      }
      if(matches){select.disabled=false;select.value=[...select.options].some(o=>o.value===prior)?prior:select.options[0].value;feedback.textContent=matches+' matching plants';botanicals();run()}
-     else {const option=document.createElement('option');option.textContent='No matching plants';option.value='';select.append(option);select.disabled=true;feedback.textContent='No match. Try another name.';el('result-filled').hidden=true;el('result-empty').hidden=false;el('live-verdict').textContent='No matching plant. Change your search.';}
+     else {const option=document.createElement('option');option.textContent='No matching plants';option.value='';select.append(option);select.disabled=true;feedback.textContent='No match. Try another name.';el('result-filled').hidden=true;el('result-empty').hidden=false;el('live-verdict').textContent='No matching plant. Change your search.';el('pair-inline-summary').textContent='No plant found';el('pair-inline-next').textContent='Try a different plant name.';}
    });
  }
  wireSearch('search-plant-a','search-a-feedback',aSelect);
@@ -387,6 +389,7 @@
   const stateLabel={compatible:'CROSS-COMPATIBLE',unlikely:'NO USUAL CROSS',exception:'DOCUMENTED EXCEPTION',unverified:'NEEDS VERIFICATION'};
   el('status-label').textContent=stateLabel[r.potential];el('status-dot').className='status-dot '+(['compatible','exception'].includes(r.potential)?'attention':r.potential==='unlikely'?'low':'unknown');
   el('result-heading').textContent=r.heading;el('result-detail').textContent=r.detail;el('live-verdict').textContent=r.a.name+' and '+r.b.name+': '+r.verdict;
+  el('pair-inline-summary').textContent=r.verdict;el('pair-inline-next').textContent=r.recommendation.split(/(?<=[.!?])\s/)[0];
   el('tax-a').textContent=r.a.species;el('tax-b').textContent=r.b.species;
   el('result-verdict').textContent=r.verdict;el('result-action').textContent=r.recommendation+' Seed collection: '+r.a.saveNote;
   const distBox=el('distance-box');const hasDistance=r.guideline!=null;
