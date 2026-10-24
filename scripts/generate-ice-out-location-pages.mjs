@@ -16,6 +16,14 @@ const lakes=[
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const json=v=>JSON.stringify(v).replace(/</g,'\\u003c');
 let source=fs.readFileSync(parentPath,'utf8').replace(/<section[^>]*data-ice-location-directory[\s\S]*?<\/section>/i,'');
+ // Every generated lake inherits the parent tool's statically readable
+ // ice-network navigation. Guard this source-of-truth relationship rather
+ // than accidentally shipping eight disconnected lake pages in future.
+ const related=[...source.matchAll(/<a class="ice-network__item" href="([^"]+)"/g)].map(x=>x[1]);
+ if(related.length!==3 || new Set(related).size!==3 ||
+    !source.includes('<link rel="stylesheet" href="/assets/ice-network.css"')) {
+   throw new Error('Ice-out parent must expose three unique, styled ice-network links to generate child pages.');
+ }
 const contentDate=source.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
 if(!contentDate)throw new Error('Ice-out parent must declare its content date.');
 const contentDates=JSON.parse(fs.readFileSync(path.join(root,'benchmarks/ice-out-content-dates.json'),'utf8'));

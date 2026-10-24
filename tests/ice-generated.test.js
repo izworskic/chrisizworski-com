@@ -62,11 +62,12 @@ test("the ice generator stays pinned to its base path", () => {
     "the generator must keep asserting BASE agrees with its hardcoded hrefs",
   );
   // Content links stay under /michigan-ice/. Shared /assets/ links and the
-  // deliberate /michigan-ice-caves/, cross-season /fall-color/ and pre-trip /up-north-michigan/ handoffs are
+  // deliberate links to /michigan-ice-caves/, /mackinac-ice-bridge/,
+  // /national-tools/ice-out/, /fall-color/ and /up-north-michigan/ are
   // valid because this
   // section is deployed inside the chrisizworski.com hub.
   for (const [name, src] of [["gen_chrome.py", chrome], ["gen_site.py", site]]) {
-    const stray = src.match(/href=\\?"\/(?!michigan-ice\/|michigan-ice-caves\/|api\/|assets\/|fall-color\/|up-north-michigan\/)[a-z]/g) || [];
+    const stray = src.match(/href=\\?"\/(?!michigan-ice\/|michigan-ice-caves\/|mackinac-ice-bridge\/|national-tools\/ice-out\/|api\/|assets\/|fall-color\/|up-north-michigan\/)[a-z]/g) || [];
     assert.equal(stray.length, 0, `${name} has a root-relative href that escapes /michigan-ice/`);
   }
 });
