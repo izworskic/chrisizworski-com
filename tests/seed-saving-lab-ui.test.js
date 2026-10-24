@@ -14,7 +14,7 @@ test('opens with a plain answer for a real pair, before any input', () => {
   assert.match(a.why, /Cucurbita pepo/);
   assert.equal(a.options.length, 3, 'three ways to keep the seed true');
   assert.match(a.options[0], /1,600 ft/);
-  assert.match(a.options[1], /Hand-pollinate/);
+  assert.match(a.options[1], /Do the bee’s work yourself/);
   assert.ok(a.also.some(s => /10–20 plants/.test(s)), 'population guidance');
   assert.match(a.live, /Zucchini and Jack-o’-lantern pumpkin: Yes, these can cross\./);
   assert.doesNotMatch(JSON.stringify(a), /\[object|undefined|NaN/);
@@ -36,7 +36,7 @@ test('one picker per plant, alphabetical within each category', () => {
 test('every change updates the answer immediately (no stale verdicts)', () => {
   const p = loadSeedLab(FILE);
   p.pick('b', 'Slicing cucumber');
-  assert.equal(p.answer().heading, 'No, these don’t normally cross.');
+  assert.equal(p.answer().heading, 'No, these do not normally cross.');
   assert.equal(p.$('q-overlap').classList.contains('hidden'), true, 'irrelevant questions hidden');
   p.pick('b', 'Jack-o’-lantern pumpkin');
   assert.equal(p.answer().heading, 'Yes, these can cross.');
@@ -49,16 +49,16 @@ test('every change updates the answer immediately (no stale verdicts)', () => {
   assert.equal(p.answer().badge, 'Protected');
   p.choose('protection', 'open');
   p.choose('overlap', 'no');
-  assert.match(p.answer().heading, /never flower together/);
+  assert.match(p.answer().heading, /never bloom together/);
   p.choose('overlap', 'unknown');
-  assert.match(p.answer().heading, /if they flower at the same time/);
+  assert.match(p.answer().heading, /if they bloom at the same time/);
   p.choose('overlap', 'yes');
   p.choose('goal', 'explore');
-  assert.match(p.answer().heading, /fine with that/);
+  assert.match(p.answer().heading, /happy to see what happens/);
   p.choose('goal', 'preserve');
   p.click('swap');
   assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'Jack-o’-lantern pumpkin');
-  assert.match(p.answer().options[1], /Cover Jack-o’-lantern pumpkin flowers/);
+  assert.match(p.answer().options[1], /Cover a few jack-o’-lantern pumpkin flowers/i);
 });
 
 test('examples and documented exceptions read plainly', () => {
@@ -96,7 +96,7 @@ test('whole garden: crossing pairs first, open one in the checker, remove plants
 
 test('shared links restore the answer and the garden; junk is ignored', () => {
   const p = loadSeedLab(FILE, { search: '?a=plant-broccoli&b=plant-european-kale&overlap=no&distance=50&g=plant-zucchini:y,plant-butternut-squash:u,nope:y' });
-  assert.match(p.answer().heading, /never flower together/);
+  assert.match(p.answer().heading, /never bloom together/);
   assert.deepEqual(p.gardenPlants().map(x => x.name), ['Zucchini', 'Butternut squash']);
   const junk = loadSeedLab(FILE, { search: '?a=<script>&b=x&distance=abc' });
   assert.equal(junk.answer().heading, 'Yes, these can cross.');

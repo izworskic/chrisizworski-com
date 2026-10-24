@@ -1161,3 +1161,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Replaced the substring usability gate with a behavioural one (`scripts/lib/seed-lab-harness.mjs`); added `tests/seed-saving-lab-ui.test.js`. GSC/GA4/AdSense NOT AVAILABLE; no search or revenue uplift claimed. No human research.
 - Second pass (owner: softer, charts, better interaction): light cream/sage palette, pair picture with facts, log distance slider + chart, garden pollen web (tap plant/line), room-per-species bar chart with table view. Gate still 100/100 behavioural; 9 UI tests.
 - Exactly one next action: watch a real phone session (or five) pick their own two plants and note where they hesitate.
+
+### Seed Saving Lab gardener's voice — October 23, 2026
+
+- Owner asked for a gardener's voice that tells the garden's story. Rewrote intro, answers, steps, garden copy, empty states and trust note in the Freighter View Farms voice (first person, place, season, bees), and replaced the "three rules" block with a four-beat season story (bloom, visit, seed, telling) with small illustrations. Decisions and data unchanged.
+- Kept standing rules: no em dashes anywhere on the page, no coffee, no invented anecdotes about Chris's household or yields; place facts limited to Bay City, Zone 6a, Saginaw Bay. Answer stays above the fold on phones (scene sentences hidden under 760px).
+- Exactly one next action: Chris reads the default answer and one "no" answer aloud and flags any line that does not sound like him.
