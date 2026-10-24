@@ -46,3 +46,15 @@ test('image attribution stays tied to source photo metadata',()=>{
  assert.ok(page.includes('CC BY-SA 4.0'));
  assert.ok(page.includes('Ship_Oakglen.jpg'));
 });
+
+test('all vessel titles fit SERP length and retain individual identity',()=>{
+ const augmented={...registry,__profiles:bios.profiles};
+ for(const p of bios.profiles){
+   const page=renderProfile(p,augmented);
+   const match=page.match(/<title>([^<]+)<\/title>/);
+   assert.ok(match,'title tag for '+p.id);
+   const title=match[1].replace(/&amp;/g,'&');
+   assert.ok(title.length<=60,'title too long: '+title);
+   assert.ok(title.includes(p.name),'ship name must lead title');
+ }
+});

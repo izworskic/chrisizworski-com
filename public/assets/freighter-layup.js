@@ -132,7 +132,7 @@
    $('map-status').textContent=ids.length?ids.length+' historical harbor references · no vessel positions implied · community reports labeled separately':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
  }
  function fitLakes(){if(!state.map)return;state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false})}
- function focusHarbor(){const ids=state.markers;if(!state.map)return;if(ids.length)state.map.setView(ids[0].marker.getLatLng(),10,{animate:false});else fitLakes()}
+ function focusHarbor(){if(!state.map)return;const selected=state.markers.find(m=>m.id===state.activeHarbor);if(selected){state.map.setView(selected.marker.getLatLng(),10,{animate:false});return}const pins=state.markers;if(pins.length===1)state.map.setView(pins[0].marker.getLatLng(),10,{animate:false});else if(pins.length>1)state.map.fitBounds(pins.map(m=>m.marker.getLatLng()),{padding:[35,35],maxZoom:8,animate:false});else fitLakes()}
  async function addTiles(){
    if(!state.map)return;
    let key='';
