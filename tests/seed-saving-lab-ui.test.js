@@ -159,3 +159,24 @@ test('pickers list crops, not varieties; links made with old variety names still
   assert.deepEqual(old.gardenPlants().map(x => x.name), ['Zinnia', 'Zinnia (2nd variety)', 'Zucchini']);
   assert.match(old.garden()[0].text, /Zinnia \+ Zinnia \(2nd variety\)/);
 });
+
+test('garden: mark plants you only eat; pairs with no seed at stake step aside and links keep the marks', () => {
+  const p = loadSeedLab(FILE, { search: '?g=plant-zucchini:s,plant-pumpkin:e,plant-cucumber:e,plant-cantaloupe-muskmelon:e' });
+  assert.deepEqual(p.gardenPlants().map(x => x.saving), [true, false, false, false]);
+  assert.match(p.garden()[0].text, /Zucchini \+ Pumpkin/);
+  assert.match(p.garden()[0].text, /keep seed from the zucchini true: 1,600 ft/);
+  p.gardenPlants()[0].toggle.dispatch('click');
+  assert.equal(p.gardenPlants()[0].saving, false);
+  assert.ok(p.garden().some(g => /No seed at stake/.test(g.text) && /Zucchini \+ Pumpkin/.test(g.text)));
+  assert.equal(p.$('pollen-web').children.filter(n => /web-edge/.test(n.attrs?.class || '')).length, 0, 'no lines when nothing is at stake');
+});
+
+test('answers name the season for biennials and warn plainly about hybrid seed', () => {
+  const p = loadSeedLab(FILE);
+  p.pick('a', 'Carrot'); p.pick('b', 'Queen Anne’s lace (wild carrot)');
+  assert.match(p.answer().also[0], /Carrot flowers in its second year/);
+  p.choose('seedType', 'f1');
+  assert.match(p.answer().also[0], /hybrid \(F1\) seed/);
+  assert.match(p.text('next-year'), /mix of its parents/);
+  assert.doesNotMatch(p.text('next-year') + p.answer().also.join(' '), /embryo|segregat|F2\b/);
+});
