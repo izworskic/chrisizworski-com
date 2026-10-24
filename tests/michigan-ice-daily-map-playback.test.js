@@ -23,7 +23,7 @@ test('The ice-map animation is real dated NOAA geographic data, never a simulate
   assert.match(code,/The CARTO location map above remains a different, current-only product/);
   assert.match(code,/PHOTO_FOCUS/);
   assert.match(code,/dialog\.showModal\(\)/);
-  assert.match(code,/data-ice-large-lake=\\"all\\"/);
+  assert.ok(code.includes('data-ice-large-lake="all"'));
   for(const lake of ['superior','michigan','huron','erie','ontario']) assert.ok(code.includes('data-ice-large-lake="'+lake+'"'));
   assert.match(code,/Open all five lakes/);
   assert.match(code,/syncLargeMap\(\)/);
