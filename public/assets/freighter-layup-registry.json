@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "updatedOn": "2026-10-24",
-  "description": "Curated, dated historical layup evidence; not a complete Great Lakes fleet directory or live AIS product.",
+  "description": "Curated source-dated winter 2025–26 harbor records across Superior and Sturgeon Bay. Sample, not an exhaustive fleet or current AIS tracker; lower-confidence records explicitly labeled.",
   "harbors": [
     {
       "id": "superior",
@@ -12,6 +12,16 @@
       "lon": -92.086,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
       "note": "Map marker identifies the Superior harbor area only. Individual docks are listed in each vessel record; no vessel is placed at an invented berth coordinate."
+    },
+    {
+      "id": "sturgeon-bay",
+      "name": "Sturgeon Bay, Wisconsin",
+      "display": "Sturgeon Bay / Fincantieri Bay Shipbuilding",
+      "lake": "Lake Michigan / Green Bay",
+      "lat": 44.832,
+      "lon": -87.378,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Harbor-wide reference near Sturgeon Bay. Vessel dry-dock positions and private shipyard access are NOT represented by map coordinates; berths can change during maintenance."
     }
   ],
   "seasons": [
@@ -28,7 +38,7 @@
       "label": "Winter 2025–26",
       "state": "historical_snapshot",
       "asOf": "2026-01-30",
-      "note": "Six active vessels documented by the Duluth Seaway Port Authority in Superior, Wisconsin. These are a verified local sample, not an exhaustive five-lake roster. Status describes winter 2025–26, not today.",
+      "note": "Nine named historical layup records across Superior and Sturgeon Bay: eight supported by port authority or maritime historian, and one community-reported. These are a curated sample, NOT an exhaustive Great Lakes fleet roster. Individual source dates vary. Historical berth positions are never current locations.",
       "records": [
         {
           "evidence": {
@@ -52,7 +62,15 @@
               "text": "Listed at Redwood Group Elevator M in Superior's winter layup roster.",
               "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
             }
-          ]
+          ],
+          "identity": {
+            "key": "burns-harbor",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
         },
         {
           "evidence": {
@@ -85,7 +103,15 @@
               "text": "Duluth Harbor Cam reported the Oberstar departing as the first ship out of port that spring.",
               "source": "https://www.duluthharborcam.com/search?max-results=5&updated-max=2026-04-05T08%3A40%3A00-05%3A00"
             }
-          ]
+          ],
+          "identity": {
+            "key": "honorable-james-l-oberstar",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
         },
         {
           "evidence": {
@@ -109,7 +135,15 @@
               "text": "Listed at Ogdensburg Pier for winter layup.",
               "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
             }
-          ]
+          ],
+          "identity": {
+            "key": "indiana-harbor",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
         },
         {
           "evidence": {
@@ -135,7 +169,15 @@
               "text": "Listed at Fraser Shipyards for winter layup.",
               "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
             }
-          ]
+          ],
+          "identity": {
+            "key": "john-j-boland",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
         },
         {
           "evidence": {
@@ -181,7 +223,15 @@
             "license": "Public domain (U.S. federal government)",
             "date": "2021-09-10",
             "alt": "Lee A. Tregurtha transiting the Soo Locks in a 2021 photograph; not a winter layup image."
-          }
+          },
+          "identity": {
+            "key": "lee-a-tregurtha",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
         },
         {
           "evidence": {
@@ -226,7 +276,165 @@
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
             "date": "2018-09-14",
             "alt": "Mesabi Miner sailing on Lake Superior in September 2018; not a winter layup photograph."
-          }
+          },
+          "identity": {
+            "key": "mesabi-miner",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "james-r-barker",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "dock_documented",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "id": "james-r-barker",
+          "name": "James R. Barker",
+          "aliases": [
+            "James R Barker",
+            "M/V James R. Barker"
+          ],
+          "statusAsOf": "2026-01-08",
+          "berth": "Fincantieri Bay Shipbuilding — graving dock on Jan 5",
+          "summary": "One thousand feet of lake freighter came through ice into Sturgeon Bay on January 5, assisted by four tugs. The historical society reports the Barker entered the shipyard's large graving dock for winter storage, a five-year inspection and painting. Later shipyard movements are distinct dated events, not assumed continuing dock occupancy.",
+          "evidence": {
+            "url": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+            "title": "JAMES R. BARKER arrives at Fincantieri",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-08"
+          },
+          "events": [
+            {
+              "date": "2026-01-05",
+              "type": "arrival",
+              "text": "Arrived at Sturgeon Bay with tug assistance; entered the Fincantieri graving dock for winter storage and five-year inspection.",
+              "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+              "sourceClass": "maritime_historical_society"
+            },
+            {
+              "date": "2026-03-23",
+              "type": "reported_departure",
+              "text": "Community port observers reported the Barker leaving its winter berth with tug and Coast Guard assistance.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Launched in 1976; the first thousand-foot Great Lakes ship built with its wheelhouse aft.",
+              "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/"
+            }
+          ]
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "edgar-b-speer",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "facility_reported",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "id": "edgar-b-speer",
+          "name": "Edgar B. Speer",
+          "aliases": [
+            "Edgar B Speer",
+            "M/V Edgar B. Speer"
+          ],
+          "statusAsOf": "2026-01-21",
+          "berth": "Fincantieri Bay Shipbuilding — dock not independently verified",
+          "summary": "On January 18, the Speer pivoted at the entrance to Sturgeon Bay and backed toward Bay Shipbuilding with two tugs assisting. Unlike most thousand-footers, its unloading equipment works sideways near the stern; that specialized arrangement shapes the ports it can serve.",
+          "evidence": {
+            "url": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+            "title": "EDGAR B. SPEER arrives at Fincantieri",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-21"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "arrival",
+              "text": "Arrived at Fincantieri Bay Shipbuilding assisted by tugs Nickelena and Erika Kobasic.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+              "sourceClass": "maritime_historical_society"
+            },
+            {
+              "date": "2026-03-24",
+              "type": "reported_berth_move",
+              "text": "Community observer reported a shift into the large graving dock. This is not an official berth assignment.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Launched in 1980 and known for its unusual 52-foot transverse unloading boom.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
+            },
+            {
+              "text": "In 2006, assisted the Roger Blough after a rudder failure on the St. Marys River.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
+            }
+          ]
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "manitoulin",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "berth_unverified",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "id": "manitoulin",
+          "name": "Manitoulin",
+          "aliases": [
+            "M/V Manitoulin"
+          ],
+          "statusAsOf": "2026-01-18",
+          "berth": "Fincantieri Bay Shipbuilding — specific berth unverified",
+          "summary": "Multiple local shipping observers reported Manitoulin wintering at Sturgeon Bay in January 2026. Later discussion described a mid-February move into the graving dock. These are community observations, not a published shipyard berth roster; the specific position remains unverified.",
+          "evidence": {
+            "url": "https://search.boatnerd.com/viewtopic.php?p=274441",
+            "title": "BoatNerd community reports — Sturgeon Bay activity in winter 2026",
+            "publisher": "BoatNerd Discussion Forum (community reports)",
+            "published": "2026-01-18"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "reported_arrival",
+              "text": "Community observers reported Manitoulin arriving for layup in Sturgeon Bay; dock assignment not verified.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            },
+            {
+              "date": "2026-02-13",
+              "type": "reported_berth_move",
+              "text": "A subsequent community discussion described Manitoulin entering the shipyard's graving dock.",
+              "source": "https://search.boatnerd.com/viewtopic.php?t=178499",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Its reported winter shifts show why a winter layup is a series of changing yard events rather than one fixed berth.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            }
+          ]
         }
       ]
     }
