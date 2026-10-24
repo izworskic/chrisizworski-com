@@ -41,16 +41,19 @@ async function run(){
       page.on('pageerror',err=>pageErrors.push(err.message));
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
       await page.locator('[data-ship]').first().waitFor({timeout:10000});
-      check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
+      check(await page.locator('[data-ship]').count()===27,size.name+': 2025–26 shows 27 ships');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
-      check(await page.locator('.layup-pin').count()===5,size.name+': five historical harbor map markers');
-      check(await page.locator('#stat-ships').textContent()==='12',size.name+': season stats');
+      check(await page.locator('.layup-pin').count()===18,size.name+': eighteen historical harbor map markers');
+      check(await page.locator('#stat-ships').textContent()==='27',size.name+': season stats');
+      check(await page.getByRole('button',{name:'Montreal, Quebec · 1 historical record; approximate harbor point',exact:true}).count()===1,size.name+': map marker announces harbor identity');
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
       // The test intentionally blocks external Wikimedia images. Ship identity must remain
       // visually represented, and a failed photo may not retain a misleading photo badge.
-      const photo=page.locator('.ship-art img').first();
+      const photo=page.locator('.ship-art:has(img)').first();
+      // The image may already be hidden by its error handler. Scroll its visible
+      // art container, then assert the image fallback rather than scrolling hidden content.
       await photo.scrollIntoViewIfNeeded();
       await page.waitForFunction(()=>[...document.querySelectorAll('.ship-art img')].some(i=>i.hidden),{timeout:5000});
       const imageFallback=await page.evaluate(()=>{
@@ -60,7 +63,29 @@ async function run(){
       check(imageFallback,size.name+': image outage reveals branded ship illustration');
 
 
-      await page.locator('#harbor-filter').selectOption('sturgeon-bay');
+      // Adversarial sequence: history restoration must control the close destination.
+      await page.locator('[data-ship="lee-a-tregurtha"]').click();
+      await page.locator('[data-ship="james-r-barker"]').click();
+      await page.goBack();
+      check(await page.locator('#detail-title').textContent()==='Lee A. Tregurtha',size.name+': Back restores the previous ship');
+      await page.locator('#detail-close').click();
+      check(await page.evaluate(()=>document.activeElement?.dataset.ship)==='lee-a-tregurtha',size.name+': Close focuses the restored ship');
+      await page.locator('#season').selectOption('2024-25');
+      await page.locator('#ship-search').fill('Evans Spirit');
+      check(await page.locator('#focus-harbor').isDisabled(),size.name+': cannot fit zero matching records');
+      check(await page.locator('#season').inputValue()==='2024-25',size.name+': no automatic cross-winter switch');
+      await page.locator('[data-action="other-winter"][data-season="2025-26"]').click();
+      check(await page.locator('[data-ship]').count()===1,size.name+': other-winter match stays specific');
+      check(await page.locator('[data-ship="evans-spirit"]').count()===1,size.name+': correct other-winter ship');
+      check(await page.locator('#ship-search').inputValue()==='Evans Spirit',size.name+': search retained across winters');
+      check(await page.evaluate(()=>document.activeElement?.id)==='fleet-title',size.name+': cross-winter action leaves useful keyboard focus');
+      await page.locator('#season').selectOption('2025-26');
+      await page.waitForFunction(()=>/Basemap unavailable/.test(document.getElementById('tile-status').textContent),{timeout:10000});
+      check((await page.locator('#tile-status').textContent()).includes('lists still work'),size.name+': failed tiles are not labeled as a working basemap');
+
+      if(size.name==='mobile')await page.locator('.refinement-panel summary').click();
+      const harborFilter=page.locator(size.name==='mobile'?'#harbor-filter-mobile':'#harbor-filter');
+      await harborFilter.selectOption('sturgeon-bay');
       check(await page.locator('[data-ship]').count()===3,size.name+': Sturgeon Bay harbor filter');
       await page.locator('#focus-harbor').click();
       await page.locator('#ship-search').fill('James R Barker');
@@ -70,13 +95,13 @@ async function run(){
       check((await page.locator('#detail-body').textContent()).includes('Fincantieri'),size.name+': right historical berth');
       check(await page.locator('#detail-body a[href*="/vessels/james-r-barker/"]').count()===1,size.name+': biography link in detail');
       await page.locator('#clear-filters').click();
-      check(await page.locator('[data-ship]').count()===12,size.name+': clear restores fleet');
-      await page.locator('#harbor-filter').selectOption('milwaukee');
+      check(await page.locator('[data-ship]').count()===27,size.name+': clear restores fleet');
+      await harborFilter.selectOption('milwaukee');
       check(await page.locator('[data-ship]').count()===1,size.name+': Milwaukee filter');
 
       await page.locator('#season').selectOption('2024-25');
-      check(await page.locator('[data-ship]').count()===2,size.name+': previous winter has two records');
-      check(await page.locator('.layup-pin').count()===1,size.name+': one archived winter harbor');
+      check(await page.locator('[data-ship]').count()===14,size.name+': previous winter has fourteen records');
+      check(await page.locator('.layup-pin').count()===11,size.name+': eleven archived winter harbors');
       await page.locator('[data-ship="algoma-compass"]').click();
       check(await page.locator('[data-winter="2025-26"]').count()===1,size.name+': historical cross-winter link');
       await page.locator('[data-winter="2025-26"]').click();
@@ -87,7 +112,7 @@ async function run(){
       check(await page.locator('[data-ship]').count()===0,size.name+': no invented future ship records');
       check(await page.locator('.layup-pin').count()===0,size.name+': no old harbor markers in future season');
       await page.locator('#season').selectOption('2025-26');
-      check(await page.locator('[data-ship]').count()===12,size.name+': archive restored');
+      check(await page.locator('[data-ship]').count()===27,size.name+': archive restored');
 
       const bioUrl=url+'vessels/algoma-compass/';
       await page.goto(bioUrl,{waitUntil:'domcontentloaded'});

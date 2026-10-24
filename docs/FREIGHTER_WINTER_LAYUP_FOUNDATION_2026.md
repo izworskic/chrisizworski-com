@@ -179,3 +179,8 @@ Implemented, feature branch only. Existing live shipping/ice tools not changed.
 - Public photo coverage is incomplete for many records; no unlicensed photo or generic AI image substitution.
 - No attempt to claim a ship's full 2026 cargo/port history without sufficiently complete historic tracking data.
 - Canadian Port Colborne, Hamilton, Sarnia and Thunder Bay still require ship-specific 2025–26 evidence before adding pins.
+
+
+## October 24 coverage release addendum
+
+The later [coverage ledger](FREIGHTER_LAYUP_COVERAGE_2026-10-24.md) supersedes earlier sample sizes and photography gaps: 2025–26 now has 27 ships across 18 harbors, with real licensed photos for every ship; 2024–25 has 14 records across 11 harbors. Newly added roster entries remain community-reported. The six substantial biographies are regenerated from shared hull/photo and season data; no thin vessel or harbor pages were added. Exact SHA, gate and preview acceptance are recorded in PR #1161.

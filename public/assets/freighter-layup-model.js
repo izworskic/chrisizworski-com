@@ -59,6 +59,11 @@
         if(v.berthPrecision==='dock_documented'&&!/(dock|pier|elevator|shipyards|graving)/i.test(v.berth||''))errors.push('vague claimed dock '+v.id);
         if(!['dock_documented','facility_reported','berth_unverified'].includes(v.berthPrecision))errors.push('missing berth precision '+v.id);
         if(!Array.isArray(v.events)||!v.events.length)errors.push('missing dated history '+v.id);
+        if(v.photo){
+          if(!v.photo.file||!/^https:\/\/commons\.wikimedia\.org\/wiki\//.test(v.photo.page||'')||!v.photo.creator||!v.photo.license||!/^\d{4}-\d\d-\d\d$/.test(v.photo.date||''))errors.push('incomplete photo provenance '+v.id);
+          if(v.photo.url&&!/^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//.test(v.photo.url))errors.push('unsupported photo host '+v.id);
+          if(!v.photo.license.startsWith('Public domain')&&!/^https:\/\/creativecommons\.org\//.test(v.photo.licenseUrl||''))errors.push('missing photo license link '+v.id);
+        }
         const past=stableIds.get(key);
         if(past&&normalizeName(past)!==normalizeName(v.name))errors.push('identity label changed across seasons '+key);
         stableIds.set(key,v.name);
@@ -97,5 +102,48 @@
       reported:records.filter(v=>classify(v,season).reported).length,
       harbors:new Set(records.map(v=>v.harborId)).size};
   }
-  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals});
+  function defaultSeason(data){return data.seasons.filter(s=>s.state==='historical_snapshot').map(s=>s.id).sort().reverse()[0]||data.seasons[0].id;}
+  function selectRecords(data,state){
+    const list=(data.seasons.find(s=>s.id===state.season)?.records||[]).filter(v=>
+      (state.activeHarbor==='all'||v.harborId===state.activeHarbor)&&
+      (state.berth==='all'||v.berth===state.berth)&&matchesSearch(v,state.query)&&
+      (state.evidence==='all'||(state.evidence==='verified'?v.status==='confirmed_historical':v.status==='reported_historical')));
+    return list.slice().sort((a,b)=>state.sort==='name'?a.name.localeCompare(b.name):b.statusAsOf.localeCompare(a.statusAsOf)||a.name.localeCompare(b.name));
+  }
+  function normalizeState(data,input={}){
+    const season=data.seasons.find(s=>s.id===input.season)||data.seasons.find(s=>s.id===defaultSeason(data));
+    const ids=new Set(season.records.map(v=>v.harborId));
+    const activeHarbor=ids.has(input.activeHarbor)?input.activeHarbor:'all';
+    const berths=new Set(season.records.filter(v=>activeHarbor==='all'||v.harborId===activeHarbor).map(v=>v.berth));
+    const state={season:season.id,activeHarbor,query:String(input.query||'').slice(0,100),
+      berth:berths.has(input.berth)?input.berth:'all',evidence:['verified','reported'].includes(input.evidence)?input.evidence:'all',
+      sort:input.sort==='recent'?'recent':'name',selected:null};
+    if(selectRecords(data,state).some(v=>v.id===input.selected))state.selected=input.selected;
+    return state;
+  }
+  function readState(data,url){
+    const p=new URL(url,'https://chrisizworski.com').searchParams;
+    return normalizeState(data,{season:p.get('season'),activeHarbor:p.get('harbor'),query:p.get('q'),berth:p.get('berth'),evidence:p.get('evidence'),sort:p.get('sort'),selected:p.get('vessel')});
+  }
+  function stateURL(data,state,url){
+    const s=normalizeState(data,state),u=new URL(url,'https://chrisizworski.com');
+    for(const key of ['season','harbor','q','berth','evidence','sort','vessel'])u.searchParams.delete(key);
+    u.searchParams.set('season',s.season);
+    for(const [key,value] of [['harbor',s.activeHarbor],['q',s.query],['berth',s.berth],['evidence',s.evidence],['sort',s.sort],['vessel',s.selected]]){
+      if(value&&value!=='all'&&!(key==='sort'&&value==='name'))u.searchParams.set(key,value);
+    }
+    if(u.hash==='#ship-detail'&&!s.selected)u.hash='';
+    return u;
+  }
+  function otherWinterMatches(data,state){
+    if(normalizeName(state.query).length<2)return [];
+    return data.seasons.filter(s=>s.id!==state.season&&s.state==='historical_snapshot')
+      .map(s=>({id:s.id,label:s.label,count:s.records.filter(v=>matchesSearch(v,state.query)).length}))
+      .filter(s=>s.count).sort((a,b)=>b.id.localeCompare(a.id));
+  }
+  function harborCounts(data,seasonId){
+    const list=data.seasons.find(s=>s.id===seasonId)?.records||[];
+    return data.harbors.map(h=>({id:h.id,name:h.name,count:list.filter(v=>v.harborId===h.id).length})).filter(h=>h.count).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name));
+  }
+  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals,defaultSeason,selectRecords,normalizeState,readState,stateURL,harborCounts,otherWinterMatches});
 });
