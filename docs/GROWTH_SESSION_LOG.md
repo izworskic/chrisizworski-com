@@ -1206,3 +1206,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Manual before scores on main: planting calendar ~60, frost dates ~44, matchmaker ~45, tomatoes ~36, seed starting ~36. After, on the automated gate: 100 each. Defects fixed: tomato and matchmaker pages scrolled sideways on phones; seed starting intro rendered inside the site header and zone 6a frost dates were out of order; matchmaker no longer calls a Vercel function.
 - Protected titles, H1s, canonicals, `tomato-quick-answer`, `frost-quick-answer` and the zone direct-answer sentence unchanged. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: owner reviews the preview and decides on merge.
+
+### What to Plant Now in Michigan: Phase 1 research, October 24, 2026
+
+- Owner brief (Codex-style) asked for research first, then STOP. Delivered `docs/PLANT_NOW_RESEARCH.md`. Verdict: NO-GO as written (no MSU crop-by-zone dated windows exist in what could be read; basil and cilantro unsourced; 36 of 78 stations have no sourced fall date), conditional GO on a station-based, rule-based design once the MSU source pack is read. MSU's site blocks automated fetching from the cloud session.
+- Also found: `/michigan-last-spring-freeze/` conflicts with the 78-station table (Traverse City Apr 28 vs May 23); `/national-tools/planting/` already answers "What can I plant now?" nationally; the planting calendar's crop offsets have no per-crop citation.
+- No code changed. GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner answers the three decisions in the doc and the MSU source pack gets read in a browser.
