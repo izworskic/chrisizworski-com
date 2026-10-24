@@ -18,6 +18,7 @@ test('Seed Saving Lab — discoverable static route and valid schema',()=>{
  assert.match(html,/https:\/\/chrisizworski.com\/#person/);
  const json=JSON.parse(html.split('<script type="application/ld+json">')[1].split('</script>')[0]);
  assert.equal(json['@graph'][0]['@id'],'https://chrisizworski.com/#person');
+ assert.equal(json['@graph'][0].url,'https://chrisizworski.com/');
 });
 test('Seed Saving Lab — curated vegetable and flower inventory',()=>{
  assert.ok(d.plants.length>=65);
