@@ -24,6 +24,8 @@ function data(iceSeason,regionSlug){
   const regions={};
   for(const s of ['saginaw-bay','lake-st-clair','little-bay-de-noc','grand-traverse-bay'])
     regions[s]=region(s);
+  if(regionSlug && !regions[regionSlug])
+    regions[regionSlug]={...region(regionSlug),scope:regionSlug.startsWith('lake-')?'lake-overview':'local-bay'};
   return {
     ok:true,iceSeason,
     observed:{lakeWide:iceSeason?
@@ -45,7 +47,10 @@ async function run(){
     const errors=[]; const exports=[];
     page.on('pageerror',e=>errors.push(e.stack||String(e)));
     const inWinter=season==='winter';
-    await page.route('**/api/ice-now**',route=>route.fulfill(asJSON(data(inWinter))));
+    await page.route('**/api/ice-now**',route=>{
+      const slug = new URL(route.request().url()).searchParams.get('region');
+      return route.fulfill(asJSON(data(inWinter,slug)));
+    });
     await page.route('**/api/ice',route=>route.fulfill(asJSON(cold)));
     await page.route('**/api/carto-basemap-config',route=>route.fulfill(asJSON({provider:'CARTO',key:'test-public-key'})));
     await page.route('https://api.weather.gov/**',route=>route.fulfill({status:503,body:'Unavailable'}));
@@ -104,6 +109,19 @@ async function run(){
     await page.waitForTimeout(900);
     assert.notEqual(await slider.inputValue(),'0','Playback did not advance');
     await page.locator('#ice-ex-play').click().catch(()=>{});
+    // The map must cover all five lakes plus a true Tawas Bay scope.
+    for(const [slug,name] of [['lake-superior','Lake Superior'],['lake-michigan','Lake Michigan'],['lake-huron','Lake Huron'],['lake-erie','Lake Erie'],['lake-ontario','Lake Ontario'],['tawas-bay','Lake Huron']]) {
+      await page.locator('#ice-ex-region').selectOption(slug);
+      await page.waitForFunction(expected =>
+        document.querySelector('#ice-ex-chart-heading')?.textContent?.includes(expected),name,{timeout:7000});
+      assert.ok((await page.locator('#ice-ex-detail').getAttribute('href')).includes('ice-region='+slug),
+        'Missing deep link '+slug);
+      assert.match(await page.locator('#ice-ex-chart-value').textContent(),new RegExp(name));
+      if(slug==='tawas-bay')assert.match(await page.locator('#ice-ex-map-type').textContent(),/Bay map/);
+      if(slug.startsWith('lake-'))assert.match(await page.locator('#ice-ex-map-type').textContent(),/Whole-lake map extent/);
+    }
+    // Preserve existing region behavior and verify zoom still refreshes NOAA imagery.
+    await page.locator('#ice-ex-region').selectOption('lake-st-clair');
     if(inWinter){
       await page.waitForFunction(()=>!!document.querySelector('#ice-ex-map .leaflet-container') ||
         !!document.querySelector('#ice-ex-map.leaflet-container'));
@@ -138,7 +156,8 @@ async function run(){
   await failed.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',route=>route.fulfill({status:200,contentType:'text/css',body:fs.readFileSync(require.resolve('leaflet/dist/leaflet.css'),'utf8')}));
   await failed.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/RRkAAAAASUVORK5CYII=','base64')}));
   await failed.route('https://api.weather.gov/**',route=>route.fulfill({status:503,body:'Unavailable'}));
-  await failed.goto('http://127.0.0.1:8126/michigan-ice/',{waitUntil:'domcontentloaded'});
+  await failed.goto('http://127.0.0.1:8126/michigan-ice/?ice-region=tawas-bay',{waitUntil:'domcontentloaded'});
+  assert.equal(await failed.locator('#ice-ex-region').inputValue(),'tawas-bay');
   await failed.locator('#ice-freeze-explorer').waitFor({timeout:10000});
   await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),{timeout:10000});
   await failed.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'),{timeout:10000});
