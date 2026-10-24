@@ -8,13 +8,13 @@ const html=fs.readFileSync(path.join(root,'great-lakes-freighter-winter-layup','
 const secure=s=>/^https:\/\/[^\s]+$/.test(s||'');
 test('source model supports three winters without future location carryover',()=>{
  assert.deepEqual(model.validateRegistry(registry),[]);
- assert.deepEqual(model.totals(hist),{documented:12,confirmed:10,reported:2,harbors:5});
- assert.deepEqual(model.totals(old),{documented:2,confirmed:2,reported:0,harbors:1});
+ assert.deepEqual(model.totals(hist),{documented:27,confirmed:10,reported:17,harbors:18});
+ assert.deepEqual(model.totals(old),{documented:14,confirmed:2,reported:12,harbors:11});
  assert.deepEqual(upcoming.records,[]);
  assert.equal(upcoming.state,'upcoming_unconfirmed');
 });
-test('all five harbors are approximate geographic references, including Ontario',()=>{
- assert.deepEqual(registry.harbors.map(h=>h.id).sort(),['milwaukee','owen-sound','sturgeon-bay','superior','toledo']);
+test('all eighteen harbors are approximate geographic references across the lakes and Seaway',()=>{
+ assert.deepEqual(registry.harbors.map(h=>h.id).sort(),['ashtabula','cleveland','ecorse','goderich','hamilton','midland','milwaukee','montreal','owen-sound','port-colborne','port-weller','sarnia','sturgeon-bay','superior','thunder-bay','toledo','toronto','windsor']);
  for(const h of registry.harbors){assert.equal(h.coordinatePrecision,'approximate_harbor_reference_not_dock');assert.ok(Number.isFinite(h.lat)&&Number.isFinite(h.lon));assert.match(h.note,/not|NOT|no vessel/i);}
  assert.equal(registry.harbors.find(h=>h.id==='owen-sound').country,'CA');
 });
@@ -62,7 +62,8 @@ test('every reused vessel photo has attribution and a source-scoped date',()=>{
    if(!v.photo.license.startsWith('Public domain'))assert.ok(secure(v.photo.licenseUrl));
    seen.add(v.photo.file);
  }
- assert.ok(seen.size>=5);
+ assert.equal(seen.size,27);
+ assert.ok(seasons.flatMap(s=>s.records).every(v=>v.photo),'every curated ship has a licensed real photo');
 });
 test('atlas supports a third season and links to source-first permanent biographies',()=>{
  for(const id of ['id="season"','id="harbor-filter"','id="ship-search"','id="layup-map"'])assert.ok(html.includes(id));
@@ -76,4 +77,25 @@ test('atlas supports a third season and links to source-first permanent biograph
 test('both interaction and evidence scripts parse',()=>{
  assert.doesNotThrow(()=>new Function(app));
  assert.doesNotThrow(()=>new Function(fs.readFileSync(path.join(root,'assets','freighter-layup-model.js'),'utf8')));
+});
+test('expanded seasonal reports preserve dates, reviewed provenance and lower confidence',()=>{
+ const added=hist.records.filter(v=>v.evidence.url==='https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/');
+ assert.equal(added.length,15);
+ const arrivals={'american-century':'2026-01-17',alpena:'2026-01-08','paul-r-tregurtha':'2026-01-14','edwin-h-gott':'2026-01-18','algoma-equinox':'2026-01-13','algoma-bear':'2026-01-14','baie-comeau':'2026-01-08','csl-tadoussac':'2026-01-03','whitefish-bay':'2026-01-19',oakglen:'2026-01-03','mark-w-barker':'2026-01-11','algoma-harvester':'2026-01-09','thunder-bay':'2026-01-13','evans-spirit':'2026-01-08','algoma-buffalo':'2026-01-13'};
+ for(const v of added){
+   assert.equal(v.status,'reported_historical');assert.equal(v.evidenceClass,'community_report');
+   assert.equal(v.events[0].date,arrivals[v.id]);assert.equal(v.evidence.published,null,'review date is not an invented publication date');
+   assert.equal(v.evidence.reviewedOn,'2026-10-24');assert.equal(model.classify(v,hist).isCurrent,false);
+   assert.ok(v.events.every(e=>e.date<=hist.asOf),'snapshot contains only arrivals before its cutoff');
+ }
+ assert.equal(old.records.filter(v=>v.evidenceClass==='community_report').length,12);
+ assert.equal(model.findVessel(hist.records,'Oakglen').match.harborId,'goderich');
+ assert.equal(model.findVessel(old.records,'Oakglen').match.harborId,'owen-sound');
+});
+test('photo validation rejects missing rights and unapproved image hosts',()=>{
+ const missing=structuredClone(registry),foreign=structuredClone(registry);
+ delete missing.seasons.find(s=>s.id==='2025-26').records.find(v=>v.id==='algoma-compass').photo.licenseUrl;
+ foreign.seasons.find(s=>s.id==='2025-26').records[0].photo.url='https://example.com/unverified.jpg';
+ assert.match(model.validateRegistry(missing).join(' '),/missing photo license link/);
+ assert.match(model.validateRegistry(foreign).join(' '),/unsupported photo host/);
 });

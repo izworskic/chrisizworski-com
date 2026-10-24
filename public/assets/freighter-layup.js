@@ -29,7 +29,7 @@
  function photoHTML(v,detail=false){
    const p=v.photo;
    if(!p)return shipSVG;
-   const url='https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
+   const url=p.url||'https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
    return '<span class="fallback-ship" hidden>'+shipSVG+'</span><img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.previousElementSibling.hidden=false">';
  }
 
@@ -131,14 +131,17 @@
      box.append(text('h3','Choose a winter harbor'),text('p','Tap a harbor to narrow the fleet. Counts describe this archive sample only.'));
      const chart=document.createElement('div');chart.className='harbor-comparison';
      const max=Math.max(...counts.map(h=>h.count));
-     for(const h of counts){
+     const more=document.createElement('details');more.className='harbor-more';
+     more.append(text('summary','Explore '+Math.max(0,counts.length-5)+' more harbors'));
+     const otherChart=document.createElement('div');otherChart.className='harbor-comparison';more.append(otherChart);
+     for(const [index,h] of counts.entries()){
        const b=text('button','');b.type='button';b.className='harbor-bar';b.setAttribute('data-harbor',h.id);b.setAttribute('aria-label',h.name+' · '+h.count+' documented records');
        const name=text('span',h.name);name.className='harbor-name';
        const graphic=document.createElementNS('http://www.w3.org/2000/svg','svg');graphic.setAttribute('viewBox','0 0 100 10');graphic.setAttribute('aria-hidden','true');
        const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('width',String(100*h.count/max));rect.setAttribute('height','10');rect.setAttribute('rx','2');graphic.append(rect);
-       b.append(name,graphic,text('strong',String(h.count)));b.addEventListener('click',()=>{setHarbor(h.id,true);focusFleet();});chart.append(b);
+       b.append(name,graphic,text('strong',String(h.count)));b.addEventListener('click',()=>{setHarbor(h.id,true);focusFleet();});(index<5?chart:otherChart).append(b);
      }
-     box.append(chart);return;
+     box.append(chart);if(counts.length>5)box.append(more);return;
    }
    const h=harbor(state.activeHarbor),list=records().filter(v=>v.harborId===h.id);
    box.append(text('h3',h.name+' · '+h.lake),text('p',list.length+' documented '+(list.length===1?'record':'records')+'. '+h.note));
@@ -170,7 +173,7 @@
    if(!state.map||!state.markerLayer)return;
    $('map-status').textContent=state.markers.length?'All '+state.markers.length+' harbor references for this winter remain visible; filters narrow the ship list.':'No sourced locations for this winter; map is context only.';
  }
- function fitLakes(){if(state.map)state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false});}
+ function fitLakes(){if(state.map)state.map.fitBounds([[40.9,-92.5],[49.2,-73.0]],{padding:[22,22],animate:false});}
  function focusHarbor(){
    if(!state.map)return;
    locationRequest++;renderMapStatus();

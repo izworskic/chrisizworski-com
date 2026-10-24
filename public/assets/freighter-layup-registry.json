@@ -57,6 +57,149 @@
       "lon": -83.485,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
       "note": "Toledo harbor context point only. Source does not identify an individual berth or shipyard; do not present this as an actual vessel position."
+    },
+    {
+      "id": "ashtabula",
+      "name": "Ashtabula, Ohio",
+      "display": "Ashtabula, Ohio harbor area",
+      "lake": "Lake Erie",
+      "lat": 41.899,
+      "lon": -80.795,
+      "country": "US",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "cleveland",
+      "name": "Cleveland, Ohio",
+      "display": "Cleveland, Ohio harbor area",
+      "lake": "Lake Erie",
+      "lat": 41.497,
+      "lon": -81.706,
+      "country": "US",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "hamilton",
+      "name": "Hamilton, Ontario",
+      "display": "Hamilton, Ontario harbor area",
+      "lake": "Lake Ontario",
+      "lat": 43.285,
+      "lon": -79.835,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "montreal",
+      "name": "Montreal, Quebec",
+      "display": "Montreal, Quebec harbor area",
+      "lake": "St. Lawrence River",
+      "lat": 45.544,
+      "lon": -73.525,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "thunder-bay",
+      "name": "Thunder Bay, Ontario",
+      "display": "Thunder Bay, Ontario harbor area",
+      "lake": "Lake Superior",
+      "lat": 48.414,
+      "lon": -89.206,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "toronto",
+      "name": "Toronto, Ontario",
+      "display": "Toronto, Ontario harbor area",
+      "lake": "Lake Ontario",
+      "lat": 43.638,
+      "lon": -79.365,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "sarnia",
+      "name": "Sarnia, Ontario",
+      "display": "Sarnia, Ontario harbor area",
+      "lake": "Lake Huron / St. Clair River",
+      "lat": 42.985,
+      "lon": -82.413,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "goderich",
+      "name": "Goderich, Ontario",
+      "display": "Goderich, Ontario harbor area",
+      "lake": "Lake Huron",
+      "lat": 43.749,
+      "lon": -81.727,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "ecorse",
+      "name": "Ecorse, Michigan",
+      "display": "Ecorse, Michigan harbor area",
+      "lake": "Detroit River",
+      "lat": 42.247,
+      "lon": -83.139,
+      "country": "US",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "port-weller",
+      "name": "Port Weller, Ontario",
+      "display": "Port Weller, Ontario harbor area",
+      "lake": "Lake Ontario / Welland Canal",
+      "lat": 43.233,
+      "lon": -79.224,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "midland",
+      "name": "Midland, Ontario",
+      "display": "Midland, Ontario harbor area",
+      "lake": "Lake Huron / Georgian Bay",
+      "lat": 44.754,
+      "lon": -79.877,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "windsor",
+      "name": "Windsor, Ontario",
+      "display": "Windsor, Ontario harbor area",
+      "lake": "Detroit River",
+      "lat": 42.305,
+      "lon": -83.102,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
+    },
+    {
+      "id": "port-colborne",
+      "name": "Port Colborne, Ontario",
+      "display": "Port Colborne, Ontario harbor area",
+      "lake": "Lake Erie / Welland Canal",
+      "lat": 42.89,
+      "lon": -79.25,
+      "country": "CA",
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor reference only, not a ship position or dock access point. A reported facility does not establish public waterfront access."
     }
   ],
   "seasons": [
@@ -73,7 +216,7 @@
       "label": "Winter 2024–25",
       "state": "historical_snapshot",
       "asOf": "2025-01-31",
-      "note": "A deliberately incomplete older archive: two separately reported Owen Sound winter berths. The Algoma Compass record links to the same vessel identity as in 2025–26; no claim of continuous winter occupancy or complete fleet coverage.",
+      "note": "Partial older archive: 14 ships in 11 harbors, with two verified Owen Sound records and twelve seasonal community reports. Arrival records through January 31, 2025; roster research reviewed October 24, 2026. Missing years are coverage gaps, not evidence a ship was sailing.",
       "records": [
         {
           "identity": {
@@ -115,7 +258,18 @@
               "text": "A year before the icebreaker-assisted 2026 arrival, the ship also used Owen Sound for its winter stay.",
               "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "Algoma_Compass_Owen_Sound_2020.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Compass_Owen_Sound_2020.jpg",
+            "creator": "JustSomePics",
+            "license": "CC BY-SA 4.0",
+            "date": "2020-08-12",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Algoma_Compass_Owen_Sound_2020.jpg/960px-Algoma_Compass_Owen_Sound_2020.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Compass in a dated vessel photograph (2020-08-12); not a winter layup record for the selected season."
+          }
         },
         {
           "identity": {
@@ -166,6 +320,545 @@
             "date": "2021-12-19",
             "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph."
           }
+        },
+        {
+          "id": "algoma-buffalo",
+          "name": "Algoma Buffalo",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-buffalo",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "port-colborne",
+          "berth": "Below Lock 8 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-09",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-09",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "creator": "Wolfgang Fricke",
+            "license": "CC BY 3.0",
+            "date": "2018-08-01",
+            "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg/960px-Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Buffalo in a dated vessel photograph (2018-08-01); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-equinox",
+          "name": "Algoma Equinox",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-equinox",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "montreal",
+          "berth": "Section 56S — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-09",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-09",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg",
+            "creator": "GriffBill",
+            "license": "CC BY-SA 4.0",
+            "date": "2019-11-18",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Algoma_Equinox_in_the_Burlington_Canal_November_2019_%28Ontario%2C_Canada%29.jpg/960px-Algoma_Equinox_in_the_Burlington_Canal_November_2019_%28Ontario%2C_Canada%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Equinox in a dated vessel photograph (2019-11-18); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-harvester",
+          "name": "Algoma Harvester",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-harvester",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "montreal",
+          "berth": "Section 56S — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-09",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-09",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Harvester-in_dry_dock.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Harvester-in_dry_dock.jpg",
+            "creator": "Cxed",
+            "license": "CC0 1.0",
+            "date": "2018-08-22",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Algoma_Harvester-in_dry_dock.jpg/960px-Algoma_Harvester-in_dry_dock.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Harvester in a dated vessel photograph (2018-08-22); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "american-century",
+          "name": "American Century",
+          "aliases": [],
+          "identity": {
+            "key": "american-century",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "superior",
+          "berth": "Elevator M — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-12",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-12",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "MV_American_Century_(October_2022).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_American_Century_(October_2022).jpg",
+            "creator": "Notorious4life",
+            "license": "CC0 1.0",
+            "date": "2022-10-29",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/MV_American_Century_%28October_2022%29.jpg/960px-MV_American_Century_%28October_2022%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "American Century in a dated vessel photograph (2022-10-29); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "baie-comeau",
+          "name": "Baie Comeau",
+          "aliases": [],
+          "identity": {
+            "key": "baie-comeau",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "thunder-bay",
+          "berth": "Keefer Terminal — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-09",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-09",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "MV_Baie_Comeau_departs_Two_Harbors_(14778686279).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_Baie_Comeau_departs_Two_Harbors_(14778686279).jpg",
+            "creator": "Pete Markham",
+            "license": "CC BY-SA 2.0",
+            "date": "2014-07-24",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/MV_Baie_Comeau_departs_Two_Harbors_%2814778686279%29.jpg/960px-MV_Baie_Comeau_departs_Two_Harbors_%2814778686279%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Baie Comeau in a dated vessel photograph (2014-07-24); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "csl-tadoussac",
+          "name": "CSL Tadoussac",
+          "aliases": [],
+          "identity": {
+            "key": "csl-tadoussac",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "toronto",
+          "berth": "Marine Terminal 51 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-19",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-19",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "CSL_Tadoussac_in_Detroit_River_(May_2021).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:CSL_Tadoussac_in_Detroit_River_(May_2021).jpg",
+            "creator": "Notorious4life",
+            "license": "CC0 1.0",
+            "date": "2021-05-15",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/CSL_Tadoussac_in_Detroit_River_%28May_2021%29.jpg/960px-CSL_Tadoussac_in_Detroit_River_%28May_2021%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "CSL Tadoussac in a dated vessel photograph (2021-05-15); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "thunder-bay",
+          "name": "Thunder Bay",
+          "aliases": [],
+          "identity": {
+            "key": "thunder-bay",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "port-colborne",
+          "berth": "Port Colborne — berth not given — community-reported",
+          "berthPrecision": "berth_unverified",
+          "status": "reported_historical",
+          "statusAsOf": "2024-12-31",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2024-12-31",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg",
+            "creator": "Cpfan776",
+            "license": "CC BY-SA 3.0",
+            "date": "2013-08-01",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "reviewedOn": "2026-10-24",
+            "alt": "Thunder Bay in a dated vessel photograph (2013-08-01); not a winter layup record for the selected season.",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg"
+          }
+        },
+        {
+          "id": "whitefish-bay",
+          "name": "Whitefish Bay",
+          "aliases": [],
+          "identity": {
+            "key": "whitefish-bay",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "midland",
+          "berth": "ADM Elevator — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-07",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-07",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Whitefish_Bay_at_Queens_Quay.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Whitefish_Bay_at_Queens_Quay.jpg",
+            "creator": "PvOberstein",
+            "license": "CC0 1.0",
+            "date": "2017-12-14",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Whitefish_Bay_at_Queens_Quay.jpg/960px-Whitefish_Bay_at_Queens_Quay.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Whitefish Bay in a dated vessel photograph (2017-12-14); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "edwin-h-gott",
+          "name": "Edwin H. Gott",
+          "aliases": [],
+          "identity": {
+            "key": "edwin-h-gott",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "toledo",
+          "berth": "CSX Dock 3 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-18",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-18",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Edwin_H._Gott_under_clear_skies_(6985621942).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Edwin_H._Gott_under_clear_skies_(6985621942).jpg",
+            "creator": "Michelle Hill / U.S. Army Corps of Engineers",
+            "license": "Public domain — USACE",
+            "date": "2012-05-01",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Edwin_H._Gott_under_clear_skies_%286985621942%29.jpg/960px-Edwin_H._Gott_under_clear_skies_%286985621942%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Edwin H. Gott in a dated vessel photograph (2012-05-01); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "alpena",
+          "name": "Alpena",
+          "aliases": [],
+          "identity": {
+            "key": "alpena",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "cleveland",
+          "berth": "Holcim Dock — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-07",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-07",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee,_WI,_USA_-_14_Aug._2011.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee,_WI,_USA_-_14_Aug._2011.jpg",
+            "creator": "Michael Pereckas",
+            "license": "CC BY 2.0",
+            "date": "2011-08-14",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee%2C_WI%2C_USA_-_14_Aug._2011.jpg/960px-Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee%2C_WI%2C_USA_-_14_Aug._2011.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Alpena in a dated vessel photograph (2011-08-14); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "mark-w-barker",
+          "name": "Mark W. Barker",
+          "aliases": [],
+          "identity": {
+            "key": "mark-w-barker",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "ecorse",
+          "berth": "Nicholson terminal (roster: Nichosons Ecorse) — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-19",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-19",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "creator": "EasternHemlock",
+            "license": "CC BY 4.0",
+            "date": "2025-04-13",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg/960px-Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Mark W. Barker in a dated vessel photograph (2025-04-13); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "paul-r-tregurtha",
+          "name": "Paul R. Tregurtha",
+          "aliases": [],
+          "identity": {
+            "key": "paul-r-tregurtha",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "sturgeon-bay",
+          "berth": "Fincantieri Shipyard — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2025-01-21",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2025-01-21",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Paul_R._Tregurtha_in_Duluth,_Minnesota.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Paul_R._Tregurtha_in_Duluth,_Minnesota.jpg",
+            "creator": "Education Prof",
+            "license": "CC0 1.0",
+            "date": "2013-08-29",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Paul_R._Tregurtha_in_Duluth%2C_Minnesota.jpg/960px-Paul_R._Tregurtha_in_Duluth%2C_Minnesota.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Paul R. Tregurtha in a dated vessel photograph (2013-08-29); not a winter layup record for the selected season."
+          }
         }
       ]
     },
@@ -174,7 +867,7 @@
       "label": "Winter 2025–26",
       "state": "historical_snapshot",
       "asOf": "2026-01-30",
-      "note": "Twelve 2025–26 historical reports across Superior, Sturgeon Bay, Milwaukee, Owen Sound (Ontario) and Toledo: 10 source-confirmed, 2 explicitly reported. No claim of full Great Lakes coverage; dates and berths remain source-specific.",
+      "note": "Partial historical archive: 27 ships in 18 US and Canadian harbors, with separately labeled verified and community/media reports. Arrival records through January 30, 2026; roster research reviewed October 24, 2026. Not a complete fleet census or live ship map.",
       "records": [
         {
           "evidence": {
@@ -206,7 +899,17 @@
             "matchPolicy": "curated_alias_only"
           },
           "evidenceClass": "port_authority",
-          "berthPrecision": "dock_documented"
+          "berthPrecision": "dock_documented",
+          "photo": {
+            "file": "MV_Burns_Harbor,_the_last_vessel_to_traverse_the_Poe_Lock_in_2019-2020_-_200115-A-VC442-0172.jpeg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_Burns_Harbor,_the_last_vessel_to_traverse_the_Poe_Lock_in_2019-2020_-_200115-A-VC442-0172.jpeg",
+            "creator": "Carmen Paris / U.S. Army Corps of Engineers",
+            "license": "Public domain — USACE",
+            "date": "2020-01-15",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/MV_Burns_Harbor%2C_the_last_vessel_to_traverse_the_Poe_Lock_in_2019-2020_-_200115-A-VC442-0172.jpeg/960px-MV_Burns_Harbor%2C_the_last_vessel_to_traverse_the_Poe_Lock_in_2019-2020_-_200115-A-VC442-0172.jpeg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Burns Harbor in a dated vessel photograph (2020-01-15); not a winter layup record for the selected season."
+          }
         },
         {
           "evidence": {
@@ -247,7 +950,18 @@
             "matchPolicy": "curated_alias_only"
           },
           "evidenceClass": "port_authority",
-          "berthPrecision": "dock_documented"
+          "berthPrecision": "dock_documented",
+          "photo": {
+            "file": "The_Hon._James_L._Oberstar_iron_ore_freighter_at_the_Presque_Isle_Ore_Dock,_Marquette,_MI_01.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:The_Hon._James_L._Oberstar_iron_ore_freighter_at_the_Presque_Isle_Ore_Dock,_Marquette,_MI_01.jpg",
+            "creator": "Joe Ross",
+            "license": "CC BY-SA 2.0",
+            "date": "2011-09-03",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/The_Hon._James_L._Oberstar_iron_ore_freighter_at_the_Presque_Isle_Ore_Dock%2C_Marquette%2C_MI_01.jpg/960px-The_Hon._James_L._Oberstar_iron_ore_freighter_at_the_Presque_Isle_Ore_Dock%2C_Marquette%2C_MI_01.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Honorable James L. Oberstar in a dated vessel photograph (2011-09-03); not a winter layup record for the selected season."
+          }
         },
         {
           "evidence": {
@@ -279,7 +993,18 @@
             "matchPolicy": "curated_alias_only"
           },
           "evidenceClass": "port_authority",
-          "berthPrecision": "dock_documented"
+          "berthPrecision": "dock_documented",
+          "photo": {
+            "file": "Indiana_Harbor_(ship,_1979)_001.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Indiana_Harbor_(ship,_1979)_001.jpg",
+            "creator": "Pete Markham",
+            "license": "CC BY-SA 2.0",
+            "date": "2012-09-01",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Indiana_Harbor_%28ship%2C_1979%29_001.jpg/960px-Indiana_Harbor_%28ship%2C_1979%29_001.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Indiana Harbor in a dated vessel photograph (2012-09-01); not a winter layup record for the selected season."
+          }
         },
         {
           "evidence": {
@@ -313,7 +1038,18 @@
             "matchPolicy": "curated_alias_only"
           },
           "evidenceClass": "port_authority",
-          "berthPrecision": "dock_documented"
+          "berthPrecision": "dock_documented",
+          "photo": {
+            "file": "MVJohnBolandLakeStClair_(cropped).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MVJohnBolandLakeStClair_(cropped).jpg",
+            "creator": "Ralphmackiewicz",
+            "license": "CC BY-SA 4.0",
+            "date": "2017-07-03",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/MVJohnBolandLakeStClair_%28cropped%29.jpg/960px-MVJohnBolandLakeStClair_%28cropped%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "John J. Boland in a dated vessel photograph (2017-07-03); not a winter layup record for the selected season."
+          }
         },
         {
           "evidence": {
@@ -531,7 +1267,18 @@
               "text": "In 2006, assisted the Roger Blough after a rudder failure on the St. Marys River.",
               "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "1000_foot_lake_frieighter_Edgar_B._Speer.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:1000_foot_lake_frieighter_Edgar_B._Speer.jpg",
+            "creator": "Pete Markham",
+            "license": "CC BY-SA 2.0",
+            "date": "2009-09-20",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/1000_foot_lake_frieighter_Edgar_B._Speer.jpg/960px-1000_foot_lake_frieighter_Edgar_B._Speer.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Edgar B. Speer in a dated vessel photograph (2009-09-20); not a winter layup record for the selected season."
+          }
         },
         {
           "harborId": "sturgeon-bay",
@@ -579,7 +1326,18 @@
               "text": "Its reported winter shifts show why a winter layup is a series of changing yard events rather than one fixed berth.",
               "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
             }
-          ]
+          ],
+          "photo": {
+            "file": "Manitoulin_(ship)_-_Sault_Ste._Marie,_Ontario_2024-06-20.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Manitoulin_(ship)_-_Sault_Ste._Marie,_Ontario_2024-06-20.jpg",
+            "creator": "Ryan Hodnett",
+            "license": "CC BY-SA 4.0",
+            "date": "2024-06-20",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Manitoulin_%28ship%29_-_Sault_Ste._Marie%2C_Ontario_2024-06-20.jpg/960px-Manitoulin_%28ship%29_-_Sault_Ste._Marie%2C_Ontario_2024-06-20.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Manitoulin in a dated vessel photograph (2024-06-20); not a winter layup record for the selected season."
+          }
         },
         {
           "id": "stewart-j-cort",
@@ -621,7 +1379,18 @@
               "text": "First thousand-foot commercial freighter on the Great Lakes, entering service in 1972; its wheelhouse and living quarters are forward.",
               "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "MV_Stewart_J._Cort_Arrives_in_Superior_-_December_2019.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_Stewart_J._Cort_Arrives_in_Superior_-_December_2019.jpg",
+            "creator": "Pmarkham / Peter J. Markham",
+            "license": "CC BY-SA 4.0",
+            "date": "2019-11-06",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/MV_Stewart_J._Cort_Arrives_in_Superior_-_December_2019.jpg/960px-MV_Stewart_J._Cort_Arrives_in_Superior_-_December_2019.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Stewart J. Cort in a dated vessel photograph (2019-11-06); not a winter layup record for the selected season."
+          }
         },
         {
           "identity": {
@@ -674,7 +1443,18 @@
               "text": "The operator lists Algoma Compass as a Canadian-flagged River Class bulk carrier built in 1973.",
               "source": "https://www.algonet.com/ship/algoma-compass/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "Algoma_Compass_Owen_Sound_2020.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Compass_Owen_Sound_2020.jpg",
+            "creator": "JustSomePics",
+            "license": "CC BY-SA 4.0",
+            "date": "2020-08-12",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Algoma_Compass_Owen_Sound_2020.jpg/960px-Algoma_Compass_Owen_Sound_2020.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Compass in a dated vessel photograph (2020-08-12); not a winter layup record for the selected season."
+          }
         },
         {
           "identity": {
@@ -724,6 +1504,680 @@
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
             "date": "2011-09-15",
             "alt": "American Spirit inside the Soo Locks in September 2011; not a winter layup photograph."
+          }
+        },
+        {
+          "id": "american-century",
+          "name": "American Century",
+          "aliases": [],
+          "identity": {
+            "key": "american-century",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "ashtabula",
+          "berth": "Pinney Dock 4 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-17",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-17",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "MV_American_Century_(October_2022).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_American_Century_(October_2022).jpg",
+            "creator": "Notorious4life",
+            "license": "CC0 1.0",
+            "date": "2022-10-29",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/MV_American_Century_%28October_2022%29.jpg/960px-MV_American_Century_%28October_2022%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "American Century in a dated vessel photograph (2022-10-29); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "alpena",
+          "name": "Alpena",
+          "aliases": [],
+          "identity": {
+            "key": "alpena",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "cleveland",
+          "berth": "Amrize Dock — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-08",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-08",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee,_WI,_USA_-_14_Aug._2011.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee,_WI,_USA_-_14_Aug._2011.jpg",
+            "creator": "Michael Pereckas",
+            "license": "CC BY 2.0",
+            "date": "2011-08-14",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee%2C_WI%2C_USA_-_14_Aug._2011.jpg/960px-Bulk_carrier_Alpena_-_IMO_5206362_-_Milwaukee%2C_WI%2C_USA_-_14_Aug._2011.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Alpena in a dated vessel photograph (2011-08-14); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "paul-r-tregurtha",
+          "name": "Paul R. Tregurtha",
+          "aliases": [],
+          "identity": {
+            "key": "paul-r-tregurtha",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "toledo",
+          "berth": "Midwest Overseas Terminal — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-14",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-14",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Paul_R._Tregurtha_in_Duluth,_Minnesota.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Paul_R._Tregurtha_in_Duluth,_Minnesota.jpg",
+            "creator": "Education Prof",
+            "license": "CC0 1.0",
+            "date": "2013-08-29",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Paul_R._Tregurtha_in_Duluth%2C_Minnesota.jpg/960px-Paul_R._Tregurtha_in_Duluth%2C_Minnesota.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Paul R. Tregurtha in a dated vessel photograph (2013-08-29); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "edwin-h-gott",
+          "name": "Edwin H. Gott",
+          "aliases": [],
+          "identity": {
+            "key": "edwin-h-gott",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "toledo",
+          "berth": "CSX Docks — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-18",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Edwin_H._Gott_under_clear_skies_(6985621942).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Edwin_H._Gott_under_clear_skies_(6985621942).jpg",
+            "creator": "Michelle Hill / U.S. Army Corps of Engineers",
+            "license": "Public domain — USACE",
+            "date": "2012-05-01",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Edwin_H._Gott_under_clear_skies_%286985621942%29.jpg/960px-Edwin_H._Gott_under_clear_skies_%286985621942%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Edwin H. Gott in a dated vessel photograph (2012-05-01); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-equinox",
+          "name": "Algoma Equinox",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-equinox",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "hamilton",
+          "berth": "Lafarge, Section 22 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-13",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-13",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg",
+            "creator": "GriffBill",
+            "license": "CC BY-SA 4.0",
+            "date": "2019-11-18",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Algoma_Equinox_in_the_Burlington_Canal_November_2019_%28Ontario%2C_Canada%29.jpg/960px-Algoma_Equinox_in_the_Burlington_Canal_November_2019_%28Ontario%2C_Canada%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Equinox in a dated vessel photograph (2019-11-18); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-bear",
+          "name": "Algoma Bear",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-bear",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "montreal",
+          "berth": "Section 56N — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-14",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-14",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Milwaukee_May_2026_01_(Algoma_Bear).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Milwaukee_May_2026_01_(Algoma_Bear).jpg",
+            "creator": "Michael Barera",
+            "license": "CC BY-SA 4.0",
+            "date": "2026-05-03",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Milwaukee_May_2026_01_%28Algoma_Bear%29.jpg/960px-Milwaukee_May_2026_01_%28Algoma_Bear%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Bear in a dated vessel photograph (2026-05-03); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "baie-comeau",
+          "name": "Baie Comeau",
+          "aliases": [],
+          "identity": {
+            "key": "baie-comeau",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "thunder-bay",
+          "berth": "Keefer Terminal — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-08",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-08",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "MV_Baie_Comeau_departs_Two_Harbors_(14778686279).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:MV_Baie_Comeau_departs_Two_Harbors_(14778686279).jpg",
+            "creator": "Pete Markham",
+            "license": "CC BY-SA 2.0",
+            "date": "2014-07-24",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/MV_Baie_Comeau_departs_Two_Harbors_%2814778686279%29.jpg/960px-MV_Baie_Comeau_departs_Two_Harbors_%2814778686279%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Baie Comeau in a dated vessel photograph (2014-07-24); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "csl-tadoussac",
+          "name": "CSL Tadoussac",
+          "aliases": [],
+          "identity": {
+            "key": "csl-tadoussac",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "toronto",
+          "berth": "Marine Terminal 51 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-03",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-03",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "CSL_Tadoussac_in_Detroit_River_(May_2021).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:CSL_Tadoussac_in_Detroit_River_(May_2021).jpg",
+            "creator": "Notorious4life",
+            "license": "CC0 1.0",
+            "date": "2021-05-15",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/CSL_Tadoussac_in_Detroit_River_%28May_2021%29.jpg/960px-CSL_Tadoussac_in_Detroit_River_%28May_2021%29.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "CSL Tadoussac in a dated vessel photograph (2021-05-15); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "whitefish-bay",
+          "name": "Whitefish Bay",
+          "aliases": [],
+          "identity": {
+            "key": "whitefish-bay",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "sarnia",
+          "berth": "Cargill Elevator (roster spelling: Cargil) — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-19",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-19",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Whitefish_Bay_at_Queens_Quay.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Whitefish_Bay_at_Queens_Quay.jpg",
+            "creator": "PvOberstein",
+            "license": "CC0 1.0",
+            "date": "2017-12-14",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Whitefish_Bay_at_Queens_Quay.jpg/960px-Whitefish_Bay_at_Queens_Quay.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Whitefish Bay in a dated vessel photograph (2017-12-14); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "oakglen",
+          "name": "Oakglen",
+          "aliases": [
+            "M/V Oakglen"
+          ],
+          "identity": {
+            "key": "oakglen",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "goderich",
+          "berth": "North Wall — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-03",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-03",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Ship Oakglen.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg",
+            "creator": "GuavaTrain",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2021-12-19",
+            "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph."
+          }
+        },
+        {
+          "id": "mark-w-barker",
+          "name": "Mark W. Barker",
+          "aliases": [],
+          "identity": {
+            "key": "mark-w-barker",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "ecorse",
+          "berth": "Nicholson terminal (roster: Nicholsons) — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-11",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-11",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "creator": "EasternHemlock",
+            "license": "CC BY 4.0",
+            "date": "2025-04-13",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg/960px-Mark_W._Barker_passing_under_the_Carter_Rd._lift_bridge.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Mark W. Barker in a dated vessel photograph (2025-04-13); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-harvester",
+          "name": "Algoma Harvester",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-harvester",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "port-weller",
+          "berth": "Ontario Shipyard — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-09",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-09",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Harvester-in_dry_dock.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Harvester-in_dry_dock.jpg",
+            "creator": "Cxed",
+            "license": "CC0 1.0",
+            "date": "2018-08-22",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Algoma_Harvester-in_dry_dock.jpg/960px-Algoma_Harvester-in_dry_dock.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Harvester in a dated vessel photograph (2018-08-22); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "thunder-bay",
+          "name": "Thunder Bay",
+          "aliases": [],
+          "identity": {
+            "key": "thunder-bay",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "midland",
+          "berth": "ADM Elevator — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-13",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-13",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg",
+            "creator": "Cpfan776",
+            "license": "CC BY-SA 3.0",
+            "date": "2013-08-01",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+            "reviewedOn": "2026-10-24",
+            "alt": "Thunder Bay in a dated vessel photograph (2013-08-01); not a winter layup record for the selected season.",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Thunder_Bay_out_of_Lock_2_2013-08-01_IMG_1091.jpg"
+          }
+        },
+        {
+          "id": "evans-spirit",
+          "name": "Evans Spirit",
+          "aliases": [],
+          "identity": {
+            "key": "evans-spirit",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "windsor",
+          "berth": "Morterm Terminal — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-08",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-08",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Evans_Spirit_upbound_at_Sault_Ste_Marie.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Evans_Spirit_upbound_at_Sault_Ste_Marie.jpg",
+            "creator": "Bradley Buhro",
+            "license": "CC BY-SA 2.0",
+            "date": "2019-09-28",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Evans_Spirit_upbound_at_Sault_Ste_Marie.jpg/960px-Evans_Spirit_upbound_at_Sault_Ste_Marie.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Evans Spirit in a dated vessel photograph (2019-09-28); not a winter layup record for the selected season."
+          }
+        },
+        {
+          "id": "algoma-buffalo",
+          "name": "Algoma Buffalo",
+          "aliases": [],
+          "identity": {
+            "key": "algoma-buffalo",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "port-colborne",
+          "berth": "Above Lock 8 — community-reported",
+          "berthPrecision": "facility_reported",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-13",
+          "evidenceClass": "community_report",
+          "evidence": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "published": null,
+            "reviewedOn": "2026-10-24"
+          },
+          "summary": "The seasonal roster reports this winter stop. Treat the listed facility as a historical report; it does not establish continuous occupancy, a particular repair, or public access.",
+          "events": [
+            {
+              "date": "2026-01-13",
+              "type": "reported_arrival",
+              "text": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+              "sourceClass": "community_report"
+            }
+          ],
+          "photo": {
+            "file": "Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "creator": "Wolfgang Fricke",
+            "license": "CC BY 3.0",
+            "date": "2018-08-01",
+            "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+            "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg/960px-Algoma_Buffalo_IMO_7620653_B_Welland_Canal_01-08-2018.jpg",
+            "reviewedOn": "2026-10-24",
+            "alt": "Algoma Buffalo in a dated vessel photograph (2018-08-01); not a winter layup record for the selected season."
           }
         }
       ]

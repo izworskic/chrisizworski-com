@@ -151,3 +151,10 @@ The frozen component criteria are now satisfied in opening (40→100), seasons (
 A component's 100 means its explicitly listed binary checks pass. It does not mean the tool is perfect or visitors have been observed succeeding. Do not weaken thresholds or remove missing observations to claim a sitewide quality score.
 
 Exactly one next action: owner reviews the completed PR/preview and chooses whether to merge. Exact final SHA and CI state belong in the PR release record.
+
+
+## Coverage follow-through — October 24, 2026
+
+The coverage expansion documented in [FREIGHTER_LAYUP_COVERAGE_2026-10-24.md](FREIGHTER_LAYUP_COVERAGE_2026-10-24.md) supersedes the original sample counts above: 27 ships / 18 harbors / 27 licensed vessel photos in 2025–26, and 14 records / 11 harbors / 14 photos in 2024–25. Verified totals remain 10 and 2; seasonal community reports are explicitly lower confidence. No 2026–27 freighter winter berth was established in this research pass.
+
+Under the frozen photography rubric, metadata coverage now clears the 80% criterion (27/27), making the source-level score 100 rather than 75. This does not mean every remote image will always load or that visitors recognize the hull: failure fallback remains tested, source identity/date/licenses are documented, and final rendered QA is recorded in PR #1161. The initial twenty journeys remain behavioral requirements; exact fixture counts and the other-winter search subject were updated for genuine source additions rather than preserving an intentionally sparse archive. Physical-device, screen-reader, zoom and visitor outcome limits remain.

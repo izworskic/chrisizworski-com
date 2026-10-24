@@ -59,6 +59,11 @@
         if(v.berthPrecision==='dock_documented'&&!/(dock|pier|elevator|shipyards|graving)/i.test(v.berth||''))errors.push('vague claimed dock '+v.id);
         if(!['dock_documented','facility_reported','berth_unverified'].includes(v.berthPrecision))errors.push('missing berth precision '+v.id);
         if(!Array.isArray(v.events)||!v.events.length)errors.push('missing dated history '+v.id);
+        if(v.photo){
+          if(!v.photo.file||!/^https:\/\/commons\.wikimedia\.org\/wiki\//.test(v.photo.page||'')||!v.photo.creator||!v.photo.license||!/^\d{4}-\d\d-\d\d$/.test(v.photo.date||''))errors.push('incomplete photo provenance '+v.id);
+          if(v.photo.url&&!/^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//.test(v.photo.url))errors.push('unsupported photo host '+v.id);
+          if(!v.photo.license.startsWith('Public domain')&&!/^https:\/\/creativecommons\.org\//.test(v.photo.licenseUrl||''))errors.push('missing photo license link '+v.id);
+        }
         const past=stableIds.get(key);
         if(past&&normalizeName(past)!==normalizeName(v.name))errors.push('identity label changed across seasons '+key);
         stableIds.set(key,v.name);

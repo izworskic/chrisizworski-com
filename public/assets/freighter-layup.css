@@ -213,3 +213,6 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
 .atlas .other-winters p{font-size:13px;margin:8px 0 14px}
 .atlas .winter-jump{min-height:44px}
 .atlas #fleet-title:focus-visible{outline:3px solid #eaa23d;outline-offset:4px}
+
+/* Keep the expanded harbor archive compact until the visitor asks for more. */
+.harbor-more{margin-top:10px}.harbor-more summary{min-height:44px;padding:10px 4px;cursor:pointer;font-size:13px;font-weight:650;color:var(--deep)}

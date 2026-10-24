@@ -54,7 +54,7 @@ async function fixture({url='https://chrisizworski.com/great-lakes-freighter-win
  const settle=()=>new Promise(r=>setImmediate(r));await settle();
  const event=async(id,type,value)=>{if(value!==undefined)get(id).value=value;get(id).listeners[type]({target:get(id)});await settle();};
  const click=async(id,attrs)=>{const n=attrs?new Node('button',attrs):get(id);get(id).listeners.click({target:n});await settle();};
- return {tiles,markers,geo,map:mapState,chooseHarbor:async id=>{get('harbor-panel').children.find(n=>n.className==='harbor-comparison').children.find(n=>n.attrs['aria-label'].startsWith(registry.harbors.find(h=>h.id===id).name+' ·')).listeners.click();await settle();},work:async i=>{all.find(n=>n.dataset.workStep===String(i)).listeners.click();await settle();},get,model,registry,location,entries,event,click,focused:()=>active,requests:()=>requests,
+ return {tiles,markers,geo,map:mapState,chooseHarbor:async id=>{get('harbor-panel').querySelector('[data-harbor="'+id+'"]').listeners.click();await settle();},work:async i=>{all.find(n=>n.dataset.workStep===String(i)).listeners.click();await settle();},get,model,registry,location,entries,event,click,focused:()=>active,requests:()=>requests,
   ship:async id=>click('ship-grid',{'data-ship':id}),back:async()=>{if(position){location.href=entries[--position];listeners.popstate();await settle();}},
   forward:async()=>{if(position+1<entries.length){location.href=entries[++position];listeners.popstate();await settle();}},
   read:()=>model.readState(registry,location.href),settle};
