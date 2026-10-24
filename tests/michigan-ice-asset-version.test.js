@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 
 function gitBlob(content) {
-  return createHash('sha1').update('blob ' + content.length + '\\0').update(content).digest('hex').slice(0,12);
+  return createHash('sha1').update('blob ' + content.length + '\0').update(content).digest('hex').slice(0,12);
 }
 test('Michigan Ice generated HTML always fingerprints both script files', () => {
   const src = fs.readFileSync('public/michigan-ice/ice.js');
