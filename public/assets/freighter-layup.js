@@ -39,7 +39,7 @@
    const list=filtered(),total=policy().totals(seasonData());
    const scope=state.activeHarbor==='all'?'all sampled harbors':harbor(state.activeHarbor)?.name||'selected harbor';
    $('count-note').textContent=seasonData().state==='upcoming_unconfirmed'?'No confirmed 2026–27 layups yet. Previous-season docks are not forecasts.':
-    list.length+' of '+total.documented+' sourced vessel records · '+scope+' · '+total.confirmed+' verified / '+total.reported+' community-reported overall.';
+    list.length+' of '+total.documented+' sourced vessel records · '+scope+' · '+total.confirmed+' verified / '+total.reported+' reported overall.';
    $('ship-grid').innerHTML=seasonData().state==='upcoming_unconfirmed'?
      '<div class="current-empty"><h3>Winter 2026–27 is still being written.</h3><p>There are no sourced 2026–27 winter layup berths in this registry yet. A vessel that stopped moving has not necessarily laid up.</p><button type="button" id="view-archive" class="small-button">Explore the verified 2025–26 archive →</button></div>':
      list.length?list.map(vesselCard).join(''):'<div class="empty">No ships match those filters. Clear your search or choose another harbor or berth.</div>';
@@ -71,8 +71,8 @@
    const otherWinters=state.archive.seasons.filter(s=>s.id!==state.season&&s.records.some(rec=>rec.id===v.id)).sort((a,b)=>b.id.localeCompare(a.id));
    const links=otherWinters.map(s=>'<button type="button" class="winter-jump" data-winter="'+esc(s.id)+'" data-vessel="'+esc(v.id)+'">'+esc(s.label)+' · view recorded layup</button>').join('');
    const biography=state.biographies?.profiles?.some(p=>p.id===v.id)?'<p><a class="button small-button" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Read '+esc(v.name)+' full ship biography ↗</a></p>':'';
-   const warning=report.reported?'<p class="evidence-warning"><strong>Community report, not independently verified.</strong> The winter location is based on local observers and can be corrected when a higher-authority record becomes available.</p>':'';
-   $('detail-body').innerHTML='<div class="detail-grid"><div><p class="tag'+(report.reported?' tag-reported':'')+'">'+esc(report.label)+'</p><p><b>Winter berth or facility:</b> '+esc(v.berth)+' · '+esc(h.name)+'</p>'+warning+'<p>'+esc(v.summary)+'</p><p class="note">Source as of '+esc(fmt(v.statusAsOf))+'. Berth precision: '+esc((v.berthPrecision||'unverified').replace(/_/g,' '))+'. This is not the vessel’s current position or proof it remained at that dock afterward.</p><h4>Winter timeline</h4><ol class="timeline">'+items+'</ol>'+(facts?'<h4>From this ship’s story</h4><ul class="fact-list">'+facts+'</ul>':'')+'<p><a href="'+esc(v.evidence.url)+'" target="_blank" rel="noopener">Read the documented source ↗</a></p></div><div>'+figure+'</div></div>';
+   const warning=report.reported?'<p class="evidence-warning"><strong>Reported historical layup, not independently confirmed.</strong> '+(v.evidenceClass==='community_report'?'This report is based on local observers.':'This source describes a planned or reported arrival without confirming the final berth.')+' Check the cited source for scope and date.</p>':'';
+   $('detail-body').innerHTML='<div class="detail-grid"><div><p class="tag'+(report.reported?' tag-reported':'')+'">'+esc(report.label)+'</p><p><b>Winter berth or facility:</b> '+esc(v.berth)+' · '+esc(h.name)+'</p>'+warning+'<p>'+esc(v.summary)+'</p><p class="note">Source as of '+esc(fmt(v.statusAsOf))+'. Berth precision: '+esc((v.berthPrecision||'unverified').replace(/_/g,' '))+'. This is not the vessel’s current position or proof it remained at that dock afterward.</p><h4>Winter timeline</h4><ol class="timeline">'+items+'</ol>'+(facts?'<h4>From this ship’s story</h4><ul class="fact-list">'+facts+'</ul>':'')+'<p><a href="'+esc(v.evidence.url)+'" target="_blank" rel="noopener">Read the documented source ↗</a></p>'+biography+(links?'<h4>This ship in other winters</h4><div class="winter-links">'+links+'</div>':'')+'</div><div>'+figure+'</div></div>';
    panel.querySelectorAll('[data-winter]').forEach(b=>b.addEventListener('click',()=>{$('season').value=b.dataset.winter;setSeason(b.dataset.winter);selectShip(b.dataset.vessel,true)}));
    $('ship-grid').querySelectorAll('[data-card]').forEach(x=>x.classList.toggle('is-selected',x.dataset.card===id));
    if(state.map){const m=state.markers.find(m=>m.id===v.harborId);if(m){state.map.setView([h.lat,h.lon],Math.max(state.map.getZoom(),9),{animate:false});m.marker.openPopup()}}
@@ -125,7 +125,7 @@
    for(const id of ids){
      const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>v.status==='confirmed_historical').length;
      const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' historical records; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
-     const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' historical records: '+verified+' verified, '+(list.length-verified)+' community-reported. Harbor-wide reference only, not precise shipyard berths.'));
+     const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' historical records: '+verified+' verified, '+(list.length-verified)+' reported. Harbor-wide reference only, not precise shipyard berths.'));
      const button=text('button','Explore this harbor');button.type='button';button.addEventListener('click',()=>{setHarbor(id,true);$('fleet').scrollIntoView({behavior:'smooth',block:'start'})});pop.append(button);
      marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});
    }
