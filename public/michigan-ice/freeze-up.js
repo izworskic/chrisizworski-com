@@ -60,6 +60,7 @@
   var mapReady = false;
   var basemap = null, basemapFailed = false, apiFailed = false;
   var pendingMapUpdate = null, resizeObserver = null;
+  var largeMapLake = 'all';
   var dailyFrameRequest = 0, frameMode = 'focus';
   var dailyFrameCache = new Map(); // bounded client-only NOAA image load outcomes
 
@@ -134,16 +135,59 @@
     if (!root) return;
     var picture = root.querySelector('#ice-ex-daily-image');
     var view = root.querySelector('#ice-ex-daily-mode');
-    var lake = REGIONS[currentSlug].lakeName || REGIONS[currentSlug].name;
     if (view) {
-      view.disabled = !PHOTO_FOCUS[REGIONS[currentSlug].lake];
-      view.textContent = frameMode === 'focus' && !view.disabled
-        ? 'Show all five lakes' : 'Focus on ' + lake;
+      view.disabled = false; // The all-lakes archive is accessible from every region, even Lake St. Clair.
+      view.textContent = 'Open all five lakes';
+      view.setAttribute('aria-haspopup','dialog');
     }
     if (!picture) return;
     var p = dailyChartPerspective();
     picture.style.transformOrigin = 'top left';
     picture.style.transform = 'translate('+p.x.toFixed(1)+'%,'+p.y.toFixed(1)+'%) scale('+p.scale+')';
+  }
+  // This top-layer dialog actually opens the entire NOAA basin-wide map,
+  // rather than merely removing CSS zoom within a small thumbnail.
+  function syncLargeMap() {
+    if (!root) return;
+    var modal = root.querySelector('#ice-ex-daily-dialog');
+    if (!modal) return;
+    var thumb = root.querySelector('#ice-ex-daily-image');
+    var picture = root.querySelector('#ice-ex-modal-image');
+    var slider = root.querySelector('#ice-ex-modal-slider');
+    var source = root.querySelector('#ice-ex-modal-source');
+    var item = chartSeries[currentIndex];
+    slider.max = String(Math.max(0,chartSeries.length - 1));
+    slider.value = String(Math.max(0,currentIndex));
+    slider.disabled = chartSeries.length < 2;
+    var url = item && !thumb.hidden ? thumb.getAttribute('src') : null;
+    if (url) {
+      if (picture.getAttribute('src') !== url) picture.src = url;
+      picture.hidden = false;
+      source.href = url; source.hidden = false;
+    } else {
+      picture.hidden = true; picture.removeAttribute('src'); source.hidden = true;
+    }
+    var focus = PHOTO_FOCUS[largeMapLake];
+    var p = focus && largeMapLake !== 'all' ? {
+      scale:focus.scale,x:50-focus.x*focus.scale*100,y:50-focus.y*focus.scale*100
+    } : {scale:1,x:0,y:0};
+    picture.style.transform = 'translate('+p.x.toFixed(1)+'%,'+p.y.toFixed(1)+'%) scale('+p.scale+')';
+    var names = {all:'All five Great Lakes',superior:'Lake Superior',
+      michigan:'Lake Michigan',huron:'Lake Huron',erie:'Lake Erie',ontario:'Lake Ontario'};
+    var value = item && (largeMapLake === 'all' ? item.total : item[largeMapLake]);
+    text('ice-ex-modal-metric', item
+      ? dateOnly(item.date)+' · '+names[largeMapLake]+' · '+percent(value)+' ice-covered'+
+          (largeMapLake === 'all'?' (combined Great Lakes mean).':' (whole-lake mean).')
+      : 'No dated NOAA ice coverage is available.');
+    text('ice-ex-modal-status', url
+      ? 'Original NOAA GLERL ice-concentration chart. Choose a lake to inspect its mapped pattern.'
+      : 'NOAA geographic image unavailable for this day; select another date. No substitute image is displayed.');
+    root.querySelectorAll('[data-ice-large-lake]').forEach(function(button) {
+      button.setAttribute('aria-pressed', String(button.dataset.iceLargeLake === largeMapLake));
+    });
+    var play = root.querySelector('#ice-ex-modal-play');
+    play.disabled = chartSeries.length < 2;
+    play.textContent = playTimer === null ? 'Play daily maps' : 'Pause';
   }
   function syncDailyFrame() {
     var img = root && root.querySelector('#ice-ex-daily-image');
@@ -159,6 +203,7 @@
       placeholder.textContent = 'The NOAA ice series is unavailable.';
       status.textContent = 'No dated NOAA ice analysis available to display.';
       source.hidden = true;
+      syncLargeMap();
       return;
     }
     var url = glMultiLakeFrameUrl(item.date);
@@ -168,6 +213,7 @@
       placeholder.textContent = 'No archived chart for this date.';
       status.textContent = 'No NOAA geographic chart is expected for '+dateOnly(item.date)+'. The measured whole-lake percentage remains in the graph.';
       source.hidden = true;
+      syncLargeMap();
       return;
     }
     // Clear the previous day immediately: never display yesterday's map
@@ -178,10 +224,12 @@
     placeholder.textContent = 'Loading the dated NOAA chart…';
     status.textContent = 'Loading NOAA geographic ice chart for '+dateOnly(item.date)+'…';
     source.hidden = true;
+    syncLargeMap();
     var cached = dailyFrameCache.get(url);
     if (cached === false) {
       placeholder.textContent = 'NOAA image not available for this date.';
       status.textContent = 'NOAA did not provide a geographic image for '+dateOnly(item.date)+'. No ice map has been invented.';
+      syncLargeMap();
       return;
     }
     function applySuccess() {
@@ -199,6 +247,7 @@
           ? name+' is selected. '
           : 'This basin-wide source does not measure '+REGIONS[currentSlug].name+' separately. ')+
         'The CARTO location map above remains a different, current-only product.';
+      syncLargeMap();
     }
     if (cached === true) { applySuccess(); return; }
     var probe = new Image();
@@ -216,6 +265,7 @@
       placeholder.textContent = 'NOAA image unavailable. Select another date.';
       status.textContent = 'NOAA daily ice-map image unavailable for '+dateOnly(item.date)+
         '. The measured GLERL whole-lake chart is still available. No substitute map is shown.';
+      syncLargeMap();
     };
     probe.src = url;
   }
@@ -223,6 +273,7 @@
     if (playTimer !== null) { clearInterval(playTimer); playTimer = null; }
     var b = root && root.querySelector('#ice-ex-play');
     if (b) b.textContent = 'Play ice maps day by day';
+    if (root && root.querySelector('#ice-ex-daily-dialog')) syncLargeMap();
   }
   function svgNode(tag, attributes) {
     var n = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -553,6 +604,22 @@
       '#ice-ex-daily-header{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}',
       '#ice-ex-daily-header h4{margin:0;font-size:16px;line-height:1.3}',
       '#ice-ex-daily-mode{min-height:38px!important;padding:6px 10px!important}',
+      '#ice-ex-daily-dialog:not([open]){display:none}',
+      '#ice-ex-daily-dialog[open]{display:block;position:fixed;inset:0;margin:auto;width:min(96vw,1060px);max-width:none;max-height:94dvh;overflow-y:auto;border:1px solid #789ba7;border-radius:14px;padding:14px;background:#f6fbfc;color:#153845;box-shadow:0 15px 55px rgba(0,0,0,.28)}',
+      '#ice-ex-daily-dialog::backdrop{background:rgba(9,29,37,.77)}',
+      '#ice-ex-daily-dialog button{min-height:38px;padding:7px 12px}',
+      '#ice-ex-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}',
+      '#ice-ex-modal-title{font-size:clamp(19px,3.8vw,27px);margin:4px 0}',
+      '#ice-ex-modal-lakes{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}',
+      '#ice-ex-modal-lakes button[aria-pressed=true]{background:#14576b;color:white;border-color:#14576b}',
+      '#ice-ex-modal-frame{position:relative;width:100%;max-width:950px;aspect-ratio:1.30;max-height:60dvh;overflow:hidden;background:#e5eef1;border:1px solid #bdd1d6;border-radius:9px}',
+      '#ice-ex-modal-image{width:100%;height:100%;object-fit:fill;display:block;transform-origin:top left;transition:transform .2s ease}',
+      '#ice-ex-modal-image[hidden],#ice-ex-modal-source[hidden]{display:none}',
+      '#ice-ex-modal-metric{font-size:14px;font-weight:650;margin:8px 0}',
+      '#ice-ex-modal-status{min-height:18px}',
+      '#ice-ex-modal-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}',
+      '#ice-ex-modal-controls input[type=range]{flex:1;min-width:160px}',
+      '@media(prefers-reduced-motion:reduce){#ice-ex-modal-image{transition:none}}',
       '#ice-ex-daily-frame{position:relative;aspect-ratio:1.30;max-width:720px;overflow:hidden;background:#eaf2f4;border:1px solid #c5dce0;border-radius:10px}',
       '#ice-ex-daily-image{width:100%;height:100%;object-fit:fill;display:block;transform-origin:top left;transition:transform .2s ease}',
       '#ice-ex-daily-image[hidden]{display:none}',
@@ -610,13 +677,35 @@
       '<p id="ice-ex-timeline-note" class="ice-ex-caption">Loading the dated NOAA GLERL series…</p>',
       '<div id="ice-ex-daily-panel" aria-label="NOAA historical daily ice map playback">',
       '<div id="ice-ex-daily-header"><h4>Watch the ice spread and retreat</h4>',
-      '<button type="button" id="ice-ex-daily-mode" aria-label="Toggle NOAA basin chart focus">Show all five lakes</button></div>',
+      '<button type="button" id="ice-ex-daily-mode" aria-haspopup="dialog" aria-controls="ice-ex-daily-dialog">Open all five lakes</button></div>',
       '<div id="ice-ex-daily-frame"><img id="ice-ex-daily-image" alt="" hidden decoding="async" referrerpolicy="no-referrer">',
       '<span id="ice-ex-daily-placeholder">Select a day in the timeline below to display its original NOAA ice map.</span></div>',
       '<p id="ice-ex-daily-status" class="ice-ex-caption" role="status">Waiting for NOAA daily ice records.</p>',
       '<p class="ice-ex-caption"><a id="ice-ex-daily-source" href="https://www.glerl.noaa.gov/data/ice/glicd.php" target="_blank" rel="noopener" hidden>Open original dated NOAA ice map</a></p>',
       '<p class="ice-ex-caption">Genuine NOAA GLERL archived ice-concentration maps, not a forecast or simulated freeze-up. The focus is a zoom of the same Great Lakes-wide source; bays are not independently resolved.</p>',
       '</div>',
+      '<dialog id="ice-ex-daily-dialog" aria-labelledby="ice-ex-modal-title" aria-modal="true">',
+      '<div id="ice-ex-modal-head"><h3 id="ice-ex-modal-title">Great Lakes · daily ice map</h3>',
+      '<button type="button" id="ice-ex-modal-close" aria-label="Close expanded ice map">Close map</button></div>',
+      '<p class="ice-ex-caption">Select All five for the complete NOAA map, or a lake for a closer view. These are archived observations, not ice-thickness estimates.</p>',
+      '<div id="ice-ex-modal-lakes" role="group" aria-label="Choose lake view">',
+      '<button type="button" data-ice-large-lake="all" aria-pressed="true">All five</button>',
+      '<button type="button" data-ice-large-lake="superior" aria-pressed="false">Superior</button>',
+      '<button type="button" data-ice-large-lake="michigan" aria-pressed="false">Michigan</button>',
+      '<button type="button" data-ice-large-lake="huron" aria-pressed="false">Huron</button>',
+      '<button type="button" data-ice-large-lake="erie" aria-pressed="false">Erie</button>',
+      '<button type="button" data-ice-large-lake="ontario" aria-pressed="false">Ontario</button></div>',
+      '<div id="ice-ex-modal-frame" role="region" aria-label="Expanded original NOAA Great Lakes ice map">',
+      '<img id="ice-ex-modal-image" alt="NOAA Great Lakes daily ice-concentration chart" hidden decoding="async">',
+      '</div>',
+      '<p id="ice-ex-modal-metric" aria-live="polite">Loading dated NOAA ice data…</p>',
+      '<div id="ice-ex-modal-controls"><label for="ice-ex-modal-slider">Date</label>',
+      '<input id="ice-ex-modal-slider" type="range" min="0" max="0" value="0" step="1" disabled>',
+      '<button type="button" id="ice-ex-modal-play">Play daily maps</button></div>',
+      '<p id="ice-ex-modal-status" class="ice-ex-caption" role="status"></p>',
+      '<p class="ice-ex-caption"><a id="ice-ex-modal-source" target="_blank" rel="noopener" hidden>Open original NOAA image</a></p>',
+      '<p class="ice-ex-caption"><strong>Not a safe-ice assessment.</strong> The percentages are whole-lake means, not conditions at a shoreline or bay.</p>',
+      '</dialog>',
       '<svg id="ice-ex-chart" viewBox="0 0 680 220"></svg>',
       '<label for="ice-ex-slider"><strong>Inspect a day</strong></label>',
       '<input id="ice-ex-slider" type="range" min="0" max="0" step="1" value="0" disabled>',
@@ -672,6 +761,7 @@
       },0);
       if(currentIndex>=peak) currentIndex=-1;
       root.querySelector('#ice-ex-play').textContent='Pause daily maps';
+      syncLargeMap();
       playTimer=setInterval(function(){
         if(!root || !root.isConnected){stopPlayback();return;}
         currentIndex+=1;
@@ -681,9 +771,35 @@
       },800);
     });
     root.querySelector('#ice-ex-slider').addEventListener('pointerdown',stopPlayback);
-    root.querySelector('#ice-ex-daily-mode').addEventListener('click',function(){
-      frameMode = frameMode === 'all' ? 'focus' : 'all';
-      styleDailyFrame();
+    var dialog=root.querySelector('#ice-ex-daily-dialog');
+    var trigger=root.querySelector('#ice-ex-daily-mode');
+    trigger.addEventListener('click',function(){
+      largeMapLake='all';
+      syncLargeMap();
+      if(typeof dialog.showModal==='function') dialog.showModal();
+      else {
+        var source=root.querySelector('#ice-ex-daily-source');
+        if (!source.hidden && source.href) window.open(source.href,'_blank','noopener');
+        else text('ice-ex-daily-status','This browser cannot open the large viewer; use the original NOAA image link when available.');
+      }
+    });
+    root.querySelector('#ice-ex-modal-close').addEventListener('click',function(){dialog.close();});
+    dialog.addEventListener('close',function(){trigger.focus({preventScroll:true});});
+    root.querySelectorAll('[data-ice-large-lake]').forEach(function(button){
+      button.addEventListener('click',function(){
+        largeMapLake=button.dataset.iceLargeLake;
+        syncLargeMap();
+      });
+    });
+    root.querySelector('#ice-ex-modal-slider').addEventListener('input',function(){
+      stopPlayback();
+      var slider=root.querySelector('#ice-ex-slider');
+      slider.value=String(this.value);
+      if(slider.oninput)slider.oninput();
+    });
+    root.querySelector('#ice-ex-modal-play').addEventListener('click',function(){
+      root.querySelector('#ice-ex-play').click();
+      syncLargeMap();
     });
     document.addEventListener('visibilitychange',function(){if(document.hidden)stopPlayback();});
     onRegionChange(currentSlug);
