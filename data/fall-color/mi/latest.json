@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-23",
-  "updated": "2026-10-23T15:46:57.266Z",
-  "body": "The Upper Peninsula shows minimal color change at eight percent across all three regions, still in early decline phase. Central and Southeast Lower Michigan lead the state at 93-94 percent, near or at peak fall color. Northwest Lower Michigan sits at 56 percent in the falling phase, while Northeast Lower trails at 36 percent, also falling.\n\nThis weekend's mixed skies favor viewing across most regions, with temperatures ranging from highs near 60-73 degrees and lows in the upper 30s to low 40s. Eastern U.P. faces some rain in coming days, which may impact conditions there. Elsewhere, dry mixed skies should provide good visibility for color observation through the weekend.\n\nFor peak foliage viewing this weekend, Southeast Lower Michigan along US-12 through the Irish Hills offers the best display at peak phase with 93 percent color. If seeking earlier-season scenery, Northwest Lower's Pierce Stocking Scenic Drive at Sleeping Bear Dunes provides 56 percent color with pleasant mixed skies and moderate temperatures ideal for a drive.",
+  "date": "2026-10-24",
+  "updated": "2026-10-24T14:38:29.189Z",
+  "body": "The modeled color progression shows stark regional variation. Central and Saginaw Bay regions lead at approximately 95 percent, with Southwest and Southeast Lower Michigan near 90-93 percent at or approaching peak. Northwest Lower sits at 57 percent in the falling phase. The Upper Peninsula and Tip of the Mitt remain early at 8 percent, still in the down phase.\n\nThis weekend's rain across most regions may accelerate leaf drop, particularly where color is already advanced. Southeast Lower and Southwest Lower, currently near peak with mixed skies and highs around 67 degrees, face the most active conditions. Northeast Lower's mixed skies and slightly warmer highs near 69 degrees offer better viewing odds than rain-affected areas, though color there remains at 35 percent.\n\nFor weekend travel, Southeast Lower Michigan along US-12 through the Irish Hills presents the best combination of peak color and favorable mixed-sky conditions. If rain becomes heavy, Northeast Lower's River Road Scenic Byway toward Lumberman's Monument offers an alternative with developing color and clearer weather patterns.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-23T15:46:53.657Z",
+  "conditionsUpdated": "2026-10-24T14:38:25.353Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -15,11 +15,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
@@ -32,11 +32,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
@@ -49,16 +49,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 56,
+      "modeledPercent": 57,
       "source": {
         "drivers": [
           "regional climatology",
@@ -66,16 +66,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 36,
+      "modeledPercent": 35,
       "source": {
         "drivers": [
           "regional climatology",
@@ -83,16 +83,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 94,
+      "modeledPercent": 95,
       "source": {
         "drivers": [
           "regional climatology",
@@ -100,11 +100,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
@@ -117,11 +117,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     },
     {
@@ -134,11 +134,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -6,
+        "anchorShiftDays": -7,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 40,
-        "satelliteWeight": 0.2
+        "satelliteAgeDays": 41,
+        "satelliteWeight": 0.16
       }
     }
   ],
