@@ -50,7 +50,9 @@ async function run(){
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
       // The test intentionally blocks external Wikimedia images. Ship identity must remain
       // visually represented, and a failed photo may not retain a misleading photo badge.
-      const photo=page.locator('.ship-art img').first();
+      const photo=page.locator('.ship-art:has(img)').first();
+      // The image may already be hidden by its error handler. Scroll its visible
+      // art container, then assert the image fallback rather than scrolling hidden content.
       await photo.scrollIntoViewIfNeeded();
       await page.waitForFunction(()=>[...document.querySelectorAll('.ship-art img')].some(i=>i.hidden),{timeout:5000});
       const imageFallback=await page.evaluate(()=>{

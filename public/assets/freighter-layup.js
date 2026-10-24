@@ -11,7 +11,7 @@
  const records=()=>seasonData()?.records||[];
  const harbor=id=>state.archive.harbors.find(h=>h.id===id);
  const filtered=()=>policy().selectRecords(state.archive,state);
- const scrollTo=el=>el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+ const scrollTo=(el,block='nearest')=>el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block});
  function writeURL(mode='push'){
    const u=policy().stateURL(state.archive,state,location.href);
    if(u.href!==location.href)history[mode==='replace'?'replaceState':'pushState'](null,'',u.href);
@@ -44,6 +44,7 @@
    const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
    options('berth-filter',[['all','All documented berths'],...[...new Set(list.map(v=>v.berth))].map(b=>[b,b])],state.berth);
    $('evidence-filter').value=state.evidence;$('sort-order').value=state.sort;
+   $('refinement-summary').textContent='Refine results'+(state.berth!=='all'?' · berth selected':'')+(state.evidence!=='all'?' · '+state.evidence+' only':'')+(state.sort==='recent'?' · newest source first':'');
    const upcoming=seasonData().state==='upcoming_unconfirmed';
    for(const id of ['harbor-filter','berth-filter','evidence-filter','sort-order'])$(id).disabled=upcoming;
  }
@@ -61,10 +62,10 @@
    const s=seasonData(),count=policy().totals(s),upcoming=s.state==='upcoming_unconfirmed';
    $('stat-ships').textContent=count.documented;$('stat-harbors').textContent=count.harbors;
    $('stat-year').textContent=upcoming?'Pending':count.confirmed+' / '+count.reported;
-   $('season-note').textContent=upcoming?'Not confirmed yet. Last winter’s berth does not predict this winter’s.':'Partial historical sample · '+s.label+' · not live ship positions.';
+   $('season-note').textContent=upcoming?'Not confirmed yet. Last winter’s berth does not predict this winter’s.':'Partial historical sample · not live ship positions.';
    $('coverage-method').textContent=s.note+' Sources have different dates; a documented berth does not establish continued occupancy.';
    $('map-title').textContent=upcoming?'A new winter is taking shape':'Where the ships spent winter';
-   $('map-intro').textContent=upcoming?'Geographic context only; no locations are confirmed for this winter.':count.harbors+' documented harbors. Markers show harbor areas, not ships or precise berths.';
+   $('map-intro').textContent=upcoming?'Geographic context only; no locations are confirmed for this winter.':'Harbor areas, not live ship positions.';
  }
  function renderDetail(){
    const v=records().find(v=>v.id===state.selected);
@@ -77,7 +78,7 @@
      '<li><time datetime="'+esc(e.date)+'">'+esc(fmt(e.date))+' · '+esc(e.type.replace(/_/g,' '))+'</time>'+esc(e.text)+' <a href="'+esc(e.source)+'" target="_blank" rel="noopener">Evidence ↗</a></li>').join('');
    const facts=(v.storyFacts||[]).map(f=>'<li>'+esc(f.text)+' <a href="'+esc(f.source)+'" target="_blank" rel="noopener">Source ↗</a></li>').join('');
    const figure=v.photo?'<figure>'+photoHTML(v,true)+'<figcaption>'+esc(v.photo.alt)+' Photo: <a href="'+esc(v.photo.page)+'" target="_blank" rel="noopener">'+esc(v.photo.creator)+'</a> · '+esc(v.photo.license)+(v.photo.licenseUrl?' (<a href="'+esc(v.photo.licenseUrl)+'" target="_blank" rel="noopener">license ↗</a>)':'')+'. Not a photo of this winter’s layup.</figcaption></figure>':
-      '<div class="empty"><strong>No rights-verified photograph yet.</strong><p>We would rather show a plain illustration than the wrong ship or an unlicensed image.</p></div>';
+      '<div class="empty"><strong>The story comes first.</strong><p>A photograph has not been added for this ship yet. Follow its documented winter chapter and the sources below.</p></div>';
    const otherWinters=state.archive.seasons.filter(s=>s.id!==state.season&&s.records.some(rec=>rec.id===v.id)).sort((a,b)=>b.id.localeCompare(a.id));
    const links=otherWinters.map(s=>'<button type="button" class="winter-jump" data-winter="'+esc(s.id)+'" data-vessel="'+esc(v.id)+'">'+esc(s.label)+' · view recorded layup</button>').join('');
    const biography='<p data-bio-vessel="'+esc(v.id)+'"></p>';
@@ -98,7 +99,7 @@
    returnVessel=id;change({selected:id});
    const v=records().find(v=>v.id===id),h=harbor(v.harborId);
    if(state.map)state.map.setView([h.lat,h.lon],9,{animate:false});
-   if(scroll){scrollTo($('ship-detail'));$('ship-detail').focus({preventScroll:true});}
+   if(scroll){scrollTo($('ship-detail'),'start');$('ship-detail').focus({preventScroll:true});}
  }
  function closeDetail(){
    const id=returnVessel||state.selected;change({selected:null});
@@ -218,7 +219,7 @@
      state.archive=archive;Object.assign(state,policy().readState(archive,location.href));
      options('season',archive.seasons.slice().sort((a,b)=>b.id.localeCompare(a.id)).map(s=>[s.id,s.label+(s.state==='upcoming_unconfirmed'?' · unconfirmed':' · archive')]),state.season);
      $('atlas-controls').disabled=false;initMap();render();writeURL('replace');
-     if(state.selected){focusHarbor();scrollTo($('ship-detail'));}
+     if(state.selected){focusHarbor();scrollTo($('ship-detail'),'start');}
      // Intentionally not awaited: optional metadata cannot hold core tasks hostage.
      loadBiographies();
    }catch{
@@ -246,7 +247,7 @@
      if(b.dataset.action==='clear-search')clearSearch();
      if(b.dataset.action==='archive')setSeason(policy().defaultSeason(state.archive));
    });
-   $('detail-body').addEventListener('click',e=>{const b=e.target.closest('[data-winter]');if(!b)return;setSeason(b.dataset.winter,b.dataset.vessel);returnVessel=b.dataset.vessel;scrollTo($('ship-detail'));$('ship-detail').focus({preventScroll:true});});
+   $('detail-body').addEventListener('click',e=>{const b=e.target.closest('[data-winter]');if(!b)return;setSeason(b.dataset.winter,b.dataset.vessel);returnVessel=b.dataset.vessel;scrollTo($('ship-detail'),'start');$('ship-detail').focus({preventScroll:true});});
    window.addEventListener('popstate',()=>{if(!state.archive)return;Object.assign(state,policy().readState(state.archive,location.href));render();focusHarbor();});
    document.querySelectorAll('[data-work-step]').forEach(b=>b.addEventListener('click',()=>winterWork(Number(b.dataset.workStep))));
    boot();
