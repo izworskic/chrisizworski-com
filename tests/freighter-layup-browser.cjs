@@ -47,6 +47,18 @@ async function run(){
       check(await page.locator('#stat-ships').textContent()==='12',size.name+': season stats');
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
+      check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
+      // The test intentionally blocks external Wikimedia images. Ship identity must remain
+      // visually represented, and a failed photo may not retain a misleading photo badge.
+      const photo=page.locator('.ship-art img').first();
+      await photo.scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>[...document.querySelectorAll('.ship-art img')].some(i=>i.hidden),{timeout:5000});
+      const imageFallback=await page.evaluate(()=>{
+        const image=[...document.querySelectorAll('.ship-art img')].find(i=>i.hidden);
+        return !!(image?.previousElementSibling && !image.previousElementSibling.hidden && !!image.parentElement.querySelector('.ship-illustration'));
+      });
+      check(imageFallback,size.name+': image outage reveals branded ship illustration');
+
 
       await page.locator('#harbor-filter').selectOption('sturgeon-bay');
       check(await page.locator('[data-ship]').count()===3,size.name+': Sturgeon Bay harbor filter');

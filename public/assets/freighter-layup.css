@@ -60,3 +60,14 @@
 .winter-links{display:flex;gap:9px;flex-wrap:wrap}
 .winter-jump{border:1px solid #92bbbf;background:#fff;color:#0d596a;padding:8px 12px;border-radius:5px;font-weight:700;cursor:pointer}
 .winter-jump:hover{background:#dceeed}
+
+/* Network-safe vessel photography: show the illustrated hull if an image host fails.
+   Hide the photo-year ribbon when the photograph itself is unavailable. */
+.ship-art .fallback-ship{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;width:100%;height:100%;z-index:0}
+.ship-art .fallback-ship .ship-illustration{width:73%;max-height:125px}
+.ship-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.ship-art .photo-hint{z-index:2}
+.ship-art:has(img[hidden]) .photo-hint{display:none}
+.detail .fallback-ship{display:flex;align-items:center;justify-content:center;background:#c5dadd;min-height:190px;padding:24px}
+.detail .fallback-ship .ship-illustration{width:75%;max-height:160px}
+img[hidden],.fallback-ship[hidden]{display:none!important}

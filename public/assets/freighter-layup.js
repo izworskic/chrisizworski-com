@@ -20,7 +20,7 @@
    const p=v.photo;
    if(!p)return shipSVG;
    const url='https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
-   return '<img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true">';
+   return '<span class="fallback-ship" hidden>'+shipSVG+'</span><img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.previousElementSibling.hidden=false">';
  }
  function vesselCard(v){
    const selected=v.id===state.selected,h=harbor(v.harborId),label=policy().classify(v,seasonData());
@@ -152,6 +152,8 @@
    if(!window.L){$('map-status').textContent='Map library unavailable. All verified ship and harbor records remain accessible below.';return}
    try{
      state.map=L.map('layup-map',{scrollWheelZoom:false,worldCopyJump:true,zoomControl:true}).setView([44.7,-84.6],5);
+     const loadingHint=$('layup-map').querySelector('.map-loading');
+     if(loadingHint)loadingHint.remove();
      state.markerLayer=L.layerGroup().addTo(state.map);
      fitLakes();addTiles();renderMapPins();
      $('reset-map').addEventListener('click',()=>setHarbor('all',true));
