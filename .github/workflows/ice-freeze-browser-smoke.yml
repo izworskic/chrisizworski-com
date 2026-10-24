@@ -7,6 +7,7 @@ on:
       - fix/michigan-ice-map-fullscreen-20261022
       - feat/great-lakes-ice-lakewide-tawas-20261023
       - feat/great-lakes-daily-ice-map-playback-20261023
+      - fix/great-lakes-daily-map-open-all-20261023
     paths:
       - scripts/ice-freeze-browser-smoke.cjs
       - .github/workflows/ice-freeze-browser-smoke.yml
