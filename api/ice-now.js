@@ -23,6 +23,48 @@ const REGIONS = {
       [-84.644, 45.837], [-84.607, 45.886]
     ]
   },
+  // Lake-wide viewers use NOAA polygon dates sampled in a small, explicitly
+  // identified reference sector. They NEVER claim the samples estimate the
+  // ice coverage of an entire Great Lake; that belongs to GLERL lakeWide.
+  'lake-superior': {
+    name: 'Lake Superior — basin overview', lake: 'superior', scope: 'lake-overview',
+    bbox: [-88.95, 47.10, -88.18, 47.68],
+    forecast: [47.47, -87.94], // NWS forecast forcing, not sampled ice
+    samples: [[-88.60,47.42],[-88.40,47.30],[-88.55,47.55]]
+  },
+  'lake-michigan': {
+    name: 'Lake Michigan — basin overview', lake: 'michigan', scope: 'lake-overview',
+    bbox: [-87.12, 44.16, -86.37, 44.90],
+    forecast: [44.26,-86.32],
+    samples: [[-86.90,44.44],[-86.72,44.64],[-86.55,44.48]]
+  },
+  'lake-huron': {
+    name: 'Lake Huron — basin overview', lake: 'huron', scope: 'lake-overview',
+    bbox: [-83.12, 44.67, -82.52, 45.30],
+    forecast: [44.42,-83.36],
+    samples: [[-82.98,44.88],[-82.80,45.02],[-82.69,44.83]]
+  },
+  'lake-erie': {
+    name: 'Lake Erie — basin overview', lake: 'erie', scope: 'lake-overview',
+    bbox: [-82.74, 41.35, -81.95, 42.00],
+    forecast: [41.45,-82.71],
+    samples: [[-82.54,41.65],[-82.35,41.55],[-82.18,41.74]]
+  },
+  'lake-ontario': {
+    name: 'Lake Ontario — basin overview', lake: 'ontario', scope: 'lake-overview',
+    bbox: [-77.81,43.46,-77.06,44.12],
+    forecast: [43.45,-76.51],
+    samples: [[-77.56,43.79],[-77.32,43.68],[-77.42,43.95]]
+  },
+  // Tawas Bay is a sheltered, localized view, not a Lake Huron average.
+  // Samples are approximate water locations inside the sand-spit shelter.
+  // Missing intersection => unavailable, not "ice-free".
+  'tawas-bay': {
+    name: 'Tawas Bay and Tawas Point', lake: 'huron', scope: 'local-bay',
+    bbox: [-83.65,44.13,-83.37,44.33],
+    forecast: [44.27,-83.50],
+    samples: [[-83.54,44.218],[-83.52,44.230],[-83.50,44.211],[-83.48,44.219]]
+  },
   'saginaw-bay': {
     name: 'Saginaw Bay', lake: 'huron',
     bbox: [-84.10, 43.52, -82.55, 44.55],
@@ -222,7 +264,7 @@ async function regionalObservation(slug, region, now) {
   const coverage = region.samples.length ? classifications.length / region.samples.length : 0;
   if (!ranked.length) {
     return {
-      slug, name: region.name, supported: true, available: false, validAt, ageHours: ah, stale,
+      slug, name: region.name, scope: region.scope || 'local-bay', supported: true, available: false, validAt, ageHours: ah, stale,
       samplesMatched: classifications.length, samplesExpected: region.samples.length, confidence: 'low',
       method: 'Sample points intersected with NOAA/NWS USNIC daily ice-analysis polygons.',
       limitation: 'No usable concentration classification intersected the configured water samples. This is not evidence of ice-free water.'
@@ -235,11 +277,15 @@ async function regionalObservation(slug, region, now) {
   const rangeLabel = lo.rank === hi.rank ? lo.label : lo.label + ' to ' + hi.label;
   const confidence = !stale && coverage >= 0.75 ? 'high' : (!stale && coverage >= 0.5 ? 'medium' : 'low');
   return {
-    slug, name: region.name, supported: true, available: true, validAt, ageHours: ah, stale,
+    slug, name: region.name, scope: region.scope || 'local-bay', supported: true, available: true, validAt, ageHours: ah, stale,
     samplesMatched: classifications.length, samplesExpected: region.samples.length,
     confidence, dominantClass: dominant, rangeLabel,
-    method: 'Sample points intersected with NOAA/NWS USNIC daily Great Lakes ice-analysis polygons.',
-    limitation: 'Observed concentration is regional chart context, not measured ice thickness and not a safety rating.'
+    method: region.scope === 'lake-overview'
+      ? 'Dates and classes from a limited NOAA/NWS USNIC reference sector. NOT a lake-wide geographic sample.'
+      : 'Sample points intersected with NOAA/NWS USNIC daily Great Lakes ice-analysis polygons.',
+    limitation: region.scope === 'lake-overview'
+      ? 'This small reference sector validates the NOAA chart date only. GLERL is the separate whole-lake percent; this polygon sample cannot estimate ice coverage lake-wide or establish safety.'
+      : 'Observed concentration is regional chart context, not measured ice thickness and not a safety rating.'
   };
 }
 
@@ -342,7 +388,7 @@ export default async function handler(req) {
     const r = REGIONS[slug];
     tasks.push(regionalObservation(slug, r, now)
       .then(v => { out.observed.regions[slug] = v; })
-      .catch(() => { out.observed.regions[slug] = { slug, name: r.name, supported: !!r.lake, available: false, stale: true, confidence: 'low' }; }));
+      .catch(() => { out.observed.regions[slug] = { slug, name: r.name, scope: r.scope || 'local-bay', supported: !!r.lake, available: false, stale: true, confidence: 'low' }; }));
   }
   const forecastSlug = requested && REGIONS[requested] ? requested : 'saginaw-bay';
   tasks.push(forecastFor(REGIONS[forecastSlug], now)
