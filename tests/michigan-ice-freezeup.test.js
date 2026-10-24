@@ -73,6 +73,6 @@ test('time series includes ice categories for all five Great Lakes and Lake St C
   assert.match(api,/erie: r\.erie, ontario: r\.ontario, stclair: r\.stclair, total: r\.total/);
   const explorer=load('public/michigan-ice/freeze-up.js');
   assert.match(explorer,/whole-lake mean/);
-  assert.match(explorer,/The slider changes only the whole-lake chart/);
+  assert.match(explorer,/The date slider synchronizes the GLERL whole-lake percentage and a genuine archived GLERL daily ice map/);
   assert.match(explorer,/if \(overlay\) \{map\.removeLayer\(overlay\);overlay=null;\}/);
 });
