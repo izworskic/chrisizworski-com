@@ -7,6 +7,11 @@
     const term=query.trim().toLowerCase();
     return vessels.filter(v=>fresh(v,now)&&(region==='all'||v.regionIds?.includes(region))&&(!term||(v.name||'').toLowerCase().includes(term)||v.mmsi.includes(term))&&(kind!=='cargo'||(v.shipType>=70&&v.shipType<90)));
   }
+  function emptyReportState({loading=false,unavailable=false,filtered=false}={}) {
+    if(loading)return {title:'Checking the river…',text:'Recent ship reports are still loading. You can explore the locks and viewing spots while we check.'};
+    if(unavailable)return {title:'The receiver is out of reach.',text:'We cannot check this stretch right now. This does not tell us whether ships are present. Try Refresh or check the official transit information.'};
+    return filtered?{title:'Try a wider search.',text:'No fresh received report matches these filters. Clear the ship search or show all reporting vessels.'}:{title:'Keep a little room for the river.',text:'We have no fresh ship reports to show in this stretch right now. A quiet receiver does not mean an empty waterway.'};
+  }
   function motion(v) {return !Number.isFinite(v.speedKnots)?'Speed unreported':v.speedKnots<0.5?'Slow or stopped':v.speedKnots.toFixed(1)+' kn reported';}
   function direction(v) {
     const bearing=Number.isFinite(v.heading)?v.heading:Number.isFinite(v.speedKnots)&&v.speedKnots>=.5&&Number.isFinite(v.course)?v.course:null;
@@ -40,5 +45,5 @@
     const stage=p<25?0:p<35?1:p<70?2:p<80?3:4;
     return {progress:p,stage,water,x,high,lowerOpen:down?p>=80:p<25,upperOpen:down?p<25:p>=80,changing:p>=35&&p<70};
   }
-  return {fresh,visible,motion,direction,distance,fit,monthly,lockFrame,clamp};
+  return {fresh,visible,emptyReportState,motion,direction,distance,fit,monthly,lockFrame,clamp};
 });
