@@ -185,7 +185,7 @@ async function run(){
   await failed.goto('http://127.0.0.1:8126/michigan-ice/?ice-region=tawas-bay',{waitUntil:'domcontentloaded'});
   assert.equal(await failed.locator('#ice-ex-region').inputValue(),'tawas-bay');
   await failed.locator('#ice-freeze-explorer').waitFor({timeout:10000});
-  await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),{timeout:10000});
+  await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),null,{timeout:10000});
   await failed.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'),{timeout:10000});
   await failed.waitForFunction(()=>/OpenStreetMap/.test(document.querySelector('#ice-ex-basemap-status')?.textContent||''),{timeout:10000});
   await failed.locator('#ice-ex-reset').click();
