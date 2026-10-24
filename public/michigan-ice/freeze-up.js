@@ -249,11 +249,16 @@
       syncDailyFrame();
       return;
     }
-    currentIndex = chartSeries.length - 1;
+    var lakeKey=REGIONS[currentSlug].lake;
+    var peakIndex=chartSeries.reduce(function(best,r,i) {
+      return Number(r[lakeKey]) > Number(chartSeries[best][lakeKey]) ? i : best;
+    },0);
+    // Start historical viewing at the actual seasonal peak, not a blank spring
+    // frame. The user can still scrub or play every observed day in the season.
+    currentIndex = historic ? peakIndex : chartSeries.length - 1;
     slider.value = String(currentIndex);
     var width=680, height=220, left=48, right=16, top=15, bottom=36;
     var plotW=width-left-right, plotH=height-top-bottom;
-    var lakeKey=REGIONS[currentSlug].lake;
     var val=function(i){return Number(chartSeries[i][lakeKey]);};
     var x=function(i){return left + (chartSeries.length === 1 ? 0 : (i/(chartSeries.length-1))*plotW);};
     var y=function(v){return top + plotH - Math.max(0,Math.min(100,v))/100*plotH;};
@@ -659,7 +664,13 @@
     root.querySelector('#ice-ex-play').addEventListener('click',function(){
       if(playTimer!==null) {stopPlayback();return;}
       if(chartSeries.length<2) return;
-      if(currentIndex>=chartSeries.length-1) currentIndex=-1;
+      // From the initial historical peak, replay from first mapped ice so
+      // visitors see formation AND retreat, not just the final thaw.
+      var key=REGIONS[currentSlug].lake;
+      var peak=chartSeries.reduce(function(best,r,i){
+        return Number(r[key])>Number(chartSeries[best][key]) ? i : best;
+      },0);
+      if(currentIndex>=peak) currentIndex=-1;
       root.querySelector('#ice-ex-play').textContent='Pause daily maps';
       playTimer=setInterval(function(){
         if(!root || !root.isConnected){stopPlayback();return;}
