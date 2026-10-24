@@ -518,6 +518,10 @@
     stopPlayback();
     currentSlug=slug;
     select.value=slug;
+    root.querySelectorAll('[data-ice-target]').forEach(function(link) {
+      if (link.dataset.iceTarget === 'lake-'+REGIONS[slug].lake) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
     text('ice-ex-context',REGIONS[slug].context);
     var link=root.querySelector('#ice-ex-detail');
     var share='/michigan-ice/?ice-region='+encodeURIComponent(slug)+'#ice-freeze-explorer';
@@ -600,6 +604,11 @@
       '#ice-freeze-explorer .ice-ex-chartbox{margin-top:15px;border-top:1px solid #cbdfe2;padding-top:12px}',
       '#ice-ex-chart{display:block;width:100%;max-height:230px;background:#fff;border:1px solid #dae5e8;border-radius:10px}',
       '#ice-ex-chart-heading{font-size:17px;margin:4px 0}',
+      '#ice-ex-lake-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 15px;line-height:1.35}',
+      '#ice-ex-lake-links strong{font-size:13px;margin-right:5px}',
+      '#ice-ex-lake-links a{padding:9px 11px;border:1px solid #92b6c0;border-radius:8px;text-decoration:none;background:#fff;color:#095c72;font-weight:600;font-size:13px;min-height:40px;display:inline-flex;align-items:center}',
+      '#ice-ex-lake-links a[aria-current=page]{background:#124f66;color:#fff;border-color:#124f66}',
+      '#ice-ex-lake-links a:focus-visible{outline:3px solid #256ea9;outline-offset:2px}',
       '#ice-ex-daily-panel{margin:13px 0 14px}',
       '#ice-ex-daily-header{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}',
       '#ice-ex-daily-header h4{margin:0;font-size:16px;line-height:1.3}',
@@ -672,8 +681,14 @@
       '<p class="ice-ex-caption" id="ice-ex-map-stamp" aria-live="polite">Awaiting NOAA data. Map colors are not ice thickness.</p>',
       '<p class="ice-ex-caption" id="ice-ex-observation" aria-live="polite">NOAA geographic observation freshness is reported separately from the lake-wide chart.</p>',
       '<div class="ice-ex-chartbox">',
-      '<div class="ice-ex-kicker">Daily progression · distinct from the map</div>',
-      '<h3 id="ice-ex-chart-heading">Whole-lake ice cover</h3>',
+      '<div class="ice-ex-kicker">NOAA daily ice coverage · choose any Great Lake</div>',
+      '<nav id="ice-ex-lake-links" aria-label="Choose Great Lake daily ice progression"><strong>Switch Great Lakes:</strong>',
+      '<a data-ice-target="lake-superior" href="/michigan-ice/?ice-region=lake-superior&viewer=20261024.2#ice-freeze-explorer">Superior</a>',
+      '<a data-ice-target="lake-michigan" href="/michigan-ice/?ice-region=lake-michigan&viewer=20261024.2#ice-freeze-explorer">Michigan</a>',
+      '<a data-ice-target="lake-huron" href="/michigan-ice/?ice-region=lake-huron&viewer=20261024.2#ice-freeze-explorer">Huron</a>',
+      '<a data-ice-target="lake-erie" href="/michigan-ice/?ice-region=lake-erie&viewer=20261024.2#ice-freeze-explorer">Erie</a>',
+      '<a data-ice-target="lake-ontario" href="/michigan-ice/?ice-region=lake-ontario&viewer=20261024.2#ice-freeze-explorer">Ontario</a></nav>',
+      '<h3 id="ice-ex-chart-heading">Selected lake — daily ice progression</h3>',
       '<p id="ice-ex-timeline-note" class="ice-ex-caption">Loading the dated NOAA GLERL series…</p>',
       '<div id="ice-ex-daily-panel" aria-label="NOAA historical daily ice map playback">',
       '<div id="ice-ex-daily-header"><h4>Watch the ice spread and retreat</h4>',
