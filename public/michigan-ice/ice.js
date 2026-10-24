@@ -547,7 +547,7 @@
   var region = document.getElementById('region-live');
   if (!document.getElementById('board') && (!region || !/^(saginaw-bay|lake-st-clair|little-bay-de-noc|grand-traverse-bay)$/.test(region.getAttribute('data-region') || ''))) return;
   var s = document.createElement('script');
-  s.src = '/michigan-ice/freeze-up.js';
+  s.src = '/michigan-ice/freeze-up.js?v=20261024.2';
   s.defer = true;
   document.head.appendChild(s);
 })();
