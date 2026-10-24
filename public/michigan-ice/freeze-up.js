@@ -180,6 +180,14 @@
       return;
     }
     var r=regionData(currentSlug);
+    text('ice-ex-observation', !activeData.iceSeason
+      ? 'Off season: no current local ice claim. The lake-wide chart below shows the previous winter.'
+      : !r || !r.available
+        ? 'No usable NOAA polygon intersects the selected samples; this does not establish open water.'
+        : r.stale ? 'NOAA chart older than 48 hours; the live ice layer is withheld.'
+          : 'NOAA mapped ice chart valid '+dateOnly(r.validAt)+'. '+
+            (r.scope === 'lake-overview' ? 'The reference sector checks chart freshness only, not the whole lake’s ice percentage.' :
+              'A few regional chart samples cannot resolve the entire bay.'));
     if (!isFreshRegion(r)) {
       ++mapRequest; // invalidate any NOAA image still loading
       if (overlay) {map.removeLayer(overlay);overlay=null;}
@@ -334,8 +342,12 @@
     select.value=slug;
     text('ice-ex-context',REGIONS[slug].context);
     var link=root.querySelector('#ice-ex-detail');
-    link.href=REGIONS[slug].link;
-    link.textContent='Explore '+REGIONS[slug].name+' conditions';
+    var share='/michigan-ice/?ice-region='+encodeURIComponent(slug)+'#ice-freeze-explorer';
+    link.href=REGIONS[slug].link || share;
+    link.textContent=REGIONS[slug].link ? 'Explore '+REGIONS[slug].name+' conditions' : 'Share '+REGIONS[slug].name+' map';
+    text('ice-ex-map-type',REGIONS[slug].scope === 'lake-overview'
+      ? 'Whole-lake map extent. NOAA GLERL is the separate source for whole-lake ice percentages.'
+      : 'Bay map: NOAA concentrations may not resolve shelter, current or shoreline ice.');
     drawChart();
     if(map) setRegionMap();
     // Reuse a previously fetched regional snapshot, with its own age checks.
@@ -376,7 +388,8 @@
     activeData=data;
     datasets[currentSlug]=data;
     drawChart();
-    if (map) updateMap();
+    if (!regionData(currentSlug)) onRegionChange(currentSlug);
+    else if (map) updateMap();
   }
   function setup() {
     if(document.getElementById('ice-freeze-explorer')) return;
@@ -423,9 +436,19 @@
       '<h2 id="ice-ex-title">Where is the lake freezing?</h2>',
       '<p class="ice-ex-lede">Follow the latest mapped ice concentrations and the daily whole-lake progression. The map and historical timeline describe different observations.</p>',
       '<div class="ice-ex-controls"><label for="ice-ex-region"><strong>Explore a waterbody</strong></label><select id="ice-ex-region">',
-      '<option value="saginaw-bay">Saginaw Bay</option><option value="lake-st-clair">Lake St. Clair</option>',
-      '<option value="little-bay-de-noc">Little Bay de Noc</option><option value="grand-traverse-bay">Grand Traverse Bay</option>',
+      '<optgroup label="All five Great Lakes">',
+      '<option value="lake-superior">Lake Superior — whole lake</option>',
+      '<option value="lake-michigan">Lake Michigan — whole lake</option>',
+      '<option value="lake-huron">Lake Huron — whole lake</option>',
+      '<option value="lake-erie">Lake Erie — whole lake</option>',
+      '<option value="lake-ontario">Lake Ontario — whole lake</option></optgroup>',
+      '<optgroup label="Lake Huron bays"><option value="saginaw-bay">Saginaw Bay</option>',
+      '<option value="tawas-bay">Tawas Bay and Tawas Point</option></optgroup>',
+      '<optgroup label="Lake Michigan bays"><option value="little-bay-de-noc">Little Bay de Noc</option>',
+      '<option value="grand-traverse-bay">Grand Traverse Bay</option></optgroup>',
+      '<optgroup label="Other interconnected waters"><option value="lake-st-clair">Lake St. Clair</option></optgroup>',
       '</select></div>',
+      '<p class="ice-ex-caption" id="ice-ex-map-type">Choose a lake or supported bay to explore.</p>',
       '<p class="ice-ex-caption" id="ice-ex-context"></p>',
       '<div id="ice-ex-map-shell"><div id="ice-ex-map" role="region" aria-label="Interactive shoreline map with NOAA regional ice concentration when current data are available"></div>',
       '<span id="ice-ex-map-hud" role="status">Loading map · NOAA data separate</span>',
@@ -443,6 +466,7 @@
       '<span><i style="background:#969696"></i>Fast ice (anchored)</span>',
       '</div>',
       '<p class="ice-ex-caption" id="ice-ex-map-stamp" aria-live="polite">Awaiting NOAA data. Map colors are not ice thickness.</p>',
+      '<p class="ice-ex-caption" id="ice-ex-observation" aria-live="polite">NOAA geographic observation freshness is reported separately from the lake-wide chart.</p>',
       '<div class="ice-ex-chartbox">',
       '<div class="ice-ex-kicker">Daily progression · distinct from the map</div>',
       '<h3 id="ice-ex-chart-heading">Whole-lake ice cover</h3>',
