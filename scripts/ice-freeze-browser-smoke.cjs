@@ -51,6 +51,18 @@ async function run(){
       const slug = new URL(route.request().url()).searchParams.get('region');
       return route.fulfill(asJSON(data(inWinter,slug)));
     });
+    await page.route('**/api/ice-history?*',route=>{
+      const value=new URL(route.request().url()).searchParams.get('season');
+      if(value==='2022')return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({ok:false})});
+      const y=Number(value);
+      if(!/^\d{4}$/.test(value)||y<2015) return route.fulfill({status:400,body:'Bad year'});
+      const historical=[
+        {date:y+'-12-01',superior:3,michigan:5,huron:7,erie:4,ontario:2,stclair:12,total:5},
+        {date:(y+1)+'-01-10',superior:31,michigan:42,huron:53,erie:61,ontario:24,stclair:72,total:38},
+        {date:(y+1)+'-03-01',superior:22,michigan:29,huron:33,erie:27,ontario:16,stclair:31,total:24}
+      ];
+      return route.fulfill(asJSON({ok:true,seasonStartYear:y,seasonLabel:y+'–'+String(y+1).slice(2),series:historical}));
+    });
     await page.route('**/api/ice',route=>route.fulfill(asJSON(cold)));
     await page.route('**/api/carto-basemap-config',route=>route.fulfill(asJSON({provider:'CARTO',key:'test-public-key'})));
     await page.route('https://api.weather.gov/**',route=>route.fulfill({status:503,body:'Unavailable'}));
@@ -140,6 +152,28 @@ async function run(){
     assert.equal(await dialog.evaluate(el=>el.open),true,'Keyboard activation failed');
     await page.keyboard.press('Escape');
     assert.equal(await dialog.evaluate(el=>el.open),false,'Escape did not close viewer');
+
+    // Archived season persists across lake changes and synchronizes both viewers.
+    const seasonSelect=page.locator('#ice-ex-season');
+    assert.ok(await seasonSelect.locator('option').count()>=10,'Missing historical winter choices');
+    await seasonSelect.selectOption('2023');
+    await page.waitForFunction(()=>/2023–24/.test(document.querySelector('#ice-ex-chart-value')?.textContent||'') ||
+      /Jan 10, 2024/.test(document.querySelector('#ice-ex-chart-value')?.textContent||''),null,{timeout:10000});
+    assert.match(await page.locator('#ice-ex-chart-value').textContent(),/53%.*Lake Huron|53%.*Lake Erie|53%.*Lake St. Clair|53%/);
+    assert.match(await page.locator('#ice-ex-daily-image').getAttribute('src'),/2024\/20240110\.jpg$/);
+    await openAll.click();
+    assert.equal(await page.locator('#ice-ex-modal-season').inputValue(),'2023');
+    await page.locator('#ice-ex-modal-season').selectOption('2021');
+    await page.waitForFunction(()=>/2022\/20220110\.jpg/.test(document.querySelector('#ice-ex-daily-image')?.getAttribute('src')||''),null,{timeout:10000});
+    assert.equal(await seasonSelect.inputValue(),'2021');
+    await page.locator('#ice-ex-modal-season').selectOption('2022');
+    await page.waitForFunction(()=>/unavailable/i.test(document.querySelector('#ice-ex-season-status')?.textContent||''),null,{timeout:10000});
+    assert.equal(await page.locator('#ice-ex-daily-image').isVisible(),false,
+      'An unavailable archive must not reuse a previous winter image');
+    await page.locator('#ice-ex-modal-season').selectOption('auto');
+    await page.locator('#ice-ex-modal-close').click();
+    await page.waitForFunction(()=>/2026|2027/.test(document.querySelector('#ice-ex-chart-value')?.textContent||''),null,{timeout:8000});
+
 
     await slider.fill('0');
     assert.match(await page.locator('#ice-ex-chart-value').textContent(),/4%/);
