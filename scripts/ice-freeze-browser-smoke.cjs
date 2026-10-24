@@ -110,7 +110,7 @@ async function run(){
     assert.equal(errors.length,0,'Page JS error at '+width+' '+season+': '+errors.join('\n'));
     assert.match(await page.locator('#ice-ex-chart-value').textContent(),/Lake Huron/);
     const note=await page.locator('#ice-ex-timeline-note').textContent();
-    assert.match(note,inWinter?/whole-lake coverage/:/last completed winter/);
+    assert.match(note,inWinter?/Current winter/:/Latest completed winter/);
     const chartPoints=await page.locator('#ice-ex-chart path').count();
     assert.ok(chartPoints>0,'SVG data trend missing');
     const slider=page.locator('#ice-ex-slider');
