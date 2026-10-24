@@ -1181,3 +1181,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Old shared links that named varieties map onto their crop through an alias table, so existing permalinks still open.
 - Tests and the behavioural usability gate (100/100) updated. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: owner reviews the preview and decides on merge.
+
+### Seaway fresh-eyes interaction repair — October 24, 2026
+
+- Owner requested a contrarian review and fixes. Reproduced the country comparison disappearing when choosing Iroquois; code review also found stale map/ship selection, a viewing-to-ships action that left the map offscreen, misleading shared empty states and region summaries discarding wider cached evidence. Default to both countries; preserve that comparison and explicit country choice in URLs/Back. Clear prior ship selection when inspecting a lock/place, switching regions or filtering that ship out; reset stale map detail and close obsolete popups. “Check ships” now returns to the ship-watch section. Loading, unreachable source, no filter matches and checked quiet water have distinct messages, with a same-region filter reset. Use newer cached evidence across scopes, retain available regional evidence during a wider outage, and mark the chosen regional card.
+- Owning repo chrisizworski-com; base main 06ece730 Agent verification succeeded (40090039952). Added six regression tests that run actual application actions with network/chart drawing isolated, alongside the existing 19 Seaway tests. Full gate, PR and deployed interaction results are recorded in the release PR. No new data, canonical or ad-policy changes. GSC/GA4/AdSense NOT AVAILABLE; no growth or human-usability uplift claimed.
+- Exactly one next action: verify the repaired comparison, region/filter recovery and viewing-to-ships paths in the deployed browser, then release after green checks.
