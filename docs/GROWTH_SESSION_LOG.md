@@ -1146,3 +1146,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner could not find a way back to the entire mapped Seaway. Replaced “Fit selected region” with an always-visible “View entire Seaway” map button on both canonical pages. It selects all five researched regions (Montreal to Lake Ontario), fits their bounds, clears ship name/type filters and selected ship, closes the popup, and restores the map overview. The button also works when the region is already “all” but a lock/ship or manual zoom has narrowed the map. The regional selector now calls its wide option “Entire Seaway.” Existing locks, camera panel and viewing plans remain available.
 - Based on main ed6b6fab; full gate, latest main verification, PR and deployed interaction evidence will be recorded in the release PR. GSC/GA4/AdSense metrics NOT AVAILABLE; no search or revenue uplift claimed.
 - Exactly one next action: verify and release the full-map return from regional, filtered and zoomed-in map states on both pages.
+
+
+### Seaway map-return script cache correction — October 23, 2026
+
+- PR #1138 merged as 24bc71e6 and Vercel production succeeded. Live browser acceptance caught the new button label using a previously cached `seaway.js?v=20261023d` (asset cache max-age 14400); its prior handler only refit the selected region. Bumped the script URL to 20261023e in the source generator and both emitted pages so returning visitors receive the new handler. The unversioned production asset already contains the new code.
+- All 56 gates passed for the map-return code; repeat full gate and fresh-version live interaction are recorded in the correction PR. GSC/GA4/AdSense results NOT AVAILABLE.
+- Exactly one next action: release the cache correction and verify the regional/filter/zoom return on the live pages using the new script URL.
