@@ -1,0 +1,732 @@
+{
+  "schemaVersion": 2,
+  "updatedOn": "2026-10-24",
+  "description": "Curated historical layup archive; 2024–25 and 2025–26 source-dated records in US and Canadian Great Lakes harbors. Incomplete samples, with explicit evidence status and no inferred current positions.",
+  "harbors": [
+    {
+      "id": "superior",
+      "name": "Superior, Wisconsin",
+      "display": "Duluth–Superior harbor",
+      "lake": "Lake Superior",
+      "lat": 46.724,
+      "lon": -92.086,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Map marker identifies the Superior harbor area only. Individual docks are listed in each vessel record; no vessel is placed at an invented berth coordinate.",
+      "country": "US"
+    },
+    {
+      "id": "sturgeon-bay",
+      "name": "Sturgeon Bay, Wisconsin",
+      "display": "Sturgeon Bay / Fincantieri Bay Shipbuilding",
+      "lake": "Lake Michigan / Green Bay",
+      "lat": 44.832,
+      "lon": -87.378,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Harbor-wide reference near Sturgeon Bay. Vessel dry-dock positions and private shipyard access are NOT represented by map coordinates; berths can change during maintenance.",
+      "country": "US"
+    },
+    {
+      "id": "milwaukee",
+      "name": "Milwaukee, Wisconsin",
+      "display": "Milwaukee commercial harbor",
+      "lake": "Lake Michigan",
+      "lat": 43.014,
+      "lon": -87.883,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate Milwaukee harbor reference; the Stewart J. Cort's winter berth and access permissions were not documented. Do not treat the marker as a ship position or driving destination.",
+      "country": "US"
+    },
+    {
+      "id": "owen-sound",
+      "name": "Owen Sound, Ontario",
+      "display": "Owen Sound harbor / Georgian Bay",
+      "country": "CA",
+      "lake": "Lake Huron / Georgian Bay",
+      "lat": 44.578,
+      "lon": -80.944,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Reference for Owen Sound inner harbor only; not a private berth or dockside public access point. Icebreaking can temporarily disturb shoreline ice."
+    },
+    {
+      "id": "toledo",
+      "name": "Toledo, Ohio",
+      "display": "Port of Toledo / Maumee Bay",
+      "country": "US",
+      "lake": "Lake Erie",
+      "lat": 41.669,
+      "lon": -83.485,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Toledo harbor context point only. Source does not identify an individual berth or shipyard; do not present this as an actual vessel position."
+    }
+  ],
+  "seasons": [
+    {
+      "id": "2026-27",
+      "label": "Winter 2026–27",
+      "state": "upcoming_unconfirmed",
+      "asOf": "2026-10-24",
+      "note": "The 2026–27 layup season is not yet confirmed in this registry. Do not inherit last winter's locations.",
+      "records": []
+    },
+    {
+      "id": "2024-25",
+      "label": "Winter 2024–25",
+      "state": "historical_snapshot",
+      "asOf": "2025-01-31",
+      "note": "A deliberately incomplete older archive: two separately reported Owen Sound winter berths. The Algoma Compass record links to the same vessel identity as in 2025–26; no claim of continuous winter occupancy or complete fleet coverage.",
+      "records": [
+        {
+          "identity": {
+            "key": "algoma-compass",
+            "imo": "7326245",
+            "mmsi": null,
+            "matchPolicy": "verified_imo_and_curated_aliases"
+          },
+          "aliases": [
+            "Roger M. Kyes",
+            "Adam E. Cornelius (1989–2018)"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "berth": "Owen Sound harbor — exact berth not verified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2025-01-31",
+          "evidenceClass": "local_maritime_museum",
+          "evidence": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "title": "The Algoma Compass Arrives for Winter Layup (reviews previous winters)",
+            "publisher": "Community Waterfront Heritage Centre",
+            "published": "2026-01-24"
+          },
+          "summary": "Local waterfront historians identify Owen Sound as a 2025 winter stop for Algoma Compass. A January 2026 local news report captions a photograph taken after its January 31, 2025 docking. Those retrospective sources establish the earlier season but do not independently verify a precise berth.",
+          "events": [
+            {
+              "date": "2025-01-31",
+              "type": "historical_arrival",
+              "text": "A later news report dates a photograph of the ship after docking at Owen Sound to January 31, 2025; the local maritime museum confirms a 2025 winter stay.",
+              "source": "https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/",
+              "sourceClass": "journalistic_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "A year before the icebreaker-assisted 2026 arrival, the ship also used Owen Sound for its winter stay.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "oakglen",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "aliases": [
+            "M/V Oakglen"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "oakglen",
+          "name": "Oakglen",
+          "harborId": "owen-sound",
+          "berth": "East side of Owen Sound harbor — individual berth unverified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2024-12-31",
+          "evidenceClass": "operator_statement",
+          "evidence": {
+            "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+            "title": "MV Oakglen Stays In Owen Sound For Winter",
+            "publisher": "Bayshore Broadcasting quoting CSL Ships director of communications",
+            "published": "2024-12-31"
+          },
+          "summary": "On December 31, 2024, the Oakglen reached Owen Sound from Port Colborne for winter layup. CSL confirmed plans for general maintenance before the next shipping season. The 1980-built gearless freighter relies on shore equipment rather than its own unloading gear.",
+          "events": [
+            {
+              "date": "2024-12-31",
+              "type": "arrival",
+              "text": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+              "sourceClass": "operator_statement"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Built in 1980, approximately 222 metres long, and described by CSL as a gearless bulk carrier.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+            }
+          ],
+          "photo": {
+            "file": "Ship Oakglen.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg",
+            "creator": "GuavaTrain",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2021-12-19",
+            "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph."
+          }
+        }
+      ]
+    },
+    {
+      "id": "2025-26",
+      "label": "Winter 2025–26",
+      "state": "historical_snapshot",
+      "asOf": "2026-01-30",
+      "note": "Twelve 2025–26 historical reports across Superior, Sturgeon Bay, Milwaukee, Owen Sound (Ontario) and Toledo: 10 source-confirmed, 2 explicitly reported. No claim of full Great Lakes coverage; dates and berths remain source-specific.",
+      "records": [
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "burns-harbor",
+          "name": "Burns Harbor",
+          "aliases": [],
+          "berth": "Redwood Group Elevator M",
+          "summary": "The 2025–26 port roster places Burns Harbor at Elevator M rather than at a shipyard. A winter berth does not establish that any particular repairs were scheduled.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Redwood Group Elevator M in Superior's winter layup roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ],
+          "identity": {
+            "key": "burns-harbor",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "honorable-james-l-oberstar",
+          "name": "Honorable James L. Oberstar",
+          "aliases": [
+            "Hon. James L. Oberstar",
+            "James L. Oberstar"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "The port lists the Oberstar among the vessels wintering at Fraser. Harbor camera reporting documents its departure on March 23, 2026, the first outbound vessel that spring.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Fraser Shipyards for winter 2025–26.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-23",
+              "type": "departure",
+              "text": "Duluth Harbor Cam reported the Oberstar departing as the first ship out of port that spring.",
+              "source": "https://www.duluthharborcam.com/search?max-results=5&updated-max=2026-04-05T08%3A40%3A00-05%3A00"
+            }
+          ],
+          "identity": {
+            "key": "honorable-james-l-oberstar",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "indiana-harbor",
+          "name": "Indiana Harbor",
+          "aliases": [],
+          "berth": "Ogdensburg Pier",
+          "summary": "Indiana Harbor spent the documented layup at Ogdensburg Pier in Superior. This is a verified berth, not a claim of a specific overhaul or scheduled sailing date.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Ogdensburg Pier for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ],
+          "identity": {
+            "key": "indiana-harbor",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "john-j-boland",
+          "name": "John J. Boland",
+          "aliases": [
+            "John J Boland"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "The port's verified January roster places John J. Boland at Fraser Shipyards. The specific scope of vessel work remains unconfirmed here.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Fraser Shipyards for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ],
+          "identity": {
+            "key": "john-j-boland",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "lee-a-tregurtha",
+          "name": "Lee A. Tregurtha",
+          "aliases": [
+            "Lee A Tregurtha"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "Built in 1942 as a Navy tanker, Lee A. Tregurtha served during World War II before its Great Lakes career. Duluth Harbor Cam recorded its arrival for Fraser winter layup on January 16, 2026.",
+          "events": [
+            {
+              "date": "2026-01-16",
+              "type": "arrival",
+              "text": "Duluth Harbor Cam documented arrival for winter layup at Fraser Shipyards.",
+              "source": "https://www.duluthharborcam.com/2026/01/lee-tregurtha-arrived-in-duluth-01162026.html"
+            },
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Confirmed at Fraser Shipyards in the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-04-05",
+              "type": "departure",
+              "text": "Duluth Harbor Cam reported a loaded departure through ice on Lake Superior.",
+              "source": "https://www.duluthharborcam.com/search/label/Lee%20A%20Tregurtha"
+            }
+          ],
+          "photo": {
+            "file": "Lee_A._Tregurtha_in_Soo_MI.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Lee_A._Tregurtha_in_Soo_MI.jpg",
+            "creator": "U.S. Army Corps of Engineers, Detroit District",
+            "license": "Public domain (U.S. federal government)",
+            "date": "2021-09-10",
+            "alt": "Lee A. Tregurtha transiting the Soo Locks in a 2021 photograph; not a winter layup image."
+          },
+          "identity": {
+            "key": "lee-a-tregurtha",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "mesabi-miner",
+          "name": "Mesabi Miner",
+          "aliases": [],
+          "berth": "Fraser Shipyards",
+          "summary": "Fraser Shipyards described winter 2025–26 as Mesabi Miner's first winter layup at its Superior yard. MPR reported the ship moving across the harbor March 22, 2026, to load iron ore for Cleveland.",
+          "events": [
+            {
+              "date": "2026-01-29",
+              "type": "yard",
+              "text": "Shipyard reported this was Mesabi Miner's first winter layup at Fraser.",
+              "source": "https://shipyards.marinelink.com/news/mesabi-miner/mesabi-miner-winter-lay-up-fraser-shipyards"
+            },
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Confirmed at Fraser Shipyards on the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-22",
+              "type": "departure",
+              "text": "MPR reported the vessel moved from its layup dock to load iron ore pellets in Duluth.",
+              "source": "https://www.mprnews.org/story/2026/03/24/great-lakes-shipping-season-starts-up-again-in-duluth-port"
+            }
+          ],
+          "photo": {
+            "file": "Mesabi_Miner_Cargo_Ship_in_Lake_Superior_-_Minnesota_(43981918974).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Mesabi_Miner_Cargo_Ship_in_Lake_Superior_-_Minnesota_(43981918974).jpg",
+            "creator": "Tony Webster",
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "date": "2018-09-14",
+            "alt": "Mesabi Miner sailing on Lake Superior in September 2018; not a winter layup photograph."
+          },
+          "identity": {
+            "key": "mesabi-miner",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "evidenceClass": "port_authority",
+          "berthPrecision": "dock_documented"
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "james-r-barker",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "dock_documented",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "id": "james-r-barker",
+          "name": "James R. Barker",
+          "aliases": [
+            "James R Barker",
+            "M/V James R. Barker"
+          ],
+          "statusAsOf": "2026-01-08",
+          "berth": "Fincantieri Bay Shipbuilding — graving dock on Jan 5",
+          "summary": "One thousand feet of lake freighter came through ice into Sturgeon Bay on January 5, assisted by four tugs. The historical society reports the Barker entered the shipyard's large graving dock for winter storage, a five-year inspection and painting. Later shipyard movements are distinct dated events, not assumed continuing dock occupancy.",
+          "evidence": {
+            "url": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+            "title": "JAMES R. BARKER arrives at Fincantieri",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-08"
+          },
+          "events": [
+            {
+              "date": "2026-01-05",
+              "type": "arrival",
+              "text": "Arrived at Sturgeon Bay with tug assistance; entered the Fincantieri graving dock for winter storage and five-year inspection.",
+              "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+              "sourceClass": "maritime_historical_society"
+            },
+            {
+              "date": "2026-03-23",
+              "type": "reported_departure",
+              "text": "Community port observers reported the Barker leaving its winter berth with tug and Coast Guard assistance.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Launched in 1976; the first thousand-foot Great Lakes ship built with its wheelhouse aft.",
+              "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/"
+            }
+          ],
+          "photo": {
+            "file": "James R Barker.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:James_R_Barker.jpg",
+            "creator": "Levi Gates",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2014-05-18",
+            "alt": "James R. Barker crossing the Straits of Mackinac in May 2014; not a winter layup photograph."
+          }
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "edgar-b-speer",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "facility_reported",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "id": "edgar-b-speer",
+          "name": "Edgar B. Speer",
+          "aliases": [
+            "Edgar B Speer",
+            "M/V Edgar B. Speer"
+          ],
+          "statusAsOf": "2026-01-21",
+          "berth": "Fincantieri Bay Shipbuilding — dock not independently verified",
+          "summary": "On January 18, the Speer pivoted at the entrance to Sturgeon Bay and backed toward Bay Shipbuilding with two tugs assisting. Unlike most thousand-footers, its unloading equipment works sideways near the stern; that specialized arrangement shapes the ports it can serve.",
+          "evidence": {
+            "url": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+            "title": "EDGAR B. SPEER arrives at Fincantieri",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-21"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "arrival",
+              "text": "Arrived at Fincantieri Bay Shipbuilding assisted by tugs Nickelena and Erika Kobasic.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+              "sourceClass": "maritime_historical_society"
+            },
+            {
+              "date": "2026-03-24",
+              "type": "reported_berth_move",
+              "text": "Community observer reported a shift into the large graving dock. This is not an official berth assignment.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Launched in 1980 and known for its unusual 52-foot transverse unloading boom.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
+            },
+            {
+              "text": "In 2006, assisted the Roger Blough after a rudder failure on the St. Marys River.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
+            }
+          ]
+        },
+        {
+          "harborId": "sturgeon-bay",
+          "identity": {
+            "key": "manitoulin",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "berthPrecision": "berth_unverified",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "id": "manitoulin",
+          "name": "Manitoulin",
+          "aliases": [
+            "M/V Manitoulin"
+          ],
+          "statusAsOf": "2026-01-18",
+          "berth": "Fincantieri Bay Shipbuilding — specific berth unverified",
+          "summary": "Multiple local shipping observers reported Manitoulin wintering at Sturgeon Bay in January 2026. Later discussion described a mid-February move into the graving dock. These are community observations, not a published shipyard berth roster; the specific position remains unverified.",
+          "evidence": {
+            "url": "https://search.boatnerd.com/viewtopic.php?p=274441",
+            "title": "BoatNerd community reports — Sturgeon Bay activity in winter 2026",
+            "publisher": "BoatNerd Discussion Forum (community reports)",
+            "published": "2026-01-18"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "reported_arrival",
+              "text": "Community observers reported Manitoulin arriving for layup in Sturgeon Bay; dock assignment not verified.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441",
+              "sourceClass": "community_report"
+            },
+            {
+              "date": "2026-02-13",
+              "type": "reported_berth_move",
+              "text": "A subsequent community discussion described Manitoulin entering the shipyard's graving dock.",
+              "source": "https://search.boatnerd.com/viewtopic.php?t=178499",
+              "sourceClass": "community_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Its reported winter shifts show why a winter layup is a series of changing yard events rather than one fixed berth.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            }
+          ]
+        },
+        {
+          "id": "stewart-j-cort",
+          "name": "Stewart J. Cort",
+          "aliases": [
+            "Stewart J Cort",
+            "M/V Stewart J. Cort"
+          ],
+          "identity": {
+            "key": "stewart-j-cort",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "milwaukee",
+          "berth": "Milwaukee harbor — precise berth not documented",
+          "berthPrecision": "berth_unverified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-20",
+          "evidenceClass": "maritime_historical_society",
+          "evidence": {
+            "url": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+            "title": "STEWART J. CORT arrives in Milwaukee",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-20"
+          },
+          "summary": "The Stewart J. Cort reached Milwaukee for winter layup on January 20, 2026. When it began service in 1972 it was the Great Lakes' first 1,000-foot freighter, and it remains unusual for its wheelhouse and crew accommodations at the bow rather than the stern.",
+          "events": [
+            {
+              "date": "2026-01-20",
+              "type": "arrival",
+              "text": "Wisconsin Marine Historical Society documented the Cort's arrival for winter layup in Milwaukee. The precise berth was not specified.",
+              "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+              "sourceClass": "maritime_historical_society"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "First thousand-foot commercial freighter on the Great Lakes, entering service in 1972; its wheelhouse and living quarters are forward.",
+              "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "algoma-compass",
+            "imo": "7326245",
+            "mmsi": null,
+            "matchPolicy": "verified_imo_and_curated_aliases"
+          },
+          "aliases": [
+            "Roger M. Kyes",
+            "Adam E. Cornelius (1989–2018)"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "berth": "Owen Sound harbor — specific berth not verified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-24",
+          "evidenceClass": "local_maritime_museum",
+          "evidence": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "title": "The Algoma Compass Arrives for Winter Layup",
+            "publisher": "Community Waterfront Heritage Centre",
+            "published": "2026-01-24"
+          },
+          "summary": "The Compass finally reached Owen Sound on January 19 after waiting offshore for a Canadian Coast Guard icebreaker to open the harbor. The 1973-built bulk carrier's recurring winter visits make it a natural ship to follow from one winter to the next.",
+          "events": [
+            {
+              "date": "2026-01-18",
+              "type": "icebreak_assistance",
+              "text": "CCGS Judy LaMarsh entered Owen Sound to break harbor ice so the waiting Compass could come in.",
+              "source": "https://waterfrontheritage.ca/ccgs-judy-lamarsh-breaks-the-ice/",
+              "sourceClass": "local_maritime_museum"
+            },
+            {
+              "date": "2026-01-19",
+              "type": "arrival",
+              "text": "The Compass tied up for winter layup following a second day of harbor icebreaking.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+              "sourceClass": "local_maritime_museum"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Built in 1973; earlier names were Roger M. Kyes and Adam E. Cornelius, before becoming Algoma Compass.",
+              "source": "https://www.boatnerd.com/vessels/lakers/algoma-central/algoma-compass/"
+            },
+            {
+              "text": "The operator lists Algoma Compass as a Canadian-flagged River Class bulk carrier built in 1973.",
+              "source": "https://www.algonet.com/ship/algoma-compass/"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "key": "american-spirit",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "aliases": [
+            "M/V American Spirit"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "american-spirit",
+          "name": "American Spirit",
+          "harborId": "toledo",
+          "berth": "Port of Toledo — specific berth not verified",
+          "status": "reported_historical",
+          "statusAsOf": "2026-01-22",
+          "evidenceClass": "journalistic_report",
+          "evidence": {
+            "url": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+            "title": "USCG Icebreakers Aid Great Lakes Shipping as Arctic Front Ices the Lakes",
+            "publisher": "The Maritime Executive",
+            "published": "2026-01-22"
+          },
+          "summary": "The thousand-foot American Spirit reached Toledo on January 21 after the Coast Guard cutter Neah Bay assisted its progress through ice on Lake Erie. Contemporary reporting described Toledo as the vessel's destination for winter layup, but did not identify a dock or subsequent berth confirmation.",
+          "events": [
+            {
+              "date": "2026-01-21",
+              "type": "reported_layup_arrival",
+              "text": "Media reporting says Neah Bay escorted American Spirit through Lake Erie ice and it reached Toledo intending winter layup; specific berth unconfirmed.",
+              "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+              "sourceClass": "journalistic_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "A roughly 1,004-foot bulk carrier operating on the Great Lakes since 1978.",
+              "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+            }
+          ],
+          "photo": {
+            "file": "American Spirit.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:American_Spirit.jpg",
+            "creator": "U.S. Army Corps of Engineers Detroit District (photo by Michelle Hill)",
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "date": "2011-09-15",
+            "alt": "American Spirit inside the Soo Locks in September 2011; not a winter layup photograph."
+          }
+        }
+      ]
+    }
+  ]
+}

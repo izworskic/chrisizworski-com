@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "updatedOn": "2026-10-24",
+  "description": "Permanent source-linked vessel biographies. Facts are ship-specific; winter berths belong to distinct seasonal records. Image usage remains inherited from rights-verified vessel registry records only.",
+  "profiles": [
+    {
+      "id": "algoma-compass",
+      "name": "Algoma Compass",
+      "tagline": "A ship that keeps rewriting its name—and its winters.",
+      "intro": "Built in Toledo in 1973, this River Class self-unloading freighter has sailed under three names and two national flags. Now Algoma Compass, it has returned to Owen Sound for winter layup more than once; the 2026 arrival required an icebreaker.",
+      "specs": [
+        {
+          "name": "Built",
+          "value": "1973",
+          "source": "https://www.algonet.com/ship/algoma-compass/"
+        },
+        {
+          "name": "IMO",
+          "value": "7326245",
+          "source": "https://www.boatnerd.com/vessels/lakers/algoma-central/algoma-compass/"
+        },
+        {
+          "name": "Previous names",
+          "value": "Roger M. Kyes; Adam E. Cornelius",
+          "source": "https://www.boatnerd.com/vessels/lakers/algoma-central/algoma-compass/"
+        },
+        {
+          "name": "Flag (operator listing)",
+          "value": "Canada",
+          "source": "https://www.algonet.com/ship/algoma-compass/"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "From Roger M. Kyes to Algoma Compass",
+          "body": "The vessel entered service as Roger M. Kyes in 1973, became Adam E. Cornelius in 1989, and took the Algoma Compass name after joining Canadian ownership. Its history shows that one ship can accumulate several identities without becoming several different vessels.",
+          "source": "https://www.boatnerd.com/vessels/lakers/algoma-central/algoma-compass/"
+        },
+        {
+          "heading": "The winter Owen Sound needed an icebreaker",
+          "body": "In January 2026 the Compass waited near Leith as harbor ice blocked its way. The Canadian Coast Guard's Judy LaMarsh opened a route, enabling the freighter to reach its winter berth January 19.",
+          "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+        },
+        {
+          "heading": "Why annual records matter",
+          "body": "Owen Sound's waterfront museum also records a winter stay in 2025. Linking those separate winters shows a recurring harbor relationship without inventing a continuous route or precise berth location.",
+          "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+        }
+      ]
+    },
+    {
+      "id": "lee-a-tregurtha",
+      "name": "Lee A. Tregurtha",
+      "tagline": "A World War II tanker that became a Great Lakes working giant.",
+      "intro": "Few freighters have made a transformation like the Lee A. Tregurtha. Built as the tanker Chiwawa in 1942, it served during World War II before extensive reconstruction made it a Great Lakes ore carrier. Winter shipyard work keeps a remarkable hull's story moving.",
+      "specs": [
+        {
+          "name": "Built",
+          "value": "1942",
+          "source": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/"
+        },
+        {
+          "name": "Historic identity",
+          "value": "Chiwawa",
+          "source": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/"
+        },
+        {
+          "name": "Modern length",
+          "value": "826 feet",
+          "source": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "From wartime tanker to ore carrier",
+          "body": "As Chiwawa, the vessel saw wartime service on both the Atlantic and Pacific oceans and was present in Tokyo Bay for Japan's formal surrender in September 1945. In 1959–60, conversion for Great Lakes use included substantial lengthening and hull alterations.",
+          "source": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/"
+        },
+        {
+          "heading": "A winter at Fraser Shipyards",
+          "body": "The Duluth-Superior Port Authority recorded Lee A. Tregurtha among six active vessels wintering in Superior during 2025–26, at Fraser Shipyards. The berth is a dated historical report, not the ship's current location.",
+          "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+        }
+      ]
+    },
+    {
+      "id": "james-r-barker",
+      "name": "James R. Barker",
+      "tagline": "The first thousand-footer built entirely on the Great Lakes.",
+      "intro": "James R. Barker entered service in 1976 as a landmark of domestic lake shipbuilding. For winter 2025–26, this thousand-footer came into Sturgeon Bay for major inspections and painting in Fincantieri's graving dock.",
+      "specs": [
+        {
+          "name": "Entered service",
+          "value": "1976",
+          "source": "https://interlakesteamship.com/about-us/our-history/"
+        },
+        {
+          "name": "Length",
+          "value": "1,004 feet",
+          "source": "https://interlakesteamship.com/about-us/our-history/"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "A turning point in Great Lakes shipbuilding",
+          "body": "Interlake Steamship describes Barker as the first 1,000-foot-class freighter built entirely on the Lakes, marking a new era of longer vessels serving the largest locks and ore routes.",
+          "source": "https://interlakesteamship.com/about-us/our-history/"
+        },
+        {
+          "heading": "A winter with the hull exposed",
+          "body": "The Wisconsin Marine Historical Society documented Barker's January 5, 2026 arrival in Sturgeon Bay, with tug assistance before entering Fincantieri Bay Shipbuilding's large graving dock for winter storage and a five-year inspection.",
+          "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/"
+        }
+      ]
+    },
+    {
+      "id": "stewart-j-cort",
+      "name": "Stewart J. Cort",
+      "tagline": "The Great Lakes' first thousand-foot freighter.",
+      "intro": "Before the now-familiar thousand-footers, Stewart J. Cort pioneered a new scale of cargo carrier in 1972. Its early construction story stretched from Mississippi to Erie, Pennsylvania, and reshaped what the Great Lakes could move.",
+      "specs": [
+        {
+          "name": "Entered service",
+          "value": "1972",
+          "source": "https://www.greatlakesvesselhistory.com/histories-by-name/c/cort-stewart-j"
+        },
+        {
+          "name": "Length",
+          "value": "1,000 feet",
+          "source": "https://www.greatlakesvesselhistory.com/histories-by-name/c/cort-stewart-j"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "Building a ship in pieces",
+          "body": "The forward and after sections originated at Ingalls in Pascagoula, Mississippi, and were later joined to a Great Lakes-built cargo midsection at Erie. The unusual construction process helped launch the first thousand-foot vessel on the Lakes.",
+          "source": "https://www.greatlakesvesselhistory.com/histories-by-name/c/cort-stewart-j"
+        },
+        {
+          "heading": "A winter in Milwaukee",
+          "body": "Wisconsin Marine Historical Society reported the Cort arriving in Milwaukee January 20, 2026 for winter layup. The source confirms the harbor but does not establish a specific dock, so the atlas only plots the harbor.",
+          "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
+        }
+      ]
+    },
+    {
+      "id": "american-spirit",
+      "name": "American Spirit",
+      "tagline": "A thousand-footer racing a January freeze.",
+      "intro": "American Spirit illustrates how the final miles before winter layup can demand as much planning as a long lake voyage. In January 2026, Coast Guard icebreaking assistance helped the vessel reach Toledo.",
+      "specs": [
+        {
+          "name": "Entered service",
+          "value": "1978",
+          "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+        },
+        {
+          "name": "Approximate length",
+          "value": "1,004 feet",
+          "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "The Lake Erie ice escort",
+          "body": "On January 21, 2026, the Coast Guard cutter Neah Bay helped American Spirit make headway through heavy Lake Erie ice. Contemporary reporting said the vessel reached Toledo bound for winter layup, but did not identify a berth. The atlas therefore treats the winter berth as reported, not confirmed.",
+          "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+        },
+        {
+          "heading": "An archive, not a live tracker",
+          "body": "The January report explains where the ship was heading at that point in history. It cannot establish where American Spirit is today; current passages belong in the separate live AIS tracker.",
+          "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+        }
+      ]
+    },
+    {
+      "id": "oakglen",
+      "name": "Oakglen",
+      "tagline": "A Canadian bulk carrier's quiet maintenance winter.",
+      "intro": "CSL's Oakglen entered Owen Sound on the last day of 2024 for the 2024–25 winter layup. The ship's winter is a useful lesson in the difference between a port confirmed by its operator and a specific dock that public sources do not identify.",
+      "specs": [
+        {
+          "name": "Built",
+          "value": "1980",
+          "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+        },
+        {
+          "name": "Length",
+          "value": "Approx. 222 metres",
+          "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+        },
+        {
+          "name": "Cargo handling",
+          "value": "Gearless bulk carrier",
+          "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+        }
+      ],
+      "chapters": [
+        {
+          "heading": "A last-day arrival",
+          "body": "Bayshore Broadcasting reported the vessel's arrival from Port Colborne on December 31, 2024. A Canada Steamship Lines spokesperson confirmed the Owen Sound winter berth and plans for general maintenance.",
+          "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+        },
+        {
+          "heading": "How a gearless ship unloads",
+          "body": "Unlike self-unloading lakers, gearless bulk carriers rely on cargo-handling facilities in the port. The difference helps explain why particular ships serve particular trades and berths across the lakes.",
+          "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+        }
+      ]
+    }
+  ]
+}
