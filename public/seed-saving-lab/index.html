@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#193d32">
+<meta name="theme-color" content="#faf7f0">
 <title>Cross-Pollination Explorer | Chris Izworski</title>
 <meta name="description" content="Can your vegetables and flowers cross? Explore 67 plants, whole-garden conflicts, seed-saving methods and what future generations might inherit.">
 <link rel="canonical" href="https://chrisizworski.com/seed-saving-lab/">
@@ -16,109 +16,159 @@
 <meta name="author" content="Chris Izworski">
 <meta name="robots" content="index,follow">
 <style>
-:root{--forest:#173d33;--pine:#255648;--sage:#718f75;--cream:#f5f1e6;--paper:#fffdf8;--ink:#1f2b25;--muted:#5d6d65;--sand:#e9e3d4;--gold:#c08a4a;--rust:#a4553a;--line:#dcd8c8;--yes:#a4553a;--yes-bg:#fbeee7;--no:#2f6b4c;--no-bg:#e8f2ea;--maybe:#8a6418;--maybe-bg:#fbf3df;--managed:#355f73;--managed-bg:#e7f0f4}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.55;font-size:16px}
+:root{
+ --bg:#faf7f0;--card:#fffdf8;--ink:#2b3530;--muted:#66736c;--line:#e6e0d2;--soft:#f3efe4;
+ --sage:#7fa58a;--sage-soft:#e7f0e8;--pine:#3f6b55;--peach:#f6e3d6;--clay:#c4623f;--clay-soft:#fbece4;
+ --honey:#f6edd3;--honey-ink:#7c5a14;--slate:#5b7f97;--slate-soft:#e6eff4;--violet:#8a6fc4;
+ --bar:#5b8aa6;--bar-strong:#3f7392;--grid:#ebe6da;
+ --shadow:0 10px 30px rgba(63,84,70,.08),0 2px 6px rgba(63,84,70,.05);--r:20px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);line-height:1.6;font-size:16px}
 a{color:inherit}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
-h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height:1.12;margin:0}p{margin:0}
-.wrap{width:min(960px,calc(100% - 32px));margin:0 auto}
-.skip{position:absolute;top:-100px;left:1rem;padding:12px;background:#fff;z-index:100}.skip:focus{top:10px}
-:focus-visible{outline:3px solid #d9a75f;outline-offset:2px}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height:1.15;margin:0}p{margin:0}
+.wrap{width:min(1000px,calc(100% - 32px));margin:0 auto}
+.skip{position:absolute;top:-100px;left:1rem;padding:12px;background:#fff;z-index:100;border-radius:8px}.skip:focus{top:10px}
+:focus-visible{outline:3px solid #e2b26b;outline-offset:2px;border-radius:6px}
 .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-/* header */
-.site-header{background:#f7f5ed;border-bottom:1px solid var(--line)}
-.topnav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.12em;line-height:1.3}
-.brand-mark{display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:none;background:var(--forest);color:#fff;border:1px solid #bca97f;font-family:Georgia,serif;font-size:12px;letter-spacing:-3px;padding-right:3px;border-radius:50%}.brand-mark span{color:#d5be85}
-.brand small{display:block;font-size:9px;letter-spacing:.1em;color:#8c8170;font-weight:700;text-transform:uppercase}
-.nav-links{display:flex;gap:18px;font-size:13px;font-weight:700}.nav-links a{text-decoration:none;color:var(--pine)}.nav-links a:hover{text-decoration:underline}
-/* intro */
-.intro{background:var(--forest);background-image:radial-gradient(circle at 85% 0%,#2f5c49 0%,transparent 45%);color:#fff;padding:36px 0 92px}
-.eyebrow{font-size:11px;letter-spacing:.18em;font-weight:800;color:#d9c08d;text-transform:uppercase}
-.intro h1{font-size:clamp(36px,6vw,58px);letter-spacing:-.03em;margin:10px 0 12px}
-.intro p{max-width:640px;color:#dbe6dd;font-size:18px;line-height:1.5}
-/* tool card */
-.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(23,61,51,.10);padding:28px}
-.tool{margin-top:-64px;position:relative}
+.hidden{display:none!important}
+/* header + intro */
+.site-header{background:transparent}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.12em;line-height:1.3;color:var(--pine)}
+.brand-mark{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;background:var(--sage-soft);color:var(--pine);border:1px solid #cfdccf;font-family:Georgia,serif;font-size:12px;letter-spacing:-2px;padding-right:2px;border-radius:50%}.brand-mark span{color:var(--clay)}
+.brand small{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:600;text-transform:uppercase}
+.nav-links{display:flex;gap:6px}.nav-links a{text-decoration:none;color:var(--pine);font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px}.nav-links a:hover{background:var(--sage-soft)}
+.intro{padding:18px 0 30px;text-align:center}
+.eyebrow{display:inline-block;font-size:12px;letter-spacing:.14em;font-weight:700;color:var(--pine);text-transform:uppercase;background:var(--sage-soft);padding:6px 12px;border-radius:999px}
+.intro h1{font-size:clamp(36px,6vw,56px);letter-spacing:-.02em;margin:14px 0 10px;color:#24322b}
+.intro p{max-width:620px;margin:0 auto;color:var(--muted);font-size:18px}
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:28px}
 .pickers{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:end}
-.picker label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
-.picker select{width:100%;min-height:52px;font-size:17px;padding:10px 12px;border:1.5px solid #b9c4b8;border-radius:8px;background:#fff}
+.picker label{display:block;font-weight:600;font-size:14px;margin-bottom:6px;color:#45524b}
+.picker select{width:100%;min-height:54px;font-size:17px;padding:10px 14px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.picker select:hover{border-color:var(--sage)}.picker select:focus{border-color:var(--pine);box-shadow:0 0 0 4px var(--sage-soft);outline:none}
 .species{display:block;margin-top:6px;font-size:13px;color:var(--muted);min-height:20px}.species i{font-family:Georgia,serif}
-.swap{width:48px;height:52px;border:1.5px solid #b9c4b8;border-radius:8px;background:#fff;font-size:20px;color:var(--pine);margin-bottom:26px}.swap:hover{background:#f1f4ee}
-.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:var(--muted)}
-.chip-btn{border:1px solid #c8d2c6;background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;min-height:36px;color:var(--pine);font-weight:700}.chip-btn:hover{background:#eef3ec}
+.swap{width:50px;height:54px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff;font-size:20px;color:var(--pine);margin-bottom:26px;transition:transform .2s,background .15s}.swap:hover{background:var(--sage-soft);transform:rotate(180deg)}
+.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted)}
+.chip-btn{border:1px solid #dcd6c6;background:#fff;border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px;color:var(--pine);font-weight:600;transition:background .15s,border-color .15s}.chip-btn:hover{background:var(--sage-soft);border-color:var(--sage)}
 /* answer */
-.answer{margin-top:24px;border-radius:12px;padding:22px 24px;border:1px solid transparent}
-.answer.yes{background:var(--yes-bg);border-color:#efcfc0}.answer.no{background:var(--no-bg);border-color:#c8ddcd}.answer.maybe{background:var(--maybe-bg);border-color:#ecdcb2}.answer.managed,.answer.same{background:var(--managed-bg);border-color:#c6d9e2}
-.badge{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;color:#fff}
-.yes .badge{background:var(--yes)}.no .badge{background:var(--no)}.maybe .badge{background:var(--maybe)}.managed .badge,.same .badge{background:var(--managed)}
-.answer h2{font-size:clamp(26px,4vw,34px);margin:12px 0 8px;letter-spacing:-.01em}
-.why{font-size:16px;color:#33423a;max-width:720px}.why i{font-family:Georgia,serif}
-.steps-title{margin:20px 0 8px;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3f4f46}
-.steps{margin:0;padding-left:22px;display:grid;gap:8px}.steps li{padding-left:4px}.steps li::marker{color:var(--pine)}.steps.options{list-style:none;padding:0;gap:8px}.steps.options li{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);border-radius:8px;padding:10px 12px}.steps.options li b{display:block;margin-bottom:2px}
-.next-year{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,.08);font-size:14px;color:#3d4c44}.next-year strong{color:var(--ink)}
-.notes{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:#4b5a52;display:grid;gap:4px}.notes li::before{content:"• ";color:var(--gold)}
-.answer-foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:18px;font-size:13px}
-.link-btn{background:none;border:0;padding:6px 0;font-weight:700;color:var(--pine);text-decoration:underline;text-underline-offset:3px;min-height:36px}
+.answer{margin-top:24px;border-radius:18px;padding:24px;display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-areas:'head viz' 'body viz';gap:4px 28px;transition:background .3s}.ans-head{grid-area:head;min-width:0}.ans-body{grid-area:body;min-width:0}.pair-viz{grid-area:viz}
+.answer.yes{background:var(--clay-soft)}.answer.no{background:var(--sage-soft)}.answer.maybe{background:var(--honey)}.answer.managed,.answer.same{background:var(--slate-soft)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:#fff}
+.yes .badge{color:#9a4426}.no .badge{color:#2f6345}.maybe .badge{color:var(--honey-ink)}.managed .badge,.same .badge{color:#38627c}
+.badge::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor}
+.answer h2{font-size:clamp(26px,4vw,34px);margin:12px 0 8px}
+.why{font-size:16px;color:#3c4842}.why i{font-family:Georgia,serif}
+.steps-title{margin:20px 0 8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#56635c}
+.steps{margin:0;padding-left:22px;display:grid;gap:8px}.steps li::marker{color:var(--sage)}
+.steps.options{list-style:none;padding:0;gap:10px}
+.steps.options li{background:rgba(255,255,255,.75);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:34px 1fr;gap:2px 10px;align-items:start}
+.steps.options li .ico{grid-row:span 2;width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-content:center;font-size:17px}
+.steps.options li b{display:block}
+.next-year{margin-top:16px;padding:12px 14px;background:rgba(255,255,255,.6);border-radius:14px;font-size:14px;color:#46534c}.next-year strong{color:var(--ink)}
+.notes{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:#56635c;display:grid;gap:4px}.notes li::before{content:"• ";color:var(--sage)}
+.answer-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:16px;font-size:14px}
+.link-btn{background:none;border:0;padding:6px 0;font-weight:600;color:var(--pine);text-decoration:underline;text-decoration-color:#b9cbbd;text-underline-offset:4px;min-height:36px}.link-btn:hover{text-decoration-color:var(--pine)}
 .answer-foot a{color:var(--pine)}
-.share-out{width:100%;padding:8px;border:1px solid #b8c5b9;border-radius:6px;font-size:13px;background:#fff}
+.share-out{width:100%;margin-top:8px;padding:10px;border:1px solid #d9d4c4;border-radius:10px;font-size:13px;background:#fff}
+/* pair picture */
+.pair-viz{align-self:start;background:rgba(255,255,255,.7);border-radius:16px;padding:12px 14px;margin:0}.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:8px 0 2px;font-size:13px;border-top:1px solid rgba(0,0,0,.07);padding-top:10px}.facts dt{color:var(--muted)}.facts dd{margin:0;font-weight:600;color:var(--ink)}.facts i{font-family:Georgia,serif;font-weight:400}
+.pair-viz svg{display:block;width:100%;height:auto}
+.pv-name{font:600 13px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.pv-sp{font:italic 12px Georgia,serif;fill:#66736c}
+.pv-mid{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#45524b}
+@media(prefers-reduced-motion:no-preference){.pollen-dot{animation:drift 2.4s ease-in-out infinite}.pollen-dot:nth-of-type(2){animation-delay:.8s}.pollen-dot:nth-of-type(3){animation-delay:1.6s}}
+@keyframes drift{0%{opacity:0;transform:translateX(-50px)}30%,70%{opacity:1}100%{opacity:0;transform:translateX(50px)}}
 /* refine */
-.refine{margin-top:26px;border-top:1px solid var(--line);padding-top:22px}
-.refine h3{font-size:22px;margin-bottom:4px}.refine>p{font-size:14px;color:var(--muted);margin-bottom:14px}
-.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
-.q{border:0;margin:0;padding:0;min-width:0}.q legend,.q>label{display:block;font-weight:700;font-size:14px;margin-bottom:8px;padding:0}
+.refine{margin-top:26px;padding-top:22px;border-top:1px dashed var(--line)}
+.refine h3{font-size:22px;margin-bottom:4px}.refine>p{font-size:14px;color:var(--muted);margin-bottom:16px}
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px}
+.q{border:0;margin:0;padding:0;min-width:0}.q legend,.q>.q-label{display:block;font-weight:600;font-size:14px;margin-bottom:8px;padding:0;color:#45524b}
+.q-wide{grid-column:1/-1}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg label{position:relative}.seg input{position:absolute;opacity:0;width:1px;height:1px}
-.seg span{display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border:1.5px solid #c3ccc1;border-radius:8px;background:#fff;font-size:14px;cursor:pointer}
-.seg input:checked+span{background:var(--pine);border-color:var(--pine);color:#fff;font-weight:700}
-.seg input:focus-visible+span{outline:3px solid #d9a75f;outline-offset:2px}
-.dist-row{display:flex;align-items:center;gap:8px}.dist-row input{width:140px;min-height:42px;padding:8px 10px;border:1.5px solid #c3ccc1;border-radius:8px;font-size:16px;background:#fff}
-.dist-hint{display:block;font-size:13px;color:var(--muted);margin-top:6px}.dist-hint b{color:var(--ink)}
-.hidden{display:none!important}
-/* garden */
+.seg span{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1.5px solid #dcd6c6;border-radius:999px;background:#fff;font-size:14px;cursor:pointer;transition:background .15s,border-color .15s}
+.seg span:hover{border-color:var(--sage)}
+.seg input:checked+span{background:var(--pine);border-color:var(--pine);color:#fff;font-weight:600}
+.seg input:focus-visible+span{outline:3px solid #e2b26b;outline-offset:2px}
+/* distance track */
+.dist-wrap{background:var(--soft);border-radius:16px;padding:14px 16px}
+.dist-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dist-row input[type=number]{width:120px;min-height:44px;padding:8px 12px;border:1.5px solid #dcd6c6;border-radius:12px;font-size:16px;background:#fff}
+.dist-row input[type=range]{flex:1;min-width:180px;accent-color:var(--pine);height:28px}
+.dist-chart{display:block;width:100%;height:auto;margin-top:6px}
+.dc-tick{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
+.dc-label{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.dc-land{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#8a958f}
+.dist-hint{display:block;font-size:13px;color:var(--muted);margin-top:4px}.dist-hint b{color:var(--ink)}
+/* sections */
 .section{padding:56px 0 8px}
-.section-head .eyebrow{color:#9b7347}
-.section-head h2{font-size:clamp(28px,4vw,38px);margin:8px 0 8px}
-.section-head p{color:var(--muted);max-width:640px;margin-bottom:18px}
-.add-row{display:flex;gap:10px}.add-row select{flex:1;min-width:0;min-height:48px;font-size:16px;padding:8px 10px;border:1.5px solid #b9c4b8;border-radius:8px;background:#fff}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 20px;border:0;border-radius:8px;font-weight:800;font-size:15px;background:#e2c28c;color:#1d3d32;text-decoration:none}.btn:hover{background:#ecd1a2}
+.section-head{text-align:center;margin-bottom:22px}.section-head h2{font-size:clamp(28px,4vw,38px);margin:12px 0 8px}.section-head p{color:var(--muted);max-width:620px;margin:0 auto}
+.add-row{display:flex;gap:10px}.add-row select{flex:1;min-width:0;min-height:50px;font-size:16px;padding:8px 12px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 22px;border:0;border-radius:14px;font-weight:700;font-size:15px;background:var(--pine);color:#fff;text-decoration:none;transition:background .15s}.btn:hover{background:#355c48}
 .garden-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;padding:0;list-style:none}
-.garden-list li{display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid #cdd5cb;border-radius:999px;padding:4px 4px 4px 13px;font-size:14px}
-.garden-list button{border:0;background:none;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;color:#6a5a50}.garden-list button:hover{background:#f1ece6}
-.garden-meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;color:var(--muted)}
-.garden-results{margin-top:20px;display:grid;gap:16px}
-.group h3{font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.group .count{display:inline-grid;place-content:center;min-width:24px;height:24px;border-radius:12px;color:#fff;font-size:12px;padding:0 6px}
-.group.yes h3{color:var(--yes)}.group.yes .count{background:var(--yes)}.group.maybe h3{color:var(--maybe)}.group.maybe .count{background:var(--maybe)}.group.no h3,.group.no summary{color:var(--no)}.group.no .count{background:var(--no)}
-.pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center;background:#fff;border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.group.yes .pair{border-left-color:var(--yes)}.group.maybe .pair{border-left-color:var(--maybe)}.group.no .pair{border-left-color:#9dbba6}
+.garden-list li{display:inline-flex;align-items:center;gap:2px;background:#fff;border:1px solid #e0dacb;border-radius:999px;padding:4px 4px 4px 14px;font-size:14px}
+.garden-list button{border:0;background:none;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;color:#8a7a70}.garden-list button:hover{background:var(--clay-soft);color:var(--clay)}
+.garden-meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:14px;color:var(--muted)}
+.garden-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:20px;align-items:start}
+.viz-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.viz-card h3{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;font-weight:700;margin-bottom:2px}
+.viz-card .sub{font-size:13px;color:var(--muted);margin-bottom:8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:#4c5952;margin-bottom:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}.legend svg{flex:none}
+#pollen-web,#room-chart{display:block;width:100%;height:auto;overflow:visible}#room-chart{max-width:700px}
+.web-node circle{fill:#fff;stroke:#a9bcae;stroke-width:2}.web-node text{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.web-node.active circle,.web-node:focus-visible circle{stroke:var(--pine);stroke-width:3;fill:var(--sage-soft)}
+.web-node,.web-hit{cursor:pointer;outline:none}
+.web-edge{transition:opacity .15s}.web.dim .web-edge{opacity:.15}.web.dim .web-edge.on{opacity:1}
+.web-hit{stroke:transparent;stroke-width:16;fill:none}
+.web-hit:focus-visible+.web-edge,.web-hit:hover+.web-edge{stroke-width:5}
+.bar-row{cursor:default}.bar-row .bar{fill:var(--bar)}.bar-row.cross .bar{fill:var(--bar-strong)}.bar-row:hover .bar,.bar-row:focus-visible .bar{fill:#2f5f7c}.bar-row{outline:none}
+.bar-row text{font:12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#3c4842}.bar-row .val{font-weight:700;fill:#2b3530}.bar-row .tag{fill:#5d6a63;font-weight:600}
+.bar-grid{stroke:var(--grid);stroke-width:1}.bar-axis{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
+.garden-results{display:grid;gap:14px}
+.group h3{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:#45524b}
+.group .count{display:inline-grid;place-content:center;min-width:24px;height:24px;border-radius:12px;color:#fff;font-size:12px;padding:0 6px;letter-spacing:0}
+.group.yes .count{background:var(--clay)}.group.maybe .count{background:var(--violet)}.group.no .count{background:var(--sage)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s,box-shadow .15s}
+.pair.hl{border-color:var(--pine);box-shadow:0 0 0 3px var(--sage-soft)}
 .pair b{display:block}.pair small{display:block;color:var(--muted);font-size:13px}.pair small i{font-family:Georgia,serif}
-.pair .link-btn{white-space:nowrap}
-.group.no summary{cursor:pointer;font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px;padding:6px 0}
-.group.no .pair{grid-template-columns:1fr}.group.no summary::-webkit-details-marker{display:none}.group.no summary::after{content:"Show ▾";margin-left:auto;font-size:12px;letter-spacing:0;text-transform:none;text-decoration:underline;color:var(--pine)}.group.no[open] summary::after{content:"Hide ▴"}
-.garden-tools{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-size:13px}
-.empty{padding:18px;border:1px dashed #c3ccc1;border-radius:8px;color:var(--muted);font-size:14px}
+.group.no summary{cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:8px;padding:6px 0;color:#45524b;list-style:none}
+.group.no summary::-webkit-details-marker{display:none}.group.no summary::after{content:"Show ▾";margin-left:auto;font-size:13px;letter-spacing:0;text-transform:none;text-decoration:underline;color:var(--pine);font-weight:600}.group.no[open] summary::after{content:"Hide ▴"}
+.group.no .pair{grid-template-columns:1fr}
+.garden-tools{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:14px}
+.empty{padding:18px;border:1.5px dashed #ddd6c4;border-radius:14px;color:var(--muted);font-size:14px;background:#fff}
+/* tooltip */
+.viz-tip{position:fixed;z-index:50;pointer-events:none;background:#2b3530;color:#fff;border-radius:10px;padding:8px 11px;font-size:13px;line-height:1.4;max-width:260px;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;transition:opacity .1s}
+.viz-tip.show{opacity:1}.viz-tip b{display:block;font-size:14px}.viz-tip span{color:#d9e3dc}
 /* notes + trust */
-.field-notes{background:var(--forest);color:#e8efe9;margin-top:56px;padding:52px 0}
-.field-notes .eyebrow{color:#d9c08d}.field-notes h2{font-size:clamp(28px,4vw,36px);color:#fff;margin:8px 0 22px}
-.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.rules h3{font-size:21px;color:#fff;margin-bottom:6px}.rules p{font-size:15px;color:#cfdcd2}
-.science-foot{margin-top:22px;font-size:14px;color:#cfdcd2;max-width:760px}.science-foot a{color:#f0d7ad}
-.farm-photo{margin:26px 0 0}.farm-photo img{display:block;width:100%;height:auto;max-height:340px;object-fit:cover;border-radius:10px;border:1px solid #5e7a66}.farm-photo figcaption{padding-top:8px;font-size:12px;color:#cdd9cf}.farm-photo a{color:#f0d7ad}
-.trust{padding:44px 0}.trust h2{font-size:28px;margin-bottom:10px}.trust p{max-width:760px;color:#3f4e46;margin-bottom:10px}
-.trust details{margin-top:6px}.trust summary{cursor:pointer;font-weight:700}.trust ul{margin:10px 0 0;padding-left:20px;font-size:14px}
-footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px}footer b{color:#fff;letter-spacing:.1em;font-size:13px}footer a{color:#f0d7ad}footer p{margin-bottom:6px}
-/* responsive */
+.field-notes{background:var(--sage-soft);margin-top:60px;padding:52px 0}
+.field-notes h2{font-size:clamp(28px,4vw,36px);margin:12px 0 22px;text-align:center}.field-notes .eyebrow{background:#fff}
+.field-notes .center{text-align:center}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.rules article{background:#fff;border-radius:18px;padding:20px}.rules h3{font-size:20px;margin-bottom:6px}.rules p{font-size:15px;color:#4c5952}
+.science-foot{margin:22px auto 0;font-size:15px;color:#4c5952;max-width:760px;text-align:center}.science-foot a{color:var(--pine)}
+.farm-photo{margin:26px 0 0}.farm-photo img{display:block;width:100%;height:auto;max-height:340px;object-fit:cover;border-radius:18px}.farm-photo figcaption{padding-top:8px;font-size:13px;color:var(--muted);text-align:center}.farm-photo a{color:var(--pine)}
+.trust{padding:44px 0}.trust h2{font-size:28px;margin-bottom:10px}.trust p{max-width:760px;color:#4c5952;margin-bottom:10px}
+.trust details{margin-top:6px}.trust summary{cursor:pointer;font-weight:600;color:var(--pine)}.trust ul{margin:10px 0 0;padding-left:20px;font-size:14px}
+footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px}footer b{color:#fff;letter-spacing:.1em;font-size:13px}footer a{color:#f3dcc0}footer p{margin-bottom:6px}
+@media(max-width:820px){
+ .answer{grid-template-columns:1fr;grid-template-areas:'head' 'viz' 'body'}.pair-viz{max-width:380px;margin:10px 0 4px}
+ .garden-grid{grid-template-columns:1fr}
+}
 @media(max-width:760px){
- .card{padding:18px;border-radius:12px}.tool{margin-top:-72px}
- .intro{padding:26px 0 90px}.intro p{font-size:16px}
+ .card{padding:18px;border-radius:18px}
+ .intro{padding:4px 0 20px}.intro p{font-size:16px}
  .pickers{grid-template-columns:1fr;gap:4px}
- .swap{justify-self:center;margin:0;height:40px;width:44px;transform:rotate(90deg)}
+ .swap{justify-self:center;margin:0;height:42px;width:46px;transform:rotate(90deg)}.swap:hover{transform:rotate(270deg)}
  .answer{padding:18px}
  .q-grid{grid-template-columns:1fr}
  .rules{grid-template-columns:1fr}.foot-grid{grid-template-columns:1fr}
  .nav-links{display:none}
  .pair{grid-template-columns:1fr}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebApplication","name":"Cross-Pollination Explorer","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"Compare seed-saving plant species and explore seed isolation decisions","isAccessibleForFree":true,"dateModified":"2026-10-23","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@type":"Organization","name":"Freighter View Farms","url":"https://freighterviewfarms.com/"},"url":"https://chrisizworski.com/seed-saving-lab/"}]}</script>
 </head>
@@ -130,13 +180,13 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
 <main>
  <section class="intro">
   <div class="wrap">
-   <div class="eyebrow">Cross-Pollination Explorer</div>
+   <span class="eyebrow">Cross-Pollination Explorer</span>
    <h1>Will these plants cross?</h1>
    <p>Pick the plant you want to save seed from and what flowers near it. You get a straight answer and what to do about it.</p>
   </div>
  </section>
 
- <section class="wrap tool" id="explorer" aria-labelledby="checker-title">
+ <section class="wrap" id="explorer" aria-labelledby="checker-title">
   <h2 id="checker-title" class="visually-hidden">Check two plants</h2>
   <div class="card">
    <form id="compare-form" onsubmit="return false">
@@ -148,26 +198,37 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
     <div class="examples"><span>Try:</span><button type="button" class="chip-btn" data-example="squash">Zucchini + pumpkin</button><button type="button" class="chip-btn" data-example="flowers">Two zinnias</button><button type="button" class="chip-btn" data-example="brassicas">Kale + broccoli</button><button type="button" class="chip-btn" data-example="melon">Cucumber + melon</button></div>
 
     <div id="results" class="answer" aria-labelledby="result-heading">
-     <span id="live-verdict" class="visually-hidden" role="status" aria-live="polite"></span>
-     <span class="badge" id="status-label"></span>
-     <h2 id="result-heading"></h2>
-     <p class="why" id="result-detail"></p>
-     <p class="steps-title" id="options-title"></p>
-     <ul class="steps options" id="result-options"></ul>
-     <p class="steps-title" id="steps-title">What to do</p>
-     <ul class="steps" id="result-steps"></ul>
-     <p class="next-year" id="next-year"></p>
-     <ul class="notes" id="result-cautions"></ul>
-     <div class="answer-foot"><a href="#refine" class="link-btn">Fit it to your garden ↓</a><button type="button" class="link-btn" id="share-comparison">Copy link to this answer</button><span>Source: <a id="source-link" href="https://seedalliance.org/publications/seed-saving-guide/" target="_blank" rel="noopener noreferrer">Seed saving reference ↗</a></span></div>
-     <label class="visually-hidden" for="comparison-link">Link to this answer</label><input id="comparison-link" class="share-out" readonly hidden>
+     <div class="ans-head">
+      <span id="live-verdict" class="visually-hidden" role="status" aria-live="polite"></span>
+      <span class="badge" id="status-label"></span>
+      <h2 id="result-heading"></h2>
+      <p class="why" id="result-detail"></p>
+     </div>
+     <figure class="pair-viz" id="pair-viz"></figure>
+     <div class="ans-body">
+      <p class="steps-title" id="options-title"></p>
+      <ul class="steps options" id="result-options"></ul>
+      <p class="steps-title" id="steps-title">What to do</p>
+      <ul class="steps" id="result-steps"></ul>
+      <p class="next-year" id="next-year"></p>
+      <ul class="notes" id="result-cautions"></ul>
+      <div class="answer-foot"><a href="#refine" class="link-btn">Fit it to your garden ↓</a><button type="button" class="link-btn" id="share-comparison">Copy link to this answer</button><span>Source: <a id="source-link" href="https://seedalliance.org/publications/seed-saving-guide/" target="_blank" rel="noopener noreferrer">Seed saving reference ↗</a></span></div>
+      <label class="visually-hidden" for="comparison-link">Link to this answer</label><input id="comparison-link" class="share-out" readonly hidden>
+     </div>
     </div>
 
     <div class="refine" id="refine">
      <h3>Make the answer fit your garden</h3>
      <p id="refine-note">Each answer updates the result above.</p>
      <div class="q-grid">
+      <div class="q q-wide" id="q-distance"><span class="q-label" id="distance-label">How far apart are they?</span>
+       <div class="dist-wrap">
+        <div class="dist-row"><input id="distance-range" type="range" min="0" max="1000" step="10" value="0" aria-labelledby="distance-label" aria-describedby="distance-copy"><label class="visually-hidden" for="distance">Distance in feet</label><input id="distance" type="number" min="0" step="1" inputmode="numeric" placeholder="Feet"><span>feet</span></div>
+        <svg class="dist-chart" id="distance-chart" viewBox="0 0 640 106" role="img" aria-labelledby="distance-copy"></svg>
+        <span class="dist-hint" id="distance-copy"></span>
+       </div>
+      </div>
       <fieldset class="q" id="q-overlap"><legend>Will they flower at the same time?</legend><div class="seg"><label><input type="radio" name="overlap" value="yes" checked><span>Yes</span></label><label><input type="radio" name="overlap" value="no"><span>No</span></label><label><input type="radio" name="overlap" value="unknown"><span>Not sure</span></label></div></fieldset>
-      <div class="q" id="q-distance"><label for="distance">How far apart are they?</label><div class="dist-row"><input id="distance" type="number" min="0" step="1" inputmode="numeric" placeholder="Feet"><span>feet</span></div><span class="dist-hint" id="distance-copy"></span></div>
       <fieldset class="q" id="q-protection"><legend>Will you bag and hand-pollinate flowers?</legend><div class="seg"><label><input type="radio" name="protection" value="open" checked><span>No</span></label><label><input type="radio" name="protection" value="controlled"><span>Yes</span></label></div></fieldset>
       <fieldset class="q"><legend>What seed did you start with?</legend><div class="seg"><label><input type="radio" name="seedType" value="op"><span>Heirloom / open-pollinated</span></label><label><input type="radio" name="seedType" value="f1"><span>Hybrid (F1)</span></label><label><input type="radio" name="seedType" value="unknown" checked><span>Not sure</span></label></div></fieldset>
       <fieldset class="q"><legend>What do you want next year?</legend><div class="seg"><label><input type="radio" name="goal" value="preserve" checked><span>The same variety</span></label><label><input type="radio" name="goal" value="explore"><span>Surprises are fine</span></label></div></fieldset>
@@ -178,22 +239,35 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
  </section>
 
  <section class="wrap section" id="whole-garden" aria-labelledby="garden-heading">
-  <div class="section-head"><span class="eyebrow">Whole garden</span><h2 id="garden-heading">Which of my plants can cross?</h2><p>List what you're growing. Every pair is checked, and the ones that can cross come first.</p></div>
+  <div class="section-head"><span class="eyebrow">Whole garden</span><h2 id="garden-heading">Which of my plants can cross?</h2><p>List what you're growing. Every pair is checked: the web shows who can cross with whom, and the chart shows how much room each crop needs.</p></div>
   <div class="card">
    <label for="garden-pick" class="visually-hidden">Add a plant</label>
    <div class="add-row"><select id="garden-pick"></select><button class="btn" type="button" id="garden-add">Add</button></div>
    <ul class="garden-list" id="garden-plants" aria-label="Plants in your garden"></ul>
    <div class="garden-meta"><span id="garden-count"></span><button type="button" class="link-btn" id="garden-demo">Load an example garden</button><button type="button" class="link-btn" id="garden-clear">Clear</button></div>
-   <div class="garden-results" id="garden-results" aria-live="polite"></div>
+   <div class="garden-grid" id="garden-grid">
+    <div class="viz-card web" id="web-card">
+     <h3>Pollen web</h3><p class="sub">Tap a plant to see its partners. Tap a line to open that pair.</p>
+     <div class="legend"><span><svg width="26" height="8" aria-hidden="true"><line x1="1" y1="4" x2="25" y2="4" stroke="#c4623f" stroke-width="3" stroke-linecap="round"/></svg>Can cross</span><span><svg width="26" height="8" aria-hidden="true"><line x1="1" y1="4" x2="25" y2="4" stroke="#8a6fc4" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/></svg>Worth checking</span><span>No line: won't normally cross</span></div>
+     <svg id="pollen-web" viewBox="0 0 440 400" role="group" aria-label="Pollen web of your garden"></svg>
+    </div>
+    <div class="garden-results" id="garden-results" aria-live="polite"></div>
+   </div>
+   <div class="viz-card bars" id="bars-card" style="margin-top:22px">
+    <h3>Room each crop needs to stay true</h3><p class="sub">Published home-garden separation guideline per species in your garden. Darker bars have a crossing partner in your list.</p>
+    <svg id="room-chart" viewBox="0 0 640 120" role="img" aria-label="Separation guideline by species"></svg>
+    <details><summary class="link-btn">Show as a table</summary><table id="room-table" style="width:100%;font-size:14px;border-collapse:collapse;margin-top:8px"><thead><tr><th style="text-align:left">Species</th><th style="text-align:left">Your plants</th><th style="text-align:right">Guideline</th><th style="text-align:right">Plants to save from</th></tr></thead><tbody id="room-rows"></tbody></table></details>
+   </div>
    <div class="garden-tools" id="garden-tools"><button type="button" class="link-btn" id="share-garden">Copy link to this garden</button><button type="button" class="link-btn" id="export-garden">Download as spreadsheet (.csv)</button></div>
    <p id="garden-feedback" class="garden-meta" role="status" aria-live="polite"></p><label class="visually-hidden" for="share-fallback">Link to copy</label><input id="share-fallback" class="share-out" hidden readonly>
   </div>
  </section>
 
- <section class="field-notes" id="field-notes"><div class="wrap"><span class="eyebrow">How crossing works</span><h2>Three rules worth carrying into the garden.</h2><div class="rules"><article><h3>Learn the Latin name.</h3><p>A zucchini and some pumpkins are the same species. A cucumber and a watermelon aren't. Common names can lead you astray.</p></article><article><h3>Separate flowering—not just plants.</h3><p>Crossing needs compatible pollen and receptive flowers at the same time. Distance, timing, bagging, and controlled pollination change the situation.</p></article><article><h3>Protect diversity.</h3><p>Saving from one favorite plant may keep an interesting trait, but long-term preservation also depends on adequate population size and thoughtful selection.</p></article></div><p class="science-foot">Usually, cross-pollination affects the <em>next generation</em> grown from saved seeds, not the current tomato, squash, or flower's appearance. Corn kernels are a notable exception. <a href="https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/saving-vegetable-seeds" target="_blank" rel="noopener noreferrer">Read the University of Minnesota explanation ↗</a></p><figure class="farm-photo"><img src="https://freighterviewfarms.wordpress.com/wp-content/uploads/2026/06/chris-izworski-summer-garden-overview.jpg?w=900" width="900" height="600" alt="Summer vegetable garden at Freighter View Farms near Saginaw Bay" loading="lazy" decoding="async"><figcaption>From the Freighter View Farms garden, Bay City, Michigan · <a href="https://freighterviewfarms.com/" rel="noopener">Garden field notes ↗</a></figcaption></figure></div></section>
+ <section class="field-notes" id="field-notes"><div class="wrap"><div class="center"><span class="eyebrow">How crossing works</span><h2>Three rules worth carrying into the garden.</h2></div><div class="rules"><article><h3>Learn the Latin name.</h3><p>A zucchini and some pumpkins are the same species. A cucumber and a watermelon aren't. Common names can lead you astray.</p></article><article><h3>Separate flowering—not just plants.</h3><p>Crossing needs compatible pollen and receptive flowers at the same time. Distance, timing, bagging, and controlled pollination change the situation.</p></article><article><h3>Protect diversity.</h3><p>Saving from one favorite plant may keep an interesting trait, but long-term preservation also depends on adequate population size and thoughtful selection.</p></article></div><p class="science-foot">Usually, cross-pollination affects the <em>next generation</em> grown from saved seeds, not the current tomato, squash, or flower's appearance. Corn kernels are a notable exception. <a href="https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/saving-vegetable-seeds" target="_blank" rel="noopener noreferrer">Read the University of Minnesota explanation ↗</a></p><figure class="farm-photo"><img src="https://freighterviewfarms.wordpress.com/wp-content/uploads/2026/06/chris-izworski-summer-garden-overview.jpg?w=900" width="900" height="600" alt="Summer vegetable garden at Freighter View Farms near Saginaw Bay" loading="lazy" decoding="async"><figcaption>From the Freighter View Farms garden, Bay City, Michigan · <a href="https://freighterviewfarms.com/" rel="noopener">Garden field notes ↗</a></figcaption></figure></div></section>
 
  <section class="trust wrap" aria-labelledby="trust-heading"><h2 id="trust-heading">A field guide, not a crystal ball.</h2><p>Species, flowering, pollination and isolation guidance come from horticultural references. This explorer does <strong>not</strong> calculate a percentage chance of crossing, guarantee purity, or infer actual genetic outcomes from variety names. A separation guideline is not a measured probability of a cross: pollinators, wind, landscape and your neighbors' gardens all matter.</p><details><summary>View the sources behind the explorer</summary><ul id="references"></ul></details></section>
 </main>
+<div class="viz-tip" id="viz-tip" role="tooltip"></div>
 <footer><div class="wrap foot-grid"><div><b>FREIGHTER VIEW FARMS</b><p>Seeds saved and stories gathered beside Saginaw Bay, Michigan.</p></div><div><p><a href="https://freighterviewfarms.com/">Return to the garden ↗</a></p><p><a href="https://chrisizworski.com/heirloom-seed-saving-guide/">Read the seed saving guide ↗</a></p></div><div><p>Field edition · October 2026</p><p>© 2026 <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></p></div></div></footer>
 <script>
 /* Freighter View Farms Seed Saving Lab — curated starting taxonomy.
@@ -408,10 +482,31 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
 
 </script>
 <script>
-/* Two-plant checker: answer first, then steps, then optional refinements. All local; no storage. */
+/* Shared helpers: DOM builders (text only, never HTML strings) and one tooltip. */
+(function(){
+ 'use strict';
+ const SVGNS='http://www.w3.org/2000/svg';
+ function h(tag,attrs,...kids){const n=document.createElement(tag);if(attrs)for(const k in attrs)n.setAttribute(k,attrs[k]);for(const k of kids)n.append(k);return n}
+ function s(tag,attrs,...kids){const n=document.createElementNS(SVGNS,tag);if(attrs)for(const k in attrs)n.setAttribute(k,attrs[k]);for(const k of kids)n.append(k);return n}
+ const tip=document.getElementById('viz-tip');
+ function showTip(target,title,lines,evt){
+  if(!tip)return;tip.replaceChildren(h('b',null,title),...lines.map(l=>h('span',null,l,h('br'))));
+  let x,y;
+  if(evt&&evt.clientX!==undefined){x=evt.clientX;y=evt.clientY}else if(target.getBoundingClientRect){const r=target.getBoundingClientRect();x=r.left+r.width/2;y=r.top}
+  tip.classList.add('show');
+  const w=tip.offsetWidth||220,vw=(window.innerWidth||1000);
+  tip.setAttribute('style','left:'+Math.max(8,Math.min(vw-w-8,(x||0)+14))+'px;top:'+Math.max(8,(y||0)-12-(tip.offsetHeight||40))+'px');
+ }
+ function hideTip(){if(tip)tip.classList.remove('show')}
+ function feet(n){const f=Math.round(n).toLocaleString('en-US')+' ft';if(n<1000)return f;const mi=n/5280;return f+' (about '+(mi<0.4?mi.toFixed(1):mi<0.75?'½':mi.toFixed(1))+' mile)'}
+ function shortFeet(n){return n>=5280&&n%5280===0?(n/5280)+' mi':Math.round(n).toLocaleString('en-US')+' ft'}
+ window.SeedLabView={h,s,showTip,hideTip,feet,shortFeet};
+})();
+</script><script>
+/* Two-plant checker: answer first, a picture of the pair, then steps and refinements. All local; no storage. */
 (function () {
  'use strict';
- const D=window.SeedLabData, api=window.SeedLabEngine;
+ const D=window.SeedLabData, api=window.SeedLabEngine, V=window.SeedLabView, h=V.h, s=V.s, feet=V.feet;
  const el=id=>document.getElementById(id);
  const aSelect=el('plant-a'), bSelect=el('plant-b');
  const CATS=['Vegetable','Flower','Herb'];
@@ -427,86 +522,116 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
  fill(aSelect);fill(bSelect);
  aSelect.value=byName('Zucchini').id;bSelect.value=byName('Jack-o’-lantern pumpkin').id;
  const plantA=()=>byId(aSelect.value), plantB=()=>byId(bSelect.value);
-
- // tiny DOM helpers: text only, never URL input as HTML
- function h(tag,attrs,...kids){const n=document.createElement(tag);if(attrs)for(const k in attrs)n.setAttribute(k,attrs[k]);for(const k of kids)n.append(k);return n}
- const latin=s=>h('i',null,s);
- function feet(n){const f=n.toLocaleString('en-US')+' ft';if(n<1000)return f;const mi=n/5280;return f+' (about '+(mi<0.4?mi.toFixed(1):mi<0.75?'½':mi.toFixed(1))+' mile)'}
+ const latin=x=>h('i',null,x);
  function radio(name,fallback){const x=document.querySelector('input[name="'+name+'"]:checked');return x?x.value:fallback}
  function setRadio(name,value){const x=document.querySelector('input[name="'+name+'"][value="'+value+'"]');if(x)x.checked=true}
  function context(){return {overlap:radio('overlap','yes'),protection:radio('protection','open'),seedType:radio('seedType','unknown'),goal:radio('goal','preserve'),distance:el('distance').value}}
+ function speciesLine(){const a=plantA(),b=plantB();el('botanical-a').replaceChildren(latin(a.species));el('botanical-b').replaceChildren(latin(b.species))}
 
- function speciesLine(){
-  const a=plantA(),b=plantB();
-  el('botanical-a').replaceChildren(latin(a.species));el('botanical-b').replaceChildren(latin(b.species));
- }
-
- // Turn the engine's result into one verdict and concrete steps. Wording only; the decision is the engine's.
+ // Words for the engine's decision. The decision itself is the engine's.
  function present(r){
   const a=r.a,b=r.b,g=r.guideline,pop=D.population[a.species];
   const tip='Tip for '+a.name+': '+a.saveNote;
   const popStep=pop?'Save seed from about '+pop+' plants, not just one, so the variety stays healthy over the years.':null;
-  const opt=(t,d)=>{const li=document.createElement('li');li.append(h('b',null,t),...[].concat(d));return li};
+  const opt=(icon,t,d)=>{const li=document.createElement('li');li.append(h('span',{class:'ico','aria-hidden':'true'},icon),h('b',null,t),h('span',null,...[].concat(d)));return li};
   const keepTrue=()=>[
-   opt(g?'Distance: keep them at least '+feet(g)+' apart.':'Distance: separate them as far as you can.',g?'That is the published home-garden guideline for this species.':''),
-   opt('Hand-pollinate.','Cover '+a.name+' flowers before they open, pollinate by hand with pollen from the same variety, re-cover and tag them. Save seed only from tagged fruit.'),
-   opt('Grow one variety.',['Let only one ',latin(a.species),' variety flower for seed this year.'])
+   opt('↔',g?'Distance: keep them at least '+feet(g)+' apart.':'Distance: separate them as far as you can.',g?'That is the published home-garden guideline for this species.':''),
+   opt('✋','Hand-pollinate.','Cover '+a.name+' flowers before they open, pollinate by hand with pollen from the same variety, re-cover and tag them. Save seed only from tagged fruit.'),
+   opt('①','Grow one variety.',['Let only one ',latin(a.species),' variety flower for seed this year.'])
   ];
   let v;
   if(r.potential==='compatible'&&r.sameEntry){
-   v={cls:'same',badge:'Same variety',title:'Same variety, so no cross between these two.',why:['Both plants are ',latin(a.species),'. What matters is any ',h('em',null,'other'),' variety of that species flowering nearby.'],also:[popStep,tip]};
+   v={cls:'same',link:'same',badge:'Same variety',title:'Same variety, so no cross between these two.',why:['Both plants are ',latin(a.species),'. What matters is any ',h('em',null,'other'),' variety of that species flowering nearby.'],also:[popStep,tip]};
   }else if(r.potential==='compatible'){
    const why=['Both are ',latin(a.species),', so pollen from '+b.name+' can fertilize '+a.name+' flowers. The fruit looks normal this year; the plants you grow from its seed may not.'];
-   if(r.goal==='explore'){
-    v={cls:'yes',badge:'Can cross',title:'Yes, and you are fine with that.',why,also:['Let them cross. Label the seed “'+a.name+' × possibly '+b.name+'”.','Grow it out next year and keep the plants you like. Expect them to vary.',tip]};
-   }else if(r.outcome==='needs-action'){
-    v={cls:'yes',badge:'Can cross',title:'Yes, these can cross.',why,options:keepTrue(),also:[popStep,tip]};
-   }else if(r.outcome==='reduced'){
-    v={cls:'managed',badge:'Lower risk',title:'They can cross, but your distance meets the guideline.',why:[r.distance.toLocaleString('en-US')+' ft apart against a '+g.toLocaleString('en-US')+' ft guideline for ',latin(a.species),'. That lowers the risk. It is not a guarantee: bees, wind and neighbors’ gardens still matter.'],also:['Check that no other '+a.species+' varieties flower closer than that, including next door.',popStep,tip]};
-   }else if(r.protection==='controlled'){
-    v={cls:'managed',badge:'Protected',title:'They can cross, but hand-pollinated flowers are protected.',why:['Both are ',latin(a.species),'. Only flowers you covered before they opened, pollinated by hand and re-covered are protected.'],also:['Tag every hand-pollinated flower. Save seed only from tagged fruit.',popStep,tip]};
-   }else if(r.overlap==='no'){
-    v={cls:'managed',badge:'Lower risk',title:'They can cross, but not if they never flower together.',why:['Both are ',latin(a.species),'. Different bloom times keep them apart, as long as they really don’t overlap.'],also:['Write down when each starts and stops flowering. Late or repeat blooms can overlap.',popStep,tip]};
-   }else{
-    v={cls:'maybe',badge:'Can cross',title:'They can cross if they flower at the same time.',why:['Both are ',latin(a.species),'. Watch whether their flowering overlaps; if it does, protect '+a.name+'.'],options:keepTrue(),also:['Note when each starts and stops flowering.',tip]};
-   }
+   if(r.goal==='explore')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, and you are fine with that.',why,also:['Let them cross. Label the seed “'+a.name+' × possibly '+b.name+'”.','Grow it out next year and keep the plants you like. Expect them to vary.',tip]};
+   else if(r.outcome==='needs-action')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, these can cross.',why,options:keepTrue(),also:[popStep,tip]};
+   else if(r.outcome==='reduced')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but your distance meets the guideline.',why:[r.distance.toLocaleString('en-US')+' ft apart against a '+g.toLocaleString('en-US')+' ft guideline for ',latin(a.species),'. That lowers the risk. It is not a guarantee: bees, wind and neighbors’ gardens still matter.'],also:['Check that no other '+a.species+' varieties flower closer than that, including next door.',popStep,tip]};
+   else if(r.protection==='controlled')v={cls:'managed',link:'guarded',badge:'Protected',title:'They can cross, but hand-pollinated flowers are protected.',why:['Both are ',latin(a.species),'. Only flowers you covered before they opened, pollinated by hand and re-covered are protected.'],also:['Tag every hand-pollinated flower. Save seed only from tagged fruit.',popStep,tip]};
+   else if(r.overlap==='no')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but not if they never flower together.',why:['Both are ',latin(a.species),'. Different bloom times keep them apart, as long as they really don’t overlap.'],also:['Write down when each starts and stops flowering. Late or repeat blooms can overlap.',popStep,tip]};
+   else v={cls:'maybe',link:'maybe',badge:'Can cross',title:'They can cross if they flower at the same time.',why:['Both are ',latin(a.species),'. Watch whether their flowering overlaps; if it does, protect '+a.name+'.'],options:keepTrue(),also:['Note when each starts and stops flowering.',tip]};
   }else if(r.potential==='exception'){
-   v={cls:'maybe',badge:'Rarely',title:'Usually not, but crosses have been documented.',why:[latin(a.species),' and ',latin(b.species),' are different species. '+r.detail],also:['If you need '+a.name+' to stay true, separate it or hand-pollinate it anyway.',tip]};
+   v={cls:'maybe',link:'maybe',badge:'Rarely',title:'Usually not, but crosses have been documented.',why:[latin(a.species),' and ',latin(b.species),' are different species. '+r.detail],also:['If you need '+a.name+' to stay true, separate it or hand-pollinate it anyway.',tip]};
   }else if(r.potential==='unverified'){
-   v={cls:'maybe',badge:'Unconfirmed',title:'Not confirmed either way.',why:[latin(a.species),' and ',latin(b.species),' share a genus. '+r.detail],also:['Check the exact species on both seed packets.','If purity matters, separate or hand-pollinate '+a.name+'.',tip]};
+   v={cls:'maybe',link:'maybe',badge:'Unconfirmed',title:'Not confirmed either way.',why:[latin(a.species),' and ',latin(b.species),' share a genus. '+r.detail],also:['Check the exact species on both seed packets.','If purity matters, separate or hand-pollinate '+a.name+'.',tip]};
   }else{
    const extra=r.source!==a.source?' '+r.detail:'';
-   v={cls:'no',badge:'No',title:'No, these don’t normally cross.',why:[latin(a.species),' and ',latin(b.species),' are different species.'+extra],also:[['What can cross with '+a.name+' is another ',latin(a.species),' variety. Check what else of that species flowers nearby.'],popStep,tip]};
+   v={cls:'no',link:'none',badge:'No',title:'No, these don’t normally cross.',why:[latin(a.species),' and ',latin(b.species),' are different species.'+extra],also:[['What can cross with '+a.name+' is another ',latin(a.species),' variety. Check what else of that species flowers nearby.'],popStep,tip]};
   }
   v.options=v.options||[];v.also=v.also.filter(Boolean);
   return v;
  }
 
- let lastResult=null;
+ // Picture of the pair: two flowers and what passes between them.
+ function trunc(t,n){return t.length>n?t.slice(0,n-1)+'…':t}
+ function drawPair(r,v){
+  const W=320,H=204,ax=70,bx=250,cy=78;
+  const flower=(x,fill)=>{const g=s('g',{transform:'translate('+x+' '+cy+')'});for(let i=0;i<6;i++)g.append(s('ellipse',{rx:'15',ry:'31',fill,opacity:'.9',transform:'rotate('+(i*30)+')'}));g.append(s('circle',{r:'16',fill:'#f2c46b',stroke:'#d9a64a','stroke-width':'2'}));return g};
+  const c={cross:'#c4623f',maybe:'#8a6fc4',guarded:'#5b7f97',same:'#5b7f97',none:'#b8c2bb'}[v.link];
+  const svg=s('svg',{viewBox:'0 0 '+W+' '+H,role:'presentation','aria-hidden':'true'});
+  svg.append(s('path',{d:'M'+ax+' '+(cy+30)+' Q'+(ax-4)+' '+(cy+60)+' '+ax+' '+(cy+74)+' M'+bx+' '+(cy+30)+' Q'+(bx+4)+' '+(cy+60)+' '+bx+' '+(cy+74),stroke:'#7fa58a','stroke-width':'4',fill:'none','stroke-linecap':'round'}));
+  const x1=ax+38,x2=bx-38;
+  if(v.link==='none'){
+   svg.append(s('line',{x1,y1:cy,x2:160-14,y2:cy,stroke:c,'stroke-width':'3','stroke-linecap':'round'}),s('line',{x1:160+14,y1:cy,x2,y2:cy,stroke:c,'stroke-width':'3','stroke-linecap':'round'}));
+   svg.append(s('path',{d:'M154 '+(cy-6)+' l12 12 M166 '+(cy-6)+' l-12 12',stroke:'#7a8680','stroke-width':'3','stroke-linecap':'round'}));
+  }else if(v.link==='same'){
+   svg.append(s('line',{x1,y1:cy,x2,y2:cy,stroke:c,'stroke-width':'3','stroke-linecap':'round'}));
+   svg.append(s('text',{x:160,y:cy-10,'text-anchor':'middle',class:'pv-mid'},'same variety'));
+  }else{
+   svg.append(s('path',{d:'M'+x1+' '+cy+' Q160 '+(cy-40)+' '+x2+' '+cy,stroke:c,'stroke-width':v.link==='cross'?'3':'2.5',fill:'none','stroke-linecap':'round','stroke-dasharray':v.link==='maybe'?'6 6':'none'}));
+   if(v.link==='guarded'){svg.append(s('rect',{x:153,y:cy-40,width:14,height:28,rx:4,fill:'#fff',stroke:c,'stroke-width':'2'}))}
+   else{const g=s('g',{transform:'translate(160 '+(cy-22)+')'});for(let i=0;i<3;i++)g.append(s('circle',{class:'pollen-dot',cx:String((i-1)*16),cy:'0',r:'4',fill:'#f2c46b',stroke:'#d9a64a'}));svg.append(g)}
+  }
+  svg.append(flower(ax,'#f3b8a0'),flower(bx,'#c9d9ef'));
+  svg.append(s('text',{x:ax,y:H-22,'text-anchor':'middle',class:'pv-name'},trunc(r.a.name,17)),s('text',{x:bx,y:H-22,'text-anchor':'middle',class:'pv-name'},trunc(r.b.name,17)));
+  svg.append(s('text',{x:ax,y:H-6,'text-anchor':'middle',class:'pv-sp'},r.a.species),s('text',{x:bx,y:H-6,'text-anchor':'middle',class:'pv-sp'},r.b.species));
+  const pop=D.population[r.a.species];
+  const fact=(k,...v)=>[h('dt',null,k),h('dd',null,...v)];
+  const dl=h('dl',{class:'facts'},...fact('Species',r.speciesMatch?'Same: ':'Different: ',h('i',null,r.speciesMatch?r.a.species:r.a.species+' / '+r.b.species)),...fact('Pollinated by',r.a.pollination.toLowerCase()),...fact('Separation guideline',r.guideline?V.feet(r.guideline):'Not needed for this pair'),...fact('Save seed from',pop?'about '+pop+' plants':'Not listed'));
+  el('pair-viz').replaceChildren(svg,dl);
+ }
+
+ // Distance: a log-scale slider and a small chart of your distance against the guideline.
+ const MIN_FT=10,MAX_FT=10000;
+ const posToFt=p=>{if(p<=0)return null;const f=Math.pow(10,1+3*p/1000);return f<100?Math.round(f):f<1000?Math.round(f/10)*10:Math.round(f/50)*50};
+ const ftToPos=f=>f===null||f===''||!(Number(f)>0)?0:Math.max(1,Math.min(1000,Math.round((Math.log10(Math.min(MAX_FT,Math.max(MIN_FT,Number(f))))-1)/3*1000)));
+ function drawDistance(r){
+  const svg=el('distance-chart'),x0=24,x1=616,y=58;
+  const X=f=>x0+(Math.log10(Math.min(MAX_FT,Math.max(MIN_FT,f)))-1)/3*(x1-x0);
+  const kids=[s('line',{x1:x0,y1:y,x2:x1,y2:y,stroke:'#d8d2c2','stroke-width':'6','stroke-linecap':'round'})];
+  const g=r.guideline;
+  if(g){kids.push(s('rect',{x:X(g),y:y-3,width:Math.max(0,x1-X(g)),height:6,rx:3,fill:'#9fc1a8'}),s('line',{x1:X(g),y1:y-22,x2:X(g),y2:y+10,stroke:'#3f6b55','stroke-width':'2'}),s('text',{x:Math.min(X(g),560),y:y-28,'text-anchor':'middle',class:'dc-label'},'Guideline '+V.shortFeet(g)))}
+  for(const [f,t] of [[10,'10 ft'],[100,'100 ft'],[1000,'1,000 ft'],[5280,'1 mile']])kids.push(s('line',{x1:X(f),y1:y+6,x2:X(f),y2:y+12,stroke:'#b9b3a3','stroke-width':'1'}),s('text',{x:X(f),y:y+26,'text-anchor':f===10?'start':'middle',class:'dc-tick'},t));
+  kids.push(s('text',{x:X(360),y:y+40,'text-anchor':'middle',class:'dc-land'},'↑ football field'));
+  const d=r.distance;
+  if(d!==null&&d!==undefined){kids.push(s('circle',{cx:X(d),cy:y,r:'8',fill:'#fff',stroke:'#2b3530','stroke-width':'3'}),s('text',{x:Math.max(40,Math.min(X(d),600)),y:y-12,'text-anchor':'middle',class:'dc-label'},'You '+V.shortFeet(d)))}
+  else kids.push(s('text',{x:x0,y:y-12,class:'dc-tick'},'Drag the slider or type your distance'));
+  svg.replaceChildren(...kids);
+ }
+
  function run(){
   const a=plantA(),b=plantB();if(!a||!b)return;
-  const r=api.compare(a,b,context(),D);lastResult=r;
+  const r=api.compare(a,b,context(),D);
   const v=present(r);
-  const box=el('results');box.className='answer '+v.cls;
+  el('results').className='answer '+v.cls;
   el('status-label').textContent=v.badge;
   el('result-heading').textContent=v.title;
   el('result-detail').replaceChildren(...v.why);
-  el('options-title').textContent=v.options.length?'To keep '+r.a.name+' true, pick one':'';
+  el('options-title').textContent=v.options.length?'To keep '+a.name+' true, pick one':'';
   el('options-title').hidden=!v.options.length;el('result-options').hidden=!v.options.length;
   el('result-options').replaceChildren(...v.options);
   el('steps-title').textContent=v.options.length?'Also':v.cls==='no'?'Good to know':'What to do';
   el('result-steps').replaceChildren(...v.also.map(x=>h('li',null,...[].concat(x))));
-  const next=api.generationText(r,1);
-  el('next-year').replaceChildren(h('strong',null,'Next year: '),next);
+  el('next-year').replaceChildren(h('strong',null,'Next year: '),api.generationText(r,1));
   const cautions=r.cautions.filter(c=>!/must coincide|did not confirm different blooming/.test(c));
   el('result-cautions').replaceChildren(...cautions.map(c=>h('li',null,c)));
   const link=el('source-link');link.href=r.source;link.textContent=r.source.includes('seedalliance')?'Organic Seed Alliance ↗':r.source.includes('seedsavers')?'Seed Savers Exchange ↗':'Crossing reference ↗';
   el('live-verdict').textContent=a.name+' and '+b.name+': '+v.title;
-  // only ask what can change this answer
+  drawPair(r,v);
   const crossable=['compatible','exception','unverified'].includes(r.potential)&&!r.sameEntry;
   for(const id of ['q-overlap','q-protection'])el(id).classList.toggle('hidden',!crossable);
   el('q-distance').classList.toggle('hidden',!(r.potential==='compatible'&&!r.sameEntry&&r.guideline));
-  if(r.guideline){const d=r.distance;el('distance-copy').replaceChildren('Guideline for this species: ',h('b',null,feet(r.guideline)),d==null?'':d>=r.guideline?' · yours meets it':' · yours is '+Math.round(d/r.guideline*100)+'% of it')}
+  if(r.guideline){const d=r.distance;el('distance-copy').replaceChildren('Guideline for this species: ',h('b',null,feet(r.guideline)),d==null?'':d>=r.guideline?' · yours meets it':' · yours is '+Math.round(d/r.guideline*100)+'% of it');drawDistance(r)}
   el('refine-note').textContent=crossable?'Each answer updates the result above.':'These two don’t normally cross, so only these questions matter.';
   el('comparison-link').hidden=true;el('share-comparison').textContent='Copy link to this answer';
  }
@@ -520,7 +645,8 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
  for(const sel of [aSelect,bSelect])sel.addEventListener('change',()=>{speciesLine();run()});
  el('swap').addEventListener('click',()=>{const x=aSelect.value;aSelect.value=bSelect.value;bSelect.value=x;speciesLine();run()});
  document.querySelectorAll('#compare-form input[type=radio]').forEach(x=>x.addEventListener('change',run));
- let t;el('distance').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(run,150)});
+ el('distance-range').addEventListener('input',()=>{const f=posToFt(Number(el('distance-range').value));el('distance').value=f===null?'':String(f);run()});
+ let t;el('distance').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>{el('distance-range').value=String(ftToPos(el('distance').value));run()},150)});
  const presets={squash:['Zucchini','Jack-o’-lantern pumpkin'],flowers:['Queen Lime zinnia','Oklahoma White zinnia'],brassicas:['European kale','Broccoli'],melon:['Slicing cucumber','Cantaloupe / muskmelon']};
  document.querySelectorAll('[data-example]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.example];setPair(byName(p[0]).id,byName(p[1]).id,false)}));
 
@@ -532,7 +658,7 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
   if(['controlled','open'].includes(qs.get('protection')))setRadio('protection',qs.get('protection'));
   if(['f1','op','unknown'].includes(qs.get('seedType')))setRadio('seedType',qs.get('seedType'));
   if(['preserve','explore'].includes(qs.get('goal')))setRadio('goal',qs.get('goal'));
-  if(/^\d{1,6}$/.test(qs.get('distance')||''))el('distance').value=qs.get('distance');
+  if(/^\d{1,6}$/.test(qs.get('distance')||'')){el('distance').value=qs.get('distance');el('distance-range').value=String(ftToPos(qs.get('distance')))}
  }
  el('share-comparison').addEventListener('click',()=>{
   const url=new URL(location.href);url.search='';url.hash='explorer';
@@ -547,15 +673,16 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
  speciesLine();run();
 })();
 </script><script>
-/* Whole-garden check. All local browser state; no storage. */
+/* Whole-garden check with a pollen web and a separation chart. All local browser state; no storage. */
 (function(){
  'use strict';
- const D=window.SeedLabData,engine=window.SeedLabEngine,el=id=>document.getElementById(id);
- const pick=el('garden-pick'),list=el('garden-plants'),out=el('garden-results');
+ const D=window.SeedLabData,engine=window.SeedLabEngine,V=window.SeedLabView,h=V.h,s=V.s,el=id=>document.getElementById(id);
+ const pick=el('garden-pick'),list=el('garden-plants'),out=el('garden-results'),web=el('pollen-web'),webCard=el('web-card');
  const MAX=12,CATS=['Vegetable','Flower','Herb'];
  const byId=id=>D.plants.find(p=>p.id===id)||null;
- function h(tag,attrs,...kids){const n=document.createElement(tag);if(attrs)for(const k in attrs)n.setAttribute(k,attrs[k]);for(const k of kids)n.append(k);return n}
- let members=[];
+ const NAMES={compatible:'Can cross',exception:'Documented exception',unverified:'Unconfirmed',unlikely:'Won’t normally cross'};
+ let members=[],focusId=null,lastR=null,resizeT;
+ window.addEventListener&&window.addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(()=>{if(lastR){drawWeb(lastR);drawRoom(lastR)}},150)});
  function fillPick(){
   pick.replaceChildren(h('option',{value:''},'Add a plant…'));
   for(const cat of CATS){const g=h('optgroup',{label:cat+'s'});D.plants.filter(p=>p.category===cat&&!members.includes(p.id)).sort((x,y)=>x.name.localeCompare(y.name)).forEach(p=>g.append(h('option',{value:p.id},p.name)));if(g.children.length)pick.append(g)}
@@ -563,50 +690,136 @@ footer{background:#132f27;color:#d4dfd6;font-size:14px;padding:30px 0}.foot-grid
  }
  function feedback(t){el('garden-feedback').textContent=t}
  function add(id){if(!byId(id)||members.includes(id))return false;if(members.length>=MAX){feedback('That’s 12 plants, the most this checker compares at once.');return false}members.push(id);render();return true}
- function remove(id){members=members.filter(x=>x!==id);render()}
+ function remove(id){members=members.filter(x=>x!==id);if(focusId===id)focusId=null;render()}
  function assessment(){return members.length<2?null:engine.makeGarden(members.map(byId),{},D)}
+ const openPair=p=>window.SeedLabUI&&window.SeedLabUI.setPair(p.a.id,p.b.id,true);
+ const key=p=>[p.a.id,p.b.id].sort().join('|');
  function pairRow(p,withLink){
   const sp=p.a.species===p.b.species?[h('i',null,p.a.species)]:[h('i',null,p.a.species),' / ',h('i',null,p.b.species)];
-  const text=h('div',null,h('b',null,p.a.name+' + '+p.b.name),h('small',null,...sp,withLink?' · '+p.action:''));
-  const row=h('div',{class:'pair'},text);
-  if(withLink){const btn=h('button',{type:'button',class:'link-btn'},'Open in checker →');btn.addEventListener('click',()=>window.SeedLabUI&&window.SeedLabUI.setPair(p.a.id,p.b.id,true));row.append(btn)}
+  const row=h('div',{class:'pair','data-key':key(p)},h('div',null,h('b',null,p.a.name+' + '+p.b.name),h('small',null,...sp,withLink?' · '+p.action:'')));
+  if(withLink){const btn=h('button',{type:'button',class:'link-btn'},'Open in checker →');btn.addEventListener('click',()=>openPair(p));row.append(btn)}
   return row;
  }
+ function trunc(t,n){return t.length>n?t.slice(0,n-1)+'…':t}
+ function partners(id,pairs){return pairs.filter(p=>p.level!=='unlikely'&&(p.a.id===id||p.b.id===id))}
+
+ // Pollen web: plants on a ring, a line for every pair that can cross or needs checking.
+ function avail(svg,fallback){const w=svg.getBoundingClientRect?svg.getBoundingClientRect().width:0;return w>0?w:fallback}
+ function drawWeb(r){
+  const narrow=avail(web,460)<420,W=narrow?360:460,H=narrow?330:380,cx=W/2,cy=H/2,R=Math.min(narrow?98:128,50+members.length*8),LEN=narrow?13:17;
+  web.setAttribute('viewBox','0 0 '+W+' '+H);
+  const pos={};members.forEach((id,i)=>{const t=-Math.PI/2+i*2*Math.PI/members.length;pos[id]={x:cx+R*Math.cos(t),y:cy+R*Math.sin(t),c:Math.cos(t),s:Math.sin(t)}});
+  const edges=r?r.pairs.filter(p=>p.level!=='unlikely'):[];
+  const kids=[];
+  for(const p of edges){
+   const A=pos[p.a.id],B=pos[p.b.id],cross=p.level==='compatible';
+   const d='M'+A.x.toFixed(1)+' '+A.y.toFixed(1)+' L'+B.x.toFixed(1)+' '+B.y.toFixed(1);
+   const label=p.a.name+' + '+p.b.name+': '+NAMES[p.level]+'. Open in checker.';
+   const hit=s('path',{d,class:'web-hit',tabindex:'0',role:'button','aria-label':label});
+   const line=s('path',{d,class:'web-edge','data-a':p.a.id,'data-b':p.b.id,stroke:cross?'#c4623f':'#8a6fc4','stroke-width':cross?'3':'2','stroke-linecap':'round','stroke-dasharray':cross?'none':'6 5',fill:'none','pointer-events':'none'});
+   hit.addEventListener('pointerenter',e=>V.showTip(hit,p.a.name+' + '+p.b.name,[NAMES[p.level],'Tap to open in the checker'],e));
+   hit.addEventListener('pointermove',e=>V.showTip(hit,p.a.name+' + '+p.b.name,[NAMES[p.level],'Tap to open in the checker'],e));
+   hit.addEventListener('focus',()=>V.showTip(hit,p.a.name+' + '+p.b.name,[NAMES[p.level],'Press Enter to open in the checker']));
+   for(const ev of ['pointerleave','blur'])hit.addEventListener(ev,V.hideTip);
+   hit.addEventListener('click',()=>{V.hideTip();openPair(p)});
+   hit.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault&&e.preventDefault();openPair(p)}});
+   kids.push(hit,line);
+  }
+  for(const id of members){
+   const p=byId(id),P=pos[id],n=partners(id,r?r.pairs:[]);
+   const anchor=P.c>0.25?'start':P.c<-0.25?'end':'middle';
+   const lx=P.x+P.c*16,ly=P.y+P.s*16+(Math.abs(P.c)<=0.25?(P.s>0?10:-4):4);
+   const g=s('g',{class:'web-node'+(focusId===id?' active':''),tabindex:'0',role:'button','aria-pressed':String(focusId===id),'aria-label':p.name+': '+(n.length?n.length+' possible crossing partner'+(n.length>1?'s':''):'no crossing partners in this list')});
+   g.append(s('circle',{cx:P.x.toFixed(1),cy:P.y.toFixed(1),r:'9'}),s('text',{x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':anchor},trunc(p.name,LEN)));
+   const lines=n.length?n.map(x=>(x.a.id===id?x.b.name:x.a.name)+' · '+NAMES[x.level].toLowerCase()):['No crossing partners in this list'];
+   g.addEventListener('pointerenter',e=>{highlight(id);V.showTip(g,p.name,lines,e)});
+   g.addEventListener('pointerleave',()=>{highlight(focusId);V.hideTip()});
+   g.addEventListener('focus',()=>{highlight(id);V.showTip(g,p.name,lines)});
+   g.addEventListener('blur',()=>{highlight(focusId);V.hideTip()});
+   const toggle=()=>{focusId=focusId===id?null:id;render()};
+   g.addEventListener('click',toggle);
+   g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault&&e.preventDefault();toggle()}});
+   kids.push(g);
+  }
+  if(members.length>=2&&!edges.length)kids.push(s('text',{x:cx,y:cy,'text-anchor':'middle',class:'dc-tick'},'No crossing lines among these plants'));
+  web.replaceChildren(...kids);
+  highlight(focusId);
+ }
+ function highlight(id){
+  webCard.classList.toggle('dim',!!id);
+  for(const e of web.children)if(e.classList&&e.classList.contains('web-edge'))e.classList.toggle('on',!!id&&(e.getAttribute('data-a')===id||e.getAttribute('data-b')===id));
+  for(const row of out.querySelectorAll?out.querySelectorAll('.pair'):[])row.classList.toggle('hl',!!id&&row.getAttribute('data-key').split('|').includes(id));
+ }
+
+ // Room each crop needs: one bar per species, published separation guideline.
+ function drawRoom(r){
+  const bySpecies=new Map();
+  for(const id of members){const p=byId(id);if(!bySpecies.has(p.species))bySpecies.set(p.species,[]);bySpecies.get(p.species).push(p)}
+  const crossSpecies=new Set((r?r.pairs:[]).filter(p=>p.level==='compatible').map(p=>p.a.species));
+  const rows=[...bySpecies].map(([sp,ps])=>({sp,ps,ft:Math.max(0,...ps.map(p=>p.isolationFt||0))||null,pop:D.population[sp]||null,cross:crossSpecies.has(sp)}));
+  const charted=rows.filter(x=>x.ft).sort((a,b)=>b.ft-a.ft||a.sp.localeCompare(b.sp));
+  const svg=el('room-chart');
+  const W=Math.round(Math.max(300,Math.min(700,avail(svg,640)))),narrow=W<520;
+  const L=narrow?4:190,Rt=narrow?W-96:W-180,top=26,rowH=narrow?48:30,bar=14,max=Math.max(1000,...charted.map(x=>x.ft));
+  const step=max>2500?1000:500,tickMax=Math.ceil(max/step)*step,X=v=>L+(v/tickMax)*(Rt-L);
+  svg.setAttribute('viewBox','0 0 '+W+' '+(top+charted.length*rowH+8));
+  const kids=[];
+  for(let v=0;v<=tickMax;v+=step)kids.push(s('line',{x1:X(v),y1:top-6,x2:X(v),y2:top+charted.length*rowH,class:'bar-grid'}),s('text',{x:X(v),y:top-10,'text-anchor':v===0&&narrow?'start':'middle',class:'bar-axis'},v===0?'0':(v>=1000?(v/1000)+'K':v)+' ft'));
+  charted.forEach((x,i)=>{
+   const y=top+i*rowH+(narrow?22:(rowH-bar)/2),w=Math.max(4,X(x.ft)-L);
+   const names=x.ps.map(p=>p.name).join(', ');
+   const g=s('g',{class:'bar-row'+(x.cross?' cross':''),tabindex:'0','aria-label':names+': '+x.ft.toLocaleString('en-US')+' feet'+(x.cross?', has a crossing partner in your list':'')});
+   if(narrow)g.append(s('text',{x:L,y:y-6},trunc(names,x.cross?26:40)+(x.cross?' · can cross here':'')));
+   else g.append(s('text',{x:L-10,y:y+bar-3,'text-anchor':'end'},trunc(names,26)));
+   g.append(s('path',{class:'bar',d:'M'+L+' '+y+' h'+(w-4)+' q4 0 4 4 v'+(bar-8)+' q0 4 -4 4 h-'+(w-4)+' z'}));
+   const vx=L+w+8,label=V.shortFeet(x.ft);
+   g.append(s('text',{x:vx,y:y+bar-3,class:'val'},label));
+   if(x.cross&&!narrow)g.append(s('text',{x:vx+label.length*7+8,y:y+bar-3,class:'tag'},'· can cross here'));
+   const lines=[x.sp,'Guideline: '+V.feet(x.ft),x.pop?'Save seed from about '+x.pop+' plants':'No population guideline listed',x.cross?'Has a crossing partner in your list':'No crossing partner in your list'];
+   g.addEventListener('pointerenter',e=>V.showTip(g,names,lines,e));g.addEventListener('pointermove',e=>V.showTip(g,names,lines,e));g.addEventListener('focus',()=>V.showTip(g,names,lines));
+   for(const ev of ['pointerleave','blur'])g.addEventListener(ev,V.hideTip);
+   kids.push(g);
+  });
+  if(!charted.length)kids.push(s('text',{x:20,y:top+10,class:'bar-axis'},'Add plants to see how much room each needs.'));
+  svg.replaceChildren(...kids);
+  el('room-rows').replaceChildren(...rows.sort((a,b)=>(b.ft||0)-(a.ft||0)).map(x=>h('tr',null,h('td',null,h('i',null,x.sp)),h('td',null,x.ps.map(p=>p.name).join(', ')),h('td',{style:'text-align:right'},x.ft?x.ft.toLocaleString('en-US')+' ft':'Not listed'),h('td',{style:'text-align:right'},x.pop||'—'))));
+ }
+
  function render(){
   list.replaceChildren(...members.map(id=>{const p=byId(id);const x=h('button',{type:'button','aria-label':'Remove '+p.name},'×');x.addEventListener('click',()=>remove(id));return h('li',null,p.name,x)}));
   el('garden-count').textContent=members.length+' of '+MAX+' plants';
   fillPick();
   const r=assessment();
-  el('garden-tools').classList.toggle('hidden',!r);
-  if(!r){out.replaceChildren(h('p',{class:'empty'},members.length?'Add one more plant to check pairs.':'Add the plants you grow, or load the example garden.'));feedback('');return}
+  for(const id of ['garden-tools','garden-grid','bars-card'])el(id).classList.toggle('hidden',!r);
+  if(!r){out.replaceChildren();feedback(members.length?'Add one more plant to check pairs.':'Add the plants you grow, or load the example garden.');web.replaceChildren();return}
   const cross=r.pairs.filter(p=>p.level==='compatible'),check=r.pairs.filter(p=>p.level==='exception'||p.level==='unverified'),safe=r.pairs.filter(p=>p.level==='unlikely');
+  const title=(label,n)=>h('h3',null,h('span',{class:'count'},String(n)),label);
   const groups=[];
-  const title=(cls,label,n)=>h('h3',null,h('span',{class:'count'},String(n)),label);
-  if(cross.length)groups.push(h('div',{class:'group yes'},title('yes',cross.length===1?'Pair that can cross':'Pairs that can cross',cross.length),...cross.map(p=>pairRow(p,true))));
-  if(check.length)groups.push(h('div',{class:'group maybe'},title('maybe','Worth checking',check.length),...check.map(p=>pairRow(p,true))));
+  if(cross.length)groups.push(h('div',{class:'group yes'},title(cross.length===1?'Pair that can cross':'Pairs that can cross',cross.length),...cross.map(p=>pairRow(p,true))));
+  if(check.length)groups.push(h('div',{class:'group maybe'},title('Worth checking',check.length),...check.map(p=>pairRow(p,true))));
   if(!cross.length&&!check.length)groups.push(h('p',{class:'empty'},'None of these plants normally cross with each other. Other varieties nearby, including next door, aren’t in this list.'));
-  if(safe.length){const d=h('details',{class:'group no'},h('summary',null,h('span',{class:'count'},String(safe.length)),' Won’t normally cross'),...safe.map(p=>pairRow(p,false)));groups.push(d)}
+  if(safe.length)groups.push(h('details',{class:'group no'},h('summary',null,h('span',{class:'count'},String(safe.length)),' Won’t normally cross'),...safe.map(p=>pairRow(p,false))));
   out.replaceChildren(...groups);
+  lastR=r;drawWeb(r);drawRoom(r);
   feedback(r.pairs.length+' pairs checked. A “can cross” label never certifies a seed lot; it means protect it.');
  }
- pick.addEventListener('change',()=>{if(pick.value){add(pick.value)}});
+ pick.addEventListener('change',()=>{if(pick.value)add(pick.value)});
  el('garden-add').addEventListener('click',()=>{if(pick.value)add(pick.value);else pick.focus()});
- el('garden-demo').addEventListener('click',()=>{members=['Zucchini','Jack-o’-lantern pumpkin','Butternut squash','European kale','Broccoli','Purple cosmos','Orange sulfur cosmos','Queen Lime zinnia','Oklahoma White zinnia'].map(n=>D.plants.find(p=>p.name===n).id);render()});
- el('garden-clear').addEventListener('click',()=>{members=[];render()});
+ el('garden-demo').addEventListener('click',()=>{focusId=null;members=['Zucchini','Jack-o’-lantern pumpkin','Butternut squash','European kale','Broccoli','Purple cosmos','Orange sulfur cosmos','Queen Lime zinnia','Oklahoma White zinnia'].map(n=>D.plants.find(p=>p.name===n).id);render()});
+ el('garden-clear').addEventListener('click',()=>{members=[];focusId=null;render()});
  function copy(text){const box=el('share-fallback');const fb=()=>{box.hidden=false;box.value=text;box.focus();box.select();feedback('Copy the link above.')};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(()=>{box.hidden=true;feedback('Link copied ✓')},fb);else fb()}
  el('share-garden').addEventListener('click',()=>{const u=new URL(location.href);u.search='';u.searchParams.set('g',members.map(id=>id+':u').join(','));u.hash='whole-garden';copy(u.toString())});
  el('export-garden').addEventListener('click',()=>{
   const r=assessment();if(!r)return;
-  const names={compatible:'Can cross',exception:'Documented exception',unverified:'Unconfirmed',unlikely:'Won’t normally cross'};
-  const rows=[['Plant','Other plant','Result','What to do','Reference'],...r.pairs.map(x=>[x.a.name,x.b.name,names[x.level],x.action,x.source])];
-  const esc=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
+  const rows=[['Plant','Other plant','Result','What to do','Reference'],...r.pairs.map(x=>[x.a.name,x.b.name,NAMES[x.level],x.action,x.source])];
+  const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const url=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(esc).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));
   const a=h('a',{href:url,download:'seed-saving-garden-check.csv'});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  });
  // Shared links: bounded, known ids only. Older links carried a bloom flag (id:y/n/u); it is accepted and ignored.
  const g=new URLSearchParams(location.search).get('g');
  if(g&&g.length<1200)for(const part of g.split(',').slice(0,MAX)){const id=part.split(':')[0];if(byId(id)&&!members.includes(id))members.push(id)}
- if(!members.length)members=['Zucchini','Jack-o’-lantern pumpkin','Queen Lime zinnia'].map(n=>D.plants.find(p=>p.name===n).id);
+ if(!members.length)members=['Zucchini','Jack-o’-lantern pumpkin','Butternut squash','Queen Lime zinnia','Oklahoma White zinnia'].map(n=>D.plants.find(p=>p.name===n).id);
  render();
 })();
 </script>

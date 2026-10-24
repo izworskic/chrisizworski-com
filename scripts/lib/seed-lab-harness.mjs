@@ -56,6 +56,8 @@ class Node {
   dispatch(type) { for (const fn of this.listeners[type] || []) fn({ target: this, preventDefault() {}, key: '' }); }
   dispatchEvent(e) { this.dispatch(e.type); return true; }
   click() { this.dispatch('click'); }
+  getBoundingClientRect() { return { left: 0, top: 0, width: 0, height: 0 }; }
+  get offsetWidth() { return 0; } get offsetHeight() { return 0; }
   focus() {} select() {} blur() {} scrollIntoView() { this.ownerDocument && (this.ownerDocument.lastScroll = this.id); }
 }
 class Element extends Node {}
@@ -89,6 +91,7 @@ export function loadSeedLab(file, { search = '' } = {}) {
   const document = {
     getElementById: id => doc.byId.get(id) || null,
     createElement: tag => { const e = new Element(tag); e.ownerDocument = doc; return e; },
+    createElementNS: (_ns, tag) => { const e = new Element(tag); e.ownerDocument = doc; return e; },
     querySelector(sel) { return this.querySelectorAll(sel)[0] || null; },
     querySelectorAll(sel) {
       if (sel === '#compare-form input[type=radio]') return doc.radios;
@@ -102,6 +105,8 @@ export function loadSeedLab(file, { search = '' } = {}) {
   const location = { href: 'https://chrisizworski.com/seed-saving-lab/' + search, search, hash: '', pathname: '/seed-saving-lab/', origin: 'https://chrisizworski.com' };
   const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob: class {}, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console });
   ctx.window = ctx;
+  ctx.innerWidth = 1280;
+  ctx.addEventListener = () => {};
   const scripts = html.split('<script>').slice(1).map(x => x.split('</script>')[0]);
   for (const src of scripts) vm.runInContext(src, ctx, { timeout: 2000 });
   const $ = id => doc.byId.get(id);

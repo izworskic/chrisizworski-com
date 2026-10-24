@@ -101,3 +101,46 @@ test('shared links restore the answer and the garden; junk is ignored', () => {
   const junk = loadSeedLab(FILE, { search: '?a=<script>&b=x&distance=abc' });
   assert.equal(junk.answer().heading, 'Yes, these can cross.');
 });
+
+test('charts: distance slider and number stay in step, and the distance chart marks guideline and you', () => {
+  const p = loadSeedLab(FILE);
+  const kids = () => p.$('distance-chart').descendants().map(n => n.textContent).join(' | ');
+  assert.match(kids(), /Guideline 1,600 ft/);
+  p.$('distance-range').value = '600';
+  p.$('distance-range').dispatch('input');
+  const ft = Number(p.$('distance').value);
+  assert.ok(ft > 500 && ft < 700, 'log scale: slider 60% ≈ 630 ft, got ' + ft);
+  assert.match(kids(), new RegExp('You ' + ft.toLocaleString('en-US') + ' ft'));
+  p.type('distance', '3000');
+  assert.ok(Number(p.$('distance-range').value) > 800, 'typing moves the slider');
+  assert.equal(p.answer().badge, 'Lower risk');
+  assert.match(p.text('pair-viz'), /Separation guideline1,600 ft/);
+});
+
+test('charts: pollen web draws a line for each crossing pair and a line opens that pair', () => {
+  const p = loadSeedLab(FILE);
+  p.click('garden-demo');
+  const web = p.$('pollen-web');
+  const edges = web.children.filter(n => n.attrs && /web-edge/.test(n.attrs.class || ''));
+  const nodes = web.children.filter(n => n.attrs && /web-node/.test(n.attrs.class || ''));
+  assert.equal(nodes.length, 9);
+  assert.equal(edges.length, 5, '3 can-cross + 2 worth-checking pairs in the example garden');
+  assert.equal(edges.filter(e => e.attrs['stroke-dasharray'] === 'none').length, 3, 'can-cross lines are solid');
+  const hits = web.children.filter(n => n.attrs && n.attrs.class === 'web-hit');
+  const target = hits.find(h => /European kale \+ Broccoli/.test(h.attrs['aria-label']));
+  target.dispatch('click');
+  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'European kale');
+  const kale = nodes.find(n => /European kale/.test(n.attrs['aria-label']));
+  kale.dispatch('click');
+  assert.match(p.$('pollen-web').children.find(n => n.attrs && /European kale/.test(n.attrs['aria-label'] || '') && /web-node/.test(n.attrs.class)).attrs.class, /active/);
+});
+
+test('charts: room chart has one bar per species with a guideline, plus a table view', () => {
+  const p = loadSeedLab(FILE);
+  p.click('garden-demo');
+  const bars = p.$('room-chart').children.filter(n => n.attrs && /bar-row/.test(n.attrs.class || ''));
+  assert.equal(bars.length, 6, '6 species in the example garden');
+  assert.match(bars[0].attrs['aria-label'], /2,640 feet/, 'sorted largest first (zinnias)');
+  assert.equal(bars.filter(b => /cross/.test(b.attrs.class)).length, 3, 'darker bars for species with a crossing partner');
+  assert.equal(p.$('room-rows').children.length, 6);
+});

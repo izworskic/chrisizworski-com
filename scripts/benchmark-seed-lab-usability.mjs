@@ -65,7 +65,7 @@ if (ok) {
 
   add('Mobile/accessibility', 4, 'Screen-reader status announces the current verdict', () => { const p = page(); p.pick('b', 'Slicing cucumber'); return /Slicing cucumber: No/.test(p.answer().live) && /role="status"/.test(html); });
   add('Mobile/accessibility', 3, 'Narrow-screen layout and visible focus', () => /@media\(max-width:760px\)/.test(html) && /:focus-visible/.test(html));
-  add('Mobile/accessibility', 3, 'Tap targets at least 42px; no visible empty controls', () => /min-height:42px/.test(html) && /min-height:52px/.test(html) && /id="comparison-link"[^>]*hidden/.test(html));
+  add('Mobile/accessibility', 3, 'Tap targets at least 42px; no visible empty controls', () => { const px = re => Number((html.match(re) || [])[1] || 0); return px(/\.seg span\{[^}]*min-height:(\d+)px/) >= 42 && px(/\.picker select\{[^}]*min-height:(\d+)px/) >= 48 && px(/\.chip-btn\{[^}]*min-height:(\d+)px/) >= 36 && /id="comparison-link"[^>]*hidden/.test(html); });
 
   add('Scientific trust', 2, 'Sources listed and linked from each answer', () => { const p = page(); return p.$('references').children.length >= 2 && /^https:\/\//.test(p.$('source-link').href || ''); });
   add('Scientific trust', 3, 'No invented crossing probabilities', () => /does <strong>not<\/strong> calculate a percentage chance/.test(html) && /not a measured probability/.test(html) && !/\d+% chance/.test(html));

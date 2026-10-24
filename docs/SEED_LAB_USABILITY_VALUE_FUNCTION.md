@@ -25,6 +25,17 @@ The first version scored the presence of source-code substrings. It reported 100
 
 Hard fails: page scripts throw, engine reference crossing cases are wrong, or changing a plant leaves the old verdict on screen.
 
+## Visual layer (October 23, 2026, second pass)
+
+The owner asked for a softer look, charts and better interaction. Added, all plain HTML/SVG and browser JavaScript with no libraries:
+
+- **Pair picture** beside each answer: two flowers with a solid line and drifting pollen (can cross), a dashed line (rare or unconfirmed), a guarded line (protected or separated), or a broken line (no cross). Facts under it: species match, pollinator, separation guideline, plants to save from.
+- **Distance chart**: log-scale slider synced with the feet box; the chart marks the species guideline, the zone that meets it, your distance and a football-field landmark.
+- **Pollen web**: garden plants on a ring with a solid rust line for each pair that can cross and a dashed violet line for each worth checking. Tap a plant to highlight its partners (and its rows in the list); tap or press Enter on a line to open that pair in the checker.
+- **Room chart**: one bar per species in the garden, the published separation guideline, darker where a crossing partner is in the list; a table view mirrors it.
+
+Chart colors were run through the dataviz validator against the page surface: rust `#c4623f` and violet `#8a6fc4` pass every check as a pair; bars `#5b8aa6` / `#3f7392` clear 3:1. Line style (solid / dashed) and text labels carry identity as well as color. Charts re-lay out for narrow screens.
+
 ## Execution evidence
 
 - Revised page: **100/100** on the behavioural gate. Mutation checks: removing the plant-change listener drops it to 75 with a hard fail; replacing "Yes, these can cross." with jargon costs 8 points.
