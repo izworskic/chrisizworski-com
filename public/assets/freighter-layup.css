@@ -197,3 +197,13 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
  .atlas .map-tools button{flex:1 1 0;font-size:11px;line-height:1.25;padding:7px 5px}
  .refinement-panel summary{width:100%}
 }
+.refinements label.mobile-harbor{display:none}
+@media(max-width:760px){
+ .atlas-intro .kicker{display:none}
+ .atlas-toolbar label[for=harbor-filter]{display:none}
+ .atlas-toolbar label[for=season]{grid-column:1}
+ .atlas-toolbar button{grid-column:2}
+ .refinements label.mobile-harbor{display:flex;flex:1 1 100%}
+ .refinements label[for=berth-filter]{flex:1 1 100%}
+}
+.atlas .leaflet-container a.leaflet-popup-close-button{width:44px;height:44px;line-height:44px;padding:0}

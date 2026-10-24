@@ -40,13 +40,13 @@
  }
  function renderControls(){
    $('season').value=state.season;$('ship-search').value=state.query;
-   options('harbor-filter',[['all','All documented harbors'],...policy().harborCounts(state.archive,state.season).map(h=>[h.id,h.name])],state.activeHarbor);
+   for(const id of ['harbor-filter','harbor-filter-mobile'])options(id,[['all','All documented harbors'],...policy().harborCounts(state.archive,state.season).map(h=>[h.id,h.name])],state.activeHarbor);
    const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
    options('berth-filter',[['all','All documented berths'],...[...new Set(list.map(v=>v.berth))].map(b=>[b,b])],state.berth);
    $('evidence-filter').value=state.evidence;$('sort-order').value=state.sort;
    $('refinement-summary').textContent='Refine results'+(state.berth!=='all'?' · berth selected':'')+(state.evidence!=='all'?' · '+state.evidence+' only':'')+(state.sort==='recent'?' · newest source first':'');
    const upcoming=seasonData().state==='upcoming_unconfirmed';
-   for(const id of ['harbor-filter','berth-filter','evidence-filter','sort-order'])$(id).disabled=upcoming;
+   for(const id of ['harbor-filter','harbor-filter-mobile','berth-filter','evidence-filter','sort-order'])$(id).disabled=upcoming;
  }
  function renderCards(){
    const list=filtered(),confirmed=list.filter(v=>v.status==='confirmed_historical').length;
@@ -223,7 +223,9 @@
      // Intentionally not awaited: optional metadata cannot hold core tasks hostage.
      loadBiographies();
    }catch{
-     $('archive-error').hidden=false;$('map-status').textContent='Archive data unavailable. Static historical records and original sources remain below.';
+     $('archive-error').hidden=false;
+     const hint=$('layup-map').querySelector('.map-loading');if(hint)hint.textContent='Map paused until the archive loads. Read the historical roster below, or retry.';
+     $('map-status').textContent='Archive data unavailable. Static historical records and original sources remain below.';
    }finally{loading=false;$('archive-retry').disabled=false;}
  }
  function winterWork(step){
@@ -233,7 +235,7 @@
  }
  function bind(){
    $('season').addEventListener('change',e=>setSeason(e.target.value));
-   $('harbor-filter').addEventListener('change',e=>setHarbor(e.target.value));
+   for(const id of ['harbor-filter','harbor-filter-mobile'])$(id).addEventListener('change',e=>setHarbor(e.target.value));
    $('ship-search').addEventListener('input',e=>change({query:e.target.value,selected:null},{mode:'replace'}));
    $('ship-search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();scrollTo($('fleet'));}});
    for(const [id,key] of [['berth-filter','berth'],['evidence-filter','evidence'],['sort-order','sort']])$(id).addEventListener('change',e=>change({[key]:e.target.value,selected:null}));

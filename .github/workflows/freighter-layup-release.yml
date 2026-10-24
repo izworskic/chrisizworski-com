@@ -9,6 +9,7 @@ on:
       - 'lib/freighter-layup-profile-render.cjs'
       - 'scripts/generate-freighter-layup-profiles.cjs'
       - 'tests/freighter-layup*'
+      - 'tests/helpers/freighter-layup-harness.cjs'
       - '.github/workflows/freighter-layup-release.yml'
   workflow_dispatch:
 permissions:

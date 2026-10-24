@@ -52,3 +52,12 @@ test('harbor comparison uses zero-based sample counts and education steps remain
  assert.equal(chart.children[0].children[1].children[0].attrs.width,'100');
  assert.equal(chart.children[1].children[1].children[0].attrs.width,'50');
 });
+test('phone and desktop harbor controls share one selection and seasonal validity',async()=>{
+ const f=await fixture();await f.event('harbor-filter-mobile','change','toledo');
+ assert.equal(f.get('harbor-filter').value,'toledo');assert.equal(f.read().activeHarbor,'toledo');assert.match(f.get('count-note').textContent,/1 of 12/);
+ await f.event('season','change','2026-27');assert.equal(f.get('harbor-filter-mobile').disabled,true);assert.equal(f.get('harbor-filter-mobile').value,'all');
+});
+test('winter-work controls explain each phase without a vessel-specific prediction',async()=>{
+ const f=await fixture();await f.work(1);assert.equal(f.get('work-title').textContent,'Make room for the work');assert.match(f.get('work-copy').textContent,/each move needs its own dated evidence/);
+ await f.work(2);assert.equal(f.get('work-title').textContent,'Return to the lakes');assert.match(f.get('work-copy').textContent,/do not promise a sailing date/);
+});

@@ -62,7 +62,9 @@ async function run(){
       check(imageFallback,size.name+': image outage reveals branded ship illustration');
 
 
-      await page.locator('#harbor-filter').selectOption('sturgeon-bay');
+      if(size.name==='mobile')await page.locator('.refinement-panel summary').click();
+      const harborFilter=page.locator(size.name==='mobile'?'#harbor-filter-mobile':'#harbor-filter');
+      await harborFilter.selectOption('sturgeon-bay');
       check(await page.locator('[data-ship]').count()===3,size.name+': Sturgeon Bay harbor filter');
       await page.locator('#focus-harbor').click();
       await page.locator('#ship-search').fill('James R Barker');
@@ -73,7 +75,7 @@ async function run(){
       check(await page.locator('#detail-body a[href*="/vessels/james-r-barker/"]').count()===1,size.name+': biography link in detail');
       await page.locator('#clear-filters').click();
       check(await page.locator('[data-ship]').count()===12,size.name+': clear restores fleet');
-      await page.locator('#harbor-filter').selectOption('milwaukee');
+      await harborFilter.selectOption('milwaukee');
       check(await page.locator('[data-ship]').count()===1,size.name+': Milwaukee filter');
 
       await page.locator('#season').selectOption('2024-25');
