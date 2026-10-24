@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 23: usability UX revision of Seed Saving Lab: compare and whole-garden interactions.
+  "/seed-saving-lab/",
   // Oct 23 2026: Cross-Pollination Explorer discovery link on existing seed-saving guide.
   "/heirloom-seed-saving-guide/",
   // October 19: ice-viewing companion links on the two local aurora destinations.
