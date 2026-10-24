@@ -21,7 +21,7 @@
    const p=v.photo;
    if(!p)return shipSVG;
    const url='https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
-   return '<img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.insertAdjacentHTML(\'afterend\',\''+shipSVG.replace(/'/g,'')+'\')">';
+   return '<img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true">';
  }
  function vesselCard(v){
    const selected=v.id===state.selected;
