@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {SITES,DEFERRED} from '../lib/michigan-ice/sites.mjs';
-const base='https://chrisizworski.com/michigan-ice-caves/',person='https://chrisizworski.com/#person',date='2026-10-19';
+const base='https://chrisizworski.com/michigan-ice-caves/',person='https://chrisizworski.com/#person',date='2026-10-24';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const url=s=>base+(s?s.id+'/':'');
 const faqs=[['Are the ice caves formed yet?','A current site-specific official report is needed to confirm formation. Accumulated cold and forecasts describe weather, not the actual curtain. Before November 1, the new season’s cold counter has not started.'],['Can I walk across the ice to Grand Island?','This planner recommends mainland viewing from Sand Point only. Stay off the lake ice: shifting currents, thin ice and hidden open water make cold totals and lake-wide percentages unsuitable for judging a crossing.'],['Does Tahquamenon Falls freeze completely?','This tool does not predict a complete freeze. Ice and snow can frame a still-flowing waterfall; plan around open designated overlooks.'],['Is Munising Falls open?','As checked October 19, 2026, NPS still lists the Munising Falls trail as closed until further notice after storm damage. Check the linked official page for an explicit reopening.']];
