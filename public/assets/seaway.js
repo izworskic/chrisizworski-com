@@ -4,7 +4,9 @@
   const D=window.SeawayReference,C=window.SeawayCore,$=id=>document.getElementById(id);
   if(!D||!C)return;
   const regionById=new Map(D.regions.map(r=>[r.id,r])),lockById=new Map(D.locks.map(l=>[l.id,l])),viewById=new Map(D.viewpoints.map(v=>[v.id,v]));
-  const cache=new Map(),errors=new Set(),markers=new Map(),lockMarkers=new Map(),viewMarkers=new Map(),lockGroups=new Map();
+  const cache=new Map(),errors=new Set(),markers=new Map(),lockMarkers=new Map(),viewMarkers=new Map(),lockGroups=new Map(),cameraMarkers=new Map();
+  const cameraById=new Map((D.cameras||[]).map(c=>[c.id,c]));
+  let selectedCamera=D.cameras?.[0]?.id,cameraPlayer=null;
   let region=document.body.dataset.defaultRegion||'all',selectedLock='eisenhower',selectedView='eisenhower-center',selectedShip=null;
   let map=null,shipsLayer=null,requestId=0,loading=false,location=null,playing=false,frameId=null,lastFrame=null,progress=0;
   const svgNS='http://www.w3.org/2000/svg',reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -24,12 +26,15 @@
     selectedLock=lockById.has(p.get('lock'))?p.get('lock'):'eisenhower';
     selectedView=viewById.has(p.get('view'))?p.get('view'):'eisenhower-center';
     selectedShip=/^\d{9}$/.test(p.get('vessel')||'')?p.get('vessel'):null;
+    selectedCamera=cameraById.has(p.get('camera'))?p.get('camera'):D.cameras?.[0]?.id;
+    cameraPlayer?.select(selectedCamera,{notify:false});updateCameraMarkers();
     $('regionSelect').value=region;$('viewingSide').value=viewById.get(selectedView).country;
   }
   function locationHref(){return window.location.href;}
   function writeURL(push=false){
     const url=new URL(locationHref());url.searchParams.set('region',region);url.searchParams.set('lock',selectedLock);url.searchParams.set('view',selectedView);
     if(selectedShip)url.searchParams.set('vessel',selectedShip);else url.searchParams.delete('vessel');
+    if(selectedCamera)url.searchParams.set('camera',selectedCamera);
     if(url.href!==locationHref())window.history[push?'pushState':'replaceState'](null,'',url);
   }
   function data(){return cache.get(region)||cache.get('all')||null;}
@@ -159,6 +164,18 @@
         const m=L.marker([lat,lon],{icon:L.divIcon({className:'seaway-lock-marker seaway-lock-group',html:'<span>'+locks.map(l=>l.number).join('·')+'</span>',iconSize:[34,34],iconAnchor:[17,17]}),title:locks.map(l=>l.name).join(' and ')+' · select to zoom in',keyboard:true,zIndexOffset:550});
         m.on('click',()=>map.setView([lat,lon],13,{animate:false}));lockGroups.set(ids.join(','),m);
       }
+      // One locator per camera area keeps the two views at each city from
+      // overlapping. These are approximate areas, never exact camera mounts.
+      for(const camera of D.cameras||[]){
+        if(cameraMarkers.has(camera.area))continue;
+        const content=el('div');content.append(el('h3',camera.areaName),el('p',camera.mapAccuracy+' These feeds show the upper river, not a lock chamber.'));
+        for(const feed of D.cameras.filter(c=>c.area===camera.area)){
+          const button=el('button','Watch '+feed.shortName,'button secondary');button.type='button';
+          button.addEventListener('click',()=>{cameraPlayer?.select(feed.id,{load:true});$('seawayCameras').scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});});content.append(button);
+        }
+        const marker=L.marker([camera.lat,camera.lon],{icon:cameraIcon(false),title:camera.areaName+' · two river views',keyboard:true,zIndexOffset:400}).addTo(map).bindPopup(content,{maxWidth:280});cameraMarkers.set(camera.area,marker);
+      }
+      updateCameraMarkers();
       renderMapLandmarks();map.on('zoomend',()=>{renderMapLandmarks();drawShips();});map.on('moveend',mapMessage);drawShips();
       let key='';try{const r=await fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(8000)});if(r.ok){const config=await r.json();if(config.provider==='CARTO'&&typeof config.key==='string')key=config.key;}}catch(_){/* Keep public access usable with the established fallback. */}
       let fallback=false;
@@ -169,6 +186,17 @@
       }
       tiles(Boolean(key));
     }catch(_){$('mapStatus').textContent='The map could not open. Use the ship cards, lock buttons and public viewing directions on this page.';$('seawayMap').append(el('p','The river guide remains available below while the map is out of reach.','empty'));}
+  }
+  function cameraIcon(active){return L.divIcon({className:'seaway-camera-marker'+(active?' is-selected':''),html:'<span>CAM</span>',iconSize:[36,28],iconAnchor:[18,14]});}
+  function updateCameraMarkers(){
+    if(!map)return;const area=cameraById.get(selectedCamera)?.area;
+    for(const [id,marker]of cameraMarkers)if(marker._seawaySelected!==(id===area)){marker.setIcon(cameraIcon(id===area));marker._seawaySelected=id===area;}
+  }
+  function locateCamera(camera){
+    setRegion(camera.region,true);
+    if(map){map.setView([camera.lat,camera.lon],13,{animate:false});cameraMarkers.get(camera.area)?.openPopup();}
+    $('mapSelection').replaceChildren(el('strong',camera.areaName),el('p',camera.mapAccuracy+' The selected feed is '+camera.name+'. Camera footage does not establish an arrival at Eisenhower or any other lock.'));
+    $('seawayMap').scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});track('camera_map',camera.id);
   }
   function renderViewMarkers(){
     if(!map)return;const side=$('viewingSide').value;
@@ -297,7 +325,8 @@
   $('historyYear').addEventListener('change',drawHistory);$('historyMeasure').addEventListener('change',drawHistory);
   window.addEventListener('popstate',()=>{const previous=region;readURL();chooseLock(selectedLock);fitRegion();render();if(previous!==region)void loadReports();});
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{drawProfile();drawHistory();map?.invalidateSize({pan:false});},200);});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseModel();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){pauseModel();if(cameraPlayer?.isLoaded())cameraPlayer.stop('Video stopped while this tab was hidden. Load the camera again when you return.');}});
+  cameraPlayer=window.SeawayCameras?.mount({root:$('seawayCameras'),feeds:D.cameras,document,onSelect:camera=>{selectedCamera=camera.id;writeURL(true);updateCameraMarkers();track('select_camera',camera.id);},onLocate:locateCamera,onPlayback:camera=>track('camera_player',camera.id)});
   readURL();chooseLock(selectedLock);renderFit();drawHistory();render();void startMap();void loadReports();
   setInterval(()=>{if(!document.hidden)void loadReports();},120000);
   setInterval(()=>{if(!document.hidden)render();},30000);

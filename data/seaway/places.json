@@ -199,5 +199,77 @@
       "source": "https://www.southdundas.com/recreation-tourism/attractions/iroquois-lock",
       "directionsQuery": "Iroquois Lock viewing area Iroquois Ontario"
     }
+  ],
+  "cameras": [
+    {
+      "id": "alexandria-river",
+      "name": "Alexandria Bay · River view",
+      "shortName": "Alex Bay · River",
+      "youtubeId": "H_EbNSqfoso",
+      "operator": "Alexandria Bay Chamber of Commerce",
+      "source": "https://www.youtube.com/@alexandriabaychamberofcomm5890/streams",
+      "area": "alexandria-bay",
+      "areaName": "Alexandria Bay camera area",
+      "lat": 44.337,
+      "lon": -75.921,
+      "region": "thousand-islands",
+      "note": "An operator-published view of the St. Lawrence River at Alexandria Bay, New York. This is an upper-river view, not a lock camera.",
+      "directUrl": "https://www.youtube.com/watch?v=H_EbNSqfoso",
+      "reviewedAt": "2026-10-23",
+      "mapAccuracy": "Approximate city camera area, not an exact camera mount or public entrance.",
+      "operatorPage": "https://visitalexbay.org/area-videos/"
+    },
+    {
+      "id": "alexandria-docks",
+      "name": "Alexandria Bay · Docks",
+      "shortName": "Alex Bay · Docks",
+      "youtubeId": "yWr9-HqS2Ys",
+      "operator": "Alexandria Bay Chamber of Commerce",
+      "source": "https://www.youtube.com/@alexandriabaychamberofcomm5890/streams",
+      "area": "alexandria-bay",
+      "areaName": "Alexandria Bay camera area",
+      "lat": 44.337,
+      "lon": -75.921,
+      "region": "thousand-islands",
+      "note": "The Chamber’s dock camera gives a second view of the Alexandria Bay waterfront. Docks, passing boats and the shipping channel are different things; the camera does not establish a ship’s route.",
+      "directUrl": "https://www.youtube.com/watch?v=yWr9-HqS2Ys",
+      "reviewedAt": "2026-10-23",
+      "mapAccuracy": "Approximate city camera area, not an exact camera mount or public entrance.",
+      "operatorPage": "https://visitalexbay.org/area-videos/"
+    },
+    {
+      "id": "brockville-south",
+      "name": "Brockville · City Hall south view",
+      "shortName": "Brockville · South",
+      "youtubeId": "k36fwVlkzBM",
+      "operator": "City of Brockville",
+      "source": "https://brockville.com/river-webcams/",
+      "area": "brockville",
+      "areaName": "Brockville camera area",
+      "lat": 44.587,
+      "lon": -75.683,
+      "region": "thousand-islands",
+      "note": "The City identifies this as the view from the back of City Hall facing the St. Lawrence River in Brockville, Ontario.",
+      "directUrl": "https://www.youtube.com/watch?v=k36fwVlkzBM",
+      "reviewedAt": "2026-10-23",
+      "mapAccuracy": "Approximate city camera area, not an exact camera mount or public entrance."
+    },
+    {
+      "id": "brockville-west",
+      "name": "Brockville · Blockhouse Island west view",
+      "shortName": "Brockville · West",
+      "youtubeId": "wJTwuekiCr0",
+      "operator": "City of Brockville",
+      "source": "https://brockville.com/river-webcams/",
+      "area": "brockville",
+      "areaName": "Brockville camera area",
+      "lat": 44.587,
+      "lon": -75.683,
+      "region": "thousand-islands",
+      "note": "The City identifies this west-facing camera at the end of Blockhouse Island. Watch the operator’s live indicator; visibility and camera direction can change.",
+      "directUrl": "https://www.youtube.com/watch?v=wJTwuekiCr0",
+      "reviewedAt": "2026-10-23",
+      "mapAccuracy": "Approximate city camera area, not an exact camera mount or public entrance."
+    }
   ]
 }
