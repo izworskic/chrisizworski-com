@@ -17,7 +17,7 @@ test('Mackinac Ice Bridge page is a distinct indexable, authored seasonal tool',
   assert.ok(desc && desc.length <= 158, 'meta description must be <= 158 characters');
   assert.match(page, /rel="canonical" href="https:\/\/chrisizworski.com\/mackinac-ice-bridge\/"/);
   assert.match(page, /https:\/\/chrisizworski.com\/#person/);
-  const date = page.match(/dateModified":"(\\d{4}-\\d{2}-\\d{2})"/)?.[1];
+  const date = page.match(/dateModified":"(\d{4}-\d{2}-\d{2})"/)?.[1];
   assert.ok(date, 'Mackinac Ice Bridge must have dateModified');
   assert.ok(read('public/sitemap-winter.xml').includes('<loc>https://chrisizworski.com/mackinac-ice-bridge/</loc><lastmod>'+date+'</lastmod>'), 'Bridge schema and winter sitemap dates must match');
   assert.match(page, /Mackinac Island Christmas Tree Ice Bridge Watch/);
