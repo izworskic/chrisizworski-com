@@ -689,7 +689,9 @@
     onRegionChange(currentSlug);
     initMap(); // Never wait for /api/ice-now to start CARTO or OSM.
     window.addEventListener('michigan-ice-data',function(evt){render(evt.detail);},{once:true});
-    if (window.__michiganIceNow) render(window.__michiganIceNow);
+    // Even a settled null response must reach the map: a failed NOAA request
+    // can finish before this deferred enhancement registers its event listener.
+    if (window.__michiganIceNowReady) render(window.__michiganIceNow);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
   else setup();
