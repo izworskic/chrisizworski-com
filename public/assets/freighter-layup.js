@@ -4,17 +4,16 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const state = {archive:null,season:'2025-26',query:'',berth:'all',selected:null,map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
+ const state = {archive:null,season:'2025-26',query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
  const esc = value => String(value ?? '').replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text = (tag,content) => {const el=document.createElement(tag);el.textContent=content;return el};
  const seasonData = () => state.archive.seasons.find(x=>x.id===state.season);
  const records = () => seasonData()?.records || [];
  const harbor = id => state.archive.harbors.find(h=>h.id===id);
- const filtered = () => records().filter(v => {
-   const q=state.query.trim().toLocaleLowerCase();
-   return (state.berth==='all'||v.berth===state.berth) &&
-      (!q||[v.name,...(v.aliases||[]),v.berth].join(' ').toLocaleLowerCase().includes(q));
- });
+ const policy=()=>window.FreighterLayupModel;
+ const filtered = () => records().filter(v=>(state.activeHarbor==='all'||v.harborId===state.activeHarbor) &&
+   (state.berth==='all'||v.berth===state.berth) && policy().matchesSearch(v,state.query));
+
  const fmt = date => {if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return 'date not recorded';return new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'})};
  const shipSVG = '<svg class="ship-illustration" viewBox="0 0 300 120" aria-hidden="true"><path fill="#234c59" d="M14 65h25l8 15h195l32-30h14l-24 44H56z"/><path fill="#457e87" d="M48 58V29h37v29z"/><path fill="#2f6370" d="M57 20h10v9H57z"/><path fill="#9dbfc0" d="M55 36h10v7H55zm16 0h8v7h-8z"/><path stroke="#497782" stroke-width="4" d="M105 68h115M90 60h151"/><path stroke="#bed6d7" stroke-width="3" d="M30 102h244"/></svg>';
  function photoHTML(v,detail=false){
@@ -24,35 +23,36 @@
    return '<img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true">';
  }
  function vesselCard(v){
-   const selected=v.id===state.selected;
-   const hasPhoto=Boolean(v.photo);
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+photoHTML(v)+(hasPhoto?'<span class="photo-hint">Historic vessel photo · '+esc(v.photo.date.slice(0,4))+'</span>':'')+'</div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><span class="tag">Confirmed historical layup</span><p class="berth">'+esc(v.berth)+' · Superior, Wisconsin</p><p class="summary">'+esc(v.summary)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore this freighter →</button></div></article>';
+   const selected=v.id===state.selected,h=harbor(v.harborId),label=policy().classify(v,seasonData());
+   const hasPhoto=Boolean(v.photo),reported=Boolean(label.reported);
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+photoHTML(v)+(hasPhoto?'<span class="photo-hint">Historic vessel photo · '+esc(v.photo.date.slice(0,4))+'</span>':'')+'</div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><span class="tag'+(reported?' tag-reported':'')+'">'+esc(label.label)+'</span><p class="berth">'+esc(v.berth)+' · '+esc(h.name)+'</p><p class="summary">'+esc(v.summary)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore this freighter →</button></div></article>';
  }
  function populateBerths(){
-   const options=['all',...new Set(records().map(r=>r.berth))];
+   const list=records().filter(r=>state.activeHarbor==='all'||r.harborId===state.activeHarbor);
+   const options=['all',...new Set(list.map(r=>r.berth))];
    if(!options.includes(state.berth))state.berth='all';
    $('berth-filter').replaceChildren(...options.map(s=>{const o=document.createElement('option');o.value=s;o.textContent=s==='all'?'All documented berths':s;return o}));
    $('berth-filter').value=state.berth;
  }
  function renderCards(){
-   const list=filtered();
-   const count=records().length;
+   const list=filtered(),total=policy().totals(seasonData());
+   const scope=state.activeHarbor==='all'?'both sampled harbors':harbor(state.activeHarbor)?.name||'selected harbor';
    $('count-note').textContent=state.season==='2026-27'?'No confirmed 2026–27 layups yet. Previous-season docks are not forecasts.':
-    list.length+' of '+count+' ships in a verified, partial Superior harbor archive · source roster dated Jan 30, 2026.';
+    list.length+' of '+total.documented+' sourced vessel records · '+scope+' · '+total.confirmed+' verified / '+total.reported+' community-reported overall.';
    $('ship-grid').innerHTML=state.season==='2026-27'?
      '<div class="current-empty"><h3>Winter 2026–27 is still being written.</h3><p>There are no sourced 2026–27 winter layup berths in this registry yet. A vessel that stopped moving has not necessarily laid up.</p><button type="button" id="view-archive" class="small-button">Explore the verified 2025–26 archive →</button></div>':
-     list.length?list.map(vesselCard).join(''):'<div class="empty">No ships match those filters. Clear your search or choose another berth.</div>';
+     list.length?list.map(vesselCard).join(''):'<div class="empty">No ships match those filters. Clear your search or choose another harbor or berth.</div>';
    const archiveBtn=$('view-archive');if(archiveBtn)archiveBtn.addEventListener('click',()=>{$('season').value='2025-26';setSeason('2025-26')});
    $('ship-grid').querySelectorAll('[data-ship]').forEach(b=>b.addEventListener('click',()=>selectShip(b.dataset.ship,true)));
  }
  function renderStats(){
-   const s=seasonData(),list=records();
-   $('stat-ships').textContent=list.length;
-   $('stat-harbors').textContent=new Set(list.map(r=>r.harborId)).size;
-   $('stat-year').textContent=s.state==='historical_snapshot'?'Jan 30':'Pending';
+   const s=seasonData(),count=policy().totals(s);
+   $('stat-ships').textContent=count.documented;
+   $('stat-harbors').textContent=count.harbors;
+   $('stat-year').textContent=s.state==='historical_snapshot'?count.confirmed+' / '+count.reported:'Pending';
    $('season-note').textContent=s.note;
    $('map-intro').textContent=s.state==='historical_snapshot'?
-      'Six named vessels at three facilities in Superior, Wisconsin, on a dated historical port roster. Map pin is the harbor area, not an individual dock.':
+      'Explore a partial historical roster from Superior and Sturgeon Bay. Map markers identify approximate harbors, not specific dock positions or live vessels.':
       'No layup locations have been confirmed for this winter. Map is geographic context only; last year’s berth does not predict this year’s.';
  }
  function selectShip(id,scroll){
@@ -61,32 +61,53 @@
    const panel=$('ship-detail');
    panel.hidden=false;
    $('detail-title').textContent=v.name;
-   const h=harbor(v.harborId);
+   const h=harbor(v.harborId),report=policy().classify(v,seasonData());
    const items=(v.events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>
-     '<li><time datetime="'+esc(e.date)+'">'+esc(fmt(e.date))+' · '+esc(e.type)+'</time>'+esc(e.text)+' <a href="'+esc(e.source)+'" target="_blank" rel="noopener">Evidence ↗</a></li>').join('');
+     '<li><time datetime="'+esc(e.date)+'">'+esc(fmt(e.date))+' · '+esc(e.type.replace(/_/g,' '))+'</time>'+esc(e.text)+' <a href="'+esc(e.source)+'" target="_blank" rel="noopener">Evidence ↗</a></li>').join('');
+   const facts=(v.storyFacts||[]).map(f=>'<li>'+esc(f.text)+' <a href="'+esc(f.source)+'" target="_blank" rel="noopener">Source ↗</a></li>').join('');
    const figure=v.photo?'<figure>'+photoHTML(v,true)+'<figcaption>'+esc(v.photo.alt)+' Photo: <a href="'+esc(v.photo.page)+'" target="_blank" rel="noopener">'+esc(v.photo.creator)+'</a> · '+esc(v.photo.license)+(v.photo.licenseUrl?' (<a href="'+esc(v.photo.licenseUrl)+'" target="_blank" rel="noopener">license ↗</a>)':'')+'. Not a photo of this winter’s layup.</figcaption></figure>':
       '<div class="empty"><strong>No rights-verified photograph yet.</strong><p>We would rather show a plain illustration than the wrong ship or an unlicensed image.</p></div>';
-   $('detail-body').innerHTML='<div class="detail-grid"><div><p class="tag">Documented winter 2025–26</p><p><b>Winter berth:</b> '+esc(v.berth)+' · '+esc(h.name)+'</p><p>'+esc(v.summary)+'</p><p class="note">The historical snapshot was dated '+esc(fmt(v.statusAsOf))+'. It is not this vessel’s current position or an assertion it remained berthed after that date.</p><h4>Events with sources</h4><ol class="timeline">'+items+'</ol><p><a href="'+esc(v.evidence.url)+'" target="_blank" rel="noopener">Read official harbor roster ↗</a></p></div><div>'+figure+'</div></div>';
+   const warning=report.reported?'<p class="evidence-warning"><strong>Community report, not independently verified.</strong> The winter location is based on local observers and can be corrected when a higher-authority record becomes available.</p>':'';
+   $('detail-body').innerHTML='<div class="detail-grid"><div><p class="tag'+(report.reported?' tag-reported':'')+'">'+esc(report.label)+'</p><p><b>Winter berth or facility:</b> '+esc(v.berth)+' · '+esc(h.name)+'</p>'+warning+'<p>'+esc(v.summary)+'</p><p class="note">Source as of '+esc(fmt(v.statusAsOf))+'. Berth precision: '+esc((v.berthPrecision||'unverified').replace(/_/g,' '))+'. This is not the vessel’s current position or proof it remained at that dock afterward.</p><h4>Winter timeline</h4><ol class="timeline">'+items+'</ol>'+(facts?'<h4>From this ship’s story</h4><ul class="fact-list">'+facts+'</ul>':'')+'<p><a href="'+esc(v.evidence.url)+'" target="_blank" rel="noopener">Read the documented source ↗</a></p></div><div>'+figure+'</div></div>';
    $('ship-grid').querySelectorAll('[data-card]').forEach(x=>x.classList.toggle('is-selected',x.dataset.card===id));
    if(state.map){const m=state.markers.find(m=>m.id===v.harborId);if(m){state.map.setView([h.lat,h.lon],Math.max(state.map.getZoom(),9),{animate:false});m.marker.openPopup()}}
    if(scroll){panel.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});panel.focus({preventScroll:true})}
  }
  function setSeason(id){
-   state.season=id;state.selected=null;state.berth='all';state.query='';$('ship-search').value='';
-   $('ship-detail').hidden=true;populateBerths();renderStats();renderCards();renderMapPins();renderHarborPanel();
+   state.season=id;state.selected=null;state.berth='all';state.query='';state.activeHarbor='all';$('ship-search').value='';
+   $('harbor-filter').value='all';$('ship-detail').hidden=true;
+   populateBerths();renderStats();renderCards();renderMapPins();renderHarborPanel();
+   if(state.map)fitLakes();
  }
  function renderHarborPanel(){
    const box=$('harbor-panel');box.replaceChildren();
-   const list=records();
-   if(!list.length){box.append(text('h3','The new winter has not been confirmed'),text('p','The 2025–26 archive remains available through the season selector. The map never assigns a past berth to the new season.'));return}
-   box.append(text('h3','Superior harbor · Lake Superior'),text('p','The port authority identifies six wintering vessels and their docks. A single harbor marker groups the vessels, because exact berth coordinates are not verified.'));
+   const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
+   if(!records().length){box.append(text('h3','The new winter has not been confirmed'),text('p','The 2025–26 archive remains available through the season selector. The map never assigns a past berth to the new season.'));return}
+   if(state.activeHarbor==='all'){
+     box.append(text('h3','Winter harbors · select a coast'),text('p','Compare source-dated records in Superior and Sturgeon Bay. The registry is partial, and each harbor point is approximate. Select a harbor marker or filter to see its fleet.'));
+     const wrap=document.createElement('div');wrap.className='harbor-chip';
+     for(const id of [...new Set(records().map(v=>v.harborId))]){
+       const h=harbor(id),ships=records().filter(v=>v.harborId===id),button=text('button',h.name+' · '+ships.length+' ships');
+       button.type='button';button.addEventListener('click',()=>setHarbor(id,true));wrap.append(button)
+     }
+     box.append(wrap);return;
+   }
+   const h=harbor(state.activeHarbor);
+   box.append(text('h3',h.name+' · '+h.lake),text('p',list.length+' dated layup reports. '+h.note));
    const wrap=document.createElement('div');wrap.className='harbor-chip';
-   for(const v of list){const b=text('button',v.name);b.type='button';b.addEventListener('click',()=>selectShip(v.id,true));wrap.append(b)}
+   for(const v of list){const b=text('button',v.name+(v.status==='reported_historical'?' · reported':''));b.type='button';b.addEventListener('click',()=>selectShip(v.id,true));wrap.append(b)}
    box.append(wrap);
    const foot=document.createElement('div');foot.className='harbor-links';
-   const a=text('a','Official port roster ↗');a.href=list[0].evidence.url;a.target='_blank';a.rel='noopener';
-   const b=text('a','Find public waterfront options on Google Maps ↗');b.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('public waterfront parks Superior Wisconsin');b.target='_blank';b.rel='noopener';
-   foot.append(a,b);box.append(foot);
+   const src=text('a','Review original harbor sources ↗');src.href=list[0].evidence.url;src.target='_blank';src.rel='noopener';
+   const publicMap=text('a','Find public waterfront locations ↗');publicMap.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('public waterfront parks '+h.name);publicMap.target='_blank';publicMap.rel='noopener';
+   const all=text('button','Show both harbors');all.type='button';all.addEventListener('click',()=>setHarbor('all',true));
+   foot.append(src,publicMap,all);box.append(foot);
+ }
+ function setHarbor(id,zoom){
+   if(id!=='all'&&!harbor(id))return;
+   state.activeHarbor=id;state.berth='all';state.selected=null;
+   $('harbor-filter').value=id;$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();
+   if(zoom&&state.map){if(id==='all')fitLakes();else{const h=harbor(id);state.map.setView([h.lat,h.lon],10,{animate:false})}}
  }
  function shipIcon(count){
    const symbol='<svg viewBox="0 0 90 36" width="62" height="30" aria-hidden="true"><path d="M5 20h8l7 6h51l13-10h3L76 33H22Z" fill="#0d465a" stroke="#fff" stroke-width="2"/><path d="M17 17V7h16v12" fill="#0d465a" stroke="#fff" stroke-width="1.5"/><path d="M24 3h4v4" fill="#0d465a"/></svg>';
@@ -97,13 +118,13 @@
    state.markerLayer.clearLayers();state.markers=[];
    const ids=[...new Set(records().map(x=>x.harborId))];
    for(const id of ids){
-     const h=harbor(id),list=records().filter(v=>v.harborId===id);
-     const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' historical vessels; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
-     const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' documented historical layups. Marker represents the harbor, not individual ships or shipyard entrances.'));
-     const button=text('button','Show ships in this harbor');button.type='button';button.addEventListener('click',()=>{$('fleet').scrollIntoView({behavior:'smooth',block:'start'});$('ship-search').focus({preventScroll:true})});pop.append(button);
-     marker.bindPopup(pop);marker.on('click',renderHarborPanel);state.markers.push({id,marker});
+     const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>v.status==='confirmed_historical').length;
+     const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' historical records; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
+     const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' historical records: '+verified+' verified, '+(list.length-verified)+' community-reported. Harbor-wide reference only, not precise shipyard berths.'));
+     const button=text('button','Explore this harbor');button.type='button';button.addEventListener('click',()=>{setHarbor(id,true);$('fleet').scrollIntoView({behavior:'smooth',block:'start'})});pop.append(button);
+     marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});
    }
-   $('map-status').textContent=ids.length?ids.length+' verified harbor in this historical sample · coordinates approximate · no vessel positions implied':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
+   $('map-status').textContent=ids.length?ids.length+' historical harbor references · 0 vessel positions implied · one community-reported record clearly labeled':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
  }
  function fitLakes(){if(!state.map)return;state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false})}
  function focusHarbor(){const ids=state.markers;if(!state.map)return;if(ids.length)state.map.setView(ids[0].marker.getLatLng(),10,{animate:false});else fitLakes()}
@@ -128,7 +149,7 @@
      state.map=L.map('layup-map',{scrollWheelZoom:false,worldCopyJump:true,zoomControl:true}).setView([44.7,-84.6],5);
      state.markerLayer=L.layerGroup().addTo(state.map);
      fitLakes();addTiles();renderMapPins();
-     $('reset-map').addEventListener('click',fitLakes);
+     $('reset-map').addEventListener('click',()=>setHarbor('all',true));
      $('focus-harbor').addEventListener('click',focusHarbor);
      $('locate').addEventListener('click',()=>{
        if(!navigator.geolocation){$('map-status').textContent='Location unavailable in this browser.';return}
@@ -147,7 +168,8 @@
      const res=await fetch('/assets/freighter-layup-registry.json',{signal:AbortSignal.timeout(9000)});
      if(!res.ok)throw new Error('Archive not available');
      const archive=await res.json();
-     if(archive.schemaVersion!==1||!Array.isArray(archive.seasons)||!Array.isArray(archive.harbors))throw new Error('Unexpected archive format');
+     if(archive.schemaVersion!==2||!Array.isArray(archive.seasons)||!Array.isArray(archive.harbors))throw new Error('Unexpected archive format');
+     if(!policy()||policy().validateRegistry(archive).length)throw new Error('Layup integrity check failed');
      state.archive=archive;
    }catch{
      $('count-note').textContent='Historical archive could not be loaded. The source names below are retained as a static reference; check the official roster.';
@@ -155,10 +177,12 @@
      $('harbor-panel').append(text('p','Archive data temporarily unavailable. Read the linked Duluth port authority roster for verification.'));
      return;
    }
+   $('harbor-filter').replaceChildren(...[{id:'all',name:'All documented harbors'},...archive.harbors.map(h=>({id:h.id,name:h.name}))].map(h=>{const option=document.createElement('option');option.value=h.id;option.textContent=h.name;return option}));
+   $('harbor-filter').addEventListener('change',e=>setHarbor(e.target.value,true));
    $('season').addEventListener('change',e=>setSeason(e.target.value));
    $('ship-search').addEventListener('input',e=>{state.query=e.target.value;state.selected=null;$('ship-detail').hidden=true;renderCards()});
    $('berth-filter').addEventListener('change',e=>{state.berth=e.target.value;state.selected=null;$('ship-detail').hidden=true;renderCards()});
-   $('clear-filters').addEventListener('click',()=>{state.query='';state.berth='all';$('ship-search').value='';$('berth-filter').value='all';renderCards()});
+   $('clear-filters').addEventListener('click',()=>{state.query='';state.berth='all';state.activeHarbor='all';$('ship-search').value='';$('harbor-filter').value='all';$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();fitLakes()});
    $('detail-close').addEventListener('click',()=>{state.selected=null;$('ship-detail').hidden=true;renderCards();$('ship-search').focus()});
    setSeason(state.season);initMap();
  }
