@@ -95,8 +95,8 @@ test('rainbow detailed timing page stays intentionally consolidated into the fla
 test('Northeast Great Lakes hub links both distinct Niagara intents and the author source guide', () => {
   assert.match(region, /href="\/niagara-border-crossing\/"/);
   assert.match(region, /href="\/national-tools\/niagara-rainbow\/"/);
-  // Seaway adds one distinct corridor tool to the six existing regional entries.
-  assert.match(region, /numberOfItems":7/);
+  // Seaway and the live lake-effect snowbelt engine now join the existing regional specialists.
+  assert.match(region, /numberOfItems":8/);
   assert.match(region, /href="\/st-lawrence-seaway\/"/);
   assert.match(region, /href="\/chris-izworski\/"/);
   assert.match(region, /href="\/chris-izworski-source-guide\/"/);
@@ -133,7 +133,7 @@ test('Welland canal is discoverable and Niagara specialists link into one decisi
   assert.match(region, /href="\/niagara-falls-today\/"/);
   assert.match(national, /data-tool-id="niagara-falls-today"/);
   assert.match(region, /href="\/welland-canal\/"/);
-  assert.match(region, /numberOfItems":7/);
+  assert.match(region, /numberOfItems":8/);
   assert.match(border, /href="\/welland-canal\/"/);
   assert.match(rainbow, /href="\/welland-canal\/"/);
   assert.match(welland, /href="\/niagara-border-crossing\/"/);
