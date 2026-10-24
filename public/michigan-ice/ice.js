@@ -546,8 +546,12 @@
 (function () {
   var region = document.getElementById('region-live');
   if (!document.getElementById('board') && (!region || !/^(saginaw-bay|lake-st-clair|little-bay-de-noc|grand-traverse-bay)$/.test(region.getAttribute('data-region') || ''))) return;
+  // Carry the generator's content-based bundle version into the enhancement.
+  // Otherwise an old freeze-up.js can survive a fresh ice.js in the device cache.
+  var script = document.currentScript;
+  var version = script && new URL(script.src, location.href).searchParams.get('v');
   var s = document.createElement('script');
-  s.src = '/michigan-ice/freeze-up.js';
+  s.src = '/michigan-ice/freeze-up.js' + (version ? '?v=' + encodeURIComponent(version) : '');
   s.defer = true;
   document.head.appendChild(s);
 })();
