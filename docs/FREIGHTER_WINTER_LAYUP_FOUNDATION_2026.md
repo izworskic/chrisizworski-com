@@ -33,9 +33,9 @@ Answer "Where is that freighter spending winter, and what is its story?" with a 
 - New static, server-rendered /great-lakes-freighter-winter-layup/ page, not a rewrite of /freighters/.
 - Versioned registry JSON with exactly two season objects and a stable id for each record.
 - Historic status as-of dates and source-level event references. Date for event is NOT a substitute for publication date.
-- One group marker at an APPROXIMATE harbor reference point, not six invented dock positions.
+- Three harbor-group markers at APPROXIMATE reference points. Not dock, public entrance or exact vessel positions.
 - CARTO basemap via already-existing /api/carto-basemap-config, OSM tiles on outage.
-- Desktop/mobile vessel search, berth filtering, detailed timelines, season switcher, 2 rights-verified ship photos.
+- Desktop/mobile vessel search, harbor and berth filters, event-dated timelines, season switcher, 2 rights-verified historical vessel photographs.
 - Current upcoming season expressly displays no verified layups. No inference from missing/stale AIS.
 - External Google Maps link for discovering public waterfront options, NOT directions to industrial docks.
 - Separate cross-links to established live tracker and ice explorer. No dependency on either endpoint.
@@ -45,9 +45,9 @@ Answer "Where is that freighter spending winter, and what is its story?" with a 
 ## Data model
 Public artifact: public/assets/freighter-layup-registry.json
 season: id, label, state, asOf, note, records[]
-record: id, name, aliases[], harborId, berth, status, statusAsOf, evidence, summary, events[], photo?
+record: id, name, aliases[], identity:{key,imo?,mmsi?,matchPolicy}, harborId, berth, berthPrecision, status, statusAsOf, evidenceClass, evidence, summary, events[], storyFacts?, photo?
 harbor: id, name, lat/lon, coordinatePrecision, note.
-Future candidate records must use stable IMO identity where valid and structured aliases; the current sample uses locally unique slugs and is NOT an authoritative complete ship identity registry.
+Stable internal IDs and curated aliases are mandatory. IMO and MMSI are deliberately null until verified, never guessed. The browser/Node shared validator rejects alias collisions, invalid IMO/MMSI check digits, misclassified confidence and unverified future-season carryover. This is NOT an authoritative fleet registry.
 
 ## Functional value function
 For investment ordering only, score each dimension 0–5:
@@ -71,24 +71,24 @@ These are RELEASE TARGETS, not measured results. No invented score from unrun UX
 ## Acceptance tests (automated)
 Run from repo root:
   node --test tests/freighter-layup.test.js
-This covers 6 sourced records, exact historical status dates, unique IDs, source-backed timeline events, photo rights,
+This covers 10 sourced records across 3 harbors, mixed evidence classes, per-record dates, unique IDs and collision-safe aliases, timeline sources, photo rights,
 deliberately empty 2026–27 season, no AIS classification dependency, static-readable page and parseable JavaScript.
 
 ## Hands-on journeys still required on preview BEFORE merging
-1. Default 2025–26: six ships; select Lee A. Tregurtha: Fraser berth, WW2 history, two independent dates, licensed photo.
+1. Default 2025–26: ten ships in three harbors, nine verified and one community-reported; select Lee A. Tregurtha: Fraser berth, WW2 history, two independent dates, licensed photo.
 2. Search Oberstar, including abbreviated alias; can open story and return to full list.
-3. Berth filter Ogdensburg Pier returns exactly Indiana Harbor. Reset returns six.
-4. Switch 2026–27: no ships, no harbor pins, no legacy location or fabricated status; switch back restores six.
+3. Berth filter Ogdensburg Pier returns only Indiana Harbor. Sturgeon Bay selects Barker, Speer and Manitoulin; Milwaukee selects Stewart J. Cort. Reset returns ten.
+4. Switch 2026–27: no ships, no harbor pins, no legacy location or fabricated status; switch back restores ten.
 5. Harbor marker card click, all-lakes reset, focus button, narrow mobile popup: no jumping, no overlapping, no wrong ship.
-6. Disable JavaScript: six static records and original roster link remain readable.
+6. Disable JavaScript: ten static ship records and original published sources remain readable.
 7. Block Wikimedia photos: legible cards and properly labeled detail remain available.
 8. Block CARTO or basemap endpoint: fallback tiles; block Leaflet entirely: source list remains readable.
 9. Observe screen-reader labels, keyboard tab order, focus on selected details; test 360px to 1440px.
 10. Inspect site build/preview. Existing /freighters/, /great-lakes-freighter-tracking/, /soo-locks/ and /michigan-ice/ remain unmodified and functional.
 
-## Deferred: phase 2+ (not part of this branch)
+## Deferred: later phases after three-harbor evidence foundation
 - Expand verified harbors across Michigan/Wisconsin/Ohio/New York/Ontario/Quebec; coverage denominator by fleet and harbor.
-- Ship identity crosswalk with IMO, MMSI and historical aliases; no current-position inference from last received AIS.
+- Complete external IMO/MMSI identity crosswalk where authentic registries establish values; local curated identity/alias model now in this branch. No current-position inference from last received AIS.
 - Fine-grained dock coordinates ONLY if permission, specificity and map geometry are verified; never route visitors to secure yard.
 - Historic voyage/port-call coverage audit and explicit missing-data model before any seasonal travel animation.
 - Curated ship-specific photographs with checked licensing and non-Wikimedia external rights.
@@ -100,6 +100,38 @@ deliberately empty 2026–27 season, no AIS classification dependency, static-re
 - Alerting/webcams, once primary core is measured usable and reliable.
 
 ## Change isolation
-This branch adds only: a new page, registry, its CSS/JS, tests, and this planning document.
+This branch adds only: a new page, registry, its CSS/JS and shared identity model, tests, and this planning document.
 No modifications to existing shipping tools, Vercel config, package scripts, source sitemaps, or deployment policy.
 Do not merge or claim production rollout until CI/preview and user journeys have passed.
+
+## Phase 2 expansion — completed in isolated feature branch (2026-10-24)
+
+### Additional sourced winter 2025–26 vessels
+- James R. Barker — Sturgeon Bay, Fincantieri; Jan 5 arrival and original graving-dock position: Wisconsin Marine Historical Society (Jan 8): https://wmhs.org/james-r-barker-arrives-at-fincantieri/
+- Edgar B. Speer — Sturgeon Bay, Fincantieri; Jan 18 arrival: Wisconsin Marine Historical Society (Jan 21): https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/
+- Manitoulin — Sturgeon Bay, Fincantieri; Jan 18 community-reported arrival and February berth reports: https://search.boatnerd.com/viewtopic.php?p=274441 and https://search.boatnerd.com/viewtopic.php?t=178499. **LOWER CONFIDENCE**. Do not upgrade to verified without new independent evidence. Exact dock is unverified.
+- Stewart J. Cort — Milwaukee, Jan 20 winter layup arrival: Wisconsin Marine Historical Society: https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/. Exact berth not documented.
+
+### Current coverage, deliberately limited
+- Three approximate harbor reference markers: Superior (Lake Superior), Sturgeon Bay (Green Bay / Lake Michigan), Milwaukee (Lake Michigan).
+- Ten individual historic vessel records: nine backed by port authority or maritime historian, one backed only by shipping-community observers.
+- No shipyard berth coordinates, no live positions, and zero current-winter inferences.
+- Each history has an `identity.key` invariant and curated aliases; IMO and MMSI remain null until independently verified.
+- Dated operational events stay separate from permanent vessel biography facts. Community events are labeled `reported_*` instead of becoming proof of confirmed repairs.
+- Search, harbor selection, berth selection and map-card cross-navigation now support >1 harbor.
+
+### Scorecard, target vs verified work
+- Data integrity and alias tests: 10/10 in-memory checked-in assertion scenarios passed against fetched branch contents. This is **not** a native Node test result.
+- Registry validator: 0 issues across 10 records, 3 harbor references and 2 season objects, in connector-backed validation.
+- Preview build: Vercel reported READY on the feature branch; externally testing the protected preview redirects to login.
+- Map/mobile/keyboard functional journey success: **not measured**; cannot assign 95% success or overall quality score without independent browser tests.
+- Existing-tool regression suite: **not run**; no existing tool files modified.
+- Next release gate remains native `node --test tests/freighter-layup.test.js`, browser interaction review and `npm run verify:all` before merge.
+- Build costs: successive feature-branch commits prompted automatic previews; future revisions should batch or temporarily pause branch previews using approved project settings, not bypass existing protection.
+
+### Resolved quality loss
+1. Previous single-harbor hardcoding is removed: the map and list now share the selected harbor.
+2. "Confirmed" is no longer blanket-applied to every historical card: community entries are visibly downgraded.
+3. A year-specific archive never infers present movement, even when a vessel has reported a berth shift or departure.
+4. Source dates are per ship; a Jan 30 Superior source must not be silently reused as Jan 20 Milwaukee evidence.
+5. Alias collision and unsafe source-class promotions fail validator checks.
