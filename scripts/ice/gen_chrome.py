@@ -1,3 +1,13 @@
+import hashlib
+from pathlib import Path
+
+def _git_blob_id(filename):
+    """Version a generated script URL from the actual JS content."""
+    data = (Path(__file__).resolve().parents[2] / "public" / "michigan-ice" / filename).read_bytes()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()[:12]
+
+ICE_ASSET_VERSION = _git_blob_id("ice.js") + "-" + _git_blob_id("freeze-up.js")
+
 BASE = "/michigan-ice"
 SITE = "https://chrisizworski.com" + BASE
 PERSON_ID = "https://chrisizworski.com/#person"
@@ -188,7 +198,7 @@ FOOTER = (
     'Built and maintained by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>. '
     'This site reports weather and satellite data. It does not report ice safety, and it never will.'
     '</footer>'
-    '</div></div><script src="/michigan-ice/ice.js"></script>'
+    f'</div></div><script src="/michigan-ice/ice.js?v={ICE_ASSET_VERSION}"></script>'
     '<script src="/assets/field-camera.js" defer></script></body></html>'
 )
 
