@@ -68,6 +68,9 @@ const intentionalChanges = new Set([
   "/snowmobile/regions/northwest-michigan.html",
   "/snowmobile/regions/grayling-gaylord.html",
   "/snowmobile/",
+  // Oct 24 2026: owner-requested garden tools upgrade (answer-first tools, charts, share links).
+  "/michigan-frost-dates/",
+  "/heirloom-variety-matchmaker/",
   // Oct 6 2026: canonical Person identity graph/author reference correction on main-owned pages.
   "/seed-starting-guide/",
   "/when-to-plant-tomatoes-michigan/",
