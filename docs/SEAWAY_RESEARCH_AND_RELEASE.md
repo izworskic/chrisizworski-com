@@ -78,3 +78,10 @@ A rejected future/out-of-region duplicate is also prevented from supplying beam 
 No demand uplift or actual visitor ship-sighting outcome has been measured. Revisit indexing, page × query evidence and fixed-label actions after a comparable observation period.
 
 Exactly one next product action after this release: evaluate received-report gaps at Massena against the official source before designing any Eisenhower “next ship” feature.
+
+
+## Google Maps viewing destinations — October 24, 2026
+
+- Seaway Visitor Center directions opened in Google Maps with destination “Seaway Visitor Center at Eisenhower Lock, 76 Barnhart Island Rd, Massena, NY 13662.”
+- The original broad Iroquois viewing query resolved to Iroquois Dam, Lisbon, New York in browser acceptance. Replaced it with the tested query “Iroquois Locks, Iroquois, Ontario, Canada,” resolving to “Iroquois Lock Gauging Station, South Dundas, ON K0E 1K0, Canada” (44.8313446, -75.3133163), on the Canadian viewing side. The Google Maps result is a routing disambiguation, not new access permission.
+- Public viewing/parking provenance remains [South Dundas: Iroquois Lock](https://www.southdundas.com/recreation-tourism/attractions/iroquois-lock); the regional tourism itinerary [Foodie on the River](https://savoureaston.ca/itinerary/foodie-on-the-river-1/) explicitly describes ship watching at the Iroquois Locks Gauging Station. Use public signs and operator access guidance.

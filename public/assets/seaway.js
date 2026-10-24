@@ -19,7 +19,7 @@
   function track(action,label){if(typeof window.gtag==='function')window.gtag('event','seaway_interaction',{action,label,page:document.body.dataset.seawayPage});}
   const time=value=>{const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'time unavailable';};
   const age=value=>{const mins=Math.max(0,Math.floor((Date.now()-Date.parse(value))/60000));return mins<1?'less than a minute ago':mins+' min ago';};
-  const directions=v=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v.directionsQuery);
+  const directions=v=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(v.directionsQuery);
   function readURL(){
     const p=new URL(locationHref()).searchParams;
     const r=p.get('region');region=r==='all'||regionById.has(r)?r:document.body.dataset.defaultRegion||'all';
@@ -165,7 +165,7 @@
       }
       for(const v of D.viewpoints){
         const marker=L.marker([v.lat,v.lon],{icon:L.divIcon({className:'seaway-view-marker',html:'<span>◎</span>',iconSize:[26,26],iconAnchor:[13,13]}),title:v.name+' · public viewing',keyboard:true,zIndexOffset:600});
-        const content=el('div');content.append(el('h3',v.name),el('p',v.description),a('Directions to public viewing ↗',directions(v)),el('br'),a('Official access information ↗',v.source));
+        const content=el('div');content.append(el('h3',v.name),el('p',v.description),a('Google Maps directions ↗',directions(v)),el('br'),a('Official access information ↗',v.source));
         marker.bindPopup(content,{maxWidth:270});marker.on('click',()=>chooseView(v.id,false));viewMarkers.set(v.id,marker);
       }
       for(const ids of [['lower-beauharnois','upper-beauharnois'],['snell','eisenhower']]){
@@ -196,7 +196,7 @@
   function renderView(){
     const side=$('viewingSide').value,allowed=D.viewpoints.filter(v=>side==='all'||v.country===side);
     if(!allowed.some(v=>v.id===selectedView)&&allowed.length)selectedView=allowed[0].id;
-    for(const b of document.querySelectorAll('#viewingChoices [data-viewpoint]')){const v=viewById.get(b.dataset.viewpoint);b.hidden=side!=='all'&&v.country!==side;b.setAttribute('aria-pressed',String(v.id===selectedView));}
+    for(const b of document.querySelectorAll('#viewingChoices [data-viewpoint]')){const v=viewById.get(b.dataset.viewpoint);b.closest('[data-viewpoint-card]').hidden=side!=='all'&&v.country!==side;b.setAttribute('aria-pressed',String(v.id===selectedView));}
     const v=viewById.get(selectedView),panel=$('viewingDetail'),focused=focusIndex(panel);
     panel.replaceChildren(el('p',v.tag,'eyebrow'),el('h3',v.name+' · '+v.place),el('p',v.description),el('p',v.practical));
     const nearby=C.visible(data()?.vessels||[],'all').filter(ship=>C.distance(v,ship)<=5),activity=el('div',undefined,'local-activity');
@@ -204,7 +204,7 @@
     activity.append(el('strong',nearby.length?nearby.length+' recent report'+(nearby.length===1?'':'s')+' within about 5 km':!checked?'Check this region for recent signals':'No fresh reports received within about 5 km'));
     activity.append(el('p',nearby.length?nearby.map(x=>x.name||x.mmsi).join(' · ')+'. Proximity does not establish a lock arrival or visibility from this spot.':'Consult the official order of turn before timing your visit. Coverage gaps can leave passing ships unreported.'));panel.append(activity,el('p',v.fallback),el('p',v.access));
     if(location)panel.append(el('p',C.distance(location,v).toFixed(0)+' km straight-line distance from your location. Check road directions; this is not driving distance.','fine'));
-    const links=el('div',undefined,'link-row');links.append(a('Directions to public viewing ↗',directions(v)),a('Official access & visitor information ↗',v.source));
+    const links=el('div',undefined,'link-row');links.append(a('Google Maps directions ↗',directions(v)),a('Official access & visitor information ↗',v.source));
     if(v.detailUrl&&window.location.pathname!==v.detailUrl){const link=el('a','Full Eisenhower Lock visiting guide →');link.href=v.detailUrl;links.append(link);}
     const explore=el('button','Check ships in this region','button secondary');explore.type='button';explore.addEventListener('click',()=>setRegion(v.region,true));links.append(explore);panel.append(links);restoreFocus(panel,focused);renderViewMarkers();
   }
@@ -218,9 +218,9 @@
     const lock=lockById.get(id);if(!lock)return;selectedLock=id;pauseModel();progress=0;renderModel();drawProfile();
     for(const b of document.querySelectorAll('[data-lock]'))b.setAttribute('aria-pressed',String(b.dataset.lock===id));
     const story=$('lockStory');story.replaceChildren(el('p','Lock '+lock.number+' · '+(lock.country==='US'?'United States':'Canada'),'eyebrow'),el('h3',lock.name),el('p',lock.story),el('p',lock.access));
-    if(lock.viewpoint){const button=el('button','Explore public viewing →','button secondary');button.type='button';button.addEventListener('click',()=>chooseView(lock.viewpoint));story.append(button);}
+    if(lock.viewpoint){const button=el('button','Explore public viewing →','button secondary');button.type='button';button.addEventListener('click',()=>chooseView(lock.viewpoint));story.append(button,a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
     if(map)for(const [key,marker]of lockMarkers){if(marker._seawaySelected!==(key===id)){marker.setIcon(L.divIcon({className:'seaway-lock-marker'+(key===id?' is-selected':''),html:'<span>'+lockById.get(key).number+'</span>',iconSize:[26,26],iconAnchor:[13,13]}));marker._seawaySelected=key===id;}}
-    if(focus){setRegion(lock.region);if(map)map.setView([lock.lat,lock.lon],13,{animate:false});const panel=$('mapSelection');panel.replaceChildren(el('strong','Lock '+lock.number+' · '+lock.name),el('p',lock.story),el('p',lock.access));}
+    if(focus){setRegion(lock.region);if(map)map.setView([lock.lat,lock.lon],13,{animate:false});const panel=$('mapSelection');panel.replaceChildren(el('strong','Lock '+lock.number+' · '+lock.name),el('p',lock.story),el('p',lock.access));if(lock.viewpoint)panel.append(a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
     writeURL(focus);track('select_lock',id);
   }
   const stages=['Enter the chamber at the starting water level.','Secure the ship. Both gates close.','Change the water level by gravity.','Match the water level on the departure side.','Open the departure gate and continue the journey.'];
