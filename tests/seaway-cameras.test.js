@@ -12,12 +12,12 @@ function fixture(){
     addEventListener(type,fn){this.handlers[type]=fn;}
     click(){this.handlers.click?.();}
   }
-  const nodes=Object.fromEntries(['seawayCameraPlayer','loadSeawayCamera','seawayCameraStatus','seawayCameraTitle','seawayCameraContext','seawayCameraDirect','seawayCameraSource','locateSeawayCamera'].map(id=>[id,new Node()]));
+  const nodes=Object.fromEntries(['seawayCameraPlayer','stopSeawayCamera','seawayCameraStatus','seawayCameraTitle','seawayCameraDirect','seawayCameraSource'].map(id=>[id,new Node()]));
   const buttons=feeds.map(c=>{const n=new Node('button');n.dataset.seawayCamera=c.id;return n;});
   const root={querySelector:s=>nodes[s.slice(1)],querySelectorAll:()=>buttons};
-  const selected=[],located=[];
-  const controller=mount({root,feeds,document:{createElement:tag=>new Node(tag)},onSelect:c=>selected.push(c.id),onLocate:c=>located.push(c.id)});
-  return {nodes,buttons,controller,selected,located};
+  const selected=[];
+  const controller=mount({root,feeds,document:{createElement:tag=>new Node(tag)},onSelect:c=>selected.push(c.id)});
+  return {nodes,buttons,controller,selected};
 }
 test('camera page load makes no iframe and source URLs stay available',()=>{
   const {nodes,controller}=fixture();assert.equal(controller.isLoaded(),false);
@@ -36,21 +36,21 @@ test('stop and hidden-tab teardown remove the stream; unchanged URL state keeps 
   const {nodes,buttons,controller}=fixture();buttons[0].click();const frame=nodes.seawayCameraPlayer.children[0];
   controller.select(feeds[0].id,{notify:false});assert.equal(nodes.seawayCameraPlayer.children[0],frame);
   controller.stop('Stopped while hidden');assert.equal(controller.isLoaded(),false);assert.equal(nodes.seawayCameraPlayer.children[0].tagName,'div');assert.equal(nodes.seawayCameraStatus.textContent,'Stopped while hidden');
-  nodes.loadSeawayCamera.click();assert.equal(controller.isLoaded(),true);nodes.loadSeawayCamera.click();assert.equal(controller.isLoaded(),false);
+  buttons[0].click();assert.equal(controller.isLoaded(),true);assert.equal(nodes.stopSeawayCamera.hidden,false);nodes.stopSeawayCamera.click();assert.equal(controller.isLoaded(),false);assert.equal(nodes.stopSeawayCamera.hidden,true);
 });
-test('unknown camera IDs cannot change a playing stream; map action uses the selected feed',()=>{
-  const {nodes,buttons,controller,located}=fixture();buttons[3].click();const frame=nodes.seawayCameraPlayer.children[0];
+test('unknown camera IDs cannot change a playing stream; closing needs no extra navigation',()=>{
+  const {nodes,buttons,controller}=fixture();buttons[3].click();const frame=nodes.seawayCameraPlayer.children[0];
   assert.equal(controller.select('https://example.invalid',{load:true}),false);assert.equal(nodes.seawayCameraPlayer.children[0],frame);
-  nodes.locateSeawayCamera.click();assert.deepEqual(located,[feeds[3].id]);
+  nodes.stopSeawayCamera.click();assert.equal(controller.isLoaded(),false);assert.equal(nodes.seawayCameraPlayer.dataset.loaded,'false');
   for(const id of ['https://example.invalid/a','abc','abcdefghijk?url=evil'])assert.throws(()=>embedURL(id));
 });
-test('four operator feeds use two approximate camera areas and both pages explain the geographic limit',()=>{
-  assert.equal(feeds.length,4);assert.equal(new Set(feeds.map(c=>c.area)).size,2);
-  for(const c of feeds){assert.equal(c.region,'thousand-islands');assert.match(c.mapAccuracy,/Approximate/);assert.equal(c.directUrl,'https://www.youtube.com/watch?v='+c.youtubeId);}
+test('four camera choices open directly without camera bubbles or map-jump controls',()=>{
+  assert.equal(feeds.length,4);
+  for(const c of feeds){assert.equal(c.area,undefined);assert.equal(c.lat,undefined);assert.equal(c.directUrl,'https://www.youtube.com/watch?v='+c.youtubeId);}
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=fs.readFileSync('public/'+slug+'/index.html','utf8');
     assert.ok(html.indexOf('id="seawayCameras"')>html.indexOf('id="seawayMap"'));assert.ok(html.indexOf('id="seawayCameras"')<html.indexOf('id="viewing-plan"'));
-    assert.match(html,/not show Eisenhower Lock or any lock chamber/);assert.match(html,/seaway-cameras\.js/);
+    assert.match(html,/not show Eisenhower Lock or any lock chamber/);assert.match(html,/seaway-cameras\.js/);assert.doesNotMatch(html,/locateSeawayCamera|legend-camera|Load this camera|Camera area/);
     const placeholder=html.split('id="seawayCameraPlayer"')[1].split('class="seaway-camera-actions"')[0];assert.doesNotMatch(placeholder,/<iframe/);
   }
 });

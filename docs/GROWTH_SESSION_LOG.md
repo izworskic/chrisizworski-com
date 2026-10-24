@@ -1117,3 +1117,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Validation: local 63/63 engine assertions and JS syntax pass. In-repository static/engine contract tests added. Preview visual/keyboard/portrait browser QA NOT AVAILABLE because sandbox Chromium blocks localhost/file navigation. Full `verify:all` NOT AVAILABLE locally (clone DNS blocked); required PR workflow still must be checked before release. Vercel deployment list returned 403; production not independently verified.
 - GSC Web impressions, clicks, CTR, position; GA4 usage; AdSense incremental revenue: NOT AVAILABLE. No growth claims.
 - Next action (one): run the PR's complete CI and preview browser acceptance, fix failures, and merge only if all production gates pass.
+
+
+### Seaway camera simplification — October 23, 2026
+
+- Owner rejected the camera bubbles and navigation complexity. Removed the two camera-area markers, CAM legend, map-jump control, back-to-map camera link and their coordinates/callbacks. Four camera buttons now open the embedded video directly below the ship map. Stop appears only when a player is open; the idle placeholder is compact. Reduced the technical camera prose to locations, credit and one short fallback instruction. Existing ships/locks/public-viewing map behavior remains.
+- Main Agent verification passed on camera release 170596ff (40047318994). Updated five camera acceptance tests to the direct choose/watch/Stop flow and explicit absence of camera map controls; the full repository gate and deployed review are recorded in the correction PR. Stream source IDs and the earlier cloud media-rendering limitation remain documented in docs/SEAWAY_CAMERAS.md. No new data, ad-policy or canonical changes. GSC/GA4/AdSense measurements NOT AVAILABLE.
+- Exactly one next action: verify and release the simplified one-click camera interface on both pages.
