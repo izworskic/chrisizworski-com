@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "updatedOn": "2026-10-24",
-  "description": "Curated source-dated winter 2025–26 harbor records across Superior and Sturgeon Bay. Sample, not an exhaustive fleet or current AIS tracker; lower-confidence records explicitly labeled.",
+  "description": "Curated historic 2025–26 layup evidence in Superior, Sturgeon Bay and Milwaukee. Ten vessel records, not a complete five-lake fleet directory. One lower-confidence community report remains clearly labeled; none is a live position.",
   "harbors": [
     {
       "id": "superior",
@@ -22,6 +22,16 @@
       "lon": -87.378,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
       "note": "Harbor-wide reference near Sturgeon Bay. Vessel dry-dock positions and private shipyard access are NOT represented by map coordinates; berths can change during maintenance."
+    },
+    {
+      "id": "milwaukee",
+      "name": "Milwaukee, Wisconsin",
+      "display": "Milwaukee commercial harbor",
+      "lake": "Lake Michigan",
+      "lat": 43.014,
+      "lon": -87.883,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate Milwaukee harbor reference; the Stewart J. Cort's winter berth and access permissions were not documented. Do not treat the marker as a ship position or driving destination."
     }
   ],
   "seasons": [
@@ -38,7 +48,7 @@
       "label": "Winter 2025–26",
       "state": "historical_snapshot",
       "asOf": "2026-01-30",
-      "note": "Nine named historical layup records across Superior and Sturgeon Bay: eight supported by port authority or maritime historian, and one community-reported. These are a curated sample, NOT an exhaustive Great Lakes fleet roster. Individual source dates vary. Historical berth positions are never current locations.",
+      "note": "Ten source-dated historical vessel layup records across Superior, Sturgeon Bay and Milwaukee. Nine port-authority or maritime-historian verified, one labeled community-reported. This curated sample is NOT a complete Great Lakes fleet roster. A historical layup record does not prove where a ship is now.",
       "records": [
         {
           "evidence": {
@@ -433,6 +443,48 @@
             {
               "text": "Its reported winter shifts show why a winter layup is a series of changing yard events rather than one fixed berth.",
               "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            }
+          ]
+        },
+        {
+          "id": "stewart-j-cort",
+          "name": "Stewart J. Cort",
+          "aliases": [
+            "Stewart J Cort",
+            "M/V Stewart J. Cort"
+          ],
+          "identity": {
+            "key": "stewart-j-cort",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "harborId": "milwaukee",
+          "berth": "Milwaukee harbor — precise berth not documented",
+          "berthPrecision": "berth_unverified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-20",
+          "evidenceClass": "maritime_historical_society",
+          "evidence": {
+            "url": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+            "title": "STEWART J. CORT arrives in Milwaukee",
+            "publisher": "Wisconsin Marine Historical Society",
+            "published": "2026-01-20"
+          },
+          "summary": "The Stewart J. Cort reached Milwaukee for winter layup on January 20, 2026. When it began service in 1972 it was the Great Lakes' first 1,000-foot freighter, and it remains unusual for its wheelhouse and crew accommodations at the bow rather than the stern.",
+          "events": [
+            {
+              "date": "2026-01-20",
+              "type": "arrival",
+              "text": "Wisconsin Marine Historical Society documented the Cort's arrival for winter layup in Milwaukee. The precise berth was not specified.",
+              "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+              "sourceClass": "maritime_historical_society"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "First thousand-foot commercial freighter on the Great Lakes, entering service in 1972; its wheelhouse and living quarters are forward.",
+              "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
             }
           ]
         }
