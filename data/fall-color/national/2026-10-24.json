@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-24",
+  "updated": "2026-10-24T14:38:41.463Z",
+  "briefings": {
+    "new-england": "Season is waning with timing index at 75; sunny conditions favor viewing but expect diminished color intensity on remaining foliage.",
+    "great-smoky-mountains": "Timing index at 100 indicates peak traditional window; sunny skies support excellent viewing conditions this weekend.",
+    "colorado-aspens": "Aspen season well past with timing index at 15; 75% rain chance and storm potential complicate weekend plans.",
+    "adirondacks": "Timing index at 45 shows season decline; sunny weather supports viewing but color intensity has diminished significantly.",
+    "north-shore-superior": "Timing index at 35 indicates season well past; live weather data unavailable to assess weekend conditions.",
+    "ozarks": "Timing index at 100 places region within peak traditional window; mostly sunny conditions favor strong weekend viewing.",
+    "eastern-sierra": "Timing index at 45 reflects season decline; sunny skies support viewing but expect reduced color compared to peak.",
+    "wasatch": "Timing index at 40 shows season past peak; mostly sunny conditions with minimal rain chance support weekend exploration.",
+    "columbia-river-gorge": "Timing index at 100 indicates peak traditional window; mostly sunny skies with low rain chance favor excellent viewing.",
+    "door-county": "Timing index at 100 places region within peak window; partly sunny conditions with 14% rain chance support weekend drives.",
+    "poconos": "Timing index at 100 indicates peak traditional window; sunny skies provide ideal conditions for fall color viewing.",
+    "texas-hill-country": "Timing index at 65 shows season approaching peak; partly sunny conditions with 13% rain chance support weekend exploration.",
+    "west-virginia-highlands": "Timing index at 90 indicates strong traditional window timing; sunny skies with minimal rain chance favor excellent viewing.",
+    "catskills": "Timing index at 100 places region within peak traditional window; mostly sunny conditions support strong weekend viewing.",
+    "shenandoah": "Timing index at 100 indicates peak traditional window; sunny skies with zero rain chance provide ideal viewing conditions."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
