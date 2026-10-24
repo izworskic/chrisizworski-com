@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "updatedOn": "2026-10-24",
+  "description": "Curated, dated historical layup evidence; not a complete Great Lakes fleet directory or live AIS product.",
+  "harbors": [
+    {
+      "id": "superior",
+      "name": "Superior, Wisconsin",
+      "display": "Duluth–Superior harbor",
+      "lake": "Lake Superior",
+      "lat": 46.724,
+      "lon": -92.086,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Map marker identifies the Superior harbor area only. Individual docks are listed in each vessel record; no vessel is placed at an invented berth coordinate."
+    }
+  ],
+  "seasons": [
+    {
+      "id": "2026-27",
+      "label": "Winter 2026–27",
+      "state": "upcoming_unconfirmed",
+      "asOf": "2026-10-24",
+      "note": "The 2026–27 layup season is not yet confirmed in this registry. Do not inherit last winter's locations.",
+      "records": []
+    },
+    {
+      "id": "2025-26",
+      "label": "Winter 2025–26",
+      "state": "historical_snapshot",
+      "asOf": "2026-01-30",
+      "note": "Six active vessels documented by the Duluth Seaway Port Authority in Superior, Wisconsin. These are a verified local sample, not an exhaustive five-lake roster. Status describes winter 2025–26, not today.",
+      "records": [
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "burns-harbor",
+          "name": "Burns Harbor",
+          "aliases": [],
+          "berth": "Redwood Group Elevator M",
+          "summary": "The 2025–26 port roster places Burns Harbor at Elevator M rather than at a shipyard. A winter berth does not establish that any particular repairs were scheduled.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Redwood Group Elevator M in Superior's winter layup roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "honorable-james-l-oberstar",
+          "name": "Honorable James L. Oberstar",
+          "aliases": [
+            "Hon. James L. Oberstar",
+            "James L. Oberstar"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "The port lists the Oberstar among the vessels wintering at Fraser. Harbor camera reporting documents its departure on March 23, 2026, the first outbound vessel that spring.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Fraser Shipyards for winter 2025–26.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-23",
+              "type": "departure",
+              "text": "Duluth Harbor Cam reported the Oberstar departing as the first ship out of port that spring.",
+              "source": "https://www.duluthharborcam.com/search?max-results=5&updated-max=2026-04-05T08%3A40%3A00-05%3A00"
+            }
+          ]
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "indiana-harbor",
+          "name": "Indiana Harbor",
+          "aliases": [],
+          "berth": "Ogdensburg Pier",
+          "summary": "Indiana Harbor spent the documented layup at Ogdensburg Pier in Superior. This is a verified berth, not a claim of a specific overhaul or scheduled sailing date.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Ogdensburg Pier for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "john-j-boland",
+          "name": "John J. Boland",
+          "aliases": [
+            "John J Boland"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "The port's verified January roster places John J. Boland at Fraser Shipyards. The specific scope of vessel work remains unconfirmed here.",
+          "events": [
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Listed at Fraser Shipyards for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "lee-a-tregurtha",
+          "name": "Lee A. Tregurtha",
+          "aliases": [
+            "Lee A Tregurtha"
+          ],
+          "berth": "Fraser Shipyards",
+          "summary": "Built in 1942 as a Navy tanker, Lee A. Tregurtha served during World War II before its Great Lakes career. Duluth Harbor Cam recorded its arrival for Fraser winter layup on January 16, 2026.",
+          "events": [
+            {
+              "date": "2026-01-16",
+              "type": "arrival",
+              "text": "Duluth Harbor Cam documented arrival for winter layup at Fraser Shipyards.",
+              "source": "https://www.duluthharborcam.com/2026/01/lee-tregurtha-arrived-in-duluth-01162026.html"
+            },
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Confirmed at Fraser Shipyards in the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-04-05",
+              "type": "departure",
+              "text": "Duluth Harbor Cam reported a loaded departure through ice on Lake Superior.",
+              "source": "https://www.duluthharborcam.com/search/label/Lee%20A%20Tregurtha"
+            }
+          ],
+          "photo": {
+            "file": "Lee_A._Tregurtha_in_Soo_MI.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Lee_A._Tregurtha_in_Soo_MI.jpg",
+            "creator": "U.S. Army Corps of Engineers, Detroit District",
+            "license": "Public domain (U.S. federal government)",
+            "date": "2021-09-10",
+            "alt": "Lee A. Tregurtha transiting the Soo Locks in a 2021 photograph; not a winter layup image."
+          }
+        },
+        {
+          "evidence": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "title": "Duluth Seaway Port Authority — Winter layup roster",
+            "publisher": "Duluth Seaway Port Authority",
+            "published": "2026-01-30"
+          },
+          "harborId": "superior",
+          "status": "confirmed_historical",
+          "statusAsOf": "2026-01-30",
+          "id": "mesabi-miner",
+          "name": "Mesabi Miner",
+          "aliases": [],
+          "berth": "Fraser Shipyards",
+          "summary": "Fraser Shipyards described winter 2025–26 as Mesabi Miner's first winter layup at its Superior yard. MPR reported the ship moving across the harbor March 22, 2026, to load iron ore for Cleveland.",
+          "events": [
+            {
+              "date": "2026-01-29",
+              "type": "yard",
+              "text": "Shipyard reported this was Mesabi Miner's first winter layup at Fraser.",
+              "source": "https://shipyards.marinelink.com/news/mesabi-miner/mesabi-miner-winter-lay-up-fraser-shipyards"
+            },
+            {
+              "date": "2026-01-30",
+              "type": "roster",
+              "text": "Confirmed at Fraser Shipyards on the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-22",
+              "type": "departure",
+              "text": "MPR reported the vessel moved from its layup dock to load iron ore pellets in Duluth.",
+              "source": "https://www.mprnews.org/story/2026/03/24/great-lakes-shipping-season-starts-up-again-in-duluth-port"
+            }
+          ],
+          "photo": {
+            "file": "Mesabi_Miner_Cargo_Ship_in_Lake_Superior_-_Minnesota_(43981918974).jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Mesabi_Miner_Cargo_Ship_in_Lake_Superior_-_Minnesota_(43981918974).jpg",
+            "creator": "Tony Webster",
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "date": "2018-09-14",
+            "alt": "Mesabi Miner sailing on Lake Superior in September 2018; not a winter layup photograph."
+          }
+        }
+      ]
+    }
+  ]
+}
