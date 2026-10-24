@@ -24,6 +24,8 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { loadTool } from './lib/garden-tool-harness.mjs';
 import { gradeLevel, JARGON } from './lib/plain-language.mjs';
+import { soilFetch, RAW as SOIL_RAW } from './lib/soil-fixtures.mjs';
+import { build as buildSoil, render as renderSoil } from './build-soil-history.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const file = r => path.join(root, 'public', r, 'index.html');
@@ -32,7 +34,7 @@ const DATE = /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w* \d{1,2}\b/;
 
 function shared(route, spec) {
   const f = file(route), html = fs.readFileSync(f, 'utf8');
-  const load = (o = {}) => loadTool(f, { today: '2026-04-20', ...o });
+  const load = (o = {}) => { const today = o.today || '2026-04-20'; return loadTool(f, { today, ...(spec.fetch ? { fetch: spec.fetch(today) } : {}), ...o }); };
   const crit = [];
   const add = (dim, w, name, fn) => { let s = 0, note = ''; try { const r = fn(); s = typeof r === 'number' ? Math.max(0, Math.min(1, r)) : r ? 1 : 0; } catch (e) { note = e.message.slice(0, 80); } crit.push({ dim, w, name, s, note }); };
   const p = load(); const a = () => spec.answer(p);
@@ -66,6 +68,44 @@ const dates = ['2026-02-15', '2026-03-20', '2026-04-20', '2026-05-12', '2026-05-
 const card = (p, b, t, w) => ({ badge: p.text(b), title: p.text(t), why: p.text(w) });
 
 const tools = [
+  shared('michigan-soil-temperature', {
+    card: 'soilCard', refineFirst: 'soilForSet', chart: 'soilChart', share: 'soilShare', shareOut: 'soilShareOut', takeaway: null, action: /\b(sow|wait|check|stays?)\b/i,
+    sources: /enviroweather\.msu\.edu[\s\S]*open-meteo\.com[\s\S]*canr\.msu\.edu/,
+    fetch: today => soilFetch({ today }),
+    answer: p => ({ ...card(p, 'soilBadge', 'soilTitle', 'soilWhy'), facts: p.text('soilFacts') }),
+    personalize: p => p.set('soilPlace', '49783'),
+    refine: p => p.choose('soilFor', p.document.querySelector('input[name="soilFor"]:checked').attrs.value === '60' ? '40' : '60'),
+    samples: load => dates.flatMap(d => { const p = load({ today: d }); return [p.text('soilTitle') + ' ' + p.text('soilWhy')]; }),
+    correctName: 'History rebuilds from the measured record; the adjusted forecast recovers a known model bias; dates never contradict the readings',
+    correct: load => {
+      const fs_ = fs.readFileSync(path.join(root, 'public/assets/garden-tools/michigan-soil-data.js'), 'utf8');
+      const rebuilt = renderSoil(buildSoil(SOIL_RAW)) === fs_;
+      const p = load({ today: '2026-05-08' }); const S = p.ctx.MISoil, st = S.station('flt');
+      // A model that runs 2 F cold is corrected exactly, and the forecast date equals the truth's date.
+      const live = (today, bias) => { const q = loadTool(file('michigan-soil-temperature'), { today, fetch: soilFetch({ today, modelBias: bias }) }); return q; };
+      let exact = true, ordered = true, honest = true; const seen = new Set();
+      for (const today of ['2026-04-01', '2026-04-20', '2026-05-08', '2026-05-20']) for (const bias of [-3, 0, 4]) {
+        const q = live(today, bias), A = q.ctx.MISoil, sid = A.nearest([43.643, -83.921]).station;
+        for (const t of [40, 60]) {
+          const msu = soilFetch({ today, modelBias: bias }), base = 'https://api.enviroweather.msu.edu/rm-api/api/run?stationCode=' + sid.id + '&dateStart=03/01/2026&selectDate=' + today.slice(5, 7) + '/' + today.slice(8) + '/2026';
+          const measured = A.fromMSU(msu(base).body), model = A.fromModel(msu('https://api.open-meteo.com/v1/forecast?latitude=' + sid.lat + '&longitude=' + sid.lon + '&past_days=7&forecast_days=16').body);
+          const a = A.assess(sid, t, today, { measured, model });
+          if (!a.bias || Math.abs(a.bias.offset - bias) > 0.05) exact = false;
+          // Truth: the same rule over the true values through the end of the forecast window.
+          const truthSeries = measured.filter(r => r.iso < today).map(r => ({ iso: r.iso, t: r.t })).concat(model.filter(r => r.iso >= today).map(r => ({ iso: r.iso, t: r.t + bias })));
+          const want = A.settled(truthSeries, A.THRESHOLDS[t]);
+          seen.add(a.code); const got = a.code === 'READY' ? a.since : a.code === 'SOON' ? a.on : null;
+          if ((want ? want.iso : null) !== got) ordered = false;
+          if (a.code === 'READY' && !(a.last.t >= t || (t === 60 && a.last.t > 60))) honest = false;
+          if (a.code === 'NOT_YET' && A.warm(a.last.t, A.THRESHOLDS[t]) ) honest = false;
+        }
+      }
+      const off = load({ today: '2026-04-20', fetch: soilFetch({ today: '2026-04-20', failMSU: true }) });
+      const offline = off.text('soilBadge') === 'Typical spring' && /could not be loaded/.test(off.text('soilWhy')) && !/Forecast\b/.test(off.text('soilBadge'));
+      if (process.env.SOIL_DEBUG) console.log({ rebuilt, exact, ordered, honest, offline, seen: [...seen] });
+      return rebuilt && exact && ordered && honest && offline && ['READY', 'SOON', 'NOT_YET'].every(c => seen.has(c)) && st && /QC: \{/.test(fs_);
+    }
+  }),
   shared('michigan-gardening', {
     card: 'pnCard', refineFirst: 'pnSoil', chart: 'pnTimeline', share: 'pnShare', shareOut: 'pnShareOut', takeaway: 'pnIcs', action: /\b(Start|Plant|plant|Sow|sow|start|harden|Harden)\b/,
     sources: /canr\.msu\.edu/,

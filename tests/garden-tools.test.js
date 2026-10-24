@@ -60,3 +60,36 @@ test('matchmaker: instant picks in the browser, link restores answers', () => {
   assert.equal(q.text('mmTitle'), p.text('mmTitle'));
   assert.doesNotMatch(p.html, /fetch\('\/api\/matchmaker'/);
 });
+
+test('soil temperature: measured, forecast and history answers, offline fallback, link into Plant Now', async () => {
+  const { soilFetch } = await import('../scripts/lib/soil-fixtures.mjs');
+  const open = (today, search = '', o = {}) => loadTool(f('michigan-soil-temperature'), { today, search, fetch: soilFetch({ today, ...o }) });
+  const spring = open('2026-04-20', '?place=Flint&for=40');
+  assert.equal(spring.text('soilBadge'), 'Warm enough');
+  assert.match(spring.text('soilWhy'), /averaged \d+°F at MSU’s Flint station/);
+  assert.match(spring.text('soilWhy'), /shifted by \+2°F/, 'the 2°F cold model is corrected and the shift is shown');
+  assert.match(spring.$('soilPlantNow').href, /^\/michigan-gardening\/\?place=Flint&soil=\d+#plant-now$/);
+  assert.ok(spring.$('soilChart').children.length > 10);
+  spring.choose('soilFor', '60');
+  assert.notEqual(spring.text('soilBadge'), 'Warm enough');
+  assert.match(spring.text('soilFacts'), /Danger of frost past/);
+  // The two MSU temperatures are the only thresholds, quoted from the 2009 guide.
+  assert.deepEqual(Object.keys(spring.ctx.MISoil.THRESHOLDS), ['40', '60']);
+  const fall = open('2026-10-24');
+  assert.equal(fall.text('soilBadge'), 'Next spring');
+  assert.match(fall.text('soilTitle'), /^Next spring, the soil near Bay City usually stays/);
+  const off = open('2026-04-20', '', { failMSU: true });
+  assert.equal(off.text('soilBadge'), 'Typical spring');
+  assert.match(off.text('soilWhy'), /could not be loaded, so this is the station’s record only/);
+  assert.match(off.$('soilPlantNow').href, /^\/michigan-gardening\/\?place=Bay\+City#plant-now$/, 'no stale reading is passed on');
+  const noModel = open('2026-05-08', '?place=Flint&for=60', { failModel: true });
+  assert.match(noModel.text('soilWhy'), /No forecast could be loaded/);
+  assert.doesNotMatch(noModel.text('soilBadge'), /Forecast/);
+  const hub = loadTool(f('michigan-gardening'), { today: '2026-04-20' });
+  assert.match(hub.html, /href="\/michigan-soil-temperature\/"/);
+});
+
+test('hub soil link carries the place', () => {
+  const hub = loadTool(f('michigan-gardening'), { today: '2026-04-20', search: '?place=49783' });
+  assert.equal(hub.document.querySelector('.pn-soil-link').href, '/michigan-soil-temperature/?place=49783');
+});

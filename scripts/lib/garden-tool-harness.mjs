@@ -3,7 +3,7 @@
  * stand-in, so tests and value functions score what a visitor sees after each action.
  * Only the DOM surface the garden tools use is implemented. No dependencies.
  *
- * loadTool(file, { search, today: 'YYYY-MM-DD', width })
+ * loadTool(file, { search, today: 'YYYY-MM-DD', width, fetch })   fetch: (url) => ({ status, body })
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -129,9 +129,33 @@ function buildTree(html, doc) {
   return body;
 }
 
-export function loadTool(file, { search = '', today = '2026-04-20', width = 760, root = path.resolve(path.dirname(file), '..', '..') } = {}) {
+/* A thenable that settles at once, so fetch stubs keep the harness synchronous: page code that chains
+ * .then() and .catch() runs to completion before the next harness call. (No Promise.all or await.) */
+function settled(ok, value) {
+  const t = {
+    then(onOk, onErr) {
+      try {
+        const f = ok ? onOk : onErr; if (!f) return t;
+        const r = f(value); return r && typeof r.then === 'function' ? r : settled(true, r);
+      } catch (e) { return settled(false, e); }
+    },
+    catch(onErr) { return t.then(null, onErr); },
+    finally(fn) { try { fn(); } catch (e) { /* ignore */ } return t; }
+  };
+  return t;
+}
+/* fetchStub(url) returns { status, body } (body is parsed JSON) or throws to simulate a network error. */
+function makeFetch(fetchStub, calls) {
+  return (url, init) => {
+    calls.push(String(url));
+    try { const r = fetchStub(String(url), init); return settled(true, { ok: r.status < 400, status: r.status, json: () => settled(true, r.body) }); }
+    catch (e) { return settled(false, e); }
+  };
+}
+
+export function loadTool(file, { search = '', today = '2026-04-20', width = 760, root = path.resolve(path.dirname(file), '..', '..'), fetch: fetchStub = null } = {}) {
   const html = fs.readFileSync(file, 'utf8');
-  const doc = { width, lastScroll: null, focused: null, downloads: [], replaced: [], all: () => body.descendants() };
+  const doc = { width, lastScroll: null, focused: null, downloads: [], replaced: [], fetched: [], all: () => body.descendants() };
   const body = buildTree(html, doc);
   const route = '/' + path.basename(path.dirname(file)) + '/';
   const document = {
@@ -151,6 +175,7 @@ export function loadTool(file, { search = '', today = '2026-04-20', width = 760,
   const location = { href: 'https://chrisizworski.com' + route + search, search, hash: '', pathname: route, origin: 'https://chrisizworski.com' };
   const Blob = class extends globalThis.Blob { constructor(parts, o) { super(parts, o); doc.downloads.push(parts.join('')); } };
   const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob, Date: FixedDate, Math, JSON, Intl, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console, history: { replaceState: (_s, _t, u) => doc.replaced.push(String(u)) }, print() { doc.printed = true; }, isSecureContext: false });
+  if (fetchStub) ctx.fetch = makeFetch(fetchStub, doc.fetched);
   ctx.window = ctx; ctx.innerWidth = width; ctx.addEventListener = () => {}; ctx.matchMedia = () => ({ matches: false, addEventListener() {} });
   // Scripts in document order: local garden-tool assets and inline code. Analytics and ad loaders are skipped.
   for (const m of html.matchAll(/<script(\s[^>]*)?>([\s\S]*?)<\/script>/g)) {
