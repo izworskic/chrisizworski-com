@@ -150,11 +150,13 @@
     if (!img) return;
     var status = root.querySelector('#ice-ex-daily-status');
     var source = root.querySelector('#ice-ex-daily-source');
+    var placeholder = root.querySelector('#ice-ex-daily-placeholder');
     var item = chartSeries[currentIndex];
     var ticket = ++dailyFrameRequest;
     styleDailyFrame();
     if (!item) {
-      img.removeAttribute('src'); img.hidden = true;
+      img.removeAttribute('src'); img.hidden = true; placeholder.hidden = false;
+      placeholder.textContent = 'The NOAA ice series is unavailable.';
       status.textContent = 'No dated NOAA ice analysis available to display.';
       source.hidden = true;
       return;
@@ -162,7 +164,8 @@
     var url = glMultiLakeFrameUrl(item.date);
     var name = REGIONS[currentSlug].lakeName || REGIONS[currentSlug].name;
     if (!url) {
-      img.removeAttribute('src'); img.hidden = true;
+      img.removeAttribute('src'); img.hidden = true; placeholder.hidden = false;
+      placeholder.textContent = 'No archived chart for this date.';
       status.textContent = 'No NOAA geographic chart is expected for '+dateOnly(item.date)+'. The measured whole-lake percentage remains in the graph.';
       source.hidden = true;
       return;
@@ -171,10 +174,13 @@
     // underneath today's date if the new NOAA image is missing or slow.
     img.hidden = true;
     img.removeAttribute('src');
+    placeholder.hidden = false;
+    placeholder.textContent = 'Loading the dated NOAA chart…';
     status.textContent = 'Loading NOAA geographic ice chart for '+dateOnly(item.date)+'…';
     source.hidden = true;
     var cached = dailyFrameCache.get(url);
     if (cached === false) {
+      placeholder.textContent = 'NOAA image not available for this date.';
       status.textContent = 'NOAA did not provide a geographic image for '+dateOnly(item.date)+'. No ice map has been invented.';
       return;
     }
@@ -184,6 +190,7 @@
         '. '+name+' is highlighted when focus is active. This is not ice thickness or safety data.';
       img.src = url;
       img.hidden = false;
+      placeholder.hidden = true;
       styleDailyFrame();
       source.href = url;
       source.hidden = false;
@@ -205,7 +212,8 @@
       if (dailyFrameCache.size > 20) dailyFrameCache.delete(dailyFrameCache.keys().next().value);
       if (ticket !== dailyFrameRequest || !root.isConnected) return;
       img.removeAttribute('src'); img.hidden = true;
-      source.hidden = true;
+      source.hidden = true; placeholder.hidden = false;
+      placeholder.textContent = 'NOAA image unavailable. Select another date.';
       status.textContent = 'NOAA daily ice-map image unavailable for '+dateOnly(item.date)+
         '. The measured GLERL whole-lake chart is still available. No substitute map is shown.';
     };
@@ -544,7 +552,7 @@
       '#ice-ex-daily-image{width:100%;height:100%;object-fit:fill;display:block;transform-origin:top left;transition:transform .2s ease}',
       '#ice-ex-daily-image[hidden]{display:none}',
       '#ice-ex-daily-placeholder{display:flex;align-items:center;justify-content:center;min-height:130px;padding:20px;text-align:center;color:#486772;font-size:14px}',
-      '#ice-ex-daily-source[hidden]{display:none}',
+      '#ice-ex-daily-source[hidden],#ice-ex-daily-placeholder[hidden]{display:none}',
       '@media(prefers-reduced-motion:reduce){#ice-ex-daily-image{transition:none}}',
       '#ice-ex-chart-value{min-height:22px;font-weight:650;font-variant-numeric:tabular-nums}',
       '#ice-freeze-explorer .ice-ex-limit{margin-top:14px;padding:10px 12px;border-left:4px solid #a54a32;background:#fff5ef;font-size:13px;line-height:1.5}',
