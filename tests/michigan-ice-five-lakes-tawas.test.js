@@ -24,7 +24,7 @@ test('five Great Lakes and Tawas Bay are selectable and URL-deep-linkable withou
   assert.match(explorer,/The reference sector checks chart freshness only/);
   assert.match(api,/scope: 'lake-overview'/);
   assert.match(api,/scope: 'local-bay'/);
-  assert.match(explorer,/The slider changes only the whole-lake chart/);
+  assert.match(explorer,/The date slider synchronizes the GLERL whole-lake percentage and a genuine archived GLERL daily ice map/);
   assert.match(explorer,/Not a safe-ice assessment/);
   assert.doesNotMatch(explorer,/safe to walk on the ice|safe for ice fishing/i);
 });

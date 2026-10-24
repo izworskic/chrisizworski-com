@@ -76,6 +76,11 @@ async function run(){
     });
     await page.route('https://basemaps.cartocdn.com/**',route=>route.fulfill({status:200,contentType:'image/png',body:png}));
     await page.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:png}));
+    await page.route('https://www.glerl.noaa.gov/data/ice/glicd/jpgs/**',route=>{
+      if(/20251201\.jpg|20261201\.jpg/.test(route.request().url()))
+        return route.fulfill({status:404,body:'NOAA daily image unavailable'});
+      return route.fulfill({status:200,contentType:'image/png',body:png});
+    });
     await page.route('https://fonts.googleapis.com/**',route=>route.abort());
     await page.route('https://fonts.gstatic.com/**',route=>route.abort());
     await page.goto('http://127.0.0.1:8126/michigan-ice/',{waitUntil:'domcontentloaded'});
@@ -98,8 +103,23 @@ async function run(){
     assert.ok(chartPoints>0,'SVG data trend missing');
     const slider=page.locator('#ice-ex-slider');
     assert.equal(await slider.isEnabled(),true);
+    const frame=page.locator('#ice-ex-daily-image');
+    await frame.waitFor({state:'visible',timeout:10000});
+    const initialSrc=await frame.getAttribute('src');
+    assert.match(initialSrc,inWinter?/\/2027\/20270301\.jpg$/:/\/2026\/20260301\.jpg$/);
+    assert.match(await page.locator('#ice-ex-daily-status').textContent(),/actual NOAA GLERL daily mapped ice concentration/);
+    assert.equal(await page.locator('#ice-ex-daily-source').isVisible(),true);
+    const focusedStyle=await frame.evaluate(img=>img.style.transform);
+    assert.match(focusedStyle,/scale\(2/);
+    await page.locator('#ice-ex-daily-mode').click();
+    assert.match(await frame.evaluate(img=>img.style.transform),/scale\(1\)/);
+    await page.locator('#ice-ex-daily-mode').click();
+    assert.match(await frame.evaluate(img=>img.style.transform),/scale\(2/);
     await slider.fill('0');
     assert.match(await page.locator('#ice-ex-chart-value').textContent(),/4%/);
+    await page.waitForFunction(()=>/not provided|unavailable/i.test(document.querySelector('#ice-ex-daily-status')?.textContent||''),{timeout:10000});
+    assert.equal(await frame.isVisible(),false,'A missing NOAA daily image must not show a previous date frame');
+    assert.equal(await page.locator('#ice-ex-daily-source').isVisible(),false);
     await page.locator('#ice-ex-region').selectOption('lake-st-clair');
     await page.waitForFunction(()=>document.querySelector('#ice-ex-chart-value')?.textContent?.includes('Lake St. Clair'));
     assert.match(await page.locator('#ice-ex-detail').getAttribute('href'),/lake-st-clair.html/);
@@ -117,11 +137,17 @@ async function run(){
       assert.ok((await page.locator('#ice-ex-detail').getAttribute('href')).includes('ice-region='+slug),
         'Missing deep link '+slug);
       assert.match(await page.locator('#ice-ex-chart-value').textContent(),new RegExp(name));
+      await page.waitForFunction(expected=>document.querySelector('#ice-ex-daily-status')?.textContent?.includes(expected),
+        /20261201|20251201/.test(await frame.getAttribute('src')||'')?'NOAA':'NOAA',{timeout:6000});
+      if(slug==='lake-superior')assert.match(await frame.evaluate(img=>img.style.transform),/scale\(2/);
       if(slug==='tawas-bay')assert.match(await page.locator('#ice-ex-map-type').textContent(),/Bay map/);
       if(slug.startsWith('lake-'))assert.match(await page.locator('#ice-ex-map-type').textContent(),/Whole-lake map extent/);
     }
     // Preserve existing region behavior and verify zoom still refreshes NOAA imagery.
     await page.locator('#ice-ex-region').selectOption('lake-st-clair');
+    // In Lake St. Clair mode, NOAA's Great Lakes chart is deliberately shown whole;
+    // the small lake's local ice state is not inferred from a cropped regional chart.
+    assert.match(await frame.evaluate(img=>img.style.transform),/scale\(1\)/);
     if(inWinter){
       await page.waitForFunction(()=>!!document.querySelector('#ice-ex-map .leaflet-container') ||
         !!document.querySelector('#ice-ex-map.leaflet-container'));
@@ -159,7 +185,7 @@ async function run(){
   await failed.goto('http://127.0.0.1:8126/michigan-ice/?ice-region=tawas-bay',{waitUntil:'domcontentloaded'});
   assert.equal(await failed.locator('#ice-ex-region').inputValue(),'tawas-bay');
   await failed.locator('#ice-freeze-explorer').waitFor({timeout:10000});
-  await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),{timeout:10000});
+  await failed.waitForFunction(()=>/NOAA ice data unavailable/.test(document.querySelector('#ice-ex-map-stamp')?.textContent||''),null,{timeout:10000});
   await failed.waitForFunction(()=>document.querySelector('#ice-ex-map')?.classList.contains('leaflet-container'),{timeout:10000});
   await failed.waitForFunction(()=>/OpenStreetMap/.test(document.querySelector('#ice-ex-basemap-status')?.textContent||''),{timeout:10000});
   await failed.locator('#ice-ex-reset').click();
