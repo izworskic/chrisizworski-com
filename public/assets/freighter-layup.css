@@ -13,3 +13,50 @@
 .harbor-links button:hover{background:#eaf3f1}
 .filter-row label:not(.search-label){flex:0 1 210px;min-width:145px}
 @media(max-width:640px){.filter-row label:not(.search-label){flex:1 1 46%;min-width:0}.harbor-links{align-items:center}}
+
+/* Permanent maritime biographies: intentionally readable without JavaScript. */
+.bio-hero{background:linear-gradient(112deg,#092938,#155568);color:#fff;padding:58px 0 64px}
+.bio-hero .eyebrow{color:#a9d7db}
+.bio-hero h1{font-size:clamp(44px,6vw,74px)}
+.bio-tagline{font:400 clamp(19px,2.7vw,27px) Georgia,serif;color:#f5cc8c;margin:12px 0}
+.bio-hero .lede{max-width:770px}
+.bio-wrap{padding-bottom:56px}
+.bio-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr);gap:46px;align-items:start}
+.bio-main>h2,.bio-winter h2,.bio-related-section h2{font-size:clamp(29px,4vw,43px);margin:0 0 13px}
+.bio-main>p{max-width:760px}
+.bio-chapter{padding:29px 0;border-top:1px solid #ccdadd}
+.bio-chapter h2{font:500 clamp(25px,3vw,34px) Georgia,serif;margin:0 0 12px}
+.bio-chapter p{max-width:720px}
+.bio-chapter a,.bio-events a{font-size:13px}
+.bio-side{background:#fff;border:1px solid #d5e1df;padding:23px;border-radius:9px}
+.bio-side h2{margin:0 0 17px;font:500 28px Georgia,serif}
+.bio-side dl{margin:0 0 22px}
+.bio-spec{display:grid;grid-template-columns:1fr auto;gap:1px 12px;padding:11px 0;border-bottom:1px solid #e6eceb}
+.bio-spec dt{color:#53696f;font-size:13px}
+.bio-spec dd{margin:0;font-size:13px;font-weight:750;text-align:right}
+.bio-spec a{grid-column:1/-1;text-align:right;font-size:11px}
+.bio-photo{margin:15px 0 0;overflow:hidden;border-radius:5px;background:#e4eeeb}
+.bio-photo img{display:block;width:100%;height:auto;max-height:370px;object-fit:contain}
+.bio-photo figcaption{padding:11px;font-size:11px;line-height:1.6}
+.bio-no-photo{padding:20px;background:#e9f0ee;border:1px dashed #afc8c8;border-radius:6px;font-size:13px}
+.bio-source-note{font-size:12px;color:#526e75;line-height:1.6}
+.bio-winter,.bio-related-section{padding-top:38px;margin-top:17px;border-top:1px solid #ccdadd}
+.bio-table-wrap{max-width:100%;overflow-x:auto;border:1px solid #cfdbda;border-radius:7px;background:#fff}
+.bio-winter table{border-collapse:collapse;width:100%;min-width:650px;font-size:13px}
+.bio-winter th,.bio-winter td{padding:13px 12px;border-bottom:1px solid #e3ebeb;text-align:left;vertical-align:top}
+.bio-winter thead{background:#e6eeec}
+.bio-winter tbody th{font-weight:750;min-width:100px}
+.bio-winter .tag{white-space:nowrap}
+.bio-events{list-style:none;padding:0;margin:18px 0 24px;border-left:2px solid #84b5b7}
+.bio-events li{padding:0 0 18px 19px;position:relative;max-width:900px}
+.bio-events li:before{content:'';width:9px;height:9px;background:#237b8a;border-radius:50%;position:absolute;left:-5.5px;top:8px}
+.bio-events time{font-weight:750;color:#43626b;font-size:12px}
+.bio-events p{margin:5px 0}
+.bio-related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.bio-related{display:flex;align-items:center;justify-content:space-between;padding:14px;border:1px solid #c8d9da;border-radius:5px;background:#fff;font-weight:750;font-size:14px}
+@media(max-width:780px){.bio-grid{grid-template-columns:1fr;gap:20px}.bio-side{order:-1}.bio-related-grid{grid-template-columns:1fr}.bio-hero{padding:45px 0}}
+
+.ship-biography-link{font-size:13px;font-weight:750;margin-top:10px;display:block}
+.winter-links{display:flex;gap:9px;flex-wrap:wrap}
+.winter-jump{border:1px solid #92bbbf;background:#fff;color:#0d596a;padding:8px 12px;border-radius:5px;font-weight:700;cursor:pointer}
+.winter-jump:hover{background:#dceeed}
