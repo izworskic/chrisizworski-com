@@ -1173,3 +1173,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner requested a Google Maps link for every viewing-location button. Both named viewing cards now have a direct Google Maps directions link beside the plan-selection action, with destination-specific accessible labels. Country filtering hides the whole card and its directions link together. Added the same action to both hub destination cards and documented lock viewing actions, and made map popup/detail links explicitly say Google Maps directions. Browser acceptance caught the old Iroquois query resolving to Iroquois Dam in New York. Changed its query to “Iroquois Locks, Iroquois, Ontario, Canada,” which Google resolves to Iroquois Lock Gauging Station on the Canadian public viewing side. The Seaway Visitor Center query resolves to 76 Barnhart Island Road. No operational lock coordinates are used as navigation targets.
 - Base main b3414995 Agent verification passed (40054475475). Full gate, PR and live interaction evidence are recorded in the release PR. CSS, JS and reference-data version URLs advanced together so returning visitors receive the new card structure and filter behavior. GSC/GA4/AdSense results NOT AVAILABLE; no search or revenue uplift claimed.
 - Exactly one next action: verify both public viewing destinations and country filters on both live Seaway pages after release.
+
+### Seed Saving Lab generic crop pickers — October 24, 2026
+
+- Owner feedback: the dropdowns listed varieties ("Brandywine tomato" was the only tomato). Pickers now list 51 crops by the names gardeners use (Tomato, Pepper, Zucchini, Pumpkin, Zinnia, Cosmos...). Crossing logic is unchanged and still species based.
+- Two varieties of one crop are compared by choosing that crop in both boxes; the second plant reads "Another tomato variety". Mostly self-pollinating crops (tomato, bean, pea, lettuce) now answer "Yes, but not often." The whole-garden list accepts up to three varieties of one crop ("Zinnia (2nd variety)").
+- Old shared links that named varieties map onto their crop through an alias table, so existing permalinks still open.
+- Tests and the behavioural usability gate (100/100) updated. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and decides on merge.

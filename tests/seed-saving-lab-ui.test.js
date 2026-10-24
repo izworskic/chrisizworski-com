@@ -16,7 +16,7 @@ test('opens with a plain answer for a real pair, before any input', () => {
   assert.match(a.options[0], /1,600 ft/);
   assert.match(a.options[1], /Do the bee’s work yourself/);
   assert.ok(a.also.some(s => /10–20 plants/.test(s)), 'population guidance');
-  assert.match(a.live, /Zucchini and Jack-o’-lantern pumpkin: Yes, these can cross\./);
+  assert.match(a.live, /Zucchini and Pumpkin: Yes, these can cross\./);
   assert.doesNotMatch(JSON.stringify(a), /\[object|undefined|NaN/);
 });
 
@@ -35,10 +35,10 @@ test('one picker per plant, alphabetical within each category', () => {
 
 test('every change updates the answer immediately (no stale verdicts)', () => {
   const p = loadSeedLab(FILE);
-  p.pick('b', 'Slicing cucumber');
+  p.pick('b', 'Cucumber');
   assert.equal(p.answer().heading, 'No, these do not normally cross.');
   assert.equal(p.$('q-overlap').classList.contains('hidden'), true, 'irrelevant questions hidden');
-  p.pick('b', 'Jack-o’-lantern pumpkin');
+  p.pick('b', 'Pumpkin');
   assert.equal(p.answer().heading, 'Yes, these can cross.');
   assert.equal(p.$('q-overlap').classList.contains('hidden'), false);
   p.type('distance', '2000');
@@ -57,8 +57,8 @@ test('every change updates the answer immediately (no stale verdicts)', () => {
   assert.match(p.answer().heading, /happy to see what happens/);
   p.choose('goal', 'preserve');
   p.click('swap');
-  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'Jack-o’-lantern pumpkin');
-  assert.match(p.answer().options[1], /Cover a few jack-o’-lantern pumpkin flowers/i);
+  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'Pumpkin');
+  assert.match(p.answer().options[1], /Cover a few pumpkin flowers/i);
 });
 
 test('examples and documented exceptions read plainly', () => {
@@ -70,7 +70,10 @@ test('examples and documented exceptions read plainly', () => {
   p.pick('a', 'French marigold'); p.pick('b', 'African marigold');
   assert.equal(p.answer().badge, 'Rarely');
   p.pick('a', 'Zucchini'); p.pick('b', 'Zucchini');
-  assert.equal(p.answer().badge, 'Same variety');
+  assert.equal(p.answer().badge, 'Can cross', 'the same crop twice means two varieties of it');
+  assert.match(p.answer().why, /Two varieties of zucchini/);
+  p.pick('a', 'Tomato'); p.pick('b', 'Tomato');
+  assert.equal(p.answer().heading, 'Yes, but not often.', 'mostly self-pollinating crops say so');
 });
 
 test('whole garden: crossing pairs first, open one in the checker, remove plants', () => {
@@ -78,11 +81,11 @@ test('whole garden: crossing pairs first, open one in the checker, remove plants
   p.click('garden-demo');
   const groups = p.garden();
   assert.match(groups[0].cls, /yes/);
-  assert.match(groups[0].text, /European kale \+ Broccoli/);
+  assert.match(groups[0].text, /Kale \(curly \/ European\) \+ Broccoli/);
   assert.match(groups.at(-1).text, /Won’t normally cross/);
   const open = groups[0].buttons.find(b => /Open in checker/.test(b.textContent));
   open.dispatch('click');
-  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'European kale');
+  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'Kale (curly / European)');
   assert.equal(p.$('plant-b').selectedOptions[0].textContent, 'Broccoli');
   assert.equal(p.doc.lastScroll, 'explorer');
   const before = p.gardenPlants().length;
@@ -127,12 +130,12 @@ test('charts: pollen web draws a line for each crossing pair and a line opens th
   assert.equal(edges.length, 5, '3 can-cross + 2 worth-checking pairs in the example garden');
   assert.equal(edges.filter(e => e.attrs['stroke-dasharray'] === 'none').length, 3, 'can-cross lines are solid');
   const hits = web.children.filter(n => n.attrs && n.attrs.class === 'web-hit');
-  const target = hits.find(h => /European kale \+ Broccoli/.test(h.attrs['aria-label']));
+  const target = hits.find(h => /Kale \(curly \/ European\) \+ Broccoli/.test(h.attrs['aria-label']));
   target.dispatch('click');
-  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'European kale');
-  const kale = nodes.find(n => /European kale/.test(n.attrs['aria-label']));
+  assert.equal(p.$('plant-a').selectedOptions[0].textContent, 'Kale (curly / European)');
+  const kale = nodes.find(n => /Kale \(curly/.test(n.attrs['aria-label']));
   kale.dispatch('click');
-  assert.match(p.$('pollen-web').children.find(n => n.attrs && /European kale/.test(n.attrs['aria-label'] || '') && /web-node/.test(n.attrs.class)).attrs.class, /active/);
+  assert.match(p.$('pollen-web').children.find(n => n.attrs && /Kale \(curly/.test(n.attrs['aria-label'] || '') && /web-node/.test(n.attrs.class)).attrs.class, /active/);
 });
 
 test('charts: room chart has one bar per species with a guideline, plus a table view', () => {
@@ -143,4 +146,16 @@ test('charts: room chart has one bar per species with a guideline, plus a table 
   assert.match(bars[0].attrs['aria-label'], /2,640 feet/, 'sorted largest first (zinnias)');
   assert.equal(bars.filter(b => /cross/.test(b.attrs.class)).length, 3, 'darker bars for species with a crossing partner');
   assert.equal(p.$('room-rows').children.length, 6);
+});
+
+test('pickers list crops, not varieties; links made with old variety names still open', () => {
+  const p = loadSeedLab(FILE);
+  const names = p.$('plant-a').options.map(o => o.textContent);
+  assert.ok(names.includes('Tomato') && names.includes('Zinnia') && names.includes('Pepper (sweet or hot)'));
+  assert.ok(!names.some(n => /Brandywine|Cherokee|Red Robin|Queen Lime|Shishito/.test(n)), 'no variety names in the picker');
+  const old = loadSeedLab(FILE, { search: '?a=plant-cherokee-purple-tomato&b=plant-brandywine-tomato&g=plant-queen-lime-zinnia:y,plant-oklahoma-white-zinnia:u,plant-zucchini:u' });
+  assert.equal(old.$('plant-a').selectedOptions[0].textContent, 'Tomato');
+  assert.equal(old.answer().heading, 'Yes, but not often.');
+  assert.deepEqual(old.gardenPlants().map(x => x.name), ['Zinnia', 'Zinnia (2nd variety)', 'Zucchini']);
+  assert.match(old.garden()[0].text, /Zinnia \+ Zinnia \(2nd variety\)/);
 });
