@@ -144,6 +144,15 @@
     if(id!==region){region=id;selectedShip=null;$('regionSelect').value=id;writeURL(push);fitRegion();render();void loadReports();}
     else fitRegion();track('select_region',id);
   }
+  function showEntireSeaway(){
+    const wasAll=region==='all';
+    selectedShip=null;$('shipSearch').value='';$('vesselKind').value='all';
+    map?.closePopup();setRegion('all',true);
+    // An already-wide region can still have a selected ship, filters or a close zoom.
+    if(wasAll){writeURL(true);render();}
+    $('mapSelection').replaceChildren(el('strong','Seven steps between Montreal and Lake Ontario.'),el('p','Tap a numbered lock, a viewing marker or a ship to explore its story. Lock dots are approximate landmarks, not visitor entrances.'));
+    track('map_overview','all');
+  }
   async function startMap(){
     try{
       if(!window.L)throw new Error('Map library unavailable');
@@ -277,7 +286,7 @@
   }
   $('regionSelect').addEventListener('change',e=>setRegion(e.target.value,true));
   $('refreshReports').addEventListener('click',()=>{track('refresh','manual');void loadReports();});
-  $('resetMap').addEventListener('click',fitRegion);
+  $('resetMap').addEventListener('click',showEntireSeaway);
   $('shipSearch').addEventListener('input',()=>{updateList();drawShips();});$('vesselKind').addEventListener('change',()=>{updateList();drawShips();});
   document.querySelectorAll('[data-viewpoint]').forEach(b=>b.addEventListener('click',()=>chooseView(b.dataset.viewpoint)));
   document.querySelectorAll('[data-lock]').forEach(b=>b.addEventListener('click',()=>chooseLock(b.dataset.lock,true)));
