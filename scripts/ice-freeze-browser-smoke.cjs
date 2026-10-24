@@ -142,6 +142,8 @@ async function run(){
     await page.locator('[data-ice-large-lake="all"]').click();
     assert.match(await enlarged.evaluate(el=>el.style.transform),/scale\(1\)/);
     await page.locator('#ice-ex-modal-slider').fill('0');
+    await page.waitForTimeout(1200);
+    console.log('NOAA modal first-day diagnostic',JSON.stringify({season,inWinter,slider:await page.locator('#ice-ex-slider').inputValue(),chart:await page.locator('#ice-ex-chart-value').textContent(),status:await page.locator('#ice-ex-modal-status').textContent(),img:await page.locator('#ice-ex-daily-image').getAttribute('src'),hidden:await page.locator('#ice-ex-daily-image').isHidden()}));
     await page.waitForFunction(()=>/not provided|unavailable/i.test(document.querySelector('#ice-ex-modal-status')?.textContent||''),null,{timeout:8000});
     assert.equal(await enlarged.isVisible(),false,'Missing historical frame must not leave stale large image');
     await page.locator('#ice-ex-modal-slider').fill('2');
