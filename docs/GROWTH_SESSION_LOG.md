@@ -1154,7 +1154,7 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - All 56 gates passed for the map-return code; repeat full gate and fresh-version live interaction are recorded in the correction PR. GSC/GA4/AdSense results NOT AVAILABLE.
 - Exactly one next action: release the cache correction and verify the regional/filter/zoom return on the live pages using the new script URL.
 
-### Seed Saving Lab answer-first redesign — October 23, 2026
+### Seed Saving Lab answer-first redesign, October 23, 2026
 
 - Owner was not happy with the UX of `/seed-saving-lab/`. Rebuilt the page around one answer: H1 "Will these plants cross?", two alphabetical plant pickers directly under it, a Yes/No/Rarely verdict, "pick one" ways to keep seed true (published distance, hand-pollination, one variety), population and harvest steps, then tap-to-answer refinements shown only when they can change the result. Whole-garden view became a list with crossing pairs first and "Open in checker". Data and crossing engine unchanged.
 - Removed: hero stats and illustration, per-plant search boxes, duplicate verdict blocks, the no-op "Review my plan" button, garden bloom selectors (they changed no result; old `g=id:y` links still load), six-tab generations section (its first-generation text now appears as "Next year:" in each answer) and the PLANNED roadmap. Kept: field notes, garden photo, trust note, sources, URLs, canonical, Person schema.
@@ -1162,7 +1162,7 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Second pass (owner: softer, charts, better interaction): light cream/sage palette, pair picture with facts, log distance slider + chart, garden pollen web (tap plant/line), room-per-species bar chart with table view. Gate still 100/100 behavioural; 9 UI tests.
 - Exactly one next action: watch a real phone session (or five) pick their own two plants and note where they hesitate.
 
-### Seed Saving Lab gardener's voice — October 23, 2026
+### Seed Saving Lab gardener's voice, October 23, 2026
 
 - Owner asked for a gardener's voice that tells the garden's story. Rewrote intro, answers, steps, garden copy, empty states and trust note in the Freighter View Farms voice (first person, place, season, bees), and replaced the "three rules" block with a four-beat season story (bloom, visit, seed, telling) with small illustrations. Decisions and data unchanged.
 - Kept standing rules: no em dashes anywhere on the page, no coffee, no invented anecdotes about Chris's household or yields; place facts limited to Bay City, Zone 6a, Saginaw Bay. Answer stays above the fold on phones (scene sentences hidden under 760px).
@@ -1174,7 +1174,7 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Base main b3414995 Agent verification passed (40054475475). Full gate, PR and live interaction evidence are recorded in the release PR. CSS, JS and reference-data version URLs advanced together so returning visitors receive the new card structure and filter behavior. GSC/GA4/AdSense results NOT AVAILABLE; no search or revenue uplift claimed.
 - Exactly one next action: verify both public viewing destinations and country filters on both live Seaway pages after release.
 
-### Seed Saving Lab generic crop pickers — October 24, 2026
+### Seed Saving Lab generic crop pickers, October 24, 2026
 
 - Owner feedback: the dropdowns listed varieties ("Brandywine tomato" was the only tomato). Pickers now list 51 crops by the names gardeners use (Tomato, Pepper, Zucchini, Pumpkin, Zinnia, Cosmos...). Crossing logic is unchanged and still species based.
 - Two varieties of one crop are compared by choosing that crop in both boxes; the second plant reads "Another tomato variety". Mostly self-pollinating crops (tomato, bean, pea, lettuce) now answer "Yes, but not often." The whole-garden list accepts up to three varieties of one crop ("Zinnia (2nd variety)").
@@ -1194,3 +1194,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner requested explanatory, educational and fun language in the voice of a national park interpretive center. Reworked both page introductions, all seven lock stories, five regional notes, both viewing descriptions/between-ship prompts, map/ship interpretation, camera introduction, the five model-stage explanations, fit/profile/history introductions and source-method explanation. Added concrete observation prompts (follow a railing against a fixed wall mark), plain definitions of beam and AIS, and gravity/water-elevator and radio-postcard analogies. Controls retain direct action labels.
 - Engineering/AIS explanations checked against Seaway operator primary sources; URLs and editorial boundaries recorded in docs/SEAWAY_RANGER_VOICE.md. Access/hours, identifiers, geometry, camera feeds, Maps destinations, live-data limits and model/calculation behavior remain unchanged. Cache URLs for changed scripts/reference data advanced together. Base main 2c51f808 Agent verification passed (40093137752). Full gate, PR and deployed copy verification are recorded in the release PR. GSC/GA4/AdSense NOT AVAILABLE; no search/revenue or human-learning uplift claimed.
 - Exactly one next action: verify the longer interpretive copy in the deployed map, viewing details and both directions of the lock model, then release after green checks.
+### Seed Saving Lab per-feature value functions, October 24, 2026
+
+- Owner asked for a value function per feature, then to score and improve against it. Added `scripts/benchmark-seed-lab-features.mjs` (16 features, behavioural criteria, gate: every feature >= 90, mean >= 95) and `docs/SEED_LAB_FEATURE_VALUE_FUNCTIONS.md`.
+- Same gate on main a87d7ecc: mean 80.7, lowest 50 (What to do). After: 100 on every feature. Fixes: plain words across all 2,601 pair answers, biennial season notes, hybrid seed warning, garden "saving seed / eating only" toggle with a "No seed at stake" group, plant-specific garden steps and CSV, unclipped chart labels, fifth example, phone verdict at 702 px.
+- Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview; then the other garden tools get the same treatment (in progress).

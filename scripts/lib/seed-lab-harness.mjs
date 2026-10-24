@@ -103,7 +103,9 @@ export function loadSeedLab(file, { search = '' } = {}) {
     body: new Element('body')
   };
   const location = { href: 'https://chrisizworski.com/seed-saving-lab/' + search, search, hash: '', pathname: '/seed-saving-lab/', origin: 'https://chrisizworski.com' };
-  const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob: class {}, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console });
+  const downloads = [];
+  const Blob = class extends globalThis.Blob { constructor(parts, o) { super(parts, o); downloads.push(parts.join('')); } };
+  const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console });
   ctx.window = ctx;
   ctx.innerWidth = 1280;
   ctx.addEventListener = () => {};
@@ -112,7 +114,7 @@ export function loadSeedLab(file, { search = '' } = {}) {
   const $ = id => doc.byId.get(id);
   const text = id => $(id).textContent.replace(/\s+/g, ' ').trim();
   const api = {
-    ctx, $, text, doc,
+    ctx, $, text, doc, downloads,
     data: ctx.SeedLabData, engine: ctx.SeedLabEngine,
     plantId: name => ctx.SeedLabData.plants.find(p => p.name === name).id,
     pick(which, name) { const s = $(which === 'a' ? 'plant-a' : 'plant-b'); s.value = api.plantId(name); s.dispatch('change'); },
@@ -125,7 +127,12 @@ export function loadSeedLab(file, { search = '' } = {}) {
       const groups = $('garden-results').children.filter(c => c instanceof Element);
       return groups.map(g => ({ cls: g.className, text: g.textContent.replace(/\s+/g, ' ').trim(), buttons: g.descendants().filter(n => n.tagName === 'BUTTON') }));
     },
-    gardenPlants: () => $('garden-plants').children.filter(c => c instanceof Element).map(li => ({ name: li.children[0].textContent, remove: li.children[1] }))
+    gardenPlants: () => $('garden-plants').children.filter(c => c instanceof Element).map(li => {
+      const buttons = li.descendants().filter(n => n.tagName === 'BUTTON');
+      const toggle = buttons.find(b => /seed-toggle/.test(b.className)) || null;
+      const nameNode = li.descendants().find(n => /chip-name/.test(n.className)) || li.children[0];
+      return { name: nameNode.textContent, remove: buttons.find(b => /^Remove/.test(b.attrs['aria-label'] || '')) || li.children[1], toggle, saving: toggle ? toggle.attrs['aria-pressed'] === 'true' : undefined };
+    })
   };
   return api;
 }
