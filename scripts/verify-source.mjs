@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 23 2026: Cross-Pollination Explorer discovery link on existing seed-saving guide.
+  "/heirloom-seed-saving-guide/",
   // October 19: ice-viewing companion links on the two local aurora destinations.
   "/northern-lights-michigan/munising/",
   "/northern-lights-michigan/paradise-whitefish-point/",
