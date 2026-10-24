@@ -67,6 +67,11 @@
           "url": "https://chrisizworski.com/seed-starting-guide/"
         },
         {
+          "@type": "WebApplication",
+          "name": "Michigan Soil Temperature: When Is It Warm Enough to Plant?",
+          "url": "https://chrisizworski.com/michigan-soil-temperature/"
+        },
+        {
           "@type": "Article",
           "name": "When to Plant Tomatoes in Michigan",
           "url": "https://chrisizworski.com/when-to-plant-tomatoes-michigan/"
@@ -511,7 +516,7 @@ a:hover { text-decoration: underline; }
 .pn-sources{margin-top:14px;font-size:14px}.pn-sources summary{cursor:pointer;font-weight:650;color:var(--green)}
 .pn-sources blockquote{margin:6px 0 10px;padding-left:12px;border-left:3px solid #d7d0bf;color:#45524b}
 .pn-credit{font-size:12.5px;color:#6b746f;margin:14px 0 0}
-.pn-more{margin:20px 0 34px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font-size:18px;margin:0 0 8px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:4px 0}
+.pn-more{margin:20px 0 34px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font-size:18px;margin:0 0 8px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:4px 0}
 @media(max-width:640px){.pn-top{padding:26px 16px 18px;text-align:left}.pn-lede{font-size:.95rem}.pn-wrap{padding:0 12px}.pn-more ul{columns:1}}
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
@@ -577,7 +582,7 @@ a:hover { text-decoration: underline; }
   <p class="gk-sub">Make it fit your garden</p>
   <div class="gk-controls">
     <fieldset class="gk-seg"><legend>Can you work the soil? (it crumbles, not sticky or frozen)</legend><label><input type="radio" name="pnWork" value="unknown" checked><span>Not sure</span></label><label><input type="radio" name="pnWork" value="yes"><span>Yes</span></label><label><input type="radio" name="pnWork" value="no"><span>Not yet</span></label></fieldset>
-    <div class="gk-field"><label for="pnSoil">Soil temperature at planting depth, &deg;F</label><input type="number" id="pnSoil" inputmode="numeric" min="20" max="100" placeholder="optional"></div>
+    <div class="gk-field"><label for="pnSoil">Soil temperature at planting depth, &deg;F</label><input type="number" id="pnSoil" inputmode="numeric" min="20" max="100" placeholder="optional"><a class="pn-soil-link" href="/michigan-soil-temperature/">No thermometer? Today's reading at your nearest MSU station</a></div>
   </div>
   <div class="gk-chart" id="pnTableCard">
     <h3>Every crop, for your station</h3>
@@ -630,10 +635,10 @@ a:hover { text-decoration: underline; }
     <div class="cat-header">
       <span class="cat-icon">📅</span>
       <h2 class="cat-title" id="cat-timing">Timing &amp; Seasons</h2>
-      <span class="cat-count">4 Guides</span>
+      <span class="cat-count">5 Guides</span>
     </div>
     <p class="cat-desc">
-      Michigan gardening lives and dies on timing. These four resources answer when to start, when to transplant, and how to read your actual frost risk instead of guessing from a generic last-frost date.
+      Michigan gardening lives and dies on timing. These five resources answer when to start, when to transplant, when the soil is warm enough, and how to read your actual frost risk instead of guessing from a generic last-frost date.
     </p>
     <div class="guide-grid has-hero">
 
@@ -678,6 +683,17 @@ a:hover { text-decoration: underline; }
         <div class="card-body">
           <p>What to start indoors this week for any USDA zone or your own frost date, with a season timeline, plus lights, heat and hardening off explained.</p>
           <a class="card-link" href="/seed-starting-guide/">Start your seeds right</a>
+        </div>
+      </article>
+
+      <article class="guide-card">
+        <div class="card-top">
+          <div class="card-badge">Live Tool</div>
+          <h3><a href="/michigan-soil-temperature/">Michigan Soil Temperature: When Is It Warm Enough?</a></h3>
+        </div>
+        <div class="card-body">
+          <p>Today's measured soil temperature at your nearest MSU weather station, a 16-day forecast checked against it, and the date it should pass MSU's 40°F and 60°F planting temperatures, with the station's past springs.</p>
+          <a class="card-link" href="/michigan-soil-temperature/">Check your soil</a>
         </div>
       </article>
 
@@ -910,6 +926,7 @@ a:hover { text-decoration: underline; }
   function render(){
     if(!place)return;
     var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;
+    var sl=document.querySelector('.pn-soil-link');if(sl)sl.href='/michigan-soil-temperature/?place='+encodeURIComponent(place.zip||place.label);
     el('pnWhere').textContent=(place.label===st.n?'':place.label+': ')+'nearest frost station '+st.n+(place.miles>=1?', about '+Math.round(place.miles)+' miles away':'')+'. Today in Michigan: '+K.fmtLong(today.day)+'.';
     var acts=week.filter(function(r){return ['START_INDOORS','HARDEN_OFF','TRANSPLANT','PLANT'].indexOf(r.code)>=0});
     var card=el('pnCard');

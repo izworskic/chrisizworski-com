@@ -1718,6 +1718,34 @@
       }
     },
     {
+      "id": "soil-temperature",
+      "name": "Michigan Soil Temperature",
+      "canonical": "https://chrisizworski.com/michigan-soil-temperature/",
+      "aliases": [],
+      "kind": "live-tool",
+      "cluster": "gardening",
+      "primaryIntent": "Michigan soil temperature today and when it passes 40F and 60F for planting",
+      "seasons": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "gardener"
+      ],
+      "networkRole": "support",
+      "searchTreatment": {
+        "status": "preseason"
+      },
+      "searchEvidence": {
+        "status": "preseason"
+      }
+    },
+    {
       "id": "agentbase",
       "name": "AgentBase",
       "canonical": "https://github.com/AgentBase1",
@@ -4738,6 +4766,38 @@
       "strength": "strong"
     },
     {
+      "from": "soil-temperature",
+      "to": "planting-calendar",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "garden",
+      "reason": "A soil reading feeds this week's planting list for the same town."
+    },
+    {
+      "from": "soil-temperature",
+      "to": "frost-dates",
+      "type": "evidence-next",
+      "strength": "strong",
+      "surface": "garden",
+      "reason": "Warm-season crops need both warm soil and the danger of frost past."
+    },
+    {
+      "from": "tomato-planting",
+      "to": "soil-temperature",
+      "type": "evidence-next",
+      "strength": "optional",
+      "surface": "garden",
+      "reason": "The tomato check asks for a soil reading the soil tool supplies."
+    },
+    {
+      "from": "soil-temperature",
+      "to": "national-planting",
+      "type": "geographic-handoff",
+      "strength": "optional",
+      "surface": "garden",
+      "reason": "Outside Michigan, the national planting tools own soil readiness."
+    },
+    {
       "from": "national-garden-water",
       "to": "planting-calendar",
       "type": "geographic-handoff",
@@ -5744,9 +5804,10 @@
       "supports": [
         "frost-dates",
         "tomato-planting",
-        "seed-starting"
+        "seed-starting",
+        "soil-temperature"
       ],
-      "rule": "Calendar owns full-season planning; supports own distinct frost, tomato, and technique questions."
+      "rule": "Calendar owns full-season planning; supports own distinct frost, tomato, and technique questions. Soil temperature owns the measured Michigan soil-warming question; the national soil-readiness page stays the U.S. owner."
     },
     {
       "intent": "U.S. northern lights forecast",
