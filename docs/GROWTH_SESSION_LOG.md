@@ -1131,3 +1131,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner requested that the regional report cards and freshness/coverage note remain attached to the map, with cameras below that complete block. Moved the existing camera section after those cards/note on both Seaway pages. No controls, data, camera playback or map behavior changed. Updated the existing ordering assertion to protect this arrangement.
 - Base main Agent verification succeeded on 0701238f. Full gate and deployed order checks are recorded in the release PR. No new canonical, metadata, source, ad or measurement changes; GSC/GA4/AdSense results NOT AVAILABLE.
 - Exactly one next action: verify and publish the requested map → regional reports → coverage note → cameras order on both pages.
+
+
+## October 23, 2026 — Seed Saving Lab usability value function
+- Owned route `/seed-saving-lab/`, feature branch `feature/seed-lab-usability-value-function`; release state to be verified in PR (do not infer production from branch CI).
+- Explicit minimization target `L=100-V`: weighted 100-point task-affordance benchmark with release threshold 90 and hard correctness guards. Original code scored 26/100 in Node static/engine proxy; revised code 100/100 in the same proxy. Separate local Chromium task flows at 390px and 1280px scored 24/100 before and 100/100 afterward, 0 JS exceptions and no horizontal overflow. These are synthetic QA measurements, not observed human performance.
+- Resolved stale pair results by recalculating all field edits; added immediate initial answer, two-mode hero navigation, accessible common/botanical plant-name filters, concise live announcements, priority-first whole-garden action, faster additions and one-click flagged-pair drill-down. Preserved species-first scientific caveats and existing page canonical.
+- Node benchmark `scripts/benchmark-seed-lab-usability.mjs` registered in required `verify:all`. User research, GSC, GA4 and AdSense results NOT AVAILABLE; no conversion, revenue, SEO or human satisfaction improvement claimed.
+- Exactly one next action: verify complete branch CI and preview interaction gates, then merge and inspect actual production deployment.
