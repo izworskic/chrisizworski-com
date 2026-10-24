@@ -19,7 +19,7 @@ Only the operator's YouTube player is embedded; video is not downloaded, rehoste
 
 ## Current interaction: choose and watch
 
-The owner requested a simpler interface after the first release. Camera bubbles and camera/map-jump controls have been removed entirely. The ship map retains ships, locks and public viewing; cameras stay in a straightforward panel immediately below it.
+The owner requested a simpler interface after the first release. Camera bubbles and camera/map-jump controls have been removed entirely. The ship map retains ships, locks and public viewing; cameras stay in a straightforward panel immediately after its regional report cards and freshness note. The map, ship list, report cards and coverage note stay together above the cameras.
 
 - Four named camera buttons open one shared video player directly, in one click. There is no separate Load action, map popup, map-jump button or large empty video placeholder. The idle panel has a compact instruction. Stop appears only while the player is open.
 - Switching cameras replaces the frame; Stop or hiding the tab removes it. Returning does not restart video automatically. AIS refresh never recreates or stops the camera.
