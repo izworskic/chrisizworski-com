@@ -188,7 +188,7 @@ FOOTER = (
     'Built and maintained by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>. '
     'This site reports weather and satellite data. It does not report ice safety, and it never will.'
     '</footer>'
-    '</div></div><script src="/michigan-ice/ice.js"></script>'
+    '</div></div><script src="/michigan-ice/ice.js?v=20261024.2"></script>'
     '<script src="/assets/field-camera.js" defer></script></body></html>'
 )
 
