@@ -69,7 +69,7 @@ test('vessel identity uses curated exact aliases instead of fuzzy auto-merges',(
  const collisions=structuredClone(registry);
  collisions.seasons.find(s=>s.id==='2025-26').records.find(v=>v.id==='manitoulin').aliases.push('Mesabi Miner');
  assert.match(model.validateRegistry(collisions).join(' '),/ambiguous alias/);
- assert.equal(model.validImo('1234567'),false);
+ assert.equal(model.validImo('1234568'),false);
  assert.equal(model.validMmsi('12'),false);
 });
 test('sturgeon bay and Milwaukee entries have independent dated historical society sources',()=>{
