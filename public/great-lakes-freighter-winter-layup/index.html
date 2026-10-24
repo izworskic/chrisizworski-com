@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Lakes Freighter Winter Layup Map & Ship Stories</title>
+<meta name="description" content="Explore verified Great Lakes freighter winter layup locations, historical dock rosters, ship stories, dated sources and an interactive harbor map.">
+<link rel="canonical" href="https://chrisizworski.com/great-lakes-freighter-winter-layup/">
+<meta name="theme-color" content="#102b3c">
+<meta property="og:type" content="website"><meta property="og:title" content="Where Do Great Lakes Freighters Spend Winter?">
+<meta property="og:description" content="A sourced winter layup atlas: verified vessel berths, ship biographies, history and a harbor map.">
+<meta property="og:url" content="https://chrisizworski.com/great-lakes-freighter-winter-layup/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/assets/leaflet-1.9.4.css">
+<link rel="stylesheet" href="/assets/freighter-layup.css">
+<link rel="icon" href="/favicon.ico">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-freighter-winter-layup/#page","name":"Great Lakes Freighter Winter Layup Map and Stories","url":"https://chrisizworski.com/great-lakes-freighter-winter-layup/","description":"Evidence-backed interactive historical layup map and Great Lakes maritime stories.","dateModified":"2026-10-24","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Great Lakes Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":2,"name":"Winter layup","item":"https://chrisizworski.com/great-lakes-freighter-winter-layup/"}]}]}</script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/freighter-layup.js"></script>
+</head><body>
+<a class="skip" href="#main">Skip to winter layup explorer</a>
+<header class="topbar"><div class="top-inner"><a class="logo" href="/freighters/">Freighter Central <span>/ Winter desk</span></a><nav aria-label="Maritime tools"><a href="/great-lakes-freighter-tracking/">Live ships</a><a href="/soo-locks/">Soo Locks</a><a href="/michigan-ice/">Great Lakes ice</a><a href="/great-lakes-gazette/">Gazette</a></nav></div></header>
+<main id="main">
+<section class="hero"><div class="hero-inner">
+  <div><p class="eyebrow">THE GREAT LAKES / WINTER FLEET</p><h1>When the giants come in from the cold.</h1>
+  <p class="lede">Where do Great Lakes freighters spend the winter? Follow the layup fleet into harbor, find the ships you know, and discover the work and stories hidden behind their winter rest.</p>
+  <div class="hero-actions"><a class="button button-gold" href="#explorer">Explore the map ↓</a><a class="button button-outline" href="#fleet">Find a ship ↓</a></div></div>
+  <aside class="hero-note"><b>A new season is approaching</b><p>Winter 2026–27 locations are not confirmed here yet. Start with the documented 2025–26 Superior harbor archive; the two seasons are never mixed.</p><a href="#how-it-works">How verification works →</a></aside>
+</div></section>
+<div class="wrapper">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/freighters/">Freighter Central</a> / Winter layup explorer</nav>
+<section class="intro" aria-label="Overview"><div class="section-head"><p class="kicker">The winter harbor atlas</p><h2>Choose a season. Find a ship. Follow the story.</h2><p>Each verified entry identifies the source and date behind its winter berth. A quiet AIS transmitter does not prove layup, and last winter's berth is not this winter's destination.</p></div>
+<div class="controls"><label for="season">Shipping winter</label><select id="season"><option value="2025-26">2025–26 · verified archive</option><option value="2026-27">2026–27 · upcoming / not confirmed</option></select><span id="season-note" role="status" aria-live="polite">Verified historical snapshot, not the current position of any vessel.</span></div>
+<div class="stats" aria-live="polite"><div><strong id="stat-ships">6</strong><span>documented vessels in this sample</span></div><div><strong id="stat-harbors">1</strong><span>confirmed harbor in this sample</span></div><div><strong id="stat-year">Jan 30</strong><span>source snapshot, 2026</span></div></div>
+</section>
+<section id="explorer" class="map-section" aria-labelledby="map-title">
+<div class="section-head tight"><p class="kicker">Explore the winter fleet</p><h2 id="map-title">Where the ships were berthed</h2><p id="map-intro">Six documented freighters wintered at docks in Superior, Wisconsin. A marker identifies the harbor area, not a vessel's exact dock position.</p></div>
+<div class="map-shell"><div class="map-tools"><button type="button" id="reset-map">All Great Lakes</button><button type="button" id="focus-harbor">Show documented harbor</button><button type="button" id="locate" title="Show your approximate location">My location</button></div>
+<div id="layup-map" role="region" aria-label="Map of documented historical layup harbors"><div class="map-loading">Loading the Great Lakes map. The documented harbor list is available below.</div></div>
+<div class="map-footer"><span id="map-status" role="status" aria-live="polite">Harbor-level locations only; never navigation waypoints.</span><span> Map data: OpenStreetMap · CARTO when available</span></div></div>
+<div id="harbor-panel" class="harbor-panel"><h3>Superior, Wisconsin</h3><p>Six named vessels were documented at three berthing facilities in this harbor for winter 2025–26. Select the harbor map marker, or choose a vessel below.</p></div>
+</section>
+<section id="fleet" class="fleet-section" aria-labelledby="fleet-title"><div class="section-head tight"><p class="kicker">Meet the winter fleet</p><h2 id="fleet-title">Find a freighter and its winter chapter</h2><p>Search vessel names or select a documented berth. These are verified examples from one harbor, not an exhaustive Great Lakes fleet list.</p></div>
+<div class="filter-row"><label class="search-label" for="ship-search">Search vessels<input id="ship-search" type="search" placeholder="Try Mesabi Miner, Oberstar, Tregurtha…" autocomplete="off"></label><label for="berth-filter">Winter berth<select id="berth-filter"><option value="all">All documented berths</option></select></label><button id="clear-filters" type="button" class="small-button">Clear filters</button></div>
+<p class="result-note" id="count-note" role="status" aria-live="polite">6 historical vessel records from one verified port roster.</p>
+<div id="ship-grid" class="ship-grid">
+  <article class="ship-card"><div class="ship-card-copy"><h3>Burns Harbor</h3><p>Redwood Group Elevator M · Superior, Wisconsin</p></div></article>
+  <article class="ship-card"><div class="ship-card-copy"><h3>Honorable James L. Oberstar</h3><p>Fraser Shipyards · Superior, Wisconsin</p></div></article>
+  <article class="ship-card"><div class="ship-card-copy"><h3>Indiana Harbor</h3><p>Ogdensburg Pier · Superior, Wisconsin</p></div></article>
+  <article class="ship-card"><div class="ship-card-copy"><h3>John J. Boland</h3><p>Fraser Shipyards · Superior, Wisconsin</p></div></article>
+  <article class="ship-card"><div class="ship-card-copy"><h3>Lee A. Tregurtha</h3><p>Fraser Shipyards · Superior, Wisconsin</p></div></article>
+  <article class="ship-card"><div class="ship-card-copy"><h3>Mesabi Miner</h3><p>Fraser Shipyards · Superior, Wisconsin</p></div></article>
+</div>
+<article class="detail" id="ship-detail" tabindex="-1" aria-labelledby="detail-title" hidden><div class="detail-top"><div><p class="kicker">A freighter's winter chapter</p><h3 id="detail-title"></h3></div><button type="button" id="detail-close" aria-label="Close vessel details">Close ×</button></div><div id="detail-body"></div></article>
+</section>
+<section class="stories" aria-labelledby="stories-title"><div class="section-head tight"><p class="kicker">The story behind the stillness</p><h2 id="stories-title">When the locks grow quiet, the yards get loud.</h2><p>Winter layup is more than parking a ship. Welders, pipefitters and maintenance crews use the break between operating seasons for repairs, inspections and upgrades. Fraser Shipyards described January 2026 as a period of intensive winter work.</p></div>
+<div class="story-grid"><article><h3>Why do freighters lay up?</h3><p>Seasonal canal and lock schedules, ice, freight demand and maintenance planning shape the winter shutdown. No single factor explains every vessel's berth.</p><a href="https://frasershipyards.com/winter-lay-up-where-the-real-grind-begins/" target="_blank" rel="noopener">Inside winter shipyard work ↗</a></article>
+<article><h3>Watch winter change the lakes</h3><p>The NOAA ice record gives geographic context for the season, but lake-wide percentages cannot reveal the ice beside an individual shipyard dock.</p><a href="/michigan-ice/">Explore Great Lakes ice ↗</a></article>
+<article><h3>Where are ships moving now?</h3><p>Layup archives tell the historical story. For recently observed vessels, choose our separate AIS map with its own timestamps and data limits.</p><a href="/great-lakes-freighter-tracking/">Open live Great Lakes ship map ↗</a></article></div>
+</section>
+<section id="how-it-works" class="method"><p class="kicker">What these records mean</p><h2>A harbor confirmed. A date attached. No invented precision.</h2><p>Our 2025–26 seed archive contains only six vessel-berth matches published by the Duluth Seaway Port Authority. The archive describes a <strong>January 30, 2026 historical snapshot</strong>. A later spring departure does not contradict that earlier documented layup.</p><p>The single map marker is an <strong>approximate harbor reference</strong>. It is not an individual berth, public ship-viewing destination or nautical waypoint. A ship's current location cannot be inferred from a past-season roster.</p><p>Photographs are genuine, dated vessel images. They are <strong>not necessarily photos from the layup season</strong>; license and provenance appear with each image. No auto-generated photos or guessed cargo histories.</p><a href="https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/" target="_blank" rel="noopener">Read the port authority's original six-ship roster ↗</a></section>
+</div></main>
+<footer class="footer"><div><a href="/freighters/">Freighter Central</a> · <a href="/great-lakes-freighter-tracking/">Live ship tracker</a> · <a href="/michigan-ice/">Great Lakes ice</a></div><p>Historical research and interpretation; not for navigation or dock access. Built by <a href="/chris-izworski/">Chris Izworski</a>.</p></footer>
+</body></html>
