@@ -1124,3 +1124,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner rejected the camera bubbles and navigation complexity. Removed the two camera-area markers, CAM legend, map-jump control, back-to-map camera link and their coordinates/callbacks. Four camera buttons now open the embedded video directly below the ship map. Stop appears only when a player is open; the idle placeholder is compact. Reduced the technical camera prose to locations, credit and one short fallback instruction. Existing ships/locks/public-viewing map behavior remains.
 - Main Agent verification passed on camera release 170596ff (40047318994). Updated five camera acceptance tests to the direct choose/watch/Stop flow and explicit absence of camera map controls; the full repository gate and deployed review are recorded in the correction PR. Stream source IDs and the earlier cloud media-rendering limitation remain documented in docs/SEAWAY_CAMERAS.md. No new data, ad-policy or canonical changes. GSC/GA4/AdSense measurements NOT AVAILABLE.
 - Exactly one next action: verify and release the simplified one-click camera interface on both pages.
+
+
+### Seaway cameras below map reports — October 23, 2026
+
+- Owner requested that the regional report cards and freshness/coverage note remain attached to the map, with cameras below that complete block. Moved the existing camera section after those cards/note on both Seaway pages. No controls, data, camera playback or map behavior changed. Updated the existing ordering assertion to protect this arrangement.
+- Base main Agent verification succeeded on 0701238f. Full gate and deployed order checks are recorded in the release PR. No new canonical, metadata, source, ad or measurement changes; GSC/GA4/AdSense results NOT AVAILABLE.
+- Exactly one next action: verify and publish the requested map → regional reports → coverage note → cameras order on both pages.

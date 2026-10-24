@@ -49,7 +49,7 @@ test('four camera choices open directly without camera bubbles or map-jump contr
   for(const c of feeds){assert.equal(c.area,undefined);assert.equal(c.lat,undefined);assert.equal(c.directUrl,'https://www.youtube.com/watch?v='+c.youtubeId);}
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=fs.readFileSync('public/'+slug+'/index.html','utf8');
-    assert.ok(html.indexOf('id="seawayCameras"')>html.indexOf('id="seawayMap"'));assert.ok(html.indexOf('id="seawayCameras"')<html.indexOf('id="viewing-plan"'));
+    assert.ok(html.indexOf('id="seawayCameras"')>html.indexOf('id="regionReports"'));assert.ok(html.indexOf('id="seawayCameras"')>html.indexOf('Freshness and coverage vary along the river.'));assert.ok(html.indexOf('id="seawayCameras"')<html.indexOf('id="viewing-plan"'));
     assert.match(html,/not show Eisenhower Lock or any lock chamber/);assert.match(html,/seaway-cameras\.js/);assert.doesNotMatch(html,/locateSeawayCamera|legend-camera|Load this camera|Camera area/);
     const placeholder=html.split('id="seawayCameraPlayer"')[1].split('class="seaway-camera-actions"')[0];assert.doesNotMatch(placeholder,/<iframe/);
   }
