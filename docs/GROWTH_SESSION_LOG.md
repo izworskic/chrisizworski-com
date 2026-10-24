@@ -1212,3 +1212,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner said "get all this done". Built the station-based, rule-based engine (`lib/plant-now`, `public/assets/garden-tools/plant-now.js`) on `/michigan-gardening/` with MSU rules quoted on the page; 11 crops live, lettuce, potatoes, garlic, basil, cilantro and harvest NOT REPORTED. Corrected conflicting frost values on the hub and `/michigan-last-spring-freeze/`. No new URLs, no server functions.
 - Chrome extension was not reachable from the session, so the MSU source pack is still unread. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: read the MSU source pack in a browser and move sourced crops out of NOT REPORTED.
+
+### Gardening hub section value functions, October 24, 2026
+
+- Owner asked for a value function per hub section, then to execute against it. Added `scripts/benchmark-hub-features.mjs` (15 sections; gate every section >= 90, mean >= 95) and `docs/HUB_SECTION_VALUE_FUNCTIONS.md`. Same gate on main 8192319d: mean 76.0, lowest 20 (guide catalogue). After: 100 on every section.
+- Fixes: four guide cards that contradicted their pages, Seed Saving Lab and matchmaker added to the hub and its structured data, stale 148-day and 140-150-day figures, an invisible Freighter View Farms link, wrong section counts, footer date, soil-blocked crops dropping from the weekly list, seasonal jobs sorted with "In season now".
+- Flagged, not changed: a May 8 frost anecdote on the hub and the freeze page that cannot be verified. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and confirms or removes the May 8 anecdote.
