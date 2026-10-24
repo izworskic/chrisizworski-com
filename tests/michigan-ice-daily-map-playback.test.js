@@ -22,7 +22,13 @@ test('The ice-map animation is real dated NOAA geographic data, never a simulate
   assert.match(code,/genuine archived GLERL daily ice map/);
   assert.match(code,/The CARTO location map above remains a different, current-only product/);
   assert.match(code,/PHOTO_FOCUS/);
-  assert.match(code,/Focus on /);
+  assert.match(code,/dialog\.showModal\(\)/);
+  assert.match(code,/data-ice-large-lake=\\"all\\"/);
+  for(const lake of ['superior','michigan','huron','erie','ontario']) assert.ok(code.includes('data-ice-large-lake="'+lake+'"'));
+  assert.match(code,/Open all five lakes/);
+  assert.match(code,/syncLargeMap\(\)/);
+  assert.match(code,/picture\.hidden = true; picture\.removeAttribute\('src'\)/);
+  assert.match(code,/aria-haspopup/);
   assert.match(code,/Not a safe-ice assessment/);
   assert.equal((mainClient.match(/__michiganIceNowReady = true/g)||[]).length,2);
   assert.match(code,/if \(window\.__michiganIceNowReady\) render\(window\.__michiganIceNow\)/);
