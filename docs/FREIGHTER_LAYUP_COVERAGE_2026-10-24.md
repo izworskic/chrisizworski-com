@@ -67,3 +67,8 @@ Focused coverage guards pin the added arrivals, lower confidence, full photo met
 
 Final full-gate, preview image/interaction evidence and exact release SHA are recorded in PR #1161. Canonical/title/meta/Person identity, ads, legacy AIS and ice endpoints remain unchanged. No new indexable pages. GSC/GA4/AdSense and visitor outcomes are unavailable; no traffic or revenue gain is claimed.
 
+
+
+## Deployed coverage acceptance
+
+The coverage preview on initial coverage head 544d026b passed all GitHub checks, including desktop/mobile browser smoke, and Vercel deployment 4SRYzce9cRYv8W5KKfPSjy7rGzd2 succeeded. Direct browser interaction opened every one of the twenty-seven ship detail views: all twenty-seven real images completed with nonzero natural width and remained visible. Observed desktop overflow was 0 px; the eighteen markers, expanded thirteen-harbor disclosure and source/license captions rendered. Final follow-through adds explicit harbor names to marker accessible labels, singular count grammar and nearby-marker zoom guidance; final SHA/check acceptance is in PR #1161. No claim of perpetual image uptime or completed physical-device/screen-reader/zoom testing.

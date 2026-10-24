@@ -45,6 +45,7 @@ async function run(){
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
       check(await page.locator('.layup-pin').count()===18,size.name+': eighteen historical harbor map markers');
       check(await page.locator('#stat-ships').textContent()==='27',size.name+': season stats');
+      check(await page.getByRole('button',{name:'Montreal, Quebec · 1 historical record; approximate harbor point',exact:true}).count()===1,size.name+': map marker announces harbor identity');
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');

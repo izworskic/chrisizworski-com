@@ -128,14 +128,14 @@
    const counts=policy().harborCounts(state.archive,state.season);
    if(!counts.length){box.append(text('h3','No confirmed harbor locations yet'),text('p','Choose a documented archive above to explore the earlier winters.'));return;}
    if(state.activeHarbor==='all'){
-     box.append(text('h3','Choose a winter harbor'),text('p','Tap a harbor to narrow the fleet. Counts describe this archive sample only.'));
+     box.append(text('h3','Choose a winter harbor'),text('p','Tap a harbor to narrow the fleet. Zoom in to separate nearby map markers. Counts describe this archive sample only.'));
      const chart=document.createElement('div');chart.className='harbor-comparison';
      const max=Math.max(...counts.map(h=>h.count));
      const more=document.createElement('details');more.className='harbor-more';
      more.append(text('summary','Explore '+Math.max(0,counts.length-5)+' more harbors'));
      const otherChart=document.createElement('div');otherChart.className='harbor-comparison';more.append(otherChart);
      for(const [index,h] of counts.entries()){
-       const b=text('button','');b.type='button';b.className='harbor-bar';b.setAttribute('data-harbor',h.id);b.setAttribute('aria-label',h.name+' · '+h.count+' documented records');
+       const b=text('button','');b.type='button';b.className='harbor-bar';b.setAttribute('data-harbor',h.id);b.setAttribute('aria-label',h.name+' · '+h.count+' documented '+(h.count===1?'record':'records'));
        const name=text('span',h.name);name.className='harbor-name';
        const graphic=document.createElementNS('http://www.w3.org/2000/svg','svg');graphic.setAttribute('viewBox','0 0 100 10');graphic.setAttribute('aria-hidden','true');
        const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('width',String(100*h.count/max));rect.setAttribute('height','10');rect.setAttribute('rx','2');graphic.append(rect);
@@ -162,7 +162,9 @@
    state.map.closePopup();state.markerLayer.clearLayers();state.markers=[];
    for(const h of policy().harborCounts(state.archive,state.season)){
      const point=harbor(h.id),list=records().filter(v=>v.harborId===h.id),verified=list.filter(v=>v.status==='confirmed_historical').length;
-     const marker=L.marker([point.lat,point.lon],{icon:shipIcon(h.count),title:h.name+' · '+h.count+' historical records; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
+     const label=h.name+' · '+h.count+' historical '+(h.count===1?'record':'records')+'; approximate harbor point';
+     const marker=L.marker([point.lat,point.lon],{icon:shipIcon(h.count),title:label,keyboard:true}).addTo(state.markerLayer);
+     marker.getElement?.()?.setAttribute('aria-label',label);
      const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',seasonData().label+' · '+verified+' verified / '+(list.length-verified)+' reported. Approximate harbor reference, not a ship position.'));
      const b=text('button','Explore this harbor');b.type='button';b.addEventListener('click',()=>{setHarbor(h.id,true);focusFleet();});pop.append(b);
      marker.bindPopup(pop,{maxWidth:260});marker.on('click',()=>setHarbor(h.id,false,true));state.markers.push({id:h.id,count:h.count,marker});
