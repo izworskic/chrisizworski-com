@@ -1167,3 +1167,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Owner asked for a gardener's voice that tells the garden's story. Rewrote intro, answers, steps, garden copy, empty states and trust note in the Freighter View Farms voice (first person, place, season, bees), and replaced the "three rules" block with a four-beat season story (bloom, visit, seed, telling) with small illustrations. Decisions and data unchanged.
 - Kept standing rules: no em dashes anywhere on the page, no coffee, no invented anecdotes about Chris's household or yields; place facts limited to Bay City, Zone 6a, Saginaw Bay. Answer stays above the fold on phones (scene sentences hidden under 760px).
 - Exactly one next action: Chris reads the default answer and one "no" answer aloud and flags any line that does not sound like him.
+
+
+### Release prerequisite: Seed Saving Lab sitemap date — October 24, 2026
+
+- Main 4a153450 failed Agent verification 40089205051 solely because `/seed-saving-lab/` has dateModified 2026-10-24 but its sitemap lastmod remained 2026-10-23. Corrected that single sitemap entry to the page's actual metadata date; no page content or Seaway feature included. This separate repair unblocks the requested Seaway directions release. Full gate and PR/deploy evidence are recorded in the repair PR. GSC/GA4/AdSense results NOT AVAILABLE.
+- Exactly one next action: release the isolated date repair, then rebase and verify Seaway PR #1144 on green main.
