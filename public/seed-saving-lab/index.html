@@ -8,7 +8,7 @@
 <meta name="description" content="Can your vegetables and flowers cross? Explore 67 plants, whole-garden conflicts, seed-saving methods and what future generations might inherit.">
 <link rel="canonical" href="https://chrisizworski.com/seed-saving-lab/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Cross-Pollination Explorer — Seed Saving Lab">
+<meta property="og:title" content="Will These Plants Cross? Seed Saving Lab">
 <meta property="og:description" content="Compare vegetables and flowers, understand compatible pollen, and decide how to preserve your seeds.">
 <meta property="og:url" content="https://chrisizworski.com/seed-saving-lab/">
 <meta property="og:image" content="https://freighterviewfarms.wordpress.com/wp-content/uploads/2026/06/chris-izworski-summer-garden-overview.jpg?w=900">
@@ -147,7 +147,7 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .field-notes{background:var(--sage-soft);margin-top:60px;padding:52px 0}
 .field-notes h2{font-size:clamp(28px,4vw,36px);margin:12px 0 22px;text-align:center}.field-notes .eyebrow{background:#fff}
 .field-notes .center{text-align:center}
-.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.rules article{background:#fff;border-radius:18px;padding:20px}.rules h3{font-size:20px;margin-bottom:6px}.rules p{font-size:15px;color:#4c5952}
+.story-lede{max-width:620px;margin:0 auto 26px;color:#4c5952;font-size:17px}.story{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;counter-reset:beat}.story li{background:#fff;border-radius:18px;padding:18px;position:relative}.story svg{width:56px;height:56px;display:block;margin-bottom:6px}.story .when{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a7a5a}.story h3{font-size:21px;margin:2px 0 6px}.story p{font-size:15px;color:#4c5952}@media(max-width:900px){.story{grid-template-columns:1fr 1fr}}@media(max-width:560px){.story{grid-template-columns:1fr}}.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.rules article{background:#fff;border-radius:18px;padding:20px}.rules h3{font-size:20px;margin-bottom:6px}.rules p{font-size:15px;color:#4c5952}
 .science-foot{margin:22px auto 0;font-size:15px;color:#4c5952;max-width:760px;text-align:center}.science-foot a{color:var(--pine)}
 .farm-photo{margin:26px 0 0}.farm-photo img{display:block;width:100%;height:auto;max-height:340px;object-fit:cover;border-radius:18px}.farm-photo figcaption{padding-top:8px;font-size:13px;color:var(--muted);text-align:center}.farm-photo a{color:var(--pine)}
 .trust{padding:44px 0}.trust h2{font-size:28px;margin-bottom:10px}.trust p{max-width:760px;color:#4c5952;margin-bottom:10px}
@@ -159,7 +159,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
 }
 @media(max-width:760px){
  .card{padding:18px;border-radius:18px}
- .intro{padding:4px 0 20px}.intro p{font-size:16px}
+ .intro{padding:0 0 16px}.intro p{font-size:16px}.intro h1{margin:10px 0 8px}.lead-scene{display:none}.intro .eyebrow{display:none}
  .pickers{grid-template-columns:1fr;gap:4px}
  .swap{justify-self:center;margin:0;height:42px;width:46px;transform:rotate(90deg)}.swap:hover{transform:rotate(270deg)}
  .answer{padding:18px}
@@ -180,9 +180,9 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
 <main>
  <section class="intro">
   <div class="wrap">
-   <span class="eyebrow">Cross-Pollination Explorer</span>
+   <span class="eyebrow">Freighter View Farms · Seed Saving Lab</span>
    <h1>Will these plants cross?</h1>
-   <p>Pick the plant you want to save seed from and what flowers near it. You get a straight answer and what to do about it.</p>
+   <p><span class="lead-scene">A zucchini leans toward the pumpkin patch. A bee works them both before noon. </span>The fruit looks the same in September, but the seed remembers. Tell me what you are saving seed from and what blooms near it, and I will tell you plainly what that bee may do.</p>
   </div>
  </section>
 
@@ -239,7 +239,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  </section>
 
  <section class="wrap section" id="whole-garden" aria-labelledby="garden-heading">
-  <div class="section-head"><span class="eyebrow">Whole garden</span><h2 id="garden-heading">Which of my plants can cross?</h2><p>List what you're growing. Every pair is checked: the web shows who can cross with whom, and the chart shows how much room each crop needs.</p></div>
+  <div class="section-head"><span class="eyebrow">Walk the whole garden</span><h2 id="garden-heading">Which of my plants can cross?</h2><p>Name what is growing this year. Every pair gets checked, the way you would walk the rows in late July with a bee on every blossom. The web shows who can reach whom, and the chart shows how much room each crop needs to stay itself.</p></div>
   <div class="card">
    <label for="garden-pick" class="visually-hidden">Add a plant</label>
    <div class="add-row"><select id="garden-pick"></select><button class="btn" type="button" id="garden-add">Add</button></div>
@@ -247,14 +247,14 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
    <div class="garden-meta"><span id="garden-count"></span><button type="button" class="link-btn" id="garden-demo">Load an example garden</button><button type="button" class="link-btn" id="garden-clear">Clear</button></div>
    <div class="garden-grid" id="garden-grid">
     <div class="viz-card web" id="web-card">
-     <h3>Pollen web</h3><p class="sub">Tap a plant to see its partners. Tap a line to open that pair.</p>
+     <h3>Pollen web</h3><p class="sub">Each line is a path a bee could carry pollen along. Tap a plant to see its partners, or tap a line to open that pair.</p>
      <div class="legend"><span><svg width="26" height="8" aria-hidden="true"><line x1="1" y1="4" x2="25" y2="4" stroke="#c4623f" stroke-width="3" stroke-linecap="round"/></svg>Can cross</span><span><svg width="26" height="8" aria-hidden="true"><line x1="1" y1="4" x2="25" y2="4" stroke="#8a6fc4" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/></svg>Worth checking</span><span>No line: won't normally cross</span></div>
      <svg id="pollen-web" viewBox="0 0 440 400" role="group" aria-label="Pollen web of your garden"></svg>
     </div>
     <div class="garden-results" id="garden-results" aria-live="polite"></div>
    </div>
    <div class="viz-card bars" id="bars-card" style="margin-top:22px">
-    <h3>Room each crop needs to stay true</h3><p class="sub">Published home-garden separation guideline per species in your garden. Darker bars have a crossing partner in your list.</p>
+    <h3>Room each crop needs to stay true</h3><p class="sub">The published home-garden separation guideline for each species you named. The darker bars have a partner in your beds that can cross with them.</p>
     <svg id="room-chart" viewBox="0 0 640 120" role="img" aria-label="Separation guideline by species"></svg>
     <details><summary class="link-btn">Show as a table</summary><table id="room-table" style="width:100%;font-size:14px;border-collapse:collapse;margin-top:8px"><thead><tr><th style="text-align:left">Species</th><th style="text-align:left">Your plants</th><th style="text-align:right">Guideline</th><th style="text-align:right">Plants to save from</th></tr></thead><tbody id="room-rows"></tbody></table></details>
    </div>
@@ -263,14 +263,21 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   </div>
  </section>
 
- <section class="field-notes" id="field-notes"><div class="wrap"><div class="center"><span class="eyebrow">How crossing works</span><h2>Three rules worth carrying into the garden.</h2></div><div class="rules"><article><h3>Learn the Latin name.</h3><p>A zucchini and some pumpkins are the same species. A cucumber and a watermelon aren't. Common names can lead you astray.</p></article><article><h3>Separate flowering—not just plants.</h3><p>Crossing needs compatible pollen and receptive flowers at the same time. Distance, timing, bagging, and controlled pollination change the situation.</p></article><article><h3>Protect diversity.</h3><p>Saving from one favorite plant may keep an interesting trait, but long-term preservation also depends on adequate population size and thoughtful selection.</p></article></div><p class="science-foot">Usually, cross-pollination affects the <em>next generation</em> grown from saved seeds, not the current tomato, squash, or flower's appearance. Corn kernels are a notable exception. <a href="https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/saving-vegetable-seeds" target="_blank" rel="noopener noreferrer">Read the University of Minnesota explanation ↗</a></p><figure class="farm-photo"><img src="https://freighterviewfarms.wordpress.com/wp-content/uploads/2026/06/chris-izworski-summer-garden-overview.jpg?w=900" width="900" height="600" alt="Summer vegetable garden at Freighter View Farms near Saginaw Bay" loading="lazy" decoding="async"><figcaption>From the Freighter View Farms garden, Bay City, Michigan · <a href="https://freighterviewfarms.com/" rel="noopener">Garden field notes ↗</a></figcaption></figure></div></section>
+ <section class="field-notes" id="field-notes"><div class="wrap"><div class="center"><span class="eyebrow">How a garden passes its story on</span><h2>A season, told in seed.</h2><p class="story-lede">Every saved seed carries a little of the summer it grew in. Here is how that story gets written, one flower at a time.</p></div>
+<ol class="story">
+<li><svg viewBox="0 0 64 64" aria-hidden="true"><g transform="translate(32 30)"><ellipse rx="7" ry="15" fill="#f3b8a0"/><ellipse rx="7" ry="15" fill="#f3b8a0" transform="rotate(60)"/><ellipse rx="7" ry="15" fill="#f3b8a0" transform="rotate(120)"/><circle r="7" fill="#f2c46b"/></g><path d="M32 45 v15" stroke="#7fa58a" stroke-width="3" stroke-linecap="round"/></svg><span class="when">Early summer</span><h3>The bloom</h3><p>A flower opens and offers two things at once: pollen to give and a place to receive it. What arrives in those few days decides what the seed will carry.</p></li>
+<li><svg viewBox="0 0 64 64" aria-hidden="true"><g transform="translate(32 32)"><ellipse cx="-6" cy="-9" rx="10" ry="6" fill="#e9f0f6" transform="rotate(-30)"/><ellipse cx="6" cy="-9" rx="10" ry="6" fill="#e9f0f6" transform="rotate(30)"/><ellipse rx="13" ry="8" fill="#f2c46b"/><path d="M-4 -7v14 M4 -7v14" stroke="#4a3b2a" stroke-width="3"/><circle cx="13" r="4.5" fill="#4a3b2a"/></g></svg><span class="when">High summer</span><h3>The visit</h3><p>Bees and wind do not read seed packets. They read botany. Pollen moves easily between plants of the same species and almost never between different ones, whatever the common names suggest.</p></li>
+<li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 40 q18 -26 36 0 q-18 14 -36 0z" fill="#d9c08d"/><circle cx="24" cy="38" r="3.5" fill="#7c5a14"/><circle cx="32" cy="35" r="3.5" fill="#7c5a14"/><circle cx="40" cy="38" r="3.5" fill="#7c5a14"/></svg><span class="when">Late summer into fall</span><h3>The seed</h3><p>The fruit on the vine looks just as it should. A cross hides inside the seed, where you cannot see it yet. Sweet corn is the one exception gardeners notice right away, in the kernels on the ear.</p></li>
+<li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 54 v-20" stroke="#5e8a6a" stroke-width="3" stroke-linecap="round"/><path d="M32 38 q-14 -4 -16 -16 q14 0 16 16z M32 34 q12 -4 14 -14 q-12 0 -14 14z" fill="#7fa58a"/><path d="M14 56 h36" stroke="#c9b893" stroke-width="3" stroke-linecap="round"/></svg><span class="when">Next spring</span><h3>The telling</h3><p>Plant it out and the story comes back. Kept apart, the variety returns as itself. Crossed, it may bring something new. Saving from many plants, not just the best one, keeps the line strong for years.</p></li>
+</ol>
+<p class="science-foot">Want the longer version? <a href="https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/saving-vegetable-seeds" target="_blank" rel="noopener noreferrer">The University of Minnesota explains saving vegetable seed ↗</a></p><figure class="farm-photo"><img src="https://freighterviewfarms.wordpress.com/wp-content/uploads/2026/06/chris-izworski-summer-garden-overview.jpg?w=900" width="900" height="600" alt="Summer vegetable garden at Freighter View Farms near Saginaw Bay" loading="lazy" decoding="async"><figcaption>The beds at Freighter View Farms, Bay City, Michigan, Zone 6a, with Saginaw Bay just beyond. <a href="https://freighterviewfarms.com/" rel="noopener">More from the garden ↗</a></figcaption></figure></div></section>
 
- <section class="trust wrap" aria-labelledby="trust-heading"><h2 id="trust-heading">A field guide, not a crystal ball.</h2><p>Species, flowering, pollination and isolation guidance come from horticultural references. This explorer does <strong>not</strong> calculate a percentage chance of crossing, guarantee purity, or infer actual genetic outcomes from variety names. A separation guideline is not a measured probability of a cross: pollinators, wind, landscape and your neighbors' gardens all matter.</p><details><summary>View the sources behind the explorer</summary><ul id="references"></ul></details></section>
+ <section class="trust wrap" aria-labelledby="trust-heading"><h2 id="trust-heading">A field guide, not a crystal ball.</h2><p>Every answer here rests on published horticultural references for species, flowering, pollination and isolation. This explorer does <strong>not</strong> calculate a percentage chance of crossing, guarantee purity, or predict what a seed will become from its variety name. A separation guideline is not a measured probability of a cross. Bees, wind, the shape of the land and the garden next door all have a say, and a good gardener keeps watching.</p><details><summary>View the sources behind the explorer</summary><ul id="references"></ul></details></section>
 </main>
 <div class="viz-tip" id="viz-tip" role="tooltip"></div>
 <footer><div class="wrap foot-grid"><div><b>FREIGHTER VIEW FARMS</b><p>Seeds saved and stories gathered beside Saginaw Bay, Michigan.</p></div><div><p><a href="https://freighterviewfarms.com/">Return to the garden ↗</a></p><p><a href="https://chrisizworski.com/heirloom-seed-saving-guide/">Read the seed saving guide ↗</a></p></div><div><p>Field edition · October 2026</p><p>© 2026 <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></p></div></div></footer>
 <script>
-/* Freighter View Farms Seed Saving Lab — curated starting taxonomy.
+/* Freighter View Farms Seed Saving Lab: curated starting taxonomy.
  * Isolation figures are advisory separation guidelines, NEVER probabilities.
  * OSA home guidance for vegetables; SSE flower-specific profiles for ornamentals.
  */
@@ -401,17 +408,17 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   const genusA=a.species.split(' ')[0],genusB=b.species.split(' ')[0];
   const special=data.special.find(x=>x.species.length===2&&x.species.includes(a.species)&&x.species.includes(b.species))||null;
   const guideline=speciesMatch?(Math.max(a.isolationFt||0,b.isolationFt||0)||null):null;
-  let potential='unlikely',heading='Different species — no usual crossing',detail='No normally compatible pollen pathway is documented between these plants.',source=a.source;
+  let potential='unlikely',heading='Different species: no usual crossing',detail='No normally compatible pollen pathway is documented between these plants.',source=a.source;
   if(speciesMatch){
    potential='compatible';
-   heading=sameEntry?'Same selected variety — protect its broader seed population':'Same species — pollen exchange is biologically possible';
+   heading=sameEntry?'Same selected variety: protect its broader seed population':'Same species: pollen exchange is biologically possible';
    detail=`${a.name} and ${b.name} are both ${a.species}. If compatible pollen reaches a receptive flower, seed may carry genes from the pollen parent.`;
   }else if(special){
    potential=special.kind==='unlikely'?'unlikely':'exception';
-   heading=potential==='exception'?'Different species — documented exception':'Different species — cross normally unlikely';
+   heading=potential==='exception'?'Different species: documented exception':'Different species: cross normally unlikely';
    detail=special.detail;source=special.source;
   }else if(genusA===genusB){
-   potential='unverified';heading='Shared genus — compatibility not verified';
+   potential='unverified';heading='Shared genus: compatibility not verified';
    detail='Sharing a genus does not establish successful crossing, fertility or seed purity. No validated pair-specific rule is available here.';
   }
   let outcome='low',verdict='No usual cross between these two plants',recommendation='Preserve the variety name and seed source on your label. Unlisted neighbors and stray pollen have not been evaluated.';
@@ -423,13 +430,13 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
     outcome='managed';verdict='Controlled pollination may protect this seed lot';
     recommendation='Only count flowers bagged before opening, supplied with known pollen, re-covered and individually tagged. Untagged fruit is not protected by this method.';
    }else if(overlap==='unknown'){
-    outcome='unknown';verdict='Possible cross — overlap not confirmed';
+    outcome='unknown';verdict='Possible cross: overlap not confirmed';
     recommendation='Record actual blooming dates; if both bloom together, select one seed variety, isolate, or bag/hand-pollinate.';
    }else if(guideline!==null&&distance!==null&&distance>=guideline){
-    outcome='reduced';verdict='Guideline met — not a purity guarantee';
+    outcome='reduced';verdict='Guideline met: not a purity guarantee';
     recommendation='Published home-garden separation is a risk-reduction guide, not a pollen barrier. Consider neighbors, wind, pollinators and other varieties.';
    }else{
-    outcome='needs-action';verdict='Compatible flowers — protection advised';
+    outcome='needs-action';verdict='Compatible flowers: protection advised';
     recommendation='For true-to-type seed, bag and hand-pollinate receptive flowers, use robust isolation, or grow only one variety of this species for seed.';
    }
   }else if(potential==='compatible'&&sameEntry){
@@ -529,34 +536,37 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  function speciesLine(){const a=plantA(),b=plantB();el('botanical-a').replaceChildren(latin(a.species));el('botanical-b').replaceChildren(latin(b.species))}
 
  // Words for the engine's decision. The decision itself is the engine's.
+ // Plant names read naturally mid-sentence: "the zucchini", but "the Cherokee Purple tomato".
+ const PROPER=/^(French|African|European|Siberian|Swiss|Armenian|Genovese|Brandywine|Cherokee|Queen)\b/;
+ const nm=n=>/^[A-Z][^ A-Z]*( [^A-Z]*)?$/.test(n)&&!PROPER.test(n)?n.charAt(0).toLowerCase()+n.slice(1):n;
  function present(r){
-  const a=r.a,b=r.b,g=r.guideline,pop=D.population[a.species];
-  const tip='Tip for '+a.name+': '+a.saveNote;
-  const popStep=pop?'Save seed from about '+pop+' plants, not just one, so the variety stays healthy over the years.':null;
+  const a=r.a,b=r.b,g=r.guideline,pop=D.population[a.species],an=nm(a.name),bn=nm(b.name);
+  const tip='From the seed shelf, on '+a.name+': '+a.saveNote;
+  const popStep=pop?'Save seed from about '+pop+' plants, not just the best one. A variety is a family, and a family needs more than one member to stay healthy.':null;
   const opt=(icon,t,d)=>{const li=document.createElement('li');li.append(h('span',{class:'ico','aria-hidden':'true'},icon),h('b',null,t),h('span',null,...[].concat(d)));return li};
   const keepTrue=()=>[
-   opt('↔',g?'Distance: keep them at least '+feet(g)+' apart.':'Distance: separate them as far as you can.',g?'That is the published home-garden guideline for this species.':''),
-   opt('✋','Hand-pollinate.','Cover '+a.name+' flowers before they open, pollinate by hand with pollen from the same variety, re-cover and tag them. Save seed only from tagged fruit.'),
-   opt('①','Grow one variety.',['Let only one ',latin(a.species),' variety flower for seed this year.'])
+   opt('↔',g?'Give them room: at least '+feet(g)+'.':'Give them as much room as the garden allows.',g?'That is the published home-garden guideline for this species. Farther is safer.':''),
+   opt('✋','Do the bee’s work yourself.','Cover a few '+an+' flowers before they open, move pollen by hand from the same variety, cover them again and tie a tag on the stem. Save seed only from the tagged fruit.'),
+   opt('①','Let one variety have the season.',['Allow only one ',latin(a.species),' to flower for seed this year, and save the other for next.'])
   ];
   let v;
   if(r.potential==='compatible'&&r.sameEntry){
-   v={cls:'same',link:'same',badge:'Same variety',title:'Same variety, so no cross between these two.',why:['Both plants are ',latin(a.species),'. What matters is any ',h('em',null,'other'),' variety of that species flowering nearby.'],also:[popStep,tip]};
+   v={cls:'same',link:'same',badge:'Same variety',title:'Same variety, so these two cannot change each other.',why:['Both are ',latin(a.species),' of the same name. The question worth asking is what ',h('em',null,'other'),' variety of that species is blooming within a bee’s reach.'],also:[popStep,tip]};
   }else if(r.potential==='compatible'){
-   const why=['Both are ',latin(a.species),', so pollen from '+b.name+' can fertilize '+a.name+' flowers. The fruit looks normal this year; the plants you grow from its seed may not.'];
-   if(r.goal==='explore')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, and you are fine with that.',why,also:['Let them cross. Label the seed “'+a.name+' × possibly '+b.name+'”.','Grow it out next year and keep the plants you like. Expect them to vary.',tip]};
+   const why=['Both are ',latin(a.species),', close cousins under one botanical name. A bee that works the '+bn+' and then the '+an+' carries that pollen with it. This year’s fruit will look exactly as it should. The plants that grow from its seed next spring may not.'];
+   if(r.goal==='explore')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, and you are happy to see what happens.',why,also:['Let the bees do their work, then label the seed honestly: “'+a.name+' × possibly '+b.name+'.”','Grow it out next season and keep the plants you like. Expect a little surprise in every row.',tip]};
    else if(r.outcome==='needs-action')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, these can cross.',why,options:keepTrue(),also:[popStep,tip]};
-   else if(r.outcome==='reduced')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but your distance meets the guideline.',why:[r.distance.toLocaleString('en-US')+' ft apart against a '+g.toLocaleString('en-US')+' ft guideline for ',latin(a.species),'. That lowers the risk. It is not a guarantee: bees, wind and neighbors’ gardens still matter.'],also:['Check that no other '+a.species+' varieties flower closer than that, including next door.',popStep,tip]};
-   else if(r.protection==='controlled')v={cls:'managed',link:'guarded',badge:'Protected',title:'They can cross, but hand-pollinated flowers are protected.',why:['Both are ',latin(a.species),'. Only flowers you covered before they opened, pollinated by hand and re-covered are protected.'],also:['Tag every hand-pollinated flower. Save seed only from tagged fruit.',popStep,tip]};
-   else if(r.overlap==='no')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but not if they never flower together.',why:['Both are ',latin(a.species),'. Different bloom times keep them apart, as long as they really don’t overlap.'],also:['Write down when each starts and stops flowering. Late or repeat blooms can overlap.',popStep,tip]};
-   else v={cls:'maybe',link:'maybe',badge:'Can cross',title:'They can cross if they flower at the same time.',why:['Both are ',latin(a.species),'. Watch whether their flowering overlaps; if it does, protect '+a.name+'.'],options:keepTrue(),also:['Note when each starts and stops flowering.',tip]};
+   else if(r.outcome==='reduced')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but you have given them room.',why:[r.distance.toLocaleString('en-US')+' feet apart, against a '+g.toLocaleString('en-US')+' foot guideline for ',latin(a.species),'. Distance lowers the odds. It does not close the door: a strong wind, a busy bee or a neighbor’s garden can still slip pollen through.'],also:['Walk the property line and look over the fence. Another '+a.species+' blooming closer than that matters as much as the one in your own bed.',popStep,tip]};
+   else if(r.protection==='controlled')v={cls:'managed',link:'guarded',badge:'Protected',title:'They can cross, but your bagged flowers are safe.',why:['Both are ',latin(a.species),'. The flowers you closed before they opened, pollinated by hand and closed again belong to you, not the bees.'],also:['Tag every hand-pollinated flower the day you do it. Save seed only from tagged fruit, and let the rest feed the kitchen.',popStep,tip]};
+   else if(r.overlap==='no')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but not if they never bloom together.',why:['Both are ',latin(a.species),'. Two plants that flower in different weeks never meet, as long as the calendar holds.'],also:['Write the first and last bloom date for each in your garden notes. A late flush or a warm September can bring them together after all.',popStep,tip]};
+   else v={cls:'maybe',link:'maybe',badge:'Can cross',title:'They can cross if they bloom at the same time.',why:['Both are ',latin(a.species),'. Watch the blossoms. If they open in the same weeks, the bees will find them both.'],options:keepTrue(),also:['Note when each one starts and stops flowering.',tip]};
   }else if(r.potential==='exception'){
-   v={cls:'maybe',link:'maybe',badge:'Rarely',title:'Usually not, but crosses have been documented.',why:[latin(a.species),' and ',latin(b.species),' are different species. '+r.detail],also:['If you need '+a.name+' to stay true, separate it or hand-pollinate it anyway.',tip]};
+   v={cls:'maybe',link:'maybe',badge:'Rarely',title:'Usually not, but it has happened.',why:[latin(a.species),' and ',latin(b.species),' are different species, and most seasons they keep to themselves. '+r.detail],also:['If your '+an+' must stay exactly itself, give it room or pollinate it by hand anyway.',tip]};
   }else if(r.potential==='unverified'){
-   v={cls:'maybe',link:'maybe',badge:'Unconfirmed',title:'Not confirmed either way.',why:[latin(a.species),' and ',latin(b.species),' share a genus. '+r.detail],also:['Check the exact species on both seed packets.','If purity matters, separate or hand-pollinate '+a.name+'.',tip]};
+   v={cls:'maybe',link:'maybe',badge:'Unconfirmed',title:'Nobody has settled this one either way.',why:[latin(a.species),' and ',latin(b.species),' share a genus. '+r.detail],also:['Read the Latin name on both seed packets before you trust either one.','If purity matters, give your '+an+' room or pollinate it by hand.',tip]};
   }else{
    const extra=r.source!==a.source?' '+r.detail:'';
-   v={cls:'no',link:'none',badge:'No',title:'No, these don’t normally cross.',why:[latin(a.species),' and ',latin(b.species),' are different species.'+extra],also:[['What can cross with '+a.name+' is another ',latin(a.species),' variety. Check what else of that species flowers nearby.'],popStep,tip]};
+   v={cls:'no',link:'none',badge:'No',title:'No, these do not normally cross.',why:[latin(a.species),' and ',latin(b.species),' are different species. A bee can work them both all afternoon and the '+an+' seed will still grow '+an+'.'+extra],also:[['The plant to watch is any other ',latin(a.species),' blooming nearby. That is the one that can change your '+an+'.'],popStep,tip]};
   }
   v.options=v.options||[];v.also=v.also.filter(Boolean);
   return v;
@@ -617,12 +627,12 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   el('status-label').textContent=v.badge;
   el('result-heading').textContent=v.title;
   el('result-detail').replaceChildren(...v.why);
-  el('options-title').textContent=v.options.length?'To keep '+a.name+' true, pick one':'';
+  el('options-title').textContent=v.options.length?'Three ways to keep your '+nm(a.name)+' true. Choose one.':'';
   el('options-title').hidden=!v.options.length;el('result-options').hidden=!v.options.length;
   el('result-options').replaceChildren(...v.options);
-  el('steps-title').textContent=v.options.length?'Also':v.cls==='no'?'Good to know':'What to do';
+  el('steps-title').textContent=v.options.length?'And whichever you choose':v.cls==='no'?'Worth knowing':'What to do';
   el('result-steps').replaceChildren(...v.also.map(x=>h('li',null,...[].concat(x))));
-  el('next-year').replaceChildren(h('strong',null,'Next year: '),api.generationText(r,1));
+  el('next-year').replaceChildren(h('strong',null,'Next spring: '),api.generationText(r,1));
   const cautions=r.cautions.filter(c=>!/must coincide|did not confirm different blooming/.test(c));
   el('result-cautions').replaceChildren(...cautions.map(c=>h('li',null,c)));
   const link=el('source-link');link.href=r.source;link.textContent=r.source.includes('seedalliance')?'Organic Seed Alliance ↗':r.source.includes('seedsavers')?'Seed Savers Exchange ↗':'Crossing reference ↗';
@@ -632,7 +642,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   for(const id of ['q-overlap','q-protection'])el(id).classList.toggle('hidden',!crossable);
   el('q-distance').classList.toggle('hidden',!(r.potential==='compatible'&&!r.sameEntry&&r.guideline));
   if(r.guideline){const d=r.distance;el('distance-copy').replaceChildren('Guideline for this species: ',h('b',null,feet(r.guideline)),d==null?'':d>=r.guideline?' · yours meets it':' · yours is '+Math.round(d/r.guideline*100)+'% of it');drawDistance(r)}
-  el('refine-note').textContent=crossable?'Each answer updates the result above.':'These two don’t normally cross, so only these questions matter.';
+  el('refine-note').textContent=crossable?'Tell me a little about your beds and the answer above will change with you.':'These two do not normally cross, so only these questions matter.';
   el('comparison-link').hidden=true;el('share-comparison').textContent='Copy link to this answer';
  }
 
@@ -689,7 +699,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   pick.value='';
  }
  function feedback(t){el('garden-feedback').textContent=t}
- function add(id){if(!byId(id)||members.includes(id))return false;if(members.length>=MAX){feedback('That’s 12 plants, the most this checker compares at once.');return false}members.push(id);render();return true}
+ function add(id){if(!byId(id)||members.includes(id))return false;if(members.length>=MAX){feedback('Twelve plants is as many as this checker compares at once.');return false}members.push(id);render();return true}
  function remove(id){members=members.filter(x=>x!==id);if(focusId===id)focusId=null;render()}
  function assessment(){return members.length<2?null:engine.makeGarden(members.map(byId),{},D)}
  const openPair=p=>window.SeedLabUI&&window.SeedLabUI.setPair(p.a.id,p.b.id,true);
@@ -782,7 +792,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   });
   if(!charted.length)kids.push(s('text',{x:20,y:top+10,class:'bar-axis'},'Add plants to see how much room each needs.'));
   svg.replaceChildren(...kids);
-  el('room-rows').replaceChildren(...rows.sort((a,b)=>(b.ft||0)-(a.ft||0)).map(x=>h('tr',null,h('td',null,h('i',null,x.sp)),h('td',null,x.ps.map(p=>p.name).join(', ')),h('td',{style:'text-align:right'},x.ft?x.ft.toLocaleString('en-US')+' ft':'Not listed'),h('td',{style:'text-align:right'},x.pop||'—'))));
+  el('room-rows').replaceChildren(...rows.sort((a,b)=>(b.ft||0)-(a.ft||0)).map(x=>h('tr',null,h('td',null,h('i',null,x.sp)),h('td',null,x.ps.map(p=>p.name).join(', ')),h('td',{style:'text-align:right'},x.ft?x.ft.toLocaleString('en-US')+' ft':'Not listed'),h('td',{style:'text-align:right'},x.pop||', '))));
  }
 
  function render(){
@@ -791,17 +801,17 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   fillPick();
   const r=assessment();
   for(const id of ['garden-tools','garden-grid','bars-card'])el(id).classList.toggle('hidden',!r);
-  if(!r){out.replaceChildren();feedback(members.length?'Add one more plant to check pairs.':'Add the plants you grow, or load the example garden.');web.replaceChildren();return}
+  if(!r){out.replaceChildren();feedback(members.length?'Add one more plant and the pairs will appear.':'Start with what is in your beds, or load the example garden.');web.replaceChildren();return}
   const cross=r.pairs.filter(p=>p.level==='compatible'),check=r.pairs.filter(p=>p.level==='exception'||p.level==='unverified'),safe=r.pairs.filter(p=>p.level==='unlikely');
   const title=(label,n)=>h('h3',null,h('span',{class:'count'},String(n)),label);
   const groups=[];
   if(cross.length)groups.push(h('div',{class:'group yes'},title(cross.length===1?'Pair that can cross':'Pairs that can cross',cross.length),...cross.map(p=>pairRow(p,true))));
   if(check.length)groups.push(h('div',{class:'group maybe'},title('Worth checking',check.length),...check.map(p=>pairRow(p,true))));
-  if(!cross.length&&!check.length)groups.push(h('p',{class:'empty'},'None of these plants normally cross with each other. Other varieties nearby, including next door, aren’t in this list.'));
+  if(!cross.length&&!check.length)groups.push(h('p',{class:'empty'},'None of these plants normally cross with each other. Varieties beyond your list, including the garden next door, are not counted here.'));
   if(safe.length)groups.push(h('details',{class:'group no'},h('summary',null,h('span',{class:'count'},String(safe.length)),' Won’t normally cross'),...safe.map(p=>pairRow(p,false))));
   out.replaceChildren(...groups);
   lastR=r;drawWeb(r);drawRoom(r);
-  feedback(r.pairs.length+' pairs checked. A “can cross” label never certifies a seed lot; it means protect it.');
+  feedback(r.pairs.length+' pairs checked. “Can cross” is not a verdict on your seed. It is a reminder to protect it.');
  }
  pick.addEventListener('change',()=>{if(pick.value)add(pick.value)});
  el('garden-add').addEventListener('click',()=>{if(pick.value)add(pick.value);else pick.focus()});
