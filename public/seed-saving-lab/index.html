@@ -51,7 +51,7 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .picker select:hover{border-color:var(--sage)}.picker select:focus{border-color:var(--pine);box-shadow:0 0 0 4px var(--sage-soft);outline:none}
 .species{display:block;margin-top:6px;font-size:13px;color:var(--muted);min-height:20px}.species i{font-family:Georgia,serif}
 .swap{width:50px;height:54px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff;font-size:20px;color:var(--pine);margin-bottom:26px;transition:transform .2s,background .15s}.swap:hover{background:var(--sage-soft);transform:rotate(180deg)}
-.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted)}
+.pick-hint{margin:10px 0 0;font-size:14px;color:var(--muted)}.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted)}
 .chip-btn{border:1px solid #dcd6c6;background:#fff;border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px;color:var(--pine);font-weight:600;transition:background .15s,border-color .15s}.chip-btn:hover{background:var(--sage-soft);border-color:var(--sage)}
 /* answer */
 .answer{margin-top:24px;border-radius:18px;padding:24px;display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-areas:'head viz' 'body viz';gap:4px 28px;transition:background .3s}.ans-head{grid-area:head;min-width:0}.ans-body{grid-area:body;min-width:0}.pair-viz{grid-area:viz}
@@ -159,7 +159,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
 }
 @media(max-width:760px){
  .card{padding:18px;border-radius:18px}
- .intro{padding:0 0 16px}.intro p{font-size:16px}.intro h1{margin:10px 0 8px}.lead-scene{display:none}.intro .eyebrow{display:none}
+ .intro{padding:0 0 16px}.intro p{font-size:16px}.intro h1{margin:10px 0 8px}.lead-scene{display:none}.pick-hint{display:none}.intro .eyebrow{display:none}
  .pickers{grid-template-columns:1fr;gap:4px}
  .swap{justify-self:center;margin:0;height:42px;width:46px;transform:rotate(90deg)}.swap:hover{transform:rotate(270deg)}
  .answer{padding:18px}
@@ -195,6 +195,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
      <button type="button" class="swap" id="swap" aria-label="Swap the two plants" title="Swap">⇄</button>
      <div class="picker"><label for="plant-b">Flowering nearby</label><select id="plant-b" name="plant-b"></select><span class="species" id="botanical-b"></span></div>
     </div>
+    <p class="pick-hint">Comparing two varieties of one crop, like two tomatoes? Choose that crop in both boxes.</p>
     <div class="examples"><span>Try:</span><button type="button" class="chip-btn" data-example="squash">Zucchini + pumpkin</button><button type="button" class="chip-btn" data-example="flowers">Two zinnias</button><button type="button" class="chip-btn" data-example="brassicas">Kale + broccoli</button><button type="button" class="chip-btn" data-example="melon">Cucumber + melon</button></div>
 
     <div id="results" class="answer" aria-labelledby="result-heading">
@@ -286,75 +287,60 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   const OSA = 'https://seedalliance.org/publications/seed-saving-guide/';
   const SSE = 'https://seedsavers.org/flower-seed-saving-profiles/';
   const ZINNIA = 'https://seedsavers.org/grow-zinnia/';
+  // One entry per crop, named the way gardeners say it. Two varieties of the same crop
+  // are compared by choosing that crop twice.
   const entries = [
-    // name, category, genus/species, pollination, guideline feet, source, saving note
-    ['Cherokee Purple tomato','Vegetable','Solanum lycopersicum','Mostly self',40,OSA,'Choose a fully ripe healthy fruit; ferment, rinse and dry seeds. Heirloom flower structures can vary.'],
-    ['Brandywine tomato','Vegetable','Solanum lycopersicum','Mostly self',40,OSA,'Ferment seed from ripe fruit and select for recognizable variety traits.'],
-    ['Red Robin tomato','Vegetable','Solanum lycopersicum','Mostly self',40,OSA,'Save mature fruit seed and verify the original packet is open-pollinated.'],
-    ['Shishito pepper','Vegetable','Capsicum annuum','Self + insects',800,OSA,'Let fruit ripen fully; use the larger hot-pepper isolation guideline near other peppers.'],
-    ['Jalapeño pepper','Vegetable','Capsicum annuum','Self + insects',800,OSA,'Same species as bell and shishito peppers. Save seed from ripe fruits.'],
-    ['Sweet bell pepper','Vegetable','Capsicum annuum','Self + insects',800,OSA,'Can cross with hot peppers; the stronger hot-pepper isolation guidance governs this comparison.'],
-    ['Lemon summer squash','Vegetable','Cucurbita pepo','Insects',1600,OSA,'Allow the fruit to reach full seed maturity; hand-pollinate and bag blossoms to keep the line.'],
-    ['Zucchini','Vegetable','Cucurbita pepo','Insects',1600,OSA,'Same species as many pumpkins and spaghetti squash. Select fully mature fruits for seed.'],
-    ['Jack-o’-lantern pumpkin','Vegetable','Cucurbita pepo','Insects',1600,OSA,'Many field pumpkins are C. pepo; cultivar taxonomy should be verified before saving.'],
-    ['Butternut squash','Vegetable','Cucurbita moschata','Insects',1600,OSA,'Usually separate from C. pepo, but unusual interspecies crosses can occur.'],
-    ['Kabocha squash','Vegetable','Cucurbita maxima','Insects',1600,OSA,'Check the packet: kabocha is commonly C. maxima.'],
-    ['Slicing cucumber','Vegetable','Cucumis sativus','Insects',1600,OSA,'Cucumbers cross with other C. sativus cultivars, not ordinary muskmelons.'],
-    ['Cantaloupe / muskmelon','Vegetable','Cucumis melo','Insects',1600,OSA,'May cross with Armenian cucumber, another C. melo.'],
-    ['Armenian cucumber','Vegetable','Cucumis melo','Insects',1600,OSA,'Despite its name it is a melon species, not a true cucumber.'],
-    ['Watermelon','Vegetable','Citrullus lanatus','Insects',1600,OSA,'Does not ordinarily cross with cucumber or muskmelon.'],
-    ['Broccoli','Vegetable','Brassica oleracea','Insects',1600,OSA,'Can cross with cabbage, European kale, cauliflower and Brussels sprouts if flowering overlaps.'],
-    ['European kale','Vegetable','Brassica oleracea','Insects',1600,OSA,'Often biennial for seed; check species since Russian/Siberian kale can be different.'],
-    ['Cabbage','Vegetable','Brassica oleracea','Insects',1600,OSA,'Biennial seed crop; other flowering B. oleracea crops are pollen sources.'],
-    ['Bok choy','Vegetable','Brassica rapa','Insects',1600,OSA,'Shares B. rapa with many Asian greens and turnips.'],
-    ['Turnip','Vegetable','Brassica rapa','Insects',1600,OSA,'Biennial seed crop; flowering bok choy is potentially compatible.'],
-    ['French pole bean','Vegetable','Phaseolus vulgaris','Mostly self',10,OSA,'Dry pods fully on healthy plants and save from several plants.'],
-    ['Bush green bean','Vegetable','Phaseolus vulgaris','Mostly self',10,OSA,'Bush and pole beans can be the same species; outcrossing is uncommon, not impossible.'],
-    ['Garden pea','Vegetable','Pisum sativum','Mostly self',10,OSA,'Allow pods to dry fully; plant-to-plant crossing is unusual.'],
-    ['Sweet corn','Vegetable','Zea mays','Wind',1600,OSA,'Nearby varieties can affect kernels on current ears (xenia), unlike most fruit crops.'],
-    ['Lettuce','Vegetable','Lactuca sativa','Mostly self',10,OSA,'Allow flower stalks to mature; collect dry fluffy seedheads.'],
-    ['Carrot','Vegetable','Daucus carota','Insects',1600,OSA,'Biennial; flowering wild carrot/Queen Anne’s lace is a possible pollen source.'],
-    ['Queen Anne’s lace (wild carrot)','Vegetable','Daucus carota','Insects',1600,OSA,'Wild D. carota can contaminate saved domestic carrot seed.'],
-    ['Beetroot','Vegetable','Beta vulgaris','Wind',3200,OSA,'Biennial; flowering Swiss chard is the same species.'],
-    ['Swiss chard','Vegetable','Beta vulgaris','Wind',1600,OSA,'Usually grown for leaves but can cross with beets when allowed to flower.'],
-    ['Basil','Herb','Ocimum basilicum','Insects',1600,OSA,'Leave healthy flower spikes to dry; multiple basil cultivars can cross.'],
-    ['Queen Lime zinnia','Flower','Zinnia elegans','Self + insects',2640,SSE,'Bag buds before opening for specific colors or shapes, or welcome natural variation.'],
-    ['Oklahoma White zinnia','Flower','Zinnia elegans','Self + insects',2640,SSE,'Harvest fully dried heads with brown stems; select and test plump seeds.'],
-    ['Scarlet zinnia','Flower','Zinnia elegans','Self + insects',2640,SSE,'A crossing partner for other Z. elegans colors and forms.'],
-    ['Narrowleaf zinnia','Flower','Zinnia angustifolia','Self + insects',null,ZINNIA,'May cross with Z. elegans in specialist breeding; verify variety and parentage.'],
-    ['Purple cosmos','Flower','Cosmos bipinnatus','Insects',1320,SSE,'Collect dry seedheads promptly before seeds scatter.'],
-    ['White cosmos','Flower','Cosmos bipinnatus','Insects',1320,SSE,'Compatible with other C. bipinnatus colors while flowering together.'],
-    ['Orange sulfur cosmos','Flower','Cosmos sulphureus','Insects',1320,SSE,'Usually does not cross with C. bipinnatus despite sharing a common name.'],
-    ['French marigold','Flower','Tagetes patula','Self + insects',1320,SSE,'Dry entire flower heads; crosses with African marigold are biologically possible.'],
-    ['African marigold','Flower','Tagetes erecta','Self + insects',1320,SSE,'Interspecies Tagetes hybrids have been produced; avoid declaring full incompatibility.'],
-    ['Calendula / pot marigold','Flower','Calendula officinalis','Insects',700,SSE,'Not a Tagetes marigold; harvest curved dry seeds before they shatter.'],
-    ['Sunflower','Flower','Helianthus annuus','Insects',2640,SSE,'Protect heads from birds; other sunflower cultivars can freely cross.'],
-    ['Nasturtium','Flower','Tropaeolum majus','Insects',1320,SSE,'Harvest seed once brown or readily detached; finish drying indoors.'],
-    ['Love-in-a-mist (nigella)','Flower','Nigella damascena','Insects',1320,SSE,'Ripe inflated pods rattle with dark seeds; shake into a container.'],
-    ['Strawflower','Flower','Xerochrysum bracteatum','Self + insects',2640,SSE,'Rub thoroughly dried papery heads and winnow.'],
-    ['Hollyhock','Flower','Alcea rosea','Self + insects',1320,SSE,'Biennial; collect dried seed disks; allow for overwintering.'],
-    ['Cauliflower','Vegetable','Brassica oleracea','Insects',1600,OSA,'Many cultivars need overwintering and a second season to set seed.'],
-    ['Brussels sprouts','Vegetable','Brassica oleracea','Insects',1600,OSA,'Biennial and compatible with flowering cabbage, kale and broccoli.'],
-    ['Collard greens','Vegetable','Brassica oleracea','Insects',1600,OSA,'Crosses with other B. oleracea seed parents when flowering.'],
-    ['Kohlrabi','Vegetable','Brassica oleracea','Insects',1600,OSA,'Another B. oleracea form; usually grown as a biennial seed crop.'],
-    ['Pak choi','Vegetable','Brassica rapa','Insects',1600,OSA,'Also known as bok choy; same species as many turnips and Asian brassicas.'],
-    ['Siberian kale','Vegetable','Brassica napus','Insects',1600,OSA,'Unlike European kale, this is commonly B. napus; crosses with rutabaga and canola.'],
-    ['Rutabaga','Vegetable','Brassica napus','Insects',1600,OSA,'Compatible with Siberian kale and canola if flowering together.'],
-    ['Arugula','Vegetable','Eruca sativa','Insects',1600,OSA,'Let seed pods dry; avoid mixing with other arugula varieties.'],
-    ['Red onion','Vegetable','Allium cepa','Insects',1600,OSA,'Biennial; can cross with other common onions when flowering.'],
-    ['Yellow onion','Vegetable','Allium cepa','Insects',1600,OSA,'Maintain enough flowering plants for genetic diversity.'],
-    ['Fava bean','Vegetable','Vicia faba','Self + insects',800,OSA,'Partly outcrossing; protect flowering seed crops near other fava varieties.'],
-    ['Scarlet runner bean','Vegetable','Phaseolus coccineus','Self + insects',800,OSA,'Often insect-crossed; unlike ordinary green beans, this is a separate species.'],
-    ['Lima bean','Vegetable','Phaseolus lunatus','Self + insects',40,OSA,'Separate species from common garden beans; seed dried pods.'],
-    ['Golden beet','Vegetable','Beta vulgaris','Wind',3200,OSA,'Flowers can exchange pollen with red beets and chard.'],
-    ['Spinach','Vegetable','Spinacia oleracea','Wind',3200,OSA,'Wind-pollinated seed crop; flowering male and female plants may be required.'],
-    ['Cilantro / coriander','Herb','Coriandrum sativum','Insects',1600,OSA,'Allow umbels to dry and collect seeds; protect varietal purity when flowering.'],
-    ['Genovese basil','Herb','Ocimum basilicum','Insects',1600,OSA,'Basil cultivars can cross while blooming together.'],
-    ['Grandpa Ott morning glory','Flower','Ipomoea purpurea','Insects',1320,SSE,'Collect dry brown seed pods; this species can self-seed abundantly.'],
-    ['Purple morning glory','Flower','Ipomoea purpurea','Insects',1320,SSE,'Confirm Latin species on seed packet; other morning-glory species differ.'],
-    ['Orange calendula','Flower','Calendula officinalis','Insects',700,SSE,'Collect ripe curled seeds regularly before they shatter.'],
-    ['Lemon Queen sunflower','Flower','Helianthus annuus','Insects',2640,SSE,'May cross with other H. annuus varieties; save heads from several plants.'],
-    ['Miss Jekyll nigella','Flower','Nigella damascena','Insects',1320,SSE,'Harvest dry rattling capsules and protect against seed drop.']
+    ["Tomato","Vegetable","Solanum lycopersicum","Mostly self",40,OSA,"Choose fully ripe, healthy fruit; ferment, rinse and dry the seed. Some heirloom flowers open wider than others, which lets bees in more often."],
+    ["Pepper (sweet or hot)","Vegetable","Capsicum annuum","Self + insects",800,OSA,"Let the fruit ripen fully before saving seed. Bell, jalapeño and other sweet and hot peppers are one species and can cross."],
+    ["Zucchini","Vegetable","Cucurbita pepo","Insects",1600,OSA,"Same species as most carving pumpkins, yellow summer squash and spaghetti squash. Save seed from fruit left to full maturity."],
+    ["Yellow summer squash","Vegetable","Cucurbita pepo","Insects",1600,OSA,"Let the fruit grow well past eating size to full seed maturity; hand-pollinate and bag blossoms to keep the line."],
+    ["Pumpkin","Vegetable","Cucurbita pepo","Insects",1600,OSA,"Most carving pumpkins are C. pepo, but some pumpkins belong to other squash species. Check the packet before saving."],
+    ["Butternut squash","Vegetable","Cucurbita moschata","Insects",1600,OSA,"Usually separate from zucchini and pumpkins, but unusual interspecies crosses can occur."],
+    ["Kabocha squash","Vegetable","Cucurbita maxima","Insects",1600,OSA,"Check the packet: kabocha is commonly C. maxima."],
+    ["Cucumber","Vegetable","Cucumis sativus","Insects",1600,OSA,"Cucumbers cross with other cucumbers, not with ordinary muskmelons."],
+    ["Cantaloupe / muskmelon","Vegetable","Cucumis melo","Insects",1600,OSA,"May cross with Armenian cucumber, which is really a melon."],
+    ["Armenian cucumber","Vegetable","Cucumis melo","Insects",1600,OSA,"Despite its name it is a melon species, not a true cucumber."],
+    ["Watermelon","Vegetable","Citrullus lanatus","Insects",1600,OSA,"Does not ordinarily cross with cucumber or muskmelon."],
+    ["Broccoli","Vegetable","Brassica oleracea","Insects",1600,OSA,"Can cross with cabbage, kale, cauliflower and Brussels sprouts if flowering overlaps."],
+    ["Cabbage","Vegetable","Brassica oleracea","Insects",1600,OSA,"Biennial seed crop; other flowering B. oleracea crops are pollen sources."],
+    ["Cauliflower","Vegetable","Brassica oleracea","Insects",1600,OSA,"Many varieties need overwintering and a second season to set seed."],
+    ["Brussels sprouts","Vegetable","Brassica oleracea","Insects",1600,OSA,"Biennial and compatible with flowering cabbage, kale and broccoli."],
+    ["Collard greens","Vegetable","Brassica oleracea","Insects",1600,OSA,"Crosses with other B. oleracea seed parents when flowering."],
+    ["Kohlrabi","Vegetable","Brassica oleracea","Insects",1600,OSA,"Another B. oleracea form; usually grown as a biennial seed crop."],
+    ["Kale (curly / European)","Vegetable","Brassica oleracea","Insects",1600,OSA,"Often biennial for seed. Russian and Siberian kales can be a different species, so check the packet."],
+    ["Siberian kale","Vegetable","Brassica napus","Insects",1600,OSA,"Unlike curly kale, this is commonly B. napus; it crosses with rutabaga and canola."],
+    ["Rutabaga","Vegetable","Brassica napus","Insects",1600,OSA,"Compatible with Siberian kale and canola if flowering together."],
+    ["Bok choy / pak choi","Vegetable","Brassica rapa","Insects",1600,OSA,"Shares B. rapa with many Asian greens and turnips."],
+    ["Turnip","Vegetable","Brassica rapa","Insects",1600,OSA,"Biennial seed crop; flowering bok choy is potentially compatible."],
+    ["Arugula","Vegetable","Eruca sativa","Insects",1600,OSA,"Let seed pods dry; avoid letting two arugula varieties flower together."],
+    ["Green bean (bush or pole)","Vegetable","Phaseolus vulgaris","Mostly self",10,OSA,"Dry pods fully on healthy plants and save from several plants. Bush and pole beans are one species; crossing is uncommon, not impossible."],
+    ["Pea","Vegetable","Pisum sativum","Mostly self",10,OSA,"Allow pods to dry fully on the vine; crossing between plants is unusual."],
+    ["Fava bean","Vegetable","Vicia faba","Self + insects",800,OSA,"Partly outcrossing; protect flowering seed crops near other fava varieties."],
+    ["Scarlet runner bean","Vegetable","Phaseolus coccineus","Self + insects",800,OSA,"Often insect-crossed; unlike ordinary green beans, this is a separate species."],
+    ["Lima bean","Vegetable","Phaseolus lunatus","Self + insects",40,OSA,"Separate species from common garden beans; save seed from dried pods."],
+    ["Sweet corn","Vegetable","Zea mays","Wind",1600,OSA,"Nearby varieties can change the kernels on this year’s ears (xenia), unlike most fruit crops."],
+    ["Lettuce","Vegetable","Lactuca sativa","Mostly self",10,OSA,"Allow flower stalks to mature; collect dry, fluffy seedheads."],
+    ["Carrot","Vegetable","Daucus carota","Insects",1600,OSA,"Biennial; flowering wild carrot (Queen Anne’s lace) is a possible pollen source."],
+    ["Queen Anne’s lace (wild carrot)","Vegetable","Daucus carota","Insects",1600,OSA,"Wild D. carota can cross into saved garden carrot seed."],
+    ["Beet","Vegetable","Beta vulgaris","Wind",3200,OSA,"Biennial and wind-pollinated; red beets, golden beets and Swiss chard are one species."],
+    ["Swiss chard","Vegetable","Beta vulgaris","Wind",1600,OSA,"Usually grown for leaves but can cross with beets when allowed to flower."],
+    ["Spinach","Vegetable","Spinacia oleracea","Wind",3200,OSA,"Wind-pollinated seed crop; male and female plants may both be needed."],
+    ["Onion","Vegetable","Allium cepa","Insects",1600,OSA,"Biennial; red, yellow and white onions are one species and can cross when flowering. Keep plenty of flowering plants."],
+    ["Basil","Herb","Ocimum basilicum","Insects",1600,OSA,"Leave healthy flower spikes to dry; different basil varieties can cross while blooming together."],
+    ["Cilantro / coriander","Herb","Coriandrum sativum","Insects",1600,OSA,"Allow umbels to dry and collect the seeds."],
+    ["Zinnia","Flower","Zinnia elegans","Self + insects",2640,SSE,"Bag buds before they open to keep a color or form, or welcome the variation. Harvest fully dried heads."],
+    ["Narrowleaf zinnia","Flower","Zinnia angustifolia","Self + insects",null,ZINNIA,"May cross with common zinnia in specialist breeding; verify the variety and its parentage."],
+    ["Cosmos","Flower","Cosmos bipinnatus","Insects",1320,SSE,"Different colors are one species and cross freely. Collect dry seedheads before they scatter."],
+    ["Sulfur cosmos","Flower","Cosmos sulphureus","Insects",1320,SSE,"The orange and yellow cosmos. Usually does not cross with common cosmos despite the shared name."],
+    ["French marigold","Flower","Tagetes patula","Self + insects",1320,SSE,"Dry entire flower heads; crosses with African marigold are biologically possible."],
+    ["African marigold","Flower","Tagetes erecta","Self + insects",1320,SSE,"Interspecies Tagetes hybrids have been produced; do not count on full separation."],
+    ["Calendula (pot marigold)","Flower","Calendula officinalis","Insects",700,SSE,"Not a true marigold; harvest the curved dry seeds before they drop."],
+    ["Sunflower","Flower","Helianthus annuus","Insects",2640,SSE,"Protect heads from birds; sunflower varieties cross freely, so save from several plants."],
+    ["Nasturtium","Flower","Tropaeolum majus","Insects",1320,SSE,"Harvest seed once brown or easily detached; finish drying indoors."],
+    ["Love-in-a-mist (nigella)","Flower","Nigella damascena","Insects",1320,SSE,"Ripe, inflated pods rattle with dark seeds; shake them into a container."],
+    ["Strawflower","Flower","Xerochrysum bracteatum","Self + insects",2640,SSE,"Rub thoroughly dried papery heads and winnow the seed."],
+    ["Hollyhock","Flower","Alcea rosea","Self + insects",1320,SSE,"Biennial; collect dried seed disks and allow for overwintering."],
+    ["Morning glory","Flower","Ipomoea purpurea","Insects",1320,SSE,"Collect dry brown pods. Confirm the species on the packet; other morning glories differ, and this one self-seeds freely."]
   ];
   const plants = entries.map((r, i) => ({id: 'plant-'+r[0].normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), name:r[0], category:r[1], species:r[2], pollination:r[3], isolationFt:r[4], source:r[5], saveNote:r[6]}));
   const special = [
@@ -379,7 +365,8 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
     'Spinacia oleracea':'80','Vicia faba':'40','Phaseolus coccineus':'40',
     'Phaseolus lunatus':'40','Eruca sativa':'80'
   };
-  const data = {population,version:'0.2.0-field',reviewed:'2026-10-23',plants,special,
+  const aliases = {"plant-cherokee-purple-tomato": "plant-tomato", "plant-brandywine-tomato": "plant-tomato", "plant-red-robin-tomato": "plant-tomato", "plant-shishito-pepper": "plant-pepper-sweet-or-hot", "plant-jalapeno-pepper": "plant-pepper-sweet-or-hot", "plant-sweet-bell-pepper": "plant-pepper-sweet-or-hot", "plant-lemon-summer-squash": "plant-yellow-summer-squash", "plant-jack-o-lantern-pumpkin": "plant-pumpkin", "plant-slicing-cucumber": "plant-cucumber", "plant-european-kale": "plant-kale-curly-european", "plant-pak-choi": "plant-bok-choy-pak-choi", "plant-bok-choy": "plant-bok-choy-pak-choi", "plant-french-pole-bean": "plant-green-bean-bush-or-pole", "plant-bush-green-bean": "plant-green-bean-bush-or-pole", "plant-garden-pea": "plant-pea", "plant-beetroot": "plant-beet", "plant-golden-beet": "plant-beet", "plant-red-onion": "plant-onion", "plant-yellow-onion": "plant-onion", "plant-genovese-basil": "plant-basil", "plant-queen-lime-zinnia": "plant-zinnia", "plant-oklahoma-white-zinnia": "plant-zinnia", "plant-scarlet-zinnia": "plant-zinnia", "plant-purple-cosmos": "plant-cosmos", "plant-white-cosmos": "plant-cosmos", "plant-orange-sulfur-cosmos": "plant-sulfur-cosmos", "plant-orange-calendula": "plant-calendula-pot-marigold", "plant-lemon-queen-sunflower": "plant-sunflower", "plant-miss-jekyll-nigella": "plant-love-in-a-mist-nigella", "plant-grandpa-ott-morning-glory": "plant-morning-glory", "plant-purple-morning-glory": "plant-morning-glory"};
+  const data = {aliases,population,version:'0.3.0-crops',reviewed:'2026-10-23',plants,special,
     references:[
       {title:'Organic Seed Alliance · Seed Saving Guide (revised 2026)',url:OSA},
       {title:'Seed Savers Exchange · Flower Seed Saving Profiles',url:SSE},
@@ -527,18 +514,21 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   }
  }
  fill(aSelect);fill(bSelect);
- aSelect.value=byName('Zucchini').id;bSelect.value=byName('Jack-o’-lantern pumpkin').id;
- const plantA=()=>byId(aSelect.value), plantB=()=>byId(bSelect.value);
+ aSelect.value=byName('Zucchini').id;bSelect.value=byName('Pumpkin').id;
+ // The same crop in both boxes means two varieties of it, so the second becomes "another variety".
+ const plantA=()=>byId(aSelect.value);
+ const plantB=()=>{const p=byId(bSelect.value);if(!p||p.id!==aSelect.value)return p;return Object.assign({},p,{id:p.id+'~2',name:'Another '+nm(p.name)+' variety',variant:true})};
+ const resolveId=id=>id&&D.aliases&&D.aliases[id]?D.aliases[id]:id;
  const latin=x=>h('i',null,x);
  function radio(name,fallback){const x=document.querySelector('input[name="'+name+'"]:checked');return x?x.value:fallback}
  function setRadio(name,value){const x=document.querySelector('input[name="'+name+'"][value="'+value+'"]');if(x)x.checked=true}
  function context(){return {overlap:radio('overlap','yes'),protection:radio('protection','open'),seedType:radio('seedType','unknown'),goal:radio('goal','preserve'),distance:el('distance').value}}
- function speciesLine(){const a=plantA(),b=plantB();el('botanical-a').replaceChildren(latin(a.species));el('botanical-b').replaceChildren(latin(b.species))}
+ function speciesLine(){const a=plantA(),b=plantB();el('botanical-a').replaceChildren(latin(a.species));el('botanical-b').replaceChildren(...(b.variant?['A second variety of the same crop · ',latin(b.species)]:[latin(b.species)]))}
 
  // Words for the engine's decision. The decision itself is the engine's.
  // Plant names read naturally mid-sentence: "the zucchini", but "the Cherokee Purple tomato".
  const PROPER=/^(French|African|European|Siberian|Swiss|Armenian|Genovese|Brandywine|Cherokee|Queen)\b/;
- const nm=n=>/^[A-Z][^ A-Z]*( [^A-Z]*)?$/.test(n)&&!PROPER.test(n)?n.charAt(0).toLowerCase()+n.slice(1):n;
+ const nm=n=>{n=n.replace(/\s*\(.*\)$/,'').split(' / ')[0];return /^[A-Z][^ A-Z]*( [^A-Z]*)?$/.test(n)&&!PROPER.test(n)?n.charAt(0).toLowerCase()+n.slice(1):n};
  function present(r){
   const a=r.a,b=r.b,g=r.guideline,pop=D.population[a.species],an=nm(a.name),bn=nm(b.name);
   const tip='From the seed shelf, on '+a.name+': '+a.saveNote;
@@ -553,9 +543,10 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   if(r.potential==='compatible'&&r.sameEntry){
    v={cls:'same',link:'same',badge:'Same variety',title:'Same variety, so these two cannot change each other.',why:['Both are ',latin(a.species),' of the same name. The question worth asking is what ',h('em',null,'other'),' variety of that species is blooming within a bee’s reach.'],also:[popStep,tip]};
   }else if(r.potential==='compatible'){
-   const why=['Both are ',latin(a.species),', close cousins under one botanical name. A bee that works the '+bn+' and then the '+an+' carries that pollen with it. This year’s fruit will look exactly as it should. The plants that grow from its seed next spring may not.'];
-   if(r.goal==='explore')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, and you are happy to see what happens.',why,also:['Let the bees do their work, then label the seed honestly: “'+a.name+' × possibly '+b.name+'.”','Grow it out next season and keep the plants you like. Expect a little surprise in every row.',tip]};
-   else if(r.outcome==='needs-action')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, these can cross.',why,options:keepTrue(),also:[popStep,tip]};
+   const selfish=a.pollination==='Mostly self';
+   const why=(b.variant?['Two varieties of '+an+', both ',latin(a.species),'. A bee moving between them carries pollen from one to the other.']:['Both are ',latin(a.species),', close cousins under one botanical name. A bee that works the '+bn+' and then the '+an+' carries that pollen with it.']).concat([' This year’s fruit will look exactly as it should. The plants that grow from its seed next spring may not.'],selfish?[' '+an.charAt(0).toUpperCase()+an.slice(1)+' flowers mostly pollinate themselves, so crosses are uncommon. They still happen, which is why a short separation guideline exists.']:[]);
+   if(r.goal==='explore')v={cls:'yes',link:'cross',badge:'Can cross',title:'Yes, and you are happy to see what happens.',why,also:['Let the bees do their work, then label the seed honestly: “'+a.name+' × possibly '+(b.variant?'another variety':bn)+'.”','Grow it out next season and keep the plants you like. Expect a little surprise in every row.',tip]};
+   else if(r.outcome==='needs-action')v={cls:'yes',link:'cross',badge:'Can cross',title:selfish?'Yes, but not often.':'Yes, these can cross.',why,options:keepTrue(),also:[popStep,tip]};
    else if(r.outcome==='reduced')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but you have given them room.',why:[r.distance.toLocaleString('en-US')+' feet apart, against a '+g.toLocaleString('en-US')+' foot guideline for ',latin(a.species),'. Distance lowers the odds. It does not close the door: a strong wind, a busy bee or a neighbor’s garden can still slip pollen through.'],also:['Walk the property line and look over the fence. Another '+a.species+' blooming closer than that matters as much as the one in your own bed.',popStep,tip]};
    else if(r.protection==='controlled')v={cls:'managed',link:'guarded',badge:'Protected',title:'They can cross, but your bagged flowers are safe.',why:['Both are ',latin(a.species),'. The flowers you closed before they opened, pollinated by hand and closed again belong to you, not the bees.'],also:['Tag every hand-pollinated flower the day you do it. Save seed only from tagged fruit, and let the rest feed the kitchen.',popStep,tip]};
    else if(r.overlap==='no')v={cls:'managed',link:'guarded',badge:'Lower risk',title:'They can cross, but not if they never bloom together.',why:['Both are ',latin(a.species),'. Two plants that flower in different weeks never meet, as long as the calendar holds.'],also:['Write the first and last bloom date for each in your garden notes. A late flush or a warm September can bring them together after all.',popStep,tip]};
@@ -593,7 +584,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
    else{const g=s('g',{transform:'translate(160 '+(cy-22)+')'});for(let i=0;i<3;i++)g.append(s('circle',{class:'pollen-dot',cx:String((i-1)*16),cy:'0',r:'4',fill:'#f2c46b',stroke:'#d9a64a'}));svg.append(g)}
   }
   svg.append(flower(ax,'#f3b8a0'),flower(bx,'#c9d9ef'));
-  svg.append(s('text',{x:ax,y:H-22,'text-anchor':'middle',class:'pv-name'},trunc(r.a.name,17)),s('text',{x:bx,y:H-22,'text-anchor':'middle',class:'pv-name'},trunc(r.b.name,17)));
+  svg.append(s('text',{x:ax,y:H-22,'text-anchor':'middle',class:'pv-name'},trunc(r.a.name,17)),s('text',{x:bx,y:H-22,'text-anchor':'middle',class:'pv-name'},r.b.variant?'Another variety':trunc(r.b.name,17)));
   svg.append(s('text',{x:ax,y:H-6,'text-anchor':'middle',class:'pv-sp'},r.a.species),s('text',{x:bx,y:H-6,'text-anchor':'middle',class:'pv-sp'},r.b.species));
   const pop=D.population[r.a.species];
   const fact=(k,...v)=>[h('dt',null,k),h('dd',null,...v)];
@@ -647,7 +638,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  }
 
  function setPair(aId,bId,scroll){
-  if(byId(aId))aSelect.value=aId;if(byId(bId))bSelect.value=bId;speciesLine();run();
+  aId=resolveId(String(aId).split('~')[0]);bId=resolveId(String(bId).split('~')[0]);if(byId(aId))aSelect.value=aId;if(byId(bId))bSelect.value=bId;speciesLine();run();
   if(scroll)el('explorer').scrollIntoView({block:'start'});
  }
  window.SeedLabUI={setPair};
@@ -657,13 +648,14 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  document.querySelectorAll('#compare-form input[type=radio]').forEach(x=>x.addEventListener('change',run));
  el('distance-range').addEventListener('input',()=>{const f=posToFt(Number(el('distance-range').value));el('distance').value=f===null?'':String(f);run()});
  let t;el('distance').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>{el('distance-range').value=String(ftToPos(el('distance').value));run()},150)});
- const presets={squash:['Zucchini','Jack-o’-lantern pumpkin'],flowers:['Queen Lime zinnia','Oklahoma White zinnia'],brassicas:['European kale','Broccoli'],melon:['Slicing cucumber','Cantaloupe / muskmelon']};
+ const presets={squash:['Zucchini','Pumpkin'],flowers:['Zinnia','Zinnia'],brassicas:['Kale (curly / European)','Broccoli'],melon:['Cucumber','Cantaloupe / muskmelon']};
  document.querySelectorAll('[data-example]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.example];setPair(byName(p[0]).id,byName(p[1]).id,false)}));
 
  // Permalinks use stable plant ids; unknown values are ignored.
  const qs=new URLSearchParams(location.search);
- if(byId(qs.get('a'))&&byId(qs.get('b'))){
-  aSelect.value=qs.get('a');bSelect.value=qs.get('b');
+ const qa=resolveId(qs.get('a')),qb=resolveId(qs.get('b'));
+ if(byId(qa)&&byId(qb)){
+  aSelect.value=qa;bSelect.value=qb;
   if(['yes','no','unknown'].includes(qs.get('overlap')))setRadio('overlap',qs.get('overlap'));
   if(['controlled','open'].includes(qs.get('protection')))setRadio('protection',qs.get('protection'));
   if(['f1','op','unknown'].includes(qs.get('seedType')))setRadio('seedType',qs.get('seedType'));
@@ -692,17 +684,23 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  const byId=id=>D.plants.find(p=>p.id===id)||null;
  const NAMES={compatible:'Can cross',exception:'Documented exception',unverified:'Unconfirmed',unlikely:'Won’t normally cross'};
  let members=[],focusId=null,lastR=null,resizeT;
+ // A crop can be added up to three times, one entry per variety: plant-zinnia, plant-zinnia~2, plant-zinnia~3.
+ const base=id=>String(id).split('~')[0];
+ const ORD=['','','2nd','3rd'];
+ function plantOf(id){const p=byId(base(id));if(!p)return null;const n=Number(String(id).split('~')[1]||1);return n>1?Object.assign({},p,{id,name:p.name+' ('+ORD[n]+' variety)'}):p}
+ function normalize(){const seen={};members=members.map(x=>{const b=base(x);seen[b]=(seen[b]||0)+1;return seen[b]===1?b:b+'~'+seen[b]})}
+ const alias=id=>D.aliases&&D.aliases[id]?D.aliases[id]:id;
  window.addEventListener&&window.addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(()=>{if(lastR){drawWeb(lastR);drawRoom(lastR)}},150)});
  function fillPick(){
   pick.replaceChildren(h('option',{value:''},'Add a plant…'));
-  for(const cat of CATS){const g=h('optgroup',{label:cat+'s'});D.plants.filter(p=>p.category===cat&&!members.includes(p.id)).sort((x,y)=>x.name.localeCompare(y.name)).forEach(p=>g.append(h('option',{value:p.id},p.name)));if(g.children.length)pick.append(g)}
+  for(const cat of CATS){const g=h('optgroup',{label:cat+'s'});D.plants.filter(p=>p.category===cat).sort((x,y)=>x.name.localeCompare(y.name)).forEach(p=>{const n=members.filter(x=>base(x)===p.id).length;if(n<3)g.append(h('option',{value:p.id},n?p.name+' (add another variety)':p.name))});if(g.children.length)pick.append(g)}
   pick.value='';
  }
  function feedback(t){el('garden-feedback').textContent=t}
- function add(id){if(!byId(id)||members.includes(id))return false;if(members.length>=MAX){feedback('Twelve plants is as many as this checker compares at once.');return false}members.push(id);render();return true}
- function remove(id){members=members.filter(x=>x!==id);if(focusId===id)focusId=null;render()}
- function assessment(){return members.length<2?null:engine.makeGarden(members.map(byId),{},D)}
- const openPair=p=>window.SeedLabUI&&window.SeedLabUI.setPair(p.a.id,p.b.id,true);
+ function add(id){if(!byId(id))return false;if(members.length>=MAX){feedback('Twelve plants is as many as this checker compares at once.');return false}if(members.filter(x=>base(x)===id).length>=3){feedback('Three varieties of one crop is as many as this checker tracks.');return false}members.push(id);normalize();render();return true}
+ function remove(id){members=members.filter(x=>x!==id);normalize();if(focusId&&!members.includes(focusId))focusId=null;render()}
+ function assessment(){return members.length<2?null:engine.makeGarden(members.map(plantOf),{},D)}
+ const openPair=p=>window.SeedLabUI&&window.SeedLabUI.setPair(base(p.a.id),base(p.b.id),true);
  const key=p=>[p.a.id,p.b.id].sort().join('|');
  function pairRow(p,withLink){
   const sp=p.a.species===p.b.species?[h('i',null,p.a.species)]:[h('i',null,p.a.species),' / ',h('i',null,p.b.species)];
@@ -736,7 +734,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
    kids.push(hit,line);
   }
   for(const id of members){
-   const p=byId(id),P=pos[id],n=partners(id,r?r.pairs:[]);
+   const p=plantOf(id),P=pos[id],n=partners(id,r?r.pairs:[]);
    const anchor=P.c>0.25?'start':P.c<-0.25?'end':'middle';
    const lx=P.x+P.c*16,ly=P.y+P.s*16+(Math.abs(P.c)<=0.25?(P.s>0?10:-4):4);
    const g=s('g',{class:'web-node'+(focusId===id?' active':''),tabindex:'0',role:'button','aria-pressed':String(focusId===id),'aria-label':p.name+': '+(n.length?n.length+' possible crossing partner'+(n.length>1?'s':''):'no crossing partners in this list')});
@@ -764,7 +762,8 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  // Room each crop needs: one bar per species, published separation guideline.
  function drawRoom(r){
   const bySpecies=new Map();
-  for(const id of members){const p=byId(id);if(!bySpecies.has(p.species))bySpecies.set(p.species,[]);bySpecies.get(p.species).push(p)}
+  for(const id of members){const p=plantOf(id);if(!bySpecies.has(p.species))bySpecies.set(p.species,[]);bySpecies.get(p.species).push(p)}
+  const plantsLabel=ps=>{const c={};for(const p of ps){const n=byId(base(p.id)).name;c[n]=(c[n]||0)+1}return Object.entries(c).map(([n,k])=>k>1?n+' ×'+k:n).join(', ')};
   const crossSpecies=new Set((r?r.pairs:[]).filter(p=>p.level==='compatible').map(p=>p.a.species));
   const rows=[...bySpecies].map(([sp,ps])=>({sp,ps,ft:Math.max(0,...ps.map(p=>p.isolationFt||0))||null,pop:D.population[sp]||null,cross:crossSpecies.has(sp)}));
   const charted=rows.filter(x=>x.ft).sort((a,b)=>b.ft-a.ft||a.sp.localeCompare(b.sp));
@@ -777,7 +776,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   for(let v=0;v<=tickMax;v+=step)kids.push(s('line',{x1:X(v),y1:top-6,x2:X(v),y2:top+charted.length*rowH,class:'bar-grid'}),s('text',{x:X(v),y:top-10,'text-anchor':v===0&&narrow?'start':'middle',class:'bar-axis'},v===0?'0':(v>=1000?(v/1000)+'K':v)+' ft'));
   charted.forEach((x,i)=>{
    const y=top+i*rowH+(narrow?22:(rowH-bar)/2),w=Math.max(4,X(x.ft)-L);
-   const names=x.ps.map(p=>p.name).join(', ');
+   const names=plantsLabel(x.ps);
    const g=s('g',{class:'bar-row'+(x.cross?' cross':''),tabindex:'0','aria-label':names+': '+x.ft.toLocaleString('en-US')+' feet'+(x.cross?', has a crossing partner in your list':'')});
    if(narrow)g.append(s('text',{x:L,y:y-6},trunc(names,x.cross?26:40)+(x.cross?' · can cross here':'')));
    else g.append(s('text',{x:L-10,y:y+bar-3,'text-anchor':'end'},trunc(names,26)));
@@ -792,11 +791,11 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
   });
   if(!charted.length)kids.push(s('text',{x:20,y:top+10,class:'bar-axis'},'Add plants to see how much room each needs.'));
   svg.replaceChildren(...kids);
-  el('room-rows').replaceChildren(...rows.sort((a,b)=>(b.ft||0)-(a.ft||0)).map(x=>h('tr',null,h('td',null,h('i',null,x.sp)),h('td',null,x.ps.map(p=>p.name).join(', ')),h('td',{style:'text-align:right'},x.ft?x.ft.toLocaleString('en-US')+' ft':'Not listed'),h('td',{style:'text-align:right'},x.pop||', '))));
+  el('room-rows').replaceChildren(...rows.sort((a,b)=>(b.ft||0)-(a.ft||0)).map(x=>h('tr',null,h('td',null,h('i',null,x.sp)),h('td',null,plantsLabel(x.ps)),h('td',{style:'text-align:right'},x.ft?x.ft.toLocaleString('en-US')+' ft':'Not listed'),h('td',{style:'text-align:right'},x.pop||'Not listed'))));
  }
 
  function render(){
-  list.replaceChildren(...members.map(id=>{const p=byId(id);const x=h('button',{type:'button','aria-label':'Remove '+p.name},'×');x.addEventListener('click',()=>remove(id));return h('li',null,p.name,x)}));
+  list.replaceChildren(...members.map(id=>{const p=plantOf(id);const x=h('button',{type:'button','aria-label':'Remove '+p.name},'×');x.addEventListener('click',()=>remove(id));return h('li',null,p.name,x)}));
   el('garden-count').textContent=members.length+' of '+MAX+' plants';
   fillPick();
   const r=assessment();
@@ -815,7 +814,7 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  }
  pick.addEventListener('change',()=>{if(pick.value)add(pick.value)});
  el('garden-add').addEventListener('click',()=>{if(pick.value)add(pick.value);else pick.focus()});
- el('garden-demo').addEventListener('click',()=>{focusId=null;members=['Zucchini','Jack-o’-lantern pumpkin','Butternut squash','European kale','Broccoli','Purple cosmos','Orange sulfur cosmos','Queen Lime zinnia','Oklahoma White zinnia'].map(n=>D.plants.find(p=>p.name===n).id);render()});
+ el('garden-demo').addEventListener('click',()=>{focusId=null;members=['Zucchini','Pumpkin','Butternut squash','Kale (curly / European)','Broccoli','Cosmos','Sulfur cosmos','Zinnia','Zinnia'].map(n=>D.plants.find(p=>p.name===n).id);normalize();render()});
  el('garden-clear').addEventListener('click',()=>{members=[];focusId=null;render()});
  function copy(text){const box=el('share-fallback');const fb=()=>{box.hidden=false;box.value=text;box.focus();box.select();feedback('Copy the link above.')};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(()=>{box.hidden=true;feedback('Link copied ✓')},fb);else fb()}
  el('share-garden').addEventListener('click',()=>{const u=new URL(location.href);u.search='';u.searchParams.set('g',members.map(id=>id+':u').join(','));u.hash='whole-garden';copy(u.toString())});
@@ -828,8 +827,10 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
  });
  // Shared links: bounded, known ids only. Older links carried a bloom flag (id:y/n/u); it is accepted and ignored.
  const g=new URLSearchParams(location.search).get('g');
- if(g&&g.length<1200)for(const part of g.split(',').slice(0,MAX)){const id=part.split(':')[0];if(byId(id)&&!members.includes(id))members.push(id)}
- if(!members.length)members=['Zucchini','Jack-o’-lantern pumpkin','Butternut squash','Queen Lime zinnia','Oklahoma White zinnia'].map(n=>D.plants.find(p=>p.name===n).id);
+ // Old links named varieties (plant-queen-lime-zinnia); those map onto their crop, as extra varieties of it.
+ if(g&&g.length<1200)for(const part of g.split(',').slice(0,MAX)){const id=alias(base(part.split(':')[0]));if(byId(id)&&members.filter(x=>base(x)===id).length<3)members.push(id)}
+ if(!members.length)members=['Zucchini','Pumpkin','Butternut squash','Zinnia','Zinnia'].map(n=>D.plants.find(p=>p.name===n).id);
+ normalize();
  render();
 })();
 </script>
