@@ -6,29 +6,31 @@
 
 A gardener should be able to choose vegetables or flowers, understand whether saved seed might receive unwanted pollen, and identify a defensible protective action. The two principal flows are **compare two plants** and **check a whole garden**. A flagged whole-garden pair should open in the detailed comparison without reentering both names.
 
-## Loss/value function
+## Loss/value function (revised October 23, 2026)
 
-Minimize `L = 100 - V`, where `V` is a weighted and repeatable **automated task-affordance proxy**. Each criterion is binary and fixed before release. **It is not a measure of human satisfaction, usability study results, GA4 engagement, search impressions, or revenue.**
+Minimize `L = 100 - V`, where `V` is a weighted, repeatable **automated behavioural task proxy**. **It is not a measure of human satisfaction, usability study results, GA4 engagement, search impressions, or revenue.**
 
-| User-value dimension | Weight | Observable contract |
+The first version scored the presence of source-code substrings. It reported 100/100 on a page the owner then found hard to use: a full-screen hero ahead of the tool, two inputs per plant, three differently worded copies of the same verdict, a submit button that did nothing new, an empty share box, garden bloom selectors that changed no result, and a six-tab "generations" section plus a roadmap of planned tools. A substring gate cannot see any of that. Every criterion now drives the page through `scripts/lib/seed-lab-harness.mjs` (a dependency-free DOM stand-in) and scores what a visitor sees after each action.
+
+| User-value dimension | Weight | Behaviour checked |
 |---|---:|---|
-| Findability | 15 | Direct, visible paths to pair and whole-garden views |
-| Answer freshness | 20 | Initial answer and recalculation after plant, flowering overlap, protection, distance or goal change |
-| Plant lookup | 15 | Filtering by common and botanical names |
-| Decision clarity | 15 | Pair-specific action and prioritized whole-garden action |
-| Garden workflow | 20 | Matrix works, easy successive additions, drill from flagged pair |
-| Mobile and accessibility | 10 | Narrow-screen CSS, keyboard focus, readable target sizes, concise live verdict |
-| Scientific trust | 5 | Botanical references; no unsupported purity or crossing probability claims |
+| Findability | 15 | Pickers and answer directly under the H1; one alphabetical picker per plant; whole-garden link in the header |
+| Answer freshness | 20 | Answer on first load; plant change updates it; flowering, distance and hand-pollination each change it |
+| Plain answer | 15 | Verdicts say Yes / No in words; a crossable pair gives at least two concrete options including the distance number |
+| Action clarity | 15 | Population and harvest steps present; questions that cannot change the answer are hidden; a shared link reopens the same answer |
+| Garden workflow | 20 | Example garden lists crossing pairs first; a flagged pair opens in the checker; add on selection, remove in one tap |
+| Mobile and accessibility | 10 | Status region announces the verdict; narrow-screen layout and focus styles; 42px+ targets; no visible empty controls |
+| Scientific trust | 5 | Sources listed and linked from each answer; no invented crossing probabilities |
 | **Total** | **100** | **Release threshold ≥90** |
 
-Critical hard fails: engine error, incorrect reference crossing cases, or a stale verdict after plant selection. Tests enforce these even if a weighted total could otherwise pass.
+Hard fails: page scripts throw, engine reference crossing cases are wrong, or changing a plant leaves the old verdict on screen.
 
 ## Execution evidence
 
-- Before changes: **26/100** by the Node benchmark on the previous published HTML; **24/100** in locally scripted Chromium interaction checks at both 390px and 1280px.
-- Revised feature: **100/100** by the Node benchmark; **100/100** in Chromium scripted interaction checks at both widths. Verified search by common and species name, instant update after changes, garden first action, a flagged-pair jump, keyboard-reachable links, primary action target sizes, no horizontal overflow and no JavaScript exceptions.
-- The Node benchmark is committed under `scripts/benchmark-seed-lab-usability.mjs` and registered in `verify:all` for future changes. Run `npm run benchmark:seed-lab-usability` for one iteration.
-- Difference between original Node score (26) and scripted browser score (24): separate criteria and tooling. Compare like with like, not these scores interchangeably.
+- Revised page: **100/100** on the behavioural gate. Mutation checks: removing the plant-change listener drops it to 75 with a hard fail; replacing "Yes, these can cross." with jargon costs 8 points.
+- The previous page cannot be scored on the behavioural gate (its markup is different), so there is no like-for-like before/after number. Do not compare it with the earlier substring score.
+- Chromium checks at 1280px and 390px: the verdict is visible in the first screen on both, no horizontal overflow, no JavaScript errors, every plant paired against a sample of partners renders without broken text (670 combinations).
+- Behaviour tests: `tests/seed-saving-lab-ui.test.js`. Engine tests: `tests/seed-saving-lab.test.js` (unchanged).
 - No real users were recruited; the scores should **not** be described as validated human task completion.
 
 ## Human research acceptance targets (not yet observed)
@@ -45,4 +47,4 @@ Start with moderated sessions and report success rate, time, comprehension and e
 
 ## Product decisions
 
-Use basic HTML and browser JavaScript, no extra libraries, APIs, accounts or data storage. Keep FVF photography, an editorial voice and a mobile-first single-page design. Highlight action ahead of the exhaustive comparison table. Scientific caution always outranks a high usability score; never produce fabricated inheritance percentages or a seed purity guarantee.
+Use basic HTML and browser JavaScript, no extra libraries, APIs, accounts or data storage. Keep FVF photography, an editorial voice and a mobile-first single-page design. Answer first: the verdict and what to do sit directly under the plant pickers; refinements come after and only when they can change the answer. One purpose per page: no roadmap of planned tools. Scientific caution always outranks a high usability score; never produce fabricated inheritance percentages or a seed purity guarantee.
