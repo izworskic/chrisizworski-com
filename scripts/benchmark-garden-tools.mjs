@@ -66,6 +66,23 @@ const dates = ['2026-02-15', '2026-03-20', '2026-04-20', '2026-05-12', '2026-05-
 const card = (p, b, t, w) => ({ badge: p.text(b), title: p.text(t), why: p.text(w) });
 
 const tools = [
+  shared('michigan-gardening', {
+    card: 'pnCard', refineFirst: 'pnSoil', chart: 'pnTimeline', share: 'pnShare', shareOut: 'pnShareOut', takeaway: 'pnIcs', action: /\b(Start|Plant|plant|Sow|sow|start|harden|Harden)\b/,
+    sources: /canr\.msu\.edu/,
+    answer: p => ({ ...card(p, 'pnBadge', 'pnTitle', 'pnWhy'), week: p.text('pnWeek'), rows: p.text('pnRows') }),
+    personalize: p => p.set('pnPlace', '49783'),
+    refine: p => { p.choose('pnWork', 'yes'); p.set('pnSoil', '62', 'input'); },
+    samples: load => dates.flatMap(d => { const p = load({ today: d }); return [p.text('pnTitle') + ' ' + p.text('pnWhy')]; }),
+    correctName: 'MSU rules applied to station dates; unsourced crops and fall dates are NOT REPORTED',
+    correct: load => {
+      const p = load({ today: '2026-03-20' }); const E = p.ctx.PlantNow, F = p.ctx.MIFrost, K = p.ctx.GardenKit;
+      const st = F.station('bay-city'), open = K.parse(st.p25), c = id => E.CROPS.find(x => x.id === id);
+      const flips = ['WAIT', 'START_INDOORS', 'HARDEN_OFF', 'TRANSPLANT'].join() === [open - 60, open - 50, open - 3, open].map(d => E.cropStatus(c('tomatoes'), st, d, {}).code).join();
+      const nr = ['basil', 'cilantro', 'garlic', 'potatoes'].every(id => { const r = E.cropStatus(c(id), st, open, {}); return r.code === 'NOT_REPORTED' && !r.windows.length; });
+      const noFall = E.frostOf(F.station('adrian')).fall === null;
+      return flips && nr && noFall && /Start peppers and tomatoes indoors|start peppers and tomatoes indoors/.test(p.text('pnTitle'));
+    }
+  }),
   shared('zone-6a-planting-calendar', {
     card: 'weekCard', refineFirst: 'customLF', chart: 'timeline', share: 'shareBtn', shareOut: 'shareOut', takeaway: 'icsBtn', action: /\b(Start|Plant|Sow|tend|order)\b/,
     sources: /canr\.msu\.edu/,
