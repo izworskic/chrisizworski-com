@@ -71,3 +71,113 @@
 .detail .fallback-ship{display:flex;align-items:center;justify-content:center;background:#c5dadd;min-height:190px;padding:24px}
 .detail .fallback-ship .ship-illustration{width:75%;max-height:160px}
 img[hidden],.fallback-ship[hidden]{display:none!important}
+
+/* Approved winter atlas: one task surface, compact fleet and nearby details. */
+[hidden]{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.atlas{max-width:1320px;margin:auto;padding:28px 28px 44px}
+.atlas-intro{max-width:1000px;margin-bottom:22px}
+.atlas-intro h1{font-size:clamp(32px,3.7vw,48px);max-width:1100px;line-height:1.12}
+.atlas-intro .kicker{margin-bottom:9px}
+.atlas-lede{font-size:17px;line-height:1.5;max-width:850px;margin:12px 0}
+.upcoming-note{font-size:13px;color:#435d65;margin:10px 0 0}
+.upcoming-note a{margin-left:6px}
+.atlas-controls{margin:0;padding:0;border:0;min-width:0}
+.atlas-toolbar{display:grid;grid-template-columns:minmax(190px,.9fr) minmax(240px,1.3fr) minmax(190px,1fr) auto;gap:12px;align-items:end}
+.atlas-controls label{font-size:12px;font-weight:750;color:#405962;display:flex;flex-direction:column;gap:5px;min-width:0}
+.atlas-controls input,.atlas-controls select{border:1px solid #a9bfc2;background:#fff;color:var(--ink);border-radius:5px;min-height:44px;padding:9px 11px;width:100%;min-width:0;font-size:14px}
+.atlas-controls input{font-size:16px}
+.atlas-controls button{background:#fff;color:var(--deep);min-height:44px}
+.refinements{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.refinements label:first-child{flex:1 1 280px;max-width:430px}
+.refinements label{flex:0 1 210px}
+.atlas-summary{margin:14px 0 20px;border-bottom:1px solid #d4dfdc;padding-bottom:13px;display:flex;gap:9px 20px;flex-wrap:wrap;align-items:center}
+.atlas-summary .stats{display:flex;gap:8px 18px;flex-wrap:wrap;margin:0;font-size:13px}
+.atlas-summary .stats span{color:var(--ink);font-size:13px}
+.atlas-summary .stats strong{font:750 14px system-ui,sans-serif}
+.atlas-summary>p:last-child{font-size:12px;color:#46616a;margin:0}
+.atlas-workspace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start;grid-template-areas:'map fleet' 'detail detail'}
+.atlas-workspace .map-section{grid-area:map;margin:0;min-width:0}
+.atlas-workspace .fleet-section{grid-area:fleet;margin:0;min-width:0}
+.atlas-workspace .detail{grid-area:detail;margin:0;scroll-margin-top:18px}
+.atlas .section-head h2{font-size:26px}
+.atlas .section-head.tight>p:not(.kicker){margin:8px 0 14px;font-size:13px;line-height:1.5}
+.atlas #layup-map{height:360px;min-height:360px}
+.atlas .map-tools button{min-height:44px;font-size:12px;padding:8px 10px}
+.atlas .map-footer{font-size:11px;padding:9px 12px;line-height:1.5}
+.atlas .harbor-panel{padding:16px;margin-top:12px}
+.atlas .harbor-panel h3{font-size:22px}
+.atlas .harbor-panel p{font-size:12px;line-height:1.5}
+.harbor-comparison{display:grid;gap:4px;margin-top:10px}
+.harbor-bar{display:grid;grid-template-columns:minmax(130px,1.3fr) minmax(40px,1fr) 22px;align-items:center;gap:10px;min-height:44px;border:1px solid transparent;background:#f2f6f2;border-radius:4px;text-align:left;padding:7px 9px;color:var(--ink);font-size:12px}
+.harbor-bar:hover{background:#e3efeb;border-color:#91b7b8}
+.harbor-bar svg{display:block;width:100%;height:12px;fill:#367e89}
+.harbor-bar strong{text-align:right}
+.atlas .harbor-links a,.atlas .harbor-links button{display:inline-flex;align-items:center;min-height:44px;padding:8px 10px}
+.atlas .layup-pin{display:grid;place-items:center;border:0;background:transparent}
+.atlas .layup-pin span{display:grid;place-items:center;margin:0;width:35px;min-width:35px;height:35px;border-radius:50%;background:#103a4c;color:#fff;border:3px solid #fff;box-shadow:0 2px 7px #173b4455;font-size:13px}
+.atlas .layup-pin.is-active span{background:#edbd68;color:#102b3c;box-shadow:0 0 0 3px #103a4c}
+.atlas .leaflet-popup-content button{min-height:44px}
+.atlas .leaflet-control-zoom a{width:44px;height:44px;line-height:44px}
+.atlas .result-note{margin:8px 0 12px;font-size:12px;line-height:1.5;min-height:36px}
+.atlas .ship-grid{display:block;max-height:660px;overflow-y:auto;overscroll-behavior:contain;padding:3px 4px 4px}
+.atlas .ship-card{display:grid;grid-template-columns:74px minmax(0,1fr);gap:0;border:1px solid #d3dfdc;box-shadow:none;margin:0 0 8px;border-radius:5px;overflow:visible}
+.atlas .ship-card.is-selected{outline:2px solid #d59c42;background:#fff8e9}
+.atlas .ship-art{height:100%;min-height:120px;background:#e2ece9;border-radius:4px 0 0 4px}
+.atlas .ship-art .ship-illustration{width:90%;max-height:70px}
+.atlas .ship-art img{position:relative;width:74px;height:100%;max-height:170px;object-fit:cover}
+.atlas .ship-card-copy{padding:12px 13px;min-width:0}
+.atlas .ship-card h3{font-size:21px;line-height:1.15;margin:0 0 7px}
+.atlas .ship-card .tag{font-size:10px;padding:2px 7px}
+.atlas .ship-card .berth{font-size:12px;line-height:1.45;margin:6px 0 8px;overflow-wrap:anywhere}
+.atlas .ship-card button{min-height:44px;font-size:12px;padding:8px 10px}
+.atlas .ship-biography-link{font-size:12px;display:inline-flex;align-items:center;min-height:44px;margin:2px 0 0}
+.atlas .detail-top button{min-height:44px;min-width:44px;color:var(--deep);font-size:13px;white-space:nowrap}
+.atlas .detail .tag{font-size:12px}
+.atlas .detail a{overflow-wrap:anywhere}
+.atlas .detail img{height:auto;max-height:360px;object-fit:contain}
+.atlas .detail .winter-jump{min-height:44px}
+.atlas .detail .timeline{margin-top:12px}
+.atlas .detail h4{margin:20px 0 9px;font-size:16px}
+.atlas .empty,.atlas .current-empty{font-size:14px}
+.atlas .empty h3{margin-top:0}
+.atlas .empty button{margin:6px 3px 0 0}
+.archive-error{padding:15px 18px;border:1px solid #bf984b;background:#fff3dc;margin-bottom:16px;border-radius:5px}
+.archive-error p{margin:0 0 10px}
+.atlas-reading{max-width:1320px;padding-left:28px;padding-right:28px}
+.winter-work{padding:26px;border:1px solid #c9d9d5;background:#eef3ed;border-radius:7px;margin:0 0 45px}
+.winter-work h2{font-size:clamp(27px,3vw,37px);margin:0}
+.winter-work>p{max-width:800px;font-size:14px}
+.work-steps{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}
+.work-steps button{min-height:44px;border:1px solid #adc6c6;background:#fff;border-radius:4px;padding:9px 15px;color:#163e4b;font-weight:750}
+.work-steps button[aria-pressed=true]{background:#123e4b;color:#fff}
+.work-explanation{padding:17px 0 5px;max-width:800px;min-height:150px}
+.work-explanation h3{font:500 26px Georgia,serif;margin:0}
+.work-explanation p{font-size:14px}
+.winter-work>a{font-size:13px}
+@media(max-width:1000px){
+ .atlas-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}
+ .atlas-toolbar button{justify-self:start}
+ .atlas-workspace{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px}
+ .atlas .ship-card{grid-template-columns:1fr}.atlas .ship-art{display:none}
+}
+@media(max-width:760px){
+ .atlas{padding:22px 16px 32px}.atlas-intro{margin-bottom:18px}
+ .atlas-intro h1{font-size:34px}.atlas-lede{font-size:16px}
+ .atlas-toolbar{grid-template-columns:minmax(0,1fr)}
+ .atlas-toolbar button{justify-self:stretch}.atlas-toolbar .search-label{order:-1}
+ .refinements{gap:10px}.refinements label:first-child{flex:1 1 100%;max-width:none}
+ .refinements label{flex:1 1 42%}
+ .atlas-workspace{display:flex;flex-direction:column;gap:20px}
+ .atlas-workspace>.map-section,.atlas-workspace>.fleet-section,.atlas-workspace>.detail{width:100%}
+ .atlas .ship-grid{max-height:none;overflow:visible;padding:3px}
+ .atlas .ship-card{grid-template-columns:74px minmax(0,1fr)}.atlas .ship-art{display:flex}
+ .atlas .ship-art img{min-height:150px}
+ .atlas #layup-map{height:290px;min-height:290px}
+ .atlas .map-tools{gap:6px;padding:8px}.atlas .map-tools button{flex:1 1 110px}
+ .atlas .detail-top{flex-wrap:wrap}.atlas .detail-top button{margin-bottom:15px}
+ .atlas .detail-grid{grid-template-columns:1fr}
+ .atlas-reading{padding-left:16px;padding-right:16px}
+ .winter-work{padding:20px}.work-explanation{min-height:190px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
