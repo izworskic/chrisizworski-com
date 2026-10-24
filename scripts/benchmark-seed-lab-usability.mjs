@@ -24,7 +24,7 @@ try{
 }catch(e){console.error('Seed Lab engine: '+e.message)}
 add('Findability',7,'Two-plant entry',has('href="#explorer"','id="compare-form"'));
 add('Findability',8,'Whole-garden entry',has('href="#whole-garden"','id="whole-garden"'));
-add('Answer freshness',6,'Initial answer',has('botanicals();showGeneration();run();'));
+add('Answer freshness',6,'Initial answer visibly summarized on mobile',has('botanicals();showGeneration();run();','id="pair-inline-summary"',"el('pair-inline-summary').textContent=r.verdict"));
 add('Answer freshness',8,'Plant-change recalculation',has("sel.addEventListener('change',()=>{botanicals();run()})"));
 add('Answer freshness',6,'Every context change recalculates',has("control.addEventListener('change',run)","el('distance').addEventListener('input'"));
 add('Plant lookup',8,'Search common plant name',has('id="search-plant-a"',"p.name+' '+p.species"));
@@ -46,4 +46,4 @@ console.log('Seed Saving Lab usability value: automated task proxy, NOT human us
 for(const [name,r] of Object.entries(byGroup))console.log(name.padEnd(23)+r.earned+'/'+r.max);
 console.log('TOTAL '+score+'/'+max+' (release gate: >=90)');
 for(const r of rules.filter(x=>!x.pass))console.log('  -'+r.weight+' '+r.name);
-if(process.argv.includes('--check')&&(score<90||!engineOK||!rules.find(x=>x.name==='Plant-change recalculation')?.pass))process.exitCode=1;
+if(process.argv.includes('--check')&&(score<90||!engineOK||!rules.find(x=>x.name==='Plant-change recalculation')?.pass||!has("el('result-filled').hidden=true","el('pair-inline-summary').textContent='No plant found'")))process.exitCode=1;
