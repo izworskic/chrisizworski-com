@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 
 const code = fs.readFileSync('public/michigan-ice/freeze-up.js','utf8');
+const mainClient = fs.readFileSync('public/michigan-ice/ice.js','utf8');
 
 test('The ice-map animation is real dated NOAA geographic data, never a simulated CARTO time layer',()=>{
   execFileSync(process.execPath,['--check','public/michigan-ice/freeze-up.js']);
@@ -23,6 +24,8 @@ test('The ice-map animation is real dated NOAA geographic data, never a simulate
   assert.match(code,/PHOTO_FOCUS/);
   assert.match(code,/Focus on /);
   assert.match(code,/Not a safe-ice assessment/);
+  assert.equal((mainClient.match(/__michiganIceNowReady = true/g)||[]).length,2);
+  assert.match(code,/if \(window\.__michiganIceNowReady\) render\(window\.__michiganIceNow\)/);
   assert.doesNotMatch(code,/MapServer\/export[^\n]*time=|safeIceThickness|forecastIceThickness/);
 });
 
