@@ -1,9 +1,9 @@
 # Great Lakes Freighter Winter Layup Explorer — foundation release gate
 Date: 2026-10-24
-Status: development branch only. NO modifications to production Freighter Central, AIS endpoints, freeze-up APIs, redirects or build pipeline.
+Status: development branch only. Phase 3 adds 5 harbors in US/Canada, 14 total season-specific records, 6 substantial vessel biographies. NO modifications to production Freighter Central, AIS endpoints, freeze-up APIs, redirects or build pipeline.
 
 ## Objective
-Answer "Where is that freighter spending winter, and what is its story?" with a verified historical answer, a harbor-level map, dated events, photos with explicit rights and truthful uncertainty. The future 2026–27 season MUST NOT inherit winter 2025–26 positions.
+Answer "Where is that freighter spending winter, and what is its story?" with a verified historical answer, a harbor-level map, dated events, photos with explicit rights and truthful uncertainty. The future 2026–27 season MUST NOT inherit historic 2025–26 or 2024–25 positions.
 
 ## Research — foundational evidence
 - Duluth Seaway Port Authority, Jan 30, 2026: https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/
@@ -135,3 +135,47 @@ Do not merge or claim production rollout until CI/preview and user journeys have
 3. A year-specific archive never infers present movement, even when a vessel has reported a berth shift or departure.
 4. Source dates are per ship; a Jan 30 Superior source must not be silently reused as Jan 20 Milwaukee evidence.
 5. Alias collision and unsafe source-class promotions fail validator checks.
+
+## Phase 3 (2026-10-24) — cross-border coverage and permanent biographies
+Implemented, feature branch only. Existing live shipping/ice tools not changed.
+
+### Source-backed 2025–26 additions
+- Owen Sound, Ontario, Canada — Algoma Compass: January 19, 2026 icebreaker-assisted arrival and layup, with Community Waterfront Heritage Centre's January 24 account: https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/ ; https://waterfrontheritage.ca/ccgs-judy-lamarsh-breaks-the-ice/
+- Toledo, Ohio — American Spirit: media reported reaching Toledo after Coast Guard help January 21, intending winter layup; **status reported, specific berth NOT verified**. https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes
+- Fleet dataset now has twelve historical records in 2025–26 across Superior, Sturgeon Bay, Milwaukee, Owen Sound and Toledo. Ten classified verified / two reported. The sample is still incomplete.
+
+### Separate 2024–25 archive
+- CSL spokesperson confirmed Oakglen wintering in Owen Sound after December 31, 2024 arrival, with general maintenance: https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/
+- Owen Sound maritime museum and January 2026 news caption support Algoma Compass's January 2025 winter visit:
+  https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/
+  https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/
+- The Algoma Compass 2024–25 and 2025–26 records carry the same `identity.key` and independently verified IMO `7326245`. This is one hull, two winter records, not two vessels or a claimed continuous location.
+
+### Permanent editorial ship biographies
+- Generated from `public/assets/freighter-vessel-biographies.json` by `scripts/generate-freighter-layup-profiles.cjs` using a shared pure renderer.
+- Six substantive source-linked pages: Algoma Compass, Lee A. Tregurtha, James R. Barker, Stewart J. Cort, American Spirit, Oakglen.
+- Each page has a distinct SEO canonical, permanent ship history, sourced particulars, multiple interpretive chapters, a cross-winter table, an event chronology, and links back to all actual source pages. No generic thin mass generation.
+- `node scripts/generate-freighter-layup-profiles.cjs --check` checks for drift without rewriting files.
+- No API/DB jobs, no extra production polling, no broad unbounded fetches, and no future-season carryover.
+
+### Image-rights research
+- James R. Barker by Levi Gates, 2014, CC BY-SA 4.0: https://commons.wikimedia.org/wiki/File:James_R_Barker.jpg
+- American Spirit by USACE Detroit District (Michelle Hill), 2011, CC BY-SA 2.0: https://commons.wikimedia.org/wiki/File:American_Spirit.jpg
+- Oakglen by GuavaTrain, 2021, CC BY-SA 4.0: https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg
+- Earlier photos of Mesabi Miner and Lee A. Tregurtha remain in the archive with credits. None of these are represented as photos of a different winter layup.
+
+### Post-build loss-function and acceptance requirements
+- 100% of historic records need dated source, status, confidence and harbor-scale positions.
+- 100% of biography historical claims must have cited supporting pages; no guessed engineering particulars.
+- Multi-winter continuity preserves stable internal ID and verified IMO where known.
+- Check 2024–25 selection: two records, one harbor, zero 2025–26 carryover unless independently documented.
+- Check 2026–27 selection: zero records/markers. No live AIS-to-layup inference.
+- Verify generation determinism and canonical uniqueness for all six biography pages.
+- Run local/native Node tests, responsive preview screenshot/browser checks, and legacy regression suite before merge.
+- Product quality threshold remains ≥92 with >=95% human-measured task success, **not yet measured**.
+
+### Known remaining gaps
+- Coverage of active commercial fleets is not complete; do not calculate a layup percentage from this sample.
+- Public photo coverage is incomplete for many records; no unlicensed photo or generic AI image substitution.
+- No attempt to claim a ship's full 2026 cargo/port history without sufficiently complete historic tracking data.
+- Canadian Port Colborne, Hamilton, Sarnia and Thunder Bay still require ship-specific 2025–26 evidence before adding pins.

@@ -156,7 +156,16 @@
               "text": "Built in 1980, approximately 222 metres long, and described by CSL as a gearless bulk carrier.",
               "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "Ship Oakglen.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg",
+            "creator": "GuavaTrain",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2021-12-19",
+            "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph."
+          }
         }
       ]
     },
@@ -460,7 +469,16 @@
               "text": "Launched in 1976; the first thousand-foot Great Lakes ship built with its wheelhouse aft.",
               "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/"
             }
-          ]
+          ],
+          "photo": {
+            "file": "James R Barker.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:James_R_Barker.jpg",
+            "creator": "Levi Gates",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2014-05-18",
+            "alt": "James R. Barker crossing the Straits of Mackinac in May 2014; not a winter layup photograph."
+          }
         },
         {
           "harborId": "sturgeon-bay",
@@ -697,7 +715,16 @@
               "text": "A roughly 1,004-foot bulk carrier operating on the Great Lakes since 1978.",
               "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
             }
-          ]
+          ],
+          "photo": {
+            "file": "American Spirit.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:American_Spirit.jpg",
+            "creator": "U.S. Army Corps of Engineers Detroit District (photo by Michelle Hill)",
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+            "date": "2011-09-15",
+            "alt": "American Spirit inside the Soo Locks in September 2011; not a winter layup photograph."
+          }
         }
       ]
     }
