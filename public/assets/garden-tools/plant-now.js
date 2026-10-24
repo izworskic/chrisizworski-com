@@ -158,7 +158,7 @@
     var week = all.filter(function (r) {
       if (r.code === 'START_INDOORS' || r.code === 'HARDEN_OFF') return true;
       if (r.code === 'TRANSPLANT' || r.code === 'PLANT') return age(r) <= 28 || r.crop.kind === 'hardy' || r.crop.kind === 'soil40';
-      if (r.code === 'READY_WHEN') return true;
+      if (r.code === 'READY_WHEN' || r.code === 'WAIT_SOIL') return true;
       if (r.code === 'WAIT') { var w = r.windows.filter(function (x) { return typeof x.from === 'number' && x.from >= d; })[0]; return w && w.from - d <= 21; }
       return false;
     }).sort(function (a, b) { return RANK[a.code] - RANK[b.code] || a.crop.name.localeCompare(b.crop.name); });
