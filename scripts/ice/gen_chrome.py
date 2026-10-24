@@ -133,6 +133,7 @@ def head(title, desc, canonical, ld_json):
         '<meta name="twitter:card" content="summary">'
         f'{FONTS}<link rel="stylesheet" href="/assets/seasonal-field-desk.css">'
         '<link rel="stylesheet" href="/assets/field-camera.css">'
+        '<link rel="stylesheet" href="/assets/ice-network.css">'
         f'<style>{CSS}</style>'
         f'<script type="application/ld+json">{_j.dumps(ld_json, separators=(",", ":"))}</script>'
         '<script defer src="/_vercel/insights/script.js"></script>'
@@ -168,6 +169,19 @@ SAFETY_BANNER = (
     '</div>'
 )
 
+ICE_NETWORK_NAV = (
+    "<nav class=\"ice-network\" aria-label=\"Explore more ice conditions\" data-ice-network=\"v1\"><div class=\"ice-network__intro"
+    "\"><h2>Explore more ice conditions</h2><p>Explore the ice season beyond lake-wide coverage: winter formations, island t"
+    "raditions, and spring thaw.</p></div><div class=\"ice-network__links\"><a class=\"ice-network__item\" href=\"/michigan-ice-"
+    "caves/\"><strong>Ice caves & frozen falls</strong><span>Check formation evidence and access before a winter visit.</spa"
+    "n><span class=\"ice-network__action\" aria-hidden=\"true\">Explore →</span></a><a class=\"ice-network__item\" href=\"/mackina"
+    "c-ice-bridge/\"><strong>Mackinac ice bridge</strong><span>Explore the island tradition and region-scale ice charts.</sp"
+    "an><span class=\"ice-network__action\" aria-hidden=\"true\">Explore →</span></a><a class=\"ice-network__item\" href=\"/nation"
+    "al-tools/ice-out/\"><strong>Spring lake ice-out</strong><span>Follow thaw progress across northern U.S. and Canadian la"
+    "kes.</span><span class=\"ice-network__action\" aria-hidden=\"true\">Explore →</span></a></div><p class=\"ice-network__safet"
+    "y\">Mapped ice, cold-weather forecasts, and archived images never establish safe ice for travel.</p></nav>"
+)
+
 SEASONAL_SWITCHER = (
     '<nav class="seasonal-switcher" data-seasonal-module="seasonal-tools" '
     'aria-label="Michigan seasonal field tools">'
@@ -183,6 +197,7 @@ SEASONAL_SWITCHER = (
 )
 
 FOOTER = (
+    ICE_NETWORK_NAV +
     SEASONAL_SWITCHER +
     '<footer class="site-footer">'
     'Ice cover from the <a href="https://www.glerl.noaa.gov/data/ice/">NOAA Great Lakes Environmental Research '
