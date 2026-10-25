@@ -1,7 +1,7 @@
 'use strict';
 /* Route research preview. NOAA/NWS are checked for one selected route at a time.
  * Geographic dots = recreation reference areas, NEVER winter parking.
- * No route grades or "go" recommendations until live manager confirmation.
+ * No route grades or "go" recommendations without dated, route-specific access evidence.
  */
 (() => {
  const $=id=>document.getElementById(id),state={
@@ -75,7 +75,7 @@
     '<p><strong>Road approach:</strong> '+esc(p.roadHint||'not available')+'</p>'+
     '<p><strong>Unresolved access question:</strong> '+esc(p.managerQuestion||'Current trail, road and plowed lot conditions are unknown')+'</p>'+
     '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>':'';
-  const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival checklist — '+esc(tracked?'manager confirmation required':'research not yet completed')+'</strong>'+
+  const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival evidence — '+esc(tracked?'access conditions remain unverified':'specific parking research incomplete')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
    '<p><strong>No GPS directions:</strong> a trail reference point or park address is not certified cleared winter parking.</p></div>';
   $('detail-body').innerHTML=
