@@ -1,3 +1,4 @@
+import { michiganIceClock, winterObservationDate, belongsToWinter } from '../lib/michigan-ice/season.mjs';
 import { acisRange, afddFrom } from '../lib/michigan-ice/thermal.mjs';
 import { cavesResponse } from '../lib/michigan-ice/caves.mjs';
 // /api/ice — server-side aggregation for the Michigan Ice Report.
@@ -25,15 +26,15 @@ const REGIONS = [
   { slug: 'burt-mullett', acis: 'KAPN', lake: null }
 ];
 
-function seasonStartYear(d) {
-  return d.getUTCMonth() + 1 >= 10 ? d.getUTCFullYear() : d.getUTCFullYear() - 1;
-}
+function seasonStartYear(d) { return michiganIceClock(d).seasonYear; }
 function rowLabel(d) {
   return MON[d.getUTCMonth()] + '-' + String(d.getUTCDate()).padStart(2, '0');
 }
 function pad(n) { return String(n).padStart(2, '0'); }
 
 async function currentCover(now) {
+  const clock = michiganIceClock(now);
+  if (!clock.active) return null;
   const y = seasonStartYear(now);
   const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/' +
     'g' + y + '_' + (y + 1) + '_ice.dat';
@@ -41,17 +42,25 @@ async function currentCover(now) {
   if (!r.ok) return null;
   const txt = await r.text();
   const lines = txt.split('\n');
-  let last = null;
+  let latest = null;
   for (const line of lines) {
     const p = line.trim().split(/\s+/);
-    if (p.length === 9 && /^\d{4}$/.test(p[0]) && /^\d+$/.test(p[1])) last = p;
+    if (p.length !== 9 || !/^\d{4}$/.test(p[0]) || !/^\d{1,3}$/.test(p[1])) continue;
+    const date = winterObservationDate(Number(p[0]), Number(p[1]));
+    const values = p.slice(2).map(Number);
+    if (!belongsToWinter(date, y, clock.today) ||
+        values.some(v => !Number.isFinite(v) || v < 0 || v > 100)) continue;
+    if (!latest || date > latest.date) latest = { date, p, values };
   }
-  if (!last) return null;
+  if (!latest) return null;
+  const age = (now.getTime() - Date.parse(latest.date + 'T00:00:00Z')) / 3600000;
+  if (!Number.isFinite(age) || age < -2 || age > 48) return null;
+  const values = latest.values;
   return {
-    seasonFile: 'g' + y + '_' + (y + 1) + '_ice.dat',
-    year: Number(last[0]), dayOfYear: Number(last[1]),
-    superior: Number(last[2]), michigan: Number(last[3]), huron: Number(last[4]),
-    erie: Number(last[5]), ontario: Number(last[6]), stclair: Number(last[7]), total: Number(last[8])
+    seasonFile: 'g' + y + '_' + (y + 1) + '_ice.dat', observedAt: latest.date,
+    year: Number(latest.p[0]), dayOfYear: Number(latest.p[1]),
+    superior: values[0], michigan: values[1], huron: values[2],
+    erie: values[3], ontario: values[4], stclair: values[5], total: values[6]
   };
 }
 
@@ -98,18 +107,20 @@ function afddChange(rows, days, current) {
 
 async function coldFor(region, now) {
   const sy = seasonStartYear(now);
-  const start = sy + '-11-01';
-  const today = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());
-  if (today < start) return { slug: region.slug, station: region.acis, seasonStart: start,
+  const clock = michiganIceClock(now), start = clock.seasonStart;
+  // ACIS daily highs/lows are completed-day observations; never call Nov 1
+  // "zero cold" before the first November day has actually ended.
+  const through = new Date(Date.parse(clock.today + 'T12:00:00Z') - 86400000).toISOString().slice(0, 10);
+  if (through < start) return { slug: region.slug, station: region.acis, seasonStart: start,
     afdd: null, normal: null, normalYears: 0, latestDate: null, change24h: null, change72h: null, change7d: null, preSeason: true };
-  const currentRows = await acisRange(region.acis, start, today);
+  const currentRows = await acisRange(region.acis, start, through);
   const cur = afddFrom(currentRows);
 
-  const md = pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());
+  const md = through.slice(5);
   const norms = [];
   for (let k = 1; k <= 10; k++) {
     const s = (sy - k) + '-11-01';
-    const e = (sy - k + (now.getUTCMonth() + 1 >= 11 ? 0 : 1)) + '-' + md;
+    const e = (sy - k + (Number(md.slice(0,2)) >= 11 ? 0 : 1)) + '-' + md;
     const v = afddFrom(await acisRange(region.acis, s, e));
     if (v !== null) norms.push(v);
   }
@@ -156,7 +167,9 @@ export default async function handler(req) {
     status: 200,
     headers: {
       'content-type': 'application/json',
-      'cache-control': 'public, max-age=21600, stale-while-revalidate=86400',
+      'cache-control': michiganIceClock(now).rolloverWindow
+        ? 'no-store'
+        : 'public, max-age=21600, stale-while-revalidate=86400',
       'x-robots-tag': 'noindex, nofollow'
     }
   });
