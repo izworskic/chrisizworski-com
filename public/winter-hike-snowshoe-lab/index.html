@@ -40,6 +40,7 @@
     <div class="sat-ctrl"><label for="sat-preset">Past winters</label><select id="sat-preset" aria-label="Choose a historic winter scene"><option value="">Select a past winter date</option></select></div>
     <div class="sat-ctrl sat-opacity"><label for="sat-opacity">Image transparency: <output for="sat-opacity" id="sat-opacity-text">75%</output></label><input id="sat-opacity" type="range" min="20" max="100" step="5" value="75"></div>
   </div>
+  <button type="button" class="sat-focus-button" id="sat-focus" disabled>Inspect selected trail area on map</button>
   <p class="satellite-status" id="sat-status" role="status" aria-live="polite">Select a dated scene to see historical regional snow cover.</p>
   <p id="sat-help" class="satellite-caveat">NASA MODIS images are historical satellite context, not a live road camera or parking-lot inspection. Approximately 250 m browse imagery and 500 m snow classification cannot resolve most parking lots or show plowing. Clouds can hide ground; a missing tile means no conclusion. NOAA modeled depth remains separately labeled.</p>
   <p class="satellite-credit">Imagery provided by NASA Global Imagery Browse Services (GIBS), part of NASA ESDIS. <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener noreferrer">Explore in NASA Worldview</a></p>
@@ -58,5 +59,6 @@
 <script defer src="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js"></script>
 <script defer src="/winter-hike-snowshoe-lab/visuals.js?v=2"></script>
 <script defer src="/winter-hike-snowshoe-lab/satellite.js?v=1"></script>
+<script defer src="/winter-hike-snowshoe-lab/satellite-ui.js?v=1"></script>
 <script defer src="/winter-hike-snowshoe-lab/app.js?v=3"></script>
 </body></html>
