@@ -15,7 +15,7 @@ test("compact hero puts the snowbelt selector next, preserves H1 and app IDs",()
  assert.equal((hero.match(/<h1\b/g)||[]).length,1);
  assert.ok(hero.length<2700,"Hero and controls must remain in one compact content group");
  assert.match(html,/\.hero\{[^}]*padding:26px 0 21px/);
- assert.match(html,/@media\(max-width:760px\)[^\n]*\.hero\{padding:19px 0 16px/);
+ assert.match(html,/@media\(max-width:760px\)[^\n]*\.hero\{padding:16px 0 17px/);
  assert.match(html,/\.main\{padding:13px 0 48px\}/);
  assert.ok(html.indexOf('<main id="lake-effect-main">')>0);
  assert.ok(html.indexOf('<div class="panel hero-chooser"')>html.indexOf('<section class="hero"'));
