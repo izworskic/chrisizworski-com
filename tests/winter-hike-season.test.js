@@ -130,14 +130,20 @@ test('full-season endpoint combines same-station discovery and only four station
  const calls=[],fetcher=async(u)=>{
   const url=new URL(u),year=Number(url.searchParams.get('endDate').slice(0,4));
   const full=url.searchParams.has('stations');calls.push(url);
-  const rows=full?
+  if(url.pathname.includes('/search/v1/data'))return {ok:true,text:async()=>JSON.stringify({
+   results:[{boundingPoints:[{coordinates:[POINT.lon,POINT.lat]}],
+    stations:[{id:STATION,name:'Nearby GHCN station',dataTypes:[{id:'SNWD',coverage:98}]}]}]
+  })};
+  const winter=full&&url.searchParams.get('startDate')?.endsWith('-11-01');
+  const rows=winter?
    Array.from({length:10},(_,i)=>fixture((year-1)+'-11-'+String(1+i).padStart(2,'0'),i<8?8:0)):
    [fixture(year+'-02-15',8)];
   return {ok:true,text:async()=>JSON.stringify(rows)};
  };
  const data=await Season.fullSeasonForRoute(route,{fetcher,now:NOW});
- assert.equal(calls.length,8);
- assert.equal(calls.filter(c=>c.searchParams.has('stations')).length,4);
+ assert.equal(calls.length,9);
+ assert.equal(calls.filter(c=>c.searchParams.has('stations')).length,8);
+ assert.equal(calls.filter(c=>c.pathname.includes('/search/v1/data')).length,1);
  assert.equal(data.routeId,route);
  assert.equal(data.station.id,STATION);
  assert.deepEqual(data.winterYears.map(y=>y.year),[2026,2025,2024,2023]);
