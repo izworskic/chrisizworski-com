@@ -60,3 +60,13 @@ test('out-of-order departure or maintenance needs an established same-winter arr
  const previous=m.addEvidence(empty,event,'2027-01-15T12:00:00Z').ledger;
  assert.equal(m.addEvidence(previous,missing,'2027-02-03T12:00:00Z').changed,true);
 });
+
+test('confirmed winter arrival cannot certify a subsequent unverified harbor move',()=>{
+ const confirmed={...event,confidence:'confirmed',source:{...event.source,class:'port_authority'}};
+ const first=m.addEvidence(empty,confirmed,'2027-01-15T00:00:00Z').ledger;
+ const moved=m.addEvidence(first,{...event,kind:'berth_change',harborId:'sarnia',date:'2027-01-18',confidence:'reported',summary:'Reported change of winter harbor.'},'2027-01-19T00:00:00Z').ledger;
+ const current=m.statusFor(moved,'lee-a-tregurtha');
+ assert.equal(current.harborId,'sarnia');
+ assert.equal(current.confidence,'reported');
+ assert.equal(current.stage,'laid_up_reported');
+});

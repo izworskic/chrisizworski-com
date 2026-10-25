@@ -391,3 +391,18 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
 .layup-home .coverage-note{font-size:11px;padding:0 24px 18px;color:#6d7c79}
 @media(max-width:940px){.layup-home .coverage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.layup-home .coverage-head{flex-direction:column;align-items:start}.layup-home .coverage-stat{padding-left:17px}.layup-home .coverage-grid{grid-template-columns:1fr;padding:12px}.layup-home .coverage-details>summary{padding:17px}.layup-home .coverage-head h2{font-size:38px}}
+
+
+/* Preseason mobile experience: do not bury the archival map beneath repeated empty reports. */
+@media (max-width: 740px) {
+  .living-winter.is-preseason .living-head {margin-bottom:8px}
+  .living-winter.is-preseason .living-deck {margin-bottom:10px}
+  .living-winter.is-preseason .winter-feed {display:none}
+  .living-winter.is-preseason .ais-watch {padding:14px}
+  .living-winter.is-preseason .ais-watch-header .kicker {margin-bottom:3px}
+  .living-winter.is-preseason .ais-watch-header p:not(.kicker),
+  .living-winter.is-preseason .ais-caveat,
+  .living-winter.is-preseason .ais-watch-list {display:none}
+  .living-winter.is-preseason .ais-watch-header h3 {margin:0 0 8px;font-size:clamp(18px,5.5vw,24px)}
+  .living-winter.is-preseason .ais-watch-status {margin:4px 0}
+}
