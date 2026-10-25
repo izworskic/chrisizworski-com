@@ -89,7 +89,7 @@
       "lat": 43.28,
       "lon": -79.87,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Approximate Hamilton harbor reference. Individual winter berths require separately sourced evidence."
+      "note": "Approximate Hamilton harbor reference. Individual winter berths require separately sourced evidence. These are not verified ship-berth coordinates."
     },
     {
       "id": "thunder-bay",
@@ -122,7 +122,7 @@
       "lat": 41.506,
       "lon": -81.697,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Port-scale reference only. Winter layup cannot be inferred from a slow vessel or industrial port stop."
+      "note": "Port-scale reference only. Winter layup cannot be inferred from a slow vessel or industrial port stop. These are not verified ship-berth coordinates."
     },
     {
       "id": "buffalo",
@@ -133,7 +133,7 @@
       "lat": 42.877,
       "lon": -78.89,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
-      "note": "Approximate harbor context; dated vessel reports determine any winter entries."
+      "note": "Approximate harbor context; dated vessel reports determine any winter entries. These are not verified ship-berth coordinates."
     },
     {
       "id": "escanaba",

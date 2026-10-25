@@ -10,7 +10,8 @@ async function run(){
  const prior=fs.readFileSync(file,'utf8'),ledger=JSON.parse(prior);
  if(!validLedger(ledger))throw Error('Current season ledger failed validation');
  const m=new Date(now).getUTCMonth()+1;
- const preSeason=m===10&&Number(ledger.season.slice(0,4))===Number(season.slice(0,4))+1&&ledger.events.length===0;
+ const localMonth=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date(now)));
+ const preSeason=localMonth===10&&Number(ledger.season.slice(0,4))===Number(season.slice(0,4))+1&&ledger.events.length===0;
  const current=preSeason?ledger:rollover(ledger,season),scan=m>=11||m<=4;
  const result=scan?await refresh({ledger:current,archive:JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8')),now}):{ledger:current,changed:false,reviews:[],outcomes:[]};
 

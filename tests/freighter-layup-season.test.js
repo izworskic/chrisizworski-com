@@ -42,3 +42,13 @@ test('community report cannot become verified by speed; no AIS fields in evidenc
  assert.equal('speedKnots' in result.events[0],false);
  assert.equal(m.standings(result)[0].confidence,'reported');
 });
+
+test('November rollover respects America/Detroit midnight and keeps the new winter empty',()=>{
+ assert.equal(m.seasonForDate('2026-11-01T03:59:59Z'),'2025-26');
+ assert.equal(m.seasonForDate('2026-11-01T04:00:00Z'),'2026-27');
+ assert.equal(m.seasonForDate('2027-11-01T03:59:59Z'),'2026-27');
+ assert.equal(m.seasonForDate('2027-11-01T04:00:00Z'),'2027-28');
+ const a=m.addEvidence(m.freshSeason('2026-27'),{vessel:{key:'sample-vessel',name:'Sample Vessel'},kind:'arrival',harborId:'sarnia',date:'2027-01-15',confidence:'reported',summary:'Dated reporting only.',source:{url:'https://example.org/report',title:'Winter arrival',publisher:'Example',class:'journalistic_report'}},'2027-01-16T12:00:00Z').ledger;
+ const b=m.rollover(a,'2027-28');
+ assert.equal(b.events.length,0);assert.equal(b.previousSeasons[0].events.length,1);
+});
