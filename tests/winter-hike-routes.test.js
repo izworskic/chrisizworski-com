@@ -154,6 +154,7 @@ test('50 named winter trails retain unverified winter access and do not create d
  assert.ok(expanded.every(r=>r.navigationReady===false&&r.verifiedWinterParking===null&&r.verifiedDriveTarget===null));
  assert.ok(expanded.every(r=>r.referencePoint.meaning.includes('Not a verified')));
  assert.deepEqual(expanded.filter(r=>r.id.startsWith('sleepbear-old-indian')).map(r=>r.lengthMiles),[2.3,2.3]);
+ assert.equal(Routes.routeById('sleepbear-alligator-intermediate').lengthMiles,5);
  assert.equal(Routes.listRoutes({activity:'snowshoe'}).filter(r=>r.placeGroup==='sleepbear').length,10);
 });
 test('NPS official source URLs are allowed but lookalike, non-HTTPS sources remain rejected',()=>{
