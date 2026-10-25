@@ -13,11 +13,15 @@ test("hero uses real, credited lake-effect weather photography—not dark satell
 });
 test("compact hero puts the snowbelt selector next, preserves H1 and app IDs",()=>{
  assert.equal((hero.match(/<h1\b/g)||[]).length,1);
- assert.ok(hero.length<1100,"Hero copy must remain short enough for first-viewport actions");
+ assert.ok(hero.length<2700,"Hero and controls must remain in one compact content group");
  assert.match(html,/\.hero\{[^}]*padding:26px 0 21px/);
  assert.match(html,/@media\(max-width:760px\)[^\n]*\.hero\{padding:19px 0 16px/);
  assert.match(html,/\.main\{padding:13px 0 48px\}/);
- assert.ok(html.indexOf('</div></section>\n<main class="main shell">')>0);
+ assert.ok(html.indexOf('<main id="lake-effect-main">')>0);
+ assert.ok(html.indexOf('<div class="panel hero-chooser"')>html.indexOf('<section class="hero"'));
+ assert.ok(html.indexOf('<div class="panel hero-chooser"')<html.indexOf('</div></section>\n<div class="main shell">'));
+ assert.equal((html.match(/id="choose-title"/g)||[]).length,1,"one selector title, not duplicated");
+ assert.ok(html.indexOf('id="check"')<html.indexOf('</div></section>\n<div class="main shell">'),"select-and-check action occurs before any hero/main ad gap");
  for(const id of ["state","region","check","locate","dashboard","headline","forecast-explainer","radar-explorer"])
  assert.match(html,new RegExp('id="'+id+'"'));
  assert.match(html,/national-snowpack-melt\.vercel\.app\/assets\/lake-effect\.js/);
