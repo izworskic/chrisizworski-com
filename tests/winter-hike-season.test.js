@@ -152,7 +152,7 @@ test('full-season endpoint combines same-station discovery and only four station
  assert.ok(data.weeks.every(x=>!('probability' in x)));
 });
 test('no Feb station response means no full-season false assertion',async()=>{
- const fetcher=async()=>({ok:true,text:async()=> '[]'});
+ const fetcher=async()=>({ok:true,text:async()=> '{"results":[]}'});
  const data=await Season.fullSeasonForRoute(route,{fetcher,now:NOW});
  assert.equal(data.status,'no-nearby-qualified-station');
  assert.deepEqual(data.weeks,[]);
@@ -182,4 +182,15 @@ test('full season UI is explicit-load only, accessible and links to dated NASA i
   const r=spawnSync(process.execPath,['--check',path.join(HERE,name)],{encoding:'utf8',timeout:8000});
   assert.equal(r.status,0,name+': '+r.stderr);
  }
+});
+
+test('distant NOAA stations provide historical context but not local snowshoe week classification',()=>{
+ const winters=[2026,2025,2024,2023].map(year=>result(year,
+  Object.fromEntries(Array.from({length:7},(_,i)=>[i,8]))));
+ const data=Season.analyze(winters,{id:STATION,miles:38.9,name:'Far snowbelt station'},NOW);
+ assert.equal(data.stationSpatialInterpretation,'distant-station-context-only');
+ assert.equal(data.topHistoricallyCoveredWeeks.length,0);
+ assert.equal(data.weeks[0].status,'station-too-distant-for-route-pattern');
+ assert.ok(data.weeks.every(w=>w.status!=='historically-frequent-6in-station-snow'));
+ assert.equal(data.parkingVerified,false);
 });
