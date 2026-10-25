@@ -10,7 +10,10 @@
   'use strict';
   const STATUSES=Object.freeze({
     confirmed_historical:{label:'Verified historical layup',weight:2},
-    reported_historical:{label:'Community-reported historical layup',weight:1}
+    reported_historical:{label:'Reported historical layup',weight:1},
+    confirmed_current:{label:'Confirmed this winter',weight:3},
+    reported_current:{label:'Reported this winter',weight:2},
+    departed_current:{label:'Departed after winter layup',weight:1}
   });
   const CLASSES=Object.freeze(['port_authority','maritime_historical_society','local_maritime_museum','operator_statement','journalistic_report','community_report','operator','official_agency']);
   function normalizeName(value){
@@ -89,7 +92,7 @@
   function classify(v,season){
     if(!season||!v||!STATUSES[v.status])return {label:'Unknown',isCurrent:false,confirmed:false};
     const historic=season.state==='historical_snapshot';
-    return {label:STATUSES[v.status].label,isCurrent:false,confirmed:historic&&v.status==='confirmed_historical',reported:historic&&v.status==='reported_historical',asOf:v.statusAsOf};
+    return {label:STATUSES[v.status].label,isCurrent:season.state==='active_current',confirmed:(historic&&v.status==='confirmed_historical')||(season.state==='active_current'&&v.status==='confirmed_current'),reported:(historic&&v.status==='reported_historical')||(season.state==='active_current'&&v.status==='reported_current'),departed:v.status==='departed_current',asOf:v.statusAsOf};
   }
   function totals(season){
     const records=season?.records||[];
