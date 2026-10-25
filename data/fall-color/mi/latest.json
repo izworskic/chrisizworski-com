@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-24",
-  "updated": "2026-10-24T14:38:29.189Z",
-  "body": "The modeled color progression shows stark regional variation. Central and Saginaw Bay regions lead at approximately 95 percent, with Southwest and Southeast Lower Michigan near 90-93 percent at or approaching peak. Northwest Lower sits at 57 percent in the falling phase. The Upper Peninsula and Tip of the Mitt remain early at 8 percent, still in the down phase.\n\nThis weekend's rain across most regions may accelerate leaf drop, particularly where color is already advanced. Southeast Lower and Southwest Lower, currently near peak with mixed skies and highs around 67 degrees, face the most active conditions. Northeast Lower's mixed skies and slightly warmer highs near 69 degrees offer better viewing odds than rain-affected areas, though color there remains at 35 percent.\n\nFor weekend travel, Southeast Lower Michigan along US-12 through the Irish Hills presents the best combination of peak color and favorable mixed-sky conditions. If rain becomes heavy, Northeast Lower's River Road Scenic Byway toward Lumberman's Monument offers an alternative with developing color and clearer weather patterns.",
+  "date": "2026-10-25",
+  "updated": "2026-10-25T14:58:27.662Z",
+  "body": "The modeled color progression shows stark regional variation. Southwest Lower Michigan leads at 94 percent with falling color, while Southeast Lower peaks at 96 percent. Central and Saginaw Bay regions show 58 percent in the falling phase. The Upper Peninsula and northern Lower Peninsula remain early, all at 7 to 10 percent in the down phase.\n\nThis weekend's mixed skies across most regions favor viewing, though rain affects the U.P. and Northeast Lower through the next few days. Temperatures range from highs near 57 to 70 degrees with lows between 32 and 44. The cooler nights in northern areas may accelerate color change, while milder conditions in the south support peak viewing windows.\n\nFor optimal foliage viewing this weekend, Southeast Lower Michigan along US-12 through the Irish Hills offers peak color conditions with favorable mixed skies and moderate temperatures. Alternatively, Southwest Lower's Blue Star Highway near Saugatuck provides near-peak color with similar weather patterns and slightly warmer conditions ideal for a scenic drive.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-24T14:38:25.353Z",
+  "conditionsUpdated": "2026-10-25T14:58:24.124Z",
   "sourceEvidence": [
     {
       "region": "wup",
-      "modeledPercent": 8,
+      "modeledPercent": 7,
       "source": {
         "drivers": [
           "regional climatology",
@@ -15,16 +15,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "eup",
-      "modeledPercent": 8,
+      "modeledPercent": 7,
       "source": {
         "drivers": [
           "regional climatology",
@@ -32,16 +32,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "tip",
-      "modeledPercent": 8,
+      "modeledPercent": 7,
       "source": {
         "drivers": [
           "regional climatology",
@@ -49,16 +49,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 57,
+      "modeledPercent": 32,
       "source": {
         "drivers": [
           "regional climatology",
@@ -66,16 +66,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 35,
+      "modeledPercent": 10,
       "source": {
         "drivers": [
           "regional climatology",
@@ -83,16 +83,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 95,
+      "modeledPercent": 58,
       "source": {
         "drivers": [
           "regional climatology",
@@ -100,16 +100,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 90,
+      "modeledPercent": 94,
       "source": {
         "drivers": [
           "regional climatology",
@@ -117,16 +117,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 93,
+      "modeledPercent": 96,
       "source": {
         "drivers": [
           "regional climatology",
@@ -134,11 +134,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -7,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 41,
-        "satelliteWeight": 0.16
+        "satelliteAgeDays": 42,
+        "satelliteWeight": 0.12
       }
     }
   ],
