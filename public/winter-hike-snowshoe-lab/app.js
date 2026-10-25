@@ -86,12 +86,14 @@
    winterAccessPanel+
    '<div class="detail-links"><a href="'+esc(route.officialUrl)+'" target="_blank" rel="noopener">Official manager page ↗</a>'+
    (route.mapUrl?'<a href="'+esc(route.mapUrl)+'" target="_blank" rel="noopener">Official route map ↗</a>':'')+'</div>'+
-   '<section class="history-zone" id="history-zone" aria-label="Four winter snow depth comparison"></section>'+ 
+   '<section class="history-zone" id="history-zone" aria-label="Four winter snow depth comparison"></section>'+
+   '<section class="season-zone" id="season-zone" aria-label="Full-season historic snow cover patterns"></section>'+ 
    '<button type="button" class="action-primary" id="check-weather">Check '+esc($('day').value)+' weather for this route</button>'+
    '<p class="source-line">No driving directions will be provided without a validated winter trailhead.</p>'+
    '<div id="weather-output" aria-live="polite"></div>';
   $('check-weather').addEventListener('click',check);
   window.WinterHikeHistory?.render($('history-zone'),route);
+  window.WinterHikeSeason?.render($('season-zone'),route);
   if(scroll && matchMedia('(max-width:850px)').matches)$('detail').scrollIntoView({behavior:'smooth',block:'start'});
  }
  function selectGroup(pinId){
