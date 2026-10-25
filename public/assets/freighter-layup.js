@@ -79,12 +79,18 @@
    view.hidden=!nowActive;
    if(!nowActive)return;
    const events=(state.liveLedger.events||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+   // Preseason or unreported winter: keep the desk visible but lead readers
+   // to the sourced archive instead of repeating large empty-state messages.
+   view.classList.toggle('is-preseason',events.length===0);
+   const starts=Date.parse(state.liveLedger.startedAt||'');
+   const beforeStart=Number.isFinite(starts)&&Date.now()<starts;
+
    const arrival=events.filter(e=>e.kind==='arrival'),departures=events.filter(e=>e.kind==='departure');
    $('live-season').textContent='Winter '+state.liveLedger.season.replace('-', '–20');
    $('live-arrivals').textContent=new Set(arrival.map(e=>e.vessel.key)).size;
    $('live-departures').textContent=new Set(departures.map(e=>e.vessel.key)).size;
    $('live-update-status').textContent=events.length?'Latest sourced update: '+fmt(events[0].date)+'. A dated report, not continuous vessel positioning.':
-     'New-season ledger open. No verified arrivals reported yet. Source checks run on a seasonal schedule; missing reporting does not imply no ships are wintering.';
+     (beforeStart?'Winter 2026–27 reporting begins November 1. No layups are forecast from last winter; explore the dated archive below.':'No verified arrivals reported in the new winter yet. Source checks run seasonally; an empty record is not evidence of empty harbors.');
    $('winter-feed').innerHTML=events.length?events.slice(0,18).map(e=>
      '<article class="winter-update"><span class="winter-date">'+esc(fmt(e.date))+'</span><div><span class="tag'+(e.confidence==='reported'?' tag-reported':'')+'">'+esc(e.confidence==='confirmed'?'Confirmed source':'Reported source')+'</span><h3>'+esc(e.vessel.name)+'</h3><p>'+esc(e.summary)+'</p><a href="'+esc(e.source.url)+'" target="_blank" rel="noopener">Source: '+esc(e.source.publisher)+' ↗</a></div></article>').join(''):
       '<div class="live-empty"><h3>The winter story is about to begin.</h3><p>New ship arrivals will appear here as dated reporting is collected. Past winter berths are not carried over and AIS silence is not evidence of layup.</p><a href="#winter-ais">Watch harbor traffic while the season develops ↓</a></div>';
