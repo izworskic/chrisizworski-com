@@ -4,7 +4,7 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
+ const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
  const esc = value => String(value ?? '').replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text = (tag,content) => {const el=document.createElement(tag);el.textContent=content;return el};
  const seasonData = () => state.archive.seasons.find(x=>x.id===state.season);
@@ -79,8 +79,8 @@
    const events=(state.liveLedger.events||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
    const arrival=events.filter(e=>e.kind==='arrival'),departures=events.filter(e=>e.kind==='departure');
    $('live-season').textContent='Winter '+state.liveLedger.season.replace('-', '–20');
-   $('live-arrivals').textContent=arrival.length;
-   $('live-departures').textContent=departures.length;
+   $('live-arrivals').textContent=new Set(arrival.map(e=>e.vessel.key)).size;
+   $('live-departures').textContent=new Set(departures.map(e=>e.vessel.key)).size;
    $('live-update-status').textContent=events.length?'Latest sourced update: '+fmt(events[0].date)+'. A dated report, not continuous vessel positioning.':
      'New-season ledger open. No verified arrivals reported yet. Source checks run on a seasonal schedule; missing reporting does not imply no ships are wintering.';
    $('winter-feed').innerHTML=events.length?events.slice(0,18).map(e=>
@@ -92,9 +92,9 @@
    if(!$('ais-watch-list'))return;
    if(!state.aisLoaded){$('ais-watch-status').textContent='AIS harbor activity is loading. These are not confirmed layup records.';return}
    const rows=state.aisActivity.slice(0,24);
-   $('ais-watch-status').textContent=state.aisCheckedAt?'AIS updated '+new Date(state.aisCheckedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
+   $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
    $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
-    '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':'Slow/stationary signal')+' · last heard '+esc(fmt(v.seen?.slice(0,10)))+'</small></li>').join(''):
+    '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmt(v.seen?.slice(0,10)))+'</small></li>').join(''):
     '<li class="ais-empty">No fresh AIS reports within the five currently monitored winter harbors. This does not establish that their docks are empty.</li>';
  }
  async function refreshAIS(){
@@ -107,7 +107,8 @@
      if(!data.ok||data.notLayupConfirmations!==true||!Array.isArray(data.activity))throw new Error('AIS provider unavailable');
      state.aisActivity=data.activity;
      state.aisCheckedAt=data.checkedAt;
-   }catch{state.aisActivity=[];state.aisCheckedAt=null}
+     state.aisPartial=Boolean(data.partial);
+   }catch{state.aisActivity=[];state.aisCheckedAt=null;state.aisPartial=false}
    state.aisLoaded=true;renderAIS();
  }
  function populateBerths(){
