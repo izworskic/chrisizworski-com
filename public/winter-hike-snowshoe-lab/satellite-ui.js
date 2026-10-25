@@ -20,7 +20,14 @@
  function visible(){return $('sat-show')?.checked===true}
  function apply(){
   const map=state.map;
-  if(!map||!map.isStyleLoaded?.())return;
+  if(!map)return;
+  // MapLibre isStyleLoaded() can be false while basemap images are still
+  // downloading, even after the route-marker layer exists and raster sources
+  // are safe to add. Waiting for all tiles silently loses the first toggle.
+  if(!map.getLayer?.('winter-area-ring')){
+   map.once?.('load',()=>{if(state.map===map)apply()});
+   return;
+  }
   safe(()=>{
    clear(map);
    if(!visible()){
