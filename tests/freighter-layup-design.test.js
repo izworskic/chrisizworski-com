@@ -43,3 +43,11 @@ test('artwork is self-hosted, sourced, and never reveals an unrelated fallback p
  assert.ok(html.includes('Levi Gates'));
  for(const p of ['freighter-winter-hero.jpg','freighter-lee-feature.jpg','freighter-barker-feature.jpg','freighter-american-feature.jpg'])assert.ok(fs.statSync(path.join(root,'public/assets',p)).size>50000,p);
 });
+
+test('structured expanded source catalog is represented by twenty credited public links',()=>{
+ const catalog=require('../public/assets/freighter-layup-sources.json');
+ assert.equal(catalog.sources.length,20);
+ assert.ok(html.includes('id="layup-reporting-network"'));
+ assert.ok(html.includes('<strong>20</strong>'));
+ for(const source of catalog.sources)assert.ok(html.includes(source.publisher.replace(/&/g,'&amp;')),source.id);
+});

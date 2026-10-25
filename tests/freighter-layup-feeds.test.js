@@ -32,10 +32,10 @@ test('generic winter port roundups without named-ship headlines require source r
 });
 
 
-test('twelve verified RSS/Atom endpoints and separate human-review tiers are declared',()=>{
+test('twenty monitored reporting inputs and separate human-review tiers are declared',()=>{
  const names=new Set(f.SOURCES.map(s=>s.id));
- assert.equal(f.SOURCES.length,12);
- assert.equal(names.size,12);
+ assert.equal(f.SOURCES.length,20);
+ assert.equal(names.size,20);
  for(const s of f.SOURCES){assert.match(s.url,/^https:\/\//);assert.ok(s.host);assert.ok(['publish','review'].includes(s.mode));}
  for(const id of ['interlake','hopa-news','thunder-bay-port','cleveland-port','shipwatcher','great-lakes-now','marinelink'])assert.ok(names.has(id),id);
  assert.equal(f.SOURCE_CATALOG.externalBoards.length,1);
@@ -50,7 +50,7 @@ test('a newspaper story that otherwise matches stays in source review, not the p
  assert.ok(result.reviews.some(r=>r.url==='https://www.boatnerd.com/winter-report/'&&r.why==='editorial_review_required'));
 });
 
-test('expanded network polls at most three sources concurrently and preserves source-order results',async()=>{
+test('expanded network polls at most four sources concurrently and preserves source-order results',async()=>{
  let busy=0,peak=0;
  const fetcher=async()=>{
   busy++;peak=Math.max(peak,busy);
@@ -60,7 +60,7 @@ test('expanded network polls at most three sources concurrently and preserves so
  };
  const out=await f.refresh({ledger:s.freshSeason('2026-27'),archive:{seasons:[]},fetcher,now:'2027-01-01T12:00:00Z'});
  assert.ok(peak>=2,'polls are concurrent');
- assert.ok(peak<=3,'provider load is bounded');
+ assert.ok(peak<=4,'provider load is bounded');
  assert.deepEqual(out.outcomes.map(x=>x.source),f.SOURCES.map(x=>x.id));
  assert.equal(out.ledger.events.length,0);
 });
@@ -76,4 +76,101 @@ test('an explicit dated Interlake operator report remains source-linked and is n
  assert.equal(d.event.source.class,'operator');
  assert.equal(d.event.confidence,'reported');
  assert.equal(d.event.harborId,'superior');
+});
+
+test('broad harbor reporting creates review leads but no automatic layup records',async()=>{
+ const source=f.SOURCES.find(s=>s.id==='boatnerd-port-news');
+ const article={title:'Lee A Tregurtha arrived at Thunder Bay for winter layup',
+   text:'Lee A Tregurtha arrived at the Port of Thunder Bay to begin winter layup.',
+   date:'2027-01-16T12:00:00Z',url:'https://www.boatnerd.com/winter-arrival/'};
+ const rss='<rss><channel><item><title>'+article.title+'</title><link>'+article.url+
+   '</link><pubDate>Sat, 16 Jan 2027 12:00:00 GMT</pubDate><description>'+article.text+'</description></item></channel></rss>';
+ const fetcher=async url=>url===source.url?{ok:true,text:async()=>rss}:{ok:false,status:503};
+ const archive={seasons:[{records:[{id:'lee-a-tregurtha',name:'Lee A. Tregurtha',identity:{key:'lee-a-tregurtha'},aliases:['Lee A Tregurtha']}]}]};
+ const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-01-17T00:00:00Z'});
+ assert.equal(result.ledger.events.length,0);
+ assert.ok(result.reviews.some(x=>x.url===article.url&&x.why==='editorial_review_required'));
+ assert.ok(result.outcomes.find(x=>x.source===source.id)?.reviewed===1);
+});
+
+test('exact seasonal BoatNerd roster URL is found but a previous winter is rejected',()=>{
+ const html='<html><a href="https://www.boatnerd.com/winter-lay-up-list-2025-2026/">Winter Lay-Up List 2025-2026</a>'+
+  '<a href="/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a></html>';
+ assert.equal(f.discoverWinterRoster(html,'2026-27'),'https://www.boatnerd.com/winter-lay-up-list-2026-2027/');
+ assert.equal(f.discoverWinterRoster('<a href="/winter-lay-up-list-2025-2026/">Winter Lay-Up List 2025-2026</a>','2026-27'),null);
+ assert.equal(f.discoverWinterRoster('<a href="https://attacker.example/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a>','2026-27'),null);
+});
+
+test('winter roster discovery does not promote any vessel to confirmed automatically',async()=>{
+ const roster=f.SOURCES.find(x=>x.id==='boatnerd-roster');
+ const fetcher=async url=>url===roster.url?{ok:true,text:async()=>'<a href="/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a>'}:{ok:false,status:503};
+ const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive:{seasons:[]},fetcher,now:'2027-01-04T10:00:00Z'});
+ assert.equal(result.ledger.events.length,0);
+ assert.ok(result.reviews.some(x=>x.why==='winter_roster_discovered'&&x.url.includes('2026-2027')));
+});
+
+test('regional news discovery can generate leads but cannot certify a vessel',async()=>{
+ const source=f.SOURCES.find(x=>x.id==='news-sarnia-stclair');
+ assert.equal(source.mode,'review');
+ const story={title:'Lee A Tregurtha arrived for winter layup in Sarnia',
+ text:'Lee A Tregurtha docked in Sarnia for winter layup.',date:'2027-01-18T12:00:00Z',
+ url:'https://news.google.com/rss/articles/fictional-source-test-only'};
+ const rss='<rss><channel><item><title>'+story.title+'</title><link>'+story.url+
+ '</link><pubDate>Mon, 18 Jan 2027 12:00:00 GMT</pubDate><description>'+story.text+'</description></item></channel></rss>';
+ const fetcher=async url=>url===source.url?{ok:true,text:async()=>rss}:{ok:false,status:503};
+ const archive={seasons:[{records:[{id:'lee-a-tregurtha',identity:{key:'lee-a-tregurtha'},name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}]}]};
+ const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-01-19T00:00:00Z'});
+ assert.equal(result.ledger.events.length,0);
+ assert.ok(result.reviews.some(x=>x.url===story.url&&x.why==='editorial_review_required'));
+});
+
+test('two independent specialist reports create one sourced reported arrival, never confirmed',async()=>{
+ const ship='Lee A Tregurtha',title=ship+' arrived for winter layup in Superior';
+ const first=f.SOURCES.find(x=>x.id==='boatnerd-port-news');
+ const second=f.SOURCES.find(x=>x.id==='shipwatcher');
+ const make=(url,date)=>'<rss><channel><item><title>'+title+'</title><link>'+url+'</link><pubDate>'+date+
+  '</pubDate><description>'+ship+' docked for winter layup in Superior.</description></item></channel></rss>';
+ const oneUrl='https://www.boatnerd.com/lee-layup/',twoUrl='https://shipwatcher-news.com/lee-layup/';
+ const fetcher=async url=>url===first.url?{ok:true,text:async()=>make(oneUrl,'Sat, 16 Jan 2027 12:00:00 GMT')}:
+   url===second.url?{ok:true,text:async()=>make(twoUrl,'Sun, 17 Jan 2027 12:00:00 GMT')}:{ok:false,status:503};
+ const archive={seasons:[{records:[{id:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha'],identity:{key:'lee-a-tregurtha'}}]}]};
+ const start=s.freshSeason('2026-27'),result=await f.refresh({ledger:start,archive,fetcher,now:'2027-01-18T00:00:00Z'});
+ assert.equal(result.ledger.events.length,1);
+ const event=result.ledger.events[0];
+ assert.equal(event.confidence,'reported');
+ assert.equal(event.kind,'arrival');
+ assert.equal(event.supportingSources.length,1);
+ assert.notEqual(new URL(event.source.url).hostname,new URL(event.supportingSources[0].url).hostname);
+ assert.ok(event.summary.includes('different publisher domains'));
+ const again=await f.refresh({ledger:result.ledger,archive,fetcher,now:'2027-01-19T00:00:00Z'});
+ assert.equal(again.changed,false);assert.equal(again.ledger.events.length,1);
+});
+
+test('two regional news searches cannot corroborate and invent a laid-up vessel',()=>{
+ const known=[{key:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}];
+ const mk=id=>({source:{kind:'discovery'},event:{vessel:{key:known[0].key,name:known[0].name},kind:'arrival',
+  harborId:'sarnia',date:'2027-01-17',source:{url:'https://news.google.com/rss/articles/'+id,title:'Lee A Tregurtha arrived for winter layup in Sarnia',publisher:'Regional Discovery',class:'journalistic_report'}}});
+ assert.equal(f.corroborate([mk('a'),mk('b')],known,s.freshSeason('2026-27'),'2027-01-18T00:00:00Z').length,0);
+});
+
+test('independent reports more than three days apart do not auto corroborate',()=>{
+ const known=[{key:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}];
+ const mk=(host,date)=>({source:{kind:'maritime'},event:{vessel:{key:known[0].key,name:known[0].name},kind:'arrival',
+  harborId:'superior',date,source:{url:'https://'+host+'/report',title:'Lee A Tregurtha arrived for winter layup at Superior',publisher:host,class:'journalistic_report'}}});
+ assert.equal(f.corroborate([mk('boatnerd.com','2027-01-02'),mk('shipwatcher-news.com','2027-01-10')],known,s.freshSeason('2026-27'),'2027-01-11T00:00:00Z').length,0);
+});
+
+test('all four regional news searches remain discovery-only; publishing and review inputs stay partitioned',()=>{
+ const sources=f.SOURCE_CATALOG.sources;
+ const publisher=sources.filter(x=>x.mode==='publish'),review=sources.filter(x=>x.mode==='review');
+ assert.equal(publisher.length,9);
+ assert.equal(review.length,11);
+ assert.equal(new Set(sources.map(x=>x.id)).size,sources.length);
+ const discovery=sources.filter(x=>x.kind==='discovery');
+ assert.equal(discovery.length,4);
+ for(const source of discovery){
+  assert.equal(source.mode,'review');
+  assert.equal(source.host,'news.google.com');
+  assert.match(source.url,/^https:\/\/news\.google\.com\/rss\/search\?/);
+ }
 });
