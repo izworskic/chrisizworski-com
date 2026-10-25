@@ -70,3 +70,25 @@ test('confirmed winter arrival cannot certify a subsequent unverified harbor mov
  assert.equal(current.confidence,'reported');
  assert.equal(current.stage,'laid_up_reported');
 });
+
+test('a press or community report cannot self-certify a winter layup',()=>{
+ for(const sourceClass of ['journalistic_report','community_report']){
+  const forged={...event,confidence:'confirmed',source:{...event.source,class:sourceClass}};
+  assert.equal(m.validLedger({...empty,events:[{...forged,id:'forged-'+sourceClass}]}),false);
+  assert.throws(()=>m.addEvidence(empty,forged,'2027-01-14T00:00:00Z'),/Invalid dated layup event/);
+ }
+ const authoritative={...event,confidence:'confirmed',source:{...event.source,class:'port_authority'}};
+ const accepted=m.addEvidence(empty,authoritative,'2027-01-14T00:00:00Z').ledger;
+ assert.equal(m.statusFor(accepted,'lee-a-tregurtha').confidence,'confirmed');
+});
+test('only an authoritative arrival or berth-change can elevate berth confidence',()=>{
+ const initial=m.addEvidence(empty,event,'2027-01-14T00:00:00Z').ledger;
+ for(const kind of ['maintenance','status_update','departure']){
+  const forged={...event,kind,date:'2027-02-01',confidence:'confirmed',source:{...event.source,class:'port_authority'}};
+  assert.throws(()=>m.addEvidence(initial,forged,'2027-02-02T00:00:00Z'),/Invalid dated layup event/);
+ }
+ const verifiedMove={...event,kind:'berth_change',date:'2027-02-01',harborId:'sarnia',confidence:'confirmed',source:{...event.source,class:'official_agency'}};
+ const moved=m.addEvidence(initial,verifiedMove,'2027-02-02T00:00:00Z').ledger;
+ assert.equal(m.statusFor(moved,'lee-a-tregurtha').harborId,'sarnia');
+ assert.equal(m.statusFor(moved,'lee-a-tregurtha').confidence,'confirmed');
+});
