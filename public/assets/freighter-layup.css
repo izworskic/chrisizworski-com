@@ -84,7 +84,7 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
 .layup-home .topbar nav{gap:7px 20px}
 .layup-home .topbar nav a{color:#e4ebe9;font-size:12px;font-weight:650;transition:color .2s}
 .layup-home .topbar nav a:hover{color:#f6c37d}
-.layup-home .hero{min-height:610px;position:relative;overflow:hidden;background:#0c2530 url('/assets/search/chris-izworski-great-lakes.jpg') center/cover;color:#fff}
+.layup-home .hero{min-height:610px;position:relative;overflow:hidden;background:linear-gradient(120deg,#081c28,#255060);color:#fff}
 .layup-home .hero-media,.layup-home .hero-shade{position:absolute;inset:0;pointer-events:none}
 .layup-home .hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 46%;filter:saturate(.8) contrast(1.04)}
 .layup-home .hero-shade{background:linear-gradient(90deg,rgba(6,21,30,.97) 1%,rgba(9,29,39,.85) 39%,rgba(9,26,35,.32) 78%,rgba(7,22,31,.27)),linear-gradient(0deg,rgba(3,17,25,.9),transparent 29%)}

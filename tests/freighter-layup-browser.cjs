@@ -55,6 +55,10 @@ async function run(){
       check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
       check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
+      check(await page.locator('.hero-media img').evaluate(img=>img.complete && img.naturalWidth>0),size.name+': self-hosted winter freighter hero image');
+      check(await page.locator('.feature-story img').count()===3,size.name+': three licensed fleet photographs');
+      for(const img of await page.locator('.feature-story img').all())check(await img.evaluate(el=>el.complete&&el.naturalWidth>0),size.name+': local story image available');
+
       check(await page.locator('.atlas-workspace #layup-map').count()===1,size.name+': integrated map and harbor notebook');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
       check(await page.locator('.layup-pin').count()===5,size.name+': five historical harbor map markers');
