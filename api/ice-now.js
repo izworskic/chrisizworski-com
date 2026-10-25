@@ -1,3 +1,4 @@
+import { michiganIceClock, winterObservationDate, belongsToWinter } from '../lib/michigan-ice/season.mjs';
 // /api/ice-now — decision-layer data for the Michigan Ice Report.
 //
 // This endpoint deliberately keeps three things separate:
@@ -131,16 +132,11 @@ const CT = {
   '99': { rank: null, label: 'concentration unknown' }
 };
 
-function seasonStartYear(d) {
-  return d.getUTCMonth() + 1 >= 10 ? d.getUTCFullYear() : d.getUTCFullYear() - 1;
-}
-function isIceSeason(d) {
-  const m = d.getUTCMonth() + 1;
-  return m >= 11 || m <= 3;
-}
+function seasonStartYear(d) { return michiganIceClock(d).seasonYear; }
+function isIceSeason(d) { return michiganIceClock(d).active; }
 function isoFromYearDay(year, doy) {
-  if (!Number.isFinite(year) || !Number.isFinite(doy)) return null;
-  return new Date(Date.UTC(year, 0, 1) + (doy - 1) * 86400000).toISOString();
+  const day = winterObservationDate(year, doy);
+  return day ? day + 'T00:00:00.000Z' : null;
 }
 function toIso(v) {
   if (v === null || v === undefined || v === '') return null;
@@ -170,21 +166,27 @@ async function fetchJson(url, options) {
 }
 
 async function lakeTrends(now, previousCompleted = false) {
-  const y = previousCompleted ? now.getUTCFullYear() - 1 : seasonStartYear(now);
+  const clock = michiganIceClock(now);
+  const y = clock.seasonYear - (previousCompleted ? 1 : 0);
   const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/g' +
     y + '_' + (y + 1) + '_ice.dat';
   const r = await fetch(url, { headers: UA });
   if (!r.ok) return null;
-  const rows = [];
+  const dated = new Map();
   for (const line of (await r.text()).split('\n')) {
     const p = line.trim().split(/\s+/);
-    if (p.length !== 9 || !/^\d{4}$/.test(p[0]) || !/^\d+$/.test(p[1])) continue;
-    rows.push({
-      year: Number(p[0]), dayOfYear: Number(p[1]),
-      superior: Number(p[2]), michigan: Number(p[3]), huron: Number(p[4]),
-      erie: Number(p[5]), ontario: Number(p[6]), stclair: Number(p[7]), total: Number(p[8])
+    if (p.length !== 9 || !/^\d{4}$/.test(p[0]) || !/^\d{1,3}$/.test(p[1])) continue;
+    const year = Number(p[0]), dayOfYear = Number(p[1]);
+    const date = winterObservationDate(year, dayOfYear);
+    const values = p.slice(2).map(Number);
+    if (!belongsToWinter(date, y, previousCompleted ? (y + 1) + '-05-31' : clock.today) ||
+        values.some(n => !Number.isFinite(n) || n < 0 || n > 100)) continue;
+    dated.set(date, {
+      year, dayOfYear, superior: values[0], michigan: values[1], huron: values[2],
+      erie: values[3], ontario: values[4], stclair: values[5], total: values[6]
     });
   }
+  const rows = [...dated].sort(([a], [b]) => a.localeCompare(b)).map(([, value]) => value);
   if (!rows.length) return null;
   const current = rows[rows.length - 1];
   const at = (days) => rows[Math.max(0, rows.length - 1 - days)];
@@ -197,7 +199,7 @@ async function lakeTrends(now, previousCompleted = false) {
   const ah = ageHours(observedAt, now);
   return {
     source: 'NOAA GLERL current-season daily Great Lakes ice concentration',
-    observedAt, ageHours: ah, stale: ah !== null && ah > 48,
+    observedAt, ageHours: ah, stale: ah === null || ah > 48 || ah < -2,
     current,
     seasonStartYear: y,
     // Chronological whole-lake observations, never geographically specific bay ice.
@@ -260,7 +262,7 @@ async function regionalObservation(slug, region, now) {
   const ranked = classifications.filter(c => c.rank !== null).sort((a, b) => a.rank - b.rank);
   const validAt = dates.length ? dates.sort().slice(-1)[0] : null;
   const ah = ageHours(validAt, now);
-  const stale = ah === null ? true : ah > 48;
+  const stale = ah === null || ah > 48 || ah < -2;
   const coverage = region.samples.length ? classifications.length / region.samples.length : 0;
   if (!ranked.length) {
     return {
@@ -381,9 +383,18 @@ export default async function handler(req) {
     },
     safety: 'No remote product here measures the ice under a person. Nothing returned by this endpoint is a safety rating.'
   };
-  const tasks = [lakeTrends(now).then(v => { out.observed.lakeWide = v; }).catch(() => { out.observed.lakeWide = null; })];
-  if (!isIceSeason(now)) tasks.push(lakeTrends(now, true)
-    .then(v => { out.historical = v; }).catch(() => { out.historical = null; }));
+  const tasks = [];
+  if (isIceSeason(now)) {
+    tasks.push(lakeTrends(now).then(async v => {
+      out.observed.lakeWide = v;
+      // When the new NOAA winter file has not started, retain an explicitly
+      // historical comparison; never copy it into observed.lakeWide.
+      if (!v) out.historical = await lakeTrends(now, true);
+    }).catch(() => { out.observed.lakeWide = null; }));
+  } else {
+    tasks.push(lakeTrends(now, true)
+      .then(v => { out.historical = v; }).catch(() => { out.historical = null; }));
+  }
   for (const slug of regionSlugs) {
     const r = REGIONS[slug];
     tasks.push(regionalObservation(slug, r, now)
@@ -399,7 +410,9 @@ export default async function handler(req) {
     status: 200,
     headers: {
       'content-type': 'application/json',
-      'cache-control': 'public, max-age=1800, stale-while-revalidate=7200',
+      'cache-control': michiganIceClock(now).rolloverWindow
+        ? 'no-store'
+        : 'public, max-age=1800, stale-while-revalidate=7200',
       'x-robots-tag': 'noindex, nofollow'
     }
   });
