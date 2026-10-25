@@ -5,10 +5,11 @@ const winter='2026-27',empty=m.freshSeason(winter);
 const event={vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},kind:'arrival',harborId:'superior',date:'2027-01-13',confidence:'reported',summary:'Local harbor report documents arrival for winter layup.',source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrived.html',title:'Layup arrival',publisher:'Duluth Harbor Cam',class:'journalistic_report'}};
 test('winter resets on November 1 UTC, never on January 1',()=>{
  assert.equal(m.seasonForDate('2026-10-31T12:00:00Z'),'2025-26');
- assert.equal(m.seasonForDate('2026-11-01T00:00:00Z'),'2026-27');
+ assert.equal(m.seasonForDate('2026-11-01T00:00:00Z'),'2025-26');
+ assert.equal(m.seasonForDate('2026-11-01T04:00:00Z'),'2026-27');
  assert.equal(m.seasonForDate('2027-01-01T12:00:00Z'),'2026-27');
  assert.equal(m.seasonForDate('2027-10-31T12:00:00Z'),'2026-27');
- assert.equal(m.seasonForDate('2027-11-01T00:00:00Z'),'2027-28');
+ assert.equal(m.seasonForDate('2027-11-01T04:00:00Z'),'2027-28');
 });
 test('reports never appear before their season; duplicate URLs do not multiply arrivals',()=>{
  assert.throws(()=>m.addEvidence(empty,event,'2026-12-25T00:00:00Z'),/Future event/);
