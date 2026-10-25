@@ -65,12 +65,24 @@
   $('detail-title').textContent=route.title;
   $('detail-intro').textContent=(route.summary||'Named official route.')+' Snow, road and parking conditions are checked separately.';
   let caveats=(route.caveats||[]).map(t=>'<li>'+esc(t)+'</li>').join('');
+  const p=route.winterAccess||{},tracked=p.tracked===true;
+  const accessRows=tracked?[
+   ['Named trail',p.trail],['Approach road',p.road],['Winter parking',p.parking]
+  ].map(([label,value])=>'<li><strong>'+esc(label)+':</strong> '+esc(value==='unknown'?'Not verified':value==='conflict'?'Conflicting manager reports':value)+'</li>').join(''):'<li>Trail-specific winter parking checkpoint has not been researched yet.</li>';
+  const accessDetails=tracked?
+    '<p><strong>Published location clue:</strong> '+esc(p.parkingHint||'not available')+'</p>'+
+    '<p><strong>Road approach:</strong> '+esc(p.roadHint||'not available')+'</p>'+
+    '<p><strong>What to ask the manager:</strong> '+esc(p.managerQuestion||'Verify current trail, road and plowed lot conditions')+'</p>'+
+    '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>':'';
+  const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival checklist — '+esc(tracked?'manager confirmation required':'research not yet completed')+'</strong>'+
+   '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
+   '<p><strong>No GPS directions:</strong> a trail reference point or park address is not certified cleared winter parking.</p></div>';
   $('detail-body').innerHTML=
    '<div class="evidence-grid"><div class="metric"><b>'+esc(route.miles===null?'—':route.miles+' mi')+'</b><small>'+
     esc(route.mileageStatus==='historical_official'?'Historic documented length':route.mileageStatus==='not_verified'?'No verified mileage':'Official named-route length')+
    '</small></div><div class="metric"><b>'+esc(route.activities.join(' / '))+'</b><small>Documented activity, not current access</small></div></div>'+
    '<p class="subhead">Trail-specific cautions</p><ul class="evidence-list">'+(caveats||'<li>Winter ground and parking status unavailable</li>')+'</ul>'+
-   '<div class="verification"><strong>Winter access not verified</strong><p>Trail open: unknown · Road plowing: unknown · Lot plowing: unknown. This pin is not a safe GPS destination.</p></div>'+
+   winterAccessPanel++
    '<div class="detail-links"><a href="'+esc(route.officialUrl)+'" target="_blank" rel="noopener">Official manager page ↗</a>'+
    (route.mapUrl?'<a href="'+esc(route.mapUrl)+'" target="_blank" rel="noopener">Official route map ↗</a>':'')+'</div>'+
    '<button type="button" class="action-primary" id="check-weather">Check '+esc($('day').value)+' weather for this route</button>'+
@@ -100,6 +112,10 @@
     '<div class="wx-no-data">Interactive weather graphics could not be loaded. Check the NWS and NOAA source directly.</div>';
   view+='<p class="source-line">Official evidence requested '+esc(e.checkedAt||'date unknown')+
     '. Forecast and modeled snow do not establish trail access.</p>';
+  const v=data.parkingVerification||{};
+  if(v.tracked){
+   view+='<p class="subhead">Current winter arrival verification</p><div class="verification"><strong>'+esc(v.status||'verification-needed')+'</strong><p>Trail: '+esc(v.trail||'unknown')+' · Road: '+esc(v.road||'unknown')+' · Parking: '+esc(v.parking||'unknown')+'</p><p>'+esc(v.managerQuestion||'Contact the land manager for winter access')+'</p></div>';
+  }
   const checks=[...(outcome.verification||[]),...(outcome.blockers||[])];
   if(!checks.length)checks.push('Specific winter lot, access road and walking route still require direct land-manager confirmation');
   if(a.status!=='verified'&&!checks.some(x=>/alert/i.test(x)))checks.push('Current NWS alert check failed');
