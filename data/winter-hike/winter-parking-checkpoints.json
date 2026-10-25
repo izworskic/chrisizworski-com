@@ -30,7 +30,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-922-5280"
     },
     {
       "id": "hartwick-visitor",
@@ -55,7 +56,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "989-348-7068"
     },
     {
       "id": "tahquamenon-upper",
@@ -81,7 +83,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "906-492-3415"
     },
     {
       "id": "tahquamenon-lower",
@@ -107,7 +110,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "906-492-3415"
     },
     {
       "id": "spring-brook",
@@ -132,7 +136,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-582-7523"
     },
     {
       "id": "sleepbear-alligator",
@@ -159,7 +164,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-326-4700"
     },
     {
       "id": "sleepbear-old-indian",
@@ -185,7 +191,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-326-4700"
     },
     {
       "id": "sleepbear-windy",
@@ -210,7 +217,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-326-4700"
     },
     {
       "id": "sleepbear-good-harbor",
@@ -235,7 +243,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "231-326-4700"
     },
     {
       "id": "baycity-tobico",
@@ -261,7 +270,8 @@
       "winterParkingVerified": false,
       "parkingEntranceCoordinates": null,
       "drivingDirectionsEnabled": false,
-      "operationalObservations": []
+      "operationalObservations": [],
+      "managerPhone": "989-684-3020"
     }
   ]
 }
