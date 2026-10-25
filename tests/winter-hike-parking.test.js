@@ -15,7 +15,7 @@ function row(kind,status='open',override={}){
    effectiveFrom:DAY,effectiveThrough:'2027-01-16',
    namedRouteConfirmed:true,roadMaintenanceConfirmed:true,plowedConfirmed:true,
    parkingEntranceConfirmed:true,
-   waypoint:{kind:'winter-parking-lot',lat:44.7509,lon:-85.4934},
+   waypoint:{kind:'winter-parking-lot',managerLotName:'Bartlett Road snowshoe lot entrance',lat:44.7509,lon:-85.4934},
    ...override};
 }
 function apiResponse(){
@@ -76,7 +76,9 @@ test('old, future, off-season, forged, mixed-route and non-specific assertions a
  {plowedConfirmed:false},
  {parkingEntranceConfirmed:false},
  {waypoint:{kind:'dnr-gis-point',lat:44.7509,lon:-85.4934}},
- {waypoint:{kind:'winter-parking-lot',lat:0,lon:0}},
+ {waypoint:{kind:'winter-parking-lot',managerLotName:'Nonexistent lot',lat:0,lon:0}},
+ {waypoint:{kind:'winter-parking-lot',managerLotName:'wrong site, far away',lat:47,lon:-89}},
+ {waypoint:{kind:'winter-parking-lot',managerLotName:'',lat:44.7509,lon:-85.4934}},
  ])assert.equal(Parking.validateObservation(row('parking','open',q),site,route,DAY,NOW),false,
    'invalid record accepted '+JSON.stringify(q));
  assert.equal(Parking.seasonOf('2027-01-15'),'2026-27');
@@ -107,7 +109,8 @@ test('closures and contradictions prevent positive access even with three other 
 test('NPS evidence cannot be satisfied by a DNR page, or vice versa',()=>{
  const site=Parking.registry.checkpoints.find(s=>s.id==='sleepbear-alligator'),trail=site.routeIds[0];
  const nps={...row('parking'),checkpointId:site.id,routeId:trail,
-  sourceUrl:'https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm'};
+  sourceUrl:'https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm',
+  waypoint:{kind:'winter-parking-lot',managerLotName:'Stocking Drive trailhead lot',lat:44.8896,lon:-86.0215}};
  assert.equal(Parking.validateObservation(nps,site,trail,DAY,NOW),true);
  assert.equal(Parking.validateObservation({...nps,sourceUrl:SOURCE},site,trail,DAY,NOW),false);
  assert.equal(Parking.validateObservation({...row('parking'),sourceUrl:nps.sourceUrl},
