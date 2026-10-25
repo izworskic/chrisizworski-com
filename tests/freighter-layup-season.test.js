@@ -53,3 +53,10 @@ test('November rollover respects America/Detroit midnight and keeps the new wint
  const b=m.rollover(a,'2027-28');
  assert.equal(b.events.length,0);assert.equal(b.previousSeasons[0].events.length,1);
 });
+
+test('out-of-order departure or maintenance needs an established same-winter arrival',()=>{
+ const missing={...event,kind:'departure',date:'2027-02-02',summary:'Reported departure'};
+ assert.throws(()=>m.addEvidence(empty,missing,'2027-02-03T12:00:00Z'),/requires a dated arrival/);
+ const previous=m.addEvidence(empty,event,'2027-01-15T12:00:00Z').ledger;
+ assert.equal(m.addEvidence(previous,missing,'2027-02-03T12:00:00Z').changed,true);
+});
