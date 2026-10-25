@@ -4,6 +4,10 @@ on:
     # UTC, four source scans daily during Nov–Apr; no weather/ship writes outside winter.
     - cron: '29 0,6,12,18 * 11,12,1,2,3,4 *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'data/freighter-layup-editorial.json'
 permissions:
   contents: write
 concurrency:
