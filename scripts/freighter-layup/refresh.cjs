@@ -9,7 +9,9 @@ async function run(){
  const file=path.join(root,'public/assets/freighter-layup-live-season.json'),reviewFile=path.join(root,'data/freighter-layup-review.json');
  const prior=fs.readFileSync(file,'utf8'),ledger=JSON.parse(prior);
  if(!validLedger(ledger))throw Error('Current season ledger failed validation');
- const current=rollover(ledger,season),m=new Date(now).getUTCMonth()+1,scan=m>=11||m<=4;
+ const m=new Date(now).getUTCMonth()+1;
+ const preSeason=m===10&&Number(ledger.season.slice(0,4))===Number(season.slice(0,4))+1&&ledger.events.length===0;
+ const current=preSeason?ledger:rollover(ledger,season),scan=m>=11||m<=4;
  const result=scan?await refresh({ledger:current,archive:JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8')),now}):{ledger:current,changed:false,reviews:[],outcomes:[]};
  const newText=JSON.stringify(result.ledger,null,2)+'\n',changed=newText!==prior;
  const oldReview=fs.existsSync(reviewFile)?JSON.parse(fs.readFileSync(reviewFile,'utf8')):{schemaVersion:1,candidates:[]};
