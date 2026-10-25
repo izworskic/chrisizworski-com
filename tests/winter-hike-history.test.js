@@ -13,26 +13,49 @@ const sample=(year,offset=0,station='USW00014847',snow='5')=>({
  STATION:station,NAME:'TRAVERSE CITY SNOW REPORT',LATITUDE:String(44.75+offset),
  LONGITUDE:'-85.5',DATE:year+'-02-15',SNWD:snow,SNWD_ATTRIBUTES:',,W,0700'
 });
+const searchResult={results:[{
+ boundingPoints:[{coordinates:[-85.5,44.75]}],
+ stations:[{id:'USW00014847',name:'TRAVERSE CITY SNOW REPORT',
+  dataTypes:[{id:'SNWD',coverage:98}]}]
+}]};
 const mock=(map)=>async url=>{
- const params=new URL(url).searchParams,year=params.get('startDate').slice(0,4);
+ const u=new URL(url),year=u.searchParams.get('startDate').slice(0,4);
+ if(u.pathname.includes('/search/'))return {ok:true,text:async()=>JSON.stringify(searchResult)};
  if(Object.hasOwn(map,year)&&map[year]==='fail')return {ok:false,status:503};
  return {ok:true,text:async()=>JSON.stringify(map[year]||[])};
 };
-test('source URL is NOAA-only and bounded to route area, week, data type and station coordinates',()=>{
+test('station search uses NOAA metadata endpoint, and SNWD read requires a valid station',()=>{
  const url=new URL(H.requestUrl(point,2025,'02-15'));
  assert.equal(url.origin,'https://www.ncei.noaa.gov');
- assert.equal(url.pathname,'/access/services/data/v1');
+ assert.equal(url.pathname,'/access/services/search/v1/data');
  assert.equal(url.searchParams.get('dataset'),'daily-summaries');
  assert.equal(url.searchParams.get('dataTypes'),'SNWD');
- assert.equal(url.searchParams.get('units'),'standard');
- assert.equal(url.searchParams.get('format'),'json');
- assert.equal(url.searchParams.get('includeStationLocation'),'true');
- assert.equal(url.searchParams.get('includeAttributes'),'true');
  assert.equal(url.searchParams.get('startDate'),'2025-02-12');
  assert.equal(url.searchParams.get('endDate'),'2025-02-18');
  assert.equal(url.searchParams.get('bbox').split(',').length,4);
+ assert.equal(url.searchParams.get('stations'),null);
+ const stationUrl=new URL(H.stationRequestUrl('USW00014847',2025,'02-15'));
+ assert.equal(stationUrl.pathname,'/access/services/data/v1');
+ assert.equal(stationUrl.searchParams.get('stations'),'USW00014847');
+ assert.equal(stationUrl.searchParams.get('units'),'standard');
+ assert.equal(stationUrl.searchParams.get('format'),'json');
+ assert.equal(stationUrl.searchParams.get('includeStationLocation'),'true');
+ assert.equal(stationUrl.searchParams.get('includeAttributes'),'true');
+ assert.throws(()=>H.stationRequestUrl('INJECT;',2025,'02-15'));
  assert.throws(()=>H.requestUrl({lat:0,lon:0},2025,'02-15'));
  assert.throws(()=>H.requestUrl(point,2025,'evil'));
+});
+test('search metadata filters out wrong-area and no-SNWD station candidates',()=>{
+ const results={results:[
+  {boundingPoints:[{coordinates:[-85.5,44.75]}],
+   stations:[{id:'USW00014847',name:'Valid',dataTypes:[{id:'SNWD',coverage:95}]}]},
+  {boundingPoints:[{coordinates:[-89,47.3]}],
+   stations:[{id:'USC00200002',name:'Too distant',dataTypes:[{id:'SNWD',coverage:99}]}]},
+  {boundingPoints:[{coordinates:[-85.4,44.75]}],
+   stations:[{id:'USC00200003',name:'No snow depth',dataTypes:[{id:'PRCP',coverage:99}]}]}
+ ]};
+ const list=H.candidateStations(results,point);
+ assert.equal(list.length,1);assert.equal(list[0].id,'USW00014847');
 });
 test('one NOAA station is retained across four winters and real zeros are not missing',async()=>{
  const calls=[];
@@ -43,7 +66,9 @@ test('one NOAA station is retained across four winters and real zeros are not mi
   2023:[sample(2023,0,'USW00014847','3')]
  })(url)};
  const result=await H.historyForRoute(route,'02-15',{fetcher,now:NOW});
- assert.equal(calls.length,4);
+ assert.equal(calls.length,5);
+ assert.ok(calls[0].url.includes('/search/v1/data'));
+ assert.ok(calls.slice(1).every(c=>new URL(c.url).searchParams.get('stations')==='USW00014847'));
  assert.deepEqual(result.years.map(y=>y.year),[2026,2025,2024,2023]);
  assert.equal(result.kind,'NOAA_NCEI_GHCN_DAILY_SNOW_DEPTH_STATION_OBSERVATIONS');
  assert.equal(result.station.id,'USW00014847');
