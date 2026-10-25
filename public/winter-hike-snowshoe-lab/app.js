@@ -62,6 +62,7 @@
  function pick(id,scroll=false){
   const route=state.routes.find(r=>r.id===id);if(!route)return;
   state.selected=route;renderCards();drawAreas();drawLines([]);
+  window.WinterHikeSatelliteUI?.selected(route);
   $('detail-title').textContent=route.title;
   $('detail-intro').textContent=(route.summary||'Named official route.')+' Snow, road and parking conditions are checked separately.';
   let caveats=(route.caveats||[]).map(t=>'<li>'+esc(t)+'</li>').join('');
@@ -220,8 +221,14 @@
        paint:{'circle-radius':7,'circle-color':'#1752b0',
          'circle-stroke-color':'#fff','circle-stroke-width':3}});
      drawAreas();drawUserLocation();
+     window.WinterHikeSatelliteUI?.attach(map);
     });
-    map.on('error',()=>{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}});
+    map.on('error',error=>{
+     if(error?.sourceId==='historic-modis'){window.WinterHikeSatelliteUI?.reportTileError();return}
+     // A historical overlay tile must NEVER trigger a basemap restart, which
+     // used to reset CARTO position and the selected destination.
+     if(!state.mapLoaded&&carto&&!hasFallback){hasFallback=true;start(FREE,false)}
+    });
    }catch{if(carto&&!hasFallback){hasFallback=true;start(FREE,false)}else mapFallback('Map failed to initialize')}
   };
   fetch('/api/carto-basemap-config',{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null)
@@ -230,6 +237,7 @@
  }
  async function init(){
   day();
+  window.WinterHikeSatelliteUI?.init();
   window.WinterHikeVisuals?.bind($('detail'),{
    onDayChange(value){
     const input=$('day');
