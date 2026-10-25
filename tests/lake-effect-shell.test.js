@@ -28,7 +28,7 @@ test("winter network keeps future snow, observed depth and trail readiness separ
  const xc=read("public/michigan-cross-country-skiing/index.html");
  const downhill=read("public/michigan-ski-hills/index.html");
  const sled=read("public/snowmobile/index.html");
- assert.match(snowbelt,/lake-effect\.js\?v=20261025-1/);
+ assert.match(snowbelt,/lake-effect\.js\?v=20261025-2/);
  assert.match(snowbelt,/michigan-cross-country-skiing/);
  assert.match(snowbelt,/michigan-ski-hills/);
  assert.match(snowbelt,/snowmobile\//);
@@ -36,7 +36,9 @@ test("winter network keeps future snow, observed depth and trail readiness separ
  assert.match(xc,/href="\/lake-effect-snow\/"/);
  assert.match(downhill,/href="\/lake-effect-snow\/"/);
  assert.match(sled,/href="\/lake-effect-snow\/"/);
- assert.match(sled,/Forecast snow and favorable winds cannot establish open trails/);
+ assert.match(sled,/None alone establishes open trails/);
+ assert.match(depth,/Nearby snowfall reports describe what an observer measured/);
+ assert.match(snowbelt,/Three evidence layers, not one/);
  assert.match(xc,/verify grooming/i);
  assert.doesNotMatch(snowbelt,/snow_inches|predicted snowband track/i);
 });
