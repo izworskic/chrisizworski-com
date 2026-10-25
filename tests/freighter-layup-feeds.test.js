@@ -30,3 +30,22 @@ test('generic winter port roundups without named-ship headlines require source r
  const d=f.classify(item,source,known,'2026-27');
  assert.equal(d.reason,'review');assert.equal(d.review.why,'ship_not_explicit_in_headline');
 });
+
+
+test('twelve verified RSS/Atom endpoints and separate human-review tiers are declared',()=>{
+ const names=new Set(f.SOURCES.map(s=>s.id));
+ assert.equal(f.SOURCES.length,12);
+ assert.equal(names.size,12);
+ for(const s of f.SOURCES){assert.match(s.url,/^https:\/\//);assert.ok(s.host);assert.ok(['publish','review'].includes(s.mode));}
+ for(const id of ['interlake','hopa-news','thunder-bay-port','cleveland-port','shipwatcher','great-lakes-now','marinelink'])assert.ok(names.has(id),id);
+ assert.equal(f.SOURCE_CATALOG.externalBoards.length,1);
+});
+test('a newspaper story that otherwise matches stays in source review, not the public ledger',async()=>{
+ const src=f.SOURCES.find(s=>s.id==='boatnerd-news');
+ const rss='<rss><item><title>Lee A Tregurtha arrived in Duluth for winter layup</title><link>https://www.boatnerd.com/winter-report/</link><pubDate>Mon, 15 Feb 2027 11:00:00 GMT</pubDate><description>Lee A Tregurtha arrived in Duluth for winter layup.</description></item></rss>';
+ const fetcher=async url=>url===src.url?{ok:true,text:async()=>rss}:{ok:false,status:503};
+ const archive={seasons:[{records:[{id:'lee-a-tregurtha',name:'Lee A. Tregurtha',identity:{key:'lee-a-tregurtha'},aliases:[]}]}]};
+ const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-02-16T12:00:00Z'});
+ assert.equal(result.ledger.events.length,0);
+ assert.ok(result.reviews.some(r=>r.url==='https://www.boatnerd.com/winter-report/'&&r.why==='editorial_review_required'));
+});

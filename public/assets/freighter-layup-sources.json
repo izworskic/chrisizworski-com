@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "seasonReportingFrequency": "Four checks per day, November through April. Publication requires source-dated evidence; incomplete coverage.",
+  "sources": [
+    {
+      "id": "duluth-cam",
+      "publisher": "Duluth Harbor Cam",
+      "url": "https://www.duluthharborcam.com/feeds/posts/default?alt=json&max-results=75",
+      "homepage": "https://www.duluthharborcam.com/",
+      "host": "www.duluthharborcam.com",
+      "sourceClass": "journalistic_report",
+      "format": "blogger",
+      "mode": "publish",
+      "region": "Lake Superior · Duluth/Superior",
+      "role": "Harbor reporting"
+    },
+    {
+      "id": "wmhs",
+      "publisher": "Wisconsin Marine Historical Society",
+      "url": "https://wmhs.org/feed/",
+      "homepage": "https://wmhs.org/",
+      "host": "wmhs.org",
+      "sourceClass": "maritime_historical_society",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Wisconsin · Lake Michigan",
+      "role": "Maritime documentation"
+    },
+    {
+      "id": "duluth-port",
+      "publisher": "Duluth Seaway Port Authority",
+      "url": "https://duluthport.com/feed/",
+      "homepage": "https://duluthport.com/news/",
+      "host": "duluthport.com",
+      "sourceClass": "port_authority",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Lake Superior · Duluth/Superior",
+      "role": "Port authority"
+    },
+    {
+      "id": "owen-museum",
+      "publisher": "Community Waterfront Heritage Centre",
+      "url": "https://waterfrontheritage.ca/feed/",
+      "homepage": "https://waterfrontheritage.ca/",
+      "host": "waterfrontheritage.ca",
+      "sourceClass": "local_maritime_museum",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Georgian Bay · Owen Sound",
+      "role": "Canadian maritime museum"
+    },
+    {
+      "id": "interlake",
+      "publisher": "Interlake Steamship",
+      "url": "https://www.interlakesteamship.com/feed/",
+      "homepage": "https://www.interlakesteamship.com/media/newsroom/",
+      "host": "www.interlakesteamship.com",
+      "sourceClass": "operator",
+      "format": "rss",
+      "mode": "publish",
+      "region": "U.S. Great Lakes fleet",
+      "role": "Vessel operator"
+    },
+    {
+      "id": "hopa-news",
+      "publisher": "HOPA Ports",
+      "url": "https://www.hopaports.ca/feed/",
+      "homepage": "https://www.hopaports.ca/news/",
+      "host": "www.hopaports.ca",
+      "sourceClass": "port_authority",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Ontario · Hamilton/Oshawa",
+      "role": "Canadian port authority"
+    },
+    {
+      "id": "thunder-bay-port",
+      "publisher": "Thunder Bay Port Authority",
+      "url": "https://portofthunderbay.ca/feed/",
+      "homepage": "https://portofthunderbay.ca/",
+      "host": "portofthunderbay.ca",
+      "sourceClass": "port_authority",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Canada · Lake Superior",
+      "role": "Canadian port authority"
+    },
+    {
+      "id": "cleveland-port",
+      "publisher": "Port of Cleveland",
+      "url": "https://www.portofcleveland.com/feed/",
+      "homepage": "https://www.portofcleveland.com/newsroom/",
+      "host": "www.portofcleveland.com",
+      "sourceClass": "port_authority",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Ohio · Lake Erie",
+      "role": "U.S. port authority"
+    },
+    {
+      "id": "boatnerd-news",
+      "publisher": "BoatNerd News",
+      "url": "https://www.boatnerd.com/category/news/feed/",
+      "homepage": "https://www.boatnerd.com/",
+      "host": "www.boatnerd.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "All Great Lakes",
+      "role": "Maritime reporting"
+    },
+    {
+      "id": "shipwatcher",
+      "publisher": "Shipwatcher News",
+      "url": "https://shipwatcher-news.com/feed/",
+      "homepage": "https://shipwatcher-news.com/newsfeed/",
+      "host": "shipwatcher-news.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "All Great Lakes",
+      "role": "Shipwatcher reporting"
+    },
+    {
+      "id": "great-lakes-now",
+      "publisher": "Great Lakes Now",
+      "url": "https://greatlakesnow.org/feed/",
+      "homepage": "https://www.greatlakesnow.org/",
+      "host": "greatlakesnow.org",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Great Lakes region",
+      "role": "Regional journalism"
+    },
+    {
+      "id": "marinelink",
+      "publisher": "MarineLink",
+      "url": "https://www.marinelink.com/news/rss",
+      "homepage": "https://www.marinelink.com/",
+      "host": "www.marinelink.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Maritime industry",
+      "role": "Industry news"
+    }
+  ],
+  "externalBoards": [
+    {
+      "name": "Hamilton port vessel-status board",
+      "url": "https://www.hopaports.ca/locations/port-of-hamilton/vessel-tracking/",
+      "publisher": "HOPA Ports",
+      "region": "Hamilton Harbour, Ontario",
+      "description": "Official arrivals, departures and explicit LAY-UP cargo status. This board is linked as an external reference; it is not treated as a continuously ingested layup feed."
+    }
+  ]
+}
