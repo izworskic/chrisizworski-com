@@ -73,6 +73,7 @@
     '<p><strong>Published location clue:</strong> '+esc(p.parkingHint||'not available')+'</p>'+
     '<p><strong>Road approach:</strong> '+esc(p.roadHint||'not available')+'</p>'+
     '<p><strong>What to ask the manager:</strong> '+esc(p.managerQuestion||'Verify current trail, road and plowed lot conditions')+'</p>'+
+    (p.managerPhone?'<p><a href="tel:'+esc(String(p.managerPhone).replace(/[^0-9]/g,''))+'">Call land manager: '+esc(p.managerPhone)+'</a></p>':'')+
     '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>':'';
   const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival checklist — '+esc(tracked?'manager confirmation required':'research not yet completed')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
