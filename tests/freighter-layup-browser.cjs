@@ -40,7 +40,18 @@ async function run(){
       const page=await context.newPage(),pageErrors=[];
       page.on('pageerror',err=>pageErrors.push(err.message));
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
-      await page.locator('[data-ship]').first().waitFor({timeout:10000});
+      try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
+      catch(err){
+       console.error('LAYUP BOOT DEBUG',JSON.stringify({
+         errors:pageErrors,
+         countNote:await page.locator('#count-note').textContent().catch(()=>null),
+         mapStatus:await page.locator('#map-status').textContent().catch(()=>null),
+         fleetHTML:(await page.locator('#ship-grid').innerHTML().catch(()=>'' )).slice(0,430),
+         scripts:await page.evaluate(()=>[...document.scripts].filter(x=>x.src).map(x=>({src:x.src}))).catch(()=>[]),
+         season:await page.locator('#season').inputValue().catch(()=>null),
+       }));
+       throw err;
+      }
       check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
       check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
