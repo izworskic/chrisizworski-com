@@ -194,3 +194,14 @@ test('distant NOAA stations provide historical context but not local snowshoe we
  assert.ok(data.weeks.every(w=>w.status!=='historically-frequent-6in-station-snow'));
  assert.equal(data.parkingVerified,false);
 });
+
+test('NOAA search outage is distinct from a valid search with no nearby station',async()=>{
+ const down=await Season.fullSeasonForRoute(route,{fetcher:async()=>({ok:false,status:503}),now:NOW});
+ assert.equal(down.status,'source-unavailable');
+ assert.equal(down.station,null);
+ assert.deepEqual(down.weeks,[]);
+ assert.equal(down.parkingVerified,false);
+ const empty=await Season.fullSeasonForRoute(route,{
+  fetcher:async()=>({ok:true,text:async()=>JSON.stringify({results:[]})}),now:NOW});
+ assert.equal(empty.status,'no-nearby-qualified-station');
+});
