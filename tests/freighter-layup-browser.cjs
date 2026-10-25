@@ -155,6 +155,7 @@ async function run(){
 
 
       await page.goto(url,{waitUntil:'domcontentloaded'});
+      await page.locator('#season').selectOption('2025-26');
       await page.locator('[data-ship]').first().waitFor({timeout:10000});
       check(await page.locator('label[for="ship-search"]').count()===1,size.name+': search label');
       check(await page.locator('a.skip').count()===1,size.name+': keyboard skip link');
