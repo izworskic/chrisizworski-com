@@ -96,9 +96,10 @@ test('historical WMTS UI changes date, overlay and opacity without enabling navi
  vm.runInNewContext(read('satellite-ui.js'),ctx,{filename:'satellite-ui.js'});
  const ui=ctx.window.WinterHikeSatelliteUI;
  assert.ok(ui);
- const sources=new Map(),layers=new Map(),calls=[];
+ const sources=new Map(),layers=new Map([['winter-area-ring',{id:'winter-area-ring'}]]),calls=[];
  const map={
-  isStyleLoaded:()=>true,
+  // Map is initialized with route layers, but basemap raster is still pending.
+  isStyleLoaded:()=>false,
   getSource:id=>sources.get(id),getLayer:id=>layers.get(id),
   addSource(id,config){sources.set(id,config);calls.push('add-source')},
   addLayer(config,before){layers.set(config.id,config);calls.push('add-layer:'+before)},
