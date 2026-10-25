@@ -10,6 +10,7 @@ on:
       - 'api/freighter-layup-live.js'
       - 'lib/freighter-layup-season.js'
       - 'lib/freighter-layup-feeds.js'
+      - 'public/assets/freighter-layup-sources.json'
       - 'scripts/freighter-layup/**'
       - '.github/workflows/freighter-layup-source-watch.yml'
       - 'lib/freighter-layup-profile-render.cjs'
