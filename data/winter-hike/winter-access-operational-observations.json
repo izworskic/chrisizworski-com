@@ -1,0 +1,6 @@
+{
+  "schema": "winter-access-operational-observations-v1",
+  "season": "2026-27",
+  "description": "Only independently confirmed, route-specific, dated winter manager operational reports. Initial set empty because current winter road, lot, and route maintenance have NOT been established. Do not fill from static park webpages or historic PDFs.",
+  "observations": []
+}
