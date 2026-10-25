@@ -186,7 +186,9 @@ function renderSurveys(value){
    [ ['Ducks',s.ducks],['Geese',s.geese] ].forEach(function(it){
      var p=it[1];if(!p)return;
      var delta=p.status!=='stale'&&Number.isFinite(p.change)?' ('+(p.change>=0?'+':'')+p.change.toLocaleString()+' vs previous week)':'';
+     var evidence=window.WildlifeField?.assess('agency-survey',p.date);
      row.appendChild(DOM('p','survey-count',it[0]+(p.status==='stale'?' (historical, older than 28 days)':'')+': '+p.count.toLocaleString()+' · '+p.date+delta));
+     row.appendChild(DOM('p','explain',(evidence?evidence.confidence+' · '+evidence.ageLabel+' · '+evidence.dateStatus+'. ':'Survey observation date: '+p.date+'. ')+'Managed-area count only, not a forecast or proof of birds at the suggested viewing spot.'));
      if(it[0]==='Ducks'&&(Number.isInteger(p.dabblers)||Number.isInteger(p.divers))){
       var groups=[];
       if(Number.isInteger(p.dabblers))groups.push('Dabblers '+p.dabblers.toLocaleString());
@@ -265,7 +267,7 @@ function renderSightings(s){
  setText('sighting-status',n===0?'No research-grade public records found in the selected area for this period. This is not evidence of absence.':(n===null?'Recent research-grade records':'Research-grade observations in query: '+n+' records (not individual birds)')+'.');
  if(s.sampleMayBeIncomplete)holder.appendChild(DOM('p','explain','The source has more than 100 records; this is a recent sample, not a complete count.'));
  (s.sample||[]).forEach(function(o){
-  var line=DOM('div','sighting');var left=DOM('div');left.appendChild(DOM('strong','',o.species));left.appendChild(DOM('small','',o.date+' · '+o.quality));line.appendChild(left);
+  var line=DOM('div','sighting');var left=DOM('div');left.appendChild(DOM('strong','',o.species));var confidence=window.WildlifeField?.assess('research-community',o.date);left.appendChild(DOM('small','',o.date+' · '+o.quality+' · '+(confidence?confidence.ageLabel+' · '+confidence.confidence:'Observation date not independently verified')+' · broad regional report, not site-confirmed'));line.appendChild(left);
   if(/^https:\/\/www\.inaturalist\.org\/observations\/\d+$/.test(o.sourceUrl)){
    var a=DOM('a','', 'View record ↗');a.href=o.sourceUrl;a.target='_blank';a.rel='noopener noreferrer';line.appendChild(a);
   }
@@ -280,6 +282,7 @@ async function selectRegion(id){
  var r=byId.get(id),token=++request;
  setText('detail-title',r.name);setText('region-habitat',r.habitat);
  renderOverview();
+ if(window.WildlifeField)window.WildlifeField.renderPlaces($('public-viewing-places'),'waterfowl',id);
  renderWeather(r.weather);renderNOAA(r);renderSnowDepth(r.snowDepth);renderHabitat(r.habitatShift);renderSurveys(r.surveys);
  setText('sighting-status','Loading dated public waterfowl observations for '+r.name+'…');
  $('sightings').replaceChildren();
