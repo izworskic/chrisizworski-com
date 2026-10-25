@@ -1,0 +1,89 @@
+{
+  "status": "RESEARCH_ONLY_NO_VERIFIED_WINTER_TRAILHEAD_NAVIGATION",
+  "researchCheckedDate": "2026-10-22",
+  "semantics": "An official park address or map parking symbol is NOT a validated, plowed, usable trailhead parking location for a selected Saturday or Sunday. No direct driving pin should be generated from these records.",
+  "places": [
+    {
+      "key": "muncie-lake",
+      "trailDnrId": "ab8b28dc-14da-4d7e-86ca-d221e0da3466",
+      "destination": "Muncie Lake Pathway",
+      "manager": "Michigan DNR",
+      "officialLink": "https://www.michigan.gov/recsearch/trails/muncie-lake-pathway",
+      "phone": "231-922-5270",
+      "accessEvidence": "DNR directions describe approach via Garfield Avenue, Hammond, High Lake, Supply and Rennie Lake roads, with a reference coordinate. No publication-time guarantee of plowing or winter parking was found.",
+      "referencePoint": {
+        "lat": 44.65728,
+        "lon": -85.44774
+      },
+      "pointPurpose": "DNR destination reference, not independently surveyed parking",
+      "winterParking": {
+        "status": "unverified",
+        "latitude": null,
+        "longitude": null,
+        "plowed": "unverified",
+        "winterRoadOpen": "unverified"
+      },
+      "routingReady": false,
+      "actionNeeded": "Confirm which lot the manager maintains in winter, road plowing, parking availability and cross-country track etiquette."
+    },
+    {
+      "key": "hartwick-old-growth",
+      "trailDnrId": "aee2c187-4fb0-4568-bb0e-615cb7a1ca5f",
+      "destination": "Hartwick Pines - Old Growth Forest Trail",
+      "manager": "Michigan DNR",
+      "officialLink": "https://www.michigan.gov/recsearch/parks/hartwick",
+      "phone": "989-348-2537",
+      "facilityAddress": "Hartwick Pines Visitor Center, 2833 Monarch Drive, Grayling, MI 49738",
+      "facilityAddressSource": "https://www.michigan.gov/mhc/sitecore/content/websites/dnr/home/places/v-centers/hartwick",
+      "facilityWinterHours": "Jan. 2–Apr. 30, Saturdays and Sundays 10 a.m.–4 p.m. according to current published visitor-center hours; hours may change",
+      "facilityHoursNotParking": true,
+      "winterParking": {
+        "status": "unverified",
+        "latitude": null,
+        "longitude": null,
+        "plowed": "unverified",
+        "winterRoadOpen": "unverified"
+      },
+      "routingReady": false,
+      "actionNeeded": "Confirm visitor center and Old Growth Forest Trail winter lot is plowed and accessible; identify exact lot GPS before navigable directions."
+    },
+    {
+      "key": "tahquamenon-lower",
+      "trailDnrId": null,
+      "destination": "Tahquamenon Falls Lower Falls winter snowshoe and walking routes",
+      "manager": "Michigan DNR",
+      "officialLink": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "phone": "906-492-3415",
+      "winterMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf",
+      "historicalMapFinding": "Official winter trail map displays Green Loop 1.6 mi, Blue Loop 2.4 mi, parking and a plowed walking trail/road. The winter map is historical; verify current-season routes, gates and actual maintained lot.",
+      "winterParking": {
+        "status": "unverified",
+        "latitude": null,
+        "longitude": null,
+        "plowed": "historical-map-only",
+        "winterRoadOpen": "unverified"
+      },
+      "routingReady": false,
+      "actionNeeded": "Park manager must identify actual Lower Falls winter day-use entrance/parking and present-day plowing."
+    },
+    {
+      "key": "tahquamenon-upper",
+      "trailDnrId": null,
+      "destination": "Tahquamenon Falls Upper Falls packed walking and snowshoe routes",
+      "manager": "Michigan DNR",
+      "officialLink": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "phone": "906-492-3415",
+      "winterMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_upper_falls_winter_trail_map.pdf",
+      "historicalMapFinding": "Winter map shows parking, packed walking, snowshoe paths and the 1.0 mi Lantern Loop; route to Lower Falls explicitly not maintained in winter.",
+      "winterParking": {
+        "status": "unverified",
+        "latitude": null,
+        "longitude": null,
+        "plowed": "historical-map-only",
+        "winterRoadOpen": "unverified"
+      },
+      "routingReady": false,
+      "actionNeeded": "Verify exact Upper Falls entrance and maintained parking; avoid linking the unmaintained Upper–Lower connection as a winter hike."
+    }
+  ]
+}

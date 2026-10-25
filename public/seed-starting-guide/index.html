@@ -6,7 +6,7 @@
 <title>National Seed Starting Guide, Planting Calendar by Zone</title>
 <meta name="description" content="Interactive seed starting calendar for all USDA hardiness zones 3 to 10. Select your zone to get exact planting dates for vegetables, herbs, and flowers.">
 <link rel="canonical" href="https://chrisizworski.com/seed-starting-guide/">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.linkedin.com/in/chris-izworski-15294510","https://github.com/izworskic","https://www.wikidata.org/wiki/Q138283432","https://www.youtube.com/@izworskic"]},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/seed-starting-guide/","url":"https://chrisizworski.com/seed-starting-guide/","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b, with Michigan Zone 6a detail from Freighter View Farms.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"about":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-10-06","inLanguage":"en-US"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/seed-starting-guide/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Seed Starting Guide","item":"https://chrisizworski.com/seed-starting-guide/"}]},{"@type":"Dataset","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b.","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/seed-starting-guide/#app","name":"Seed Starting Date Calculator","url":"https://chrisizworski.com/seed-starting-guide/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.linkedin.com/in/chris-izworski-15294510","https://github.com/izworskic","https://www.wikidata.org/wiki/Q138283432","https://www.youtube.com/@izworskic"]},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/seed-starting-guide/","url":"https://chrisizworski.com/seed-starting-guide/","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b, with Michigan Zone 6a detail from Freighter View Farms.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"about":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-10-24","inLanguage":"en-US"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/seed-starting-guide/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Seed Starting Guide","item":"https://chrisizworski.com/seed-starting-guide/"}]},{"@type":"Dataset","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b.","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/seed-starting-guide/#app","name":"Seed Starting Date Calculator","url":"https://chrisizworski.com/seed-starting-guide/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}}]}</script>
 <style>
 /* ─── SITE HEADER / NAV ─── */
 .site-header {
@@ -88,11 +88,17 @@ tr:hover td { background:#fafafa; }
 .dir { background:#fff3e0; color:#e65100; }
 .fall{ background:#f3e5f5; color:#6a1b9a; }
 
+.about-seed-starting { margin-top:32px; }
+.about-seed-starting h2 { font-size:1.25rem; color:#2c5f2d; margin:28px 0 10px; }
+.about-seed-starting p { margin:0 0 14px; }
+.zbtn { min-height:44px; min-width:52px; }
 .credit { margin-top:32px; padding:16px 20px; background:#f8f8f8; border-radius:8px; font-size:.88rem; color:#555; }
 .credit a { color:#2c5f2d; text-decoration:none; font-weight:500; }
 .src { font-size:.78rem; color:#aaa; margin-top:20px; }
 
 @media(max-width:640px){
+  .wrap { padding:20px 16px 60px; }
+  .meta { margin-bottom:16px; padding-bottom:12px; }
   h1 { font-size:1.5rem; }
   .frost-strip { grid-template-columns:repeat(2,1fr); }
   .tbtn { padding:8px 12px; font-size:.82rem; }
@@ -124,22 +130,11 @@ tr:hover td { background:#fafafa; }
 <meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 </head>
 <body>
 <header class="site-header">
   <p class="site-title"><a href="/">Chris Izworski</a></p>
-<p>Starting seeds indoors in Michigan requires working with the specific conditions of Zone 6a, a last frost date that typically falls between late April and mid-May, depending on your exact location and the year. Bay City and the Saginaw Bay shoreline run slightly warmer than inland zones, which affects timing.</p>
-<p>This guide covers the sequence from seed selection through transplant, with timing built around the Zone 6a calendar used at <a href="https://freighterviewfarms.com">Freighter View Farms</a> on Saginaw Bay. The interactive tool below works for all USDA zones, select your zone to get crop-specific start dates for vegetables, herbs, and flowers.</p>
-
-<h2>Why Timing Matters More Than Equipment</h2>
-<p>Most seed starting failures come from timing errors, not equipment. Starting tomatoes ten weeks before last frost instead of six produces leggy, root-bound transplants that struggle in the garden. Starting peppers too late means they never reach full production before the first fall frost. Getting the calendar right is more important than having the perfect grow light setup.</p>
-<p>For Zone 6a in Bay City and the Saginaw Bay region, the average last spring frost falls around May 6, though lakeshore locations can be a week earlier and inland spots occasionally later. The interactive planting calendar below uses these frost windows to calculate start dates for each crop. For the full frost date reference for Michigan cities, see the <a href="/michigan-frost-dates/">Michigan frost dates guide</a>.</p>
-
-<h2>Zone 6a Seed Starting Basics</h2>
-<p>Most warm-season crops, tomatoes, peppers, eggplant, need 6 to 10 weeks of indoor growing time before transplanting. Start them under lights in late March or early April for Bay City conditions. Brassicas, broccoli, cabbage, cauliflower, go in earlier, around 6 to 8 weeks before last frost, in mid-March. Squash, cucumbers, and melons need only 3 to 4 weeks indoors; starting them too early produces fast-growing vines that outgrow their containers before the soil warms enough to transplant safely.</p>
-<p>Soil temperature at planting matters as much as air temperature. Tomatoes planted in cold soil stall, they sit without growing until the ground warms above 60°F, and any head start from indoor growing evaporates. Waiting until soil hits 60-65°F, usually two weeks after the last frost date in Zone 6a, produces better results than calendar-based transplanting alone. The <a href="/zone-6a-planting-calendar/">Zone 6a planting calendar</a> covers transplant timing by crop.</p>
-
-<h2>Timing Your Start</h2>
 </header>
 <nav class="site-nav">
   <a href="/about/">About</a>
@@ -153,24 +148,55 @@ tr:hover td { background:#fafafa; }
   <h1>National Seed Starting Guide</h1>
   <div class="meta">Planting calendar for all USDA zones &nbsp;·&nbsp; Compiled by <a href="https://chrisizworski.com">Chris Izworski</a> &nbsp;·&nbsp; Updated April 2026</div>
 
-  <div class="zone-bar">
-    <h2>Select Your Hardiness Zone</h2>
-    <p>Not sure of your zone? <a href="https://planthardiness.ars.usda.gov/" target="_blank" rel="noopener">Look it up on the USDA map →</a></p>
-    <div class="zone-grid" id="zoneBtns"></div>
-    <div class="zone-desc" id="zoneDesc"></div>
-    <div class="zone-note" id="zoneNote"></div>
+  <div class="gk" id="seed-start-tool">
+  <div class="gk-card">
+    <p class="gk-q" id="zoneLabel">Your USDA hardiness zone</p>
+    <div class="zone-grid" id="zoneBtns" role="group" aria-labelledby="zoneLabel"></div>
+    <p class="gk-note">Not sure? <a href="https://planthardiness.ars.usda.gov/" target="_blank" rel="noopener">Look it up on the USDA map</a>, or skip the zone and enter your own last frost date below.</p>
+    <div class="gk-answer" id="ssCard">
+      <span class="gk-badge" id="ssBadge">This week</span>
+      <h2 id="ssTitle">Zone 6a: start tomatoes indoors in late February.</h2>
+      <p id="ssWhy"></p>
+      <ul class="gk-steps" id="ssNow"></ul>
+      <p class="gk-sub" id="ssSoonTitle" hidden>Coming up in the next two weeks</p>
+      <ul class="gk-steps" id="ssSoon"></ul>
+      <dl class="gk-facts" id="ssFacts"></dl>
+      <p class="gk-note" id="ssMichigan" hidden>In Michigan? <a href="/zone-6a-planting-calendar/">Use your nearest of 78 frost stations</a> for dates that fit your town, not just your zone.</p>
+      <span class="gk-visually-hidden" id="ssLive" role="status" aria-live="polite"></span>
+    </div>
+    <div class="gk-controls" style="margin-top:16px">
+      <div class="gk-field"><label for="ssLF">Or your own last frost date</label><input type="date" id="ssLF"></div>
+    </div>
+    <p class="gk-note" id="zoneNote"></p>
+    <div class="gk-chart">
+      <h3>Your seed-starting season</h3>
+      <p class="gk-note">Each bar is a window counted from your last frost date. Tap a crop for its dates.</p>
+      <div class="gk-filter" id="ssTabs" role="group" aria-label="Show crops"><button type="button" data-tab="veg" aria-pressed="true">Vegetables</button><button type="button" data-tab="herbs" aria-pressed="false">Herbs</button><button type="button" data-tab="flowers" aria-pressed="false">Flowers</button><button type="button" data-tab="warm" aria-pressed="false">Warm-season</button></div>
+      <div id="ssLegend"></div>
+      <svg id="ssTimeline" role="group" aria-label="Seed starting windows by crop; the same dates are in the table below"></svg>
+    </div>
+    <div class="gk-answer info" id="ssCropCard" hidden><span class="gk-badge">Crop</span><h3 class="gk-title" id="ssCropTitle"></h3><ul class="gk-steps" id="ssCropSteps"></ul><p id="ssCropNote"></p></div>
+    <div class="tbl-wrap" id="tableArea"></div>
+    <div class="gk-actions">
+      <button type="button" class="gk-link" id="ssShare">Copy link to this calendar</button>
+      <button type="button" class="gk-link" id="ssIcs">Add these dates to my calendar (.ics)</button>
+    </div>
+    <input id="ssShareOut" class="gk-out" readonly hidden aria-label="Link to this calendar">
+  </div>
   </div>
 
-  <div class="frost-strip" id="frostStrip"></div>
+  <div class="about-seed-starting">
+<p>Starting seeds indoors in Michigan requires working with the specific conditions of Zone 6a, a last frost date that typically falls between late April and mid-May, depending on your exact location and the year. Bay City and the Saginaw Bay shoreline run slightly warmer than inland zones, which affects timing.</p>
+<p>This guide covers the sequence from seed selection through transplant, with timing built around the Zone 6a calendar used at <a href="https://freighterviewfarms.com">Freighter View Farms</a> on Saginaw Bay. The interactive tool below works for all USDA zones, select your zone to get crop-specific start dates for vegetables, herbs, and flowers.</p>
 
-  <div class="tabs">
-    <button class="tbtn active" onclick="showTab('veg',this)">Vegetables</button>
-    <button class="tbtn" onclick="showTab('herbs',this)">Herbs</button>
-    <button class="tbtn" onclick="showTab('flowers',this)">Flowers</button>
-    <button class="tbtn" onclick="showTab('warm',this)">Warm-Season</button>
+<h2>Why Timing Matters More Than Equipment</h2>
+<p>Most seed starting failures come from timing errors, not equipment. Starting tomatoes ten weeks before last frost instead of six produces leggy, root-bound transplants that struggle in the garden. Starting peppers too late means they never reach full production before the first fall frost. Getting the calendar right is more important than having the perfect grow light setup.</p>
+<p>For Zone 6a in Bay City and the Saginaw Bay region, the average last spring frost falls around May 6, though lakeshore locations can be a week earlier and inland spots occasionally later. The interactive planting calendar below uses these frost windows to calculate start dates for each crop. For the full frost date reference for Michigan cities, see the <a href="/michigan-frost-dates/">Michigan frost dates guide</a>.</p>
+
+<h2>Zone 6a Seed Starting Basics</h2>
+<p>Most warm-season crops, tomatoes, peppers, eggplant, need 6 to 10 weeks of indoor growing time before transplanting. Start them under lights in late March or early April for Bay City conditions. Brassicas, broccoli, cabbage, cauliflower, go in earlier, around 6 to 8 weeks before last frost, in mid-March. Squash, cucumbers, and melons need only 3 to 4 weeks indoors; starting them too early produces fast-growing vines that outgrow their containers before the soil warms enough to transplant safely.</p>
+<p>Soil temperature at planting matters as much as air temperature. Tomatoes planted in cold soil stall, they sit without growing until the ground warms above 60°F, and any head start from indoor growing evaporates. Waiting until soil hits 60-65°F, usually two weeks after the last frost date in Zone 6a, produces better results than calendar-based transplanting alone. The <a href="/zone-6a-planting-calendar/">Zone 6a planting calendar</a> covers transplant timing by crop.</p>
   </div>
-
-  <div class="tbl-wrap" id="tableArea"></div>
 
   <div class="credit">
     Data compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist, and gardener based in Bay City, Michigan on Saginaw Bay. Related guides: <a href="https://chrisizworski.com/heirloom-seed-saving-guide/">Heirloom Seed Saving Guide</a> · <a href="https://chrisizworski.com/michigan-native-plants/">Michigan Native Plants</a> · <a href="https://chrisizworski.com/zone-6a-planting-calendar/">Zone 6a Planting Calendar</a>
@@ -178,6 +204,7 @@ tr:hover td { background:#fafafa; }
   <div class="src">Sources: USDA ARS Plant Hardiness Zone Map; Cornell Cooperative Extension; University of Minnesota Extension; Oregon State University Extension; Old Farmer's Almanac frost database; Seed Savers Exchange; Johnny's Selected Seeds variety trials.</div>
 </div>
 
+<script src="/assets/garden-tools/garden-kit.js"></script>
 <script>
 const ZONES = {
   "3a": { last:"May 25", first:"Sep 1",  days:99,  states:"Northern MN, ND, western MT, northern ME", note:"Very short season. Focus on cold-tolerant crops and fast-maturing varieties. Row covers and cold frames are essential tools." },
@@ -186,7 +213,7 @@ const ZONES = {
   "4b": { last:"May 5",  first:"Sep 22", days:140, states:"Southern WI, Michigan UP, northern NY/VT, northern ID/WA", note:"Moderate-short season. Most vegetables possible with careful variety selection. Perennials need heavy winter mulching." },
   "5a": { last:"Apr 28", first:"Oct 1",  days:156, states:"Northern IL/IN/OH, central MI, central NY, northern NE/CO", note:"Moderate season. Wide variety selection possible. Most perennial herbs survive with mulching." },
   "5b": { last:"Apr 20", first:"Oct 8",  days:171, states:"Chicago area, central MI, southern NY/PA, Denver area", note:"Good season length. Most vegetables succeed. Eggplant and peppers prefer warm, sheltered spots." },
-  "6a": { last:"May 10", first:"Oct 5",  days:148, states:"Central MI, central PA/NJ, southern NY, northern MO/KS", note:"Productive zone, Bay City / Saginaw Bay area. Most vegetables thrive. Lakeshore microclimates can extend the season." },
+  "6a": { last:"Apr 18", first:"Oct 15", days:180, states:"Central MI, central PA/NJ, southern NY, northern MO/KS", note:"Productive zone. Most vegetables thrive. In Michigan the local frost date matters more than the zone: Bay City's median last frost is May 2." },
   "6b": { last:"Apr 15", first:"Oct 22", days:190, states:"Southern MI, PA, NJ, OH, central MO/KS, central CO", note:"Excellent growing zone. Long season allows succession plantings. Most Mediterranean herbs overwinter with light protection." },
   "7a": { last:"Apr 5",  first:"Nov 1",  days:209, states:"VA, TN, NC, AR, northern TX/OK, Pacific NW coast, NM", note:"Long season. Two full vegetable seasons possible spring and fall. Heat-tolerant varieties important for summer crops." },
   "7b": { last:"Mar 25", first:"Nov 15", days:235, states:"Central VA/NC/TN, Willamette Valley OR, northern TX", note:"Long season. Fall gardens highly productive. Garlic planted October. Some vegetables overwinter with protection." },
@@ -274,82 +301,90 @@ const CROPS = {
   ],
 };
 
-let zone = "6a", tab = "veg";
+/* Answer first: what to start this week for your zone (or your own frost date), a season
+ * timeline, and the full table. Browser only; nothing is stored or sent. */
+(function(){
+  'use strict';
+  var K=window.GardenKit,h=K.h,el=function(id){return document.getElementById(id)};
+  var state={zone:'6a',tab:'veg',lf:null,crop:null};
+  var LABEL={indoor:'Start indoors',transplant:'Plant out',sow:'Sow outside',fall:'Plant in fall'};
+  var VERB={indoor:'Start {c} indoors',transplant:'Plant {c} out',sow:'Sow {c} outside',fall:'Plant {c} in fall'};
+  var METHOD={it:'Indoors, then transplant',d:'Sow outside',e:'Indoors or outside',t:'Transplant',f:'Plant in fall'};
+  function low(n){return n.toLowerCase().replace(/\s*\((bush|pole)\)/,' ($1)')}
+  function anchors(){var z=ZONES[state.zone];return {spring:state.lf!==null?state.lf:K.parse(z.last),fall:K.parse(z.first)}}
+  function wins(c,a){
+    var out=[],wk=function(w){return Math.round(w*7)};
+    if(c.i)out.push({kind:'indoor',from:a.spring+wk(c.i[0]),to:a.spring+wk(c.i[1])});
+    if(c.t)out.push({kind:'transplant',from:a.spring+wk(c.t[0]),to:a.spring+wk(c.t[1])});
+    if(c.d)out.push({kind:'sow',from:a.spring+wk(c.d[0]),to:a.spring+wk(c.d[1])});
+    if(c.m==='f')out.push({kind:'fall',from:a.fall,to:a.fall+21});
+    return out.map(function(w){return {kind:w.kind,from:K.wrapDay(w.from),to:K.wrapDay(w.to)}});
+  }
+  function inside(d,w){return w.from<=w.to?d>=w.from&&d<=w.to:d>=w.from||d<=w.to}
+  function until(d,w){return ((w.from-d)%365+365)%365}
+  function all(){var o=[];Object.keys(CROPS).forEach(function(k){CROPS[k].forEach(function(c){o.push(c)})});return o}
+  function plan(a,d,horizon){
+    var now=[],soon=[];
+    all().forEach(function(c){wins(c,a).forEach(function(w){var t=VERB[w.kind].replace('{c}',low(c.n));if(inside(d,w))now.push({c:c,w:w,t:t,left:((w.to-d)%365+365)%365});else if(until(d,w)<=horizon)soon.push({c:c,w:w,t:t,n:until(d,w)})})});
+    now.sort(function(x,y){return x.left-y.left});soon.sort(function(x,y){return x.n-y.n});
+    return {now:now,soon:soon};
+  }
+  function inDays(n){return n===0?'today':n===1?'tomorrow':'in '+n+' days'}
+  function where(){return state.lf!==null?'With a last frost of '+K.fmt(state.lf):'Zone '+state.zone}
 
-function addWks(dateStr, wks) {
-  const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-  const [m,d] = dateStr.split(" ");
-  const base = new Date(2026, months[m], +d);
-  base.setDate(base.getDate() + Math.round(wks*7));
-  return base.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-}
-
-function rng(dateStr, w1, w2) {
-  if (w1==null) return ", ";
-  return addWks(dateStr,w1) + " to " + addWks(dateStr,w2);
-}
-
-function buildZones() {
-  const el = document.getElementById('zoneBtns');
-  Object.keys(ZONES).forEach(z => {
-    const b = document.createElement('button');
-    b.className = 'zbtn' + (z===zone?' active':'');
-    b.textContent = z;
-    b.onclick = () => { zone=z; refresh(); document.querySelectorAll('.zbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
-    el.appendChild(b);
-  });
-}
-
-function refresh() {
-  const z = ZONES[zone];
-  document.getElementById('zoneDesc').innerHTML = `<strong>Zone ${zone}:</strong> ${z.states}`;
-  document.getElementById('zoneNote').textContent = z.note;
-  document.getElementById('frostStrip').innerHTML = `
-    <div class="fc"><span class="fc-num">${z.last}</span><span class="fc-lbl">Last Spring Frost</span></div>
-    <div class="fc warm"><span class="fc-num">${z.first}</span><span class="fc-lbl">First Fall Frost</span></div>
-    <div class="fc"><span class="fc-num">${z.days} days</span><span class="fc-lbl">Frost-Free Season</span></div>
-    <div class="fc"><span class="fc-num">Zone ${zone}</span><span class="fc-lbl">USDA Zone</span></div>
-  `;
-
-  const methodHTML = {
-    it: '<span class="pill in">Indoors</span> + <span class="pill out">Transplant</span>',
-    d:  '<span class="pill dir">Direct Sow</span>',
-    e:  '<span class="pill in">Indoors</span> or <span class="pill dir">Direct</span>',
-    t:  '<span class="pill out">Transplant</span>',
-    f:  '<span class="pill fall">Fall Plant</span>',
-  };
-
-  const rows = CROPS[tab].map(c => {
-    const lf = z.last;
-    const indoors   = c.i ? rng(lf, c.i[0], c.i[1]) : ", ";
-    const transplant= c.t ? rng(lf, c.t[0], c.t[1]) : ", ";
-    const direct    = c.d ? rng(lf, c.d[0], c.d[1]) : (c.m==='f' ? "Oct (fall)" : ", ");
-    return `<tr>
-      <td><strong>${c.n}</strong></td>
-      <td>${methodHTML[c.m]}</td>
-      <td>${indoors}</td>
-      <td>${transplant}</td>
-      <td>${direct}</td>
-      <td style="font-size:.8rem;color:#777">${c.notes}</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('tableArea').innerHTML = `
-    <table>
-      <tr><th>Crop</th><th>Method</th><th>Start Indoors</th><th>Transplant Outside</th><th>Direct Sow</th><th>Notes</th></tr>
-      ${rows}
-    </table>`;
-}
-
-function showTab(t, btn) {
-  tab=t;
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  refresh();
-}
-
-buildZones();
-refresh();
+  function renderAnswer(a,d){
+    var p=plan(a,d,14),n=p.now.length,z=ZONES[state.zone],card=el('ssCard');
+    if(n){card.className='gk-answer';el('ssBadge').textContent='This week';el('ssTitle').textContent=where()+': '+(n===1?p.now[0].t.charAt(0).toLowerCase()+p.now[0].t.slice(1)+' this week.':n+' jobs are in their window this week.')}
+    else{var nx=plan(a,d,365).soon[0];card.className='gk-answer wait';el('ssBadge').textContent='A quiet week';el('ssTitle').textContent=where()+': nothing to start or sow this week.';
+      el('ssWhy').textContent=nx?'Next up: '+nx.t.charAt(0).toLowerCase()+nx.t.slice(1)+' on '+K.fmt(nx.w.from)+', '+inDays(nx.n)+'.':''}
+    if(n)el('ssWhy').textContent='Counted from a last spring frost of '+K.fmt(a.spring)+(state.lf!==null?', your date.':', typical for zone '+state.zone+'.')+' Zones describe winter cold, so your own frost date is always the better anchor.';
+    var item=function(x){return h('li',null,h('b',null,x.t),'Window '+K.range(x.w.from,x.w.to)+' · '+(x.left===0?'last day today':x.left+' days left'))};
+    el('ssNow').replaceChildren.apply(el('ssNow'),p.now.slice(0,4).map(item).concat(n>4?[h('li',{class:'gk-more'},h('details',null,h('summary',null,'Show '+(n-4)+' more this week'),h('ul',{class:'gk-steps'},p.now.slice(4).map(item))))]:[]));
+    el('ssSoonTitle').hidden=!p.soon.length;
+    el('ssSoon').replaceChildren.apply(el('ssSoon'),p.soon.slice(0,4).map(function(x){return h('li',null,h('b',null,x.t),'Opens '+K.fmt(x.w.from)+', '+inDays(x.n))}));
+    var fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]};
+    el('ssFacts').replaceChildren.apply(el('ssFacts'),[].concat(fx('Last spring frost',K.fmt(a.spring)+(state.lf!==null?' (yours)':' (typical for zone '+state.zone+')')),fx('First fall frost',z.first+' (typical for zone '+state.zone+')'),fx('Frost-free season',K.days(((a.fall-a.spring)%365+365)%365)),fx('Zone '+state.zone,z.states)));
+    el('ssMichigan').hidden=!/^[456]/.test(state.zone);
+    el('zoneNote').textContent=z.note;
+    el('ssLive').textContent=el('ssTitle').textContent;
+  }
+  function renderCrop(a,d){
+    var c=null;all().forEach(function(x){if(x.n===state.crop)c=x});
+    el('ssCropCard').hidden=!c;if(!c)return;
+    el('ssCropTitle').textContent=c.n+', '+where().toLowerCase().replace(/^zone/,'zone');
+    el('ssCropSteps').replaceChildren.apply(el('ssCropSteps'),wins(c,a).map(function(w){return h('li',null,h('b',null,LABEL[w.kind]+': '+K.range(w.from,w.to)),inside(d,w)?'Open now.':'Opens '+K.fmt(w.from)+', '+inDays(until(d,w))+'.')}));
+    el('ssCropNote').textContent=METHOD[c.m]+'. '+c.notes+'.';
+  }
+  function renderTimeline(a,d){
+    K.timeline(el('ssTimeline'),CROPS[state.tab].map(function(c){return {id:c.n,label:c.n,bars:wins(c,a)}}),{spring:a.spring,fall:a.fall,today:d,active:state.crop,onRow:function(id){state.crop=id;render();el('ssCropCard').scrollIntoView({block:'nearest'})}});
+    document.querySelectorAll('#ssTabs button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-tab')===state.tab))});
+  }
+  function renderTable(a){
+    var get=function(c,k){var w=wins(c,a).filter(function(x){return x.kind===k})[0];return w?K.range(w.from,w.to):''};
+    el('tableArea').replaceChildren(h('table',null,h('thead',null,h('tr',null,['Crop','Method','Start indoors','Transplant outside','Sow outside','Notes'].map(function(t){return h('th',null,t)}))),h('tbody',null,CROPS[state.tab].map(function(c){
+      return h('tr',null,h('td',null,h('strong',null,c.n)),h('td',null,METHOD[c.m]),h('td',null,get(c,'indoor')),h('td',null,get(c,'transplant')),h('td',null,c.m==='f'?get(c,'fall')+' (fall)':get(c,'sow')),h('td',{style:'font-size:.8rem;color:#666'},c.notes));
+    }))));
+  }
+  function query(){var q=new URLSearchParams();q.set('zone',state.zone);if(state.lf!==null)q.set('lf',el('ssLF').value);if(state.tab!=='veg')q.set('tab',state.tab);return '?'+q.toString()}
+  function render(){
+    var a=anchors(),d=K.today();
+    document.querySelectorAll('#zoneBtns button').forEach(function(b){var on=b.getAttribute('data-zone')===state.zone;b.className='zbtn'+(on?' active':'');b.setAttribute('aria-pressed',String(on))});
+    renderAnswer(a,d);renderCrop(a,d);renderTimeline(a,d);renderTable(a);
+    if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
+  }
+  var zb=el('zoneBtns');
+  Object.keys(ZONES).forEach(function(z){var b=h('button',{type:'button',class:'zbtn','data-zone':z,'aria-pressed':'false'},z);b.addEventListener('click',function(){state.zone=z;render()});zb.append(b)});
+  el('ssLegend').append(K.legend(['indoor','transplant','sow','fall']));
+  document.querySelectorAll('#ssTabs button').forEach(function(b){b.addEventListener('click',function(){state.tab=b.getAttribute('data-tab');state.crop=null;render()})});
+  el('ssLF').addEventListener('change',function(){state.lf=K.fromISO(el('ssLF').value);render()});
+  el('ssShare').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query()+'#seed-start-tool',el('ssShare'),el('ssShareOut'))});
+  el('ssIcs').addEventListener('click',function(){var a=anchors(),ev=[];CROPS[state.tab].forEach(function(c){wins(c,a).forEach(function(w){ev.push({from:w.from,to:w.to,title:VERB[w.kind].replace('{c}',low(c.n)),note:c.notes+'. '+where()+'. From chrisizworski.com/seed-starting-guide/'})})});K.ics(ev,'seed-starting-zone-'+state.zone+'.ics')});
+  var q=new URLSearchParams(location.search);
+  if(ZONES[q.get('zone')])state.zone=q.get('zone');
+  if(K.fromISO(q.get('lf'))!==null){state.lf=K.fromISO(q.get('lf'));el('ssLF').value=q.get('lf')}
+  if(CROPS[q.get('tab')])state.tab=q.get('tab');
+  render();
+})();
 </script>
 <div style="max-width:860px;margin:0 auto;padding:0 20px">
 <h2 style="color:#2c5f2d">Seed starting in Michigan: the specifics</h2>

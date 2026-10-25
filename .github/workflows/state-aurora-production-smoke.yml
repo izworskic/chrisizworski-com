@@ -115,12 +115,13 @@ jobs:
           echo 'Checking aurora sitemap'
           fetch_retry https://chrisizworski.com/sitemap-aurora-states.xml /tmp/sitemap.xml
           count=$(grep -o '<url>' /tmp/sitemap.xml | wc -l | tr -d ' ')
-          if [ "$count" != '26' ]; then
-            echo "Expected 26 aurora sitemap URLs, got $count"
+          # The committed inventory includes 23 additional park/region destinations.
+          if [ "$count" != '49' ]; then
+            echo "Expected 49 aurora sitemap URLs, got $count"
             cat /tmp/sitemap.xml
             exit 1
           fi
           grep -Fq 'https://chrisizworski.com/northern-lights-michigan/keweenaw/' /tmp/sitemap.xml
           grep -Fq 'https://chrisizworski.com/national-tools/aurora/maine/acadia-national-park/' /tmp/sitemap.xml
 
-          echo 'Aurora production smoke passed: 5 parent engines, 20 child pages, 26 sitemap URLs.'
+          echo 'Aurora production smoke passed: 5 parent engines, 20 child pages, 49 sitemap URLs.'

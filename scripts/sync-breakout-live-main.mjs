@@ -16,6 +16,10 @@ export const BREAKOUT_SLUGS = [
   'lake-powell-ramp-status'
 ];
 
+// Single-purpose tools built outside the breakout-live portfolio config. They are mirrored and routed the same way
+// but are not part of the exactly-ten portfolio check below.
+export const EXTRA_SLUGS = ['mauna-kea-tonight','big-island-beach-day','kona-manta-ray-night','kilauea-episode-watch'];
+const ALL_SLUGS=[...BREAKOUT_SLUGS,...EXTRA_SLUGS];
 const TOOL_SLUGS=BREAKOUT_SLUGS.filter(x=>x!=='live-decisions');
 const CANONICAL_ORIGIN='https://chrisizworski.com';
 const GA4='G-Y5D2V2W7HN';
@@ -26,7 +30,7 @@ const KILAUEA_PLACE='Hawaiʻi Volcanoes National Park · Hawaiʻi';
 const KILAUEA_DECISION='Is Kīlauea worth going to right now, and which viewpoint fits the conditions?';
 
 function routePairs(){
-  return BREAKOUT_SLUGS.flatMap(slug=>{
+  return ALL_SLUGS.flatMap(slug=>{
     const base=`/national-tools/${slug}`;
     const dest=`/synced-national-tools/${slug}/index.html`;
     return [[base,dest],[`${base}/`,dest]];
@@ -61,6 +65,25 @@ function syncKilaueaLiveDecisionDiscovery(targetRoot){
   fs.writeFileSync(file,html,'utf8');
 }
 
+function syncExtraSitemap(targetRoot){
+  const file=path.join(targetRoot,'public','sitemap-breakout-live.xml');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: breakout sitemap missing');
+  let xml=fs.readFileSync(file,'utf8');
+  for(const slug of EXTRA_SLUGS){
+    const loc=`${CANONICAL_ORIGIN}/national-tools/${slug}/`;
+    const page=fs.readFileSync(path.join(targetRoot,'public','synced-national-tools',slug,'index.html'),'utf8');
+    const modified=page.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+    if(!modified) throw new Error(`Breakout sync: ${slug} dateModified missing`);
+    const esc=loc.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const existing=xml.match(new RegExp(`<loc>${esc}</loc><lastmod>(\\d{4}-\\d{2}-\\d{2})</lastmod>`))?.[1];
+    const lastmod=existing&&existing>modified?existing:modified;
+    xml=xml.replace(new RegExp(`\\s*<url><loc>${esc}</loc>[\\s\\S]*?</url>`,'g'),'');
+    xml=xml.replace('</urlset>',`  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>\n</urlset>`);
+    if((xml.match(new RegExp(esc,'g'))||[]).length!==1) throw new Error(`Breakout sync: ${slug} sitemap URL must be unique`);
+  }
+  fs.writeFileSync(file,xml,'utf8');
+}
+
 function syncKilaueaSitemap(targetRoot){
   const file=path.join(targetRoot,'public','sitemap-breakout-live.xml');
   if(!fs.existsSync(file)) throw new Error('Breakout sync: breakout sitemap missing');
@@ -68,8 +91,11 @@ function syncKilaueaSitemap(targetRoot){
   const page=fs.readFileSync(path.join(targetRoot,'public','synced-national-tools','kilauea-live','index.html'),'utf8');
   const modified=page.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
   if(!modified) throw new Error('Breakout sync: Kilauea page dateModified missing');
+  // Never move lastmod backwards: the sitemap can be ahead of the page's JSON-LD date.
+  const existing=xml.match(/<loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc><lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/)?.[1];
+  const lastmod=existing&&existing>modified?existing:modified;
   xml=xml.replace(/\s*<url><loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc>[\s\S]*?<\/url>/g,'');
-  const entry=`  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>${modified}</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n`;
+  const entry=`  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>${lastmod}</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n`;
   if(!xml.includes('</urlset>')) throw new Error('Breakout sync: sitemap closing tag missing');
   xml=xml.replace('</urlset>',entry+'</urlset>');
   if((xml.match(/https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//g)||[]).length!==1) throw new Error('Breakout sync: Kilauea sitemap URL must be unique');
@@ -84,7 +110,7 @@ export function installBreakoutLive(coreDir,targetRoot){
   const expected=[...TOOL_SLUGS].sort();
   if(JSON.stringify(ids)!==JSON.stringify(expected)) throw new Error(`Breakout sync: core portfolio mismatch: ${ids.join(', ')}`);
 
-  for(const slug of BREAKOUT_SLUGS){
+  for(const slug of ALL_SLUGS){
     const src=path.join(coreDir,'public','national-tools',slug,'index.html');
     if(!fs.existsSync(src)) throw new Error(`Breakout sync: generated page missing for ${slug}`);
     const html=fs.readFileSync(src,'utf8');
@@ -99,6 +125,7 @@ export function installBreakoutLive(coreDir,targetRoot){
 
   syncKilaueaLiveDecisionDiscovery(targetRoot);
   syncKilaueaSitemap(targetRoot);
+  syncExtraSitemap(targetRoot);
 
   const vercelPath=path.join(targetRoot,'vercel.json');
   const v=JSON.parse(fs.readFileSync(vercelPath,'utf8'));
@@ -117,7 +144,7 @@ export function installBreakoutLive(coreDir,targetRoot){
     if(v.rewrites.findIndex(r=>r.source===source)>=finalCatch) throw new Error(`Breakout sync: ${source} does not precede catch-all`);
   }
   fs.writeFileSync(vercelPath,JSON.stringify(v,null,2)+'\n');
-  return {pages:BREAKOUT_SLUGS.length,routes:pairs.length};
+  return {pages:ALL_SLUGS.length,routes:pairs.length};
 }
 
 const invoked=fileURLToPath(import.meta.url)===path.resolve(process.argv[1]||'');

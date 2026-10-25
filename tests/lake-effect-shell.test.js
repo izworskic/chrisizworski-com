@@ -1,0 +1,23 @@
+"use strict";
+const {test}=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs");
+const read=p=>fs.readFileSync(p,"utf8");
+test("Lake-effect entry is a single canonical source-backed tool",()=>{
+ const html=read("public/lake-effect-snow/index.html"),catalog=read("public/tools/index.html");
+ const site=JSON.parse(read("vercel.json")),graph=JSON.parse(read("benchmarks/tool-network-registry.json"));
+ const winter=read("public/sitemap-winter.xml");
+ const route=site.rewrites.find(x=>x.source==="/api/lake-effect");
+ assert.equal(route?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect");
+ assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/">/);
+ assert.match(html,/national-snowpack-melt\.vercel\.app\/assets\/lake-effect\.js/);
+ assert.match(html,/id="radar-basemap-status"/);
+ assert.match(html,/lake-effect-radar\.js\?v=20261024-2/);
+ assert.match(read("api/carto-basemap-config.js"),/CARTO_BASEMAP_PUBLIC_KEY/);
+ assert.match(html,/chrisizworski.com\/#person/);
+ assert.match(html,/Built by <a href="https:\/\/chrisizworski.com\/chris-izworski\//);
+ assert.match(html,/dateModified":"2026-10-24"/);
+ assert.match(catalog,/data-tool-id="lake-effect-snow"/);
+ assert.match(winter,/https:\/\/chrisizworski.com\/lake-effect-snow\/<\/loc><lastmod>2026-10-24/);
+ assert.equal(graph.tools.filter(x=>x.id==="lake-effect-snow").length,1);
+ assert.ok(graph.relationships.some(x=>x.from==="lake-effect-snow"&&x.to==="national-snow"));
+ assert.ok(!read("public/michigan-snow-depth/index.html").includes('id="lakeEffectApp"'));
+});

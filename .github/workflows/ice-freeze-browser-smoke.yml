@@ -1,0 +1,47 @@
+name: Michigan Ice freeze-up Chromium smoke
+on:
+  push:
+    branches:
+      - feat/michigan-ice-freeze-up-explorer-2026
+      - fix/michigan-ice-map-resilience-20261022
+      - fix/michigan-ice-map-fullscreen-20261022
+      - feat/great-lakes-ice-lakewide-tawas-20261023
+      - feat/great-lakes-daily-ice-map-playback-20261023
+      - fix/great-lakes-daily-map-open-all-20261023
+      - feat/great-lakes-ice-season-archive-20261024
+    paths:
+      - scripts/ice-freeze-browser-smoke.cjs
+      - .github/workflows/ice-freeze-browser-smoke.yml
+      - public/michigan-ice/**
+      - api/ice-now.js
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser tools
+        run: |
+          npm ci --ignore-scripts
+          npm install --no-save --ignore-scripts playwright@1.56.1 leaflet@1.9.4
+          npx playwright install --with-deps chromium
+      - name: Smoke current NOAA mapping and historical timeline at three sizes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8126 --bind 127.0.0.1 --directory public >/tmp/ice-freeze-browser.log 2>&1 &
+          node scripts/ice-freeze-browser-smoke.cjs
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ice-freeze-browser-views
+          path: artifacts/ice-freeze-browser/*.png
+          if-no-files-found: ignore
+          retention-days: 7

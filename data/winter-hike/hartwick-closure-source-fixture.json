@@ -1,0 +1,34 @@
+{
+  "checkedDate": "2026-10-22",
+  "source": "Michigan DNR DNRTrailsOPENDATA MapServer",
+  "description": "Read-only ArcGIS attributes returned by official ID queries. Not proof of current winter road access or plowing.",
+  "destination": {
+    "id": "090650cb-9a90-4507-92c0-7520eca49af7",
+    "name": "Hartwick Pines - Au Sable River Trail"
+  },
+  "closures": [
+    {
+      "OBJECTID": 2043,
+      "RecreationSearchTrailID": "090650cb-9a90-4507-92c0-7520eca49af7",
+      "TrailNamePrimary": "Hartwick Pines Au Sable River Trail",
+      "TrailUseCategory": "Nonmotorized",
+      "OpenClosedStatusNonmotor": "Temporarily Closed Due To Bridge Maintenance Or Repair",
+      "PublicComments": "11/2022: Closed due to unsafe bridge conditions. ",
+      "SegmentLengthMiles": 0.77591409
+    }
+  ],
+  "snowshoe": [
+    {
+      "OBJECTID": 2091,
+      "RecreationSearchTrailID": "090650cb-9a90-4507-92c0-7520eca49af7",
+      "TrailNamePrimary": "Hartwick Pines Mertz Grade Trail",
+      "TrailUseCategory": "Nonmotorized",
+      "OpenClosedStatusNonmotor": "Open",
+      "SegmentLengthMiles": 0.17466746
+    }
+  ],
+  "sourceUrls": [
+    "https://gisagodnr.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/MapServer/0",
+    "https://gisagodnr.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/MapServer/6"
+  ]
+}

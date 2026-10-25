@@ -1,0 +1,28 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const source=fs.readFileSync('public/michigan-ice/freeze-up.js','utf8');
+test('Great Lakes freeze-up map uses public CARTO config, never keyless CARTO, and provides OSM fallback',()=>{
+  execFileSync(process.execPath,['--check','public/michigan-ice/freeze-up.js']);
+  assert.match(source,/fetch\('\/api\/carto-basemap-config'/);
+  assert.match(source,/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key=/);
+  assert.match(source,/encodeURIComponent\(config\.key\.trim\(\)\)/);
+  assert.match(source,/tile\.openstreetmap\.org/);
+  assert.match(source,/preferred\.on\('tileerror'/);
+  assert.match(source,/preferred\.on\('tileload'/);
+  assert.match(source,/CARTO tile service unavailable; showing OpenStreetMap/);
+  assert.match(source,/Map ready \(OpenStreetMap\)/);
+  assert.doesNotMatch(source,/basemaps\.cartocdn\.com\/light_all/);
+  assert.match(source,/Not a safe-ice assessment/);
+  assert.match(source,/id=\"ice-ex-fullscreen\"/);
+  assert.match(source,/shell\.requestFullscreen\(\)/);
+  assert.match(source,/document\.exitFullscreen\(\)/);
+  assert.match(source,/fullscreenchange/);
+  assert.match(source,/:fullscreen #ice-ex-map/);
+  assert.doesNotMatch(source,/adsbygoogle|google_ad_client|data-ad-slot/);
+  assert.match(source,/root\.querySelector\('#ice-ex-reset'\)\.addEventListener\('click'/);
+  assert.match(source,/ResizeObserver/);
+  assert.match(source,/initMap\(\); \/\/ Never wait for \/api\/ice-now/);
+  assert.match(source,/NOAA ice data unavailable\. The map remains usable/);
+});

@@ -1,0 +1,1734 @@
+{
+  "schema": "winter-route-catalog-v1",
+  "status": "CURATED_STATIC_ROUTE_IDENTITIES_NOT_LIVE_WINTER_ACCESS",
+  "compiledAt": "2026-10-22",
+  "state": "Michigan",
+  "countMeaning": "Named routes, trail segments, and mapped winter corridors; NOT confirmed open, plowed or safe destinations. Some snowshoe trails are explicitly ski-shared. No turn-by-turn navigation.",
+  "dataProvenance": "Michigan DNR official named trail pages, accessible official hiking maps, and dated GIS trail point records. No GIS segment sums are used as route lengths.",
+  "sources": {
+    "muskegon": {
+      "page": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "phone": "231-744-3480"
+    },
+    "negwegon": {
+      "page": "https://www.michigan.gov/recsearch/parks/Negwegon",
+      "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "phone": "989-724-5126"
+    },
+    "vasa": {
+      "page": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "map": null,
+      "phone": "231-922-5280"
+    },
+    "paradise": {
+      "page": "https://www.michigan.gov/recsearch/trails/paradise-pathway",
+      "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "phone": "906-492-3415"
+    },
+    "pine": {
+      "page": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "map": null,
+      "phone": "906-248-3422"
+    },
+    "lower": {
+      "page": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf?hash=88190F0D9F58BD5C48483E94A6D22F94&rev=b201daba99084a74bc26ea2d684c1d3b",
+      "phone": "906-492-3415"
+    },
+    "upper": {
+      "page": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_upper_falls_winter_trail_map.pdf?hash=93DA42B499E1415AD7801A6FE83D8751&rev=c6f80fa38f1a443d92de62c3d72339d0",
+      "phone": "906-492-3415"
+    },
+    "hartwick": {
+      "page": "https://www.michigan.gov/recsearch/parks/Hartwick",
+      "map": null,
+      "phone": "989-348-7068"
+    },
+    "bay": {
+      "page": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "map": null,
+      "phone": "989-684-3020"
+    },
+    "grand": {
+      "page": "https://www.michigan.gov/recsearch/parks/grandmere",
+      "map": null,
+      "phone": "269-426-4013"
+    },
+    "harris": {
+      "page": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "map": null,
+      "phone": null
+    },
+    "port": {
+      "page": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "map": null,
+      "phone": "989-738-8663"
+    },
+    "algonac": {
+      "page": "https://www.michigan.gov/recsearch/parks/algonac",
+      "map": null,
+      "phone": "810-765-5605"
+    }
+  },
+  "routes": [
+    {
+      "id": "muskegon-lost-lake-loop-west",
+      "displayName": "Muskegon — Lost Lake Loop West",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "loop",
+      "lengthMiles": 3.1,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [
+        "2026 channel walkway closure is separate and must not be conflated with this loop"
+      ],
+      "editorialSummary": "Lost Lake dune-and-wetland circuit; moderate route on DNR map",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-white-night",
+      "displayName": "Muskegon — White Night Trail",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "trail",
+      "lengthMiles": 1.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Easy marked course on official Muskegon hiking map",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-petes-path",
+      "displayName": "Muskegon — Pete's Path",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "trail",
+      "lengthMiles": 2.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Moderate mapped woodland/dune trail",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-spencers-advanced",
+      "displayName": "Muskegon — Spencer's Advanced Loop",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "loop",
+      "lengthMiles": 0.3,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Short but challenging loop; additional access walk not included in mapped loop miles",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-hearty-hiker",
+      "displayName": "Muskegon — Hearty Hiker Trail",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "trail",
+      "lengthMiles": 3,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "f8bfa595-22b6-4c71-bf32-45f16dc8aca4",
+      "sourceDnrTrailName": "Muskegon - Hearty Hiker Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25230684,
+        "lon": -86.34778949,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Challenging marked route with rolling coastal dunes",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-lost-lake-east",
+      "displayName": "Muskegon — Lost Lake Loop East",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "loop",
+      "lengthMiles": 2.7,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Moderate Lost Lake trail circuit",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-old-bay-mills",
+      "displayName": "Muskegon — Old Bay Mills Trail",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "trail",
+      "lengthMiles": 2.2,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.25343884,
+        "lon": -86.34359149,
+        "label": "Nearby DNR Muskegon trail reference, not selected route start",
+        "meaning": "Nearby DNR Muskegon trail reference, not selected route start"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Moderate wooded trail on official park map",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "muskegon-dune-ridge",
+      "displayName": "Muskegon — Dune Ridge Trail",
+      "region": "southern-lower",
+      "placeGroup": "muskegon",
+      "routeForm": "trail",
+      "lengthMiles": 2.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "38c03760-1688-42b8-a2da-aeb7c23adcce",
+      "sourceDnrTrailName": "Muskegon - Dune Ridge Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.23214684,
+        "lon": -86.3342205,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/muskegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/muskegon_hiking.pdf?hash=10570179DF73C0058A01344C187BF402&rev=f36fdcfaee844755b828c592eadca6aa",
+      "managerPhone": "231-744-3480",
+      "caveats": [],
+      "editorialSummary": "Challenging dune-ridge hike; ice and loose/snow-covered dune slopes require care",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "negwegon-potawatomi",
+      "displayName": "Negwegon — Potawatomi Trail",
+      "region": "northern-lower",
+      "placeGroup": "negwegon",
+      "routeForm": "trail",
+      "lengthMiles": 3.6,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.85642302,
+        "lon": -83.32423451,
+        "label": "DNR Negwegon trail reference, not lot entrance",
+        "meaning": "DNR Negwegon trail reference, not lot entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/Negwegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "managerPhone": "989-724-5126",
+      "caveats": [
+        "Sand Hill park approach includes a two-track and dirt road; winter access unknown"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "negwegon-algonquin",
+      "displayName": "Negwegon — Algonquin Trail",
+      "region": "northern-lower",
+      "placeGroup": "negwegon",
+      "routeForm": "trail",
+      "lengthMiles": 3.7,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "29f5ed2c-0dcf-4da4-a6ac-28dc7ff05dc4",
+      "sourceDnrTrailName": "Negwegon - Algonquin Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.85642302,
+        "lon": -83.32423451,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/Negwegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "managerPhone": "989-724-5126",
+      "caveats": [
+        "Sand Hill park approach includes a two-track and dirt road; winter access unknown"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "negwegon-chippewa",
+      "displayName": "Negwegon — Chippewa Trail",
+      "region": "northern-lower",
+      "placeGroup": "negwegon",
+      "routeForm": "trail",
+      "lengthMiles": 3.1,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "69372d57-af8a-4adc-93b6-bfc070914350",
+      "sourceDnrTrailName": "Negwegon - Chippewa Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.85642302,
+        "lon": -83.32423451,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/Negwegon",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/negwegon_map.pdf?rev=84ef368885ed4d80a2237408623cec5c",
+      "managerPhone": "989-724-5126",
+      "caveats": [
+        "Sand Hill park approach includes a two-track and dirt road; winter access unknown"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "vasa-snowshoe-orange",
+      "displayName": "Vasa Snowshoe Trail — Orange Loop",
+      "region": "northern-lower",
+      "placeGroup": "vasa",
+      "routeForm": "stacked_loop",
+      "lengthMiles": 1.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.750594,
+        "lon": -85.493329,
+        "label": "DNR pathway reference, not exact snowshoe entrance",
+        "meaning": "DNR pathway reference, not exact snowshoe entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "managerPhone": "231-922-5280",
+      "caveats": [
+        "Winter-specific loop; do not walk on adjacent groomed ski tracks"
+      ],
+      "editorialSummary": "Acme Creek Valley marked snowshoe loop",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "vasa-snowshoe-green-yellow",
+      "displayName": "Vasa Snowshoe Trail — Green/Yellow Loop",
+      "region": "northern-lower",
+      "placeGroup": "vasa",
+      "routeForm": "stacked_loop",
+      "lengthMiles": 0.6,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.750594,
+        "lon": -85.493329,
+        "label": "DNR pathway reference, not exact snowshoe entrance",
+        "meaning": "DNR pathway reference, not exact snowshoe entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "managerPhone": "231-922-5280",
+      "caveats": [
+        "Map interpretation and route junctions require current signs",
+        "Do not disturb groomed Nordic tracks"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "vasa-snowshoe-red",
+      "displayName": "Vasa Snowshoe Trail — Red Loop",
+      "region": "northern-lower",
+      "placeGroup": "vasa",
+      "routeForm": "stacked_loop",
+      "lengthMiles": 0.25,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.750594,
+        "lon": -85.493329,
+        "label": "DNR pathway reference, not exact snowshoe entrance",
+        "meaning": "DNR pathway reference, not exact snowshoe entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "managerPhone": "231-922-5280",
+      "caveats": [
+        "Very short loop; access walk may increase actual trip length"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "vasa-snowshoe-complete",
+      "displayName": "Vasa Snowshoe Trail — Full Marked System",
+      "region": "northern-lower",
+      "placeGroup": "vasa",
+      "routeForm": "network",
+      "lengthMiles": 2.5,
+      "lengthEvidence": "approximate_official",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.750594,
+        "lon": -85.493329,
+        "label": "DNR pathway reference, not exact snowshoe entrance",
+        "meaning": "DNR pathway reference, not exact snowshoe entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/vasa-pathway",
+      "managerPhone": "231-922-5280",
+      "caveats": [
+        "Official approximate system total; stacked loops must not simply be added into a fabricated circuit",
+        "Trailhead described as opposite grooming barn; exact winter plowed parking not verified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "paradise-south-m123",
+      "displayName": "Paradise Pathway — South M-123 Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "paradise",
+      "routeForm": "loop",
+      "lengthMiles": 1.6,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.630828,
+        "lon": -85.048833,
+        "label": "DNR Paradise Pathway reference, not parking",
+        "meaning": "DNR Paradise Pathway reference, not parking"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/paradise-pathway",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Volunteer Nordic grooming is inconsistent and page descriptions conflict; stay off ski tracks",
+        "Parking shared with snowmobile club; use designated areas only"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "paradise-north-m123",
+      "displayName": "Paradise Pathway — North M-123 Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "paradise",
+      "routeForm": "loop",
+      "lengthMiles": 3.2,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.630828,
+        "lon": -85.048833,
+        "label": "DNR Paradise Pathway reference, not parking",
+        "meaning": "DNR Paradise Pathway reference, not parking"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/paradise-pathway",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Keep snowshoes off groomed ski tracks",
+        "Winter trail route may change or be rerouted"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "paradise-north-ridge",
+      "displayName": "Paradise Pathway — North Ridge Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "paradise",
+      "routeForm": "loop",
+      "lengthMiles": 3.4,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.630828,
+        "lon": -85.048833,
+        "label": "DNR Paradise Pathway reference, not parking",
+        "meaning": "DNR Paradise Pathway reference, not parking"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/paradise-pathway",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/paradise_trail.pdf?hash=060A2E3A0F474791ACEBBDB06F66E600&rev=a84e1263cc064002a9ecba83513c863c",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Winter trail route may be rerouted and local grooming varies",
+        "Check winter parking shared with snowmobiles"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "pine-bowl-short",
+      "displayName": "Pine Bowl Pathway — Short Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "pine",
+      "routeForm": "loop",
+      "lengthMiles": 2,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.248808,
+        "lon": -84.425589,
+        "label": "DNR Pine Bowl Pathway reference, not parking",
+        "meaning": "DNR Pine Bowl Pathway reference, not parking"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "managerPhone": "906-248-3422",
+      "caveats": [
+        "Official page contradicts itself about grooming; verify active winter restrictions",
+        "Stay off groomed classic ski tracks"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "pine-bowl-long",
+      "displayName": "Pine Bowl Pathway — Long Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "pine",
+      "routeForm": "loop",
+      "lengthMiles": 5.7,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.248808,
+        "lon": -84.425589,
+        "label": "DNR Pine Bowl Pathway reference, not parking",
+        "meaning": "DNR Pine Bowl Pathway reference, not parking"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "managerPhone": "906-248-3422",
+      "caveats": [
+        "Official page contradicts itself about grooming; verify before use",
+        "Stay off groomed classic ski tracks"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "tahq-lower-green",
+      "displayName": "Tahquamenon Falls — Lower Falls Green Snowshoe Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "lower",
+      "routeForm": "loop",
+      "lengthMiles": 1.6,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.60549024,
+        "lon": -85.20342146,
+        "label": "DNR lower-area trail reference, not plowed trailhead",
+        "meaning": "DNR lower-area trail reference, not plowed trailhead"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf?hash=88190F0D9F58BD5C48483E94A6D22F94&rev=b201daba99084a74bc26ea2d684c1d3b",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf?hash=88190F0D9F58BD5C48483E94A6D22F94&rev=b201daba99084a74bc26ea2d684c1d3b",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Historically mapped winter route; present-season plowing not confirmed",
+        "Upper–Lower Falls connecting trail not maintained in winter"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "tahq-lower-blue",
+      "displayName": "Tahquamenon Falls — Lower Falls Blue Snowshoe Loop",
+      "region": "upper-peninsula",
+      "placeGroup": "lower",
+      "routeForm": "loop",
+      "lengthMiles": 2.4,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.60549024,
+        "lon": -85.20342146,
+        "label": "DNR lower-area trail reference, not plowed trailhead",
+        "meaning": "DNR lower-area trail reference, not plowed trailhead"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf?hash=88190F0D9F58BD5C48483E94A6D22F94&rev=b201daba99084a74bc26ea2d684c1d3b",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_lower_falls_winter_trail_map.pdf?hash=88190F0D9F58BD5C48483E94A6D22F94&rev=b201daba99084a74bc26ea2d684c1d3b",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Historically mapped winter route; present-season parking and road plowing unverified",
+        "Cell service may be limited"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "tahq-upper-marked-snowshoe",
+      "displayName": "Tahquamenon Falls — Upper Falls Marked Snowshoe Path",
+      "region": "upper-peninsula",
+      "placeGroup": "upper",
+      "routeForm": "winter_corridor",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.57568025,
+        "lon": -85.25176744,
+        "label": "DNR upper-area trail reference, not plowed trailhead",
+        "meaning": "DNR upper-area trail reference, not plowed trailhead"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_upper_falls_winter_trail_map.pdf?hash=93DA42B499E1415AD7801A6FE83D8751&rev=c6f80fa38f1a443d92de62c3d72339d0",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Historical official map has no single full route length for this marked snowshoe corridor",
+        "Do not enter the unmaintained Upper–Lower Falls connector"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "tahq-upper-packed-walking",
+      "displayName": "Tahquamenon Falls — Upper Falls Packed Walking Path",
+      "region": "upper-peninsula",
+      "placeGroup": "upper",
+      "routeForm": "winter_corridor",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike"
+      ],
+      "winterUse": "packed_winter_walking",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.57568025,
+        "lon": -85.25176744,
+        "label": "DNR upper-area trail reference, not plowed trailhead",
+        "meaning": "DNR upper-area trail reference, not plowed trailhead"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_upper_falls_winter_trail_map.pdf?hash=93DA42B499E1415AD7801A6FE83D8751&rev=c6f80fa38f1a443d92de62c3d72339d0",
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "managerPhone": "906-492-3415",
+      "caveats": [
+        "Historically mapped walking approach; 0.4-mile map label is a segment, not a proven full round trip",
+        "Current packing and ice unverified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "hartwick-old-growth",
+      "displayName": "Hartwick Pines — Old Growth Forest Loop",
+      "region": "northern-lower",
+      "placeGroup": "hartwick",
+      "routeForm": "loop",
+      "lengthMiles": 1.25,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "aee2c187-4fb0-4568-bb0e-615cb7a1ca5f",
+      "sourceDnrTrailName": "Hartwick Pines - Old Growth Forest Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.741629,
+        "lon": -84.661305,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/Hartwick",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/Hartwick",
+      "managerPhone": "989-348-7068",
+      "caveats": [
+        "Paved does not mean cleared or ice-free in winter"
+      ],
+      "editorialSummary": "Paved historical forest interpretive circuit",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "hartwick-mertz-grade",
+      "displayName": "Hartwick Pines — Mertz Grade Foot Trail",
+      "region": "northern-lower",
+      "placeGroup": "hartwick",
+      "routeForm": "trail",
+      "lengthMiles": 2,
+      "lengthEvidence": "historical_official",
+      "sourceDnrTrailId": "7044963f-2af5-45e3-bd20-86486e62b198",
+      "sourceDnrTrailName": "Hartwick Pines - Mertz Grade Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.740392,
+        "lon": -84.652566,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/Hartwick",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/PRD/MgtPlans/Hartwick_Phase1_GMP.pdf?rev=1df7784f5f624c9ab2c87bb353eefed7",
+      "managerPhone": "989-348-7068",
+      "caveats": [
+        "2.0 miles is from an older DNR planning document; current route length requires refresh",
+        "Separate Au Sable River bridge closure and DNR ID collision must not be misattributed"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "bay-tobico-lagoon",
+      "displayName": "Bay City — Tobico Lagoon Trail",
+      "region": "southern-lower",
+      "placeGroup": "bay",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "6e8e7fc1-2371-494a-a986-508f2d9cc640",
+      "sourceDnrTrailName": "Bay City - Tobico Lagoon Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.671315,
+        "lon": -83.912055,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "managerPhone": "989-684-3020",
+      "caveats": [
+        "Lagoon-adjacent boardwalk and ice hazard must be checked",
+        "Route miles and plowed lot unverified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "bay-tobico-marsh",
+      "displayName": "Bay City — Tobico Marsh Trail",
+      "region": "southern-lower",
+      "placeGroup": "bay",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "4c602909-9986-486b-9537-08c7f9e5a6ad",
+      "sourceDnrTrailName": "Bay City - Tobico Marsh Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.67513896,
+        "lon": -83.92288523,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "managerPhone": "989-684-3020",
+      "caveats": [
+        "Wetland trail/boardwalk winter conditions unknown",
+        "Cross-country grooming possible; avoid groomed tracks"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "bay-andersen-nature",
+      "displayName": "Bay City — Andersen Nature Trail",
+      "region": "southern-lower",
+      "placeGroup": "bay",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "6bd5568e-96c8-4db1-9aee-27e64cc63865",
+      "sourceDnrTrailName": "Bay City - Andersen Nature Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 43.656829,
+        "lon": -83.897931,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/BayCity",
+      "managerPhone": "989-684-3020",
+      "caveats": [
+        "Groomed cross-country use possible; preserve ski tracks",
+        "Wetland boardwalk ice and winter parking unknown"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "grand-mere-dune",
+      "displayName": "Grand Mere — Dune Trail",
+      "region": "southern-lower",
+      "placeGroup": "grand",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "22d1677f-0f94-48e1-b93e-b368fe9b99fa",
+      "sourceDnrTrailName": "Grand Mere - Dune Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 42.003826,
+        "lon": -86.542784,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/grandmere",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/grandmere",
+      "managerPhone": "269-426-4013",
+      "caveats": [
+        "Dune slopes and wind ice risk",
+        "Hunting during designated seasons"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "grand-mere-paved",
+      "displayName": "Grand Mere — Paved Trail",
+      "region": "southern-lower",
+      "placeGroup": "grand",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "5582a40d-aedf-463f-b817-b3945914bfed",
+      "sourceDnrTrailName": "Grand Mere - Paved Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 42.003826,
+        "lon": -86.542784,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/grandmere",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/grandmere",
+      "managerPhone": "269-426-4013",
+      "caveats": [
+        "Paved trail can become icy; no clearing or winter parking verified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "harrisville-heritage",
+      "displayName": "Harrisville — Heritage Trail",
+      "region": "northern-lower",
+      "placeGroup": "harris",
+      "routeForm": "trail",
+      "lengthMiles": 2,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": "9b715c05-f5ab-4b31-917c-a807aad81684",
+      "sourceDnrTrailName": "Harrisville - Heritage Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.64916144,
+        "lon": -83.29431528,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "managerPhone": null,
+      "caveats": [
+        "2 miles is trail total, not necessarily a round trip",
+        "Winter day-use parking not confirmed"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "harrisville-cedar-run",
+      "displayName": "Harrisville — Cedar Run Nature Trail",
+      "region": "northern-lower",
+      "placeGroup": "harris",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "821cb384-0f6e-48aa-8193-9a127665b9ca",
+      "sourceDnrTrailName": "Harrisville - Cedar Run Nature Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.64916144,
+        "lon": -83.29431528,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/dnr/about/accessibility/trails",
+      "managerPhone": null,
+      "caveats": [
+        "Route length and winter access unverified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "port-crescent-day-use",
+      "displayName": "Port Crescent — Day-Use Trail",
+      "region": "southern-lower",
+      "placeGroup": "port",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "2ec73909-cc41-49b0-9839-b1a9e778c72c",
+      "sourceDnrTrailName": "Port Crescent - Day-Use Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.00019854,
+        "lon": -83.07019142,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "managerPhone": "989-738-8663",
+      "caveats": [
+        "Park day-use and campground entrances are two miles apart; do not route to the wrong one",
+        "Winter parking lot status unverified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "port-crescent-dunes",
+      "displayName": "Port Crescent — Dunes Nature Trail",
+      "region": "southern-lower",
+      "placeGroup": "port",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "c9a1f3e6-2911-4b09-aaa5-db069394955c",
+      "sourceDnrTrailName": "Port Crescent - Dunes Nature Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.00958254,
+        "lon": -83.05316942,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "managerPhone": "989-738-8663",
+      "caveats": [
+        "Sand, dune steps and river ice may affect winter walking",
+        "Wrong entrance risk; verify day-use road"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "port-crescent-organization",
+      "displayName": "Port Crescent — Organization Area Trail",
+      "region": "southern-lower",
+      "placeGroup": "port",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "3f1bd185-0a8f-4c63-9f20-4392ad18ad4e",
+      "sourceDnrTrailName": "Port Crescent - Organization Area Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.00019854,
+        "lon": -83.07019142,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/portcrescent",
+      "managerPhone": "989-738-8663",
+      "caveats": [
+        "Organization-area access/seasonal closures require DNR check",
+        "No verified route length"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "algonac-blazing-star",
+      "displayName": "Algonac — Blazing Star Trail",
+      "region": "southern-lower",
+      "placeGroup": "algonac",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "9443ae58-d707-48cb-9fa2-ae484720302d",
+      "sourceDnrTrailName": "Algonac - Blazing Star Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 42.65270445,
+        "lon": -82.51830472,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/algonac",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/algonac",
+      "managerPhone": "810-765-5605",
+      "caveats": [
+        "Rare prairie habitat; stay on official route",
+        "Current winter lot access unknown"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    },
+    {
+      "id": "algonac-oak-savanna",
+      "displayName": "Algonac — Oak Savanna Trail",
+      "region": "southern-lower",
+      "placeGroup": "algonac",
+      "routeForm": "named_trail",
+      "lengthMiles": null,
+      "lengthEvidence": "not_verified",
+      "sourceDnrTrailId": "a875d12d-cc53-4c17-b637-91c6708a7288",
+      "sourceDnrTrailName": "Algonac - Oak Savanna Trail",
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 42.65226257,
+        "lon": -82.51725329,
+        "meaning": "Mapped DNR trail reference point, NOT a verified winter parking location"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/parks/algonac",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/parks/algonac",
+      "managerPhone": "810-765-5605",
+      "caveats": [
+        "Shared XC route possible; preserve any tracked surface",
+        "Winter maintenance unverified"
+      ],
+      "editorialSummary": "",
+      "needs": [
+        "current winter lot plowing and entrance",
+        "manager route opening and closure validation",
+        "chosen route geometry"
+      ]
+    }
+  ],
+  "quarantined": [
+    {
+      "id": "anderson-loop-1",
+      "name": "Anderson Lake Pathway Loop 1",
+      "miles": 2.5,
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsA-D/Anderson_Lake_Pathway.pdf?rev=0e75c8b84f284655878f740828fec2b7",
+      "reason": "Official campground says seasonal roads and campground NOT plowed; map explicitly labels ski loops; winter snowshoe alignment must be independently confirmed",
+      "parkingRestricted": true
+    },
+    {
+      "id": "anderson-loop-2",
+      "name": "Anderson Lake Pathway Loop 2",
+      "miles": 3.5,
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsA-D/Anderson_Lake_Pathway.pdf?rev=0e75c8b84f284655878f740828fec2b7",
+      "reason": "Unplowed campground/seasonal road; 2012 Nordic map does not establish winter snowshoe trailhead",
+      "parkingRestricted": true
+    },
+    {
+      "id": "anderson-loop-3",
+      "name": "Anderson Lake Pathway Loop 3",
+      "miles": 4.3,
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsA-D/Anderson_Lake_Pathway.pdf?rev=0e75c8b84f284655878f740828fec2b7",
+      "reason": "Unplowed campground/seasonal road; ski loop not confirmed as independently accessible snowshoe route",
+      "parkingRestricted": true
+    },
+    {
+      "id": "hartwick-au-sable-loop",
+      "name": "Hartwick Pines Au Sable River Trail historical circuit",
+      "miles": null,
+      "source": "https://www.michigan.gov/recsearch/parks/Hartwick",
+      "reason": "Permanent/indefinite bridge-based partial closure; no intact round-trip loop. Manager describes only a revised out-and-back with undetermined safe total distance",
+      "parkingRestricted": false
+    },
+    {
+      "id": "tahq-upper-lantern-loop",
+      "name": "Tahquamenon Upper Falls Lantern Loop (1.0 mi)",
+      "miles": 1,
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/tahquamenon_upper_falls_winter_trail_map.pdf?hash=93DA42B499E1415AD7801A6FE83D8751&rev=c6f80fa38f1a443d92de62c3d72339d0",
+      "reason": "Historical map labels this as cross-country ski trail, NOT snowshoe trail; do not republish as a dedicated snowshoe loop",
+      "parkingRestricted": false
+    },
+    {
+      "id": "muncie-pathway-whole-system",
+      "name": "Muncie Lake Pathway (9.8 mi network)",
+      "miles": null,
+      "source": "https://www.michigan.gov/recsearch/trails/muncie-lake-pathway",
+      "reason": "9.8 miles is entire pathway network, not a defined trip loop. Need vetted trail segment/turn sequence; ski track must be avoided",
+      "parkingRestricted": false
+    },
+    {
+      "id": "pine-bowl-network-total",
+      "name": "Pine Bowl 5.9-mile pathway network",
+      "miles": null,
+      "source": "https://www.michigan.gov/recsearch/trails/pine-bowl-pathway",
+      "reason": "Network length differs from actual short and long named loops; only the 2.0 and 5.7 mile route records are included",
+      "parkingRestricted": false
+    }
+  ],
+  "operationalDefaults": {
+    "routeOpen": "unverified",
+    "parkingPlowed": "unverified",
+    "roadOpen": "unverified",
+    "realTrailheadCoordinates": null,
+    "directionsEnabled": false,
+    "requiredBeforePublication": [
+      "manager-current-season trail access",
+      "road and winter lot plowing",
+      "validated route geometry/closure overlay",
+      "route length recheck if historical"
+    ],
+    "snowshoeTrackPolicy": "Use marked snowshoe routes where possible. For shared XC trails, follow manager rules and never tread on groomed classic tracks."
+  }
+}

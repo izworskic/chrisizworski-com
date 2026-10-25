@@ -43,6 +43,10 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 23: usability UX revision of Seed Saving Lab: compare and whole-garden interactions.
+  "/seed-saving-lab/",
+  // Oct 23 2026: Cross-Pollination Explorer discovery link on existing seed-saving guide.
+  "/heirloom-seed-saving-guide/",
   // October 19: ice-viewing companion links on the two local aurora destinations.
   "/northern-lights-michigan/munising/",
   "/northern-lights-michigan/paradise-whitefish-point/",
@@ -64,6 +68,11 @@ const intentionalChanges = new Set([
   "/snowmobile/regions/northwest-michigan.html",
   "/snowmobile/regions/grayling-gaylord.html",
   "/snowmobile/",
+  // Oct 24 2026: owner-requested garden tools upgrade (answer-first tools, charts, share links).
+  "/michigan-gardening/",
+  "/michigan-last-spring-freeze/",
+  "/michigan-frost-dates/",
+  "/heirloom-variety-matchmaker/",
   // Oct 6 2026: canonical Person identity graph/author reference correction on main-owned pages.
   "/seed-starting-guide/",
   "/when-to-plant-tomatoes-michigan/",

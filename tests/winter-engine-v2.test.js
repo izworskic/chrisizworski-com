@@ -50,7 +50,9 @@ test('all six generated Ice water pages have unique local questions and a winter
     assert.match(html, /Winter companion/, slug);
     assert.match(html, /https:\/\/chrisizworski\.com\/michigan-cross-country-skiing\//, slug);
     assert.match(html, /https:\/\/xcski\.chrisizworski\.com\//, slug);
-    assert.match(html, /"dateModified":\s*"2026-10-06"/, slug);
+    const generatorDate = read('scripts/ice/gen_site.py').match(/ICE_ROOT_DATE_MODIFIED = "(\d{4}-\d{2}-\d{2})"/)?.[1];
+    assert.ok(generatorDate,'Missing authoritative region modification date');
+    assert.ok(html.includes('"dateModified":"'+generatorDate+'"'),slug+' generated content must use its source date');
   }
   assert.match(read('public/michigan-ice/regions/saginaw-bay.html'), /parent-lake context only/i);
   assert.match(read('public/michigan-ice/regions/houghton-lake.html'), /No comparable NOAA lake-ice product exists/i);
@@ -78,7 +80,7 @@ test('XC planning hub adds comparison and source hierarchy while preserving live
 test('winter generator remains the source of truth and one-shot migration files are gone', () => {
   const generator = read('scripts/ice/gen_site.py');
   assert.match(generator, /REGION_DECISIONS/);
-  assert.match(generator, /ICE_ROOT_DATE_MODIFIED = "2026-10-06"/);
+  assert.match(generator, /ICE_ROOT_DATE_MODIFIED = "\d{4}-\d{2}-\d{2}"/);
   assert.equal(existsSync(path.join(root, 'scripts/apply-winter-engine-v2.mjs')), false);
   assert.equal(existsSync(path.join(root, 'scripts/run-winter-engine-migration.mjs')), false);
   assert.equal(existsSync(path.join(root, '.github/workflows/winter-engine-regenerate.yml')), false);

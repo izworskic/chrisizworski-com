@@ -1,3 +1,51 @@
+## Kilauea Episode Watch, plus charts on Beach Day and Manta Night - October 23, 2026
+
+- **Owner direction:** More single-purpose public Hawaii tools (not tied to one trip); chose Kilauea viewing. Asked for charts and graphs to explain the tools, and asked that the new tool cost nothing on Vercel.
+- **Existing-site check:** the hub already has Kilauea Live (go/no-go right now). This tool answers a different question: the USGS forecast window for the next episode, how often episodes have started, and whether the summit is clear. Titles differ ("Kilauea Next Episode: USGS Forecast Window" vs "Kilauea Live: Should You Go Now?") and the new page links to Kilauea Live. This was found after the build, not before; the overlap was caught before the hub sync.
+- **Owning repo:** `izworskic/national-outdoor-core` (core PRs #38 and #39, merge abdaa0c). This shell holds the mirrored page, two route rewrites and a sitemap entry, and the refreshed Beach Day and Manta pages that now carry two inline-SVG charts each.
+- **Decision fixed:** is an episode expected soon, and can you see anything from the overlook. Reads the USGS HVO daily update (status and forecast window, shown in HVO's words), Open-Meteo summit weather by hour, and a 16-episode 2026 record parsed from HVO notices (clock-timed starts and ends only). No server function: USGS and Open-Meteo allow browser calls, so the engine runs in the visitor's browser.
+- **Honest limits:** nobody can give an episode start time; the weather cutoffs are unvalidated; USGS windows have been missed (episode 55 by about 5 weeks), listed as two hand-checked cases, not a hit rate. Open-Meteo's free tier is for non-commercial use and this site shows ads: a risk to resolve before heavy traffic.
+- **Verification:** core suite 213/213; verified in a real browser against the live USGS and Open-Meteo sources. GSC, GA4 and AdSense for the new URL: NOT AVAILABLE.
+- **Exactly one next action:** Capture a GSC baseline for the Kilauea URL 7 and 28 days after deploy and compare against Kilauea Live to confirm the two do not cannibalize each other.
+
+## Kona Manta Night Snorkel conditions - October 22, 2026
+
+- **Owner direction:** More single-purpose Hawaii tools. Chose Kona manta ray night from four options after an autocomplete breadth check (about 139 phrasings for "kona manta ray", the widest of the candidates; breadth, not volume). Chris travels to Kailua-Kona Dec 23 2026 to Jan 1 2027.
+- **Owning repo:** `izworskic/national-outdoor-core` (core PR #36, merge 11f588b). This shell holds only the mirrored page, two route rewrites and a sitemap entry.
+- **Decision fixed:** how rough the sea is at the two manta sites (Garden Eel Cove near the airport, Manta Village at Keauhou Bay) for 6-9 pm HST on each of the next four nights, from NWS alerts, the NWS Surf Zone Forecast, the PacIOOS SWAN wave model judged against each site's own 2016-2025 evening record (plus absolute 0.4 m / 0.8 m floors because Garden Eel Cove is very sheltered), wind, rain and 24 h runoff.
+- **Honest limits:** no sighting prediction (plankton drives sightings and no source measures it); operators publish no cancellation cutoffs, so rules are unvalidated and confidence never exceeds MODERATE; tides and currents excluded. Sources read: Wikipedia (sites, plankton, year-round tours), snorkeling-report.com (rough sea, rain, wind, swell, current, tides degrade conditions).
+- **Verification:** core suite 198/198; hub `npm run verify:all` run on this branch before merge. GSC, GA4 and AdSense for the new URL: NOT AVAILABLE.
+- **Exactly one next action:** Capture a GSC baseline for this URL 7 and 28 days after deploy, then compare predicted sea ratings against what operators actually ran on a few nights before raising confidence.
+
+## Hawaii Island decision tools: Mauna Kea Tonight and Big Island Beach Day - October 22, 2026
+
+- **Owner direction:** Build single-purpose Hawaii tools where large sites are weak, then run all three Hawaii tools (Haleakala Sunrise, Mauna Kea Tonight, Big Island Beach Day) through this playbook before merging. Chris travels to Kailua-Kona Dec 23 2026 to Jan 1 2027.
+- **Owning repo:** `izworskic/national-outdoor-core` (engines, APIs, generators, tests). This site shell holds only mirrored canonical HTML, route rewrites and sitemap entries. Core PR #34 (Mauna Kea: night rolls at sunrise, +6 day data, old bookmarks fall back to tonight, short API cache) merged as 98d5564; core PR #35 (Big Island Beach Day) merged as 953cc7b. Hub PR #1108 (pin bump) merged; hub PR #1111 mirrors Beach Day.
+- **Demand evidence:** Google autocomplete alphabet expansion measures breadth of phrasing, not volume. Mauna Kea and Big Island ocean-condition queries had thin, weak competition (dashboards, no combined call). No Search Console data exists for these URLs yet.
+- **Decision value:** Mauna Kea: road gate + summit/Visitor Station sky + moon in one GO / PARTLY / NO-GO / CHECK call, cross-checked against the Maunakea Weather Center forecaster. Beach Day: six coasts ranked from NWS Surf Zone Forecast, active High Surf alerts, the PacIOOS SWAN wave model judged against each coast's own 2016-2025 daytime record, and onshore wind; CHECK when sources are two steps apart.
+- **Honest limits:** Thresholds for both tools are unvalidated starting rules, published on the pages; confidence never exceeds MODERATE. Measured against 2016-2025 NWS high-surf advisory days, the model's daily peak height separates advisory days only modestly (AUC 0.76 Kohala, 0.63 South), so NWS forecast and alerts lead. Brown water, jellyfish and vog are excluded and stated. Mauna Kea road message is not maintained April-November, flagged as a default.
+- **Reliability fixes found in testing:** the wave-model host returns 503 to a custom User-Agent (the engine now sends none) and sometimes stalls ~15 s then 503 (short timeouts, retries, one deadline); all sources failing returns NO_DATA, never a crash.
+- **Verification:** core suite 185/185; hub `npm run verify:all` all 55 steps passed on the Beach Day branch; GA4 and AdSense identifiers present on all three pages; Haleakala and Mauna Kea canonical pages and the core APIs checked live (200, correct CORS and Vary); Beach Day API live with all five sources OK. Beach Day page production check follows merge and deploy.
+- **Measurement:** GSC impressions, clicks, CTR, position, GA4 and AdSense for these URLs: NOT AVAILABLE. Deployed means shipped, not indexed or ranked. 1m impressions and 5% CTR remain targets only.
+- **Exactly one next action:** Capture a dated GSC baseline for the three Hawaii URLs 7 and 28 days after Beach Day deploys; then validate Mauna Kea and Beach Day thresholds against labeled days before raising confidence.
+
+## Lake-effect snow website integration — October 21, 2026
+
+- **Owner:** national-snowpack-melt source PR #12; this site-shell branch holds ONLY its public canonical HTML mirror, an API rewrite, catalog/registry/sitemap routing and a related Snow Finder link.
+- **Separate intents:** /lake-effect-snow/ future regional setup; /michigan-snow-depth/ snow on ground; /michigan-snow-totals/ official recent reports. No duplicated physics or ranking in site shell.
+- **Release:** NOT MERGED. Source preview built but is auth-protected; live NWS and GLSEA checks and browser acceptance remain required. This branch must pass the site's full verification before merge; main production not changed. No new cron or paid service.
+- **Search measurements:** GSC, GA4 and AdSense attributable results NOT AVAILABLE. 1m impressions and 5% organic CTR remain targets only.
+- **Exactly one next action:** Validate the source API on an accessible preview with NWS and NOAA feed freshness, then finish source and shell browser/CI gates before merging in order.
+
+## Great Lakes Freighter Tracker — direct vessel search (October 20, 2026)
+
+- **Owner directive:** Update the next measured growth opportunity after the White Christmas forecast, without rewriting existing winning snippets or altering ad placements.
+- **Measured GSC baseline:** Search Console Web, worldwide, `sc-domain:chrisizworski.com`, September 20–October 17 (28 days): `/great-lakes-freighter-tracking/` 9,294 impressions, 143 clicks, 1.54% CTR, average position 7.29. Leading queries: “great lakes ship tracker” 1,196 impressions/7 clicks, and “great lakes freighter tracker” 618/3. Verified before change; no post-change result claimed.
+- **UX improvement:** Add accessible ship name/MMSI search immediately above the existing AIS map; filter the already retrieved last-30-minute observations to match both map markers and vessel list; select a result to zoom, or reset to All Great Lakes. An empty or degraded feed is never reported as proof of zero vessel traffic. No additional provider/API calls, paid services, title/description/canonical changes, or advertising configuration changes.
+- **SEO integrity:** Updated this modified page’s `dateModified` and matching sitemap `lastmod` from Oct 12 to Oct 20 to satisfy the complete 55-step repository freshness gate without inventing dates for unrelated pages. Existing creator attribution preserved.
+- **Release status at authoring:** PR [#1098](https://github.com/izworskic/chrisizworski-com/pull/1098) on `feature/freighter-name-search-20261020`; full CI rerun, merge and production verification **pending**. Measured CTR lift, Google canonical selection and page revenue **NOT AVAILABLE**.
+- **Exactly one next action:** Pass `npm run verify:all` on the final branch SHA, then merge and verify the canonical production page and map input.
+
 ## Holiday Travel airport selection — October 19, 2026
 
 - **Owner-reported defect:** Changing departure airport updated no meaningful figures for almost all airports. Only ORD had a hardcoded historical rate; every other airport silently inherited an identical U.S. baseline. The dates were national TSA rankings; user understandably expected airport data to respond to selection.
@@ -969,3 +1017,205 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Known limits/backlog:** 18 further live canonicals lack owning-source date metadata and remain outside the maps under the repo's stricter stamp rule. Petoskey, Blue Spring children and Melvin Price children need their exported date schemas fixed at source; any available dates now synchronize locally. Preserve the closed seed shop's noindex setting and remove it from its WordPress sitemap through the owning CMS. Private account performance and submission records are retained separately, outside this public repository. Full recommendations/evidence: `docs/SITEMAP_GROWTH_AUDIT_2026-10-19.md` and `audit/sitemaps-2026-10-19.json`.
 - **Validation/release:** complete local repository gate passes all 55 steps; focused sitemap/discovery/date/package fixtures pass. Production build exited 0. Main remained green and unchanged at pre-PR recheck. Review branch/PR carries the final commit and remote checks; this entry does not claim a merge, production deployment, sitemap submission or Google processing. Production merge remains the owner's call under AGENTS.md §7.
 - **Exactly one next action:** review the checked sitemap PR; after merge and production HTTP/XML verification, submit `https://chrisizworski.com/sitemap-index.xml` in the verified GSC domain property and record its processing result.
+
+## John Day visitor usefulness repair — October 22, 2026
+
+- **Scope/owner:** `izworskic/chrisizworski-com`, `improve/john-day-visitor-experience`, based on green main `0def42ef`. Compared the actual Soo Locks and Welland sources. The prior page buried practical decisions beneath unknown-status summaries and engineering detail; its 100% structural benchmark did not establish usefulness.
+- **Changed:** initial-HTML visitor desk with goal/time controls, distinct 30/90/180-minute itineraries, Giles French and LePage recreation destinations, official access links, named Google Maps searches, and a conditional Bonneville alternative for a dedicated lock-viewing trip. No John Day chamber-viewing platform or same-day park opening inferred. Moved traffic/map ahead of status limitations, started map at John Day rather than the full corridor, connected selected vessel cards to the map, reduced top-page dimension detail, and added five deliberate passage stages in both directions alongside manual water exploration. Existing data APIs, source dates, canonical/Person, noindex state and ads policy preserved.
+- **Evidence:** official USACE Columbia River Recreation, Corps Lakes project G208480, Recreation.gov LePage 233536, and USACE Northwestern Division recreational-lockage visitor information checked October 22. Suggested itineraries are editorial time budgets, not measured waiting/driving times. No live vessel queue or close-up John Day viewpoint verified.
+- **Validation:** 37 focused John Day tests pass, including real planner outcome causality, both passage directions/reset/manual-state behavior, offline API handling and existing rules/water/AIS contracts. Full clean-source repository gate passes all 55 steps; production build exited 0, including emitted-output audits. Build-generated files were removed before the final clean-source gate. Local visual/browser QA unavailable: cloud browser could not reach the executor's loopback server (connection refused). No visual/mobile certification claimed. Current GSC/GA4/AdSense data NOT AVAILABLE; no ranking or revenue uplift claim.
+- **Release:** review branch only; no merge or production deployment claimed. AGENTS.md §7 reserves merges for the owner.
+- **Exactly one next action:** inspect the deployed review preview on phone and desktop against the visitor scenarios before approving release.
+
+### John Day release completion — October 22, 2026
+
+- Owner requested completion and release of PR #1118. Added deferred vessel focus after lazy map loading, cleared selections when reports disappear, and separated approach/departure vessels from the chamber illustration. Added regression tests for both review findings; all 39 focused John Day tests pass. Full gate and exact remote release status are retained in the PR.
+- Preview is browser-accessible. Final revision will be checked there before the authorized merge; live checks follow deployment. No current GSC/AdSense measurements or uplift claims.
+- Exactly one next action: verify the production planner, map and passage controls after the checked merge deploys.
+
+## John Day map-first correction — October 22, 2026
+
+- Owner rejected the prior release's buried map, hidden demonstration, optional AIS loading and weak viewing/incoming surfaces. Rebuilt the primary experience as compact header → CARTO raster map with lock dots and automatic adjacent vessel cards → linked shore-viewing cards → visible play/pause/scrub/reverse SVG lockage. Trip planning and background detail follow the experience. Leaflet removes the WebGL2 dependency.
+- Both live site AIS and its provider returned zero features during the source check. The empty state identifies missing receiver observations and unknown incoming traffic, with official queue/alternate AIS actions; no invented ships, ETA or public chamber viewpoint. Course labels are explicitly geometric context, not a lock queue.
+- Acceptance/source ledger: `docs/JOHN_DAY_MAP_FIRST_REVIEW.md`. Focused tests cover fresh/stale vessel interpretation, raster-map selection, page ordering and animated geometry/reduced motion. Required full gate and deployed browser results recorded in the review PR. GSC/GA4/AdSense data NOT AVAILABLE.
+- Exactly one next action: inspect the deployed map-first preview against the owner's specific ship/map/animation/viewing requirements before releasing this correction.
+
+## John Day shared AIS compatibility — October 22, 2026
+
+- Owner requested the existing Soo/Great Lakes AIS path. Confirmed Soo, Great Lakes and Welland use Open Waters bbox requests and the shared Soo normalizer. Removed John Day's extra upstream kind/max_age parameters and mandatory kind field, which could discard otherwise valid shared-format vessel reports. Explicit non-vessel objects remain excluded; shared 30-minute freshness, attribution and location checks remain. Added a missing-kind compatibility regression.
+- Main verification passed before edits. Release checks pending; no coverage or incoming-ship claims. GSC/AdSense data unavailable.
+- Exactly one next action: complete the full gate and deploy the AIS compatibility correction.
+
+### Shared AIS review correction — October 22, 2026
+
+- PR #1120 merged as 3438319 and production deployed successfully. Late review identified that bbox-only requests can include non-vessel objects and older reports; restoring documented upstream kind and 30-minute bounds while preserving shared-parser compatibility for absent optional kind fields. No claims that the prior zero-report result proves an empty river. Focused tests and full gate rerun before follow-up release. GSC/AdSense unavailable.
+- Exactly one next action: release the reviewed source-filter correction after green checks.
+
+### John Day AIS empty-state wording — October 22, 2026
+
+- Owner requested the proposed heading in the live tool: ‘The river’s moving. We’re waiting for a signal.’ Updated the existing no-report heading and bumped its script cache version. Supporting receiver-gap explanation and AIS behavior remain unchanged. Prior AIS correction #1121 is merged and deployed as 683d1cb6 with green main verification. Current copy release checks pending; GSC/AdSense unavailable.
+- Exactly one next action: deploy and verify the requested wording after repository checks pass.
+
+### John Day interpretive language pass — October 22, 2026
+
+- Owner requested a National Parks ranger-style experience throughout John Day. Rewrote the welcome, AIS interpretation and empty/error states, shore stops and itineraries, water-lift teaching narrative, river-chart explanation, commerce/ecology/history chapters and source guidance. Each invites observation and explains a next step without promising ships, access or operating clearance. Preserved dated rules, contacts, dimensions, report data and user controls. Updated existing copy-sensitive benchmark assertions to the equivalent visible wording; no new empirical usability or growth claims. Prior release #1122 deployed as 4d03725b; current release checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify and release the interpretive copy in the browser after green repository checks.
+
+### John Day recognizable AIS ships — October 22, 2026
+
+- Owner requested ships that look like ships. Replaced map triangles with a local SVG overhead cargo-vessel silhouette: pointed bow, rounded stern, cargo hatches, wheelhouse and funnel. Course rotation retained with reported-heading fallback; map/card selection remains unchanged. Matching legend and map instructions updated; larger marker hitbox and cache versions included. No synthetic AIS observations added. Prior ranger release #1123 is merged/deployed as 60150b25; main verify job passed, public propagation audit running. GSC/AdSense unavailable. Current release checks pending.
+- Exactly one next action: verify and release the ship-marker update after green checks.
+
+### John Day viewport AIS repair — October 23, 2026
+
+- Owner found no ships even after zooming to the US. Confirmed the prior map only consumed the fixed John Day card query; panning never requested map-area vessels. Connected a separate viewport-driven AIS layer to the provider's documented vector-tile service, with server-side decoding, fixed validated tile coordinates, vessel/freshness filtering, CDN caching, bounded request fanout and stale-request protection. Local incoming cards remain explicitly John Day-only. Added map scope/count/loading/partial-state guidance and source links. No synthetic live positions.
+- Live source evidence: John Day GeoJSON remains empty, while a real North America vector tile returned 51 ship reports, decoded successfully. Added captured-public-tile regression and endpoint validation tests; fixture is test-only. Prior #1124 deployed as 1fbe5361 with green main CI. Current release checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify real ships appear when panning the deployed map, then release after green checks.
+
+- Review follow-up: handle world-wrap longitudes and derive counts from the same fresh deduplicated local/tile union as markers. Removed the shared API proxy: browser requests public CORS-enabled Open Waters tiles directly, with no site token and no shared Vercel/provider quota. Bundled local decoder is reproducible with `npm run build:john-day-map-tiles`; fixture and wrap/count regressions retained.
+
+### John Day Duluth-style ships and stable refresh — October 23, 2026
+
+- Owner rejected purple overhead vessels and flashing. Matched Duluth's blue side-profile freighter glyph and 38×22 local / 50×26 approach / 64×30 selected sizing, with stopped/selected colors and matching legend. Replaced layer-wide clear/rebuild with MMSI-keyed updates: move existing markers, update changed icons/popups only, remove only stale or off-view reports. Keep fresh reports while replacement tiles load or partially fail. No icon rotation or ship pulse.
+- Added regression checks for same marker and popup across repeated reports and map movement, no layer clearing, position updates in place and stale removal. Prior #1125 is merged/deployed as 1dce0a96 with green main CI; current checks pending. GSC/AdSense unavailable.
+- Exactly one next action: verify the stable Duluth-style ship layer in the deployed browser and release after green checks.
+
+- Review corrections: deduplicate retained/current sources by newest `seen`, recompute approach classification from the selected observation, and immediately redraw when clearing a ship selection. Added newest-report/approach and immediate lock-selection regressions; rebuild bundled helper before release.
+
+### John Day ship-map decluttering — October 23, 2026
+
+- Owner requested the identified crowding fix. Country/world views (zoom ≤5) now use stable, clickable 64-pixel-grid report counts; selecting a count zooms to its actual member reports. Regional views (zoom 6–9) use 24×14 freighters, with existing Duluth-style detail sizing at zoom 10+. Selected ships stay visible and highlighted. Counts explicitly represent loaded/sampled reports, not a complete vessel census. Existing keyed updates and popup stability preserved.
+- Added count conservation, stable grouping, selected-vessel bypass and detail-zoom regressions. Prior #1126 merged/deployed as 3a2da1fd with green main CI. Current release checks pending; GSC/AdSense unavailable.
+- Exactly one next action: verify country groups, group selection and regional/detail sizes in the deployed browser, then release after green checks.
+
+
+### St. Lawrence Seaway ship watch — October 23, 2026
+
+- Owner requested research and implementation from `docs/ST_LAWRENCE_SEAWAY_BUILD_PLAN.md`. Built `/st-lawrence-seaway/` and the distinct `/eisenhower-lock/` visiting destination, with received AIS reports, seven-lock explorer, interactive gravity-lock cutaway, reference-lift staircase, dimension comparison, BTS historical traffic chart, and documented US/Canadian viewing plans. Existing Welland receives additive related links. Source/method limits and canonical-intent rationale are in `docs/SEAWAY_RESEARCH_AND_RELEASE.md`.
+- Main prerequisite rechecked: latest Agent branch verification succeeded, run 39962825932. Feature rebased onto current main `9481f32e`. Focused 14-test suite and initial quick gate passed. All 55 full-gate steps passed; PR #1129 is open on `feat/st-lawrence-seaway`. Initial head `da06a4c` passed CI, emitted-site build and public audit (all eight reported checks green). The deployed Seaway and Eisenhower previews passed desktop interactive acceptance; a discovered chart keyboard-focus issue was corrected and all 55 gates passed again. Follow-up `9f7775b` also passed every reported CI check, including emitted-site build and public audit; the deployed chart retained focus after Enter. A final exact-observation dimension correction adds a future/out-of-region regression and passed all 55 source gates; its final commit/check status is recorded in PR #1129. No production deployment or merge is claimed. The prior emitted-site build passed canonical/ad-loader output checks. Fixed the API-specific Vercel timeout override order and updated pinned regional card count to seven and Tools editorial date to October 23 because discovery was actually added.
+- Real handler source checks received fresh reports; Massena/Iroquois receiver silence does not establish no ships. The planned 72-hour coverage study was not completed; no new monitoring job, ETA, queue ingestion or alerts introduced. GSC, GA4 demand and AdSense revenue measurements: NOT AVAILABLE; no uplift claimed.
+- Exactly one next action: owner reviews PR #1129 for production merge.
+
+
+### Seaway production release and stale sitemap smoke repair — October 23, 2026
+
+- Owner requested continuation after the reviewed preview. PR #1129 merged as `d17c2ca450886ca486617cabe268d404b7df2468`; Vercel production deployment `8q7FvyYnoYxntnLGAFcUTkH4Uncw` succeeded. Public Seaway and Eisenhower pages returned 200, correct self-canonicals and sitemap discovery. The production API returned 200/noindex with 22 recent reports around 8:18 p.m. EDT; queue remains unknown. Browser checks passed live ships, closed-gate water change, history selection and keyboard focus. An existing Auto ads interstitial appeared during one internal navigation; the direct Eisenhower page loaded normally, and ad policy was not changed. Main Agent verification passed on the merge; public audit status is recorded in the release PR.
+- Found a separate pre-existing smoke assertion: State Aurora Production Smoke expected 26 sitemap URLs although the committed and live inventory both contain 49 unique URLs, including 23 additional destinations. Corrected the strict count/message to 49 in its own small repair PR; no product, source data, public HTML, canonical or ad changes. All existing parent/API/child checks remain. All 55 source gates passed before opening the repair PR.
+- Massena and Iroquois received no fresh reports during this check; coverage continuity and a ship encounter remain unproven. Portrait/reduced-motion visual acceptance is still unavailable in the browser surface. GSC, GA4 demand and AdSense results: NOT AVAILABLE; no ranking, CTR or revenue improvement claimed.
+- Exactly one next action: evaluate Massena's received-report gaps against the official Seaway source before adding any next-ship prediction.
+
+### Seaway river camera integration — October 23, 2026
+
+- Owner requested embedding cameras like Duluth. Added one click-to-load player below the ship map on both Seaway and Eisenhower pages, four named camera choices, two approximate camera-area markers with view selection, fullscreen/operator links, URL selection and explicit upper-river geography. Camera players are removed on stop/switch/hidden tabs; ship refresh does not recreate them. No new API, dependency, canonical or ad configuration.
+- Research caught stale official Alexandria Bay video links: oEmbed succeeded but actual player metadata reported ended/unavailable recordings. Replaced them with current river/dock streams from the verified operator channel. Brockville City's two feeds reported live. Source IDs, verification limits and embedding method are recorded in `docs/SEAWAY_CAMERAS.md`; no Eisenhower chamber stream is claimed.
+- Base main Agent verification passed (40044732226 on be8f979c). Final source passed all 55 gates and 19 focused Seaway tests. PR #1132 head e90900c9 passed CI, emitted build and public audit; Vercel preview succeeded. Browser acceptance passed initial no-frame behavior, all four player/source choices, Stop, AIS-refresh preservation, camera-area markers/map focus, shared URL selection and explicit Eisenhower geography. This cloud browser received no video frames; the production Duluth player showed the same limitation. Actual visual playback is not claimed. Final merge/production status is recorded in PR #1132. GSC, GA4 and AdSense measurements NOT AVAILABLE; no uplift claimed.
+- Exactly one next action: read fixed-camera GA4 player-request events after a comparable 28-day window before expanding the camera inventory.
+
+## 2026-10-23 — Freighter View Farms Seed Saving Lab (unmerged draft)
+- Owner: chrisizworski-com web tools; canonical proposed `https://chrisizworski.com/seed-saving-lab/` with Freighter View Farms WordPress serving as the editorial referral. Branch `feature/freighter-seed-saving-lab-v2`; PR #1131 (DRAFT, NOT DEPLOYED or merged as recorded here).
+- Shipped to PR: 67 botanically labeled vegetable/flower/herb selections; deterministic same-species and documented interspecies comparisons; no invented pollen probabilities; corrected beet/chard home-use guidelines; crop population notes; 2–12 plant matrix, shareable URL and CSV export; internal contextual link from seed-saving reference; sitemap and canonical/Person structured data.
+- Validation: local 63/63 engine assertions and JS syntax pass. In-repository static/engine contract tests added. Preview visual/keyboard/portrait browser QA NOT AVAILABLE because sandbox Chromium blocks localhost/file navigation. Full `verify:all` NOT AVAILABLE locally (clone DNS blocked); required PR workflow still must be checked before release. Vercel deployment list returned 403; production not independently verified.
+- GSC Web impressions, clicks, CTR, position; GA4 usage; AdSense incremental revenue: NOT AVAILABLE. No growth claims.
+- Next action (one): run the PR's complete CI and preview browser acceptance, fix failures, and merge only if all production gates pass.
+
+
+### Seaway camera simplification — October 23, 2026
+
+- Owner rejected the camera bubbles and navigation complexity. Removed the two camera-area markers, CAM legend, map-jump control, back-to-map camera link and their coordinates/callbacks. Four camera buttons now open the embedded video directly below the ship map. Stop appears only when a player is open; the idle placeholder is compact. Reduced the technical camera prose to locations, credit and one short fallback instruction. Existing ships/locks/public-viewing map behavior remains.
+- Main Agent verification passed on camera release 170596ff (40047318994). Updated five camera acceptance tests to the direct choose/watch/Stop flow and explicit absence of camera map controls; the full repository gate and deployed review are recorded in the correction PR. Stream source IDs and the earlier cloud media-rendering limitation remain documented in docs/SEAWAY_CAMERAS.md. No new data, ad-policy or canonical changes. GSC/GA4/AdSense measurements NOT AVAILABLE.
+- Exactly one next action: verify and release the simplified one-click camera interface on both pages.
+
+
+### Seaway cameras below map reports — October 23, 2026
+
+- Owner requested that the regional report cards and freshness/coverage note remain attached to the map, with cameras below that complete block. Moved the existing camera section after those cards/note on both Seaway pages. No controls, data, camera playback or map behavior changed. Updated the existing ordering assertion to protect this arrangement.
+- Base main Agent verification succeeded on 0701238f. Full gate and deployed order checks are recorded in the release PR. No new canonical, metadata, source, ad or measurement changes; GSC/GA4/AdSense results NOT AVAILABLE.
+- Exactly one next action: verify and publish the requested map → regional reports → coverage note → cameras order on both pages.
+
+
+## October 23, 2026 — Seed Saving Lab usability value function
+- Owned route `/seed-saving-lab/`, feature branch `feature/seed-lab-usability-value-function`; release state to be verified in PR (do not infer production from branch CI).
+- Explicit minimization target `L=100-V`: weighted 100-point task-affordance benchmark with release threshold 90 and hard correctness guards. Original code scored 26/100 in Node static/engine proxy; revised code 100/100 in the same proxy. Separate local Chromium task flows at 390px and 1280px scored 24/100 before and 100/100 afterward, 0 JS exceptions and no horizontal overflow. These are synthetic QA measurements, not observed human performance.
+- Resolved stale pair results by recalculating all field edits; added immediate initial answer, two-mode hero navigation, accessible common/botanical plant-name filters, concise live announcements, priority-first whole-garden action, faster additions and one-click flagged-pair drill-down. Preserved species-first scientific caveats and existing page canonical.
+- Node benchmark `scripts/benchmark-seed-lab-usability.mjs` registered in required `verify:all`. User research, GSC, GA4 and AdSense results NOT AVAILABLE; no conversion, revenue, SEO or human satisfaction improvement claimed.
+- Exactly one next action: verify complete branch CI and preview interaction gates, then merge and inspect actual production deployment.
+
+
+### Seaway return to full map — October 23, 2026
+
+- Owner could not find a way back to the entire mapped Seaway. Replaced “Fit selected region” with an always-visible “View entire Seaway” map button on both canonical pages. It selects all five researched regions (Montreal to Lake Ontario), fits their bounds, clears ship name/type filters and selected ship, closes the popup, and restores the map overview. The button also works when the region is already “all” but a lock/ship or manual zoom has narrowed the map. The regional selector now calls its wide option “Entire Seaway.” Existing locks, camera panel and viewing plans remain available.
+- Based on main ed6b6fab; full gate, latest main verification, PR and deployed interaction evidence will be recorded in the release PR. GSC/GA4/AdSense metrics NOT AVAILABLE; no search or revenue uplift claimed.
+- Exactly one next action: verify and release the full-map return from regional, filtered and zoomed-in map states on both pages.
+
+
+### Seaway map-return script cache correction — October 23, 2026
+
+- PR #1138 merged as 24bc71e6 and Vercel production succeeded. Live browser acceptance caught the new button label using a previously cached `seaway.js?v=20261023d` (asset cache max-age 14400); its prior handler only refit the selected region. Bumped the script URL to 20261023e in the source generator and both emitted pages so returning visitors receive the new handler. The unversioned production asset already contains the new code.
+- All 56 gates passed for the map-return code; repeat full gate and fresh-version live interaction are recorded in the correction PR. GSC/GA4/AdSense results NOT AVAILABLE.
+- Exactly one next action: release the cache correction and verify the regional/filter/zoom return on the live pages using the new script URL.
+
+### Seed Saving Lab answer-first redesign, October 23, 2026
+
+- Owner was not happy with the UX of `/seed-saving-lab/`. Rebuilt the page around one answer: H1 "Will these plants cross?", two alphabetical plant pickers directly under it, a Yes/No/Rarely verdict, "pick one" ways to keep seed true (published distance, hand-pollination, one variety), population and harvest steps, then tap-to-answer refinements shown only when they can change the result. Whole-garden view became a list with crossing pairs first and "Open in checker". Data and crossing engine unchanged.
+- Removed: hero stats and illustration, per-plant search boxes, duplicate verdict blocks, the no-op "Review my plan" button, garden bloom selectors (they changed no result; old `g=id:y` links still load), six-tab generations section (its first-generation text now appears as "Next year:" in each answer) and the PLANNED roadmap. Kept: field notes, garden photo, trust note, sources, URLs, canonical, Person schema.
+- Replaced the substring usability gate with a behavioural one (`scripts/lib/seed-lab-harness.mjs`); added `tests/seed-saving-lab-ui.test.js`. GSC/GA4/AdSense NOT AVAILABLE; no search or revenue uplift claimed. No human research.
+- Second pass (owner: softer, charts, better interaction): light cream/sage palette, pair picture with facts, log distance slider + chart, garden pollen web (tap plant/line), room-per-species bar chart with table view. Gate still 100/100 behavioural; 9 UI tests.
+- Exactly one next action: watch a real phone session (or five) pick their own two plants and note where they hesitate.
+
+### Seed Saving Lab gardener's voice, October 23, 2026
+
+- Owner asked for a gardener's voice that tells the garden's story. Rewrote intro, answers, steps, garden copy, empty states and trust note in the Freighter View Farms voice (first person, place, season, bees), and replaced the "three rules" block with a four-beat season story (bloom, visit, seed, telling) with small illustrations. Decisions and data unchanged.
+- Kept standing rules: no em dashes anywhere on the page, no coffee, no invented anecdotes about Chris's household or yields; place facts limited to Bay City, Zone 6a, Saginaw Bay. Answer stays above the fold on phones (scene sentences hidden under 760px).
+- Exactly one next action: Chris reads the default answer and one "no" answer aloud and flags any line that does not sound like him.
+
+### Seaway viewing-location Google Maps links — October 24, 2026
+
+- Owner requested a Google Maps link for every viewing-location button. Both named viewing cards now have a direct Google Maps directions link beside the plan-selection action, with destination-specific accessible labels. Country filtering hides the whole card and its directions link together. Added the same action to both hub destination cards and documented lock viewing actions, and made map popup/detail links explicitly say Google Maps directions. Browser acceptance caught the old Iroquois query resolving to Iroquois Dam in New York. Changed its query to “Iroquois Locks, Iroquois, Ontario, Canada,” which Google resolves to Iroquois Lock Gauging Station on the Canadian public viewing side. The Seaway Visitor Center query resolves to 76 Barnhart Island Road. No operational lock coordinates are used as navigation targets.
+- Base main b3414995 Agent verification passed (40054475475). Full gate, PR and live interaction evidence are recorded in the release PR. CSS, JS and reference-data version URLs advanced together so returning visitors receive the new card structure and filter behavior. GSC/GA4/AdSense results NOT AVAILABLE; no search or revenue uplift claimed.
+- Exactly one next action: verify both public viewing destinations and country filters on both live Seaway pages after release.
+
+### Seed Saving Lab generic crop pickers, October 24, 2026
+
+- Owner feedback: the dropdowns listed varieties ("Brandywine tomato" was the only tomato). Pickers now list 51 crops by the names gardeners use (Tomato, Pepper, Zucchini, Pumpkin, Zinnia, Cosmos...). Crossing logic is unchanged and still species based.
+- Two varieties of one crop are compared by choosing that crop in both boxes; the second plant reads "Another tomato variety". Mostly self-pollinating crops (tomato, bean, pea, lettuce) now answer "Yes, but not often." The whole-garden list accepts up to three varieties of one crop ("Zinnia (2nd variety)").
+- Old shared links that named varieties map onto their crop through an alias table, so existing permalinks still open.
+- Tests and the behavioural usability gate (100/100) updated. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and decides on merge.
+
+### Seaway fresh-eyes interaction repair — October 24, 2026
+
+- Owner requested a contrarian review and fixes. Reproduced the country comparison disappearing when choosing Iroquois; code review also found stale map/ship selection, a viewing-to-ships action that left the map offscreen, misleading shared empty states and region summaries discarding wider cached evidence. Default to both countries; preserve that comparison and explicit country choice in URLs/Back. Clear prior ship selection when inspecting a lock/place, switching regions or filtering that ship out; reset stale map detail and close obsolete popups. “Check ships” now returns to the ship-watch section. Loading, unreachable source, no filter matches and checked quiet water have distinct messages, with a same-region filter reset. Use newer cached evidence across scopes, retain available regional evidence during a wider outage, and mark the chosen regional card.
+- Owning repo chrisizworski-com; base main 06ece730 Agent verification succeeded (40090039952). Added six regression tests that run actual application actions with network/chart drawing isolated, alongside the existing 19 Seaway tests. Full gate, PR and deployed interaction results are recorded in the release PR. No new data, canonical or ad-policy changes. GSC/GA4/AdSense NOT AVAILABLE; no growth or human-usability uplift claimed.
+- Exactly one next action: verify the repaired comparison, region/filter recovery and viewing-to-ships paths in the deployed browser, then release after green checks.
+
+
+### Seaway interpretive ranger voice — October 24, 2026
+
+- Owner requested explanatory, educational and fun language in the voice of a national park interpretive center. Reworked both page introductions, all seven lock stories, five regional notes, both viewing descriptions/between-ship prompts, map/ship interpretation, camera introduction, the five model-stage explanations, fit/profile/history introductions and source-method explanation. Added concrete observation prompts (follow a railing against a fixed wall mark), plain definitions of beam and AIS, and gravity/water-elevator and radio-postcard analogies. Controls retain direct action labels.
+- Engineering/AIS explanations checked against Seaway operator primary sources; URLs and editorial boundaries recorded in docs/SEAWAY_RANGER_VOICE.md. Access/hours, identifiers, geometry, camera feeds, Maps destinations, live-data limits and model/calculation behavior remain unchanged. Cache URLs for changed scripts/reference data advanced together. Base main 2c51f808 Agent verification passed (40093137752). Full gate, PR and deployed copy verification are recorded in the release PR. GSC/GA4/AdSense NOT AVAILABLE; no search/revenue or human-learning uplift claimed.
+- Exactly one next action: verify the longer interpretive copy in the deployed map, viewing details and both directions of the lock model, then release after green checks.
+### Seed Saving Lab per-feature value functions, October 24, 2026
+
+- Owner asked for a value function per feature, then to score and improve against it. Added `scripts/benchmark-seed-lab-features.mjs` (16 features, behavioural criteria, gate: every feature >= 90, mean >= 95) and `docs/SEED_LAB_FEATURE_VALUE_FUNCTIONS.md`.
+- Same gate on main a87d7ecc: mean 80.7, lowest 50 (What to do). After: 100 on every feature. Fixes: plain words across all 2,601 pair answers, biennial season notes, hybrid seed warning, garden "saving seed / eating only" toggle with a "No seed at stake" group, plant-specific garden steps and CSV, unclipped chart labels, fifth example, phone verdict at 702 px.
+- Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview; then the other garden tools get the same treatment (in progress).
+### Garden tools up to the Seed Saving Lab bar, October 24, 2026
+
+- Owner asked to review the other garden tools against the Seed Saving Lab and bring them up to par. Added a shared value function (`scripts/benchmark-garden-tools.mjs`, eight behaviours, gate every tool >= 90), a garden-tool harness and shared assets in `public/assets/garden-tools/`.
+- Manual before scores on main: planting calendar ~60, frost dates ~44, matchmaker ~45, tomatoes ~36, seed starting ~36. After, on the automated gate: 100 each. Defects fixed: tomato and matchmaker pages scrolled sideways on phones; seed starting intro rendered inside the site header and zone 6a frost dates were out of order; matchmaker no longer calls a Vercel function.
+- Protected titles, H1s, canonicals, `tomato-quick-answer`, `frost-quick-answer` and the zone direct-answer sentence unchanged. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and decides on merge.
+
+### What to Plant Now in Michigan: engine on the hub, October 24, 2026
+
+- Owner said "get all this done". Built the station-based, rule-based engine (`lib/plant-now`, `public/assets/garden-tools/plant-now.js`) on `/michigan-gardening/` with MSU rules quoted on the page; 11 crops live, lettuce, potatoes, garlic, basil, cilantro and harvest NOT REPORTED. Corrected conflicting frost values on the hub and `/michigan-last-spring-freeze/`. No new URLs, no server functions.
+- Chrome extension was not reachable from the session, so the MSU source pack is still unread. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: read the MSU source pack in a browser and move sourced crops out of NOT REPORTED.
+
+### Gardening hub section value functions, October 24, 2026
+
+- Owner asked for a value function per hub section, then to execute against it. Added `scripts/benchmark-hub-features.mjs` (15 sections; gate every section >= 90, mean >= 95) and `docs/HUB_SECTION_VALUE_FUNCTIONS.md`. Same gate on main 8192319d: mean 76.0, lowest 20 (guide catalogue). After: 100 on every section.
+- Fixes: four guide cards that contradicted their pages, Seed Saving Lab and matchmaker added to the hub and its structured data, stale 148-day and 140-150-day figures, an invisible Freighter View Farms link, wrong section counts, footer date, soil-blocked crops dropping from the weekly list, seasonal jobs sorted with "In season now".
+- Flagged, not changed: a May 8 frost anecdote on the hub and the freeze page that cannot be verified. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner reviews the preview and confirms or removes the May 8 anecdote.

@@ -518,13 +518,13 @@
       var slug = regionEl.getAttribute('data-region');
       var reg = REGIONS.filter(function (r) { return r.slug === slug; })[0];
       Promise.all([fetchServer(), fetchNow(slug), reg ? fetchObs(reg) : Promise.resolve(null)])
-        .then(function (res) { renderRegion(slug, res[0], res[1], res[2]); });
+        .then(function (res) { renderRegion(slug, res[0], res[1], res[2]); window.__michiganIceNow = res[1]; window.__michiganIceNowReady = true; window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
       return;
     }
 
     if (isIndex) {
       Promise.all([fetchServer(), fetchNow(), Promise.all(REGIONS.map(fetchObs))])
-        .then(function (res) { renderIndex(res[0], res[1], res[2]); });
+        .then(function (res) { renderIndex(res[0], res[1], res[2]); window.__michiganIceNow = res[1]; window.__michiganIceNowReady = true; window.dispatchEvent(new CustomEvent('michigan-ice-data', { detail: res[1] })); });
       return;
     }
 
@@ -540,4 +540,18 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
+})();
+
+// An independent progressive enhancement. Base report and safety copy work without it.
+(function () {
+  var region = document.getElementById('region-live');
+  if (!document.getElementById('board') && (!region || !/^(saginaw-bay|lake-st-clair|little-bay-de-noc|grand-traverse-bay)$/.test(region.getAttribute('data-region') || ''))) return;
+  // Carry the generator's content-based bundle version into the enhancement.
+  // Otherwise an old freeze-up.js can survive a fresh ice.js in the device cache.
+  var script = document.currentScript;
+  var version = script && new URL(script.src, location.href).searchParams.get('v');
+  var s = document.createElement('script');
+  s.src = '/michigan-ice/freeze-up.js' + (version ? '?v=' + encodeURIComponent(version) : '');
+  s.defer = true;
+  document.head.appendChild(s);
 })();

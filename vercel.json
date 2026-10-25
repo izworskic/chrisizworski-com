@@ -4,6 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/st-lawrence-seaway.js": {
+      "maxDuration": 15
+    },
     "api/great-lakes-ferry-conditions.js": {
       "maxDuration": 20
     },
@@ -66,6 +69,9 @@
     },
     "api/michigan-ski.js": {
       "maxDuration": 60
+    },
+    "api/winter-hike-lab.js": {
+      "maxDuration": 30
     },
     "api/waterfowl-freeze-line.js": {
       "maxDuration": 40
@@ -401,6 +407,23 @@
   ],
   "headers": [
     {
+      "source": "/michigan-ice/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0, must-revalidate"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/flight-tracker-sw.js",
       "headers": [
         {
@@ -675,6 +698,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/lake-effect",
+      "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect"
+    },
     {
       "source": "/api/california-roads",
       "destination": "https://national-outdoor-core.vercel.app/api/california-roads"
@@ -2205,6 +2232,38 @@
     {
       "source": "/national-tools/lake-powell-ramp-status/",
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
+    },
+    {
+      "source": "/national-tools/mauna-kea-tonight",
+      "destination": "/synced-national-tools/mauna-kea-tonight/index.html"
+    },
+    {
+      "source": "/national-tools/mauna-kea-tonight/",
+      "destination": "/synced-national-tools/mauna-kea-tonight/index.html"
+    },
+    {
+      "source": "/national-tools/big-island-beach-day",
+      "destination": "/synced-national-tools/big-island-beach-day/index.html"
+    },
+    {
+      "source": "/national-tools/big-island-beach-day/",
+      "destination": "/synced-national-tools/big-island-beach-day/index.html"
+    },
+    {
+      "source": "/national-tools/kona-manta-ray-night",
+      "destination": "/synced-national-tools/kona-manta-ray-night/index.html"
+    },
+    {
+      "source": "/national-tools/kona-manta-ray-night/",
+      "destination": "/synced-national-tools/kona-manta-ray-night/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-episode-watch",
+      "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-episode-watch/",
+      "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
     },
     {
       "source": "/national-tools/:path*",
