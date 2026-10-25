@@ -36,6 +36,6 @@ Use `confidence:'reported'` until the underlying official source establishes the
 The PR browser gate must validate both an empty 2026–27 season and an injected sample live arrival that updates the map, timeline and card while leaving older winters untouched. It must also validate map/photo failure fallbacks, no mobile overflow and meaningful default search behavior.
 
 ## Current limitations
-- Only four reporting feeds and thirteen AIS harbor reference areas. This is **not** national fleet-complete coverage, and a missing RSS mention isn't evidence no vessel laid up.
+- Only five reporting feeds and thirteen AIS harbor reference areas. This is **not** national fleet-complete coverage, and a missing RSS mention isn't evidence no vessel laid up.
 - AIS near a monitored harbor does **not** establish winter berthage, repair status, or a scheduled arrival.
 - Automated source parsing can miss nonstandard headlines and vessel names; manual review is retained as a route for research-driven corrections.
