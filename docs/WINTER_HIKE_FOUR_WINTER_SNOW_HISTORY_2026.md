@@ -10,7 +10,7 @@ The chart is **station measurement**, not NOHRSC modeled snow depth or a direct 
 
 ## Data contracts and citations
 
-1. NOAA [NCEI Access Data Service documentation](https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation) defines HTTPS `/access/services/data/v1`, `dataset=daily-summaries`, `dataTypes=SNWD`, `bbox=N,W,S,E`, `units=standard`, `format=json`, `includeStationName=true`, `includeStationLocation=true`, and quality attributes. Each real upstream request is **centered on server-curated trail-area reference coordinates**, never user-supplied lat/lon.
+1. NOAA [NCEI Search Service](https://www.ncei.noaa.gov/access/search/documentation/search-service/) accepts a bounded `bbox` with `dataset=daily-summaries` and `dataTypes=SNWD`, returning reporting station IDs, coordinates and historical coverage. NOAA [NCEI Data Service](https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation) **requires a `stations` value** for actual daily `SNWD`; the previous bbox-only data request returned HTTP 400 on October 25. Subsequent station-specific calls request standard inches, station coordinates and quality attributes.
 2. NOAA [NCEI Past Weather Tool](https://www.drought.gov/data-maps-tools/ncei-past-weather-tool) describes original station daily snow-depth observations and the need for quality control and gaps.
 3. NOAA [NOHRSC archive](https://www.nohrsc.noaa.gov/archived_data/) offers historic 1-km **modeled** gridded SNODAS products; it does **not** supply our chart's station snow depths. No SNODAS historical point series has been extracted or displayed here.
 4. NASA [GIBS historical imagery](https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/) visually portrays MODIS Terra imagery at 250 m browse / ~500 m snow-cover scale. It is neither a source of numeric NCEI depth observations nor evidence a parking lot has been plowed.
@@ -26,7 +26,7 @@ Each winter row has an explicit **View YYYY-MM-DD in NASA imagery** control. Thi
 ## Server protection and cache
 
 - Read-only `mode=history&route=<known-id>&anchor=01-15|02-15|03-15`, no coordinate input and no other date ranges.
-- Four parallel HTTPS NCEI requests at most, each 7 days; 6.5-second request timeout, 1.6 MB response limit, 40-mile station search radius and strict date, station-ID, coordinates, nonnegative depth and quality-flag validation.
+- One bounded NOAA station-metadata search followed by up to five verified candidates × four parallel daily NCEI requests (worst case 21 upstream requests), with a shared 22-second total deadline, 6.5-second individual request cap and strict 40-mile station-radius/date/quality checks. Stations within 25 miles with measured data across three or more winters are preferred. Actual query counts are lower when the first candidate has sufficient reports.
 - Four **completed** winters only; in October 2026 those are winters ending **2026, 2025, 2024, 2023**. Incomplete/current winter not portrayed as historical results.
 - Each response is public, `X-Robots-Tag: noindex,nofollow` and edge cached for 24 hours; client fetches on explicit user click and memoizes the result.
 - The service returns partial data with source unavailability labels; it does not make up depths if the NCEI endpoint fails.
@@ -44,7 +44,7 @@ Each winter row has an explicit **View YYYY-MM-DD in NASA imagery** control. Thi
 | Four unnecessary upstream requests on every route-card selection | 10 |
 | Extra click to view a historical year on the map | 1 |
 
-To approve: all 100-loss violations **zero**; NOAA API contract and failure cases covered by automated tests; new JS parses; preview HTML, noindex, and official route-map baseline gates pass. Real NOAA HTTP success and NASA imagery tile rendering still require **live-browser/connected-network verification**; synthetic CI tests do not prove the upstream services work at deployment time. No trail or winter lot is certified cleared, and direction links remain disabled.
+To approve: all 100-loss violations **zero**; NOAA live route-history source check and source-variant tests passed October 25, 2026 on four geographically separated Michigan pilot routes in GitHub Actions. NASA raster imagery in an actual mobile browser still needs separate verification. No trail or winter lot is certified cleared, and directions remain disabled.
 
 ## Follow-up for a true week-of-year snow-depth climate profile
 
