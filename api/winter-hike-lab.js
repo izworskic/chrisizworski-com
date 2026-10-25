@@ -11,7 +11,8 @@ const Eval=require('../lib/winter-hike-decision.cjs');
 const Access=require('../lib/winter-hike-trip.cjs');
 const Parking=require('../lib/winter-hike-parking.cjs');
 const History=require('../lib/winter-hike-history.cjs');
-const ALLOWED=new Set(['catalog','preview','history']);
+const Season=require('../lib/winter-hike-season.cjs');
+const ALLOWED=new Set(['catalog','preview','history','season']);
 function compactRoute(r) {
  return {id:r.id,title:r.displayName,group:r.placeGroup,region:r.region,
   routeForm:r.routeForm,miles:r.lengthMiles,mileageStatus:r.lengthEvidence,
@@ -40,6 +41,18 @@ async function handler(req,res) {
   return status(res,200,{status:'research-only',compiledAt:Routes.catalog.compiledAt,
    warning:'Destination points are NOT winter parking. Named routes do not imply open roads, plowed lots, packed trails or safe travel.',
    routes:Routes.catalog.routes.map(compactRoute),quarantinedCount:Routes.catalog.quarantined.length},1200);
+ }
+ if(mode==='season'){
+  const id=String(req.query?.route||'');
+  if(!Routes.routeById(id))
+   return status(res,400,{error:'Choose a named catalog route for four completed winter seasons'});
+  try {
+   const record=await Season.fullSeasonForRoute(id);
+   // Station measurements from completed winters do not need daily refresh.
+   return status(res,200,{status:'full-season-station-history-not-trip-clearance',...record},86400);
+  }catch{
+   return status(res,503,{error:'NOAA full-winter station history unavailable; no snow-depth values estimated'});
+  }
  }
  if(mode==='history'){
   const id=String(req.query?.route||'');
