@@ -49,9 +49,9 @@ async function run(){
    '--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--ignore-gpu-blocklist',
    '--enable-unsafe-swiftshader','--disable-dev-shm-usage'
   ]});
-  const sizes=[{w:390,h:844,deviceScaleFactor:2,isMobile:true,hasTouch:true},
-   {w:768,h:1024,deviceScaleFactor:1,isMobile:true,hasTouch:true},
-   {w:1365,h:900,deviceScaleFactor:1,isMobile:false,hasTouch:false}];
+  const sizes=[{viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true},
+   {viewport:{width:768,height:1024},deviceScaleFactor:1,isMobile:true,hasTouch:true},
+   {viewport:{width:1365,height:900},deviceScaleFactor:1,isMobile:false,hasTouch:false}];
   const names=['phone-390','tablet-768','desktop-1365'];
   for(let i=0;i<sizes.length;i++){
    const device=sizes[i],context=await browser.newContext({...device,
@@ -87,8 +87,6 @@ async function run(){
    await page.waitForSelector('#history-compare');
    await page.locator('#sat-date').fill('2025-02-15');
    await page.locator('#sat-date').dispatchEvent('change');
-   await page.locator('#sat-mode').selectOption('trueColor');
-   await page.locator('#sat-show').check();
    await page.waitForFunction(()=>document.getElementById('map-status').textContent.includes('map ·'),null,{timeout:18000}).catch(async e=>{
      const diagnostic=await page.evaluate(()=>({
       mapStatus:document.getElementById('map-status')?.textContent,
@@ -100,8 +98,9 @@ async function run(){
      console.log('MOBILE MAP LOAD DIAGNOSTIC '+JSON.stringify({viewport:names[i],diagnostic,errors:exceptions,logs:logs.slice(0,12)}));
      throw e;
    });
-   await timeout(1000);
-   await timeout(2500);
+   await page.locator('#sat-mode').selectOption('trueColor');
+   await page.locator('#sat-show').check();
+   await page.waitForTimeout(1800);
    const first=await page.evaluate(()=>{
     const el=document.getElementById('map'),sat=document.getElementById('sat-status');
     return {status:document.getElementById('map-status').textContent,
@@ -114,9 +113,10 @@ async function run(){
       missingDirection:document.querySelectorAll('a[href*="google.com/maps/dir"]').length===0
     };
    });
+   await page.waitForTimeout(4500);
    const img1=tiles.filter(x=>x.status===200&&x.contentType.startsWith('image/')&&x.url.includes('TrueColor'));
    await page.locator('#sat-mode').selectOption('snowCover');
-   await timeout(2500);
+   await page.waitForTimeout(4500);
    const img2=tiles.filter(x=>x.status===200&&x.contentType.startsWith('image/')&&x.url.includes('NDSI_Snow_Cover'));
    await page.locator('#sat-next').click();
    const next=await page.locator('#sat-date').inputValue();
@@ -129,7 +129,7 @@ async function run(){
     first.viewport+4>=first.docWidth&&first.layerToggle&&first.missingDirection&&
     next==='2025-02-16'&&!unchecked&&
     img1.length>0&&img2.length>0&&exceptions.length===0;
-   const row={viewport:names[i],passed,map:first,successfulRealNASA:{trueColor:img1.length,
+   const row={viewport:names[i],passed,map:first,tiles:tiles.slice(0,12),successfulRealNASA:{trueColor:img1.length,
     snow:img2.length},dateAfterNext:next,exceptions,logs:logs.slice(0,12)};
    report.push(row);
    console.log('BROWSER MOBILE MAP RESULT '+JSON.stringify(row));
