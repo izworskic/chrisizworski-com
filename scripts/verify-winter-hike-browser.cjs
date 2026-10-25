@@ -29,7 +29,7 @@ const server=http.createServer(async(req,res)=>{
   if(u.pathname==='/api/winter-hike-lab'){
    await api(req,res,u.searchParams);return;
   }
-  const target=u.pathname==='/'?'/winter-hike-snowshoe-lab/index.html':u.pathname;
+  const target=u.pathname==='/'||u.pathname==='/winter-hike-snowshoe-lab/'?'/winter-hike-snowshoe-lab/index.html':u.pathname;
   const file=path.resolve(ROOT,'.'+target);
   if(!file.startsWith(ROOT+path.sep)){res.writeHead(403);res.end();return}
   const st=await fs.promises.stat(file).catch(()=>null);
@@ -77,8 +77,12 @@ async function run(){
     const bytes=fs.readFileSync(path.resolve('node_modules/maplibre-gl/dist/maplibre-gl.css'));
     await route.fulfill({status:200,contentType:'text/css',body:bytes});
    });
-   await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
-   await page.waitForFunction(()=>document.querySelectorAll('.route-card').length>=50,{timeout:12000});
+   const initial=await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
+   if(initial.status()!==200)throw Error('Browser harness HTML request returned '+initial.status());
+   await page.waitForFunction(()=>document.querySelectorAll('.route-card').length>=50,null,{timeout:12000}).catch(async e=>{
+    const snapshot=await page.evaluate(()=>({title:document.title,body:document.body?.textContent.slice(0,200),result:document.getElementById('result-count')?.textContent}));
+    console.log('ROUTE CATALOG LOAD DIAGNOSTIC '+JSON.stringify({snapshot,exceptions,logs}));throw e;
+   });
    await page.locator('.route-card').first().click();
    await page.waitForSelector('#history-compare');
    await page.locator('#sat-date').fill('2025-02-15');
@@ -96,10 +100,7 @@ async function run(){
      console.log('MOBILE MAP LOAD DIAGNOSTIC '+JSON.stringify({viewport:names[i],diagnostic,errors:exceptions,logs:logs.slice(0,12)}));
      throw e;
    });
-   await page.waitForFunction(()=>{
-    const map=window.WinterHikeSatelliteUI?.debugMap?.();
-    return map && map.getSource('historic-modis') && map.getLayer('historic-modis');
-   },{timeout:13000}).catch(()=>{});
+   await timeout(1000);
    await timeout(2500);
    const first=await page.evaluate(()=>{
     const el=document.getElementById('map'),sat=document.getElementById('sat-status');
