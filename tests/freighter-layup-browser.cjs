@@ -110,6 +110,16 @@ async function run(){
       const bioUrl=url+'vessels/algoma-compass/';
       await page.goto(bioUrl,{waitUntil:'domcontentloaded'});
       check((await page.locator('h1').textContent()).includes('Algoma Compass'),size.name+': permanent biography loads');
+      check(await page.locator('body.layup-biography .bio-hero h1').isVisible(),size.name+': designed ship hero');
+      check(await page.locator('body.layup-biography .bio-trust-bar').isVisible(),size.name+': source-date honesty');
+      check(await page.locator('.bio-chapter').count()>=2,size.name+': editorial history chapters');
+      const overflowBio=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+      check(overflowBio<=3,size.name+': ship biography overflow '+overflowBio);
+      await page.goto(url+'vessels/oakglen/',{waitUntil:'domcontentloaded'});
+      check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Oakglen historical photo');
+      await page.goto(url+'vessels/james-r-barker/',{waitUntil:'domcontentloaded'});
+      check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Barker historical photo');
+
       check((await page.locator('#winter-record').textContent()).includes('Winter 2024–25'),size.name+': earlier season biography table');
       check((await page.locator('#winter-record').textContent()).includes('Winter 2025–26'),size.name+': current archive biography table');
       check(await page.locator('meta[name="description"]').count()===1,size.name+': page-specific metadata');

@@ -58,3 +58,12 @@ test('all vessel titles fit SERP length and retain individual identity',()=>{
    assert.ok(title.includes(p.name),'ship name must lead title');
  }
 });
+
+test('all six biographies keep the editorial family and verified winter tables',()=>{
+ for(const p of bios.profiles){
+  const page=renderProfile(p,{...registry,__profiles:bios.profiles});
+  assert.ok(page.includes('<body class="layup-biography">'),p.id);
+  assert.ok(page.includes('bio-hero-actions')&&page.includes('bio-trust-bar'),p.id);
+  assert.ok(page.includes('id="winter-record"')&&page.includes('Read the original reporting'),p.id);
+ }
+});
