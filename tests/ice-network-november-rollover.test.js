@@ -120,7 +120,7 @@ test('all five surfaces fail closed and retain an independently labeled prior wi
   assert.match(freeze, /historical NOAA observations, not current conditions/);
   assert.match(freeze, /'America\/Detroit'/);
   const greatLakesClient = fs.readFileSync('public/michigan-ice/ice.js', 'utf8');
-  assert.match(greatLakesClient, /timeZone: 'America\\/Detroit', month: 'numeric'/);
+  assert.ok(greatLakesClient.includes("timeZone: 'America/Detroit', month: 'numeric'"));
   assert.match(caves, /through>=season.start/);
   assert.match(caves, /Keep the day-by-day prior winter inspector available/);
   assert.match(bridge, /seasonOpen && o && o.available/);
