@@ -3,6 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {readFileSync}=require('node:fs');
 const {spawnSync}=require('node:child_process');
+const vm=require('node:vm');
 const path=require('node:path');
 const S=require('../public/winter-hike-snowshoe-lab/satellite.js');
 const Parking=require('../lib/winter-hike-parking.cjs');
@@ -77,4 +78,61 @@ test('all browser JavaScript parses in Node check mode, including map viewer and
   const result=spawnSync(process.execPath,['--check',path.join(base,name)],{encoding:'utf8',timeout:8000});
   assert.equal(result.status,0,name+': '+result.stderr);
  }
+});
+
+
+test('historical WMTS UI changes date, overlay and opacity without enabling navigation or basemap resets',()=>{
+ const keys=['sat-show','sat-mode','sat-date','sat-preset','sat-prev','sat-next',
+  'sat-opacity','sat-opacity-text','sat-focus','sat-status'];
+ const controls=Object.fromEntries(keys.map(k=>[k,{
+  value:k==='sat-mode'?'trueColor':k==='sat-opacity'?'75':'',
+  checked:false,disabled:false,textContent:'',options:[],events:{},
+  addEventListener(type,fn){this.events[type]=fn},
+  replaceChildren(){this.options=[]},
+  append(o){this.options.push(o)}
+ }]));
+ const dom={getElementById:id=>controls[id],createElement:()=>({value:'',textContent:''})};
+ const ctx={window:{WinterHikeSatellite:S},document:dom,Number,Date,Math};
+ vm.runInNewContext(read('satellite-ui.js'),ctx,{filename:'satellite-ui.js'});
+ const ui=ctx.window.WinterHikeSatelliteUI;
+ assert.ok(ui);
+ const sources=new Map(),layers=new Map(),calls=[];
+ const map={
+  isStyleLoaded:()=>true,
+  getSource:id=>sources.get(id),getLayer:id=>layers.get(id),
+  addSource(id,config){sources.set(id,config);calls.push('add-source')},
+  addLayer(config,before){layers.set(config.id,config);calls.push('add-layer:'+before)},
+  removeLayer(id){layers.delete(id);calls.push('remove-layer')},
+  removeSource(id){sources.delete(id);calls.push('remove-source')},
+  setPaintProperty(id,name,value){calls.push('opacity:'+value)},
+  getZoom:()=>5.2,easeTo(opts){calls.push('center:'+opts.center.join(','))}
+ };
+ ui.init();ui.attach(map);
+ assert.equal(controls['sat-show'].checked,false);
+ assert.equal(sources.size,0);
+ controls['sat-show'].checked=true;controls['sat-show'].events.change();
+ assert.equal(sources.size,1);
+ const first=sources.get('historic-modis').tiles[0];
+ assert.match(first,/CorrectedReflectance_TrueColor/);
+ assert.match(first,/2026-02-15/);
+ controls['sat-mode'].value='snowCover';controls['sat-mode'].events.change();
+ assert.match(sources.get('historic-modis').tiles[0],/NDSI_Snow_Cover/);
+ assert.equal(sources.get('historic-modis').maxzoom,8);
+ assert.equal(calls.filter(x=>x==='remove-layer').length,1);
+ controls['sat-opacity'].value='40';controls['sat-opacity'].events.input();
+ assert.ok(calls.includes('opacity:0.4'));
+ ui.selected({point:{lat:44.7,lon:-85.5}});
+ controls['sat-focus'].events.click();
+ assert.ok(calls.includes('center:-85.5,44.7'));
+ assert.equal(controls['sat-focus'].disabled,false);
+ controls['sat-date'].value='2099-01-01';controls['sat-date'].events.change();
+ assert.equal(controls['sat-show'].checked,false);
+ assert.equal(sources.size,0);
+ assert.match(controls['sat-status'].textContent,/Invalid date/);
+ controls['sat-date'].value='2025-02-15';controls['sat-date'].events.change();
+ assert.equal(controls['sat-show'].checked,true);
+ assert.match(sources.get('historic-modis').tiles[0],/2025-02-15/);
+ ui.reportTileError();
+ assert.match(controls['sat-status'].textContent,/unavailable|could not be retrieved/);
+ assert.equal('directionsUrl' in ui,false);
 });
