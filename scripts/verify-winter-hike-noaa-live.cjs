@@ -28,6 +28,7 @@ async function diagnose(){
  const H=require('../lib/winter-hike-history.cjs');
  for(const [name,url] of [
   ['vasa bbox February',H.requestUrl(Routes.routeById('vasa-snowshoe-orange').referencePoint,2025,'02-15')],
+  ['station search service bbox','https://www.ncei.noaa.gov/access/services/search/v1/data?dataset=daily-summaries&dataTypes=SNWD&startDate=2025-02-12&endDate=2025-02-18&bbox=45.2106,-86.1411,44.2906,-84.8456&limit=25&offset=0'],
   ['known station winter 7 days','https://www.ncei.noaa.gov/access/services/data/v1?dataset=daily-summaries&dataTypes=SNWD&stations=USW00014847&startDate=2025-02-12&endDate=2025-02-18&units=standard&format=json&includeStationName=true&includeStationLocation=true&includeAttributes=true']
  ]){
   try{
