@@ -172,6 +172,12 @@ async function run(){
       check(await page.locator('#harbor-filter option').count()===2,size.name+': newly sourced candidate harbor now filterable');
       check(await page.locator('#harbor-filter option[value="sarnia"]').count()===1,size.name+': Sarnia can be shown with actual dated evidence');
       check((await page.locator('#stat-year').textContent())==='0 / 1',size.name+': old confirmed harbor cannot validate new reported berth');
+      sampleLive.events[1].harborId='superior';
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('[data-ship="lee-a-tregurtha"]').waitFor({timeout:10000});
+      check((await page.locator('#stat-year').textContent())==='0 / 1',size.name+': unverified same-harbor move stays reported');
+      sampleLive.events[1].harborId='sarnia';
+
       check(await page.locator('.layup-pin').count()===1,size.name+': one source-dated new harbor marker');
             await context.unroute('**/assets/freighter-layup-live-season.json');
 

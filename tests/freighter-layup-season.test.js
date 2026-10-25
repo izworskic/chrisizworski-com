@@ -93,3 +93,12 @@ test('only an authoritative arrival or berth-change can elevate berth confidence
  assert.equal(m.statusFor(moved,'lee-a-tregurtha').harborId,'sarnia');
  assert.equal(m.statusFor(moved,'lee-a-tregurtha').confidence,'confirmed');
 });
+
+test('same-harbor unverified berth change cannot inherit an earlier official confirmation',()=>{
+ const arrival={...event,confidence:'confirmed',source:{...event.source,class:'port_authority'}};
+ const original=m.addEvidence(empty,arrival,'2027-01-15T00:00:00Z').ledger;
+ const moved=m.addEvidence(original,{...event,kind:'berth_change',date:'2027-01-18',confidence:'reported',summary:'New berth awaiting independent verification.'},'2027-01-19T00:00:00Z').ledger;
+ assert.equal(m.statusFor(original,'lee-a-tregurtha').confidence,'confirmed');
+ assert.equal(m.statusFor(moved,'lee-a-tregurtha').harborId,'superior');
+ assert.equal(m.statusFor(moved,'lee-a-tregurtha').confidence,'reported');
+});
