@@ -11,7 +11,8 @@
  const statusText={
   'historically-frequent-6in-station-snow':'Frequently measured ≥6 in at station',
   'variable-or-lower-station-snow':'Variable / less persistent in observations',
-  'insufficient-history':'Not enough station reports'
+  'insufficient-history':'Not enough station reports',
+  'station-too-distant-for-route-pattern':'Reporting station too far away for trail-area pattern'
  };
  function render(root,route){
   if(!root||!route?.id)return;
@@ -82,14 +83,14 @@
   const station=data.station;
   if(!station||!data.weeks.length)
    return '<div class="season-unknown"><strong>No defensible full-season comparison</strong><p>'+esc(data.caveat||'A consistent nearby NOAA station was not found in the completed winters.')+'</p></div>';
-  const weak=data.coverageWinters120Days<3;
+  const weak=data.coverageWinters120Days<3||data.stationSpatialInterpretation==='distant-station-context-only';
   const sc='<p class="season-provenance"><strong>'+esc(station.name)+'</strong> · '+esc(station.miles)+
    ' miles straight-line from the trail-area reference · '+esc(data.yearsAnalyzed)+' completed winters · '+
    esc(data.totalObservedDays)+' / '+esc(data.totalPossibleDays)+' valid daily reports'+
-   (weak?' · Limited full-season coverage':'')+'</p>';
+   (data.stationSpatialInterpretation==='distant-station-context-only'?' · TOO DISTANT for local historical snow pattern':weak?' · Limited full-season coverage':'')+'</p>';
   const cards=data.weeks.map((w,i)=>{
    const state=w.status==='historically-frequent-6in-station-snow'?'frequent':
-    w.status==='insufficient-history'?'insufficient':'variable';
+    w.status==='insufficient-history'||w.status==='station-too-distant-for-route-pattern'?'insufficient':'variable';
    const height=state==='insufficient'?0:Math.round(w.qualifyingWinters/Math.max(1,w.reportWinters)*100);
    const label='Week '+w.week+', '+w.label+', '+(statusText[w.status]||w.status)+
     ', '+w.qualifyingWinters+' of '+w.reportWinters+' evaluable winters qualifying';
