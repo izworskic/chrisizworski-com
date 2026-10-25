@@ -7,13 +7,13 @@ const DNR=require('../data/winter-hike/michigan-dnr-candidates.json');
 const {routes,quarantined}=data;
 test('curation v1 is a non-live catalog with independent explicit source and parking contracts',()=>{
  const a=Routes.auditCatalog();
- assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,38);
- assert.equal(a.measured,25);assert.equal(a.unknown,13);assert.equal(a.groups,13);
+ assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,50);
+ assert.equal(a.measured,37);assert.equal(a.unknown,13);assert.equal(a.groups,15);
  assert.equal(data.operationalDefaults.directionsEnabled,false);
 });
 test('official route identities are unique and evidence scoped to particular route, not entire state park',()=>{
  assert.equal(new Set(routes.map(r=>r.id)).size,routes.length);
- assert.ok(routes.every(r=>r.routeEvidenceUrl.startsWith('https://www.michigan.gov/')));
+ assert.ok(routes.every(r=>/^https:\/\/www\.(?:michigan|nps)\.gov\//.test(r.routeEvidenceUrl)));
  assert.ok(routes.every(r=>r.currentWinterAccess==='unverified'&&r.navigationReady===false));
 });
 test('exact DNR point joins match original UUID and coordinates, but never create GPS directions',()=>{
@@ -91,7 +91,7 @@ test('listed winter snowshoe routes differ from boots-only packed Upper Falls wa
  assert.equal(Routes.listRoutes({region:'upper-peninsula'}).length,9);
 });
 test('length filter excludes unverified mileage instead of estimating it',()=>{
- assert.equal(Routes.listRoutes({onlyMeasured:true}).length,25);
+ assert.equal(Routes.listRoutes({onlyMeasured:true}).length,37);
  assert.ok(Routes.listRoutes({onlyMeasured:true}).every(r=>r.miles>0));
  assert.throws(()=>Routes.listRoutes({activity:'trailrunning'}));
 });
@@ -115,15 +115,15 @@ test('invalid official website host, missing provenance or fake navigation fails
 const accessResearch=require('../data/winter-hike/michigan-route-access-research.json');
 test('all 13 curated route areas preserve manager-sourced winter-access caveats',()=>{
  const groups=new Set(routes.map(r=>r.placeGroup));
- assert.equal(groups.size,13);
- assert.equal(accessResearch.records.length,13);
+ assert.equal(groups.size,15);
+ assert.equal(accessResearch.records.length,15);
  for(const record of accessResearch.records) {
   assert.ok(groups.has(record.group));
   assert.equal(record.navigationReady,false);
   assert.equal(record.currentWinterParkingConfirmed,false);
   assert.equal(record.currentAccessRoadConfirmed,false);
   assert.equal(record.verifiedWinterParkingCoordinates,null);
-  assert.match(record.officialSource,/^https:\/\/www\.michigan\.gov\//);
+  assert.match(record.officialSource,/^https:\/\/www\.(?:michigan|nps)\.gov\//);
  }
 });
 test('Vasa parking address is only a research hint, not winter-access approval',()=>{
@@ -145,4 +145,20 @@ test('all public route cards remain research-only even if route length and map a
   assert.equal(r.routeGeometryStatus,'not-verified');
   assert.equal(r.accessResearch.winterParkingConfirmed,false);
  }
+});
+
+test('50 named winter trails retain unverified winter access and do not create driving directions',()=>{
+ const a=Routes.auditCatalog();assert.equal(a.ok,true,JSON.stringify(a.errors));
+ const expanded=routes.filter(r=>r.placeGroup==='spring'||r.placeGroup==='sleepbear');
+ assert.equal(expanded.length,12);
+ assert.ok(expanded.every(r=>r.navigationReady===false&&r.verifiedWinterParking===null&&r.verifiedDriveTarget===null));
+ assert.ok(expanded.every(r=>r.referencePoint.meaning.includes('Not a verified')));
+ assert.deepEqual(expanded.filter(r=>r.id.startsWith('sleepbear-old-indian')).map(r=>r.lengthMiles),[2.3,2.3]);
+ assert.equal(Routes.listRoutes({activity:'snowshoe'}).filter(r=>r.placeGroup==='sleepbear').length,10);
+});
+test('NPS official source URLs are allowed but lookalike, non-HTTPS sources remain rejected',()=>{
+ const r=Routes.routeById('sleepbear-windy-moraine');
+ assert.deepEqual(Routes.validateRoute(r),[]);
+ assert.ok(Routes.validateRoute({...r,officialPage:'https://nps.gov.attacker.invalid/'}).length);
+ assert.ok(Routes.validateRoute({...r,routeEvidenceUrl:'http://www.nps.gov/x'}).length);
 });
