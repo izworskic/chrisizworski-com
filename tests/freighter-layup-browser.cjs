@@ -57,7 +57,7 @@ async function run(){
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
       check(await page.locator('.hero-media img').evaluate(img=>img.complete && img.naturalWidth>0),size.name+': self-hosted winter freighter hero image');
       check(await page.locator('.feature-story img').count()===3,size.name+': three licensed fleet photographs');
-      for(const img of await page.locator('.feature-story img').all()){await img.scrollIntoViewIfNeeded();await img.evaluate(el=>el.decode().catch(()=>{}));check(await img.evaluate(el=>el.complete&&el.naturalWidth>0),size.name+': local story image available');}
+      for(const img of await page.locator('.feature-story img').all()){await img.evaluate(el=>el.decode().catch(()=>{}));const state=await img.evaluate(el=>({src:el.getAttribute('src'),complete:el.complete,hidden:el.hidden,width:el.naturalWidth}));check(state.complete&&state.width>0,size.name+': local story image available: '+JSON.stringify(state));}
 
       check(await page.locator('.atlas-workspace #layup-map').count()===1,size.name+': integrated map and harbor notebook');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
