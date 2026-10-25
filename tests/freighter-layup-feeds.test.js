@@ -49,3 +49,31 @@ test('a newspaper story that otherwise matches stays in source review, not the p
  assert.equal(result.ledger.events.length,0);
  assert.ok(result.reviews.some(r=>r.url==='https://www.boatnerd.com/winter-report/'&&r.why==='editorial_review_required'));
 });
+
+test('expanded network polls at most three sources concurrently and preserves source-order results',async()=>{
+ let busy=0,peak=0;
+ const fetcher=async()=>{
+  busy++;peak=Math.max(peak,busy);
+  await new Promise(resolve=>setTimeout(resolve,2));
+  busy--;
+  return {ok:false,status:503};
+ };
+ const out=await f.refresh({ledger:s.freshSeason('2026-27'),archive:{seasons:[]},fetcher,now:'2027-01-01T12:00:00Z'});
+ assert.ok(peak>=2,'polls are concurrent');
+ assert.ok(peak<=3,'provider load is bounded');
+ assert.deepEqual(out.outcomes.map(x=>x.source),f.SOURCES.map(x=>x.id));
+ assert.equal(out.ledger.events.length,0);
+});
+test('an explicit dated Interlake operator report remains source-linked and is not an AIS inference',()=>{
+ const operator=f.SOURCES.find(x=>x.id==='interlake');
+ const vessel=[{name:'Lee A. Tregurtha',key:'lee-a-tregurtha',aliases:['Lee A Tregurtha']}];
+ const article={title:'Lee A Tregurtha arrived in Duluth for winter layup',
+  text:'Lee A Tregurtha berthed in Superior for winter layup.',
+  date:'2027-01-19T11:00:00Z',
+  url:'https://www.interlakesteamship.com/media/newsroom/lee-a-tregurtha-winter/'};
+ const d=f.classify(article,operator,vessel,'2026-27');
+ assert.equal(d.reason,'accepted');
+ assert.equal(d.event.source.class,'operator');
+ assert.equal(d.event.confidence,'reported');
+ assert.equal(d.event.harborId,'superior');
+});
