@@ -40,13 +40,20 @@ An automated crawl or a description last-checked date cannot set \`managerObserv
 
 Even if all three manager assertions were complete, **this stage does not generate driving URLs or enable navigation**, because selected route geometry, conflicting closures, last-mile vehicle access, active NWS hazards, and full release gates remain separate. The research API still returns \`X-Robots-Tag: noindex, nofollow\`. The UI displays three independent statuses, manager source, official phone contact and the exact missing confirmation question.
 
-## Operational manager verification workflow
+## Remote-only winter access research workflow (October 25 decision)
 
-1. Contact the listed DNR park/pathway manager or NPS ranger, identify the **specific** signed winter route and **named lot** (not generic park), request official winter access/closure status for **both** trip day and chosen entrance.
-2. Obtain written official or directly manager-confirmed evidence of plowing, vehicle passability, exact maintained *parking entrance* lat/lon, route openness, and applicable grooming, closure and restricted-use rules. Record when the manager actually checked, not when we read the page.
-3. Review source provenance and effective dates, record separate trail/road/parking rows for each route that actually uses the lot. Do not propagate a park-wide "open" statement to unrelated entrances.
-4. If conflicting or uncertain, preserve **unknown/restricted/closed** and the contact question. Manual field validation or manager operational records are required; old website maps and weather reports do not resolve missing access.
-5. Once route geometry + closure identity and weather checks also pass and a separate publication decision is made, implement verified-only *lot* directions (never source reference dots) and verify on mobile with working maps.
+**No phone calls, emails or other direct manager contact.** Satellite and published digital sources replace the earlier contact-first research plan. Source-grounded operational winter plowing remains unverified unless a dated, independently accessible agency notice specifically establishes it. Historic images never certify it.
+
+1. Load NASA GIBS MODIS Terra corrected reflectance true-color (browse resolution 250 m) and MODIS NDSI snow-cover classification (approximately 500 m) over each existing DNR/NPS trail reference location. Use dated images from past winters, not current-conditions labels. Example: 2024-01-15 versus 2025-02-15; date, instrument and cloud limitations must be displayed.
+2. Keep NOAA NOHRSC snow depth and NWS forecasts independent: modeled snow is not a MODIS observation or direct trail surface measurement. Overlay imagery on the CARTO map while preserving trail points and explicitly mapped closure line segments.
+3. Inspect public official DNR/NPS road-closure posts, maps and seasonal rules without contacting staff. Record a proven closure as a block; do **not** infer an open plowed entrance merely because a park website lists an address or a MODIS image shows a snow-free pixel.
+4. Cloud gaps, 250–500 m resolution and forest canopy make a visually cleared 10–50 m lot or narrow road **unresolvable**. Do not algorithmically calculate "probability plowed" from MODIS. Display winter travel access as `unknown` until independently verifiable road/lots evidence exists.
+5. Use a historical imagery date picker, layer switch, transparency slider and per-trail zoom to let visitors compare real archived landscapes themselves. Preserve source date, map attribution, privacy and mobile stability. Missing tiles = unavailable, never snow-free.
+6. If a later public authoritative operational bulletin supplies date-specific open/closed status, the existing winter-access validator can consume it **without contacting anyone**; route geometry and weather gates remain separate. Do not activate navigation based only on satellite data.
+
+NASA Earthdata imagery: https://nasa-gibs.github.io/gibs-api-docs/access-basics/  
+NASA MODIS 500 m snow-cover product: https://modis-snow-ice.gsfc.nasa.gov/?c=MOD10A1  
+Daily historical browser: https://worldview.earthdata.nasa.gov/
 
 ## Failure budget
 
@@ -62,4 +69,4 @@ Even if all three manager assertions were complete, **this stage does not genera
 
 **Merge requirements:** zero 100-loss regressions; pass all native Node tests, \`npm run verify:all\`, site HTML audit, and preview mobile smoke. **Production trip recommendations remain prohibited without current actual manager parking/road/trail observations and full route-closure validation.**
 
-Next evidence-gathering focus: the first 10 locations above, beginning with Bartlett Road Vasa and the independent Upper/Lower Falls day-use lots. No assumption of snow or plowing is justified merely by the fact the trail is a good winter recreation destination.
+Next evidence-gathering focus: remotely inspect dated MODIS winter imagery at the first ten trail references, compare snow distribution with NOAA snow-depth context, and look for published official seasonal road restrictions. Do not contact managers or infer plowing from MODIS.
