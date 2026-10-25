@@ -112,7 +112,7 @@ async function coldFor(region, now) {
   // "zero cold" before the first November day has actually ended.
   const through = new Date(Date.parse(clock.today + 'T12:00:00Z') - 86400000).toISOString().slice(0, 10);
   if (through < start) return { slug: region.slug, station: region.acis, seasonStart: start,
-    afdd: null, normal: null, normalYears: 0, latestDate: null, change24h: null, change72h: null, change7d: null, preSeason: true };
+    afdd: null, normal: null, normalYears: 0, latestDate: null, change24h: null, change72h: null, change7d: null, preSeason: clock.preSeason, awaitingFirstObservation: !clock.preSeason };
   const currentRows = await acisRange(region.acis, start, through);
   const cur = afddFrom(currentRows);
 
