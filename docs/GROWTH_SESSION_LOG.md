@@ -1219,3 +1219,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Fixes: four guide cards that contradicted their pages, Seed Saving Lab and matchmaker added to the hub and its structured data, stale 148-day and 140-150-day figures, an invisible Freighter View Farms link, wrong section counts, footer date, soil-blocked crops dropping from the weekly list, seasonal jobs sorted with "In season now".
 - Flagged, not changed: a May 8 frost anecdote on the hub and the freeze page that cannot be verified. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
 - Exactly one next action: owner reviews the preview and confirms or removes the May 8 anecdote.
+
+### Michigan soil temperature tool, October 24, 2026
+
+- Owner asked to research and build the soil temperature tool. New page `/michigan-soil-temperature/`: measured 2-inch soil at the nearest of about 100 MSU Enviroweather stations (read in the browser), an Open-Meteo forecast shifted to match the station's last 7 days, and 11 springs of measured history per station (2016 to 2026), against MSU's 40°F and above-60°F planting temperatures; 60°F answers also wait for the frost station's cautious date. Research and design in `docs/SOIL_TEMP_RESEARCH.md`.
+- History: `scripts/fetch-msu-soil-history.mjs` (one-time download), `data/garden/msu-soil-2in-daily.json`, `scripts/build-soil-history.mjs` (quality checks, deterministic). 885 station-springs kept, 72 dropped. Statewide middle dates: April 7 (40°F), May 26 (60°F); a station's own date moves about four weeks between springs.
+- Linked from the hub catalogue and the hub's soil field (with the town), and onward into What to Plant Now with the reading. Registry node `soil-temperature`. No Vercel function, build step or scheduled job. The adjusted forecast is not yet validated against later readings. Synthetic checks only; GSC/GA4/AdSense NOT AVAILABLE.
+- Exactly one next action: owner emails eweather@msu.edu to tell MSU the page reads its station data, then checks the page in a real browser.
