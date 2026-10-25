@@ -18,7 +18,8 @@ test('real hero photograph has durable credit and honest historic distinction',(
  assert.ok(html.includes('Sharon Mollerus'));
  assert.ok(html.includes('CC BY 2.0'));
  assert.match(html,/not a 2025–26 layup photograph/i);
- assert.ok(html.includes('https://commons.wikimedia.org/wiki/Special:Redirect/file/'));
+ assert.ok(html.includes('src="/assets/freighter-winter-hero.jpg"'));
+ assert.ok(html.includes('https://commons.wikimedia.org/wiki/File:Mesabi_Miner'));
 });
 test('design presentation is isolated from permanent vessel biography pages',()=>{
  assert.ok(css.includes('.layup-home .hero'));
