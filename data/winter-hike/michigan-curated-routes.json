@@ -1,7 +1,7 @@
 {
   "schema": "winter-route-catalog-v1",
   "status": "CURATED_STATIC_ROUTE_IDENTITIES_NOT_LIVE_WINTER_ACCESS",
-  "compiledAt": "2026-10-22",
+  "compiledAt": "2026-10-25",
   "state": "Michigan",
   "countMeaning": "Named routes, trail segments, and mapped winter corridors; NOT confirmed open, plowed or safe destinations. Some snowshoe trails are explicitly ski-shared. No turn-by-turn navigation.",
   "dataProvenance": "Michigan DNR official named trail pages, accessible official hiking maps, and dated GIS trail point records. No GIS segment sums are used as route lengths.",
@@ -70,6 +70,16 @@
       "page": "https://www.michigan.gov/recsearch/parks/algonac",
       "map": null,
       "phone": "810-765-5605"
+    },
+    "spring": {
+      "page": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "map": null,
+      "phone": "231-582-7523"
+    },
+    "sleepbear": {
+      "page": "https://www.nps.gov/slbe/planyourvisit/winteractivities.htm",
+      "map": null,
+      "phone": "231-326-4700"
     }
   },
   "routes": [
@@ -1656,6 +1666,534 @@
         "current winter lot plowing and entrance",
         "manager route opening and closure validation",
         "chosen route geometry"
+      ]
+    },
+    {
+      "id": "spring-brook-first-loop",
+      "displayName": "Spring Brook — First Cedar Swamp Loop",
+      "region": "northern-lower",
+      "placeGroup": "spring",
+      "routeForm": "loop",
+      "lengthMiles": 1.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 45.217643,
+        "lon": -84.811492,
+        "label": "DNR trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "managerPhone": "231-582-7523",
+      "caveats": [
+        "DNR describes two loops, without independently naming them on markers",
+        "Ungroomed cross-country ski uses share this pathway"
+      ],
+      "editorialSummary": "DNR describes the 1.5-mile first loop along Spring Brook and cedar swamp",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "spring-brook-second-loop",
+      "displayName": "Spring Brook — Second Ridgetop Loop",
+      "region": "northern-lower",
+      "placeGroup": "spring",
+      "routeForm": "loop",
+      "lengthMiles": 0.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_nonmotorized",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 45.217643,
+        "lon": -84.811492,
+        "label": "DNR trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "managerPhone": "231-582-7523",
+      "caveats": [
+        "DNR describes two loops, without independently naming them on markers",
+        "Ungroomed cross-country ski uses share this pathway"
+      ],
+      "editorialSummary": "DNR describes a separate 0.5-mile second loop with ridgetop views",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-alligator-easy",
+      "displayName": "Sleeping Bear — Alligator Hill Easy Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 3,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.8896,
+        "lon": -86.0215,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Official easy 3-mile loop; 4.6 miles only with optional overlook spur",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-alligator-intermediate",
+      "displayName": "Sleeping Bear — Alligator Hill Intermediate Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 4.7,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.8896,
+        "lon": -86.0215,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Official intermediate 4.7-mile loop, excluding optional spur",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-alligator-advanced",
+      "displayName": "Sleeping Bear — Alligator Hill Advanced Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 4.6,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.8896,
+        "lon": -86.0215,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/alligator-hill-trail-stocking-drive-trailhead.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Official advanced 4.6-mile loop, excluding optional spur",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-old-indian-green",
+      "displayName": "Sleeping Bear — Old Indian Green Arrow Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 2.3,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.7028,
+        "lon": -86.185,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/old-indian-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/old-indian-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Trail-specific NPS page lists this marked Green Arrow loop as 2.3 miles",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-old-indian-black",
+      "displayName": "Sleeping Bear — Old Indian Black Arrow Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 2.3,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.7028,
+        "lon": -86.185,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/old-indian-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/old-indian-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Trail-specific NPS page lists this steeper Black Arrow loop as 2.3 miles",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-windy-moraine",
+      "displayName": "Sleeping Bear — Windy Moraine Trail",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 1.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.8544,
+        "lon": -86.0358,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/windy-moraine-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/windy-moraine-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Published 1.5-mile loop with a Glen Lake overlook",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-shauger-hill",
+      "displayName": "Sleeping Bear — Shauger Hill Trail",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 2.4,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.8525,
+        "lon": -86.0405,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/shauger-hill-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/shauger-hill-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31",
+        "Crossings of Shauger Hill Road and snowmobile routes"
+      ],
+      "editorialSummary": "Published 2.4-mile loop, with road and snowmobile crossings",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-bay-view-farm",
+      "displayName": "Sleeping Bear — Bay View Farm Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 2.4,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.934,
+        "lon": -85.9497,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/bay-view-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/bay-view-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Published 2.4-mile Farm Loop through historic fields",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-bay-view-ridge",
+      "displayName": "Sleeping Bear — Bay View Ridge Loop",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 4,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.934,
+        "lon": -85.9497,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/bay-view-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/bay-view-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31"
+      ],
+      "editorialSummary": "Published 4-mile Ridge Loop with hills and views",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "sleepbear-good-harbor",
+      "displayName": "Sleeping Bear — Good Harbor Bay Trail",
+      "region": "northern-lower",
+      "placeGroup": "sleepbear",
+      "routeForm": "loop",
+      "lengthMiles": 2.8,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "shared_ski_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 44.938,
+        "lon": -85.8553,
+        "label": "NPS trail-area reference, not verified winter parking",
+        "meaning": "Not a verified winter vehicle lot or currently open driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/000/good-harbor-bay-trail.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/000/good-harbor-bay-trail.htm",
+      "managerPhone": "231-326-4700",
+      "caveats": [
+        "NPS official trailhead point is not proof of winter-plowed vehicle parking",
+        "Avoid walking or snowshoeing on groomed ski tracks",
+        "Pets prohibited on these NPS trails December 1–March 31",
+        "Wetland crossings may freeze and become slippery"
+      ],
+      "editorialSummary": "Published 2.8-mile wooded and wetland loop",
+      "needs": [
+        "Verify current-season trail and closure status",
+        "Verify winter-maintained approach road and specific plowed parking lot",
+        "Confirm selected route geometry before directions"
       ]
     }
   ],
