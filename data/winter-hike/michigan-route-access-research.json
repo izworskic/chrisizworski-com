@@ -1,6 +1,6 @@
 {
   "status": "STATIC_ACCESS_RESEARCH_NO_CURRENT_WINTER_LOTS_VERIFIED",
-  "compiledAt": "2026-10-22",
+  "compiledAt": "2026-10-25",
   "meaning": "Park addresses and map parking symbols are narrative research hints; NOT GPS navigation or current plowed lots.",
   "records": [
     {
@@ -171,6 +171,32 @@
       "verifiedWinterParkingCoordinates": null,
       "navigationReady": false,
       "checkedForStaticDescription": "2026-10-22"
+    },
+    {
+      "group": "spring",
+      "officialSource": "https://www.michigan.gov/recsearch/trails/spring-brook-pathway",
+      "accessHint": "DNR's 45.217643,-84.811492 trail-area reference and two named-order loops do not establish any cleared lot.",
+      "restriction": "Ungroomed trail shared by skiers, hikers and snowshoers; winter road maintenance unknown.",
+      "requiredManagerCheck": "Verify road, plowed parking entrance, and both loop starts with DNR",
+      "currentWinterParkingConfirmed": false,
+      "currentAccessRoadConfirmed": false,
+      "currentTrailOpenConfirmed": false,
+      "verifiedWinterParkingCoordinates": null,
+      "navigationReady": false,
+      "checkedForStaticDescription": "2026-10-25"
+    },
+    {
+      "group": "sleepbear",
+      "officialSource": "https://www.nps.gov/slbe/planyourvisit/winteractivities.htm",
+      "accessHint": "NPS publishes actual trailhead GPS for each route; these positions are not evidence of season-current plowed winter parking.",
+      "restriction": "Winter ski tracks must be avoided; December 1–March 31 pet restrictions apply at these routes.",
+      "requiredManagerCheck": "Verify route-specific active closures, winter roads and lots, ski-lane layout with NPS",
+      "currentWinterParkingConfirmed": false,
+      "currentAccessRoadConfirmed": false,
+      "currentTrailOpenConfirmed": false,
+      "verifiedWinterParkingCoordinates": null,
+      "navigationReady": false,
+      "checkedForStaticDescription": "2026-10-25"
     }
   ]
 }

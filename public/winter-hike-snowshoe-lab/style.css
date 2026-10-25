@@ -61,3 +61,106 @@
 .wx-access-item strong{font-size:12px;line-height:1.4;flex:1}.wx-access-item small{font-size:10px;color:#966523;font-weight:750}
 @media(max-width:510px){.wx-panel{padding:14px 11px}.wx-panel-head{gap:5px}.wx-panel h3{font-size:16px}.wx-week-days{grid-template-columns:repeat(7,80px)}.wx-risk-grid{grid-template-columns:1fr 1fr}.wx-risk{padding:9px}.wx-risk p{font-size:11px}.wx-ranger-read{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.wx-day,.wx-wind-hour{transition:none}}
+
+
+/* Historical NASA MODIS inspector: regional imagery, not a parking camera. */
+.satellite-console{margin:16px 0 4px;background:#fff;border:1px solid #d3dfdb;border-radius:15px;padding:20px 22px;box-shadow:0 8px 24px #123c3610}
+.satellite-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.satellite-head h3{font-size:20px;letter-spacing:-.02em;margin:0}
+.satellite-head .eyebrow{margin:0 0 4px}
+.satellite-toggle{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#214f42;cursor:pointer}
+.satellite-toggle input{accent-color:#20745e;width:18px;height:18px}
+.satellite-controls{display:grid;grid-template-columns:1.1fr 1.5fr 1.2fr 1fr;gap:14px;margin:19px 0 13px}
+.sat-ctrl{display:flex;flex-direction:column;gap:7px;min-width:0}
+.sat-ctrl label{font-size:12px;font-weight:750;color:#214f42}
+.sat-ctrl select,.sat-ctrl input[type="date"]{width:100%;border:1px solid #bfcfc7;background:#fafdfb;min-height:41px;border-radius:9px;padding:8px;color:#244438;font-size:13px}
+.sat-date-nav{display:flex;gap:5px;min-width:0;align-items:center}
+.sat-date-nav input{flex:1;min-width:0}
+.sat-date-nav button,.sat-focus-button{border:1px solid #9ab9a8;border-radius:9px;background:#f4f8f4;color:#1d5647;padding:10px;font-size:12px;font-weight:750;white-space:nowrap}
+.sat-date-nav button:disabled,.sat-focus-button:disabled{opacity:.5;cursor:not-allowed}
+.sat-opacity input[type="range"]{width:100%;min-height:36px;accent-color:#277158}
+.sat-focus-button{margin:3px 0 10px}
+.satellite-status{margin:0 0 9px;color:#254a42;font-size:13px;line-height:1.5;font-weight:700}
+.satellite-caveat,.satellite-credit{font-size:12px;line-height:1.6;color:#586d69;margin:7px 0 0}
+.satellite-credit a{font-weight:700}
+@media(max-width:980px){.satellite-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:610px){.satellite-console{padding:16px}.satellite-controls{grid-template-columns:1fr}.sat-date-nav button{padding:9px 6px;font-size:11px}.sat-date-nav input{font-size:13px}.satellite-head{align-items:flex-start;flex-direction:column}.sat-opacity input[type="range"]{max-width:100%}}
+
+
+/* Real NOAA NCEI station-reported snow depth, same 7-day week over four winters. */
+.history-zone{border-top:1px solid var(--line);margin-top:20px;padding-top:23px}
+.history-zone h3{font-size:20px;letter-spacing:-.025em;margin:4px 0 0}
+.history-zone .eyebrow{margin:0;font-size:10px}
+.history-head{display:flex;align-items:center;justify-content:space-between}
+.history-intro{font-size:13px;color:#506963;line-height:1.6;margin:12px 0}
+.history-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0}
+.history-actions label{font-size:12px;font-weight:750}
+.history-actions select{font-size:13px;border:1px solid #bfcfc7;border-radius:9px;background:#fff;color:#204b3b;min-height:40px;padding:7px}
+.history-actions .action-primary{font-size:12px;min-height:40px;padding:9px 12px}
+.history-actions button:disabled{opacity:.65;cursor:progress}
+.history-station{border-radius:9px;background:#eef5ed;padding:11px 13px;font-size:13px;line-height:1.5;color:#21483d}
+.history-chart-caption{font-size:11px;line-height:1.5;color:#587064}
+.history-year{border:1px solid #e3e9e4;border-radius:11px;padding:13px 13px 12px;margin:11px 0;background:#fbfcfa}
+.history-year-heading{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:12px;color:#4b665a}
+.history-year-heading strong{font-size:19px;color:#1c5543;font-weight:800}
+.history-observed-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:5px;margin:13px 0 10px;min-width:0;border-bottom:1px solid #c2d2c6}
+.history-day{min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px}
+.history-stick{height:66px;width:100%;max-width:36px;display:flex;align-items:flex-end;justify-content:center;position:relative;background:#f0f3ed;border-radius:4px 4px 0 0}
+.history-bar{background:linear-gradient(180deg,#8cbcc0,#237a75);width:65%;border-radius:3px 3px 0 0;min-height:0}
+.history-no-report{font-size:15px;color:#a3b1a7;position:absolute;top:25px}
+.history-day small{font-size:10px;font-weight:700;color:#60756c}
+.history-number{font-size:10px;line-height:1.25;white-space:nowrap;color:#305c4e}
+.history-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#526b62}
+.history-map-day{font:inherit;border:1px solid #9ab9a8;border-radius:8px;background:#eef5eb;color:#205749;padding:8px 10px;cursor:pointer;font-weight:700}
+.history-map-day:hover{background:#e0f0e7}
+.history-source,.history-disclaimer{font-size:11px;line-height:1.55;color:#5a7068}
+.history-source{margin-top:12px}
+.history-disclaimer{margin:12px 0 0}
+@media(max-width:610px){.history-year{padding:10px}.history-observed-bars{gap:2px}.history-stick{height:54px}.history-number{font-size:9px}.history-actions{align-items:stretch}.history-actions select{flex:1}.history-foot{align-items:flex-start}}
+
+
+/* NOAA GHCN-Daily snow-depth station observations: 26 winter-week comparison. */
+.season-zone{margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
+.season-zone .eyebrow{font-size:10px;margin:0 0 6px}
+.season-head h3{font-size:22px;line-height:1.15;letter-spacing:-.035em;margin:0 0 9px;color:#214b3d}
+.season-intro{font-size:13px;line-height:1.65;color:#4b655e;margin:7px 0 15px}
+.season-zone .action-primary{min-height:42px;font-size:12px}
+.season-zone .action-primary:disabled{opacity:.65;cursor:progress}
+.season-provenance{padding:13px 14px;border-radius:10px;background:#edf4f0;font-size:12px;line-height:1.6;color:#264f42}
+.season-legend{display:flex;flex-wrap:wrap;gap:8px 13px;font-size:11px;color:#516a60;margin:17px 0 9px}
+.season-legend span{display:inline-flex;align-items:center;gap:5px}
+.season-key{display:inline-block;width:10px;height:10px;border-radius:3px}
+.season-key.frequent{background:#227a66}
+.season-key.variable{background:#b8bca4}
+.season-key.insufficient{background:#e0e5e3}
+.season-strip{display:grid;grid-template-columns:repeat(26,minmax(23px,1fr));gap:2px;padding:8px 3px 4px;border:1px solid #dfe8e1;border-radius:9px;background:#f8faf9;overflow-x:auto}
+.season-week{display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;min-width:23px;min-height:100px;border:1px solid transparent;border-radius:6px;padding:3px 1px;background:transparent;cursor:pointer;gap:3px}
+.season-week:hover,.season-week[aria-pressed="true"]{border-color:#296d5a;background:#e6f1eb}
+.season-week:focus-visible{outline:2px solid #b47a19;outline-offset:1px}
+.season-week-bar{display:flex;height:68px;min-height:68px;width:100%;align-items:flex-end;justify-content:center;border-radius:3px 3px 0 0;background:#edf2ef}
+.season-week-fill{width:76%;display:block;min-height:0;border-radius:3px 3px 0 0}
+.season-week[data-snow-status="frequent"] .season-week-fill{background:#227a66}
+.season-week[data-snow-status="variable"] .season-week-fill{background:#b8bca4}
+.season-week[data-snow-status="insufficient"] .season-week-fill{background:transparent}
+.season-week[data-snow-status="insufficient"] .season-week-bar{background:repeating-linear-gradient(135deg,#edf0ee 0 6px,#dce4df 6px 9px)}
+.season-week-label{font-size:9px;line-height:1.35;letter-spacing:-.02em;color:#46665b;white-space:nowrap}
+.season-small{color:#657a70;font-size:11px;line-height:1.6;margin:8px 0 12px}
+.season-summary{background:#eef4ed;padding:11px 13px;border-radius:9px;font-size:12px;line-height:1.6;color:#245447}
+.season-week-detail{border:1px solid #d4e0d9;border-radius:12px;padding:14px;background:#fff;margin:15px 0}
+.season-week-detail h4{font-size:15px;letter-spacing:-.01em;margin:0 0 5px;color:#244b41}
+.season-week-detail>p{font-size:12px;line-height:1.6;margin:8px 0;color:#557166}
+.season-evidence-row{border-top:1px solid #e2eae4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;font-size:11px;line-height:1.6;color:#294d42}
+.season-evidence-row:first-of-type{margin-top:10px}
+.season-evidence-row span{color:#64766d}
+.season-map-date{font-size:11px;padding:7px 9px;border-radius:8px;background:#f2f8f3;border:1px solid #9cbba9;white-space:nowrap;color:#225544;cursor:pointer}
+.season-map-date:hover{background:#e2f0e5}
+.season-year-coverage{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0;color:#4b675c}
+.season-year-coverage span{font-size:10px;padding:5px 8px;border-radius:7px;background:#edf2ef}
+.season-disclaimer,.season-unknown{font-size:12px;line-height:1.65;color:#657b70}
+.season-unknown{background:#fcf8e8;border:1px solid #eee3bd;border-radius:10px;padding:14px}
+@media(max-width:640px){
+ .season-strip{grid-template-columns:repeat(26,25px);overflow-x:auto;scrollbar-width:thin}
+ .season-evidence-row{align-items:flex-start;flex-direction:column}
+ .season-map-date{white-space:normal}
+ .season-week-detail{padding:11px}
+}

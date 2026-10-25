@@ -1,0 +1,35 @@
+name: Winter Hike mobile historical imagery browser
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/winter-hike-50-official-routes-20261025
+    paths:
+      - .github/workflows/winter-hike-browser.yml
+      - scripts/verify-winter-hike-browser.cjs
+      - public/winter-hike-snowshoe-lab/**
+permissions:
+  contents: read
+jobs:
+  chromium-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser harness
+        run: npm install --no-save --package-lock=false --ignore-scripts playwright@1.56.1 maplibre-gl@5.16.0
+      - name: Install Chromium browser and system libraries
+        run: npx playwright install --with-deps chromium
+      - name: Check real satellite overlays, map navigation, mobile widths and imagery toggles
+        run: node scripts/verify-winter-hike-browser.cjs
+      - name: Retain mobile map screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-hike-browser-evidence
+          path: artifacts/winter-hike-browser/
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,24 @@
+name: Winter Hike live NASA imagery
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/winter-hike-50-official-routes-20261025
+    paths:
+      - .github/workflows/winter-hike-nasa-live.yml
+      - scripts/verify-winter-hike-nasa-live.cjs
+      - public/winter-hike-snowshoe-lab/satellite.js
+      - public/winter-hike-snowshoe-lab/satellite-ui.js
+permissions:
+  contents: read
+jobs:
+  nasa-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify authentic NASA GIBS MODIS historical image tiles
+        run: node scripts/verify-winter-hike-nasa-live.cjs

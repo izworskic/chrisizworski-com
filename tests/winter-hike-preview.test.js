@@ -11,10 +11,10 @@ function response(){
  let code=200;const headers={};
  return {headers,setHeader(k,v){headers[k]=v},status(c){code=c;return this},json(v){return {code,headers,body:v}}};
 }
-test('catalog endpoint has exactly 38 routes and disables every navigation target',async()=>{
+test('catalog endpoint has exactly 50 routes and disables every navigation target',async()=>{
  const o=await API({method:'GET',query:{mode:'catalog'}},response());
  assert.equal(o.code,200);
- assert.equal(o.body.routes.length,38);
+ assert.equal(o.body.routes.length,50);
  assert.equal(o.headers['X-Robots-Tag'],'noindex, nofollow');
  assert.ok(o.body.routes.every(r=>r.navigationReady===false&&r.parking==='unverified'&&Number.isFinite(r.point.lat)));
 });
