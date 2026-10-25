@@ -61,3 +61,27 @@
 .wx-access-item strong{font-size:12px;line-height:1.4;flex:1}.wx-access-item small{font-size:10px;color:#966523;font-weight:750}
 @media(max-width:510px){.wx-panel{padding:14px 11px}.wx-panel-head{gap:5px}.wx-panel h3{font-size:16px}.wx-week-days{grid-template-columns:repeat(7,80px)}.wx-risk-grid{grid-template-columns:1fr 1fr}.wx-risk{padding:9px}.wx-risk p{font-size:11px}.wx-ranger-read{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.wx-day,.wx-wind-hour{transition:none}}
+
+
+/* Historical NASA MODIS inspector: regional imagery, not a parking camera. */
+.satellite-console{margin:16px 0 4px;background:#fff;border:1px solid #d3dfdb;border-radius:15px;padding:20px 22px;box-shadow:0 8px 24px #123c3610}
+.satellite-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.satellite-head h3{font-size:20px;letter-spacing:-.02em;margin:0}
+.satellite-head .eyebrow{margin:0 0 4px}
+.satellite-toggle{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#214f42;cursor:pointer}
+.satellite-toggle input{accent-color:#20745e;width:18px;height:18px}
+.satellite-controls{display:grid;grid-template-columns:1.1fr 1.5fr 1.2fr 1fr;gap:14px;margin:19px 0 13px}
+.sat-ctrl{display:flex;flex-direction:column;gap:7px;min-width:0}
+.sat-ctrl label{font-size:12px;font-weight:750;color:#214f42}
+.sat-ctrl select,.sat-ctrl input[type="date"]{width:100%;border:1px solid #bfcfc7;background:#fafdfb;min-height:41px;border-radius:9px;padding:8px;color:#244438;font-size:13px}
+.sat-date-nav{display:flex;gap:5px;min-width:0;align-items:center}
+.sat-date-nav input{flex:1;min-width:0}
+.sat-date-nav button,.sat-focus-button{border:1px solid #9ab9a8;border-radius:9px;background:#f4f8f4;color:#1d5647;padding:10px;font-size:12px;font-weight:750;white-space:nowrap}
+.sat-date-nav button:disabled,.sat-focus-button:disabled{opacity:.5;cursor:not-allowed}
+.sat-opacity input[type="range"]{width:100%;min-height:36px;accent-color:#277158}
+.sat-focus-button{margin:3px 0 10px}
+.satellite-status{margin:0 0 9px;color:#254a42;font-size:13px;line-height:1.5;font-weight:700}
+.satellite-caveat,.satellite-credit{font-size:12px;line-height:1.6;color:#586d69;margin:7px 0 0}
+.satellite-credit a{font-weight:700}
+@media(max-width:980px){.satellite-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:610px){.satellite-console{padding:16px}.satellite-controls{grid-template-columns:1fr}.sat-date-nav button{padding:9px 6px;font-size:11px}.sat-date-nav input{font-size:13px}.satellite-head{align-items:flex-start;flex-direction:column}.sat-opacity input[type="range"]{max-width:100%}}
