@@ -20,16 +20,16 @@
 <main class="shell">
 <section class="hero"><p class="eyebrow">Michigan trail research • Preview</p><h1>Is this the weekend to hike or snowshoe?</h1>
 <p class="lede">Find a <em>real, named trail</em>. Then see what NOAA snow depth and the National Weather Service can—and cannot—tell you about the conditions.</p>
-<div class="trust"><strong>Research preview, not trip clearance.</strong> No destination shown here has a confirmed plowed winter trailhead or safe route. Map pins are general DNR reference areas, not driving directions. Check the land manager before departure.</div></section>
+<div class="trust"><strong>Research preview, not trip clearance.</strong> No destination shown here has a confirmed plowed winter trailhead or safe route. Map pins are DNR/NPS route reference locations, not verified plowed winter parking or driving directions. Check the land manager before departure.</div></section>
 <section class="workbench" aria-label="Trip planning controls">
 <div class="ctrl"><label for="activity">Activity</label><select id="activity"><option value="either">Hiking or snowshoeing</option><option value="snowshoe">Snowshoe only</option><option value="hike">Boot hiking</option></select></div>
 <div class="ctrl"><label for="region">Part of Michigan</label><select id="region"><option value="all">Entire state</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower Peninsula</option><option value="southern-lower">Southern Lower Peninsula</option></select></div>
 <div class="ctrl"><label for="day">Day to check</label><input type="date" id="day" required aria-describedby="date-note"><small id="date-note">NWS hourly outlook: next 7 days</small></div>
 <div class="ctrl"><label for="search">Trail or park</label><input id="search" type="search" placeholder="e.g., Tahquamenon, Vasa" autocomplete="off"></div>
 </section>
-<section class="explore"><div class="topline"><div><p class="eyebrow">Explore the official route inventory</p><h2>Where should I investigate?</h2><p class="muted">Location points represent recreation areas, not winter parking. Click a map area to filter its routes.</p></div>
+<section class="explore"><div class="topline"><div><p class="eyebrow">Explore the official route inventory</p><h2>Where should I investigate?</h2><p class="muted">Location points represent manager trail areas, not current winter parking. Click a trail-area marker to filter its matching routes.</p></div>
 <div class="map-actions"><button type="button" id="nearby">Use my location</button><button type="button" id="all-map">Show all Michigan</button></div></div>
-<div class="map-frame"><div id="map" role="region" aria-label="Map of Michigan route reference areas"></div><div class="map-fallback" id="map-status" aria-live="polite">Preparing route map…</div></div>
+<div class="map-frame"><div id="map" role="region" aria-label="Map of official Michigan trail-area reference points"></div><div class="map-fallback" id="map-status" aria-live="polite">Preparing route map…</div></div>
 <p class="map-note">Map: CARTO when configured, otherwise OpenFreeMap. Lines are *partial official GIS segments*, not promised complete routes. Red indicates a mapped closure. Never navigate to a reference dot.</p></section>
 <section class="results" id="routes"><div class="routes"><div class="topline"><div><h2>Named trails</h2><p id="result-count" class="muted" role="status">Loading official inventory…</p></div><button id="clear" type="button" class="subtle">Clear park filter</button></div>
 <div id="cards" class="cards" aria-live="polite"></div></div>
