@@ -84,8 +84,9 @@ test('a press or community report cannot self-certify a winter layup',()=>{
 test('only an authoritative arrival or berth-change can elevate berth confidence',()=>{
  const initial=m.addEvidence(empty,event,'2027-01-14T00:00:00Z').ledger;
  for(const kind of ['maintenance','status_update','departure']){
-  const forged={...event,kind,date:'2027-02-01',confidence:'confirmed',source:{...event.source,class:'port_authority'}};
-  assert.throws(()=>m.addEvidence(initial,forged,'2027-02-02T00:00:00Z'),/Invalid dated layup event/);
+  const verifiedSource={...event,kind,date:'2027-02-01',confidence:'confirmed',source:{...event.source,class:'port_authority'}};
+  const withUpdate=m.addEvidence(initial,verifiedSource,'2027-02-02T00:00:00Z').ledger;
+  assert.equal(m.statusFor(withUpdate,'lee-a-tregurtha').confidence,'reported','no general update upgrades an unverified arrival');
  }
  const verifiedMove={...event,kind:'berth_change',date:'2027-02-01',harborId:'sarnia',confidence:'confirmed',source:{...event.source,class:'official_agency'}};
  const moved=m.addEvidence(initial,verifiedMove,'2027-02-02T00:00:00Z').ledger;

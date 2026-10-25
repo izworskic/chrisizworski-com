@@ -53,7 +53,7 @@
  }
  function mountLedger(data){
    if(data?.schemaVersion!==1||!/^\d{4}-\d{2}$/.test(data.season)||!Array.isArray(data.events)||!Array.isArray(data.previousSeasons))return false;
-    if(data.events.some(e=>!e?.id||!e?.vessel?.key||!e?.vessel?.name||!/^\d{4}-\d{2}-\d{2}$/.test(e.date||'')||!['arrival','berth_change','maintenance','departure','status_update'].includes(e.kind)||!['confirmed','reported'].includes(e.confidence)||!/^https:\/\//.test(e.source?.url||'')||!e.source?.publisher|| (e.confidence==='confirmed'&&(!['arrival','berth_change'].includes(e.kind)||!['port_authority','operator','operator_statement','official_agency','maritime_historical_society','local_maritime_museum'].includes(e.source?.class)))))return false;
+    if(data.events.some(e=>!e?.id||!e?.vessel?.key||!e?.vessel?.name||!/^\d{4}-\d{2}-\d{2}$/.test(e.date||'')||!['arrival','berth_change','maintenance','departure','status_update'].includes(e.kind)||!['confirmed','reported'].includes(e.confidence)||!/^https:\/\//.test(e.source?.url||'')||!e.source?.publisher|| (e.confidence==='confirmed'&&!['port_authority','operator','operator_statement','official_agency','maritime_historical_society','local_maritime_museum'].includes(e.source?.class))))return false;
    const candidate={...state.archive,seasons:state.archive.seasons.map(s=>({...s,records:s.records.slice()}))};
    const season=candidate.seasons.find(s=>s.id===data.season);
    if(!season)return false;
