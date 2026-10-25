@@ -35,7 +35,7 @@ test('generic winter port roundups without named-ship headlines require source r
 test('twenty monitored reporting inputs and separate human-review tiers are declared',()=>{
  const names=new Set(f.SOURCES.map(s=>s.id));
  assert.equal(f.SOURCES.length,20);
- assert.equal(names.size,12);
+ assert.equal(names.size,20);
  for(const s of f.SOURCES){assert.match(s.url,/^https:\/\//);assert.ok(s.host);assert.ok(['publish','review'].includes(s.mode));}
  for(const id of ['interlake','hopa-news','thunder-bay-port','cleveland-port','shipwatcher','great-lakes-now','marinelink'])assert.ok(names.has(id),id);
  assert.equal(f.SOURCE_CATALOG.externalBoards.length,1);
@@ -81,16 +81,16 @@ test('an explicit dated Interlake operator report remains source-linked and is n
 test('the expanded source network includes US, Canada, owners and ship reporting',()=>{
  const ids=f.SOURCES.map(s=>s.id);
  assert.equal(ids.length,20);
- for(const id of ['boatnerd-port-news','shipwatcher','great-lakes-now','port-cleveland','port-thunder-bay','interlake','lca','algoma','boatnerd-roster'])
+ for(const id of ['boatnerd-port-news','shipwatcher','great-lakes-now','cleveland-port','thunder-bay-port','interlake','lca','algoma','boatnerd-roster'])
    assert.ok(ids.includes(id),id);
  assert.equal(new Set(ids).size,ids.length);
  for(const s of f.SOURCES){assert.ok(s.url.startsWith('https://'));assert.ok(s.host);assert.ok(s.publisher)}
 });
 test('broad harbor reporting creates review leads but no automatic layup records',async()=>{
- const source=f.SOURCES.find(s=>s.id==='port-thunder-bay');
+ const source=f.SOURCES.find(s=>s.id==='boatnerd-port-news');
  const article={title:'Lee A Tregurtha arrived at Thunder Bay for winter layup',
    text:'Lee A Tregurtha arrived at the Port of Thunder Bay to begin winter layup.',
-   date:'2027-01-16T12:00:00Z',url:'https://www.portthunderbay.ca/winter-arrival/'};
+   date:'2027-01-16T12:00:00Z',url:'https://www.boatnerd.com/winter-arrival/'};
  const rss='<rss><channel><item><title>'+article.title+'</title><link>'+article.url+
    '</link><pubDate>Sat, 16 Jan 2027 12:00:00 GMT</pubDate><description>'+article.text+'</description></item></channel></rss>';
  const fetcher=async url=>url===source.url?{ok:true,text:async()=>rss}:{ok:false,status:503};
@@ -98,7 +98,7 @@ test('broad harbor reporting creates review leads but no automatic layup records
  const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-01-17T00:00:00Z'});
  assert.equal(result.ledger.events.length,0);
  assert.ok(result.reviews.some(x=>x.url===article.url&&x.why==='editorial_review_required'));
- assert.ok(result.outcomes.find(x=>x.source===source.id)?.leads===1);
+ assert.ok(result.outcomes.find(x=>x.source===source.id)?.reviewed===1);
 });
 test('exact seasonal BoatNerd roster URL is found but a previous winter is rejected',()=>{
  const html='<html><a href="https://www.boatnerd.com/winter-lay-up-list-2025-2026/">Winter Lay-Up List 2025-2026</a>'+
