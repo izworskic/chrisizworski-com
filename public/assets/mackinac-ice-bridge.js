@@ -136,9 +136,13 @@
   }
   function observation(data) {
     var o = data && data.observed && data.observed.regions && data.observed.regions['mackinac-straits'];
-    iceReady = !!(o && o.available && !o.stale && o.validAt);
+    var seasonOpen = !!(data && data.iceSeason);
+    iceReady = !!(seasonOpen && o && o.available && !o.stale && o.validAt);
     el('dot').className='state-bullet' + (iceReady ? ' ready' : o && o.stale ? ' stale' : '');
-    if (iceReady) {
+    if (!seasonOpen) {
+      text('iceTitle', 'The winter ice-watch season has not started');
+      text('iceDescription', 'Winter monitoring resumes November 1, Michigan time. Archived ice charts are not current Straits conditions.');
+    } else if (iceReady) {
       text('iceTitle', 'NOAA regional ice analysis available');
       text('iceDescription', (o.rangeLabel || o.dominantClass || 'Classifications available') + '. These are sample-based ice-cover classes, not crossing conditions.');
     } else if (o && o.stale) {
@@ -153,7 +157,9 @@
     text('observationSource', 'NOAA / U.S. National Ice Center · ' + (o && o.validAt ? 'analysis: ' + hourText(o.validAt) : 'no verified local chart timestamp') + (o && o.stale ? ' · STALE' : ''));
     text('iceContext', iceReady
       ? 'The map shows NOAA polygon shading across the Straits. Regional concentration describes surface coverage, never ice thickness or a travel route.'
-      : 'The basemap is geographic context only. Without a recent NOAA analysis, no ice conditions are depicted.');
+      : !seasonOpen
+        ? 'Off season. Geography remains visible; archived NOAA ice shading is withheld.'
+        : 'The basemap is geographic context only. Without a recent NOAA analysis, no ice conditions are depicted.');
     updateIceButton();
     scheduleIce();
     renderSignal();
