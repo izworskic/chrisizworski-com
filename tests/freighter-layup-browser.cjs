@@ -115,14 +115,17 @@ async function run(){
       check(await page.locator('.bio-chapter').count()>=2,size.name+': editorial history chapters');
       const overflowBio=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
       check(overflowBio<=3,size.name+': ship biography overflow '+overflowBio);
+      check((await page.locator('#winter-record').textContent()).includes('Winter 2024–25'),size.name+': earlier season biography table');
+      check((await page.locator('#winter-record').textContent()).includes('Winter 2025–26'),size.name+': current archive biography table');
+      check(await page.locator('meta[name="description"]').count()===1,size.name+': page-specific metadata');
+      fs.mkdirSync(path.resolve(__dirname,'..','artifacts/layup-qa'),{recursive:true});
+      await page.screenshot({path:path.resolve(__dirname,'..','artifacts/layup-qa/'+size.name+'-biography.png'),fullPage:true});
       await page.goto(url+'vessels/oakglen/',{waitUntil:'domcontentloaded'});
       check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Oakglen historical photo');
       await page.goto(url+'vessels/james-r-barker/',{waitUntil:'domcontentloaded'});
       check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Barker historical photo');
+      await page.screenshot({path:path.resolve(__dirname,'..','artifacts/layup-qa/'+size.name+'-barker.png'),fullPage:true});
 
-      check((await page.locator('#winter-record').textContent()).includes('Winter 2024–25'),size.name+': earlier season biography table');
-      check((await page.locator('#winter-record').textContent()).includes('Winter 2025–26'),size.name+': current archive biography table');
-      check(await page.locator('meta[name="description"]').count()===1,size.name+': page-specific metadata');
 
       await page.goto(url,{waitUntil:'domcontentloaded'});
       await page.locator('[data-ship]').first().waitFor({timeout:10000});
