@@ -5,17 +5,26 @@
 <title>Lake Effect Snow Forecast: Hourly Snowbelt Outlook</title>
 <meta name="description" content="Explore lake-effect snow in MI, WI, OH, PA and NY using NWS hourly forecasts, wind shifts, warnings and NOAA lake-temperature context.">
 <link rel="canonical" href="https://chrisizworski.com/lake-effect-snow/">
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+<link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg" fetchpriority="high">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website"><meta property="og:title" content="Lake Effect Snow: Which Snowbelt Is Favored?"><meta property="og:description" content="Hour-by-hour NWS evidence, official alerts and broad snowbelt exposure—not a made-up snowband track."><meta property="og:url" content="https://chrisizworski.com/lake-effect-snow/">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg"><meta property="og:image:alt" content="Historic wall of intense lake-effect snowfall advancing toward the Buffalo Southtowns in November 2014.">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Lake Effect Snow: Which Snowbelt Is Favored?"><meta name="twitter:description" content="Compare official forecasts, lake conditions and changing wind direction across the Great Lakes.">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/lake-effect-snow/#tool","name":"Great Lakes Lake-Effect Snow Decision Engine","url":"https://chrisizworski.com/lake-effect-snow/","operatingSystem":"Web","applicationCategory":"WeatherApplication","dateModified":"2026-10-25","author":{"@id":"https://chrisizworski.com/#person"},"description":"Snowbelt-level interpretation of official NWS hourly snow, wind and alert forecasts, contextualized with NOAA daily lakewide temperature and explicitly qualitative uncertainty.","publisher":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true}]}</script>
 <style>
 :root{color-scheme:light;--ink:#202b34;--muted:#556777;--paper:#f4f7f7;--line:#d2dfe5;--blue:#114e64;--sea:#087f85;--gold:#996516}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--blue)}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #00899b;outline-offset:3px}
-.shell{max-width:1080px;margin:0 auto;padding:0 18px}.head{background:#fff;border-bottom:1px solid var(--line)}.head .shell{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:14px;padding-bottom:14px}.head a{text-decoration:none;font-weight:650}.head nav{display:flex;gap:17px;flex-wrap:wrap;font-size:.82rem}
-.hero{background:#153e55;background-image:linear-gradient(95deg,rgba(3,30,49,.97),rgba(3,34,51,.89) 44%,rgba(3,42,55,.46)),url('https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/87000/87504/GreatLakes_tmo_2016042_lrg.jpg');background-size:cover;background-position:center 35%;color:#fff;padding:48px 0 44px}.hero a{color:#deefff}.kicker{text-transform:uppercase;letter-spacing:.15em;font-weight:750;font-size:.72rem}.hero h1{font:normal clamp(2rem,5vw,3.4rem)/1.12 Georgia,serif;max-width:780px;margin:14px 0}.hero p{max-width:770px;font-size:1.09rem;color:#e6f1f4}
-.hero .quote{border-left:3px solid #83d9df;padding-left:18px;margin-top:23px;font-style:italic}
-.main{padding:24px 0 48px}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:23px;margin-bottom:18px;box-shadow:0 1px 7px #0b33400b}
+.shell{max-width:1080px;margin:0 auto;padding:0 18px}.head{background:#fff;border-bottom:1px solid var(--line)}.head .shell{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:9px;padding-bottom:9px}.head a{text-decoration:none;font-weight:650}.head nav{display:flex;gap:17px;flex-wrap:wrap;font-size:.82rem}
+.hero{background:#153e55;background-image:linear-gradient(90deg,rgba(5,26,41,.96) 0%,rgba(5,26,41,.88) 35%,rgba(5,26,41,.51) 64%,rgba(5,26,41,.13) 100%),url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg');background-size:cover;background-position:center 46%;color:#fff;padding:26px 0 21px}
+.hero a{color:#d7f3fb}.hero .kicker{color:#b7e8ef;letter-spacing:.12em;font-size:.7rem}
+.hero h1{font:normal clamp(1.92rem,4.6vw,2.95rem)/1.11 Georgia,serif;max-width:770px;margin:7px 0 7px;letter-spacing:-.02em}
+.hero-deck{max-width:640px;margin:0;color:#f0f7f9;font-size:1rem;line-height:1.47}
+.hero-credit{max-width:760px;margin:12px 0 0;color:#d5e6ec;font-size:.72rem;line-height:1.4;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.hero-credit a{text-decoration:underline;text-underline-offset:2px}
+
+.main{padding:13px 0 48px}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:23px;margin-bottom:18px;box-shadow:0 1px 7px #0b33400b}
 .panel h2{font:normal 1.65rem/1.25 Georgia,serif;color:#164a5e;margin:0 0 12px}.control{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:14px;align-items:end}
 label{font-weight:700;font-size:.8rem;display:block;margin-bottom:7px}select,button{font:inherit;border-radius:7px;min-height:45px}select{padding:9px 12px;border:1px solid #aabdc7;background:#fff;width:100%}
 button{border:0;color:#fff;background:var(--blue);padding:9px 16px;cursor:pointer}button:hover{background:#087080}button.secondary{background:#e9f2f5;color:#17485d;border:1px solid #abc5d0}
@@ -89,17 +98,18 @@ small,.small{color:var(--muted);font-size:.81rem}.alert{border-left:4px solid #a
 @media(max-width:760px){.radar-explorer{padding:12px}.radar-frame{height:320px;max-height:53vh}.radar-toolbar{gap:6px}.radar-toolbar button{padding:8px 10px;font-size:.8rem}}
 
 footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.85rem}
-@media(max-width:760px){.control,.two,.three,.guide{grid-template-columns:1fr}.panel{padding:17px}.hero{padding:32px 0}.head .shell{display:block}.head nav{margin-top:6px}.hero h1{font-size:2.25rem}}
+@media(max-width:760px){.control,.two,.three,.guide{grid-template-columns:1fr}.panel{padding:15px}.hero{padding:19px 0 16px;background-image:linear-gradient(90deg,rgba(5,26,41,.94),rgba(5,26,41,.67)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg');background-position:62% 42%}.hero h1{font-size:clamp(1.83rem,7.5vw,2.25rem);margin:5px 0}.hero-deck{font-size:.92rem;line-height:1.42}.hero-credit{margin-top:9px;font-size:.68rem}.head .shell{display:block}.head nav{margin-top:3px;gap:12px}.main{padding-top:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header class="head"><div class="shell"><a href="https://chrisizworski.com/">Chris Izworski</a><nav aria-label="Site"><a href="https://chrisizworski.com/tools/">All tools</a><a href="https://chrisizworski.com/michigan-snow-depth/">Snow on the ground</a><a href="https://chrisizworski.com/national-tools/snow/">National snow tracker</a></nav></div></header>
-<section class="hero"><div class="shell">
-<div class="kicker">Great Lakes · An hour-by-hour winter decision tool</div>
-<h1>Lake-effect snow: which snowbelt is favored?</h1>
-<p>Pick a place and watch the setup change. NWS hourly snow forecasts and official warnings anchor the outlook. Offshore NOAA GFS 850-mb air temperature and winds, 925-mb turning, and dated lake temperatures add a deeper view of the setup. Together they help you see when to pay closer attention—without pretending to know which street the band will cross.</p>
-<p class="quote">A few degrees of wind shift can move the heaviest snow miles away. No map can honestly promise the exact track three days ahead.</p><p style="font-size:.73rem;color:#d5e7ef">Historic satellite imagery: NASA Earth Observatory / Terra MODIS, February 11, 2016. This is not a current forecast image. <a href="https://science.nasa.gov/earth/earth-observatory/cloud-streets-over-the-great-lakes-87504/" target="_blank" rel="noopener">Image source</a>.</p>
+<section class="hero" aria-labelledby="lake-effect-title"><div class="shell">
+<div class="kicker">Great Lakes · live snowbelt outlook</div>
+<h1 id="lake-effect-title">Lake-effect snow: which snowbelt is favored?</h1>
+<p class="hero-deck">Choose a snowbelt. Explore NWS snow forecasts and warnings, NOAA radar, and what the winds are doing over the next 72 hours.</p>
+<p class="hero-credit">Historic lake-effect snow wall approaching Buffalo, November 2014 · Photo: Shawn Smith / NOAA Weather in Focus.
+<a href="https://commons.wikimedia.org/wiki/File:Snowfall_descending_on_the_Buffalo_Southtowns_(27940598775).jpg" target="_blank" rel="noopener">Photo &amp; CC BY 2.0 credit</a>. Not a current radar or satellite image.</p>
 </div></section>
 <main class="main shell">
 <section class="panel" aria-labelledby="choose-title">
