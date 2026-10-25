@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michigan Soil Temperature: When Is It Warm Enough to Plant?</title>
+<meta name="description" content="Today's measured soil temperature at your nearest MSU station, a 16-day forecast checked against it, and when it should pass 40°F and 60°F for planting.">
+<link rel="canonical" href="https://chrisizworski.com/michigan-soil-temperature/">
+<meta property="og:title" content="Michigan Soil Temperature: When Is It Warm Enough to Plant?">
+<meta property="og:description" content="Measured soil temperature from about 100 MSU stations, a forecast checked against it, and 11 springs of records, for MSU's 40°F and 60°F planting temperatures.">
+<meta property="og:url" content="https://chrisizworski.com/michigan-soil-temperature/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://api.enviroweather.msu.edu" crossorigin>
+<link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+<style>
+/* === site chrome === */
+.site-header{text-align:center;padding:24px 20px 18px;border-bottom:1px solid #e8e4dc;background:#fff}
+.site-header .site-title{font-size:19px;font-weight:normal;color:#2c5f2d;letter-spacing:.5px}
+.site-header .site-title a{color:#2c5f2d;text-decoration:none}
+.site-nav{text-align:center;padding:9px 20px;border-bottom:1px solid #e8e4dc;background:#fff;font-size:13px}
+.site-nav a{color:#5a5a5a;margin:0 9px;text-decoration:none}
+.site-nav a:hover{color:#2c5f2d}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#1a1a1a;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:30px;color:#2c5f2d;margin:18px 0 6px;font-weight:600;line-height:1.25}
+.sub{color:#5a5a5a;font-size:15px;margin-bottom:20px}
+h2{font-size:21px;color:#2c5f2d;margin:34px 0 10px;font-weight:600}
+h3{font-size:16px;color:#1a1a1a;margin:20px 0 6px}
+p{margin:0 0 14px;font-size:15px}
+a{color:#2c5f2d}
+ul.plain{margin:0 0 14px 20px;font-size:15px}
+ul.plain li{margin:4px 0}
+.answer-card{background:#edf6f0;border-left:4px solid #2c5f2d;border-radius:0 6px 6px 0;padding:15px 17px;margin:16px 0 22px;color:#304037}
+.src{font-size:12.5px;color:#777;margin-top:26px}
+.credit{font-size:12.5px;color:#777;margin-top:8px}
+.tool-strip{background:#f7f6f2;border:1px solid #e8e4dc;border-radius:8px;padding:16px 20px;margin:34px 0 8px}
+.tool-strip h2{margin-top:0;font-size:17px}
+.tool-strip ul{margin:8px 0 0 18px;font-size:14px}
+.tool-strip li{margin:5px 0}
+/* === soil tool === */
+.sl-chart svg{width:100%;height:auto;display:block}
+.sl-band{fill:#e3efe6}
+.sl-mid{fill:none;stroke:#8aa892;stroke-width:1.5;stroke-dasharray:4 4}
+.sl-meas{fill:none;stroke:#2c5f2d;stroke-width:2.5}
+.sl-fc{fill:none;stroke:#b5562f;stroke-width:2.5;stroke-dasharray:6 4}
+.sl-model{fill:none;stroke:#b5562f;stroke-width:1;stroke-opacity:.45}
+.sl-grid{stroke:#ece9e1;stroke-width:1}
+.sl-th{stroke:#3a5577;stroke-width:1.5}
+.sl-th.off{stroke:#b9c3d1;stroke-dasharray:3 3}
+.sl-axis{font-size:11px;fill:#6a6a6a}
+.sl-th-label{font-size:11.5px;fill:#3a5577;font-weight:600}
+.sl-today{stroke:#1a1a1a;stroke-width:1;stroke-dasharray:2 3}
+.sl-today-label{font-size:11px;fill:#1a1a1a}
+.sl-mark{fill:#2c5f2d;stroke:#fff;stroke-width:2}
+.sl-mark.fc{fill:#b5562f}
+.sl-mark-label{font-size:12px;font-weight:600;fill:#1a1a1a}
+.sl-key{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;margin:6px 0 0;padding:0;font-size:13px;color:#4a4a4a}
+.sl-key li{display:flex;align-items:center;gap:6px}
+.sl-chart .sl-key svg{width:26px;height:10px;flex:none;display:inline-block}
+.sl-limits{font-size:14px;color:#3b3b3b;margin:14px 0 0}
+.sl-limits summary{cursor:pointer;color:#2c5f2d;font-weight:600}
+.sl-limits ul{margin:8px 0 0 20px}
+.sl-limits li{margin:5px 0}
+@media print{
+  .site-nav,.gk-controls,.gk-actions,.tool-strip,.commercial-invite,#soilPlace,.gk-field{display:none}
+  body{font-size:11px}
+  h1{font-size:20px}
+}
+@media(max-width:640px){h1{font-size:25px}}
+</style>
+<link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.linkedin.com/in/chris-izworski-15294510","https://www.wikidata.org/wiki/Q138283432","https://www.youtube.com/@izworskic"]},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/michigan-soil-temperature/#app","name":"Michigan Soil Temperature: When Is It Warm Enough to Plant?","url":"https://chrisizworski.com/michigan-soil-temperature/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"description":"Today's measured soil temperature at the nearest MSU Enviroweather station, a 16-day forecast adjusted to match it, and the date the soil should pass MSU's 40°F and 60°F planting temperatures, with 11 springs of station records.","author":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"},"dateModified":"2026-10-25","inLanguage":"en-US"},{"@type":"Dataset","@id":"https://chrisizworski.com/michigan-soil-temperature/#history","name":"Michigan spring soil warming dates, MSU Enviroweather stations, 2016 to 2026","description":"For each MSU Enviroweather (Michigan Automated Weather Network) station with a usable spring record, the date the 2-inch soil stayed at 40°F or warmer and above 60°F through June 30, from measured daily soil temperatures.","creator":{"@id":"https://chrisizworski.com/#person"},"isBasedOn":"https://enviroweather.msu.edu/","temporalCoverage":"2016/2026","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-10-25"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Gardening","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":3,"name":"Michigan Soil Temperature","item":"https://chrisizworski.com/michigan-soil-temperature/"}]}]}</script>
+<link rel="stylesheet" href="/assets/growth-commercial.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body data-analytics-page="michigan-soil-temperature">
+<header class="site-header">
+<p class="site-title"><a href="/">Chris Izworski</a></p>
+</header>
+<nav class="site-nav">
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/speaking/">Speaking</a>
+  <a href="/michigan-gardening/">Gardening</a>
+  <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms &#x2197;</a>
+</nav>
+<div class="wrap">
+<h1>Michigan Soil Temperature: When Is It Warm Enough to Plant?</h1>
+<p class="sub">Today's reading at your nearest MSU weather station, a forecast checked against it, and its past springs.</p>
+
+
+<div class="gk" id="soil-tool">
+<div class="gk-card">
+  <div class="gk-field"><label for="soilPlace">Your town or ZIP</label><input type="text" id="soilPlace" list="soilTowns" autocomplete="off" value="Bay City" placeholder="for example Traverse City or 48706"><datalist id="soilTowns"></datalist></div>
+  <div class="gk-answer" id="soilCard">
+    <span class="gk-badge" id="soilBadge">Typical spring</span>
+    <h2 id="soilTitle">Turn on JavaScript to see today's soil temperature near you.</h2>
+    <p id="soilWhy">The page reads MSU Enviroweather's station measurements and a forecast in your browser.</p>
+    <dl class="gk-facts" id="soilFacts"></dl>
+    <div class="gk-actions"><a class="gk-btn" id="soilPlantNow" href="/michigan-gardening/#plant-now">See what to plant this week</a><a class="gk-link" id="soilStationLink" href="https://enviroweather.msu.edu/" rel="noopener">This station on MSU Enviroweather</a></div>
+    <span class="gk-visually-hidden" id="soilLive" role="status" aria-live="polite"></span>
+  </div>
+  <p class="gk-sub">Which seeds?</p>
+  <div class="gk-controls">
+    <fieldset class="gk-seg" id="soilForSet"><legend>Planting temperature</legend><label><input type="radio" name="soilFor" value="40"><span>40°F: beets, carrots, radishes, turnips</span></label><label><input type="radio" name="soilFor" value="60"><span>Above 60°F: beans, squash, cucumbers</span></label></fieldset>
+  </div>
+  <div class="gk-chart sl-chart">
+    <h3 id="soilChartHead">The soil 2 inches down at this station</h3>
+    <p class="gk-note" id="soilChartNote">Solid green: measured by MSU. Dashed rust: the forecast, adjusted to match the station. Shaded: the middle half of past springs at this station, with its middle line dashed.</p>
+    <svg id="soilChart" role="img" aria-labelledby="soilChartNote soilChartSummary"></svg>
+    <p class="gk-visually-hidden" id="soilChartSummary"></p>
+    <ul class="sl-key" id="soilKey"></ul>
+  </div>
+  <div class="gk-actions"><button type="button" class="gk-link" id="soilShare">Copy link to this answer</button><button type="button" class="gk-link" id="soilPrint">Print this answer</button></div>
+  <input id="soilShareOut" class="gk-out" readonly hidden aria-label="Link to this answer">
+  <details class="sl-limits" id="soilLimits"><summary>How this works, and what it cannot tell you</summary>
+    <ul>
+      <li><strong>Measured:</strong> the soil temperature 2 inches down at the nearest <a href="https://enviroweather.msu.edu/" rel="noopener">MSU Enviroweather</a> station (the Michigan Automated Weather Network). Each day's figure is the average of that day's low and high. Your own bed can run a few degrees warmer or colder than the station, with different soil, shade, mulch or a raised bed.</li>
+      <li><strong>Forecast:</strong> the <a href="https://open-meteo.com/" rel="noopener">Open-Meteo</a> weather model's soil temperature at about 2.4 inches (6 cm), for the station's location. Models run warm or cold in soil, so the page shifts the whole forecast by the average gap between model and station over the last 7 days, and says how big that shift was. This site has not measured how accurate the adjusted forecast is; treat dates more than a week out as rough.</li>
+      <li><strong>The rule:</strong> MSU gives the temperatures, not a rule for a single day. This page counts the soil as warm enough from the first day its daily average stays at 40°F or more (or above 60°F) for the rest of the data: the rest of the forecast for this year, or through June 30 for past springs. A warm afternoon that is followed by a cold week does not count.</li>
+      <li><strong>Past springs:</strong> the same station's measured springs, 2016 to 2026 where it has them. Springs with more than 12 missing days, or a gap of more than a week, are left out, and readings more than 12°F away from all nearby stations are treated as sensor faults.</li>
+      <li><strong>Frost:</strong> warm soil is one of MSU's two conditions for warm-season crops. The other is that the danger of frost is past, which this site reads as the nearest frost station's cautious date (only 1 spring in 4 still freezes after it). <a href="/michigan-frost-dates/">Frost dates for 78 stations</a>.</li>
+      <li>Everything runs in your browser. Nothing you type is sent anywhere except the station's location, to the two data services.</li>
+    </ul>
+  </details>
+</div>
+</div>
+
+<div class="answer-card" id="soil-quick-answer"><strong>MSU's two numbers:</strong> beets, carrots, radishes and turnips germinate once the soil at planting depth reaches 40°F, and beans, squash, cucumbers and other warm-season seed need it above 60°F. <span id="quickStatewide">At most of MSU's stations the soil 2 inches down settles at 40°F or warmer between late March and mid-April, and above 60°F between mid-May and early June. At any one station the date moves by about four weeks from spring to spring, so check this year's reading above.</span></div>
+
+<h2>Why soil temperature, not the calendar</h2>
+<p>Seeds respond to the soil they sit in, and soil warms more slowly than air in spring. MSU Extension's planting guide puts it in two numbers. Seeds of beets, carrots, radishes and turnips "will germinate at a minimum of 40°F." Warm-season seed, like beans, squash and cucumbers, "will not germinate well unless the soil temperature at planting depth exceeds 60°F." A thermometer pushed to planting depth in the morning answers the question for your own bed. This page answers it for the nearest station, which has measured its soil every day for years, and turns a forecast into a date.</p>
+
+<h2>When does Michigan's soil usually warm up?</h2>
+<p id="statewideNote">Across the 91 MSU stations with at least five measured springs from 2016 to 2026, the middle date for the soil 2 inches down to stay at 40°F or warmer runs from March 19 at South Haven to April 24 at McMillan near Newberry, with most stations between March 27 and April 13. Staying above 60°F comes about seven weeks later: from May 14 at Cassopolis to June 16 at Hawks, McBain and Petoskey, with most between May 21 and June 8. The year matters as much as the place. Across all stations, the middle 40°F date came as early as March 23 (2021) and as late as April 23 (2020), and the 60°F date ranged from May 15 (2024) to June 14 (2019). At a typical station, its earliest and latest springs were about four weeks apart.</p>
+
+<h2>Questions</h2>
+<h3>What depth should I check soil temperature at?</h3>
+<p>MSU's numbers are for the soil at planting depth. Most seeds go in less than 2 inches deep, so this page uses the station's 2-inch sensor. The 4-inch reading is listed too; it lags the 2-inch one in spring.</p>
+<h3>Why is the station reading different from my thermometer?</h3>
+<p>The station sits in open, level ground with its own soil and cover. Dark soil, a south slope, a raised bed or plastic mulch warm faster; shade, wet clay or a thick mulch warm slower. Use the station as the regional trend and your thermometer as the final word.</p>
+<h3>Does warm soil mean it is safe to plant tomatoes and beans?</h3>
+<p>Not on its own. MSU also says warm-season crops cannot go out until the danger of frost is past. When you pick the 60°F seeds, this page shows the later of the two dates. <a href="/michigan-gardening/#plant-now">What to Plant Now in Michigan</a> puts both together for every crop.</p>
+
+<aside class="commercial-invite" aria-label="Related Michigan planting tools">
+  <p class="commercial-eyebrow">Turn the soil reading into a planting list</p>
+  <p>Carry today's reading into the week's planting list for your town, or check the frost dates that decide when tender crops go out.</p>
+  <p class="commercial-actions"><a href="/michigan-gardening/#plant-now" data-growth-cta="soil-plant-now">What to plant this week</a><a href="/michigan-frost-dates/" data-growth-cta="soil-frost-dates">Michigan frost dates</a><a href="/when-to-plant-tomatoes-michigan/" data-growth-cta="soil-tomatoes">When to plant tomatoes</a></p>
+</aside>
+
+<div class="tool-strip">
+<h2>Michigan garden tools by Chris Izworski</h2>
+<ul>
+<li><a href="/michigan-gardening/#plant-now">What to Plant Now in Michigan</a>: this week's planting list for your town, from MSU's rules and your frost station</li>
+<li><a href="/michigan-frost-dates/">Michigan frost dates</a>: the 78 State Climatologist stations, with plain odds for any planting day</li>
+<li><a href="/when-to-plant-tomatoes-michigan/">When to plant tomatoes in Michigan</a>: seed start, hardening off and planting out for your station</li>
+<li><a href="/seed-starting-guide/">Seed starting guide</a>: what to start indoors this week</li>
+</ul>
+</div>
+
+<div class="src">Sources: soil temperature measured by <a href="https://enviroweather.msu.edu/" rel="noopener">MSU Enviroweather</a> (Michigan Automated Weather Network), read live and, for past springs, downloaded on <span id="srcFetched">October 24, 2026</span>. Forecast: <a href="https://open-meteo.com/" rel="noopener">Open-Meteo</a>, licensed CC BY 4.0. Planting temperatures: <a href="https://www.canr.msu.edu/uploads/resources/pdfs/plantingveg.pdf" rel="noopener">How to Plant Vegetables, MSU Extension (updated April 29, 2009)</a>. Frost dates: Michigan State Climatologist Office via <a href="https://www.canr.msu.edu/resources/frost-free-dates" rel="noopener">MSU Extension</a>.</div>
+<div class="credit">Built by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist and gardener in Bay City, Michigan.</div>
+</div>
+<script src="/assets/garden-tools/garden-kit.js"></script>
+<script src="/assets/garden-tools/michigan-frost.js"></script>
+<script src="/assets/garden-tools/michigan-places.js"></script>
+<script src="/assets/garden-tools/plant-now.js"></script>
+<script src="/assets/garden-tools/michigan-soil-data.js"></script>
+<script src="/assets/garden-tools/michigan-soil.js"></script>
+<script>
+/* Michigan soil temperature: nearest MSU station, measured soil, an adjusted forecast and past springs,
+ * read in the browser. No server of ours is involved. */
+(function(){
+  'use strict';
+  var K=window.GardenKit,S=window.MISoil,SD=window.MISoilData,P=window.MIPlaces,E=window.PlantNow,h=K.h,s=K.s,el=function(id){return document.getElementById(id)};
+  var MSU='https://api.enviroweather.msu.edu',OM='https://api.open-meteo.com/v1/forecast';
+  var q=new URLSearchParams(location.search),today=E.detroitToday(q.get('date')),place=null,forT=null,data=null,ask=0;
+
+  // ---------- places ----------
+  function locate(input){
+    var v=String(input||'').trim();if(!v)return null;
+    if(/^\d{5}$/.test(v)){var z=P.ZIPS.filter(function(r){return r[0]===v})[0];return z?{label:z[3]+' '+z[0],zip:z[0],pt:[z[1],z[2]]}:null}
+    var key=v.toLowerCase().replace(/^st\.? /,'saint ').replace(/^mt\.? /,'mount ');
+    var hits=P.ZIPS.filter(function(r){return r[3].toLowerCase()===key});
+    if(hits.length){var la=0,lo=0;hits.forEach(function(r){la+=r[1];lo+=r[2]});return {label:hits[0][3],pt:[la/hits.length,lo/hits.length]}}
+    var st=SD.STATIONS.filter(function(x){return x.n.toLowerCase()===v.toLowerCase()||x.id===v.toLowerCase()})[0];
+    return st?{label:st.n,pt:[st.lat,st.lon]}:null;
+  }
+  function resolve(p){var n=S.nearest(p.pt),f=E.nearestStation(p.pt);return {label:p.label,zip:p.zip,pt:p.pt,soil:n.station,miles:n.miles,frost:f.station}}
+  el('soilTowns').replaceChildren.apply(el('soilTowns'),E.towns().map(function(t){return h('option',{value:t})}));
+
+  // ---------- live data ----------
+  function mmdd(iso){var p=iso.split('-');return p[1]+'/'+p[2]+'/'+p[0]}
+  function startISO(){var d=K.fromISO(today.iso);if(d>S.SPRING_END||d<S.MAR1+7)return S.addDays(today.iso,-45);return today.iso.slice(0,4)+'-03-01'}
+  function cacheGet(k){try{var v=JSON.parse(window.localStorage.getItem(k)||'null');return v&&Date.now()-v.at<3*3600e3?v:null}catch(e){return null}}
+  function cacheSet(k,v){try{v.at=Date.now();window.localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function json(r){if(!r||!r.ok)throw new Error('HTTP '+(r&&r.status));return r.json()}
+  function load(){
+    var st=place.soil,my=++ask,key='soil1:'+st.id+':'+today.iso,hit=cacheGet(key);
+    data={measured:null,model:null,msuFailed:false,modelFailed:false,loading:true};
+    if(hit){data={measured:hit.measured,model:hit.model,msuFailed:!hit.measured,modelFailed:!hit.model,loading:false};render();return}
+    render();
+    if(typeof fetch!=='function'){data.loading=false;data.msuFailed=data.modelFailed=true;render();return}
+    var got={measured:null,model:null};
+    fetch(MSU+'/ewx-api/api/session').then(json).then(function(t){
+      return fetch(MSU+'/rm-api/api/run?resultModelCode=soilconditions&stationId='+st.serial+'&stationCode='+st.id+'&stationType=1&selectDate='+mmdd(today.iso)+'&dateStart='+mmdd(startISO()),{headers:{Authorization:'Bearer '+t.token}});
+    }).then(json).then(function(j){var m=S.fromMSU(j);got.measured=m.length?m:null}).catch(function(){got.measured=null})
+    .then(function(){return fetch(OM+'?latitude='+st.lat+'&longitude='+st.lon+'&hourly=soil_temperature_6cm&temperature_unit=fahrenheit&timezone=America%2FDetroit&past_days=7&forecast_days='+S.FORECAST_DAYS)})
+    .then(json).then(function(j){var m=S.fromModel(j);got.model=m.length?m:null}).catch(function(){got.model=null})
+    .then(function(){
+      if(my!==ask)return;
+      data={measured:got.measured,model:got.model,msuFailed:!got.measured,modelFailed:!got.model,loading:false};
+      if(got.measured)cacheSet(key,{measured:got.measured,model:got.model});
+      render();
+    });
+  }
+
+  // ---------- words ----------
+  function deg(v){return Math.round(v)+'°F'}
+  function signed(v){var r=Math.round(v*10)/10;return (r>0?'+':r<0?'−':'±')+Math.abs(r)+'°F'}
+  function when(iso){return iso===S.addDays(today.iso,-1)?'Yesterday':'On '+S.fmtISO(iso)}
+  function stay(t){return t===40?'at 40°F or warmer':'above 60°F'}
+  function frostDay(){return E.frostOf(place.frost).cautious}
+  function trendWord(a){if(a.trend===null||a.trend===undefined)return '';return Math.abs(a.trend)<1.5?'about the same as a week before':(a.trend<0?'down ':'up ')+Math.round(Math.abs(a.trend))+'°F from a week before'}
+  function short(a){
+    var o=a.outlook,typ=o.median!==null?'usually from '+S.dayText(o.median):'not by June 30 in past springs';
+    switch(a.code){
+      case 'READY':return 'Warm enough since '+S.fmtISO(a.since);
+      case 'SOON':return 'Around '+S.fmtISO(a.on)+' (forecast)';
+      case 'DIPPING':return 'Warm now; forecast to cool'+(a.dip?' around '+S.fmtISO(a.dip.iso):'');
+      case 'NOT_YET':return (a.hasForecast?'Not in the next '+S.FORECAST_DAYS+' days; ':'Not yet; ')+typ;
+      case 'OFFSEASON':return 'Next spring, '+typ;
+      default:return 'In past springs, '+typ;
+    }
+  }
+  function answer(a){
+    var th=a.th,where=place.label,stn='MSU’s '+a.station.n+' station',dist=place.miles<1?'':', '+place.miles+' miles away',o=a.outlook,far=place.miles>30?' That station is '+place.miles+' miles from you, so read it as a rough guide.':'';
+    var reading=a.last?when(a.last.iso)+' the soil 2 inches down averaged '+deg(a.last.t)+' at '+stn+dist+'.':'';
+    var fr=frostDay(),frText=K.fmt(fr),afterFrost=a.t===60&&K.fromISO(today.iso)<fr;
+    var adj=a.bias?' The forecast is shifted by '+signed(a.bias.offset)+' to match the station over the last '+a.bias.days+' days'+(Math.abs(a.bias.offset)>S.TRUST_GAP?', a large gap, so treat it loosely':'')+'.':'';
+    var frostNote=function(iso){return a.t===60&&K.fromISO(iso)<fr&&K.fromISO(today.iso)<=fr?' MSU also says to wait until the danger of frost is past: about '+frText+' at the '+place.frost.n+' frost station, so sow from '+frText+'.':''};
+    var r={};
+    if(a.code==='READY'){
+      r.badge='Warm enough';r.cls='';
+      r.title=afterFrost?'The soil near '+where+' is above 60°F; wait for the frost date, '+frText+'.':'The soil near '+where+' is warm enough for '+th.crops+'.';
+      r.why=reading+' It has stayed '+stay(a.t)+' since '+S.fmtISO(a.since)+(a.hasForecast?', and the adjusted forecast keeps it there through '+S.fmtISO(a.end.iso)+'.':'. No forecast could be loaded to check the days ahead.')+adj+(afterFrost?' MSU also says warm-season crops wait until the danger of frost is past: about '+frText+' at the '+place.frost.n+' frost station.':'');
+    }else if(a.code==='SOON'){
+      var late=a.t===60&&K.fromISO(a.on)<fr;
+      r.badge='Forecast';r.cls='wait';
+      r.title=late?'The soil near '+where+' should pass 60°F around '+S.fmtISO(a.on)+'; sow from the frost date, '+frText+'.':'The soil near '+where+' should '+(a.t===40?'reach 40°F':'pass 60°F')+' around '+S.fmtISO(a.on)+'.';
+      r.why=reading+' The adjusted forecast keeps it '+stay(a.t)+' from '+S.fmtISO(a.on)+' through '+S.fmtISO(a.end.iso)+'.'+adj+' Forecasts drift, so check again in a few days.'+frostNote(a.on);
+    }else if(a.code==='DIPPING'){
+      r.badge='Cooling off';r.cls='wait';
+      r.title='The soil near '+where+' is '+(a.t===40?'at 40°F or warmer':'above 60°F')+' now, but the forecast cools it'+(a.dip?' around '+S.fmtISO(a.dip.iso):'')+'.';
+      r.why=reading+(a.dip?' The adjusted forecast has it at '+deg(a.dip.t)+' on '+S.fmtISO(a.dip.iso)+'.':'')+adj+' '+S.outlookWords(o,a.t)+frostNote(today.iso);
+    }else if(a.code==='NOT_YET'){
+      r.badge='Not yet';r.cls='no';
+      r.title=a.hasForecast?'The soil near '+where+' won’t stay '+stay(a.t)+' in the next '+S.FORECAST_DAYS+' days.':'The soil near '+where+' is still below '+(a.t===40?'40°F':'60°F')+'.';
+      r.why=reading+(a.hasForecast?adj:' No forecast could be loaded, so there is no date for this year yet.')+' '+S.outlookWords(o,a.t);
+    }else if(a.code==='OFFSEASON'){
+      r.badge='Next spring';r.cls='info';
+      r.title=o.median!==null?'Next spring, the soil near '+where+' usually stays '+stay(a.t)+' from about '+S.dayText(o.median)+'.':'The soil near '+where+' did not stay '+stay(a.t)+' by June 30 in past springs.';
+      r.why=reading.replace(/\.$/,'')+(trendWord(a)?', '+trendWord(a)+'.':'.')+' '+S.outlookWords(o,a.t);
+    }else{
+      r.badge='Typical spring';r.cls='info';
+      r.title=o.median!==null?'In a typical spring, the soil near '+where+' stays '+stay(a.t)+' from about '+S.dayText(o.median)+'.':'The soil near '+where+' did not stay '+stay(a.t)+' by June 30 in past springs.';
+      r.why=(data&&data.loading?'Loading today’s reading from '+stn+(place.miles<1?'':' ('+place.miles+' miles away)')+'. ':'Today’s reading from '+stn+(place.miles<1?'':' ('+place.miles+' miles away)')+' could not be loaded'+(a.stale&&a.last?' (its latest is from '+S.fmtISO(a.last.iso)+')':'')+', so this is the station’s record only. ')+S.outlookWords(o,a.t);
+    }
+    r.why+=far;
+    return r;
+  }
+
+  // ---------- chart ----------
+  function drawChart(a,other){
+    var svg=el('soilChart'),W=Math.round(Math.max(300,Math.min(900,K.width(svg,760)))),narrow=W<520,H=narrow?230:260;
+    var td=K.fromISO(today.iso),spring=a.spring,typ=S.typical(a.station);
+    var series=a.series,measured=series.filter(function(r){return r.kind==='measured'}),fc=series.filter(function(r){return r.kind==='forecast'});
+    if(spring){var sm=a.measured.filter(function(r){return r.t!==null&&K.fromISO(r.iso)>=S.MAR1});measured=sm.map(function(r){return {iso:r.iso,t:r.t}})}
+    var d0=spring?S.MAR1:td-45,d1=spring?Math.max(S.JUN30,td+S.FORECAST_DAYS):td+S.FORECAST_DAYS+1;
+    var pts=measured.concat(fc).map(function(r){return r.t}),lo=Math.min.apply(null,[34].concat(pts,typ&&spring?typ.lo.filter(function(v){return v!==null}):[])),hi=Math.max.apply(null,[66].concat(pts,typ&&spring?typ.hi.filter(function(v){return v!==null}):[]));
+    lo=Math.floor((lo-2)/10)*10;hi=Math.ceil((hi+2)/10)*10;
+    var L=narrow?30:38,R=W-12,T=16,B=H-30,X=function(d){return L+(d-d0)/(d1-d0)*(R-L)},Y=function(v){return B-(v-lo)/(hi-lo)*(B-T)};
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var k=[];
+    for(var v=lo;v<=hi;v+=10)k.push(s('line',{x1:L,y1:Y(v),x2:R,y2:Y(v),class:'sl-grid'}),s('text',{x:L-5,y:Y(v)+4,'text-anchor':'end',class:'sl-axis'},v+'°'));
+    for(var d=d0;d<=d1;d++){var f=K.fmt(d).split(' ');if(f[1]==='1'||(!narrow&&f[1]==='15'&&d1-d0<160))k.push(s('text',{x:X(d),y:B+18,'text-anchor':'middle',class:'sl-axis'},K.fmt(d)))}
+    if(typ&&spring){
+      var up=[],dn=[],mid=[];typ.days.forEach(function(dd,i){if(typ.lo[i]===null)return;up.push(X(dd).toFixed(1)+' '+Y(typ.hi[i]).toFixed(1));dn.unshift(X(dd).toFixed(1)+' '+Y(typ.lo[i]).toFixed(1));mid.push(X(dd).toFixed(1)+' '+Y(typ.mid[i]).toFixed(1))});
+      if(up.length)k.push(s('path',{d:'M'+up.join(' L')+' L'+dn.join(' L')+' Z',class:'sl-band'}),s('path',{d:'M'+mid.join(' L'),class:'sl-mid'}));
+    }
+    [40,60].forEach(function(t){k.push(s('line',{x1:L,y1:Y(t),x2:R,y2:Y(t),class:'sl-th'+(t===a.t?'':' off')}),s('text',{x:L+4,y:Y(t)-4,class:'sl-th-label'},t===40?'40°F root crops':'60°F warm-season seed'))});
+    var path=function(rows){return rows.map(function(r,i){return (i?'L':'M')+X(K.fromISO(r.iso)).toFixed(1)+' '+Y(r.t).toFixed(1)}).join(' ')};
+    if(measured.length)k.push(s('path',{d:path(measured),class:'sl-meas'}));
+    if(fc.length){var join=measured.length?[measured[measured.length-1]]:[];k.push(s('path',{d:path(join.concat(fc)),class:'sl-fc'}))}
+    if(td>=d0&&td<=d1)k.push(s('line',{x1:X(td),y1:T,x2:X(td),y2:B,class:'sl-today'}),s('text',{x:X(td)+4,y:T+10,class:'sl-today-label'},'Today'));
+    var mark=a.code==='READY'?{iso:a.since,fc:false,lab:'Since '+S.fmtISO(a.since)}:a.code==='SOON'?{iso:a.on,fc:true,lab:'Around '+S.fmtISO(a.on)}:null;
+    if(mark){var mx=X(K.fromISO(mark.iso)),my=Y(a.t);k.push(s('circle',{cx:mx,cy:my,r:6,class:'sl-mark'+(mark.fc?' fc':'')}),s('text',{x:Math.min(R-4,Math.max(L+4,mx)),y:my-12,'text-anchor':mx>R-90?'end':mx<L+90?'start':'middle',class:'sl-mark-label'},mark.lab))}
+    svg.replaceChildren.apply(svg,k);
+    var sum=a.last?'Latest measured '+deg(a.last.t)+' on '+S.fmtISO(a.last.iso)+'. ':'No measured readings loaded. ';
+    if(fc.length)sum+='Forecast from '+S.fmtISO(fc[0].iso)+' to '+S.fmtISO(fc[fc.length-1].iso)+', ranging '+deg(Math.min.apply(null,fc.map(function(r){return r.t})))+' to '+deg(Math.max.apply(null,fc.map(function(r){return r.t})))+'. ';
+    if(typ&&spring&&typ.mid[0]!==null)sum+='In a typical spring here the soil averages '+deg(typ.mid[0])+' on Mar 1 and '+deg(typ.mid[typ.mid.length-1])+' in late June.';
+    el('soilChartSummary').textContent=sum;
+    el('soilChartHead').textContent='The soil 2 inches down at '+a.station.n+(spring?', this spring':', the last six weeks');
+    var key=[['sl-meas','Measured by MSU'],['sl-fc','Forecast, adjusted']];if(typ&&spring)key.push(['sl-band','Middle half of past springs']);
+    el('soilKey').replaceChildren.apply(el('soilKey'),key.map(function(x){return h('li',null,s('svg',{viewBox:'0 0 26 10','aria-hidden':'true'},x[0]==='sl-band'?s('rect',{x:0,y:0,width:26,height:10,class:x[0]}):s('line',{x1:0,y1:5,x2:26,y2:5,class:x[0]})),x[1])}));
+  }
+
+  // ---------- render ----------
+  function defaultT(){
+    var sp=K.fromISO(today.iso)<=S.SPRING_END;if(!sp)return 40;
+    var a=S.assess(place.soil,40,today.iso,data&&data.measured?{measured:data.measured,model:data.model||[]}:{});
+    if(a.code==='READY')return 60;if(a.code==='NO_LIVE'&&a.outlook.median!==null&&K.fromISO(today.iso)>a.outlook.median+7)return 60;return 40;
+  }
+  function query(){var u=new URLSearchParams();u.set('place',place.zip||place.label);u.set('for',String(forT));if(q.get('date'))u.set('date',q.get('date'));return '?'+u.toString()}
+  function render(){
+    var t=forT||defaultT(),input={measured:data&&data.measured||[],model:data&&data.model||[]};
+    document.querySelectorAll('input[name="soilFor"]').forEach(function(r){r.checked=r.value===String(t)});
+    var a=S.assess(place.soil,t,today.iso,input),b=S.assess(place.soil,t===40?60:40,today.iso,input),r=answer(a);
+    el('soilCard').className='gk-answer'+(r.cls?' '+r.cls:'');el('soilBadge').textContent=r.badge;el('soilTitle').textContent=r.title;el('soilWhy').textContent=r.why;
+    var a40=t===40?a:b,a60=t===60?a:b,fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]},facts=[];
+    if(a.last){var l=a.last;facts=facts.concat(fx('Soil 2 inches down, '+S.fmtISO(l.iso),deg(l.t)+(l.lo!==null&&l.hi!==null?' (low '+deg(l.lo)+', high '+deg(l.hi)+')':'')));if(l.t4!==null&&l.t4!==undefined)facts=facts.concat(fx('4 inches down',deg(l.t4)))}
+    facts=facts.concat(fx('Station',a.station.n+', '+a.station.county+' County'+(place.miles?', '+place.miles+' miles away':'')),fx('40°F, root crops',short(a40)),fx('Above 60°F, warm-season seed',short(a60)));
+    facts=facts.concat(fx('Forecast adjustment',a.bias?signed(a.bias.offset)+', from the last '+a.bias.days+' days':data&&data.loading?'Loading':'No forecast loaded'));
+    facts=facts.concat(fx('Danger of frost past',K.fmt(frostDay())+' at the '+place.frost.n+' frost station'));
+    el('soilFacts').replaceChildren.apply(el('soilFacts'),facts);
+    var pn=new URLSearchParams();pn.set('place',place.zip||place.label);if(a.last&&!a.stale)pn.set('soil',String(Math.round(a.last.t)));
+    el('soilPlantNow').href='/michigan-gardening/?'+pn.toString()+'#plant-now';
+    el('soilPlantNow').textContent=a.last&&!a.stale?'Use '+deg(a.last.t)+' in this week’s planting list':'See what to plant this week';
+    el('soilStationLink').href='https://mawn.geo.msu.edu/station.asp?id='+a.station.id;el('soilStationLink').textContent=a.station.n+' station records at MSU';
+    drawChart(a,b);
+    el('soilLive').textContent=r.title;
+    if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
+  }
+  function setPlace(v){var p=locate(v);if(!p)return false;place=resolve(p);load();return true}
+  el('soilPlace').addEventListener('change',function(){if(!setPlace(el('soilPlace').value)){el('soilLive').textContent='No Michigan town or ZIP called '+el('soilPlace').value+'. Try a nearby town or a 5-digit ZIP.'}});
+  document.querySelectorAll('input[name="soilFor"]').forEach(function(r){r.addEventListener('change',function(){forT=Number(r.value);render()})});
+  el('soilShare').addEventListener('click',function(){if(!forT)forT=Number((document.querySelector('input[name="soilFor"]:checked')||{value:40}).value);K.copyLink(location.origin+location.pathname+query()+'#soil-tool',el('soilShare'),el('soilShareOut'))});
+  el('soilPrint').addEventListener('click',function(){window.print()});
+  if(q.get('for')==='40'||q.get('for')==='60')forT=Number(q.get('for'));
+  var start=q.get('place')||'Bay City';
+  if(!setPlace(start))setPlace('Bay City');else el('soilPlace').value=place.zip||place.label;
+})();
+</script>
+</body>
+</html>
