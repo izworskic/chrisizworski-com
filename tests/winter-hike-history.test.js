@@ -114,7 +114,7 @@ test('single station comparison does not fill missing winters with nearest diffe
 test('upstream outage and malformed JSON never manufacture observed snow depths',async()=>{
  const fetcher=async()=>({ok:true,text:async()=>'{invalid'});
  const r=await H.historyForRoute(route,'01-15',{fetcher,now:NOW});
- assert.equal(r.historyStatus,'no-qualified-station');assert.equal(r.station,null);
+ assert.equal(r.historyStatus,'source-unavailable');assert.equal(r.station,null);
  assert.equal(r.years.length,4);
  assert.ok(r.years.every(x=>x.status==='source-unavailable'&&x.days.length===0&&x.peakObservedIn===null));
 });
