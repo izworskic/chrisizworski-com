@@ -154,3 +154,50 @@ test('client chart only displays returned NOAA observations and launches dated N
   assert.equal(result.status,0,script+': '+result.stderr);
  }
 });
+
+
+test('live search metadata prefers a high-coverage local station over distant high-coverage snowbelt source',()=>{
+ const data={results:[
+  {boundingPoints:[{coordinates:[-85.2,45.1]}],stations:[{
+   id:'USC00202382',name:'Far high coverage',dataTypes:[{id:'SNWD',coverage:100}]}]},
+  {boundingPoints:[{coordinates:[-85.49,44.8]}],stations:[{
+   id:'USC00208245',name:'Local 95%',dataTypes:[{id:'SNWD',coverage:95}]}]}
+ ]};
+ const ranked=H.candidateStations(data,point);
+ assert.equal(ranked[0].id,'USC00208245');
+ assert.ok(ranked[0].miles<10);
+});
+test('station search failure is explicit and never represented as no snow measured',async()=>{
+ const failed=await H.discoverStations(point,2025,'02-15',{
+  fetcher:async()=>({ok:false,status:400,text:async()=>'{"errorMessage":"A station is required."}'})
+ });
+ assert.equal(failed.status,'source-unavailable');
+ assert.deepEqual(failed.candidates,[]);
+ const v=await H.historyForRoute(route,'02-15',{
+  fetcher:async()=>({ok:false,status:503}),now:NOW});
+ assert.equal(v.discoveryStatus,'source-unavailable');
+ assert.equal(v.station,null);assert.ok(v.years.every(x=>x.days.length===0));
+});
+test('a NOAA Search candidate with no actual SNWD reports cannot hide the next reporting station',async()=>{
+ const pointId='USC00208245',dead='US1MIGT0033';
+ const search={results:[
+  {boundingPoints:[{coordinates:[-85.49,44.751]}],
+   stations:[{id:dead,name:'Metadata only',dataTypes:[{id:'SNWD',coverage:100}]}]},
+  {boundingPoints:[{coordinates:[-85.51,44.73]}],
+   stations:[{id:pointId,name:'Observed station',dataTypes:[{id:'SNWD',coverage:94}]}]}
+ ]};
+ const called=[];
+ const fetcher=async url=>{
+  const u=new URL(url);called.push(u);
+  if(u.pathname.includes('/search/'))return {ok:true,text:async()=>JSON.stringify(search)};
+  const station=u.searchParams.get('stations'),year=Number(u.searchParams.get('endDate').slice(0,4));
+  return {ok:true,text:async()=>JSON.stringify(station===dead?[]:[
+   sample(year,0,pointId,'5')
+  ])};
+ };
+ const h=await H.historyForRoute(route,'02-15',{fetcher,now:NOW});
+ assert.equal(h.station.id,pointId);
+ assert.equal(h.station.coverageWinters,4);
+ assert.equal(h.stationSearchCandidates,2);
+ assert.ok(called.filter(u=>u.pathname.includes('/search/')).length===1);
+});
