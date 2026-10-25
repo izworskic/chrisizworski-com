@@ -135,6 +135,56 @@ async function run(){
    console.log('BROWSER MOBILE MAP RESULT '+JSON.stringify(row));
    await context.close();
   }
+  // Run CARTO map branch on a real 390px viewport without exposing Vercel's key.
+  // Only in this test, remove a fake token from the public CARTO style URL.
+  {
+   const c=await browser.newContext({viewport:{width:390,height:844},
+    isMobile:true,hasTouch:true,deviceScaleFactor:2});
+   const page=await c.newPage(),errors=[],tiles=[];
+   page.on('pageerror',e=>errors.push(e.message));
+   page.on('response',r=>{
+    if(r.url().includes('gibs.earthdata.nasa.gov/wmts/')&&r.status()===200&&
+      r.headers()['content-type']?.startsWith('image/'))tiles.push(r.url());
+   });
+   await page.route('**/api/carto-basemap-config',r=>r.fulfill({status:200,
+    contentType:'application/json',
+    body:JSON.stringify({provider:'CARTO',key:'test-public-style-access-key'})}));
+   await page.route('https://basemaps.cartocdn.com/**',r=>{
+    const u=new URL(r.request().url());u.searchParams.delete('key');
+    return r.continue({url:u.toString()});
+   });
+   await page.route('https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js',r=>r.fulfill({
+    status:200,contentType:'application/javascript',
+    body:fs.readFileSync(require.resolve('maplibre-gl/dist/maplibre-gl.js'))}));
+   await page.route('https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css',r=>r.fulfill({
+    status:200,contentType:'text/css',
+    body:fs.readFileSync(path.resolve('node_modules/maplibre-gl/dist/maplibre-gl.css'))}));
+   await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
+   await page.waitForFunction(()=>document.querySelectorAll('.route-card').length===50,null,{timeout:12000});
+   let cartoReady=false;
+   try {
+    await page.waitForFunction(()=>document.getElementById('map-status')?.textContent.startsWith('CARTO map ·'),
+     null,{timeout:20000});cartoReady=true;
+   }catch{}
+   if(cartoReady){
+    await page.locator('.route-card').first().click();
+    await page.locator('#sat-date').fill('2025-02-15');
+    await page.locator('#sat-date').dispatchEvent('change');
+    await page.locator('#sat-mode').selectOption('snowCover');
+    await page.locator('#sat-show').check();
+    await page.waitForTimeout(4500);
+   }
+   const state=await page.evaluate(()=>({map:document.getElementById('map-status')?.textContent,
+    width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
+   const passed=cartoReady&&tiles.some(t=>t.includes('NDSI_Snow_Cover'))&&
+    state.width<=state.viewport+4&&!errors.length;
+   fs.mkdirSync(path.resolve('artifacts/winter-hike-browser'),{recursive:true});
+   await page.screenshot({path:path.resolve('artifacts/winter-hike-browser/phone-carto-390.png'),fullPage:false});
+   console.log('BROWSER CARTO MAP RESULT '+JSON.stringify({passed,cartoReady,state,
+    nasaTiles:tiles.filter(t=>t.includes('NDSI_Snow_Cover')).length,errors}));
+   await c.close();
+   if(!passed)throw Error('CARTO + NASA historic tile integration failed on mobile');
+  }
   if(report.some(x=>!x.passed))throw Error('At least one real mobile/desktop map + historical satellite scene check failed');
   console.log('BROWSER HISTORICAL SATELLITE RELEASE GATE PASSED');
  }finally{
