@@ -145,6 +145,110 @@
       "mode": "review",
       "region": "Maritime industry",
       "role": "Industry news"
+    },
+    {
+      "id": "boatnerd-port-news",
+      "publisher": "BoatNerd Port & Vessel Reporting",
+      "url": "https://www.boatnerd.com/feed/",
+      "homepage": "https://www.boatnerd.com/",
+      "host": "www.boatnerd.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "All Great Lakes",
+      "role": "Port and vessel reporting",
+      "kind": "maritime"
+    },
+    {
+      "id": "lca",
+      "publisher": "Lake Carriers’ Association",
+      "url": "https://lcaships.com/feed/",
+      "homepage": "https://lcaships.com/",
+      "host": "lcaships.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "U.S. Great Lakes fleet",
+      "role": "Industry reporting",
+      "kind": "industry"
+    },
+    {
+      "id": "algoma",
+      "publisher": "Algoma Central Corporation",
+      "url": "https://www.algonet.com/feed/",
+      "homepage": "https://www.algonet.com/news-and-media/",
+      "host": "www.algonet.com",
+      "sourceClass": "operator",
+      "format": "rss",
+      "mode": "publish",
+      "region": "Canadian Great Lakes fleet",
+      "role": "Fleet operator",
+      "kind": "operators"
+    },
+    {
+      "id": "boatnerd-roster",
+      "publisher": "BoatNerd Winter Layup Roster",
+      "url": "https://www.boatnerd.com/",
+      "homepage": "https://www.boatnerd.com/",
+      "host": "www.boatnerd.com",
+      "sourceClass": "journalistic_report",
+      "format": "roster_html",
+      "mode": "review",
+      "region": "Whole Great Lakes",
+      "role": "Seasonal winter roster index",
+      "kind": "roster"
+    },
+    {
+      "id": "news-sarnia-stclair",
+      "publisher": "Regional discovery: Sarnia and St. Clair",
+      "url": "https://news.google.com/rss/search?q=freighter%20winter%20layup%20Sarnia%20OR%20Detroit%20OR%20St%20Clair&hl=en-US&gl=US&ceid=US:en",
+      "homepage": "https://news.google.com/",
+      "host": "news.google.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Sarnia / St. Clair River / Detroit",
+      "role": "News-search leads, never automatic verification",
+      "kind": "discovery"
+    },
+    {
+      "id": "news-welland-hamilton",
+      "publisher": "Regional discovery: Welland and Hamilton",
+      "url": "https://news.google.com/rss/search?q=freighter%20winter%20layup%20Hamilton%20OR%20Port%20Colborne%20OR%20Welland&hl=en-US&gl=US&ceid=US:en",
+      "homepage": "https://news.google.com/",
+      "host": "news.google.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Hamilton / Port Colborne / Welland",
+      "role": "News-search leads, never automatic verification",
+      "kind": "discovery"
+    },
+    {
+      "id": "news-owen-thunder",
+      "publisher": "Regional discovery: Owen Sound and Thunder Bay",
+      "url": "https://news.google.com/rss/search?q=freighter%20winter%20layup%20Thunder%20Bay%20OR%20Owen%20Sound&hl=en-US&gl=US&ceid=US:en",
+      "homepage": "https://news.google.com/",
+      "host": "news.google.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Owen Sound / Thunder Bay",
+      "role": "News-search leads, never automatic verification",
+      "kind": "discovery"
+    },
+    {
+      "id": "news-eastern-ports",
+      "publisher": "Regional discovery: Eastern Great Lakes",
+      "url": "https://news.google.com/rss/search?q=freighter%20winter%20layup%20Erie%20OR%20Cleveland%20OR%20Buffalo%20OR%20Escanaba&hl=en-US&gl=US&ceid=US:en",
+      "homepage": "https://news.google.com/",
+      "host": "news.google.com",
+      "sourceClass": "journalistic_report",
+      "format": "rss",
+      "mode": "review",
+      "region": "Erie / Cleveland / Buffalo / Escanaba",
+      "role": "News-search leads, never automatic verification",
+      "kind": "discovery"
     }
   ],
   "externalBoards": [
@@ -155,5 +259,6 @@
       "region": "Hamilton Harbour, Ontario",
       "description": "Official arrivals, departures and explicit LAY-UP cargo status. This board is linked as an external reference; it is not treated as a continuously ingested layup feed."
     }
-  ]
+  ],
+  "reportingNote": "Twenty monitored inputs: fifteen publisher feeds, a season-specific BoatNerd roster index, and four geographically targeted news discovery feeds. News searches and roster matches only generate research leads."
 }

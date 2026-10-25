@@ -44,6 +44,9 @@ async function run(){
       await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
       check(await page.locator('#season').inputValue()==='2026-27',size.name+': new winter is default');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk visible');
+      await page.locator('#layup-reporting-network summary').click();
+      check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty source directory entries');
+      await page.locator('#layup-reporting-network summary').click();
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
       await page.locator('#season').selectOption('2025-26');
       try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
@@ -119,7 +122,7 @@ async function run(){
        id:'winter-demo-arrival',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
        kind:'arrival',date:'2027-01-16',confidence:'reported',
        summary:'Lee A. Tregurtha arrived for winter layup according to a dated harbor report.',
-       source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrival.html',title:'Arrival for winter layup',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
+       source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrival.html',title:'Arrival for winter layup',publisher:'Duluth Harbor Cam',class:'journalistic_report'}, supportingSources:[{url:'https://www.boatnerd.com/lee-winter-coverage/',title:'Winter harbor coverage',publisher:'BoatNerd',class:'journalistic_report'}]
       }]};
       await context.route('**/assets/freighter-layup-live-season.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(sampleLive)}));
       await page.reload({waitUntil:'domcontentloaded'});
@@ -129,6 +132,7 @@ async function run(){
       check(await page.locator('.layup-pin').count()===1,size.name+': sourced record adds harbor map pin');
       check(await page.locator('[data-ship="lee-a-tregurtha"]').count()===1,size.name+': new winter roster grows');
       check((await page.locator('#winter-feed').textContent()).includes('Duluth Harbor Cam'),size.name+': exact source attribution');
+      check(await page.locator('#winter-feed .winter-story-citations a').count()===2,size.name+': both reports linked to the ship story');
       check((await page.locator('#winter-feed').textContent()).includes('Reported source'),size.name+': non-official remains reported');
       await page.locator('#season').selectOption('2025-26');
       check(await page.locator('[data-ship]').count()===12,size.name+': live ledger cannot overwrite last winter');
