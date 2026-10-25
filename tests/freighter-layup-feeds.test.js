@@ -163,3 +163,18 @@ test('independent reports more than three days apart do not auto corroborate',()
   harborId:'superior',date,source:{url:'https://'+host+'/report',title:'Lee A Tregurtha arrived for winter layup at Superior',publisher:host,class:'journalistic_report'}}});
  assert.equal(f.corroborate([mk('boatnerd.com','2027-01-02'),mk('shipwatcher-news.com','2027-01-10')],known,s.freshSeason('2026-27'),'2027-01-11T00:00:00Z').length,0);
 });
+
+test('all four regional news searches remain discovery-only; publishing and review inputs stay partitioned',()=>{
+ const sources=f.SOURCE_CATALOG.sources;
+ const publisher=sources.filter(x=>x.mode==='publish'),review=sources.filter(x=>x.mode==='review');
+ assert.equal(publisher.length,9);
+ assert.equal(review.length,11);
+ assert.equal(new Set(sources.map(x=>x.id)).size,sources.length);
+ const discovery=sources.filter(x=>x.kind==='discovery');
+ assert.equal(discovery.length,4);
+ for(const source of discovery){
+  assert.equal(source.mode,'review');
+  assert.equal(source.host,'news.google.com');
+  assert.match(source.url,/^https:\/\/news\.google\.com\/rss\/search\?/);
+ }
+});
