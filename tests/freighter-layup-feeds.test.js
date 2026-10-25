@@ -21,3 +21,12 @@ test('unmatched spring departure is held for review rather than erasing a ship',
  assert.equal(result.ledger.events.length,0);
  assert.ok(result.reviews.some(x=>x.url===departure.url));
 });
+
+test('generic winter port roundups without named-ship headlines require source review',()=>{
+ const known=[{key:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}];
+ const source=f.SOURCES[0];
+ const item={title:'Winter harbor traffic roundup',text:'Lee A Tregurtha arrived in Duluth for winter layup in Superior.',
+   date:'2027-01-18T11:00:00Z',url:'https://www.duluthharborcam.com/2027/01/winter-roundup.html'};
+ const d=f.classify(item,source,known,'2026-27');
+ assert.equal(d.reason,'review');assert.equal(d.review.why,'ship_not_explicit_in_headline');
+});
