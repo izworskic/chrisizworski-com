@@ -48,6 +48,8 @@ async function handler(req,res) {
    return status(res,400,{error:'Choose a named catalog route for four completed winter seasons'});
   try {
    const record=await Season.fullSeasonForRoute(id);
+   if(record.status==='source-unavailable')
+    return status(res,503,{error:'NOAA station discovery unavailable; historical snow is unknown, not zero'});
    // Station measurements from completed winters do not need daily refresh.
    return status(res,200,{status:'full-season-station-history-not-trip-clearance',...record},86400);
   }catch{
@@ -61,6 +63,8 @@ async function handler(req,res) {
    return status(res,400,{error:'Choose a curated route and one of Jan 15, Feb 15 or Mar 15'});
   try {
    const record=await History.historyForRoute(id,anchor);
+   if(record.discoveryStatus==='source-unavailable')
+    return status(res,503,{error:'NOAA station discovery unavailable; historical snow is unknown, not zero'});
    // Public historical station measurements are slow-changing; cache this
    // bounded result for a day. Requests are explicit per selected route.
    return status(res,200,{status:'historical-station-context-not-trip-clearance',...record},86400);
