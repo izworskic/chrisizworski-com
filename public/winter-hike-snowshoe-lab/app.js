@@ -5,7 +5,7 @@
  */
 (() => {
  const $=id=>document.getElementById(id),state={
-  routes:[],filtered:[],selected:null,parkFilter:null,geolocation:null,
+  routes:[],filtered:[],selected:null,parkFilter:null,pointFilter:null,geolocation:null,
   map:null,mapLoaded:false,areas:[],routeSource:null,request:null,cache:new Map()
  };
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -21,16 +21,21 @@
   $('day').value=toIso(saturday<=end?saturday:d);
  }
  function areaPins(routes) {
+  // One park can have several widely separated trailheads: cluster by source position.
   const map=new Map();
-  for(const r of routes)if(!map.has(r.group))map.set(r.group,{id:r.group,title:r.group.replace(/-/g,' '),
-    lat:r.point.lat,lon:r.point.lon,count:0});
-  for(const r of routes)map.get(r.group).count++;
+  for(const r of routes){
+   const key=r.group+'|'+Number(r.point.lat).toFixed(5)+'|'+Number(r.point.lon).toFixed(5);
+   if(!map.has(key))map.set(key,{id:key,group:r.group,title:r.title,
+     lat:r.point.lat,lon:r.point.lon,count:0,routeIds:[]});
+   const pin=map.get(key);pin.count++;pin.routeIds.push(r.id);
+  }
   return [...map.values()];
  }
  function filtered(){
   const query=$('search').value.trim().toLowerCase(),mode=$('activity').value,region=$('region').value;
   let list=state.routes.filter(r=>(mode==='either'||r.activities.includes(mode)) &&
     (region==='all'||r.region===region) && (!state.parkFilter||r.group===state.parkFilter) &&
+    (!state.pointFilter||state.pointFilter.has(r.id)) &&
     (!query||(r.title+' '+r.group).toLowerCase().includes(query)));
   if(state.geolocation)list.sort((a,b)=>distance(state.geolocation,a.point)-distance(state.geolocation,b.point));
   state.filtered=list;renderCards();
@@ -74,8 +79,9 @@
   $('check-weather').addEventListener('click',check);
   if(scroll && matchMedia('(max-width:850px)').matches)$('detail').scrollIntoView({behavior:'smooth',block:'start'});
  }
- function selectGroup(group){
-  state.parkFilter=group;$('search').value='';filtered();
+ function selectGroup(pinId){
+  const pin=state.areas.find(a=>a.id===pinId);if(!pin)return;
+  state.parkFilter=pin.group;state.pointFilter=new Set(pin.routeIds);$('search').value='';filtered();
   const first=state.filtered[0];if(first)pick(first.id);
   if(matchMedia('(max-width:850px)').matches)$('routes').scrollIntoView({behavior:'smooth'});
  }
@@ -98,9 +104,9 @@
   if(!checks.length)checks.push('Specific winter lot, access road and walking route still require direct land-manager confirmation');
   if(a.status!=='verified'&&!checks.some(x=>/alert/i.test(x)))checks.push('Current NWS alert check failed');
   view+=warningBox([...new Set(checks)]);
-  view+='<p class="subhead">DNR route geometry</p>'+
+  view+='<p class="subhead">Official route geometry</p>'+
     '<p class="muted">'+esc(data.sourceGeometry?.overlay?.note||
-     'No complete digitally mapped route. The official PDF or manager description is the source.')+'</p>';
+     'No complete digitally mapped route. The official manager map or description is the source.')+'</p>';
   view+='<p class="source-line">No official trailhead GPS or directions are available. NOAA snow is modeled landscape context; future warnings can change.</p>';
   $('weather-output').innerHTML=view;
   visuals?.rememberTimeline($('detail'),f);
@@ -132,10 +138,10 @@
  }
  function drawAreas(){
   if(!state.mapLoaded)return;
-  const visible=new Set(state.filtered.map(r=>r.group));
-  const geo={type:'FeatureCollection',features:state.areas.filter(a=>visible.has(a.id)).map(a=>({
+  const visible=new Set(state.filtered.map(r=>r.id));
+  const geo={type:'FeatureCollection',features:state.areas.filter(a=>a.routeIds.some(id=>visible.has(id))).map(a=>({
    type:'Feature',geometry:{type:'Point',coordinates:[a.lon,a.lat]},
-   properties:{id:a.id,name:a.title,count:a.count,selected:a.id===state.selected?.group?1:0}
+   properties:{id:a.id,name:a.title,count:a.count,selected:a.routeIds.includes(state.selected?.id)?1:0}
   }))};
   const s=state.map.getSource('winter-areas');if(s)s.setData(geo);
  }
@@ -222,8 +228,8 @@
    filtered();
   }));
   $('day').addEventListener('change',()=>{if(state.selected)pick(state.selected.id)});
-  $('clear').addEventListener('click',()=>{state.parkFilter=null;filtered()});
-  $('all-map').addEventListener('click',()=>{state.parkFilter=null;filtered();if(state.mapLoaded)state.map.easeTo({center:[-86.9,44.4],zoom:5.2,duration:400})});
+  $('clear').addEventListener('click',()=>{state.parkFilter=null;state.pointFilter=null;filtered()});
+  $('all-map').addEventListener('click',()=>{state.parkFilter=null;state.pointFilter=null;filtered();if(state.mapLoaded)state.map.easeTo({center:[-86.9,44.4],zoom:5.2,duration:400})});
   $('cards').addEventListener('click',e=>{const b=e.target.closest('[data-route]');if(b)pick(b.dataset.route,true)});
   $('nearby').addEventListener('click',()=>{
    if(!navigator.geolocation){$('map-status').textContent='Geolocation unavailable; filter by region.';return}
