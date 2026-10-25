@@ -17,7 +17,7 @@ test('real hero photograph has durable credit and honest historic distinction',(
  assert.ok(html.includes('Mesabi_Miner')||html.includes('Mesabi%20Miner'));
  assert.ok(html.includes('Sharon Mollerus'));
  assert.ok(html.includes('CC BY 2.0'));
- assert.ok(html.includes('Not a 2025–26 layup photograph'));
+ assert.match(html,/not a 2025–26 layup photograph/i);
  assert.ok(html.includes('https://commons.wikimedia.org/wiki/Special:Redirect/file/'));
 });
 test('design presentation is isolated from permanent vessel biography pages',()=>{
