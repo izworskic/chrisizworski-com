@@ -36,7 +36,17 @@ async function diagnose(){
    const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(15000)});
    const body=await r.text();
    let json;try{json=JSON.parse(body)}catch{}
-   const first=Array.isArray(json)?json[0]:json;
+   const first=Array.isArray(json)?json[0]:
+    name==='station search service bbox'?{
+     count:json?.count,stationIds:json?.stations?.buckets?.slice(0,30).map(x=>x.key),
+     candidates:json?.results?.slice(0,5).map(x=>({
+      keys:Object.keys(x),boundingPoints:x.boundingPoints,
+      stations:x.stations?.slice(0,2).map(y=>({
+       keys:Object.keys(y),id:y.id,name:y.name,latitude:y.latitude,longitude:y.longitude,
+       snowDepth:y.dataTypes?.filter(z=>z.id==='SNWD').slice(0,2)
+      }))
+     }))
+    }:json;
    console.log('NOAA DIRECT PROBE '+JSON.stringify({name,http:r.status,ms:Date.now()-begin,bytes:body.length,
     rows:Array.isArray(json)?json.length:null,first,error:!r.ok?body.slice(0,600):null,url}));
   }catch(e){console.log('NOAA DIRECT PROBE '+JSON.stringify({name,exception:String(e.message||e),url}));}
