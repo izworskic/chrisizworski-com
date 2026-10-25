@@ -1,0 +1,38 @@
+name: Winter layup live season source watch
+on:
+  schedule:
+    # UTC, four source scans daily during Nov–Apr; no weather/ship writes outside winter.
+    - cron: '29 0,6,12,18 * 11,12,1,2,3,4 *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: winter-layup-source-ledger-writer
+  cancel-in-progress: false
+jobs:
+  winter-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run dated-report ingestion and November season rollover
+        run: node scripts/freighter-layup/refresh.cjs
+      - name: Validate winter story ledger
+        run: node --test tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
+      - name: Publish only on new evidence or season rollover
+        run: |
+          if git diff --quiet -- public/assets/freighter-layup-live-season.json data/freighter-layup-review.json; then
+            echo 'No new independently sourced winter stories; no deploy.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/freighter-layup-live-season.json data/freighter-layup-review.json
+          git commit -m "data(layup): winter evidence and annual rollover [skip ci]"
+          git push origin HEAD:main
