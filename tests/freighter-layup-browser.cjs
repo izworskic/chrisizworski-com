@@ -41,6 +41,7 @@ async function run(){
       page.on('pageerror',err=>pageErrors.push(err.message));
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
       await page.locator('#winter-live').waitFor({timeout:10000});
+      await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
       check(await page.locator('#season').inputValue()==='2026-27',size.name+': new winter is default');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk visible');
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
@@ -155,6 +156,7 @@ async function run(){
 
 
       await page.goto(url,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
       await page.locator('#season').selectOption('2025-26');
       await page.locator('[data-ship]').first().waitFor({timeout:10000});
       check(await page.locator('label[for="ship-search"]').count()===1,size.name+': search label');
