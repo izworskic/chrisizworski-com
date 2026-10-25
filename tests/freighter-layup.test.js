@@ -16,7 +16,7 @@ test('source model supports three winters without future location carryover',()=
 test('thirteen watch harbors are approximate references, including Canada and Michigan',()=>{
  assert.equal(registry.harbors.length,13);
  for(const id of ['milwaukee','owen-sound','sturgeon-bay','superior','toledo','sarnia','port-colborne','hamilton','thunder-bay','erie-pa','cleveland','buffalo','escanaba'])assert.ok(registry.harbors.some(h=>h.id===id),id);
- for(const h of registry.harbors){assert.equal(h.coordinatePrecision,'approximate_harbor_reference_not_dock');assert.ok(Number.isFinite(h.lat)&&Number.isFinite(h.lon));assert.match(h.note,/not|NOT|no vessel/i);}
+ for(const h of registry.harbors){assert.equal(h.coordinatePrecision,'approximate_harbor_reference_not_dock');assert.ok(Number.isFinite(h.lat)&&Number.isFinite(h.lon));assert.match(h.note,/\b(?:not|no|never|does not)\b/i);}
  assert.equal(registry.harbors.find(h=>h.id==='owen-sound').country,'CA');
 });
 test('each dated layup has canonical identity, visible confidence and evidence',()=>{
