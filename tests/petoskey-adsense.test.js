@@ -32,7 +32,7 @@ test('the production injector puts one correct AdSense loader in every Petoskey 
         assert.match(loaders[0], /\basync\b/);
         assert.match(loaders[0], /crossorigin="anonymous"/);
       }
-      for (const href of ['/about/', '/connect/', '/privacy/', '/terms/']) assert.ok(html.includes(`href="${href}"`), `${file}: ${href}`);
+      for (const href of ['/chris-izworski/', '/connect/', '/privacy/', '/terms/']) assert.ok(html.includes(`href="${href}"`) || html.includes(`href="https://chrisizworski.com${href}"`), `${file}: ${href}`);
     }
     assert.equal(contentCount, 33);
     assert.equal(fs.readFileSync(path.join(root, 'public/ads.txt'), 'utf8').trim(), 'google.com, pub-8222782620788075, DIRECT, f08c47fec0942fa0');

@@ -15,9 +15,9 @@ test('excluding ads preserves ownership verification and other scripts', () => {
   assert.equal(removeAdLoader(retained + loader), retained);
 });
 test('publisher links remain reachable and repeated composition adds no duplicates', () => {
-  const result = sitePolicyLinks('<body><a href="/about/">About</a><a href="https://chrisizworski.com/privacy/">Privacy</a></body>');
+  const result = sitePolicyLinks('<body><a href="/chris-izworski/">About</a><a href="https://chrisizworski.com/privacy/">Privacy</a></body>');
   assert.ok(result.includes('href="/connect/"')); assert.ok(result.includes('href="/terms/"'));
-  assert.equal((result.match(/href="\/about\/"/g) || []).length, 1);
+  assert.equal((result.match(/href="\/chris-izworski\/"/g) || []).length, 1);
   assert.equal((result.match(/Privacy/g) || []).length, 1);
   assert.equal(sitePolicyLinks(result), result);
 });
