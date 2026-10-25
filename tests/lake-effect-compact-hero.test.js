@@ -1,7 +1,7 @@
 "use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs");
 const html=fs.readFileSync("public/lake-effect-snow/index.html","utf8");
-const hero=html.slice(html.indexOf('<section class="hero"'),html.indexOf('<main class="main shell">'));
+const hero=html.slice(html.indexOf('<section class="hero"'),html.indexOf('</div></section>\n<div class="main shell">'));
 test("hero uses real, credited lake-effect weather photography—not dark satellite imagery",()=>{
  assert.match(html,/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29\.jpg/);
  assert.match(hero,/Photo: Shawn Smith \/ NOAA Weather in Focus/);
