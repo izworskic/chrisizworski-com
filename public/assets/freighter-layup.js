@@ -14,6 +14,7 @@
  const filtered = () => records().filter(v=>(state.activeHarbor==='all'||v.harborId===state.activeHarbor) &&
    (state.berth==='all'||v.berth===state.berth) && policy().matchesSearch(v,state.query));
 
+ const fmtAIS = timestamp => {const d=new Date(timestamp);return Number.isFinite(d.valueOf())?d.toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'time unavailable'};
  const fmt = date => {if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return 'date not recorded';return new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'})};
  const shipSVG = '<svg class="ship-illustration" viewBox="0 0 300 120" aria-hidden="true"><path fill="#234c59" d="M14 65h25l8 15h195l32-30h14l-24 44H56z"/><path fill="#457e87" d="M48 58V29h37v29z"/><path fill="#2f6370" d="M57 20h10v9H57z"/><path fill="#9dbfc0" d="M55 36h10v7H55zm16 0h8v7h-8z"/><path stroke="#497782" stroke-width="4" d="M105 68h115M90 60h151"/><path stroke="#bed6d7" stroke-width="3" d="M30 102h244"/></svg>';
  function photoHTML(v,detail=false){
@@ -41,7 +42,8 @@
      events.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
      const last=events.at(-1),old=prior.find(r=>r.id===key);
      const arrival=[...events].reverse().find(e=>e.kind==='arrival');
-     const source=last.source,confirmed=events.some(e=>['arrival','berth_change'].includes(e.kind)&&e.confidence==='confirmed'&&e.harborId===last.harborId&&['port_authority','operator','operator_statement','official_agency','maritime_historical_society','local_maritime_museum'].includes(e.source?.class));
+     const latestLocation=[...events].reverse().find(e=>e.kind==='arrival'||e.kind==='berth_change');
+     const source=latestLocation?.source||last.source,confirmed=Boolean(latestLocation&&latestLocation.confidence==='confirmed'&&latestLocation.harborId===last.harborId&&['port_authority','operator','operator_statement','official_agency','maritime_historical_society','local_maritime_museum'].includes(latestLocation.source?.class));
      return {id:key,name:last.vessel.name,aliases:old?.aliases||[],identity:old?.identity||{key,imo:null,mmsi:null},
        harborId:last.harborId,berth:'Harbor report — specific berth not verified',
        berthPrecision:'berth_unverified',status:last.kind==='departure'?'departed_current':confirmed?'confirmed_current':'reported_current',
@@ -104,7 +106,7 @@
    const harborScope=state.aisMonitoredHarbors?state.aisMonitoredHarbors+' monitored harbor areas':'monitored harbor areas';
    $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
    $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
-    '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmt(v.seen?.slice(0,10)))+'</small></li>').join(''):
+    '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmtAIS(v.seen))+'</small></li>').join(''):
     '<li class="ais-empty">'+(state.aisCheckedAt?'No recent signals returned across '+harborScope+'. This does not mean the winter docks are empty.':'Live AIS feed unavailable. No conclusion can be drawn about '+harborScope+'.')+'</li>';
  }
  async function refreshAIS(){
