@@ -23,7 +23,26 @@ async function runAPI(route){
  await handler({method:'GET',query:{mode:'season',route}},res);
  return {code,headers,payload,elapsed:Date.now()-start};
 }
+async function diagnose(){
+ const Routes=require('../lib/winter-hike-routes.cjs');
+ const H=require('../lib/winter-hike-history.cjs');
+ for(const [name,url] of [
+  ['vasa bbox February',H.requestUrl(Routes.routeById('vasa-snowshoe-orange').referencePoint,2025,'02-15')],
+  ['known station winter 7 days','https://www.ncei.noaa.gov/access/services/data/v1?dataset=daily-summaries&dataTypes=SNWD&stations=USW00014847&startDate=2025-02-12&endDate=2025-02-18&units=standard&format=json&includeStationName=true&includeStationLocation=true&includeAttributes=true']
+ ]){
+  try{
+   const begin=Date.now();
+   const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(15000)});
+   const body=await r.text();
+   let json;try{json=JSON.parse(body)}catch{}
+   const first=Array.isArray(json)?json[0]:json;
+   console.log('NOAA DIRECT PROBE '+JSON.stringify({name,http:r.status,ms:Date.now()-begin,bytes:body.length,
+    rows:Array.isArray(json)?json.length:null,first,error:!r.ok?body.slice(0,600):null,url}));
+  }catch(e){console.log('NOAA DIRECT PROBE '+JSON.stringify({name,exception:String(e.message||e),url}));}
+ }
+}
 async function main(){
+ await diagnose();
  let meaningful=0,hadReports=0;const rows=[];
  console.log('NOAA LIVE E2E: NCEI daily-summaries SNWD, one station per trail, 2023-2026 complete winters');
  for(const loc of sites){
