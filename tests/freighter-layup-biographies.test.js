@@ -27,7 +27,7 @@ test('static pages match deterministic renderer and have unique canonicals',()=>
    assert.ok(rendered.includes('<link rel="canonical" href="'+canonical+'">'));
    assert.ok(!canonicals.has(canonical));canonicals.add(canonical);
    assert.ok(rendered.includes('application/ld+json')&&rendered.includes('Read the original reporting'));
-   assert.ok(rendered.includes('Where this ship spent its winters'));
+   assert.match(rendered,/Where this ship spent(?:<br>)?<em>?its winters/i);
  }
 });
 test('Algoma Compass timeline has independent records in both seasons',()=>{
