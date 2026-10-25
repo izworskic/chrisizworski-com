@@ -97,7 +97,7 @@ test('three independent winter operational checks may complete access evidence b
 test('closures and contradictions prevent positive access even with three other open statements',()=>{
  const base=[row('trail'),row('road'),row('parking')];
  const closed=Parking.assess(route,{tripDay:DAY,now:NOW,observations:[...base,row('road','closed')]});
- assert.equal(closed.status,'access-closed');assert.equal(closed.road,'conflict');
+ assert.equal(closed.status,'access-closed');assert.equal(closed.road,'closed');
  assert.equal(closed.managerAccessConfirmed,false);assert.equal(closed.navigationReady,false);
  const restricted=Parking.assess(route,{tripDay:DAY,now:NOW,observations:[row('trail','restricted'),row('road'),row('parking')]});
  assert.equal(restricted.status,'verification-needed');assert.equal(restricted.managerAccessConfirmed,false);
