@@ -23,40 +23,18 @@ async function runAPI(route){
  await handler({method:'GET',query:{mode:'season',route}},res);
  return {code,headers,payload,elapsed:Date.now()-start};
 }
-async function diagnose(){
- const Routes=require('../lib/winter-hike-routes.cjs');
- const H=require('../lib/winter-hike-history.cjs');
- for(const [name,url] of [
-  ['vasa bbox February',H.requestUrl(Routes.routeById('vasa-snowshoe-orange').referencePoint,2025,'02-15')],
-  ['station search service bbox','https://www.ncei.noaa.gov/access/services/search/v1/data?dataset=daily-summaries&dataTypes=SNWD&startDate=2025-02-12&endDate=2025-02-18&bbox=45.2106,-86.1411,44.2906,-84.8456&limit=25&offset=0'],
-  ['known station winter 7 days','https://www.ncei.noaa.gov/access/services/data/v1?dataset=daily-summaries&dataTypes=SNWD&stations=USW00014847&startDate=2025-02-12&endDate=2025-02-18&units=standard&format=json&includeStationName=true&includeStationLocation=true&includeAttributes=true']
- ]){
-  try{
-   const begin=Date.now();
-   const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(15000)});
-   const body=await r.text();
-   let json;try{json=JSON.parse(body)}catch{}
-   const first=Array.isArray(json)?json[0]:
-    name==='station search service bbox'?{
-     count:json?.count,stationIds:json?.stations?.buckets?.slice(0,30).map(x=>x.key),
-     candidates:json?.results?.slice(0,5).map(x=>({
-      keys:Object.keys(x),boundingPoints:x.boundingPoints,
-      stations:x.stations?.slice(0,2).map(y=>({
-       keys:Object.keys(y),id:y.id,name:y.name,latitude:y.latitude,longitude:y.longitude,
-       snowDepth:y.dataTypes?.filter(z=>z.id==='SNWD').slice(0,2)
-      }))
-     }))
-    }:json;
-   console.log('NOAA DIRECT PROBE '+JSON.stringify({name,http:r.status,ms:Date.now()-begin,bytes:body.length,
-    rows:Array.isArray(json)?json.length:null,first,error:!r.ok?body.slice(0,600):null,url}));
-  }catch(e){console.log('NOAA DIRECT PROBE '+JSON.stringify({name,exception:String(e.message||e),url}));}
- }
-}
 async function main(){
- await diagnose();
  let meaningful=0,hadReports=0;const rows=[];
  console.log('NOAA LIVE E2E: NCEI daily-summaries SNWD, one station per trail, 2023-2026 complete winters');
  for(const loc of sites){
+  const H=require('../lib/winter-hike-history.cjs');
+  const Routes=require('../lib/winter-hike-routes.cjs');
+  const point=Routes.routeById(loc.id).referencePoint;
+  const discovered=await H.discoverStations(point,2025,'02-15');
+  console.log('NOAA DISCOVERY '+JSON.stringify({
+   route:loc.id,status:discovered.status,
+   candidates:discovered.candidates.map(x=>({id:x.id,name:x.name,miles:x.miles,coverage:x.coverage}))
+  }));
   const r=await runAPI(loc.id),p=r.payload||{};
   const yrs=Array.isArray(p.winterYears)?p.winterYears:[];
   const valid=p.station&&p.station.id&&p.kind==='NOAA_NCEI_GHCN_DAILY_FULL_WINTER_STATION_SNOW_DEPTH';
@@ -74,7 +52,7 @@ async function main(){
     throw new Error('SOURCE CLASSIFICATION INVALID: '+loc.id+' week '+w.week);
   }
   rows.push({place:loc.name,route:loc.id,http:r.code,latencyMs:r.elapsed,
-   source:p.kind||p.status,station:p.station?{
+   source:p.kind||p.status,spatial:p.stationSpatialInterpretation||'unknown',station:p.station?{
     id:p.station.id,name:p.station.name,miles:p.station.miles
    }:null,observedDays:reportDays,completeWinters:complete,
    weeks:p.weeks?.length||0,historicallyFrequentWeeks:classified.length,
