@@ -1804,7 +1804,7 @@
       "region": "northern-lower",
       "placeGroup": "sleepbear",
       "routeForm": "loop",
-      "lengthMiles": 4.7,
+      "lengthMiles": 5,
       "lengthEvidence": "official_named_route",
       "sourceDnrTrailId": null,
       "sourceDnrTrailName": null,
@@ -1833,9 +1833,10 @@
       "caveats": [
         "NPS official trailhead point is not proof of winter-plowed vehicle parking",
         "Avoid walking or snowshoeing on groomed ski tracks",
-        "Pets prohibited on these NPS trails December 1–March 31"
+        "Pets prohibited on these NPS trails December 1–March 31",
+        "NPS trailhead page says 5.0 mi; broader NPS trail table says 4.7 mi. Verify current sign/map before travel"
       ],
-      "editorialSummary": "Official intermediate 4.7-mile loop, excluding optional spur",
+      "editorialSummary": "NPS Stocking Drive trailhead documents a 5.0-mile intermediate loop, excluding 1.6-mile lookout spur",
       "needs": [
         "Verify current-season trail and closure status",
         "Verify winter-maintained approach road and specific plowed parking lot",
