@@ -10,7 +10,8 @@ const GIS=require('../lib/winter-hike-arcgis.cjs');
 const Eval=require('../lib/winter-hike-decision.cjs');
 const Access=require('../lib/winter-hike-trip.cjs');
 const Parking=require('../lib/winter-hike-parking.cjs');
-const ALLOWED=new Set(['catalog','preview']);
+const History=require('../lib/winter-hike-history.cjs');
+const ALLOWED=new Set(['catalog','preview','history']);
 function compactRoute(r) {
  return {id:r.id,title:r.displayName,group:r.placeGroup,region:r.region,
   routeForm:r.routeForm,miles:r.lengthMiles,mileageStatus:r.lengthEvidence,
@@ -39,6 +40,20 @@ async function handler(req,res) {
   return status(res,200,{status:'research-only',compiledAt:Routes.catalog.compiledAt,
    warning:'Destination points are NOT winter parking. Named routes do not imply open roads, plowed lots, packed trails or safe travel.',
    routes:Routes.catalog.routes.map(compactRoute),quarantinedCount:Routes.catalog.quarantined.length},1200);
+ }
+ if(mode==='history'){
+  const id=String(req.query?.route||'');
+  const anchor=String(req.query?.anchor||'02-15');
+  if(!Routes.routeById(id)||!History.ANCHORS.has(anchor))
+   return status(res,400,{error:'Choose a curated route and one of Jan 15, Feb 15 or Mar 15'});
+  try {
+   const record=await History.historyForRoute(id,anchor);
+   // Public historical station measurements are slow-changing; cache this
+   // bounded result for a day. Requests are explicit per selected route.
+   return status(res,200,{status:'historical-station-context-not-trip-clearance',...record},86400);
+  }catch{
+   return status(res,503,{error:'NOAA historical station context unavailable. No values estimated.'});
+  }
  }
  const id=String(req.query?.route||'');
  const activity=String(req.query?.activity||'either');
