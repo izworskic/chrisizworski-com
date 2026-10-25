@@ -1,0 +1,25 @@
+name: Winter Hike NOAA live end-to-end
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/winter-hike-50-official-routes-20261025
+    paths:
+      - .github/workflows/winter-hike-noaa-live.yml
+      - scripts/verify-winter-hike-noaa-live.cjs
+      - lib/winter-hike-history.cjs
+      - lib/winter-hike-season.cjs
+      - api/winter-hike-lab.js
+permissions:
+  contents: read
+jobs:
+  ncei-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify real NOAA NCEI full-season station records through serverless route API
+        run: node scripts/verify-winter-hike-noaa-live.cjs

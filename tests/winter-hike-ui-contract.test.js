@@ -57,8 +57,10 @@ test('the isolated preview API has enough runtime for bounded NOAA/NWS and DNR r
 
 test('visualization module loads before main UI and uses keyboard-accessible native buttons',()=>{
  const a=html.indexOf('/winter-hike-snowshoe-lab/visuals.js?v=2');
- const b=html.indexOf('/winter-hike-snowshoe-lab/app.js?v=2');
- assert.ok(a>0&&b>a);
+ const satellite=html.indexOf('/winter-hike-snowshoe-lab/satellite.js?v=1');
+ const satelliteUi=html.indexOf('/winter-hike-snowshoe-lab/satellite-ui.js?v=1');
+ const b=html.indexOf('/winter-hike-snowshoe-lab/app.js?v=3');
+ assert.ok(a>0&&satellite>a&&satelliteUi>satellite&&b>satelliteUi);
  assert.match(visuals,/data-wx-day/);assert.match(visuals,/aria-pressed/);
  assert.match(visuals,/data-wx-hour/);
 });

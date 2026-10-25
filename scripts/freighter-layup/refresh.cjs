@@ -31,7 +31,18 @@ async function run(){
   if(changed)fs.writeFileSync(file,newText);
   if(reviewChanged){fs.mkdirSync(path.dirname(reviewFile),{recursive:true});fs.writeFileSync(reviewFile,reviewText)}
  }
- console.log(JSON.stringify({season,scan,changed,reviewChanged,events:result.ledger.events.length,needReview:result.reviews.length,sources:result.outcomes}));
+ const active=result.outcomes.filter(x=>x.ok).length;
+ console.log(JSON.stringify({season,scan,changed,reviewChanged,events:result.ledger.events.length,
+  sourcesResponding:active,sourcesTotal:result.outcomes.length,needReview:result.reviews.length,sources:result.outcomes}));
+ if(process.env.GITHUB_STEP_SUMMARY){
+  const clean=s=>String(s||'').replace(/[|\r\n]/g,' ').slice(0,110);
+  const rows=result.outcomes.map(x=>'| '+clean(x.source)+' | '+(x.ok?'Ready':'Unavailable')+
+   ' | '+(x.items??0)+' | '+(x.added??0)+' | '+(x.reviewed??0)+' | '+clean(x.error||'')+' |').join('\n');
+  fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Winter layup reporting network\n\n'+
+    'Winter: **'+season+'** | Responding: **'+active+'/'+result.outcomes.length+
+    '** | Published events: **'+result.ledger.events.length+'** | New research leads: **'+result.reviews.length+'**\n\n'+
+    '| Source | Feed | Items | Published | Review leads | Error |\n|---|---|---:|---:|---:|---|\n'+rows+'\n');
+ }
 }
 if(require.main===module)run().catch(e=>{console.error(e.message);process.exitCode=1});
 module.exports={run};

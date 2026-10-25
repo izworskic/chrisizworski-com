@@ -42,12 +42,18 @@ async function run(){
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
       await page.locator('#winter-live').waitFor({timeout:10000});
       await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
-      check(await page.locator('#season').inputValue()==='2026-27',size.name+': new winter is default');
-      check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk visible');
+      check(await page.locator('#season').inputValue()==='2025-26',size.name+': evidence-rich archive is default until first active report');
+      check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk stays visible while browsing archives');
       await page.locator('#layup-reporting-network summary').click();
-      check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty source directory entries');
+      check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty monitored reporting inputs');
+      check(await page.locator('#layup-reporting-network details').evaluate(x=>x.open),size.name+': source panel expands');
       await page.locator('#layup-reporting-network summary').click();
+
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
+      check(await page.locator('#winter-live').evaluate(e=>e.classList.contains('is-preseason')),size.name+': empty current winter is presented as preseason');
+      if(size.name==='mobile'){
+       check(await page.locator('#winter-live').evaluate(e=>e.getBoundingClientRect().height)<1150,size.name+': compact preseason does not push the useful archive too far down');
+      }
       await page.locator('#season').selectOption('2025-26');
       try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
       catch(err){
@@ -62,6 +68,7 @@ async function run(){
        throw err;
       }
       check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
+      check(await page.locator('#harbor-filter option').count()===6,size.name+': only five source-dated historical harbor choices; thirteen monitored areas are not claimed as layups');
       check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
       check(await page.locator('.hero-media img').evaluate(img=>img.complete && img.naturalWidth>0),size.name+': self-hosted winter freighter hero image');
@@ -122,7 +129,7 @@ async function run(){
        id:'winter-demo-arrival',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
        kind:'arrival',date:'2027-01-16',confidence:'reported',
        summary:'Lee A. Tregurtha arrived for winter layup according to a dated harbor report.',
-       source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrival.html',title:'Arrival for winter layup',publisher:'Duluth Harbor Cam',class:'journalistic_report'}, supportingSources:[{url:'https://www.boatnerd.com/lee-winter-coverage/',title:'Winter harbor coverage',publisher:'BoatNerd',class:'journalistic_report'}]
+       source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrival.html',title:'Arrival for winter layup',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
       }]};
       await context.route('**/assets/freighter-layup-live-season.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(sampleLive)}));
       await page.reload({waitUntil:'domcontentloaded'});
@@ -132,11 +139,52 @@ async function run(){
       check(await page.locator('.layup-pin').count()===1,size.name+': sourced record adds harbor map pin');
       check(await page.locator('[data-ship="lee-a-tregurtha"]').count()===1,size.name+': new winter roster grows');
       check((await page.locator('#winter-feed').textContent()).includes('Duluth Harbor Cam'),size.name+': exact source attribution');
-      check(await page.locator('#winter-feed .winter-story-citations a').count()===2,size.name+': both reports linked to the ship story');
       check((await page.locator('#winter-feed').textContent()).includes('Reported source'),size.name+': non-official remains reported');
       await page.locator('#season').selectOption('2025-26');
       check(await page.locator('[data-ship]').count()===12,size.name+': live ledger cannot overwrite last winter');
-      await context.unroute('**/assets/freighter-layup-live-season.json');
+
+      // A departure ends the current berth but must NOT erase the dated story.
+      sampleLive.events.push({
+       id:'winter-demo-departure',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
+       kind:'departure',date:'2027-03-01',confidence:'reported',
+       summary:'Lee A. Tregurtha departed winter layup at Superior.',
+       source:{url:'https://www.duluthharborcam.com/2027/03/lee-departure.html',title:'Departure',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
+      });
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('#winter-feed .winter-update').first().waitFor({timeout:10000});
+      check(await page.locator('#winter-live').isVisible(),size.name+': current-season story desk remains visible in archive view');
+      check(await page.locator('#season').inputValue()==='2025-26',size.name+': archive is default when no actively reported berth remains');
+      check(await page.locator('#live-departures').textContent()==='1',size.name+': departure is retained as a real winter event');
+      await page.locator('#season').selectOption('2026-27');
+      check(await page.locator('.layup-pin').count()===0,size.name+': departed vessel removed from occupied winter harbor map');
+      check(await page.locator('[data-ship]').count()===0,size.name+': departed vessel removed from current berth cards');
+      check((await page.locator('#winter-feed').textContent()).includes('departed winter layup'),size.name+': departure preserved in source timeline');
+
+      // A confirmed arrival in one harbor does not confirm an unverified move
+      // to one of the other eight candidate harbor areas.
+      sampleLive.events.splice(0,sampleLive.events.length,{
+       id:'first-verified-arrival',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
+       kind:'arrival',date:'2027-01-16',confidence:'confirmed',summary:'Confirmed arrival at Superior.',
+       source:{url:'https://duluthport.com/news/arrival/',title:'Verified winter arrival',publisher:'Duluth Seaway Port Authority',class:'port_authority'}
+      },{
+       id:'unverified-harbor-move',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'sarnia',
+       kind:'berth_change',date:'2027-01-20',confidence:'reported',summary:'Reported move to Sarnia, pending independent confirmation.',
+       source:{url:'https://www.duluthharborcam.com/2027/01/ship-moved.html',title:'Possible move to Sarnia',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
+      });
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('[data-ship="lee-a-tregurtha"]').waitFor({timeout:10000});
+      check(await page.locator('#season').inputValue()==='2026-27',size.name+': active winter regains default');
+      check(await page.locator('#harbor-filter option').count()===2,size.name+': newly sourced candidate harbor now filterable');
+      check(await page.locator('#harbor-filter option[value="sarnia"]').count()===1,size.name+': Sarnia can be shown with actual dated evidence');
+      check((await page.locator('#stat-year').textContent())==='0 / 1',size.name+': old confirmed harbor cannot validate new reported berth');
+      sampleLive.events[1].harborId='superior';
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('[data-ship="lee-a-tregurtha"]').waitFor({timeout:10000});
+      check((await page.locator('#stat-year').textContent())==='0 / 1',size.name+': unverified same-harbor move stays reported');
+      sampleLive.events[1].harborId='sarnia';
+
+      check(await page.locator('.layup-pin').count()===1,size.name+': one source-dated new harbor marker');
+            await context.unroute('**/assets/freighter-layup-live-season.json');
 
 
       const bioUrl=url+'vessels/algoma-compass/';

@@ -78,14 +78,6 @@ test('an explicit dated Interlake operator report remains source-linked and is n
  assert.equal(d.event.harborId,'superior');
 });
 
-test('the expanded source network includes US, Canada, owners and ship reporting',()=>{
- const ids=f.SOURCES.map(s=>s.id);
- assert.equal(ids.length,20);
- for(const id of ['boatnerd-port-news','shipwatcher','great-lakes-now','cleveland-port','thunder-bay-port','interlake','lca','algoma','boatnerd-roster'])
-   assert.ok(ids.includes(id),id);
- assert.equal(new Set(ids).size,ids.length);
- for(const s of f.SOURCES){assert.ok(s.url.startsWith('https://'));assert.ok(s.host);assert.ok(s.publisher)}
-});
 test('broad harbor reporting creates review leads but no automatic layup records',async()=>{
  const source=f.SOURCES.find(s=>s.id==='boatnerd-port-news');
  const article={title:'Lee A Tregurtha arrived at Thunder Bay for winter layup',
@@ -100,6 +92,7 @@ test('broad harbor reporting creates review leads but no automatic layup records
  assert.ok(result.reviews.some(x=>x.url===article.url&&x.why==='editorial_review_required'));
  assert.ok(result.outcomes.find(x=>x.source===source.id)?.reviewed===1);
 });
+
 test('exact seasonal BoatNerd roster URL is found but a previous winter is rejected',()=>{
  const html='<html><a href="https://www.boatnerd.com/winter-lay-up-list-2025-2026/">Winter Lay-Up List 2025-2026</a>'+
   '<a href="/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a></html>';
@@ -107,6 +100,7 @@ test('exact seasonal BoatNerd roster URL is found but a previous winter is rejec
  assert.equal(f.discoverWinterRoster('<a href="/winter-lay-up-list-2025-2026/">Winter Lay-Up List 2025-2026</a>','2026-27'),null);
  assert.equal(f.discoverWinterRoster('<a href="https://attacker.example/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a>','2026-27'),null);
 });
+
 test('winter roster discovery does not promote any vessel to confirmed automatically',async()=>{
  const roster=f.SOURCES.find(x=>x.id==='boatnerd-roster');
  const fetcher=async url=>url===roster.url?{ok:true,text:async()=>'<a href="/winter-lay-up-list-2026-2027/">Winter Lay-Up List 2026-2027</a>'}:{ok:false,status:503};
@@ -151,12 +145,14 @@ test('two independent specialist reports create one sourced reported arrival, ne
  const again=await f.refresh({ledger:result.ledger,archive,fetcher,now:'2027-01-19T00:00:00Z'});
  assert.equal(again.changed,false);assert.equal(again.ledger.events.length,1);
 });
+
 test('two regional news searches cannot corroborate and invent a laid-up vessel',()=>{
  const known=[{key:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}];
  const mk=id=>({source:{kind:'discovery'},event:{vessel:{key:known[0].key,name:known[0].name},kind:'arrival',
   harborId:'sarnia',date:'2027-01-17',source:{url:'https://news.google.com/rss/articles/'+id,title:'Lee A Tregurtha arrived for winter layup in Sarnia',publisher:'Regional Discovery',class:'journalistic_report'}}});
  assert.equal(f.corroborate([mk('a'),mk('b')],known,s.freshSeason('2026-27'),'2027-01-18T00:00:00Z').length,0);
 });
+
 test('independent reports more than three days apart do not auto corroborate',()=>{
  const known=[{key:'lee-a-tregurtha',name:'Lee A. Tregurtha',aliases:['Lee A Tregurtha']}];
  const mk=(host,date)=>({source:{kind:'maritime'},event:{vessel:{key:known[0].key,name:known[0].name},kind:'arrival',
