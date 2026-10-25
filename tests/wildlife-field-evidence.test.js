@@ -22,6 +22,8 @@ test('Animal presence cannot be deduced from weather, habitat, missing date',()=
 test('Public places are source-backed and not conflated with observed birds',()=>{
  assert.equal(F.places('waterfowl','saginaw-bay').length,4);
  assert.equal(F.places('waterfowl','northern-lower').length,0);
+ assert.equal(F.places('shed','bay-city').length,2); // Both operator-linked walks visible in an actual selectable region.
+ assert.equal(F.places('shed','saginaw').length,0);
  assert.ok(F.places('shed','bay-city')[0].note.includes('NOT a verified shed-collecting site'));
  assert.ok(F.places('waterfowl','saginaw-bay').every(p=>p.source.startsWith('https://')&&!p.name.toLowerCase().includes('nest')));
 });
