@@ -107,5 +107,14 @@
   state.tileFailures++;
   status('NASA imagery tile could not be retrieved for the selected date or area. Treat this scene as unavailable, not snow-free. The base map and route list remain available.');
  }
- window.WinterHikeSatelliteUI={init,attach,selected,reportTileError};
+ function goToDate(day,mode='snowCover'){
+  if(!S.validHistoricalDay(day))return false;
+  if(!state.initialised)init();
+  if(!state.initialised)return false;
+  if(S.MODES[mode])$('sat-mode').value=mode;
+  const ok=resetDate(day);
+  if(ok)document.querySelector?.('.satellite-console')?.scrollIntoView({block:'nearest',behavior:'smooth'});
+  return ok;
+ }
+ window.WinterHikeSatelliteUI={init,attach,selected,reportTileError,goToDate};
 })();
