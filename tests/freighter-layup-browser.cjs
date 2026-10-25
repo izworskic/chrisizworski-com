@@ -45,10 +45,9 @@ async function run(){
       check(await page.locator('#season').inputValue()==='2025-26',size.name+': evidence-rich archive is default until first active report');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk stays visible while browsing archives');
       await page.locator('#layup-reporting-network summary').click();
-      check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty monitored reporting inputs');
-      check(await page.locator('#layup-reporting-network details').evaluate(x=>x.open),size.name+': source panel expands');
+      check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty linked reporting inputs');
+      check(await page.locator('#layup-reporting-network details').evaluate(el=>el.open),size.name+': source disclosure expanded');
       await page.locator('#layup-reporting-network summary').click();
-
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
       check(await page.locator('#winter-live').evaluate(e=>e.classList.contains('is-preseason')),size.name+': empty current winter is presented as preseason');
       if(size.name==='mobile'){
