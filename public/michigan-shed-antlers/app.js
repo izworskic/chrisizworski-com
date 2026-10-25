@@ -111,6 +111,7 @@
   if(!state.locations.some(x=>x.id===id))return;
   const changed=state.site!==id;
   state.site=id;$('location').value=id;
+  if(window.WildlifeField)window.WildlifeField.renderPlaces($('shed-public-places'),'shed',id);
   if(changed){$('ground').value='unknown';loadForecast();}
   document.querySelectorAll('.map-pin').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.site===id)));
  }
@@ -150,10 +151,12 @@
    for(const s of state.locations){const opt=document.createElement('option');opt.value=s.id;opt.textContent=s.name+' · '+s.region;select.append(opt);}
    state.site=state.locations.some(x=>x.id==='bay-city')?'bay-city':state.locations[0].id;select.value=state.site;
    initMap();initCompare();
+   if(window.WildlifeField)window.WildlifeField.renderPlaces($('shed-public-places'),'shed',state.site);
   }catch(err){
    $('comparison').textContent='Regional list temporarily unavailable. Reload to retry.';
    setStatus('Location service unavailable','unavailable');
    state.locations=[{id:'bay-city',name:'Bay City / Saginaw Bay'}];
+   if(window.WildlifeField)window.WildlifeField.renderPlaces($('shed-public-places'),'shed',state.site);
   }
   loadForecast();
  }
