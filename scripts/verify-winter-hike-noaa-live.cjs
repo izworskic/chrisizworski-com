@@ -6,6 +6,14 @@
  * No credentials, no park contacts, no inferred parking or live trip clearance.
  */
 const handler=require('../api/winter-hike-lab.js');
+const {readFileSync}=require('node:fs');
+const {runInNewContext}=require('node:vm');
+const {join}=require('node:path');
+const context={window:{},document:{getElementById(){return null}}};
+runInNewContext(readFileSync(join(__dirname,'../public/winter-hike-snowshoe-lab/season-ui.js'),'utf8'),
+ context,{filename:'season-ui.js'});
+const render= context.window.WinterHikeSeason?.markup;
+if(typeof render!=='function')throw Error('Season chart HTML builder not installed');
 const sites=[
  {id:'vasa-snowshoe-orange',name:'Vasa / Traverse City'},
  {id:'hartwick-old-growth',name:'Hartwick Pines / Grayling'},
@@ -49,7 +57,16 @@ async function main(){
   if(valid&&r.code===200&&sourceSafe&&p.parkingVerified===false&&p.routeOpenVerified===false&&
     yrs.length===4&&p.weeks.length===26&&reportDays>0)hadReports++;
   if(valid&&r.code===200&&sourceSafe&&complete>=3&&reportDays>=400&&
-   p.stationSpatialInterpretation==='nearby-station-context')meaningful++;
+   p.stationSpatialInterpretation==='nearby-station-context'){
+   const html=render(p);
+   const weekControls=(html.match(/data-season-week="/g)||[]).length;
+   const hasProvenance=html.includes(p.station.name)&&html.includes(String(p.station.miles));
+   const hasAccessWarning=/station|parking|trail/i.test(html)&&
+    html.includes('26 seven-day historical winter');
+   if(weekControls!==26||!hasProvenance||!hasAccessWarning)
+    throw Error('Real NOAA station data failed the 26-week HTML chart contract for '+loc.id);
+   meaningful++;
+  }
   for(const w of classified){
    if(w.qualifyingWinters<3||w.reportWinters<3||w.rows.filter(x=>x.eligible&&x.qualifies).length<3)
     throw new Error('SOURCE CLASSIFICATION INVALID: '+loc.id+' week '+w.week);
