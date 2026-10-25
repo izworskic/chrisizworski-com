@@ -6,6 +6,12 @@ on:
       - 'public/great-lakes-freighter-winter-layup/**'
       - 'public/assets/freighter-layup*'
       - 'public/assets/freighter-vessel-biographies.json'
+      - 'public/assets/freighter-layup-live-season.json'
+      - 'api/freighter-layup-live.js'
+      - 'lib/freighter-layup-season.js'
+      - 'lib/freighter-layup-feeds.js'
+      - 'scripts/freighter-layup/**'
+      - '.github/workflows/freighter-layup-source-watch.yml'
       - 'lib/freighter-layup-profile-render.cjs'
       - 'scripts/generate-freighter-layup-profiles.cjs'
       - 'tests/freighter-layup*'
@@ -30,7 +36,7 @@ jobs:
       - name: Install pinned project dependencies
         run: npm ci
       - name: Verify actual Node assertions
-        run: node --test tests/freighter-layup.test.js tests/freighter-layup-biographies.test.js
+        run: node --test tests/freighter-layup.test.js tests/freighter-layup-biographies.test.js tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
       - name: Check generated biographies match source exactly
         run: node scripts/generate-freighter-layup-profiles.cjs --check
       - name: Prepare headless browser runner

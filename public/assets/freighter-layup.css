@@ -327,3 +327,42 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
 .layup-biography .footer{background:#0b222c}
 @media(max-width:790px){.layup-biography .bio-grid{grid-template-columns:1fr;gap:25px}.layup-biography .bio-side{position:static;order:0}.layup-biography .bio-hero-overlay{background:linear-gradient(90deg,#081a27f5,#10293699),linear-gradient(0deg,#071924da,transparent 38%)}.layup-biography .bio-hero-bottom{flex-direction:column;align-items:flex-start}.layup-biography .bio-hero-credit{text-align:left}}
 @media(max-width:560px){.layup-biography .top-inner{padding:13px 18px;flex-direction:column;align-items:flex-start;gap:10px}.layup-biography .topbar nav{width:100%;overflow:auto;flex-wrap:nowrap}.layup-biography .topbar nav a{white-space:nowrap;font-size:11px}.layup-biography .bio-hero{min-height:590px}.layup-biography .bio-hero-content{padding:50px 19px 21px;gap:31px}.layup-biography .bio-hero h1{font-size:clamp(44px,11vw,64px)}.layup-biography .bio-tagline{font-size:24px}.layup-biography .bio-hero .lede{font-size:15px}.layup-biography .bio-hero-actions{flex-direction:column;align-items:stretch;max-width:305px}.layup-biography .bio-hero-bottom{font-size:9px}.layup-biography .bio-trust-bar{flex-direction:column;align-items:flex-start;padding:13px 18px}.layup-biography .bio-main>h2,.layup-biography .bio-winter>h2{font-size:38px}.layup-biography .bio-related-grid{grid-template-columns:1fr}.layup-biography .bio-side{padding:21px}.layup-biography .method{padding:20px}}
+
+/* Living winter product — follows the season rather than leading with historic tables. */
+.layup-home .living-winter{scroll-margin-top:20px;margin:12px 0 72px;padding:clamp(26px,4vw,45px);border-radius:12px;background:#112e3b;color:#eff4ed;box-shadow:0 18px 40px #132f3a20}
+.layup-home .living-head{display:flex;justify-content:space-between;gap:25px;align-items:end}
+.layup-home .living-head .kicker{color:#f1c37e}
+.layup-home .living-head h2{font:400 clamp(39px,5vw,65px)/1.08 Georgia,serif;color:#fff;letter-spacing:-.045em;margin:0}
+.layup-home .living-head h2 em{color:#ecc18a;font-weight:400}
+.layup-home .living-deck{font-size:15px;line-height:1.7;color:#cfdfdd;max-width:720px}
+.layup-home .living-totals{display:flex;flex-shrink:0;gap:24px}
+.layup-home .living-totals>div{border-left:1px solid #59747a;padding-left:18px;display:flex;flex-direction:column}
+.layup-home .living-totals strong{font:400 45px Georgia,serif;color:#e9c185}
+.layup-home .living-totals span{font-size:11px;max-width:90px;color:#c8dbd8}
+.layup-home .living-meta{display:flex;justify-content:space-between;gap:18px;padding:17px 0;border-top:1px solid #45606a;border-bottom:1px solid #45606a;margin-top:24px;font-size:12px;color:#d1e3dd}
+.layup-home .living-meta strong{color:#f4c486;white-space:nowrap}
+.layup-home .winter-feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.layup-home .winter-update{background:#20414d;border:1px solid #45606a;padding:18px 19px;display:flex;gap:16px}
+.layup-home .winter-date{font:700 11px ui-sans-serif,system-ui;color:#d9b881;white-space:nowrap}
+.layup-home .winter-update h3{font:400 26px Georgia,serif;margin:9px 0}
+.layup-home .winter-update p{font-size:13px;color:#dbebeb;margin:0 0 9px}
+.layup-home .winter-update a{color:#f6c88e;font-size:12px}
+.layup-home .live-empty{grid-column:1/-1;background:#1e4050;border:1px solid #466674;border-radius:5px;padding:26px}
+.layup-home .live-empty h3{font:400 30px Georgia,serif;color:#fff;margin:0 0 7px}
+.layup-home .live-empty p{color:#dce9e6;font-size:14px;max-width:700px}
+.layup-home .live-empty a{color:#f1c88b}
+.layup-home .ais-watch{padding:23px;background:#e8eeeb;color:#163741;border-radius:7px}
+.layup-home .ais-watch-header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.layup-home .ais-watch-header h3{font:400 29px Georgia,serif;margin:0 0 6px}
+.layup-home .ais-watch-header p:not(.kicker){font-size:13px;color:#536b6c;margin:0;max-width:660px}
+.layup-home .ais-watch .kicker{color:#947042}
+.layup-home #ais-refresh{background:#f9fcfb;border-color:#a3bcb7;color:#194b5b;white-space:nowrap}
+.layup-home #ais-watch-status{font-size:12px;color:#506c6c}
+.layup-home .ais-watch-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.layup-home .ais-watch-list li{background:#fff;border:1px solid #d2e0db;padding:11px;display:flex;flex-direction:column;gap:3px;font-size:12px}
+.layup-home .ais-watch-list li strong{font-size:14px;color:#143c48}
+.layup-home .ais-watch-list li small{color:#697e7b}
+.layup-home .ais-watch-list li.ais-empty{grid-column:1/-1;color:#536d72}
+.layup-home .ais-caveat{font-size:11px;color:#5f7776}
+@media(max-width:900px){.layup-home .living-head{align-items:start;flex-direction:column}.layup-home .living-totals{gap:26px}.layup-home .ais-watch-list{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.layup-home .living-winter{padding:22px 16px;margin:0 0 52px}.layup-home .living-head h2{font-size:39px}.layup-home .winter-feed{grid-template-columns:1fr}.layup-home .living-meta{flex-direction:column;gap:6px}.layup-home .ais-watch{padding:17px}.layup-home .ais-watch-header{flex-direction:column;align-items:start}.layup-home .ais-watch-list{grid-template-columns:1fr}.layup-home .living-totals strong{font-size:35px}}

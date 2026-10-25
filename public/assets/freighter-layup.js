@@ -4,7 +4,7 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const state = {archive:null,biographies:null,season:'2025-26',query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
+ const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
  const esc = value => String(value ?? '').replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text = (tag,content) => {const el=document.createElement(tag);el.textContent=content;return el};
  const seasonData = () => state.archive.seasons.find(x=>x.id===state.season);
@@ -28,6 +28,89 @@
    const biog=state.biographies?.profiles?.some(p=>p.id===v.id);
    return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+photoHTML(v)+(hasPhoto?'<span class="photo-hint">Historic vessel photo · '+esc(v.photo.date.slice(0,4))+'</span>':'')+'</div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><span class="tag'+(reported?' tag-reported':'')+'">'+esc(label.label)+'</span><p class="berth">'+esc(v.berth)+' · '+esc(h.name)+'</p><p class="summary">'+esc(v.summary)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore this freighter →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Read permanent biography ↗</a>':'')+'</div></article>';
  }
+
+ function activeRecordsFromLedger(ledger,archive){
+   const prior=archive.seasons.flatMap(s=>s.records||[]);
+   const latest=new Map();
+   for(const ev of ledger.events||[]){
+     if(!ev?.vessel?.key||!archive.harbors.some(h=>h.id===ev.harborId))continue;
+     if(!latest.has(ev.vessel.key))latest.set(ev.vessel.key,[]);
+     latest.get(ev.vessel.key).push(ev);
+   }
+   return [...latest.entries()].map(([key,events])=>{
+     events.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+     const last=events.at(-1),old=prior.find(r=>r.id===key);
+     const arrival=[...events].reverse().find(e=>e.kind==='arrival');
+     const source=last.source,confirmed=events.some(e=>e.kind==='arrival'&&e.confidence==='confirmed');
+     return {id:key,name:last.vessel.name,aliases:old?.aliases||[],identity:old?.identity||{key,imo:null,mmsi:null},
+       harborId:last.harborId,berth:'Harbor report — specific berth not verified',
+       berthPrecision:'berth_unverified',status:last.kind==='departure'?'departed_current':confirmed?'confirmed_current':'reported_current',
+       statusAsOf:last.date,evidenceClass:source.class,evidence:{url:source.url,title:source.title,publisher:source.publisher,published:last.date},
+       summary:last.summary+(last.kind==='departure'?' The winter berth is no longer current.':' Dated evidence; no live position is implied.'),
+       events:events.map(e=>({date:e.date,type:e.kind,text:e.summary,source:e.source.url,sourceClass:e.source.class})),
+       storyFacts:old?.storyFacts||[],photo:old?.photo||null};
+   });
+ }
+ function mountLedger(data){
+   if(data?.schemaVersion!==1||!/^\d{4}-\d{2}$/.test(data.season)||!Array.isArray(data.events)||!Array.isArray(data.previousSeasons))return false;
+   const season=state.archive.seasons.find(s=>s.id===data.season);
+   if(!season)return false;
+   // A new winter can show live sourced reports without mutating last winter's archive.
+   const stories=activeRecordsFromLedger(data,state.archive);
+   season.records=stories;
+   season.state=stories.length?'active_current':'upcoming_unconfirmed';
+   season.note=stories.length?'Live season: source-dated winter reports only, separate from AIS activity.':'No source-confirmed layup arrivals in the new-season ledger yet. AIS harbor traffic does not prove layup.';
+   const historic=data.previousSeasons||[];
+   for(const past of historic){
+     if(!/^\d{4}-\d{2}$/.test(past.season)||!Array.isArray(past.events)||state.archive.seasons.some(s=>s.id===past.season))continue;
+     const records=activeRecordsFromLedger({...data,events:past.events},state.archive).map(v=>({...v,status:v.status==='confirmed_current'?'confirmed_historical':'reported_historical'}));
+     state.archive.seasons.push({id:past.season,label:'Winter '+past.season.replace('-', '–20'),state:'historical_snapshot',asOf:past.season,records,note:'Dated winter ledger archive; reported statuses retain their uncertainty.'});
+   }
+   if(policy().validateRegistry(state.archive).length)return false;
+   state.liveLedger=data;
+   return true;
+ }
+ function renderLiveDesk(){
+   const nowActive=state.liveLedger&&state.season===state.liveLedger.season;
+   const view=$('winter-live');
+   if(!view)return;
+   view.hidden=!nowActive;
+   if(!nowActive)return;
+   const events=(state.liveLedger.events||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+   const arrival=events.filter(e=>e.kind==='arrival'),departures=events.filter(e=>e.kind==='departure');
+   $('live-season').textContent='Winter '+state.liveLedger.season.replace('-', '–20');
+   $('live-arrivals').textContent=new Set(arrival.map(e=>e.vessel.key)).size;
+   $('live-departures').textContent=new Set(departures.map(e=>e.vessel.key)).size;
+   $('live-update-status').textContent=events.length?'Latest sourced update: '+fmt(events[0].date)+'. A dated report, not continuous vessel positioning.':
+     'New-season ledger open. No verified arrivals reported yet. Source checks run on a seasonal schedule; missing reporting does not imply no ships are wintering.';
+   $('winter-feed').innerHTML=events.length?events.slice(0,18).map(e=>
+     '<article class="winter-update"><span class="winter-date">'+esc(fmt(e.date))+'</span><div><span class="tag'+(e.confidence==='reported'?' tag-reported':'')+'">'+esc(e.confidence==='confirmed'?'Confirmed source':'Reported source')+'</span><h3>'+esc(e.vessel.name)+'</h3><p>'+esc(e.summary)+'</p><a href="'+esc(e.source.url)+'" target="_blank" rel="noopener">Source: '+esc(e.source.publisher)+' ↗</a></div></article>').join(''):
+      '<div class="live-empty"><h3>The winter story is about to begin.</h3><p>New ship arrivals will appear here as dated reporting is collected. Past winter berths are not carried over and AIS silence is not evidence of layup.</p><a href="#winter-ais">Watch harbor traffic while the season develops ↓</a></div>';
+   renderAIS();
+ }
+ function renderAIS(){
+   if(!$('ais-watch-list'))return;
+   if(!state.aisLoaded){$('ais-watch-status').textContent='AIS harbor activity is loading. These are not confirmed layup records.';return}
+   const rows=state.aisActivity.slice(0,24);
+   $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
+   $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
+    '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmt(v.seen?.slice(0,10)))+'</small></li>').join(''):
+    '<li class="ais-empty">No fresh AIS reports within the five currently monitored winter harbors. This does not establish that their docks are empty.</li>';
+ }
+ async function refreshAIS(){
+   if(!$('ais-watch-status'))return;
+   $('ais-watch-status').textContent='Checking current harbor AIS signals…';
+   try{
+     const r=await fetch('/api/freighter-layup-live',{signal:AbortSignal.timeout(15000)});
+     if(!r.ok)throw new Error('AIS temporarily unavailable');
+     const data=await r.json();
+     if(!data.ok||data.notLayupConfirmations!==true||!Array.isArray(data.activity))throw new Error('AIS provider unavailable');
+     state.aisActivity=data.activity;
+     state.aisCheckedAt=data.checkedAt;
+     state.aisPartial=Boolean(data.partial);
+   }catch{state.aisActivity=[];state.aisCheckedAt=null;state.aisPartial=false}
+   state.aisLoaded=true;renderAIS();
+ }
  function populateBerths(){
    const list=records().filter(r=>state.activeHarbor==='all'||r.harborId===state.activeHarbor);
    const options=['all',...new Set(list.map(r=>r.berth))];
@@ -50,7 +133,7 @@
    const s=seasonData(),count=policy().totals(s);
    $('stat-ships').textContent=count.documented;
    $('stat-harbors').textContent=count.harbors;
-   $('stat-year').textContent=s.state==='historical_snapshot'?count.confirmed+' / '+count.reported:'Pending';
+   $('stat-year').textContent=s.state==='historical_snapshot'||s.state==='active_current'?count.confirmed+' / '+count.reported:'Pending';
    $('season-note').textContent=s.note;
    $('map-intro').textContent=s.state==='historical_snapshot'?
       'Explore '+count.documented+' documented winter records from '+count.harbors+' harbors. Map markers identify approximate harbors, not dock positions or live vessels.':
@@ -81,7 +164,7 @@
  function setSeason(id){
    state.season=id;state.selected=null;state.berth='all';state.query='';state.activeHarbor='all';$('ship-search').value='';
    $('harbor-filter').value='all';$('ship-detail').hidden=true;
-   populateBerths();renderStats();renderCards();renderMapPins();renderHarborPanel();
+   populateBerths();renderStats();renderCards();renderMapPins();renderHarborPanel();renderLiveDesk();
    if(state.map)fitLakes();
  }
  function renderHarborPanel(){
@@ -123,7 +206,7 @@
    state.markerLayer.clearLayers();state.markers=[];
    const ids=[...new Set(records().map(x=>x.harborId))];
    for(const id of ids){
-     const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>v.status==='confirmed_historical').length;
+     const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>policy().classify(v,seasonData()).confirmed).length;
      const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' historical records; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
      const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' historical records: '+verified+' verified, '+(list.length-verified)+' reported. Harbor-wide reference only, not precise shipyard berths.'));
      const button=text('button','Explore this harbor');button.type='button';button.addEventListener('click',()=>{setHarbor(id,true);$('fleet').scrollIntoView({behavior:'smooth',block:'start'})});pop.append(button);
@@ -179,6 +262,11 @@
      if(archive.schemaVersion!==2||!Array.isArray(archive.seasons)||!Array.isArray(archive.harbors))throw new Error('Unexpected archive format');
      if(!policy()||policy().validateRegistry(archive).length)throw new Error('Layup integrity check failed');
      state.archive=archive;
+     try{
+       const lr=await fetch('/assets/freighter-layup-live-season.json',{cache:'no-store',signal:AbortSignal.timeout(7000)});
+       if(lr.ok){const live=await lr.json();if(!mountLedger(live))console.warn('Live layup ledger ignored due to validation failure')}
+     }catch{ /* Archive remains available even when season data is offline. */ }
+
      try{const br=await fetch('/assets/freighter-vessel-biographies.json',{signal:AbortSignal.timeout(7000)});if(br.ok){const d=await br.json();if(d.schemaVersion===1&&Array.isArray(d.profiles))state.biographies=d}}catch{}
    }catch{
      $('count-note').textContent='Historical archive could not be loaded. The source names below are retained as a static reference; check the official roster.';
@@ -195,7 +283,10 @@
    $('berth-filter').addEventListener('change',e=>{state.berth=e.target.value;state.selected=null;$('ship-detail').hidden=true;renderCards()});
    $('clear-filters').addEventListener('click',()=>{state.query='';state.berth='all';state.activeHarbor='all';$('ship-search').value='';$('harbor-filter').value='all';$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();fitLakes()});
    $('detail-close').addEventListener('click',()=>{state.selected=null;$('ship-detail').hidden=true;renderCards();$('ship-search').focus()});
+   $('ais-refresh')?.addEventListener('click',refreshAIS);
    setSeason(state.season);initMap();
+   refreshAIS();
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.season===state.liveLedger?.season)refreshAIS()});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
