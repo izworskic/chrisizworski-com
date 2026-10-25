@@ -42,7 +42,10 @@
  }
  function resetDate(day){
   if(!S.validHistoricalDay(day)){
-   status('Invalid date. Choose a past satellite day, starting March 1, 2000.');
+   // Never leave yesterday's raster visible underneath an invalid/new date label.
+   $('sat-show').checked=false;
+   safe(()=>clear(state.map));
+   status('Invalid date. Historical overlay hidden; choose a past day starting March 1, 2000.');
    return false;
   }
   $('sat-date').value=day;$('sat-show').checked=true;apply();
