@@ -86,7 +86,7 @@
   const sc='<p class="season-provenance"><strong>'+esc(station.name)+'</strong> · '+esc(station.miles)+
    ' miles straight-line from the trail-area reference · '+esc(data.yearsAnalyzed)+' completed winters · '+
    esc(data.totalObservedDays)+' / '+esc(data.totalPossibleDays)+' valid daily reports'+
-   (weak?' · **Sparse season-long coverage**':'')+'</p>';
+   (weak?' · Limited full-season coverage':'')+'</p>';
   const cards=data.weeks.map((w,i)=>{
    const state=w.status==='historically-frequent-6in-station-snow'?'frequent':
     w.status==='insufficient-history'?'insufficient':'variable';
