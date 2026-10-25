@@ -89,7 +89,7 @@ test('Nov 2 accepts only dated November observations, rejects October and future
 });
 
 test('after ice season, the archive selects the winter just completed', async () => {
-  await at('2027-04-10T15:00:00Z', '2026 305 0 0 1 0 0 0 0.2\\n', async () => {
+  await at('2027-04-10T15:00:00Z', '2026 305 0 0 1 0 0 0 0.2\n', async () => {
     const data = await (await nowHandler({ url: site + '/api/ice-now?region=saginaw-bay' })).json();
     assert.equal(data.iceSeason, false);
     assert.equal(data.observed.lakeWide, null);
