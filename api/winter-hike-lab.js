@@ -9,6 +9,7 @@ const Live=require('../lib/winter-hike-live.cjs');
 const GIS=require('../lib/winter-hike-arcgis.cjs');
 const Eval=require('../lib/winter-hike-decision.cjs');
 const Access=require('../lib/winter-hike-trip.cjs');
+const Parking=require('../lib/winter-hike-parking.cjs');
 const ALLOWED=new Set(['catalog','preview']);
 function compactRoute(r) {
  return {id:r.id,title:r.displayName,group:r.placeGroup,region:r.region,
@@ -19,7 +20,7 @@ function compactRoute(r) {
   officialUrl:r.officialPage,mapUrl:r.officialMap,caveats:r.caveats,
   summary:r.editorialSummary,sourceDnrTrailId:r.sourceDnrTrailId,
   geometryStatus:r.sourceDnrTrailId?'direct DNR source ID, extent unverified':'no route-specific GIS match',
-  parking:'unverified',navigationReady:false};
+  parking:'unverified',navigationReady:false,winterAccess:Parking.assess(r.id)};
 }
 function status(res,code,body,maxAge=0){
  res.setHeader('Content-Type','application/json; charset=utf-8');
@@ -63,6 +64,12 @@ async function handler(req,res) {
     {error:message.includes('Trip date')||message.includes('outing date')?'Date outside forecast horizon':'Official forecast service unavailable'});
  }
  const access=Access.resolveAccess(dest);
+ const parkingAccess=Parking.assess(route.id,{tripDay:date});
+ // Explicit, dated manager closures constrain the weather decision; unknown
+ // parking is never promoted to open from a static park page.
+ for(const k of ['trail','road','parking']){
+  if(['open','closed','restricted'].includes(parkingAccess[k]))access[k]=parkingAccess[k];
+ }
  const gis=geometry?.spatial||null;
  const decision=Eval.interpret(dest,{
   activity,access,snow:weather.snow,
@@ -90,6 +97,7 @@ async function handler(req,res) {
    meaning:'DNR source geometry fragments are not an independently verified complete walking itinerary'},
   access:{trail:access.trail,parking:access.parking,road:access.road,
    navigationReady:false,verifiedWinterParking:null},
+  parkingVerification:parkingAccess,
   officialSource:route.officialPage,
   navigation:{enabled:false,reason:'No winter plowed parking coordinates or verified complete route have been certified'}
  },300);
