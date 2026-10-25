@@ -85,3 +85,35 @@
 .satellite-credit a{font-weight:700}
 @media(max-width:980px){.satellite-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:610px){.satellite-console{padding:16px}.satellite-controls{grid-template-columns:1fr}.sat-date-nav button{padding:9px 6px;font-size:11px}.sat-date-nav input{font-size:13px}.satellite-head{align-items:flex-start;flex-direction:column}.sat-opacity input[type="range"]{max-width:100%}}
+
+
+/* Real NOAA NCEI station-reported snow depth, same 7-day week over four winters. */
+.history-zone{border-top:1px solid var(--line);margin-top:20px;padding-top:23px}
+.history-zone h3{font-size:20px;letter-spacing:-.025em;margin:4px 0 0}
+.history-zone .eyebrow{margin:0;font-size:10px}
+.history-head{display:flex;align-items:center;justify-content:space-between}
+.history-intro{font-size:13px;color:#506963;line-height:1.6;margin:12px 0}
+.history-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0}
+.history-actions label{font-size:12px;font-weight:750}
+.history-actions select{font-size:13px;border:1px solid #bfcfc7;border-radius:9px;background:#fff;color:#204b3b;min-height:40px;padding:7px}
+.history-actions .action-primary{font-size:12px;min-height:40px;padding:9px 12px}
+.history-actions button:disabled{opacity:.65;cursor:progress}
+.history-station{border-radius:9px;background:#eef5ed;padding:11px 13px;font-size:13px;line-height:1.5;color:#21483d}
+.history-chart-caption{font-size:11px;line-height:1.5;color:#587064}
+.history-year{border:1px solid #e3e9e4;border-radius:11px;padding:13px 13px 12px;margin:11px 0;background:#fbfcfa}
+.history-year-heading{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:12px;color:#4b665a}
+.history-year-heading strong{font-size:19px;color:#1c5543;font-weight:800}
+.history-observed-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:5px;margin:13px 0 10px;min-width:0;border-bottom:1px solid #c2d2c6}
+.history-day{min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px}
+.history-stick{height:66px;width:100%;max-width:36px;display:flex;align-items:flex-end;justify-content:center;position:relative;background:#f0f3ed;border-radius:4px 4px 0 0}
+.history-bar{background:linear-gradient(180deg,#8cbcc0,#237a75);width:65%;border-radius:3px 3px 0 0;min-height:0}
+.history-no-report{font-size:15px;color:#a3b1a7;position:absolute;top:25px}
+.history-day small{font-size:10px;font-weight:700;color:#60756c}
+.history-number{font-size:10px;line-height:1.25;white-space:nowrap;color:#305c4e}
+.history-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#526b62}
+.history-map-day{font:inherit;border:1px solid #9ab9a8;border-radius:8px;background:#eef5eb;color:#205749;padding:8px 10px;cursor:pointer;font-weight:700}
+.history-map-day:hover{background:#e0f0e7}
+.history-source,.history-disclaimer{font-size:11px;line-height:1.55;color:#5a7068}
+.history-source{margin-top:12px}
+.history-disclaimer{margin:12px 0 0}
+@media(max-width:610px){.history-year{padding:10px}.history-observed-bars{gap:2px}.history-stick{height:54px}.history-number{font-size:9px}.history-actions{align-items:stretch}.history-actions select{flex:1}.history-foot{align-items:flex-start}}
