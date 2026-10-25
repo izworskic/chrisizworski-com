@@ -34,7 +34,7 @@ test('stale AIS, missing speed and unknown MMSI never become candidates',()=>{
  assert.equal(m.aisActivity([raw],now)[0].signal,'recent_harbor_AIS_only'.replace('recent_harbor_AIS_only','recent_ais_near_harbor_not_layup_confirmation'));
  assert.equal(m.aisActivity([{...raw,seen:'2027-01-10T16:00:00Z'}],now).length,0);
  assert.equal(m.aisActivity([{...raw,lat:41,lon:-75}],now).length,0);
- assert.equal(m.aisActivity([{...raw,speedKnots:null}],now).length,1); // Number(null) is zero: verify and correct in follow-up
+ assert.equal(m.aisActivity([{...raw,speedKnots:null}],now).length,0);
 });
 test('community report cannot become verified by speed; no AIS fields in evidence ledger',()=>{
  const result=m.addEvidence(empty,event,'2027-01-14T00:00:00Z').ledger;
