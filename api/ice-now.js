@@ -167,7 +167,9 @@ async function fetchJson(url, options) {
 
 async function lakeTrends(now, previousCompleted = false) {
   const clock = michiganIceClock(now);
-  const y = clock.seasonYear - (previousCompleted ? 1 : 0);
+  const y = previousCompleted
+    ? clock.seasonYear - (clock.preSeason || clock.active ? 1 : 0)
+    : clock.seasonYear;
   const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/g' +
     y + '_' + (y + 1) + '_ice.dat';
   const r = await fetch(url, { headers: UA });
@@ -198,7 +200,7 @@ async function lakeTrends(now, previousCompleted = false) {
   const observedAt = isoFromYearDay(current.year, current.dayOfYear);
   const ah = ageHours(observedAt, now);
   return {
-    source: 'NOAA GLERL current-season daily Great Lakes ice concentration',
+    source: previousCompleted ? 'NOAA GLERL completed-winter archive' : 'NOAA GLERL current-season daily Great Lakes ice concentration',
     observedAt, ageHours: ah, stale: ah === null || ah > 48 || ah < -2,
     current,
     seasonStartYear: y,
