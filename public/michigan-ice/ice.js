@@ -34,7 +34,11 @@
     return (Number(n) >= 0 ? '+' : '') + Number(n).toFixed(dp === undefined ? 0 : dp);
   }
   function inIceSeason(d) {
-    var m = d.getMonth() + 1;
+    // Great Lakes season changes with Michigan's midnight, not the
+    // viewer's browser timezone (especially important on October 31).
+    var m = Number(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Detroit', month: 'numeric'
+    }).format(d));
     return m >= 11 || m <= 3;
   }
   function dateText(v) {

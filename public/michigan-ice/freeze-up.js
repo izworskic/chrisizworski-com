@@ -101,8 +101,10 @@
   // Archive dates and selection are scoped to whole-lake charts only.
   // Live NOAA/USNIC chart on CARTO never changes with historic controls.
   function latestSeasonStart() {
-    var now = new Date();
-    return now.getUTCFullYear() - (now.getUTCMonth() + 1 < 11 ? 1 : 0);
+    var fields=Object.fromEntries(new Intl.DateTimeFormat('en-US',{
+      timeZone:'America/Detroit',year:'numeric',month:'2-digit'
+    }).formatToParts(new Date()).map(function(p){return [p.type,p.value];}));
+    return Number(fields.year) - (Number(fields.month) < 11 ? 1 : 0);
   }
   function seasonLabel(y) {
     return y+'–'+String(y+1).slice(2);
@@ -355,6 +357,11 @@
     svg.replaceChildren();
     var available = activeData && activeData.observed && activeData.observed.lakeWide;
     var historic = !activeData || !activeData.iceSeason;
+    // November may start before NOAA publishes a single 2026–27 winter day.
+    // Show the prior winter only with an unmistakable historical label.
+    var awaitingNewWinter = !historic &&
+      (!available || !Array.isArray(available.series) || !available.series.length);
+    if(awaitingNewWinter && activeData && activeData.historical) historic = true;
     var source = selectedSeason === 'auto'
       ? (historic ? activeData && activeData.historical : available)
       : archiveForSelection();
@@ -375,10 +382,12 @@
       ? 'Loading NOAA daily records for winter '+seasonLabel(archiveYear)+'…'
       : archiveError || (archiveYear !== null
           ? 'Viewing archived winter '+seasonLabel(archiveYear)+'. The CARTO map above remains current-only.'
-          : 'Automatically follows the most recent ice season. Select another winter to compare.'));
+          : awaitingNewWinter
+            ? 'The '+seasonLabel(latestSeasonStart())+' winter is underway, but NOAA has not published a usable daily record yet. Any chart shown is the latest completed winter, labeled historical.'
+            : 'Automatically follows the most recent ice season. Select another winter to compare.'));
     if (!chartSeries.length) {
       text('ice-ex-chart-value', archiveLoading ? 'Loading the selected NOAA season…' :
-        archiveError || 'No NOAA daily series is available for this selection. No values have been estimated.');
+        archiveError || (awaitingNewWinter ? 'Awaiting the first dated NOAA observation for winter '+seasonLabel(latestSeasonStart())+'. Select an older winter to inspect its archive.' : 'No NOAA daily series is available for this selection. No values have been estimated.'));
       syncDailyFrame();
       return;
     }

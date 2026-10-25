@@ -15,7 +15,7 @@ The owner asked for every garden tool to be brought up to the Seed Saving Lab. T
 | Share | 10 | A copied link reopens the same answer; a calendar file or print to take away |
 | Access and trust | 10 | Labelled controls, a status region that speaks the answer, linked sources, no em dashes, no inline handlers |
 
-**Correctness invariants.** Planting calendar: every window equals the station frost date plus the published offset, for all 78 stations and 47 crops, and the tables agree. Frost dates: the risk curve passes through the published 75, 50 and 25 percent dates and never rises through spring, at every station; all 78 table rows remain. Tomatoes: seed start, harden off and plant out come in order at every station, and soil and forecast readings flip the answer correctly. Seed starting: zone frost dates run in order (colder zones later) and the intro no longer sits inside the site header. Matchmaker: three different picks for all 256 zone, sun, space and goal combinations, matching the API, with no server call.
+**Correctness invariants.** Planting calendar: every window equals the station frost date plus the published offset, for all 78 stations and 47 crops, and the tables agree. Frost dates: the risk curve passes through the published 75, 50 and 25 percent dates and never rises through spring, at every station; all 78 table rows remain. Tomatoes: seed start, harden off and plant out come in order at every station, and soil and forecast readings flip the answer correctly. Seed starting: zone frost dates run in order (colder zones later) and the intro no longer sits inside the site header. Matchmaker: three different picks for all 256 zone, sun, space and goal combinations, matching the API, with no server call. Soil temperature: the page's history rebuilds byte for byte from the committed measured record; a model that runs 3°F cold, exact or 4°F warm is corrected to the station exactly, and the date shown equals the date the same rule gives on the true values, on four spring dates for both temperatures (Ready, Forecast and Not yet all occur); "Ready" never shows over a reading below the temperature; an MSU outage falls back to the station's record and says so. Live data comes from `scripts/lib/soil-fixtures.mjs`, built from the committed MSU record, never the network.
 
 ## Before and after
 
@@ -28,6 +28,7 @@ The owner asked for every garden tool to be brought up to the Seed Saving Lab. T
 | When to plant tomatoes | ~36 | 100 | No tool at all; the page scrolled sideways on a phone (453 px) |
 | Seed starting guide | ~36 | 100 | Intro rendered inside the site header, above the nav; zone 6a frost dates out of order (May 10, later than zone 5); empty table cells showed ", "; inline click handlers |
 | Heirloom variety matchmaker | ~45 | 100 | Five screens and a server call before any answer; sideways scroll on a phone (396 px); no sources |
+| Michigan soil temperature (new, October 24) | n/a | 100 | New tool; see `docs/SOIL_TEMP_RESEARCH.md` |
 | Seed Saving Lab (reference) | 100 | 100 | Its own gates: `benchmark:seed-lab-usability`, `benchmark:seed-lab-features` |
 
 ## What each tool does now

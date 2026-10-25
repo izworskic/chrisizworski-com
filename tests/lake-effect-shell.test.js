@@ -10,14 +10,33 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/">/);
  assert.match(html,/national-snowpack-melt\.vercel\.app\/assets\/lake-effect\.js/);
  assert.match(html,/id="radar-basemap-status"/);
- assert.match(html,/lake-effect-radar\.js\?v=20261024-2/);
+ assert.match(html,/lake-effect-radar\.js\?v=20261025-1/);
  assert.match(read("api/carto-basemap-config.js"),/CARTO_BASEMAP_PUBLIC_KEY/);
  assert.match(html,/chrisizworski.com\/#person/);
  assert.match(html,/Built by <a href="https:\/\/chrisizworski.com\/chris-izworski\//);
- assert.match(html,/dateModified":"2026-10-24"/);
+ assert.match(html,/dateModified":"2026-10-25"/);
  assert.match(catalog,/data-tool-id="lake-effect-snow"/);
- assert.match(winter,/https:\/\/chrisizworski.com\/lake-effect-snow\/<\/loc><lastmod>2026-10-24/);
+ assert.match(winter,/https:\/\/chrisizworski.com\/lake-effect-snow\/<\/loc><lastmod>2026-10-25/);
  assert.equal(graph.tools.filter(x=>x.id==="lake-effect-snow").length,1);
  assert.ok(graph.relationships.some(x=>x.from==="lake-effect-snow"&&x.to==="national-snow"));
  assert.ok(!read("public/michigan-snow-depth/index.html").includes('id="lakeEffectApp"'));
+});
+
+test("winter network keeps future snow, observed depth and trail readiness separate",()=>{
+ const snowbelt=read("public/lake-effect-snow/index.html");
+ const depth=read("public/michigan-snow-depth/index.html");
+ const xc=read("public/michigan-cross-country-skiing/index.html");
+ const downhill=read("public/michigan-ski-hills/index.html");
+ const sled=read("public/snowmobile/index.html");
+ assert.match(snowbelt,/lake-effect\.js\?v=20261025-1/);
+ assert.match(snowbelt,/michigan-cross-country-skiing/);
+ assert.match(snowbelt,/michigan-ski-hills/);
+ assert.match(snowbelt,/snowmobile\//);
+ assert.match(depth,/href="\/lake-effect-snow\/"/);
+ assert.match(xc,/href="\/lake-effect-snow\/"/);
+ assert.match(downhill,/href="\/lake-effect-snow\/"/);
+ assert.match(sled,/href="\/lake-effect-snow\/"/);
+ assert.match(sled,/Forecast snow and favorable winds cannot establish open trails/);
+ assert.match(xc,/verify grooming/i);
+ assert.doesNotMatch(snowbelt,/snow_inches|predicted snowband track/i);
 });

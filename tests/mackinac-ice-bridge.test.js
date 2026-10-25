@@ -28,7 +28,7 @@ test('No travel safety promise or route appears in map and content', () => {
   assert.match(page, /Christmas-tree markers are not safety certification/);
   assert.doesNotMatch(page, /(?:safe to cross|open for snowmobiles|crossing is safe)/i);
   assert.match(ui, /No usable recent NOAA concentration classification/);
-  assert.match(ui, /iceReady = !!\(o && o.available && !o.stale && o.validAt\)/);
+  assert.match(ui, /iceReady = !!\(seasonOpen && o && o.available && !o.stale && o.validAt\)/);
   assert.doesNotMatch(ui, /(?:polyline|routingControl|drawRoute)\s*\(/);
 });
 test('Map uses configured CARTO key and the official NOAA chart, with fallback', () => {

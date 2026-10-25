@@ -289,6 +289,7 @@ async function loadEvidence(s){
   if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.inaturalist.org/"))inatLink.href=obs.searchUrl;
   if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.gbif.org/"))inatLink.href=obs.searchUrl;
   const gbif=obs.source==="GBIF";
+  const reportQuality=window.WildlifeField?.assess(gbif?"indexed-community":"research-community",obs.latestObservedOn);
   text("eagle-observation-source",gbif?"GBIF indexed observations · past 30 days":"iNaturalist · past 30 days");
   inatLink.textContent=gbif?"Open GBIF occurrence search ↗":"Open original iNaturalist observation search ↗";
   if(ice.sourceUrl&&ice.sourceUrl.startsWith("https://apps.glerl.noaa.gov/"))iceLink.href=ice.sourceUrl;
@@ -298,9 +299,9 @@ async function loadEvidence(s){
     text("eagle-reports-detail",
       (gbif?"GBIF human-observation records indexed within a 40 km corridor over the last 30 days. Publishing may lag and records are not independently research-grade. ":
        "Research-grade iNaturalist entries sampled from a 40 km region over the past 30 days. ")+
-      (obs.moreRecords?"Only part of the source records were sampled; the number may be incomplete.":"These are reports, not individual birds.")
+      (obs.moreRecords?"Only part of the source records were sampled; the number may be incomplete.":"These are reports, not individual birds.")+" "+(reportQuality?.scope||"No confirmation at this viewing point.")
     );
-    text("eagle-reports-date",obs.latestObservedOn?(gbif?"Latest date in indexed sample: ":"Most recent observed: ")+obs.latestObservedOn+" ("+obs.ageDays+" days ago).":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
+    text("eagle-reports-date",obs.latestObservedOn?(gbif?"Latest date in indexed sample: ":"Most recent observed: ")+obs.latestObservedOn+" ("+obs.ageDays+" days ago · "+(reportQuality?.confidence||"source confidence unverified")+" · "+(reportQuality?.dateStatus||"date unverified")+").":"No qualifying reports in the retrieved sample. This does not mean no eagles.");
   }else{
     text("eagle-reports-number","Unavailable");
     text("eagle-reports-detail","The community observation feed could not be checked. Bird activity is unknown; see the original source.");
@@ -401,7 +402,7 @@ async function loadCount(s){
   if(!r.ok)throw Error("unavailable");const data=await r.json();
   if(selected.id!==s.id)return;
   if(!data.available||!data.count){p.textContent="No verified dated count could be read for this site. View the original Corps report instead.";return}
-  const d=data.count;p.textContent="Latest published count: "+d.adults+" adults + "+d.juveniles+" immatures = "+(d.adults+d.juveniles)+" eagles, observed "+d.date+". Historical observation — not a current sighting.";
+  const d=data.count;p.textContent="U.S. Army Corps agency survey (higher source confidence): "+d.adults+" adults + "+d.juveniles+" immatures = "+(d.adults+d.juveniles)+" eagles, observed "+d.date+" ("+data.ageDays+" days ago). A dated site-level count, not a current sighting.";
   if(data.stale){const q=document.createElement("p");q.textContent="This observation is older than 14 days. Do not use it as evidence of activity today.";field.append(q)}
  }catch{if(selected.id===s.id)p.textContent="Published counts are temporarily unavailable. Use the source link; no count is assumed."}
 }
