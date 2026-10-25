@@ -113,6 +113,10 @@
   if(!state.initialised)return false;
   if(S.MODES[mode])$('sat-mode').value=mode;
   const ok=resetDate(day);
+  if(ok&&state.map&&state.selectedPoint){
+   state.map.easeTo({center:[state.selectedPoint.lon,state.selectedPoint.lat],
+     zoom:7.6,duration:350});
+  }
   if(ok)document.querySelector?.('.satellite-console')?.scrollIntoView({block:'nearest',behavior:'smooth'});
   return ok;
  }
