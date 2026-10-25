@@ -24,7 +24,7 @@ const server=http.createServer(async(req,res)=>{
   if(u.pathname==='/api/carto-basemap-config'){
    res.setHeader('Content-Type','application/json');
    // Uncredentialed real CARTO basemap style if valid; don't expose Vercel key.
-   res.end(JSON.stringify({provider:'CARTO',key:'smoke-test-key-no-real-secrets'}));return;
+   res.end(JSON.stringify({provider:'unavailable'}));return;
   }
   if(u.pathname==='/api/winter-hike-lab'){
    await api(req,res,u.searchParams);return;
@@ -85,7 +85,17 @@ async function run(){
    await page.locator('#sat-date').dispatchEvent('change');
    await page.locator('#sat-mode').selectOption('trueColor');
    await page.locator('#sat-show').check();
-   await page.waitForFunction(()=>document.getElementById('map-status').textContent.includes('map ·'),{timeout:30000});
+   await page.waitForFunction(()=>document.getElementById('map-status').textContent.includes('map ·'),null,{timeout:18000}).catch(async e=>{
+     const diagnostic=await page.evaluate(()=>({
+      mapStatus:document.getElementById('map-status')?.textContent,
+      typeofMaplibre:typeof window.maplibregl,
+      satelliteStatus:document.getElementById('sat-status')?.textContent,
+      routeCount:document.querySelectorAll('.route-card').length,
+      mapHeight:document.querySelector('#map')?.clientHeight
+     }));
+     console.log('MOBILE MAP LOAD DIAGNOSTIC '+JSON.stringify({viewport:names[i],diagnostic,errors:exceptions,logs:logs.slice(0,12)}));
+     throw e;
+   });
    await page.waitForFunction(()=>{
     const map=window.WinterHikeSatelliteUI?.debugMap?.();
     return map && map.getSource('historic-modis') && map.getLayer('historic-modis');
