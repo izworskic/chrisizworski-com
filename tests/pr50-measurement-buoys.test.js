@@ -85,7 +85,7 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
 test("PR 50 page freshness stamps match sitemap.xml", () => {
   const sitemap = read("public/sitemap.xml");
   for (const [route, file] of [
-    ["/about/", "public/about/index.html"],
+    ["/chris-izworski/", "public/chris-izworski/index.html"],
     ["/guides/", "public/guides/index.html"],
     ["/great-lakes-buoys/", "public/great-lakes-buoys/index.html"],
   ]) {

@@ -11,11 +11,13 @@ const registry = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks/tool-net
 test('retired page aliases resolve identically with and without the directory slash', () => {
   for (const rule of exactRedirects) {
     const base = rule.source.replace(/\/$/, '');
-    const variants = [base, base + '/'].map(source => exactRedirects.find(item => item.source === source));
+    // File aliases have no directory-slash form; directory aliases must retain both.
+    const variants = /\.html$/.test(base) ? [rule] : [base, base + '/'].map(source => exactRedirects.find(item => item.source === source));
     assert.ok(variants.every(Boolean), `${base} must preserve both public URL forms`);
     for (const variant of variants) {
       assert.equal(variant.destination, rule.destination, base);
-      assert.equal(variant.permanent, !base.startsWith('/mackinac-island'), base);
+      if (/^\/about(?:\/|\.html|$)/.test(base)) assert.equal(variant.statusCode, 301, base);
+      else assert.equal(variant.permanent, !base.startsWith('/mackinac-island'), base);
     }
   }
 });

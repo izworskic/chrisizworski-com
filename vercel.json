@@ -85,6 +85,26 @@
   },
   "redirects": [
     {
+      "source": "/about",
+      "destination": "https://chrisizworski.com/chris-izworski/",
+      "statusCode": 301
+    },
+    {
+      "source": "/about/",
+      "destination": "https://chrisizworski.com/chris-izworski/",
+      "statusCode": 301
+    },
+    {
+      "source": "/about/index.html",
+      "destination": "https://chrisizworski.com/chris-izworski/",
+      "statusCode": 301
+    },
+    {
+      "source": "/about.html",
+      "destination": "https://chrisizworski.com/chris-izworski/",
+      "statusCode": 301
+    },
+    {
       "source": "/mackinac-island",
       "destination": "/mackinac-island/ferry-planner/",
       "permanent": false

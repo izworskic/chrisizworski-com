@@ -39,7 +39,7 @@ test("canonical Chris Izworski profile remains a ProfilePage for the shared Pers
   assert.ok(profile);
   assert.equal(profile["@type"], "ProfilePage");
   assert.deepEqual(profile.mainEntity, { "@id": "https://chrisizworski.com/#person" });
-  assert.ok(html.includes("<h1 class=\"page-title\">Chris Izworski: Profile</h1>"));
+  assert.ok(html.includes("<h1 class=\"page-title\">Chris Izworski</h1>"));
 });
 
 test("search click authority benchmark preserves the measured baseline and loss function", () => {

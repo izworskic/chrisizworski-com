@@ -12,12 +12,13 @@ test('each composed tool keeps owner HTML, identity and a single ad loader while
     const routes=rewrites.filter(r=>r.destination===`/api/public-tool-shell?tool=${tool}`);
     assert.equal(routes.length,2,tool);
     const canonical=`https://chrisizworski.com${routes.find(r=>r.source.endsWith('/')).source}`;
-    const original=`<html><head><title>Chris Izworski tool</title><link rel="canonical" href="${canonical}"><script src="/engine.js"></script><script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script></head><body><h1>Original tool</h1><p>Owner content</p><a href="/chris-izworski/">Profile</a></body></html>`;
+    const original=`<html><head><title>Chris Izworski tool</title><link rel="canonical" href="${canonical}"><script src="/engine.js"></script><script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script></head><body><h1>Original tool</h1><p>Owner content</p><a href="/about/">About</a><a href="/chris-izworski/">Profile</a></body></html>`;
     t.mock.method(globalThis,'fetch',async received=>{assert.equal(received,url);return new Response(original,{headers:{'content-type':'text/html'}});});
     const res=response();await handler({method:'GET',query:{tool}},res);
+    assert.ok(!res.body.includes('href="/about/"'));
     assert.equal(res.code,200);assert.equal(res.headers['x-robots-tag'],undefined);
     for(const value of [canonical,'<h1>Original tool</h1>','<p>Owner content</p>','src="/engine.js"','href="/chris-izworski/"'])assert.ok(res.body.includes(value));
-    for(const route of ['about','connect','privacy','terms'])assert.ok(res.body.includes(`href="/${route}/"`));
+    for(const route of ['chris-izworski','connect','privacy','terms'])assert.ok(res.body.includes(`href="/${route}/"`));
     assert.equal((res.body.match(/pagead\/js\/adsbygoogle.js/g)||[]).length, require('../config/in-article-ads.json').loaderMode === 'off' ? 0 : 1);
   }
 });
