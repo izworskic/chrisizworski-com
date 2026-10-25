@@ -12,6 +12,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin>
 <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+<link rel="preconnect" href="https://gibs.earthdata.nasa.gov" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=1">
 </head><body>
@@ -20,7 +21,7 @@
 <main class="shell">
 <section class="hero"><p class="eyebrow">Michigan trail research • Preview</p><h1>Is this the weekend to hike or snowshoe?</h1>
 <p class="lede">Find a <em>real, named trail</em>. Then see what NOAA snow depth and the National Weather Service can—and cannot—tell you about the conditions.</p>
-<div class="trust"><strong>Research preview, not trip clearance.</strong> No destination shown here has a confirmed plowed winter trailhead or safe route. Map pins are DNR/NPS route reference locations, not verified plowed winter parking or driving directions. Check the land manager before departure.</div></section>
+<div class="trust"><strong>Research preview, not trip clearance.</strong> No destination shown here has a confirmed plowed winter trailhead or safe route. Map pins are DNR/NPS route reference locations, not verified plowed winter parking or driving directions. Road and parking access remain unverified until supported by actual dated operational evidence.</div></section>
 <section class="workbench" aria-label="Trip planning controls">
 <div class="ctrl"><label for="activity">Activity</label><select id="activity"><option value="either">Hiking or snowshoeing</option><option value="snowshoe">Snowshoe only</option><option value="hike">Boot hiking</option></select></div>
 <div class="ctrl"><label for="region">Part of Michigan</label><select id="region"><option value="all">Entire state</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower Peninsula</option><option value="southern-lower">Southern Lower Peninsula</option></select></div>
@@ -30,18 +31,32 @@
 <section class="explore"><div class="topline"><div><p class="eyebrow">Explore the official route inventory</p><h2>Where should I investigate?</h2><p class="muted">Location points represent manager trail areas, not current winter parking. Click a trail-area marker to filter its matching routes.</p></div>
 <div class="map-actions"><button type="button" id="nearby">Use my location</button><button type="button" id="all-map">Show all Michigan</button></div></div>
 <div class="map-frame"><div id="map" role="region" aria-label="Map of official Michigan trail-area reference points"></div><div class="map-fallback" id="map-status" aria-live="polite">Preparing route map…</div></div>
+<div class="satellite-console" aria-label="Historical satellite imagery inspector">
+  <div class="satellite-head"><div><p class="eyebrow">Look back before you plan</p><h3>Historical winter from space</h3></div>
+  <label class="satellite-toggle"><input type="checkbox" id="sat-show"> Show MODIS imagery on map</label></div>
+  <div class="satellite-controls">
+    <div class="sat-ctrl"><label for="sat-mode">NASA imagery</label><select id="sat-mode"><option value="trueColor">Terra · true-color</option><option value="snowCover">Terra · snow-cover index</option></select></div>
+    <div class="sat-ctrl"><label for="sat-date">Historical image date</label><div class="sat-date-nav"><button type="button" id="sat-prev" aria-label="Previous satellite day">−1 day</button><input id="sat-date" type="date" min="2000-03-01" aria-describedby="sat-help"><button type="button" id="sat-next" aria-label="Next satellite day">+1 day</button></div></div>
+    <div class="sat-ctrl"><label for="sat-preset">Past winters</label><select id="sat-preset" aria-label="Choose a historic winter scene"><option value="">Select a past winter date</option></select></div>
+    <div class="sat-ctrl sat-opacity"><label for="sat-opacity">Image transparency: <output for="sat-opacity" id="sat-opacity-text">75%</output></label><input id="sat-opacity" type="range" min="20" max="100" step="5" value="75"></div>
+  </div>
+  <p class="satellite-status" id="sat-status" role="status" aria-live="polite">Select a dated scene to see historical regional snow cover.</p>
+  <p id="sat-help" class="satellite-caveat">NASA MODIS images are historical satellite context, not a live road camera or parking-lot inspection. Approximately 250 m browse imagery and 500 m snow classification cannot resolve most parking lots or show plowing. Clouds can hide ground; a missing tile means no conclusion. NOAA modeled depth remains separately labeled.</p>
+  <p class="satellite-credit">Imagery provided by NASA Global Imagery Browse Services (GIBS), part of NASA ESDIS. <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener noreferrer">Explore in NASA Worldview</a></p>
+</div>
 <p class="map-note">Map: CARTO when configured, otherwise OpenFreeMap. Lines are *partial official GIS segments*, not promised complete routes. Red indicates a mapped closure. Never navigate to a reference dot.</p></section>
 <section class="results" id="routes"><div class="routes"><div class="topline"><div><h2>Named trails</h2><p id="result-count" class="muted" role="status">Loading official inventory…</p></div><button id="clear" type="button" class="subtle">Clear park filter</button></div>
 <div id="cards" class="cards" aria-live="polite"></div></div>
 <aside class="detail" id="detail"><div class="detail-head"><p class="eyebrow">Select a named route</p><h2 id="detail-title">Weather and access report</h2><p id="detail-intro" class="muted">Choose a trail card to review official route description, weekend forecast, modeled snow, and unresolved safety checks.</p></div>
 <div id="detail-body"></div></aside></section>
 <section class="explain"><h2>How to read this evidence</h2>
-<div class="explain-grid"><article><h3>Snow on the landscape</h3><p>NOAA/NOHRSC provides modeled grid-cell snow depth, not a measurement on the trail. Conditions under trees, on boardwalks and in wind-exposed areas can be very different.</p></article>
+<div class="explain-grid"><article><h3>Snow on the landscape</h3><p>NOAA/NOHRSC provides modeled grid-cell snow depth, not a measurement on the trail. NASA MODIS historical images independently show regional satellite imagery, not parking-lot clearing. Conditions under trees, on boardwalks and in wind-exposed areas can be very different.</p></article>
 <article><h3>Forecast where you’ll walk</h3><p>NWS supplies daytime temperatures, wind, freeze-thaw potential, precipitation and current warnings. It cannot tell you whether a specific bridge or footpath is passable.</p></article>
-<article><h3>Know before you drive</h3><p>The land manager must confirm winter road maintenance, actual plowed trailhead parking and route status. Groomed cross-country ski tracks must not be damaged by hikers or snowshoes.</p></article></div>
+<article><h3>Know before you drive</h3><p>Satellite imagery and snow models do not establish which lot is plowed or which road is open. Show these separately as unknown unless an authoritative dated report exists. Groomed cross-country ski tracks must not be damaged by hikers or snowshoes.</p></article></div>
 </section>
 </main><footer class="foot"><div class="shell">An independent, source-attributed planning project. <a href="/chris-izworski/">Built by Chris Izworski</a> · <a href="/michigan-snow-depth/">Snow depth finder</a> · This preview is excluded from search indexing.</div></footer>
 <script defer src="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js"></script>
 <script defer src="/winter-hike-snowshoe-lab/visuals.js?v=2"></script>
-<script defer src="/winter-hike-snowshoe-lab/app.js?v=2"></script>
+<script defer src="/winter-hike-snowshoe-lab/satellite.js?v=1"></script>
+<script defer src="/winter-hike-snowshoe-lab/app.js?v=3"></script>
 </body></html>
