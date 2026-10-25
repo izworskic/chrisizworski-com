@@ -45,6 +45,10 @@ async function run(){
       check(await page.locator('#season').inputValue()==='2025-26',size.name+': evidence-rich archive is default until first active report');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk stays visible while browsing archives');
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
+      check(await page.locator('#winter-live').evaluate(e=>e.classList.contains('is-preseason')),size.name+': empty current winter is presented as preseason');
+      if(size.name==='mobile'){
+       check(await page.locator('#winter-live').evaluate(e=>e.getBoundingClientRect().height)<1150,size.name+': compact preseason does not push the useful archive too far down');
+      }
       await page.locator('#season').selectOption('2025-26');
       try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
       catch(err){
