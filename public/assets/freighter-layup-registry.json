@@ -57,6 +57,94 @@
       "lon": -83.485,
       "coordinatePrecision": "approximate_harbor_reference_not_dock",
       "note": "Toledo harbor context point only. Source does not identify an individual berth or shipyard; do not present this as an actual vessel position."
+    },
+    {
+      "id": "sarnia",
+      "name": "Sarnia, Ontario",
+      "display": "Sarnia Harbour",
+      "lake": "Lake Huron / St. Clair River",
+      "country": "CA",
+      "lat": 42.99,
+      "lon": -82.42,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Harbor-scale reference only. Sarnia Harbour identifies winter berthage as a regular activity; no individual vessel position or winter berth is implied by this pin."
+    },
+    {
+      "id": "port-colborne",
+      "name": "Port Colborne, Ontario",
+      "display": "Port Colborne / Welland Canal",
+      "lake": "Lake Erie",
+      "country": "CA",
+      "lat": 42.885,
+      "lon": -79.25,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Reference for the commercial port and canal approach, not a reported winter berth or dock entrance."
+    },
+    {
+      "id": "hamilton",
+      "name": "Hamilton, Ontario",
+      "display": "Hamilton Harbour",
+      "lake": "Lake Ontario",
+      "country": "CA",
+      "lat": 43.28,
+      "lon": -79.87,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate Hamilton harbor reference. Individual winter berths require separately sourced evidence."
+    },
+    {
+      "id": "thunder-bay",
+      "name": "Thunder Bay, Ontario",
+      "display": "Port of Thunder Bay",
+      "lake": "Lake Superior",
+      "country": "CA",
+      "lat": 48.415,
+      "lon": -89.22,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Port-scale Thunder Bay, Ontario reference. Do not confuse this harbor with Michigan’s Thunder Bay National Marine Sanctuary."
+    },
+    {
+      "id": "erie-pa",
+      "name": "Erie, Pennsylvania",
+      "display": "Port of Erie / Presque Isle Bay",
+      "lake": "Lake Erie",
+      "country": "US",
+      "lat": 42.135,
+      "lon": -80.08,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor context; shipyards and docks are not public map destinations."
+    },
+    {
+      "id": "cleveland",
+      "name": "Cleveland, Ohio",
+      "display": "Port of Cleveland",
+      "lake": "Lake Erie",
+      "country": "US",
+      "lat": 41.506,
+      "lon": -81.697,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Port-scale reference only. Winter layup cannot be inferred from a slow vessel or industrial port stop."
+    },
+    {
+      "id": "buffalo",
+      "name": "Buffalo, New York",
+      "display": "Buffalo Harbor",
+      "lake": "Lake Erie",
+      "country": "US",
+      "lat": 42.877,
+      "lon": -78.89,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate harbor context; dated vessel reports determine any winter entries."
+    },
+    {
+      "id": "escanaba",
+      "name": "Escanaba, Michigan",
+      "display": "Port of Escanaba",
+      "lake": "Lake Michigan",
+      "country": "US",
+      "lat": 45.746,
+      "lon": -87.055,
+      "coordinatePrecision": "approximate_harbor_reference_not_dock",
+      "note": "Approximate port reference; does not imply a ship is laid up here."
     }
   ],
   "seasons": [
