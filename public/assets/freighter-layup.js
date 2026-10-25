@@ -105,7 +105,7 @@
    const foot=document.createElement('div');foot.className='harbor-links';
    const src=text('a','Review original harbor sources ↗');src.href=list[0].evidence.url;src.target='_blank';src.rel='noopener';
    const publicMap=text('a','Find public waterfront locations ↗');publicMap.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('public waterfront parks '+h.name);publicMap.target='_blank';publicMap.rel='noopener';
-   const all=text('button','Show both harbors');all.type='button';all.addEventListener('click',()=>setHarbor('all',true));
+   const all=text('button','View all harbors');all.type='button';all.addEventListener('click',()=>setHarbor('all',true));
    foot.append(src,publicMap,all);box.append(foot);
  }
  function setHarbor(id,zoom){

@@ -40,8 +40,26 @@ async function run(){
       const page=await context.newPage(),pageErrors=[];
       page.on('pageerror',err=>pageErrors.push(err.message));
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
-      await page.locator('[data-ship]').first().waitFor({timeout:10000});
+      try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
+      catch(err){
+       console.error('LAYUP BOOT DEBUG',JSON.stringify({
+         errors:pageErrors,
+         countNote:await page.locator('#count-note').textContent().catch(()=>null),
+         mapStatus:await page.locator('#map-status').textContent().catch(()=>null),
+         fleetHTML:(await page.locator('#ship-grid').innerHTML().catch(()=>'' )).slice(0,430),
+         scripts:await page.evaluate(()=>[...document.scripts].filter(x=>x.src).map(x=>({src:x.src}))).catch(()=>[]),
+         season:await page.locator('#season').inputValue().catch(()=>null),
+       }));
+       throw err;
+      }
       check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
+      check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
+      check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
+      check(await page.locator('.hero-media img').evaluate(img=>img.complete && img.naturalWidth>0),size.name+': self-hosted winter freighter hero image');
+      check(await page.locator('.feature-story img').count()===3,size.name+': three licensed fleet photographs');
+      for(const img of await page.locator('.feature-story img').all()){await img.evaluate(el=>el.decode().catch(()=>{}));const state=await img.evaluate(el=>({src:el.getAttribute('src'),complete:el.complete,hidden:el.hidden,width:el.naturalWidth}));check(state.complete&&state.width>0,size.name+': local story image available: '+JSON.stringify(state));}
+
+      check(await page.locator('.atlas-workspace #layup-map').count()===1,size.name+': integrated map and harbor notebook');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
       check(await page.locator('.layup-pin').count()===5,size.name+': five historical harbor map markers');
       check(await page.locator('#stat-ships').textContent()==='12',size.name+': season stats');
@@ -92,9 +110,22 @@ async function run(){
       const bioUrl=url+'vessels/algoma-compass/';
       await page.goto(bioUrl,{waitUntil:'domcontentloaded'});
       check((await page.locator('h1').textContent()).includes('Algoma Compass'),size.name+': permanent biography loads');
+      check(await page.locator('body.layup-biography .bio-hero h1').isVisible(),size.name+': designed ship hero');
+      check(await page.locator('body.layup-biography .bio-trust-bar').isVisible(),size.name+': source-date honesty');
+      check(await page.locator('.bio-chapter').count()>=2,size.name+': editorial history chapters');
+      const overflowBio=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+      check(overflowBio<=3,size.name+': ship biography overflow '+overflowBio);
       check((await page.locator('#winter-record').textContent()).includes('Winter 2024–25'),size.name+': earlier season biography table');
       check((await page.locator('#winter-record').textContent()).includes('Winter 2025–26'),size.name+': current archive biography table');
       check(await page.locator('meta[name="description"]').count()===1,size.name+': page-specific metadata');
+      fs.mkdirSync(path.resolve(__dirname,'..','artifacts/layup-qa'),{recursive:true});
+      await page.screenshot({path:path.resolve(__dirname,'..','artifacts/layup-qa/'+size.name+'-biography.png'),fullPage:true});
+      await page.goto(url+'vessels/oakglen/',{waitUntil:'domcontentloaded'});
+      check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Oakglen historical photo');
+      await page.goto(url+'vessels/james-r-barker/',{waitUntil:'domcontentloaded'});
+      check(await page.locator('.bio-hero-media img').evaluate(i=>i.complete&&i.naturalWidth>0),size.name+': Barker historical photo');
+      await page.screenshot({path:path.resolve(__dirname,'..','artifacts/layup-qa/'+size.name+'-barker.png'),fullPage:true});
+
 
       await page.goto(url,{waitUntil:'domcontentloaded'});
       await page.locator('[data-ship]').first().waitFor({timeout:10000});
