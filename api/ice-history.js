@@ -1,3 +1,4 @@
+import { michiganIceClock } from '../lib/michigan-ice/season.mjs';
 // NOAA GLERL selected-winter archive. Separate from live /api/ice-now so
 // replay never causes additional current NOAA polygons or NWS requests.
 // Archive percentages describe WHOLE LAKES, not bays or safe ice conditions.
@@ -7,7 +8,7 @@ const GLERL = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/
 const KEYS = ['superior','michigan','huron','erie','ontario','stclair','total'];
 const MIN_YEAR = 2015;
 function latestSeasonStart(now) {
-  return now.getUTCFullYear() - (now.getUTCMonth() + 1 < 11 ? 1 : 0);
+  return michiganIceClock(now).seasonYear;
 }
 function isoDay(year, day) {
   if (!Number.isInteger(year) || !Number.isInteger(day) || day < 1 ||
@@ -59,8 +60,8 @@ export default async function handler(req) {
     });
     if(!upstream.ok) throw new Error('NOAA daily archive unavailable');
     const rows=decodeGlData(await upstream.text(),start);
-    if(!rows.length) throw new Error('NOAA daily archive contains no valid winter observations');
-    const seasonActive=start===latest && (now.getUTCMonth()+1>=11 || now.getUTCMonth()+1<=3);
+    if(!rows.length || (start===latest && rows[rows.length-1].date>michiganIceClock(now).today)) throw new Error('NOAA daily archive contains no valid winter observations');
+    const seasonActive=start===latest && michiganIceClock(now).active;
     return response({
       ok:true,source:'NOAA GLERL daily mean ice concentration',
       seasonStartYear:start,seasonLabel:start+'–'+String(start+1).slice(2),
@@ -68,7 +69,7 @@ export default async function handler(req) {
       series:rows,
       scope:'Whole-lake percentages only. No local bay coverage, ice thickness, or safe-ice assessment.',
       chartArchive:'https://www.glerl.noaa.gov/data/ice/glicd.php?year='+(start+1)
-    },200,seasonActive?'public, max-age=600, s-maxage=1800':'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
+    },200,michiganIceClock(now).rolloverWindow?'no-store':seasonActive?'public, max-age=600, s-maxage=1800':'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
   }catch{
     return response({ok:false,seasonStartYear:start,
       error:'NOAA has no usable daily record for this winter right now. Other seasons remain available.'},
