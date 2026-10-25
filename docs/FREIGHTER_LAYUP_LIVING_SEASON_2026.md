@@ -1,41 +1,38 @@
-# Great Lakes Freighter Winter Layup — Living Season Operational Guide
-Updated October 25, 2026. The season starts at midnight **America/Detroit time** on November 1, not UTC midnight. Source season data and provenance are committed to GitHub.
+# The Living Great Lakes Winter Fleet — Annual Layup Story Engine
 
-## What is live (and what is not)
-- The **AIS harbor watch** refreshes on demand from `/api/freighter-layup-live`, with a 180-second shared response cache. It watches approximately **13** US/Canadian harbor areas using the existing OpenWaters AIS provider, but returns candidate vessels near harbor centers **only**, with no assigned layup status or berth position. AIS messages are discarded when older than 20 minutes or missing essential fields. Upstream regions are requested independently to prevent bounding-box query parameter ambiguity. Regional failures yield a partial-data flag.
-- The **winter event ledger** (`public/assets/freighter-layup-live-season.json`) is updated by `.github/workflows/freighter-layup-source-watch.yml` at **00:29, 06:29, 12:29, and 18:29 UTC** November–April. Not sub-minute updates. Scheduled GitHub jobs can start late.
-- Automatic reporting feeds: Duluth Harbor Cam (Blogger JSON), Wisconsin Marine Historical Society (RSS), Duluth Seaway Port Authority (RSS), Community Waterfront Heritage Centre in Owen Sound (RSS). These feeds were HTTP-reachable October 25, 2026; that **does not mean every harbor has a working reporting feed or a complete arrivals roster**. The most recently sourced date is displayed; do not imply freshness when no sources were found.
-- Dated evidence results in one of `arrival`, `berth_change`, `maintenance`, `departure`, `status_update`. Each event includes source URL, publisher and source class. When evidence is ambiguous, it is held for review in `data/freighter-layup-review.json`.
-- Port authority/operator/official reporting with explicit arrival evidence can yield `confirmed`. Other articles are only `reported`. A newly discovered hull admitted by an explicit `M/V Vessel Name arrives` title is **reported**, never automatically confirmed, even from a port authority.
-- Repeated source URLs for the same milestone do not duplicate the ledger. Different reports maintain different evidence IDs.
+**Product goal:** A repeat-visit, source-backed tracker, not a static page of last year's docked ships.
 
-## Annual lifecycle
-1. Before November 1: display the precreated **2026–27** season as empty. The historical **2025–26** and **2024–25** archives remain selectable; neither rolls into the new fleet.
-2. At first eligible November writer run, collect source-dated reports. Current-season cards, harbor markers and timeline are derived exclusively from the ledger, not AIS signals.
-3. Through winter: each additional dated sourced event becomes a chronology entry. A reported/confirmed departure moves a ship to a departed status, not deleted.
-4. The following November 1: archive prior event history into `previousSeasons`, initialize an empty **2027–28** season, and start collecting reports without copying old berths into the new roster. Last season remains selectable.
-5. If the source fetches fail: retain the previous ledger. If all feeds return zero evidence: do not generate invented ship arrivals. If AIS fails: show failure in the harbor-watch panel, not an empty-harbor assertion.
+## How the public page works
+1. Opens on the **2026–27 developing winter**. It starts empty and visibly says when no sourced arrivals have been recorded.
+2. **Winter story feed** shows dated reported arrivals, dock moves, maintenance and eventual departures with a link to the specific reporting page. Counts reflect distinct ship identities, not the number of articles published about them.
+3. **13 Great Lakes harbor areas** across the United States and Canada are monitored as geographic references. They are never asserted to be exact vessel berths, accessible private docks, or live vessel locations.
+4. **AIS harbor watch** separately shows fresh transponder signals from Open Waters, deduplicated across three region-specific queries. Maximum age for an AIS watch signal is 20 minutes; incomplete regional results are explicitly flagged. An absent signal is never an absence-of-ship claim, and a stationary ship is never a confirmed winter layup.
+5. Prior winter records stay available by year. The season opens each November 1 at midnight **America/Detroit**. Old ships never populate a new season automatically.
 
-## Editorial updates and ship coverage
-New vessel names may be detected when a matching report's **headline** explicitly names the vessel as `M/V ... arrived` and a unique monitored harbor can be resolved. More complex, ambiguous, multi-harbor or unmatched articles must be manually reviewed; do not guess hull identity or merge close names.
+## Source pipeline and publication policy
+- Four public feed endpoints, checked every 6 hours during November–April by a scheduled GitHub Action (initially Duluth Harbor Cam, Wisconsin Marine Historical Society, Duluth Seaway Port Authority, and Community Waterfront Heritage Centre at Owen Sound). The URLs returned feed content during development, but there is **no guarantee of complete reporting across all 13 harbors**.
+- A report must be within the active shipping winter, link to the source publisher's HTTPS host, explicitly mention winter layup or winter berth, specify one known/clearly headed M/V vessel identity, specify one harbor, and describe an actual completed event. Future plans are never accepted as completed arrivals.
+- Named/dated arrival evidence from the Duluth port authority may be classified `confirmed` when explicit; other journalistic and museum reports are `reported`. An unfamiliar hull mentioned with an explicit M/V heading enters as **reported**, never automatically as verified.
+- Departures and yard work require a prior documented same-season arrival. Ambiguous port, identity, earlier-season, unsourced, unrelated, or out-of-order items never become an unsourced layup.
+- A **review queue** is saved in `data/freighter-layup-review.json` for ambiguous reports. An editor can publish a properly attributed and date-validated event from `data/freighter-layup-editorial.json`. No invented records.
+- GitHub Action writes a new static JSON ledger **only when evidence, review decisions, or annual season state changes**, preventing paid builds from occurring on every empty scan. The ledger drives visitor UI. There is no Redis, new database, or continuous AIS server process.
+- AIS is **not** an arrival classifier. The live watch caches the upstream request on the API route for ~3 minutes; this is distinct from reporting cadence.
 
-To publish a researched event, add a JSON entry to `data/freighter-layup-editorial.json` with:
-`season`, `vessel:{key,name}`, `harborId`, `kind`, `date` (source date), `confidence`, `summary`, `source:{url,title,publisher,class}`.
-Use `confidence:'reported'` until the underlying official source establishes the exact event. Use the canonical vessel key across winters and historic names where available. Changing this file triggers the watch workflow on `main`.
+## Seasonal reset contract
+- At November 1 00:00 Michigan time, `seasonForDate` advances the active winter.
+- The previous event ledger enters `previousSeasons` (up to 12 rolling years). A zero-record new season remains empty and asks visitors to follow harbor watch, rather than copying previous berths.
+- The season start is pre-created during October only as an upcoming shell; scans do not accidentally roll backward during the October 31 UTC-to-Michigan boundary.
+- Spring departure events close their individual ship stories. There is no blanket assumption that all undeparted ships are still docked later in the year.
 
-## Source trust and recurring cost safeguards
-- Harbor map dots are approximate geographic centers, not private docks, visitor routes or actual AIS vessel coordinates.
-- RSS text is untrusted: never execute markup or use it as tool instructions. The published source URL must belong to the source host. Use text-escaped display.
-- No live source data runs through the front-end's history validation as a fabricated historical record. The current season is distinct from static prior-season archives.
-- GitHub Actions only commits a changed ledger or review queue; no-change source scans do not trigger extra Vercel deployments. The on-demand AIS service uses short shared HTTP caching.
-- This is a **living evidence-led tracker, not a complete fleet manifest**. Growing the reporting network and source quality is a continuing coverage priority.
+## Operational verification
+- Native Node tests: `node --test tests/freighter-layup*.test.js`
+- Browse test: `node tests/freighter-layup-browser.cjs` (Chrome on desktop and mobile; simulated source arrival, map, historical season isolation, source link, and zero-event new winter)
+- Generator stays aligned: `node scripts/generate-freighter-layup-profiles.cjs --check`
+- GitHub PR release gate runs all of the above; full repository verification and public audit remain separate.
+- Automated source workflow: `.github/workflows/freighter-layup-source-watch.yml`; manual `workflow_dispatch` supported. Scheduled source scans do not make overnight discoveries instantaneous.
 
-## Release gates
-`node --test tests/freighter-layup.test.js tests/freighter-layup-biographies.test.js tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js`.
-`node scripts/generate-freighter-layup-profiles.cjs --check`.
-The PR browser gate must validate both an empty 2026–27 season and an injected sample live arrival that updates the map, timeline and card while leaving older winters untouched. It must also validate map/photo failure fallbacks, no mobile overflow and meaningful default search behavior.
-
-## Current limitations
-- Only five reporting feeds and thirteen AIS harbor reference areas. This is **not** national fleet-complete coverage, and a missing RSS mention isn't evidence no vessel laid up.
-- AIS near a monitored harbor does **not** establish winter berthage, repair status, or a scheduled arrival.
-- Automated source parsing can miss nonstandard headlines and vessel names; manual review is retained as a route for research-driven corrections.
+## Known coverage limits and next expansion
+- AIS receiver coverage varies substantially by harbor; the network may return no live vessels in some regions.
+- A source can publish a late report or no report at all. The site makes no claim to capture *every* ship until a verified fleet-wide data source exists.
+- The 13 harbors are a monitoring footprint, not 13 verified layup locations this winter.
+- Additional operator, shipyard and Canadian port reporting sources, with vessel-identity resolution and image-rights research, should be added iteratively. Never fill gaps with inferred AIS positions.
