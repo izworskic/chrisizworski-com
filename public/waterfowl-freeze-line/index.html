@@ -23,7 +23,9 @@
 {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Waterfowl Freeze-Line Tracker","item":"https://chrisizworski.com/waterfowl-freeze-line/"}]}
 ]}
 </script>
-<script defer src="/waterfowl-freeze-line/app.js?v=5"></script>
+<link rel="stylesheet" href="/assets/wildlife-field.css?v=1">
+<script defer src="/assets/wildlife-field-evidence.js?v=1"></script>
+<script defer src="/waterfowl-freeze-line/app.js?v=6"></script>
 </head>
 <body>
 <a class="skip" href="#explore">Skip to tracker</a>
@@ -67,6 +69,7 @@
 <article class="panel chart-panel"><div class="panel-top"><div><p class="eyebrow">Weather / NOAA NWS</p><h3>Cold exposure ahead</h3></div><span class="meta" id="forecast-date">Forecast pending</span></div><div id="temp-chart" class="chart" role="img" aria-label="72 hour temperature forecast in six-hour steps"></div><p class="explain">The dashed line is 32°F. More subfreezing forecast hours can increase freeze pressure on shallow wetlands. Water depth, currents, wind and local conditions change the outcome. There is no calibrated prediction of marsh ice here.</p></article>
 <article class="panel sightings-panel"><div class="panel-top"><div><p class="eyebrow">Observations / iNaturalist</p><h3>Recently reported ducks &amp; geese</h3></div><span class="meta">Last 14 days</span></div><p id="sighting-status" role="status" aria-live="polite">Choose a region to retrieve recent public observations.</p><div id="sightings"></div><p class="explain">One observation is one submitted record, <strong>not one bird</strong>. Sightings are incomplete, may be reported late and reflect observer effort. Coordinates are intentionally not republished.</p><a href="https://michiganbirdingreport.com/" target="_blank" rel="noopener" class="text-link">Explore Michigan Birding Report's eBird observations ↗</a></article>
 </div>
+<article class="panel" id="public-viewing"><p class="eyebrow">Field trip / documented public approaches</p><h3>Where can I actually watch from?</h3><p class="explain">These are land-manager-described visitor areas, not bird locations. Check current public access, hunting-unit rules, closures and ice conditions with the operator. Recent wildlife reports elsewhere in the region do not confirm birds at any listed place.</p><div class="wildlife-place-grid" id="public-viewing-places" aria-live="polite"><p>Choose a region for checked public approaches.</p></div><p class="wildlife-source-note">Operator access confidence is separate from animal presence. No public access lead verified for a region means <strong>no recommendation</strong>, not a missing bird count.</p></article>
 <article class="panel habitat-panel" aria-labelledby="habitat-title">
 <div class="panel-top"><div><p class="eyebrow">03 / Habitat shift • conditions, not tracked birds</p>
 <h3 id="habitat-title">When the marsh freezes, watch the big water</h3></div><span class="tag" id="habitat-status">Awaiting regional evidence</span></div>
