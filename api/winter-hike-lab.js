@@ -15,7 +15,7 @@ function compactRoute(r) {
   routeForm:r.routeForm,miles:r.lengthMiles,mileageStatus:r.lengthEvidence,
   activities:r.supportedActivity,winterUse:r.winterUse,
   point:{lat:r.referencePoint.lat,lon:r.referencePoint.lon,
-   meaning:'DNR reference area only, not a confirmed trailhead/parking location'},
+   meaning:r.referencePoint.meaning},
   officialUrl:r.officialPage,mapUrl:r.officialMap,caveats:r.caveats,
   summary:r.editorialSummary,sourceDnrTrailId:r.sourceDnrTrailId,
   geometryStatus:r.sourceDnrTrailId?'direct DNR source ID, extent unverified':'no route-specific GIS match',
