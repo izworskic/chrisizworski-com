@@ -24,6 +24,11 @@
 .hero-credit{max-width:760px;margin:12px 0 0;color:#d5e6ec;font-size:.72rem;line-height:1.4;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 .hero-credit a{text-decoration:underline;text-underline-offset:2px}
 
+.hero .hero-chooser{margin:15px 0 0;padding:15px 19px 13px;background:#fff;color:var(--ink);box-shadow:0 7px 22px rgba(2,24,37,.2)}
+.hero .hero-chooser h2{margin:0 0 10px;font-size:1.46rem}
+.hero .hero-chooser .aux{margin-top:6px;font-size:.78rem}
+.hero .hero-chooser .status{padding:6px 0 0;min-height:0}
+
 .main{padding:13px 0 48px}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:23px;margin-bottom:18px;box-shadow:0 1px 7px #0b33400b}
 .panel h2{font:normal 1.65rem/1.25 Georgia,serif;color:#164a5e;margin:0 0 12px}.control{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:14px;align-items:end}
 label{font-weight:700;font-size:.8rem;display:block;margin-bottom:7px}select,button{font:inherit;border-radius:7px;min-height:45px}select{padding:9px 12px;border:1px solid #aabdc7;background:#fff;width:100%}
@@ -98,26 +103,27 @@ small,.small{color:var(--muted);font-size:.81rem}.alert{border-left:4px solid #a
 @media(max-width:760px){.radar-explorer{padding:12px}.radar-frame{height:320px;max-height:53vh}.radar-toolbar{gap:6px}.radar-toolbar button{padding:8px 10px;font-size:.8rem}}
 
 footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.85rem}
-@media(max-width:760px){.control,.two,.three,.guide{grid-template-columns:1fr}.panel{padding:15px}.hero{padding:19px 0 16px;background-image:linear-gradient(90deg,rgba(5,26,41,.94),rgba(5,26,41,.67)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg');background-position:62% 42%}.hero h1{font-size:clamp(1.83rem,7.5vw,2.25rem);margin:5px 0}.hero-deck{font-size:.92rem;line-height:1.42}.hero-credit{margin-top:9px;font-size:.68rem}.head .shell{display:block}.head nav{margin-top:3px;gap:12px}.main{padding-top:9px}}
+@media(max-width:760px){.control,.two,.three,.guide{grid-template-columns:1fr}.panel{padding:15px}.hero{padding:16px 0 17px;background-image:linear-gradient(90deg,rgba(5,26,41,.94),rgba(5,26,41,.67)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg');background-position:62% 42%}.hero h1{font-size:clamp(1.83rem,7.5vw,2.25rem);margin:5px 0}.hero-deck{font-size:.92rem;line-height:1.42}.hero-credit{margin-top:9px;font-size:.68rem}.hero .hero-chooser{margin-top:11px;padding:12px 13px}.hero .hero-chooser h2{font-size:1.35rem;margin-bottom:7px}.hero .hero-chooser label{margin-bottom:4px}.hero .hero-chooser .aux{margin-top:5px}.head .shell{display:block}.head nav{margin-top:3px;gap:12px}.main{padding-top:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header class="head"><div class="shell"><a href="https://chrisizworski.com/">Chris Izworski</a><nav aria-label="Site"><a href="https://chrisizworski.com/tools/">All tools</a><a href="https://chrisizworski.com/michigan-snow-depth/">Snow on the ground</a><a href="https://chrisizworski.com/national-tools/snow/">National snow tracker</a></nav></div></header>
+<main id="lake-effect-main">
 <section class="hero" aria-labelledby="lake-effect-title"><div class="shell">
 <div class="kicker">Great Lakes · live snowbelt outlook</div>
 <h1 id="lake-effect-title">Lake-effect snow: which snowbelt is favored?</h1>
 <p class="hero-deck">Choose a snowbelt. Explore NWS snow forecasts and warnings, NOAA radar, and what the winds are doing over the next 72 hours.</p>
 <p class="hero-credit">Historic lake-effect snow wall approaching Buffalo, November 2014 · Photo: Shawn Smith / NOAA Weather in Focus.
 <a href="https://commons.wikimedia.org/wiki/File:Snowfall_descending_on_the_Buffalo_Southtowns_(27940598775).jpg" target="_blank" rel="noopener">Photo &amp; CC BY 2.0 credit</a>. Not a current radar or satellite image.</p>
-</div></section>
-<main class="main shell">
-<section class="panel" aria-labelledby="choose-title">
+<div class="panel hero-chooser" aria-labelledby="choose-title">
 <h2 id="choose-title">Find your snowbelt</h2>
 <div class="control"><div><label for="state">State</label><select id="state"><option value="MI">Michigan</option><option value="WI">Wisconsin</option><option value="OH">Ohio</option><option value="PA">Pennsylvania</option><option value="NY">New York</option></select></div><div><label for="region">Snowbelt area</label><select id="region" aria-label="Select snowbelt region"></select></div><div><button type="button" id="check">Check conditions</button></div></div>
 <p class="aux"><button class="secondary" id="locate" type="button">Use my location to choose a nearby region</button></p><p class="aux">Location stays in your browser. The tool requests only the selected region from the server. These are representative snowbelt checkpoints, not exact snowfall footprints.</p>
 <div class="status" aria-live="polite" id="status">Choose a region to load current NWS evidence.</div>
-</section>
+</div>
+</div></section>
+<div class="main shell">
 <div class="dashboard" id="dashboard" hidden>
 <section class="panel verdict"><span class="kicker" style="color:#4e7180">Snowbelt decision</span><h2 id="headline"></h2><p id="impact" class="signal"></p><p><strong>When to watch:</strong> <span id="timing-window">Not yet verified</span></p><div class="three"><div class="stat"><span>Evidence confidence</span><strong id="confidence"></strong><span>Not a snow probability</span></div><div class="stat"><span>First 12 hours</span><strong id="matched"></strong><span>Hours with snow forecast + wind alignment</span></div><div class="stat"><span>Official winter alerts</span><strong id="alert-count"></strong><span id="alert-status"></span></div></div><p id="method" class="small"></p></section>
 <section class="panel"><h2>Hourly conditions: next 72 hours</h2><p>Scroll across the forecast. Each column is an NWS hourly point forecast for the selected representative town, not a predicted snowband position.</p><div class="legend"><span style="background:#d9edf2">Snow forecast + favorable surface wind</span><span style="background:#e8eefb">Snow forecast, uncertain wind alignment</span><span style="background:#f4e8d0">Wind aligned, snow not forecast</span></div><div class="le-story" id="forecast-explainer" aria-labelledby="story-heading">
@@ -186,7 +192,7 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 <div><h3>Wind is a clue, not a forecast</h3><p>Air traveling over comparatively warm open water can collect heat and moisture. Regional wind direction influences which shore is exposed. Shifts, vertical wind shear and local terrain determine where individual bands actually organize.</p><h3>Lake temperature is background context</h3><p>NOAA GLSEA reports a daily satellite-derived lakewide surface average. The separate NOAA GFS model now supplies offshore 850-mb air temperature, so the engine can show a qualified lake-to-air contrast and 925–850-mb directional turning. These are screening clues—not observed inversions, a full sounding, or a snowband track. A warmer lake alone does not guarantee snow.</p></div>
 <div><h3>Confidence is about evidence agreement</h3><p>High, medium and low describe how complete and consistent official snow forecasts, surface wind alignment, alerts and fresh lake data are. These labels are not calibrated odds of snow or band-placement skill.</p><h3>When data disappear</h3><p>If NOAA or NWS is unavailable, the engine marks missing evidence. It will not quietly replace live observations with last year's typical snowbelt patterns or invent accumulation totals.</p></div>
 </div></section>
-</main>
+</div></main>
 <footer><div class="shell">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · NOAA/NWS data are government sources; interpretation is independent and does not replace official alerts or local road authorities.</div></footer>
 <script src="https://national-snowpack-melt.vercel.app/assets/lake-effect.js?v=20261025-1" defer></script>
 <script src="https://national-snowpack-melt.vercel.app/assets/lake-effect-explainer.js?v=20261024-1" defer></script>
