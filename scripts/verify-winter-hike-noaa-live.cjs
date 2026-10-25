@@ -35,6 +35,25 @@ async function main(){
    route:loc.id,status:discovered.status,
    candidates:discovered.candidates.map(x=>({id:x.id,name:x.name,miles:x.miles,coverage:x.coverage}))
   }));
+  if(['bay-tobico-marsh','sleepbear-alligator-easy'].includes(loc.id)){
+   for(const c of discovered.candidates.slice(0,3)){
+    for(const year of [2025]){
+     const url=H.stationRequestUrl(c.id,year,'02-15');
+     try{
+      const rr=await fetch(url,{signal:AbortSignal.timeout(12000)});
+      const raw=await rr.text();let data;try{data=JSON.parse(raw)}catch{}
+      const rows=Array.isArray(data)?data:null;
+      console.log('NOAA SAMPLE DIAGNOSTIC '+JSON.stringify({
+       route:loc.id,station:c.id,http:rr.status,bytes:raw.length,
+       records:rows?.length||0,first:rows?.[0]||null,
+       accepted:rows?.filter(x=>H.normalizeObservation(x,year,'02-15',point)).length||0,
+       error:!rr.ok?raw.slice(0,180):null
+      }));
+     }catch(e){console.log('NOAA SAMPLE DIAGNOSTIC '+JSON.stringify({
+      route:loc.id,station:c.id,error:String(e.message||e)}));}
+    }
+   }
+  }
   const r=await runAPI(loc.id),p=r.payload||{};
   const yrs=Array.isArray(p.winterYears)?p.winterYears:[];
   const valid=p.station&&p.station.id&&p.kind==='NOAA_NCEI_GHCN_DAILY_FULL_WINTER_STATION_SNOW_DEPTH';
