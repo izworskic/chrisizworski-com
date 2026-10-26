@@ -80,3 +80,32 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.doesNotMatch(html, /destination-art art-/);
   assert.doesNotMatch(html, /michigan-paddling\/hero\.jpg/);
 });
+
+test('photographs have distinct source-licensed scenes and quiet credits', () => {
+  const figs = [...html.matchAll(/<figure class="destination-photo (?:card|hero-photo)"[\s\S]*?<\/figure>/g)];
+  const cards = [...html.matchAll(/<figure class="destination-photo card"[\s\S]*?<\/figure>/g)];
+  assert.equal(figs.length, 23);
+  assert.equal(cards.length, 20);
+  for (const item of figs) {
+    const body = item[0];
+    assert.match(body, /alt="[^"]{12,}"/);
+    assert.match(body, /<figcaption class="photo-credit">Photo:/);
+    assert.match(body, /https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+    assert.match(body, /https:\/\/creativecommons\.org\//);
+    assert.doesNotMatch(body, /reference photograph/);
+  }
+  const urls = cards.map(item => item[0].match(/<img src="([^"]+)"/)?.[1]);
+  assert.equal(new Set(urls).size, 20);
+  assert.ok(urls.every(url => url?.startsWith('https://')));
+  for (const token of [
+    'Calm_summer_day_at_Miners_Castle', 'Isle_Royale_Todd_Harbor_sunset',
+    'Ice_caves_spears', 'Michigan%27s_Torch_Lake_Swimming',
+    'Arch_Rock%2C_Mackinac_Island', 'Au_Sable_River.jpg',
+    'Old_Mission_Peninsula.jpg', 'Nordhouse_Dunes_Wilderness_Area_shoreline',
+    'Manistee_River_in_Autumn_2012'
+  ]) assert.ok(html.includes(token), 'Missing curated photo ' + token);
+  assert.match(html, /fetchpriority="high"/);
+  assert.match(css, /Editorial photo direction/);
+  assert.match(css, /object-position:var\(--photo-position/);
+  assert.match(css, /figcaption\.photo-credit/);
+});

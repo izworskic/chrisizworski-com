@@ -1,3 +1,15 @@
+## Michigan Adventure Finder — photographic curation release (October 26, 2026)
+
+- **Owner request:** Independently find, vet, place, and publish stronger destination photographs; handle all code, credits, cropping and deployment without requiring manual user action.
+- **Scope:** Only the Michigan Adventure Finder HTML and scoped CSS, its focused Node tests, and this growth log. No other tools, ads, advertising configuration, homepage, identity pages, or CARTO endpoints modified.
+- **Curated replacements (9 destination cards):** Pictured Rocks Miners Castle (NPS public domain), Isle Royale Todd Harbor sunset (Todd VerBeek CC BY-SA 4.0), Eben Ice Caves ice formations (ThePenultimateOne CC BY-SA 4.0), Torch Lake clear-water swimming (H. G. Judd CC BY-SA 3.0), Mackinac Arch Rock (rboed CC BY 2.0), Au Sable River Highbanks bend (RomanKahler CC BY-SA 4.0), Old Mission Peninsula vineyards and bay (stanthejeep CC BY-SA 2.5), Nordhouse Dunes shoreline (Huron-Manistee National Forests public domain), and Manistee River in autumn (papadakp CC BY-SA 3.0). These were verified against Commons file metadata and visually spot-checked when possible. Rejected the 2006 Torch Lake sky-dominated image as weaker; existing nine other location-specific images intentionally retained.
+- **Hero:** Main Pictured Rocks view now shows true blue Superior water and Miners Castle; supporting Torch Lake scene conveys clear shallow water, and Lake of the Clouds retains its contrasting ridge view. First hero image preloaded by browser priority, all destination photos lazy-loaded.
+- **Editorial polish:** All 23 images have understated but visibly accessible linked source/photographer and license credits. Per-image responsive CSS crop focal positions avoid generic center-crop accidents. Distinct captions are maintained; source metadata is static HTML.
+- **Hard truth:** These are historical illustrative photographs, not evidence of *today's* weather, crowding, closures or safe access. Image content is linked to public Commons CDN; no image bytes were copied to the site repository. Site-specific rendering and 390px mobile verification are required after merge.
+- **SEO and ads:** Existing canonical, Person schema, site navigation, tool registries, metadata, and AdSense were not changed. No search/GSC/advertising uplift is claimed without later dated data.
+- **Quality verification:** Dedicated test covers all 20 unique images, proper citation links and titles, new curated selections, CSS crop rules, and hero priority. Pull-request CI, preview and production checks still required.
+- **Exactly one next action:** Validate full PR CI, then merge only with green checks and inspect live desktop/mobile photo rendering and map status.
+
 ## Michigan Adventure Finder post-deploy visual fixes — October 26, 2026
 
 - **Review evidence:** Public 1366×900 browser screenshot showed the photographic intro but a large ad-created visual gap before the finder, leaving no controls in the first viewport. The map screenshot showed the static loading placeholder while `window.load` was still pending for resources.
