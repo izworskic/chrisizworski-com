@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-26",
+  "updated": "2026-10-26T17:26:49.617Z",
+  "briefings": {
+    "new-england": "Season is fading with timing index at 65; mostly sunny conditions favor weekend viewing despite being past peak.",
+    "great-smoky-mountains": "Currently at peak timing with index of 100; mostly cloudy skies and 39% rain chance present moderate viewing conditions.",
+    "colorado-aspens": "Aspen season nearly complete at index 5; chance snow showers expected with 50% precipitation likelihood this weekend.",
+    "adirondacks": "Well past peak at index 35; mostly sunny weekend weather offers clear views despite advanced season timing.",
+    "north-shore-superior": "Season well past at index 25; live weather data unavailable for this region.",
+    "ozarks": "Peak timing at index 100; chance rain showers with 45% precipitation expected this weekend.",
+    "eastern-sierra": "Season well past at index 35; chance snow showers and 52% rain chance likely this weekend.",
+    "wasatch": "Season well past at index 30; rain and snow likely with 68% precipitation chance this weekend.",
+    "columbia-river-gorge": "At peak timing with index 100; mostly sunny conditions and low 12% rain chance favor excellent weekend viewing.",
+    "door-county": "Peak timing at index 100; chance rain showers with 35% precipitation expected this weekend.",
+    "poconos": "At peak timing with index 100; mostly sunny skies and minimal 6% rain chance ideal for weekend travel.",
+    "texas-hill-country": "Approaching peak at index 75; chance showers and thunderstorms with 43% precipitation expected this weekend.",
+    "west-virginia-highlands": "Past peak at index 80; mostly cloudy with low 10% rain chance provides conditional weekend viewing.",
+    "catskills": "Nearly at peak at index 90; mostly sunny conditions and minimal 9% rain chance favor weekend exploration.",
+    "shenandoah": "At peak timing with index 100; partly sunny skies and low 12% rain chance support promising weekend conditions."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
