@@ -11,7 +11,7 @@ test("Michigan Tools has one canonical, actionable radar-rich lake-effect listin
  const items=graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/#toollist").itemListElement;
  assert.equal(items.filter(x=>x.item?.url===url).length,1);
  assert.match(items.find(x=>x.item?.url===url).item.description,/live NWS radar playback/);
- assert.equal(graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/").dateModified,"2026-10-24");
+ assert.equal(graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/").dateModified,"2026-10-25");
 });
 test("U.S. Outdoor Tools contains a discoverable Northeast Great Lakes radar card and ItemList",()=>{
  const {html,graph}=parse("public/synced-national-tools/index.html");
@@ -40,8 +40,8 @@ test("Northeast Great Lakes desk links the live tool, without duplicate schema e
 });
 test("Sitemap freshness and canonical lake-effect URL stay unchanged",()=>{
  const map=read("public/sitemap.xml"),shell=read("public/lake-effect-snow/index.html");
- for(const section of ["/tools/","/national-tools/"]){
-  assert.match(map,new RegExp("https://chrisizworski.com"+section.replace(/\//g,"\\/")+"<\\/loc>\\s*<lastmod>2026-10-24<\\/lastmod>"));
+ for(const [section, date] of [["/tools/","2026-10-25"],["/national-tools/","2026-10-24"]]){
+  assert.match(map,new RegExp("https://chrisizworski.com"+section.replace(/\//g,"\\/")+"<\\/loc>\\s*<lastmod>"+date+"<\\/lastmod>"));
  }
  assert.match(shell,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/"/);
 });
