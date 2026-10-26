@@ -518,48 +518,48 @@
       "lng": -88.474395,
       "level": "moderate",
       "minutes": "45–90 min",
-      "walk": "Signed North Country Trail route along the Sturgeon River; updated maps required.",
+      "walk": "Roughly 500-foot rocky spur from roadside park to the North Country Trail, then follow the signed trail roughly another half mile to the stone barrier overlook. Includes footbridge, boardwalk sections, roots and uneven gorge terrain.",
       "best": "Late spring and fall.",
-      "access": "Natural roots and rocky ledges beside the Sturgeon River; do not assume edge access or winter upkeep.",
+      "access": "North Country Trail chapter documents an established public visitor trail on Michigan Tech property from the MDOT Canyon Falls Roadside Park trailhead. Follow marked route and stay behind cliff-view barriers.",
       "status": "verify",
       "note": "Local published coordinates are for the waterfall; use the roadside park as your start.",
-      "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "Roadside trail",
-      "parking": "MDOT Canyon Falls Roadside Park west side US-41 one mile south of Alberta; check seasonal opening.",
+      "parking": "Canyon Falls MDOT Roadside Park off US-41 near Alberta; seasonal daylight parking, no overnight parking. Lot gate typically closes late October and reopens toward late April.",
       "feature": "The Sturgeon River funnels into bedrock channels and a dark gorge.",
-      "further": "Keep well back from unsupported rock lips and river edges.",
-      "manager": "MDOT · Canyon Falls Roadside Park; North Country Trail corridor, underlying ownership unresolved",
-      "decision": "Research page only: waterfall-edge land jurisdiction still unconfirmed.",
-      "publication": "research-only-guide",
-      "accessConfidence": "incomplete-jurisdiction-or-crossing",
+      "further": "NCTA March 2024 guide reports a seasonal closed gate at the MDOT park, limited plowed space near gate, no overnight parking, and potential ticketing on US-41 shoulders. Conditions can change, especially in winter; verify current signage.",
+      "manager": "Michigan Technological University (landowner); North Country Trail Peter Wolfe Chapter (trail maintenance); MDOT (US-41 parking)",
+      "decision": "An accessible public hike with a real trail, not a riverbank roadside pullout. Stop at the stone-barrier overlook and do not descend unsupported gorge edges.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "documented-public-trail-not-live-status",
       "sourceReviewed": "2026-10-26",
       "gisObjectId": 53,
       "verification": {
         "landManager": {
-          "verified": false,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "MDOT · Canyon Falls Roadside Park; North Country Trail corridor, underlying ownership unresolved"
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "North Country Trail Chapter Seg. 58 specifies Michigan Tech trail land and Peter Wolfe Chapter maintenance."
         },
         "publicAccess": {
           "verified": true,
-          "source": "https://northcountrytrail.org/events/locations/canyon-falls-roadside-park/",
-          "description": "Research page only: waterfall-edge land jurisdiction still unconfirmed."
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "Published signed NCT Segment 58 route from MDOT Canyon Falls Roadside Park to a maintained public viewing barrier."
         },
         "parking": {
           "verified": true,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "MDOT Canyon Falls Roadside Park west side US-41 one mile south of Alberta; check seasonal opening."
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "MDOT roadside lot identified with seasonal daylight parking, no overnight parking and winter locked gate."
         },
         "trail": {
           "verified": true,
-          "source": "https://northcountrytrail.org/events/locations/canyon-falls-roadside-park/",
-          "description": "Signed North Country Trail route along the Sturgeon River; updated maps required."
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "500-foot rocky trail spur, boardwalk, Bocco Creek footbridge and signed NCT route to Canyon Falls stone-barrier overlook."
         },
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-          "description": "Michigan GIS waterfall feature ID 53; this is not parking"
+          "description": "Michigan geographic state waterfall feature 53, not a road destination."
         }
       }
     },
