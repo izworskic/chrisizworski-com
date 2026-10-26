@@ -1476,6 +1476,165 @@
           "description": "Alger County Chamber publishes approximate geographic waterfall coordinates 46.5087, -86.5233; not a parking point"
         }
       }
+    },
+    {
+      "id": "eagle-river-falls",
+      "name": "Eagle River Falls",
+      "gisObjectId": 142,
+      "lat": 47.412144,
+      "lng": -88.29635,
+      "place": "Eagle River, Keweenaw County",
+      "level": "easy",
+      "minutes": "15–40 min",
+      "status": "restricted",
+      "kind": "MDOT roadside park",
+      "manager": "MDOT · Eagle River Bridge Park; Houghton Township publishes local bridge guidance",
+      "parking": "MDOT-owned Eagle River Bridge Park public parking beside M-26 and Houghton Township Hall. Park in the designated lot, never in traffic lanes.",
+      "walk": "Follow the park's existing viewing path to see the Eagle River falls and old dam. Houghton Township lists a separate historic pedestrian bridge with picnic tables as currently closed. Do not enter that bridge.",
+      "access": "The county recreation plan identifies MDOT-owned Eagle River Bridge Park as a public waterfall viewpoint, while Houghton Township separately identifies a closed pedestrian bridge.",
+      "best": "Spring runoff or after rain; water and mist vary during dry weeks.",
+      "feature": "A Keweenaw waterfall and historic industrial dam beside the M-26 bridge with a short public viewing path.",
+      "decision": "Choose this stop for the signed park's waterfall view; do not confuse the public park path with the historic pedestrian bridge currently listed closed.",
+      "note": "A dam changes the height and appearance of the river drop; the entire height is not one uninterrupted natural fall.",
+      "region": "Western U.P.",
+      "source": "https://www.houghtontwp.org/attractions",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-access-current-site-condition-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "MDOT · Eagle River Bridge Park; Houghton Township publishes local bridge guidance"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.houghtontwp.org/attractions",
+          "description": "The county recreation plan identifies MDOT-owned Eagle River Bridge Park as a public waterfall viewpoint, while Houghton Township separately identifies a closed pedestrian bridge."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "MDOT-owned Eagle River Bridge Park public parking beside M-26 and Houghton Township Hall. Park in the designated lot, never in traffic lanes."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.houghtontwp.org/attractions",
+          "description": "Follow the park's existing viewing path to see the Eagle River falls and old dam. Houghton Township lists a separate historic pedestrian bridge with picnic tables as currently closed. Do not enter that bridge."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS feature 142, waterfall location not a parking entrance"
+        }
+      }
+    },
+    {
+      "id": "haven-falls",
+      "name": "Haven Falls",
+      "gisObjectId": 138,
+      "lat": 47.382887,
+      "lng": -88.025673,
+      "place": "Lac La Belle, Keweenaw County",
+      "level": "roadside",
+      "minutes": "15–45 min",
+      "status": "verify",
+      "kind": "County roadside park",
+      "manager": "Keweenaw County Road Commission · Haven Falls Park",
+      "parking": "Haven Falls Park on Gay-Lac La Belle Road; from US-41 drive approximately 4.5 miles to the fork, bear right, then another half mile to the park.",
+      "walk": "Park in Haven Falls Park and take the short in-park walk to the cascade at the back of the grounds. The waterfall may also be viewed from within a vehicle when foliage and flow permit.",
+      "access": "The county recreation plan identifies the road-commission-owned public park, and the Road Commission lists it among maintained roadside parks.",
+      "best": "Spring runoff and autumn color; low water can mean a delicate trickle.",
+      "feature": "An easy waterfall-and-picnic stop inside a public roadside park beside Lac La Belle.",
+      "decision": "Choose Haven Falls for a simple family picnic and an easy short walk rather than an undeveloped gorge scramble.",
+      "note": "Restrooms and winter vehicle access are seasonal; do not assume the park is plowed or facilities are open.",
+      "region": "Western U.P.",
+      "source": "https://keweenawcountyonline.com/commissions-roads.php",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-access-current-site-condition-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "Keweenaw County Road Commission · Haven Falls Park"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawcountyonline.com/commissions-roads.php",
+          "description": "The county recreation plan identifies the road-commission-owned public park, and the Road Commission lists it among maintained roadside parks."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "Haven Falls Park on Gay-Lac La Belle Road; from US-41 drive approximately 4.5 miles to the fork, bear right, then another half mile to the park."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "Park in Haven Falls Park and take the short in-park walk to the cascade at the back of the grounds. The waterfall may also be viewed from within a vehicle when foliage and flow permit."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS feature 138, waterfall location not a parking entrance"
+        }
+      }
+    },
+    {
+      "id": "silver-river-falls-keweenaw",
+      "name": "Silver River Falls (Keweenaw)",
+      "gisObjectId": 146,
+      "lat": 47.46332,
+      "lng": -88.072915,
+      "place": "M-26 east of Eagle Harbor, Keweenaw County",
+      "level": "steps",
+      "minutes": "20–50 min",
+      "status": "verify",
+      "kind": "Nature preserve",
+      "manager": "Michigan Nature Association · Mariner's Preserve at Silver River Falls; MDOT maintains M-26 bridge",
+      "parking": "Roadside parking near the M-26 Silver River bridge. The MNA sanctuary listing confirms roadside parking, but the precise legal approach and walking-side pullout must be checked on arrival.",
+      "walk": "The MNA preserve provides a short riverside trail toward the ledges downstream from the M-26 bridge. Some published approaches require crossing M-26; no protected crossing has been independently verified. Cross only when lawful and safe or skip the stop.",
+      "access": "MNA expressly preserved this property for continued public waterfall visits and identifies a public trail with roadside parking.",
+      "best": "Spring snowmelt or after rain to see water gliding across conglomerate and basalt ledges.",
+      "feature": "Short natural-area waterfall views across two different rock types, on land expressly conserved for public access.",
+      "decision": "Choose this for Keweenaw geology; do not visit if a safe lawful route from a parking area to the trail is unavailable.",
+      "note": "The historic M-26 bridge was replaced in 2023. Older online instructions depicting the old span or detour are outdated.",
+      "region": "Western U.P.",
+      "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-access-current-site-condition-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "Michigan Nature Association · Mariner's Preserve at Silver River Falls; MDOT maintains M-26 bridge"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "MNA expressly preserved this property for continued public waterfall visits and identifies a public trail with roadside parking."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigannature.org/map.html",
+          "description": "Roadside parking near the M-26 Silver River bridge. The MNA sanctuary listing confirms roadside parking, but the precise legal approach and walking-side pullout must be checked on arrival."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "The MNA preserve provides a short riverside trail toward the ledges downstream from the M-26 bridge. Some published approaches require crossing M-26; no protected crossing has been independently verified. Cross only when lawful and safe or skip the stop."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS feature 146, waterfall location not a parking entrance"
+        }
+      }
     }
   ]
 }
