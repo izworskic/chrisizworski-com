@@ -20,7 +20,7 @@ try{
   await run('mobile hub contains 20 human-readable destinations',async()=>{
     assert.equal(await page.locator('[data-fall]').count(),20);
     assert.equal(await page.locator('h1').count(),1);
-    assert.ok((await page.locator('body').innerText()).includes('Public'));
+    assert.ok(await page.locator('#geo-research-panel').count()===1);
   });
   await run('mobile map initializes from local Leaflet JS and CARTO tiles',async()=>{
     await page.waitForFunction(()=>!!window.UPWaterfallMap,{timeout:15000});
