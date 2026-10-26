@@ -651,7 +651,7 @@ if (!toolsHtml.includes("Built by Chris Izworski")) failures.push("The new Tools
 const toolsJsonLdMatch = toolsHtml.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
 const toolsJsonLd = toolsJsonLdMatch ? JSON.parse(toolsJsonLdMatch[1]) : null;
 const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] === "ItemList");
-const visibleToolUrls = [...toolsHtml.matchAll(/<div class="tool-card"[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
+const visibleToolUrls = [...toolsHtml.matchAll(/<(?:div class="tool-card"|aside class="adventure-discovery tool-card")[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
 if (visibleToolUrls.length < 43 || toolsItemList?.numberOfItems !== visibleToolUrls.length || JSON.stringify(toolsItemList?.itemListElement?.map(entry => entry.item.url)) !== JSON.stringify(visibleToolUrls)) {
   failures.push("Tools ItemList must preserve the catalog and match every visible card in order");
 }

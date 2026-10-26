@@ -1,0 +1,1075 @@
+{
+  "reviewed": "2026-10-26",
+  "purpose": "Curated planning destinations; not live access or real-time water flow",
+  "waterfalls": [
+    {
+      "id": "tahquamenon",
+      "name": "Tahquamenon Falls",
+      "region": "Eastern U.P.",
+      "place": "Paradise / Newberry",
+      "lat": 46.582417,
+      "lng": -85.25455,
+      "level": "easy",
+      "minutes": "30–120 min",
+      "walk": "Paved approaches, overlooks and stairs; choose route to suit mobility.",
+      "best": "All four seasons; spring runoff and autumn color are especially distinctive.",
+      "access": "Upper Falls has an accessible boardwalk; lower falls are a separate park stop. Winter conditions can change walking access.",
+      "status": "verify",
+      "note": "Upper and Lower Falls are distinct viewing areas; this pin represents the Upper Falls day-use area, not both falls.",
+      "source": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "locationSource": "https://www.dnr.state.mi.us/PUBLICATIONS/PDFS/RecreationCamping/upper_falls_day_use.pdf",
+      "kind": "State park",
+      "link": "/tahquamenon-falls/",
+      "path": "",
+      "parking": "24019 Upper Falls Drive, Newberry, MI",
+      "feature": "A landmark river-wide curtain with approachable overlooks and a separate Lower Falls experience.",
+      "further": "Do not treat one stop or one trail as covering both waterfalls."
+    },
+    {
+      "id": "bond-falls",
+      "name": "Bond Falls",
+      "region": "Western U.P.",
+      "place": "Paulding / Ontonagon County",
+      "lat": 46.40992,
+      "lng": -89.132584,
+      "level": "easy",
+      "minutes": "25–60 min",
+      "walk": "Boardwalk route with six viewing positions; winter trail is not groomed or monitored.",
+      "best": "Spring runoff, green summer forest and October foliage.",
+      "access": "Vehicle access is typically mid-May through mid-October; trail access may remain possible outside those dates but is not groomed or monitored for ice.",
+      "status": "seasonal",
+      "note": "The DNR’s official point is the scenic site; use its parking guidance, not the pin alone.",
+      "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State scenic site",
+      "parking": "Roadside parking at Bond Falls Scenic Site, near Paulding; vehicle access usually mid-May–mid-October.",
+      "feature": "A wide fan of cascades breaks over fractured rock, visible from several boardwalk overlooks.",
+      "further": "The accessible summer boardwalk should not be assumed snow-cleared in winter.",
+      "manager": "Michigan DNR · Bond Falls Scenic Site",
+      "decision": "Boardwalk lets visitors compare six cascading perspectives; do not treat seasonal vehicle access as year-round.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 27,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+          "description": "Michigan DNR · Bond Falls Scenic Site"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+          "description": "Official publicly described visitor approach: Roadside parking at Bond Falls Scenic Site, near Paulding; vehicle access usually mid-May–mid-October."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+          "description": "Roadside parking at Bond Falls Scenic Site, near Paulding; vehicle access usually mid-May–mid-October."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+          "description": "Boardwalk route with six viewing positions; winter trail is not groomed or monitored."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 27; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "agate-falls",
+      "name": "Agate Falls",
+      "region": "Western U.P.",
+      "place": "Trout Creek",
+      "lat": 46.480924,
+      "lng": -89.090229,
+      "level": "easy",
+      "minutes": "25–50 min",
+      "walk": "Approximately half-mile route via pedestrian underpass to observation platform; trestle/ORV and snowmobile routes remain detoured.",
+      "best": "Spring volume and golden forest in fall.",
+      "access": "DNR reopened the scenic site in September 2026. The railroad trestle and some ORV/snowmobile routes remain closed or detoured.",
+      "status": "restricted",
+      "note": "A scenic-site reopening does not reopen the trestle bridge.",
+      "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State scenic site",
+      "parking": "Park at MDOT rest area beside M-28 near Trout Creek, normally early May–late October.",
+      "feature": "Terraced sandstone channels the Ontonagon River into braided cascades beneath a tall trestle.",
+      "further": "Follow the DNR closure notice before assuming any bridge or motorized trail is open.",
+      "manager": "Michigan DNR · Agate Falls Scenic Site and MDOT M-28 rest area",
+      "decision": "Falls viewpoint reopened in September 2026, but railroad trestle and ORV routes are not open.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 33,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+          "description": "Michigan DNR · Agate Falls Scenic Site and MDOT M-28 rest area"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+          "description": "Official publicly described visitor approach: Park at MDOT rest area beside M-28 near Trout Creek, normally early May–late October."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+          "description": "Park at MDOT rest area beside M-28 near Trout Creek, normally early May–late October."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+          "description": "Approximately half-mile route via pedestrian underpass to observation platform; trestle/ORV and snowmobile routes remain detoured."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 33; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "wagner-falls",
+      "name": "Wagner Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Munising",
+      "lat": 46.388944,
+      "lng": -86.648995,
+      "level": "easy",
+      "minutes": "15–30 min",
+      "walk": "0.1-mile packed-gravel and boardwalk approach with some steps to a developed platform.",
+      "best": "Summer greenery and fall color.",
+      "access": "Very small parking area, approximately 8–10 cars; no restrooms or drinking water.",
+      "status": "verify",
+      "note": "The map pin is a waterfall reference; DNR provides the arrival route.",
+      "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
+      "locationSource": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+      "kind": "State scenic site",
+      "parking": "Take M-28 east of Munising then M-94 west; signed lot for about 8–10 vehicles.",
+      "feature": "A short mossy forest walk ends at a viewing platform over a layered creek cascade.",
+      "further": "Short does not mean step-free; inspect the official DNR trail map.",
+      "manager": "Michigan DNR · Wagner Falls Scenic Site",
+      "decision": "Good short waterfall visit near Munising; limited parking and no onsite water or restrooms.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
+          "description": "Michigan DNR · Wagner Falls Scenic Site"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
+          "description": "Official publicly described visitor approach: Take M-28 east of Munising then M-94 west; signed lot for about 8–10 vehicles."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
+          "description": "Take M-28 east of Munising then M-94 west; signed lot for about 8–10 vehicles."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
+          "description": "0.1-mile packed-gravel and boardwalk approach with some steps to a developed platform."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+          "description": "Destination location published by visitor authority"
+        }
+      }
+    },
+    {
+      "id": "miners-falls",
+      "name": "Miners Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Pictured Rocks near Munising",
+      "lat": 46.4746,
+      "lng": -86.5315,
+      "level": "easy",
+      "minutes": "45–80 min",
+      "walk": "0.6 mile each way on gravel/dirt trail; 64 stairs to lower viewing platform.",
+      "best": "Spring wildflowers and peak fall color.",
+      "access": "Access from Miners Castle Road (H-11). Vehicles over 32 feet should not attempt the small parking access road.",
+      "status": "verify",
+      "note": "Use the park's road/trail conditions before driving in winter.",
+      "source": "https://www.nps.gov/places/miners-falls.htm",
+      "locationSource": "https://algercountychamber.com/waterfalls",
+      "kind": "National lakeshore",
+      "parking": "Small lot 0.5 mile off Miners Castle Road (H-11), four miles north of H-58; no vehicles over 32 feet.",
+      "feature": "One of Pictured Rocks' most powerful falls drops through a sandstone opening.",
+      "further": "Stay on official platforms; avoid steep unofficial routes to the base.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "decision": "Powerful falls with upper and lower overlooks; RVs and stair-averse visitors need to plan.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-falls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-falls.htm",
+          "description": "Official publicly described visitor approach: Small lot 0.5 mile off Miners Castle Road (H-11), four miles north of H-58; no vehicles over 32 feet."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-falls.htm",
+          "description": "Small lot 0.5 mile off Miners Castle Road (H-11), four miles north of H-58; no vehicles over 32 feet."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-falls.htm",
+          "description": "0.6 mile each way on gravel/dirt trail; 64 stairs to lower viewing platform."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://algercountychamber.com/waterfalls",
+          "description": "Destination location published by visitor authority"
+        }
+      }
+    },
+    {
+      "id": "chapel-falls",
+      "name": "Chapel Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Chapel Basin",
+      "lat": 46.528877,
+      "lng": -86.44429,
+      "level": "moderate",
+      "minutes": "90–150 min",
+      "walk": "1.2-mile one-way forest walk on an old roadbed with gentle hills. No pets or potable water.",
+      "best": "Late spring and autumn hardwood foliage.",
+      "access": "Chapel Road is rough; parking often fills early. Pets prohibited on Chapel trails; no drinking water at trailhead.",
+      "status": "verify",
+      "note": "The map pin marks the fall, not Chapel trailhead or a vehicle approach.",
+      "source": "https://www.nps.gov/places/chapel-falls.htm",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National lakeshore",
+      "parking": "Chapel trailhead at the end of rough 5-mile Chapel Road from H-58; lot often full by 9 a.m.",
+      "feature": "A high sandstone cascade and maple forest reward a deliberate hike into Chapel Basin.",
+      "further": "Do not drive a low-clearance vehicle on Chapel Road without checking conditions.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "decision": "Plan an early start; road and parking bottlenecks can matter more than walking effort.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 201,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/chapel-falls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/chapel-falls.htm",
+          "description": "Official publicly described visitor approach: Chapel trailhead at the end of rough 5-mile Chapel Road from H-58; lot often full by 9 a.m."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/chapel-falls.htm",
+          "description": "Chapel trailhead at the end of rough 5-mile Chapel Road from H-58; lot often full by 9 a.m."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/chapel-falls.htm",
+          "description": "1.2-mile one-way forest walk on an old roadbed with gentle hills. No pets or potable water."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 201; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "spray-falls",
+      "name": "Spray Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Lake Superior cliffs",
+      "lat": 46.557988,
+      "lng": -86.410616,
+      "level": "difficult",
+      "minutes": "Half-day hike / boat tour",
+      "walk": "Limited trail view; 9.6-mile round trip from Chapel or just under 8 from Little Beaver. Pets prohibited.",
+      "best": "Summer boating season; only if a suitable boat tour actually operates.",
+      "access": "Best seen from the water. Hiking provides limited sightlines; no pets on Spray Falls area trails.",
+      "status": "verify",
+      "note": "Waterfall is on the cliff, not a road-accessible viewing or boat launch location.",
+      "source": "https://www.nps.gov/places/spray-falls.htm",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National lakeshore",
+      "parking": "Chapel or Little Beaver trailhead for long hike; for iconic view use authorized Pictured Rocks boat tour.",
+      "feature": "A roughly 70-foot waterfall free-falls from Pictured Rocks into Lake Superior.",
+      "further": "A water-view recommendation is not a forecast of cruise availability or lake safety.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "decision": "Boat provides full Lake Superior cliff-to-waterfall perspective; not a roadside trail.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 203,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/spray-falls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/spray-falls.htm",
+          "description": "Official publicly described visitor approach: Chapel or Little Beaver trailhead for long hike; for iconic view use authorized Pictured Rocks boat tour."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/spray-falls.htm",
+          "description": "Chapel or Little Beaver trailhead for long hike; for iconic view use authorized Pictured Rocks boat tour."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/spray-falls.htm",
+          "description": "Limited trail view; 9.6-mile round trip from Chapel or just under 8 from Little Beaver. Pets prohibited."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 203; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "sable-falls",
+      "name": "Sable Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Grand Marais",
+      "lat": 46.66874,
+      "lng": -86.013716,
+      "level": "steps",
+      "minutes": "25–50 min",
+      "walk": "168 steps descend to best waterfall view; approximately 0.4-mile round trip to Lake Superior and back.",
+      "best": "Spring cascades and late September / October hardwood color.",
+      "access": "Steep stair count means this is not a barrier-free base-of-falls visit; seasonal facilities.",
+      "status": "verify",
+      "note": "The location pin identifies the falls; consult NPS for parking and route.",
+      "source": "https://www.nps.gov/places/sable-falls.htm",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National lakeshore",
+      "parking": "Sable Falls parking on H-58 approximately one mile west of Grand Marais; seasonal facilities.",
+      "feature": "Sandstone ledges lead to Lake Superior, with a stair-supported waterfall viewpoint.",
+      "further": "Expect a strenuous climb back up 168 steps, especially on damp boards.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "decision": "High stair count makes lower view unsuitable for visitors avoiding steep steps.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 204,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/sable-falls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/sable-falls.htm",
+          "description": "Official publicly described visitor approach: Sable Falls parking on H-58 approximately one mile west of Grand Marais; seasonal facilities."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/sable-falls.htm",
+          "description": "Sable Falls parking on H-58 approximately one mile west of Grand Marais; seasonal facilities."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/sable-falls.htm",
+          "description": "168 steps descend to best waterfall view; approximately 0.4-mile round trip to Lake Superior and back."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 204; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "munising-falls",
+      "name": "Munising Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Munising",
+      "lat": 46.422582,
+      "lng": -86.620328,
+      "level": "easy",
+      "minutes": "Visit not currently available",
+      "walk": "Normally an 800-foot paved route but trail CLOSED indefinitely after April 2025 washout.",
+      "best": "Only after the NPS announces reopening.",
+      "access": "NPS lists Munising Falls Trail CLOSED until further notice following April 2025 storm damage. Work is projected into 2027.",
+      "status": "closed",
+      "note": "No waterfall access via the closed trail. Nearby parking/visitor center availability does not reopen it.",
+      "source": "https://www.nps.gov/places/munising-falls.htm",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National lakeshore",
+      "parking": "Parking near the visitor center at Washington Street / Sand Point Road, Munising does not reopen the trail.",
+      "feature": "A 50-foot fall in a sandstone canyon—currently a plan-for-later destination.",
+      "further": "Do not circumvent closure barriers; choose Wagner or Miners Falls instead.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "decision": "Do not travel expecting a waterfall view; choose Wagner or Miners until NPS reopens access.",
+      "publication": "verified-closure-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 200,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/munising-falls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/munising-falls.htm",
+          "description": "Official publicly described visitor approach: Parking near the visitor center at Washington Street / Sand Point Road, Munising does not reopen the trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/munising-falls.htm",
+          "description": "Parking near the visitor center at Washington Street / Sand Point Road, Munising does not reopen the trail."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/munising-falls.htm",
+          "description": "Normally an 800-foot paved route but trail CLOSED indefinitely after April 2025 washout."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 200; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "laughing-whitefish-falls",
+      "name": "Laughing Whitefish Falls",
+      "region": "Central U.P.",
+      "place": "Sundell / Alger County",
+      "lat": 46.383822,
+      "lng": -87.068932,
+      "level": "steps",
+      "minutes": "60–100 min",
+      "walk": "0.5-mile each way, three overlooks; 20 steps to middle and 137 steps to lower platform.",
+      "best": "Spring flow and autumn foliage.",
+      "access": "Moderate forest approach, steps and gorge terrain; no guaranteed winter maintenance.",
+      "status": "verify",
+      "note": "Use DNR state park and trail information for the actual arrival point.",
+      "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State park",
+      "parking": "From M-94 via Sundell Road then signed Laughing Whitefish Falls Road, seasonal 0.4-mile dirt segment.",
+      "feature": "Water slides down a broad rock slope inside an old-growth gorge.",
+      "further": "The view at the top and lower viewpoints differ significantly in effort.",
+      "manager": "Michigan DNR · Laughing Whitefish Falls State Park",
+      "decision": "Upper overlook avoids the full stair descent. Road is unplowed and has no turnaround in winter.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 193,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+          "description": "Michigan DNR · Laughing Whitefish Falls State Park"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+          "description": "Official publicly described visitor approach: From M-94 via Sundell Road then signed Laughing Whitefish Falls Road, seasonal 0.4-mile dirt segment."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+          "description": "From M-94 via Sundell Road then signed Laughing Whitefish Falls Road, seasonal 0.4-mile dirt segment."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+          "description": "0.5-mile each way, three overlooks; 20 steps to middle and 137 steps to lower platform."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 193; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "canyon-falls",
+      "name": "Canyon Falls",
+      "region": "Central U.P.",
+      "place": "L’Anse / Baraga County",
+      "lat": 46.624106,
+      "lng": -88.474395,
+      "level": "moderate",
+      "minutes": "45–90 min",
+      "walk": "Roughly 500-foot rocky spur from roadside park to the North Country Trail, then follow the signed trail roughly another half mile to the stone barrier overlook. Includes footbridge, boardwalk sections, roots and uneven gorge terrain.",
+      "best": "Late spring and fall.",
+      "access": "North Country Trail chapter documents an established public visitor trail on Michigan Tech property from the MDOT Canyon Falls Roadside Park trailhead. Follow marked route and stay behind cliff-view barriers.",
+      "status": "verify",
+      "note": "Local published coordinates are for the waterfall; use the roadside park as your start.",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside trail",
+      "parking": "Canyon Falls MDOT Roadside Park off US-41 near Alberta; seasonal daylight parking, no overnight parking. Lot gate typically closes late October and reopens toward late April.",
+      "feature": "The Sturgeon River funnels into bedrock channels and a dark gorge.",
+      "further": "NCTA March 2024 guide reports a seasonal closed gate at the MDOT park, limited plowed space near gate, no overnight parking, and potential ticketing on US-41 shoulders. Conditions can change, especially in winter; verify current signage.",
+      "manager": "Michigan Technological University (landowner); North Country Trail Peter Wolfe Chapter (trail maintenance); MDOT (US-41 parking)",
+      "decision": "An accessible public hike with a real trail, not a riverbank roadside pullout. Stop at the stone-barrier overlook and do not descend unsupported gorge edges.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "documented-public-trail-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 53,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "North Country Trail Chapter Seg. 58 specifies Michigan Tech trail land and Peter Wolfe Chapter maintenance."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "Published signed NCT Segment 58 route from MDOT Canyon Falls Roadside Park to a maintained public viewing barrier."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "MDOT roadside lot identified with seasonal daylight parking, no overnight parking and winter locked gate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+          "description": "500-foot rocky trail spur, boardwalk, Bocco Creek footbridge and signed NCT route to Canyon Falls stone-barrier overlook."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan geographic state waterfall feature 53, not a road destination."
+        }
+      }
+    },
+    {
+      "id": "manabezho-falls",
+      "name": "Manabezho Falls",
+      "region": "Western U.P.",
+      "place": "Porcupine Mountains / Presque Isle River",
+      "lat": 46.704074,
+      "lng": -89.970776,
+      "level": "steps",
+      "minutes": "45–90 min",
+      "walk": "DNR's approximately 2-mile loop links Manabezho, Manido and Nawadaha; uneven riverfront trail and stairs.",
+      "best": "Strong spring river flow and early October leaf color.",
+      "access": "Porcupine Mountains park access applies; slick bedrock and strong currents occur along the falls chain.",
+      "status": "verify",
+      "note": "This is a river-scene pin, not a guarantee of approach/parking.",
+      "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State park",
+      "parking": "Park at state-designated Presque Isle River Scenic Site, not at the falls geographic point.",
+      "feature": "A broad western U.P. cascade in an old-growth river valley with several neighboring drops.",
+      "further": "Manido and Nawadaha Falls belong to the same walking network, not separate easy roadside stops.",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "decision": "Plan a combined river-falls visit, watching slick bedrock and fast-moving water.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-visitor-route-not-live-status",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 90,
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+          "description": "Michigan DNR · Porcupine Mountains Wilderness State Park"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+          "description": "Official publicly described visitor approach: Park at state-designated Presque Isle River Scenic Site, not at the falls geographic point."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+          "description": "Park at state-designated Presque Isle River Scenic Site, not at the falls geographic point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-Newsletter-2024.pdf?hash=882BCE40118A896DC9DE1AA2E5AB3A45&rev=bb3a54a58cc94556b876362a02a3b0d7",
+          "description": "DNR's approximately 2-mile loop links Manabezho, Manido and Nawadaha; uneven riverfront trail and stairs."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 90; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "scott-falls",
+      "name": "Scott Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Au Train / M-28",
+      "lat": 46.436999,
+      "lng": -86.81447,
+      "level": "roadside",
+      "minutes": "10–20 min",
+      "walk": "No independently certified legal pedestrian crossing or developed footpath to waterfall.",
+      "best": "After rainfall or snowmelt; some flow is seasonal.",
+      "access": "Do not stop or park along travel lanes. Use only legal designated pullouts and cross M-28 only where safe.",
+      "status": "verify",
+      "note": "Roadside falls with traffic hazard. Do not use the waterfall point as a driving destination.",
+      "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside stop",
+      "parking": "MDOT Scott Falls Roadside Park on north side of M-28, approximately 11 miles west of Munising.",
+      "feature": "An easy-to-see roadside cascade with a very different access profile from forest hikes.",
+      "further": "A seasonal roadside trickle should not be represented as a guaranteed high-volume waterfall.",
+      "manager": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved",
+      "decision": "Research page only: do not direct visitors to cross M-28.",
+      "publication": "research-only-guide",
+      "accessConfidence": "incomplete-jurisdiction-or-crossing",
+      "sourceReviewed": "2026-10-26",
+      "gisObjectId": 196,
+      "verification": {
+        "landManager": {
+          "verified": false,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved"
+        },
+        "publicAccess": {
+          "verified": false,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "Research page only: do not direct visitors to cross M-28."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "MDOT Scott Falls Roadside Park on north side of M-28, approximately 11 miles west of Munising."
+        },
+        "trail": {
+          "verified": false,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "No independently certified legal pedestrian crossing or developed footpath to waterfall."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature ID 196; this is not parking"
+        }
+      }
+    },
+    {
+      "id": "great-conglomerate-falls",
+      "name": "Great Conglomerate Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.631634,
+      "lng": -90.054861,
+      "level": "steps",
+      "minutes": "45–90 min",
+      "walk": "About ¾ mile along an improved trail with stairs from the byway parking area.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "May 15, 2026 Forest Service notice listed Conglomerate Falls open with caution on trail tread and stairs. Check for newer restrictions before travel. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "verify",
+      "note": "Make this the longer, geologically interesting Black River byway stop.",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Great Conglomerate Falls lot on County Road 513 north of Bessemer.",
+      "feature": "A huge conglomerate block splits the Black River into two plunging channels.",
+      "further": "Trail includes stairs and wet rock; do not assume the fall itself is drive-up.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 66,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
+        }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Trail caution",
+        "detail": "May 15, 2026 Forest Service notice listed Conglomerate Falls open with caution on trail tread and stairs. Check for newer restrictions before travel.",
+        "noExpiryListed": true
+      }
+    },
+    {
+      "id": "potawatomi-falls",
+      "name": "Potawatomi Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.637918,
+      "lng": -90.051383,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "About ⅛ mile on a developed path; confirm the correct parking side for the accessible paved connection.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "May 15, 2026 Forest Service notice lists Potawatomi Falls open with some platform closures, with additional closures possible during works. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
+      "note": "The most practical short-walk companion to Gorge Falls.",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Potawatomi/Gorge viewing parking along County Road 513; the surfaced accessible route is described from Gorge lot.",
+      "feature": "A short forest walkway reaches a beautifully tiered Black River fall.",
+      "further": "The specific accessible approach is route-dependent. Not all connecting footpaths are step-free.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 71,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
+        }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Platform closures",
+        "detail": "May 15, 2026 Forest Service notice lists Potawatomi Falls open with some platform closures, with additional closures possible during works.",
+        "noExpiryListed": true
+      }
+    },
+    {
+      "id": "gorge-falls",
+      "name": "Gorge Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.64045,
+      "lng": -90.050083,
+      "level": "steps",
+      "minutes": "20–50 min",
+      "walk": "About ⅛ mile on a signed visitor trail, with steps at the narrow gorge viewing section.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "May 15, 2026 Forest Service notice lists Gorge Falls open with some closures; trail access can change as construction proceeds. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
+      "note": "A different river character just a short walk from Potawatomi Falls.",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Potawatomi/Gorge Falls signed parking area on County Road 513.",
+      "feature": "The Black River compresses through dark rock in a deep, narrow gorge.",
+      "further": "A permitted overlook does not mean visitors may approach exposed gorge edges.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 73,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
+        }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Partial trail closures",
+        "detail": "May 15, 2026 Forest Service notice lists Gorge Falls open with some closures; trail access can change as construction proceeds.",
+        "noExpiryListed": true
+      }
+    },
+    {
+      "id": "sandstone-falls",
+      "name": "Sandstone Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.653316,
+      "lng": -90.045593,
+      "level": "steps",
+      "minutes": "30–60 min",
+      "walk": "About ¼ mile from signed parking, including steps and uneven sections near river overlooks.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "May 15, 2026 Forest Service notice lists Sandstone Falls CLOSED due to viewing-platform and stair replacement. Do not plan this stop until the agency posts reopening. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "closed",
+      "note": "Choose Sandstone for intimate rock-and-current detail photographs.",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Sandstone Falls byway pull-off and lot on County Road 513.",
+      "feature": "Water threads across irregular sandstone ledges instead of one single plunge.",
+      "further": "Wet rock near the river must not be treated as a public walkway.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-closure-guide",
+      "gisObjectId": 78,
+      "accessConfidence": "closed-in-unexpired-forest-service-alert",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
+        }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Forest Service lists closed",
+        "detail": "May 15, 2026 Forest Service notice lists Sandstone Falls CLOSED due to viewing-platform and stair replacement. Do not plan this stop until the agency posts reopening.",
+        "noExpiryListed": true
+      }
+    },
+    {
+      "id": "rainbow-falls",
+      "name": "Rainbow Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.658695,
+      "lng": -90.04376,
+      "level": "steps",
+      "minutes": "45–90 min",
+      "walk": "About ½ mile by the signed west-bank approach with many stairs. The suspension bridge / east-bank walk from Black River Harbor is a separate, longer route.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "May 15, 2026 Forest Service notice listed Rainbow Falls open, with later trail and platform closures planned. Do not presume it is still fully open. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
+      "note": "The photo-driven finale to the five signed Black River byway falls.",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Rainbow Falls parking near the Black River Harbor end of County Road 513.",
+      "feature": "Spray and sunlight can turn the lower Black River into a rainbow-lit cascade.",
+      "further": "Rainbows are not guaranteed; the return climb is significant and road access changes seasonally.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 81,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
+        }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Construction watch",
+        "detail": "May 15, 2026 Forest Service notice listed Rainbow Falls open, with later trail and platform closures planned. Do not presume it is still fully open.",
+        "noExpiryListed": true
+      }
+    },
+    {
+      "id": "o-kun-de-kun-falls",
+      "name": "O Kun de Kun Falls",
+      "region": "Western U.P.",
+      "place": "Ontonagon County",
+      "lat": 46.651152,
+      "lng": -89.15254,
+      "level": "moderate",
+      "minutes": "90–180 min",
+      "walk": "North Country Trail Segment 22 extends 1.4 miles from the US-45 trailhead to the Baltimore River bridge, passing Konteka Falls and O Kun de Kun Falls; short gravel spur, intermittent boardwalk and steeper riverbank tread.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "This is a hike-first waterfall day, not a scenic-byway roadside stop.",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National scenic trail",
+      "parking": "Signed trailhead lot east of US-45 approximately 7.8 miles north of Bruce Crossing; typically plowed in winter, but never park on highway shoulder or assume guaranteed access.",
+      "feature": "A remote-feeling Baltimore River curtain viewed from a suspension bridge.",
+      "further": "The eastern side of the Baltimore River is not a parking access point. Do not plan to scramble behind the waterfall.",
+      "manager": "Ottawa National Forest / U.S. Forest Service (landowner); Peter Wolfe Chapter NCTA (trail maintenance)",
+      "publication": "verified-access-guide",
+      "gisObjectId": 64,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "NCTA Segment 22 signed public US-45-to-Baltimore River suspension bridge trail."
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "May 2026 Peter Wolfe Chapter Segment 22 identifies U.S. Forest Service ownership, Ottawa National Forest and NCTA volunteer maintenance."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "Public US-45 parking east of highway; no parking or vehicular access at the Baltimore River end of trail."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "1.4-mile route to Baltimore River suspension bridge, gravel spur and boardwalk, Konteka and O Kun de Kun Falls viewpoints."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "nawadaha-falls",
+      "name": "Nawadaha Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.698631,
+      "lng": -89.974237,
+      "level": "easy",
+      "minutes": "30–75 min",
+      "walk": "Nawadaha has a DNR-documented accessible observation platform on the West River Trail; other Presque Isle River paths are rough and stair-heavy.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "A lower-effort entry to the park's three-waterfall sequence before Manido and Manabezho.",
+      "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State park",
+      "parking": "Presque Isle River Scenic Site parking; follow signed state park access roads and West River Trail.",
+      "feature": "An upstream cascade with a recognized viewpoint among the old-growth Presque Isle River falls.",
+      "further": "One accessible overlook does not make the whole river loop accessible. Check M-519 and park road status.",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "publication": "verified-access-guide",
+      "gisObjectId": 89,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+name: U.P. waterfall browser smoke
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/upper-peninsula-waterfalls/**'
+      - 'public/assets/up-waterfalls*'
+      - 'public/assets/vendor/leaflet-1.9.4.css'
+      - 'public/assets/leaflet-1.9.4.js'
+      - 'tests/up-waterfalls-browser-smoke.mjs'
+      - '.github/workflows/up-waterfalls-browser-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-and-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser into isolated temporary workspace
+        run: |
+          npm install --prefix /tmp/up-waterfalls-playwright --no-save --package-lock=false playwright@1.56.1
+          /tmp/up-waterfalls-playwright/node_modules/.bin/playwright install --with-deps chromium
+      - name: Serve the built-in HTML-first waterfall experience
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory public >/tmp/up-waterfalls-smoke-http.log 2>&1 &
+          echo $! > /tmp/up-waterfalls-smoke-http.pid
+      - name: Mobile, map, filters, access and sitemap smoke
+        run: node tests/up-waterfalls-browser-smoke.mjs
+      - name: Preserve full-page screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: up-waterfalls-mobile-map-screenshots
+          path: /tmp/up-waterfalls-smoke-screens/*.png
+          if-no-files-found: ignore
+          retention-days: 7

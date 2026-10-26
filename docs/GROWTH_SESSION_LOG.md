@@ -1,3 +1,14 @@
+## Upper Peninsula Waterfall GIS Evidence Expansion — October 26, 2026
+
+- **Branch / PR:** feature/up-waterfall-explorer-20261026, draft PR #1199. Merge current main preserving other changes.
+- **Inventory:** Michigan state geographic Waterfalls feature layer: 197 source records, 161 validated Upper Peninsula geographic reference points staged as geographic reference only. Optional toggle-off map layer does NOT represent trails, public access, parking or live status.
+- **Visitors:** 20 curated waterfalls, 19 distinct child pages plus a Tahquamenon canonical handoff. Seven new evidence-linked guides: Great Conglomerate, Potawatomi, Gorge, Sandstone, Rainbow, O Kun de Kun and Nawadaha. Each has separate geographic, route, land-manager, parking and trail citations; first-wave guide evidence audit complete, with Scott Falls remaining noindex.
+- **2026–27 hazard:** Active USFS Black River notice dated May 15, 2026. Sandstone CLOSED; Potawatomi and Gorge partially restricted, Rainbow future closures possible, Great Conglomerate tread/stair caution. Agency project projected through fall 2027. No reopening presumed.
+- **USGS data:** V2.0 release DOI P9QQTKA0 located, 8.57MB raw GeoJSON could not be retrieved intact in connected request. Offline USGS importer created to preserve NHD IDs as research-only records when the complete file is available; no USGS record-level import claimed.
+- **Publication integrity:** 161 geographic candidates cannot generate indexable detail pages or driving directions. New page URLs only for field-access-evidenced guidance, including an explicitly closed Sandstone caution page. Ads policy unchanged.
+- **Verification:** Full head-SHA CI and real Chromium browser smoke must pass; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
+- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass.
+
 ## Michigan Adventure Finder searchable directory — concurrent-main reconciliation, October 26, 2026
 
 - User explicitly requested a Michigan Tools directory link for `/michigan-destinations/`.

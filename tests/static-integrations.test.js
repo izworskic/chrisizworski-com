@@ -98,7 +98,7 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   // 42 since 2026-09-21: Detroit Outdoors Today joined as the Southeast Michigan live opportunity desk.
   // 43 since 2026-09-26: Michigan Snow Totals joined as the statewide NWS snowfall-report map.
   // Build-time discovery can add cards. Require complete ordered coverage instead of a stale count.
-  const visibleUrls = [...html.matchAll(/<div class="tool-card"[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
+  const visibleUrls = [...html.matchAll(/<(?:div class="tool-card"|aside class="adventure-discovery tool-card")[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
   assert.ok(visibleUrls.length >= 43, "retain the existing catalog");
   assert.equal(itemList.numberOfItems, visibleUrls.length);
   assert.deepEqual(itemList.itemListElement.map(entry => entry.item.url), visibleUrls);
