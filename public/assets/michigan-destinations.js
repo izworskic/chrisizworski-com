@@ -161,7 +161,21 @@
     try {
       mapEl.textContent = '';
       map = window.L.map(mapEl, {scrollWheelZoom:false, zoomControl:true}).setView([44.6,-85.4],6);
+      // DOMContentLoaded is early enough for interaction, but lazy photos and
+      // Auto ads may settle layout afterward. Keep Leaflet's cached pixel size current.
+      if (typeof ResizeObserver !== 'undefined') {
+        const mapResizeObserver = new ResizeObserver(() => {
+          if (map) map.invalidateSize({pan:false});
+        });
+        mapResizeObserver.observe(mapEl);
+      }
+      window.addEventListener('load', () => {
+        if (map) map.invalidateSize({pan:false});
+      }, {once:true});
       updateMap();
+      window.requestAnimationFrame(() => {
+        if (map) map.invalidateSize({pan:false});
+      });
       connectCarto();
     } catch (error) {
       map = null;
