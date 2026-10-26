@@ -1250,3 +1250,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Updated only the tracker editorial `dateModified` and corresponding sitemap `lastmod` to October 25, plus the two pinned-date assertions. A new regression test covers bidirectional routes, distinct intent, mobile layout and retained live-map elements. Implementation on `codex/freighter-tracker-winter-layup-handoff-20261025`; CI and production results belong in the PR.
 - This is a **discoverability and helpful next-decision** improvement. No proof of increased GSC impressions, CTR, organic clicks or revenue, nor of real-time layup status from AIS.
 - Exactly one next action: inspect PR CI and responsive rendering, merge only when verified, then confirm the production URL and anchor.
+
+### Michigan Snow Totals — winter observation-to-decision internal links, October 25, 2026
+- GSC baseline, Sep 25–Oct 22: `/michigan-snow-totals/` 1,154 impressions, 8 clicks, 0.69% CTR; no uplift attribution.
+- Preserved observed NWS snow reports, dated town search, existing map, 24/48/72-hour windows, JSON-LD author and stable canonical.
+- Expanded the existing "After the snow" decision links to distinct `/michigan-snow-depth/` (snow remaining on ground), `/lake-effect-snow/` (future snowbelt forecast), `/national-tools/snow/` (national snowpack), and `/national-tools/white-christmas/forecast/` (historical December 25 odds, NOT a prediction based on today's reports). Existing snowmobile, cross-country and ice links remain.
+- Source `dateModified` and both sitemap `lastmod` entries advanced for real updated content. Added tests for discovery, canonical and source-type distinction.
+- No change to NWS/NOAA APIs, underlying reports, meteorological inference, or ad code. Branch `codex/michigan-snow-evidence-network-20261025`; CI/release recorded in PR.
+- Exactly one next action: pass CI/public canonical audit; then verify live links/meaning from mobile.
