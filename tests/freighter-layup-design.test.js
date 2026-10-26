@@ -17,7 +17,9 @@ test('real hero photograph has durable credit and honest historic distinction',(
  assert.ok(html.includes('Mesabi_Miner')||html.includes('Mesabi%20Miner'));
  assert.ok(html.includes('Sharon Mollerus'));
  assert.ok(html.includes('CC BY 2.0'));
- assert.match(html,/not a 2025–26 layup photograph/i);
+ assert.ok(html.includes('Dec. 31, 2017'));
+ assert.ok(html.includes('class="map-evidence-note"'));
+ assert.equal((html.match(/id="map-evidence-note"/g)||[]).length,1);
  assert.ok(html.includes('src="/assets/freighter-winter-hero.jpg"'));
  assert.ok(html.includes('https://commons.wikimedia.org/wiki/File:Mesabi_Miner'));
 });
