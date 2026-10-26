@@ -9,9 +9,11 @@ test('Michigan Adventure Finder is an actual searchable, year-round Michigan tri
   const planners = toolsHtml.match(/<section class="tool-group" id="trip-planners-group"[\s\S]*?<\/section>/)?.[0];
   assert.ok(planners, 'Michigan trip planner section exists');
   assert.equal((toolsHtml.match(/data-tool-id="michigan-adventure-finder"/g) || []).length, 1, 'exactly one catalog entry');
-  assert.match(planners, /<div class="tool-grid">\s*<aside class="adventure-discovery tool-card"/, 'featured entry inside the searchable grid');
-  const card = planners.match(/<aside class="adventure-discovery tool-card"([\s\S]*?)<\/aside>/)?.[0];
-  assert.ok(card, 'discoverable native tool card');
+  assert.match(planners, /<div class="tool-grid">\s*<div class="tool-card" data-tool-id="michigan-adventure-finder"/, 'first entry must use the standard directory card structure');
+  const position = planners.indexOf('<div class="tool-card" data-tool-id="michigan-adventure-finder"');
+  const next = planners.indexOf('<div class="tool-card" data-tool-id="mackinac-island"', position);
+  const card = position >= 0 && next > position ? planners.slice(position, next) : '';
+  assert.ok(card, 'discoverable native directory card');
   assert.match(card, /data-tool-id="michigan-adventure-finder"/);
   assert.match(card, /data-tags="[^"]*\bplanning\b[^"]*"/);
   assert.match(card, /data-tags="[^"]*\bnature\b[^"]*"/);
