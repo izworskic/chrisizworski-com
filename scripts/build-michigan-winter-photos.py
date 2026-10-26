@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One-time, source-licensed image import for the Michigan winter flagship; manual quality gate."""
 from __future__ import annotations
-import html, io, json, os, time, urllib.request
+import html, io, json, os, time, urllib.request, urllib.error
 from pathlib import Path
 from PIL import Image, ImageOps, UnidentifiedImageError
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,10 @@ for item in manifest['images']:
                 raw=response.read(22*1024*1024+1)
                 if len(raw)>22*1024*1024:raise RuntimeError('Photo exceeds upload budget')
                 break
+        except urllib.error.HTTPError as e:
+            if e.code in (403,429):
+                raise RuntimeError('Source denied automated retrieval; do not bypass source policy: '+src) from e
+            last=e
         except Exception as e:
             last=e
             if attempt<3:time.sleep(2+attempt*3)

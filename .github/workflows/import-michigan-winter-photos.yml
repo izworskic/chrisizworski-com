@@ -1,10 +1,6 @@
 name: Import licensed Michigan winter photos once
 on:
-  push:
-    branches: [feat/michigan-winter-activities-production]
-    paths:
-      - scripts/build-michigan-winter-photos.py
-      - data/michigan-winter-photo-sources.json
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:

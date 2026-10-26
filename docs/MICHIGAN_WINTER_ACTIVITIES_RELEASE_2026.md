@@ -13,3 +13,6 @@ This guide answers *which winter activity*, not *where should I go in Michigan a
 
 ## Next action
 Check the final exact-head GitHub Actions workflow and photo/source evidence and browser QA, then review 100-point rubric before production merge. Never merge broad seven-guide draft PR #1221 as a proxy for this one-guide release.
+
+## Source access blocker and policy — October 26
+The one-time source download workflow successfully fetched and resized the first 10 archived photos (17 total originals required) but the Wikimedia host returned HTTP 429 with an explicit robot-policy notice for a later USFWS source. The workflow deliberately aborted without committing incomplete assets. Do NOT evade that denial with automated proxies, IP rotation, or other bypasses. The import workflow is now **manual-only**, not triggered on code pushes. Future locally hosted assets require compliant source access or explicitly authorized photo supply. Existing browser QA with remote images found intermittent photo-load failures; until fully resolved, the photo reliability gate remains red and the 100/100 target is not achieved. Do not merge the flagship PR yet.
