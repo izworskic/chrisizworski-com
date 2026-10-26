@@ -226,6 +226,11 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
 .region-detail{font-size:12px!important;color:#4b554e!important;line-height:1.55;margin:0!important}
 .region-weather{font-size:11px!important;color:#315f78!important;line-height:1.5;margin:7px 0 0!important}
 .region-note{font-size:12px!important;color:#6c756e!important;line-height:1.6;margin:11px 0 0!important}
+.region-deep-guide{display:inline-flex;align-items:center;min-height:36px;font-size:12px;font-weight:650;color:#c6f5de;text-decoration:underline;text-underline-offset:3px}
+.region-deep-guide:hover{color:#fff}
+.region-deep-guide:focus-visible,.region-card-guide:focus-visible{outline:3px solid #2a8a5a;outline-offset:3px;border-radius:2px}
+.region-card-guide{display:inline-block;margin-top:11px;font-size:12px;font-weight:650;color:#155b56;text-decoration:underline;text-underline-offset:3px}
+.region-card-guide:hover{color:#092f31}
 @media(max-width:680px){.region-outlook-head{display:block}.region-outlook-head p{text-align:left;margin-top:5px}.region-grid{grid-template-columns:1fr}}
 .field-report{background:#eef5f7;border:1px solid #cfdfe4;border-radius:5px;padding:17px 19px;margin:0 0 26px}
 .field-report h3{font-size:16px;color:#173c2c;margin:0 0 5px}
@@ -391,7 +396,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
     <span class="decision-eyebrow">Your aurora night</span>
     <span class="decision-source">NOAA · NWS · USNO</span>
   </div>
-  <div class="region-picker"><label for="regionSelect">Choose your region</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select></div>
+  <div class="region-picker"><label for="regionSelect">Choose your region</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select><a id="regionDeepLink" class="region-deep-guide" href="/northern-lights-michigan/mackinaw-city/">Mackinaw City local forecast &amp; viewing guide</a></div>
   <div class="local-answer" aria-live="polite" aria-atomic="true">
     <div class="tonight-label" id="localRegion">Tonight near the Straits of Mackinac</div>
     <h2 id="localHeadline">Checking your regional outlook</h2>
@@ -464,12 +469,12 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
     <p id="regionOutlookTime">Checking NOAA's 30-to-90-minute OVATION nowcast and the next 24 hours of Kp guidance.</p>
   </div>
   <div class="region-grid" id="regionGrid">
-    <article class="region-card" data-region-id="keweenaw" data-level="unavailable"><h3>Keweenaw Peninsula</h3><p class="region-places">Copper Harbor, Houghton, Hancock, and Brockway Mountain</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Dark skies and a north-facing Lake Superior horizon make this Michigan's strongest viewing region.</p></article>
-    <article class="region-card" data-region-id="marquette" data-level="unavailable"><h3>Marquette</h3><p class="region-places">Marquette, Escanaba, and the central Upper Peninsula</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Use Presque Isle or another dark north-facing shoreline and verify local clouds.</p></article>
-    <article class="region-card" data-region-id="munising" data-level="unavailable"><h3>Munising</h3><p class="region-places">Munising and Pictured Rocks</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Lake Superior beaches provide a dark northern horizon when park access and weather allow.</p></article>
-    <article class="region-card" data-region-id="sault-ste-marie" data-level="unavailable"><h3>Sault Ste. Marie</h3><p class="region-places">Sault Ste. Marie, Paradise, and Whitefish Point</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Whitefish Point offers darker skies than the city and a broad view over Lake Superior.</p></article>
-    <article class="region-card" data-region-id="mackinaw-city" data-level="unavailable"><h3>Mackinaw City</h3><p class="region-places">Mackinaw City, Petoskey, and the Straits</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Headlands International Dark Sky Park is the strongest nearby viewing option.</p></article>
-    <article class="region-card" data-region-id="traverse-city" data-level="unavailable"><h3>Traverse City</h3><p class="region-places">Traverse City, Gaylord, Alpena, and northern Michigan</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 6</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Seek a dark shoreline with an open northern horizon and little city glow.</p></article>
+    <article class="region-card" data-region-id="keweenaw" data-level="unavailable"><h3>Keweenaw Peninsula</h3><p class="region-places">Copper Harbor, Houghton, Hancock, and Brockway Mountain</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Dark skies and a north-facing Lake Superior horizon make this Michigan's strongest viewing region.</p><a class="region-card-guide" href="/northern-lights-michigan/keweenaw/">Keweenaw local forecast & viewing spots</a></article>
+    <article class="region-card" data-region-id="marquette" data-level="unavailable"><h3>Marquette</h3><p class="region-places">Marquette, Escanaba, and the central Upper Peninsula</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Use Presque Isle or another dark north-facing shoreline and verify local clouds.</p><a class="region-card-guide" href="/northern-lights-michigan/marquette/">Marquette local forecast & viewing spots</a></article>
+    <article class="region-card" data-region-id="munising" data-level="unavailable"><h3>Munising</h3><p class="region-places">Munising and Pictured Rocks</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Lake Superior beaches provide a dark northern horizon when park access and weather allow.</p><a class="region-card-guide" href="/northern-lights-michigan/munising/">Munising local forecast & viewing spots</a></article>
+    <article class="region-card" data-region-id="sault-ste-marie" data-level="unavailable"><h3>Sault Ste. Marie</h3><p class="region-places">Sault Ste. Marie, Paradise, and Whitefish Point</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Whitefish Point offers darker skies than the city and a broad view over Lake Superior.</p><a class="region-card-guide" href="/northern-lights-michigan/paradise-whitefish-point/">Whitefish Point local aurora forecast</a></article>
+    <article class="region-card" data-region-id="mackinaw-city" data-level="unavailable"><h3>Mackinaw City</h3><p class="region-places">Mackinaw City, Petoskey, and the Straits</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Headlands International Dark Sky Park is the strongest nearby viewing option.</p><a class="region-card-guide" href="/northern-lights-michigan/mackinaw-city/">Mackinaw City local forecast & viewing spots</a></article>
+    <article class="region-card" data-region-id="traverse-city" data-level="unavailable"><h3>Traverse City</h3><p class="region-places">Traverse City, Gaylord, Alpena, and northern Michigan</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 6</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Seek a dark shoreline with an open northern horizon and little city glow.</p><a class="region-card-guide" href="/northern-lights-michigan/sleeping-bear-dunes/">Sleeping Bear Dunes local aurora forecast</a></article>
     <article class="region-card" data-region-id="bay-city" data-level="unavailable"><h3>Bay City and Saginaw Bay</h3><p class="region-places">Bay City, the Thumb, and Saginaw Bay</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Sleeper State Park provides the best north-facing water horizon in this region.</p></article>
     <article class="region-card" data-region-id="detroit" data-level="unavailable"><h3>Detroit and southern Michigan</h3><p class="region-places">Detroit, Lansing, Grand Rapids, and southeast and west Michigan</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Strong storms, darker rural skies, and a clear northern horizon are normally required.</p></article>
   </div>
@@ -782,6 +787,14 @@ const KP_STATUS = ['Quiet','Quiet','Quiet','Unsettled','Active','G1 Storm','G2 S
 const KP_COLORS = ['#5fc88f','#5fc88f','#7ac8a0','#a8a040','#c08030','#c06020','#a02020','#801818','#600808','#400404'];
 
 const REGION_PREF_KEY = 'aurora-region-v1';
+const REGION_GUIDE_LINKS = {
+  'keweenaw': { href: '/northern-lights-michigan/keweenaw/', label: 'Keweenaw local forecast & viewing guide' },
+  'marquette': { href: '/northern-lights-michigan/marquette/', label: 'Marquette local forecast & viewing guide' },
+  'munising': { href: '/northern-lights-michigan/munising/', label: 'Munising local forecast & viewing guide' },
+  'sault-ste-marie': { href: '/northern-lights-michigan/paradise-whitefish-point/', label: 'Whitefish Point local forecast & viewing guide' },
+  'mackinaw-city': { href: '/northern-lights-michigan/mackinaw-city/', label: 'Mackinaw City local forecast & viewing guide' },
+  'traverse-city': { href: '/northern-lights-michigan/sleeping-bear-dunes/', label: 'Sleeping Bear Dunes local forecast & viewing guide' }
+};
 let currentKp = 0, userMarker = null, kpForecast = [], notifyEnabled = false;
 let auroraMap = null, markers = [], latestAuroraData = null, selectedRegionId = 'mackinaw-city';
 
@@ -822,6 +835,12 @@ function setSelectedRegion(id, source, measure){
   if (!Array.from(select.options).some(function(option){return option.value===id;})) id='mackinaw-city';
   selectedRegionId = id;
   select.value = id;
+  const guideLink = document.getElementById('regionDeepLink');
+  const guide = REGION_GUIDE_LINKS[id];
+  if (guideLink) {
+    guideLink.href = guide ? guide.href : '#viewing-locations';
+    guideLink.textContent = guide ? guide.label : 'Explore Michigan viewing locations';
+  }
   try { localStorage.setItem(REGION_PREF_KEY, id); } catch (error) {}
   if (measure !== false) trackAuroraEvent('Aurora Region Selected', {region:id, source:source||'selector'});
   if (latestAuroraData) renderDecisionData(latestAuroraData);
@@ -1099,7 +1118,7 @@ function renderRegionalOutlook(ovation){
       weather = document.createElement('p');
       weather.className = 'region-weather';
       weather.setAttribute('data-region-weather','');
-      card.appendChild(weather);
+      card.insertBefore(weather, card.querySelector('.region-card-guide'));
     }
     const clouds = skyCoverAt(region, new Date());
     weather.textContent = Number.isFinite(clouds)
