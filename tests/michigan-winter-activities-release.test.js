@@ -6,3 +6,5 @@ test('winter guide isolated entry points are in discovery and tools, and sitemap
 test('winter field guide CSS and map JS exist',()=>{for(const path of ['public/assets/winter-field-guide.css','public/assets/winter-field-guide.js','public/assets/michigan-winter-activities.css'])assert.ok(existsSync(path));});
 
 test('same-location winter map entries share a navigable grouped popup instead of covering one another',()=>{const html=read('public/michigan-winter-activities/index.html');const js=read('public/assets/michigan-winter-activities.js');assert.ok(html.includes('/assets/michigan-winter-activities.js'));assert.match(js,/groups=new Map/);assert.match(js,/group\.cards\.length/);assert.match(js,/Orientation only/);});
+
+test('Houghton Lake photo has resized first attempt and safe one-shot fallback',()=>{const html=read('public/michigan-winter-activities/index.html');const js=read('public/assets/michigan-winter-activities.js');assert.match(html,/960px-Ice_Fishing_Shanties_on_Houghton_Lake/);assert.match(html,/data-fallback-src=/);assert.match(js,/fallbackUsed/);});
