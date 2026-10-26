@@ -288,7 +288,7 @@
       "minutes": "45–90 min",
       "walk": "About ¾ mile along an improved trail with stairs from the byway parking area.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
-      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "access": "May 15, 2026 Forest Service notice listed Conglomerate Falls open with caution on trail tread and stairs. Check for newer restrictions before travel. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "verify",
       "note": "Make this the longer, geologically interesting Black River byway stop.",
       "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
@@ -322,7 +322,19 @@
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
         }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Trail caution",
+        "detail": "May 15, 2026 Forest Service notice listed Conglomerate Falls open with caution on trail tread and stairs. Check for newer restrictions before travel.",
+        "noExpiryListed": true
       }
     },
     {
@@ -336,8 +348,8 @@
       "minutes": "20–45 min",
       "walk": "About ⅛ mile on a developed path; confirm the correct parking side for the accessible paved connection.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
-      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
-      "status": "verify",
+      "access": "May 15, 2026 Forest Service notice lists Potawatomi Falls open with some platform closures, with additional closures possible during works. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
       "note": "The most practical short-walk companion to Gorge Falls.",
       "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -370,7 +382,19 @@
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
         }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Platform closures",
+        "detail": "May 15, 2026 Forest Service notice lists Potawatomi Falls open with some platform closures, with additional closures possible during works.",
+        "noExpiryListed": true
       }
     },
     {
@@ -384,8 +408,8 @@
       "minutes": "20–50 min",
       "walk": "About ⅛ mile on a signed visitor trail, with steps at the narrow gorge viewing section.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
-      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
-      "status": "verify",
+      "access": "May 15, 2026 Forest Service notice lists Gorge Falls open with some closures; trail access can change as construction proceeds. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
       "note": "A different river character just a short walk from Potawatomi Falls.",
       "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -418,7 +442,19 @@
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
         }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Partial trail closures",
+        "detail": "May 15, 2026 Forest Service notice lists Gorge Falls open with some closures; trail access can change as construction proceeds.",
+        "noExpiryListed": true
       }
     },
     {
@@ -432,8 +468,8 @@
       "minutes": "30–60 min",
       "walk": "About ¼ mile from signed parking, including steps and uneven sections near river overlooks.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
-      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
-      "status": "verify",
+      "access": "May 15, 2026 Forest Service notice lists Sandstone Falls CLOSED due to viewing-platform and stair replacement. Do not plan this stop until the agency posts reopening. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "closed",
       "note": "Choose Sandstone for intimate rock-and-current detail photographs.",
       "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -442,9 +478,9 @@
       "feature": "Water threads across irregular sandstone ledges instead of one single plunge.",
       "further": "Wet rock near the river must not be treated as a public walkway.",
       "manager": "Ottawa National Forest · Bessemer Ranger District",
-      "publication": "verified-access-guide",
+      "publication": "verified-closure-guide",
       "gisObjectId": 78,
-      "accessConfidence": "public-route-documented-current-open-unknown",
+      "accessConfidence": "closed-in-unexpired-forest-service-alert",
       "sourceReviewed": "2026-10-26",
       "verification": {
         "publicAccess": {
@@ -466,7 +502,19 @@
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
         }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Forest Service lists closed",
+        "detail": "May 15, 2026 Forest Service notice lists Sandstone Falls CLOSED due to viewing-platform and stair replacement. Do not plan this stop until the agency posts reopening.",
+        "noExpiryListed": true
       }
     },
     {
@@ -480,8 +528,8 @@
       "minutes": "45–90 min",
       "walk": "About ½ mile by the signed west-bank approach with many stairs. The suspension bridge / east-bank walk from Black River Harbor is a separate, longer route.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
-      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
-      "status": "verify",
+      "access": "May 15, 2026 Forest Service notice listed Rainbow Falls open, with later trail and platform closures planned. Do not presume it is still fully open. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
+      "status": "restricted",
       "note": "The photo-driven finale to the five signed Black River byway falls.",
       "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -514,7 +562,19 @@
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        "currentRestrictions": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs"
         }
+      },
+      "construction": {
+        "source": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+        "published": "2026-05-15",
+        "reviewed": "2026-10-26",
+        "status": "Construction watch",
+        "detail": "May 15, 2026 Forest Service notice listed Rainbow Falls open, with later trail and platform closures planned. Do not presume it is still fully open.",
+        "noExpiryListed": true
       }
     },
     {
