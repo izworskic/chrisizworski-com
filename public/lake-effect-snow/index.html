@@ -105,6 +105,19 @@ small,.small{color:var(--muted);font-size:.81rem}.alert{border-left:4px solid #a
 footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.85rem}
 @media(max-width:760px){.control,.two,.three,.guide{grid-template-columns:1fr}.panel{padding:15px}.hero{padding:16px 0 17px;background-image:linear-gradient(90deg,rgba(5,26,41,.94),rgba(5,26,41,.67)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg');background-position:62% 42%}.hero h1{font-size:clamp(1.83rem,7.5vw,2.25rem);margin:5px 0}.hero-deck{font-size:.92rem;line-height:1.42}.hero-credit{margin-top:9px;font-size:.68rem}.hero .hero-chooser{margin-top:11px;padding:12px 13px}.hero .hero-chooser h2{font-size:1.35rem;margin-bottom:7px}.hero .hero-chooser label{margin-bottom:4px}.hero .hero-chooser .aux{margin-top:5px}.head .shell{display:block}.head nav{margin-top:3px;gap:12px}.main{padding-top:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Static, crawlable follow-on decisions remain visible when forecast APIs are unavailable. */
+.winter-next-decisions{background:#eaf2f5;border:1px solid #b7ccd4;border-radius:16px;padding:clamp(18px,3vw,30px);margin:20px 0 28px}
+.winter-next-decisions h2{font:700 clamp(21px,2.6vw,29px)/1.2 system-ui,sans-serif;color:#163749;margin:0 0 9px}
+.winter-next-decisions>p{color:#365360;line-height:1.55;margin:0 0 19px;max-width:75ch}
+.winter-next-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.winter-next-grid a{display:flex;flex-direction:column;gap:8px;background:#fff;color:#143a4d;border:1px solid #bfd2d9;border-radius:10px;padding:15px;text-decoration:none;min-height:122px}
+.winter-next-grid a strong{font-size:14px;line-height:1.35}
+.winter-next-grid a span{font-size:12px;line-height:1.45;color:#41606c}
+.winter-next-grid a:hover{border-color:#326e82;background:#f5fcff}
+.winter-next-grid a:focus-visible{outline:3px solid #b77918;outline-offset:3px}
+@media(max-width:980px){.winter-next-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.winter-next-grid{grid-template-columns:1fr}.winter-next-grid a{min-height:0}}
 </style>
 </head>
 <body>
@@ -188,6 +201,20 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 </div>
 <section class="panel"><h2>Evidence and uncertainty</h2><p id="source-age" class="small"></p><p id="limitations"></p><p class="small"><a id="forecast-link" target="_blank" rel="noopener" href="https://www.weather.gov/">NWS point forecast source</a> · <a id="alert-link" target="_blank" rel="noopener" href="https://www.weather.gov/">NWS alert source</a></p><p><a href="https://chrisizworski.com/michigan-snow-depth/">Find existing snow on the ground</a> · <a href="https://chrisizworski.com/michigan-cross-country-skiing/">Cross-country ski planning</a> · <a href="https://chrisizworski.com/michigan-ski-hills/">Downhill ski hills</a> · <a href="https://chrisizworski.com/snowmobile/">Michigan snowmobiling</a></p></section>
 </div>
+<nav class="winter-next-decisions" aria-labelledby="winter-next-title">
+  <h2 id="winter-next-title">What winter decision comes next?</h2>
+  <p>The snowbelt forecast indicates where snow could develop. Use the appropriate separate tool to decide what actually fell, what remains on the ground, and whether conditions support an outing.</p>
+  <div class="winter-next-grid">
+    <a href="/michigan-snow-totals/"><strong>How much snow fell?</strong><span>Dated National Weather Service reports, not forecast totals</span></a>
+    <a href="/michigan-snow-depth/"><strong>Where is snow on the ground?</strong><span>Modeled snow depth with measured-station comparisons</span></a>
+    <a href="/michigan-cross-country-skiing/"><strong>Can I cross-country ski?</strong><span>Check snow signals and operator grooming reports</span></a>
+    <a href="/michigan-ski-hills/"><strong>Which downhill hills?</strong><span>Compare conditions; confirm official lift operation</span></a>
+    <a href="/snowmobile/"><strong>Are snowmobile trails ready?</strong><span>Snow alone does not establish groomed trail access</span></a>
+    <a href="/michigan-ice/"><strong>How is lake ice developing?</strong><span>Cold accumulation and observations; never safe-ice certification</span></a>
+    <a href="/michigan-ice-caves/"><strong>Which ice caves can I visit?</strong><span>Formation conditions and access are separate checks</span></a>
+    <a href="/national-tools/white-christmas/forecast/"><strong>Will Christmas be snowy?</strong><span>Historical December 25 odds, not a long-range snowstorm forecast</span></a>
+  </div>
+</nav>
 <section class="panel"><h2>How forecasts and reported snowfall differ</h2><div class="guide">
 <div><h3>Three evidence layers, not one</h3><p>The top decision now separates a regional setup, the NWS hourly forecast and dated snowfall reports within 50 km. Missing reports cannot establish that no snow fell. Nearby observations do not confirm snowfall at your exact position or a trail base.</p><h3>Wind is a clue, not a forecast</h3><p>Air traveling over comparatively warm open water can collect heat and moisture. Regional wind direction influences which shore is exposed. Shifts, vertical wind shear and local terrain determine where individual bands actually organize.</p><h3>Lake temperature is background context</h3><p>NOAA GLSEA reports a daily satellite-derived lakewide surface average. The separate NOAA GFS model now supplies offshore 850-mb air temperature, so the engine can show a qualified lake-to-air contrast and 925–850-mb directional turning. These are screening clues—not observed inversions, a full sounding, or a snowband track. A warmer lake alone does not guarantee snow.</p></div>
 <div><h3>Confidence is about evidence agreement</h3><p>High, medium and low describe how complete and consistent official snow forecasts, surface wind alignment, alerts and fresh lake data are. These labels are not calibrated odds of snow or band-placement skill.</p><h3>When data disappear</h3><p>If NOAA or NWS is unavailable, the engine marks missing evidence. It will not quietly replace live observations with last year's typical snowbelt patterns or invent accumulation totals.</p></div>
