@@ -26,3 +26,13 @@ Add a license-verified winter image for each additional destination, stronger ex
 
 ## Tool directory entry points
 A separate, scoped seven-link collection sits immediately before the existing Michigan winter decision router on /tools/. No tool forecasts, ad settings or existing winter-router choices were replaced.
+
+## Pin-level geographic corrections
+Following CI, calibrated source-derived destination markers without assuming parking availability:
+- Sand Point Beach near Munising: 46.450217, -86.606683 (Explore Munising destination coordinates https://www.exploremunising.com/nature-parks/).
+- Eben Ice Caves feature: 46.38134, -86.94309 (OSM place node via https://mapcarta.com/N6605774754); winter route remains officially unverified.
+- Soo Locks public visitor center: 46.50184, -84.35067 (OSM place via https://mapcarta.com/26648120 and official USACE information https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/).
+- Vasa Pathway: 44.750594, -85.493329 (Michigan DNR https://www.michigan.gov/recsearch/trails/vasa-pathway).
+- Headlands dark sky park: 45.77536, -84.78278 (DarkSky International https://darksky.org/places/headlands-dark-sky-park/).
+- Silver Lake state park ORV area: 43.68290, -86.49800 (regional feature, https://ordealist.com/guides/silver-lake-orv-area). Use Michigan DNR for permitted fat-tire dates and the *different* pedestrian parking address: https://www.michigan.gov/dnr/things-to-do/winter/bike/silver-lake-fat-tire.
+These pins identify visit destinations, not verified open winter parking or safe tracks.
