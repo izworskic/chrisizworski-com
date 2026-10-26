@@ -1,0 +1,52 @@
+name: One-time USGS waterfall hydrography import
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+    paths:
+      - '.github/workflows/up-waterfall-usgs-source-import.yml'
+      - 'scripts/build-up-waterfall-hydro-crosswalk.mjs'
+permissions:
+  contents: write
+jobs:
+  source-import:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feature/up-waterfalls-usgs-v2-crosswalk-20261026'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/up-waterfalls-usgs-v2-crosswalk-20261026
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download official USGS 2020 data release (not part of the site build)
+        env:
+          SOURCE_URL: https://www.sciencebase.gov/catalog/file/get/5e8d2b5982cee42d13466001?f=__disk__86%2Ff1%2Fc5%2F86f1c5a4ab96d77b04d827a87b0e85570b97d25e
+        run: |
+          curl -fLsS --retry 3 --retry-delay 3 --connect-timeout 20 --max-time 150 \
+            -H "Accept: application/geo+json, application/json" \
+            "$SOURCE_URL" -o "$RUNNER_TEMP/up-usgs-source.geojson"
+          test "$(wc -c < "$RUNNER_TEMP/up-usgs-source.geojson")" -gt 5000000
+      - name: Extract conservative Michigan GIS/NHD research linkage
+        run: node scripts/build-up-waterfall-hydro-crosswalk.mjs "$RUNNER_TEMP/up-usgs-source.geojson"
+      - name: Test all waterfall and import safety gates
+        run: node --test tests/up-waterfalls-usgs.test.js tests/up-waterfalls-hydro-crosswalk.test.js tests/up-waterfalls.test.js
+      - name: Commit only derived small geographic research results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/up-waterfall-usgs-v2-crosswalk.json public/assets/up-waterfall-hydro-crosswalk.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Stage full-source USGS NHD crosswalk (geography only, no visitor pages)"
+            git push origin "HEAD:feature/up-waterfalls-usgs-v2-crosswalk-20261026"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: up-waterfall-hydro-crosswalk
+          path: |
+            data/up-waterfall-usgs-v2-crosswalk.json
+            public/assets/up-waterfall-hydro-crosswalk.json
+          retention-days: 7
