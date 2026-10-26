@@ -9,6 +9,15 @@
 - **Verification:** Full head-SHA CI and real Chromium browser smoke must pass; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
 - **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass.
 
+## Michigan Adventure Finder searchable directory — concurrent-main reconciliation, October 26, 2026
+
+- User explicitly requested a Michigan Tools directory link for `/michigan-destinations/`.
+- The original directory had a banner link only; another live commit changed it into a searchable `<aside class="tool-card">` while this PR was verifying. That partial change was not represented in the 90-item JSON-LD directory, and was outside the parser used by `scripts/reconcile-tools-directory.mjs`. Reconciled against commit `c9eb7fcb8166` with no unrelated changes overwritten.
+- Replaced it with a standard `<div class="tool-card">` in **Michigan trip planners**, placed first, with year-round activity tags and factual destination discovery copy. Tool registry ID and canonical reused, no duplicated card.
+- JSON-LD now contains 91 visible directory entries including the actual `CollectionPage` `@id` from the destination; matching order and author identity. Dedicated tests prevent regression.
+- Ads, destination page, hero imagery, analytics and all other tool card implementations unchanged. No claimed CTR/GSC lift.
+- **Next:** after required CI and Vercel gates pass, merge and smoke-test the published `/tools/#trip-planners` entry.
+
 ## Michigan Adventure Finder — Michigan tools directory registration — October 26, 2026
 
 - **Owner request:** Add the existing public Michigan Adventure Finder to the Michigan tools page. Canonical: `https://chrisizworski.com/michigan-destinations/`.
