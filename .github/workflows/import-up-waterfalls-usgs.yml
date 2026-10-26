@@ -28,7 +28,9 @@ jobs:
       - name: Normalize USGS points and construct state GIS crosswalk
         run: node scripts/stage-up-waterfall-usgs.mjs /tmp/conterminousUS_falls_nhd.geojson
       - name: Run source and publication regression tests
-        run: node --test tests/up-waterfalls-usgs.test.js tests/up-waterfalls-crosswalk.test.js tests/up-waterfalls.test.js
+        run: |
+          node -e "for(const path of ['data/up-waterfall-usgs-candidates.json','data/up-waterfall-usgs-crosswalk.json','public/assets/up-waterfalls-usgs-matches.json'])JSON.parse(require('node:fs').readFileSync(path,'utf8'))"
+          node --test tests/up-waterfalls-usgs.test.js tests/up-waterfalls-crosswalk.test.js tests/up-waterfalls.test.js
       - name: Commit only non-public research data to this branch
         shell: bash
         run: |
