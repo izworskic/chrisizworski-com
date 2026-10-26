@@ -34,23 +34,26 @@ These are samples, **not** exhaustive query results and not sufficient to prescr
 
 ## Winter discovery cohort
 
-The same on-demand workflow inspects HTTP status, noindex, canonical, initial HTML, and minimum search-visible content for these canonical routes:
+The same on-demand workflow inspects HTTP status, noindex, canonical, initial HTML, and minimum search-visible content for these **11** canonical routes:
 
 1. `/national-tools/snow/` — extracted national snow owner.
-2. `/michigan-ice/` — state ice discovery.
-3. `/michigan-ice-caves/` — distinct access and ice-formation decisions.
-4. `/michigan-cross-country-skiing/` — XC planning.
-5. `/michigan-ski-hills/` — downhill decision.
-6. `/snowmobile/` — snowmobile conditions.
-7. `/mackinac-ice-bridge/` — season rollover, not a declaration of safe ice.
-8. `/great-lakes-freighter-winter-layup/` — distinct layup chronology and ship stories; not the same intent as the live tracker.
+2. `/lake-effect-snow/` — Great Lakes snowbelt outlook; distinct from reported snowfall.
+3. `/michigan-snow-depth/` — current snow on the ground and snow-finder decisions.
+4. `/michigan-ice/` — state ice discovery.
+5. `/michigan-ice/regions/saginaw-bay.html` — Saginaw Bay ice-specific conditions.
+6. `/michigan-ice-caves/` — distinct access and ice-formation decisions.
+7. `/michigan-cross-country-skiing/` — XC planning.
+8. `/michigan-ski-hills/` — downhill decision.
+9. `/snowmobile/` — snowmobile conditions.
+10. `/mackinac-ice-bridge/` — season rollover, not a declaration of safe ice.
+11. `/great-lakes-freighter-winter-layup/` — distinct layup chronology and ship stories; not the same intent as the live tracker.
 
-These eight routes are **technical discovery checks**, not proof of search demand, indexation or forecast quality. Any missing route or faulty canonical becomes an explicit issue; extracted-product fixes must go through the appropriate owning repository. Wider winter clusters (Lake-Effect Snow, Snow on the Ground, Freeze-Up, hiking/snowshoeing) require canonical registry confirmation before adding a path to a technical audit; do not guess URLs.
+These eleven routes are **technical discovery checks**, not proof of search demand, indexation or forecast quality. Any missing route or faulty canonical becomes an explicit issue; extracted-product fixes must go through the appropriate owning repository. The separate `/winter-hike-snowshoe-lab/` remains a **noindex research preview**, per its source, and must not be mistaken for a missing public indexed page. Public release requires its own verified winter-parking/access and production gates.
 
 ## Audit outputs and boundaries
 
 - `.github/workflows/million-impressions-cohort.yml` runs when explicitly dispatched, and once on the PR changing the narrowly scoped audit definition. **It does not run on every normal merge.**
-- `scripts/audit-million-impressions-cohort.mjs` inspects Northern Lights first, then the other five measured pages, followed by eight winter URLs.
+- `scripts/audit-million-impressions-cohort.mjs` inspects Northern Lights first, then the other five measured pages, followed by eleven winter URLs.
 - The artifact `million-impressions-cohort-20261025` preserves `artifacts/million-impressions-cohort-20261025.json`, reporting page status, detected canonical, title, description, H1, initial HTML length, declared creator and actual technical errors.
 - Main's pre-existing agent branch verifier runs its full `npm run verify:all` gate on PRs. Do not merge if that or the cohort audit is red.
 - HTTP/HTML diagnostics **cannot** prove Google indexing, selected snippets, live API accuracy, mobile interactions, actual CTR uplift or AdSense revenue. Separate browser and Search Console confirmation is required.
