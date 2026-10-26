@@ -223,7 +223,7 @@
    }
    $('map-status').textContent=ids.length?'Select a harbor marker to inspect its vessels.':'No harbor records for this season; choose an archive winter.';
  }
- function fitLakes(){if(!state.map)return;state.map.fitBounds([[41.3,-92.4],[48.9,-78.2]],{padding:[28,28],maxZoom:6,animate:false})}
+ function fitLakes(){if(!state.map)return;const bounds=[[41.3,-92.4],[48.9,-78.2]];state.map.fitBounds(bounds,{padding:[28,28],maxZoom:6,animate:false});$('layup-map').dataset.initialBounds=bounds.map(p=>p.join(',')).join('|')}
  function focusHarbor(){if(!state.map)return;const selected=state.markers.find(m=>m.id===state.activeHarbor);if(selected){state.map.setView(selected.marker.getLatLng(),10,{animate:false});return}const pins=state.markers;if(pins.length===1)state.map.setView(pins[0].marker.getLatLng(),10,{animate:false});else if(pins.length>1)state.map.fitBounds(pins.map(m=>m.marker.getLatLng()),{padding:[35,35],maxZoom:8,animate:false});else fitLakes()}
  async function addTiles(){
    if(!state.map)return;
