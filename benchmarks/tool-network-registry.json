@@ -4098,6 +4098,44 @@
         "decisionWindowDays": 28,
         "privacy": "No precise location or individual filter combinations in analytics."
       }
+    },
+    {
+      "id": "upper-peninsula-waterfalls",
+      "name": "Upper Peninsula Waterfall Map & Trip Planner",
+      "canonical": "https://chrisizworski.com/upper-peninsula-waterfalls/",
+      "aliases": [],
+      "kind": "interactive-map",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Upper Peninsula waterfalls can I visit and how should I plan the trail access?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "upper-peninsula-michigan"
+      ],
+      "personas": [
+        "hiker",
+        "photographer",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-tool-no-gsc"
+      }
     }
   ],
   "relationships": [
@@ -5836,6 +5874,30 @@
       "strength": "strong",
       "surface": "michigan-destination-cards",
       "reason": "Dark-sky destination browsing transitions to aurora viewing evidence."
+    },
+    {
+      "from": "upper-peninsula-waterfalls",
+      "to": "pictured-rocks",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "waterfall-visit-guides",
+      "reason": "Waterfall discovery can lead to a fuller Pictured Rocks trip plan."
+    },
+    {
+      "from": "upper-peninsula-waterfalls",
+      "to": "michigan-ice-caves",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "seasonal-waterfall-context",
+      "reason": "Winter formations require specialized ice and seasonal access evidence."
+    },
+    {
+      "from": "fall-color",
+      "to": "upper-peninsula-waterfalls",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "upper-peninsula-fall-planning",
+      "reason": "Waterfall overlooks provide distinct leaf-peeping destinations with their own access requirements."
     }
   ],
   "cannibalizationGroups": [

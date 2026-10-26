@@ -1,3 +1,14 @@
+## Upper Peninsula Waterfall Explorer — October 26, 2026
+
+- **Owner request:** Research an interactive Upper Peninsula waterfall map and a useful profile for each featured waterfall; retain source truth and scale toward larger geospatial coverage without publishing thin programmatic doorway pages.
+- **Repository/branch:** `izworskic/chrisizworski-com`, `feature/up-waterfall-explorer-20261026`. New canonical hub: `/upper-peninsula-waterfalls/`; 12 curated waterfall child URLs. Tahquamenon retains its specialist canonical at `/tahquamenon-falls/`.
+- **Visitor utility:** Carto/Leaflet map, named destinations, region/trail/access filtering, explicit closed/restricted/seasonal statuses, a six-stop shortlist, local-permission geolocation with straight-line miles, official source links and progressive static HTML fallback.
+- **Editorial evidence:** USGS hydrography/WWD for future location enrichment; dated NPS and DNR authority for park access. Munising Falls is CLOSED until further notice; Agate reopened but trestle/motorized travel restricted; Bond vehicle access typically season-limited. Map pins intentionally do not claim to mark safe parking access.
+- **Integration:** Tools directory card and JSON-LD, `sitemap-up-waterfalls.xml`, sitemap index, Michigan Adventure Finder contextual link, linked registry node/relationships, shared ad loader unchanged.
+- **GSC/AdSense:** no new-URL data available and no traffic uplift claimed. Site-wide ads policy untouched.
+- **Validation to finish:** source and schema spot checks complete; full `npm run verify:all` and production browser acceptance remain pending CI. No merge while red or incomplete.
+- **One next action:** Review the pull-request full verification gate; only then merge and inspect live map/mobile interactions.
+
 ## Michigan Adventure Finder — October 26, 2026
 
 - **Owner direction:** Build a destination-first Michigan travel experience inspired by Madeline Marquardt's destination storytelling. Keep advertising and AdSense unchanged. Use the existing site and specialist tools, not a second independent deployment.
