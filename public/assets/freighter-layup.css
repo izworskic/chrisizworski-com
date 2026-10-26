@@ -542,3 +542,31 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 
 /* Native hidden must take precedence over generic button styles. */
 .layup-home #ais-show-more[hidden]{display:none!important}
+
+/* ACTUAL AUTO-ADS LAYOUT CLEARANCE
+   Ads stay loaded. Main content scrolls in an explicitly reserved viewport
+   above the bottom anchor; auto-placed in-flow ads remain on the page but are
+   displayed after the map/roster/story rather than between the hero and map. */
+html:has(> body.layup-home){height:100%;overflow:hidden}
+body.layup-home{
+ --layup-anchor-reserve:145px;
+ height:calc(100vh - var(--layup-anchor-reserve));
+ height:calc(100dvh - var(--layup-anchor-reserve));
+ overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;
+ scroll-behavior:smooth;scroll-padding-bottom:22px;padding-bottom:0;
+}
+.layup-home #main{display:flex;flex-direction:column;min-width:0}
+.layup-home #main>.hero{order:0;flex-shrink:0}
+.layup-home #main>.wrapper{order:1;width:100%;min-width:0;align-self:center}
+.layup-home #main>.google-auto-placed{order:2;align-self:stretch;flex-shrink:0;max-width:100%;margin:18px 0 10px}
+/* Google inserts fixed side rails with inline coordinates. At widths where
+   they would overlay the tool, hide only that side-rail format (not the ad slot
+   type or other inline/anchor formats). */
+@media(max-width:1600px){
+ body.layup-home ins.adsbygoogle-noablate[style*="position: fixed"][style*="right:"]:not([style*="bottom:"]){
+  visibility:hidden!important;pointer-events:none!important
+ }
+}
+@media(max-width:700px){
+ body.layup-home{--layup-anchor-reserve:126px}
+}
