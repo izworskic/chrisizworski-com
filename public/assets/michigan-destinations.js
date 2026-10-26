@@ -245,7 +245,7 @@
   }
   restoreQuery();
   applyFilters();
-  // Defer map work to the load event; CDN failures leave a complete static guide.
-  if(document.readyState==='complete') initMap();
-  else window.addEventListener('load',initMap,{once:true});
+  // Photos and ad resources can delay window.load significantly. Start the map at DOM readiness.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',initMap,{once:true});
+  else initMap();
 })();

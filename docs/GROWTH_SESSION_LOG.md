@@ -1,3 +1,11 @@
+## Michigan Adventure Finder post-deploy visual fixes — October 26, 2026
+
+- **Review evidence:** Public 1366×900 browser screenshot showed the photographic intro but a large ad-created visual gap before the finder, leaving no controls in the first viewport. The map screenshot showed the static loading placeholder while `window.load` was still pending for resources.
+- **Fix:** Move the fully functional mood chips and three filters *inside* the introductory experience, ahead of the boundary where auto-ad whitespace appears; no ad code or placement policies changed. Tighten its type and spacing. Replace the Keweenaw aerial photograph, which had an aircraft wing across the landscape, with a verified Great Sand Bay shoreline photograph (Tony Webster, CC BY 2.0).
+- **Runtime:** Initialize Leaflet on `DOMContentLoaded` rather than `window.load` to avoid waiting on photos/third-party ad resources. Keep public-key config request and tile-error OSM fallback unchanged.
+- **Verification:** Source checks pass. CI and live screenshot remain to be checked. No Google Search Console impact claims.
+- **Exactly one next action:** Review CI and then verify browser viewport and CARTO state after the deployment.
+
 ## Michigan Adventure Finder editorial rebuild — October 26, 2026
 
 - **Owner feedback:** Initial launch was visually generic, oversized and lacked authentic per-destination imagery. Owner asked to do the opposite: place-led storytelling and real photos, not a giant artificial hero. The CARTO map also used a keyless tile request even though Vercel already supplies a public basemap key.
