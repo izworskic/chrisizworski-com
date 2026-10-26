@@ -1,0 +1,41 @@
+{
+  "id": "FIELD_GUIDE_V1",
+  "name": "Field Guide Editorial Design System",
+  "version": "1.0.0",
+  "date": "2026-10-26",
+  "owner": "Chris Izworski",
+  "referenceUrl": "https://chrisizworski.com/michigan-destinations/",
+  "sourcePath": "izworskic/chrisizworski-com/design-systems/field-guide-v1/",
+  "kind": "portable-static-editorial-design-system",
+  "visibility": "source only, no production route",
+  "invocations": [
+    "Use FIELD_GUIDE_V1",
+    "Use my Field Guide design standard",
+    "Use the Michigan Adventure Finder design standard"
+  ],
+  "corePrinciples": [
+    "Place and experience before control panels",
+    "Location-accurate licensed photography",
+    "Useful decisions within first viewport",
+    "Map near narrative",
+    "Static HTML remains useful without JS",
+    "Explicit uncertainty and source dates",
+    "No ad code mutations"
+  ],
+  "components": [
+    "compact-editorial-hero",
+    "licensed-photo",
+    "mood-controls",
+    "destination-story",
+    "condition-handoff",
+    "map-rail",
+    "map-fallback",
+    "accessible-photo-credit"
+  ],
+  "qualityGate": "docs/QA_SCORECARD.md",
+  "assets": {
+    "localLeafletCss": "starter/vendor/leaflet-1.9.4.css",
+    "remoteLeafletJs": "Leaflet v1.9.4; external JS requires connectivity"
+  },
+  "portability": "Standalone folder can be copied to the root of a dedicated repository without changing internal paths"
+}
