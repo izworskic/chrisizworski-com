@@ -46,6 +46,8 @@
     if (exceptionInput.disabled) exceptionInput.checked = false;
 
     byId("guideTollTotal").textContent = "$" + result.total.toFixed(2);
+    var standardReturn = byId("guideRoundTripTotal");
+    if (standardReturn) standardReturn.textContent = "$" + (2 * result.total).toFixed(2);
     var formula = result.leadAxles + " lead axles × $" + result.leadRate.toFixed(2);
     if (result.towedAxles) {
       formula += " + " + result.towedAxles + " towed axles × $" + result.towedRate.toFixed(2);

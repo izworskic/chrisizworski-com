@@ -43,6 +43,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // October 25: reviewed Bridge toll UI and calculator script are intentionally new relative to the older live-crawl snapshot. Retain QA/regression gates until next clean production crawl.
+  "/assets/mackinac-guide.css",
+  "/assets/mackinac-toll-calculator.js",
   // October 23: usability UX revision of Seed Saving Lab: compare and whole-garden interactions.
   "/seed-saving-lab/",
   // Oct 23 2026: Cross-Pollination Explorer discovery link on existing seed-saving guide.

@@ -664,3 +664,8 @@ a:hover {
     scroll-behavior: auto;
   }
 }
+
+/* Round-trip planning is useful beyond the $4 answer shown in a search result. */
+.toll-output .roundtrip-label{display:block;margin-top:15px;padding-top:12px;border-top:1px solid rgba(255,255,255,.3);color:#e0eee9;font-size:11px;letter-spacing:.03em;line-height:1.5}
+.toll-output .roundtrip-total{font-size:28px;line-height:1.2}
+.toll-output small{font-size:11px;line-height:1.5}

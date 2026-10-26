@@ -40,7 +40,7 @@ for (const slug of paths) {
     });
     assert.ok(matched.length >= 3, "FAQ questions must appear visibly on the page");
     const siteMap = read("public/sitemap.xml");
-    const editorialLastmod = slug === "mackinac-bridge-live" ? "2026-10-14" : slug === "northern-lights-michigan" ? "2026-10-25" : slug === "great-lakes-freighter-tracking" ? "2026-10-25" : "2026-10-11";
+    const editorialLastmod = slug === "mackinac-bridge-live" ? "2026-10-25" : slug === "northern-lights-michigan" ? "2026-10-25" : slug === "great-lakes-freighter-tracking" ? "2026-10-25" : "2026-10-11";
     assert.ok(siteMap.includes(`<loc>https://chrisizworski.com/${slug}/</loc>\n    <lastmod>${editorialLastmod}</lastmod>`),
       "sitemap URL and date");
     assert.ok(graph.some(item => item.dateModified === editorialLastmod), "schema dateModified");
