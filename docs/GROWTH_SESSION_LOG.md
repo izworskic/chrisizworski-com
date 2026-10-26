@@ -1,3 +1,12 @@
+## Michigan Adventure Finder — Michigan tools directory registration — October 26, 2026
+
+- **Owner request:** Add the existing public Michigan Adventure Finder to the Michigan tools page. Canonical: `https://chrisizworski.com/michigan-destinations/`.
+- **Problem:** The tools page had an editorial banner under Michigan trip planners, but it was **outside** the `.tool-grid` and lacked `.tool-card[data-tags]`. The site's live search, categories, tool counts and `In season now` filter therefore could not find the existing destination experience.
+- **Changes:** Converted that single banner into one prominently featured native tool-card at the beginning of `public/tools/index.html`'s Michigan trip planner grid. Added stable `michigan-adventure-finder` ID, planning/nature tags, all twelve months, and explicit browse-by-region/season/activity description. Kept the page URL and its visible link while avoiding duplicate catalog entries.
+- **Guards:** `tests/michigan-adventure-directory-listing.test.js` asserts catalog placement, unique ID, search/season tags, existing destination canonical and 20 static destinations, and intact filtering. No advertising/AdSense code, identity metadata, sitemap, specialist engines or location/map code changed.
+- **Observations:** This is discoverability wiring, not a claim of GSC, CTR, traffic or revenue gains. No new URL or canonical needed.
+- **Exactly one next action:** Verify CI and preview, merge only after green checks, and confirm the updated Michigan tools page in production.
+
 ## Field Guide design standard extraction — October 26, 2026
 
 - **User request:** Keep the photo-led Michigan Adventure Finder visual standard reusable for future tools; owner should be able to say "Use my Field Guide standard" without writing code or repeating design instructions.
