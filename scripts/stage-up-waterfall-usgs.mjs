@@ -28,5 +28,14 @@ for(const g of state.features){
 const stamp={source:'USGS Waterfalls and Rapids / NHD V2',doi:'https://doi.org/10.5066/P9QQTKA0',sourceYear:2020,sha256:crypto.createHash('sha256').update(data).digest('hex'),sourceFeatureCount:parsed.features.length,importedCandidateCount:hydro.length,stateCrosslinks:crosswalk.length,manualReview:review.length,spatialCaveat:'USGS bounding-box-only points may be outside Upper Peninsula; do not automatically map or publish unmatched points.',accessPolicy:'No hydrography feature provides permission, trail, land manager, parking or current opening.'};
 const candidates={...normalized,provenance:stamp};
 fs.writeFileSync('data/up-waterfall-usgs-candidates.json',JSON.stringify(candidates,null,2)+'\n');
-fs.writeFileSync('data/up-waterfall-usgs-crosswalk.json',JSON.stringify({schemaVersion:1,provenance:stamp,matches:crosswalk,needsManualReview:review},null,2)+'\n');
+fs.writeFileSync('data/up-waterfall-usgs-crosswalk.json',JSON.stringify({schemaVersion:1,provenance:stamp,matches:crosswalk,needsManualReview:review},null,2)+'\\n');
+const publicCrosswalk={
+ schemaVersion:1,
+ source:stamp.doi,
+ sourceYear:stamp.sourceYear,
+ researchOnly:true,
+ note:'Names and locations align with USGS hydrography; this does not certify trails, parking, land ownership or safe access.',
+ matches:crosswalk.map(m=>({oid:m.stateGisObjectId,name:m.stateName,usgsName:m.usgsName,nhdComid:m.nhdPlusComid,nhdReachCode:m.nhdPlusReachCode,separationMeters:m.separationMeters}))
+};
+fs.writeFileSync('public/assets/up-waterfalls-usgs-matches.json',JSON.stringify(publicCrosswalk)+'\\n');
 console.log(JSON.stringify(stamp,null,2));

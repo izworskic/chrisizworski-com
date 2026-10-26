@@ -10,3 +10,16 @@ test('USGS record-level ingest is research only and never produces published vis
  assert.match(pipeline,/data\/up-waterfall-usgs-crosswalk.json/);
  assert.ok(!pipeline.includes('git push origin HEAD:main'));
 });
+
+test('public USGS source crosswalk only exposes scientific matches, never visitor access or routes',()=>{
+ const source=fs.readFileSync('scripts/stage-up-waterfall-usgs.mjs','utf8');
+ const layer=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
+ assert.match(source,/publicCrosswalk/);
+ assert.match(source,/up-waterfalls-usgs-matches.json/);
+ assert.match(layer,/nhdComid/);
+ assert.match(layer,/Neither source establishes legal access/);
+ assert.match(layer,/box.addEventListener\('change',render\)/);
+ assert.ok(!layer.includes('parking.href='));
+ const file='public/assets/up-waterfalls-usgs-matches.json';
+ if(fs.existsSync(file)){const j=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(j.researchOnly,true);assert.ok(j.matches.every(x=>Number.isInteger(x.oid)&&!('parking' in x)&&!('landManager' in x)&&!('trail' in x)&&!('publicAccess' in x)));}
+});
