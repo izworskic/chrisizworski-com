@@ -108,13 +108,24 @@ async function run(){
       check(await page.locator('main > .wrapper > section').evaluateAll(nodes=>nodes.map(n=>n.id||n.className).join('|')).then(v=>v.startsWith('explorer|fleet|ship-biographies|stories|sources-evidence')),size.name+': page section order');
       check(await page.locator('#source-evidence-details').evaluate(e=>!e.open),size.name+': source and evidence methods collapsed by default');
       const boundsText=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds||'');
-      check(boundsText==='41.3,-92.4|48.9,-78.2',size.name+': Lakes-focused initial map target');
+      const bounds=boundsText.split('|').map(v=>v.split(',').map(Number));
+      check(bounds.length===2&&bounds.every(b=>b.length===2&&b.every(Number.isFinite)),size.name+': map exposes real initial bounds');
+      check(bounds[0][0]>40&&bounds[1][0]<49.5&&bounds[0][1]<-91.5&&bounds[1][1]>-82,
+        size.name+': Great Lakes rather than eastern-seaboard extent '+boundsText);
+      const mapCenter=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds);
+      check(!!mapCenter,size.name+': initial map bounds verified');
 
       check(await page.locator('#stat-ships').textContent()==='12',size.name+': season stats');
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
       check(await page.locator('.ship-monogram').count()===12,size.name+': all twelve ships use consistent monogram tiles');
+      check((await page.locator('#count-note').textContent()).indexOf('12 sourced')===-1,size.name+': counts are not duplicated in roster');
+      for(const ship of ['manitoulin','stewart-j-cort','algoma-compass','american-spirit']){
+        const berth=await page.locator('[data-card="'+ship+'"] .berth').textContent();
+        check(!/not verified|not documented|layup verified|winter 2025/i.test(berth),size.name+': concise berth label for '+ship);
+      }
+      check(await page.locator('#harbor-panel').count()===1,size.name+': harbor notebook exists only inside map workspace');
       check(await page.locator('.ship-art img').count()===0,size.name+': mixed roster photography removed');
       check(await page.locator('#ship-biographies .bio-related').count()===3,size.name+': nonfeatured biographies deduplicated');
 
@@ -253,6 +264,19 @@ async function run(){
       });
       check(adChecks.bodyPadding>=95,size.name+': reserved bottom sticky-anchor space');
       if(size.name==='mobile')check(adChecks.rail==='none',size.name+': narrow side rail suppressed');
+      const actualAd=await page.evaluate(()=>{
+        const fake=document.createElement('div');fake.className='qa-sticky-ad';
+        Object.assign(fake.style,{position:'fixed',left:'0',right:'0',bottom:'0',height:'105px',zIndex:'999999',background:'#fff'});
+        fake.setAttribute('aria-hidden','true');document.body.append(fake);
+        window.scrollTo(0,document.documentElement.scrollHeight);
+        const adBox=fake.getBoundingClientRect(),footer=document.querySelector('.footer').getBoundingClientRect();
+        fake.remove();
+        return {noFooterOverlap:footer.bottom<=adBox.top,footerBottom:footer.bottom,adTop:adBox.top};
+      });
+      check(actualAd.noFooterOverlap,size.name+': simulated fixed anchor cannot cover footer '+JSON.stringify(actualAd));
+      const hero=await page.locator('.hero').boundingBox();
+      const map=await page.locator('#explorer').boundingBox();
+      check(hero&&map&&map.y>=hero.y+hero.height-3,size.name+': first tool is map directly after hero');
       check(adChecks.footerBottom<=adChecks.viewport-90,size.name+': sticky bottom ad cannot cover footer at page end');
 
       check(pageErrors.length===0,size.name+': unhandled browser exceptions: '+pageErrors.join('; '));
