@@ -81,6 +81,20 @@ async function run(){
 
       check(await page.locator('.atlas-workspace #layup-map').count()===1,size.name+': integrated map and harbor notebook');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
+      // Controlled AIS fixture: only eight nearby signals appear until explicitly expanded.
+      const simulatedAIS={ok:true,notLayupConfirmations:true,checkedAt:'2026-10-26T10:00:00Z',activity:Array.from({length:13},(_,i)=>({
+        name:'QA Vessel '+(i+1),harborId:'superior',seen:'2026-10-26T09:58:00Z',behavior:'moving'
+      }))};
+      await context.route('**/api/freighter-layup-live',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(simulatedAIS)}));
+      await page.locator('#ais-refresh').click();
+      await page.waitForFunction(()=>document.querySelector('#ais-watch-list')?.querySelectorAll('li').length===8,{timeout:7000});
+      check(await page.locator('#ais-watch-list li').count()===8,size.name+': AIS limited to eight visible observations');
+      check(await page.locator('#ais-show-more').isVisible(),size.name+': user can expand nearby AIS observations');
+      await page.locator('#ais-show-more').click();
+      check(await page.locator('#ais-watch-list li').count()===13,size.name+': show more reveals all mock signals');
+      await page.locator('#ais-show-more').click();
+      check(await page.locator('#ais-watch-list li').count()===8,size.name+': show fewer restores eight');
+      await context.unroute('**/api/freighter-layup-live');
       check(await page.locator('.layup-pin').count()===5,size.name+': five historical harbor map markers');
       check(await page.locator('.atlas-harbor-column').isHidden(),size.name+': no empty harbor notebook panel');
       await page.locator('.layup-pin').first().click();

@@ -106,7 +106,7 @@
    const rows=state.aisExpanded?state.aisActivity:state.aisActivity.slice(0,8);
    const harborScope=state.aisMonitoredHarbors?state.aisMonitoredHarbors+' monitored harbor areas':'monitored harbor areas';
    $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
-   const more=$('ais-show-more');if(more){more.hidden=state.aisActivity.length<=8;more.textContent=state.aisExpanded?'Show fewer AIS vessels':'Show '+(state.aisActivity.length-8)+' more AIS vessels';more.setAttribute('aria-expanded',String(state.aisExpanded))}
+   const more=$('ais-show-more');if(more){more.hidden=state.aisActivity.length<=8;more.textContent=state.aisExpanded?'Show fewer AIS vessels':state.aisActivity.length>8?'Show '+(state.aisActivity.length-8)+' more AIS vessels':'';more.setAttribute('aria-expanded',String(state.aisExpanded))}
    $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
     '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmtAIS(v.seen))+'</small></li>').join(''):
     '<li class="ais-empty">'+(state.aisCheckedAt?'No recent signals returned across '+harborScope+'. This does not mean the winter docks are empty.':'Live AIS feed unavailable. No conclusion can be drawn about '+harborScope+'.')+'</li>';

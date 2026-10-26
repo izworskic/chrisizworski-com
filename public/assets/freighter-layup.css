@@ -539,3 +539,6 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
  .layup-home .ship-stories .feature-grid,.layup-home .ship-stories .bio-related-grid{grid-template-columns:1fr}
  .layup-home .sources-evidence #source-evidence-details>summary{flex-wrap:wrap}
 }
+
+/* Native hidden must take precedence over generic button styles. */
+.layup-home #ais-show-more[hidden]{display:none!important}
