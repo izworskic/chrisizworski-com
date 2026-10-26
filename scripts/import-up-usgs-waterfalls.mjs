@@ -12,7 +12,7 @@ export function normalizeUSGS(raw){
   const features=[],seen=new Set(),stats={sourceRecords:raw.features.length,candidates:0,countyVerified:0,boundingBoxOnly:0};
   for(const [i,f] of raw.features.entries()){
     if(f?.geometry?.type!=='Point')continue;
-    const [lng,lat]=(f.geometry.coordinates||[]).map(Number);if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat<45.65||lat>48.55||lng< -90.6||lng> -84.0)continue;
+    const [lng,lat]=(f.geometry.coordinates||[]).map(Number);if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat<45.0||lat>48.55||lng< -90.6||lng> -84.0)continue;
     const p=f.properties||{},name=String(get(p,['fall_name','fallname','name','feature_name','gnis_name'])||'Unnamed fall'),type=String(get(p,['fall_type','falltype','type','feature_type'])||'');
     if(/rapids|dam/i.test(name+' '+type))continue;
     const county=String(get(p,['county','countyname','county_name'])||'').toUpperCase().replace(/ COUNTY$/,'');if(county&&!UPPER.has(county))continue;
@@ -30,7 +30,7 @@ export function normalizeUSGS(raw){
     features.push({id:'usgs-v2-'+id,name,lat:+lat.toFixed(6),lng:+lng.toFixed(6),county:UPPER.has(county)?county:null,geoEvidence:UPPER.has(county)?'county-attribute':'bounding-box-only',hydro:{usgsFallId:id,fallType:type||null,nhdComid:comid,nhdPlusReachCode:reachcode,nhdHrReachCode:hrReachcode,nhdHrMeasure:useful(get(hr,['measure'])),tallestDropFeet:useful(get(characteristic,['tallest drop feet']))},landManager:'unknown',publicAccess:'unknown',parking:'unknown',trail:'unknown',publication:'research-only',source:'https://doi.org/10.5066/P9QQTKA0'});
   }
   stats.candidates=features.length;
-  return {schemaVersion:1,doi:'https://doi.org/10.5066/P9QQTKA0',release:2020,warning:'Bounding box may include non-UP falls. USGS hydrography does not establish access, ownership, parking or a public trail.',stats,features};
+  return {schemaVersion:1,doi:'https://doi.org/10.5066/P9QQTKA0',release:2020,warning:'Bounding box intentionally includes southern Menominee County and may also include Wisconsin, Lower Michigan or Canadian points. County checks and geographic review are required. USGS hydrography does not establish access, ownership, parking or a public trail.',stats,features};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   if(!process.argv[2]){console.error('Pass local USGS GeoJSON path; use DOI to obtain raw release.');process.exit(2);}
