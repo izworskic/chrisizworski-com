@@ -980,18 +980,18 @@
       "lng": -89.15254,
       "level": "moderate",
       "minutes": "90–180 min",
-      "walk": "Approximately 1.1–1.3 miles one way following the NCT to a Baltimore River suspension bridge; roots, boardwalk and steeper grades near the river.",
+      "walk": "North Country Trail Segment 22 extends 1.4 miles from the US-45 trailhead to the Baltimore River bridge, passing Konteka Falls and O Kun de Kun Falls; short gravel spur, intermittent boardwalk and steeper riverbank tread.",
       "best": "Spring runoff and autumn color; current flow not measured here.",
       "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
       "status": "verify",
       "note": "This is a hike-first waterfall day, not a scenic-byway roadside stop.",
-      "source": "https://northcountrytrail.org/trail/michigan/pwc/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National scenic trail",
-      "parking": "Signed North Country Trail parking on the east side of US-45, roughly 7.8 miles north of Bruce Crossing.",
+      "parking": "Signed trailhead lot east of US-45 approximately 7.8 miles north of Bruce Crossing; typically plowed in winter, but never park on highway shoulder or assume guaranteed access.",
       "feature": "A remote-feeling Baltimore River curtain viewed from a suspension bridge.",
       "further": "The eastern side of the Baltimore River is not a parking access point. Do not plan to scramble behind the waterfall.",
-      "manager": "North Country Trail Association / Ottawa National Forest area",
+      "manager": "Ottawa National Forest / U.S. Forest Service (landowner); Peter Wolfe Chapter NCTA (trail maintenance)",
       "publication": "verified-access-guide",
       "gisObjectId": 64,
       "accessConfidence": "public-route-documented-current-open-unknown",
@@ -999,19 +999,23 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "NCTA Segment 22 signed public US-45-to-Baltimore River suspension bridge trail."
         },
         "landManager": {
           "verified": true,
-          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "May 2026 Peter Wolfe Chapter Segment 22 identifies U.S. Forest Service ownership, Ottawa National Forest and NCTA volunteer maintenance."
         },
         "parking": {
           "verified": true,
-          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "Public US-45 parking east of highway; no parking or vehicular access at the Baltimore River end of trail."
         },
         "trail": {
           "verified": true,
-          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+          "description": "1.4-mile route to Baltimore River suspension bridge, gravel spur and boardwalk, Konteka and O Kun de Kun Falls viewpoints."
         },
         "location": {
           "verified": true,
