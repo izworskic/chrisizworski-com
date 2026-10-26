@@ -542,3 +542,9 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 
 /* Native hidden must take precedence over generic button styles. */
 .layup-home #ais-show-more[hidden]{display:none!important}
+
+/* Map-first final spacing: reserve fixed ad overlay space without touching placements. */
+.layup-home{--layup-anchor-reserve:calc(144px + env(safe-area-inset-bottom,0px))}
+.layup-home #layup-map,.layup-home .map-tools,.layup-home #ship-grid,.layup-home #ship-detail,.layup-home .filter-row,.layup-home #winter-ais,.layup-home .footer{scroll-margin-block-end:var(--layup-anchor-reserve)}
+.layup-home #ship-grid:focus-within,.layup-home #ship-detail:focus-within{scroll-margin-block-end:var(--layup-anchor-reserve)}
+@media(max-width:620px){.layup-home{--layup-anchor-reserve:calc(158px + env(safe-area-inset-bottom,0px))}}

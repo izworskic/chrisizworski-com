@@ -74,3 +74,13 @@ test('layup map has one caveat adjacent to the map and roster names remain crawl
  assert.ok(css.includes('.layup-home .atlas-harbor-column[hidden]'));
  assert.ok(css.includes('--layup-anchor-reserve'));
 });
+
+test('evidence-focused map and clean harbor interaction are not a duplicated set of controls',()=>{
+ const js=fs.readFileSync(path.join(root,'public/assets/freighter-layup.js'),'utf8');
+ assert.ok(js.includes('const footprint=(selected.length>=2?current:reference)'));
+ assert.ok(js.includes("marker.on('click',()=>setHarbor(id,true))"));
+ assert.ok(!js.includes("text('button','View harbor vessels')"));
+ assert.ok(!html.includes('<p class="ais-caveat">'));
+ assert.ok(!html.includes('12 sourced vessel records in five harbors'));
+ assert.ok(css.includes('--layup-anchor-reserve:calc(144px'));
+});
