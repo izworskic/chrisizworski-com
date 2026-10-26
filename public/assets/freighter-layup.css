@@ -406,3 +406,136 @@ img[hidden],.fallback-ship[hidden]{display:none!important}
   .living-winter.is-preseason .ais-watch-header h3 {margin:0 0 8px;font-size:clamp(18px,5.5vw,24px)}
   .living-winter.is-preseason .ais-watch-status {margin:4px 0}
 }
+
+/* MAP-FIRST RELEASE — layout only, no AdSense configuration or ad placement removed. */
+.layup-home{--layup-anchor-reserve:108px;padding-bottom:var(--layup-anchor-reserve)}
+html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
+.layup-home #explorer,.layup-home #fleet,.layup-home #ship-detail,.layup-home .footer{scroll-margin-bottom:var(--layup-anchor-reserve)}
+.layup-home .footer{padding-bottom:calc(var(--layup-anchor-reserve) + 16px)}
+.layup-home .hero,.layup-home .hero-inner{min-height:395px}
+.layup-home .hero-inner{padding-top:44px;padding-bottom:19px;gap:20px}
+.layup-home .hero h1{font-size:clamp(49px,5.7vw,83px);max-width:930px}
+.layup-home .hero .lede{margin:15px 0 18px;font-size:clamp(15px,1.4vw,18px);max-width:660px}
+.layup-home .hero-actions{margin:0}
+.layup-home .hero-bottom{justify-content:flex-end;padding-top:11px;border-color:#ffffff30}
+.layup-home .hero-credit{max-width:660px}
+.layup-home .wrapper{padding-top:0}
+.layup-home .atlas{display:flex;flex-direction:column;gap:0;margin:22px 0 64px}
+.layup-home .atlas-heading{order:0;margin-bottom:17px}
+.layup-home .atlas h2,.layup-home .fleet-section h2,.layup-home .ship-stories h2,.layup-home .stories h2{font:400 clamp(31px,4vw,51px)/1.1 Georgia,serif;letter-spacing:-.032em}
+.layup-home .atlas-heading .section-deck{font-size:14px;margin:8px 0 0}
+.layup-home .atlas-record-status{display:none}
+.layup-home .atlas-toolbar{order:1}
+.layup-home .atlas-toolbar .controls{padding:10px 16px;align-items:center}
+.layup-home .atlas-toolbar .controls select{min-width:240px}
+.layup-home .atlas-workspace{order:2;display:block;min-height:0;border:1px solid #cbdad2;position:relative}
+.layup-home .atlas-map-column{position:relative;display:block;min-width:0}
+.layup-home .map-shell{display:block}
+.layup-home .map-tools{padding:8px 11px}
+.layup-home #layup-map{height:min(53vw,545px);min-height:420px;background:#dce8e6}
+.layup-home .atlas-stats{order:3;border-radius:0}
+.layup-home .atlas-stats .stats>div{padding:12px 18px}
+.layup-home .atlas-stats .stats strong{font-size:30px}
+.layup-home .map-evidence-note{order:4;font-size:12px;line-height:1.65;color:#607577;margin:10px 0 15px;max-width:1050px}
+.layup-home .atlas-harbor-column{position:absolute;right:15px;bottom:65px;z-index:500;width:min(360px,42%);max-height:68%;overflow:auto;padding:16px;background:#f8f6eff7;border:1px solid #a6bcb5;box-shadow:0 12px 34px #102f3e40;border-radius:8px}
+.layup-home .atlas-harbor-column[hidden]{display:none!important}
+.layup-home .atlas-harbor-column .kicker{margin:0 0 8px}
+.layup-home .harbor-panel-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;align-items:center;margin-bottom:9px}
+.layup-home .harbor-panel-heading h3{grid-column:1;font-size:22px;margin:0}
+.layup-home .harbor-panel-heading span{grid-column:1;color:#557074;font-size:11px}
+.layup-home .harbor-panel-heading button{grid-column:2;grid-row:1/3;align-self:start;background:#e3eae4;color:#173c4a;border:1px solid #c5d7d0;border-radius:6px;width:32px;height:32px}
+.layup-home .harbor-vessels{list-style:none;margin:0;padding:0;max-height:215px;overflow:auto}
+.layup-home .harbor-vessels li{border-top:1px solid #d9e3dc}
+.layup-home .harbor-vessels button{background:transparent;border:0;padding:7px 0;text-align:left;color:#245866;font-size:12px;line-height:1.5;width:100%}
+.layup-home .harbor-vessels button:hover{text-decoration:underline}
+.layup-home .layup-pin.is-selected{filter:drop-shadow(0 0 7px #df9b31)}
+.layup-home .layup-pin.is-selected span{background:#a55c16;color:#fff}
+.layup-home .living-winter{order:5;margin:15px 0;background:#133440}
+.layup-home .living-winter.is-preseason{background:#edf1e9;color:#24454e;padding:12px 17px;border:1px solid #cadbd3;border-radius:7px;box-shadow:none}
+.layup-home .living-winter.is-preseason .living-head,.layup-home .living-winter.is-preseason .winter-feed{display:none!important}
+.layup-home .living-winter.is-preseason .living-meta{padding:0;border:0;margin:0;display:flex;gap:15px;align-items:center}
+.layup-home .living-winter.is-preseason .living-meta strong{color:#274e5a}
+.layup-home .living-winter.is-preseason .living-meta span{color:#4f6970}
+.layup-home .living-winter:not(.is-preseason) .living-head h2{font-size:30px}
+.layup-home .ais-watch{order:6;margin:0;padding:18px;border:1px solid #d3e0d8;box-shadow:none}
+.layup-home .ais-watch-header h3{font-size:23px}
+.layup-home .ais-watch-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.layup-home .ais-watch-list li{padding:10px;min-width:0}
+.layup-home #ais-show-more:not([hidden]){display:block;margin:12px auto;background:#fff;border:1px solid #89adaf;color:#154552}
+.layup-home .fleet-section{margin:0 0 66px}
+.layup-home .fleet-section .section-head>p:not(.kicker){font-size:13px}
+.layup-home .filter-row{display:grid;grid-template-columns:minmax(260px,1.5fr) minmax(250px,1fr) minmax(250px,1fr) auto;align-items:end;gap:12px}
+.layup-home .filter-row label{min-width:0;width:100%}
+.layup-home .filter-row select,.layup-home .filter-row input{width:100%;min-width:0;text-overflow:clip}
+.layup-home .ship-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.layup-home .ship-card{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.layup-home .ship-art{height:112px;min-height:112px;flex:0 0 auto;background:linear-gradient(145deg,#183c4b,#49737b);border-bottom:1px solid #b0c8c4}
+.layup-home .ship-monogram{font:400 52px/1 Georgia,serif;color:#dce9e3;letter-spacing:.12em;text-shadow:0 3px 7px #03232940}
+.layup-home .ship-art:after{content:'';height:1px;background:#d2ab74aa;width:55px;position:absolute;bottom:18px;left:calc(50% - 27px)}
+.layup-home .ship-card-copy{padding:15px 18px 17px;display:flex;flex-direction:column;align-items:flex-start;flex:1}
+.layup-home .ship-card h3{font-size:22px;line-height:1.18}
+.layup-home .ship-card .berth{color:#587079;line-height:1.5;margin:10px 0 14px}
+.layup-home .ship-card button{margin-top:auto}
+.layup-home .ship-stories{margin:0 0 72px;border-top:1px solid #d9e1db;padding-top:29px}
+.layup-home .ship-stories .story-intro{font-size:14px;color:#5e7073;margin:8px 0 24px}
+.layup-home .ship-library-title{font:400 26px/1.2 Georgia,serif;margin:32px 0 16px}
+.layup-home .ship-stories .bio-related-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.layup-home .stories{margin:0 0 60px}
+.layup-home .sources-evidence{margin:0 0 50px}
+.layup-home #source-evidence-details{background:#f8faf7;border:1px solid #cfdad2;border-radius:7px}
+.layup-home #source-evidence-details>summary{list-style:none;cursor:pointer;padding:16px 20px;color:#1a4551;font-weight:750;display:flex;justify-content:space-between;gap:15px;align-items:center}
+.layup-home #source-evidence-details>summary::-webkit-details-marker{display:none}
+.layup-home #source-evidence-details>summary:focus-visible{outline:3px solid #f0bb71;outline-offset:2px}
+.layup-home .source-expander{font-size:12px;color:#56757a;font-weight:600}
+.layup-home #source-evidence-details[open] .source-expander{font-size:0}
+.layup-home #source-evidence-details[open] .source-expander:after{content:'Hide sources −';font-size:12px}
+.layup-home .sources-evidence .layup-coverage{margin:0;padding:20px;border-top:1px solid #d5e1d8}
+.layup-home .sources-evidence .coverage-head{margin:0 0 14px}
+.layup-home .sources-evidence .coverage-head h3{font:400 29px Georgia,serif;margin:0}
+.layup-home .sources-evidence .coverage-details{border:0}
+.layup-home .sources-evidence .method{margin:0 20px 22px;padding:18px}
+.layup-home .sources-evidence .method h3{font:400 25px Georgia,serif;margin:0 0 10px}
+@media(max-width:1199px){
+ .layup-home .ad-side-rail,.layup-home .ad-rail,.layup-home [data-ad-position="side-rail"],.layup-home .google-auto-placed[data-auto-format="side-rail"],.layup-home ins.adsbygoogle[data-ad-format="vertical"]{display:none!important}
+}
+@media(max-width:960px){
+ .layup-home .filter-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .layup-home .ship-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .layup-home .ais-watch-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .layup-home .feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+ .layup-home{--layup-anchor-reserve:112px}
+ .layup-home .hero,.layup-home .hero-inner{min-height:395px}
+ .layup-home .hero-inner{padding:27px 18px 15px;gap:12px}
+ .layup-home .hero h1{font-size:clamp(40px,9vw,54px)}
+ .layup-home .hero .eyebrow{margin:0 0 12px}
+ .layup-home .hero .lede{font-size:14px;margin:12px 0}
+ .layup-home .hero-bottom{padding:9px 0 0}
+ .layup-home .hero-credit{font-size:9px}
+ .layup-home .hero-actions{max-width:none}
+ .layup-home .hero-actions .button{width:100%;max-width:320px}
+ .layup-home .atlas{margin:13px 0 43px}
+ .layup-home .atlas-heading{gap:5px;margin-bottom:11px}
+ .layup-home .atlas h2,.layup-home .fleet-section h2,.layup-home .ship-stories h2,.layup-home .stories h2{font-size:33px}
+ .layup-home .atlas-toolbar .controls{padding:9px 12px}
+ .layup-home .atlas-toolbar .controls label{width:100%}
+ .layup-home .atlas-toolbar .controls select{min-width:0;width:100%}
+ .layup-home #layup-map{height:385px;min-height:385px}
+ .layup-home .atlas-harbor-column{position:static;max-height:none;overflow:visible;width:100%;box-shadow:none;border-radius:0;border-left:0;border-right:0}
+ .layup-home .atlas-stats .stats>div{padding:10px 7px}
+ .layup-home .atlas-stats .stats strong{font-size:23px}
+ .layup-home .map-evidence-note{font-size:11px;margin:11px 0}
+ .layup-home .living-winter.is-preseason{padding:10px 12px;margin:10px 0}
+ .layup-home .living-winter.is-preseason .living-meta{gap:4px}
+ .layup-home .ais-watch{padding:14px}
+ .layup-home .ais-watch-list{grid-template-columns:1fr 1fr}
+ .layup-home .ais-watch-list li{padding:8px}
+ .layup-home .ais-watch-list li strong{font-size:12px}
+ .layup-home .filter-row{grid-template-columns:1fr;gap:9px;padding:12px}
+ .layup-home .ship-grid{grid-template-columns:1fr}
+ .layup-home .ship-art{height:95px;min-height:95px}
+ .layup-home .ship-monogram{font-size:42px}
+ .layup-home .ship-stories .feature-grid,.layup-home .ship-stories .bio-related-grid{grid-template-columns:1fr}
+ .layup-home .sources-evidence #source-evidence-details>summary{flex-wrap:wrap}
+}
