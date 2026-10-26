@@ -48,3 +48,6 @@ Only /michigan-winter-activities/ has been rebuilt in this investment; other six
 
 ## Exact first-guide release audit scope
 For /michigan-winter-activities/ only, use the dedicated browser visual workflow after source edits. It visits the emitted static HTML, checks 18 cards with and without JS, filter behavior, mobile horizontal overflow, credible map fallback, all photo loads (scroll to trigger lazy loading), and uploads 390px/1366px screenshots for human review. This workflow is scoped to the winter flagship feature branch and does not trigger the Million Impressions pipeline.
+
+## Visual review and corrections
+Real GitHub Actions browser screenshots at 320/390/768/1366 showed no overflow and all 17 photos loaded. Reviewer found a mismatched bright-green Saginaw Bay photo on the ice-fishing card, so moved that experience to DNR-listed Houghton Lake, using a location-accurate 2012 Joe Ross CC BY-SA 2.0 historical winter photo and a DNR-documented Denton Township land-access locator (winter parking not verified). Keweenaw regional snowmobile story now illustrates the actual frozen Keweenaw Waterway (2004, Dcclark CC BY 2.5) rather than summertime dunes. Adjusted 390px micro-step text labels to prevent line wraps.
