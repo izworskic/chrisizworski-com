@@ -80,4 +80,6 @@ test('Google auto ads remain placed after the tool and bottom anchor has a dedic
  assert.ok(css.includes('html:has(> body.layup-home){height:100%;overflow:hidden}'));
  assert.ok(css.includes('height:calc(100dvh - var(--layup-anchor-reserve))'));
  assert.ok(css.includes('ins.adsbygoogle-noablate[style*="position: fixed"]'));
+ assert.ok(css.includes(':not([style*="bottom:"])'), 'bottom ad anchor must remain visible');
+ assert.ok(css.includes('body.layup-home{')&&css.includes('overflow-x:hidden;overflow-y:auto'), 'tool scrollport must reserve viewport height');
 });
