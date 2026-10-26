@@ -1,0 +1,32 @@
+import fs from 'node:fs';
+
+const file='public/lake-superior-provincial-park/index.html';
+const html=fs.readFileSync(file,'utf8');
+const cards=[...html.matchAll(/<article class="card"[^>]+>/g)].map(match=>match[0]);
+const tests=[];
+const check=(label,ok)=>tests.push({label,ok:Boolean(ok)});
+const include=(s)=>html.includes(s);
+
+check('canonical park page',include('https://chrisizworski.com/lake-superior-provincial-park/'));
+check('draft remains noindex until map, imagery and QA',include('content="noindex,follow"'));
+check('ten static, JS-independent destination descriptions',cards.length===10 && (html.match(/<h3>/g)||[]).length===10);
+check('unique destination IDs',new Set(cards.map(c=>c.match(/data-id="([^"]+)"/)?.[1])).size===10);
+check('per-destination effort and time data',cards.every(c=>/data-minutes="\d+"/.test(c) && /data-effort="/.test(c)));
+check('Agawa and Trappers official seasonal closure',include('data-id="agawa"') && include('data-id="trappers"') && cards.filter(c=>c.includes('data-status="closed"')).length===2);
+check('trails closed in 2026 cannot be selected for recommendation',include("c.dataset.status!=='closed'") && include("c.dataset.status==='closed'"));
+check('regular park operating season end labeled by date',include('2026 day-use season ended October 25'));
+check('hunting zone caution',include('Nokomis and South Old Woman River') && include('hunting'));
+check('explicit current-access uncertainty',include('Access unverified') && include('not confirmed accessible after seasonal closure'));
+check('barrier-free verified separate from easy trails',include('data-effort="verified"') && include('Visitor Centre') && include('not automatically accessible'));
+check('short Awausee out-and-back from authority',include('First lookout: 45 min return'));
+check('full Pinguisibi separately labeled from first falls',include('Full 6 km return: 1½–3 hr'));
+check('day use permitting and primary authority sources',include('reservations.ontarioparks.ca') && include('/dayuse/faq') && include('/park/lakesuperior/alerts'));
+check('no false current parking navigation target',include('verified parking pin') && !include('maps/dir/?api=1'));
+check('time budget labels exclude driving',include('Driving between stops, parking, permits, breaks and weather delays are NOT included'));
+check('no persistent tracking/storage',!/\b(localStorage|sessionStorage|document.cookie)\b/.test(html));
+check('no invented live API claims',include('not a live opening-status service'));
+check('no AdSense configuration added by prototype',!include('adsbygoogle') && !include('googlesyndication'));
+const failed=tests.filter(t=>!t.ok);
+for(const t of tests)console.log((t.ok?'PASS ':'FAIL ')+t.label);
+console.log('Lake Superior Provincial Park Explorer checks: '+(tests.length-failed.length)+'/'+tests.length);
+if(failed.length)process.exitCode=1;
