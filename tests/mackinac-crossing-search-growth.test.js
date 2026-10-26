@@ -16,7 +16,7 @@ test('official status comes before editorial Gazette and retains source safeguar
   assert.match(live,/will not infer an .open. answer if that official source is unavailable/i);
   assert.match(live,/id="officialUpdated"/);
   assert.match(live,/id="refreshButton"/);
-  assert.match(live,/id="toll-section"/);
+  assert.match(live,/class="toll-section"/);
   assert.match(live,/<title>Mackinac Bridge Conditions Today: Live Status &amp; Wind<\/title>/);
   assert.match(live,/href="https:\/\/chrisizworski.com\/mackinac-bridge-live\/"/);
 });
@@ -36,6 +36,6 @@ test('only genuinely revised bridge canonical dates advance',()=>{
   for(const slug of ['mackinac-bridge-live','mackinac-bridge-tolls']){
     assert.match(sitemap,new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>2026-10-25<\\/lastmod>'));
   }
-  assert.match(toll,/"dateModified": "2026-10-25"/);
+  assert.match(toll,/"dateModified"\s*:\s*"2026-10-25"/);
   assert.match(live,/"dateModified": "2026-10-25"/);
 });
