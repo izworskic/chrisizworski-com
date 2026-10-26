@@ -28,8 +28,8 @@ test("the demand towns are present in the served HTML, not only in the API respo
 
 test("both halves of the synonym are covered: northern lights and aurora borealis", () => {
   assert.match(html, /<title>[^<]*Northern Lights[^<]*<\/title>/i, "the title keeps the head term");
-  // The Oct 19 owner-approved short search snippet omits the synonym; it remains in OG metadata.
-  assert.match(html, /<meta name="description" content="Live Kp, cloud cover and moon data show whether the northern lights are visible over Michigan tonight, plus the best viewing hours and darkest spots\."/i, "approved search snippet remains intact");
+  // The Oct 26 query-intent refinement keeps the synonym in OG while the snippet answers tonight visibility.
+  assert.match(html, /<meta name="description" content="Can you see the northern lights in Michigan tonight\? Check live NOAA activity, local NWS cloud cover, best viewing hours and dark-sky spots by region\."/i, "query-first snippet remains intact");
   assert.match(html, /<meta property="og:description" content="[^"]*aurora borealis/i, "the social description still carries the synonym");
 });
 
