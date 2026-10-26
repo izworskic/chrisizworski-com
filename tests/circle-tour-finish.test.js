@@ -43,13 +43,14 @@ test('planner supports real trip actions without storing personal data', () => {
   assert.doesNotMatch(html + page + core + map + live, /localStorage|sessionStorage|document\.cookie/);
 });
 
-test('September 30 finish layer keeps current travel facts and loads the adaptive day engine', () => {
-  assert.match(page, /const RELEASE = '2026-09-30'/);
+test('October 26 park-access update preserves the adaptive Circle Tour engine', () => {
+  assert.match(page, /const RELEASE = '2026-10-26'/);
   assert.match(page, /lake-superior-circle-tour-live-day\.js\?v=20260930-1/);
   assert.match(page, /Agawa Canyon Tour Train runs August 1–October 18/);
   assert.match(page, /https:\/\/agawatrain\.com\//);
-  assert.match(page, /Gargantua Road is closed for maintenance/);
-  assert.match(page, /Photography and digital-device use are not permitted at the Agawa Rock Pictographs/);
+  assert.match(page, /Agawa Rock Pictographs Trail and Trapper’s Trail/);
+  assert.match(page, /Other off-season access is unverified/);
+  assert.match(html, /href="\/lake-superior-provincial-park\/"/);
   assert.match(page, /Munising Falls Trail remains closed until further notice/);
   assert.match(page, /Sand Point Road and beach are open/);
   assert.match(page, /block\.remove\(\)/);
