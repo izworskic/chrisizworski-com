@@ -17,10 +17,11 @@ try{
   await page.route('https://pagead2.googlesyndication.com/**',r=>r.abort());
   await page.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('[data-fall]').first().waitFor();
-  await run('mobile hub contains 20 human-readable destinations',async()=>{
-    assert.equal(await page.locator('[data-fall]').count(),20);
+  await run('mobile hub contains 23 human-readable destinations',async()=>{
+    assert.equal(await page.locator('[data-fall]').count(),23);
     assert.equal(await page.locator('h1').count(),1);
     assert.ok(await page.locator('#geographic-research').count()===1);
+    for(const id of ['mosquito-falls','elliot-falls','manido-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
   await run('mobile map initializes from local Leaflet JS and CARTO tiles',async()=>{
     await page.waitForFunction(()=>!!window.UPWaterfallMap,{timeout:15000});
