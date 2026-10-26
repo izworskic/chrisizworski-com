@@ -1,0 +1,39 @@
+name: Winter Field Guide Visual QA
+on:
+  push:
+    branches: [feat/michigan-winter-activities-production]
+    paths:
+      - public/michigan-winter-activities/**
+      - public/assets/michigan-winter-activities.css
+      - public/assets/winter-field-guide.*
+      - scripts/check-winter-flagship-visual.mjs
+      - .github/workflows/winter-field-guide-visual.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Start static content server
+        run: |
+          python3 -m http.server 4173 --directory public > /tmp/winter-field-guide-http.log 2>&1 &
+          sleep 2
+      - name: Run measured multi-viewport visual checks
+        run: node scripts/check-winter-flagship-visual.mjs
+      - name: Upload screenshot and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michigan-winter-guide-visual-evidence
+          path: artifacts/winter-field-guide-visual/
+          retention-days: 7
