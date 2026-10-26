@@ -80,3 +80,39 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.doesNotMatch(html, /destination-art art-/);
   assert.doesNotMatch(html, /michigan-paddling\/hero\.jpg/);
 });
+
+test('photographs are genuine location-specific works with visible reuse credits', () => {
+  const figures=[...html.matchAll(/<figure class="destination-photo (?:card|hero-photo)"[^>]*>([\\s\\S]*?)<\\/figure>/g)];
+  assert.equal(figures.length,23,'20 destinations + 3 hero photographs');
+  const cardFigures=[...html.matchAll(/<figure class="destination-photo card"[^>]*>([\\s\\S]*?)<\\/figure>/g)];
+  assert.equal(cardFigures.length,20);
+  const cardImageUrls=[];
+  for(const [,body] of figures){
+    assert.match(body, /alt="[^"]{12,}"/, 'meaningful accessible alt text');
+    assert.match(body, /<figcaption class="photo-credit">Photo:/,'subtle, visible caption');
+    assert.match(body, /https:\\/\\/commons.wikimedia.org\\/wiki\\/File:/, 'original photographer source linked');
+    assert.match(body, /https:\\/\\/creativecommons.org\\//,'reuse license linked');
+    assert.doesNotMatch(body, /reference photograph/);
+  }
+  for(const [,body] of cardFigures){
+    const url=body.match(/<img src="([^"]+)"/)?.[1];
+    assert.ok(url?.startsWith('https://'),'photographs have explicit immutable destinations');
+    cardImageUrls.push(url);
+  }
+  assert.equal(new Set(cardImageUrls).size,20,'no photo recycled across different destinations');
+  for(const filename of [
+    'Calm_summer_day_at_Miners_Castle',
+    'Isle_Royale_Todd_Harbor_sunset',
+    'Ice_caves_spears',
+    'Michigan%27s_Torch_Lake_Swimming',
+    'Arch_Rock%2C_Mackinac_Island',
+    'Au_Sable_River.jpg',
+    'Old_Mission_Peninsula.jpg',
+    'Nordhouse_Dunes_Wilderness_Area_shoreline',
+    'Manistee_River_in_Autumn_2012'
+  ]) assert.match(html,new RegExp(filename),'curated destination imagery: '+filename);
+  assert.match(html,/fetchpriority="high"/);
+  assert.match(css,/Editorial photo direction/);
+  assert.match(css,/object-position:var\\(--photo-position/);
+  assert.match(css,/figcaption\\.photo-credit/);
+});
