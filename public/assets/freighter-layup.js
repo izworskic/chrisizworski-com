@@ -27,8 +27,10 @@
    const selected=v.id===state.selected,h=harbor(v.harborId),biog=state.biographies?.profiles?.some(p=>p.id===v.id);
    const words=v.name.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/).filter(Boolean);
    const initials=(words.length>1?words[0][0]+words.at(-1)[0]:v.name.slice(0,2)).toUpperCase();
-   const facility=v.berth.split(' — ')[0];
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art"><span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(facility)+' · '+esc(h.name)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
+   const facility=(v.berth||'').split(' — ')[0].trim();
+   const genericBerth=/^(Milwaukee harbor|Owen Sound harbor|Port of Toledo|Harbor report|Harbor area)$/i.test(facility);
+   const cardBerth=genericBerth||!facility?h.name:facility+' · '+h.name;
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art"><span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
  }
 
  function activeRecordsFromLedger(ledger,archive){
@@ -105,7 +107,7 @@
    if(!state.aisLoaded){$('ais-watch-status').textContent='AIS harbor activity is loading. These are not confirmed layup records.';return}
    const rows=state.aisExpanded?state.aisActivity:state.aisActivity.slice(0,8);
    const harborScope=state.aisMonitoredHarbors?state.aisMonitoredHarbors+' monitored harbor areas':'monitored harbor areas';
-   $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
+   $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed.':'AIS is currently unavailable. Dated reporting remains available above.';
    const more=$('ais-show-more');if(more){more.hidden=state.aisActivity.length<=8;more.textContent=state.aisExpanded?'Show fewer AIS vessels':state.aisActivity.length>8?'Show '+(state.aisActivity.length-8)+' more AIS vessels':'';more.setAttribute('aria-expanded',String(state.aisExpanded))}
    $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
     '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmtAIS(v.seen))+'</small></li>').join(''):
@@ -217,13 +219,24 @@
    for(const id of ids){
      const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>policy().classify(v,seasonData()).confirmed).length;
      const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' dated winter reports; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
-     const pop=document.createElement('div');pop.append(text('strong',h.name));
-     const button=text('button','View harbor vessels');button.type='button';button.addEventListener('click',()=>setHarbor(id,true));pop.append(button);
-     marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});marker.getElement()?.classList.toggle('is-selected',state.activeHarbor===id);
+     marker.on('click',()=>setHarbor(id,true));state.markers.push({id,marker});marker.getElement()?.classList.toggle('is-selected',state.activeHarbor===id);
    }
    $('map-status').textContent=ids.length?'Select a harbor marker to inspect its vessels.':'No harbor records for this season; choose an archive winter.';
  }
- function fitLakes(){if(!state.map)return;const bounds=[[41.3,-92.4],[48.9,-78.2]];state.map.fitBounds(bounds,{padding:[28,28],maxZoom:6,animate:false});$('layup-map').dataset.initialBounds=bounds.map(p=>p.join(',')).join('|')}
+ function fitLakes(){
+   if(!state.map||!state.archive)return;
+   // Fit to source-dated harbors; for an empty/live or single-port winter preserve a five-lake context.
+   const current=records(),reference=state.archive.seasons.find(s=>s.id==='2025-26')?.records||[];
+   const selected=[...new Set(current.map(v=>v.harborId))];
+   const footprint=(selected.length>=2?current:reference).map(v=>harbor(v.harborId)).filter(Boolean);
+   const lat=footprint.map(h=>h.lat),lon=footprint.map(h=>h.lon);
+   const bounds=footprint.length?
+     [[Math.max(40.7,Math.min(...lat)-.7),Math.max(-93.6,Math.min(...lon)-1.05)],
+      [Math.min(49.1,Math.max(...lat)+.8),Math.min(-77.9,Math.max(...lon)+1.05)]]:
+     [[41.1,-93.1],[48.9,-78.0]];
+   state.map.fitBounds(bounds,{padding:[24,24],maxZoom:6,animate:false});
+   $('layup-map').dataset.initialBounds=bounds.map(p=>p.join(',')).join('|');
+ }
  function focusHarbor(){if(!state.map)return;const selected=state.markers.find(m=>m.id===state.activeHarbor);if(selected){state.map.setView(selected.marker.getLatLng(),10,{animate:false});return}const pins=state.markers;if(pins.length===1)state.map.setView(pins[0].marker.getLatLng(),10,{animate:false});else if(pins.length>1)state.map.fitBounds(pins.map(m=>m.marker.getLatLng()),{padding:[35,35],maxZoom:8,animate:false});else fitLakes()}
  async function addTiles(){
    if(!state.map)return;

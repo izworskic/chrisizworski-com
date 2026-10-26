@@ -1,13 +1,45 @@
 ## Upper Peninsula Waterfall GIS Evidence Expansion — October 26, 2026
 
 - **Branch / PR:** feature/up-waterfall-explorer-20261026, draft PR #1199. Merge current main preserving other changes.
-- **Inventory:** Michigan state geographic Waterfalls feature layer: 197 source records, 163 named non-rapids/dam candidates staged as geographic reference only. Optional toggle-off map layer does NOT represent trails, public access, parking or live status.
-- **Visitors:** 20 curated waterfalls, 19 distinct child pages plus a Tahquamenon canonical handoff. Seven new evidence-linked guides: Great Conglomerate, Potawatomi, Gorge, Sandstone, Rainbow, O Kun de Kun and Nawadaha. Each has separate geographic, route, land-manager, parking and trail citations; existing first-wave guides still require an individual five-axis legacy audit.
+- **Inventory:** Michigan state geographic Waterfalls feature layer: 197 source records, 161 validated Upper Peninsula geographic reference points staged as geographic reference only. Optional toggle-off map layer does NOT represent trails, public access, parking or live status.
+- **Visitors:** 20 curated waterfalls, 19 distinct child pages plus a Tahquamenon canonical handoff. Seven new evidence-linked guides: Great Conglomerate, Potawatomi, Gorge, Sandstone, Rainbow, O Kun de Kun and Nawadaha. Each has separate geographic, route, land-manager, parking and trail citations; first-wave guide evidence audit complete, with Scott Falls remaining noindex.
 - **2026–27 hazard:** Active USFS Black River notice dated May 15, 2026. Sandstone CLOSED; Potawatomi and Gorge partially restricted, Rainbow future closures possible, Great Conglomerate tread/stair caution. Agency project projected through fall 2027. No reopening presumed.
 - **USGS data:** V2.0 release DOI P9QQTKA0 located, 8.57MB raw GeoJSON could not be retrieved intact in connected request. Offline USGS importer created to preserve NHD IDs as research-only records when the complete file is available; no USGS record-level import claimed.
-- **Publication integrity:** 163 geographic records cannot generate indexable detail pages or driving directions. New page URLs only for field-access-evidenced guidance, including an explicitly closed Sandstone caution page. Ads policy unchanged.
-- **Verification:** Full current-branch CI and mobile preview checks required; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
-- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass## Michigan destination photography release — visual map follow-up (October 26, 2026)
+- **Publication integrity:** 161 geographic candidates cannot generate indexable detail pages or driving directions. New page URLs only for field-access-evidenced guidance, including an explicitly closed Sandstone caution page. Ads policy unchanged.
+- **Verification:** Full head-SHA CI and real Chromium browser smoke must pass; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
+- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass.
+
+## Field Guide design standard extraction — October 26, 2026
+
+- **User request:** Keep the photo-led Michigan Adventure Finder visual standard reusable for future tools; owner should be able to say "Use my Field Guide standard" without writing code or repeating design instructions.
+- **Stable identifier:** `FIELD_GUIDE_V1` / version 1.0.0.
+- **Repository boundary:** A new standalone GitHub repository cannot be created using the connected GitHub action set. A complete self-contained source package was instead created under `design-systems/field-guide-v1/` in the existing owning repo. It is ready to move unchanged to a private `field-guide-design-system` repo once a repository-create tool is available. **Do not claim the separate repository exists.**
+- **Implemented assets:** Portable semantic tokens, concise first-screen hero, licensed real photographs with visible source/credit, responsive story cards, filter controls, CARTO + OpenStreetMap progressive map with locally bundled Leaflet CSS (full BSD-2-Clause notice), truth/data labeling rules, integration instructions and a weighted 100-point QA scorecard. Starter is a noindex reference example, not a new published route.
+- **Agent discovery:** Added a pointer to the root `AGENTS.md` and `docs/FIELD_GUIDE_DESIGN_STANDARD.md`. Exact prompt: **"Use FIELD_GUIDE_V1 for this tool"**.
+- **Safety and correctness:** Did not touch public destination code, sitemap, canonical, AdSense, identities, weather engines, map config or other deployed tools; no GSC/rank/revenue change claimed.
+- **Quality gates:** Dependency-free `npm test` in design-system folder plus root Node regression test and full owning-repo `npm run verify:all`. The full PR and public audit must pass before release.
+- **Exactly one next action:** Review and merge the green FIELD_GUIDE_V1 PR, then use that folder as the default source for future opt-in design requests.
+
+## Michigan Adventure Finder — final live photo audit (October 26, 2026)
+
+- **Owner continuation:** Review the live destination experience after the photography release and correct any genuine remaining quality gaps without reworking the ad stack.
+- **Live browser evidence:** The supposedly blank Isle Royale and Grand Sable cards were false alarms caused by deep document-area screenshots not activating native lazy loading. Targeted element screenshots confirmed full photographs, credits, links, and text. Targeted 390px checks also confirmed Munising ice, Mackinac Arch Rock, Ludington/Nordhouse, Au Sable, Torch Lake, Traverse City and Tunnel of Trees.
+- **One verified editorial improvement:** Alpena/Thunder Bay's newly merged image of dredging/industrial harbor works looked less like a Michigan destination than a technical report. Replaced that image only with an authentic photograph of Alpena's red lighthouse on the Lake Huron breakwater, by Dylan L. Tanner, CC BY-SA 2.5 (Commons File:Lighthouse at Alpena MI 2005-09.jpeg). Updated linked attribution, descriptive alt text, crop, and test to enforce the source. All 20 destination cards remain present.
+- **Preserved:** 20 distinct credited scene photos, complete static travel stories, default native image lazy-loading for below-fold cards, keyed CARTO with local Leaflet CSS, regional/seasonal filters, canonical and existing SEO registry. No ads or AdSense code edited.
+- **Search outcomes:** No ranking, traffic, or revenue gains claimed without comparably dated GSC and AdSense measurements.
+- **One release action:** Merge only after full GitHub CI, public audit and preview succeed; then verify the live Alpena card and map.
+
+## Michigan Adventure Finder: completed image audit follow-through — October 26, 2026
+
+- **Task:** Resume after disconnect and finish the photographic editorial QA without requiring owner action.
+- **Live state verified before changes:** 20 destination cards and 3 hero photos; CARTO Voyager tiles, pins and controls rendering from the Vercel public key, from release #1206. Browser screenshots of card elements verified that initially blank long-page captures were caused by images not yet lazy-loaded offscreen; **not evidence of broken source URLs**. Individual screenshots verified Isle Royale, Grand Sable, Marquette, Munising, Tunnel of Trees, etc. Distinguish lazy-loading timing from actual URL failures.
+- **Remaining editorial corrections:** Marquette: replaced generic beach close-up with Presque Isle rocky Superior coast (Hitoubashira, CC BY-SA 4.0); Mackinac Island: replaced fragile/hard-to-render prior Arch Rock shot with a visually inspected alternative framing clear Lake Huron (Andy Gnias, CC BY-SA 4.0); Alpena: replaced winter ice imagery on a May–October destination card with a distinct summertime harbor aerial (U.S. Army Corps of Engineers Detroit District, CC BY-SA 2.0); Detroit River: replaced ambiguous horizon/water image with recognizable Detroit skyline from Belle Isle (TheWxResearcher, CC0).
+- **Rights:** Each new photograph sourced from Wikimedia Commons file metadata and retains visible linked source/creator and license. Per-photo focal cropping retained. No photos copied from proprietary travel pages.
+- **Scope:** Michigan destination HTML, focused tests and this log only. Ad/AdSense code and policy, canonicals, site navigation, Personal SERP, map/CARTO configuration, other pages unchanged.
+- **Tests:** Focused assertions updated for all current curated filenames; general 20-card/23-photo/linked-credits guardrails maintained. Do not merge with red CI. Search traffic uplift unknown.
+- **Exactly one next action:** Complete PR CI/public audit, merge only verified changes, and confirm the four destination cards with live image screenshots.
+
+## Michigan destination photography release — visual map follow-up (October 26, 2026)
 
 - **Verified post-release screenshot:** The nine-photo curated page and linked credits displayed correctly at 1366px and 390px, but a mid-page screenshot showed only one 256px CARTO raster tile and no zoom controls/pins despite an optimistic CARTO “loaded” status.
 - **Root issue addressed:** Leaflet's essential map layout stylesheet was requested from an external unpkg CDN; losing or delaying that stylesheet leaves bare tiles in flow even when Leaflet JS and key-bearing CARTO requests run successfully. Vendored the exact Leaflet 1.9.4 stylesheet from the published CDN into `public/assets/vendor/leaflet-1.9.4.css` with BSD-2-Clause source attribution, and replaced the external CSS link with a site-hosted resource. JS still loads Leaflet from its existing source.

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field Guide — editorial starter (do not publish unchanged)</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="A portable example of an authentic, photo-led destination guide with an evidence-aware map.">
+<link rel="stylesheet" href="./vendor/leaflet-1.9.4.css">
+<link rel="stylesheet" href="./field-guide.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script defer src="./field-guide.js"></script>
+</head>
+<body>
+<a class="fg-skip" href="#fg-main">Skip to places</a>
+<header class="fg-header"><a class="fg-brand" href="#fg-main">Field Guide <span>· demo</span></a><p>Authentic landscapes. Better decisions.</p></header>
+<main id="fg-main" class="fg">
+<section class="fg-hero" aria-labelledby="fg-title">
+  <div class="fg-intro">
+    <p class="fg-eyebrow">Field notes / Michigan sample</p>
+    <h1 id="fg-title">Go somewhere <em>worth remembering.</em></h1>
+    <p>Follow the pull of a clear shoreline, a forest overlook or a waterfall. Start with the experience. Use source-backed tools to decide when.</p>
+    <a class="fg-primary" href="#fg-browse">Explore places <span aria-hidden="true">↓</span></a>
+    <p class="fg-disclosure">Sample destinations · illustrative historic photographs · not current conditions</p>
+  </div>
+  <div class="fg-hero-images" aria-label="Real photographs of Michigan landscapes">
+    <figure class="fg-photo fg-hero-main" style="--fg-image-position:55% 55%">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG/960px-Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG" alt="Miners Castle cliffs above turquoise Lake Superior water" width="960" height="640" decoding="async" fetchpriority="high">
+      <figcaption class="fg-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Calm_summer_day_at_Miners_Castle_(31924797-119d-4ca9-b4ec-933447d0d9d3).JPG">NPS</a> · <a href="https://creativecommons.org/publicdomain/mark/1.0/">Public domain</a></figcaption>
+    </figure>
+    <figure class="fg-photo fg-hero-side" style="--fg-image-position:52% 52%">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg" alt="Lake of the Clouds, Michigan, surrounded by autumn ridges" width="960" height="640" loading="lazy" decoding="async">
+      <figcaption class="fg-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg">Stevenliuyi</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></figcaption>
+    </figure>
+  </div>
+</section>
+<section class="fg-discover" id="fg-browse" aria-label="Choose a destination">
+  <div class="fg-section-line"><div><p class="fg-eyebrow">The first decision</p><h2>What calls to you?</h2></div><p>Filter by experience. Seasons are typical, not a report of current weather or access.</p></div>
+  <div class="fg-moods" role="group" aria-label="Choose an experience">
+    <button type="button" class="fg-chip" data-mood="all" aria-pressed="true">Everything</button>
+    <button type="button" class="fg-chip" data-mood="water">Big water</button>
+    <button type="button" class="fg-chip" data-mood="forest">Forest overlooks</button>
+    <button type="button" class="fg-chip" data-mood="waterfall">A waterfall day</button>
+  </div>
+  <form class="fg-controls" id="fg-form" role="search">
+    <label>Season
+      <select id="fg-season"><option value="any">Any season</option><option value="spring">Spring</option><option value="summer">Summer</option><option value="fall">Fall</option><option value="winter">Winter</option></select>
+    </label>
+    <label>Region
+      <select id="fg-region"><option value="all">Anywhere</option><option value="western-up">Western U.P.</option><option value="central-up">Central U.P.</option><option value="eastern-up">Eastern U.P.</option></select>
+    </label>
+    <button class="fg-primary" type="submit">Find a place</button>
+  </form>
+  <p id="fg-results" class="fg-status" role="status" aria-live="polite">Three illustrated places to explore. Check official conditions before setting out.</p>
+</section>
+<section class="fg-places" aria-label="Michigan destination stories">
+<aside class="fg-map-panel" aria-labelledby="fg-map-title">
+  <p class="fg-eyebrow">The field map</p><h2 id="fg-map-title">The places, in context</h2>
+  <p>Tap a pin, read the story. Maps show location, not a safe route or open parking.</p>
+  <div id="fg-map" class="fg-map" aria-label="Map of the three sample destinations"><p class="fg-map-fallback">Map needs JavaScript and a supported network. All three destination stories below remain usable.</p></div>
+  <p id="fg-map-status" class="fg-status" role="status" aria-live="polite">Map is optional; browse the destination stories if tiles are unavailable.</p>
+  <p class="fg-fine"><a href="https://www.openstreetmap.org/#map=6/46.7/-87.4" target="_blank" rel="noopener noreferrer">Open a standard Michigan map</a>.</p>
+</aside>
+<div class="fg-story-feed" id="fg-stories">
+  <article class="fg-story" id="minerstower" data-region="central-up" data-moods="water" data-seasons="spring,summer,fall" data-lat="46.56" data-lng="-86.32">
+    <figure class="fg-photo" style="--fg-image-position:55% 55%">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG/960px-Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG" alt="Pictured Rocks sandstone formation rising above turquoise Lake Superior water" width="960" height="640" loading="lazy" decoding="async">
+      <figcaption class="fg-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Calm_summer_day_at_Miners_Castle_(31924797-119d-4ca9-b4ec-933447d0d9d3).JPG">NPS</a> · <a href="https://creativecommons.org/publicdomain/mark/1.0/">Public domain</a></figcaption>
+    </figure>
+    <div class="fg-story-body"><p class="fg-kicker">Munising / Lake Superior</p><h3>Pictured Rocks</h3><p>The turquoise water and weathered cliffs ask you to slow down. Choose an overlook before planning a boat or kayak outing.</p><p class="fg-move"><b>The move</b> Walk to a shore overlook; then see whether wind and boat conditions favor a longer trip.</p><p class="fg-notice">Access and boat operations vary; consult the park's current notices.</p><div class="fg-links"><a href="https://www.nps.gov/piro/planyourvisit/conditions.htm">Official conditions</a><a href="https://chrisizworski.com/great-lakes-water-temperature/">Water context</a></div></div>
+  </article>
+  <article class="fg-story" id="cloudlake" data-region="western-up" data-moods="forest,water" data-seasons="summer,fall,winter" data-lat="46.82" data-lng="-89.75">
+    <figure class="fg-photo" style="--fg-image-position:48% 57%">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg" alt="Lake of the Clouds amid fall-colored hills in the Porcupine Mountains" width="960" height="640" loading="lazy" decoding="async">
+      <figcaption class="fg-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg">Stevenliuyi</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></figcaption>
+    </figure>
+    <div class="fg-story-body"><p class="fg-kicker">Ontonagon / Upper Peninsula</p><h3>Lake of the Clouds</h3><p>A forested ridgeline and a long lake below give Michigan an unexpectedly wild sense of scale.</p><p class="fg-move"><b>The move</b> Begin with the overlook; add a trail only after confirming seasonal access and its difficulty.</p><p class="fg-notice">Road and trail access change in winter.</p><div class="fg-links"><a href="https://www.michigan.gov/dnr/places/v-centers/porcupine-mountains">State park information</a><a href="https://chrisizworski.com/fall-color/">Fall color tool</a></div></div>
+  </article>
+  <article class="fg-story" id="tahquamenon" data-region="eastern-up" data-moods="waterfall,forest" data-seasons="spring,summer,fall,winter" data-lat="46.60" data-lng="-85.21">
+    <figure class="fg-photo" style="--fg-image-position:48% 55%">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Tahquamenon_Falls_2024.jpg/960px-Tahquamenon_Falls_2024.jpg" alt="Amber water flowing over the wide ledge of Tahquamenon Falls" width="960" height="640" loading="lazy" decoding="async">
+      <figcaption class="fg-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Tahquamenon_Falls_2024.jpg">Mojnsen</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></figcaption>
+    </figure>
+    <div class="fg-story-body"><p class="fg-kicker">Paradise / Eastern Upper Peninsula</p><h3>Tahquamenon Falls</h3><p>Hear the broad waterfall before the view opens up. There is more to explore beyond the most popular railing.</p><p class="fg-move"><b>The move</b> Save time for a river walk and quieter trail; check official access before arriving.</p><p class="fg-notice">Never treat winter waterfall or ice photos as proof of safe ice.</p><div class="fg-links"><a href="https://www.michigan.gov/dnr/places/state-parks/tahquamenon">State park notices</a><a href="https://chrisizworski.com/michigan-ice-caves/">Winter ice evidence</a></div></div>
+  </article>
+</div>
+</section>
+<p id="fg-empty" class="fg-empty" hidden>No matches in this small demonstration. <button type="button" id="fg-clear">Show all sample places</button></p>
+<section class="fg-ending"><div><p class="fg-eyebrow">Field Guide standard</p><h2>Go for the place. Check the evidence.</h2></div><p>These are reference places and archival photographs, not a live weather or accessibility service. Build real products by pairing the invitation with authoritative current-condition tools and dated access notices.</p></section>
+</main>
+<footer class="fg-footer">FIELD_GUIDE_V1 · Starter specimen only · not a published travel recommendation</footer>
+<noscript><p class="fg-nojs">Filtering and map need JavaScript. All sample destination descriptions, photographs and useful links are available above.</p></noscript>
+</body></html>
