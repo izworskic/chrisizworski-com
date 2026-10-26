@@ -685,7 +685,7 @@
       "access": "May 15, 2026 Forest Service notice listed Conglomerate Falls open with caution on trail tread and stairs. Check for newer restrictions before travel. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "verify",
       "note": "Make this the longer, geologically interesting Black River byway stop.",
-      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National forest",
       "parking": "Signed Great Conglomerate Falls lot on County Road 513 north of Bessemer.",
@@ -699,11 +699,11 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "landManager": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "parking": {
           "verified": true,
@@ -745,7 +745,7 @@
       "access": "May 15, 2026 Forest Service notice lists Potawatomi Falls open with some platform closures, with additional closures possible during works. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "restricted",
       "note": "The most practical short-walk companion to Gorge Falls.",
-      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National forest",
       "parking": "Signed Potawatomi/Gorge viewing parking along County Road 513; the surfaced accessible route is described from Gorge lot.",
@@ -759,11 +759,11 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "landManager": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "parking": {
           "verified": true,
@@ -805,7 +805,7 @@
       "access": "May 15, 2026 Forest Service notice lists Gorge Falls open with some closures; trail access can change as construction proceeds. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "restricted",
       "note": "A different river character just a short walk from Potawatomi Falls.",
-      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National forest",
       "parking": "Potawatomi/Gorge Falls signed parking area on County Road 513.",
@@ -819,11 +819,11 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "landManager": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "parking": {
           "verified": true,
@@ -865,7 +865,7 @@
       "access": "May 15, 2026 Forest Service notice lists Sandstone Falls CLOSED due to viewing-platform and stair replacement. Do not plan this stop until the agency posts reopening. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "closed",
       "note": "Choose Sandstone for intimate rock-and-current detail photographs.",
-      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National forest",
       "parking": "Signed Sandstone Falls byway pull-off and lot on County Road 513.",
@@ -879,11 +879,11 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "landManager": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "parking": {
           "verified": true,
@@ -925,7 +925,7 @@
       "access": "May 15, 2026 Forest Service notice listed Rainbow Falls open, with later trail and platform closures planned. Do not presume it is still fully open. Previous public access descriptions apply only outside closures; follow current Forest Service signs.",
       "status": "restricted",
       "note": "The photo-driven finale to the five signed Black River byway falls.",
-      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National forest",
       "parking": "Signed Rainbow Falls parking near the Black River Harbor end of County Road 513.",
@@ -939,11 +939,11 @@
       "verification": {
         "publicAccess": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "landManager": {
           "verified": true,
-          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area"
         },
         "parking": {
           "verified": true,
