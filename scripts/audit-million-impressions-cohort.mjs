@@ -16,6 +16,9 @@ const pages = [
   { group: 'first-six', path: '/michigan-snow-totals/', impressions: 1154, clicks: 8, intent: 'How much snow fell in Michigan?' },
   // Winter discovery checks: URL-based technical evidence, NOT confirmed rank potential.
   { group: 'winter-discovery', path: '/national-tools/snow/' },
+  { group: 'winter-discovery', path: '/lake-effect-snow/' },
+  { group: 'winter-discovery', path: '/michigan-snow-depth/' },
+  { group: 'winter-discovery', path: '/michigan-ice/regions/saginaw-bay.html' },
   { group: 'winter-discovery', path: '/michigan-ice/' },
   { group: 'winter-discovery', path: '/michigan-ice-caves/' },
   { group: 'winter-discovery', path: '/michigan-cross-country-skiing/' },
