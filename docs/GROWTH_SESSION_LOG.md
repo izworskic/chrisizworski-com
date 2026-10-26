@@ -1,3 +1,13 @@
+## Michigan Adventure Finder: completed image audit follow-through — October 26, 2026
+
+- **Task:** Resume after disconnect and finish the photographic editorial QA without requiring owner action.
+- **Live state verified before changes:** 20 destination cards and 3 hero photos; CARTO Voyager tiles, pins and controls rendering from the Vercel public key, from release #1206. Browser screenshots of card elements verified that initially blank long-page captures were caused by images not yet lazy-loaded offscreen; **not evidence of broken source URLs**. Individual screenshots verified Isle Royale, Grand Sable, Marquette, Munising, Tunnel of Trees, etc. Distinguish lazy-loading timing from actual URL failures.
+- **Remaining editorial corrections:** Marquette: replaced generic beach close-up with Presque Isle rocky Superior coast (Hitoubashira, CC BY-SA 4.0); Mackinac Island: replaced fragile/hard-to-render prior Arch Rock shot with a visually inspected alternative framing clear Lake Huron (Andy Gnias, CC BY-SA 4.0); Alpena: replaced winter ice imagery on a May–October destination card with a distinct summertime harbor aerial (U.S. Army Corps of Engineers Detroit District, CC BY-SA 2.0); Detroit River: replaced ambiguous horizon/water image with recognizable Detroit skyline from Belle Isle (TheWxResearcher, CC0).
+- **Rights:** Each new photograph sourced from Wikimedia Commons file metadata and retains visible linked source/creator and license. Per-photo focal cropping retained. No photos copied from proprietary travel pages.
+- **Scope:** Michigan destination HTML, focused tests and this log only. Ad/AdSense code and policy, canonicals, site navigation, Personal SERP, map/CARTO configuration, other pages unchanged.
+- **Tests:** Focused assertions updated for all current curated filenames; general 20-card/23-photo/linked-credits guardrails maintained. Do not merge with red CI. Search traffic uplift unknown.
+- **Exactly one next action:** Complete PR CI/public audit, merge only verified changes, and confirm the four destination cards with live image screenshots.
+
 ## Michigan destination photography release — visual map follow-up (October 26, 2026)
 
 - **Verified post-release screenshot:** The nine-photo curated page and linked credits displayed correctly at 1366px and 390px, but a mid-page screenshot showed only one 256px CARTO raster tile and no zoom controls/pins despite an optimistic CARTO “loaded” status.
