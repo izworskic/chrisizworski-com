@@ -1,0 +1,35 @@
+name: Million impressions cohort on-demand audit
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/audit-million-impressions-cohort.mjs
+      - .github/workflows/million-impressions-cohort.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: million-impressions-cohort-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  live-cohort-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect Northern Lights first, all six primary pages, and winter discovery
+        run: node scripts/audit-million-impressions-cohort.mjs
+      - name: Preserve baseline and technical findings
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: million-impressions-cohort-20261025
+          path: artifacts/million-impressions-cohort-20261025.json
+          if-no-files-found: warn
+          retention-days: 14
