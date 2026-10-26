@@ -6176,7 +6176,7 @@
       "from": "michigan-winter-activities",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6184,7 +6184,7 @@
       "from": "frozen-michigan",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6200,7 +6200,7 @@
       "from": "michigan-winter-trails",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6216,7 +6216,7 @@
       "from": "michigan-winter-wildlife",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6232,7 +6232,7 @@
       "from": "great-lakes-winter-guide",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6248,7 +6248,7 @@
       "from": "michigan-winter-night-sky",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },
@@ -6264,7 +6264,7 @@
       "from": "michigan-winter-weekends",
       "to": "michigan-adventure-finder",
       "type": "context",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "guide-network",
       "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
     },

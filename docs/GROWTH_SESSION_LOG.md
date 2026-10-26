@@ -1441,7 +1441,7 @@ This is an operational journal, not a record of proven ranking lift unless measu
 
 ### 2026-10-26 — Seven Michigan winter field guides (feature branch)
 
-- Built seven distinct FIELD_GUIDE_V1 editorial winter guides with shared responsive CSS, progressive map/filter JS, static place narrative and grounded general-area markers; 48 total researched experience entries.
+- Built seven distinct FIELD_GUIDE_V1 editorial winter guides with shared responsive CSS, progressive map/filter JS, static place narrative and grounded general-area markers; 47 total researched experience entries.
 - Reused existing specialist tools, official NPS and Michigan DNR references, explicit winter-access caveats, NPS photo credits and separate search intentions. No new condition prediction, no changes to existing weather/ice engines or AdSense configuration.
 - Added sitemap-winter entries, discovery from Michigan Adventure Finder, tool-network relationships and focused Node tests.
 - GSC, indexing, revenue lift, photo-level 90/100 release rubric, full CI, preview visuals and merge/deploy all **not verified at authoring**. Do not claim published routes until release gates and merge pass.
