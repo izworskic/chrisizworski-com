@@ -5,7 +5,13 @@ const path = require("node:path");
 const I = require("../lib/mackinac-island/intelligence.js");
 const AI = require("../lib/mackinac-island/adaptive-impact.js");
 const Q = I.QUESTION_LIBRARY;
-const DATE = "2026-09-26";
+// Match the live intake engine's Detroit-local evaluation day. A fixed September day
+// incorrectly compares autumn recommendations to the October/November selector.
+const DATE = (() => {
+  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Detroit", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+  const get = type => parts.find(part => part.type === type).value;
+  return get("year")+"-"+get("month")+"-"+get("day");
+})();
 
 // Deterministic sample spanning every party, duration and trip-loss the intake offers.
 const opts = (id) => Q[id].options.map((o) => o[0]);
