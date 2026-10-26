@@ -1,3 +1,11 @@
+## U.P. Waterfall USGS Hydrography Import — October 26, 2026
+
+- Previous waterfall explorer release PR #1199 merged. Twenty curated waterfall destinations, nineteen guides, one Tahquamenon canonical link. Scott Falls remains noindex until access/road-crossing proof.
+- This branch stages a separate 2020 USGS NHD V2 source-file import (DOI 10.5066/P9QQTKA0) using a fixed official ScienceBase download URL, full-download size/feature-count validation and SHA-256 provenance.
+- Generates non-public U.P. regional geographic research and a conservative Michigan state-GIS crosswalk only when names agree and separation is within 400 meters. Ambiguous matches require review. No automatic visitor URLs or public access assumptions.
+- Verification: GitHub workflow, repository unit tests and full gate required. Source data not claimed imported until remote workflow confirms.
+- GSC/AdSense values not read; no claimed SEO lift. Next single action: inspect USGS GitHub Actions import result, then cross-reference feature count and matching quality before adding a public opt-in scientific map layer.
+
 ## Upper Peninsula Waterfall GIS Evidence Expansion — October 26, 2026
 
 - **Branch / PR:** feature/up-waterfall-explorer-20261026, draft PR #1199. Merge current main preserving other changes.

@@ -1,0 +1,43 @@
+name: Import U.P. waterfall USGS geographic research
+on:
+  push:
+    branches:
+      - feature/up-waterfall-usgs-ingest-20261026
+    paths:
+      - .github/workflows/import-up-waterfalls-usgs.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download the published USGS release
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --retry-all-errors --retry-delay 3 --max-time 180 --silent --show-error --output /tmp/conterminousUS_falls_nhd.geojson 'https://www.sciencebase.gov/catalog/file/get/5e8d2b5982cee42d13466001?f=__disk__86%2Ff1%2Fc5%2F86f1c5a4ab96d77b04d827a87b0e85570b97d25e'
+          test "$(wc -c </tmp/conterminousUS_falls_nhd.geojson)" -ge 2000000
+      - name: Normalize USGS points and construct state GIS crosswalk
+        run: node scripts/stage-up-waterfall-usgs.mjs /tmp/conterminousUS_falls_nhd.geojson
+      - name: Run source and publication regression tests
+        run: |
+          node -e "for(const path of ['data/up-waterfall-usgs-candidates.json','data/up-waterfall-usgs-crosswalk.json','public/assets/up-waterfalls-usgs-matches.json'])JSON.parse(require('node:fs').readFileSync(path,'utf8'))"
+          node --test tests/up-waterfalls-usgs.test.js tests/up-waterfalls-crosswalk.test.js tests/up-waterfalls.test.js
+      - name: Commit only non-public research data to this branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/up-waterfall-usgs-candidates.json data/up-waterfall-usgs-crosswalk.json public/assets/up-waterfalls-usgs-matches.json
+          if git diff --cached --quiet; then echo 'USGS research data unchanged'; exit 0; fi
+          git commit -m 'Stage verified USGS V2 waterfall geographic inventory and non-access crosswalk'
+          git push origin HEAD:feature/up-waterfall-usgs-ingest-20261026
