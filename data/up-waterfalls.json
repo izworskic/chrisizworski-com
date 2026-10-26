@@ -276,6 +276,342 @@
       "parking": "M-28 designated pullout near Scott Falls, Au Train, MI",
       "feature": "An easy-to-see roadside cascade with a very different access profile from forest hikes.",
       "further": "A seasonal roadside trickle should not be represented as a guaranteed high-volume waterfall."
+    },
+    {
+      "id": "great-conglomerate-falls",
+      "name": "Great Conglomerate Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.631634,
+      "lng": -90.054861,
+      "level": "steps",
+      "minutes": "45–90 min",
+      "walk": "About ¾ mile along an improved trail with stairs from the byway parking area.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "Make this the longer, geologically interesting Black River byway stop.",
+      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Great Conglomerate Falls lot on County Road 513 north of Bessemer.",
+      "feature": "A huge conglomerate block splits the Black River into two plunging channels.",
+      "further": "Trail includes stairs and wet rock; do not assume the fall itself is drive-up.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 66,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "potawatomi-falls",
+      "name": "Potawatomi Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.637918,
+      "lng": -90.051383,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "About ⅛ mile on a developed path; confirm the correct parking side for the accessible paved connection.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "The most practical short-walk companion to Gorge Falls.",
+      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Potawatomi/Gorge viewing parking along County Road 513; the surfaced accessible route is described from Gorge lot.",
+      "feature": "A short forest walkway reaches a beautifully tiered Black River fall.",
+      "further": "The specific accessible approach is route-dependent. Not all connecting footpaths are step-free.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 71,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "gorge-falls",
+      "name": "Gorge Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.64045,
+      "lng": -90.050083,
+      "level": "steps",
+      "minutes": "20–50 min",
+      "walk": "About ⅛ mile on a signed visitor trail, with steps at the narrow gorge viewing section.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "A different river character just a short walk from Potawatomi Falls.",
+      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Potawatomi/Gorge Falls signed parking area on County Road 513.",
+      "feature": "The Black River compresses through dark rock in a deep, narrow gorge.",
+      "further": "A permitted overlook does not mean visitors may approach exposed gorge edges.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 73,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "sandstone-falls",
+      "name": "Sandstone Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.653316,
+      "lng": -90.045593,
+      "level": "steps",
+      "minutes": "30–60 min",
+      "walk": "About ¼ mile from signed parking, including steps and uneven sections near river overlooks.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "Choose Sandstone for intimate rock-and-current detail photographs.",
+      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Sandstone Falls byway pull-off and lot on County Road 513.",
+      "feature": "Water threads across irregular sandstone ledges instead of one single plunge.",
+      "further": "Wet rock near the river must not be treated as a public walkway.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 78,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "rainbow-falls",
+      "name": "Rainbow Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.658695,
+      "lng": -90.04376,
+      "level": "steps",
+      "minutes": "45–90 min",
+      "walk": "About ½ mile by the signed west-bank approach with many stairs. The suspension bridge / east-bank walk from Black River Harbor is a separate, longer route.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "The photo-driven finale to the five signed Black River byway falls.",
+      "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Signed Rainbow Falls parking near the Black River Harbor end of County Road 513.",
+      "feature": "Spray and sunlight can turn the lower Black River into a rainbow-lit cascade.",
+      "further": "Rainbows are not guaranteed; the return climb is significant and road access changes seasonally.",
+      "manager": "Ottawa National Forest · Bessemer Ranger District",
+      "publication": "verified-access-guide",
+      "gisObjectId": 81,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/attmain/ottawa/specialplaces"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "o-kun-de-kun-falls",
+      "name": "O Kun de Kun Falls",
+      "region": "Western U.P.",
+      "place": "Ontonagon County",
+      "lat": 46.651152,
+      "lng": -89.15254,
+      "level": "moderate",
+      "minutes": "90–180 min",
+      "walk": "Approximately 1.1–1.3 miles one way following the NCT to a Baltimore River suspension bridge; roots, boardwalk and steeper grades near the river.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "This is a hike-first waterfall day, not a scenic-byway roadside stop.",
+      "source": "https://northcountrytrail.org/trail/michigan/pwc/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National scenic trail",
+      "parking": "Signed North Country Trail parking on the east side of US-45, roughly 7.8 miles north of Bruce Crossing.",
+      "feature": "A remote-feeling Baltimore River curtain viewed from a suspension bridge.",
+      "further": "The eastern side of the Baltimore River is not a parking access point. Do not plan to scramble behind the waterfall.",
+      "manager": "North Country Trail Association / Ottawa National Forest area",
+      "publication": "verified-access-guide",
+      "gisObjectId": 64,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/trail/michigan/pwc/"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
+    },
+    {
+      "id": "nawadaha-falls",
+      "name": "Nawadaha Falls",
+      "region": "Western U.P.",
+      "place": "Gogebic County",
+      "lat": 46.698631,
+      "lng": -89.974237,
+      "level": "easy",
+      "minutes": "30–75 min",
+      "walk": "Nawadaha has a DNR-documented accessible observation platform on the West River Trail; other Presque Isle River paths are rough and stair-heavy.",
+      "best": "Spring runoff and autumn color; current flow not measured here.",
+      "access": "Public destination or signed trail documented by linked land manager/trail authority. Verify current open status independently.",
+      "status": "verify",
+      "note": "A lower-effort entry to the park's three-waterfall sequence before Manido and Manabezho.",
+      "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State park",
+      "parking": "Presque Isle River Scenic Site parking; follow signed state park access roads and West River Trail.",
+      "feature": "An upstream cascade with a recognized viewpoint among the old-growth Presque Isle River falls.",
+      "further": "One accessible overlook does not make the whole river loop accessible. Check M-519 and park road status.",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "publication": "verified-access-guide",
+      "gisObjectId": 89,
+      "accessConfidence": "public-route-documented-current-open-unknown",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      }
     }
   ]
 }
