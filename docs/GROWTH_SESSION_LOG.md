@@ -7,7 +7,13 @@
 - **USGS data:** V2.0 release DOI P9QQTKA0 located, 8.57MB raw GeoJSON could not be retrieved intact in connected request. Offline USGS importer created to preserve NHD IDs as research-only records when the complete file is available; no USGS record-level import claimed.
 - **Publication integrity:** 163 geographic records cannot generate indexable detail pages or driving directions. New page URLs only for field-access-evidenced guidance, including an explicitly closed Sandstone caution page. Ads policy unchanged.
 - **Verification:** Full current-branch CI and mobile preview checks required; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
-- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass.
+- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass## Michigan destination photography release — visual map follow-up (October 26, 2026)
+
+- **Verified post-release screenshot:** The nine-photo curated page and linked credits displayed correctly at 1366px and 390px, but a mid-page screenshot showed only one 256px CARTO raster tile and no zoom controls/pins despite an optimistic CARTO “loaded” status.
+- **Root issue addressed:** Leaflet's essential map layout stylesheet was requested from an external unpkg CDN; losing or delaying that stylesheet leaves bare tiles in flow even when Leaflet JS and key-bearing CARTO requests run successfully. Vendored the exact Leaflet 1.9.4 stylesheet from the published CDN into `public/assets/vendor/leaflet-1.9.4.css` with BSD-2-Clause source attribution, and replaced the external CSS link with a site-hosted resource. JS still loads Leaflet from its existing source.
+- **Layout stability:** `ResizeObserver`, post-layout animation frame, and `load` follow-up call `map.invalidateSize({pan:false})` to handle dynamic photo/ad shifts and viewport changes. Does not change CARTO key handling, geolocation consent, ad systems or map data.
+- **Verification:** Dedicated Node regression test checks the local vendor CSS file and map resize recovery. Full CI and production viewport screenshots required before concluding repaired.
+- **Exactly one next action:** With CI green, merge the map-only fix and visually verify complete tile coverage and pins on the live desktop and mobile map.
 
 ## Michigan Adventure Finder — photographic curation release (October 26, 2026)
 
