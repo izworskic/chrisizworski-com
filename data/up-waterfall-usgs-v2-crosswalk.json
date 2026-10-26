@@ -1,0 +1,2176 @@
+{
+  "schemaVersion": 1,
+  "source": "https://doi.org/10.5066/P9QQTKA0",
+  "stateSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+  "publication": "research-only",
+  "warning": "USGS stream linkage and state GIS waterfall position establish neither land ownership nor safe/legal visitor access, parking, trail, current status or waterfall flow.",
+  "matchingRule": "Only unique normalized-name matches within 800 m of a state GIS waterfall are linked. Duplicates held separately. County-only features are not public map destinations.",
+  "stats": {
+    "nationalSourceRecords": 11860,
+    "regionalBoundingCandidates": 332,
+    "countyTaggedUP": 0,
+    "linkedToMichiganGIS": 113,
+    "countyOnlyCandidates": 0,
+    "heldAmbiguous": 1
+  },
+  "matches": [
+    {
+      "stateGisObjectId": 2,
+      "stateName": "Misicot Falls",
+      "usgsName": "Misicot Falls",
+      "usgsFeatureId": "e414039a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 45.757123,
+      "usgsLng": -87.947023,
+      "distanceMeters": 94,
+      "hydro": {
+        "usgsFallId": "e414039a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "6841825",
+        "nhdPlusReachCode": "04030108000072",
+        "nhdHrReachCode": "04030108003646",
+        "nhdHrMeasure": "17.9070",
+        "tallestDropFeet": 8
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 6,
+      "stateName": "Fumee Falls",
+      "usgsName": "Fumee Falls",
+      "usgsFeatureId": "e40ef326-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 45.806524,
+      "usgsLng": -87.978405,
+      "distanceMeters": 683,
+      "hydro": {
+        "usgsFallId": "e40ef326-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6841007",
+        "nhdPlusReachCode": "04030108000987",
+        "nhdHrReachCode": "04030108000987",
+        "nhdHrMeasure": "44.0816",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 12,
+      "stateName": "Chicagon Falls",
+      "usgsName": "Chicagon Falls",
+      "usgsFeatureId": "e40eed6d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.133608,
+      "usgsLng": -88.453546,
+      "distanceMeters": 64,
+      "hydro": {
+        "usgsFallId": "e40eed6d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "14443668",
+        "nhdPlusReachCode": "04030106000076",
+        "nhdHrReachCode": "04030106000076",
+        "nhdHrMeasure": "76.0011",
+        "tallestDropFeet": 23
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 15,
+      "stateName": "Margeson Falls",
+      "usgsName": "Margeson Falls",
+      "usgsFeatureId": "e40f02d7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.224439,
+      "usgsLng": -88.241556,
+      "distanceMeters": 600,
+      "hydro": {
+        "usgsFallId": "e40f02d7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6832131",
+        "nhdPlusReachCode": "04030107000508",
+        "nhdHrReachCode": "04030107000508",
+        "nhdHrMeasure": "67.0285",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 17,
+      "stateName": "Chipmunk Falls",
+      "usgsName": "Chipmunk Falls",
+      "usgsFeatureId": "52586166-87d8-4946-b1d6-2c0fe08d2e38",
+      "usgsLat": 46.291623,
+      "usgsLng": -88.563199,
+      "distanceMeters": 20,
+      "hydro": {
+        "usgsFallId": "52586166-87d8-4946-b1d6-2c0fe08d2e38",
+        "fallType": null,
+        "nhdComid": "14443490",
+        "nhdPlusReachCode": "04030106000548",
+        "nhdHrReachCode": "04030106000548",
+        "nhdHrMeasure": "25.807390",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 19,
+      "stateName": "Mex-I-Min-E Falls",
+      "usgsName": "Mex-i-min-e Falls",
+      "usgsFeatureId": "724494fc-71b1-4c96-8bfe-c35140936664",
+      "usgsLat": 46.313383,
+      "usgsLng": -89.054079,
+      "distanceMeters": 9,
+      "hydro": {
+        "usgsFallId": "724494fc-71b1-4c96-8bfe-c35140936664",
+        "fallType": null,
+        "nhdComid": "11952089",
+        "nhdPlusReachCode": "04020102000137",
+        "nhdHrReachCode": "04020102000137",
+        "nhdHrMeasure": "79.033970",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 21,
+      "stateName": "Kakabika Falls",
+      "usgsName": "Kakabika Falls",
+      "usgsFeatureId": "e40efacb-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.337238,
+      "usgsLng": -89.452037,
+      "distanceMeters": 4,
+      "hydro": {
+        "usgsFallId": "e40efacb-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11951547",
+        "nhdPlusReachCode": "04020102000070",
+        "nhdHrReachCode": "04020102000070",
+        "nhdHrMeasure": "20.652600",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 23,
+      "stateName": "Little Falls",
+      "usgsName": "Little Falls",
+      "usgsFeatureId": "764c4984-159d-46d0-b78f-4088fda9dc85",
+      "usgsLat": 46.377206,
+      "usgsLng": -89.099501,
+      "distanceMeters": 2,
+      "hydro": {
+        "usgsFallId": "764c4984-159d-46d0-b78f-4088fda9dc85",
+        "fallType": null,
+        "nhdComid": "11952047",
+        "nhdPlusReachCode": "04020102000135",
+        "nhdHrReachCode": "04020102000135",
+        "nhdHrMeasure": "13.9045",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 24,
+      "stateName": "Judson Falls",
+      "usgsName": "Judson Falls",
+      "usgsFeatureId": "e40efa36-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.389548,
+      "usgsLng": -89.561487,
+      "distanceMeters": 33,
+      "hydro": {
+        "usgsFallId": "e40efa36-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11952025",
+        "nhdPlusReachCode": "04020102000024",
+        "nhdHrReachCode": "04020102000024",
+        "nhdHrMeasure": "58.6384",
+        "tallestDropFeet": 25
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 25,
+      "stateName": "Nelson Canyon Falls",
+      "usgsName": "Nelson Canyon Falls",
+      "usgsFeatureId": "e40f091e-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.392048,
+      "usgsLng": -89.578797,
+      "distanceMeters": 72,
+      "hydro": {
+        "usgsFallId": "e40f091e-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11952029",
+        "nhdPlusReachCode": "04020102000644",
+        "nhdHrReachCode": "04020102000644",
+        "nhdHrMeasure": "17.2906",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 26,
+      "stateName": "Duppy Falls",
+      "usgsName": "Duppy Falls",
+      "usgsFeatureId": "e40ef062-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.417489,
+      "usgsLng": -88.911397,
+      "distanceMeters": 550,
+      "hydro": {
+        "usgsFallId": "e40ef062-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11949013",
+        "nhdPlusReachCode": "04020102000177",
+        "nhdHrReachCode": "04020102000177",
+        "nhdHrMeasure": "14.2004",
+        "tallestDropFeet": 4
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 27,
+      "stateName": "Bond Falls",
+      "usgsName": "Bond Falls",
+      "usgsFeatureId": "e40eea2a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.409142,
+      "usgsLng": -89.132358,
+      "distanceMeters": 88,
+      "hydro": {
+        "usgsFallId": "e40eea2a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11951445",
+        "nhdPlusReachCode": "04020102000133",
+        "nhdHrReachCode": "04020102000133",
+        "nhdHrMeasure": "95.3444",
+        "tallestDropFeet": 40
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 29,
+      "stateName": "Jumbo Falls",
+      "usgsName": "Jumbo Falls",
+      "usgsFeatureId": "e40efa81-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.451739,
+      "usgsLng": -88.913257,
+      "distanceMeters": 165,
+      "hydro": {
+        "usgsFallId": "e40efa81-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11948665",
+        "nhdPlusReachCode": "04020102000174",
+        "nhdHrReachCode": "04020102000174",
+        "nhdHrMeasure": "89.9539",
+        "tallestDropFeet": 4
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 30,
+      "stateName": "Yondota",
+      "usgsName": "Yondota Falls",
+      "usgsFeatureId": "e413ea23-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.430198,
+      "usgsLng": -89.684547,
+      "distanceMeters": 78,
+      "hydro": {
+        "usgsFallId": "e413ea23-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6793689",
+        "nhdPlusReachCode": "04020101000139",
+        "nhdHrReachCode": "04020101000139",
+        "nhdHrMeasure": "18.9842",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 33,
+      "stateName": "Agate Falls",
+      "usgsName": "Agate Falls",
+      "usgsFeatureId": "e40ee644-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.480869,
+      "usgsLng": -89.090277,
+      "distanceMeters": 7,
+      "hydro": {
+        "usgsFallId": "e40ee644-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11951297",
+        "nhdPlusReachCode": "04020102000130",
+        "nhdHrReachCode": "04020102000130",
+        "nhdHrMeasure": "21.712000",
+        "tallestDropFeet": 40
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 37,
+      "stateName": "Neepikon Falls",
+      "usgsName": "Neepikon Falls",
+      "usgsFeatureId": "5439a560-7ee4-4407-82b4-486023ae0df7",
+      "usgsLat": 46.491067,
+      "usgsLng": -89.99629,
+      "distanceMeters": 134,
+      "hydro": {
+        "usgsFallId": "5439a560-7ee4-4407-82b4-486023ae0df7",
+        "fallType": null,
+        "nhdComid": "6793641",
+        "nhdPlusReachCode": "04020101000095",
+        "nhdHrReachCode": "04020101000095",
+        "nhdHrMeasure": "84.1382",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 38,
+      "stateName": "Gabbro Falls",
+      "usgsName": "Gabbro Falls",
+      "usgsFeatureId": "e40ef370-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.502036,
+      "usgsLng": -89.992517,
+      "distanceMeters": 5,
+      "hydro": {
+        "usgsFallId": "e40ef370-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790209",
+        "nhdPlusReachCode": "04020101000095",
+        "nhdHrReachCode": "04020101000095",
+        "nhdHrMeasure": "28.3213",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 39,
+      "stateName": "Powder Horn Falls",
+      "usgsName": "Powder Horn Falls",
+      "usgsFeatureId": "e413d260-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.505838,
+      "usgsLng": -90.082177,
+      "distanceMeters": 22,
+      "hydro": {
+        "usgsFallId": "e413d260-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790999",
+        "nhdPlusReachCode": "04020101000247",
+        "nhdHrReachCode": "04020101000247",
+        "nhdHrMeasure": "75.6113",
+        "tallestDropFeet": 30
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 40,
+      "stateName": "Rocky Forty Falls",
+      "usgsName": "Rocky Forty Falls",
+      "usgsFeatureId": "e413d75a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.508018,
+      "usgsLng": -90.120097,
+      "distanceMeters": 50,
+      "hydro": {
+        "usgsFallId": "e413d75a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "1813075",
+        "nhdPlusReachCode": "04010302000424",
+        "nhdHrReachCode": "04010302000424",
+        "nhdHrMeasure": "15.3652",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 42,
+      "stateName": "Onion Falls",
+      "usgsName": "Onion Falls",
+      "usgsFeatureId": "e413ce4f-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.569909,
+      "usgsLng": -88.984177,
+      "distanceMeters": 202,
+      "hydro": {
+        "usgsFallId": "e413ce4f-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11945785",
+        "nhdPlusReachCode": "04020102000242",
+        "nhdHrReachCode": "04020102000242",
+        "nhdHrMeasure": "8.9434",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 44,
+      "stateName": "Tibbets Falls",
+      "usgsName": "Tibbets Falls",
+      "usgsFeatureId": "e413df1f-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.581739,
+      "usgsLng": -88.589567,
+      "distanceMeters": 152,
+      "hydro": {
+        "usgsFallId": "e413df1f-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11930614",
+        "nhdPlusReachCode": "04020104000120",
+        "nhdHrReachCode": "04020104000120",
+        "nhdHrMeasure": "86.226300",
+        "tallestDropFeet": 4
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 46,
+      "stateName": "Tioga Falls",
+      "usgsName": "Tioga Falls",
+      "usgsFeatureId": "e413dfba-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.594219,
+      "usgsLng": -88.348677,
+      "distanceMeters": 46,
+      "hydro": {
+        "usgsFallId": "e413dfba-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "11931018",
+        "nhdPlusReachCode": "04020104000139",
+        "nhdHrReachCode": "04020104000139",
+        "nhdHrMeasure": "12.9575",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 47,
+      "stateName": "Saxon Falls",
+      "usgsName": "Saxon Falls",
+      "usgsFeatureId": "e413d990-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.535988,
+      "usgsLng": -90.378947,
+      "distanceMeters": 33,
+      "hydro": {
+        "usgsFallId": "e413d990-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "1812919",
+        "nhdPlusReachCode": "04010302000204",
+        "nhdHrReachCode": "04010302000204",
+        "nhdHrMeasure": "77.2212",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 50,
+      "stateName": "Superior Falls",
+      "usgsName": "Superior Falls",
+      "usgsFeatureId": "e413de32-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.562508,
+      "usgsLng": -90.415547,
+      "distanceMeters": 2,
+      "hydro": {
+        "usgsFallId": "e413de32-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "1812799",
+        "nhdPlusReachCode": "04010302000201",
+        "nhdHrReachCode": "04010302000201",
+        "nhdHrMeasure": "42.3031",
+        "tallestDropFeet": 50
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 51,
+      "stateName": "Upper Falls",
+      "usgsName": "Upper Falls",
+      "usgsFeatureId": "e413e2cc-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.621893,
+      "usgsLng": -88.488395,
+      "distanceMeters": 74,
+      "hydro": {
+        "usgsFallId": "e413e2cc-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "slide",
+        "nhdComid": "11930478",
+        "nhdPlusReachCode": "04020104000127",
+        "nhdHrReachCode": "04020104000127",
+        "nhdHrMeasure": "50.2066",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 53,
+      "stateName": "Canyon Falls",
+      "usgsName": "Canyon Falls",
+      "usgsFeatureId": "e40eeb5a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.622522,
+      "usgsLng": -88.476524,
+      "distanceMeters": 240,
+      "hydro": {
+        "usgsFallId": "e40eeb5a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11930478",
+        "nhdPlusReachCode": "04020104000127",
+        "nhdHrReachCode": "04020104000127",
+        "nhdHrMeasure": "87.1596",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 54,
+      "stateName": "Minnewawa Falls",
+      "usgsName": "Minnewawa Falls",
+      "usgsFeatureId": "e40f05d7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.597438,
+      "usgsLng": -89.848767,
+      "distanceMeters": 16,
+      "hydro": {
+        "usgsFallId": "e40f05d7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "segmented",
+        "nhdComid": "6790505",
+        "nhdPlusReachCode": "04020101000123",
+        "nhdHrReachCode": "04020101000123",
+        "nhdHrMeasure": "84.4196",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 57,
+      "stateName": "Nimikon Falls",
+      "usgsName": "Nimikon Falls",
+      "usgsFeatureId": "e40f096b-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.604915,
+      "usgsLng": -89.853275,
+      "distanceMeters": 38,
+      "hydro": {
+        "usgsFallId": "e40f096b-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "segmented",
+        "nhdComid": "6790501",
+        "nhdPlusReachCode": "04020101000123",
+        "nhdHrReachCode": "04020101000123",
+        "nhdHrMeasure": "56.8332",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 58,
+      "stateName": "Chippewa Falls",
+      "usgsName": "Chippewa Falls",
+      "usgsFeatureId": "e40eee05-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.598648,
+      "usgsLng": -90.083027,
+      "distanceMeters": 39,
+      "hydro": {
+        "usgsFallId": "e40eee05-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790899",
+        "nhdPlusReachCode": "04020101000084",
+        "nhdHrReachCode": "04020101000084",
+        "nhdHrMeasure": "16.0023",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 59,
+      "stateName": "Ogemaw Falls",
+      "usgsName": "Ogemaw Falls",
+      "usgsFeatureId": "e413cd46-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.646329,
+      "usgsLng": -88.508647,
+      "distanceMeters": 398,
+      "hydro": {
+        "usgsFallId": "e413cd46-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027644",
+        "nhdPlusReachCode": "04020105000729",
+        "nhdHrReachCode": "04020105000729",
+        "nhdHrMeasure": "58.2080",
+        "tallestDropFeet": 10
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 60,
+      "stateName": "Rapid River Falls",
+      "usgsName": "Rapid River Falls",
+      "usgsFeatureId": "e413d4dd-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.626988,
+      "usgsLng": -89.668757,
+      "distanceMeters": 19,
+      "hydro": {
+        "usgsFallId": "e413d4dd-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790095",
+        "nhdPlusReachCode": "04020101000183",
+        "nhdHrReachCode": "04020101000183",
+        "nhdHrMeasure": "69.3863",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 63,
+      "stateName": "Algonquin Falls",
+      "usgsName": "Algonquin Falls",
+      "usgsFeatureId": "82066b92-7ae2-4e7e-bcb5-5cbf0bcf63d9",
+      "usgsLat": 46.617454,
+      "usgsLng": -90.075753,
+      "distanceMeters": 203,
+      "hydro": {
+        "usgsFallId": "82066b92-7ae2-4e7e-bcb5-5cbf0bcf63d9",
+        "fallType": null,
+        "nhdComid": "6790845",
+        "nhdPlusReachCode": "04020101000083",
+        "nhdHrReachCode": "04020101000083",
+        "nhdHrMeasure": "38.9456",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 64,
+      "stateName": "O-Kun-De-Kun Falls",
+      "usgsName": "O Kun de Kun Falls",
+      "usgsFeatureId": "e40f0aa3-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.65122,
+      "usgsLng": -89.152384,
+      "distanceMeters": 14,
+      "hydro": {
+        "usgsFallId": "e40f0aa3-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11946627",
+        "nhdPlusReachCode": "04020102000104",
+        "nhdHrReachCode": "04020102000104",
+        "nhdHrMeasure": "2.0732",
+        "tallestDropFeet": 25
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 65,
+      "stateName": "Ogima Falls",
+      "usgsName": "Ogima Falls",
+      "usgsFeatureId": "e413cdac-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.634338,
+      "usgsLng": -89.929497,
+      "distanceMeters": 40,
+      "hydro": {
+        "usgsFallId": "e413cdac-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6790099",
+        "nhdPlusReachCode": "04020101000207",
+        "nhdHrReachCode": "04020101000207",
+        "nhdHrMeasure": "44.0073",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 66,
+      "stateName": "Great Conglomerate Falls",
+      "usgsName": "Great Conglomerate Falls",
+      "usgsFeatureId": "e40ef4e7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.631944,
+      "usgsLng": -90.054799,
+      "distanceMeters": 35,
+      "hydro": {
+        "usgsFallId": "e40ef4e7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "segmented",
+        "nhdComid": "6790803",
+        "nhdPlusReachCode": "04020101000082",
+        "nhdHrReachCode": "04020101000082",
+        "nhdHrMeasure": "49.7393",
+        "tallestDropFeet": 30
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 67,
+      "stateName": "Cascade Falls",
+      "usgsName": "Cascade Falls",
+      "usgsFeatureId": "e40eec3c-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.651829,
+      "usgsLng": -89.446207,
+      "distanceMeters": 13,
+      "hydro": {
+        "usgsFallId": "e40eec3c-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11946515",
+        "nhdPlusReachCode": "04020102000210",
+        "nhdHrReachCode": "04020102000210",
+        "nhdHrMeasure": "13.035300",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 68,
+      "stateName": "Upper Silver Falls",
+      "usgsName": "Upper Silver Falls",
+      "usgsFeatureId": "e4141dad-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.679809,
+      "usgsLng": -88.330037,
+      "distanceMeters": 150,
+      "hydro": {
+        "usgsFallId": "e4141dad-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "12027410",
+        "nhdPlusReachCode": "04020105000055",
+        "nhdHrReachCode": "04020105000055",
+        "nhdHrMeasure": "49.0884",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 69,
+      "stateName": "Ogimakwe Falls",
+      "usgsName": "Ogimakwe Falls",
+      "usgsFeatureId": "e413ce01-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.640118,
+      "usgsLng": -89.926667,
+      "distanceMeters": 48,
+      "hydro": {
+        "usgsFallId": "e413ce01-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790099",
+        "nhdPlusReachCode": "04020101000207",
+        "nhdHrReachCode": "04020101000207",
+        "nhdHrMeasure": "31.6760",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 70,
+      "stateName": "Abinodji Falls",
+      "usgsName": "Abinodji Falls",
+      "usgsFeatureId": "e40ee5eb-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.642848,
+      "usgsLng": -89.928247,
+      "distanceMeters": 138,
+      "hydro": {
+        "usgsFallId": "e40ee5eb-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790099",
+        "nhdPlusReachCode": "04020101000207",
+        "nhdHrReachCode": "04020101000207",
+        "nhdHrMeasure": "27.3240",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 71,
+      "stateName": "Potawatomi",
+      "usgsName": "Potawatomi Falls",
+      "usgsFeatureId": "e413d212-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.637878,
+      "usgsLng": -90.051587,
+      "distanceMeters": 16,
+      "hydro": {
+        "usgsFallId": "e413d212-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790797",
+        "nhdPlusReachCode": "04020101000082",
+        "nhdHrReachCode": "04020101000082",
+        "nhdHrMeasure": "25.1634",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 72,
+      "stateName": "Deer Creek Falls",
+      "usgsName": "Deer Creek Falls",
+      "usgsFeatureId": "e413e84d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.652748,
+      "usgsLng": -89.697557,
+      "distanceMeters": 54,
+      "hydro": {
+        "usgsFallId": "e413e84d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790391",
+        "nhdPlusReachCode": "04020101000263",
+        "nhdHrReachCode": "04020101000263",
+        "nhdHrMeasure": "16.5580",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 73,
+      "stateName": "Gorge Falls",
+      "usgsName": "Gorge Falls",
+      "usgsFeatureId": "e40ef49d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.640288,
+      "usgsLng": -90.050317,
+      "distanceMeters": 25,
+      "hydro": {
+        "usgsFallId": "e40ef49d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "horsetail",
+        "nhdComid": "6790787",
+        "nhdPlusReachCode": "04020101000082",
+        "nhdHrReachCode": "04020101000082",
+        "nhdHrMeasure": "15.0893",
+        "tallestDropFeet": 24
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 75,
+      "stateName": "Manakiki Falls",
+      "usgsName": "Manakiki Falls",
+      "usgsFeatureId": "e40f01f1-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.641238,
+      "usgsLng": -90.112377,
+      "distanceMeters": 63,
+      "hydro": {
+        "usgsFallId": "e40f01f1-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "slide",
+        "nhdComid": "6790791",
+        "nhdPlusReachCode": "04020101000791",
+        "nhdHrReachCode": "04020101000791",
+        "nhdHrMeasure": "11.7732",
+        "tallestDropFeet": 25
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 78,
+      "stateName": "Sandstone Falls",
+      "usgsName": "Sandstone Falls",
+      "usgsFeatureId": "e413d93f-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.649988,
+      "usgsLng": -90.047427,
+      "distanceMeters": 396,
+      "hydro": {
+        "usgsFallId": "e413d93f-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790781",
+        "nhdPlusReachCode": "04020101000081",
+        "nhdHrReachCode": "04020101000081",
+        "nhdHrMeasure": "17.7354",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 79,
+      "stateName": "Lepisto Falls",
+      "usgsName": "Lepisto Falls",
+      "usgsFeatureId": "e40efbb1-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.658608,
+      "usgsLng": -89.940577,
+      "distanceMeters": 24,
+      "hydro": {
+        "usgsFallId": "e40efbb1-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6790491",
+        "nhdPlusReachCode": "04020101000120",
+        "nhdHrReachCode": "04020101000120",
+        "nhdHrMeasure": "91.080400",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 80,
+      "stateName": "Vista Falls",
+      "usgsName": "Vista Falls",
+      "usgsFeatureId": "e413e628-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.693189,
+      "usgsLng": -88.860807,
+      "distanceMeters": 194,
+      "hydro": {
+        "usgsFallId": "e413e628-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "11930310",
+        "nhdPlusReachCode": "04020104000325",
+        "nhdHrReachCode": "04020104000325",
+        "nhdHrMeasure": "55.8842",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 81,
+      "stateName": "Rainbow Falls",
+      "usgsName": "Rainbow Falls",
+      "usgsFeatureId": "e413d43a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.658831,
+      "usgsLng": -90.043723,
+      "distanceMeters": 15,
+      "hydro": {
+        "usgsFallId": "e413d43a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "6790757",
+        "nhdPlusReachCode": "04020101000078",
+        "nhdHrReachCode": "04020101000078",
+        "nhdHrMeasure": "82.1078",
+        "tallestDropFeet": 45
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 83,
+      "stateName": "Daults Falls",
+      "usgsName": "Daults Falls",
+      "usgsFeatureId": "e40eef80-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.713619,
+      "usgsLng": -88.426127,
+      "distanceMeters": 493,
+      "hydro": {
+        "usgsFallId": "e40eef80-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027408",
+        "nhdPlusReachCode": "04020105000039",
+        "nhdHrReachCode": "04020105000039",
+        "nhdHrMeasure": "25.0210",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 84,
+      "stateName": "Little Trap Falls",
+      "usgsName": "Little Trap Falls",
+      "usgsFeatureId": "e40efd28-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.690319,
+      "usgsLng": -89.556757,
+      "distanceMeters": 16,
+      "hydro": {
+        "usgsFallId": "e40efd28-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "fan",
+        "nhdComid": "6790381",
+        "nhdPlusReachCode": "04020101000206",
+        "nhdHrReachCode": "04020101000206",
+        "nhdHrMeasure": "59.8698",
+        "tallestDropFeet": 40
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 88,
+      "stateName": "Power House Falls",
+      "usgsName": "Power House Falls",
+      "usgsFeatureId": "e413d2ff-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.736853,
+      "usgsLng": -88.444434,
+      "distanceMeters": 10,
+      "hydro": {
+        "usgsFallId": "e413d2ff-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027296",
+        "nhdPlusReachCode": "04020105000036",
+        "nhdHrReachCode": "04020105000036",
+        "nhdHrMeasure": "49.7783",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 89,
+      "stateName": "Nawadaha Falls",
+      "usgsName": "Nawadaha Falls",
+      "usgsFeatureId": "e40f08d3-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.699418,
+      "usgsLng": -89.973447,
+      "distanceMeters": 106,
+      "hydro": {
+        "usgsFallId": "e40f08d3-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790481",
+        "nhdPlusReachCode": "04020101000120",
+        "nhdHrReachCode": "04020101000120",
+        "nhdHrMeasure": "13.665400",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 90,
+      "stateName": "Manabezho Falls",
+      "usgsName": "Manabezho Falls",
+      "usgsFeatureId": "e40f01a6-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.707318,
+      "usgsLng": -89.971607,
+      "distanceMeters": 366,
+      "hydro": {
+        "usgsFallId": "e40f01a6-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "6790477",
+        "nhdPlusReachCode": "04020101000120",
+        "nhdHrReachCode": "04020101000120",
+        "nhdHrMeasure": "4.117800",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 98,
+      "stateName": "Greenstone Falls",
+      "usgsName": "Greenstone Falls",
+      "usgsFeatureId": "e40ef535-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.723798,
+      "usgsLng": -89.831997,
+      "distanceMeters": 40,
+      "hydro": {
+        "usgsFallId": "e40ef535-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6789663",
+        "nhdPlusReachCode": "04020101000584",
+        "nhdHrReachCode": "04020101000584",
+        "nhdHrMeasure": "89.8230",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 102,
+      "stateName": "Trappers Falls",
+      "usgsName": "Trappers Falls",
+      "usgsFeatureId": "e413e0f5-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.732728,
+      "usgsLng": -89.884727,
+      "distanceMeters": 12,
+      "hydro": {
+        "usgsFallId": "e413e0f5-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6789659",
+        "nhdPlusReachCode": "04020101000584",
+        "nhdHrReachCode": "04020101000584",
+        "nhdHrMeasure": "21.7765",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 103,
+      "stateName": "Letherby Falls",
+      "usgsName": "Letherby Falls",
+      "usgsFeatureId": "e40efbfb-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.781579,
+      "usgsLng": -88.101936,
+      "distanceMeters": 81,
+      "hydro": {
+        "usgsFallId": "e40efbfb-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027202",
+        "nhdPlusReachCode": "04020105000450",
+        "nhdHrReachCode": "04020105000450",
+        "nhdHrMeasure": "80.243800",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 104,
+      "stateName": "Explorers Falls",
+      "usgsName": "Explorers Falls",
+      "usgsFeatureId": "e40ef22e-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.735578,
+      "usgsLng": -89.887007,
+      "distanceMeters": 42,
+      "hydro": {
+        "usgsFallId": "e40ef22e-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6789621",
+        "nhdPlusReachCode": "04020101000584",
+        "nhdHrReachCode": "04020101000584",
+        "nhdHrMeasure": "16.6362",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 105,
+      "stateName": "Black Slate Falls",
+      "usgsName": "Black Slate Falls",
+      "usgsFeatureId": "e40ee991-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.786989,
+      "usgsLng": -88.238767,
+      "distanceMeters": 362,
+      "hydro": {
+        "usgsFallId": "e40ee991-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "904020407",
+        "nhdPlusReachCode": "04020105000063",
+        "nhdHrReachCode": "04020105000063",
+        "nhdHrMeasure": "49.7941",
+        "tallestDropFeet": 4
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 106,
+      "stateName": "Little Iron Falls",
+      "usgsName": "Little Iron Falls",
+      "usgsFeatureId": "e40efc94-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.749128,
+      "usgsLng": -89.730347,
+      "distanceMeters": 53,
+      "hydro": {
+        "usgsFallId": "e40efc94-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "6790317",
+        "nhdPlusReachCode": "04020101000543",
+        "nhdHrReachCode": "04020101000543",
+        "nhdHrMeasure": "50.9552",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 107,
+      "stateName": "Quartzite Falls",
+      "usgsName": "Quartzite Falls",
+      "usgsFeatureId": "e413d34d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.788799,
+      "usgsLng": -88.241777,
+      "distanceMeters": 55,
+      "hydro": {
+        "usgsFallId": "e413d34d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "904020407",
+        "nhdPlusReachCode": "04020105000063",
+        "nhdHrReachCode": "04020105000063",
+        "nhdHrMeasure": "47.9738",
+        "tallestDropFeet": 8
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 108,
+      "stateName": "Nonesuch Falls",
+      "usgsName": "Nonesuch Falls",
+      "usgsFeatureId": "e40f0a51-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.754569,
+      "usgsLng": -89.616007,
+      "distanceMeters": 262,
+      "hydro": {
+        "usgsFallId": "e40f0a51-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "slide",
+        "nhdComid": "6790323",
+        "nhdPlusReachCode": "04020101000539",
+        "nhdHrReachCode": "04020101000539",
+        "nhdHrMeasure": "53.2032",
+        "tallestDropFeet": 12
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 110,
+      "stateName": "Silver Falls",
+      "usgsName": "Silver Falls",
+      "usgsFeatureId": "e413dc0a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.792369,
+      "usgsLng": -88.336357,
+      "distanceMeters": 61,
+      "hydro": {
+        "usgsFallId": "e413dc0a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027160",
+        "nhdPlusReachCode": "04020105000046",
+        "nhdHrReachCode": "04020105000046",
+        "nhdHrMeasure": "38.5655",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 112,
+      "stateName": "Traders Falls",
+      "usgsName": "Traders Falls",
+      "usgsFeatureId": "e413e056-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.751402,
+      "usgsLng": -89.893529,
+      "distanceMeters": 31,
+      "hydro": {
+        "usgsFallId": "e413e056-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "6790303",
+        "nhdPlusReachCode": "04020101000582",
+        "nhdHrReachCode": "04020101000582",
+        "nhdHrMeasure": "48.6490",
+        "tallestDropFeet": 6
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 117,
+      "stateName": "Little Union Gorge Falls",
+      "usgsName": "Little Union Gorge Falls",
+      "usgsFeatureId": "e40efdc0-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.797449,
+      "usgsLng": -89.622207,
+      "distanceMeters": 529,
+      "hydro": {
+        "usgsFallId": "e40efdc0-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6789417",
+        "nhdPlusReachCode": "04020101000558",
+        "nhdHrReachCode": "04020101000558",
+        "nhdHrMeasure": "11.5982",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 118,
+      "stateName": "Trap Falls",
+      "usgsName": "Trap Falls",
+      "usgsFeatureId": "e413e0a8-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.791649,
+      "usgsLng": -89.690487,
+      "distanceMeters": 14,
+      "hydro": {
+        "usgsFallId": "e413e0a8-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6789487",
+        "nhdPlusReachCode": "04020101000890",
+        "nhdHrReachCode": "04020101000890",
+        "nhdHrMeasure": "52.728200",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 119,
+      "stateName": "Slate River Falls",
+      "usgsName": "Slate River Falls",
+      "usgsFeatureId": "e413dcf3-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.830729,
+      "usgsLng": -88.251287,
+      "distanceMeters": 69,
+      "hydro": {
+        "usgsFallId": "e413dcf3-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "punchbowl",
+        "nhdComid": "904020408",
+        "nhdPlusReachCode": "04020105000063",
+        "nhdHrReachCode": "04020105000063",
+        "nhdHrMeasure": "6.0425",
+        "tallestDropFeet": 25
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 120,
+      "stateName": "Big Falls",
+      "usgsName": "Big Falls",
+      "usgsFeatureId": "e40ee813-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.838409,
+      "usgsLng": -88.069736,
+      "distanceMeters": 492,
+      "hydro": {
+        "usgsFallId": "e40ee813-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "segmented",
+        "nhdComid": "12027056",
+        "nhdPlusReachCode": "04020105000072",
+        "nhdHrReachCode": "04020105000072",
+        "nhdHrMeasure": "59.1669",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 121,
+      "stateName": "West Branch Falls",
+      "usgsName": "West Branch Falls",
+      "usgsFeatureId": "e413e712-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.838893,
+      "usgsLng": -88.090429,
+      "distanceMeters": 4,
+      "hydro": {
+        "usgsFallId": "e413e712-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12027052",
+        "nhdPlusReachCode": "04020105000153",
+        "nhdHrReachCode": "04020105000153",
+        "nhdHrMeasure": "56.5452",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 122,
+      "stateName": "Pewabeck Falls",
+      "usgsName": "Pewabeck Falls",
+      "usgsFeatureId": "e413d031-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.806909,
+      "usgsLng": -89.587167,
+      "distanceMeters": 17,
+      "hydro": {
+        "usgsFallId": "e413d031-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "6789437",
+        "nhdPlusReachCode": "04020101000537",
+        "nhdHrReachCode": "04020101000537",
+        "nhdHrMeasure": "39.1730",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 123,
+      "stateName": "East Branch Falls",
+      "usgsName": "East Branch Falls",
+      "usgsFeatureId": "5c62ffd3-0d00-43f8-9071-17b31078398f",
+      "usgsLat": 46.849731,
+      "usgsLng": -88.06334,
+      "distanceMeters": 91,
+      "hydro": {
+        "usgsFallId": "5c62ffd3-0d00-43f8-9071-17b31078398f",
+        "fallType": null,
+        "nhdComid": "12027056",
+        "nhdPlusReachCode": "04020105000072",
+        "nhdHrReachCode": "04020105000072",
+        "nhdHrMeasure": "11.8498",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 124,
+      "stateName": "Bonanza Falls",
+      "usgsName": "Bonanza Falls",
+      "usgsFeatureId": "e40ee9dc-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.817399,
+      "usgsLng": -89.570507,
+      "distanceMeters": 178,
+      "hydro": {
+        "usgsFallId": "e40ee9dc-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "6790463",
+        "nhdPlusReachCode": "04020101000149",
+        "nhdHrReachCode": "04020101000149",
+        "nhdHrMeasure": "14.9544",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 127,
+      "stateName": "Mountain Stream Falls",
+      "usgsName": "Mountain Stream Falls",
+      "usgsFeatureId": "e40f07ea-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.869649,
+      "usgsLng": -87.893716,
+      "distanceMeters": 47,
+      "hydro": {
+        "usgsFallId": "e40f07ea-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025330",
+        "nhdPlusReachCode": "04020105000409",
+        "nhdHrReachCode": "04020105000409",
+        "nhdHrMeasure": "76.6113",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 129,
+      "stateName": "Ripley Falls",
+      "usgsName": "Ripley Falls",
+      "usgsFeatureId": "e413d5c6-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.132569,
+      "usgsLng": -88.555197,
+      "distanceMeters": 374,
+      "hydro": {
+        "usgsFallId": "e413d5c6-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": null,
+        "nhdHrMeasure": null,
+        "tallestDropFeet": 25
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 130,
+      "stateName": "Lower Hungarian Falls",
+      "usgsName": "Lower Hungarian Falls",
+      "usgsFeatureId": "e40f0073-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.171629,
+      "usgsLng": -88.446847,
+      "distanceMeters": 485,
+      "hydro": {
+        "usgsFallId": "e40f0073-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "fan",
+        "nhdComid": "11937985",
+        "nhdPlusReachCode": "04020103000995",
+        "nhdHrReachCode": "04020103000995",
+        "nhdHrMeasure": "1.4315",
+        "tallestDropFeet": 50
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 134,
+      "stateName": "Upper Hungarian Falls",
+      "usgsName": "Upper Hungarian Falls",
+      "usgsFeatureId": "e413e44a-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.174099,
+      "usgsLng": -88.451967,
+      "distanceMeters": 71,
+      "hydro": {
+        "usgsFallId": "e413e44a-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "fan",
+        "nhdComid": "11937985",
+        "nhdPlusReachCode": "04020103000995",
+        "nhdHrReachCode": "04020103000995",
+        "nhdHrMeasure": "9.3167",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 137,
+      "stateName": "Lower Falls",
+      "usgsName": "Lower Falls",
+      "usgsFeatureId": "59083108-76f2-4d82-9bf8-02676b418b1b",
+      "usgsLat": 47.335564,
+      "usgsLng": -88.44584,
+      "distanceMeters": 146,
+      "hydro": {
+        "usgsFallId": "59083108-76f2-4d82-9bf8-02676b418b1b",
+        "fallType": null,
+        "nhdComid": "11937025",
+        "nhdPlusReachCode": "04020103000150",
+        "nhdHrReachCode": "04020103000150",
+        "nhdHrMeasure": "17.6501",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 138,
+      "stateName": "Haven Falls",
+      "usgsName": "Haven Falls",
+      "usgsFeatureId": "e40ef5cd-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.382189,
+      "usgsLng": -88.029577,
+      "distanceMeters": 304,
+      "hydro": {
+        "usgsFallId": "e40ef5cd-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "horsetail",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": null,
+        "nhdHrMeasure": null,
+        "tallestDropFeet": 38
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 142,
+      "stateName": "Eagle River Falls",
+      "usgsName": "Eagle River Falls",
+      "usgsFeatureId": "e40ef0b4-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.411829,
+      "usgsLng": -88.296387,
+      "distanceMeters": 35,
+      "hydro": {
+        "usgsFallId": "e40ef0b4-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "11936947",
+        "nhdPlusReachCode": "04020103000489",
+        "nhdHrReachCode": "04020103000489",
+        "nhdHrMeasure": "17.3946",
+        "tallestDropFeet": 60
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 144,
+      "stateName": "Copper Falls",
+      "usgsName": "Copper Falls",
+      "usgsFeatureId": "e40eef35-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.430569,
+      "usgsLng": -88.196097,
+      "distanceMeters": 118,
+      "hydro": {
+        "usgsFallId": "e40eef35-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11937867",
+        "nhdPlusReachCode": "04020103000485",
+        "nhdHrReachCode": "04020103000485",
+        "nhdHrMeasure": "69.3251",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 146,
+      "stateName": "Silver River Falls",
+      "usgsName": "Silver River Falls",
+      "usgsFeatureId": "e413dc57-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 47.463429,
+      "usgsLng": -88.072907,
+      "distanceMeters": 12,
+      "hydro": {
+        "usgsFallId": "e413dc57-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11936911",
+        "nhdPlusReachCode": "04020103000478",
+        "nhdHrReachCode": "04020103000478",
+        "nhdHrMeasure": "46.2447",
+        "tallestDropFeet": 10
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 149,
+      "stateName": "Upper Falls",
+      "usgsName": "Upper Falls",
+      "usgsFeatureId": "e413e364-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.811609,
+      "usgsLng": -87.860526,
+      "distanceMeters": 690,
+      "hydro": {
+        "usgsFallId": "e413e364-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025448",
+        "nhdPlusReachCode": "04020105000089",
+        "nhdHrReachCode": "04020105000089",
+        "nhdHrMeasure": "36.2721",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 150,
+      "stateName": "Twin Falls",
+      "usgsName": "Twin Falls",
+      "usgsFeatureId": "e40ef6f7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.806919,
+      "usgsLng": -87.848186,
+      "distanceMeters": 63,
+      "hydro": {
+        "usgsFallId": "e40ef6f7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025464",
+        "nhdPlusReachCode": "04020105000140",
+        "nhdHrReachCode": "04020105000140",
+        "nhdHrMeasure": "30.123300",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 151,
+      "stateName": "Middle Falls",
+      "usgsName": "Middle Falls",
+      "usgsFeatureId": "e40f03bd-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.811749,
+      "usgsLng": -87.828706,
+      "distanceMeters": 52,
+      "hydro": {
+        "usgsFallId": "e40f03bd-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "12025412",
+        "nhdPlusReachCode": "04020105000088",
+        "nhdHrReachCode": "04020105000088",
+        "nhdHrMeasure": "67.0767",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 152,
+      "stateName": "Lower Falls",
+      "usgsName": "Lower Falls",
+      "usgsFeatureId": "e40eff42-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.814847,
+      "usgsLng": -87.804701,
+      "distanceMeters": 48,
+      "hydro": {
+        "usgsFallId": "e40eff42-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025406",
+        "nhdPlusReachCode": "04020105000086",
+        "nhdHrReachCode": "04020105000086",
+        "nhdHrMeasure": "39.3918",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 153,
+      "stateName": "Alder Falls",
+      "usgsName": "Alder Falls",
+      "usgsFeatureId": "e40ee6e3-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.781889,
+      "usgsLng": -87.707836,
+      "distanceMeters": 114,
+      "hydro": {
+        "usgsFallId": "e40ee6e3-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025516",
+        "nhdPlusReachCode": "04020105000376",
+        "nhdHrReachCode": "04020105000376",
+        "nhdHrMeasure": "30.8609",
+        "tallestDropFeet": 30
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 154,
+      "stateName": "Bushy Creek Falls",
+      "usgsName": "Bushy Creek Falls",
+      "usgsFeatureId": "e40eeb0c-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.736369,
+      "usgsLng": -87.694836,
+      "distanceMeters": 217,
+      "hydro": {
+        "usgsFallId": "e40eeb0c-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "12025544",
+        "nhdPlusReachCode": "04020105000332",
+        "nhdHrReachCode": "04020105000332",
+        "nhdHrMeasure": "6.2911",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 155,
+      "stateName": "Pinnacle Falls",
+      "usgsName": "Pinnacle Falls",
+      "usgsFeatureId": "e413d0d0-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.706552,
+      "usgsLng": -87.806986,
+      "distanceMeters": 11,
+      "hydro": {
+        "usgsFallId": "e413d0d0-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "12025618",
+        "nhdPlusReachCode": "04020105000108",
+        "nhdHrReachCode": "04020105000108",
+        "nhdHrMeasure": "6.5072",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 157,
+      "stateName": "Little Garlic Falls",
+      "usgsName": "Little Garlic Falls",
+      "usgsFeatureId": "e40efc46-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.667819,
+      "usgsLng": -87.578686,
+      "distanceMeters": 21,
+      "hydro": {
+        "usgsFallId": "e40efc46-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025780",
+        "nhdPlusReachCode": "04020105000275",
+        "nhdHrReachCode": "04020105000275",
+        "nhdHrMeasure": "37.6221",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 160,
+      "stateName": "Dead River Falls",
+      "usgsName": "Dead River Falls",
+      "usgsFeatureId": "e40eefca-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.568419,
+      "usgsLng": -87.478406,
+      "distanceMeters": 169,
+      "hydro": {
+        "usgsFallId": "e40eefca-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025986",
+        "nhdPlusReachCode": "04020105000773",
+        "nhdHrReachCode": "04020105000773",
+        "nhdHrMeasure": "35.8520",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 162,
+      "stateName": "Reany Falls",
+      "usgsName": "Reany Falls",
+      "usgsFeatureId": "e413d579-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.573626,
+      "usgsLng": -87.478228,
+      "distanceMeters": 73,
+      "hydro": {
+        "usgsFallId": "e413d579-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12025974",
+        "nhdPlusReachCode": "04020105000612",
+        "nhdHrReachCode": "04020105000612",
+        "nhdHrMeasure": "21.6841",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 170,
+      "stateName": "Ely Falls",
+      "usgsName": "Ely Falls",
+      "usgsFeatureId": "e40ef196-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.438519,
+      "usgsLng": -87.687056,
+      "distanceMeters": 32,
+      "hydro": {
+        "usgsFallId": "e40ef196-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11959390",
+        "nhdPlusReachCode": "04030110000195",
+        "nhdHrReachCode": "04030110001057",
+        "nhdHrMeasure": "15.7135",
+        "tallestDropFeet": 3
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 172,
+      "stateName": "Warner Falls",
+      "usgsName": "Warner Falls",
+      "usgsFeatureId": "e413e6c4-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.433389,
+      "usgsLng": -87.599166,
+      "distanceMeters": 16,
+      "hydro": {
+        "usgsFallId": "e413e6c4-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "horsetail",
+        "nhdComid": "11959386",
+        "nhdPlusReachCode": "04030110000190",
+        "nhdHrReachCode": "04030110001280",
+        "nhdHrMeasure": "26.326700",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 175,
+      "stateName": "Tiger Falls",
+      "usgsName": "Tiger Falls",
+      "usgsFeatureId": "e413df6d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.403279,
+      "usgsLng": -87.574656,
+      "distanceMeters": 779,
+      "hydro": {
+        "usgsFallId": "e413df6d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "11959428",
+        "nhdPlusReachCode": "04030110000028",
+        "nhdHrReachCode": "04030110000028",
+        "nhdHrMeasure": "4.2553",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 180,
+      "stateName": "Frohling Falls",
+      "usgsName": "Frohling Falls",
+      "usgsFeatureId": "e40ef2d8-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.360379,
+      "usgsLng": -87.329486,
+      "distanceMeters": 64,
+      "hydro": {
+        "usgsFallId": "e40ef2d8-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "11959478",
+        "nhdPlusReachCode": "04020201005397",
+        "nhdHrReachCode": "04020201002847",
+        "nhdHrMeasure": "33.2509",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 183,
+      "stateName": "White City Falls",
+      "usgsName": "White City Falls",
+      "usgsFeatureId": "e413e7ff-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.390093,
+      "usgsLng": -87.71915,
+      "distanceMeters": 7,
+      "hydro": {
+        "usgsFallId": "e413e7ff-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "11959458",
+        "nhdPlusReachCode": "04030110000042",
+        "nhdHrReachCode": "04030110000042",
+        "nhdHrMeasure": "84.3103",
+        "tallestDropFeet": 12
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 184,
+      "stateName": "Black River Falls",
+      "usgsName": "Black River Falls",
+      "usgsFeatureId": "e40ee944-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.393399,
+      "usgsLng": -87.786176,
+      "distanceMeters": 221,
+      "hydro": {
+        "usgsFallId": "e40ee944-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "horsetail",
+        "nhdComid": "11959438",
+        "nhdPlusReachCode": "04030110000099",
+        "nhdHrReachCode": "04030110000099",
+        "nhdHrMeasure": "15.6684",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 187,
+      "stateName": "Caps Creek Falls",
+      "usgsName": "Caps Creek Falls",
+      "usgsFeatureId": "e40eeba4-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.331069,
+      "usgsLng": -87.974126,
+      "distanceMeters": 17,
+      "hydro": {
+        "usgsFallId": "e40eeba4-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": null,
+        "nhdComid": "6829511",
+        "nhdPlusReachCode": "04030107000106",
+        "nhdHrReachCode": "04030107000106",
+        "nhdHrMeasure": "13.2464",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 191,
+      "stateName": "Whitefish Falls",
+      "usgsName": "Whitefish Falls",
+      "usgsFeatureId": "e413e89e-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.217744,
+      "usgsLng": -87.05008,
+      "distanceMeters": 6,
+      "hydro": {
+        "usgsFallId": "e413e89e-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12014514",
+        "nhdPlusReachCode": "04030111000033",
+        "nhdHrReachCode": "04030111000033",
+        "nhdHrMeasure": "67.0222",
+        "tallestDropFeet": 4
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 192,
+      "stateName": "Au Train Falls",
+      "usgsName": "Au Train Falls",
+      "usgsFeatureId": "e413e191-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.338439,
+      "usgsLng": -86.851766,
+      "distanceMeters": 66,
+      "hydro": {
+        "usgsFallId": "e413e191-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "slide",
+        "nhdComid": "12021200",
+        "nhdPlusReachCode": "04020201000431",
+        "nhdHrReachCode": "04020201002792",
+        "nhdHrMeasure": "9.0530",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 193,
+      "stateName": "Laughing Whitefish Falls",
+      "usgsName": "Laughing Whitefish Falls",
+      "usgsFeatureId": "e40efb63-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.383849,
+      "usgsLng": -87.069196,
+      "distanceMeters": 20,
+      "hydro": {
+        "usgsFallId": "e40efb63-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": "12021724",
+        "nhdPlusReachCode": "04020201000050",
+        "nhdHrReachCode": "04020201000050",
+        "nhdHrMeasure": "61.183400",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 194,
+      "stateName": "Rock River Falls",
+      "usgsName": "Rock River Falls",
+      "usgsFeatureId": "e413d6b7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.411159,
+      "usgsLng": -86.976376,
+      "distanceMeters": 26,
+      "hydro": {
+        "usgsFallId": "e413d6b7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "12021110",
+        "nhdPlusReachCode": "04020201000060",
+        "nhdHrReachCode": "04020201000060",
+        "nhdHrMeasure": "59.383900",
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 195,
+      "stateName": "Silver Bell Falls",
+      "usgsName": "Silver Bell Falls",
+      "usgsFeatureId": "e413dbbc-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.451169,
+      "usgsLng": -86.970346,
+      "distanceMeters": 35,
+      "hydro": {
+        "usgsFallId": "e413dbbc-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "horsetail",
+        "nhdComid": "12021062",
+        "nhdPlusReachCode": "04020201000381",
+        "nhdHrReachCode": "04020201000381",
+        "nhdHrMeasure": "64.7121",
+        "tallestDropFeet": 30
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 196,
+      "stateName": "Scott Falls",
+      "usgsName": "Scott Falls",
+      "usgsFeatureId": "e413da2c-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.437059,
+      "usgsLng": -86.814416,
+      "distanceMeters": 8,
+      "hydro": {
+        "usgsFallId": "e413da2c-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "plunge",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": "04020201002226",
+        "nhdHrMeasure": "20.5210",
+        "tallestDropFeet": 10
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 197,
+      "stateName": "Horseshoe Falls",
+      "usgsName": "Horseshoe Falls",
+      "usgsFeatureId": "e40ef7d9-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.403829,
+      "usgsLng": -86.642246,
+      "distanceMeters": 107,
+      "hydro": {
+        "usgsFallId": "e40ef7d9-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": null,
+        "nhdHrMeasure": null,
+        "tallestDropFeet": 20
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 199,
+      "stateName": "Tannery Falls",
+      "usgsName": "Tannery Falls",
+      "usgsFeatureId": "e413de80-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.415979,
+      "usgsLng": -86.627866,
+      "distanceMeters": 91,
+      "hydro": {
+        "usgsFallId": "e413de80-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "plunge",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": "04020201002319",
+        "nhdHrMeasure": "45.3682",
+        "tallestDropFeet": 40
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 200,
+      "stateName": "Munising Falls",
+      "usgsName": "Munising Falls",
+      "usgsFeatureId": "e40f0882-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.422779,
+      "usgsLng": -86.621406,
+      "distanceMeters": 85,
+      "hydro": {
+        "usgsFallId": "e40f0882-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12021108",
+        "nhdPlusReachCode": "04020201000331",
+        "nhdHrReachCode": "04020201000331",
+        "nhdHrMeasure": "26.5511",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 201,
+      "stateName": "Chapel Falls",
+      "usgsName": "Chapel Falls",
+      "usgsFeatureId": "e40eed22-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.528909,
+      "usgsLng": -86.444296,
+      "distanceMeters": 4,
+      "hydro": {
+        "usgsFallId": "e40eed22-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12018224",
+        "nhdPlusReachCode": "04020201000319",
+        "nhdHrReachCode": "04020201004414",
+        "nhdHrMeasure": "9.9315",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 203,
+      "stateName": "Spray Falls",
+      "usgsName": "Spray Falls",
+      "usgsFeatureId": "e413dd92-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.557709,
+      "usgsLng": -86.410566,
+      "distanceMeters": 31,
+      "hydro": {
+        "usgsFallId": "e413dd92-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "plunge",
+        "nhdComid": "12018208",
+        "nhdPlusReachCode": "04020201000315",
+        "nhdHrReachCode": "04020201000315",
+        "nhdHrMeasure": "0.5548",
+        "tallestDropFeet": 70
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 204,
+      "stateName": "Sable Falls",
+      "usgsName": "Sable Falls",
+      "usgsFeatureId": "e413d7f6-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.669049,
+      "usgsLng": -86.013776,
+      "distanceMeters": 35,
+      "hydro": {
+        "usgsFallId": "e413d7f6-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12018182",
+        "nhdPlusReachCode": "04020201000081",
+        "nhdHrReachCode": "04020201000081",
+        "nhdHrMeasure": "8.0321",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 205,
+      "stateName": "Chipmunk Falls",
+      "usgsName": "Chipmunk Falls",
+      "usgsFeatureId": "e40eedb7-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.669459,
+      "usgsLng": -85.955496,
+      "distanceMeters": 25,
+      "hydro": {
+        "usgsFallId": "e40eedb7-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "plunge",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": "04020201001594",
+        "nhdHrMeasure": "49.8025",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 207,
+      "stateName": "Upper Tahquamenon Falls",
+      "usgsName": "Upper Tahquamenon Falls",
+      "usgsFeatureId": "e413e27e-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.574843,
+      "usgsLng": -85.256646,
+      "distanceMeters": 10,
+      "hydro": {
+        "usgsFallId": "e413e27e-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "block",
+        "nhdComid": "12186629",
+        "nhdPlusReachCode": "04020202000004",
+        "nhdHrReachCode": "04020202000004",
+        "nhdHrMeasure": "89.6818",
+        "tallestDropFeet": 48
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 208,
+      "stateName": "Lower Tahquamenon Falls",
+      "usgsName": "Lower Tahquamenon Falls",
+      "usgsFeatureId": "e40efeae-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.603519,
+      "usgsLng": -85.204596,
+      "distanceMeters": 260,
+      "hydro": {
+        "usgsFallId": "e40efeae-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "12186603",
+        "nhdPlusReachCode": "04020202000004",
+        "nhdHrReachCode": "04020202000004",
+        "nhdHrMeasure": "64.1744",
+        "tallestDropFeet": 15
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 213,
+      "stateName": "Alger Falls",
+      "usgsName": "Alger Falls",
+      "usgsFeatureId": "e40ee72d-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.393179,
+      "usgsLng": -86.647716,
+      "distanceMeters": 9,
+      "hydro": {
+        "usgsFallId": "e40ee72d-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "cascade",
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": "04020201002500",
+        "nhdHrMeasure": "5.962900",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    },
+    {
+      "stateGisObjectId": 215,
+      "stateName": "Big Garlic Falls",
+      "usgsName": "Big Garlic Falls",
+      "usgsFeatureId": "e40ee861-8a58-11e6-b586-ecf4bb62914c",
+      "usgsLat": 46.681879,
+      "usgsLng": -87.573256,
+      "distanceMeters": 24,
+      "hydro": {
+        "usgsFallId": "e40ee861-8a58-11e6-b586-ecf4bb62914c",
+        "fallType": "tiered",
+        "nhdComid": "904020389",
+        "nhdPlusReachCode": "04020105000296",
+        "nhdHrReachCode": "04020105000296",
+        "nhdHrMeasure": "67.9755",
+        "tallestDropFeet": null
+      },
+      "reviewState": "hydrogeography-only-no-access"
+    }
+  ],
+  "countyOnly": [],
+  "unresolved": [
+    {
+      "stateGisObjectId": 166,
+      "sourceRecords": [
+        "e40f0707-8a58-11e6-b586-ecf4bb62914c",
+        "7821452e-4e46-477a-b17e-111ffa6da6c2"
+      ],
+      "reason": "multiple-usgs-records-for-state-site"
+    }
+  ]
+}
