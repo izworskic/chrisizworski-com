@@ -14,9 +14,9 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.match(read("api/carto-basemap-config.js"),/CARTO_BASEMAP_PUBLIC_KEY/);
  assert.match(html,/chrisizworski.com\/#person/);
  assert.match(html,/Built by <a href="https:\/\/chrisizworski.com\/chris-izworski\//);
- assert.match(html,/dateModified":"2026-10-25"/);
+ assert.match(html,/dateModified":"2026-10-26"/);
  assert.match(catalog,/data-tool-id="lake-effect-snow"/);
- assert.match(winter,/https:\/\/chrisizworski.com\/lake-effect-snow\/<\/loc><lastmod>2026-10-25/);
+ assert.match(winter,/https:\/\/chrisizworski.com\/lake-effect-snow\/<\/loc><lastmod>2026-10-26/);
  assert.equal(graph.tools.filter(x=>x.id==="lake-effect-snow").length,1);
  assert.ok(graph.relationships.some(x=>x.from==="lake-effect-snow"&&x.to==="national-snow"));
  assert.ok(!read("public/michigan-snow-depth/index.html").includes('id="lakeEffectApp"'));
