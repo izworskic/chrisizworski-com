@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// On-demand, read-only production inspection for the October 25 search-growth cohort.
+// On-demand, read-only production inspection for the October 2026 search-growth cohort; 20 priority URLs.
 // Does not change site pages, GSC, indexing, ads, APIs, or metadata.
 // Run: node scripts/audit-million-impressions-cohort.mjs
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -14,7 +14,10 @@ const pages = [
   { group: 'first-six', path: '/mackinac-bridge-tolls/', impressions: 5699, clicks: 13, intent: 'How much is the Mackinac Bridge toll?' },
   { group: 'first-six', path: '/national-tools/white-christmas/forecast/', impressions: 1614, clicks: 3, intent: 'Will it snow for Christmas?' },
   { group: 'first-six', path: '/michigan-snow-totals/', impressions: 1154, clicks: 8, intent: 'How much snow fell in Michigan?' },
-  // Winter discovery checks: URL-based technical evidence, NOT confirmed rank potential.
+  // On-demand discovery checks: URL-based technical evidence, NOT confirmation of Google indexing.
+  { group: 'winter-discovery', path: '/tools/' },
+  { group: 'winter-discovery', path: '/white-christmas-probability-map/' },
+  { group: 'winter-discovery', path: '/national-tools/white-christmas/' },
   { group: 'winter-discovery', path: '/national-tools/snow/' },
   { group: 'winter-discovery', path: '/lake-effect-snow/' },
   { group: 'winter-discovery', path: '/michigan-snow-depth/' },
@@ -103,16 +106,20 @@ const output = {
     'HTTP/initial HTML only; not browser UX, source API accuracy, or Google-selected snippets.',
     'No causally attributable ranking, CTR, or revenue improvement is claimed.',
     'Some national URLs are assembled/deployed by other owning repositories; fixes belong there.',
-    'Winter pages are discovery diagnostics; missing baseline here means NOT MEASURED, not zero demand.'
+    'Winter pages are discovery diagnostics; missing baseline here means NOT MEASURED, not zero demand.',
+    'The static 2026-09-25..2026-10-22 GSC figures are historical comparison data, not a claim of refreshed same-day Search Console observations.',
+    'This technical gate includes the Tools hub and distinct White Christmas history/calculator pages; URL Inspection remains necessary for Google-selected canonicals.'
   ],
   firstSixTotals: { ...totals, ctr: totals.clicks / totals.impressions },
   firstSixTechnicalPass: first.every(p => p.issues.length === 0),
+  winterTechnicalPass: results.filter(p => p.group === 'winter-discovery').every(p => p.issues.length === 0),
+  allPagesTechnicalPass: results.every(p => p.issues.length === 0),
   pages: results
 };
 await mkdir('artifacts', { recursive: true });
 await writeFile('artifacts/million-impressions-cohort-20261025.json', JSON.stringify(output, null, 2) + '\n');
 console.log(JSON.stringify(output, null, 2));
-if (!output.firstSixTechnicalPass) {
-  console.error('Primary cohort has HTTP or indexability defects; inspect report before release.');
+if (!output.allPagesTechnicalPass) {
+  console.error('A monitored page has an HTTP, redirect, or indexability defect; inspect the per-URL report before release.');
   process.exitCode = 1;
 }
