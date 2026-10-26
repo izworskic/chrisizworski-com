@@ -1,0 +1,33 @@
+name: On-demand USGS waterfall hydrography import
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Retrieve full official USGS V2 data release
+        env:
+          SOURCE_URL: https://www.sciencebase.gov/catalog/file/get/5e8d2b5982cee42d13466001?f=__disk__86%2Ff1%2Fc5%2F86f1c5a4ab96d77b04d827a87b0e85570b97d25e
+        run: |
+          curl -fLsS --retry 3 --retry-delay 3 --connect-timeout 20 --max-time 150 \
+            -H "Accept: application/geo+json, application/json" \
+            "$SOURCE_URL" -o "$RUNNER_TEMP/up-usgs-source.geojson"
+          test "$(wc -c < "$RUNNER_TEMP/up-usgs-source.geojson")" -gt 5000000
+      - name: Derive research-only NHD crosswalk
+        run: node scripts/build-up-waterfall-hydro-crosswalk.mjs "$RUNNER_TEMP/up-usgs-source.geojson"
+      - name: Validate crosswalk and visitor-page safety tests
+        run: node --test tests/up-waterfalls-usgs.test.js tests/up-waterfalls-hydro-crosswalk.test.js tests/up-waterfalls.test.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: up-waterfall-hydro-crosswalk
+          path: |
+            data/up-waterfall-usgs-v2-crosswalk.json
+            public/assets/up-waterfall-hydro-crosswalk.json
+          retention-days: 7
