@@ -23,3 +23,6 @@ Required: node --test tests/winter-field-guides.test.js; npm run verify:quick; n
 
 ## Next critical development investment
 Add a license-verified winter image for each additional destination, stronger exact winter parking/trailhead records, confirmed source observation age, and user-tested per-guide maps. Only then treat seven guides as full 90/100 FIELD_GUIDE_V1 editorial releases. GSC and ad lift unknown until dated measurement.
+
+## Tool directory entry points
+A separate, scoped seven-link collection sits immediately before the existing Michigan winter decision router on /tools/. No tool forecasts, ad settings or existing winter-router choices were replaced.
