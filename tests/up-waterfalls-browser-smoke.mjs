@@ -17,8 +17,8 @@ try{
   await page.route('https://pagead2.googlesyndication.com/**',r=>r.abort());
   await page.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('[data-fall]').first().waitFor();
-  await run('mobile hub contains 20 human-readable destinations',async()=>{
-    assert.equal(await page.locator('[data-fall]').count(),20);
+  await run('mobile hub contains 23 human-readable destinations',async()=>{
+    assert.equal(await page.locator('[data-fall]').count(),23);
     assert.equal(await page.locator('h1').count(),1);
     assert.ok(await page.locator('#geographic-research').count()===1);
   });
@@ -58,7 +58,7 @@ try{
     assert.ok(await page.locator('.leaflet-marker-icon').count()>10);
   });
   await page.screenshot({path:screenshots+'/hub-desktop.png',fullPage:true,animations:'disabled'});
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});

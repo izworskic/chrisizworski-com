@@ -1070,6 +1070,168 @@
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         }
       }
+    },
+    {
+      "id": "upper-hungarian-falls",
+      "name": "Upper Hungarian Falls",
+      "region": "Western U.P.",
+      "place": "Houghton County · Tamarack City",
+      "lat": 47.173872,
+      "lng": -88.451082,
+      "gisObjectId": 134,
+      "level": "easy",
+      "minutes": "30–75 min",
+      "walk": "From the Golf Course Road shoulder near the Hungarian Falls sign, follow the old gated access road on foot approximately 400 yards toward the pond and upper falls. This is a rustic route, not a paved accessible path.",
+      "best": "Spring snowmelt, after sustained rain, and hardwood color; no live water-flow measurement.",
+      "access": "Keweenaw Land Trust states that its upper 10-acre nature area is open to the public year-round for nonmotorized visits. Golf Course Road is not fully plowed in winter.",
+      "status": "verify",
+      "note": "This is the shorter, easier access into the Hungarian Falls complex. The historic dam/pond is not a designated swimming facility; water and edges require caution.",
+      "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Land trust nature area",
+      "parking": "Shoulder of Golf Course Road near the Hungarian Falls Nature Area sign, about 0.5 mi uphill from 6th Street in Tamarack City. KLT's parking reference: 47.173159, -88.444743. Never drive the old gated woods road.",
+      "feature": "A public land-trust preserve at the top of the Dover Creek gorge with the historic dam, pond and upper falls.",
+      "further": "The upper waterfall is on the KLT preserve; much of the lower gorge is on Michigan state land, with private parcels nearby. Do not assume all visible paths are public.",
+      "manager": "Keweenaw Land Trust · upper 10-acre nature area",
+      "decision": "Pick the upper falls when you want the shortest officially described walk and a look at the Keweenaw Fault landscape without committing to the steep lower gorge.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-route-verified-current-road-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+          "description": "KLT conserves and opens the upper 10 acres to public nonmotorized visits"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+          "description": "KLT publishes year-round public hiking access; winter road conditions change"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Nature%20Area%20Directions_0_0.pdf",
+          "description": "KLT Golf Course Road roadside parking: 47.173159, -88.444743; old gated drive not for vehicles"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT brochure: walk about 400 yards along rough former access road to upper nature area"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS source waterfall point 134, distinct from parking"
+        }
+      }
+    },
+    {
+      "id": "lower-hungarian-falls",
+      "name": "Lower Hungarian Falls",
+      "region": "Western U.P.",
+      "place": "Houghton County · Tamarack City",
+      "lat": 47.169572,
+      "lng": -88.441196,
+      "gisObjectId": 130,
+      "level": "difficult",
+      "minutes": "60–150 min",
+      "walk": "From the KLT-signed Golf Course Road access, follow the rough former drive toward the gorge, take the downstream/left-side path, and use the marked public trail corridor. The entire gorge traverse is roughly two miles, with steep, eroded cliffside sections and no protective fences.",
+      "best": "Spring melt or rain when the lower cascade carries water; roots and ledges may be slippery even in dry weather.",
+      "access": "Keweenaw Land Trust describes public hiking throughout the gorge, with its upper parcel and a large Michigan state-owned section; its mapped brochure is essential because neighboring parcels are private.",
+      "status": "verify",
+      "note": "The lower fall is NOT the easy upper KLT preserve access. Routes descend a steep gorge, and maps should not be mistaken for a guaranteed safe trail surface.",
+      "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State lands / trail corridor",
+      "parking": "Use the KLT-published Golf Course Road shoulder parking, near 47.173159, -88.444743. In winter park only where legally plowed; KLT says most of Golf Course Road is unplowed.",
+      "feature": "A lower gorge waterfall reached by rustic trails, with steep cliffs, exposed rock and a distinct visitor decision from Upper Hungarian Falls.",
+      "further": "KLT's ownership map colors its 10-acre upper preserve, state lands and neighboring private parcels differently. Remain on public paths and do not improvise gorge-crossings.",
+      "manager": "Michigan DNR-owned gorge parcels; Keweenaw Land Trust manages upper access parcel (check parcel map)",
+      "decision": "Choose the lower waterfall only if you want a challenging gorge walk; otherwise use the signed upper preserve path. Do not recommend cliff-edge shortcuts.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-corridor-parcel-mapping-required-current-trail-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT mapped brochure distinguishes state-owned lower gorge, upper KLT land and private neighbors"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+          "description": "KLT publishes public hiking from Tamarack City/Golf Course Road to the gorge"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Nature%20Area%20Directions_0_0.pdf",
+          "description": "KLT roadside shoulder parking and winter plowing restrictions"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT gorge trail map: roughly two miles for the system, strenuous lower sections"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS waterfall point 130, not trailhead"
+        }
+      }
+    },
+    {
+      "id": "fumee-falls",
+      "name": "Fumee Falls",
+      "region": "Central U.P.",
+      "place": "Dickinson County · east of Iron Mountain",
+      "lat": 45.800533,
+      "lng": -87.980322,
+      "gisObjectId": 6,
+      "level": "steps",
+      "minutes": "15–40 min",
+      "walk": "Begin at the Fumee Falls Roadside Park parking area on the north side of US-2; a short stairway/boardwalk approach leads toward the upper creek tiers. Use only maintained visitor paths, not highway shoulders.",
+      "best": "Spring melt or after recent rain; flow can be thin during dry summer weeks.",
+      "access": "MDOT publishes Fumee Falls Roadside Park as a state visitor facility, but most MDOT roadside parks close for the season October 29, 2026. Check this specific park's open/gated status before planning a stop.",
+      "status": "seasonal",
+      "note": "Unlike long hikes, this waterfall is a brief roadside stop. A small three-tier fall is not a guaranteed strong-flow destination in dry periods.",
+      "source": "https://www.michigan.gov/mdot/travel/tourists/roadside-parks",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "MDOT roadside park",
+      "parking": "Fumee Falls Roadside Park on the north side of US-2, approximately six miles east of Iron Mountain. Follow park signage and do not enter closed gates or park in the traffic lane.",
+      "feature": "A compact three-tier creek fall reached from an established MDOT roadside park beside US-2.",
+      "further": "MDOT's October 15, 2026 notice says most parks close October 29; that is a seasonal facility warning, not a live report of Fumee's gate. Check before driving.",
+      "manager": "Michigan Department of Transportation · Fumee Falls Roadside Park",
+      "decision": "Best for a brief, signed-roadside waterfall stop on a US-2 drive; choose other falls for a long hiking day.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-roadside-park-and-short-trail-current-gate-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "Official MDOT Pure Michigan byways driving guide identifies Fumee Falls Roadside Park"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/mdot/travel/tourists/roadside-parks",
+          "description": "MDOT lists roadside parks as public travel recreation facilities"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+          "description": "Official Fumee Falls roadside park, US-2; observe posted gated access"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://upper-michigan.com/guide/waterfalls/fumee-falls.html",
+          "description": "Regional Fumee Falls guide identifies short boardwalk/stair access to tiers"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan waterfall GIS ID 6, location is fall not visitor parking"
+        }
+      }
     }
   ]
 }
