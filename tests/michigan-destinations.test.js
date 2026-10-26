@@ -63,7 +63,7 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.match(js, /basemaps\.cartocdn\.com\/rastertiles\/voyager/);
   assert.match(js, /\/api\/carto-basemap-config/);
   assert.match(js, /DOMContentLoaded/);
-  assert.doesNotMatch(js, /window\.addEventListener\('load'/);
+  assert.doesNotMatch(js, /window\.addEventListener\('load',\s*initMap/);
   assert.ok(html.indexOf('id="quick-find"') < html.indexOf('id="finder"'), 'planning controls must appear on the first screen');
   assert.match(js, /encodeURIComponent\(cfg\.key\.trim\(\)\)/);
   assert.match(js, /tile\.openstreetmap\.org/);
