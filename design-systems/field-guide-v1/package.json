@@ -1,0 +1,13 @@
+{
+  "name": "field-guide-editorial-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Portable, photo-led and evidence-aware travel guide design standard",
+  "scripts": {
+    "test": "node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
