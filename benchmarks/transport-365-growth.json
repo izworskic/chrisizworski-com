@@ -1,7 +1,7 @@
 {
   "version": "1.2.0",
   "created": "2026-08-18",
-  "updated": "2026-09-25",
+  "updated": "2026-10-26",
   "source": {
     "type": "Google Search Console export",
     "file": "chrisizworski.com-Performance-on-Search-2026-08-15",
@@ -15,7 +15,7 @@
       "status": "ready-for-release",
       "releaseDate": null,
       "evaluationWindow": null,
-      "hypothesis": "Pair the exact Mackinac Bridge toll head term with a calculator-led title and snippet emphasizing vehicle-specific RV, trailer and round-trip math that a bare-price SERP answer cannot resolve, while preserving the existing fare answer and calculator.",
+      "hypothesis": "Put the verified $4 standard passenger-car fare directly into the search title while retaining the calculator and Chris Izworski attribution. The description gives the $8 round-trip context and specifies RV/trailer axle estimates and payment discounts that a zero-click bare-price answer cannot provide. Monitor query-family clicks, not a guaranteed CTR lift.",
       "baseline": {
         "impressions": 637,
         "clicks": 1,
@@ -92,8 +92,8 @@
         "averagePositionMax": 5
       },
       "treatment": {
-        "title": "Mackinac Bridge Toll Calculator 2026 | Chris Izworski",
-        "metaDescription": "Mackinac Bridge toll is $4 for a car ($2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return.",
+        "title": "Mackinac Bridge Toll: $4 Car | Calculator | Chris Izworski",
+        "metaDescription": "Mackinac Bridge toll 2026: $4 car one-way, $8 round trip. Calculate RV and trailer tolls by axle; see the 2.3% card fee and MacPass 36-hour discount.",
         "h1": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
         "firstAnswer": "The Mackinac Bridge toll is $4 one way for a standard two-axle passenger car in 2026, or $8 round trip at the standard rate."
       },
@@ -134,6 +134,13 @@
           "from": "Bare-price-led title and snippet; no FAQPage schema",
           "to": "Calculator-led exact requested metadata with five on-page FAQ entities; one trip-context incoming link each on Mackinac Island fall, U.P. fall, and Soo Locks. Bridge Live already links to tolls.",
           "rationale": "Owner-supplied 6,437 impressions and 15 clicks in 28 days at 8.3 average position; protect answer and calculator while distinguishing vehicle-specific math."
+        },
+        {
+          "date": "2026-10-26",
+          "field": "title + metaDescription + aligned OG/Twitter/WebPage JSON-LD",
+          "from": "Calculator-led title without the $4 standard fare in the title",
+          "to": "Verified $4 car fare, vehicle-specific calculator utility, creator attribution, $8 round-trip and MacPass/card information in query-led snippet",
+          "rationale": "Connected GSC 28-day data: 5683 impressions / 12 clicks / pos 8.34, exact 'mackinac bridge toll' 544 impressions / 0 clicks. Official Mackinac Bridge Authority still states $4 car / $2 passenger axle / $5 other axle; test search-intent clarity without touching the calculator, H1 or authority-derived rates."
         }
       ],
       "latest28DayBaseline20261012": {
@@ -144,6 +151,26 @@
         "averagePosition": 8.3,
         "queryCount": 143,
         "assessment": "Bare-price query cluster likely has significant zero-click intent; judge on qualified calculator clicks, aiming toward 1% CTR and top-five average position; not guaranteed."
+      },
+      "latest28DayBaseline20261024": {
+        "source": "Connected Windsor.ai Google Search Console Web search, sc-domain:chrisizworski.com, September 27-October 24, 2026 inclusive",
+        "impressions": 5683,
+        "clicks": 12,
+        "ctr": 0.0021115607953545662,
+        "averagePosition": 8.3391,
+        "exactQuery": {
+          "query": "mackinac bridge toll",
+          "impressions": 544,
+          "clicks": 0,
+          "averagePosition": 9.9062
+        },
+        "costQuery": {
+          "query": "how much does it cost to cross the mackinac bridge",
+          "impressions": 245,
+          "clicks": 0,
+          "averagePosition": 8.0367
+        },
+        "note": "Query/device breakdown omits undisclosed GSC rows and must not be summed to page totals. No post-treatment uplift is asserted."
       }
     },
     {
