@@ -44,10 +44,10 @@ async function run(){
       await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
       check(await page.locator('#season').inputValue()==='2025-26',size.name+': evidence-rich archive is default until first active report');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk stays visible while browsing archives');
-      await page.locator('#layup-reporting-network summary').click();
+      await page.locator('#source-evidence-details > summary').click();
       check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty linked reporting inputs');
-      check(await page.locator('#layup-reporting-network details').evaluate(el=>el.open),size.name+': source disclosure expanded');
-      await page.locator('#layup-reporting-network summary').click();
+      check(await page.locator('#source-evidence-details').evaluate(el=>el.open),size.name+': source disclosure expanded');
+      await page.locator('#source-evidence-details > summary').click();
       check(await page.locator('#winter-feed .live-empty').count()===1,size.name+': new winter does not invent arrivals');
       check(await page.locator('#winter-live').evaluate(e=>e.classList.contains('is-preseason')),size.name+': empty current winter is presented as preseason');
       if(size.name==='mobile'){
@@ -67,6 +67,11 @@ async function run(){
        throw err;
       }
       check(await page.locator('[data-ship]').count()===12,size.name+': 2025–26 shows twelve ships');
+      for(const id of ['harbor-filter','berth-filter']){
+       const fit=await page.locator('#'+id).evaluate(el=>{const option=el.selectedOptions[0],canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font=getComputedStyle(el).font;return {text:option?.textContent||'',required:ctx.measureText(option?.textContent||'').width+40,actual:el.clientWidth}});
+       check(fit.actual>=fit.required,size.name+': untruncated '+id+' label '+JSON.stringify(fit));
+      }
+
       check(await page.locator('#harbor-filter option').count()===6,size.name+': only five source-dated historical harbor choices; thirteen monitored areas are not claimed as layups');
       check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
@@ -76,24 +81,46 @@ async function run(){
 
       check(await page.locator('.atlas-workspace #layup-map').count()===1,size.name+': integrated map and harbor notebook');
       await page.locator('.layup-pin').first().waitFor({timeout:10000});
+      // Controlled AIS fixture: only eight nearby signals appear until explicitly expanded.
+      const simulatedAIS={ok:true,notLayupConfirmations:true,checkedAt:'2026-10-26T10:00:00Z',activity:Array.from({length:13},(_,i)=>({
+        name:'QA Vessel '+(i+1),harborId:'superior',seen:'2026-10-26T09:58:00Z',behavior:'moving'
+      }))};
+      await context.route('**/api/freighter-layup-live',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(simulatedAIS)}));
+      await page.locator('#ais-refresh').click();
+      await page.waitForFunction(()=>document.querySelector('#ais-watch-list')?.querySelectorAll('li').length===8,{timeout:7000});
+      check(await page.locator('#ais-watch-list li').count()===8,size.name+': AIS limited to eight visible observations');
+      check(await page.locator('#ais-show-more').isVisible(),size.name+': user can expand nearby AIS observations');
+      await page.locator('#ais-show-more').click();
+      check(await page.locator('#ais-watch-list li').count()===13,size.name+': show more reveals all mock signals');
+      await page.locator('#ais-show-more').click();
+      check(await page.locator('#ais-watch-list li').count()===8,size.name+': show fewer restores eight');
+      await context.unroute('**/api/freighter-layup-live');
       check(await page.locator('.layup-pin').count()===5,size.name+': five historical harbor map markers');
+      check(await page.locator('.atlas-harbor-column').isHidden(),size.name+': no empty harbor notebook panel');
+      await page.locator('.layup-pin').first().click();
+      check(await page.locator('.atlas-harbor-column').isVisible(),size.name+': selected harbor details integrated into map');
+      check(await page.locator('.atlas-harbor-column .harbor-vessels li').count()>0,size.name+': harbor selection reveals vessel links');
+      check(await page.locator('.harbor-chip button').count()===0,size.name+': no duplicate harbor button list');
+      await page.locator('.harbor-panel-heading button').click();
+      check(await page.locator('.atlas-harbor-column').isHidden(),size.name+': closing harbor restores full map');
+      const headings=await page.locator('main h2').allTextContents();
+      for(const title of ['Winter Harbor Map','Current Winter Arrivals','Harbor Roster','Ship Stories','Why Freighters Lay Up'])check(headings.some(x=>x.includes(title)),size.name+': functional section heading '+title);
+      check(await page.locator('main > .wrapper > section').evaluateAll(nodes=>nodes.map(n=>n.id||n.className).join('|')).then(v=>v.startsWith('explorer|fleet|ship-biographies|stories|sources-evidence')),size.name+': page section order');
+      check(await page.locator('#source-evidence-details').evaluate(e=>!e.open),size.name+': source and evidence methods collapsed by default');
+      const boundsText=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds||'');
+      check(boundsText==='41.3,-92.4|48.9,-78.2',size.name+': Lakes-focused initial map target');
+
       check(await page.locator('#stat-ships').textContent()==='12',size.name+': season stats');
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
-      // The test intentionally blocks external Wikimedia images. Ship identity must remain
-      // visually represented, and a failed photo may not retain a misleading photo badge.
-      const photo=page.locator('.ship-art img').first();
-      await photo.scrollIntoViewIfNeeded();
-      await page.waitForFunction(()=>[...document.querySelectorAll('.ship-art img')].some(i=>i.hidden),{timeout:5000});
-      const imageFallback=await page.evaluate(()=>{
-        const image=[...document.querySelectorAll('.ship-art img')].find(i=>i.hidden);
-        return !!(image?.previousElementSibling && !image.previousElementSibling.hidden && !!image.parentElement.querySelector('.ship-illustration'));
-      });
-      check(imageFallback,size.name+': image outage reveals branded ship illustration');
+      check(await page.locator('.ship-monogram').count()===12,size.name+': all twelve ships use consistent monogram tiles');
+      check(await page.locator('.ship-art img').count()===0,size.name+': mixed roster photography removed');
+      check(await page.locator('#ship-biographies .bio-related').count()===3,size.name+': nonfeatured biographies deduplicated');
 
 
       await page.locator('#harbor-filter').selectOption('sturgeon-bay');
+      check(await page.locator('.atlas-harbor-column').isVisible(),size.name+': harbor filter highlights map notebook');
       check(await page.locator('[data-ship]').count()===3,size.name+': Sturgeon Bay harbor filter');
       await page.locator('#focus-harbor').click();
       await page.locator('#ship-search').fill('James R Barker');
@@ -214,6 +241,20 @@ async function run(){
       check(await page.locator('a.skip').count()===1,size.name+': keyboard skip link');
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
       check(overflow<=3,size.name+': horizontal overflow '+overflow+'px');
+      // Ad layout verification: a simulated sticky anchor sits in the reserved bottom
+      // area and side-rail placement is removed only below desktop width.
+      const adChecks=await page.evaluate(()=>{
+        const ad=document.createElement('div');ad.className='ad-side-rail';ad.textContent='side rail QA';document.body.append(ad);
+        const sideDisplay=getComputedStyle(ad).display;ad.remove();
+        const footer=document.querySelector('.footer');
+        window.scrollTo(0,document.documentElement.scrollHeight);
+        return {rail:sideDisplay,bodyPadding:parseFloat(getComputedStyle(document.body).paddingBottom),
+          footerBottom:footer.getBoundingClientRect().bottom,viewport:innerHeight};
+      });
+      check(adChecks.bodyPadding>=95,size.name+': reserved bottom sticky-anchor space');
+      if(size.name==='mobile')check(adChecks.rail==='none',size.name+': narrow side rail suppressed');
+      check(adChecks.footerBottom<=adChecks.viewport-90,size.name+': sticky bottom ad cannot cover footer at page end');
+
       check(pageErrors.length===0,size.name+': unhandled browser exceptions: '+pageErrors.join('; '));
       fs.mkdirSync(path.resolve(__dirname,'..','artifacts/layup-qa'),{recursive:true});
       await page.screenshot({path:path.resolve(__dirname,'..','artifacts/layup-qa/'+size.name+'.png'),fullPage:true});

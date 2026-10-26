@@ -17,7 +17,9 @@ test('real hero photograph has durable credit and honest historic distinction',(
  assert.ok(html.includes('Mesabi_Miner')||html.includes('Mesabi%20Miner'));
  assert.ok(html.includes('Sharon Mollerus'));
  assert.ok(html.includes('CC BY 2.0'));
- assert.match(html,/not a 2025–26 layup photograph/i);
+ assert.ok(html.includes('Dec. 31, 2017'));
+ assert.ok(html.includes('class="map-evidence-note"'));
+ assert.equal((html.match(/id="map-evidence-note"/g)||[]).length,1);
  assert.ok(html.includes('src="/assets/freighter-winter-hero.jpg"'));
  assert.ok(html.includes('https://commons.wikimedia.org/wiki/File:Mesabi_Miner'));
 });
@@ -48,6 +50,27 @@ test('structured expanded source catalog is represented by twenty credited publi
  const catalog=require('../public/assets/freighter-layup-sources.json');
  assert.equal(catalog.sources.length,20);
  assert.ok(html.includes('id="layup-reporting-network"'));
- assert.ok(html.includes('<strong>20</strong>'));
+ assert.equal((html.match(/class="coverage-source"/g)||[]).length,20);
  for(const source of catalog.sources)assert.ok(html.includes(source.publisher.replace(/&/g,'&amp;')),source.id);
+});
+
+test('map-first layout order and one evidence disclosure keep the tool above editorial content',()=>{
+ const ids=['id="explorer"','id="fleet"','id="ship-biographies"','class="stories"','id="sources-evidence"'];
+ const offsets=ids.map(x=>html.indexOf(x));
+ assert.ok(offsets.every((x,i)=>x>=0&&(!i||x>offsets[i-1])));
+ assert.ok(html.indexOf('id="explorer"')<html.indexOf('id="winter-live"'));
+ assert.equal((html.match(/class="hero-actions"/g)||[]).length,1);
+ assert.equal((html.match(/href="#explorer">Explore harbor map/g)||[]).length,1);
+ assert.ok(!html.includes('class="hero-index"'));
+ assert.match(html,/<details id="source-evidence-details">/);
+ assert.ok(!html.includes('<details id="source-evidence-details" open'));
+ for(const v of ['Winter Harbor Map','Harbor Roster — Every Ship','Ship Stories &amp; Library','Why Freighters Lay Up'])assert.ok(html.includes(v));
+});
+test('layup map has one caveat adjacent to the map and roster names remain crawlable',()=>{
+ assert.equal((html.match(/id="map-evidence-note"/g)||[]).length,1);
+ assert.equal((html.match(/id="ais-show-more"/g)||[]).length,1);
+ assert.ok(html.includes('id="harbor-panel" class="harbor-panel"></div>'));
+ assert.ok(css.includes('.layup-home .ship-monogram'));
+ assert.ok(css.includes('.layup-home .atlas-harbor-column[hidden]'));
+ assert.ok(css.includes('--layup-anchor-reserve'));
 });

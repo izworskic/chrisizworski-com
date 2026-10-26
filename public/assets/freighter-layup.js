@@ -4,7 +4,7 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,aisMonitoredHarbors:null,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
+ const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,aisMonitoredHarbors:null,aisExpanded:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
  const esc = value => String(value ?? '').replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text = (tag,content) => {const el=document.createElement(tag);el.textContent=content;return el};
  const seasonData = () => state.archive.seasons.find(x=>x.id===state.season);
@@ -24,10 +24,11 @@
    return '<span class="fallback-ship" hidden>'+shipSVG+'</span><img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.previousElementSibling.hidden=false">';
  }
  function vesselCard(v){
-   const selected=v.id===state.selected,h=harbor(v.harborId),label=policy().classify(v,seasonData());
-   const hasPhoto=Boolean(v.photo),reported=Boolean(label.reported);
-   const biog=state.biographies?.profiles?.some(p=>p.id===v.id);
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+photoHTML(v)+(hasPhoto?'<span class="photo-hint">Historic vessel photo · '+esc(v.photo.date.slice(0,4))+'</span>':'')+'</div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><span class="tag'+(reported?' tag-reported':'')+'">'+esc(label.label)+'</span><p class="berth">'+esc(v.berth)+' · '+esc(h.name)+'</p><p class="summary">'+esc(v.summary)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore this freighter →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Read permanent biography ↗</a>':'')+'</div></article>';
+   const selected=v.id===state.selected,h=harbor(v.harborId),biog=state.biographies?.profiles?.some(p=>p.id===v.id);
+   const words=v.name.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/).filter(Boolean);
+   const initials=(words.length>1?words[0][0]+words.at(-1)[0]:v.name.slice(0,2)).toUpperCase();
+   const facility=v.berth.split(' — ')[0];
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art"><span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(facility)+' · '+esc(h.name)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
  }
 
  function activeRecordsFromLedger(ledger,archive){
@@ -102,9 +103,10 @@
  function renderAIS(){
    if(!$('ais-watch-list'))return;
    if(!state.aisLoaded){$('ais-watch-status').textContent='AIS harbor activity is loading. These are not confirmed layup records.';return}
-   const rows=state.aisActivity.slice(0,24);
+   const rows=state.aisExpanded?state.aisActivity:state.aisActivity.slice(0,8);
    const harborScope=state.aisMonitoredHarbors?state.aisMonitoredHarbors+' monitored harbor areas':'monitored harbor areas';
    $('ais-watch-status').textContent=state.aisCheckedAt?'AIS checked '+new Date(state.aisCheckedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})+(state.aisPartial?' · Partial regional coverage':'')+'. Positions may be delayed; presence in port does not establish layup.':'AIS is currently unavailable. Dated reporting remains available above.';
+   const more=$('ais-show-more');if(more){more.hidden=state.aisActivity.length<=8;more.textContent=state.aisExpanded?'Show fewer AIS vessels':state.aisActivity.length>8?'Show '+(state.aisActivity.length-8)+' more AIS vessels':'';more.setAttribute('aria-expanded',String(state.aisExpanded))}
    $('ais-watch-list').innerHTML=rows.length?rows.map(v=>
     '<li><strong>'+esc(v.name)+'</strong><span>'+esc(harbor(v.harborId)?.name||v.harborId)+'</span><small>'+esc(v.behavior==='moving'?'Under way':v.behavior==='movement_unknown'?'Movement not reported':'Slow/stationary signal')+' · last heard '+esc(fmtAIS(v.seen))+'</small></li>').join(''):
     '<li class="ais-empty">'+(state.aisCheckedAt?'No recent signals returned across '+harborScope+'. This does not mean the winter docks are empty.':'Live AIS feed unavailable. No conclusion can be drawn about '+harborScope+'.')+'</li>';
@@ -122,11 +124,11 @@
      state.aisMonitoredHarbors=Array.isArray(data.harbors)?data.harbors.length:null;
      state.aisPartial=Boolean(data.partial);
    }catch{state.aisActivity=[];state.aisCheckedAt=null;state.aisPartial=false;state.aisMonitoredHarbors=null}
-   state.aisLoaded=true;renderAIS();
+   state.aisExpanded=false;state.aisLoaded=true;renderAIS();
  }
  function populateHarborFilter(){
    const ids=new Set(records().map(v=>v.harborId));
-   const harbors=[{id:'all',name:'All harbors with dated records'},...state.archive.harbors.filter(h=>ids.has(h.id))];
+   const harbors=[{id:'all',name:'All harbors'},...state.archive.harbors.filter(h=>ids.has(h.id))];
    $('harbor-filter').replaceChildren(...harbors.map(h=>{const option=document.createElement('option');option.value=h.id;option.textContent=h.name;return option}));
    if(state.activeHarbor!=='all'&&!ids.has(state.activeHarbor))state.activeHarbor='all';
    $('harbor-filter').value=state.activeHarbor;
@@ -135,14 +137,14 @@
    const list=records().filter(r=>state.activeHarbor==='all'||r.harborId===state.activeHarbor);
    const options=['all',...new Set(list.map(r=>r.berth))];
    if(!options.includes(state.berth))state.berth='all';
-   $('berth-filter').replaceChildren(...options.map(s=>{const o=document.createElement('option');o.value=s;o.textContent=s==='all'?'All documented berths':s;return o}));
+   $('berth-filter').replaceChildren(...options.map(s=>{const o=document.createElement('option');o.value=s;o.textContent=s==='all'?'All berths':s;return o}));
    $('berth-filter').value=state.berth;
  }
  function renderCards(){
    const list=filtered(),total=policy().totals({...seasonData(),records:records()});
    const scope=state.activeHarbor==='all'?'all sampled harbors':harbor(state.activeHarbor)?.name||'selected harbor';
    $('count-note').textContent=seasonData().state==='upcoming_unconfirmed'||(seasonData().state==='active_current'&&!records().length)?'No confirmed '+seasonData().label+' layups yet. Previous-season docks are not forecasts.':
-    list.length+' of '+total.documented+' sourced vessel records · '+scope+' · '+total.confirmed+' verified / '+total.reported+' reported overall.';
+    'Showing vessels for '+scope+'.';
    $('ship-grid').innerHTML=seasonData().state==='upcoming_unconfirmed'||(seasonData().state==='active_current'&&!records().length)?
      '<div class="current-empty"><h3>'+esc(seasonData().label)+' is still being written.</h3><p>No active winter berth is documented in this season. Departed ships remain in the dated story feed but do not appear as occupied harbor pins. AIS silence does not prove layup.</p><button type="button" id="view-archive" class="small-button">Explore the verified 2025–26 archive →</button></div>':
      list.length?list.map(vesselCard).join(''):'<div class="empty">No ships match those filters. Clear your search or choose another harbor or berth.</div>';
@@ -154,10 +156,8 @@
    $('stat-ships').textContent=count.documented;
    $('stat-harbors').textContent=count.harbors;
    $('stat-year').textContent=s.state==='historical_snapshot'||s.state==='active_current'?count.confirmed+' / '+count.reported:'Pending';
-   $('season-note').textContent=s.note;
-   $('map-intro').textContent=s.state==='historical_snapshot'?
-      'Explore '+count.documented+' documented winter records from '+count.harbors+' harbors. Map markers identify approximate harbors, not dock positions or live vessels.':
-      (count.documented?'This winter: '+count.documented+' sourced active berth reports in '+count.harbors+' harbors. Departed ships are excluded.':'No active winter berths documented for this season. Past harbor positions do not predict this season.');
+   $('season-note').textContent=s.label+' selected.';
+   $('map-intro').textContent='Select a harbor marker to see its documented vessels.';
  }
  function selectShip(id,scroll){
    const v=records().find(x=>x.id===id);if(!v)return;
@@ -188,33 +188,22 @@
    if(state.map)fitLakes();
  }
  function renderHarborPanel(){
-   const box=$('harbor-panel');box.replaceChildren();
-   const list=records().filter(v=>state.activeHarbor==='all'||v.harborId===state.activeHarbor);
-   if(!records().length){box.append(text('h3','No documented active berth in '+seasonData().label),text('p','Select an earlier archive in the winter menu for historical records. Past berths are never assigned to this winter.'));return}
-   if(state.activeHarbor==='all'){
-     box.append(text('h3','Winter harbors · select a harbor'),text('p','Compare source-dated records in '+new Set(records().map(v=>v.harborId)).size+' harbors. The archive is partial; every marker is an approximate harbor reference. Choose a harbor on the map or filter to see its fleet.'));
-     const wrap=document.createElement('div');wrap.className='harbor-chip';
-     for(const id of [...new Set(records().map(v=>v.harborId))]){
-       const h=harbor(id),ships=records().filter(v=>v.harborId===id),button=text('button',h.name+' · '+ships.length+' ships');
-       button.type='button';button.addEventListener('click',()=>setHarbor(id,true));wrap.append(button)
-     }
-     box.append(wrap);return;
-   }
-   const h=harbor(state.activeHarbor);
-   box.append(text('h3',h.name+' · '+h.lake),text('p',list.length+' dated layup reports. '+h.note));
-   const wrap=document.createElement('div');wrap.className='harbor-chip';
-   for(const v of list){const b=text('button',v.name+(v.status==='reported_historical'?' · reported':''));b.type='button';b.addEventListener('click',()=>selectShip(v.id,true));wrap.append(b)}
-   box.append(wrap);
-   const foot=document.createElement('div');foot.className='harbor-links';
-   const src=text('a','Review original harbor sources ↗');src.href=list[0].evidence.url;src.target='_blank';src.rel='noopener';
-   const publicMap=text('a','Find public waterfront locations ↗');publicMap.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('public waterfront parks '+h.name);publicMap.target='_blank';publicMap.rel='noopener';
-   const all=text('button','View all harbors');all.type='button';all.addEventListener('click',()=>setHarbor('all',true));
-   foot.append(src,publicMap,all);box.append(foot);
+  const aside=document.querySelector('.atlas-harbor-column'),box=$('harbor-panel');box.replaceChildren();
+  if(state.activeHarbor==='all'||!records().length){if(aside)aside.hidden=true;return}
+  const h=harbor(state.activeHarbor),ships=records().filter(v=>v.harborId===state.activeHarbor);
+  if(aside)aside.hidden=false;
+  const top=document.createElement('div');top.className='harbor-panel-heading';top.append(text('h3',h.name),text('span',h.lake));
+  const reset=text('button','×');reset.type='button';reset.setAttribute('aria-label','Clear harbor selection');reset.addEventListener('click',()=>setHarbor('all',true));top.append(reset);box.append(top);
+  const list=document.createElement('ul');list.className='harbor-vessels';
+  for(const v of ships){const li=document.createElement('li'),button=text('button',v.name+' ↗');button.type='button';button.addEventListener('click',()=>selectShip(v.id,true));li.append(button);list.append(li)}
+  box.append(list);
  }
+
  function setHarbor(id,zoom){
    if(id!=='all'&&!harbor(id))return;
    state.activeHarbor=id;state.berth='all';state.selected=null;
    $('harbor-filter').value=id;$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();
+   for(const p of state.markers)p.marker.getElement()?.classList.toggle('is-selected',p.id===id);
    if(zoom&&state.map){if(id==='all')fitLakes();else{const h=harbor(id);state.map.setView([h.lat,h.lon],10,{animate:false})}}
  }
  function shipIcon(count){
@@ -228,13 +217,13 @@
    for(const id of ids){
      const h=harbor(id),list=records().filter(v=>v.harborId===id),verified=list.filter(v=>policy().classify(v,seasonData()).confirmed).length;
      const marker=L.marker([h.lat,h.lon],{icon:shipIcon(list.length),title:h.name+' · '+list.length+' dated winter reports; approximate harbor point',keyboard:true}).addTo(state.markerLayer);
-     const pop=document.createElement('div');pop.append(text('strong',h.name),text('p',list.length+' source-dated '+(seasonData().state==='historical_snapshot'?'historical':'winter')+' reports: '+verified+' verified, '+(list.length-verified)+' reported. Harbor point only; no live ship positions.'));
-     const button=text('button','Explore this harbor');button.type='button';button.addEventListener('click',()=>{setHarbor(id,true);$('fleet').scrollIntoView({behavior:'smooth',block:'start'})});pop.append(button);
-     marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});
+     const pop=document.createElement('div');pop.append(text('strong',h.name));
+     const button=text('button','View harbor vessels');button.type='button';button.addEventListener('click',()=>setHarbor(id,true));pop.append(button);
+     marker.bindPopup(pop);marker.on('click',()=>setHarbor(id,false));state.markers.push({id,marker});marker.getElement()?.classList.toggle('is-selected',state.activeHarbor===id);
    }
-   $('map-status').textContent=ids.length?ids.length+' source-dated harbor references · departed ships excluded · no live positions':'No confirmed harbor positions for the selected winter. Map shows geographic context only.';
+   $('map-status').textContent=ids.length?'Select a harbor marker to inspect its vessels.':'No harbor records for this season; choose an archive winter.';
  }
- function fitLakes(){if(!state.map)return;state.map.fitBounds([[40.9,-92.5],[49.2,-76.3]],{padding:[22,22],animate:false})}
+ function fitLakes(){if(!state.map)return;const bounds=[[41.3,-92.4],[48.9,-78.2]];state.map.fitBounds(bounds,{padding:[28,28],maxZoom:6,animate:false});$('layup-map').dataset.initialBounds=bounds.map(p=>p.join(',')).join('|')}
  function focusHarbor(){if(!state.map)return;const selected=state.markers.find(m=>m.id===state.activeHarbor);if(selected){state.map.setView(selected.marker.getLatLng(),10,{animate:false});return}const pins=state.markers;if(pins.length===1)state.map.setView(pins[0].marker.getLatLng(),10,{animate:false});else if(pins.length>1)state.map.fitBounds(pins.map(m=>m.marker.getLatLng()),{padding:[35,35],maxZoom:8,animate:false});else fitLakes()}
  async function addTiles(){
    if(!state.map)return;
@@ -247,14 +236,14 @@
      const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')}).addTo(state.map);
      state.tiles=layer;
      layer.on('tileerror',()=>{if(carto&&!failed){failed=true;state.map.removeLayer(layer);add(false)}});
-     layer.on('load',()=>{$('map-status').textContent=(carto?'CARTO':'OpenStreetMap')+' map · sourced harbor references only · never live vessel positions.'});
+     layer.on('load',()=>{$('map-status').textContent=(carto?'CARTO':'OpenStreetMap')+' basemap ready · choose a harbor marker.'});
    };
    add(Boolean(key));
  }
  function initMap(){
    if(!window.L){$('map-status').textContent='Map library unavailable. All verified ship and harbor records remain accessible below.';return}
    try{
-     state.map=L.map('layup-map',{scrollWheelZoom:false,worldCopyJump:true,zoomControl:true}).setView([44.7,-84.6],5);
+     state.map=L.map('layup-map',{scrollWheelZoom:false,worldCopyJump:true,zoomControl:true}).setView([45.2,-85.3],5);
      const loadingHint=$('layup-map').querySelector('.map-loading');
      if(loadingHint)loadingHint.remove();
      state.markerLayer=L.layerGroup().addTo(state.map);
@@ -310,6 +299,7 @@
    $('clear-filters').addEventListener('click',()=>{state.query='';state.berth='all';state.activeHarbor='all';$('ship-search').value='';$('harbor-filter').value='all';$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();fitLakes()});
    $('detail-close').addEventListener('click',()=>{state.selected=null;$('ship-detail').hidden=true;renderCards();$('ship-search').focus()});
    $('ais-refresh')?.addEventListener('click',refreshAIS);
+     $('ais-show-more')?.addEventListener('click',()=>{state.aisExpanded=!state.aisExpanded;renderAIS()});
    setSeason(state.season);initMap();
    refreshAIS();
    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&(!state.aisCheckedAt||Date.now()-Date.parse(state.aisCheckedAt)>180000))refreshAIS()});
