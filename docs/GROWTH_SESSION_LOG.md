@@ -1258,3 +1258,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - SEO safety: both previously approved titles, H1s, canonical URLs, Person reference and source links preserved. Revised `dateModified`, two `sitemap.xml` lastmod records, regression test expectations and styling for readability. No change to ads or revenue code.
 - Outcome not yet measured; this is product-usefulness and task-sequencing work, not proven GSC uplift. Branch `codex/mackinac-crossing-search-growth-20261025`; release evidence will appear in PR.
 - Exactly one next action: complete full verification / public HTML audit and mobile live-source/return-fare interaction QA before merging.
+
+### Michigan Snow Totals — winter observation-to-decision internal links, October 25, 2026
+- GSC baseline, Sep 25–Oct 22: `/michigan-snow-totals/` 1,154 impressions, 8 clicks, 0.69% CTR; no uplift attribution.
+- Preserved observed NWS snow reports, dated town search, existing map, 24/48/72-hour windows, JSON-LD author and stable canonical.
+- Expanded the existing "After the snow" decision links to distinct `/michigan-snow-depth/` (snow remaining on ground), `/lake-effect-snow/` (future snowbelt forecast), `/national-tools/snow/` (national snowpack), and `/national-tools/white-christmas/forecast/` (historical December 25 odds, NOT a prediction based on today's reports). Existing snowmobile, cross-country and ice links remain.
+- Source `dateModified` and both sitemap `lastmod` entries advanced for real updated content. Added tests for discovery, canonical and source-type distinction.
+- No change to NWS/NOAA APIs, underlying reports, meteorological inference, or ad code. Branch `codex/michigan-snow-evidence-network-20261025`; CI/release recorded in PR.
+- Exactly one next action: pass CI/public canonical audit; then verify live links/meaning from mobile.
