@@ -13,6 +13,7 @@
   const resultContext = document.getElementById('result-context');
   const empty = document.getElementById('empty');
   const mapEl = document.getElementById('destination-map');
+  const moodButtons = [...document.querySelectorAll('[data-activity]')];
   let map = null;
   let markers = [];
   let userPin = null;
@@ -92,25 +93,84 @@
       userPin = window.L.circleMarker([location.lat, location.lng], {radius:7,color:'#155b67',fillColor:'#fefdf5',fillOpacity:1,weight:3}).addTo(map).bindPopup('Your approximate location — not stored by this page');
     }
   }
+  const mapStatus = document.getElementById('map-status');
+  function tellMap(message,state) {
+    if (mapStatus) { mapStatus.textContent = message; mapStatus.dataset.state = state; }
+  }
+  function addMapTiles(url, isFallback) {
+    if (!map) return;
+    if (map._destinationTileLayer) map.removeLayer(map._destinationTileLayer);
+    const layer = window.L.tileLayer(url, {
+      attribution: isFallback
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 18, subdomains: 'abcd'
+    });
+    map._destinationTileLayer = layer;
+    let errorCount = 0;
+    let hasPainted = false;
+    layer.on('tileload', () => {
+      if (hasPainted || map._destinationTileLayer !== layer) return;
+      hasPainted = true;
+      tellMap(isFallback
+        ? 'OpenStreetMap basemap is displayed because CARTO is unavailable. Destination locations are unchanged.'
+        : 'CARTO map loaded with the configured Vercel public key. Select a pin to explore a place.',
+        isFallback ? 'fallback' : 'ready');
+    });
+    layer.on('tileerror', () => {
+      if (map._destinationTileLayer !== layer) return;
+      if (++errorCount >= 2) {
+        if (!isFallback) {
+          tellMap('CARTO tiles failed to load; switching to OpenStreetMap.', 'fallback');
+          addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', true);
+        } else {
+          tellMap('Map tiles are unavailable. All destination descriptions and direct links still work.', 'error');
+        }
+      }
+    });
+    layer.addTo(map);
+  }
+  async function connectCarto() {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7500);
+    try {
+      tellMap('Connecting to CARTO using the public key configured in Vercel…', 'pending');
+      const response = await fetch('/api/carto-basemap-config', {
+        method: 'GET', credentials: 'same-origin', signal: controller.signal
+      });
+      if (!response.ok) throw new Error('CARTO configuration endpoint unavailable');
+      const cfg = await response.json();
+      if (!cfg || cfg.provider !== 'CARTO' || typeof cfg.key !== 'string' || !cfg.key.trim()) {
+        throw new Error('CARTO public key unavailable');
+      }
+      const url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='
+        + encodeURIComponent(cfg.key.trim());
+      addMapTiles(url, false);
+    } catch (error) {
+      tellMap('CARTO unavailable. Loading OpenStreetMap instead; you can still select destinations.', 'fallback');
+      addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', true);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
   function initMap() {
     if (!window.L || !mapEl) {
-      if(mapEl) mapEl.innerHTML = '<p class="map-fallback">The interactive map is unavailable. Browse the destination cards above, or open the external map link below.</p>';
+      tellMap('Interactive map could not start. Browse all places using the photograph-led list.', 'error');
       return;
     }
     try {
       mapEl.textContent = '';
       map = window.L.map(mapEl, {scrollWheelZoom:false, zoomControl:true}).setView([44.6,-85.4],6);
-      window.L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxZoom:18, subdomains:'abcd'
-      }).addTo(map);
       updateMap();
+      connectCarto();
     } catch (error) {
       map = null;
-      mapEl.textContent = 'Map unavailable. Destination cards and planning links remain accessible above.';
+      mapEl.textContent = 'Map unavailable. Explore any of the destination stories and official links beside it.';
+      tellMap('Map could not start, but all destination links remain usable.', 'error');
     }
   }
   function applyFilters({focus=false,updateUrl=false}={}) {
+    moodButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.activity === activityEl.value)));
     const months = targetMonths(whenEl.value);
     const activity = activityEl.value, region = regionEl.value;
     let count = 0;
@@ -131,7 +191,7 @@
     updateMap();
     if(updateUrl){
       const params = new URLSearchParams();
-      if(whenEl.value !== 'weekend') params.set('when',whenEl.value);
+      if(whenEl.value !== 'any') params.set('when',whenEl.value);
       if(activity !== 'all') params.set('activity',activity);
       if(region !== 'all') params.set('region',region);
       const query = params.toString();
@@ -147,9 +207,10 @@
     });
   }
   function reset() {
-    whenEl.value='weekend';activityEl.value='all';regionEl.value='all';
+    whenEl.value='any';activityEl.value='all';regionEl.value='all';
     applyFilters({updateUrl:true});
   }
+  moodButtons.forEach(btn => btn.addEventListener('click', () => {activityEl.value = btn.dataset.activity;applyFilters({updateUrl:true});}));
   form.addEventListener('submit',e=>{e.preventDefault();applyFilters({focus:true,updateUrl:true});});
   [whenEl,activityEl,regionEl].forEach(el=>el.addEventListener('change',()=>applyFilters({updateUrl:true})));
   document.getElementById('reset').addEventListener('click',reset);
