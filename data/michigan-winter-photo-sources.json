@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-26",
+  "scope": "michigan-winter-activities",
+  "purpose": "One-time source-licensed archival photo optimization, not current conditions.",
+  "images": [
+    {
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/images/P1049311_1.jpg?maxwidth=650&autorotate=false",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-01.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/images/Munising-Snowshoe-Trail-Jan-2021-13.JPG?maxwidth=650&autorotate=false",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-02.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Upper_Tahquamenon_Falls.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-03.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sleeping_Bear_Bluff_in_Winter_(9085511671).jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-04.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-05.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Silver_Lake_Dunes_Michigan_1.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-06.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Keweenaw_Waterway_in_Winter.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-07.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dune_Climb_in_the_Winter_20060803111130.JPG",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-08.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://www.nps.gov/common/uploads/cropped_image/primary/4779EB5B-ED3E-70AE-5A76A9A3D71A32D4.jpg?width=1600&quality=90&mode=crop",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-09.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Ice_Fishing_Shanties_on_Houghton_Lake%2C_Michigan_during_Tip-Up_Town_Weekend_%286778351105%29.jpg/960px-Ice_Fishing_Shanties_on_Houghton_Lake%2C_Michigan_during_Tip-Up_Town_Weekend_%286778351105%29.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-10.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bald_eagle_in_the_snow_(50506165162).jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-11.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Detroit_skylines_from_Belle_Isle.jpg/960px-Detroit_skylines_from_Belle_Isle.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-12.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Winter_scene_in_rural_historic_district_(c5e7f735-14b3-4cea-a314-351cec12a0d7).JPG",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-13.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Milky_Way_against_treetops_at_Headlands_International_Dark_Sky_Park_MI_(54705027488).jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-14.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Au_Sable_River.jpg/960px-Au_Sable_River.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-15.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Presque_Isle_Lake_Superior.jpg/960px-Presque_Isle_Lake_Superior.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-16.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    },
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Silver_Lake_Dunes_Michigan_2.jpg",
+      "localPath": "public/assets/michigan-winter-activities/photos/scene-17.webp",
+      "maxWidth": 1100,
+      "maxHeight": 900
+    }
+  ]
+}
