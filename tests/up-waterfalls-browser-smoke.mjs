@@ -60,7 +60,7 @@ try{
     assert.ok(await page.locator('.leaflet-marker-icon').count()>10);
   });
   await page.screenshot({path:screenshots+'/hub-desktop.png',fullPage:true,animations:'disabled'});
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['bridalveil-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['bridalveil-falls',true],['nonesuch-falls',true],['little-union-gorge-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -75,7 +75,7 @@ try{
       if(id==='scott-falls')assert.match(await page.locator('body').innerText(),/not yet confirmed|noindex|access evidence/i);
       if(id==='munising-falls')assert.match(await page.locator('body').innerText(),/closed until further notice|trail closed/i);
       if(id==='bridalveil-falls'){const body=await page.locator('body').innerText();assert.match(body,/Miners Castle/);assert.match(body,/Miners Beach/);assert.match(body,/No maintained hiking path|No maintained trail/i);await page.screenshot({path:screenshots+'/bridalveil-falls-mobile.png',fullPage:true,animations:'disabled'});}
-      if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});
+      if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});if(id==='nonesuch-falls'){assert.equal(await page.locator('.detail-map .leaflet-interactive').count(),2,'Nonesuch should show waterfall and independently sourced parking marker');assert.match(await page.locator('body').innerText(),/Nonesuch Parking|46\.759717/);await page.screenshot({path:screenshots+'/nonesuch-falls-mobile.png',fullPage:true,animations:'disabled'});}if(id==='little-union-gorge-falls'){assert.equal(await page.locator('.detail-map .leaflet-interactive').count(),1,'Do not invent Union Mine parking pin');assert.match(await page.locator('body').innerText(),/Union Mine Interpretive Trail/);await page.screenshot({path:screenshots+'/little-union-gorge-mobile.png',fullPage:true,animations:'disabled'});}
     });
   }
 }finally{await browser.close()}
