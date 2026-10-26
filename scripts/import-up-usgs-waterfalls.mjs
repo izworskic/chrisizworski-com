@@ -16,9 +16,18 @@ export function normalizeUSGS(raw){
     const p=f.properties||{},name=String(get(p,['fall_name','fallname','name','feature_name','gnis_name'])||'Unnamed fall'),type=String(get(p,['fall_type','falltype','type','feature_type'])||'');
     if(/rapids|dam/i.test(name+' '+type))continue;
     const county=String(get(p,['county','countyname','county_name'])||'').toUpperCase().replace(/ COUNTY$/,'');if(county&&!UPPER.has(county))continue;
-    const id=String(get(p,['fall_id','fallid','objectid','fid','gnis_id'])||i+1),key=id+':'+lat.toFixed(5)+':'+lng.toFixed(5);if(seen.has(key))continue;seen.add(key);
+    // The published 2020 USGS GeoJSON uses keys such as "feature id",
+    // "nhdplusv2 address": {"comid", "reachcode", "measure"}, and
+    // "nhdhr address": {"reachcode", "measure"}; they are not flat columns.
+    const id=String(get(p,['feature id','fall_id','fallid','objectid','fid','gnis_id'])||i+1),key=id+':'+lat.toFixed(5)+':'+lng.toFixed(5);if(seen.has(key))continue;seen.add(key);
+    const plus=get(p,['nhdplusv2 address','nhdplusv2address'])||{},hr=get(p,['nhdhr address','nhdhraddress'])||{};
+    const useful=v=>v===null||v===undefined||/^NO (?:COMID|REACHCODE|MEASURE)$/i.test(String(v))?null:v;
+    const comid=useful(get(p,['comid','nhdpluscomid'])??get(plus,['comid']));
+    const reachcode=useful(get(plus,['reachcode']));
+    const hrReachcode=useful(get(hr,['reachcode']));
+    const characteristic=Array.isArray(p.characteristics)?p.characteristics[0]||{}:{};
     if(UPPER.has(county))stats.countyVerified++;else stats.boundingBoxOnly++;
-    features.push({id:'usgs-v2-'+id,name,lat:+lat.toFixed(6),lng:+lng.toFixed(6),county:UPPER.has(county)?county:null,geoEvidence:UPPER.has(county)?'county-attribute':'bounding-box-only',hydro:{usgsFallId:get(p,['fall_id','fallid']),nhdComid:get(p,['comid','nhdpluscomid']),nhdHrId:get(p,['nhdhrcomid','nhdhrid'])},landManager:'unknown',publicAccess:'unknown',parking:'unknown',trail:'unknown',publication:'research-only',source:'https://doi.org/10.5066/P9QQTKA0'});
+    features.push({id:'usgs-v2-'+id,name,lat:+lat.toFixed(6),lng:+lng.toFixed(6),county:UPPER.has(county)?county:null,geoEvidence:UPPER.has(county)?'county-attribute':'bounding-box-only',hydro:{usgsFallId:id,fallType:type||null,nhdComid:comid,nhdPlusReachCode:reachcode,nhdHrReachCode:hrReachcode,nhdHrMeasure:useful(get(hr,['measure'])),tallestDropFeet:useful(get(characteristic,['tallest drop feet']))},landManager:'unknown',publicAccess:'unknown',parking:'unknown',trail:'unknown',publication:'research-only',source:'https://doi.org/10.5066/P9QQTKA0'});
   }
   stats.candidates=features.length;
   return {schemaVersion:1,doi:'https://doi.org/10.5066/P9QQTKA0',release:2020,warning:'Bounding box may include non-UP falls. USGS hydrography does not establish access, ownership, parking or a public trail.',stats,features};
