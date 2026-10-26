@@ -11,37 +11,37 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
-      - name: Check live toll page and cache-busted origin path
+      - name: Verify updated production toll price-led SERP, canonical and fare facts
         shell: bash
         run: |
           set -euo pipefail
           BASE='https://chrisizworski.com/mackinac-bridge-tolls/'
           BUST="${BASE}?verify=${GITHUB_SHA}"
+          expected='Mackinac Bridge Toll: $4 Car | Calculator | Chris Izworski'
+          expected_desc='Mackinac Bridge toll 2026: $4 car one-way, $8 round trip. Calculate RV and trailer tolls by axle; see the 2.3% card fee and MacPass 36-hour discount.'
+          canonical='<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'
+          ready=false
 
-          echo '=== clean URL headers ==='
-          curl -sSIL "$BASE" | sed -n '1,40p'
-          echo '=== cache-busted URL headers ==='
-          curl -sSIL "$BUST" | sed -n '1,40p'
+          # Main-branch push can arrive before Vercel promotes the new deployment.
+          # Require BOTH origin paths to show the new revision, not just an old cache hit.
+          for attempt in $(seq 1 32); do
+            clean="$(curl -fsSL --max-time 15 "$BASE" || true)"
+            bust="$(curl -fsSL --max-time 15 "$BUST" || true)"
+            echo "Production propagation attempt $attempt of 32"
+            printf '%s' "$clean" | grep -o '<title>[^<]*</title>' | head -1 || true
+            printf '%s' "$bust" | grep -o '<title>[^<]*</title>' | head -1 || true
 
-          clean="$(curl -sSL "$BASE")"
-          bust="$(curl -sSL "$BUST")"
-
-          printf '%s' "$clean" | grep -o '<title>[^<]*</title>' | head -1 || true
-          printf '%s' "$bust" | grep -o '<title>[^<]*</title>' | head -1 || true
-
-          expected='Mackinac Bridge Toll Calculator 2026 | Chris Izworski'
-          if printf '%s' "$clean" | grep -Fq "$expected"; then
-            echo 'CLEAN_URL_UPDATED=true'
-          else
-            echo 'CLEAN_URL_UPDATED=false'
+            if [[ "$clean" == *"$expected"* && "$clean" == *"$expected_desc"* && "$clean" == *"$canonical"* && "$clean" == *'"@type":"FAQPage"'* &&
+                  "$bust" == *"$expected"* && "$bust" == *"$expected_desc"* && "$bust" == *"$canonical"* && "$bust" == *'"@type":"FAQPage"'* ]]; then
+              ready=true
+              break
+            fi
+            sleep 12
+          done
+          if [[ "$ready" != true ]]; then
+            echo 'FAIL: production toll URL and cache-busted URL did not both serve the current title, description, self-canonical and FAQ schema.'
+            exit 1
           fi
-          if printf '%s' "$bust" | grep -Fq "$expected"; then
-            echo 'CACHE_BUSTED_URL_UPDATED=true'
-          else
-            echo 'CACHE_BUSTED_URL_UPDATED=false'
-          fi
-
-          grep -Fq "$expected" <<< "$bust"
-          grep -Fq "Mackinac Bridge toll is \$4 for a car (\$2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return." <<< "$bust"
-          grep -Fq '"@type":"FAQPage"' <<< "$bust"
+          echo 'PASS: clean and cache-busted production URLs both serve the verified price-led toll search presentation.'

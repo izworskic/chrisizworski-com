@@ -11,7 +11,7 @@ const priorityPages = [
   ["public/fall-color/index.html", "Michigan Fall Color Map 2026: Live Peak Color Forecast"],
   ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Can You See Them?"],
   ["public/mackinac-bridge-live/index.html", "Mackinac Bridge Conditions Today: Live Status &amp; Wind"],
-  ["public/mackinac-bridge-tolls/index.html", "Mackinac Bridge Toll Calculator 2026 | Chris Izworski"]
+  ["public/mackinac-bridge-tolls/index.html", "Mackinac Bridge Toll: $4 Car | Calculator | Chris Izworski"]
 ];
 
 test("priority search pages keep their search promise and link the publisher to the canonical profile", () => {

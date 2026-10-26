@@ -13,16 +13,16 @@ function title(html) {
 test("Mackinac toll page promises the calculator in search while preserving the passenger-car answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
   const tollExperiment = JSON.parse(read("benchmarks/transport-365-growth.json")).experiments[0];
-  assert.equal(title(html), "Mackinac Bridge Toll Calculator 2026 | Chris Izworski");
+  assert.equal(title(html), "Mackinac Bridge Toll: $4 Car | Calculator | Chris Izworski");
   assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
   const tollDescription = /<meta name="description" content="([^"]+)"/.exec(html)?.[1] ?? "";
   assert.equal(tollDescription, tollExperiment.treatment.metaDescription);
-  assert.equal(tollDescription, "Mackinac Bridge toll is $4 for a car ($2 per axle). Calculate RV, trailer and round-trip tolls, the 2.3% card fee, and MacPass's free 36-hour return.");
-  assert.match(tollDescription, /\$4 for a car/i);
-  assert.match(tollDescription, /\$2 per axle/i);
-  assert.match(tollDescription, /RV, trailer and round-trip tolls/i);
+  assert.equal(tollDescription, "Mackinac Bridge toll 2026: $4 car one-way, $8 round trip. Calculate RV and trailer tolls by axle; see the 2.3% card fee and MacPass 36-hour discount.");
+  assert.match(tollDescription, /\$4 car one-way/i);
+  assert.match(tollDescription, /\$8 round trip/i);
+  assert.match(tollDescription, /Calculate RV and trailer tolls by axle/i);
   assert.match(tollDescription, /2\.3% card fee/i);
-  assert.match(tollDescription, /MacPass's free 36-hour return/i);
+  assert.match(tollDescription, /MacPass 36-hour discount/i);
   assert.match(html, /<h1>Mackinac Bridge Toll 2026: \$4 for a Passenger Car<\/h1>/);
   assert.match(html, /The Mackinac Bridge toll is \$4 one way for a standard two-axle passenger car in 2026, or \$8 round trip at the standard rate\./i);
   assert.match(html, /Passenger vehicles are \$2 per axle/i);
@@ -61,6 +61,10 @@ test("365 transport experiment records observed baselines and the focused toll f
   assert.equal(toll.latestObservedSignal.exactQuery.clicks, 1);
   assert.equal(toll.latestObservedSignal.exactQuery.ctr, 0.0013);
   assert.equal(toll.latestObservedSignal.exactQuery.averagePosition, 9.98);
+  assert.equal(toll.latest28DayBaseline20261024.impressions, 5683);
+  assert.equal(toll.latest28DayBaseline20261024.clicks, 12);
+  assert.equal(toll.latest28DayBaseline20261024.exactQuery.impressions, 544);
+  assert.equal(toll.latest28DayBaseline20261024.costQuery.clicks, 0);
   assert.equal(toll.target.ctr, 0.01);
   assert.equal(toll.target.averagePositionMax, 5);
   assert.equal(toll.latest28DayBaseline20261012.impressions, 6437);
