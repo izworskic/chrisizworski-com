@@ -254,6 +254,20 @@ async function run(){
       check(overflow<=3,size.name+': horizontal overflow '+overflow+'px');
       // Ad layout verification: a simulated sticky anchor sits in the reserved bottom
       // area and side-rail placement is removed only below desktop width.
+      // An auto-placed in-flow advertisement injected between the hero and
+      // wrapper must retain its full dimensions but render after all tool content.
+      const movedAd=await page.evaluate(()=>{
+        const slot=document.createElement('div');slot.className='google-auto-placed qa-inflow';
+        slot.innerHTML='<div style="height:280px;width:100%;background:#eee">ad layout test</div>';
+        document.querySelector('#main>.hero').after(slot);
+        const hero=document.querySelector('#main>.hero').getBoundingClientRect();
+        const tool=document.querySelector('#main>.wrapper').getBoundingClientRect();
+        const ad=slot.getBoundingClientRect(),visible=getComputedStyle(slot).display;
+        slot.remove();return {height:ad.height,visible,toolTop:tool.top,toolBottom:tool.bottom,heroBottom:hero.bottom,adTop:ad.top};
+      });
+      check(movedAd.height>=280&&movedAd.visible!=='none',size.name+': original-size injected ad remains visible');
+      check(movedAd.toolTop>=movedAd.heroBottom-3&&movedAd.adTop>=movedAd.toolBottom-4,
+        size.name+': hero leads directly into tool; injected ad follows it '+JSON.stringify(movedAd));
       const adChecks=await page.evaluate(()=>{
         const ad=document.createElement('div');ad.className='ad-side-rail';ad.textContent='side rail QA';document.body.append(ad);
         const sideDisplay=getComputedStyle(ad).display;ad.remove();

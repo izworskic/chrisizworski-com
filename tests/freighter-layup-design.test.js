@@ -84,3 +84,9 @@ test('evidence-focused map and clean harbor interaction are not a duplicated set
  assert.ok(!html.includes('12 sourced vessel records in five harbors'));
  assert.ok(css.includes('--layup-anchor-reserve:calc(144px'));
 });
+
+test('auto-placed in-flow ads are retained but ordered after the map-first tool',()=>{
+ assert.ok(css.includes('.layup-home #main>.google-auto-placed{order:2'));
+ assert.ok(css.includes('.layup-home #main>.wrapper{order:1'));
+ assert.ok(!css.includes('.layup-home #main>.google-auto-placed{display:none'));
+});
