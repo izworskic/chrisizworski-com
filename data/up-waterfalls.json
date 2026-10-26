@@ -1070,6 +1070,189 @@
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         }
       }
+    },
+    {
+      "id": "mosquito-falls",
+      "name": "Mosquito Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Chapel/Mosquito near Munising",
+      "lat": 46.51621,
+      "lng": -86.47776,
+      "level": "moderate",
+      "minutes": "75–150 min",
+      "walk": "NPS lists a 2.0-mile round trip: walk 0.3 mile toward Mosquito Beach from Chapel/Mosquito trailhead, then take the signed 0.7-mile side trail to Mosquito Falls. Forest tread may be muddy and rough.",
+      "best": "Spring forest flowers and fall color, with varying seasonal streamflow.",
+      "access": "Official Pictured Rocks visitor trail. No pets on Chapel/Mosquito trails. No drinking water at trailhead; parking is limited and access road is rough.",
+      "status": "verify",
+      "note": "Mosquito Falls is not Mosquito Beach. Take the waterfall side trail instead of continuing directly to the lake.",
+      "source": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+      "locationSource": "https://algercountychamber.com/waterfalls",
+      "kind": "National lakeshore",
+      "parking": "Chapel/Mosquito trailhead at the end of five-mile Chapel Road from H-58; heavily rutted road, limited signed parking; do not park outside permitted areas.",
+      "feature": "Three low sandstone drops along a quiet Mosquito River forest trail; the hike is more substantial than the waterfall's height.",
+      "further": "Download the NPS Chapel/Mosquito trail map before leaving cell coverage. Trail and road status are not live-confirmed.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "gisObjectId": null,
+      "season": "Wet weather improves flow but can also worsen mud; autumn adds hardwood canopy color.",
+      "sources": {
+        "publicAccess": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+        "landManager": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+        "parking": "https://www.nps.gov/places/mosquito-beach.htm",
+        "trail": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+        "location": "https://algercountychamber.com/waterfalls"
+      },
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-route-current-open-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+          "description": "Official Pictured Rocks visitor trail. No pets on Chapel/Mosquito trails. No drinking water at trailhead; parking is limited and access road is rough."
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/mosquito-beach.htm",
+          "description": "Chapel/Mosquito trailhead at the end of five-mile Chapel Road from H-58; heavily rutted road, limited signed parking; do not park outside permitted areas."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+          "description": "NPS lists a 2.0-mile round trip: walk 0.3 mile toward Mosquito Beach from Chapel/Mosquito trailhead, then take the signed 0.7-mile side trail to Mosquito Falls. Forest tread may be muddy and rough."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://algercountychamber.com/waterfalls",
+          "description": "Published geographic location for Mosquito Falls, not a parking point"
+        }
+      }
+    },
+    {
+      "id": "elliot-falls",
+      "name": "Elliot Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Eastern Miners Beach, Munising",
+      "lat": 46.49963,
+      "lng": -86.53181,
+      "level": "easy",
+      "minutes": "25–60 min",
+      "walk": "From the small east-end Miners Beach lot, take the designated staircase down to sand, then walk a few hundred yards right along the shore toward the cliff where the creek drops into Lake Superior.",
+      "best": "After rain, spring runoff and warm sunset light; small creek flow varies.",
+      "access": "An NPS-listed public waterfall at Miners Beach. Leashed pets allowed. Beach sand, stairs, shoreline rock and wave conditions limit access.",
+      "status": "verify",
+      "note": "Do not confuse this small shoreline waterfall with Miners Falls inland. The eastern beach parking lot gives the shorter approach.",
+      "source": "https://www.nps.gov/places/elliot-falls.htm",
+      "locationSource": "https://www.openstreetmap.org/node/12913596084",
+      "kind": "National lakeshore",
+      "parking": "Small eastern Miners Beach lot off Miners Beach Road via Miners Castle Road; larger western Miners Beach lot offers a longer sandy walk.",
+      "feature": "A petite Lake Superior shoreline cascade over sculpted rock, with a very different experience than the inland Miners Falls trail.",
+      "further": "Choose the beach route only when waves, sand and steps permit safe access. Never follow the waterfall coordinate by car.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "gisObjectId": null,
+      "season": "Small creek flow can nearly disappear in dry periods; Lake Superior surf is a separate access hazard.",
+      "sources": {
+        "publicAccess": "https://www.nps.gov/places/elliot-falls.htm",
+        "landManager": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+        "parking": "https://www.nps.gov/places/miners-beach.htm",
+        "trail": "https://www.nps.gov/places/elliot-falls.htm",
+        "location": "https://www.openstreetmap.org/node/12913596084"
+      },
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-route-current-open-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/elliot-falls.htm",
+          "description": "An NPS-listed public waterfall at Miners Beach. Leashed pets allowed. Beach sand, stairs, shoreline rock and wave conditions limit access."
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+          "description": "National Park Service · Pictured Rocks National Lakeshore"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-beach.htm",
+          "description": "Small eastern Miners Beach lot off Miners Beach Road via Miners Castle Road; larger western Miners Beach lot offers a longer sandy walk."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/elliot-falls.htm",
+          "description": "From the small east-end Miners Beach lot, take the designated staircase down to sand, then walk a few hundred yards right along the shore toward the cliff where the creek drops into Lake Superior."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.openstreetmap.org/node/12913596084",
+          "description": "Published geographic location for Elliot Falls, not a parking point"
+        }
+      }
+    },
+    {
+      "id": "manido-falls",
+      "name": "Manido Falls",
+      "region": "Western U.P.",
+      "place": "Presque Isle River, Porcupine Mountains",
+      "lat": 46.707467,
+      "lng": -89.971589,
+      "level": "moderate",
+      "minutes": "45–100 min",
+      "walk": "Signed Presque Isle River East/West River trails link waterfalls. DNR park map lists the West River Trail at 1 mile and East River Trail at 1.4 miles; neither is a certified walk distance specifically to Manido.",
+      "best": "Spring runoff and hardwood autumn color; bedrock is slippery when wet.",
+      "access": "Public Michigan DNR state park scenic corridor. Only signed viewing trails and overlooks are appropriate; stairs, uneven rocks and road conditions vary.",
+      "status": "verify",
+      "note": "Michigan GIS spells the site 'Mannido Falls' (state feature 92); DNR's park map uses Manido. It is one of three separate Presque Isle River waterfalls.",
+      "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State park",
+      "parking": "Presque Isle River Scenic Site designated state park parking near West/East River trail access; use the official Porcupine Mountains map for M-519 and South Boundary Road routes.",
+      "feature": "An intermediate cascade between Manabezho and Nawadaha, experienced as part of the Presque Isle River walking circuit.",
+      "further": "Plan the three waterfall viewpoints as one walking outing rather than three independent parking stops. Winter roads and platforms may close.",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "gisObjectId": 92,
+      "season": "High river flow changes safe viewing positions; winter ice never makes cliff-edge approaches safe.",
+      "sources": {
+        "publicAccess": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+        "landManager": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+        "parking": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=424c589204324cdb805c8557d870f6d2",
+        "trail": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=424c589204324cdb805c8557d870f6d2",
+        "location": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      },
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-route-current-open-unverified",
+      "sourceReviewed": "2026-10-26",
+      "verification": {
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+          "description": "Public Michigan DNR state park scenic corridor. Only signed viewing trails and overlooks are appropriate; stairs, uneven rocks and road conditions vary."
+        },
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+          "description": "Michigan DNR · Porcupine Mountains Wilderness State Park"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=424c589204324cdb805c8557d870f6d2",
+          "description": "Presque Isle River Scenic Site designated state park parking near West/East River trail access; use the official Porcupine Mountains map for M-519 and South Boundary Road routes."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=424c589204324cdb805c8557d870f6d2",
+          "description": "Signed Presque Isle River East/West River trails link waterfalls. DNR park map lists the West River Trail at 1 mile and East River Trail at 1.4 miles; neither is a certified walk distance specifically to Manido."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Published geographic location for Manido Falls, not a parking point"
+        }
+      }
     }
   ]
 }
