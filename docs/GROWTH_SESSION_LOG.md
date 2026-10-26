@@ -1,3 +1,14 @@
+## Field Guide design standard extraction — October 26, 2026
+
+- **User request:** Keep the photo-led Michigan Adventure Finder visual standard reusable for future tools; owner should be able to say "Use my Field Guide standard" without writing code or repeating design instructions.
+- **Stable identifier:** `FIELD_GUIDE_V1` / version 1.0.0.
+- **Repository boundary:** A new standalone GitHub repository cannot be created using the connected GitHub action set. A complete self-contained source package was instead created under `design-systems/field-guide-v1/` in the existing owning repo. It is ready to move unchanged to a private `field-guide-design-system` repo once a repository-create tool is available. **Do not claim the separate repository exists.**
+- **Implemented assets:** Portable semantic tokens, concise first-screen hero, licensed real photographs with visible source/credit, responsive story cards, filter controls, CARTO + OpenStreetMap progressive map with locally bundled Leaflet CSS (full BSD-2-Clause notice), truth/data labeling rules, integration instructions and a weighted 100-point QA scorecard. Starter is a noindex reference example, not a new published route.
+- **Agent discovery:** Added a pointer to the root `AGENTS.md` and `docs/FIELD_GUIDE_DESIGN_STANDARD.md`. Exact prompt: **"Use FIELD_GUIDE_V1 for this tool"**.
+- **Safety and correctness:** Did not touch public destination code, sitemap, canonical, AdSense, identities, weather engines, map config or other deployed tools; no GSC/rank/revenue change claimed.
+- **Quality gates:** Dependency-free `npm test` in design-system folder plus root Node regression test and full owning-repo `npm run verify:all`. The full PR and public audit must pass before release.
+- **Exactly one next action:** Review and merge the green FIELD_GUIDE_V1 PR, then use that folder as the default source for future opt-in design requests.
+
 ## Michigan Adventure Finder — final live photo audit (October 26, 2026)
 
 - **Owner continuation:** Review the live destination experience after the photography release and correct any genuine remaining quality gaps without reworking the ad stack.
