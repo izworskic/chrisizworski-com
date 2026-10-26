@@ -43,7 +43,7 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
-  // Oct 26: verified Bridge live ribbon answer-jump CSS intentionally differs from older live crawl snapshot; no ad styling changes.
+  // Oct 26: owner-approved lake-effect forecast → winter-decision cards added to source while the clean snapshot predates this release. Existing page audits remain active.\n  "/lake-effect-snow/",\n  // Oct 26: verified Bridge live ribbon answer-jump CSS intentionally differs from older live crawl snapshot; no ad styling changes.
   "/assets/mackinac-bridge-live.css",
   // October 25: reviewed Bridge toll UI and calculator script are intentionally new relative to the older live-crawl snapshot. Retain QA/regression gates until next clean production crawl.
   "/assets/mackinac-guide.css",
