@@ -18,7 +18,7 @@
   const searchUrl = item => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.latitude+','+item.longitude);
   const visible = item => !item.mapCardId || !document.querySelector('.card[data-id="'+item.mapCardId+'"]')?.hidden;
   const compact = id => catalog?.locations.find(item => item.id === id) || null;
-  const allowedAsWaypoint = item => Boolean(verified(item) && item.drivingWaypointConfidence==='official_destination' && !item.closed2026);
+  const allowedAsWaypoint = item => Boolean(document.getElementById('season')?.value==='future' && verified(item) && item.drivingWaypointConfidence==='official_destination' && !item.closed2026);
   function createPopup(item){
     const popup=document.createElement('div');popup.className='lspp-map-popup';
     const title=document.createElement('strong'); title.textContent=item.name;
@@ -165,7 +165,7 @@
         buildRoute();showMarkers();
       });
       document.getElementById('direction')?.addEventListener('change',buildRoute);
-      document.getElementById('season')?.addEventListener('change',buildRoute);
+      document.getElementById('season')?.addEventListener('change',()=>{buildRoute();showMarkers();});
     }catch{
       text(status,'Access evidence or map unavailable; follow Ontario Parks source links and do not assume any road or trail is open.');
     }
