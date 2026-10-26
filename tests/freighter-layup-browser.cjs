@@ -247,13 +247,30 @@ async function run(){
         const ad=document.createElement('div');ad.className='ad-side-rail';ad.textContent='side rail QA';document.body.append(ad);
         const sideDisplay=getComputedStyle(ad).display;ad.remove();
         const footer=document.querySelector('.footer');
-        window.scrollTo(0,document.documentElement.scrollHeight);
+        document.body.scrollTop=document.body.scrollHeight;
         return {rail:sideDisplay,bodyPadding:parseFloat(getComputedStyle(document.body).paddingBottom),
           footerBottom:footer.getBoundingClientRect().bottom,viewport:innerHeight};
       });
       check(adChecks.bodyPadding>=95,size.name+': reserved bottom sticky-anchor space');
       if(size.name==='mobile')check(adChecks.rail==='none',size.name+': narrow side rail suppressed');
-      check(adChecks.footerBottom<=adChecks.viewport-90,size.name+': sticky bottom ad cannot cover footer at page end');
+      const actualScrollBounds=await page.evaluate(()=>({bodyBottom:document.body.getBoundingClientRect().bottom,viewport:innerHeight}));
+      check(actualScrollBounds.bodyBottom<=actualScrollBounds.viewport-118,size.name+': page scroll area ends before bottom anchored ads');
+      check(adChecks.footerBottom<=actualScrollBounds.bodyBottom+2,size.name+': footer remains inside dedicated scroll area');
+      const adFormats=await page.evaluate(()=>{
+        const content=document.querySelector('#main'),wrapper=content.querySelector('.wrapper'),hero=content.querySelector('.hero');
+        const injected=document.createElement('div');injected.className='google-auto-placed';injected.style.height='250px';
+        content.insertBefore(injected,wrapper);
+        const rail=document.createElement('ins');rail.className='adsbygoogle-noablate';
+        rail.setAttribute('style','position: fixed !important; right: 162px !important; top: 155px !important; display: block !important');
+        document.body.append(rail);
+        const result={autoOrder:Number(getComputedStyle(injected).order),
+          wrapperOrder:Number(getComputedStyle(wrapper).order),
+          railVisibility:getComputedStyle(rail).visibility};
+        injected.remove();rail.remove();return result;
+      });
+      check(adFormats.autoOrder>adFormats.wrapperOrder,size.name+': auto-placed ads move below the map, roster and stories');
+      check(adFormats.railVisibility==='hidden',size.name+': side rail hidden when it would overlap content');
+
 
       check(pageErrors.length===0,size.name+': unhandled browser exceptions: '+pageErrors.join('; '));
       fs.mkdirSync(path.resolve(__dirname,'..','artifacts/layup-qa'),{recursive:true});

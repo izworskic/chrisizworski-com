@@ -74,3 +74,10 @@ test('layup map has one caveat adjacent to the map and roster names remain crawl
  assert.ok(css.includes('.layup-home .atlas-harbor-column[hidden]'));
  assert.ok(css.includes('--layup-anchor-reserve'));
 });
+
+test('Google auto ads remain placed after the tool and bottom anchor has a dedicated viewport reserve',()=>{
+ assert.ok(css.includes('.layup-home #main>.google-auto-placed{order:2'));
+ assert.ok(css.includes('html:has(> body.layup-home){height:100%;overflow:hidden}'));
+ assert.ok(css.includes('height:calc(100dvh - var(--layup-anchor-reserve))'));
+ assert.ok(css.includes('ins.adsbygoogle-noablate[style*="position: fixed"]'));
+});
