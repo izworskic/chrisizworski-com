@@ -21,7 +21,7 @@ test('official status comes before editorial Gazette and retains source safeguar
   assert.match(live,/href="https:\/\/chrisizworski.com\/mackinac-bridge-live\/"/);
 });
 test('toll route presents standard dynamic return journey without inventing MacPass benefit',()=>{
-  assert.match(toll,/<title>Mackinac Bridge Toll Calculator 2026 \| Chris Izworski<\/title>/);
+  assert.match(toll,/<title>Mackinac Bridge Toll: \$4 Car \| Calculator \| Chris Izworski<\/title>/);
   assert.match(toll,/id="guideTollTotal"/);
   assert.match(toll,/id="guideRoundTripTotal"/);
   assert.match(toll,/id="guideMotorhomeAuto"/);
@@ -34,9 +34,9 @@ test('toll route presents standard dynamic return journey without inventing MacP
 });
 test('only genuinely revised bridge canonical dates advance',()=>{
   for(const slug of ['mackinac-bridge-live','mackinac-bridge-tolls']){
-    const editorialDate = slug === 'mackinac-bridge-live' ? '2026-10-26' : '2026-10-25';
+    const editorialDate = '2026-10-26';
     assert.match(sitemap,new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>'+editorialDate+'<\\/lastmod>'));
   }
-  assert.match(toll,/"dateModified"\s*:\s*"2026-10-25"/);
+  assert.match(toll,/"dateModified"\s*:\s*"2026-10-26"/);
   assert.match(live,/"dateModified": "2026-10-26"/);
 });
