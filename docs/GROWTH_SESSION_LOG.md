@@ -1,3 +1,14 @@
+## Michigan Adventure Finder editorial rebuild — October 26, 2026
+
+- **Owner feedback:** Initial launch was visually generic, oversized and lacked authentic per-destination imagery. Owner asked to do the opposite: place-led storytelling and real photos, not a giant artificial hero. The CARTO map also used a keyless tile request even though Vercel already supplies a public basemap key.
+- **Scope:** Only `/michigan-destinations/` HTML and its own CSS/JS, dedicated tests and this handoff were changed. No AdSense, ad loader, identity page, homepage, canonical URL, directory schema or other specialist tool modified.
+- **Editorial rebuild:** Hero reduced from approximately 540–730 px to a compact two-column introduction with three credited real Michigan photographs. All 20 cards now have distinct, location-specific licensed photos, visible photographer/Commons credit and reusable-license links, plus one concrete experience suggestion per destination. Removed fake gradient location art, the empty large hero and redundant full-width evidence-block before the map.
+- **Map repair:** Fetches `/api/carto-basemap-config`, the existing Vercel Edge route that reads `CARTO_BASEMAP_PUBLIC_KEY`, then requests CARTO Voyager raster tiles with `?key=`. Never logs or commits the key. On config failure or tile errors, swaps to OpenStreetMap and displays status. The map sits adjacent to the first destination stories, follows filters and retains fully accessible text fallback.
+- **Experience:** Six one-tap interest prompts, season/activity/region filters, photo-led editorial flow and mobile stacked layout. Static cards and links remain visible without JavaScript. No live-condition, ice-safety, park-open or wildlife appearance claims.
+- **Search posture:** Same canonical `/michigan-destinations/` and same Person schema; no new thin pages or keyword duplication. Source image assets use NPS public domain / Wikimedia Commons PD, CC0, CC BY or CC BY-SA permissions with credits and source links.
+- **Evidence:** Destination photographs and their reuse licenses verified from Commons API/NPS sources. Full CI, external image loads, responsive browser rendering and production deploy need verification before final release. No GSC, GA4 or AdSense outcomes measured.
+- **Exactly one next action:** Confirm preview render and the Vercel-keyed map, run full PR CI, then merge only with green checks and verify production URL.
+
 ## Michigan Adventure Finder — October 26, 2026
 
 - **Owner direction:** Build a destination-first Michigan travel experience inspired by Madeline Marquardt's destination storytelling. Keep advertising and AdSense unchanged. Use the existing site and specialist tools, not a second independent deployment.
