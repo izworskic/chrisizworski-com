@@ -26,7 +26,7 @@ check('barrier-free verified separate from easy trails',include('data-effort="ve
 check('short Awausee out-and-back from authority',include('First lookout: 45 min return'));
 check('full Pinguisibi separately labeled from first falls',include('Full 6 km return: 1½–3 hr'));
 check('day use permitting and primary authority sources',include('reservations.ontarioparks.ca') && include('/dayuse/faq') && include('/park/lakesuperior/alerts'));
-check('no false current parking navigation target',include('not a parking-stall location') && !include('maps/dir/?api=1'));
+check('no false current parking navigation target',include('not a surveyed parking-stall position') && !include('maps/dir/?api=1'));
 check('time budget labels exclude driving',include('Driving between stops, parking, permits, breaks and weather delays are NOT included'));
 check('no persistent tracking/storage',!/\b(localStorage|sessionStorage|document.cookie)\b/.test(html));
 check('no invented live API claims',include('not a live opening-status service'));
