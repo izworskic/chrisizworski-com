@@ -1437,3 +1437,19 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - GitHub source-import workflow and focused tests succeeded on initial PR head. Full final GitHub gate, Vercel preview and merge outcome must be checked against their latest exact commit; do not claim otherwise from this handoff entry.
 - GSC, index coverage and AdSense performance were not retrieved in this development session; no growth or revenue uplift claimed.
 - Single next action: verify latest-head waterfall browser smoke and five-axis publication test before merging PR #1216; after release inspect a matched NHD popup on the production research overlay.
+
+
+### 2026-10-26 — Seven Michigan winter field guides (feature branch)
+
+- Built seven distinct FIELD_GUIDE_V1 editorial winter guides with shared responsive CSS, progressive map/filter JS, static place narrative and grounded general-area markers; 47 total researched experience entries.
+- Reused existing specialist tools, official NPS and Michigan DNR references, explicit winter-access caveats, NPS photo credits and separate search intentions. No new condition prediction, no changes to existing weather/ice engines or AdSense configuration.
+- Added sitemap-winter entries, discovery from Michigan Adventure Finder, tool-network relationships and focused Node tests.
+- GSC, indexing, revenue lift, photo-level 90/100 release rubric, full CI, preview visuals and merge/deploy all **not verified at authoring**. Do not claim published routes until release gates and merge pass.
+- Single next action: run full repository CI and real browser QA on PR head; repair regressions and then merge only when green.
+
+
+### 2026-10-26 — Michigan winter activities flagship quality pass
+
+- Worked one guide at a time: expanded /michigan-winter-activities/ from 8 to 18 source-backed experiences. Added winter-specific visual design and destination/permit/risk evidence without modifying other six field guides or AdSense settings.
+- All guide info is editorial seasonality, not live availability; Vercel protected preview prevented a verified visual 100/100 score at authoring.
+- GSC and monetization effects not available. Single next action: validate a protected-preview browser run at 390/1366, including all credited images and visible map tiles; address issues before a production merge.
