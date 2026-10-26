@@ -104,8 +104,10 @@ test('photographs have distinct source-licensed scenes and quiet credits', () =>
     'Arch_Rock_at_Mackinac_Island', 'Au_Sable_River.jpg',
     'Old_Mission_Peninsula.jpg', 'Nordhouse_Dunes_Wilderness_Area_shoreline',
     'Manistee_River_in_Autumn_2012', 'Presque_Isle_Lake_Superior',
-    'Alpena_Harbor_', 'Detroit_skylines_from_Belle_Isle'
+    'Lighthouse_at_Alpena_MI_2005-09', 'Detroit_skylines_from_Belle_Isle'
   ]) assert.ok(html.includes(token), 'Missing curated photo ' + token);
+  assert.match(html, /Dylan L\. Tanner/);
+  assert.match(html, /creativecommons\.org\/licenses\/by-sa\/2\.5/);
   assert.match(html, /fetchpriority="high"/);
   assert.match(css, /Editorial photo direction/);
   assert.match(css, /object-position:var\(--photo-position/);
