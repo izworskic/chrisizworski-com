@@ -33,6 +33,8 @@ try{
     await page.locator('button.wf-chip[data-tag="ice"]').click();
     const iceCount=await page.locator('.wf-story:visible').count();
     const markerCount=await page.locator('.leaflet-marker-icon').count();
+    const multiPins=await page.locator('.wf-pin-multi').count();
+    report.filters.push({width,multiPins});check(multiPins>0,'co-located experiences should create grouped map markers');
     report.filters.push({width,iceCount,markerCount});
     check(iceCount===4,'ice filter wrong: '+iceCount+' at '+width);
     await page.locator('#wf-region').selectOption('up');

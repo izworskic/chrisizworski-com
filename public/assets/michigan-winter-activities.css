@@ -28,3 +28,5 @@
 
 /* Alignment fix observed in 390px browser capture: step labels must not wrap. */
 @media(max-width:610px){.wf--activities .wf-microitem{align-items:start}.wf--activities .wf-microitem b{flex:0 0 92px;white-space:nowrap;font-size:.61rem}.wf--activities .wf-microitem span{flex:1;min-width:0}}
+
+.wf--activities .wf-pin-multi{width:24px;height:24px;background:#1c6452;color:#fff;border:2px solid white;display:flex;align-items:center;justify-content:center;border-radius:50%;font:800 11px/1 sans-serif;box-shadow:0 1px 7px #1d453d66}.wf--activities .wf-map-popup ul{list-style:none;margin:9px 0 0;padding:0}.wf--activities .wf-map-popup li+li{border-top:1px solid #e4e9e5;padding-top:5px;margin-top:5px}.wf--activities .wf-map-popup a{font-size:13px;font-weight:700;line-height:1.5;display:block}
