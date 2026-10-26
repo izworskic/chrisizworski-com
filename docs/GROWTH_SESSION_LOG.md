@@ -1446,3 +1446,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Added sitemap-winter entries, discovery from Michigan Adventure Finder, tool-network relationships and focused Node tests.
 - GSC, indexing, revenue lift, photo-level 90/100 release rubric, full CI, preview visuals and merge/deploy all **not verified at authoring**. Do not claim published routes until release gates and merge pass.
 - Single next action: run full repository CI and real browser QA on PR head; repair regressions and then merge only when green.
+
+
+### 2026-10-26 — Michigan winter activities flagship quality pass
+
+- Worked one guide at a time: expanded /michigan-winter-activities/ from 8 to 18 source-backed experiences. Added winter-specific visual design and destination/permit/risk evidence without modifying other six field guides or AdSense settings.
+- All guide info is editorial seasonality, not live availability; Vercel protected preview prevented a verified visual 100/100 score at authoring.
+- GSC and monetization effects not available. Single next action: validate a protected-preview browser run at 390/1366, including all credited images and visible map tiles; address issues before a production merge.

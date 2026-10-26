@@ -36,3 +36,12 @@ Following CI, calibrated source-derived destination markers without assuming par
 - Headlands dark sky park: 45.77536, -84.78278 (DarkSky International https://darksky.org/places/headlands-dark-sky-park/).
 - Silver Lake state park ORV area: 43.68290, -86.49800 (regional feature, https://ordealist.com/guides/silver-lake-orv-area). Use Michigan DNR for permitted fat-tire dates and the *different* pedestrian parking address: https://www.michigan.gov/dnr/things-to-do/winter/bike/silver-lake-fat-tire.
 These pins identify visit destinations, not verified open winter parking or safe tracks.
+## Flagship guide quality investment — October 26
+Only /michigan-winter-activities/ has been rebuilt in this investment; other six specialist guides and their common component behavior stay unchanged.
+
+- Expanded from eight to eighteen discrete winter experiences; every card has a specific official owner/source, documented travel/access limitation, and handoff to an existing condition or specialist tool.
+- Added five activity-first chips plus effort and Michigan-region filters; kept full static readable HTML and original synchronized map/filter infrastructure.
+- Added flagship-only CSS with compact three-photo winter hero, field-guide trip decision steps, labeled historical photos, and single-column mobile story cards. No manipulation of Auto Ads or other tool engines.
+- Identified statewide rule differences including precise Silver Lake fat-bike parking address and December 15–March 15 window, Porkies east approach/closed South Boundary Road, Sleeping Bear skiing and sledding restrictions, Muskegon fall-status caveat, and no lake-ice safety claims.
+- Added winter exact-place photo evidence: NPS snowshoe, ice-curtain, Sand Point shore; Commons winter Upper Tahquamenon (James Phelps CC BY 2.0), Sleeping Bear winter bluff (NPS CC BY 2.0), Silver Lake dunes (USACE federal public domain). Remaining imagery reuses location-verified, attribution-verified Michigan Adventure Finder reference photographs with explicit season disclaimers; a few specialized experiences use tasteful editorial index art rather than fake imagery.
+- Hard gate remains: visual browser audit of 390px and 1366px rendered preview photos/map, all licensing URL resolutions and no-ad-overlap before measuring release quality. Vercel preview is deployment-protected. Never call this 100/100 without completing these gates.
