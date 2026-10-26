@@ -255,7 +255,7 @@ function apply(){
   if(visible)shown++;
   var b=c.querySelector('.badge');
   if(c.dataset.status==='closed'){b.textContent=season.value==='current'?'Closed for 2026':'2026 closure · recheck';}
-  else{b.textContent=season.value==='current'?'Access unverified':'Future access · recheck';}
+  else{b.textContent=season.value==='current'?'Off-season · unverified':'Future access · recheck';}
  });
  count.textContent=shown+' destination'+(shown===1?'':'s')+' fit your filters';
  var rail=document.getElementById('routeList');rail.replaceChildren();
@@ -267,7 +267,7 @@ function apply(){
 }
 function build(){
  apply();
- var choices=cards.filter(function(c){return allowed(c) && c.dataset.status!=='closed';}).sort(function(a,b){return rank(b)-rank(a);});
+ var choices=season.value==='current'?[]:cards.filter(function(c){return allowed(c) && c.dataset.status!=='closed';}).sort(function(a,b){return rank(b)-rank(a);});
  var limit=Number(budget.value),selected=[],used=0;
  choices.forEach(function(c){var minutes=Number(c.dataset.minutes);if(selected.length<4 && minutes+used<=limit){selected.push(c);used+=minutes;}});
  planStops.replaceChildren();
@@ -275,7 +275,7 @@ function build(){
   var li=document.createElement('li'),strong=document.createElement('strong');strong.textContent=c.querySelector('h3').textContent;
   li.appendChild(strong);li.appendChild(document.createTextNode(' · ~'+c.dataset.minutes+' min at stop · access requires recheck'));planStops.appendChild(li);
  });
- document.getElementById('planIntro').textContent=selected.length?'Suggested stops based on your interests, walking effort and time budget. These are possibilities, not confirmation that access is open.':'No eligible destinations for these settings. Try more time or a different walking level. Closed stops are never automatically recommended.';
+ document.getElementById('planIntro').textContent=season.value==='current'?'The published 2026 park day-use season has ended. No open-day-use itinerary can be recommended now. Choose the future-season planning view, then recheck Ontario Parks alerts before travel.':selected.length?'Hypothetical stops for a future operating season, based on your interests, effort and on-site time. This is NOT an access-opening confirmation.':'No eligible destinations for these settings. Try more time or a different walking level. 2026-closed trails are excluded until a verified reopening update.';
  document.getElementById('planSum').textContent=selected.length?'On-site allowance: '+used+' min. Driving between stops, parking, permits, breaks and weather delays are NOT included. Time budgets and shorter stops are estimates unless explicitly identified as official.':'';
  window.dispatchEvent(new CustomEvent('lspp:plan-updated',{detail:{ids:selected.map(function(c){return c.dataset.id;}),onSiteMinutes:used}}));
 }
