@@ -215,3 +215,14 @@ button,a{-webkit-tap-highlight-color:transparent}
 .vessel-search-controls input:focus-visible,.vessel-search-controls button:focus-visible{outline:3px solid #daaa4a;outline-offset:2px}
 .vessel-search-status{font-size:.83rem;color:#3c6069;line-height:1.4;margin:9px 0 0}
 @media(max-width:520px){.vessel-search-controls{display:grid;grid-template-columns:1fr 1fr}.vessel-search-controls input{grid-column:1/-1;width:100%}.vessel-search-controls button{font-size:.8rem}}
+
+
+/* The seasonal handoff is a distinct decision, never an AIS-derived layup verdict. */
+.layup-handoff{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;margin:24px 0 0;padding:23px 25px;border:1px solid #c5dbd7;border-radius:10px;background:#eef6f3}
+.layup-handoff .layup-eyebrow{margin:0 0 7px;color:#246557;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.layup-handoff h2{font:normal clamp(20px,2vw,26px)/1.2 Georgia,"Times New Roman",serif;color:#103d40;margin:0 0 9px}
+.layup-handoff p:not(.layup-eyebrow){max-width:740px;margin:0;color:#3e575d;font-size:14px;line-height:1.55}
+.layup-handoff-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:46px;max-width:270px;padding:11px 15px;border:1px solid #185f60;border-radius:7px;color:#fff;background:#185f60;font-weight:750;font-size:14px;line-height:1.35;text-align:center;text-decoration:none}
+.layup-handoff-link:hover{color:#fff;background:#104748;border-color:#104748}
+.layup-handoff-link:focus-visible{outline:3px solid #d59a32;outline-offset:3px}
+@media(max-width:700px){.layup-handoff{grid-template-columns:1fr;gap:16px;padding:19px}.layup-handoff-link{max-width:none;width:100%}}
