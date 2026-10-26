@@ -30,7 +30,7 @@ async function run(){
   const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
   const results=[];
   try{
-    for(const size of [{width:1320,height:950,name:'desktop'},{width:390,height:844,name:'mobile'}]){
+    for(const size of [{width:1320,height:950,name:'desktop'},{width:1024,height:800,name:'compact-desktop'},{width:390,height:844,name:'mobile'}]){
       const context=await browser.newContext({viewport:{width:size.width,height:size.height},reducedMotion:'reduce'});
       // Exercise map markers without letting an external tile/photo/CDN outage block tests.
       await context.route('**/*',route=>{
@@ -107,6 +107,22 @@ async function run(){
       for(const title of ['Winter Harbor Map','Current Winter Arrivals','Harbor Roster','Ship Stories','Why Freighters Lay Up'])check(headings.some(x=>x.includes(title)),size.name+': functional section heading '+title);
       check(await page.locator('main > .wrapper > section').evaluateAll(nodes=>nodes.map(n=>n.id||n.className).join('|')).then(v=>v.startsWith('explorer|fleet|ship-biographies|stories|sources-evidence')),size.name+': page section order');
       check(await page.locator('#source-evidence-details').evaluate(e=>!e.open),size.name+': source and evidence methods collapsed by default');
+      const adFlow=await page.evaluate(()=>{
+        const hero=document.querySelector('main > .hero'),wrapper=document.querySelector('main > .wrapper');
+        const slot=document.createElement('div');slot.className='google-auto-placed';slot.style.height='280px';
+        hero.after(slot);
+        const result={slotAfterMainTool:slot.getBoundingClientRect().top>=wrapper.getBoundingClientRect().bottom-1,
+          remainsInDOM:slot.isConnected,mapFollowsHero:hero.getBoundingClientRect().bottom<=wrapper.getBoundingClientRect().top+1};
+        slot.remove();return result;
+      });
+      check(adFlow.slotAfterMainTool&&adFlow.remainsInDOM&&adFlow.mapFollowsHero,size.name+': injected auto ad retained but follows map-first tool');
+      const filterWidths=await page.evaluate(()=>{
+        const row=document.querySelector('.filter-row');
+        return {width:row.getBoundingClientRect().width,scrollWidth:row.scrollWidth,
+          controls:[...row.querySelectorAll('select')].map(e=>e.getBoundingClientRect().width)};
+      });
+      check(filterWidths.scrollWidth<=filterWidths.width+3,size.name+': filters do not overflow');
+      check(filterWidths.controls.every(w=>w>=220||size.width<621),size.name+': harbor and berth select widths avoid truncation');
       const boundsText=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds||'');
       const bounds=boundsText.split('|').map(v=>v.split(',').map(Number));
       check(bounds.length===2&&bounds.every(b=>b.length===2&&b.every(Number.isFinite)),size.name+': map exposes real initial bounds');
