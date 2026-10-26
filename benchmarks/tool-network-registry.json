@@ -4136,6 +4136,279 @@
       "searchEvidence": {
         "status": "new-tool-no-gsc"
       }
+    },
+    {
+      "id": "michigan-winter-activities",
+      "name": "Michigan Winter Activities",
+      "canonical": "https://chrisizworski.com/michigan-winter-activities/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Choose an activity; then check the real conditions.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "hub",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "frozen-michigan",
+      "name": "Frozen Michigan: Ice Wonders",
+      "canonical": "https://chrisizworski.com/frozen-michigan/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "A beautiful ice photograph is not today's access report.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "michigan-winter-trails",
+      "name": "Michigan Winter Trails",
+      "canonical": "https://chrisizworski.com/michigan-winter-trails/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "The right route starts with the right winter use.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "michigan-winter-wildlife",
+      "name": "Michigan Winter Wildlife",
+      "canonical": "https://chrisizworski.com/michigan-winter-wildlife/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Suitability is not a sighting.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "great-lakes-winter-guide",
+      "name": "Great Lakes Winter Guide",
+      "canonical": "https://chrisizworski.com/great-lakes-winter-guide/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Watch the winter lake. Stay on safe, authorized ground.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "michigan-winter-night-sky",
+      "name": "Michigan Winter Night Sky",
+      "canonical": "https://chrisizworski.com/michigan-winter-night-sky/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Night-sky forecasts need a sky and a place.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
+    },
+    {
+      "id": "michigan-winter-weekends",
+      "name": "Michigan Winter Weekends",
+      "canonical": "https://chrisizworski.com/michigan-winter-weekends/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Good winter trips have a backup plan.",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "outdoor-visitor",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "proposed-release",
+        "intentSeparation": "Activity and destination discovery only; specialist tools own observed and forecast conditions."
+      },
+      "searchEvidence": {
+        "status": "new-canonical-no-gsc",
+        "note": "Owner requested seven distinct FIELD_GUIDE_V1 adaptations on October 26, 2026; no impressions or rankings are claimed."
+      },
+      "measurement": {
+        "search": "GSC Web URL + query at 7/28 days",
+        "product": "Distinct specialist handoff interactions",
+        "decisionWindowDays": 28,
+        "privacy": "No raw precise location is captured by the field-guide experience."
+      }
     }
   ],
   "relationships": [
@@ -5898,6 +6171,118 @@
       "strength": "strong",
       "surface": "upper-peninsula-fall-planning",
       "reason": "Waterfall overlooks provide distinct leaf-peeping destinations with their own access requirements."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "frozen-michigan",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "frozen-michigan",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-winter-trails",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "michigan-winter-wildlife",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-winter-wildlife",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "great-lakes-winter-guide",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "great-lakes-winter-guide",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "michigan-winter-night-sky",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-winter-night-sky",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "michigan-winter-weekends",
+      "to": "michigan-adventure-finder",
+      "type": "context",
+      "strength": "medium",
+      "surface": "guide-network",
+      "reason": "Distinct winter activity discovery links to the year-round Michigan destination atlas."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-winter-weekends",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-field-guide-network",
+      "reason": "Activity selection links to a dedicated winter field guide."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "michigan-winter-activities",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "seasonal-outdoor-navigation",
+      "reason": "Year-round Michigan explorer sends winter activity discovery to the specialized field guide."
     }
   ],
   "cannibalizationGroups": [
