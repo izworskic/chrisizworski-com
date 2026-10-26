@@ -41,7 +41,8 @@ test('Michigan Adventure Finder belongs to directory schema and existing source 
   assert.deepEqual(listing.itemListElement.map(item=>item.position),cards.map((_,i)=>i+1));
   const entry=listing.itemListElement.find(row=>row.item.url===canonical)?.item;
   assert.ok(entry);
-  assert.equal(entry['@type'],'WebPage');
+  assert.equal(entry['@type'],'CollectionPage');
+  assert.equal(entry['@id'],canonical+'#page');
   assert.equal(entry.author?.['@id'],'https://chrisizworski.com/#person');
   const registry=manifest.tools.find(tool=>tool.id==='michigan-adventure-finder');
   assert.equal(registry?.canonical,canonical);
