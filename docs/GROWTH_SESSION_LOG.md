@@ -1,3 +1,12 @@
+## Michigan Adventure Finder — final live photo audit (October 26, 2026)
+
+- **Owner continuation:** Review the live destination experience after the photography release and correct any genuine remaining quality gaps without reworking the ad stack.
+- **Live browser evidence:** The supposedly blank Isle Royale and Grand Sable cards were false alarms caused by deep document-area screenshots not activating native lazy loading. Targeted element screenshots confirmed full photographs, credits, links, and text. Targeted 390px checks also confirmed Munising ice, Mackinac Arch Rock, Ludington/Nordhouse, Au Sable, Torch Lake, Traverse City and Tunnel of Trees.
+- **One verified editorial improvement:** Alpena/Thunder Bay's newly merged image of dredging/industrial harbor works looked less like a Michigan destination than a technical report. Replaced that image only with an authentic photograph of Alpena's red lighthouse on the Lake Huron breakwater, by Dylan L. Tanner, CC BY-SA 2.5 (Commons File:Lighthouse at Alpena MI 2005-09.jpeg). Updated linked attribution, descriptive alt text, crop, and test to enforce the source. All 20 destination cards remain present.
+- **Preserved:** 20 distinct credited scene photos, complete static travel stories, default native image lazy-loading for below-fold cards, keyed CARTO with local Leaflet CSS, regional/seasonal filters, canonical and existing SEO registry. No ads or AdSense code edited.
+- **Search outcomes:** No ranking, traffic, or revenue gains claimed without comparably dated GSC and AdSense measurements.
+- **One release action:** Merge only after full GitHub CI, public audit and preview succeed; then verify the live Alpena card and map.
+
 ## Michigan Adventure Finder: completed image audit follow-through — October 26, 2026
 
 - **Task:** Resume after disconnect and finish the photographic editorial QA without requiring owner action.
