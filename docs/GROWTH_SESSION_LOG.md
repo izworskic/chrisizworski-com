@@ -1,3 +1,16 @@
+## Michigan Adventure Finder — October 26, 2026
+
+- **Owner direction:** Build a destination-first Michigan travel experience inspired by Madeline Marquardt's destination storytelling. Keep advertising and AdSense unchanged. Use the existing site and specialist tools, not a second independent deployment.
+- **Owning repository:** `izworskic/chrisizworski-com`. New canonical: `/michigan-destinations/`. Branch: `feature/michigan-adventure-finder-20261026`.
+- **Distinct search decision:** Discover a *place* for a Michigan trip by season, activity, and region. This editorial discovery intent must not compete with `Michigan Outdoors Now` for live day-trip rankings or with the Outdoor Weekend engine for current-condition recommendations.
+- **User experience:** 20 authored Michigan destinations across U.P., Northern Lower, Western Lower, Central/East and Southeast; season/activity/region filters, responsive trip cards, official visitor links, condition-tool handoffs, and a Leaflet map with attributed CARTO tiles. Browser geolocation is optional and permission-gated. The visitor's exact coordinates are not stored or tracked by this page.
+- **Truth contract:** Typical seasonal fit only, not live weather, verified open/closed access, current ice safety or wildlife sightings. Static HTML remains complete and readable when JavaScript, the map, or external libraries fail. Existing specialized live engines remain authoritative.
+- **Search integration:** Defined Person schema with canonical `https://chrisizworski.com/#person`, `CollectionPage`, 20-item `ItemList`, self-canonical, sitemap inclusion, homepage and Tools-directory links, and tool-network registry relationships.
+- **Verification completed in connected GitHub source:** JavaScript syntax, 20 static card checks, title/meta limits, valid JSON-LD and responsive asset presence. Added `tests/michigan-destinations.test.js` for the repository's Node test gate. **Full `npm run verify:all` and a browser/Vercel production smoke check are NOT yet verified in this session.** Do not merge if CI is red or incomplete.
+- **Measured GSC/GA4/AdSense:** NOT AVAILABLE for this new URL; no ranking, revenue or traffic gain claimed.
+- **Known limitations:** First launch uses site-owned Michigan paddling and winter/reference photography in hero/editorial sections, with tasteful regional illustrations for destination cards; destination-specific licensed photography would be a later enhancement. CARTO raster tiles depend on external network availability, with a text-and-links fallback. No drive-time estimates.
+- **Exactly one next action:** Run and review the full pull-request CI gate, then merge only after all required checks pass and confirm the published page.
+
 ## Kilauea Episode Watch, plus charts on Beach Day and Manta Night - October 23, 2026
 
 - **Owner direction:** More single-purpose public Hawaii tools (not tied to one trip); chose Kilauea viewing. Asked for charts and graphs to explain the tools, and asked that the new tool cost nothing on Vercel.
