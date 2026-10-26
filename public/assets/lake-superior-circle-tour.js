@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-09-30';
+  const RELEASE = '2026-10-26';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;
@@ -108,7 +108,7 @@
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
     if (footer) {
-      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated September 30, 2026');
+      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated October 26, 2026');
     }
   }
 
