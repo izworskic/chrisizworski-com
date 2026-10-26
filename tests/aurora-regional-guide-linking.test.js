@@ -21,7 +21,7 @@ test('existing winning statewide intent, title, author and canonical remain prot
   assert.match(page, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/northern-lights-michigan\/">/);
   assert.match(page, /https:\/\/chrisizworski\.com\/#person/);
   assert.match(page, /<h1 class="page-title">Northern Lights Michigan Tonight<\/h1>/);
-  assert.ok(page.includes('"dateModified": "2026-10-25"'));
+  assert.ok(page.includes('"dateModified": "2026-10-26"'));
   assert.ok(page.includes('Guide updated October 2026'));
 
 });

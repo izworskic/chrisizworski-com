@@ -1266,3 +1266,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Source `dateModified` and both sitemap `lastmod` entries advanced for real updated content. Added tests for discovery, canonical and source-type distinction.
 - No change to NWS/NOAA APIs, underlying reports, meteorological inference, or ad code. Branch `codex/michigan-snow-evidence-network-20261025`; CI/release recorded in PR.
 - Exactly one next action: pass CI/public canonical audit; then verify live links/meaning from mobile.
+
+### Decision-first read-through for Aurora and Mackinac Bridge — October 26, 2026
+- Public 360px and 1440px captures showed publisher-served floating/sticky advertising partially obscuring the official bridge status and Aurora answer. Incident documented in issue #1188. Ads can be injected outside static source HTML; client pages cannot guarantee their location.
+- **Bounded mitigation:** make a prominent, 40px-high high-contrast native in-page jump link available in both always-near-top status ribbons. Targets are existing canonical Aurora regional answer and Bridge Authority status card. Ensure accessible focus indicators and anchor scroll margins so visitors can get to the direct answer even when large display units come before the main content.
+- **Not a full resolution:** this does not suppress or reposition third-party ad overlays, and cannot guarantee the overlay stops covering the card at certain viewport positions. Issue #1188 remains open for publisher/AdSense placement-setting remediation. No AdSense script, monetization configuration, ad targeting, CSS hiding rules, forecast/status data source, SEO titles, canonical URLs or creator identity changed.
+- Updated only genuine Oct 26 editorial dates for those two live pages and relevant sitemaps, pinned assertions, and older-crawl CSS intentional-change manifest. QA through PR tests then 360/1440 live screenshot; report any remaining overlay truthfully.
+- Exactly one next action: verify the merged top-ribbon links reach actual official data; if any overlay continues to obstruct it, leave ad-placement issue open and resolve via authorized publisher controls.

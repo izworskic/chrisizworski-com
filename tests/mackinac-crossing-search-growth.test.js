@@ -34,8 +34,9 @@ test('toll route presents standard dynamic return journey without inventing MacP
 });
 test('only genuinely revised bridge canonical dates advance',()=>{
   for(const slug of ['mackinac-bridge-live','mackinac-bridge-tolls']){
-    assert.match(sitemap,new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>2026-10-25<\\/lastmod>'));
+    const editorialDate = slug === 'mackinac-bridge-live' ? '2026-10-26' : '2026-10-25';
+    assert.match(sitemap,new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>'+editorialDate+'<\\/lastmod>'));
   }
   assert.match(toll,/"dateModified"\s*:\s*"2026-10-25"/);
-  assert.match(live,/"dateModified": "2026-10-25"/);
+  assert.match(live,/"dateModified": "2026-10-26"/);
 });

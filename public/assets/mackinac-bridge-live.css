@@ -2523,3 +2523,10 @@ legend {
   .bridge-walk { padding: 18px 16px 20px; }
   .bridge-walk__facts { grid-template-columns: 1fr; }
 }
+
+/* Editorial answer-access affordance. Does not move, hide, or restyle advertising. */
+.live-ribbon .ribbon-answer-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:7px 12px;border:1px solid rgba(255,255,255,.62);border-radius:6px;color:#fff;font-weight:700;text-align:center;text-decoration:underline;text-underline-offset:3px}
+.live-ribbon .ribbon-answer-link:hover{color:#fff;background:rgba(255,255,255,.14)}
+.live-ribbon .ribbon-answer-link:focus-visible{outline:3px solid #ffd076;outline-offset:3px}
+#statusCard{scroll-margin-top:18px}
+@media(max-width:640px){.live-ribbon{gap:8px;padding:8px 12px}.live-ribbon .ribbon-answer-link{width:100%;max-width:350px}}
