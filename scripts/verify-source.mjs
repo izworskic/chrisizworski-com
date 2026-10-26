@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 26: verified Bridge live ribbon answer-jump CSS intentionally differs from older live crawl snapshot; no ad styling changes.
+  "/assets/mackinac-bridge-live.css",
   // October 25: reviewed Bridge toll UI and calculator script are intentionally new relative to the older live-crawl snapshot. Retain QA/regression gates until next clean production crawl.
   "/assets/mackinac-guide.css",
   "/assets/mackinac-toll-calculator.js",
