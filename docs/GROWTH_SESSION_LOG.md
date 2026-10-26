@@ -1,3 +1,11 @@
+## Michigan destination photography release — visual map follow-up (October 26, 2026)
+
+- **Verified post-release screenshot:** The nine-photo curated page and linked credits displayed correctly at 1366px and 390px, but a mid-page screenshot showed only one 256px CARTO raster tile and no zoom controls/pins despite an optimistic CARTO “loaded” status.
+- **Root issue addressed:** Leaflet's essential map layout stylesheet was requested from an external unpkg CDN; losing or delaying that stylesheet leaves bare tiles in flow even when Leaflet JS and key-bearing CARTO requests run successfully. Vendored the exact Leaflet 1.9.4 stylesheet from the published CDN into `public/assets/vendor/leaflet-1.9.4.css` with BSD-2-Clause source attribution, and replaced the external CSS link with a site-hosted resource. JS still loads Leaflet from its existing source.
+- **Layout stability:** `ResizeObserver`, post-layout animation frame, and `load` follow-up call `map.invalidateSize({pan:false})` to handle dynamic photo/ad shifts and viewport changes. Does not change CARTO key handling, geolocation consent, ad systems or map data.
+- **Verification:** Dedicated Node regression test checks the local vendor CSS file and map resize recovery. Full CI and production viewport screenshots required before concluding repaired.
+- **Exactly one next action:** With CI green, merge the map-only fix and visually verify complete tile coverage and pins on the live desktop and mobile map.
+
 ## Michigan Adventure Finder — photographic curation release (October 26, 2026)
 
 - **Owner request:** Independently find, vet, place, and publish stronger destination photographs; handle all code, credits, cropping and deployment without requiring manual user action.

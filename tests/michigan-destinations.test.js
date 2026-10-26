@@ -4,14 +4,15 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
 const read = relative => readFile(new URL('../' + relative, import.meta.url), 'utf8');
-const [html, css, js, tools, home, sitemap, registryText] = await Promise.all([
+const [html, css, js, tools, home, sitemap, registryText, leafletCss] = await Promise.all([
   read('public/michigan-destinations/index.html'),
   read('public/assets/michigan-destinations.css'),
   read('public/assets/michigan-destinations.js'),
   read('public/tools/index.html'),
   read('public/index.html'),
   read('public/sitemap.xml'),
-  read('benchmarks/tool-network-registry.json')
+  read('benchmarks/tool-network-registry.json'),
+  read('public/assets/vendor/leaflet-1.9.4.css')
 ]);
 const registry = JSON.parse(registryText);
 
@@ -62,7 +63,7 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.match(js, /basemaps\.cartocdn\.com\/rastertiles\/voyager/);
   assert.match(js, /\/api\/carto-basemap-config/);
   assert.match(js, /DOMContentLoaded/);
-  assert.doesNotMatch(js, /window\.addEventListener\('load'/);
+  assert.doesNotMatch(js, /window\.addEventListener\('load',\s*initMap/);
   assert.ok(html.indexOf('id="quick-find"') < html.indexOf('id="finder"'), 'planning controls must appear on the first screen');
   assert.match(js, /encodeURIComponent\(cfg\.key\.trim\(\)\)/);
   assert.match(js, /tile\.openstreetmap\.org/);
@@ -108,4 +109,14 @@ test('photographs have distinct source-licensed scenes and quiet credits', () =>
   assert.match(css, /Editorial photo direction/);
   assert.match(css, /object-position:var\(--photo-position/);
   assert.match(css, /figcaption\.photo-credit/);
+});
+
+test('Leaflet stylesheet is local and map pixel dimensions adapt after layout shifts', () => {
+  assert.match(html, /href="\/assets\/vendor\/leaflet-1\.9\.4\.css"/);
+  assert.doesNotMatch(html, /href="https:\/\/unpkg\.com\/leaflet@1\.9\.4\/dist\/leaflet\.css"/);
+  assert.match(leafletCss, /\.leaflet-container/);
+  assert.match(leafletCss, /\.leaflet-pane/);
+  assert.match(leafletCss, /\.leaflet-control/);
+  assert.match(js, /ResizeObserver/);
+  assert.match(js, /invalidateSize/);
 });
