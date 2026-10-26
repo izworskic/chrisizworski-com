@@ -1415,6 +1415,67 @@
           "description": "Michigan waterfall GIS ID 6, location is fall not visitor parking"
         }
       }
+    },
+    {
+      "id": "bridalveil-falls",
+      "name": "Bridalveil Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "Miners Castle / Miners Beach, Alger County",
+      "lat": 46.5087,
+      "lng": -86.5233,
+      "level": "easy",
+      "minutes": "20–90 min, depending on viewpoint",
+      "walk": "No maintained trail reaches Bridalveil Falls itself. For a distant view, walk from the Miners Castle parking lot to its lower overlook (stairs and a steep grade), or use the short west-end Miners Beach boardwalk for a shore view. A concession-operated boat tour gives the most complete cliffside view.",
+      "best": "Snowmelt and spring rains; the creek can be a trickle in dry summer weather. Sightlines and boat sailings depend on conditions.",
+      "access": "Publicly viewable from NPS-managed Miners Castle and Miners Beach vantage points, or from an authorized sightseeing boat. Do not route hikers to the waterfall brink, cliff base or North Country Trail.",
+      "status": "verify",
+      "note": "The signature view is from Lake Superior. Shore viewpoints are distant; an NPS viewpoint does not guarantee visible flow on a given day.",
+      "source": "https://www.nps.gov/places/bridalveil-falls.htm",
+      "locationSource": "https://algercountychamber.com/waterfalls",
+      "kind": "National lakeshore",
+      "parking": "Miners Castle lot at the end of Miners Castle Road (H-11) for lower overlook; or west-end Miners Beach lot, reached via Miners Beach Road off H-11. These are visitor arrival areas, not the falls coordinates.",
+      "feature": "A seasonal cliffside ribbon falling toward Lake Superior; the decision is where to view it, not which trail to the falls to take.",
+      "further": "There is no safe, maintained land route directly to the waterfall. The lower Miners Castle overlook has stairs and a steep incline; the west Miners Beach boardwalk is wheelchair-accessible to its platform. The falls may be nearly dry.",
+      "manager": "National Park Service · Pictured Rocks National Lakeshore",
+      "gisObjectId": null,
+      "decision": "Choose a boat tour for the full waterfall-and-cliff view; Miners Castle for a distant overlook; Miners Beach for a gentler viewpoint. Do not attempt a direct waterfall hike.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-viewpoint-and-parking-verification-not-live-open",
+      "sourceReviewed": "2026-10-26",
+      "sources": {
+        "manager": "https://www.nps.gov/places/bridalveil-falls.htm",
+        "publicAccess": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+        "parking": "https://www.nps.gov/places/miners-castle.htm",
+        "trail": "https://www.nps.gov/places/miners-beach.htm",
+        "location": "https://algercountychamber.com/waterfalls"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/bridalveil-falls.htm",
+          "description": "NPS confirms Bridalveil is inside Pictured Rocks National Lakeshore and identifies official viewing options"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+          "description": "NPS lists viewing from the water, distant Miners Castle lower overlook and west end of Miners Beach; not from North Country Trail"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-castle.htm",
+          "description": "NPS Miners Castle parking at end of H-11 and signed scenic overlooks; alternative Miners Beach parking documented by NPS"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.nps.gov/places/miners-beach.htm",
+          "description": "NPS Miners Beach west-end boardwalk to shore overlook. No maintained trail to the falls itself; lower Miners Castle overlook has stairs."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://algercountychamber.com/waterfalls",
+          "description": "Alger County Chamber publishes approximate geographic waterfall coordinates 46.5087, -86.5233; not a parking point"
+        }
+      }
     }
   ]
 }
