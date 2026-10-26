@@ -548,3 +548,16 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 .layup-home #layup-map,.layup-home .map-tools,.layup-home #ship-grid,.layup-home #ship-detail,.layup-home .filter-row,.layup-home #winter-ais,.layup-home .footer{scroll-margin-block-end:var(--layup-anchor-reserve)}
 .layup-home #ship-grid:focus-within,.layup-home #ship-detail:focus-within{scroll-margin-block-end:var(--layup-anchor-reserve)}
 @media(max-width:620px){.layup-home{--layup-anchor-reserve:calc(158px + env(safe-area-inset-bottom,0px))}}
+
+/* The ad provider can insert an in-flow auto placement between hero and atlas.
+   Preserve that ad, but place it after the tool in the visual flow. */
+.layup-home main{display:flex;flex-direction:column;align-items:stretch;min-width:0}
+.layup-home main > .hero{order:0;width:100%}
+.layup-home main > .wrapper{order:1;width:100%;min-width:0}
+.layup-home main > .google-auto-placed{order:2;width:100%;align-self:stretch}
+.layup-home main > .adsbygoogle:not([style*="position: fixed"]){order:2}
+@media(max-width:1199px){
+ .layup-home .filter-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .layup-home .filter-row label{min-width:0}
+}
+@media(max-width:620px){.layup-home .filter-row{grid-template-columns:minmax(0,1fr)}}

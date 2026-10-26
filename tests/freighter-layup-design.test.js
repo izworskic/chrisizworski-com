@@ -84,3 +84,10 @@ test('evidence-focused map and clean harbor interaction are not a duplicated set
  assert.ok(!html.includes('12 sourced vessel records in five harbors'));
  assert.ok(css.includes('--layup-anchor-reserve:calc(144px'));
 });
+
+test('AdSense auto slots remain mounted but cannot precede the tool visually',()=>{
+ assert.ok(css.includes('main > .google-auto-placed{order:2'));
+ assert.ok(css.includes('main > .wrapper{order:1'));
+ assert.match(css,/@media\(max-width:1199px\)[\s\S]*?\.filter-row\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+ assert.ok(!html.includes('adsbygoogle'),'No direct modification to AdSense embed code');
+});
