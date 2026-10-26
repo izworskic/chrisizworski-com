@@ -76,7 +76,7 @@ section('Mobile, live data and resilience', 10, [
 ]);
 
 section('Current 2026 trip facts', 5, [
-  [has(page, "const RELEASE = '2026-09-30'"), 'release stamp'],
+  [has(page, "const RELEASE = '2026-10-26'"), 'release stamp'],
   [has(page, 'Agawa Canyon Tour Train runs August 1–October 18'), 'current Agawa season'],
   [has(page, 'Agawa Rock Pictographs Trail and Trapper’s Trail') && has(html, '/lake-superior-provincial-park/'), '2026 LSPP closure and park-explorer handoff'],
   [has(page, 'Munising Falls Trail remains closed until further notice'), 'current Pictured Rocks closure'],
