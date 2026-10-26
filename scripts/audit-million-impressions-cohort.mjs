@@ -6,14 +6,14 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const origin = 'https://chrisizworski.com';
 const asOf = '2026-10-22';
-const measuredWindow = '2026-10-09..2026-10-22';
+const measuredWindow = '2026-09-25..2026-10-22';
 const pages = [
-  { group: 'first-six', path: '/northern-lights-michigan/', impressions: 11666, clicks: 109, intent: 'Can I see northern lights in Michigan tonight?' },
-  { group: 'first-six', path: '/great-lakes-freighter-tracking/', impressions: 4713, clicks: 58, intent: 'Track Great Lakes ships now' },
-  { group: 'first-six', path: '/mackinac-bridge-live/', impressions: 3347, clicks: 16, intent: 'Is the Mackinac Bridge open today?' },
-  { group: 'first-six', path: '/mackinac-bridge-tolls/', impressions: 2577, clicks: 7, intent: 'How much is the Mackinac Bridge toll?' },
-  { group: 'first-six', path: '/national-tools/white-christmas/forecast/', impressions: 587, clicks: 1, intent: 'Will it snow for Christmas?' },
-  { group: 'first-six', path: '/michigan-snow-totals/', impressions: 666, clicks: 3, intent: 'How much snow fell in Michigan?' },
+  { group: 'first-six', path: '/northern-lights-michigan/', impressions: 19892, clicks: 200, intent: 'Can I see northern lights in Michigan tonight?' },
+  { group: 'first-six', path: '/great-lakes-freighter-tracking/', impressions: 9119, clicks: 142, intent: 'Track Great Lakes ships now' },
+  { group: 'first-six', path: '/mackinac-bridge-live/', impressions: 5285, clicks: 20, intent: 'Is the Mackinac Bridge open today?' },
+  { group: 'first-six', path: '/mackinac-bridge-tolls/', impressions: 5699, clicks: 13, intent: 'How much is the Mackinac Bridge toll?' },
+  { group: 'first-six', path: '/national-tools/white-christmas/forecast/', impressions: 1614, clicks: 3, intent: 'Will it snow for Christmas?' },
+  { group: 'first-six', path: '/michigan-snow-totals/', impressions: 1154, clicks: 8, intent: 'How much snow fell in Michigan?' },
   // Winter discovery checks: URL-based technical evidence, NOT confirmed rank potential.
   { group: 'winter-discovery', path: '/national-tools/snow/' },
   { group: 'winter-discovery', path: '/michigan-ice/' },
@@ -95,7 +95,7 @@ const totals = first.reduce((a, p) => ({ impressions: a.impressions + p.baseline
   clicks: a.clicks + p.baseline.clicks }), { impressions: 0, clicks: 0 });
 const output = {
   checkedAt: new Date().toISOString(), dataFinalizedThrough: asOf,
-  source: 'Connected Google Search Console, sc-domain:chrisizworski.com; page aggregation, October 9–22, 2026',
+  source: 'Connected Google Search Console, sc-domain:chrisizworski.com; page aggregation, September 25–October 22, 2026',
   limitations: [
     'HTTP/initial HTML only; not browser UX, source API accuracy, or Google-selected snippets.',
     'No causally attributable ranking, CTR, or revenue improvement is claimed.',
