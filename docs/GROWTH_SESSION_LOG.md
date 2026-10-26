@@ -1,13 +1,32 @@
-## Upper Peninsula Waterfall Explorer — October 26, 2026
+## Upper Peninsula Waterfall GIS Evidence Expansion — October 26, 2026
 
-- **Owner request:** Research an interactive Upper Peninsula waterfall map and a useful profile for each featured waterfall; retain source truth and scale toward larger geospatial coverage without publishing thin programmatic doorway pages.
-- **Repository/branch:** `izworskic/chrisizworski-com`, `feature/up-waterfall-explorer-20261026`. New canonical hub: `/upper-peninsula-waterfalls/`; 12 curated waterfall child URLs. Tahquamenon retains its specialist canonical at `/tahquamenon-falls/`.
-- **Visitor utility:** Carto/Leaflet map, named destinations, region/trail/access filtering, explicit closed/restricted/seasonal statuses, a six-stop shortlist, local-permission geolocation with straight-line miles, official source links and progressive static HTML fallback.
-- **Editorial evidence:** USGS hydrography/WWD for future location enrichment; dated NPS and DNR authority for park access. Munising Falls is CLOSED until further notice; Agate reopened but trestle/motorized travel restricted; Bond vehicle access typically season-limited. Map pins intentionally do not claim to mark safe parking access.
-- **Integration:** Tools directory card and JSON-LD, `sitemap-up-waterfalls.xml`, sitemap index, Michigan Adventure Finder contextual link, linked registry node/relationships, shared ad loader unchanged.
-- **GSC/AdSense:** no new-URL data available and no traffic uplift claimed. Site-wide ads policy untouched.
-- **Validation to finish:** source and schema spot checks complete; full `npm run verify:all` and production browser acceptance remain pending CI. No merge while red or incomplete.
-- **One next action:** Review the pull-request full verification gate; only then merge and inspect live map/mobile interactions.
+- **Branch / PR:** feature/up-waterfall-explorer-20261026, draft PR #1199. Merge current main preserving other changes.
+- **Inventory:** Michigan state geographic Waterfalls feature layer: 197 source records, 163 named non-rapids/dam candidates staged as geographic reference only. Optional toggle-off map layer does NOT represent trails, public access, parking or live status.
+- **Visitors:** 20 curated waterfalls, 19 distinct child pages plus a Tahquamenon canonical handoff. Seven new evidence-linked guides: Great Conglomerate, Potawatomi, Gorge, Sandstone, Rainbow, O Kun de Kun and Nawadaha. Each has separate geographic, route, land-manager, parking and trail citations; existing first-wave guides still require an individual five-axis legacy audit.
+- **2026–27 hazard:** Active USFS Black River notice dated May 15, 2026. Sandstone CLOSED; Potawatomi and Gorge partially restricted, Rainbow future closures possible, Great Conglomerate tread/stair caution. Agency project projected through fall 2027. No reopening presumed.
+- **USGS data:** V2.0 release DOI P9QQTKA0 located, 8.57MB raw GeoJSON could not be retrieved intact in connected request. Offline USGS importer created to preserve NHD IDs as research-only records when the complete file is available; no USGS record-level import claimed.
+- **Publication integrity:** 163 geographic records cannot generate indexable detail pages or driving directions. New page URLs only for field-access-evidenced guidance, including an explicitly closed Sandstone caution page. Ads policy unchanged.
+- **Verification:** Full current-branch CI and mobile preview checks required; no production merge while red or untested. GSC impressions/revenue for new pages unavailable.
+- **Exactly one next action:** Run full repository check on updated branch, inspect preview on mobile, then merge only if all checks and site access evidence pass.
+
+## Michigan Adventure Finder post-deploy visual fixes — October 26, 2026
+
+- **Review evidence:** Public 1366×900 browser screenshot showed the photographic intro but a large ad-created visual gap before the finder, leaving no controls in the first viewport. The map screenshot showed the static loading placeholder while `window.load` was still pending for resources.
+- **Fix:** Move the fully functional mood chips and three filters *inside* the introductory experience, ahead of the boundary where auto-ad whitespace appears; no ad code or placement policies changed. Tighten its type and spacing. Replace the Keweenaw aerial photograph, which had an aircraft wing across the landscape, with a verified Great Sand Bay shoreline photograph (Tony Webster, CC BY 2.0).
+- **Runtime:** Initialize Leaflet on `DOMContentLoaded` rather than `window.load` to avoid waiting on photos/third-party ad resources. Keep public-key config request and tile-error OSM fallback unchanged.
+- **Verification:** Source checks pass. CI and live screenshot remain to be checked. No Google Search Console impact claims.
+- **Exactly one next action:** Review CI and then verify browser viewport and CARTO state after the deployment.
+
+## Michigan Adventure Finder editorial rebuild — October 26, 2026
+
+- **Owner feedback:** Initial launch was visually generic, oversized and lacked authentic per-destination imagery. Owner asked to do the opposite: place-led storytelling and real photos, not a giant artificial hero. The CARTO map also used a keyless tile request even though Vercel already supplies a public basemap key.
+- **Scope:** Only `/michigan-destinations/` HTML and its own CSS/JS, dedicated tests and this handoff were changed. No AdSense, ad loader, identity page, homepage, canonical URL, directory schema or other specialist tool modified.
+- **Editorial rebuild:** Hero reduced from approximately 540–730 px to a compact two-column introduction with three credited real Michigan photographs. All 20 cards now have distinct, location-specific licensed photos, visible photographer/Commons credit and reusable-license links, plus one concrete experience suggestion per destination. Removed fake gradient location art, the empty large hero and redundant full-width evidence-block before the map.
+- **Map repair:** Fetches `/api/carto-basemap-config`, the existing Vercel Edge route that reads `CARTO_BASEMAP_PUBLIC_KEY`, then requests CARTO Voyager raster tiles with `?key=`. Never logs or commits the key. On config failure or tile errors, swaps to OpenStreetMap and displays status. The map sits adjacent to the first destination stories, follows filters and retains fully accessible text fallback.
+- **Experience:** Six one-tap interest prompts, season/activity/region filters, photo-led editorial flow and mobile stacked layout. Static cards and links remain visible without JavaScript. No live-condition, ice-safety, park-open or wildlife appearance claims.
+- **Search posture:** Same canonical `/michigan-destinations/` and same Person schema; no new thin pages or keyword duplication. Source image assets use NPS public domain / Wikimedia Commons PD, CC0, CC BY or CC BY-SA permissions with credits and source links.
+- **Evidence:** Destination photographs and their reuse licenses verified from Commons API/NPS sources. Full CI, external image loads, responsive browser rendering and production deploy need verification before final release. No GSC, GA4 or AdSense outcomes measured.
+- **Exactly one next action:** Confirm preview render and the Vercel-keyed map, run full PR CI, then merge only with green checks and verify production URL.
 
 ## Michigan Adventure Finder — October 26, 2026
 
@@ -1334,3 +1353,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Approved title, H1, canonical, visible creator/Person entity and real NOAA/NWS/USNO data engine are already in place, so this narrowly scoped release refines only the head meta description and immediately visible lead paragraph. Both now directly answer the Michigan tonight decision intent and distinguish local region/data before a yes/no is rendered; they never promise a sighting.
 - Pinned the exact metadata test and added a regression test for crawlable initial answer and essential signals. This is a single-variable, same-day content change with no new pages, ad configuration, layout, API, routing, schema, image or alert modifications. `dateModified` and sitemap `lastmod` were already 2026-10-26, so neither is artificially incremented.
 - GSC ranks and impressions do not prove Google showed the authored snippet, nor can this release claim a click uplift. Release only after complete `npm run verify:all`, public build/authority audit and final PR SHA checks. Single next action once deployed: compare 7-day finalized northern-lights "tonight" query family after deployment and account for storm demand/position.
+
+### Mackinac Bridge toll price-led CTR treatment — October 26, 2026
+- Verified official MBA toll schedule and MacPass eligibility; no toll rates/vehicle-class JS changed. GSC Web 28-day Sep 27–Oct 24 baseline: 5,683 impressions/12 clicks/0.211% CTR/avg pos 8.3391 for `/mackinac-bridge-tolls/`. Exact query `mackinac bridge toll`: 544 impressions/0 clicks/avg pos 9.9062. Cost question `how much does it cost to cross the mackinac bridge`: 245/0/8.0367. Query rows are incomplete relative to full page totals.
+- Applied one focused query-to-SERP price intervention: title now leads with the verified $4 car fare while retaining Calculator and Chris Izworski; description foregrounds $4 car/$8 round trip plus axle-specific RV/trailer estimates, the official card fee and conditional MacPass discount. Original H1, static answer, person/byline, page canonical, FAQ questions, toll calculator, ads and live status sibling unchanged.
+- Refreshed exact-title/metadata SEO tests and historical transport benchmark with immutable newest observed baseline; modified existing toll-specific production smoke to wait for production propagation instead of racing Vercel. No continuous/each-merge Million Impressions trigger added.
+- Confirmed secondary picturedrocks subdomain mirror has the preferred main-site canonical in page HTML; selected Google canonical/indexing remain unknown until URL Inspection. Detailed source, safety and measurement in `docs/MACKINAC_TOLLS_CTR_2026-10-26.md`.
+- Release only after all final-PR-head `verify:all`, emitted HTML/public audit, identity guardrail and preview tests pass; post-merge require toll-specific production smoke and Vercel production ready. Single next step after deployment: compare finalized 7-day and 28-day exact toll/cost-query CTR at comparable position, not assume uplift.

@@ -59,10 +59,24 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   }
   assert.match(html, /<noscript>/);
   assert.match(html, /aria-live="polite"/);
-  assert.match(js, /basemaps\.cartocdn\.com\/voyager/);
+  assert.match(js, /basemaps\.cartocdn\.com\/rastertiles\/voyager/);
+  assert.match(js, /\/api\/carto-basemap-config/);
+  assert.match(js, /DOMContentLoaded/);
+  assert.doesNotMatch(js, /window\.addEventListener\('load'/);
+  assert.ok(html.indexOf('id="quick-find"') < html.indexOf('id="finder"'), 'planning controls must appear on the first screen');
+  assert.match(js, /encodeURIComponent\(cfg\.key\.trim\(\)\)/);
+  assert.match(js, /tile\.openstreetmap\.org/);
   assert.match(js, /scrollWheelZoom:false/);
   assert.match(js, /America\/Detroit/);
   assert.match(js, /navigator\.geolocation\.getCurrentPosition/);
   assert.doesNotMatch(html, /\b(OPEN NOW|LIVE TRIP RATING)\b/i);
-  assert.match(html, /typical seasonality, not live reports/);
+  assert.match(html, /Seasonality is typical/);
+  assert.match(html, /class="hero-gallery"/);
+  assert.match(html, /class="mood-bar"/);
+  assert.match(html, /id="map-status"/);
+  assert.equal((html.match(/class="destination-photo card"/g) || []).length, 20);
+  assert.equal((html.match(/class="experience"/g) || []).length, 20);
+  assert.ok(html.indexOf('id="map-section"') < html.indexOf('id="destinations"'), 'map must be alongside the browse feed, before the destination cards');
+  assert.doesNotMatch(html, /destination-art art-/);
+  assert.doesNotMatch(html, /michigan-paddling\/hero\.jpg/);
 });
