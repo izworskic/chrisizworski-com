@@ -1,12 +1,20 @@
-## Michigan Adventure Finder — searchable Michigan tools directory integration (October 26, 2026)
+## Michigan Adventure Finder searchable directory — concurrent-main reconciliation, October 26, 2026
 
-- **Owner instruction:** Add live `https://chrisizworski.com/michigan-destinations/` to the Michigan tools page. Owning directory is `public/tools/index.html`, canonical `https://chrisizworski.com/tools/`, under `Michigan trip planners`.
-- **Existing state:** The destination guide was linked by a promotional `<aside>` only. The Tools directory's filter/search operates on `.tool-card[data-tags]` and the schema ItemList was generated from actual cards, so the old aside never appeared as a searchable tool.
-- **Change:** Replace that single promo banner with an authentic `michigan-adventure-finder` card at the **top of the Michigan trip-planners group**, with the correct link, year-round months, trip-planning and nature tags, and accurate static description (20 destinations, photo-led discovery, CARTO map, season/activity/region filters, existing specialist and official access handoffs). Update the group blurb to include destination discovery.
-- **Search/schema:** Existing `benchmarks/tool-network-registry.json` already owns the destination guide and its `trip-planning` intent. No registry duplicate. Visible directory and ordered JSON-LD schema now each have 91 unique entries and one direct link to the Finder; Person identity unchanged.
-- **Regression guard:** `tests/michigan-adventure-tools-directory.test.js` checks searchable/card presence, categorical filtering, nonduplicated link and exact schema count/order. No invented live condition or page rankings; no changes to AdSense loader, auto-ads, destination guide, homepage, canonical, or any other tool.
-- **Measurement:** GSC click/impression uplift not measurable at shipping; only observe subsequent matched time windows.
-- **Exactly one next action:** Confirm full PR CI and Vercel preview green, merge, and verify public `/tools/` has the new searchable card and destination link.
+- User explicitly requested a Michigan Tools directory link for `/michigan-destinations/`.
+- The original directory had a banner link only; another live commit changed it into a searchable `<aside class="tool-card">` while this PR was verifying. That partial change was not represented in the 90-item JSON-LD directory, and was outside the parser used by `scripts/reconcile-tools-directory.mjs`. Reconciled against commit `c9eb7fcb8166` with no unrelated changes overwritten.
+- Replaced it with a standard `<div class="tool-card">` in **Michigan trip planners**, placed first, with year-round activity tags and factual destination discovery copy. Tool registry ID and canonical reused, no duplicated card.
+- JSON-LD now contains 91 visible directory entries including the actual `CollectionPage` `@id` from the destination; matching order and author identity. Dedicated tests prevent regression.
+- Ads, destination page, hero imagery, analytics and all other tool card implementations unchanged. No claimed CTR/GSC lift.
+- **Next:** after required CI and Vercel gates pass, merge and smoke-test the published `/tools/#trip-planners` entry.
+
+## Michigan Adventure Finder — Michigan tools directory registration — October 26, 2026
+
+- **Owner request:** Add the existing public Michigan Adventure Finder to the Michigan tools page. Canonical: `https://chrisizworski.com/michigan-destinations/`.
+- **Problem:** The tools page had an editorial banner under Michigan trip planners, but it was **outside** the `.tool-grid` and lacked `.tool-card[data-tags]`. The site's live search, categories, tool counts and `In season now` filter therefore could not find the existing destination experience.
+- **Changes:** Converted that single banner into one prominently featured native tool-card at the beginning of `public/tools/index.html`'s Michigan trip planner grid. Added stable `michigan-adventure-finder` ID, planning/nature tags, all twelve months, and explicit browse-by-region/season/activity description. Kept the page URL and its visible link while avoiding duplicate catalog entries.
+- **Guards:** `tests/michigan-adventure-directory-listing.test.js` asserts catalog placement, unique ID, search/season tags, existing destination canonical and 20 static destinations, and intact filtering. No advertising/AdSense code, identity metadata, sitemap, specialist engines or location/map code changed.
+- **Observations:** This is discoverability wiring, not a claim of GSC, CTR, traffic or revenue gains. No new URL or canonical needed.
+- **Exactly one next action:** Verify CI and preview, merge only after green checks, and confirm the updated Michigan tools page in production.
 
 ## Field Guide design standard extraction — October 26, 2026
 
