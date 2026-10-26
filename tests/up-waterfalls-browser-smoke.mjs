@@ -17,11 +17,12 @@ try{
   await page.route('https://pagead2.googlesyndication.com/**',r=>r.abort());
   await page.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('[data-fall]').first().waitFor();
-  await run('mobile hub contains 26 human-readable destinations',async()=>{
-    assert.equal(await page.locator('[data-fall]').count(),26);
+  const expectedFalls=JSON.parse(await fs.readFile('data/up-waterfalls.json','utf8')).waterfalls.length;
+  await run('mobile hub count matches curated waterfall data',async()=>{
+    assert.equal(await page.locator('[data-fall]').count(),expectedFalls);
     assert.equal(await page.locator('h1').count(),1);
     assert.ok(await page.locator('#geographic-research').count()===1);
-    for(const id of ['mosquito-falls','elliot-falls','manido-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
+    for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
   await run('mobile map initializes from local Leaflet JS and CARTO tiles',async()=>{
     await page.waitForFunction(()=>!!window.UPWaterfallMap,{timeout:15000});
@@ -59,7 +60,7 @@ try{
     assert.ok(await page.locator('.leaflet-marker-icon').count()>10);
   });
   await page.screenshot({path:screenshots+'/hub-desktop.png',fullPage:true,animations:'disabled'});
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['bridalveil-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -73,6 +74,7 @@ try{
       assert.ok(metrics.scroll<=metrics.width+2,id+' mobile horizontal overflow');
       if(id==='scott-falls')assert.match(await page.locator('body').innerText(),/not yet confirmed|noindex|access evidence/i);
       if(id==='munising-falls')assert.match(await page.locator('body').innerText(),/closed until further notice|trail closed/i);
+      if(id==='bridalveil-falls'){const body=await page.locator('body').innerText();assert.match(body,/Miners Castle/);assert.match(body,/Miners Beach/);assert.match(body,/No maintained hiking path|No maintained trail/i);await page.screenshot({path:screenshots+'/bridalveil-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});
     });
   }
