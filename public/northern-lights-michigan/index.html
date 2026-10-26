@@ -51,7 +51,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-10-25",
+      "dateModified": "2026-10-26",
       "inLanguage": "en-US",
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
@@ -124,6 +124,9 @@ a:hover{text-decoration:underline}
 .live-strip .live-label{text-transform:uppercase}
 .live-strip .live-status{color:#fff;font-weight:bold}
 .live-strip .refresh-info{font-size:10px;color:#88a8c0;margin-left:8px}
+.live-strip .live-jump{display:inline-flex;align-items:center;min-height:40px;padding:7px 12px;border:1px solid rgba(213,245,231,.7);border-radius:6px;color:#e6fff0;text-decoration:underline;text-underline-offset:3px;font:700 12px system-ui,sans-serif;white-space:normal;text-align:center}
+.live-strip .live-jump:focus-visible{outline:3px solid #f7c370;outline-offset:2px}
+#aurora-decision{scroll-margin-top:18px}
 
 .body{max-width:1040px;margin:0 auto;padding:24px 24px 60px}
 .breadcrumb{font-size:13px;color:#999;margin-bottom:12px}
@@ -383,6 +386,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
   <span class="live-label">Aurora forecast</span>
   <span class="live-status" id="liveStatus">loading NOAA SWPC data...</span>
   <span class="refresh-info" id="refreshInfo"></span>
+  <a class="live-jump" href="#aurora-decision">Check my regional forecast ↓</a>
 </div>
 <main class="body" id="main">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
