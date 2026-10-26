@@ -89,8 +89,8 @@
       travel.append(note);return;
     }
     const north=document.getElementById('direction')?.value==='north';
-    // Route order comes from Ontario Parks trail Highway-17 numbers: higher km to lower km is northbound.
-    eligible.sort((a,b)=>(Number(a.hwy17Km)-Number(b.hwy17Km))*(north?-1:1));
+    // Use official site latitudes for north/south ordering; missing highway-km labels must never be cast to zero.
+    eligible.sort((a,b)=>(a.latitude-b.latitude)*(north?1:-1));
     const params=new URLSearchParams({api:'1',origin:eligible[0].latitude+','+eligible[0].longitude,destination:eligible[eligible.length-1].latitude+','+eligible[eligible.length-1].longitude,travelmode:'driving'});
     if(eligible.length>2)params.set('waypoints',eligible.slice(1,-1).map(x=>x.latitude+','+x.longitude).join('|'));
     const title=document.createElement('strong');title.textContent='Official destination-coordinate route ('+eligible.length+' stops)';travel.append(title);
