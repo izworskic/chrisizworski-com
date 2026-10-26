@@ -51,3 +51,10 @@ For /michigan-winter-activities/ only, use the dedicated browser visual workflow
 
 ## Visual review and corrections
 Real GitHub Actions browser screenshots at 320/390/768/1366 showed no overflow and all 17 photos loaded. Reviewer found a mismatched bright-green Saginaw Bay photo on the ice-fishing card, so moved that experience to DNR-listed Houghton Lake, using a location-accurate 2012 Joe Ross CC BY-SA 2.0 historical winter photo and a DNR-documented Denton Township land-access locator (winter parking not verified). Keweenaw regional snowmobile story now illustrates the actual frozen Keweenaw Waterway (2004, Dcclark CC BY 2.5) rather than summertime dunes. Adjusted 390px micro-step text labels to prevent line wraps.
+
+## Third image/provenance pass
+- Replaced summer Dune Climb photo with Kerry Kelly's NPS winter 2005 image (public domain; source file explicitly identifies NPS employee and crop/retouch).
+- Added historic Port Oneida snow scene within Sleeping Bear park for camping: clearly labeled **not** the Platte campground.
+- Added source-verified exact Headlands night sky image by radicalespresso, author Public Domain Mark, dated July 2025 not current winter conditions.
+- Added a USFWS species-reference bald eagle in October 2020 Minnesota snow by Courtney Celley, explicitly NOT Saginaw Bay field evidence. Accurate species/season atmosphere, not a claim of sighting.
+- Review date of every archival photo appears in the photo caption. No imagined view or image generation.
