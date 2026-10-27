@@ -1541,6 +1541,246 @@
           "description": "GNIS-derived Delta County Rapid River Falls coordinate 46.0216667,-86.9833333; not park entrance or western namesake."
         }
       }
+    },
+    {
+      "id": "eagle-river-falls",
+      "name": "Eagle River Falls",
+      "place": "Eagle River, Keweenaw County",
+      "lat": 47.412144,
+      "lng": -88.29635,
+      "level": "easy",
+      "minutes": "15–35 min",
+      "status": "verify",
+      "kind": "Public roadside park / historic pedestrian bridge",
+      "manager": "Michigan DOT · Eagle River Bridge Park; Houghton Township · historic pedestrian bridge",
+      "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "parking": "Eagle River Bridge Park on M-26 in Eagle River, next to the historical marker near the bridge. Use the designated lot rather than stopping on the highway.",
+      "walk": "About 20 yards from the signed parking area to a historic pedestrian bridge above the falls. Stay on the bridge and established walkways; the gorge itself is not a safe shortcut.",
+      "best": "Spring snowmelt brings the fullest cascade; fall leaves frame the dark volcanic rock. Winter snow and ice can make the walkway slippery.",
+      "access": "County recreation inventory identifies the MDOT-owned Eagle River Bridge Park as a public waterfall viewpoint. The historic bridge is a pedestrian crossing, not a vehicle route. Opening and surface conditions are not monitored live.",
+      "note": "The former fuse-factory waterway and dam remains tell a copper-country industrial story. Stay on the pedestrian bridge for the high-angle overlook.",
+      "feature": "From a historic pedestrian bridge, watch the Eagle River spill over old bedrock and industrial dam remnants just before Lake Superior.",
+      "decision": "Choose this for the shortest, most straightforward gorge overlook on the Keweenaw coast, especially when traveling with people who do not want a forest hike.",
+      "why": "One of the rare U.P. waterfalls where the old bridge is the experience. The turbulent water lies below; the safest viewpoint is above.",
+      "sourceReviewed": "2026-10-27",
+      "sourceDetail": "https://www.visitkeweenaw.com/blog/post/ten-ways-to-experience-fall-color-in-the-keweenaw/",
+      "parkingSource": "https://www.visitkeweenaw.com/blog/post/the-keweenaws-top-historical-destinations-for-winter/",
+      "managerSource": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "accessSource": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "trailSource": "https://www.visitkeweenaw.com/blog/post/ten-ways-to-experience-fall-color-in-the-keweenaw/",
+      "questions": [
+        [
+          "Will I have to hike?",
+          "No substantial hike is required for the primary overlook. The historic pedestrian bridge is a short walk from the dedicated park lot, but snow or an unexpected bridge closure can change the answer."
+        ],
+        [
+          "Can I get below the waterfall?",
+          "This guide recommends the developed bridge viewpoint. The gorge has steep rock and fast water; an informal descent is not a maintained visitor trail."
+        ],
+        [
+          "How do I make it more than a photo stop?",
+          "Study the old dam remnants above the cascade, the parallel timber road bridge and the Lake Superior shoreline nearby. The landscape connects copper industry, bridge engineering and river geology."
+        ]
+      ],
+      "gisObjectId": 142,
+      "region": "Western U.P.",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-manager-parking-and-route-not-live-status",
+      "usgsMatch": {
+        "featureId": "e40ef0b4-8a58-11e6-b586-ecf4bb62914c",
+        "distanceMeters": 35,
+        "nhdComid": "11936947",
+        "nhdPlusReachCode": "04020103000489",
+        "nhdHrReachCode": "04020103000489"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "Michigan DOT · Eagle River Bridge Park; Houghton Township · historic pedestrian bridge"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "County recreation inventory identifies the MDOT-owned Eagle River Bridge Park as a public waterfall viewpoint. The historic bridge is a pedestrian crossing, not a vehicle route. Opening and surface conditions are not monitored live."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/the-keweenaws-top-historical-destinations-for-winter/",
+          "description": "Eagle River Bridge Park on M-26 in Eagle River, next to the historical marker near the bridge. Use the designated lot rather than stopping on the highway."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/ten-ways-to-experience-fall-color-in-the-keweenaw/",
+          "description": "About 20 yards from the signed parking area to a historic pedestrian bridge above the falls. Stay on the bridge and established walkways; the gorge itself is not a safe shortcut."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan Geographic waterfall feature 142, distinct from visitor parking"
+        }
+      }
+    },
+    {
+      "id": "haven-falls",
+      "name": "Haven Falls",
+      "place": "Lac La Belle, Keweenaw County",
+      "lat": 47.382887,
+      "lng": -88.025673,
+      "level": "roadside",
+      "minutes": "15–40 min",
+      "status": "verify",
+      "kind": "Keweenaw County roadside park",
+      "manager": "Keweenaw County Road Commission · Haven Falls Park",
+      "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "parking": "Turn from US-41 onto Lac La Belle Road, continue about 4.5 miles to the fork, keep right and find Haven Falls Park about half a mile farther. Use the county park's signed parking area.",
+      "walk": "The falls sit at the back of Haven Falls Park and can be viewed from the parking and picnic area. An informal closer approach may have uneven rock; no surveyed accessible path length is published.",
+      "best": "Spring snowmelt brings lively cascades over conglomerate rock; in dry summer weather the creek may shrink. Autumn trees make the roadside setting particularly inviting.",
+      "access": "County-owned public roadside park with picnic tables and toilet facilities listed in the 2025–2029 recreation plan. Accessibility assessment is 2 on the county's scale; do not interpret that as a verified ADA route. Facilities may be seasonal.",
+      "note": "The creek slides across tilted conglomerate into a pool and then flows beneath a small footbridge toward Lac La Belle. Stay on park paths and avoid slick rocks.",
+      "feature": "A modest little waterfall spills across a copper-country rock outcrop at the back of a roadside picnic park near Lac La Belle.",
+      "decision": "Best for a relaxed picnic, a short stop with children, or people wanting water and forest without committing to a rocky hike.",
+      "why": "This is a county roadside park first and a waterfall stop second. Its strength is the easy arrival, picnic area and a chance to hear moving water up close.",
+      "sourceReviewed": "2026-10-27",
+      "sourceDetail": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+      "parkingSource": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+      "managerSource": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "accessSource": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "trailSource": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+      "questions": [
+        [
+          "Is this a tall waterfall?",
+          "No. Haven Falls is a small creek drop whose character depends on recent rain and meltwater. It is better for a picnic and close observation than a dramatic vertical plunge."
+        ],
+        [
+          "Is it accessible?",
+          "The county gives Haven Falls Park an accessibility assessment of 2. That is not enough to guarantee step-free viewing, restrooms or winter maintenance. Confirm needs before travel."
+        ],
+        [
+          "What else fits this stop?",
+          "Lac La Belle is across the road from the park. This works as a quiet break between the Keweenaw interior and the shore, without assuming every picnic facility is available in winter."
+        ]
+      ],
+      "gisObjectId": 138,
+      "region": "Western U.P.",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-manager-parking-and-route-not-live-status",
+      "usgsMatch": {
+        "featureId": "e40ef5cd-8a58-11e6-b586-ecf4bb62914c",
+        "distanceMeters": 304,
+        "nhdComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": null
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "Keweenaw County Road Commission · Haven Falls Park"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "County-owned public roadside park with picnic tables and toilet facilities listed in the 2025–2029 recreation plan. Accessibility assessment is 2 on the county's scale; do not interpret that as a verified ADA route. Facilities may be seasonal."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "Turn from US-41 onto Lac La Belle Road, continue about 4.5 miles to the fork, keep right and find Haven Falls Park about half a mile farther. Use the county park's signed parking area."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "The falls sit at the back of Haven Falls Park and can be viewed from the parking and picnic area. An informal closer approach may have uneven rock; no surveyed accessible path length is published."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan Geographic waterfall feature 138, distinct from visitor parking"
+        }
+      }
+    },
+    {
+      "id": "silver-river-falls-keweenaw",
+      "name": "Silver River Falls (Keweenaw)",
+      "place": "M-26 near Brockway Mountain Drive, Keweenaw County",
+      "lat": 47.46332,
+      "lng": -88.072915,
+      "level": "easy",
+      "minutes": "20–50 min",
+      "status": "verify",
+      "kind": "Michigan Nature Association preserve",
+      "manager": "Michigan Nature Association · Mariner's Preserve at Silver River Falls (waterfall land); Michigan DOT · M-26 road",
+      "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+      "parking": "A small roadside pull-off is on the west side of the M-26 bridge over Silver River, near the western base of Brockway Mountain Drive. Park completely off the travel lane.",
+      "walk": "From the M-26 bridge area, a short informal path follows the river downstream into Mariner's Preserve. The roadside pull-off and footpath can be on opposite sides of M-26: crossing requires extreme care and may not be appropriate in busy, snowy or low-visibility conditions.",
+      "best": "Spring snowmelt, early summer after rain, and fall color show the rock ledges best. Water may be modest during dry spells.",
+      "access": "Michigan Nature Association confirms that Mariner's Preserve was donated to protect permanent public access to the waterfall. The preserve describes roadside parking and a short downstream walk. Neither private driveways nor unsurveyed streambank scrambles are authorized approaches.",
+      "note": "The river slips down exposed conglomerate and basalt, showing the tilt of the Keweenaw bedrock. This is not the Silver River in Baraga County.",
+      "feature": "Just below M-26, the Silver River steps across exposed conglomerate and basalt inside a protected public nature preserve.",
+      "decision": "Best for visitors who enjoy reading the bedrock and a short river walk, but only when the roadside crossing and footing are suitable.",
+      "why": "The protected riverbank shows the geology of the Keweenaw more clearly than a tall waterfall. Consider the visit an intimate geology stop, not a drive-up platform.",
+      "sourceReviewed": "2026-10-27",
+      "sourceDetail": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/",
+      "parkingSource": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+      "managerSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+      "accessSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+      "trailSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+      "questions": [
+        [
+          "Is there an official parking lot at the waterfall?",
+          "The published approach names a small roadside pull-off by the M-26 bridge, not a large developed parking lot. Stay clear of traffic and don't mistake the waterfall coordinate for the pull-off."
+        ],
+        [
+          "Is the path accessible?",
+          "No continuous wheelchair-accessible or maintained step-free route is verified. The path is short but uneven, and the road crossing is a genuine safety decision."
+        ],
+        [
+          "Why is it called Mariner's Preserve?",
+          "The Michigan Nature Association says the site was donated as a memorial and to protect permanent public access. Its exposed basalt and conglomerate help tell the story of the Keweenaw's tilted geology."
+        ]
+      ],
+      "gisObjectId": 146,
+      "region": "Western U.P.",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-manager-parking-and-route-not-live-status",
+      "usgsMatch": {
+        "featureId": "e413dc57-8a58-11e6-b586-ecf4bb62914c",
+        "distanceMeters": 12,
+        "nhdComid": "11936911",
+        "nhdPlusReachCode": "04020103000478",
+        "nhdHrReachCode": "04020103000478"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "Michigan Nature Association · Mariner's Preserve at Silver River Falls (waterfall land); Michigan DOT · M-26 road"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "Michigan Nature Association confirms that Mariner's Preserve was donated to protect permanent public access to the waterfall. The preserve describes roadside parking and a short downstream walk. Neither private driveways nor unsurveyed streambank scrambles are authorized approaches."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+          "description": "A small roadside pull-off is on the west side of the M-26 bridge over Silver River, near the western base of Brockway Mountain Drive. Park completely off the travel lane."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=252",
+          "description": "From the M-26 bridge area, a short informal path follows the river downstream into Mariner's Preserve. The roadside pull-off and footpath can be on opposite sides of M-26: crossing requires extreme care and may not be appropriate in busy, snowy or low-visibility conditions."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan Geographic waterfall feature 146, distinct from visitor parking"
+        }
+      }
     }
   ]
 }
