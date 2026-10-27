@@ -67,6 +67,17 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
       "alt": "Lake Superior coastal vista photographed along the Orphan Lake Trail",
       "proof": "Commons direct Orphan Lake Trail photo"
+    },
+    {
+      "id": "centre",
+      "file": "Agawa Bay Beach.jpg",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Agawa_Bay_Beach.jpg/960px-Agawa_Bay_Beach.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Agawa_Bay_Beach.jpg",
+      "author": "Beckettlc",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "Nearby Agawa Bay beach on Lake Superior, not a photograph of the visitor centre building",
+      "proof": "Commons coordinates at Agawa Bay beach; clearly labeled nearby scenery, not the Visitor Centre building"
     }
   ]
 }
