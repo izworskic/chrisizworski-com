@@ -3,7 +3,7 @@
   "source": "https://doi.org/10.5066/P9QQTKA0",
   "stateSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
   "publication": "research-only",
-  "warning": "USGS stream linkage and state GIS waterfall position establish neither land ownership nor safe/legal visitor access, parking, trail, current status or waterfall flow.",
+  "warning": "USGS historical NHD geographic cross-reference, not verified waterfall identity, public access, parking, trail or live river flow. Matches over 250 m are held for review; editorial proximity tiers are not official USGS accuracy ratings.",
   "matchingRule": "Only unique normalized-name matches within 800 m of a state GIS waterfall are linked. Duplicates held separately. County-only features are not public map destinations.",
   "stats": {
     "nationalSourceRecords": 11860,
@@ -11,7 +11,12 @@
     "countyTaggedUP": 0,
     "linkedToMichiganGIS": 113,
     "countyOnlyCandidates": 0,
-    "heldAmbiguous": 1
+    "heldAmbiguous": 1,
+    "matchQuality": {
+      "closeWithin100m": 78,
+      "moderate101to250m": 18,
+      "displacedOver250m": 17
+    }
   },
   "matches": [
     {
@@ -31,7 +36,9 @@
         "nhdHrMeasure": "17.9070",
         "tallestDropFeet": 8
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 6,
@@ -50,7 +57,9 @@
         "nhdHrMeasure": "44.0816",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 12,
@@ -69,7 +78,9 @@
         "nhdHrMeasure": "76.0011",
         "tallestDropFeet": 23
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 15,
@@ -88,7 +99,9 @@
         "nhdHrMeasure": "67.0285",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 17,
@@ -107,7 +120,9 @@
         "nhdHrMeasure": "25.807390",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 19,
@@ -126,7 +141,9 @@
         "nhdHrMeasure": "79.033970",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 21,
@@ -145,7 +162,9 @@
         "nhdHrMeasure": "20.652600",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 23,
@@ -164,7 +183,9 @@
         "nhdHrMeasure": "13.9045",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 24,
@@ -183,7 +204,9 @@
         "nhdHrMeasure": "58.6384",
         "tallestDropFeet": 25
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 25,
@@ -202,7 +225,9 @@
         "nhdHrMeasure": "17.2906",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 26,
@@ -221,7 +246,9 @@
         "nhdHrMeasure": "14.2004",
         "tallestDropFeet": 4
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 27,
@@ -240,7 +267,9 @@
         "nhdHrMeasure": "95.3444",
         "tallestDropFeet": 40
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 29,
@@ -259,7 +288,9 @@
         "nhdHrMeasure": "89.9539",
         "tallestDropFeet": 4
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 30,
@@ -278,7 +309,9 @@
         "nhdHrMeasure": "18.9842",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 33,
@@ -297,7 +330,9 @@
         "nhdHrMeasure": "21.712000",
         "tallestDropFeet": 40
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 37,
@@ -316,7 +351,9 @@
         "nhdHrMeasure": "84.1382",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 38,
@@ -335,7 +372,9 @@
         "nhdHrMeasure": "28.3213",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 39,
@@ -354,7 +393,9 @@
         "nhdHrMeasure": "75.6113",
         "tallestDropFeet": 30
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 40,
@@ -373,7 +414,9 @@
         "nhdHrMeasure": "15.3652",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 42,
@@ -392,7 +435,9 @@
         "nhdHrMeasure": "8.9434",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 44,
@@ -411,7 +456,9 @@
         "nhdHrMeasure": "86.226300",
         "tallestDropFeet": 4
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 46,
@@ -430,7 +477,9 @@
         "nhdHrMeasure": "12.9575",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 47,
@@ -449,7 +498,9 @@
         "nhdHrMeasure": "77.2212",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 50,
@@ -468,7 +519,9 @@
         "nhdHrMeasure": "42.3031",
         "tallestDropFeet": 50
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 51,
@@ -487,7 +540,9 @@
         "nhdHrMeasure": "50.2066",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 53,
@@ -506,7 +561,9 @@
         "nhdHrMeasure": "87.1596",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 54,
@@ -525,7 +582,9 @@
         "nhdHrMeasure": "84.4196",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 57,
@@ -544,7 +603,9 @@
         "nhdHrMeasure": "56.8332",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 58,
@@ -563,7 +624,9 @@
         "nhdHrMeasure": "16.0023",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 59,
@@ -582,7 +645,9 @@
         "nhdHrMeasure": "58.2080",
         "tallestDropFeet": 10
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 60,
@@ -601,7 +666,9 @@
         "nhdHrMeasure": "69.3863",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 63,
@@ -620,7 +687,9 @@
         "nhdHrMeasure": "38.9456",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 64,
@@ -639,7 +708,9 @@
         "nhdHrMeasure": "2.0732",
         "tallestDropFeet": 25
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 65,
@@ -658,7 +729,9 @@
         "nhdHrMeasure": "44.0073",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 66,
@@ -677,7 +750,9 @@
         "nhdHrMeasure": "49.7393",
         "tallestDropFeet": 30
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 67,
@@ -696,7 +771,9 @@
         "nhdHrMeasure": "13.035300",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 68,
@@ -715,7 +792,9 @@
         "nhdHrMeasure": "49.0884",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 69,
@@ -734,7 +813,9 @@
         "nhdHrMeasure": "31.6760",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 70,
@@ -753,7 +834,9 @@
         "nhdHrMeasure": "27.3240",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 71,
@@ -772,7 +855,9 @@
         "nhdHrMeasure": "25.1634",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 72,
@@ -791,7 +876,9 @@
         "nhdHrMeasure": "16.5580",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 73,
@@ -810,7 +897,9 @@
         "nhdHrMeasure": "15.0893",
         "tallestDropFeet": 24
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 75,
@@ -829,7 +918,9 @@
         "nhdHrMeasure": "11.7732",
         "tallestDropFeet": 25
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 78,
@@ -848,7 +939,9 @@
         "nhdHrMeasure": "17.7354",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 79,
@@ -867,7 +960,9 @@
         "nhdHrMeasure": "91.080400",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 80,
@@ -886,7 +981,9 @@
         "nhdHrMeasure": "55.8842",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 81,
@@ -905,7 +1002,9 @@
         "nhdHrMeasure": "82.1078",
         "tallestDropFeet": 45
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 83,
@@ -924,7 +1023,9 @@
         "nhdHrMeasure": "25.0210",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 84,
@@ -943,7 +1044,9 @@
         "nhdHrMeasure": "59.8698",
         "tallestDropFeet": 40
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 88,
@@ -962,7 +1065,9 @@
         "nhdHrMeasure": "49.7783",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 89,
@@ -981,7 +1086,9 @@
         "nhdHrMeasure": "13.665400",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 90,
@@ -1000,7 +1107,9 @@
         "nhdHrMeasure": "4.117800",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 98,
@@ -1019,7 +1128,9 @@
         "nhdHrMeasure": "89.8230",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 102,
@@ -1038,7 +1149,9 @@
         "nhdHrMeasure": "21.7765",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 103,
@@ -1057,7 +1170,9 @@
         "nhdHrMeasure": "80.243800",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 104,
@@ -1076,7 +1191,9 @@
         "nhdHrMeasure": "16.6362",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 105,
@@ -1095,7 +1212,9 @@
         "nhdHrMeasure": "49.7941",
         "tallestDropFeet": 4
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 106,
@@ -1114,7 +1233,9 @@
         "nhdHrMeasure": "50.9552",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 107,
@@ -1133,7 +1254,9 @@
         "nhdHrMeasure": "47.9738",
         "tallestDropFeet": 8
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 108,
@@ -1152,7 +1275,9 @@
         "nhdHrMeasure": "53.2032",
         "tallestDropFeet": 12
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 110,
@@ -1171,7 +1296,9 @@
         "nhdHrMeasure": "38.5655",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 112,
@@ -1190,7 +1317,9 @@
         "nhdHrMeasure": "48.6490",
         "tallestDropFeet": 6
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 117,
@@ -1209,7 +1338,9 @@
         "nhdHrMeasure": "11.5982",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 118,
@@ -1228,7 +1359,9 @@
         "nhdHrMeasure": "52.728200",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 119,
@@ -1247,7 +1380,9 @@
         "nhdHrMeasure": "6.0425",
         "tallestDropFeet": 25
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 120,
@@ -1266,7 +1401,9 @@
         "nhdHrMeasure": "59.1669",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 121,
@@ -1285,7 +1422,9 @@
         "nhdHrMeasure": "56.5452",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 122,
@@ -1304,7 +1443,9 @@
         "nhdHrMeasure": "39.1730",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 123,
@@ -1323,7 +1464,9 @@
         "nhdHrMeasure": "11.8498",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 124,
@@ -1342,7 +1485,9 @@
         "nhdHrMeasure": "14.9544",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 127,
@@ -1361,7 +1506,9 @@
         "nhdHrMeasure": "76.6113",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 129,
@@ -1380,7 +1527,9 @@
         "nhdHrMeasure": null,
         "tallestDropFeet": 25
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 130,
@@ -1399,7 +1548,9 @@
         "nhdHrMeasure": "1.4315",
         "tallestDropFeet": 50
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 134,
@@ -1418,7 +1569,9 @@
         "nhdHrMeasure": "9.3167",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 137,
@@ -1437,7 +1590,9 @@
         "nhdHrMeasure": "17.6501",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 138,
@@ -1456,7 +1611,9 @@
         "nhdHrMeasure": null,
         "tallestDropFeet": 38
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 142,
@@ -1475,7 +1632,9 @@
         "nhdHrMeasure": "17.3946",
         "tallestDropFeet": 60
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 144,
@@ -1494,7 +1653,9 @@
         "nhdHrMeasure": "69.3251",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 146,
@@ -1513,7 +1674,9 @@
         "nhdHrMeasure": "46.2447",
         "tallestDropFeet": 10
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 149,
@@ -1532,7 +1695,9 @@
         "nhdHrMeasure": "36.2721",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 150,
@@ -1551,7 +1716,9 @@
         "nhdHrMeasure": "30.123300",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 151,
@@ -1570,7 +1737,9 @@
         "nhdHrMeasure": "67.0767",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 152,
@@ -1589,7 +1758,9 @@
         "nhdHrMeasure": "39.3918",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 153,
@@ -1608,7 +1779,9 @@
         "nhdHrMeasure": "30.8609",
         "tallestDropFeet": 30
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 154,
@@ -1627,7 +1800,9 @@
         "nhdHrMeasure": "6.2911",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 155,
@@ -1646,7 +1821,9 @@
         "nhdHrMeasure": "6.5072",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 157,
@@ -1665,7 +1842,9 @@
         "nhdHrMeasure": "37.6221",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 160,
@@ -1684,7 +1863,9 @@
         "nhdHrMeasure": "35.8520",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 162,
@@ -1703,7 +1884,9 @@
         "nhdHrMeasure": "21.6841",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 170,
@@ -1722,7 +1905,9 @@
         "nhdHrMeasure": "15.7135",
         "tallestDropFeet": 3
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 172,
@@ -1741,7 +1926,9 @@
         "nhdHrMeasure": "26.326700",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 175,
@@ -1760,7 +1947,9 @@
         "nhdHrMeasure": "4.2553",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 180,
@@ -1779,7 +1968,9 @@
         "nhdHrMeasure": "33.2509",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 183,
@@ -1798,7 +1989,9 @@
         "nhdHrMeasure": "84.3103",
         "tallestDropFeet": 12
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 184,
@@ -1817,7 +2010,9 @@
         "nhdHrMeasure": "15.6684",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 187,
@@ -1836,7 +2031,9 @@
         "nhdHrMeasure": "13.2464",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 191,
@@ -1855,7 +2052,9 @@
         "nhdHrMeasure": "67.0222",
         "tallestDropFeet": 4
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 192,
@@ -1874,7 +2073,9 @@
         "nhdHrMeasure": "9.0530",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 193,
@@ -1893,7 +2094,9 @@
         "nhdHrMeasure": "61.183400",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 194,
@@ -1912,7 +2115,9 @@
         "nhdHrMeasure": "59.383900",
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 195,
@@ -1931,7 +2136,9 @@
         "nhdHrMeasure": "64.7121",
         "tallestDropFeet": 30
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 196,
@@ -1950,7 +2157,9 @@
         "nhdHrMeasure": "20.5210",
         "tallestDropFeet": 10
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 197,
@@ -1969,7 +2178,9 @@
         "nhdHrMeasure": null,
         "tallestDropFeet": 20
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "moderate",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 199,
@@ -1988,7 +2199,9 @@
         "nhdHrMeasure": "45.3682",
         "tallestDropFeet": 40
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 200,
@@ -2007,7 +2220,9 @@
         "nhdHrMeasure": "26.5511",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 201,
@@ -2026,7 +2241,9 @@
         "nhdHrMeasure": "9.9315",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 203,
@@ -2045,7 +2262,9 @@
         "nhdHrMeasure": "0.5548",
         "tallestDropFeet": 70
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 204,
@@ -2064,7 +2283,9 @@
         "nhdHrMeasure": "8.0321",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 205,
@@ -2083,7 +2304,9 @@
         "nhdHrMeasure": "49.8025",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 207,
@@ -2102,7 +2325,9 @@
         "nhdHrMeasure": "89.6818",
         "tallestDropFeet": 48
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 208,
@@ -2121,7 +2346,9 @@
         "nhdHrMeasure": "64.1744",
         "tallestDropFeet": 15
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "review-needed",
+      "requiresCoordinateReview": true
     },
     {
       "stateGisObjectId": 213,
@@ -2140,7 +2367,9 @@
         "nhdHrMeasure": "5.962900",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     },
     {
       "stateGisObjectId": 215,
@@ -2159,7 +2388,9 @@
         "nhdHrMeasure": "67.9755",
         "tallestDropFeet": null
       },
-      "reviewState": "hydrogeography-only-no-access"
+      "reviewState": "hydrogeography-only-no-access",
+      "matchQuality": "close",
+      "requiresCoordinateReview": false
     }
   ],
   "countyOnly": [],

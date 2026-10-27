@@ -7,6 +7,7 @@ import path from 'node:path';
 import {normalizeUSGS} from './import-up-usgs-waterfalls.mjs';
 const DOI='https://doi.org/10.5066/P9QQTKA0',MICHIGAN='https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7';
 const normalize=n=>String(n||'').normalize('NFKD').toLowerCase().replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').replace(/\bwaterfalls?\b/g,'falls').replace(/\bfalls?\b/g,'').replace(/\s+/g,' ').trim();
+export const classifyUPHydroMatch=d=>{if(!Number.isFinite(d)||d<0)throw Error('Invalid cross-source distance');return d<=100?'close':d<=250?'moderate':'review-needed'};
 const meters=(a,b)=>{const t=Math.PI/180,dlat=(b.lat-a.lat)*t,dlng=(b.lng-a.lng)*t,h=Math.sin(dlat/2)**2+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dlng/2)**2;return 12742000*Math.asin(Math.min(1,Math.sqrt(h)));};
 export function buildUPHydroCrosswalk(raw,state){
   if(!Array.isArray(state?.features))throw Error('Michigan geographic feature array required');
@@ -21,9 +22,9 @@ export function buildUPHydroCrosswalk(raw,state){
     }else if(sites.length>1)unresolved.push({usgsFeatureId:f.hydro.usgsFallId,name:f.name,reason:'multiple-nearby-state-falls'});
     else if(f.geoEvidence==='county-attribute')countyOnly.push({id:f.id,name:f.name,lat:f.lat,lng:f.lng,county:f.county,hydro:f.hydro,reviewState:'unmatched-research-only'});
   }
-  const matches=proposed.filter(x=>byState.get(x.stateGisObjectId).length===1).sort((a,b)=>a.stateGisObjectId-b.stateGisObjectId);
+  const matches=proposed.filter(x=>byState.get(x.stateGisObjectId).length===1).map(x=>({...x,matchQuality:classifyUPHydroMatch(x.distanceMeters),requiresCoordinateReview:classifyUPHydroMatch(x.distanceMeters)==='review-needed'})).sort((a,b)=>a.stateGisObjectId-b.stateGisObjectId);
   for(const [id,group] of byState)if(group.length>1)unresolved.push({stateGisObjectId:id,sourceRecords:group.map(x=>x.usgsFeatureId),reason:'multiple-usgs-records-for-state-site'});
-  return {schemaVersion:1,source:DOI,stateSource:MICHIGAN,publication:'research-only',warning:'USGS stream linkage and state GIS waterfall position establish neither land ownership nor safe/legal visitor access, parking, trail, current status or waterfall flow.',matchingRule:'Only unique normalized-name matches within 800 m of a state GIS waterfall are linked. Duplicates held separately. County-only features are not public map destinations.',stats:{nationalSourceRecords:parsed.stats.sourceRecords,regionalBoundingCandidates:parsed.stats.candidates,countyTaggedUP:parsed.stats.countyVerified,linkedToMichiganGIS:matches.length,countyOnlyCandidates:countyOnly.length,heldAmbiguous:unresolved.length},matches,countyOnly,unresolved};
+  return {schemaVersion:1,source:DOI,stateSource:MICHIGAN,publication:'research-only',warning:"USGS historical NHD geographic cross-reference, not verified waterfall identity, public access, parking, trail or live river flow. Matches over 250 m are held for review; editorial proximity tiers are not official USGS accuracy ratings.",matchingRule:'Only unique normalized-name matches within 800 m of a state GIS waterfall are linked. Duplicates held separately. County-only features are not public map destinations.',stats:{nationalSourceRecords:parsed.stats.sourceRecords,regionalBoundingCandidates:parsed.stats.candidates,countyTaggedUP:parsed.stats.countyVerified,linkedToMichiganGIS:matches.length,countyOnlyCandidates:countyOnly.length,heldAmbiguous:unresolved.length,matchQuality:{closeWithin100m:matches.filter(x=>x.matchQuality==='close').length,moderate101to250m:matches.filter(x=>x.matchQuality==='moderate').length,displacedOver250m:matches.filter(x=>x.matchQuality==='review-needed').length}},matches,countyOnly,unresolved};
 }
 async function run(){
  const src=process.argv[2];if(!src)throw Error('Pass downloaded official USGS V2 GeoJSON file');
@@ -32,7 +33,7 @@ async function run(){
  const result=buildUPHydroCrosswalk(source,JSON.parse(mi));
  if(result.matches.length<3)throw Error('Fewer than 3 reliable spatial matches; hold import for review');
  await writeFile('data/up-waterfall-usgs-v2-crosswalk.json',JSON.stringify(result,null,2)+'\n');
- const lite={schemaVersion:1,source:DOI,warning:result.warning,stats:result.stats,matches:result.matches.map(x=>({stateGisObjectId:x.stateGisObjectId,stateName:x.stateName,usgsFeatureId:x.usgsFeatureId,distanceMeters:x.distanceMeters,nhdComid:x.hydro.nhdComid,nhdPlusReachCode:x.hydro.nhdPlusReachCode,nhdHrReachCode:x.hydro.nhdHrReachCode}))};
+ const lite={schemaVersion:1,source:DOI,warning:result.warning,stats:result.stats,matches:result.matches.map(x=>({stateGisObjectId:x.stateGisObjectId,stateName:x.stateName,usgsFeatureId:x.usgsFeatureId,distanceMeters:x.distanceMeters,nhdComid:x.hydro.nhdComid,nhdPlusReachCode:x.hydro.nhdPlusReachCode,nhdHrReachCode:x.hydro.nhdHrReachCode,matchQuality:x.matchQuality,requiresCoordinateReview:x.requiresCoordinateReview}))};
  await writeFile('public/assets/up-waterfall-hydro-crosswalk.json',JSON.stringify(lite)+'\n');
  console.log(JSON.stringify(result.stats));
 }
