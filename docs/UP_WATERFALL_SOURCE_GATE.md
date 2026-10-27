@@ -64,3 +64,11 @@ Promoted the following state GIS and linked USGS points only after separately re
 - **Silver River Falls**, GIS #146 / USGS NHDPlus COMID 11936911: County recreation plan inventories Silver River Falls Park and older county land-use plan identifies MDOT ownership. Visitor brochure locates parking south of M-26 and the footpath north, but a marked legal/safe pedestrian crossing is not independently documented. Preserve a **noindex research guide**, omit from sitemap and provide no guessed pedestrian or driving routes until resolved.
 
 State GIS points are waterfall locations only, not parking entrances. USGS NHD linkage does not independently establish public rights of way. Any future indexable promotion requires all five evidence axes with actual source links and a sufficiently specific visitor page.
+
+## Pinnacle Falls source qualification — October 27, 2026
+
+- Promoted Michigan state GIS waterfall #155 (46.706651, -87.806989), USGS V2 feature e413d0d0-8a58-11e6-b586-ecf4bb62914c / NHDPlusV2 COMID 12025618; unique GIS-USGS match 11 m apart. Coordinates represent the waterfall rather than visitor parking.
+- Yellow Dog Watershed Preserve identifies the owner/manager, 280-acre public conservation preserve, allowed hiking and camping/motorized-use rules, signed two-track access to a small parking area, and approximately one mile of steep rugged trail. https://yellowdogwatershed.org/pinnacle-falls-preserve/
+- Independent Marquette regional waterfall brochure confirms the CR-550, CR-510, AAA and forest two-track access sequence; no unsupported surveyed parking coordinates or calculated drive times. https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls3_2025brochureV2_03a81a20-d8c9-4ab9-b1c6-ccc8ac1bfc68.pdf
+- A complete educational HTML-first guide describes geology, nineteenth-century logging, trip-choice implications, seasonal road limits and specific preserve rules. Mark indexable only because all five evidence axes have linked sources; never equate geospatial proximity with right-of-way.
+- Current opening and road conditions remain unverified. Don't confuse Pinnacle Falls Preserve with Yellow Dog River Community Forest trailhead.
