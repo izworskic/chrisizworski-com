@@ -123,7 +123,7 @@
 .layup-home .map-loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--sub)}
 .layup-home .map-footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 12px;font-size:.76rem;color:var(--sub);border-top:1px solid var(--line)}
 .layup-home .leaflet-container{background:#08131d;font-family:var(--body)}
-.layup-home .leaflet-tile-pane{filter:brightness(.72) contrast(1.05) saturate(.8)}
+.layup-home .leaflet-tile-pane{filter:brightness(1.15) contrast(1.05)}
 .layup-home .tiles-osm .leaflet-tile-pane{filter:invert(1) hue-rotate(190deg) brightness(.62) contrast(.95) saturate(.55)}
 .layup-home .leaflet-control-zoom a{background:var(--panel)!important;color:var(--ice)!important;border-color:var(--line-strong)!important}
 .layup-home .leaflet-control-attribution{background:rgba(5,13,22,.7)!important;color:var(--sub)!important;font-size:10px}
