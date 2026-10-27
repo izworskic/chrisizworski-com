@@ -284,9 +284,9 @@ function apply(){
   if(visible)shown++;
   var b=c.querySelector('.badge');
   if(c.dataset.status==='closed'){b.textContent=season.value==='current'?'Closed for 2026':'2026 closure · recheck';}
-  else{b.textContent=season.value==='current'?'Off-season · unverified':'Future access · recheck';}
+  else{b.textContent=season.value==='current'?'Off-season · access unverified':'Future visit · recheck access';}
  });
- count.textContent=shown+' destination'+(shown===1?'':'s')+' fit your filters';
+ count.textContent=shown+' place'+(shown===1?'':'s')+' to explore';
  var rail=document.getElementById('routeList');rail.replaceChildren();
  cards.slice().filter(function(c){return c.dataset.km && c.dataset.id!=='agawa' && c.dataset.id!=='katherine';}).sort(function(a,b){return (Number(a.dataset.km)-Number(b.dataset.km))*(direction.value==='north'?-1:1);}).forEach(function(c){
   var btn=document.createElement('button');btn.type='button';btn.textContent='km '+c.dataset.km+' · '+c.querySelector('h3').textContent;
@@ -302,14 +302,14 @@ function build(){
  planStops.replaceChildren();
  selected.sort(function(a,b){return (Number(a.dataset.km)-Number(b.dataset.km))*(direction.value==='north'?-1:1);}).forEach(function(c){
   var li=document.createElement('li'),strong=document.createElement('strong');strong.textContent=c.querySelector('h3').textContent;
-  li.appendChild(strong);li.appendChild(document.createTextNode(' · ~'+c.dataset.minutes+' min at stop · access requires recheck'));planStops.appendChild(li);
+  li.appendChild(strong);li.appendChild(document.createTextNode(' · allow about '+c.dataset.minutes+' minutes here · confirm access before going'));planStops.appendChild(li);
  });
- document.getElementById('planIntro').textContent=season.value==='current'?'The published 2026 park day-use season has ended. No open-day-use itinerary can be recommended now. Choose the future-season planning view, then recheck Ontario Parks alerts before travel.':selected.length?'Hypothetical stops for a future operating season, based on your interests, effort and on-site time. This is NOT an access-opening confirmation.':'No eligible destinations for these settings. Try more time or a different walking level. 2026-closed trails are excluded until a verified reopening update.';
- document.getElementById('planSum').textContent=selected.length?'On-site allowance: '+used+' min. Driving between stops, parking, permits, breaks and weather delays are NOT included. Time budgets and shorter stops are estimates unless explicitly identified as official.':'';
+ document.getElementById('planIntro').textContent=season.value==='current'?'The park’s published 2026 day-use season is over. No open-day-use itinerary can be recommended now. You can still explore ideas for a future visit, but check Ontario Parks’ operating dates and alerts before travelling.':selected.length?'Here are a few places that fit the kind of day you described. Treat this as a future-season idea, not a notice that roads, trails or parking areas are open.':'Nothing matches that combination just yet. Try giving yourself a little more time or choosing a different walking level. Places closed in 2026 stay out of the plan until an official reopening is verified.';
+ document.getElementById('planSum').textContent=selected.length?'Allow about '+used+' minutes to enjoy these stops. Driving between stops, parking, permits, breaks and weather delays are NOT included. Short-visit times are planning allowances; official full-trail times are noted on the cards.':'';
  window.dispatchEvent(new CustomEvent('lspp:plan-updated',{detail:{ids:selected.map(function(c){return c.dataset.id;}),onSiteMinutes:used}}));
 }
 document.getElementById('build').addEventListener('click',build);
-document.getElementById('clear').addEventListener('click',function(){season.value='current';budget.value='180';effort.value='all';direction.value='north';showClosed.checked=false;document.querySelectorAll('.checks input[type=checkbox][value]').forEach(function(e){e.checked=e.value==='scenery';});apply();planStops.replaceChildren();document.getElementById('planIntro').textContent='Choose Build a suggested stop list to see a new recommendation.';document.getElementById('planSum').textContent='';});
+document.getElementById('clear').addEventListener('click',function(){season.value='current';budget.value='180';effort.value='all';direction.value='north';showClosed.checked=false;document.querySelectorAll('.checks input[type=checkbox][value]').forEach(function(e){e.checked=e.value==='scenery';});apply();planStops.replaceChildren();document.getElementById('planIntro').textContent='Tell us what you hope to see, and we’ll suggest a few places to spend your time. Current openings must still be checked with Ontario Parks.';document.getElementById('planSum').textContent='';});
 [season,budget,effort,direction,showClosed].forEach(function(e){e.addEventListener('change',apply);});
 document.querySelectorAll('.checks input[type=checkbox][value]').forEach(function(e){e.addEventListener('change',apply);});
 apply();
