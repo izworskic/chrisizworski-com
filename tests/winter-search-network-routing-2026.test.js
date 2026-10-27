@@ -35,6 +35,6 @@ test('forecast, observed, modeled snowpack, recreational access and AIS are not 
  assert.ok(!winter.includes('href="/winter-hike-snowshoe-lab/"'),'Research-only noindex lab must stay outside search-ready hub');
 });
 test('hub revision and indexed sitemap remain in sync',()=>{
- assert.match(tools,/"dateModified":"2026-10-26"/);
- assert.match(read('public/sitemap.xml'),/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-10-26<\/lastmod>/);
+ assert.match(tools,/"dateModified":"2026-10-27"/);
+ assert.match(read('public/sitemap.xml'),/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-10-27<\/lastmod>/);
 });

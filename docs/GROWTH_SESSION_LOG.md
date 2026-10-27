@@ -1466,3 +1466,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - **Repository gate:** First full publishable exact-head release gate https://github.com/izworskic/chrisizworski-com/actions/runs/40439435737 revealed 2 consistent discrepancies in Tools directory ItemList count/order (93 visible cards vs 92 schema entries) plus related source assertion. The subsequent branch commit reconciled the Tool directory JSON-LD to 93/93 and ordered the new park tool directly after Circle Tour. **Repeat full final-head verification before merge; do not report production deployed on green preview alone.**
 - **Outcome measurement:** No latest verified GSC impressions, clicks, CTR or AdSense revenue attributable to this release. Existing Million Impressions pipeline not reconfigured.
 - **Single next action:** Inspect the post-Tools-schema full repository/production-emission gate; merge PR #1220 only if fully green, then inspect the actual public destination URL and canonical metadata after Vercel production deployment.
+
+
+### 2026-10-27 — Frozen Michigan standalone field guide
+
+- Built statewide /frozen-michigan/ as the second FIELD_GUIDE_V1 release candidate; 11 named experiences across both peninsulas with dated DNR/NPS/NPS-closure source evidence, photography provenance, and land-based viewing cautions.
+- Classified individual access as documented seasonal approach, winter arrival unverified, or limited vehicle approach. Surfaced Munising Falls 2025 washout closure prominently rather than advertising it as an available winter waterfall.
+- Introduced a unique interactive three-process field lesson on sandstone seep ice, waterfalls and windblown lake spray. Shared responsive map with grouped Sand Point markers, filterable cards and explicit no-ice-crossing guidance. No AdSense configuration or existing lake ice engine changed.
+- Linked from tools, Michigan destinations, existing winter activities and specialist tools. Release remains unmerged until CI and visual QA; rankings/impressions unmeasured.
