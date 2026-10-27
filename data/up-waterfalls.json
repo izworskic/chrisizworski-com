@@ -1555,24 +1555,24 @@
       "access": "Public park trail on state-managed land, reached from Little Carp River Road off South Boundary Road. Road and trail access may change seasonally; no year-round vehicle access is implied.",
       "status": "verify",
       "note": "Greenstone is a small, shaded forest cascade, not a tall vertical drop. The trailhead also serves nearby Overlooked Falls; do not confuse the first bridge cascade with the Greenstone destination farther downstream.",
-      "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "State park",
       "parking": "Park only at the marked Little Carp River Trailhead at the end of Little Carp River Road, reached from South Boundary Road in Porcupine Mountains Wilderness State Park. The falls coordinate is not the lot.",
       "feature": "A secluded Little Carp River cascade, reached by a forest walk from the same trailhead as nearby Overlooked Falls.",
-      "further": "Check the park's South Boundary Road and Little Carp River Road conditions. The river crossing, mud and roots can change the difficulty after storms.",
+      "further": "Check the park's South Boundary Road and Little Carp River Road conditions. The river crossing, mud and roots can change the difficulty after storms. Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure.",
       "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
       "decision": "Pick Greenstone for a short backcountry-feeling forest hike and a second possible waterfall stop at Overlooked Falls. This is not a drive-up waterfall.",
       "sourceReviewed": "2026-10-27",
       "verification": {
         "landManager": {
           "verified": true,
-          "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
           "description": "Michigan DNR manages Porcupine Mountains Wilderness State Park and its Little Carp River trail system"
         },
         "publicAccess": {
           "verified": true,
-          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/PRD/parks/PMWSPMap.pdf?rev=24ea59184945498f9a44a235cf54a7ec",
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?hash=2B634376B8D9A7235A7ED7BA9AE6BFEB&rev=dc3f2d70bece4b4ba689b6d9a8d159e4",
           "description": "Michigan DNR park map locates Greenstone Falls within the public Little Carp River trail corridor"
         },
         "parking": {
@@ -1592,7 +1592,8 @@
         }
       },
       "publication": "verified-access-guide",
-      "accessConfidence": "published-recreation-route-current-open-unverified"
+      "accessConfidence": "published-recreation-route-current-open-unverified",
+      "winterRoad": "Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure."
     },
     {
       "id": "nonesuch-falls",
@@ -1609,26 +1610,26 @@
       "access": "Public state-park historic trail reached from a designated South Boundary Road parking area. The trail passes fragile 19th-century mine remains: leave stones, artifacts, foundation walls and old workings undisturbed.",
       "status": "verify",
       "note": "Nonesuch Falls is a modest, roughly 10-foot series of rock ledges rather than a broad plunge. This stop pairs nature with copper-mining history.",
-      "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "State park",
       "parking": "Use the Nonesuch Mine Trail parking area off South Boundary Road, identified by the Michigan DNR as N46°45.583′ W89°37.194′ (WGS84). The trailhead parking is north of the waterfall and distinct from its GIS point.",
       "parkingLat": 46.759717,
       "parkingLng": -89.6199,
       "feature": "A small Little Iron River waterfall beyond the preserved ruins of the historic Nonesuch copper mine.",
-      "further": "Do not enter abandoned mine openings or climb masonry. Watch for unstable rock, unbridged wet sections and seasonal closures on South Boundary Road.",
+      "further": "Do not enter abandoned mine openings or climb masonry. Watch for unstable rock, unbridged wet sections and seasonal closures on South Boundary Road. Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure.",
       "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
       "decision": "Choose Nonesuch for a mine-history walk with a waterfall reward, not for waterfall height. Leave extra time to read signs and explore the designated historic trail.",
       "sourceReviewed": "2026-10-27",
       "verification": {
         "landManager": {
           "verified": true,
-          "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
           "description": "Michigan DNR park maintains the Nonesuch historic mine and trail area"
         },
         "publicAccess": {
           "verified": true,
-          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/PRD/parks/PMWSPMap.pdf?rev=24ea59184945498f9a44a235cf54a7ec",
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?hash=2B634376B8D9A7235A7ED7BA9AE6BFEB&rev=dc3f2d70bece4b4ba689b6d9a8d159e4",
           "description": "Michigan DNR park map marks Nonesuch Falls and the visitor walking route from South Boundary Road"
         },
         "parking": {
@@ -1648,7 +1649,8 @@
         }
       },
       "publication": "verified-access-guide",
-      "accessConfidence": "published-recreation-route-current-open-unverified"
+      "accessConfidence": "published-recreation-route-current-open-unverified",
+      "winterRoad": "Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure."
     },
     {
       "id": "little-union-gorge-falls",
@@ -1665,19 +1667,19 @@
       "access": "Public one-mile interpretive loop maintained by Michigan DNR in Porcupine Mountains Wilderness State Park. Road access, seasonal conditions, and park permit requirements are separate checks.",
       "status": "verify",
       "note": "The interpretive loop is the product here: the little gorge, early copper-mining story and nearby water are all part of a useful stop. Low water can diminish the waterfall's spectacle.",
-      "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "State park",
       "parking": "Use the signed Union Mine Interpretive Trail parking/trailhead on the west side of South Boundary Road, south of the Wilderness Visitor Center. Do not mistake the nearby outpost campground for the official trailhead.",
       "feature": "A string of modest gorge cascades within a signed one-mile loop through early copper-mining history.",
-      "further": "The route is generally shorter than the park's backcountry trails, but wet rock and trail conditions still change after rain. Park in designated areas and stay out of river channels.",
+      "further": "The route is generally shorter than the park's backcountry trails, but wet rock and trail conditions still change after rain. Park in designated areas and stay out of river channels. Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure.",
       "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
       "decision": "Best short walk for combining several modest river drops with interpretive copper-mine history. It also works when a longer wilderness waterfall hike does not fit your day.",
       "sourceReviewed": "2026-10-27",
       "verification": {
         "landManager": {
           "verified": true,
-          "source": "https://www.michigan.gov/recsearch/parks/porcupinemountains",
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
           "description": "Michigan DNR manages the Union Mine Interpretive Trail in Porcupine Mountains"
         },
         "publicAccess": {
@@ -1702,7 +1704,8 @@
         }
       },
       "publication": "verified-access-guide",
-      "accessConfidence": "published-recreation-route-current-open-unverified"
+      "accessConfidence": "published-recreation-route-current-open-unverified",
+      "winterRoad": "Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure."
     }
   ]
 }
