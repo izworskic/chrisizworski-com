@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-26",
+  "reviewed": "2026-10-27",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -1483,6 +1483,62 @@
           "verified": true,
           "source": "https://algercountychamber.com/waterfalls",
           "description": "Alger County Chamber publishes approximate geographic waterfall coordinates 46.5087, -86.5233; not a parking point"
+        }
+      }
+    },
+    {
+      "id": "rapid-river-falls-delta-county",
+      "name": "Rapid River Falls (Delta County)",
+      "region": "Central U.P.",
+      "place": "Masonville Township / Rapid River, Delta County",
+      "lat": 46.021667,
+      "lng": -86.983333,
+      "gisObjectId": null,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "From the signed day-use parking area, follow the county's developed viewing walkway. The county lists additional nature trails but does not publish a measured parking-to-waterfall walking distance.",
+      "best": "Spring runoff over limestone shelves and fall foliage; no current water-flow measurement is supplied.",
+      "access": "Delta County publishes year-round day-use operation, but that does not verify the gate, parking or walkway is currently open. The county assesses overall park accessibility at 1 of 5 despite an accessible viewing walkway.",
+      "status": "verify",
+      "note": "Small limestone cascades and interesting karst landscape, not a tall cliff plunge. Stay on designated viewing areas; undeveloped ground contains possible sinkholes.",
+      "source": "https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/",
+      "locationSource": "https://www.anyplaceamerica.com/directory/mi/delta-county-26041/falls/",
+      "kind": "Delta County park",
+      "parking": "Rapid River Falls County Park, 13149 S 15, Rapid River MI 49878. Follow signed park access from US-41 near the Rapid River crossing; park only in the designated visitor area.",
+      "feature": "An 80-acre county park where the Rapid River spills across limestone shelves beside a developed viewing walkway.",
+      "further": "Accessible waterfall walkway does not mean accessible parking, all facilities or every trail. The county rates overall accessibility 1/5 and flags needed parking improvements.",
+      "manager": "Delta County Parks and Recreation",
+      "decision": "A 20–45 minute river-and-karst stop on the US-41 corridor; ideal for a short waterfall break rather than a long hiking day.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "county-public-day-use-site-and-GNIS-waterfall-location-current-status-not-live",
+      "sourceReviewed": "2026-10-27",
+      "locationQuality": "GNIS-derived geographic waterfall point, not a parking or trailhead coordinate.",
+      "sourceDisambiguation": "Do not match by name to Michigan GIS waterfall object 60 at 46.627099,-89.668576 in the western U.P.; the Delta County waterfall lies near 46.021667,-86.983333.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/",
+          "description": "County park authority identifies the 80-acre park and day-use recreation."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://deltacountymi.gov/wp-content/uploads/2026/01/Delta-County-Recreation-Plan.pdf",
+          "description": "County 2026–2030 recreation plan lists public year-round day-use park and a waterfall viewing walkway."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://deltacountymi.gov/township-information/baldwin-township/points-of-interest/",
+          "description": "Delta County township directory lists Dutch Mill / Rapid River Falls Park at 13149 S 15, Rapid River; official plan describes signed US-41 approach."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://deltacountymi.gov/wp-content/uploads/2026/01/Delta-County-Recreation-Plan.pdf",
+          "description": "County plan documents developed waterfall walkway and nature trails, without measurable approach length; accessibility rated 1/5 overall."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.anyplaceamerica.com/directory/mi/delta-county-26041/falls/",
+          "description": "GNIS-derived Delta County Rapid River Falls coordinate 46.0216667,-86.9833333; not park entrance or western namesake."
         }
       }
     }
