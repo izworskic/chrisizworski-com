@@ -37,7 +37,7 @@ async function main(){
       check(await page.locator('article.stop').count()===9,name+' lacks nine cards');
       check(await page.locator('.map-direct a').count()===3,name+' lacks independent road directions');
       check(await page.locator('a[href*="nps.gov"]').count()>=10,name+' missing official park links');
-      await page.waitForFunction(()=>window.L && document.querySelectorAll('#ap-map .leaflet-interactive').length>=4,null,{timeout:30000});
+      try{await page.waitForFunction(()=>window.L && document.querySelectorAll('#ap-map .leaflet-interactive').length>=4,null,{timeout:14000});}catch{const diagnostic=await page.evaluate(()=>({leaflet:!!window.L,mapState:document.querySelector('#ap-map')?.dataset,dom:document.querySelector('#ap-map')?.innerHTML.slice(0,450),scripts:[...document.scripts].map(s=>s.src).filter(Boolean)}));throw Error(name+' map initialization diagnostic '+JSON.stringify(diagnostic)+'; JS errors: '+errors.join('; '));}
       const screen=await page.evaluate(()=>({width:window.innerWidth,scroll:document.documentElement.scrollWidth}));
       check(screen.scroll<=screen.width+2,name+' horizontal overflow '+JSON.stringify(screen));
       // Travel filters change the actual guide; all original cards remain in static DOM.
