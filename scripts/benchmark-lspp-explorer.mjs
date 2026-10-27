@@ -51,6 +51,10 @@ check('Old Woman Bay day-use Ontario Parks coordinates',access.locations.find(x=
 check('Gargantua closed road blocks routing',access.locations.find(x=>x.id==='gargantua')?.closed2026 && access.locations.find(x=>x.id==='gargantua')?.drivingWaypointConfidence==='no_navigation');
 check('local Leaflet stylesheet and bundled map script are loaded',include('/assets/vendor/leaflet-1.9.4.css') && include('/assets/lake-superior-provincial-park-map.js') && include('id="access-map"'));
 check('CARTO same-origin config and no secret in map source',map.includes('/api/carto-basemap-config') && map.includes('OpenStreetMap fallback') && !map.includes('CARTO_BASEMAP_PUBLIC_KEY'));
+check('each geolocated popup offers Google Maps location link',map.includes("const searchUrl = item") && map.includes('lspp-google-place') && map.includes('if(verified(item))'));
+check('direct Google driving directions use user origin and official site coordinates',map.includes("const directionsUrl = item") && map.includes("destination:item.latitude+','+item.longitude") && map.includes("travelmode:'driving'") && !map.includes("origin:item.latitude"));
+check('closed Agawa Rock marker remains location-view only',map.includes("item.closed2026?'View the closed site on Google Maps'") && map.includes('if(allowedAsWaypoint(item))') && map.includes('!item.closed2026'));
+check('map popups offer large mobile Google Maps actions',include('.lspp-map-actions a{') && include('min-height:44px') && include('.lspp-google-directions'));
 check('planner event passes selected IDs to route module',include("lspp:plan-updated") && map.includes("lspp:plan-updated") && map.includes("lastPlan=Array.isArray"));
 check('planner never recommends in 2026 off-season',include("season.value==='current'?[]") && include('No open-day-use itinerary can be recommended now'));
 check('route ordering handles missing Highway km without default zero',map.includes('a.latitude-b.latitude') && !map.includes('Number(a.hwy17Km)-Number(b.hwy17Km)'));
