@@ -106,11 +106,11 @@ async function main(){
    const route=page.locator('#verified-drive-route a[href*="maps/dir"]');
    need(await route.count()===1,size.name+' future map route link');
    need(!(await route.getAttribute('href')).includes('47.370316'),size.name+' no sacred site routing');
-   await page.locator('#season').selectOption('current');
-   // Leaflet may keep the previous popup in the DOM while replacing markers.
-   // Close it before opening a known site on the rebuilt, off-season map.
-   const popupClose=page.locator('.leaflet-popup-close-button:visible');
-   if(await popupClose.count())await popupClose.last().click();
+   // Test a fresh default-season load independently of the future-season run.
+   // This avoids Leaflet's transient cached popup nodes after sequential pin checks.
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('#season')?.value==='current'
+      && document.querySelectorAll('.leaflet-marker-icon').length>=6,null,{timeout:24000});
    await page.locator('.leaflet-marker-icon[title="Old Woman Bay day-use area"]').dispatchEvent('click');
    const currentPopup=page.locator('.leaflet-popup-content:visible').last();
    await currentPopup.locator('a.lspp-google-place').waitFor({state:'visible',timeout:5000});
