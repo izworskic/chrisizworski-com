@@ -42,3 +42,6 @@
 .fzn .wf-story,.fzn .wf-story:nth-child(2n){grid-template-columns:1fr}.fzn .wf-story>.wf-photo,.fzn .wf-story-index{height:190px;min-height:190px}.fzn .wf-story-body{padding:15px}.fzn .wf-story-body h3{font-size:1.48rem}.fzn .wf-story-body>p:not(.wf-kicker){font-size:.79rem;line-height:1.52}.fzn .wf-story-index b{font-size:3.5rem}
 }
 @media(max-width:370px){.fzn .wf-controls{grid-template-columns:1fr}.fzn .wf-controls label:nth-child(3),.fzn .wf-controls button{grid-column:1/-1}.fzn-signpost>div{display:flex;flex-direction:column;gap:0}}
+
+/* Small-screen ice-process controls: keep numeral horizontal and titles legible. */
+@media(max-width:610px){.fzn .fzn-form-selector button{grid-template-columns:36px minmax(0,1fr);align-items:start;column-gap:12px}.fzn .fzn-form-selector button>span{grid-row:1 / span 2;display:block;white-space:nowrap;word-break:normal;font:500 1.35rem/1.35 var(--wf-display);min-width:0;letter-spacing:0}.fzn .fzn-form-selector button strong,.fzn .fzn-form-selector button small{min-width:0;overflow-wrap:normal;word-break:normal}.fzn .fzn-form-selector button strong{font-size:.84rem;line-height:1.3}}

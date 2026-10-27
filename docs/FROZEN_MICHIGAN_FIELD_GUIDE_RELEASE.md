@@ -33,3 +33,8 @@ GSC effects and external live conditions remain unknown; this is a trip research
 
 ## Geometry correction
 Individual mapped waterfall nodes, not the general park entrance centroid: Upper Tahquamenon Falls at 46.5748,-85.2568 (OSM node 1594106217 via https://mapcarta.com/Tahquamenon_Falls), Lower Tahquamenon Falls at 46.60432,-85.20687 (OSM node 1595401845 via https://mapcarta.com/22346198). These are feature markers only, not car parking. Pointing both to the park-office centroid would be misleading.
+
+## 2026-10-27 integration fixes
+- The existing winter activities regression suite previously prohibited any link to Frozen Michigan because it was unpublished. In this same new-guide release, the link is now intentionally real and the test explicitly checks the reciprocal guide handoff, while all other unreleased sibling guides stay prohibited.
+- Updated dateModified and sitemap lastmod together for the three existing edited entry points (/tools/, /michigan-destinations/, /michigan-winter-activities/), preserving the site's freshness contract.
+- On mobile, the ice-process number receives a fixed two-digit horizontal column, with title/subtitle text in an independent flexible column. This prevents vertical number wrapping at 320/390px.
