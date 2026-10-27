@@ -90,7 +90,7 @@ async function main(){
        const driveUrl=new URL(await directions.getAttribute('href'));
        need(driveUrl.hostname==='www.google.com' && driveUrl.pathname==='/maps/dir/' && driveUrl.searchParams.get('api')==='1',
          size.name+' '+name+' Google directions URI invalid');
-       need(/^47\\.[0-9]+,-84\\.[0-9]+$/.test(driveUrl.searchParams.get('destination')||''),
+       need(/^47\.[0-9]+,-84\.[0-9]+$/.test(driveUrl.searchParams.get('destination')||''),
          size.name+' '+name+' directions destination missing coordinates');
        need(driveUrl.searchParams.get('travelmode')==='driving' && !driveUrl.searchParams.has('origin'),
          size.name+' '+name+' directions should use visitor-supplied current origin');
