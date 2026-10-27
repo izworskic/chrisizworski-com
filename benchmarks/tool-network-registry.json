@@ -1258,6 +1258,39 @@
       }
     },
     {
+      "id": "lake-superior-provincial-park",
+      "name": "Lake Superior Provincial Park Explorer",
+      "canonical": "https://chrisizworski.com/lake-superior-provincial-park/",
+      "aliases": [],
+      "kind": "authority-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Lake Superior Provincial Park stops, trails, permits, parking evidence and visit-time decisions",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "lake-superior",
+        "ontario-provincial-parks"
+      ],
+      "personas": [
+        "road-tripper",
+        "hiker",
+        "family-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
       "id": "xc-planning",
       "name": "Michigan Cross-Country Skiing",
       "canonical": "https://chrisizworski.com/michigan-cross-country-skiing/",
@@ -6001,6 +6034,22 @@
       "strength": "strong",
       "surface": "ice-activity-entry",
       "reason": "Field-guide inspiration leads to formation and winter access evidence rather than inventing ice conditions."
+    },
+    {
+      "from": "circle-tour",
+      "to": "lake-superior-provincial-park",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "The provincial park is a major Highway 17 Circle Tour stop, and the explorer resolves accessible experiences, stop times, parking and dated closures."
+    },
+    {
+      "from": "lake-superior-provincial-park",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "ontario-provincial-park",
+      "reason": "The Circle Tour planner provides multi-day routing beyond the park's stop-level access and hiking comparison."
     },
     {
       "from": "michigan-winter-activities",
