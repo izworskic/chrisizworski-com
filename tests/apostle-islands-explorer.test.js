@@ -1,0 +1,64 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
+const root=path.resolve(import.meta.dirname,'..');
+const file=(p)=>readFileSync(path.join(root,p),'utf8');
+const html=file('public/apostle-islands/index.html');
+const js=file('public/assets/apostle-islands.js');
+const css=file('public/assets/apostle-islands.css');
+const tools=file('public/tools/index.html');
+const circle=file('public/lake-superior-circle-tour/index.html');
+const registry=JSON.parse(file('benchmarks/tool-network-registry.json'));
+const sitemap=file('public/sitemap.xml');
+const canonical='https://chrisizworski.com/apostle-islands/';
+test('one useful static-first destination answer and nine distinct crawlable experiences',()=>{
+assert.match(html,/<h1>Apostle Islands/);
+assert.match(html,/First visit\?/);
+const ids=[...html.matchAll(/<article class="stop" id="stop-([^"]+)" data-modes="([^"]+)" data-times="([^"]+)"/g)];
+assert.equal(ids.length,9);
+assert.equal(new Set(ids.map(x=>x[1])).size,9);
+for(const [,id,mode,time] of ids){assert.ok(mode.length>0 && time.length>0, id);}
+assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/apostle-islands\/"/);
+assert.match(html,/<title>[^<]{10,60}<\/title>/);
+assert.ok(html.indexOf('id="choices"') < html.indexOf('id="explore"'));
+});
+test('all decision paths have official sources and distinct island access rules',()=>{
+for (const term of ['Meyers Beach','Madeline Island','Raspberry Island','Sand Island','Stockton Island','Devils Island','Sea Caves Watch','NWS marine forecasts','Little Sand Bay construction','NPS campsites']) assert.ok(html.includes(term),term);
+for (const domain of ['www.nps.gov','wavesatseacaves.cee.wisc.edu','marine.weather.gov','madferry.com','www.usgs.gov','dnr.wisconsin.gov']) assert.ok(html.includes(domain),domain);
+assert.match(html,/Madeline is outside the National Lakeshore/);
+assert.match(html,/Devils Island marina is closed/);
+assert.match(html,/No online reading is launch clearance/);
+assert.doesNotMatch(html,/safe to launch today|safe ice crossing|currently available tickets/i);
+});
+test('independently licensed photos and no-JS map directions are preserved',()=>{
+assert.equal((html.match(/<figure class="photo"/g)||[]).length,4);
+assert.ok(html.includes('creativecommons.org/licenses/by/4.0'));
+assert.ok(html.includes('creativecommons.org/publicdomain/zero/1.0'));
+assert.equal((html.match(/class="photo"/g)||[]).length,4);
+assert.match(html,/map-direct/);
+assert.ok(html.includes('https://www.google.com/maps/search/'));
+assert.ok(js.includes('/api/carto-basemap-config'));
+assert.ok(js.includes('tile.openstreetmap.org'));
+assert.ok(js.includes('new ResizeObserver'));
+assert.ok(css.includes('max-width:700px'));
+assert.ok(css.includes('prefers-reduced-motion'));
+assert.ok(!js.includes('localStorage')&&!js.includes('geolocation'));
+});
+test('Circle Tour, directory, sitemap and authority graph agree on canonical',()=>{
+assert.match(circle,/href="\/apostle-islands\/"/);
+assert.match(tools,/data-tool-id="apostle-islands"/);
+assert.ok(tools.includes('href="/apostle-islands/"'));
+assert.ok(sitemap.includes('<loc>'+canonical+'</loc>'));
+const node=registry.tools.find(x=>x.id==='apostle-islands');
+assert.equal(node?.canonical,canonical);
+assert.ok(registry.relationships.some(x=>x.from==='circle-tour'&&x.to==='apostle-islands'));
+assert.ok(registry.relationships.some(x=>x.from==='apostle-islands'&&x.to==='circle-tour'));
+const schema=JSON.parse(tools.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+const list=schema['@graph'].find(x=>x['@type']==='ItemList');
+const cardCount=[...tools.matchAll(/<div class="tool-card"[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].length;
+assert.equal(list.numberOfItems,cardCount);
+assert.equal(list.itemListElement.length,cardCount);
+const item=list.itemListElement.find(x=>x.item?.url===canonical);
+assert.equal(item?.item?.['@id'],canonical+'#webpage');
+});
