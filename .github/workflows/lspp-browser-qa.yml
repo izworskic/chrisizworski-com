@@ -1,8 +1,8 @@
 name: Lake Superior Park field guide browser QA
 on:
-  push:
+  pull_request:
     branches:
-      - feature/lake-superior-provincial-park-explorer-20261026
+      - main
     paths:
       - 'public/lake-superior-provincial-park/**'
       - 'public/assets/lake-superior-provincial-park*'
