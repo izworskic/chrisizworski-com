@@ -82,3 +82,7 @@ State GIS points are waterfall locations only, not parking entrances. USGS NHD l
 - The USGS monitoring station 04043275 on the Yellow Dog River ceased reporting daily flows in 2016. Never label that record live or derive today's waterfall condition from it.
 - The five-axis verified public approach permits publication as a substantive indexable guide without implying current road passability or trail maintenance.
 - Sources: https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/ ; https://yellowdogwatershed.org/land-protection-program/ ; https://cdn.ymaws.com/aipg.org/resource/resmgr/documents/events/conferences/2022_mi/marquette_area_waterfalls.pdf ; https://www.michigan.org/property/yellow-dog-hills-falls ; https://yellowdogwatershed.org/wp-content/uploads/2015/06/Yellow-Dog-River-Community-Forest-Plan-with-Forestry-Plan.pdf ; https://waterdata.usgs.gov/monitoring-location/USGS-04043275/.
+
+## October 27 crosswalk location agreement gate
+
+Of 113 name-matched USGS V2-to-state-GIS links: 78 lie within 100 m, 18 within 101–250 m, and 17 are 251–800 m apart. These are editorial geographic agreement tiers, not USGS-certified accuracy. The research map must withhold NHD identifiers from the 17 distant links until manually reconciled; all matches are historical data, not proof of public access. All 33 visitor destinations retain their independent five-axis publication gate. The on-demand import writes the tiers into both the archival and public research crosswalks.
