@@ -1,0 +1,41 @@
+name: Apostle Islands field guide browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/apostle-islands/**'
+      - 'public/assets/apostle-islands.*'
+      - 'scripts/verify-apostle-islands-browser.cjs'
+      - '.github/workflows/apostle-islands-browser-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  field-guide-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated pinned browser harness
+        run: |
+          mkdir -p /tmp/apostles-playwright
+          npm install --prefix /tmp/apostles-playwright --no-save --ignore-scripts playwright@1.58.2
+          npx --yes playwright@1.58.2 install --with-deps chromium
+          echo "NODE_PATH=/tmp/apostles-playwright/node_modules" >> "$GITHUB_ENV"
+      - name: Verify real browser interactions, licensed photo loads and map tiles
+        run: node scripts/verify-apostle-islands-browser.cjs
+      - name: Upload desktop/mobile browser screenshots and assertions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apostle-islands-browser-qa
+          path: artifacts/apostle-islands
+          retention-days: 7
+          if-no-files-found: warn
