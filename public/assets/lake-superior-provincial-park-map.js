@@ -73,7 +73,7 @@
   function showMarkers(){
     if(!map||!catalog)return;
     markers.forEach(m=>map.removeLayer(m));markers=[];
-    const located=catalog.locations.filter(item=>verified(item) && visible(item));
+    const located=catalog.locations.filter(verified); // show closed sites in red as map evidence even when itinerary filters exclude them
     located.forEach(item=>{const marker=makeMarker(item).addTo(map);markers.push(marker);});
     text(document.getElementById('pin-count'),located.length+' officially located destinations shown; zero exact parking-stall pins verified');
   }
