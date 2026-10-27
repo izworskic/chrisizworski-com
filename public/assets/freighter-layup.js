@@ -79,6 +79,8 @@
    if(policy().validateRegistry(candidate).length)return false;
    state.archive=candidate;
    state.liveLedger=data;
+   // Tell the experience layer which ships the dated ledger currently places in winter berths.
+   document.dispatchEvent(new CustomEvent('layup:fleet',{detail:{season:data.season,ships:stories.filter(v=>v.status!=='departed_current').map(v=>({id:v.id,name:v.name,harborId:v.harborId,confirmed:v.status==='confirmed_current'})),departed:stories.filter(v=>v.status==='departed_current').length,updatedAt:data.updatedAt||null}}));
    return true;
  }
  function renderLiveDesk(){

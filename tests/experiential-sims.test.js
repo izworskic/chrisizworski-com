@@ -154,3 +154,15 @@ test('winter layup: the experience layer is wired in order and the home page kee
   for (const season of registry.seasons) for (const v of season.records) assert.ok(specs.vessels[v.id], 'hull dimensions for ' + v.id);
   for (const [id, v] of Object.entries(specs.vessels)) assert.ok(v.lengthFt > 600 && v.lengthFt <= 1013.5 && v.beamFt >= 70 && v.beamFt <= 105, id + ' is a plausible laker');
 });
+
+test('winter layup: the hero only reflects ships the dated ledger places in berths', () => {
+  const app = read('public/assets/freighter-layup.js');
+  assert.ok(app.includes("new CustomEvent('layup:fleet'"), 'explorer announces the mounted ledger');
+  assert.ok(app.indexOf("state.liveLedger=data;") < app.indexOf("new CustomEvent('layup:fleet'"), 'announced only after the ledger validated');
+  assert.ok(app.includes("stories.filter(v=>v.status!=='departed_current')"), 'departed ships are not drawn in berths');
+  assert.ok(wfSrc.includes("document.addEventListener('layup:fleet'"));
+  assert.ok(wfSrc.includes('.slice(0, 9)'), 'far-shore fleet is capped');
+  assert.ok(!wfSrc.includes('/api/freighter-layup-live') && !wfSrc.includes('freighter-layup-live-season.json'), 'the hero never fetches AIS or the ledger itself');
+  const html = read('public/great-lakes-freighter-winter-layup/index.html');
+  assert.equal((html.match(/data-fleet-line/g) || []).length, 1);
+});
