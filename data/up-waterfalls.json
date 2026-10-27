@@ -1541,6 +1541,168 @@
           "description": "GNIS-derived Delta County Rapid River Falls coordinate 46.0216667,-86.9833333; not park entrance or western namesake."
         }
       }
+    },
+    {
+      "id": "haven-falls",
+      "name": "Haven Falls",
+      "region": "Keweenaw Peninsula",
+      "place": "Lac La Belle, Keweenaw County",
+      "lat": 47.382887,
+      "lng": -88.025673,
+      "gisObjectId": 138,
+      "level": "roadside",
+      "minutes": "15–35 min",
+      "walk": "From the designated Haven Falls Park parking area, walk a short distance through the roadside picnic grounds toward the waterfall behind the park. The falls are visible from the parking area; no backcountry trail is necessary.",
+      "best": "Spring snowmelt typically brings more water to the short Haven Creek cascade; low-flow periods can be quiet.",
+      "access": "Haven Falls Park is a public county-road-commission roadside park. County recreation inventory lists partial—not universal—accessibility; confirm restrooms, surfaces and seasonal conditions before visiting.",
+      "status": "verify",
+      "note": "Haven Falls Park sits opposite Lac La Belle. The county's accessibility assessment of 2 means some facilities meet guidelines, not that every route is wheelchair accessible.",
+      "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "County road commission roadside park",
+      "parking": "Haven Falls Park on Gay–Lac La Belle Road, near Lac La Belle. From US-41 take Lac La Belle Road about 4.5 miles to the fork, then right about 0.5 mile to the park on the right.",
+      "feature": "A small waterfall spills over Keweenaw conglomerate into Haven Creek behind a public picnic park near Lac La Belle.",
+      "further": "There is no reason to follow a private driveway or scramble upstream to see this waterfall. Stay on established public park surfaces.",
+      "manager": "Keweenaw County Road Commission (Haven Falls Park)",
+      "decision": "Best short stop for travelers wanting a picnic, restrooms and waterfall together, rather than a remote forest hike.",
+      "publication": "verified-access-guide",
+      "sourceReviewed": "2026-10-27",
+      "accessConfidence": "county-identified-public-park-current-condition-unverified",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "2025–2029 Keweenaw County Recreation Plan identifies Haven Falls Park as owned by the Keweenaw County Road Commission."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "County recreation inventory describes an available roadside public park; no private approach is required."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "Visit Keweenaw provides signed road directions to Haven Falls Park and places the falls behind its park parking area."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+          "description": "Visitor authority describes a short walk inside the park and waterfall visible from the car. No surveyed trail length is stated."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan geographic waterfall feature 138 (47.382887, -88.025673), not a surveyed parking entrance."
+        }
+      }
+    },
+    {
+      "id": "eagle-river-falls",
+      "name": "Eagle River Falls",
+      "region": "Keweenaw Peninsula",
+      "place": "Eagle River, Keweenaw County",
+      "lat": 47.412144,
+      "lng": -88.29635,
+      "gisObjectId": 142,
+      "level": "easy",
+      "minutes": "15–40 min",
+      "walk": "Park at Eagle River Bridge Park just off M-26 and use the designated pedestrian bridge to view the waterfall; the walk from parking to bridge is only a short stroll, not a riverbank hike.",
+      "best": "Spring melt often makes this Eagle River gorge especially dramatic; winter ice may cover parts of the cascades without establishing safe footing.",
+      "access": "MDOT owns the publicly described Eagle River Bridge Park. View from the established pedestrian bridge, not from the old industrial dam, highway bridge roadway or gorge edge.",
+      "status": "verify",
+      "note": "Historic fuse-company dam remains influence the waterfall appearance. From the visitor bridge, turn around to see the historic two-arched M-26 timber road bridge.",
+      "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "MDOT roadside park and pedestrian bridge",
+      "parking": "Eagle River Bridge Park beside the township hall, 5055 M-26 in Eagle River. Use the small signed visitor parking area off M-26; do not park on the bridge shoulder.",
+      "feature": "An old copper-country industrial waterfall and dam in a deep Eagle River gorge, viewed from a public pedestrian bridge beside the timber M-26 bridge.",
+      "further": "The pedestrian bridge is a viewing structure, not permission to access the historic dam or descend into the gorge. Ice and high water change hazards.",
+      "manager": "Michigan Department of Transportation (MDOT), Eagle River Bridge Park",
+      "decision": "The best easy Keweenaw stop for a waterfall view framed by industrial history and an unusual timber arch bridge.",
+      "publication": "verified-access-guide",
+      "sourceReviewed": "2026-10-27",
+      "accessConfidence": "county-confirmed-MDOT-park-public-viewing-bridge-opening-not-live",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "2025–2029 Keweenaw County Recreation Plan lists Eagle River Bridge Park as owned by MDOT."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "County identifies a public roadside park by the township hall with an established view of Eagle River Falls."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+          "description": "Visit Keweenaw directs visitors to the small parking area on the right after crossing M-26 bridge in Eagle River."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+          "description": "Visit Keweenaw explicitly describes the pedestrian bridge from parking to the Lower Eagle River Falls viewing position."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan waterfall GIS feature 142 at the falls, not a parking GPS point."
+        }
+      }
+    },
+    {
+      "id": "silver-river-falls",
+      "name": "Silver River Falls",
+      "region": "Keweenaw Peninsula",
+      "place": "M-26 east of Eagle Harbor, Keweenaw County",
+      "lat": 47.46332,
+      "lng": -88.072915,
+      "gisObjectId": 146,
+      "level": "roadside",
+      "minutes": "15–40 min",
+      "walk": "The Keweenaw visitor brochure describes a rustic pull-off south of the M-26 Silver River bridge and a short path on the north side. That route would require an at-grade highway crossing, which has not been independently confirmed as a safe legal pedestrian approach.",
+      "best": "Spring flow over the stepped Silver River bedrock; wet rocks and ice can make streamside footing hazardous.",
+      "access": "A county recreation inventory identifies Silver River Falls Park as a public waterfall location, but highway crossing design and exact legal visitor approach are unresolved. Do not use this page as driving or pedestrian routing advice.",
+      "status": "restricted",
+      "note": "Research guide only. Park ownership is identified in an older county land-use plan as MDOT, while the 2025–2029 county recreation plan lists the site but gives no current crossing guidance.",
+      "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "MDOT roadside park (historic county ownership record)",
+      "parking": "A Keweenaw visitor brochure identifies a rustic parking area south of M-26 at the Silver River bridge, about 4.5 miles east of Eagle Harbor. Arrival and safe pedestrian crossing remain unverified.",
+      "feature": "A tiered Silver River waterfall near an M-26 roadside park, still awaiting a documented safe walking connection from visitor parking.",
+      "further": "Do not cross M-26 or enter the river gorge solely on these directions. Confirm legal pedestrian access and any roadwork with the responsible road authority.",
+      "manager": "MDOT per county land-use inventory; updated park oversight not separately confirmed",
+      "decision": "Keep this as a map research stop for now; Haven or Eagle River offers a better documented arrival and viewing route.",
+      "publication": "research-only-guide",
+      "sourceReviewed": "2026-10-27",
+      "accessConfidence": "unresolved-pedestrian-crossing-not-safe-to-promote",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawcountyonline.org/docs/Keweenaw_County_Land_Use.pdf",
+          "description": "County land-use inventory identifies Silver River Falls Park as an MDOT roadside park; current oversight has not been reconfirmed."
+        },
+        "publicAccess": {
+          "verified": false,
+          "source": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+          "description": "County identifies Silver River Falls Park, but a designated pedestrian crossing is not established by the recreation plan."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Visit Keweenaw waterfall brochure reports a south-side M-26 parking area."
+        },
+        "trail": {
+          "verified": false,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Visitor brochure locates the path north of M-26, opposite the parking area. Safe/legal crossing must be resolved first."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State of Michigan GIS waterfall feature 146, distinct from roadside parking or access point."
+        }
+      }
     }
   ]
 }
