@@ -65,10 +65,17 @@ async function main(){
       const pins=await page.locator('#ap-map .leaflet-interactive').count();
       check(pins>=4,name+' lost map pins');
       await page.locator('#ap-map').screenshot({path:path.join(out,name+'-map.png')});report.screenshots.push(name+'-map.png');
-      await page.locator('#ap-map .leaflet-interactive').first().dispatchEvent('click');
-      const popup=page.locator('#ap-map .leaflet-popup-content');
-      check(await popup.count()>=1,name+' map popup failed');
-      check(await popup.locator('a[href*="google.com/maps"]').count()>=1,name+' location directions missing from popup');
+      let roadPopups=0,islandPopups=0;
+      for(let pi=0;pi<pins;pi++){
+        await page.locator('#ap-map .leaflet-interactive').nth(pi).dispatchEvent('click');
+        const popup=page.locator('#ap-map .leaflet-popup-content');
+        await popup.waitFor({state:'visible',timeout:3500});
+        const href=await popup.locator('a').first().getAttribute('href');
+        if(href.includes('google.com/maps/'))roadPopups++;
+        else if(href.includes('nps.gov/places/sand-island.htm'))islandPopups++;
+        else throw Error(name+' unexpected map popup URL '+href);
+      }
+      check(roadPopups===3&&islandPopups===1,name+' expected three road directions and one water-only NPS info pin, got '+roadPopups+'/'+islandPopups);
       check(errors.length===0,name+' page JS exceptions '+errors.join('; '));
       report.viewports.push({name,tiles,pins,photos:imgResults.length,filters:true,overflow:false});
       await context.close();
