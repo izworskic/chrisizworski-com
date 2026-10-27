@@ -1,0 +1,45 @@
+name: Lake Superior Park field guide browser QA
+on:
+  push:
+    branches:
+      - feature/lake-superior-provincial-park-explorer-20261026
+    paths:
+      - 'public/lake-superior-provincial-park/**'
+      - 'public/assets/lake-superior-provincial-park*'
+      - 'scripts/verify-lspp-browser.cjs'
+      - 'scripts/benchmark-lspp-explorer.mjs'
+      - '.github/workflows/lspp-browser-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-field-guide:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run source and parking truth benchmark
+        run: node scripts/benchmark-lspp-explorer.mjs --check
+      - name: Install isolated Playwright harness
+        run: |
+          mkdir -p /tmp/lspp-playwright
+          npm install --prefix /tmp/lspp-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/lspp-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Run real Chromium map and photo QA
+        run: node scripts/verify-lspp-browser.cjs
+      - name: Upload phone/desktop screenshots and test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lake-superior-park-browser-qa
+          path: artifacts/lspp
+          if-no-files-found: warn
+          retention-days: 7
