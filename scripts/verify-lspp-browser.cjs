@@ -107,10 +107,16 @@ async function main(){
    need(await route.count()===1,size.name+' future map route link');
    need(!(await route.getAttribute('href')).includes('47.370316'),size.name+' no sacred site routing');
    await page.locator('#season').selectOption('current');
-   await page.locator('.leaflet-marker-icon').first().dispatchEvent('click');
-   need(await page.locator('.leaflet-popup-content:visible a.lspp-google-place').count()===1,
+   // Leaflet may keep the previous popup in the DOM while replacing markers.
+   // Close it before opening a known site on the rebuilt, off-season map.
+   const popupClose=page.locator('.leaflet-popup-close-button:visible');
+   if(await popupClose.count())await popupClose.last().click();
+   await page.locator('.leaflet-marker-icon[title="Old Woman Bay day-use area"]').dispatchEvent('click');
+   const currentPopup=page.locator('.leaflet-popup-content:visible').last();
+   await currentPopup.locator('a.lspp-google-place').waitFor({state:'visible',timeout:5000});
+   need(await currentPopup.locator('a.lspp-google-place').count()===1,
      size.name+' off-season bubble still allows viewing Google Maps location');
-   need(await page.locator('.leaflet-popup-content:visible a.lspp-google-directions').count()===0,
+   need(await currentPopup.locator('a.lspp-google-directions').count()===0,
      size.name+' off-season bubble must not give driving directions');
    await page.locator('#build').click();
    need((await page.locator('#planIntro').innerText()).includes('No open-day-use itinerary'),size.name+' off-season access gate');
