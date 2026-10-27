@@ -30,7 +30,10 @@
    const facility=(v.berth||'').split(' — ')[0].trim();
    const genericBerth=/^(Milwaukee harbor|Owen Sound harbor|Port of Toledo|Harbor report|Harbor area)$/i.test(facility);
    const cardBerth=genericBerth||!facility?h.name:facility+' · '+h.name;
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art"><span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p><button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
+   // To-scale silhouette from the fleet specs file when the experience layer is present; the monogram stays as the hull mark.
+   const fleet=window.WinterFleet,spec=fleet?.specFor(v.id),art=fleet?fleet.cardArt(v):'';
+   const specLine=spec?'<p class="spec">'+esc(spec.lengthFt.toLocaleString()+' ft · '+spec.beamFt+' ft beam · built '+spec.built+(spec.fleet?' · '+spec.fleet:''))+'</p>':'';
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+art+'<span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p>'+specLine+'<button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
  }
 
  function activeRecordsFromLedger(ledger,archive){
@@ -190,12 +193,15 @@
    if(state.map)fitLakes();
  }
  function renderHarborPanel(){
-  const aside=document.querySelector('.atlas-harbor-column'),box=$('harbor-panel');box.replaceChildren();
-  if(state.activeHarbor==='all'||!records().length){if(aside)aside.hidden=true;return}
+  const aside=document.querySelector('.atlas-harbor-column'),box=$('harbor-panel'),workspace=document.querySelector('.atlas-workspace');box.replaceChildren();
+  if(state.activeHarbor==='all'||!records().length){if(aside)aside.hidden=true;workspace?.classList.remove('has-harbor');return}
   const h=harbor(state.activeHarbor),ships=records().filter(v=>v.harborId===state.activeHarbor);
-  if(aside)aside.hidden=false;
+  if(aside)aside.hidden=false;workspace?.classList.add('has-harbor');
   const top=document.createElement('div');top.className='harbor-panel-heading';top.append(text('h3',h.name),text('span',h.lake));
   const reset=text('button','×');reset.type='button';reset.setAttribute('aria-label','Clear harbor selection');reset.addEventListener('click',()=>setHarbor('all',true));top.append(reset);box.append(top);
+  // Dock drawing: the harbor's recorded ships side by side at one scale, from hull data, not positions.
+  if(window.WinterFleet){const dock=document.createElement('div');dock.className='harbor-dock';dock.innerHTML=window.WinterFleet.dockSVG(ships,h.name);
+    dock.querySelectorAll('.dock-ship').forEach(g=>{const open=()=>selectShip(g.getAttribute('data-dock-ship'),true);g.addEventListener('click',open);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})});box.append(dock)}
   const list=document.createElement('ul');list.className='harbor-vessels';
   for(const v of ships){const li=document.createElement('li'),button=text('button',v.name+' ↗');button.type='button';button.addEventListener('click',()=>selectShip(v.id,true));li.append(button);list.append(li)}
   box.append(list);
@@ -209,8 +215,9 @@
    if(zoom&&state.map){if(id==='all')fitLakes();else{const h=harbor(id);state.map.setView([h.lat,h.lon],10,{animate:false})}}
  }
  function shipIcon(count){
-   const symbol='<svg viewBox="0 0 90 36" width="62" height="30" aria-hidden="true"><path d="M5 20h8l7 6h51l13-10h3L76 33H22Z" fill="#0d465a" stroke="#fff" stroke-width="2"/><path d="M17 17V7h16v12" fill="#0d465a" stroke="#fff" stroke-width="1.5"/><path d="M24 3h4v4" fill="#0d465a"/></svg>';
-   return L.divIcon({className:'layup-pin',html:symbol+'<span>'+count+'</span>',iconSize:[66,48],iconAnchor:[33,34]});
+   // A laid-up laker seen from the shore: dark hull, lit deckhouse windows, a sodium glow on the ice.
+   const symbol='<svg viewBox="0 0 90 36" width="62" height="30" aria-hidden="true"><path d="M5 20h8l7 6h51l13-10h3L76 33H22Z" fill="#132a3c" stroke="#f2b24a" stroke-width="2"/><path d="M17 17V7h16v12" fill="#132a3c" stroke="#f2b24a" stroke-width="1.5"/><path d="M24 3h4v4" fill="#f2b24a"/><rect x="20" y="10" width="3" height="3" fill="#ffe7a8"/><rect x="26" y="10" width="3" height="3" fill="#ffe7a8"/><path d="M38 23h30" stroke="#ffe7a8" stroke-width="1.2" stroke-dasharray="2 3"/></svg>';
+   return L.divIcon({className:'layup-pin',html:'<span class="pin-body"><i class="pin-glow"></i>'+symbol+'<span class="pin-count">'+count+'</span></span>',iconSize:[66,48],iconAnchor:[33,34]});
  }
  function renderMapPins(){
    if(!state.map||!state.markerLayer)return;
@@ -245,7 +252,9 @@
    if(!state.map)return;
    let failed=false;
    const add=(carto)=>{
-     const url=carto?'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+     // Night basemap: CARTO dark_matter when a key is configured; otherwise OSM, which the home stylesheet darkens with a CSS filter.
+     const url=carto?'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key):'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+     $('layup-map').classList.toggle('tiles-osm',!carto);
      const layer=L.tileLayer(url,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'+(carto?' &copy; <a href="https://carto.com/attributions">CARTO</a>':'')}).addTo(state.map);
      state.tiles=layer;
      layer.on('tileerror',()=>{if(carto&&!failed){failed=true;state.map.removeLayer(layer);add(false)}});
@@ -307,6 +316,8 @@
    // Filter includes only harbors with a record in the selected season.
    $('harbor-filter').addEventListener('change',e=>setHarbor(e.target.value,true));
    $('season').addEventListener('change',e=>setSeason(e.target.value));
+   // The experience layer loads hull dimensions separately; redraw the roster and harbor dock when they arrive.
+   document.addEventListener('fleetspecs:ready',()=>{renderCards();renderHarborPanel()});
    $('ship-search').addEventListener('input',e=>{state.query=e.target.value;state.selected=null;$('ship-detail').hidden=true;renderCards()});
    $('berth-filter').addEventListener('change',e=>{state.berth=e.target.value;state.selected=null;$('ship-detail').hidden=true;renderCards()});
    $('clear-filters').addEventListener('click',()=>{state.query='';state.berth='all';state.activeHarbor='all';$('ship-search').value='';$('harbor-filter').value='all';$('ship-detail').hidden=true;populateBerths();renderCards();renderHarborPanel();fitLakes()});

@@ -2,7 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'public/great-lakes-freighter-winter-layup/index.html'),'utf8');
-const css=fs.readFileSync(path.join(root,'public/assets/freighter-layup.css'),'utf8');
+// The home page now ships its own night-harbor stylesheet; freighter-layup.css remains for the biography pages.
+const css=fs.readFileSync(path.join(root,'public/assets/freighter-winter-home.css'),'utf8');
 const registry=JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8'));
 test('editorial entry keeps meaningful accessible visitor journey',()=>{
  assert.match(html,/<body class="layup-home">/);
@@ -64,7 +65,7 @@ test('map-first layout order and one evidence disclosure keep the tool above edi
  assert.ok(!html.includes('class="hero-index"'));
  assert.match(html,/<details id="source-evidence-details">/);
  assert.ok(!html.includes('<details id="source-evidence-details" open'));
- for(const v of ['Winter Harbor Map','Harbor Roster — Every Ship','Ship Stories &amp; Library','Why Freighters Lay Up'])assert.ok(html.includes(v));
+ for(const v of ['Winter Harbor Map','Harbor Roster: Every Ship','Ship Stories &amp; Library','Why Freighters Lay Up'])assert.ok(html.includes(v));
 });
 test('layup map has one caveat adjacent to the map and roster names remain crawlable',()=>{
  assert.equal((html.match(/id="map-evidence-note"/g)||[]).length,1);
