@@ -1703,6 +1703,71 @@
           "description": "State of Michigan GIS waterfall feature 146, distinct from roadside parking or access point."
         }
       }
+    },
+    {
+      "id": "pinnacle-falls",
+      "name": "Pinnacle Falls",
+      "region": "Central U.P.",
+      "place": "Yellow Dog River / Big Bay, Marquette County",
+      "lat": 46.706651,
+      "lng": -87.806989,
+      "gisObjectId": 155,
+      "level": "moderate",
+      "minutes": "90–180 min",
+      "walk": "Approximately one mile each way from the preserve parking area, on a steep, rugged foot trail descending into the Yellow Dog River gorge; use the posted trail and its mid-route interpretive sign. Expect a strenuous climb back to the car.",
+      "best": "Spring runoff may make the waterfall stronger; fall colors the red-pine and hardwood gorge. This is seasonal character, not a live flow forecast.",
+      "access": "Pinnacle Falls Preserve is a 280-acre Yellow Dog Watershed Preserve protected property; the owner lists hiking as an allowed use. Stay on the established preserve foot trail and respect preserve rules. No current same-day road or trail-open guarantee.",
+      "status": "verify",
+      "note": "This is the separate Pinnacle Falls Preserve, not the Yellow Dog River Community Forest waterfall trailhead on County Road 510. The preserve's designated parking entrance is reached by a different sequence of roads.",
+      "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Conservation preserve",
+      "parking": "Small signed Pinnacle Falls Preserve parking area at the end of the remote access two-track from County Road AAA, reached via CR-550 and CR-510 from Marquette/Big Bay. The preserve owner publishes turn-by-turn guidance; do not drive to the waterfall coordinate. Road surface, winter clearance and two-track passability must be checked before driving.",
+      "feature": "A rugged descent into a Yellow Dog River gorge where a wooded rock pinnacle towers above a roughly 25–30-foot cascade.",
+      "further": "The two-track and final descent can be difficult. Do not use the feature coordinate for driving, expect an accessible path or assume the seasonal road has been maintained.",
+      "manager": "Yellow Dog Watershed Preserve · Pinnacle Falls Preserve (conservation easement held by The Nature Conservancy)",
+      "decision": "Choose Pinnacle for a substantial wooded gorge hike and the river's geologic story. Choose Wagner or Fumee instead if you need a short developed visitor path.",
+      "publication": "verified-access-guide",
+      "sourceReviewed": "2026-10-27",
+      "accessConfidence": "preserve-owner-published-public-trail-parking-current-conditions-unverified",
+      "hydro": {
+        "stateGisObjectId": 155,
+        "usgsFeatureId": "e413d0d0-8a58-11e6-b586-ecf4bb62914c",
+        "nhdPlusComid": "12025618",
+        "matchDistanceMeters": 11
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+          "description": "Owner states it purchased 40 acres in 2003 and received 240 more acres in 2017, creating the current 280-acre preserve; The Nature Conservancy holds the conservation easement."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+          "description": "Preserve expressly permits hiking, fishing, birding and other non-motorized activities; camping and motorized use have restrictions."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+          "description": "Owner describes small parking at the signed end of a road/two-track from CR-AAA via CR-550/CR-510. Exact parking coordinates are not independently surveyed."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+          "description": "Owner describes roughly one mile of steep rugged trail, a midpoint sign, and an approach from the north to the falls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS waterfall feature 155 is a falls coordinate, corroborated within 11 meters by independent USGS V2 hydrography; neither supplies an entrance coordinate."
+        },
+        "hydrography": {
+          "verified": true,
+          "source": "https://doi.org/10.5066/P9QQTKA0",
+          "description": "2020 USGS V2 NHDPlus COMID 12025618, linked to Michigan GIS ID 155 by independent spatial/name match. Not an access source."
+        }
+      }
     }
   ]
 }
