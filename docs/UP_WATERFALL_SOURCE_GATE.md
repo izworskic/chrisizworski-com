@@ -46,3 +46,11 @@ Three verified visitor guides added: Mosquito Falls (NPS Chapel/Mosquito trail, 
 - The HTML-first indexable hub grows from 23 to 26 discovery destinations, with 24 sourced child guides; Scott Falls remains noindex and excluded from the structured ItemList and sitemap. All geography-only candidates and USGS crosswalk rows remain research-only. No new URLs are generated from geographic features without the five-axis gate.
 
 Land manager sources: https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area, https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf, https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf, https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/10/15/mdot-roadside-parks-set-to-close-for-season.
+
+## Rapid River Falls name collision and Delta County source gate (October 27, 2026)
+
+- Added a full visitor guide for **Rapid River Falls (Delta County)** using the county-owned 80-acre Rapid River Falls County Park, 13149 S 15, Rapid River, and separately verified geographic waterfall location near 46.021667, -86.983333.
+- **Do not join by name** to state GIS object 60, whose namesake point is near 46.627099, -89.668576 in the western U.P. This visitor page uses `gisObjectId: null` and GNIS-derived Delta County position. No unrelated USGS NHD crosswalk identifiers may be inherited.
+- County's adopted 2026–2030 plan documents a developed waterfall-viewing walkway and year-round day-use park; overall county accessibility assessment is 1/5 and parking accessibility needs improvement. Do not claim fully accessible facilities, exact trail mileage, or today's opening status.
+- Indexing five-axis gate: land manager and public use via county park, signed visitor arrival via county address/US-41 direction, developed walkway via county plan, geographic fall position via GNIS-derived record. Parking/visitor entrance is not the waterfall point.
+- Sources: https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/ ; https://deltacountymi.gov/wp-content/uploads/2026/01/Delta-County-Recreation-Plan.pdf ; https://deltacountymi.gov/township-information/baldwin-township/points-of-interest/ ; https://www.anyplaceamerica.com/directory/mi/delta-county-26041/falls/.
