@@ -34,6 +34,7 @@ if(!mapEl||typeof window.L==='undefined'){if(mapEl)mapEl.dataset.state='fallback
 const L=window.L;
 try{
 map=L.map(mapEl,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true}).setView([46.91,-90.85],9);
+mapEl.classList.add('is-ready');
 map.attributionControl.setPrefix('Leaflet');
 const osm=()=>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'});
 let active=osm().addTo(map),fallback=false;
