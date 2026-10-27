@@ -62,5 +62,5 @@ layer.on('tileerror',()=>{if(++errors>=2){if(map.hasLayer(layer))map.removeLayer
 layer.addTo(map);
 layer.once('load',()=>{if(loaded&&map.hasLayer(active)){map.removeLayer(active);active=layer;}});
 }).catch(()=>{mapEl.dataset.tiles='osm';});
-}catch(err){mapEl.dataset.state='fallback';if(map){map.remove();map=null;}/* Native HTML fallback remains. */}
+}catch(err){mapEl.dataset.state='fallback';mapEl.dataset.mapError=String(err?.message||err).slice(0,150);console.warn('Apostle Islands map fallback:',mapEl.dataset.mapError);if(map){map.remove();map=null;}/* Native HTML fallback remains. */}
 })();
