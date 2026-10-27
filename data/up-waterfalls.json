@@ -1768,6 +1768,60 @@
           "description": "2020 USGS V2 NHDPlus COMID 12025618, linked to Michigan GIS ID 155 by independent spatial/name match. Not an access source."
         }
       }
+    },
+    {
+      "id": "yellow-dog-falls",
+      "name": "Yellow Dog Falls",
+      "region": "Central U.P.",
+      "place": "Big Bay / Yellow Dog River Community Forest",
+      "lat": 46.72865,
+      "lng": -87.70674,
+      "gisObjectId": null,
+      "level": "moderate",
+      "minutes": "75–150 min",
+      "walk": "Follow the established forest trail from the County Road 510 bridge parking area on the south side of the Yellow Dog River, downstream toward the falls. Landowner estimates about 0.75 mile to the first falls; a published geological field guide describes roughly 0.5 mile to Yellow Dog Falls. Treat mileage as approximate and return on the signed route.",
+      "best": "Spring snowmelt and autumn forest color. Seasonal patterns, not a current flow or trail-surface observation.",
+      "access": "Yellow Dog Watershed Preserve owns and protects the public 688-acre Community Forest. The established nonmotorized trail leads from the signed bridge-side entrance into the waterfall corridor. Do not cross into downstream private parcels or use river fords as an informal shortcut.",
+      "status": "verify",
+      "note": "Yellow Dog Falls (also called Hills Falls) is reached from the Community Forest parking area at the CR-510 Yellow Dog River bridge. Pinnacle Falls is a different protected property with a separate two-track arrival.",
+      "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+      "locationSource": "https://cdn.ymaws.com/aipg.org/resource/resmgr/documents/events/conferences/2022_mi/marquette_area_waterfalls.pdf",
+      "kind": "Conservation forest",
+      "parking": "Yellow Dog River Community Forest's primary public parking and trailhead immediately south of the Yellow Dog River bridge on County Road 510. From CR-550 follow CR-510, turn left after about 2.6 miles to stay on dirt CR-510 at the AAA junction, continue about 3.9 miles and cross the river; landowner directs visitors to the lot on the left.",
+      "feature": "A series of forested river drops and rock ledges reached by a maintained public trail from the County Road 510 bridge, not the remote Pinnacle Falls entrance.",
+      "further": "Allow extra time for the unpaved CR-510 approach and check road conditions. Do not assume wheelchair access, a guaranteed winter-plowed lot, cellphone coverage, safe swimming, or live flow measurements.",
+      "manager": "Yellow Dog Watershed Preserve · Yellow Dog River Community Forest (688 acres)",
+      "decision": "Choose Yellow Dog Falls for a public forest trail and a series of river cascades. Choose Pinnacle Falls for a much more remote, steep gorge outing from a different signed road and parking area.",
+      "publication": "verified-access-guide",
+      "sourceReviewed": "2026-10-27",
+      "accessConfidence": "landowner-public-access-parking-and-route-documented-current-conditions-unverified",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/land-protection-program/",
+          "description": "Yellow Dog Watershed Preserve confirms ownership and monitoring of the 688-acre Yellow Dog River Community Forest, held for public nonmotorized recreation."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+          "description": "Landowner explicitly documents public entry at the CR-510 Yellow Dog River bridge and an established trail into the waterfall area."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+          "description": "Landowner supplies the CR-550 to CR-510 to dirt CR-510 route and parking/trailhead south of the river bridge. No surveyed lot coordinate is invented."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+          "description": "Landowner confirms signed primary access and trail to multiple waterfalls, reporting roughly three-quarters of a mile to the first falls. A geology field guide gives about a half-mile to Yellow Dog Falls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://cdn.ymaws.com/aipg.org/resource/resmgr/documents/events/conferences/2022_mi/marquette_area_waterfalls.pdf",
+          "description": "AIPG geologic field trip identifies Yellow Dog Falls at N46°43.720', W87°42.403'; independent waterfall documentation corroborates the falls point near 46.72865, -87.70674. This is not a parking pin."
+        }
+      }
     }
   ]
 }
