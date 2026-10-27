@@ -42,6 +42,18 @@ async function main(){
    const photos=await page.locator('.hero-gallery img').evaluateAll(nodes=>nodes.map(x=>({complete:x.complete,width:x.naturalWidth,src:x.currentSrc})));
    need(photos.length===2&&photos.every(x=>x.complete&&x.width>0),size.name+' real hero photos '+JSON.stringify(photos));
    await page.screenshot({path:path.join(out,size.name+'-top.png')});report.screens.push(size.name+'-top.png');
+   const cardPhotos=page.locator('.card-photo img');
+   need(await cardPhotos.count()===7,size.name+' seven licensed card photos');
+   for(let pi=0;pi<await cardPhotos.count();pi++){
+     const photo=cardPhotos.nth(pi);
+     await photo.scrollIntoViewIfNeeded();
+     await page.waitForFunction(index=>{
+       const i=document.querySelectorAll('.card-photo img')[index];
+       return i && i.complete;
+     },pi,{timeout:15000});
+     const state=await photo.evaluate(el=>({src:el.currentSrc,width:el.naturalWidth}));
+     need(state.width>0,size.name+' card photo '+pi+' did not load '+state.src);
+   }
    await page.locator('#access-map').scrollIntoViewIfNeeded();
    await page.waitForTimeout(5500);
    const tiles=await page.locator('.leaflet-tile-loaded').evaluateAll(nodes=>nodes.filter(x=>x.complete&&x.naturalWidth>0).length);
