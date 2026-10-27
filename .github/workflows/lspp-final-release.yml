@@ -29,6 +29,9 @@ jobs:
         run: npm run verify:all
       - name: Run built public site and crawlability audit
         run: npm run profile:build -- build-profile.json
+      - name: Check released indexability and registry alignment
+        run: |
+          node -e "const fs=require('fs'); const h=fs.readFileSync('public/lake-superior-provincial-park/index.html','utf8'); if(!h.includes('content=\"index,follow,max-image-preview:large\"'))process.exit(1); const t=fs.readFileSync('public/tools/index.html','utf8'); if(!t.includes('data-tool-id=\"lake-superior-provincial-park\"'))process.exit(1);"
       - name: Verify canonical park route, SEO metadata and source protections
         run: |
           node scripts/benchmark-lspp-explorer.mjs --check
