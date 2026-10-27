@@ -4136,6 +4136,46 @@
       "searchEvidence": {
         "status": "new-tool-no-gsc"
       }
+    },
+    {
+      "id": "michigan-winter-activities",
+      "name": "Michigan Winter Activities Field Guide",
+      "canonical": "https://chrisizworski.com/michigan-winter-activities/",
+      "aliases": [],
+      "kind": "editorial-discovery-hub",
+      "cluster": "winter-snow",
+      "primaryIntent": "Which Michigan winter activity should I choose by personal style, region, and effort before checking site-specific conditions?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "winter-hiker",
+        "weekend-visitor",
+        "outdoor-generalist"
+      ],
+      "networkRole": "hub",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Winter activity discovery, not measured snowpack, forecast, confirmed sightings, or today-ready trails. Existing Michigan Adventure Finder owns all-season destination exploration."
+      },
+      "searchEvidence": {
+        "status": "new-no-gsc",
+        "note": "Owner-requested, source-rich winter collection. Post-release GSC impressions and CTR not yet measured."
+      },
+      "measurement": {
+        "search": "GSC Web URL x query over 7/28 day comparable windows",
+        "product": "Existing specialist tool handoffs",
+        "decisionWindowDays": 28,
+        "privacy": "No precise visitor position stored."
+      }
     }
   ],
   "relationships": [
@@ -5898,6 +5938,30 @@
       "strength": "strong",
       "surface": "upper-peninsula-fall-planning",
       "reason": "Waterfall overlooks provide distinct leaf-peeping destinations with their own access requirements."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "michigan-winter-activities",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-contextual-entry",
+      "reason": "Season-agnostic destination browsing hands off to winter-specific activity exploration."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-adventure-finder",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "year-round-guide-footer",
+      "reason": "Winter travelers can return to the existing year-round Michigan destination guide."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-ice-caves",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "ice-activity-entry",
+      "reason": "Field-guide inspiration leads to formation and winter access evidence rather than inventing ice conditions."
     }
   ],
   "cannibalizationGroups": [

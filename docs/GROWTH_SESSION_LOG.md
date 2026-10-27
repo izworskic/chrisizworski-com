@@ -1437,3 +1437,12 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - GitHub source-import workflow and focused tests succeeded on initial PR head. Full final GitHub gate, Vercel preview and merge outcome must be checked against their latest exact commit; do not claim otherwise from this handoff entry.
 - GSC, index coverage and AdSense performance were not retrieved in this development session; no growth or revenue uplift claimed.
 - Single next action: verify latest-head waterfall browser smoke and five-axis publication test before merging PR #1216; after release inspect a matched NHD popup on the production research overlay.
+
+
+### 2026-10-26 — First Michigan winter field guide isolated release branch
+
+- Carved /michigan-winter-activities/ into an isolated production candidate so six other incomplete draft guides are not inadvertently published; original draft PR #1221 unchanged.
+- Eighteen sourced activities, visible photo provenance, legal/seasonal access distinctions, no-JS content and filter/map decision UX. Existing live tool handoffs replace all unpublished sibling links.
+- Michigan Adventure Finder, Tools directory, sitemap-winter and registry linking only this guide. AdSense configuration untouched; new document uses the usual publisher loader.
+- GSC baseline/revenue unavailable; any traffic impact is unmeasured. Release not presumed merged.
+- Single next action: verify final isolated commit in full CI and browser QA, then review quality gates before publication.
