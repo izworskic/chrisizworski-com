@@ -138,17 +138,17 @@
       "name": "Wagner Falls",
       "region": "Pictured Rocks / Munising",
       "place": "Munising",
-      "lat": 46.388944,
-      "lng": -86.648995,
+      "lat": 46.387663,
+      "lng": -86.646554,
       "level": "easy",
       "minutes": "15–30 min",
-      "walk": "0.1-mile packed-gravel and boardwalk approach with some steps to a developed platform.",
+      "walk": "Michigan DNR August 2026 map: 0.13 mile on packed gravel and boardwalk between signed parking and viewing platform; some steps.",
       "best": "Summer greenery and fall color.",
       "access": "Very small parking area, approximately 8–10 cars; no restrooms or drinking water.",
       "status": "verify",
-      "note": "The map pin is a waterfall reference; DNR provides the arrival route.",
+      "note": "The geographic waterfall point and DNR mapped parking lot are separate locations. Follow the signed lot on M-94; the map does not represent a surveyed driveway entrance.",
       "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
-      "locationSource": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+      "locationSource": "https://www.anyplaceamerica.com/topographic_maps/michigan/alger_county/wagner_falls/242-2124/",
       "kind": "State scenic site",
       "parking": "Take M-28 east of Munising then M-94 west; signed lot for about 8–10 vehicles.",
       "feature": "A short mossy forest walk ends at a viewing platform over a layered creek cascade.",
@@ -171,8 +171,8 @@
         },
         "parking": {
           "verified": true,
-          "source": "https://www.michigan.gov/recsearch/parks/wagnerfalls",
-          "description": "Take M-28 east of Munising then M-94 west; signed lot for about 8–10 vehicles."
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+          "description": "Michigan DNR August 2026 Wagner Falls map identifies parking at 46.388944,-86.648995 and 0.13-mile trail to viewing platform"
         },
         "trail": {
           "verified": true,
@@ -181,9 +181,18 @@
         },
         "location": {
           "verified": true,
-          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
-          "description": "Destination location published by visitor authority"
+          "source": "https://www.anyplaceamerica.com/topographic_maps/michigan/alger_county/wagner_falls/242-2124/",
+          "description": "USGS Geographic Names waterfall-location reference; not vehicle parking"
         }
+      },
+      "parkingLocation": {
+        "lat": 46.388944,
+        "lng": -86.648995,
+        "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+        "authority": "Michigan DNR",
+        "label": "DNR-mapped Wagner Falls signed lot",
+        "reviewed": "2026-10-26",
+        "certainty": "official map reference; follow signed entrance"
       }
     },
     {
