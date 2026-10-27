@@ -8,7 +8,7 @@ const {chromium}=require('playwright');
 const base=process.env.SMOKE_URL||'http://127.0.0.1:8765';
 const screenshots='/tmp/up-waterfalls-smoke-screens';
 await fs.mkdir(screenshots,{recursive:true});
-const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage'],...(process.env.UP_WATERFALL_CHROME?{executablePath:process.env.UP_WATERFALL_CHROME}:{})});
 const failures=[];
 async function run(name,fn){try{await fn();console.log('PASS '+name)}catch(e){failures.push(name+': '+e.message);console.error('FAIL '+name+': '+e.message)}}
 try{
