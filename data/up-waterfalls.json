@@ -1822,6 +1822,120 @@
           "description": "AIPG geologic field trip identifies Yellow Dog Falls at N46°43.720', W87°42.403'; independent waterfall documentation corroborates the falls point near 46.72865, -87.70674. This is not a parking pin."
         }
       }
+    },
+    {
+      "id": "kakabika-falls",
+      "name": "Kakabika Falls",
+      "region": "Western U.P.",
+      "place": "Cisco Branch Ontonagon River / near Marenisco",
+      "lat": 46.337278,
+      "lng": -89.45204,
+      "gisObjectId": 21,
+      "level": "easy",
+      "minutes": "25–60 min",
+      "walk": "From the small signed falls parking area beside County Road 527, follow the short riverside footpath along the Cisco Branch Ontonagon River. The U.S. Forest Service calls the trail short and not difficult; exact accessible grade or distance is not certified.",
+      "best": "Spring snowmelt or following recent rain; low water reveals the bedrock S-turns.",
+      "access": "An Ottawa National Forest recreation destination with a published public trail and small parking area; check seasonal road and trail conditions. Neither live opening nor wheelchair accessibility has been verified.",
+      "status": "verify",
+      "note": "The sign and lot are on County Road 527. Do not drive to the state GIS waterfall coordinate or assume the trail extends farther downstream onto private land.",
+      "source": "https://www.recreation.gov/camping/poi/238266",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Approach County Road 527 from US-2 between Watersmeet and Marenisco. The federal recreation listing identifies the Bessemer Ranger District, and U.P. Travel specifies the signed parking area before the bridge. Use the small designated lot, not the road shoulder.",
+      "feature": "On the Cisco Branch Ontonagon River, a succession of bends and rock ledges forms an unusual S-shaped waterfall instead of one vertical plunge.",
+      "further": "Do not confuse Kakabika Falls in Michigan with Kakabeka Falls in Ontario. Forest conditions and road maintenance can change, especially after a storm or freeze.",
+      "manager": "U.S. Forest Service · Ottawa National Forest, Bessemer Ranger District",
+      "decision": "Best for a short, quieter forest stop when you want unusual river geology without committing to a long gorge hike.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-route-not-open-now",
+      "sourceReviewed": "2026-10-27",
+      "hydro": {
+        "nhdPlusComid": "11951547",
+        "nhdPlusReachCode": "04020102000070",
+        "nhdHrReachCode": "04020102000070",
+        "usgsFeatureId": "e40efacb-8a58-11e6-b586-ecf4bb62914c"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238266",
+          "description": "Federal Recreation.gov visitor listing identifies Ottawa National Forest and Bessemer Ranger District"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238266",
+          "description": "Forest Service lists Kakabika Falls as a recreation site with a public hiking trail"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.uptravel.com/listing/kakabika-falls/2119/",
+          "description": "UP Travel specifies signed visitor lot beside County Road 527 before crossing the river bridge"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238266",
+          "description": "Forest Service describes a short, not difficult walking trail to the river falls"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS Waterfalls layer feature 21; marks falls, not public parking"
+        }
+      }
+    },
+    {
+      "id": "interstate-falls",
+      "name": "Interstate Falls",
+      "region": "Western U.P.",
+      "place": "Montreal River / Michigan–Wisconsin state line",
+      "lat": 46.473467,
+      "lng": -90.197191,
+      "gisObjectId": 35,
+      "level": "easy",
+      "minutes": "30–70 min",
+      "walk": "The landowner's published route is a 0.7-mile out-and-back woodland walk to the Montreal River lookout. It is a natural-surface trail, not a barrier-free platform or a drive-up waterfall.",
+      "best": "Spring runoff and autumn hardwoods; winter requires checking trail and road surface.",
+      "access": "The documented public route begins in the Town of Kimball, Iron County, Wisconsin. The river itself forms the Michigan–Wisconsin state line; the map point is NOT a legal Michigan-side trail or an entrance.",
+      "status": "verify",
+      "note": "Do not follow a Michigan riverside two-track or an improvised route to the mapped waterfall. The Wisconsin conservation-area entrance is the documented public approach.",
+      "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Town-owned conservation area / cross-border",
+      "parking": "In Wisconsin, head north from Hurley on Highway 51, turn west onto US-2, continue approximately 0.6 mile, then turn onto Center Drive and drive about 0.2 mile to the signed Interstate Falls trailhead. Do not use the waterfall coordinate as parking.",
+      "feature": "An 18-foot plunge on the Montreal River, which divides Michigan from Wisconsin, protected by a town-owned conservation parcel on the Wisconsin bank.",
+      "further": "A U.P. waterfall on the state boundary is not necessarily accessed from Michigan. This visitor route is a Wisconsin-side walk, with dogs leashed under Town of Kimball rules.",
+      "manager": "Town of Kimball, Iron County, Wisconsin · conserved through Northwoods Land Trust",
+      "decision": "Best for a short border-country woodland walk and a river-gorge view; plan the arrival from the Wisconsin side, not Ironwood's Michigan roads.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-route-not-open-now",
+      "sourceReviewed": "2026-10-27",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+          "description": "Northwoods Land Trust records the land purchase and 2016 conveyance to the Town of Kimball, Wisconsin"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+          "description": "Town-owned conservation area explicitly open for public waterfall viewing"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+          "description": "Published Wisconsin arrival instructions via US-2 and Center Drive to the trailhead"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+          "description": "Landowner describes 0.7-mile out-and-back trail to Interstate Falls"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS Waterfalls layer feature 35, a waterfall point on the Montreal River boundary"
+        }
+      }
     }
   ]
 }
