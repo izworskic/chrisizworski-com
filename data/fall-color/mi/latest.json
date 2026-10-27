@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-26",
-  "updated": "2026-10-26T17:26:36.126Z",
-  "body": "The Upper Peninsula regions show minimal color change at seven percent, while the Lower Peninsula displays stark contrasts. Southwest Lower and Southeast Lower lead dramatically at ninety-seven and ninety-nine percent respectively, in falling and peak phases. Central and Saginaw Bay sits at forty-one percent falling. The remaining Lower Peninsula regions range from nine to seven percent in early decline.\n\nThis weekend's mixed skies across most regions favor viewing, though Western U.P. and Tip of the Mitt face some rain with cooler temperatures in the mid-sixties. Northeast Lower and Northwest Lower offer mixed conditions with highs near sixty-six degrees. Southeast Lower provides the most stable weather at seventy-one degrees with mixed skies, ideal for peak foliage observation.\n\nFor optimal weekend viewing, Southeast Lower's Irish Hills along US-12 offers peak color with favorable conditions. Alternatively, Southwest Lower's Blue Star Highway near Saugatuck presents near-complete fall display with similar weather stability. Those in central regions might explore Chippewa Nature Center's river road in Midland, where forty-one percent color change and seventy-two-degree highs create comfortable conditions.",
+  "date": "2026-10-27",
+  "updated": "2026-10-27T16:43:46.076Z",
+  "body": "The model shows stark regional variation across Michigan. Southwest and Southeast Lower Peninsula regions are at peak or near-peak color, estimated at 98-99 percent. Central and Saginaw Bay sits at 33 percent in the falling phase. All Upper Peninsula and northern Lower Peninsula regions remain early, around 7-8 percent in the down phase.\n\nThis weekend, rain is expected across most of Michigan with highs ranging from 59 to 74 degrees. Southeast Lower Peninsula offers the most favorable conditions with mixed skies and warmer temperatures near 74, while the Upper Peninsula will see cooler highs near 59-62 with rain. The rain may accelerate color drop in already-peaked southern regions but will have minimal impact on early-stage northern areas.\n\nFor weekend travel, Southeast Lower Peninsula offers the best foliage viewing opportunity, with peak color along US-12 through the Irish Hills. Those in central Michigan can explore the Chippewa Nature Center river road near Midland, where color is actively falling. Upper Peninsula visitors should expect minimal color change and plan accordingly, as the region remains weeks away from peak display.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-26T17:26:32.364Z",
+  "conditionsUpdated": "2026-10-27T16:43:42.629Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -15,11 +15,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
@@ -32,11 +32,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
@@ -49,11 +49,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
@@ -66,16 +66,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 9,
+      "modeledPercent": 8,
       "source": {
         "drivers": [
           "regional climatology",
@@ -83,16 +83,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 41,
+      "modeledPercent": 33,
       "source": {
         "drivers": [
           "regional climatology",
@@ -100,16 +100,16 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 97,
+      "modeledPercent": 98,
       "source": {
         "drivers": [
           "regional climatology",
@@ -117,11 +117,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     },
     {
@@ -134,11 +134,11 @@
           "canopy camera anchor",
           "MODIS canopy greenness"
         ],
-        "anchorShiftDays": -4,
+        "anchorShiftDays": -5,
         "anchorConfidence": "low",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 43,
-        "satelliteWeight": 0.08
+        "satelliteAgeDays": 44,
+        "satelliteWeight": 0.04
       }
     }
   ],
