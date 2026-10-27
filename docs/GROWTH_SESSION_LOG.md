@@ -1,3 +1,13 @@
+### 2026-10-27 — Apostle Islands decision-oriented Circle Tour field guide
+
+- **Branch / PR:** `feat/apostle-islands-explorer`, [#1239](https://github.com/izworskic/chrisizworski-com/pull/1239), draft. Distinct canonical `/apostle-islands/` owns water access, trip-type, cave, cruise, Madeline ferry and backcountry decisions; the existing Circle Tour remains multi-state routing owner.
+- **Visitor utility:** Nine static, indexable, official-source-backed experiences; photograph licensing; site-standard Field Guide v1 design; CSS/mobile design, filterable Leaflet and CARTO/OSM-fallback map; directions and critical safety text present with JavaScript off.
+- **Accuracy constraints:** Madeline Island separate from NPS; 2026 Little Sand Bay and Devils Island construction noted with explicit date; UW wave monitoring offline seasonally; no invented safe paddling, winter ice access, boat landings or bookings. Public sources documented in `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`.
+- **Site integration:** Circle Tour Bayfield stop, Tools directory + ordered JSON-LD, primary sitemap and reciprocal network registry links. No ads changes.
+- **Gate history:** Initial 59-step run found mismatched Tools directory list count (93 vs 94) and overlong 75-character title; fixed. Added specific static-first tests. Final-head verification and actual rendered mobile/desktop imagery and map checks remain unverified until CI completes. **Do not merge on red or pending checks.**
+- **GSC / AdSense measurement:** No verified new-tool search impressions, clicks or revenue. No ranking uplift claimed.
+- **Exactly one next action:** Inspect latest PR #1239 CI and Vercel preview, test 390px and 1366px with loaded photos/map, repair all blockers, and only then merge and perform live smoke.
+
 ### 2026-10-27 — Keweenaw waterfall park access expansion
 
 - Branch: `feature/keweenaw-waterfall-access-guides-20261027`. Continued the merged Upper Peninsula Waterfall Explorer without rebuilding the map or modifying advertising.
