@@ -1,0 +1,72 @@
+{
+  "researchedAt": "2026-10-26",
+  "catalog": "Wikimedia Commons subject-verified photos; do not substitute illustrations for missing locations; CSS responsive crop indicated as presentation crop",
+  "photos": [
+    {
+      "id": "old-woman",
+      "file": "Old Woman Bay.jpg",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Old_Woman_Bay.jpg/960px-Old_Woman_Bay.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Old_Woman_Bay.jpg",
+      "author": "Beckettlc",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "Old Woman Bay sandy beach with forested headlands and blue Lake Superior",
+      "proof": "Commons direct subject and license"
+    },
+    {
+      "id": "katherine",
+      "file": "Katherine Cove.jpg",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Katherine_Cove.jpg/960px-Katherine_Cove.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Katherine_Cove.jpg",
+      "author": "Beckettlc",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "Curving sand beach and clear shallows at Katherine Cove",
+      "proof": "Commons direct subject and license"
+    },
+    {
+      "id": "nokomis",
+      "file": "Nokomis Trail.jpg",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Nokomis_Trail.jpg/960px-Nokomis_Trail.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Nokomis_Trail.jpg",
+      "author": "Beckettlc",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "Elevated Nokomis Trail overlook above Old Woman Bay and the coast",
+      "proof": "Commons direct subject and license"
+    },
+    {
+      "id": "agawa",
+      "file": "Agawa Rock Pictographs Trail.jpg",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Agawa_Rock_Pictographs_Trail.jpg/960px-Agawa_Rock_Pictographs_Trail.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Agawa_Rock_Pictographs_Trail.jpg",
+      "author": "Michael Wason",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "alt": "Rugged trail leading toward Agawa Rock pictograph site, closed for 2026",
+      "proof": "Commons direct site trail, not pictograph detail"
+    },
+    {
+      "id": "sand",
+      "file": "Sand River hike (9657093125).jpg",
+      "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Sand_River_hike_%289657093125%29.jpg?width=768",
+      "source": "https://commons.wikimedia.org/wiki/File:Sand_River_hike_(9657093125).jpg",
+      "author": "Helena Jacoba",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "alt": "Trail scenery beside the Sand River in Lake Superior Provincial Park",
+      "proof": "Commons direct Sand River Ontario category; source notes camera EXIF position inconsistent, not used for geolocation"
+    },
+    {
+      "id": "orphan",
+      "file": "Lake Superior vista 4.JPG",
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Lake_Superior_vista_4.JPG/960px-Lake_Superior_vista_4.JPG",
+      "source": "https://commons.wikimedia.org/wiki/File:Lake_Superior_vista_4.JPG",
+      "author": "Fungus Guy",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "alt": "Lake Superior coastal vista photographed along the Orphan Lake Trail",
+      "proof": "Commons direct Orphan Lake Trail photo"
+    }
+  ]
+}
