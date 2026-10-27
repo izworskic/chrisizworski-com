@@ -27,6 +27,10 @@ try{
    check(markers>=7,'map markers missing at '+width);check(multi>=1,'Sand Point marker grouping missing at '+width);
    await p.screenshot({path:out+'/map-'+width+'.png'});
    report.map.push({width,markers,multi,status:await p.locator('#wf-map-message').textContent()});
+   const directMaps=await p.locator('#wf-stories a.fzn-google-map-link').count();
+   check(directMaps===11,'Google Maps location handoffs: expected 11 got '+directMaps+' at '+width);
+   const mapHref=await p.locator('#wf-stories a.fzn-google-map-link').first().getAttribute('href');
+   check(mapHref?.includes('maps/search/?api=1&query=')&&mapHref?.includes('46.450217'),'invalid destination map URL at '+width);
    let loaded=0,fallback=0,unhandled=[];
    const images=p.locator('figure.wf-photo img');
    for(let i=0;i<await images.count();i++){

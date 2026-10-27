@@ -1,7 +1,7 @@
 name: Frozen Michigan browser quality gate
 on:
   push:
-    branches: [feat/frozen-michigan-field-guide-release]
+    branches: [feat/frozen-michigan-field-guide-release, feat/frozen-michigan-map-handoffs]
     paths:
       - public/frozen-michigan/**
       - public/assets/frozen-michigan.*

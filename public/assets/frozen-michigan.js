@@ -36,7 +36,14 @@ function refreshPins(initial){
   for(const card of group.cards){
    const title=card.querySelector('h3')?.textContent||'Open field note';
    const item=document.createElement('li');const a=document.createElement('a');a.href='#'+card.id;a.textContent=title;
-   a.addEventListener('click',ev=>{ev.preventDefault();card.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});const h=card.querySelector('h3');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}map.closePopup()});item.append(a);items.append(item)
+   a.addEventListener('click',ev=>{ev.preventDefault();card.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});const h=card.querySelector('h3');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}map.closePopup()});item.append(a);
+   const view=document.createElement('a');
+   const lat=Number(card.dataset.lat),lng=Number(card.dataset.lng);
+   view.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(lat+','+lng);
+   view.target='_blank';view.rel='noopener noreferrer';view.className='fzn-popup-map-link';
+   view.textContent='View geographic area · not parking ↗';
+   view.title='Location only: verify official winter parking, access and closures';
+   item.append(view);items.append(item)
   }
   root.append(items);
   const markerClass=multi?'wf-pin wf-pin-multi':'wf-pin';
