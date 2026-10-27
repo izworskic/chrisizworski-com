@@ -1,4 +1,5 @@
 name: Lake Superior Park release gate
+# Final-head rerun after normalizing the field-guide Tools entity to WebPage.
 on:
   push:
     branches:
