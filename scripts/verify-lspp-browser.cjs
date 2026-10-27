@@ -67,8 +67,38 @@ async function main(){
    const pins=await page.locator('.leaflet-marker-icon').count();
    need(pins>=6,size.name+' six official site pins, found '+pins);
    await page.locator('#access-map').screenshot({path:path.join(out,size.name+'-map.png')});report.screens.push(size.name+'-map.png');
-   await page.locator('.leaflet-marker-icon').first().click();
-   need(await page.locator('.leaflet-popup').count()>=1,size.name+' pin popup opens');
+   // Every government-located bubble needs a Google Maps place link.
+   // Five confirmed destination positions may show driving directions for a future
+   // operating season; the closed Agawa Rock pictograph site must remain view-only.
+   const bubbleLabels=[];
+   for(let mi=0;mi<pins;mi++){
+     await page.locator('.leaflet-marker-icon').nth(mi).dispatchEvent('click');
+     const popup=page.locator('.leaflet-popup-content:visible').last();
+     await popup.waitFor({state:'visible',timeout:5000});
+     const place=popup.locator('a.lspp-google-place');
+     need(await place.count()===1,size.name+' marker '+mi+' Google Maps location link');
+     const placeUrl=new URL(await place.getAttribute('href'));
+     need(placeUrl.hostname==='www.google.com' && placeUrl.pathname==='/maps/search/' && placeUrl.searchParams.get('api')==='1',
+       size.name+' marker '+mi+' Google Maps location URL invalid');
+     const name=await popup.locator('strong').first().innerText();
+     const directions=popup.locator('a.lspp-google-directions');
+     if(name.includes('Agawa Rock')){
+       need(await directions.count()===0,size.name+' sacred pictograph marker must never give driving directions');
+       need((await popup.innerText()).includes('closed'),size.name+' sacred pictograph marker must explain closure');
+     }else{
+       need(await directions.count()===1,size.name+' '+name+' missing driving directions');
+       const driveUrl=new URL(await directions.getAttribute('href'));
+       need(driveUrl.hostname==='www.google.com' && driveUrl.pathname==='/maps/dir/' && driveUrl.searchParams.get('api')==='1',
+         size.name+' '+name+' Google directions URI invalid');
+       need(/^47\.[0-9]+,-84\.[0-9]+$/.test(driveUrl.searchParams.get('destination')||''),
+         size.name+' '+name+' directions destination missing coordinates');
+       need(driveUrl.searchParams.get('travelmode')==='driving' && !driveUrl.searchParams.has('origin'),
+         size.name+' '+name+' directions should use visitor-supplied current origin');
+     }
+     bubbleLabels.push(name);
+   }
+   need(bubbleLabels.length===6,size.name+' all six map bubbles tested');
+
    await page.locator('#season').selectOption('future');
    await page.locator('#budget').selectOption('480');
    await page.locator('#build').click();
@@ -76,11 +106,22 @@ async function main(){
    const route=page.locator('#verified-drive-route a[href*="maps/dir"]');
    need(await route.count()===1,size.name+' future map route link');
    need(!(await route.getAttribute('href')).includes('47.370316'),size.name+' no sacred site routing');
-   await page.locator('#season').selectOption('current');
+   // Test a fresh default-season load independently of the future-season run.
+   // This avoids Leaflet's transient cached popup nodes after sequential pin checks.
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('#season')?.value==='current'
+      && document.querySelectorAll('.leaflet-marker-icon').length>=6,null,{timeout:24000});
+   await page.locator('.leaflet-marker-icon[title="Old Woman Bay day-use area"]').dispatchEvent('click');
+   const currentPopup=page.locator('.leaflet-popup-content:visible').last();
+   await currentPopup.locator('a.lspp-google-place').waitFor({state:'visible',timeout:5000});
+   need(await currentPopup.locator('a.lspp-google-place').count()===1,
+     size.name+' off-season bubble still allows viewing Google Maps location');
+   need(await currentPopup.locator('a.lspp-google-directions').count()===0,
+     size.name+' off-season bubble must not give driving directions');
    await page.locator('#build').click();
    need((await page.locator('#planIntro').innerText()).includes('No open-day-use itinerary'),size.name+' off-season access gate');
    need(await page.locator('#verified-drive-route a[href*="maps/dir"]').count()===0,size.name+' no current driving route');
-   report.cases.push({viewport:size.name,photos:photos.length,tiles,pins,overflow:false,routeGuard:true});
+   report.cases.push({viewport:size.name,photos:photos.length,tiles,pins,googleMapsPopups:bubbleLabels.length,closedSiteViewOnly:true,overflow:false,routeGuard:true});
    await ctx.close();
   }
   const ctx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});

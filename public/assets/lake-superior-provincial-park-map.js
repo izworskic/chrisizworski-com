@@ -28,7 +28,14 @@
   const text = (node, value) => { if (node) node.textContent = value; };
   const verified = item => Boolean(item.siteCoordinateVerified && Number.isFinite(item.latitude) && Number.isFinite(item.longitude));
   const link = (url, label) => { const a=document.createElement('a');a.href=url;a.textContent=label;a.target='_blank';a.rel='noopener noreferrer';return a; };
+  // Universal Google Maps links: no starting address is supplied, so Google Maps
+  // can offer the visitor their own current location as a starting point.
+  // Destination coordinates indicate an official site/area, NEVER a surveyed parking stall.
   const searchUrl = item => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.latitude+','+item.longitude);
+  const directionsUrl = item => {
+    const params=new URLSearchParams({api:'1',destination:item.latitude+','+item.longitude,travelmode:'driving'});
+    return 'https://www.google.com/maps/dir/?'+params.toString();
+  };
   const visible = item => !item.mapCardId || !document.querySelector('.card[data-id="'+item.mapCardId+'"]')?.hidden;
   const compact = id => catalog?.locations.find(item => item.id === id) || null;
   const allowedAsWaypoint = item => Boolean(accessEvidenceFresh() && document.getElementById('season')?.value==='future' && verified(item) && item.drivingWaypointConfidence==='official_destination' && !item.closed2026);
@@ -41,11 +48,34 @@
       : 'This pin shows where the destination lies along the shore. It does not mark an independently verified parking stall or mean the road and facilities are open.';
     popup.append(title,evidence);
     const note=document.createElement('p');note.textContent=item.parkingInfrastructure;popup.append(note);
+    // Every government-located map bubble has a Google Maps location link.
+    // Driving directions are offered only for future-season, source-fresh, nonclosed
+    // official destinations. Agawa Rock is intentionally a view-only sacred-site marker.
+    if(verified(item)){
+      const actions=document.createElement('div');actions.className='lspp-map-actions';
+      if(allowedAsWaypoint(item)){
+        const drive=link(directionsUrl(item),'Get driving directions in Google Maps');
+        drive.className='lspp-google-directions';
+        drive.setAttribute('aria-label','Get driving directions to '+item.name+' in Google Maps');
+        actions.append(drive);
+      }
+      const place=link(searchUrl(item),item.closed2026?'View the closed site on Google Maps':'View location on Google Maps');
+      place.className='lspp-google-place';
+      place.setAttribute('aria-label','View '+item.name+' on Google Maps');
+      actions.append(place);
+      popup.append(actions);
+      if(!allowedAsWaypoint(item)){
+        const caution=document.createElement('p');caution.className='lspp-map-direction-note';
+        caution.textContent=item.closed2026
+          ? 'This place is closed for 2026. You can look at the location on the map, but directions to the site are not offered.'
+          : !accessEvidenceFresh()
+            ? 'Driving directions are paused until the park’s access notes are reviewed again.'
+            : 'For driving directions, switch the planner above to a future operating season and check Ontario Parks before travelling.';
+        popup.append(caution);
+      }
+    }
     const source=document.createElement('p');
     source.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'Read the official location notes'));popup.append(source);
-    if(allowedAsWaypoint(item)){
-      const nav=document.createElement('p');nav.append(link(searchUrl(item),'See this destination on Google Maps'));popup.append(nav);
-    }
     if(item.mapCardId) {
       const button=document.createElement('button');button.type='button';button.className='secondary-button';
       button.textContent='Explore this place';
