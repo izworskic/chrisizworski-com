@@ -73,7 +73,7 @@ async function main(){
    const bubbleLabels=[];
    for(let mi=0;mi<pins;mi++){
      await page.locator('.leaflet-marker-icon').nth(mi).dispatchEvent('click');
-     const popup=page.locator('.leaflet-popup-content');
+     const popup=page.locator('.leaflet-popup-content:visible').last();
      await popup.waitFor({state:'visible',timeout:5000});
      const place=popup.locator('a.lspp-google-place');
      need(await place.count()===1,size.name+' marker '+mi+' Google Maps location link');
@@ -108,9 +108,9 @@ async function main(){
    need(!(await route.getAttribute('href')).includes('47.370316'),size.name+' no sacred site routing');
    await page.locator('#season').selectOption('current');
    await page.locator('.leaflet-marker-icon').first().dispatchEvent('click');
-   need(await page.locator('.leaflet-popup-content a.lspp-google-place').count()===1,
+   need(await page.locator('.leaflet-popup-content:visible a.lspp-google-place').count()===1,
      size.name+' off-season bubble still allows viewing Google Maps location');
-   need(await page.locator('.leaflet-popup-content a.lspp-google-directions').count()===0,
+   need(await page.locator('.leaflet-popup-content:visible a.lspp-google-directions').count()===0,
      size.name+' off-season bubble must not give driving directions');
    await page.locator('#build').click();
    need((await page.locator('#planIntro').innerText()).includes('No open-day-use itinerary'),size.name+' off-season access gate');
