@@ -11,6 +11,19 @@
   if (!el || !status || !list) return;
   let map = null, layer = null, markers = [], catalog = null, lastPlan = [];
   let fallbackStarted = false;
+  const SNAPSHOT_VALID_DAYS = 30;
+  function sourceAgeDays() {
+    if (!catalog?.researchedAt) return Infinity;
+    const ts=Date.parse(catalog.researchedAt+'T12:00:00Z');
+    return Number.isFinite(ts) ? Math.max(0,(Date.now()-ts)/86400000) : Infinity;
+  }
+  function accessEvidenceFresh(){return sourceAgeDays()<=SNAPSHOT_VALID_DAYS;}
+  function showFreshnessWarning(){
+    let warning=document.getElementById('source-expiry-warning');
+    if(!warning)return;
+    warning.hidden=accessEvidenceFresh();
+    if(!warning.hidden)warning.textContent='The park access snapshot is over 30 days old. This guide still describes the park, but external route links are withheld until Ontario Parks alerts and operating dates are reviewed. See the official alert and park-hours links.';
+  }
   const officialLink = 'https://www.ontarioparks.ca/park/lakesuperior/maps';
   const text = (node, value) => { if (node) node.textContent = value; };
   const verified = item => Boolean(item.siteCoordinateVerified && Number.isFinite(item.latitude) && Number.isFinite(item.longitude));
@@ -18,7 +31,7 @@
   const searchUrl = item => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.latitude+','+item.longitude);
   const visible = item => !item.mapCardId || !document.querySelector('.card[data-id="'+item.mapCardId+'"]')?.hidden;
   const compact = id => catalog?.locations.find(item => item.id === id) || null;
-  const allowedAsWaypoint = item => Boolean(document.getElementById('season')?.value==='future' && verified(item) && item.drivingWaypointConfidence==='official_destination' && !item.closed2026);
+  const allowedAsWaypoint = item => Boolean(accessEvidenceFresh() && document.getElementById('season')?.value==='future' && verified(item) && item.drivingWaypointConfidence==='official_destination' && !item.closed2026);
   function createPopup(item){
     const popup=document.createElement('div');popup.className='lspp-map-popup';
     const title=document.createElement('strong'); title.textContent=item.name;
@@ -148,6 +161,7 @@
       if(!response.ok)throw Error('access catalog unavailable');
       catalog=await response.json();
       if(!Array.isArray(catalog.locations))throw Error('invalid access catalog');
+      showFreshnessWarning();
       displaySources();buildRoute();
       if(typeof window.L==='undefined'){
         text(status,'Map library unavailable. Official coordinates, sources and stop details remain usable below.');return;
