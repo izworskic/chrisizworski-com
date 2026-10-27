@@ -4176,6 +4176,45 @@
         "decisionWindowDays": 28,
         "privacy": "No precise visitor position stored."
       }
+    },
+    {
+      "id": "frozen-michigan",
+      "name": "Frozen Michigan Ice and Winter Landscape Field Guide",
+      "canonical": "https://chrisizworski.com/frozen-michigan/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Which actual Michigan frozen waterfalls, ice curtains and shoreline ice viewpoints should I visit, and what winter access is documented?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "photographer",
+        "nature-viewer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Editorial ice landscape discovery and visitor arrival evidence, not lake ice coverage, ice safety, ice-cave live conditions, or the existing general winter activity directory."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Source-based, 11 unique frozen landscape field notes; initial page release."
+      },
+      "measurement": {
+        "search": "GSC Web URL and query for 7/28 days",
+        "product": "Specialist handoffs and guide discovery",
+        "decisionWindowDays": 28,
+        "privacy": "No precise user location or visitor identity collected"
+      }
     }
   ],
   "relationships": [
@@ -5962,6 +6001,46 @@
       "strength": "strong",
       "surface": "ice-activity-entry",
       "reason": "Field-guide inspiration leads to formation and winter access evidence rather than inventing ice conditions."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "frozen-michigan",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "frozen-guide-handoff",
+      "reason": "Activity guide leads into specialist winter landscapes."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "frozen-michigan",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "winter-destinations",
+      "reason": "Year-round destination guide suggests a season-specific ice atlas."
+    },
+    {
+      "from": "frozen-michigan",
+      "to": "michigan-ice-caves",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "curtain-experiences",
+      "reason": "Existing specialized ice cave conditions and access details."
+    },
+    {
+      "from": "frozen-michigan",
+      "to": "michigan-ice",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "lake-ice-education",
+      "reason": "Observed lake-ice coverage only, not safe ice."
+    },
+    {
+      "from": "frozen-michigan",
+      "to": "michigan-winter-activities",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "winter-network",
+      "reason": "Return to broad outdoor activity chooser."
     }
   ],
   "cannibalizationGroups": [

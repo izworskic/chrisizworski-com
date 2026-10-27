@@ -1446,3 +1446,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Michigan Adventure Finder, Tools directory, sitemap-winter and registry linking only this guide. AdSense configuration untouched; new document uses the usual publisher loader.
 - GSC baseline/revenue unavailable; any traffic impact is unmeasured. Release not presumed merged.
 - Single next action: verify final isolated commit in full CI and browser QA, then review quality gates before publication.
+
+
+### 2026-10-27 — Frozen Michigan standalone field guide
+
+- Built statewide /frozen-michigan/ as the second FIELD_GUIDE_V1 release candidate; 11 named experiences across both peninsulas with dated DNR/NPS/NPS-closure source evidence, photography provenance, and land-based viewing cautions.
+- Classified individual access as documented seasonal approach, winter arrival unverified, or limited vehicle approach. Surfaced Munising Falls 2025 washout closure prominently rather than advertising it as an available winter waterfall.
+- Introduced a unique interactive three-process field lesson on sandstone seep ice, waterfalls and windblown lake spray. Shared responsive map with grouped Sand Point markers, filterable cards and explicit no-ice-crossing guidance. No AdSense configuration or existing lake ice engine changed.
+- Linked from tools, Michigan destinations, existing winter activities and specialist tools. Release remains unmerged until CI and visual QA; rankings/impressions unmeasured.
