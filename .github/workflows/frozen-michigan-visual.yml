@@ -1,0 +1,38 @@
+name: Frozen Michigan browser quality gate
+on:
+  push:
+    branches: [feat/frozen-michigan-field-guide-release]
+    paths:
+      - public/frozen-michigan/**
+      - public/assets/frozen-michigan.*
+      - scripts/check-frozen-michigan-visual.mjs
+      - .github/workflows/frozen-michigan-visual.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium runner
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Serve static guide
+        run: |
+          python3 -m http.server 4173 --directory public >/tmp/frozen-michigan.log 2>&1 &
+          sleep 2
+      - name: Validate visual and interactive guide
+        run: node scripts/check-frozen-michigan-visual.mjs
+      - name: Save screenshots and measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-michigan-visual-evidence
+          path: artifacts/frozen-michigan-visual/
+          retention-days: 7
