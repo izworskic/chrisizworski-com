@@ -54,3 +54,13 @@ Land manager sources: https://keweenawlandtrust.org/protected-lands/hungarian-fa
 - County's adopted 2026–2030 plan documents a developed waterfall-viewing walkway and year-round day-use park; overall county accessibility assessment is 1/5 and parking accessibility needs improvement. Do not claim fully accessible facilities, exact trail mileage, or today's opening status.
 - Indexing five-axis gate: land manager and public use via county park, signed visitor arrival via county address/US-41 direction, developed walkway via county plan, geographic fall position via GNIS-derived record. Parking/visitor entrance is not the waterfall point.
 - Sources: https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/ ; https://deltacountymi.gov/wp-content/uploads/2026/01/Delta-County-Recreation-Plan.pdf ; https://deltacountymi.gov/township-information/baldwin-township/points-of-interest/ ; https://www.anyplaceamerica.com/directory/mi/delta-county-26041/falls/.
+
+## Keweenaw County park access review — October 27, 2026
+
+Promoted the following state GIS and linked USGS points only after separately reviewing the 2025–2029 Keweenaw County Recreation Plan, the relevant visitor routes, and documented park management:
+
+- **Haven Falls**, Michigan GIS #138 / USGS UUID e40ef5cd-8a58-11e6-b586-ecf4bb62914c: Keweenaw County Road Commission owns the park; Visit Keweenaw supplies parking directions and the short park-internal approach. Source: https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf and https://www.visitkeweenaw.com/listing/haven-falls-park/595/. No claim of universal accessibility; county score 2 indicates only partial compliance.
+- **Eagle River Falls**, Michigan GIS #142 / USGS NHDPlus COMID 11936947: Keweenaw County identifies MDOT ownership of Eagle River Bridge Park; visitor authority describes off-M-26 parking and the historic pedestrian bridge viewpoint. Sources: county plan and https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/.
+- **Silver River Falls**, GIS #146 / USGS NHDPlus COMID 11936911: County recreation plan inventories Silver River Falls Park and older county land-use plan identifies MDOT ownership. Visitor brochure locates parking south of M-26 and the footpath north, but a marked legal/safe pedestrian crossing is not independently documented. Preserve a **noindex research guide**, omit from sitemap and provide no guessed pedestrian or driving routes until resolved.
+
+State GIS points are waterfall locations only, not parking entrances. USGS NHD linkage does not independently establish public rights of way. Any future indexable promotion requires all five evidence axes with actual source links and a sufficiently specific visitor page.

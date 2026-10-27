@@ -19,3 +19,32 @@ test('Bridalveil Falls decision guide is independently verified and does not pro
 test('Wagner Falls has separate authoritative parking and waterfall map positions',()=>{const f=d.waterfalls.find(x=>x.id==='wagner-falls');const detail=fs.readFileSync('public/upper-peninsula-waterfalls/wagner-falls/index.html','utf8');const script=fs.readFileSync('public/assets/up-waterfalls.js','utf8');assert.equal(f.lat,46.387663);assert.equal(f.lng,-86.646554);assert.deepEqual([f.parkingLocation.lat,f.parkingLocation.lng],[46.388944,-86.648995]);assert.notDeepEqual([f.lat,f.lng],[f.parkingLocation.lat,f.parkingLocation.lng]);assert.match(f.parkingLocation.source,/michigan.gov\/recsearch/);assert.ok(f.verification.parking.source===f.parkingLocation.source);assert.ok(detail.includes('data-parking-lat="46.388944" data-parking-lng="-86.648995"'));assert.ok(detail.includes('data-lat="46.387663" data-lng="-86.646554"'));assert.ok(detail.includes('destination=46.388944%2C-86.648995'));assert.ok(detail.includes('0.13-mile'));assert.ok(hub.includes('data-id="wagner-falls"'));assert.ok(hub.includes('data-parking-source="'+f.parkingLocation.source+'"'));assert.ok(script.includes('official parking'));assert.ok(script.includes('c.dataset.parkingSource'));assert.ok(fs.readFileSync('public/assets/up-fall-detail.js','utf8').includes('Verified visitor parking point'));});
 
 test('Delta County Rapid River Falls is a sourced public park distinct from western GIS namesake',()=>{const id='rapid-river-falls-delta-county',f=d.waterfalls.find(x=>x.id===id),h=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8'),s=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');assert.equal(f.publication,'verified-access-guide');assert.equal(f.gisObjectId,null);assert.ok(Math.abs(f.lat-46.0216667)<0.001&&Math.abs(f.lng+86.9833333)<0.001);assert.ok(hub.includes('data-id="'+id+'"'));assert.ok(s.includes('/'+id+'/'));assert.match(h,/<meta name="robots" content="index,follow/);for(const k of ['landManager','publicAccess','parking','trail','location']){assert.equal(f.verification[k].verified,true);assert.ok(h.includes(f.verification[k].source));}assert.ok(h.includes('1 out of 5'));assert.ok(h.includes('13149 S 15'));assert.ok(h.includes('46.627099, -89.668576'));assert.ok(h.includes('https://chrisizworski.com/#person'));assert.equal(d.waterfalls.filter(x=>x.id===id).length,1);});
+
+test('Keweenaw park guides require independently evidenced visitor access before indexing',()=>{
+  const sitemap=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
+  const hydro=JSON.parse(fs.readFileSync('data/up-waterfall-usgs-v2-crosswalk.json','utf8'));
+  for(const id of ['haven-falls','eagle-river-falls','silver-river-falls']){
+    const f=d.waterfalls.find(x=>x.id===id);
+    assert.ok(f,'destination must exist: '+id);
+    assert.ok(hub.includes('data-id="'+id+'"'));
+    const html=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+    assert.ok(html.includes('<h1>'+f.name+'</h1>'));
+    assert.ok(html.includes('https://chrisizworski.com/#person'));
+    assert.ok(html.includes('href="/assets/vendor/leaflet-1.9.4.css"'));
+    assert.ok(html.replace(/<[^>]+>/g,' ').split(/\s+/).length>=330,'visitor guide too thin: '+id);
+    for(const axis of ['landManager','publicAccess','parking','trail','location']){
+      assert.ok(f.verification[axis]?.source.startsWith('https://'));
+      assert.ok(html.includes(f.verification[axis].source),'missing citation: '+id+':'+axis);
+    }
+    assert.ok(hydro.matches.some(x=>x.stateGisObjectId===f.gisObjectId),'missing scientific cross-reference '+id);
+    const indexed=sitemap.includes('/upper-peninsula-waterfalls/'+id+'/');
+    const eligible=Object.values(f.verification).every(x=>x.verified)&&f.publication==='verified-access-guide';
+    assert.equal(indexed,eligible,'indexing gate '+id);
+    assert.match(html,new RegExp('<meta name="robots" content="'+(eligible?'index,follow':'noindex,follow')));
+  }
+  const silver=d.waterfalls.find(x=>x.id==='silver-river-falls');
+  assert.equal(silver.verification.trail.verified,false);
+  assert.equal(silver.verification.publicAccess.verified,false);
+  assert.ok(!sitemap.includes('/silver-river-falls/'));
+  assert.match(hub,/Silver River Falls[\s\S]*?Access research only/);
+});
