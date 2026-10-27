@@ -1258,6 +1258,40 @@
       }
     },
     {
+      "id": "apostle-islands",
+      "name": "Apostle Islands Explorer",
+      "canonical": "https://chrisizworski.com/apostle-islands/",
+      "aliases": [],
+      "kind": "authority-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Choose Apostle Islands sea caves, cruises, island access, kayak tours and camping with official conditions and transport handoffs",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "lake-superior",
+        "wisconsin"
+      ],
+      "personas": [
+        "road-tripper",
+        "paddler",
+        "family-traveler",
+        "hiker"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
       "id": "lake-superior-provincial-park",
       "name": "Lake Superior Provincial Park Explorer",
       "canonical": "https://chrisizworski.com/lake-superior-provincial-park/",
@@ -6090,6 +6124,23 @@
       "strength": "optional",
       "surface": "winter-network",
       "reason": "Return to broad outdoor activity chooser."
+    }
+,
+    {
+      "from": "circle-tour",
+      "to": "apostle-islands",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "Bayfield Circle Tour stop links to a detailed decision guide for cave access, ferry, cruises and island days."
+    },
+    {
+      "from": "apostle-islands",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "apostle-visitor-planner",
+      "reason": "Return to the full Lake Superior Circle Tour road-trip itinerary after planning the islands."
     }
   ],
   "cannibalizationGroups": [
