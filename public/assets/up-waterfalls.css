@@ -2,3 +2,18 @@
 .research-discovery{margin:16px 0;padding:20px 24px;border:1px solid #b9c8c2;border-radius:12px;background:#eef3f0}.research-discovery h3{font:normal 1.65rem/1.2 Georgia,serif;margin:0 0 8px}.research-discovery p{font-size:.9rem;max-width:850px;margin:8px 0}.research-toggle{display:inline-flex;align-items:center;gap:10px;padding:11px 13px;border-radius:7px;background:white;font-weight:750;color:#223f3d}.research-toggle input{width:18px;height:18px;accent-color:#176862}.research-discovery .small{font-size:.78rem;color:#506a65}
 
 .construction-alert{margin:18px 0;padding:16px 20px;border:1px solid #c79259;border-left:5px solid #a76024;border-radius:8px;background:#fff1df;color:#502e16;line-height:1.65}.construction-alert a{font-weight:800}.statusline.closed{border-color:#a52f23;background:#fff0ea}.statusline.restricted{border-color:#b06b29;background:#fff5e7}
+
+/* Source-backed visitor arrival stays collapsed until asked for; avoid taller result cards. */
+.arrival-details{border-top:1px solid var(--line);margin-top:.75rem;padding-top:.55rem;font-size:.88rem}
+.arrival-details summary{cursor:pointer;color:var(--water);font-weight:650;list-style-position:inside}
+.arrival-details summary:focus-visible{outline:3px solid #e08d4e;outline-offset:2px}
+.arrival-details-body{padding:.4rem .35rem .15rem;line-height:1.45}
+.arrival-details-body p{margin:.4rem 0}
+.arrival-details .arrival-caution{color:var(--sub);font-weight:550}
+.selected-intro{font-size:.92rem;color:var(--sub);margin:0 0 .8rem}
+.selected-stop{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:.9rem 1rem;margin:.65rem 0;min-width:0}
+.selected-stop h4{margin:0 0 .35rem;font:600 1rem/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.selected-stop p{margin:.3rem 0;font-size:.91rem;line-height:1.5;overflow-wrap:anywhere}
+.selected-stop .selected-status{color:var(--sub);font-size:.84rem}
+.selected-stop .selected-warning{font-weight:650;color:var(--danger)}
+.selected-stop a{overflow-wrap:anywhere}
