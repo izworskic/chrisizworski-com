@@ -7,6 +7,8 @@
 <meta name="description" content="Compare Agawa Rock, Old Woman Bay, Sand River and park trails by visit time, access, parking and permits. Check official closures before you go.">
 <meta name="robots" content="noindex,follow">
 <meta name="author" content="Chris Izworski">
+<meta property="og:image" content="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Old_Woman_Bay.jpg/960px-Old_Woman_Bay.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://chrisizworski.com/lake-superior-provincial-park/">
 <link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
 <style>
@@ -20,7 +22,7 @@ header{background:#103947;color:white;position:relative;overflow:hidden}
 header::after{content:"";position:absolute;right:-8%;bottom:-115px;width:600px;height:380px;background:radial-gradient(ellipse at 54% 65%,#297b80 0 24%,transparent 25%),linear-gradient(148deg,transparent 40%,#1a525d 40% 54%,transparent 54%),linear-gradient(160deg,transparent 36%,#29616a 36% 52%,transparent 52%);opacity:.7;pointer-events:none}
 .topbar{display:flex;justify-content:space-between;gap:16px;padding-top:23px;font-size:13px;position:relative;z-index:1}
 .topbar a{color:#dcefeb}.eyebrow{text-transform:uppercase;letter-spacing:.15em;font-size:12px;font-weight:750;color:#b6e6df}
-.hero{padding:62px 0 75px;position:relative;z-index:1;max-width:810px}
+.hero{padding:45px 0 68px;position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,350px);align-items:center;gap:26px}.hero-copy{max-width:720px}.hero-gallery{display:grid;gap:9px;align-content:center;max-width:100%;min-width:0}.hero-gallery figure{margin:0}.hero-gallery figure:first-child{aspect-ratio:1.55}.hero-gallery figure:last-child{aspect-ratio:2.1}
 h1{font-family:Georgia,serif;font-size:clamp(38px,5.2vw,70px);line-height:1.07;font-weight:500;letter-spacing:-.035em;margin:13px 0 18px}
 .hero p{font-size:19px;color:#e1efed;max-width:670px}
 .hero-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
@@ -90,17 +92,27 @@ footer a{color:#c2eae4}
 #verified-drive-route{padding:12px 0;border-top:1px solid var(--line);margin-top:15px;font-size:13px}
 #verified-drive-route p{margin:5px 0 10px}
 @media(max-width:480px){.access-map-section{padding:14px}#access-map{height:355px}}
+
+.card-photo{margin:-22px -22px 16px;position:relative;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;background:#dee7e5}
+.card-photo img,.hero-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.card-photo{height:210px}.card-photo img{object-position:center 48%}
+.card-photo figcaption,.hero-photo figcaption{position:absolute;left:0;bottom:0;max-width:100%;padding:5px 9px;background:#122d37df;color:#f5f9f8;font:11px/1.4 system-ui,sans-serif}
+.card-photo figcaption a,.hero-photo figcaption a{color:#d4f6f0}
+.hero-photo{position:relative;overflow:hidden;border-radius:10px;background:#1d454c}
+.hero-gallery .hero-photo:nth-child(2) img{object-position:center 64%}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding:35px 0 58px}.hero-gallery{display:grid;grid-template-columns:1.2fr .8fr}.hero-gallery figure:first-child,.hero-gallery figure:last-child{aspect-ratio:1.7}.hero-gallery{max-width:100%}}
+@media(max-width:480px){.hero-gallery{grid-template-columns:1fr 1fr;gap:7px}.hero-gallery figure:first-child,.hero-gallery figure:last-child{aspect-ratio:1.15}.card-photo{margin:-16px -16px 13px;height:178px}}
 </style>
 </head>
 <body>
 <header>
 <div class="wrap">
 <nav class="topbar" aria-label="Site and trip navigation"><a href="/">Chris Izworski · Great Lakes Field Guides</a><a href="/lake-superior-circle-tour/">Back to Lake Superior Circle Tour</a></nav>
-<div class="hero"><div class="eyebrow">Ontario · Highway 17 · Field guide</div>
+<div class="hero"><div class="hero-copy"><div class="eyebrow">Ontario · Highway 17 · Field guide</div>
 <h1>Lake Superior Provincial Park, by the hour.</h1>
 <p>Ancient pictographs, immense cliffs, waterfall trails and wild shorelines. Choose your time and walking comfort—then see which stops deserve it, with access limitations made explicit.</p>
 <div class="hero-links"><a href="#explore">Find my stops</a><a class="secondary" href="https://www.ontarioparks.ca/park/lakesuperior/alerts" target="_blank" rel="noopener">Official park alerts</a></div>
-</div></div></header>
+</div><div class="hero-gallery" aria-label="Photographs from Lake Superior Provincial Park"><figure class="hero-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Old_Woman_Bay.jpg/960px-Old_Woman_Bay.jpg" alt="Old Woman Bay sandy beach with forested headlands and blue Lake Superior" width="960" height="720" loading="eager" decoding="async" referrerpolicy="no-referrer" fetchpriority="high"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Old_Woman_Bay.jpg" target="_blank" rel="noopener noreferrer">Beckettlc</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a></figcaption></figure><figure class="hero-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Katherine_Cove.jpg/960px-Katherine_Cove.jpg" alt="Curving sand beach and clear shallows at Katherine Cove" width="960" height="720" loading="eager" decoding="async" referrerpolicy="no-referrer" fetchpriority="high"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Katherine_Cove.jpg" target="_blank" rel="noopener noreferrer">Beckettlc</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a></figcaption></figure></div></div></div></header>
 <main class="wrap">
 <section class="updatebar" aria-label="Important access advisory">
 <strong>October 26, 2026 · seasonal access advisory</strong>
@@ -134,24 +146,28 @@ footer a{color:#c2eae4}
 <div class="sectionhead"><div><h2>Choose the right experience</h2><p>Official trail times where published; shorter stop estimates are marked as planning allowances.</p></div><span id="count" class="count">10 destinations</span></div>
 <div id="cards">
 <article class="card" data-id="old-woman" data-km="1042.6" data-minutes="30" data-effort="low" data-tags="scenery family" data-status="unknown" data-rank="10">
+<figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Old_Woman_Bay.jpg/960px-Old_Woman_Bay.jpg" alt="Old Woman Bay sandy beach with forested headlands and blue Lake Superior" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Old_Woman_Bay.jpg" target="_blank" rel="noopener noreferrer">Beckettlc</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a></figcaption></figure>
 <div class="card-top"><div><div class="num">01 / Great first stop · Hwy 17 km 1042.6</div><h3>Old Woman Bay</h3></div><span class="badge unknown">Access unverified</span></div>
 <p class="summary">The high-impact roadside stop: sand and pebble shore beneath towering cliffs. Good for photos and a brief beach walk without committing to Nokomis.</p>
 <div class="facts"><span class="fact">Allow 20–45 min</span><span class="fact">Roadside day-use area</span><span class="fact">Not verified wheelchair-accessible</span></div>
 <details><summary>Parking, access and safety</summary><div class="evidence"><p>Ontario Parks lists a day-use area on Lake Superior with Nokomis trail access and publishes the day-use location at 47.790313, -84.896840. This is a destination coordinate, not a surveyed parking-stall position. Exact parking capacity and off-season maintenance are not published on the facility page. Beach terrain varies; a roadside stop is not an accessibility certification.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/facilities">Official day-use facilities</a></p></div></details>
 </article>
 <article class="card" data-id="agawa" data-km="1098" data-minutes="60" data-effort="moderate" data-tags="culture scenery hiking" data-status="closed" data-rank="10">
+<figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Agawa_Rock_Pictographs_Trail.jpg/960px-Agawa_Rock_Pictographs_Trail.jpg" alt="Rugged trail leading toward Agawa Rock pictograph site, closed for 2026" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Agawa_Rock_Pictographs_Trail.jpg" target="_blank" rel="noopener noreferrer">Michael Wason</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> · displayed with responsive crop</figcaption></figure>
 <div class="card-top"><div><div class="num">02 / Sacred site</div><h3>Agawa Rock Pictographs</h3></div><span class="badge closed">Closed for 2026</span></div>
 <p class="summary">An active sacred Anishinaabe site beside the lake. The rocky descent and exposed shoreline make it unsuitable for mobility-limited visitors or high-wave conditions—even during an operating season.</p>
 <div class="facts"><span class="fact">Plan 45–75 min</span><span class="fact">Rugged and exposed</span><span class="fact">No dogs at sacred site (community request)</span></div>
 <details><summary>Respectful access, parking and safety</summary><div class="evidence"><p>Ontario Parks reports the trail closed since September 11, 2026 for private Indigenous ceremonies and hazardous fall weather. Do not treat calm waves as permission to enter. Local Indigenous communities request that dogs not be taken to the pictograph site.</p><p>The Ontario government GeoTour places the signed access road about 7.5 km north of the Visitor Centre and documents a parking lot 1.5 km from Highway 17. Its Agawa Rock GPS waypoint is not specifically identified as the parking lot, so no driving pin is offered here. The 2026 closure overrides normal driving and hiking guidance.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/alerts">Official closure notice</a></p></div></details>
 </article>
 <article class="card" data-id="sand" data-km="1090.6" data-minutes="45" data-effort="low" data-tags="waterfall hiking family scenery" data-status="unknown" data-rank="9">
+<figure class="card-photo"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sand_River_hike_%289657093125%29.jpg?width=768" alt="Trail scenery beside the Sand River in Lake Superior Provincial Park" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Sand_River_hike_(9657093125).jpg" target="_blank" rel="noopener noreferrer">Helena Jacoba</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a></figcaption></figure>
 <div class="card-top"><div><div class="num">03 / Hwy 17 km 1090.6</div><h3>Pinguisibi / Sand River — first falls</h3></div><span class="badge unknown">Access unverified</span></div>
 <p class="summary">One of the park's most useful short hiking choices. Walk upstream toward the first waterfall, then decide whether to continue.</p>
 <div class="facts"><span class="fact">Short visit: allow 30–60 min</span><span class="fact">Full 6 km return: 1½–3 hr</span><span class="fact">Easy-rated trail, not barrier-free</span></div>
 <details><summary>Parking and trail detail</summary><div class="evidence"><p>Ontario Parks identifies the Sand River day-use area for picnics and waterfall access. The historic management plan documents paved roads and vault toilets, not independently surveyed modern parking coordinates. The first waterfall is a short hike upstream; 30–60 minutes is a planning allowance, not an official published time for that waterfall alone.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/activities">Official trail descriptions</a></p></div></details>
 </article>
 <article class="card" data-id="katherine" data-km="1088" data-minutes="45" data-effort="low" data-tags="scenery family" data-status="unknown" data-rank="8">
+<figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Katherine_Cove.jpg/960px-Katherine_Cove.jpg" alt="Curving sand beach and clear shallows at Katherine Cove" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Katherine_Cove.jpg" target="_blank" rel="noopener noreferrer">Beckettlc</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a></figcaption></figure>
 <div class="card-top"><div><div class="num">04 / Lake Superior shoreline</div><h3>Katherine Cove</h3></div><span class="badge unknown">Access unverified</span></div>
 <p class="summary">The gentler beach choice for families, with fine sand and shallow nearshore water. Lake Superior water can still be cold.</p>
 <div class="facts"><span class="fact">Allow 30–60 min</span><span class="fact">Day-use area</span><span class="fact">Beach access not mobility-verified</span></div>
@@ -164,12 +180,14 @@ footer a{color:#c2eae4}
 <details><summary>Parking and route</summary><div class="evidence"><p>Trailhead at Hwy 17 km 1101.4; use the same trail back from the first lookout. The overall loop is 10 km and demanding. This shorter option remains a real hike, not low-effort or barrier-free.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/activities">Official trail guidance</a></p></div></details>
 </article>
 <article class="card" data-id="nokomis" data-km="1042.6" data-minutes="135" data-effort="moderate" data-tags="scenery hiking" data-status="unknown" data-rank="9">
+<figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Nokomis_Trail.jpg/960px-Nokomis_Trail.jpg" alt="Elevated Nokomis Trail overlook above Old Woman Bay and the coast" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Nokomis_Trail.jpg" target="_blank" rel="noopener noreferrer">Beckettlc</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a></figcaption></figure>
 <div class="card-top"><div><div class="num">06 / Old Woman Bay trailhead</div><h3>Nokomis loop</h3></div><span class="badge unknown">Access unverified</span></div>
 <p class="summary">The iconic overlook hike above Old Woman Bay. Expect steep sections, rough footing and a steep final descent. An autumn hunting-area advisory applies.</p>
 <div class="facts"><span class="fact">5 km loop</span><span class="fact">1½–3 hr</span><span class="fact">Moderate · hunting advisory</span></div>
 <details><summary>Trail and seasonal advisory</summary><div class="evidence"><p>Starts at the Old Woman Bay day-use area. Ontario Parks identifies Nokomis within the designated fall hunting area and recommends hunter orange. Dogs must be leashed. This is not a closure notice for the trail itself.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/alerts">Official alerts</a></p></div></details>
 </article>
 <article class="card" data-id="orphan" data-km="1080.8" data-minutes="180" data-effort="moderate" data-tags="scenery hiking waterfall" data-status="unknown" data-rank="8">
+<figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Lake_Superior_vista_4.JPG/960px-Lake_Superior_vista_4.JPG" alt="Lake Superior coastal vista photographed along the Orphan Lake Trail" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Lake_Superior_vista_4.JPG" target="_blank" rel="noopener noreferrer">Fungus Guy</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> · displayed with responsive crop</figcaption></figure>
 <div class="card-top"><div><div class="num">07 / Hwy 17 km 1080.8</div><h3>Orphan Lake loop</h3></div><span class="badge unknown">Access unverified</span></div>
 <p class="summary">A deeper immersion: forest, Lake Superior overlook, rocky beach and the Baldhead River waterfalls.</p>
 <div class="facts"><span class="fact">8 km loop</span><span class="fact">2–4 hr</span><span class="fact">Moderate</span></div>
