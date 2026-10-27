@@ -4,7 +4,7 @@ test('all new public guide pages have independently sourced access evidence',()=
 test('unverified GIS candidates do not become indexable pages',()=>{const geo=JSON.parse(fs.readFileSync('data/up-waterfall-geo-candidates.json','utf8'));const display=JSON.parse(fs.readFileSync('public/assets/up-waterfalls-geography.json','utf8'));assert.equal(geo.sourceFeatureCount,197);assert.equal(geo.features.length,161);assert.equal(display.points.length,161);assert.ok(display.points.every(p=>!fs.existsSync(path.join('public/upper-peninsula-waterfalls',p.id,'index.html'))));assert.ok(hub.includes('id="show-geo-candidates"'));assert.ok(fs.readFileSync('public/assets/up-waterfalls-research.js','utf8').toLowerCase().includes('do not'));});
 
 test('publishing gate: every sitemap waterfall URL has verified land manager, public access, parking, trail, location and substantial guide',()=>{const sm=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');for(const f of d.waterfalls){if(f.link)continue;const path='public/upper-peninsula-waterfalls/'+f.id+'/index.html',html=fs.readFileSync(path,'utf8'),target='https://chrisizworski.com/upper-peninsula-waterfalls/'+f.id+'/';const exists=sm.includes('<loc>'+target+'</loc>');const axes=['landManager','publicAccess','parking','trail','location'];const eligible=['verified-access-guide','verified-closure-guide'].includes(f.publication)&&axes.every(k=>f.verification?.[k]?.verified===true&&/^https:\/\//.test(f.verification[k].source));assert.equal(exists,eligible,'sitemap mismatch for '+f.id);assert.ok(html.includes('href="/upper-peninsula-waterfalls/"'),f.id+' missing return navigation');if(eligible){assert.match(html,/<meta name="robots" content="index,follow/);assert.ok(/parking|where to park|arrival reference|where to start/i.test(html)&&/trail|walk|approach|route/i.test(html),'missing arrival decisions: '+f.id);assert.ok(html.replace(/<[^>]*>/g,' ').split(/\s+/).length>=190,'thin visitor guide: '+f.id);for(const k of axes)assert.ok(html.includes(f.verification[k].source),'uncited '+k+': '+f.id)}else{assert.match(html,/<meta name="robots" content="noindex,follow"/)}}});
-test('GIS research overlay stays inside Upper Peninsula and cannot publish pages',()=>{const a=JSON.parse(fs.readFileSync('data/up-waterfall-geo-candidates.json','utf8'));const g=JSON.parse(fs.readFileSync('public/assets/up-waterfalls-geography.json','utf8'));assert.equal(a.sourceFeatureCount,197);assert.equal(a.features.length,161);assert.equal(g.points.length,161);const ids=new Set(a.features.map(x=>x.gisObjectId));assert.equal(ids.size,161);assert.ok(a.features.every(x=>Number.isInteger(x.gisObjectId)&&x.lat>=45.5&&x.lat<48&&x.lng>=-91&&x.lng<=-83));assert.ok(g.points.every(x=>ids.has(x.oid)));assert.equal(d.waterfalls.filter(x=>!x.link).length,27);});
+test('GIS research overlay stays inside Upper Peninsula and cannot publish pages',()=>{const a=JSON.parse(fs.readFileSync('data/up-waterfall-geo-candidates.json','utf8'));const g=JSON.parse(fs.readFileSync('public/assets/up-waterfalls-geography.json','utf8'));assert.equal(a.sourceFeatureCount,197);assert.equal(a.features.length,161);assert.equal(g.points.length,161);const ids=new Set(a.features.map(x=>x.gisObjectId));assert.equal(ids.size,161);assert.ok(a.features.every(x=>Number.isInteger(x.gisObjectId)&&x.lat>=45.5&&x.lat<48&&x.lng>=-91&&x.lng<=-83));assert.ok(g.points.every(x=>ids.has(x.oid)));assert.equal(d.waterfalls.filter(x=>!x.link).length,30);});
 
 test('locally vendored Leaflet CSS protects mobile map layout on the hub and every visitor guide',()=>{const local='/assets/vendor/leaflet-1.9.4.css';assert.ok(fs.existsSync('public'+local));assert.ok(hub.includes('href="'+local+'"'));for(const f of d.waterfalls.filter(x=>!x.link)){const page=fs.readFileSync('public/upper-peninsula-waterfalls/'+f.id+'/index.html','utf8');assert.ok(page.includes('href="'+local+'"'),f.id+' must use locally hosted map CSS');assert.ok(!page.includes('href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"'),f.id+' still depends on remote map CSS');}});
 
@@ -19,3 +19,33 @@ test('Bridalveil Falls decision guide is independently verified and does not pro
 test('Wagner Falls has separate authoritative parking and waterfall map positions',()=>{const f=d.waterfalls.find(x=>x.id==='wagner-falls');const detail=fs.readFileSync('public/upper-peninsula-waterfalls/wagner-falls/index.html','utf8');const script=fs.readFileSync('public/assets/up-waterfalls.js','utf8');assert.equal(f.lat,46.387663);assert.equal(f.lng,-86.646554);assert.deepEqual([f.parkingLocation.lat,f.parkingLocation.lng],[46.388944,-86.648995]);assert.notDeepEqual([f.lat,f.lng],[f.parkingLocation.lat,f.parkingLocation.lng]);assert.match(f.parkingLocation.source,/michigan.gov\/recsearch/);assert.ok(f.verification.parking.source===f.parkingLocation.source);assert.ok(detail.includes('data-parking-lat="46.388944" data-parking-lng="-86.648995"'));assert.ok(detail.includes('data-lat="46.387663" data-lng="-86.646554"'));assert.ok(detail.includes('destination=46.388944%2C-86.648995'));assert.ok(detail.includes('0.13-mile'));assert.ok(hub.includes('data-id="wagner-falls"'));assert.ok(hub.includes('data-parking-source="'+f.parkingLocation.source+'"'));assert.ok(script.includes('official parking'));assert.ok(script.includes('c.dataset.parkingSource'));assert.ok(fs.readFileSync('public/assets/up-fall-detail.js','utf8').includes('Verified visitor parking point'));});
 
 test('Delta County Rapid River Falls is a sourced public park distinct from western GIS namesake',()=>{const id='rapid-river-falls-delta-county',f=d.waterfalls.find(x=>x.id===id),h=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8'),s=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');assert.equal(f.publication,'verified-access-guide');assert.equal(f.gisObjectId,null);assert.ok(Math.abs(f.lat-46.0216667)<0.001&&Math.abs(f.lng+86.9833333)<0.001);assert.ok(hub.includes('data-id="'+id+'"'));assert.ok(s.includes('/'+id+'/'));assert.match(h,/<meta name="robots" content="index,follow/);for(const k of ['landManager','publicAccess','parking','trail','location']){assert.equal(f.verification[k].verified,true);assert.ok(h.includes(f.verification[k].source));}assert.ok(h.includes('1 out of 5'));assert.ok(h.includes('13149 S 15'));assert.ok(h.includes('46.627099, -89.668576'));assert.ok(h.includes('https://chrisizworski.com/#person'));assert.equal(d.waterfalls.filter(x=>x.id===id).length,1);});
+
+test('Keweenaw Eagle River, Haven and Silver River waterfall guides satisfy the five-axis publication gate',()=>{
+  const ids=['eagle-river-falls','haven-falls','silver-river-falls-keweenaw'];
+  const sitemap=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
+  const cross=JSON.parse(fs.readFileSync('data/up-waterfall-usgs-v2-crosswalk.json','utf8'));
+  assert.ok(hub.includes('31 researched waterfall profiles'));
+  for(const id of ids){
+    const f=d.waterfalls.find(x=>x.id===id);
+    assert.ok(f,id);
+    assert.equal(f.publication,'verified-access-guide');
+    assert.equal(d.waterfalls.filter(x=>x.id===id).length,1);
+    const page=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+    assert.ok(hub.includes('data-id="'+id+'"'));
+    assert.ok(sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+    assert.match(page,/<meta name="robots" content="index,follow/);
+    assert.ok(page.includes('https://chrisizworski.com/#person'));
+    assert.ok(page.includes('href="/assets/vendor/leaflet-1.9.4.css"'));
+    assert.ok(page.includes('data-lat="'+f.lat+'" data-lng="'+f.lng+'"'));
+    assert.ok(page.replace(/<[^>]+>/g,' ').split(/\s+/).length>330);
+    for(const k of ['landManager','publicAccess','parking','trail','location']){
+      assert.equal(f.verification?.[k]?.verified,true,id+' '+k);
+      assert.ok(page.includes(f.verification[k].source),id+' missing source '+k);
+    }
+    const usgs=cross.matches.find(x=>x.stateGisObjectId===f.gisObjectId);
+    assert.equal(f.usgsMatch.featureId,usgs.usgsFeatureId);
+  }
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/scott-falls/'));
+  const silver=fs.readFileSync('public/upper-peninsula-waterfalls/silver-river-falls-keweenaw/index.html','utf8');
+  assert.ok(silver.includes('crossing'));
+});
