@@ -22,7 +22,7 @@
     let warning=document.getElementById('source-expiry-warning');
     if(!warning)return;
     warning.hidden=accessEvidenceFresh();
-    if(!warning.hidden)warning.textContent='The park access snapshot is over 30 days old. This guide still describes the park, but external route links are withheld until Ontario Parks alerts and operating dates are reviewed. See the official alert and park-hours links.';
+    if(!warning.hidden)warning.textContent='A note before you travel: these park access notes are now more than 30 days old. The places and their stories are still here to explore, but driving links are paused until Ontario Parks alerts and operating dates are checked again. Please consult the official notices below.';
   }
   const officialLink = 'https://www.ontarioparks.ca/park/lakesuperior/maps';
   const text = (node, value) => { if (node) node.textContent = value; };
@@ -37,18 +37,18 @@
     const title=document.createElement('strong'); title.textContent=item.name;
     const evidence=document.createElement('p');
     evidence.textContent=item.coordinateClass==='official_geotour_stop_location_not_parking'
-      ? 'Government GeoTour landmark coordinate. NOT a parking location. Agawa Rock Trail closed for 2026. No directions offered.'
-      : 'Official park / geological survey destination coordinates. NOT a verified individual parking stall or proof of current access.';
+      ? 'This pin shows the Agawa Rock landmark, not a parking entrance. The pictograph trail is closed for the 2026 season. Please honour this sacred place and the closure; no driving directions are offered.'
+      : 'This pin shows where the destination lies along the shore. It does not mark an independently verified parking stall or mean the road and facilities are open.';
     popup.append(title,evidence);
     const note=document.createElement('p');note.textContent=item.parkingInfrastructure;popup.append(note);
     const source=document.createElement('p');
-    source.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'See authoritative source'));popup.append(source);
+    source.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'Read the official location notes'));popup.append(source);
     if(allowedAsWaypoint(item)){
-      const nav=document.createElement('p');nav.append(link(searchUrl(item),'View official destination point on Google Maps'));popup.append(nav);
+      const nav=document.createElement('p');nav.append(link(searchUrl(item),'See this destination on Google Maps'));popup.append(nav);
     }
     if(item.mapCardId) {
       const button=document.createElement('button');button.type='button';button.className='secondary-button';
-      button.textContent='Read stop access details';
+      button.textContent='Explore this place';
       button.addEventListener('click',()=>{
         const card=document.querySelector('.card[data-id="'+item.mapCardId+'"]');
         if(!card)return;
@@ -75,7 +75,7 @@
     markers.forEach(m=>map.removeLayer(m));markers=[];
     const located=catalog.locations.filter(verified); // show closed sites in red as map evidence even when itinerary filters exclude them
     located.forEach(item=>{const marker=makeMarker(item).addTo(map);markers.push(marker);});
-    text(document.getElementById('pin-count'),located.length+' officially located destinations shown; zero exact parking-stall pins verified');
+    text(document.getElementById('pin-count'),located.length+' places marked using Ontario government locations · parking entrances not individually verified');
   }
   function displaySources(){
     list.replaceChildren();
@@ -83,10 +83,10 @@
       const li=document.createElement('li');
       const name=document.createElement('strong');name.textContent=item.name+' — ';
       li.append(name);
-      const cls=document.createElement('span'); cls.textContent=item.id==='agawa'?'government landmark, no navigation':'official destination location, not a parking stall'; li.append(cls);
+      const cls=document.createElement('span'); cls.textContent=item.id==='agawa'?'sacred site, closed; no driving pin':'official destination area; parking entrance not confirmed'; li.append(cls);
       li.append(document.createTextNode(' · '));
-      li.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'source'));
-      if(allowedAsWaypoint(item)){li.append(document.createTextNode(' · '));li.append(link(searchUrl(item),'map point')); }
+      li.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'official record'));
+      if(allowedAsWaypoint(item)){li.append(document.createTextNode(' · '));li.append(link(searchUrl(item),'see on map')); }
       list.append(li);
     });
   }
@@ -98,7 +98,7 @@
     const eligible=planned.filter(allowedAsWaypoint);
     const rejected=planned.filter(x=>!allowedAsWaypoint(x));
     if(eligible.length<2){
-      note.textContent='A multi-stop route needs at least two planner stops with officially located destination coordinates. No estimated drive time or road-opening claim is provided.';
+      note.textContent='Once your future-season plan includes at least two places with verified destination locations, we can show how they line up along the highway. We will not guess at drive times or whether a road is open.';
       travel.append(note);return;
     }
     const north=document.getElementById('direction')?.value==='north';
@@ -106,13 +106,13 @@
     eligible.sort((a,b)=>(a.latitude-b.latitude)*(north?1:-1));
     const params=new URLSearchParams({api:'1',origin:eligible[0].latitude+','+eligible[0].longitude,destination:eligible[eligible.length-1].latitude+','+eligible[eligible.length-1].longitude,travelmode:'driving'});
     if(eligible.length>2)params.set('waypoints',eligible.slice(1,-1).map(x=>x.latitude+','+x.longitude).join('|'));
-    const title=document.createElement('strong');title.textContent='Official destination-coordinate route ('+eligible.length+' stops)';travel.append(title);
-    const note2=document.createElement('p');note2.textContent='This opens an external driving-map preview. Coordinates identify day-use areas or facilities—not confirmed parking entrances. Seasonal access and road status are unverified.';travel.append(note2);
-    if(rejected.length){const omitted=document.createElement('p');omitted.textContent='Not routed: '+rejected.map(x=>x.name).join(', ')+' (closed, unlocated or parking/route confidence insufficient).';travel.append(omitted);}
-    const a=link('https://www.google.com/maps/dir/?'+params.toString(),'Inspect route in Google Maps');a.className='primary lspp-route-link';travel.append(a);
+    const title=document.createElement('strong');title.textContent='A possible drive along the shore ('+eligible.length+' stops)';travel.append(title);
+    const note2=document.createElement('p');note2.textContent='Explore this route in an external map before your trip. The points identify park destinations, not confirmed parking entrances. Please check seasonal road access with Ontario Parks before setting off.';travel.append(note2);
+    if(rejected.length){const omitted=document.createElement('p');omitted.textContent='Not included in the driving preview: '+rejected.map(x=>x.name).join(', ')+'. These places are closed or lack sufficiently reliable routing coordinates.';travel.append(omitted);}
+    const a=link('https://www.google.com/maps/dir/?'+params.toString(),'See the possible drive in Google Maps');a.className='primary lspp-route-link';travel.append(a);
     const switcher=document.getElementById('season');
     if(switcher?.value==='current'){
-      const seasonal=document.createElement('p');seasonal.textContent='Warning: the 2026 park day-use season has ended. This is not a recommendation to travel now.';travel.append(seasonal);
+      const seasonal=document.createElement('p');seasonal.textContent='The 2026 park day-use season has ended. This is a future-trip idea, not a recommendation to enter the park now.';travel.append(seasonal);
     }
   }
   function tile(url,attribution,fallback){
@@ -124,23 +124,23 @@
     item.on('tileload',()=>{
       if(layer!==item)return;
       completed+=1;
-      if(completed>=3)text(status,fallback?'OpenStreetMap fallback displayed. All mapped points remain official destination references.':'CARTO basemap is loading. Pin locations come from Ontario Parks and the Ontario government GeoTour.');
+      if(completed>=3)text(status,fallback?'OpenStreetMap fallback is showing the shoreline. Pins still represent official destination locations, not parking entrances.':'The shore map is coming into view. Destination pins come from Ontario Parks and Ontario’s government GeoTour.');
     });
     item.on('tileerror',()=>{
       if(layer!==item)return;
       failed+=1;
       if(failed>=2){
         if(!fallback)useFallback();
-        else text(status,'Map tiles unavailable. Use the location source list and official park maps below.');
+        else text(status,'The map image is unavailable just now. You can still find every documented place through the official park maps and location notes below.');
       }
     });
     item.addTo(map);
-    setTimeout(()=>{if(layer===item && completed<2){if(!fallback)useFallback();else text(status,'Basemap could not be verified. The primary-source list is still available.');}},8000);
+    setTimeout(()=>{if(layer===item && completed<2){if(!fallback)useFallback();else text(status,'Map imagery could not be confirmed. The park’s official location records remain available below.');}},8000);
   }
   function useFallback(){
     if(fallbackStarted)return;
     fallbackStarted=true;
-    text(status,'CARTO unavailable; loading OpenStreetMap fallback.');
+    text(status,'The first map could not load; bringing up the OpenStreetMap fallback instead.');
     tile('https://tile.openstreetmap.org/{z}/{x}/{y}.png','&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',true);
   }
   async function tiles(){
