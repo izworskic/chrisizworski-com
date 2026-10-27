@@ -14,7 +14,9 @@ const check=(label,ok)=>tests.push({label,ok:Boolean(ok)});
 const include=(s)=>html.includes(s);
 
 check('canonical park page',include('https://chrisizworski.com/lake-superior-provincial-park/'));
-check('draft remains noindex until map, imagery and QA',include('content="noindex,follow"'));
+check('Article and Person-linked WebPage with 10 linked stops',include('application/ld+json') && include('https://chrisizworski.com/#person') && (html.match(/id="stop-(old-woman|agawa|sand|katherine|awausee|nokomis|orphan|trappers|crescent|centre)"/g)||[]).length===10);
+check('all stops in single canonical sitemap URL',fs.readFileSync('public/sitemap.xml','utf8').includes('<loc>https://chrisizworski.com/lake-superior-provincial-park/</loc>'));
+check('indexable after source/photo/browser release checks',include('content="index,follow,max-image-preview:large"') && !include('content="noindex,follow"'));
 check('ten static, JS-independent destination descriptions',cards.length===10 && (html.match(/<h3>/g)||[]).length===10);
 check('unique destination IDs',new Set(cards.map(c=>c.match(/data-id="([^"]+)"/)?.[1])).size===10);
 check('per-destination effort and time data',cards.every(c=>/data-minutes="\d+"/.test(c) && /data-effort="/.test(c)));
