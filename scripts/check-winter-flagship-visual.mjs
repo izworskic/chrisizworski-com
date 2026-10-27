@@ -23,11 +23,12 @@ try{
       const im=imagery.nth(i);
       await im.scrollIntoViewIfNeeded();
       await im.evaluate(el=>el.decode().catch(()=>{}));
-      const p=await im.evaluate(el=>({alt:el.alt,src:el.currentSrc,ok:el.complete&&el.naturalWidth>0}));
-      if(p.ok)loaded++;else failed.push(p.alt);
+      await page.waitForTimeout(250);
+      const p=await im.evaluate(el=>({alt:el.alt,src:el.currentSrc,ok:el.complete&&el.naturalWidth>0,fallBack:el.closest('figure')?.dataset.mediaStatus==='fallback'}));
+      if(p.ok)loaded++;else if(p.fallBack)failed.push(p.alt);else{report.issues.push('unhandled broken photograph at '+width+': '+p.alt)}
     }
-    report.photos.push({width,loaded,total:await imagery.count(),failed});
-    check(failed.length===0,'broken images at '+width+': '+failed.join(' | '));
+    report.photos.push({width,loaded,total:await imagery.count(),fallbacks:failed});
+    const captions=await page.locator('figure.wf-photo figcaption').count();check(captions===await imagery.count(),'missing photo attribution at '+width);
     await page.locator('#stop-11').scrollIntoViewIfNeeded();
     await page.screenshot({path:out+'/cards-'+width+'.png',fullPage:false});
     await page.locator('button.wf-chip[data-tag="ice"]').click();
@@ -46,6 +47,18 @@ try{
   }else report.viewports.push({width,overflow,firstCount});
   await page.close();
  }
+ // Explicitly simulate a blocked licensed image host and confirm the fallback is honest and usable.
+ const blocked=await browser.newPage({viewport:{width:390,height:844}});
+ await blocked.route('**/commons.wikimedia.org/**', route=>route.abort('failed'));
+ await blocked.route('**/upload.wikimedia.org/**', route=>route.abort('failed'));
+ await blocked.route('**/thumb.wikimedia.org/**', route=>route.abort('failed'));
+ await blocked.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
+ const target=blocked.locator('#stop-11 .wf-photo');await target.scrollIntoViewIfNeeded();
+ await blocked.waitForTimeout(1400);
+ const fallback=await target.evaluate(el=>({shown:el.dataset.mediaStatus==='fallback',label:el.querySelector('.wf-photo-unavailable')?.textContent,caption:el.querySelector('figcaption')?.textContent}));
+ check(fallback.shown&&fallback.label?.includes('IMAGE UNAVAILABLE')&&fallback.caption?.includes('Joe Ross'),'blocked-photo fallback failed or suppressed credit');
+ await blocked.screenshot({path:out+'/blocked-photo-fallback-390.png',fullPage:false});
+ await blocked.close();
  const page=await browser.newPage({javaScriptEnabled:false});
  await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
  const count=await page.locator('.wf-story').count();

@@ -5,6 +5,7 @@ on:
     paths:
       - public/michigan-winter-activities/**
       - public/assets/michigan-winter-activities.css
+      - public/assets/michigan-winter-activities.js
       - public/assets/winter-field-guide.*
       - scripts/check-winter-flagship-visual.mjs
       - .github/workflows/winter-field-guide-visual.yml

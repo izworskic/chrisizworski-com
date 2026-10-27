@@ -1,6 +1,24 @@
 /* FIELD_GUIDE_V1 winter: progressive filters, honest regional markers, CARTO / OSM fallback */
 (()=>{'use strict';
-for(const im of document.querySelectorAll('img[data-fallback-src]'))im.addEventListener('error',()=>{if(im.dataset.fallbackUsed)return;im.dataset.fallbackUsed='yes';im.src=im.dataset.fallbackSrc});const stories=[...document.querySelectorAll('.wf-story')];if(!stories.length)return;const regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),chips=[...document.querySelectorAll('.wf-chip')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');let tag='all',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;const message=(s,kind)=>{status.textContent=s;status.dataset.state=kind||''};const shown=()=>stories.filter(c=>!c.hidden);const reset=()=>{tag='all';regions.value='all';efforts.value='all';filter()};
+/* Retain genuine credits; never substitute a photo of a different location.
+   Offline/blocked originals fall back to an explicitly editorial panel, not a broken-image icon. */
+function revealPhotoFallback(im){
+ const fig=im.closest('.wf-photo');if(!fig||fig.dataset.mediaStatus==='fallback')return;
+ fig.dataset.mediaStatus='fallback';im.hidden=true;im.setAttribute('aria-hidden','true');
+ let panel=fig.querySelector('.wf-photo-unavailable');
+ if(!panel){panel=document.createElement('div');panel.className='wf-photo-unavailable';
+ const label=document.createElement('span');label.className='wf-photo-unavailable-kicker';label.textContent='FIELD NOTE / IMAGE UNAVAILABLE';
+ const title=document.createElement('strong');title.textContent=fig.closest('.wf-story')?.querySelector('h3')?.textContent||'Michigan in winter';
+ const explanation=document.createElement('span');explanation.textContent='The source photograph could not load. The access notes and official links below remain available.';
+ panel.append(label,title,explanation);fig.insertBefore(panel,fig.firstChild)}
+ panel.hidden=false;
+}
+for(const im of document.querySelectorAll('.wf-photo img')){
+ let fallbackAttempted=false;
+ const fail=()=>{if(!fallbackAttempted&&im.dataset.fallbackSrc){fallbackAttempted=true;im.dataset.fallbackUsed='yes';im.src=im.dataset.fallbackSrc;return;}revealPhotoFallback(im)};
+ im.addEventListener('error',fail);
+ if(im.complete&&im.naturalWidth===0)fail();
+}const stories=[...document.querySelectorAll('.wf-story')];if(!stories.length)return;const regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),chips=[...document.querySelectorAll('.wf-chip')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');let tag='all',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;const message=(s,kind)=>{status.textContent=s;status.dataset.state=kind||''};const shown=()=>stories.filter(c=>!c.hidden);const reset=()=>{tag='all';regions.value='all';efforts.value='all';filter()};
 chips.forEach(b=>b.addEventListener('click',()=>{tag=b.dataset.tag;filter()}));regions.addEventListener('change',filter);efforts.addEventListener('change',filter);document.getElementById('wf-reset')?.addEventListener('click',reset);document.getElementById('wf-show-all')?.addEventListener('click',reset);
 function filter(){for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));for(const c of stories)c.hidden=(tag!=='all'&&c.dataset.tag!==tag)||(regions.value!=='all'&&c.dataset.region!==regions.value)||(efforts.value!=='all'&&c.dataset.effort!==efforts.value);let n=shown().length;count.textContent=n?n+' experiences match. Confirm current access, conditions and official sources before leaving.':'No experiences match these choices. Try another region or effort.';empty.hidden=n>0;refreshPins(false)}
 function refreshPins(initial){
