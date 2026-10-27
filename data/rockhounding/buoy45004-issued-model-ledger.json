@@ -1,7 +1,7 @@
 {
   "schemaVersion": "offshore-model-issues-45004-v1",
   "source": "NOAA_GLWU_GRIB2",
-  "generatedAt": "2026-10-27T14:52:08.000Z",
+  "generatedAt": "2026-10-27T23:57:01.000Z",
   "stationId": "45004",
   "retentionDays": 21,
   "cycles": [
@@ -14804,13 +14804,383 @@
       "canClaimRockExposure": false,
       "canClaimSafeShore": false,
       "sourceUrl": "https://nomads.ncep.noaa.gov/cgi-bin/filter_glwu.pl?file=glwu.grlc_2p5km_sr.t12z.grib2&var_HTSGW=on&lev_surface=on&subregion=&leftlon=-86.70&rightlon=-86.47&toplat=47.68&bottomlat=47.49&dir=%2Fglwu.20261027"
+    },
+    {
+      "schemaVersion": "noaa-glwu-buoy45004-model-v1",
+      "source": "NOAA_GLWU_GRIB2",
+      "station": {
+        "id": "45004",
+        "name": "East Superior",
+        "lat": 47.583,
+        "lon": -86.586
+      },
+      "grid": "2p5km",
+      "parameter": "HTSGW",
+      "cell": {
+        "lat": 47.578791,
+        "lon": -86.57397,
+        "distanceKm": 1.016
+      },
+      "issueAt": "2026-10-27T18:00:00.000Z",
+      "modelRecords": [
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T18:00:00.000Z",
+          "leadHours": 0,
+          "modelSignificantWaveHeightM": 0.83,
+          "phase": "MODEL_INITIAL"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T19:00:00.000Z",
+          "leadHours": 1,
+          "modelSignificantWaveHeightM": 0.92,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T20:00:00.000Z",
+          "leadHours": 2,
+          "modelSignificantWaveHeightM": 1.03,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T21:00:00.000Z",
+          "leadHours": 3,
+          "modelSignificantWaveHeightM": 1.14,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T22:00:00.000Z",
+          "leadHours": 4,
+          "modelSignificantWaveHeightM": 1.26,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-27T23:00:00.000Z",
+          "leadHours": 5,
+          "modelSignificantWaveHeightM": 1.41,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T00:00:00.000Z",
+          "leadHours": 6,
+          "modelSignificantWaveHeightM": 1.57,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T01:00:00.000Z",
+          "leadHours": 7,
+          "modelSignificantWaveHeightM": 1.68,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T02:00:00.000Z",
+          "leadHours": 8,
+          "modelSignificantWaveHeightM": 1.71,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T03:00:00.000Z",
+          "leadHours": 9,
+          "modelSignificantWaveHeightM": 1.73,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T04:00:00.000Z",
+          "leadHours": 10,
+          "modelSignificantWaveHeightM": 1.71,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T05:00:00.000Z",
+          "leadHours": 11,
+          "modelSignificantWaveHeightM": 1.7,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T06:00:00.000Z",
+          "leadHours": 12,
+          "modelSignificantWaveHeightM": 1.66,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T07:00:00.000Z",
+          "leadHours": 13,
+          "modelSignificantWaveHeightM": 1.62,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T08:00:00.000Z",
+          "leadHours": 14,
+          "modelSignificantWaveHeightM": 1.59,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T09:00:00.000Z",
+          "leadHours": 15,
+          "modelSignificantWaveHeightM": 1.54,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T10:00:00.000Z",
+          "leadHours": 16,
+          "modelSignificantWaveHeightM": 1.49,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T11:00:00.000Z",
+          "leadHours": 17,
+          "modelSignificantWaveHeightM": 1.44,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T12:00:00.000Z",
+          "leadHours": 18,
+          "modelSignificantWaveHeightM": 1.38,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T13:00:00.000Z",
+          "leadHours": 19,
+          "modelSignificantWaveHeightM": 1.32,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T14:00:00.000Z",
+          "leadHours": 20,
+          "modelSignificantWaveHeightM": 1.26,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T15:00:00.000Z",
+          "leadHours": 21,
+          "modelSignificantWaveHeightM": 1.2,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T16:00:00.000Z",
+          "leadHours": 22,
+          "modelSignificantWaveHeightM": 1.12,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T17:00:00.000Z",
+          "leadHours": 23,
+          "modelSignificantWaveHeightM": 1.03,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T18:00:00.000Z",
+          "leadHours": 24,
+          "modelSignificantWaveHeightM": 0.93,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T19:00:00.000Z",
+          "leadHours": 25,
+          "modelSignificantWaveHeightM": 0.82,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T20:00:00.000Z",
+          "leadHours": 26,
+          "modelSignificantWaveHeightM": 0.73,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T21:00:00.000Z",
+          "leadHours": 27,
+          "modelSignificantWaveHeightM": 0.65,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T22:00:00.000Z",
+          "leadHours": 28,
+          "modelSignificantWaveHeightM": 0.57,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-28T23:00:00.000Z",
+          "leadHours": 29,
+          "modelSignificantWaveHeightM": 0.51,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T00:00:00.000Z",
+          "leadHours": 30,
+          "modelSignificantWaveHeightM": 0.49,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T01:00:00.000Z",
+          "leadHours": 31,
+          "modelSignificantWaveHeightM": 0.54,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T02:00:00.000Z",
+          "leadHours": 32,
+          "modelSignificantWaveHeightM": 0.67,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T03:00:00.000Z",
+          "leadHours": 33,
+          "modelSignificantWaveHeightM": 0.85,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T04:00:00.000Z",
+          "leadHours": 34,
+          "modelSignificantWaveHeightM": 1.12,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T05:00:00.000Z",
+          "leadHours": 35,
+          "modelSignificantWaveHeightM": 1.39,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T06:00:00.000Z",
+          "leadHours": 36,
+          "modelSignificantWaveHeightM": 1.63,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T07:00:00.000Z",
+          "leadHours": 37,
+          "modelSignificantWaveHeightM": 1.74,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T08:00:00.000Z",
+          "leadHours": 38,
+          "modelSignificantWaveHeightM": 1.76,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T09:00:00.000Z",
+          "leadHours": 39,
+          "modelSignificantWaveHeightM": 1.73,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T10:00:00.000Z",
+          "leadHours": 40,
+          "modelSignificantWaveHeightM": 1.69,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T11:00:00.000Z",
+          "leadHours": 41,
+          "modelSignificantWaveHeightM": 1.63,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T12:00:00.000Z",
+          "leadHours": 42,
+          "modelSignificantWaveHeightM": 1.57,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T13:00:00.000Z",
+          "leadHours": 43,
+          "modelSignificantWaveHeightM": 1.54,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T14:00:00.000Z",
+          "leadHours": 44,
+          "modelSignificantWaveHeightM": 1.51,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T15:00:00.000Z",
+          "leadHours": 45,
+          "modelSignificantWaveHeightM": 1.49,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T16:00:00.000Z",
+          "leadHours": 46,
+          "modelSignificantWaveHeightM": 1.51,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T17:00:00.000Z",
+          "leadHours": 47,
+          "modelSignificantWaveHeightM": 1.57,
+          "phase": "MODEL_FORECAST"
+        },
+        {
+          "issueAt": "2026-10-27T18:00:00.000Z",
+          "validAt": "2026-10-29T18:00:00.000Z",
+          "leadHours": 48,
+          "modelSignificantWaveHeightM": 1.68,
+          "phase": "MODEL_FORECAST"
+        }
+      ],
+      "messageCount": 49,
+      "modelInitialIsIndependentObservation": false,
+      "isAgateBeachModelCell": false,
+      "canClaimNearshoreSurf": false,
+      "canClaimRockExposure": false,
+      "canClaimSafeShore": false,
+      "sourceUrl": "https://nomads.ncep.noaa.gov/cgi-bin/filter_glwu.pl?file=glwu.grlc_2p5km_sr.t18z.grib2&var_HTSGW=on&lev_surface=on&subregion=&leftlon=-86.70&rightlon=-86.47&toplat=47.68&bottomlat=47.49&dir=%2Fglwu.20261027"
     }
   ],
   "excludesAgateBeachModelCell": true,
   "canClaimBeachSurf": false,
   "canClaimRockExposure": false,
   "counts": {
-    "cycles": 40,
-    "forecasts": 1920
+    "cycles": 41,
+    "forecasts": 1968
   }
 }
