@@ -1,11 +1,16 @@
 name: Lake Superior Park release gate
-# Final-head rerun after normalizing the field-guide Tools entity to WebPage.
+# Final-head release validation after resolving structured Person identity and Tools schema.
 on:
   push:
     branches:
       - feature/lake-superior-provincial-park-explorer-20261026
     paths:
       - '.github/workflows/lspp-final-release.yml'
+      - 'public/lake-superior-provincial-park/**'
+      - 'public/tools/index.html'
+      - 'benchmarks/tool-network-registry.json'
+      - 'public/sitemap.xml'
+      - 'scripts/benchmark-lspp-explorer.mjs'
   workflow_dispatch:
 
 permissions:
