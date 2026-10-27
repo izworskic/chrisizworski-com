@@ -18,6 +18,13 @@ check('Article and Person-linked WebPage with 10 linked stops',include('applicat
 check('all stops in single canonical sitemap URL',fs.readFileSync('public/sitemap.xml','utf8').includes('<loc>https://chrisizworski.com/lake-superior-provincial-park/</loc>'));
 check('indexable after source/photo/browser release checks',include('content="index,follow,max-image-preview:large"') && !include('content="noindex,follow"'));
 check('ten static, JS-independent destination descriptions',cards.length===10 && (html.match(/<h3>/g)||[]).length===10);
+const storyCards=[...html.matchAll(/<article class="card"[^>]*>[\s\S]*?<\/article>/g)].map(x=>x[0]);
+const storySummaries=storyCards.map(card=>card.match(/<p class="summary">([\s\S]*?)<\/p>/)?.[1]||'');
+check('ten evocative, individually substantive park stories',storySummaries.length===10 && storySummaries.every(text=>text.trim().split(/\s+/).length>=45));
+check('shoreline and Indigenous interpretation remain explicit',html.includes('The lake sets the pace here.') && html.includes('living Anishinaabe cultural landscape') && html.includes('Pinguisibi'));
+check('cultural-site closure remains next to its description',storyCards.find(c=>c.includes('data-id="agawa"'))?.includes('closed for the remainder of 2026') && storyCards.find(c=>c.includes('data-id="agawa"'))?.includes('active sacred place'));
+check('off-season notes and mobility limits still easily readable',html.includes('not automatically accessible') && html.includes('2026 day-use season ended October 25') && html.includes('not a surveyed parking-stall position'));
+
 check('unique destination IDs',new Set(cards.map(c=>c.match(/data-id="([^"]+)"/)?.[1])).size===10);
 check('per-destination effort and time data',cards.every(c=>/data-minutes="\d+"/.test(c) && /data-effort="/.test(c)));
 check('Agawa and Trappers official seasonal closure',include('data-id="agawa"') && include('data-id="trappers"') && cards.filter(c=>c.includes('data-status="closed"')).length===2);
