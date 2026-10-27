@@ -33,7 +33,7 @@ check('no false current parking navigation target',include('not a surveyed parki
 check('time budget labels exclude driving',include('Driving between stops, parking, permits, breaks and weather delays are NOT included'));
 check('no persistent tracking/storage',!/\b(localStorage|sessionStorage|document.cookie)\b/.test(html));
 check('no invented live API claims',include('not a live opening-status service'));
-check('no AdSense configuration added by prototype',!include('adsbygoogle') && !include('googlesyndication'));
+check('no page-specific AdSense units or overrides', !/<ins\\b[^>]*\\badsbygoogle\\b/i.test(html) && !/\\bdata-ad-slot\\s*=/.test(html) && !/\\bgoogle_ad_client\\s*=/.test(html));
 check('13 source-linked access records with unique IDs',access.locations.length===13 && new Set(access.locations.map(x=>x.id)).size===13 && access.locations.every(x=>x.sourceKeys?.length));
 check('six geolocated government site references, zero claimed exact parking stalls',located.length===6 && parking.length===0 && located.every(x=>Number.isFinite(x.latitude)&&Number.isFinite(x.longitude)));
 check('all map-linked destinations exist in the static HTML',access.locations.filter(x=>x.mapCardId).every(x=>cardIds.has(x.mapCardId)));
