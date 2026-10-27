@@ -1,3 +1,11 @@
+### 2026-10-27 — Keweenaw waterfall park access expansion
+
+- Branch: `feature/keweenaw-waterfall-access-guides-20261027`. Continued the merged Upper Peninsula Waterfall Explorer without rebuilding the map or modifying advertising.
+- State GIS + USGS V2 linked evidence checked for Haven #138, Eagle River #142, Silver River #146. Separate authoritative land ownership evidence from Keweenaw County 2025–2029 Recreation Plan; regional visitor sources cover parking and foot approach.
+- Two access-qualified individual pages and one unindexed research guide; search publication gate enforced in tests. Historic water-flow and GIS locations are not live-access claims.
+- Latest GSC and AdSense outcome: no newly verified measurements attributable to this branch; no SEO benefit claimed.
+- Next action: inspect 59-step CI and protected preview, reconcile branch with current main before any merge; only after a green check should production be touched.
+
 ## Upper Peninsula Waterfall GIS Evidence Expansion — October 26, 2026
 
 - **Branch / PR:** feature/up-waterfall-explorer-20261026, draft PR #1199. Merge current main preserving other changes.
