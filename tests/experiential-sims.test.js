@@ -115,3 +115,42 @@ test('shared ship art: both lock simulators load the drawing kit before themselv
   assert.equal((svg.match(/<g/g) || []).length, (svg.match(/<\/g>/g) || []).length);
   assert.match(svg, /transform="scale\(-1 1\)"[^>]*>TEST</, 'a left-facing ship keeps its name readable');
 });
+
+const wfSrc = read('public/assets/freighter-winter-experience.js');
+const wf = new Function(wfSrc.slice(wfSrc.indexOf('var MILESTONES'), wfSrc.indexOf('/* ---------------- Hero scene')) + ';return {MILESTONES, phaseFor, nextMilestone, yearFraction};')();
+
+test('winter layup: the season dial follows the published Soo Locks and Seaway calendar', () => {
+  const noon = (y, m, d) => new Date(Date.UTC(y, m - 1, d, 17));
+  assert.equal(wf.phaseFor(noon(2026, 10, 27)).id, 'running');
+  assert.equal(wf.phaseFor(noon(2026, 12, 10)).id, 'closing');
+  assert.equal(wf.phaseFor(noon(2027, 1, 5)).id, 'arriving');
+  assert.equal(wf.phaseFor(noon(2027, 1, 15)).id, 'asleep', 'Soo Locks close January 15');
+  assert.equal(wf.phaseFor(noon(2027, 2, 20)).id, 'asleep');
+  assert.equal(wf.phaseFor(noon(2027, 3, 10)).id, 'fitout');
+  assert.equal(wf.phaseFor(noon(2027, 3, 25)).id, 'running', 'Soo Locks reopen March 25');
+  const n1 = wf.nextMilestone(noon(2027, 1, 1));
+  assert.equal(n1.ms.id, 'welland-clear'); assert.equal(n1.days, 9);
+  const n2 = wf.nextMilestone(noon(2027, 1, 16));
+  assert.equal(n2.ms.id, 'fitout');
+  assert.equal(wf.nextMilestone(noon(2027, 3, 25)).days, 0);
+  assert.equal(wf.yearFraction(noon(2027, 3, 25)), 0, 'the dial starts at opening day');
+  assert.ok(wf.yearFraction(noon(2027, 1, 15)) > 0.8);
+  assert.equal(wf.MILESTONES.filter(m => m.id === 'soo-close')[0].d, 15);
+});
+
+test('winter layup: the experience layer is wired in order and the home page keeps its own stylesheet', () => {
+  const html = read('public/great-lakes-freighter-winter-layup/index.html');
+  const art = html.indexOf('src="/assets/lock-ship-art.js?v='), exp = html.indexOf('src="/assets/freighter-winter-experience.js?v='), app = html.indexOf('src="/assets/freighter-layup.js?v=');
+  assert.ok(art > 0 && exp > art && app > exp, 'ship art, then the experience layer, then the explorer');
+  assert.equal((html.match(/id="winter-scene"/g) || []).length, 1);
+  assert.equal((html.match(/id="season-dial"/g) || []).length, 1);
+  assert.ok(html.includes('href="/assets/freighter-winter-home.css?v='));
+  assert.ok(!html.includes('href="/assets/freighter-layup.css'), 'biography stylesheet is not loaded on the home page');
+  for (const f of ['public/assets/freighter-winter-experience.js', 'public/assets/freighter-winter-home.css', 'public/assets/freighter-fleet-specs.json', 'public/great-lakes-freighter-winter-layup/index.html']) {
+    assert.ok(!read(f).includes('—'), f + ' has no em dashes');
+  }
+  const specs = JSON.parse(read('public/assets/freighter-fleet-specs.json'));
+  const registry = JSON.parse(read('public/assets/freighter-layup-registry.json'));
+  for (const season of registry.seasons) for (const v of season.records) assert.ok(specs.vessels[v.id], 'hull dimensions for ' + v.id);
+  for (const [id, v] of Object.entries(specs.vessels)) assert.ok(v.lengthFt > 600 && v.lengthFt <= 1013.5 && v.beamFt >= 70 && v.beamFt <= 105, id + ' is a plausible laker');
+});

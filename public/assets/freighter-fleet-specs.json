@@ -1,0 +1,192 @@
+{
+ "schemaVersion": 1,
+ "updatedOn": "2026-10-27",
+ "note": "Hull dimensions for to-scale drawings only. Lengths are overall, in feet, from operator fleet pages and public vessel references; they say nothing about where a ship is now.",
+ "vessels": {
+  "burns-harbor": {
+   "lengthFt": 1000,
+   "beamFt": 105,
+   "built": 1980,
+   "fleet": "American Steamship Co.",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#c8402f",
+    "#f1ede3"
+   ],
+   "source": "https://www.americansteamship.com/"
+  },
+  "honorable-james-l-oberstar": {
+   "lengthFt": 806,
+   "beamFt": 75,
+   "built": 1959,
+   "fleet": "Interlake Steamship",
+   "type": "classic-unloader",
+   "hull": "#7a2b22",
+   "stack": [
+    "#1c1c1c",
+    "#f2a944",
+    "#1c1c1c"
+   ],
+   "source": "https://www.interlake-steamship.com/our-fleet/m-v-honorable-james-l-oberstar/"
+  },
+  "indiana-harbor": {
+   "lengthFt": 1000,
+   "beamFt": 105,
+   "built": 1979,
+   "fleet": "American Steamship Co.",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#c8402f",
+    "#f1ede3"
+   ],
+   "source": "https://www.americansteamship.com/"
+  },
+  "john-j-boland": {
+   "lengthFt": 680,
+   "beamFt": 78,
+   "built": 1973,
+   "fleet": "American Steamship Co.",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#c8402f",
+    "#f1ede3"
+   ],
+   "source": "https://en.wikipedia.org/wiki/MV_John_J._Boland"
+  },
+  "lee-a-tregurtha": {
+   "lengthFt": 826,
+   "beamFt": 75,
+   "built": 1942,
+   "fleet": "Interlake Steamship",
+   "type": "classic-unloader",
+   "hull": "#7a2b22",
+   "stack": [
+    "#1c1c1c",
+    "#f2a944",
+    "#1c1c1c"
+   ],
+   "source": "https://www.interlake-steamship.com/"
+  },
+  "mesabi-miner": {
+   "lengthFt": 1004,
+   "beamFt": 105,
+   "built": 1977,
+   "fleet": "Interlake Steamship",
+   "type": "aft-ender",
+   "hull": "#7a2b22",
+   "stack": [
+    "#1c1c1c",
+    "#f2a944",
+    "#1c1c1c"
+   ],
+   "source": "https://www.interlake-steamship.com/"
+  },
+  "james-r-barker": {
+   "lengthFt": 1004,
+   "beamFt": 105,
+   "built": 1976,
+   "fleet": "Interlake Steamship",
+   "type": "aft-ender",
+   "hull": "#7a2b22",
+   "stack": [
+    "#1c1c1c",
+    "#f2a944",
+    "#1c1c1c"
+   ],
+   "source": "https://www.interlake-steamship.com/"
+  },
+  "edgar-b-speer": {
+   "lengthFt": 1004,
+   "beamFt": 105,
+   "built": 1980,
+   "fleet": "Great Lakes Fleet (Key Lakes)",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#e2e2e2",
+    "#1c1c1c"
+   ],
+   "source": "https://www.greatlakesfleet.com/"
+  },
+  "manitoulin": {
+   "lengthFt": 663,
+   "beamFt": 78,
+   "built": 1991,
+   "rebuilt": 2015,
+   "fleet": "Lower Lakes Towing",
+   "type": "aft-ender",
+   "hull": "#5a2a22",
+   "stack": [
+    "#1c1c1c",
+    "#e2e2e2",
+    "#1c1c1c"
+   ],
+   "source": "https://www.lowerlakestowing.com/",
+   "approximate": true
+  },
+  "stewart-j-cort": {
+   "lengthFt": 1000,
+   "beamFt": 105,
+   "built": 1972,
+   "fleet": "Interlake Steamship",
+   "type": "aft-ender",
+   "hull": "#7a2b22",
+   "stack": [
+    "#1c1c1c",
+    "#f2a944",
+    "#1c1c1c"
+   ],
+   "source": "https://www.interlake-steamship.com/"
+  },
+  "algoma-compass": {
+   "lengthFt": 680,
+   "beamFt": 78,
+   "built": 1973,
+   "fleet": "Algoma Central",
+   "type": "aft-ender",
+   "hull": "#9a3127",
+   "stack": [
+    "#1c1c1c",
+    "#e2e2e2",
+    "#1c1c1c"
+   ],
+   "source": "https://en.wikipedia.org/wiki/Algoma_Compass"
+  },
+  "american-spirit": {
+   "lengthFt": 1004,
+   "beamFt": 105,
+   "built": 1978,
+   "fleet": "American Steamship Co.",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#c8402f",
+    "#f1ede3"
+   ],
+   "source": "https://www.americansteamship.com/"
+  },
+  "oakglen": {
+   "lengthFt": 730,
+   "beamFt": 76,
+   "built": 1980,
+   "fleet": "Canada Steamship Lines",
+   "type": "aft-ender",
+   "hull": "#8c2f25",
+   "stack": [
+    "#1c1c1c",
+    "#e2e2e2",
+    "#1c1c1c"
+   ],
+   "source": "https://www.cslships.com/",
+   "approximate": true
+  }
+ }
+}
