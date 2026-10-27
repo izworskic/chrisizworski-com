@@ -88,7 +88,24 @@
     [this.back, this.front].forEach(function (c) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0); });
     this.w = w; this.h = h;
     var stage = this.root.parentNode.querySelector('.hero-stage');
-    this.horizon = stage ? stage.offsetTop + stage.offsetHeight * 0.3 : h * 0.62;
+    this.horizon = stage ? stage.offsetTop + stage.offsetHeight * (w < 700 ? 0.5 : 0.3) : h * 0.62;
+  };
+  // Ships the dated ledger places in winter berths this season; drawn small along the far shore, to relative scale.
+  Scene.prototype.setFleet = function (ships) { this.fleet = (ships || []).slice(0, 9); this.drawShip(); if (reduce) this.draw(performance.now()); };
+  Scene.prototype.farFleetSVG = function () {
+    var ships = this.fleet || [], w = this.w, hz = this.horizon, out = '';
+    if (!ships.length) return out;
+    var unit = (w < 700 ? w * 0.11 : w * 0.075) / 1000, gap = w < 700 ? 10 : 16, total = 0;
+    var rows = ships.map(function (v) { var sp = specFor(v.id); var len = sp ? sp.lengthFt : 730; total += len * unit + gap; return {v: v, sp: sp, len: len}; });
+    // Spread along a distant breakwater, above the main hull line so each one stays visible.
+    var span = w * (w < 700 ? 0.9 : 0.8), step = Math.max(0, (span - total) / Math.max(1, rows.length)), x = 8, y = hz - 46;
+    rows.forEach(function (r, i) {
+      var L = r.len * unit, k = L / r.len * 1.2;
+      var spec = {name: '', len: r.len, beam: r.sp ? r.sp.beamFt : 78, type: r.sp ? r.sp.type : 'aft-ender', hull: r.sp ? r.sp.hull : '#5a2a22', stack: r.sp ? r.sp.stack : ['#1c1c1c', '#777', '#1c1c1c']};
+      out += '<g opacity=".85" transform="translate(' + x.toFixed(1) + ' ' + y + ')"><title>' + esc(r.v.name) + ', reported in winter berth</title>' + Art.ship(spec, {L: L, k: k, t: 0, moving: 0, lit: true, flip: i % 2 === 1}) + '</g>';
+      x += L + gap + step;
+    });
+    return '<rect x="0" y="' + (hz - 48) + '" width="' + (w * 0.84).toFixed(0) + '" height="6" fill="#07111b"/>' + out;
   };
   Scene.prototype.setDate = function (d) { this.date = d; this.phase = phaseFor(d); this.drawShip(); if (reduce) this.draw(performance.now()); };
   Scene.prototype.params = function () {
@@ -110,7 +127,7 @@
     var L = w < 700 ? w * 0.78 : w * 0.62, k = L / this.ship.len * (w < 700 ? 1.5 : 1.05);
     var x = (w < 700 ? w * 0.42 : w * 0.46) - L / 2, y = this.horizon + 2;
     this.shipLayer.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    var svg = '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')">' +
+    var svg = this.farFleetSVG() + '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')">' +
       Art.ship(this.ship, {L: L, k: k, t: 0, moving: 0, lit: p.lights > 0.6}) + '</g>';
     // Snow on the hatches and deckhouse roof when she is laid up.
     if (p.deckSnow > 0) {
@@ -383,6 +400,27 @@
     if (sceneEl) sceneEl.setAttribute('data-phase', ph.id);
   }) : null;
   if (!dial && statusEl) { var ph0 = phaseFor(new Date()), nx0 = nextMilestone(new Date()); statusEl.textContent = ph0.label + (nx0 ? ': ' + nx0.days + ' days until ' + nx0.ms.label : ''); }
+
+  // The explorer script mounts the dated live ledger; the hero reflects what it says, and only that.
+  var fleetLine = document.querySelector('[data-fleet-line]'), lastFleet = null;
+  function applyFleet(d) {
+    if (!d) return;
+    lastFleet = d;
+    if (scene) scene.setFleet(d.ships);
+    if (!fleetLine) return;
+    var n = d.ships.length, harbors = {};
+    d.ships.forEach(function (v) { harbors[v.harborId] = 1; });
+    var hc = Object.keys(harbors).length, confirmed = d.ships.filter(function (v) { return v.confirmed; }).length;
+    var label = 'Winter ' + d.season.replace('-', '\u201320');
+    if (!n) { fleetLine.textContent = label + ': no arrivals reported yet' + (d.departed ? '; ' + d.departed + ' departed' : '') + '. The ship above is an illustration.'; }
+    else {
+      var names = d.ships.slice(0, 3).map(function (v) { return v.name; }).join(', ') + (n > 3 ? ' and ' + (n - 3) + ' more' : '');
+      fleetLine.textContent = label + ': ' + n + (n === 1 ? ' ship' : ' ships') + ' reported in winter berths across ' + hc + (hc === 1 ? ' harbor' : ' harbors') + (confirmed ? ' (' + confirmed + ' confirmed)' : '') + ': ' + names + '. Drawn small along the far shore.';
+    }
+    fleetLine.hidden = false;
+  }
+  document.addEventListener('layup:fleet', function (e) { applyFleet(e.detail); });
+  document.addEventListener('fleetspecs:ready', function () { if (lastFleet && scene) scene.setFleet(lastFleet.ships); });
 
   fetch('/assets/freighter-fleet-specs.json', {signal: AbortSignal.timeout(7000)}).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
     if (d && d.schemaVersion === 1) { specs = d; document.dispatchEvent(new CustomEvent('fleetspecs:ready')); }
