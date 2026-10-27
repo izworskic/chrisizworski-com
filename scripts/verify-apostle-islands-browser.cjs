@@ -68,7 +68,7 @@ async function main(){
       let roadPopups=0,islandPopups=0;
       for(let pi=0;pi<pins;pi++){
         await page.locator('#ap-map .leaflet-interactive').nth(pi).dispatchEvent('click');
-        const popup=page.locator('#ap-map .leaflet-popup-content');
+        const popup=page.locator('#ap-map .leaflet-popup-content:visible').last();
         await popup.waitFor({state:'visible',timeout:3500});
         const href=await popup.locator('a').first().getAttribute('href');
         if(href.includes('google.com/maps/'))roadPopups++;
