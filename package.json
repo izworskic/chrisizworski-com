@@ -26,7 +26,7 @@
     "benchmark:trip-stack": "node scripts/benchmark-contextual-trip-stack-v2.mjs",
     "benchmark:tool-network": "node scripts/benchmark-tool-network-registry.mjs",
     "report:tool-network": "node scripts/report-tool-network-registry.mjs",
-    "benchmark:circle-tour": "node scripts/benchmark-circle-tour.mjs --check",
+    "benchmark:circle-tour": "node scripts/benchmark-circle-tour.mjs --check && node scripts/benchmark-lspp-explorer.mjs --check",
     "benchmark:entity": "node scripts/benchmark-entity-surface.mjs",
     "benchmark:winter": "node scripts/benchmark-winter-engine.mjs",
     "benchmark:winter-flow": "node scripts/benchmark-winter-persona-flow.mjs",

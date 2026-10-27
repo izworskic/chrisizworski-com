@@ -67,3 +67,32 @@ jobs:
     uses: ./.github/workflows/tool-authority-live-audit.yml
     with:
       build-artifact: verified-site-output
+
+  lspp-browser-qa:
+    needs: verify
+    if: github.event_name == 'pull_request' && github.head_ref == 'feature/lake-superior-provincial-park-explorer-20261026'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright
+        run: |
+          mkdir -p /tmp/lspp-playwright
+          npm install --prefix /tmp/lspp-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/lspp-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify Lake Superior Provincial Park map, photos and planner in Chromium
+        run: node scripts/verify-lspp-browser.cjs
+      - name: Save viewport and map screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lake-superior-park-qa
+          path: artifacts/lspp/
+          retention-days: 7
+          if-no-files-found: warn

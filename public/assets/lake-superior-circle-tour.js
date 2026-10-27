@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-09-30';
+  const RELEASE = '2026-10-26';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;
@@ -82,7 +82,7 @@
       const alert = document.createElement('div');
       alert.className = 'ct-current-alert';
       alert.dataset.currentAlert = 'lspp';
-      alert.innerHTML = '<strong>Lake Superior Provincial Park alert</strong>Gargantua Road is closed for maintenance, affecting several backcountry access points and campsites. Photography and digital-device use are not permitted at the Agawa Rock Pictographs. <a href="https://www.ontarioparks.ca/park/LakeSuperior/alerts" target="_blank" rel="noopener">Check Ontario Parks alerts →</a>';
+      alert.innerHTML = '<strong>Lake Superior Provincial Park alert</strong>As of October 26, the 2026 day-use season has ended. Agawa Rock Pictographs Trail and Trapper’s Trail were closed for the 2026 season; Nokomis and South Old Woman River had hunting-area advisories. Other off-season access is unverified. <a href="/lake-superior-provincial-park/">Compare park stops and trails →</a> <a href="https://www.ontarioparks.ca/park/LakeSuperior/alerts" target="_blank" rel="noopener">Check Ontario Parks alerts →</a>';
       lspp.prepend(alert);
     }
   }
@@ -108,7 +108,7 @@
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
     if (footer) {
-      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated September 30, 2026');
+      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated October 26, 2026');
     }
   }
 
