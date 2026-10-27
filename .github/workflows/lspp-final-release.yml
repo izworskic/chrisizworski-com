@@ -1,0 +1,43 @@
+name: Lake Superior Park release gate
+on:
+  push:
+    branches:
+      - feature/lake-superior-provincial-park-explorer-20261026
+    paths:
+      - '.github/workflows/lspp-final-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-verified-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Run complete repository verification
+        run: npm run verify:all
+      - name: Run built public site and crawlability audit
+        run: npm run profile:build -- build-profile.json
+      - name: Verify canonical park route, SEO metadata and source protections
+        run: |
+          node scripts/benchmark-lspp-explorer.mjs --check
+          node scripts/benchmark-circle-tour.mjs --check
+      - name: Retain real build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lspp-release-build-evidence
+          path: build-profile.json
+          if-no-files-found: warn
+          retention-days: 7
