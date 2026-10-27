@@ -1438,6 +1438,15 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - GSC, index coverage and AdSense performance were not retrieved in this development session; no growth or revenue uplift claimed.
 - Single next action: verify latest-head waterfall browser smoke and five-axis publication test before merging PR #1216; after release inspect a matched NHD popup on the production research overlay.
 
+
+### 2026-10-26 — First Michigan winter field guide isolated release branch
+
+- Carved /michigan-winter-activities/ into an isolated production candidate so six other incomplete draft guides are not inadvertently published; original draft PR #1221 unchanged.
+- Eighteen sourced activities, visible photo provenance, legal/seasonal access distinctions, no-JS content and filter/map decision UX. Existing live tool handoffs replace all unpublished sibling links.
+- Michigan Adventure Finder, Tools directory, sitemap-winter and registry linking only this guide. AdSense configuration untouched; new document uses the usual publisher loader.
+- GSC baseline/revenue unavailable; any traffic impact is unmeasured. Release not presumed merged.
+- Single next action: verify final isolated commit in full CI and browser QA, then review quality gates before publication.
+
 ### 2026-10-26 — Lake Superior Provincial Park Explorer: official-access map investment (#1220)
 
 - **Ownership and scope:** `izworskic/chrisizworski-com`; `feature/lake-superior-provincial-park-explorer-20261026`; draft PR #1220. New `/lake-superior-provincial-park/` exploratory guide with ten crawlable static cards, interest/effort/on-site time filters, verified-source map, separate evidence catalog and Circle Tour stop #15 handoff. Production main not merged.
