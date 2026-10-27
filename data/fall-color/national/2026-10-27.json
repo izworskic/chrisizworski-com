@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-27",
+  "updated": "2026-10-27T16:43:59.131Z",
+  "briefings": {
+    "new-england": "Season has passed peak, but clear skies this weekend may still reveal residual color on Kancamagus Highway and Smugglers' Notch.",
+    "great-smoky-mountains": "Currently within prime viewing window; Newfound Gap Road and Cades Cove Loop offer strong color displays despite 50% rain chance.",
+    "colorado-aspens": "Aspen season has concluded; snow showers expected this weekend make high-elevation drives like Maroon Creek Road challenging.",
+    "adirondacks": "Well past peak timing with minimal foliage remaining; mostly sunny conditions this weekend suit scenic drives but expect limited color.",
+    "north-shore-superior": "Season has passed; live weather data unavailable for this weekend's North Shore Scenic Drive and Gunflint Trail conditions.",
+    "ozarks": "Peak color window active now; rain showers likely this weekend on Arkansas Scenic Byway 7 and Pig Trail Scenic Byway.",
+    "eastern-sierra": "Aspen color has faded; snow showers possible this weekend on Bishop Creek Canyon and June Lake Loop at elevation.",
+    "wasatch": "Season well past; high storm chance (89%) this weekend makes Alpine Loop Scenic Byway and Guardsman Pass less ideal.",
+    "columbia-river-gorge": "Prime viewing window active; slight snow chance this weekend adds scenic drama to Historic Columbia River Highway drives.",
+    "door-county": "Near-peak conditions with mostly residual color; light rain possible this weekend on WI-42 and Peninsula State Park routes.",
+    "poconos": "Currently at peak timing; mostly sunny skies this weekend ideal for Delaware Water Gap and Lake Wallenpaupack corridor.",
+    "texas-hill-country": "Approaching prime window with strong color development; low rain chance this weekend favors FM-337 and Lost Maples approach.",
+    "west-virginia-highlands": "Past peak but substantial color remains; mostly cloudy, dry conditions this weekend suit Highland Scenic Highway and US-48.",
+    "catskills": "Near-peak with good residual foliage; mostly sunny skies this weekend enhance Catskill Mountains Scenic Byway and Kaaterskill Clove.",
+    "shenandoah": "Currently at peak timing; mostly cloudy conditions this weekend ideal for Skyline Drive North and Central Districts."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
