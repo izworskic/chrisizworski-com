@@ -1,3 +1,12 @@
+### 2026-10-27 — Apostle Islands 2027 source-freshness guard
+
+- PR #1249 improves the existing `/apostle-islands/` canonical and trip readiness, without new indexed routes or ad-configuration changes.
+- Adds six directly sourced NPS/operator evidence cards with October 27, 2026 review date; dynamic overdue labels and clearly archived 2026 shuttle and tour content. NPS alerts remain official-site handoffs, not inferred live conditions.
+- Introduces a weekly scheduled and manual conservative source-drift job. It compares known text evidence on the NPS construction page and concessioner shuttle/tour pages, raises one human-review issue for changes or unavailable pages, and **never** auto-opens docks or extends 2026 schedules.
+- No Redis, NPS API key, fake boat availability, inferred wave safety, or unstated 2027 schedule. Existing eight island dossiers, 17 trails, nine experiences, trip readiness, Leaflet map, and Circle Tour destination page remain intact.
+- QA: `tests/apostle-source-watch.test.js`, source desk assertions, desktop/phone and no-JS Chromium visual tests; full repository verification and emitted output audit; production smoke after merge.
+- GSC clicks/impressions/CTR and visitor behavior change not yet measured. Future work: source-review issue triage, actual authorized 2027 shuttle dates when published, and island-by-island trail/camping review with NPS updates.
+
 ### 2026-10-27 — Apostle Islands trip feasibility and return-planning desk
 
 - PR #1247, branch `feat/apostle-trip-readiness-20261027`, continues the existing island planner without adding a competing indexable URL or modifying advertising.

@@ -102,6 +102,17 @@ Of 113 name-matched USGS V2-to-state-GIS links: 78 lie within 100 m, 18 within 1
 - A full guide is promoted only after five independent source categories are documented: geographic location, land/facility manager, legitimate public viewing access, designated parking, and walking route/risks. Current road and trail status are **not** live. Hydro facility operation means no guaranteed waterfall flow.
 - Sources: https://www.ferc.gov/news-events/events/evening-scoping-meeting-saxon-falls-hydroelectric-project-saxon-project-and ; https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF ; https://www.travelwisconsin.com/outdoors/waterfalls/superior-falls ; https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7 ; https://doi.org/10.5066/P9QQTKA0.
 
+## October 27, 2026 — independent current USGS NHD point agreement layer
+
+The 2020 USGS Falls/Rapids V2 source crosswalk (113 state GIS matches) remains unchanged. A **separate** authoritative USGS National Map NHD Point layer was queried on October 27, 2026 (FTYPE 487 = Waterfall, service reporting data refreshed October 2026). Source: https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/0 . The regional envelope crosses state and international borders, so it is NOT a Michigan or U.P. inventory count.
+
+- Retrieved **97** NHD waterfall point records from the envelope in four 25-record result pages: 30 named, 67 unnamed.
+- Against the 161 named Michigan geographic research points, 20 separately named locations agree within 250 m. A geographic corroboration message may appear on the opt-in research-only layer for those matched Michigan GIS records; never show NHD corroboration as a public trail, navigable parking point or opening status.
+- Two records (Jumbo Falls and O Kun de Kun Falls) are 251–1,000 m from the state point and require location review. Two dangerous namesake matches (Silver Falls, ~111 km; Cascade Falls, ~304 km) are rejected rather than attached to a location. The matching is by normalized name AND distance; no name-only join.
+- No additional indexable URLs, visitor routes, parking pins, or land-tenure claims are made from this data. The 2020 historical crosswalk and the current NHD Point records are distinct datasets; do not substitute one layer's IDs, stream reaches, or provenance for the other. NHD Point REACHCODE is null for many waterfall records; do not fabricate hydrologic stream linkage.
+
+Repository: `data/up-waterfall-nhd-point-audit.json` contains all 97 records and decisions, while the static research overlay exposes only the 20 <=250m geographic corroborations. Any feature guide must still satisfy the separate five-axis visitor-access indexing gate.
+
 ## October 27 — Horseshoe Falls seasonal private-access guide
 
 - **Horseshoe Falls** in Munising is a paid, privately operated attraction, not state-park or National Park Service visitor access. The City of Munising recreation plan identifies the private status, the Munising visitor bureau corroborates the visitor approach, and the operator supplies admission, 400-foot walking distance, mobility and leashed-pet guidance. https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf ; https://www.munising.org/activities/horseshoe-falls/ ; https://www.uppermichiganwaterfalls.com/information.
