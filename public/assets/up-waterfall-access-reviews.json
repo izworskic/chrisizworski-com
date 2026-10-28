@@ -7,12 +7,12 @@
       "gisObjectId": 124,
       "name": "Bonanza Falls / Greenwood Falls",
       "county": "ONTONAGON",
-      "status": "parcel-ownership-conflict",
-      "publicAccess": "not-established",
+      "status": "township-seasonal-visitor-site-adjacent-parcel-conflict",
+      "publicAccess": "township-visitor-site-documented-full-route-unverified",
       "publicationEligible": false,
-      "title": "Parcel boundary conflict — visitor access unverified",
-      "summary": "The Michigan GIS waterfall point lies in a parcel attributed to a private LLC, while a separate regional brochure point about 168 metres away lies in a township-attributed parcel. A signed local approach is described by tourism sources, but public parking rights and a lawful route to each riverbank have not been established.",
-      "guidance": "Do not drive to the mapped waterfall point or infer a right to enter riverfront land. Use only clearly signed lawful access and check current local land-management guidance; no route or precise parking waypoint is supplied here.",
+      "title": "Seasonal township visitor area; waterfall parcels differ",
+      "summary": "Carp Lake Township documents managing the Bonanza Falls visitor entrance, parking, signs and facilities. The regional waterfall marker falls within a parcel attributed to the township, but Michigan GIS waterfall #124 about 168 metres away intersects a parcel recorded to a private LLC. Only the signed township visitor approach is supported; unrestricted riverbank or private-parcel access is not.",
+      "guidance": "Use only the signed Bonanza/Greenwood Falls township entrance from M-64 during its visitor season. The township documented no RV, oversized vehicle or overnight camping restrictions under consideration; check posted signs. Do not navigate to the GIS falls point, cross unmarked property boundaries, or assume the area is open in late October/winter.",
       "locationNotes": "Michigan GIS #124 (46.818863,-89.571458); regional Western U.P. brochure (46.817719,-89.570023); locations about 168 m apart, not interchangeable. Parcel ownership display is not a title search or easement determination.",
       "sourceLinks": [
         {
@@ -34,10 +34,22 @@
         {
           "label": "Regional published waterfall approach",
           "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "Carp Lake Township 2025 June signage approval",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
+        },
+        {
+          "label": "Carp Lake Township August parking/visitor signs",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
+        },
+        {
+          "label": "Carp Lake Township October seasonal closure",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf"
         }
       ],
-      "reviewLimitations": "Parcel mirror identifies the state GIS point as Iron River Assoc., LLC (03-113-001-00), and the alternate brochure point as Township of Carp Lake (03-113-002-30). Neither establishes title, visitor easement, rights over connecting property, trail access, or current road operation. Michigan DNR-managed-land point query returned no overlap, which does not prove ownership by itself.",
-      "nextEvidence": "Reconcile actual official public lot and signed trail geometry against county parcels; verify legal visitor permission/easement and site management. Keep research-only and noindex."
+      "reviewLimitations": "Carp Lake Township 2025 board minutes document paid replacement signage, parking/turnaround expansion discussion, visitor facilities and seasonal closure. October 2025 minutes anticipated closing by end of that month; December 2025 minutes confirmed closure until spring 2026. Neither establishes the 2026 closing date. Parcel overlay identifies two different ownership labels, but is not a legal easement, title or trail survey.",
+      "nextEvidence": "Official lot-to-public-view route and boundary against parcel data; current season gate/closure signs. Do not public-index full falls guide until lawful viewing route is independently matched to the municipal visitor site."
     }
   ]
 }
