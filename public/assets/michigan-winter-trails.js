@@ -1,0 +1,155 @@
+/* FIELD_GUIDE_V1 winter trails: progressive filters, honest regional markers, CARTO / OSM fallback */
+(()=>{'use strict';
+/* Retain genuine credits; never substitute a photo of a different location.
+   Offline/blocked originals fall back to an explicitly editorial panel, not a broken-image icon. */
+function revealPhotoFallback(im){
+ const fig=im.closest('.wf-photo');if(!fig||fig.dataset.mediaStatus==='fallback')return;
+ fig.dataset.mediaStatus='fallback';im.hidden=true;im.setAttribute('aria-hidden','true');
+ let panel=fig.querySelector('.wf-photo-unavailable');
+ if(!panel){panel=document.createElement('div');panel.className='wf-photo-unavailable';
+ const label=document.createElement('span');label.className='wf-photo-unavailable-kicker';label.textContent='FIELD NOTE / IMAGE UNAVAILABLE';
+ const title=document.createElement('strong');title.textContent=fig.closest('.wf-story')?.querySelector('h3')?.textContent||'Michigan winter trails';
+ const explanation=document.createElement('span');explanation.textContent='The source photograph could not load. The trail access notes and official links below remain available.';
+ panel.append(label,title,explanation);fig.insertBefore(panel,fig.firstChild)}
+ panel.hidden=false;
+}
+for(const im of document.querySelectorAll('.wf-photo img')){
+ let fallbackAttempted=false;
+ const fail=()=>{if(!fallbackAttempted&&im.dataset.fallbackSrc){fallbackAttempted=true;im.dataset.fallbackUsed='yes';im.src=im.dataset.fallbackSrc;return;}revealPhotoFallback(im)};
+ im.addEventListener('error',fail);
+ if(im.complete&&im.naturalWidth===0)fail();
+}
+const stories=[...document.querySelectorAll('.wf-story')];if(!stories.length)return;
+const access=document.getElementById('trl-access'),regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),chips=[...document.querySelectorAll('.wf-chip')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');
+let tag='all',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;
+const message=(s,kind)=>{if(!status)return;status.textContent=s;status.dataset.state=kind||''};
+const shown=()=>stories.filter(c=>!c.hidden);
+const reset=()=>{tag='all';regions.value='all';efforts.value='all';access.value='all';filter()};
+chips.forEach(b=>b.addEventListener('click',()=>{tag=b.dataset.tag;filter()}));
+regions.addEventListener('change',filter);
+efforts.addEventListener('change',filter);
+access.addEventListener('change',filter);
+document.getElementById('wf-reset')?.addEventListener('click',reset);
+document.getElementById('wf-show-all')?.addEventListener('click',reset);
+function filter(){
+ for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));
+ for(const c of stories)c.hidden=(tag!=='all'&&c.dataset.tag!==tag)||(regions.value!=='all'&&c.dataset.region!==regions.value)||(efforts.value!=='all'&&c.dataset.effort!==efforts.value)||(access.value!=='all'&&c.dataset.access!==access.value);
+ let n=shown().length;
+ count.textContent=n?n+' trail systems match. Confirm current snow, grooming, seasonal road plowing and official sources before leaving.':'No trail systems match these choices. Try another region, trail mode or effort.';
+ empty.hidden=n>0;
+ refreshPins(false);
+}
+function refreshPins(initial){
+ if(!map||!window.L)return;
+ markers.forEach(m=>map.removeLayer(m));markers=[];
+ const groups=new Map();
+ for(const card of shown()){
+  const lat=Number(card.dataset.lat),lng=Number(card.dataset.lng);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+  const key=lat.toFixed(5)+','+lng.toFixed(5);
+  if(!groups.has(key))groups.set(key,{lat,lng,cards:[]});
+  groups.get(key).cards.push(card);
+ }
+ const points=[];
+ for(const group of groups.values()){
+  const multi=group.cards.length>1,firstName=group.cards[0].querySelector('h3')?.textContent||'Trail system';
+  const root=document.createElement('div');root.className='wf-map-popup';
+  const heading=document.createElement('strong');heading.textContent=multi?group.cards.length+' winter trail experiences here':firstName;root.append(heading);
+  const note=document.createElement('p');note.textContent='Trail corridor orientation. Check seasonal road plowing and closures with official sources; never use this pin as verified winter parking.';root.append(note);
+  const items=document.createElement('ul');
+  for(const card of group.cards){
+   const title=card.querySelector('h3')?.textContent||'Open trail note';
+   const item=document.createElement('li');const a=document.createElement('a');a.href='#'+card.id;a.textContent=title;
+   a.addEventListener('click',ev=>{ev.preventDefault();card.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});const h=card.querySelector('h3');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}map.closePopup()});item.append(a);
+   const view=document.createElement('a');
+   const lat=Number(card.dataset.lat),lng=Number(card.dataset.lng);
+   view.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(lat+','+lng);
+   view.target='_blank';view.rel='noopener noreferrer';view.className='trl-popup-map-link';
+   view.textContent='View geographic area · not parking ↗';
+   view.title='Location only: verify official winter parking, trail uses and closures';
+   item.append(view);items.append(item);
+  }
+  root.append(items);
+  const markerClass=multi?'wf-pin wf-pin-multi':'wf-pin';
+  const icon=window.L.divIcon({className:'',html:'<span class="'+markerClass+'" aria-hidden="true">'+(multi?group.cards.length:'')+'</span>',iconSize:multi?[24,24]:[17,17],iconAnchor:multi?[12,12]:[8,8]});
+  markers.push(window.L.marker([group.lat,group.lng],{title:multi?group.cards.length+' winter trail experiences':firstName,icon}).bindPopup(root).addTo(map));
+  points.push([group.lat,group.lng]);
+ }
+ if(initial||(!userZoomed&&!fitOnce)){if(points.length>1)map.fitBounds(points,{padding:[23,23],maxZoom:7});else if(points.length)map.setView(points[0],7);fitOnce=true}
+}
+function showTiles(url,provider){
+ if(!map)return;if(tiles)map.removeLayer(tiles);
+ const layer=window.L.tileLayer(url,{subdomains:provider==='CARTO'?'abcd':'abc',maxZoom:18,attribution:provider==='CARTO'?'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>':'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+ tiles=layer;let failed=0,loaded=0;
+ layer.on('tileload',()=>{if(tiles!==layer)return;loaded++;if(loaded>=2)message(provider==='CARTO'?'CARTO basemap loaded. Choose a regional trail marker.':'OpenStreetMap fallback loaded. Choose a regional trail marker.',provider==='CARTO'?'ready':'fallback')});
+ layer.on('tileerror',()=>{if(tiles!==layer)return;if(++failed>=2){if(provider==='CARTO'){message('CARTO unavailable; switching to OpenStreetMap.','fallback');showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png','OSM')}else message('Map unavailable. Trail dossiers and official source links remain accessible.','error')}});
+ layer.addTo(map);
+}
+async function connectTiles(){
+ const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),6500);
+ try{
+  const r=await fetch('/api/carto-basemap-config',{credentials:'same-origin',signal:ac.signal});
+  if(!r.ok)throw Error('config');
+  const c=await r.json();
+  if(c?.provider!=='CARTO'||typeof c.key!=='string'||!c.key.trim())throw Error('config');
+  showTiles('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(c.key.trim()),'CARTO');
+ }catch{
+  message('Public CARTO map configuration unavailable. OpenStreetMap fallback.','fallback');
+  showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png','OSM');
+ }finally{clearTimeout(timer)}
+}
+function init(){
+ if(!window.L){message('Interactive map unavailable; browse all trail systems below.','error');return}
+ try{
+  mapNode.textContent='';
+  map=window.L.map(mapNode,{scrollWheelZoom:false}).setView([44.8,-85.5],6);
+  map.on('dragstart zoomstart',()=>{userZoomed=true});
+  refreshPins(true);
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map?.invalidateSize({pan:false})).observe(mapNode);
+  requestAnimationFrame(()=>map?.invalidateSize({pan:false}));
+  connectTiles();
+ }catch{message('Map could not start. Every trail system remains readable.','error')}
+}
+filter();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+
+(function(){
+const desc={
+ snowshoe:{
+  label:'TRAIL MODE 01 · DEDICATED SNOWSHOE',
+  title:'Marked snowshoe loops keep you clear of classic ski tracks',
+  copy:'Dedicated snowshoe loops—such as Pictured Rocks Munising Snowshoe Trail (2.65 mi), Tahquamenon Lower Falls Green (1.6 mi) and Blue (2.4 mi) loops, and Vasa Pathway Orange (1.5 mi), Green/Yellow (0.6 mi) and Red (0.25 mi) loops—give snowshoers their own singletrack without crossing set ski rails.',
+  alert:'Even at parks with dedicated snowshoe loops, watch for ski-only boundaries: Tahquamenon Upper Falls 1.0-mile Lantern Loop is cross-country ski only.'
+ },
+ shared:{
+  label:'TRAIL MODE 02 · SKI-SHARED CORRIDORS',
+  title:'Walk the outer edge—never step on parallel classic ski rails',
+  copy:'On shared winter corridors like the Sleeping Bear Heritage Trail, Paradise Pathway, and Hartwick Pines Mertz Grade, groomers or skiers set parallel classic tracks alongside a wider deck. Snowshoers and winter walkers must stay on the outer edge of the corridor.',
+  alert:'A boot or snowshoe print inside a set ski track freezes into a hard rut that catches ski tips on descents. Step wide at junctions and obey seasonal pet bans.'
+ },
+ fatbike:{
+  label:'TRAIL MODE 03 · WINTER FAT-TIRE WINDOWS',
+  title:'Dune fat-bike dates, tire-width minimums & soft-crust rules',
+  copy:'Silver Lake State Park opens its dunes to fat-tire bikes only from December 15 through March 15 (minimum 3.5-inch tire width required), while groomed northern singletrack like the Vasa pathway depends on sub-freezing snow crust and low tire pressure (3–5 PSI).',
+  alert:'If your tires leave a rut deeper than an inch or you must push up climbs, the snow surface is too soft—turn back or air down before trenching the groomed deck.'
+ },
+ packed:{
+  label:'TRAIL MODE 04 · PACKED BOOTS & SEASONAL ROADS',
+  title:'Microspikes on packed forest loops; caution on unplowed roads',
+  copy:'High-use forest walks like Hartwick Pines Old Growth Loop (1.25 mi), Tahquamenon Upper Falls Brink Walk (0.75 mi) and Muskegon State Park loops pack into dense ice where microspikes beat wide snowshoes. Meanwhile, unplowed seasonal roads (Anderson Lake, Sand Hill Rd) stop sedans short.',
+  alert:'Hartwick Pines Au Sable River Foot Trail has an indefinite footbridge closure (out-and-back only), and Port Crescent pins split 2 miles between main entrance and day-use loops.'
+ }
+};
+const labels=[...document.querySelectorAll('[data-use]')].filter(e=>e.tagName==='BUTTON'),art=document.getElementById('trl-use-art');
+const lb=document.getElementById('trl-use-label'),title=document.getElementById('trl-use-title'),copy=document.getElementById('trl-use-copy'),alert=document.getElementById('trl-use-alert');
+labels.forEach(b=>b.addEventListener('click',()=>{
+ const d=desc[b.dataset.use];if(!d)return;
+ labels.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ if(art)art.dataset.use=b.dataset.use;
+ if(lb)lb.textContent=d.label;
+ if(title)title.textContent=d.title;
+ if(copy)copy.textContent=d.copy;
+ if(alert)alert.textContent=d.alert;
+}));
+})();

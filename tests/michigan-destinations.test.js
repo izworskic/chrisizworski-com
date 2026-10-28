@@ -45,7 +45,7 @@ test('indexing, creator identity, navigation, and search intent are protected', 
   assert.equal(nodes.find(x => x['@type'] === 'Person')?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'CollectionPage')?.author?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'ItemList')?.numberOfItems, 20);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-10-27<\/lastmod>/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-10-28<\/lastmod>/);
   assert.match(tools, /href="\/michigan-destinations\/"/);
   const node = registry.tools.find(x => x.id === 'michigan-adventure-finder');
   assert.equal(node.canonical, 'https://chrisizworski.com/michigan-destinations/');

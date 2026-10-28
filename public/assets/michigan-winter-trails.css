@@ -1,0 +1,132 @@
+/* Michigan Winter Trails: a distinct FIELD_GUIDE_V1 editorial application. Never changes site ad settings. */
+.trl{--wf-accent:#265944;--wf-paper:#f4f6f2;--wf-ink:#183229;--wf-muted:#4e665c;--wf-line:#d6e0d9}
+.trl .wf-hero{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:25px;padding-top:23px;padding-bottom:20px}
+.trl .wf-intro h1{font-size:clamp(2.65rem,4.5vw,4.35rem);max-width:610px}
+.trl .wf-lede strong{color:#1f4e3b}
+.trl .trl-hero-montage{height:276px;display:grid;grid-template-columns:1.4fr .9fr;grid-template-rows:1fr 1fr;gap:7px;min-width:0}
+.trl .trl-hero-montage .wf-photo{height:100%;min-height:0;border-radius:5px}
+.trl .trl-hero-montage .wf-photo:first-child{grid-row:1/3}
+.trl .trl-hero-montage .wf-photo img{object-fit:cover;object-position:center}
+.trl .trl-hero-montage .wf-photo figcaption{font-size:.51rem;padding:21px 8px 6px}
+
+.trl-signpost{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-top:10px;padding-bottom:20px;border-top:1px solid var(--wf-line)}
+.trl-signpost>div{border-left:3px solid #7fb099;padding-left:12px;display:flex;flex-direction:column;gap:2px}
+.trl-signpost strong{color:#21523e;text-transform:uppercase;font-size:.68rem;letter-spacing:.08em}
+.trl-signpost span{color:#556c62;font-size:.77rem}
+
+.trl-closure{padding:17px 19px;border:1px solid #e4caa8;border-left:5px solid #af6538;background:#fcf8f1;border-radius:6px;display:flex;gap:26px;align-items:center;justify-content:space-between;margin-bottom:24px}
+.trl-closure h2{font-size:1.42rem;line-height:1.25;color:#5f3f28}
+.trl-closure p:not(.wf-eyebrow){font-size:.8rem;line-height:1.65;color:#725846;margin-top:7px}
+.trl-closure>a{flex-shrink:0;font-size:.76rem;font-weight:700}
+
+.trl-science{padding:22px 0 27px;border-top:1px solid #d4e2d9}
+.trl-science-head{display:flex;justify-content:space-between;align-items:end;gap:22px}
+.trl-science-head>p{max-width:460px;color:#586f64;font-size:.79rem}
+.trl-science-layout{display:grid;grid-template-columns:minmax(0,.74fr) minmax(0,1.26fr);gap:12px;margin-top:17px}
+.trl-use-selector{display:flex;flex-direction:column;gap:8px}
+.trl-use-selector button{border:1px solid #c7dad0;border-radius:6px;background:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:32px minmax(0,1fr);gap:2px 10px;color:#1e4636}
+.trl-use-selector button[aria-pressed="true"]{background:#e4f0ea;border-color:#699b84;box-shadow:inset 3px 0 #2b664d}
+.trl-use-selector button>span{grid-row:1/3;font:500 1.55rem/1.2 var(--wf-display);color:#9f6846;white-space:nowrap}
+.trl-use-selector strong{font-size:.8rem}
+.trl-use-selector small{color:#536c61;font-size:.72rem}
+
+.trl-use-stage{background:linear-gradient(140deg,#1c3b2f,#244d3e 60%,#1f4034);border-radius:6px;color:white;min-height:248px;padding:17px 21px;overflow:hidden;position:relative}
+.trl-stage-type{font-size:.67rem!important;letter-spacing:.12em;color:#b8dfd0;margin:0 0 5px!important}
+.trl-use-stage h3{font-size:1.65rem;position:relative}
+.trl-use-stage p{font-size:.8rem;max-width:580px;position:relative;color:#e4f0ea;margin-top:7px!important}
+.trl-use-stage .trl-stage-foot{font-size:.73rem;font-weight:700;color:#dce4c8;margin-top:14px!important}
+.trl-use-art{height:64px;display:flex;gap:8px;align-items:center;justify-content:center;overflow:hidden;opacity:.92;margin:9px 0 6px}
+.trl-use-art i{display:block;width:22px;background:linear-gradient(#dcf2e6,#7fb89c,#b8dfd0);border-radius:10px;height:48px}
+.trl-use-art i:nth-child(2n){height:34px;width:14px}
+.trl-use-art i:nth-child(3n){height:52px;width:26px}
+.trl-use-art[data-use="shared"] i{width:10px;height:54px;border-radius:2px}
+.trl-use-art[data-use="fatbike"] i{height:28px;width:28px;border-radius:50%;border:3px solid #d9eadf;background:transparent}
+.trl-use-art[data-use="packed"] i{height:16px;width:32px;border-radius:3px;transform:skewX(-12deg)}
+
+.trl .wf-discover{padding-top:22px}
+.trl .wf-controls label{flex:1 1 180px}
+.trl .wf-chip{font-size:.75rem}
+.trl .wf-map{height:415px}
+.trl .trl-map-caution{margin-top:12px;border-left:3px solid #a87553;background:#f3eee6;padding:10px 12px;font-size:.73rem;color:#654c3b;display:flex;flex-direction:column;gap:4px}
+
+.trl .wf-story{min-height:295px}
+.trl .wf-story>.wf-photo{min-height:295px}
+.trl .wf-story .wf-photo img{object-position:center 45%}
+.trl .wf-story-body .wf-kicker{font-size:.63rem}
+.trl .wf-story-body .trl-status{font-weight:800;font-size:.7rem!important;margin-top:2px!important;color:#2f6349!important}
+.trl .wf-story-body .trl-status-conditional{color:#8c5d2e!important}
+.trl .wf-story-body .trl-status-limited{color:#a14636!important}
+.trl .wf-story-body .trl-routes{font-size:.73rem!important;color:#244b3c!important;background:#eef3ef;border-left:3px solid #6b9e85;padding:6px 9px;border-radius:0 4px 4px 0}
+.trl .wf-story-body .trl-why{font-size:.78rem!important;color:#3d5f52!important}
+.trl .wf-story-body{gap:7px}
+.trl .wf-links a{font-size:.74rem}
+
+.trl .wf-photo img[hidden]{display:none!important}
+.trl .wf-photo[data-media-status="fallback"]{background:#dbe8e2;isolation:isolate}
+.trl .wf-photo-unavailable{width:100%;height:100%;min-height:170px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:22px 16px 55px;color:#1f4b3b;background:linear-gradient(145deg,#d6e8df,#edf1e9)}
+.trl .wf-photo-unavailable[hidden]{display:none}
+.trl .wf-photo-unavailable-kicker{font-size:.62rem;color:#886a4e;letter-spacing:.11em;font-weight:800}
+.trl .wf-photo-unavailable strong{font:500 1.45rem/1.2 var(--wf-display)}
+.trl .wf-photo-unavailable>span:last-child{font-size:.74rem}
+.trl .wf-photo[data-media-status="fallback"] figcaption{color:white;background:linear-gradient(transparent,#214236 80%)}
+.trl .wf-photo[data-media-status="fallback"] figcaption a{color:white}
+
+.trl .wf-pin-multi{width:24px;height:24px;background:#235c46;border:2px solid white;color:white;display:flex;align-items:center;justify-content:center;border-radius:50%;font:800 11px sans-serif;box-shadow:0 1px 7px #173d2e66}
+.trl .wf-map-popup ul{list-style:none;margin:8px 0 0;padding:0}
+.trl .wf-map-popup li+li{border-top:1px solid #dce5df;padding-top:5px;margin-top:5px}
+
+.trl-ledger{padding:28px 0 34px;border-top:1px solid var(--wf-line)}
+.trl-ledger-head{display:flex;justify-content:space-between;align-items:end;gap:22px;margin-bottom:16px}
+.trl-ledger-head>p{max-width:490px;font-size:.79rem;color:var(--wf-muted)}
+.trl-ledger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:11px}
+.trl-ledger-card{background:#fffefa;border:1px solid var(--wf-line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.trl-ledger-card h3{font-size:1.15rem}
+.trl-ledger-meta{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#8f6344}
+.trl-ledger-card p{font-size:.77rem;color:var(--wf-muted);line-height:1.5}
+.trl-ledger-card a{margin-top:auto;font-size:.73rem;font-weight:700}
+.trl-quarantine{margin-top:16px;padding:15px 17px;background:#fcf8f1;border:1px solid #e4caa8;border-left:4px solid #a85c32;border-radius:6px}
+.trl-quarantine h3{font-size:1.2rem;color:#5c3b24;margin-bottom:6px}
+.trl-quarantine p{font-size:.78rem;color:#6c5240;margin-bottom:8px}
+.trl-quarantine ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:.76rem;color:#4f392b;line-height:1.48}
+
+@media(max-width:930px){.trl .wf-hero{grid-template-columns:1fr 1fr}.trl .trl-hero-montage{height:240px}.trl-science-head,.trl-ledger-head{display:block}.trl-science-head>p,.trl-ledger-head>p{margin-top:7px}}
+@media(max-width:800px){.trl .wf-stories{display:flex;flex-direction:column}.trl .wf-story,.trl .wf-story:nth-child(2n){grid-template-columns:36% 64%}.trl .wf-story>.wf-photo{min-height:250px}.trl .wf-explore{display:flex;flex-direction:column}}
+@media(max-width:610px){
+  .trl .wf-hero{display:flex;flex-direction:column;gap:15px;padding-top:18px}
+  .trl .wf-hero h1{font-size:clamp(2.45rem,9.5vw,3.35rem)}
+  .trl .trl-hero-montage{width:100%;height:175px}
+  .trl .trl-hero-montage .wf-scene{display:none}
+  .trl-signpost{display:flex;flex-direction:column;gap:7px}
+  .trl-signpost>div{display:grid;grid-template-columns:138px 1fr;align-items:baseline;padding:0 8px}
+  .trl-closure{display:block;padding:14px;margin-bottom:16px}
+  .trl-closure h2{font-size:1.23rem}
+  .trl-closure>a{display:inline-block;margin-top:10px}
+  .trl-science{padding:16px 0}
+  .trl-science-layout{grid-template-columns:1fr}
+  .trl-use-selector{display:grid;grid-template-columns:1fr}
+  .trl-use-selector button{padding:9px;grid-template-columns:36px minmax(0,1fr);align-items:start;column-gap:12px}
+  .trl-use-selector button>span{grid-row:1 / span 2;display:block;white-space:nowrap;word-break:normal;font:500 1.35rem/1.35 var(--wf-display);min-width:0;letter-spacing:0}
+  .trl-use-selector button strong,.trl-use-selector button small{min-width:0;overflow-wrap:normal;word-break:normal}
+  .trl-use-selector button strong{font-size:.84rem;line-height:1.3}
+  .trl-use-stage{min-height:235px}
+  .trl .wf-controls{display:grid;grid-template-columns:1fr 1fr}
+  .trl .wf-controls label{min-width:0}
+  .trl .wf-controls label:nth-child(3){grid-column:1/-1}
+  .trl .wf-controls button{grid-column:1/-1}
+  .trl .wf-story,.trl .wf-story:nth-child(2n){grid-template-columns:1fr}
+  .trl .wf-story>.wf-photo,.trl .wf-story-index{height:190px;min-height:190px}
+  .trl .wf-story-body{padding:15px}
+  .trl .wf-story-body h3{font-size:1.45rem}
+  .trl .wf-story-body>p:not(.wf-kicker){font-size:.79rem;line-height:1.52}
+  .trl .wf-story-index b{font-size:3.5rem}
+}
+@media(max-width:370px){
+  .trl .wf-controls{grid-template-columns:1fr}
+  .trl .wf-controls label:nth-child(3),.trl .wf-controls button{grid-column:1/-1}
+  .trl-signpost>div{display:flex;flex-direction:column;gap:0}
+}
+
+/* Visitor map handoff. No location is represented as guaranteed plowed winter parking. */
+.trl .wf-links .trl-google-map-link{font-size:.71rem;color:#36614d;font-weight:700}
+.trl .wf-map-popup .trl-popup-map-link{display:block;font-size:.7rem;margin-top:3px;color:#2f5e49;text-decoration:underline}
+@media(max-width:610px){.trl .wf-links .trl-google-map-link{font-size:.74rem;line-height:1.55}}

@@ -4282,6 +4282,45 @@
         "decisionWindowDays": 28,
         "privacy": "No precise user location or visitor identity collected"
       }
+    },
+    {
+      "id": "michigan-winter-trails",
+      "name": "Michigan Winter Trails Field Guide",
+      "canonical": "https://chrisizworski.com/michigan-winter-trails/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "winter-snow",
+      "primaryIntent": "Which Michigan winter trail systems and loops allow snowshoeing, cross-country skiing, winter fat biking or winter hiking, and what seasonal access rules apply?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "winter-traveler",
+        "hiker",
+        "nordic-skier"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Editorial winter trail-mode and route-etiquette field guide across 15 trail systems and 50 named DNR/NPS loops, distinct from live cross-country ski snow reports, snow-depth maps, and the general winter activities chooser."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Source-backed 15 winter trail systems, 50 named loops and 7 quarantined route blockers; initial page release."
+      },
+      "measurement": {
+        "search": "GSC Web URL and query for 7/28 days",
+        "product": "Specialist handoffs and guide discovery",
+        "decisionWindowDays": 28,
+        "privacy": "No precise user location or visitor identity collected"
+      }
     }
   ],
   "relationships": [
@@ -6124,8 +6163,7 @@
       "strength": "optional",
       "surface": "winter-network",
       "reason": "Return to broad outdoor activity chooser."
-    }
-,
+    },
     {
       "from": "circle-tour",
       "to": "apostle-islands",
@@ -6141,6 +6179,54 @@
       "strength": "strong",
       "surface": "apostle-visitor-planner",
       "reason": "Return to the full Lake Superior Circle Tour road-trip itinerary after planning the islands."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-winter-trails",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-trails-handoff",
+      "reason": "Broad winter activity guide hands off to 15 trail systems and 50 named loops sorted by winter trail rules."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "michigan-winter-trails",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "winter-destinations",
+      "reason": "Year-round destination guide links to dedicated winter trail system and loop selection."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "xc-planning",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "nordic-ski-handoff",
+      "reason": "Move from winter trail rule selection to cross-country ski trail planning and live conditions."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "michigan-snow-totals",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "snowfall-context",
+      "reason": "Check recent snowfall totals before driving to a Michigan winter trailhead."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "frozen-michigan",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "winter-network",
+      "reason": "Pair a winter trail outing with nearby documented ice curtains, frozen waterfalls or shoreline viewpoints."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "michigan-winter-activities",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "winter-network",
+      "reason": "Return to the 18-experience statewide winter activity chooser."
     }
   ],
   "cannibalizationGroups": [

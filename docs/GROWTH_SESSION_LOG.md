@@ -1,3 +1,11 @@
+### 2026-10-28 — Michigan Winter Trails standalone Field Guide v1 release
+
+- Publishes `/michigan-winter-trails/` as the third standalone `FIELD_GUIDE_V1` winter field guide (joining `/michigan-winter-activities/` and `/frozen-michigan/`), built on the audited Michigan DNR & NPS route dataset (`data/winter-hike/michigan-curated-routes.json` and `data/winter-hike/michigan-route-access-research.json`).
+- Covers 15 primary winter trail systems and 50 named DNR/NPS loops across the Upper and Lower Peninsulas, separating dedicated snowshoe singletrack (Pictured Rocks Munising 2.65 mi, Tahquamenon Lower Falls 1.6 & 2.4 mi, Vasa 1.5/0.6/0.25 mi), ski-shared corridors (Sleeping Bear Heritage & 10 mainland loops, Paradise, Pine Bowl), seasonal fat-tire windows (Silver Lake Dec 15–Mar 15 dune window with 3.5-inch minimum tire width, Vasa singletrack), and packed winter walking loops (Hartwick Pines, Muskegon, Bay City Tobico Marsh).
+- Explicitly surfaces 7 quarantined routes (`UNPLOWED_SEASONAL_ROAD` on Anderson Lake Loops 1–3, `BRIDGE_CLOSED_OUT_AND_BACK` on Hartwick Pines Au Sable River Foot Trail, `SKI_ONLY_NO_SNOWSHOE` on Tahquamenon Upper Falls 1.0-mile Lantern Loop, `SKI_NETWORK_COMPLEXITY` on Muncie Lakes 9.8-mile network, and `SKI_NETWORK_STEEP_DESCENTS` on Pine Bowl 5.9-mile network).
+- Uses local Leaflet 1.9.4 (`/assets/leaflet-1.9.4.js`), grouped Vasa multi-experience pin (`.wf-pin-multi`), view-only Google Maps coordinate links (`not parking`), 3 NPS public-domain + 8 Wikimedia Commons exact-place photographs with transparent offline fallback, and 4 honest `.wf-story-index` markers where no exact-place photo exists.
+- Wired into `/tools/`, `/michigan-destinations/`, `/michigan-winter-activities/`, `/frozen-michigan/`, `public/sitemap-winter.xml`, and `benchmarks/tool-network-registry.json`. GSC impressions/clicks/CTR unmeasured until post-deploy window.
+
 ### 2026-10-28 — Apostle Islands Visual NPS Island Atlas
 
 - Build a visual, eight-island field atlas on the existing canonical `/apostle-islands/`, with original National Park Service island maps showing real trail lines and a separate Leaflet layer containing 42 NPS-listed campsite reference positions (21 Stockton, 7 Oak, 7 Basswood, 6 Rocky, 1 Michigan).
