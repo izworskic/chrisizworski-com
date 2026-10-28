@@ -55,7 +55,7 @@ async function main(){
       await page.locator('input[name="island-purpose"][value="overnight"]').check();
       check(await page.locator('article.island-card:visible').count()===6,name+' camping filter must exclude Raspberry and Devils');
       await page.locator('input[name="island-purpose"][value="shuttle"]').check();
-      check(await page.locator('article.island-card:visible').count()===3,name+' published season transport filter count');
+      check(await page.locator('article.island-card:visible').count()===4,name+' published season shuttle or lighthouse tour filter count');
       await page.locator('input[name="island-purpose"][value="lighthouse"]').check();
       check(await page.locator('article.island-card:visible').count()===4,name+' lighthouse context filter count');
       check(await page.locator('#island-devils').isVisible(),name+' closed Devils must not disappear from lighthouse context');
