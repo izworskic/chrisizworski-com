@@ -1,0 +1,84 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-28",
+  "id": "northern-michigan-wine-cider-spirits-breakthrough",
+  "canonicalHub": "https://chrisizworski.com/michigan-wine-cider-spirits/",
+  "connectedPlanners": {
+    "traverseCity": "https://tcwine.chrisizworski.com/",
+    "petoskey": "https://chrisizworski.com/petoskey-wine/"
+  },
+  "canonicalPerson": "https://chrisizworski.com/#person",
+  "objective": "Break into Page 1 across Northern Michigan wine, hard cider, and craft spirits queries (Traverse City, Old Mission, Leelanau, Petoskey, Walloon Lake, Boyne, Harbor Springs, Charlevoix) by solving high-friction visitor logistics and winter/four-season planning in FIELD_GUIDE_V1.",
+  "valueFunction": {
+    "id": "V_wine_cider_spirits_v1",
+    "scoreRange": [0, 100],
+    "releaseTarget": 94,
+    "dimensions": [
+      {
+        "id": "firstScreenEditorialAndVisualDesire",
+        "weight": 20,
+        "description": "Immediate editorial answer and rights-verified Northern Michigan vineyard/harbor photography in static HTML above the fold; zero 100vh client-side bailout blockers before H1; SERP title <= 60 chars and meta description <= 158 chars."
+      },
+      {
+        "id": "fourSeasonAndWinterBreakthrough",
+        "weight": 20,
+        "description": "Captures surging Q4/Q1 winter search intent: heated vineyard igloos and domes, on-site snowshoe-and-sip trail networks, apres-ski distillery handoffs near Boyne/Nub's Nob/Crystal/TC, and winter indoor/heated dog rules."
+      },
+      {
+        "id": "triCategoryProblemSolving",
+        "weight": 20,
+        "description": "Unifies Wine (Old Mission/Leelanau cool-climate vinifera vs. Tip of the Mitt cold-hardy hybrids), Hard Cider (heritage orchard and urban taprooms), and Craft Spirits (bourbon/rye/vodka lounges open after 5 PM when vineyards close)."
+      },
+      {
+        "id": "operationalTruthAndLogistics",
+        "weight": 15,
+        "description": "Distinguishes walk-in tasting rooms from reservation-required towers/igloos, group size caps (6-8), real lunch kitchens vs. snack crackers, single-peninsula/single-cluster driving math, rural rideshare scarcity, and clean HTML without double-escaped entities."
+      },
+      {
+        "id": "interactiveFieldGuideUx",
+        "weight": 15,
+        "description": "Co-located progressive CARTO/OSM Leaflet 1.9.4 map with grouped multi-stop markers (.wf-pin-multi), 4-axis interactive filters (Craft Category, Corridor, Winter/Trip Feature, Booking Rule), and 4-mode Tasting Day & Season Decoder."
+      },
+      {
+        "id": "rootDomainAuthorityAndNetworkRouting",
+        "weight": 10,
+        "description": "Root-domain canonical on chrisizworski.com wired into /tools/, /michigan-destinations/ (replacing external traversecity.com leak), /michigan-winter-activities/, /michigan-winter-trails/, /frozen-michigan/, /petoskey-wine/, sitemap-winter.xml, and tool-network-registry.json."
+      }
+    ],
+    "hardStops": [
+      "Any page ships a 100vh client-side loading box above the H1 on the root Field Guide.",
+      "Any photograph lacks explicit source/author/license attribution or misrepresents a venue.",
+      "Any Google Maps link routes to unverified turn-by-turn directions instead of view-only landmark coordinates.",
+      "Any Petoskey or TC page contains double-escaped HTML entities (&amp;apos;) in visible copy.",
+      "Any Petoskey page defaults its static region recommender to Old Mission Peninsula instead of Petoskey.",
+      "Title exceeds 60 characters or meta description exceeds 158 characters."
+    ]
+  },
+  "anchorCount": 18,
+  "corridors": [
+    {
+      "id": "old-mission",
+      "name": "Old Mission Peninsula (45th Parallel Ridge)",
+      "mappedVenues": 11,
+      "plannerUrl": "https://tcwine.chrisizworski.com/old-mission-peninsula-wineries"
+    },
+    {
+      "id": "leelanau",
+      "name": "Leelanau Peninsula & Suttons Bay",
+      "mappedVenues": 35,
+      "plannerUrl": "https://tcwine.chrisizworski.com/leelanau-peninsula-wine-trail"
+    },
+    {
+      "id": "tc-urban",
+      "name": "Traverse City Commons, Warehouse & 8th Street",
+      "mappedVenues": 31,
+      "plannerUrl": "https://tcwine.chrisizworski.com/traverse-city-breweries-and-distilleries"
+    },
+    {
+      "id": "petoskey-tip",
+      "name": "Petoskey, Walloon Lake, Boyne, Harbor Springs & Charlevoix",
+      "mappedVenues": 25,
+      "plannerUrl": "https://chrisizworski.com/petoskey-wine/"
+    }
+  ]
+}
