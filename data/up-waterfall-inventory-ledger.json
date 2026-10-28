@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 43,
-  "linkedByExactOid": 35,
-  "unresolvedCandidates": 126,
+  "curatedCount": 44,
+  "linkedByExactOid": 36,
+  "unresolvedCandidates": 125,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1226,18 +1226,27 @@
         -89.446195
       ],
       "river": "CASCADE CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "cascade-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-visitor-route-not-open-now",
+      "landManager": "USDA Forest Service · Ottawa National Forest",
+      "parkingEvidence": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+      "trailEvidence": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Keep established signed FR468 hiking route; do not promote unbuilt NCT connector or invent parking coordinates. Recheck Forest Service alerts and road passability before travel.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "05",
+      "classification": "verified-published-trail",
+      "accessAssessment": "December 2025 NCTA map confirms signed FR 468 trail parking and documented USFS trail. Winter road conditions and current opening are not live verified.",
+      "evidence": [
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+        "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3980,5 +3989,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "03a"
+  "lastBatch": "05"
 }
