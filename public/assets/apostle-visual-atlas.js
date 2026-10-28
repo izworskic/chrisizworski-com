@@ -31,7 +31,7 @@ function setTab(id){
 function ensureMap(){
  if(map||!L)return;
  try{
-  map=L.map(mapEl,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
+  map=L.map(mapEl,{scrollWheelZoom:false,zoomControl:true,preferCanvas:false});
   map.attributionControl.setPrefix('Leaflet');
   map.setView([46.93,-90.7],10);
   const osm=()=>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'});
