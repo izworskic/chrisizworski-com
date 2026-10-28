@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 35,
-    "pending": 126,
-    "curatedTotal": 43,
+    "exactIdMatched": 36,
+    "pending": 125,
+    "curatedTotal": 44,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -991,22 +991,23 @@
       "lat": 46.651708,
       "lng": -89.446195,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "cascade-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "USDA Forest Service, Ottawa National Forest",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-28",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "official-trail-route-verified-historical-current-road-check-pending",
-      "sourceNotes": "USFS Trap Hills brochure documents Cascade Falls Trail, Forest Road 400 to Forest Road 468; main route 0.75 mile one way, Bluff route 1 mile one way with rock scrambling. Archived brochure; check current access/road status and map trailhead before publication. Official USDA Forest Service 2009 Trap Hills trail description specifies FR400 seven miles northeast of Bergland to FR468, moderate main trail 0.75 mile each direction, challenging bluff trail one mile each direction. Brochure map source could not be opened for current verification.",
+      "disposition": "verified-access-guide-fr468-signed-arrival",
+      "sourceNotes": "USFS Trap Hills brochure documents Cascade Falls Trail, Forest Road 400 to Forest Road 468; main route 0.75 mile one way, Bluff route 1 mile one way with rock scrambling. Archived brochure; check current access/road status and map trailhead before publication. Official USDA Forest Service 2009 Trap Hills trail description specifies FR400 seven miles northeast of Bergland to FR468, moderate main trail 0.75 mile each direction, challenging bluff trail one mile each direction. Brochure map source could not be opened for current verification. 2025 North Country Trail Association Peter Wolfe Chapter guide inspected as screenshot (PDF pages 10–11): explicitly marks signed Cascade Falls parking on FR 468 and notes pending NCT connector. GIS #67 proximity agrees with regional Cascade Falls geographic reference; no separate parking latitude claimed. Seasonal road limitations retained.",
       "sourceLinks": [
-        "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf"
+        "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf"
       ],
-      "outstandingGate": "Current Forest Service route and road conditions; official trailhead mapping and waterfall pin reconciliation.",
+      "outstandingGate": "Release verification only: full CI, browser/mobile, deployment.",
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "publicationEligible": true
     },
     {
       "gisObjectId": 68,
@@ -3236,6 +3237,16 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Cascade historical federal trailhead/effort and Bonanza alias/location confirmed by independent civic and university sources; legal current access and official cartographic gates remain before visitor publication."
+    },
+    {
+      "batch": "05-cascade-publication",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        67
+      ],
+      "publicGuidesAdded": 1,
+      "work": "Cascade Falls new HTML guide, curated map arrival card, ItemList, waterfall sitemap and source gate; road opening not live checked",
+      "tests": "Pending exact-head CI and browser checks"
     }
   ]
 }
