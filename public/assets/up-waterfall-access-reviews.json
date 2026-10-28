@@ -7,14 +7,22 @@
       "gisObjectId": 124,
       "name": "Bonanza Falls / Greenwood Falls",
       "county": "ONTONAGON",
-      "status": "township-seasonal-visitor-site-adjacent-parcel-conflict",
-      "publicAccess": "township-visitor-site-documented-full-route-unverified",
-      "publicationEligible": false,
-      "title": "Seasonal township visitor area; waterfall parcels differ",
-      "summary": "Carp Lake Township documents managing the Bonanza Falls visitor entrance, parking, signs and facilities. The regional waterfall marker falls within a parcel attributed to the township, but Michigan GIS waterfall #124 about 168 metres away intersects a parcel recorded to a private LLC. Only the signed township visitor approach is supported; unrestricted riverbank or private-parcel access is not.",
-      "guidance": "Use only the signed Bonanza/Greenwood Falls township entrance from M-64 during its visitor season. The township documented no RV, oversized vehicle or overnight camping restrictions under consideration; check posted signs. Do not navigate to the GIS falls point, cross unmarked property boundaries, or assume the area is open in late October/winter.",
-      "locationNotes": "Michigan GIS #124 (46.818863,-89.571458); regional Western U.P. brochure (46.817719,-89.570023); locations about 168 m apart, not interchangeable. Parcel ownership display is not a title search or easement determination.",
+      "status": "verified-seasonal-township-park-upper-falls-only",
+      "publicAccess": "signed-upper-falls-township-park-published-downstream-private-unknown",
+      "publicationEligible": true,
+      "title": "Township upper-falls park verified; GIS point is outside mapped park",
+      "summary": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and publishes its map destination. The official map destination and regional upper-river view reference lie within a township-attributed parcel; Michigan's separate natural waterfall GIS #124 location lies outside it on a parcel attributed to a private LLC. The guide covers the short signed park approach to the upper falls only.",
+      "guidance": "Use only the signed township park entrance and short established path from designated parking to the upper river view, then return. Do not drive to the GIS falls point, infer access to all downstream drops, or assume the seasonal park is open today.",
+      "locationNotes": "Township Google Maps published destination 46.8176942,-89.5674561 (NOT verified lot); regional brochure upper-view reference 46.817719,-89.570023 (NOT surveyed viewpoint); state natural falls GIS #124 46.818863,-89.571458 on other attributed parcel. Route is signed, not surveyed or traced on the map.",
       "sourceLinks": [
+        {
+          "label": "Carp Lake Township: Greenwoods (Bonanza Falls) public park",
+          "url": "https://www.carplaketwp.org/general-resources"
+        },
+        {
+          "label": "Direct signed parking-to-upper-falls trail description",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
+        },
         {
           "label": "Carp Lake Township August parking/visitor signs",
           "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
@@ -48,8 +56,22 @@
           "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
         }
       ],
-      "reviewLimitations": "Carp Lake Township 2025 board minutes document paid replacement signage, parking/turnaround expansion discussion, visitor facilities and seasonal closure. October 2025 minutes anticipated closing by end of that month; December 2025 minutes confirmed closure until spring 2026. Neither establishes the 2026 closing date. Parcel overlay identifies two different ownership labels, but is not a legal easement, title or trail survey.",
-      "nextEvidence": "Official lot-to-public-view route and boundary against parcel data; current season gate/closure signs. Do not public-index full falls guide until lawful viewing route is independently matched to the municipal visitor site."
+      "reviewLimitations": "Municipal park access is verified by the township's own Parks & Facilities directory, and a local guide describes a short signed lot-to-upper-falls path. Exact lot coordinates and trail geometry remain unverified; the published map has reference points only. Different parcels may apply farther downstream. The 2025 autumn closure minutes do not establish the 2026 park opening or closure date.",
+      "nextEvidence": "For additional access, obtain mapped lawful public walking rights from the township upper viewing area toward any lower drops; verify current season entrance status. Do not extend the published signed upper-falls park route by inference.",
+      "publicationScope": "township-park-signed-upper-falls-only",
+      "parkVisitorMapDestination": {
+        "lat": 46.8176942,
+        "lng": -89.5674561,
+        "source": "https://www.carplaketwp.org/general-resources",
+        "parkingLocation": false
+      },
+      "regionalUpperFallsReference": {
+        "lat": 46.817719,
+        "lng": -89.570023,
+        "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "surveyedViewpoint": false
+      },
+      "publicGuideUrl": "/upper-peninsula-waterfalls/bonanza-falls/"
     }
   ]
 }
