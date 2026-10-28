@@ -2316,14 +2316,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "unknown-legal-approach-parcel-conflict",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Reconcile precise lawful parking and full visitor trail across parcel boundaries; establish easement/permission from land authority. Never use falls GIS point as vehicle arrival.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "06",
+      "classification": "parcel-boundary-conflict-private-municipal",
+      "accessAssessment": "MI GIS falls point lies on parcel attributed to Iron River Assoc., LLC; tourism brochure point around 168 m away lies on a parcel attributed to Township of Carp Lake. Ownership labels are informational, not proof of legal right of way, trail access or title. Do not promote or route.",
+      "evidence": [
+        "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
+        "https://ontonagoncounty.org/home/resources/",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+      ]
     },
     {
       "source": "mi-state-gis",
