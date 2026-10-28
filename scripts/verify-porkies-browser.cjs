@@ -36,6 +36,9 @@ async function main(){
    need(await page.locator('#planner select').count()===4,device.name+' planner inputs missing');
    need(await page.locator('article.story').count()===3,device.name+' static destination stories missing');
    need(await page.locator('#crossings .crossing-card').count()===4,device.name+' evidence-supported river crossing desk missing');
+   await page.locator('.crossing-inventory summary').click();
+   need(await page.locator('.crossing-inventory-row').count()===9,device.name+' nine independent current-condition records missing');
+   need((await page.locator('.crossing-inventory').innerText()).includes('No currently verified route'),device.name+' current bridge conditions incorrectly cleared');
    need((await page.locator('#crossings').innerText()).includes('No automated through-route'),device.name+' safety blocker not visible');
 
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
@@ -149,6 +152,7 @@ async function main(){
   await page.goto(url,{waitUntil:'domcontentloaded'});
   need(await page.locator('article.story').count()===3,'no JS static experiences missing');
   need(await page.locator('#crossings .crossing-card').count()===4,'no JS verified DNR crossing evidence missing');
+  need(await page.locator('.crossing-inventory-row').count()===9,'no JS bridge source cards missing');
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
   need((await page.locator('#routing-explainer').innerText()).includes('7 separate groups'),'source-only trail topology fallback missing');
