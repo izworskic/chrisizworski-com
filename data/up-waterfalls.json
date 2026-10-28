@@ -1315,6 +1315,15 @@
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan state GIS source waterfall point 134, distinct from parking"
         }
+      },
+      "parkingLocation": {
+        "lat": 47.173159,
+        "lng": -88.444743,
+        "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+        "authority": "Keweenaw Land Trust",
+        "label": "Hungarian Falls shared Golf Course Road shoulder arrival",
+        "reviewed": "2026-10-28",
+        "certainty": "Official map reference, road is seasonal and unplowed in winter; do not enter the gated woods road"
       }
     },
     {
@@ -1369,6 +1378,15 @@
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan state GIS waterfall point 130, not trailhead"
         }
+      },
+      "parkingLocation": {
+        "lat": 47.173159,
+        "lng": -88.444743,
+        "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+        "authority": "Keweenaw Land Trust",
+        "label": "Hungarian Falls shared Golf Course Road shoulder arrival",
+        "reviewed": "2026-10-28",
+        "certainty": "Official map reference, road is seasonal and unplowed in winter; do not enter the gated woods road"
       }
     },
     {
