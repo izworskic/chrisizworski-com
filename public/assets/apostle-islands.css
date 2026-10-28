@@ -69,3 +69,5 @@
 @media(max-width:850px){.island-cards{grid-template-columns:1fr}.island-booking{grid-template-columns:1fr}.island-card{padding:18px}}
 @media(max-width:550px){.island-card-top{gap:7px}.island-card h3{font-size:1.32rem}.island-card{padding:15px}.island-status{max-width:87px;font-size:.61rem}.island-facts>div{grid-template-columns:83px 1fr;gap:8px}.island-compare-columns{grid-template-columns:1fr}.island-compare-head{display:block}.island-compare-head button{margin:5px 0 12px}}
 @media(prefers-reduced-motion:reduce){.island-trails summary span{transition:none}}
+
+.island-hero-link{display:inline-flex;margin-left:14px;color:#f8e5bf;font-weight:750;font-size:.92rem;text-decoration:underline}.island-hero-link:focus-visible{outline:3px solid #e4a764}@media(max-width:550px){.island-hero-link{display:flex;margin:12px 0 0}}
