@@ -207,3 +207,41 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .crossing-alternative-grid p{font-size:.79rem;line-height:1.6}
 .crossing-alternatives .crossing-official-gate{font-size:.78rem;color:#627367}
 @media(max-width:700px){.crossing-alternatives{padding:17px 15px}.crossing-alternative-grid{grid-template-columns:1fr}}
+
+/* Official 21-trail truth desk: static native details retain no-JS and screenreader usability. */
+.trail-truth{padding:clamp(25px,4vw,50px) max(18px,calc((100vw - 1220px)/2));background:#f4f3e9;color:#223f33}
+.trail-truth .section-top{max-width:910px}
+.trail-filter-wrap{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:15px 0;border-top:1px solid #c4cbbf;margin:15px 0}
+.trail-filter-wrap label{font-weight:700;font-size:.79rem}
+.trail-filter-wrap select{background:white;color:#183b33;border:1px solid #7e958a;border-radius:4px;padding:10px;max-width:100%;min-height:43px;font-size:.86rem}
+.trail-filter-wrap p{font-size:.76rem;color:#557267;margin:0}
+.trail-truth-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;align-items:start}
+.trail-truth-card{border:1px solid #ced6cb;background:#fff;border-radius:5px;min-width:0}
+.trail-truth-card[hidden]{display:none}
+.trail-truth-card summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 14px 30px;position:relative;min-height:64px;list-style:none}
+.trail-truth-card summary::-webkit-details-marker{display:none}
+.trail-truth-card summary:before{content:"+";font-size:1.14rem;font-weight:800;color:#537267;position:absolute;left:12px;top:50%;transform:translateY(-50%)}
+.trail-truth-card[open] summary:before{content:"−"}
+.trail-name{font-family:Fraunces,Georgia,serif;font-size:1rem;line-height:1.23;font-weight:600}
+.trail-distance{white-space:nowrap;text-align:right;color:#214c3a;font-weight:700;font-size:.89rem}
+.trail-distance small{display:block;font-weight:400;font-size:.59rem;color:#5b7166}
+.trail-truth-card[open]{border-color:#8caea0}
+.trail-truth-detail{padding:0 16px 15px;font-size:.79rem;line-height:1.6}
+.trail-truth-detail p{margin:8px 0}
+.trail-edition-warning{display:block;padding:6px 9px;background:#faf0e7;border-left:3px solid #ad633a;font-weight:700;font-size:.75rem;color:#844221}
+.trail-truth-detail .trail-safety{color:#794329}
+.trail-access a{color:#205f4d;text-decoration:underline}
+.trail-links{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin-top:10px}
+.trail-links button{font-size:.73rem;font-weight:650;color:#fff;background:#25594b;padding:9px 11px;border:0;border-radius:3px;min-height:40px;cursor:pointer}
+.trail-links a{font-size:.73rem;color:#245d4b;text-decoration:underline}
+.trail-truth-foot{max-width:970px;font-size:.76rem;line-height:1.5;color:#587168;margin-top:16px}
+.trail-truth-foot a{color:#245d4b;text-decoration:underline}
+@media(max-width:660px){.trail-truth-grid{grid-template-columns:1fr}.trail-filter-wrap{align-items:start;flex-direction:column}.trail-truth-card summary{padding-top:13px;padding-bottom:13px}.trail-truth{padding:26px 15px}}
+
+.west-corridor-field-note{margin:14px 0 22px;padding:20px 23px;background:#e5ede4;border-left:4px solid #467a65;border-radius:3px;color:#234238}
+.west-corridor-label{font-size:.68rem;text-transform:uppercase;font-weight:750;letter-spacing:.12em;color:#496858}
+.west-corridor-field-note h4{font-family:Fraunces,Georgia,serif;font-size:1.4rem;line-height:1.2;margin:7px 0 11px;font-weight:550}
+.west-corridor-field-note p{max-width:95ch;font-size:.82rem;line-height:1.65;margin:9px 0;color:#405a4c}
+.west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
+.west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
+@media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}

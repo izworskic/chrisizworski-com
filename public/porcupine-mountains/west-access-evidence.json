@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-28",
+  "decision": "source-described-west-approach-not-complete-live-vehicle-route",
+  "officialDnr": {
+    "park": "https://www.michigan.gov/recsearch/parks/porkies",
+    "claims": [
+      "County Road 519 from the Wakefield side remains the official alternative to reach Presque Isle during the park's winter M-107 and South Boundary Road closures.",
+      "Some park roads close starting December 1 through late spring and reopen when the road commission determines them safe."
+    ]
+  },
+  "officialRoadFunding": {
+    "url": "https://www.michiganbusiness.org/press-releases/2026/08/state-of-michigan-celebrates-380-new-jobs-infrastructure-improvements-coming-to-western-upper-peninsula/",
+    "asOf": "2026-08-25",
+    "note": "2026 state grant announcement describes County Road 519 N pavement in poor condition (2/10) and future rehabilitation. Funding approval is not evidence construction or closure has begun."
+  },
+  "stateRoadGIS": {
+    "endpoint": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
+    "sourceRoadName": "Presque Isle Rd",
+    "sourceFeatureIds": [
+      10130,
+      10152,
+      10347,
+      10521,
+      10560,
+      10863,
+      11060,
+      11187,
+      11233,
+      11538
+    ],
+    "researchEnvelope": "-90.05,46.57,-89.91,46.74",
+    "mappedBoundingBox": [
+      -89.975369,
+      46.566908,
+      -89.94118,
+      46.695608
+    ],
+    "status": "possible-corresponding-approach-segments-not-individually-crosswalked-to-signed-CR519",
+    "note": "MGF centerline naming in this envelope does not use 519. Do not equate these IDs one-for-one with the signed County Road 519 or claim a complete drive from US-28 to a parking stall."
+  },
+  "routeRules": {
+    "fromWestDuringWinter": "DNR-authorized west-side approach identified, subject to current posted closures and parking",
+    "fromEastDuringWinter": "no verified through-park cross-closure route",
+    "summer": "roads still require actual posted status",
+    "driveTimeMinutes": null,
+    "trafficStatus": null,
+    "liveGateStatus": null,
+    "certifiedRoute": false
+  },
+  "lastMile": {
+    "candidateParkingAssetId": 841,
+    "sourceVerification": "DNR parking asset and named trail point previously crosswalked; exact signed turn and lot open status unverified"
+  }
+}
