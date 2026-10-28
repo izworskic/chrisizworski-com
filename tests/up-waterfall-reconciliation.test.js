@@ -83,3 +83,20 @@ test('Cascade Falls guide is public only with signed FR 468 parking and separate
   assert.ok(!card[0].includes('data-parking-lat='), 'no invented parking coordinate');
   assert.ok(!detail.includes('maps/dir/?api=1&destination=46.651708'), 'do not route vehicles to falls');
 });
+
+test('canonical source ledger and geographic reconciliation agree as waterfall coverage grows', () => {
+  const canonical = JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json', 'utf8'));
+  assert.equal(canonical.sourceCandidateCount, 161);
+  assert.equal(canonical.curatedCount, curated.waterfalls.length);
+  assert.equal(canonical.curatedCount, ledger.counts.curatedTotal);
+  assert.equal(canonical.linkedByExactOid, ledger.counts.exactIdMatched);
+  assert.equal(canonical.unresolvedCandidates, ledger.counts.pending);
+  const canonicalGIS = new Map(canonical.entries.filter(x => x.source === 'mi-state-gis').map(x => [x.sourceId, x]));
+  assert.equal(canonicalGIS.size, 161);
+  for (const row of ledger.candidates) {
+    const prior = canonicalGIS.get(row.gisObjectId);
+    assert.ok(prior, 'canonical ledger missing GIS ID ' + row.gisObjectId);
+    assert.equal(prior.curatedId, row.curatedId, 'mismatched curated link for GIS ID ' + row.gisObjectId);
+    assert.equal(prior.identity === 'linked', row.reconciliation === 'curated-exact-gis-id');
+  }
+});
