@@ -16,36 +16,36 @@
       "locationNotes": "Michigan GIS #124 (46.818863,-89.571458); regional Western U.P. brochure (46.817719,-89.570023); locations about 168 m apart, not interchangeable. Parcel ownership display is not a title search or easement determination.",
       "sourceLinks": [
         {
-          "label": "Ontonagon County parcel-GIS disclaimer",
-          "url": "https://ontonagoncounty.org/home/resources/"
-        },
-        {
-          "label": "County parcel research layer — Michigan Tech mirror",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0"
-        },
-        {
-          "label": "GIS #124 point parcel query",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.571458%2C46.818863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
-        },
-        {
-          "label": "Regional brochure point parcel query",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.570023%2C46.817719&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
-        },
-        {
-          "label": "Regional published waterfall approach",
-          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
-        },
-        {
-          "label": "Carp Lake Township 2025 June signage approval",
-          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
-        },
-        {
           "label": "Carp Lake Township August parking/visitor signs",
           "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
         },
         {
           "label": "Carp Lake Township October seasonal closure",
           "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf"
+        },
+        {
+          "label": "Ontonagon County parcel-GIS disclaimer",
+          "url": "https://ontonagoncounty.org/home/resources/"
+        },
+        {
+          "label": "GIS #124 point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.571458%2C46.818863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Regional published waterfall approach",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "County parcel research layer — Michigan Tech mirror",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0"
+        },
+        {
+          "label": "Regional brochure point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.570023%2C46.817719&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Carp Lake Township 2025 June signage approval",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
         }
       ],
       "reviewLimitations": "Carp Lake Township 2025 board minutes document paid replacement signage, parking/turnaround expansion discussion, visitor facilities and seasonal closure. October 2025 minutes anticipated closing by end of that month; December 2025 minutes confirmed closure until spring 2026. Neither establishes the 2026 closing date. Parcel overlay identifies two different ownership labels, but is not a legal easement, title or trail survey.",
