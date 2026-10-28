@@ -118,3 +118,29 @@ The first two releases identified eight promising islands, their historic/offici
 - Chromium QA asserts conditions for Devils, Raspberry, Oak day vs overnight, unverified group-site inventory, party-size lottery, 30-day window, and no boat; no-JS checklist; desktop/mobile screenshots and maps must remain green.
 - Full `verify:all`, emitted output audit and Vercel preview must pass on exact commit, before a merge.
 - SEO outcome not measurable until actual GSC observation data; no new indexable route, duplicate tool page, or ad configuration change.
+
+## October 27, 2026 · source freshness and 2027 rollover guard
+
+**Problem:** The island-by-island planner stores a 2026 snapshot, and the scheduled-shuttle product menu shows dates without stating a new season. A user consulting the page in 2027 must not mistake the 2026 shuttle dates or construction state for current access.
+
+### Public-source findings (checked October 27)
+- [NPS conditions](https://www.nps.gov/apis/planyourvisit/conditions.htm) last displayed its general page update date as September 2, 2026. Embedded alert widgets are dynamic. **No visible static alerts is not evidence of no active alerts.**
+- [NPS Devils Island construction](https://www.nps.gov/apis/learn/infrastructure-projects.htm): 2026 project underway, marina remains closed until completed; Little Sand Bay public boat access maintained with potential construction impacts. Re-check after any update. Do **not** automatically remove dock/campsite closure based on an archive being old.
+- [Operator seasonal Stockton/Oak shuttles](https://www.apostleisland.com/hiking-and-camping-shuttles/): published June 20–August 30 season, Stockton day and overnight, Oak overnight. Neither a yearless on-page date nor a link to a booking button establishes future-season operation or available seats.
+- [Cruise tours](https://www.apostleisland.com/fares-schedules/): Raspberry and Michigan island lighthouse products listed; actual landing, available departure and return require a separate operator check.
+- [NPS API getting started](https://www.nps.gov/subjects/developer/get-started.htm): parkCode `apis` API alerts require a personal API key. This release neither invents a key nor scrapes a JS widget pretending to be an official API feed.
+- [NPS permit rules](https://www.nps.gov/apis/planyourvisit/camping-permits-reservations.htm): 30-day individual and March group reservation logic; all fees, windows and sites subject to source review before travel.
+
+### Implementation
+- The canonical `/apostle-islands/` now has a six-source **static** source desk with reviewed date, next-editorial-review dates and official source links. The site does not claim to poll NPS alerts or concessioner ticket inventory in real time.
+- Client JS updates reviewed/overdue/archived badges using the visitor's local calendar date. A current page view does not renew the historical 2026 evidence.
+- Once June–August 2026 season has ended, the shuttle outcome explicitly changes to **Archive only · next season unverified**, while retaining the underlying published product descriptions and reservation requirements.
+- `scripts/check-apostle-sources.mjs` checks stable visible text from public NPS construction and concessioner page(s), with timeout and explicit `changed` vs `unavailable` reports. It does **not** claim a completed source scan proves docks, permits, sea caves or ferry services safe/open/current.
+- `.github/workflows/apostle-islands-source-watch.yml` runs weekly Tuesday and on manual dispatch. When a baseline signal disappears or a fetch fails, it creates a single open manual-review GitHub issue, without modifying visitor pages or quietly renewing an evidence date. A source change must be manually investigated and the snapshot revised only with grounded facts.
+- The monitor is **drift detection**, not a complete NPS conditions feed. The workflow needs standard GitHub Actions issue write permission; if GitHub restricts this, the run fails visibly instead of claiming an issue was filed.
+
+### Release/testing policy
+- Source watch offline tests exercise changed sources, unreachable sources, scripts hidden in HTML, and no-live-verification semantics, including no API keys/Redis.
+- Existing static-content tests protect all 8 island guides, 17 trails and 9 activity cards. Browser QA checks 390px phone, 1366px desktop, source desk, archive labels, actual Leaflet tiles and no-JS source links.
+- Preserve author identity, all existing indexable canonicals, Circle Tour navigation and existing AdSense setup. No new indexed URL or ad changes.
+- Full repository verify, browser QA, emitted-output audits and Vercel ready before merge. SEO outcome unmeasured.
