@@ -75,6 +75,28 @@ async function main(){
       check(await page.locator('.compare-snapshot').count()===0,name+' comparison clear failed');
       await page.locator('#island-planner').screenshot({path:path.join(out,name+'-island-access.png')});
       report.screenshots.push(name+'-island-access.png');
+      // Visitor can move from a dock's published trail/campsite record to a trip brief.
+      check(await page.locator('.dock-record').count()===11,name+' 11 NPS dock records');
+      check(await page.locator('.dock-record[data-dock-state="closed"]').count()===1,name+' only Devils dock closed');
+      check(await page.locator('.dock-record:visible').count()===3,name+' Stockton default should show three docks');
+      await page.locator('#dock-island-choice').selectOption('raspberry');
+      check(await page.locator('.dock-record:visible').count()===2,name+' Raspberry two dock options');
+      await page.locator('#dock-island-choice').selectOption('devils');
+      check(await page.locator('.dock-record:visible').count()===1,name+' Devils closed dock context');
+      check((await page.locator('#dock-found-count').innerText()).includes('closed landing'),name+' closed count not prominent');
+      check((await page.locator('#dock-devils-south .dock-chip').innerText()).includes('Closed'),name+' Devils status mislabeled');
+      await page.locator('#dock-island-choice').selectOption('all');
+      check(await page.locator('.dock-record:visible').count()===11,name+' all 11 dock records not visible');
+      await page.locator('[data-dock-island="sand"]').click();
+      check(await page.locator('#dock-island-choice').inputValue()==='sand',name+' island guide link did not select Sand');
+      check(await page.locator('.dock-record:visible').count()===1,name+' Sand dock selection');
+      await page.locator('#dock-sand-east .dock-plan-link').click();
+      check(await page.locator('#trip-island').inputValue()==='sand',name+' landing-to-trip brief lost selected island');
+      check((await page.locator('#trip-selected-dock').innerText()).includes('East Bay dock'),name+' exact dock not preserved in trip context');
+      check((await page.locator('#trip-selected-dock').innerText()).includes('does not reserve a berth'),name+' no availability disclaimer');
+      await page.locator('#dock-island-choice').selectOption('stockton');
+      await page.locator('#landing-field-desk').screenshot({path:path.join(out,name+'-dock-field-desk.png')});
+      report.screenshots.push(name+'-dock-field-desk.png');
       // Trip readiness has no live booking or marine-safety authority.
       check(await page.locator('#source-desk').count()===1,name+' source desk missing');
       check(await page.locator('.ap-source-item').count()===6,name+' six source entries missing');
@@ -154,6 +176,8 @@ async function main(){
     check(await nojs.locator('article.island-card').count()===8,'no JavaScript island cards');
     check(await nojs.locator('#trip-readiness').count()===1,'no JavaScript NPS booking guidance');
     check(await nojs.locator('.ap-source-item').count()===6,'no JavaScript source provenance cards');
+    check(await nojs.locator('.dock-record').count()===11,'no JavaScript public dock evidence');
+    check((await nojs.locator('#dock-devils-south').innerText()).includes('Closed landing'),'no JavaScript Devils closure');
     check((await nojs.locator('[data-source-id="operator-shuttle"]').innerText()).includes('Published season: June 20'),'no JavaScript dated operator evidence');
     check(await nojs.locator('#trip-r-steps li').count()===4,'no JavaScript booking checklist');
     check(await nojs.locator('article.island-card .island-trails li').count()===17,'no JavaScript trail inventory');
