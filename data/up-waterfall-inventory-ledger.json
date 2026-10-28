@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 40,
-  "linkedByExactOid": 32,
-  "unresolvedCandidates": 129,
+  "curatedCount": 41,
+  "linkedByExactOid": 33,
+  "unresolvedCandidates": 128,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -144,8 +144,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-iron"
+      "nextAction": "Verify current We Energies parcel/operations and any designated public viewpoint; no access guide.",
+      "batch": "county-iron",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "restricted-private-utility",
+      "accessAssessment": "Private utility dam/gorge. Public road or fishing access is NOT permission to enter facility or gorge.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://upper-michigan.com/guide/waterfalls/peavey-falls.html"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -167,8 +175,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-iron"
+      "nextAction": "Land parcel/manager, signed parking and road status independently required before visitor page.",
+      "batch": "county-iron",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "route-reported-owner-unverified",
+      "accessAssessment": "Iron County tourism describes a signed forest approach near Long Lake; washed-out road risk. Full land ownership and road maintenance unknown.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.iron.org/outdoors/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -259,8 +275,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "nextAction": "Check Ottawa NF campground source, route access and exact waterfall identity vs Mexi-Mini alias.",
+      "batch": "county-gogebic",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "recreation-route-reported-not-fully-verified",
+      "accessAssessment": "Regional chamber describes route near Burnt Dam Campground; must confirm separate waterfall trail/parking and current USFS permissions.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.iron.org/outdoors/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -328,8 +352,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Resolve ownership, possible aliases and legal visitor approach.",
+      "batch": "county-ontonagon",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "unknown-access",
+      "accessAssessment": "Michigan GIS locates Rock Bluff Falls; no documented signed visitor route or public parking confirmed.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -420,8 +452,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-iron"
+      "nextAction": "Verify USFS route, bridge and public trail status before visitor guide.",
+      "batch": "county-iron",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "recreation-route-reported-not-fully-verified",
+      "accessAssessment": "Iron County chamber describes route from FS 3645 and a creek crossing, but current bridge and road status unverified.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.iron.org/outdoors/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -489,8 +529,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-houghton"
+      "nextAction": "Verify official USFS parking and ownership, seasonal road status.",
+      "batch": "county-houghton",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "recreation-route-reported-not-fully-verified",
+      "accessAssessment": "Regional chamber reports USFS road turnout and short path. Confirm public road and signed parking with land manager.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.iron.org/outdoors/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -604,8 +652,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "nextAction": "Resolve parcel tenure and public easement before any visitor directions.",
+      "batch": "county-gogebic",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "access-research-only-land-rights-unknown",
+      "accessAssessment": "Unofficial waterfall descriptions approach via powerline clearing; legal access and parking not independently established.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/gabbro-falls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -627,8 +683,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "nextAction": "Do not recommend access based on point geometry; land tenure review needed.",
+      "batch": "county-gogebic",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "unknown-access",
+      "accessAssessment": "Michigan state GIS names Powder Horn Falls, but a signed visitor trail, parking and land manager have not been independently verified.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -719,8 +783,16 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-houghton"
+      "nextAction": "Reconcile GIS #45 against the Sturgeon River Gorge waterfall location and USGS identifiers; no auto match or trailhead.",
+      "batch": "county-houghton",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "geographic-identity-conflict",
+      "accessAssessment": "USFS confirms Sturgeon Falls in designated wilderness with few established trails, but published waterfall coordinates differ substantially from state GIS record #45; may be a separate feature.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.recreation.gov/camping/poi/238242"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -755,18 +827,26 @@
         -90.37857
       ],
       "river": "MONTREAL RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "saxon-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-public-overlook-not-live-opening",
+      "landManager": "Northern States Power Company–Wisconsin / Xcel Energy · Saxon Falls hydroelectric project",
+      "parkingEvidence": "https://ironcountyoutdoors.org/saxon-falls/",
+      "trailEvidence": "https://www.travelwisconsin.com/outdoors/waterfalls/saxon-falls",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "nextAction": "Maintain 2026 source and verify current hydro/road visitor restrictions on future refresh.",
+      "batch": "county-gogebic",
+      "reviewBatch": "02",
+      "reviewed": "2026-10-28",
+      "classification": "verified-published-overlook",
+      "accessAssessment": "Public Wisconsin-side hydro project overlook with separately documented signed gravel parking and walking path; not live verified.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://ironcountyoutdoors.org/saxon-falls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3880,5 +3960,6 @@
       "nextAction": "Do not infer a state GIS match; check source identity and alias separately",
       "batch": "non-gis-curated"
     }
-  ]
+  ],
+  "lastBatch": "02"
 }

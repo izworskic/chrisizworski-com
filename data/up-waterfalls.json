@@ -2245,6 +2245,62 @@
       "publication": "verified-access-guide",
       "accessConfidence": "published-recreation-route-current-open-unverified",
       "winterRoad": "Michigan DNR states South Boundary Road closes to vehicles at Headquarters Road south to the Pinkerton Trailhead from December 1 through late spring. The waterfall's normal visitor parking is on the affected park road system; do not plan an ordinary drive-up visit during that closure."
+    },
+    {
+      "id": "saxon-falls",
+      "name": "Saxon Falls",
+      "region": "Western U.P.",
+      "place": "Montreal River · Wisconsin–Michigan border",
+      "lat": 46.535849,
+      "lng": -90.37857,
+      "gisObjectId": 47,
+      "parkingLat": 46.535797,
+      "parkingLng": -90.380255,
+      "level": "moderate",
+      "minutes": "30–75 min",
+      "walk": "Follow the short wooded trail east of the Wisconsin-side parking area to Xcel Energy's provided overlook. Travel Wisconsin estimates 0.25–0.5 mile of gravel/dirt walking; the route is not described as wheelchair accessible.",
+      "best": "After spring snowmelt or substantial rainfall, subject to hydroelectric regulation; no real-time discharge is offered.",
+      "access": "Publicly described overlook reached ONLY from the Wisconsin bank of the Montreal River. Xcel Energy hydroelectric project land surrounds the falls; neither the Michigan bank nor the dam and gorge are general public access routes. Current visitor opening not established.",
+      "status": "verify",
+      "note": "This fall is on a state-line river, but the documented visitor approach and overlook are in Wisconsin. Do not attempt river crossings, hydro plant approaches or a speculative Michigan-side trail.",
+      "source": "https://hydrorelicensing.com/saxon/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Utility project / public overlook",
+      "parking": "Use Wisconsin-side Saxon Falls Road (unpaved) and the signed overlook parking area at 46.535797, -90.380255. From US-2, use WI-122 to County Highway B, then Saxon Falls Road. Do not drive toward the Michigan GIS waterfall point.",
+      "feature": "A powerful Montreal River cascade drops into a deep gorge near a working hydroelectric plant, with its safer public overlook reached from Wisconsin.",
+      "further": "The access road is gravel, and seasonal road, ice, construction and hydro plant operating rules may change. Do not conflate Wisconsin DNR's public flowage boat landing with the waterfall overlook.",
+      "manager": "Northern States Power Company–Wisconsin / Xcel Energy · Saxon Falls hydroelectric project",
+      "decision": "Choose this border waterfall only when the Wisconsin-side overlook fits your itinerary. Superior Falls has a different, Michigan-side visitor entrance farther downstream.",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-public-overlook-not-live-opening",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://hydrorelicensing.com/saxon/",
+          "description": "Xcel Energy owns the project-boundary lands and operates Saxon Falls hydropower project"
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://ironcountyoutdoors.org/saxon-falls/",
+          "description": "Community recreation authority describes Xcel Energy-provided overlook and specifies Wisconsin-bank-only safe approach"
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://ironcountyoutdoors.org/saxon-falls/",
+          "description": "Wisconsin signed Saxon Falls Road lot, listed at 46.535797, -90.380255; not the fall location"
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.travelwisconsin.com/outdoors/waterfalls/saxon-falls",
+          "description": "Travel Wisconsin describes the developed footpath and 0.25–0.5 mile dirt/gravel visitor walking"
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan geographic waterfall feature 47 at the falls, separate from Wisconsin-side signed parking"
+        }
+      }
     }
   ]
 }
