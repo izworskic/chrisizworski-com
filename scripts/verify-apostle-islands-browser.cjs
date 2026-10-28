@@ -68,7 +68,7 @@ async function main(){
       await page.locator('#island-oak .island-compare').check();
       check(await page.locator('.compare-snapshot').count()===2,name+' comparison did not create two columns');
       check((await page.locator('.compare-snapshot').first().innerText()).includes('Presque Isle'),name+' comparison lost dock facts');
-      await page.locator('#island-sand .island-compare').check();
+      await page.locator('#island-sand .island-compare').click();
       check(!(await page.locator('#island-sand .island-compare').isChecked()),name+' comparison allowed a third selected island');
       check(await page.locator('.compare-snapshot').count()===2,name+' comparing two has changed');
       await page.locator('#island-compare-clear').click();
