@@ -46,10 +46,10 @@
   try{
    await loadManifest();
    if(kind==="cr519"){
-     const response=await root.fetch(BASE+"west-approach-evidence.json",{credentials:"same-origin"});
+     const response=await root.fetch(BASE+"west-access-evidence.json",{credentials:"same-origin"});
      if(!response.ok)throw Error("Western road evidence missing");
      const west=await response.json();
-     if(west.status!=="official-western-corridor-mapped-road-access-unconfirmed"||west.data?.corridorFeatureCount!==17||west.temporaryNotice?.reopeningVerified!==false||west.policy?.routeCertified!==false)throw Error("Western road evidence unreviewed");
+     if(west.decision!=="source-described-west-approach-not-complete-live-vehicle-route"||west.stateRoadGIS?.sourceFeatureIds?.length!==17||west.temporaryNotice?.reopeningVerified!==false||west.routeRules?.certifiedRoute!==false)throw Error("Western road evidence unreviewed");
    }
    const r=await root.fetch(BASE+paths[kind],{credentials:"same-origin"});
    if(!r.ok)throw Error("Geometry not available");
