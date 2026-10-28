@@ -184,7 +184,6 @@ test('landing filter and trip brief never treat a dock as current availability',
  const ui=file('public/assets/apostle-landing-desk.js');
  const ready=file('public/assets/apostle-trip-readiness.js');
  assert.ok(html.includes('src="/assets/apostle-landing-desk.js"'));
- assert.ok(ui.includes('selected')===false || ui.includes('selected'));
  for(const text of ['showIsland','card.dataset.dockState','dispatchEvent(new Event','No specific island dock selected','does not reserve a berth'])assert.ok(ui.includes(text),text);
  assert.ok(ready.includes("'Proposed dock: '"));
  assert.ok(ui.includes("card.hidden=!visible"));
