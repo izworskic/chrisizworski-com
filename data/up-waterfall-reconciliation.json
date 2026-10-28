@@ -999,8 +999,8 @@
       "publicAccessVerified": null,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "federal-managed-trail-route-source-found",
-      "sourceNotes": "USFS Trap Hills brochure documents Cascade Falls Trail, Forest Road 400 to Forest Road 468; main route 0.75 mile one way, Bluff route 1 mile one way with rock scrambling. Archived brochure; check current access/road status and map trailhead before publication.",
+      "disposition": "official-trail-route-verified-historical-current-road-check-pending",
+      "sourceNotes": "USFS Trap Hills brochure documents Cascade Falls Trail, Forest Road 400 to Forest Road 468; main route 0.75 mile one way, Bluff route 1 mile one way with rock scrambling. Archived brochure; check current access/road status and map trailhead before publication. Official USDA Forest Service 2009 Trap Hills trail description specifies FR400 seven miles northeast of Bergland to FR468, moderate main trail 0.75 mile each direction, challenging bluff trail one mile each direction. Brochure map source could not be opened for current verification.",
       "sourceLinks": [
         "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf"
       ],
@@ -1875,11 +1875,13 @@
       "publicAccessVerified": null,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "regional-public-parking-route-source-found",
-      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status.",
+      "disposition": "multiple-independent-visitor-sources-land-title-pending",
+      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status. Village of Ontonagon business directory independently lists Bonanza Falls (Greenwoods) between Silver City and White Pine off M-64; NMU regional heritage guide gives one mile south of Silver City, west of M-64. These corroborate named destination and approach, but not legal parcel boundary or current gate.",
       "sourceLinks": [
         "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
-        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
+        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+        "https://villageofontonagon.org/business-directory/",
+        "https://upheritage.nmu.edu/ontonagon"
       ],
       "outstandingGate": "Official land manager and legal approach, parking status, alias match Bonanza/Greenwood; no public promotion on tourism evidence alone.",
       "evidenceReviewed": "2026-10-28",
@@ -3224,6 +3226,16 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Six distinct research candidates triaged; USFS route for Cascade, regional leads for Bonanza, Duppy, Chicagon and Mex-I-Min-E, dam caution at Peavy. All gated."
+    },
+    {
+      "batch": "04-cascade-bonanza-source-corroboration",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        67,
+        124
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Cascade historical federal trailhead/effort and Bonanza alias/location confirmed by independent civic and university sources; legal current access and official cartographic gates remain before visitor publication."
     }
   ]
 }
