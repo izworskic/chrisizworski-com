@@ -177,3 +177,5 @@
 .dock-desk-note{margin:10px 0 0;color:#536b6b;font-size:.76rem;line-height:1.6}
 @media(max-width:760px){.dock-record-grid{grid-template-columns:1fr}.dock-launch-gateway{grid-template-columns:1fr}.dock-card-top h3{font-size:1.3rem}}
 @media(max-width:450px){.dock-desk-selector label{display:block}.dock-desk-selector select{display:block;margin:9px 0 0;width:100%}.dock-record{padding:15px}.dock-card-top{gap:7px}.dock-card-index{min-width:25px;font-size:1.4rem}.dock-chip{min-width:76px;max-width:85px;font-size:.61rem}.dock-launch-gateway{padding:17px}}
+
+.trip-dock-context{font-size:.8rem;color:#4c6763;line-height:1.55;background:#f1f5ee;padding:10px 12px;border-left:3px solid #7b9a86;border-radius:0 7px 7px 0;margin:15px 0 0}
