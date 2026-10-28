@@ -286,7 +286,50 @@
      });
    }catch(e){$('map-status').textContent='Map could not load; the documented vessel list below is still available.'}
  }
+ function detectLayupSeasonPhase(date = new Date()){
+   const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric',day:'numeric'}).formatToParts(date);
+   const m=+parts.find(p=>p.type==='month').value,d=+parts.find(p=>p.type==='day').value;
+   if(m>=11||(m===1&&d<=15))return {id:'closing',label:'Closing Rush (Nov 1 – Jan 15)'};
+   if((m===1&&d>=16)||m===2)return {id:'winter',label:'Deep Winter Layup (Jan 16 – Feb 28)'};
+   if(m===3||(m===4&&d<=15))return {id:'breakout',label:'Fit-Out & Breakout (Mar 1 – Apr 15)'};
+   return {id:'navigation',label:'Open Navigation (Apr 16 – Oct 31)'};
+ }
+ function initSeasonalMaritimeEngine(){
+   const engine=$('layup-season-engine');if(!engine)return;
+   const auto=detectLayupSeasonPhase(new Date());
+   const badge=$('layup-auto-season-badge');
+   if(badge)badge.textContent='Auto-detected today: '+auto.label;
+   const tabs=[...engine.querySelectorAll('[data-layup-phase-btn]')];
+   const panels=[...engine.querySelectorAll('[data-layup-phase-panel]')];
+   const activate=phaseId=>{
+     tabs.forEach(t=>{const on=t.dataset.layupPhaseBtn===phaseId;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',String(on))});
+     panels.forEach(p=>{p.hidden=p.dataset.layupPhasePanel!==phaseId});
+   };
+   tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.layupPhaseBtn)));
+   activate(auto.id);
+ }
+ function initPortViewingGuide(){
+   const guide=$('layup-port-guide');if(!guide)return;
+   const btns=[...guide.querySelectorAll('[data-port-filter]')];
+   const cards=[...guide.querySelectorAll('.port-guide-card')];
+   btns.forEach(b=>b.addEventListener('click',()=>{
+     const region=b.dataset.portFilter;
+     btns.forEach(x=>x.classList.toggle('is-active',x===b));
+     cards.forEach(c=>{c.hidden=region!=='all'&&c.dataset.portRegion!==region});
+   }));
+   guide.querySelectorAll('[data-port-select-harbor]').forEach(btn=>btn.addEventListener('click',()=>{
+     const harborId=btn.dataset.portSelectHarbor;
+     if(!state.archive)return;
+     if(!records().some(v=>v.harborId===harborId)){
+       $('season').value='2025-26';setSeason('2025-26');
+     }
+     setHarbor(harborId,true);
+     $('fleet')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+   }));
+ }
  async function boot(){
+   initSeasonalMaritimeEngine();
+   initPortViewingGuide();
    let archive;
    try{
      const res=await fetch('/assets/freighter-layup-registry.json',{signal:AbortSignal.timeout(9000)});
