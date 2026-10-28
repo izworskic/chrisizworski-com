@@ -76,6 +76,12 @@ async function main(){
       await page.locator('#island-planner').screenshot({path:path.join(out,name+'-island-access.png')});
       report.screenshots.push(name+'-island-access.png');
       // Trip readiness has no live booking or marine-safety authority.
+      check(await page.locator('#source-desk').count()===1,name+' source desk missing');
+      check(await page.locator('.ap-source-item').count()===6,name+' six source entries missing');
+      check((await page.locator('[data-source-id="operator-shuttle"] .ap-source-state').innerText()).includes('2026 season archived'),name+' old operator dates not marked archived');
+      check((await page.locator('[data-source-id="nps-conditions"] .ap-source-state').innerText()).includes('check official source'),name+' NPS alerts improperly assumed live');
+      check(await page.locator('.ap-source-item a[href*="nps.gov"]').count()>=4,name+' authoritative links missing');
+      await page.locator('#source-desk').screenshot({path:path.join(out,name+'-source-desk.png')});report.screenshots.push(name+'-source-desk.png');
       check(await page.locator('#trip-readiness').count()===1,name+' missing trip readiness section');
       check(await page.locator('#trip-r-steps li').count()>=3,name+' no source-led booking sequence');
       await page.locator('#trip-transport').selectOption('none');
@@ -91,7 +97,7 @@ async function main(){
       await page.locator('#trip-transport').selectOption('scheduled');
       check((await page.locator('#trip-r-status').innerText()).includes('No verified scheduled service'),name+' Oak day shuttle not proven');
       await page.locator('#trip-type').selectOption('overnight');
-      check((await page.locator('#trip-r-status').innerText()).includes('Seasonal shuttle published'),name+' Oak overnight route not explained');
+      check((await page.locator('#trip-r-status').innerText()).includes('Archive only · next season unverified'),name+' Oak overnight route not explained');
       await page.locator('#trip-island').selectOption('michigan');
       await page.locator('#trip-transport').selectOption('taxi');
       await page.locator('#trip-people').fill('9');
@@ -147,6 +153,8 @@ async function main(){
     check(await nojs.locator('article.stop').count()===9,'no JavaScript article cards');
     check(await nojs.locator('article.island-card').count()===8,'no JavaScript island cards');
     check(await nojs.locator('#trip-readiness').count()===1,'no JavaScript NPS booking guidance');
+    check(await nojs.locator('.ap-source-item').count()===6,'no JavaScript source provenance cards');
+    check((await nojs.locator('[data-source-id="operator-shuttle"]').innerText()).includes('Published season: June 20'),'no JavaScript dated operator evidence');
     check(await nojs.locator('#trip-r-steps li').count()===4,'no JavaScript booking checklist');
     check(await nojs.locator('article.island-card .island-trails li').count()===17,'no JavaScript trail inventory');
     check(await nojs.locator('#island-devils').innerText().then(x=>x.includes('DOCK CLOSED')),'no JavaScript dock closure');
