@@ -26,6 +26,27 @@ let lastBrief='';
 const pad=n=>String(n).padStart(2,'0');
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());};
 const dayDifference=(d0,d1)=>Math.round((Date.parse(d0+'T12:00:00Z')-Date.parse(d1+'T12:00:00Z'))/86400000);
+const SOURCE_SEASON_END='2026-08-30';
+function refreshSourceDesk(){
+ const now=today();
+ const rows=[...document.querySelectorAll('.ap-source-item')];
+ for(const row of rows){
+  const type=row.dataset.kind,reviewDue=row.dataset.reviewDue||'';
+  const out=row.querySelector('.ap-source-state');
+  if(!out)continue;
+  row.dataset.expired=(!!reviewDue&&now>reviewDue)?'true':'false';
+  if(type==='archived'){
+   out.textContent=row.dataset.expired==='true'?'2026 archive · 2027 review overdue':'2026 season archived · future trips unverified';
+  }else if(type==='on-demand'){
+   out.textContent='Read the official marine forecast before every crossing';
+  }else if(row.dataset.expired==='true'){
+   out.textContent='Review overdue since '+reviewDue+' · check official source';
+  }else{
+   out.textContent='Dated review '+row.dataset.reviewed+' · check official source';
+  }
+ }
+}
+
 const makeStep=(title,detail,url,label)=>{
 const li=document.createElement('li');const bold=document.createElement('strong');bold.textContent=title+'. ';li.append(bold,document.createTextNode(detail+' '));
 if(url&&label){const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=label+' ↗';li.append(a);}steps.append(li);
@@ -87,7 +108,7 @@ setOutcome(code,'Published lighthouse tour · landing not confirmed','A historic
 makeStep('Confirm the landing','Ask the operator about the chosen date, actual island stop, lighthouse access, and passenger return.',source.lighthouse,'Tour schedules');
 }else{
 code='conditional';
-setOutcome(code,'Seasonal shuttle published · future service unverified',key==='oak'?'The concessioner publishes an Oak Island overnight shuttle, not a regular Oak same-day hiking service.':'The concessioner publishes Stockton Island '+(overnight?'overnight camping':'day-hiking')+' shuttle service. The reviewed 2026 season has ended. Future schedules and ticket availability are unverified.');
+setOutcome(code,today()>SOURCE_SEASON_END?'Archive only · next season unverified':'Seasonal shuttle listed · date unverified',key==='oak'?'The concessioner publishes an Oak Island overnight shuttle, not a regular Oak same-day hiking service.':'The concessioner publishes Stockton Island '+(overnight?'overnight camping':'day-hiking')+' shuttle service. The reviewed 2026 season has ended. Future schedules and ticket availability are unverified.');
 makeStep('Reserve both ways','Verify seasonal operating dates and buy outbound AND return transportation; return trips are separate booking decisions.',source.shuttles,'Shuttle operator');
 }
 }else if(transport==='taxi'){
@@ -141,5 +162,6 @@ if(!lastBrief)return;
 try{if(!navigator.clipboard?.writeText)throw Error('unavailable');await navigator.clipboard.writeText(lastBrief);copied.textContent='Trip brief copied. Confirm details with NPS and your operator.';}
 catch{copied.textContent='Clipboard unavailable. The steps above remain available to select and copy.';}
 });
+refreshSourceDesk();
 build();
 })();
