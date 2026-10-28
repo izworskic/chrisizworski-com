@@ -45,6 +45,8 @@ async function all(base,where,fields,location){
 }
 function groupBy(v,k){return v.reduce((x,e)=>(x[e[k]||"Unnamed"]=(x[e[k]||"Unnamed"]||0)+1,x),{});}
 const ledger=JSON.parse(await fs.readFile(path.join(ROOT,"data/porkies-junction-crossing-ledger.json"),"utf8"));
+const bridges=JSON.parse(await fs.readFile(path.join(ROOT,"data/porkies-bridge-crossing-structures.json"),"utf8"));
+if(bridges.entries.length!==9||bridges.entries.some(x=>x.authorizedAsRoutingEdge!==false||x.physicalOpeningEvidence!==false))throw Error("Unreviewed bridge structure decision");
 const trail=await all(TRAILS,"FacilityName='Porcupine Mountains Wilderness State Park'","OBJECTID,TrailNamePrimary,SegmentLengthMiles", {});
 const stream=await all(HYDRO,"1=1","OBJECTID,GNIS_Name,FType,ReachCode",{geometry:AREA,geometryType:"esriGeometryEnvelope",inSR:4326,spatialRel:"esriSpatialRelIntersects"});
 if(trail.length!==819)throw Error("DNR trail source changed; manual review required");
@@ -84,7 +86,8 @@ if(process.argv.includes("--emit-public-summary")){
   counts:{sourceTrails:trail.length,sourceStreams:stream.length,geometricIntersections:exact.length,nearLineCandidates:near.length,totalCandidates:geometry.length,sourceDescribedJunctionRecords:ledger.records.length},
   registry:ledger.records.map(({id,trail,site,type,status,referenceMiles,note,source})=>({id,trail,site,type,status,referenceMiles,note,source,coordinatesPublished:false,bridgeOrFord:"unknown",routeEligible:false})),
   priorityEvidence:targetReview.map(({ledgerId,candidateCount,lineIntersections,navigationStatus,comment})=>({ledgerId,candidateCount,lineIntersections,navigationStatus,comment,coordinatePublished:false})),
-  safety:{currentBridgeStatus:"unknown",officialCrossingCoordinatesCertified:false,anyAutoRouteAcrossStream:false,historicalBigCarpBridgeStatus:"2016 report only, no current assertion",fieldVerificationRequired:true},
+  structureReview:{mapEdition:bridges.mapEdition,compiledOn:bridges.compiledOn,conditionCertified:0,officialClosureReview:bridges.officialClosureReview,entries:bridges.entries.map(({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds})=>({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds,publicCoordinate:null,routeEligible:false}))},
+  safety:{currentBridgeStatus:"unknown",officialCrossingCoordinatesCertified:false,anyAutoRouteAcrossStream:false,historicalBigCarpBridgeStatus:"2016 report only, no current assertion",fieldVerificationRequired:true,currentPassableCrossings:0,exactMapSymbolToCrossingMatches:0},
   advisory:"Evidence of a river crossing or connected trail is not evidence of a safe, open, bridged route. No GPS crossing pin, route time, or ford status is published."
  };
  await fs.writeFile(path.join(PUBLIC,"crossing-evidence.json"),JSON.stringify(summary,null,2)+"\n");
