@@ -71,3 +71,45 @@
 @media(prefers-reduced-motion:reduce){.island-trails summary span{transition:none}}
 
 .island-hero-link{display:inline-flex;margin-left:14px;color:#f8e5bf;font-weight:750;font-size:.92rem;text-decoration:underline}.island-hero-link:focus-visible{outline:3px solid #e4a764}@media(max-width:550px){.island-hero-link{display:flex;margin:12px 0 0}}
+
+/* Trip readiness field desk — static-first and scoped; no site-wide ad changes */
+.trip-readiness{padding:28px 0 48px;scroll-margin-top:24px}
+.trip-r-heading{max-width:920px;margin-bottom:22px}
+.trip-r-heading h2{margin:4px 0 12px}
+.trip-r-heading>p:not(.eyebrow){color:#4c6267;line-height:1.65;font-size:1rem;margin:10px 0}
+.trip-r-heading .eyebrow{color:var(--orange)}
+.trip-r-caveat{padding:11px 15px;background:#fff2e4;border-left:4px solid #c98c45;border-radius:0 8px 8px 0;font-size:.9rem!important;color:#5b5041!important}
+.trip-r-layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:16px;align-items:stretch}
+.trip-r-form,.trip-r-result{background:var(--paper);border:1px solid #d7e2dd;border-radius:17px;padding:22px;box-shadow:0 8px 28px #0e45400a}
+.trip-r-form h3,.trip-r-result h3{font-family:var(--serif);font-size:1.62rem;line-height:1.18;margin:0 0 18px;font-weight:500}
+.trip-r-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px 13px}
+.trip-r-fields label{display:flex;flex-direction:column;font-size:.79rem;letter-spacing:.015em;font-weight:750;gap:7px;min-width:0}
+.trip-r-fields label:has(#trip-transport){grid-column:1/-1}
+.trip-r-fields select,.trip-r-fields input{width:100%;color:#1b444b;background:white;border:1px solid #9fbeb5;border-radius:8px;padding:10px 11px;font:400 .9rem/1.3 var(--sans);min-height:43px}
+.trip-r-fields small{color:#677b79;font-size:.73rem;line-height:1.35;font-weight:450}
+#trip-nights-wrap[hidden]{display:none}
+.trip-r-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.trip-r-actions button{font:750 .85rem var(--sans);min-height:43px;padding:9px 15px;border-radius:24px;cursor:pointer;border:1px solid #0c4650}
+#trip-evaluate{background:var(--dark);color:white}
+#trip-copy{background:white;color:#13454a}
+#trip-copy:disabled{opacity:.45;cursor:default}
+#trip-copy-status{font-size:.8rem;color:#375e54;min-height:1.25rem}
+.trip-r-result{background:#e9f0ec}
+.trip-r-eyebrow{font-size:.71rem;letter-spacing:.12em;font-weight:800;color:#526d6a;margin:0 0 8px}
+.trip-r-result h3{margin:9px 0}
+.trip-r-state{display:inline-block;padding:5px 11px;background:#d2e4db;color:#18584d;border-radius:6px;font-size:.78rem;font-weight:850;line-height:1.35;margin:0}
+.trip-r-result[data-outcome=closed] .trip-r-state,.trip-r-result[data-outcome=unsupported] .trip-r-state{background:#f6ded7;color:#843d32}
+.trip-r-result[data-outcome=conditional] .trip-r-state{background:#fff0cc;color:#765426}
+#trip-r-summary{font-size:.94rem;line-height:1.65;margin:10px 0}
+.trip-r-date-note{font-size:.83rem;color:#425f65;border-bottom:1px solid #bfcfc7;padding-bottom:14px}
+.trip-r-result h4{font:800 .91rem var(--sans);margin:18px 0 6px}
+#trip-r-steps{margin:0 0 12px;padding-left:24px}
+#trip-r-steps li{font-size:.84rem;line-height:1.55;padding:3px 0 7px}
+.trip-r-fee{font-size:.8rem;color:#485f63;background:#f5f8f5;padding:10px 12px;border-radius:8px}
+.trip-r-fee[hidden]{display:none}
+.trip-r-sources{display:flex;flex-wrap:wrap;gap:7px 16px;font-size:.76rem;font-weight:750;margin-top:14px}
+.trip-r-guide{margin-top:15px;background:#e0e8e3;border-radius:10px;padding:16px 20px;color:#33575a;font-size:.84rem;line-height:1.6}
+.trip-r-noscript{padding:14px;border:1px solid #b69957;background:#fff6e7}
+.island-plan-link{color:#804b25}
+@media(max-width:820px){.trip-r-layout{grid-template-columns:1fr}.trip-r-form,.trip-r-result{padding:20px}}
+@media(max-width:510px){.trip-readiness{padding-bottom:32px}.trip-r-fields{grid-template-columns:1fr}.trip-r-fields label:has(#trip-transport){grid-column:auto}.trip-r-form,.trip-r-result{padding:16px}.trip-r-actions button{width:100%}}
