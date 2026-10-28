@@ -179,3 +179,32 @@ The public `/apostle-islands/` guide now pairs the three sources in **11 landing
 - Trip brief retains proposed dock's name as **something to verify**, not a booking. Source citations and date remain the authority.
 - Full `verify:all`, public rendered HTML audit, Vercel preview and exact-head checks must pass before merge; production deployment and page smoke after merge.
 - Growth measurement not yet established; a new user path exists from Circle Tour → Apostle Islands → island → actual dock → trip brief, but GSC/GA should be assessed later rather than claiming engagement improvements.
+
+## October 28, 2026 · Visual NPS Island Atlas and campsite reference layer
+
+### Design decision: honor two different maps
+Visitors need **trail geography** and **campsite geography**. These are distinct evidence types. NPS already produces original island maps with its own mapped trail linework and shoreline categories. The NPS campsite directory publishes site latitude/longitude for most islands. Redrawing trail polylines from narrative distances would invent actual alignments and give a dangerous impression of navigability. This release therefore shows both sources separately:
+
+1. **Eight original NPS illustrated island maps** on `/apostle-islands/#island-atlas`. These are official map images, sourced from `https://www.nps.gov/apis/planyourvisit/maps.htm` (last published map update June 29, 2026). The guide includes 24 *NPS-described* trail segments (some historical or closed) and a short caution for each island, with enlarge-to-original and official trail-directory links.
+2. **42 point locations from the NPS campsite directory** (`https://www.nps.gov/apis/planyourvisit/campsite-directory.htm`, NPS directory last updated February 9, 2026) on a Leaflet/CARTO-fallback basemap. These are dated reference positions only. The layer never generates trails, on-water routes, harbor positions, site availability, site-to-dock distances or safe-launch metrics.
+3. The campsites are supplied via a small static `public/apostle-islands/island-atlas.json`. Every location has an official island and NPS site identifier, latitude and longitude. The in-page source-linked static HTML remains readable with JavaScript off or when the map data request fails.
+4. **Sand Island has zero campsite dots.** NPS explicitly warns that its campsite coordinate table is **in the process of being corrected**, instructing visitors to use camping maps and on-site signage. We cite the official image and note that accessible site 3 and group C are documented, without guessing where they are.
+5. **Devils Island has zero campsite dots.** NPS's historical directory oddly repeats the same latitude/longitude for Cat 1 and Devils 1. Coupled with the reviewed Devils south marina closure and campsite restrictions, the atlas withholds that misleading point and offers no landing recommendation.
+6. **Raspberry Island has zero campsite dots** because it has no designated campsites or primitive-camping zone.
+7. Stockton includes 21 NPS-dated site positions; Oak 7; Rocky 6; Basswood 7; Michigan 1; 21+7+6+7+1=42. Published accessible/boardwalk connections are explicitly noted only for Stockton campsite 1 and Quarry Bay group sites A/B. Other sites are not labeled accessible.
+8. The UI is usable at 390px and 1366px, with island tabs, source-led hiking summaries, map site-type filters, clickable site records, a distinct visual group-site treatment, and direct handoffs to verified dock evidence and trip readiness.
+9. Public site URLs and indexability remain unchanged. No Redis, paid map credentials in client HTML, AdSense changes, speculative route generation, or false ferry/campsite availability.
+
+### Original official sources
+- [NPS original island maps](https://www.nps.gov/apis/planyourvisit/maps.htm): eight direct map images in that page's own image collection. The island map is the canonical *visual trail alignment*, not our campsite point overlay.
+- [NPS Trails at the Apostle Islands](https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm): names, distances, trail caution and access limitations. NPS still lists historical paths on Devils; historic linework does not override closure.
+- [NPS Campsite Directory](https://www.nps.gov/apis/planyourvisit/campsite-directory.htm): the per-site coordinate table, Sand Island correction caveat, accessible boardwalk sites, and site distinctions.
+- [NPS Construction](https://www.nps.gov/apis/learn/infrastructure-projects.htm): historic Devils Island marina closure requiring recheck for each future season.
+- [NPS park conditions](https://www.nps.gov/apis/planyourvisit/conditions.htm): do not infer landing clearance from map display.
+- [NPS booking rules](https://www.nps.gov/apis/planyourvisit/camping-permits-reservations.htm): campsite permit is distinct from transport and availability.
+
+### Release requirements
+- `tests/apostle-islands-explorer.test.js`: exactly eight maps, 24 trails and 42 valid coordinates across five mapped islands, with Sand/Devils/Raspberry exclusions and no generated trail geometry.
+- `scripts/verify-apostle-islands-browser.cjs`: responsive browser captures, selected island changes, all-site/group/accessible counts, site popup, original NPS map image load, correct withholding states and eight static island maps with JavaScript off.
+- Full source/SEO/freshness gate; emitted-output audit; preview Vercel Ready; exact-head check green; post-merge production smoke.
+- Analytics impact not yet measured. The new atlas should be linked internally from existing island dossiers and hero, but we will not create thin, duplicative indexable island URLs before independently verifying them.

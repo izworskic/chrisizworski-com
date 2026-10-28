@@ -1,0 +1,468 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-28",
+  "campsiteDirectoryLastUpdated": "2026-02-09",
+  "mapSource": "https://www.nps.gov/apis/planyourvisit/maps.htm",
+  "trailSource": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+  "siteSource": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+  "constructionSource": "https://www.nps.gov/apis/learn/infrastructure-projects.htm",
+  "scope": "Eight researched islands, 42 NPS-published designated site coordinates on five islands. NPS historical planning references, not surveyed present-day navigation waypoints; no live availability or trail linework generated.",
+  "coordinatePolicy": {
+    "sand": "omit all Sand coordinates because NPS says they are being corrected",
+    "devils": "omit coordinate because duplicated Cat entry and marina/campsite closure",
+    "raspberry": "no designated sites",
+    "group": "letter-numbered site identifier follows NPS coordinate table",
+    "accessible": "Stockton 1 and groups A/B have explicitly documented boardwalk access; Sand 3 and C likewise documented but coordinates withheld"
+  },
+  "islands": [
+    {
+      "id": "stockton",
+      "name": "Stockton Island",
+      "ojibwe": "Wiisaakodewan-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Stockton_500px.jpg",
+      "lede": "From the quiet sand of Julian Bay to an old brownstone quarry, Stockton asks you to choose which shoreline you want to meet.",
+      "note": "Three distinct public dock approaches in the NPS list. The Presque Isle–Quarry Bay trail connection has had a bridge washout; verify trail conditions before committing.",
+      "trails": [
+        [
+          "Julian Bay Trail",
+          "0.4 mi",
+          "From Presque Isle ranger station to Julian Bay."
+        ],
+        [
+          "Anderson Point Trail",
+          "1.4 mi",
+          "Woodland path between the Presque Isle dock and Julian Bay."
+        ],
+        [
+          "Tombolo Trail",
+          "2.8 mi",
+          "Bog and beach; lagoon outlet may require wading."
+        ],
+        [
+          "Quarry Bay Trail",
+          "3.6 mi",
+          "From Presque Isle toward Quarry Bay; meadow route can be indistinct."
+        ],
+        [
+          "Quarry Trail",
+          "1.5 mi",
+          "From Quarry Bay toward the old brownstone quarry."
+        ],
+        [
+          "Trout Point Trail",
+          "6.3 mi",
+          "Unmaintained route through island interior; difficult route finding."
+        ]
+      ],
+      "accessible": [
+        "1",
+        "A",
+        "B"
+      ],
+      "sites": [
+        [
+          "1",
+          46.9130884,
+          -90.54908037
+        ],
+        [
+          "2",
+          46.91351205,
+          -90.54908163
+        ],
+        [
+          "3",
+          46.91370659,
+          -90.54917894
+        ],
+        [
+          "4",
+          46.91443925,
+          -90.54889957
+        ],
+        [
+          "5",
+          46.91493353,
+          -90.5488233
+        ],
+        [
+          "6",
+          46.9154973,
+          -90.5496837
+        ],
+        [
+          "7",
+          46.91610851,
+          -90.55019248
+        ],
+        [
+          "8",
+          46.91648335,
+          -90.55024445
+        ],
+        [
+          "10",
+          46.91706086,
+          -90.55100947
+        ],
+        [
+          "11",
+          46.91709389,
+          -90.55096169
+        ],
+        [
+          "12",
+          46.9175745,
+          -90.55149671
+        ],
+        [
+          "13",
+          46.91798455,
+          -90.55195847
+        ],
+        [
+          "15",
+          46.91926002,
+          -90.55341532
+        ],
+        [
+          "16",
+          46.91978917,
+          -90.5542075
+        ],
+        [
+          "17",
+          46.92040138,
+          -90.55478216
+        ],
+        [
+          "18",
+          46.9208007,
+          -90.55545347
+        ],
+        [
+          "19",
+          46.92096633,
+          -90.55607105
+        ],
+        [
+          "20",
+          46.92070062,
+          -90.61004413
+        ],
+        [
+          "21",
+          46.96674392,
+          -90.53246342
+        ],
+        [
+          "A",
+          46.92169488,
+          -90.60685356
+        ],
+        [
+          "B",
+          46.92150218,
+          -90.60907175
+        ]
+      ]
+    },
+    {
+      "id": "oak",
+      "name": "Oak Island",
+      "ojibwe": "Mitigominikaani-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Oak_500px_2.jpg",
+      "lede": "This is the island of long trails: ancient beach ridges, sugar maples and overlooks high above Lake Superior.",
+      "note": "The NPS overlook is about 3.5 miles from the dock, not 1.8 miles from the dock. The published operator schedule was for overnight service; a same-day return must be arranged separately.",
+      "trails": [
+        [
+          "Loop Trail",
+          "5.2 mi",
+          "Horseshoe from the public dock through the central uplands."
+        ],
+        [
+          "Northwest Beach Trail",
+          "1.6 mi",
+          "Branch off the loop, reaching campsite 4 about 2.8 miles from dock."
+        ],
+        [
+          "Overlook Trail",
+          "1.8 mi",
+          "Spur from inland junction; overlook about 3.5 miles from dock."
+        ],
+        [
+          "North Bay Trail",
+          "1.1 mi",
+          "Ravine route to campsite 6, about 4 miles from dock."
+        ],
+        [
+          "Sandspit Trail",
+          "1.5 mi",
+          "Beach and sites 1/A. Stay on established trails and bare beach."
+        ]
+      ],
+      "accessible": [],
+      "sites": [
+        [
+          "1",
+          46.91439768,
+          -90.73619597
+        ],
+        [
+          "2",
+          46.92947345,
+          -90.75275911
+        ],
+        [
+          "3",
+          46.93309519,
+          -90.75539798
+        ],
+        [
+          "4",
+          46.94981629,
+          -90.76128746
+        ],
+        [
+          "6",
+          46.95817082,
+          -90.72771101
+        ],
+        [
+          "A",
+          46.91421839,
+          -90.7349018
+        ],
+        [
+          "B",
+          46.9299021,
+          -90.75312104
+        ]
+      ]
+    },
+    {
+      "id": "sand",
+      "name": "Sand Island",
+      "ojibwe": "Waabaabikaa-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Sand_500px.jpg",
+      "lede": "Walk from East Bay toward a lighthouse above the lake, or take the old roadbed into the island's cabin history.",
+      "note": "NPS is updating Sand Island campsite coordinates. Their previously published latitude/longitude entries are deliberately NOT plotted here. Refer to its official campsite map, posted signs and current ranger guidance.",
+      "trails": [
+        [
+          "Lighthouse Trail",
+          "2.0 mi",
+          "From East Bay dock north to the lighthouse; boardwalk can be slippery."
+        ],
+        [
+          "Wellisch Cabin Trail",
+          "0.6 mi",
+          "Old roadbed south past sites 2, A and B. No maintained path to Lighthouse Bay sites 4/5."
+        ]
+      ],
+      "accessible": [
+        "3",
+        "C"
+      ],
+      "sites": [],
+      "withheld": [
+        "1",
+        "2",
+        "3",
+        "A",
+        "B",
+        "C"
+      ],
+      "withheldReason": "NPS says Sand Island campsite coordinates are in the process of being corrected. No campsite pin is safe to treat as a location reference."
+    },
+    {
+      "id": "raspberry",
+      "name": "Raspberry Island",
+      "ojibwe": "Miskominikaani-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Raspberry_500px.jpg",
+      "lede": "A lighthouse above two shores and a walk through old forest. This is a landing-and-return day, not an island camping night.",
+      "note": "No designated campsites and no primitive camping. A published lighthouse cruise does not guarantee a landing on a given trip.",
+      "trails": [
+        [
+          "West Bay Trail",
+          "1.0 mi",
+          "From the lighthouse grounds to a west-bay viewpoint."
+        ],
+        [
+          "Sandspit Trail",
+          "0.75 mi",
+          "Old-growth forest to the southeast beach."
+        ]
+      ],
+      "accessible": [],
+      "sites": [],
+      "withheldReason": "There are no designated campsites on Raspberry Island. Nothing to plot."
+    },
+    {
+      "id": "michigan",
+      "name": "Michigan Island",
+      "ojibwe": "Bagidaabii-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Michigan_500px.jpg",
+      "lede": "Behind the light station, a trail leads toward a sandspit, then along the uncertain edge of a lagoon.",
+      "note": "The lagoon trail seems to stop at a bog before continuing. A sightseeing lighthouse tour may not land; confirm the actual itinerary.",
+      "trails": [
+        [
+          "Sandspit / Campsite Trail",
+          "1.0 mi",
+          "From the light station behind the vault toilet toward sandspit and campsite."
+        ],
+        [
+          "Lagoon Trail",
+          "0.5 mi",
+          "Bog crossing may make the route appear to end."
+        ]
+      ],
+      "accessible": [],
+      "sites": [
+        [
+          "1",
+          46.87415599,
+          -90.50872369
+        ]
+      ]
+    },
+    {
+      "id": "rocky",
+      "name": "Rocky Island",
+      "ojibwe": "Ziinzibaakwado-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Rocky_500px.jpg",
+      "lede": "A compact network begins at the east dock, where northern campsite paths and a southern shoreline trail split.",
+      "note": "North Trail goes by sites 4, 5 and A. Respect private lands past Group Site A. Do not assume scheduled passenger service.",
+      "trails": [
+        [
+          "West Trail",
+          "1.0 mi",
+          "Boardwalk and stairs lead to a woodland path crossing the island."
+        ],
+        [
+          "South Trail",
+          "0.9 mi",
+          "From the dock bulletin board toward the south shoreline."
+        ],
+        [
+          "North Trail",
+          "0.45 mi",
+          "Past campsites 4, 5 and A toward the island's northern shore."
+        ]
+      ],
+      "accessible": [],
+      "sites": [
+        [
+          "1",
+          47.02130648,
+          -90.6792778
+        ],
+        [
+          "2",
+          47.02500597,
+          -90.67895717
+        ],
+        [
+          "3",
+          47.02733712,
+          -90.67744201
+        ],
+        [
+          "4",
+          47.03026107,
+          -90.67578801
+        ],
+        [
+          "5",
+          47.03044111,
+          -90.67553898
+        ],
+        [
+          "A",
+          47.03237708,
+          -90.67366797
+        ]
+      ]
+    },
+    {
+      "id": "basswood",
+      "name": "Basswood Island",
+      "ojibwe": "Wiigobiish-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Basswood_500px_6.jpg",
+      "lede": "Follow the longer loop through an abandoned farm landscape and old brownstone quarry, with a campsite path branching from the dock clearing.",
+      "note": "The 5.5-mile loop is not a measure of how far your campsite is from a boat landing. NPS says sites A, 5 and 6 are on the short branch from the dock-area trail intersection.",
+      "trails": [
+        [
+          "Farm & Quarry Loop",
+          "5.5 mi",
+          "NPS route through McCloud-Brigham farm landscape and brownstone quarry."
+        ]
+      ],
+      "accessible": [],
+      "sites": [
+        [
+          "1",
+          46.83113353,
+          -90.76066869
+        ],
+        [
+          "2",
+          46.83167257,
+          -90.76145165
+        ],
+        [
+          "3",
+          46.83175178,
+          -90.76170579
+        ],
+        [
+          "4",
+          46.83200583,
+          -90.76224038
+        ],
+        [
+          "5",
+          46.85010211,
+          -90.7576756
+        ],
+        [
+          "6",
+          46.8499183,
+          -90.75768222
+        ],
+        [
+          "A",
+          46.84990874,
+          -90.75697286
+        ]
+      ]
+    },
+    {
+      "id": "devils",
+      "name": "Devils Island",
+      "ojibwe": "Maji-manidoo-minis",
+      "map": "https://www.nps.gov/apis/planyourvisit/images/Devils_500px.jpg",
+      "lede": "The NPS map tells the history of a light station and its paths, but it is not an invitation to land at the closed south marina.",
+      "note": "South dock/marina and campsites are closed in the reviewed 2026 NPS construction information. The NPS campsite table repeats an anomalous Cat Island coordinate for Devils; do not plot it or interpret it as a valid campsite location.",
+      "trails": [
+        [
+          "East Landing Trail",
+          "0.13 mi",
+          "Historical link to a natural rock landing; not a recommended landing approach."
+        ],
+        [
+          "West Landing Trail",
+          "0.4 mi",
+          "Historical light-station path; not a current access plan."
+        ],
+        [
+          "Boathouse Trail",
+          "1.0 mi",
+          "Historic trail from the light station to the closed south harbor."
+        ]
+      ],
+      "accessible": [],
+      "sites": [],
+      "withheldReason": "Closed marina and campsite access. The published Devils campsite coordinate is anomalous and excluded."
+    }
+  ]
+}
