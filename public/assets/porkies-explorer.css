@@ -184,3 +184,16 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .crossing-disclosure p{font-size:.87rem}
 .crossing-disclosure a{font-size:.85rem;font-weight:700}
 @media(max-width:700px){.crossing-grid{grid-template-columns:1fr}.crossing-card{padding:16px 18px}}
+
+.crossing-inventory{background:#fcfaf1;border:1px solid #d1c9bb;padding:18px 21px;margin:17px 0;border-radius:5px}
+.crossing-inventory>summary{cursor:pointer;font-size:.95rem;font-weight:700;color:#1d4e3d}
+.crossing-inventory .crossing-review-date{font-size:.82rem;max-width:98ch;color:#4b5e50}
+.crossing-inventory-list{padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;list-style:none}
+.crossing-inventory-row{border:1px solid #d7d8cc;background:#fffefa;border-left:3px solid #a07658;padding:13px 15px;min-width:0;display:grid;gap:5px;align-content:start}
+.crossing-inventory-row strong{display:block;font-size:.89rem;line-height:1.4}
+.crossing-inventory-row small{display:block;color:#6e776e;font-size:.74rem}
+.crossing-inventory-row p{font-size:.81rem;line-height:1.5;margin:.3em 0}
+.crossing-links{display:flex;gap:11px;align-items:center;flex-wrap:wrap;justify-content:space-between;font-size:.74rem}
+.crossing-not-cleared{font-weight:700;color:#825339}
+.crossing-links a{font-weight:700}
+@media(max-width:700px){.crossing-inventory{padding:13px 14px}.crossing-inventory-list{grid-template-columns:1fr}}
