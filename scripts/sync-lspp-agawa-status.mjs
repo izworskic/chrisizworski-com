@@ -45,7 +45,7 @@ export function evaluate(alertsHtml,parkHtml,day){
   const closures=relevant.filter(n=>/\bclos(?:ed|ure)\b/i.test(n));
   const reopenings=relevant.filter(n=>/\b(reopened|has reopened|now open|is open|open to the public)\b/i.test(n)&&!/\bclosed\b/i.test(n));
   const years=n=>[...n.matchAll(/\b(20\d{2})\b/g)].map(m=>Number(m[1]));
-  const activeClosure=closures.some(n=>!years(n).length||Math.max(...years(n))>=year);
+  const activeClosure=closures.some(n=>!/for the season/i.test(n)||!years(n).length||Math.max(...years(n))>=year);
   const publishedSeason=schedule.year===year&&day>=schedule.start&&day<=schedule.end;
   const explicitlyReopened=reopenings.some(n=>years(n).includes(year));
   const status=activeClosure?'closed':publishedSeason&&explicitlyReopened?'open-confirmed':publishedSeason?'no-current-closure-posted':'seasonal-review';
@@ -64,16 +64,18 @@ function selfTest(){
   const old='Agawa Rock Pictographs Trail is closed for the season as of September 11th, 2026.';
   const now='Agawa Rock Pictographs Trail is closed for the season as of May 2nd, 2027.';
   const open='Agawa Rock Pictographs Trail has reopened to the public for 2027.';
+  const indefinite='Agawa Rock Pictographs Trail is closed until further notice since September 2026.';
   const cases=[
     [alert(old),season(2026),'2026-10-28','closed'],
     [alert(old),season(2026),'2027-06-12','seasonal-review'],
     [alert(old),season(2027),'2027-04-26','seasonal-review'],
     [alert(old),season(2027),'2027-05-03','no-current-closure-posted'],
     [alert(now),season(2027),'2027-05-03','closed'],
+    [alert(indefinite),season(2027),'2027-05-03','closed'],
     [alert(open),season(2027),'2027-05-03','open-confirmed']
   ];
   for(const [a,p,d,status] of cases){const actual=evaluate(a,p,d).status;if(actual!==status)throw Error('status self-test failed: '+actual+' != '+status);}
-  console.log('PASS Agawa six seasonal, closure, reopening scenarios');
+  console.log('PASS Agawa seven seasonal, closure, reopening scenarios');
 }
 async function read(url){
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),16000);
