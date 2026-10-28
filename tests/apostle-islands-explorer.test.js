@@ -105,3 +105,30 @@ assert.ok(js.includes('compareBoxes.filter'));
 assert.ok(js.includes('compareOutput.replaceChildren'));
 assert.ok(!js.includes('innerHTML='));
 });
+
+test('trip-readiness source content is available without client-side execution',()=>{
+ const ids=['trip-readiness','trip-island','trip-type','trip-transport','trip-date','trip-people','trip-nights','trip-r-status','trip-r-steps','trip-copy'];
+ for(const id of ids)assert.ok(html.includes('id="'+id+'"'),id);
+ assert.ok(html.includes('/assets/apostle-trip-readiness.js'));
+ assert.ok(html.includes('print the permit within seven days'));
+ assert.ok(html.includes('within 30 days'));
+ assert.ok(html.includes('Group camping for 8–21'));
+ assert.ok(html.includes('does not include island transportation'));
+ assert.ok(html.includes('No campsite permit includes island transportation'));
+ assert.ok(html.indexOf('id="trip-readiness"')>html.indexOf('id="island-planner"'));
+});
+test('trip-readiness logic never fabricates island travel or booking outcomes',()=>{
+ const engine=file('public/assets/apostle-trip-readiness.js');
+ for(const guard of [
+  "key==='devils'","key==='raspberry'","transport==='none'",
+  "group&&!groupIslands.has(key)","shuttleOvernight.has(key)",
+  "dayDifference(day,today())","interval>30",
+  "2026 season has ended","No verified scheduled service",
+  "An email confirmation is not"
+ ]) assert.ok(engine.includes(guard),guard);
+ assert.ok(engine.includes("new Set(['stockton','oak','sand','rocky','basswood'])"));
+ assert.ok(engine.includes("new Set(['stockton','oak'])"));
+ assert.doesNotMatch(engine,/innerHTML\s*=/);
+ assert.doesNotMatch(engine,/localStorage|sessionStorage|redis|geolocation/i);
+ assert.ok(engine.includes('No ticket, landing, campsite or safe passage has been confirmed.'));
+});
