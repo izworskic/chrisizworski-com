@@ -1998,6 +1998,68 @@
           "description": "Michigan state geographic waterfall feature 50 locates the falls, distinct from public parking. USGS Falls/Rapids V2 name-matched point lies approximately 2 m away; neither supplies a legal route."
         }
       }
+    },
+    {
+      "id": "horseshoe-falls",
+      "name": "Horseshoe Falls",
+      "region": "Pictured Rocks / Munising",
+      "place": "602 Bell Avenue, Munising",
+      "lat": 46.402894,
+      "lng": -86.642575,
+      "gisObjectId": 197,
+      "level": "easy",
+      "minutes": "25–60 min",
+      "walk": "The operator lists a 400-foot walk from its on-site parking area to the falls, through the gift-shop grounds. This is a maintained paid attraction, not a wilderness hike.",
+      "best": "Spring and summer during its advertised early May–mid October operating season. Springs feed the waterfall, so it can retain flow when nearby small streams are low.",
+      "access": "Privately owned, ticketed waterfall attraction. The operator describes leashed-pet access and an accessible visitor route. Verify specific mobility needs and today's operation directly with the business.",
+      "status": "seasonal",
+      "note": "This is separate from the federally managed Pictured Rocks trails. An admission ticket and seasonal operating calendar apply; do not confuse Horseshoe Falls with the closed Munising Falls trail.",
+      "source": "https://www.uppermichiganwaterfalls.com/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Privately managed seasonal waterfall attraction",
+      "parking": "Official visitor parking at Horseshoe Falls & Gift Shop, 602 Bell Avenue, Munising, Michigan 49862. Route to the street address, not the waterfall GIS coordinates.",
+      "feature": "A spring-fed waterfall within maintained gardens, with a trout pond and a family scavenger hunt; an easy paid alternative to a long backcountry waterfall hike.",
+      "further": "As of October 27, 2026, the operator advertises early May through mid-October seasonal hours, usually 9 AM–7 PM during its season. Do not assume the grounds are open outside those dates. Prices and hours can change.",
+      "manager": "Horseshoe Falls & Gift Shop (private operator), Munising",
+      "decision": "Choose this when a short maintained walk, family activities or a more predictable spring-fed cascade matters more than a remote forest hike. It is not a free state or national park stop.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "operator-city-and-visitor-bureau-sources-verified-not-live-open",
+      "sourceReviewed": "2026-10-27",
+      "hydro": {
+        "usgsFeatureId": "e40ef7d9-8a58-11e6-b586-ecf4bb62914c",
+        "nhdPlusComid": null,
+        "nhdPlusReachCode": null,
+        "nhdHrReachCode": null,
+        "matchDistanceMeters": 107,
+        "matchQuality": "moderate"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf",
+          "description": "City of Munising recreation plan explicitly identifies Horseshoe Falls as a privately owned, admission-charging attraction accessed from Bell Avenue."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.munising.org/activities/horseshoe-falls/",
+          "description": "Munising Visitor's Bureau confirms the publicly offered visitor entrance is private and admission-based, with a gentle walking path."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.uppermichiganwaterfalls.com/contact-us",
+          "description": "The private operator lists the arrival address 602 Bell Avenue, Munising; parking is on its own grounds. No lot coordinate is fabricated."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.uppermichiganwaterfalls.com/information",
+          "description": "The operator states the fall is approximately 400 feet from its parking lot and describes its accessible visitor route; not a certified ADA site-specific audit."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS mapped waterfall feature #197 is at 46.402894, -86.642575. This is the falls, not the parking lot; USGS hydro reference is 107 m away."
+        }
+      }
     }
   ]
 }
