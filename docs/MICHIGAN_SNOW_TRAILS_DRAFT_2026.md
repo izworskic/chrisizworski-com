@@ -17,3 +17,9 @@ Photo candidates: NPS Munising snowshoe image, archive photo of Corsair skiing (
 Required before release: verify photo licenses and image delivery; obtain suitable location-specific photographs; inspect map tiles, pins, filters, keyboard, no-JS fallback and actual responsive composition at 320/390/768/1366; finish the full repository verification, sitemap, registry and discovery integration; assess the field-guide scorecard. Never claim current conditions from archival photos. No ads policy changes.
 
 Additional editorial photograph: the NPS Munising cross-country ski trail, December 24, 2017, public domain, source and usage details: https://commons.wikimedia.org/wiki/File:Cross_Country_Ski_Trail_(c643db67-db0b-4172-b869-04232201f9d3).JPG. Used as an explicitly labeled illustration in the trail-etiquette section, not as imagery for another place.
+
+## October 28 photo research
+Michigan DNR states its Public Portfolio is available for public and commercial use: https://www.michigan.gov/dnr/about/newsroom/photo-video. Two specific portfolio records were viewed in the gallery:
+- Vasa Pathway, January/February 2024, photographer credit Michigan Department of Natural Resources, record o5ttigndnl6454drbn3jbjmd4s. The description confirms VASA pathway; it does not identify the winter singletrack. Caption says so.
+- Porcupine Mountains snowshoe, February 2020, record agamgn8ifp21fcoc7pdjb4241t. DNR record requires credit Tyler Leipprandt and Michigan Sky Media LLC. Caption explicitly identifies snowshoe subject, not skiing.
+Image URLs redirect through Canto's CDN. Verify stable anonymous image delivery and layout in browser before publication. Blueberry Ridge remains without a licensed exact-trail image. DNR's general website policy prohibits copying website images without written permission; its recsearch page photographs must not be assumed part of the Public Portfolio.
