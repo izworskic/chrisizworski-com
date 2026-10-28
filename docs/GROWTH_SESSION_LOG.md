@@ -1,3 +1,11 @@
+### 2026-10-28 — Apostle Islands Visual NPS Island Atlas
+
+- Build a visual, eight-island field atlas on the existing canonical `/apostle-islands/`, with original National Park Service island maps showing real trail lines and a separate Leaflet layer containing 42 NPS-listed campsite reference positions (21 Stockton, 7 Oak, 7 Basswood, 6 Rocky, 1 Michigan).
+- Distinguish source geography: no invented trail route linework, dock coordinates, walking distances, water routes or safety/availability predictions. NPS directory explicitly reports Sand Island campsite coordinates being corrected: omit those pins. Exclude Devils’ anomalous campsite point and closed south landing, and show no campsite dots for Raspberry (no designated camps).
+- Added accessible-site/group-site filters, eight original NPS trail maps and 24 trail descriptions, responsive tabbed island selection, clickable verified campsite records and handoffs to dock/trip planners.
+- Maintain site-wide identity/SEO, ads and tool graph; no new indexable page or Redis. Full Chromium screenshots, no-JS text and sources, NPS image loads, sitemap and fresh build audit required before release.
+- Meaningful user value: choose an island visually, understand which hiking trails and actual listed camp areas it offers, and form an independent plan for water transport and park permits. No engagement/SEO outcome claimed until measured.
+
 ### 2026-10-28 — Apostle Islands dock-to-trail decision layer
 
 - Adds a substantial NPS-sourced "From public dock to island trail" selection on the existing `/apostle-islands/` canonical: 10 documented dock locations and one explicitly closed Devils Island landing, grouped across eight researched islands.
