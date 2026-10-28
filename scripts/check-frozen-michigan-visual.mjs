@@ -40,8 +40,9 @@ try{
    let loaded=0,fallback=0,unhandled=[];
    const images=p.locator('figure.wf-photo img');
    for(let i=0;i<await images.count();i++){
-    const im=images.nth(i);await im.scrollIntoViewIfNeeded();
-    await im.evaluate(el=>el.decode().catch(()=>{}));await p.waitForTimeout(200);
+    const im=images.nth(i);
+    await im.evaluate(el=>el.closest('figure')?.scrollIntoView({block:'center'}));
+    await im.evaluate(el=>el.hidden?Promise.resolve():el.decode().catch(()=>{}));await p.waitForTimeout(200);
     const state=await im.evaluate(el=>({ok:el.naturalWidth>0,alt:el.alt,status:el.closest('figure')?.dataset.mediaStatus}));
     if(state.ok)loaded++;else if(state.status==='fallback')fallback++;else unhandled.push(state.alt);
    }
