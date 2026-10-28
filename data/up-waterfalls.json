@@ -2475,6 +2475,61 @@
           "description": "Michigan state GIS feature #67 at 46.651708, -89.446195 places Cascade Falls on Cascade Creek; this is not a vehicle parking coordinate."
         }
       }
+    },
+    {
+      "id": "bonanza-falls",
+      "name": "Bonanza Falls (Greenwood Falls)",
+      "region": "Western U.P.",
+      "place": "Greenwoods Township Park · Big Iron River",
+      "lat": 46.818863,
+      "lng": -89.571458,
+      "gisObjectId": 124,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "From the signed Greenwoods township park parking area off M-64, follow the short established path to the upper river viewing area, then return the same way. This is NOT an authorized route to every downstream waterfall or riverbank section; no surveyed trail line or exact length is claimed.",
+      "best": "Snow-free park season with flowing water; spring after rain can bring stronger water, while fall foliage frames the river shelves.",
+      "access": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and provides its own map directions; a separate local guide documents the direct signed visitor path from the lot to the upper falls. Do not cross unmarked parcels or follow the river downstream on an assumed public path.",
+      "status": "verify",
+      "source": "https://www.carplaketwp.org/general-resources",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Township public park",
+      "parking": "Follow Carp Lake Township's published Greenwoods (Bonanza Falls) destination off M-64 south of Silver City. Use the actual signed gravel park entrance and designated parking lot. The township's Google Maps link gives a park destination area, NOT a surveyed lot coordinate; NEVER route to the waterfall GIS #124 pin.",
+      "feature": "Broad layered cascades and multiple low drops on the Big Iron River. The easily visited upper falls are approached through the signed Greenwoods township park rather than directly from the geographic waterfall coordinate.",
+      "note": "Three separate references: land-manager Google Maps park destination (46.8176942,-89.5674561), regional upper-falls reference (46.817719,-89.570023) in township-attributed land, and MI GIS natural falls #124 (46.818863,-89.571458) on a separately attributed parcel. These are NOT interchangeable directions. No surveyed pedestrian path or easement to downstream drops is established.",
+      "decision": "Choose Bonanza for a short signed township-park upper-falls stop only when its seasonal entrance is open. Follow the established path from the public lot to river views, then turn around; do not extend the hike along the falls GIS location.",
+      "further": "Carp Lake Township 2025 meeting minutes describe seasonal park closure toward winter; no 2026 closing date or open-now status is verified. The short walk is natural and rocky, with slippery water-worn ledges and no documented accessible platform. Neither brochure coordinates nor parcel polygons authorize crossing private river frontage.",
+      "manager": "Carp Lake Township · Greenwoods (Bonanza Falls) park",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "township-park-upper-falls-route-published-not-open-now",
+      "winterRoad": "Carp Lake Township records weather-dependent late-fall closure and closure through winter in 2025, but does not publish a verified 2026 schedule in sources checked. A published summer map pin cannot establish winter parking or a current open gate.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/general-resources",
+          "description": "Carp Lake Township's own Parks & Facilities directory identifies Greenwoods (Bonanza Falls) as a township-managed park with falls and directions."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/general-resources",
+          "description": "Township expressly designates a park with falls, public in its signed facility and upper-falls viewing area; this does not authorize all downstream riverfront parcels."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/meeting-minutes",
+          "description": "Township board minutes document signage, entrance and seasonal visitor parking. Township's published park map link supplies a destination inside township parcel, not a precise lot waypoint."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+          "description": "Waterfalls of the Keweenaw documents parking near M-64 and a short direct path to the upper river viewing area; no surveyed path or permission for downstream walking."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "MI GIS #124 marks the natural falls within a separate nonmunicipal attributed parcel. Regional brochure and township map destination locate the public upper-falls park at two distinct points on township-attributed land."
+        }
+      }
     }
   ]
 }
