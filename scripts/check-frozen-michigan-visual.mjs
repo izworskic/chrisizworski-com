@@ -8,7 +8,11 @@ const check=(ok,msg)=>{if(!ok)report.issues.push(msg)};
 try{
  for(const width of [320,390,768,1366]){
   const p=await browser.newPage({viewport:{width,height:width===1366?900:844}});
+  // The field map must initialize even when the former external script CDN is blocked.
+  await p.route('**/unpkg.com/**', route=>route.abort('failed'));
   await p.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+  const leafletLoaded=await p.evaluate(()=>typeof window.L!=='undefined' && typeof window.L.map==='function');
+  check(leafletLoaded,'locally served Leaflet did not initialize at '+width);
   await p.locator('.wf-story').first().waitFor();
   await p.waitForTimeout(1300);
   const count=await p.locator('.wf-story:visible').count();
@@ -22,6 +26,8 @@ try{
    await p.screenshot({path:out+'/science-'+width+'.png'});
    await p.locator('#wf-map').scrollIntoViewIfNeeded();
    await p.waitForTimeout(1400);
+   const mapState=await p.locator('#wf-map-message').textContent();
+   check(!/map unavailable|map could not start|interactive map unavailable/i.test(mapState||''),'map failed while unpkg blocked at '+width+': '+mapState);
    const markers=await p.locator('.leaflet-marker-icon').count();
    const multi=await p.locator('.wf-pin-multi').count();
    check(markers>=7,'map markers missing at '+width);check(multi>=1,'Sand Point marker grouping missing at '+width);

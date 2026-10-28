@@ -47,3 +47,6 @@ Individual mapped waterfall nodes, not the general park entrance centroid: Upper
 
 ## 2026-10-27 visitor navigation follow-up
 Added Google Maps **view-only** links to all 11 experience cards and each interactive map popup. Coordinates describe mapped natural features or shore-viewing areas and are emphatically **not** confirmed winter parking, permitted paths, safe ice routes, or turn-by-turn winter directions. The authoritative land manager's access page remains the first trip instruction. The field guide's distinct intent and ice-safety safeguards are unchanged. Static links work without JS; browser and unit tests cover 11/11 entries and popup links.
+
+## 2026-10-28 — Local Leaflet reliability investment
+The production page previously loaded its essential map runtime from unpkg. Browser checks that cannot access that CDN render “Map unavailable” despite intact field-note links. Reused the repository's already-vendored Leaflet 1.9.4 browser script at /assets/leaflet-1.9.4.js (BSD-2-Clause license remains at /vendor/leaflet/LICENSE), rather than adding a new dependency. Automated visual QA now **blocks unpkg outright** at 320/390/768/1366px and requires the map runtime to initialize and map markers to remain visible. No map tiles, CARTO configuration, advertisement settings or other guide pages were changed.
