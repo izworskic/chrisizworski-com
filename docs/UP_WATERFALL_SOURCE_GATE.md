@@ -119,3 +119,24 @@ Repository: `data/up-waterfall-nhd-point-audit.json` contains all 97 records and
 - Public arrival is through the **operator's 602 Bell Avenue visitor entrance**, not by car to the GIS waterfall point. The operator advertises an early May–mid-October season. As of October 27, do not claim the attraction open now.
 - Michigan GIS geographic feature **#197** lies at 46.402894, -86.642575. USGS V2 has a same-name match about 107 meters apart; this is a *moderate* geospatial correspondence and NHDPlus COMID is unavailable. No hydrography record verifies opening, visitor routes, parking or current flow.
 - This complete visitor guide qualifies for indexing through independent land management, licensed visitor offer, designated street-address parking, operator's visitor walk, and GIS waterfall-coordinate sources. It adds a different *paid maintained-grounds* choice alongside nearby free Wagner Falls and the still-closed Munising Falls Trail.
+
+## October 28 — property-boundary conflict promotion safeguard (GIS #124 Bonanza / Greenwood)
+
+A named waterfall can have **one mapped natural feature and a different publicly managed viewing area**. Bonanza is a verified example: the Michigan state GIS falls coordinate (46.818863, -89.571458) intersects a recorded nonmunicipal parcel, whereas the Western U.P. waterfall brochure's separately published point (46.817719, -89.570023; approximately 168 m apart) intersects a parcel attributed to Carp Lake Township. These results came from point-in-polygon queries against the [MTU-hosted Ontonagon County parcel feature layer](https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0). [Ontonagon County's own GIS notice](https://ontonagoncounty.org/home/resources/) explicitly warns that parcel maps are not legal surveys or authoritative title determinations. These are **research ownership labels**, not legal findings or public access grants.
+
+Carp Lake Township separately documents the **seasonal Bonanza visitor facility** in its 2025 board minutes: approved Greenwood/Bonanza signage (June 25); signed entrance, parking/turnaround and visitor restrictions (August 20); fall park closure around late October as weather warrants (October 15); closure through winter until spring 2026 (December 17). The township's management of the visitor facility **does not establish a legal public route to every river drop or across the neighboring parcel**. Nor do last winter's closures prove the park is open or closed today in 2026.
+
+Generalizable five-part boundary check for all future waterfall guides:
+1. Keep the source waterfall GIS point immutable. Never send vehicles there.
+2. Independently locate the **signed visitor entrance and lot**, preferably on the land manager's map. A regional brochure pin is an approximate reference, not necessarily a drivable lot.
+3. Reconcile manager and recorded surface parcel ownership at **both** the falls and public arrival. A missing state-DNR polygon is not evidence of private title; an apparent municipal or private parcel is not itself a legal easement finding.
+4. Confirm that the proposed **entire public walking approach to the viewing area** is authorized and does not silently enter an unverified parcel. Park-only evidence cannot automatically authorize access to an adjoining riverbank.
+5. Review time-specific closures for the **current year** separately from historical operating practice. If any axis remains unresolved, keep a research-only record or nonindex informational access warning without invented parking directions.
+
+The opt-in research layer now loads `public/assets/up-waterfall-access-reviews.json`, displaying source-linked individual access warnings where available, and falls back to generic conservative text if that optional file is unavailable. A recorded conflict is not proof of criminal trespass or an invitation to contact a private landowner. No existing guide/ad/canonical or unrelated route is changed by this safeguard.
+
+Official township evidence:
+- 2025-06-25: https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf
+- 2025-08-20: https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf
+- 2025-10-15: https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf
+- 2025-12-17: https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf
