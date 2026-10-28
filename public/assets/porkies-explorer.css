@@ -237,3 +237,11 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .trail-truth-foot{max-width:970px;font-size:.76rem;line-height:1.5;color:#587168;margin-top:16px}
 .trail-truth-foot a{color:#245d4b;text-decoration:underline}
 @media(max-width:660px){.trail-truth-grid{grid-template-columns:1fr}.trail-filter-wrap{align-items:start;flex-direction:column}.trail-truth-card summary{padding-top:13px;padding-bottom:13px}.trail-truth{padding:26px 15px}}
+
+.west-corridor-field-note{margin:14px 0 22px;padding:20px 23px;background:#e5ede4;border-left:4px solid #467a65;border-radius:3px;color:#234238}
+.west-corridor-label{font-size:.68rem;text-transform:uppercase;font-weight:750;letter-spacing:.12em;color:#496858}
+.west-corridor-field-note h4{font-family:Fraunces,Georgia,serif;font-size:1.4rem;line-height:1.2;margin:7px 0 11px;font-weight:550}
+.west-corridor-field-note p{max-width:95ch;font-size:.82rem;line-height:1.65;margin:9px 0;color:#405a4c}
+.west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
+.west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
+@media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}
