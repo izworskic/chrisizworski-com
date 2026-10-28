@@ -142,12 +142,12 @@ test('source desk presents dated NPS and operator provenance without fake live a
  assert.ok(html.includes('2026-11-03'));
  assert.ok(html.includes('2027-04-01'));
  assert.match(html,/not a live feed of dock openings/i);
- assert.ok(js.includes('No online reading is launch clearance'));
+ assert.ok(html.includes('No online reading is launch clearance'));
  const readiness=file('public/assets/apostle-trip-readiness.js');
  assert.match(readiness,/function refreshSourceDesk\(/);
  assert.match(readiness,/Archive only · next season unverified/);
  assert.match(readiness,/Review overdue since/);
- assert.ok(readiness.includes('a safe crossing'));
+ assert.ok(readiness.includes('No ticket, landing, campsite or safe passage has been confirmed.'));
  assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes("cron: '18 13 * * 2'"));
  assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes('issues: write'));
  assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes('issues.create'));
