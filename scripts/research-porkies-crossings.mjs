@@ -13,6 +13,8 @@ const OUT=path.join(ROOT,"artifacts/porkies-crossings");
 const PUBLIC=path.join(ROOT,"public/porcupine-mountains");
 const TRAILS="https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/2/query";
 const HYDRO="https://gisagoegle.state.mi.us/arcgis/rest/services/EGLE/MiEnviroBasemap/MapServer/1/query";
+const BRIDGES="https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRReferenceAssetsOPENDATA/FeatureServer/0/query";
+const BRIDGE_AREA="-90.06,46.61,-89.55,46.90";
 const AREA="-90.04,46.66,-89.57,46.86";
 function url(base,obj){let x=new URL(base);for(let [k,v] of Object.entries(obj))x.searchParams.set(k,String(v));return x.href;}
 async function arc(base,obj){
@@ -50,6 +52,15 @@ if(bridges.entries.length!==9||bridges.entries.some(x=>x.authorizedAsRoutingEdge
 const trail=await all(TRAILS,"FacilityName='Porcupine Mountains Wilderness State Park'","OBJECTID,TrailNamePrimary,SegmentLengthMiles", {});
 const stream=await all(HYDRO,"1=1","OBJECTID,GNIS_Name,FType,ReachCode",{geometry:AREA,geometryType:"esriGeometryEnvelope",inSR:4326,spatialRel:"esriSpatialRelIntersects"});
 if(trail.length!==819)throw Error("DNR trail source changed; manual review required");
+const bridgeFilter={where:"1=1",geometry:BRIDGE_AREA,geometryType:"esriGeometryEnvelope",inSR:"4326",spatialRel:"esriSpatialRelIntersects"};
+const count=(await arc(BRIDGES,{...bridgeFilter,returnCountOnly:true,f:"json"})).count;
+const bridgeData=await arc(BRIDGES,{...bridgeFilter,outFields:"OBJECTID,ASSETTYPE,ASSETDETAILTYPE,DESCRIP,CONDITION,OWNEDBY,ADMINBY",returnGeometry:false,f:"json",resultRecordCount:100});
+const officialBridgeAssets=bridgeData.features?.map(x=>x.attributes)||[];
+if(count!==officialBridgeAssets.length||count>100||!Number.isInteger(count))throw Error("DNR managed bridge inventory count mismatch");
+const certifiedPedestrian=officialBridgeAssets.filter(x=>/pedestrian|foot|trail/i.test(String(x.ASSETDETAILTYPE||""))&&x.CONDITION==="Good");
+if(certifiedPedestrian.length>0)throw Error("New footbridge asset evidence requires individual official current review, not automatic route approval");
+if(count!==bridges.officialBridgeAssetLookup.recordsFound)throw Error("DNR managed-bridge inventory updated; refresh bridge-source ledger before release");
+
 const geometry=candidates(trail,stream,{nearMeters:12,maxResults:2500});
 const exact=geometry.filter(x=>x.relationship==="line-intersection");
 const near=geometry.filter(x=>x.relationship==="near-line");
@@ -71,7 +82,8 @@ const targetReview=targets.map(t=>{
 const doc={
   asOf:"2026-10-28",classification:crossingPolicy,sourceTrail:TRAILS,sourceHydro:HYDRO,
   sourceOfficialGPSMap:ledger.sources.dnrGPSParkMap,sourceDNRDescriptions:ledger.sources.dnrTrailDescriptions,
-  sourceFeatures:{trail:trail.length,stream:stream.length},measured:{totalCandidates:geometry.length,lineIntersections:exact.length,nearLines:near.length,namedHydroCandidates:geometry.filter(x=>x.river).length,interestingCandidates:interesting.length},
+  sourceFeatures:{trail:trail.length,stream:stream.length,managedBridgeAssets:count},
+  officialBridgeAssets:officialBridgeAssets.map(x=>({id:x.OBJECTID,type:x.ASSETDETAILTYPE,description:x.DESCRIP,condition:x.CONDITION,owner:x.OWNEDBY})),measured:{totalCandidates:geometry.length,lineIntersections:exact.length,nearLines:near.length,namedHydroCandidates:geometry.filter(x=>x.river).length,interestingCandidates:interesting.length},
   caveats:["Hydrographic centerlines are not surveyed ford/bridge locations.","An intersection can represent digitization overlap, culvert, cul-de-sac, bridge, waterfall route, or no navigable trail at all.","Near-line candidates are deliberately lower-confidence than line intersections; both remain unverified.","DNR map unbridged-crossing symbols have not been machine-georeferenced to an exact official crossing point.","2016 Big Carp bridge storm notice does not establish present condition.","No candidate may be used to route a person or infer dry, safe, accessible stream crossing."],
   namedRiverSummary:groupBy(geometry.filter(x=>x.river),"river"),
   priorityRiverMatches:interesting.slice(0,80),targetReview,
@@ -86,10 +98,10 @@ if(process.argv.includes("--emit-public-summary")){
   counts:{sourceTrails:trail.length,sourceStreams:stream.length,geometricIntersections:exact.length,nearLineCandidates:near.length,totalCandidates:geometry.length,sourceDescribedJunctionRecords:ledger.records.length},
   registry:ledger.records.map(({id,trail,site,type,status,referenceMiles,note,source})=>({id,trail,site,type,status,referenceMiles,note,source,coordinatesPublished:false,bridgeOrFord:"unknown",routeEligible:false})),
   priorityEvidence:targetReview.map(({ledgerId,candidateCount,lineIntersections,navigationStatus,comment})=>({ledgerId,candidateCount,lineIntersections,navigationStatus,comment,coordinatePublished:false})),
-  structureReview:{mapEdition:bridges.mapEdition,compiledOn:bridges.compiledOn,conditionCertified:0,officialClosureReview:bridges.officialClosureReview,entries:bridges.entries.map(({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds})=>({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds,publicCoordinate:null,routeEligible:false}))},
+  structureReview:{mapEdition:bridges.mapEdition,compiledOn:bridges.compiledOn,conditionCertified:0,officialClosureReview:bridges.officialClosureReview,managedBridgeAssetAudit:bridges.officialBridgeAssetLookup,entries:bridges.entries.map(({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds})=>({id,label,district,kind,mapMarkerReview,structure,latestCondition,sourceUrls,sourceIds,publicCoordinate:null,routeEligible:false}))},
   safety:{currentBridgeStatus:"unknown",officialCrossingCoordinatesCertified:false,anyAutoRouteAcrossStream:false,historicalBigCarpBridgeStatus:"2016 report only, no current assertion",fieldVerificationRequired:true,currentPassableCrossings:0,exactMapSymbolToCrossingMatches:0},
   advisory:"Evidence of a river crossing or connected trail is not evidence of a safe, open, bridged route. No GPS crossing pin, route time, or ford status is published."
  };
  await fs.writeFile(path.join(PUBLIC,"crossing-evidence.json"),JSON.stringify(summary,null,2)+"\n");
 }
-console.log(JSON.stringify({class:doc.classification,features:doc.sourceFeatures,candidates:doc.measured,known:ledger.records.length,priorityRivers:doc.namedRiverSummary,priorityReview:targetReview.map(x=>({id:x.ledgerId,candidates:x.candidateCount,exact:x.lineIntersections})),publicSummary:process.argv.includes("--emit-public-summary")},null,2));
+console.log(JSON.stringify({class:doc.classification,features:doc.sourceFeatures,managedBridgeAssetRecords:count,candidates:doc.measured,known:ledger.records.length,priorityRivers:doc.namedRiverSummary,priorityReview:targetReview.map(x=>({id:x.ledgerId,candidates:x.candidateCount,exact:x.lineIntersections})),publicSummary:process.argv.includes("--emit-public-summary")},null,2));
