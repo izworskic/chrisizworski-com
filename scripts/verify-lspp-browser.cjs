@@ -119,7 +119,7 @@ async function main(){
    need(await currentPopup.locator('a.lspp-google-directions').count()===0,
      size.name+' off-season bubble must not give driving directions');
    await page.locator('#build').click();
-   need((await page.locator('#planIntro').innerText()).includes('No open-day-use itinerary'),size.name+' off-season access gate');
+   need((await page.locator('#planIntro').innerText()).includes('No current-season itinerary'),size.name+' off-season access gate');
    need(await page.locator('#verified-drive-route a[href*="maps/dir"]').count()===0,size.name+' no current driving route');
    report.cases.push({viewport:size.name,photos:photos.length,tiles,pins,googleMapsPopups:bubbleLabels.length,closedSiteViewOnly:true,overflow:false,routeGuard:true});
    await ctx.close();
@@ -130,6 +130,28 @@ async function main(){
   need(await page.locator('#verified-location-list li').count()===6,'no-JS sources');
   need(await page.locator('a[href*="ontarioparks.ca/park/lakesuperior/alerts"]').count()>=1,'no-JS official alerts');
   await ctx.close();report.cases.push({viewport:'no-js',cards:10,locations:6});
+  // Verify the new-season state transitions independently using a synthetic,
+  // clearly test-only official-source snapshot (no live status is asserted here).
+  const future=await browser.newContext({viewport:{width:390,height:844}});
+  const futurePage=await future.newPage();
+  const sample={
+    schemaVersion:1,status:'no-current-closure-posted',checkedAt:new Date().toISOString().slice(0,10),
+    currentDayUseActive:true,dayUse:{year:2027,start:'2027-05-01',end:'2027-10-25'},
+    source:{alerts:'https://www.ontarioparks.ca/park/lakesuperior/alerts',operatingDates:'https://www.ontarioparks.ca/park/lakesuperior'}
+  };
+  await futurePage.route('**/assets/lspp-agawa-status.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(sample)}));
+  await futurePage.goto(url,{waitUntil:'domcontentloaded'});
+  await futurePage.waitForFunction(()=>window.LSPP_AGAWA_STATE==='no-current-closure-posted',null,{timeout:20000});
+  need(await futurePage.locator('#stop-agawa').getAttribute('data-status')==='unknown','new-season no-current-closure must become planning-eligible but NOT confirmed open');
+  need((await futurePage.locator('#agawa-auto-status').innerText()).includes('opening not independently confirmed'),'must explain unconfirmed opening');
+  need(await futurePage.locator('#season option[value="current"]').innerText()!=='After the 2026 operating season','season selector must roll forward');
+  await futurePage.waitForFunction(()=>document.querySelectorAll('.leaflet-marker-icon').length>=6,null,{timeout:20000});
+  await futurePage.locator('.leaflet-marker-icon[title*="Agawa Rock"]').dispatchEvent('click');
+  const sacredPopup=futurePage.locator('.leaflet-popup-content:visible').last();
+  need(await sacredPopup.locator('a.lspp-google-directions').count()===0,'sacred site still has no unverified parking directions after status rollover');
+  await future.close();
+  report.cases.push({viewport:'future-season-simulation',agawa:'no-current-closure-posted',planningEligible:true,directionsToSacredSite:false});
+
   console.log('LSPP browser QA PASSED',JSON.stringify(report.cases));
  }catch(e){report.failures.push(e.stack||String(e));console.error('LSPP browser QA FAILED',e.stack||e);process.exitCode=1;}
  finally{fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(ok=>server.close(ok));}

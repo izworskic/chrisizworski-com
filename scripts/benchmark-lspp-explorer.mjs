@@ -6,6 +6,9 @@ const cards=[...html.matchAll(/<article class="card"[^>]+>/g)].map(match=>match[
 const map=fs.readFileSync('public/assets/lake-superior-provincial-park-map.js','utf8');
 const access=JSON.parse(fs.readFileSync('public/assets/lake-superior-provincial-park-access.json','utf8'));
 const photography=JSON.parse(fs.readFileSync('public/assets/lake-superior-provincial-park-photos.json','utf8')).photos;
+const auto=fs.readFileSync('public/assets/lspp-agawa-live.js','utf8');
+const monitor=fs.readFileSync('scripts/sync-lspp-agawa-status.mjs','utf8');
+const currentStatus=JSON.parse(fs.readFileSync('public/assets/lspp-agawa-status.json','utf8'));
 const located=access.locations.filter(x=>x.siteCoordinateVerified);
 const parking=access.locations.filter(x=>x.parkingCoordinateVerified);
 const cardIds=new Set(cards.map(c=>c.match(/data-id="([^"]+)"/)?.[1]));
@@ -53,10 +56,10 @@ check('local Leaflet stylesheet and bundled map script are loaded',include('/ass
 check('CARTO same-origin config and no secret in map source',map.includes('/api/carto-basemap-config') && map.includes('OpenStreetMap fallback') && !map.includes('CARTO_BASEMAP_PUBLIC_KEY'));
 check('each geolocated popup offers Google Maps location link',map.includes("const searchUrl = item") && map.includes('lspp-google-place') && map.includes('if(verified(item))'));
 check('direct Google driving directions use user origin and official site coordinates',map.includes("const directionsUrl = item") && map.includes("destination:item.latitude+','+item.longitude") && map.includes("travelmode:'driving'") && !map.includes("origin:item.latitude"));
-check('closed Agawa Rock marker remains location-view only',map.includes("item.closed2026?'View the closed site on Google Maps'") && map.includes('if(allowedAsWaypoint(item))') && map.includes('!item.closed2026'));
+check('closed Agawa Rock marker remains location-view only',map.includes("item.id==='agawa'?'View sacred site location on Google Maps'") && map.includes('if(allowedAsWaypoint(item))') && map.includes('!item.closed2026'));
 check('map popups offer large mobile Google Maps actions',include('.lspp-map-actions a{') && include('min-height:44px') && include('.lspp-google-directions'));
 check('planner event passes selected IDs to route module',include("lspp:plan-updated") && map.includes("lspp:plan-updated") && map.includes("lastPlan=Array.isArray"));
-check('planner never recommends in 2026 off-season',include("season.value==='current'?[]") && include('No open-day-use itinerary can be recommended now'));
+check('planner never recommends in 2026 off-season',include("season.value==='current'&&!window.LSPP_DAY_USE_ACTIVE?[]") && include('No current-season itinerary can be recommended now'));
 check('route ordering handles missing Highway km without default zero',map.includes('a.latitude-b.latitude') && !map.includes('Number(a.hwy17Km)-Number(b.hwy17Km)'));
 check('route guard prevents closed or unlocated destinations',map.includes('planned.filter(allowedAsWaypoint)') && map.includes('item.siteCoordinateVerified') && map.includes('!item.closed2026'));
 check('all coords are located inside provincial park study bounding area',located.every(x=>x.latitude>=47.3&&x.latitude<=47.81&&x.longitude>=-84.91&&x.longitude<=-84.59));
@@ -68,6 +71,11 @@ check('unlocated trailheads not fabricated as precise parking',access.locations.
 check('official km trailhead access for five target hikes',Object.entries({sand:1090.6,orphan:1080.8,awausee:1101.4,trappers:1074.3,crescent:1113.8}).every(([id,km])=>access.locations.find(x=>x.id===id)?.hwy17Km===km));
 check('source snapshot expires map routing after 30 days',map.includes('SNAPSHOT_VALID_DAYS = 30') && map.includes('accessEvidenceFresh() && document.getElementById') && html.includes('source-expiry-warning'));
 check('2026 access review published for visitor',html.includes('Last official access review: October 26, 2026'));
+check('Agawa source monitor only uses official Ontario Parks pages',monitor.includes('www.ontarioparks.ca/park/lakesuperior/alerts') && monitor.includes('www.ontarioparks.ca/park/lakesuperior'));
+check('Agawa current baseline remains closed',currentStatus.status==='closed' && currentStatus.dayUse.year===2026 && currentStatus.currentDayUseActive===false);
+check('Agawa status never assumes open on missing alerts',monitor.includes("no-current-closure-posted") && monitor.includes('open-confirmed') && monitor.includes('seasonal-review'));
+check('Agawa card, map and operating-season planner use monitored status',include('id="agawa-auto-status"') && include('id="agawa-access-story"') && include('lspp-agawa-live.js') && include('LSPP_DAY_USE_ACTIVE') && map.includes('lspp:official-season-change'));
+check('Agawa map still never has a driving destination pin',access.locations.find(x=>x.id==='agawa')?.drivingWaypointConfidence==='no_navigation');
 const failed=tests.filter(t=>!t.ok);
 for(const t of tests)console.log((t.ok?'PASS ':'FAIL ')+t.label);
 console.log('Lake Superior Provincial Park Explorer checks: '+(tests.length-failed.length)+'/'+tests.length);

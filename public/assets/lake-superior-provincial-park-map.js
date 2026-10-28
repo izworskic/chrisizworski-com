@@ -43,8 +43,11 @@
     const popup=document.createElement('div');popup.className='lspp-map-popup';
     const title=document.createElement('strong'); title.textContent=item.name;
     const evidence=document.createElement('p');
+    const agawaUpdate=item.id==='agawa' && ['open-confirmed','no-current-closure-posted'].includes(window.LSPP_AGAWA_STATE);
     evidence.textContent=item.coordinateClass==='official_geotour_stop_location_not_parking'
-      ? 'This pin shows the Agawa Rock landmark, not a parking entrance. The pictograph trail is closed for the 2026 season. Please honour this sacred place and the closure; no driving directions are offered.'
+      ? agawaUpdate
+        ? 'This is an Anishinaabe sacred site. Current published park dates and Agawa access notices are reflected in the card, but this map pin does not identify its parking entrance and never offers driving directions.'
+        : 'This pin shows the Agawa Rock sacred landmark, not a parking entrance. The trail was closed for the 2026 season; check the current Ontario Parks notices before any future visit.'
       : 'This pin shows where the destination lies along the shore. It does not mark an independently verified parking stall or mean the road and facilities are open.';
     popup.append(title,evidence);
     const note=document.createElement('p');note.textContent=item.parkingInfrastructure;popup.append(note);
@@ -59,15 +62,17 @@
         drive.setAttribute('aria-label','Get driving directions to '+item.name+' in Google Maps');
         actions.append(drive);
       }
-      const place=link(searchUrl(item),item.closed2026?'View the closed site on Google Maps':'View location on Google Maps');
+      const place=link(searchUrl(item),item.id==='agawa'?'View sacred site location on Google Maps':'View location on Google Maps');
       place.className='lspp-google-place';
       place.setAttribute('aria-label','View '+item.name+' on Google Maps');
       actions.append(place);
       popup.append(actions);
       if(!allowedAsWaypoint(item)){
         const caution=document.createElement('p');caution.className='lspp-map-direction-note';
-        caution.textContent=item.closed2026
-          ? 'This place is closed for 2026. You can look at the location on the map, but directions to the site are not offered.'
+        caution.textContent=item.id==='agawa'
+          ? 'Agawa Rock is a sacred site and this GPS point is not its parking entrance. Check official access notices; turn-by-turn directions are intentionally unavailable here.'
+          : item.closed2026
+            ? 'This place has a recorded closure. Check Ontario Parks before travel; directions are not offered.'
           : !accessEvidenceFresh()
             ? 'Driving directions are paused until the park’s access notes are reviewed again.'
             : 'For driving directions, switch the planner above to a future operating season and check Ontario Parks before travelling.';
@@ -91,7 +96,7 @@
     return popup;
   }
   function makeMarker(item){
-    const closed=item.closed2026;
+    const closed=item.id==='agawa'?!['open-confirmed','no-current-closure-posted'].includes(window.LSPP_AGAWA_STATE):item.closed2026;
     const icon=window.L.divIcon({
       className:'lspp-map-icon',html:'<span class="lspp-map-pin '+(closed?'is-closed':'')+'" aria-hidden="true"></span>',
       iconSize:[23,23],iconAnchor:[11,11],popupAnchor:[0,-8]
@@ -113,7 +118,7 @@
       const li=document.createElement('li');
       const name=document.createElement('strong');name.textContent=item.name+' — ';
       li.append(name);
-      const cls=document.createElement('span'); cls.textContent=item.id==='agawa'?'sacred site, closed; no driving pin':'official destination area; parking entrance not confirmed'; li.append(cls);
+      const cls=document.createElement('span'); cls.textContent=item.id==='agawa'?'sacred site · access status in guide · no parking pin':'official destination area; parking entrance not confirmed'; li.append(cls);
       li.append(document.createTextNode(' · '));
       li.append(link(catalog.canonicalSources[item.sourceKeys[0]]||officialLink,'official record'));
       if(allowedAsWaypoint(item)){li.append(document.createTextNode(' · '));li.append(link(searchUrl(item),'see on map')); }
@@ -214,5 +219,6 @@
       text(status,'Access evidence or map unavailable; follow Ontario Parks source links and do not assume any road or trail is open.');
     }
   }
+  window.addEventListener('lspp:official-season-change',()=>{if(catalog){showMarkers();displaySources();buildRoute();}});
   boot();
 })();

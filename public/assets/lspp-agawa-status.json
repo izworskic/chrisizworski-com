@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "status": "closed",
+  "checkedAt": "2026-10-28",
+  "dayUse": {
+    "start": "2026-05-01",
+    "end": "2026-10-25",
+    "year": 2026
+  },
+  "currentDayUseActive": false,
+  "source": {
+    "alerts": "https://www.ontarioparks.ca/park/lakesuperior/alerts",
+    "operatingDates": "https://www.ontarioparks.ca/park/lakesuperior"
+  },
+  "historical2026Closure": "2026-09-11",
+  "evidence": "Current or undated official Agawa closure notice.",
+  "culturalSite": true,
+  "parkingPinVerified": false
+}
