@@ -97,3 +97,17 @@ test("geographic matching is explicit about one source ID vs official 2025 map s
  assert.ok(bridge.entries.every(x=>x.mapMarkerReview.length>25));
  assert.ok(bridge.entries.every(x=>x.privateCandidateCoordinatesPublished===false));
 });
+
+test("current DNR bridge-asset layer cannot certify park hiking bridges or erase mapped infrastructure",()=>{
+ const b=bridge.officialBridgeAssetLookup,publicAudit=report.structureReview.managedBridgeAssetAudit;
+ assert.equal(b.recordsFound,1);
+ assert.equal(b.explicitlyVerifiedFootbridgeAssetRecords,0);
+ assert.equal(b.records[0].objectId,163);
+ assert.equal(b.records[0].detailType,"Vehicular");
+ assert.equal(b.records[0].condition,null);
+ assert.equal(b.records[0].publicVisitorHikingBridge,false);
+ assert.equal(publicAudit.recordsFound,1);
+ assert.equal(publicAudit.records[0].condition,null);
+ assert.match(publicAudit.interpretation,/MUST NOT/);
+ assert.equal(report.safety.currentPassableCrossings,0);
+});
