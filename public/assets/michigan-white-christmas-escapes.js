@@ -1,4 +1,4 @@
-/* FIELD_GUIDE_V1 Michigan White Christmas & Christmas-Week Escapes: progressive filters, Christmas Countdown Engine, CARTO/OSM fallback */
+/* FIELD_GUIDE_V1 Michigan White Christmas & Christmas-Week Escapes: 4 visual holiday doors, Climatology Blueprint, CARTO/OSM fallback */
 (()=>{'use strict';
 function revealPhotoFallback(im){
  const fig=im.closest('.wf-photo');if(!fig||fig.dataset.mediaStatus==='fallback')return;
@@ -11,7 +11,7 @@ function revealPhotoFallback(im){
  panel.append(label,title,explanation);fig.insertBefore(panel,fig.firstChild)}
  panel.hidden=false;
 }
-for(const im of document.querySelectorAll('.wf-photo img')){
+for(const im of document.querySelectorAll('.wf-photo img, .wce-door-media img')){
  let fallbackAttempted=false;
  const fail=()=>{if(!fallbackAttempted&&im.dataset.fallbackSrc){fallbackAttempted=true;im.dataset.fallbackUsed='yes';im.src=im.dataset.fallbackSrc;return;}revealPhotoFallback(im)};
  im.addEventListener('error',fail);
@@ -19,8 +19,8 @@ for(const im of document.querySelectorAll('.wf-photo img')){
 }
 
 const stories=[...document.querySelectorAll('.wf-story')];if(!stories.length)return;
-const regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),seasonSelect=document.getElementById('wce-season'),chips=[...document.querySelectorAll('.wf-chip')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');
-let tag='all',activeSeasonTab='early',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;
+const regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),chips=[...document.querySelectorAll('.wf-chip')],doors=[...document.querySelectorAll('[data-door]')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');
+let tag='all',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;
 
 const message=(s,kind)=>{if(!status)return;status.textContent=s;status.dataset.state=kind||''};
 const shown=()=>stories.filter(c=>!c.hidden);
@@ -28,24 +28,35 @@ const reset=()=>{
  tag='all';
  if(regions)regions.value='all';
  if(efforts)efforts.value='all';
- if(seasonSelect)seasonSelect.value='all';
  filter();
 };
 chips.forEach(b=>b.addEventListener('click',()=>{tag=b.dataset.tag||'all';filter()}));
-[regions,efforts,seasonSelect].forEach(el=>el?.addEventListener('change',filter));
+doors.forEach(card=>{
+ const btn=card.querySelector('[data-door-filter]');
+ if(!btn)return;
+ btn.addEventListener('click',()=>{
+  const nextTag=card.dataset.door||'all';
+  tag=nextTag;
+  if(regions)regions.value='all';
+  if(efforts)efforts.value='all';
+  filter();
+  const target=document.getElementById('find-escape');
+  if(target)target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+ });
+});
+[regions,efforts].forEach(el=>el?.addEventListener('change',filter));
 document.getElementById('wf-reset')?.addEventListener('click',reset);
 document.getElementById('wf-show-all')?.addEventListener('click',reset);
 
 function filter(){
  for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));
+ for(const d of doors)d.setAttribute('data-active-door',String(d.dataset.door===tag));
  for(const c of stories){
   const tags=(c.dataset.tag||'').split(/\s+/);
-  const seasons=(c.dataset.seasons||'').split(/\s+/);
   const tagOk=tag==='all'||tags.includes(tag);
   const regOk=!regions||regions.value==='all'||c.dataset.region===regions.value;
   const effOk=!efforts||efforts.value==='all'||c.dataset.effort===efforts.value;
-  const seaOk=!seasonSelect||seasonSelect.value==='all'||seasons.includes(seasonSelect.value);
-  c.hidden=!(tagOk&&regOk&&effOk&&seaOk);
+  c.hidden=!(tagOk&&regOk&&effOk);
  }
  const n=shown().length;
  if(count)count.textContent=n?`${n} of ${stories.length} researched Michigan Christmas-week escape towns shown. Historical NOAA odds do not guarantee current-year December 25 snow.`:'No Christmas-week towns match these filters. Try another probability tier or region.';
@@ -53,101 +64,71 @@ function filter(){
  refreshPins(false);
 }
 
-const seasonProfiles={
- early:{
-  badge:'Auto-calibrated to Michigan calendar · Pre-Holiday Climatology & Lodging Window (Oct–Nov 10)',
-  title:'Use NOAA 30-Year Climatology & Machine-Snow Backups to Pick Your Holiday Base',
-  copy:'More than 45 days before December 25, no weather model can predict Christmas Day snowfall for a specific street. Right now, your strongest decision signal is NOAA 1991–2020 1-inch snow-depth climatology: choose 90%+ Upper Peninsula towns (Marquette, Houghton, Ironwood, Munising), 65–80% Northern Lower snowbelts with resort snowmaking (Gaylord, Petoskey/Boyne, Traverse City), or holiday-lights towns that shine even without snow (Frankenmuth).',
-  picks:'<strong>Best holiday bases to book now:</strong> <a href="#stop-1">Marquette (~96%)</a> · <a href="#stop-2">Houghton &amp; Keweenaw (95%+)</a> · <a href="#stop-6">Gaylord &amp; Otsego (75–80%)</a> · <a href="#stop-7">Petoskey &amp; Boyne (68–72%)</a> · <a href="#stop-8">Traverse City (60–65%)</a> · <a href="#stop-9">Frankenmuth Lights</a>',
-  btnLabel:'Filter towns for early holiday booking ↓'
+const blueprintStage={
+ noaa:{
+  label:'CLIMATOLOGY 01 · THE NOAA 1-INCH SNOW-DEPTH RULE (1991–2020)',
+  title:'Why Marquette is ~96% while Metro Detroit is 34.7%',
+  copy:'NOAA defines an official White Christmas as at least 1 inch of snow on the ground at 7:00 AM on December 25—not necessarily snow falling that morning. In the 1991–2020 U.S. Climate Normals, Detroit sits at 34.7% and Saginaw at 45.7% because mid-December Ohio Valley rain systems regularly wash away early southern snowpacks. North of the 45th parallel and along Lake Superior, cold northwest winds over 39°F open water replenish snowpack all December, pushing Gaylord to ~75–80% and Marquette/Keweenaw to ~95–96%.',
+  foot:'Decision rule: Use historical NOAA odds when booking Christmas lodging in October or November; switch to live snowpack inside 45 days.',
+  links:[
+   {label:'Open White Christmas Calculator ↗',href:'/national-tools/white-christmas/'},
+   {label:'Open Michigan Station Breakdown ↗',href:'/white-christmas-michigan/'},
+   {label:'Open NOAA Probability Map ↗',href:'/white-christmas-probability-map/'}
+  ]
  },
- pack:{
-  badge:'Auto-calibrated to Michigan calendar · 45-Day Snowpack Build Window (Nov 11–Dec 17)',
-  title:'Existing NOHRSC Ground Snowpack Joins Historical Climatology',
-  copy:'Inside 45 days of Christmas, surviving snow on the ground begins shifting local White Christmas odds above or below the 30-year baseline. Track early lake-effect snowpack across the Upper Peninsula and Gaylord/Boyne plateau using the Michigan Snow Depth Finder and the White Christmas Calculator.',
-  picks:'<strong>Watch early snowpack in:</strong> <a href="#stop-1">Marquette</a> · <a href="#stop-2">Houghton</a> · <a href="#stop-3">Ironwood &amp; Porkies</a> · <a href="#stop-4">Munising</a> · <a href="#stop-6">Gaylord &amp; Hartwick Pines</a> · <a href="#stop-7">Petoskey &amp; Boyne</a>',
-  btnLabel:'Filter to 10 snowpack-tracked towns ↓'
+ windows:{
+  label:'CLIMATOLOGY 02 · THE 3 HOLIDAY DECISION WINDOWS',
+  title:'When to look at history vs. ground snowpack vs. 7-day NWS forecasts',
+  copy:'Holiday weather planning fails when travelers use the wrong signal at the wrong time. (1) More than 45 days before December 25, use 30-year NOAA station climatology to pick a high-probability snowbelt or a snowmaking resort. (2) Between November 11 and December 17 (the 45-day window), check NOHRSC observed snow depth—deep early U.P. snowpack survives brief warm-ups. (3) Inside 7 days (December 18–25), check local National Weather Service rain vs. snow forecasts.',
+  foot:'Decision rule: Never treat a 30-year historical percentage as a Christmas Eve weather forecast.',
+  links:[
+   {label:'Open Christmas 2026 Forecast Outlook ↗',href:'/national-tools/white-christmas/forecast/'},
+   {label:'Open Michigan Snow Depth Finder ↗',href:'/michigan-snow-depth/'},
+   {label:'Open White Christmas Calculator ↗',href:'/national-tools/white-christmas/'}
+  ]
  },
- forecast:{
-  badge:'Auto-calibrated to Michigan calendar · 7-Day NWS Christmas Forecast Lock-In (Dec 18–25)',
-  title:'Short-Range NWS Snow vs. Rain & Temperature Forecasts Now Decide the Outcome',
-  copy:'Inside the final week before December 25, local National Weather Service hourly forecasts for rain, snow, and above-freezing dewpoints overtake historical climatology. Check whether existing snowpack will survive through Christmas morning or if a lake-effect band will whiten the ground on Christmas Eve.',
-  picks:'<strong>Check final Christmas-week conditions:</strong> <a href="#stop-1">Marquette</a> · <a href="#stop-6">Gaylord</a> · <a href="#stop-7">Petoskey &amp; Boyne</a> · <a href="#stop-8">Traverse City</a> · <a href="#stop-9">Frankenmuth</a> · <a href="#stop-10">Muskegon &amp; West Coast</a>',
-  btnLabel:'Filter to Christmas-week escapes ↓'
+ snowmaking:{
+  label:'CLIMATOLOGY 03 · MACHINE SNOWMAKING & ELEVATION INSURANCE',
+  title:'How Northern Michigan ski resorts save mild El Niño Decembers',
+  copy:'Even during a warm December when natural woods trails in southern and central Michigan turn bare, high-capacity fan guns at Boyne Mountain, The Highlands at Harbor Springs, Nub\'s Nob, Treetops, Crystal Mountain, Marquette Mountain, and Mont Ripley build deep machine-snow bases whenever overnight wet-bulb temperatures dip below 28°F. Pairing a 70%+ snowbelt town with a snowmaking resort gives families guaranteed holiday snow play.',
+  foot:'Decision rule: Book a base town with both natural lake-effect elevation and a commercial snowmaking hill within 20 minutes.',
+  links:[
+   {label:'Compare Michigan Ski Hills ↗',href:'/michigan-ski-hills/'},
+   {label:'Open Cross-Country Ski Finder ↗',href:'/michigan-cross-country-skiing/'},
+   {label:'Open Winter Weekend Getaways ↗',href:'/michigan-winter-weekends/'}
+  ]
  },
- post:{
-  badge:'Auto-calibrated to Michigan calendar · New Year Week & Deep Winter Window (Dec 26–Mar)',
-  title:'Christmas-to-New-Year Escapes & Peak January–March Snowpack',
-  copy:'Between December 26 and March, Michigan enters its deepest snowpack and ice-formation window. Use these same 10 holiday escape towns for New Year’s week ski trips, January/February ice curtain expeditions in Munising and Tahquamenon, and early-bird planning for next Christmas.',
-  picks:'<strong>Top New Year &amp; Deep Winter towns:</strong> <a href="#stop-1">Marquette</a> · <a href="#stop-2">Houghton</a> · <a href="#stop-4">Munising Ice Curtains</a> · <a href="#stop-5">Tahquamenon Falls</a> · <a href="#stop-7">Petoskey &amp; Boyne</a> · <a href="#stop-8">Traverse City Igloos</a>',
-  btnLabel:'Filter to all 10 winter escape towns ↓'
+ logistics:{
+  label:'CLIMATOLOGY 04 · CHRISTMAS-TO-NEW-YEAR WEEK RESERVATIONS & ROAD RULES',
+  title:'December 24–25 closures vs. December 26–January 1 peak week',
+  copy:'Many Michigan tasting rooms, museums, and independent restaurants close on Christmas Eve afternoon and Christmas Day, then reopen at full throttle from December 26 through New Year\'s Day. Reserve heated vineyard igloos (Traverse City/Petoskey), ski rentals, and Frankenmuth dining weeks ahead. Before driving north up I-75 or across the Mackinac Bridge, verify live MDOT MiDrive plows and bridge wind advisories.',
+  foot:'Decision rule: Always pack a full tank of fuel, winter wiper fluid, traction cleats, and a town-based no-snow backup.',
+  links:[
+   {label:'Open Wine, Cider & Spirits Igloo Guide ↗',href:'/michigan-wine-cider-spirits/'},
+   {label:'Open Michigan Winter Activities ↗',href:'/michigan-winter-activities/'},
+   {label:'Open First Snow Adventures ↗',href:'/michigan-first-snow-adventures/'}
+  ]
  }
 };
 
-function detectCurrentSeason(){
- try{
-  const params=new URLSearchParams(window.location.search);
-  const override=params.get('season');
-  if(override&&seasonProfiles[override])return override;
-  const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric',day:'numeric'}).formatToParts(new Date());
-  const month=Number(parts.find(p=>p.type==='month')?.value||1);
-  const day=Number(parts.find(p=>p.type==='day')?.value||1);
-  if(month===10||(month===11&&day<=10))return 'early';
-  if((month===11&&day>=11)||(month===12&&day<=17))return 'pack';
-  if(month===12&&day>=18&&day<=25)return 'forecast';
-  return 'post';
- }catch{return 'early'}
-}
-
-function setSeasonView(seasonKey){
- const active=seasonKey in seasonProfiles?seasonKey:'early';
- const profile=seasonProfiles[active]||seasonProfiles.early;
- const badge=document.getElementById('wce-season-badge');
- if(badge)badge.textContent=`All 4 holiday planning windows available below · ${profile.badge.split('·')[1]?.trim()||'Michigan calendar'}`;
- document.querySelectorAll('[data-season-card]').forEach(card=>{
-  const isCurrent=card.dataset.seasonCard===active;
-  card.setAttribute('data-current-season',String(isCurrent));
-  const pill=card.querySelector('[data-season-pill]');
-  if(pill)pill.hidden=!isCurrent;
- });
-}
-setSeasonView(detectCurrentSeason());
-
-const modeStage={
- up90:{
-  label:'TIER 01 · 90%–96% UPPER PENINSULA SUPERIOR SNOWBELTS',
-  title:'Near-certain December 25 snowpack along Lake Superior',
-  copy:'In NOAA\'s 1991–2020 U.S. Climate Normals, the Lake Superior snowbelt across Michigan\'s Upper Peninsula ranks among the most reliable White Christmas zones in North America outside the high Rockies. Marquette (~96%), Houghton/Hancock (95%+), the Ironwood/Porcupine Mountains Gogebic Range (92%+), Munising (90%+), and Sault Ste. Marie/Tahquamenon (~88%) regularly build multi-foot lake-effect bases before winter solstice.',
-  alert:'Travel rule: Pack winter emergency gear, check MDOT MiDrive and Mackinac Bridge wind advisories, and always keep a town-based backup plan if a Christmas Eve blizzard closes rural U.P. trailheads.'
- },
- north70:{
-  label:'TIER 02 · 60%–80% NORTHERN LOWER PLATEAU, SKI HILLS & BAYS',
-  title:'Combine high-plateau lake-effect snow with resort snowmaking',
-  copy:'If you want strong White Christmas odds without driving into the Upper Peninsula, target Northern Lower Michigan\'s inland elevation and snowmaking resorts. Gaylord and Grayling sit above 1,300 feet along I-75 (~75–80% historical odds), Petoskey, Harbor Springs, and Boyne (~68–72%) add massive resort snowmaking at Boyne Mountain, The Highlands, and Nub\'s Nob, and Traverse City / Sleeping Bear (~60–65%) pairs coastal moraine snow with heated vineyard igloos.',
-  alert:'Travel rule: Even in a warm El Niño December when natural woods snow is thin, Northern Michigan ski resorts keep machine-made slopes open for Christmas week.'
- },
- lights:{
-  label:'TIER 03 · 40%–51% HOLIDAY LIGHTS, LUGE & NO-SNOW PROOF TOWNS',
-  title:'Enjoy 100% Christmas spirit even when southern snow is a coin flip',
-  copy:'Across East-Central and West Michigan, historical December 25 snow cover is roughly a 40% to 51% proposition (Saginaw 45.7%, Flint 51.1%, West Coast ~38–45%). Frankenmuth (Bronner\'s CHRISTmas Wonderland, Main Street lights, Bavarian inns) and Muskegon State Park (Winter Sports Complex luge/skating + dune trails) guarantee a memorable Christmas-week outing regardless of the thermometer.',
-  alert:'Travel rule: Use Frankenmuth or Bay City as an easy I-75 base, then check the Michigan Snow Depth tool for a 90-minute day trip north to Hartwick Pines if you want forest snow.'
- },
- south35:{
-  label:'TIER 04 · WHY DETROIT (34.7%) & SOUTHERN MICHIGAN FLIP YEAR TO YEAR',
-  title:'One December rainstorm can erase an early southern Michigan snowpack',
-  copy:'Why does Metro Detroit only average a 34.7% White Christmas in the 1991–2020 normals? Southeast Michigan sits on the leeward side of the state, shielded from northwest Lake Michigan lake-effect bands and exposed to mild Ohio Valley rain systems in mid-December. A 6-inch snowstorm on December 10 often melts completely before December 24 unless sub-freezing air locks in.',
-  alert:'Travel rule: Check your exact southern Michigan ZIP in our White Christmas Calculator, and inside 7 days of Christmas switch to the live Christmas 2026 Forecast Outlook.'
- }
-};
-
-document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>{
- const item=modeStage[btn.dataset.mode];
+document.querySelectorAll('[data-blueprint]').forEach(btn=>btn.addEventListener('click',()=>{
+ const item=blueprintStage[btn.dataset.blueprint];
  if(!item)return;
- document.querySelectorAll('[data-mode]').forEach(other=>other.setAttribute('aria-pressed',String(other===btn)));
- document.getElementById('wce-mode-label').textContent=item.label;
- document.getElementById('wce-mode-title').textContent=item.title;
- document.getElementById('wce-mode-copy').textContent=item.copy;
- document.getElementById('wce-mode-alert').textContent=item.alert;
+ document.querySelectorAll('[data-blueprint]').forEach(other=>other.setAttribute('aria-pressed',String(other===btn)));
+ document.getElementById('wce-blueprint-label').textContent=item.label;
+ document.getElementById('wce-blueprint-title').textContent=item.title;
+ document.getElementById('wce-blueprint-copy').textContent=item.copy;
+ document.getElementById('wce-blueprint-foot').textContent=item.foot;
+ const linksWrap=document.getElementById('wce-blueprint-links');
+ if(linksWrap&&Array.isArray(item.links)){
+  linksWrap.textContent='';
+  for(const l of item.links){
+   const a=document.createElement('a');
+   a.href=l.href;
+   a.textContent=l.label;
+   linksWrap.append(a);
+  }
+ }
 }));
 
 function refreshPins(initial){

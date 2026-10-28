@@ -33,11 +33,12 @@ const checks = [
       wkdHtml.includes('"@type":"FAQPage"'),
   },
   {
-    name: 'Rank #2 Michigan White Christmas Escapes: 10 static holiday towns + 4 always-visible season cards + NOAA climatology',
+    name: 'Rank #2 Michigan White Christmas Escapes: 10 static holiday towns + 4 visual Christmas doors + Climatology Blueprint',
     weight: 15,
     pass:
       (wceHtml.match(/<article class="wf-story"/g) || []).length === 10 &&
-      (wceHtml.match(/data-season-card="/g) || []).length === 4 &&
+      (wceHtml.match(/data-door="/g) || []).length === 4 &&
+      (wceHtml.match(/data-blueprint="/g) || []).length === 4 &&
       wceHtml.includes('"numberOfItems":10') &&
       wceHtml.includes('1991–2020') &&
       wceHtml.includes('href="/national-tools/white-christmas/forecast/"'),

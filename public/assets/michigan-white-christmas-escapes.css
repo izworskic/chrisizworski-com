@@ -1,12 +1,12 @@
 /* Michigan White Christmas & Christmas-Week Escapes: FIELD_GUIDE_V1 holiday snowbelt discovery hub. Never modifies site ad settings. */
 .wce{--wf-accent:#1d4e42;--wf-paper:#f5f7f5;--wf-ink:#162d26;--wf-muted:#4a635b;--wf-line:#d2e0da}
-.wce .wf-hero{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:25px;padding-top:23px;padding-bottom:20px}
-.wce .wf-intro h1{font-size:clamp(2.55rem,4.3vw,4.15rem);max-width:620px}
+.wce .wf-hero{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:25px;padding-top:23px;padding-bottom:20px}
+.wce .wf-intro h1{font-size:clamp(2.5rem,4.2vw,4.08rem);max-width:620px}
 .wce .wf-lede strong{color:#17473b}
 .wce-hero-ctas{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
 .wce-secondary-cta{display:inline-flex;align-items:center;padding:10px 14px;border-radius:5px;border:1px solid #9ab9ad;background:#fff;color:#184539;font-size:.78rem;font-weight:800;text-decoration:none}
 .wce-secondary-cta:hover{background:#eaf2ee}
-.wce .wce-hero-montage{height:278px;display:grid;grid-template-columns:1.4fr .9fr;grid-template-rows:1fr 1fr;gap:7px;min-width:0}
+.wce .wce-hero-montage{height:282px;display:grid;grid-template-columns:1.38fr .92fr;grid-template-rows:1fr 1fr;gap:7px;min-width:0}
 .wce .wce-hero-montage .wf-photo{height:100%;min-height:0;border-radius:5px}
 .wce .wce-hero-montage .wf-photo:first-child{grid-row:1/3}
 .wce .wce-hero-montage .wf-photo img{object-fit:cover;object-position:center}
@@ -17,47 +17,56 @@
 .wce-signpost strong{color:#1b4a3d;text-transform:uppercase;font-size:.68rem;letter-spacing:.08em}
 .wce-signpost span{color:#4b645c;font-size:.77rem}
 
+/* 4 Visual White Christmas Doors */
+.wce-doors{padding:18px 0 24px;border-top:1px solid var(--wf-line)}
+.wce-doors-head{display:flex;justify-content:space-between;align-items:flex-end;gap:22px;margin-bottom:16px}
+.wce-doors-head h2{font-size:clamp(1.55rem,2.6vw,2.15rem);line-height:1.16;margin:4px 0 0}
+.wce-doors-head>p{max-width:490px;font-size:.8rem;line-height:1.55;color:var(--wf-muted);margin:0}
+.wce-doors-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.wce-door{background:#fff;border:1px solid var(--wf-line);border-radius:7px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 18px rgba(17,44,37,.06);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.wce-door:hover{transform:translateY(-2px);border-color:#69a08e;box-shadow:0 10px 24px rgba(17,44,37,.11)}
+.wce-door[data-active-door="true"]{border-color:#1d4e42;box-shadow:0 0 0 2px rgba(29,78,66,.22),0 10px 24px rgba(17,44,37,.12)}
+.wce-door-media{position:relative;height:152px;overflow:hidden;background:#1a3c32}
+.wce-door-media img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.wce-door-badge{position:absolute;top:9px;left:9px;background:rgba(15,38,31,.86);color:#f2fbf8;font-size:.63rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:4px;backdrop-filter:blur(4px)}
+.wce-door-body{padding:13px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+.wce-door-body h3{font-size:1.12rem;line-height:1.22;margin:0;color:var(--wf-ink)}
+.wce-door-towns{font-size:.69rem;font-weight:800;color:#934832;letter-spacing:.03em;margin:0}
+.wce-door-body p:not(.wce-door-towns){font-size:.76rem;line-height:1.5;color:var(--wf-muted);margin:0}
+.wce-door-tools{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:6px}
+.wce-door-tools a{font-size:.67rem;font-weight:700;color:#1b4a3d;background:#edf5f2;border:1px solid #c5ddd4;padding:3px 7px;border-radius:4px;text-decoration:none}
+.wce-door-tools a:hover{background:#dcece6}
+.wce-door-btn{margin-top:6px;width:100%;padding:8px 10px;border-radius:5px;border:1px solid #1d4e42;background:#1d4e42;color:#fff;font-size:.74rem;font-weight:800;cursor:pointer;text-align:center}
+.wce-door-btn:hover{background:#153b31}
+
 .wce-closure{padding:17px 19px;border:1px solid #dccbb3;border-left:5px solid #9d4132;background:#fcf8f3;border-radius:6px;display:flex;gap:24px;align-items:center;justify-content:space-between;margin-bottom:20px}
-.wce-closure h2{font-size:1.38rem;line-height:1.25;color:#542c24}
+.wce-closure h2{font-size:1.34rem;line-height:1.25;color:#542c24}
 .wce-closure p:not(.wf-eyebrow){font-size:.8rem;line-height:1.62;color:#63453d;margin-top:7px}
 .wce-closure-actions{display:flex;flex-direction:column;gap:7px;flex-shrink:0}
 .wce-closure-actions a{font-size:.74rem;font-weight:700;padding:7px 11px;border-radius:5px;border:1px solid #ccb39c;background:#fff;color:#522b22;text-decoration:none;white-space:nowrap}
 .wce-closure-actions a:hover{background:#f5ece3}
 
-.wce-season-engine{background:linear-gradient(135deg,#14332b 0%,#1d4b3f 62%,#245b4d 100%);color:#f3faf7;border-radius:8px;padding:18px 20px;margin-bottom:22px;border:1px solid #2e6d5c;box-shadow:0 8px 22px rgba(17,44,37,.12)}
-.wce-season-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,.15)}
-.wce-season-head .wf-eyebrow{color:#a8e5d2;margin-bottom:4px}
-.wce-season-head h2{color:#fff;font-size:1.38rem;margin:0}
-.wce-season-lead{color:#cfeee3;font-size:.79rem;line-height:1.48;max-width:54ch;margin:0}
-.wce-season-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-top:14px}
-.wce-season-card{background:rgba(10,29,24,.48);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:7px}
-.wce-season-card[data-current-season="true"]{background:rgba(255,255,255,.12);border-color:#e7a854;box-shadow:0 0 0 1px rgba(231,168,84,.4)}
-.wce-season-card-top{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
-.wce-season-window{font-size:.69rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#a8e5d2}
-.wce-season-live-pill{background:#e7a854;color:#142821;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:999px}
-.wce-season-card h3{color:#fff;font-size:1.02rem;line-height:1.26;margin:0}
-.wce-season-card p{color:#d8efe7;font-size:.77rem;line-height:1.5;margin:0}
-.wce-season-picks{margin-top:auto!important;padding-top:4px;font-size:.73rem!important;color:#fff!important}
-.wce-season-picks a{color:#b0eed9;text-decoration:underline}
-.wce-season-card-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:5px;padding:7px 10px;border-radius:5px;background:rgba(255,255,255,.14);color:#fff;font-size:.74rem;font-weight:700;text-decoration:none}
-.wce-season-card-cta:hover{background:#e7a854;color:#142821}
-
-.wce-science{padding:22px 0 26px;border-top:1px solid var(--wf-line)}
-.wce-science-head{display:flex;justify-content:space-between;align-items:end;gap:22px}
-.wce-science-head>p{max-width:460px;color:var(--wf-muted);font-size:.79rem}
-.wce-science-layout{display:grid;grid-template-columns:minmax(0,.76fr) minmax(0,1.24fr);gap:12px;margin-top:16px}
+/* White Christmas Climatology & Booking Blueprint */
+.wce-blueprint{padding:20px 0 24px;border-top:1px solid var(--wf-line)}
+.wce-blueprint-head{display:flex;justify-content:space-between;align-items:flex-end;gap:22px}
+.wce-blueprint-head h2{font-size:clamp(1.48rem,2.4vw,2rem);margin:4px 0 0}
+.wce-blueprint-head>p{max-width:470px;color:var(--wf-muted);font-size:.79rem;line-height:1.54;margin:0}
+.wce-blueprint-layout{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:13px;margin-top:15px}
 .wce-mode-selector{display:flex;flex-direction:column;gap:8px}
-.wce-mode-selector button{border:1px solid #c4d9d0;border-radius:6px;background:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:32px minmax(0,1fr);gap:2px 10px;color:#173b31;cursor:pointer}
+.wce-mode-selector button{border:1px solid #c4d9d0;border-radius:6px;background:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:34px minmax(0,1fr);gap:2px 10px;color:#173b31;cursor:pointer}
 .wce-mode-selector button[aria-pressed="true"]{background:#e5f1ec;border-color:#5b9682;box-shadow:inset 3px 0 #1e5948}
-.wce-mode-selector button>span{grid-row:1/3;font:500 1.5rem/1.2 var(--wf-display);color:#9d4c38;white-space:nowrap}
+.wce-mode-selector button>span{grid-row:1/3;font:500 1.48rem/1.2 var(--wf-display);color:#9d4c38;white-space:nowrap}
 .wce-mode-selector strong{font-size:.8rem}
 .wce-mode-selector small{color:#4b655d;font-size:.72rem}
 
-.wce-mode-stage{background:linear-gradient(140deg,#16352d,#1f4c40 62%,#193d33);border-radius:6px;color:#fff;min-height:230px;padding:18px 22px;display:flex;flex-direction:column;justify-content:center}
-.wce-stage-type{font-size:.67rem!important;letter-spacing:.12em;color:#aae6d3;margin:0 0 5px!important;font-weight:800}
-.wce-mode-stage h3{font-size:1.58rem;margin:0}
-.wce-mode-stage p{font-size:.8rem;max-width:600px;color:#e3f3ed;margin-top:8px!important;line-height:1.6}
-.wce-mode-stage .wce-stage-foot{font-size:.74rem;font-weight:700;color:#f3d8a7;margin-top:14px!important}
+.wce-mode-stage{background:linear-gradient(140deg,#16352d,#1f4c40 62%,#193d33);border-radius:6px;color:#fff;min-height:240px;padding:19px 22px;display:flex;flex-direction:column;justify-content:center}
+.wce-stage-type{font-size:.67rem!important;letter-spacing:.12em;color:#aae6d3;margin:0 0 5px!important;font-weight:800;text-transform:uppercase}
+.wce-mode-stage h3{font-size:1.54rem;margin:0;color:#fff}
+.wce-mode-stage p{font-size:.81rem;max-width:620px;color:#e3f3ed;margin-top:8px!important;line-height:1.6}
+.wce-mode-stage .wce-stage-foot{font-size:.74rem;font-weight:700;color:#f3d8a7;margin-top:13px!important}
+.wce-stage-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.wce-stage-links a{font-size:.72rem;font-weight:700;color:#16352d;background:#e4f4ee;padding:5px 10px;border-radius:4px;text-decoration:none}
+.wce-stage-links a:hover{background:#fff}
 
 .wce .wf-discover{padding-top:22px}
 .wce .wf-controls label{flex:1 1 180px}
@@ -65,13 +74,22 @@
 .wce .wf-map{height:420px}
 .wce .wce-map-caution{margin-top:12px;border-left:3px solid #9d5b3e;background:#f4efe8;padding:10px 12px;font-size:.73rem;color:#5c4335;display:flex;flex-direction:column;gap:4px}
 
-.wce .wf-story{min-height:295px}
-.wce .wf-story>.wf-photo{min-height:295px}
+/* Destination Story Cards with Two-Box Christmas Snow vs. Mild Backup Grid */
+.wce .wf-story{min-height:310px}
+.wce .wf-story>.wf-photo{min-height:310px}
 .wce .wf-story .wf-photo img{object-position:center 45%}
-.wce .wf-story-body .wf-kicker{font-size:.63rem}
-.wce .wf-story-body .wce-status{font-weight:800;font-size:.71rem!important;margin-top:2px!important;color:#1e5b49!important}
-.wce .wf-story-body .wce-plan{font-size:.74rem!important;color:#173d32!important;background:#eaf3ef;border-left:3px solid #58937f;padding:6px 9px;border-radius:0 4px 4px 0}
-.wce .wf-story-body{gap:7px}
+.wce .wf-story-body{gap:8px}
+.wce-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.wce .wf-story-body .wf-kicker{font-size:.64rem;margin:0}
+.wce-drive-pill{font-size:.63rem;font-weight:800;color:#1b4a3d;background:#e7f2ee;border:1px solid #c3ddd3;padding:2px 8px;border-radius:999px}
+.wce .wf-story-body .wce-status{font-weight:800;font-size:.72rem!important;margin:0!important;color:#1e5b49!important}
+.wce-itinerary-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:2px}
+.wce-itinerary-box{background:#f2f7f5;border:1px solid #d2e3dc;border-left:3px solid #1e5b49;border-radius:4px;padding:8px 10px}
+.wce-itinerary-box.wce-backup-box{background:#faf5ef;border-color:#e4d4c3;border-left-color:#9d4c38}
+.wce-itinerary-box strong{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:#174236;margin-bottom:3px}
+.wce-itinerary-box.wce-backup-box strong{color:#7c3827}
+.wce-itinerary-box p{font-size:.73rem!important;line-height:1.46!important;color:#233e36!important;margin:0!important}
+.wce .wf-access{font-size:.73rem!important;color:#4a635b!important;margin:0!important}
 .wce .wf-links a{font-size:.74rem}
 
 .wce .wf-photo img[hidden]{display:none!important}
@@ -98,20 +116,32 @@
 .wce-ledger-card p{font-size:.77rem;color:var(--wf-muted);line-height:1.5}
 .wce-ledger-card a{margin-top:auto;font-size:.73rem;font-weight:700}
 
-@media(max-width:930px){.wce .wf-hero{grid-template-columns:1fr 1fr}.wce .wce-hero-montage{height:240px}.wce-science-head,.wce-ledger-head{display:block}.wce-science-head>p,.wce-ledger-head>p{margin-top:7px}.wce-season-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.wce .wf-stories{display:flex;flex-direction:column}.wce .wf-story,.wce .wf-story:nth-child(2n){grid-template-columns:36% 64%}.wce .wf-story>.wf-photo{min-height:250px}.wce .wf-explore{display:flex;flex-direction:column}}
+@media(max-width:980px){
+  .wce .wf-hero{grid-template-columns:1fr 1fr}
+  .wce .wce-hero-montage{height:240px}
+  .wce-doors-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wce-doors-head,.wce-blueprint-head,.wce-ledger-head{display:block}
+  .wce-doors-head>p,.wce-blueprint-head>p,.wce-ledger-head>p{margin-top:7px}
+}
+@media(max-width:800px){
+  .wce .wf-stories{display:flex;flex-direction:column}
+  .wce .wf-story,.wce .wf-story:nth-child(2n){grid-template-columns:36% 64%}
+  .wce .wf-story>.wf-photo{min-height:250px}
+  .wce .wf-explore{display:flex;flex-direction:column}
+  .wce-itinerary-grid{grid-template-columns:1fr}
+}
 @media(max-width:610px){
   .wce .wf-hero{display:flex;flex-direction:column;gap:15px;padding-top:18px}
   .wce .wf-hero h1{font-size:clamp(2.35rem,9.2vw,3.25rem)}
-  .wce .wce-hero-montage{width:100%;height:175px}
+  .wce .wce-hero-montage{width:100%;height:185px}
   .wce .wce-hero-montage .wf-scene{display:none}
   .wce-signpost{display:flex;flex-direction:column;gap:7px}
+  .wce-doors-grid{grid-template-columns:1fr}
   .wce-closure{display:block;padding:14px}
   .wce-closure-actions{margin-top:10px;flex-direction:row;flex-wrap:wrap}
-  .wce-season-grid{grid-template-columns:1fr}
-  .wce-science-layout{grid-template-columns:1fr}
+  .wce-blueprint-layout{grid-template-columns:1fr}
   .wce .wf-controls{display:grid;grid-template-columns:1fr 1fr}
   .wce .wf-controls button{grid-column:1/-1}
   .wce .wf-story,.wce .wf-story:nth-child(2n){grid-template-columns:1fr}
-  .wce .wf-story>.wf-photo{height:195px;min-height:195px}
+  .wce .wf-story>.wf-photo{height:200px;min-height:200px}
 }
