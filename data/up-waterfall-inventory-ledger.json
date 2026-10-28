@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 41,
-  "linkedByExactOid": 33,
-  "unresolvedCandidates": 128,
+  "curatedCount": 43,
+  "linkedByExactOid": 35,
+  "unresolvedCandidates": 126,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1778,18 +1778,29 @@
         -89.830185
       ],
       "river": "LITTLE CARP RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "overlooked-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-public-park-trail-not-current-opening",
+      "landManager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "parkingEvidence": "https://www.michigan.gov/oac/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-Newsletter-2024.pdf?hash=3F08405CEDF6C75A0E13BD7C6E8B2E67&rev=bb3a54a58cc94556b876362a02a3b0d7",
+      "trailEvidence": "https://www.michigan.gov/oac/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-Newsletter-2024.pdf?hash=3F08405CEDF6C75A0E13BD7C6E8B2E67&rev=bb3a54a58cc94556b876362a02a3b0d7",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Verify same-day road closure before describing as open.",
+      "batch": "county-ontonagon",
+      "reviewBatch": "03",
+      "reviewed": "2026-10-28",
+      "classification": "verified-visitor-guide",
+      "accessAssessment": "From the Little Carp River Road parking lot, take the signed Little Carp River Trail toward the first footbridge and continue just downstream to Overlooked Falls. Michigan DNR's visitor guide places the waterfall less than half a mile from the lot. Park road closures begin Dec. 1 and usually continue into late spring. Do not promise winter vehicle access to Little Carp River Road. The streamside trail can be wet, uneven or icy.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf",
+        "https://www.michigan.gov/oac/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-Newsletter-2024.pdf?hash=3F08405CEDF6C75A0E13BD7C6E8B2E67&rev=bb3a54a58cc94556b876362a02a3b0d7",
+        "https://www.michigan.gov/oac/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-Newsletter-2024.pdf?hash=3F08405CEDF6C75A0E13BD7C6E8B2E67&rev=bb3a54a58cc94556b876362a02a3b0d7",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2146,18 +2157,29 @@
         -89.690505
       ],
       "river": "CARP RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "trap-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-public-park-trail-not-current-opening",
+      "landManager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "trailEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Verify same-day road closure before describing as open.",
+      "batch": "county-ontonagon",
+      "reviewBatch": "03",
+      "reviewed": "2026-10-28",
+      "classification": "verified-visitor-guide",
+      "accessAssessment": "DNR's Porcupine Mountains visitor guide describes Trap Falls as a 3.2-mile round-trip hike from Government Peak Trailhead on M-107, typically taking 2–5 hours. Follow the Government Peak Trail to the river viewpoint. Check current M-107 and park-road restrictions before departure; park road closures affect some segments from Dec. 1 to late spring. Avoid trail shortcuts, unbridged water crossings and uncertain ice conditions. Distance of 3.2 miles derives from DNR 2023 visitor guide; current DNR trail descriptions confirm the route, not the mileage.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3961,5 +3983,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "02"
+  "lastBatch": "03"
 }
