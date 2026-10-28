@@ -1871,13 +1871,13 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
+      "landManager": "Carp Lake Township (signed visitor entrance and parking, not every waterfall parcel)",
       "parkingVerified": false,
       "publicAccessVerified": false,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "parcel-boundary-conflict-legal-access-unverified",
-      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status. Village of Ontonagon business directory independently lists Bonanza Falls (Greenwoods) between Silver City and White Pine off M-64; NMU regional heritage guide gives one mile south of Silver City, west of M-64. These corroborate named destination and approach, but not legal parcel boundary or current gate. October 28 parcel-overlay review: MI GIS #124 intersects parcel recorded as Iron River Assoc., LLC, 03-113-001-00, while regional waterfall brochure coordinate intersects a different parcel recorded as Township of Carp Lake, 03-113-002-30, approx. 168 m distant. This is an ownership/access conflict requiring route-specific verification, not proof of trespass, closure, public easement, title, or safe parking. County states parcel GIS is not legal title evidence.",
+      "disposition": "seasonal-township-visitor-site-confirmed-private-gis-point-conflict",
+      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status. Village of Ontonagon business directory independently lists Bonanza Falls (Greenwoods) between Silver City and White Pine off M-64; NMU regional heritage guide gives one mile south of Silver City, west of M-64. These corroborate named destination and approach, but not legal parcel boundary or current gate. October 28 parcel-overlay review: MI GIS #124 intersects parcel recorded as Iron River Assoc., LLC, 03-113-001-00, while regional waterfall brochure coordinate intersects a different parcel recorded as Township of Carp Lake, 03-113-002-30, approx. 168 m distant. This is an ownership/access conflict requiring route-specific verification, not proof of trespass, closure, public easement, title, or safe parking. County states parcel GIS is not legal title evidence. Official 2025 Carp Lake Township minutes verify that township maintains Bonanza visitor signage, parking/turnaround, and facilities; Oct 2025 park closure planned for late month (weather-dependent), Dec 2025 confirmed closed until spring 2026. This establishes a seasonal municipal visitor location, not legal access to the adjacent privately attributed GIS falls coordinate. Current 2026 seasonal status unverified.",
       "sourceLinks": [
         "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
         "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
@@ -1885,9 +1885,13 @@
         "https://upheritage.nmu.edu/ontonagon",
         "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
         "https://ontonagoncounty.org/home/resources/",
-        "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/"
+        "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/",
+        "https://www.carplaketwp.org/meeting-minutes",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf"
       ],
-      "outstandingGate": "The state GIS falls point and tourism brochure coordinate intersect different recorded parcels. Verify public right-of-way, actual signed parking and lawful trail/shore access before promoting or offering directions.",
+      "outstandingGate": "Verify the complete signed township lot-to-view route is public and does not cross the nonmunicipal recorded parcel; confirm current year visitor opening/closure and posted restrictions; then qualify visitor publication separately from GIS falls point.",
       "evidenceReviewed": "2026-10-28",
       "publicationEligible": false,
       "parcelReview": {
@@ -1912,7 +1916,21 @@
         "publicAccessEstablished": false,
         "titleOrEasementEstablished": false,
         "countyDisclaimer": "https://ontonagoncounty.org/home/resources/",
-        "limitations": "Point-in-polygon records do not establish survey boundaries, deeds, easements, legal access or specific lot location. No change in visitor eligibility until route is independently established."
+        "limitations": "Point-in-polygon records do not establish survey boundaries, deeds, easements, legal access or specific lot location. No change in visitor eligibility until route is independently established.",
+        "townshipVisitorEvidence": {
+          "manager": "Carp Lake Township",
+          "visitorSiteConfirmed": true,
+          "siteSeasonal": true,
+          "currentOpenStatus": "not-verified",
+          "sources": [
+            "https://www.carplaketwp.org/meeting-minutes",
+            "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf",
+            "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf",
+            "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf"
+          ],
+          "parking": "Township board minutes discuss sign and parking lot, but no precise parking coordinate or legal trail-to-falls alignment supplied",
+          "caution": "Private parcel map point remains a distinct falls location; published tourism directions do not automatically authorize crossing it."
+        }
       }
     },
     {
@@ -3283,6 +3301,15 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Resolved two mapped Bonanza points to different attributed parcels; both route and easement remain unverified; opted-in popup warns and links primary sources; no waterfall parking directions or indexable guide."
+    },
+    {
+      "batch": "06-Bonanza-township-source-verification",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        124
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Township 2025 official minutes confirm Bonanza seasonal visitor entrance, signs, parking and closures. Geographic falls pin still overlaps nonmunicipal parcel and route boundary remains unverified; do not publish as an open visitor trail."
     }
   ]
 }
