@@ -53,29 +53,6 @@ try{
     await page.waitForFunction(()=>document.querySelector('#geo-candidate-status')?.textContent.includes('additional geographic research points displayed'),{timeout:15000});
     assert.match(await page.locator('#geo-candidate-status').innerText(),/research points displayed/i);
   });
-  await run('Bonanza parcel boundary warning renders on opt-in GIS marker without drive route',async()=>{
-    const message=await page.evaluate(()=>{
-      const map=window.UPWaterfallMap;
-      if(!map)throw Error('Missing waterfall map');
-      let found=null;
-      map.eachLayer(layer=>{
-        if(typeof layer.getLayers!=='function')return;
-        for(const marker of layer.getLayers()){
-          if(typeof marker.getLatLng!=='function')continue;
-          const p=marker.getLatLng();
-          if(Math.abs(p.lat-46.818863)<0.00005&&Math.abs(p.lng+89.571458)<0.00005)found=marker;
-        }
-      });
-      if(!found)throw Error('Bonanza research marker not available');
-      const popup=found.getPopup();
-      if(!popup)throw Error('Bonanza access popup missing');
-      return popup.getContent()?.textContent||'';
-    });
-    assert.match(message,/seasonal township visitor area/i);
-    assert.match(message,/private LLC/i);
-    assert.match(message,/do not navigate to the GIS falls point/i);
-    assert.doesNotMatch(message,/Google Maps driving directions/i);
-  });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
     const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
@@ -83,6 +60,27 @@ try{
     assert.ok(await page.locator('.leaflet-marker-icon').count()>10);
   });
   await page.screenshot({path:screenshots+'/hub-desktop.png',fullPage:true,animations:'disabled'});
+  await run('Bonanza signed township park page distinguishes three map points and rejects private-waterfall driving',async()=>{
+    await page.setViewportSize({width:390,height:844});
+    await page.goto(base+'/upper-peninsula-waterfalls/bonanza-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+    assert.equal(await page.locator('h1').count(),1);
+    assert.match(await page.locator('meta[name="robots"]').getAttribute('content'),/^index,follow/);
+    const body=await page.locator('body').innerText();
+    assert.match(body,/Township.*Park|Greenwoods township park/i);
+    assert.match(body,/signed.*parking|signed.*entrance/i);
+    assert.match(body,/private LLC|private.*parcel|private.*riverfront/i);
+    assert.match(body,/current opening and road conditions are unverified/i);
+    assert.equal(await page.locator('#mini-map[data-lat="46.818863"][data-visit-lat="46.8176942"][data-view-lat="46.817719"]').count(),1);
+    await page.waitForFunction(()=>document.querySelectorAll('#mini-map .leaflet-interactive').length>=3,{timeout:12000});
+    assert.ok(await page.locator('#mini-map .leaflet-interactive').count()>=3);
+    const html=await page.content();
+    assert.ok(html.includes('destination=46.8176942%2C-89.5674561'));
+    assert.ok(!html.includes('destination=46.818863'));
+    assert.ok(!html.includes('data-parking-lat='));
+    const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+    assert.ok(scroll<=width+2,'Bonanza page horizontal overflow '+scroll+' > '+width);
+    await page.screenshot({path:screenshots+'/bonanza-township-park-mobile.png',fullPage:true,animations:'disabled'});
+  });
   for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['bridalveil-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
