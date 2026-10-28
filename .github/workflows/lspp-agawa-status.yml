@@ -1,0 +1,49 @@
+name: Lake Superior Park official Agawa status monitor
+on:
+  schedule:
+    - cron: '23 11 * * *'
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/sync-lspp-agawa-status.mjs'
+      - 'public/assets/lspp-agawa-status.json'
+      - 'public/assets/lspp-agawa-live.js'
+      - '.github/workflows/lspp-agawa-status.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lspp-agawa-official-status
+  cancel-in-progress: false
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate closure logic and season rollover
+        run: node scripts/sync-lspp-agawa-status.mjs --self-test
+      - name: Check official Ontario Parks alerts and operating dates
+        run: node scripts/sync-lspp-agawa-status.mjs
+      - name: Commit a source-verified status change or four-day heartbeat
+        if: github.event_name != 'pull_request'
+        run: |
+          git add public/assets/lspp-agawa-status.json
+          if git diff --cached --quiet; then
+            echo "No status change or heartbeat necessary."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: refresh officially checked Agawa Rock seasonal access"
+          git push origin HEAD:main
