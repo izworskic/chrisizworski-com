@@ -5,3 +5,67 @@
 .map-direct{display:flex;flex-wrap:wrap;gap:7px 14px;font-size:.78rem;margin:8px 0 13px}.stop.selected{border-color:#bd8650;box-shadow:0 0 0 3px #cf96553b}
 
 #ap-map.is-ready>.fallback{display:none}#ap-map[data-state="fallback"]>.fallback{display:flex}
+
+/* Access verified island-by-island field desk. Does not modify site advertising. */
+.island-layer{padding-block:20px 52px;scroll-margin-top:24px}
+.island-head{max-width:950px;margin:0 auto 18px}
+.island-head>p:not(.eyebrow){font-size:1.05rem;color:#526a6c;margin:12px 0}
+.island-head .eyebrow{color:var(--orange)}
+.island-caveat{border-left:4px solid #c79251;padding:10px 16px;background:#fff6e9;color:#4b4f48!important;border-radius:0 8px 8px 0;font-size:.92rem!important}
+.island-pick{background:var(--paper);border:1px solid var(--line);padding:18px 22px;border-radius:14px;margin:22px 0}
+.island-pick fieldset{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:9px}
+.island-pick legend{font-size:.85rem;font-weight:800;margin-bottom:12px}
+.island-pick label{display:inline-flex;align-items:center;cursor:pointer}
+.island-pick input{opacity:0;position:absolute;width:1px;height:1px}
+.island-pick label span{border:1px solid #aac3bb;border-radius:999px;display:inline-block;font-size:.82rem;font-weight:700;padding:7px 12px;background:white;color:var(--dark)}
+.island-pick input:checked+span{background:#0d303b;color:white;border-color:#0d303b}
+.island-pick input:focus-visible+span{outline:3px solid #b8793d;outline-offset:3px}
+.island-count{margin:14px 0 0;font-size:.82rem;color:var(--muted)}
+.island-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:16px}
+.island-card{display:flex;flex-direction:column;gap:11px;padding:21px;border-radius:15px;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 18px #153d4b08;scroll-margin:22px}
+.island-card[hidden]{display:none}
+.island-card-top{display:flex;align-items:flex-start;gap:12px}
+.island-number{font:1.9rem/1 var(--serif);color:#9b6955;min-width:38px}
+.island-card-top>div{min-width:0;flex:1}
+.island-card h3{margin:0;font-family:var(--serif);font-size:1.45rem}
+.island-label{margin:0!important;font-weight:750;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem!important;color:var(--orange)!important}
+.island-status{font-size:.66rem;font-weight:800;border-radius:6px;background:#e6f0ea;color:#1e5348;padding:4px 8px;max-width:108px;text-align:center;line-height:1.3}
+.island-status.island-closed{background:#f9e5e3;color:#872b22}
+.island-story{font-size:.92rem;color:#456168;margin:0}
+.island-facts{display:grid;gap:0;border-top:1px solid #e5e9e2;border-bottom:1px solid #e5e9e2}
+.island-facts>div{padding:10px 0;display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;align-items:start;border-bottom:1px solid #e5e9e2}
+.island-facts>div:last-child{border-bottom:0}
+.island-facts small{letter-spacing:.065em;font-size:.66rem;color:#71847f;font-weight:800}
+.island-facts p{font-size:.82rem;line-height:1.55;margin:0;color:#294a50}
+.island-trails{font-size:.88rem;background:#edf3ef;border-radius:9px}
+.island-trails summary{list-style:none;cursor:pointer;font-weight:800;padding:10px 12px;display:flex;justify-content:space-between;gap:12px}
+.island-trails summary::-webkit-details-marker{display:none}
+.island-trails summary span{font-size:1.15rem;line-height:1}
+.island-trails[open] summary span{transform:rotate(45deg)}
+.island-trails ul{margin:0;padding:0 16px 14px 28px}
+.island-trails li{margin:7px 0}
+.island-warning{background:#fbf1e7;border-left:3px solid #c47b44;color:#765436;font-size:.79rem;margin:0;padding:11px 12px;border-radius:3px}
+.island-actions{display:flex;gap:9px 15px;flex-wrap:wrap;font-size:.76rem;font-weight:750;margin-top:auto}
+.compare-control{display:flex;align-items:center;gap:7px;font-weight:700;font-size:.81rem;margin-top:4px;cursor:pointer}
+.compare-control input{accent-color:#17616b;width:17px;height:17px}
+#island-empty{padding:20px;background:white;border:1px dashed #acc3ba;border-radius:10px}
+#island-empty[hidden]{display:none}
+.island-compare-panel{background:#e5eae5;border:1px solid #d2ded5;border-radius:18px;padding:22px;margin-top:20px}
+.island-compare-head{display:flex;justify-content:space-between;gap:24px;align-items:start}
+.island-compare-head h3{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px}
+.island-compare-head p,#island-compare-empty{font-size:.85rem;color:#4d6868;margin:4px 0 12px}
+#island-compare-clear{border:1px solid #8bb4ae;border-radius:9px;padding:8px 13px;background:#fff;color:#184c52;cursor:pointer;white-space:nowrap}
+#island-compare-clear:disabled{opacity:.45;cursor:default}
+.island-compare-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.island-compare-columns .compare-snapshot{background:white;border:1px solid #c8d6cf;border-radius:10px;padding:16px}
+.island-compare-columns h4{font:1.3rem var(--serif);margin:0 0 9px}
+.island-compare-columns dl{margin:0}.island-compare-columns dt{font-size:.68rem;letter-spacing:.08em;font-weight:850;margin:10px 0 2px;text-transform:uppercase}
+.island-compare-columns dd{font-size:.82rem;margin:0;color:#416268}
+.island-booking{display:grid;grid-template-columns:1.4fr .6fr;gap:25px;align-items:center;background:#103743;color:#ecf4f3;padding:23px;border-radius:15px;margin-top:20px}
+.island-booking h3{font:1.55rem var(--serif);margin:0 0 10px;color:white}
+.island-booking p{font-size:.88rem;color:#e0eeeb;margin:10px 0}
+.island-booking-links{display:flex;flex-direction:column;gap:10px}
+.island-booking-links a{color:#fff1d4;font-size:.85rem;font-weight:700}
+@media(max-width:850px){.island-cards{grid-template-columns:1fr}.island-booking{grid-template-columns:1fr}.island-card{padding:18px}}
+@media(max-width:550px){.island-card-top{gap:7px}.island-card h3{font-size:1.32rem}.island-card{padding:15px}.island-status{max-width:87px;font-size:.61rem}.island-facts>div{grid-template-columns:83px 1fr;gap:8px}.island-compare-columns{grid-template-columns:1fr}.island-compare-head{display:block}.island-compare-head button{margin:5px 0 12px}}
+@media(prefers-reduced-motion:reduce){.island-trails summary span{transition:none}}
