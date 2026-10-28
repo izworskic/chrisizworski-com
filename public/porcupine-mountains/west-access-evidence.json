@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "reviewed": "2026-10-28",
   "decision": "source-described-west-approach-not-complete-live-vehicle-route",
   "officialDnr": {
@@ -17,27 +17,27 @@
   "stateRoadGIS": {
     "endpoint": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
     "sourceRoadName": "Presque Isle Rd",
-    "sourceFeatureIds": [
-      10130,
-      10152,
-      10347,
-      10521,
-      10560,
-      10863,
-      11060,
-      11187,
-      11233,
-      11538
-    ],
-    "researchEnvelope": "-90.05,46.57,-89.91,46.74",
+    "sourceFeatureIds": [],
+    "researchEnvelope": "-90.09,46.43,-89.89,46.75",
     "mappedBoundingBox": [
       -89.975369,
-      46.566908,
-      -89.94118,
+      46.51642,
+      -89.924939,
       46.695608
     ],
-    "status": "possible-corresponding-approach-segments-not-individually-crosswalked-to-signed-CR519",
-    "note": "MGF centerline naming in this envelope does not use 519. Do not equate these IDs one-for-one with the signed County Road 519 or claim a complete drive from US-28 to a parking stall."
+    "status": "township-road-name-crosswalked-centerlines-not-signed-parking-to-parking-navigation",
+    "note": "Wakefield Township's Master Plan confirms CR 519 is called Presque Isle Road. These 17 NFC-5 centerlines share PR 1475809 and connect geometrically, but do not prove signed junctions, M-28 turn legality or the last 1.3 km to the DNR parking asset; do not publish drive times or an automatically optimized route.",
+    "nfc": 5,
+    "primaryReference": 1475809,
+    "sourceLengthKmApprox": 21.44,
+    "northEndGapToParkingMetersApprox": 1316,
+    "heldSeparateWesternSideRoads": {
+      "count": 3,
+      "name": "W Presque Isle Rd",
+      "nfc": 0,
+      "why": "Distinct name/reference; do not infer it is part of signed CR 519"
+    },
+    "geojson": "cr519-road-reference.geojson"
   },
   "routeRules": {
     "fromWestDuringWinter": "DNR-authorized west-side approach identified, subject to current posted closures and parking",
@@ -46,10 +46,35 @@
     "driveTimeMinutes": null,
     "trafficStatus": null,
     "liveGateStatus": null,
-    "certifiedRoute": false
+    "certifiedRoute": false,
+    "temporaryJunctionOpeningVerified": false,
+    "uncheckedGoogleDirectionsAllowed": false,
+    "note": "Official park area western approach is not a guarantee that the M-28/CR519 entrance work zone is open; 2026-09-22 notice identifies Johnson Road detour, reopening unverified as of 2026-10-28."
   },
   "lastMile": {
     "candidateParkingAssetId": 841,
     "sourceVerification": "DNR parking asset and named trail point previously crosswalked; exact signed turn and lot open status unverified"
+  },
+  "townshipRoadNameSource": {
+    "url": "https://wakefieldtownship.com/wp-content/documents/Wakefield%20Township%20Master%20Plan.pdf",
+    "meaning": "Thomaston Road / County Road 519 / Presque Isle Road"
+  },
+  "temporaryNotice": {
+    "id": "wakefield-2026-09-22-cr519-m28",
+    "publishedOn": "2026-09-22",
+    "activeStatus": "not-independently-resolved",
+    "reopeningVerified": false,
+    "explicitClosureEnd": null,
+    "closureScope": "intersection of County Road 519 and M-28; NOT full CR519 corridor",
+    "publishedDetour": "Johnson Road",
+    "detourVerifiedInRoadGraph": false,
+    "notATurnByTurnDetour": true,
+    "lastReviewed": "2026-10-28",
+    "source": "https://wakefieldtownship.com/north-county-road-519-will-be-closed/"
+  },
+  "overnightRoadsideParking": {
+    "source": "https://gogebiccountyroadcommission.org/",
+    "published": "2026-10-26",
+    "restriction": "No county-road or highway shoulder parking outside city limits November 1–April 15, 2:00–7:00 a.m.; does not imply designated DNR visitor lot is closed"
   }
 }
