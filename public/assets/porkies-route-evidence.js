@@ -4,7 +4,7 @@
 (function(root){
  "use strict";
  const BASE="/porcupine-mountains/",MAX_FEATURES={trails:819,roads:250},layers={};
- const paths={trails:"trail-reference.geojson",roads:"park-road-reference.geojson",ski:"ski-reference.geojson"};
+ const paths={trails:"trail-reference.geojson",roads:"park-road-reference.geojson",ski:"ski-reference.geojson",cr519:"cr519-road-reference.geojson"};
  let atlas=null,evidence=null;
  function currentSeason(){
   const e=root.document.getElementById("travel-date");
@@ -21,6 +21,7 @@
    :{color:"#b47d3c",weight:3,opacity:.85,dashArray:"9,5"};
   return {color:"#496e84",weight:3,opacity:.72};
  }
+ function westRoadStyle(){return {color:"#227a93",weight:4.5,opacity:.95,dashArray:"6,5"};}
  function skiStyle(){return {color:"#496f9f",weight:3,opacity:.82,dashArray:"7,3"};}
  function trailStyle(){
   return {color:"#256c57",weight:2.5,opacity:.7,dashArray:"4,4"};
@@ -38,33 +39,40 @@
  }
  async function show(kind) {
   if(!atlas){message("The map is not available. Please use the official DNR GPS map above.");return false;}
-  const button=root.document.getElementById(kind==="trails"?"porkies-trails-toggle":kind==="ski"?"porkies-ski-toggle":"porkies-roads-toggle");
+  const button=root.document.getElementById(kind==="trails"?"porkies-trails-toggle":kind==="ski"?"porkies-ski-toggle":kind==="cr519"?"porkies-cr519-toggle":"porkies-roads-toggle");
   if(layers[kind]){atlas.removeLayer(layers[kind]);delete layers[kind];button?.setAttribute("aria-pressed","false");message("Map layer hidden. No navigable park route is certified by these GIS layers.");return false;}
   button?.setAttribute("aria-pressed","true");
-  message("Loading official "+(kind==="trails"?"DNR hiking geometry":kind==="ski"?"DNR ski-trail geometry":"Michigan road geometry")+"…");
+  message("Loading official "+(kind==="trails"?"DNR hiking geometry":kind==="ski"?"DNR ski-trail geometry":kind==="cr519"?"CR 519 / Presque Isle Road centerline":"Michigan road geometry")+"…");
   try{
    await loadManifest();
+   if(kind==="cr519"){
+     const response=await root.fetch(BASE+"west-approach-evidence.json",{credentials:"same-origin"});
+     if(!response.ok)throw Error("Western road evidence missing");
+     const west=await response.json();
+     if(west.status!=="official-western-corridor-mapped-road-access-unconfirmed"||west.data?.corridorFeatureCount!==17||west.temporaryNotice?.reopeningVerified!==false||west.policy?.routeCertified!==false)throw Error("Western road evidence unreviewed");
+   }
    const r=await root.fetch(BASE+paths[kind],{credentials:"same-origin"});
    if(!r.ok)throw Error("Geometry not available");
    const geo=await r.json();
-   if(geo.type!=="FeatureCollection"||!Array.isArray(geo.features)||geo.features.length<20||geo.features.length>(kind==="trails"?1000:250)||kind==="ski"&&geo.features.length!==40)throw Error("Unexpected geometry coverage");
+   if(geo.type!=="FeatureCollection"||!Array.isArray(geo.features)||geo.features.length<(kind==="cr519"?17:20)||geo.features.length>(kind==="trails"?1000:250)||kind==="ski"&&geo.features.length!==40||kind==="cr519"&&geo.features.length!==17)throw Error("Unexpected geometry coverage");
    if(geo.features.some(f=>f.properties?.routingCertified!==false))throw Error("Unreviewed route status");
-   const pane=kind==="trails"?"porkies-trail-evidence":kind==="ski"?"porkies-ski-evidence":"porkies-road-evidence";
+   const pane=kind==="trails"?"porkies-trail-evidence":kind==="ski"?"porkies-ski-evidence":kind==="cr519"?"porkies-cr519-evidence":"porkies-road-evidence";
    if(!atlas.getPane(pane))atlas.createPane(pane);
-   atlas.getPane(pane).style.zIndex=kind==="trails"?"352":kind==="ski"?"354":"348";
+   atlas.getPane(pane).style.zIndex=kind==="trails"?"352":kind==="ski"?"354":kind==="cr519"?"356":"348";
    atlas.getPane(pane).style.pointerEvents="auto";
    const layer=root.L.geoJSON(geo,{
-    pane,style:kind==="trails"?trailStyle:kind==="ski"?skiStyle:roadStyle,
+    pane,style:kind==="trails"?trailStyle:kind==="ski"?skiStyle:kind==="cr519"?westRoadStyle:roadStyle,
     onEachFeature:(feature,part)=>{
      const p=feature.properties||{};
      const road=kind==="roads";
-     const caut=road?(restricted(p.corridor)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
+     const caut=kind==="cr519"?"This is the official MGF road centerline named Presque Isle Road / CR 519, NOT a certified drive. Wakefield Township published a September 22, 2026 work-zone closure at the M-28 junction and Johnson Road detour; reopening is unconfirmed.":road?(restricted(p.corridor)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
      part.bindPopup("<strong>"+safe(p.name)+"</strong><p>"+safe(caut)+"</p><p>Official source record "+safe(p.id)+". Not a generated hiking or driving route.</p>");
     }
    }).addTo(atlas);
    layers[kind]=layer;
    button?.setAttribute("aria-pressed","true");
-   message(kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines from the 296-record research extract. Red dashed roads have documented seasonal vehicle restrictions; current opening is not inferred.");
+   if(kind==="cr519"&&layer.getBounds().isValid())atlas.fitBounds(layer.getBounds().pad(.16),{maxZoom:11});
+   message(kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="cr519"?"Showing 17 mapped Presque Isle Road / CR 519 centerline segments, not a navigation route. The trace stops short of DNR parking. M-28 work-zone status has no verified reopening; check the Johnson Road detour and current local notices.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines from the 296-record research extract. Red dashed roads have documented seasonal vehicle restrictions; current opening is not inferred.");
    return true;
   }catch(err){
    button?.setAttribute("aria-pressed","false");
@@ -103,10 +111,12 @@
   const buttonT=root.document.getElementById("porkies-trails-toggle");
   const buttonR=root.document.getElementById("porkies-roads-toggle");
   const buttonS=root.document.getElementById("porkies-ski-toggle");
+  const buttonW=root.document.getElementById("porkies-cr519-toggle");
   if(!buttonT||!buttonR)return;
   buttonT.addEventListener("click",()=>show("trails"));
   buttonR.addEventListener("click",()=>show("roads"));
   if(buttonS)buttonS.addEventListener("click",()=>show("ski"));
+  if(buttonW)buttonW.addEventListener("click",()=>show("cr519"));
   root.addEventListener("porkies:trail-reference",e=>inspectNamedTrail(e?.detail?.name));
   root.document.getElementById("travel-date")?.addEventListener("change",refresh);
   root.document.getElementById("planner")?.addEventListener("submit",()=>root.setTimeout(refresh,0));
