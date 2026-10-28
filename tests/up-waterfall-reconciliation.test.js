@@ -37,14 +37,21 @@ test('exact GIS reconciliation cannot silently create or alter public guides', (
   }
 });
 
-test('Menominee drafts remain unpublished until location-to-arrival gate is cleared', () => {
-  for (const id of [3, 188, 189]) {
-    const row = ledger.candidates.find(x => x.gisObjectId === id);
-    assert.ok(row.guideDraft);
-    assert.equal(row.publicationEligible, false);
-    assert.ok(row.outstandingGate);
-    assert.ok(row.parkingVerified);
-    assert.ok(row.publicAccessVerified);
+test('Pemene remains unpublished while Sand Portage and Quiver clear their official visitor-map gates', () => {
+  const pemene = ledger.candidates.find(x => x.gisObjectId === 188);
+  assert.ok(pemene.guideDraft);
+  assert.equal(pemene.publicationEligible, false);
+  assert.equal(pemene.curatedId, null);
+  assert.ok(pemene.outstandingGate);
+  assert.equal(pemene.parkingVerified, true);
+  assert.equal(pemene.publicAccessVerified, true);
+  for (const [oid,id] of [[3,'sand-portage-falls'],[189,'quiver-falls']]) {
+    const row=ledger.candidates.find(x=>x.gisObjectId===oid);
+    assert.equal(row.publicationEligible,true);
+    assert.equal(row.curatedId,id);
+    assert.equal(row.reconciliation,'curated-exact-gis-id');
+    assert.equal(row.visitorRouteEvidence.currentRoadStatus,'unverified');
+    assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
   }
 });
 
