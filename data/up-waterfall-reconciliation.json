@@ -1872,21 +1872,48 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
+      "parkingVerified": false,
+      "publicAccessVerified": false,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "multiple-independent-visitor-sources-land-title-pending",
-      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status. Village of Ontonagon business directory independently lists Bonanza Falls (Greenwoods) between Silver City and White Pine off M-64; NMU regional heritage guide gives one mile south of Silver City, west of M-64. These corroborate named destination and approach, but not legal parcel boundary or current gate.",
+      "disposition": "parcel-boundary-conflict-legal-access-unverified",
+      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status. Village of Ontonagon business directory independently lists Bonanza Falls (Greenwoods) between Silver City and White Pine off M-64; NMU regional heritage guide gives one mile south of Silver City, west of M-64. These corroborate named destination and approach, but not legal parcel boundary or current gate. October 28 parcel-overlay review: MI GIS #124 intersects parcel recorded as Iron River Assoc., LLC, 03-113-001-00, while regional waterfall brochure coordinate intersects a different parcel recorded as Township of Carp Lake, 03-113-002-30, approx. 168 m distant. This is an ownership/access conflict requiring route-specific verification, not proof of trespass, closure, public easement, title, or safe parking. County states parcel GIS is not legal title evidence.",
       "sourceLinks": [
         "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
         "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
         "https://villageofontonagon.org/business-directory/",
-        "https://upheritage.nmu.edu/ontonagon"
+        "https://upheritage.nmu.edu/ontonagon",
+        "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
+        "https://ontonagoncounty.org/home/resources/",
+        "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/"
       ],
-      "outstandingGate": "Official land manager and legal approach, parking status, alias match Bonanza/Greenwood; no public promotion on tourism evidence alone.",
+      "outstandingGate": "The state GIS falls point and tourism brochure coordinate intersect different recorded parcels. Verify public right-of-way, actual signed parking and lawful trail/shore access before promoting or offering directions.",
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "publicationEligible": false,
+      "parcelReview": {
+        "source": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
+        "sourceAuthority": "Michigan Technological University-hosted Ontonagon County parcel feature layer; informational, not a legal title determination",
+        "reviewed": "2026-10-28",
+        "fallsGisPoint": {
+          "lat": 46.818863,
+          "lng": -89.571458,
+          "parcelNumber": "03-113-001-00",
+          "recordedOwner": "Iron River Assoc., LLC",
+          "ownerClassification": "nonmunicipal-record"
+        },
+        "tourismBrochurePoint": {
+          "lat": 46.817719,
+          "lng": -89.570023,
+          "parcelNumber": "03-113-002-30",
+          "recordedOwner": "Township of Carp Lake",
+          "ownerClassification": "municipal-record"
+        },
+        "approxDistanceMeters": 168,
+        "publicAccessEstablished": false,
+        "titleOrEasementEstablished": false,
+        "countyDisclaimer": "https://ontonagoncounty.org/home/resources/",
+        "limitations": "Point-in-polygon records do not establish survey boundaries, deeds, easements, legal access or specific lot location. No change in visitor eligibility until route is independently established."
+      }
     },
     {
       "gisObjectId": 126,
@@ -3247,6 +3274,15 @@
       "publicGuidesAdded": 1,
       "work": "Cascade Falls new HTML guide, curated map arrival card, ItemList, waterfall sitemap and source gate; road opening not live checked",
       "tests": "Pending exact-head CI and browser checks"
+    },
+    {
+      "batch": "06-Bonanza-parcel-boundary",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        124
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Resolved two mapped Bonanza points to different attributed parcels; both route and easement remain unverified; opted-in popup warns and links primary sources; no waterfall parking directions or indexable guide."
     }
   ]
 }
