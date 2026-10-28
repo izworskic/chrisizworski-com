@@ -4321,6 +4321,56 @@
         "decisionWindowDays": 28,
         "privacy": "No precise user location or visitor identity collected"
       }
+    },
+    {
+      "id": "michigan-wine-cider-spirits",
+      "name": "Northern Michigan Wine, Cider & Spirits Field Guide",
+      "canonical": "https://chrisizworski.com/michigan-wine-cider-spirits/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Northern Michigan wineries, heritage hard cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey fit my day, season, winter igloo/snowshoe plan, and after-5 PM lounge window?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "northwest-lower-michigan",
+        "traverse-city",
+        "petoskey",
+        "little-traverse-bay"
+      ],
+      "personas": [
+        "traveler",
+        "group-planner",
+        "wine-traveler",
+        "winter-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Root-domain editorial field guide uniting 18 anchor wineries, heritage cideries, and craft distilleries across 4 Northern Michigan corridors with winter heated igloos, snowshoe vineyard loops, and 5:00 PM distillery handoffs, routing deep scheduling intent to tc-wine (77 stops) and petoskey-wine (25 stops)."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Built to solve above-the-fold SSR, photography, winter igloo/snowshoe positioning, and cross-corridor wine/cider/spirits comparison for TC and Petoskey."
+      },
+      "measurement": {
+        "search": "GSC Web URL and query for 7/28 days",
+        "product": "Handoffs to tc-wine, petoskey-wine, and winter trail/ski tools",
+        "decisionWindowDays": 28,
+        "privacy": "No precise user location or visitor identity collected"
+      }
     }
   ],
   "relationships": [
@@ -6227,6 +6277,70 @@
       "strength": "optional",
       "surface": "winter-network",
       "reason": "Return to the 18-experience statewide winter activity chooser."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "tc-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tc-corridor-handoff",
+      "reason": "Field guide anchor stops hand off to the 77-stop routed Traverse City winery day planner."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "petoskey-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "petoskey-corridor-handoff",
+      "reason": "Field guide Tip of the Mitt stops hand off to the 25-stop Petoskey wine, cider, and distillery planner."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "michigan-winter-trails",
+      "type": "related-context",
+      "strength": "strong",
+      "surface": "snowshoe-vineyard-handoff",
+      "reason": "Vineyard snowshoe loops pair with 15 audited DNR/NPS winter trail systems."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "michigan-ski-hills",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "apres-ski-handoff",
+      "reason": "Boyne, Walloon, and Leelanau tasting rooms and distilleries pair with Northern Michigan ski weekends."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "michigan-wine-cider-spirits",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tasting-field-guide-discovery",
+      "reason": "All-season destination finder routes Traverse City and Tip of the Mitt tasting intent into the unified field guide."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-wine-cider-spirits",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "winter-igloo-handoff",
+      "reason": "Winter activity guide connects snowshoe-and-sip and heated vineyard igloo seekers to Northern Michigan tasting rooms."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "michigan-wine-cider-spirits",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "winter-network",
+      "reason": "Winter trail hikers can warm up at snowshoe-friendly vineyards, heated domes, and after-hours distilleries."
+    },
+    {
+      "from": "petoskey-wine",
+      "to": "michigan-wine-cider-spirits",
+      "type": "related-context",
+      "strength": "strong",
+      "surface": "search-answer-handoff",
+      "reason": "Petoskey planner links to the 4-corridor Northern Michigan Wine, Cider & Spirits Field Guide for cross-peninsula comparison."
     }
   ],
   "cannibalizationGroups": [
