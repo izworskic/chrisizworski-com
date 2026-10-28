@@ -33,12 +33,14 @@ test('closures, ski-only rules, fat-tire windows and 7 quarantined route blocker
   assert.doesNotMatch(html,/guaranteed plowed parking|all trails are groomed daily/i);
 });
 
-test('photo credits and source rights are explicit with honest seasonal/archival disclosures',()=>{
+test('photo credits and source rights are explicit with honest seasonal/archival disclosures across all 15 breakout cards',()=>{
   const photos=[...html.matchAll(/<figure class="wf-photo[^]*?<\/figure>/g)];
-  assert.ok(photos.length>=12);
+  const indices=[...html.matchAll(/<div class="wf-story-index"[\s\S]*?<\/div>/g)];
+  assert.equal(photos.length,18);
+  assert.equal(indices.length,0);
   for(const [photo] of photos){
     assert.match(photo,/Photo: <a/);
-    assert.match(photo,/(CC BY|CC0|NPS public-domain)/);
+    assert.match(photo,/(CC BY|CC0|NPS public-domain|Public domain)/);
     assert.match(photo,/figcaption/);
     assert.match(photo,/alt="[^"]+"/);
   }

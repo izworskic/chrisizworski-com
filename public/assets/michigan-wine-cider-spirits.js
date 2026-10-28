@@ -4,10 +4,11 @@
   const region=document.getElementById('wf-region');
   const feature=document.getElementById('wf-feature');
   const access=document.getElementById('wcs-access');
+  const seasonSelect=document.getElementById('wcs-season');
   const count=document.getElementById('wf-count');
   const empty=document.getElementById('wf-empty');
   const mapMessage=document.getElementById('wf-map-message');
-  let activeTag='all',markers=new Map(),leafletMap=null;
+  let activeTag='all',activeSeasonTab='winter',markers=new Map(),leafletMap=null;
 
   function revealPhotoFallback(img){
     const figure=img.closest('.wf-photo');
@@ -34,11 +35,13 @@
   function matches(card){
     const tags=(card.dataset.tag||'').split(/\s+/);
     const features=(card.dataset.feature||'').split(/\s+/);
+    const seasons=(card.dataset.seasons||'').split(/\s+/);
     const t=activeTag==='all'||tags.includes(activeTag);
     const r=!region||region.value==='all'||card.dataset.region===region.value;
     const f=!feature||feature.value==='all'||features.includes(feature.value);
     const a=!access||access.value==='all'||card.dataset.access===access.value;
-    return t&&r&&f&&a;
+    const s=!seasonSelect||seasonSelect.value==='all'||seasons.includes(seasonSelect.value);
+    return t&&r&&f&&a&&s;
   }
 
   function apply(){
@@ -71,16 +74,95 @@
     chips.forEach(other=>other.setAttribute('aria-pressed',String(other===chip)));
     apply();
   }));
-  [region,feature,access].forEach(control=>control?.addEventListener('change',apply));
+  [region,feature,access,seasonSelect].forEach(control=>control?.addEventListener('change',apply));
   document.getElementById('wf-reset')?.addEventListener('click',()=>{
     activeTag='all';
     chips.forEach(chip=>chip.setAttribute('aria-pressed',String(chip.dataset.tag==='all')));
     if(region)region.value='all';
     if(feature)feature.value='all';
     if(access)access.value='all';
+    if(seasonSelect)seasonSelect.value='all';
     apply();
   });
   document.getElementById('wf-show-all')?.addEventListener('click',()=>document.getElementById('wf-reset')?.click());
+
+  const seasonProfiles={
+    winter:{
+      badge:'Auto-calibrated to Michigan calendar · Winter Window (Nov 15 - Mar 31)',
+      title:'Winter Igloos, Snowshoe Vineyards & Apres-Ski Distilleries',
+      copy:'Automatic seasonal focus for late fall through March: bookable heated vineyard igloos (Aurora Cellars, Boyne Valley Vineyards, Rudbeckia), groomed snowshoe-and-sip loops (Brys Estate, Black Star Farms, 45 North, Pond Hill Farm), heated dog-friendly shelters (Bowers Harbor), and downtown craft distilleries open after vineyards close at 5:00 PM.',
+      picks:'<strong>Top stops for Winter:</strong> <a href="#stop-2">Brys Estate</a> · <a href="#stop-5">Black Star Farms</a> · <a href="#stop-7">Aurora &amp; 45 North</a> · <a href="#stop-13">Boyne Valley Vineyards</a> · <a href="#stop-17">Pond Hill Farm</a> · <a href="#stop-12">Mammoth &amp; GT Distillery</a>',
+      btnLabel:'Filter atlas to 14 Winter-ready stops ↓'
+    },
+    spring:{
+      badge:'Auto-calibrated to Michigan calendar · Spring Blossom & Cellar Window (Apr 1 - May 31)',
+      title:'Cherry Blossom Ridges, New Vintage Releases & Quiet Tasting Rooms',
+      copy:'In April and May, Old Mission and Leelanau orchards burst into white cherry and apple blossom while tasting rooms pour newly bottled Riesling, Pinot Blanc, and sparkling rosés without summer crowds. Pair a morning drive up Center Road or M-22 with an afternoon orchard cidery and a warm dinner in Suttons Bay or Petoskey.',
+      picks:'<strong>Top stops for Spring:</strong> <a href="#stop-1">Chateau Chantal</a> · <a href="#stop-4">2 Lads</a> · <a href="#stop-6">MAWBY Sparkling</a> · <a href="#stop-9">Two K Farms Orchard</a> · <a href="#stop-11">Left Foot Charley</a> · <a href="#stop-15">Petoskey Farms</a>',
+      btnLabel:'Filter atlas to 18 Spring stops ↓'
+    },
+    summer:{
+      badge:'Auto-calibrated to Michigan calendar · Summer Patio & Bay Breeze Window (Jun 1 - Aug 31)',
+      title:'Grand Traverse & Little Traverse Bay Patios, Sparkling Lawns & Harbor Walks',
+      copy:'From June through August, long Northern Michigan daylight (sunset past 9:15 PM) opens hilltop bay decks, lavender gardens, and harbor tasting rooms in Fishtown Leland, Suttons Bay, Walloon Lake, and Charlevoix. Book seated patio flights early, pace water and lunch stops, and transition to downtown lounges after 5:00 PM.',
+      picks:'<strong>Top stops for Summer:</strong> <a href="#stop-2">Brys Secret Garden</a> · <a href="#stop-6">MAWBY</a> · <a href="#stop-10">VerTerra Leland</a> · <a href="#stop-14">Walloon Lake &amp; Rudbeckia</a> · <a href="#stop-16">Gypsy Distillery</a> · <a href="#stop-18">1918 Cellars Castle Farms</a>',
+      btnLabel:'Filter atlas to 18 Summer patio stops ↓'
+    },
+    fall:{
+      badge:'Auto-calibrated to Michigan calendar · Fall Harvest Crush & Color Window (Sep 1 - Nov 14)',
+      title:'Autumn Vineyard Crush, Heirloom Cider Pressing & Tunnel of Trees Foliage',
+      copy:'September through mid-November brings harvest crush aroma, peak hardwood color along M-22, Center Road, and M-119 (Tunnel of Trees), and fresh-pressed heirloom hard ciders. Weekend tasting rooms book out weeks ahead during October peak foliage, so anchor your route with 1 reservation stop plus 2 walk-in cideries or distilleries.',
+      picks:'<strong>Top stops for Fall Harvest:</strong> <a href="#stop-1">Chateau Chantal</a> · <a href="#stop-8">Tandem Ciders</a> · <a href="#stop-9">Two K Farms</a> · <a href="#stop-14">Walloon Lake &amp; Rudbeckia</a> · <a href="#stop-17">Pond Hill Farm (M-119)</a> · <a href="#stop-11">Left Foot Charley</a>',
+      btnLabel:'Filter atlas to 18 Fall harvest stops ↓'
+    }
+  };
+
+  function detectCurrentSeason(){
+    try{
+      const params=new URLSearchParams(window.location.search);
+      const override=params.get('season');
+      if(override&&seasonProfiles[override])return override;
+      const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric',day:'numeric'}).formatToParts(new Date());
+      const month=Number(parts.find(p=>p.type==='month')?.value||1);
+      const day=Number(parts.find(p=>p.type==='day')?.value||1);
+      if(month===12||month<=3||(month===11&&day>=15))return 'winter';
+      if(month===4||month===5)return 'spring';
+      if(month>=6&&month<=8)return 'summer';
+      return 'fall';
+    }catch(_){
+      return 'winter';
+    }
+  }
+
+  function setSeasonView(seasonKey,isAuto){
+    const profile=seasonProfiles[seasonKey]||seasonProfiles.winter;
+    activeSeasonTab=seasonKey in seasonProfiles?seasonKey:'winter';
+    document.querySelectorAll('[data-season-tab]').forEach(tab=>{
+      tab.setAttribute('aria-pressed',String(tab.dataset.seasonTab===activeSeasonTab));
+    });
+    const badge=document.getElementById('wcs-season-badge');
+    const title=document.getElementById('wcs-season-title');
+    const copy=document.getElementById('wcs-season-copy');
+    const picks=document.getElementById('wcs-season-picks');
+    const applyBtn=document.getElementById('wcs-season-apply');
+    if(badge)badge.textContent=isAuto?profile.badge:profile.badge.replace('Auto-calibrated to Michigan calendar','Previewing seasonal guide');
+    if(title)title.textContent=profile.title;
+    if(copy)copy.textContent=profile.copy;
+    if(picks)picks.innerHTML=profile.picks;
+    if(applyBtn)applyBtn.textContent=profile.btnLabel;
+  }
+
+  document.querySelectorAll('[data-season-tab]').forEach(tab=>{
+    tab.addEventListener('click',()=>setSeasonView(tab.dataset.seasonTab||'winter',false));
+  });
+  document.getElementById('wcs-season-apply')?.addEventListener('click',()=>{
+    if(seasonSelect){
+      seasonSelect.value=activeSeasonTab;
+      apply();
+      document.getElementById('explore')?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+  setSeasonView(detectCurrentSeason(),true);
 
   const modeStage={
     winter:{

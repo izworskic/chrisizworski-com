@@ -105,7 +105,7 @@ if (gmapLinks.length === 18) d4 += 5;
 let d5 = 0;
 const photos = [...html.matchAll(/<figure class="wf-photo[^"]*"[\s\S]*?<\/figure>/g)];
 const indices = [...html.matchAll(/<div class="wf-story-index"[\s\S]*?<\/div>/g)];
-if (photos.length === 14 && indices.length === 7) d5 += 5;
+if (photos.length === 21 && indices.length === 0) d5 += 5;
 const allPhotosValid = photos.every(p => p[0].includes('https://commons.wikimedia.org/wiki/File:') && p[0].includes('class="wf-scene"'));
 if (allPhotosValid) d5 += 5;
 let jsValid = false;
@@ -115,7 +115,7 @@ try {
 } catch {
   jsValid = false;
 }
-if (jsValid && html.includes('/assets/vendor/leaflet-1.9.4.css') && js.includes('/api/carto-basemap-config') && js.includes('wf-pin-multi')) {
+if (jsValid && html.includes('/assets/vendor/leaflet-1.9.4.css') && js.includes('/api/carto-basemap-config') && js.includes('wf-pin-multi') && js.includes('detectCurrentSeason')) {
   d5 += 5;
 }
 

@@ -46,16 +46,18 @@ const spec = JSON.parse(specText);
 const registry = JSON.parse(registryText);
 
 test('18 anchor wineries, cideries, and distilleries are statically rendered with 102-venue 4-corridor crosswalk ledger', () => {
-  const stories = [...html.matchAll(/<article class="wf-story" id="(stop-\d+)" data-tag="([^"]+)" data-feature="([^"]+)" data-access="([^"]+)" data-region="([^"]+)" data-lat="([^"]+)" data-lng="([^"]+)" data-evidence="([^"]+)" data-record="([^"]+)">([\s\S]*?)<\/article>/g)];
+  const stories = [...html.matchAll(/<article class="wf-story" id="(stop-\d+)" data-tag="([^"]+)" data-feature="([^"]+)" data-access="([^"]+)" data-region="([^"]+)" data-seasons="([^"]+)" data-lat="([^"]+)" data-lng="([^"]+)" data-evidence="([^"]+)" data-record="([^"]+)">([\s\S]*?)<\/article>/g)];
   assert.equal(stories.length, 18, 'expected 18 static anchor tasting stops');
   assert.equal(spec.anchorCount, 18, 'benchmark spec must declare 18 anchors');
 
   const ids = new Set();
   const tagTokens = new Set();
   const regions = new Set();
-  for (const [, id, tagAttr, features, access, region, lat, lng, evidence, record, body] of stories) {
+  const seasonTokens = new Set();
+  for (const [, id, tagAttr, features, access, region, seasonsAttr, lat, lng, evidence, record, body] of stories) {
     ids.add(id);
     for (const token of tagAttr.split(/\s+/)) tagTokens.add(token);
+    for (const sToken of seasonsAttr.split(/\s+/)) seasonTokens.add(sToken);
     regions.add(region);
     assert.ok(['walkin', 'reserve', 'evening'].includes(access), `valid access for ${id}`);
     assert.ok(['old-mission', 'leelanau', 'tc-urban', 'petoskey-walloon', 'harbor-charlevoix'].includes(region), `valid region for ${id}`);
@@ -72,6 +74,7 @@ test('18 anchor wineries, cideries, and distilleries are statically rendered wit
   }
   assert.equal(ids.size, 18);
   assert.deepEqual([...tagTokens].sort(), ['cider', 'multicraft', 'spirits', 'wine']);
+  assert.deepEqual([...seasonTokens].sort(), ['fall', 'spring', 'summer', 'winter']);
   assert.deepEqual([...regions].sort(), ['harbor-charlevoix', 'leelanau', 'old-mission', 'petoskey-walloon', 'tc-urban']);
 
   const ledgerCards = [...html.matchAll(/<div class="wcs-ledger-card">([\s\S]*?)<\/div>\s*<\/div>/g)];
@@ -104,11 +107,11 @@ test('winter igloos, snowshoe trails, 5:00 PM distillery handoff, and reservatio
   assert.ok(!js.includes('\u2014'), 'no em dashes in JS');
 });
 
-test('photographs have verified Wikimedia Commons credits, licenses, and honest seasonal disclosures', () => {
+test('photographs have verified Wikimedia Commons credits, licenses, and honest seasonal disclosures across all 18 breakout cards', () => {
   const photos = [...html.matchAll(/<figure class="wf-photo[^"]*" data-photo-provenance="([^"]+)">([\s\S]*?)<\/figure>/g)];
   const indices = [...html.matchAll(/<div class="wf-story-index"[\s\S]*?<\/div>/g)];
-  assert.equal(photos.length, 14, '3 hero photos + 11 card photos');
-  assert.equal(indices.length, 7, '7 typographic place markers where no venue photo is claimed');
+  assert.equal(photos.length, 21, '3 hero photos + 18 breakout card photos');
+  assert.equal(indices.length, 0, 'zero number-only placeholder cards remain');
 
   for (const [, prov, body] of photos) {
     assert.equal(prov, 'source-checked');
@@ -119,7 +122,7 @@ test('photographs have verified Wikimedia Commons credits, licenses, and honest 
   assert.match(js, /function revealPhotoFallback/);
 });
 
-test('interactive 4-mode decoder, 4-way filters, local Leaflet 1.9.4, and grouped Petoskey pin work cleanly', () => {
+test('interactive 4-season auto-calendar engine, 4-mode decoder, 5-way filters, and local Leaflet 1.9.4 work cleanly', () => {
   assert.doesNotThrow(() => new vm.Script(js));
   assert.ok(wfgCss.length > 3000);
   assert.ok(css.length > 3000);
@@ -131,12 +134,19 @@ test('interactive 4-mode decoder, 4-way filters, local Leaflet 1.9.4, and groupe
     assert.match(html, new RegExp(`data-mode="${mode}"`));
     assert.match(js, new RegExp(`${mode}:\\s*\\{`));
   }
-  for (const id of ['wf-region', 'wf-feature', 'wcs-access', 'wf-reset', 'wf-map', 'wf-count', 'wcs-mode-stage']) {
+  for (const season of ['winter', 'spring', 'summer', 'fall']) {
+    assert.match(html, new RegExp(`data-season-tab="${season}"`));
+    assert.match(js, new RegExp(`${season}:\\s*\\{`));
+  }
+  for (const id of ['wcs-season-bar', 'wcs-season', 'wcs-season-apply', 'wf-region', 'wf-feature', 'wcs-access', 'wf-reset', 'wf-map', 'wf-count', 'wcs-mode-stage']) {
     assert.match(html, new RegExp(`id="${id}"`), `missing #${id}`);
   }
+  assert.match(js, /function detectCurrentSeason/);
+  assert.match(js, /America\/Detroit/);
   assert.match(js, /\/api\/carto-basemap-config/);
   assert.match(js, /tile\.openstreetmap\.org/);
   assert.match(js, /wf-pin-multi/);
+  assert.match(petoskeyHome, /min-height:360px;padding:28px/);
 });
 
 test('SEO metadata, JSON-LD graph, Petoskey repairs, and sitewide discovery links are verified', () => {
