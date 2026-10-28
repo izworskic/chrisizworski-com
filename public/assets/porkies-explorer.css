@@ -197,3 +197,13 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .crossing-not-cleared{font-weight:700;color:#825339}
 .crossing-links a{font-weight:700}
 @media(max-width:700px){.crossing-inventory{padding:13px 14px}.crossing-inventory-list{grid-template-columns:1fr}}
+
+.crossing-alternatives{margin:18px 0 22px;background:#e6eee7;border-left:4px solid #427560;padding:20px 24px}
+.crossing-alternatives h3{font-size:clamp(1.4rem,2vw,2rem);margin:4px 0 9px;color:var(--pine)}
+.crossing-alternatives p{font-size:.87rem;line-height:1.6;color:#35564b}
+.crossing-alternative-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.crossing-alternative-grid>div{padding:14px 16px;border:1px solid #bbd0c0;background:#f9faf3}
+.crossing-alternative-grid strong{font-size:.9rem;line-height:1.4;color:#154538;display:block}
+.crossing-alternative-grid p{font-size:.79rem;line-height:1.6}
+.crossing-alternatives .crossing-official-gate{font-size:.78rem;color:#627367}
+@media(max-width:700px){.crossing-alternatives{padding:17px 15px}.crossing-alternative-grid{grid-template-columns:1fr}}
