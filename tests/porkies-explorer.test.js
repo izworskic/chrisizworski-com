@@ -82,3 +82,11 @@ test('static page remains useful with JavaScript disabled', () => {
  assert.match(css,/@media\(max-width:700px\)/);
  assert.match(css,/:focus-visible/);
 });
+
+test('wilderness itineraries explicitly reject unverified crossings and full through routes',()=>{
+ const p=plan({arrival:'west',hours:16,ability:'high',interest:'forest'});
+ assert.ok(p.stops.some(s=>s.zone==='interior'));
+ assert.ok(p.warnings.some(s=>/No crossing-dependent Big Carp/.test(s)));
+ assert.ok(p.excluded.some(s=>/Unverified river-to-river/.test(s)));
+ assert.ok(p.sources.some(s=>s.url.includes('Porcupine-Mountains-State-Park-Map-GPS.pdf')));
+});
