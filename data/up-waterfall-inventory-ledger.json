@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 45,
-  "linkedByExactOid": 37,
-  "unresolvedCandidates": 124,
+  "curatedCount": 47,
+  "linkedByExactOid": 39,
+  "unresolvedCandidates": 122,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -42,18 +42,28 @@
         -87.964463
       ],
       "river": "MENOMINEE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "sand-portage-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-signed-wisconsin-bank-visitor-route-not-open-now",
+      "landManager": "Michigan & Wisconsin DNR, Menominee River State Recreation Area",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+      "trailEvidence": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-dickinson"
+      "nextAction": "Recheck present road conditions; never use GIS fall point as vehicle directions.",
+      "batch": "county-dickinson",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "08",
+      "classification": "verified-official-park-map-visitor-trail-overlook",
+      "accessAssessment": "DNR Piers Gorge Unit map B-1 identifies WI visitor lot and trail from US141/Knutson Road, DNR recreation text names 0.5 mile Sand Portage path; not the Michigan Piers Gorge parking or GIS falls pin. Winter roads not plowed, current parking status unverified.",
+      "evidence": [
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+        "https://www.marinettecountywi.gov/departments/parks/outdoor-recreation/waterfalls/parks/outdoor-recreation/waterfalls/",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3385,18 +3395,28 @@
         -87.824715
       ],
       "river": "MENOMINEE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "quiver-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-signed-wisconsin-bank-visitor-route-not-open-now",
+      "landManager": "Michigan & Wisconsin DNR, Menominee River State Recreation Area",
+      "parkingEvidence": "https://www.marinettecountywi.gov/departments/parks/outdoor-recreation/waterfalls/parks/outdoor-recreation/waterfalls/",
+      "trailEvidence": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-menominee"
+      "nextAction": "Recheck present road conditions; never use GIS fall point as vehicle directions.",
+      "batch": "county-menominee",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "08",
+      "classification": "verified-official-park-map-visitor-trail-overlook",
+      "accessAssessment": "DNR Quiver Falls Unit map B-2 places visitor parking and scenic overlook; Marinette County roads US141 to County R to Pemene Dam Rd; WI DNR confirms accessible lot/viewing area, not complete accessible riverbank. Winter roads not plowed, current parking status unverified.",
+      "evidence": [
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+        "https://www.marinettecountywi.gov/departments/parks/outdoor-recreation/waterfalls/parks/outdoor-recreation/waterfalls/",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4004,5 +4024,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "07"
+  "lastBatch": "08"
 }
