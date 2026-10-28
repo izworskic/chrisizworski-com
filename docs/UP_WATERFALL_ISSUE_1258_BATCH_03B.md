@@ -12,7 +12,7 @@ Continue comprehensive source-by-source inventory, without generating thin/unsaf
 | --- | --- | --- | --- |
 | 67 | Cascade Falls, Cascade Creek / Trap Hills | A guide describes a signed northern forest route; American Whitewater identifies the tempting southern access as a private driveway. Official Forest Service public parking and legal trail alignment are not yet established independently. | Research only; no new route or page |
 | 106 | Little Iron Falls, Little Iron River | Name and location require reconciliation with other Little Iron/Pewabeck descriptions; no authenticated public parking/trail. Avoid linking the Nonesuch Mine route. | Research only |
-| 124 | Bonanza Falls, Big Iron River | Greenland/Greenwood? The published names **Greenwood Falls** and **Bonanza Falls** refer to the same candidate. A signed M-64 approach is described, but land tenure and public pathway rights need independent confirmation. Do not count twice. | Research only |
+| 124 | Bonanza Falls, Big Iron River | Published names **Greenwood Falls** and **Bonanza Falls** refer to the same candidate. A signed M-64 approach is described, but land tenure and public pathway rights need independent confirmation. Do not count twice. | Research only |
 
 The canonical alias candidate is **Greenwood Falls / Bonanza Falls**; the word "Greenland" is not a validated alias. No page has been created for it.
 
