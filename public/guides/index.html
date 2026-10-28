@@ -59,6 +59,11 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
 .guide-title a:hover{color:#2c5f2d}
 .guide-desc{font-size:14px;color:#555;line-height:1.65}
 .guide-arrow{font-size:13px;padding-top:3px;white-space:nowrap}
+.fg-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:5px;font-family:Arial,sans-serif;font-size:11px}
+.fg-pill{background:#eef4ee;color:#2c5f2d;border:1px solid #cfe0cf;border-radius:3px;padding:1px 7px;font-weight:700;letter-spacing:.03em}
+.fg-inseason{background:#1d4e42;color:#fff;border-radius:3px;padding:1px 7px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.fg-tools{margin-top:6px;font-family:Arial,sans-serif;font-size:12px;color:#555}
+.fg-tools a{font-weight:600}
 .footer{text-align:center;padding:20px;border-top:1px solid #e8e4dc;font-size:13px;color:#999;margin-top:48px}
 @media(max-width:640px){h1.page-title{font-size:28px}.guide-card{grid-template-columns:1fr}}
 </style>
@@ -107,7 +112,93 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
 <h1 class="page-title">Guides</h1>
 <p class="sub">Practical reference material on Great Lakes travel, AI operations, and Zone 6a Michigan gardening.</p>
 
-<p>A guide here earns its place by being specific enough to be actually useful. General advice is easy to find. These try to go further, into the particular conditions of Zone 6a Michigan gardening, or the specific decision points that come up when deploying AI in an operational environment. The operations guides are written for people who are responsible for making real decisions, not for an academic audience. The gardening guides are written from direct experience at <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> on Saginaw Bay, not from general horticultural sources. The <a href="/chris-izworski-freighter-view-farms/" data-growth-cta="guides-fvf-authority">project guide</a> connects that experience to the Michigan gardening cluster.</p>
+<p>A guide here earns its place by being specific enough to be actually useful. General advice is easy to find. These try to go further, into the particular conditions of Zone 6a Michigan gardening, or the specific decision points that come up when deploying AI in an operational environment. The operations guides are written for people who are responsible for making decisions, not for an academic audience. The gardening guides are written from direct experience at <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> on Saginaw Bay, not from general horticultural sources. The <a href="/chris-izworski-freighter-view-farms/" data-growth-cta="guides-fvf-authority">project guide</a> connects that experience to the Michigan gardening cluster.</p>
+
+<h2 class="section-head" id="field-guides">Michigan &amp; Great Lakes Fall and Winter Field Guides</h2>
+
+<p>Photography-led, stop-by-stop field guides built on the Field Guide V1 architecture. Each guide pairs curated public destinations, interactive maps, and no-snow/weather-proof backup plans with direct handoffs into the <a href="/tools/">live Michigan &amp; Great Lakes decision tools</a>. Guides in their peak calendar window are automatically badged below.</p>
+
+<div id="field-guides-list">
+<div class="guide-card" data-field-guide="michigan-winter-weekends" data-months="10,11,12,1,2,3">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">12 Base Towns · Oct–Mar</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-winter-weekends/">Michigan Winter Weekend Getaways, 12 Two-Day Base Towns</a></div>
+    <div class="guide-desc">Compare 12 researched Michigan winter weekend bases—Marquette, Munising, the Keweenaw, Ironwood, Tahquamenon, Traverse City, Petoskey/Boyne, Gaylord, Alpena, Muskegon, Frankenmuth, and Saugatuck—with 4 trip-style doors, a Saturday outdoor plan, and a mild-weather indoor backup for every town.</div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-snow-depth/">Michigan Snow Depth</a> &middot; <a href="/lake-effect-snow/">Lake-Effect Snow</a> &middot; <a href="/michigan-ski-hills/">Ski Hills</a> &middot; <a href="/mackinac-bridge-live/">Mackinac Bridge Live</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-winter-weekends/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="michigan-white-christmas-escapes" data-months="10,11,12">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">10 Holiday Towns · Oct–Dec</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-white-christmas-escapes/">Michigan White Christmas &amp; Christmas-Week Escapes</a></div>
+    <div class="guide-desc">Where to find a White Christmas in Michigan: 10 Christmas-to-New-Year escape towns ranked by NOAA 1991–2020 1-inch snow-depth probability (~96% Marquette and 95%+ Keweenaw to 75–80% Gaylord, 68–72% Petoskey/Boyne, and 45.7% Frankenmuth), with resort snowmaking insurance and holiday-lights backups.</div>
+    <div class="fg-tools">Connected live tools: <a href="/national-tools/white-christmas/">White Christmas Calculator</a> &middot; <a href="/national-tools/white-christmas/forecast/">Christmas 2026 Forecast</a> &middot; <a href="/white-christmas-michigan/">MI Station Climatology</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-white-christmas-escapes/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="michigan-first-snow-adventures" data-months="10,11,12">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">12 Early Snowbelts · Late Oct–Dec</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-first-snow-adventures/">Michigan First Snow Adventures: Where Winter Arrives First</a></div>
+    <div class="guide-desc">Track where Michigan's first skiable and snowshoeable snow accumulates across 12 Lake Superior and Northern Lower high-plateau snowbelts—with grass-bed Nordic trail thresholds (2–4&quot; vs. 12&quot; rocky terrain), early snowmaking hills, and bare-ground hike backups.</div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-snow-depth/">Michigan Snow Depth</a> &middot; <a href="/lake-effect-snow/">Lake-Effect Snow</a> &middot; <a href="/michigan-snow-totals/">Snow Totals</a> &middot; <a href="/michigan-cross-country-skiing/">XC Skiing</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-first-snow-adventures/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="great-lakes-winter-freighter-guide" data-months="11,12,1,2,3">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">12 Harbors &amp; Locks · Nov–Mar</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/great-lakes-winter-freighter-guide/">Great Lakes Winter Freighter &amp; Harbor Guide</a></div>
+    <div class="guide-desc">12 public shoreline overlooks and winter layup ports across Sault Ste. Marie, Duluth, Superior, Sturgeon Bay, Port Huron, Detroit, Toledo, Milwaukee, Muskegon, Marquette, Alpena, and Owen Sound—covering the Jan 15 Soo Locks closure, 1,000-footer layup berths, and USCG icebreakers.</div>
+    <div class="fg-tools">Connected live tools: <a href="/great-lakes-freighter-winter-layup/">Winter Layup Tracker</a> &middot; <a href="/great-lakes-freighter-tracking/">Live AIS Ship Map</a> &middot; <a href="/soo-locks/">Soo Locks</a> &middot; <a href="/freighters/">Freighter Central</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/great-lakes-winter-freighter-guide/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="michigan-winter-activities" data-months="11,12,1,2,3">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">18 Winter Experiences · Nov–Mar</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-winter-activities/">Michigan Winter Activities Field Guide</a></div>
+    <div class="guide-desc">18 source-backed winter experiences across both peninsulas covering snowshoeing, frozen waterfalls, fat-tire biking, winter wildlife, downhill and cross-country skiing, Muskegon luge, and dark-sky stargazing.</div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-snow-depth/">Michigan Snow Depth</a> &middot; <a href="/michigan-ski-hills/">Ski Hills</a> &middot; <a href="/michigan-ice-caves/">Ice Caves</a> &middot; <a href="/northern-lights-michigan/">Northern Lights</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-winter-activities/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="frozen-michigan" data-months="12,1,2,3">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">11 Ice Wonders · Dec–Mar</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/frozen-michigan/">Frozen Michigan: Ice Caves, Waterfalls &amp; Winter Shorelines</a></div>
+    <div class="guide-desc">11 researched winter ice destinations—Eben Ice Caves, Pictured Rocks ice curtains, Upper Tahquamenon Falls, Bond Falls, Laughing Whitefish, and Straits ice—with official access distinctions and cold-accumulation handoffs.</div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-ice-caves/">Michigan Ice Caves</a> &middot; <a href="/michigan-ice/">Michigan Ice Report</a> &middot; <a href="/mackinac-ice-bridge/">Mackinac Ice Bridge</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/frozen-michigan/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="michigan-winter-trails" data-months="11,12,1,2,3">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">15 Trail Systems · 50 Loops · Nov–Mar</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-winter-trails/">Michigan Winter Trails: Snowshoe, Cross-Country Ski &amp; Fat-Bike Loops</a></div>
+    <div class="guide-desc">Compare 15 audited Michigan winter trail systems and 50 named DNR and NPS loops—with snowshoe vs. ski-shared track etiquette, Silver Lake's Dec 15–Mar 15 fat-tire dune window, and seasonal unplowed road warnings.</div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-cross-country-skiing/">XC Skiing</a> &middot; <a href="/michigan-snow-depth/">Snow Depth</a> &middot; <a href="/estivant-pines/">Estivant Pines</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-winter-trails/">Explore &rarr;</a></div>
+</div>
+
+<div class="guide-card" data-field-guide="michigan-wine-cider-spirits" data-months="10,11,12,1,2,3,4">
+  <div>
+    <div class="fg-meta"><span class="fg-pill">18 Anchor Venues · 102-Venue Crosswalk · Oct–Apr</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+    <div class="guide-title"><a href="/michigan-wine-cider-spirits/">Northern Michigan Wine, Cider &amp; Spirits: Traverse City &amp; Petoskey</a></div>
+    <div class="guide-desc">18 anchor wineries, heritage cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey/Walloon Lake—with heated winter igloos, snowshoe vineyard loops, and 5:00 PM distillery handoffs.</div>
+    <div class="fg-tools">Connected live tools: <a href="/petoskey-wine/">Petoskey Wine Planner</a> &middot; <a href="https://tcwine.chrisizworski.com/" target="_blank" rel="noopener">Traverse City Wine Planner</a></div>
+  </div>
+  <div class="guide-arrow"><a href="/michigan-wine-cider-spirits/">Explore &rarr;</a></div>
+</div>
+</div>
 
 <h2 class="section-head">AI and Public Safety Operations</h2>
 
@@ -267,7 +358,20 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Updated July 2026</div>
+<div class="footer">Bay City, Michigan &middot; Updated October 2026</div>
+<script>
+(function(){
+  var m = new Date().getMonth() + 1;
+  var cards = document.querySelectorAll('[data-field-guide][data-months]');
+  for (var i = 0; i < cards.length; i++) {
+    var months = (cards[i].getAttribute('data-months') || '').split(',').map(Number);
+    if (months.indexOf(m) > -1) {
+      var badge = cards[i].querySelector('[data-fg-season]');
+      if (badge) badge.hidden = false;
+    }
+  }
+})();
+</script>
 <script defer src="/assets/growth-cta.js"></script>
 </body>
 </html>
