@@ -62,3 +62,46 @@ assert.equal(list.itemListElement.length,cardCount);
 const item=list.itemListElement.find(x=>x.item?.url===canonical);
 assert.equal(item?.item?.['@id'],canonical+'#webpage');
 });
+
+test('eight distinct NPS island dossiers are fully crawlable and consistent with source inventory',()=>{
+const inv=JSON.parse(file('public/apostle-islands/island-access.json'));
+assert.equal(inv.islands.length,8);
+assert.equal(new Set(inv.islands.map(i=>i.id)).size,8);
+assert.equal(inv.islands.flatMap(i=>i.trails).length,17);
+const cards=[...html.matchAll(/<article class="island-card" id="island-([^"]+)" data-island-id="([^"]+)"/g)];
+assert.equal(cards.length,8);
+assert.deepEqual(cards.map(m=>m[1]),inv.islands.map(i=>i.id));
+assert.ok(html.indexOf('id="island-planner"') < html.indexOf('id="explore"'));
+assert.equal((html.match(/class="island-trails"/g)||[]).length,8);
+assert.ok(html.includes('2026 VERIFIED SOURCES'));
+for(const i of inv.islands){
+assert.ok(i.sourceTrail.includes('nps.gov'));
+assert.ok(i.sourceCamp.includes('nps.gov'));
+assert.ok(i.sourceTransport.startsWith('https://'));
+assert.ok(i.trails.length>0&&i.trails.every(t=>t[1]>0));
+assert.ok(html.includes('id="island-'+i.id+'"'));
+}
+});
+test('closed docks and absence of scheduled transport cannot turn into open island access',()=>{
+const inv=JSON.parse(file('public/apostle-islands/island-access.json'));
+const devils=inv.islands.find(x=>x.id==='devils');
+assert.equal(devils.landable,false);
+assert.equal(devils.day,false);
+assert.equal(devils.overnight,false);
+assert.match(devils.warning,/closed/i);
+assert.match(html,/class="island-status island-closed">DOCK CLOSED/);
+const raspberry=inv.islands.find(x=>x.id==='raspberry');
+assert.equal(raspberry.overnight,false);
+assert.match(raspberry.camp,/excluded from primitive camping/);
+const oak=inv.islands.find(x=>x.id==='oak');
+assert.equal(oak.day,false);
+assert.equal(oak.service,'seasonal');
+for(const key of ['rocky','sand','basswood']){
+const island=inv.islands.find(x=>x.id===key);
+assert.equal(island.service,'arrange',key+' must not invent scheduled service');
+}
+assert.match(html,/Names are not navigation waypoints|Island names are not navigation waypoints/);
+assert.ok(js.includes('compareBoxes.filter'));
+assert.ok(js.includes('compareOutput.replaceChildren'));
+assert.ok(!js.includes('innerHTML='));
+});
