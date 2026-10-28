@@ -1,0 +1,164 @@
+{
+  "status": "geometry-not-navigable",
+  "reviewedOn": "2026-10-28",
+  "sources": {
+    "trailService": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/2/query",
+    "roadService": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20/query",
+    "skiService": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/5/query",
+    "map": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+  },
+  "audit": {
+    "trailFeatures": 819,
+    "roadFeatures": 296,
+    "skiFeatures": 40,
+    "trailComponents5m": 7,
+    "roadComponents5m": 3,
+    "skiComponents5m": 8,
+    "sourceTrailMiles": 77.98,
+    "knownRouteCoverageDiscrepancies": [
+      {
+        "name": "Porcupine Mountain Wilderness Escarpment Trail",
+        "sourceGeometryMiles": 0.429,
+        "publishedMapMiles": 3.7,
+        "coverageRatio": 0.116,
+        "fullTrailClaimAllowed": false
+      },
+      {
+        "name": "Porcupine Mountain Wilderness Government Peak Trail",
+        "sourceGeometryMiles": 4.024,
+        "publishedMapMiles": 6.4,
+        "coverageRatio": 0.629,
+        "fullTrailClaimAllowed": false
+      },
+      {
+        "name": "Porcupine Mountain Wilderness Lake Superior Trail",
+        "sourceGeometryMiles": 9.611,
+        "publishedMapMiles": 15.6,
+        "coverageRatio": 0.616,
+        "fullTrailClaimAllowed": false
+      },
+      {
+        "name": "Porcupine Mountain Wilderness North Mirror Lake Trail",
+        "sourceGeometryMiles": 3.86,
+        "publishedMapMiles": 3.5,
+        "coverageRatio": 1.103,
+        "fullTrailClaimAllowed": false
+      }
+    ]
+  },
+  "parkingConnections": [
+    {
+      "id": "lake",
+      "parkingAssetId": 1409,
+      "trailNearest": {
+        "meters": 20.2,
+        "sourceId": 6690,
+        "name": "Porcupine Mountain Wilderness Big Carp River Trail"
+      },
+      "roadNearest": {
+        "meters": 7.3,
+        "sourceId": 7351,
+        "name": "Porcupine Mtns W SP Service"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    },
+    {
+      "id": "summit",
+      "parkingAssetId": 72,
+      "trailNearest": {
+        "meters": 4.9,
+        "sourceId": 6755,
+        "name": "Porcupine Mountain Wilderness Beaver Creek Trail"
+      },
+      "roadNearest": {
+        "meters": 3.1,
+        "sourceId": 8470,
+        "name": "Porcupine Mtns W SP Access"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    },
+    {
+      "id": "presque",
+      "parkingAssetId": 841,
+      "trailNearest": {
+        "meters": 85.7,
+        "sourceId": 5399,
+        "name": "Porcupine Mountain Wilderness Trail to Falls"
+      },
+      "roadNearest": {
+        "meters": 4.5,
+        "sourceId": 9470,
+        "name": "Porcupine Mtn W SP Service"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    },
+    {
+      "id": "pinkerton",
+      "parkingAssetId": 1294,
+      "trailNearest": {
+        "meters": 0.1,
+        "sourceId": 4711,
+        "name": "Porcupine Mountain Wilderness Pinkerton Trail"
+      },
+      "roadNearest": {
+        "meters": 7.7,
+        "sourceId": 8981,
+        "name": "S Boundary Rd"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    },
+    {
+      "id": "visitor",
+      "parkingAssetId": 11,
+      "trailNearest": {
+        "meters": 1992.8,
+        "sourceId": 4491,
+        "name": "Porcupine Mountain Wilderness Union Spring Trail"
+      },
+      "roadNearest": {
+        "meters": 13,
+        "sourceId": 7278,
+        "name": "Porcupine Mtns W SP Service"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    },
+    {
+      "id": "ski",
+      "parkingAssetId": 171,
+      "trailNearest": {
+        "meters": 2214.2,
+        "sourceId": 4482,
+        "name": "Porcupine Mountain Wilderness Union Spring Trail"
+      },
+      "roadNearest": {
+        "meters": 72.7,
+        "sourceId": 7202,
+        "name": "Porcupine Mtns W SP Access"
+      },
+      "footRouteCertified": false,
+      "driveRouteCertified": false
+    }
+  ],
+  "noPublicRouteTimes": true,
+  "noCrossingSafetyCertification": true,
+  "seasonalRoadRules": {
+    "m107": {
+      "vehicleStatus": "seasonally-restricted",
+      "routeEligible": false
+    },
+    "southBoundary": {
+      "vehicleStatus": "seasonally-restricted",
+      "routeEligible": false
+    }
+  },
+  "geometryFiles": [
+    "trail-reference.geojson",
+    "park-road-reference.geojson",
+    "ski-reference.geojson"
+  ]
+}
