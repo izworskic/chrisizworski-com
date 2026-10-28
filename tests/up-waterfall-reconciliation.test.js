@@ -136,7 +136,8 @@ test('Bonanza public guide is scoped strictly to signed township upper-falls acc
   assert.ok(page.includes('data-view-lat="46.817719"'));
   assert.ok(page.includes('data-lat="46.818863"'));
   assert.ok(!page.includes('data-parking-lat='));
-  assert.match(page, /downstream riverfront land|unverified downstream riverfront|downstream.*property/i);
+  assert.match(page, /downstream drops/);
+  assert.match(page, /different ownership records/);
   assert.match(page, /current opening and road conditions are unverified/i);
   assert.ok(page.includes('https://chrisizworski.com/#person'));
   assert.ok(page.includes('href="/upper-peninsula-waterfalls/"'));
