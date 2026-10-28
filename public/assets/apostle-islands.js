@@ -30,6 +30,57 @@ for(const p of markers){const c=document.getElementById('stop-'+p.id);if(!map)co
 for(const r of radio)r.addEventListener('change',update);
 if(duration)duration.addEventListener('change',update);
 update();
+
+// Island-specific decision desk. Static HTML always carries the actual source-backed answers.
+const islandRadios=[...document.querySelectorAll('input[name="island-purpose"]')];
+const islandCards=[...document.querySelectorAll('.island-card')];
+const islandCount=document.getElementById('island-count');
+const islandEmpty=document.getElementById('island-empty');
+const compareOutput=document.getElementById('island-compare-output');
+const compareEmpty=document.getElementById('island-compare-empty');
+const compareClear=document.getElementById('island-compare-clear');
+const compareBoxes=[...document.querySelectorAll('.island-compare')];
+let compareNotice='';
+function renderCompare(){
+ if(!compareOutput)return;
+ const chosen=compareBoxes.filter(x=>x.checked).slice(0,2);
+ compareOutput.replaceChildren();
+ if(compareClear)compareClear.disabled=chosen.length===0;
+ if(compareEmpty)compareEmpty.textContent=compareNotice||(!chosen.length?'Select two islands above to compare their access requirements.':chosen.length===1?'One island selected. Choose another to see the difference.':'Comparing two islands. Schedules and dock conditions must still be checked.');
+ const headings=['Landing','How to get there','Camping'];
+ for(const selected of chosen){
+  const article=selected.closest('.island-card');
+  if(!article)continue;
+  const card=document.createElement('section');card.className='compare-snapshot';
+  const title=document.createElement('h4');title.textContent=article.querySelector('h3')?.textContent||'Island';card.append(title);
+  const facts=article.querySelectorAll('.island-facts>div p');
+  const dl=document.createElement('dl');
+  headings.forEach((heading,i)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=heading;dd.textContent=facts[i]?.textContent||'Not verified';dl.append(dt,dd);});
+  const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent='Documented trails';dd.textContent=[...article.querySelectorAll('.island-trails li strong')].map(x=>x.textContent).join(' · ')||'None verified';dl.append(dt,dd);
+  const warning=document.createElement('dt'),wvalue=document.createElement('dd');warning.textContent='Current access caution';wvalue.textContent=article.querySelector('.island-warning')?.textContent||'Check NPS';dl.append(warning,wvalue);
+  card.append(dl);compareOutput.append(card);
+ }
+}
+const updateIslands=()=>{
+ const goal=islandRadios.find(r=>r.checked)?.value||'all';
+ let shown=0;
+ for(const article of islandCards){
+  const keep=goal==='all'||(goal==='shuttle' ? article.dataset.shuttle==='true' : article.dataset[goal]==='true');
+  article.hidden=!keep;if(keep)shown++;
+ }
+ if(islandCount)islandCount.textContent='Showing '+shown+' of '+islandCards.length+' access-researched islands. Names, dock references and shuttle schedules are not current landing authorization.';
+ if(islandEmpty)islandEmpty.hidden=shown>0;
+ compareNotice='';renderCompare();
+};
+for(const radio of islandRadios)radio.addEventListener('change',updateIslands);
+for(const control of compareBoxes)control.addEventListener('change',()=>{
+ compareNotice='';
+ if(compareBoxes.filter(c=>c.checked).length>2){control.checked=false;compareNotice='Compare two at a time. Clear or uncheck one to choose another.';}
+ renderCompare();
+});
+if(compareClear)compareClear.addEventListener('click',()=>{compareBoxes.forEach(x=>x.checked=false);compareNotice='';renderCompare();});
+if(islandCards.length)updateIslands();
+
 if(!mapEl||typeof window.L==='undefined'){if(mapEl)mapEl.dataset.state='fallback';return;}
 const L=window.L;
 try{
