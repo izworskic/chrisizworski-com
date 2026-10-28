@@ -2386,7 +2386,9 @@
       "further": "The river corridor has roots, grades, potential mud and slippery rock. Do not attempt the falls as a casual winter stop or assume water crossings are bridged. M-107 and South Boundary Road seasonal restrictions may affect driving access.",
       "hydro": {
         "usgsFeatureId": "e413e0a8-8a58-11e6-b586-ecf4bb62914c",
-        "nhdPlusComid": null,
+        "nhdPlusComid": "6789487",
+        "nhdPlusReachCode": "04020101000890",
+        "nhdHrReachCode": "04020101000890",
         "matchDistanceMeters": 14,
         "matchQuality": "close",
         "coordinateReviewRequired": false
