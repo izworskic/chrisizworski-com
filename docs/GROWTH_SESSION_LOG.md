@@ -1,3 +1,13 @@
+### 2026-10-27 — Apostle Islands trip feasibility and return-planning desk
+
+- PR #1247, branch `feat/apostle-trip-readiness-20261027`, continues the existing island planner without adding a competing indexable URL or modifying advertising.
+- Visitor need: island listings and named docks do not establish that the person can travel, return, or reserve a campsite. The new "Before you leave Bayfield" trip brief asks island, day/overnight, water transport mode, optional departure date, party size and nights.
+- Decision blocks: closed Devils Island landings, unsupported Raspberry overnight camping, no road-only NPS island access, unverified Oak day shuttles, undocumented 8–21-person group sites. All scheduled transport is treated as a dated 2026 source, not as current or 2027 availability.
+- Camping evidence: NPS 30-day individual campsite booking window; 8–21 group sites use separate annual March lottery; confirmation email is not the printed permit; 2026 posted campsite/reservation fees labeled non-live. Independent return-trip, NWS weather and NPS alerts verified by direct source links.
+- Static-first NPS checklist and source links; progressive JS plan, no new API, Redis, or inferred docking coordinates. Dedicated Chromium and source tests extended to negative access and permit-window cases.
+- Verified GSC/AdSense impact: no new comparable data; cannot claim CTR/rank/revenue gains. Protect Circle Tour routing identity and established author graph.
+- Release gate: exact-head complete CI, browser captures, Vercel preview, public emission; only after green merge and production smoke.
+
 ### 2026-10-27 — Apostle Islands island-by-island access expansion
 
 - PR #1246, branch `feat/apostle-islands-island-access-20261027`, expands existing indexable `/apostle-islands/` instead of publishing thin new island pages.

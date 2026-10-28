@@ -87,3 +87,34 @@ The next visitor-value investment is **one substantial island-by-island comparis
 - Run full source tests plus dedicated real Chromium (390px/1366px), check no-JS static dossier evidence, accessibility, license attributions, broken links and existing field guide regressions.
 - Commit only verified changed files. CI+Vercel must be green before merging; post-merge public route and canonical 200, new cards and interactions smoke-tested.
 - Compare canonical `/apostle-islands/` GSC discovery in equivalent 28-day periods when data exists; cannot claim ranking uplift on publication.
+
+## October 27, 2026 · Before You Leave Bayfield decision engine
+
+### Why another layer?
+The first two releases identified eight promising islands, their historic/official trail inventory, and named public docks. They did **not** yet answer the principal traveler decision: can a selected day or camping plan be arranged given the visitor's transport mode, group size and date? The incremental user value is **preventing bad bookings**, not adding unverified locations.
+
+### Inputs and output contract
+- User selects from eight existing island dossiers; chooses day trip or overnight, transport type (scheduled excursion, NPS-listed water taxi, private boat, none), departure date if known, party size 1–21 and 1–14 nights.
+- Deterministic client-only logic (no Redis or booking integration) outputs a source-linked logistics **sequence**, never a safe-to-launch or current booking verdict.
+- Before a trip is marked *conditionally plan-able*, reject Devils Island landings; reject overnight Raspberry; reject group-size 8–21 camping on islands without NPS-listed group sites; and reject a no-water-transport plan.
+- The 2026 regular Stockton day/overnight and Oak overnight operator services are only *historical published offerings*. Oak day service is unverified. Raspberry and Michigan lighthouse tours are conditional on a verified landing and individual date. Other regular shuttles are not invented.
+- User-selected date controls the NPS individual-site 30-day reservation-window explanation, but cannot check inventory. Group campsites operate on a March annual lottery/reservation process; do not apply the individual 30-day window to groups.
+- NPS says campsite permits are not the emailed confirmation: visitors print the actual permit inside seven days of arrival or obtain it at Bayfield.
+- Any ferry/shuttle return pickup is a separate booking decision. NPS commercial-services source warns of weather delays and schedule changes.
+- Published campsite rates reviewed in October 2026: $15 per individual site/night, $30 per group site/night, plus $10 per trip reservation fee, excluding transport; not a live quote or availability. These facts must be reverified for future seasons.
+- Copyable trip brief is on-device only and carries current verification disclaimers. Original visitor cards and full island source list remain readable without JavaScript; the static source-led booking checklist is server-rendered.
+
+### Verified primary sources
+- [NPS camping permits and reservations](https://www.nps.gov/apis/planyourvisit/camping-permits-reservations.htm) — trip length up to 14 nights, 30-day standard booking window, group lottery March, print permit within seven days, distinct $10 reservation fee.
+- [NPS camping](https://www.nps.gov/apis/planyourvisit/camping.htm) — 1–7 individual sites, 8–21 group, published historic per-night fees, accessibility and group site inventory.
+- [NPS concessioner shuttle types](https://www.apostleisland.com/hiking-and-camping-shuttles/) — Stockton day and overnight, Oak overnight; outbound and return bought separately. 2026 published dates must not be interpreted as a future-season guarantee.
+- [NPS authorized commercial services](https://www.nps.gov/apis/planyourvisit/commercial-services.htm) — NPS lists authorized taxis, but does not approve any imagined itinerary, response, or launch.
+- [NPS public dock guidance](https://www.nps.gov/apis/planyourvisit/boating.htm) — dock space first come, depths variable, navigational expertise and charts required.
+- [NPS 2026 construction](https://www.nps.gov/apis/learn/infrastructure-projects.htm) and [NPS alerts](https://www.nps.gov/apis/planyourvisit/conditions.htm) — closure evidence, to be revalidated for visitor date.
+- [NOAA/NWS marine forecast](https://marine.weather.gov/MapClick.php?zoneid=LSZ150) — regional forecast, not a safe-landings prediction.
+
+### Release gates
+- Static source and regression tests ensure eight previous cards, 17 verified trail claims, author links, Ads behavior, sitemap and original Circle Tour stay untouched.
+- Chromium QA asserts conditions for Devils, Raspberry, Oak day vs overnight, unverified group-site inventory, party-size lottery, 30-day window, and no boat; no-JS checklist; desktop/mobile screenshots and maps must remain green.
+- Full `verify:all`, emitted output audit and Vercel preview must pass on exact commit, before a merge.
+- SEO outcome not measurable until actual GSC observation data; no new indexable route, duplicate tool page, or ad configuration change.
