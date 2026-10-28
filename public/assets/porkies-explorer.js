@@ -36,6 +36,10 @@
     var season = seasonFor(input.date);
     var note = "No driving ETA, actual road opening, parking vacancy or same-day trail conditions have been verified. Consult DNR road and trail notices before leaving.";
     var output = { mode: season, time: hours, stops: [], excluded: [], warnings: [note], sources: [{ name: "Official park information", url: DNR }, { name: "Official park & trail map", url: MAP }] };
+    if (season !== "unknown" && arrival === "west" && String(input.date || "") >= "2026-09-22") {
+      output.warnings.push("Wakefield Township posted a September 22, 2026 road-work closure at County Road 519 and M-28, with a Johnson Road detour. No official reopening has been independently verified as of October 28; this is not proof the closure remains in effect. Verify current local road signs before using the west entrance. Unchecked navigation is withheld.");
+      output.sources.push({ name: "Wakefield Township CR 519 construction notice", url: "https://wakefieldtownship.com/north-county-road-519-will-be-closed/" });
+    }
     if (season === "unknown") {
       output.title = "Choose a valid travel date";
       output.intro = "The travel date must be supplied to distinguish regular visitor access from winter restrictions.";
