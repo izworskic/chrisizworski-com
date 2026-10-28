@@ -48,18 +48,21 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
+      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "disposition": "official-public-route-documented-needs-arrival-map-check",
       "sourceNotes": "Wisconsin DNR publishes Sand Portage Falls Hiking Trail: 0.5 mile from parking off Highway 141 east of Knuston Road; unprotected rocky descent beyond view. Confirm specific arrival map and restrictions prior to public guide.",
       "sourceLinks": [
-        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation"
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info"
       ],
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "publicationEligible": false,
+      "guideDraft": "docs/UP_WATERFALL_1258_MENOMINEE_FIELD_GUIDE_SOURCE_PACK.md",
+      "outstandingGate": "Official lot and trail geographic reconciliation plus full publication checks"
     },
     {
       "gisObjectId": 4,
@@ -2640,19 +2643,22 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
+      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "disposition": "official-public-route-documented-coordinate-conflict",
       "sourceNotes": "Wisconsin DNR: Pemene Falls hiking trail starts at end of Verheyen Lane off County Road Z; 0.5 mile to primitive overlook, shorter 0.8 mile loop and 1.9 mile loop. GIS falls coordinate requires independent reconciliation with official trail endpoint before promotion.",
       "sourceLinks": [
         "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
-        "https://www.michigan.gov/recsearch/parks/menominee"
+        "https://www.michigan.gov/recsearch/parks/menominee",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info"
       ],
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "publicationEligible": false,
+      "guideDraft": "docs/UP_WATERFALL_1258_MENOMINEE_FIELD_GUIDE_SOURCE_PACK.md",
+      "outstandingGate": "Critical: GIS-to-overlook location mismatch; official mapped lot and trail alignment"
     },
     {
       "gisObjectId": 189,
@@ -2665,18 +2671,21 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
+      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "disposition": "official-public-overlook-documented-needs-arrival-map-check",
       "sourceNotes": "Wisconsin DNR: Quiver Falls overlook reached via Pemene Dam Road, with parking area and footpath; accessible parking/viewing area described. Confirm route location against official map before visitor page.",
       "sourceLinks": [
-        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation"
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info"
       ],
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "publicationEligible": false,
+      "guideDraft": "docs/UP_WATERFALL_1258_MENOMINEE_FIELD_GUIDE_SOURCE_PACK.md",
+      "outstandingGate": "Official lot and trail geographic reconciliation plus full publication checks"
     },
     {
       "gisObjectId": 190,
@@ -3140,6 +3149,18 @@
       ],
       "indexableNewGuides": 0,
       "notes": "Official route text corroborates public viewing for three candidates, but GIS-to-overlook/parking map and current restrictions must be reconciled before promotion. No changes to published guides."
+    },
+    {
+      "batch": "02-guide-source-pack",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        3,
+        188,
+        189
+      ],
+      "draftedVisitorGuideCount": 3,
+      "publicGuidesAdded": 0,
+      "outcome": "Official signed road-level parking/trail approaches and visitor copy drafted; source identity, map-target, verification and release gates outstanding."
     }
   ]
 }
