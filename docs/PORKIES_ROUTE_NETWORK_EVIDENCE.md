@@ -1,3 +1,20 @@
+## Western County Road 519 corridor / M-28 work-zone review — October 28, 2026
+
+**Important operational discovery:** Previous west-corridor note correctly separated DNR winter CR519 access, but had only ten MGF “Presque Isle Rd” centerline features and missed a dated, local work-zone notice. Wakefield Township's September 22, 2026 post explicitly identifies CR519's M-28 junction closure for water-main replacement, telling Porcupine Mountains visitors to use **Johnson Road** as the detour. No end date or reopening update was independently found as of October 28; **this does not establish that the road is still closed**.
+
+- DNR official access: https://www.michigan.gov/recsearch/parks/porkies. CR519 from Wakefield is the distinct Presque Isle western approach when M-107/South Boundary through-driving routes are restricted.
+- Official road alias: Wakefield Township Master Plan, roads section, https://wakefieldtownship.com/wp-content/documents/Wakefield%20Township%20Master%20Plan.pdf explicitly identifies **Thomaston Road / County Road 519 / Presque Isle Road**.
+- State road geometry: Michigan Geographic Framework, All Roads MapServer layer 20, https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20. In a western corridor research envelope (`-90.09,46.43,-89.89,46.75`), **17** named `Presque Isle Rd` segments, NFC 5, primary network reference PR 1475809, are geometrically endpoint-connected; approximate **21.44 km** of centerline. The northernmost source coordinate is roughly **1,316 m straight-line** south of DNR parking asset 841. Therefore this is **not** a completed driving route or a signed last turn into parking. Three separately named `W Presque Isle Rd` features with NFC 0 and different PR are **not** silently included as signed CR519.
+- Township work zone: https://wakefieldtownship.com/north-county-road-519-will-be-closed/ posted **September 22, 2026**; limited scope to junction at M-28, not all of CR519. Detour named **Johnson Road**. No detailed legal detour topology, current reopening, vehicle speeds, accessibility or travel time source.
+- County winter roadside restriction: https://gogebiccountyroadcommission.org/ posted October 26, 2026. Overnight roadside/shoulder parking outside city limits prohibited **November 1–April 15, 2–7 a.m.** This does not establish park lot hours.
+- The separate August 2026 state rehabilitation announcement describing pavement condition 2 of 10 concerns prospective improvement and cannot be confused with the dated township water-main construction work.
+
+**Product decision:** Overlay 17 source-matched road centerlines as a visibly non-navigable, opt-in reference and retain the DNR parking pin as a separate last-mile reference. Suppress unchecked Google driving-route links to Presque Isle for travel dates on or after the 2026-09-22 notice while reopening evidence is absent. Preserve other source-supported parking links, leave all bridge/ford cases blocked, and never offer an invented Johnson Road turn list. Keep the official township notice and the location-only map link prominent in no-JS output. Users must check current local status and signs: do not display an ongoing closure badge based solely on an old undated-end notice.
+
+**Review ledger:** `public/porcupine-mountains/west-access-evidence.json`, `public/porcupine-mountains/cr519-road-reference.geojson`, `tests/porkies-cr519-corridor.test.mjs`, and extended browser planner QA. Neither DNR seasonal road operations nor county road project data constitute a live closure map. The rest of Porkies is not a turn-by-turn road or hiking router, and the main page stays `noindex,follow`.
+
+---
+
 ## Critical crossing and bridge review — 2026-10-28
 
 **Verification result: no named wilderness pedestrian crossing can currently be certified passable from public official data.** That is not a claim that every bridge is absent or closed. The core unresolved problem is inadequate current bridge-condition and individually matched crossing evidence, not a missing route animation.
