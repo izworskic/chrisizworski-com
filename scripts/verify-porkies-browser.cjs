@@ -139,7 +139,7 @@ async function main(){
    need((await page.locator('[data-parking-id="presque"] .access-date-note').innerText()).includes('Johnson Road'),device.name+' township detour warning absent from parking decision');
    await page.locator('#arrival').selectOption('east');
    await page.locator('#planner button[type=submit]').click();
-   await page.waitForFunction(()=>!document.querySelector('[data-parking-id="presque"] .parking-drive'),null,{timeout:5000});
+   await page.waitForFunction(()=>Boolean(document.querySelector('[data-parking-id="ski"] .parking-drive')),null,{timeout:5000}); // Wait for new planner render, not previously-absent west link.
    need(await page.locator('[data-parking-id="presque"] .parking-drive').count()===0,device.name+' east-origin winter route incorrectly offered County Road 519 across closed park');
    need(await page.locator('[data-parking-id="ski"] .parking-drive').count()===1,device.name+' east-origin winter sports route missing');
    content=await page.locator('#results').innerText();
