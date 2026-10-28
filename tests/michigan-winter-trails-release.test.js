@@ -13,7 +13,7 @@ test('crawlable statewide winter trail guide with 15 source-backed static trail 
   assert.match(html,/<noscript>/);
   for(const region of ['up','north','south'])assert.ok(html.includes('data-region="'+region+'"'),region);
   for(const tag of ['snowshoe','ski','bike','hike'])assert.ok(html.includes('data-tag="'+tag+'"'),tag);
-  for(const bad of ['michigan-winter-wildlife','great-lakes-winter-guide','michigan-winter-night-sky','michigan-winter-weekends']){
+  for(const bad of ['michigan-winter-wildlife','great-lakes-winter-guide','michigan-winter-night-sky']){
     assert.ok(!html.includes('href="/'+bad+'/"'),'unreleased sibling link '+bad);
   }
 });
