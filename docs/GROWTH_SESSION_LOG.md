@@ -1,3 +1,12 @@
+### 2026-10-28 — Porkies named junction and river-crossing verification
+
+- Compared **819** DNR hiking line features with **1,190** Michigan EGLE hydrography features. Detected **174** candidate line encounters (86 exact GIS intersections, 88 within-12-meter near-lines), retained all private candidate coordinates for source map review. These are not 174 signed crossings and are NOT safe routes.
+- Cross-walked **23 DNR-described junction/crossing/terminal records** with explicit source URL, null GPS, unknown bridge/ford status and `routeEligible:false`. DNR explicitly confirms Beaver Creek crosses Little Carp and Government Peak crosses the upper Carp; source GIS finds Beaver Creek/Little Carp intersection (one exact plus nearby duplicates), Government Peak has a Carp River Inlet label requiring independent name check. Presque east/west, Pinkerton Creek remain uncertified.
+- Published only privacy/safety-safe aggregate `public/porcupine-mountains/crossing-evidence.json`, no fake crossing coordinates, no automated ford or bridge decisions. New `#crossings` park-ranger field guide explains four high-priority hazards including historical-only 2016 Big Carp bridge washout.
+- Automated reproducible evidence: `.github/workflows/porkies-crossings-audit.yml`, `lib/porkies/crossing-candidates.mjs`, `scripts/research-porkies-crossings.mjs`, `data/porkies-junction-crossing-ledger.json`, `tests/porkies-crossings.test.mjs`, `tests/porkies-crossing-registry.test.mjs`. Full research methods in `docs/PORKIES_ROUTE_NETWORK_EVIDENCE.md`.
+- **Release:** Porkies /porcupine-mountains remains draft PR #1254, `noindex,follow`, not merged. No new metrics, ad changes or current bridge/ford status claims.
+- **Exactly one next investment:** match official DNR GPS map unbridged-crossing markers to distinct source trail/hydro IDs, review bridge/ford physical status from current credible official evidence, and certify named endpoints before permitting hiking routes or ETA.
+
 ### 2026-10-28 — Porkies official road and trail topology evidence
 
 - Reconstructed public-source hiking connectivity from **819 DNR records** and official Michigan Geographic Framework **296 road-centerline records**. Trail endpoint-components at 3/5/10/15 m = **8/7/6/3**. Real geometry coverage is about **78 mapped miles**, NOT the complete verified park hiking network.
