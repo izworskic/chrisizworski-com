@@ -148,7 +148,15 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "hydropower-dam-context-not-falls-guide",
+      "sourceNotes": "Dickinson County tourism describes Peavy Falls Dam as a scenic drive/fishing point, not independently verified waterfall visitor trail. Do not transform dam access into natural waterfall directions.",
+      "sourceLinks": [
+        "https://www.ironmountain.org/pages/fall-colors/"
+      ],
+      "outstandingGate": "Reconcile GIS falls versus Peavy hydropower dam and determine whether a separate legally accessible falls exists.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 12,
@@ -165,7 +173,15 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "regional-approach-source-name-variant",
+      "sourceNotes": "Iron County Economic Chamber calls Chicaugon Falls, accessed by rough Dave's Camp Road/Raymer Road and signed walk; GIS uses Chicagon. Spring road washout warning. Alias and legal trail must be confirmed independently.",
+      "sourceLinks": [
+        "https://www.iron.org/outdoors/waterfalls/"
+      ],
+      "outstandingGate": "Chicagon/Chicaugon identity check, road and parking legality, trail manager, up-to-date passability.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 15,
@@ -233,7 +249,15 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "regional-name-variant-route-needs-confirmation",
+      "sourceNotes": "Iron County Economic Chamber lists Mexi-Mini Falls near Burnt Dam Campground; state GIS spells Mex-I-Min-E. Do not assume name identity or campground trail without independent Forest Service source.",
+      "sourceLinks": [
+        "https://www.iron.org/outdoors/waterfalls/"
+      ],
+      "outstandingGate": "Alias/geographic match, USFS current campground status, public parking/trail details.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 20,
@@ -360,7 +384,15 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "regional-trail-route-source-found",
+      "sourceNotes": "Iron County Economic Chamber documents Duppy Falls accessed from FH16 to FS trail road 3645, then ~0.5-mile unmarked trail from State Creek clearing. Unmarked path and possible road access constraints; no authoritative forest road open-status or park-trail confirmation.",
+      "sourceLinks": [
+        "https://www.iron.org/outdoors/waterfalls/"
+      ],
+      "outstandingGate": "USFS land and road jurisdiction, signed or accepted public trailhead, bridge status, safe approach and geographic feature identity.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 27,
@@ -966,7 +998,15 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "federal-managed-trail-route-source-found",
+      "sourceNotes": "USFS Trap Hills brochure documents Cascade Falls Trail, Forest Road 400 to Forest Road 468; main route 0.75 mile one way, Bluff route 1 mile one way with rock scrambling. Archived brochure; check current access/road status and map trailhead before publication.",
+      "sourceLinks": [
+        "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf"
+      ],
+      "outstandingGate": "Current Forest Service route and road conditions; official trailhead mapping and waterfall pin reconciliation.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 68,
@@ -1834,7 +1874,16 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "regional-public-parking-route-source-found",
+      "sourceNotes": "Regional 2026 Porcupine Mountains waterfall guide calls Bonanza/Greenwood Falls on Big Iron River, via M-64 and gravel access; independent waterfall photography resource reports a signed Greenwood Falls small parking area near Silver City. Validate landowner and legal entry, precise parking and seasonal road status.",
+      "sourceLinks": [
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
+      ],
+      "outstandingGate": "Official land manager and legal approach, parking status, alias match Bonanza/Greenwood; no public promotion on tourism evidence alone.",
+      "evidenceReviewed": "2026-10-28",
+      "publicationEligible": false
     },
     {
       "gisObjectId": 126,
@@ -3161,6 +3210,20 @@
       "draftedVisitorGuideCount": 3,
       "publicGuidesAdded": 0,
       "outcome": "Official signed road-level parking/trail approaches and visitor copy drafted; source identity, map-target, verification and release gates outstanding."
+    },
+    {
+      "batch": "03-western-UP-source-triage",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        9,
+        12,
+        19,
+        26,
+        67,
+        124
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Six distinct research candidates triaged; USFS route for Cascade, regional leads for Bonanza, Duppy, Chicagon and Mex-I-Min-E, dam caution at Peavy. All gated."
     }
   ]
 }
