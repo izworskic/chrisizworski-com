@@ -368,6 +368,26 @@
       "targetedPorkiesBridgeItemFound": false,
       "inference": "No matching listed closure does NOT establish an open bridge or safe ford."
     },
+    "managedBridgeAssetAudit": {
+      "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRReferenceAssetsOPENDATA/FeatureServer/0",
+      "reviewed": "2026-10-28",
+      "spatialFilter": "-90.06,46.61,-89.55,46.90 WGS84 envelope",
+      "recordsFound": 1,
+      "records": [
+        {
+          "objectId": 163,
+          "assetType": "Bridge",
+          "detailType": "Vehicular",
+          "description": "Snowmobile UP1",
+          "owner": "County",
+          "administrator": "DNR",
+          "condition": null,
+          "publicVisitorHikingBridge": false
+        }
+      ],
+      "explicitlyVerifiedFootbridgeAssetRecords": 0,
+      "interpretation": "Only one regional vehicular/snowmobile asset is recorded in this DNR managed bridge layer. No named Porkies pedestrian crossings were confirmed by this dataset. This is an incomplete asset-inventory source for hiking and MUST NOT be used to claim that bridges do not physically exist, are closed, or are open."
+    },
     "entries": [
       {
         "id": "beaver-littlecarp-ford",
