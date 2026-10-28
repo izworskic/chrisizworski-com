@@ -1,3 +1,14 @@
+### 2026-10-27 — Apostle Islands island-by-island access expansion
+
+- PR #1246, branch `feat/apostle-islands-island-access-20261027`, expands existing indexable `/apostle-islands/` instead of publishing thin new island pages.
+- Eight source-evidenced island dossiers, 17 specifically named NPS trails, named docks (not GPS waypoints), separate camping and ferry/shuttle status, closure gate for Devils Island, and informed same-day vs overnight choices.
+- Interactive purpose filters and two-island comparison use HTML content that remains visible without JavaScript. Hero and original guide cards link directly to the new layer.
+- Researched using October 2026 NPS trail and public docks lists, individual campsite directory, primitive zone exclusions, active closures, 2026 construction, and authorized concessioner 2026 transport schedules. 2026 seasonal service never implies future ticket availability.
+- Unchanged ads, route/canonical and original Circle Tour search intent. SEO effects and new GSC clicks/impressions **unmeasured**.
+- Evidence and revalidation policy: `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`. Source inventory: `public/apostle-islands/island-access.json`.
+- Release gate: complete full-repository CI and real 390px/1366px Chromium checks, then merge only green exact SHA, verify Vercel READY and real public page; no fabricated access status or live availability.
+- Single next action: Inspect PR #1246 checks and screenshots, resolve any failures, then merge and smoke-test production.
+
 ### 2026-10-27 — Apostle Islands decision-oriented Circle Tour field guide
 
 - **Branch / PR:** `feat/apostle-islands-explorer`, [#1239](https://github.com/izworskic/chrisizworski-com/pull/1239), draft. Distinct canonical `/apostle-islands/` owns water access, trip-type, cave, cruise, Madeline ferry and backcountry decisions; the existing Circle Tour remains multi-state routing owner.
