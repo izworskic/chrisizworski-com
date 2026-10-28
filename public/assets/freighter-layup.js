@@ -20,7 +20,7 @@
  function photoHTML(v,detail=false){
    const p=v.photo;
    if(!p)return shipSVG;
-   const url='https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
+   const url=p.thumbUrl||('https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960');
    return '<span class="fallback-ship" hidden>'+shipSVG+'</span><img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.previousElementSibling.hidden=false">';
  }
  function vesselCard(v){
@@ -33,7 +33,8 @@
    // To-scale silhouette from the fleet specs file when the experience layer is present; the monogram stays as the hull mark.
    const fleet=window.WinterFleet,spec=fleet?.specFor(v.id),art=fleet?fleet.cardArt(v):'';
    const specLine=spec?'<p class="spec">'+esc(spec.lengthFt.toLocaleString()+' ft · '+spec.beamFt+' ft beam · built '+spec.built+(spec.fleet?' · '+spec.fleet:''))+'</p>':'';
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+art+'<span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p>'+specLine+'<button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
+   const cardPhoto=v.photo?'<div class="ship-card-photo">'+photoHTML(v)+'<span class="ship-photo-credit">'+esc(v.photo.creator)+'</span></div>':'';
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'">'+cardPhoto+'<div class="ship-art">'+art+'<span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p>'+specLine+'<button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
  }
 
  function activeRecordsFromLedger(ledger,archive){

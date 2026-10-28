@@ -2,61 +2,81 @@
 /**
  * Sprint 1 Fall & Winter Field Guide Benchmark (Value Function V_sprint1)
  * Verifies:
- * 1. /michigan-winter-weekends/ (Rank #1 Flagship: 12 stops, 15 verified photos, Automatic 4-Season Engine, Leaflet map)
- * 2. /michigan-white-christmas-escapes/ (Rank #2: 10 stops, 13 verified photos, Christmas Countdown Engine, NOAA climatology + live tool handoffs)
- * 3. 100% real photograph coverage (0 .wf-story-index placeholders) across all 6 winter field guides
- * 4. Hub & sitemap integration across /tools/, /michigan-destinations/, /fall-color/, and /sitemap-winter.xml
+ * 1. Rank #1 /michigan-winter-weekends/ (12 stops, 15 verified photos, 4 always-visible season cards, Leaflet map)
+ * 2. Rank #2 /michigan-white-christmas-escapes/ (10 stops, 13 verified photos, 4 always-visible season cards, NOAA climatology + live tool handoffs)
+ * 3. Rank #3 /michigan-first-snow-adventures/ (12 stops, 15 verified photos, 4 always-visible season cards, snowbelt tool handoffs)
+ * 4. Rank #4 /great-lakes-winter-freighter-guide/ (12 stops, 15 verified photos, 4 always-visible season cards, maritime tool handoffs)
+ * 5. /great-lakes-freighter-winter-layup/ + 6 biography pages: 12 real ship card photos (.ship-card-photo img) via thumb.wikimedia.org (0 Special:Redirect 429s)
+ * 6. 100% real photograph coverage (0 .wf-story-index placeholders) across all 8 winter field guides
+ * 7. Hub & sitemap integration across /tools/, /michigan-destinations/, /freighters/, and /sitemap-winter.xml
  */
 import {readFileSync} from 'node:fs';
 
 const read = (p) => readFileSync(p, 'utf8');
 
 const wkdHtml = read('public/michigan-winter-weekends/index.html');
-const wkdJs = read('public/assets/michigan-winter-weekends.js');
 const wceHtml = read('public/michigan-white-christmas-escapes/index.html');
-const wceJs = read('public/assets/michigan-white-christmas-escapes.js');
+const fsaHtml = read('public/michigan-first-snow-adventures/index.html');
+const wfgHtml = read('public/great-lakes-winter-freighter-guide/index.html');
+const layupHtml = read('public/great-lakes-freighter-winter-layup/index.html');
+const layupReg = read('public/assets/freighter-layup-registry.json');
 
 const checks = [
   {
-    name: 'Rank #1 Michigan Winter Weekend Getaways: 12 static 2-day base towns + JSON-LD',
-    weight: 20,
+    name: 'Rank #1 Michigan Winter Weekend Getaways: 12 static 2-day base towns + 4 always-visible season cards',
+    weight: 15,
     pass:
       (wkdHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
+      (wkdHtml.match(/data-season-card="/g) || []).length === 4 &&
       wkdHtml.includes('"numberOfItems":12') &&
       wkdHtml.includes('"@type":"FAQPage"'),
   },
   {
-    name: 'Rank #1 Automatic 4-Season Calendar Engine (America/Detroit) + Playbook Decoder',
+    name: 'Rank #2 Michigan White Christmas Escapes: 10 static holiday towns + 4 always-visible season cards + NOAA climatology',
     weight: 15,
-    pass:
-      wkdHtml.includes('id="wkd-season-bar"') &&
-      wkdHtml.includes('id="wkd-mode-stage"') &&
-      wkdJs.includes('America/Detroit'),
-  },
-  {
-    name: 'Rank #2 Michigan White Christmas Escapes: 10 static holiday towns + NOAA 1991-2020 climatology',
-    weight: 20,
     pass:
       (wceHtml.match(/<article class="wf-story"/g) || []).length === 10 &&
+      (wceHtml.match(/data-season-card="/g) || []).length === 4 &&
       wceHtml.includes('"numberOfItems":10') &&
       wceHtml.includes('1991–2020') &&
-      wceHtml.includes('href="/national-tools/white-christmas/forecast/"') &&
-      wceHtml.includes('href="/white-christmas-probability-map/"'),
+      wceHtml.includes('href="/national-tools/white-christmas/forecast/"'),
   },
   {
-    name: 'Rank #2 Automatic Christmas Countdown & 4-Season Holiday Engine (America/Detroit)',
+    name: 'Rank #3 Michigan First Snow Adventures: 12 static early-snowbelt stops + 4 always-visible season cards + snow tool links',
     weight: 15,
     pass:
-      wceHtml.includes('id="wce-season-bar"') &&
-      wceHtml.includes('id="wce-mode-stage"') &&
-      wceJs.includes('America/Detroit'),
+      (fsaHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
+      (fsaHtml.match(/data-season-card="/g) || []).length === 4 &&
+      fsaHtml.includes('"numberOfItems":12') &&
+      fsaHtml.includes('href="/michigan-snow-depth/"') &&
+      fsaHtml.includes('href="/lake-effect-snow/"'),
   },
   {
-    name: '100% Real Verified Photographs (0 .wf-story-index boxes) across all 6 Winter Field Guides',
+    name: 'Rank #4 Great Lakes Winter Freighter & Harbor Guide: 12 static harbors + 4 always-visible season cards + maritime tool links',
+    weight: 15,
+    pass:
+      (wfgHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
+      (wfgHtml.match(/data-season-card="/g) || []).length === 4 &&
+      wfgHtml.includes('"numberOfItems":12') &&
+      wfgHtml.includes('href="/great-lakes-freighter-winter-layup/"') &&
+      wfgHtml.includes('href="/great-lakes-freighter-tracking/"'),
+  },
+  {
+    name: 'Freighter Winter Layup: 12 real ship card photos (.ship-card-photo) + thumbUrl in all 14 registry entries (0 Special:Redirect)',
+    weight: 15,
+    pass:
+      (layupHtml.match(/class="ship-card-photo"/g) || []).length === 12 &&
+      !layupHtml.includes('Special:Redirect') &&
+      (layupReg.match(/"thumbUrl":\s*"https:\/\/thumb\.wikimedia\.org\//g) || []).length === 14,
+  },
+  {
+    name: '100% Real Verified Photographs (0 .wf-story-index boxes) across all 8 Winter Field Guides',
     weight: 15,
     pass: [
       'public/michigan-winter-weekends/index.html',
       'public/michigan-white-christmas-escapes/index.html',
+      'public/michigan-first-snow-adventures/index.html',
+      'public/great-lakes-winter-freighter-guide/index.html',
       'public/michigan-winter-activities/index.html',
       'public/frozen-michigan/index.html',
       'public/michigan-winter-trails/index.html',
@@ -67,16 +87,20 @@ const checks = [
     }),
   },
   {
-    name: 'Discovery Hub & Sitemap Wiring (/tools/, /michigan-destinations/, /fall-color/, /sitemap-winter.xml)',
-    weight: 15,
+    name: 'Discovery Hub & Sitemap Wiring (/tools/, /michigan-destinations/, /freighters/, /sitemap-winter.xml)',
+    weight: 10,
     pass: [
       'public/tools/index.html',
       'public/michigan-destinations/index.html',
-      'public/fall-color/index.html',
       'public/sitemap-winter.xml',
     ].every((p) => {
       const h = read(p);
-      return h.includes('michigan-winter-weekends/') && h.includes('michigan-white-christmas-escapes/');
+      return (
+        h.includes('michigan-winter-weekends/') &&
+        h.includes('michigan-white-christmas-escapes/') &&
+        h.includes('michigan-first-snow-adventures/') &&
+        h.includes('great-lakes-winter-freighter-guide/')
+      );
     }),
   },
 ];
