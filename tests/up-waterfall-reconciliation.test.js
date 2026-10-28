@@ -101,52 +101,78 @@ test('canonical source ledger and geographic reconciliation agree as waterfall c
   }
 });
 
-test('Bonanza/Greenwood parcel conflict remains opt-in research-only, not visitor routing', () => {
-  const record = ledger.candidates.find(x => x.gisObjectId === 124);
-  const original = JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'))
-    .entries.find(x => x.source === 'mi-state-gis' && x.sourceId === 124);
-  const reviewData = JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'));
-  const review = reviewData.records.find(x => x.gisObjectId === 124);
-  const gisOverlay = fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
-  const hub = fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
 
-  assert.equal(record.reconciliation, 'pending-identity-and-access-research');
-  assert.equal(record.publicationEligible, false);
-  assert.equal(record.publicAccessVerified, false);
-  assert.equal(record.parkingVerified, false);
-  assert.equal(original.publication, 'research-only');
-  assert.equal(original.curatedId, null);
-  assert.ok(original.classification.includes('parcel-boundary-conflict'));
-  assert.ok(review);
-  assert.equal(review.publicationEligible, false);
-  assert.equal(review.publicAccess, 'township-visitor-site-documented-full-route-unverified');
-  assert.match(review.summary, /municipal|township/i);
-  assert.match(review.summary, /private/i);
-  assert.ok(review.guidance.includes('Do not navigate to the GIS falls point'));
-  assert.ok(review.sourceLinks.some(x => x.url.includes('ontonagoncounty.org')));
-  assert.ok(review.sourceLinks.some(x => x.url.includes('sabu.mtu.edu')));
-  assert.ok(gisOverlay.includes('up-waterfall-access-reviews.json'));
-  assert.ok(gisOverlay.includes('review.publicationEligible===false'));
-  assert.ok(gisOverlay.includes('document.createElement'));
-  assert.ok(!curated.waterfalls.some(x => x.gisObjectId === 124));
-  assert.ok(!hub.includes('data-gis-oid="124"'));
-  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
+test('Bonanza public guide is scoped strictly to signed township upper-falls access', () => {
+  const f = curated.waterfalls.find(x => x.id === 'bonanza-falls');
+  const record = ledger.candidates.find(x => x.gisObjectId === 124);
+  const original = JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json', 'utf8'))
+    .entries.find(x => x.source === 'mi-state-gis' && x.sourceId === 124);
+  const review = JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'))
+    .records.find(x => x.gisObjectId === 124);
+  const page = fs.readFileSync('public/upper-peninsula-waterfalls/bonanza-falls/index.html','utf8');
+  const hub = fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  assert.ok(f);
+  assert.equal(f.gisObjectId, 124);
+  assert.equal(f.publication, 'verified-access-guide');
+  assert.equal(record.reconciliation, 'curated-exact-gis-id');
+  assert.equal(record.curatedId, f.id);
+  assert.equal(record.publicationEligible, true);
+  assert.equal(original.identity, 'linked');
+  assert.equal(original.publication, 'verified-access-guide');
+  assert.equal(original.curatedId, f.id);
+  assert.equal(review.publicationScope, 'township-park-signed-upper-falls-only');
+  assert.equal(record.verificationScope, 'township-signed-park-and-upper-falls-public-view-only');
+  assert.equal(record.downstreamWalkVerified, false);
+  assert.equal(record.parcelReview.fullWalkToNaturalGisPointEstablished, false);
+  assert.equal(record.parcelReview.titleOrEasementEstablished, false);
+  assert.deepEqual([f.lat, f.lng], [46.818863, -89.571458]);
+  for (const key of ['landManager','publicAccess','parking','trail','location']) {
+    assert.equal(f.verification[key].verified, true, key);
+    assert.ok(page.replaceAll('&amp;', '&').includes(f.verification[key].source), key + ' evidence missing');
+  }
+  assert.ok(page.includes('https://www.carplaketwp.org/general-resources'));
+  assert.ok(page.includes('Township-listed Google Maps destination'));
+  assert.ok(page.includes('data-visit-lat="46.8176942"'));
+  assert.ok(page.includes('data-view-lat="46.817719"'));
+  assert.ok(page.includes('data-lat="46.818863"'));
+  assert.ok(!page.includes('data-parking-lat='));
+  assert.match(page, /downstream.*private|private.*downstream|unverified.*downstream/i);
+  assert.match(page, /current opening and road conditions are unverified/i);
+  assert.ok(page.includes('https://chrisizworski.com/#person'));
+  assert.ok(page.includes('href="/upper-peninsula-waterfalls/"'));
+  assert.match(page, /<meta name="robots" content="index,follow/);
+  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/greenwood-falls/'));
+  const card = hub.match(/<article class="waterfall-card"[^>]*data-id="bonanza-falls"[\s\S]*?<\/article>/);
+  assert.ok(card);
+  assert.match(card[0], /data-arrival-verified="verified"/);
+  assert.match(card[0], /data-gis-oid="124"/);
+  assert.ok(card[0].includes('Check parking source') && card[0].includes('Check trail source'));
+  assert.ok(!card[0].includes('data-parking-lat='));
 });
 
-test('Bonanza township signage and seasonal closure evidence cannot imply current open status', () => {
+test('Bonanza three-map references and seasonality never impersonate parking or current opening', () => {
   const r = ledger.candidates.find(x => x.gisObjectId === 124);
   const review = JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'))
     .records.find(x => x.gisObjectId === 124);
-  assert.equal(r.parcelReview.townshipVisitorEvidence.visitorSiteConfirmed, true);
+  const mapScript = fs.readFileSync('public/assets/up-fall-detail.js','utf8');
+  const page = fs.readFileSync('public/upper-peninsula-waterfalls/bonanza-falls/index.html','utf8');
+  const map = r.parcelReview.townshipVisitorEvidence.officialParkDirectionsDestination;
+  assert.deepEqual([map.lat, map.lng], [46.8176942,-89.5674561]);
+  assert.equal(map.parkingLotPrecisionConfirmed, false);
   assert.equal(r.parcelReview.townshipVisitorEvidence.currentOpenStatus, 'not-verified');
-  assert.equal(r.parcelReview.publicAccessEstablished, false);
-  assert.equal(review.publicationEligible, false);
-  assert.match(review.guidance, /signed.*township entrance|signed.*entrance/i);
-  assert.match(review.guidance, /late October|winter/i);
-  assert.ok(review.sourceLinks.some(x => /2f5de80733814402a12c7433d4b19023/.test(x.url)));
-  assert.ok(review.sourceLinks.some(x => /0bf497560d2a44b68cee8fd20bab0828/.test(x.url)));
-  assert.match(review.reviewLimitations, /2026 closing date/i);
-  assert.ok(!curated.waterfalls.some(x => x.id === 'bonanza-falls'));
-  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
+  assert.equal(r.currentOpenStatus, 'unverified');
+  assert.equal(r.parcelReview.publicAccessEstablished, true);
+  assert.equal(r.parcelReview.fullWalkToNaturalGisPointEstablished, false);
+  assert.equal(review.publicationEligible, true);
+  assert.equal(review.parkVisitorMapDestination.parkingLocation, false);
+  assert.equal(review.regionalUpperFallsReference.surveyedViewpoint, false);
+  assert.match(page, /not a surveyed parking-lot waypoint|not an exact parking coordinate/i);
+  assert.match(page, /do not draw|does not draw/i);
+  assert.match(page, /late October|winter|December/i);
+  assert.match(mapScript, /dataSet|dataset\.visitLat|dataset\.viewLat/);
+  assert.match(mapScript, /not a surveyed parking-lot coordinate/);
+  assert.match(mapScript, /not a GPS trail marker/);
+  assert.ok(page.includes('https://www.google.com/maps/dir/?api=1&destination=46.8176942%2C-89.5674561'));
+  assert.ok(!page.includes('destination=46.818863'));
 });
