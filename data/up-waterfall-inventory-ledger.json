@@ -2163,8 +2163,8 @@
       "publication": "verified-access-guide",
       "access": "published-public-park-trail-not-current-opening",
       "landManager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
-      "parkingEvidence": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
-      "trailEvidence": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "trailEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
       "nextAction": "Verify same-day road closure before describing as open.",
@@ -2172,12 +2172,12 @@
       "reviewBatch": "03",
       "reviewed": "2026-10-28",
       "classification": "verified-visitor-guide",
-      "accessAssessment": "DNR's Porcupine Mountains visitor guide describes Trap Falls as a 3.2-mile round-trip hike from Government Peak Trailhead on M-107, typically taking 2–5 hours. Follow the Government Peak Trail to the river viewpoint. Check current M-107 and park-road restrictions before departure; park road closures affect some segments from Dec. 1 to late spring. Avoid trail shortcuts, unbridged water crossings and uncertain ice conditions.",
+      "accessAssessment": "DNR's Porcupine Mountains visitor guide describes Trap Falls as a 3.2-mile round-trip hike from Government Peak Trailhead on M-107, typically taking 2–5 hours. Follow the Government Peak Trail to the river viewpoint. Check current M-107 and park-road restrictions before departure; park road closures affect some segments from Dec. 1 to late spring. Avoid trail shortcuts, unbridged water crossings and uncertain ice conditions. Distance of 3.2 miles derives from DNR 2023 visitor guide; current DNR trail descriptions confirm the route, not the mileage.",
       "evidence": [
         "https://www.michigan.gov/recsearch/parks/porkies",
         "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
-        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
-        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
