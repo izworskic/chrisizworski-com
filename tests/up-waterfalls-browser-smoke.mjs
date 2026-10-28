@@ -53,6 +53,29 @@ try{
     await page.waitForFunction(()=>document.querySelector('#geo-candidate-status')?.textContent.includes('additional geographic research points displayed'),{timeout:15000});
     assert.match(await page.locator('#geo-candidate-status').innerText(),/research points displayed/i);
   });
+  await run('Bonanza parcel boundary warning renders on opt-in GIS marker without drive route',async()=>{
+    const message=await page.evaluate(()=>{
+      const map=window.UPWaterfallMap;
+      if(!map)throw Error('Missing waterfall map');
+      let found=null;
+      map.eachLayer(layer=>{
+        if(typeof layer.getLayers!=='function)return;
+        for(const marker of layer.getLayers()){
+          if(typeof marker.getLatLng!=='function')continue;
+          const p=marker.getLatLng();
+          if(Math.abs(p.lat-46.818863)<0.00005&&Math.abs(p.lng+89.571458)<0.00005)found=marker;
+        }
+      });
+      if(!found)throw Error('Bonanza research marker not available');
+      const popup=found.getPopup();
+      if(!popup)throw Error('Bonanza access popup missing');
+      return popup.getContent()?.textContent||'';
+    });
+    assert.match(message,/seasonal township visitor area/i);
+    assert.match(message,/private LLC/i);
+    assert.match(message,/do not navigate to the GIS falls point/i);
+    assert.doesNotMatch(message,/Google Maps driving directions/i);
+  });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
     const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
