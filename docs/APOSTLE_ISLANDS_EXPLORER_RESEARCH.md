@@ -48,3 +48,42 @@ Source, creator and license link appear at every figure. Verify HTTP image respo
 - [ ] Validate NPS construction status and operator season before next annual season.
 - [ ] Merge only after green gates and rendered QA; smoke-test live URL and record final SHA.
 - [ ] Measure the specific canonical URL in GSC after a comparable observation period; no ranking or revenue claims before data.
+
+## Island access decision layer — October 27, 2026
+
+The next visitor-value investment is **one substantial island-by-island comparison on the existing indexable canonical**, not thin unvalidated child pages. The NPS site publishes documented docks, 17 trails for the eight curated islands below, and designated campsite requirements. The authorized cruise operator publishes island *types* of seasonal transport. These are separate categories of evidence: a dock is not a landing guarantee, a campground permit is not a transport booking, and a lighthouse named on a cruise route does not imply a landing.
+
+### Eight island dossiers
+| Island | NPS named public dock | Walk/experience evidence | Camping / transport qualification |
+|---|---|---|---|
+| Stockton | Presque Isle east/west; Quarry Bay | Julian Bay 0.4 mi; Anderson Point 1.4; Tombolo 2.8 | NPS designated accessible and group sites; operator seasonal day and overnight shuttles; bridge/wade alert |
+| Oak | West dock | Loop 5.2; Overlook 1.8 (overlook 3.5 from dock); Sandspit 1.5 | Overnight camping shuttle, **not** promised day roundtrip; designated camping |
+| Sand | East Bay | Lighthouse 2.0; Wellisch Cabin 0.6 | NPS accessible site 3/group C; unverified routine shuttle; private docks and West Bay Club excluded; old campsite coordinates unreliable |
+| Raspberry | Light station east/west docks | West Bay 1.0; Sandspit 0.75 | Seasonal lighthouse tour; no designated campsite; excluded from primitive zones |
+| Michigan | Light station dock | Sandspit 1.0; Lagoon 0.5 | NPS campsites; operator lighthouse tour listing; landing on selected trip must be confirmed |
+| Rocky | East dock | West 1.0; South 0.9; North 0.45 | NPS campsites; no scheduled shuttle verified; private land around Group A protected |
+| Basswood | West dock | 5.5-mile farm and quarry loop | NPS campsites; no scheduled shuttle verified |
+| Devils | Southern marina **closed** | Historical Boathouse 1.0 **not offered as a route** | 2026 marina rehabilitation; campsites closed, no primitive zone. Recommend viewing only when conditions/operator permit |
+
+### Primary evidence
+- [NPS island hiking trail descriptions](https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm) — names and trail lengths, reviewed Oct 27, 2026.
+- [NPS boat docking table](https://www.nps.gov/apis/planyourvisit/boating.htm) — named landings; conditions and depths can change.
+- [NPS park map and docks](https://www.nps.gov/apis/planyourvisit/park-brochure.htm) — geography, not GPS-perfect safe navigation.
+- [NPS designated campsite directory](https://www.nps.gov/apis/planyourvisit/campsite-directory.htm) — per-island sites; **Sand Island campsite coordinates currently being updated by NPS**.
+- [NPS camping practice and fees](https://www.nps.gov/apis/planyourvisit/camping.htm) — all camping permits and transport independent.
+- [NPS primitive zone exclusions](https://www.nps.gov/apis/planyourvisit/primitive-camping-zones.htm) — excludes Devils/Raspberry among others.
+- [2026 NPS construction alerts](https://www.nps.gov/apis/learn/infrastructure-projects.htm) — Devils dock remains closed until repair; Little Sand Bay launch remains open with possible delays.
+- [NPS formal closure compendium](https://www.nps.gov/apis/learn/management/superintendents-compendium.htm) — Devils docks/boathouse closure.
+- [NPS conditions and alerts](https://www.nps.gov/apis/planyourvisit/conditions.htm) — dated warnings, private inholdings and Stockton washed-out bridge.
+- [Authorized concessioner shuttle options](https://www.apostleisland.com/hiking-and-camping-shuttles/) — Stockton seasonal day and overnight; Oak overnight; departure and return both must be reserved; 2026 season should not be depicted as current after October.
+- [Authorized operator tours](https://www.apostleisland.com/fares-schedules/) — Raspberry and Michigan lighthouse experiences; not proof any future departure is bookable.
+
+### Safety, editorial and measurement gates
+- Keep eight evidence-backed dossiers in static HTML sourced from `public/apostle-islands/island-access.json`. This source document is a research dataset, not a live API; do not treat its review date as measurement freshness beyond October 2026.
+- No invented boat taxi bookings, public ferry routes, precise dock or campsite coordinates, estimated paddling times, or safe-launch decisions.
+- Explicit absence of public landing on Devils; closed campsites not presented as reservable.
+- Intent filters and comparisons only change presentation, never unlock access.
+- Separate newly expanded visitor intent ("which island should I visit?") from Circle Tour's road itinerary intent; no new thin indexable pages.
+- Run full source tests plus dedicated real Chromium (390px/1366px), check no-JS static dossier evidence, accessibility, license attributions, broken links and existing field guide regressions.
+- Commit only verified changed files. CI+Vercel must be green before merging; post-merge public route and canonical 200, new cards and interactions smoke-tested.
+- Compare canonical `/apostle-islands/` GSC discovery in equivalent 28-day periods when data exists; cannot claim ranking uplift on publication.
