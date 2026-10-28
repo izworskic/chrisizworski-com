@@ -144,3 +144,38 @@ The first two releases identified eight promising islands, their historic/offici
 - Existing static-content tests protect all 8 island guides, 17 trails and 9 activity cards. Browser QA checks 390px phone, 1366px desktop, source desk, archive labels, actual Leaflet tiles and no-JS source links.
 - Preserve author identity, all existing indexable canonicals, Circle Tour navigation and existing AdSense setup. No new indexed URL or ad changes.
 - Full repository verify, browser QA, emitted-output audits and Vercel ready before merge. SEO outcome unmeasured.
+
+## October 28, 2026 · NPS dock-to-trail arrival field desk
+
+### Research investment
+Until this change, the island planner had eight island dossiers and 17 hiking trails but mostly generic named landings. NPS publishes a **public dock table** with individual shore docks and historical published depth ranges, a separate **hiking trail directory** with actual trailheads and mileages, and a **campsite directory** with named sites and special accessible connections.
+
+The public `/apostle-islands/` guide now pairs the three sources in **11 landings across eight islands**: 10 NPS-listed public dock locations and one expressly **closed** Devils Island south landing. These are not all 21 islands, nor inferred safe beach landings. Raw research inventory: `public/apostle-islands/landing-evidence.json`, last reviewed October 28, 2026.
+
+| Island | NPS dock descriptions and published depth ranges | Grounded trail / campsite relationship |
+|---|---|---|
+| Stockton | Presque Isle west 6–7 ft, east 4–7 ft, Quarry Bay 5–6 ft | Julian Bay 0.4 mi from Presque Isle visitor area, Quarry Bay link 3.6 mi, Quarry Trail 1.5 mi. NPS says west dock boardwalk to accessible site #1, Quarry Bay dock boardwalk to group sites A/B. Prior bridge washout affects overland plans. |
+| Oak | West dock 4–5 ft | 5.2-mi island loop; 1.8-mi overlook spur with NPS statement that overlook lies roughly 3.5 mi from dock. Campsite locations vary; do not treat sandspit as adjacent to dock. |
+| Sand | East Bay dock 2–3 ft | Lighthouse trail 2.0 mi; Wellisch Cabin 0.6 mi. NPS reports accessible site #3 and group C from dock by boardwalk; older campsite GPS coordinates under correction. No maintained trail from East Bay to Lighthouse Bay sites 4/5. |
+| Raspberry | Light station west dock 5–6 ft, east 3–4 ft | Two lighthouse-area forest trails; **no** designated campsite or primitive overnight option. |
+| Michigan | Light station dock 3–5 ft | Sandspit 1.0 mi, lagoon 0.5 mi; bog route can appear to end. Island tour does not guarantee a landing. |
+| Rocky | East dock 6–7 ft | North 0.45, South 0.9 and West 1.0 mile; NPS North Trail past campsites 4/5/A. Private inholding restrictions. |
+| Basswood | West dock 2–4 ft | 5.5-mi quarry/farm loop; near-dock short branch to camps A/5/6, other sites by quarry. |
+| Devils | **South landing struck through in NPS dock inventory, closed during rehabilitation** | Historic Boathouse Trail 1.0 mi is **not** offered as an accessible walk or landing route. No depth range shown. |
+
+### Sources / safety constraints
+- [NPS public docks](https://www.nps.gov/apis/planyourvisit/boating.htm): published ranges are broad, vary with lake levels, sediment and storms; dock space has no guarantee. **These are not current navigation clearances.**
+- [NPS island hiking](https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm): exact NPS trail names, distances, trail starts, and caution descriptions. We avoid falsely adding trail segments to infer trip length/time.
+- [NPS campsite directory](https://www.nps.gov/apis/planyourvisit/campsite-directory.htm): official named sites, boardwalk accessibility, Sand Island coordinate corrections. Site descriptions do not establish reservations/availability.
+- [NPS island transport](https://www.nps.gov/apis/planyourvisit/getting-to-the-islands.htm): 21 NPS islands require water access; Madeline Island is not an NPS island and uses a separate ferry.
+- [NPS construction](https://www.nps.gov/apis/learn/infrastructure-projects.htm): Devils marina closure requires future manual revalidation. We do not treat the struck-through historic dock as public.
+- [NPS park conditions](https://www.nps.gov/apis/planyourvisit/conditions.htm): critical decision must be rechecked for visitor date.
+- Road map links navigate to the **Bayfield waterfront** and **Little Sand Bay visitor area** only. There is no inferred water route, berth coordinate, paddling duration or safe-launch indicator.
+- Keep original eight island static dossiers, trail directory, source freshness desk, and 2026 archived transport honest. No new indexable pages or ad changes.
+
+### Quality and release gates
+- Unit source assertions verify exactly 11 dock records, 10 listed, 1 closed, 8 islands, 10 sourced NPS published depth ranges, no GPS points and 8 reciprocal island links.
+- Browser QA verifies filter changes across Stockton (3 docks), Raspberry (2), Sand (1), Devils (1 closed), all (11), and source-only no-JS presentation, with screenshots at 390px/1366px.
+- Trip brief retains proposed dock's name as **something to verify**, not a booking. Source citations and date remain the authority.
+- Full `verify:all`, public rendered HTML audit, Vercel preview and exact-head checks must pass before merge; production deployment and page smoke after merge.
+- Growth measurement not yet established; a new user path exists from Circle Tour → Apostle Islands → island → actual dock → trip brief, but GSC/GA should be assessed later rather than claiming engagement improvements.

@@ -135,3 +135,47 @@
 .ap-source-foot{font-size:.77rem;color:#536b6b;margin:14px 0 0;line-height:1.6}
 @media(max-width:800px){.ap-source-head{display:block}.ap-source-basis{margin-top:14px}.ap-source-list{grid-template-columns:1fr}}
 @media(max-width:480px){.ap-source-item{padding:15px}.ap-source-meta{display:block}.ap-source-meta a{display:block;margin-top:8px}}
+
+/* Dock -> trail field guide: published public-dock evidence, not current clearance. */
+.dock-desk{padding:36px 0 50px;scroll-margin-top:20px}
+.dock-desk-heading{max-width:900px}.dock-desk-heading .eyebrow{color:var(--orange)}
+.dock-desk-heading h2{font:normal clamp(1.75rem,3vw,2.5rem)/1.16 var(--serif);margin:7px 0 12px}
+.dock-desk-heading>p:not(.eyebrow){color:#536967;font-size:.98rem;line-height:1.6;margin:0 0 15px}
+.dock-desk-warning{padding:16px 19px;background:#fff4e8;border-left:5px solid #b77b40;color:#5b4c3b;border-radius:0 10px 10px 0;font-size:.87rem;line-height:1.62;margin:22px 0}
+.dock-desk-warning a{font-weight:750}
+.dock-desk-selector{background:#e7efea;padding:17px 21px;border-radius:13px;margin:16px 0}
+.dock-desk-selector label{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:.85rem;font-weight:800}
+#dock-island-choice{min-height:43px;min-width:240px;max-width:100%;padding:8px 11px;font-size:.9rem;border:1px solid #819c93;border-radius:9px;background:#fff;color:#234d50}
+#dock-found-count{font-size:.76rem;color:#4b6867;margin:9px 0 0}
+.dock-record-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:14px}
+.dock-record{display:flex;flex-direction:column;min-width:0;padding:19px;background:#fffdfa;border:1px solid #d4e0d7;border-radius:13px;gap:11px}
+.dock-record[hidden]{display:none}
+.dock-record-closed{background:#fcf3f0;border-color:#dbbcb5}
+.dock-card-top{display:flex;gap:12px;align-items:flex-start}
+.dock-card-top>div{flex:1;min-width:0}
+.dock-card-index{font:1.7rem/1 var(--serif);color:#a07957;min-width:31px}
+.dock-card-island{color:#9e602e!important;font-size:.67rem!important;letter-spacing:.07em;text-transform:uppercase;font-weight:850;margin:0 0 4px!important}
+.dock-card-top h3{font:normal 1.4rem/1.15 var(--serif);margin:0}
+.dock-chip{font-size:.67rem;text-align:center;min-width:80px;max-width:110px;background:#e3efe7;color:#315c4f;padding:5px 9px;font-weight:800;border-radius:6px;line-height:1.35}
+.dock-chip-closed{background:#f0d6d0;color:#8a3225}
+.dock-depth{margin:0;background:#edf4ef;border-radius:7px;padding:10px 12px;font-size:.81rem;line-height:1.5;color:#244b4a}
+.dock-record-closed .dock-depth{background:#f6ded9}
+.dock-depth span{color:#5b7069}
+.dock-facts{display:grid;gap:13px;margin:0 0 2px}
+.dock-facts>div{padding-bottom:12px;border-bottom:1px solid #e1e7df}
+.dock-facts>div:last-child{border-bottom:0;padding-bottom:0}
+.dock-facts strong{display:block;color:#325a55;text-transform:uppercase;letter-spacing:.07em;font-size:.69rem;margin-bottom:5px}
+.dock-facts p{font-size:.85rem;line-height:1.54;color:#425b5f;margin:0}
+.dock-actions{display:flex;flex-wrap:wrap;gap:10px 15px;margin-top:auto;padding-top:14px;border-top:1px solid #e1e7df}
+.dock-actions a{font-size:.76rem;font-weight:800}
+.dock-actions .dock-plan-link{color:#975821}
+.dock-launch-gateway{background:#143c46;color:#f4f7f2;padding:21px 25px;border-radius:14px;display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;margin:17px 0}
+.dock-launch-gateway h3{color:white;font:normal 1.45rem var(--serif);margin:0 0 9px}
+.dock-launch-gateway p{font-size:.86rem;line-height:1.62;margin:0;color:#e5eeee}
+.dock-launch-gateway nav{display:flex;flex-direction:column;gap:9px}
+.dock-launch-gateway nav a{font-size:.82rem;font-weight:800;color:#f6e1b7}
+.dock-desk-note{margin:10px 0 0;color:#536b6b;font-size:.76rem;line-height:1.6}
+@media(max-width:760px){.dock-record-grid{grid-template-columns:1fr}.dock-launch-gateway{grid-template-columns:1fr}.dock-card-top h3{font-size:1.3rem}}
+@media(max-width:450px){.dock-desk-selector label{display:block}.dock-desk-selector select{display:block;margin:9px 0 0;width:100%}.dock-record{padding:15px}.dock-card-top{gap:7px}.dock-card-index{min-width:25px;font-size:1.4rem}.dock-chip{min-width:76px;max-width:85px;font-size:.61rem}.dock-launch-gateway{padding:17px}}
+
+.trip-dock-context{font-size:.8rem;color:#4c6763;line-height:1.55;background:#f1f5ee;padding:10px 12px;border-left:3px solid #7b9a86;border-radius:0 7px 7px 0;margin:15px 0 0}
