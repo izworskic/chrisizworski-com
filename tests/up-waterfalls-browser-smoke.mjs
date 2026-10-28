@@ -59,7 +59,7 @@ try{
       if(!map)throw Error('Missing waterfall map');
       let found=null;
       map.eachLayer(layer=>{
-        if(typeof layer.getLayers!=='function)return;
+        if(typeof layer.getLayers!=='function')return;
         for(const marker of layer.getLayers()){
           if(typeof marker.getLatLng!=='function')continue;
           const p=marker.getLatLng();
