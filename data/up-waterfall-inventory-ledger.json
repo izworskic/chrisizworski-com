@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 44,
-  "linkedByExactOid": 36,
-  "unresolvedCandidates": 125,
+  "curatedCount": 45,
+  "linkedByExactOid": 37,
+  "unresolvedCandidates": 124,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -2312,22 +2312,22 @@
         -89.571458
       ],
       "river": "BIG IRON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "bonanza-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "township-seasonal-visitor-site-only-full-route-unverified",
-      "landManager": "Carp Lake Township manages published signed visitor site, not all riverbank parcels",
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "township-public-upper-falls-park-approach-only-not-open-now",
+      "landManager": "Carp Lake Township — Greenwoods Bonanza Falls Park visitor facilities, not all riverfront parcels",
+      "parkingEvidence": "https://www.carplaketwp.org/general-resources",
+      "trailEvidence": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Trace signed municipal lot-to-public viewing route and its land rights; verify current posted opening/closure. No indexing or GIS pin driving.",
+      "nextAction": "Keep no invented lot coordinate or cross-property route. Review present season opening and any official updated access map; downstream walk remains excluded.",
       "batch": "county-ontonagon",
       "reviewed": "2026-10-28",
-      "reviewBatch": "06",
-      "classification": "township-visitor-site-private-waterfall-parcel-boundary",
-      "accessAssessment": "Municipality documents signage, parking, visitor facilities and seasonal park closure. GIS falls point belongs to separately attributed private parcel, while regional brochure point lies within a township-attributed parcel. Exact legal lot-to-view trail and current season status unverified.",
+      "reviewBatch": "07",
+      "classification": "verified-municipal-park-visitor-route-geo-falls-point-outside-park",
+      "accessAssessment": "Official township park directory with falls and published Google Maps park destination. From the signed M-64 lot follow short path to upper river view only. Original MI GIS #124 falls point is outside township-attributed parcel; that point is not public parking or authorized downstream access. Current park gate/winter operation unverified.",
       "evidence": [
         "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
         "https://ontonagoncounty.org/home/resources/",
@@ -2335,7 +2335,9 @@
         "https://www.carplaketwp.org/meeting-minutes",
         "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf",
         "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf",
-        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf"
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf",
+        "https://www.carplaketwp.org/general-resources",
+        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
       ]
     },
     {
@@ -4002,5 +4004,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "05"
+  "lastBatch": "07"
 }
