@@ -28,18 +28,19 @@
 .wce-season-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,.15)}
 .wce-season-head .wf-eyebrow{color:#a8e5d2;margin-bottom:4px}
 .wce-season-head h2{color:#fff;font-size:1.38rem;margin:0}
-.wce-season-tabs{display:flex;flex-wrap:wrap;gap:6px}
-.wce-season-tab{background:rgba(255,255,255,.1);color:#e2f5ee;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;font-size:.72rem;font-weight:700;cursor:pointer}
-.wce-season-tab[aria-pressed="true"]{background:#fff;color:#15362d;border-color:#fff}
-.wce-season-body{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding-top:14px}
-.wce-season-body h3{color:#fff;font-size:1.18rem;margin:0 0 6px}
-.wce-season-body p{color:#d8efe7;font-size:.8rem;line-height:1.58;margin:0}
-.wce-season-picks{margin-top:8px!important;font-size:.76rem!important;color:#fff!important}
+.wce-season-lead{color:#cfeee3;font-size:.79rem;line-height:1.48;max-width:54ch;margin:0}
+.wce-season-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-top:14px}
+.wce-season-card{background:rgba(10,29,24,.48);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:7px}
+.wce-season-card[data-current-season="true"]{background:rgba(255,255,255,.12);border-color:#e7a854;box-shadow:0 0 0 1px rgba(231,168,84,.4)}
+.wce-season-card-top{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.wce-season-window{font-size:.69rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#a8e5d2}
+.wce-season-live-pill{background:#e7a854;color:#142821;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:999px}
+.wce-season-card h3{color:#fff;font-size:1.02rem;line-height:1.26;margin:0}
+.wce-season-card p{color:#d8efe7;font-size:.77rem;line-height:1.5;margin:0}
+.wce-season-picks{margin-top:auto!important;padding-top:4px;font-size:.73rem!important;color:#fff!important}
 .wce-season-picks a{color:#b0eed9;text-decoration:underline}
-.wce-season-cta{display:flex;flex-direction:column;gap:6px;align-items:flex-end;max-width:230px;text-align:right}
-.wce-season-btn{background:#e7a854;color:#172923;border:none;border-radius:6px;padding:9px 14px;font-size:.76rem;font-weight:800;cursor:pointer;white-space:nowrap}
-.wce-season-btn:hover{background:#f0b86b}
-.wce-season-cta small{color:#b8ded1;font-size:.67rem;line-height:1.35}
+.wce-season-card-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:5px;padding:7px 10px;border-radius:5px;background:rgba(255,255,255,.14);color:#fff;font-size:.74rem;font-weight:700;text-decoration:none}
+.wce-season-card-cta:hover{background:#e7a854;color:#142821}
 
 .wce-science{padding:22px 0 26px;border-top:1px solid var(--wf-line)}
 .wce-science-head{display:flex;justify-content:space-between;align-items:end;gap:22px}
@@ -97,7 +98,7 @@
 .wce-ledger-card p{font-size:.77rem;color:var(--wf-muted);line-height:1.5}
 .wce-ledger-card a{margin-top:auto;font-size:.73rem;font-weight:700}
 
-@media(max-width:930px){.wce .wf-hero{grid-template-columns:1fr 1fr}.wce .wce-hero-montage{height:240px}.wce-science-head,.wce-ledger-head,.wce-season-body{display:block}.wce-science-head>p,.wce-ledger-head>p{margin-top:7px}.wce-season-cta{align-items:flex-start;text-align:left;max-width:none;margin-top:12px}}
+@media(max-width:930px){.wce .wf-hero{grid-template-columns:1fr 1fr}.wce .wce-hero-montage{height:240px}.wce-science-head,.wce-ledger-head{display:block}.wce-science-head>p,.wce-ledger-head>p{margin-top:7px}.wce-season-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){.wce .wf-stories{display:flex;flex-direction:column}.wce .wf-story,.wce .wf-story:nth-child(2n){grid-template-columns:36% 64%}.wce .wf-story>.wf-photo{min-height:250px}.wce .wf-explore{display:flex;flex-direction:column}}
 @media(max-width:610px){
   .wce .wf-hero{display:flex;flex-direction:column;gap:15px;padding-top:18px}
@@ -107,6 +108,7 @@
   .wce-signpost{display:flex;flex-direction:column;gap:7px}
   .wce-closure{display:block;padding:14px}
   .wce-closure-actions{margin-top:10px;flex-direction:row;flex-wrap:wrap}
+  .wce-season-grid{grid-template-columns:1fr}
   .wce-science-layout{grid-template-columns:1fr}
   .wce .wf-controls{display:grid;grid-template-columns:1fr 1fr}
   .wce .wf-controls button{grid-column:1/-1}

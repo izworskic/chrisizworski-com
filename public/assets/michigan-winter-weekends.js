@@ -101,35 +101,19 @@ function detectCurrentSeason(){
  }catch{return 'winter'}
 }
 
-function setSeasonView(seasonKey,isAuto){
- const profile=seasonProfiles[seasonKey]||seasonProfiles.winter;
- activeSeasonTab=seasonKey in seasonProfiles?seasonKey:'winter';
- document.querySelectorAll('[data-season-tab]').forEach(tab=>{
-  tab.setAttribute('aria-pressed',String(tab.dataset.seasonTab===activeSeasonTab));
- });
+function setSeasonView(seasonKey){
+ const active=seasonKey in seasonProfiles?seasonKey:'winter';
+ const profile=seasonProfiles[active]||seasonProfiles.winter;
  const badge=document.getElementById('wkd-season-badge');
- const title=document.getElementById('wkd-season-title');
- const copy=document.getElementById('wkd-season-copy');
- const picks=document.getElementById('wkd-season-picks');
- const applyBtn=document.getElementById('wkd-season-apply');
- if(badge)badge.textContent=isAuto?profile.badge:profile.badge.replace('Auto-calibrated to Michigan calendar','Previewing seasonal weekend guide');
- if(title)title.textContent=profile.title;
- if(copy)copy.textContent=profile.copy;
- if(picks)picks.innerHTML=profile.picks;
- if(applyBtn)applyBtn.textContent=profile.btnLabel;
+ if(badge)badge.textContent=`All 4 seasonal weekend guides available below · ${profile.badge.split('·')[1]?.trim()||'Michigan calendar'}`;
+ document.querySelectorAll('[data-season-card]').forEach(card=>{
+  const isCurrent=card.dataset.seasonCard===active;
+  card.setAttribute('data-current-season',String(isCurrent));
+  const pill=card.querySelector('[data-season-pill]');
+  if(pill)pill.hidden=!isCurrent;
+ });
 }
-
-document.querySelectorAll('[data-season-tab]').forEach(tab=>{
- tab.addEventListener('click',()=>setSeasonView(tab.dataset.seasonTab||'winter',false));
-});
-document.getElementById('wkd-season-apply')?.addEventListener('click',()=>{
- if(seasonSelect){
-  seasonSelect.value=activeSeasonTab;
-  filter();
-  document.getElementById('explore')?.scrollIntoView({behavior:'smooth',block:'start'});
- }
-});
-setSeasonView(detectCurrentSeason(),true);
+setSeasonView(detectCurrentSeason());
 
 const modeStage={
  snowbelt:{

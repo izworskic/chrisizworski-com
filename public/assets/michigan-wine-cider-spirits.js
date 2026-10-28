@@ -119,6 +119,8 @@
 
   function detectCurrentSeason(){
     try{
+      const edition=document.body?.dataset?.seasonEdition;
+      if(edition&&seasonProfiles[edition])return edition;
       const params=new URLSearchParams(window.location.search);
       const override=params.get('season');
       if(override&&seasonProfiles[override])return override;
@@ -134,35 +136,19 @@
     }
   }
 
-  function setSeasonView(seasonKey,isAuto){
-    const profile=seasonProfiles[seasonKey]||seasonProfiles.winter;
-    activeSeasonTab=seasonKey in seasonProfiles?seasonKey:'winter';
-    document.querySelectorAll('[data-season-tab]').forEach(tab=>{
-      tab.setAttribute('aria-pressed',String(tab.dataset.seasonTab===activeSeasonTab));
-    });
+  function setSeasonView(seasonKey){
+    const active=seasonKey in seasonProfiles?seasonKey:'winter';
+    const profile=seasonProfiles[active]||seasonProfiles.winter;
     const badge=document.getElementById('wcs-season-badge');
-    const title=document.getElementById('wcs-season-title');
-    const copy=document.getElementById('wcs-season-copy');
-    const picks=document.getElementById('wcs-season-picks');
-    const applyBtn=document.getElementById('wcs-season-apply');
-    if(badge)badge.textContent=isAuto?profile.badge:profile.badge.replace('Auto-calibrated to Michigan calendar','Previewing seasonal guide');
-    if(title)title.textContent=profile.title;
-    if(copy)copy.textContent=profile.copy;
-    if(picks)picks.innerHTML=profile.picks;
-    if(applyBtn)applyBtn.textContent=profile.btnLabel;
+    if(badge)badge.textContent=`All 4 seasonal guides available below · ${profile.badge.split('·')[1]?.trim()||'Michigan calendar'}`;
+    document.querySelectorAll('[data-season-card]').forEach(card=>{
+      const isCurrent=card.dataset.seasonCard===active;
+      card.setAttribute('data-current-season',String(isCurrent));
+      const pill=card.querySelector('[data-season-pill]');
+      if(pill)pill.hidden=!isCurrent;
+    });
   }
-
-  document.querySelectorAll('[data-season-tab]').forEach(tab=>{
-    tab.addEventListener('click',()=>setSeasonView(tab.dataset.seasonTab||'winter',false));
-  });
-  document.getElementById('wcs-season-apply')?.addEventListener('click',()=>{
-    if(seasonSelect){
-      seasonSelect.value=activeSeasonTab;
-      apply();
-      document.getElementById('explore')?.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-  });
-  setSeasonView(detectCurrentSeason(),true);
+  setSeasonView(detectCurrentSeason());
 
   const modeStage={
     winter:{

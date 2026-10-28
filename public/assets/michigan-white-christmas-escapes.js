@@ -99,35 +99,19 @@ function detectCurrentSeason(){
  }catch{return 'early'}
 }
 
-function setSeasonView(seasonKey,isAuto){
- const profile=seasonProfiles[seasonKey]||seasonProfiles.early;
- activeSeasonTab=seasonKey in seasonProfiles?seasonKey:'early';
- document.querySelectorAll('[data-season-tab]').forEach(tab=>{
-  tab.setAttribute('aria-pressed',String(tab.dataset.seasonTab===activeSeasonTab));
- });
+function setSeasonView(seasonKey){
+ const active=seasonKey in seasonProfiles?seasonKey:'early';
+ const profile=seasonProfiles[active]||seasonProfiles.early;
  const badge=document.getElementById('wce-season-badge');
- const title=document.getElementById('wce-season-title');
- const copy=document.getElementById('wce-season-copy');
- const picks=document.getElementById('wce-season-picks');
- const applyBtn=document.getElementById('wce-season-apply');
- if(badge)badge.textContent=isAuto?profile.badge:profile.badge.replace('Auto-calibrated to Michigan calendar','Previewing holiday timeline stage');
- if(title)title.textContent=profile.title;
- if(copy)copy.textContent=profile.copy;
- if(picks)picks.innerHTML=profile.picks;
- if(applyBtn)applyBtn.textContent=profile.btnLabel;
+ if(badge)badge.textContent=`All 4 holiday planning windows available below · ${profile.badge.split('·')[1]?.trim()||'Michigan calendar'}`;
+ document.querySelectorAll('[data-season-card]').forEach(card=>{
+  const isCurrent=card.dataset.seasonCard===active;
+  card.setAttribute('data-current-season',String(isCurrent));
+  const pill=card.querySelector('[data-season-pill]');
+  if(pill)pill.hidden=!isCurrent;
+ });
 }
-
-document.querySelectorAll('[data-season-tab]').forEach(tab=>{
- tab.addEventListener('click',()=>setSeasonView(tab.dataset.seasonTab||'early',false));
-});
-document.getElementById('wce-season-apply')?.addEventListener('click',()=>{
- if(seasonSelect){
-  seasonSelect.value=activeSeasonTab;
-  filter();
-  document.getElementById('explore')?.scrollIntoView({behavior:'smooth',block:'start'});
- }
-});
-setSeasonView(detectCurrentSeason(),true);
+setSeasonView(detectCurrentSeason());
 
 const modeStage={
  up90:{

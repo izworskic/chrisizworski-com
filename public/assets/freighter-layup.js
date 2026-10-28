@@ -298,15 +298,14 @@
    const engine=$('layup-season-engine');if(!engine)return;
    const auto=detectLayupSeasonPhase(new Date());
    const badge=$('layup-auto-season-badge');
-   if(badge)badge.textContent='Auto-detected today: '+auto.label;
+   if(badge)badge.textContent='Current phase today: '+auto.label;
    const tabs=[...engine.querySelectorAll('[data-layup-phase-btn]')];
    const panels=[...engine.querySelectorAll('[data-layup-phase-panel]')];
-   const activate=phaseId=>{
-     tabs.forEach(t=>{const on=t.dataset.layupPhaseBtn===phaseId;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',String(on))});
-     panels.forEach(p=>{p.hidden=p.dataset.layupPhasePanel!==phaseId});
-   };
-   tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.layupPhaseBtn)));
-   activate(auto.id);
+   tabs.forEach(t=>{const on=t.dataset.layupPhaseBtn===auto.id;t.classList.toggle('is-active',on)});
+   panels.forEach(p=>{
+     p.hidden=false;
+     p.classList.toggle('is-current-phase',p.dataset.layupPhasePanel===auto.id);
+   });
  }
  function initPortViewingGuide(){
    const guide=$('layup-port-guide');if(!guide)return;

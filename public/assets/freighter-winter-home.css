@@ -277,11 +277,13 @@
 .layup-home .season-engine-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .layup-home .season-engine-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(79,207,149,.14);border:1px solid var(--aurora);color:var(--aurora);border-radius:999px;padding:.42rem .9rem;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .layup-home .season-engine-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:18px}
-.layup-home .season-tab{background:rgba(5,13,22,.5);border:1px solid var(--line);color:var(--fog);border-radius:12px;padding:.7rem .85rem;font-size:.82rem;font-weight:650;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,color .2s}
-.layup-home .season-tab:hover{border-color:var(--line-strong);color:var(--ice)}
+.layup-home .season-engine-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.layup-home .season-tab{display:inline-flex;align-items:center;background:rgba(5,13,22,.5);border:1px solid var(--line);color:var(--fog);border-radius:12px;padding:.7rem .85rem;font-size:.82rem;font-weight:650;cursor:pointer;text-align:left;text-decoration:none;transition:border-color .2s,background .2s,color .2s}
+.layup-home .season-tab:hover{border-color:var(--line-strong);color:var(--ice);text-decoration:none}
 .layup-home .season-tab.is-active{background:rgba(242,178,74,.14);border-color:var(--lamp);color:var(--white);box-shadow:0 0 0 1px rgba(242,178,74,.35)}
 .layup-home .season-panel{background:rgba(5,13,22,.45);border:1px solid var(--line);border-radius:14px;padding:20px}
-.layup-home .season-panel-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,.85fr);gap:22px;align-items:start}
+.layup-home .season-panel.is-current-phase{border-color:var(--lamp);box-shadow:0 0 0 1px rgba(242,178,74,.35),0 14px 32px rgba(0,0,0,.28)}
+.layup-home .season-panel-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 .layup-home .season-panel h3{font-size:1.3rem;margin:4px 0 10px;color:var(--white)}
 .layup-home .season-checklist{margin:12px 0 16px;padding-left:18px;color:var(--fog);font-size:.9rem;display:grid;gap:8px}
 .layup-home .season-panel-links{display:flex;flex-wrap:wrap;gap:10px}

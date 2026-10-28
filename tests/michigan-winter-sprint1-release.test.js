@@ -40,7 +40,9 @@ test('Rank #1 Flagship Michigan Winter Weekend Getaways (/michigan-winter-weeken
   assert.match(html, /id="wkd-season-bar"/);
   assert.match(html, /id="wkd-mode-stage"/);
   assert.match(html, /id="wkd-drive"/);
-  assert.match(html, /id="wkd-season"/);
+  for (const season of ['winter', 'spring', 'summer', 'fall']) {
+    assert.match(html, new RegExp(`data-season-card="${season}"`));
+  }
   assert.ok(html.includes('src="/assets/leaflet-1.9.4.js"'));
   assert.ok(!html.includes('unpkg.com/leaflet'));
 

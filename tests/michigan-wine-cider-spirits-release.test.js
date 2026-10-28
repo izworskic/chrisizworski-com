@@ -135,10 +135,12 @@ test('interactive 4-season auto-calendar engine, 4-mode decoder, 5-way filters, 
     assert.match(js, new RegExp(`${mode}:\\s*\\{`));
   }
   for (const season of ['winter', 'spring', 'summer', 'fall']) {
-    assert.match(html, new RegExp(`data-season-tab="${season}"`));
+    assert.match(html, new RegExp(`data-season-card="${season}"`));
+    assert.match(html, new RegExp(`href="/michigan-wine-cider-spirits/${season}/"`));
     assert.match(js, new RegExp(`${season}:\\s*\\{`));
+    assert.ok(fs.existsSync(path.join(rootDir, 'public', 'michigan-wine-cider-spirits', season, 'index.html')), `missing ${season} edition`);
   }
-  for (const id of ['wcs-season-bar', 'wcs-season', 'wcs-season-apply', 'wf-region', 'wf-feature', 'wcs-access', 'wf-reset', 'wf-map', 'wf-count', 'wcs-mode-stage']) {
+  for (const id of ['wcs-season-bar', 'wf-region', 'wf-feature', 'wcs-access', 'wf-reset', 'wf-map', 'wf-count', 'wcs-mode-stage']) {
     assert.match(html, new RegExp(`id="${id}"`), `missing #${id}`);
   }
   assert.match(js, /function detectCurrentSeason/);
