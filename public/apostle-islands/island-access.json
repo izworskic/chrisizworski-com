@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-27",
+  "scope": "Curated 8 of 21 islands; named docks are orientation references, NOT verified GPS landing waypoints",
+  "seasonCaveat": "2026 shuttle and dock evidence must be reverified for future seasons",
+  "sources": {
+    "trails": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+    "camping": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+    "transport": "https://www.apostleisland.com/hiking-and-camping-shuttles/",
+    "construction": "https://www.nps.gov/apis/learn/infrastructure-projects.htm",
+    "alerts": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
+    "boating": "https://www.nps.gov/apis/planyourvisit/boating.htm"
+  },
+  "islands": [
+    {
+      "id": "stockton",
+      "name": "Stockton Island",
+      "nickname": "Singing sands & island trails",
+      "overview": "Walk from Presque Isle through pine woods to Julian Bay, or continue deeper into the island where an old quarry and quieter shoreline await.",
+      "landing": "Presque Isle east/west public docks; Quarry Bay public dock",
+      "transport": "Operator lists a seasonal Stockton day-hiking shuttle and overnight camping shuttle; the published 2026 season has ended.",
+      "service": "seasonal",
+      "day": true,
+      "overnight": true,
+      "lighthouse": false,
+      "landable": true,
+      "trails": [
+        [
+          "Julian Bay Trail",
+          0.4,
+          "From the Presque Isle ranger station to Julian Bay beach."
+        ],
+        [
+          "Anderson Point Trail",
+          1.4,
+          "Wooded route between Julian Bay and the dock."
+        ],
+        [
+          "Tombolo Trail",
+          2.8,
+          "A lagoon outlet can require wading."
+        ]
+      ],
+      "camp": "NPS designated campsites; accessible site 1 at Presque Isle and group A/B at Quarry Bay. Permits and transport required.",
+      "warning": "A Presque Isle–Quarry Bay trail bridge was washed out; check current crossing conditions before choosing longer routes.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/stockton-campsites.htm",
+      "sourceTransport": "https://www.apostleisland.com/hiking-and-camping-shuttles/",
+      "transportLabel": "Published shuttles"
+    },
+    {
+      "id": "oak",
+      "name": "Oak Island",
+      "nickname": "High overlooks & long walks",
+      "overview": "Follow old beach ridges through hardwood forest to a view of islands and the Hole-in-the-Wall sea arch.",
+      "landing": "Public west-side dock; sandspit landing is a separate small-craft decision",
+      "transport": "Operator lists a seasonal overnight camping shuttle; it is not advertised as a regular same-day hiking shuttle.",
+      "service": "seasonal",
+      "day": false,
+      "overnight": true,
+      "lighthouse": false,
+      "landable": true,
+      "trails": [
+        [
+          "Loop Trail",
+          5.2,
+          "Horseshoe hike rising over the lakeshore's highest island point."
+        ],
+        [
+          "Overlook Trail",
+          1.8,
+          "Branch from the loop trail; overlook is 3.5 miles from dock."
+        ],
+        [
+          "Sandspit Trail",
+          1.5,
+          "Beach walk toward campsites, stay on established trail or sand."
+        ]
+      ],
+      "camp": "Designated individual and group sites; check the exact campsite's dock or sandspit approach.",
+      "warning": "An outbound ferry or shuttle ticket is not proof of a same-day return. Arrange pickup in advance.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/oak-campsites.htm",
+      "sourceTransport": "https://www.apostleisland.com/hiking-and-camping-shuttles/",
+      "transportLabel": "Overnight shuttle"
+    },
+    {
+      "id": "sand",
+      "name": "Sand Island",
+      "nickname": "Red sandstone lighthouse",
+      "overview": "The path from East Bay leads toward an 1881 brownstone lighthouse and an old keeper's view of western Lake Superior.",
+      "landing": "Public East Bay dock (no dock at Lighthouse Bay verified)",
+      "transport": "No regular Sand Island landing shuttle verified. Arrange an authorized water taxi or suitable private boat and return.",
+      "service": "arrange",
+      "day": true,
+      "overnight": true,
+      "lighthouse": true,
+      "landable": true,
+      "trails": [
+        [
+          "Lighthouse Trail",
+          2,
+          "From East Bay dock to the lighthouse; wet boardwalks may be slippery."
+        ],
+        [
+          "Wellisch Cabin Trail",
+          0.6,
+          "Old roadbed south past designated camping areas."
+        ]
+      ],
+      "camp": "Designated sites and group sites; NPS identifies accessible site 3 and group C by East Bay boardwalk. Permit required.",
+      "warning": "West Bay Club is closed, southeastern private docks are not public, and NPS says campsite coordinates are being corrected.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+      "sourceTransport": "https://www.nps.gov/apis/planyourvisit/commercial-services.htm",
+      "transportLabel": "Authorized services"
+    },
+    {
+      "id": "raspberry",
+      "name": "Raspberry Island",
+      "nickname": "Historic lighthouse grounds",
+      "overview": "A white lighthouse, forest canopy and small beach invite a quieter historical stop.",
+      "landing": "Public east and west docks by the light station",
+      "transport": "Operator publishes a seasonal Raspberry Island lighthouse tour with island time; confirm the future season and on-site tour access.",
+      "service": "seasonal",
+      "day": true,
+      "overnight": false,
+      "lighthouse": true,
+      "landable": true,
+      "trails": [
+        [
+          "West Bay Trail",
+          1,
+          "From light station toward views of Sand Island."
+        ],
+        [
+          "Sandspit Trail",
+          0.75,
+          "Old-growth forest route to the southeast beach."
+        ]
+      ],
+      "camp": "No designated campsites listed; Raspberry is excluded from primitive camping zones. Treat it as a day visit.",
+      "warning": "This is Wisconsin's Apostle Islands Raspberry Island, not Isle Royale's island with the same name.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/primitive-camping-zones.htm",
+      "sourceTransport": "https://www.apostleisland.com/fares-schedules/",
+      "transportLabel": "Lighthouse tour"
+    },
+    {
+      "id": "michigan",
+      "name": "Michigan Island",
+      "nickname": "Light stations & sandy spit",
+      "overview": "The light station and lagoon trail lead away from the open lake toward a remote island shoreline.",
+      "landing": "Public dock at Michigan Island light station",
+      "transport": "A Michigan Island lighthouse excursion is advertised; verify whether a specific departure actually lands and permits touring.",
+      "service": "tour",
+      "day": true,
+      "overnight": true,
+      "lighthouse": true,
+      "landable": true,
+      "trails": [
+        [
+          "Sandspit / Campsite Trail",
+          1,
+          "From the light station to sandspit campsites."
+        ],
+        [
+          "Lagoon Trail",
+          0.5,
+          "Trail appears to end at a bog before resuming farther on."
+        ]
+      ],
+      "camp": "NPS lists designated Michigan Island campsite options. Book a permit and arrange round-trip transport separately.",
+      "warning": "The bog crossing is not a continuous surfaced trail; sightseeing on water does not guarantee an island landing.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+      "sourceTransport": "https://www.apostleisland.com/fares-schedules/",
+      "transportLabel": "Island tour options"
+    },
+    {
+      "id": "rocky",
+      "name": "Rocky Island",
+      "nickname": "Forest, camps & fishing history",
+      "overview": "Small stretches of shore and modest wooded trails offer a less crowded island experience.",
+      "landing": "Public east-side dock",
+      "transport": "No scheduled passenger shuttle confirmed; plan a water taxi or private vessel with a verified return.",
+      "service": "arrange",
+      "day": true,
+      "overnight": true,
+      "lighthouse": false,
+      "landable": true,
+      "trails": [
+        [
+          "West Trail",
+          1,
+          "Wooded trail across the island from the dock."
+        ],
+        [
+          "South Trail",
+          0.9,
+          "Follows the island's eastern shoreline."
+        ],
+        [
+          "North Trail",
+          0.45,
+          "Past campsite area north of the public dock."
+        ]
+      ],
+      "camp": "Designated and group camping; permit required.",
+      "warning": "Private land north of Group Site A is not publicly accessible. Never use private docks as an access suggestion.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+      "sourceTransport": "https://www.nps.gov/apis/planyourvisit/commercial-services.htm",
+      "transportLabel": "Authorized services"
+    },
+    {
+      "id": "basswood",
+      "name": "Basswood Island",
+      "nickname": "Quarry & farm remnants",
+      "overview": "A substantial loop through old farm ground and stone-working sites tells the history of the lake's industrial shores.",
+      "landing": "Public west-side dock",
+      "transport": "No regular passenger shuttle verified. Arrange licensed water transport or private boating and a return.",
+      "service": "arrange",
+      "day": true,
+      "overnight": true,
+      "lighthouse": false,
+      "landable": true,
+      "trails": [
+        [
+          "Farm & Quarry Loop",
+          5.5,
+          "NPS loop from dock through McCloud-Brigham farm site and the historic brownstone quarry."
+        ]
+      ],
+      "camp": "NPS campsite directory lists designated Basswood campsites; backcountry permit required.",
+      "warning": "The quarry is historic industrial terrain; stay on maintained routes and do not enter unsafe structures.",
+      "sourceTrail": "https://www.nps.gov/apis/planyourvisit/basswood-island.htm",
+      "sourceCamp": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+      "sourceTransport": "https://www.nps.gov/apis/planyourvisit/commercial-services.htm",
+      "transportLabel": "Authorized services"
+    },
+    {
+      "id": "devils",
+      "name": "Devils Island",
+      "nickname": "Sea caves · dock closed",
+      "overview": "The outer island holds some of the most dramatic sandstone sea caves, but a visitor landing itinerary is not currently supportable.",
+      "landing": "South dock and marina closed for 2026 rehabilitation; no arrival instructions offered",
+      "transport": "Offshore viewing only when authorized operators and weather permit. Do not plan to land.",
+      "service": "closed",
+      "day": false,
+      "overnight": false,
+      "lighthouse": true,
+      "landable": false,
+      "trails": [
+        [
+          "Boathouse Trail",
+          1,
+          "Historic trail exists in NPS inventory but the south landing is closed; not a visit recommendation."
+        ]
+      ],
+      "camp": "NPS ongoing alerts list Devils Island campsites closed; primitive camping not permitted.",
+      "warning": "Closed dock, boathouse and adjacent areas. A trail entry in NPS inventory does not reopen island access.",
+      "sourceTrail": "https://www.nps.gov/apis/learn/infrastructure-projects.htm",
+      "sourceCamp": "https://www.nps.gov/apis/learn/management/superintendents-compendium.htm",
+      "sourceTransport": "https://www.nps.gov/apis/planyourvisit/boating.htm",
+      "transportLabel": "NPS closure"
+    }
+  ]
+}
