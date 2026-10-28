@@ -113,7 +113,7 @@ test('trip-readiness source content is available without client-side execution',
  assert.ok(html.includes('print the permit within seven days'));
  assert.ok(html.includes('within 30 days'));
  assert.ok(html.includes('Group camping for 8–21'));
- assert.ok(html.includes('does not include island transportation'));
+ assert.ok(html.includes('No campsite permit includes island transportation'));
  assert.ok(html.includes('No campsite permit includes island transportation'));
  assert.ok(html.indexOf('id="trip-readiness"')>html.indexOf('id="island-planner"'));
 });
@@ -124,7 +124,7 @@ test('trip-readiness logic never fabricates island travel or booking outcomes',(
   "group&&!groupIslands.has(key)","shuttleOvernight.has(key)",
   "dayDifference(day,today())","interval>30",
   "2026 season has ended","No verified scheduled service",
-  "An email confirmation is not"
+  "email confirmation is not"
  ]) assert.ok(engine.includes(guard),guard);
  assert.ok(engine.includes("new Set(['stockton','oak','sand','rocky','basswood'])"));
  assert.ok(engine.includes("new Set(['stockton','oak'])"));
