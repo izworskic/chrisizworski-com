@@ -1226,18 +1226,36 @@
         -89.446195
       ],
       "river": "CASCADE CREEK",
-      "identity": "unreconciled",
+      "identity": "name-river-location-consistent-access-unresolved",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "access": "candidate-public-forest-approach-unconfirmed; private-driveway-conflict",
+      "landManager": "Ottawa National Forest cited as trail vicinity; actual legal public easement/trail limits require official confirmation",
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/cascade-creek/cascade-falls/",
+      "trailEvidence": "https://www.americanwhitewater.org/content/River/view/river-detail/10805/main",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Check USFS named road/trail and parking entrance against federal map; exclude private south access. Do not make public routing claim until official forest access evidence resolves conflicting paths.",
+      "batch": "B03b-research-triage",
+      "evidence": [
+        "https://www.waterfallsofthekeweenaw.com/cascade-creek/cascade-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/10805/main"
+      ],
+      "flags": [
+        "private-driveway-approach",
+        "uncertain-authorized-parking",
+        "not-current-road-status"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -1949,18 +1967,36 @@
         -89.730367
       ],
       "river": "LITTLE IRON RIVER",
-      "identity": "unreconciled",
+      "identity": "coordinate-and-name-research-only-alias-dispute",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "public trailhead and legal approach unverified; avoid nearby Nonesuch trail inference",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Investigate GIS waterfall coordinate versus contemporary Little Iron/Pewabeck descriptions; no invented access track, no Nonesuch trail shortcut. Verify authority, signed parking and safe trail independently.",
+      "batch": "B03b-research-triage",
+      "evidence": [
+        "https://www.uptravel.com/listing/pewabeck-falls/3210/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ],
+      "flags": [
+        "possible-name-collision",
+        "no-verified-trailhead",
+        "no-legal-public-route"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -2303,18 +2339,41 @@
         -89.571458
       ],
       "river": "BIG IRON RIVER",
-      "identity": "unreconciled",
+      "identity": "alias-candidate-bonanza-greenwood-big-iron",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "published signed visitor route; falls-side ownership and legal public walkway not established by manager",
       "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+      "trailEvidence": "https://mi-trale.org/water-trails-of-michigan/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Resolve Greenwood/Bonanza alias with state GIS and authoritative land title; verify M-64 signed west-side parking and walking right with owner/manager before promotion. One waterfall identity, not separate URLs.",
+      "batch": "B03b-research-triage",
+      "aliases": [
+        "Greenwood Falls",
+        "Bonanza Falls"
+      ],
+      "evidence": [
+        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/waterfall/6655",
+        "https://mi-trale.org/water-trails-of-michigan/"
+      ],
+      "flags": [
+        "alias-not-separate-destination",
+        "land-tenure-unconfirmed",
+        "no-current-open-status"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -3980,5 +4039,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "03a"
+  "lastBatch": "03b-research"
 }
