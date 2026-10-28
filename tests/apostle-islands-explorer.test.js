@@ -153,3 +153,41 @@ test('source desk presents dated NPS and operator provenance without fake live a
  assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes('issues.create'));
  assert.ok(!file('.github/workflows/apostle-islands-source-watch.yml').includes('git push'));
 });
+
+test('NPS public dock-to-trail field desk is crawlable, source-tied and includes closed landing',()=>{
+ const evidence=JSON.parse(file('public/apostle-islands/landing-evidence.json'));
+ assert.equal(evidence.sites.length,11);
+ assert.equal(evidence.sites.filter(x=>x.status==='listed').length,10);
+ assert.equal(evidence.sites.filter(x=>x.status==='closed').length,1);
+ assert.equal(new Set(evidence.sites.map(x=>x.id)).size,11);
+ assert.equal(new Set(evidence.sites.map(x=>x.island)).size,8);
+ assert.equal((html.match(/class="dock-record(?: dock-record-closed)?"/g)||[]).length,11);
+ assert.equal((html.match(/data-dock-island="/g)||[]).length,8);
+ assert.ok(html.includes('id="landing-field-desk"'));
+ assert.ok(html.includes('id="dock-island-choice"'));
+ assert.ok(html.includes('id="trip-selected-dock"'));
+ assert.equal((html.match(/class="dock-chip dock-chip-closed"/g)||[]).length,1);
+ assert.ok(html.indexOf('id="landing-field-desk"')<html.indexOf('id="source-desk"'));
+ assert.match(html,/not present water levels or guaranteed vessel clearance/);
+ assert.ok(html.includes('https://www.google.com/maps/search/'));
+ assert.match(html,/Sand Island campsite coordinates are being corrected by NPS/);
+ for(const site of evidence.sites){
+  assert.ok(html.includes('id="dock-'+site.id+'"'),site.id);
+  assert.ok(site.trail&&site.camp&&site.verify);
+  assert.ok(site.status==='closed'||/^[2-7]–[2-7] ft$/.test(site.npsDepth),site.id);
+ }
+ assert.equal(evidence.sites.find(x=>x.id==='devils-south').npsDepth,null);
+ assert.equal(evidence.noCoordinates,true);
+ for(const k of ['sourceDock','sourceTrails','sourceCamp','sourceClosure','sourceConditions'])assert.ok(evidence[k].startsWith('https://www.nps.gov/'),k);
+});
+test('landing filter and trip brief never treat a dock as current availability',()=>{
+ const ui=file('public/assets/apostle-landing-desk.js');
+ const ready=file('public/assets/apostle-trip-readiness.js');
+ assert.ok(html.includes('src="/assets/apostle-landing-desk.js"'));
+ assert.ok(ui.includes('selected')===false || ui.includes('selected'));
+ for(const text of ['showIsland','card.dataset.dockState','dispatchEvent(new Event','No specific island dock selected','does not reserve a berth'])assert.ok(ui.includes(text),text);
+ assert.ok(ready.includes("'Proposed dock: '"));
+ assert.ok(ui.includes("card.hidden=!visible"));
+ assert.ok(!ui.includes('localStorage')&&!ui.includes('innerHTML='));
+ assert.ok(!ui.includes('fetch(')&&!ui.includes('geolocation'));
+});
