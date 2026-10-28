@@ -177,3 +177,55 @@ test('Bonanza three-map references and seasonality never impersonate parking or 
   assert.ok(page.includes('https://www.google.com/maps/dir/?api=1&destination=46.8176942%2C-89.5674561'));
   assert.ok(!page.includes('destination=46.818863'));
 });
+
+test('official Menominee River Sand Portage and Quiver guides preserve Wisconsin parking and the geographic point distinction', () => {
+  const canonical = JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+  const hub = fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  for (const [id,oid,road] of [['sand-portage-falls',3,/US-141|US Highway 141/],['quiver-falls',189,/Pemene Dam Road/]]) {
+    const f=curated.waterfalls.find(x=>x.id===id);
+    const row=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const original=canonical.entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+    const html=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+    assert.ok(f&&row&&original,id+' source missing');
+    assert.equal(f.publication,'verified-access-guide');
+    assert.equal(f.gisObjectId,oid);
+    assert.deepEqual([f.lat,f.lng],[row.lat,row.lng]);
+    assert.equal(row.reconciliation,'curated-exact-gis-id');
+    assert.equal(row.curatedId,id);
+    assert.equal(original.identity,'linked');
+    assert.equal(original.curatedId,id);
+    assert.equal(row.publicationEligible,true);
+    assert.equal(row.publicAccessVerified,true);
+    assert.equal(row.parkingVerified,true);
+    assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
+    assert.equal(row.visitorRouteEvidence.currentRoadStatus,'unverified');
+    assert.match(f.parking,road);
+    assert.match(html,road);
+    assert.match(html,/<meta name="robots" content="index,follow/);
+    assert.match(html,/waterfall.*not parking|not.*parking.*waterfall|coordinate.*not.*parking/i);
+    assert.match(html,/unplowed|not plowed|not.*plowed/i);
+    assert.ok(html.includes('https://chrisizworski.com/#person'));
+    assert.ok(html.includes('/assets/vendor/leaflet-1.9.4.css'));
+    assert.ok(html.includes('/assets/leaflet-1.9.4.js'));
+    assert.ok(!html.includes('data-parking-lat='),'cannot invent precise parking lat');
+    assert.ok(html.replace(/<[^>]+>/g,' ').trim().split(/\s+/).length>500,'thin guide '+id);
+    for(const key of ['landManager','publicAccess','parking','trail','location']){
+      assert.equal(f.verification[key].verified,true,id+' missing '+key);
+      assert.ok(html.replaceAll('&amp;','&').includes(f.verification[key].source),id+' missing source '+key);
+    }
+    const card=hub.match(new RegExp('<article class="waterfall-card"[^>]*data-id="'+id+'"[\\s\\S]*?<\\/article>'));
+    assert.ok(card,'missing hub card '+id);
+    assert.match(card[0],/data-arrival-verified="verified"/);
+    assert.match(card[0],/class="arrival-details"/);
+    assert.ok(card[0].includes('Check parking source')&&card[0].includes('Check trail source'));
+    assert.ok(sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+  }
+  const sand=fs.readFileSync('public/upper-peninsula-waterfalls/sand-portage-falls/index.html','utf8');
+  const quiver=fs.readFileSync('public/upper-peninsula-waterfalls/quiver-falls/index.html','utf8');
+  assert.match(sand,/no designated developed overlook|no designated.*overlook|no constructed falls viewing deck/i);
+  assert.match(sand,/Michigan.*Piers Gorge Road/i);
+  assert.match(quiver,/accessible.*parking|parking.*accessible/i);
+  assert.match(quiver,/does not publish.*distance|does not supply.*distance/i);
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/pemene-falls/'));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/misicot-falls/'));
+});
