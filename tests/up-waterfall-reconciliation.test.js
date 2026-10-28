@@ -47,3 +47,39 @@ test('Menominee drafts remain unpublished until location-to-arrival gate is clea
     assert.ok(row.publicAccessVerified);
   }
 });
+
+test('Cascade Falls guide is public only with signed FR 468 parking and separate waterfall point', () => {
+  const f = curated.waterfalls.find(x => x.id === 'cascade-falls');
+  const row = ledger.candidates.find(x => x.gisObjectId === 67);
+  assert.ok(f);
+  assert.equal(f.publication, 'verified-access-guide');
+  assert.equal(f.gisObjectId, 67);
+  assert.equal(row.curatedId, f.id);
+  assert.equal(row.reconciliation, 'curated-exact-gis-id');
+  assert.equal(row.publicationEligible, true);
+  assert.deepEqual([f.lat, f.lng], [row.lat, row.lng]);
+  for (const axis of ['landManager', 'publicAccess', 'parking', 'trail', 'location']) {
+    assert.equal(f.verification[axis].verified, true, axis);
+    assert.ok(f.verification[axis].source.startsWith('https://'));
+  }
+  const detail = fs.readFileSync('public/upper-peninsula-waterfalls/cascade-falls/index.html', 'utf8');
+  const hub = fs.readFileSync('public/upper-peninsula-waterfalls/index.html', 'utf8');
+  const card = hub.match(/<article class="waterfall-card"[^>]*data-id="cascade-falls"[\s\S]*?<\/article>/);
+  assert.ok(card);
+  assert.match(card[0], /data-gis-oid="67"/);
+  assert.match(card[0], /class="arrival-details"/);
+  assert.match(card[0], /data-arrival-verified="verified"/);
+  assert.match(card[0], /Check parking source/);
+  assert.match(detail, /<meta name="robots" content="index,follow/);
+  assert.ok(detail.includes('https://chrisizworski.com/#person'));
+  assert.ok(detail.includes('Forest Road 468') && detail.includes('Forest Road 400'));
+  assert.match(detail, /connector.*not yet|connector.*not.*official|connector.*not.*complete|proposed connector/i);
+  assert.match(detail, /not winter-plowed|not plowed|unplowed/i);
+  assert.match(detail, /current opening and road conditions are unverified/i);
+  for (const axis of ['landManager', 'publicAccess', 'parking', 'trail', 'location']) {
+    assert.ok(detail.includes(f.verification[axis].source), axis + ' must be cited in guide');
+  }
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/cascade-falls/</loc>'));
+  assert.ok(!card[0].includes('data-parking-lat='), 'no invented parking coordinate');
+  assert.ok(!detail.includes('maps/dir/?api=1&destination=46.651708'), 'do not route vehicles to falls');
+});
