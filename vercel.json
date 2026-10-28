@@ -1082,6 +1082,10 @@
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
     },
     {
+      "source": "/assets/white-christmas-season.js",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-season.js"
+    },
+    {
       "source": "/assets/white-christmas-hero-final.webp",
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-hero-final.webp"
     },
