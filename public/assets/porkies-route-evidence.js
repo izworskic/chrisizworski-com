@@ -72,6 +72,29 @@
    return false;
   }
  }
+ async function inspectNamedTrail(name) {
+  if(!atlas){message("Official line map is unavailable. Read the DNR descriptions and GPS map linked below.");return;}
+  if(typeof name!=="string"||!name.trim()||name.length>150)return;
+  if(!layers.trails) {
+   const ready=await show("trails");
+   if(!ready)return;
+  }
+  const selected=[],normal=trailStyle();
+  layers.trails.eachLayer(layer=>{
+   const source=String(layer.feature?.properties?.name||"");
+   const match=source.trim().toLowerCase()===name.trim().toLowerCase() ||
+      source.trim().toLowerCase()==="porcupine mountain wilderness "+name.trim().toLowerCase();
+   if(layer.setStyle)layer.setStyle(match?{color:"#d07d31",weight:5,opacity:1,dashArray:null}:normal);
+   if(match){selected.push(layer);if(layer.bringToFront)layer.bringToFront();}
+  });
+  if(!selected.length){
+   message(name+": not present as a separately named line in the DNR hiking GIS. No substitute line, artificial route or estimated walk is shown.");
+   return;
+  }
+  const bounds=root.L.featureGroup(selected).getBounds();
+  if(bounds.isValid())atlas.fitBounds(bounds.pad(.25),{maxZoom:13});
+  message(name+": showing "+selected.length+" source line fragment"+(selected.length===1?"":"s")+". This is NOT a verified continuous route; check the published map for missing parts, return trip and unbridged crossings.");
+ }
  function refresh(){
   if(layers.roads)layers.roads.setStyle(roadStyle);
   if(layers.roads)message("Road restrictions shown for the selected date. Red dashed lines are flagged as seasonally restricted; geometry is not live closure data.");
@@ -84,6 +107,7 @@
   buttonT.addEventListener("click",()=>show("trails"));
   buttonR.addEventListener("click",()=>show("roads"));
   if(buttonS)buttonS.addEventListener("click",()=>show("ski"));
+  root.addEventListener("porkies:trail-reference",e=>inspectNamedTrail(e?.detail?.name));
   root.document.getElementById("travel-date")?.addEventListener("change",refresh);
   root.document.getElementById("planner")?.addEventListener("submit",()=>root.setTimeout(refresh,0));
   atlas=root.PorkiesAtlas?.map||null;
