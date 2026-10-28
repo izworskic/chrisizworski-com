@@ -1,0 +1,60 @@
+name: Porkies named junction and river-crossing source audit
+on:
+  push:
+    branches: [feat/porkies-access-decision-explorer-20261028]
+    paths:
+      - 'data/porkies-junction-crossing-ledger.json'
+      - 'lib/porkies/crossing-candidates.mjs'
+      - 'scripts/research-porkies-crossings.mjs'
+      - '.github/workflows/porkies-crossings-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: porkies-crossing-audit-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test near-line vs real intersection and blocked safety semantics
+        run: node --test tests/porkies-crossings.test.mjs
+      - name: Crosscheck DNR hiking features against EGLE river centerlines
+        run: node scripts/research-porkies-crossings.mjs --emit-public-summary
+      - name: Verify public report cannot expose uncertified candidate GPS
+        run: |
+          node -e "const fs=require('fs');const a=require('./public/porcupine-mountains/crossing-evidence.json');const s=fs.readFileSync('./public/porcupine-mountains/crossing-evidence.json','utf8');if(a.status!=='crossing-research-not-route-approved'||a.counts.sourceTrails!==819||a.registry.length!==23||a.safety.anyAutoRouteAcrossStream!==false||a.registry.some(x=>x.routeEligible||x.coordinatesPublished)||s.includes('allCandidates')||s.includes('priorityRiverMatches'))process.exit(1)"
+      - name: Retain private candidate coordinates for manual DNR map comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-crossings-private-evidence
+          path: artifacts/porkies-crossings/
+          retention-days: 21
+          if-no-files-found: warn
+      - name: Publish safe source-only crossing summary to draft branch
+        if: github.ref == 'refs/heads/feat/porkies-access-decision-explorer-20261028'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/porcupine-mountains/crossing-evidence.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(porkies): preserve DNR-confirmed junction ledger and candidate crossings as unverified"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin feat/porkies-access-decision-explorer-20261028
+              git rebase origin/feat/porkies-access-decision-explorer-20261028
+              if git push origin HEAD:feat/porkies-access-decision-explorer-20261028; then
+                break
+              fi
+              if [ "$attempt" = 5 ]; then exit 1; fi
+              sleep "$attempt"
+            done
+          fi

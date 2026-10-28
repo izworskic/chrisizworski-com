@@ -1,0 +1,29 @@
+name: Porkies DNR geographic source audit
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/research-porkies-gis.mjs'
+      - '.github/workflows/porkies-dnr-source-audit.yml'
+permissions:
+  contents: read
+jobs:
+  source-import:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/feat/porkies')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Export DNR trails and parking research assets
+        run: node scripts/research-porkies-gis.mjs
+      - name: Preserve research data for manual GIS reconciliation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-dnr-gis-research
+          path: artifacts/porkies/
+          if-no-files-found: warn
+          retention-days: 21

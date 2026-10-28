@@ -1,0 +1,42 @@
+name: Porkies visitor planner browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/porcupine-mountains/**'
+      - 'public/assets/porkies-explorer.*'
+      - 'scripts/verify-porkies-browser.cjs'
+      - '.github/workflows/porkies-browser-qa.yml'
+  workflow_dispatch:
+concurrency:
+  group: porkies-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  chromium-field-guide:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated pinned Playwright harness
+        run: |
+          mkdir -p /tmp/porkies-playwright
+          npm install --prefix /tmp/porkies-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/porkies-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify mobile and desktop planner, license imagery, no-JS fallback
+        run: node scripts/verify-porkies-browser.cjs
+      - name: Upload screenshots and browser assertion report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-browser-qa
+          path: artifacts/porkies-browser/
+          if-no-files-found: warn
+          retention-days: 7
