@@ -229,7 +229,7 @@ test('atlas excludes NPS disputed Sand and anomalous Devils coordinate, never gu
  assert.equal(by('basswood').sites.length,7);
  assert.equal(by('michigan').sites.length,1);
  const atlasJs=file('public/assets/apostle-visual-atlas.js');
- for(const guard of ['getIsland','setTab','mapPoints','markerLayer.clearLayers','is-withheld','No site markers','CARTO','osm-fallback','document.querySelectorAll(\'[data-atlas-go]\')'])assert.ok(atlasJs.includes(guard),guard);
+ for(const guard of ['getIsland','setTab','mapPoints','markerLayer.clearLayers','is-withheld','no campsite location markers','CARTO','osm-fallback','document.querySelectorAll(\'[data-atlas-go]\')'])assert.ok(atlasJs.includes(guard),guard);
  assert.doesNotMatch(atlasJs,/L\.polyline|L\.polygon|L\.routing/);
  assert.doesNotMatch(atlasJs,/localStorage|sessionStorage|redis|innerHTML\s*=/i);
  assert.ok(html.includes('not reconstructed or guessed'));
