@@ -23,11 +23,12 @@ const layupReg = read('public/assets/freighter-layup-registry.json');
 
 const checks = [
   {
-    name: 'Rank #1 Michigan Winter Weekend Getaways: 12 static 2-day base towns + 4 always-visible season cards',
+    name: 'Rank #1 Michigan Winter Weekend Getaways: 12 static 2-day base towns + 4 visual experience doors + Weekend Blueprint',
     weight: 15,
     pass:
       (wkdHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
-      (wkdHtml.match(/data-season-card="/g) || []).length === 4 &&
+      (wkdHtml.match(/data-door="/g) || []).length === 4 &&
+      (wkdHtml.match(/data-blueprint="/g) || []).length === 4 &&
       wkdHtml.includes('"numberOfItems":12') &&
       wkdHtml.includes('"@type":"FAQPage"'),
   },
