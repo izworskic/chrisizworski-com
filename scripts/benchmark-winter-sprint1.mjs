@@ -53,11 +53,12 @@ const checks = [
       fsaHtml.includes('href="/lake-effect-snow/"'),
   },
   {
-    name: 'Rank #4 Great Lakes Winter Freighter & Harbor Guide: 12 static harbors + 4 always-visible season cards + maritime tool links',
+    name: 'Rank #4 Great Lakes Winter Freighter & Harbor Guide: 12 static harbors + 4 visual maritime doors + Shipping Blueprint',
     weight: 15,
     pass:
       (wfgHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
-      (wfgHtml.match(/data-season-card="/g) || []).length === 4 &&
+      (wfgHtml.match(/data-door="/g) || []).length === 4 &&
+      (wfgHtml.match(/data-blueprint="/g) || []).length === 4 &&
       wfgHtml.includes('"numberOfItems":12') &&
       wfgHtml.includes('href="/great-lakes-freighter-winter-layup/"') &&
       wfgHtml.includes('href="/great-lakes-freighter-tracking/"'),
