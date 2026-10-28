@@ -89,6 +89,13 @@ function showCampsites(){
  else if(bounds.length===1)map.setView(bounds[0],12,{animate:false});
 }
 for(const tab of tabs)tab.addEventListener('click',e=>{e.preventDefault();setTab(tab.dataset.atlasPick);});
+for(const link of document.querySelectorAll('[data-atlas-go]')){
+ link.addEventListener('click',e=>{
+  e.preventDefault();
+  setTab(link.dataset.atlasGo);
+  root.scrollIntoView({behavior:'smooth',block:'start'});
+ });
+}
 if(filter)filter.addEventListener('change',showCampsites);
 for(const link of document.querySelectorAll('.atlas-site-link')){
  link.addEventListener('click',e=>{
