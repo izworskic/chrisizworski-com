@@ -190,3 +190,49 @@ test('landing filter and trip brief never treat a dock as current availability',
  assert.ok(!ui.includes('localStorage')&&!ui.includes('innerHTML='));
  assert.ok(!ui.includes('fetch(')&&!ui.includes('geolocation'));
 });
+
+test('island atlas pairs eight original NPS trail maps with 42 published campsite coordinates',()=>{
+ const atlas=JSON.parse(file('public/apostle-islands/island-atlas.json'));
+ assert.equal(atlas.islands.length,8);
+ assert.equal(atlas.islands.reduce((n,x)=>n+x.sites.length,0),42);
+ assert.equal(atlas.islands.reduce((n,x)=>n+x.trails.length,0),24);
+ assert.equal((html.match(/class="atlas-scene"/g)||[]).length,8);
+ assert.equal((html.match(/class="atlas-map-figure"/g)||[]).length,8);
+ assert.equal((html.match(/data-atlas-go="/g)||[]).length,8);
+ assert.ok(html.includes('id="island-atlas"'));
+ assert.ok(html.includes('id="atlas-geographic-map"'));
+ assert.ok(html.includes('src="/assets/apostle-visual-atlas.js"'));
+ assert.ok(html.includes('id="atlas-marker-filter"'));
+ assert.ok(atlas.mapSource.startsWith('https://www.nps.gov/'));
+ assert.ok(atlas.siteSource.startsWith('https://www.nps.gov/'));
+ assert.ok(atlas.trailSource.startsWith('https://www.nps.gov/'));
+ assert.ok(atlas.islands.every(x=>x.map.startsWith('https://www.nps.gov/apis/planyourvisit/images/')&&x.trails.length>=1));
+ assert.ok(atlas.islands.every(x=>x.sites.every(site=>site.length===3&&site[1]>46&&site[1]<48&&site[2]< -90&&site[2]>-92)));
+ for(const id of ['stockton','oak','sand','raspberry','michigan','rocky','basswood','devils']){
+  assert.ok(html.includes('id="atlas-'+id+'"'),id);
+  assert.ok(html.includes('href="#atlas-'+id+'"'),id);
+ }
+});
+test('atlas excludes NPS disputed Sand and anomalous Devils coordinate, never guesses trail lines',()=>{
+ const atlas=JSON.parse(file('public/apostle-islands/island-atlas.json'));
+ const by=id=>atlas.islands.find(x=>x.id===id);
+ assert.equal(by('sand').sites.length,0);
+ assert.match(by('sand').withheldReason,/being corrected/i);
+ assert.equal(by('devils').sites.length,0);
+ assert.match(by('devils').withheldReason,/anomalous/i);
+ assert.equal(by('raspberry').sites.length,0);
+ assert.match(by('raspberry').withheldReason,/no designated/i);
+ assert.deepEqual(by('stockton').accessible,['1','A','B']);
+ assert.equal(by('stockton').sites.length,21);
+ assert.equal(by('oak').sites.length,7);
+ assert.equal(by('rocky').sites.length,6);
+ assert.equal(by('basswood').sites.length,7);
+ assert.equal(by('michigan').sites.length,1);
+ const atlasJs=file('public/assets/apostle-visual-atlas.js');
+ for(const guard of ['getIsland','setTab','mapPoints','markerLayer.clearLayers','is-withheld','No site markers','CARTO','osm-fallback','document.querySelectorAll(\'[data-atlas-go]\')'])assert.ok(atlasJs.includes(guard),guard);
+ assert.doesNotMatch(atlasJs,/L\.polyline|L\.polygon|L\.routing/);
+ assert.doesNotMatch(atlasJs,/localStorage|sessionStorage|redis|innerHTML\s*=/i);
+ assert.ok(html.includes('not reconstructed or guessed'));
+ assert.ok(html.includes('original NPS island maps')||html.includes('actual NPS island trail maps'));
+ assert.ok(!html.includes('Sand Island campsite coordinates have been corrected'));
+});
