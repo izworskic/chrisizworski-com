@@ -4,6 +4,7 @@ on:
     branches: [feat/porkies-access-decision-explorer-20261028]
     paths:
       - 'data/porkies-junction-crossing-ledger.json'
+      - 'data/porkies-bridge-crossing-structures.json'
       - 'lib/porkies/crossing-candidates.mjs'
       - 'scripts/research-porkies-crossings.mjs'
       - '.github/workflows/porkies-crossings-audit.yml'
@@ -31,7 +32,7 @@ jobs:
         run: node scripts/research-porkies-crossings.mjs --emit-public-summary
       - name: Verify public report cannot expose uncertified candidate GPS
         run: |
-          node -e "const fs=require('fs');const a=require('./public/porcupine-mountains/crossing-evidence.json');const s=fs.readFileSync('./public/porcupine-mountains/crossing-evidence.json','utf8');if(a.status!=='crossing-research-not-route-approved'||a.counts.sourceTrails!==819||a.registry.length!==23||a.safety.anyAutoRouteAcrossStream!==false||a.registry.some(x=>x.routeEligible||x.coordinatesPublished)||s.includes('allCandidates')||s.includes('priorityRiverMatches'))process.exit(1)"
+          node -e "const fs=require('fs');const a=require('./public/porcupine-mountains/crossing-evidence.json');const s=fs.readFileSync('./public/porcupine-mountains/crossing-evidence.json','utf8');if(a.status!=='crossing-research-not-route-approved'||a.counts.sourceTrails!==819||a.registry.length!==23||a.safety.anyAutoRouteAcrossStream!==false||a.registry.some(x=>x.routeEligible||x.coordinatesPublished)||a.structureReview?.entries.length!==9||a.structureReview?.conditionCertified!==0||a.safety?.exactMapSymbolToCrossingMatches!==0||a.structureReview?.entries.some(x=>x.routeEligible||x.publicCoordinate!==null)||s.includes('allCandidates')||s.includes('priorityRiverMatches'))process.exit(1)"
       - name: Retain private candidate coordinates for manual DNR map comparison
         if: always()
         uses: actions/upload-artifact@v4
