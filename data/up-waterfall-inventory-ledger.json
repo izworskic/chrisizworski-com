@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 41,
-  "linkedByExactOid": 33,
-  "unresolvedCandidates": 128,
+  "curatedCount": 43,
+  "linkedByExactOid": 35,
+  "unresolvedCandidates": 126,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1778,18 +1778,28 @@
         -89.830185
       ],
       "river": "LITTLE CARP RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "overlooked-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-visitor-route-not-open-now",
+      "landManager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "parkingEvidence": "https://explorewesternup.com/things-to-do/waterfalls/",
+      "trailEvidence": "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Recheck park road/seasonal restrictions before presenting live opening; refresh visitor source links.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "03a",
+      "classification": "verified-published-trail",
+      "accessAssessment": "State park public trail and signed visitor parking described in sources, not an open-now or summer road guarantee.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2146,18 +2156,27 @@
         -89.690505
       ],
       "river": "CARP RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "trap-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "published-visitor-route-not-open-now",
+      "landManager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "parkingEvidence": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+      "trailEvidence": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Recheck park road/seasonal restrictions before presenting live opening; refresh visitor source links.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "03a",
+      "classification": "verified-published-trail",
+      "accessAssessment": "State park public trail and signed visitor parking described in sources, not an open-now or summer road guarantee.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3961,5 +3980,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "02"
+  "lastBatch": "03a"
 }

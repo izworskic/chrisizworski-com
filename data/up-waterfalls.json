@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-27",
+  "reviewed": "2026-10-28",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -2299,6 +2299,125 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan geographic waterfall feature 47 at the falls, separate from Wisconsin-side signed parking"
+        }
+      }
+    },
+    {
+      "region": "Western U.P.",
+      "kind": "State park",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-visitor-route-not-open-now",
+      "winterRoad": "Michigan DNR states that South Boundary Road is closed to ordinary vehicles from Headquarters Road south to Pinkerton Trailhead from December 1 through late spring. Neither a summer trailhead description nor a mapped waterfall confirms winter vehicle access.",
+      "id": "overlooked-falls",
+      "name": "Overlooked Falls",
+      "place": "Porcupine Mountains · Little Carp River",
+      "lat": 46.721769,
+      "lng": -89.830185,
+      "gisObjectId": 97,
+      "level": "easy",
+      "minutes": "20–50 min",
+      "walk": "From the signed Little Carp River Road trailhead, follow the Little Carp River Trail a few hundred feet to the first footbridge. Overlooked Falls is just downstream; check the bridge-side views without scrambling along the bank.",
+      "best": "Spring snowmelt gives the small cascades more volume; moss and autumn color distinguish the shady river setting.",
+      "access": "Public Michigan DNR state-park walking route from the Little Carp River Road lot. No water-flow or current road-opening data is supplied here.",
+      "parking": "Signed Little Carp River Trailhead parking at the end of Little Carp River Road, entered from South Boundary Road. Use this lot, not the mapped waterfall coordinates.",
+      "feature": "A short, quiet cascade a few hundred feet from the Little Carp River footbridge, an ideal introductory stop before the longer Greenstone Falls hike.",
+      "note": "Overlooked Falls is beside the first bridge; Greenstone Falls is a separate waterfall farther along the same river trail. Do not mistake their pins or hiking distances.",
+      "decision": "Pick Overlooked for the short stop from the Little Carp River parking area, then decide if you want to continue to Greenstone on the longer two-mile round-trip route.",
+      "further": "The park's road system has seasonal vehicle closures. The footbridge and river stones can be wet and icy. Don't use this as a winter driving itinerary; check DNR conditions first.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
+          "description": "Michigan DNR operates Porcupine Mountains and its Little Carp River Trail."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
+          "description": "UP Travel identifies Overlooked Falls as a public state-park visitor stop reached from the Little Carp River trailhead."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://explorewesternup.com/things-to-do/waterfalls/",
+          "description": "Western UP visitor guidance identifies the signed parking at the end of Little Carp River Road from South Boundary Road."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
+          "description": "From the lot, Overlooked Falls lies a few hundred feet down the Little Carp River Trail by the first footbridge."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS #97 maps the waterfall, not visitor parking."
+        }
+      }
+    },
+    {
+      "region": "Western U.P.",
+      "kind": "State park",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "manager": "Michigan DNR · Porcupine Mountains Wilderness State Park",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-visitor-route-not-open-now",
+      "winterRoad": "Michigan DNR states that South Boundary Road is closed to ordinary vehicles from Headquarters Road south to Pinkerton Trailhead from December 1 through late spring. Neither a summer trailhead description nor a mapped waterfall confirms winter vehicle access.",
+      "id": "trap-falls",
+      "name": "Trap Falls",
+      "place": "Porcupine Mountains · Upper Carp River",
+      "lat": 46.791775,
+      "lng": -89.690505,
+      "gisObjectId": 118,
+      "level": "moderate",
+      "minutes": "120–300 min",
+      "walk": "Take the Government Peak Trail from its signed M-107 trailhead. Michigan DNR's visitor publication describes a 3.2-mile round-trip hike to Trap Falls; other guides publish longer approaches. Confirm the current route and mileage on the DNR trail map before leaving the trailhead.",
+      "best": "Spring and late summer after rain, with added interest from remote old-growth river scenery.",
+      "access": "Public nonmotorized Government Peak Trail within Porcupine Mountains Wilderness State Park. This is a committed woodland hike, not a pullout or accessible waterfall platform.",
+      "parking": "Use the designated Government Peak Trailhead parking on M-107 inside Porcupine Mountains Wilderness State Park. Do not navigate to the waterfall coordinate or improvise riverbank parking.",
+      "feature": "A remote Upper Carp River cascade reached on a sustained Government Peak Trail walk through rugged Porcupine Mountains forest.",
+      "note": "Route mileage differs among DNR and regional descriptions; this guide deliberately follows the DNR visitor publication while warning visitors to verify current signage.",
+      "decision": "Choose Trap Falls for a half-day hiking destination rather than a quick scenic stop. Compare with Overlooked if your party needs a much shorter walk.",
+      "further": "The river corridor has roots, grades, potential mud and slippery rock. Do not attempt the falls as a casual winter stop or assume water crossings are bridged. M-107 and South Boundary Road seasonal restrictions may affect driving access.",
+      "hydro": {
+        "usgsFeatureId": "e413e0a8-8a58-11e6-b586-ecf4bb62914c",
+        "nhdPlusComid": "6789487",
+        "nhdPlusReachCode": "04020101000890",
+        "nhdHrReachCode": "04020101000890",
+        "matchDistanceMeters": 14,
+        "matchQuality": "close",
+        "coordinateReviewRequired": false
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
+          "description": "Michigan DNR manages the Government Peak Trail and Upper Carp River corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+          "description": "Michigan DNR identifies Trap Falls as a public day-hike destination from Government Peak Trailhead."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+          "description": "The DNR visitor publication identifies the designated Government Peak Trailhead on M-107 as the starting point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+          "description": "DNR identifies a 3.2-mile round-trip hiking route; another regional guide uses a different mileage, so current signs should be checked."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS waterfall #118 maps the river drop, not the M-107 parking area."
         }
       }
     }
