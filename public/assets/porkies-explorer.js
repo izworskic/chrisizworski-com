@@ -98,6 +98,11 @@
       output.excluded.push("Backcountry lodging and camping availability are not checked or implied by this plan.");
       output.sources.push({ name: "DNR overnight information", url: DNR });
     }
+    if (output.stops.some(function (s) { return s.zone === "interior"; })) {
+      output.warnings.push("No crossing-dependent Big Carp, Little Carp, Government Peak or Presque Isle wilderness traverse has an individually confirmed safe bridge or ford. Do not turn these planning references into a hiking GPS route.");
+      output.excluded.push("Unverified river-to-river or ridge-to-lakeshore wilderness through-routes: official 2025 map crossing symbols and source trail segments are not yet certified as passable.");
+      output.sources.push({ name: "Official DNR map: unbridged crossing symbols", url: "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf" });
+    }
     if (ability === "low") output.warnings.push("Shorter approaches are not all barrier-free. Check specific surface, steps and viewing-platform access directly with the DNR.");
     if (output.stops.some(function (s) { return s.zone === "west"; }) && output.stops.some(function (s) { return s.zone === "east"; })) {
       output.warnings.push("This plan crosses distinct western/eastern districts; validate driving route, vehicle-access rules and local-time arrangements before using it.");
