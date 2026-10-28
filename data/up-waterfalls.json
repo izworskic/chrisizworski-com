@@ -1936,6 +1936,68 @@
           "description": "Michigan GIS Waterfalls layer feature 35, a waterfall point on the Montreal River boundary"
         }
       }
+    },
+    {
+      "id": "superior-falls",
+      "name": "Superior Falls",
+      "region": "Western U.P.",
+      "place": "Montreal River / Michigan–Wisconsin border",
+      "lat": 46.562528,
+      "lng": -90.41554,
+      "gisObjectId": 50,
+      "level": "steps",
+      "minutes": "45–100 min",
+      "walk": "Signed upper and lower waterfall viewing paths from the utility-side public parking area. The lower gorge path is steep, rocky or uneven and may be dangerous when wet or icy; a shorter upper overlook is the safer alternative for some visitors. Wisconsin tourism describes 0.5–1 mile of visitor walking, depending on route.",
+      "best": "Spring runoff and autumn color; regulated hydroelectric releases mean appearance varies and cannot be forecast from a seasonal label.",
+      "access": "Public access is described by a regional access inventory and Wisconsin tourism guidance on the MICHIGAN side of the Montreal River. The land is adjoining an active hydroelectric station operated by Northern States Power / Xcel Energy. Follow the signed visitor paths only; no crossing to an assumed Wisconsin-bank access is needed.",
+      "status": "verify",
+      "note": "This is not Interstate Falls, farther upstream on the same border river. Superior Falls visitors reach a signed utility-side gravel parking approach on Michigan land; the steep lower gorge is optional.",
+      "source": "https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Utility-managed scenic access / interstate river",
+      "parking": "From US-2 in Wisconsin take Highway 122 north approximately 4.2 miles, cross the state line into Michigan, continue roughly 0.5 mile and turn left onto the signed gravel access road for the utility-side parking area. The mapped waterfall is not the parking entrance.",
+      "feature": "A series of red-sandstone drops on the Montreal River near Lake Superior, beside a working hydroelectric plant and the Michigan–Wisconsin border.",
+      "further": "Never approach the powerhouse, dam structures or fenced/posted areas. The access inventory warns the lower trail is steep and dangerous when icy or wet. Road and trail opening are not verified in real time.",
+      "manager": "Northern States Power Company (Xcel Energy), Superior Falls Hydroelectric Project P-2587",
+      "decision": "Choose the signed upper overlook for a shorter viewing stop. Consider the steeper lower gorge only with suitable footwear and dry conditions; this is not an accessible paved trail.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-site-and-utility-owner-documented-current-open-status-unverified",
+      "sourceReviewed": "2026-10-27",
+      "hydro": {
+        "nhdPlusComid": "1812799",
+        "nhdPlusReachCode": "04010302000201",
+        "nhdHrReachCode": "04010302000201",
+        "usgsFeatureId": "e413de32-8a58-11e6-b586-ecf4bb62914c",
+        "matchDistanceMeters": 2,
+        "matchQuality": "close"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.ferc.gov/news-events/events/evening-scoping-meeting-saxon-falls-hydroelectric-project-saxon-project-and",
+          "description": "FERC identifies Northern States Power as the applicant and utility operator for Superior Falls Hydroelectric Project P-2587; county public access study describes Xcel-owned adjoining property."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF",
+          "description": "Bayfield County regional public access inventory describes Michigan-side visitor access, a public parking area, benches and trails near Superior Falls; utility facilities and posted restrictions remain off limits."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.travelwisconsin.com/outdoors/waterfalls/superior-falls",
+          "description": "Travel Wisconsin publishes the Highway 122 approach, Michigan state-line crossing, signed left-turn gravel road and visitor parking area."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF",
+          "description": "Public access study lists upper/lower scenic paths and warns the lower gorge descent is steep and potentially dangerous when wet or icy; tourism listing describes rough 0.5–1 mile walking."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state geographic waterfall feature 50 locates the falls, distinct from public parking. USGS Falls/Rapids V2 name-matched point lies approximately 2 m away; neither supplies a legal route."
+        }
+      }
     }
   ]
 }
