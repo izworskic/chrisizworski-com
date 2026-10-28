@@ -32,3 +32,11 @@ For each batch: independently cite geography, land manager, legal public approac
 - Merge: **not performed**. This is a non-public data/doc PR candidate, pending review.
 - Blockers: official access checks for 126 unmatched GIS features, possible duplicates, eight curated nonmatches, and live seasonal restrictions.
 - Follow-up: update issue #1258 only with actual test/PR receipts, and preserve the branch when blocked.
+
+## Batch 03 research started: Gogebic / Ontonagon official access controls
+
+The Michigan DNR's current Porcupine Mountains park page confirms South Boundary Road seasonal closures (Headquarters Road to Pinkerton Trailhead, Dec. 1 through late spring) and identifies County Road 519 as the access to Presque Isle Scenic Area. It identifies the Nawadaha accessible viewing platform on the West River Trail. These are road- and destination-specific rules, not a blanket winter status for the entire park. Source: https://www.michigan.gov/recsearch/parks/porkies (checked 2026-10-28).
+
+The 2025 Michigan DNR visitor guide describes the separate day-use arrival and boardwalk/stair choices at Presque Isle; it must not be generalized into a parking guarantee for isolated upper-river falls. Source: https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf (historical guide; not live).
+
+Prioritize GIS alias/feature checks around Manabezho, Manido, Nawadaha, Little Carp, Big Carp and Union River. Do not add duplicate visitor guides for gorge features already covered by existing official arrivals. Remaining source candidates are unreviewed; per-candidate dispositions and route/parking evidentiary records are still required. No new page added in this checkpoint.
