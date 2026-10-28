@@ -2420,6 +2420,61 @@
           "description": "Michigan state GIS waterfall #118 maps the river drop, not the M-107 parking area."
         }
       }
+    },
+    {
+      "id": "cascade-falls",
+      "name": "Cascade Falls",
+      "region": "Western U.P.",
+      "place": "Trap Hills · Ottawa National Forest",
+      "lat": 46.651708,
+      "lng": -89.446195,
+      "gisObjectId": 67,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "From the signed parking area on Forest Road 468, take the established Cascade Falls main trail about 0.75 mile one way. The optional Bluff Trail is about one mile one way, considerably rougher and involves scrambling.",
+      "best": "Snow-free hiking conditions, when forest roads are passable; spring water and autumn colors can be rewarding.",
+      "access": "Public trail on Ottawa National Forest land. The December 2025 North Country Trail Association guide confirms the signed parking on FR 468, but the proposed North Country Trail connector is not a completed official trail.",
+      "status": "verify",
+      "note": "This is Cascade Falls on Cascade Creek in the Trap Hills near Bergland, not the unrelated Cascade Falls in Utah or Jackson, Michigan. Michigan GIS #67 marks the falls, not the parking lot.",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Drive to the signed Cascade Falls Trail parking area on Forest Road 468 after turning off Forest Road 400 near Bergland. Use the posted trailhead, never the mapped waterfall point as a driving destination.",
+      "feature": "A forest cascade hidden among rugged Trap Hills rock, reached by a straightforward main trail or a more demanding ridge-loop alternative.",
+      "decision": "Choose the main trail for the waterfall with a moderate forest walk. Choose the longer Bluff Trail only if you want rocky ridge terrain and are comfortable scrambling.",
+      "further": "Forest roads in this area are not plowed in winter, and snowmelt/road damage can make access impossible even after the snow is gone. No live trail-opening, road, ice or water-flow status is supplied.",
+      "manager": "USDA Forest Service · Ottawa National Forest",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-visitor-route-not-open-now",
+      "winterRoad": "The NCTA's December 2025 guide says surrounding forest access roads are unplowed in winter and often need drying after snowmelt. The FR 468 signed lot is a mapped summer trailhead, not a winter road-open promise.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+          "description": "December 2025 Peter Wolfe Chapter guide lists Forest Service ownership and Ottawa National Forest responsibility for Cascade Falls spur-trail maintenance."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+          "description": "Official USDA Forest Service Trap Hills brochure describes the signed public Cascade Falls Trail; NCTA 2025 guide corroborates it."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+          "description": "December 2025 NCTA PDF page 11 (printed source page 11) visibly identifies signed Cascade Falls Trail parking at FR 468, separate from the waterfall and proposed connector."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+          "description": "The Forest Service identifies 0.75 mile one way for main trail and one mile one way for the difficult Bluff Trail. NCTA 2025 identifies the existing FR468 route as established."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS feature #67 at 46.651708, -89.446195 places Cascade Falls on Cascade Creek; this is not a vehicle parking coordinate."
+        }
+      }
     }
   ]
 }
