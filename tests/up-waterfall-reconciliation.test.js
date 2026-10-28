@@ -119,7 +119,7 @@ test('Bonanza/Greenwood parcel conflict remains opt-in research-only, not visito
   assert.ok(original.classification.includes('parcel-boundary-conflict'));
   assert.ok(review);
   assert.equal(review.publicationEligible, false);
-  assert.equal(review.publicAccess, 'not-established');
+  assert.equal(review.publicAccess, 'township-visitor-site-documented-full-route-unverified');
   assert.match(review.summary, /municipal|township/i);
   assert.match(review.summary, /private/i);
   assert.ok(review.guidance.includes('Do not drive to the mapped waterfall point'));
@@ -132,4 +132,21 @@ test('Bonanza/Greenwood parcel conflict remains opt-in research-only, not visito
   assert.ok(!hub.includes('data-gis-oid="124"'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/greenwood-falls/'));
+});
+
+test('Bonanza township signage and seasonal closure evidence cannot imply current open status', () => {
+  const r = ledger.candidates.find(x => x.gisObjectId === 124);
+  const review = JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'))
+    .records.find(x => x.gisObjectId === 124);
+  assert.equal(r.parcelReview.townshipVisitorEvidence.visitorSiteConfirmed, true);
+  assert.equal(r.parcelReview.townshipVisitorEvidence.currentOpenStatus, 'not-verified');
+  assert.equal(r.parcelReview.publicAccessEstablished, false);
+  assert.equal(review.publicationEligible, false);
+  assert.match(review.guidance, /signed.*township entrance|signed.*entrance/i);
+  assert.match(review.guidance, /late October|winter/i);
+  assert.ok(review.sourceLinks.some(x => /2f5de80733814402a12c7433d4b19023/.test(x.url)));
+  assert.ok(review.sourceLinks.some(x => /0bf497560d2a44b68cee8fd20bab0828/.test(x.url)));
+  assert.match(review.reviewLimitations, /not.*2026|2026.*not/i);
+  assert.ok(!curated.waterfalls.some(x => x.id === 'bonanza-falls'));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
 });
