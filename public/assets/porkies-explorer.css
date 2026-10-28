@@ -245,3 +245,12 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
 .west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
 @media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}
+
+/* County Road 519: DNR approach vs temporary M-28 junction notice, both visible with no JS. */
+.west-approach-warning{background:#f7f0e5;border-left:4px solid #a36b39;padding:17px 20px;margin:15px 0 18px;color:#4f4538;border-radius:0 5px 5px 0;display:grid;gap:10px}
+.west-approach-warning h4{font-family:Fraunces,Georgia,serif;font-size:1.3rem;line-height:1.24;margin:3px 0 9px;color:#533d2e}
+.west-approach-warning p:not(.eyebrow){font-size:.81rem;line-height:1.62;margin:9px 0}
+.west-approach-links{display:flex;flex-wrap:wrap;gap:8px 16px}
+.west-approach-links a{font-size:.76rem;font-weight:650;color:#1c6558;text-decoration:underline}
+.route-evidence-key .key-cr519{border-color:#227a93}
+@media(max-width:680px){.west-approach-warning{padding:14px 13px}.west-approach-warning h4{font-size:1.12rem}}
