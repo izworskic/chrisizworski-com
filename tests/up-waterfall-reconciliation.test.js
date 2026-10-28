@@ -122,7 +122,7 @@ test('Bonanza/Greenwood parcel conflict remains opt-in research-only, not visito
   assert.equal(review.publicAccess, 'township-visitor-site-documented-full-route-unverified');
   assert.match(review.summary, /municipal|township/i);
   assert.match(review.summary, /private/i);
-  assert.ok(review.guidance.includes('Do not drive to the mapped waterfall point'));
+  assert.ok(review.guidance.includes('Do not navigate to the GIS falls point'));
   assert.ok(review.sourceLinks.some(x => x.url.includes('ontonagoncounty.org')));
   assert.ok(review.sourceLinks.some(x => x.url.includes('sabu.mtu.edu')));
   assert.ok(gisOverlay.includes('up-waterfall-access-reviews.json'));
@@ -146,7 +146,7 @@ test('Bonanza township signage and seasonal closure evidence cannot imply curren
   assert.match(review.guidance, /late October|winter/i);
   assert.ok(review.sourceLinks.some(x => /2f5de80733814402a12c7433d4b19023/.test(x.url)));
   assert.ok(review.sourceLinks.some(x => /0bf497560d2a44b68cee8fd20bab0828/.test(x.url)));
-  assert.match(review.reviewLimitations, /not.*2026|2026.*not/i);
+  assert.match(review.reviewLimitations, /2026 closing date/i);
   assert.ok(!curated.waterfalls.some(x => x.id === 'bonanza-falls'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/bonanza-falls/'));
 });
