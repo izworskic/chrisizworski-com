@@ -23,14 +23,22 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "published-park-visitor-trail-identity-review-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-dickinson"
+      "nextAction": "Complete official lot/visitor viewpoint-versus-natural-GIS point pairing before individual visitor guide. Do not auto-index.",
+      "batch": "county-dickinson",
+      "classification": "misicot-third-pier-identity-geographic-reference-guide-pending",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "08",
+      "accessAssessment": "Misicot Falls alias Third Pier independently documented by American Whitewater; Michigan official Piers Gorge parking/trails off Highway 8/Piers Gorge Road. Exact designated hiker viewing site and river GIS offset require site-specific guide validation.",
+      "evidence": [
+        "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3376,14 +3384,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "published-park-visitor-trail-identity-review-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-menominee"
+      "nextAction": "Complete official lot/visitor viewpoint-versus-natural-GIS point pairing before individual visitor guide. Do not auto-index.",
+      "batch": "county-menominee",
+      "classification": "verified-pemene-river-identity-and-public-wisconsin-overlook-guide-pending",
+      "reviewed": "2026-10-28",
+      "reviewBatch": "08",
+      "accessAssessment": "Natural Pemene GIS #188 coordinate corroborated by independent photographer and named geography. Wisconsin DNR's mapped 0.5-mile overlook from Verheyen Lane is a different visitor position, not an erroneous river point; do not confuse Pemene Landing or MI-side informal river approach.",
+      "evidence": [
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://adammartin.space/2019-pemene-falls/",
+        "https://mapcarta.com/22878684"
+      ]
     },
     {
       "source": "mi-state-gis",
