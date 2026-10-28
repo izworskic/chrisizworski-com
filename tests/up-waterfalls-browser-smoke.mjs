@@ -81,7 +81,7 @@ try{
     assert.ok(scroll<=width+2,'Bonanza page horizontal overflow '+scroll+' > '+width);
     await page.screenshot({path:screenshots+'/bonanza-township-park-mobile.png',fullPage:true,animations:'disabled'});
   });
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['bridalveil-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['bridalveil-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -96,6 +96,8 @@ try{
       if(id==='scott-falls')assert.match(await page.locator('body').innerText(),/not yet confirmed|noindex|access evidence/i);
       if(id==='munising-falls')assert.match(await page.locator('body').innerText(),/closed until further notice|trail closed/i);
       if(id==='bridalveil-falls'){const body=await page.locator('body').innerText();assert.match(body,/Miners Castle/);assert.match(body,/Miners Beach/);assert.match(body,/No maintained hiking path|No maintained trail/i);await page.screenshot({path:screenshots+'/bridalveil-falls-mobile.png',fullPage:true,animations:'disabled'});}
+      if(id==='sand-portage-falls'){const body=await page.locator('body').innerText();assert.match(body,/Knutson|Knuston/);assert.match(body,/0.5-mile/);assert.match(body,/not.*parking/i);}
+      if(id==='quiver-falls'){const body=await page.locator('body').innerText();assert.match(body,/Pemene Dam Road/);assert.match(body,/accessible/i);assert.match(body,/not.*parking/i);await page.screenshot({path:screenshots+'/quiver-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});
     });
   }
