@@ -32,6 +32,12 @@
    arrival = ["west","east","inpark"].includes(arrival) ? arrival : "inpark";
    if(s==="unknown")return {canDirect:false,notice:"Choose a valid travel date before opening directions."};
    if(road==="west"){
+     var notice=point.westEntranceNotice;
+     // Dated work-zone restriction is at the M-28 junction, NOT the entire west approach.
+     // Never infer a reopening from an old notice or hand Google an unchecked driving route.
+     if(notice && notice.reopeningVerified===false && /^\d{4}-\d{2}-\d{2}$/.test(date) && date>=notice.publishedOn){
+       return {canDirect:false,notice:"Wakefield Township reported a road-work closure at the M-28 / County Road 519 junction on September 22, 2026, and named Johnson Road as the detour. No official reopening confirmation has been verified as of October 28, 2026. This does NOT establish the road is still closed on your visit date. Driving directions are withheld until independently checked; use the mapped parking point and township notice instead."};
+     }
      var limited = s==="winter" || s==="spring";
      return {canDirect:!limited||arrival==="west",notice:limited
        ? (arrival==="west"?"DNR identifies the west-side County Road 519 approach to Presque Isle during the park's main road closures. Individual parking operations are NOT verified.":"County Road 519 is a western approach: no verified open east-to-west driving route. Change 'Approaching from' to Western U.P. only if that is your actual approach, and confirm official road conditions.")

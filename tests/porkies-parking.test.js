@@ -66,7 +66,10 @@ test('map-only routing policy blocks closed or uncertain seasonal roads',()=>{
    assert.equal(eligibility(byId[id],'2026-11-15').canDirect,false,id+' falsely routed during ambiguous November');
    assert.equal(eligibility(byId[id],'2027-08-15').canDirect,true,id+' did not offer summer directions');
  }
- assert.equal(eligibility(byId.presque,'2027-01-15','west').canDirect,true,'CR519 distinct winter west approach should be preserved');
+ assert.equal(eligibility(byId.presque,'2027-01-15','west').canDirect,false,'unresolved September 2026 township CR519/M28 notice forbids unchecked Google driving URLs');
+ assert.match(eligibility(byId.presque,'2027-01-15','west').notice,/Johnson Road/);
+ assert.match(eligibility(byId.presque,'2027-01-15','west').notice,/not.*claim|does NOT establish/i);
+ assert.equal(eligibility(byId.presque,'2026-08-15','west').canDirect,true,'historical notice must not retroactively block visits before its publication');
  assert.equal(eligibility(byId.presque,'2027-01-15','east').canDirect,false,'winter east-to-Presque route cannot silently cross closed park roads');
  assert.equal(eligibility(byId.presque,'2027-01-15','inpark').canDirect,false,'unknown winter arrival corridor cannot imply legal route');
  assert.equal(eligibility(byId.ski,'2027-01-15','east').canDirect,true,'winter complex east approach should be possible');
@@ -74,6 +77,8 @@ test('map-only routing policy blocks closed or uncertain seasonal roads',()=>{
  assert.equal(eligibility(byId.ski,'2027-05-15').canDirect,false,'spring ski operation cannot be inferred');
  assert.equal(eligibility(byId.visitor,'2027-01-15').canDirect,false,'winter visitor center approach unverified');
  assert.equal(season('2027-02-30'),'unknown');
+ assert.equal(byId.presque.westEntranceNotice.reopeningVerified,false);
+ assert.equal(byId.presque.westEntranceNotice.detourRouteVerified,false);
 });
 test('Google Maps links end at DNR mapped parking asset coordinates, not attraction positions',()=>{
  for(const p of published.points){

@@ -16,12 +16,14 @@ test("DNR confirms the distinct CR519 western winter approach without granting e
  assert.equal(data.routeRules.liveGateStatus,null);
  assert.equal(data.routeRules.driveTimeMinutes,null);
 });
-test("source GIS has ten possible corridor centerlines but no ungrounded signed 519 classification",()=>{
+test("source GIS and township crosswalk recover 17 connected Presque Isle Road references, not turn-by-turn navigation",()=>{
  assert.equal(data.stateRoadGIS.sourceRoadName,"Presque Isle Rd");
- assert.equal(data.stateRoadGIS.sourceFeatureIds.length,10);
- assert.equal(new Set(data.stateRoadGIS.sourceFeatureIds).size,10);
- assert.match(data.stateRoadGIS.status,/not-individually-crosswalked/);
- assert.match(data.stateRoadGIS.note,/Do not equate/);
+ assert.equal(data.stateRoadGIS.sourceFeatureIds.length,17);
+ assert.equal(new Set(data.stateRoadGIS.sourceFeatureIds).size,17);
+ assert.match(data.stateRoadGIS.status,/crosswalked-centerlines-not-signed/);
+ assert.match(data.stateRoadGIS.note,/do not publish drive times/);
+ assert.equal(data.stateRoadGIS.nfc,5);
+ assert.equal(data.stateRoadGIS.northEndGapToParkingMetersApprox,1316);
  assert.equal(data.lastMile.candidateParkingAssetId,841);
 });
 test("state road improvement announcement describes poor pavement, not confirmed road closure",()=>{
@@ -32,5 +34,9 @@ test("state road improvement announcement describes poor pavement, not confirmed
  assert.match(html,/2 of 10/);
  assert.match(html,/not a current construction notice or closure/);
  assert.match(html,/Source crosswalk/);
+ assert.match(html,/September 22, 2026/);
+ assert.match(html,/Johnson Road/);
+ assert.equal(data.temporaryNotice.reopeningVerified,false);
+ assert.equal(data.routeRules.uncheckedGoogleDirectionsAllowed,false);
  assert.match(html,/name="robots" content="noindex,follow"/);
 });

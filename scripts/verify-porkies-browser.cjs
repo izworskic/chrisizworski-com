@@ -76,6 +76,12 @@ async function main(){
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 40 DNR ski-trail records'),null,{timeout:25000});
      const skiLines=await page.locator('.leaflet-porkies-ski-evidence-pane path').count();
      need(skiLines>=20,'Official DNR ski routes not rendered '+skiLines);
+     await page.locator('#porkies-cr519-toggle').click();
+     await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 17 mapped Presque Isle Road'),null,{timeout:25000});
+     const westLines=await page.locator('.leaflet-porkies-cr519-evidence-pane path').count();
+     need(westLines===17,'County Road 519 official centerlines not rendered '+westLines);
+     await page.locator('#parking-map').screenshot({path:path.join(out,'desktop-cr519-road-evidence.png')});
+     report.screenshots.push('desktop-cr519-road-evidence.png');
      const roadLines=await page.locator('.leaflet-porkies-road-evidence-pane path').count();
      need(roadLines>=50,'Official park-road centerline layer missing '+roadLines);
      await page.locator('#parking-map').screenshot({path:path.join(out,'desktop-road-trail-evidence.png')});
@@ -98,6 +104,7 @@ async function main(){
      await page.locator('#porkies-trails-toggle').click();
      await page.locator('#porkies-roads-toggle').click();
      await page.locator('#porkies-ski-toggle').click();
+     await page.locator('#porkies-cr519-toggle').click();
    }
    await page.waitForFunction(()=>document.querySelector('#results h3')?.textContent.includes('Build around'),null,{timeout:10000});
    let overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
@@ -127,12 +134,12 @@ async function main(){
    need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===0,device.name+' lake summer-road directions leaked in winter');
    need(await page.locator('[data-parking-id="summit"] .parking-drive').count()===0,device.name+' summit summer-road directions leaked in winter');
    const cr519=page.locator('[data-parking-id="presque"] .parking-drive');
-   need(await cr519.count()===1,device.name+' official CR519 independent winter approach missing');
-   const googleLink=new URL(await cr519.getAttribute('href'));
-   need(googleLink.hostname==='www.google.com'&&googleLink.pathname==='/maps/dir/'&&googleLink.searchParams.get('api')==='1',device.name+' DNR parking route URL malformed');
+   need(await cr519.count()===0,device.name+' unresolved township M-28 / CR519 notice leaked unchecked driving URL');
+   need(await page.locator('[data-parking-id="presque"] .parking-maplink').count()===1,device.name+' western DNR parking location-only map missing');
+   need((await page.locator('[data-parking-id="presque"] .access-date-note').innerText()).includes('Johnson Road'),device.name+' township detour warning absent from parking decision');
    await page.locator('#arrival').selectOption('east');
    await page.locator('#planner button[type=submit]').click();
-   await page.waitForFunction(()=>!document.querySelector('[data-parking-id="presque"] .parking-drive'),null,{timeout:5000});
+   await page.waitForFunction(()=>Boolean(document.querySelector('[data-parking-id="ski"] .parking-drive')),null,{timeout:5000}); // Wait for new planner render, not previously-absent west link.
    need(await page.locator('[data-parking-id="presque"] .parking-drive').count()===0,device.name+' east-origin winter route incorrectly offered County Road 519 across closed park');
    need(await page.locator('[data-parking-id="ski"] .parking-drive').count()===1,device.name+' east-origin winter sports route missing');
    content=await page.locator('#results').innerText();
@@ -181,6 +188,7 @@ async function main(){
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
+  need((await page.locator('#west-corridor-field-note').innerText()).includes('Johnson Road'),'no JS official detour note missing');
   need(await page.locator('details[data-trail="escarpment"] .trail-edition-warning').count()===1,'no JS source mileage discrepancy hidden');
   need((await page.locator('#routing-explainer').innerText()).includes('7 separate groups'),'source-only trail topology fallback missing');
   need(await page.locator('.parking-maplink').count()===6,'no JS parking map pin links missing');
