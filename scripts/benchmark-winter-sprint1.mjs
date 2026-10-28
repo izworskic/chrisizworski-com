@@ -43,11 +43,12 @@ const checks = [
       wceHtml.includes('href="/national-tools/white-christmas/forecast/"'),
   },
   {
-    name: 'Rank #3 Michigan First Snow Adventures: 12 static early-snowbelt stops + 4 always-visible season cards + snow tool links',
+    name: 'Rank #3 Michigan First Snow Adventures: 12 static early-snowbelt stops + 4 visual first-snow doors + Snowbelt Blueprint',
     weight: 15,
     pass:
       (fsaHtml.match(/<article class="wf-story"/g) || []).length === 12 &&
-      (fsaHtml.match(/data-season-card="/g) || []).length === 4 &&
+      (fsaHtml.match(/data-door="/g) || []).length === 4 &&
+      (fsaHtml.match(/data-blueprint="/g) || []).length === 4 &&
       fsaHtml.includes('"numberOfItems":12') &&
       fsaHtml.includes('href="/michigan-snow-depth/"') &&
       fsaHtml.includes('href="/lake-effect-snow/"'),
