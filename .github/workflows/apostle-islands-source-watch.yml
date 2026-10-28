@@ -1,0 +1,60 @@
+name: Apostle Islands official source drift watch
+on:
+  schedule:
+    - cron: '18 13 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  source-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check NPS construction and island operator evidence without making safety claims
+        env:
+          APOSTLE_SOURCE_REPORT: ${{ runner.temp }}/apostle-source-drift.json
+        run: |
+          node scripts/check-apostle-sources.mjs
+      - name: Publish source drift report summary
+        env:
+          APOSTLE_SOURCE_REPORT: ${{ runner.temp }}/apostle-source-drift.json
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          import {readFileSync} from 'node:fs';
+          const result=JSON.parse(readFileSync(process.env.APOSTLE_SOURCE_REPORT,'utf8'));
+          console.log('## Apostle Islands source change watch');
+          console.log('**Human editorial review required:** '+(result.flagged.length?'Yes':'No observed baseline change'));
+          console.log('Source matching is not a live access, booking, safety, or complete alert certification.'); 
+          for (const item of result.sources) console.log('- '+item.name+': **'+item.state+'**'+(item.missing?.length?' (unmatched: '+item.missing.join(', ')+')':''));
+          NODE
+      - name: Flag source drift for manual review, never auto-rewrite visitor claims
+        uses: actions/github-script@v7
+        env:
+          APOSTLE_SOURCE_REPORT: ${{ runner.temp }}/apostle-source-drift.json
+        with:
+          script: |
+            const fs=require('fs');
+            const report=JSON.parse(fs.readFileSync(process.env.APOSTLE_SOURCE_REPORT,'utf8'));
+            if(!report.flagged.length){core.info('Baseline signals still present; does not establish current island access.');return;}
+            const title='Apostle Islands source drift: reverify closures and seasonal transport';
+            const open=await github.paginate(github.rest.issues.listForRepo,{owner:context.repo.owner,repo:context.repo.repo,state:'open',per_page:100});
+            const existing=open.find(issue=>!issue.pull_request&&issue.title===title);
+            if(existing){core.info('Source drift already tracked in issue #'+existing.number);return;}
+            const lines=[
+              'Automated public-page scan found changed or unavailable source evidence. This is a **review task, not a notice that a dock or campsite is open**.',
+              '',
+              ...report.sources.filter(i=>i.state!=='baseline-signals-present').map(i=>'- **'+i.name+'**: '+i.state+'; '+(i.missing?.join(', ')||i.reason||'check manually')+'; '+i.url),
+              '',
+              'Verify NPS closure notices and operator season, dates, return trips, group-site rules and campsite access manually. Update the on-page evidence date only after review.',
+              '',
+              'Do not automatically remove Devils Island closure, publish a future shuttle schedule, or display a marine safety verdict.',
+              '',
+              'Source desk: https://chrisizworski.com/apostle-islands/#source-desk',
+              'Action: '+context.serverUrl+'/'+context.repo.owner+'/'+context.repo.repo+'/actions/runs/'+context.runId
+            ];
+            const newIssue=await github.rest.issues.create({owner:context.repo.owner,repo:context.repo.repo,title,body:lines.join('\n')});
+            core.info('Opened review issue #'+newIssue.data.number);

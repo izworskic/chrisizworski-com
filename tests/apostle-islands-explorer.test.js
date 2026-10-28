@@ -132,3 +132,24 @@ test('trip-readiness logic never fabricates island travel or booking outcomes',(
  assert.doesNotMatch(engine,/localStorage|sessionStorage|redis|geolocation/i);
  assert.ok(engine.includes('No ticket, landing, campsite or safe passage has been confirmed.'));
 });
+
+test('source desk presents dated NPS and operator provenance without fake live assurances',()=>{
+ assert.equal((html.match(/class="ap-source-item"/g)||[]).length,6);
+ assert.ok(html.includes('id="source-desk"'));
+ assert.ok(html.includes('data-evidence-reviewed="2026-10-27"'));
+ assert.ok(html.includes('data-kind="archived"'));
+ assert.ok(html.includes('2027 service has not been verified'));
+ assert.ok(html.includes('2026-11-03'));
+ assert.ok(html.includes('2027-04-01'));
+ assert.match(html,/not a live feed of dock openings/i);
+ assert.ok(html.includes('No online reading is launch clearance'));
+ const readiness=file('public/assets/apostle-trip-readiness.js');
+ assert.match(readiness,/function refreshSourceDesk\(/);
+ assert.match(readiness,/Archive only · next season unverified/);
+ assert.match(readiness,/Review overdue since/);
+ assert.ok(readiness.includes('No ticket, landing, campsite or safe passage has been confirmed.'));
+ assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes("cron: '18 13 * * 2'"));
+ assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes('issues: write'));
+ assert.ok(file('.github/workflows/apostle-islands-source-watch.yml').includes('issues.create'));
+ assert.ok(!file('.github/workflows/apostle-islands-source-watch.yml').includes('git push'));
+});

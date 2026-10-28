@@ -113,3 +113,25 @@
 .island-plan-link{color:#804b25}
 @media(max-width:820px){.trip-r-layout{grid-template-columns:1fr}.trip-r-form,.trip-r-result{padding:20px}}
 @media(max-width:510px){.trip-readiness{padding-bottom:32px}.trip-r-fields{grid-template-columns:1fr}.trip-r-fields label:has(#trip-transport){grid-column:auto}.trip-r-form,.trip-r-result{padding:16px}.trip-r-actions button{width:100%}}
+
+/* Source provenance: clear staleness, archived seasons, and official-site handoffs. */
+.ap-source-desk{padding:24px 0 36px;scroll-margin-top:25px}
+.ap-source-head{display:flex;justify-content:space-between;gap:32px;align-items:start;margin-bottom:17px}
+.ap-source-head h2{font:normal clamp(1.5rem,3vw,2.2rem)/1.2 var(--serif);margin:4px 0 10px}
+.ap-source-head .eyebrow{color:var(--orange)}
+.ap-source-head p:not(.eyebrow){max-width:800px;color:#50686a;line-height:1.6;font-size:.95rem;margin:0}
+.ap-source-basis{border-left:3px solid #ac7a4b;padding-left:14px;font-size:.73rem;flex-shrink:0;line-height:1.7;color:#53696b;min-width:170px}
+.ap-source-basis strong,.ap-source-basis span{display:block}.ap-source-basis strong{font-size:.92rem;color:var(--dark)}
+.ap-source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ap-source-item{border:1px solid var(--line);border-radius:12px;background:#fffdfa;padding:17px 18px;display:flex;flex-direction:column;gap:14px;justify-content:space-between;min-width:0}
+.ap-source-item h3{font:normal 1.15rem/1.25 var(--serif);margin:0 0 5px;color:#163d42}
+.ap-source-item p{font-size:.82rem;color:#4a6667;line-height:1.6;margin:0}
+.ap-source-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:9px 15px;align-items:center}
+.ap-source-meta a{font-size:.78rem;font-weight:750}
+.ap-source-state{font-size:.7rem;font-weight:800;border-radius:6px;background:#e4ede9;padding:6px 9px;color:#345c55}
+.ap-source-item[data-kind=archived] .ap-source-state{background:#fff0d9;color:#785027}
+.ap-source-item[data-kind=on-demand] .ap-source-state{background:#e6edf5;color:#344e6e}
+.ap-source-item[data-expired=true] .ap-source-state{background:#f7dcd5;color:#833d30}
+.ap-source-foot{font-size:.77rem;color:#536b6b;margin:14px 0 0;line-height:1.6}
+@media(max-width:800px){.ap-source-head{display:block}.ap-source-basis{margin-top:14px}.ap-source-list{grid-template-columns:1fr}}
+@media(max-width:480px){.ap-source-item{padding:15px}.ap-source-meta{display:block}.ap-source-meta a{display:block;margin-top:8px}}
