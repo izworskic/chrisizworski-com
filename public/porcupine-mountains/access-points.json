@@ -58,12 +58,21 @@
       "roadRule": "west",
       "kind": "waterfall",
       "summary": "Parking asset matched to the DNR East and West River Trails reference. The river corridor has multiple lots and different steps, paths and platforms.",
-      "visitorAdvice": "This matched lot is NOT a verified specific starting point for every waterfall. DNR identifies the trail behind the Presque Isle contact booth as the shortest approach to Nawadaha; follow on-site signs. No swimming or wading.",
+      "visitorAdvice": "This matched lot is NOT a verified specific starting point for every waterfall. DNR identifies the trail behind the Presque Isle contact booth as the shortest approach to Nawadaha; follow on-site signs. No swimming or wading. Wakefield Township published a September 22, 2026 work-zone closure at the M-28/CR519 intersection and designated Johnson Road as a detour. The notice has no closure end date; check updated road conditions before visiting.",
       "pageUrl": "https://www.michigan.gov/recsearch/data/locations/trails-l-p/porcupine-mountain-wilderness---east-and-west-river-trails",
       "status": "dnr-mapped-crosschecked-not-current",
       "coordinatesPurpose": "DNR mapped parking asset; no claim of vacancy, open gate, plowed lot, or precise pedestrian entrance",
       "namedRecreationLat": 46.7073356,
-      "namedRecreationLon": -89.97461272
+      "namedRecreationLon": -89.97461272,
+      "westEntranceNotice": {
+        "source": "https://wakefieldtownship.com/north-county-road-519-will-be-closed/",
+        "publishedOn": "2026-09-22",
+        "lastReviewed": "2026-10-28",
+        "reopeningVerified": false,
+        "scope": "M-28 intersection / water-main construction (not the whole CR519)",
+        "detourNamed": "Johnson Road",
+        "detourRouteVerified": false
+      }
     },
     {
       "id": "pinkerton",
