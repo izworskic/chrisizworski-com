@@ -1,6 +1,6 @@
 /* Apostle Islands visual atlas: official NPS cartography and dated campsite reference points.
    The NPS map image is the only displayed trail geometry. Do NOT infer routes to site dots.
-   No Redis, site availability, invented marina waypoint or safety clearance. */
+   No external state, booking availability, invented marina waypoint or safety clearance. */
 (() => {'use strict';
 const root=document.getElementById('island-atlas');
 const mapEl=document.getElementById('atlas-geographic-map');
