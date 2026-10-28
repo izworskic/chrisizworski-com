@@ -171,7 +171,8 @@ footer a{color:#c2eae4}
 <article class="card" id="stop-agawa" data-id="agawa" data-km="1098" data-minutes="60" data-effort="moderate" data-tags="culture scenery hiking" data-status="closed" data-rank="10">
 <figure class="card-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Agawa_Rock_Pictographs_Trail.jpg/960px-Agawa_Rock_Pictographs_Trail.jpg" alt="Rugged trail leading toward Agawa Rock pictograph site, closed for 2026" width="960" height="720" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Agawa_Rock_Pictographs_Trail.jpg" target="_blank" rel="noopener noreferrer">Michael Wason</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> · displayed with responsive crop</figcaption></figure>
 <div class="card-top"><div><div class="num">02 / Sacred site</div><h3>Agawa Rock Pictographs</h3></div><span class="badge closed">Closed for 2026</span></div>
-<p class="summary">At Agawa Rock, painted figures along the lakeside cliff are part of a living Anishinaabe cultural landscape. In a normal visiting season, the rugged trail leads down toward the water and an exposed rock ledge where Superior’s waves have the final say. This is an active sacred place, not simply another photo stop. The trail is closed for the remainder of 2026: please do not enter.</p>
+<p id="agawa-auto-status" role="status" class="note">Checking Ontario Parks for updated access. The 2026 closure remains in effect for that season; later access must be verified.</p>
+<p class="summary">At Agawa Rock, painted figures along the lakeside cliff are part of a living Anishinaabe cultural landscape. In a normal visiting season, the rugged trail leads down toward the water and an exposed rock ledge where Superior’s waves have the final say. This is an active sacred place, not simply another photo stop. <span id="agawa-access-story">The trail is closed for the remainder of 2026: please do not enter.</span></p>
 <div class="facts"><span class="fact">Plan 45–75 min</span><span class="fact">Rugged and exposed</span><span class="fact">No dogs at sacred site (community request)</span></div>
 <details><summary>Why this place deserves special care</summary><div class="evidence"><p>Local First Nations have asked visitors not to bring dogs to the pictographs. Ontario Parks closed the trail September 11, 2026, for private Indigenous ceremonies and hazardous fall weather. This closure is firm, even on a calm day. When the trail eventually reopens, visitors must still consider its steep rock descent, slippery surfaces and exposed lakeside ledge; it is not a low-effort or barrier-free walk.</p><p>The Ontario government GeoTour describes a signed road off Highway 17 and a parking area about 1.5 km along that road. Its mapped Agawa Rock location is not a confirmed parking entrance, so we deliberately offer no navigation pin for it.</p><p><a href="https://www.ontarioparks.ca/park/lakesuperior/alerts">Read Ontario Parks' Agawa Rock closure and cultural-site guidance</a></p></div></details>
 </article>
@@ -290,7 +291,8 @@ function apply(){
   c.hidden=!visible;
   if(visible)shown++;
   var b=c.querySelector('.badge');
-  if(c.dataset.status==='closed'){b.textContent=season.value==='current'?'Closed for 2026':'2026 closure · recheck';}
+  if(c.dataset.id==='agawa' && window.LSPP_AGAWA_BADGE){b.textContent=window.LSPP_AGAWA_BADGE;}
+  else if(c.dataset.status==='closed'){b.textContent=season.value==='current'?'Closed for 2026':'2026 closure · recheck';}
   else{b.textContent=season.value==='current'?'Off-season · access unverified':'Future visit · recheck access';}
  });
  count.textContent=shown+' place'+(shown===1?'':'s')+' to explore';
@@ -303,7 +305,7 @@ function apply(){
 }
 function build(){
  apply();
- var choices=season.value==='current'?[]:cards.filter(function(c){return allowed(c) && c.dataset.status!=='closed';}).sort(function(a,b){return rank(b)-rank(a);});
+ var choices=season.value==='current'&&!window.LSPP_DAY_USE_ACTIVE?[]:cards.filter(function(c){return allowed(c) && c.dataset.status!=='closed';}).sort(function(a,b){return rank(b)-rank(a);});
  var limit=Number(budget.value),selected=[],used=0;
  choices.forEach(function(c){var minutes=Number(c.dataset.minutes);if(selected.length<4 && minutes+used<=limit){selected.push(c);used+=minutes;}});
  planStops.replaceChildren();
@@ -311,17 +313,19 @@ function build(){
   var li=document.createElement('li'),strong=document.createElement('strong');strong.textContent=c.querySelector('h3').textContent;
   li.appendChild(strong);li.appendChild(document.createTextNode(' · allow about '+c.dataset.minutes+' minutes here · confirm access before going'));planStops.appendChild(li);
  });
- document.getElementById('planIntro').textContent=season.value==='current'?'The park’s published 2026 day-use season is over. No open-day-use itinerary can be recommended now. You can still explore ideas for a future visit, but check Ontario Parks’ operating dates and alerts before travelling.':selected.length?'Here are a few places that fit the kind of day you described. Treat this as a future-season idea, not a notice that roads, trails or parking areas are open.':'Nothing matches that combination just yet. Try giving yourself a little more time or choosing a different walking level. Places closed in 2026 stay out of the plan until an official reopening is verified.';
+ document.getElementById('planIntro').textContent=season.value==='current'&&!window.LSPP_DAY_USE_ACTIVE?'The park’s published day-use dates have ended or are not yet confirmed. No current-season itinerary can be recommended now. You can explore future visits, but check Ontario Parks’ operating dates and alerts before travelling.':selected.length?'Here are a few places that fit the kind of day you described. Treat this as a future-season idea, not a notice that roads, trails or parking areas are open.':'Nothing matches that combination just yet. Try giving yourself a little more time or choosing a different walking level. Places closed in 2026 stay out of the plan until an official reopening is verified.';
  document.getElementById('planSum').textContent=selected.length?'Allow about '+used+' minutes to enjoy these stops. Driving between stops, parking, permits, breaks and weather delays are NOT included. Short-visit times are planning allowances; official full-trail times are noted on the cards.':'';
  window.dispatchEvent(new CustomEvent('lspp:plan-updated',{detail:{ids:selected.map(function(c){return c.dataset.id;}),onSiteMinutes:used}}));
 }
 document.getElementById('build').addEventListener('click',build);
 document.getElementById('clear').addEventListener('click',function(){season.value='current';budget.value='180';effort.value='all';direction.value='north';showClosed.checked=false;document.querySelectorAll('.checks input[type=checkbox][value]').forEach(function(e){e.checked=e.value==='scenery';});apply();planStops.replaceChildren();document.getElementById('planIntro').textContent='Tell us what you hope to see, and we’ll suggest a few places to spend your time. Current openings must still be checked with Ontario Parks.';document.getElementById('planSum').textContent='';});
 [season,budget,effort,direction,showClosed].forEach(function(e){e.addEventListener('change',apply);});
+window.addEventListener('lspp:official-season-change',function(){apply();planStops.replaceChildren();document.getElementById('planIntro').textContent='The latest Ontario Parks status has been applied. Build your suggested stops again to reflect the current restrictions.';});
 document.querySelectorAll('.checks input[type=checkbox][value]').forEach(function(e){e.addEventListener('change',apply);});
 apply();
 })();
 </script>
 <script defer src="/assets/leaflet-1.9.4.js"></script>
 <script defer src="/assets/lake-superior-provincial-park-map.js"></script>
+<script defer src="/assets/lspp-agawa-live.js"></script>
 </body></html>
