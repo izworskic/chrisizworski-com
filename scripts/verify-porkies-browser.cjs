@@ -43,6 +43,10 @@ async function main(){
    need((await page.locator('#crossings').innerText()).includes('No automated through-route'),device.name+' safety blocker not visible');
 
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
+   need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
+   const westNote=await page.locator('#west-corridor-field-note').innerText();
+   need(westNote.includes('County Road 519')&&westNote.includes('2 of 10')&&westNote.includes('not an east-to-west shortcut'),device.name+' CR519 named route/pavement safety evidence missing');
+   need(await page.locator('#west-corridor-field-note a[href*="michiganbusiness.org"]').count()===1,device.name+' county pavement source link missing');
    need(await page.locator('.trail-truth-card').count()===21,device.name+' source-cited 21-trail catalog missing');
    need(await page.locator('.trail-edition-warning').count()===4,device.name+' conflicting DNR map editions not flagged');
    await page.locator('#trail-truth-filter').selectOption('editions');
@@ -176,6 +180,7 @@ async function main(){
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
+  need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
   need(await page.locator('details[data-trail="escarpment"] .trail-edition-warning').count()===1,'no JS source mileage discrepancy hidden');
   need((await page.locator('#routing-explainer').innerText()).includes('7 separate groups'),'source-only trail topology fallback missing');
   need(await page.locator('.parking-maplink').count()===6,'no JS parking map pin links missing');
