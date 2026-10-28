@@ -2316,22 +2316,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unknown-legal-approach-parcel-conflict",
-      "landManager": null,
+      "access": "township-seasonal-visitor-site-only-full-route-unverified",
+      "landManager": "Carp Lake Township manages published signed visitor site, not all riverbank parcels",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Reconcile precise lawful parking and full visitor trail across parcel boundaries; establish easement/permission from land authority. Never use falls GIS point as vehicle arrival.",
+      "nextAction": "Trace signed municipal lot-to-public viewing route and its land rights; verify current posted opening/closure. No indexing or GIS pin driving.",
       "batch": "county-ontonagon",
       "reviewed": "2026-10-28",
       "reviewBatch": "06",
-      "classification": "parcel-boundary-conflict-private-municipal",
-      "accessAssessment": "MI GIS falls point lies on parcel attributed to Iron River Assoc., LLC; tourism brochure point around 168 m away lies on a parcel attributed to Township of Carp Lake. Ownership labels are informational, not proof of legal right of way, trail access or title. Do not promote or route.",
+      "classification": "township-visitor-site-private-waterfall-parcel-boundary",
+      "accessAssessment": "Municipality documents signage, parking, visitor facilities and seasonal park closure. GIS falls point belongs to separately attributed private parcel, while regional brochure point lies within a township-attributed parcel. Exact legal lot-to-view trail and current season status unverified.",
       "evidence": [
         "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0",
         "https://ontonagoncounty.org/home/resources/",
-        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://www.carplaketwp.org/meeting-minutes",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf",
+        "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4446082a76cf47bab867625a113ab1c6.pdf"
       ]
     },
     {
