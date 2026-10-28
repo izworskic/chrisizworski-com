@@ -1,3 +1,12 @@
+### 2026-10-28 — Apostle Islands dock-to-trail decision layer
+
+- Adds a substantial NPS-sourced "From public dock to island trail" selection on the existing `/apostle-islands/` canonical: 10 documented dock locations and one explicitly closed Devils Island landing, grouped across eight researched islands.
+- Differentiates Stockton Presque Isle west/east and Quarry Bay, and Raspberry light station east/west, instead of flattening each island to one access point. NPS published depth ranges are labeled historic, not present clearance. No boat waypoint, crossing time, guaranteed dock space or closure inference.
+- Connects landing-specific trailheads, accessible group sites/campgrounds, private boundary limits and closures; selecting a landing carries its dock name and warning into the trip brief. Includes Google road map links for Bayfield and Little Sand Bay, but no fabricated water routes.
+- Responsive filters, static without-JS source evidence, original eight island dossiers, source freshness review and photos/map kept intact. No new indexable URLs, identity/SEO rewrites, Redis or ads configuration changes.
+- Evidence ledger: `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`; data `public/apostle-islands/landing-evidence.json`. Tests: source assertions and real mobile+desktop Chromium for island-to-dock-to-trip handoff, closures and map/photo regressions.
+- Growth expectations unmeasured: new source-backed path to help Lake Superior Circle Tour visitors plan real island outings; measure in later GA/GSC windows and only publish individual island pages with verified independent value.
+
 ### 2026-10-27 — Apostle Islands 2027 source-freshness guard
 
 - PR #1249 improves the existing `/apostle-islands/` canonical and trip readiness, without new indexed routes or ad-configuration changes.
