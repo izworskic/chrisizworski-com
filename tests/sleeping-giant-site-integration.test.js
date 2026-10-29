@@ -93,3 +93,19 @@ test('Source truth cannot be replaced by 2026 seasonal claims, inferred travel t
  assert.doesNotMatch(html,/\bWEATHER LIVE\b/);
  assert.doesNotMatch(html,/api\/sleeping-giant/);
 });
+
+test('Repository-checkout public page exists before build, has canonical authored six-route source content',()=>{
+ const html=fs.readFileSync(path.join(root,'public/sleeping-giant-provincial-park/index.html'),'utf8');
+ const schema=schemaFrom(html);
+ const owner=schema['@graph'].find(x=>x['@type']==='WebPage');
+ const list=schema['@graph'].find(x=>x['@type']==='ItemList');
+ assert.equal(owner.url,canonical);
+ assert.equal(owner.author['@id'],'https://chrisizworski.com/#person');
+ assert.equal(list.numberOfItems,6);
+ assert.ok(html.includes('id="trail-top-of-the-giant"'));
+ assert.ok(html.includes('id="trail-sea-lion"'));
+ assert.ok(html.includes('21.8 km'));
+ assert.match(html,/not a live trail report/i);
+ assert.match(html,/robots" content="index,follow/);
+ assert.equal((html.match(/pagead2\\.googlesyndication\\.com\\/pagead\\/js\\/adsbygoogle\\.js/g)||[]).length,1);
+});
