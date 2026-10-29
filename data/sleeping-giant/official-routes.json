@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-28",
+  "reviewedAt": "2026-10-29",
   "regionTimezone": "America/Toronto",
   "status": "source-backed planning reference; not a live access or conditions feed",
   "sources": {
@@ -8,7 +8,8 @@
     "bikeHike": "https://blog.ontarioparks.ca/bike-hike-sleeping-giant/",
     "park": "https://www.ontarioparks.ca/park/sleepinggiant",
     "alerts": "https://www.ontarioparks.ca/park/sleepinggiant/alerts",
-    "ontarioTrails": "https://data.ontario.ca/en/dataset/ontario-trail-network"
+    "ontarioTrails": "https://data.ontario.ca/en/dataset/ontario-trail-network",
+    "camping": "https://www.ontarioparks.ca/park/SleepingGiant/camping"
   },
   "accessPoints": [
     {
@@ -16,13 +17,17 @@
       "name": "South Kabeyun Trailhead",
       "siteCoordinates": null,
       "parkingCoordinates": null,
-      "locationStatus": "officially named; exact public parking pin unverified",
+      "locationStatus": "Ontario Parks verifies signed South Kabeyun public parking facility; exact parking coordinates and current operating status not verified",
       "currentAccess": "unverified",
       "officialPermitRequired": true,
       "sources": [
         "activities",
-        "bikeHike"
-      ]
+        "bikeHike",
+        "camping"
+      ],
+      "namedParkingFacilityVerified": true,
+      "signedParkingApproachVerified": true,
+      "officialRoadDistanceReferenceKm": 36.5
     },
     {
       "id": "middlebrun",
@@ -34,7 +39,9 @@
       "officialPermitRequired": true,
       "sources": [
         "activities"
-      ]
+      ],
+      "namedParkingFacilityVerified": false,
+      "signedParkingApproachVerified": false
     },
     {
       "id": "pass-lake",
@@ -46,7 +53,9 @@
       "officialPermitRequired": true,
       "sources": [
         "activities"
-      ]
+      ],
+      "namedParkingFacilityVerified": false,
+      "signedParkingApproachVerified": false
     }
   ],
   "routes": [
