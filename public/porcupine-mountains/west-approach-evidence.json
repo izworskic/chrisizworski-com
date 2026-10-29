@@ -1,0 +1,85 @@
+{
+  "asOf": "2026-10-28",
+  "status": "west-approach-source-crosswalk-not-road-route",
+  "sourceMGF": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20/query",
+  "originalRoadIDs": [
+    10130,
+    10152,
+    10347,
+    10521,
+    10560,
+    10863,
+    11060,
+    11187,
+    11233,
+    11538,
+    11771,
+    11833,
+    12174,
+    12304,
+    12579,
+    12736,
+    12783,
+    12943,
+    13293,
+    13364,
+    13451,
+    13860,
+    13958,
+    14135,
+    14203,
+    14500,
+    14834
+  ],
+  "sourceMGFPropertyReference": 1475809,
+  "sourceNames": {
+    "Presque Isle Rd": 17,
+    "Thomaston Rd": 10
+  },
+  "westRecords": 27,
+  "northBoundaryRecords": 3,
+  "scenicAreaAccessRecords": 9,
+  "sourceLineworkMiles": 15.6,
+  "graphComponents": [
+    {
+      "toleranceMeters": 3,
+      "components": 1,
+      "endpoints": 2
+    },
+    {
+      "toleranceMeters": 5,
+      "components": 1,
+      "endpoints": 2
+    },
+    {
+      "toleranceMeters": 10,
+      "components": 1,
+      "endpoints": 2
+    }
+  ],
+  "parkingAssetId": 841,
+  "sourceLineDistanceToParkingMeters": 1315.6,
+  "nearestParkAccessCenterlineMeters": 131.6,
+  "sourceEvidence": [
+    {
+      "name": "Michigan DNR current park access rules",
+      "url": "https://www.michigan.gov/recsearch/parks/porkies"
+    },
+    {
+      "name": "Michigan DNR winter programs, Feb 2026",
+      "url": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/Explorer/Porkies-VC-programs.pdf"
+    }
+  ],
+  "visitorGuidance": "DNR directs visitors approaching Presque Isle in winter to use County Road 519 north from US-28 just east of Wakefield. The separate ski area is approached from the east via M-64. Do not drive South Boundary Road as a winter cross-park shortcut.",
+  "mapDisplayRule": "The MGF records follow Thomaston Road and Presque Isle Road under road-network PR 1475809. Neither the name change nor apparent continuity certifies official road 519 signage, live gate conditions, legal turns or drivable clearance. This is not an independently verified complete path from US-28 to the mapped parking asset.",
+  "crossParkThroughVehicleRouteCertified": false,
+  "pointToPointDrivingDirectionsCertified": false,
+  "seasonalRoadOpeningCertified": false,
+  "currentRoadStatus": "unverified",
+  "warnings": [
+    "South Boundary Road has documented seasonal vehicle closures. Never infer access to east-side attractions through closed segments.",
+    "MGF road name/PR continuity is source geometry, not state route designation signage.",
+    "Current winter plowing, ice, closures, precise parking entrance and road-to-lot turn remain unknown.",
+    "MGF road centerlines do not include live closures, barricades, directionality, speed, driving time or user-specific origin."
+  ]
+}
