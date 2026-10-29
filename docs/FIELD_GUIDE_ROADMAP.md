@@ -20,18 +20,19 @@ You do **not** need to remember where each Field Guide is linked or manually rot
 
 ---
 
-## 2. Live Field Guides Inventory (8 Live)
+## 2. Live Field Guides Inventory (9 Live)
 
 | # | Field Guide | URL | Stops | Peak Months | Primary Connected Live Tools |
 |---|---|---|---|---|---|
 | 1 | **Michigan Winter Weekend Getaways** | `/michigan-winter-weekends/` | 12 | Oct–Mar (`10,11,12,1,2,3`) | `/michigan-snow-depth/`, `/lake-effect-snow/`, `/michigan-ski-hills/`, `/michigan-cross-country-skiing/`, `/mackinac-bridge-live/` |
 | 2 | **Michigan White Christmas Escapes** | `/michigan-white-christmas-escapes/` | 10 | Oct–Dec (`10,11,12`) | `/national-tools/white-christmas/`, `/national-tools/white-christmas/forecast/`, `/white-christmas-probability-map/`, `/white-christmas-michigan/` |
 | 3 | **Michigan First Snow Adventures** | `/michigan-first-snow-adventures/` | 12 | Oct–Dec (`10,11,12`) | `/michigan-snow-depth/`, `/lake-effect-snow/`, `/michigan-snow-totals/`, `/michigan-cross-country-skiing/`, `/michigan-ski-hills/` |
-| 4 | **Great Lakes Winter Freighter & Harbor Guide** | `/great-lakes-winter-freighter-guide/` | 12 | Nov–Mar (`11,12,1,2,3`) | `/great-lakes-freighter-winter-layup/`, `/great-lakes-freighter-tracking/`, `/soo-locks/`, `/duluth-canal-park/`, `/freighters/` |
-| 5 | **Michigan Winter Activities** | `/michigan-winter-activities/` | 18 | Nov–Mar (`11,12,1,2,3`) | `/michigan-snow-depth/`, `/michigan-cross-country-skiing/`, `/michigan-ski-hills/`, `/michigan-ice-caves/` |
-| 6 | **Frozen Michigan** | `/frozen-michigan/` | 11 | Dec–Mar (`12,1,2,3`) | `/michigan-ice-caves/`, `/michigan-ice/`, `/mackinac-ice-bridge/`, `/tahquamenon-falls/` |
-| 7 | **Michigan Winter Trails** | `/michigan-winter-trails/` | 15 | Nov–Mar (`11,12,1,2,3`) | `/michigan-cross-country-skiing/`, `/michigan-snow-depth/`, `/michigan-snow-totals/`, `/estivant-pines/` |
-| 8 | **Northern Michigan Wine, Cider & Spirits** | `/michigan-wine-cider-spirits/` | 18 | Oct–Apr (`10,11,12,1,2,3,4`) | `/petoskey-wine/`, `https://tcwine.chrisizworski.com/` |
+| 4 | **Michigan Late-Fall & November Adventures** | `/michigan-late-fall-adventures/` | 12 | Oct–Dec (`10,11,12`) | `/upper-peninsula-waterfalls/`, `/michigan-rockhounding/`, `/waterfowl-freeze-line/`, `https://michigantroutreport.com/salmon-run/`, `/edmund-fitzgerald/` |
+| 5 | **Great Lakes Winter Freighter & Harbor Guide** | `/great-lakes-winter-freighter-guide/` | 12 | Nov–Mar (`11,12,1,2,3`) | `/great-lakes-freighter-winter-layup/`, `/great-lakes-freighter-tracking/`, `/soo-locks/`, `/duluth-canal-park/`, `/freighters/` |
+| 6 | **Michigan Winter Activities** | `/michigan-winter-activities/` | 18 | Nov–Mar (`11,12,1,2,3`) | `/michigan-snow-depth/`, `/michigan-cross-country-skiing/`, `/michigan-ski-hills/`, `/michigan-ice-caves/` |
+| 7 | **Frozen Michigan** | `/frozen-michigan/` | 11 | Dec–Mar (`12,1,2,3`) | `/michigan-ice-caves/`, `/michigan-ice/`, `/mackinac-ice-bridge/`, `/tahquamenon-falls/` |
+| 8 | **Michigan Winter Trails** | `/michigan-winter-trails/` | 15 | Nov–Mar (`11,12,1,2,3`) | `/michigan-cross-country-skiing/`, `/michigan-snow-depth/`, `/michigan-snow-totals/`, `/estivant-pines/` |
+| 9 | **Northern Michigan Wine, Cider & Spirits** | `/michigan-wine-cider-spirits/` | 18 | Oct–Apr (`10,11,12,1,2,3,4`) | `/petoskey-wine/`, `https://tcwine.chrisizworski.com/` |
 
 ---
 

@@ -63,6 +63,26 @@
       ]
     },
     {
+      "slug": "michigan-late-fall-adventures",
+      "url": "/michigan-late-fall-adventures/",
+      "title": "Michigan Late-Fall & November Adventure Guide",
+      "subtitle": "12 Shoulder-Season Stops · Swollen Waterfalls, Agates, Steelhead & Migration",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [10, 11, 12],
+      "seasonLabel": "Late Oct–Early Dec · Late Fall",
+      "summary": "12 researched Michigan late-fall and November destinations for swollen U.P. waterfalls, post-gale Lake Superior agates and Petoskey stones, fall chrome steelhead runs, and sandhill crane/waterfowl staging—with Nov 15–30 firearm deer-season blaze-orange rules.",
+      "connectedTools": [
+        "/upper-peninsula-waterfalls/",
+        "/michigan-rockhounding/",
+        "/waterfowl-freeze-line/",
+        "https://michigantroutreport.com/salmon-run/",
+        "/edmund-fitzgerald/",
+        "https://whitetail.chrisizworski.com/"
+      ]
+    },
+    {
       "slug": "great-lakes-winter-freighter-guide",
       "url": "/great-lakes-winter-freighter-guide/",
       "title": "Great Lakes Winter Freighter & Harbor Guide",
