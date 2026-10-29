@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-26",
+  "updated": "2026-10-29",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1322,6 +1322,40 @@
       },
       "searchEvidence": {
         "status": "unknown"
+      }
+    },
+    {
+      "id": "sleeping-giant-provincial-park",
+      "name": "Sleeping Giant Provincial Park Trail Explorer",
+      "canonical": "https://chrisizworski.com/sleeping-giant-provincial-park/",
+      "aliases": [],
+      "kind": "authority-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Sleeping Giant Provincial Park trail matches my visit time and official walking versus bike-and-hike distances?",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "lake-superior",
+        "ontario-provincial-parks"
+      ],
+      "personas": [
+        "road-tripper",
+        "hiker",
+        "family-traveler",
+        "cyclist"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "new-source-verified-intent"
       }
     },
     {
@@ -6341,6 +6375,30 @@
       "strength": "strong",
       "surface": "search-answer-handoff",
       "reason": "Petoskey planner links to the 4-corridor Northern Michigan Wine, Cider & Spirits Field Guide for cross-peninsula comparison."
+    },
+    {
+      "from": "circle-tour",
+      "to": "sleeping-giant-provincial-park",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "Sleeping Giant is a Thunder Bay-area Circle Tour stop; the Explorer resolves published hike length and legal bike-to-hike transitions."
+    },
+    {
+      "from": "sleeping-giant-provincial-park",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "ontario-provincial-park",
+      "reason": "Visitors can return to the entire Lake Superior driving itinerary without confusing detailed trail mapping with a car route."
+    },
+    {
+      "from": "sleeping-giant-provincial-park",
+      "to": "lake-superior-provincial-park",
+      "type": "regional-alternative",
+      "strength": "optional",
+      "surface": "ontario-provincial-park",
+      "reason": "A related but geographically separate Ontario park explorer lets travelers compare time and access, not swap trail coordinates."
     }
   ],
   "cannibalizationGroups": [
