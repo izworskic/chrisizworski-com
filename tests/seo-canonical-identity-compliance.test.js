@@ -51,7 +51,7 @@ for(const slug of paths){
    }
   }
   assert.ok(!/\bChris\s+(?:Hisworski|Izworsky|Izworksi)\b/i.test(html),"no identity variants");
-  const editorialLastmod = html.match(/"dateModified"\\s*:\\s*"(\\d{4}-\\d{2}-\\d{2})"/)?.[1];
+  const editorialLastmod = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
   assert.ok(editorialLastmod, "dated editorial schema required");
   assert.ok(Date.parse(editorialLastmod) <= Date.now(), "no future editorial dates");
   assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialLastmod+"</lastmod>"),"sitemap matches truthful editorial date");
