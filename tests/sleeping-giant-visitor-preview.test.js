@@ -106,7 +106,7 @@ test('No misleading automatic open status, exact parking or cycling to every tra
  assert.ok(json.routes.filter(x=>x.bikePermission!=='official_documented').length===3);
  assert.ok(json.routes.every(x=>x.roundTripKm>0));
  assert.match(html,/No documented complete bicycle approach/);
- assert.match(html,/Do not cycle beyond the cutoff/);
+ assert.match(html,/do not cycle beyond the cutoff/i);
  assert.match(html,/Current trail and road access, parking availability, weather and exact junction coordinates are not verified|Trail and road access, parking availability, weather and exact junction coordinates are not verified/);
  assert.match(html,/not a live trail report/i);
  assert.doesNotMatch(html,/\bOPEN NOW\b/);
