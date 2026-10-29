@@ -70,16 +70,30 @@ async function main(){
      must(await page.locator('#bike-breakdown').isVisible(),viewport.name+' bike/walk section hidden');
      must((await page.locator('#bike-breakdown').innerText()).includes('13.4 km cycling'),viewport.name+' official split missing');
      must((await page.locator('#gap-note').innerText()).includes('unverified'),viewport.name+' parking gap not disclosed');
+     const mapFocus=page.locator('#map-focus');
+     must(await mapFocus.isEnabled(),viewport.name+' mapped route should enable inspection controls');
+     await mapFocus.selectOption('destination');
+     const destinationView=await page.locator('#map-canvas').getAttribute('viewBox');
+     must(destinationView!=='0 0 820 610',viewport.name+' destination focus did not zoom map');
+     await mapFocus.selectOption('parking');
+     const parkingView=await page.locator('#map-canvas').getAttribute('viewBox');
+     must(parkingView!==destinationView,viewport.name+' parking focus did not shift to the separate research point');
+     must((await page.locator('#map-zoom-status').innerText()).includes('not for navigation'),
+       viewport.name+' inspection mode must remain explicitly non-navigable');
+     await mapFocus.selectOption('overview');
+     must((await page.locator('#map-canvas').getAttribute('viewBox'))==='0.00 0.00 820.00 610.00',
+       viewport.name+' full research route reset did not work');
      await page.locator('#map-section').screenshot({path:path.join(out,viewport.name+'-map.png'),animations:'disabled'});
      report.screenshots.push(viewport.name+'-map.png');
      await page.locator('[data-id="middlebrun-beach"] button[data-select="middlebrun-beach"]').click();
      must(await page.locator('#route-shapes path').count()===0,viewport.name+' unmapped Middlebrun invented route');
      must((await page.locator('#mapped-distance').innerText())==='Not mapped',viewport.name+' missing map uncertainty');
+     must(await page.locator('#map-focus').isDisabled(),viewport.name+' no invented focus for unmapped destinations');
      must(await page.locator('a[href*="maps/dir"]').count()===0,viewport.name+' forbidden directions');
      must(errors.length===0,viewport.name+' JS errors '+errors.join('; '));
      report.viewports.push({viewport:viewport.name,width:viewport.width,
        staticCards:6,defaultMappedSections:2,topMappedSections:3,
-       bikeSplitTest:true,unmappedRouteTest:true,horizontalOverflow:false,scriptErrors:0});
+       bikeSplitTest:true,mapFocusTest:true,unmappedRouteTest:true,horizontalOverflow:false,scriptErrors:0});
      await context.close();
    }
    const noJs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
