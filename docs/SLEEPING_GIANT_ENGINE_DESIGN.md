@@ -88,3 +88,9 @@ The initial verified-source topology INVESTMENT is now committed. See `docs/SLEE
 - Dedicated CI now runs both route/forecast and topology tests, and saves a machine-readable topology audit artifact.
 
 **Remaining geographic gate:** exact official parking approach, cycling cutoff and signed junction locations, full resolution topology, on-the-ground/current access evidence. No user-facing turn-by-turn route or precise ascent/ETA output before those are reconciled. HTML/JavaScript map remains a later product phase.
+
+## October 28, 2026 — stacked release verification
+
+The separate baseline repair PR #1274 passed its 59-step `npm run verify:all` gate in [GitHub Actions run 40800109022](https://github.com/izworskic/chrisizworski-com/actions/runs/40800109022). Other focused baseline checks passed. Public build-and-audit and Sleeping Giant merge-base re-verification must still finish before any release.
+
+This feature PR #1273 is stacked onto `fix/winter-search-ci-baseline-20261028`. It must pass GitHub's **synthetic merge ref** tests against that base (not only the standalone Sleeping Giant unit tests). Neither PR authorizes a main-branch merge, publication or visitor navigation claim.
