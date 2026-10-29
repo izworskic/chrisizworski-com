@@ -26,7 +26,7 @@ test('Geometry QA export is generated as OFFLINE review-only HTML and source-pre
   assert.ok(geo.features.every(f=>f.geometry.type==='LineString' && f.geometry.coordinates.length>=2));
   assert.match(html,/Internal Geometry Review/);
   assert.match(html,/Not for directions/);
-  assert.match(html,/research route/i);
+  assert.match(html,/Source geometry to review/i);
   assert.match(html,/OpenStreetMap contributors/);
   assert.match(html,/source-data/);
   assert.match(html,/id="map"/);
