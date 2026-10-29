@@ -56,3 +56,15 @@ test('top-of-page action tracks saved or selected region and has honest map fall
     assert.ok(page.includes(needle), 'Hero link mapping exists for ' + slug);
   }
 });
+
+test('The statewide aurora decision links directly to verified Michigan dark-sky arrival planning', () => {
+ const liveEnd=page.indexOf('priority-decision-group: live aurora answer kept together');
+ const handoff=page.indexOf('class="night-sky-handoff"');
+ const nights=page.indexOf('class="next-nights"');
+ assert.ok(liveEnd>0&&handoff>liveEnd&&nights>handoff,
+  'Show location planning immediately after the first actual aurora decision');
+ assert.match(page,/href="\/national-tools\/dark-sky\/michigan\/"/);
+ assert.match(page,/data-growth-cta="aurora-to-dark-sky-visit"/);
+ assert.match(page,/A strong aurora signal does not make a park accessible/);
+ assert.equal((page.match(/class="night-sky-handoff"/g)||[]).length,1);
+});
