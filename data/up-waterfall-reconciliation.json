@@ -7,8 +7,8 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 46,
-    "pending": 115,
+    "exactIdMatched": 48,
+    "pending": 113,
     "curatedTotal": 54,
     "curatedNoMatchingGIS": 8
   },
@@ -3452,14 +3452,37 @@
       "lat": 46.574752,
       "lng": -85.256643,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-multifeature-parent-tool",
+      "curatedId": "tahquamenon",
+      "publicGuide": "existing-verified-park-planner",
+      "landManager": "Michigan DNR, Tahquamenon Falls State Park",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "existing-parent-tool-no-new-indexable-duplicate",
+      "sourceNotes": "Official Michigan DNR confirms distinct Upper Tahquamenon visitor area with separate parking and accessible overlooks. The pre-existing /tahquamenon-falls/ interactive planner already compares Upper and Lower; no competing waterfall SEO page should be created. DNR May 18, 2026 announcement confirms 1,100-foot accessible brink boardwalk replacing old 94-step stairs. Upper main visitor lot 24019 Upper Falls Drive is not state GIS natural falls coordinate.",
+      "outstandingGate": "Both features already publicly explained within the existing parent planner. Do not create duplicate indexable pages, conflate waterfall coordinates with parking, or infer same-day road/boardwalk conditions.",
+      "featureCoverage": {
+        "parentCuratedId": "tahquamenon",
+        "parentUrl": "/tahquamenon-falls/",
+        "distinctVisitorArea": "upper",
+        "gisNaturalFeatureLocation": {
+          "lat": 46.574752,
+          "lng": -85.256643
+        },
+        "notVehicleParking": true,
+        "landManagerPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "currentAccessStatus": "unverified",
+        "publicationMode": "single-existing-tool-for-two-gis-features"
+      },
+      "sourceLinks": [
+        "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "https://www.michigan.gov/dnr/about/accessibility/trails",
+        "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+      ]
     },
     {
       "gisObjectId": 208,
@@ -3469,14 +3492,37 @@
       "lat": 46.601944,
       "lng": -85.207103,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-multifeature-parent-tool",
+      "curatedId": "tahquamenon",
+      "publicGuide": "existing-verified-park-planner",
+      "landManager": "Michigan DNR, Tahquamenon Falls State Park",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "existing-parent-tool-no-new-indexable-duplicate",
+      "sourceNotes": "Official Michigan DNR confirms distinct Lower Tahquamenon visitor area with separate parking and accessible overlooks. The pre-existing /tahquamenon-falls/ interactive planner already compares Upper and Lower; no competing waterfall SEO page should be created. Lower day-use parking via M-123 is a separate 4 road miles from Upper parking, features a half-mile accessible boardwalk and Ronald A. Olson Island Bridge. DNR's site navigation reference is NOT the natural falls GIS coordinate. Seasonal boat rentals not available year-round.",
+      "outstandingGate": "Both features already publicly explained within the existing parent planner. Do not create duplicate indexable pages, conflate waterfall coordinates with parking, or infer same-day road/boardwalk conditions.",
+      "featureCoverage": {
+        "parentCuratedId": "tahquamenon",
+        "parentUrl": "/tahquamenon-falls/",
+        "distinctVisitorArea": "lower",
+        "gisNaturalFeatureLocation": {
+          "lat": 46.601944,
+          "lng": -85.207103
+        },
+        "notVehicleParking": true,
+        "landManagerPage": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "currentAccessStatus": "unverified",
+        "publicationMode": "single-existing-tool-for-two-gis-features"
+      },
+      "sourceLinks": [
+        "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "https://www.michigan.gov/dnr/about/accessibility/trails",
+        "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+      ]
     },
     {
       "gisObjectId": 213,
@@ -3743,6 +3789,16 @@
       ],
       "publicGuidesAdded": 3,
       "outcome": "Visit Keweenaw 2023 waterfall map screenshot plus current visitor pages verify M-26 roadside Jacobs, short upper gorge viewpoint at Manganese Road, and rustic 250-yard Wyandotte trail off Poyhonen Road. None invent parking coordinates, private upstream creek walking, gorge descents or current availability."
+    },
+    {
+      "batch": "13a-tahquamenon-existing-tool-geographic-deduplication",
+      "date": "2026-10-29",
+      "reviewedIds": [
+        207,
+        208
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Recognized two distinct state GIS waterfalls as already covered by existing /tahquamenon-falls/ combined decision tool. DNR's May 2026 boardwalk/access update verified; add source-linked crosswalk without duplicate indexable destination pages."
     }
   ]
 }
