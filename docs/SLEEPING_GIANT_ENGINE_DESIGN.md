@@ -74,3 +74,17 @@ Keep one broad destination canonical, separate route URLs only after distinct qu
 Score first release for route-source truth 30, decision usefulness 25, verified access/geometry 20, frontend usability 15, search distinctness 10. **Any false safe/open/cycling permission/parking assertion vetoes release** regardless of score. Measure GA4 completed route selections, source/directions link opens, GSC impressions/clicks from equivalent 28-day time windows after deployment. New demand and traffic are hypotheses until actual data exists.
 
 **Current next concrete action:** verify the official trail topology and access/parking anchors, then add edge-level graph fixtures and tests. This precedes an interactive map or server-side forecast acquisition.
+
+## GIS/topology implementation completed — October 28, 2026
+
+The initial verified-source topology INVESTMENT is now committed. See `docs/SLEEPING_GIANT_ROUTE_TOPOLOGY_EVIDENCE.md` for exact external endpoints, counts, GIS source IDs, nine non-routable junction candidates, and Ontario Parks vs OTN legal-use conflicts.
+
+- 30 park-managed government GIS trail-feature shapes (simplified **research** geometry, not navigable route geometry); 13 unlabeled government access-point records.
+- Geospatial candidate screening from official OTN line endpoints, with deterministic source-ID-preserving proximity report and source-policy conflicts.
+- Nine park-described trail relationships audited; all `routeEligible:false`, `manuallyCertified:false`.
+- Ontario Parks cycling overlay blocks the incorrect full-length Kabeyun cycling inference, identifies Sawyer/Top/Head/Nanabosho walk-only branches, and flags that OTN omits permitted Sawbill cycling.
+- 13 OTN access points remain non-certified as named parking or driveable trailheads.
+- Government lengths Kabeyun 40 GIS vs 37 km park; Nanabosho 0.7 vs 0.8; Sibley Creek 1.7 vs 2.3 preserved as conflicts, not silently reconciled.
+- Dedicated CI now runs both route/forecast and topology tests, and saves a machine-readable topology audit artifact.
+
+**Remaining geographic gate:** exact official parking approach, cycling cutoff and signed junction locations, full resolution topology, on-the-ground/current access evidence. No user-facing turn-by-turn route or precise ascent/ETA output before those are reconciled. HTML/JavaScript map remains a later product phase.
