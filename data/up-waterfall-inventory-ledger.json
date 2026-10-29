@@ -189,23 +189,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "DNR-natural-feature-land-verified-public-approach-unverified",
+      "access": "documented-land-or-tourism-feature-only-complete-public-route-unverified",
       "landManager": "Michigan DNR Crystal Falls Management Unit — natural falls parcel only",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Match complete legal public road/trail corridor from Raymer signs to DNR-owned falls parcel; verify parking, right-of-way and seasonal passability, then reconsider visitor guide.",
+      "nextAction": "Require legal public road/right-of-way inventory for Raymer/Dave's Camp, safe parking and entire trail; no GIS point driving.",
       "batch": "county-iron",
-      "reviewBatch": "10",
+      "reviewBatch": "11",
       "reviewed": "2026-10-28",
-      "classification": "state-owned-waterfall-parcel-RAYMER-intervening-private-camp-access-unverified",
-      "accessAssessment": "Official DNR LOTS map point query places state GIS Chicagon Falls #12 inside dedicated 47.8-acre forest parcel ParID 258918, Crystal Falls Management Unit. This does NOT prove legal continuous entry from Raymer/Dave's Camp Rd, parkable public turnaround, passable spring road or easement across any private camps.",
+      "classification": "dnr-falls-parcel-verified-historic-private-access-road-corridor-gated",
+      "accessAssessment": "Official DNR Crystal Falls Compartment 12139 management report states private landowners control nearly all VEHICLE access into adjacent Chicagon Creek area; county Long Lake Rd listed in historical restricted-roads document, but Raymer/Dave's Camp road/right-of-way, turnout and walking path to state falls parcel have not been publicly verified. This historical forest-compartment statement is area context only, not proof of exact falls-access easement.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.iron.org/outdoors/waterfalls/",
         "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
-        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2",
+        "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Crystal_Falls/2021/cry139_comp_info.pdf",
+        "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf",
+        "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20"
       ]
     },
     {
@@ -673,23 +676,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "undetermined-parcel-road-seasonal-public-route",
+      "access": "documented-land-or-tourism-feature-only-complete-public-route-unverified",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Identify official legal lot and complete mapped public walking approach before indexing. Do not navigate to falls GIS point.",
+      "nextAction": "Require ski hill/bridge public lot permission/easement and continuous legal visitor footpath to a specific upper or lower view; no pipeline shortcut.",
       "batch": "county-gogebic",
-      "reviewBatch": "10",
+      "reviewBatch": "11",
       "reviewed": "2026-10-28",
-      "classification": "city-bessemer-described-gabbro-access-trail-land-rights-unverified",
-      "accessAssessment": "Bessemer city scenic drive official page says Gabbro/Baker's Falls visitors can walk from Blackjack Ski Hill bridge or upper hill path, but public trail/parcel crossing and parking waypoints remain unverified.",
+      "classification": "city-recognized-gabbro-falls-ski-hill-trail-permission-gated",
+      "accessAssessment": "City of Bessemer official tourist guide describes bridge lower and ski hill upper paths; third-party outdoor guide suggests blue markers near bridge. Gogebic County official parcel GIS expressly not a legal survey; no landowner-recognized public parking or continuous trail/utility easement/bridge-to-view public corridor yet verified.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/gabbro-falls/",
         "https://www.cityofbessemer.org/visit/scenic-drives/",
-        "https://explorewesternup.com/things-to-do/waterfalls/"
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://www.gogebic.gov/government/county_offices/gis_map_system.php",
+        "https://www.theoutbound.com/michigan/hiking/hike-to-gabbro-falls",
+        "https://www.cityofbessemermi.gov/visit/"
       ]
     },
     {
@@ -4053,5 +4059,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "10"
+  "lastBatch": "11"
 }
