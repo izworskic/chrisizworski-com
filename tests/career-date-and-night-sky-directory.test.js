@@ -48,6 +48,8 @@ test('night-sky decisions and all six Michigan aurora guides use the same list-c
     const link = section.match(new RegExp(`<li><a href="${route}"[^>]*data-decision-network="[^"]+"[^>]*>[^<]+<span>[^<]+</span></a></li>`));
     assert.ok(link, `missing styled, measured link for ${route}`);
   }
+  assert.match(tools, /@media\(min-width:1080px\)\{section\[aria-labelledby="tools-decision-title"\] \.decision-network__grid\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(tools, /@media\(min-width:641px\) and \(max-width:1079px\)\{section\[aria-labelledby="tools-decision-title"\] \.decision-network__grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(section, /confirm park hours and access/i);
   assert.match(section, /do not guarantee a sighting/i);
   assert.doesNotMatch(section, /<h3>Dark-sky aurora guides<\/h3><p>/);
