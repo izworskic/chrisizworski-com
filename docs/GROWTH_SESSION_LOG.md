@@ -1658,3 +1658,24 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Classified individual access as documented seasonal approach, winter arrival unverified, or limited vehicle approach. Surfaced Munising Falls 2025 washout closure prominently rather than advertising it as an available winter waterfall.
 - Introduced a unique interactive three-process field lesson on sandstone seep ice, waterfalls and windblown lake spray. Shared responsive map with grouped Sand Point markers, filterable cards and explicit no-ice-crossing guidance. No AdSense configuration or existing lake ice engine changed.
 - Linked from tools, Michigan destinations, existing winter activities and specialist tools. Release remains unmerged until CI and visual QA; rankings/impressions unmeasured.
+
+### 2026-10-29 — Guide directory inventory and release-check repair
+
+- Audited the live seasonal guide registry and broader destination, river, fishing, dark-sky and gardening guides. Added missing directory links and corrected card descriptions where the actual destinations changed; grouped individual waterfall pages under their collection and kept the noindex Porcupine Mountains preview out. Detailed scope and ongoing checks: `docs/GUIDES_DISCOVERY_INVENTORY_2026-10-29.md`.
+- Release repair preserves map-location and winter parking distinctions, restores source and author signals, and fixes search lengths and sitemap freshness checks. No ad code or settings changed.
+- Validation and release status are recorded in the associated pull requests and must be checked against their final heads and production deployment. No new GSC or AdSense data was measured in this session.
+- **Single next action:** Verify the final guide-directory PR checks, merge when green, and confirm the production page and its principal guide links.
+
+### 2026-10-29 — Correct Prepared start and restore night-sky discovery
+
+- Chris directly corrected his Prepared start date to December 2025. Updated the canonical profile, Prepared career page, 911 career pages, biography, timeline and projects, without inferring his job title at the start. Removed the inaccurate claim that a 2026 start date was not reported. Retained the canonical Person identity, existing SEO metadata and all unrelated career milestones.
+- Replaced the unstyled dark-sky paragraphs on `/tools/` with two existing-design decision-network lists: five night-sky tools/collections and all six published Michigan aurora destination guides. Weather forecasts do not guarantee sightings or park access; no ad configuration changed.
+- Exact-head repository checks and publication status are recorded in the release PR. GSC and AdSense measurements were not gathered. Next action: verify the final production profile and night-sky links after a green release.
+
+### 2026-10-29 — Christmas guide repair and directory categories
+
+- Restored the existing shared winter field-guide stylesheet and layout classes on `/michigan-white-christmas-escapes/`; the previous CSS URL did not exist. The map, probability-tier filter, reset and lesson selector worked in the exact-head preview at desktop and 390px. PR #1286 merged as `fd05403ef2fc5f5eecfc9b09d59eaaf1371b9468`; the production page was observed rendering the shared grid with ten destinations and a loaded map. The complete 59-step gate and emitted-output audit passed.
+- The authoritative national directory change was implemented and merged first in `izworskic/national-outdoor-tools-hub` PR #124 (`a0ce1907e987b63e787a2bdb763d335a481ea1e9`): Florida's Skyway belongs in Southeast, and flight tracking and AgentBase belong in the non-regional section. The hub's 241 tests and production build passed. This site-shell change explicitly syncs those cards and the existing NYC listing into the published mirror, retains the Maryland, house and national waterfall entries there, and removes their misplaced Michigan-directory listings. The existing gardening hub already contains the planting, frost, seed-saving and matchmaker tools; its duplicate block is removed from `/tools/`. Build discovery scripts no longer put the two out-of-region bridge cards back on the Michigan page.
+- Site-shell PR #1287 merged as `6ca4a4a02741651c85a44d6cb2816edb172f0e63`; all 59 repository checks, the production build and the emitted public-output audit passed. The matching production Vercel deployment reported READY. Browser checks confirmed all seven requested items in the U.S. directory, their absence as Michigan cards, the gardening hub links, and working Everyday & developer and Skyway-search filters.
+- No advertising configuration or loader logic was changed. GSC and AdSense outcome data were not available; no traffic or revenue effect is claimed.
+- **Single next action:** Review directory navigation and search use in GA4 when comparable post-release data is available.
