@@ -31,8 +31,9 @@ jobs:
         run: node --test tests/porkies-route-topology.test.mjs tests/porkies-parking.test.js
       - name: Import 17 state MGF Presque Isle Road lines and 15 distinct west-of-Pinkerton lines
         run: node scripts/research-porkies-west-road.mjs
-      - name: Test precise western road and Pinkerton closure source decisions
-        run: node --test tests/porkies-west-road.test.mjs
+      - name: Test every Porkies source, parking, crossing, trail and route contract
+        run: |
+          node --test tests/porkies-explorer.test.js tests/porkies-parking.test.js tests/porkies-crossings.test.mjs tests/porkies-crossing-registry.test.mjs tests/porkies-route-evidence.test.mjs tests/porkies-route-topology.test.mjs tests/porkies-trail-truth.test.mjs tests/porkies-west-road.test.mjs
       - name: Fail on unverified or shifted policy
         run: |
           node - <<'NODE'
