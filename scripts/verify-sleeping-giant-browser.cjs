@@ -43,7 +43,7 @@ async function main(){
      // remote licensed photo has loaded, so validate the actual image bytes.
      const hero=await page.evaluate(async()=>{
        const css=getComputedStyle(document.querySelector('.hero-image')).backgroundImage;
-       const match=css.match(/url\\(["']?([^"')]+)["']?\\)/);
+       const match=css.match(/url\(["']?([^"')]+)["']?\)/);
        if(!match)return {ok:false,reason:'no CSS image url',css};
        const url=match[1];
        return await new Promise(resolve=>{
