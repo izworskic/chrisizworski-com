@@ -143,7 +143,7 @@ for (const name of readdirSync(publicRoot).filter(name => /sitemap.*\.xml$/.test
 const DELEGATED_DATE_SCHEMAS = new Set([
   "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml",
 ]);
-async function syncSitemaps(dateByRoute) {
+async function syncSitemaps(dateByRoute, publishedWithinTolerance) {
   let updated = 0;
   const mismatches = [];
   for (const name of SITEMAPS) {
@@ -155,6 +155,10 @@ async function syncSitemaps(dateByRoute) {
       (whole, route, gap, current) => {
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want || want === current) return whole;
+        // Git may be up to seven days ahead of the published dateModified (our
+        // explicit tolerance). A sitemap that carries the PUBLISHED date is
+        // also truthful. Never forgive a sitemap date older than the page.
+        if (CHECK && publishedWithinTolerance.get(route) === current) return whole;
         updated += 1;
         mismatches.push({ sitemap:name, route, current, want });
         return `<loc>https://chrisizworski.com${route}</loc>${gap}<lastmod>${want}</lastmod>`;
@@ -183,6 +187,7 @@ async function syncSitemaps(dateByRoute) {
 
 const files = walk(publicRoot);
 const dateByRoute = new Map();
+const publishedWithinTolerance = new Map();
 const lagging = [];
 let rewritten = 0;
 let skippedNoHistory = 0;
@@ -203,11 +208,14 @@ for (const file of files) {
 
   const routeKey = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
   const lagDays = Math.round((Date.parse(real) - Date.parse(claimed)) / 86400000);
-  // In --check, the sitemap must agree with the dateModified actually published on the page.
-  // A stamp up to TOLERANCE_DAYS behind Git is already explicitly allowed; demanding
-  // the *future rewritten* date in its sitemap would contradict that tolerance.
-  // In write mode the stamper still advances both page and sitemap to the real date.
-  dateByRoute.set(routeKey, CHECK && lagDays <= TOLERANCE_DAYS ? claimed : (lagDays > 0 ? real : claimed));
+  // The sitemap normally follows the true content-commit date. In check
+  // mode, also accept the published page dateModified if that date is within
+  // the established seven-day Git freshness tolerance, since it is the
+  // exact editorial date actually exposed in the page's JSON-LD.
+  dateByRoute.set(routeKey, lagDays > 0 ? real : claimed);
+  if (lagDays >= 0 && lagDays <= TOLERANCE_DAYS) {
+    publishedWithinTolerance.set(routeKey, claimed);
+  }
   if (lagDays <= 0) continue; // already truthful, or newer than git which we never touch
 
   const rel = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
@@ -260,7 +268,7 @@ if (iceParent !== undefined) {
   for (const route of ledger.pages) dateByRoute.set(route, generatedDate);
 }
 
-const sitemapSync = await syncSitemaps(dateByRoute);
+const sitemapSync = await syncSitemaps(dateByRoute, publishedWithinTolerance);
 const sitemapDrift = sitemapSync.updated;
 
 if (CHECK) {
