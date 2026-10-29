@@ -25,9 +25,11 @@ test('closures, ski-only rules, fat-tire windows and 7 quarantined route blocker
   assert.match(html,/cross-country ski only/i);
   assert.match(html,/December 15 through March 15|Dec 15–Mar 15/);
   assert.match(html,/3\.5-inch/);
-  assert.match(html,/UNPLOWED_SEASONAL_ROAD/);
-  assert.match(html,/BRIDGE_CLOSED_OUT_AND_BACK/);
-  assert.match(html,/SKI_ONLY_NO_SNOWSHOE/);
+  assert.match(html,/Anderson Lake State Forest Campground and pathway access roads are not plowed/i);
+  assert.match(html,/footbridge[^<]*closed indefinitely/i);
+  assert.match(html,/cross-country ski only/i);
+  assert.match(html,/Muncie Lakes[^<]*avoid walking on groomed ski tracks/i);
+  assert.match(html,/Pine Bowl[^<]*steep outer descents/i);
   assert.match(html,/Anderson Lake Pathway/);
   assert.match(html,/Snow depth is not plowed parking/);
   assert.doesNotMatch(html,/guaranteed plowed parking|all trails are groomed daily/i);
@@ -40,14 +42,14 @@ test('photo credits and source rights are explicit with honest seasonal/archival
   assert.equal(indices.length,0);
   for(const [photo] of photos){
     assert.match(photo,/Photo: <a/);
-    assert.match(photo,/(CC BY|CC0|NPS public-domain|Public domain)/);
+    assert.match(photo,/(CC BY|CC0|public[ -]domain)/i);
     assert.match(photo,/figcaption/);
     assert.match(photo,/alt="[^"]+"/);
   }
   assert.match(html,/Joe Passe/);
   assert.match(html,/summer reference, not winter snow/);
   assert.match(html,/Guettarda/);
-  assert.match(html,/Tobico Marsh in winter/);
+  assert.match(html,/Frozen cattail channels at Tobico Marsh/);
   assert.match(js,/revealPhotoFallback/);
   assert.match(js,/IMAGE UNAVAILABLE/);
 });
@@ -74,7 +76,7 @@ test('all 15 winter trail systems link to view-only Google Maps areas, never unv
   assert.equal(blocks.length,15);
   for(const [b] of blocks){
     assert.match(b,/https:\/\/www\.google\.com\/maps\/search\/\?api=1&amp;query=[0-9.]+%2C-[0-9.]+/);
-    assert.match(b,/View place on Google Maps · not parking/);
+    assert.match(b,/View [^<]+ on Google Maps · area only, not verified parking/);
     assert.match(b,/target="_blank" rel="noopener noreferrer"/);
   }
   assert.match(js,/trl-popup-map-link/);

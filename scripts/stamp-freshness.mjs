@@ -203,7 +203,10 @@ for (const file of files) {
 
   const routeKey = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
   const lagDays = Math.round((Date.parse(real) - Date.parse(claimed)) / 86400000);
-  dateByRoute.set(routeKey, lagDays > 0 ? real : claimed);
+  // In check mode compare the sitemap with the date actually in the document.
+  // Write mode synchronizes to the date it will stamp; a permitted lag in check
+  // mode must not be mistaken for a page/sitemap mismatch.
+  dateByRoute.set(routeKey, CHECK ? claimed : (lagDays > 0 ? real : claimed));
   if (lagDays <= 0) continue; // already truthful, or newer than git which we never touch
 
   const rel = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
