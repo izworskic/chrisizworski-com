@@ -203,7 +203,11 @@ for (const file of files) {
 
   const routeKey = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
   const lagDays = Math.round((Date.parse(real) - Date.parse(claimed)) / 86400000);
-  // In --check, the sitemap must agree with the dateModified actually published on the page.\n  // A stamp up to TOLERANCE_DAYS behind Git is already explicitly allowed; demanding\n  // the *future rewritten* date in its sitemap would contradict that tolerance.\n  // In write mode the stamper still advances both page and sitemap to the real date.\n  dateByRoute.set(routeKey, CHECK && lagDays <= TOLERANCE_DAYS ? claimed : (lagDays > 0 ? real : claimed));
+  // In --check, the sitemap must agree with the dateModified actually published on the page.
+  // A stamp up to TOLERANCE_DAYS behind Git is already explicitly allowed; demanding
+  // the *future rewritten* date in its sitemap would contradict that tolerance.
+  // In write mode the stamper still advances both page and sitemap to the real date.
+  dateByRoute.set(routeKey, CHECK && lagDays <= TOLERANCE_DAYS ? claimed : (lagDays > 0 ? real : claimed));
   if (lagDays <= 0) continue; // already truthful, or newer than git which we never touch
 
   const rel = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
