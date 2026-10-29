@@ -182,263 +182,193 @@
 }
 </script>
 
+<link rel="stylesheet" href="/assets/home-almanac.css?v=20261029c">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --green: #2c5f2d;
-  --green-dark: #1e4520;
-  --green-light: #f0f7f0;
-  --tan: #f5f2eb;
-  --border: #e2ddd4;
-  --text: #1a1a1a;
-  --muted: #666;
-  --lighter: #999;
+  --green: var(--hm-accent, #28594b);
+  --green-dark: var(--hm-accent-dark, #1b3f35);
+  --green-light: #eef4f1;
+  --tan: var(--hm-paper, #f5f4ed);
+  --border: var(--hm-line, #dde2d9);
+  --text: var(--hm-ink, #1e3432);
+  --muted: var(--hm-muted, #52675e);
+  --lighter: var(--hm-copper, #a36947);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #faf9f6;
-  color: var(--text);
-  line-height: 1.6;
+  font: 16px/1.65 var(--hm-body, 'DM Sans', system-ui, sans-serif);
+  background: var(--hm-paper, #f5f4ed);
+  color: var(--hm-ink, #1e3432);
+  line-height: 1.65;
 }
 
 a { color: var(--green); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ─── SITE HEADER ─── */
-.site-header {
-  text-align: center;
-  padding: 28px 20px 20px;
-  border-bottom: 1px solid var(--border);
-  background: #fff;
+.page-shell {
+  width: min(1260px, calc(100% - 36px));
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 28px 0 64px;
 }
-.site-header .site-title{ font-size: 20px; font-weight: normal; color: var(--green); letter-spacing: .5px; }
-.site-header .site-title a{ color: var(--green); }
 
-.site-nav {
-  text-align: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--border);
-  background: #fff;
-  font-size: 13px;
-}
-.site-nav a { color: #5a5a5a; margin: 0 10px; }
-.site-nav a:hover, .site-nav a.active { color: var(--green); }
-.site-nav a.active { font-weight: 700; }
-
-/* ─── HERO BANNER ─── */
-.hero-banner {
-  background: var(--green);
-  color: #fff;
-  padding: 56px 24px 52px;
-  text-align: center;
-}
-.hero-eyebrow {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  color: rgba(255,255,255,.65);
+.breadcrumb {
+  font: 600 .78rem/1.4 var(--hm-body, sans-serif);
+  color: var(--muted);
   margin-bottom: 16px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
 }
-.hero-banner h1{
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 18px;
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hero-banner p {
-  font-size: 1.05rem;
-  color: rgba(255,255,255,.82);
-  max-width: 580px;
-  margin: 0 auto 30px;
-  line-height: 1.7;
-}
-.hero-meta {
-  display: inline-flex;
-  gap: 24px;
-  font-size: 12.5px;
-  color: rgba(255,255,255,.6);
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hero-meta span { display: flex; align-items: center; gap: 6px; }
-.hero-meta .dot { width: 4px; height: 4px; background: rgba(255,255,255,.4); border-radius: 50%; }
-
-/* ─── ZONE FACTS STRIP ─── */
-.zone-strip {
-  display: flex;
-  background: var(--green-dark);
-  flex-wrap: wrap;
-}
-.zone-fact {
-  flex: 1;
-  min-width: 110px;
-  text-align: center;
-  padding: 16px 10px;
-  border-right: 1px solid rgba(255,255,255,.12);
-}
-.zone-fact:last-child { border-right: none; }
-.zone-fact .val { font-size: 1.4rem; font-weight: 800; color: #fff; line-height: 1; display: block; }
-.zone-fact .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.5); display: block; margin-top: 5px; }
+.breadcrumb a { color: var(--green); }
 
 /* ─── MAIN WRAP ─── */
-.wrap { max-width: 960px; margin: 0 auto; padding: 0 22px 80px; }
+.wrap { width: min(1260px, calc(100% - 36px)); max-width: 1260px; margin: 0 auto; padding: 0 0 64px; }
 
 /* ─── START-HERE DECISION STRIP ─── */
-.start-here{margin-top:34px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px}
-.start-here .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--lighter);font-weight:800;margin-bottom:6px}
-.start-here h2{font-size:1.25rem;line-height:1.25;margin-bottom:7px}
-.start-here>p{font-size:.9rem;color:var(--muted);max-width:720px}
-.start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
-.start-card{display:block;border:1px solid var(--border);border-radius:7px;padding:15px 16px;background:var(--green-light);color:var(--text)}
-.start-card:hover{text-decoration:none;border-color:var(--green);background:#f7fbf7}
-.start-card strong{display:block;color:var(--green-dark);font-size:.94rem;margin-bottom:4px}
-.start-card span{display:block;color:var(--muted);font-size:.8rem;line-height:1.5}
-@media(max-width:720px){.start-grid{grid-template-columns:1fr}}
+.start-here{margin-top:34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-top:4px solid var(--green);border-radius:10px;padding:26px 28px;box-shadow:var(--hm-shadow,0 10px 28px -12px rgba(24,46,42,.12))}
+.start-here .eyebrow{font:700 .72rem/1.2 var(--hm-body,sans-serif);text-transform:uppercase;letter-spacing:.13em;color:var(--lighter);margin-bottom:6px}
+.start-here h2{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin-bottom:8px}
+.start-here>p{font:400 .95rem/1.6 var(--hm-body,sans-serif);color:var(--muted);max-width:780px}
+.start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+.start-card{display:flex;flex-direction:column;border:1px solid var(--border);border-top:3px solid var(--green);border-radius:8px;padding:18px 20px;background:var(--hm-paper,#f5f4ed);color:var(--text);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.start-card:hover{text-decoration:none;border-color:var(--green);background:#fffefa;transform:translateY(-2px);box-shadow:var(--hm-shadow-hover)}
+.start-card strong{display:block;font:500 1.12rem/1.28 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin-bottom:6px}
+.start-card span{display:block;color:var(--hm-ink-soft,#354c47);font:400 .86rem/1.58 var(--hm-body,sans-serif)}
+@media(max-width:1024px){.start-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.start-grid{grid-template-columns:1fr}}
 
 /* ─── CATEGORY SECTIONS ─── */
 .category {
-  margin-top: 56px;
+  margin-top: 42px;
 }
 .cat-header {
   display: flex;
   align-items: baseline;
-  gap: 14px;
-  margin-bottom: 6px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--border);
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--text);
 }
-.cat-icon { font-size: 1.4rem; line-height: 1; }
-.cat-title { font-size: 1.15rem; font-weight: 800; color: var(--text); }
-.cat-count { font-size: 12px; color: var(--lighter); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.cat-icon { font-size: 1.25rem; line-height: 1; }
+.cat-title { font: 500 clamp(1.45rem, 2.3vw, 1.9rem)/1.2 var(--hm-display, 'Fraunces', Georgia, serif); color: var(--text); letter-spacing: -.015em; }
+.cat-count { font: 700 .72rem/1.2 var(--hm-body, sans-serif); color: var(--lighter); text-transform: uppercase; letter-spacing: .08em; }
 .cat-desc {
-  font-size: .9rem;
+  font: 400 .95rem/1.6 var(--hm-body, sans-serif);
   color: var(--muted);
-  margin-bottom: 18px;
-  line-height: 1.6;
-  max-width: 680px;
+  margin-bottom: 16px;
+  max-width: none;
 }
 
 /* ─── GUIDE CARDS ─── */
 .guide-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .guide-card {
-  background: #fff;
+  background: var(--hm-surface, #fffefa);
   border: 1px solid var(--border);
+  border-top: 3px solid var(--green);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: box-shadow .15s, border-color .15s, transform .1s;
+  box-shadow: 0 4px 14px -8px rgba(24,46,42,.07);
+  transition: box-shadow .16s ease, border-color .16s ease, transform .16s ease;
 }
 .guide-card:hover {
-  border-color: var(--green);
-  box-shadow: 0 4px 16px rgba(44,95,45,.1);
-  transform: translateY(-1px);
+  border-color: var(--hm-line-strong, #c5d0c7);
+  box-shadow: var(--hm-shadow-hover, 0 16px 36px -12px rgba(24,46,42,.2));
+  transform: translateY(-2px);
 }
 
 .card-top {
-  background: var(--green-light);
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding: 18px 20px 8px;
+  border-bottom: none;
 }
 .card-badge {
   display: inline-block;
-  background: var(--green);
-  color: #fff;
-  font-size: 9.5px;
+  background: transparent;
+  color: var(--lighter);
+  font: 700 .69rem/1.2 var(--hm-body, sans-serif);
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 3px;
-  margin-bottom: 10px;
+  letter-spacing: .09em;
+  padding: 0;
+  margin-bottom: 6px;
 }
 .card-top h3 {
-  font-size: .975rem;
-  font-weight: 700;
+  font: 500 1.14rem/1.28 var(--hm-display, 'Fraunces', Georgia, serif);
   color: var(--text);
-  line-height: 1.3;
 }
 .card-top h3 a { color: var(--text); }
 .card-top h3 a:hover { color: var(--green); text-decoration: none; }
 
 .card-body {
-  padding: 14px 20px 16px;
+  padding: 0 20px 18px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 .card-body p {
-  font-size: .855rem;
-  color: var(--muted);
-  line-height: 1.65;
+  font: 400 .88rem/1.6 var(--hm-body, sans-serif);
+  color: var(--hm-ink-soft, #354c47);
   flex: 1;
   margin-bottom: 14px;
 }
 .card-link {
-  font-size: .825rem;
-  font-weight: 700;
-  color: var(--green);
-  display: flex;
+  font: 700 .78rem/1.2 var(--hm-body, sans-serif);
+  color: #fff;
+  background: var(--green);
+  padding: 7px 13px;
+  border-radius: 5px;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  align-self: flex-start;
+  gap: 5px;
 }
+.card-link:hover { background: var(--green-dark); color: #fff; text-decoration: none; }
 .card-link::after { content: '→'; }
 
-/* ─── HIGHLIGHT CARD (spans 2 cols) ─── */
-.guide-grid.has-hero { grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 640px) {
-  .guide-card.hero-card {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .guide-card.hero-card .card-top { border-bottom: none; border-right: 1px solid var(--border); }
-}
+/* ─── HIGHLIGHT CARD ─── */
+.guide-grid.has-hero { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 /* ─── ABOUT INTRO ─── */
 .about-intro {
-  margin-top: 56px;
-  background: var(--tan);
+  margin-top: 44px;
+  background: var(--hm-surface, #fffefa);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 32px 36px;
+  border-top: 3px solid var(--lighter);
+  border-radius: 10px;
+  padding: 28px 32px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 36px;
+  gap: 32px;
+  box-shadow: var(--hm-shadow);
 }
 .about-intro h3 {
-  font-size: .8rem;
-  font-weight: 700;
+  font: 700 .73rem/1.2 var(--hm-body, sans-serif);
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
   color: var(--lighter);
   margin-bottom: 10px;
 }
 .about-intro p {
-  font-family: Georgia, serif;
-  font-size: .95rem;
-  color: #444;
-  line-height: 1.8;
+  font: 400 .94rem/1.68 var(--hm-body, sans-serif);
+  color: var(--hm-ink-soft, #354c47);
 }
 .about-intro p + p { margin-top: 12px; }
-.about-intro a { color: var(--green); }
+.about-intro a { color: var(--green); font-weight: 600; }
 
 /* ─── FVF BLOCK ─── */
 .fvf-block {
-  margin-top: 52px;
-  background: var(--green);
-  border-radius: 8px;
-  padding: 36px 40px;
+  margin-top: 36px;
+  background: #183430;
+  border-radius: 10px;
+  padding: 32px 36px;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 28px;
@@ -446,31 +376,29 @@ a:hover { text-decoration: underline; }
   color: #fff;
 }
 .fvf-block .fvf-eyebrow {
-  font-size: 10.5px;
+  font: 700 .72rem/1.2 var(--hm-body, sans-serif);
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,.6);
-  margin-bottom: 10px;
+  letter-spacing: .14em;
+  color: #9fc6ba;
+  margin-bottom: 8px;
 }
 .fvf-block h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 10px;
+  font: 500 1.55rem/1.2 var(--hm-display, 'Fraunces', Georgia, serif);
+  color: #fff;
+  margin-bottom: 8px;
 }
 .fvf-block p {
-  font-size: .92rem;
-  color: rgba(255,255,255,.8);
-  line-height: 1.7;
-  max-width: 500px;
+  font: 400 .92rem/1.65 var(--hm-body, sans-serif);
+  color: rgba(255,255,255,.88);
+  max-width: 620px;
 }
 .fvf-btn {
   display: inline-block;
   background: #fff;
-  color: var(--green);
-  font-weight: 700;
-  font-size: .875rem;
-  padding: 13px 26px;
-  border-radius: 5px;
+  color: var(--green-dark);
+  font: 700 .84rem/1.2 var(--hm-body, sans-serif);
+  padding: 13px 22px;
+  border-radius: 6px;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -478,32 +406,30 @@ a:hover { text-decoration: underline; }
 
 /* ─── FOOTER ─── */
 .site-footer {
-  text-align: center;
-  padding: 20px;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: #bbb;
-  background: #fff;
+  border-top: 2px solid var(--hm-line-strong, #c5d0c7);
+  background: var(--hm-surface, #fffefa);
+  padding: 28px 0 36px;
+  font: 500 .83rem/1.5 var(--hm-body, sans-serif);
+  color: var(--muted);
 }
-.site-footer a { color: #aaa; }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 620px) {
-  .hero-banner { padding: 40px 18px; }
-  .guide-grid.has-hero { grid-template-columns: 1fr; }
-  .guide-card.hero-card { grid-column: 1; display: flex; flex-direction: column; }
-  .guide-card.hero-card .card-top { border-right: none; border-bottom: 1px solid var(--border); }
-  .about-intro { grid-template-columns: 1fr; gap: 20px; padding: 24px 22px; }
-  .fvf-block { grid-template-columns: 1fr; padding: 28px 24px; }
+@media (max-width: 1024px) {
+  .guide-grid, .guide-grid.has-hero { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .guide-grid, .guide-grid.has-hero { grid-template-columns: 1fr; }
+  .about-intro { grid-template-columns: 1fr; gap: 20px; padding: 22px 20px; }
+  .fvf-block { grid-template-columns: 1fr; padding: 24px 20px; }
   .fvf-btn { align-self: flex-start; }
 }
 .fvf-block p a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 /* What to Plant Now */
-.pn-top{background:var(--green);color:#fff;text-align:center;padding:40px 22px 26px}
-.pn-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.7);margin-bottom:10px}
-.pn-top h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.1;margin:0 auto 12px;max-width:720px;color:#fff}
-.pn-lede{font-size:1rem;color:rgba(255,255,255,.88);max-width:640px;margin:0 auto;line-height:1.6}
-.pn-wrap{max-width:960px;margin:-8px auto 0;padding:0 22px}
+.pn-top{width:min(1260px,calc(100% - 36px));max-width:1260px;margin:28px auto 20px;background:var(--hm-surface,#fffefa);color:var(--text);text-align:left;padding:28px 32px;border:1px solid var(--border);border-top:4px solid var(--green);border-radius:10px;box-shadow:var(--hm-shadow,0 10px 28px -12px rgba(24,46,42,.12))}
+.pn-eyebrow{font:700 .73rem/1.2 var(--hm-body,sans-serif);text-transform:uppercase;letter-spacing:.14em;color:var(--lighter);margin-bottom:8px}
+.pn-top h1{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display,'Fraunces',Georgia,serif);letter-spacing:-.025em;margin:0 0 10px;max-width:none;color:var(--text)}
+.pn-lede{font:400 1.08rem/1.55 var(--hm-display,'Fraunces',Georgia,serif);font-style:italic;color:var(--hm-ink-soft,#354c47);max-width:none;margin:0}
+.pn-wrap{width:min(1260px,calc(100% - 36px));max-width:1260px;margin:0 auto;padding:0}
 .pn-group{margin-top:12px}.pn-group h3{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4e5b54;margin:0 0 4px}
 .pn-group p{margin:0;font-size:15px}
 .pn-table-wrap{overflow-x:auto}
@@ -516,8 +442,8 @@ a:hover { text-decoration: underline; }
 .pn-sources{margin-top:14px;font-size:14px}.pn-sources summary{cursor:pointer;font-weight:650;color:var(--green)}
 .pn-sources blockquote{margin:6px 0 10px;padding-left:12px;border-left:3px solid #d7d0bf;color:#45524b}
 .pn-credit{font-size:12.5px;color:#6b746f;margin:14px 0 0}
-.pn-more{margin:20px 0 34px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font-size:18px;margin:0 0 8px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:4px 0}
-@media(max-width:640px){.pn-top{padding:26px 16px 18px;text-align:left}.pn-lede{font-size:.95rem}.pn-wrap{padding:0 12px}.pn-more ul{columns:1}}
+.pn-more{margin:24px 0 34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-radius:10px;padding:20px 24px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font:500 1.35rem/1.25 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin:0 0 10px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:5px 0}
+@media(max-width:680px){.pn-top{padding:22px 20px}.pn-lede{font-size:.98rem}.pn-more ul{columns:1}}
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 
@@ -546,23 +472,53 @@ a:hover { text-decoration: underline; }
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/growth-cta.js"></script>
 </head>
-<body data-analytics-page="michigan-gardening">
-
-<!-- SITE HEADER -->
-<header class="site-header">
-<p class="site-title"><a href="/">Chris Izworski</a></p>
+<body class="hm-page" data-analytics-page="michigan-gardening">
+<a class="hm-skip" href="#plant-now">Skip to Michigan Gardening Tools</a>
+<div class="hm-authority-ribbon" role="region" aria-label="Identity and verification credentials">
+  <div class="hm-shell hm-authority-ribbon__inner">
+    <div class="hm-authority-ribbon__badge">
+      <span class="hm-pulse-dot" aria-hidden="true"></span>
+      <span>Chris Izworski &middot; Bay City, Michigan &middot; Independent Great Lakes Digital Publication &amp; Field Desk</span>
+    </div>
+    <nav class="hm-dossier-nav" aria-label="Author verification and dossier links">
+      <span>Dossier:</span>
+      <a href="/chris-izworski/">Biography</a>
+      <a href="/press/">Press</a>
+      <a href="/media/">Media</a>
+      <a href="/timeline/">Timeline</a>
+      <a href="/citations/">Citations</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/ai/">AI &amp; 911</a>
+    </nav>
+  </div>
+</div>
+<header class="hm-masthead">
+  <div class="hm-shell hm-masthead__inner">
+    <div class="hm-brand-group">
+      <a href="/" aria-label="Chris Izworski Home">
+        <img class="hm-brand-avatar" src="/chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
+      </a>
+      <div class="hm-brand-copy">
+        <p class="hm-brand-title"><a href="/">Chris Izworski</a></p>
+        <p class="hm-brand-sub">Great Lakes Almanac, Live Decision Engines &amp; Field Guides</p>
+      </div>
+    </div>
+    <nav class="hm-primary-nav" aria-label="Primary publication navigation">
+      <a href="/">Home</a>
+      <a href="/tools/">Michigan &amp; Great Lakes</a>
+      <a href="/national-tools/">U.S. Tools</a>
+      <a href="/michigan-gardening/" class="is-active" aria-current="page">Gardening Tools</a>
+      <a href="/guides/">Guides</a>
+      <a href="/chris-izworski/">About Chris</a>
+      <a href="/start-here/" class="hm-nav-cta">Start Here</a>
+    </nav>
+  </div>
 </header>
-<nav class="site-nav">
-  <a href="/about/">About</a>
-  <a href="/press/">Press</a>
-  <a href="/speaking/">Speaking</a>
-  <a href="/michigan-gardening/" class="active">Gardening</a>
-  <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms ↗</a>
-</nav>
 
 <!-- WHAT TO PLANT NOW -->
 <div class="pn-top">
-  <div class="pn-eyebrow">Michigan gardening calendar</div>
+  <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Gardening Tools</div>
+  <div class="pn-eyebrow">Great Lakes Almanac &middot; Michigan Gardening, Frost &amp; Heirloom Seed Tools</div>
   <h1>What to Plant Now in Michigan</h1>
   <p class="pn-lede">Pick your town. This works out what is due this week from your nearest of 78 Michigan frost stations and the planting rules MSU Extension publishes. Where Michigan sources give no rule, it says so instead of guessing.</p>
 </div>
@@ -619,14 +575,17 @@ a:hover { text-decoration: underline; }
 <!-- MAIN CONTENT -->
 <div class="wrap">
 
-  <section class="start-here" aria-labelledby="garden-start-title">
-    <div class="eyebrow">Start with the decision</div>
-    <h2 id="garden-start-title">What are you trying to plant or time?</h2>
-    <p>The fastest path into the Michigan garden guides is the question you actually have: a city-specific calendar, a warm-season transplant date, or a tomato variety that can finish in Michigan.</p>
+  <section class="start-here" id="gardening-tools-suite" aria-labelledby="garden-start-title">
+    <div class="eyebrow">Michigan Gardening &amp; Yard Decision Suite</div>
+    <h2 id="garden-start-title">Interactive Gardening, Frost &amp; Seed Tools</h2>
+    <p>Every interactive calculator, frost probability lookup, heirloom seed tool, and yard planner built from Freighter View Farms and Michigan State Climatologist records lives here.</p>
     <div class="start-grid">
-      <a class="start-card" href="/zone-6a-planting-calendar/"><strong>Michigan Zone 6a planting calendar by city</strong><span>Compute indoor seed-starting, transplant, direct-sow and fall-sow windows for 47 crops from 78 Michigan frost stations.</span></a>
-      <a class="start-card" href="/when-to-plant-tomatoes-michigan/"><strong>When to plant tomatoes in Michigan</strong><span>Regional 2026 transplant dates plus the soil-temperature, night-temperature and frost checks that decide whether it is actually time.</span></a>
-      <a class="start-card" href="/heirloom-tomatoes-michigan/"><strong>Best heirloom tomatoes for Michigan</strong><span>Compare Michigan-suitable varieties by maturity, reliability, disease pressure, flavor and use before choosing seed.</span></a>
+      <a class="start-card" href="/zone-6a-planting-calendar/"><strong>Zone 6a Planting Calculator</strong><span>Compute indoor seed-starting, transplant, direct-sow and fall-sow windows for 47 crops from 78 Michigan frost stations.</span></a>
+      <a class="start-card" href="/michigan-frost-dates/"><strong>Michigan Frost Dates by City</strong><span>Compare 75%, 50%, and 25% last-spring and first-fall freeze probabilities across all 78 Michigan climate stations.</span></a>
+      <a class="start-card" href="/michigan-soil-temperature/"><strong>Michigan Soil Temperature Live</strong><span>Check today's 4-inch soil temperature at your nearest station against 40&deg;F cool-crop and 60&deg;F tomato thresholds.</span></a>
+      <a class="start-card" href="/heirloom-variety-matchmaker/"><strong>Heirloom Variety Matchmaker</strong><span>Answer five questions about your sun, space, and season to get three heirloom varieties calibrated to finish before frost.</span></a>
+      <a class="start-card" href="/seed-saving-lab/"><strong>Seed Saving Cross-Pollination Lab</strong><span>Test two crops or your entire garden list across 51 species to see if they cross-pollinate and what isolation distance keeps seed true.</span></a>
+      <a class="start-card" href="https://lawn.chrisizworski.com" target="_blank" rel="noopener"><strong>Perfect Lawn Advisor</strong><span>Enter your address for a property-specific lawn care plan built from USDA zone, soil type, grass species, and live weather.</span></a>
     </div>
   </section>
 
@@ -890,10 +849,19 @@ a:hover { text-decoration: underline; }
 </div><!-- /.wrap -->
 
 <footer class="site-footer">
-  Updated October 2026 &nbsp;&middot;&nbsp;
-  <a href="/">Chris Izworski</a> &nbsp;&middot;&nbsp;
-  <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> &nbsp;&middot;&nbsp;
-  Bay City, Michigan
+  <div class="hm-shell hm-footer__inner">
+    <p style="margin:0">Updated October 2026 &nbsp;&middot;&nbsp; <a href="/">Chris Izworski</a> &nbsp;&middot;&nbsp; <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> &nbsp;&middot;&nbsp; Bay City, Michigan</p>
+    <nav class="hm-footer__links" aria-label="Site information">
+      <a href="/chris-izworski/">About Chris</a>
+      <a href="/tools/">Michigan &amp; Great Lakes</a>
+      <a href="/national-tools/">U.S. Tools</a>
+      <a href="/michigan-gardening/">Gardening Tools</a>
+      <a href="/guides/">Field Guides</a>
+      <a href="/connect/">Contact</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Use</a>
+    </nav>
+  </div>
 </footer>
 
 <script src="/assets/garden-tools/garden-kit.js"></script>
