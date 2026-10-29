@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 49,
-    "pending": 112,
-    "curatedTotal": 55,
+    "exactIdMatched": 50,
+    "pending": 111,
+    "curatedTotal": 56,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -2782,14 +2782,33 @@
       "lat": 46.507745,
       "lng": -87.446107,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "morgan-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Noquemanon Trail Network (South Trails)",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "verified-NTN-South-trailhead-designated-M553-crossing-motor-closed-road",
+      "sourceNotes": "Travel Marquette identifies the NTN South Trailhead on M-553 as the safe public parking and explicitly warns against stopping on opposite dirt shoulder due to high-speed traffic and short sightlines. Signed trail leads to designated highway crossing; after crossing, pedestrian Mount Marquette Road (closed motorized traffic), about 1.2 mi and short branch to falls; published approx 2.8mi round-trip varies with trail. NTN South Trails site confirms public network and seasonal use. No raw falls-GIS parking waypoint or invented highway crossing coordinate.",
+      "outstandingGate": "Current trail closures and posted winter routes must be checked before departure. Public parking and designated crossing verified from tourism and trail manager sources. Do not advise shoulder parking or driving Mt Marquette Road.",
+      "visitorRouteEvidence": {
+        "managerSource": "https://noquetrails.org/south-trails/",
+        "roadArrivalSource": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "parking": "NTN South Trailhead M553 not shoulder",
+        "highwayCrossing": "Designated crossing accessed from NTN lot",
+        "closedMotorRoad": "Mount Marquette Road",
+        "gisFallsPointIsNotParking": true,
+        "currentOpenStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://noquetrails.org/south-trails/"
+      ]
     },
     {
       "gisObjectId": 169,
@@ -3855,6 +3874,15 @@
       ],
       "publicGuidesAdded": 1,
       "outcome": "NCTA and U.P. tourism independently confirm Rock River Falls FR2276/FR2293 wilderness visitor route with season-specific high-clearance caveats and distinct falls lot versus NCT trailhead. Alger municipality reports no safe roadside parking despite informal third-party turnout, Au Train upstream hydro project FERC risk and property right issues demand refreshed official access. No unsafe new guides for those two."
+    },
+    {
+      "batch": "13c-Morgan-NTN-safe-crossing",
+      "date": "2026-10-29",
+      "reviewedIds": [
+        166
+      ],
+      "publicGuidesAdded": 1,
+      "outcome": "Travel Marquette and NTN document South Trailhead parking and M553 safer signed crossing to motor-closed Mt Marquette Road and Morgan Creek Falls. Distinct parking/river points and no unsafe highway shoulder shortcut."
     }
   ]
 }
