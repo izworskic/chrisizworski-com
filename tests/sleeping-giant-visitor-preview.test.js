@@ -32,7 +32,7 @@ test('Visitor preview compiles to self-contained HTML with a useful no-script ro
  assert.match(html,/4\.6 km/);
  assert.match(html,/1\.0 km/);
  assert.match(html,/6–10 hours/);
- assert.match(html,/Source-backed/i);
+ assert.match(html,/published distances and documented timing/i);
  assert.match(html,/Built by Chris Izworski/);
  assert.equal((html.match(/class="route-card"/g)||[]).length,6);
  assert.equal((html.match(/class="map-choice"/g)||[]).length,6);
@@ -97,7 +97,7 @@ test('Interactive preview has labelled controls, keyboard focus, a live result r
  assert.match(html,/id="map-canvas" viewBox=/);
  assert.match(html,/id="route-shapes"/);
  assert.match(html,/data-source-id/);
- assert.match(html,/no verified public-parking connector/i);
+ assert.match(html,/unverified parking-to-trail connection/i);
 });
 test('No misleading automatic open status, exact parking or cycling to every trail',()=>{
  const {json,html}=compile();
