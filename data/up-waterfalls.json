@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-28",
+  "reviewed": "2026-10-29",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -2852,6 +2852,168 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan GIS #19 maps the natural falls at 46.313443,-89.054153; Forest Service site reference 46.31379535,-89.05313987 is a different general location and not a lot."
+        }
+      }
+    },
+    {
+      "id": "jacobs-falls",
+      "name": "Jacob's Falls",
+      "region": "Western U.P.",
+      "place": "M-26 coastal route · Jacob Creek · near Eagle River",
+      "lat": 47.427749,
+      "lng": -88.237254,
+      "gisObjectId": 143,
+      "level": "easy",
+      "minutes": "10–25 min",
+      "walk": "The small lower cascade is visible from M-26 about three miles east of Eagle River. No maintained or separately authorized upstream gorge trail is established. View from safe roadside ground only, when a legal pull-off is available.",
+      "best": "During spring melt or shortly after rain. Summer flow can be light; traffic and snowbanks change roadside safety.",
+      "access": "Visit Keweenaw explicitly identifies this as a roadside waterfall. Roadside visibility does NOT establish a dedicated public parking stall, upstream bank crossing, or right to use nearby Jampot business parking.",
+      "status": "verify",
+      "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside lower cascade",
+      "parking": "Use a legal safe M-26 pull-off near Jacob Creek, three miles northeast of Eagle River; do not stop on highway lanes or blocked shoulders. The nearby Jampot business is a landmark, not guaranteed public waterfall parking. Never navigate by the raw falls GPS point.",
+      "feature": "A small dark-rock cascade close to the M-26 roadway between Eagle River and Eagle Harbor, with additional upper creek drops beyond the basic visitor view.",
+      "decision": "Choose a short roadside stop only if safe legal parking exists. The standard visit is not an upstream creek scramble.",
+      "further": "No verified developed parking lot or safe winter roadside turnout. Current opening and road conditions are unverified. Upper cascades are informal routes and not recommended as public visitor walks.",
+      "manager": "Keweenaw visitor-bureau documented roadside attraction; public land ownership of all upper banks not established",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-visitor-bureau-roadside-view-no-specific-parking-coordinate",
+      "winterRoad": "M-26 can have snowbanks that eliminate safe pull-offs; no same-day parking or shoulder clearance is available in sources.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+          "description": "Official Keweenaw regional destination body identifies roadside attraction; not a title or upstream-land management claim."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+          "description": "Roadside lower cascade can be seen from state-highway vicinity without an upstream trail. Authorized parking and upper-bank access are deliberately excluded."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Visitor bureau directs M-26 about three miles northeast of Eagle River; only legal permitted roadside stopping, no independently verified lot coordinates."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://copperharbor.org/portfolio/waterfalls/",
+          "description": "Local Copper Harbor destination guidance treats lower falls as visible immediately from road; no formal upper gorge trail is promoted."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State waterfall GIS #143 marks natural falls by M-26, not a drivable pull-off."
+        }
+      }
+    },
+    {
+      "id": "manganese-falls",
+      "name": "Manganese Falls",
+      "region": "Western U.P.",
+      "place": "Copper Harbor · Manganese Creek gorge",
+      "lat": 47.462062,
+      "lng": -87.878959,
+      "gisObjectId": 145,
+      "level": "moderate",
+      "minutes": "20–45 min",
+      "walk": "From legal parking on Manganese Road south of Copper Harbor, follow the short published upper-gorge path to the viewing area. Tourism guide estimates about 100 feet from road to falls area, but the full viewing trail may be longer. Do not descend the steep, informal gorge paths.",
+      "best": "Spring or after rainfall for visible water flow from narrow gorge; prioritize dry footing and child safety.",
+      "access": "Visit Keweenaw and Copper Harbor tourism describe a short public-facing upper-gorge viewing trail. Deep exposed rock walls and steep slopes require caution. No officially sanctioned route to the gorge bottom is established.",
+      "status": "verify",
+      "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Short upper-gorge viewpoint",
+      "parking": "From Copper Harbor's visitor center turn south onto Lake Manganese/Manganese Road about 0.7 mile and use a legal safe space off road near the signed upper-gorge path. No surveyed parking stall or live opening guaranteed; never use the MI GIS #145 falls point as driving destination.",
+      "feature": "A deep, narrow mossy rock gorge with Manganese Creek falling around 45 feet from its upper ledge; a short road approach leads to a cautious view from above.",
+      "decision": "Choose the short road-to-viewing-area path, not a steep downstream scramble. The drop is significant and not fully protected along every edge.",
+      "further": "Visitor bureau highlights exposed gorge edges and special care with children. Seasonal ice, leaves and mud add danger. The 2023 brochure's approximate falls point differs from MI GIS #145; neither is a parking coordinate. Current opening and road conditions are unverified.",
+      "manager": "Keweenaw visitor bureau and Copper Harbor destination guidance; underlying gorge parcel ownership not assumed from tourism listing",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "visitor-bureau-short-gorge-trail-not-lower-ravine-route",
+      "winterRoad": "A short stroll does not imply cleared winter roadside parking or safe gorge viewing. Current road and footpath conditions unverified.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+          "description": "Visit Keweenaw destination page identifies published Manganese Road viewer access; no title/easement is inferred for informal creek routes."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+          "description": "Regional tourism confirms short road-to-upper-gorge viewpoint and explicitly warns of deep ravine."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Official visitor brochure provides 0.7-mile Manganese Road approach from Copper Harbor Visitor Center. No precise lot coordinate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://copperharbor.org/portfolio/waterfalls/",
+          "description": "Copper Harbor destination body describes simple upper viewing path; steep downstream approaches excluded."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "MI GIS #145 natural falls coordinate, not parking; 2023 tourism brochure approximate visitor position differs."
+        }
+      }
+    },
+    {
+      "id": "wyandotte-falls",
+      "name": "Wyandotte Falls",
+      "region": "Western U.P.",
+      "place": "Misery River · Twin Lakes · Houghton County",
+      "lat": 46.890025,
+      "lng": -88.877565,
+      "gisObjectId": 128,
+      "level": "moderate",
+      "minutes": "30–60 min",
+      "walk": "From the visitor-bureau described parking area along Poyhonen Road off M-26, follow an unimproved approximately 250-yard rustic trail south through cedar woods to Wyandotte Falls on the Misery River. No surveyed trail polyline or developed platform; stay on established path.",
+      "best": "Spring thaw or after rainfall, because the modest stepped falls can become subdued in summer; avoid mud and unstable footpaths.",
+      "access": "Keweenaw visitor bureau's public waterfall tour names the signed Poyhonen Road parking area and 250-yard rustic walking approach. Independent Copper Country waterfall guide corroborates location. Respect nearby golf-course infrastructure and do not wander off the path.",
+      "status": "verify",
+      "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Rustic Misery River short hike",
+      "parking": "From M-26 about 1.5 miles southwest of Twin Lakes State Park take Poyhonen Road west about 0.8 mile to the brochure's parking area. Independent regional guide places the trailhead beyond Wyandotte Hills Golf Course. Park only in a designated, permitted space; not at the natural falls GIS coordinates or golf maintenance areas.",
+      "feature": "Quiet two-step Misery River cascades through ancient cedar and mossy boulders with variable seasonal water.",
+      "decision": "Choose a short forest hike with uneven footing and use only the mapped brochure parking approach; do not treat golf course facilities as a public lot.",
+      "further": "No guaranteed accessible trail, restrooms or winter-plowed side road. Visitor bureau estimates 250 yards; other sources differ, so route is not digitized precisely. Current opening and road conditions are unverified.",
+      "manager": "Keweenaw regional waterfall visitor system; no assumed entitlement to golf-course or adjacent private land",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "visitor-bureau-documented-parking-road-and-rustic-footpath-not-open-now",
+      "winterRoad": "Parking road and rustic trail may be uncleared during snow. No live road/golf-course operational status source.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Regional Keweenaw visitor bureau documents the established public-facing waterfall arrival, not a legal title statement about adjoining golf land."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Regional 2023 map describes Wyandotte Falls as an established visitor stop with rustic walking trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "M-26 to Poyhonen Rd roughly 0.8 mile from turn to parking; actual stall unverified by coordinates."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/",
+          "description": "Independent Copper Country visitor guide describes approximately 250 yards along unimproved path from roadside parking to falls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #128 named falls on Misery River distinct from visitor lot."
         }
       }
     }
