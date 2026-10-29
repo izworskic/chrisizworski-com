@@ -3,10 +3,11 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const {execFileSync}=require('node:child_process');
 const {chromium}=require('playwright');
-const root=path.resolve(__dirname,'..'),out=path.resolve(root,'artifacts/sleeping-giant-browser');
+const root=path.resolve(__dirname,'..'),siteMode=process.argv.includes('--site'),
+ out=path.resolve(root,siteMode?'artifacts/sleeping-giant-site-browser':'artifacts/sleeping-giant-browser');
 fs.mkdirSync(out,{recursive:true});
 const preview=path.join(out,'preview');
-execFileSync(process.execPath,[path.join(root,'scripts/export-sleeping-giant-visitor-preview.mjs'),preview],{
+execFileSync(process.execPath,[path.join(root,siteMode?'scripts/build-sleeping-giant-site.mjs':'scripts/export-sleeping-giant-visitor-preview.mjs'),...(siteMode?['--out',preview]:[preview])],{
  encoding:'utf8',cwd:root,timeout:30000
 });
 const server=http.createServer((req,res)=>{
@@ -19,7 +20,7 @@ const must=(condition,message)=>{if(!condition)throw Error(message)};
 async function main(){
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
  const target='http://127.0.0.1:'+server.address().port+'/';
- const report={reviewOnly:true,sourceDate:'2026-10-29',viewports:[],failures:[],screenshots:[]};
+ const report={reviewOnly:!siteMode,siteIntegration:siteMode,sourceDate:'2026-10-29',viewports:[],failures:[],screenshots:[]};
  let browser;
  try{
    browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',
@@ -35,6 +36,24 @@ async function main(){
      const response=await page.goto(target,{waitUntil:'domcontentloaded',timeout:25000});
      must(response?.status()===200,viewport.name+' local preview not 200');
      must(await page.locator('.route-card').count()===6,viewport.name+' six static cards missing');
+     if(siteMode){
+       const metadata=await page.evaluate(()=>({
+         canonical:document.querySelector('link[rel="canonical"]')?.href||null,
+         robots:document.querySelector('meta[name="robots"]')?.content||null,
+         adLoaders:document.querySelectorAll('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]').length,
+         publisher:document.querySelector('meta[name="google-adsense-account"]')?.content||null,
+         schema:JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent),
+       }));
+       must(metadata.canonical==='https://chrisizworski.com/sleeping-giant-provincial-park/',
+         viewport.name+' canonical differs from dedicated park intent');
+       must(metadata.robots.startsWith('index,follow'),viewport.name+' public page not indexable');
+       must(metadata.adLoaders===1&&metadata.publisher==='ca-pub-8222782620788075',
+         viewport.name+' standard one-ad-loader contract failed');
+       const owner=metadata.schema['@graph'].find(x=>x['@type']==='WebPage');
+       must(owner?.author?.['@id']==='https://chrisizworski.com/#person',
+         viewport.name+' author identity contract failed');
+     }
+
      must((await page.locator('#result-hint').innerText()).includes('Only Ontario Parks'),viewport.name+' planner JS did not initialize');
      must(await page.locator('#route-shapes path').count()===2,viewport.name+' default Sea Lion map not 2 sections');
      const visible=await page.locator('[data-id="sea-lion"] .card-decision').innerText();
