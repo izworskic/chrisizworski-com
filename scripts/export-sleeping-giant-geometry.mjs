@@ -27,6 +27,54 @@ const geo={type:'FeatureCollection',metadata:{title:'Sleeping Giant internal sou
  ontarioLicence:'https://www.ontario.ca/page/open-government-licence-ontario'},features};
 const data={report,overlays};
 const safe=JSON.stringify(data).replace(/</g,'\\u003c');
+
+const {catalog,plan}=require('../lib/sleeping-giant/route-engine.cjs');
+const {evaluateAccess}=require('../lib/sleeping-giant/visitor-access-engine.cjs');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cards=catalog.routes.map((r,i)=>{
+ const details=evaluateAccess({routeId:r.id});
+ const duration=r.officialDurationMinutes?
+   (r.officialDurationMinutes.min===r.officialDurationMinutes.max?
+    'About '+r.officialDurationMinutes.min+' minutes':
+    r.officialDurationMinutes.min/60+'–'+r.officialDurationMinutes.max/60+' hours walking'):
+   'Complete duration unknown';
+ const mode=r.bikePermission==='official_documented'?
+   r.bikeApproachRoundTripKm+' km bike + '+r.bikeHikeRemainingRoundTripKm+' km walk (both return)':
+   'No complete cycling option documented';
+ const parkSource=r.officialBasis.map(key=>'<a href="'+esc(catalog.sources[key])+'" target="_blank" rel="noopener noreferrer">Official source</a>').join(' ');
+ const maps=order.includes(r.id)?'<button class="inspect-route" data-view="'+esc(r.id)+'" type="button">Inspect government-mapped trail sections</button>':
+   '<span class="pending-map">Detailed GIS shape not yet reconstructed</span>';
+ return ['<article class="route-card" data-route-id="'+esc(r.id)+'" style="order:'+i+'">',
+  '<div class="route-eyebrow">Sleeping Giant · '+esc(r.difficulty)+'</div>',
+  '<h3>'+esc(r.name)+'</h3>',
+  '<p class="route-distance">'+r.roundTripKm+' km return</p>',
+  '<p class="route-copy">'+esc(r.caution)+'</p>',
+  '<p class="route-modes">'+esc(mode)+'</p>',
+  '<p class="route-time">'+esc(duration)+'</p>',
+  '<p class="route-access">'+esc(details.lot?'Signed South Kabeyun lot exists; exact parking point and current access not verified.':'Named access only; exact parking unverified.')+'</p>',
+  '<p class="route-status" data-status="'+esc(r.id)+'">Choose your outing above for a planning comparison.</p>',
+  '<div class="route-links">'+parkSource+'</div>',maps,'</article>'].join('');
+}).join('\n');
+const matrix={};
+for(const hours of [2,4,6,8,10,12])for(const mode of ['hike','bike-hike'])for(const interest of ['summit','short-walk','geology','beach']){
+ const result=plan({hours,mode,interest,remainingDaylightMinutes:null});
+ if(!result.planningOnly||result.liveTrailStatus!==false)throw Error('A planning matrix may not imply live status');
+ matrix[[hours,mode,interest].join('|')]=result.results.map(r=>({id:r.id,classification:r.classification,reason:r.duration.status}));
+}
+const matrixJson=JSON.stringify({plans:matrix,reviewedAt:catalog.reviewedAt,navigationEligible:false,liveAccess:false}).replace(/</g,'\\u003c');
+const controlsHtml=[
+ '<section class="visitor-choices" aria-labelledby="choice-title"><div><span class="section-eyebrow">The journey before the route</span><h2 id="choice-title">What kind of day do you have?</h2>',
+ '<p>Official return distances, travel modes and known unknowns. This does not check real-time weather, parking, or trail status.</p></div>',
+ '<div class="visitor-filters">',
+ '<label for="visitor-interest">What draws you?<select id="visitor-interest"><option value="summit">High overlooks</option><option value="short-walk">A shorter walk</option><option value="geology">Rock and shoreline</option><option value="beach">A beach</option></select></label>',
+ '<label for="visitor-hours">Hours you have<select id="visitor-hours"><option>2</option><option>4</option><option>6</option><option selected>8</option><option>10</option><option>12</option></select></label>',
+ '<label for="visitor-mode">Travel mode<select id="visitor-mode"><option value="hike">On foot</option><option value="bike-hike">Bike + hike</option></select></label>',
+ '</div></section><p id="visitor-summary" class="visitor-summary" aria-live="polite">All six source-backed outings are available below. Use the selectors to compare their planning fit.</p>'
+].join('\n');
+const routeGallery='<section class="gallery" aria-labelledby="gallery-title"><div class="gallery-head"><span class="section-eyebrow">Park trails, not guesses</span>'+
+ '<h2 id="gallery-title">Six ways to encounter the Giant</h2>'+
+ '<p>The cards, route distances and official sources remain useful without JavaScript. Map selection requires JavaScript, and no map is approved for directions.</p></div>'+
+ '<div id="route-gallery" class="route-gallery">'+cards+'</div></section>';
 const html=`<!doctype html>
 <html lang="en">
 <head>
@@ -56,6 +104,35 @@ svg .grid{stroke:#28505a;stroke-width:1;fill:none}svg .marker{stroke:#082029;str
 svg text{font:12px system-ui,sans-serif;fill:#f5f7f3;paint-order:stroke;stroke:#0b222c;stroke-width:4px;stroke-linejoin:round}
 ul{padding-left:20px;color:#c8dcdb}li{margin:.6rem 0}a{color:#8de8ce}
 @media(max-width:790px){.layout{grid-template-columns:1fr}svg{aspect-ratio:1.05}}
+
+.visitor-choices,.visitor-summary,.gallery{max-width:1250px;margin:18px auto;padding:18px clamp(18px,4vw,46px)}
+.visitor-choices{display:grid;grid-template-columns:1fr 1.4fr;gap:24px;align-items:end;background:#16413d;border-radius:17px}
+.visitor-choices h2,.gallery h2{font:clamp(1.6rem,2.9vw,2.4rem)/1.1 Georgia,serif;letter-spacing:-.03em;margin:7px 0}
+.visitor-choices p{margin:0;color:#bfd6ce;font-size:.85rem}
+.section-eyebrow{letter-spacing:.12em;text-transform:uppercase;font-weight:750;font-size:.72rem;color:#e0ae71}
+.visitor-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.visitor-filters label{font-size:.76rem;font-weight:750;margin:0;display:block}
+.visitor-filters select{margin-top:7px;background:#f8f6ef;color:#163630;border:1px solid #adc2b8}
+.visitor-summary{font-weight:650;font-size:.88rem;color:#afd9c9;margin-top:0}
+.gallery-head p{font-size:.86rem;max-width:70ch;margin:0}
+.route-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+.route-card{border:1px solid #426361;border-radius:14px;background:#13343a;padding:18px;display:flex;flex-direction:column;gap:8px}
+.route-card[data-preferred=true]{border-color:#dfaf70;box-shadow:0 0 0 1px #dfaf70}
+.route-eyebrow{letter-spacing:.1em;text-transform:uppercase;font-size:.71rem;color:#d6b184}
+.route-card h3{font:1.55rem/1.15 Georgia,serif;margin:4px 0}
+.route-card p{font-size:.83rem;margin:0;color:#c5d9d5}
+.route-card .route-distance{font:1.25rem Georgia,serif;color:#fff}
+.route-card .route-modes{background:#274b47;padding:8px;border-radius:6px;color:#e4f5e9;font-size:.77rem}
+.route-card .route-status{margin-top:auto;padding-top:12px;border-top:1px solid #41615e;color:#e1d0a8}
+.route-card .route-status[data-kind=not_suitable]{color:#f2a98f}
+.route-card .route-status[data-kind=planning_candidate]{color:#9be7c6}
+.route-links{font-size:.78rem;display:flex;gap:10px;flex-wrap:wrap}
+.inspect-route{border:0;border-radius:8px;padding:10px;background:#d8e5d8;color:#17342e;font-weight:750;text-align:left}
+.pending-map{font-size:.72rem;color:#bacdca}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #e7b976;outline-offset:3px}
+@media(max-width:920px){.visitor-choices{grid-template-columns:1fr}.route-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.visitor-filters,.route-gallery{grid-template-columns:1fr}.visitor-choices{border-radius:0}}
+
 </style>
 </head>
 <body>
@@ -64,6 +141,7 @@ ul{padding-left:20px;color:#c8dcdb}li{margin:.6rem 0}a{color:#8de8ce}
 <p>Seven unsimplified Ontario Trail Network features. Four source-reconciled summit and shoreline options. This is an internal cartographic inspection of candidate trail positions, not a visitor navigation map.</p>
 <div class="warning" role="note"><strong>Not for directions.</strong> The signed parking lot has no certified entrance pin or verified pedestrian connector. Mapped junction intersections are not proven on-site signs. Official Ontario Parks distances control trip planning; live trail, road and permit status are unknown.</div>
 </header>
+${controlsHtml}
 <main class="layout">
 <section class="panel" aria-labelledby="controls"><h2 id="controls">Compare an outing</h2>
 <label for="route">Source geometry to review</label>
@@ -88,8 +166,10 @@ ul{padding-left:20px;color:#c8dcdb}li{margin:.6rem 0}a{color:#8de8ce}
 <div id="segments" aria-live="polite"></div>
 </section>
 </main>
+${routeGallery}
 <footer class="note">Ontario OTN © King's Printer for Ontario under the Open Government Licence – Ontario. Parking candidate © OpenStreetMap contributors (ODbL). Source geometry is for internal review only.</footer>
 <script id="source-data" type="application/json">${safe}</script>
+<script id="visitor-data" type="application/json">${matrixJson}</script>
 <script>
 'use strict';
 const model=JSON.parse(document.getElementById('source-data').textContent);
@@ -137,6 +217,42 @@ function paint(){
   ' · '+s.calculatedOneWaySectionKm.toFixed(2)+' km GIS-derived · OTN #'+s.sourceObjectId;list.append(li)}segments.append(list);
 }
 choice.addEventListener('change',paint);paint();
+
+const visitor=JSON.parse(document.getElementById('visitor-data').textContent);
+if(visitor.navigationEligible||visitor.liveAccess)throw Error('Research map incorrectly marked usable for navigation');
+const chooser={hours:document.getElementById('visitor-hours'),mode:document.getElementById('visitor-mode'),interest:document.getElementById('visitor-interest')};
+const gallery=document.getElementById('route-gallery'),visitorSummary=document.getElementById('visitor-summary');
+const verdict={planning_candidate:'A planning candidate; current access unknown',
+ needs_verification:'Duration or access details require verification',
+ not_suitable:'Not suitable for this time or travel mode'};
+function refreshVisitor(){
+ const key=[chooser.hours.value,chooser.mode.value,chooser.interest.value].join('|');
+ const entries=visitor.plans[key];if(!entries)return;
+ let ready=0;
+ for(const [index,item] of entries.entries()){
+  const card=gallery.querySelector('[data-route-id="'+item.id+'"]');if(!card)continue;
+  card.style.order=index;
+  const label=card.querySelector('[data-status]');
+  label.dataset.kind=item.classification;
+  label.textContent=verdict[item.classification]+(item.reason==='unknown_bike_duration'?'; no verified mixed-mode trip time':'');
+  if(item.classification==='planning_candidate')ready++;
+  card.dataset.preferred=String(item.classification==='planning_candidate'&&ready===1);
+ }
+ visitorSummary.textContent=ready?
+  ready+' preliminary planning '+(ready===1?'candidate':'candidates')+
+  '. Confirm park notices, parking, daylight and the actual trail before departing.':
+  'No duration-certified option for that combination. Other routes remain listed for comparison; unknown trip times are not an approval.';
+}
+gallery.addEventListener('click',event=>{
+ const btn=event.target.closest('button[data-view]');if(!btn)return;
+ if(![...choice.options].some(option=>option.value===btn.dataset.view))return;
+ choice.value=btn.dataset.view;
+ paint();
+ document.getElementById('map').scrollIntoView({block:'nearest',behavior:'auto'});
+});
+Object.values(chooser).forEach(input=>input.addEventListener('change',refreshVisitor));
+refreshVisitor();
+
 </script>
 </body>
 </html>`;
