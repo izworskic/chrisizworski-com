@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-28",
+  "status": "source-corroborated-western-approach-not-live-verified",
+  "sources": {
+    "dnrPark": "https://www.michigan.gov/recsearch/parks/porkies",
+    "mgfRoads": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
+    "dnrMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+    "dnrWinterSki": "https://www.michigan.gov/skitheporkies"
+  },
+  "sourceNameCrosswalk": {
+    "officialParkAccessName": "County Road 519",
+    "mgfCenterlineName": "Presque Isle Rd",
+    "mgfPrincipalRouteId": 1475809,
+    "mgfNfc": 5,
+    "reason": "Official DNR calls the separate west approach CR519; state MGF labels the west connector Presque Isle Rd, without an explicit county-road number in its RDNAME field. These names align spatially to the DNR park 519 approach. This is map-source reconciliation, not live road inspection."
+  },
+  "westApproach": {
+    "namedMgFeatureIds": [
+      10130,
+      10152,
+      10347,
+      10521,
+      10560,
+      10863,
+      11060,
+      11187,
+      11233,
+      11538,
+      11771,
+      11833,
+      12174,
+      12304,
+      12579,
+      12736,
+      12783
+    ],
+    "name": "MGF Presque Isle Rd",
+    "southernCenterlineTerminus": "Named MGF line begins near 46.5164N; this dataset does not validate an unbroken drive from downtown Wakefield or any other origin.",
+    "northernCenterlineTerminus": "Mapped south junction with S Boundary Rd at approximately 46.6956N. This does not establish a direct driveway to the Presque Isle DNR parking asset."
+  },
+  "westernSouthBoundary": {
+    "featureIds": [
+      9688,
+      9685,
+      9684,
+      9533,
+      9429,
+      9372,
+      9218,
+      9121,
+      9107,
+      9071,
+      9042,
+      8963,
+      8910,
+      8892,
+      8884
+    ],
+    "claim": "The source-matched South Boundary segment west of the Pinkerton access point should not share the east-of-Pinkerton seasonal-closure flag solely because its road name is the same.",
+    "closurePolicy": "DNR says its closed South Boundary portion starts at Headquarters Road and ends at Pinkerton Trailhead; the separate CR519 west-side access remains possible. Exact current gate position and travel-day conditions remain unverified."
+  },
+  "evidenceLimitations": [
+    "MGF is road centerlines, not live legal driving directions",
+    "County Road 519 name is corroborated by official DNR park guidance, not identical to the MGF road string",
+    "Road dataset does not certify bridge load restrictions, plowing, temporary gates or turns",
+    "Never route across the seasonal South Boundary portion east of Pinkerton or restricted M-107",
+    "CR519 MGF southern line terminates north of Wakefield and has no certified origin-to-park routing",
+    "Final spur from South Boundary to the independently mapped DNR lot is not a signed/inspected drive route"
+  ],
+  "allowTurnByTurn": false,
+  "allowTravelTime": false,
+  "allowsAutomaticConnectedRoute": false,
+  "currentRoadOpenStatus": "unknown",
+  "parkingAsset": {
+    "id": 841,
+    "lat": 46.707426,
+    "lon": -89.975468,
+    "proof": "DNR parking asset corroborated by separately named DNR recreation point; not a legal route to/from CR519"
+  }
+}

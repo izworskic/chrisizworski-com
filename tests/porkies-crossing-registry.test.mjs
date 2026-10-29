@@ -11,7 +11,7 @@ test("all 23 published relationships retain original DNR source and absolute rou
  assert.equal(report.registry.length,23);
  assert.deepEqual(report.registry.map(x=>x.id),source.records.map(x=>x.id));
  for(const x of report.registry){
-   assert.equal(x.coordinatePublished,false);
+   assert.equal(x.coordinatesPublished,false); // public registry deliberately uses plural key; no inferred GPS point
    assert.equal(x.routeEligible,false);
    assert.equal(x.bridgeOrFord,"unknown");
    assert.ok(x.source.startsWith("https://"));

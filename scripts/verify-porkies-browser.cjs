@@ -43,7 +43,9 @@ async function main(){
    need((await page.locator('#crossings').innerText()).includes('No automated through-route'),device.name+' safety blocker not visible');
 
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
-   need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
+   need((await page.locator('#west-corridor-field-note').innerText()).includes('17 connected Presque Isle Road segments'),'no JS new west road source crosswalk missing');
+  need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
+   need((await page.locator('#west-corridor-field-note').innerText()).includes('17 connected Presque Isle Road segments'),device.name+' current DNR west road source count missing');
    const westNote=await page.locator('#west-corridor-field-note').innerText();
    need(westNote.includes('County Road 519')&&westNote.includes('2 of 10')&&westNote.includes('not an east-to-west shortcut'),device.name+' CR519 named route/pavement safety evidence missing');
    need(await page.locator('#west-corridor-field-note a[href*="michiganbusiness.org"]').count()===1,device.name+' county pavement source link missing');
@@ -74,6 +76,11 @@ async function main(){
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('selected park-area road centerlines'),null,{timeout:25000});
      await page.locator('#porkies-ski-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 40 DNR ski-trail records'),null,{timeout:25000});
+     await page.locator('#porkies-west-toggle').click();
+     await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 17 mapped Presque Isle Road centerlines'),null,{timeout:25000});
+     const westLines=await page.locator('.leaflet-porkies-west-evidence-pane path').count();
+     need(westLines>=32,'West CR519 + South Boundary 32 mapped source segments not rendered '+westLines);
+     need(await page.locator('#porkies-west-toggle').getAttribute('aria-pressed')==='true','Verified-source CR519 west overlay not toggled');
      const skiLines=await page.locator('.leaflet-porkies-ski-evidence-pane path').count();
      need(skiLines>=20,'Official DNR ski routes not rendered '+skiLines);
      const roadLines=await page.locator('.leaflet-porkies-road-evidence-pane path').count();
@@ -82,6 +89,8 @@ async function main(){
      report.screenshots.push('desktop-road-trail-evidence.png');
      await page.locator('#travel-date').fill('2027-01-15');
      await page.locator('#planner button[type=submit]').click();
+     const westBoundary=await page.locator('.leaflet-porkies-road-evidence-pane path[stroke="#4a8c77"]').count();
+     need(westBoundary===15,'Distinct DNR west-of-Pinkerton South Boundary should be 15 reviewed segments, got '+westBoundary);
      const marked=await page.locator('.leaflet-porkies-road-evidence-pane path[stroke="#ad4839"]').count();
      need(marked>=10,'seasonal park road segments not visibly flagged in winter '+marked);
      await page.locator('#travel-date').fill('2026-10-28');
@@ -98,6 +107,7 @@ async function main(){
      await page.locator('#porkies-trails-toggle').click();
      await page.locator('#porkies-roads-toggle').click();
      await page.locator('#porkies-ski-toggle').click();
+     await page.locator('#porkies-west-toggle').click();
    }
    await page.waitForFunction(()=>document.querySelector('#results h3')?.textContent.includes('Build around'),null,{timeout:10000});
    let overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
