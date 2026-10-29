@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
 <link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css" crossorigin="">
-<link rel="stylesheet" href="/assets/winter-wildlife-field-guide.css">
+<link rel="stylesheet" href="/assets/winter-field-guide.css">
 <link rel="stylesheet" href="/assets/michigan-white-christmas-escapes.css">
 <script defer src="/assets/leaflet-1.9.4.js" crossorigin=""></script>
 <script defer src="/assets/michigan-white-christmas-escapes.js"></script>
@@ -34,7 +34,7 @@
 </head>
 <body class="wf wce" data-guide-architecture="FIELD_GUIDE_V1">
 <a class="wf-skip" href="#main">Skip to Michigan White Christmas escapes</a>
-<header class="wf-top">
+<header class="wf-top wf-sitebar">
 <div class="wf-shell">
 <a class="wf-brand" href="/">Chris Izworski</a>
 <nav class="wf-nav" aria-label="Page sections">
@@ -54,7 +54,7 @@
 <h1>Michigan White Christmas &amp; Christmas-Week Escapes</h1>
 <p class="wf-lede">Every November, friends downstate ask me the same question: <em>"Will we actually have snow on the ground for Christmas, or do we need to drive north?"</em> In Metro Detroit, the 30-year NOAA odds of waking up to at least an inch of snow on December 25 sit at <strong>34.7%</strong>—and even here around Saginaw Bay, it is a <strong>45.7%</strong> coin flip. But cross north of the 45th parallel onto the Gaylord plateau (<strong>75%–80%</strong>) or across the Mackinac Bridge into the Lake Superior snowbelt (<strong>88%–96%</strong>), and winter is already settled in. Here is how to choose the right Christmas-to-New-Year base town, how to read the weather windows, and how to guarantee a great holiday week even if December turns mild.</p>
 <div class="wce-hero-ctas">
-<a class="wf-cta" href="#doors">Choose your Christmas trip style</a>
+<a class="wf-cta wf-primary" href="#doors">Choose your Christmas trip style</a>
 <a class="wce-secondary-cta" href="/national-tools/white-christmas/">Check any city or ZIP in Calculator ↗</a>
 </div>
 </div>
@@ -208,14 +208,14 @@
 </section>
 
 <section id="find-escape" class="wf-shell wf-discover">
-<div class="wf-section-head">
+<div class="wf-section-head wf-heading">
 <div>
 <p class="wf-eyebrow">10 Michigan Christmas-Week Escape Towns</p>
 <h2>Filter by snow probability tier, region &amp; holiday vibe</h2>
 </div>
-<p class="wf-count" id="wf-count" aria-live="polite">Showing 10 of 10 Michigan Christmas-week escape towns. Use the 30-year NOAA odds to book early, then check live snow depth inside 45 days.</p>
+<p class="wf-count wf-counter" id="wf-count" aria-live="polite">Showing 10 of 10 Michigan Christmas-week escape towns. Use the 30-year NOAA odds to book early, then check live snow depth inside 45 days.</p>
 </div>
-<div class="wf-chip-bar" role="group" aria-label="Filter by White Christmas tier">
+<div class="wf-chip-bar wf-chips" role="group" aria-label="Filter by White Christmas tier">
 <button type="button" class="wf-chip" data-tag="all" aria-pressed="true">All 10 Escapes</button>
 <button type="button" class="wf-chip" data-tag="tier-90" aria-pressed="false">90%+ U.P. Snowbelts</button>
 <button type="button" class="wf-chip" data-tag="tier-70" aria-pressed="false">60–80% Up North</button>
@@ -243,10 +243,10 @@
 </div>
 
 <div class="wf-explore">
-<aside class="wf-map-card" aria-label="Michigan White Christmas escapes map">
+<aside class="wf-map-card wf-map-panel" aria-label="Michigan White Christmas escapes map">
 <div class="wf-map-head">
 <strong>Michigan Christmas-Week Snowbelt Map</strong>
-<span id="wf-map-message" data-state="loading">Loading interactive map…</span>
+<span class="wf-map-message" id="wf-map-message" data-state="loading">Loading interactive map…</span>
 </div>
 <div id="wf-map" class="wf-map" role="region" aria-label="Interactive map of 10 Michigan Christmas-week escape towns">Map loads with JavaScript enabled. All 10 Christmas-week destinations are listed below.</div>
 <div class="wce-map-caution">
