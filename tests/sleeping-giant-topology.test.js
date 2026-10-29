@@ -98,3 +98,16 @@ test('geographic nearness alone does not promote a disconnected/fictional path',
  const b=lines.features.find(x=>x.properties.TRAIL_NAME==='Sawyer Bay Trail');
  assert.ok(candidateDistance(a,b)<=JUNCTION_TOLERANCE_METRES);
 });
+
+
+test('government OTN access points remain separate from the named official South Kabeyun parking lot',()=>{
+ const report=audit();
+ assert.equal(report.gate.officiallyDocumentedNamedParkingFacilities,1);
+ assert.equal(report.gate.exactParkingPinsCertified,0);
+ assert.equal(report.officialNamedAccessEvidence.namedAnchorsVerified,7);
+ assert.equal(report.officialNamedAccessEvidence.existingParkingFacilitiesVerified,1);
+ assert.equal(report.officialNamedAccessEvidence.coordinateCertified,0);
+ assert.equal(report.officialNamedAccessEvidence.routeGeometryCertified,0);
+ assert.equal(report.outcome,'RESEARCH_ONLY_DO_NOT_ROUTE');
+ assert.ok(report.accessPointAudit.every(a=>a.parkingVerified===false));
+});
