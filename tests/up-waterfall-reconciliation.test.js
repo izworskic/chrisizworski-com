@@ -583,3 +583,34 @@ test('remaining geographic candidates have an exhaustive nonpublishing eight-at-
   assert.equal(new Set(batchIds).size,expected.size);
   assert.ok(q.batches.every(x=>x.candidates.length<=8));
 });
+
+test('Morgan Falls public route uses NTN South parking and designated crossing, never highway shoulder',()=>{
+  const f=curated.waterfalls.find(x=>x.id==='morgan-falls');
+  const geo=ledger.candidates.find(x=>x.gisObjectId===166);
+  const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===166);
+  const html=fs.readFileSync('public/upper-peninsula-waterfalls/morgan-falls/index.html','utf8');
+  const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  assert.ok(f&&geo&&source);
+  assert.equal(geo.curatedId,f.id);
+  assert.equal(source.curatedId,f.id);
+  assert.equal(geo.reconciliation,'curated-exact-gis-id');
+  assert.equal(f.publication,'verified-access-guide');
+  assert.equal(geo.visitorRouteEvidence.navigationToGisPointAllowed,false);
+  assert.match(f.parking,/South Trailhead/);
+  assert.match(html,/designated.*crossing|designated M-553 crossing/i);
+  assert.match(html,/DO NOT park|Do not park/i);
+  assert.match(html,/closed to motor/i);
+  assert.match(html,/2\.8 miles round trip/i);
+  assert.match(html,/current opening and road conditions are unverified/i);
+  assert.ok(!html.includes('data-parking-lat='));
+  assert.ok(html.includes('https://chrisizworski.com/#person'));
+  for(const axis of ['landManager','publicAccess','parking','trail','location']){
+    assert.equal(f.verification[axis].verified,true,axis);
+    assert.ok(html.includes(f.verification[axis].source),axis+' citation missing');
+  }
+  const card=hub.match(/<article class="waterfall-card"[^>]*data-id="morgan-falls"[\s\S]*?<\/article>/);
+  assert.ok(card);
+  assert.match(card[0],/data-gis-oid="166"/);
+  assert.match(card[0],/Check parking source/);
+  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/morgan-falls/'));
+});
