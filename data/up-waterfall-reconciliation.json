@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 39,
-    "pending": 122,
-    "curatedTotal": 47,
+    "exactIdMatched": 41,
+    "pending": 120,
+    "curatedTotal": 49,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -21,24 +21,27 @@
       "lat": 45.757574,
       "lng": -87.948049,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "misicot-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area (public visitor approach on Michigan shore)",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-28",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "misicot-third-pier-alias-corroborated-guide-pending",
-      "sourceNotes": "Wisconsin DNR: Piers 1–3 accessed from Michigan via Highway 8 and Piers Gorge Road; GIS Misicot identity as Pier 3 requires individual source confirmation, not just river proximity. American Whitewater explicitly identifies Misicot Falls as 'Third Pier' and reports river feature at 45.75780,-87.94930; Michigan GIS #2 at 45.757574,-87.948049 is nearby but geographically different enough to flag positional precision. Wisconsin DNR identifies the Michigan Piers 1–3 overlooks off Highway 8/Piers Gorge Road, and DNR 2018 Map B-1 shows signed Michigan parking/trail; do not present paddlers' river scouting or rapids as a safe hiker access route.",
+      "disposition": "verified-misicot-third-pier-michigan-public-overlook-route",
+      "sourceNotes": "Wisconsin DNR: Piers 1–3 accessed from Michigan via Highway 8 and Piers Gorge Road; GIS Misicot identity as Pier 3 requires individual source confirmation, not just river proximity. American Whitewater explicitly identifies Misicot Falls as 'Third Pier' and reports river feature at 45.75780,-87.94930; Michigan GIS #2 at 45.757574,-87.948049 is nearby but geographically different enough to flag positional precision. Wisconsin DNR identifies the Michigan Piers 1–3 overlooks off Highway 8/Piers Gorge Road, and DNR 2018 Map B-1 shows signed Michigan parking/trail; do not present paddlers' river scouting or rapids as a safe hiker access route. Full admission gate resolved: DNR map Piers Gorge B-1 shows Michigan parking and hiking trail to Piers viewpoints, Wisconsin DNR explicitly confirms Michigan Pier 1–3 visitor views via Highway 8 and Piers Gorge Road, Michigan tourism authority lists a 1.5-mi scenic trail. American Whitewater independently names Misicot Falls Third Pier. No claimed precise mileage from lot to Third Pier or paddler scouting route as hiking access.",
       "sourceLinks": [
         "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
         "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
-        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2"
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+        "https://dnr.wisconsin.gov/topic/parks/menominee/info",
+        "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail"
       ],
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false,
-      "outstandingGate": "Develop source-scoped Michigan Piers Gorge Pier 3 visitor guide with road/parking and walking effort; cannot use the whitewater river-scouter/paddler route as standard hiking or parking directions. Validate identity and viewing angle against park map before publication.",
+      "publicationEligible": true,
+      "outstandingGate": "Check actual current parking road/gate and posted park conditions before visiting. The GIS point is only the natural river feature, not a legal visitor parking or trailhead location.",
       "identityReconciliation": {
         "alias": "Third Pier (Misicot Falls)",
         "source": "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
@@ -48,6 +51,19 @@
         },
         "officialOverlook": "Piers 1–3, Michigan side via Highway 8 and Piers Gorge Road",
         "status": "identity corroborated; visitor route/pin needs final guide review"
+      },
+      "guideDraft": null,
+      "visitorRouteEvidence": {
+        "reviewed": "2026-10-28",
+        "parkMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+        "landManagerPage": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "visitorRouteSource": "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail",
+        "geographicIdentitySource": "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
+        "parkingLocationPrecision": "not-verified-or-invented",
+        "gisNaturalFeatureNotParking": true,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false,
+        "routeScope": "Michigan Piers Gorge scenic hiking trail to named Pier 1–3 viewing areas only"
       }
     },
     {
@@ -2793,28 +2809,29 @@
       "lat": 45.594123,
       "lng": -87.777192,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area",
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "pemene-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Michigan and Wisconsin DNR, Menominee River State Recreation Area (public visitor approach on Wisconsin shore)",
       "parkingVerified": true,
       "publicAccessVerified": true,
-      "reviewed": null,
+      "reviewed": "2026-10-28",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "verified-dnr-pemene-public-overlook-identity-crosschecked-guide-pending",
-      "sourceNotes": "Wisconsin DNR: Pemene Falls hiking trail starts at end of Verheyen Lane off County Road Z; 0.5 mile to primitive overlook, shorter 0.8 mile loop and 1.9 mile loop. GIS falls coordinate requires independent reconciliation with official trail endpoint before promotion. Reviewed Pemene DNR official 2005 trail-map screenshot and 2018 park infrastructure map: Wisconsin lot + 0.5 mi designated overlook path, 0.8/1.9 mi loop options; separate Pemene Landing off Horseshoe Road is a boat access, not trailhead. Independent photographer Adam Martin geolocates the natural falls at 45.5941048,-87.777153, consistent with Michigan GIS #188 45.594123,-87.777192 (meters, not a route mismatch). Mapcarta Wisconsin named waterfall also 45.59413,-87.77734. Earlier 'GIS coordinate conflict' should be restated as DIFFERENT visitor overlook vs river feature, not evidence that the falls GIS coordinate is wrong. Current visitor road and seasonal access conditions not verified.",
+      "disposition": "verified-public-pemene-wisconsin-primitive-overlook-source-route",
+      "sourceNotes": "Wisconsin DNR: Pemene Falls hiking trail starts at end of Verheyen Lane off County Road Z; 0.5 mile to primitive overlook, shorter 0.8 mile loop and 1.9 mile loop. GIS falls coordinate requires independent reconciliation with official trail endpoint before promotion. Reviewed Pemene DNR official 2005 trail-map screenshot and 2018 park infrastructure map: Wisconsin lot + 0.5 mi designated overlook path, 0.8/1.9 mi loop options; separate Pemene Landing off Horseshoe Road is a boat access, not trailhead. Independent photographer Adam Martin geolocates the natural falls at 45.5941048,-87.777153, consistent with Michigan GIS #188 45.594123,-87.777192 (meters, not a route mismatch). Mapcarta Wisconsin named waterfall also 45.59413,-87.77734. Earlier 'GIS coordinate conflict' should be restated as DIFFERENT visitor overlook vs river feature, not evidence that the falls GIS coordinate is wrong. Current visitor road and seasonal access conditions not verified. Full admission gate resolved: Wisconsin DNR 2005 trail map shows southern Wisconsin Pemene Falls hiking trail lot, primitive 0.5-mi overlook and 0.8/1.9-mi loops, corroborated by DNR 2018 Pemene Falls Unit map. Official area navigation reference is 45.5884,-87.7847, not a measured lot. Natural state GIS feature #188 is at different location on the river. Pemene Landing boat access is NOT the hiking trailhead.",
       "sourceLinks": [
         "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
         "https://www.michigan.gov/recsearch/parks/menominee",
         "https://dnr.wisconsin.gov/topic/parks/menominee/info",
         "https://adammartin.space/2019-pemene-falls/",
         "https://mapcarta.com/22878684",
-        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2"
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb"
       ],
       "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false,
-      "guideDraft": "docs/UP_WATERFALL_1258_MENOMINEE_FIELD_GUIDE_SOURCE_PACK.md",
-      "outstandingGate": "Prepare final Pemene visitor guide separating Wisconsin Verheyen Lane trailhead/primitive overlook from GIS river point and Michigan-side informal approach. Check exact latest access and gate before visitor trip; no new page yet.",
+      "publicationEligible": true,
+      "guideDraft": null,
+      "outstandingGate": "Check actual current parking road/gate and posted park conditions before visiting. The GIS point is only the natural river feature, not a legal visitor parking or trailhead location.",
       "locationReconciliation": {
         "naturalFeatureGis": {
           "lat": 45.594123,
@@ -2835,6 +2852,18 @@
         "officialTrailDistanceMi": 0.5,
         "trailhead": "End of Verheyen Lane, off Wisconsin County Road Z",
         "currentOpenStatus": "unverified"
+      },
+      "visitorRouteEvidence": {
+        "reviewed": "2026-10-28",
+        "parkMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+        "landManagerPage": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "visitorRouteSource": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "geographicIdentitySource": "https://adammartin.space/2019-pemene-falls/",
+        "parkingLocationPrecision": "not-verified-or-invented",
+        "gisNaturalFeatureNotParking": true,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false,
+        "routeScope": "Wisconsin signed Pemene trail to primitive gorge overlook only"
       }
     },
     {
@@ -3434,6 +3463,16 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Pemene GIS feature corroborated by independent river coordinates; historical conflict correctly reframed as separate WI viewing overlook vs falls point. Misicot explicitly crosswalked to Third Pier via American Whitewater, with MI DNR Piers Gorge access shown on official park map. Both guide candidates remain nonindex research pending individual route decisions."
+    },
+    {
+      "batch": "09-menoninee-pemene-misicot-official-access",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        188,
+        2
+      ],
+      "publicGuidesAdded": 2,
+      "outcome": "Verified DNR map/documented WI Pemene lot-to-primitive gorge overlook and MI Piers Gorge trail-to-Pier 1-3 views; Misicot Third Pier identity confirmed by independent American Whitewater. Both public guides scope parking and trails, no precise lot points, downstream riverbank access or current-open claims."
     }
   ]
 }
