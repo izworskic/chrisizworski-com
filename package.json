@@ -97,7 +97,8 @@
     "verify:sitemap-index": "node scripts/build-sitemap-index.mjs --check",
     "build:john-day-map-tiles": "esbuild lib/john-day-map-ais.js --bundle --platform=browser --format=iife --global-name=JohnDayMapTiles --outfile=public/assets/john-day-map-tiles.js --minify --legal-comments=eof",
     "generate:seaway": "node scripts/generate-seaway.mjs",
-    "build:sleeping-giant": "node scripts/build-sleeping-giant-site.mjs"
+    "build:sleeping-giant": "node scripts/build-sleeping-giant-site.mjs",
+    "preverify:all": "node scripts/build-sleeping-giant-site.mjs"
   },
   "dependencies": {
     "@mapbox/vector-tile": "^2.0.4",
