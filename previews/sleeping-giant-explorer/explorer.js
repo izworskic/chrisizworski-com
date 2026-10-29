@@ -14,6 +14,24 @@
  const mapTitle=document.getElementById('map-route-name'),officialDist=document.getElementById('official-distance');
  const mappedDist=document.getElementById('mapped-distance'),gap=document.getElementById('gap-note');
  const bikePanel=document.getElementById('bike-breakdown'),mapStatus=document.getElementById('map-status');
+ const mapFocus=document.getElementById('map-focus'),mapZoomStatus=document.getElementById('map-zoom-status');
+ let focusPoints=null;
+ function focusMap(mode) {
+   const target=focusPoints?.[mode];
+   if(!target){map.setAttribute('viewBox','0 0 820 610');mapZoomStatus.textContent='Overview · not for navigation';return}
+   const detail=mode!=='overview',zoom=detail?2.5:1;
+   const width=820/zoom,height=610/zoom;
+   const x=Math.max(width/2,Math.min(820-width/2,target[0]));
+   const y=Math.max(height/2,Math.min(610-height/2,target[1]));
+   map.setAttribute('viewBox',[
+     (x-width/2).toFixed(2),(y-height/2).toFixed(2),
+     width.toFixed(2),height.toFixed(2)
+   ].join(' '));
+   const labels={overview:'Full trail outline',start:'Mapped trail start',destination:'Mapped destination',
+     parking:'Approximate parking study point'};
+   mapZoomStatus.textContent=(labels[mode]||'Research view')+' · not for navigation';
+ }
+
  const NS='http://www.w3.org/2000/svg';
  const summaries={
   'sea-lion':'An extraordinary rock arch at the edge of Lake Superior, reached by a shorter walk from South Kabeyun.',
@@ -88,6 +106,11 @@
       ' The total trip duration cannot be verified from published bike/walk timings.';
   }
   paths.replaceChildren();pins.replaceChildren();
+  focusPoints=null;
+  mapFocus.value='overview';
+  map.setAttribute('viewBox','0 0 820 610');
+  mapFocus.disabled=!overlay;
+  focusMap('overview');
   if(!overlay){
     mapTitle.textContent=route.name+' · reference unavailable';
     mappedDist.textContent='Not mapped';
@@ -131,10 +154,14 @@
     el('title',{},dot).textContent=description;
   });
   const [lx,ly]=to(parking);
-  const text=el('text',{x:Math.max(10,Math.min(650,lx+11)).toFixed(2),
-    y:Math.max(20,Math.min(585,ly-12)).toFixed(2)},pins);
-  text.textContent='Approx. lot (unverified entrance)';
+  const atRight=lx>540;
+  const text=el('text',{x:Math.max(14,Math.min(805,atRight?lx-12:lx+12)).toFixed(2),
+    y:Math.max(20,Math.min(585,ly-12)).toFixed(2),'text-anchor':atRight?'end':'start'},pins);
+  text.textContent='Approx. parking · unverified';
+  focusPoints={overview:[410,305],start:to(start),destination:to(end),parking:to(parking)};
+  focusMap('overview');
  }
+ mapFocus.addEventListener('change',()=>focusMap(mapFocus.value));
  planner.addEventListener('change',()=>{updateDecisions();drawRoute(currentId)});
  cardList.addEventListener('click',event=>{
    const button=event.target.closest('[data-select]');
