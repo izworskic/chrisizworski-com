@@ -46,12 +46,12 @@
   /* Interactive Winter Shipping Architecture Blueprint */
   const BLUEPRINTS = {
     closure: {
-      kicker: 'PRINCIPLE 01 · THE JAN 15 – MAR 25 SOO LOCK CLOSURE',
+      kicker: 'FIELD LESSON 01 · THE JAN 15 – MAR 25 SOO LOCK CLOSURE',
       title: 'Why midnight on January 15 splits the Great Lakes winter in two',
       copy:
-        'Under federal regulation (33 CFR 207.440), the U.S. Army Corps of Engineers closes the Poe Lock at Sault Ste. Marie at 11:59 PM on January 15 and pumps the 1,200-foot chamber dry for ten weeks of winter steel and gate maintenance until March 25. Before January 15, thousand-footers race through St. Marys River ice to deliver final Lake Superior taconite loads; after January 15, Lake Superior is sealed off and the upper-lakes fleet ties up in winter berths.',
+        'If you watch freighters on the Great Lakes, your winter calendar revolves around 11:59 PM on January 15. That is when the U.S. Army Corps of Engineers closes the 1,200-foot Poe Lock at Sault Ste. Marie under federal regulation (33 CFR 207.440) and pumps the chamber dry for ten weeks of winter steel and gate work until March 25. Before January 15, the 1,000-footers push day and night through St. Marys River brash ice to deliver their final Lake Superior taconite loads; the morning after January 15, Lake Superior is sealed off and the big ships settle into their winter berths.',
       rule:
-        'Field rule: Plan active canal and lock ship-watching for November through January 15 or after March 22; plan shipyard and winter-berth photography for January 16 through mid-March.',
+        'How I use this: I chase active canal and lock passages from November through January 15 (and again after March 22), and spend late January through mid-March photographing the fleet in winter layup.',
       links: [
         { label: 'Soo Locks Live & Closure Tracker ↗', href: '/soo-locks/' },
         { label: 'Duluth Ship Canal Live Tracker ↗', href: '/duluth-ship-canal/' },
@@ -59,12 +59,12 @@
       ],
     },
     overlooks: {
-      kicker: 'PRINCIPLE 02 · PUBLIC SHORE OVERLOOKS VS. PRIVATE SHIPYARDS',
-      title: 'Every shipyard and bulk dock is closed industrial property—use bridges and parks',
+      kicker: 'FIELD LESSON 02 · PUBLIC SHORE OVERLOOKS VS. PRIVATE SHIPYARDS',
+      title: 'Why municipal bridges and waterfront parks beat driving up to a shipyard gate',
       copy:
-        'Great Lakes winter layup yards—including Fraser Shipyards in Superior, Fincantieri Bay Shipbuilding in Sturgeon Bay, Ironhead Marine in Toledo, and bulk elevators in Milwaukee and Sarnia—are active heavy-industrial facilities governed by Coast Guard Maritime Transportation Security Act (MTSA) rules. The best winter photography happens from public municipal bridges, waterfront parks, and museum observation towers looking across the water.',
+        'Every winter, someone drives all the way to Sturgeon Bay or Superior expecting to walk onto a shipyard pier—and runs straight into a locked Coast Guard MTSA security gate. Commercial graving docks and bulk terminals like Fraser Shipyards in Superior, Fincantieri Bay Shipbuilding in Sturgeon Bay, and Ironhead Marine in Toledo are active heavy-industrial yards. Fortunately, you do not need yard access: public bridges in Sturgeon Bay, Barker’s Island in Superior, and the harbour walls in Owen Sound look right across the channel at the bows of laid-up 1,000-footers.',
       rule:
-        'Field rule: Never drive into shipyard gates, rail docks, or private terminal roads. Use the public bridge sidewalks and municipal waterfront parks listed on every card below.',
+        'How I use this: Never drive into shipyard gates or rail docks—use the public bridge sidewalks, riverfront parks, and museum towers mapped on every stop below.',
       links: [
         { label: 'Winter Layup Atlas & Sourced Roster ↗', href: '/great-lakes-freighter-winter-layup/' },
         { label: 'Great Lakes Ship-Watching Spots ↗', href: '/great-lakes-ship-watching-spots/' },
@@ -72,12 +72,12 @@
       ],
     },
     ais: {
-      kicker: 'PRINCIPLE 03 · WHY AIS SPEED CANNOT CERTIFY A WINTER BERTH',
-      title: 'Pair live AIS transits with source-dated winter layup records',
+      kicker: 'FIELD LESSON 03 · READING AIS VS. SOURCED LAYUP RECORDS',
+      title: 'Why a 0.0-knot AIS dot is not proof of a winter layup berth',
       copy:
-        'A freighter showing 0.0 knots on an AIS map in December or January may simply be anchored behind Keweenaw Point waiting out a gale, queued for an icebreaker in Whitefish Bay, or loading at a dock—and conversely, ships tied up in winter shipyards often power down their AIS transponders for weeks. That is why our Winter Layup Tracker separates sourced port-authority and historical-society berth records from live AIS harbor signals.',
+        'Boatwatchers learn early that winter AIS data has two quirks. First, a freighter sitting at 0.0 knots in December or early January might simply be anchored behind Keweenaw Point riding out a gale or waiting for a Coast Guard cutter in Whitefish Bay. Second, once a ship ties up for the winter in Sturgeon Bay or Superior and switches to shore power, the crew often turns the AIS transponder off until March fit-out. That is why I built the Winter Layup Tracker around verified port-authority and historical-society berth records rather than raw AIS speed.',
       rule:
-        'Field rule: Use the Live Ship Map for vessels actively underway, and use the Winter Layup Tracker for source-verified winter berths.',
+        'How I use this: Check the Live Ship Map for vessels actively underway, and use the Winter Layup Tracker to see where each ship is berthed for the winter.',
       links: [
         { label: 'Freighter Winter Layup Tracker ↗', href: '/great-lakes-freighter-winter-layup/' },
         { label: 'Live Great Lakes Freighter Map ↗', href: '/great-lakes-freighter-tracking/' },
@@ -85,12 +85,12 @@
       ],
     },
     breakout: {
-      kicker: 'PRINCIPLE 04 · FIT-OUT STEAM & THE MARCH 25 BREAKOUT',
-      title: 'Follow USCG Operation Taconite and Operation Coal Shovel in February & March',
+      kicker: 'FIELD LESSON 04 · FIT-OUT STEAM & THE MARCH 25 BREAKOUT',
+      title: 'How to watch Coast Guard icebreakers and spring fit-out from a warm car',
       copy:
-        'Even during deep winter, tug-barge units and shuttle freighters move coal, salt, and petroleum along the Detroit River, St. Clair River, and lower Lake Michigan with U.S. and Canadian Coast Guard icebreaker support. Around March 10–20, shipyard crews light main engines for spring fit-out while USCGC Mackinaw and 140-foot Bay-class icebreaking tugs carve tracks through the Straits of Mackinac, Whitefish Bay, and Duluth–Superior for the March 25 reopening.',
+        'Even in the dead of February when the Soo Locks are dry, winter shipping never completely stops: tug-barge units and river shuttles haul coal, salt, and fuel along the St. Clair River, Detroit River, and lower Lake Michigan behind U.S. and Canadian Coast Guard icebreakers. Then, around March 10–20, smoke rises from shipyard stacks as engineers light main engines for spring fit-out, and heavy icebreaker USCGC Mackinaw and the 140-foot Bay-class tugs carve tracks through the Straits and Whitefish Bay for the March 25 opener.',
       rule:
-        'Field rule: Icebreaker wakes and bow thrusters fracture shoreline and river ice miles away without warning—never step onto harbor, canal, or river ice.',
+        'How I use this: Icebreaker wakes fracture river and shoreline ice miles away without warning—watch from paved riverfront pull-offs and never step onto harbor ice.',
       links: [
         { label: 'Great Lakes Ice Report & Cutters ↗', href: '/michigan-ice/' },
         { label: 'Detroit River Ship Tracker ↗', href: '/detroit-river-freighters/' },
