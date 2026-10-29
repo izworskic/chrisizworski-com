@@ -64,6 +64,20 @@ async function main(){
    need(tiles>=3,device.name+' map has too few visible real tiles '+tiles);
    await page.locator('#parking-map').screenshot({path:path.join(out,device.name+'-parking-map.png')});
    report.screenshots.push(device.name+'-parking-map.png');
+
+   need(await page.locator('#west-access-evidence').count()===1,device.name+' CR519 evidence text missing');
+   need((await page.locator('#west-access-evidence').innerText()).includes('1.3 km'),device.name+' MGF lot-separation warning absent');
+   if(device.name==='desktop'){
+     await page.locator('#porkies-west-toggle').click();
+     await page.waitForFunction(()=>document.querySelector('#west-access-status')?.textContent.includes('Showing 27 mapped MGF source segments'),null,{timeout:20000});
+     const trace=await page.locator('.leaflet-porkies-west-road-evidence-pane path').count();
+     need(trace===27,device.name+' west corridor MGF features not rendered: '+trace);
+     need(await page.locator('#porkies-west-toggle').getAttribute('aria-pressed')==='true','west corridor toggle inactive');
+     await page.locator('#parking-map').screenshot({path:path.join(out,'desktop-west-approach-source.png')});
+     report.screenshots.push('desktop-west-approach-source.png');
+     await page.locator('#porkies-west-toggle').click();
+     need(await page.locator('.leaflet-porkies-west-road-evidence-pane path').count()===0,'source trace not cleared');
+   }
    if(device.name==='desktop'){
      await page.locator('#porkies-trails-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 819 DNR hiking features'),null,{timeout:30000});
@@ -179,6 +193,7 @@ async function main(){
   need(await page.locator('.crossing-alternative-grid>div').count()===3,'no JS crossing-safe itinerary alternatives missing');
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
+  need((await page.locator('#west-access-evidence').innerText()).includes('County Road 519'),'noJS western route guidance not available');
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
   need(await page.locator('details[data-trail="escarpment"] .trail-edition-warning').count()===1,'no JS source mileage discrepancy hidden');

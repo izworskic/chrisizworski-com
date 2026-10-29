@@ -95,6 +95,46 @@
   if(bounds.isValid())atlas.fitBounds(bounds.pad(.25),{maxZoom:13});
   message(name+": showing "+selected.length+" source line fragment"+(selected.length===1?"":"s")+". This is NOT a verified continuous route; check the published map for missing parts, return trip and unbridged crossings.");
  }
+ let westLayer=null;
+ function westMessage(s){const e=root.document.getElementById("west-access-status");if(e)e.textContent=s;}
+ async function toggleWestApproach(){
+  const button=root.document.getElementById("porkies-west-toggle");
+  if(!button)return;
+  if(!atlas){westMessage("Map unavailable. The official DNR road instructions and source descriptions above remain readable.");return;}
+  if(westLayer){atlas.removeLayer(westLayer);westLayer=null;button.setAttribute("aria-pressed","false");westMessage("Source trace hidden; no road opening or driving route is implied.");return;}
+  westMessage("Loading the independently cross-checked County Road 519 source geometry…");
+  try{
+   const [m,g]=await Promise.all([
+    root.fetch(BASE+"west-approach-evidence.json",{credentials:"same-origin"}),
+    root.fetch(BASE+"west-approach-reference.geojson",{credentials:"same-origin"})
+   ]);
+   if(!m.ok||!g.ok)throw Error("source unavailable");
+   const manifest=await m.json(),geo=await g.json();
+   if(manifest.status!=="west-approach-source-crosswalk-not-road-route"||
+     manifest.westRecords!==27||manifest.crossParkThroughVehicleRouteCertified!==false||
+     manifest.pointToPointDrivingDirectionsCertified!==false||manifest.seasonalRoadOpeningCertified!==false||
+     geo.type!=="FeatureCollection"||geo.features?.length!==27||
+     geo.features.some(x=>x.properties?.notRoute!==true||x.properties?.mgfPR!==1475809))throw Error("unverified west corridor source");
+   if(!atlas.getPane("porkies-west-road-evidence"))atlas.createPane("porkies-west-road-evidence");
+   atlas.getPane("porkies-west-road-evidence").style.zIndex="349";
+   const layer=root.L.geoJSON(geo,{
+    pane:"porkies-west-road-evidence",
+    style:{color:"#76518b",weight:5,opacity:.95,dashArray:"9,6"},
+    onEachFeature:(feature,l)=>{
+     l.bindPopup("<strong>"+safe(feature.properties?.name)+"</strong><p>Michigan Geographic Framework centerline. Government records identify this Thomaston / Presque Isle Road corridor with County Road 519. This is not a live opening report, permitted turn or guaranteed park parking approach.</p>");
+    }
+   }).addTo(atlas);
+   westLayer=layer;
+   button.setAttribute("aria-pressed","true");
+   const bounds=layer.getBounds();
+   if(bounds.isValid())atlas.fitBounds(bounds.pad(.08),{maxZoom:12});
+   westMessage("Showing 27 mapped MGF source segments (1 connected graph component at 5 m). The road trace ends about 1.3 km from the DNR Presque Isle parking asset. No road-to-lot connection, current closure, legal turn or driving time is certified.");
+  }catch(e){
+   button.setAttribute("aria-pressed","false");
+   westMessage("Official 519 source geometry unavailable or its integrity check failed. Consult the DNR road guidance; no substitute route will be drawn.");
+  }
+ }
+
  function refresh(){
   if(layers.roads)layers.roads.setStyle(roadStyle);
   if(layers.roads)message("Road restrictions shown for the selected date. Red dashed lines are flagged as seasonally restricted; geometry is not live closure data.");
@@ -107,6 +147,7 @@
   buttonT.addEventListener("click",()=>show("trails"));
   buttonR.addEventListener("click",()=>show("roads"));
   if(buttonS)buttonS.addEventListener("click",()=>show("ski"));
+  root.document.getElementById("porkies-west-toggle")?.addEventListener("click",toggleWestApproach);
   root.addEventListener("porkies:trail-reference",e=>inspectNamedTrail(e?.detail?.name));
   root.document.getElementById("travel-date")?.addEventListener("change",refresh);
   root.document.getElementById("planner")?.addEventListener("submit",()=>root.setTimeout(refresh,0));

@@ -1,0 +1,42 @@
+name: Porkies DNR and MGF west access crosswalk
+on:
+  push:
+    branches: [feat/porkies-west-access-evidence-20261028]
+    paths:
+      - 'scripts/research-porkies-west-access.mjs'
+      - '.github/workflows/porkies-west-access.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Query state GIS and rebuild west-side geometric evidence
+        run: node scripts/research-porkies-west-access.mjs
+      - name: Fail closed on unsupported vehicle navigation
+        run: |
+          node -e "const d=require('./public/porcupine-mountains/west-approach-evidence.json'); if(d.status!=='west-approach-source-crosswalk-not-road-route'||d.westRecords!==27||d.pointToPointDrivingDirectionsCertified||d.crossParkThroughVehicleRouteCertified||d.seasonalRoadOpeningCertified)process.exit(1)"
+      - name: Retain source overlays on feature branch only
+        if: github.ref == 'refs/heads/feat/porkies-west-access-evidence-20261028'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/porcupine-mountains/west-approach-evidence.json public/porcupine-mountains/west-approach-reference.geojson
+          if ! git diff --cached --quiet; then
+            git commit -m "data(porkies): retain official west-side MGF source trace"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin feat/porkies-west-access-evidence-20261028
+              git rebase origin/feat/porkies-west-access-evidence-20261028
+              if git push origin HEAD:feat/porkies-west-access-evidence-20261028; then exit 0; fi
+              if [ "$attempt" = 5 ]; then exit 1; fi
+              sleep "$attempt"
+            done
+          fi
