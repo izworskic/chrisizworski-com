@@ -1,3 +1,11 @@
+### 2026-10-28 — Sleeping Giant engine foundation (research/PR only)
+
+- Official Ontario Parks trail activity source and bike/hike guide reviewed: full-return distances 21.8 km Top, 16.2 km Head, 17.0 km Nanabosho; legal bike/walk return splits 13.4/8.4, 12.2/4.0, 11.8/5.2 km respectively; Sea Lion 2.4 km/roughly 1 h. Different named-spur vs full-trip distances explicitly distinguished.
+- New source registry and pure Node route decision module enforce verified bike permissions, conservative official walking-duration ranges, reserve-adjusted daylight, no precise parking GPS, no inferred live access, and route closure source gates. A separate cached-forecast contract grades only complete-hour coverage of a confirmed walking duration; uncertain/stale/missing source returns unknown.
+- Files: `data/sleeping-giant/official-routes.json`, `lib/sleeping-giant/{route-engine,summit-window}.cjs`, `tests/sleeping-giant-engine.test.js`, `docs/SLEEPING_GIANT_ENGINE_DESIGN.md`.
+- No public page, sitemap, tools card, canonical or ad configuration changed. No GSC/AdSense measurement or ranking uplift claimed. No live ECCC API fetch/cache, trail-geospatial graph or browser UI yet. This stage must not be described as a live visitor tool.
+- Source review date 2026-10-28. **Next concrete action:** validate official trail route geometry and parking/access anchors with government map and OTN, then add edge-level route graph with routing tests before the HTML/JavaScript experience.
+
 ### 2026-10-28 — Porkies critical bridge/ford verification, structural source coverage
 
 - Reviewed 2025 official DNR GPS map unbridged-crossing symbols and narrative trails against 174 EGLE/DNR hydro-line candidates; retained candidate source IDs, **no public crossing GPS**. Individually distinguished nine site records including the 2016 Big Carp *mouth bridge* and a **separate** upstream 2026 hiking-account crossing. Explicitly 0 physical-status-certified traverses; GPS map symbols cannot be precisely tied to particular signed crossing locations without further authoritative evidence.
