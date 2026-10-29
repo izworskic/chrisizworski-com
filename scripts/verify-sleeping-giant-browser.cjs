@@ -39,6 +39,23 @@ async function main(){
      must(await page.locator('#route-shapes path').count()===2,viewport.name+' default Sea Lion map not 2 sections');
      const visible=await page.locator('[data-id="sea-lion"] .card-decision').innerText();
      must(visible.includes('Published hiking range fits')||visible.includes('Ontario Parks'),viewport.name+' source duration unavailable');
+     // The hero is a CSS background: layout-only screenshots do not prove its
+     // remote licensed photo has loaded, so validate the actual image bytes.
+     const hero=await page.evaluate(async()=>{
+       const css=getComputedStyle(document.querySelector('.hero-image')).backgroundImage;
+       const match=css.match(/url\\(["']?([^"')]+)["']?\\)/);
+       if(!match)return {ok:false,reason:'no CSS image url',css};
+       const url=match[1];
+       return await new Promise(resolve=>{
+         const photo=new Image();
+         const timer=setTimeout(()=>resolve({ok:false,reason:'timeout',url}),15000);
+         photo.onload=()=>{clearTimeout(timer);resolve({ok:photo.naturalWidth>=600,
+           url,width:photo.naturalWidth,height:photo.naturalHeight})};
+         photo.onerror=()=>{clearTimeout(timer);resolve({ok:false,reason:'load error',url})};
+         photo.src=url;
+       });
+     });
+     must(hero.ok,viewport.name+' licensed Sleeping Giant hero did not load '+JSON.stringify(hero));
      const overflow=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,screen:innerWidth}));
      must(overflow.doc<=overflow.screen+3,viewport.name+' horizontal overflow '+JSON.stringify(overflow));
      await page.screenshot({path:path.join(out,viewport.name+'-hero.png'),animations:'disabled'});
