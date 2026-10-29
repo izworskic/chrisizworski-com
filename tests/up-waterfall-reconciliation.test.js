@@ -353,3 +353,25 @@ test('Chicaugon and Gabbro remain nonindexable research with parcel and road haz
   assert.match(asset.records.find(x=>x.gisObjectId===38).summary,/Blackjack/i);
   assert.ok(research.includes('up-waterfall-access-reviews.json'));
 });
+
+test('Chicagon DNR waterfall parcel ownership cannot promote a private-camp road as public access', () => {
+  const row=ledger.candidates.find(x=>x.gisObjectId===12);
+  const canonical=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'))
+    .entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===12);
+  const review=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'))
+    .records.find(x=>x.gisObjectId===12);
+  assert.equal(row.parcelReview.dnrManagedLand.parID,258918);
+  assert.equal(row.parcelReview.dnrManagedLand.acreage,47.8);
+  assert.equal(row.parcelReview.routeToFallsLandVerified,false);
+  assert.equal(row.publicationEligible,false);
+  assert.equal(row.parkingVerified,false);
+  assert.equal(row.publicAccessVerified,false);
+  assert.ok(canonical.accessAssessment.includes('ParID 258918'));
+  assert.equal(review.dnrManagedFallsParcel.parID,258918);
+  assert.equal(review.publicationEligible,false);
+  assert.match(review.summary,/private camps/i);
+  assert.match(review.summary,/state ownership|DNR.*forest parcel|DNR.*parcel/i);
+  assert.ok(review.sourceLinks.some(s=>s.url.includes('DNRLOTSParcelsOPENDATA')));
+  assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===12));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/chicagon-falls/'));
+});
