@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 55,
-  "linkedByExactOid": 49,
-  "unresolvedCandidates": 112,
+  "curatedCount": 56,
+  "linkedByExactOid": 50,
+  "unresolvedCandidates": 111,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3076,18 +3076,26 @@
         -87.446107
       ],
       "river": "CARP RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "morgan-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "NTN-South-trailhead-M553-designated-crossing-public-route-not-open-now",
+      "landManager": "Noquemanon Trail Network (South Trails)",
+      "parkingEvidence": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "trailEvidence": "https://noquetrails.org/south-trails/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "nextAction": "Current season NTN closure and crossing status require on-site verification; no invented GPS.",
+      "batch": "county-marquette",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "13",
+      "classification": "visitor-bureau-safe-parking-and-designated-crossing",
+      "accessAssessment": "Travel Marquette verifies NTN South public parking on M-553, designated pedestrian highway crossing, and walking Mount Marquette Road closed to motor vehicles; do not park on high speed opposite shoulder or use falls GIS as lot.",
+      "evidence": [
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://noquetrails.org/south-trails/"
+      ]
     },
     {
       "source": "mi-state-gis",
