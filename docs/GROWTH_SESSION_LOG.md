@@ -1,3 +1,12 @@
+### 2026-10-29 — Michigan Adventure Finder photograph presentation final QA
+
+- Inspected live desktop browser screenshot and source of `/michigan-destinations/`. The prior photo-curation release is **already on production** with 20 source-attributed location photographs, a photographed Miners Castle hero, photographer/license captions, intentional crop positions and local Leaflet style. The key-backed CARTO map showed READY with destination markers. No unlicensed/AI art was introduced.
+- The owner requested the complete photography treatment. Rather than regress the already improved Isle Royale, Au Sable, Traverse City, Mackinac, Nordhouse and other images, retained all 20 curated sources and credits after examining them. A direct document-origin screenshot at an offscreen offset showed a pale lazy-image placeholder for Keweenaw; this was not treated as proof of a broken URL because the screenshot capture did not trigger scroll-based lazy loading.
+- Reduced perceived empty photographs while entering the destination feed: load the first three cards immediately with low fetch priority, leaving the remaining 17 lazy. Added alternating desktop layouts for every fourth card to break the repeated photo-left/text-right pattern while preserving the DOM reading order and mobile layout. Protected 20 distinct photos, linked licensing, alt text and first-photo loading in tests.
+- **No changes** to ads/AdSense, identity pages, SEO canonicals, map credential handling, existing specialist tools or the published 20-location inventory. No traffic/CTR gain asserted.
+- **Release gate:** PR checks and live screenshots should confirm 1366px desktop and 390px mobile, all 20 real images/credit links, working keyed CARTO, no photo reordering on mobile.
+- **Exactly one next action:** Verify the photographic presentation in the browser after green CI and deploy without changing the ad system.
+
 ### 2026-10-28 — Porkies critical bridge/ford verification, structural source coverage
 
 - Reviewed 2025 official DNR GPS map unbridged-crossing symbols and narrative trails against 174 EGLE/DNR hydro-line candidates; retained candidate source IDs, **no public crossing GPS**. Individually distinguished nine site records including the 2016 Big Carp *mouth bridge* and a **separate** upstream 2026 hiking-account crossing. Explicitly 0 physical-status-certified traverses; GPS map symbols cannot be precisely tied to particular signed crossing locations without further authoritative evidence.
