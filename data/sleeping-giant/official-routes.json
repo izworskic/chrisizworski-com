@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-28",
+  "regionTimezone": "America/Toronto",
+  "status": "source-backed planning reference; not a live access or conditions feed",
+  "sources": {
+    "activities": "https://www.ontarioparks.ca/park/sleepinggiant/activities",
+    "bikeHike": "https://blog.ontarioparks.ca/bike-hike-sleeping-giant/",
+    "park": "https://www.ontarioparks.ca/park/sleepinggiant",
+    "alerts": "https://www.ontarioparks.ca/park/sleepinggiant/alerts",
+    "ontarioTrails": "https://data.ontario.ca/en/dataset/ontario-trail-network"
+  },
+  "accessPoints": [
+    {
+      "id": "south-kabeyun",
+      "name": "South Kabeyun Trailhead",
+      "siteCoordinates": null,
+      "parkingCoordinates": null,
+      "locationStatus": "officially named; exact public parking pin unverified",
+      "currentAccess": "unverified",
+      "officialPermitRequired": true,
+      "sources": [
+        "activities",
+        "bikeHike"
+      ]
+    },
+    {
+      "id": "middlebrun",
+      "name": "Middlebrun Bay trailhead",
+      "siteCoordinates": null,
+      "parkingCoordinates": null,
+      "locationStatus": "officially named; exact public parking pin unverified",
+      "currentAccess": "unverified",
+      "officialPermitRequired": true,
+      "sources": [
+        "activities"
+      ]
+    },
+    {
+      "id": "pass-lake",
+      "name": "Pass Lake Overlook trailhead",
+      "siteCoordinates": null,
+      "parkingCoordinates": null,
+      "locationStatus": "exact parking/access pin not verified",
+      "currentAccess": "unverified",
+      "officialPermitRequired": true,
+      "sources": [
+        "activities"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "sea-lion",
+      "name": "Sea Lion Trail",
+      "startingAccessId": "south-kabeyun",
+      "activity": "hike",
+      "roundTripKm": 2.4,
+      "intrinsicTrailKmOneWay": 0.4,
+      "difficulty": "moderate",
+      "officialDurationMinutes": {
+        "min": 60,
+        "max": 60,
+        "qualifier": "roughly an hour"
+      },
+      "bikeApproachRoundTripKm": 0,
+      "bikeHikeRemainingRoundTripKm": null,
+      "bikePermission": "not_officially_documented_for_this_route",
+      "interestTags": [
+        "short-walk",
+        "geology",
+        "lake"
+      ],
+      "officialBasis": [
+        "activities"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Rock outcrop and pebble beach; moderate does not imply accessible or hazard-free."
+    },
+    {
+      "id": "top-of-the-giant",
+      "name": "Top of the Giant",
+      "startingAccessId": "south-kabeyun",
+      "activity": "hike",
+      "roundTripKm": 21.8,
+      "intrinsicTrailKmOneWay": 3.3,
+      "difficulty": "difficult",
+      "officialDurationMinutes": {
+        "min": 360,
+        "max": 600,
+        "qualifier": "most hikers 6–10 hours; walking estimate"
+      },
+      "bikeApproachRoundTripKm": 13.4,
+      "bikeHikeRemainingRoundTripKm": 8.4,
+      "bikePermission": "official_documented",
+      "bikeStop": "Kabeyun / Talus Lake junction",
+      "bikeStorage": "Official blog identifies bike racks at the junction.",
+      "interestTags": [
+        "summit",
+        "lake",
+        "challenge"
+      ],
+      "officialBasis": [
+        "activities",
+        "bikeHike"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Exposed cliff environment and difficult ascent; no forecast can establish safe conditions."
+    },
+    {
+      "id": "head-of-the-giant",
+      "name": "Head of the Giant",
+      "startingAccessId": "south-kabeyun",
+      "activity": "hike",
+      "roundTripKm": 16.2,
+      "intrinsicTrailKmOneWay": 1.4,
+      "difficulty": "difficult",
+      "officialDurationMinutes": null,
+      "bikeApproachRoundTripKm": 12.2,
+      "bikeHikeRemainingRoundTripKm": 4,
+      "bikePermission": "official_documented",
+      "bikeStop": "Sawyer Bay / Kabeyun connection",
+      "bikeStorage": "No rack documented; Ontario Parks describes gentle locking to a nearby tree.",
+      "interestTags": [
+        "summit",
+        "challenge",
+        "lake"
+      ],
+      "officialBasis": [
+        "activities",
+        "bikeHike"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Officially described as the park's steepest trail; duration not source-certified."
+    },
+    {
+      "id": "nanabosho-lookout",
+      "name": "Nanabosho Lookout",
+      "startingAccessId": "south-kabeyun",
+      "activity": "hike",
+      "roundTripKm": 17,
+      "intrinsicTrailKmOneWay": 0.8,
+      "difficulty": "difficult",
+      "officialDurationMinutes": null,
+      "bikeApproachRoundTripKm": 11.8,
+      "bikeHikeRemainingRoundTripKm": 5.2,
+      "bikePermission": "official_documented",
+      "bikeStop": "Sawyer Bay approach / foot-only junction",
+      "bikeStorage": "No rack documented; Ontario Parks describes gentle locking to a nearby tree.",
+      "interestTags": [
+        "summit",
+        "challenge",
+        "lake"
+      ],
+      "officialBasis": [
+        "activities",
+        "bikeHike"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Difficult climb and lookout; duration not source-certified."
+    },
+    {
+      "id": "middlebrun-beach",
+      "name": "Middlebrun Bay Beach",
+      "startingAccessId": "middlebrun",
+      "activity": "hike",
+      "roundTripKm": 4.6,
+      "intrinsicTrailKmOneWay": 2.3,
+      "difficulty": "moderate",
+      "officialDurationMinutes": null,
+      "bikeApproachRoundTripKm": null,
+      "bikeHikeRemainingRoundTripKm": null,
+      "bikePermission": "not_officially_documented_for_this_route",
+      "interestTags": [
+        "beach",
+        "lake",
+        "short-walk"
+      ],
+      "officialBasis": [
+        "activities"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Cold Lake Superior water; no swim safety verdict."
+    },
+    {
+      "id": "pass-lake-overlook",
+      "name": "Pass Lake Overlook",
+      "startingAccessId": "pass-lake",
+      "activity": "hike",
+      "roundTripKm": 1,
+      "intrinsicTrailKmOneWay": 0.5,
+      "difficulty": "moderate",
+      "officialDurationMinutes": null,
+      "bikeApproachRoundTripKm": null,
+      "bikeHikeRemainingRoundTripKm": null,
+      "bikePermission": "not_officially_documented_for_this_route",
+      "interestTags": [
+        "short-walk",
+        "lookout",
+        "geology"
+      ],
+      "officialBasis": [
+        "activities"
+      ],
+      "currentTrailStatus": "unverified",
+      "caution": "Official trail length does not verify current trailhead parking or hiking time."
+    }
+  ]
+}
