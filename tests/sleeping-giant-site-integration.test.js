@@ -32,7 +32,7 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.ok(html.includes('21.8 km'));
  assert.ok(html.includes('Ontario Parks'));
  assert.ok(html.includes('<noscript>'));
- assert.match(html,/parking-to-trail connection is unverified/i);
+ assert.match(html,/unverified parking-to-trail connection/i);
  assert.doesNotMatch(html,/<a[^>]*href=["']https:\/\/www\.google\.com\/maps\/dir\//i);
 });
 test('Sleeping Giant release head owns one distinct canonical and consistent full Person/ItemList JSON-LD',()=>{
