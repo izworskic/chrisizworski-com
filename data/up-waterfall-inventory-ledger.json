@@ -265,26 +265,33 @@
         -89.054153
       ],
       "river": "MID ONTONAGON RIVER",
-      "identity": "unreconciled",
+      "identity": "published-name-gis-point-needs-route-check",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
       "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "landManager": "Ottawa National Forest referenced in older waterfall source; confirmation needed",
+      "parkingEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+      "trailEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Check Ottawa NF campground source, route access and exact waterfall identity vs Mexi-Mini alias.",
-      "batch": "county-gogebic",
+      "nextAction": "Validate Burned Dam Campground/Old US-2 and USFS 4500 route against current Ottawa NF map, any campground access fees/closures and GIS point before enabling navigation.",
+      "batch": "B04-forest-route-preflight",
       "reviewBatch": "02",
       "reviewed": "2026-10-28",
       "classification": "recreation-route-reported-not-fully-verified",
       "accessAssessment": "Regional chamber describes route near Burnt Dam Campground; must confirm separate waterfall trail/parking and current USFS permissions.",
       "evidence": [
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
-      ]
+        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+      ],
+      "accessResearch": {
+        "parking": "Iron County guide points to Burned Dam Campground via USFS 4500; legal designated parking and seasonal status not independently verified",
+        "trail": "Visitor guide calls access easy, but does not establish precise verified signed trail effort",
+        "currentRoadConditions": "unknown",
+        "legalRoute": "unverified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -442,26 +449,34 @@
         -88.911255
       ],
       "river": "N/A",
-      "identity": "unreconciled",
+      "identity": "published-name-gis-point-needs-field-route-crosscheck",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
       "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "landManager": "Ottawa National Forest cited in older USFS waterfall map; current site authority under review",
+      "parkingEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+      "trailEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Verify USFS route, bridge and public trail status before visitor guide.",
-      "batch": "county-iron",
+      "nextAction": "Cross-check Iron County 2026 guide's FR 168 parking and unmarked half-mile approach with current Forest Service road status and land tenure before offering precise turn-by-turn directions.",
+      "batch": "B04-forest-route-preflight",
       "reviewBatch": "02",
       "reviewed": "2026-10-28",
       "classification": "recreation-route-reported-not-fully-verified",
       "accessAssessment": "Iron County chamber describes route from FS 3645 and a creek crossing, but current bridge and road status unverified.",
       "evidence": [
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
-      ]
+        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf",
+        "https://upper-michigan.com/guide/waterfalls/duppy-falls.html"
+      ],
+      "accessResearch": {
+        "parking": "Iron County 2026 guide describes clearing off USFS 168; not verified as legal current public arrival",
+        "trail": "Iron County guide describes 0.5-mile walk; trail is not validated by current USFS route authority",
+        "currentRoadConditions": "unknown",
+        "legalRoute": "unverified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -519,26 +534,33 @@
         -88.912138
       ],
       "river": "JUMBO RIVER",
-      "identity": "unreconciled",
+      "identity": "published-name-gis-point-needs-route-check",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
       "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "landManager": "Ottawa National Forest geographic vicinity; road and land access jurisdiction not independently certified",
+      "parkingEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+      "trailEvidence": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Verify official USFS parking and ownership, seasonal road status.",
-      "batch": "county-houghton",
+      "nextAction": "Verify Iron County 2026 guide's Golden Glow Road / USFS 4589-b approach and correct waterfall trail with Forest Service. Verify road condition, gates and public parking before a guide is indexable.",
+      "batch": "B04-forest-route-preflight",
       "reviewBatch": "02",
       "reviewed": "2026-10-28",
       "classification": "recreation-route-reported-not-fully-verified",
       "accessAssessment": "Regional chamber reports USFS road turnout and short path. Confirm public road and signed parking with land manager.",
       "evidence": [
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
-      ]
+        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+      ],
+      "accessResearch": {
+        "parking": "Regional guide gives Golden Glow Road N and USFS 4589-b, but no independently current/legal lot confirmation",
+        "trail": "Published destination route is described; signed trail length and seasonal road gates require manager check",
+        "currentRoadConditions": "unknown",
+        "legalRoute": "unverified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -773,26 +795,34 @@
         -88.68412
       ],
       "river": "STURGEON RIVER",
-      "identity": "unreconciled",
+      "identity": "significant-location-conflict-not-safe-to-match",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
       "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "landManager": "Ottawa NF and NCTA chapter describe public trail corridor; whether GIS feature #45 corresponds to gorge visitor falls unverified",
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/",
+      "trailEvidence": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Reconcile GIS #45 against the Sturgeon River Gorge waterfall location and USGS identifiers; no auto match or trailhead.",
-      "batch": "county-houghton",
+      "nextAction": "Resolve material GIS vs visitor-guide location discrepancy before any public waterfall point or driving route: state point approx 46.582163,-88.684120 while published Sturgeon River Gorge Falls approx 46.64234,-88.69331. Confirm whether source describes different feature and reconcile NCT trailhead/FR2270 accordingly.",
+      "batch": "B04-forest-route-preflight",
       "reviewBatch": "02",
       "reviewed": "2026-10-28",
       "classification": "geographic-identity-conflict",
       "accessAssessment": "USFS confirms Sturgeon Falls in designated wilderness with few established trails, but published waterfall coordinates differ substantially from state GIS record #45; may be a separate feature.",
       "evidence": [
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.recreation.gov/camping/poi/238242"
-      ]
+        "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Mar2024.pdf",
+        "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/"
+      ],
+      "accessResearch": {
+        "parking": "Published FR2270 trailhead near Sturgeon Gorge; cannot assign to GIS #45 until feature identity confirmed",
+        "trail": "NCTA spur documented but waterfall feature identity/position conflict remains unresolved",
+        "currentRoadConditions": "unknown",
+        "legalRoute": "unverified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -1226,18 +1256,36 @@
         -89.446195
       ],
       "river": "CASCADE CREEK",
-      "identity": "unreconciled",
+      "identity": "name-river-location-consistent-access-unresolved",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "access": "candidate-public-forest-approach-unconfirmed; private-driveway-conflict",
+      "landManager": "Ottawa National Forest cited as trail vicinity; actual legal public easement/trail limits require official confirmation",
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/cascade-creek/cascade-falls/",
+      "trailEvidence": "https://www.americanwhitewater.org/content/River/view/river-detail/10805/main",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Check USFS named road/trail and parking entrance against federal map; exclude private south access. Do not make public routing claim until official forest access evidence resolves conflicting paths.",
+      "batch": "B03b-research-triage",
+      "evidence": [
+        "https://www.waterfallsofthekeweenaw.com/cascade-creek/cascade-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/10805/main"
+      ],
+      "flags": [
+        "private-driveway-approach",
+        "uncertain-authorized-parking",
+        "not-current-road-status"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -1949,18 +1997,36 @@
         -89.730367
       ],
       "river": "LITTLE IRON RIVER",
-      "identity": "unreconciled",
+      "identity": "coordinate-and-name-research-only-alias-dispute",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "public trailhead and legal approach unverified; avoid nearby Nonesuch trail inference",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Investigate GIS waterfall coordinate versus contemporary Little Iron/Pewabeck descriptions; no invented access track, no Nonesuch trail shortcut. Verify authority, signed parking and safe trail independently.",
+      "batch": "B03b-research-triage",
+      "evidence": [
+        "https://www.uptravel.com/listing/pewabeck-falls/3210/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ],
+      "flags": [
+        "possible-name-collision",
+        "no-verified-trailhead",
+        "no-legal-public-route"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -2303,18 +2369,41 @@
         -89.571458
       ],
       "river": "BIG IRON RIVER",
-      "identity": "unreconciled",
+      "identity": "alias-candidate-bonanza-greenwood-big-iron",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "published signed visitor route; falls-side ownership and legal public walkway not established by manager",
       "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+      "trailEvidence": "https://mi-trale.org/water-trails-of-michigan/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "nextAction": "Resolve Greenwood/Bonanza alias with state GIS and authoritative land title; verify M-64 signed west-side parking and walking right with owner/manager before promotion. One waterfall identity, not separate URLs.",
+      "batch": "B03b-research-triage",
+      "aliases": [
+        "Greenwood Falls",
+        "Bonanza Falls"
+      ],
+      "evidence": [
+        "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/waterfall/6655",
+        "https://mi-trale.org/water-trails-of-michigan/"
+      ],
+      "flags": [
+        "alias-not-separate-destination",
+        "land-tenure-unconfirmed",
+        "no-current-open-status"
+      ],
+      "fiveAxisGate": {
+        "geography": "state-gis-point-only",
+        "identity": "under-review",
+        "landManager": "not-certified",
+        "legalPublicAccess": "not-certified",
+        "parking": "not-certified",
+        "trail": "not-certified"
+      },
+      "pageEligible": false
     },
     {
       "source": "mi-state-gis",
@@ -3980,5 +4069,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "03a"
+  "lastBatch": "04-research"
 }
