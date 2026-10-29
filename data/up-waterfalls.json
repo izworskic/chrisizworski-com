@@ -3041,6 +3041,60 @@
           "description": "Michigan GIS #128 named falls on Misery River distinct from visitor lot."
         }
       }
+    },
+    {
+      "id": "rock-river-falls",
+      "name": "Rock River Falls",
+      "region": "Central U.P.",
+      "place": "Rock River Canyon Wilderness · near Chatham",
+      "lat": 46.411253,
+      "lng": -86.976063,
+      "gisObjectId": 194,
+      "level": "difficult",
+      "minutes": "90–180 min",
+      "walk": "From a permitted open forest-road turnout on FR 2293, follow the natural Rock River Falls footpath; NCTA also describes a distinct 1.2-mile spur from the main NCT. Published direct-walk estimates vary (roughly 1.5–1.8 mile roundtrip) by parking and route. No exact legal falls lot GPS or maintained trail distance is asserted.",
+      "best": "Snow-free, dry-road conditions when the FR 2276/2293 forest roads are open and passable; avoid winter driving to the western NCT trailhead.",
+      "access": "USDA Hiawatha National Forest Rock River Canyon Wilderness, with NCTA chapter-documented public North Country Trail and falls spur. U.P. visitor bureau describes unmarked falls parking along FR2293. No promise of current safe/authorized winter motor access, bridge, accessibility or exact coordinates.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest wilderness trail",
+      "parking": "From Chatham take Rock River Road/H-01 to FR 2276 (Cole Creek/Sandstrom Road), then FR 2293 (Falls Road). Find permitted signed/unmarked visitor turnout described in U.P. tourism; do not route to the natural waterfall GIS point. The western NCT parking reference is a different trailhead, not a certified Rock River Falls lot.",
+      "feature": "Secluded Rock River cascade in forest wilderness, with a rugged wet-landscape trail and no developed overlook.",
+      "decision": "Choose this only when the rough forest-road approach and unmarked wilderness trail fit your vehicle and experience. NCTA warns the FR 2293 western trailhead is unreachable by car in winter; trail spur and direct approach distances differ.",
+      "further": "North Country Trail Association's 2023 segment guide documents FR 2276/2293 road system, 1.2-mile falls spur and winter road limits; U.P. tourism describes small FR2293 falls parking. Current opening and road conditions are unverified; do not assume roadside parking near private land is legal.",
+      "manager": "USDA Forest Service · Hiawatha National Forest · Rock River Canyon Wilderness",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "mapped-public-wilderness-NCTA-trail-regional-parking-no-open-now",
+      "winterRoad": "NCTA advises higher-clearance vehicle for the western trailhead late spring through early winter and says western trailhead is not vehicle-accessible in winter. Confirm current USFS road opening and closures.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd534265.pdf",
+          "description": "USFS Hiawatha forest NCT map names Rock River Canyon Wilderness and Rock River Falls Trail."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA chapter documents public trail/rock river falls spur and wilderness-appropriate visitor footpath."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+          "description": "U.P. visitor association explicitly describes a small falls trail parking area on FR2293; no exact survey-level GPS parking coordinate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA 2023 segment guide describes Rock River Falls spur (1.2 miles on NCT route), road approaches and winter reachability distinct from other direct-route walking distances."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #194 locates the actual Rock River Falls natural river feature, not parking."
+        }
+      }
     }
   ]
 }
