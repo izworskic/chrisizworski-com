@@ -109,7 +109,7 @@ test('photographs have distinct source-licensed scenes and quiet credits', () =>
   assert.match(html, /Dylan L\. Tanner/);
   assert.match(html, /creativecommons\.org\/licenses\/by-sa\/2\.5/);
   assert.match(html, /fetchpriority="high"/);
-  assert.equal((html.match(/Michigan%27s_Torch_Lake\.jpg/g) || []).length, 2, 'same licensed Torch Lake photo must appear in hero and destination card');
+  assert.equal((html.match(/<img src="[^"]*Michigan%27s_Torch_Lake\.jpg"/g) || []).length, 2, 'same licensed Torch Lake photo must appear in hero and destination card');
   assert.doesNotMatch(html, /Torch_Lake_Swimming/);
   assert.match(html, /Sand_Point_Road/);
   assert.match(html, /National Park Service/);
