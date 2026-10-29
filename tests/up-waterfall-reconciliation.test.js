@@ -19,14 +19,23 @@ test('each source GIS identity appears exactly once in research ledger', () => {
 });
 
 test('exact GIS reconciliation cannot silently create or alter public guides', () => {
-  const curatedById = new Map(curated.waterfalls
-    .filter(x => Number.isInteger(x.gisObjectId))
-    .map(x => [x.gisObjectId, x]));
+  const curatedById = new Map();
+  for (const guide of curated.waterfalls) {
+    if (Number.isInteger(guide.gisObjectId)) curatedById.set(guide.gisObjectId, {guide, multi:false});
+    for (const oid of guide.multiFeatureGisObjectIds||[]) {
+      assert.ok(!curatedById.has(oid), 'duplicate GIS ownership '+oid);
+      curatedById.set(oid,{guide,multi:true});
+    }
+  }
   for (const row of ledger.candidates) {
-    const guide = curatedById.get(row.gisObjectId);
-    if (guide) {
-      assert.equal(row.curatedId, guide.id);
-      assert.equal(row.reconciliation, 'curated-exact-gis-id');
+    const claim = curatedById.get(row.gisObjectId);
+    if (claim) {
+      assert.equal(row.curatedId, claim.guide.id);
+      assert.equal(row.reconciliation, claim.multi ? 'curated-multifeature-parent-tool' : 'curated-exact-gis-id');
+      if (claim.multi) {
+        assert.equal(row.featureCoverage.parentCuratedId, claim.guide.id);
+        assert.ok(claim.guide.gisFeatureCrosswalk.some(v=>v.gisObjectId===row.gisObjectId));
+      }
     } else {
       assert.equal(row.curatedId, null);
       assert.equal(row.reconciliation, 'pending-identity-and-access-research');
@@ -98,7 +107,7 @@ test('canonical source ledger and geographic reconciliation agree as waterfall c
     const prior = canonicalGIS.get(row.gisObjectId);
     assert.ok(prior, 'canonical ledger missing GIS ID ' + row.gisObjectId);
     assert.equal(prior.curatedId, row.curatedId, 'mismatched curated link for GIS ID ' + row.gisObjectId);
-    assert.equal(prior.identity === 'linked', row.reconciliation === 'curated-exact-gis-id');
+    assert.equal(prior.identity === 'linked', ['curated-exact-gis-id','curated-multifeature-parent-tool'].includes(row.reconciliation));
   }
 });
 
@@ -473,4 +482,26 @@ test('Keweenaw Jacobs, Manganese and Wyandotte visitor guides are source-backed 
   assert.match(wya,/Poyhonen Road/);
   assert.match(wya,/golf course/i);
   assert.ok(![jac,man,wya].some(x=>x.includes('destination=47.')));
+});
+
+test('Upper and Lower Tahquamenon source IDs share the existing canonical planner without duplicate pages', () => {
+  const parent=curated.waterfalls.find(x=>x.id==='tahquamenon');
+  assert.ok(parent);
+  assert.equal(parent.link,'/tahquamenon-falls/');
+  assert.deepEqual(parent.multiFeatureGisObjectIds,[207,208]);
+  assert.equal(parent.gisFeatureCrosswalk.length,2);
+  for (const oid of [207,208]) {
+    const geo=ledger.candidates.find(x=>x.gisObjectId===oid);
+    assert.equal(geo.curatedId,parent.id);
+    assert.equal(geo.reconciliation,'curated-multifeature-parent-tool');
+    assert.equal(geo.publicGuide,'existing-verified-park-planner');
+    assert.equal(geo.featureCoverage.notVehicleParking,true);
+    assert.equal(geo.featureCoverage.currentAccessStatus,'unverified');
+    assert.equal(geo.featureCoverage.parentUrl,parent.link);
+    assert.equal(geo.publicationEligible,true);
+    assert.ok(parent.gisFeatureCrosswalk.some(x=>x.gisObjectId===oid&&x.source.startsWith('https://')));
+  }
+  assert.match(parent.further,/1,100-foot accessible Upper Falls/);
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/upper-tahquamenon-falls/'));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/lower-tahquamenon-falls/'));
 });
