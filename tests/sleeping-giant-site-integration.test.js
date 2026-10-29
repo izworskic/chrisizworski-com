@@ -107,5 +107,5 @@ test('Repository-checkout public page exists before build, has canonical authore
  assert.ok(html.includes('21.8 km'));
  assert.match(html,/not a live trail report/i);
  assert.match(html,/robots" content="index,follow/);
- assert.equal((html.match(/pagead2\\.googlesyndication\\.com\\/pagead\\/js\\/adsbygoogle\\.js/g)||[]).length,1);
+ assert.equal(html.split('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js').length-1,1);
 });
