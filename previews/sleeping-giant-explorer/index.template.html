@@ -96,7 +96,14 @@
           <radialGradient id="lake" cx="65%" cy="70%" r="100%"><stop offset="0%" stop-color="#183e50"/><stop offset="100%" stop-color="#0b2633"/></radialGradient>
           <pattern id="mapgrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="#3c6c75" stroke-opacity=".19" fill="none"/></pattern>
         </defs><rect width="820" height="610" fill="url(#lake)"/><rect width="820" height="610" fill="url(#mapgrid)"/><g id="route-shapes"></g><g id="route-pins"></g></svg>
-        <div class="map-bottom"><span id="map-status">Mapped sections only; current trail conditions unknown.</span><span>Government source features · not a basemap</span></div>
+        <div class="map-bottom">
+          <span id="map-status">Mapped sections only; current trail conditions unknown.</span>
+          <label class="map-focus-label" for="map-focus">Inspect <select id="map-focus" aria-label="Focus the research map on a section">
+            <option value="overview">Entire trail</option><option value="start">Mapped trail start</option>
+            <option value="destination">Mapped destination</option><option value="parking">Approximate parking context</option>
+          </select></label>
+          <span class="map-zoom-status" id="map-zoom-status" aria-live="polite">Overview · not for navigation</span>
+        </div>
       </div>
       <aside class="route-detail" aria-labelledby="detail-title">
         <div class="detail-overline">SELECTED EXPERIENCE</div><h3 id="detail-title">Sea Lion Trail</h3><p id="detail-intro">A rock arch at the edge of a very big lake.</p>
