@@ -200,7 +200,7 @@
       "reviewBatch": "11",
       "reviewed": "2026-10-28",
       "classification": "dnr-falls-parcel-verified-historic-private-access-road-corridor-gated",
-      "accessAssessment": "Official DNR Crystal Falls Compartment 12139 management report states private landowners control nearly all VEHICLE access into adjacent Chicagon Creek area; county Long Lake Rd listed in historical restricted-roads document, but Raymer/Dave's Camp road/right-of-way, turnout and walking path to state falls parcel have not been publicly verified. This historical forest-compartment statement is area context only, not proof of exact falls-access easement.",
+      "accessAssessment": "Official Michigan DNR LOTS places falls GIS #12 in dedicated 47.8-acre DNR Crystal Falls Management Unit forest parcel (ParID 258918). This describes waterfall land only, NOT legal road, parking or full footpath. Official DNR Crystal Falls Compartment 12139 management report states private landowners control nearly all VEHICLE access into adjacent Chicagon Creek area; county Long Lake Rd listed in historical restricted-roads document, but Raymer/Dave's Camp road/right-of-way, turnout and walking path to state falls parcel have not been publicly verified. This historical forest-compartment statement is area context only, not proof of exact falls-access easement.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.iron.org/outdoors/waterfalls/",
