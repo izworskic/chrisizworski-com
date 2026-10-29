@@ -1,11 +1,11 @@
-name: Sleeping Giant engine tests
+name: Sleeping Giant engine and GIS source tests
 
 on:
   pull_request:
     paths:
       - 'data/sleeping-giant/**'
       - 'lib/sleeping-giant/**'
-      - 'tests/sleeping-giant-engine.test.js'
+      - 'tests/sleeping-giant-*.test.js'
       - '.github/workflows/sleeping-giant-engine.yml'
   workflow_dispatch:
 
@@ -16,5 +16,15 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Run Node.js route and weather-window contracts
-        run: node --test tests/sleeping-giant-engine.test.js
+      - name: Test route, daylight, forecast and GIS-source safety gates
+        run: node --test tests/sleeping-giant-*.test.js
+      - name: Export research-only trail topology report
+        run: |
+          mkdir -p artifacts/sleeping-giant
+          node lib/sleeping-giant/topology-audit.cjs > artifacts/sleeping-giant/topology-audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sleeping-giant-topology-audit
+          path: artifacts/sleeping-giant/topology-audit.json
+          if-no-files-found: error
+          retention-days: 14
