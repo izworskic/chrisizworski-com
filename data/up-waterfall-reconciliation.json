@@ -215,15 +215,19 @@
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "disposition": "DNR-owned-falls-parcel-verified-Raymer-route-private-camps-easement-pending",
-      "sourceNotes": "Iron County Economic Chamber calls Chicaugon Falls, accessed by rough Dave's Camp Road/Raymer Road and signed walk; GIS uses Chicagon. Spring road washout warning. Alias and legal trail must be confirmed independently. 2026 Iron County visitor publication and current chamber describe US2->Long Lake Rd->Raymer/Dave's Camp two-track, frequently washed out in spring, dismount and follow signs. Regional report warns route passes private camps. No land-manager parcel/path right-of-way or current road access evidence. Non-promotion remains mandatory. Direct Oct 28 query to Michigan DNR official LOTS Managed Lands FeatureServer/2 at GIS #12 returns dedicated forest parcel ParID 258918, 47.8 acres, Crystal Falls Management Unit. This establishes land status at the falls itself; not an easement from Raymer Rd through potentially private intervening camps. Official DNR layer had no hit at inconsistent alternate tourism point 46.1089,-88.4903, which proves nothing about title there.",
+      "sourceNotes": "Iron County Economic Chamber calls Chicaugon Falls, accessed by rough Dave's Camp Road/Raymer Road and signed walk; GIS uses Chicagon. Spring road washout warning. Alias and legal trail must be confirmed independently. 2026 Iron County visitor publication and current chamber describe US2->Long Lake Rd->Raymer/Dave's Camp two-track, frequently washed out in spring, dismount and follow signs. Regional report warns route passes private camps. No land-manager parcel/path right-of-way or current road access evidence. Non-promotion remains mandatory. Direct Oct 28 query to Michigan DNR official LOTS Managed Lands FeatureServer/2 at GIS #12 returns dedicated forest parcel ParID 258918, 47.8 acres, Crystal Falls Management Unit. This establishes land status at the falls itself; not an easement from Raymer Rd through potentially private intervening camps. Official DNR layer had no hit at inconsistent alternate tourism point 46.1089,-88.4903, which proves nothing about title there. Forest Management Compartment 12139 report (2019-2020 source, page 1) for surrounding Chicagon Creek/Slough area explicitly states 'Private land owners control almost all vehicle access into this compartment.' Its jurisdiction is the wider compartment, not a mapped public access route or falls #12 easement. Official county seasonal restriction list dated 2018 names LONG LAKE RD but NOT Raymer (absence from dated restricted list is NOT proof of road closure/ownership). Michigan Geographic Framework layer /20 returned named Long Lake Rd but no Raymer/Dave's Camp in 3500m query, which is NOT definitive absence or private road evidence.",
       "sourceLinks": [
         "https://www.iron.org/outdoors/waterfalls/",
         "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
         "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/",
         "https://fallsdiscovery.com/waterfalls/chicagon-falls-michigan/",
-        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2",
+        "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Crystal_Falls/2021/cry139_comp_info.pdf",
+        "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf",
+        "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
+        "https://www.michigan.gov/dnr/things-to-do/orv-riding/state-forest-roads/maps-and-status"
       ],
-      "outstandingGate": "DNR-managed waterfall parcel confirmed. Verify Raymer/Dave's Camp public road/right-of-way, seasonal washouts and exact lawful parking, and entire signed access route past private camps before indexable guide; do not use alternate geographic point or falls GIS as parking.",
+      "outstandingGate": "Natural falls on state parcel verified. Official DNR compartment review of nearby Chicagon Creek area records private owners controlling much of vehicle access; neither older county road list nor general state road viewer proves public legal Raymer/Dave's Camp route. Require ROW, designated turnout and full walking trail verification before index.",
       "evidenceReviewed": "2026-10-28",
       "publicationEligible": false,
       "identityNote": "State GIS Chicagon Falls at 46.134032 -88.452985 corroborated by waterfall geographic catalog near 46.1336 -88.4535, but one other tourism webpage offers inconsistent location 46.1089 -88.4903 that is not suitable for route/navigation.",
@@ -248,6 +252,49 @@
         "scope": "Surface of natural falls GIS point intersects a DNR-managed dedicated forest parcel. Does not establish visitor access rights along Raymer/Dave's Camp route, parking rights or crossing of intervening private camps.",
         "routeToFallsLandVerified": false,
         "currentRoadStatus": "unverified"
+      },
+      "accessRouteAudit": {
+        "version": 1,
+        "reviewed": "2026-10-28",
+        "publicRouteCleared": false,
+        "fullVehicleApproachVerified": false,
+        "publicParkingVerified": false,
+        "continuousPublicFootpathVerified": false,
+        "currentOpenStatus": "unverified",
+        "nonDrivingFallsPoint": true,
+        "reviewAsset": "/assets/up-waterfall-access-reviews.json",
+        "priorityGates": [
+          "Confirm Raymer/Dave's Camp Road jurisdiction and legal public right-of-way",
+          "Confirm lawful parking before washout/private camps",
+          "Confirm continuous public signed trail to DNR-managed falls parcel"
+        ],
+        "evidenceHierarchy": [
+          {
+            "kind": "state-owned-falls-point",
+            "state": "verified",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+          },
+          {
+            "kind": "nearby-DNR-compartment-private-access-limit",
+            "state": "historic-area-context-only",
+            "source": "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Crystal_Falls/2021/cry139_comp_info.pdf"
+          },
+          {
+            "kind": "county-Long-Lake-Road",
+            "state": "documented-road-name-not-live-closure",
+            "source": "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf"
+          },
+          {
+            "kind": "Raymer-Daves-Camp-road",
+            "state": "no-authoritative-public-right-of-way",
+            "source": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20"
+          },
+          {
+            "kind": "parking-and-walk",
+            "state": "unverified",
+            "source": "https://www.iron.org/outdoors/waterfalls/"
+          }
+        ]
       }
     },
     {
@@ -670,12 +717,53 @@
       "disposition": "Bessemer-municipal-visitor-approach-described-parcel-and-trail-validation-pending",
       "publicationEligible": false,
       "evidenceReviewed": "2026-10-28",
-      "sourceNotes": " City of Bessemer official scenic drives page describes Gabbro/Baker's Falls on Black River accessible from Blackjack Ski Hill near bridge and an alternate upper viewpoint; separate Western U.P. visitor guide suggests gas pipeline corridor access. Neither proves legal shoreline easement or public lot/trail alignment. Local city route is priority source for next audit.",
+      "sourceNotes": " City of Bessemer official scenic drives page describes Gabbro/Baker's Falls on Black River accessible from Blackjack Ski Hill near bridge and an alternate upper viewpoint; separate Western U.P. visitor guide suggests gas pipeline corridor access. Neither proves legal shoreline easement or public lot/trail alignment. Local city route is priority source for next audit. Gogebic County official GIS site explicitly disclaims survey/title use. City of Bessemer scenic drive lists two informal visitor approaches near Blackjack Ski Hill bridge and upper ski hill; independent accounts mention blue markers and an ATV trail, but neither verifies public ski resort/resort-service-road parking rights or legal lower-river footpath. Michigan DNR LOTS point check did not match sampled natural falls point, which is NOT evidence of private title.",
       "sourceLinks": [
         "https://www.cityofbessemer.org/visit/scenic-drives/",
-        "https://explorewesternup.com/things-to-do/waterfalls/"
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://www.gogebic.gov/government/county_offices/gis_map_system.php",
+        "https://www.theoutbound.com/michigan/hiking/hike-to-gabbro-falls",
+        "https://www.cityofbessemermi.gov/visit/"
       ],
-      "outstandingGate": "Match city-described signed bridge/trailhead to legal public right-of-way and lower viewing area; do not route to pipeline clearing or GIS falls point before verification"
+      "outstandingGate": "City tourist recommendation and independent hiking accounts support name and informal route but not legal bridge/upper ski-hill parking, public trail easement, full connected visitor walking line or current conditions. Do not index or route to GIS point.",
+      "accessRouteAudit": {
+        "version": 1,
+        "reviewed": "2026-10-28",
+        "publicRouteCleared": false,
+        "fullVehicleApproachVerified": false,
+        "publicParkingVerified": false,
+        "continuousPublicFootpathVerified": false,
+        "currentOpenStatus": "unverified",
+        "nonDrivingFallsPoint": true,
+        "reviewAsset": "/assets/up-waterfall-access-reviews.json",
+        "priorityGates": [
+          "Confirm legal bridge or upper ski-hill public parking, landowner permission and road status",
+          "Confirm continuous public signed bridge-to-lower falls or upper approach on parcels",
+          "Reconcile utility/pipeline crossing with public easements, do not infer public access from powerline clearing"
+        ],
+        "evidenceHierarchy": [
+          {
+            "kind": "city-designated-attraction",
+            "state": "verified-city-recommendation-not-land-rights",
+            "source": "https://www.cityofbessemer.org/visit/scenic-drives/"
+          },
+          {
+            "kind": "bridge-parking-and-lower-trail",
+            "state": "third-party-described-but-not-legal-access",
+            "source": "https://www.theoutbound.com/michigan/hiking/hike-to-gabbro-falls"
+          },
+          {
+            "kind": "upper-ski-hill-path",
+            "state": "landowner-parcel-route-uncertain",
+            "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+          },
+          {
+            "kind": "Gogebic-county-parcel-source",
+            "state": "legal-record-not-yet-reconciled",
+            "source": "https://www.gogebic.gov/government/county_offices/gis_map_system.php"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 39,
@@ -3577,6 +3665,16 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Official Michigan DNR LOTS query confirms geographic Chicagon Falls GIS #12 point in dedicated 47.8 acre Crystal Falls Management Unit forest land. No connected public right-of-way, seasonal road passability or legal visitor lot established. Still nonindexable."
+    },
+    {
+      "batch": "11-western-UP-access-corridor-audit",
+      "date": "2026-10-28",
+      "reviewedIds": [
+        12,
+        38
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Official historical Crystal Falls DNR Compartment 12139 confirms surrounding compartment vehicle access largely private; 2018 Iron County restricted-road list and Michigan MGF only support Long Lake road naming, not Raymer legal ROW. Gabbro city-recommended bridge/upper approach and independent route description do not show legal public ski-hill/parcel access. Machine-readable segment-based gating added to optional map research popups, both remain nonindexable."
     }
   ]
 }
