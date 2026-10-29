@@ -375,3 +375,50 @@ test('Chicagon DNR waterfall parcel ownership cannot promote a private-camp road
   assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===12));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/chicagon-falls/'));
 });
+
+test('western U.P. road-to-waterfall audit lists every required step without pretending that road naming is legal access', () => {
+  const asset=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'));
+  const canonical=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+  const js=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
+  assert.match(js,/route-evidence-list/);
+  assert.match(js,/Public access not established/);
+  assert.match(js,/Verified geographic fact/);
+  assert.match(js,/document.createElement\('ol'\)/);
+  assert.ok(!js.includes('google.com/maps/dir/?api=1&destination='));
+  for(const [oid,minSteps] of [[12,6],[38,6]]) {
+    const candidate=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const prior=canonical.entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+    const review=asset.records.find(x=>x.gisObjectId===oid);
+    assert.ok(candidate&&prior&&review);
+    assert.equal(candidate.curatedId,null);
+    assert.equal(prior.curatedId,null);
+    assert.equal(candidate.publicationEligible,false);
+    assert.equal(review.publicationEligible,false);
+    assert.equal(candidate.accessRouteAudit.publicRouteCleared,false);
+    assert.equal(candidate.accessRouteAudit.fullVehicleApproachVerified,false);
+    assert.equal(candidate.accessRouteAudit.publicParkingVerified,false);
+    assert.equal(candidate.accessRouteAudit.continuousPublicFootpathVerified,false);
+    assert.equal(candidate.accessRouteAudit.nonDrivingFallsPoint,true);
+    assert.equal(review.routeAudit.outcome,'not-cleared');
+    assert.equal(review.routeAudit.destinationCoordinatesForDriving,false);
+    assert.equal(review.routeAudit.routePolylineAuthorized,false);
+    assert.ok(review.routeAudit.segments.length>=minSteps);
+    assert.equal(new Set(review.routeAudit.segments.map(x=>x.key)).size,review.routeAudit.segments.length);
+    assert.ok(review.routeAudit.segments.some(x=>x.status==='not-verified'));
+    for(const part of review.routeAudit.segments) {
+      assert.ok(['verified-geography','documented-not-live','not-verified'].includes(part.status));
+      assert.ok(part.source.startsWith('https://'),oid+' missing route source for '+part.key);
+      assert.ok(part.finding.length>=40);
+    }
+    assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===oid));
+    const slug=oid===12?'chicagon-falls':'gabbro-falls';
+    assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+slug+'/'));
+  }
+  const chic=asset.records.find(x=>x.gisObjectId===12);
+  assert.equal(chic.dnrManagedFallsParcel.parID,258918);
+  assert.match(chic.reviewLimitations,/compartment.*not a survey|does not map a complete legal route|not a legal road determination/i);
+  assert.match(chic.summary,/private landowners control almost all vehicle access/i);
+  const gabbro=asset.records.find(x=>x.gisObjectId===38);
+  assert.ok(gabbro.routeAudit.segments.some(x=>x.key==='upper'&&x.status==='not-verified'));
+  assert.match(gabbro.summary,/bridge|ski hill/i);
+});
