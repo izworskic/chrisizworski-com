@@ -245,3 +245,12 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
 .west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
 @media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}
+
+/* Separate DNR CR519 western approach: source geometry, not live road-open state. */
+.western-access-note{padding:15px 18px;margin:12px 0;border:1px solid #aac1b2;border-left:4px solid #367e66;background:#f5f6ef;border-radius:5px}
+.western-access-note .eyebrow{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#4f806c}
+.western-access-note h4{font-family:Fraunces,Georgia,serif;color:#153e32;font-size:1.3rem;font-weight:600;line-height:1.25;margin:5px 0 8px}
+.western-access-note p{color:#415c50;font-size:.82rem;line-height:1.65;margin:7px 0}
+.western-access-note a{color:#1e6450;text-decoration:underline}
+.route-evidence-key .key-west{border-color:#1d735d}
+@media(max-width:600px){.western-access-note{padding:12px 13px}.western-access-note h4{font-size:1.16rem}}
