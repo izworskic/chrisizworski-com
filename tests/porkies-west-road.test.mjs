@@ -62,9 +62,7 @@ test("map shows explicit CR519 caveats in static HTML and cannot leak route prom
  assert.match(js,/m\.routesAllowed!==false/);
  assert.doesNotMatch(js,/routeTimeMinutes|turnByTurnDirections|currentOpen=true/);
 });
-test("west map styling is distinct, but no layer represents currently open roads",async()=>{
- const mod=await import("../public/assets/porkies-route-evidence.js");
- const style=mod.default||mod;
+test("west map styling is distinct, but no layer represents currently open roads",()=>{
  assert.ok(js.includes('color:"#4a8c77"'));
  assert.ok(js.includes('color:"#ad4839"'));
  assert.ok(js.includes('color:"#1d735d"'));
