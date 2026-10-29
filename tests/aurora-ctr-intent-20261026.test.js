@@ -29,5 +29,5 @@ test("Aurora intent update preserves canonical, Person entity and data-first con
   assert.match(html, /fetch\('\/api\/aurora'/);
   assert.match(html, /id="selectedCloud"/);
   assert.match(html, /id="selectedMoon"/);
-  assert.match(html, /"dateModified": "2026-10-26"/);
+  assert.ok((html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1] || "") >= "2026-10-26");
 });

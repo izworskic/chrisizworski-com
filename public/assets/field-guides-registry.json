@@ -11,9 +11,16 @@
       "status": "live",
       "releaseWave": "Release 1: Pre-Christmas Flagship",
       "stopCount": 12,
-      "activeMonths": [10, 11, 12, 1, 2, 3],
+      "activeMonths": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
       "seasonLabel": "Oct–Mar · All Winter",
-      "summary": "12 researched 2-day Michigan winter base towns from Marquette, Munising, the Keweenaw, and Ironwood to Traverse City, Petoskey, Gaylord, Alpena, Frankenmuth, and Saugatuck—each pairing a Saturday outdoor anchor with a no-snow indoor backup.",
+      "summary": "Twelve researched Michigan winter weekend bases, from Munising, Marquette and the Keweenaw to Traverse City, Grayling and Detroit, with outdoor itineraries and weather backups.",
       "connectedTools": [
         "/michigan-snow-depth/",
         "/lake-effect-snow/",
@@ -31,7 +38,11 @@
       "status": "live",
       "releaseWave": "Release 1: Pre-Christmas Flagship",
       "stopCount": 10,
-      "activeMonths": [10, 11, 12],
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
       "seasonLabel": "Oct–Dec · Holiday Planning",
       "summary": "Compare 10 Michigan Christmas-week escape towns ranked by NOAA 1991–2020 1-inch snow-depth probability (~96% Marquette to 45.7% Frankenmuth), resort snowmaking insurance, holiday lights, and mild-December backup plans.",
       "connectedTools": [
@@ -51,7 +62,11 @@
       "status": "live",
       "releaseWave": "Release 1: Pre-Christmas Flagship",
       "stopCount": 12,
-      "activeMonths": [10, 11, 12],
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
       "seasonLabel": "Late Oct–Dec · Early Snow",
       "summary": "Where winter arrives first in Michigan: 12 high-elevation Lake Superior and Northern Lower snowbelt stops with grass-bed Nordic trail thresholds (2–4\" vs. 12\"), early snowmaking hills, and bare-ground hike backups.",
       "connectedTools": [
@@ -63,6 +78,30 @@
       ]
     },
     {
+      "slug": "michigan-late-fall-adventures",
+      "url": "/michigan-late-fall-adventures/",
+      "title": "Michigan Late-Fall & November Adventure Guide",
+      "subtitle": "12 Shoulder-Season Stops · Swollen Waterfalls, Agates, Steelhead & Migration",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Late Oct–Early Dec · Late Fall",
+      "summary": "12 researched Michigan late-fall and November destinations for swollen U.P. waterfalls, post-gale Lake Superior agates and Petoskey stones, fall chrome steelhead runs, and sandhill crane/waterfowl staging—with Nov 15–30 firearm deer-season blaze-orange rules.",
+      "connectedTools": [
+        "/upper-peninsula-waterfalls/",
+        "/michigan-rockhounding/",
+        "/waterfowl-freeze-line/",
+        "https://michigantroutreport.com/salmon-run/",
+        "/edmund-fitzgerald/",
+        "https://whitetail.chrisizworski.com/"
+      ]
+    },
+    {
       "slug": "great-lakes-winter-freighter-guide",
       "url": "/great-lakes-winter-freighter-guide/",
       "title": "Great Lakes Winter Freighter & Harbor Guide",
@@ -70,7 +109,13 @@
       "status": "live",
       "releaseWave": "Release 1: Pre-Christmas Flagship",
       "stopCount": 12,
-      "activeMonths": [11, 12, 1, 2, 3],
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
       "seasonLabel": "Nov–Mar · Winter Fleet",
       "summary": "12 public Great Lakes harbors and lock overlooks for late-season freighter passages, the Jan 15–Mar 25 Soo Locks winter closure, 1,000-footer winter layup berths, and USCG icebreaker operations.",
       "connectedTools": [
@@ -90,7 +135,13 @@
       "status": "live",
       "releaseWave": "Foundation Guide",
       "stopCount": 18,
-      "activeMonths": [11, 12, 1, 2, 3],
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
       "seasonLabel": "Nov–Mar · Statewide Winter",
       "summary": "18 source-backed winter experiences across both peninsulas covering snowshoeing, frozen waterfalls, fat-tire biking, winter wildlife, downhill and XC skiing, Muskegon luge, and dark-sky stargazing.",
       "connectedTools": [
@@ -109,9 +160,14 @@
       "status": "live",
       "releaseWave": "Foundation Guide",
       "stopCount": 11,
-      "activeMonths": [12, 1, 2, 3],
+      "activeMonths": [
+        12,
+        1,
+        2,
+        3
+      ],
       "seasonLabel": "Dec–Mar · Deep Freeze",
-      "summary": "11 researched Michigan winter ice destinations—Eben Ice Caves, Pictured Rocks ice curtains, Upper Tahquamenon Falls, Bond Falls, Laughing Whitefish, and Straits ice—with official access rules and live cold-trend handoffs.",
+      "summary": "Eleven Michigan winter viewpoints, including Eben Ice Caves, Pictured Rocks ice curtains, Tahquamenon and Bond Falls, and Lake Michigan shorelines, with access notes and cold-trend handoffs.",
       "connectedTools": [
         "/michigan-ice-caves/",
         "/michigan-ice/",
@@ -127,7 +183,13 @@
       "status": "live",
       "releaseWave": "Foundation Guide",
       "stopCount": 15,
-      "activeMonths": [11, 12, 1, 2, 3],
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
       "seasonLabel": "Nov–Mar · Trail Season",
       "summary": "15 audited Michigan winter trail systems and 50 named DNR/NPS loops with snowshoe vs. groomed ski track etiquette, Silver Lake's Dec 15–Mar 15 fat-bike season, and seasonal unplowed road warnings.",
       "connectedTools": [
@@ -145,7 +207,15 @@
       "status": "live",
       "releaseWave": "Foundation Guide",
       "stopCount": 18,
-      "activeMonths": [10, 11, 12, 1, 2, 3, 4],
+      "activeMonths": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
       "seasonLabel": "Oct–Apr · Igloos & Tasting",
       "summary": "18 anchor wineries, heritage cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey/Walloon Lake—with heated winter domes, vineyard snowshoe loops, and 5:00 PM distillery handoffs.",
       "connectedTools": [

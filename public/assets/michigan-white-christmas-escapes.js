@@ -59,17 +59,17 @@ function filter(){
   c.hidden=!(tagOk&&regOk&&effOk);
  }
  const n=shown().length;
- if(count)count.textContent=n?`${n} of ${stories.length} researched Michigan Christmas-week escape towns shown. Historical NOAA odds do not guarantee current-year December 25 snow.`:'No Christmas-week towns match these filters. Try another probability tier or region.';
+ if(count)count.textContent=n?`Showing ${n} of ${stories.length} Michigan Christmas-week escape towns. Use the 30-year NOAA odds to book early, then check live snow depth inside 45 days.`:'No Christmas-week towns match that exact combination. Try another probability tier or region.';
  if(empty)empty.hidden=n>0;
  refreshPins(false);
 }
 
 const blueprintStage={
  noaa:{
-  label:'CLIMATOLOGY 01 · THE NOAA 1-INCH SNOW-DEPTH RULE (1991–2020)',
-  title:'Why Marquette is ~96% while Metro Detroit is 34.7%',
-  copy:'NOAA defines an official White Christmas as at least 1 inch of snow on the ground at 7:00 AM on December 25—not necessarily snow falling that morning. In the 1991–2020 U.S. Climate Normals, Detroit sits at 34.7% and Saginaw at 45.7% because mid-December Ohio Valley rain systems regularly wash away early southern snowpacks. North of the 45th parallel and along Lake Superior, cold northwest winds over 39°F open water replenish snowpack all December, pushing Gaylord to ~75–80% and Marquette/Keweenaw to ~95–96%.',
-  foot:'Decision rule: Use historical NOAA odds when booking Christmas lodging in October or November; switch to live snowpack inside 45 days.',
+  label:'FIELD LESSON 01 · HOW THE NOAA 1-INCH RULE ACTUALLY WORKS',
+  title:'Why Marquette is a 96% lock while Metro Detroit is a 1-in-3 coin flip',
+  copy:'Most people assume a "White Christmas" means fresh flakes falling out of the sky on December 25. Climatologists measure something much more practical: whether at least 1 inch of snow is sitting on the ground at 7:00 AM on Christmas morning across NOAA\'s 1991–2020 climate normals. Down in Metro Detroit (34.7%) or here around Saginaw Bay (45.7%), a single December rainstorm tracking up from the Ohio Valley regularly washes our early snowpack down the storm drains. Once you drive north of the 45th parallel onto the 1,350-foot Gaylord plateau (~75–80%) or cross the Mackinac Bridge into the Lake Superior snowbelt (88–96%), cold northwest winds blowing across 39°F open water rebuild the snowpack after every warm spell.',
+  foot:'How I use this: Historical NOAA percentages tell you where to book a cabin in October or November—never whether a specific storm will hit on December 24.',
   links:[
    {label:'Open White Christmas Calculator ↗',href:'/national-tools/white-christmas/'},
    {label:'Open Michigan Station Breakdown ↗',href:'/white-christmas-michigan/'},
@@ -77,10 +77,10 @@ const blueprintStage={
   ]
  },
  windows:{
-  label:'CLIMATOLOGY 02 · THE 3 HOLIDAY DECISION WINDOWS',
-  title:'When to look at history vs. ground snowpack vs. 7-day NWS forecasts',
-  copy:'Holiday weather planning fails when travelers use the wrong signal at the wrong time. (1) More than 45 days before December 25, use 30-year NOAA station climatology to pick a high-probability snowbelt or a snowmaking resort. (2) Between November 11 and December 17 (the 45-day window), check NOHRSC observed snow depth—deep early U.P. snowpack survives brief warm-ups. (3) Inside 7 days (December 18–25), check local National Weather Service rain vs. snow forecasts.',
-  foot:'Decision rule: Never treat a 30-year historical percentage as a Christmas Eve weather forecast.',
+  label:'FIELD LESSON 02 · THE 3 HOLIDAY WEATHER WINDOWS',
+  title:'When to stop looking at 30-year history and start watching the ground',
+  copy:'Holiday trip planning goes sideways when people use the wrong weather tool at the wrong time. (1) More than 45 days before Christmas, all long-range forecasts are noise—use 30-year NOAA station odds to choose a high-elevation snowbelt or a snowmaking resort. (2) Starting around November 11 (the 45-day window), watch actual ground snowpack on our Snow Depth Finder; once the Keweenaw or Ironwood builds a two-foot base, it takes an extraordinary thaw to erase it. (3) Inside 7 days (December 18–25), switch to hourly National Weather Service forecasts to time your highway drive.',
+  foot:'How I use this: I check the 30-year odds when booking lodging, the NOHRSC snowpack map at Thanksgiving, and the NWS radar the week of Christmas.',
   links:[
    {label:'Open Christmas 2026 Forecast Outlook ↗',href:'/national-tools/white-christmas/forecast/'},
    {label:'Open Michigan Snow Depth Finder ↗',href:'/michigan-snow-depth/'},
@@ -88,10 +88,10 @@ const blueprintStage={
   ]
  },
  snowmaking:{
-  label:'CLIMATOLOGY 03 · MACHINE SNOWMAKING & ELEVATION INSURANCE',
-  title:'How Northern Michigan ski resorts save mild El Niño Decembers',
-  copy:'Even during a warm December when natural woods trails in southern and central Michigan turn bare, high-capacity fan guns at Boyne Mountain, The Highlands at Harbor Springs, Nub\'s Nob, Treetops, Crystal Mountain, Marquette Mountain, and Mont Ripley build deep machine-snow bases whenever overnight wet-bulb temperatures dip below 28°F. Pairing a 70%+ snowbelt town with a snowmaking resort gives families guaranteed holiday snow play.',
-  foot:'Decision rule: Book a base town with both natural lake-effect elevation and a commercial snowmaking hill within 20 minutes.',
+  label:'FIELD LESSON 03 · MACHINE SNOWMAKING & ELEVATION INSURANCE',
+  title:'How Northern Michigan ski hills save a mild El Niño December',
+  copy:'Every few years, a mild December leaves backyards green from Detroit all the way to Traverse City. That is when modern resort snowmaking earns its keep. Whenever overnight wet-bulb temperatures dip below 28°F, the high-capacity fan guns at Boyne Mountain, The Highlands at Harbor Springs, Nub\'s Nob, Treetops, Crystal Mountain, Marquette Mountain, and Mont Ripley blow deep, durable base snow that survives 45°F afternoons. If you are traveling with kids who want to ski or tube between Christmas and New Year\'s, booking near a snowmaking hill is the smartest insurance policy in Michigan.',
+  foot:'How I use this: In the Lower Peninsula, I always pair a snowbelt town with a commercial snowmaking hill within a 20-minute drive.',
   links:[
    {label:'Compare Michigan Ski Hills ↗',href:'/michigan-ski-hills/'},
    {label:'Open Cross-Country Ski Finder ↗',href:'/michigan-cross-country-skiing/'},
@@ -99,10 +99,10 @@ const blueprintStage={
   ]
  },
  logistics:{
-  label:'CLIMATOLOGY 04 · CHRISTMAS-TO-NEW-YEAR WEEK RESERVATIONS & ROAD RULES',
-  title:'December 24–25 closures vs. December 26–January 1 peak week',
-  copy:'Many Michigan tasting rooms, museums, and independent restaurants close on Christmas Eve afternoon and Christmas Day, then reopen at full throttle from December 26 through New Year\'s Day. Reserve heated vineyard igloos (Traverse City/Petoskey), ski rentals, and Frankenmuth dining weeks ahead. Before driving north up I-75 or across the Mackinac Bridge, verify live MDOT MiDrive plows and bridge wind advisories.',
-  foot:'Decision rule: Always pack a full tank of fuel, winter wiper fluid, traction cleats, and a town-based no-snow backup.',
+  label:'FIELD LESSON 04 · CHRISTMAS EVE QUIET VS. NEW YEAR\'S PEAK WEEK',
+  title:'How to navigate December 24–25 closures and December 26–January 1 crowds',
+  copy:'Christmas week in northern Michigan has two completely different rhythms. On Christmas Eve afternoon and Christmas Day, most independent restaurants, museums, and tasting rooms close so local staff can be with their families—meaning you want a cabin kitchen, a resort dining room reservation, or a thermos of hot soup for a quiet trail walk. Then, on the morning of December 26, every ski lift, heated vineyard igloo, and downtown pub erupts into the busiest winter week of the year. Book igloos in Petoskey or Traverse City and chicken dinners in Frankenmuth weeks ahead.',
+  foot:'How I use this: Keep winter wiper fluid, traction cleats, and a half tank of fuel in the car before crossing the Mackinac Bridge or the Gaylord snowbelt.',
   links:[
    {label:'Open Wine, Cider & Spirits Igloo Guide ↗',href:'/michigan-wine-cider-spirits/'},
    {label:'Open Michigan Winter Activities ↗',href:'/michigan-winter-activities/'},

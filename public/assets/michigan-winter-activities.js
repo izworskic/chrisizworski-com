@@ -20,7 +20,7 @@ for(const im of document.querySelectorAll('.wf-photo img')){
  if(im.complete&&im.naturalWidth===0)fail();
 }const stories=[...document.querySelectorAll('.wf-story')];if(!stories.length)return;const regions=document.getElementById('wf-region'),efforts=document.getElementById('wf-effort'),chips=[...document.querySelectorAll('.wf-chip')],count=document.getElementById('wf-count'),empty=document.getElementById('wf-empty'),mapNode=document.getElementById('wf-map'),status=document.getElementById('wf-map-message');let tag='all',map=null,markers=[],tiles=null,userZoomed=false,fitOnce=false;const message=(s,kind)=>{status.textContent=s;status.dataset.state=kind||''};const shown=()=>stories.filter(c=>!c.hidden);const reset=()=>{tag='all';regions.value='all';efforts.value='all';filter()};
 chips.forEach(b=>b.addEventListener('click',()=>{tag=b.dataset.tag;filter()}));regions.addEventListener('change',filter);efforts.addEventListener('change',filter);document.getElementById('wf-reset')?.addEventListener('click',reset);document.getElementById('wf-show-all')?.addEventListener('click',reset);
-function filter(){for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));for(const c of stories)c.hidden=(tag!=='all'&&c.dataset.tag!==tag)||(regions.value!=='all'&&c.dataset.region!==regions.value)||(efforts.value!=='all'&&c.dataset.effort!==efforts.value);let n=shown().length;count.textContent=n?n+' experiences match. Confirm current access, conditions and official sources before leaving.':'No experiences match these choices. Try another region or effort.';empty.hidden=n>0;refreshPins(false)}
+function filter(){for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));for(const c of stories)c.hidden=(tag!=='all'&&c.dataset.tag!==tag)||(regions.value!=='all'&&c.dataset.region!==regions.value)||(efforts.value!=='all'&&c.dataset.effort!==efforts.value);let n=shown().length;count.textContent=n?`Showing ${n} Michigan winter ${n===1?'outing':'outings'}. Check live snow, ice, or sky conditions before you head out.`:'No outings match those filters—try another region or effort level.';empty.hidden=n>0;refreshPins(false)}
 function refreshPins(initial){
  if(!map||!window.L)return;
  markers.forEach(m=>map.removeLayer(m));markers=[];
@@ -30,8 +30,8 @@ function refreshPins(initial){
  for(const group of groups.values()){
   const multi=group.cards.length>1,firstName=group.cards[0].querySelector('h3')?.textContent||'Destination';
   const root=document.createElement('div');root.className='wf-map-popup';
-  const heading=document.createElement('strong');heading.textContent=multi?group.cards.length+' winter experiences in this area':firstName;root.append(heading);
-  const note=document.createElement('p');note.textContent='Orientation only. Verify winter access, parking and trail rules using each official source.';root.append(note);
+  const heading=document.createElement('strong');heading.textContent=multi?group.cards.length+' winter outings in this area':firstName;root.append(heading);
+  const note=document.createElement('p');note.textContent='Orientation only: this marker shows a general area, not verified winter parking. Choose a field note for access details and official links.';root.append(note);
   const items=document.createElement('ul');
   for(const card of group.cards){
    const title=card.querySelector('h3')?.textContent||'Open field note';

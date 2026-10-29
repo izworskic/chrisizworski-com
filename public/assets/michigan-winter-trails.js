@@ -35,7 +35,7 @@ function filter(){
  for(const b of chips)b.setAttribute('aria-pressed',String(b.dataset.tag===tag));
  for(const c of stories)c.hidden=(tag!=='all'&&c.dataset.tag!==tag)||(regions.value!=='all'&&c.dataset.region!==regions.value)||(efforts.value!=='all'&&c.dataset.effort!==efforts.value)||(access.value!=='all'&&c.dataset.access!==access.value);
  let n=shown().length;
- count.textContent=n?n+' trail systems match. Confirm current snow, grooming, seasonal road plowing and official sources before leaving.':'No trail systems match these choices. Try another region, trail mode or effort.';
+ count.textContent=n?`Showing ${n} Michigan winter trail ${n===1?'system':'systems'}. Check snow depth, grooming, and turn-in plowing before you head out.`:'No trail systems match those filters—try broadening the region, mode, or effort.';
  empty.hidden=n>0;
  refreshPins(false);
 }
@@ -117,28 +117,28 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (function(){
 const desc={
  snowshoe:{
-  label:'TRAIL MODE 01 · DEDICATED SNOWSHOE',
-  title:'Marked snowshoe loops keep you clear of classic ski tracks',
-  copy:'Dedicated snowshoe loops—such as Pictured Rocks Munising Snowshoe Trail (2.65 mi), Tahquamenon Lower Falls Green (1.6 mi) and Blue (2.4 mi) loops, and Vasa Pathway Orange (1.5 mi), Green/Yellow (0.6 mi) and Red (0.25 mi) loops—give snowshoers their own singletrack without crossing set ski rails.',
-  alert:'Even at parks with dedicated snowshoe loops, watch for ski-only boundaries: Tahquamenon Upper Falls 1.0-mile Lantern Loop is cross-country ski only.'
+  label:'FIELD LESSON 01 · DEDICATED SNOWSHOE SINGLETRACK',
+  title:'Why dedicated snowshoe loops are the best stress-free winter walk',
+  copy:'When you want to wander through deep hemlock and pine woods without worrying about ski etiquette, pick a dedicated snowshoe trail—like the 2.65-mile Munising Snowshoe Trail at Pictured Rocks, the Green (1.6 mi) and Blue (2.4 mi) loops at Lower Tahquamenon Falls, or the color-coded snowshoe loops at Traverse City\'s Vasa Trailhead.',
+  alert:'Field tip: Even at parks with dedicated snowshoe trails, watch the signs at junctions—at Upper Tahquamenon Falls, the 1.0-mile Marked Snowshoe Trail welcomes snowshoes, while the neighboring 1.0-mile Lantern Loop is strictly reserved for cross-country skis.'
  },
  shared:{
-  label:'TRAIL MODE 02 · SKI-SHARED CORRIDORS',
-  title:'Walk the outer edge—never step on parallel classic ski rails',
-  copy:'On shared winter corridors like the Sleeping Bear Heritage Trail, Paradise Pathway, and Hartwick Pines Mertz Grade, groomers or skiers set parallel classic tracks alongside a wider deck. Snowshoers and winter walkers must stay on the outer edge of the corridor.',
-  alert:'A boot or snowshoe print inside a set ski track freezes into a hard rut that catches ski tips on descents. Step wide at junctions and obey seasonal pet bans.'
+  label:'FIELD LESSON 02 · SHARED SKI & SNOWSHOE CORRIDORS',
+  title:'Walk the outer edge and keep the parallel classic ski rails clean',
+  copy:'On shared winter pathways like the Sleeping Bear Heritage Trail, Paradise Pathway, and Hartwick Pines\' Mertz Grade, groomers or local skiers set two parallel classic tracks alongside a wider snow deck. Snowshoers and winter walkers are welcome—just stay on the outer edge of the corridor.',
+  alert:'Field tip: A single boot or snowshoe print punched into a set ski groove freezes overnight into a rock-hard divot that can catch a skier\'s tip on a fast descent. Step wide when crossing tracks at junctions.'
  },
  fatbike:{
-  label:'TRAIL MODE 03 · WINTER FAT-TIRE WINDOWS',
-  title:'Dune fat-bike dates, tire-width minimums & soft-crust rules',
-  copy:'Silver Lake State Park opens its dunes to fat-tire bikes only from December 15 through March 15 (minimum 3.5-inch tire width required), while groomed northern singletrack like the Vasa pathway depends on sub-freezing snow crust and low tire pressure (3–5 PSI).',
-  alert:'If your tires leave a rut deeper than an inch or you must push up climbs, the snow surface is too soft—turn back or air down before trenching the groomed deck.'
+  label:'FIELD LESSON 03 · WINTER FAT-TIRE WINDOWS & PSI CRAFT',
+  title:'How low tire pressure (3–5 PSI) lets fat bikes float on snow',
+  copy:'Silver Lake State Park opens its 450 acres of open dunes to fat-tire bikes from December 15 through March 15 (minimum 3.5-inch tire width required), while groomed northern singletrack like Traverse City\'s Vasa Winter Sports Singletrack relies on sub-freezing snow crust and ultra-low tire pressures (3–5 PSI).',
+  alert:'Field tip: If your tires leave a rut deeper than an inch or you have to dismount and push up climbs, the snow deck is too soft—air down further or save the ride for a colder morning.'
  },
  packed:{
-  label:'TRAIL MODE 04 · PACKED BOOTS & SEASONAL ROADS',
-  title:'Microspikes on packed forest loops; caution on unplowed roads',
-  copy:'High-use forest walks like Hartwick Pines Old Growth Loop (1.25 mi), Tahquamenon Upper Falls Brink Walk (0.75 mi) and Muskegon State Park loops pack into dense ice where microspikes beat wide snowshoes. Meanwhile, unplowed seasonal roads (Anderson Lake, Sand Hill Rd) stop sedans short.',
-  alert:'Hartwick Pines Au Sable River Foot Trail has an indefinite footbridge closure (out-and-back only), and Port Crescent pins split 2 miles between main entrance and day-use loops.'
+  label:'FIELD LESSON 04 · MICROSPIKES VS. UNPLOWED ROADS',
+  title:'Why microspikes beat snowshoes on packed trails—and where sedans get stuck',
+  copy:'Popular state park loops like Hartwick Pines\' Old Growth Trail (1.25 mi), Tahquamenon\'s Upper Falls Brink Walk (0.75 mi), and Muskegon State Park\'s dune loops pack down into firm, icy troughs where steel-tooth microspikes grip far better than bulky snowshoes. Out on the backroads, however, unplowed seasonal approaches like Anderson Lake and Negwegon\'s Sand Hill Road will stop a passenger car cold.',
+  alert:'Field tip: Always keep a pair of microspikes and a shovel in your trunk from December through March, and stick to highway-accessible trailheads right after a big lake-effect storm.'
  }
 };
 const labels=[...document.querySelectorAll('[data-use]')].filter(e=>e.tagName==='BUTTON'),art=document.getElementById('trl-use-art');

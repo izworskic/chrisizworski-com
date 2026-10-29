@@ -29,16 +29,12 @@ const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
   <div class="decision-network__head">
     <h2 id="first-party-migrated-title">More first-party live tools</h2>
-    <p>Find fishing access, compare waterfall conditions, or plan a Niagara Falls rainbow visit.</p>
+    <p>Find Ontario fishing access or plan a Niagara Falls rainbow visit.</p>
   </div>
   <div class="decision-network__grid">
     <div class="decision-network__lane">
       <h3>Ontario fishing</h3>
       <ul><li><a href="/ontario-fishing-lake-finder/">Ontario Fishing Lake Finder<span>Ontario lake registry, fish evidence, access, roads, fire and weather context</span></a></li></ul>
-    </div>
-    <div class="decision-network__lane">
-      <h3>National waterfall planning</h3>
-      <ul><li><a href="/national-tools/waterfalls/">Waterfall Window<span>Live water conditions translated into a go-or-wait trip decision</span></a></li></ul>
     </div>
     <div class="decision-network__lane">
       <h3>Niagara Falls</h3>

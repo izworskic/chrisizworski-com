@@ -46,12 +46,12 @@
   /* Interactive Weekend Architecture Blueprint */
   const BLUEPRINTS = {
     anchor: {
-      kicker: 'PRINCIPLE 01 · THE SATURDAY HEADLINE',
-      title: 'Anchor Saturday morning on your most weather-sensitive outdoor goal',
+      kicker: 'FIELD LESSON 01 · PUT YOUR HEADLINE GOAL ON SATURDAY MORNING',
+      title: 'Why I always put my most weather-sensitive outdoor stop on Saturday at 9:30 AM',
       copy:
-        'Great Lakes winter weather changes fastest near the shoreline. Schedule your primary outdoor objective—walking to the Sand Point ice curtains in Munising, snowshoeing the 1.6-mile Green Loop at Lower Tahquamenon, or skiing the Vasa Pathway—for Saturday morning between 9:30 AM and 1:30 PM when wind and visibility are easiest to judge.',
+        'Great Lakes winter weather shifts fastest near the water. Whenever I drive north for a Friday-to-Sunday trip, I put my primary outdoor goal—walking to the Sand Point ice curtains in Munising, snowshoeing the 1.6-mile Green Loop at Lower Tahquamenon, or skiing the Vasa Pathway—first thing Saturday morning between 9:30 AM and 1:30 PM. If Saturday morning delivers calm air and good snow, you lock in the highlight of your trip right away; if a squall rolls in early, you still have Sunday morning in reserve.',
       rule:
-        'Field rule: Check the destination’s primary condition tool on Friday evening and again Saturday at breakfast before leaving your base town.',
+        'How I use this: I check the primary condition tool on Friday night and again over Saturday breakfast before leaving town.',
       links: [
         { label: 'Michigan Snow Depth Map ↗', href: '/michigan-snow-depth/' },
         { label: 'Michigan Winter Trails ↗', href: '/michigan-winter-trails/' },
@@ -59,12 +59,12 @@
       ],
     },
     backup: {
-      kicker: 'PRINCIPLE 02 · THE THAW & GALE BACKUP',
-      title: 'Never book a winter base town that only works in one kind of weather',
+      kicker: 'FIELD LESSON 02 · NEVER BOOK A ONE-TRICK BASE TOWN',
+      title: 'How a good base town saves the weekend when a thaw or gale hits',
       copy:
-        'If a 38°F rain-snow mix softens ski tracks or a 35-knot Lake Superior gale closes exposed shore overlooks, your weekend shouldn’t collapse. Every base town in this guide pairs an exposed outdoor headline with an inland forest fallback or an indoor cultural/tasting route—such as Old Mission heated vineyard igloos, Marquette’s Lower Harbor & museums, or the Soo Locks observation platform.',
+        'Everyone who travels Michigan in winter eventually gets caught by a 39°F January rain or a 35-knot Lake Superior whiteout. The difference between a ruined trip and a great memory is the base town you picked. Every town in this guide pairs an outdoor headline with a sheltered forest loop or an indoor town plan—whether that is heated vineyard igloos on Old Mission Peninsula, the Marquette Regional History Center and Third Street breweries, or watching river ice from inside Belle Isle’s Dossin Museum.',
       rule:
-        'Field rule: Before booking lodging, confirm both your outdoor Saturday route and a sheltered Sunday backup within 20 minutes of town.',
+        'How I use this: Before I book a hotel, I make sure I have both a Saturday trail plan and a warm Sunday backup within 20 minutes of town.',
       links: [
         { label: 'MI Wine, Cider & Spirits Guide ↗', href: '/michigan-wine-cider-spirits/' },
         { label: 'Michigan Ski Hills Comparison ↗', href: '/michigan-ski-hills/' },
@@ -72,12 +72,12 @@
       ],
     },
     daylight: {
-      kicker: 'PRINCIPLE 03 · WINTER ROADS & 4:45 PM DUSK',
-      title: 'Summer scenic drives become unplowed snowmobile corridors in winter',
+      kicker: 'FIELD LESSON 03 · WINTER GATES & 4:45 PM DUSK',
+      title: 'Which famous summer scenic drives become snowmobile corridors in winter',
       copy:
-        'From November through February, northern Michigan sunset arrives between 4:45 PM and 5:30 PM, and several famous summer roads close to wheeled vehicles: M-107 to Lake of the Clouds and South Boundary Road in the Porcupine Mountains, Pierce Stocking Scenic Drive at Sleeping Bear, and the unmaintained 4–5 mile River Trail between Upper and Lower Tahquamenon Falls.',
+        'From November through February, northern Michigan dusk settles in between 4:45 PM and 5:30 PM, and several famous summer roads close to wheeled vehicles: M-107 out to Lake of the Clouds and South Boundary Road in the Porcupine Mountains, Pierce Stocking Scenic Drive at Sleeping Bear Dunes, and the unplowed seasonal roads beyond Copper Harbor. Never trust a summer GPS shortcut onto an unplowed two-track.',
       rule:
-        'Field rule: Never follow a summer GPS shortcut onto seasonal forest roads; use MDOT MiDrive and each park’s official winter access page.',
+        'How I use this: Stick to state-plowed highways (MDOT MiDrive) and each park’s designated winter parking lot.',
       links: [
         { label: 'Lake-Effect Snow Engine ↗', href: '/lake-effect-snow/' },
         { label: 'Mackinac Bridge Live Conditions ↗', href: '/mackinac-bridge-live/' },
@@ -85,12 +85,12 @@
       ],
     },
     tools: {
-      kicker: 'PRINCIPLE 04 · THE 48-HOUR EVIDENCE CHECK',
-      title: 'Let inspirations guide where you book; let live data guide where you drive',
+      kicker: 'FIELD LESSON 04 · THE THURSDAY NIGHT EVIDENCE CHECK',
+      title: 'Let the photography inspire where you go; let live data decide what you pack',
       copy:
-        'Photographs show what a landscape can look like in a strong winter, never what is formed or open today. Forty-eight hours before departure, pair our NOHRSC ground snow-depth map with NWS hourly lake-effect advisories, ice-formation reports, and dark-sky cloud cover so your gear—snowshoes, microspikes, or binoculars—matches the actual weekend.',
+        'A snowy photograph shows what a place looks like when winter is firing on all cylinders—not whether snow is on the ground this Friday. Forty-eight hours before you leave home, check our NOHRSC ground snow-depth map, NWS lake-effect advisories, ice-curtain freeze reports, and dark-sky cloud cover so you know whether to throw snowshoes, microspikes, or binoculars in the trunk.',
       rule:
-        'Field rule: Historical odds and archival photos are for trip inspiration. Never walk on lake or river ice or assume a trailhead lot is plowed.',
+        'How I use this: I check live snow depth and road conditions on Thursday night so my gear matches the actual weekend.',
       links: [
         { label: 'Michigan Ice Caves Tool ↗', href: '/michigan-ice-caves/' },
         { label: 'Northern Lights Michigan ↗', href: '/northern-lights-michigan/' },

@@ -46,12 +46,12 @@
   /* Interactive First-Snow Meteorology & Trail Physics Blueprint */
   const BLUEPRINTS = {
     lakeeffect: {
-      kicker: 'PRINCIPLE 01 · LAKE SUPERIOR FETCH + 1,400–1,950 FT LIFT',
-      title: 'Where cold northwest air over 42°F Lake Superior drops the first deep snow',
+      kicker: 'FIELD LESSON 01 · LAKE SUPERIOR FETCH + 1,400–1,950 FT LIFT',
+      title: 'How a 600-foot climb inland turns 35°F shoreline rain into knee-deep powder',
       copy:
-        'Michigan’s earliest natural snowpack forms where cold Canadian air crosses the relatively warm open surface of Lake Superior and rises abruptly into 1,400 to 1,958-foot coastal highlands. While shoreline towns sit at 34°F in rain-snow mix, climbing 600 to 1,000 feet inland into Calumet, the Gogebic Range around Ironwood, the Porcupine Mountains, or the Negaunee–Marquette highlands drops the temperature 4–6°F and turns wet squalls into dense early powder.',
+        'If you only check the weather station at a shoreline harbor in November, you will miss half of Michigan’s early ski season. When cold Canadian air pours across 42°F Lake Superior, the shoreline in Marquette or Houghton might sit at 34°F in wet sleet. Drive ten minutes inland up into the Negaunee highlands, Calumet, the Gogebic Range around Ironwood, or the Porcupine Mountains—climbing 600 to 1,200 feet—and adiabatic cooling drops the air temperature 4 to 6°F while squeezing dense lake-effect powder right onto the ridges.',
       rule:
-        'Field rule: Early lake-effect bands are narrow and elevation-dependent—always verify real-time inches on the Michigan Snow Depth Finder before driving north.',
+        'How I use this: Early lake-effect bands are narrow and elevation-driven—always check the inland highland stations on our Michigan Snow Depth Finder before loading the car.',
       links: [
         { label: 'Michigan Snow Depth Finder ↗', href: '/michigan-snow-depth/' },
         { label: 'Lake-Effect Snow Engine ↗', href: '/lake-effect-snow/' },
@@ -59,12 +59,12 @@
       ],
     },
     nordic: {
-      kicker: 'PRINCIPLE 02 · WHY GRASS-BED TRAILS SKI ON 4–6 INCHES',
-      title: 'Mowed, rock-picked Nordic corridors open weeks before rocky backcountry paths',
+      kicker: 'FIELD LESSON 02 · WHY GRASS-BED TRAILS SKI ON 4–6 INCHES',
+      title: 'Why mowed Nordic corridors open weeks before rocky backcountry trails',
       copy:
-        'A rugged root-and-rock hiking trail needs 12 to 18 inches of compacted base before you can ski or snowshoe without striking stone. By contrast, dedicated Nordic centers and state forest pathways that mow smooth turf and clear rocks in autumn—such as ABR in Ironwood, Swedetown in Calumet, Michigan Tech Trails in Houghton, Forbush Corner/Hanson Hills near Grayling, and the Vasa Pathway—can roll a skiable deck on the very first 4 to 6 inches of wet lake-effect snow.',
+        'A rugged root-and-rock hiking trail needs a foot or more of compacted snow before you can ski or snowshoe without gouging your bases on granite. Dedicated Nordic centers and state forest pathways solve that before the first flake falls: crews spend October mowing smooth turf and picking rocks along the corridors at ABR in Ironwood, Swedetown in Calumet, Michigan Tech in Houghton, Forbush Corner and Hanson Hills near Grayling, and the Vasa Pathway. When the first 4 to 6 inches of wet lake-effect snow hits that grass, a rubber-tired roller packs it into a clean, fast early-winter deck.',
       rule:
-        'Field rule: Pack "rock skis" or snowshoes for early-season tracks, and carry microspikes in your pack for wind-scoured or icy boardwalk approaches.',
+        'How I use this: I bring my older "rock skis" or snowshoes for November tracks, and always keep microspikes in my pack for wind-scoured boardwalks.',
       links: [
         { label: 'XC Ski Conditions Tool ↗', href: '/michigan-cross-country-skiing/' },
         { label: 'Michigan Winter Trails Guide ↗', href: '/michigan-winter-trails/' },
@@ -72,12 +72,12 @@
       ],
     },
     rules: {
-      kicker: 'PRINCIPLE 03 · THE NOV 15–30 & DEC 1 PUBLIC-LAND RULES',
-      title: 'Blaze orange in November woods; snowmobile trails open December 1',
+      kicker: 'FIELD LESSON 03 · NOVEMBER BLAZE ORANGE & DEC 1 SNOWMOBILES',
+      title: 'Sharing the November woods safely and knowing when winter gates close',
       copy:
-        'Early-winter recreation overlaps two critical Michigan DNR calendar rules. First, firearm deer season runs November 15–30 (followed by muzzleloader and late seasons in December)—always wear high-visibility blaze orange when hiking, snowshoeing, or skiing on multi-use state and national forest lands. Second, state-designated snowmobile trails and seasonal roads (such as M-107 in the Porkies) do not open to snowmobiles until December 1, and grooming requires sufficient frozen base.',
+        'Chasing early snow in November overlaps two critical dates on the Michigan outdoor calendar. First, firearm deer season runs November 15–30 (with muzzleloader and late seasons continuing in December)—so whenever you hike, snowshoe, or ski outside dedicated fee-area tracks on state or national forest land, wear a blaze-orange hat and vest. Second, state-designated snowmobile trails and seasonal roads (like M-107 in the Porkies) do not open to sleds until December 1, and groomers only roll once the ground freezes solid.',
       rule:
-        'Field rule: In November, stick to non-motorized Nordic, snowshoe, and waterfall trails and keep high-visibility orange outer layers in your daypack.',
+        'How I use this: In November, stick to non-motorized Nordic, snowshoe, and waterfall trails, and keep a high-visibility orange outer layer in the truck.',
       links: [
         { label: 'Michigan Snowmobile Trail Tool ↗', href: '/snowmobile/' },
         { label: 'Michigan Winter Activities Guide ↗', href: '/michigan-winter-activities/' },
@@ -85,12 +85,12 @@
       ],
     },
     plateau: {
-      kicker: 'PRINCIPLE 04 · THE 1,350-FT LOWER PENINSULA PLATEAU & SNOWMAKING',
+      kicker: 'FIELD LESSON 04 · THE 1,350-FT LOWER PENINSULA PLATEAU & SNOWMAKING',
       title: 'How Gaylord, Boyne, and Caberfae beat the coast by three weeks',
       copy:
-        'In the Lower Peninsula, you do not need to cross the Mackinac Bridge to find early snow. The high interior moraine stretching from Cadillac and Caberfae Peaks (1,500+ ft) north through Grayling, Hartwick Pines, Gaylord (1,350 ft), and Boyne Falls catches Lake Michigan northwest fetch while sitting cold enough at night (below 26°F wet-bulb) for resort fan guns to build deep machine-made bases by Thanksgiving and early December.',
+        'You do not have to cross the Mackinac Bridge to get on snow before Christmas. The high interior glacial moraine running from Cadillac and Caberfae Peaks (1,500+ ft) north through Grayling, Hartwick Pines, Gaylord (1,350 ft), and Boyne Falls catches northwest Lake Michigan fetch while dropping cold enough at night (below 26°F wet-bulb) for commercial fan guns to blow deep machine-made snow by Thanksgiving weekend.',
       rule:
-        'Field rule: Pair early-season Northern Lower ski and trail mornings with heated vineyard igloos and tasting rooms in Petoskey or Traverse City if afternoon weather softens.',
+        'How I use this: Pair a morning on the early snowmaking runs or high-plateau pines with an afternoon in a heated vineyard igloo in Petoskey or Traverse City.',
       links: [
         { label: 'Michigan Ski Hills Finder ↗', href: '/michigan-ski-hills/' },
         { label: 'MI Wine, Cider & Spirits Guide ↗', href: '/michigan-wine-cider-spirits/' },
