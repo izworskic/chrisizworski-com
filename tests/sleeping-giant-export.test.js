@@ -33,5 +33,29 @@ test('Geometry QA export is generated as OFFLINE review-only HTML and source-pre
   assert.match(html,/id="route"/);
   assert.match(html,/noindex,nofollow,noarchive/);
   assert.doesNotMatch(html,/href="https:\/\/www.google.com\/maps\/dir/);
+
+  // The planning guide remains crawlable/readable as static HTML in the artifact.
+  assert.equal((html.match(/class="route-card"/g)||[]).length,6);
+  for(const id of ['top-of-the-giant','head-of-the-giant','nanabosho-lookout',
+    'sea-lion','middlebrun-beach','pass-lake-overlook']){
+    assert.ok(html.includes('data-route-id="'+id+'"'),'Missing static visitor route '+id);
+  }
+  assert.match(html,/<section class="visitor-choices"/);
+  assert.match(html,/<select id="visitor-mode"/);
+  assert.match(html,/<select id="visitor-hours"/);
+  assert.match(html,/<select id="visitor-interest"/);
+  assert.match(html,/role="note"/);
+  assert.match(html,/data-view="top-of-the-giant"/);
+  assert.doesNotMatch(html,/data-view="pass-lake-overlook"/);
+  assert.match(html,/Current access|current access|opening status|road access/);
+  const match=html.match(/<script id="visitor-data" type="application\/json">([\s\S]*?)<\/script>/);
+  assert.ok(match,'Visitor matrix must be embedded in offline review page');
+  const decision=JSON.parse(match[1]);
+  assert.equal(decision.navigationEligible,false);
+  assert.equal(decision.liveAccess,false);
+  assert.equal(Object.keys(decision.plans).length,48);
+  assert.ok(decision.plans['2|bike-hike|summit'].some(r=>r.id==='top-of-the-giant'));
+  assert.ok(decision.plans['8|hike|summit'].some(r=>r.id==='top-of-the-giant'));
+
  } finally {fs.rmSync(dest,{recursive:true,force:true});}
 });
