@@ -3095,6 +3095,60 @@
           "description": "Michigan GIS #194 locates the actual Rock River Falls natural river feature, not parking."
         }
       }
+    },
+    {
+      "id": "morgan-falls",
+      "name": "Morgan Falls",
+      "region": "Central U.P.",
+      "place": "Morgan Creek · NTN South Trails · Marquette",
+      "lat": 46.507745,
+      "lng": -87.446107,
+      "gisObjectId": 166,
+      "level": "moderate",
+      "minutes": "90–150 min",
+      "walk": "Begin at the NTN South Trailhead lot on M-553, use the designated trail connection to a safer highway crossing, then follow Mount Marquette Road on foot about 1.2 miles and a short side footpath to Morgan Creek Falls. Regional visitor sources list about 2.8 miles round trip from the South Trailhead; do not drive motor-restricted road or claim a shorter shoulder crossing.",
+      "best": "Dry trail season with careful crossing of M-553 and safe creek-side footing; autumn hardwood color is excellent but wet leaves hide roots.",
+      "access": "Documented public NTN South Trailhead and nonmotorized Mount Marquette Road approach; Travel Marquette explicitly prohibits/strongly warns against parking the M-553 dirt shoulder opposite NTN due to high-speed traffic and blind sight lines. Follow marked designated crossing.",
+      "status": "verify",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Public nonmotorized trail and creek waterfall",
+      "parking": "Use NTN South Trails main trailhead off M-553 south of Marquette, on left heading south before Rippling River Resort. DO NOT park opposite on M-553 dirt shoulder. Walk to designated trail crossing with better sight lines; do not drive motor-restricted Mount Marquette Road or the GIS falls point.",
+      "feature": "Morgan Creek cascade in dark bedrock near Marquette reached by NTN South trail crossing and a vehicle-closed road walk.",
+      "decision": "Choose Morgan for a substantial family-friendly forest walk only if your group can safely negotiate the designated M-553 crossing and uneven final creek path. The falls pin itself is not the trailhead.",
+      "further": "NTN South Trails is mixed-use with seasonal grooming and distinct biking routes; no current waterfall trail status available. Current opening and road conditions are unverified. Close sightlines and highway traffic make shoulder parking dangerous.",
+      "manager": "Noquemanon Trail Network · NTN South Trails",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "NTN-public-parking-crossing-visitor-route-confirmed-no-current-status",
+      "winterRoad": "NTN publishes season-specific trail use and grooming; no promise of public access to steep, icy waterfall creek path or motor traffic on Mount Marquette Road.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://noquetrails.org/south-trails/",
+          "description": "Noquemanon Trail Network official South Trails manager site identifies NTN South public trail system and main trailhead along County Road 553."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Travel Marquette publishes public Morgan Falls hike from NTN South parking, designated crossing and closed-to-cars Mount Marquette Road."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Local visitor bureau directs parking at NTN South Trailhead and explicitly warns against unsafe illegal M-553 shoulder parking."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Tourism describes designated safe highway crossing, nonmotorized Mount Marquette Road segment about 1.2mi, short falls footpath, about 2.8mi total."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS feature #166 locates Morgan Falls natural feature on Morgan Creek, not the public parking lot."
+        }
+      }
     }
   ]
 }
