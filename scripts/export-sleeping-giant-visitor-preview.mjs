@@ -65,8 +65,8 @@ if(built.includes('/* INLINE_')||!built.includes('<noscript>')||!built.includes(
   throw Error('Missing static fallback, review indexing gate, or template substitution');
 // Test actual outgoing anchors and affirmative status language, not text
 // fragments inside source citations, script comments, or negated caveats.
-if(/<a\\b[^>]*href=["']https:\\/\\/www\\.google\\.com\\/maps\\/dir\\//i.test(built)
-  || /\\b(?:trail|road)\\s+is\\s+open\\s+now\\b/i.test(built))
+if(/<a\b[^>]*href=["']https:\/\/www\.google\.com\/maps\/dir\//i.test(built)
+  || /\b(?:trail|road)\s+is\s+open\s+now\b/i.test(built))
   throw Error('Disallowed directions/current opening claim');
 fs.mkdirSync(destination,{recursive:true});
 fs.writeFileSync(path.join(destination,'index.html'),built);
