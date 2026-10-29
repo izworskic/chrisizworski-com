@@ -6,6 +6,7 @@ on:
       - 'data/sleeping-giant/**'
       - 'lib/sleeping-giant/**'
       - 'tests/sleeping-giant-*.test.js'
+      - 'scripts/export-sleeping-giant-geometry.mjs'
       - '.github/workflows/sleeping-giant-engine.yml'
   workflow_dispatch:
 
@@ -22,10 +23,12 @@ jobs:
         run: |
           mkdir -p artifacts/sleeping-giant
           node lib/sleeping-giant/topology-audit.cjs > artifacts/sleeping-giant/topology-audit.json
+      - name: Export non-navigable geometry reconciliation and internal HTML map viewer
+        run: node scripts/export-sleeping-giant-geometry.mjs artifacts/sleeping-giant
       - uses: actions/upload-artifact@v4
         with:
           name: sleeping-giant-topology-audit
-          path: artifacts/sleeping-giant/topology-audit.json
+          path: artifacts/sleeping-giant/
           if-no-files-found: error
           retention-days: 14
 
