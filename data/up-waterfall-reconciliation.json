@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 43,
-    "pending": 118,
-    "curatedTotal": 51,
+    "exactIdMatched": 46,
+    "pending": 115,
+    "curatedTotal": 54,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -2218,14 +2218,33 @@
       "lat": 46.890025,
       "lng": -88.877565,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "wyandotte-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Keweenaw regional destination guide; underlying land ownership not inferred",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-29",
+      "publicationEligible": true,
+      "disposition": "tourism-verified-rustic-visitor-trail-from-Poyhonen-road",
+      "outstandingGate": "Official tourist approach sufficient for a scope-limited roadside/viewpoint guide; permitted current parking, private banks and present conditions are NOT verified. Never navigate to GIS falls coordinates or infer upstream/right-of-way.",
+      "sourceNotes": " Visit Keweenaw 2023 waterfall brochure directs M-26 near Twin Lakes State Park, Poyhonen Road about 0.8 mile to parking and a 250-yard rustic path to small Misery River falls. Independent Copper Country and waterfall directory corroborate trail near golf course. Golf facilities not public parking by default; exact lot coordinate and present road status unverified.",
+      "visitorRouteEvidence": {
+        "routeSource": "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/",
+        "roadOrTrailSource": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "exactParkingCoordinateEstablished": false,
+        "legalSafeParkingAvailability": "not-verified-live",
+        "tourismPublishedApproachOnly": true,
+        "upperCreekOrGorgeExtensionAuthorized": false,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/"
+      ]
     },
     {
       "gisObjectId": 129,
@@ -2437,14 +2456,33 @@
       "lat": 47.427749,
       "lng": -88.237254,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "jacobs-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Keweenaw regional destination guide; underlying land ownership not inferred",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-29",
+      "publicationEligible": true,
+      "disposition": "tourism-verified-roadside-lower-falls-no-invented-parking",
+      "outstandingGate": "Official tourist approach sufficient for a scope-limited roadside/viewpoint guide; permitted current parking, private banks and present conditions are NOT verified. Never navigate to GIS falls coordinates or infer upstream/right-of-way.",
+      "sourceNotes": " Keweenaw visitor bureau directly calls Jacob's Falls roadside and brochure places it along M-26 about three miles northeast of Eagle River. Lower fall view is a roadside stop IF safe legal shoulder/pull-off; no guaranteed designated lot, no Jampot business parking right, and no sanctioned upper creek-bank hiking route. Natural feature point is not vehicle parking.",
+      "visitorRouteEvidence": {
+        "routeSource": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+        "roadOrTrailSource": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "exactParkingCoordinateEstablished": false,
+        "legalSafeParkingAvailability": "not-verified-live",
+        "tourismPublishedApproachOnly": true,
+        "upperCreekOrGorgeExtensionAuthorized": false,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.visitkeweenaw.com/outdoors/waterfalls/"
+      ]
     },
     {
       "gisObjectId": 144,
@@ -2471,14 +2509,33 @@
       "lat": 47.462062,
       "lng": -87.878959,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "manganese-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Keweenaw regional destination guide; underlying land ownership not inferred",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-29",
+      "publicationEligible": true,
+      "disposition": "tourism-verified-short-upper-gorge-overlook-no-scramble",
+      "outstandingGate": "Official tourist approach sufficient for a scope-limited roadside/viewpoint guide; permitted current parking, private banks and present conditions are NOT verified. Never navigate to GIS falls coordinates or infer upstream/right-of-way.",
+      "sourceNotes": " Visit Keweenaw current visitor listing identifies Manganese Road approximately 0.7 mile south of Copper Harbor visitor area with falls about 100 feet from road and deep gorge trail to upper viewing position. Brochure's position 47.4609,-87.8782 differs from state GIS #145 natural falls; both must not be used as exact parking. Steep unprotected gorge and downstream scramble NOT part of recommended visit.",
+      "visitorRouteEvidence": {
+        "routeSource": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+        "roadOrTrailSource": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "exactParkingCoordinateEstablished": false,
+        "legalSafeParkingAvailability": "not-verified-live",
+        "tourismPublishedApproachOnly": true,
+        "upperCreekOrGorgeExtensionAuthorized": false,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.visitkeweenaw.com/listing/manganese-falls/607/"
+      ]
     },
     {
       "gisObjectId": 146,
@@ -3675,6 +3732,17 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Official historical Crystal Falls DNR Compartment 12139 confirms surrounding compartment vehicle access largely private; 2018 Iron County restricted-road list and Michigan MGF only support Long Lake road naming, not Raymer legal ROW. Gabbro city-recommended bridge/upper approach and independent route description do not show legal public ski-hill/parcel access. Machine-readable segment-based gating added to optional map research popups, both remain nonindexable."
+    },
+    {
+      "batch": "12-Keweenaw-visitor-bureau-road-and-trails",
+      "date": "2026-10-29",
+      "reviewedIds": [
+        143,
+        145,
+        128
+      ],
+      "publicGuidesAdded": 3,
+      "outcome": "Visit Keweenaw 2023 waterfall map screenshot plus current visitor pages verify M-26 roadside Jacobs, short upper gorge viewpoint at Manganese Road, and rustic 250-yard Wyandotte trail off Poyhonen Road. None invent parking coordinates, private upstream creek walking, gorge descents or current availability."
     }
   ]
 }
