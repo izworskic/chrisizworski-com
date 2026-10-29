@@ -9,6 +9,7 @@ on:
       - 'scripts/export-sleeping-giant-geometry.mjs'
       - 'scripts/export-sleeping-giant-visitor-preview.mjs'
       - 'scripts/build-sleeping-giant-site.mjs'
+      - 'public/sleeping-giant-provincial-park/**'
       - 'public/tools/index.html'
       - 'public/guides/index.html'
       - 'public/lake-superior-circle-tour/index.html'
@@ -60,6 +61,11 @@ jobs:
         run: npm ci
       - name: Verify the actual feature + repaired baseline merge
         run: npm run verify:all
+      - name: Verify production build output including ads and canonical page
+        run: |
+          npm run build:site
+          node scripts/verify-auto-ads-build.mjs
+          node --test tests/sleeping-giant-site-integration.test.js
 
   preview-browser-qa:
     runs-on: ubuntu-latest
