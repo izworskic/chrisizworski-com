@@ -505,3 +505,56 @@ test('Upper and Lower Tahquamenon source IDs share the existing canonical planne
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/upper-tahquamenon-falls/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/lower-tahquamenon-falls/'));
 });
+
+test('Rock River Falls has a source-verified wilderness route without false parking and stays indexable',()=>{
+  const fall=curated.waterfalls.find(x=>x.id==='rock-river-falls');
+  const gis=ledger.candidates.find(x=>x.gisObjectId===194);
+  const original=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'))
+    .entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===194);
+  const page=fs.readFileSync('public/upper-peninsula-waterfalls/rock-river-falls/index.html','utf8');
+  const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  assert.ok(fall&&gis&&original);
+  assert.equal(fall.publication,'verified-access-guide');
+  assert.equal(gis.curatedId,fall.id);
+  assert.equal(gis.reconciliation,'curated-exact-gis-id');
+  assert.equal(original.curatedId,fall.id);
+  assert.equal(original.identity,'linked');
+  assert.equal(gis.visitorRouteEvidence.navigationToGisPointAllowed,false);
+  assert.equal(gis.visitorRouteEvidence.fallsSpecificParkingCoordinateVerified,false);
+  assert.equal(gis.visitorRouteEvidence.nctaWesternTrailheadIsNotFallsParking,true);
+  assert.match(page,/FR.?2276|Forest Road 2276/);
+  assert.match(page,/FR.?2293|Forest Road 2293/);
+  assert.match(page,/1\.2-mile/);
+  assert.match(page,/not automatically the Rock River Falls parking lot/i);
+  assert.match(page,/current opening and road conditions are unverified/i);
+  assert.match(page,/<meta name="robots" content="index,follow/);
+  assert.ok(!page.includes('data-parking-lat='));
+  assert.ok(!page.includes('destination=46.411253'));
+  assert.ok(page.includes('https://chrisizworski.com/#person'));
+  for(const axis of ['landManager','publicAccess','parking','trail','location']){
+    assert.equal(fall.verification[axis].verified,true,axis);
+    assert.ok(page.includes(fall.verification[axis].source),axis+' citation missing');
+  }
+  const card=hub.match(/<article class="waterfall-card"[^>]*data-id="rock-river-falls"[\s\S]*?<\/article>/);
+  assert.ok(card);
+  assert.match(card[0],/data-gis-oid="194"/);
+  assert.match(card[0],/class="arrival-details"/);
+  assert.match(card[0],/Check parking source/);
+  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/rock-river-falls/'));
+});
+test('Alger and Au Train are withheld from indexing for documented parking and dam access uncertainty',()=>{
+  const reviews=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
+  for(const [oid,id] of [[213,'alger-falls'],[192,'au-train-falls']]){
+    const geo=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const item=reviews.find(x=>x.gisObjectId===oid);
+    assert.ok(geo&&item);
+    assert.equal(geo.publicationEligible,false);
+    assert.equal(geo.curatedId,null);
+    assert.equal(item.publicationEligible,false);
+    assert.ok(item.sourceLinks.length>=2);
+    assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===oid));
+    assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+  }
+  assert.match(reviews.find(x=>x.gisObjectId===213).summary,/no safe parking options/i);
+  assert.match(reviews.find(x=>x.gisObjectId===192).reviewLimitations,/not a final current FERC status/i);
+});
