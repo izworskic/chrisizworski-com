@@ -25,42 +25,14 @@ function patchRegistry(){
   }
 }
 
-function patchTools(){
-  const file='public/tools/index.html';
-  let html=fs.readFileSync(file,'utf8');
-  let changed=false;
-  if(!html.includes(`data-featured-tool="${KEY}"`)){
-    const maryland=html.match(/    <article class="feature-card" data-featured-tool="maryland-bay-bridge">[\s\S]*?    <\/article>\n/);
-    const niagara=html.match(/    <article class="feature-card" data-featured-tool="niagara-border-crossing">[\s\S]*?    <\/article>\n/);
-    const anchor=maryland||niagara;
-    if(!anchor)throw new Error('Sunshine Skyway discovery: bridge featured-card anchor not found');
-    const card=`    <article class="feature-card" data-featured-tool="${KEY}">\n      <div class="feature-kicker">Live Florida bridge decision</div>\n      <h3><a href="${REL}" data-track-tool="${KEY}" data-placement="tools-featured">Sunshine Skyway Bridge Live</a></h3>\n      <p>Official FL511 road status first, then Skyway camera video, wind context and current all-electronic tolls.</p>\n      <a class="tool-cta" href="${REL}" data-track-tool="${KEY}" data-placement="tools-featured">Check the Skyway <span aria-hidden="true">&rarr;</span></a>\n    </article>\n`;
-    html=html.replace(anchor[0],`${anchor[0]}${card}`);changed=true;
-  }
-  if(!html.includes(`data-tool-key="${KEY}"`)){
-    const marylandKey=html.indexOf('data-tool-key="maryland-bay-bridge"');
-    const niagaraKey=html.indexOf('data-tool-key="niagara-border-crossing"');
-    const keyIndex=marylandKey>=0?marylandKey:niagaraKey;
-    if(keyIndex<0)throw new Error('Sunshine Skyway discovery: bridge catalog anchor not found');
-    const start=html.lastIndexOf('<div class="tool-card"',keyIndex);
-    if(start<0)throw new Error('Sunshine Skyway discovery: tool-card boundary not found');
-    const card=`  <div class="tool-card" data-tool-key="${KEY}" data-tags="planning live-data bridges traffic travel florida tampa bay skyway i-275 tolls cameras wind" data-months="1,2,3,4,5,6,7,8,9,10,11,12">\n    <div class="tk">Live data<span class="tk-season" hidden> / useful now</span></div>\n    <div class="tool-title"><a href="${REL}">${NAME}</a></div>\n    <div class="tool-desc">${DESC}</div>\n  </div>\n`;
-    html=html.slice(0,start)+card+html.slice(start);changed=true;
-  }
-  const count=(html.match(/class="tool-card"/g)||[]).length;
-  html=html.replace(/search all \d+ tools by name or topic/i,`search all ${count} tools by name or topic`);
-  fs.writeFileSync(file,html);
-  console.log(`Sunshine Skyway tools discovery ${changed?'applied':'already present'}; catalog count ${count}.`);
-}
-
 function patchNationalTools(){
   const file='public/synced-national-tools/index.html';
   let html=fs.readFileSync(file,'utf8');
   if(!html.includes(`data-tool-id="${KEY}"`)){
-    const marker='<article class="directory-card" data-search-card data-tool-id="maryland-bay-bridge"';
+    const marker='<article class="directory-card" data-search-card data-tool-id="blue-spring"';
     let at=html.indexOf(marker);
     if(at<0){
-      const fallback='<article class="directory-card" data-search-card data-tool-id="cbbt"';
+      const fallback='<article class="directory-card" data-search-card data-tool-id="maryland-bay-bridge"';
       at=html.indexOf(fallback);
     }
     if(at<0)throw new Error('National tools: bridge anchor missing for Sunshine Skyway insertion');
@@ -75,16 +47,13 @@ function patchNationalTools(){
   const list=graph.find(node=>node?.['@id']==='https://chrisizworski.com/national-tools/#toollist');
   if(!list||!Array.isArray(list.itemListElement))throw new Error('National tools: ItemList missing');
   if(!list.itemListElement.some(entry=>entry?.url===URL)){
-    const md=list.itemListElement.findIndex(entry=>entry?.url==='https://chrisizworski.com/chesapeake-bay-bridge-maryland/');
-    const cbbt=list.itemListElement.findIndex(entry=>entry?.url==='https://chrisizworski.com/chesapeake-bay-bridge-tunnel/');
-    const at=Math.max(md,cbbt);
+    const at=list.itemListElement.findIndex(entry=>entry?.url==='https://chrisizworski.com/national-tools/blue-spring-live/');
     const entry={'@type':'ListItem',position:0,url:URL,name:NAME};
-    if(at>=0)list.itemListElement.splice(at+1,0,entry);else list.itemListElement.push(entry);
+    if(at>=0)list.itemListElement.splice(at,0,entry);else list.itemListElement.push(entry);
   }
   list.itemListElement.forEach((entry,index)=>{entry.position=index+1});
   list.numberOfItems=list.itemListElement.length;
-  const page=graph.find(node=>node?.['@id']==='https://chrisizworski.com/national-tools/#page');
-  if(page)page.dateModified=LASTMOD;
+  // Preserve the owning hub's publication metadata during this compatibility sync.
   html=html.replace(schemaMatch[0],`<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
   const count=(html.match(/data-search-card/g)||[]).length;
   html=html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/,`$1${count} tools shown$2`);
@@ -133,7 +102,6 @@ function patchInboundLinks(){
 }
 
 patchRegistry();
-patchTools();
 patchNationalTools();
 upsertSitemap();
 patchLlms();
