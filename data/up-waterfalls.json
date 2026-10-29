@@ -2746,6 +2746,114 @@
           "description": "American Whitewater independently names river rapid Misicot Falls as Third Pier. MI GIS #2 is natural river feature, not a trailhead; catalog positions may differ from legal overlook."
         }
       }
+    },
+    {
+      "id": "duppy-falls",
+      "name": "Duppy Falls",
+      "region": "Western U.P.",
+      "place": "Jumbo River · Ottawa National Forest",
+      "lat": 46.412542,
+      "lng": -88.911255,
+      "gisObjectId": 26,
+      "level": "difficult",
+      "minutes": "Allow extra time",
+      "walk": "The current Forest Service Duppy page says south from Kenton on FH16, right on Forest Road 3610, then about 0.25 mile to an unmarked angler-created trail. Walk west to Jumbo River and upstream to the falls; agency does not publish a precise maintained trail distance.",
+      "best": "Snow-free conditions and navigable forest roads; spring flow and autumn colors appeal but increase footing and road risks.",
+      "access": "Forest Service-listed waterfall with informal angler trail in Ottawa National Forest. No developed official parking lot, trail marking, accessible route, or verified footbridge. The official route is FR3610; some regional publications say FR3645 or USFS168, which have NOT been reconciled as interchangeable.",
+      "status": "verify",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest backcountry",
+      "parking": "From Kenton follow Forest Highway 16 south to Forest Road 3610 as the CURRENT Forest Service directs. After about 1/4 mile, look for an unmarked trail. No surveyed parking lot or precise car destination; use only legal signed turnouts and do not block gates. Alternative FR3645 and USFS168 labels appear regionally but are not assumed equivalent.",
+      "feature": "A cluster of low ledges in the Jumbo River beside an old quarry opening, reached by an informal trout-angler route.",
+      "decision": "Choose Duppy only for a backcountry outing with offline mapping and a willingness to turn around; there is no signed maintained visitor path. Forest Service says Site Open year-round, which does not mean the forest road is driveable today.",
+      "further": "An informal path, possible stream crossing and slippery river rocks; no developed overlook. Current opening and road conditions are unverified. Do not navigate to GIS #26 as if it were parking; the older Forest Service brochure's feature coordinate differs from the MI GIS feature coordinate.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Kenton Ranger District",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-forest-service-informal-visitor-route-not-open-now",
+      "winterRoad": "The Forest Service's recreation listing says January-December/site open, not daily road clearance. Confirm temporary closures and road status; unmarked path is not guaranteed safe in winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Forest Service's current Duppy Falls recreation page identifies Kenton Ranger District manager."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Forest Service lists Duppy as a recreation area and explicitly describes an angler-created unmarked path; this is not a maintained trail guarantee."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Road-level visitor ARRIVAL via FH16->FR3610->0.25 mile to unmarked trail, NOT a developed parking lot; must verify permitted safe turnout on site."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Unmarked route west to river, then upstream to falls; exact total distance not given by agency."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature #26 is a natural feature; older official USFS waterfall brochure gives alternative feature coordinate 46.413807,-88.910858, neither is parking."
+        }
+      }
+    },
+    {
+      "id": "mex-i-min-e-falls",
+      "name": "Mex-i-min-e Falls",
+      "region": "Western U.P.",
+      "place": "Burned Dam Campground · Middle Branch Ontonagon River",
+      "lat": 46.313443,
+      "lng": -89.054153,
+      "gisObjectId": 19,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "From Burned Dam Campground follow the Forest Service's short established trail to the river and waterfall. Official recreation page gives approximately 0.25 mile ROUND TRIP and calls the trail easy to intermediate, not 2.4 miles as claimed by some third-party guides.",
+      "best": "During forest road maintenance and snow-free campground access, normally May–September; fall can be attractive but current access isn't assured.",
+      "access": "Official Forest Service recreation site and short falls trail from Burned Dam Campground, approached via Old US-2 and Forest Road 4500. Campground is open until snow closes access; not a year-round guaranteed drivable lot.",
+      "status": "verify",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest waterfall and rustic campground",
+      "parking": "From Watersmeet head north on US45 about one mile, east on Old US2 about seven miles, then north onto Forest Road 4500 about one mile to Burned Dam Campground. Use designated visitor parking. The Forest Service site's latitude/longitude is a general campground reference, NOT a surveyed parking space; the state waterfall GPS point is separate.",
+      "feature": "A short forest footpath to stepped cascades of the Middle Branch Ontonagon River beside rustic campground and lumbering-era history.",
+      "decision": "Best for an easy-to-intermediate SHORT waterfall walk once FR4500 is passable. Do not confuse site open year-round with maintained vehicle access outside May–September.",
+      "further": "USFS campground page says site maintained May 22–Sept 30, and road access lasts until snow closes it. No drinking water and only pit toilets. Current opening and road conditions are unverified; no accessible overlook certification.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Watersmeet Ranger District",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-usfs-campground-to-falls-trail-not-open-now",
+      "winterRoad": "Forest Service says May 22–Sept 30 maintenance, although visitor site is listed for Jan–Dec. Snow may close road access; do not presume vehicle travel in October/winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "USDA Forest Service's Mex-i-min-e Falls page identifies Watersmeet Ranger District."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "Forest Service lists waterfall recreation with public 1/4-mile return trail at Burned Dam Campground."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
+          "description": "Official campground page supplies Watersmeet -> US45 -> Old US2 -> FR4500 -> campground road route; the official geo point is not verified exact parking."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "Official easy-to-intermediate footpath from campground to Middle Branch Ontonagon River, 1/4 mile round trip."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #19 maps the natural falls at 46.313443,-89.054153; Forest Service site reference 46.31379535,-89.05313987 is a different general location and not a lot."
+        }
+      }
     }
   ]
 }
