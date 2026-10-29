@@ -8,7 +8,7 @@ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8')
 const sitemap=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
 const ids=['overlooked-falls','trap-falls'];
 test('issue 1258 batch 03a: individual public access, parking, trail, land and geography checks gate both guides',()=>{
- assert.equal(data.length,43);
+ assert.ok(data.length>=43,'previous 43 visitor destinations must be retained');
  for(const id of ids){
   const f=data.find(x=>x.id===id);assert.ok(f,id);
   assert.equal(f.publication,'verified-access-guide');
@@ -50,14 +50,14 @@ test('trap hydro comparison is geographical only, not a parking or safe-travel g
 test('B03a ledger moves two stable GIS identities without inflating research candidates',()=>{
  assert.equal(ledger.sourceCount,197);
  assert.equal(ledger.sourceCandidateCount,161);
- assert.equal(ledger.curatedCount,43);
- assert.equal(ledger.linkedByExactOid,35);
- assert.equal(ledger.unresolvedCandidates,126);
+ assert.equal(ledger.curatedCount,data.length,'ledger reflects current curated inventory');
+ assert.equal(ledger.linkedByExactOid,data.filter(x=>Number.isInteger(x.gisObjectId)&&ledger.entries.some(e=>e.source==='mi-state-gis'&&e.sourceId===x.gisObjectId)).length);
+ assert.equal(ledger.unresolvedCandidates,ledger.sourceCandidateCount-ledger.linkedByExactOid);
  assert.equal(ledger.entries.length,169);
- assert.equal(ledger.lastBatch,'03a');
+ assert.ok(ledger.lastBatch,'batch lineage must remain recorded');
  for(const oid of [97,118]){const x=ledger.entries.find(y=>y.sourceId===oid&&y.source==='mi-state-gis');assert.ok(x);assert.equal(x.identity,'linked');assert.equal(x.reviewBatch,'03a');assert.equal(x.publication,'verified-access-guide');assert.ok(x.parkingEvidence.startsWith('https://'));assert.ok(x.trailEvidence.startsWith('https://'));}
  const schemas=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
  const list=schemas['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,41);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,41);
+ assert.equal(list.numberOfItems,data.filter(x=>x.link||['verified-access-guide','verified-closure-guide'].includes(x.publication)).length);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,list.numberOfItems);
 });
