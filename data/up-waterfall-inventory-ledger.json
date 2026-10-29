@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 47,
-  "linkedByExactOid": 39,
-  "unresolvedCandidates": 122,
+  "curatedCount": 49,
+  "linkedByExactOid": 41,
+  "unresolvedCandidates": 120,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -19,25 +19,27 @@
         -87.948049
       ],
       "river": "MENOMINEE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "misicot-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "published-park-visitor-trail-identity-review-only",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-michigan-shore-public-overlook-not-open-now",
+      "landManager": "Michigan and Wisconsin DNR · Menominee River State Recreation Area",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+      "trailEvidence": "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Complete official lot/visitor viewpoint-versus-natural-GIS point pairing before individual visitor guide. Do not auto-index.",
+      "nextAction": "Check present access; never route to raw GIS falls point or infer an unverified riverbank scramble.",
       "batch": "county-dickinson",
-      "classification": "misicot-third-pier-identity-geographic-reference-guide-pending",
+      "classification": "verified-natural-falls-and-separate-official-viewpoint",
       "reviewed": "2026-10-28",
-      "reviewBatch": "08",
-      "accessAssessment": "Misicot Falls alias Third Pier independently documented by American Whitewater; Michigan official Piers Gorge parking/trails off Highway 8/Piers Gorge Road. Exact designated hiker viewing site and river GIS offset require site-specific guide validation.",
+      "reviewBatch": "09",
+      "accessAssessment": "Public Michigan Piers Gorge Trail off Highway 8/Piers Gorge Road reaches Piers 1–3, independently named Misicot (Third Pier) by American Whitewater. Michigan tourism lists 1.5-mile scenic trail overall, not exact Third Pier mileage. No boating scout routes. Parking precise coordinate not supplied; current road conditions unverified.",
       "evidence": [
         "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
-        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation"
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+        "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail"
       ]
     },
     {
@@ -3380,26 +3382,27 @@
         -87.777192
       ],
       "river": "MENOMINEE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "pemene-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "published-park-visitor-trail-identity-review-only",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-wisconsin-shore-public-overlook-not-open-now",
+      "landManager": "Michigan and Wisconsin DNR · Menominee River State Recreation Area",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+      "trailEvidence": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Complete official lot/visitor viewpoint-versus-natural-GIS point pairing before individual visitor guide. Do not auto-index.",
+      "nextAction": "Check present access; never route to raw GIS falls point or infer an unverified riverbank scramble.",
       "batch": "county-menominee",
-      "classification": "verified-pemene-river-identity-and-public-wisconsin-overlook-guide-pending",
+      "classification": "verified-natural-falls-and-separate-official-viewpoint",
       "reviewed": "2026-10-28",
-      "reviewBatch": "08",
-      "accessAssessment": "Natural Pemene GIS #188 coordinate corroborated by independent photographer and named geography. Wisconsin DNR's mapped 0.5-mile overlook from Verheyen Lane is a different visitor position, not an erroneous river point; do not confuse Pemene Landing or MI-side informal river approach.",
+      "reviewBatch": "09",
+      "accessAssessment": "Public DNR signed Pemene trail at end Verheyen Lane off County Z; Wisconsin side 0.5-mile primitive overlook vs GIS feature on river, separate Pemene Landing boat access; full trail map lists 0.8 and 1.9 mile loops. Parking precise coordinate not supplied; current road conditions unverified.",
       "evidence": [
         "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
         "https://adammartin.space/2019-pemene-falls/",
-        "https://mapcarta.com/22878684"
+        "https://mapcarta.com/22878684",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb"
       ]
     },
     {
@@ -4041,5 +4044,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "08"
+  "lastBatch": "09"
 }
