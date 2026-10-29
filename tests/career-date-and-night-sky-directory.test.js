@@ -18,6 +18,7 @@ test('Prepared employment start is corrected across the identity pages', () => {
     assert.doesNotMatch(html, /2026 start date is <strong>NOT REPORTED/i, file);
   }
   assert.match(read('public/timeline/index.html'), /Dec 2025 – present/);
+  assert.match(read('public/timeline/index.html'), /Prepared<\/strong> &middot; current role: Solutions Consultant/);
   assert.match(read('public/projects/index.html'), /Prepared &middot; December 2025 – present/);
 });
 
