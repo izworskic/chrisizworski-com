@@ -51,7 +51,9 @@ for(const slug of paths){
    }
   }
   assert.ok(!/\bChris\s+(?:Hisworski|Izworsky|Izworksi)\b/i.test(html),"no identity variants");
-  const editorialLastmod=slug==="great-lakes-freighter-tracking"?"2026-10-25":slug==="northern-lights-michigan"?"2026-10-26":slug==="tools"?"2026-10-28":slug==="mackinac-bridge-live"?"2026-10-26":slug==="mackinac-bridge-tolls"?"2026-10-26":(["tools","soo-locks","northern-lights-michigan/munising","northern-lights-michigan/paradise-whitefish-point"].includes(slug)?"2026-10-19":"2026-10-11");
+  const editorialLastmod = html.match(/"dateModified"\\s*:\\s*"(\\d{4}-\\d{2}-\\d{2})"/)?.[1];
+  assert.ok(editorialLastmod, "dated editorial schema required");
+  assert.ok(Date.parse(editorialLastmod) <= Date.now(), "no future editorial dates");
   assert.ok(sitemap.includes("<loc>"+url+"</loc>\n    <lastmod>"+editorialLastmod+"</lastmod>"),"sitemap matches truthful editorial date");
   const inward=paths.filter(s=>s!==slug&&all[s].includes('href="/'+slug+'/"'));
   const outward=[...html.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map(x=>x[1]);
