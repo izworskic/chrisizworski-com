@@ -558,3 +558,28 @@ test('Alger and Au Train are withheld from indexing for documented parking and d
   assert.match(reviews.find(x=>x.gisObjectId===213).summary,/no safe parking options/i);
   assert.match(reviews.find(x=>x.gisObjectId===192).reviewLimitations,/not a final current FERC status/i);
 });
+
+test('remaining geographic candidates have an exhaustive nonpublishing eight-at-a-time review queue',()=>{
+  const q=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+  assert.equal(q.schemaVersion,1);
+  assert.match(q.policy,/Do not auto-index/i);
+  assert.equal(q.counts.gisFeatures,161);
+  assert.equal(q.counts.curatedDestinations,curated.waterfalls.length);
+  assert.equal(q.counts.matchedGisFeatures,ledger.counts.exactIdMatched);
+  assert.equal(q.counts.pendingGisFeatures,ledger.counts.pending);
+  assert.equal(q.candidates.length,ledger.counts.pending);
+  const expected=new Set(ledger.candidates.filter(x=>!x.curatedId).map(x=>x.gisObjectId));
+  const actual=new Set(q.candidates.map(x=>x.gisObjectId));
+  assert.equal(actual.size,expected.size);
+  for(const id of actual) assert.ok(expected.has(id),'queue has stale or unknown GIS ID '+id);
+  for(const row of q.candidates){
+    assert.equal(row.publicationEligible,false);
+    assert.ok(row.blockingGate.length>=20);
+    assert.ok(row.cluster.includes('/'));
+    assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===row.gisObjectId));
+  }
+  const batchIds=q.batches.flatMap(x=>x.candidates);
+  assert.equal(batchIds.length,expected.size);
+  assert.equal(new Set(batchIds).size,expected.size);
+  assert.ok(q.batches.every(x=>x.candidates.length<=8));
+});
