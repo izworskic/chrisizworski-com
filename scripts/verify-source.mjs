@@ -143,6 +143,7 @@ const intentionalChanges = new Set([
   // Mirror changes come from the national hub owner; no specialist engine implementation changes.
   "/assets/tool-engagement.js",
   "/synced-national-tools/",
+  "/synced-national-tools/assets/national-tools-directory.css",
   "/synced-national-tools/assets/national-tools-directory.js",
   // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.
   "/synced-national-tools/haleakala-sunrise/",

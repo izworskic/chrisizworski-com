@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guides | Chris Izworski</title>
-<meta name="description" content="Practical guides from Chris Izworski covering Mackinac Bridge travel, Great Lakes routes, AI in 911 operations, and Zone 6a Michigan gardening.">
+<title>Guides by Chris Izworski | AI, 911, Great Lakes Travel, and Zone 6a Gardening</title>
+<meta name="description" content="Guides by Chris Izworski covering AI in 911 and public safety, Great Lakes travel and ship watching, and Zone 6a Michigan gardening.">
 <link rel="canonical" href="https://chrisizworski.com/guides/">
-<meta property="og:title" content="Guides | Chris Izworski">
-<meta property="og:description" content="Practical guides from Chris Izworski covering AI in 911 operations, public trust, Zone 6a Michigan gardening, seed saving, and heirloom vegetables.">
+<meta property="og:title" content="Guides by Chris Izworski | AI, 911, Great Lakes Travel, and Zone 6a Gardening">
+<meta property="og:description" content="Practical guides by Chris Izworski on public-safety AI, Great Lakes travel, and Zone 6a gardening.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/guides/">
 <script type="application/ld+json">
@@ -34,85 +34,140 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="/assets/home-almanac.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
-a{color:#2c5f2d;text-decoration:none}
-a:hover{text-decoration:underline}
-.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
-.header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
-.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
-.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
-.nav a:hover,.nav a.active{color:#2c5f2d}
-.nav a.active{font-weight:bold}
-.body{max-width:780px;margin:0 auto;padding:44px 20px 60px}
-.breadcrumb{font-size:13px;color:#999;margin-bottom:24px}
-.breadcrumb a{color:#999}
-h1.page-title{font-size:36px;font-weight:normal;color:#2c2c2c;margin-bottom:10px;line-height:1.2}
-.sub{font-size:17px;color:#6b6b6b;font-style:italic;margin-bottom:32px;border-bottom:1px solid #e8e4dc;padding-bottom:20px}
-.body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
-h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16px;border-bottom:1px solid #e8e4dc;padding-bottom:8px}
-.guide-card{display:grid;grid-template-columns:1fr auto;gap:8px 24px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #f0ebe0;align-items:start}
-.guide-card:last-child{border-bottom:none}
-.guide-title{font-size:17px;font-weight:normal;color:#2c2c2c;margin-bottom:6px}
-.guide-title a{color:#2c2c2c}
-.guide-title a:hover{color:#2c5f2d}
-.guide-desc{font-size:14px;color:#555;line-height:1.65}
-.guide-arrow{font-size:13px;padding-top:3px;white-space:nowrap}
-.fg-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:5px;font-family:Arial,sans-serif;font-size:11px}
-.fg-pill{background:#eef4ee;color:#2c5f2d;border:1px solid #cfe0cf;border-radius:3px;padding:1px 7px;font-weight:700;letter-spacing:.03em}
-.fg-inseason{background:#1d4e42;color:#fff;border-radius:3px;padding:1px 7px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.fg-tools{margin-top:6px;font-family:Arial,sans-serif;font-size:12px;color:#555}
-.fg-tools a{font-weight:600}
-.footer{text-align:center;padding:20px;border-top:1px solid #e8e4dc;font-size:13px;color:#999;margin-top:48px}
-@media(max-width:640px){h1.page-title{font-size:28px}.guide-card{grid-template-columns:1fr}}
+body.hm-page{font:16px/1.65 var(--hm-body);background:var(--hm-paper);color:var(--hm-ink)}
+a{color:var(--hm-accent);text-decoration:none}a:hover{text-decoration:underline}
+.body{width:min(1260px,calc(100% - 36px));max-width:1260px;margin:0 auto;padding:28px 0 64px}
+.breadcrumb{font:600 .78rem/1.4 var(--hm-body);color:var(--hm-muted);margin-bottom:16px;letter-spacing:.03em;text-transform:uppercase}.breadcrumb a{color:var(--hm-accent)}
+.guides-hero{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:4px solid var(--hm-accent);border-radius:10px;padding:30px 32px;margin-bottom:34px;box-shadow:var(--hm-shadow);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.85fr);gap:28px;align-items:center}
+.guides-kicker{font:700 .73rem/1.2 var(--hm-body);letter-spacing:.14em;text-transform:uppercase;color:var(--hm-copper);margin:0 0 8px}
+h1.page-title{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display);letter-spacing:-.025em;color:var(--hm-ink);margin:0 0 12px}
+.sub{font:400 1.12rem/1.55 var(--hm-display);color:var(--hm-ink-soft);font-style:italic;margin:0 0 16px;border-bottom:1px solid var(--hm-line);padding-bottom:16px}
+.body p{font-size:.98rem;margin-bottom:18px;color:var(--hm-ink-soft);line-height:1.68}
+.guides-hero p:last-child{margin-bottom:0}
+.guides-index-box{background:var(--hm-paper);border:1px solid var(--hm-line-strong);border-radius:8px;padding:20px 22px}
+.guides-index-box h2{font:700 .74rem/1.2 var(--hm-body);letter-spacing:.12em;text-transform:uppercase;color:var(--hm-copper);margin:0 0 12px}
+.guides-index-links{display:flex;flex-direction:column;gap:8px}
+.guides-index-links a{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--hm-surface);border:1px solid var(--hm-line);border-radius:6px;font:600 .84rem/1.3 var(--hm-body);color:var(--hm-ink);text-decoration:none}
+.guides-index-links a:hover{border-color:var(--hm-accent);color:var(--hm-accent);text-decoration:none}
+.guides-index-links span{font:600 .71rem/1 var(--hm-body);color:var(--hm-muted);background:var(--hm-paper-deep);padding:4px 8px;border-radius:999px}
+h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);color:var(--hm-ink);margin:42px 0 12px;border-bottom:2px solid var(--hm-ink);padding-bottom:10px;letter-spacing:-.015em}
+#field-guides-list,.guides-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px}
+.guide-card{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:3px solid var(--hm-accent);border-radius:8px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;box-shadow:0 4px 14px -8px rgba(24,46,42,.08);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.guide-card:hover{transform:translateY(-2px);box-shadow:var(--hm-shadow-hover);border-color:var(--hm-line-strong)}
+.guide-card:last-child{border-bottom:1px solid var(--hm-line)}
+.guide-title{font:500 1.2rem/1.28 var(--hm-display);margin-bottom:8px;color:var(--hm-ink)}
+.guide-title a{color:var(--hm-ink)}.guide-title a:hover{color:var(--hm-accent)}
+.guide-desc{font:400 .9rem/1.62 var(--hm-body);color:var(--hm-ink-soft)}
+.guide-arrow{font:700 .8rem/1.2 var(--hm-body);padding-top:10px;border-top:1px solid var(--hm-line);margin-top:auto}
+.guide-arrow a{display:inline-flex;align-items:center;padding:6px 12px;border-radius:5px;background:var(--hm-accent);color:#fff;text-decoration:none}
+.guide-arrow a:hover{background:var(--hm-accent-dark);color:#fff;text-decoration:none}
+.fg-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.fg-pill{display:inline-block;font:700 .68rem/1.2 var(--hm-body);letter-spacing:.07em;text-transform:uppercase;padding:4px 9px;border-radius:4px;background:var(--hm-paper);color:var(--hm-copper);border:1px solid var(--hm-line-strong)}
+.fg-inseason{display:inline-block;font:700 .66rem/1.2 var(--hm-body);letter-spacing:.07em;text-transform:uppercase;padding:4px 9px;border-radius:4px;background:var(--hm-accent);color:#fff}
+.fg-tools{font:500 .78rem/1.5 var(--hm-body);color:var(--hm-muted);margin-top:12px;padding-top:10px;border-top:1px dashed var(--hm-line)}
+.fg-tools a{font-weight:700;color:var(--hm-accent)}
+@media(max-width:1024px){#field-guides-list,.guides-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.guides-hero{grid-template-columns:1fr}}
+@media(max-width:680px){#field-guides-list,.guides-grid{grid-template-columns:1fr}.guides-hero{padding:22px 20px}}
 </style>
-
-
-
-
-
-
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
-<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Chris Izworski verified profile preview image">
+<meta property="og:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
-<meta name="twitter:image:alt" content="Chris Izworski verified profile preview image">
-<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
-<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
+<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <script defer src="/_vercel/insights/script.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Y5D2V2W7HN');
+</script>
+<script defer src="/assets/ai-referral-measurement.js" data-ai-referral-measurement></script>
+<meta name="google-adsense-account" content="ca-pub-8222782620788075">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
+<meta property="og:site_name" content="Chris Izworski">
+<meta name="twitter:title" content="Guides by Chris Izworski | AI, 911, Great Lakes Travel, and Zone 6a Gardening">
+<meta name="twitter:description" content="Guides by Chris Izworski covering AI in 911 and public safety, Great Lakes travel and ship watching, and Zone 6a Michigan gardening.">
 </head>
-<body data-analytics-page="guides">
-<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
-<div class="nav">
-<a href="/">Home</a>
-<a href="/about/">About</a>
-<a href="/start-here/">Start Here</a>
-<a href="/tools/">Tools</a>
-<a href="/press/">Press</a>
-<a href="/media/">Media</a>
-<a href="/timeline/">Timeline</a>
-<a href="/citations/">Citations</a>
-<a href="/case-studies/">Case Studies</a>
-<a href="/blog/">Blog</a>
-<a href="/ai/">AI</a>
-<a href="/guides/" class="active">Guides</a>
+<body class="hm-page">
+<a class="hm-skip" href="#main-guides-body">Skip to Guides</a>
+<div class="hm-authority-ribbon" role="region" aria-label="Identity and verification credentials">
+  <div class="hm-shell hm-authority-ribbon__inner">
+    <div class="hm-authority-ribbon__badge">
+      <span class="hm-pulse-dot" aria-hidden="true"></span>
+      <span>Chris Izworski &middot; Bay City, Michigan &middot; Independent Great Lakes Digital Publication &amp; Field Desk</span>
+    </div>
+    <nav class="hm-dossier-nav" aria-label="Author verification and dossier links">
+      <span>Dossier:</span>
+      <a href="/chris-izworski/">Biography</a>
+      <a href="/press/">Press</a>
+      <a href="/media/">Media</a>
+      <a href="/timeline/">Timeline</a>
+      <a href="/citations/">Citations</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/ai/">AI &amp; 911</a>
+    </nav>
+  </div>
 </div>
-<div class="body">
+<header class="hm-masthead">
+  <div class="hm-shell hm-masthead__inner">
+    <div class="hm-brand-group">
+      <a href="/" aria-label="Chris Izworski Home">
+        <img class="hm-brand-avatar" src="/chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
+      </a>
+      <div class="hm-brand-copy">
+        <p class="hm-brand-title"><a href="/">Chris Izworski</a></p>
+        <p class="hm-brand-sub">Great Lakes Almanac, Live Decision Engines &amp; Field Guides</p>
+      </div>
+    </div>
+    <nav class="hm-primary-nav" aria-label="Primary publication navigation">
+      <a href="/">Home</a>
+      <a href="/tools/">Tools</a>
+      <a href="/national-tools/">U.S. Tools</a>
+      <a href="/guides/" class="is-active" aria-current="page">Guides</a>
+      <a href="/great-lakes/">Great Lakes</a>
+      <a href="/projects/">Projects</a>
+      <a href="/blog/">Writing</a>
+      <a href="/chris-izworski/">About Chris</a>
+      <a href="/start-here/" class="hm-nav-cta">Start Here</a>
+    </nav>
+  </div>
+</header>
+
+<div class="body" id="main-guides-body">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Guides</div>
 
-<h1 class="page-title">Guides</h1>
-<p class="sub">Practical reference material on Great Lakes travel, AI operations, and Zone 6a Michigan gardening.</p>
-
-<p>A guide here earns its place by being specific enough to be actually useful. General advice is easy to find. These try to go further, into the particular conditions of Zone 6a Michigan gardening, or the specific decision points that come up when deploying AI in an operational environment. The operations guides are written for people who are responsible for making decisions, not for an academic audience. The gardening guides are written from direct experience at <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> on Saginaw Bay, not from general horticultural sources. The <a href="/chris-izworski-freighter-view-farms/" data-growth-cta="guides-fvf-authority">project guide</a> connects that experience to the Michigan gardening cluster.</p>
+<section class="guides-hero" aria-labelledby="guides-main-title">
+  <div>
+    <p class="guides-kicker">Great Lakes Almanac &middot; Field Guides &amp; Reference Manuals</p>
+    <h1 class="page-title" id="guides-main-title">Guides</h1>
+    <p class="sub">Practical reference material on Great Lakes travel, AI operations, and Zone 6a Michigan gardening.</p>
+    <p>A guide here earns its place by being specific enough to be actually useful. General advice is easy to find. These try to go further, into the particular conditions of Zone 6a Michigan gardening, or the specific decision points that come up when deploying AI in an operational environment. The operations guides are written for people who are responsible for making decisions, not for an academic audience. The gardening guides are written from direct experience at <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> on Saginaw Bay, not from general horticultural sources. The <a href="/chris-izworski-freighter-view-farms/" data-growth-cta="guides-fvf-authority">project guide</a> connects that experience to the Michigan gardening cluster.</p>
+  </div>
+  <aside class="guides-index-box" aria-label="Guide collections on this page">
+    <h2>Browse by Collection</h2>
+    <div class="guides-index-links">
+      <a href="#field-guides">Fall &amp; Winter Field Guides <span>9 Editions</span></a>
+      <a href="#ai-operations">AI &amp; Public Safety Operations <span>3 Guides</span></a>
+      <a href="#great-lakes-travel">Great Lakes Travel <span>9 Guides</span></a>
+      <a href="#zone-6a-gardening">Zone 6a Michigan Gardening <span>6 Guides</span></a>
+    </div>
+  </aside>
+</section>
 
 <h2 class="section-head" id="field-guides">Michigan &amp; Great Lakes Fall and Winter Field Guides</h2>
 
@@ -220,16 +275,17 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
 </div>
 </div>
 
-<h2 class="section-head">AI and Public Safety Operations</h2>
+<h2 class="section-head" id="ai-operations">AI and Public Safety Operations</h2>
 
 <p>These guides cover the practical side of AI deployment in emergency communications and public safety, what works in live operational environments, what the failure modes look like, and how to approach stakeholder communication when introducing new technology to a government workforce. They are drawn from Chris Izworski's direct experience deploying AI at Saginaw County 911. For the full operational record, see <a href="/case-studies/">case studies</a> and the <a href="/blog/">blog</a>.</p>
 
+<div class="guides-grid">
 <div class="guide-card">
   <div>
     <div class="guide-title"><a href="/blog/ai-supporting-911-administrative-work/">How AI Supports 911 Administrative Workflows</a></div>
     <div class="guide-desc">Where AI creates real value in dispatch center operations, call summarization, queue classification, routine follow-up, and how to structure the guardrails, measurement, and correction loops that keep it reliable. Covers the most common failure modes in administrative AI deployments.</div>
   </div>
-  <div class="guide-arrow"><a href="/blog/ai-supporting-911-administrative-work/">Read →</a></div>
+  <div class="guide-arrow"><a href="/blog/ai-supporting-911-administrative-work/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -237,7 +293,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/blog/public-trust-ai-911-operations/">Building Public Trust While Introducing AI in 911 Operations</a></div>
     <div class="guide-desc">How to frame AI scope for the public, brief staff before the first external question arrives, and respond when something goes wrong. Covers the specific communication patterns that build confidence versus the vague language that tends to create concern.</div>
   </div>
-  <div class="guide-arrow"><a href="/blog/public-trust-ai-911-operations/">Read →</a></div>
+  <div class="guide-arrow"><a href="/blog/public-trust-ai-911-operations/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -245,19 +301,21 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/ai/">AI Implementation Notes</a></div>
     <div class="guide-desc">A running reference on applied AI in public safety and operations, deployment patterns, reliability considerations, and what distinguishes systems that stay useful from those that drift. Focused on what has been deployed and measured, not on capability claims.</div>
   </div>
-  <div class="guide-arrow"><a href="/ai/">Read →</a></div>
+  <div class="guide-arrow"><a href="/ai/">Read &rarr;</a></div>
+</div>
 </div>
 
-<h2 class="section-head">Great Lakes Travel</h2>
+<h2 class="section-head" id="great-lakes-travel">Great Lakes Travel</h2>
 
 <p>Long-form route guides for the Great Lakes shoreline, built from years on the water and a Bay City base. Detailed, stop-by-stop, with field-tested local intel.</p>
 
+<div class="guides-grid">
 <div class="guide-card">
   <div>
     <div class="guide-title"><a href="/mackinac-bridge-live/">Mackinac Bridge Live Conditions and Crossing Tool</a></div>
     <div class="guide-desc">The official crossing status comes first, with separate northbound and southbound camera views, NWS Straits radar, off-bridge weather context, hourly approach wind, vehicle-specific confidence, nearby road events, tolls, and driver assistance.</div>
   </div>
-  <div class="guide-arrow"><a href="/mackinac-bridge-live/">Open →</a></div>
+  <div class="guide-arrow"><a href="/mackinac-bridge-live/">Open &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -265,7 +323,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/mackinac-bridge-rv-trailer-wind-rules/">Mackinac Bridge RV and Trailer Wind Rules</a></div>
     <div class="guide-desc">The official sustained-wind ranges, what counts as a high-profile vehicle, when escorts are required, where northbound and southbound vehicles queue, and when RVs or trailers cannot cross.</div>
   </div>
-  <div class="guide-arrow"><a href="/mackinac-bridge-rv-trailer-wind-rules/">Read →</a></div>
+  <div class="guide-arrow"><a href="/mackinac-bridge-rv-trailer-wind-rules/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -273,7 +331,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/mackinac-bridge-driver-assistance/">Mackinac Bridge Driver Assistance</a></div>
     <div class="guide-desc">The current 24/7 service charge, age and waiver requirements, Bridge Services phone number, and the correct request point on each side for travelers who want Authority staff to drive their vehicle.</div>
   </div>
-  <div class="guide-arrow"><a href="/mackinac-bridge-driver-assistance/">Read →</a></div>
+  <div class="guide-arrow"><a href="/mackinac-bridge-driver-assistance/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -281,7 +339,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/mackinac-bridge-tolls/">Mackinac Bridge Toll Calculator and Fare Guide</a></div>
     <div class="guide-desc">Calculate one-way passenger, motorhome, commercial, and towing charges from the current official axle rates, including the motorhome-towing-auto exception, payment options, and card fee.</div>
   </div>
-  <div class="guide-arrow"><a href="/mackinac-bridge-tolls/">Calculate →</a></div>
+  <div class="guide-arrow"><a href="/mackinac-bridge-tolls/">Calculate &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -289,7 +347,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/lake-superior-circle-tour/">Lake Superior Circle Tour, Stop-by-Stop Guide and Trip Planner</a></div>
     <div class="guide-desc">The complete 1,300-mile circumnavigation of Lake Superior, every major stop, every activity, official links, and three concrete day-by-day itineraries (7, 10, and 14 days). Freighter-watching notes at every port. Live Lake Superior water-level data. North Shore field notes for the Canadian segment most American guides shortchange. Whitefish Point and the Edmund Fitzgerald Shipwreck Coast treated as the major stop they actually are. An interactive trip planner that prints to a clean checklist.</div>
   </div>
-  <div class="guide-arrow"><a href="/lake-superior-circle-tour/">Read →</a></div>
+  <div class="guide-arrow"><a href="/lake-superior-circle-tour/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -297,7 +355,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/edmund-fitzgerald/">SS Edmund Fitzgerald, the Complete Record</a></div>
     <div class="guide-desc">The full history of the Edmund Fitzgerald, lost November 10, 1975, with all hands. The ship, the final voyage, the 29-man crew, the wreck site, the July 4, 1995 bell recovery, the Gordon Lightfoot song, and the annual memorial ceremonies at Whitefish Point.</div>
   </div>
-  <div class="guide-arrow"><a href="/edmund-fitzgerald/">Read →</a></div>
+  <div class="guide-arrow"><a href="/edmund-fitzgerald/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -305,7 +363,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/soo-locks/">Soo Locks, Live Vessel Activity and Visitor Guide</a></div>
     <div class="guide-desc">An interactive live AIS map for vessels near the Soo Locks plus the visitor guide: lock dimensions, navigation season status, vessel category identification, and the Poe replacement lock under construction.</div>
   </div>
-  <div class="guide-arrow"><a href="/soo-locks/">Read →</a></div>
+  <div class="guide-arrow"><a href="/soo-locks/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -313,7 +371,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/northern-lights-michigan/">Northern Lights in Michigan, Tonight's Aurora Forecast</a></div>
     <div class="guide-desc">Live NOAA SWPC Kp forecast, tonight's viewing odds, dark-sky locations across the Upper Peninsula and Lake Superior north shore, photography settings, and the science behind aurora visibility from Michigan.</div>
   </div>
-  <div class="guide-arrow"><a href="/northern-lights-michigan/">Read →</a></div>
+  <div class="guide-arrow"><a href="/northern-lights-michigan/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -323,18 +381,19 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
   </div>
   <div class="guide-arrow"><a href="/great-lakes-buoys/">Read &rarr;</a></div>
 </div>
+</div>
 
-
-<h2 class="section-head">Zone 6a Michigan Gardening</h2>
+<h2 class="section-head" id="zone-6a-gardening">Zone 6a Michigan Gardening</h2>
 
 <p>These guides are specific to the growing conditions around Bay City and the Great Lakes Bay Region, frost dates, soil, and variety selection for Zone 6a Michigan. They are built from years of growing and seed saving at Freighter View Farms, not from general horticultural sources. The goal is information specific enough to actually change what you do in the garden. For tools and calculators built from the same data, see the <a href="/tools/">tools page</a>.</p>
 
+<div class="guides-grid">
 <div class="guide-card">
   <div>
     <div class="guide-title"><a href="/zone-6a-planting-calendar/">Zone 6a Planting Calendar, Bay City and Saginaw Bay</a></div>
     <div class="guide-desc">Month-by-month seed starting and transplant guide for Zone 6a Michigan, calibrated to the Bay City frost window. Covers tomatoes, peppers, brassicas, cucurbits, and direct-sow crops with specific timing recommendations for indoor starts and outdoor transplanting.</div>
   </div>
-  <div class="guide-arrow"><a href="/zone-6a-planting-calendar/">Read →</a></div>
+  <div class="guide-arrow"><a href="/zone-6a-planting-calendar/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -342,7 +401,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/heirloom-seed-saving-guide/">Heirloom Seed Saving Guide, Michigan</a></div>
     <div class="guide-desc">Fermentation method and dry processing for tomatoes, beans, and squash. Isolation distances, harvest timing, and storage for Zone 6a Michigan conditions. Written from the Freighter View Farms seed library, not from general horticultural references.</div>
   </div>
-  <div class="guide-arrow"><a href="/heirloom-seed-saving-guide/">Read →</a></div>
+  <div class="guide-arrow"><a href="/heirloom-seed-saving-guide/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -350,7 +409,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/heirloom-tomatoes-michigan/">Heirloom Tomatoes in Michigan, Varieties and Growing Notes</a></div>
     <div class="guide-desc">Which heirloom tomato varieties actually perform in Zone 6a Michigan's short season and variable summers. Covers variety selection, season extension, and what the Freighter View Farms trial plots have shown over multiple seasons.</div>
   </div>
-  <div class="guide-arrow"><a href="/heirloom-tomatoes-michigan/">Read →</a></div>
+  <div class="guide-arrow"><a href="/heirloom-tomatoes-michigan/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -358,7 +417,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/when-to-plant-tomatoes-michigan/">When to Plant Tomatoes in Michigan</a></div>
     <div class="guide-desc">Frost date timing, hardening-off schedules, and soil temperature thresholds for tomato transplanting in Michigan. Covers the Bay City window specifically and the variables that matter more than the calendar date.</div>
   </div>
-  <div class="guide-arrow"><a href="/when-to-plant-tomatoes-michigan/">Read →</a></div>
+  <div class="guide-arrow"><a href="/when-to-plant-tomatoes-michigan/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -366,7 +425,7 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/michigan-frost-dates/">Michigan Frost Dates by Region</a></div>
     <div class="guide-desc">Last spring frost and first fall frost dates for Michigan growing regions, with specific data for the Great Lakes Bay Region. Covers how lake effect moderates frost timing near the shore versus inland locations.</div>
   </div>
-  <div class="guide-arrow"><a href="/michigan-frost-dates/">Read →</a></div>
+  <div class="guide-arrow"><a href="/michigan-frost-dates/">Read &rarr;</a></div>
 </div>
 
 <div class="guide-card">
@@ -374,11 +433,26 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 16
     <div class="guide-title"><a href="/companion-planting-zone-6a/">Companion Planting for Zone 6a Michigan</a></div>
     <div class="guide-desc">Practical companion planting combinations that work in Zone 6a Michigan conditions, what actually suppresses pests, improves yield, or makes efficient use of a small plot, versus the companion planting folklore that doesn't hold up under observation.</div>
   </div>
-  <div class="guide-arrow"><a href="/companion-planting-zone-6a/">Read →</a></div>
+  <div class="guide-arrow"><a href="/companion-planting-zone-6a/">Read &rarr;</a></div>
+</div>
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Updated October 2026</div>
+
+<footer class="hm-footer">
+  <div class="hm-shell hm-footer__inner">
+    <p style="margin:0">&copy; 2026 Chris Izworski &middot; Bay City, Michigan &middot; Updated October 2026 &middot; <span class="seo-author-credit">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></p>
+    <nav class="hm-footer__links" aria-label="Site information">
+      <a href="/chris-izworski/">About Chris</a>
+      <a href="/tools/">Michigan Tools</a>
+      <a href="/national-tools/">U.S. Tools</a>
+      <a href="/guides/">Field Guides</a>
+      <a href="/connect/">Contact</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Use</a>
+    </nav>
+  </div>
+</footer>
 <script>
 (function(){
   var m = new Date().getMonth() + 1;
