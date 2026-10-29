@@ -72,6 +72,62 @@
         "surveyedViewpoint": false
       },
       "publicGuideUrl": "/upper-peninsula-waterfalls/bonanza-falls/"
+    },
+    {
+      "gisObjectId": 12,
+      "name": "Chicagon / Chicaugon Falls",
+      "county": "IRON",
+      "status": "public-tourism-signs-described-legal-route-unverified",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Chicaugon: private-camp corridor and washout risk",
+      "summary": "Iron County tourism describes the Raymer/Dave's Camp approach off Long Lake Road, with signs toward the falls. Seasonal road washouts are documented, and another current local source describes private camps along the approach. We have not established a lawful public walking path across every parcel or a currently legal safe parking area.",
+      "guidance": "Do not follow the GIS waterfall pin as a driving destination or assume a washout permits crossing private camp land. The road and full legal walking approach need individual verification; this is a research location, not a published visitor route.",
+      "locationNotes": "Michigan GIS #12 at 46.134032,-88.452985 agrees broadly with other geographic catalogs around 46.1336,-88.4535; a separate tourism listing reports 46.1089,-88.4903, a materially different location. The latter must not be substituted as parking or falls position.",
+      "reviewLimitations": "No trail/parcel easement geometry or present-day passable access established from county visitor directions, despite public tourism promotion.",
+      "nextEvidence": "Verify Raymer Drive and Dave's Camp Road legal road ownership/closed sections and continuous signed route past private camps to designated viewing area; locate permitted parking. Do not index before full route check.",
+      "sourceLinks": [
+        {
+          "label": "Iron County Chamber road and washout directions",
+          "url": "https://www.iron.org/outdoors/waterfalls/"
+        },
+        {
+          "label": "2026 Iron County visitor waterfall guide",
+          "url": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf"
+        },
+        {
+          "label": "Local report warning of private camps",
+          "url": "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/"
+        },
+        {
+          "label": "Geographic location corroboration",
+          "url": "https://fallsdiscovery.com/waterfalls/chicagon-falls-michigan/"
+        }
+      ]
+    },
+    {
+      "gisObjectId": 38,
+      "name": "Gabbro / Baker's Falls",
+      "county": "GOGEBIC",
+      "status": "city-route-described-parcel-visitor-trail-unverified",
+      "publicAccess": "city-directions-not-yet-full-route-verified",
+      "publicationEligible": false,
+      "title": "Gabbro/Baker's: City describes two approaches, land boundary pending",
+      "summary": "The City of Bessemer identifies Gabbro/Baker's Falls as a sightseeing stop and describes a path near the bridge by Blackjack Ski Hill, plus an alternate upper route. Regional directions also mention a gas pipeline clearing. Neither source yet resolves a signed legally public lot-to-view trail or the crossing of adjacent parcels.",
+      "guidance": "Use this research point to plan verification, not to drive to the waterfall GPS or follow an unsourced pipeline shortcut. A future guide requires a mapped legal parking approach and designated public viewing trail, with rough sections and seasonal conditions made explicit.",
+      "locationNotes": "Michigan state GIS #38 marks the natural Black River falls; no separately certified visitor lot or full legal walking line has been established.",
+      "reviewLimitations": "City scenic tourism recommendation is credible evidence of a visitor destination but does not itself certify all parcel access, maintained trail status or winter road clearance.",
+      "nextEvidence": "Reconcile the City of Bessemer bridge/Blackjack Ski Hill route with public lot and legal footpath, and independently check upper-route land ownership.",
+      "sourceLinks": [
+        {
+          "label": "City of Bessemer official scenic-drive visitor description",
+          "url": "https://www.cityofbessemer.org/visit/scenic-drives/"
+        },
+        {
+          "label": "Western U.P. regional waterfall approaches",
+          "url": "https://explorewesternup.com/things-to-do/waterfalls/"
+        }
+      ]
     }
   ]
 }
