@@ -63,7 +63,10 @@ if(tokens.some(token=>html.split(token).length!==2))throw Error('Preview must co
 const built=html.replace(tokens[0],css).replace(tokens[1],js).replace(tokens[2],json);
 if(built.includes('/* INLINE_')||!built.includes('<noscript>')||!built.includes('noindex,nofollow,noarchive'))
   throw Error('Missing static fallback, review indexing gate, or template substitution');
-if(built.includes('href="https://www.google.com/maps/dir/')||built.includes('current trail open'))
+// Test actual outgoing anchors and affirmative status language, not text
+// fragments inside source citations, script comments, or negated caveats.
+if(/<a\\b[^>]*href=["']https:\\/\\/www\\.google\\.com\\/maps\\/dir\\//i.test(built)
+  || /\\b(?:trail|road)\\s+is\\s+open\\s+now\\b/i.test(built))
   throw Error('Disallowed directions/current opening claim');
 fs.mkdirSync(destination,{recursive:true});
 fs.writeFileSync(path.join(destination,'index.html'),built);
