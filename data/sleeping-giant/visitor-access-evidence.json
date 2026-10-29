@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 2,
+  "reviewedAt": "2026-10-29",
+  "status": "official named-access and legal-use evidence; never an exact-position or current-trail-conditions feed",
+  "sources": {
+    "parkCamping": "https://www.ontarioparks.ca/park/SleepingGiant/camping",
+    "parkBikeGuide": "https://blog.ontarioparks.ca/bike-hike-sleeping-giant/",
+    "parkActivities": "https://www.ontarioparks.ca/park/SleepingGiant/activities",
+    "parkManagementPlan": "https://www.ontario.ca/page/sleeping-giant-provincial-park-management-plan",
+    "parkMap": "https://www.ontarioparks.ca/pdf/maps/sleepinggiant/trails_map.pdf",
+    "parkAlerts": "https://www.ontarioparks.ca/park/SleepingGiant/alerts"
+  },
+  "policies": {
+    "publicMapNavigationEnabled": false,
+    "turnByTurnRouteEnabled": false,
+    "actualTrailOpeningKnown": false,
+    "anyCoordinateCertified": false,
+    "namedOfficialWayfindingAllowed": true,
+    "noLivePermitsOrParkingAvailability": true,
+    "officialParkTextOverrulesOTNCyclingFlags": true,
+    "caution": "Park maps and Ontario Trail Network geometries do not confirm signed intersection coordinates, winter road access, bridge passability, safe cliffs or current trail closures."
+  },
+  "anchors": [
+    {
+      "id": "south-kabeyun",
+      "name": "South Kabeyun Trailhead",
+      "kind": "signed_parking_lot",
+      "existingParkingVerified": true,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": true,
+      "legalBikeBoundaryVerified": false,
+      "bikeRackVerified": false,
+      "approach": "South on Ontario Highway 587, about 36.5 km south along the highway; the large lot is marked with a brown-and-yellow sign naming Kabeyun, Sawyer Bay, Ravine Lake and Sea Lion trails. Ontario Parks also describes it as roughly five minutes beyond Marie Louise Lake Campground.",
+      "routeDistanceKmFromRoadStart": null,
+      "roadKmAsPublished": 36.5,
+      "roadKmReference": "Ontario Parks says 36.5 km south on Highway 587; it does not specify an odometer zero-point suitable for GPS turn instructions.",
+      "visitorNote": "Arrive early when demand is high. A valid day-use or other qualifying permit must be displayed. Verify today's road conditions and posted access before departure.",
+      "evidence": [
+        {
+          "source": "parkCamping",
+          "claim": "Officially named large signed South Kabeyun parking lot and capacity limitations."
+        },
+        {
+          "source": "parkBikeGuide",
+          "claim": "All three difficult Giant summit trips begin at the South Kabeyun trailhead; five-minute drive beyond campground."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "kabeyun-sawyer",
+      "name": "Kabeyun / Sawyer Bay approach",
+      "kind": "named_trail_relationship",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": false,
+      "visitorNote": "Ontario Parks treats Sawyer Bay Trail as cycling-permitted and describes hiking routes that switch from it to a short Kabeyun connector; do not infer an exact junction pin.",
+      "evidence": [
+        {
+          "source": "parkBikeGuide",
+          "claim": "Head approach cycles along Sawyer Bay Trail and continues on a walking-only short Kabeyun connector."
+        },
+        {
+          "source": "parkActivities",
+          "claim": "Sawyer Bay Trail is on the official list of trails where cycling is permitted."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "kabeyun-talus",
+      "name": "Kabeyun / Talus Lake junction",
+      "kind": "official_bike_cutoff_with_rack",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": true,
+      "route": "top-of-the-giant",
+      "bikeRoundTripKmFromSouthKabeyun": 13.4,
+      "footRoundTripKmAfterBike": 8.4,
+      "visitorNote": "The legal bike cutoff for South Kabeyun is the Talus Lake junction. Ontario Parks describes a bike rack at the junction. The distances are round-trip trip components, not GPS segment geometry.",
+      "evidence": [
+        {
+          "source": "parkActivities",
+          "claim": "Cycling permitted on South Kabeyun only as far as the Talus junction."
+        },
+        {
+          "source": "parkBikeGuide",
+          "claim": "13.4 km round-trip bike / 8.4 km walk for Top of the Giant; rack at Kabeyun/Talus."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "sawyer-talus",
+      "name": "Sawyer Bay / Talus Lake walking connection",
+      "kind": "named_trail_relationship",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": false,
+      "visitorNote": "The published Nanabosho route rides Sawyer Bay and continues on Talus Lake Trail on foot. The exact turnoff location and any designated bike storage spot are not georeferenced here.",
+      "evidence": [
+        {
+          "source": "parkBikeGuide",
+          "claim": "Nanabosho trip splits cycling on Sawyer Bay from a walking-only Talus Lake and Nanabosho approach."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "talus-top",
+      "name": "Talus Lake / Top of the Giant hiking approach",
+      "kind": "named_walking_approach",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": false,
+      "visitorNote": "After leaving the bike at Kabeyun/Talus, proceed on foot via Talus and Top of the Giant as signed in the park. The exact junction position remains unverified.",
+      "evidence": [
+        {
+          "source": "parkBikeGuide",
+          "claim": "The Top of Giant itinerary is Kabeyun bike segment followed by Talus and Top of the Giant walking segment."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "head-foot-transition",
+      "name": "Sawyer Bay / Kabeyun / Head walking transition",
+      "kind": "official_bike_to_foot_transition",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": false,
+      "route": "head-of-the-giant",
+      "bikeRoundTripKmFromSouthKabeyun": 12.2,
+      "footRoundTripKmAfterBike": 4,
+      "visitorNote": "Ontario Parks describes riding the Sawyer Bay approach, then walking the 0.6 km Kabeyun connector and 1.4 km Head Trail. No official rack is documented; exact stop coordinate is unverified.",
+      "evidence": [
+        {
+          "source": "parkBikeGuide",
+          "claim": "12.2 km round-trip ride, 4 km round-trip walk; 0.6 km Kabeyun connector and 1.4 km Head Trail each way. No bike rack at transition."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    },
+    {
+      "id": "nanabosho-foot-transition",
+      "name": "Sawyer Bay / Talus / Nanabosho walking transition",
+      "kind": "official_bike_to_foot_transition",
+      "existingParkingVerified": false,
+      "namedAccessVerified": true,
+      "roadApproachTextVerified": false,
+      "legalBikeBoundaryVerified": true,
+      "bikeRackVerified": false,
+      "route": "nanabosho-lookout",
+      "bikeRoundTripKmFromSouthKabeyun": 11.8,
+      "footRoundTripKmAfterBike": 5.2,
+      "visitorNote": "Ontario Parks describes riding the first 5.5 km of Sawyer Bay Trail, then hiking the Talus and Nanabosho trails. No official rack is documented; exact stop coordinate is unverified.",
+      "evidence": [
+        {
+          "source": "parkBikeGuide",
+          "claim": "17 km overall return: 11.8 km bike / 5.2 km walk. No bike rack at walking transition."
+        }
+      ],
+      "coordinates": null,
+      "parkingCoordinates": null,
+      "precisePointCertified": false,
+      "currentOpeningVerified": false,
+      "turnByTurnEligible": false
+    }
+  ]
+}
