@@ -29,7 +29,7 @@ for(const slug of slugs){
   assert.ok(graph.some(x=>x["@type"]==="BreadcrumbList"));
   const webpage=graph.find(x=>x["@type"]==="WebPage");
   assert.equal(webpage.url,canonical);
-  assert.match(webpage.dateModified,/^\\d{4}-\\d{2}-\\d{2}$/);
+  assert.match(webpage.dateModified,/^\d{4}-\d{2}-\d{2}$/);
   assert.ok(Date.parse(webpage.dateModified)<=Date.now(),"no future dates");
   const faq=graph.find(x=>x["@type"]==="FAQPage");
   assert.ok(faq?.mainEntity?.length>=3);
