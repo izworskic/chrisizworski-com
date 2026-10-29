@@ -1,0 +1,68 @@
+name: Porkies CR519 western-approach road evidence
+on:
+  push:
+    branches: [feat/porkies-west-519-access-evidence-20261028]
+    paths:
+      - 'scripts/research-porkies-west-road.mjs'
+      - 'data/porkies-west-road-ledger.json'
+      - 'lib/porkies/route-topology.mjs'
+      - '.github/workflows/porkies-west-road-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: porkies-west-road-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  official-road-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate existing independent park road and parking source contracts
+        run: node --test tests/porkies-route-topology.test.mjs tests/porkies-parking.test.js
+      - name: Import 17 state MGF Presque Isle Road lines and 15 distinct west-of-Pinkerton lines
+        run: node scripts/research-porkies-west-road.mjs
+      - name: Fail on unverified or shifted policy
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const s=JSON.parse(fs.readFileSync('public/porcupine-mountains/west-access-evidence.json'));
+          const g=JSON.parse(fs.readFileSync('public/porcupine-mountains/west-road-reference.geojson'));
+          if(s.westRoadFeatureCount!==17||s.westSouthBoundaryFeatureCount!==15||s.presquIsleRoadNetworkAt5m!==1||s.routesAllowed||s.ETAallowed||s.seasonal.presentAccessVerified||g.features.length!==32||g.features.some(f=>f.properties.routingCertified!==false))process.exit(1);
+          NODE
+      - name: Upload independently inspectable road source evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-519-west-road-geometry-review
+          path: |
+            public/porcupine-mountains/west-access-evidence.json
+            public/porcupine-mountains/west-road-reference.geojson
+          retention-days: 14
+      - name: Commit generated official evidence on feature branch safely
+        if: github.ref == 'refs/heads/feat/porkies-west-519-access-evidence-20261028'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/porcupine-mountains/west-access-evidence.json public/porcupine-mountains/west-road-reference.geojson
+          if git diff --cached --quiet; then
+            echo "No geometry update"
+          else
+            git commit -m "data(porkies): verify and publish CR519 western approach evidence only"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin feat/porkies-west-519-access-evidence-20261028
+              git rebase origin/feat/porkies-west-519-access-evidence-20261028
+              if git push origin HEAD:feat/porkies-west-519-access-evidence-20261028; then
+                echo "Source evidence published without overwriting other work"
+                break
+              fi
+              if [ "$attempt" = 5 ]; then exit 1; fi
+              sleep "$attempt"
+            done
+          fi
