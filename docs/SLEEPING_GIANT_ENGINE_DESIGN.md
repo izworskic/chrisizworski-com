@@ -94,3 +94,15 @@ The initial verified-source topology INVESTMENT is now committed. See `docs/SLEE
 The separate baseline repair PR #1274 passed its 59-step `npm run verify:all` gate in [GitHub Actions run 40800109022](https://github.com/izworskic/chrisizworski-com/actions/runs/40800109022). Other focused baseline checks passed. Public build-and-audit and Sleeping Giant merge-base re-verification must still finish before any release.
 
 This feature PR #1273 is stacked onto `fix/winter-search-ci-baseline-20261028`. It must pass GitHub's **synthetic merge ref** tests against that base (not only the standalone Sleeping Giant unit tests). Neither PR authorizes a main-branch merge, publication or visitor navigation claim.
+
+## October 29, 2026 — named parking and official cycling transitions
+
+Added `data/sleeping-giant/visitor-access-evidence.json` and `lib/sleeping-giant/visitor-access-engine.cjs`, with a source-ledger document `docs/SLEEPING_GIANT_OFFICIAL_ACCESS_EVIDENCE_20261029.md`.
+
+Ontario Parks' own current camping description confirms that the South Kabeyun Highway 587 trailhead is a **large, signed public parking facility** (36.5 km south along Highway 587, with no usable route start reference for automatic navigation), that it can fill, and that vehicles require a valid permit. This upgrades **narrative facility existence and approach**, not exact parking coordinates or today's opening status.
+
+Ontario Parks' bike/hike guide and activity policy verify the Kabeyun/Talus cutoff with a named bike rack and the documented round-trip split for Top (13.4 km ride, 8.4 km walk), plus Head (12.2/4.0) and Nanabosho (11.8/5.2) walking transitions. Head/Nanabosho have no official racks. Seven owner-sourced named anchors are now captured with `coordinates:null`, `parkingCoordinates:null`, `currentOpeningVerified:false`, `turnByTurnEligible:false` and a stable no-GPS gate. It is safe to display owner-authored **textual** wayfinding, not park-at-this-pin links or line routing.
+
+Existing OTN access points remain distinct from the separately confirmed parking lot. GIS topology still has **zero** certified parking coordinates, traversable junction edges or live access checks.
+
+**Next substantive phase after this:** independently anchored full-resolution geometry and signed-trail intersection verification before any turn navigation or dynamic elevation.
