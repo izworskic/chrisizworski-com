@@ -49,6 +49,6 @@ test("Lake effect offers visible, crawlable, intent-separated winter next decisi
  assert.match(chunk,/not forecast totals/);
  assert.match(chunk,/never safe-ice certification/);
  assert.match(chunk,/Historical December 25 odds/);
- assert.match(lake, /"dateModified":"2026-10-26"/);
- assert.match(winterSitemap, /<loc>https:\/\/chrisizworski\.com\/lake-effect-snow\/<\/loc>\s*<lastmod>2026-10-26<\/lastmod>/);
+ assert.match(lake, /"dateModified":"2026-10-28"/);
+ assert.match(winterSitemap, /<loc>https:\/\/chrisizworski\.com\/lake-effect-snow\/<\/loc>\s*<lastmod>2026-10-28<\/lastmod>/);
 });
