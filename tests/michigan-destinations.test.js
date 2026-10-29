@@ -123,3 +123,20 @@ test('Leaflet stylesheet is local and map pixel dimensions adapt after layout sh
   assert.match(js, /ResizeObserver/);
   assert.match(js, /invalidateSize/);
 });
+
+test('first destination scenes paint early and the rest remain lazy', () => {
+  const cards = [...html.matchAll(/<article class="destination" id="([^"]+)"[\s\S]*?<figure class="destination-photo card"[^>]*><img([^>]*)>/g)];
+  assert.equal(cards.length, 20);
+  for (const [i, card] of cards.entries()) {
+    const attrs = card[2];
+    if (i < 3) {
+      assert.match(attrs, /loading="eager"/, card[1]);
+      assert.match(attrs, /fetchpriority="low"/, card[1]);
+    } else {
+      assert.match(attrs, /loading="lazy"/, card[1]);
+    }
+  }
+  assert.match(css, /@media\(min-width:851px\)/);
+  assert.match(css, /\.destination:nth-child\(4n\+3\) \.destination-photo\.card\{grid-column:2;grid-row:1\}/);
+  assert.match(css, /\.destination:nth-child\(4n\+3\) \.destination-body\{grid-column:1;grid-row:1\}/);
+});
