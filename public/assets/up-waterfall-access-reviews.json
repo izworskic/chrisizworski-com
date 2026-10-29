@@ -80,13 +80,17 @@
       "status": "public-tourism-signs-described-legal-route-unverified",
       "publicAccess": "not-established-continuously",
       "publicationEligible": false,
-      "title": "Chicaugon: private-camp corridor and washout risk",
-      "summary": "Iron County tourism describes the Raymer/Dave's Camp approach off Long Lake Road, with signs toward the falls. Seasonal road washouts are documented, and another current local source describes private camps along the approach. We have not established a lawful public walking path across every parcel or a currently legal safe parking area.",
-      "guidance": "Do not follow the GIS waterfall pin as a driving destination or assume a washout permits crossing private camp land. The road and full legal walking approach need individual verification; this is a research location, not a published visitor route.",
+      "title": "DNR owns falls parcel; visitor right-of-way still unverified",
+      "summary": "Michigan DNR's own land system identifies the natural Chicagon Falls point within a dedicated 47.8-acre Crystal Falls Management Unit parcel. The tourism approach via Raymer/Dave's Camp Road still passes private camps and may wash out. State ownership of the waterfall parcel does not create a legal visitor route, easement or parking on intervening land.",
+      "guidance": "The waterfall's state parcel is verified, but do NOT navigate to the GIS point, cross private camps or assume Raymer/Dave's Camp Road is passable and public to its end. A signed, legal lot-to-view path needs verification before a visitor guide can be indexed.",
       "locationNotes": "Michigan GIS #12 at 46.134032,-88.452985 agrees broadly with other geographic catalogs around 46.1336,-88.4535; a separate tourism listing reports 46.1089,-88.4903, a materially different location. The latter must not be substituted as parking or falls position.",
-      "reviewLimitations": "No trail/parcel easement geometry or present-day passable access established from county visitor directions, despite public tourism promotion.",
-      "nextEvidence": "Verify Raymer Drive and Dave's Camp Road legal road ownership/closed sections and continuous signed route past private camps to designated viewing area; locate permitted parking. Do not index before full route check.",
+      "reviewLimitations": "State land at the GIS falls is not the same as a documented continuous public right-of-way or permitted parking. Parcel polygon is administrative, not a survey. No same-day road status, current signage or ROW field inspection completed.",
+      "nextEvidence": "Identify Raymer/Dave's Camp road title and public-access corridor, legal parking and continuous signed trail into DNR-managed falls parcel; source the access from DNR/township/road authority.",
       "sourceLinks": [
+        {
+          "label": "Michigan DNR official managed lands GIS layer",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+        },
         {
           "label": "Iron County Chamber road and washout directions",
           "url": "https://www.iron.org/outdoors/waterfalls/"
@@ -103,7 +107,14 @@
           "label": "Geographic location corroboration",
           "url": "https://fallsdiscovery.com/waterfalls/chicagon-falls-michigan/"
         }
-      ]
+      ],
+      "dnrManagedFallsParcel": {
+        "parID": 258918,
+        "acreage": 47.8,
+        "landStatus": "Dedicated",
+        "name": "Crystal Falls Management Unit",
+        "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+      }
     },
     {
       "gisObjectId": 38,
