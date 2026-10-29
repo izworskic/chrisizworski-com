@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-28",
+  "reviewed": "2026-10-29",
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
@@ -271,6 +271,60 @@
           }
         ]
       }
+    },
+    {
+      "gisObjectId": 213,
+      "name": "Alger Falls",
+      "county": "ALGER",
+      "status": "municipal-plan-no-safe-highway-parking",
+      "publicAccess": "roadside-visible-parking-not-verified-safe",
+      "publicationEligible": false,
+      "title": "Alger Falls: no safe parking in city plan",
+      "summary": "Munising's adopted recreation plan says there are no safe parking options at the roadside Alger Falls viewing area by M-28/M-94. Older tourist and hiking accounts mention a turnout, but they do not supersede the city's documented road-safety concern.",
+      "guidance": "Do not stop in travel lanes, walk over the guardrail or use the waterfall GIS point as a parking destination. Safe public parking and pedestrian access require current MDOT confirmation.",
+      "reviewLimitations": "Adopted municipal recreation planning evidence establishes a serious safety concern; it does not establish that all road shoulders are legally closed or that no future improvement has occurred.",
+      "nextEvidence": "Verify current MDOT designated turnout, safe walking/crossing area and whether a legal official view can be reached without stopping on the highway.",
+      "sourceLinks": [
+        {
+          "label": "City of Munising adopted recreation plan, Alger Falls safety",
+          "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+        },
+        {
+          "label": "Munising visitor bureau attraction listing",
+          "url": "https://www.munising.org/activities/alger-falls/"
+        },
+        {
+          "label": "Third-party turnout claim requiring MDOT review",
+          "url": "https://myhikes.org/trails/alger-falls"
+        }
+      ]
+    },
+    {
+      "gisObjectId": 192,
+      "name": "Au Train Falls",
+      "county": "ALGER",
+      "status": "hydroelectric-dam-site-access-operator-review",
+      "publicAccess": "historic-visitor-parking-dam-rights-unverified",
+      "publicationEligible": false,
+      "title": "Au Train: two visitor approaches; utility rights need checking",
+      "summary": "Munising visitor sources describe two different Power Dam Road parking areas, one for upper cascades and another for lower falls beyond a gate. The Au Train dam has faced federal safety compliance and license-surrender proceedings, with reported property/operating-right changes in 2025. Those reports do not prove the waterfall area is currently closed or open.",
+      "guidance": "Do not infer permission through utility gates or present a current safe parking/walking route until the dam operator's current access rules and federal project status are verified. Water release conditions can change and are not monitored here.",
+      "reviewLimitations": "Historical tourism directions do not establish 2026 utility landowner permission; reporting on proposed license surrender is not a final current FERC status or an official public closure order.",
+      "nextEvidence": "Check current FERC project docket and dam operator identity, public-access condition at both Power Dam Road parking areas, and gates/posted warnings. Preserve upper and lower falls as separate access experiences.",
+      "sourceLinks": [
+        {
+          "label": "Munising Visitor Bureau upper/lower directions",
+          "url": "https://www.munising.org/activities/au-train-falls/"
+        },
+        {
+          "label": "2025 FERC safety and license proceeding reporting",
+          "url": "https://www.uppermichiganssource.com/2025/11/17/federal-government-calls-surrender-au-train-dam/"
+        },
+        {
+          "label": "Regional two-parking-area visitor guidance",
+          "url": "https://www.exploremunising.com/waterfalls/"
+        }
+      ]
     }
   ]
 }
