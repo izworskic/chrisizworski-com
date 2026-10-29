@@ -614,3 +614,33 @@ test('Morgan Falls public route uses NTN South parking and designated crossing, 
   assert.match(card[0],/Check parking source/);
   assert.ok(sitemap.includes('/upper-peninsula-waterfalls/morgan-falls/'));
 });
+
+
+test('Batch 14 eight source-reviewed GIS records stay unindexed with distinct route and safety gates',()=> {
+ const refs=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
+ const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries;
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8')).candidates;
+ for(const oid of [135,160,45,46,91,95,96,88]){
+  const g=ledger.candidates.find(x=>x.gisObjectId===oid);
+  const a=source.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+  const r=refs.find(x=>x.gisObjectId===oid);
+  const q=queue.find(x=>x.gisObjectId===oid);
+  assert.ok(g&&a&&r&&q,'all four source artifacts for '+oid);
+  assert.equal(g.curatedId,null);
+  assert.equal(r.publicationEligible,false);
+  assert.equal(q.publicationEligible,false);
+  assert.equal(q.reviewStatus,'previous-research-needs-public-access-review');
+  assert.ok(g.sourceLinks.length>=2);
+  assert.ok(r.routeAudit.segments.length===6);
+  assert.ok(r.routeAudit.segments.some(x=>x.status==='not-cleared'));
+  assert.ok(r.sourceLinks.every(x=>x.url.startsWith('https://')));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+r.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'/'));
+ }
+ assert.match(refs.find(x=>x.gisObjectId===135).reviewLimitations,/milestones/i);
+ assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/utility/i);
+ assert.match(refs.find(x=>x.gisObjectId===46).guidance,/Do not.*gate/i);
+ assert.match(refs.find(x=>x.gisObjectId===91).summary,/private/i);
+ const mapJS=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
+ assert.match(mapJS,/accessReviews/);
+ assert.match(mapJS,/routeAudit/);
+});

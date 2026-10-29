@@ -4,76 +4,6 @@
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
-      "gisObjectId": 124,
-      "name": "Bonanza Falls / Greenwood Falls",
-      "county": "ONTONAGON",
-      "status": "verified-seasonal-township-park-upper-falls-only",
-      "publicAccess": "signed-upper-falls-township-park-published-downstream-private-unknown",
-      "publicationEligible": true,
-      "title": "Township upper-falls park verified; GIS point is outside mapped park",
-      "summary": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and publishes its map destination. The official map destination and regional upper-river view reference lie within a township-attributed parcel; Michigan's separate natural waterfall GIS #124 location lies outside it on a parcel attributed to a private LLC. The guide covers the short signed park approach to the upper falls only.",
-      "guidance": "Use only the signed township park entrance and short established path from designated parking to the upper river view, then return. Do not drive to the GIS falls point, infer access to all downstream drops, or assume the seasonal park is open today.",
-      "locationNotes": "Township Google Maps published destination 46.8176942,-89.5674561 (NOT verified lot); regional brochure upper-view reference 46.817719,-89.570023 (NOT surveyed viewpoint); state natural falls GIS #124 46.818863,-89.571458 on other attributed parcel. Route is signed, not surveyed or traced on the map.",
-      "sourceLinks": [
-        {
-          "label": "Carp Lake Township: Greenwoods (Bonanza Falls) public park",
-          "url": "https://www.carplaketwp.org/general-resources"
-        },
-        {
-          "label": "Direct signed parking-to-upper-falls trail description",
-          "url": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
-        },
-        {
-          "label": "Carp Lake Township August parking/visitor signs",
-          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
-        },
-        {
-          "label": "Carp Lake Township October seasonal closure",
-          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf"
-        },
-        {
-          "label": "Ontonagon County parcel-GIS disclaimer",
-          "url": "https://ontonagoncounty.org/home/resources/"
-        },
-        {
-          "label": "GIS #124 point parcel query",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.571458%2C46.818863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
-        },
-        {
-          "label": "Regional published waterfall approach",
-          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
-        },
-        {
-          "label": "County parcel research layer — Michigan Tech mirror",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0"
-        },
-        {
-          "label": "Regional brochure point parcel query",
-          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.570023%2C46.817719&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
-        },
-        {
-          "label": "Carp Lake Township 2025 June signage approval",
-          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
-        }
-      ],
-      "reviewLimitations": "Municipal park access is verified by the township's own Parks & Facilities directory, and a local guide describes a short signed lot-to-upper-falls path. Exact lot coordinates and trail geometry remain unverified; the published map has reference points only. Different parcels may apply farther downstream. The 2025 autumn closure minutes do not establish the 2026 park opening or closure date.",
-      "nextEvidence": "For additional access, obtain mapped lawful public walking rights from the township upper viewing area toward any lower drops; verify current season entrance status. Do not extend the published signed upper-falls park route by inference.",
-      "publicationScope": "township-park-signed-upper-falls-only",
-      "parkVisitorMapDestination": {
-        "lat": 46.8176942,
-        "lng": -89.5674561,
-        "source": "https://www.carplaketwp.org/general-resources",
-        "parkingLocation": false
-      },
-      "regionalUpperFallsReference": {
-        "lat": 46.817719,
-        "lng": -89.570023,
-        "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
-        "surveyedViewpoint": false
-      },
-      "publicGuideUrl": "/upper-peninsula-waterfalls/bonanza-falls/"
-    },
-    {
       "gisObjectId": 12,
       "name": "Chicagon / Chicaugon Falls",
       "county": "IRON",
@@ -273,31 +203,614 @@
       }
     },
     {
-      "gisObjectId": 213,
-      "name": "Alger Falls",
-      "county": "ALGER",
-      "status": "municipal-plan-no-safe-highway-parking",
-      "publicAccess": "roadside-visible-parking-not-verified-safe",
+      "gisObjectId": 45,
+      "name": "Sturgeon Falls",
+      "county": "HOUGHTON",
+      "status": "federal-wilderness-trail-public-route-current-road-unverified",
+      "publicAccess": "research-only-route-not-cleared",
       "publicationEligible": false,
-      "title": "Alger Falls: no safe parking in city plan",
-      "summary": "Munising's adopted recreation plan says there are no safe parking options at the roadside Alger Falls viewing area by M-28/M-94. Older tourist and hiking accounts mention a turnout, but they do not supersede the city's documented road-safety concern.",
-      "guidance": "Do not stop in travel lanes, walk over the guardrail or use the waterfall GIS point as a parking destination. Safe public parking and pedestrian access require current MDOT confirmation.",
-      "reviewLimitations": "Adopted municipal recreation planning evidence establishes a serious safety concern; it does not establish that all road shoulders are legally closed or that no future improvement has occurred.",
-      "nextEvidence": "Verify current MDOT designated turnout, safe walking/crossing area and whether a legal official view can be reached without stopping on the highway.",
+      "title": "Sturgeon Falls: access evidence under review",
+      "summary": "Federal Recreation.gov and Wild and Scenic Rivers materials place Sturgeon Falls in Ottawa National Forest's Sturgeon River Gorge Wilderness. The North Country Trail Association's 2025 chapter guide documents a wilderness falls trail descending by steep switchbacks and a distinct signed approach from the NCT spur. No snow plowing is provided on connecting roads.",
+      "guidance": "Use official wilderness trailhead and published trail maps only; do not turn the falls GIS pin into a parking GPS. A wilderness switchback into the gorge is a strenuous footpath, not an accessible overlook or guaranteed open motor route.",
+      "reviewLimitations": "NCTA's 2025 trail details establish historical approach and jurisdiction, not current road clearance, snow conditions, exact seasonal bridge/footpath conditions or a measured parking-to-waterfall distance.",
+      "nextEvidence": "Reconcile FR2270/FR2200 named public trailheads with current Ottawa National Forest motor vehicle use map, visitor parking and any 2026 trail/road notices before an indexable guide.",
       "sourceLinks": [
         {
-          "label": "City of Munising adopted recreation plan, Alger Falls safety",
-          "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+          "label": "NCTA Peter Wolfe chapter 2025 segment guide",
+          "url": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
         },
         {
-          "label": "Munising visitor bureau attraction listing",
-          "url": "https://www.munising.org/activities/alger-falls/"
+          "label": "Recreation.gov official federal wilderness overview",
+          "url": "https://www.recreation.gov/camping/poi/238242"
         },
         {
-          "label": "Third-party turnout claim requiring MDOT review",
-          "url": "https://myhikes.org/trails/alger-falls"
+          "label": "Federal Wild and Scenic Rivers overview",
+          "url": "https://www.fws.gov/rivers/river/sturgeon-ottawa"
         }
-      ]
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #45 falls on Sturgeon River within named gorge; point is not a trailhead",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager",
+            "status": "documented-not-live",
+            "finding": "Ottawa National Forest and federal wilderness documented",
+            "source": "https://www.recreation.gov/camping/poi/238242"
+          },
+          {
+            "label": "Forest roads",
+            "status": "not-cleared",
+            "finding": "FR2270/FR2200 chapter references; current MVUM travel authorization not confirmed",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          },
+          {
+            "label": "Visitor lot",
+            "status": "documented-not-live",
+            "finding": "NCTA documents a wilderness trailhead lot separate from NCT spur; current access unknown",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          },
+          {
+            "label": "Hike",
+            "status": "documented-not-live",
+            "finding": "Steep wilderness switchbacks down gorge; no blazed connector inside wilderness",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          },
+          {
+            "label": "Season",
+            "status": "not-cleared",
+            "finding": "NCTA says area roads not winter-plowed; 2026 real-time conditions not available",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 46,
+      "name": "Tioga Falls",
+      "county": "BARAGA",
+      "status": "private-camp-gated-access-no-public-route",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Tioga Falls: access evidence under review",
+      "summary": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths.",
+      "guidance": "Do not tell visitors to pass the gate, cross the river to bypass private land or take the GIS coordinates as a car destination. Keep research-only until an authorized public trailhead, parking and continuous permitted approach exist.",
+      "reviewLimitations": "Third-party historical route description is not a legal parcel survey or 2026 gate status; absence of a public route is not proof that every possible access is legally closed.",
+      "nextEvidence": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance.",
+      "sourceLinks": [
+        {
+          "label": "Independent field account and private-gate warning",
+          "url": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+        },
+        {
+          "label": "Michigan GIS named waterfall",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "Independent field account near exact Tioga River GIS #46 point",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Land rights",
+            "status": "not-cleared",
+            "finding": "Private camp and posted gate reported; public easement not established",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Access road",
+            "status": "not-cleared",
+            "finding": "Unmarked two-track and gate; no verified lawful public motor approach",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "No documented designated public trailhead parking",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Footpath",
+            "status": "not-cleared",
+            "finding": "Suggestions to ford river or avoid cabin are not public access authorization",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "No 2026 manager permission or gate decision confirmed",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 88,
+      "name": "Power House Falls (Falls River)",
+      "county": "BARAGA",
+      "status": "village-powerhouse-park-with-trail-identity-review",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Power House Falls (Falls River): access evidence under review",
+      "summary": "Village of L'Anse's 2025 visitor manual independently describes a small park at Powerhouse Falls and an upstream half-mile trail by the old powerhouse, separate from downtown lower/middle Falls River walk. It gives no current gate, structural-safety certification or exact lot GPS.",
+      "guidance": "Use only the park entrance and established path; do not enter old powerhouse buildings or cross utility tracks/structures, and do not assume the state GIS #88 marker is a driveable lot.",
+      "reviewLimitations": "Historic power station and trail descriptions do not establish structural safety or current 2026 operation of the parking lot. Other generic Power Dam/Falls River records are different nearby features.",
+      "nextEvidence": "Verify current small-park operator, official entrance and parking permission plus correspondence of GIS #88 to the waterfall visible from the park before visitor-guide promotion.",
+      "sourceLinks": [
+        {
+          "label": "Village of L'Anse official visitor manual",
+          "url": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+        },
+        {
+          "label": "Independent location description of Powerhouse Falls",
+          "url": "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/"
+        },
+        {
+          "label": "State GIS #88 natural feature",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #88 matches named Falls River Power House Falls",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Manager",
+            "status": "not-cleared",
+            "finding": "Village describes park but parcel/operator and present maintenance unknown",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Access road",
+            "status": "documented-not-live",
+            "finding": "Village notes small park south of L'Anse, not a falls GIS navigation point",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "Small park is described, current entrance or winter lot not verified",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Footpath",
+            "status": "documented-not-live",
+            "finding": "Village says half-mile trail upstream; not exact falls-to-lot distance",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "Do not enter old powerhouse; current access restrictions unverified",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 91,
+      "name": "Upper Falls (Falls River)",
+      "county": "BARAGA",
+      "status": "falls-river-named-upper-private-access-conflict",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Upper Falls (Falls River): access evidence under review",
+      "summary": "L'Anse municipality describes a public Falls River nature trail and upper, middle and lower waterfall views, but a separate recent guide claims an Upper Falls label is on private land. GIS #91 upper coordinate is not enough to assign an exact trail view or resolve this same-name collision.",
+      "guidance": "Use the Village/Baraga Falls River Trail route only for documented public viewpoints; do not enter upstream private yards, cross tracks, walk beneath US-41 or assume GIS #91 can be visited legally.",
+      "reviewLimitations": "Municipal trail summary does not georeference which of several 'Upper' falls points is public. Private-property statement is secondary and may describe a different upstream drop.",
+      "nextEvidence": "Match each named falls feature to the municipal trail's legally accessible section and parcel; resolve #91 versus other upstream 'Upper Falls' before public page.",
+      "sourceLinks": [
+        {
+          "label": "Village of L'Anse 2025 information manual",
+          "url": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+        },
+        {
+          "label": "Baraga County Trails public Falls River Trail",
+          "url": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        },
+        {
+          "label": "Conflicting private Upper Falls guide",
+          "url": "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #91 is a named upper Falls River natural feature, not a path",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Trail authority",
+            "status": "documented-not-live",
+            "finding": "L'Anse visitor material describes public river trail generally",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Road",
+            "status": "documented-not-live",
+            "finding": "Baraga trail group publishes two visitor trailheads",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "Published parking cannot yet be legally linked to GIS #91 feature",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Last footpath",
+            "status": "not-cleared",
+            "finding": "Public river trail doesn't prove exact upstream private drop access",
+            "source": "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "No site-specific 2026 trespass/easement/railroad conditions",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 95,
+      "name": "Middle Falls (Falls River)",
+      "county": "BARAGA",
+      "status": "municipal-falls-river-trail-view-match-to-check",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Middle Falls (Falls River): access evidence under review",
+      "summary": "L'Anse village materials describe riverbank trail viewing of named middle and lower drops. Baraga County Trails publishes a 1.4-mile out-and-back Falls River Trail with downstream Main Street lot and upstream US-41 bridge-side trailhead, but the exact GIS #95 viewpoint and railroad boundaries are not independently aligned.",
+      "guidance": "Use only signed public Falls River Trail, avoiding railway tracks, hydro-plant property and risky riverbank scrambles. Do not present the natural falls GIS pin as parking.",
+      "reviewLimitations": "The quoted public trail total is the entire trail, not measured from either specific waterfall. Informal guides suggesting crossings under or over bridges are not authorization.",
+      "nextEvidence": "Verify GIS #95 identity versus posted Middle Falls viewpoint and municipal lot/trail access rules, then assess public guide promotion alongside Lower Falls as distinct stops or one shared itinerary.",
+      "sourceLinks": [
+        {
+          "label": "Village of L'Anse 2025 visitor information",
+          "url": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+        },
+        {
+          "label": "Baraga County Trails signed route and two lots",
+          "url": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        },
+        {
+          "label": "Independent middle-drop identity account",
+          "url": "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #95 marks Middle Falls on Falls River",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Public trail",
+            "status": "documented-not-live",
+            "finding": "County trails organization describes public Falls River Trail",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Road",
+            "status": "documented-not-live",
+            "finding": "Main Street and US-41 trailheads documented, no point navigation",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Parking",
+            "status": "documented-not-live",
+            "finding": "Separate two published lots; exact fall-specific routing unverified",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Footpath",
+            "status": "not-cleared",
+            "finding": "Need public trail-to-actual #95 view proof without railroad shortcut",
+            "source": "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/"
+          },
+          {
+            "label": "Conditions",
+            "status": "not-cleared",
+            "finding": "2026 site signage/rail and hydro hazards not directly verified",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 96,
+      "name": "Lower Falls (Falls River)",
+      "county": "BARAGA",
+      "status": "municipal-falls-river-trail-downstream-identity-review",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Lower Falls (Falls River): access evidence under review",
+      "summary": "Village of L'Anse and Baraga County Trails describe public waterfront-side river walking and lower Falls River cascades. The specialist geographic source distinguishes the lower natural drop from historic cement dam features; they must not be conflated into a dam-access route.",
+      "guidance": "Start from signed municipal waterfront/river parking if open and follow designated river paths only; do not cross a gated industrial bridge or go onto the old dam to see a GIS point.",
+      "reviewLimitations": "Public trail can reach river scenery, but sightline to GIS #96 and legal bank/path boundaries require source confirmation. Municipal trail length is not lower-falls hike length.",
+      "nextEvidence": "Confirm separate Lower Falls (#96) versus adjacent artificial drop and authorized viewing position before promoting an indexable guide.",
+      "sourceLinks": [
+        {
+          "label": "Village of L'Anse municipal falls overview",
+          "url": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+        },
+        {
+          "label": "Baraga County Trails route",
+          "url": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        },
+        {
+          "label": "Lower Falls independent description",
+          "url": "https://www.waterfallsofthekeweenaw.com/falls-river/lower-falls/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #96 named Lower Falls, keep distinct from historic dam structure",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Public lands",
+            "status": "documented-not-live",
+            "finding": "Village documents Falls River visitor path near downtown",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Road",
+            "status": "documented-not-live",
+            "finding": "Main Street waterfront arrival is published",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Parking",
+            "status": "documented-not-live",
+            "finding": "County trails group lists river-side small park parking; current gate not live",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Last footpath",
+            "status": "not-cleared",
+            "finding": "Public trail's sightline to #96 needs sign/parcel verification",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "No present dam, industry or riverbank safety confirmation",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 124,
+      "name": "Bonanza Falls / Greenwood Falls",
+      "county": "ONTONAGON",
+      "status": "verified-seasonal-township-park-upper-falls-only",
+      "publicAccess": "signed-upper-falls-township-park-published-downstream-private-unknown",
+      "publicationEligible": true,
+      "title": "Township upper-falls park verified; GIS point is outside mapped park",
+      "summary": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and publishes its map destination. The official map destination and regional upper-river view reference lie within a township-attributed parcel; Michigan's separate natural waterfall GIS #124 location lies outside it on a parcel attributed to a private LLC. The guide covers the short signed park approach to the upper falls only.",
+      "guidance": "Use only the signed township park entrance and short established path from designated parking to the upper river view, then return. Do not drive to the GIS falls point, infer access to all downstream drops, or assume the seasonal park is open today.",
+      "locationNotes": "Township Google Maps published destination 46.8176942,-89.5674561 (NOT verified lot); regional brochure upper-view reference 46.817719,-89.570023 (NOT surveyed viewpoint); state natural falls GIS #124 46.818863,-89.571458 on other attributed parcel. Route is signed, not surveyed or traced on the map.",
+      "sourceLinks": [
+        {
+          "label": "Carp Lake Township: Greenwoods (Bonanza Falls) public park",
+          "url": "https://www.carplaketwp.org/general-resources"
+        },
+        {
+          "label": "Direct signed parking-to-upper-falls trail description",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
+        },
+        {
+          "label": "Carp Lake Township August parking/visitor signs",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
+        },
+        {
+          "label": "Carp Lake Township October seasonal closure",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf"
+        },
+        {
+          "label": "Ontonagon County parcel-GIS disclaimer",
+          "url": "https://ontonagoncounty.org/home/resources/"
+        },
+        {
+          "label": "GIS #124 point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.571458%2C46.818863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Regional published waterfall approach",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "County parcel research layer — Michigan Tech mirror",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0"
+        },
+        {
+          "label": "Regional brochure point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.570023%2C46.817719&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Carp Lake Township 2025 June signage approval",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
+        }
+      ],
+      "reviewLimitations": "Municipal park access is verified by the township's own Parks & Facilities directory, and a local guide describes a short signed lot-to-upper-falls path. Exact lot coordinates and trail geometry remain unverified; the published map has reference points only. Different parcels may apply farther downstream. The 2025 autumn closure minutes do not establish the 2026 park opening or closure date.",
+      "nextEvidence": "For additional access, obtain mapped lawful public walking rights from the township upper viewing area toward any lower drops; verify current season entrance status. Do not extend the published signed upper-falls park route by inference.",
+      "publicationScope": "township-park-signed-upper-falls-only",
+      "parkVisitorMapDestination": {
+        "lat": 46.8176942,
+        "lng": -89.5674561,
+        "source": "https://www.carplaketwp.org/general-resources",
+        "parkingLocation": false
+      },
+      "regionalUpperFallsReference": {
+        "lat": 46.817719,
+        "lng": -89.570023,
+        "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "surveyedViewpoint": false
+      },
+      "publicGuideUrl": "/upper-peninsula-waterfalls/bonanza-falls/"
+    },
+    {
+      "gisObjectId": 135,
+      "name": "Douglas Houghton Falls",
+      "county": "HOUGHTON",
+      "status": "state-scenic-site-development-visitor-bureau-conflict",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Douglas Houghton Falls: access evidence under review",
+      "summary": "Michigan DNR confirms Phase 1 parking, an accessible path and Hammell Creek pedestrian bridge completed in 2025, but the path beyond the bridge remains unimproved, with no observation deck, guardrails or final dedication. Phase 2 is planned for 2027. Visit Keweenaw says the site is open for visitation; neither source authorizes interpreting the undeveloped cliff path as an accessible or finished overlook.",
+      "guidance": "Do not direct drivers to the lower private-property approach or imply the final waterfall overlook is complete. Before promoting a guide, reconcile DNR's formal-opening statement with Visit Keweenaw's visit guidance and identify any posted construction or closure restrictions.",
+      "reviewLimitations": "State DNR and visitor bureau describe different milestones: visitation versus official dedication; do not collapse these into an unqualified open/closed claim.",
+      "nextEvidence": "Obtain current DNR site-specific visitor operating status, allowable accessible-path terminus, and bridge-to-overlook safety rules; do not use a lower-gorge private entry.",
+      "sourceLinks": [
+        {
+          "label": "Michigan DNR scenic-site status",
+          "url": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls"
+        },
+        {
+          "label": "Michigan DNR current project phases",
+          "url": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates"
+        },
+        {
+          "label": "Visit Keweenaw visitor guidance",
+          "url": "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "GIS #135 marks natural falls on Hammell Creek, not the M-26 entrance",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Public land",
+            "status": "documented-not-live",
+            "finding": "DNR administers the 70-acre scenic site; property acquisition and project development documented",
+            "source": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates"
+          },
+          {
+            "label": "Approach road",
+            "status": "documented-not-live",
+            "finding": "DNR says new entrance road built in phase 1; current operating restriction needs reconciling",
+            "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls"
+          },
+          {
+            "label": "Visitor parking",
+            "status": "documented-not-live",
+            "finding": "Phase 1 parking constructed, but construction-season visitor permission not independently established today",
+            "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls"
+          },
+          {
+            "label": "Footpath and safety",
+            "status": "not-cleared",
+            "finding": "Accessible path ends at pedestrian bridge; beyond it steep natural path without built safety platform",
+            "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls"
+          },
+          {
+            "label": "Current permissions",
+            "status": "not-cleared",
+            "finding": "Visit Keweenaw says visits permitted, DNR says official opening after all improvements; verify site notice",
+            "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 160,
+      "name": "Dead River Falls",
+      "county": "MARQUETTE",
+      "status": "tourism-trail-documented-site-management-unverified",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Dead River Falls: access evidence under review",
+      "summary": "Travel Marquette's waterfall visitor map describes a 1.7-mile Forestville Road waterfall outing from a parking area right of the powerhouse, up a gated gravel service road and down to the river. Marquette Township's recreation plan names Dead River Falls in Forestville. NTN's separate Forestville trailhead is not proof that its parking is the same as the powerhouse waterfall approach.",
+      "guidance": "Use the tourism-described Forestville approach only after checking posted property, service-gate, parking and trail restrictions. Do not route to the GIS falls point or substitute an NTN Forestville/NCT lot without verified connecting public footpath.",
+      "reviewLimitations": "Printed tourism map describes the visitor route, not current utility power-station permissions or a surveyed legal parking lot. Variable hike distances from independent guides are not parking-to-falls measurements.",
+      "nextEvidence": "Verify current owner/operator of powerhouse-side road and public lot, any gate or construction rule, and continuity of the visitor footpath; distinguish NTN Forestville Trailhead from the falls parking.",
+      "sourceLinks": [
+        {
+          "label": "Travel Marquette waterfall map, Dead River #3",
+          "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+        },
+        {
+          "label": "Marquette Township 2022–26 recreation plan",
+          "url": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+        },
+        {
+          "label": "Noquemanon North Trails access list",
+          "url": "https://www.noquetrails.org/north-trails"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #160 identifies named Dead River waterfalls near Forestville",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Jurisdiction",
+            "status": "documented-not-live",
+            "finding": "Township plan identifies Dead River Falls as local recreation, not utility land title",
+            "source": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+          },
+          {
+            "label": "Approach road",
+            "status": "documented-not-live",
+            "finding": "Tourism publishes Wright Street to Forestville Road, not a GIS-pin vehicle route",
+            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+          },
+          {
+            "label": "Visitor parking",
+            "status": "not-cleared",
+            "finding": "Tourism describes right-of-powerhouse parking; current legal use/service area must be confirmed",
+            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+          },
+          {
+            "label": "Walking line",
+            "status": "documented-not-live",
+            "finding": "Tourism says gravel road by gate, marked stumps, steep descent along river; not a surveyed trail",
+            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "Utility operations, gate permission, riverbank hazards and winter-road maintenance not current",
+            "source": "https://www.noquetrails.org/north-trails"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 192,
@@ -323,6 +836,33 @@
         {
           "label": "Regional two-parking-area visitor guidance",
           "url": "https://www.exploremunising.com/waterfalls/"
+        }
+      ]
+    },
+    {
+      "gisObjectId": 213,
+      "name": "Alger Falls",
+      "county": "ALGER",
+      "status": "municipal-plan-no-safe-highway-parking",
+      "publicAccess": "roadside-visible-parking-not-verified-safe",
+      "publicationEligible": false,
+      "title": "Alger Falls: no safe parking in city plan",
+      "summary": "Munising's adopted recreation plan says there are no safe parking options at the roadside Alger Falls viewing area by M-28/M-94. Older tourist and hiking accounts mention a turnout, but they do not supersede the city's documented road-safety concern.",
+      "guidance": "Do not stop in travel lanes, walk over the guardrail or use the waterfall GIS point as a parking destination. Safe public parking and pedestrian access require current MDOT confirmation.",
+      "reviewLimitations": "Adopted municipal recreation planning evidence establishes a serious safety concern; it does not establish that all road shoulders are legally closed or that no future improvement has occurred.",
+      "nextEvidence": "Verify current MDOT designated turnout, safe walking/crossing area and whether a legal official view can be reached without stopping on the highway.",
+      "sourceLinks": [
+        {
+          "label": "City of Munising adopted recreation plan, Alger Falls safety",
+          "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+        },
+        {
+          "label": "Munising visitor bureau attraction listing",
+          "url": "https://www.munising.org/activities/alger-falls/"
+        },
+        {
+          "label": "Third-party turnout claim requiring MDOT review",
+          "url": "https://myhikes.org/trails/alger-falls"
         }
       ]
     }
