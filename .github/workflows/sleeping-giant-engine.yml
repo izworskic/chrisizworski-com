@@ -7,6 +7,8 @@ on:
       - 'lib/sleeping-giant/**'
       - 'tests/sleeping-giant-*.test.js'
       - 'scripts/export-sleeping-giant-geometry.mjs'
+      - 'scripts/export-sleeping-giant-visitor-preview.mjs'
+      - 'previews/sleeping-giant-explorer/**'
       - '.github/workflows/sleeping-giant-engine.yml'
   workflow_dispatch:
 
@@ -25,6 +27,8 @@ jobs:
           node lib/sleeping-giant/topology-audit.cjs > artifacts/sleeping-giant/topology-audit.json
       - name: Export non-navigable geometry reconciliation and internal HTML map viewer
         run: node scripts/export-sleeping-giant-geometry.mjs artifacts/sleeping-giant
+      - name: Export standalone visitor-facing explorer preview (review only)
+        run: node scripts/export-sleeping-giant-visitor-preview.mjs artifacts/sleeping-giant/visitor-preview
       - uses: actions/upload-artifact@v4
         with:
           name: sleeping-giant-topology-audit
