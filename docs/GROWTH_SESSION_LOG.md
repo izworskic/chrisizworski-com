@@ -1,3 +1,10 @@
+### 2026-10-29 — Sleeping Giant official lot and bike/walk transition evidence
+
+- Verified South Kabeyun *named signed parking facility*, 36.5 km south on Hwy 587, capacity caution and permit requirement from Ontario Parks camping. Exact lot coordinates, current road conditions and parking availability remain unknown. Park visitor advice describes campground approximately five minutes north of the lot.
+- Park cycling rules confirm bike use on **South Kabeyun only to Kabeyun/Talus**. September 2024 owner-authored blog confirms racks at that cutoff, and explicitly no racks at Head/Nanabosho bike-to-walk transitions. Top 13.4-km bike + 8.4-km walk, Head 12.2+4.0, Nanabosho 11.8+5.2, each round-trip; source citations in `docs/SLEEPING_GIANT_OFFICIAL_ACCESS_EVIDENCE_20261029.md`.
+- Added strict `visitor-access-evidence.json`, `visitor-access-engine.cjs` and fail-closed tests; integrated named evidence into GIS topology-audit output without promoting any of the 13 unlabeled OTN points to parking or any of the nine mapped junctions to navigation. **No public URLs, ads, search metadata, or visitor-facing precise map changed.**
+- Route map remains unpublishable as a turn-by-turn system until precise signed parking/junction coordinate corroboration plus current access checks and full-resolution graph proof.
+
 ### 2026-10-28 — Sleeping Giant CI repair stack (not merged)
 
 - Sleeping Giant draft PR #1273 is stacked onto the isolated winter/search CI baseline repair PR #1274. Both remain draft and **not deployed to main**. The PR head's old full-site failure must be judged against the refreshed merge/base, not misrepresented as a repaired production state.
