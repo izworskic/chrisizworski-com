@@ -422,3 +422,55 @@ test('western U.P. road-to-waterfall audit lists every required step without pre
   assert.ok(gabbro.routeAudit.segments.some(x=>x.key==='upper'&&x.status==='not-verified'));
   assert.match(gabbro.summary,/bridge|ski hill/i);
 });
+
+test('Keweenaw Jacobs, Manganese and Wyandotte visitor guides are source-backed and avoid unverified parking', () => {
+  const old=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+  const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  for(const [id,oid,road] of [['jacobs-falls',143,/M-26/],['manganese-falls',145,/Manganese Road/],['wyandotte-falls',128,/Poyhonen Road/]]) {
+    const f=curated.waterfalls.find(x=>x.id===id);
+    const r=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const legacy=old.entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+    const html=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+    assert.ok(f&&r&&legacy,id+' missing');
+    assert.equal(f.publication,'verified-access-guide');
+    assert.equal(f.gisObjectId,oid);
+    assert.deepEqual([f.lat,f.lng],[r.lat,r.lng]);
+    assert.equal(r.curatedId,id);
+    assert.equal(legacy.curatedId,id);
+    assert.equal(r.reconciliation,'curated-exact-gis-id');
+    assert.equal(legacy.identity,'linked');
+    assert.equal(r.publicationEligible,true);
+    assert.equal(r.visitorRouteEvidence.navigationToGisPointAllowed,false);
+    assert.equal(r.visitorRouteEvidence.exactParkingCoordinateEstablished,false);
+    assert.equal(r.visitorRouteEvidence.currentRoadStatus,'unverified');
+    assert.match(f.parking,road);
+    assert.match(html,road);
+    assert.match(html,/current opening and road conditions are unverified/i);
+    assert.match(html,/<meta name="robots" content="index,follow/);
+    assert.ok(html.includes('https://chrisizworski.com/#person'));
+    assert.ok(!html.includes('data-parking-lat='));
+    assert.ok(html.replace(/<[^>]+>/g,' ').trim().split(/\s+/).length>500);
+    for(const axis of ['landManager','publicAccess','parking','trail','location']){
+      assert.equal(f.verification[axis].verified,true,id+' '+axis);
+      assert.ok(html.replaceAll('&amp;','&').includes(f.verification[axis].source),id+' missing '+axis);
+    }
+    const card=hub.match(new RegExp('<article class="waterfall-card"[^>]*data-id="'+id+'"[^>]*>[\\s\\S]*?<\\/article>'));
+    assert.ok(card,id+' hub card');
+    assert.match(card[0],/data-arrival-verified="verified"/);
+    assert.ok(card[0].includes('Check parking source')&&card[0].includes('Check trail source'));
+    assert.ok(sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+  }
+  const jac=fs.readFileSync('public/upper-peninsula-waterfalls/jacobs-falls/index.html','utf8');
+  const man=fs.readFileSync('public/upper-peninsula-waterfalls/manganese-falls/index.html','utf8');
+  const wya=fs.readFileSync('public/upper-peninsula-waterfalls/wyandotte-falls/index.html','utf8');
+  assert.match(jac,/Jampot/);
+  assert.match(jac,/not.*parking|business parking/i);
+  assert.match(jac,/no.*maintained|not a.*trail|informal/i);
+  assert.match(man,/deep gorge|steep.*gorge/i);
+  assert.match(man,/children/i);
+  assert.match(man,/0\.7 mile/i);
+  assert.match(wya,/250.yard/i);
+  assert.match(wya,/Poyhonen Road/);
+  assert.match(wya,/golf course/i);
+  assert.ok(![jac,man,wya].some(x=>x.includes('destination=47.')));
+});
