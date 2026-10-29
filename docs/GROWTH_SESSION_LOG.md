@@ -1,3 +1,10 @@
+### 2026-10-28 — Sleeping Giant CI repair stack (not merged)
+
+- Sleeping Giant draft PR #1273 is stacked onto the isolated winter/search CI baseline repair PR #1274. Both remain draft and **not deployed to main**. The PR head's old full-site failure must be judged against the refreshed merge/base, not misrepresented as a repaired production state.
+- Isolated baseline work restores full-site winter test/UX evidence, trims overlong editorial metadata, reconciles actual page and sitemap freshness without editing protected homepage content, and keeps the committed reputation sitemap source hash pinned. No ads configuration changes; protected SERP gate explicitly enforced.
+- Dedicated Sleeping Giant route/GIS tests previously green. Full repository, audit, and exact combined-branch status must pass before considering either PR releasable.
+- **Next concrete action after CI is green:** independently certify South Kabeyun trailhead/parking, Talus cycling cutoff and named summit junction geometry before publishing the visitor-facing HTML/JavaScript router.
+
 ### 2026-10-28 — Sleeping Giant mapped trail topology audit (non-routing GIS evidence)
 
 - Retrieved **30** Ontario Land Information Ontario GIS park-managed trail features from layer 19 and **13** unlabelled Ontario Trail Network access points from layer 20, original OTN source IDs and attributes retained; excluded two unrelated broad Trans Canada Trail records intersecting the study envelope. Source query URLs, Ontario Open Government Licence, retrieval date, simplified-geometry limitations and official source checks recorded in `docs/SLEEPING_GIANT_ROUTE_TOPOLOGY_EVIDENCE.md`.
