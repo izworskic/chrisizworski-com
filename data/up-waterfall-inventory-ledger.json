@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 51,
-  "linkedByExactOid": 43,
-  "unresolvedCandidates": 118,
+  "curatedCount": 54,
+  "linkedByExactOid": 46,
+  "unresolvedCandidates": 115,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -2431,18 +2431,26 @@
         -88.877565
       ],
       "river": "MISERY RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "wyandotte-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "Keweenaw-visitor-bureau-published-limited-road-to-view-not-open-now",
+      "landManager": "Visitor guide verification only — no parcel-title or private-trail entitlement asserted",
+      "parkingEvidence": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "trailEvidence": "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-houghton"
+      "nextAction": "Check posted permitted parking and present conditions on site; do not extend to steep gorge or unverified upstream access.",
+      "batch": "county-houghton",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "12",
+      "classification": "published-regional-roadside-or-short-visitor-approach-no-precise-parking",
+      "accessAssessment": "M-26 to Poyhonen Rd ~0.8mi to visitor parking and ~250yd rustic trail; nearby golf course not blanket public parking or trail rights Sitewide status not live; natural falls GIS coordinate is not visitor lot.",
+      "evidence": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2684,18 +2692,26 @@
         -88.237254
       ],
       "river": "JACOB CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "jacobs-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "Keweenaw-visitor-bureau-published-limited-road-to-view-not-open-now",
+      "landManager": "Visitor guide verification only — no parcel-title or private-trail entitlement asserted",
+      "parkingEvidence": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "trailEvidence": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-keweenaw"
+      "nextAction": "Check posted permitted parking and present conditions on site; do not extend to steep gorge or unverified upstream access.",
+      "batch": "county-keweenaw",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "12",
+      "classification": "published-regional-roadside-or-short-visitor-approach-no-precise-parking",
+      "accessAssessment": "M-26 roadside lower cascade only, legal highway turnout on site not guaranteed, no upstream creek trail Sitewide status not live; natural falls GIS coordinate is not visitor lot.",
+      "evidence": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.visitkeweenaw.com/outdoors/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2730,18 +2746,26 @@
         -87.878959
       ],
       "river": "MANGANESE CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "manganese-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "Keweenaw-visitor-bureau-published-limited-road-to-view-not-open-now",
+      "landManager": "Visitor guide verification only — no parcel-title or private-trail entitlement asserted",
+      "parkingEvidence": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "trailEvidence": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-keweenaw"
+      "nextAction": "Check posted permitted parking and present conditions on site; do not extend to steep gorge or unverified upstream access.",
+      "batch": "county-keweenaw",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "12",
+      "classification": "published-regional-roadside-or-short-visitor-approach-no-precise-parking",
+      "accessAssessment": "Copper Harbor Manganese Rd to short upper gorge viewing area; do not use brochure or falls GIS coordinate as parking; steep gorge scramble not official route Sitewide status not live; natural falls GIS coordinate is not visitor lot.",
+      "evidence": [
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.visitkeweenaw.com/listing/manganese-falls/607/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4059,5 +4083,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "11"
+  "lastBatch": "12"
 }
