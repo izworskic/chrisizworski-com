@@ -6,6 +6,8 @@ on:
       - 'scripts/research-porkies-west-road.mjs'
       - 'data/porkies-west-road-ledger.json'
       - 'lib/porkies/route-topology.mjs'
+      - 'tests/porkies-west-road.test.mjs'
+      - 'public/assets/porkies-route-evidence.js'
       - '.github/workflows/porkies-west-road-audit.yml'
   workflow_dispatch:
 permissions:
