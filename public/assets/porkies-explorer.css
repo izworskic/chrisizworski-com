@@ -245,3 +245,14 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
 .west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
 @media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}
+
+/* Western park access: independent government corridor source, never GPS instructions. */
+.west-access-evidence{margin:14px 0;background:#f4f1ed;border:1px solid #bfafc4;border-radius:6px;padding:16px 18px}
+.west-access-evidence h4{font-family:Fraunces,Georgia,serif;color:#49395d;font-size:1.22rem;font-weight:600;line-height:1.28;margin:4px 0 7px}
+.west-access-evidence p{font-size:.8rem;line-height:1.62;margin:7px 0}
+.west-access-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-top:13px}
+.west-access-actions button{background:#604878;color:white;border:0;border-radius:4px;padding:10px 13px;font-size:.78rem;font-weight:700;min-height:40px}
+.west-access-actions button[aria-pressed="true"]{background:#372644}
+.west-access-actions a{font-size:.75rem;color:#504168;text-decoration:underline}
+.west-access-evidence #west-access-status{font-size:.73rem;font-weight:650;color:#6a526e;margin-top:10px}
+@media(max-width:650px){.west-access-evidence{padding:13px 12px}.west-access-actions{flex-direction:column;align-items:stretch}.west-access-actions button{width:100%}}
