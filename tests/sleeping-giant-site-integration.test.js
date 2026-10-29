@@ -57,7 +57,7 @@ test('Sleeping Giant release head owns one distinct canonical and consistent ful
 });
 test('Sleeping Giant site page follows the standard single-ad-loader policy without an extra in-article placement',()=>{
  const html=emit();
- assert.equal((html.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g)||[]).length,1);
+ assert.equal(html.split('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js').length-1,1);
  assert.equal((html.match(/name="google-adsense-account"/g)||[]).length,1);
  assert.match(html,/ca-pub-8222782620788075/);
  assert.doesNotMatch(html,/<ins[^>]*class="adsbygoogle"/);
