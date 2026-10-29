@@ -222,6 +222,32 @@
         "/petoskey-wine/",
         "https://tcwine.chrisizworski.com/"
       ]
+    },
+    {
+      "slug": "great-lakes-rockhounding-field-guide",
+      "url": "/great-lakes-rockhounding-field-guide/",
+      "title": "The Great Lakes Rockhound’s Field Guide",
+      "subtitle": "15 Agate, Petoskey Stone, Yooperlite & Fossil Beaches",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 15,
+      "activeMonths": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "seasonLabel": "Apr–Nov · Peak Post-Storm Season",
+      "summary": "15 audited Great Lakes beaches with stone ID diagnostics, gravel-bar anatomy, 365nm filtered UV specs for Yooperlites, live 72-hour wave-worked badges, and the boundary between Michigan's 25-lb state limit and National Lakeshore collecting bans.",
+      "connectedTools": [
+        "/michigan-rockhounding/",
+        "/great-lakes-beaches/",
+        "/great-lakes-buoys/"
+      ]
     }
   ],
   "plannedRoadmap": [
