@@ -8,6 +8,13 @@ on:
       - 'tests/sleeping-giant-*.test.js'
       - 'scripts/export-sleeping-giant-geometry.mjs'
       - 'scripts/export-sleeping-giant-visitor-preview.mjs'
+      - 'scripts/build-sleeping-giant-site.mjs'
+      - 'public/tools/index.html'
+      - 'public/guides/index.html'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'public/sitemap.xml'
+      - 'benchmarks/tool-network-registry.json'
+      - 'package.json'
       - 'scripts/verify-sleeping-giant-browser.cjs'
       - 'previews/sleeping-giant-explorer/**'
       - '.github/workflows/sleeping-giant-engine.yml'
@@ -72,11 +79,15 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
       - name: Test actual visitor interactions in phone and desktop Chromium
         run: node scripts/verify-sleeping-giant-browser.cjs
+      - name: Test integrated canonical site page on phone and desktop
+        run: node scripts/verify-sleeping-giant-browser.cjs --site
       - name: Save responsive screenshots and browser report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sleeping-giant-visitor-browser-qa
-          path: artifacts/sleeping-giant-browser/
+          path: |
+            artifacts/sleeping-giant-browser/
+            artifacts/sleeping-giant-site-browser/
           if-no-files-found: warn
           retention-days: 14
