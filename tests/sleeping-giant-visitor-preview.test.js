@@ -95,6 +95,13 @@ test('Interactive preview has labelled controls, keyboard focus, a live result r
  assert.match(html,/prefers-reduced-motion/);
  assert.match(html,/focus-visible/);
  assert.match(html,/id="map-canvas" viewBox=/);
+ assert.match(html,/id="map-focus"/);
+ assert.match(html,/id="map-zoom-status"/);
+ assert.match(html,/value="destination"/);
+ assert.match(html,/value="parking"/);
+ assert.match(html,/text-anchor/);
+ assert.match(html,/focusMap\('overview'\)/);
+
  assert.match(html,/id="route-shapes"/);
  assert.match(html,/data-source-id/);
  assert.match(html,/unverified parking-to-trail connection/i);
