@@ -117,7 +117,7 @@ try{
     assert.ok(scroll<=width+2,'Bonanza page horizontal overflow '+scroll+' > '+width);
     await page.screenshot({path:screenshots+'/bonanza-township-park-mobile.png',fullPage:true,animations:'disabled'});
   });
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['bridalveil-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['morgan-falls',true],['bridalveil-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -142,6 +142,7 @@ try{
       if(id==='manganese-falls'){const b=await page.locator('body').innerText();assert.match(b,/Manganese Road/);assert.match(b,/deep gorge|steep gorge/i);assert.match(b,/children/);assert.match(b,/current opening and road conditions are unverified/i);await page.screenshot({path:screenshots+'/manganese-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='wyandotte-falls'){const b=await page.locator('body').innerText();assert.match(b,/Poyhonen Road/);assert.match(b,/250-yard/);assert.match(b,/Misery River/);assert.match(b,/current opening and road conditions are unverified/i);await page.screenshot({path:screenshots+'/wyandotte-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='rock-river-falls'){const b=await page.locator('body').innerText();assert.match(b,/FR 2293|FR2293/);assert.match(b,/FR 2276|FR2276/);assert.match(b,/1.2-mile/);assert.match(b,/current opening and road conditions are unverified/i);assert.match(b,/not automatically the Rock River Falls parking lot/i);await page.screenshot({path:screenshots+'/rock-river-falls-mobile.png',fullPage:true,animations:'disabled'});}
+      if(id==='morgan-falls'){const b=await page.locator('body').innerText();assert.match(b,/NTN South Trailhead/);assert.match(b,/M-553/);assert.match(b,/designated.*crossing/i);assert.match(b,/closed to motor/i);assert.match(b,/Do not park/i);assert.match(b,/current opening and road conditions are unverified/i);await page.screenshot({path:screenshots+'/morgan-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});
     });
   }
