@@ -52,9 +52,9 @@ test("South Boundary road west of Pinkerton is exact signed-off source subset, n
 });
 test("map shows explicit CR519 caveats in static HTML and cannot leak route promotion",()=>{
  assert.match(body,/id="porkies-west-toggle"/);
- assert.match(body,/The Michigan Geographic Framework labels/);
- assert.match(body,/not.*proof of plowing/i);
- assert.match(body,/DNR's seasonal South Boundary closure applies from Headquarters Road to the Pinkerton Trailhead/);
+ assert.match(body,/State road-centerline records in the same corridor use the name/);
+ assert.match(body,/not.*a plowed road/i);
+ assert.match(body,/DNR's seasonal South Boundary closure starts at Pinkerton on the west/);
  assert.match(body,/noindex,follow/);
  assert.match(js,/WEST_BOUNDARY_IDS/);
  assert.match(js,/west-access-evidence\.json/);
