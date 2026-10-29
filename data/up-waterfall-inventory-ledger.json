@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 54,
-  "linkedByExactOid": 48,
-  "unresolvedCandidates": 113,
+  "curatedCount": 55,
+  "linkedByExactOid": 49,
+  "unresolvedCandidates": 112,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3579,18 +3579,26 @@
         -86.976063
       ],
       "river": "ROCK RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "rock-river-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "NCTA-trail-and-visitor-bureau-forest-road-not-open-now",
+      "landManager": "USDA Forest Service, Hiawatha National Forest",
+      "parkingEvidence": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+      "trailEvidence": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "nextAction": "Verify current legal forest-road conditions; no GIS waterfall coordinate driving.",
+      "batch": "county-alger",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "13",
+      "classification": "wilderness-public-trail-route-no-exact-falls-parking-coordinate",
+      "accessAssessment": "Rock River Road via FR2276 and FR2293 has tourism parking and NCTA trail evidence. Distinct NCTA western lot is not the falls lot; winter vehicle entry not verified.",
+      "evidence": [
+        "https://www.uptravel.com/listing/rock-river-falls/3493/",
+        "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
+      ]
     },
     {
       "source": "mi-state-gis",
