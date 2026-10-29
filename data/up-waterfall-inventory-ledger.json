@@ -189,22 +189,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "undetermined-parcel-road-seasonal-public-route",
-      "landManager": null,
+      "access": "DNR-natural-feature-land-verified-public-approach-unverified",
+      "landManager": "Michigan DNR Crystal Falls Management Unit — natural falls parcel only",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Identify official legal lot and complete mapped public walking approach before indexing. Do not navigate to falls GIS point.",
+      "nextAction": "Match complete legal public road/trail corridor from Raymer signs to DNR-owned falls parcel; verify parking, right-of-way and seasonal passability, then reconsider visitor guide.",
       "batch": "county-iron",
       "reviewBatch": "10",
       "reviewed": "2026-10-28",
-      "classification": "chicaugon-roadwashout-private-camps-continuous-right-of-way-unverified",
-      "accessAssessment": "Iron County public tourism describes signs off Raymer/Dave's Camp Rd but seasonal washouts, private camps and inconsistent alternative geographic coordinates; public crossing and legal parking not independently verified.",
+      "classification": "state-owned-waterfall-parcel-RAYMER-intervening-private-camp-access-unverified",
+      "accessAssessment": "Official DNR LOTS map point query places state GIS Chicagon Falls #12 inside dedicated 47.8-acre forest parcel ParID 258918, Crystal Falls Management Unit. This does NOT prove legal continuous entry from Raymer/Dave's Camp Rd, parkable public turnaround, passable spring road or easement across any private camps.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.iron.org/outdoors/waterfalls/",
-        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf"
+        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
       ]
     },
     {
