@@ -1,3 +1,11 @@
+### 2026-10-29 — Sleeping Giant offline visitor explorer recovered after interruption
+
+- Expanded research-only `geometry-review.html` output with six official static route cards, source URLs, signed access caveats, and Node-precomputed planning comparisons across available hours, interest and bike-versus-hike. Added regression tests for all six cards, 48 planner combinations, source-backed mode warnings and no navigation claims.
+- Recovered the separate photo-led Field Guide preview at `previews/sleeping-giant-explorer/`; fixed its generated-page gate to inspect actual directions/open-status claims, and made the Kabeyun/Talus cutoff prohibition explicit. Wikimedia hero image *Top of the Sleeping Giant* by Justin Meissen is Commons-licensed CC BY-SA 2.0, verified against the Commons file metadata. No destination photography invented.
+- Exact validation: the standalone visitor preview and full geometry build passed **47/47** dedicated tests and **59/59** repository gate steps in GitHub Actions [run 40861682865](https://github.com/izworskic/chrisizworski-com/actions/runs/40861682865). Review artifact contains offline `visitor-preview/index.html` and GIS QA viewer, not production pages.
+- PR #1273 remains draft and stacked on repair PR #1274; neither was merged or deployed during this session. **No production HTML, indexable URLs, AdSense policy, ads placements, Person identity pages or sitemaps touched.** No measured GSC/rank/revenue change claimed.
+- **Next single development action:** validate the photo-led preview at 390px mobile and 1366px desktop in an actual browser, including image load, responsive controls and SVG source-map behavior, before considering any public route release. Current-conditions and turn-by-turn navigation remain intentionally disabled.
+
 ### 2026-10-29 — Sleeping Giant full-detail trail geometry, source mismatch and internal map review
 
 - Retrieved **unsimplified** Ontario OTN layer 19 trail geometry individually for seven high-value trails (same original OBJECTID and OGF_ID as earlier simplified inventory). Kabeyun increased from 400 to 2,597 vertices; Sawyer Bay from 80 to 2,480. Source captures have 6-decimal WGS84 precision but are not sign-surveyed GPS data.
