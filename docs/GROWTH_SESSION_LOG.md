@@ -1592,3 +1592,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Release repair preserves map-location and winter parking distinctions, restores source and author signals, and fixes search lengths and sitemap freshness checks. No ad code or settings changed.
 - Validation and release status are recorded in the associated pull requests and must be checked against their final heads and production deployment. No new GSC or AdSense data was measured in this session.
 - **Single next action:** Verify the final guide-directory PR checks, merge when green, and confirm the production page and its principal guide links.
+
+### 2026-10-29 — Correct Prepared start and restore night-sky discovery
+
+- Chris directly corrected his Prepared start date to December 2025. Updated the canonical profile, Prepared career page, 911 career pages, biography, timeline and projects, without inferring his job title at the start. Removed the inaccurate claim that a 2026 start date was not reported. Retained the canonical Person identity, existing SEO metadata and all unrelated career milestones.
+- Replaced the unstyled dark-sky paragraphs on `/tools/` with two existing-design decision-network lists: five night-sky tools/collections and all six published Michigan aurora destination guides. Weather forecasts do not guarantee sightings or park access; no ad configuration changed.
+- Exact-head repository checks and publication status are recorded in the release PR. GSC and AdSense measurements were not gathered. Next action: verify the final production profile and night-sky links after a green release.

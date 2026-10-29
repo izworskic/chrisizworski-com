@@ -22,8 +22,8 @@ test('canonical profile answers the query and contains the full existing identit
   const opening = html.split('</h1>')[1].match(/<p>(.*?)<\/p>/s)[1];
   for (const fact of ['Solutions Consultant at Prepared', 'Executive Director of Saginaw County 911 from 2022 to 2025', 'Director of Bay County 911 from 2013 to 2022', 'In 2024']) assert.ok(opening.includes(fact), fact);
   assert.match(html, /What he's doing now/);
-  assert.match(html, /joined in October 2025/);
-  assert.match(html, /2026 start date is <strong>NOT REPORTED/);
+  assert.match(html, /joined Prepared in December 2025/);
+  assert.doesNotMatch(html, /joined in October 2025|2026 start date is <strong>NOT REPORTED/);
   for (const route of ['prepared', 'prepared911', 'nena-the-call', 'wnem-tv5', 'source-guide', 'news-coverage']) assert.ok(html.includes(`href="/chris-izworski-${route}/"`), route);
   const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap(m => { const d = JSON.parse(m[1]); return d['@graph'] || [d]; });
   const person = nodes.find(n => n['@type'] === 'Person' && Array.isArray(n.sameAs));
