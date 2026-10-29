@@ -11,7 +11,7 @@
       "lng": -85.25455,
       "level": "easy",
       "minutes": "30–120 min",
-      "walk": "Paved approaches, overlooks and stairs; choose route to suit mobility.",
+      "walk": "Upper: paved approaches and new 1,100-foot accessible brink boardwalk (May 2026). Lower: independent Lower Falls day-use boardwalk and island bridge. Separate parking entrances.",
       "best": "All four seasons; spring runoff and autumn color are especially distinctive.",
       "access": "Upper Falls has an accessible boardwalk; lower falls are a separate park stop. Winter conditions can change walking access.",
       "status": "verify",
@@ -23,7 +23,32 @@
       "path": "",
       "parking": "24019 Upper Falls Drive, Newberry, MI",
       "feature": "A landmark river-wide curtain with approachable overlooks and a separate Lower Falls experience.",
-      "further": "Do not treat one stop or one trail as covering both waterfalls."
+      "further": "Two separate state GIS waterfall features are already covered by the main Tahquamenon Visit Planner. The May 2026 1,100-foot accessible Upper Falls brink boardwalk replaces the old 94-step route. The Lower Falls has a separate parking area, accessible riverboardwalk and the Ronald A. Olson Island Bridge; do not use the upper parking pin for the lower waterfall. Verify current winter boardwalk conditions.",
+      "multiFeatureGisObjectIds": [
+        207,
+        208
+      ],
+      "coverageScope": "Single existing comprehensive Tahquamenon day-planning tool covers two distinct state GIS waterfall identities; do not create duplicate SEO destination pages.",
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 207,
+          "name": "Upper Tahquamenon Falls",
+          "lat": 46.574752,
+          "lng": -85.256643,
+          "arrival": "Upper Falls day-use parking, 24019 Upper Falls Drive, Newberry; waterfall coordinate is NOT parking",
+          "visitorRoute": "DNR paved Upper Falls approaches and 1,100-foot accessible new brink boardwalk completed May 2026",
+          "source": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+        },
+        {
+          "gisObjectId": 208,
+          "name": "Lower Tahquamenon Falls",
+          "lat": 46.601944,
+          "lng": -85.207103,
+          "arrival": "Separate Lower Falls day-use parking via M-123, four miles east of Upper Falls",
+          "visitorRoute": "DNR Lower Falls accessible overlooks and Ronald A. Olson Island Bridge; rental rowboats seasonal and conditions-dependent",
+          "source": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls"
+        }
+      ]
     },
     {
       "id": "bond-falls",
