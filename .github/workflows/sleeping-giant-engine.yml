@@ -1,0 +1,20 @@
+name: Sleeping Giant engine tests
+
+on:
+  pull_request:
+    paths:
+      - 'data/sleeping-giant/**'
+      - 'lib/sleeping-giant/**'
+      - 'tests/sleeping-giant-engine.test.js'
+      - '.github/workflows/sleeping-giant-engine.yml'
+  workflow_dispatch:
+
+jobs:
+  engine-contracts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Node.js route and weather-window contracts
+        run: node --test tests/sleeping-giant-engine.test.js
