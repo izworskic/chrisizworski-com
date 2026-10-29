@@ -124,7 +124,7 @@ test('All destination photos have source attribution and valid license metadata'
   }
 });
 
-test('Field guide is registered in registry, guides hub, tools hub, sitemap, and companions', () => {
+test('Field guide is registered in registry, guides hub, tools hub, sitemap, homepage, and companions', () => {
   const liveEntry = registry.guides.find((g) => g.slug === 'great-lakes-rockhounding-field-guide');
   assert.ok(liveEntry, 'registry must contain great-lakes-rockhounding-field-guide');
   assert.equal(liveEntry.status, 'live');
@@ -140,6 +140,19 @@ test('Field guide is registered in registry, guides hub, tools hub, sitemap, and
   const sitemap = read('public/sitemap-winter.xml');
   assert.ok(sitemap.includes('https://chrisizworski.com/great-lakes-rockhounding-field-guide/'));
 
+  const home = read('public/index.html');
+  assert.ok(home.includes('href="/great-lakes-rockhounding-field-guide/"'));
+  assert.ok(home.includes('The Great Lakes Rockhound’s Field Guide'));
+
+  const destinations = read('public/michigan-destinations/index.html');
+  assert.ok(destinations.includes('href="/great-lakes-rockhounding-field-guide/"'));
+
   const rockConditions = read('public/michigan-rockhounding/index.html');
   assert.ok(rockConditions.includes('href="/great-lakes-rockhounding-field-guide/"'));
+
+  // Hero CTAs are styled as prominent buttons
+  assert.match(html, /class="[^"]*rh-hero-ctas[^"]*"/);
+  assert.match(html, /href="\/michigan-rockhounding\/"[^>]*>Check Live 72h Wave Conditions/);
+  assert.match(html, /href="\/great-lakes-buoys\/"[^>]*>Open Great Lakes Wave Buoys/);
+  assert.match(css, /\.rh-secondary-cta/);
 });

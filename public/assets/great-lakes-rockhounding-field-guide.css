@@ -21,6 +21,67 @@
   height: 250px;
 }
 
+/* Hero CTA Button Row */
+.rh-hero-ctas,
+.lfa-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.rh-hero-ctas .wf-primary,
+.lfa-hero-ctas .wf-primary {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: var(--wf-accent, #255d54);
+  color: #ffffff !important;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(37, 93, 84, 0.2);
+  transition: all .15s ease-in-out;
+}
+.rh-hero-ctas .wf-primary:hover,
+.lfa-hero-ctas .wf-primary:hover {
+  background: #19433c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 93, 84, 0.28);
+}
+.rh-secondary-cta,
+.lfa-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--wf-accent, #255d54);
+  background: #ffffff;
+  color: var(--wf-accent, #255d54) !important;
+  font-size: .86rem;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all .15s ease-in-out;
+}
+.rh-secondary-cta:hover,
+.lfa-secondary-cta:hover {
+  background: #edf5f3;
+  border-color: #19433c;
+  color: #19433c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
 /* Field Blueprint & Anatomy Sections */
 .rh-anatomy {
   margin: 28px auto 32px;
