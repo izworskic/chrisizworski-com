@@ -252,7 +252,7 @@ scoreItem('V_entry', 6, combinedCss.includes('Fraunces') && combinedCss.includes
 const primaryNavMatch = html.match(/<nav[^>]*aria-label="Primary[^"]*"[^>]*>([\s\S]*?)<\/nav>/i);
 const primaryNavLinks = primaryNavMatch ? (primaryNavMatch[1].match(/<a\b/gi) || []).length : 99;
 scoreItem('V_entry', 6, primaryNavLinks >= 5 && primaryNavLinks <= 7 && html.includes('aria-label="Verified entity and press dossier"'), `Two-Tier Masthead Navigation (Primary reader nav has ${primaryNavLinks} focused items + Secondary entity dossier strip)`);
-scoreItem('V_entry', 8, html.includes('id="living-atlas-map"') && (html.match(/data-atlas-region=/g) || []).length >= 6, 'Interactive SVG "Living Atlas" of Michigan & the Great Lakes with 6+ clickable regional corridors above the fold');
+scoreItem('V_entry', 8, html.includes('id="living-atlas-map"') && html.includes('/assets/leaflet-1.9.4.js') && js.includes('ATLAS_PINS') && (html.match(/data-atlas-region=/g) || []).length >= 6, 'Interactive Leaflet + CARTO/OSM "Living Atlas" map with 14 GPS stations & 6 clickable corridors above the fold');
 
 // Dimension 4: V_media (15 pts) — Interactive Storytelling, Gazette Wire & Verified Photography
 scoreItem('V_media', 6, (html.match(/data-intent-filter=/g) || []).length >= 6 && (html.match(/data-dossier-tab=/g) || []).length >= 3 && js.length > 1500, 'Interactive Intent/Condition Switcher + Interactive Dossier Explorer powered by progressive JS');

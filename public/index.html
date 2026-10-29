@@ -201,8 +201,9 @@
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
-<link rel="stylesheet" href="/assets/home-almanac.css?v=20261029">
+<link rel="stylesheet" href="/assets/home-almanac.css?v=20261029b">
 <meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
 <meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
 <meta property="og:image:type" content="image/png">
@@ -219,7 +220,8 @@
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
-<script defer src="/assets/home-almanac.js?v=20261029"></script>
+<script defer src="/assets/leaflet-1.9.4.js"></script>
+<script defer src="/assets/home-almanac.js?v=20261029b"></script>
 </head>
 <body class="hm-page" data-analytics-page="home">
 <a href="#main-content" class="hm-skip">Skip to main content</a>
@@ -349,75 +351,18 @@
           </div>
 
           <div class="hm-atlas-stage">
-            <div class="hm-atlas-svg-wrap">
-              <svg id="living-atlas-map" class="hm-atlas-svg" viewBox="0 0 420 380" role="img" aria-label="Interactive regional map of Michigan and the Great Lakes">
-                <defs>
-                  <radialGradient id="lakeGlow" cx="50%" cy="45%" r="60%">
-                    <stop offset="0%" stop-color="#295264" stop-opacity="0.55"/>
-                    <stop offset="100%" stop-color="#12252d" stop-opacity="0.9"/>
-                  </radialGradient>
-                </defs>
-                <!-- Great Lakes Basin Background -->
-                <rect x="0" y="0" width="420" height="380" rx="8" fill="url(#lakeGlow)"/>
-                <!-- Subtle Graticule Lines -->
-                <line x1="0" y1="95" x2="420" y2="95" stroke="rgba(255,255,255,0.07)" stroke-dasharray="3 3"/>
-                <line x1="0" y1="190" x2="420" y2="190" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 4"/>
-                <text x="10" y="185" fill="rgba(255,255,255,0.42)" font-size="8" font-weight="700" letter-spacing="1">45TH PARALLEL</text>
-                <line x1="0" y1="285" x2="420" y2="285" stroke="rgba(255,255,255,0.07)" stroke-dasharray="3 3"/>
-
-                <!-- Water Labels -->
-                <text x="72" y="42" fill="#8ab8cc" font-size="9" font-weight="700" letter-spacing="1.5">LAKE SUPERIOR</text>
-                <text x="112" y="255" fill="#8ab8cc" font-size="9" font-weight="700" letter-spacing="1.5">LAKE MICHIGAN</text>
-                <text x="318" y="198" fill="#8ab8cc" font-size="9" font-weight="700" letter-spacing="1.5">LAKE HURON</text>
-
-                <!-- 1. Keweenaw & Western U.P. -->
-                <g class="hm-atlas-region" data-atlas-region="keweenaw-western-up" tabindex="0" role="button" aria-label="Keweenaw, Houghton and Western Upper Peninsula">
-                  <path class="hm-region-zone" d="M 28 96 L 86 52 L 114 68 L 128 108 L 54 122 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="84" cy="76" r="5" fill="#7bdcb5"/>
-                  <text x="36" y="114" fill="#ffffff" font-size="9.5" font-weight="700">1. Keweenaw &amp; West U.P.</text>
-                </g>
-
-                <!-- 2. Pictured Rocks, Marquette & Central U.P. -->
-                <g class="hm-atlas-region" data-atlas-region="pictured-rocks-central-up" tabindex="0" role="button" aria-label="Munising, Pictured Rocks, Marquette and Tahquamenon">
-                  <path class="hm-region-zone" d="M 132 76 L 236 70 L 242 114 L 134 118 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="185" cy="92" r="5" fill="#7bdcb5"/>
-                  <text x="142" y="108" fill="#ffffff" font-size="9.5" font-weight="700">2. Pictured Rocks &amp; U.P.</text>
-                </g>
-
-                <!-- 3. Straits of Mackinac & Soo Locks -->
-                <g class="hm-atlas-region" data-atlas-region="straits-mackinac-soo" tabindex="0" role="button" aria-label="Mackinac Bridge, Soo Locks and Straits">
-                  <path class="hm-region-zone" d="M 242 74 L 318 82 L 308 148 L 236 144 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="272" cy="122" r="5" fill="#7bdcb5"/>
-                  <text x="244" y="138" fill="#ffffff" font-size="9.5" font-weight="700">3. Soo &amp; Mackinac</text>
-                </g>
-
-                <!-- 4. Traverse City, Sleeping Bear & Little Traverse -->
-                <g class="hm-atlas-region" data-atlas-region="traverse-leelanau-nw" tabindex="0" role="button" aria-label="Traverse City, Leelanau, Sleeping Bear and Petoskey">
-                  <path class="hm-region-zone" d="M 188 152 L 256 150 L 250 226 L 178 222 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="216" cy="184" r="5" fill="#7bdcb5"/>
-                  <text x="182" y="212" fill="#ffffff" font-size="9.5" font-weight="700">4. Traverse &amp; Petoskey</text>
-                </g>
-
-                <!-- 5. High Country, Au Sable & Manistee Rivers -->
-                <g class="hm-atlas-region" data-atlas-region="high-country-ausable" tabindex="0" role="button" aria-label="Au Sable River, Manistee River and Grayling High Country">
-                  <path class="hm-region-zone" d="M 258 154 L 322 162 L 314 238 L 252 232 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="284" cy="194" r="5" fill="#7bdcb5"/>
-                  <text x="256" y="224" fill="#ffffff" font-size="9.5" font-weight="700">5. Au Sable &amp; Pines</text>
-                </g>
-
-                <!-- 6. Saginaw Bay (Bay City), Port Huron & Detroit River -->
-                <g class="hm-atlas-region" data-atlas-region="saginaw-detroit-shore" tabindex="0" role="button" aria-label="Saginaw Bay, Bay City, Port Huron and Detroit River">
-                  <path class="hm-region-zone" d="M 232 242 L 356 242 L 352 346 L 224 342 Z" fill="rgba(82, 201, 151, 0.22)" stroke="#7bdcb5" stroke-width="1.5"/>
-                  <circle class="hm-region-node" cx="296" cy="272" r="5.5" fill="#f4b176"/>
-                  <text x="234" y="330" fill="#ffffff" font-size="9.5" font-weight="700">6. Saginaw Bay &amp; Detroit</text>
-                </g>
-              </svg>
+            <div id="living-atlas-map" class="hm-atlas-map-canvas" role="region" aria-label="Interactive map of Michigan and the Great Lakes">
+              <p class="hm-atlas-map-fallback">Loading interactive Michigan &amp; Great Lakes map (14 field stations across Superior, Michigan, Huron, the Straits &amp; Saginaw Bay)…</p>
+            </div>
+            <div class="hm-atlas-map-meta">
+              <span id="atlas-map-status">Interactive CARTO &amp; OpenStreetMap &middot; 14 Michigan &amp; Great Lakes stations</span>
+              <span>Click any map pin or corridor pill below</span>
             </div>
 
             <div class="hm-atlas-readout" aria-live="polite">
               <p id="atlas-readout-kicker" class="hm-atlas-readout__kicker">Interactive Great Lakes &amp; Michigan Living Atlas</p>
-              <h3 id="atlas-readout-title" class="hm-atlas-readout__title">Select a region on the map or pills below</h3>
-              <p id="atlas-readout-desc" class="hm-atlas-readout__desc">Click any of the 6 Michigan &amp; Great Lakes corridors to spotlight matching live telemetry tools, seasonal field guides, and daily reports.</p>
+              <h3 id="atlas-readout-title" class="hm-atlas-readout__title">Click any map pin or corridor pill below</h3>
+              <p id="atlas-readout-desc" class="hm-atlas-readout__desc">Explore 14 Michigan &amp; Great Lakes field stations on the interactive map—or select a corridor below to fly to that region and spotlight its live tools and field guides.</p>
               <div id="atlas-readout-links" class="hm-atlas-readout__links">
                 <a href="/tools/">All 45+ Free Tools &nearr;</a>
                 <a href="/michigan-destinations/">Michigan Adventure Finder &nearr;</a>
@@ -428,12 +373,12 @@
           </div>
 
           <div class="hm-atlas-pills" role="group" aria-label="Quick regional corridor selector">
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="keweenaw-western-up" aria-pressed="false">1. Keweenaw &amp; West U.P.</button>
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="pictured-rocks-central-up" aria-pressed="false">2. Pictured Rocks &amp; Central U.P.</button>
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="straits-mackinac-soo" aria-pressed="false">3. Mackinac &amp; Soo Locks</button>
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="traverse-leelanau-nw" aria-pressed="false">4. Traverse, Sleeping Bear &amp; Wine</button>
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="high-country-ausable" aria-pressed="false">5. Au Sable, Trout &amp; Pines</button>
-            <button type="button" class="hm-atlas-pill" data-atlas-pill="saginaw-detroit-shore" aria-pressed="false">6. Saginaw Bay &amp; Borders</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="keweenaw-western-up" data-atlas-region="keweenaw-western-up" aria-pressed="false">1. Keweenaw &amp; West U.P.</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="pictured-rocks-central-up" data-atlas-region="pictured-rocks-central-up" aria-pressed="false">2. Pictured Rocks &amp; Central U.P.</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="straits-mackinac-soo" data-atlas-region="straits-mackinac-soo" aria-pressed="false">3. Mackinac &amp; Soo Locks</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="traverse-leelanau-nw" data-atlas-region="traverse-leelanau-nw" aria-pressed="false">4. Traverse, Sleeping Bear &amp; Wine</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="high-country-ausable" data-atlas-region="high-country-ausable" aria-pressed="false">5. Au Sable, Trout &amp; Pines</button>
+            <button type="button" class="hm-atlas-pill" data-atlas-pill="saginaw-detroit-shore" data-atlas-region="saginaw-detroit-shore" aria-pressed="false">6. Saginaw Bay &amp; Borders</button>
           </div>
         </aside>
       </div>

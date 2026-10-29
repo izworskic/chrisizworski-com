@@ -467,48 +467,98 @@ body.hm-page {
 }
 
 .hm-atlas-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 14px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background: linear-gradient(155deg, #162c35 0%, #1c3b38 100%);
   border-radius: 7px;
-  padding: 14px;
+  padding: 12px;
   color: #f0f6f4;
 }
 
-.hm-atlas-svg-wrap {
+.hm-atlas-map-canvas {
+  width: 100%;
+  height: 315px;
+  min-height: 290px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: #dce6e5;
   position: relative;
-  width: 100%;
+  isolation: isolate;
 }
 
-.hm-atlas-svg {
-  width: 100%;
-  height: auto;
+.hm-atlas-map-fallback {
+  padding: 18px;
+  color: var(--hm-ink);
+  font-size: 0.82rem;
+}
+
+.hm-map-pin {
   display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #d47d54;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(18, 36, 34, 0.55);
+  transition: transform 0.18s ease, background-color 0.18s ease;
 }
 
-.hm-atlas-region {
-  cursor: pointer;
-  transition: transform 0.22s ease, opacity 0.22s ease;
+.hm-map-pin--home {
+  background: #28594b;
+  width: 20px;
+  height: 20px;
 }
 
-.hm-atlas-region path,
-.hm-atlas-region circle {
-  transition: fill 0.22s ease, stroke 0.22s ease, r 0.22s ease;
+.hm-map-pin.is-active,
+.hm-map-pin:hover {
+  transform: scale(1.28);
+  background: #b54d1f;
 }
 
-.hm-atlas-region:hover .hm-region-zone,
-.hm-atlas-region.is-active .hm-region-zone {
-  fill: rgba(213, 142, 81, 0.38);
-  stroke: #f4b176;
-  stroke-width: 2.2;
+.hm-map-popup h4 {
+  margin: 0 0 4px;
+  font: 600 0.96rem/1.2 var(--hm-display);
+  color: var(--hm-ink);
 }
 
-.hm-atlas-region:hover .hm-region-node,
-.hm-atlas-region.is-active .hm-region-node {
-  fill: #f4b176;
-  r: 7;
+.hm-map-popup p {
+  margin: 0 0 8px;
+  font-size: 0.76rem;
+  line-height: 1.42;
+  color: var(--hm-muted);
+}
+
+.hm-map-popup__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hm-map-popup__links a {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff !important;
+  background: var(--hm-accent);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.hm-map-popup__links a:hover {
+  background: var(--hm-accent-dark);
+}
+
+.hm-atlas-map-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.76);
+  flex-wrap: wrap;
 }
 
 .hm-atlas-readout {
