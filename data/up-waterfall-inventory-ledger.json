@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 49,
-  "linkedByExactOid": 41,
-  "unresolvedCandidates": 120,
+  "curatedCount": 51,
+  "linkedByExactOid": 43,
+  "unresolvedCandidates": 118,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -189,21 +189,22 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "undetermined-parcel-road-seasonal-public-route",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Land parcel/manager, signed parking and road status independently required before visitor page.",
+      "nextAction": "Identify official legal lot and complete mapped public walking approach before indexing. Do not navigate to falls GIS point.",
       "batch": "county-iron",
-      "reviewBatch": "02",
+      "reviewBatch": "10",
       "reviewed": "2026-10-28",
-      "classification": "route-reported-owner-unverified",
-      "accessAssessment": "Iron County tourism describes a signed forest approach near Long Lake; washed-out road risk. Full land ownership and road maintenance unknown.",
+      "classification": "chicaugon-roadwashout-private-camps-continuous-right-of-way-unverified",
+      "accessAssessment": "Iron County public tourism describes signs off Raymer/Dave's Camp Rd but seasonal washouts, private camps and inconsistent alternative geographic coordinates; public crossing and legal parking not independently verified.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
+        "https://www.iron.org/outdoors/waterfalls/",
+        "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf"
       ]
     },
     {
@@ -285,25 +286,28 @@
         -89.054153
       ],
       "river": "MID ONTONAGON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "mex-i-min-e-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-USFS-visitor-route-not-open-now",
+      "landManager": "USDA Forest Service, Ottawa National Forest",
+      "parkingEvidence": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
+      "trailEvidence": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Check Ottawa NF campground source, route access and exact waterfall identity vs Mexi-Mini alias.",
+      "nextAction": "Confirm current road passability/legal parking and forest closures. GIS coordinate natural falls only, never drive there.",
       "batch": "county-gogebic",
-      "reviewBatch": "02",
+      "reviewBatch": "10",
       "reviewed": "2026-10-28",
-      "classification": "recreation-route-reported-not-fully-verified",
-      "accessAssessment": "Regional chamber describes route near Burnt Dam Campground; must confirm separate waterfall trail/parking and current USFS permissions.",
+      "classification": "forest-service-public-campground-short-falls-path",
+      "accessAssessment": "Official USDA Watersmeet FR4500 to Burned Dam Campground -> easy/intermediate about quarter-mile ROUND TRIP waterfall trail. May-Sept maintenance; access until snow closes road; site coordinate distinct from natural falls point and parking unknown.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
+        "https://www.iron.org/outdoors/waterfalls/",
+        "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
+        "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfall-Map.pdf"
       ]
     },
     {
@@ -462,25 +466,27 @@
         -88.911255
       ],
       "river": "N/A",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "duppy-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-USFS-visitor-route-not-open-now",
+      "landManager": "USDA Forest Service, Ottawa National Forest",
+      "parkingEvidence": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+      "trailEvidence": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Verify USFS route, bridge and public trail status before visitor guide.",
+      "nextAction": "Confirm current road passability/legal parking and forest closures. GIS coordinate natural falls only, never drive there.",
       "batch": "county-iron",
-      "reviewBatch": "02",
+      "reviewBatch": "10",
       "reviewed": "2026-10-28",
-      "classification": "recreation-route-reported-not-fully-verified",
-      "accessAssessment": "Iron County chamber describes route from FS 3645 and a creek crossing, but current bridge and road status unverified.",
+      "classification": "forest-service-unmarked-angler-trail-no-developed-parking",
+      "accessAssessment": "Official USDA Kenton FR3610 -> informal fisher trail, no developed signed parking or precise walking mileage. Regional FR3645/USFS168 labels conflict; no equivalency assumed; no guarantee motor travel passable.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
+        "https://www.iron.org/outdoors/waterfalls/",
+        "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfall-Map.pdf"
       ]
     },
     {
@@ -666,21 +672,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "undetermined-parcel-road-seasonal-public-route",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve parcel tenure and public easement before any visitor directions.",
+      "nextAction": "Identify official legal lot and complete mapped public walking approach before indexing. Do not navigate to falls GIS point.",
       "batch": "county-gogebic",
-      "reviewBatch": "02",
+      "reviewBatch": "10",
       "reviewed": "2026-10-28",
-      "classification": "access-research-only-land-rights-unknown",
-      "accessAssessment": "Unofficial waterfall descriptions approach via powerline clearing; legal access and parking not independently established.",
+      "classification": "city-bessemer-described-gabbro-access-trail-land-rights-unverified",
+      "accessAssessment": "Bessemer city scenic drive official page says Gabbro/Baker's Falls visitors can walk from Blackjack Ski Hill bridge or upper hill path, but public trail/parcel crossing and parking waypoints remain unverified.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/gabbro-falls/"
+        "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/gabbro-falls/",
+        "https://www.cityofbessemer.org/visit/scenic-drives/",
+        "https://explorewesternup.com/things-to-do/waterfalls/"
       ]
     },
     {
@@ -4044,5 +4052,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "09"
+  "lastBatch": "10"
 }
