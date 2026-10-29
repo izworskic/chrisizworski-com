@@ -1,3 +1,11 @@
+### 2026-10-29 — Sleeping Giant full-detail trail geometry, source mismatch and internal map review
+
+- Retrieved **unsimplified** Ontario OTN layer 19 trail geometry individually for seven high-value trails (same original OBJECTID and OGF_ID as earlier simplified inventory). Kabeyun increased from 400 to 2,597 vertices; Sawyer Bay from 80 to 2,480. Source captures have 6-decimal WGS84 precision but are not sign-surveyed GPS data.
+- Reconstructed **eight** mapped intersection candidates and **four** geographic itinerary overlays (Top, Head, Nanabosho, Sea Lion). Ontarian visitor bike/walk mode rules preserved. Every candidate remains a *research map join*, not legally/geographically/currently certified turn guidance.
+- **Critical discovered gap:** Ontario Parks round-trip-from-parking distances exceed the traced OTN network shapes by roughly 0.6–0.8 km; an independent OpenStreetMap parking area center is ~430 m (straight-line) from the mapped OTN common South Kabeyun trail start. OTN layer 20 access point #6001 is ~43 m from that mapped OSM parking center. A drivable entrance and legal walkable public parking-to-trail connector remain **unverified**. Do not create invented routing or adjust official distances.
+- Committed `otn-unsimplified-core-research.geojson`, `lib/sleeping-giant/geometry-reconciliation.cjs`, new GIS/export tests and `scripts/export-sleeping-giant-geometry.mjs`, producing internal HTML+JavaScript QA map, source-provenance GeoJSON and JSON audit as GitHub Actions artifacts. These are not public pages and do not change ads, sitemap, canonicals or existing visitor tools.
+- Evidence and release gates: `docs/SLEEPING_GIANT_GEOGRAPHIC_RECONCILIATION_20261029.md`. Next product step: read-only, plainly labeled source-trail visualisation, source-accurate road/parking link verification, then public UX and ECCC forecast feed separately; turn-by-turn remains blocked.
+
 ### 2026-10-29 — Sleeping Giant official lot and bike/walk transition evidence
 
 - Verified South Kabeyun *named signed parking facility*, 36.5 km south on Hwy 587, capacity caution and permit requirement from Ontario Parks camping. Exact lot coordinates, current road conditions and parking availability remain unknown. Park visitor advice describes campground approximately five minutes north of the lot.
