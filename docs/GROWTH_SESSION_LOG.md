@@ -1585,3 +1585,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Classified individual access as documented seasonal approach, winter arrival unverified, or limited vehicle approach. Surfaced Munising Falls 2025 washout closure prominently rather than advertising it as an available winter waterfall.
 - Introduced a unique interactive three-process field lesson on sandstone seep ice, waterfalls and windblown lake spray. Shared responsive map with grouped Sand Point markers, filterable cards and explicit no-ice-crossing guidance. No AdSense configuration or existing lake ice engine changed.
 - Linked from tools, Michigan destinations, existing winter activities and specialist tools. Release remains unmerged until CI and visual QA; rankings/impressions unmeasured.
+
+### 2026-10-29 — Guide directory inventory and release-check repair
+
+- Audited the live seasonal guide registry and broader destination, river, fishing, dark-sky and gardening guides. Added missing directory links and corrected card descriptions where the actual destinations changed; grouped individual waterfall pages under their collection and kept the noindex Porcupine Mountains preview out. Detailed scope and ongoing checks: `docs/GUIDES_DISCOVERY_INVENTORY_2026-10-29.md`.
+- Release repair preserves map-location and winter parking distinctions, restores source and author signals, and fixes search lengths and sitemap freshness checks. No ad code or settings changed.
+- Validation and release status are recorded in the associated pull requests and must be checked against their final heads and production deployment. No new GSC or AdSense data was measured in this session.
+- **Single next action:** Verify the final guide-directory PR checks, merge when green, and confirm the production page and its principal guide links.
