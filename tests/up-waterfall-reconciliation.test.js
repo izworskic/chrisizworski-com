@@ -281,3 +281,75 @@ test('Pemene Wisconsin trail and Misicot Michigan Third Pier access remain sourc
   assert.ok(!pemene.includes('destination=45.594123'));
   assert.ok(!misicot.includes('destination=45.757574'));
 });
+
+test('Duppy and Mex-i-min-e guides rely on current USDA visitor sources without fabricating vehicle parking', () => {
+  const canonical=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+  const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  for(const [id,oid,road] of [['duppy-falls',26,/FR.?3610|Forest Road 3610/],['mex-i-min-e-falls',19,/FR.?4500|Forest Road 4500/]]){
+    const guide=curated.waterfalls.find(x=>x.id===id);
+    const gis=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const legacy=canonical.entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+    const html=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+    assert.ok(guide&&gis&&legacy,id);
+    assert.equal(guide.publication,'verified-access-guide');
+    assert.equal(guide.gisObjectId,oid);
+    assert.deepEqual([guide.lat,guide.lng],[gis.lat,gis.lng]);
+    assert.equal(gis.reconciliation,'curated-exact-gis-id');
+    assert.equal(gis.curatedId,id);
+    assert.equal(legacy.curatedId,id);
+    assert.equal(legacy.identity,'linked');
+    assert.equal(gis.publicationEligible,true);
+    assert.equal(gis.parkingVerified,true);
+    assert.equal(gis.publicAccessVerified,true);
+    assert.equal(gis.visitorRouteEvidence.navigationToGisPointAllowed,false);
+    assert.equal(gis.visitorRouteEvidence.currentRoadStatus,'unverified');
+    assert.match(guide.parking,road);
+    assert.match(html,road);
+    assert.match(html,/current opening and road conditions are unverified/i);
+    assert.match(html,/<meta name="robots" content="index,follow/);
+    assert.ok(html.includes('https://chrisizworski.com/#person'));
+    assert.ok(html.replace(/<[^>]+>/g,' ').trim().split(/\s+/).length>500,id+' guide thin');
+    assert.ok(!html.includes('data-parking-lat='));
+    for(const axis of ['landManager','publicAccess','parking','trail','location']){
+      assert.equal(guide.verification[axis].verified,true,id+' '+axis);
+      assert.ok(html.replaceAll('&amp;','&').includes(guide.verification[axis].source),id+' lacks citation '+axis);
+    }
+    const card=hub.match(new RegExp('<article class="waterfall-card"[^>]*data-id="'+id+'"[\\s\\S]*?<\\/article>'));
+    assert.ok(card,id+' hub card missing');
+    assert.match(card[0],/data-arrival-verified="verified"/);
+    assert.ok(card[0].includes('Check parking source')&&card[0].includes('Check trail source'));
+    assert.ok(sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+  }
+  const duppy=fs.readFileSync('public/upper-peninsula-waterfalls/duppy-falls/index.html','utf8');
+  const mex=fs.readFileSync('public/upper-peninsula-waterfalls/mex-i-min-e-falls/index.html','utf8');
+  assert.match(duppy,/unmarked trail/i);
+  assert.match(duppy,/3645/);
+  assert.match(duppy,/168/);
+  assert.match(duppy,/do not assume.*interchangeable|different.*forest-road identifiers/i);
+  assert.match(duppy,/no published universal-access viewpoint|no.*developed viewing deck/i);
+  assert.match(mex,/quarter-mile.*round trip|quarter.mile.*round trip|1\/4.mile.*round trip/i);
+  assert.match(mex,/Forest Road 4500/);
+  assert.match(mex,/May.*September/);
+  assert.ok(mex.includes('data-visit-lat="46.31379535"'));
+  assert.ok(!mex.includes('destination=46.313443'));
+});
+
+test('Chicaugon and Gabbro remain nonindexable research with parcel and road hazards explained', () => {
+  const asset=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'));
+  const research=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
+  for(const [oid,slug] of [[12,'chicagon-falls'],[38,'gabbro-falls']]){
+    const candidate=ledger.candidates.find(x=>x.gisObjectId===oid);
+    const caution=asset.records.find(x=>x.gisObjectId===oid);
+    assert.ok(candidate&&caution);
+    assert.equal(candidate.publicationEligible,false);
+    assert.equal(candidate.curatedId,null);
+    assert.equal(candidate.reconciliation,'pending-identity-and-access-research');
+    assert.equal(caution.publicationEligible,false);
+    assert.ok(caution.sourceLinks.length>=2);
+    assert.ok(!curated.waterfalls.some(x=>x.gisObjectId===oid));
+    assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+slug+'/'));
+  }
+  assert.match(asset.records.find(x=>x.gisObjectId===12).summary,/private camps|washout/i);
+  assert.match(asset.records.find(x=>x.gisObjectId===38).summary,/Blackjack/i);
+  assert.ok(research.includes('up-waterfall-access-reviews.json'));
+});
