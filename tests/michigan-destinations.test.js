@@ -100,7 +100,7 @@ test('photographs have distinct source-licensed scenes and quiet credits', () =>
   assert.ok(urls.every(url => url?.startsWith('https://')));
   for (const token of [
     'Calm_summer_day_at_Miners_Castle', 'Isle_Royale_Todd_Harbor_sunset',
-    'Ice_caves_spears', 'Michigan%27s_Torch_Lake_Swimming',
+    'Ice_Formations_Along_the_Pictured_Rocks_Escarpment', 'Michigan%27s_Torch_Lake.jpg',
     'Arch_Rock_at_Mackinac_Island', 'Au_Sable_River.jpg',
     'Old_Mission_Peninsula.jpg', 'Nordhouse_Dunes_Wilderness_Area_shoreline',
     'Manistee_River_in_Autumn_2012', 'Presque_Isle_Lake_Superior',
@@ -109,6 +109,10 @@ test('photographs have distinct source-licensed scenes and quiet credits', () =>
   assert.match(html, /Dylan L\. Tanner/);
   assert.match(html, /creativecommons\.org\/licenses\/by-sa\/2\.5/);
   assert.match(html, /fetchpriority="high"/);
+  assert.equal((html.match(/Michigan%27s_Torch_Lake\.jpg/g) || []).length, 2, 'same licensed Torch Lake photo must appear in hero and destination card');
+  assert.doesNotMatch(html, /Torch_Lake_Swimming/);
+  assert.match(html, /Sand_Point_Road/);
+  assert.match(html, /National Park Service/);
   assert.match(css, /Editorial photo direction/);
   assert.match(css, /object-position:var\(--photo-position/);
   assert.match(css, /figcaption\.photo-credit/);
