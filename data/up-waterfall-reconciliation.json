@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 48,
-    "pending": 113,
-    "curatedTotal": 54,
+    "exactIdMatched": 49,
+    "pending": 112,
+    "curatedTotal": 55,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -3182,7 +3182,16 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "visitor-bureau-upper-and-lower-parking-described-FERC-high-hazard-project-rights-review",
+      "publicationEligible": false,
+      "evidenceReviewed": "2026-10-29",
+      "sourceNotes": "Munising Visitor Bureau describes Power Dam Road from M-94 via Au Train Forest Lake Road, two visitor parking areas for upper and lower falls and a gated gravel walk for lower falls. Separate Nov 17 2025 reporting cites FERC notice calling for surrender of Au Train hydro license due to high-hazard dam safety concerns and land-right/ownership changes. This does NOT establish present closure of public approach, but demands updated dam/utility owner access and current gate/road permission verification before indexable guide.",
+      "outstandingGate": "Locate current 2026 FERC dam license/order status, public access/right-of-way at both parking positions, gate conditions and official operator/public-safety policy; do not infer dam flow or permission from old tourism directions.",
+      "sourceLinks": [
+        "https://www.munising.org/activities/au-train-falls/",
+        "https://www.uppermichiganssource.com/2025/11/17/federal-government-calls-surrender-au-train-dam/"
+      ]
     },
     {
       "gisObjectId": 193,
@@ -3217,14 +3226,40 @@
       "lat": 46.411253,
       "lng": -86.976063,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "rock-river-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "USDA Forest Service, Hiawatha National Forest, Rock River Canyon Wilderness",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "verified-public-wilderness-NCTA-route-without-exact-falls-lot-or-winter-road-claim",
+      "sourceNotes": "Michigan U.P. visitor association describes Chatham Rock River Road -> FR 2276 -> FR 2293 to a small unmarked waterfall visitor parking area. NCTA Marquette Area Chapter 2023 PDF independently names Rock River Canyon wilderness trail, western NCT trailhead and 1.2-mi falls spur. NCTA 46.424791,-86.977818 western parking reference is NOT automatically the falls-specific lot; its seasonal winter vehicle restriction must be retained. Public wilderness route verified; no surveyed waterfall lot coordinates, current road opening or single universal hiking mileage.",
+      "outstandingGate": "Published visitor guide is source backed; verify legal motor vehicle FR2293 opening and specific roadside parking on travel date. Do not route to GIS #194 as a car park.",
+      "sourceLinks": [
+        "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+        "https://www.uptravel.com/listing/rock-river-falls/3493/",
+        "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd534265.pdf"
+      ],
+      "visitorRouteEvidence": {
+        "sourceNCTA": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+        "sourceTourism": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+        "forestMap": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd534265.pdf",
+        "forestRoads": [
+          "Rock River Road H01",
+          "Forest Road 2276",
+          "Forest Road 2293"
+        ],
+        "publicVisitorTrail": true,
+        "fallsSpecificParkingCoordinateVerified": false,
+        "nctaWesternTrailheadIsNotFallsParking": true,
+        "fullRouteDistanceNotUniversal": true,
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      }
     },
     {
       "gisObjectId": 195,
@@ -3536,10 +3571,20 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "municipal-recreation-plan-no-safe-parking-conflict",
+      "publicationEligible": false,
+      "evidenceReviewed": "2026-10-29",
+      "sourceNotes": "City of Munising 2024 Adopted Recreation Plan (Wagner Falls/Alger Falls section) explicitly states Alger Falls at M-28/M-94 has NO SAFE PARKING OPTIONS. Munising regional visitor directory and third-party MyHikes call it a roadside waterfall and describe a turnout, conflicting with municipal safety assessment. Do not publish parking advice or directions to pull off/guardrail crossing without MDOT-confirmed current safe legal turnout.",
+      "outstandingGate": "Obtain current MDOT road safety/designated parking and pedestrian access confirmation; municipal planning documents currently state no safe parking. Remain nonindexable; geographic point only.",
+      "sourceLinks": [
+        "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf",
+        "https://www.munising.org/activities/alger-falls/",
+        "https://myhikes.org/trails/alger-falls"
+      ]
     },
     {
       "gisObjectId": 215,
@@ -3799,6 +3844,17 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Recognized two distinct state GIS waterfalls as already covered by existing /tahquamenon-falls/ combined decision tool. DNR's May 2026 boardwalk/access update verified; add source-linked crosswalk without duplicate indexable destination pages."
+    },
+    {
+      "batch": "13b-rock-river-falls-and-alger-au-train-source-gates",
+      "date": "2026-10-29",
+      "reviewedIds": [
+        194,
+        213,
+        192
+      ],
+      "publicGuidesAdded": 1,
+      "outcome": "NCTA and U.P. tourism independently confirm Rock River Falls FR2276/FR2293 wilderness visitor route with season-specific high-clearance caveats and distinct falls lot versus NCT trailhead. Alger municipality reports no safe roadside parking despite informal third-party turnout, Au Train upstream hydro project FERC risk and property right issues demand refreshed official access. No unsafe new guides for those two."
     }
   ]
 }
