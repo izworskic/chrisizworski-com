@@ -1,3 +1,12 @@
+### 2026-10-29 — Michigan Adventure Finder photo QA correction
+
+- Following owner request to finish photography, audited the live published 20-card guide at 1366px and 390px. The existing October 2026 editorial/photo pass already upgraded all 20 cards to real location-specific licensed photographs; retained strong Miners Castle, Todd Harbor sunset, Old Mission vineyards, Au Sable Highbanks overlook, Arch Rock, Nordhouse dunes and other existing curated work.
+- Found one genuine regression: **Torch Lake hero image failed to load on the live mobile screenshot** (direct upload.wikimedia.org source), though a desktop capture could display it. Replaced both the Torch Lake hero and destination card with the Commons-provided 960px thumbnail of *Michigan's Torch Lake* by H. G. Judd (CC BY-SA 3.0); kept source/author/license links. The new photograph has blue-green water and a wooded shoreline, not staged/AI imagery.
+- Corrected Munising ice destination to the official NPS public-domain *Ice Formations Along the Pictured Rocks Escarpment off Sand Point Road* rather than generic close-up of ice spears. This is a location-specific photographed ice curtain; no inference of current ice safety or access.
+- Changed exactly one HTML and its existing photography test plus this session log. No changes to maps, Vercel env configuration, ads, canonicals, indexing, SEO signals, homepage or other tools. Photograph author/license audit from Wikimedia Commons API; QA checks updated for the two replacements and 23 credit captions.
+- Deploy and production screenshot verdict are gated on final CI and merge, not assumed. No claimed GSC outcomes.
+- **Exactly one next action:** after deployment, visually verify both replacement photos at desktop/mobile, and check the keyed CARTO status remains ready.
+
 ### 2026-10-28 — Porkies critical bridge/ford verification, structural source coverage
 
 - Reviewed 2025 official DNR GPS map unbridged-crossing symbols and narrative trails against 174 EGLE/DNR hydro-line candidates; retained candidate source IDs, **no public crossing GPS**. Individually distinguished nine site records including the 2016 Big Carp *mouth bridge* and a **separate** upstream 2026 hiking-account crossing. Explicitly 0 physical-status-certified traverses; GPS map symbols cannot be precisely tied to particular signed crossing locations without further authoritative evidence.
