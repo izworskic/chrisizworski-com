@@ -6,8 +6,8 @@
   "sourceCount": 197,
   "sourceCandidateCount": 161,
   "curatedCount": 54,
-  "linkedByExactOid": 46,
-  "unresolvedCandidates": 115,
+  "linkedByExactOid": 48,
+  "unresolvedCandidates": 113,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3832,18 +3832,26 @@
         -85.256643
       ],
       "river": "TAHQUAMENON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "tahquamenon",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "existing-parent-tool-no-duplicate-guide",
+      "access": "DNR-public-park-separate-upper-falls-area",
+      "landManager": "Michigan DNR Tahquamenon Falls State Park",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "trailEvidence": "https://www.michigan.gov/dnr/about/accessibility/trails",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-luce"
+      "nextAction": "Retain one canonical parent planner; audit reader-facing facts and avoid same parking pin for both waterfalls.",
+      "batch": "county-luce",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "13",
+      "classification": "two-geographic-falls-represented-by-one-existing-SEO-decision-tool",
+      "accessAssessment": "State GIS Upper Tahquamenon is covered by the already-live main Tahquamenon tool, with distinct day-use parking and river access; the new 2026 boardwalk applies to Upper only. No separate indexable field-guide URL needed or created.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3855,18 +3863,26 @@
         -85.207103
       ],
       "river": "TAHQUAMENON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "tahquamenon",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "existing-parent-tool-no-duplicate-guide",
+      "access": "DNR-public-park-separate-lower-falls-area",
+      "landManager": "Michigan DNR Tahquamenon Falls State Park",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "trailEvidence": "https://www.michigan.gov/dnr/about/accessibility/trails",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-chippewa"
+      "nextAction": "Retain one canonical parent planner; audit reader-facing facts and avoid same parking pin for both waterfalls.",
+      "batch": "county-chippewa",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "13",
+      "classification": "two-geographic-falls-represented-by-one-existing-SEO-decision-tool",
+      "accessAssessment": "State GIS Lower Tahquamenon is covered by the already-live main Tahquamenon tool, with distinct day-use parking and river access; the new 2026 boardwalk applies to Upper only. No separate indexable field-guide URL needed or created.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+        "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4083,5 +4099,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "12"
+  "lastBatch": "13"
 }
