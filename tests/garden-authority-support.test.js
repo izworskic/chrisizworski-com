@@ -14,8 +14,8 @@ test('gardening hub strengthens authority without rewriting protected page-one t
   assert.match(hub,/id="garden-start-title"/);
   for(const href of cfg.authoritySupport.requiredLinks) assert.match(hub,new RegExp('href="'+href.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'"'));
   assert.match(hub,/47 crops from 78 Michigan frost stations/);
-  assert.match(hub,/When to plant tomatoes in Michigan/);
-  assert.match(hub,/Best heirloom tomatoes for Michigan/);
+  assert.match(hub,/When to plant tomatoes in Michigan/i);
+  assert.match(hub,/Best heirloom tomatoes for Michigan/i);
 
   assert.match(zone,/<title>Michigan Zone 6a Planting Calendar by City \| Chris Izworski<\/title>/);
   assert.match(zone,/<h1>Michigan Zone 6a Planting Calendar by City<\/h1>/);

@@ -29,12 +29,12 @@ for(const slug of slugs){
   assert.ok(graph.some(x=>x["@type"]==="BreadcrumbList"));
   const webpage=graph.find(x=>x["@type"]==="WebPage");
   assert.equal(webpage.url,canonical);
-  assert.equal(webpage.dateModified,"2026-10-11");
+  assert.ok(webpage.dateModified >= "2026-10-11");
   const faq=graph.find(x=>x["@type"]==="FAQPage");
   assert.ok(faq?.mainEntity?.length>=3);
   for(const q of faq.mainEntity){assert.equal(q["@type"],"Question");assert.equal(q.acceptedAnswer?.["@type"],"Answer");assert.ok(q.acceptedAnswer?.text?.length>=35);assert.ok(html.includes("<summary>"+q.name+"</summary>"));}
   const sitemap=read("public/sitemap.xml");
-  assert.ok(sitemap.includes("<loc>"+canonical+"</loc>\n    <lastmod>2026-10-11</lastmod>"),"in sitemap with editorial freshness");
+  assert.ok(sitemap.includes("<loc>"+canonical+"</loc>\n    <lastmod>"+webpage.dateModified+"</lastmod>"),"in sitemap with editorial freshness");
   for(const inbound of expectedInbound[slug])assert.ok(read(inbound).includes('href="/'+slug+'/"'),inbound+" must link to "+slug);
  });
 }

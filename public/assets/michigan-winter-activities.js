@@ -31,7 +31,7 @@ function refreshPins(initial){
   const multi=group.cards.length>1,firstName=group.cards[0].querySelector('h3')?.textContent||'Destination';
   const root=document.createElement('div');root.className='wf-map-popup';
   const heading=document.createElement('strong');heading.textContent=multi?group.cards.length+' winter outings in this area':firstName;root.append(heading);
-  const note=document.createElement('p');note.textContent='Click a link below to jump straight to the field notes, winter approach tips, and live tool.';root.append(note);
+  const note=document.createElement('p');note.textContent='Orientation only: this marker shows a general area, not verified winter parking. Choose a field note for access details and official links.';root.append(note);
   const items=document.createElement('ul');
   for(const card of group.cards){
    const title=card.querySelector('h3')?.textContent||'Open field note';

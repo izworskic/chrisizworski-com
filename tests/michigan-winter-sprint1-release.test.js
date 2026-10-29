@@ -4,7 +4,7 @@ import {readFileSync, existsSync} from 'node:fs';
 
 const read = (p) => readFileSync(p, 'utf8');
 
-test('Rank #1 Flagship Michigan Winter Weekend Getaways (/michigan-winter-weekends/) has 12 static weekend bases, 15 verified photos (0 numbered placeholders), Automatic 4-Season Engine, and Leaflet map', () => {
+test('Rank #1 Flagship Michigan Winter Weekend Getaways (/michigan-winter-weekends/) has 12 static weekend bases, 15 verified photos (0 numbered placeholders), four experience doors, and Leaflet map', () => {
   const html = read('public/michigan-winter-weekends/index.html');
   const css = read('public/assets/michigan-winter-weekends.css');
   const js = read('public/assets/michigan-winter-weekends.js');
@@ -17,7 +17,7 @@ test('Rank #1 Flagship Michigan Winter Weekend Getaways (/michigan-winter-weeken
 
   const stories = [...html.matchAll(/<article class="wf-story"[\s\S]*?<\/article>/g)];
   assert.equal(stories.length, 12);
-  assert.equal((html.match(/data-evidence="https:\/\//g) || []).length, 12);
+  assert.equal((html.match(/data-source="https:\/\//g) || []).length, 12);
 
   const photos = [...html.matchAll(/<figure class="wf-photo[^]*?<\/figure>/g)];
   const indices = [...html.matchAll(/<div class="wf-story-index"[\s\S]*?<\/div>/g)];
@@ -33,26 +33,25 @@ test('Rank #1 Flagship Michigan Winter Weekend Getaways (/michigan-winter-weeken
 
   for (const [b] of stories) {
     assert.match(b, /https:\/\/www\.google\.com\/maps\/search\/\?api=1&amp;query=[0-9.]+%2C-[0-9.]+/);
-    assert.match(b, /View place on Google Maps · not parking/);
+    assert.match(b, /View (?:place|town area) on Google Maps · not parking/);
     assert.match(b, /target="_blank" rel="noopener noreferrer"/);
   }
 
-  assert.match(html, /id="wkd-season-bar"/);
-  assert.match(html, /id="wkd-mode-stage"/);
-  assert.match(html, /id="wkd-drive"/);
-  for (const season of ['winter', 'spring', 'summer', 'fall']) {
-    assert.match(html, new RegExp(`data-season-card="${season}"`));
+  assert.match(html, /id="wkd-blueprint-stage"/);
+  assert.match(html, /id="wf-drive"/);
+  for (const door of ['snow', 'ice', 'stars', 'fleet']) {
+    assert.match(html, new RegExp(`data-door="${door}"`));
   }
   assert.ok(html.includes('src="/assets/leaflet-1.9.4.js"'));
   assert.ok(!html.includes('unpkg.com/leaflet'));
 
-  assert.match(js, /America\/Detroit/);
+  assert.match(js, /doorCards/);
   assert.match(js, /revealPhotoFallback/);
-  assert.match(js, /groups=new Map/);
-  assert.ok(css.includes('.wkd-season-engine'));
+  assert.match(js, /groups\s*=\s*new Map/);
+  assert.ok(css.includes('.wkd-blueprint'));
 });
 
-test('Rank #2 Michigan White Christmas & Christmas-Week Escapes (/michigan-white-christmas-escapes/) has 10 static holiday towns, 13 verified photos (0 numbered placeholders), Christmas Countdown Engine, and NOAA climatology', () => {
+test('Rank #2 Michigan White Christmas & Christmas-Week Escapes (/michigan-white-christmas-escapes/) has 10 static holiday towns, 13 verified photos (0 numbered placeholders), four holiday choices, and NOAA climatology', () => {
   const html = read('public/michigan-white-christmas-escapes/index.html');
   const css = read('public/assets/michigan-white-christmas-escapes.css');
   const js = read('public/assets/michigan-white-christmas-escapes.js');
@@ -81,25 +80,27 @@ test('Rank #2 Michigan White Christmas & Christmas-Week Escapes (/michigan-white
 
   for (const [b] of stories) {
     assert.match(b, /https:\/\/www\.google\.com\/maps\/search\/\?api=1&amp;query=[0-9.]+%2C-[0-9.]+/);
-    assert.match(b, /View place on Google Maps · not parking/);
+    assert.match(b, /View (?:place|town area) on Google Maps · not parking/);
     assert.match(b, /target="_blank" rel="noopener noreferrer"/);
   }
 
   assert.match(html, /1991–2020/);
   assert.match(html, /96%/);
   assert.match(html, /45\.7%/);
-  assert.match(html, /id="wce-season-bar"/);
-  assert.match(html, /id="wce-mode-stage"/);
+  assert.match(html, /id="wce-blueprint-stage"/);
+  for (const door of ['tier-90', 'tier-70', 'ski-resort', 'tier-lights']) {
+    assert.match(html, new RegExp(`data-door="${door}"`));
+  }
   assert.ok(html.includes('href="/national-tools/white-christmas/forecast/"'));
   assert.ok(html.includes('href="/white-christmas-probability-map/"'));
   assert.ok(html.includes('href="/white-christmas-michigan/"'));
   assert.ok(html.includes('src="/assets/leaflet-1.9.4.js"'));
   assert.ok(!html.includes('unpkg.com/leaflet'));
 
-  assert.match(js, /America\/Detroit/);
+  assert.match(js, /data-door/);
   assert.match(js, /revealPhotoFallback/);
-  assert.match(js, /groups=new Map/);
-  assert.ok(css.includes('.wce-season-engine'));
+  assert.match(js, /groups\s*=\s*new Map/);
+  assert.ok(css.includes('.wce-mode-stage'));
 });
 
 test('100% real photograph coverage across all winter field guides with zero .wf-story-index numbered placeholders', () => {
