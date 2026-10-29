@@ -40,7 +40,7 @@ test('photo credits and source rights are explicit with honest seasonal/archival
   assert.equal(indices.length,0);
   for(const [photo] of photos){
     assert.match(photo,/Photo: <a/);
-    assert.match(photo,/(CC BY|CC0|NPS public-domain|Public domain)/);
+    assert.match(photo,/(CC BY|CC0|NPS public-domain|Public domain|DNR public-use portfolio)/);
     assert.match(photo,/figcaption/);
     assert.match(photo,/alt="[^"]+"/);
   }
@@ -50,6 +50,17 @@ test('photo credits and source rights are explicit with honest seasonal/archival
   assert.match(html,/Tobico Marsh in winter/);
   assert.match(js,/revealPhotoFallback/);
   assert.match(js,/IMAGE UNAVAILABLE/);
+});
+
+test('DNR winter photos retain their source credits and precise scene disclosures',()=>{
+  const porkies=html.match(/<article class="wf-story" id="stop-6"[\s\S]*?<\/article>/)?.[0];
+  const vasa=html.match(/<article class="wf-story" id="stop-7"[\s\S]*?<\/article>/)?.[0];
+  assert.ok(porkies); assert.ok(vasa);
+  assert.match(porkies,/Tyler Leipprandt/);
+  assert.match(porkies,/snowshoeing · February 2020 · archival image/);
+  assert.match(vasa,/Michigan Department of Natural Resources/);
+  assert.match(vasa,/specific snowshoe loop not identified/);
+  for(const card of [porkies,vasa]) assert.match(card,/DNR public-use portfolio/);
 });
 
 test('interactive trail-use decoder, grouped Vasa map marker and 4-way filters are wired',()=>{
