@@ -53,6 +53,38 @@ try{
     await page.waitForFunction(()=>document.querySelector('#geo-candidate-status')?.textContent.includes('additional geographic research points displayed'),{timeout:15000});
     assert.match(await page.locator('#geo-candidate-status').innerText(),/research points displayed/i);
   });
+
+  await run('Chicagon and Gabbro geographic pins expose audited road gates, not directions',async()=>{
+    const results=await page.evaluate(()=>{
+      const map=window.UPWaterfallMap;
+      if(!map)throw Error('Waterfall map absent');
+      const targets=[{name:'Chicagon',lat:46.134032,lng:-88.452985},{name:'Gabbro',lat:46.502079,lng:-89.992485}];
+      return targets.map(t=>{
+        let found=null;
+        map.eachLayer(layer=>{
+          if(typeof layer.getLayers!=='function')return;
+          for(const marker of layer.getLayers()){
+            if(typeof marker.getLatLng!=='function')continue;
+            const point=marker.getLatLng();
+            if(Math.abs(point.lat-t.lat)<0.00006&&Math.abs(point.lng-t.lng)<0.00006)found=marker;
+          }
+        });
+        if(!found||!found.getPopup())throw Error(t.name+' GIS research marker missing');
+        const body=found.getPopup().getContent();
+        return {name:t.name,text:body.textContent,rows:body.querySelectorAll('ol.route-evidence-list li').length,links:body.querySelectorAll('ol.route-evidence-list a[href^="https://"]').length};
+      });
+    });
+    for(const v of results){
+      assert.ok(v.rows>=6,v.name+' missing access route steps');
+      assert.equal(v.links,v.rows,v.name+' must source each segment');
+      assert.match(v.text,/Road-to-waterfall access evidence/);
+      assert.match(v.text,/Public access not established/);
+      assert.match(v.text,/Do not drive|Do NOT navigate|do NOT navigate/i);
+      assert.doesNotMatch(v.text,/Google Maps driving directions/);
+    }
+    assert.match(results.find(x=>x.name==='Chicagon').text,/DNR.*forest parcel|state forest parcel|47\.8-acre/);
+    assert.match(results.find(x=>x.name==='Gabbro').text,/Blackjack|ski hill/i);
+  });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
     const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
