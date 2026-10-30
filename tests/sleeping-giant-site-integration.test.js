@@ -34,7 +34,7 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.ok(html.includes('tile.openstreetmap.org'), 'fallback provider absent');
  assert.ok(html.includes('basemaps.cartocdn.com/rastertiles/voyager'), 'CARTO Voyager provider absent');
  assert.ok(html.includes('geoLines.clearLayers()'), 'route selection cannot clear stale geographic lines');
- assert.ok(html.includes('No reconciled trail route or parking location is verified'), 'unmapped route must avoid invented geometry');
+ assert.ok(html.includes('No mapped trail route or parking location is verified'), 'unmapped route must avoid invented geometry');
  assert.doesNotMatch(html, /Google Maps driving directions to approximate parking/i);
  assert.ok(html.includes('id="trail-top-of-the-giant"'));
  assert.ok(html.includes('id="trail-sea-lion"'));
