@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-29",
+  "reviewed": "2026-10-30",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -3338,6 +3338,114 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan state GIS #198 Memorial and #199 Tannery are separate waterfall features. They are NOT visitor parking or legal entry."
+        }
+      }
+    },
+    {
+      "id": "houghton-douglass-falls",
+      "name": "Houghton-Douglass Falls",
+      "region": "Western U.P.",
+      "place": "Hammell Creek · Calumet Township · M-26",
+      "lat": 47.206922,
+      "lng": -88.427485,
+      "gisObjectId": 135,
+      "level": "moderate",
+      "minutes": "30–75 min",
+      "walk": "From the DNR's completed M-26 site entrance, use the Phase 1 accessible path to the pedestrian bridge over Hammell Creek. BEYOND THE BRIDGE the trail remains rugged and undeveloped, with no completed accessible fall overlook, safety barriers or observation platform. Do not treat a local visitor bureau's approximate 0.5-mile round trip as an ADA-certified trail.",
+      "best": "Snow-free, dry footing and adequate daylight, only while DNR signs allow visitor access. Full overlook expected after planned Phase 2 construction, not currently complete.",
+      "access": "DNR says the property is still under development and will officially open/dedicate once all phases are complete; Visit Keweenaw currently describes visitation after Phase 1. DNR cautions that beyond the bridge the trail is rugged with no barriers. Phase 2 overlooks and completed accessible route are scheduled for construction in 2027. Verify posted site-specific restrictions before attempting the undeveloped path.",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State scenic site under development",
+      "parking": "DNR Phase 1 built a dedicated parking area and access drive off M-26, 1.5 miles north of Lake Linden. Use the entrance signed for Houghton-Douglass Falls; the DNR site reference point 47.206425,-88.431575 is an area direction, not a surveyed parking space. Do not use the waterfall's natural GIS marker or historical lower private-land access.",
+      "feature": "A towering Hammell Creek waterfall framed by volcanic rock; the public site is still being constructed.",
+      "decision": "If you visit, choose the completed parking-to-bridge portion and assess whether continuing onto the undeveloped path is permitted and safe. This is not yet a completed ADA waterfall overlook.",
+      "further": "Michigan DNR says official dedication is after all improvements. Keweenaw visitor bureau reports visits are possible following Phase 1. These are different milestones, not a contradiction to erase. Do not promise an opened accessible falls platform, guardrails, or a completed overlook in 2026. Current opening and road conditions are unverified. No precise surveyed parking GPS is asserted.",
+      "manager": "Michigan DNR · Houghton-Douglass Falls and Veterans Memorial Scenic Site",
+      "sourceReviewed": "2026-10-30",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-visitor-source-and-site-geometry-confirmed-no-live-season-status",
+      "winterRoad": "The parking/bridge may be affected by construction, ice and weather. Phase 2 planned for 2027 is not a live schedule or opening guarantee.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+          "description": "DNR is the site owner/manager, with 70-acre scenic project and construction milestones."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/",
+          "description": "Visit Keweenaw says Phase 1 complete and visitation possible, subject to DNR site limitations; this is not full official dedication."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+          "description": "Phase 1 new access road, parking and vault toilet off M-26; area coordinates are not individual parking GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates",
+          "description": "Accessible to pedestrian bridge ONLY; beyond bridge natural unimproved path, no finished barriers/observation deck."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Natural #135 marker on Hammell Creek separate from official DNR visitor approach."
+        }
+      }
+    },
+    {
+      "id": "power-house-falls",
+      "name": "Power House Falls",
+      "region": "Western U.P.",
+      "place": "Falls River · L’Anse · Baraga County",
+      "lat": 46.736793,
+      "lng": -88.44433,
+      "gisObjectId": 88,
+      "level": "easy",
+      "minutes": "15–45 min",
+      "walk": "From the small park at Power House Falls, view the cascade from established riverside ground. The Village of L'Anse describes a roughly half-mile upstream riverside trail; this is the general path length, not a signed promise of access to every other drop. Do not enter the old powerhouse, climb its walls, use industrial structures, or scramble down the falls.",
+      "best": "Snow-free spring to autumn. Spring runoff produces more active water; slow summer conditions can show low cascades.",
+      "access": "The Village of L'Anse describes a small park beside Power House Falls, and Baraga County visitor bureau separately lists it as a waterfall destination. Independent field directions identify the signed Power Dam Road park spur. No verified current closure notice was found; do not assert open now or winter plowing.",
+      "status": "verify",
+      "source": "https://visitbaragacounty.com/activities/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Riverside village park waterfall",
+      "parking": "Travel from US-41 south of L'Anse onto Power Dam Road. The Baraga County tourism listing and independent field guide describe the signed Power House Falls spur off Power Dam Road leading to a small park with parking and pavilion. This is NOT the downtown Falls River Trail parking and not the GIS natural falls waypoint. Present maintenance, road clearance and park opening have not been verified live.",
+      "feature": "A short, broad Falls River cascade beside a historic concrete powerhouse, with a small riverside park and upstream trail.",
+      "decision": "Choose this for a short, less strenuous Falls River stop separate from the downtown Middle and Lower Falls Trail. Stay on the park side and do not use the abandoned industrial building.",
+      "further": "The village describes a park and upstream trail, independent field observations describe a signed park road, and USGS old-powerplant station 04043098 independently places the powerplant at 46.737155,-88.444853 close to Michigan GIS natural falls #88. These are geographic identity checks, not current park opening permission. Published heights vary widely (about 6 to 15 feet), so no definitive height is promised. Current opening and road conditions are unverified.",
+      "manager": "L'Anse area small riverside visitor park; present operating authority not independently confirmed",
+      "sourceReviewed": "2026-10-30",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-visitor-source-and-site-geometry-confirmed-no-live-season-status",
+      "winterRoad": "No current winter-plowing or side-road maintenance confirmation; verify access before driving. Riverside ice, dam ruins and abandoned concrete structures are unsafe.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+          "description": "Village of L'Anse official visitor manual documents park by falls and half-mile upstream walk, not formal parcel ownership."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://visitbaragacounty.com/activities/waterfalls/",
+          "description": "Baraga County tourism names Power House Falls as a separate visitor waterfall, corroborating civic guide."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/",
+          "description": "Independent site-specific field guide describes signed Power Dam Road spur, parking, pavilion and falls at park."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+          "description": "Village describes riverside trail half mile upstream and nearby old concrete powerhouse."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043098/",
+          "description": "USGS old powerplant stream station is close to GIS #88; American Whitewater separately georeferences the named natural waterfall, not parking."
         }
       }
     }

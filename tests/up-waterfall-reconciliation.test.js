@@ -624,11 +624,11 @@ test('Morgan Falls public route uses NTN South parking and designated crossing, 
 });
 
 
-test('remaining Batch 14 five source-reviewed GIS records stay unindexed with distinct route and safety gates',()=> {
+test('remaining Batch 14 three source-reviewed GIS records stay unindexed with distinct route and safety gates',()=> {
  const refs=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
  const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries;
  const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8')).candidates;
- for(const oid of [135,160,46,91,88]){
+ for(const oid of [160,46,91]){
   const g=ledger.candidates.find(x=>x.gisObjectId===oid);
   const a=source.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
   const r=refs.find(x=>x.gisObjectId===oid);
@@ -744,4 +744,43 @@ test('Memorial and Tannery/Olsen closure guide never provides visitor arrival or
   assert.equal(f.verification[axis].verified,true);
   assert.ok(h.includes(f.verification[axis].source));
  }
+});
+
+test('Batch 18 Houghton Phase-1 and Power House public visitor paths preserve distinct site safety and physical geography',()=>{
+ const inventory=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries;
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const gisResearch=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ for(const [oid,id] of [[135,'houghton-douglass-falls'],[88,'power-house-falls']]){
+  const f=curated.waterfalls.find(x=>x.id===id);
+  const record=ledger.candidates.find(x=>x.gisObjectId===oid);
+  const source=inventory.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
+  const html=fs.readFileSync('public/upper-peninsula-waterfalls/'+id+'/index.html','utf8');
+  assert.ok(f&&record&&source);
+  assert.equal(f.publication,'verified-access-guide');
+  assert.equal(record.curatedId,id);
+  assert.equal(source.curatedId,id);
+  assert.equal(record.visitorRouteEvidence.navigationToGisPointAllowed,false);
+  assert.ok(!queue.candidates.some(x=>x.gisObjectId===oid));
+  assert.ok(!gisResearch.some(x=>x.gisObjectId===oid));
+  assert.match(html,/current opening and road conditions are unverified/i);
+  assert.ok(!html.includes('data-parking-lat='));
+  assert.ok(html.includes('https://chrisizworski.com/#person'));
+  assert.ok(hub.includes('data-id="'+id+'" data-gis-oid="'+oid+'"'));
+  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
+  for(const axis of ['landManager','publicAccess','parking','trail','location']){
+   assert.equal(f.verification[axis].verified,true);
+   assert.ok(html.includes(f.verification[axis].source),axis);
+  }
+ }
+ const d=fs.readFileSync('public/upper-peninsula-waterfalls/houghton-douglass-falls/index.html','utf8');
+ assert.match(d,/BEYOND THE BRIDGE|beyond.*bridge/i);
+ assert.match(d,/2027/);
+ assert.match(d,/no.*completed.*platform|no completed.*observation platform/i);
+ assert.match(d,/officially open and be dedicated|official.*dedicat/i);
+ const ph=fs.readFileSync('public/upper-peninsula-waterfalls/power-house-falls/index.html','utf8');
+ assert.match(ph,/Power Dam Road/);
+ assert.match(ph,/USGS/);
+ assert.match(ph,/not a.*parking/i);
+ for(const oid of [160,91]){const row=ledger.candidates.find(x=>x.gisObjectId===oid);assert.equal(row.curatedId,null);assert.equal(row.publicationEligible,false);assert.ok(queue.candidates.some(x=>x.gisObjectId===oid));}
 });

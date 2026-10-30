@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 59,
-  "linkedByExactOid": 54,
-  "unresolvedCandidates": 107,
+  "curatedCount": 61,
+  "linkedByExactOid": 56,
+  "unresolvedCandidates": 105,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1675,26 +1675,27 @@
         -88.44433
       ],
       "river": "FALLS RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "power-house-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "route-or-permission-not-cleared",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "source-backed-public-visitor-facility-current-conditions-unverified",
+      "landManager": "L'Anse area small riverside visitor park; present operating authority not independently confirmed",
+      "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/",
+      "trailEvidence": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-29",
-      "nextAction": "Verify current small-park operator, official entrance and parking permission plus correspondence of GIS #88 to the waterfall visible from the park before visitor-guide promotion.",
+      "checked": "2026-10-30",
+      "nextAction": "Current seasonal/posted visitor access requires check; no open-now, road-plowing, completed facilities or exact parking GPS invented.",
       "batch": "county-baraga",
-      "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "village-powerhouse-park-with-trail-identity-review",
-      "accessAssessment": "Village of L'Anse's 2025 visitor manual independently describes a small park at Powerhouse Falls and an upstream half-mile trail by the old powerhouse, separate from downtown lower/middle Falls River walk. It gives no current gate, structural-safety certification or exact lot GPS. Historic power station and trail descriptions do not establish structural safety or current 2026 operation of the parking lot. Other generic Power Dam/Falls River records are different nearby features.",
+      "reviewed": "2026-10-30",
+      "reviewBatch": "18",
+      "classification": "village-described-small-park-county-visitor-site-USGS-old-powerplant-match",
+      "accessAssessment": "The village describes a park and upstream trail, independent field observations describe a signed park road, and USGS old-powerplant station 04043098 independently places the powerplant at 46.737155,-88.444853 close to Michigan GIS natural falls #88. These are geographic identity checks, not current park opening permission. Published heights vary widely (about 6 to 15 feet), so no definitive height is promised. Current opening and road conditions are unverified.",
       "evidence": [
         "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+        "https://visitbaragacounty.com/activities/waterfalls/",
         "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/",
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        "https://waterdata.usgs.gov/monitoring-location/USGS-04043098/"
       ]
     },
     {
@@ -1762,17 +1763,18 @@
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-29",
-      "nextAction": "Match each named falls feature to the municipal trail's legally accessible section and parcel; resolve #91 versus other upstream 'Upper Falls' before public page.",
+      "checked": "2026-10-30",
+      "nextAction": "Obtain mapped public trail-to-GIS-#91 view with land title/easement evidence or establish same-name feature mixup. Do not route onto private river property or along rail tracks.",
       "batch": "county-baraga",
-      "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "falls-river-named-upper-private-access-conflict",
-      "accessAssessment": "L'Anse municipality describes a public Falls River nature trail and upper, middle and lower waterfall views, but a separate recent guide claims an Upper Falls label is on private land. GIS #91 upper coordinate is not enough to assign an exact trail view or resolve this same-name collision. Municipal trail summary does not georeference which of several 'Upper' falls points is public. Private-property statement is secondary and may describe a different upstream drop.",
+      "reviewed": "2026-10-30",
+      "reviewBatch": "18",
+      "classification": "generic-upper-falls-LAnse-private-property-identity-not-matched-to-village-public-trail",
+      "accessAssessment": "Official village waterfall summary speaks of public upper/middle/lower trail experiences in general but does not geolocate a public viewpoint at GIS #91. Independent 2026 guide says specific upstream Upper Falls on private land without public access. Preserve distinct Middle #95 and Lower #96 visitor guide; no unapproved routes to #91.",
       "evidence": [
         "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+        "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html",
         "https://www.baragacountytrails.org/trails/falls-river-trail",
-        "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html"
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
     {
@@ -2585,26 +2587,27 @@
         -88.427485
       ],
       "river": "HAMMELL CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "houghton-douglass-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "route-or-permission-not-cleared",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "source-backed-public-visitor-facility-current-conditions-unverified",
+      "landManager": "Michigan DNR · Houghton-Douglass Falls and Veterans Memorial Scenic Site",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+      "trailEvidence": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-29",
-      "nextAction": "Obtain current DNR site-specific visitor operating status, allowable accessible-path terminus, and bridge-to-overlook safety rules; do not use a lower-gorge private entry.",
+      "checked": "2026-10-30",
+      "nextAction": "Current seasonal/posted visitor access requires check; no open-now, road-plowing, completed facilities or exact parking GPS invented.",
       "batch": "county-houghton",
-      "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "state-scenic-site-development-visitor-bureau-conflict",
-      "accessAssessment": "Michigan DNR confirms Phase 1 parking, an accessible path and Hammell Creek pedestrian bridge completed in 2025, but the path beyond the bridge remains unimproved, with no observation deck, guardrails or final dedication. Phase 2 is planned for 2027. Visit Keweenaw says the site is open for visitation; neither source authorizes interpreting the undeveloped cliff path as an accessible or finished overlook. State DNR and visitor bureau describe different milestones: visitation versus official dedication; do not collapse these into an unqualified open/closed claim.",
+      "reviewed": "2026-10-30",
+      "reviewBatch": "18",
+      "classification": "DNR-phase1-parking-bridge-visitor-bureau-visitation-2027-final-overlook-incomplete",
+      "accessAssessment": "Michigan DNR says official dedication is after all improvements. Keweenaw visitor bureau reports visits are possible following Phase 1. These are different milestones, not a contradiction to erase. Do not promise an opened accessible falls platform, guardrails, or a completed overlook in 2026. Current opening and road conditions are unverified. No precise surveyed parking GPS is asserted.",
       "evidence": [
         "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+        "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/",
         "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates",
-        "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/"
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
     {
@@ -3079,16 +3082,16 @@
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-29",
-      "nextAction": "Verify current owner/operator of powerhouse-side road and public lot, any gate or construction rule, and continuity of the visitor footpath; distinguish NTN Forestville Trailhead from the falls parking.",
+      "checked": "2026-10-30",
+      "nextAction": "Find authoritative 2026 powerplant operator or land manager statement confirming lawful public use of powerhouse parking, gate-side pedestrian corridor, and designated falls path; do not substitute state boat-launch or NTN trail lot.",
       "batch": "county-marquette",
-      "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "tourism-trail-documented-site-management-unverified",
-      "accessAssessment": "Travel Marquette's waterfall visitor map describes a 1.7-mile Forestville Road waterfall outing from a parking area right of the powerhouse, up a gated gravel service road and down to the river. Marquette Township's recreation plan names Dead River Falls in Forestville. NTN's separate Forestville trailhead is not proof that its parking is the same as the powerhouse waterfall approach. Printed tourism map describes the visitor route, not current utility power-station permissions or a surveyed legal parking lot. Variable hike distances from independent guides are not parking-to-falls measurements.",
+      "reviewed": "2026-10-30",
+      "reviewBatch": "18",
+      "classification": "Forestville-powerhouse-parking-touring-guide-but-current-utility-permission-not-established",
+      "accessAssessment": "Marquette Township official approved recreation plan names Dead River Falls in Forestville and confirms a DIFFERENT state-owned Forestville Access Site for boating. Independent Falls River specialist places hiking path beside old power station and parking near outhouse, but current utility ownership, public parking permission, walk past service gate, and posted hiking rule are unverified. State-owned boat access is not automatic hiking access to falls.",
       "evidence": [
-        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf",
         "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
+        "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
         "https://www.noquetrails.org/north-trails"
       ]
     },
@@ -4236,5 +4239,5 @@
       ]
     }
   ],
-  "lastBatch": "17"
+  "lastBatch": "18"
 }
