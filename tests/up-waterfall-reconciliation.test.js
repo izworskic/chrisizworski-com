@@ -45,7 +45,7 @@ test('exact GIS reconciliation cannot silently create or alter public guides', (
         assert.ok(visitor && !Number.isInteger(visitor.gisObjectId));
         assert.ok(Math.abs(visitor.lat-row.lat)>0.04);
         assert.match(row.disposition,/same-name-state-GIS-geography-mismatch/i);
-        assert.match(row.sourceNotes,/6\\.74 km/);
+        assert.match(row.sourceNotes,/6\.74 km/);
       } else {
         assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/' + proposedSlug + '/'),
           'unreviewed GIS feature may not auto-enter public waterfall sitemap: ' + row.name);
@@ -695,7 +695,7 @@ test('Sturgeon visitor guide prevents 6.74 km state GIS misrouting while retaini
  assert.equal(geo.publicationEligible,false);
  assert.equal(geo.lat,46.582163);
  assert.equal(review.publicationEligible,false);
- assert.match(review.summary,/6\\.74 km/);
+ assert.match(review.summary,/6\.74 km/);
  assert.ok(review.routeAudit.segments.length===6);
  assert.ok(q.candidates.some(x=>x.gisObjectId===45));
  assert.ok(data.entries.some(x=>x.source==='curated-non-gis'&&x.curatedId==='sturgeon-falls'));
