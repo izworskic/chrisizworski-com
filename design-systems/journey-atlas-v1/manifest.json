@@ -1,0 +1,19 @@
+{
+  "id": "JOURNEY_ATLAS_V1",
+  "version": "1.0.0",
+  "name": "Journey Atlas: trip-aware experience and alternative decision layer",
+  "dependsOn": "FIELD_GUIDE_V1",
+  "components": [
+    "editorial-discovery",
+    "experience-matching",
+    "trip-handoff",
+    "dated-truth",
+    "alternative-path"
+  ],
+  "example": "/lake-superior-circle-tour/#journey-atlas",
+  "accessPolicy": "fail-closed; no inferred live access",
+  "runtime": {
+    "javascript": "starter/journey-atlas.js",
+    "styles": "starter/journey-atlas.css"
+  }
+}
