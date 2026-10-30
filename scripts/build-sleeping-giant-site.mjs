@@ -17,7 +17,7 @@ if(!destination||destination===root)throw Error('Missing or invalid destination'
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'sleeping-giant-site-'));
 const canonical='https://chrisizworski.com/sleeping-giant-provincial-park/';
 const title='Sleeping Giant Provincial Park Trails | Chris Izworski';
-const description='Discover the Sea Lion rock arch, towering Sleeping Giant lookouts, quiet Lake Superior beaches and six hikes, with Ontario Parks return distances and trail guidance.';
+const description='Explore six Sleeping Giant hikes: the Sea Lion arch, high cliff lookouts and Lake Superior beaches, with Ontario Parks distances and access advice.';
 const photo='https://commons.wikimedia.org/wiki/Special:FilePath/Top_of_the_Sleeping_Giant.jpg';
 const reviewedAt='2026-10-29';
 try{
