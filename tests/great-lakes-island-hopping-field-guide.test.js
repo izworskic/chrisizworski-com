@@ -70,12 +70,15 @@ test('Island Personality Matrix, open-water physics, and ranger rules are presen
   assert.match(html, /Canine Biosecurity Bans/);
 });
 
-test('Personality matrix and map hooks are wired in client JS', () => {
+test('Personality matrix and map hooks are wired in client JS with CARTO API basemap and fallback', () => {
   assert.match(js, /ISLANDS_DATA/);
   assert.match(js, /initFilters/);
   assert.match(js, /applyFilters/);
   assert.match(js, /initMap/);
-  assert.match(js, /carto-basemap-config|basemaps\.cartocdn\.com/);
+  assert.match(js, /\/api\/carto-basemap-config/);
+  assert.match(js, /rastertiles\/voyager/);
+  assert.match(js, /encodeURIComponent/);
+  assert.match(js, /tile\.openstreetmap\.org/);
   assert.match(js, /ig-visible-count/);
 });
 

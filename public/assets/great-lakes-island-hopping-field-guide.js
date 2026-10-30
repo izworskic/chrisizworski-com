@@ -26,6 +26,7 @@
 
   var map = null;
   var markers = {};
+  var tiles = null;
 
   function initFilters() {
     var personalityButtons = document.querySelectorAll('[data-personality-filter]');
@@ -131,6 +132,51 @@
     }
   }
 
+  function showTiles(url, provider) {
+    if (!map) return;
+    if (tiles) map.removeLayer(tiles);
+
+    var layer = L.tileLayer(url, {
+      subdomains: provider === 'CARTO' ? 'abcd' : 'abc',
+      maxZoom: 18,
+      attribution: provider === 'CARTO'
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    tiles = layer;
+    var failed = 0;
+
+    layer.on('tileerror', function () {
+      if (tiles !== layer) return;
+      if (++failed >= 2 && provider === 'CARTO') {
+        showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 'OSM');
+      }
+    });
+
+    layer.addTo(map);
+  }
+
+  function connectTiles() {
+    var ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ac ? setTimeout(function () { ac.abort(); }, 6500) : null;
+    fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: ac ? ac.signal : undefined })
+      .then(function (r) {
+        if (!r.ok) throw new Error('config');
+        return r.json();
+      })
+      .then(function (c) {
+        if (!c || c.provider !== 'CARTO' || typeof c.key !== 'string' || !c.key.trim()) throw new Error('config');
+        showTiles('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' + encodeURIComponent(c.key.trim()), 'CARTO');
+      })
+      .catch(function () {
+        showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 'OSM');
+      })
+      .finally(function () {
+        if (timer) clearTimeout(timer);
+      });
+  }
+
   function initMap() {
     var mapEl = document.getElementById('island-map');
     if (!mapEl || typeof L === 'undefined') return;
@@ -143,21 +189,16 @@
       scrollWheelZoom: false
     });
 
-    var cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      maxZoom: 19
-    });
+    connectTiles();
 
-    cartoLayer.on('tileerror', function () {
-      if (!map._osmFallbackAdded) {
-        map._osmFallbackAdded = true;
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-      }
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(function () {
+        if (map) map.invalidateSize({ pan: false });
+      }).observe(mapEl);
+    }
+    requestAnimationFrame(function () {
+      if (map) map.invalidateSize({ pan: false });
     });
-
-    cartoLayer.addTo(map);
 
     ISLANDS_DATA.forEach(function (island) {
       var icon = L.divIcon({
