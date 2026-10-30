@@ -38,6 +38,10 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.doesNotMatch(html, /Google Maps driving directions to approximate parking/i);
  assert.ok(html.includes('id="trail-top-of-the-giant"'));
  assert.ok(html.includes('id="trail-sea-lion"'));
+ assert.ok(html.includes('pebble beach on Perry Bay'), 'Sea Lion story missing from rendered page');
+ assert.ok(html.includes('quiet sweep of sand'), 'Middlebrun story missing from rendered page');
+ assert.ok(html.includes('A little preparation makes room for wonder'), 'visitor guide voice missing');
+ assert.ok(!html.includes('is-highlight')&&!html.includes('is-denied'), 'a trail must never appear pre-approved or rejected');
  assert.ok(html.includes('21.8 km'));
  assert.ok(html.includes('Ontario Parks'));
  assert.ok(html.includes('<noscript>'));
@@ -97,7 +101,7 @@ test('Source truth cannot be replaced by 2026 seasonal claims, inferred travel t
  assert.match(html,/not a live trail report/);
  assert.match(html,/Current trail and road access|Trail and road access/);
  assert.match(html,/No documented complete bicycle approach/);
- assert.match(html,/bike-to-foot transition|bike-to-hike routes/);
+ assert.match(html,/walking transitions|bicycle rack|bike-to-foot transition|bike-to-hike routes/);
  assert.doesNotMatch(html,/\bOPEN NOW\b/);
  assert.doesNotMatch(html,/\bWEATHER LIVE\b/);
  assert.doesNotMatch(html,/api\/sleeping-giant/);

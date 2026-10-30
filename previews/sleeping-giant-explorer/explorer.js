@@ -3,7 +3,7 @@
  const node=document.getElementById('explorer-data');
  if(!node)return;
  let model;
- try{model=JSON.parse(node.textContent)}catch{document.getElementById('result-hint').textContent='Interactive data unavailable. Use the official distances and source links shown below.';return}
+ try{model=JSON.parse(node.textContent)}catch{document.getElementById('result-hint').textContent='The interactive trail guide could not load. The official distances and Ontario Parks links below are still here to help you plan.';return}
  const routes=new Map(model.routes.map(r=>[r.id,r]));
  const overlays=new Map(model.overlays.map(r=>[r.routeId,r]));
  const cardList=document.getElementById('route-grid');
@@ -154,17 +154,17 @@
 
  const NS='http://www.w3.org/2000/svg';
  const summaries={
-  'sea-lion':'An extraordinary rock arch at the edge of Lake Superior, reached by a shorter walk from South Kabeyun.',
-  'top-of-the-giant':'The signature cliff and plateau experience. This is a demanding, long outing even with a bicycle.',
-  'head-of-the-giant':'The steepest of the Giant summit trails, accessed beyond the Sawyer Bay approach.',
-  'nanabosho-lookout':'A remarkable view across the Sibley Peninsula, reached after a long approach and uphill walking.',
-  'middlebrun-beach':'A quieter beach walk from its own trailhead. Detailed geospatial verification is not available yet.',
-  'pass-lake-overlook':'A short climb to a sandstone lookout from a separate trailhead. Detailed map evidence is pending.'
+  'sea-lion':'Follow the forest path past Perry Bay, then meet a remarkable arch of dark stone beside the open lake. The interpretive signs tell how the rock was formed.',
+  'top-of-the-giant':'After kilometres of forest comes the climb to the Giant’s high summit. The lake appears far below the cliffs and both sides of the peninsula open to the horizon. This is a long, demanding walk.',
+  'head-of-the-giant':'Beyond Sawyer Bay, the park’s steepest trail climbs to a headland view. The ascent takes care and energy; the great sweep of land and water is its reward.',
+  'nanabosho-lookout':'The trail rises to the Giant’s chest, where Sawyer Bay, Marie Louise Lake and islands across the peninsula come into view after a long approach.',
+  'middlebrun-beach':'Walk through the forest to a quiet sweep of sand and the sound of Superior on the shore. This trail has a separate starting point that has not been precisely mapped here.',
+  'pass-lake-overlook':'Climb a sandstone bluff that once stood above glacial water as an island. Pass Lake and Thunder Bay spread out below, and cedar shade greets you on the return.'
  };
  const bikeStops={
-  'top-of-the-giant':'Ontario Parks reports a rack at Kabeyun / Talus; do not cycle beyond the cutoff.',
-  'head-of-the-giant':'No official bike rack is documented at the Head walking transition.',
-  'nanabosho-lookout':'No official bike rack is documented at the Nanabosho walking transition.'
+  'top-of-the-giant':'Ontario Parks describes a bicycle rack where South Kabeyun meets Talus Lake Trail. Leave your bike there; do not cycle beyond the cutoff.',
+  'head-of-the-giant':'No bicycle rack is documented where the Head Trail becomes a walk.',
+  'nanabosho-lookout':'No bicycle rack is documented where the Nanabosho approach becomes a walk.'
  };
  let currentId='sea-lion';
  function el(name,attributes,parent){
@@ -174,15 +174,15 @@
  }
  function labelFor(score,route,mode){
   if(mode==='bike-hike'&&route.bikePermission!=='official_documented')
-    return 'No documented complete bicycle approach. Choose on foot.';
+    return 'No documented complete bicycle approach. Walk this trail; the full route by bicycle has not been established.';
   if(mode==='bike-hike')
-    return 'Legal bike/foot split documented, but no official total bike-and-hike duration.';
+    return 'Ontario Parks allows cycling on parts of this approach, but has no official total time for the ride and walk together. Allow plenty of daylight.';
   switch(score.durationStatus){
-   case 'below_documented_minimum':return 'Below Ontario Parks’ published minimum hiking time. Choose a shorter option.';
-   case 'within_documented_range_not_assured':return 'Your time falls within the reported hiking range, not beyond its upper end.';
-   case 'meets_documented_upper_duration':return 'Published hiking range fits your time budget; conditions and daylight still unverified.';
-   case 'unknown_duration':return 'Ontario Parks provides a distance but no complete outing time. Fit cannot be verified.';
-   default:return 'Compare official distances and verify current conditions with Ontario Parks.';
+   case 'below_documented_minimum':return 'The time you have set aside is shorter than Ontario Parks’ published minimum for this return walk. Save this trail for a longer day.';
+   case 'within_documented_range_not_assured':return 'You have allowed some of the time Ontario Parks suggests, but not the full upper range. Leave room for rests, changing conditions and daylight.';
+   case 'meets_documented_upper_duration':return 'Ontario Parks’ published walking-time range fits the hours you selected. Enjoy the journey, but check conditions and daylight before you leave.';
+   case 'unknown_duration':return 'Ontario Parks gives a return distance but no complete walking time for this trail. Choose a generous daylight window rather than a tight schedule.';
+   default:return 'Use the official distances to imagine your day, then check current conditions with Ontario Parks.';
   }
  }
  function currentMode(){return planner.querySelector('input[name="mode"]:checked')?.value||'hike'}
@@ -196,19 +196,19 @@
    if(!card||!route)return;
    const d=card.querySelector('.card-decision');
    d.textContent=labelFor(score,route,mode);
-   card.classList.toggle('is-highlight',score.classification==='planning_candidate');
-   card.classList.toggle('is-denied',score.classification==='not_suitable');
+   // Do not style a timing outcome as a trail endorsement.
+   // Timing affects the note and ordering, never approval or disapproval colors.
    card.dataset.status=score.classification;
   });
   for(const score of results)if(cards.has(score.id))cardList.append(cards.get(score.id));
   const fitting=results.filter(score=>score.classification==='planning_candidate').length;
-  document.getElementById('result-count').textContent=fitting+' timing reference'+(fitting===1?'':'s')+' in '+results.length+' options';
+  document.getElementById('result-count').textContent=results.length+' trails to explore';
   const h=document.getElementById('result-hint');
   h.textContent=mode==='bike-hike'
-   ?'Only official cycling approaches are considered. Complete bike-trip times remain unknown; no route is certified time-feasible.'
-   :'Only Ontario Parks’ documented full-trip times can support a budget match. Unknown timing never becomes a positive verdict.';
+   ?'Only Ontario Parks’ permitted cycling stretches are shown. No complete bike-and-hike time is published, so give every outing room to breathe.'
+   :'Only Ontario Parks’ published return-walk times are used here. For other trails, take the distance as a starting point, not a promise about how long your day will take.';
   document.getElementById('result-head').textContent=fitting?
-   'A planning starting point, not a green light.':'Compare the distances; confirm the uncertain parts.';
+   'A few trails may fit the hours you have.':'Let the landscape and your available time guide the choice.';
  }
  function drawRoute(id){
   const route=routes.get(id);if(!route)return;
@@ -219,14 +219,14 @@
     :'No research trail outline available for '+route.name+'. The official distance is separate; parking and trail access remain unverified. Not a navigation map.');
   const isBike=currentMode()==='bike-hike'&&route.bikePermission==='official_documented';
   detailTitle.textContent=route.name;
-  detailIntro.textContent=summaries[id]||'Official route descriptions available from Ontario Parks.';
+  detailIntro.textContent=summaries[id]||'Every trail has a story. Ontario Parks has the official route description.';
   officialDist.textContent=route.roundTripKm.toFixed(1)+' km';
   bikePanel.replaceChildren();
   bikePanel.hidden=!isBike;
   if(isBike){
     bikePanel.textContent=route.bikeApproachRoundTripKm.toFixed(1)+' km cycling + '+
       route.bikeHikeRemainingRoundTripKm.toFixed(1)+' km walking, both round-trip. '+bikeStops[id]+
-      ' The total trip duration cannot be verified from published bike/walk timings.';
+      ' Ontario Parks has not published a full time for this combined ride and walk.';
   }
   paths.replaceChildren();pins.replaceChildren();
   focusPoints=null;
@@ -236,17 +236,17 @@
   renderGeo(id,overlay);
   focusMap('overview');
   if(!overlay){
-    mapTitle.textContent=route.name+' · reference unavailable';
+    mapTitle.textContent=route.name+' · route line not available';
     mappedDist.textContent='Not mapped';
-    gap.textContent='No full-detail government trail overlay has been source-reconciled for this separate trailhead. The official route distance still applies.';
-    mapStatus.textContent='No research line available. Do not infer a route or parking pin.';
+    gap.textContent='This trail has its own starting place, but we do not yet have a reliable map line for it. Ontario Parks’ official return distance remains your best guide.';
+    mapStatus.textContent='No verified trail line here. Follow park signs and official maps, not an estimated shortcut.';
     return;
   }
   mapTitle.textContent=route.name;
   mappedDist.textContent=overlay.mappedReturnKm.toFixed(2)+' km';
-  gap.textContent='The OTN geometry is '+Math.abs(overlay.unmappedOrSourceDifferenceReturnKm).toFixed(2)+
-    ' km shorter than Ontario Parks’ official full return. The parking-to-trail segment is unverified, not a straight-line connector.';
-  mapStatus.textContent='Mapped trail sections only. No certified directions or live access.';
+  gap.textContent='This mapped trail line accounts for '+Math.abs(overlay.unmappedOrSourceDifferenceReturnKm).toFixed(2)+
+    ' km less than the full return distance given by Ontario Parks. The approach from parking is unverified here, so do not treat the gap as a straight-line shortcut.';
+  mapStatus.textContent='These lines help you see the landscape. They are not directions or a live trail report.';
   const parking=model.parking.center,all=overlay.sections.flatMap(s=>s.researchGeometry.coordinates);
   const coords=all.concat([parking]);
   const latAvg=coords.reduce((sum,p)=>sum+p[1],0)/coords.length;
