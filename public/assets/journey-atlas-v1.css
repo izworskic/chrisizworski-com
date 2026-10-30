@@ -17,7 +17,7 @@
 .ja-shell .ja-card{background:#fff;border:1px solid #d9e0da;border-radius:12px;overflow:hidden;min-width:0;display:flex;flex-direction:column}
 .ja-shell .ja-card[hidden],.ja-shell [hidden]{display:none!important}
 .ja-shell .ja-photo{position:relative;margin:0;background:#e7ebe5}
-.ja-shell .ja-photo img{display:block;width:100%;height:145px;object-fit:cover;object-position:center}
+.ja-shell .ja-photo img{display:block;width:100%;height:188px;object-fit:cover;object-position:center}
 .ja-shell .ja-photo figcaption{font-size:10px;padding:4px 9px;line-height:1.45;background:#f4f5ef;color:#39564a}
 .ja-shell .ja-photo a{color:#1d5743;text-decoration:underline}
 .ja-shell .ja-plain{height:55px;display:flex;align-items:center;padding:10px 13px;background:#e5eae0;color:#31554b;font:italic 14px Georgia,serif}
@@ -36,5 +36,5 @@
 .ja-shell .ja-footer a{color:#1d5743}
 .ja-shell :focus-visible{outline:3px solid #b75c1a;outline-offset:3px}
 @media(max-width:900px){.ja-shell .ja-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:640px){.ja-shell{margin:12px 10px 22px;padding:14px;border-radius:13px}.ja-shell .ja-form{grid-template-columns:1fr;gap:9px}.ja-shell .ja-grid{grid-template-columns:1fr}.ja-shell .ja-card{display:grid;grid-template-columns:120px minmax(0,1fr)}.ja-shell .ja-photo{height:100%}.ja-shell .ja-photo img{height:145px}.ja-shell .ja-photo figcaption{font-size:9px}.ja-shell .ja-plain{height:100%;padding:8px}.ja-shell .ja-card-body{padding:12px}.ja-shell .ja-card h3{font-size:19px}}
-@media(max-width:370px){.ja-shell .ja-card{grid-template-columns:1fr}.ja-shell .ja-photo img{height:160px}.ja-shell .ja-plain{height:45px}}
+@media(max-width:640px){.ja-shell{margin:12px 10px 22px;padding:14px;border-radius:13px}.ja-shell .ja-form{grid-template-columns:1fr;gap:9px}.ja-shell .ja-grid{grid-template-columns:1fr}.ja-shell .ja-card{display:flex;flex-direction:column}.ja-shell .ja-photo{height:auto}.ja-shell .ja-photo img{height:200px;object-fit:cover}.ja-shell .ja-photo figcaption{font-size:10px;padding:6px 12px}.ja-shell .ja-plain{height:90px;padding:12px}.ja-shell .ja-card-body{padding:16px;gap:10px}.ja-shell .ja-card h3{font-size:22px}.ja-shell .ja-card p{font-size:14px;line-height:1.55}.ja-shell .ja-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ja-shell .ja-actions a,.ja-shell .ja-actions button{width:100%;min-height:44px;font-size:12px;padding:9px 8px;border-radius:8px}.ja-shell .ja-actions a:first-child,.ja-shell .ja-actions a:last-child{grid-column:1/-1}}
+@media(max-width:370px){.ja-shell .ja-photo img{height:175px}.ja-shell .ja-card-body{padding:13px}}
