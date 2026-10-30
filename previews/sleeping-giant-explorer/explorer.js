@@ -94,6 +94,9 @@
   const route=routes.get(id);if(!route)return;
   currentId=id;
   const overlay=overlays.get(id);
+  map.setAttribute('aria-label',overlay
+    ?'Research-only trail outline for '+route.name+', with an approximate parking area indicated separately. Not a navigation map.'
+    :'No research trail outline available for '+route.name+'. The official distance is separate; parking and trail access remain unverified. Not a navigation map.');
   const isBike=currentMode()==='bike-hike'&&route.bikePermission==='official_documented';
   detailTitle.textContent=route.name;
   detailIntro.textContent=summaries[id]||'Official route descriptions available from Ontario Parks.';
