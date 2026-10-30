@@ -141,7 +141,7 @@ for (const name of readdirSync(publicRoot).filter(name => /sitemap.*\.xml$/.test
 // dateModified on all children. Sync any available dates, but require their owning
 // generators to add the missing stamps; do not manufacture dates in deployment mirrors.
 const DELEGATED_DATE_SCHEMAS = new Set([
-  "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml",
+  "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml", "sitemap-reputation.xml",
 ]);
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
