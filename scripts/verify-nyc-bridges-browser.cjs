@@ -30,6 +30,9 @@ const assert=(ok,msg)=>{if(!ok)throw Error(msg)};
    const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
    assert(response&&response.status()===200,'HTTP error on '+view.name);
    assert(await page.locator('.bridge-entry').count()===6,'Six bridge profiles missing');
+   const crumbTop=await page.locator('.crumbs').evaluate(el=>el.getBoundingClientRect().top);
+   assert(crumbTop<145,view.name+' first-screen gap exceeds 145px: '+crumbTop);
+
    await page.locator('.hero').screenshot({path:path.join(out,view.name+'-hero.png')});
    await page.locator('#bridge-map').scrollIntoViewIfNeeded();
    await page.waitForTimeout(4500);
