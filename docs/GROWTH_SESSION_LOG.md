@@ -1,3 +1,12 @@
+### 2026-10-30 — Michigan Adventure Finder photographic release: independently verified live
+
+- Prior Oct 26 photographic curation already shipped: 9 curated replacements, 20 unique destination photographs with source and license attribution, three-image introductory gallery, responsive crop tuning. Did not duplicate a completed release.
+- Live 1366px desktop and 390px mobile browser screenshots inspected; responsive layout confirmed. CARTO tile layer and 20 pins visible; all 20 direct Commons image URLs respond with image/jpeg.
+- **New repeatable visual evidence:** `scripts/verify-michigan-destinations-photo-browser.cjs` and photo-only Chromium workflow scroll physically through all 20 cards on both screen sizes. GitHub Action [41046997595](https://github.com/izworskic/chrisizworski-com/actions/runs/41046997595) **passed**: 20/20 decoded images on desktop and phone, 20 pins, CARTO loaded with configured public key, zero JS errors, zero horizontal overflow. Its screenshots/report artifact was retained.
+- Offscreen screenshot captures had shown pale-green placeholders for images that were not scrolled into view. The real scroll test confirms normal lazy-loading operation; no performance-harming change to eager-load all images is warranted.
+- Scope of this QA follow-up: testing script, workflow and handoff only; no ad, HTML, image selection, canonical, schema, site layout or map code modifications. No GSC or revenue impact claimed.
+- **Exactly one next action:** Merge the browser QA harness after all required PR checks are green, then keep it available for future destination-photo changes.
+
 ### 2026-10-29 — Sleeping Giant canonical site integration prepared, production build verified, NOT merged
 
 - Canonical planned: `/sleeping-giant-provincial-park/` owns park-trail comparison, not the multi-day Circle Tour itinerary. Distinct registry node, person-based WebPage/ItemList/BreadcrumbList schema, main sitemap entry, Tools and Guides cards, Thunder Bay Circle Tour handoff, and reciprocal in/out network relationships added. Corrected a stale Circle Tour summary that confused the short named trail with the 21.8-km full outing and seasonal camping with year-round park operations.
