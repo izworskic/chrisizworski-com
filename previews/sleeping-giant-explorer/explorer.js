@@ -3,7 +3,7 @@
  const node=document.getElementById('explorer-data');
  if(!node)return;
  let model;
- try{model=JSON.parse(node.textContent)}catch{document.getElementById('result-hint').textContent='Interactive data unavailable. Use the official distances and source links shown below.';return}
+ try{model=JSON.parse(node.textContent)}catch{document.getElementById('result-hint').textContent='The interactive trail guide could not load. The official distances and Ontario Parks links below are still here to help you plan.';return}
  const routes=new Map(model.routes.map(r=>[r.id,r]));
  const overlays=new Map(model.overlays.map(r=>[r.routeId,r]));
  const cardList=document.getElementById('route-grid');
@@ -196,19 +196,19 @@
    if(!card||!route)return;
    const d=card.querySelector('.card-decision');
    d.textContent=labelFor(score,route,mode);
-   card.classList.toggle('is-highlight',score.classification==='planning_candidate');
-   card.classList.toggle('is-denied',score.classification==='not_suitable');
+   // Do not style a timing outcome as a trail endorsement.
+   // Timing affects the note and ordering, never approval or disapproval colors.
    card.dataset.status=score.classification;
   });
   for(const score of results)if(cards.has(score.id))cardList.append(cards.get(score.id));
   const fitting=results.filter(score=>score.classification==='planning_candidate').length;
-  document.getElementById('result-count').textContent=fitting+' timing reference'+(fitting===1?'':'s')+' in '+results.length+' options';
+  document.getElementById('result-count').textContent=results.length+' trails to explore';
   const h=document.getElementById('result-hint');
   h.textContent=mode==='bike-hike'
-   ?'Only official cycling approaches are considered. Complete bike-trip times remain unknown; no route is certified time-feasible.'
-   :'Only Ontario Parks’ documented full-trip times can support a budget match. Unknown timing never becomes a positive verdict.';
+   ?'Only Ontario Parks’ permitted cycling stretches are shown. No complete bike-and-hike time is published, so give every outing room to breathe.'
+   :'Only Ontario Parks’ published return-walk times are used here. For other trails, take the distance as a starting point, not a promise about how long your day will take.';
   document.getElementById('result-head').textContent=fitting?
-   'A planning starting point, not a green light.':'Compare the distances; confirm the uncertain parts.';
+   'A few trails may fit the hours you have.':'Let the landscape and your available time guide the choice.';
  }
  function drawRoute(id){
   const route=routes.get(id);if(!route)return;
@@ -219,14 +219,14 @@
     :'No research trail outline available for '+route.name+'. The official distance is separate; parking and trail access remain unverified. Not a navigation map.');
   const isBike=currentMode()==='bike-hike'&&route.bikePermission==='official_documented';
   detailTitle.textContent=route.name;
-  detailIntro.textContent=summaries[id]||'Official route descriptions available from Ontario Parks.';
+  detailIntro.textContent=summaries[id]||'Every trail has a story. Ontario Parks has the official route description.';
   officialDist.textContent=route.roundTripKm.toFixed(1)+' km';
   bikePanel.replaceChildren();
   bikePanel.hidden=!isBike;
   if(isBike){
     bikePanel.textContent=route.bikeApproachRoundTripKm.toFixed(1)+' km cycling + '+
       route.bikeHikeRemainingRoundTripKm.toFixed(1)+' km walking, both round-trip. '+bikeStops[id]+
-      ' The total trip duration cannot be verified from published bike/walk timings.';
+      ' Ontario Parks has not published a full time for this combined ride and walk.';
   }
   paths.replaceChildren();pins.replaceChildren();
   focusPoints=null;
@@ -236,17 +236,17 @@
   renderGeo(id,overlay);
   focusMap('overview');
   if(!overlay){
-    mapTitle.textContent=route.name+' · reference unavailable';
+    mapTitle.textContent=route.name+' · route line not available';
     mappedDist.textContent='Not mapped';
-    gap.textContent='No full-detail government trail overlay has been source-reconciled for this separate trailhead. The official route distance still applies.';
-    mapStatus.textContent='No research line available. Do not infer a route or parking pin.';
+    gap.textContent='This trail has its own starting place, but we do not yet have a reliable map line for it. Ontario Parks’ official return distance remains your best guide.';
+    mapStatus.textContent='No verified trail line here. Follow park signs and official maps, not an estimated shortcut.';
     return;
   }
   mapTitle.textContent=route.name;
   mappedDist.textContent=overlay.mappedReturnKm.toFixed(2)+' km';
-  gap.textContent='The OTN geometry is '+Math.abs(overlay.unmappedOrSourceDifferenceReturnKm).toFixed(2)+
-    ' km shorter than Ontario Parks’ official full return. The parking-to-trail segment is unverified, not a straight-line connector.';
-  mapStatus.textContent='Mapped trail sections only. No certified directions or live access.';
+  gap.textContent='This mapped trail line accounts for '+Math.abs(overlay.unmappedOrSourceDifferenceReturnKm).toFixed(2)+
+    ' km less than the full return distance given by Ontario Parks. The approach from parking is unverified here, so do not treat the gap as a straight-line shortcut.';
+  mapStatus.textContent='These lines help you see the landscape. They are not directions or a live trail report.';
   const parking=model.parking.center,all=overlay.sections.flatMap(s=>s.researchGeometry.coordinates);
   const coords=all.concat([parking]);
   const latAvg=coords.reduce((sum,p)=>sum+p[1],0)/coords.length;
