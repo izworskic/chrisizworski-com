@@ -116,7 +116,7 @@ async function main(){
      await page.locator('#porkies-roads-toggle').click();
      await page.locator('#porkies-ski-toggle').click();
    }
-   await page.waitForFunction(()=>document.querySelector('#results h3')?.textContent.includes('Build around'),null,{timeout:10000});
+   await page.waitForFunction(()=>document.querySelector('#results h3')?.textContent.includes('Let one corner'),null,{timeout:10000});
    let overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
    need(overflow.scroll<=overflow.viewport+2,device.name+' horizontal overflow '+JSON.stringify(overflow));
    need(errors.length===0,device.name+' JS errors '+errors.join('; '));
@@ -159,7 +159,7 @@ async function main(){
    await page.locator('#travel-date').fill('2027-05-02');
    await page.locator('#planner button[type=submit]').click();
    content=await page.locator('#results').innerText();
-   need(content.includes('Spring road reopening must be confirmed'),device.name+' May guard missing');
+   need(content.includes('The forest is waking, but the scenic roads may still be closed'),device.name+' May guard missing');
    await page.locator('#travel-date').fill('2026-10-28');
    await page.locator('#arrival').selectOption('east');
    await page.locator('#hours').selectOption('8');
@@ -167,7 +167,7 @@ async function main(){
    await page.locator('#planner button[type=submit]').click();
    content=await page.locator('#results').innerText();
    need(content.includes('Lake of the Clouds'),device.name+' accessible outlook missing');
-   need(!content.includes('Suggested experiences\nSummit Peak'),device.name+' inappropriate tower suggestion');
+   need(!(await page.locator('#results .recommendations li a').allTextContents()).some(x=>x.includes('Summit Peak')),device.name+' inappropriate tower suggestion');
    await page.locator('#results').screenshot({path:path.join(out,device.name+'-decision.png')});
    report.screenshots.push(device.name+'-decision.png');
    if(device.name!=='narrow'){
