@@ -1,0 +1,246 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "Ontario Land Information Ontario LIO Open04 MapServer",
+    "licence": "Open Government Licence – Ontario",
+    "licenceURL": "https://www.ontario.ca/page/open-government-licence-ontario",
+    "retrieved": "2026-10-28",
+    "bbox": [
+      -89.1,
+      48.2,
+      -88.4,
+      48.65
+    ],
+    "routeEligible": false,
+    "parkingVerified": false,
+    "note": "RESEARCH ONLY. Geometry simplified at maxAllowableOffset=0.00006 degree before download; do not use to certify waypoints, route times, cycling permissions or park access. Ontario Parks management plan and trail activity rules override OTN permitted-use metadata.",
+    "sourceUrl": "https://ws.lioservices.lrc.gov.on.ca/arcgis2/rest/services/LIO_OPEN_DATA/LIO_Open04/MapServer",
+    "layer": 20,
+    "sourceQuery": "https://ws.lioservices.lrc.gov.on.ca/arcgis2/rest/services/LIO_OPEN_DATA/LIO_Open04/MapServer/20/query?geometry=-89.1%2C48.2%2C-88.4%2C48.65&geometryType=esriGeometryEnvelope&inSR=4326&outSR=4326&spatialRel=esriSpatialRelIntersects&returnGeometry=true&f=geojson&where=1%3D1&outFields=OBJECTID%2COGF_ID%2CLOCATION_ACCURACY%2CEFFECTIVE_DATETIME&geometryPrecision=6",
+    "accessPointMeaning": "An OTN record is not automatically an approved parking location or road-access point.",
+    "features": 13
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 10225,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.761693,
+          48.421921
+        ]
+      },
+      "properties": {
+        "OBJECTID": 10225,
+        "OGF_ID": 319513554,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652216000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10385,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.753038,
+          48.434371
+        ]
+      },
+      "properties": {
+        "OBJECTID": 10385,
+        "OGF_ID": 319513465,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652208000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5089,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.749816,
+          48.464429
+        ]
+      },
+      "properties": {
+        "OBJECTID": 5089,
+        "OGF_ID": 319510599,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700563813000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5713,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.742953,
+          48.448478
+        ]
+      },
+      "properties": {
+        "OBJECTID": 5713,
+        "OGF_ID": 319510502,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700563804000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12081,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.738115,
+          48.459333
+        ]
+      },
+      "properties": {
+        "OBJECTID": 12081,
+        "OGF_ID": 319514672,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700835999000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9937,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.82194,
+          48.476314
+        ]
+      },
+      "properties": {
+        "OBJECTID": 9937,
+        "OGF_ID": 319513571,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652217000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6001,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.821308,
+          48.340786
+        ]
+      },
+      "properties": {
+        "OBJECTID": 6001,
+        "OGF_ID": 319510517,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700563806000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10161,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.803561,
+          48.362569
+        ]
+      },
+      "properties": {
+        "OBJECTID": 10161,
+        "OGF_ID": 319513622,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652222000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10449,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.802788,
+          48.35544
+        ]
+      },
+      "properties": {
+        "OBJECTID": 10449,
+        "OGF_ID": 319513547,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652215000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10033,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.801531,
+          48.362775
+        ]
+      },
+      "properties": {
+        "OBJECTID": 10033,
+        "OGF_ID": 319513477,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652209000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9553,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.798455,
+          48.344847
+        ]
+      },
+      "properties": {
+        "OBJECTID": 9553,
+        "OGF_ID": 319513649,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652224000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7361,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.797087,
+          48.344231
+        ]
+      },
+      "properties": {
+        "OBJECTID": 7361,
+        "OGF_ID": 319513468,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700652312000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4945,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.77905,
+          48.385365
+        ]
+      },
+      "properties": {
+        "OBJECTID": 4945,
+        "OGF_ID": 319510570,
+        "LOCATION_ACCURACY": "Within 10 metres",
+        "EFFECTIVE_DATETIME": 1700563811000
+      }
+    }
+  ]
+}

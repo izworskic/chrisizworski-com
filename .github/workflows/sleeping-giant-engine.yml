@@ -1,0 +1,99 @@
+name: Sleeping Giant engine and GIS source tests
+
+on:
+  pull_request:
+    paths:
+      - 'data/sleeping-giant/**'
+      - 'lib/sleeping-giant/**'
+      - 'tests/sleeping-giant-*.test.js'
+      - 'scripts/export-sleeping-giant-geometry.mjs'
+      - 'scripts/export-sleeping-giant-visitor-preview.mjs'
+      - 'scripts/build-sleeping-giant-site.mjs'
+      - 'public/sleeping-giant-provincial-park/**'
+      - 'public/tools/index.html'
+      - 'public/guides/index.html'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'public/sitemap.xml'
+      - 'benchmarks/tool-network-registry.json'
+      - 'package.json'
+      - 'scripts/verify-sleeping-giant-browser.cjs'
+      - 'previews/sleeping-giant-explorer/**'
+      - '.github/workflows/sleeping-giant-engine.yml'
+  workflow_dispatch:
+
+jobs:
+  engine-contracts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test route, daylight, forecast and GIS-source safety gates
+        run: node --test tests/sleeping-giant-*.test.js
+      - name: Export research-only trail topology report
+        run: |
+          mkdir -p artifacts/sleeping-giant
+          node lib/sleeping-giant/topology-audit.cjs > artifacts/sleeping-giant/topology-audit.json
+      - name: Export non-navigable geometry reconciliation and internal HTML map viewer
+        run: node scripts/export-sleeping-giant-geometry.mjs artifacts/sleeping-giant
+      - name: Export standalone visitor-facing explorer preview (review only)
+        run: node scripts/export-sleeping-giant-visitor-preview.mjs artifacts/sleeping-giant/visitor-preview
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sleeping-giant-topology-audit
+          path: artifacts/sleeping-giant/
+          if-no-files-found: error
+          retention-days: 14
+
+  combined-repository-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install exact repository dependencies
+        run: npm ci
+      - name: Verify the actual feature + repaired baseline merge
+        run: npm run verify:all
+      - name: Verify production build output including ads and canonical page
+        run: |
+          npm run build:site
+          node scripts/verify-auto-ads-build.mjs
+          node --test tests/sleeping-giant-site-integration.test.js
+
+  preview-browser-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright harness
+        run: |
+          mkdir -p /tmp/sleeping-giant-playwright
+          npm install --prefix /tmp/sleeping-giant-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/sleeping-giant-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test actual visitor interactions in phone and desktop Chromium
+        run: node scripts/verify-sleeping-giant-browser.cjs
+      - name: Test integrated canonical site page on phone and desktop
+        run: node scripts/verify-sleeping-giant-browser.cjs --site
+      - name: Save responsive screenshots and browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sleeping-giant-visitor-browser-qa
+          path: |
+            artifacts/sleeping-giant-browser/
+            artifacts/sleeping-giant-site-browser/
+          if-no-files-found: warn
+          retention-days: 14

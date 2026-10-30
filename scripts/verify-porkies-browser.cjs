@@ -29,6 +29,13 @@ async function main(){
    const ctx=await browser.newContext({viewport:{width:device.width,height:device.height},deviceScaleFactor:1,ignoreHTTPSErrors:false});
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
+   // Deterministic DNR GIS fixture: test truth of evidence handling, not external network reliability.
+   await page.route('**/DNRTrailsOPENDATA/FeatureServer/*/query?**',route=>route.fulfill({
+    status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({features:[],exceededTransferLimit:false})
+   }));
+   await page.route('**/DNRReferenceAssetsOPENDATA/FeatureServer/0/query?**',route=>route.fulfill({
+    status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({features:[{attributes:{OBJECTID:163,ASSETDETAILTYPE:'Vehicular',CONDITION:null}}]})
+   }));
    const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
    need(response?.status()===200,device.name+' HTML load failed');
    need(await page.locator('h1').count()===1,device.name+' missing H1');
@@ -43,6 +50,16 @@ async function main(){
    need((await page.locator('#crossings').innerText()).includes('No automated through-route'),device.name+' safety blocker not visible');
 
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
+   need(await page.locator('#park-access-evidence').count()===1,device.name+' official source status desk missing');
+   await page.waitForFunction(()=>document.querySelector('#park-gis-panel')?.dataset.check==='queried',null,{timeout:10000});
+   const sourceStatus=await page.locator('#park-gis-verdict').innerText();
+   need(sourceStatus.includes('zero temporary closure lines'),device.name+' DNR GIS zero-count sample not presented');
+   need(sourceStatus.includes('condition field')&&sourceStatus.includes('not live parking'),device.name+' bridge condition and vacancy caveat missing');
+   need(await page.locator('.porkies-access-truth[data-match="crosschecked"]').count()===6,device.name+' six named parking-to-trailhead crosswalks missing');
+   need(await page.locator('.porkies-access-truth[data-match="unverified"]').count()===15,device.name+' fifteen non-certified backcountry trailhead warnings missing');
+   await page.locator('#park-gis-refresh').click();
+   await page.waitForFunction(()=>document.querySelector('#park-gis-panel')?.dataset.check==='queried',null,{timeout:10000});
+
    need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
    const westNote=await page.locator('#west-corridor-field-note').innerText();
    need(westNote.includes('County Road 519')&&westNote.includes('2 of 10')&&westNote.includes('not an east-to-west shortcut'),device.name+' CR519 named route/pavement safety evidence missing');
@@ -119,6 +136,8 @@ async function main(){
    need(await page.locator('[data-parking-id="presque"]:visible').count()===1,device.name+' selected west-side parking card missing');
    await page.locator('#travel-date').fill('2027-01-15');
    await page.locator('#planner button[type=submit]').click();
+   need(await page.locator('#park-road-verdict').getAttribute('data-confidence')==='restricted',device.name+' winter road closure rule not flagged');
+
    content=await page.locator('#results').innerText();
    need(content.includes('Presque Isle River scenic-area access'),device.name+' distinct west-side winter approach missing');
    need(content.includes('not assumed available'),device.name+' winter road exclusion missing');
