@@ -1,3 +1,13 @@
+## JOURNEY_ATLAS_V1 initial integration — October 30, 2026
+
+- **Owner request:** Build a reusable, callable journey intelligence template and demonstrate it on Lake Superior Circle Tour.
+- **Reusable ID:** `JOURNEY_ATLAS_V1` version 1.0.0 in `design-systems/journey-atlas-v1/`, with portable HTML/CSS/JS starter, evidence contract and QA scorecard. Paired with `FIELD_GUIDE_V1`.
+- **Implementation:** Optional experience chooser inside the existing `/lake-superior-circle-tour/` canonical. Ten editorial cards across Ontario/Wisconsin/Michigan/Minnesota, six previously documented licensed photographs, explicit official-source links, interest/shore/time filtering, alternate-experience hints, direct specialist tools and existing trip-stop add handoff. No live condition inference or new canonical; all 31 stops and existing map retained.
+- **Sources:** Reused dated official-source/photographic research of `/lake-superior-provincial-park/` (Oct 26) and `/apostle-islands/` (Oct 27), plus Circle Tour's existing verified official references. 2026 closures and 2027 sailings specifically fail closed.
+- **SEO/GSC/AdSense:** No new standalone indexable URLs, no modified title, canonical, JSON-LD, sitemap or ad system; no new GSC or revenue measurement claimed.
+- **Verification:** Local structural assertions and new Node test file added; final owning-repo `npm run verify:all`, browser/mobile QA, required GitHub actions and production smoke must still be confirmed before merge.
+- **Next action:** Verify exact PR head with required CI and real browser review; merge only if all inherited gates are green.
+
 ### 2026-10-28 — Porkies critical bridge/ford verification, structural source coverage
 
 - Reviewed 2025 official DNR GPS map unbridged-crossing symbols and narrative trails against 174 EGLE/DNR hydro-line candidates; retained candidate source IDs, **no public crossing GPS**. Individually distinguished nine site records including the 2016 Big Carp *mouth bridge* and a **separate** upstream 2026 hiking-account crossing. Explicitly 0 physical-status-certified traverses; GPS map symbols cannot be precisely tied to particular signed crossing locations without further authoritative evidence.
