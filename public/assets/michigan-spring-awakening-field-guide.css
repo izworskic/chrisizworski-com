@@ -1,0 +1,504 @@
+/* FIELD_GUIDE_V1 · Michigan Spring Awakening & Forager Field Guide Styles */
+.wf--spring {
+  --wf-paper: #f4f6f0;
+  --wf-surface: #ffffff;
+  --wf-ink: #1b281e;
+  --wf-muted: #536b56;
+  --wf-accent: #2e6930;
+  --wf-accent-hover: #1e4b20;
+  --wf-line: #d3dfd5;
+  --wf-earth: #6b4423;
+  --wf-morel: #8d5b2d;
+  --wf-maple: #c2410c;
+  --wf-peeper: #15803d;
+  --wf-vernal: #0369a1;
+  --wf-amber: #b45309;
+}
+
+.wf-hero-spring-montage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.wf-hero-spring-montage figure {
+  height: 250px;
+}
+
+/* Hero CTA Button Row */
+.sp-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.sp-hero-ctas .wf-primary {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: var(--wf-accent, #2e6930);
+  color: #ffffff !important;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(46, 105, 48, 0.22);
+  transition: all .15s ease-in-out;
+}
+.sp-hero-ctas .wf-primary:hover {
+  background: var(--wf-accent-hover, #1e4b20);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(46, 105, 48, 0.3);
+}
+.sp-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--wf-accent, #2e6930);
+  background: #ffffff;
+  color: var(--wf-accent, #2e6930) !important;
+  font-size: .86rem;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all .15s ease-in-out;
+}
+.sp-secondary-cta:hover {
+  background: #f0f7f1;
+  border-color: var(--wf-accent-hover, #1e4b20);
+  color: var(--wf-accent-hover, #1e4b20) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Latitudinal Wave Scrubber Section */
+.sp-scrubber-box {
+  margin: 32px auto 28px;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 8px;
+  padding: 24px 26px;
+  box-shadow: 0 4px 16px -6px rgba(27, 40, 30, 0.08);
+}
+.sp-scrubber-head h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+  color: var(--wf-ink);
+  margin: 4px 0 8px;
+}
+.sp-scrubber-head p {
+  color: var(--wf-muted);
+  font-size: .95rem;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+.sp-scrubber-controls {
+  background: #f8faf7;
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.sp-slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.sp-slider-title {
+  font-size: .85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--wf-accent);
+}
+.sp-slider-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--wf-ink);
+}
+.sp-range-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #d3dfd5;
+  outline: none;
+  cursor: pointer;
+}
+.sp-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--wf-accent);
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.sp-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: .75rem;
+  color: var(--wf-muted);
+  margin-top: 6px;
+}
+
+.sp-zone-card {
+  background: #ffffff;
+  border: 1.5px solid var(--wf-accent);
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+.sp-zone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px dashed var(--wf-line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.sp-zone-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--wf-ink);
+}
+.sp-zone-metrics {
+  font-size: .82rem;
+  color: var(--wf-muted);
+  font-weight: 600;
+}
+.sp-zone-awakening-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.sp-zone-awakening-item {
+  background: #f4f6f0;
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+.sp-zone-awakening-item strong {
+  display: block;
+  font-size: .84rem;
+  color: var(--wf-accent);
+  margin-bottom: 3px;
+}
+.sp-zone-awakening-item span {
+  font-size: .78rem;
+  color: var(--wf-ink);
+  line-height: 1.35;
+  display: block;
+}
+
+/* Category Filter Chips */
+.sp-filter-cluster {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.sp-filter-label {
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--wf-muted);
+  margin-right: 4px;
+}
+.sp-filter-btn {
+  background: var(--wf-paper);
+  border: 1px solid var(--wf-line);
+  color: var(--wf-ink);
+  padding: 7px 13px;
+  border-radius: 5px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.sp-filter-btn:hover {
+  background: #e2ebe4;
+  border-color: #a4bea8;
+}
+.sp-filter-btn.is-active {
+  background: var(--wf-accent);
+  border-color: var(--wf-accent);
+  color: #ffffff;
+}
+
+/* Phenology Physics & Triggers */
+.sp-physics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 22px auto 36px;
+}
+.sp-physics-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(27, 40, 30, 0.04);
+}
+.sp-physics-badge {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #e4eee5;
+  color: var(--wf-accent);
+  margin-bottom: 8px;
+}
+.sp-physics-card h3 {
+  font-size: 1.12rem;
+  color: var(--wf-ink);
+  margin: 4px 0 8px;
+  line-height: 1.35;
+}
+.sp-physics-card p {
+  font-size: .88rem;
+  color: var(--wf-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Forager Ethics & Safety Banner */
+.sp-ethics-box {
+  background: #fbf7ee;
+  border: 1.5px solid #d49a37;
+  border-radius: 8px;
+  padding: 24px 26px;
+  margin: 34px auto;
+  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
+}
+.sp-ethics-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.sp-ethics-badge {
+  background: #b45309;
+  color: #ffffff;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.sp-ethics-head h2 {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: #5c2d04;
+  margin: 0;
+}
+.sp-ethics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.sp-ethics-rule {
+  background: #ffffff;
+  border: 1px solid #ebd9b8;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.sp-ethics-rule strong {
+  display: block;
+  color: #78350f;
+  font-size: .88rem;
+  margin-bottom: 6px;
+}
+.sp-ethics-rule p {
+  font-size: .82rem;
+  color: #634327;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* 12 Phenological Events & Destinations */
+.sp-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: #f8faf7;
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 14px 0 18px;
+}
+.sp-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sp-spec-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--wf-muted);
+}
+.sp-spec-val {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--wf-ink);
+}
+
+.sp-field-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.sp-field-pill--maple {
+  background: #ffedd5;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+.sp-field-pill--vernal {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.sp-field-pill--wildflower {
+  background: #fce7f3;
+  color: #9d174d;
+  border: 1px solid #fbcfe8;
+}
+.sp-field-pill--forage {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.sp-field-pill--avian {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.sp-naturalist-log,
+.sp-forager-briefing {
+  border-left: 3px solid var(--wf-accent);
+  padding: 8px 0 8px 16px;
+  margin: 14px 0;
+}
+.sp-naturalist-log strong,
+.sp-forager-briefing strong {
+  display: block;
+  font-size: .88rem;
+  color: var(--wf-ink);
+  margin-bottom: 4px;
+}
+.sp-naturalist-log p,
+.sp-forager-briefing p {
+  font-size: .88rem;
+  color: var(--wf-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sp-forager-briefing {
+  border-left-color: #b45309;
+}
+
+.sp-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--wf-line);
+}
+.sp-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--wf-accent);
+  color: #ffffff !important;
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 9px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.sp-card-cta:hover {
+  background: var(--wf-accent-hover);
+  transform: translateY(-1px);
+}
+.sp-tool-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: var(--wf-accent) !important;
+  border: 1.5px solid var(--wf-accent);
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.sp-tool-cta:hover {
+  background: #f0f7f1;
+  transform: translateY(-1px);
+}
+.sp-google-map-link {
+  font-size: .78rem;
+  color: var(--wf-muted);
+  text-decoration: underline;
+  margin-left: auto;
+}
+.sp-google-map-link:hover {
+  color: var(--wf-ink);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .wf-hero-spring-montage {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .wf-hero-spring-montage figure {
+    height: 200px;
+  }
+  .sp-zone-awakening-list,
+  .sp-physics-grid,
+  .sp-ethics-grid {
+    grid-template-columns: 1fr;
+  }
+  .sp-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sp-google-map-link {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 6px;
+  }
+}
