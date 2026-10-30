@@ -1,3 +1,4 @@
+[hidden]{display:none!important}
 
 :root{--ink:#13272c;--deep:#0c2028;--cream:#f5f3ed;--paper:#fffdfa;--line:#d9dcd8;--teal:#1f6063;--rust:#a85336;--muted:#53646a;--display:Georgia,"Iowan Old Style",serif;--ui:system-ui,-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.62 var(--ui);-webkit-font-smoothing:antialiased}img{display:block;max-width:100%}a{color:#13575c}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}.shell{width:min(1240px,calc(100% - 40px));margin-inline:auto}.skip-link{position:absolute;left:-9999px;top:8px;z-index:1000;background:white;padding:8px}.skip-link:focus{left:8px}.screen-reader{position:absolute;left:-99999px;height:1px;overflow:hidden}
