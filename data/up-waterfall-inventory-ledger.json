@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 56,
-  "linkedByExactOid": 50,
-  "unresolvedCandidates": 111,
+  "curatedCount": 57,
+  "linkedByExactOid": 52,
+  "unresolvedCandidates": 109,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1803,26 +1803,28 @@
         -88.452723
       ],
       "river": "FALLS RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "falls-river-trail",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "route-or-permission-not-cleared",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "public-Falls-River-Trail-documented-no-railway-or-private-shortcut",
+      "landManager": "Baraga County Trails in Motion",
+      "parkingEvidence": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "trailEvidence": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-29",
-      "nextAction": "Verify GIS #95 identity versus posted Middle Falls viewpoint and municipal lot/trail access rules, then assess public guide promotion alongside Lower Falls as distinct stops or one shared itinerary.",
+      "nextAction": "Visit only via published Main Street or US-41 trailhead; verify seasonal signs and conditions",
       "batch": "county-baraga",
       "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "municipal-falls-river-trail-view-match-to-check",
-      "accessAssessment": "L'Anse village materials describe riverbank trail viewing of named middle and lower drops. Baraga County Trails publishes a 1.4-mile out-and-back Falls River Trail with downstream Main Street lot and upstream US-41 bridge-side trailhead, but the exact GIS #95 viewpoint and railroad boundaries are not independently aligned. The quoted public trail total is the entire trail, not measured from either specific waterfall. Informal guides suggesting crossings under or over bridges are not authorization.",
+      "reviewBatch": "15",
+      "classification": "primary-middle-falls-public-trail-guide",
+      "accessAssessment": "Current Baraga County Trails documents 1.4-mi out-and-back, two published parking lots; county waterfall brochure distinguishes two cascade views. No river crossings, rail shortcuts, private upper approach or industrial bridge passage.",
       "evidence": [
-        "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
         "https://www.baragacountytrails.org/trails/falls-river-trail",
-        "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/"
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://visitbaragacounty.com/activities/summer-recreation/",
+        "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
     {
@@ -1835,26 +1837,28 @@
         -88.454957
       ],
       "river": "FALLS RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "falls-river-trail",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "route-or-permission-not-cleared",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "public-Falls-River-Trail-documented-no-railway-or-private-shortcut",
+      "landManager": "Baraga County Trails in Motion",
+      "parkingEvidence": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "trailEvidence": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-29",
-      "nextAction": "Confirm separate Lower Falls (#96) versus adjacent artificial drop and authorized viewing position before promoting an indexable guide.",
+      "nextAction": "Visit only via published Main Street or US-41 trailhead; verify seasonal signs and conditions",
       "batch": "county-baraga",
       "reviewed": "2026-10-29",
-      "reviewBatch": "14",
-      "classification": "municipal-falls-river-trail-downstream-identity-review",
-      "accessAssessment": "Village of L'Anse and Baraga County Trails describe public waterfront-side river walking and lower Falls River cascades. The specialist geographic source distinguishes the lower natural drop from historic cement dam features; they must not be conflated into a dam-access route. Public trail can reach river scenery, but sightline to GIS #96 and legal bank/path boundaries require source confirmation. Municipal trail length is not lower-falls hike length.",
+      "reviewBatch": "15",
+      "classification": "lower-falls-shared-public-trail-guide",
+      "accessAssessment": "Current Baraga County Trails documents 1.4-mi out-and-back, two published parking lots; county waterfall brochure distinguishes two cascade views. No river crossings, rail shortcuts, private upper approach or industrial bridge passage.",
       "evidence": [
-        "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
         "https://www.baragacountytrails.org/trails/falls-river-trail",
-        "https://www.waterfallsofthekeweenaw.com/falls-river/lower-falls/"
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://visitbaragacounty.com/activities/summer-recreation/",
+        "https://www.waterfallsofthekeweenaw.com/falls-river/lower-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
     {
@@ -4178,5 +4182,5 @@
       "batch": "non-gis-curated"
     }
   ],
-  "lastBatch": "14"
+  "lastBatch": "15"
 }

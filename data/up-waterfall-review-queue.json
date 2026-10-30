@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 56,
-    "matchedGisFeatures": 50,
-    "pendingGisFeatures": 111
+    "curatedDestinations": 57,
+    "matchedGisFeatures": 52,
+    "pendingGisFeatures": 109
   },
   "batchSize": 8,
   "batches": [
@@ -27,163 +27,161 @@
       "batchNumber": 2,
       "candidates": [
         191,
-        95,
         88,
-        96,
         198,
         199,
         110,
-        119
+        119,
+        154,
+        215
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        154,
-        215,
         150,
         151,
         8,
         38,
         12,
-        4
+        4,
+        9,
+        195
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        9,
-        195,
         205,
         44,
         52,
         59,
         68,
-        83
+        83,
+        99,
+        103
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        99,
-        103,
         105,
         107,
         114,
         121,
         123,
-        126
+        126,
+        20,
+        24
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        20,
-        24,
         25,
         30,
         37,
         39,
         40,
-        48
+        48,
+        58,
+        63
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        58,
-        63,
         65,
         69,
         70,
         74,
         75,
-        79
+        79,
+        86,
+        102
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        86,
-        102,
         104,
         112,
         113,
         29,
         42,
-        80
+        80,
+        85,
+        129
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        85,
-        129,
         15,
         17,
         144,
         18,
         116,
-        127
+        127,
+        148,
+        153
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        148,
-        153,
         157,
         162,
         163,
         169,
         170,
-        172
+        172,
+        173,
+        175
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        173,
-        175,
         180,
         181,
         183,
         184,
         185,
-        186
+        186,
+        187,
+        22
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        187,
-        22,
         28,
         54,
         57,
         60,
         61,
-        62
+        62,
+        72,
+        84
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        72,
-        84,
         106,
         122,
         51,
         120,
         136,
-        137
+        137,
+        139,
+        140
       ]
     },
     {
       "batchNumber": 14,
       "candidates": [
-        139,
-        140,
         149,
         152,
         176,
@@ -329,21 +327,6 @@
       "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
     },
     {
-      "gisObjectId": 95,
-      "name": "Middle Falls",
-      "county": "BARAGA",
-      "river": "FALLS RIVER",
-      "lat": 46.752422,
-      "lng": -88.452723,
-      "cluster": "BARAGA / FALLS RIVER",
-      "priorityScore": 91,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 3,
-      "blockingGate": "Verify GIS #95 identity versus posted Middle Falls viewpoint and municipal lot/trail access rules, then assess public guide promotion alongside Lower Falls as distinct stops or one shared itinerary."
-    },
-    {
       "gisObjectId": 88,
       "name": "Power House Falls",
       "county": "BARAGA",
@@ -357,21 +340,6 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 3,
       "blockingGate": "Verify current small-park operator, official entrance and parking permission plus correspondence of GIS #88 to the waterfall visible from the park before visitor-guide promotion."
-    },
-    {
-      "gisObjectId": 96,
-      "name": "Lower Falls",
-      "county": "BARAGA",
-      "river": "FALLS RIVER",
-      "lat": 46.754031,
-      "lng": -88.454957,
-      "cluster": "BARAGA / FALLS RIVER",
-      "priorityScore": 90,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 3,
-      "blockingGate": "Confirm separate Lower Falls (#96) versus adjacent artificial drop and authorized viewing position before promoting an indexable guide."
     },
     {
       "gisObjectId": 198,

@@ -644,3 +644,29 @@ test('Batch 14 eight source-reviewed GIS records stay unindexed with distinct ro
  assert.match(mapJS,/accessReviews/);
  assert.match(mapJS,/routeAudit/);
 });
+
+test('Falls River single guide covers Middle and Lower via public trail not unsafe river or railway shortcut',()=>{
+ const guide=curated.waterfalls.find(x=>x.id==='falls-river-trail');
+ assert.ok(guide);
+ assert.equal(guide.gisObjectId,95);
+ assert.deepEqual(guide.multiFeatureGisObjectIds,[96]);
+ assert.equal(guide.publication,'verified-access-guide');
+ for(const oid of [95,96]){
+   const row=ledger.candidates.find(x=>x.gisObjectId===oid);
+   assert.equal(row.curatedId,'falls-river-trail');
+   assert.equal(row.publicationEligible,true);
+   assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
+ }
+ const h=fs.readFileSync('public/upper-peninsula-waterfalls/falls-river-trail/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ assert.match(h,/1\.4 miles out and back/i);
+ assert.match(h,/Lower Falls/);
+ assert.match(h,/Middle Falls/);
+ assert.match(h,/railway/);
+ assert.match(h,/current opening and road conditions are unverified/i);
+ assert.ok(!h.includes('data-parking-lat='));
+ assert.match(hub,/data-id="falls-river-trail" data-gis-oid="95" data-gis-multi-oid="96"/);
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/falls-river-trail/'));
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ assert.ok(!queue.candidates.some(x=>[95,96].includes(x.gisObjectId)));
+});

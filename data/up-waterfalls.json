@@ -3149,6 +3149,75 @@
           "description": "Michigan GIS feature #166 locates Morgan Falls natural feature on Morgan Creek, not the public parking lot."
         }
       }
+    },
+    {
+      "id": "falls-river-trail",
+      "name": "Falls River Trail: Middle & Lower Falls",
+      "region": "Western U.P.",
+      "place": "L’Anse · Falls River · Baraga County",
+      "lat": 46.752422,
+      "lng": -88.452723,
+      "gisObjectId": 95,
+      "multiFeatureGisObjectIds": [
+        96
+      ],
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 96,
+          "name": "Lower Falls",
+          "lat": 46.754031,
+          "lng": -88.454957,
+          "arrival": "Public downstream Falls River Trail parking described by Baraga County Trails, not the natural GIS coordinate",
+          "visitorRoute": "Downstream riverside signed trail toward Lower Falls, then upstream to Middle Falls",
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        }
+      ],
+      "coverageScope": "One maintained L’Anse Falls River Trail outing combines Middle Falls #95 and Lower Falls #96 without duplicating search pages; upper/private and powerhouse/utility falls are excluded.",
+      "level": "easy",
+      "minutes": "35–75 min",
+      "walk": "Follow the signed Falls River Trail beside the river. On the downstream approach the first named natural cascade is Lower Falls, followed upstream by Middle Falls visible from the high bank. Baraga County Trails describes 1.4 miles out-and-back for the complete trail, NOT the distance between individual waterfall views. Do not cross the railroad, utility structures, US-41 or the river for shortcuts.",
+      "best": "Spring and autumn daylight with dry trail footing; rain can swell Falls River but no flow forecast is offered.",
+      "access": "Baraga County Trails describes a public 1.4-mile out-and-back riverside trail, with a downtown Main Street downstream lot and separate US-41 bridge-side upstream trailhead. Older county brochure confirms the Lower-to-Middle viewpoint sequence. The high-bank viewpoint is not a river scrambling route.",
+      "status": "verify",
+      "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Village public riverside waterfall walk",
+      "parking": "Downstream Falls River Trail: from L’Anse Main Street, use the public small-park parking on the right beside Falls River as specified by Baraga County Trails. Walk on the marked east-bank trail upstream, beside the power plant. The upstream alternate is the right-side signed lot on US-41 just before its Falls River bridge. Neither parking entrance is the natural waterfall coordinate.",
+      "feature": "Slate-ledged cascades in a short riverside corridor connecting L’Anse's lower and middle falls.",
+      "decision": "For an accessible-by-town short outing rather than a deep-woods hike, begin at the downtown Falls River Trail lot and stay on the formal bank trail. Avoid old railroad and powerhouse shortcuts.",
+      "further": "Trail association's 1.4 miles is the full walk, not falls-to-falls distance. The older county waterfall brochure and independent geography establish Lower and Middle falls as separate river drops. Some informal pages recommend crossing railroad tracks, going beneath US-41 or approaching private Upper Falls: none are part of this recommended visit. Current opening and road conditions are unverified.",
+      "manager": "Baraga County Trails in Motion · Falls River Trail; nearby industrial property is not public trail",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-trail-organization-two-lots-and-county-waterfall-view-sequence-current-conditions-not-live",
+      "winterRoad": "The trail organization lists snowshoeing; that does not guarantee either lot is plowed, icy bluff safety or a fall-specific winter route. Never assume river ice is safe.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+          "description": "Local trail organization maintains published Falls River Trail and signed downtown/US41 access; does not grant permission onto the power plant."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://visitbaragacounty.com/activities/summer-recreation/",
+          "description": "Baraga County tourism describes Falls River Trail as accessible public walk with Lower Falls views; no authority to cross the railway."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+          "description": "Published downtown Main Street river-side parking and separate US-41 bridge-side trailhead; no surveyed parking GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+          "description": "County falls brochure describes Lower Falls first and continuing upstream along high bluff to Middle Falls, corroborated by current trail organization route."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #95 Middle and #96 Lower are separate named Falls River features, not lots or old cement dam."
+        }
+      }
     }
   ]
 }

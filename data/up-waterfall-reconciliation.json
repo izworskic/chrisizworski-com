@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 50,
-    "pending": 111,
-    "curatedTotal": 56,
+    "exactIdMatched": 52,
+    "pending": 109,
+    "curatedTotal": 57,
     "curatedNoMatchingGIS": 8
   },
   "candidates": [
@@ -1834,23 +1834,25 @@
       "lat": 46.752422,
       "lng": -88.452723,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "falls-river-trail",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Baraga County Trails in Motion public Falls River Trail",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "evidenceReviewed": "2026-10-29",
-      "disposition": "municipal-falls-river-trail-view-match-to-check",
-      "publicationEligible": false,
-      "sourceNotes": "L'Anse village materials describe riverbank trail viewing of named middle and lower drops. Baraga County Trails publishes a 1.4-mile out-and-back Falls River Trail with downstream Main Street lot and upstream US-41 bridge-side trailhead, but the exact GIS #95 viewpoint and railroad boundaries are not independently aligned. LIMITATIONS: The quoted public trail total is the entire trail, not measured from either specific waterfall. Informal guides suggesting crossings under or over bridges are not authorization.",
-      "outstandingGate": "Verify GIS #95 identity versus posted Middle Falls viewpoint and municipal lot/trail access rules, then assess public guide promotion alongside Lower Falls as distinct stops or one shared itinerary.",
+      "disposition": "documented-LAnse-public-Falls-River-Trail-two-official-trailheads",
+      "publicationEligible": true,
+      "sourceNotes": "Official trail association two public parking entrances and 1.4-mile full trail; county visitor waterfall brochure distinguishes Lower #96 from Middle #95. No railroad crossing, private Upper Falls, industrial access or GIS parking. Middle view from designated upper bluff trail.",
+      "outstandingGate": "Current lot plowing/posted construction and riverside trail condition unverified; keep on signed trail. No current opening claims.",
       "sourceLinks": [
-        "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
         "https://www.baragacountytrails.org/trails/falls-river-trail",
-        "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/"
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://visitbaragacounty.com/activities/summer-recreation/",
+        "https://www.waterfallsofthekeweenaw.com/falls-river/middle-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
@@ -1892,6 +1894,14 @@
             "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
           }
         ]
+      },
+      "visitorRouteEvidence": {
+        "managerSource": "https://www.baragacountytrails.org/trails/falls-river-trail",
+        "roadArrivalSource": "https://www.baragacountytrails.org/trails/falls-river-trail",
+        "parking": "Downtown Main Street riverside lot or documented US-41 bridge trailhead; natural falls coordinate is not parking",
+        "trailSource": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
       }
     },
     {
@@ -1902,23 +1912,25 @@
       "lat": 46.754031,
       "lng": -88.454957,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
+      "reconciliation": "curated-multifeature-parent-tool",
+      "curatedId": "falls-river-trail",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Baraga County Trails in Motion public Falls River Trail",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-29",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "evidenceReviewed": "2026-10-29",
-      "disposition": "municipal-falls-river-trail-downstream-identity-review",
-      "publicationEligible": false,
-      "sourceNotes": "Village of L'Anse and Baraga County Trails describe public waterfront-side river walking and lower Falls River cascades. The specialist geographic source distinguishes the lower natural drop from historic cement dam features; they must not be conflated into a dam-access route. LIMITATIONS: Public trail can reach river scenery, but sightline to GIS #96 and legal bank/path boundaries require source confirmation. Municipal trail length is not lower-falls hike length.",
-      "outstandingGate": "Confirm separate Lower Falls (#96) versus adjacent artificial drop and authorized viewing position before promoting an indexable guide.",
+      "disposition": "documented-LAnse-public-Falls-River-Trail-two-official-trailheads",
+      "publicationEligible": true,
+      "sourceNotes": "Official trail association two public parking entrances and 1.4-mile full trail; county visitor waterfall brochure distinguishes Lower #96 from Middle #95. No railroad crossing, private Upper Falls, industrial access or GIS parking. Lower natural falls is not old artificial dam.",
+      "outstandingGate": "Current lot plowing/posted construction and riverside trail condition unverified; keep on signed trail. No current opening claims.",
       "sourceLinks": [
-        "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
         "https://www.baragacountytrails.org/trails/falls-river-trail",
-        "https://www.waterfallsofthekeweenaw.com/falls-river/lower-falls/"
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://visitbaragacounty.com/activities/summer-recreation/",
+        "https://www.waterfallsofthekeweenaw.com/falls-river/lower-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
@@ -1960,6 +1972,19 @@
             "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
           }
         ]
+      },
+      "visitorRouteEvidence": {
+        "managerSource": "https://www.baragacountytrails.org/trails/falls-river-trail",
+        "roadArrivalSource": "https://www.baragacountytrails.org/trails/falls-river-trail",
+        "parking": "Downtown Main Street riverside lot or documented US-41 bridge trailhead; natural falls coordinate is not parking",
+        "trailSource": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      },
+      "featureCoverage": {
+        "parentCuratedId": "falls-river-trail",
+        "relationship": "same signed trail, distinct downstream Lower Falls natural feature",
+        "publicGuide": "https://chrisizworski.com/upper-peninsula-waterfalls/falls-river-trail/"
       }
     },
     {
