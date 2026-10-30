@@ -90,3 +90,20 @@ test('wilderness itineraries explicitly reject unverified crossings and full thr
  assert.ok(p.excluded.some(s=>/Unverified river-to-river/.test(s)));
  assert.ok(p.sources.some(s=>s.url.includes('Porcupine-Mountains-State-Park-Map-GPS.pdf')));
 });
+
+test('park interpreter keeps the landscapes ahead of GIS research and maintains real access caveats', () => {
+ const hero=html.indexOf('class="hero"');
+ const stories=html.indexOf('id="places"');
+ const forest=html.indexOf('id="more"');
+ const chooser=html.indexOf('id="decision"');
+ const atlas=html.indexOf('id="access-atlas"');
+ const evidence=html.indexOf('id="park-access-evidence"');
+ assert.ok(hero>=0 && hero<stories && stories<forest && forest<chooser && chooser<atlas && atlas<evidence);
+ assert.match(html,/hear the Presque Isle before you see it/i);
+ assert.match(html,/Lake of the Clouds rests beneath/i);
+ assert.match(html,/old-growth groves/i);
+ assert.match(html,/The DNR documents an accessible platform for Nawadaha/i);
+ assert.match(html,/No automated through-route/i);
+ assert.match(html,/name="robots" content="noindex,follow"/);
+ assert.equal((html.match(/class="parking-card"/g)||[]).length,6);
+});
