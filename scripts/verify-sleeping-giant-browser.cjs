@@ -41,7 +41,7 @@ async function main(){
      const page=await context.newPage(),errors=[];
      // Deterministic map tile fixtures test Leaflet layout/overlays without depending
      // on a third-party tile outage or writing a public key into repository source.
-     const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==','base64');
+     const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGM4evcqAATiAnhnXAhlAAAAAElFTkSuQmCC','base64');
      let tileRequests=0,cartoRequests=0;
      await page.route('**/tile.openstreetmap.org/**',route=>{
        tileRequests++;return route.fulfill({status:200,contentType:'image/png',body:tile});
