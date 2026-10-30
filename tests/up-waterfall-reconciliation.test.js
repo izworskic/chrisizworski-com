@@ -862,6 +862,10 @@ test('Slate River research remains noindex and cannot be advertised as legal acc
  assert.equal(source.classification,row.disposition);
  assert.match(page,/name="robots" content="noindex,follow"/);
  assert.match(page,/Nature Conservancy/);
+ assert.match(page,/25%/);
+ assert.match(page,/one-third/);
+ assert.ok(row.sourceLinks.includes('https://www.nature.org/en-us/about-us/where-we-work/united-states/michigan/stories-in-michigan/deer-hunting-in-michigan/'));
+ assert.ok(!page.includes('data-parking-lat='));
  assert.match(page,/Skanee Road/);
  assert.match(page,/Arvon Road/);
  assert.match(page,/not a verified visitor itinerary/i);
