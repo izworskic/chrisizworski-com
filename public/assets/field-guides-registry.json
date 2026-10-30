@@ -329,6 +329,38 @@
         "/great-lakes-buoys/",
         "/great-lakes-island-hopping-field-guide/"
       ]
+    },
+    {
+      "slug": "michigan-dark-sky-field-guide",
+      "url": "/michigan-dark-sky-field-guide/",
+      "title": "Michigan After Dark: The Northern Lights, Dark-Sky Preserves & Meteor Shower Field Guide",
+      "subtitle": "12 Dark-Sky Preserves & Aurora Shorelines · Horizon Azimuths, Bortle Ratings & Night Etiquette",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Year-Round · Peak Aurora Sep–Apr · Perseids Aug",
+      "summary": "12 audited Michigan dark-sky preserves and Great Lakes shorelines with horizon azimuth compasses, Bortle ratings, 24/7 gate access rules, and smartphone night-mode cheat sheets.",
+      "connectedTools": [
+        "/northern-lights-michigan/",
+        "/national-tools/dark-sky/michigan/",
+        "/national-tools/meteor-shower/",
+        "/great-lakes-buoys/",
+        "/great-lakes-rockhounding-field-guide/"
+      ]
     }
   ],
   "plannedRoadmap": [

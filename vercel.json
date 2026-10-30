@@ -423,6 +423,16 @@
       "source": "/labs/kilauea-live/",
       "destination": "/national-tools/kilauea-live/",
       "permanent": true
+    },
+    {
+      "source": "/michigan-after-dark-field-guide",
+      "destination": "/michigan-dark-sky-field-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/michigan-after-dark-field-guide/",
+      "destination": "/michigan-dark-sky-field-guide/",
+      "permanent": true
     }
   ],
   "headers": [
