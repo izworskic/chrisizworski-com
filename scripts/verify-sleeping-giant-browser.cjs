@@ -12,6 +12,13 @@ execFileSync(process.execPath,[path.join(root,siteMode?'scripts/build-sleeping-g
 });
 const server=http.createServer((req,res)=>{
  const url=new URL(req.url,'http://localhost');
+ const assets={'/assets/leaflet-1.9.4.js':['application/javascript','public/assets/leaflet-1.9.4.js'],
+  '/assets/vendor/leaflet-1.9.4.css':['text/css','public/assets/vendor/leaflet-1.9.4.css']};
+ if(assets[url.pathname]){
+   const [mime,relative]=assets[url.pathname];
+   res.writeHead(200,{'Content-Type':mime,'Cache-Control':'no-store'});
+   fs.createReadStream(path.join(root,relative)).pipe(res);return;
+ }
  if(url.pathname!=='/'&&url.pathname!=='/index.html'){res.writeHead(404);res.end();return}
  res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
  fs.createReadStream(path.join(preview,'index.html')).pipe(res);
@@ -32,10 +39,34 @@ async function main(){
      const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},
        deviceScaleFactor:1,reducedMotion:'reduce'});
      const page=await context.newPage(),errors=[];
+     // Deterministic map tile fixtures test Leaflet layout/overlays without depending
+     // on a third-party tile outage or writing a public key into repository source.
+     const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==','base64');
+     let tileRequests=0,cartoRequests=0;
+     await page.route('**/tile.openstreetmap.org/**',route=>{
+       tileRequests++;return route.fulfill({status:200,contentType:'image/png',body:tile});
+     });
+     await page.route('**/basemaps.cartocdn.com/**',route=>{
+       const req=new URL(route.request().url());
+       must(req.searchParams.get('key')==='public-test-only-key','CARTO request missing configured public key');
+       cartoRequests++;return route.fulfill({status:200,contentType:'image/png',body:tile});
+     });
+     await page.route('**/api/carto-basemap-config',route=>route.fulfill(
+       viewport.name==='desktop'
+         ?{status:200,contentType:'application/json',body:JSON.stringify({provider:'CARTO',key:'public-test-only-key'})}
+         :{status:503,contentType:'application/json',body:'{}'}));
      page.on('pageerror',e=>errors.push(e.message));
      const response=await page.goto(target,{waitUntil:'domcontentloaded',timeout:25000});
      must(response?.status()===200,viewport.name+' local preview not 200');
      must(await page.locator('.route-card').count()===6,viewport.name+' six static cards missing');
+     await page.waitForFunction(()=>document.querySelector('#map-viewport')?.classList.contains('is-geographic'),
+       {timeout:12000});
+     must(await page.locator('.map-geographic .leaflet-tile-loaded').count()>=1,
+       viewport.name+' no rendered geographic basemap tiles');
+     must(await page.locator('.map-geographic .leaflet-control-zoom').count()===1,
+       viewport.name+' Leaflet zoom controls missing');
+     must(await page.locator('.map-geographic .leaflet-control-attribution').count()===1,
+       viewport.name+' tile attribution missing');
      if(siteMode){
        const metadata=await page.evaluate(()=>({
          canonical:document.querySelector('link[rel="canonical"]')?.href||null,
@@ -55,7 +86,9 @@ async function main(){
      }
 
      must((await page.locator('#result-hint').innerText()).includes('Only Ontario Parks'),viewport.name+' planner JS did not initialize');
-     must(await page.locator('#route-shapes path').count()===2,viewport.name+' default Sea Lion map not 2 sections');
+     must(await page.locator('#route-shapes path').count()===2,viewport.name+' default Sea Lion SVG fallback not 2 sections');
+     must(await page.locator('.map-geographic path.leaflet-interactive').count()>=5,
+       viewport.name+' georeferenced Sea Lion segments and markers not drawn');
      must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Sea Lion'),viewport.name+' default map accessibility name incorrect');
      const visible=await page.locator('[data-id="sea-lion"] .card-decision').innerText();
      must(visible.includes('Published hiking range fits')||visible.includes('Ontario Parks'),viewport.name+' source duration unavailable');
@@ -86,7 +119,9 @@ async function main(){
      const top=page.locator('[data-id="top-of-the-giant"]');
      must((await top.locator('.card-decision').innerText()).includes('no official total'),viewport.name+' bike timing shown as known');
      await top.locator('button[data-select="top-of-the-giant"]').click();
-     must(await page.locator('#route-shapes path').count()===3,viewport.name+' Top bike/foot geometry missing');
+     must(await page.locator('#route-shapes path').count()===3,viewport.name+' Top bike/foot SVG geometry missing');
+     must(await page.locator('.map-geographic path.leaflet-interactive').count()>=6,
+       viewport.name+' georeferenced Top bike/foot line sections not drawn');
      must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Top of the Giant'),viewport.name+' mapped route accessible name stale');
      must(await page.locator('#bike-breakdown').isVisible(),viewport.name+' bike/walk section hidden');
      must((await page.locator('#bike-breakdown').innerText()).includes('13.4 km cycling'),viewport.name+' official split missing');
@@ -107,12 +142,16 @@ async function main(){
      await page.locator('#map-section').screenshot({path:path.join(out,viewport.name+'-map.png'),animations:'disabled'});
      report.screenshots.push(viewport.name+'-map.png');
      await page.locator('[data-id="middlebrun-beach"] button[data-select="middlebrun-beach"]').click();
-     must(await page.locator('#route-shapes path').count()===0,viewport.name+' unmapped Middlebrun invented route');
+     must(await page.locator('#route-shapes path').count()===0,viewport.name+' unmapped Middlebrun invented SVG route');
+     must(await page.locator('.map-geographic path.leaflet-interactive').count()===0,
+       viewport.name+' unmapped Middlebrun invented geographic line or parking marker');
      const missingMapLabel=await page.locator('#map-canvas').getAttribute('aria-label');
      must(missingMapLabel.includes('Middlebrun Bay Beach')&&missingMapLabel.includes('No research trail outline'),viewport.name+' unmapped route accessible name misleading');
      must((await page.locator('#mapped-distance').innerText())==='Not mapped',viewport.name+' missing map uncertainty');
      must(await page.locator('#map-focus').isDisabled(),viewport.name+' no invented focus for unmapped destinations');
      must(await page.locator('a[href*="maps/dir"]').count()===0,viewport.name+' forbidden directions');
+     must(tileRequests>0,viewport.name+' OpenStreetMap fallback not requested');
+     if(viewport.name==='desktop')must(cartoRequests>0,viewport.name+' configured CARTO basemap never requested');
      must(errors.length===0,viewport.name+' JS errors '+errors.join('; '));
      report.viewports.push({viewport:viewport.name,width:viewport.width,
        staticCards:6,defaultMappedSections:2,topMappedSections:3,
