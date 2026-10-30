@@ -57,8 +57,13 @@ test('Circle Tour preserves original route and includes complete fallback cards'
   assert.equal((atlas.match(/data-ja-add-stop="\d+"/g)||[]).length,10);
   for(const match of atlas.matchAll(/data-ja-add-stop="(\d+)"/g))
     assert.ok(html.includes('id="stop-'+match[1]+'"'),'must map to existing trip stop '+match[1]);
-  assert.equal((atlas.match(/class="ja-photo"/g)||[]).length,6);
-  assert.equal((atlas.match(/<figcaption>/g)||[]).length,6);
+  assert.equal((atlas.match(/class="ja-photo"/g)||[]).length,10);
+  assert.equal((atlas.match(/<figcaption>/g)||[]).length,10);
+  assert.doesNotMatch(atlas,/class="ja-plain"/);
+  assert.match(atlas,/Andre Carrotflower/);
+  assert.match(atlas,/Randen Pederson/);
+  assert.match(atlas,/Chris Light/);
+  assert.match(atlas,/Coates4/);
   assert.match(atlas,/2026 day-use season ended October 25/);
   assert.match(atlas,/2027 sailings and seats must not be inferred/);
   assert.match(atlas,/editorial, not a live weather/);
