@@ -27,6 +27,15 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.ok(html.includes('id="explorer-data"'));
  assert.ok(html.includes('id="map-focus"'));
  assert.ok(html.includes('id="map-canvas"'));
+ assert.ok(html.includes('id="map-geographic"'), 'real geographic basemap container missing');
+ assert.ok(html.includes('/assets/vendor/leaflet-1.9.4.css'), 'Leaflet styles absent');
+ assert.ok(html.includes('/assets/leaflet-1.9.4.js'), 'local Leaflet runtime absent');
+ assert.ok(html.includes('/api/carto-basemap-config'), 'site CARTO configuration not wired');
+ assert.ok(html.includes('tile.openstreetmap.org'), 'fallback provider absent');
+ assert.ok(html.includes('basemaps.cartocdn.com/rastertiles/voyager'), 'CARTO Voyager provider absent');
+ assert.ok(html.includes('geoLines.clearLayers()'), 'route selection cannot clear stale geographic lines');
+ assert.ok(html.includes('No reconciled trail route or parking location is verified'), 'unmapped route must avoid invented geometry');
+ assert.doesNotMatch(html, /Google Maps driving directions to approximate parking/i);
  assert.ok(html.includes('id="trail-top-of-the-giant"'));
  assert.ok(html.includes('id="trail-sea-lion"'));
  assert.ok(html.includes('21.8 km'));
