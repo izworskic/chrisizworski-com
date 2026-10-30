@@ -3271,6 +3271,75 @@
           "description": "NCTA 2014 GPS table lists Sturgeon Falls at 46.64242,-88.69346, corroborated by Visit Keweenaw and independent waterfall guide; conflicting state GIS #45 at 46.582163,-88.68412 is NOT an exact match."
         }
       }
+    },
+    {
+      "id": "twin-waterfalls-memorial-preserve",
+      "name": "Memorial & Tannery Falls: Preserve Closure",
+      "region": "Pictured Rocks / Munising",
+      "place": "Twin Waterfalls Memorial Plant Preserve · Munising",
+      "lat": 46.413381,
+      "lng": -86.629242,
+      "gisObjectId": 198,
+      "multiFeatureGisObjectIds": [
+        199
+      ],
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 199,
+          "name": "Tannery Falls / Rudy M. Olson Falls",
+          "lat": 46.415716,
+          "lng": -86.626745,
+          "arrival": "No visitor arrival. MNA sanctuary closed to all visitors through 2028 according to current landowner website.",
+          "visitorRoute": "No public trail or parking while closure applies",
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171"
+        }
+      ],
+      "coverageScope": "One privately conserved sanctuary closure covers distinct state GIS #198 Memorial Falls and #199 Tannery/Olson Falls without inventing an accessible visitor route.",
+      "level": "closed",
+      "minutes": "No visit permitted",
+      "walk": "There is no permitted visitor trail to Memorial Falls or Tannery / Rudy M. Olson Falls while the preserve is closed. Do not bypass barricades, enter from neighboring property, walk along the creek, or treat GIS natural coordinates as a public route. Consider Wagner Falls or Mosquito Falls subject to their own current access restrictions.",
+      "best": "After the Michigan Nature Association explicitly announces an authorized reopening; closure has no guaranteed end date.",
+      "access": "Michigan Nature Association identifies both falls within its Twin Waterfalls Memorial Plant Preserve and states the sanctuary is currently closed to ALL visitors. The organization's current homepage says closed through 2028. No private or alternative access is allowed.",
+      "status": "closed",
+      "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Conservation sanctuary · CLOSED",
+      "parking": "DO NOT VISIT the Twin Waterfalls Memorial Plant Preserve. The Michigan Nature Association currently prohibits all visitors, and its homepage announces closure through 2028. Former Nestor, Cleveland or Washington Street directions and older trail maps are superseded by the landowner's closure. No parking or path to either fall is recommended.",
+      "feature": "Two separate sandstone-canyon falls in a protected plant preserve; the owner currently prohibits visitation.",
+      "decision": "Do not visit the preserve while closed. Check MNA's own closure statement; choose another officially accessible waterfall rather than trying old Nestor/Washington approaches.",
+      "further": "MNA's 2021 closure notice explains needed trail rerouting, erosion repairs, visitor infrastructure and signage upgrades. The owner still marks the sanctuary closed in October 2026 and its homepage says through 2028, not that reopening automatically happens on January 1, 2029. Older brochures showing trailheads and private neighboring side approaches are obsolete for public access; no live trail or parking availability is claimed.",
+      "manager": "Michigan Nature Association · Twin Waterfalls Memorial Plant Preserve",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-closure-guide",
+      "accessConfidence": "current-landowner-closure-confirmed-through-2028-no-public-visit",
+      "winterRoad": "Closed to all visitors regardless of snow or daylight; a winter frozen waterfall is not a permitted exception.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+          "description": "MNA identifies owner/manager of Twin Waterfalls Memorial Plant Preserve, including Memorial, Tannery/Olson Falls."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+          "description": "Landowner expressly says currently CLOSED to all visitors. Closure overrides historical visitor routes."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+          "description": "Historic visitor entrances and parking from older guides are not permitted visitor arrivals while sanctuary closure is in effect."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigannature.org/",
+          "description": "Current MNA banner says Twin Waterfalls sanctuary closed through 2028; no authorized walking trail currently available."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS #198 Memorial and #199 Tannery are separate waterfall features. They are NOT visitor parking or legal entry."
+        }
+      }
     }
   ]
 }

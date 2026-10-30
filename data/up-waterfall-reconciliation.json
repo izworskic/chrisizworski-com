@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 52,
-    "pending": 109,
-    "curatedTotal": 58,
+    "exactIdMatched": 54,
+    "pending": 107,
+    "curatedTotal": 59,
     "curatedNoMatchingGIS": 9
   },
   "candidates": [
@@ -3790,14 +3790,35 @@
       "lat": 46.413381,
       "lng": -86.629242,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "twin-waterfalls-memorial-preserve",
+      "publicGuide": "verified-closure-guide",
+      "landManager": "Michigan Nature Association",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "MNA-currently-closed-all-visitors-through-2028-verified-closure-guide",
+      "sourceNotes": "MNA present landowner sanctuary page says Twin Waterfalls (Memorial, Tannery, Olson) closed to all visitors. MNA main homepage says closed THROUGH 2028; older 2021 press statement describes causes but not reopening. A truthful closure guide is indexable yet carries ZERO visitor parking/directions. State GIS position is natural falls, not public access.",
+      "outstandingGate": "Maintain closure until Michigan Nature Association publicly posts authorized reopening and actual visitor parking/trails, not simply calendar rollover; no visits to closed preserve.",
+      "visitorRouteEvidence": {
+        "managerSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "closureSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "deadlineSource": "https://www.michigannature.org/",
+        "historicalClosureNotice": "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "parking": "No public visitor parking",
+        "trail": "No authorized entry or walking path while closed",
+        "currentRoadStatus": "not-applicable-site-closed",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "https://www.michigannature.org/",
+        "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "gisObjectId": 199,
@@ -3807,14 +3828,40 @@
       "lat": 46.415716,
       "lng": -86.626745,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-multifeature-parent-tool",
+      "curatedId": "twin-waterfalls-memorial-preserve",
+      "publicGuide": "verified-closure-guide",
+      "landManager": "Michigan Nature Association",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-10-29",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-29",
+      "disposition": "MNA-currently-closed-all-visitors-through-2028-verified-closure-guide",
+      "sourceNotes": "MNA present landowner sanctuary page says Twin Waterfalls (Memorial, Tannery, Olson) closed to all visitors. MNA main homepage says closed THROUGH 2028; older 2021 press statement describes causes but not reopening. A truthful closure guide is indexable yet carries ZERO visitor parking/directions. State GIS position is natural falls, not public access.",
+      "outstandingGate": "Maintain closure until Michigan Nature Association publicly posts authorized reopening and actual visitor parking/trails, not simply calendar rollover; no visits to closed preserve.",
+      "visitorRouteEvidence": {
+        "managerSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "closureSource": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "deadlineSource": "https://www.michigannature.org/",
+        "historicalClosureNotice": "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "parking": "No public visitor parking",
+        "trail": "No authorized entry or walking path while closed",
+        "currentRoadStatus": "not-applicable-site-closed",
+        "navigationToGisPointAllowed": false
+      },
+      "sourceLinks": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "https://www.michigannature.org/",
+        "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "featureCoverage": {
+        "parentCuratedId": "twin-waterfalls-memorial-preserve",
+        "relationship": "same protected sanctuary, distinct named canyon/stream waterfall",
+        "publicGuide": "https://chrisizworski.com/upper-peninsula-waterfalls/twin-waterfalls-memorial-preserve/"
+      }
     },
     {
       "gisObjectId": 200,

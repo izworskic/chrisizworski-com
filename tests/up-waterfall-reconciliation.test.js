@@ -713,3 +713,35 @@ test('Sturgeon visitor guide prevents 6.74 km state GIS misrouting while retaini
   assert.ok(html.includes(f.verification[axis].source),axis);
  }
 });
+
+test('Memorial and Tannery/Olsen closure guide never provides visitor arrival or ignores MNA 2028 restriction',()=>{
+ const f=curated.waterfalls.find(x=>x.id==='twin-waterfalls-memorial-preserve');
+ const h=fs.readFileSync('public/upper-peninsula-waterfalls/twin-waterfalls-memorial-preserve/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ const q=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ assert.ok(f);
+ assert.equal(f.publication,'verified-closure-guide');
+ assert.equal(f.status,'closed');
+ assert.equal(f.gisObjectId,198);
+ assert.deepEqual(f.multiFeatureGisObjectIds,[199]);
+ for(const oid of [198,199]){
+  const row=ledger.candidates.find(x=>x.gisObjectId===oid);
+  assert.equal(row.curatedId,f.id);
+  assert.equal(row.publicationEligible,true);
+  assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
+  assert.equal(row.visitorRouteEvidence.parking,'No public visitor parking');
+  assert.ok(!q.candidates.some(x=>x.gisObjectId===oid));
+ }
+ assert.match(h,/Closed to ALL visitors|closed to all visitors/i);
+ assert.match(h,/through 2028/i);
+ assert.match(h,/does not guarantee reopening/i);
+ assert.match(h,/Wagner Falls/);
+ assert.match(h,/Mosquito Falls/);
+ assert.ok(!h.includes('data-parking-lat='));
+ assert.match(hub,/data-id="twin-waterfalls-memorial-preserve" data-gis-oid="198" data-gis-multi-oid="199"/);
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/twin-waterfalls-memorial-preserve/'));
+ for(const axis of ['landManager','publicAccess','parking','trail','location']){
+  assert.equal(f.verification[axis].verified,true);
+  assert.ok(h.includes(f.verification[axis].source));
+ }
+});

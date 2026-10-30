@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 58,
-  "linkedByExactOid": 52,
-  "unresolvedCandidates": 109,
+  "curatedCount": 59,
+  "linkedByExactOid": 54,
+  "unresolvedCandidates": 107,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3759,18 +3759,28 @@
         -86.629242
       ],
       "river": "UNNAMED CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "twin-waterfalls-memorial-preserve",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-closure-guide",
+      "access": "MNA-closed-to-all-visitors-through-2028",
+      "landManager": "Michigan Nature Association",
+      "parkingEvidence": "none: closure prohibits visitor arrival",
+      "trailEvidence": "none: closure prohibits walking approach",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-10-29",
+      "nextAction": "Recheck MNA sanctuary closure before any reopening claim; never auto-publish visit route",
+      "batch": "county-alger",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "17",
+      "classification": "source-backed-closed-sanctuary-closure-guide",
+      "accessAssessment": "MNA authoritative 2026 property page says closed to ALL visitors, and homepage says through 2028; zero permitted visitor parking or walking path. Separate GIS point never becomes legal entry.",
+      "evidence": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "https://www.michigannature.org/",
+        "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3782,18 +3792,28 @@
         -86.626745
       ],
       "river": "TANNERY CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "twin-waterfalls-memorial-preserve",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-closure-guide",
+      "access": "MNA-closed-to-all-visitors-through-2028",
+      "landManager": "Michigan Nature Association",
+      "parkingEvidence": "none: closure prohibits visitor arrival",
+      "trailEvidence": "none: closure prohibits walking approach",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-10-29",
+      "nextAction": "Recheck MNA sanctuary closure before any reopening claim; never auto-publish visit route",
+      "batch": "county-alger",
+      "reviewed": "2026-10-29",
+      "reviewBatch": "17",
+      "classification": "source-backed-closed-sanctuary-closure-guide",
+      "accessAssessment": "MNA authoritative 2026 property page says closed to ALL visitors, and homepage says through 2028; zero permitted visitor parking or walking path. Separate GIS point never becomes legal entry.",
+      "evidence": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "https://www.michigannature.org/",
+        "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4216,5 +4236,5 @@
       ]
     }
   ],
-  "lastBatch": "16"
+  "lastBatch": "17"
 }

@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 58,
-    "matchedGisFeatures": 52,
-    "pendingGisFeatures": 109
+    "curatedDestinations": 59,
+    "matchedGisFeatures": 54,
+    "pendingGisFeatures": 107
   },
   "batchSize": 8,
   "batches": [
@@ -28,162 +28,160 @@
       "candidates": [
         191,
         88,
-        198,
-        199,
         110,
         119,
         154,
-        215
+        215,
+        150,
+        151
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        150,
-        151,
         8,
         38,
         12,
         4,
         9,
-        195
+        195,
+        205,
+        44
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        205,
-        44,
         52,
         59,
         68,
         83,
         99,
-        103
+        103,
+        105,
+        107
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        105,
-        107,
         114,
         121,
         123,
         126,
         20,
-        24
+        24,
+        25,
+        30
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        25,
-        30,
         37,
         39,
         40,
         48,
         58,
-        63
+        63,
+        65,
+        69
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        65,
-        69,
         70,
         74,
         75,
         79,
         86,
-        102
+        102,
+        104,
+        112
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        104,
-        112,
         113,
         29,
         42,
         80,
         85,
-        129
+        129,
+        15,
+        17
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        15,
-        17,
         144,
         18,
         116,
         127,
         148,
-        153
+        153,
+        157,
+        162
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        157,
-        162,
         163,
         169,
         170,
         172,
         173,
-        175
+        175,
+        180,
+        181
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        180,
-        181,
         183,
         184,
         185,
         186,
         187,
-        22
+        22,
+        28,
+        54
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        28,
-        54,
         57,
         60,
         61,
         62,
         72,
-        84
+        84,
+        106,
+        122
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        106,
-        122,
         51,
         120,
         136,
         137,
         139,
-        140
+        140,
+        149,
+        152
       ]
     },
     {
       "batchNumber": 14,
       "candidates": [
-        149,
-        152,
         176,
         177,
         23
@@ -340,36 +338,6 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 3,
       "blockingGate": "Verify current small-park operator, official entrance and parking permission plus correspondence of GIS #88 to the waterfall visible from the park before visitor-guide promotion."
-    },
-    {
-      "gisObjectId": 198,
-      "name": "Memorial Falls",
-      "county": "ALGER",
-      "river": "UNNAMED CREEK",
-      "lat": 46.413381,
-      "lng": -86.629242,
-      "cluster": "ALGER / UNNAMED CREEK",
-      "priorityScore": 88,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 199,
-      "name": "Tannery Falls",
-      "county": "ALGER",
-      "river": "TANNERY CREEK",
-      "lat": 46.415716,
-      "lng": -86.626745,
-      "cluster": "ALGER / TANNERY CREEK",
-      "priorityScore": 87,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
     },
     {
       "gisObjectId": 110,
