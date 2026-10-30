@@ -56,6 +56,7 @@ async function main(){
 
      must((await page.locator('#result-hint').innerText()).includes('Only Ontario Parks'),viewport.name+' planner JS did not initialize');
      must(await page.locator('#route-shapes path').count()===2,viewport.name+' default Sea Lion map not 2 sections');
+     must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Sea Lion'),viewport.name+' default map accessibility name incorrect');
      const visible=await page.locator('[data-id="sea-lion"] .card-decision').innerText();
      must(visible.includes('Published hiking range fits')||visible.includes('Ontario Parks'),viewport.name+' source duration unavailable');
      // The hero is a CSS background: layout-only screenshots do not prove its
@@ -86,6 +87,7 @@ async function main(){
      must((await top.locator('.card-decision').innerText()).includes('no official total'),viewport.name+' bike timing shown as known');
      await top.locator('button[data-select="top-of-the-giant"]').click();
      must(await page.locator('#route-shapes path').count()===3,viewport.name+' Top bike/foot geometry missing');
+     must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Top of the Giant'),viewport.name+' mapped route accessible name stale');
      must(await page.locator('#bike-breakdown').isVisible(),viewport.name+' bike/walk section hidden');
      must((await page.locator('#bike-breakdown').innerText()).includes('13.4 km cycling'),viewport.name+' official split missing');
      must((await page.locator('#gap-note').innerText()).includes('unverified'),viewport.name+' parking gap not disclosed');
@@ -106,6 +108,8 @@ async function main(){
      report.screenshots.push(viewport.name+'-map.png');
      await page.locator('[data-id="middlebrun-beach"] button[data-select="middlebrun-beach"]').click();
      must(await page.locator('#route-shapes path').count()===0,viewport.name+' unmapped Middlebrun invented route');
+     const missingMapLabel=await page.locator('#map-canvas').getAttribute('aria-label');
+     must(missingMapLabel.includes('Middlebrun Bay Beach')&&missingMapLabel.includes('No research trail outline'),viewport.name+' unmapped route accessible name misleading');
      must((await page.locator('#mapped-distance').innerText())==='Not mapped',viewport.name+' missing map uncertainty');
      must(await page.locator('#map-focus').isDisabled(),viewport.name+' no invented focus for unmapped destinations');
      must(await page.locator('a[href*="maps/dir"]').count()===0,viewport.name+' forbidden directions');
