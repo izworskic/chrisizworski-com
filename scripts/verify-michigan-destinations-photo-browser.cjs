@@ -38,17 +38,12 @@ async function runView(browser, viewport) {
     const img=card.locator('.destination-photo.card img');
     await img.scrollIntoViewIfNeeded({timeout:12000});
     try {
-      await img.evaluate(async el=>{
-        if(el.complete && el.naturalWidth > 0)return;
-        await new Promise((resolve,reject)=>{
-          let timer=setTimeout(()=>reject(Error('Image not loaded after scroll')),16000);
-          const good=()=>{clearTimeout(timer);resolve()};
-          const bad=()=>{clearTimeout(timer);reject(Error('Image load error'))};
-          el.addEventListener('load',good,{once:true});
-          el.addEventListener('error',bad,{once:true});
-          if(el.complete)el.naturalWidth ? good():bad();
-        });
-      });
+      // A genuine first-image error can legitimately trigger the on-page licensed
+      // fallback. Wait for a decoded image rather than failing on that first event.
+      await page.waitForFunction(index => {
+        const image=document.querySelectorAll('.destination-photo.card img')[index];
+        return image && image.complete && image.naturalWidth > 0;
+      }, i, {timeout:20000});
     } catch(error) {
       results.push({id,ok:false,reason:String(error.message).slice(0,220)});
       continue;
