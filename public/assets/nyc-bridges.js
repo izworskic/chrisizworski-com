@@ -1,15 +1,15 @@
-
 (function(){
 "use strict";
 var bridges=[
-{id:"brooklyn",name:"Brooklyn Bridge",types:"walk photo history skyline",lat:40.7061,lng:-73.9969},
-{id:"manhattan",name:"Manhattan Bridge",types:"walk photo history skyline",lat:40.7075,lng:-73.9903},
-{id:"williamsburg",name:"Williamsburg Bridge",types:"walk photo history",lat:40.7132,lng:-73.9719},
-{id:"queensboro",name:"Ed Koch Queensboro Bridge",types:"walk photo engineering skyline",lat:40.7567,lng:-73.9541},
-{id:"george-washington",name:"George Washington Bridge",types:"walk photo skyline engineering",lat:40.8517,lng:-73.9527},
-{id:"high-bridge",name:"The High Bridge",types:"walk history engineering",lat:40.8423,lng:-73.9309}
+{id:"brooklyn",num:1,year:1883,name:"Brooklyn Bridge",types:"walk photo history skyline",lat:40.7061,lng:-73.9969,route:"Lower Manhattan ↔ DUMBO / Brooklyn Heights",walkway:"Elevated wooden boardwalk (pedestrians only since 2021)",approach:"Manhattan: City Hall Park · Brooklyn: Tillary & Adams St"},
+{id:"manhattan",num:2,year:1909,name:"Manhattan Bridge",types:"walk photo history skyline",lat:40.7075,lng:-73.9903,route:"Chinatown ↔ DUMBO",walkway:"South walkway for pedestrians; North path for bicycles",approach:"Manhattan: Bowery & Canal St · Brooklyn: Jay & Sands St"},
+{id:"williamsburg",num:3,year:1903,name:"Williamsburg Bridge",types:"walk photo history",lat:40.7132,lng:-73.9719,route:"Lower East Side ↔ Williamsburg",walkway:"Separated south pedestrian walkway / north bikeway",approach:"Manhattan: Delancey & Clinton · Brooklyn: Roebling & S 4th St"},
+{id:"queensboro",num:4,year:1909,name:"Ed Koch Queensboro Bridge",types:"walk photo engineering skyline",lat:40.7567,lng:-73.9541,route:"Midtown East ↔ Long Island City",walkway:"South Outer Roadway (dedicated pedestrian promenade)",approach:"Manhattan: E 60th St & 2nd Ave · Queens: Queens Plaza North"},
+{id:"george-washington",num:5,year:1931,name:"George Washington Bridge",types:"walk photo skyline engineering",lat:40.8517,lng:-73.9527,route:"Washington Heights ↔ Fort Lee, NJ",walkway:"Renovated South Walk with Hudson viewing balconies",approach:"Manhattan: W 178th & Cabrini · Fort Lee: Hudson Terrace"},
+{id:"high-bridge",num:6,year:1848,name:"The High Bridge",types:"walk history engineering",lat:40.8423,lng:-73.9309,route:"Washington Heights ↔ Highbridge, Bronx",walkway:"Car-free brick promenade 140 ft above Harlem River",approach:"Manhattan: W 172nd & Amsterdam · Bronx: W 170th & University"}
 ];
 var map=null,markers=[],active="all";
+
 function filterBridges(next){
  active=next;
  document.querySelectorAll(".filter").forEach(function(b){var on=b.dataset.filter===next;b.setAttribute("aria-pressed",String(on));b.classList.toggle("active",on)});
@@ -21,6 +21,23 @@ function filterBridges(next){
  document.getElementById("empty-filter").hidden=count>0;
 }
 document.querySelectorAll(".filter").forEach(function(b){b.addEventListener("click",function(){filterBridges(b.dataset.filter)})});
+
+function focusBridge(id){
+ var pair=markers.find(function(m){return m.record.id===id});
+ if(!pair||!map)return;
+ if(active!=="all"&&!pair.record.types.split(" ").includes(active)){
+  filterBridges("all");
+ }
+ map.setView([pair.record.lat,pair.record.lng],14,{animate:true});
+ pair.marker.openPopup();
+ document.querySelectorAll(".bridge-marker").forEach(function(m){m.classList.remove("active")});
+ var el=pair.marker.getElement();
+ if(el){
+  var inner=el.querySelector(".bridge-marker");
+  if(inner)inner.classList.add("active");
+ }
+}
+
 function startMap(){
  var status=document.getElementById("map-status"),el=document.getElementById("bridge-map");
  if(!el||!window.L){if(status)status.prepend(document.createTextNode("Interactive map unavailable. Use the bridge list and map links. "));return}
@@ -29,8 +46,7 @@ function startMap(){
  var tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'});
  tiles.addTo(map);el.dataset.tiles="osm";
  var errors=0,loaded=0;tiles.on("tileload",function(){loaded++});tiles.on("tileerror",function(){errors++;if(errors>=3&&loaded===0&&status){status.prepend(document.createTextNode("Map imagery could not load. Use the bridge links or open the full city map. "))}});
- // The existing same-origin endpoint provides a publishable CARTO key; OSM stays
- // visible unless a keyed CARTO layer has actually loaded raster tiles.
+ 
  fetch("/api/carto-basemap-config",{credentials:"same-origin"}).then(function(res){return res.ok?res.json():null}).then(function(conf){
   if(!conf||conf.provider!=="CARTO"||typeof conf.key!=="string"||!conf.key.trim())return;
   var uri="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key="+encodeURIComponent(conf.key.trim());
@@ -42,12 +58,61 @@ function startMap(){
   carto.addTo(map);
  }).catch(function(){el.dataset.tiles="osm-fallback"});
 
- bridges.forEach(function(b){var icon=L.divIcon({className:"",html:'<span class="bridge-marker" aria-hidden="true"></span>',iconSize:[24,24],iconAnchor:[12,12]});var mark=L.marker([b.lat,b.lng],{icon:icon,title:b.name}).addTo(map);var safeName=b.name.replaceAll("&","&amp;").replaceAll("<","&lt;");mark.bindPopup('<div class="map-popup"><strong>'+safeName+'</strong><br>Approximate bridge location, not a walkway entrance.<br><a href="#'+b.id+'">Explore this bridge →</a></div>');markers.push({marker:mark,record:b})});
+ bridges.forEach(function(b){
+  var icon=L.divIcon({className:"bridge-pin-wrap",html:'<span class="bridge-marker" aria-hidden="true"><span class="pin-num">'+b.num+'</span></span>',iconSize:[28,28],iconAnchor:[14,14]});
+  var mark=L.marker([b.lat,b.lng],{icon:icon,title:b.name}).addTo(map);
+  var safeName=b.name.replaceAll("&","&amp;").replaceAll("<","&lt;");
+  var popupHtml='<div class="map-popup">' +
+    '<div class="popup-badge">0'+b.num+' · '+b.year+'</div>' +
+    '<h4 class="popup-title">'+safeName+'</h4>' +
+    '<p class="popup-route">'+b.route+'</p>' +
+    '<div class="popup-detail"><span class="popup-label">Walkway:</span> '+b.walkway+'</div>' +
+    '<div class="popup-access"><span class="popup-label">Approach:</span> '+b.approach+'</div>' +
+    '<a class="popup-link" href="#'+b.id+'">Explore this bridge in guide ↓</a>' +
+  '</div>';
+  mark.bindPopup(popupHtml,{maxWidth:280,minWidth:220});
+  mark.on("click",function(){
+   document.querySelectorAll(".bridge-marker").forEach(function(m){m.classList.remove("active")});
+   var mel=mark.getElement();
+   if(mel){
+    var minn=mel.querySelector(".bridge-marker");
+    if(minn)minn.classList.add("active");
+   }
+  });
+  markers.push({marker:mark,record:b});
+ });
+
  if(window.ResizeObserver){new ResizeObserver(function(){map.invalidateSize({pan:false})}).observe(el)}
  setTimeout(function(){map.invalidateSize({pan:false})},100);
+
+ function checkHash(){
+  var hash=(window.location.hash||"").replace("#","");
+  if(!hash)return;
+  var pair=markers.find(function(m){return m.record.id===hash});
+  if(pair){
+   focusBridge(hash);
+  }
+ }
+ window.addEventListener("hashchange",checkHash);
+ setTimeout(checkHash,400);
+
  }catch(e){if(status)status.prepend(document.createTextNode("Interactive map unavailable. Use the bridge list and direct map links. "))}
 }
 startMap();
+
+document.addEventListener("click",function(e){
+ var btn=e.target.closest("[data-focus]");
+ if(!btn)return;
+ var id=btn.dataset.focus;
+ if(!id)return;
+ e.preventDefault();
+ focusBridge(id);
+ var mapEl=document.getElementById("bridge-map");
+ if(mapEl && btn.classList.contains("btn-focus-map")){
+  mapEl.scrollIntoView({behavior:"smooth",block:"center"});
+ }
+});
+
 var routes={
 classic:{title:"The classic river walk",description:"Walk the Brooklyn Bridge, then discover the two great suspension bridges from the DUMBO waterfront. The streets and waterfront may be busy; allow time to linger.",steps:["Brooklyn Bridge pedestrian promenade","Brooklyn Bridge Park / Empire Fulton Ferry lawn","Washington Street view of Manhattan Bridge"],link:"https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+Park"},
 river:{title:"Architecture and the East River",description:"Explore the Queensboro Bridge's cantilever geometry, then see it from the waterfront in Long Island City. The view, rather than a fixed route time, is the point of this outing.",steps:["Queensboro Bridge pedestrian path, current DOT guidance","Long Island City waterfront near the bridge","Optional Roosevelt Island perspective, subject to access and transit"],link:"https://www.google.com/maps/search/?api=1&query=Queensboro+Bridge+Long+Island+City+waterfront"},
