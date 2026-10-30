@@ -15,8 +15,128 @@
  const mappedDist=document.getElementById('mapped-distance'),gap=document.getElementById('gap-note');
  const bikePanel=document.getElementById('bike-breakdown'),mapStatus=document.getElementById('map-status');
  const mapFocus=document.getElementById('map-focus'),mapZoomStatus=document.getElementById('map-zoom-status');
+
+ const geoElement=document.getElementById('map-geographic');
+ const geoFrame=document.getElementById('map-viewport');
+ const geoNote=document.getElementById('basemap-note');
+ let geoMap=null,geoLines=null,geoBounds=null,geoTargets=null;
+ const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+ const cartoCredit=osmCredit+' &copy; <a href="https://carto.com/attributions">CARTO</a>';
+ function showGeographic(provider){
+   if(!geoMap)return;
+   geoFrame.classList.add('is-geographic');
+   map.setAttribute('aria-hidden','true');
+   geoElement.setAttribute('aria-hidden','false');
+   geoNote.textContent=provider+' basemap · research overlay, not navigation';
+   geoMap.invalidateSize({animate:false});
+ }
+ function fitGeo(bounds,maxZoom=14){
+   if(geoMap&&bounds?.isValid())geoMap.fitBounds(bounds.pad(.17),{
+     padding:[24,24],animate:false,maxZoom});
+ }
+ function renderGeo(id,overlay){
+   if(!geoMap)return;
+   const L=window.L,route=routes.get(id);
+   geoLines.clearLayers();geoBounds=null;geoTargets=null;
+   geoElement.setAttribute('aria-label',overlay
+     ?'Geographic map with Ontario Trail Network research sections for '+route.name+'. Not a navigation map.'
+     :'Park context only. No mapped trail route or parking location is verified for '+route.name+'.');
+   if(!overlay){
+     const all=[...overlays.values()].flatMap(o=>o.sections.flatMap(p=>p.researchGeometry.coordinates));
+     fitGeo(L.latLngBounds(all.map(p=>[p[1],p[0]])),11);
+     return;
+   }
+   const flip=coord=>[coord[1],coord[0]];
+   const start=overlay.sections[0].researchGeometry.coordinates[0];
+   const end=overlay.sections.at(-1).researchGeometry.coordinates.at(-1);
+   const parking=model.parking.center,vertices=[];
+   overlay.sections.forEach(section=>{
+     const positions=section.researchGeometry.coordinates.map(flip);
+     if(positions.length<2)return;
+     vertices.push(...positions);
+     const bike=section.modeOnMappedTrail==='bike';
+     L.polyline(positions,{color:bike?'#157864':'#b26122',weight:5,opacity:.96,
+       lineCap:'round',lineJoin:'round'}).bindTooltip(
+         section.trail+' · '+(bike?'park-permitted cycling':'walking')+' · research geometry only'
+       ).addTo(geoLines);
+   });
+   const mark=(coord,color,label)=>L.circleMarker(flip(coord),{
+      radius:7,color:'#fff',weight:2,fillColor:color,fillOpacity:1
+    }).bindTooltip(label).addTo(geoLines);
+   mark(start,'#183e36','Mapped section start; parking connector unverified');
+   mark(end,'#b26122','Mapped destination; signed endpoint not independently verified');
+   mark(parking,'#b04432','Approximate parking research point; NOT a navigation waypoint');
+   geoTargets={start:flip(start),destination:flip(end),parking:flip(parking)};
+   geoBounds=L.latLngBounds([...vertices,flip(parking)]);
+   fitGeo(geoBounds);
+ }
+ function initGeo(){
+   if(!window.L||!geoElement)return;
+   const L=window.L;
+   try{
+     geoMap=L.map(geoElement,{scrollWheelZoom:false,zoomControl:true,
+       attributionControl:true,minZoom:7,maxZoom:18,zoomSnap:.5});
+     geoMap.setView([48.43,-88.85],10);
+     geoLines=L.layerGroup().addTo(geoMap);
+     const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+       maxZoom:18,attribution:osmCredit,crossOrigin:true});
+     let active=osm,loadedOSM=0,errorsOSM=0;
+     osm.on('tileload',()=>{loadedOSM++;if(active===osm)showGeographic('OpenStreetMap')});
+     osm.on('tileerror',()=>{
+       if(++errorsOSM>=3&&loadedOSM===0&&active===osm){
+         geoFrame.classList.remove('is-geographic');
+         map.removeAttribute('aria-hidden');
+         geoElement.setAttribute('aria-hidden','true');
+         geoNote.textContent='Map tiles unavailable. Research outline shown instead.';
+       }
+     });
+     osm.addTo(geoMap);
+     fetch('/api/carto-basemap-config',{credentials:'same-origin'})
+       .then(response=>response.ok?response.json():null).then(config=>{
+       if(config?.provider!=='CARTO'||typeof config.key!=='string'||!config.key.trim())return;
+       const url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+
+         encodeURIComponent(config.key.trim());
+       const carto=L.tileLayer(url,{subdomains:'abcd',maxZoom:18,attribution:cartoCredit});
+       let loaded=0,errors=0;
+       carto.on('tileload',()=>{
+         if(++loaded>=2&&active!==carto){
+           active=carto;
+           if(geoMap.hasLayer(osm))geoMap.removeLayer(osm);
+           showGeographic('CARTO Voyager');
+         }
+       });
+       carto.on('tileerror',()=>{
+         if(++errors>=2){
+           if(!geoMap.hasLayer(osm))osm.addTo(geoMap);
+           active=osm;
+           if(geoMap.hasLayer(carto))geoMap.removeLayer(carto);
+           geoNote.textContent='OpenStreetMap fallback · research overlay, not navigation';
+         }
+       });
+       carto.addTo(geoMap);
+     }).catch(()=>{});
+     if(typeof ResizeObserver!=='undefined'){
+       const observer=new ResizeObserver(()=>geoMap?.invalidateSize({animate:false}));
+       observer.observe(geoElement);
+     }
+   }catch{
+     if(geoMap){try{geoMap.remove()}catch{}}
+     geoMap=null;geoLines=null;
+     geoNote.textContent='Basemap unavailable. Research outline shown instead.';
+   }
+ }
  let focusPoints=null;
  function focusMap(mode) {
+   if(geoMap){
+     if(mode==='overview'&&geoBounds)fitGeo(geoBounds);
+     else if(geoTargets?.[mode])geoMap.setView(geoTargets[mode],15,{animate:false});
+     if(geoBounds || mode==='overview'){
+       const names={overview:'Full research outline',start:'Mapped trail start',
+         destination:'Mapped destination',parking:'Approximate parking study point'};
+       mapZoomStatus.textContent=(names[mode]||'Park context')+' · not for navigation';
+       return;
+     }
+   }
    const target=focusPoints?.[mode];
    if(!target){map.setAttribute('viewBox','0 0 820 610');mapZoomStatus.textContent='Overview · not for navigation';return}
    const detail=mode!=='overview',zoom=detail?2.5:1;
@@ -113,6 +233,7 @@
   mapFocus.value='overview';
   map.setAttribute('viewBox','0 0 820 610');
   mapFocus.disabled=!overlay;
+  renderGeo(id,overlay);
   focusMap('overview');
   if(!overlay){
     mapTitle.textContent=route.name+' · reference unavailable';
@@ -175,5 +296,6 @@
    document.getElementById('map-section').scrollIntoView({behavior:
      window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
  });
+ initGeo();
  updateDecisions();drawRoute(currentId);
 })();
