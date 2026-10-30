@@ -45,7 +45,16 @@ function check(ok,msg){if(!ok)throw Error(msg);}
     check(await page.locator('#journey-atlas article.ja-card:visible').count()===3,size.name+' reset');
     await page.locator('#journey-atlas [data-ja-more]').click();
     check(await page.locator('#journey-atlas article.ja-card:visible').count()===10,size.name+' reveal all');
-    check(await page.locator('#journey-atlas figure.ja-photo figcaption').count()===6,size.name+' photo credits');
+    check(await page.locator('#journey-atlas figure.ja-photo figcaption').count()===10,size.name+' ten photo credits');
+    const imgs=page.locator('#journey-atlas figure.ja-photo img');
+    check(await imgs.count()===10,size.name+' photographs missing');
+    for(let i=0;i<10;i++){
+      const el=imgs.nth(i);
+      await el.scrollIntoViewIfNeeded({timeout:20000});
+      await page.waitForFunction(index=>{const img=document.querySelectorAll('#journey-atlas figure.ja-photo img')[index];return img&&img.complete;},i,{timeout:25000});
+      const state=await el.evaluate(img=>({url:img.currentSrc,width:img.naturalWidth}));
+      check(state.width>0,size.name+' photograph '+i+' failed to load '+state.url);
+    }
     await page.locator('#journey-atlas [data-ja-add-stop="15"]').click();
     await page.waitForFunction(()=>document.querySelector('#stop-15 .add-btn')?.getAttribute('aria-pressed')==='true',null,{timeout:12000});
     const filename=size.name+'-atlas.png';
