@@ -1,0 +1,42 @@
+name: Journey Atlas Chromium QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'public/assets/journey-atlas-v1.*'
+      - 'design-systems/journey-atlas-v1/**'
+      - 'scripts/verify-journey-atlas-browser.cjs'
+      - '.github/workflows/journey-atlas-browser-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unit tests
+        run: node --test tests/journey-atlas-standard.test.js
+      - name: Install isolated Playwright
+        run: |
+          mkdir -p /tmp/atlas-playwright
+          npm install --prefix /tmp/atlas-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/atlas-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Mobile desktop and no-JS Chromium QA
+        run: node scripts/verify-journey-atlas-browser.cjs
+      - name: Keep QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: journey-atlas-browser-qa
+          path: artifacts/journey-atlas
+          if-no-files-found: warn
+          retention-days: 7
