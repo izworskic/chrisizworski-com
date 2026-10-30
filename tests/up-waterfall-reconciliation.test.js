@@ -624,11 +624,11 @@ test('Morgan Falls public route uses NTN South parking and designated crossing, 
 });
 
 
-test('Batch 14 eight source-reviewed GIS records stay unindexed with distinct route and safety gates',()=> {
+test('remaining Batch 14 five source-reviewed GIS records stay unindexed with distinct route and safety gates',()=> {
  const refs=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
  const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries;
  const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8')).candidates;
- for(const oid of [135,160,45,46,91,95,96,88]){
+ for(const oid of [135,160,46,91,88]){
   const g=ledger.candidates.find(x=>x.gisObjectId===oid);
   const a=source.find(x=>x.source==='mi-state-gis'&&x.sourceId===oid);
   const r=refs.find(x=>x.gisObjectId===oid);
