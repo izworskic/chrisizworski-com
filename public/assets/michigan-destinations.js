@@ -9,6 +9,23 @@
   const activityEl = document.getElementById('activity');
   const regionEl = document.getElementById('region');
   const cards = [...document.querySelectorAll('.destination')];
+  // The preferred Torch Lake Commons original occasionally fails at the CDN.
+  // On failure use a second photograph by the same author (Hgjudd), also
+  // CC BY-SA 3.0, and update attribution and alt text to match the new image.
+  document.querySelectorAll('img[data-fallback-src]').forEach(img => {
+    let usedFallback = false;
+    const switchImage = () => {
+      if (usedFallback) return;
+      usedFallback = true;
+      img.alt = img.dataset.fallbackAlt || img.alt;
+      const sourceLink = img.closest('figure')?.querySelector('.photo-credit a');
+      if (sourceLink && img.dataset.fallbackFile) sourceLink.href = img.dataset.fallbackFile;
+      img.src = img.dataset.fallbackSrc;
+    };
+    img.addEventListener('error', switchImage, {once:true});
+    if (img.complete && !img.naturalWidth) switchImage();
+  });
+
   const resultTitle = document.getElementById('result-title');
   const resultContext = document.getElementById('result-context');
   const empty = document.getElementById('empty');
