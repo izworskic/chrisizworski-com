@@ -123,3 +123,14 @@ test('Leaflet stylesheet is local and map pixel dimensions adapt after layout sh
   assert.match(js, /ResizeObserver/);
   assert.match(js, /invalidateSize/);
 });
+
+test('Torch Lake photograph degrades to licensed alternate without a blank card', () => {
+  const fallback = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Michigan%27s_Torch_Lake.jpg/960px-Michigan%27s_Torch_Lake.jpg';
+  const originals = [...html.matchAll(/data-fallback-src="([^"]+)"/g)];
+  assert.equal(originals.length, 2, 'both the Torch Lake hero and destination card need a fallback');
+  originals.forEach(match=>assert.equal(match[1], fallback));
+  assert.equal((html.match(/data-fallback-file="https:\/\/commons\.wikimedia\.org\/wiki\/File:Michigan%27s_Torch_Lake\.jpg"/g)||[]).length, 2);
+  assert.match(js, /img\[data-fallback-src\]/);
+  assert.match(js, /img\.addEventListener\('error', switchImage/);
+  assert.match(js, /sourceLink\.href = img\.dataset\.fallbackFile/);
+});
