@@ -249,7 +249,7 @@ test('NPS evidence maps exactly 21 documented dock-to-trail-to-site relationship
  assert.equal((html.match(/data-path-select="/g)||[]).length,21);
  assert.ok(html.includes('id="atlas-connection-readout"'));
  assert.ok(html.includes('id="trip-selected-path"'));
- assert.ok(html.includes('NPS relationship')||html.includes('NPS source'));
+ assert.ok(html.includes('NPS primary evidence'));
  for(const p of x.rows){
   const island=atlas.islands.find(a=>a.id===p.island);
   assert.ok(island,'Unknown island '+p.id);
