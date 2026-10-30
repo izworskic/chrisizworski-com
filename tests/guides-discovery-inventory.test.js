@@ -12,7 +12,7 @@ test('guide directory links published standalone guides and major guide collecti
     '/lake-superior-provincial-park/', '/sleeping-giant-provincial-park/', '/apostle-islands/', '/upper-peninsula-waterfalls/',
     '/mackinac-island/ferry-planner/', '/au-sable-river/', '/manistee-river-map/',
     '/michigan-paddling/manistee-river/', '/michigan-trout-streams/', '/great-lakes-fish/',
-    '/great-lakes-shipwrecks/', '/great-lakes-beaches/', '/michigan-boat-launches/',
+    '/great-lakes-shipwrecks/', '/great-lakes-shipwreck-viewing-field-guide/', '/great-lakes-beaches/', '/michigan-boat-launches/',
     '/great-lakes-ferries/', '/niagara-falls-today/', '/duluth-canal-park/',
     '/great-lakes-ship-watching-spots/', '/great-lakes-lighthouses/', '/michigan-paddling/',
     '/seed-starting-guide/', '/michigan-native-plants/', '/michigan-last-spring-freeze/',
