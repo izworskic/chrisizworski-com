@@ -13,7 +13,7 @@ test('Prepared employment start is corrected across the identity pages', () => {
     'public/projects/index.html'
   ]) {
     const html = read(file);
-    assert.match(html, /(?:December|Dec) 2025/, file);
+    assert.match(html, /(?:December|Dec)(?:\s+\d+,)?\s+2025/, file);
     assert.doesNotMatch(html, /(?:joined|began|started) Prepared (?:as a Solutions Consultant )?in October 2025|Prepared career profile reports that he joined in October 2025|Solutions Consultant &middot; October 2025/i, file);
     assert.doesNotMatch(html, /2026 start date is <strong>NOT REPORTED/i, file);
   }
