@@ -46,7 +46,7 @@ async function main(){
      await page.route('**/tile.openstreetmap.org/**',route=>{
        tileRequests++;return route.fulfill({status:200,contentType:'image/png',body:tile});
      });
-     await page.route('**/basemaps.cartocdn.com/**',route=>{
+     await page.route('**/*basemaps.cartocdn.com/**',route=>{
        const req=new URL(route.request().url());
        must(req.searchParams.get('key')==='public-test-only-key','CARTO request missing configured public key');
        cartoRequests++;return route.fulfill({status:200,contentType:'image/png',body:tile});
