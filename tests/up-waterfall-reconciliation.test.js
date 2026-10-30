@@ -784,3 +784,21 @@ test('Batch 18 Houghton Phase-1 and Power House public visitor paths preserve di
  assert.match(ph,/not a.*parking/i);
  for(const oid of [160,91]){const row=ledger.candidates.find(x=>x.gisObjectId===oid);assert.equal(row.curatedId,null);assert.equal(row.publicationEligible,false);assert.ok(queue.candidates.some(x=>x.gisObjectId===oid));}
 });
+
+test('Dead River operator evidence must never imply a powerhouse visitor lot or dam gate access',()=>{
+ const g=ledger.candidates.find(x=>x.gisObjectId===160);
+ const review=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records.find(x=>x.gisObjectId===160);
+ const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===160);
+ assert.ok(g&&review&&source);
+ assert.equal(g.curatedId,null);
+ assert.equal(g.publicationEligible,false);
+ assert.equal(review.publicationEligible,false);
+ assert.equal(g.accessRouteAudit.outcome,'not-cleared');
+ assert.equal(review.routeAudit.segments.length,6);
+ assert.ok(review.routeAudit.segments.some(x=>x.label==='Visitor parking'&&x.status==='not-cleared'));
+ assert.match(review.summary,/Marquette Board of Light & Power/i);
+ assert.match(review.summary,/Neither is a site-specific public parking/i);
+ assert.match(review.guidance,/NOT a verified signed falls route/);
+ assert.ok(source.nextAction.includes('FERC Forestville'));
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/dead-river-falls/'));
+});

@@ -3061,53 +3061,56 @@
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "evidenceReviewed": "2026-10-30",
-      "disposition": "Forestville-powerhouse-parking-touring-guide-but-current-utility-permission-not-established",
+      "disposition": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
       "publicationEligible": false,
-      "sourceNotes": "Marquette Township official approved recreation plan names Dead River Falls in Forestville and confirms a DIFFERENT state-owned Forestville Access Site for boating. Independent Falls River specialist places hiking path beside old power station and parking near outhouse, but current utility ownership, public parking permission, walk past service gate, and posted hiking rule are unverified. State-owned boat access is not automatic hiking access to falls.",
-      "outstandingGate": "Find authoritative 2026 powerplant operator or land manager statement confirming lawful public use of powerhouse parking, gate-side pedestrian corridor, and designated falls path; do not substitute state boat-launch or NTN trail lot.",
+      "sourceNotes": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
+      "outstandingGate": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
       "sourceLinks": [
+        "https://mblp.org/",
+        "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf",
         "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
         "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
-        "https://www.noquetrails.org/north-trails"
+        "https://www.noquetrails.org/north-trails",
+        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
         "segments": [
           {
-            "label": "Identity",
+            "label": "Waterfall geography",
             "status": "verified-geography",
-            "finding": "GIS #160 identifies named Dead River waterfalls near Forestville",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "Named Dead River Falls natural GIS #160; not car parking or an asserted maintained route.",
+            "source": "Michigan state GIS Waterfalls MapServer/7"
           },
           {
-            "label": "Jurisdiction",
-            "status": "documented-not-live",
-            "finding": "Township plan identifies Dead River Falls as local recreation, not utility land title",
-            "source": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+            "label": "Utility/manager",
+            "status": "verified-geography",
+            "finding": "MBLP operates hydro facilities on Dead River; Forestville FERC Part 12D safety review documented in 2023 meeting, but no visitor policy found.",
+            "source": "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf"
           },
           {
-            "label": "Approach road",
+            "label": "Road approach",
             "status": "documented-not-live",
-            "finding": "Tourism publishes Wright Street to Forestville Road, not a GIS-pin vehicle route",
-            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+            "finding": "Regional guides and Marquette township describe Forestville Road and falls visitor interest, not current utility gate/road permissions.",
+            "source": "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
           },
           {
             "label": "Visitor parking",
             "status": "not-cleared",
-            "finding": "Tourism describes right-of-powerhouse parking; current legal use/service area must be confirmed",
-            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
+            "finding": "Specialist guide describes parking beside old power station. Distinct state-owned Forestville boat access and NTN trailheads DO NOT establish power-station lot rights.",
+            "source": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
           },
           {
-            "label": "Walking line",
-            "status": "documented-not-live",
-            "finding": "Tourism says gravel road by gate, marked stumps, steep descent along river; not a surveyed trail",
-            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/2022_TravMarq_Publication_ReviewV7_dragged__6473b902-4bb2-4721-9223-6dc8198a807b.pdf"
-          },
-          {
-            "label": "Current conditions",
+            "label": "Walking path",
             "status": "not-cleared",
-            "finding": "Utility operations, gate permission, riverbank hazards and winter-road maintenance not current",
-            "source": "https://www.noquetrails.org/north-trails"
+            "finding": "Signed historic gorge trail and service road described by independent guides; current power-operator trail authorization, maintenance and closures not established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/"
+          },
+          {
+            "label": "Live conditions",
+            "status": "not-cleared",
+            "finding": "2026 gate, water release, terrain, station works and trail closure status unknown; no winter or river-crossing directions.",
+            "source": "https://mblp.org/"
           }
         ]
       }

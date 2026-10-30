@@ -3078,21 +3078,24 @@
       "possibleCuratedIds": [],
       "publication": "research-only",
       "access": "route-or-permission-not-cleared",
-      "landManager": null,
+      "landManager": "MBLP Dead River hydro operator identified; falls-trail property/permission not verified",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-30",
-      "nextAction": "Find authoritative 2026 powerplant operator or land manager statement confirming lawful public use of powerhouse parking, gate-side pedestrian corridor, and designated falls path; do not substitute state boat-launch or NTN trail lot.",
+      "nextAction": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
       "batch": "county-marquette",
       "reviewed": "2026-10-30",
-      "reviewBatch": "18",
-      "classification": "Forestville-powerhouse-parking-touring-guide-but-current-utility-permission-not-established",
-      "accessAssessment": "Marquette Township official approved recreation plan names Dead River Falls in Forestville and confirms a DIFFERENT state-owned Forestville Access Site for boating. Independent Falls River specialist places hiking path beside old power station and parking near outhouse, but current utility ownership, public parking permission, walk past service gate, and posted hiking rule are unverified. State-owned boat access is not automatic hiking access to falls.",
+      "reviewBatch": "19",
+      "classification": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
+      "accessAssessment": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
       "evidence": [
+        "https://mblp.org/",
+        "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf",
         "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
         "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
-        "https://www.noquetrails.org/north-trails"
+        "https://www.noquetrails.org/north-trails",
+        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
       ]
     },
     {
@@ -4239,5 +4242,5 @@
       ]
     }
   ],
-  "lastBatch": "18"
+  "lastBatch": "19"
 }
