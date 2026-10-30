@@ -245,3 +245,27 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .west-corridor-links{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:12px}
 .west-corridor-links a{font-size:.76rem;text-decoration:underline;color:#205f4e;font-weight:650}
 @media(max-width:600px){.west-corridor-field-note{padding:16px}.west-corridor-field-note h4{font-size:1.22rem}}
+
+/* 2026-10-30: evidence is separate from navigation. Source queries cannot certify access. */
+.park-access-evidence{background:linear-gradient(145deg,#e6ede5,#f5f2e7);border:1px solid var(--border);border-radius:18px;padding:22px 24px;margin:18px 0 28px;color:var(--ink)}
+.park-access-evidence .access-evidence-intro h4{font:550 clamp(1.45rem,2.3vw,2.05rem)/1.16 "Fraunces",Georgia,serif;margin:6px 0 10px}
+.park-access-evidence .access-evidence-intro>p:last-child{max-width:72ch;margin:0 0 18px}
+.access-evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.access-evidence-tile{min-width:0;background:var(--cream);padding:20px;border:1px solid var(--border);border-radius:13px}
+.access-evidence-tile[data-confidence=restricted]{border-left:5px solid #a54d37}
+.access-evidence-tile[data-confidence=uncertain]{border-left:5px solid #a77938}
+.access-evidence-tile[data-check=partial]{border-left:5px solid #a77938}
+.access-evidence-tile .access-kicker{font-size:.72rem;font-weight:750;text-transform:uppercase;letter-spacing:.09em;color:var(--pine);margin:0 0 4px}
+.access-evidence-tile h5{font:650 1.06rem/1.35 "DM Sans",sans-serif;color:var(--dark);margin:0 0 10px}
+.access-evidence-tile p{font-size:.88rem;line-height:1.55;margin:0 0 12px}
+.access-evidence-tile a{font-size:.84rem;font-weight:650;overflow-wrap:anywhere}
+.access-evidence-tile button{display:inline-flex;border:1px solid var(--pine);color:var(--pine);background:transparent;padding:8px 14px;border-radius:9px;font:650 .84rem "DM Sans",sans-serif;cursor:pointer;min-height:40px}
+.access-evidence-tile button:hover{background:#deeee4}
+.access-evidence-tile button:focus-visible{outline:3px solid #c98341;outline-offset:2px}
+.access-evidence-tile .access-source-date{font-size:.78rem;color:#46675a}
+.access-evidence-links{margin-top:14px!important}
+.park-access-evidence .access-evidence-guard{border-top:1px solid var(--border);padding-top:14px;font-size:.83rem;line-height:1.6;margin:16px 0 0}
+.porkies-access-truth{border-left:3px solid #9bbbaa;padding:8px 11px;background:#f1f6ee;margin:10px 0 4px;font-size:.78rem;line-height:1.55;color:#274b3d}
+.porkies-access-truth[data-match=unverified]{border-color:#b99453;background:#fcf7ec}
+.porkies-access-truth a{font-weight:700}
+@media(max-width:740px){.park-access-evidence{padding:15px 14px;margin:16px 0 20px}.access-evidence-grid{grid-template-columns:1fr}.access-evidence-tile{padding:16px}}
