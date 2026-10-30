@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 56,
-    "pending": 105,
-    "curatedTotal": 61,
+    "exactIdMatched": 57,
+    "pending": 104,
+    "curatedTotal": 62,
     "curatedNoMatchingGIS": 9
   },
   "candidates": [
@@ -1339,7 +1339,16 @@
       "parkingVerified": null,
       "publicAccessVerified": null,
       "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-30",
+      "disposition": "upper-silver-feature-12km-geographic-name-collision-with-lower-picnic-drop",
+      "sourceNotes": "GIS Upper Silver Falls #68 is at 46.681143,-88.329766, roughly 12 km south of Lower Silver Falls #110 46.792674,-88.335692. Specialist field account names an upper drop only ~0.25 miles upstream from lower picnic falls. No valid exact GIS match for that informal upper chute; do NOT attach #68 to lower Silver visitor guide or send visitors on upstream riverbank routes.",
+      "outstandingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/",
+        "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml"
+      ]
     },
     {
       "gisObjectId": 69,
@@ -2161,14 +2170,37 @@
       "lat": 46.792674,
       "lng": -88.335692,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "lower-silver-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "Lower Silver Falls public picnic/visitor area described by Baraga County tourism; exact owner/operating manager not verified",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-30",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-30",
+      "disposition": "lower-silver-picnic-road-end-and-100ft-footpath-published-county-tourism",
+      "publicationEligible": true,
+      "sourceNotes": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified.",
+      "outstandingGate": "Verify site operating manager/deed and current road maintenance or closures. Guide is lower falls picnic area ONLY; no GIS #68 alias, upstream path/ford or mapped parking coordinate.",
+      "sourceLinks": [
+        "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+        "https://www.baragacountytourism.org/attractions",
+        "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/",
+        "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml",
+        "https://villageofbaraga.com/PDF/Receation-Plan.pdf",
+        "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "managerSource": "https://www.baragacountytourism.org/attractions",
+        "managerTitleEstablished": false,
+        "roadArrivalSource": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+        "parking": "From L’Anse take Skanee Road northeast toward Huron Bay, then turn onto signed Falls Road / Silver Falls Road. The Baraga County waterfall visitor brochure describes public picnic viewing at the road's end; a separate visitor field account describes the left fork of the Falls Road approach and a parking clearing with an outhouse. Road length and fork description differ between older sources; follow today's signs and legal parking, not a waterfall GIS coordinate. Current road opening, winter plowing and park management are unverified.",
+        "trail": "From the designated lower-falls picnic parking, look for the first lower Silver River cascade and follow the short established bank path approximately 100 feet to the second lower chute, as described in the Baraga County tourist brochure. Wet basalt rock and the deep plunge pool require care. This is NOT the quarter-mile unmarked upstream path toward a separate upper series; do not use a river ford or scramble to reach it.",
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false
+      }
     },
     {
       "gisObjectId": 112,
@@ -2302,8 +2334,63 @@
       "landManager": null,
       "parkingVerified": null,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-10-30",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-30",
+      "disposition": "two-conflicting-county-tourist-approaches-skanee-bridge-versus-historic-arvon-quarry",
+      "publicationEligible": false,
+      "sourceNotes": "UPtravel Michigan visitor bureau and Lake Superior Circle Tour describe the Skanee Road bridge, a small turnout/two-track east of the bridge and a roughly half-mile rough east-bank approach. The older Baraga County waterfall brochure instead sends visitors 3.3 miles south on Arvon Road to a slate quarry and calls that Slate River Falls; this is geometrically a separate upstream approach near Quartzite/Black Slate, not proven to reach GIS #119. An independent gorge guide reports river fording and wet rock climbing, which are not authorized safe access directions. Signed parking legality, trail landowner and current condition not verified.",
+      "outstandingGate": "Resolve the 3.3-mile Arvon quarry vs Skanee Road bridge routes through an authoritative trail/parcel map and roadside-turnout management; identify landowner access agreement, signed east-bank footpath and safe non-fording viewpoint before indexable guide. Historic brochures are not present road clearance.",
+      "sourceLinks": [
+        "https://www.uptravel.com/listing/slate-river-falls/3708/",
+        "https://lakesuperiorcircletour.info/location/slate-river-falls/",
+        "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+        "https://www.waterfallsofthekeweenaw.com/slate-river/slate-river-falls/",
+        "https://travelthemitten.com/waterfalls/slate-river-falls-baraga-county/",
+        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Boards/NRC/NRC-Archive/Sept_12_24_Approved_Orders.pdf?hash=89C717EED6A6432BE70647E56116F69D&rev=09432b3c080b439698891fd593ef6d40",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Natural waterfall identity",
+            "status": "verified-geography",
+            "finding": "GIS #119 46.831054,-88.252067 agrees with Slate River Falls references 46.83089,-88.25177; map marker is not parking.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager and parcel",
+            "status": "not-cleared",
+            "finding": "Tourist bureaus promote a visit but landowner, public trail easement and allowed bank route not established.",
+            "source": "https://www.uptravel.com/listing/slate-river-falls/3708/"
+          },
+          {
+            "label": "Road approaches",
+            "status": "conflicting",
+            "finding": "Current UPtravel/Circle Tour: Skanee Road bridge; older county brochure: Arvon Road 3.3 miles to quarry. Do not merge them or instruct a crossing between unrelated sites.",
+            "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf"
+          },
+          {
+            "label": "Legal visitor parking",
+            "status": "not-cleared",
+            "finding": "Regional guide mentions informal two-track turnout east of Skanee bridge, no authoritative signed parking or permission/closure information.",
+            "source": "https://lakesuperiorcircletour.info/location/slate-river-falls/"
+          },
+          {
+            "label": "Walking corridor",
+            "status": "not-cleared",
+            "finding": "Rough east-bank path described by tourism; independent field logs include dangerous wet fording/rock climb. No certified family-friendly trail, avoid fords and cliff descent.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/slate-river-falls/"
+          },
+          {
+            "label": "Live conditions",
+            "status": "not-cleared",
+            "finding": "No current bank erosion, flooding, winter road or parking-closure status.",
+            "source": "https://www.uptravel.com/listing/slate-river-falls/3708/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 120,

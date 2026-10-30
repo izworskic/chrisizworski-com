@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 61,
-    "matchedGisFeatures": 56,
-    "pendingGisFeatures": 105
+    "curatedDestinations": 62,
+    "matchedGisFeatures": 57,
+    "pendingGisFeatures": 104
   },
   "batchSize": 8,
   "batches": [
@@ -18,20 +18,20 @@
         46,
         192,
         213,
+        119,
         91,
-        190,
-        191
+        190
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        110,
-        119,
+        191,
         154,
         215,
         150,
         151,
+        68,
         8,
         38
       ]
@@ -52,136 +52,130 @@
     {
       "batchNumber": 4,
       "candidates": [
-        68,
         83,
         99,
         103,
         105,
         107,
         114,
-        121
+        121,
+        123
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        123,
         126,
         20,
         24,
         25,
         30,
         37,
-        39
+        39,
+        40
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        40,
         48,
         58,
         63,
         65,
         69,
         70,
-        74
+        74,
+        75
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        75,
         79,
         86,
         102,
         104,
         112,
         113,
-        29
+        29,
+        42
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        42,
         80,
         85,
         129,
         15,
         17,
         144,
-        18
+        18,
+        116
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        116,
         127,
         148,
         153,
         157,
         162,
         163,
-        169
+        169,
+        170
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        170,
         172,
         173,
         175,
         180,
         181,
         183,
-        184
+        184,
+        185
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        185,
         186,
         187,
         22,
         28,
         54,
         57,
-        60
+        60,
+        61
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        61,
         62,
         72,
         84,
         106,
         122,
         51,
-        120
+        120,
+        136
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        136,
         137,
         139,
         140,
         149,
         152,
         176,
-        177
-      ]
-    },
-    {
-      "batchNumber": 14,
-      "candidates": [
+        177,
         23
       ]
     }
@@ -263,6 +257,21 @@
       "blockingGate": "Obtain current MDOT road safety/designated parking and pedestrian access confirmation; municipal planning documents currently state no safe parking. Remain nonindexable; geographic point only."
     },
     {
+      "gisObjectId": 119,
+      "name": "Slate River Falls",
+      "county": "BARAGA",
+      "river": "SLATE RIVER",
+      "lat": 46.831054,
+      "lng": -88.252067,
+      "cluster": "BARAGA / SLATE RIVER",
+      "priorityScore": 96,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 7,
+      "blockingGate": "Resolve the 3.3-mile Arvon quarry vs Skanee Road bridge routes through an authoritative trail/parcel map and roadside-turnout management; identify landowner access agreement, signed east-bank footpath and safe non-fording viewpoint before indexable guide. Historic brochures are not present road clearance."
+    },
+    {
       "gisObjectId": 91,
       "name": "Upper Falls",
       "county": "BARAGA",
@@ -301,36 +310,6 @@
       "lng": -87.050041,
       "cluster": "ALGER / WHITEFISH RIVER",
       "priorityScore": 91,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 110,
-      "name": "Silver Falls",
-      "county": "BARAGA",
-      "river": "SILVER RIVER",
-      "lat": 46.792674,
-      "lng": -88.335692,
-      "cluster": "BARAGA / SILVER RIVER",
-      "priorityScore": 85,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 119,
-      "name": "Slate River Falls",
-      "county": "BARAGA",
-      "river": "SLATE RIVER",
-      "lat": 46.831054,
-      "lng": -88.252067,
-      "cluster": "BARAGA / SLATE RIVER",
-      "priorityScore": 84,
       "priorityReason": "Named priority for authoritative source review",
       "publicationEligible": false,
       "reviewStatus": "needs-source-discovery",
@@ -396,6 +375,21 @@
       "reviewStatus": "needs-source-discovery",
       "sourceCount": 0,
       "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
+    },
+    {
+      "gisObjectId": 68,
+      "name": "Upper Silver Falls",
+      "county": "BARAGA",
+      "river": "SILVER RIVER",
+      "lat": 46.681143,
+      "lng": -88.329766,
+      "cluster": "BARAGA / SILVER RIVER",
+      "priorityScore": 12,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching."
     },
     {
       "gisObjectId": 8,
@@ -540,21 +534,6 @@
       "lat": 46.64893,
       "lng": -88.51222,
       "cluster": "BARAGA / OGEMAW CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 68,
-      "name": "Upper Silver Falls",
-      "county": "BARAGA",
-      "river": "SILVER RIVER",
-      "lat": 46.681143,
-      "lng": -88.329766,
-      "cluster": "BARAGA / SILVER RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

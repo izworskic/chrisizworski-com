@@ -3448,6 +3448,60 @@
           "description": "USGS old powerplant stream station is close to GIS #88; American Whitewater separately georeferences the named natural waterfall, not parking."
         }
       }
+    },
+    {
+      "id": "lower-silver-falls",
+      "name": "Lower Silver Falls",
+      "region": "Western U.P.",
+      "place": "Silver River · Falls Road · near L’Anse",
+      "lat": 46.792674,
+      "lng": -88.335692,
+      "gisObjectId": 110,
+      "level": "easy",
+      "minutes": "20–40 min",
+      "walk": "From the designated lower-falls picnic parking, look for the first lower Silver River cascade and follow the short established bank path approximately 100 feet to the second lower chute, as described in the Baraga County tourist brochure. Wet basalt rock and the deep plunge pool require care. This is NOT the quarter-mile unmarked upstream path toward a separate upper series; do not use a river ford or scramble to reach it.",
+      "best": "Late spring to fall with dry road conditions and running water; avoid high-water and icy ledges.",
+      "access": "Baraga County's waterfall visitor brochure explicitly advertises a lower Silver River falls picnic/viewing stop reached via Falls Road off Skanee Road and a 100-foot footpath between nearby lower drops. An independent field guide corroborates a parking clearing and visitor paths. County tourism is the public-access evidence, not a deed or statement that the site is a county-operated park.",
+      "status": "verify",
+      "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside picnic-area waterfall and short footpath",
+      "parking": "From L’Anse take Skanee Road northeast toward Huron Bay, then turn onto signed Falls Road / Silver Falls Road. The Baraga County waterfall visitor brochure describes public picnic viewing at the road's end; a separate visitor field account describes the left fork of the Falls Road approach and a parking clearing with an outhouse. Road length and fork description differ between older sources; follow today's signs and legal parking, not a waterfall GIS coordinate. Current road opening, winter plowing and park management are unverified.",
+      "feature": "Two tight chutes cut through dark basalt beneath tall pines, close enough for a short visit without a backcountry ascent.",
+      "decision": "Choose the lower, roadside picnic stop. Don't follow the rough quarter-mile upriver route or enter the deep pool; this guide is scoped only to the publicly described lower viewing paths.",
+      "further": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified.",
+      "manager": "Lower Silver Falls public picnic/visitor area described by Baraga County tourism; exact owner/operating manager not verified",
+      "sourceReviewed": "2026-10-30",
+      "publication": "verified-access-guide",
+      "accessConfidence": "county-tourism-published-lower-visitor-area-and-independent-parking-walk-corroboration-manager-title-unconfirmed",
+      "winterRoad": "The public tourist sources are not winter-road reports. Falls Road/side spurs may be unplowed or impassable; do not infer winter driving access. Falls and pool ice may be unstable.",
+      "verification": {
+        "landManager": {
+          "verified": false,
+          "source": "https://www.baragacountytourism.org/attractions",
+          "description": "Baraga County tourism publishes this as a visitor attraction, not an official park ownership or operating-management statement."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+          "description": "Baraga County tourism specifically endorses a lower Silver River picnic waterfall and short visitor footpath."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/",
+          "description": "Field visitor notes describe a parking area and outhouse at the lower falls fork, not certified GPS coordinates or road clearance."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+          "description": "Published lower-site footpath of about 100 feet between lower drops, NOT upstream rugged quarter-mile trek."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml",
+          "description": "Independent lower Silver Falls coordinate 46.79355,-88.33650 broadly aligns with state GIS #110, not upper feature #68."
+        }
+      }
     }
   ]
 }

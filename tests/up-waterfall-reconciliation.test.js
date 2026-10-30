@@ -802,3 +802,43 @@ test('Dead River operator evidence must never imply a powerhouse visitor lot or 
  assert.ok(source.nextAction.includes('FERC Forestville'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/dead-river-falls/'));
 });
+
+test('Batch 20 Lower Silver Falls scope is lower picnic drop #110, not distant Upper Silver #68',()=>{
+ const guide=curated.waterfalls.find(x=>x.id==='lower-silver-falls');
+ const lower=ledger.candidates.find(x=>x.gisObjectId===110);
+ const upper=ledger.candidates.find(x=>x.gisObjectId===68);
+ const slate=ledger.candidates.find(x=>x.gisObjectId===119);
+ const data=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+ const q=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const audits=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8'));
+ const page=fs.readFileSync('public/upper-peninsula-waterfalls/lower-silver-falls/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ assert.ok(guide&&lower&&upper&&slate);
+ assert.equal(guide.gisObjectId,110);
+ assert.equal(guide.publication,'verified-access-guide');
+ assert.equal(guide.verification.landManager.verified,false,'tourist promotion is not title or operating authority');
+ assert.equal(lower.curatedId,guide.id);
+ assert.equal(lower.visitorRouteEvidence.navigationToGisPointAllowed,false);
+ assert.equal(lower.visitorRouteEvidence.managerTitleEstablished,false);
+ assert.equal(upper.curatedId,null);
+ assert.equal(slate.curatedId,null);
+ assert.equal(slate.publicationEligible,false);
+ assert.equal(slate.accessRouteAudit.outcome,'not-cleared');
+ assert.ok(slate.sourceNotes.includes('Arvon Road'));
+ assert.ok(slate.sourceNotes.includes('Skanee Road'));
+ assert.ok(audits.records.some(x=>x.gisObjectId===68));
+ assert.ok(audits.records.some(x=>x.gisObjectId===119));
+ assert.ok(q.candidates.some(x=>x.gisObjectId===68));
+ assert.ok(q.candidates.some(x=>x.gisObjectId===119));
+ assert.ok(!q.candidates.some(x=>x.gisObjectId===110));
+ assert.ok(data.entries.some(x=>x.source==='mi-state-gis'&&x.sourceId===110&&x.curatedId===guide.id));
+ assert.match(page,/100 feet/i);
+ assert.match(page,/quarter-mile/i);
+ assert.match(page,/12 km/i);
+ assert.match(page,/manager.*unresolved/i);
+ assert.match(page,/current opening and road conditions are unverified/i);
+ assert.ok(!page.includes('data-parking-lat='));
+ assert.match(hub,/data-id="lower-silver-falls" data-gis-oid="110"/);
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/lower-silver-falls/'));
+ for(const axis of ['landManager','publicAccess','parking','trail','location']){assert.ok(page.includes(guide.verification[axis].source));}
+});
