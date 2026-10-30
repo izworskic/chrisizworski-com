@@ -134,7 +134,7 @@ if(tripDate&&dayDifference(tripDate,today())<0){dateNote.textContent+=' The plan
 if(tripDate&&Number(tripDate.slice(0,4))>2026&&transport==='scheduled'){dateNote.textContent+=' A future-season operator schedule has NOT been verified.';}
 lastBrief=[
 'Apostle Islands trip logistics — research reviewed October 27, 2026',
-heading.textContent,'Proposed dock: '+(document.getElementById('trip-selected-dock')?.textContent||'No dock selected'), 'Travel date: '+(tripDate||'not selected'),'Transport: '+mode.selectedOptions[0].text,
+heading.textContent,'Proposed NPS island path: '+(document.getElementById('trip-selected-path')?.textContent||'No trail sequence selected'),'Proposed dock: '+(document.getElementById('trip-selected-dock')?.textContent||'No dock selected'), 'Travel date: '+(tripDate||'not selected'),'Transport: '+mode.selectedOptions[0].text,
 'Status: '+status.textContent,summary.textContent,dateNote.textContent,
 ...([...steps.children].map((n,i)=>(i+1)+'. '+n.textContent)),
 'Official source: '+source.conditions,'NPS permit rules: '+source.permit,
