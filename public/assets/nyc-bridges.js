@@ -27,8 +27,21 @@ function startMap(){
  try{
  map=L.map(el,{scrollWheelZoom:false,attributionControl:true}).setView([40.773,-73.968],11);
  var tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'});
- tiles.addTo(map);
+ tiles.addTo(map);el.dataset.tiles="osm";
  var errors=0,loaded=0;tiles.on("tileload",function(){loaded++});tiles.on("tileerror",function(){errors++;if(errors>=3&&loaded===0&&status){status.prepend(document.createTextNode("Map imagery could not load. Use the bridge links or open the full city map. "))}});
+ // The existing same-origin endpoint provides a publishable CARTO key; OSM stays
+ // visible unless a keyed CARTO layer has actually loaded raster tiles.
+ fetch("/api/carto-basemap-config",{credentials:"same-origin"}).then(function(res){return res.ok?res.json():null}).then(function(conf){
+  if(!conf||conf.provider!=="CARTO"||typeof conf.key!=="string"||!conf.key.trim())return;
+  var uri="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key="+encodeURIComponent(conf.key.trim());
+  var carto=L.tileLayer(uri,{subdomains:"abcd",maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
+  var gotTile=false,failed=0;
+  carto.on("tileload",function(){gotTile=true});
+  carto.on("tileerror",function(){failed++;if(failed>=3&&map.hasLayer(carto)){map.removeLayer(carto);el.dataset.tiles="osm-fallback"}});
+  carto.on("load",function(){if(gotTile&&map.hasLayer(tiles)&&map.hasLayer(carto)){map.removeLayer(tiles);tiles=carto;el.dataset.tiles="carto"}});
+  carto.addTo(map);
+ }).catch(function(){el.dataset.tiles="osm-fallback"});
+
  bridges.forEach(function(b){var icon=L.divIcon({className:"",html:'<span class="bridge-marker" aria-hidden="true"></span>',iconSize:[24,24],iconAnchor:[12,12]});var mark=L.marker([b.lat,b.lng],{icon:icon,title:b.name}).addTo(map);var safeName=b.name.replaceAll("&","&amp;").replaceAll("<","&lt;");mark.bindPopup('<div class="map-popup"><strong>'+safeName+'</strong><br>Approximate bridge location, not a walkway entrance.<br><a href="#'+b.id+'">Explore this bridge →</a></div>');markers.push({marker:mark,record:b})});
  if(window.ResizeObserver){new ResizeObserver(function(){map.invalidateSize({pan:false})}).observe(el)}
  setTimeout(function(){map.invalidateSize({pan:false})},100);
