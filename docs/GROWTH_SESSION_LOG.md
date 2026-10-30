@@ -1,3 +1,12 @@
+### 2026-10-30 — Michigan Adventure Finder: real photo-scroll QA and Torch Lake resilience
+
+- The previously published photographic curation (9 updated destinations, all 20 authentic licensed photos, photo credits and crops) was already live, so did not redo the selection. Verified all 20 remote image URLs respond and captured real desktop/mobile layouts. CARTO map loads with 20 marker pins.
+- Added `scripts/verify-michigan-destinations-photo-browser.cjs` and `.github/workflows/michigan-destinations-photo-browser.yml` to scroll all 20 cards into view at 1366px/390px, assert decoded photos and source/license links, and retain screenshots/JSON.
+- First real-scroll run [41046997595](https://github.com/izworskic/chrisizworski-com/actions/runs/41046997595) passed **20/20 photos on both viewport sizes**, zero JS errors, zero overflow and CARTO ready. A repeat [41047159154](https://github.com/izworskic/chrisizworski-com/actions/runs/41047159154) found intermittent source failure on *Torch Lake* (19/20 on both widths), which previous source-only tests missed.
+- **Repair:** Keep the preferred HG Judd swim photograph, but on a real CDN error switch the hero and card to a separately verified 960px Commons photograph *Michigan's Torch Lake.jpg* by the **same author, same CC BY-SA 3.0 license**, and update alternate text + original-source link. Browser acceptance waits for recovered decoded image. No 20-photo eager-load regression.
+- Merge/release evidence pending final current-HEAD CI and live browser smoke. No ads, map key logic, global styles, other tools, identity, metadata, canonical, sitemap or schema changed; no GSC or revenue impact inferred.
+- **Exactly one next action:** Pass the repeat QA and required repository checks, merge, then verify public production image and map.
+
 ## JOURNEY_ATLAS_V1 initial integration — October 30, 2026
 
 - **Owner request:** Build a reusable, callable journey intelligence template and demonstrate it on Lake Superior Circle Tour.
