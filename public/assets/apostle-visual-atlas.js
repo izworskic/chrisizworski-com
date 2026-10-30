@@ -11,6 +11,9 @@ const withheld=document.getElementById('atlas-coordinates-withheld');
 const filter=document.getElementById('atlas-marker-filter');
 if(!root||!mapEl||!panels.length)return;
 let atlas=null,map=null,L=window.L,markerLayer=null,siteMarkers=new Map(),current='stockton',mapLoaded=false;
+let pathways=null,activePath=null;
+const pathReadout=document.getElementById('atlas-connection-readout');
+const pathTrip=document.getElementById('trip-selected-path');
 const isLetter=id=>/^[A-Z]$/.test(id);
 const mapPoints=(island)=>{
  if(!island)return[];
@@ -19,6 +22,7 @@ const mapPoints=(island)=>{
 };
 const getIsland=id=>atlas?.islands.find(i=>i.id===id);
 function setTab(id){
+ if(current!==id)activePath=null;
  current=id;
  const selected=panels.find(p=>p.dataset.atlasIsland===id);
  if(!selected)return;
@@ -27,6 +31,7 @@ function setTab(id){
  const dockSelect=document.getElementById('dock-island-choice');
  if(dockSelect&&dockSelect.value!==id){dockSelect.value=id;dockSelect.dispatchEvent(new Event('change'));}
  if(atlas)showCampsites();
+ if(pathReadout&&!activePath){pathReadout.querySelector('strong').textContent='Choose a documented island sequence';pathReadout.querySelector('p').textContent='Select a dock, trail and site relationship. Where NPS publishes campsite coordinates, the matching site dots can be highlighted; no route is drawn.';}
 }
 function ensureMap(){
  if(map||!L)return;
@@ -61,6 +66,7 @@ function showCampsites(){
  const island=getIsland(current);
  if(!island)return;
  const pts=mapPoints(island),total=island.sites.length,withheldState=!total;
+ const chosen=pathways?.rows.find(p=>p.id===activePath&&p.island===current)||null;
  root.classList.toggle('is-withheld',withheldState);
  if(withheld)withheld.hidden=!withheldState;
  const noData=island.withheldReason||'NPS provides no verified campsite coordinate points for this island.';
@@ -77,16 +83,67 @@ function showCampsites(){
  markerLayer.clearLayers();siteMarkers=new Map();
  const bounds=[];
  for(const [id,lat,lng] of pts){
-  const marker=L.circleMarker([lat,lng],styleFor(island,id)).addTo(markerLayer);
+  const match=chosen&&chosen.siteIds.includes(id);
+ const base=styleFor(island,id);
+ if(chosen&&chosen.siteIds.length){base.fillOpacity=match?1:.2;base.weight=match?4:1;base.radius=match?10:5;}
+ const marker=L.circleMarker([lat,lng],base).addTo(markerLayer);
   const box=document.createElement('div');
   const heading=document.createElement('strong');heading.textContent=island.name+' · Site '+id;box.append(heading);
   const desc=document.createElement('p');desc.textContent=(isLetter(id)?'NPS-listed group campsite. ':'NPS-listed individual campsite. ')+(island.accessible.includes(id)?'NPS documents a boardwalk-accessible connection. ':'')+'Published coordinates are not a route, reservation or guarantee of access.';box.append(desc);
+  const related=pathways?.rows.filter(p=>p.island===current&&p.siteIds.includes(id))||[];
+  if(related.length){const connection=document.createElement('p');connection.textContent='NPS-described arrival: '+related.map(p=>p.routeLabel).join(' · ');box.append(connection);}
   const link=document.createElement('a');link.href=atlas.siteSource;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Verify site with NPS ↗';box.append(link);
   marker.bindPopup(box);siteMarkers.set(id,marker);bounds.push([lat,lng]);
+  marker.on('click',()=>{const rel=related[0];if(rel&&activePath!==rel.id)choosePath(rel.id,{fromMarker:true});});
  }
  map.invalidateSize({pan:false});
  if(bounds.length>1)map.fitBounds(L.latLngBounds(bounds).pad(.18),{maxZoom:12,animate:false});
  else if(bounds.length===1)map.setView(bounds[0],12,{animate:false});
+}
+function choosePath(id,options={}){
+ const rel=pathways?.rows.find(x=>x.id===id);
+ if(!rel)return;
+ if(current!==rel.island)setTab(rel.island);
+ activePath=id;
+ root.dataset.activePath=id;
+ const own=mapPoints(getIsland(current));
+ if(filter&&rel.siteIds.length&&rel.siteIds.some(site=>!own.some(x=>x[0]===site)))filter.value='all';
+ document.querySelectorAll('.atlas-path-card').forEach(el=>el.classList.toggle('is-selected',el.dataset.pathId===id));
+ const card=document.getElementById('atlas-path-'+id);
+ if(card)card.open=true;
+ if(pathReadout){
+  pathReadout.querySelector('strong').textContent=rel.title;
+  const siteLabel=rel.siteIds.length?' · NPS site '+rel.siteIds.join(', '):' · no campsite reference';
+  const withheld=rel.island==='sand'||rel.island==='devils'||rel.island==='raspberry';
+  pathReadout.querySelector('p').textContent=rel.routeLabel+siteLabel+(withheld?'. No campsite markers plotted; use NPS original maps and written site evidence.':'. Highlighted dots mark published campsite reference positions, NOT a trail path.');
+ }
+ showCampsites();
+ if(map&&rel.siteIds.length){
+  const found=rel.siteIds.map(site=>siteMarkers.get(site)).filter(Boolean);
+  if(found.length===1)map.setView(found[0].getLatLng(),13,{animate:false});
+  else if(found.length>1)map.fitBounds(L.latLngBounds(found.map(m=>m.getLatLng())).pad(.32),{maxZoom:13,animate:false});
+ }
+ if(options.fromMarker&&card)card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+for(const b of document.querySelectorAll('[data-path-select]')){
+ b.addEventListener('click',()=>choosePath(b.dataset.pathSelect));
+}
+for(const link of document.querySelectorAll('[data-path-dock]')){
+ link.addEventListener('click',()=>{
+  const dock=document.getElementById('dock-'+link.dataset.pathDock);
+  const select=document.getElementById('dock-island-choice');
+  if(select&&dock){select.value=dock.dataset.island;select.dispatchEvent(new Event('change'));}
+ });
+}
+for(const link of document.querySelectorAll('[data-path-trip]')){
+ link.addEventListener('click',()=>{
+  const rel=pathways?.rows.find(x=>x.id===link.dataset.pathTrip);
+  if(!rel)return;
+  choosePath(rel.id);
+  const tripIsland=document.getElementById('trip-island');
+  if(tripIsland){tripIsland.value=rel.island;tripIsland.dispatchEvent(new Event('change',{bubbles:true}));}
+  if(pathTrip)pathTrip.textContent='NPS relationship to verify: '+rel.title+' · '+rel.routeLabel+'. '+rel.caution+' No landing, campsite permit or boat return has been confirmed.';
+ });
 }
 for(const tab of tabs)tab.addEventListener('click',e=>{e.preventDefault();setTab(tab.dataset.atlasPick);});
 for(const link of document.querySelectorAll('[data-atlas-go]')){
@@ -115,6 +172,15 @@ for(const panel of panels)panel.hidden=panel.dataset.atlasIsland!=='stockton';
 fetch('/apostle-islands/island-atlas.json',{credentials:'same-origin'}).then(r=>{if(!r.ok)throw Error('atlas data '+r.status);return r.json();}).then(data=>{
  if(!Array.isArray(data.islands)||data.islands.length!==8||!data.coordinatePolicy?.sand)throw Error('invalid atlas data');
  atlas=data;setTab(current);
+ return fetch('/apostle-islands/verified-pathways.json',{credentials:'same-origin'}).then(r=>{if(!r.ok)throw Error('pathway evidence '+r.status);return r.json();}).then(paths=>{
+  if(!Array.isArray(paths.rows)||paths.rows.length!==21)throw Error('invalid NPS route evidence');
+  pathways=paths;
+  for(const b of document.querySelectorAll('[data-path-select]'))b.hidden=false;
+  showCampsites();
+ }).catch(err=>{
+  if(pathReadout)pathReadout.querySelector('p').textContent='Interactive campsite-to-trail highlighting unavailable. The NPS source-linked planning sequences remain readable below.';
+  console.warn('NPS pathway relationship data unavailable:',String(err?.message||err));
+ });
 }).catch(err=>{
  // Preserve all eight maps and original NPS source links when the data request fails.
  root.classList.remove('is-interactive','is-withheld');

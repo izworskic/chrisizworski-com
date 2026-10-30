@@ -1,3 +1,12 @@
+### 2026-10-30 — Apostle Islands verified campsite-to-trail planning layer
+
+- Enhanced existing `/apostle-islands/` visual NPS island atlas with **21 NPS source-verified sequences** identifying which published dock, boardwalk/named trail (or separate campsite description) actually relates to each available site or day outing. No new indexable page.
+- Island-by-island, offers 5 Stockton, 5 Oak, 4 Sand, 2 Rocky, 2 Basswood, 1 Michigan, 1 Raspberry and 1 Devils closure sequence. Site relationships are explicitly classified as boardwalk, named trail, trail branch, described access, day only or blocked. Three readable steps and direct NPS citations each.
+- Clicking a source-backed sequence emphasizes its *existing* campsite reference dots while dimming unrelated sites; it does not draw invented lines or calculate distances. NPS map trails are still sourced from original artwork. Campsite clicks reveal which NPS path description applies. Sand remains no-location-pin, Raspberry no-campsite and Devils landing closed in researched record.
+- Distinguishes slightly conflicting NPS Oak/Michigan mileages instead of synthesizing false precision. Keeps return-transport and permits independent from a dock and hiking plan, and passes selected NPS relationship to copyable trip brief.
+- Works without JavaScript through 21 pre-rendered source-linked details cards. Adds no Redis, Ads changes, new tools/routes, fabricated availability or safety assurances.
+- Measures engagement and organic search only after comparable GSC/GA windows; no performance promise made. New journey: island map → evidence-supported trail/campsite choice → dock record → trip logistics brief.
+
 ### 2026-10-30 — Michigan Adventure Finder: real photo-scroll QA and Torch Lake resilience
 
 - The previously published photographic curation (9 updated destinations, all 20 authentic licensed photos, photo credits and crops) was already live, so did not redo the selection. Verified all 20 remote image URLs respond and captured real desktop/mobile layouts. CARTO map loads with 20 marker pins.

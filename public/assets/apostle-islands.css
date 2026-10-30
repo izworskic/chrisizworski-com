@@ -243,3 +243,39 @@
 @media(max-width:900px){.atlas-layout{grid-template-columns:1fr}.atlas-map-column{position:relative;top:auto}.atlas-geographic-map{height:380px}}
 @media(max-width:510px){.island-atlas{padding:24px 0 35px}.atlas-tabs{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:7px}.atlas-tab{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start}.atlas-scene{padding:14px}.atlas-geographic-map{height:310px}.atlas-map-column{padding:11px}.atlas-site-list{grid-template-columns:repeat(2,minmax(0,1fr))}.atlas-forward{padding:16px}}
 @media(prefers-reduced-motion:reduce){.atlas-tab,.atlas-site-link{scroll-behavior:auto}}
+
+/* Source-backed campsite-to-trail interpretation; source texts remain visible without JS. */
+.atlas-pathways{border:1px solid #ccded3;border-radius:13px;background:#f5f8f1;padding:16px;display:grid;gap:12px}
+.pathways-intro .eyebrow{font-size:.68rem;color:#98602b;margin:0 0 6px}
+.pathways-intro h4{font:normal 1.35rem/1.2 var(--serif);margin:0 0 7px;color:#174b49}
+.pathways-intro>p:not(.eyebrow){font-size:.79rem;line-height:1.55;color:#4f6563;margin:0}
+.atlas-path-list{display:grid;gap:8px}
+.atlas-path-card{background:#fff;border:1px solid #ceded5;border-radius:10px;overflow:hidden;scroll-margin-top:22px}
+.atlas-path-card.is-selected{border-color:#287a72;box-shadow:inset 4px 0 #287a72}
+.atlas-path-card.is-closure{border-color:#d7a8a0;background:#fff6f3}
+.atlas-path-card summary{display:flex;gap:12px;padding:12px 15px;cursor:pointer;align-items:center;list-style:none}
+.atlas-path-card summary::-webkit-details-marker{display:none}
+.atlas-path-card summary:focus-visible,.atlas-path-card button:focus-visible{outline:3px solid #af7840;outline-offset:-3px}
+.path-summary-copy{display:grid;gap:4px;min-width:0;flex:1}
+.path-summary-copy strong{font-size:.91rem;line-height:1.33;color:#25494e}
+.path-summary-copy small{font-size:.68rem;color:#54716e}
+.path-kind{font-size:.65rem;letter-spacing:.045em;text-transform:uppercase;font-weight:850;color:#9a622b}
+.atlas-path-card.is-closure .path-kind{color:#923c2c}
+.path-expand-indicator{font-size:1.25rem;color:#5f8079;font-weight:300}
+.atlas-path-card[open] .path-expand-indicator{transform:rotate(45deg)}
+.path-detail{padding:0 15px 15px}
+.path-route-title{font-size:.76rem;line-height:1.6;color:#4d6964;background:#e9f1e9;padding:9px 11px;border-radius:7px;margin:0 0 12px}
+.path-sequence{list-style:none;display:grid;gap:0;margin:0;padding:0 0 0 4px}
+.path-sequence li{display:flex;gap:13px;position:relative;padding:0 0 14px;font-size:.81rem;line-height:1.6;color:#435b5e}
+.path-sequence li:not(:last-child):before{content:"";position:absolute;top:28px;left:12px;bottom:0;border-left:1px solid #a5c1b3}
+.path-seq-number{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;height:26px;border-radius:50%;background:#235b56;color:white;font-size:.7rem;font-weight:800;position:relative;z-index:1}
+.path-sequence li p{margin:0;flex:1}
+.path-caution{border-left:3px solid #b78a57;padding:9px 11px;background:#fff5e6;color:#675138;font-size:.77rem;line-height:1.55;margin:3px 0 12px}
+.path-card-actions{display:flex;flex-wrap:wrap;gap:9px 13px;align-items:center}
+.path-card-actions a{font-size:.75rem;font-weight:750}
+.atlas-path-choose{border:1px solid #275f59;border-radius:7px;background:#275f59;color:white;font-size:.76rem;font-weight:800;padding:9px 12px;cursor:pointer;min-height:40px}
+.atlas-path-choose[hidden]{display:none}
+.atlas-connection-readout{background:#173f43;color:#e6eee7;border-radius:9px;padding:14px 15px;font-size:.79rem;line-height:1.6;margin-top:11px}
+.atlas-connection-readout strong{display:block;font-size:.91rem;color:#fff;margin-bottom:3px}
+.atlas-connection-readout p{margin:0}
+@media(max-width:490px){.atlas-pathways{padding:11px}.atlas-path-card summary{padding:11px}.path-detail{padding:0 11px 12px}.path-card-actions{gap:11px}.path-card-actions a{min-height:28px;display:inline-flex;align-items:center}}
