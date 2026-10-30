@@ -8,7 +8,7 @@
 - Primary search intent: choosing a Sleeping Giant Provincial Park walk by **complete official return distance, legal bike-to-hike portions and published duration evidence**. The [Lake Superior Circle Tour](/lake-superior-circle-tour/) continues to own the broader road-trip itinerary.
 - `public/sleeping-giant-provincial-park/index.html` is a checked-in, crawlable six-option source-first guide. This exists so standalone GitHub discovery/governance checks see a real published-document candidate before any build.
 - `scripts/build-sleeping-giant-site.mjs` upgrades that source page during `npm run build:site`, generating the richer responsive HTML/CSS/JavaScript Explorer from the **same tested official route engine** rather than a parallel client-side ranking algorithm. The build emits six static route cards, four research-only GIS overlays, **70** source-evaluated planning combinations, and full official-distance and access notices.
-- `preverify:all` generates the same full page before source/SEO compliance gates, so a clean checkout is reproducible. Do not disable this without replacing the missing-page source coverage.
+- `verify:all` now reads the checked-in source page without generating over it. The build still creates the enhanced site version through `build:site`; targeted integration/browser tests generate their own disposable outputs.
 - Other source owners: `previews/sleeping-giant-explorer/`, `data/sleeping-giant/`, `lib/sleeping-giant/`.
 
 ## Search, analytics, discovery and ads integration
@@ -32,7 +32,7 @@
 
 - [Full green GitHub Actions run 40900851727](https://github.com/izworskic/chrisizworski-com/actions/runs/40900851727): **53/53 Sleeping Giant contracts**; all **59/59 `verify:all` stages passed** on the combined feature + baseline branch; full **`npm run build:site` passed**, followed by explicit standard Auto Ads audit and six new integration tests; real Chromium in desktop, phone and no-JavaScript modes passed, including source vs site page states.
 - [Independent Detroit discovery governance run 40900851747](https://github.com/izworskic/chrisizworski-com/actions/runs/40900851747) passed after the checked-in public page was included. Its success is not a claim of Google indexing.
-- **Green executable commit:** `35418f8ccaa398640118d81e8ea8b1890322236c`. This document and the handoff log follow the executable check; neither changes runtime behavior.
+- **Prior green executable commit:** `35418f8ccaa398640118d81e8ea8b1890322236c`. Two later code-review fixes are committed: route-dependent accessible SVG descriptions and removal of the source-mutating `preverify:all` hook, with regression coverage. Re-run CI on the revised commit before release.
 
 ## Release ordering and postmerge validation
 
@@ -40,4 +40,4 @@ The repository auto-deploys on merge to `main`. **Do not merge just to preview.*
 
 After the user explicitly approves release, verify a live HTTP 200 at the canonical URL, real emitted HTML canonical/schema, 6 source cards, 70 planner states, the route-map fallback, sitemap visibility, surrounding directory links and a production ad-loader audit. Monitor GSC after sufficient crawl latency; do not claim measured traffic or rankings before data arrives.
 
-**Exactly one next priority:** release-ready merge reconciliation against the latest main, with independent current production-build/SEO checks on that merge candidate. Do not add unverified parking route or live weather logic as a shortcut.
+**Next release gate:** confirm all revised PR checks, reconcile against the latest `main` including subsequent field-guide fixes, and run final production-build/SEO checks. Merge only when that final candidate is green. Do not add unverified parking route or live weather logic as a shortcut.
