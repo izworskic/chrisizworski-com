@@ -3218,6 +3218,59 @@
           "description": "Michigan GIS #95 Middle and #96 Lower are separate named Falls River features, not lots or old cement dam."
         }
       }
+    },
+    {
+      "id": "sturgeon-falls",
+      "name": "Sturgeon Falls",
+      "region": "Western U.P.",
+      "place": "Sturgeon River Gorge Wilderness · Ottawa National Forest",
+      "lat": 46.64242,
+      "lng": -88.69346,
+      "level": "difficult",
+      "minutes": "120–180 min",
+      "walk": "From the established wilderness parking, follow the Sturgeon Falls footpath downhill through steep switchbacks into the gorge. Visit Keweenaw estimates approximately one mile each way to the river waterfall; allow 2–3 hours for the trip. The NCTA 2025 map's white-blazed half-mile spur connects the parking with the North Country Trail, and must NOT be mistaken for the falls walk.",
+      "best": "Dry-road late spring through fall, with good daylight and cautious footing. Forest roads are not plowed in winter and can be affected by spring washouts.",
+      "access": "Federal Ottawa National Forest wilderness footpath documented by 2025 North Country Trail Association map, with separate parking from FR2200 NCT lot. Visitor bureau independently locates natural falls at ~46.6428,-88.6937, 6.74 km away from the similarly named state GIS #45 record; that state point is NOT promoted as the visitor location.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "locationSource": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/",
+      "kind": "National forest wilderness waterfall hike",
+      "parking": "Use the signed Sturgeon River Gorge Wilderness trailhead on the mapped Forest Road 2270 access corridor. The NCTA's 2025 trail map distinguishes this wilderness trailhead parking from the FR2200 North Country Trail lot. An older NCTA GPS list uses the road name FR2276 for the wilderness falls parking; follow current Forest Service road signs and maps, not either historic numbering alone. No certified live drivable route or vehicle navigation to the waterfall point.",
+      "feature": "Powerful Sturgeon River drop through a narrow volcanic-rock chute in a remote forested gorge.",
+      "decision": "Visit only with sufficient daylight, dry-route experience and confirmed passable forest roads. The marked wilderness parking area is not the natural falls coordinate; take the switchback footpath rather than shortcuts down the cliff.",
+      "further": "Two independent field references agree on the actual Sturgeon River Falls location around 46.6424 N. Michigan GIS #45 says 46.582163 N: the roughly 6.74 km difference is unresolved, so the public guide does NOT claim an exact GIS link. NCTA's 2014 GPS table also uses an older road reference FR2276 where its 2025 trail guide uses FR2270. Current opening and road conditions are unverified, and neither the historic NCTA GPS waypoint nor the natural waterfall latitude is a guaranteed car routing destination.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Sturgeon River Gorge Wilderness",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "verified-federal-wilderness-NCTA-trail-and-two-independent-visitor-falls-positions-but-unlinked-state-geography",
+      "winterRoad": "NCTA 2025 states no roads on its Sturgeon River Gorge segment map are plowed in winter. Spring mud and washouts can persist into June. No current forest-road open-now claim.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238242",
+          "description": "Federal recreation source describes wilderness Sturgeon Falls in Ottawa National Forest, including steep undeveloped gorge."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA's 2025 trail map documents the public wilderness trailhead and the maintained wilderness falls path."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA 2025 marks wilderness falls trailhead parking on FR2270 corridor distinct from FR2200 NCT parking; 2014 GPS list calls an adjacent parking road FR2276, requiring current sign verification."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/",
+          "description": "Visit Keweenaw describes approximately one-mile steep switchback path from public trailhead; 2025 NCTA independently confirms unblazed maintained wilderness path."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf",
+          "description": "NCTA 2014 GPS table lists Sturgeon Falls at 46.64242,-88.69346, corroborated by Visit Keweenaw and independent waterfall guide; conflicting state GIS #45 at 46.582163,-88.68412 is NOT an exact match."
+        }
+      }
     }
   ]
 }

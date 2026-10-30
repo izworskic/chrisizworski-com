@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 52,
     "pending": 109,
-    "curatedTotal": 57,
-    "curatedNoMatchingGIS": 8
+    "curatedTotal": 58,
+    "curatedNoMatchingGIS": 9
   },
   "candidates": [
     {
@@ -850,14 +850,17 @@
       "reviewed": null,
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "evidenceReviewed": "2026-10-29",
-      "disposition": "federal-wilderness-trail-public-route-current-road-unverified",
+      "disposition": "same-name-state-GIS-geography-mismatch-6-74km-separated-from-visitor-Sturgeon-Falls",
       "publicationEligible": false,
-      "sourceNotes": "Federal Recreation.gov and Wild and Scenic Rivers materials place Sturgeon Falls in Ottawa National Forest's Sturgeon River Gorge Wilderness. The North Country Trail Association's 2025 chapter guide documents a wilderness falls trail descending by steep switchbacks and a distinct signed approach from the NCT spur. No snow plowing is provided on connecting roads. LIMITATIONS: NCTA's 2025 trail details establish historical approach and jurisdiction, not current road clearance, snow conditions, exact seasonal bridge/footpath conditions or a measured parking-to-waterfall distance.",
-      "outstandingGate": "Reconcile FR2270/FR2200 named public trailheads with current Ottawa National Forest motor vehicle use map, visitor parking and any 2026 trail/road notices before an indexable guide.",
+      "sourceNotes": "Michigan state GIS #45 at 46.582163,-88.684120 is 6.74 km from the documented public Sturgeon River Gorge Falls: NCTA GPS table 46.64242,-88.69346, Visit Keweenaw 46.6428,-88.6937, independent waterfall account 46.64234,-88.69331. Do NOT reconcile these geographic points on name alone. The public guide uses the visitor-bureau/NCTA physical falls location and is curated without exact GIS match. NCTA 2014 parking GPS table uses FR2276, while its 2025 map describes FR2270; current signed roads govern.",
+      "outstandingGate": "Determine whether MI GIS #45 is a second Sturgeon River rapid/waterfall 6.74km south, spatial misplacement, or duplicate GIS naming. Seek authoritative hydrography/land manager feature location; until then no exact ID match or GIS-point visitor routing.",
       "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
-        "https://www.recreation.gov/camping/poi/238242",
-        "https://www.fws.gov/rivers/river/sturgeon-ottawa"
+        "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf",
+        "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/",
+        "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/",
+        "https://www.recreation.gov/camping/poi/238242"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
@@ -4111,6 +4114,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "No exact GIS candidate ID match; manually reconcile geography and naming without treating this as a new waterfall."
+    },
+    {
+      "id": "sturgeon-falls",
+      "name": "Sturgeon Falls",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "Visitor waterfall at 46.64242,-88.69346 verified by NCTA GPS and Visit Keweenaw; same-name Michigan state GIS #45 is 6.74 km away, quarantined until spatial identity is established. Do not attach GIS #45 to this visitor guide."
     }
   ],
   "batchCheckpoints": [

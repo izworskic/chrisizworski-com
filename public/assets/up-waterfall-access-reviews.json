@@ -206,65 +206,73 @@
       "gisObjectId": 45,
       "name": "Sturgeon Falls",
       "county": "HOUGHTON",
-      "status": "federal-wilderness-trail-public-route-current-road-unverified",
-      "publicAccess": "research-only-route-not-cleared",
+      "status": "same-name-falls-point-6-74km-discrepancy-no-vehicle-route",
+      "publicAccess": "geography-disputed-research-only",
       "publicationEligible": false,
-      "title": "Sturgeon Falls: access evidence under review",
-      "summary": "Federal Recreation.gov and Wild and Scenic Rivers materials place Sturgeon Falls in Ottawa National Forest's Sturgeon River Gorge Wilderness. The North Country Trail Association's 2025 chapter guide documents a wilderness falls trail descending by steep switchbacks and a distinct signed approach from the NCT spur. No snow plowing is provided on connecting roads.",
-      "guidance": "Use official wilderness trailhead and published trail maps only; do not turn the falls GIS pin into a parking GPS. A wilderness switchback into the gorge is a strenuous footpath, not an accessible overlook or guaranteed open motor route.",
-      "reviewLimitations": "NCTA's 2025 trail details establish historical approach and jurisdiction, not current road clearance, snow conditions, exact seasonal bridge/footpath conditions or a measured parking-to-waterfall distance.",
-      "nextEvidence": "Reconcile FR2270/FR2200 named public trailheads with current Ottawa National Forest motor vehicle use map, visitor parking and any 2026 trail/road notices before an indexable guide.",
+      "title": "Sturgeon Falls: Michigan GIS pin conflicts with verified visitor waterfall",
+      "summary": "Michigan state GIS #45 is 6.74 km south of the Sturgeon Falls location independently documented by the North Country Trail Association (46.64242,-88.69346), Visit Keweenaw (46.6428,-88.6937), and geographic field accounts. The official public visitor guide is based on the corroborated gorge waterfall location, NOT this GIS point.",
+      "guidance": "Do not drive or hike to state GIS #45 expecting the visitor waterfall. Use the separate official Sturgeon River Gorge Wilderness trailhead and NCTA 2025 map. This GIS marker is displayed only in the opt-in research map until spatial identity can be established.",
+      "reviewLimitations": "Same name does not prove the state source maps a different physical falls or an error. Road naming also differs between NCTA 2014 FR2276 and 2025 FR2270 descriptions, so use current signed Forest Service roads.",
+      "nextEvidence": "Verify GIS feature #45 with modern federal hydrography and exact stream location; establish if separate cascade or coordinate error. Never auto-merge by name.",
       "sourceLinks": [
         {
-          "label": "NCTA Peter Wolfe chapter 2025 segment guide",
+          "label": "State GIS source #45",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "NCTA 2014 Sturgeon Falls GPS",
+          "url": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf"
+        },
+        {
+          "label": "NCTA 2025 hiking route map",
           "url": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
         },
         {
-          "label": "Recreation.gov official federal wilderness overview",
-          "url": "https://www.recreation.gov/camping/poi/238242"
+          "label": "Visit Keweenaw location and visitor trail",
+          "url": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/"
         },
         {
-          "label": "Federal Wild and Scenic Rivers overview",
-          "url": "https://www.fws.gov/rivers/river/sturgeon-ottawa"
+          "label": "Independent named waterfall point",
+          "url": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/"
         }
       ],
       "routeAudit": {
         "outcome": "not-cleared",
         "segments": [
           {
-            "label": "Identity",
-            "status": "verified-geography",
-            "finding": "GIS #45 falls on Sturgeon River within named gorge; point is not a trailhead",
+            "label": "Geographic feature",
+            "status": "not-cleared",
+            "finding": "State #45 and three independent visitor waterfall positions are separated by 6.74 km. Exact identity unresolved.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
-            "label": "Land manager",
+            "label": "Federal site identity",
             "status": "documented-not-live",
-            "finding": "Ottawa National Forest and federal wilderness documented",
+            "finding": "Ottawa National Forest wilderness has a visitor waterfall further north; this state marker has no certified crosswalk.",
             "source": "https://www.recreation.gov/camping/poi/238242"
           },
           {
-            "label": "Forest roads",
+            "label": "Main road",
             "status": "not-cleared",
-            "finding": "FR2270/FR2200 chapter references; current MVUM travel authorization not confirmed",
+            "finding": "Never route motor travel to state point. NCTA public visitor parking documented separately.",
             "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
           },
           {
-            "label": "Visitor lot",
+            "label": "Signed trailhead",
             "status": "documented-not-live",
-            "finding": "NCTA documents a wilderness trailhead lot separate from NCT spur; current access unknown",
-            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+            "finding": "NCTA has current wilderness visitor trail map; 2014 FR2276 versus 2025 FR2270 naming conflict noted.",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf"
           },
           {
-            "label": "Hike",
-            "status": "documented-not-live",
-            "finding": "Steep wilderness switchbacks down gorge; no blazed connector inside wilderness",
-            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
-          },
-          {
-            "label": "Season",
+            "label": "Falls walking path",
             "status": "not-cleared",
-            "finding": "NCTA says area roads not winter-plowed; 2026 real-time conditions not available",
+            "finding": "No visitor footpath from state #45 to northern public gorge falls; straight-line separation cannot be a hiking route.",
+            "source": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/"
+          },
+          {
+            "label": "Current condition",
+            "status": "not-cleared",
+            "finding": "Roads unplowed in winter, no open-now status.",
             "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
           }
         ]

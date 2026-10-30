@@ -40,8 +40,16 @@ test('exact GIS reconciliation cannot silently create or alter public guides', (
       assert.equal(row.curatedId, null);
       assert.equal(row.reconciliation, 'pending-identity-and-access-research');
       const proposedSlug = row.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/' + proposedSlug + '/'),
-        'unreviewed GIS feature may not auto-enter public waterfall sitemap: ' + row.name);
+      if (row.gisObjectId===45) {
+        const visitor=curated.waterfalls.find(x=>x.id==='sturgeon-falls');
+        assert.ok(visitor && !Number.isInteger(visitor.gisObjectId));
+        assert.ok(Math.abs(visitor.lat-row.lat)>0.04);
+        assert.match(row.disposition,/same-name-state-GIS-geography-mismatch/i);
+        assert.match(row.sourceNotes,/6\\.74 km/);
+      } else {
+        assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/' + proposedSlug + '/'),
+          'unreviewed GIS feature may not auto-enter public waterfall sitemap: ' + row.name);
+      }
     }
   }
 });
@@ -669,4 +677,39 @@ test('Falls River single guide covers Middle and Lower via public trail not unsa
  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/falls-river-trail/'));
  const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
  assert.ok(!queue.candidates.some(x=>[95,96].includes(x.gisObjectId)));
+});
+
+test('Sturgeon visitor guide prevents 6.74 km state GIS misrouting while retaining research candidate',()=>{
+ const f=curated.waterfalls.find(x=>x.id==='sturgeon-falls');
+ const geo=ledger.candidates.find(x=>x.gisObjectId===45);
+ const data=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
+ const review=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records.find(x=>x.gisObjectId===45);
+ const q=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const html=fs.readFileSync('public/upper-peninsula-waterfalls/sturgeon-falls/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ assert.ok(f&&geo&&review);
+ assert.equal(f.publication,'verified-access-guide');
+ assert.equal(f.gisObjectId,undefined);
+ assert.equal(f.lat,46.64242);
+ assert.equal(geo.curatedId,null);
+ assert.equal(geo.publicationEligible,false);
+ assert.equal(geo.lat,46.582163);
+ assert.equal(review.publicationEligible,false);
+ assert.match(review.summary,/6\\.74 km/);
+ assert.ok(review.routeAudit.segments.length===6);
+ assert.ok(q.candidates.some(x=>x.gisObjectId===45));
+ assert.ok(data.entries.some(x=>x.source==='curated-non-gis'&&x.curatedId==='sturgeon-falls'));
+ assert.match(html,/FR2276/);
+ assert.match(html,/FR2270/);
+ assert.match(html,/half-mile spur/);
+ assert.match(html,/no roads on this map are plowed in winter/i);
+ assert.match(html,/current opening and road conditions are unverified/i);
+ assert.ok(!html.includes('data-parking-lat='));
+ assert.match(hub,/data-id="sturgeon-falls" data-name="Sturgeon River Falls"/);
+ assert.ok(!hub.includes('data-id="sturgeon-falls" data-gis-oid="45"'));
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/sturgeon-falls/'));
+ for(const axis of ['landManager','publicAccess','parking','trail','location']){
+  assert.equal(f.verification[axis].verified,true,axis);
+  assert.ok(html.includes(f.verification[axis].source),axis);
+ }
 });

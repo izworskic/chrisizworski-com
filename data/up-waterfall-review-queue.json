@@ -4,7 +4,7 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 57,
+    "curatedDestinations": 58,
     "matchedGisFeatures": 52,
     "pendingGisFeatures": 109
   },
@@ -233,8 +233,8 @@
       "priorityReason": "Named priority for authoritative source review",
       "publicationEligible": false,
       "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 3,
-      "blockingGate": "Reconcile FR2270/FR2200 named public trailheads with current Ottawa National Forest motor vehicle use map, visitor parking and any 2026 trail/road notices before an indexable guide."
+      "sourceCount": 6,
+      "blockingGate": "Determine whether MI GIS #45 is a second Sturgeon River rapid/waterfall 6.74km south, spatial misplacement, or duplicate GIS naming. Seek authoritative hydrography/land manager feature location; until then no exact ID match or GIS-point visitor routing."
     },
     {
       "gisObjectId": 46,
