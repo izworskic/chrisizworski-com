@@ -124,7 +124,7 @@ async function main(){
        viewport.name+' georeferenced Top bike/foot line sections not drawn');
      must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Top of the Giant'),viewport.name+' mapped route accessible name stale');
      must(await page.locator('#bike-breakdown').isVisible(),viewport.name+' bike/walk section hidden');
-     must((await page.locator('#bike-breakdown').innerText()).includes('13.4 km cycling'),viewport.name+' official split missing');
+     must((await page.locator('#bike-breakdown').innerText()).includes('8.3 mi (13.4 km) cycling'),viewport.name+' official bike split must show miles and source km');
      must((await page.locator('#gap-note').innerText()).includes('unverified'),viewport.name+' parking gap not disclosed');
      const mapFocus=page.locator('#map-focus');
      must(await mapFocus.isEnabled(),viewport.name+' mapped route should enable inspection controls');
@@ -162,7 +162,7 @@ async function main(){
    const page=await noJs.newPage();
    await page.goto(target,{waitUntil:'domcontentloaded'});
    must(await page.locator('.route-card').count()===6,'No-JavaScript route cards unavailable');
-   must((await page.locator('body').innerText()).includes('21.8 km'),'No-JavaScript full official return unavailable');
+   must((await page.locator('body').innerText()).includes('13.5 mi') && (await page.locator('body').innerText()).includes('21.8 km'),'No-JavaScript route should show miles plus official source km');
    must((await page.locator('body').innerText()).includes('not a live trail report'),'No-JavaScript caveat missing');
    must(await page.locator('a[href*="ontarioparks.ca/park/sleepinggiant/alerts"]').count()>=1,
      'No-JavaScript official alerts link missing');
