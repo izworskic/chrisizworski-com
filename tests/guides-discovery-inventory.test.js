@@ -9,7 +9,7 @@ const html = read('public/guides/index.html');
 test('guide directory links published standalone guides and major guide collections', () => {
   const routes = [
     '/michigan-destinations/', '/fall-color/', '/lake-superior-circle-tour/',
-    '/lake-superior-provincial-park/', '/apostle-islands/', '/upper-peninsula-waterfalls/',
+    '/lake-superior-provincial-park/', '/sleeping-giant-provincial-park/', '/apostle-islands/', '/upper-peninsula-waterfalls/',
     '/mackinac-island/ferry-planner/', '/au-sable-river/', '/manistee-river-map/',
     '/michigan-paddling/manistee-river/', '/michigan-trout-streams/', '/great-lakes-fish/',
     '/great-lakes-shipwrecks/', '/great-lakes-beaches/', '/michigan-boat-launches/',
@@ -49,7 +49,7 @@ test('live seasonal registry entries and seasonal wine editions remain discovera
 
 test('collection counts match the visible card groups', () => {
   for (const [id, next, count] of [
-    ['field-guides', 'ai-operations', 14], ['ai-operations', 'great-lakes-travel', 3],
+    ['field-guides', 'ai-operations', 15], ['ai-operations', 'great-lakes-travel', 3],
     ['great-lakes-travel', 'zone-6a-gardening', 27], ['zone-6a-gardening', 'beyond-the-great-lakes', 11]
   ]) {
     const start = html.indexOf(`id="${id}"`), end = html.indexOf(`id="${next}"`, start);
