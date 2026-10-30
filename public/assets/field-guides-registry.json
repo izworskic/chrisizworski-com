@@ -248,6 +248,37 @@
         "/great-lakes-beaches/",
         "/great-lakes-buoys/"
       ]
+    },
+    {
+      "slug": "great-lakes-island-hopping-field-guide",
+      "url": "/great-lakes-island-hopping-field-guide/",
+      "title": "The Great Lakes Island-Hopper's Field Guide",
+      "subtitle": "12 Ferry-Access Archipelagos · Personality Matrix & Open-Water Rules",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May-Oct · Peak Ferry Season",
+      "summary": "12 audited Great Lakes ferry-access archipelagos with open-water nautical miles, crossing physics, vehicle and bike regulations, canine biosecurity bans, and direct ferry booking handoffs.",
+      "connectedTools": [
+        "/great-lakes-ferries/",
+        "/isle-royale-ferry-comparison/",
+        "/mackinac-island/ferry-planner/",
+        "/beaver-island-ferry/",
+        "/manitou-island-ferry/",
+        "/pelee-island-ferry/",
+        "/put-in-bay-ferry/",
+        "/chi-cheemaun-ferry/",
+        "/apostle-islands/",
+        "/great-lakes-buoys/"
+      ]
     }
   ],
   "plannedRoadmap": [

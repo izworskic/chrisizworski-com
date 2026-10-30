@@ -49,7 +49,7 @@ test('live seasonal registry entries and seasonal wine editions remain discovera
 
 test('collection counts match the visible card groups', () => {
   for (const [id, next, count] of [
-    ['field-guides', 'ai-operations', 13], ['ai-operations', 'great-lakes-travel', 3],
+    ['field-guides', 'ai-operations', 14], ['ai-operations', 'great-lakes-travel', 3],
     ['great-lakes-travel', 'zone-6a-gardening', 27], ['zone-6a-gardening', 'beyond-the-great-lakes', 11]
   ]) {
     const start = html.indexOf(`id="${id}"`), end = html.indexOf(`id="${next}"`, start);
