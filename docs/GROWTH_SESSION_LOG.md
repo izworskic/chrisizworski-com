@@ -4,8 +4,8 @@
 - Live 1366px desktop and 390px mobile browser screenshots inspected; responsive layout confirmed. CARTO tile layer and 20 pins visible; all 20 direct Commons image URLs respond with image/jpeg.
 - **New repeatable visual evidence:** `scripts/verify-michigan-destinations-photo-browser.cjs` and photo-only Chromium workflow scroll physically through all 20 cards on both screen sizes. GitHub Action [41046997595](https://github.com/izworskic/chrisizworski-com/actions/runs/41046997595) **passed**: 20/20 decoded images on desktop and phone, 20 pins, CARTO loaded with configured public key, zero JS errors, zero horizontal overflow. Its screenshots/report artifact was retained.
 - Offscreen screenshot captures had shown pale-green placeholders for images that were not scrolled into view. The real scroll test confirms normal lazy-loading operation; no performance-harming change to eager-load all images is warranted.
-- Scope of this QA follow-up: testing script, workflow and handoff only; no ad, HTML, image selection, canonical, schema, site layout or map code modifications. No GSC or revenue impact claimed.
-- **Exactly one next action:** Merge the browser QA harness after all required PR checks are green, then keep it available for future destination-photo changes.
+- Follow-up QA exposed intermittent Wikimedia original-image errors for Torch Lake (19/20 on both widths in run 41047159154). The page now keeps the preferred swimming image but swaps on image error to the verified 960px Commons thumbnail of *Michigan's Torch Lake.jpg* by the same photographer Hgjudd under the same CC BY-SA 3.0 license; the linked source and alt update with the image. Tests handle a recovered failure without accepting a blank card. Scope: Michigan destination HTML/JS, focused test, Chromium workflow and handoff; no ad, canonical, schema, site layout or map code changes. No GSC or revenue impact claimed.
+- **Exactly one next action:** Verify the fallback release with repeated live-scrolling Chromium checks and full PR gates, then merge and smoke-check production.
 
 ### 2026-10-29 — Sleeping Giant canonical site integration prepared, production build verified, NOT merged
 
