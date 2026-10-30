@@ -81,7 +81,7 @@ test('Sitemap, Tools, Guides, Circle Tour and registry agree on one canonical an
  assert.ok(registry.relationships.some(x=>x.from==='circle-tour'&&x.to==='sleeping-giant-provincial-park'));
  assert.ok(registry.relationships.some(x=>x.from==='sleeping-giant-provincial-park'&&x.to==='circle-tour'));
  assert.ok(packageJSON.scripts['build:site'].includes('node scripts/build-sleeping-giant-site.mjs && node scripts/generate-tool-entity-graph.mjs'));
- assert.equal(packageJSON.scripts['preverify:all'],'node scripts/build-sleeping-giant-site.mjs');
+ assert.ok(!Object.hasOwn(packageJSON.scripts,'preverify:all'), 'Source verification must not rewrite the committed public page');
 });
 test('Source truth cannot be replaced by 2026 seasonal claims, inferred travel times or cached real-time weather',()=>{
  const html=emit();
