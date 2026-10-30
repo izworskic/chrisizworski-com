@@ -110,6 +110,7 @@ async function main(){
       // NPS route evidence: labels, three-step chain, map emphasis and trip handoff.
       check(await page.locator('.atlas-path-card').count()===21,name+' 21 sourced pathway examples');
       check(await page.locator('.path-sequence li').count()===63,name+' three stages per pathway');
+      await page.locator('[data-path-select="stockton-access"]:not([hidden])').waitFor({timeout:14000});
       check(await page.locator('.atlas-path-choose:not([hidden])').count()===21,name+' pathway data load or UI activation failed');
       await page.locator('#atlas-path-stockton-quarry-groups summary').click();
       await page.locator('[data-path-select="stockton-quarry-groups"]').click();
