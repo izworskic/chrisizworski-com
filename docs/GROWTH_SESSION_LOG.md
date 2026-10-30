@@ -7,6 +7,136 @@
 - Works without JavaScript through 21 pre-rendered source-linked details cards. Adds no Redis, Ads changes, new tools/routes, fabricated availability or safety assurances.
 - Measures engagement and organic search only after comparable GSC/GA windows; no performance promise made. New journey: island map → evidence-supported trail/campsite choice → dock record → trip logistics brief.
 
+### 2026-10-30 — Michigan Adventure Finder: real photo-scroll QA and Torch Lake resilience
+
+- The previously published photographic curation (9 updated destinations, all 20 authentic licensed photos, photo credits and crops) was already live, so did not redo the selection. Verified all 20 remote image URLs respond and captured real desktop/mobile layouts. CARTO map loads with 20 marker pins.
+- Added `scripts/verify-michigan-destinations-photo-browser.cjs` and `.github/workflows/michigan-destinations-photo-browser.yml` to scroll all 20 cards into view at 1366px/390px, assert decoded photos and source/license links, and retain screenshots/JSON.
+- First real-scroll run [41046997595](https://github.com/izworskic/chrisizworski-com/actions/runs/41046997595) passed **20/20 photos on both viewport sizes**, zero JS errors, zero overflow and CARTO ready. A repeat [41047159154](https://github.com/izworskic/chrisizworski-com/actions/runs/41047159154) found intermittent source failure on *Torch Lake* (19/20 on both widths), which previous source-only tests missed.
+- **Repair:** Keep the preferred HG Judd swim photograph, but on a real CDN error switch the hero and card to a separately verified 960px Commons photograph *Michigan's Torch Lake.jpg* by the **same author, same CC BY-SA 3.0 license**, and update alternate text + original-source link. Browser acceptance waits for recovered decoded image. No 20-photo eager-load regression.
+- Merge/release evidence pending final current-HEAD CI and live browser smoke. No ads, map key logic, global styles, other tools, identity, metadata, canonical, sitemap or schema changed; no GSC or revenue impact inferred.
+- **Exactly one next action:** Pass the repeat QA and required repository checks, merge, then verify public production image and map.
+
+## JOURNEY_ATLAS_V1 initial integration — October 30, 2026
+
+- **Owner request:** Build a reusable, callable journey intelligence template and demonstrate it on Lake Superior Circle Tour.
+- **Reusable ID:** `JOURNEY_ATLAS_V1` version 1.0.0 in `design-systems/journey-atlas-v1/`, with portable HTML/CSS/JS starter, evidence contract and QA scorecard. Paired with `FIELD_GUIDE_V1`.
+- **Implementation:** Optional experience chooser inside the existing `/lake-superior-circle-tour/` canonical. Ten editorial cards across Ontario/Wisconsin/Michigan/Minnesota, six previously documented licensed photographs, explicit official-source links, interest/shore/time filtering, alternate-experience hints, direct specialist tools and existing trip-stop add handoff. No live condition inference or new canonical; all 31 stops and existing map retained.
+- **Sources:** Reused dated official-source/photographic research of `/lake-superior-provincial-park/` (Oct 26) and `/apostle-islands/` (Oct 27), plus Circle Tour's existing verified official references. 2026 closures and 2027 sailings specifically fail closed.
+- **SEO/GSC/AdSense:** No new standalone indexable URLs, no modified title, canonical, JSON-LD, sitemap or ad system; no new GSC or revenue measurement claimed.
+- **Verification:** Local structural assertions and new Node test file added; final owning-repo `npm run verify:all`, browser/mobile QA, required GitHub actions and production smoke must still be confirmed before merge.
+- **Next action:** Verify exact PR head with required CI and real browser review; merge only if all inherited gates are green.
+
+### 2026-10-28 — Porkies critical bridge/ford verification, structural source coverage
+
+- Reviewed 2025 official DNR GPS map unbridged-crossing symbols and narrative trails against 174 EGLE/DNR hydro-line candidates; retained candidate source IDs, **no public crossing GPS**. Individually distinguished nine site records including the 2016 Big Carp *mouth bridge* and a **separate** upstream 2026 hiking-account crossing. Explicitly 0 physical-status-certified traverses; GPS map symbols cannot be precisely tied to particular signed crossing locations without further authoritative evidence.
+- Cross-queried independent DNR **Managed Bridge** asset FeatureServer/0 in the park research envelope: one asset (#163), County-owned vehicular/Snowmobile UP1, **CONDITION null**. No individual pedestrian bridge verified by that inventory, which is not evidence that park footbridges are absent. Official DNR closures list offers no specific current crossing clearance; no published closure does not equal open.
+- Incorporated `data/porkies-bridge-crossing-structures.json` with nine bridge/ford evidence records, external source confidence and current-condition block, regenerated safe public `crossing-evidence.json`; research pipeline now checks official bridge layer on every source audit and halts on unexpected asset changes.
+- User-facing `#crossings` includes nine inspected source cards and three source-described visitor alternatives: Lake of the Clouds paved overlook, Summit Peak tower approach (not step-free), Nawadaha viewing platform. Planner explicitly withholds speculative Big/Little Carp or Government Peak wilderness traverses and river-crossing ETAs. All photos/ads/other route canonicals preserved.
+- **Deployment gate:** draft PR #1254, noindex, no public merge; full site and Chromium source tests required on exact head. No claims of 2026 inspected bridge, open ford or usable log crossing. Source report: `docs/PORKIES_ROUTE_NETWORK_EVIDENCE.md`.
+- **One remaining external evidence need:** current park-maintained individual bridge/ford inspection records or official signed crossings (including source ID / exact map symbol match). Those are not publicly discoverable; remote GIS cannot substitute for physical-condition evidence.
+
+### 2026-10-28 — Porkies named junction and river-crossing verification
+
+- Compared **819** DNR hiking line features with **1,190** Michigan EGLE hydrography features. Detected **174** candidate line encounters (86 exact GIS intersections, 88 within-12-meter near-lines), retained all private candidate coordinates for source map review. These are not 174 signed crossings and are NOT safe routes.
+- Cross-walked **23 DNR-described junction/crossing/terminal records** with explicit source URL, null GPS, unknown bridge/ford status and `routeEligible:false`. DNR explicitly confirms Beaver Creek crosses Little Carp and Government Peak crosses the upper Carp; source GIS finds Beaver Creek/Little Carp intersection (one exact plus nearby duplicates), Government Peak has a Carp River Inlet label requiring independent name check. Presque east/west, Pinkerton Creek remain uncertified.
+- Published only privacy/safety-safe aggregate `public/porcupine-mountains/crossing-evidence.json`, no fake crossing coordinates, no automated ford or bridge decisions. New `#crossings` park-ranger field guide explains four high-priority hazards including historical-only 2016 Big Carp bridge washout.
+- Automated reproducible evidence: `.github/workflows/porkies-crossings-audit.yml`, `lib/porkies/crossing-candidates.mjs`, `scripts/research-porkies-crossings.mjs`, `data/porkies-junction-crossing-ledger.json`, `tests/porkies-crossings.test.mjs`, `tests/porkies-crossing-registry.test.mjs`. Full research methods in `docs/PORKIES_ROUTE_NETWORK_EVIDENCE.md`.
+- **Release:** Porkies /porcupine-mountains remains draft PR #1254, `noindex,follow`, not merged. No new metrics, ad changes or current bridge/ford status claims.
+- **Exactly one next investment:** match official DNR GPS map unbridged-crossing markers to distinct source trail/hydro IDs, review bridge/ford physical status from current credible official evidence, and certify named endpoints before permitting hiking routes or ETA.
+
+### 2026-10-28 — Porkies official road and trail topology evidence
+
+- Reconstructed public-source hiking connectivity from **819 DNR records** and official Michigan Geographic Framework **296 road-centerline records**. Trail endpoint-components at 3/5/10/15 m = **8/7/6/3**. Real geometry coverage is about **78 mapped miles**, NOT the complete verified park hiking network.
+- Recorded 22 M-107 segments, 59 South Boundary, 23 east approach, 192 other road records in the study window. Preserved 104 classifiable road lines and 819 hiking lines as sourced **non-routable map overlays** behind the existing six cross-verified parking points.
+- Named-trail geometry conflicts remain severe: Escarpment 0.429 vs published 3.7 mi, Government Peak 4.024 vs 6.4, Lake Superior 9.611 vs 15.6; North Mirror Lake 3.860 vs published 3.5. No valid complete-hike or bridge/crossing confirmation from source. Visitor-center and ski-area hiking coverage absent; map says some trails exist but this particular DNR hiking layer omits them.
+- Added reproducible GitHub Action `.github/workflows/porkies-route-evidence.yml`, graph audit `lib/porkies/route-topology.mjs`, source pipeline `scripts/research-porkies-routing.mjs`, verified GeoJSON evidence layers, source/crossing/road closure risk tests, and date-aware map toggles. All public line overlays have `routingCertified:false` and no false ETA claims. Technical ledger: `docs/PORKIES_ROUTE_NETWORK_EVIDENCE.md`.
+- **Product/release state:** Branch-only draft PR #1254, new /porcupine-mountains/ still noindex, no ads or existing fall/waterfall canonical alterations. Do not merge until exact-head gates are green and risk of misleading trail routing is resolved.
+- **Next investment:** georeference the park map's unbridged crossings and named trail terminals, verify shared North Country Trail sections, then validate vehicle road network and individual hikes with exact parking-to-return routes before offering distances or travel times.
+
+
+### 2026-10-28 — Porcupine Mountains field guide, decision planner and source audit
+
+- PR #1254: noindex `/porcupine-mountains/` prototype on `feat/porkies-access-decision-explorer-20261028`; source-backed photographic FIELD_GUIDE_V1, static official park details, date+arrival+duration+ability+interest decision engine with explicit exclusions and road uncertainty. Existing 31-stop Lake Superior Circle Tour Stop #6 connects to the new guide, corrects unverified “Dark Sky Preserve” and cabin/road language; existing fall-color and three Presque Isle waterfall canonicals untouched; no AdSense or Redis changes.
+- Real GIS import: `scripts/research-porkies-gis.mjs` and GitHub Action [40676754962](https://github.com/izworskic/chrisizworski-com/actions/runs/40676754962) successfully extracted **819/819** DNR WGS84 trail features (22 categories), **16** DNR parking asset points, and retained a source-audit artifact. Research detected **41** single-appearance ~10-meter endpoint buckets and name-to-map length discrepancies (Escarpment, Government Peak, Lake Superior); neither represents fully reconciled usable hiking routes. No public parking/navigation points or fake walking ETAs produced.
+- QA: 59-step full site repository gate **passed** on source-import SHA `9af9d8f3` (after corrected Circle Tour sitemap lastmod); real Chromium browser run [40677154025](https://github.com/izworskic/chrisizworski-com/actions/runs/40677154025) **passed** 390px and 340px mobile, 1366px desktop, planner season/ability scenarios, all archival photo loads, zero JS errors, zero horizontal overflow and no-JS fallback. Browser screenshot artifact retained. Later documentation/QA harness commits may trigger fresh CI before merge; verify exact latest head.
+- Release status: **draft PR, not merged, not public production, noindex.** The Vercel preview built READY but is protected by SSO; browser QA used an isolated local static server on the runner, not the authenticated Vercel preview.
+- GSC/AdSense measurement: no latest comparable report accessed, no ranking, traffic or revenue uplift claimed.
+- Parking follow-up (October 28): six DNR-sourced matched parking assets now power the preliminary itinerary map and Google access links, while ten uncertain assets remain suppressed. New access-direction gating, summer/winter road checks, and map/mobile tests. Source ledger `docs/PORKIES_PARKING_ACCESS_RESEARCH.md`.
+- **Exactly one next action:** reconcile the complete trail and road routing graph before claiming point-to-point hiking or driving times.
+
+### 2026-10-28 — Michigan Winter Trails standalone Field Guide v1 release
+
+- Publishes `/michigan-winter-trails/` as the third standalone `FIELD_GUIDE_V1` winter field guide (joining `/michigan-winter-activities/` and `/frozen-michigan/`), built on the audited Michigan DNR & NPS route dataset (`data/winter-hike/michigan-curated-routes.json` and `data/winter-hike/michigan-route-access-research.json`).
+- Covers 15 primary winter trail systems and 50 named DNR/NPS loops across the Upper and Lower Peninsulas, separating dedicated snowshoe singletrack (Pictured Rocks Munising 2.65 mi, Tahquamenon Lower Falls 1.6 & 2.4 mi, Vasa 1.5/0.6/0.25 mi), ski-shared corridors (Sleeping Bear Heritage & 10 mainland loops, Paradise, Pine Bowl), seasonal fat-tire windows (Silver Lake Dec 15–Mar 15 dune window with 3.5-inch minimum tire width, Vasa singletrack), and packed winter walking loops (Hartwick Pines, Muskegon, Bay City Tobico Marsh).
+- Explicitly surfaces 7 quarantined routes (`UNPLOWED_SEASONAL_ROAD` on Anderson Lake Loops 1–3, `BRIDGE_CLOSED_OUT_AND_BACK` on Hartwick Pines Au Sable River Foot Trail, `SKI_ONLY_NO_SNOWSHOE` on Tahquamenon Upper Falls 1.0-mile Lantern Loop, `SKI_NETWORK_COMPLEXITY` on Muncie Lakes 9.8-mile network, and `SKI_NETWORK_STEEP_DESCENTS` on Pine Bowl 5.9-mile network).
+- Uses local Leaflet 1.9.4 (`/assets/leaflet-1.9.4.js`), grouped Vasa multi-experience pin (`.wf-pin-multi`), view-only Google Maps coordinate links (`not parking`), 3 NPS public-domain + 8 Wikimedia Commons exact-place photographs with transparent offline fallback, and 4 honest `.wf-story-index` markers where no exact-place photo exists.
+- Wired into `/tools/`, `/michigan-destinations/`, `/michigan-winter-activities/`, `/frozen-michigan/`, `public/sitemap-winter.xml`, and `benchmarks/tool-network-registry.json`. GSC impressions/clicks/CTR unmeasured until post-deploy window.
+
+### 2026-10-28 — Apostle Islands Visual NPS Island Atlas
+
+- Build a visual, eight-island field atlas on the existing canonical `/apostle-islands/`, with original National Park Service island maps showing real trail lines and a separate Leaflet layer containing 42 NPS-listed campsite reference positions (21 Stockton, 7 Oak, 7 Basswood, 6 Rocky, 1 Michigan).
+- Distinguish source geography: no invented trail route linework, dock coordinates, walking distances, water routes or safety/availability predictions. NPS directory explicitly reports Sand Island campsite coordinates being corrected: omit those pins. Exclude Devils’ anomalous campsite point and closed south landing, and show no campsite dots for Raspberry (no designated camps).
+- Added accessible-site/group-site filters, eight original NPS trail maps and 24 trail descriptions, responsive tabbed island selection, clickable verified campsite records and handoffs to dock/trip planners.
+- Maintain site-wide identity/SEO, ads and tool graph; no new indexable page or Redis. Full Chromium screenshots, no-JS text and sources, NPS image loads, sitemap and fresh build audit required before release.
+- Meaningful user value: choose an island visually, understand which hiking trails and actual listed camp areas it offers, and form an independent plan for water transport and park permits. No engagement/SEO outcome claimed until measured.
+
+### 2026-10-28 — Apostle Islands dock-to-trail decision layer
+
+- Adds a substantial NPS-sourced "From public dock to island trail" selection on the existing `/apostle-islands/` canonical: 10 documented dock locations and one explicitly closed Devils Island landing, grouped across eight researched islands.
+- Differentiates Stockton Presque Isle west/east and Quarry Bay, and Raspberry light station east/west, instead of flattening each island to one access point. NPS published depth ranges are labeled historic, not present clearance. No boat waypoint, crossing time, guaranteed dock space or closure inference.
+- Connects landing-specific trailheads, accessible group sites/campgrounds, private boundary limits and closures; selecting a landing carries its dock name and warning into the trip brief. Includes Google road map links for Bayfield and Little Sand Bay, but no fabricated water routes.
+- Responsive filters, static without-JS source evidence, original eight island dossiers, source freshness review and photos/map kept intact. No new indexable URLs, identity/SEO rewrites, Redis or ads configuration changes.
+- Evidence ledger: `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`; data `public/apostle-islands/landing-evidence.json`. Tests: source assertions and real mobile+desktop Chromium for island-to-dock-to-trip handoff, closures and map/photo regressions.
+- Growth expectations unmeasured: new source-backed path to help Lake Superior Circle Tour visitors plan real island outings; measure in later GA/GSC windows and only publish individual island pages with verified independent value.
+
+### 2026-10-27 — Apostle Islands 2027 source-freshness guard
+
+- PR #1249 improves the existing `/apostle-islands/` canonical and trip readiness, without new indexed routes or ad-configuration changes.
+- Adds six directly sourced NPS/operator evidence cards with October 27, 2026 review date; dynamic overdue labels and clearly archived 2026 shuttle and tour content. NPS alerts remain official-site handoffs, not inferred live conditions.
+- Introduces a weekly scheduled and manual conservative source-drift job. It compares known text evidence on the NPS construction page and concessioner shuttle/tour pages, raises one human-review issue for changes or unavailable pages, and **never** auto-opens docks or extends 2026 schedules.
+- No Redis, NPS API key, fake boat availability, inferred wave safety, or unstated 2027 schedule. Existing eight island dossiers, 17 trails, nine experiences, trip readiness, Leaflet map, and Circle Tour destination page remain intact.
+- QA: `tests/apostle-source-watch.test.js`, source desk assertions, desktop/phone and no-JS Chromium visual tests; full repository verification and emitted output audit; production smoke after merge.
+- GSC clicks/impressions/CTR and visitor behavior change not yet measured. Future work: source-review issue triage, actual authorized 2027 shuttle dates when published, and island-by-island trail/camping review with NPS updates.
+
+### 2026-10-27 — Apostle Islands trip feasibility and return-planning desk
+
+- PR #1247, branch `feat/apostle-trip-readiness-20261027`, continues the existing island planner without adding a competing indexable URL or modifying advertising.
+- Visitor need: island listings and named docks do not establish that the person can travel, return, or reserve a campsite. The new "Before you leave Bayfield" trip brief asks island, day/overnight, water transport mode, optional departure date, party size and nights.
+- Decision blocks: closed Devils Island landings, unsupported Raspberry overnight camping, no road-only NPS island access, unverified Oak day shuttles, undocumented 8–21-person group sites. All scheduled transport is treated as a dated 2026 source, not as current or 2027 availability.
+- Camping evidence: NPS 30-day individual campsite booking window; 8–21 group sites use separate annual March lottery; confirmation email is not the printed permit; 2026 posted campsite/reservation fees labeled non-live. Independent return-trip, NWS weather and NPS alerts verified by direct source links.
+- Static-first NPS checklist and source links; progressive JS plan, no new API, Redis, or inferred docking coordinates. Dedicated Chromium and source tests extended to negative access and permit-window cases.
+- Verified GSC/AdSense impact: no new comparable data; cannot claim CTR/rank/revenue gains. Protect Circle Tour routing identity and established author graph.
+- Release gate: exact-head complete CI, browser captures, Vercel preview, public emission; only after green merge and production smoke.
+
+### 2026-10-27 — Apostle Islands island-by-island access expansion
+
+- PR #1246, branch `feat/apostle-islands-island-access-20261027`, expands existing indexable `/apostle-islands/` instead of publishing thin new island pages.
+- Eight source-evidenced island dossiers, 17 specifically named NPS trails, named docks (not GPS waypoints), separate camping and ferry/shuttle status, closure gate for Devils Island, and informed same-day vs overnight choices.
+- Interactive purpose filters and two-island comparison use HTML content that remains visible without JavaScript. Hero and original guide cards link directly to the new layer.
+- Researched using October 2026 NPS trail and public docks lists, individual campsite directory, primitive zone exclusions, active closures, 2026 construction, and authorized concessioner 2026 transport schedules. 2026 seasonal service never implies future ticket availability.
+- Unchanged ads, route/canonical and original Circle Tour search intent. SEO effects and new GSC clicks/impressions **unmeasured**.
+- Evidence and revalidation policy: `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`. Source inventory: `public/apostle-islands/island-access.json`.
+- Release gate: complete full-repository CI and real 390px/1366px Chromium checks, then merge only green exact SHA, verify Vercel READY and real public page; no fabricated access status or live availability.
+- Single next action: Inspect PR #1246 checks and screenshots, resolve any failures, then merge and smoke-test production.
+
+### 2026-10-27 — Apostle Islands decision-oriented Circle Tour field guide
+
+- **Branch / PR:** `feat/apostle-islands-explorer`, [#1239](https://github.com/izworskic/chrisizworski-com/pull/1239), draft. Distinct canonical `/apostle-islands/` owns water access, trip-type, cave, cruise, Madeline ferry and backcountry decisions; the existing Circle Tour remains multi-state routing owner.
+- **Visitor utility:** Nine static, indexable, official-source-backed experiences; photograph licensing; site-standard Field Guide v1 design; CSS/mobile design, filterable Leaflet and CARTO/OSM-fallback map; directions and critical safety text present with JavaScript off.
+- **Accuracy constraints:** Madeline Island separate from NPS; 2026 Little Sand Bay and Devils Island construction noted with explicit date; UW wave monitoring offline seasonally; no invented safe paddling, winter ice access, boat landings or bookings. Public sources documented in `docs/APOSTLE_ISLANDS_EXPLORER_RESEARCH.md`.
+- **Site integration:** Circle Tour Bayfield stop, Tools directory + ordered JSON-LD, primary sitemap and reciprocal network registry links. No ads changes.
+- **Gate history:** Initial 59-step run found mismatched Tools directory list count (93 vs 94) and overlong 75-character title; fixed. Added specific static-first tests. Final-head verification and actual rendered mobile/desktop imagery and map checks remain unverified until CI completes. **Do not merge on red or pending checks.**
+- **GSC / AdSense measurement:** No verified new-tool search impressions, clicks or revenue. No ranking uplift claimed.
+- **Exactly one next action:** Inspect latest PR #1239 CI and Vercel preview, test 390px and 1366px with loaded photos/map, repair all blockers, and only then merge and perform live smoke.
+
+### 2026-10-27 — Keweenaw waterfall park access expansion
+
+- Branch: `feature/keweenaw-waterfall-access-guides-20261027`. Continued the merged Upper Peninsula Waterfall Explorer without rebuilding the map or modifying advertising.
+- State GIS + USGS V2 linked evidence checked for Haven #138, Eagle River #142, Silver River #146. Separate authoritative land ownership evidence from Keweenaw County 2025–2029 Recreation Plan; regional visitor sources cover parking and foot approach.
+- Two access-qualified individual pages and one unindexed research guide; search publication gate enforced in tests. Historic water-flow and GIS locations are not live-access claims.
+- Latest GSC and AdSense outcome: no newly verified measurements attributable to this branch; no SEO benefit claimed.
+- Next action: inspect 59-step CI and protected preview, reconcile branch with current main before any merge; only after a green check should production be touched.
+
 ### 2026-10-29 — Sleeping Giant canonical site integration prepared, production build verified, NOT merged
 
 - Canonical planned: `/sleeping-giant-provincial-park/` owns park-trail comparison, not the multi-day Circle Tour itinerary. Distinct registry node, person-based WebPage/ItemList/BreadcrumbList schema, main sitemap entry, Tools and Guides cards, Thunder Bay Circle Tour handoff, and reciprocal in/out network relationships added. Corrected a stale Circle Tour summary that confused the short named trail with the 21.8-km full outing and seasonal camping with year-round park operations.

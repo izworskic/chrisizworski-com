@@ -1,0 +1,39 @@
+name: Michigan Adventure Finder photo browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/michigan-destinations/**'
+      - 'public/assets/michigan-destinations.*'
+      - 'scripts/verify-michigan-destinations-photo-browser.cjs'
+      - '.github/workflows/michigan-destinations-photo-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-scroll-photo-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Chromium test harness
+        run: |
+          mkdir -p /tmp/michigan-destinations-playwright
+          npm install --prefix /tmp/michigan-destinations-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/michigan-destinations-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify every destination image loads after real user scroll on desktop and mobile
+        run: node scripts/verify-michigan-destinations-photo-browser.cjs
+      - name: Retain mobile and desktop photographs, map state, and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michigan-destinations-photo-browser
+          path: artifacts/michigan-destinations-photo
+          if-no-files-found: warn
+          retention-days: 7
