@@ -42,7 +42,7 @@ Use the original file description's attribution and license. If external thumbna
 - Mandatory full gate: `npm run verify:all` through Agent branch verification and related checks; no merge while red.
 - Vercel preview is protected by Vercel Authentication: direct unauthenticated browsing yields Vercel login, **not** an app screenshot. Browser QA instead runs the exact branch source on a local Actions server with real remote photo/tile requests.
 - User-visible live status requires production deploy+live page verification after merge. A READY Vercel preview is not production.
-- Neither advertising configuration nor the existing NYC Crossing page was changed.
+- PR #1301 left advertising configuration and NYC Crossing unchanged. A post-launch browser screenshot exposed a large AdSense-reserved blank region before the hero. The site already supports exact-route exclusions in `config/in-article-ads.json`; PR #1303 uses that established exception for `/nyc-bridges` only. The source page remains analytics-tagged; the publisher ownership meta stays intact, while the AdSense loader is disabled solely on the guide. Other URLs, especially `/nyc-crossing/`, retain ad behavior.
 
 ## Measurement and next investment
 The primary search query cluster is walk NYC bridges / best NYC bridge photography viewpoints / NYC bridge history. GSC baseline for this newly created route is not available. Measure indexation, search query ownership, bridge-profile interaction and guide-to-tool navigation over 28 days after launch without claiming uplift.
