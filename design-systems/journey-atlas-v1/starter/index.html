@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JOURNEY_ATLAS_V1 · Portable Starter</title><link rel="stylesheet" href="journey-atlas.css"></head>
+<body style="margin:0;background:#e8ede8;font-family:system-ui,sans-serif">
+<main>
+<section class="ja-shell" id="journey-atlas" data-journey-atlas aria-labelledby="ja-heading">
+<p class="ja-kicker">JOURNEY_ATLAS_V1 · Portable demonstration</p>
+<h2 id="ja-heading">Choose the kind of day you want</h2>
+<p class="ja-deck">A working, no-build example of destination discovery. These are real destinations, but this starter does not verify current access or tour availability.</p>
+<div class="ja-form" role="group" aria-label="Find experiences">
+<div class="ja-field"><label for="ja-region">Shore</label><select id="ja-region" data-ja-region><option value="all">All shores</option><option value="mi">Michigan</option><option value="wi">Wisconsin</option></select></div>
+<div class="ja-field"><label for="ja-interest">Interest</label><select id="ja-interest" data-ja-interest><option value="all">Any</option><option value="scenery">Scenery</option><option value="hiking">Hiking</option><option value="maritime">Islands and water</option></select></div>
+<div class="ja-field"><label for="ja-time">Time</label><select id="ja-time" data-ja-time><option value="all">Flexible</option><option value="short">Short stop</option><option value="half">Half day</option><option value="full">Full day</option></select></div>
+</div>
+<div class="ja-summary"><p data-ja-result role="status" aria-live="polite">Two experiences to explore. Filters need JavaScript.</p><button class="ja-small-btn" type="button" data-ja-reset>Reset</button></div>
+<div class="ja-grid">
+<article class="ja-card" data-ja-place data-ja-order="1" data-ja-region="mi" data-ja-interests="scenery hiking" data-ja-times="short half full">
+<figure class="ja-photo"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg" width="960" height="640" loading="lazy" alt="Lake of the Clouds amid fall-colored ridges"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg">Stevenliuyi</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></figcaption></figure>
+<div class="ja-card-body"><span class="ja-locale">Michigan · Porcupine Mountains</span><h3>Lake of the Clouds</h3><p>A dramatic overlook and the entrance to a wider wilderness journey.</p><p class="ja-meta">Short stop or hiking day (editorial fit)</p><p class="ja-alt">Alternative: check shorter official park overlooks.</p><div class="ja-actions"><a href="https://www.michigan.gov/dnr/things-to-do/hiking/trails/porcupine-mountains">Official source</a></div></div></article>
+<article class="ja-card" data-ja-place data-ja-order="2" data-ja-region="wi" data-ja-interests="scenery maritime hiking" data-ja-times="half full">
+<figure class="ja-photo"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Apostle%20Islands%20Sea%20Caves.jpg?width=1000" width="960" height="640" loading="lazy" alt="Red sandstone sea caves at the Apostle Islands"><figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Apostle_Islands_Sea_Caves.jpg">DataThread</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption></figure>
+<div class="ja-card-body"><span class="ja-locale">Wisconsin · Apostle Islands</span><h3>Choose an island experience</h3><p>Differentiate a guided paddle, sightseeing cruise and land-based coastal walk.</p><p class="ja-meta">Half-day or full-day interest (editorial fit)</p><p class="ja-alt">Alternative: visit the mainland shore when water conditions are unsuitable.</p><div class="ja-actions"><a href="https://www.nps.gov/apis/planyourvisit/index.htm">Official NPS source</a></div></div></article>
+</div>
+<p data-ja-empty hidden>No matches. Change a filter.</p>
+<div class="ja-summary"><button type="button" class="ja-small-btn" data-ja-more hidden>Show all</button><p data-ja-trip-status role="status" aria-live="polite"></p></div>
+<p class="ja-footer">No live safety, operator availability, or official route clearance is implied. Use the land manager's dated notices.</p>
+</section></main>
+<script src="journey-atlas.js" defer></script>
+</body></html>
