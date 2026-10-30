@@ -82,7 +82,8 @@ test('A mapped government line remains unapproved navigation, and nonmapped expe
  assert.match(html,/unverified parking-to-trail connection/i);
  assert.doesNotMatch(html,/google\.com\/maps\/dir/);
  assert.doesNotMatch(html,/api\/sleeping-giant/);
- assert.doesNotMatch(html,/<script[^>]*src=/);
+ assert.match(html,/<script src="\/assets\/leaflet-1\.9\.4\.js"><\/script>/);
+ assert.doesNotMatch(html,/<script[^>]+src="https?:\/\//);
 });
 test('Interactive preview has labelled controls, keyboard focus, a live result region and reduced motion',()=>{
  const {html}=compile();
