@@ -17,7 +17,7 @@ if(!destination||destination===root)throw Error('Missing or invalid destination'
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'sleeping-giant-site-'));
 const canonical='https://chrisizworski.com/sleeping-giant-provincial-park/';
 const title='Sleeping Giant Provincial Park Trails | Chris Izworski';
-const description='Compare Sleeping Giant hikes, full return distances and bike-to-hike routes. Explore source-mapped trails, timing limits and Ontario Parks access information.';
+const description='Discover the Sea Lion rock arch, towering Sleeping Giant lookouts, quiet Lake Superior beaches and six hikes, with Ontario Parks return distances and trail guidance.';
 const photo='https://commons.wikimedia.org/wiki/Special:FilePath/Top_of_the_Sleeping_Giant.jpg';
 const reviewedAt='2026-10-29';
 try{
@@ -69,7 +69,7 @@ try{
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
 </head>`);
  replaceOnce('ONTARIO / SIBLEY PENINSULA / LAKE SUPERIOR','SLEEPING GIANT PROVINCIAL PARK / ONTARIO / LAKE SUPERIOR');
- replaceOnce('The cliffs look close across the water. Getting to them is another story.', 'Sleeping Giant Provincial Park rises above the north shore of Lake Superior. The cliffs look close across the water. Getting to them is another story.');
+ // The source template now tells the complete park story. No extra hero copy injection.
  replaceOnce('class="route-grid" id="route-grid"', 'class="route-grid" id="route-grid" itemscope itemtype="https://schema.org/ItemList"');
  for(const [,id] of [['Sea Lion Trail','sea-lion'],['Top of the Giant','top-of-the-giant'],
  ['Head of the Giant','head-of-the-giant'],['Nanabosho Lookout','nanabosho-lookout'],
