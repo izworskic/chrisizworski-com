@@ -15,3 +15,19 @@
 @media(max-width:1020px){.route-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.map-layout{grid-template-columns:minmax(0,1.4fr) minmax(270px,1fr)}.map-legend{min-width:200px}.planner{grid-template-columns:1fr 1fr}.planner>.control:last-child{grid-column:span 2}}
 @media(max-width:750px){.map-bottom{align-items:flex-start}.map-focus-label{flex-wrap:wrap}.map-focus-label select{max-width:100%}.map-zoom-status{min-width:100%}.mast-inner{min-height:0}.mast-nav{padding:18px 22px}.backlink{max-width:140px;text-align:right;line-height:1.3}.brand span{display:none}.hero-gradient{background:linear-gradient(90deg,rgba(6,31,28,.91),rgba(6,31,28,.42)),linear-gradient(0deg,rgba(8,31,28,.76),transparent)}.hero-content{padding:65px 23px 84px}.hero-metrics strong{font-size:1.5rem}.hero-metrics div+div{padding-left:10px}.hero-metrics div{padding-right:7px}.photo-credit{font-size:.6rem;left:22px;right:22px}.section{padding-top:62px;padding-bottom:65px}.section-head,.map-heading{display:block}.verified-label{display:none}.planner{grid-template-columns:1fr;padding:16px}.planner>.control:last-child{grid-column:auto}.route-grid{grid-template-columns:1fr}.route-card{min-height:305px}.map-band{padding:65px 0}.map-heading h2{font-size:2.9rem}.map-legend{margin-top:23px}.map-layout{grid-template-columns:1fr}.map-surface svg{aspect-ratio:1.2}.access-grid{grid-template-columns:1fr}.map-topbar,.map-bottom{font-size:.7rem}.no-nav{font-size:.54rem!important;white-space:normal;text-align:right}.result-intro{align-items:flex-start}.count-note{white-space:normal}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+
+/* A real geographic surface lives above the original no-network SVG fallback. */
+.map-viewport{position:relative;aspect-ratio:820/610;overflow:hidden;background:#102c36}
+.map-viewport>.map-geographic{position:absolute;inset:0;display:none;z-index:2;min-height:0;background:#d9e4dc}
+.map-viewport.is-geographic>.map-geographic{display:block}
+.map-viewport.is-geographic>#map-canvas{visibility:hidden}
+.map-viewport>#map-canvas{width:100%;height:100%;display:block}
+.map-viewport>.basemap-note{position:absolute;left:12px;bottom:12px;z-index:3;max-width:calc(100% - 24px);background:rgba(12,38,44,.92);border:1px solid rgba(255,255,255,.26);border-radius:8px;padding:8px 11px;font-size:.69rem;line-height:1.35;color:#e6f3ed;pointer-events:none}
+.map-viewport.is-geographic>.basemap-note{top:12px;bottom:auto;max-width:270px;font-weight:680;background:rgba(16,48,54,.85)}
+.map-geographic.leaflet-container{font:13px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;touch-action:pan-x pan-y;background:#dbe7dc}
+.map-geographic .leaflet-control-attribution{background:rgba(255,255,255,.92);color:#2d3e37;font-size:10px}
+.map-geographic .leaflet-control-attribution a{color:#135f50}
+.map-geographic .leaflet-control-zoom a{color:#173f36}
+.map-geographic .leaflet-tooltip{font:600 12px/1.4 system-ui,sans-serif;color:#203b35;border-radius:7px;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+@media(max-width:750px){.map-viewport{aspect-ratio:1.16}.map-viewport.is-geographic>.basemap-note{max-width:190px;top:8px;left:8px;font-size:.6rem;line-height:1.3}.map-viewport>.basemap-note{font-size:.65rem}.map-geographic .leaflet-control-attribution{font-size:9px}}
