@@ -4,6 +4,8 @@
  if(!node)return;
  let model;
  try{model=JSON.parse(node.textContent)}catch{document.getElementById('result-hint').textContent='The interactive trail guide could not load. The official distances and Ontario Parks links below are still here to help you plan.';return}
+ const KM_TO_MI=0.62137119223733;
+ const showDistance=(km,precision=1)=>(km*KM_TO_MI).toFixed(precision)+' mi ('+km.toFixed(precision)+' km)';
  const routes=new Map(model.routes.map(r=>[r.id,r]));
  const overlays=new Map(model.overlays.map(r=>[r.routeId,r]));
  const cardList=document.getElementById('route-grid');
@@ -155,7 +157,7 @@
  const NS='http://www.w3.org/2000/svg';
  const summaries={
   'sea-lion':'Follow the forest path past Perry Bay, then meet a remarkable arch of dark stone beside the open lake. The interpretive signs tell how the rock was formed.',
-  'top-of-the-giant':'After kilometres of forest comes the climb to the Giant’s high summit. The lake appears far below the cliffs and both sides of the peninsula open to the horizon. This is a long, demanding walk.',
+  'top-of-the-giant':'After miles of forest comes the climb to the Giant’s high summit. The lake appears far below the cliffs and both sides of the peninsula open to the horizon. This is a long, demanding walk.',
   'head-of-the-giant':'Beyond Sawyer Bay, the park’s steepest trail climbs to a headland view. The ascent takes care and energy; the great sweep of land and water is its reward.',
   'nanabosho-lookout':'The trail rises to the Giant’s chest, where Sawyer Bay, Marie Louise Lake and islands across the peninsula come into view after a long approach.',
   'middlebrun-beach':'Walk through the forest to a quiet sweep of sand and the sound of Superior on the shore. This trail has a separate starting point that has not been precisely mapped here.',
@@ -220,12 +222,12 @@
   const isBike=currentMode()==='bike-hike'&&route.bikePermission==='official_documented';
   detailTitle.textContent=route.name;
   detailIntro.textContent=summaries[id]||'Every trail has a story. Ontario Parks has the official route description.';
-  officialDist.textContent=route.roundTripKm.toFixed(1)+' km';
+  officialDist.textContent=showDistance(route.roundTripKm);
   bikePanel.replaceChildren();
   bikePanel.hidden=!isBike;
   if(isBike){
-    bikePanel.textContent=route.bikeApproachRoundTripKm.toFixed(1)+' km cycling + '+
-      route.bikeHikeRemainingRoundTripKm.toFixed(1)+' km walking, both round-trip. '+bikeStops[id]+
+    bikePanel.textContent=showDistance(route.bikeApproachRoundTripKm)+' cycling + '+
+      showDistance(route.bikeHikeRemainingRoundTripKm)+' walking, both round-trip. '+bikeStops[id]+
       ' Ontario Parks has not published a full time for this combined ride and walk.';
   }
   paths.replaceChildren();pins.replaceChildren();
@@ -243,9 +245,9 @@
     return;
   }
   mapTitle.textContent=route.name;
-  mappedDist.textContent=overlay.mappedReturnKm.toFixed(2)+' km';
-  gap.textContent='This mapped trail line accounts for '+Math.abs(overlay.unmappedOrSourceDifferenceReturnKm).toFixed(2)+
-    ' km less than the full return distance given by Ontario Parks. The approach from parking is unverified here, so do not treat the gap as a straight-line shortcut.';
+  mappedDist.textContent=showDistance(overlay.mappedReturnKm,2);
+  gap.textContent='This mapped trail line accounts for '+showDistance(Math.abs(overlay.unmappedOrSourceDifferenceReturnKm),2)+
+    ' less than the full return distance given by Ontario Parks. The approach from parking is unverified here, so do not treat the gap as a straight-line shortcut.';
   mapStatus.textContent='These lines help you see the landscape. They are not directions or a live trail report.';
   const parking=model.parking.center,all=overlay.sections.flatMap(s=>s.researchGeometry.coordinates);
   const coords=all.concat([parking]);
