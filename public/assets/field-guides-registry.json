@@ -303,6 +303,32 @@
         "/michigan-trillium/",
         "https://morel.chrisizworski.com/"
       ]
+    },
+    {
+      "slug": "great-lakes-shipwreck-viewing-field-guide",
+      "url": "/great-lakes-shipwreck-viewing-field-guide/",
+      "title": "Ghost Ships & Clear Water: Great Lakes Shipwreck Viewing Field Guide",
+      "subtitle": "12 Shallow Preserves · Kayak, Glass-Bottom Boat, Snorkel & Dune Viewing",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May–Oct · Clear-Water Season",
+      "summary": "Maritime historian & underwater preserve ranger guide to 12 shallow Great Lakes shipwrecks in 5 to 25 feet of crystal-clear water visible by kayak, glass-bottom boat, snorkel, or beach walking.",
+      "connectedTools": [
+        "/great-lakes-shipwrecks/",
+        "/edmund-fitzgerald/",
+        "/great-lakes-lighthouses/",
+        "/great-lakes-buoys/",
+        "/great-lakes-island-hopping-field-guide/"
+      ]
     }
   ],
   "plannedRoadmap": [
