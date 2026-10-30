@@ -201,7 +201,7 @@ async function main(){
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
   need(await page.locator('details[data-trail="escarpment"] .trail-edition-warning').count()===1,'no JS source mileage discrepancy hidden');
-  need((await page.locator('#routing-explainer').innerText()).includes('7 separate groups'),'source-only trail topology fallback missing');
+  need((await page.locator('#routing-explainer').innerText()).includes('7 disconnected groups'),'source-only trail topology fallback missing');
   need(await page.locator('.parking-maplink').count()===6,'no JS parking map pin links missing');
   need(await page.locator('.story a[href*="upper-peninsula-waterfalls"]').count()===3,'no JS waterfall handoffs missing');
   await page.screenshot({path:path.join(out,'no-js-mobile.png')});
