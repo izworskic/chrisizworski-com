@@ -43,6 +43,10 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.ok(html.includes('A little preparation makes room for wonder'), 'visitor guide voice missing');
  assert.ok(!html.includes('is-highlight')&&!html.includes('is-denied'), 'a trail must never appear pre-approved or rejected');
  assert.ok(html.includes('21.8 km'));
+ assert.ok(html.includes('13.5 mi'), 'Top of the Giant should show miles first');
+ assert.ok(html.includes('1.5 mi'), 'Sea Lion should show miles first');
+ assert.ok(html.includes('62+ mi'), 'Park-wide metric should show miles');
+ assert.ok(html.includes('showDistance(overlay.mappedReturnKm,2)'), 'Mapped distance must convert from kilometer source data');
  assert.ok(html.includes('Ontario Parks'));
  assert.ok(html.includes('<noscript>'));
  assert.match(html,/unverified parking-to-trail connection/i);
