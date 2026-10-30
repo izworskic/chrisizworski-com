@@ -1,0 +1,39 @@
+name: NYC Bridges guide browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/nyc-bridges/**'
+      - 'public/assets/nyc-bridges.*'
+      - 'scripts/verify-nyc-bridges-browser.cjs'
+      - '.github/workflows/nyc-bridges-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bridge-guide-experience:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright test harness
+        run: |
+          mkdir -p /tmp/nyc-bridges-playwright
+          npm install --prefix /tmp/nyc-bridges-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/nyc-bridges-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test six photos, map tiles, controls and responsive layouts
+        run: node scripts/verify-nyc-bridges-browser.cjs
+      - name: Retain page captures and QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nyc-bridges-browser-evidence
+          path: artifacts/nyc-bridges-qa
+          if-no-files-found: warn
+          retention-days: 7
