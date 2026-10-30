@@ -30,21 +30,21 @@
  function eligibility(point,date,arrival) {
    var s=season(date), road=point.roadRule;
    arrival = ["west","east","inpark"].includes(arrival) ? arrival : "inpark";
-   if(s==="unknown")return {canDirect:false,notice:"Choose a valid travel date before opening directions."};
+   if(s==="unknown")return {canDirect:false,notice:"Tell us your visit date before we offer driving directions."};
    if(road==="west"){
      var limited = s==="winter" || s==="spring";
      return {canDirect:!limited||arrival==="west",notice:limited
-       ? (arrival==="west"?"DNR identifies the west-side County Road 519 approach to Presque Isle during the park's main road closures. Individual parking operations are NOT verified.":"County Road 519 is a western approach: no verified open east-to-west driving route. Change 'Approaching from' to Western U.P. only if that is your actual approach, and confirm official road conditions.")
-       : "Follow the County Road 519 scenic-area approach; choose signed public day-use parking on arrival."};
+       ? (arrival==="west"?"The west-side County Road 519 approach brings you toward the Presque Isle River even when the interior scenic roads close. Check current parking and trail conditions before you go.":"The way to the western river country is not a shortcut from the eastern side when interior roads are closed. Choose the Western U.P. approach only if it matches your actual journey, and check the DNR road notices.")
+       : "Follow the signed County Road 519 approach to the river country, then choose a designated public day-use lot on arrival."};
    }
    if(road==="ski"){
      var allowed = s==="normal" || (s==="winter" && arrival==="east");
      return {canDirect:allowed,notice:s==="winter"
-       ? (arrival==="east"?"East-side approach to winter sports complex. Verify operations, snow report and parking; not proof of open access.":"No verified west-to-east through-park winter vehicle route. Switch to the eastern approach only if that reflects your travel.")
-       : s==="normal"?"East-side trail-network lot; verify the relevant activity and signed parking.":"No verified active season or operating lot: map reference only."};
+       ? (arrival==="east"?"The eastern winter-sports area may offer snowy forest trails. Check the ski and snow report, operations and parking before traveling; none is confirmed open here.":"The winter road closures prevent us from suggesting a through-park drive. Use the eastern approach only if that is how you will actually arrive.")
+       : s==="normal"?"The eastern trail network begins near this mapped lot. Follow signs and confirm your planned activity is available.":"This parking point is shown for orientation; seasonal operations have not been confirmed."};
    }
-   if(road==="seasonal")return {canDirect:s==="normal",notice:s==="normal"?"DNR source-matched lot. Confirm road openings and signed parking before traveling.":"M-107/South Boundary seasonal restrictions or uncertain reopening: directions withheld, map view only."};
-   return {canDirect:s==="normal",notice:s==="normal"?"DNR mapped asset close to named trail reference; on-site access and hours must be confirmed.":"Visitor center or lot operating status not established on this date: map view only."};
+   if(road==="seasonal")return {canDirect:s==="normal",notice:s==="normal"?"This mapped lot is near a named park trail. Enjoy the view only after confirming the scenic road is open and parking is signed.":"The high scenic roads may still be closed for winter or spring breakup. The point remains on the map, but driving directions are withheld until seasonal access can be confirmed."};
+   return {canDirect:s==="normal",notice:s==="normal"?"The mapped lot is near a named nature trail. Check posted opening hours and access before walking in.":"Visitor-center access is not confirmed for this date. Use this pin for orientation rather than driving instructions."};
  }
  function urlFor(point,driving) {
    var xy=point.lat.toFixed(6)+","+point.lon.toFixed(6);
@@ -66,7 +66,7 @@
    if(actions) {
      actions.replaceChildren();
      if(map && markerById[point.id]){
-       var locate=elt("button","parking-locate","Show on park map");
+       var locate=elt("button","parking-locate","Find on the park map");
        locate.type="button";
        locate.addEventListener("click",function(){
          var marker=markerById[point.id];
@@ -76,16 +76,16 @@
        });
        actions.appendChild(locate);
      }
-     var mapLink=elt("a","parking-maplink","View DNR mapped point");
+     var mapLink=elt("a","parking-maplink","See this DNR map location");
      mapLink.href=urlFor(point,false);mapLink.target="_blank";mapLink.rel="noopener noreferrer";actions.appendChild(mapLink);
      if(state.canDirect){
-       var drive=elt("a","parking-drive","Driving directions to mapped lot");
+       var drive=elt("a","parking-drive","Directions to mapped parking area");
        drive.href=urlFor(point,true);drive.target="_blank";drive.rel="noopener noreferrer";
        actions.appendChild(drive);
      }else{
-       actions.appendChild(elt("span","parking-withheld","Driving directions withheld for this season"));
+       actions.appendChild(elt("span","parking-withheld","Check seasonal access before driving"));
      }
-     var official=elt("a","parking-official","Official DNR trail information");
+     var official=elt("a","parking-official","Official park trail details");
      official.href=point.pageUrl;official.target="_blank";official.rel="noopener noreferrer";actions.appendChild(official);
    }
    var caveat=node.querySelector(".access-date-note");
@@ -96,7 +96,7 @@
  function updateFilter(){
    Object.values(siteById).forEach(renderCard);
    var status=root.document.getElementById("parking-status");
-   if(status)status.textContent=focusSelected&&planIds.length ? "Showing "+planIds.length+" DNR mapped access points relevant to your preliminary plan. Other areas remain on the full map." : "Showing all six DNR source-corroborated parking areas. Pins are not road or trail status.";
+   if(status)status.textContent=focusSelected&&planIds.length ? "Showing "+planIds.length+" DNR mapped access points relevant to your preliminary plan. Other areas remain on the full map." : "Explore six DNR-mapped places where a visit might begin. A pin never confirms that its parking or trail is open.";
    var selected=root.document.getElementById("parking-focus");
    if(selected)selected.setAttribute("aria-pressed",focusSelected?"true":"false");
    if(map) {
@@ -119,7 +119,7 @@
    var frame=root.document.getElementById("parking-map");
    if(!frame || !root.L){
      var warning=root.document.getElementById("parking-map-message");
-     if(warning)warning.textContent="Map tiles unavailable. All named DNR parking locations and official map links remain below.";
+     if(warning)warning.textContent="The interactive map is unavailable, but the six mapped parking areas and official park links are still listed below.";
      return;
    }
    map=root.L.map(frame,{scrollWheelZoom:false,zoomControl:true});
@@ -131,13 +131,13 @@
    var active=fallback;
    for (var point of points){
      var marker=root.L.circleMarker([point.lat,point.lon],{radius:7,color:"#173e36",weight:1.5,fillColor:"#276452",fillOpacity:.6}).addTo(map);
-     marker.bindPopup("<strong>"+point.title.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</strong><p>DNR mapped parking asset #"+point.parkingAssetId+". Not proof of open parking or trail access.</p><p><a href='"+urlFor(point,false)+"' target='_blank' rel='noopener noreferrer'>View mapped point</a></p>");
+     marker.bindPopup("<strong>"+point.title.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</strong><p>Michigan DNR mapped parking point #"+point.parkingAssetId+". Check road, parking and trail conditions before leaving.</p><p><a href='"+urlFor(point,false)+"' target='_blank' rel='noopener noreferrer'>View mapped point</a></p>");
      markerById[point.id]=marker;
      marker.on("click",function(id){return function(){root.document.querySelector('[data-parking-id="'+id+'"]')?.scrollIntoView({behavior:"smooth",block:"nearest"});};}(point.id));
    }
    map.fitBounds(root.L.latLngBounds(points.map(p=>[p.lat,p.lon])).pad(.12),{maxZoom:11});
    var message=root.document.getElementById("parking-map-message");
-   if(message)message.textContent="Six DNR parking-asset markers. Select a marker or a card; the map does not show road or trail routes.";
+   if(message)message.textContent="Six possible places to begin exploring. Select a marker to learn about the area; road and trail lines are shown separately when available.";
    root.setTimeout(()=>map.invalidateSize(),250);
    if(root.ResizeObserver){new root.ResizeObserver(()=>map.invalidateSize()).observe(frame);}
    // Use the existing site-owner publishable CARTO configuration. Never write keys into source.
@@ -175,9 +175,9 @@
      }else updateFilter();
    }catch(e){
      var status=root.document.getElementById("parking-status");
-     if(status)status.textContent="Live crosswalk file could not be loaded; use the static DNR-labeled cards and official map below.";
+     if(status)status.textContent="The mapped access records could not be refreshed. The park descriptions and official DNR map are still available below.";
      var msg=root.document.getElementById("parking-map-message");
-     if(msg)msg.textContent="Map unavailable. Official DNR sources and static parking descriptions remain accessible.";
+     if(msg)msg.textContent="The map is unavailable right now. Use the signed parking details and official DNR links below.";
    }
  }
  if(typeof module!=="undefined"&&module.exports)module.exports={season,eligibility,urlFor,nameFor};
