@@ -45,6 +45,29 @@ test('Visitor preview compiles to self-contained HTML with a useful no-script ro
  assert.equal(summary.researchGeometryRoutes,4);
  assert.equal(summary.decisionComparisons,70);
 });
+test('Interpretive trail stories stay distinct and the planner never colors a route approved or rejected',()=>{
+ const {html}=compile();
+ const stories={
+  'sea-lion':'pebble beach on Perry Bay',
+  'top-of-the-giant':'Lake Superior on both sides of the peninsula',
+  'head-of-the-giant':'steepest climb in the park',
+  'nanabosho-lookout':'Marie Louise Lake',
+  'middlebrun-beach':'quiet sweep of sand',
+  'pass-lake-overlook':'Thousands of years ago'
+ };
+ for(const [id,landmark] of Object.entries(stories)){
+  const card=html.match(new RegExp('<article class="route-card" data-id="'+id+'">([\\s\\S]*?)<\\/article>'))?.[1];
+  assert.ok(card,id+' story missing');
+  assert.ok(card.includes(landmark),id+' must describe its own place');
+ }
+ assert.match(html,/A little preparation makes room for wonder/);
+ assert.match(html,/Six trails\. Six ways to meet the Giant/);
+ assert.doesNotMatch(html,/is-highlight|is-denied/);
+ assert.doesNotMatch(html,/border-color:#5a9c7e|#9e573b/);
+ assert.match(html,/No documented complete bicycle approach/);
+ assert.match(html,/no official total time/);
+ assert.match(html,/Only Ontario Parks’ published return-walk times/);
+});
 test('All 70 planning combinations are produced by the canonical Node route engine, not browser guesses',()=>{
  const {json}=compile();
  assert.equal(Object.keys(json.plans).length,70);

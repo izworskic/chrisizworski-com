@@ -279,6 +279,30 @@
         "/apostle-islands/",
         "/great-lakes-buoys/"
       ]
+    },
+    {
+      "slug": "michigan-spring-awakening-field-guide",
+      "url": "/michigan-spring-awakening-field-guide/",
+      "title": "Michigan Spring Awakening & Forager’s Field Guide",
+      "subtitle": "12 Seasonal Milestones · Morels, Sugarbushes, Ephemerals & Vernal Choruses",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "seasonLabel": "Feb–May · Spring Awakening",
+      "summary": "Northwoods field naturalist & phenology guide to Michigan spring: morels, maple tapping, vernal pool amphibian choruses, trillium blankets, and 41.7°N to 47.4°N soil warming waves.",
+      "connectedTools": [
+        "/michigan-maple-sap-run/",
+        "/michigan-soil-temperature/",
+        "/michigan-frog-chorus/",
+        "/michigan-trillium/",
+        "https://morel.chrisizworski.com/"
+      ]
     }
   ],
   "plannedRoadmap": [

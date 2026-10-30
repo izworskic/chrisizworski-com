@@ -1,3 +1,7 @@
+## Reusable Journey Atlas experience intelligence — 2026-10-30
+
+When the owner asks **"Use JOURNEY_ATLAS_V1"**, **"use my Journey Atlas template"** or **"trip-aware field guide"**, first read [`design-systems/journey-atlas-v1/AGENTS.md`](design-systems/journey-atlas-v1/AGENTS.md), [`README.md`](design-systems/journey-atlas-v1/README.md) and the evidence/QA rules. It complements `FIELD_GUIDE_V1`: experience matching by shore, interest and qualitative time; source-linked alternatives; optional integration with the existing stop planner. Reuse verified specialist tools rather than duplicating their logic. No fake live access, unapproved ad changes, or new indexable duplicate route. Lake Superior reference: `/lake-superior-circle-tour/#journey-atlas`.
+
 ## Reusable photo-led Field Guide standard — 2026-10-26
 
 When the owner asks **"use my Field Guide design standard"**, **"FIELD_GUIDE_V1"** or **"the Michigan Adventure Finder design"**, first read [`design-systems/field-guide-v1/AGENTS.md`](design-systems/field-guide-v1/AGENTS.md) and its referenced specification. The self-contained, versioned system includes accessible HTML/CSS/JS starter, photographed destination cards, credits/licenses, map fallback and QA benchmark. Apply the *experience principles*, not cloned text or duplicated cards. Do not modify the existing advertising stack without a separate explicit request. The source folder is not a public route and not a separate GitHub repository.
