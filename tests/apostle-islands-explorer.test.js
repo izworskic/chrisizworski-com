@@ -236,3 +236,42 @@ test('atlas excludes NPS disputed Sand and anomalous Devils coordinate, never gu
  assert.ok(html.includes('original NPS island maps')||html.includes('actual NPS island trail maps'));
  assert.ok(!html.includes('Sand Island campsite coordinates have been corrected'));
 });
+
+test('NPS evidence maps exactly 21 documented dock-to-trail-to-site relationships across eight islands',()=>{
+ const x=JSON.parse(file('public/apostle-islands/verified-pathways.json'));
+ const atlas=JSON.parse(file('public/apostle-islands/island-atlas.json'));
+ const docks=JSON.parse(file('public/apostle-islands/landing-evidence.json'));
+ assert.equal(x.rows.length,21);
+ assert.equal(new Set(x.rows.map(p=>p.id)).size,21);
+ assert.equal(new Set(x.rows.map(p=>p.island)).size,8);
+ assert.equal((html.match(/class="atlas-path-card(?: is-closure)?"/g)||[]).length,21);
+ assert.equal((html.match(/class="path-sequence"/g)||[]).length,21);
+ assert.equal((html.match(/data-path-select="/g)||[]).length,21);
+ assert.ok(html.includes('id="atlas-connection-readout"'));
+ assert.ok(html.includes('id="trip-selected-path"'));
+ assert.ok(html.includes('NPS relationship')||html.includes('NPS source'));
+ for(const p of x.rows){
+  const island=atlas.islands.find(a=>a.id===p.island);
+  assert.ok(island,'Unknown island '+p.id);
+  assert.ok(docks.sites.some(d=>d.id===p.dockId&&d.island===p.island),'No NPS-listed dock '+p.id);
+  assert.equal(p.stages.length,3,'Sequence should be three stages '+p.id);
+  assert.ok(p.routeLabel&&p.caution,'Missing caution '+p.id);
+  assert.ok(p.sourceUrls.length>=1&&p.sourceUrls.every(url=>url.startsWith('https://www.nps.gov/')),'Missing official NPS source '+p.id);
+  if(p.island!=='sand')for(const id of p.siteIds)assert.ok(island.sites.some(([sid])=>sid===id),'Bad campsite pairing '+p.id+': '+id);
+  assert.ok(html.includes('id="atlas-path-'+p.id+'"'),'Missing static route '+p.id);
+ }
+});
+test('disputed Sand points and Devils access are never mapped as connected routes',()=>{
+ const x=JSON.parse(file('public/apostle-islands/verified-pathways.json'));
+ const data=file('public/assets/apostle-visual-atlas.js');
+ const sand=x.rows.filter(p=>p.island==='sand');
+ assert.equal(sand.length,4);
+ assert.ok(sand.every(p=>/NPS/.test(p.caution)||p.caution.includes('site')||p.caution.includes('Sand')));
+ assert.equal(x.rows.find(p=>p.id==='devils-closed').kind,'closed');
+ assert.equal(x.rows.find(p=>p.id==='devils-closed').siteIds.length,0);
+ assert.deepEqual(x.rows.find(p=>p.id==='sand-boardwalk').siteIds,['3','C']);
+ assert.ok(x.rows.some(p=>p.id==='oak-northwest'&&p.caution.includes('different dock-to-site distances')||p.id==='oak-northwest'&&p.caution.includes('slightly different')));
+ for(const mark of ['choosePath','activePath','data-path-select','data-path-dock','data-path-trip','pathReadout','No campsite markers plotted'.toLowerCase().slice(0,9)])assert.ok(data.toLowerCase().includes(mark.toLowerCase()),mark);
+ assert.doesNotMatch(data,/L\.polyline|L\.polygon|L\.routing|fetch\(['"]https:/);
+ assert.ok(file('public/assets/apostle-trip-readiness.js').includes('trip-selected-path'));
+});
