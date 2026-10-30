@@ -1,0 +1,461 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-30",
+  "basis": "Only NPS-documented dock, named trail, boardwalk, campsite or day-trail relationships. No calculated trail geometry, campsite availability, docking clearance or return service.",
+  "permitUrl": "https://www.nps.gov/apis/planyourvisit/camping-permits-reservations.htm",
+  "conditionsUrl": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
+  "directoryUrl": "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+  "rows": [
+    {
+      "id": "stockton-access",
+      "island": "stockton",
+      "kind": "boardwalk",
+      "dockId": "stockton-presque-west",
+      "title": "Presque Isle: boardwalk to site 1",
+      "routeLabel": "NPS-documented accessible boardwalk",
+      "siteIds": [
+        "1"
+      ],
+      "stages": [
+        "Arrive only if the west Presque Isle public dock is usable and your transport is confirmed.",
+        "Use the NPS-documented boardwalk from the west-side harbor dock to accessible campsite 1 and nearby facilities.",
+        "Confirm site 1 permit separately; check the return crossing with your operator."
+      ],
+      "caution": "The campsite path is documented; the water approach, docking and reservation are not verified here.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+        "https://www.nps.gov/apis/planyourvisit/stockton-campsites.htm"
+      ]
+    },
+    {
+      "id": "stockton-shore",
+      "island": "stockton",
+      "kind": "described-access",
+      "dockId": "stockton-presque-west",
+      "title": "Presque Isle: shoreline campground",
+      "routeLabel": "NPS campsite locations along Presque Isle Bay",
+      "siteIds": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "10",
+        "11",
+        "12",
+        "13",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "stages": [
+        "Arrive at Presque Isle only with a confirmed vessel and dock plan.",
+        "NPS places campsites 2–19 along about three-quarters of a mile of Presque Isle Bay shoreline; site 2 is nearest the dock.",
+        "Use the official campground map and signs to locate your assigned site; arrange return transport."
+      ],
+      "caution": "NPS does not name a continuous dock-to-site trail for every campsite. Erosion has removed direct beach access at many sites; no straight-line approach is shown.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/stockton-campsites.htm",
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm"
+      ]
+    },
+    {
+      "id": "stockton-quarry-groups",
+      "island": "stockton",
+      "kind": "boardwalk",
+      "dockId": "stockton-quarry",
+      "title": "Quarry Bay: accessible group camps A and B",
+      "routeLabel": "NPS-documented Quarry Bay boardwalk",
+      "siteIds": [
+        "A",
+        "B"
+      ],
+      "stages": [
+        "Verify your boat's approach and public Quarry Bay dock access.",
+        "Follow the NPS boardwalk from the Quarry Bay dock to group campsite A or B.",
+        "Confirm the specific group reservation, printed permit and return trip."
+      ],
+      "caution": "These are group sites, not individual campsite substitutes. The former inter-bay bridge washout means no unverified overland route between Quarry and Presque Isle.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+        "https://www.nps.gov/apis/planyourvisit/stockton-campsites.htm"
+      ]
+    },
+    {
+      "id": "stockton-quarry20",
+      "island": "stockton",
+      "kind": "described-access",
+      "dockId": "stockton-quarry",
+      "title": "Quarry Bay: individual site 20",
+      "routeLabel": "NPS describes site 20 as ¼ mile west of dock",
+      "siteIds": [
+        "20"
+      ],
+      "stages": [
+        "Check the public Quarry Bay dock and independent vessel return plan.",
+        "NPS locates site 20 about one-quarter mile west of the dock, in trees behind the west end of the beach.",
+        "Confirm the site permit and local wayfinding; no traced footpath has been inferred."
+      ],
+      "caution": "A published site location is not a mapped trail alignment. Do not substitute the nearby beach for guaranteed landing access.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/stockton-campsites.htm",
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm"
+      ]
+    },
+    {
+      "id": "stockton-julian",
+      "island": "stockton",
+      "kind": "day-trail",
+      "dockId": "stockton-presque-east",
+      "title": "Julian Bay beach walk",
+      "routeLabel": "Julian Bay Trail · 0.4 mile",
+      "siteIds": [],
+      "stages": [
+        "Arrive at the Presque Isle visitor area using authorized water transport.",
+        "Walk the NPS Julian Bay Trail from the ranger station to the beach.",
+        "Return to the dock on your confirmed transport schedule."
+      ],
+      "caution": "This is a day-hike relationship, not a campsite route. The 0.4-mile published trail length does not include transport or other walking.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm"
+      ]
+    },
+    {
+      "id": "oak-near-dock",
+      "island": "oak",
+      "kind": "described-access",
+      "dockId": "oak-west",
+      "title": "Oak: campsites nearest the west dock",
+      "routeLabel": "NPS-described west-dock approach",
+      "siteIds": [
+        "2",
+        "3",
+        "B"
+      ],
+      "stages": [
+        "Confirm transport to the NPS west public dock.",
+        "NPS locates individual site 2 about 0.1 mile west, site 3 about 0.25 mile west and group B about 50 yards west of the dock.",
+        "Locate your assigned campsite using the NPS map and check the permit and pickup."
+      ],
+      "caution": "These are NPS descriptive distances, not a drawn trail. Group B is a group-permit site.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/oak-campsites.htm",
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm"
+      ]
+    },
+    {
+      "id": "oak-sandspit",
+      "island": "oak",
+      "kind": "named-trail",
+      "dockId": "oak-west",
+      "title": "Oak: sandspit campsites 1 and A",
+      "routeLabel": "Sandspit Trail · NPS describes 1.5 miles from dock",
+      "siteIds": [
+        "1",
+        "A"
+      ],
+      "stages": [
+        "Confirm west dock landing and an actual return boat.",
+        "Follow the NPS Sandspit Trail toward the southern sandspit.",
+        "Locate individual site 1 or group A on the designated sandspit area; use only established paths, boardwalks or beach."
+      ],
+      "caution": "Sandspit vegetation is fragile. Group site A requires a group reservation. Dock-to-sandspit distance comes from the NPS campsite description.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/oak-campsites.htm"
+      ]
+    },
+    {
+      "id": "oak-northwest",
+      "island": "oak",
+      "kind": "named-trail",
+      "dockId": "oak-west",
+      "title": "Oak: Northwest Beach campsite 4",
+      "routeLabel": "Northwest Beach Trail via Loop Trail",
+      "siteIds": [
+        "4"
+      ],
+      "stages": [
+        "Confirm landing at the west dock and assess the longer backcountry day.",
+        "Take the NPS Loop Trail to the Northwest Beach Trail junction, then follow that named trail toward campsite 4.",
+        "Verify campsite allocation, daylight and the return route before leaving the dock area."
+      ],
+      "caution": "NPS trail and campsite pages give slightly different dock-to-site distances (about 2.8 and 3 miles). No exact total or route geometry is inferred.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/oak-campsites.htm"
+      ]
+    },
+    {
+      "id": "oak-northbay",
+      "island": "oak",
+      "kind": "named-trail",
+      "dockId": "oak-west",
+      "title": "Oak: North Bay campsite 6",
+      "routeLabel": "North Bay Trail via Loop Trail",
+      "siteIds": [
+        "6"
+      ],
+      "stages": [
+        "Confirm west dock access and allow for a longer overland approach.",
+        "Follow NPS Loop Trail connections to the North Bay Trail and campsite 6.",
+        "Verify site-specific conditions and how you will leave the island."
+      ],
+      "caution": "NPS descriptions differ slightly on dock-to-site distance (about 3.7 and 4 miles). This guide does not resolve that into a false precise estimate.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/oak-campsites.htm"
+      ]
+    },
+    {
+      "id": "oak-overlook",
+      "island": "oak",
+      "kind": "day-trail",
+      "dockId": "oak-west",
+      "title": "Oak: high overlook hike",
+      "routeLabel": "Loop Trail to Overlook Trail",
+      "siteIds": [],
+      "stages": [
+        "Arrive at the west dock with a scheduled return plan.",
+        "Follow the inland Loop Trail to the signed Overlook Trail junction.",
+        "Enjoy the view and return by the documented trail network in time for your confirmed boat."
+      ],
+      "caution": "NPS describes the overlook roughly 3.5 miles from the dock. This is a trail outing, not a shortcut to a campsite.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm"
+      ]
+    },
+    {
+      "id": "sand-boardwalk",
+      "island": "sand",
+      "kind": "boardwalk",
+      "dockId": "sand-east",
+      "title": "Sand: accessible site 3 and group C",
+      "routeLabel": "NPS-documented East Bay dock boardwalk",
+      "siteIds": [
+        "3",
+        "C"
+      ],
+      "stages": [
+        "Check East Bay public dock access with your operator.",
+        "Use the NPS boardwalk to accessible site 3 or group C (NPS lists them near the dock).",
+        "Verify campsite permit and return transport independently."
+      ],
+      "caution": "NPS is correcting Sand Island campsite coordinates. These connections are documented in prose but no campsite pins are plotted.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm",
+        "https://www.nps.gov/apis/planyourvisit/sand-campsites.htm"
+      ]
+    },
+    {
+      "id": "sand-wellisch",
+      "island": "sand",
+      "kind": "named-trail",
+      "dockId": "sand-east",
+      "title": "Sand: Wellisch Cabin Trail camps",
+      "routeLabel": "Wellisch Cabin Trail · 0.6 mile",
+      "siteIds": [
+        "2",
+        "A",
+        "B"
+      ],
+      "stages": [
+        "Land only if the East Bay dock and transport are confirmed.",
+        "Follow the Wellisch Cabin Trail south from East Bay dock, passing site 2 and group sites A and B.",
+        "Find the assigned site from current NPS signs; arrange an independent return."
+      ],
+      "caution": "No Sand campsite coordinates are plotted while NPS corrects its published table. A/B require group camping permits.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/sand-campsites.htm"
+      ]
+    },
+    {
+      "id": "sand-lighthouse6",
+      "island": "sand",
+      "kind": "named-trail",
+      "dockId": "sand-east",
+      "title": "Sand: lighthouse approach and site 6",
+      "routeLabel": "Lighthouse Trail · NPS lists site 6 about 1 mile north",
+      "siteIds": [
+        "6"
+      ],
+      "stages": [
+        "Arrive at the NPS East Bay dock with confirmed transport.",
+        "Take the Lighthouse Trail north; NPS locates site 6 on the east side about a mile from the dock.",
+        "Use the official map and signs for the site, then confirm permit and return."
+      ],
+      "caution": "Site 6 has a separate toilet approach; NPS says there is no direct campsite-to-toilet path. Site coordinate withheld pending corrections.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/sand-campsites.htm"
+      ]
+    },
+    {
+      "id": "sand-lighthouse",
+      "island": "sand",
+      "kind": "day-trail",
+      "dockId": "sand-east",
+      "title": "Sand: lighthouse day walk",
+      "routeLabel": "Lighthouse Trail · 2.0 miles",
+      "siteIds": [],
+      "stages": [
+        "Confirm East Bay dock access and return pickup.",
+        "Take the NPS Lighthouse Trail north from the dock toward the lighthouse.",
+        "Return using the original mapped trail, allowing for conditions and the actual boat schedule."
+      ],
+      "caution": "The boardwalk may be slippery when wet. This is not an endorsement of landing at Lighthouse Bay or reaching campsites 4/5.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm"
+      ]
+    },
+    {
+      "id": "rocky-north",
+      "island": "rocky",
+      "kind": "named-trail",
+      "dockId": "rocky-east",
+      "title": "Rocky: north shore campsites 4, 5 and A",
+      "routeLabel": "North Trail · 0.45 mile",
+      "siteIds": [
+        "4",
+        "5",
+        "A"
+      ],
+      "stages": [
+        "Verify use of the east public dock.",
+        "From the dock bulletin board take the NPS North Trail, which passes sites 4, 5 and group A.",
+        "Check the assigned permit and turn back before private land beyond group A."
+      ],
+      "caution": "The 0.45 mile is the trail's published length, not a measured dock-to-each-site distance. Respect the private-property boundary.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/rocky-campsites.htm"
+      ]
+    },
+    {
+      "id": "rocky-near",
+      "island": "rocky",
+      "kind": "described-access",
+      "dockId": "rocky-east",
+      "title": "Rocky: sites 2 and 3 near the dock",
+      "routeLabel": "NPS describes short dock-side walks",
+      "siteIds": [
+        "2",
+        "3"
+      ],
+      "stages": [
+        "Confirm east dock access for the actual date.",
+        "NPS describes sites 2 and 3 within about a quarter mile of the dock, reached on short walks.",
+        "Find the marked campsite; do not assume the rocky beach is a safe or adequate small-boat landing."
+      ],
+      "caution": "NPS does not specify a named trail connection to sites 2 and 3. No trail line is drawn.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/rocky-campsites.htm"
+      ]
+    },
+    {
+      "id": "basswood-dock-camps",
+      "island": "basswood",
+      "kind": "named-branch",
+      "dockId": "basswood-west",
+      "title": "Basswood: dock-side campsites A, 5 and 6",
+      "routeLabel": "Short right branch at dock clearing",
+      "siteIds": [
+        "A",
+        "5",
+        "6"
+      ],
+      "stages": [
+        "Verify the west dock and carry gear uphill to the clearing.",
+        "At the island trail junction follow the NPS-described short right-hand branch through group A toward sites 5 and 6.",
+        "Confirm the assigned site and separate return transport."
+      ],
+      "caution": "NPS locates the group site roughly 200 yards south of dock; this is a short campsite branch, not the full 5.5-mile farm-and-quarry loop.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/basswood-campsites.htm"
+      ]
+    },
+    {
+      "id": "basswood-quarry",
+      "island": "basswood",
+      "kind": "day-trail",
+      "dockId": "basswood-west",
+      "title": "Basswood: farm and quarry loop",
+      "routeLabel": "Farm and Quarry Loop · 5.5 miles",
+      "siteIds": [],
+      "stages": [
+        "Confirm west dock and a realistic return vessel plan.",
+        "Start at the clearing uphill from dock and follow the NPS trail loop by the historic farm and brownstone quarry.",
+        "Return to dock via the marked loop and verify conditions before setting out."
+      ],
+      "caution": "NPS describes sites 1–4 southwest of the quarry but does not establish a precise branch from the loop to each campsite. This is not a campsite-access line.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm"
+      ]
+    },
+    {
+      "id": "michigan-sandspit",
+      "island": "michigan",
+      "kind": "named-trail",
+      "dockId": "michigan-light",
+      "title": "Michigan: sandspit campsite 1",
+      "routeLabel": "Sandspit / Campsite Trail · 1.0 mile",
+      "siteIds": [
+        "1"
+      ],
+      "stages": [
+        "Confirm an actual landing at the Michigan Island light station; passing lighthouse cruises may not stop.",
+        "From behind the light station near the vault toilet take the NPS Sandspit / Campsite Trail toward site 1.",
+        "Camp only in the designated site behind the dunes; confirm permit and boat pickup."
+      ],
+      "caution": "NPS campsite description places the site about 0.9 mile west of light station; trail directory lists a 1.0-mile route. No exact dock-to-site mileage is calculated.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/michigan-campsite.htm"
+      ]
+    },
+    {
+      "id": "raspberry-day",
+      "island": "raspberry",
+      "kind": "day-only",
+      "dockId": "raspberry-west",
+      "title": "Raspberry: lighthouse and island trails",
+      "routeLabel": "West Bay Trail and Sandspit Trail",
+      "siteIds": [],
+      "stages": [
+        "Confirm the operator's actual landing and departure time at Raspberry light station.",
+        "Explore the NPS West Bay or Sandspit hiking trails from lighthouse grounds.",
+        "Return to the boat. There are no designated campsites or primitive camping on Raspberry."
+      ],
+      "caution": "This is a day-only experience; a published tour listing does not guarantee a landing.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/planyourvisit/trails-at-the-apostle-islands.htm",
+        "https://www.nps.gov/apis/planyourvisit/campsite-directory.htm"
+      ]
+    },
+    {
+      "id": "devils-closed",
+      "island": "devils",
+      "kind": "closed",
+      "dockId": "devils-south",
+      "title": "Devils: closed south harbor",
+      "routeLabel": "Historical trail descriptions only",
+      "siteIds": [],
+      "stages": [
+        "Do not plan a dock landing or an overnight stay at the south marina from the historical NPS map.",
+        "Read the current NPS construction and park conditions notices.",
+        "Choose another island if you need a permitted landing, overnight stay, or campsite."
+      ],
+      "caution": "Closed in the reviewed NPS construction record; this guide does not infer a reopening or recommend alternate rock landings.",
+      "sourceUrls": [
+        "https://www.nps.gov/apis/learn/infrastructure-projects.htm",
+        "https://www.nps.gov/apis/planyourvisit/conditions.htm"
+      ]
+    }
+  ]
+}
