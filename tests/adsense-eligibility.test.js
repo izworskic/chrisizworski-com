@@ -141,3 +141,20 @@ test('central page exceptions are host-scoped and respect path boundaries', () =
   for(const url of ['/problem','/problem/child'])assert.ok(!applyAdSettings(page,url,cfg).includes('adsbygoogle'));
   for(const url of ['/problem-other','https://tcwine.chrisizworski.com/problem'])assert.ok(applyAdSettings(page,url,cfg).includes('adsbygoogle'));
 });
+
+
+test('NYC Bridges is the only new route excluded from loader while ownership, GA4 and crossing ads remain',()=>{
+  const {pageExcluded,applyAdSettings}=require('../lib/adsense-eligibility');
+  const cfg=require('../config/in-article-ads.json');
+  const raw='<html><head><meta name="google-adsense-account" content="'+cfg.publisherId+'"></head><body><h1>NYC Bridges</h1></body></html>';
+  assert.equal(pageExcluded('/nyc-bridges/',cfg),true);
+  assert.equal(pageExcluded('/nyc-bridges/index.html',cfg),true);
+  for(const route of ['/nyc-crossing/','/nyc-bridges-extra/','/guides/','/']){
+    assert.equal(pageExcluded(route,cfg),false,'Excluded unrelated route '+route);
+    assert.match(applyAdSettings(raw,route,cfg),/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/,'Unrelated route loader missing '+route);
+  }
+  const guide=applyAdSettings(raw,'/nyc-bridges/index.html',cfg);
+  assert.doesNotMatch(guide,/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/);
+  assert.match(guide,/google-adsense-account/,'Publisher ownership meta remains');
+  assert.match(guide,/<h1>NYC Bridges<\/h1>/);
+});
