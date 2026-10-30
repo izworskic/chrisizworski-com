@@ -154,17 +154,17 @@
 
  const NS='http://www.w3.org/2000/svg';
  const summaries={
-  'sea-lion':'An extraordinary rock arch at the edge of Lake Superior, reached by a shorter walk from South Kabeyun.',
-  'top-of-the-giant':'The signature cliff and plateau experience. This is a demanding, long outing even with a bicycle.',
-  'head-of-the-giant':'The steepest of the Giant summit trails, accessed beyond the Sawyer Bay approach.',
-  'nanabosho-lookout':'A remarkable view across the Sibley Peninsula, reached after a long approach and uphill walking.',
-  'middlebrun-beach':'A quieter beach walk from its own trailhead. Detailed geospatial verification is not available yet.',
-  'pass-lake-overlook':'A short climb to a sandstone lookout from a separate trailhead. Detailed map evidence is pending.'
+  'sea-lion':'Follow the forest path past Perry Bay, then meet a remarkable arch of dark stone beside the open lake. The interpretive signs tell how the rock was formed.',
+  'top-of-the-giant':'After kilometres of forest comes the climb to the Giant’s high summit. The lake appears far below the cliffs and both sides of the peninsula open to the horizon. This is a long, demanding walk.',
+  'head-of-the-giant':'Beyond Sawyer Bay, the park’s steepest trail climbs to a headland view. The ascent takes care and energy; the great sweep of land and water is its reward.',
+  'nanabosho-lookout':'The trail rises to the Giant’s chest, where Sawyer Bay, Marie Louise Lake and islands across the peninsula come into view after a long approach.',
+  'middlebrun-beach':'Walk through the forest to a quiet sweep of sand and the sound of Superior on the shore. This trail has a separate starting point that has not been precisely mapped here.',
+  'pass-lake-overlook':'Climb a sandstone bluff that once stood above glacial water as an island. Pass Lake and Thunder Bay spread out below, and cedar shade greets you on the return.'
  };
  const bikeStops={
-  'top-of-the-giant':'Ontario Parks reports a rack at Kabeyun / Talus; do not cycle beyond the cutoff.',
-  'head-of-the-giant':'No official bike rack is documented at the Head walking transition.',
-  'nanabosho-lookout':'No official bike rack is documented at the Nanabosho walking transition.'
+  'top-of-the-giant':'Ontario Parks describes a bicycle rack where South Kabeyun meets Talus Lake Trail. Leave your bike there; do not cycle beyond the cutoff.',
+  'head-of-the-giant':'No bicycle rack is documented where the Head Trail becomes a walk.',
+  'nanabosho-lookout':'No bicycle rack is documented where the Nanabosho approach becomes a walk.'
  };
  let currentId='sea-lion';
  function el(name,attributes,parent){
@@ -174,15 +174,15 @@
  }
  function labelFor(score,route,mode){
   if(mode==='bike-hike'&&route.bikePermission!=='official_documented')
-    return 'No documented complete bicycle approach. Choose on foot.';
+    return 'No documented complete bicycle approach. Walk this trail; the full route by bicycle has not been established.';
   if(mode==='bike-hike')
-    return 'Legal bike/foot split documented, but no official total bike-and-hike duration.';
+    return 'Ontario Parks allows cycling on parts of this approach, but has no official total time for the ride and walk together. Allow plenty of daylight.';
   switch(score.durationStatus){
-   case 'below_documented_minimum':return 'Below Ontario Parks’ published minimum hiking time. Choose a shorter option.';
-   case 'within_documented_range_not_assured':return 'Your time falls within the reported hiking range, not beyond its upper end.';
-   case 'meets_documented_upper_duration':return 'Published hiking range fits your time budget; conditions and daylight still unverified.';
-   case 'unknown_duration':return 'Ontario Parks provides a distance but no complete outing time. Fit cannot be verified.';
-   default:return 'Compare official distances and verify current conditions with Ontario Parks.';
+   case 'below_documented_minimum':return 'The time you have set aside is shorter than Ontario Parks’ published minimum for this return walk. Save this trail for a longer day.';
+   case 'within_documented_range_not_assured':return 'You have allowed some of the time Ontario Parks suggests, but not the full upper range. Leave room for rests, changing conditions and daylight.';
+   case 'meets_documented_upper_duration':return 'Ontario Parks’ published walking-time range fits the hours you selected. Enjoy the journey, but check conditions and daylight before you leave.';
+   case 'unknown_duration':return 'Ontario Parks gives a return distance but no complete walking time for this trail. Choose a generous daylight window rather than a tight schedule.';
+   default:return 'Use the official distances to imagine your day, then check current conditions with Ontario Parks.';
   }
  }
  function currentMode(){return planner.querySelector('input[name="mode"]:checked')?.value||'hike'}
