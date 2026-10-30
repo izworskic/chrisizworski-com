@@ -7,6 +7,7 @@
 <meta name="author" content="Chris Izworski">
 <title>Sleeping Giant Explorer | Unpublished Visitor Preview</title>
 <meta name="description" content="Compare Ontario Parks Sleeping Giant hikes, full parking-to-destination distances and documented bike-to-hike portions. Unpublished planning preview, not navigation.">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
 <style>/* INLINE_STYLES */</style>
 </head>
 <body>
@@ -88,14 +89,18 @@
 <section id="map-section" class="map-band" aria-labelledby="map-title">
   <div class="wrap">
     <div class="section-kicker pale"><span class="index">02</span> READ THE TERRAIN</div>
-    <div class="map-heading"><div><h2 id="map-title">The trail is longer<br>than the name suggests.</h2><p>Explore four government-mapped trail outlines. These are research geometries, not certified GPS directions. The unverified parking-to-trail connection is intentionally not drawn.</p></div><div class="map-legend"><span><i class="bike-key"></i>Park-permitted cycling section</span><span><i class="walk-key"></i>Walking-only section</span><span><i class="park-key"></i>Approximate parking research point</span></div></div>
+    <div class="map-heading"><div><h2 id="map-title">The trail is longer<br>than the name suggests.</h2><p>Explore four government-mapped trail outlines on a geographic basemap. Zoom and pan to understand the landscape; the trail lines remain research geometry, not certified GPS directions. The unverified parking-to-trail connection is intentionally not drawn.</p></div><div class="map-legend"><span><i class="bike-key"></i>Park-permitted cycling section</span><span><i class="walk-key"></i>Walking-only section</span><span><i class="park-key"></i>Approximate parking research point</span></div></div>
     <div class="map-layout">
       <div class="map-surface">
-        <div class="map-topbar"><div><span>TRAIL OUTLINE / ONTARIO OTN</span><strong id="map-route-name">Sea Lion Trail</strong></div><span class="no-nav">REFERENCE MAP · NOT NAVIGATION</span></div>
+        <div class="map-topbar"><div><span>GEOGRAPHIC CONTEXT / ONTARIO OTN</span><strong id="map-route-name">Sea Lion Trail</strong></div><span class="no-nav">REFERENCE MAP · NOT NAVIGATION</span></div>
+        <div class="map-viewport" id="map-viewport">
         <svg id="map-canvas" viewBox="0 0 820 610" role="img" aria-label="Research-only trail outline for Sea Lion, with an approximate parking area indicated separately. Not a navigation map."><defs>
           <radialGradient id="lake" cx="65%" cy="70%" r="100%"><stop offset="0%" stop-color="#183e50"/><stop offset="100%" stop-color="#0b2633"/></radialGradient>
           <pattern id="mapgrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="#3c6c75" stroke-opacity=".19" fill="none"/></pattern>
         </defs><rect width="820" height="610" fill="url(#lake)"/><rect width="820" height="610" fill="url(#mapgrid)"/><g id="route-shapes"></g><g id="route-pins"></g></svg>
+        <div id="map-geographic" class="map-geographic" role="region" aria-label="Geographic park context with research-only trail overlays. Not a navigation map." aria-hidden="true"></div>
+        <div class="basemap-note" id="basemap-note" aria-live="polite">Loading geographic basemap. Research outline remains available if map tiles fail.</div>
+        </div>
         <div class="map-bottom">
           <span id="map-status">Mapped sections only; current trail conditions unknown.</span>
           <label class="map-focus-label" for="map-focus">Inspect <select id="map-focus" aria-label="Focus the research map on a section">
@@ -131,6 +136,7 @@
 <section class="closing wrap"><h2>The mountain will still be there tomorrow.</h2><p>Give yourself enough time to return, respect posted signs, and let Lake Superior decide the weather rather than a cheerful label on a screen.</p><p class="footlinks"><a href="https://chrisizworski.com/lake-superior-circle-tour/">Back to Lake Superior Circle Tour</a> <span aria-hidden="true">·</span> <a href="https://www.ontarioparks.ca/park/sleepinggiant">Ontario Parks information</a></p></section>
 </main>
 <footer class="page-footer"><div class="wrap"><span>Built by Chris Izworski</span><span>Evidence reviewed October 29, 2026 · Preview only · No live trail status</span><span>Landscape by Justin Meissen, CC BY-SA 2.0</span></div></footer>
+<script src="/assets/leaflet-1.9.4.js"></script>
 <script id="explorer-data" type="application/json">/* INLINE_DATA */</script>
 <script>/* INLINE_SCRIPT */</script>
 </body></html>
