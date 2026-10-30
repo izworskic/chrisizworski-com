@@ -2316,25 +2316,28 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
+      "access": "research-only-route-not-cleared",
+      "landManager": "TNC manages Slate River Forest along four river miles; cannot yet match specific lower-falls/bridge parcels",
       "parkingEvidence": null,
-      "trailEvidence": null,
+      "trailEvidence": "tourism rough east-bank route only; parcel/easement and dry-viewing access unverified",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-10-30",
-      "nextAction": "Resolve the 3.3-mile Arvon quarry vs Skanee Road bridge routes through an authoritative trail/parcel map and roadside-turnout management; identify landowner access agreement, signed east-bank footpath and safe non-fording viewpoint before indexable guide. Historic brochures are not present road clearance.",
+      "nextAction": "Obtain parcel and TNC preserve polygons covering both banks between Skanee Road and GIS #119; confirm landowner/easement permission for a continuous non-fording path, a designated legal parking/turnaround from road manager, and a safe signed viewpoint with current trail and flood status. Do not assume a forest-wide hiking policy grants entry to other parcels, or that an open bridge confers parking rights.",
       "batch": "county-baraga",
       "reviewed": "2026-10-30",
-      "reviewBatch": "20",
-      "classification": "two-conflicting-county-tourist-approaches-skanee-bridge-versus-historic-arvon-quarry",
-      "accessAssessment": "UPtravel Michigan visitor bureau and Lake Superior Circle Tour describe the Skanee Road bridge, a small turnout/two-track east of the bridge and a roughly half-mile rough east-bank approach. The older Baraga County waterfall brochure instead sends visitors 3.3 miles south on Arvon Road to a slate quarry and calls that Slate River Falls; this is geometrically a separate upstream approach near Quartzite/Black Slate, not proven to reach GIS #119. An independent gorge guide reports river fording and wet rock climbing, which are not authorized safe access directions. Signed parking legality, trail landowner and current condition not verified.",
+      "reviewBatch": "21",
+      "classification": "TNC-forest-foot-access-proven-specific-Skanee-road-to-Slate-falls-parcels-unverified",
+      "accessAssessment": "Michigan GIS #119 and independent lower Slate River Falls locations agree, but the public visit route does not yet have permission-backed parking or a safe viewing path. UPtravel and Circle Tour describe a rough east-bank route from near the Skanee Road bridge. A separate field report required a river crossing for a close view and declined it during high water. The older Baraga visitor brochure's 3.3-mile Arvon Road/quarry directions overlap a different upstream Quartzite/Black Slate cluster. The Nature Conservancy now owns the 9,760-acre Slate River Forest, including approximately four miles of river, and permits hiking on ITS protected property, but published evidence does not prove the lower GIS #119 waterfall, road turnout and entire bank path are all on that property. An NBI-derived listing says the Skanee bridge itself is open, which does NOT authorize roadside parking.",
       "evidence": [
+        "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
         "https://www.uptravel.com/listing/slate-river-falls/3708/",
         "https://lakesuperiorcircletour.info/location/slate-river-falls/",
         "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+        "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/",
+        "https://www.gowaterfalling.com/waterfalls/slateriver.shtml",
         "https://www.waterfallsofthekeweenaw.com/slate-river/slate-river-falls/",
-        "https://travelthemitten.com/waterfalls/slate-river-falls-baraga-county/",
-        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Boards/NRC/NRC-Archive/Sept_12_24_Approved_Orders.pdf?hash=89C717EED6A6432BE70647E56116F69D&rev=09432b3c080b439698891fd593ef6d40",
+        "https://www.wuppdr.org/gis",
+        "https://mytownview.com/michigan/baraga/arvon-township/infrastructure/bridges",
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
@@ -4279,5 +4282,5 @@
       ]
     }
   ],
-  "lastBatch": "20"
+  "lastBatch": "21"
 }

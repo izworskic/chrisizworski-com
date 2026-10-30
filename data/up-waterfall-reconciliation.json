@@ -2331,62 +2331,71 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
+      "landManager": "TNC manages Slate River Forest along four river miles; cannot yet match specific lower-falls/bridge parcels",
+      "parkingVerified": false,
       "publicAccessVerified": null,
       "reviewed": "2026-10-30",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
       "evidenceReviewed": "2026-10-30",
-      "disposition": "two-conflicting-county-tourist-approaches-skanee-bridge-versus-historic-arvon-quarry",
+      "disposition": "TNC-forest-foot-access-proven-specific-Skanee-road-to-Slate-falls-parcels-unverified",
       "publicationEligible": false,
-      "sourceNotes": "UPtravel Michigan visitor bureau and Lake Superior Circle Tour describe the Skanee Road bridge, a small turnout/two-track east of the bridge and a roughly half-mile rough east-bank approach. The older Baraga County waterfall brochure instead sends visitors 3.3 miles south on Arvon Road to a slate quarry and calls that Slate River Falls; this is geometrically a separate upstream approach near Quartzite/Black Slate, not proven to reach GIS #119. An independent gorge guide reports river fording and wet rock climbing, which are not authorized safe access directions. Signed parking legality, trail landowner and current condition not verified.",
-      "outstandingGate": "Resolve the 3.3-mile Arvon quarry vs Skanee Road bridge routes through an authoritative trail/parcel map and roadside-turnout management; identify landowner access agreement, signed east-bank footpath and safe non-fording viewpoint before indexable guide. Historic brochures are not present road clearance.",
+      "sourceNotes": "Michigan GIS #119 and independent lower Slate River Falls locations agree, but the public visit route does not yet have permission-backed parking or a safe viewing path. UPtravel and Circle Tour describe a rough east-bank route from near the Skanee Road bridge. A separate field report required a river crossing for a close view and declined it during high water. The older Baraga visitor brochure's 3.3-mile Arvon Road/quarry directions overlap a different upstream Quartzite/Black Slate cluster. The Nature Conservancy now owns the 9,760-acre Slate River Forest, including approximately four miles of river, and permits hiking on ITS protected property, but published evidence does not prove the lower GIS #119 waterfall, road turnout and entire bank path are all on that property. An NBI-derived listing says the Skanee bridge itself is open, which does NOT authorize roadside parking.",
+      "outstandingGate": "Obtain parcel and TNC preserve polygons covering both banks between Skanee Road and GIS #119; confirm landowner/easement permission for a continuous non-fording path, a designated legal parking/turnaround from road manager, and a safe signed viewpoint with current trail and flood status. Do not assume a forest-wide hiking policy grants entry to other parcels, or that an open bridge confers parking rights.",
       "sourceLinks": [
+        "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
         "https://www.uptravel.com/listing/slate-river-falls/3708/",
         "https://lakesuperiorcircletour.info/location/slate-river-falls/",
         "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+        "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/",
+        "https://www.gowaterfalling.com/waterfalls/slateriver.shtml",
         "https://www.waterfallsofthekeweenaw.com/slate-river/slate-river-falls/",
-        "https://travelthemitten.com/waterfalls/slate-river-falls-baraga-county/",
-        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Boards/NRC/NRC-Archive/Sept_12_24_Approved_Orders.pdf?hash=89C717EED6A6432BE70647E56116F69D&rev=09432b3c080b439698891fd593ef6d40",
+        "https://www.wuppdr.org/gis",
+        "https://mytownview.com/michigan/baraga/arvon-township/infrastructure/bridges",
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
         "segments": [
           {
-            "label": "Natural waterfall identity",
+            "label": "Waterfall geography",
             "status": "verified-geography",
-            "finding": "GIS #119 46.831054,-88.252067 agrees with Slate River Falls references 46.83089,-88.25177; map marker is not parking.",
+            "finding": "GIS #119 at 46.831054,-88.252067 matches independent lower-gorge falls point; not a parking location or approved footpath.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
-            "label": "Land manager and parcel",
+            "label": "Protected land ownership",
             "status": "not-cleared",
-            "finding": "Tourist bureaus promote a visit but landowner, public trail easement and allowed bank route not established.",
+            "finding": "TNC's Slate River Forest covers 9,760 acres and about four miles of river, with foot travel allowed on preserve only. Public page does not show whether GIS #119, turnout and full trail are inside TNC boundary.",
+            "source": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/"
+          },
+          {
+            "label": "Skanee Road public bridge",
+            "status": "verified-geography",
+            "finding": "NBI-derived bridge inventory shows Skanee Road/Slate River vehicle bridge open. No inference about legal two-track entry or parking.",
+            "source": "https://mytownview.com/michigan/baraga/arvon-township/infrastructure/bridges"
+          },
+          {
+            "label": "Roadside arrival and parking",
+            "status": "not-cleared",
+            "finding": "Tourism account mentions two-track turnaround east of bridge. No landowner, signed public parking plan or bridge-shoulder permission confirmed.",
             "source": "https://www.uptravel.com/listing/slate-river-falls/3708/"
           },
           {
-            "label": "Road approaches",
+            "label": "Dry-ground viewpoint and trail",
+            "status": "not-cleared",
+            "finding": "Half-mile rough east-bank path is described in visitor materials; historical field report required river crossing for its close view and reports hazardous water. Continuous authorized and non-fording access not established.",
+            "source": "https://www.gowaterfalling.com/waterfalls/slateriver.shtml"
+          },
+          {
+            "label": "Upstream Arvon route identity",
             "status": "conflicting",
-            "finding": "Current UPtravel/Circle Tour: Skanee Road bridge; older county brochure: Arvon Road 3.3 miles to quarry. Do not merge them or instruct a crossing between unrelated sites.",
-            "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf"
-          },
-          {
-            "label": "Legal visitor parking",
-            "status": "not-cleared",
-            "finding": "Regional guide mentions informal two-track turnout east of Skanee bridge, no authoritative signed parking or permission/closure information.",
-            "source": "https://lakesuperiorcircletour.info/location/slate-river-falls/"
-          },
-          {
-            "label": "Walking corridor",
-            "status": "not-cleared",
-            "finding": "Rough east-bank path described by tourism; independent field logs include dangerous wet fording/rock climb. No certified family-friendly trail, avoid fords and cliff descent.",
-            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/slate-river-falls/"
+            "finding": "County brochure labels Arvon Road slate-quarry approach as Slate River Falls; Quartzite/Black Slate cluster has separate mapped points at that road. No valid connection to GIS #119 lower gorge.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
           },
           {
             "label": "Live conditions",
             "status": "not-cleared",
-            "finding": "No current bank erosion, flooding, winter road or parking-closure status.",
+            "finding": "No authoritative October 2026 status of trail, floods, parking, seasonal closure or bank erosion.",
             "source": "https://www.uptravel.com/listing/slate-river-falls/3708/"
           }
         ]

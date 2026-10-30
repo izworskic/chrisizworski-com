@@ -842,3 +842,33 @@ test('Batch 20 Lower Silver Falls scope is lower picnic drop #110, not distant U
  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/lower-silver-falls/'));
  for(const axis of ['landManager','publicAccess','parking','trail','location']){assert.ok(page.includes(guide.verification[axis].source));}
 });
+
+test('Slate River research remains noindex and cannot be advertised as legal access',()=>{
+ const row=ledger.candidates.find(x=>x.gisObjectId===119);
+ const audit=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records.find(x=>x.gisObjectId===119);
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===119);
+ const page=fs.readFileSync('public/upper-peninsula-waterfalls/research/slate-river-falls/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ const researchJs=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
+ assert.equal(row.curatedId,null);
+ assert.equal(row.publicGuide,null);
+ assert.equal(row.publicationEligible,false);
+ assert.equal(row.accessRouteAudit.outcome,'not-cleared');
+ assert.equal(row.accessRouteAudit.segments.length,7);
+ assert.equal(audit.publicationEligible,false);
+ assert.equal(audit.researchPage,'/upper-peninsula-waterfalls/research/slate-river-falls/');
+ assert.ok(queue.candidates.some(x=>x.gisObjectId===119));
+ assert.equal(source.classification,row.disposition);
+ assert.match(page,/name="robots" content="noindex,follow"/);
+ assert.match(page,/Nature Conservancy/);
+ assert.match(page,/Skanee Road/);
+ assert.match(page,/Arvon Road/);
+ assert.match(page,/not a verified visitor itinerary/i);
+ assert.ok(!page.includes('data-parking-lat='));
+ assert.ok(!page.includes('google.com/maps/dir'));
+ assert.ok(!hub.includes('data-id="slate-river-falls"'));
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/slate-river-falls/'));
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/slate-river-falls/'));
+ assert.match(researchJs,/Read the full source-backed access review/);
+});
