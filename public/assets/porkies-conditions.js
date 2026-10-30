@@ -31,7 +31,7 @@
    if(season==="winter")return {code:"restricted",title:"Seasonal vehicle closures apply",text:"From December 1, the DNR closes the M-107 overlook approach at Whitetail parking and South Boundary Road from Headquarters Road toward Pinkerton. Do not plan a through-park drive. County Road 519 is the separate western Presque Isle approach; its same-day surface and parking are not verified."};
    if(season==="reopening")return {code:"uncertain",title:"Reopening is not date-certified",text:"Spring access begins only when the Ontonagon County Road Commission determines it is safe. An automatically chosen May date does not certify the gates open. Use DNR/road commission notices."};
    if(season==="prewinter")return {code:"uncertain",title:"Shoulder-season road status unverified",text:"November can bring early winter restrictions or icy travel. Road gates, parking and bridge conditions remain unverified even though the published seasonal closure begins December 1."};
-   if(season==="normal")return {code:"unknown",title:"Normal-season road plan, not an opening report",text:"June–October is the typical scenic-road season, but this tool has no authoritative live open-gate or plowed-parking feed. Do not interpret a navigation link as an assurance."};
+   if(season==="ordinary")return {code:"unknown",title:"Normal-season road plan, not an opening report",text:"June–October is the typical scenic-road season, but this tool has no authoritative live open-gate or plowed-parking feed. Do not interpret a navigation link as an assurance."};
    return {code:"unknown",title:"Date is missing or invalid",text:"Choose a travel date to see the published seasonal rule. No current or future road-open verdict is available."};
  }
  function assessSample(layer,data){
