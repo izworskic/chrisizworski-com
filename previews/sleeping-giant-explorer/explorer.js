@@ -76,7 +76,8 @@
    try{
      geoMap=L.map(geoElement,{scrollWheelZoom:false,zoomControl:true,
        attributionControl:true,minZoom:7,maxZoom:18,zoomSnap:.5});
-     geoMap.setView([48.43,-88.85],10);
+     const anchor=overlays.get('sea-lion').sections[0].researchGeometry.coordinates[0];
+     geoMap.setView([anchor[1],anchor[0]],10);
      geoLines=L.layerGroup().addTo(geoMap);
      const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
        maxZoom:18,attribution:osmCredit,crossOrigin:true});
@@ -134,7 +135,6 @@
        const names={overview:'Full research outline',start:'Mapped trail start',
          destination:'Mapped destination',parking:'Approximate parking study point'};
        mapZoomStatus.textContent=(names[mode]||'Park context')+' · not for navigation';
-       return;
      }
    }
    const target=focusPoints?.[mode];
