@@ -398,5 +398,6 @@
      window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
  });
  initGeo();
- drawRoute(updateDecisions());
+ updateDecisions();
+ drawRoute(currentId);
 })();
