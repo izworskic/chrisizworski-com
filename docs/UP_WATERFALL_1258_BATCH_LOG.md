@@ -354,3 +354,7 @@ USFS [Recreation.gov waterfall facility](https://www.recreation.gov/camping/poi/
 ## Batch 37 — Jumbo Falls USFS trail confirmed, source geography unresolved (2026-10-31)
 
 USFS public short trail via Golden Glow / FR4589-B [2015 guide](https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf) verified, but agency lat/lng is 904m from independent actual falls point and GIS #29 between. No synthetic parking point, legal vehicle path or visitor waypoint. Added source-linked six checks, noindex research document, re-sorted queue. Inventory still **71 curated, 65 linked, 96 remaining**.
+
+## Batch 38 — Automatic source and browser release gate (2026-10-31)
+
+The U.P. waterfall Chromium workflow previously checked only HTML/assets on PR. Updated in place to run on this waterfall feature branch and on relevant pull requests including source ledger, queue, sitemap and tests. Runs Node source/route/geography safety suite first, then real Chromium map, mobile and save/filter checks, retaining screenshots. Concurrency cancels obsolete runs. No production app files changed, no merge/promotion. Vercel success alone does not establish tested release readiness.
