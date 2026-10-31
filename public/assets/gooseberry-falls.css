@@ -5,3 +5,10 @@
 @media(max-width:640px){body{font-size:15.5px}.site-head{padding:12px 18px;flex-direction:column;align-items:flex-start;gap:5px}.eyebrow-wrap,.intro,.desk,.decision-layers,.explore,.map-section,.bottom-story,.page-footer{padding-left:17px;padding-right:17px}.intro{grid-template-columns:1fr;gap:10px;padding-top:15px;padding-bottom:26px}.deck{margin:12px 0}.intro h1{font-size:clamp(2.45rem,11vw,3.7rem)}.hero-photo{max-width:100%;margin:0}.hero-photo img{height:160px}.hero-photo figcaption{font-size:.73rem}.desk{border-radius:0;padding-top:24px}.desk-top{display:block}.evidence-pill{display:inline-block;margin-bottom:15px;white-space:normal}.choice-grid{grid-template-columns:1fr 1fr;gap:12px}.choice select{font-size:.85rem;min-height:49px}.answer-details{grid-template-columns:1fr 1fr;gap:0 12px}.answer-details strong{font-size:.86rem}.answer{padding:16px}.answer h3{font-size:2rem}.answer-why{font-size:1rem}.action-row>*{flex:1 1 100%}.decision-layers,.explore,.map-section{padding-top:44px}.layer-grid,.experience-grid,.map-grid{grid-template-columns:1fr}.layer:last-child{grid-column:auto}.map-heading{display:block}.map-links{flex-direction:row;flex-wrap:wrap;margin-bottom:16px}#gb-map{height:300px}.map-guide{padding:20px}.bottom-story{margin-top:50px}.page-footer>div{gap:11px 22px}}
 @media(max-width:365px){.choice-grid{grid-template-columns:1fr}.intro h1{font-size:2.5rem}.answer-details{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Exact-place, rights-verified imagery beside every outing. */
+.experience-photo{margin:-22px -22px 17px;min-width:0}
+.experience-photo img{width:100%;height:151px;object-fit:cover;display:block;border-radius:8px 8px 0 0;background:#d9e0d9}
+.experience-photo figcaption{font-size:.69rem;line-height:1.4;color:#53656a;padding:8px 13px 0}
+.experience-photo figcaption a{color:#075b70;text-decoration:underline}
+@media(max-width:640px){.experience-photo img{height:180px}}
