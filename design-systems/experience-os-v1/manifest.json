@@ -1,6 +1,6 @@
 {
   "id": "EXPERIENCE_OS_V1",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "reviewedAt": "2026-10-31",
   "status": "source-only",
   "root": "design-systems/experience-os-v1",
@@ -29,7 +29,7 @@
     "templates/RESEARCH_RECORD.md",
     "templates/RELEASE_REVIEW.md"
   ],
-  "firstPilot": "Porcupine Mountains Explorer",
+  "firstPilot": "Tahquamenon Falls Visit Planner (implemented and merged; see docs/TAHQUAMENON_PILOT_20261031.md)",
   "releaseThreshold": 90,
   "noPublicRoute": true
 }
