@@ -66,6 +66,6 @@ test('trailhead matching is explicit; 15 unproven paths receive warnings',()=>{
  assert.match(html,/id="park-gis-verdict"/);
  assert.match(html,/porkies-conditions\.js/);
  assert.match(html,/name="robots" content="noindex,follow"/);
- assert.match(html,/dateModified":"2026-10-30"/);
+ assert.match(html,/dateModified":"2026-10-31"/);
  assert.doesNotMatch(html,/parking available now|bridge certified safe|all park roads open/i);
 });
