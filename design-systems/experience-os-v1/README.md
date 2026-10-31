@@ -1,6 +1,6 @@
 # EXPERIENCE_OS_V1 — research-led interactive experience operating system
 
-**Version:** 1.2.0 · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
+**Version:** 1.2.1 (V1.2 operational kit) · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
 
 ## Why this exists
 
@@ -54,6 +54,16 @@ The site already has `FIELD_GUIDE_V1` (photo-led editorial quality) and `JOURNEY
 - `docs/MULTI_REPO_ADOPTION.md`: scope, entry points and portable instructions.
 - `templates/`: experience brief, source record and release review.
 - `tests/experience-os.test.js` at repository root: ensures this package remains readable, linked, versioned and has the core safety contracts.
+
+## V1.2 operational kit — durable, repeatable release evidence
+
+**Already present in V1.2.0:** connected selection state, research inspiration, actual-browser QA, interpretive voice and release evidence levels. **Added in V1.2.1:** conservative time-fit; live-provider tile/photo proof; atomic Tools/sitemap/registry discovery; a pure source-truth/release-evidence validator; and a non-overwriting draft scaffold. This is a patch within the existing `EXPERIENCE_OS_V1` directory, not a parallel `V1_2` source of truth.
+
+- Read [the operating kit](docs/V1_2_OPERATING_KIT.md) before substantial new tool development, plus the original design standards.
+- Generate a deliberately incomplete record with `node scripts/new-experience-os-v1.2.mjs --help`.
+- Validate the filled record with `node scripts/verify-experience-os-v1.2.mjs path/to/record.json`; add `--check-site` for central-site source-level canonical, Tools, sitemap and registry checks.
+- Study the [Gooseberry source and launch retrospective](docs/GOOSEBERRY_PILOT_20261031.md) and [finished release record](examples/gooseberry-release-record.json) for practical examples of what passed, failed and remained unmeasured.
+- **Structural checks are not official-source verification or real browser tests.** Owning-repo CI, real-image/map checks, production deployment, independent public smoke and user-outcome measurement are distinct gates.
 
 ## First verified implementation
 
