@@ -31,3 +31,40 @@
 .map-geographic .leaflet-control-zoom a{color:#173f36}
 .map-geographic .leaflet-tooltip{font:600 12px/1.4 system-ui,sans-serif;color:#203b35;border-radius:7px;box-shadow:0 4px 12px rgba(0,0,0,.18)}
 @media(max-width:750px){.map-viewport{aspect-ratio:1.16}.map-viewport.is-geographic>.basemap-note{max-width:190px;top:8px;left:8px;font-size:.6rem;line-height:1.3}.map-viewport>.basemap-note{font-size:.65rem}.map-geographic .leaflet-control-attribution{font-size:9px}}
+
+/* Experience OS v1: featured adventure is one selected route, not another catalog. */
+.featured-adventure{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:0;overflow:hidden;border:1px solid #cddbcc;border-radius:19px;background:#fffefa;margin:-11px 0 38px;box-shadow:0 12px 32px rgba(22,54,45,.08)}
+.featured-adventure.no-photo{grid-template-columns:minmax(0,1fr)}
+.featured-photo{margin:0;position:relative;min-width:0;min-height:310px;overflow:hidden;background:#234a47;display:flex;flex-direction:column}
+.featured-photo[hidden]{display:none!important}
+.featured-photo img{display:block;width:100%;height:100%;min-height:310px;max-height:390px;object-fit:cover;flex:1}
+.featured-photo figcaption{font-size:12px;line-height:1.35;color:#f9f5e9;background:#153c36;padding:10px 15px}
+.featured-photo figcaption a{color:#f4f7dd;text-decoration-thickness:1px}
+.featured-body{padding:28px 31px;min-width:0}
+.featured-body h3{font:500 clamp(1.9rem,3.5vw,2.7rem)/1.12 Georgia,serif;letter-spacing:-.035em;margin:13px 0 12px;color:#17382f}
+.featured-body>p#focus-story{color:#3b5a4d;font-size:1rem;line-height:1.62;margin:0 0 18px;max-width:640px}
+.featured-facts{display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid #d5e1d5;border-bottom:1px solid #d5e1d5;padding:14px 0}
+.featured-facts div{min-width:0}
+.featured-facts span{display:block;font-size:.78rem;color:#567265;margin-bottom:5px}
+.featured-facts strong{font:500 1.28rem/1.25 Georgia,serif;color:#123b30;overflow-wrap:anywhere}
+.featured-access{font-size:.91rem;line-height:1.58;color:#52675a;margin:17px 0}
+.featured-actions{display:flex;gap:15px;flex-wrap:wrap;align-items:center}
+.featured-actions button{background:#174e3e;color:#fff;border:2px solid #174e3e;border-radius:8px;padding:12px 16px;min-height:46px;font-size:.91rem;font-weight:750;cursor:pointer}
+.featured-actions button:hover{background:#0c3229}
+.featured-actions a{font-size:.88rem;font-weight:720;color:#155b48}
+.featured-status{font-size:.78rem;color:#5e7066;margin:14px 0 0}
+.route-card.is-selected{border-color:#2e7454;box-shadow:0 0 0 2px #2e7454 inset,0 8px 20px rgba(30,77,57,.1)}
+.route-card.is-selected .map-choice{background:#194f40;color:#fff}
+.map-route-select{display:block;font-size:.74rem;font-weight:760;margin:13px 0 6px;color:#385d4d}
+.map-route-select select{display:block;width:100%;min-height:45px;background:#fff;border:1px solid #789c8d;border-radius:9px;margin:7px 0 0;padding:9px 12px;color:#183c30;cursor:pointer}
+@media(max-width:750px){
+ .featured-adventure{grid-template-columns:1fr;margin:-12px 0 32px}
+ .featured-body{order:0;padding:22px 22px 24px}
+ .featured-photo{order:1;min-height:0}
+ .featured-photo img{min-height:0;max-height:240px;aspect-ratio:3/2}
+ .featured-facts{grid-template-columns:1fr 1fr;gap:10px}
+ .featured-facts strong{font-size:1.08rem}
+ .featured-body>p#focus-story{font-size:1rem}
+ .featured-actions button{width:100%}
+ .featured-actions a{display:inline-block;padding:6px 0}
+}
