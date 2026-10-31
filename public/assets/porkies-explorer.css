@@ -380,3 +380,20 @@ main>.porkies-journal{max-width:1450px;margin:auto;padding-top:clamp(45px,6vw,80
 @media(prefers-reduced-motion:reduce){
  .journal-actions *, .experience-fieldnote *{scroll-behavior:auto!important;transition:none!important}
 }
+
+/* Verified park photo scope and DNR GIS point ≠ signed pedestrian entrance. */
+.experience-photo figcaption .experience-photo-license{margin-left:9px;white-space:nowrap}
+.experience-photo figcaption .experience-photo-scope{display:block;margin-top:4px;padding-top:4px;border-top:1px solid #d6d8cf;line-height:1.55;color:#435e52}
+.experience-entry{margin:5px 0 14px;padding:13px 15px;background:#f6f4e7;border-left:3px solid #966c41;border-radius:3px}
+.experience-entry .eyebrow{font-size:.68rem;color:#6f5940;margin-bottom:5px}
+.experience-entry-relation{font-size:.85rem;line-height:1.57;color:#29483c;margin:0 0 8px}
+.experience-entry-next{font-size:.84rem;line-height:1.58;color:#244b3e;margin:0 0 7px}
+.experience-entry-source{margin:7px 0}
+.experience-entry-source summary{font-size:.79rem;line-height:1.5;font-weight:750;cursor:pointer;min-height:34px;padding:5px 0}
+.experience-entry-source summary:focus-visible,.experience-locate-parking:focus-visible{outline:3px solid #ae6d3c;outline-offset:2px}
+.experience-entry-source p{font-size:.76rem;line-height:1.55;margin:5px 0}
+.experience-entry-source a{display:inline-block;font-size:.76rem;font-weight:750;min-height:32px}
+.experience-locate-parking{background:#fdfbf4;color:#15473c;border:1px solid #769584;border-radius:4px;padding:7px 11px;font-size:.77rem;font-weight:750;line-height:1.4;min-height:42px;margin-top:6px;max-width:100%;white-space:normal}
+.experience-locate-parking:hover{background:#e7efe6}
+.experience-entry-static{border-left:3px solid #966c41;background:#f5f2e5;padding:9px 12px;font-size:.85rem;line-height:1.6}
+@media(max-width:680px){.experience-entry{padding:12px}.experience-photo figcaption .experience-photo-scope{font-size:.69rem}.experience-locate-parking{width:100%}}
