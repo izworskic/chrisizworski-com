@@ -113,3 +113,32 @@ test("page provides linked truthful comparison even with JavaScript disabled",()
  assert.match(css,/grid-template-columns:1fr/);
  assert.doesNotMatch(html,/parking available now|all roads open|bridge certified safe/i);
 });
+
+
+test("ranger notes deepen the real choice without inventing new access evidence",()=>{
+  const expectedIds=["clouds","summit","river","nature","escarpment","winter"];
+  assert.deepEqual(data.options.map(o=>o.id),expectedIds);
+  for(const option of data.options){
+    assert.ok(typeof option.fieldNote==="string"&&option.fieldNote.trim().split(/\s+/).length>=46,"Substantial, source-backed note missing: "+option.id);
+    assert.ok(option.fieldNote.trim().split(/\s+/).length<=110,"Selection note is too long: "+option.id);
+    assert.match(option.fieldNoteSource,/^https:\/\/www\.michigan\.gov\//,"DNR evidence required for "+option.id);
+    assert.doesNotMatch(option.fieldNote,/currently open|safe crossing|available parking|guaranteed sighting/i,option.id);
+    assert.ok(option.source&&option.limits&&option.publishedDistance,"Existing decision contract changed for "+option.id);
+  }
+  assert.match(code,/experience-fieldnote/);
+  assert.match(code,/option\.fieldNoteSource/);
+  assert.match(code,/elt\(doc,"details","experience-fieldnote"\)/);
+  assert.match(code,/elt\(doc,"summary","experience-fieldnote-trigger"/);
+  assert.equal((html.match(/class="journal-entry"/g)||[]).length,4);
+  assert.equal((html.match(/class="experience-fieldnote"/g)||[]).length,2,"No-JS lake and summit reference notes required");
+  for(const p of ["id="+'"'+"read-landscape"+'"',"The ancient ridge","The living forest","The western river","The wilderness decision"]){
+    assert.ok(html.includes(p),"Interpretive journal missing "+p);
+  }
+  for(const url of ["https://www.michigan.gov/dnr/places/natural-areas/porcupine-mountains","https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"]){
+    assert.ok(html.includes(url),"Primary landscape evidence missing: "+url);
+  }
+  assert.match(html,/name="robots" content="noindex,follow"/);
+  assert.match(css,/\.porkies-journal/);
+  assert.match(css,/\.experience-fieldnote/);
+  assert.match(css,/@media\(max-width:600px\)/);
+});
