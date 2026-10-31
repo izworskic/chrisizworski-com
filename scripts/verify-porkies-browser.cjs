@@ -82,11 +82,13 @@ async function main(){
    await page.locator('#parking-map').screenshot({path:path.join(out,device.name+'-parking-map.png')});
    report.screenshots.push(device.name+'-parking-map.png');
    if(device.name==='desktop'){
-     await page.locator('#porkies-trails-toggle').click();
+     // Two same-tick clicks used to create two independent GeoJSON layers.
+     // Keep the requested layer on, and render only one copy of the DNR source.
+     await page.locator('#porkies-trails-toggle').evaluate(button=>{button.click();button.click();});
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 819 DNR hiking features'),null,{timeout:30000});
      need(await page.locator('#porkies-trails-toggle').getAttribute('aria-pressed')==='true','trail overlay should be enabled');
      const trailLines=await page.locator('.leaflet-porkies-trail-evidence-pane path').count();
-     need(trailLines>=500,'DNR trail overlay lacks the expected source linework '+trailLines);
+     need(trailLines>=500&&trailLines<1500,'DNR trail overlay missing or duplicated on rapid taps: '+trailLines);
      await page.locator('#porkies-roads-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('selected park-area road centerlines'),null,{timeout:25000});
      await page.locator('#porkies-ski-toggle').click();
@@ -109,6 +111,14 @@ async function main(){
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Escarpment Trail: showing'),null,{timeout:20000});
      const sourceHigh=await page.locator('.leaflet-porkies-trail-evidence-pane path[stroke="#d07d31"]').count();
      need(sourceHigh>0,'The named Escarpment source geometry was not highlighted');
+     for(const [id,name,parts] of [['east-river','East River Trail',2],['correction','Correction Line Trail',13],['cross','Cross Trail',38]]){
+       await page.locator('details[data-trail="'+id+'"] summary').click();
+       await page.locator('details[data-trail="'+id+'"] .trail-see-map').click();
+       await page.waitForFunction(({name,parts})=>document.querySelector('#route-evidence-status')?.textContent.includes(name+': showing '+parts+' source line fragment'),{name,parts},{timeout:20000});
+       const highlighted=await page.locator('.leaflet-porkies-trail-evidence-pane path[stroke="#d07d31"]').count();
+       need(highlighted===parts,'DNR '+name+' mismatch between highlighted map paths and reviewed source parts: '+highlighted);
+       if(id==='cross')need((await page.locator('#route-evidence-status').innerText()).includes('individual trail identity is unresolved'),'combined Cross/Correction name requires explicit warning');
+     }
      await page.locator('details[data-trail="visitor-nature"] summary').click();
      await page.locator('details[data-trail="visitor-nature"] .trail-see-map').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('not present as a separately named line'),null,{timeout:10000});
