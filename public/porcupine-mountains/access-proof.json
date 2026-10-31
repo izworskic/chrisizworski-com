@@ -51,13 +51,19 @@
     "appliesToDesignatedParkLots": "unknown; this notice concerns roads and shoulders, not an independent lot policy"
   },
   "sourceWatch": {
-    "automation": "GitHub Actions source check produces an artifact and flags source-change review only; it never certifies reopening or silently alters visitor directions",
+    "automation": "Daily GitHub Actions monitors three reachable official county/township pages, retains a dated artifact and flags source-change review; DNR is manual-only. It never certifies reopening or silently alters visitor directions.",
     "sources": [
       "township-notice",
       "township-news",
-      "dnr-park",
       "gogebic-road-commission"
     ],
-    "updateAuthority": "Manual primary-source verification required before changing route permissions"
+    "updateAuthority": "Manual primary-source verification required before changing route permissions",
+    "manualSources": [
+      {
+        "id": "dnr-park",
+        "url": "https://www.michigan.gov/recsearch/parks/porkies",
+        "reason": "DNR serves HTTP 403 to unattended GitHub Actions in the verified 2026-10-31 check; manual official source inspection required"
+      }
+    ]
   }
 }
