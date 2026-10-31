@@ -934,3 +934,33 @@ test('Slate River public-route gates require primary authority permission',()=>{
  assert.match(page,/2025 Visit Keweenaw feature/);
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/slate-river-falls/'));
 });
+
+test('Scott Falls park-side-only promotion backed by Alger County and MDOT, no M-28 crossing',()=>{
+ const f=curated.waterfalls.find(x=>x.id==='scott-falls');
+ const row=ledger.candidates.find(x=>x.gisObjectId===196);
+ const orig=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===196);
+ const page=fs.readFileSync('public/upper-peninsula-waterfalls/scott-falls/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ assert.ok(f&&row&&orig);
+ assert.equal(f.publication,'verified-access-guide');
+ assert.equal(f.accessConfidence,'county-recreation-plan-verifies-mdot-park-parking-view-only-no-falls-side-route');
+ assert.equal(row.publicationEligible,true);
+ assert.equal(row.curatedId,'scott-falls');
+ assert.equal(orig.publication,'verified-access-guide');
+ assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
+ assert.equal(row.visitorRouteEvidence.pedestrianCrossingAllowedByGuide,false);
+ assert.equal(row.visitorRouteEvidence.waterfallSideRouteVerified,false);
+ assert.match(page,/name="robots" content="index,follow,max-image-preview:large"/);
+ assert.match(page,/view from the MDOT roadside park, without crossing M-28/);
+ assert.match(page,/MDOT's April 2026 roadside-park notice/);
+ assert.match(page,/Current opening and roadside conditions are unverified/);
+ assert.match(page,/do not cross M-28/i);
+ assert.ok(!page.includes('data-parking-lat='));
+ for(const axis of ['landManager','publicAccess','parking','trail','location']){
+  assert.equal(f.verification[axis].verified,true);
+  assert.ok(page.includes(f.verification[axis].source),axis);
+ }
+ assert.match(hub,/data-id="scott-falls" data-gis-oid="196"/);
+ assert.ok(hub.includes('data-arrival-verified="verified"'));
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/scott-falls/'));
+});

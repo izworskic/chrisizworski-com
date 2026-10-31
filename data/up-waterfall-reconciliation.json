@@ -3818,20 +3818,35 @@
       "source": "Michigan state GIS Waterfalls MapServer/7",
       "reconciliation": "curated-exact-gis-id",
       "curatedId": "scott-falls",
-      "publicGuide": "research-only-guide",
-      "landManager": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved",
-      "parkingVerified": {
-        "verified": true,
-        "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-        "description": "MDOT Scott Falls Roadside Park on north side of M-28, approximately 11 miles west of Munising."
-      },
-      "publicAccessVerified": {
-        "verified": false,
-        "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-        "description": "Research page only: do not direct visitors to cross M-28."
-      },
-      "reviewed": "2026-10-26",
-      "notes": "Existing curated record; retain its independent five-axis evidence and status."
+      "publicGuide": "verified-access-guide",
+      "landManager": "MDOT state roadside park (park side); ownership/permission on waterfall side not established",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Existing curated record; retain its independent five-axis evidence and status.",
+      "evidenceReviewed": "2026-10-31",
+      "publicationEligible": true,
+      "disposition": "MDOT-park-side-only-view-confirmed-no-highway-crossing",
+      "sourceNotes": "The Alger County 2024 recreation plan, page 35, describes parking and a waterfall view across the highway. MDOT's April 21, 2026 announcement lists Scott Falls Roadside Park and notes delayed spring reopening due to snow; it also describes roadside parks as often seasonal, closing in late October. Neither establishes the park's current October 31 opening. No pedestrian crossing, waterfall-side trail, safe grotto approach, roadside shoulder or exact parking GPS has been independently approved.",
+      "outstandingGate": "Park-side view published; no certified crossing, waterfall-side land rights, winter seasonal park status or parking GPS. Do not promote crossing or walk-behind experience.",
+      "sourceLinks": [
+        "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+        "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+        "https://www.munising.org/activities/scott-falls/",
+        "https://lakesuperiorcircletour.info/location/scott-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "managerSource": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+        "parkingSource": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+        "parking": "Use MDOT's Scott Falls Roadside Park / H.J. Rathfoot State Roadside Park on the Lake Superior (north) side of M-28 near Au Train, only when the park entrance is open and the designated parking area is available. Alger County's recreation plan identifies this park and its waterfall view across the highway. Do not stop in a travel lane, on the bridge, or an undesignated shoulder. The natural waterfall GIS coordinate is NOT the roadside park entrance.",
+        "trail": "Remain on the roadside-park side of M-28 for the verified waterfall view across the highway. There is no established public pedestrian crossing in these sources, and the waterfall-side path, under-ledge grotto and sandstone rim are NOT a certified visitor trail. Do not cross busy M-28 or climb to the falls based on this guide.",
+        "currentRoadStatus": "seasonal-check-posted-park-status",
+        "navigationToGisPointAllowed": false,
+        "pedestrianCrossingAllowedByGuide": false,
+        "waterfallSideRouteVerified": false,
+        "publicScope": "park-side-view-only"
+      }
     },
     {
       "gisObjectId": 197,

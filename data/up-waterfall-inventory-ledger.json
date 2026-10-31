@@ -3801,15 +3801,26 @@
       "identity": "linked",
       "curatedId": "scott-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only-guide",
-      "access": "incomplete-jurisdiction-or-crossing",
-      "landManager": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved",
-      "parkingEvidence": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-      "trailEvidence": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+      "publication": "verified-access-guide",
+      "access": "MDOT-park-parking-view-across-highway-verified-only",
+      "landManager": "MDOT state roadside park (park side); ownership/permission on waterfall side not established",
+      "parkingEvidence": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+      "trailEvidence": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Recheck source freshness before declaring open",
-      "batch": "published-existing"
+      "checked": "2026-10-31",
+      "nextAction": "Park-side view published; no certified crossing, waterfall-side land rights, winter seasonal park status or parking GPS. Do not promote crossing or walk-behind experience.",
+      "batch": "published-existing",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "24",
+      "classification": "MDOT-park-side-only-view-confirmed-no-highway-crossing",
+      "accessAssessment": "The Alger County 2024 recreation plan, page 35, describes parking and a waterfall view across the highway. MDOT's April 21, 2026 announcement lists Scott Falls Roadside Park and notes delayed spring reopening due to snow; it also describes roadside parks as often seasonal, closing in late October. Neither establishes the park's current October 31 opening. No pedestrian crossing, waterfall-side trail, safe grotto approach, roadside shoulder or exact parking GPS has been independently approved.",
+      "evidence": [
+        "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+        "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+        "https://www.munising.org/activities/scott-falls/",
+        "https://lakesuperiorcircletour.info/location/scott-falls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4321,5 +4332,5 @@
       ]
     }
   ],
-  "lastBatch": "23"
+  "lastBatch": "24"
 }
