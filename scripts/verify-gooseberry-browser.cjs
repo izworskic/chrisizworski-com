@@ -90,6 +90,15 @@ async function scenario({name,width,height}){
  await page.locator('[data-place="beach"]').click();
  ok((await page.locator('.map-guide h3').innerText()).includes('Agate Beach'),name+' list->map selection failed');
  ok(pageerrors.length===0,name+' JS runtime errors: '+pageerrors.join('; '));
+ const photos=page.locator('.experience-photo img');
+ for(let i=0;i<await photos.count();i++){
+   await photos.nth(i).scrollIntoViewIfNeeded();
+   await page.waitForFunction(index=>{
+     const photo=document.querySelectorAll('.experience-photo img')[index];
+     return photo?.complete&&photo?.naturalWidth>=300;
+   },i,{timeout:18000});
+ }
+ ok((await page.locator('.experience-photo figcaption a').count())===4,name+' photograph credit links missing');
  await page.screenshot({path:path.join(out,name+'.png'),fullPage:true,animations:'disabled'});
  scans.push({name,width,height,mapTileRequests,dimensions,jsErrors:pageerrors});
  await context.close();
