@@ -24,6 +24,11 @@ These are **design risks and previously reported complaints**, not claims each i
 | A18 | Recent research trapped in chat with no actionable entry | Capture source URL, pattern, limitations, test, PR link in repo | Source and release logs |
 | A19 | Generic mechanical "data engineering" voice on scenic travel guides | Interpretive, accurate, readable copy supporting sense of place | Read aloud; source and action test |
 | A20 | User gets asked to code, locate dozens of photographs or manually track credits | Agent owns research, verification and implementation within tools/permissions | Completion scope review |
+| A21 | Scrollable horizontal jump links expand a phone CSS grid to min-content width (17px overflow at 360px) | Keep `grid-template-columns:minmax(0,1fr)`, `min-width:0` and scrolling inside the control | Browser assert document scrollWidth at 360/390/768/desktop |
+| A22 | Leaflet fails but the UI still reserves a 430px blank map and spinner | Collapse the failed map into a short linked source notice, and offer non-map full stop browser | Block CDN/tiles in browser and verify placeholder height |
+| A23 | Dynamically selected remote photo occupies a large blank panel while loading or after failed request | Hide the panel until a successfully loaded real image is available; keep source/detail readable | Screenshot after selection with slow/broken image requests |
+| A24 | Source syntax tests pass but runtime `$().forEach` selector typo prevents all visitor controls | Run real browser interaction tests for every selected major control | Playwright keyboard and click scenarios, check pageerror |
+| A25 | Photo/map choice scrolls users away from the updated detail, or is buried after secondary information | Put experience immediately after the core answer and scroll/focus to the changed evidence | Observe viewport before/after photo or marker select |
 
 ## Severity and repair
 

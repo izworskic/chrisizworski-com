@@ -32,6 +32,17 @@
 
 For each family, identify a single meaningful variable to change and the resulting changed **answer**, rather than just a moving interface. Example: changing "hike length" changes the verified shortlist, highlighted route and parking context; it does not merely recolor a decorative chip.
 
+
+## I13 — Proven local implementation: Tahquamenon Falls (2026-10-31)
+
+The first completed EXPERIENCE_OS_V1 pilot is the [Tahquamenon Falls Visit Planner](https://chrisizworski.com/tahquamenon-falls/), built and merged in [owning repo PR #20](https://github.com/izworskic/tahquamenon-falls-live/pull/20). **Read the [specific design/research and failures](TAHQUAMENON_PILOT_20261031.md) before reusing P02/P06/P07/P10.**
+
+**Observed mechanism:** Five time choices and park interests adjust the original itinerary. Source-identified falls/bridge photographs update the selected-place detail and Leaflet map marker. Users can browse 17 park stops using native HTML and dated DNR/operator source links even if map or scripts fail.
+
+**What transfers:** Keep the core decision ahead of visual exposition; design connected map/card/plan state, verify with keyboard and across four widths, and collapse failed visualizations rather than masking them. **What doesn't transfer:** exact layout, 17 coordinates, DNR park claims, Wikimedia file licenses without rechecking, or any suggestion that arbitrary destination routes can be inferred from map pins.
+
+**Evidence:** Existing-owner `npm run verify`, Playwright rendered 360/390/768/1440 and blocked map/JavaScript trials green, screenshots inspected. **Not measured:** conversion, user satisfaction, p75 CWV, organic ranking or revenue gain.
+
 ## Accumulating evidence after releases
 
 Add entries as `I13`, `I14`, etc., with: exact sourced example, checked date, what was genuinely observed, legal/API limits, which local implementation adapted it, PR or demo, tests, outcome and mistakes. A failed approach is useful evidence. **Do not claim the local adaptation exists before its code and deployed behavior are verified.**
