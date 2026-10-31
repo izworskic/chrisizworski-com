@@ -1,0 +1,1812 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-10-31",
+  "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
+  "records": [
+    {
+      "gisObjectId": 12,
+      "name": "Chicagon / Chicaugon Falls",
+      "county": "IRON",
+      "status": "DNR-natural-feature-verified-vehicle-corridor-not-established",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "State-owned waterfall; no proven continuous public approach",
+      "summary": "Michigan DNR land records put Chicagon Falls on a dedicated 47.8-acre state forest parcel. An official forest-management report for the surrounding Chicagon Creek compartment warns that private landowners control almost all vehicle access to that compartment. County tourism guides describe a signed Raymer/Dave's Camp trail but report washouts and passing private camps. None of this establishes today's lawful parking or a continuous public trail to the waterfall.",
+      "guidance": "The waterfall's state parcel is verified, but do NOT navigate to the GIS point, cross private camps or assume Raymer/Dave's Camp Road is passable and public to its end. A signed, legal lot-to-view path needs verification before a visitor guide can be indexed.",
+      "locationNotes": "Michigan GIS #12 at 46.134032,-88.452985 agrees broadly with other geographic catalogs around 46.1336,-88.4535; a separate tourism listing reports 46.1089,-88.4903, a materially different location. The latter must not be substituted as parking or falls position.",
+      "reviewLimitations": "2019/2020-era DNR compartment 12139 concerns the surrounding Chicagon Creek forest area, not a survey or specific trail deed for falls #12. County road commission's 2018 seasonal-restriction list includes Long Lake Road but does not show Raymer/Dave's Camp in that list; absence proves neither private ownership nor closure. State MGF geographic road-name data near the falls identifies Long Lake Road but not a named Raymer segment, which also is not a legal road determination. Exact right-of-way, parking and current passability remain unverified.",
+      "nextEvidence": "Obtain an authoritative legal public right-of-way or DNR access map from Long Lake Road through Raymer/Dave's Camp to the state parcel, including permission at private camps, a designated turnout and footpath; until then no vehicle waypoint or public trail line.",
+      "sourceLinks": [
+        {
+          "label": "Michigan DNR official managed lands GIS layer",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+        },
+        {
+          "label": "Iron County Chamber road and washout directions",
+          "url": "https://www.iron.org/outdoors/waterfalls/"
+        },
+        {
+          "label": "2026 Iron County visitor waterfall guide",
+          "url": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf"
+        },
+        {
+          "label": "Local report warning of private camps",
+          "url": "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/"
+        },
+        {
+          "label": "Geographic location corroboration",
+          "url": "https://fallsdiscovery.com/waterfalls/chicagon-falls-michigan/"
+        },
+        {
+          "label": "DNR Crystal Falls forest-compartment access report",
+          "url": "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Crystal_Falls/2021/cry139_comp_info.pdf"
+        },
+        {
+          "label": "Iron County Road Commission seasonal roads list (historical)",
+          "url": "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf"
+        },
+        {
+          "label": "Michigan state geographic road centerlines",
+          "url": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20"
+        },
+        {
+          "label": "DNR 2026 forest-road rules and maps",
+          "url": "https://www.michigan.gov/dnr/things-to-do/orv-riding/state-forest-roads/maps-and-status"
+        }
+      ],
+      "dnrManagedFallsParcel": {
+        "parID": 258918,
+        "acreage": 47.8,
+        "landStatus": "Dedicated",
+        "name": "Crystal Falls Management Unit",
+        "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+      },
+      "routeAudit": {
+        "reviewed": "2026-10-28",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "key": "fall",
+            "label": "Natural falls parcel",
+            "status": "verified-geography",
+            "finding": "DNR LOTS intersects GIS #12 with dedicated 47.8-acre state-managed parcel (ParID 258918). This verifies the falls land only, not entry from the road.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2"
+          },
+          {
+            "key": "mainroad",
+            "label": "Long Lake Road",
+            "status": "documented-not-live",
+            "finding": "Named in Michigan Geographic Framework road data and the Iron County Road Commission's older seasonal restriction list. Neither is evidence of 2026 passability or right-of-way for the onward two-track.",
+            "source": "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf"
+          },
+          {
+            "key": "two-track",
+            "label": "Raymer / Dave's Camp approach",
+            "status": "not-verified",
+            "finding": "Tourism sources describe road, signs, washouts and nearby private camps, but no current road authority inventory or continuous lawful public corridor to the falls has been verified.",
+            "source": "https://www.iron.org/outdoors/waterfalls/"
+          },
+          {
+            "key": "parking",
+            "label": "Permitted visitor parking",
+            "status": "not-verified",
+            "finding": "A 2013 third-party account attributes an old widened turnout to park directions; this is not a current officially designated public parking site or safe-vehicle-access point.",
+            "source": "https://travelthemitten.com/waterfalls/chicagon-falls-a-scenic-waterfall-by-bewabic-state-park/"
+          },
+          {
+            "key": "walk",
+            "label": "Complete signed footpath",
+            "status": "not-verified",
+            "finding": "Older sources describe signs and a one-mile walk, but the entire path, any private-parcel crossing and the final connection to the state falls parcel are not authoritative mapped public access.",
+            "source": "https://www.iron.org/outdoors/waterfalls/"
+          },
+          {
+            "key": "operating",
+            "label": "Current road and seasonal conditions",
+            "status": "not-verified",
+            "finding": "Washouts are reported; no current official open-road, bridge or posted-closure check confirms availability.",
+            "source": "https://www.michigan.gov/dnr/things-to-do/orv-riding/state-forest-roads"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 29,
+      "name": "Jumbo Falls",
+      "county": "HOUGHTON",
+      "status": "public-trail-position-discrepancy",
+      "publicAccess": "USFS public trail documented, exact falls route geometry and parking current state not established",
+      "publicationEligible": false,
+      "title": "Jumbo Falls: public trail, but maps disagree by nearly a kilometre",
+      "summary": "The USDA Forest Service Ottawa National Forest 2015 Recreation Opportunity Guide names Jumbo Falls and directs visitors from M-28 west of Kenton through Golden Glow Road, Forest Road 4589 and 4589-B past Jumbo Pit to an established falls trail. Its official coordinate is 46.457753,-88.912228. A regional trail list describes a short, roughly 0.1-mile level trail from the named parking to Jumbo Falls, but a specialist natural falls point is 46.44963,-88.91278, 904 metres from the agency brochure point; Michigan GIS #29 at 46.453006,-88.912138 lies between them, 528 metres from agency and 379 metres from specialist. We cannot identify which coordinate is trailhead, fall, other cascade or an outdated record from currently published evidence. Historic park/trail road descriptions do NOT establish road passability, a correct map pin, new signage or a precise current legal parking turnout.",
+      "guidance": "The U.S. Forest Service has an established named Jumbo Falls Trail via Golden Glow Road and FR4589-B. Do not use a raw mapped falls pin as parking or an off-road route until its physical location and current trailhead are reconciled.",
+      "reviewLimitations": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
+      "nextEvidence": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
+      "researchPage": "/upper-peninsula-waterfalls/research/jumbo-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://upper-michigan.com/guide/waterfalls/jumbo-falls.html"
+        },
+        {
+          "label": "Source 5",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 6",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "USFS named waterfall",
+            "status": "verified-geography",
+            "finding": "USFS 2015 waterfall recreation guide explicitly names a public Jumbo Falls trail in Ottawa National Forest.",
+            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+          },
+          {
+            "label": "Forest road approach",
+            "status": "documented-not-live",
+            "finding": "Agency directions use Golden Glow Rd, FR4589 and FR4589-B through Jumbo Pit, but may be 11 years old and not current legal/seasonal road status.",
+            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+          },
+          {
+            "label": "Public trail",
+            "status": "documented-not-live",
+            "finding": "Regional trail guide describes a 0.1-mile fairly level two-bridge footpath through hardwoods near Jumbo River; exact endpoint requires reconciliation.",
+            "source": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/"
+          },
+          {
+            "label": "Mapped waterfall identity",
+            "status": "conflicting",
+            "finding": "Agency coordinate to specialist falls coordinate 904m; GIS source lies between, creating over-300m position discrepancies.",
+            "source": "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/"
+          },
+          {
+            "label": "Visitor parking and map destination",
+            "status": "not-cleared",
+            "finding": "Road/turnout descriptions do not tie a currently authorized public parking site to a verified falls point; no parking GPS may be synthesized.",
+            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
+          },
+          {
+            "label": "Current road, river and trail",
+            "status": "not-cleared",
+            "finding": "No dated 2026 route-specific road restrictions, trail bridges, gate opening or exact waterfall pin survey confirmed.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 38,
+      "name": "Gabbro / Baker's Falls",
+      "county": "GOGEBIC",
+      "status": "city-route-described-parcel-visitor-trail-unverified",
+      "publicAccess": "city-directions-not-yet-full-route-verified",
+      "publicationEligible": false,
+      "title": "Gabbro/Baker's: City describes two approaches, land boundary pending",
+      "summary": "The City of Bessemer identifies Gabbro/Baker's Falls and describes two approaches near the Blackjack Ski Hill bridge and upper hillside. An independent hiking account describes an informal marked trail, while regional tourism describes a gas/powerline clearing. These are distinct visitor proposals; a legal public parking site and continuous foot access through the ski-hill/utility corridor have not been independently established.",
+      "guidance": "Use this research point to plan verification, not to drive to the waterfall GPS or follow an unsourced pipeline shortcut. A future guide requires a mapped legal parking approach and designated public viewing trail, with rough sections and seasonal conditions made explicit.",
+      "locationNotes": "Michigan state GIS #38 marks the natural Black River falls; no separately certified visitor lot or full legal walking line has been established.",
+      "reviewLimitations": "The city recommendation confirms a named visitor attraction, but is not a route survey, public easement or current vehicle road status. Gogebic County's official parcel viewer cautions against legal/title use, and the falls GIS point does not lie in a returned MI DNR LOTS managed parcel at the sampled point. No DNR layer hit is not private-property proof.",
+      "nextEvidence": "Determine jurisdiction/owner of the bridge turnout and upper service road, establish ski-resort permission or public trail easement and official safe parking, then distinguish publicly authorized upper and lower views. Avoid the unverified utility-corridor shortcut.",
+      "sourceLinks": [
+        {
+          "label": "City of Bessemer official scenic-drive visitor description",
+          "url": "https://www.cityofbessemer.org/visit/scenic-drives/"
+        },
+        {
+          "label": "Western U.P. regional waterfall approaches",
+          "url": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "Gogebic County official parcel viewer and legal disclaimer",
+          "url": "https://www.gogebic.gov/government/county_offices/gis_map_system.php"
+        },
+        {
+          "label": "Independent signed bridge-path description (not legal authority)",
+          "url": "https://www.theoutbound.com/michigan/hiking/hike-to-gabbro-falls"
+        },
+        {
+          "label": "Blackjack / Gabbro regional approach details",
+          "url": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/gabbro-falls/"
+        },
+        {
+          "label": "Current City of Bessemer visitor overview",
+          "url": "https://www.cityofbessemermi.gov/visit/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-28",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "key": "fall",
+            "label": "Named waterfall location",
+            "status": "verified-geography",
+            "finding": "State GIS #38 identifies the waterfall on the Black River; city and regional visitor sources also identify Gabbro/Baker's Falls. These are natural-feature locations, not arrival points.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "key": "mainroad",
+            "label": "Blackjack Ski Hill approach",
+            "status": "documented-not-live",
+            "finding": "City of Bessemer describes Blackjack Ski Hill access from US-2 and bridge crossing, but does not certify current road status or a public ski-resort parking easement.",
+            "source": "https://www.cityofbessemer.org/visit/scenic-drives/"
+          },
+          {
+            "key": "parking",
+            "label": "Bridge and upper-hill parking",
+            "status": "not-verified",
+            "finding": "City mentions bridge and upper trails; third-party reports parking by bridge or service road. No designated lot/right-of-way or ski-resort permission established.",
+            "source": "https://www.theoutbound.com/michigan/hiking/hike-to-gabbro-falls"
+          },
+          {
+            "key": "walk",
+            "label": "Lower bridge-view trail",
+            "status": "not-verified",
+            "finding": "City and third-party sources describe a short lower route, but trail continuity and public land/easement through riverside parcels remain unverified; no official route geometry.",
+            "source": "https://www.cityofbessemer.org/visit/scenic-drives/"
+          },
+          {
+            "key": "upper",
+            "label": "Upper hillside / pipeline route",
+            "status": "not-verified",
+            "finding": "Upper and utility-clearing approaches are described differently. No official authorization across resort land or utility easements is established.",
+            "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+          },
+          {
+            "key": "operating",
+            "label": "Current conditions and access",
+            "status": "not-verified",
+            "finding": "No verified current bridge turnout legality, snow clearance, seasonal gate or slippery-riverside trail status.",
+            "source": "https://www.gogebic.gov/government/county_offices/gis_map_system.php"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 45,
+      "name": "Sturgeon Falls",
+      "county": "HOUGHTON",
+      "status": "same-name-falls-point-6-74km-discrepancy-no-vehicle-route",
+      "publicAccess": "geography-disputed-research-only",
+      "publicationEligible": false,
+      "title": "Sturgeon Falls: Michigan GIS pin conflicts with verified visitor waterfall",
+      "summary": "Michigan state GIS #45 is 6.74 km south of the Sturgeon Falls location independently documented by the North Country Trail Association (46.64242,-88.69346), Visit Keweenaw (46.6428,-88.6937), and geographic field accounts. The official public visitor guide is based on the corroborated gorge waterfall location, NOT this GIS point.",
+      "guidance": "Do not drive or hike to state GIS #45 expecting the visitor waterfall. Use the separate official Sturgeon River Gorge Wilderness trailhead and NCTA 2025 map. This GIS marker is displayed only in the opt-in research map until spatial identity can be established.",
+      "reviewLimitations": "Same name does not prove the state source maps a different physical falls or an error. Road naming also differs between NCTA 2014 FR2276 and 2025 FR2270 descriptions, so use current signed Forest Service roads.",
+      "nextEvidence": "Verify GIS feature #45 with modern federal hydrography and exact stream location; establish if separate cascade or coordinate error. Never auto-merge by name.",
+      "sourceLinks": [
+        {
+          "label": "State GIS source #45",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "NCTA 2014 Sturgeon Falls GPS",
+          "url": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf"
+        },
+        {
+          "label": "NCTA 2025 hiking route map",
+          "url": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+        },
+        {
+          "label": "Visit Keweenaw location and visitor trail",
+          "url": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/"
+        },
+        {
+          "label": "Independent named waterfall point",
+          "url": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Geographic feature",
+            "status": "not-cleared",
+            "finding": "State #45 and three independent visitor waterfall positions are separated by 6.74 km. Exact identity unresolved.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Federal site identity",
+            "status": "documented-not-live",
+            "finding": "Ottawa National Forest wilderness has a visitor waterfall further north; this state marker has no certified crosswalk.",
+            "source": "https://www.recreation.gov/camping/poi/238242"
+          },
+          {
+            "label": "Main road",
+            "status": "not-cleared",
+            "finding": "Never route motor travel to state point. NCTA public visitor parking documented separately.",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          },
+          {
+            "label": "Signed trailhead",
+            "status": "documented-not-live",
+            "finding": "NCTA has current wilderness visitor trail map; 2014 FR2276 versus 2025 FR2270 naming conflict noted.",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf"
+          },
+          {
+            "label": "Falls walking path",
+            "status": "not-cleared",
+            "finding": "No visitor footpath from state #45 to northern public gorge falls; straight-line separation cannot be a hiking route.",
+            "source": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/"
+          },
+          {
+            "label": "Current condition",
+            "status": "not-cleared",
+            "finding": "Roads unplowed in winter, no open-now status.",
+            "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 46,
+      "name": "Tioga Falls",
+      "county": "BARAGA",
+      "status": "private-camp-gated-access-no-public-route",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Tioga Falls: access evidence under review",
+      "summary": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths. MDOT public Tioga Creek Roadside Park cascades are about 2.19km south and have a separate safe park-side visitor guide; do not treat them as this gated GIS Tioga Falls.",
+      "guidance": "Do not tell visitors to pass the gate, cross the river to bypass private land or take the GIS coordinates as a car destination. Keep research-only until an authorized public trailhead, parking and continuous permitted approach exist. For a public stop, choose the signed Tioga Creek Roadside Park only, and only if its gate is open. Do not follow directions toward this named GIS #46 upstream/private gate.",
+      "reviewLimitations": "Third-party historical route description is not a legal parcel survey or 2026 gate status; absence of a public route is not proof that every possible access is legally closed.",
+      "nextEvidence": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance.",
+      "sourceLinks": [
+        {
+          "label": "Independent field account and private-gate warning",
+          "url": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+        },
+        {
+          "label": "Michigan GIS named waterfall",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "2026 MDOT Tioga Creek Roadside Park seasonal listing",
+          "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28"
+        },
+        {
+          "label": "Independent park-side falls, distinct from #46",
+          "url": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "Independent field account near exact Tioga River GIS #46 point MDOT Tioga park cascades are about 2.19km south, NOT this natural GIS point.",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Land rights",
+            "status": "not-cleared",
+            "finding": "Private camp and posted gate reported; public easement not established",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Access road",
+            "status": "not-cleared",
+            "finding": "Unmarked two-track and gate; no verified lawful public motor approach",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "No documented designated public trailhead parking",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Footpath",
+            "status": "not-cleared",
+            "finding": "Suggestions to ford river or avoid cabin are not public access authorization",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "No 2026 manager permission or gate decision confirmed",
+            "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 68,
+      "name": "Upper Silver Falls",
+      "county": "BARAGA",
+      "status": "12km-same-name-location-discrepancy",
+      "publicAccess": "research-only-geographic-identity-unresolved",
+      "publicationEligible": false,
+      "title": "Upper Silver Falls #68: not the upper picnic-site chute",
+      "summary": "GIS Upper Silver Falls #68 is at 46.681143,-88.329766, roughly 12 km south of Lower Silver Falls #110 46.792674,-88.335692. Specialist field account names an upper drop only ~0.25 miles upstream from lower picnic falls. No valid exact GIS match for that informal upper chute; do NOT attach #68 to lower Silver visitor guide or send visitors on upstream riverbank routes.",
+      "guidance": "Do not treat source #68 as the short upstream drops above Lower Silver Falls. No verified trailhead or access rights exist for this separate 12-km-distant research marker.",
+      "reviewLimitations": "Independent account's quarter-mile upstream chute location does not agree with GIS #68, and two different river features may share the Upper Silver label.",
+      "nextEvidence": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching.",
+      "sourceLinks": [
+        {
+          "label": "Source Michigan waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent lower and upper visitor descriptions",
+          "url": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+        },
+        {
+          "label": "Lower picnic falls coordinates",
+          "url": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "not-cleared",
+            "finding": "Upper #68 12km south of lower #110, not quarter-mile upstream chute",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager",
+            "status": "not-cleared",
+            "finding": "No confirmed public land title/manager for #68",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Road",
+            "status": "not-cleared",
+            "finding": "Lower Falls Rd does not establish road to feature #68",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          },
+          {
+            "label": "Visitor parking",
+            "status": "not-cleared",
+            "finding": "No approved public parking for distinct GIS #68",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Trail",
+            "status": "not-cleared",
+            "finding": "No approved approach to #68; short upstream rough path in field guide is unrelated",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No current access status",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 86,
+      "name": "Iagoo Falls",
+      "county": "GOGEBIC",
+      "status": "geographic-name-conflict-public-route-unverified",
+      "publicAccess": "unreconciled-two-locations",
+      "publicationEligible": false,
+      "title": "Iagoo Falls: state GIS and park visitor map disagree by over four kilometres",
+      "summary": "Regional 2026-hosted Western U.P. visitor brochure identifies Iagoo Falls near 46.662334,-89.941527, about 0.42km north of Lepisto, while Michigan state GIS #86 places Iagoo at 46.691604,-89.970696, roughly 3.9km farther north near South Boundary Road. Those cannot be represented as one verified visitor site; park/NCTA identifies Lepisto route, not a signed Iagoo side trail.",
+      "guidance": "Do not drive to either Iagoo coordinate as if it were a trailhead. The verified Lepisto hike is a separate public experience; do not extend it along an unsigned riverbank without a legitimate trail.",
+      "reviewLimitations": "2026-hosted brochure and state GIS may refer to different falls, misplaced coordinates, or a shared name; no authoritative adjudication exists.",
+      "nextEvidence": "Reconcile state GIS Iagoo #86 with regional brochure and river hydrography using independent authoritative park GIS; verify exact Iagoo viewing point, approved NCT spur/shoreline path and legal access/parking. Do NOT send hikers to GIS #86 or substitute Lepisto spur.",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Western U.P. visitor map Iagoo point and Lepisto route",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "NCTA 2025 MI-008 actual trail",
+          "url": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+        },
+        {
+          "label": "DNR state park",
+          "url": "https://www.michigan.gov/recsearch/parks/porkies"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Source GIS #86",
+            "status": "verified-geography",
+            "finding": "Michigan state named Iagoo position at 46.691604,-89.970696 is raw geography, not a trailhead.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Visitor bureau Iagoo position",
+            "status": "conflicting",
+            "finding": "Regional brochure maps Iagoo at 46.662334,-89.941527 very near Lepisto, ~3.9km from source GIS #86.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Park/NCTA public land",
+            "status": "documented-not-live",
+            "finding": "Park and NCTA confirm marked NCT corridor through the park, but not a named Iagoo route or consistent coordinate.",
+            "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+          },
+          {
+            "label": "Public parking",
+            "status": "not-cleared",
+            "finding": "Lepisto CR519 lot is documented; neither source proves a legal lot-to-actual-Iagoo route, whichever geographic interpretation applies.",
+            "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+          },
+          {
+            "label": "Complete viewing route",
+            "status": "not-cleared",
+            "finding": "Brochure calls Iagoo downstream from Lepisto without mapped spur. State GIS point nearer SBR cannot be treated as 0.2mi side trip.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No 2026 signed side-trail/river conditions or precise name resolution verified.",
+            "source": "https://www.michigan.gov/recsearch/parks/porkies"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 91,
+      "name": "Upper Falls (Falls River)",
+      "county": "BARAGA",
+      "status": "falls-river-named-upper-private-access-conflict",
+      "publicAccess": "research-only-route-not-cleared",
+      "publicationEligible": false,
+      "title": "Upper Falls (Falls River): access evidence under review",
+      "summary": "Official village waterfall summary speaks of public upper/middle/lower trail experiences in general but does not geolocate a public viewpoint at GIS #91. Independent 2026 guide says specific upstream Upper Falls on private land without public access. Preserve distinct Middle #95 and Lower #96 visitor guide; no unapproved routes to #91.",
+      "guidance": "Do not route to GIS #91 or through upstream private parcels; public Middle and Lower Falls Trail remains the verified alternative.",
+      "reviewLimitations": "Municipal trail summary does not georeference which of several 'Upper' falls points is public. Private-property statement is secondary and may describe a different upstream drop.",
+      "nextEvidence": "Obtain mapped public trail-to-GIS-#91 view with land title/easement evidence or establish same-name feature mixup. Do not route onto private river property or along rail tracks.",
+      "sourceLinks": [
+        {
+          "label": "Source review",
+          "url": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+        },
+        {
+          "label": "Independent route evidence",
+          "url": "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html"
+        },
+        {
+          "label": "Land-manager/trail distinction",
+          "url": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        },
+        {
+          "label": "GIS geography",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #91 is a named upper Falls River natural feature, not a path",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Trail authority",
+            "status": "documented-not-live",
+            "finding": "L'Anse visitor material describes public river trail generally",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          },
+          {
+            "label": "Road",
+            "status": "documented-not-live",
+            "finding": "Baraga trail group publishes two visitor trailheads",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "Published parking cannot yet be legally linked to GIS #91 feature",
+            "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+          },
+          {
+            "label": "Last footpath",
+            "status": "not-cleared",
+            "finding": "Public river trail doesn't prove exact upstream private drop access",
+            "source": "https://upper-michigan.com/guide/waterfalls/upper-falls-lanse.html"
+          },
+          {
+            "label": "Current status",
+            "status": "not-cleared",
+            "finding": "No site-specific 2026 trespass/easement/railroad conditions",
+            "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 112,
+      "name": "Traders Falls: Pinkerton Trail geography audit",
+      "county": "GOGEBIC",
+      "status": "not-safe-to-promote",
+      "publicAccess": "not-established",
+      "publicationEligible": false,
+      "title": "Traders Falls: Pinkerton Trail geography audit",
+      "summary": "Michigan DNR maps the publicly accessible Pinkerton Creek Trail from South Boundary Road, and the Western U.P. visitor map describes Traders Falls about two miles along it. However Michigan state GIS #112 places the waterfall at 46.751671,-89.893639 with river field CARP RIVER; the regional brochure places Traders around 46.748746,-89.891906, approximately 351 metres away. No park-manager evidence identifies a signed final path or authorized creek crossing to the precise waterfall. Public park hiking is verified; the full path to named Traders Falls is not.",
+      "guidance": "Do not navigate to a raw waterfall GIS pin, assume unsigned bridge parking or follow a guessed riverbank route.",
+      "reviewLimitations": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions.",
+      "nextEvidence": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions.",
+      "researchPage": "/upper-peninsula-waterfalls/research/traders-falls/",
+      "sourceLinks": [
+        {
+          "label": "Evidence 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Evidence 2",
+          "url": "https://explorewesternup.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "Evidence 3",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "Evidence 4",
+          "url": "https://www.michigan.gov/recsearch/parks/porkies"
+        },
+        {
+          "label": "Evidence 5",
+          "url": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739"
+        },
+        {
+          "label": "Evidence 6",
+          "url": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "documented-not-live",
+            "finding": "State GIS and visitor-map fall positions are about 351m apart and river names conflict",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Manager or ownership",
+            "status": "documented-not-live",
+            "finding": "DNR public park land includes Pinkerton Trail but does not officially name Traders waterfall viewpoint",
+            "source": "https://explorewesternup.com/things-to-do/waterfalls/"
+          },
+          {
+            "label": "Road and approach",
+            "status": "not-cleared",
+            "finding": "DNR map verifies Pinkerton Trailhead parking only, not a separate Traders lot",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "Regional bureau describes 2 miles via public trail but exact connecting path is unspecified",
+            "source": "https://www.michigan.gov/recsearch/parks/porkies"
+          },
+          {
+            "label": "Continuous visitor path",
+            "status": "not-cleared",
+            "finding": "No signed, legally continuous dry creek-bank route to this natural fall established",
+            "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "Current South Boundary Road/trail conditions not verified",
+            "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 114,
+      "name": "Erick's Falls: West Branch Huron River access review",
+      "county": "BARAGA",
+      "status": "not-safe-to-promote",
+      "publicAccess": "not-established",
+      "publicationEligible": false,
+      "title": "Erick's Falls: West Branch Huron River access review",
+      "summary": "Michigan GIS #114 46.806264,-88.087136 agrees within about 16m of specialist West Branch Erick's Falls 46.8064,-88.08705. Older field accounts describe an informal Black Creek Road bridge turnout and a short walk downstream, but lack a signed public parking site, county-road status and verified landowner permission along the banks. This is a distinct river branch and bridge several miles upstream from officially public Big Eric's Bridge State Forest Campground (GIS #126); campground permission does not transfer to this location.",
+      "guidance": "Do not navigate to a raw waterfall GIS pin, assume unsigned bridge parking or follow a guessed riverbank route.",
+      "reviewLimitations": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route.",
+      "nextEvidence": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route.",
+      "researchPage": "/upper-peninsula-waterfalls/research/ericks-west-branch-falls/",
+      "sourceLinks": [
+        {
+          "label": "Evidence 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Evidence 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/ericks-falls/"
+        },
+        {
+          "label": "Evidence 3",
+          "url": "https://upper-michigan.com/guide/waterfalls/ericks-falls.html"
+        },
+        {
+          "label": "Evidence 4",
+          "url": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "documented-not-live",
+            "finding": "West Branch Erick's source GIS and independent falls location agree within about 16m",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Manager or ownership",
+            "status": "documented-not-live",
+            "finding": "Black Creek Road bridge is named only in informal visitor sources",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/ericks-falls/"
+          },
+          {
+            "label": "Road and approach",
+            "status": "not-cleared",
+            "finding": "Modern riverbank parcel ownership or public easement is unverified",
+            "source": "https://upper-michigan.com/guide/waterfalls/ericks-falls.html"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "Old campsite/bridge clearing is not a signed public vehicle lot",
+            "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge"
+          },
+          {
+            "label": "Continuous visitor path",
+            "status": "not-cleared",
+            "finding": "Short downstream bank walk lacks official land-manager access authorization",
+            "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "No 2026 road plowing, gate/river safety or parking confirmation",
+            "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 119,
+      "name": "Slate River Falls",
+      "county": "BARAGA",
+      "status": "TNC-fee-natural-falls-verified-public-parking-and-dry-view-not-cleared",
+      "publicAccess": "TNC restricted land, hiking allowed subject to preserve policy, complete visitor path unverified",
+      "publicationEligible": false,
+      "title": "Slate River Falls: landowner confirmed; the bridge and parking are different questions",
+      "summary": "TNC fee-owns natural falls #119. The 2025 Visit Keweenaw report describes a small pull-off and gorge-rim trail, but parking authorization, legal continuous footpath, safe no-ford viewpoint and current conditions remain unresolved.",
+      "guidance": "The research-only access checklist separates verified ownership from four public route gates. Do not navigate to natural GIS points or treat a 2025 tourism pull-off description as approved parking.",
+      "reviewLimitations": "A TNC Fee Ownership boundary is not a surveyed county tax parcel/road right-of-way. TNC GIS PUB_ACCESS is Restricted Access. Hiking permission does not grant vehicle entry; flood-damaged Skanee Road segments were passable with caution in May 2025, not a statement of current road status.",
+      "nextEvidence": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json.",
+      "sourceLinks": [
+        {
+          "label": "TNC live reserve fee-polygon query",
+          "url": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
+        },
+        {
+          "label": "TNC reserve hiking and vehicle restrictions",
+          "url": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/"
+        },
+        {
+          "label": "USGS Skanee Road bridge coordinates",
+          "url": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
+        },
+        {
+          "label": "NBI road bridge #504 location",
+          "url": "https://bridgecondition.com/bridge/michigan/mi-000000000000504"
+        },
+        {
+          "label": "Baraga County Road Commission authority/contact",
+          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+        },
+        {
+          "label": "Baraga County official GIS parcel viewer",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        },
+        {
+          "label": "2025 CRC flood/Skanee road updates",
+          "url": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+        },
+        {
+          "label": "Visit Keweenaw 2025 pull-off and gorge-rim report (not a parking authorization)",
+          "url": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/"
+        },
+        {
+          "label": "Baraga Road Commission official contact",
+          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+        },
+        {
+          "label": "Baraga Equalization parcel authority",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Waterfall geography",
+            "status": "verified-geography",
+            "finding": "GIS #119 at 46.831054,-88.252067 matches independent lower-gorge falls point; not a parking location or approved footpath.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Protected land ownership",
+            "status": "documented-not-live",
+            "finding": "Verified TNC fee ownership of the natural GIS #119 waterfall from live public layer OBJECTID 8370. Layer PUB_ACCESS is Restricted Access. Skanee public bridge is outside fee polygon; 100m east sample is inside, but this cannot establish parking, road rights or actual route. TNC hiking permission applies subject to preserve rules.",
+            "source": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
+          },
+          {
+            "label": "Skanee Road public bridge",
+            "status": "verified-geography",
+            "finding": "USGS stream site and NBI #504 identify bridge near 46.8332,-88.2586, outside TNC fee-owned reserve polygon. Bridge passability and 2025 flood status are not parking/roadside permission or live 2026 road clearance.",
+            "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
+          },
+          {
+            "label": "Roadside arrival and parking",
+            "status": "not-cleared",
+            "finding": "TNC polygon shows sample 100m east of bridge inside reserve. Actual two-track/turnout not independently mapped, and no Baraga CRC approval or current road reconstruction/plowing confirmation exists. No vehicle access on TNC preserve.",
+            "source": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+          },
+          {
+            "label": "Dry-ground viewpoint and trail",
+            "status": "not-cleared",
+            "finding": "Half-mile rough east-bank path is described in visitor materials; historical field report required river crossing for its close view and reports hazardous water. Continuous authorized and non-fording access not established.",
+            "source": "https://www.gowaterfalling.com/waterfalls/slateriver.shtml"
+          },
+          {
+            "label": "Upstream Arvon route identity",
+            "status": "conflicting",
+            "finding": "County brochure labels Arvon Road slate-quarry approach as Slate River Falls; Quartzite/Black Slate cluster has separate mapped points at that road. No valid connection to GIS #119 lower gorge.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
+          },
+          {
+            "label": "Live conditions",
+            "status": "not-cleared",
+            "finding": "2025 Baraga CRC flood updates listed Skanee Road as passable with caution and the damaged Skanee Road approach toward Slate River; no 2026 confirmation for turnouts, road reconstruction or dry trail conditions.",
+            "source": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+          }
+        ]
+      },
+      "researchPage": "/upper-peninsula-waterfalls/research/slate-river-falls/",
+      "accessDecision": {
+        "sourceFile": "data/up-waterfall-slate-river-access-decision.json",
+        "publicGuideEligible": false,
+        "requestsSent": false
+      }
+    },
+    {
+      "gisObjectId": 124,
+      "name": "Bonanza Falls / Greenwood Falls",
+      "county": "ONTONAGON",
+      "status": "verified-seasonal-township-park-upper-falls-only",
+      "publicAccess": "signed-upper-falls-township-park-published-downstream-private-unknown",
+      "publicationEligible": true,
+      "title": "Township upper-falls park verified; GIS point is outside mapped park",
+      "summary": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and publishes its map destination. The official map destination and regional upper-river view reference lie within a township-attributed parcel; Michigan's separate natural waterfall GIS #124 location lies outside it on a parcel attributed to a private LLC. The guide covers the short signed park approach to the upper falls only.",
+      "guidance": "Use only the signed township park entrance and short established path from designated parking to the upper river view, then return. Do not drive to the GIS falls point, infer access to all downstream drops, or assume the seasonal park is open today.",
+      "locationNotes": "Township Google Maps published destination 46.8176942,-89.5674561 (NOT verified lot); regional brochure upper-view reference 46.817719,-89.570023 (NOT surveyed viewpoint); state natural falls GIS #124 46.818863,-89.571458 on other attributed parcel. Route is signed, not surveyed or traced on the map.",
+      "sourceLinks": [
+        {
+          "label": "Carp Lake Township: Greenwoods (Bonanza Falls) public park",
+          "url": "https://www.carplaketwp.org/general-resources"
+        },
+        {
+          "label": "Direct signed parking-to-upper-falls trail description",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/"
+        },
+        {
+          "label": "Carp Lake Township August parking/visitor signs",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_2f5de80733814402a12c7433d4b19023.pdf"
+        },
+        {
+          "label": "Carp Lake Township October seasonal closure",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_0bf497560d2a44b68cee8fd20bab0828.pdf"
+        },
+        {
+          "label": "Ontonagon County parcel-GIS disclaimer",
+          "url": "https://ontonagoncounty.org/home/resources/"
+        },
+        {
+          "label": "GIS #124 point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.571458%2C46.818863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Regional published waterfall approach",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "County parcel research layer — Michigan Tech mirror",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0"
+        },
+        {
+          "label": "Regional brochure point parcel query",
+          "url": "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/Ontonagon_County_Parcels/FeatureServer/0/query?where=1%3D1&geometry=-89.570023%2C46.817719&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+        },
+        {
+          "label": "Carp Lake Township 2025 June signage approval",
+          "url": "https://8e87cfbc-b101-4b9b-8f98-ed8a5ca7d0d0.filesusr.com/ugd/86ec78_4bcbe3d029e344d3a4b3c7d3e40f0772.pdf"
+        }
+      ],
+      "reviewLimitations": "Municipal park access is verified by the township's own Parks & Facilities directory, and a local guide describes a short signed lot-to-upper-falls path. Exact lot coordinates and trail geometry remain unverified; the published map has reference points only. Different parcels may apply farther downstream. The 2025 autumn closure minutes do not establish the 2026 park opening or closure date.",
+      "nextEvidence": "For additional access, obtain mapped lawful public walking rights from the township upper viewing area toward any lower drops; verify current season entrance status. Do not extend the published signed upper-falls park route by inference.",
+      "publicationScope": "township-park-signed-upper-falls-only",
+      "parkVisitorMapDestination": {
+        "lat": 46.8176942,
+        "lng": -89.5674561,
+        "source": "https://www.carplaketwp.org/general-resources",
+        "parkingLocation": false
+      },
+      "regionalUpperFallsReference": {
+        "lat": 46.817719,
+        "lng": -89.570023,
+        "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "surveyedViewpoint": false
+      },
+      "publicGuideUrl": "/upper-peninsula-waterfalls/bonanza-falls/"
+    },
+    {
+      "gisObjectId": 149,
+      "name": "Upper Falls — Salmon Trout West Branch",
+      "county": "MARQUETTE",
+      "status": "visitor-access-not-established",
+      "publicAccess": "no complete lawful sightseeing route verified",
+      "publicationEligible": false,
+      "title": "Upper Falls: west branch natural waterfall, public visit not authorized",
+      "summary": "DNR confirms the WEST Branch Upper Falls with strong GNIS geographic agreement. Most river basin is private club property, whose roads are gated; no visitor arrival is established.",
+      "guidance": "Do not treat upstream publicly monitored streams or historic fisheries research as permission to walk onto private falls land.",
+      "reviewLimitations": "Historical watershed report does not establish specific 2026 property title at source #149.",
+      "nextEvidence": "Current exact land parcel and owner, express tourist sightseeing permission, approved parking/road, fully legal footpath and current restrictions.",
+      "researchPage": "/upper-peninsula-waterfalls/research/salmon-trout-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098060/upper-falls/"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://huronmountainclub.org/guest-info/"
+        },
+        {
+          "label": "Source 5",
+          "url": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "verified-geography",
+            "finding": "DNR 1988 Upper Falls is on WEST Branch, section 15, 0.5 mile above East Branch junction; GNIS #2098060 is about 18m from state GIS #149.",
+            "source": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098060/upper-falls/"
+          },
+          {
+            "label": "Predominant land rights",
+            "status": "documented-not-live",
+            "finding": "DNR records most lower Salmon Trout watershed on private Huron Mountain Club land, not an exact current #149 parcel survey.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Club entry policy",
+            "status": "documented-not-live",
+            "finding": "Current HMC guest policy states all access roads are gated and patrolled.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          },
+          {
+            "label": "Public parking",
+            "status": "not-cleared",
+            "finding": "No signed public falls lot or owner-authorized road identified; public monitoring further upstream cannot be substituted.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          },
+          {
+            "label": "Walking route",
+            "status": "not-cleared",
+            "finding": "No club-authorized public footpath or dry viewpoint from lawful public parking.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Current owner permission",
+            "status": "not-cleared",
+            "finding": "No dated club or current parcel owner authorization for sightseeing at this fall.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 150,
+      "name": "Twin Falls — East Branch Salmon Trout",
+      "county": "MARQUETTE",
+      "status": "visitor-access-not-established",
+      "publicAccess": "no complete lawful sightseeing route verified",
+      "publicationEligible": false,
+      "title": "Twin Falls: East Branch waterfall, Commercial Forest tourist access not established",
+      "summary": "Expert creek location supports Twin Falls, but old Twin/Hogback names were confused. Proposed nine-mile CF-corner bushwhack does not establish landowner permission for tourist sightseeing.",
+      "guidance": "Do not enter Dodge City private camps, drive a closed track or treat DNR hunting/fishing foot-access rights as general waterfall hiking approval.",
+      "reviewLimitations": "Official 2026 CF enrollment, entire private-land route, actual parking easement and precise HMC boundary lack parcel verification.",
+      "nextEvidence": "Current DNR CF parcel overlay and authorized SIGHTSEEING permission for every segment, signed public lot, continuous walking corridor and safety/seasonal access before visitor guide. Do not promote a 9mi CF hunting right as general tourism.",
+      "researchPage": "/upper-peninsula-waterfalls/research/salmon-trout-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://www.michigan.gov/en/dnr/managing-resources/forestry/private/cf"
+        },
+        {
+          "label": "Source 5",
+          "url": "https://huronmountainclub.org/guest-info/"
+        },
+        {
+          "label": "Source 6",
+          "url": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Natural Twin identity",
+            "status": "verified-geography",
+            "finding": "State #150 is roughly 40m from specialist East Branch Twin site, distinct from Hogback cascade downstream past club line.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/"
+          },
+          {
+            "label": "Commercial Forest corner",
+            "status": "documented-not-live",
+            "finding": "Specialist reports a tiny CF parcel entry north of Dodge City, not a verified current official parcel or continuous easement.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/"
+          },
+          {
+            "label": "Legal sightseeing permission",
+            "status": "verified-geography",
+            "finding": "DNR CF Program allows public foot access for hunting, fishing and trapping only; other activities require landowner permission.",
+            "source": "https://www.michigan.gov/en/dnr/managing-resources/forestry/private/cf"
+          },
+          {
+            "label": "Permitted parking",
+            "status": "not-cleared",
+            "finding": "Informal small gated logging-road turnout is not a road-authority approved tourist lot; private Dodge City camps must not be crossed.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/"
+          },
+          {
+            "label": "Visitor trail",
+            "status": "not-cleared",
+            "finding": "About nine-mile expert bushwhack and ~700–800ft ascent is no authorized maintained public sightseeing route.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/"
+          },
+          {
+            "label": "Boundary and conditions",
+            "status": "not-cleared",
+            "finding": "2022 monitoring identifies separate East Branch site behind JM Longyear private gate; actual falls corridor/club boundary not surveyed.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 151,
+      "name": "Middle Falls — Salmon Trout Mainstem",
+      "county": "MARQUETTE",
+      "status": "visitor-access-not-established",
+      "publicAccess": "no complete lawful sightseeing route verified",
+      "publicationEligible": false,
+      "title": "Middle Falls: mainstem Salmon Trout research, no verified public tourist access",
+      "summary": "DNR and GNIS support Middle Falls on the Salmon Trout mainstem, but nearby HMC private monitoring and gated club policy offer no tourist parking or route.",
+      "guidance": "Do not drive to a Lower Dam research station, HMC gate or a natural GIS point. No public trail exists in verified records.",
+      "reviewLimitations": "Historic ownership describes watershed broadly, not a modern parcel audit at exact waterfall.",
+      "nextEvidence": "Confirm current site parcel and manager, express visitor access, signed public trail and road parking plus present conditions; scientific monitoring access alone does not qualify.",
+      "researchPage": "/upper-peninsula-waterfalls/research/salmon-trout-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098058/middle-falls/"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+        },
+        {
+          "label": "Source 5",
+          "url": "https://huronmountainclub.org/guest-info/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named middle location",
+            "status": "verified-geography",
+            "finding": "1988 DNR documents Middle on mainstem ~1 river mile downstream of West-East junction in section 14; GNIS #2098058 ~177m from source #151.",
+            "source": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098058/middle-falls/"
+          },
+          {
+            "label": "Mainstem ownership",
+            "status": "documented-not-live",
+            "finding": "DNR says most Salmon Trout lower basin lies in privately held Huron Mountain Club watershed; current falls parcel not independently intersected.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Nearby monitoring land",
+            "status": "documented-not-live",
+            "finding": "2022 YDWP MiCorps Lower Dam monitoring location near Middle is private HMC, but it is NOT Middle Falls and does not itself prove that waterfall's title.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          },
+          {
+            "label": "Road and parking",
+            "status": "not-cleared",
+            "finding": "HMC official guest policy says roads are gated/patrolled and offers no public Middle Falls lot.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          },
+          {
+            "label": "Tourist footpath",
+            "status": "not-cleared",
+            "finding": "No documented public easement, designated walking approach or visitor viewpoint.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Current permission",
+            "status": "not-cleared",
+            "finding": "No current site manager authorization or 2026 road/trail access determination for this fall.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 154,
+      "name": "Bushy Creek Falls",
+      "county": "MARQUETTE",
+      "status": "visitor-access-not-established",
+      "publicAccess": "no complete lawful sightseeing route verified",
+      "publicationEligible": false,
+      "title": "Bushy Creek: nearby public forest does not establish a legal waterfall route",
+      "summary": "Public CR510 trail reaches Yellow Dog/Hills Falls, not necessarily creek-mouth Bushy Falls. A separate YDWP 12-acre property is downstream of the confluence. Natural falls ownership and a continuous safe public path remain unresolved. A 2023 YDWP newsletter explicitly references Bushy Creek Falls in the Community Forest, strengthening conservation-land association but still no continuous public route.",
+      "guidance": "Visit the verified Yellow Dog Falls trail instead; do not wade past private cabins, use Bushy Creek Truck Trail as assured access, or drive to the falls marker.",
+      "reviewLimitations": "The precise YDWP property boundaries have not been overlaid on the falls. Older unofficial downstream visits contain access/wading risks. Current seasonal conditions are unknown. Official 2017 forest plan confirms Bushy tributary frontage and 2023 Preserve newsletter locates fieldwork near Bushy Creek Falls, without a surveyed falls point/parking/walking line.",
+      "nextEvidence": "Parcel map for exact natural falls and BOTH banks, signed owner-approved continuous dry path from lawful parking, posted current access and water safety; YDWP property downstream of confluence and official Hills trail are insufficient.",
+      "researchPage": "/upper-peninsula-waterfalls/research/bushy-creek-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+        },
+        {
+          "label": "YDWP 2017 community forest plan, Bushy Creek frontage",
+          "url": "https://yellowdogwatershed.org/wp-content/uploads/2015/06/Yellow-Dog-River-Community-Forest-Plan-with-Forestry-Plan.pdf"
+        },
+        {
+          "label": "YDWP Fall/Winter 2023 newsletter, Bushy Creek Falls field reference p12",
+          "url": "https://yellowdogwatershed.org/wp-content/uploads/2023/11/The-Howl-Fall-Winter-2023-2024.pdf"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #154 is approximately 167 metres from the specialist mapped drop where Bushy Creek joins Yellow Dog River.",
+            "source": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+          },
+          {
+            "label": "Protected lands",
+            "status": "documented-not-live",
+            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract. YDWP 2017 plan documents Bushy Creek frontage; 2023 newsletter explicitly references Bushy Creek Falls in Community Forest; not an approved exact route.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/"
+          },
+          {
+            "label": "Public access entry",
+            "status": "documented-not-live",
+            "finding": "YDWP CR510 bridge trail reaches Hills Falls after about 0.75 mile; it does not document a visitor route to Bushy creek mouth.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          },
+          {
+            "label": "Continuous footpath",
+            "status": "not-cleared",
+            "finding": "Specialist downstream riverside route fades after fourth drop and mentions wading and a cabin; no sanctioned unbroken dry route.",
+            "source": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+          },
+          {
+            "label": "Waterfall visitor parking",
+            "status": "not-cleared",
+            "finding": "Neither separate Bushy parking nor entitlement to finish the creek-mouth visit from existing CR510 lot verified.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          },
+          {
+            "label": "Current safety",
+            "status": "not-cleared",
+            "finding": "Seasonal Bushy Truck Trail is described without reliable directions, recent passability or crossing conditions.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 160,
+      "name": "Dead River Falls",
+      "county": "MARQUETTE",
+      "status": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
+      "publicAccess": "regional visitor route historic-current-utility-permission-unverified",
+      "publicationEligible": false,
+      "title": "Dead River Falls: operator identified, parking permission still unverified",
+      "summary": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
+      "guidance": "Do not route directly to the hydro powerhouse lot or drive a gated utility road on the strength of historic travel directions. The separate state-owned boat access and NTN forest trailheads are NOT a verified signed falls route. No river crossing or dam/service-area trespass directions.",
+      "reviewLimitations": "Current municipal operator identity and FERC safety inspections DO NOT establish legal visitor access to hydro facilities, powerhouse lot, service gate, or every canyon bank. Published visitor routes vary and may be dated.",
+      "nextEvidence": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
+      "sourceLinks": [
+        {
+          "label": "MBLP municipal utility",
+          "url": "https://mblp.org/"
+        },
+        {
+          "label": "MBLP 2023 Forestville federal safety inspection minutes",
+          "url": "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf"
+        },
+        {
+          "label": "Marquette Township state boat access vs waterfall",
+          "url": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+        },
+        {
+          "label": "Falls field guide (historic walking route)",
+          "url": "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/"
+        },
+        {
+          "label": "NTN separate Forestville trailhead network",
+          "url": "https://www.noquetrails.org/north-trails"
+        },
+        {
+          "label": "Lake Superior Circle Tour waterfall description",
+          "url": "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Waterfall geography",
+            "status": "verified-geography",
+            "finding": "Named Dead River Falls natural GIS #160; not car parking or an asserted maintained route.",
+            "source": "Michigan state GIS Waterfalls MapServer/7"
+          },
+          {
+            "label": "Utility/manager",
+            "status": "verified-geography",
+            "finding": "MBLP operates hydro facilities on Dead River; Forestville FERC Part 12D safety review documented in 2023 meeting, but no visitor policy found.",
+            "source": "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf"
+          },
+          {
+            "label": "Road approach",
+            "status": "documented-not-live",
+            "finding": "Regional guides and Marquette township describe Forestville Road and falls visitor interest, not current utility gate/road permissions.",
+            "source": "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+          },
+          {
+            "label": "Visitor parking",
+            "status": "not-cleared",
+            "finding": "Specialist guide describes parking beside old power station. Distinct state-owned Forestville boat access and NTN trailheads DO NOT establish power-station lot rights.",
+            "source": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+          },
+          {
+            "label": "Walking path",
+            "status": "not-cleared",
+            "finding": "Signed historic gorge trail and service road described by independent guides; current power-operator trail authorization, maintenance and closures not established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/"
+          },
+          {
+            "label": "Live conditions",
+            "status": "not-cleared",
+            "finding": "2026 gate, water release, terrain, station works and trail closure status unknown; no winter or river-crossing directions.",
+            "source": "https://mblp.org/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 172,
+      "name": "Warner Falls: 2026 M-35 culvert access review",
+      "county": "MARQUETTE",
+      "status": "not-safe-to-promote",
+      "publicAccess": "not-established",
+      "publicationEligible": false,
+      "title": "Warner Falls: 2026 M-35 culvert access review",
+      "summary": "Michigan tourism and Travel Marquette historically call Warner Falls a roadside stop on M-35 near Palmer. Michigan MDOT's July 1 2026 release documents replacement of the M-35 culvert over Warner Creek with road reconstruction, asphalt and new pavement markings, and predicted a mid-August completion. A predicted construction finish does not certify safe October visitor parking, shoulder legality or an intact old guardrail footpath. No post-work MDOT-sanctioned parking and pedestrian route identified. Do not route drivers to a shoulder.",
+      "guidance": "Do not navigate to a raw waterfall GIS pin, assume unsigned bridge parking or follow a guessed riverbank route.",
+      "reviewLimitations": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
+      "nextEvidence": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
+      "researchPage": "/upper-peninsula-waterfalls/research/warner-falls/",
+      "sourceLinks": [
+        {
+          "label": "Evidence 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Evidence 2",
+          "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
+        },
+        {
+          "label": "Evidence 3",
+          "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+        },
+        {
+          "label": "Evidence 4",
+          "url": "https://www.michigan.org/property/warner-falls"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "documented-not-live",
+            "finding": "State GIS #172 locates Warner Creek natural falls separately from parking",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Manager or ownership",
+            "status": "documented-not-live",
+            "finding": "MDOT confirmed 2026 replacement of M-35 culvert at Warner Creek",
+            "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
+          },
+          {
+            "label": "Road and approach",
+            "status": "not-cleared",
+            "finding": "Historic visitor listings predate road/culvert work and are not live access records",
+            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+          },
+          {
+            "label": "Parking",
+            "status": "not-cleared",
+            "finding": "No MDOT-designated legal new roadside parking verified",
+            "source": "https://www.michigan.org/property/warner-falls"
+          },
+          {
+            "label": "Continuous visitor path",
+            "status": "not-cleared",
+            "finding": "No confirmed safe walk from allowed lot after guardrail/roadway rebuilding",
+            "source": "https://www.michigan.org/property/warner-falls"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "MDOT July project estimate does not confirm present site open status",
+            "source": "https://www.michigan.org/property/warner-falls"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 190,
+      "name": "Hunters Brooks Falls",
+      "county": "DELTA",
+      "status": "primary-DNR-natural-falls-at-brook-mouth-private-posted-reported",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
+      "publicationEligible": false,
+      "title": "Hunters Brook Falls — posted private land reported; no public mouth access",
+      "summary": "DNR confirms a small falls where Hunters Brook reaches the Escanaba River. Specialist sources report private, posted land next to the confluence. No land-based public visitor route is established.",
+      "guidance": "No route or parking pin. The DNR's documented public fishing sites elsewhere on Hunters Brook are not waterfall access. Do not enter posted land or assume a paddler's sighting creates a public approach.",
+      "reviewLimitations": "The DNR 2018 fishery report is authoritative for physical waterfall location, not 2026 private-land restrictions. The database's Posted classification is not a freshly surveyed parcel/status check. Neither an American Whitewater river narrative nor a nearby fishing site establishes land access.",
+      "nextEvidence": "Find a current published parcel/right-of-way layer for the mouth, current posting/owner-approved visitor route and official legal trailhead/parking specifically connected to the falls; do not substitute farther-upstream DNR fishing access or boat-trip scouting.",
+      "sourceLinks": [
+        {
+          "label": "Michigan state geographic waterfall GIS",
+          "url": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+        },
+        {
+          "label": "Source evidence 1",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+        },
+        {
+          "label": "Source evidence 2",
+          "url": "https://www.americanwhitewater.org/content/River/view/river-detail/929/main"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall existence and identity",
+            "status": "verified-geography",
+            "finding": "DNR fisheries report 2018-248 explicitly identifies a single waterfall at the mouth of Hunters Brook entering the Escanaba River; source GIS #190 marks the named feature.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Land rights near confluence",
+            "status": "documented-not-live",
+            "finding": "World Waterfall Database marks the unofficially named falls Posted and private; American Whitewater notes a nearby residence. Current parcel and posting inspection have not been established.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+          },
+          {
+            "label": "Vehicle approach",
+            "status": "not-cleared",
+            "finding": "Neither DNR nor river-boating material identifies a lawful public road-to-falls vehicle approach. Broader CR426 public access along a 28-mile brook is not the same as access to its mouth.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Permitted visitor parking",
+            "status": "not-cleared",
+            "finding": "The DNR's 2000s planned walk-in fishing lot on another reach of Hunters Brook does not prove parking for the mouth waterfall.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Continuous walking/viewing corridor",
+            "status": "not-cleared",
+            "finding": "No designated public bank route or safe viewpoint is identified; watercraft-only river visibility is not a pedestrian trail.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/929/main"
+          },
+          {
+            "label": "Current permission and conditions",
+            "status": "not-cleared",
+            "finding": "No dated 2026 site posting or owner-issued public permission, trail status or safe river level is available. Do not index a visitor guide.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 191,
+      "name": "Whitefish Falls",
+      "county": "ALGER",
+      "status": "visitor-bureau-unimproved-trail-parking-and-manager-unverified",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
+      "publicationEligible": false,
+      "title": "Whitefish Falls — bureau-described trail, no verified lot or exact manager",
+      "summary": "A genuine small waterfall northwest of Trenary has a regional visitor-bureau listing and a photographed informal trail. The listed trail is not yet joined to a verified public parking/land-manager source.",
+      "guidance": "Do not drive to the natural falls pin, use an unrelated township-park coordinate, or promise an easy walk. The named Whitefish Falls is separate from Laughing Whitefish Falls State Park.",
+      "reviewLimitations": "Regional tourism says 'unimproved trail' and '15 minutes or less' but supplies no mapped lot or land authority. One guide's claimed township-park coordinate lies ~4.9 km east of the MI GIS falls. A field photographer reports a state forest section, not an authoritative DNR permission or parking classification.",
+      "nextEvidence": "Find current DNR parcel/forest recreation map with precise #191 ownership and permitted arrival, public signed lot or designated roadside parking, mapped unimproved trail to the SAME waterfall and land-manager seasonal notices; check claims around Whitefish River Township Park independently.",
+      "sourceLinks": [
+        {
+          "label": "Michigan state geographic waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source evidence 1",
+          "url": "https://www.munising.org/activities/whitefish-falls/"
+        },
+        {
+          "label": "Source evidence 2",
+          "url": "https://www.miroadtrip.com/locations/whitefish-falls"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://waterfallsamerica.com/waterfalls/whitefish-falls-mi-1622606/"
+        },
+        {
+          "label": "Source evidence 4",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        },
+        {
+          "label": "Source evidence 5",
+          "url": "https://www.usgs.gov/us-board-on-geographic-names/what-geographic-names-information-system-gnis"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "verified-geography",
+            "finding": "Michigan source #191 and independently published USGS GNIS #1622606 positions are ~172 m apart. This is Whitefish Falls near Trenary, NOT Laughing Whitefish Falls State Park.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager and permission",
+            "status": "not-cleared",
+            "finding": "An independent photographer describes state-forest land; no exact DNR legal boundary/site manager or explicit public trail permission has been matched to GIS #191.",
+            "source": "https://www.miroadtrip.com/locations/whitefish-falls"
+          },
+          {
+            "label": "Road identity and geographic disagreement",
+            "status": "not-cleared",
+            "finding": "Munising bureau places falls west of US-41 northwest of Trenary. Another aggregate's township park pin is ~4.9 km east and cannot be transferred to the falls as directions.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Legal visitor parking",
+            "status": "not-cleared",
+            "finding": "Neither official/regionally published address nor signed legal parking lot and year-round status established; do not infer from informal cars seen during one visit.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          },
+          {
+            "label": "Complete unimproved trail",
+            "status": "documented-not-live",
+            "finding": "Munising bureau says <=15 minutes on an unimproved trail; no certified parking-to-view line or current trail maintenance/riverbank conditions documented.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          },
+          {
+            "label": "Current seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated trailhead opening, parking/plowing notice or hazard update for late October 2026 verified.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 192,
+      "name": "Au Train Falls",
+      "county": "ALGER",
+      "status": "FERC-final-termination-EGLE-dam-oversight-access-unknown",
+      "publicAccess": "research-only-two-visitor-routes-neither-cleared",
+      "publicationEligible": false,
+      "title": "Au Train Falls: federal hydro license terminated; visitor access still unverified",
+      "summary": "FERC's December 29, 2025 final order (Docket P-10856-141, 193 FERC ¶61,242) TERMINATED the Au Train Hydroelectric Project license by implied surrender, effective that day's close of business, with existing facilities LEFT IN PLACE. FERC's record cites high-hazard dam classification, inadequate spillway remediation, licensee UP Hydro's bankruptcy and loss of property control. In 2025 foreclosure, Stephenson Bank acquired 18/22 project parcels and later sold those 18 to D. Charles Trust Investments, LLC (including powerhouse and surrounding project buffer), but individual tourist parking and falls-side parcel title/right of way are not mapped by this order. Michigan EGLE now holds state dam-safety jurisdiction; termination neither orders immediate dam removal nor establishes all waterfall visitor routes closed or open. Munising tourism describes two separate upper/lower falls visitor stops near utility gates, but that older guidance does not establish October 2026 parking, public gate entry, walkway, flow conditions or new property owner consent.",
+      "guidance": "Do not treat either of the old Power Dam Road upper/lower tourism lots as current authorized parking; do not pass power plant or dam gates without posted public authorization. The federal license ended in 2025; that does NOT automatically mean the waterfall is closed or dam removed. No river crossing or dam-outlet approach is recommended.",
+      "reviewLimitations": "Original 2025 report about a proposed license surrender is superseded by FERC's December 29 FINAL termination order. The FERC order ends federal licensing, not every existing owner property right or recreational activity. Ownership changes within project boundary do not map the exact upper/lower parking parcels.",
+      "nextEvidence": "Current 2026 rights owner/EGLE source explicitly documenting a lawful publicly accessible upper and/or lower falls visitor parking area and foot corridor on utility land; verify separate two-view routes, gate policy, dam safety/flow notices and legal parking. FERC final license termination itself neither closes all visits nor authorizes tourist access.",
+      "sourceLinks": [
+        {
+          "label": "FERC final order Dec 29, 2025 (P-10856-141)",
+          "url": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+        },
+        {
+          "label": "Federal order legal summary Jan 2026",
+          "url": "https://www.troutmanenergyreport.com/2026/01/ferc-terminates-au-train-hydroelectric-project-license-by-implied-surrender/"
+        },
+        {
+          "label": "Munising visitor bureau two falls approaches (historic)",
+          "url": "https://www.munising.org/activities/au-train-falls/"
+        },
+        {
+          "label": "2025 pre-order regional reporting (context only)",
+          "url": "https://www.uppermichiganssource.com/2025/11/17/federal-government-calls-surrender-au-train-dam/"
+        },
+        {
+          "label": "Michigan geographic falls record",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Natural waterfall geography",
+            "status": "verified-geography",
+            "finding": "State natural Au Train Falls GIS #192 near 46.339031,-86.851879. Natural GIS point is not an official lot, utility gate or safe waterfall viewing location.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Hydro regulation",
+            "status": "verified-geography",
+            "finding": "Final FERC December 29, 2025 order terminated P-10856-141 license by implied surrender effective same date. Facilities remain in place; dam oversight transfers to Michigan EGLE.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Property and title",
+            "status": "documented-not-live",
+            "finding": "FERC order documents May 2025 bank foreclosure on 18 of 22 project parcels and later conveyance to D. Charles Trust Investments LLC. Neither original project licensee nor tourist guide can assume current approval of waterfall parking and access corridors.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Upper and lower parking",
+            "status": "not-cleared",
+            "finding": "Municipal tourism lists two distinct Power Dam Road upper/lower falls parking options. No 2026 right-of-way or owner-signed permissions, exact spaces, gate rules or new operator access policy independently confirmed.",
+            "source": "https://www.munising.org/activities/au-train-falls/"
+          },
+          {
+            "label": "Dam risk and viewing trail",
+            "status": "not-cleared",
+            "finding": "FERC explicitly flags high hazard due to spillway and other dam safety deficiencies. Old utility gravel/gated walking directions do not certify an open, nonhazardous public path. Do not enter restricted works or wade below outlet.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No present owner/EGLE posted safety closure or specific October 2026 permission, roadway maintenance or reservoir release plan verified. License termination does not imply instant public closure or dam removal.",
+            "source": "https://www.troutmanenergyreport.com/2026/01/ferc-terminates-au-train-hydroelectric-project-license-by-implied-surrender/"
+          }
+        ]
+      },
+      "researchPage": "/upper-peninsula-waterfalls/research/au-train-falls/"
+    },
+    {
+      "gisObjectId": 213,
+      "name": "Alger Falls",
+      "county": "ALGER",
+      "status": "municipal-plan-no-safe-highway-parking",
+      "publicAccess": "roadside-visible-parking-not-verified-safe",
+      "publicationEligible": false,
+      "title": "Alger Falls: no safe parking in city plan",
+      "summary": "Munising's adopted recreation plan says there are no safe parking options at the roadside Alger Falls viewing area by M-28/M-94. Older tourist and hiking accounts mention a turnout, but they do not supersede the city's documented road-safety concern.",
+      "guidance": "Do not stop in travel lanes, walk over the guardrail or use the waterfall GIS point as a parking destination. Safe public parking and pedestrian access require current MDOT confirmation.",
+      "reviewLimitations": "Adopted municipal recreation planning evidence establishes a serious safety concern; it does not establish that all road shoulders are legally closed or that no future improvement has occurred.",
+      "nextEvidence": "Verify current MDOT designated turnout, safe walking/crossing area and whether a legal official view can be reached without stopping on the highway.",
+      "sourceLinks": [
+        {
+          "label": "City of Munising adopted recreation plan, Alger Falls safety",
+          "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+        },
+        {
+          "label": "Munising visitor bureau attraction listing",
+          "url": "https://www.munising.org/activities/alger-falls/"
+        },
+        {
+          "label": "Third-party turnout claim requiring MDOT review",
+          "url": "https://myhikes.org/trails/alger-falls"
+        }
+      ]
+    },
+    {
+      "gisObjectId": 215,
+      "name": "Big Garlic Falls",
+      "county": "MARQUETTE",
+      "status": "state-gis-point-probably-lower-big-garlic-private-owner-reports",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
+      "publicationEligible": false,
+      "title": "Big Garlic GIS likely LOWER falls, private bank reports and conflicting names",
+      "summary": "State GIS #215 appears to mark LOWER Big Garlic Falls, not the separate main Big Garlic Falls. Historical comments from landowners warn of private banks, and no complete public visiting corridor is verified.",
+      "guidance": "Do not present a Gold Mine Road/County Road KE parking pin, river-wading shortcut or Little Garlic trail as access. Keep the distinct river falls separate and obtain an authoritative legal visitor route before publishing.",
+      "reviewLimitations": "Approximate 51 m match is highly suggestive but not a formally accepted source alias. Owner-reported private-land comments are historical and not a current surveyed ownership determination. Online comment arguments about navigable waterways are not an approved safe walking route or a land-tenure opinion.",
+      "nextEvidence": "Resolve official source alias Lower Big Garlic versus Big Garlic GIS #215; confirm current parcel/owner rules and a complete permitted bank-to-view route, approved visitor parking and seasonal safety by published manager/road records. Never route via private banks, river wading, Gold Mine bridge or the separate Little Garlic trail.",
+      "sourceLinks": [
+        {
+          "label": "Michigan state geographic waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source evidence 1",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
+        },
+        {
+          "label": "Source evidence 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/big-garlic-falls/"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Which waterfall GIS #215 represents",
+            "status": "verified-geography",
+            "finding": "GIS #215 is ~51 m from independently mapped LOWER Big Garlic and ~3.87 km from separate main Big Garlic Falls. Retain a probable identity link, not an exact official alias.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
+          },
+          {
+            "label": "Land rights and reporting",
+            "status": "documented-not-live",
+            "finding": "2018/2019 landowner or nearby-owner comments on specialist source report private banks; current parcel boundaries and rights are not independently confirmed.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
+          },
+          {
+            "label": "Road/bridge separation",
+            "status": "not-cleared",
+            "finding": "Main Big Garlic's Gold Mine Road bridge is ~3.9 km from GIS #215 and has a separate reported 2021 posting. No Big Garlic bridge access permission is established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/big-garlic-falls/"
+          },
+          {
+            "label": "Designated visitor parking",
+            "status": "not-cleared",
+            "finding": "No officially designated legal visitor parking for LOWER Big Garlic is documented. Do not promote shoulder/bridge parking from a third-party account.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
+          },
+          {
+            "label": "Visitor trail versus river passage",
+            "status": "not-cleared",
+            "finding": "No authorized continuous land trail exists in current published evidence; wading/river-law arguments and public Little Garlic Falls trail do not solve access to Big Garlic.",
+            "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
+          },
+          {
+            "label": "Current ownership, restrictions and conditions",
+            "status": "not-cleared",
+            "finding": "Neither a fresh parcel review nor published permission and seasonal trail/river safety is available; research only.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          }
+        ]
+      }
+    }
+  ]
+}

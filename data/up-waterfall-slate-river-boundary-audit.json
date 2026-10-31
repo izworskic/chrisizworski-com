@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "issue": 1258,
+  "date": "2026-10-30",
+  "title": "Slate River Falls TNC boundary overlay vs Skanee bridge",
+  "sourceQuery": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson",
+  "layerFeatureId": 8370,
+  "layerName": "Slate River Forest Reserve",
+  "ownerCategory": "Fee Ownership",
+  "publicAccessField": "Restricted Access",
+  "geoJson": "/assets/up-slate-river-tnc-boundary.geojson",
+  "samplingMethod": "Spatial Esri REST Point Intersects and independent point-in-generalized-MultiPolygon recheck; samples are not a visitor trail or surveyed land lines",
+  "points": [
+    {
+      "name": "Natural Slate River Falls GIS #119",
+      "type": "waterfall",
+      "lat": 46.831054,
+      "lon": -88.252067,
+      "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "tncFeeOverlay": true
+    },
+    {
+      "name": "Skanee Road bridge (NBI #504)",
+      "type": "bridge",
+      "lat": 46.833158,
+      "lon": -88.258622,
+      "source": "https://bridgecondition.com/bridge/michigan/mi-000000000000504",
+      "tncFeeOverlay": false
+    },
+    {
+      "name": "Slate River at Skanee Road (USGS #04043165)",
+      "type": "water-site",
+      "lat": 46.833333,
+      "lon": -88.258611,
+      "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/",
+      "tncFeeOverlay": false
+    },
+    {
+      "name": "Illustrative point 100m due east of bridge (NOT parking)",
+      "type": "test-only",
+      "lat": 46.833158,
+      "lon": -88.25731,
+      "source": "analytic-sample-not-route",
+      "tncFeeOverlay": true
+    },
+    {
+      "name": "Upper Quartzite GIS #107 (different falls)",
+      "type": "research-control",
+      "lat": 46.789247,
+      "lon": -88.242098,
+      "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "tncFeeOverlay": false
+    }
+  ],
+  "limits": {
+    "waterfallOwnerVerified": true,
+    "skaneeBridgeInsideTncFee": false,
+    "potentialRoadsideParkingApproval": null,
+    "verifiedPublicParking": false,
+    "completeFootpathPermission": false,
+    "dryGroundFallsViewVerified": false,
+    "fullRouteReady": false
+  },
+  "authorities": {
+    "landowner": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
+    "parkingAuthority": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/",
+    "countyPropertyLookup": "https://www.baragacounty.org/government/departments/equalization/",
+    "roadSafety": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+  },
+  "conclusion": "Natural falls in TNC fee property, bridge outside; must secure lawful parking and signed safe dry viewing route before visitor-guide promotion."
+}

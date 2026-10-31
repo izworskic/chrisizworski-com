@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-28",
+  "reviewed": "2026-10-31",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -11,7 +11,7 @@
       "lng": -85.25455,
       "level": "easy",
       "minutes": "30–120 min",
-      "walk": "Paved approaches, overlooks and stairs; choose route to suit mobility.",
+      "walk": "Upper: paved approaches and new 1,100-foot accessible brink boardwalk (May 2026). Lower: independent Lower Falls day-use boardwalk and island bridge. Separate parking entrances.",
       "best": "All four seasons; spring runoff and autumn color are especially distinctive.",
       "access": "Upper Falls has an accessible boardwalk; lower falls are a separate park stop. Winter conditions can change walking access.",
       "status": "verify",
@@ -23,7 +23,32 @@
       "path": "",
       "parking": "24019 Upper Falls Drive, Newberry, MI",
       "feature": "A landmark river-wide curtain with approachable overlooks and a separate Lower Falls experience.",
-      "further": "Do not treat one stop or one trail as covering both waterfalls."
+      "further": "Two separate state GIS waterfall features are already covered by the main Tahquamenon Visit Planner. The May 2026 1,100-foot accessible Upper Falls brink boardwalk replaces the old 94-step route. The Lower Falls has a separate parking area, accessible riverboardwalk and the Ronald A. Olson Island Bridge; do not use the upper parking pin for the lower waterfall. Verify current winter boardwalk conditions.",
+      "multiFeatureGisObjectIds": [
+        207,
+        208
+      ],
+      "coverageScope": "Single existing comprehensive Tahquamenon day-planning tool covers two distinct state GIS waterfall identities; do not create duplicate SEO destination pages.",
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 207,
+          "name": "Upper Tahquamenon Falls",
+          "lat": 46.574752,
+          "lng": -85.256643,
+          "arrival": "Upper Falls day-use parking, 24019 Upper Falls Drive, Newberry; waterfall coordinate is NOT parking",
+          "visitorRoute": "DNR paved Upper Falls approaches and 1,100-foot accessible new brink boardwalk completed May 2026",
+          "source": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/18/showcasing-the-dnr-new-accessible-boardwalk-opens-at-tahquamenon-falls"
+        },
+        {
+          "gisObjectId": 208,
+          "name": "Lower Tahquamenon Falls",
+          "lat": 46.601944,
+          "lng": -85.207103,
+          "arrival": "Separate Lower Falls day-use parking via M-123, four miles east of Upper Falls",
+          "visitorRoute": "DNR Lower Falls accessible overlooks and Ronald A. Olson Island Bridge; rental rowboats seasonal and conditions-dependent",
+          "source": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls"
+        }
+      ]
     },
     {
       "id": "bond-falls",
@@ -630,53 +655,53 @@
       "id": "scott-falls",
       "name": "Scott Falls",
       "region": "Pictured Rocks / Munising",
-      "place": "Au Train / M-28",
+      "place": "Au Train · M-28 · MDOT Scott Falls Roadside Park",
       "lat": 46.436999,
       "lng": -86.81447,
       "level": "roadside",
-      "minutes": "10–20 min",
-      "walk": "No independently certified legal pedestrian crossing or developed footpath to waterfall.",
-      "best": "After rainfall or snowmelt; some flow is seasonal.",
-      "access": "Do not stop or park along travel lanes. Use only legal designated pullouts and cross M-28 only where safe.",
+      "minutes": "5–20 min",
+      "walk": "Remain on the roadside-park side of M-28 for the verified waterfall view across the highway. There is no established public pedestrian crossing in these sources, and the waterfall-side path, under-ledge grotto and sandstone rim are NOT a certified visitor trail. Do not cross busy M-28 or climb to the falls based on this guide.",
+      "best": "Spring snowmelt and rain bring stronger flow; summer can reduce the curtain to a thin trickle. View only where the roadside park is open and available.",
+      "access": "Alger County's adopted recreation-plan materials name the state-managed Scott Falls Roadside Park and explicitly list parking and a waterfall view across the highway. This guide is for park-side viewing ONLY; no pedestrian crossing or walk-behind waterfall access is approved.",
       "status": "verify",
       "note": "Roadside falls with traffic hazard. Do not use the waterfall point as a driving destination.",
-      "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+      "source": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "kind": "Roadside stop",
-      "parking": "MDOT Scott Falls Roadside Park on north side of M-28, approximately 11 miles west of Munising.",
-      "feature": "An easy-to-see roadside cascade with a very different access profile from forest hikes.",
-      "further": "A seasonal roadside trickle should not be represented as a guaranteed high-volume waterfall.",
-      "manager": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved",
-      "decision": "Research page only: do not direct visitors to cross M-28.",
-      "publication": "research-only-guide",
-      "accessConfidence": "incomplete-jurisdiction-or-crossing",
-      "sourceReviewed": "2026-10-26",
+      "kind": "MDOT roadside park viewpoint across a busy highway",
+      "parking": "Use MDOT's Scott Falls Roadside Park / H.J. Rathfoot State Roadside Park on the Lake Superior (north) side of M-28 near Au Train, only when the park entrance is open and the designated parking area is available. Alger County's recreation plan identifies this park and its waterfall view across the highway. Do not stop in a travel lane, on the bridge, or an undesignated shoulder. The natural waterfall GIS coordinate is NOT the roadside park entrance.",
+      "feature": "A slender thread of water slipping over a sandstone ledge, visible across M-28 from a Lake Superior roadside park. A road-stop waterfall, not a creek hike.",
+      "further": "The Alger County 2024 recreation plan, page 35, describes parking and a waterfall view across the highway. MDOT's April 21, 2026 announcement lists Scott Falls Roadside Park and notes delayed spring reopening due to snow; it also describes roadside parks as often seasonal, closing in late October. Neither establishes the park's current October 31 opening. No pedestrian crossing, waterfall-side trail, safe grotto approach, roadside shoulder or exact parking GPS has been independently approved.",
+      "manager": "MDOT state roadside park (park side); ownership/permission on waterfall side not established",
+      "decision": "Choose a short park-side viewpoint if the MDOT roadside park is open. Do not cross M-28 to the falls or use a shoulder pull-off as a substitute if the park is closed.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "county-recreation-plan-verifies-mdot-park-parking-view-only-no-falls-side-route",
+      "sourceReviewed": "2026-10-31",
       "gisObjectId": 196,
       "verification": {
         "landManager": {
-          "verified": false,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "MDOT · Scott Falls Roadside Park; falls-side land and crossing unresolved"
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+          "description": "Alger County 2024 recreation plan identifies Scott Falls Roadside Park as MDOT-managed; this is NOT proof of waterfall-side land title."
         },
         "publicAccess": {
-          "verified": false,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "Research page only: do not direct visitors to cross M-28."
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+          "description": "County plan explicitly lists a view of the waterfall from within the park across M-28; only park-side viewing is approved by this guide."
         },
         "parking": {
           "verified": true,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "MDOT Scott Falls Roadside Park on north side of M-28, approximately 11 miles west of Munising."
+          "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+          "description": "MDOT lists Scott Falls Roadside Park among its seasonally operated M-28 facilities and explains annual closures; present open-now is unverified."
         },
         "trail": {
-          "verified": false,
-          "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
-          "description": "No independently certified legal pedestrian crossing or developed footpath to waterfall."
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/algercounty/document_center/Board%20Minutes/2024/Packets/24-05-13.pdf",
+          "description": "Park-side road view needs no waterfall-side hiking or highway crossing; no path on the falls bank is verified."
         },
         "location": {
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-          "description": "Michigan GIS waterfall feature ID 196; this is not parking"
+          "description": "Natural Michigan GIS feature #196 at 46.436999,-86.814470, separate from the road park's arrival."
         }
       }
     },
@@ -2418,6 +2443,1555 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan state GIS waterfall #118 maps the river drop, not the M-107 parking area."
+        }
+      }
+    },
+    {
+      "id": "cascade-falls",
+      "name": "Cascade Falls",
+      "region": "Western U.P.",
+      "place": "Trap Hills · Ottawa National Forest",
+      "lat": 46.651708,
+      "lng": -89.446195,
+      "gisObjectId": 67,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "From the signed parking area on Forest Road 468, take the established Cascade Falls main trail about 0.75 mile one way. The optional Bluff Trail is about one mile one way, considerably rougher and involves scrambling.",
+      "best": "Snow-free hiking conditions, when forest roads are passable; spring water and autumn colors can be rewarding.",
+      "access": "Public trail on Ottawa National Forest land. The December 2025 North Country Trail Association guide confirms the signed parking on FR 468, but the proposed North Country Trail connector is not a completed official trail.",
+      "status": "verify",
+      "note": "This is Cascade Falls on Cascade Creek in the Trap Hills near Bergland, not the unrelated Cascade Falls in Utah or Jackson, Michigan. Michigan GIS #67 marks the falls, not the parking lot.",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest",
+      "parking": "Drive to the signed Cascade Falls Trail parking area on Forest Road 468 after turning off Forest Road 400 near Bergland. Use the posted trailhead, never the mapped waterfall point as a driving destination.",
+      "feature": "A forest cascade hidden among rugged Trap Hills rock, reached by a straightforward main trail or a more demanding ridge-loop alternative.",
+      "decision": "Choose the main trail for the waterfall with a moderate forest walk. Choose the longer Bluff Trail only if you want rocky ridge terrain and are comfortable scrambling.",
+      "further": "Forest roads in this area are not plowed in winter, and snowmelt/road damage can make access impossible even after the snow is gone. No live trail-opening, road, ice or water-flow status is supplied.",
+      "manager": "USDA Forest Service · Ottawa National Forest",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "published-visitor-route-not-open-now",
+      "winterRoad": "The NCTA's December 2025 guide says surrounding forest access roads are unplowed in winter and often need drying after snowmelt. The FR 468 signed lot is a mapped summer trailhead, not a winter road-open promise.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+          "description": "December 2025 Peter Wolfe Chapter guide lists Forest Service ownership and Ottawa National Forest responsibility for Cascade Falls spur-trail maintenance."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+          "description": "Official USDA Forest Service Trap Hills brochure describes the signed public Cascade Falls Trail; NCTA 2025 guide corroborates it."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+          "description": "December 2025 NCTA PDF page 11 (printed source page 11) visibly identifies signed Cascade Falls Trail parking at FR 468, separate from the waterfall and proposed connector."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd1148492.pdf",
+          "description": "The Forest Service identifies 0.75 mile one way for main trail and one mile one way for the difficult Bluff Trail. NCTA 2025 identifies the existing FR468 route as established."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS feature #67 at 46.651708, -89.446195 places Cascade Falls on Cascade Creek; this is not a vehicle parking coordinate."
+        }
+      }
+    },
+    {
+      "id": "bonanza-falls",
+      "name": "Bonanza Falls (Greenwood Falls)",
+      "region": "Western U.P.",
+      "place": "Greenwoods Township Park · Big Iron River",
+      "lat": 46.818863,
+      "lng": -89.571458,
+      "gisObjectId": 124,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "From the signed Greenwoods township park parking area off M-64, follow the short established path to the upper river viewing area, then return the same way. This is NOT an authorized route to every downstream waterfall or riverbank section; no surveyed trail line or exact length is claimed.",
+      "best": "Snow-free park season with flowing water; spring after rain can bring stronger water, while fall foliage frames the river shelves.",
+      "access": "Carp Lake Township explicitly lists Greenwoods (Bonanza Falls) as a public park with falls and provides its own map directions; a separate local guide documents the direct signed visitor path from the lot to the upper falls. Do not cross unmarked parcels or follow the river downstream on an assumed public path.",
+      "status": "verify",
+      "source": "https://www.carplaketwp.org/general-resources",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Township public park",
+      "parking": "Follow Carp Lake Township's published Greenwoods (Bonanza Falls) destination off M-64 south of Silver City. Use the actual signed gravel park entrance and designated parking lot. The township's Google Maps link gives a park destination area, NOT a surveyed lot coordinate; NEVER route to the waterfall GIS #124 pin.",
+      "feature": "Broad layered cascades and multiple low drops on the Big Iron River. The easily visited upper falls are approached through the signed Greenwoods township park rather than directly from the geographic waterfall coordinate.",
+      "note": "Three separate references: land-manager Google Maps park destination (46.8176942,-89.5674561), regional upper-falls reference (46.817719,-89.570023) in township-attributed land, and MI GIS natural falls #124 (46.818863,-89.571458) on a separately attributed parcel. These are NOT interchangeable directions. No surveyed pedestrian path or easement to downstream drops is established.",
+      "decision": "Choose Bonanza for a short signed township-park upper-falls stop only when its seasonal entrance is open. Follow the established path from the public lot to river views, then turn around; do not extend the hike along the falls GIS location.",
+      "further": "Carp Lake Township 2025 meeting minutes describe seasonal park closure toward winter; no 2026 closing date or open-now status is verified. The short walk is natural and rocky, with slippery water-worn ledges and no documented accessible platform. Neither brochure coordinates nor parcel polygons authorize crossing private river frontage.",
+      "manager": "Carp Lake Township · Greenwoods (Bonanza Falls) park",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "township-park-upper-falls-route-published-not-open-now",
+      "winterRoad": "Carp Lake Township records weather-dependent late-fall closure and closure through winter in 2025, but does not publish a verified 2026 schedule in sources checked. A published summer map pin cannot establish winter parking or a current open gate.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/general-resources",
+          "description": "Carp Lake Township's own Parks & Facilities directory identifies Greenwoods (Bonanza Falls) as a township-managed park with falls and directions."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/general-resources",
+          "description": "Township expressly designates a park with falls, public in its signed facility and upper-falls viewing area; this does not authorize all downstream riverfront parcels."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.carplaketwp.org/meeting-minutes",
+          "description": "Township board minutes document signage, entrance and seasonal visitor parking. Township's published park map link supplies a destination inside township parcel, not a precise lot waypoint."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/big-iron-river/greenwood-falls/",
+          "description": "Waterfalls of the Keweenaw documents parking near M-64 and a short direct path to the upper river viewing area; no surveyed path or permission for downstream walking."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "MI GIS #124 marks the natural falls within a separate nonmunicipal attributed parcel. Regional brochure and township map destination locate the public upper-falls park at two distinct points on township-attributed land."
+        }
+      }
+    },
+    {
+      "id": "sand-portage-falls",
+      "name": "Sand Portage Falls",
+      "region": "Eastern U.P.",
+      "place": "Piers Gorge · Menominee River (Wisconsin shore)",
+      "lat": 45.759885,
+      "lng": -87.964463,
+      "gisObjectId": 3,
+      "level": "moderate",
+      "minutes": "45–90 min",
+      "walk": "Take the designated Sand Portage Falls Hiking Trail from the Wisconsin parking off US-141 east of Knutson Road. The 0.5-mile walk goes to a view of the waterfall and Piers Gorge. The optional rocky scramble down to the falls is NOT the standard path.",
+      "best": "Snow-free hiking conditions with clear signed parking; see river rock ledges and wooded gorge, particularly in autumn.",
+      "access": "Official designated Wisconsin-shore trail in Menominee River State Recreation Area, distinct from Michigan Piers Gorge Road overlooks. Wisconsin DNR's 2018 Piers Gorge Unit infrastructure map shows the Wisconsin lot and trail. Public viewing route not a constructed overlook or current open-now report.",
+      "status": "verify",
+      "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State recreation area",
+      "parking": "Use the Wisconsin Sand Portage Falls trail parking off US Highway 141 just east of Knutson Road (called Knuston in current DNR prose). Do not navigate to the falls GIS coordinate. The Michigan-side Piers Gorge Road entrance is separate.",
+      "feature": "The Menominee River enters the rocky Piers Gorge corridor, with foaming ledges and powerful current best viewed from the Wisconsin trail.",
+      "decision": "Choose Sand Portage for a roughly half-mile Wisconsin-bank walk to a broad gorge view. Choose Michigan Piers Gorge for a separate Pier 1–3 perspective, not a trail connection across the river.",
+      "further": "Wisconsin DNR states there is no developed falls viewing platform, and lower rock access is rugged. Its property roads are unplowed in winter and can be difficult in wet periods. No current access condition is inferred.",
+      "manager": "Wisconsin DNR / Michigan DNR · Menominee River State Recreation Area",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-visitor-route-not-open-now",
+      "winterRoad": "The Wisconsin recreation area is open year-round but its access roads are not plowed in winter. Do not infer this trailhead is open to vehicles during snow or wet-season conditions.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "Wisconsin DNR names the Sand Portage Falls hiking trail in the jointly managed Piers Gorge Unit."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "Official designated public Sand Portage Falls Hiking Trail with visitor overlook; separate Michigan Pier 1–3 trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+          "description": "Michigan/Wisconsin DNR 2018 Piers Gorge Unit Map B-1 page 3 shows Wisconsin-side parking and trail off US-141 near Knutson Road, separately from Michigan-side parking."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR documents 0.5-mile hike from Wisconsin parking to falls view, with mowed/wooded sections, hills and no developed viewing area."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #3 names Sand Portage Falls on the Menominee River, consistent with independently named DNR visitor trail/overlook; coordinate is waterfall, NOT parking."
+        }
+      }
+    },
+    {
+      "id": "quiver-falls",
+      "name": "Quiver Falls",
+      "region": "Eastern U.P.",
+      "place": "Quiver Falls Unit · Menominee River (Wisconsin shore)",
+      "lat": 45.654161,
+      "lng": -87.824715,
+      "gisObjectId": 189,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "Follow the dedicated footpath from the Quiver Falls parking area off Pemene Dam Road to the designated viewing area. Wisconsin DNR describes the viewing area and parking lot as accessible. The DNR visitor text does not publish a path distance or universal route grade.",
+      "best": "During accessible open-road conditions; broad river ledges and remnants of logging-era dam cribbing near a designated overlook.",
+      "access": "Official Quiver Falls overlook on the Wisconsin side of Menominee River State Recreation Area. Wisconsin DNR confirms a public lot and footpath with an accessible viewing area; use designated parking, not boat access or GIS falls point.",
+      "status": "verify",
+      "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State recreation area",
+      "parking": "From Wisconsin US-141 north of Pembine turn east onto County Road R for about 7.2 miles, then follow Pemene Dam Road and the signed Quiver Falls lot. Marinette County describes a quick left over the railway and another immediate left, then about one mile to parking. Confirm posted entrance, do not drive to the waterfall marker.",
+      "feature": "A wide Menominee River fall beside a developed viewing area, with remnants of logging dams and cribbing visible upstream.",
+      "decision": "Choose Quiver for a short designated overlook rather than a long hike. The DNR reports accessible parking/viewing; do not assume every shoreline route is accessible or maintained.",
+      "further": "Park roads are not plowed during winter and may be difficult in wet weather. No live gate, road or waterfall-flow status is supplied. The canoe takeout is not the overlook lot.",
+      "manager": "Wisconsin DNR / Michigan DNR · Menominee River State Recreation Area",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-visitor-overlook-not-open-now",
+      "winterRoad": "Wisconsin DNR states the recreation area's access roads are not plowed in winter; year-round park hours do not establish current road or parking availability.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "Wisconsin DNR identifies Quiver Falls Unit overlook in the jointly managed recreation area."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR documents public Quiver Falls scenic viewing area with designated footpath and public parking; accessible parking/view area described."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.marinettecountywi.gov/departments/parks/outdoor-recreation/waterfalls/parks/outdoor-recreation/waterfalls/",
+          "description": "Marinette County publishes road-level directions US-141 to County R to Pemene Dam Road and parking, independently consistent with official 2018 DNR unit map."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR confirms footpath connecting parking with Quiver Falls overlook; no quantified walking mileage or full-route grade stated."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS #189 names Quiver Falls on Menominee River; visitor parking is a different Wisconsin-shore feature. Official Quiver Falls Unit map B-2 page 4 confirms overlook geography."
+        }
+      }
+    },
+    {
+      "id": "pemene-falls",
+      "name": "Pemene Falls",
+      "region": "Eastern U.P.",
+      "place": "Pemene Falls Unit · Wisconsin shore of Menominee River",
+      "lat": 45.594123,
+      "lng": -87.777192,
+      "gisObjectId": 188,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "From the designated parking area at the end of Verheyen Lane off Wisconsin County Road Z, follow the DNR's Pemene Falls Hiking Trail about 0.5 mile one way to the primitive gorge overlook. DNR also describes 0.8-mile short and 1.9-mile long loops. The falls GIS point is not the parking or overlook.",
+      "best": "Snow-free hiking conditions when the primitive access road is passable; higher spring water makes the gorge dramatic, while fall forest colors frame the river.",
+      "access": "Official Wisconsin-side Pemene Falls hiking trail and primitive viewing point, shown on DNR trail map. Pemene Landing off Horseshoe Road is a separate river boat landing and is NOT this trailhead. No public route down to the actual natural waterfall GPS marker is implied.",
+      "status": "verify",
+      "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State recreation area",
+      "parking": "Use the official Pemene Falls Hiking Trail parking at the end of Verheyen Lane off Wisconsin County Road Z. Wisconsin DNR offers a Pemene-area navigation link, but it is NOT a precise lot point. Do not navigate to the falls GIS coordinate or Pemene Landing boat launch.",
+      "feature": "The Menominee River narrows through granite at Pemene Falls, with old concrete dam remnants visible from a primitive forest gorge overlook.",
+      "decision": "Choose the direct half-mile overlook trail for the falls. Choose the 0.8-mile short or 1.9-mile long loop when you want a longer forest walk; no downstream scramble is required.",
+      "further": "Wisconsin DNR explicitly reports natural-surface trails with steep rocky stretches, primitive gorge-edge overlook and minimal directional signs. Area roads are not plowed in winter and can be difficult during wet weather; current opening and road conditions are unverified.",
+      "manager": "Wisconsin DNR / Michigan DNR · Menominee River State Recreation Area",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-wisconsin-overlook-route-not-open-now",
+      "winterRoad": "Wisconsin DNR warns property roads are unplowed in winter and may be difficult during wet conditions. No live open gate or road status is supplied.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "Wisconsin DNR describes the Pemene Falls Unit of jointly managed Menominee River State Recreation Area."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR identifies designated Pemene Falls trail and primitive public gorge overlook, separate from boat landing."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+          "description": "Official Wisconsin DNR trail map (PDF p1) shows signed parking in the southern Pemene trail system, reached via Verheyen Lane from County Z as specified by DNR."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR identifies 0.5-mile overlook, 0.8-mi short loop, 1.9-mi long loop and steep natural tread; do not confuse loop lengths."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "MI GIS #188 falls point 45.594123,-87.777192 corroborated independently in regional geography; not a parking lot or same point as visitor overlook."
+        }
+      }
+    },
+    {
+      "id": "misicot-falls",
+      "name": "Misicot Falls (Third Pier)",
+      "region": "Eastern U.P.",
+      "place": "Piers Gorge · Michigan shore of Menominee River",
+      "lat": 45.757574,
+      "lng": -87.948049,
+      "gisObjectId": 2,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "Begin at designated Michigan Piers Gorge parking at the end of Piers Gorge Road off Highway 8. The public scenic hiking trail is listed as 1.5 miles overall with multiple Piers 1–3 overlooks. Misicot Falls is Third Pier; its exact distance from parking is not established from a current official map, so do not present 1.5 miles as the one-way walk to this one viewpoint.",
+      "best": "Snow-free conditions with time to view the gorge from maintained/recognized hiking overlooks; spring water and autumn foliage are attractive but change risks at the river.",
+      "access": "Michigan-side signed Piers Gorge Scenic Hiking Trail. Wisconsin DNR documents Piers 1–3 as views from Michigan off Highway 8/Piers Gorge Road. Independent American Whitewater identifies Third Pier as Misicot Falls; its river scouting instructions are NOT hiking routes.",
+      "status": "verify",
+      "source": "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State recreation area",
+      "parking": "Use signed Piers Gorge Road from Highway 8 on Michigan side and the DNR trail parking. This is separate from Wisconsin Sand Portage trailhead off US-141; do not navigate to the river GIS #2 location or follow paddlers' scouting shortcuts.",
+      "feature": "The third ledge of Piers Gorge, named Misicot Falls / Third Pier, where the Menominee River constricts into a turbulent rock-walled chute.",
+      "decision": "Choose the signed Michigan Piers Gorge trail to see Piers 1–3 from the public bank. Do not treat whitewater scouting directions as pedestrian visitor paths, and don't promise an exact Pier 3 hiking mileage.",
+      "further": "The falls and overlook are different geographic references. Current opening and road conditions are unverified; follow park regulations, stay on established overlooks and avoid water-level or slippery-rock descents.",
+      "manager": "Michigan DNR / Wisconsin DNR · Menominee River State Recreation Area",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-piers-gorge-michigan-visitor-path-not-open-now",
+      "winterRoad": "Wisconsin DNR says some recreation-area access roads are not plowed in winter, but conditions for the Michigan Piers Gorge Road entrance are not verified; do not infer it is passable from year-round park hours.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "Wisconsin DNR names jointly managed park Piers Gorge Unit and Michigan shore Piers 1–3 views."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+          "description": "DNR documents Michigan-side public hiking trail and Piers 1–3 viewpoints off Highway 8/Piers Gorge Road."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+          "description": "DNR 2018 Piers Gorge Unit infrastructure map PDF p3 shows Michigan-side parking and trail, separately from WI Sand Portage lot."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail",
+          "description": "Official Michigan tourism listing documents 1.5-mile scenic trail and access off Hwy 8/Piers Gorge Rd; exact Third Pier walk length not claimed."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.americanwhitewater.org/content/River/view/river-detail/point-of-interest/other/6783",
+          "description": "American Whitewater independently names river rapid Misicot Falls as Third Pier. MI GIS #2 is natural river feature, not a trailhead; catalog positions may differ from legal overlook."
+        }
+      }
+    },
+    {
+      "id": "duppy-falls",
+      "name": "Duppy Falls",
+      "region": "Western U.P.",
+      "place": "Jumbo River · Ottawa National Forest",
+      "lat": 46.412542,
+      "lng": -88.911255,
+      "gisObjectId": 26,
+      "level": "difficult",
+      "minutes": "Allow extra time",
+      "walk": "The current Forest Service Duppy page says south from Kenton on FH16, right on Forest Road 3610, then about 0.25 mile to an unmarked angler-created trail. Walk west to Jumbo River and upstream to the falls; agency does not publish a precise maintained trail distance.",
+      "best": "Snow-free conditions and navigable forest roads; spring flow and autumn colors appeal but increase footing and road risks.",
+      "access": "Forest Service-listed waterfall with informal angler trail in Ottawa National Forest. No developed official parking lot, trail marking, accessible route, or verified footbridge. The official route is FR3610; some regional publications say FR3645 or USFS168, which have NOT been reconciled as interchangeable.",
+      "status": "verify",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest backcountry",
+      "parking": "From Kenton follow Forest Highway 16 south to Forest Road 3610 as the CURRENT Forest Service directs. After about 1/4 mile, look for an unmarked trail. No surveyed parking lot or precise car destination; use only legal signed turnouts and do not block gates. Alternative FR3645 and USFS168 labels appear regionally but are not assumed equivalent.",
+      "feature": "A cluster of low ledges in the Jumbo River beside an old quarry opening, reached by an informal trout-angler route.",
+      "decision": "Choose Duppy only for a backcountry outing with offline mapping and a willingness to turn around; there is no signed maintained visitor path. Forest Service says Site Open year-round, which does not mean the forest road is driveable today.",
+      "further": "An informal path, possible stream crossing and slippery river rocks; no developed overlook. Current opening and road conditions are unverified. Do not navigate to GIS #26 as if it were parking; the older Forest Service brochure's feature coordinate differs from the MI GIS feature coordinate.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Kenton Ranger District",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-forest-service-informal-visitor-route-not-open-now",
+      "winterRoad": "The Forest Service's recreation listing says January-December/site open, not daily road clearance. Confirm temporary closures and road status; unmarked path is not guaranteed safe in winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Forest Service's current Duppy Falls recreation page identifies Kenton Ranger District manager."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Forest Service lists Duppy as a recreation area and explicitly describes an angler-created unmarked path; this is not a maintained trail guarantee."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Road-level visitor ARRIVAL via FH16->FR3610->0.25 mile to unmarked trail, NOT a developed parking lot; must verify permitted safe turnout on site."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+          "description": "Unmarked route west to river, then upstream to falls; exact total distance not given by agency."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS waterfall feature #26 is a natural feature; older official USFS waterfall brochure gives alternative feature coordinate 46.413807,-88.910858, neither is parking."
+        }
+      }
+    },
+    {
+      "id": "mex-i-min-e-falls",
+      "name": "Mex-i-min-e Falls",
+      "region": "Western U.P.",
+      "place": "Burned Dam Campground · Middle Branch Ontonagon River",
+      "lat": 46.313443,
+      "lng": -89.054153,
+      "gisObjectId": 19,
+      "level": "easy",
+      "minutes": "20–45 min",
+      "walk": "From Burned Dam Campground follow the Forest Service's short established trail to the river and waterfall. Official recreation page gives approximately 0.25 mile ROUND TRIP and calls the trail easy to intermediate, not 2.4 miles as claimed by some third-party guides.",
+      "best": "During forest road maintenance and snow-free campground access, normally May–September; fall can be attractive but current access isn't assured.",
+      "access": "Official Forest Service recreation site and short falls trail from Burned Dam Campground, approached via Old US-2 and Forest Road 4500. Campground is open until snow closes access; not a year-round guaranteed drivable lot.",
+      "status": "verify",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest waterfall and rustic campground",
+      "parking": "From Watersmeet head north on US45 about one mile, east on Old US2 about seven miles, then north onto Forest Road 4500 about one mile to Burned Dam Campground. Use designated visitor parking. The Forest Service site's latitude/longitude is a general campground reference, NOT a surveyed parking space; the state waterfall GPS point is separate.",
+      "feature": "A short forest footpath to stepped cascades of the Middle Branch Ontonagon River beside rustic campground and lumbering-era history.",
+      "decision": "Best for an easy-to-intermediate SHORT waterfall walk once FR4500 is passable. Do not confuse site open year-round with maintained vehicle access outside May–September.",
+      "further": "USFS campground page says site maintained May 22–Sept 30, and road access lasts until snow closes it. No drinking water and only pit toilets. Current opening and road conditions are unverified; no accessible overlook certification.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Watersmeet Ranger District",
+      "sourceReviewed": "2026-10-28",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-usfs-campground-to-falls-trail-not-open-now",
+      "winterRoad": "Forest Service says May 22–Sept 30 maintenance, although visitor site is listed for Jan–Dec. Snow may close road access; do not presume vehicle travel in October/winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "USDA Forest Service's Mex-i-min-e Falls page identifies Watersmeet Ranger District."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "Forest Service lists waterfall recreation with public 1/4-mile return trail at Burned Dam Campground."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
+          "description": "Official campground page supplies Watersmeet -> US45 -> Old US2 -> FR4500 -> campground road route; the official geo point is not verified exact parking."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+          "description": "Official easy-to-intermediate footpath from campground to Middle Branch Ontonagon River, 1/4 mile round trip."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #19 maps the natural falls at 46.313443,-89.054153; Forest Service site reference 46.31379535,-89.05313987 is a different general location and not a lot."
+        }
+      }
+    },
+    {
+      "id": "jacobs-falls",
+      "name": "Jacob's Falls",
+      "region": "Western U.P.",
+      "place": "M-26 coastal route · Jacob Creek · near Eagle River",
+      "lat": 47.427749,
+      "lng": -88.237254,
+      "gisObjectId": 143,
+      "level": "easy",
+      "minutes": "10–25 min",
+      "walk": "The small lower cascade is visible from M-26 about three miles east of Eagle River. No maintained or separately authorized upstream gorge trail is established. View from safe roadside ground only, when a legal pull-off is available.",
+      "best": "During spring melt or shortly after rain. Summer flow can be light; traffic and snowbanks change roadside safety.",
+      "access": "Visit Keweenaw explicitly identifies this as a roadside waterfall. Roadside visibility does NOT establish a dedicated public parking stall, upstream bank crossing, or right to use nearby Jampot business parking.",
+      "status": "verify",
+      "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside lower cascade",
+      "parking": "Use a legal safe M-26 pull-off near Jacob Creek, three miles northeast of Eagle River; do not stop on highway lanes or blocked shoulders. The nearby Jampot business is a landmark, not guaranteed public waterfall parking. Never navigate by the raw falls GPS point.",
+      "feature": "A small dark-rock cascade close to the M-26 roadway between Eagle River and Eagle Harbor, with additional upper creek drops beyond the basic visitor view.",
+      "decision": "Choose a short roadside stop only if safe legal parking exists. The standard visit is not an upstream creek scramble.",
+      "further": "No verified developed parking lot or safe winter roadside turnout. Current opening and road conditions are unverified. Upper cascades are informal routes and not recommended as public visitor walks.",
+      "manager": "Keweenaw visitor-bureau documented roadside attraction; public land ownership of all upper banks not established",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-visitor-bureau-roadside-view-no-specific-parking-coordinate",
+      "winterRoad": "M-26 can have snowbanks that eliminate safe pull-offs; no same-day parking or shoulder clearance is available in sources.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+          "description": "Official Keweenaw regional destination body identifies roadside attraction; not a title or upstream-land management claim."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+          "description": "Roadside lower cascade can be seen from state-highway vicinity without an upstream trail. Authorized parking and upper-bank access are deliberately excluded."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Visitor bureau directs M-26 about three miles northeast of Eagle River; only legal permitted roadside stopping, no independently verified lot coordinates."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://copperharbor.org/portfolio/waterfalls/",
+          "description": "Local Copper Harbor destination guidance treats lower falls as visible immediately from road; no formal upper gorge trail is promoted."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State waterfall GIS #143 marks natural falls by M-26, not a drivable pull-off."
+        }
+      }
+    },
+    {
+      "id": "manganese-falls",
+      "name": "Manganese Falls",
+      "region": "Western U.P.",
+      "place": "Copper Harbor · Manganese Creek gorge",
+      "lat": 47.462062,
+      "lng": -87.878959,
+      "gisObjectId": 145,
+      "level": "moderate",
+      "minutes": "20–45 min",
+      "walk": "From legal parking on Manganese Road south of Copper Harbor, follow the short published upper-gorge path to the viewing area. Tourism guide estimates about 100 feet from road to falls area, but the full viewing trail may be longer. Do not descend the steep, informal gorge paths.",
+      "best": "Spring or after rainfall for visible water flow from narrow gorge; prioritize dry footing and child safety.",
+      "access": "Visit Keweenaw and Copper Harbor tourism describe a short public-facing upper-gorge viewing trail. Deep exposed rock walls and steep slopes require caution. No officially sanctioned route to the gorge bottom is established.",
+      "status": "verify",
+      "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Short upper-gorge viewpoint",
+      "parking": "From Copper Harbor's visitor center turn south onto Lake Manganese/Manganese Road about 0.7 mile and use a legal safe space off road near the signed upper-gorge path. No surveyed parking stall or live opening guaranteed; never use the MI GIS #145 falls point as driving destination.",
+      "feature": "A deep, narrow mossy rock gorge with Manganese Creek falling around 45 feet from its upper ledge; a short road approach leads to a cautious view from above.",
+      "decision": "Choose the short road-to-viewing-area path, not a steep downstream scramble. The drop is significant and not fully protected along every edge.",
+      "further": "Visitor bureau highlights exposed gorge edges and special care with children. Seasonal ice, leaves and mud add danger. The 2023 brochure's approximate falls point differs from MI GIS #145; neither is a parking coordinate. Current opening and road conditions are unverified.",
+      "manager": "Keweenaw visitor bureau and Copper Harbor destination guidance; underlying gorge parcel ownership not assumed from tourism listing",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "visitor-bureau-short-gorge-trail-not-lower-ravine-route",
+      "winterRoad": "A short stroll does not imply cleared winter roadside parking or safe gorge viewing. Current road and footpath conditions unverified.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+          "description": "Visit Keweenaw destination page identifies published Manganese Road viewer access; no title/easement is inferred for informal creek routes."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+          "description": "Regional tourism confirms short road-to-upper-gorge viewpoint and explicitly warns of deep ravine."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Official visitor brochure provides 0.7-mile Manganese Road approach from Copper Harbor Visitor Center. No precise lot coordinate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://copperharbor.org/portfolio/waterfalls/",
+          "description": "Copper Harbor destination body describes simple upper viewing path; steep downstream approaches excluded."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "MI GIS #145 natural falls coordinate, not parking; 2023 tourism brochure approximate visitor position differs."
+        }
+      }
+    },
+    {
+      "id": "wyandotte-falls",
+      "name": "Wyandotte Falls",
+      "region": "Western U.P.",
+      "place": "Misery River · Twin Lakes · Houghton County",
+      "lat": 46.890025,
+      "lng": -88.877565,
+      "gisObjectId": 128,
+      "level": "moderate",
+      "minutes": "30–60 min",
+      "walk": "From the visitor-bureau described parking area along Poyhonen Road off M-26, follow an unimproved approximately 250-yard rustic trail south through cedar woods to Wyandotte Falls on the Misery River. No surveyed trail polyline or developed platform; stay on established path.",
+      "best": "Spring thaw or after rainfall, because the modest stepped falls can become subdued in summer; avoid mud and unstable footpaths.",
+      "access": "Keweenaw visitor bureau's public waterfall tour names the signed Poyhonen Road parking area and 250-yard rustic walking approach. Independent Copper Country waterfall guide corroborates location. Respect nearby golf-course infrastructure and do not wander off the path.",
+      "status": "verify",
+      "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Rustic Misery River short hike",
+      "parking": "From M-26 about 1.5 miles southwest of Twin Lakes State Park take Poyhonen Road west about 0.8 mile to the brochure's parking area. Independent regional guide places the trailhead beyond Wyandotte Hills Golf Course. Park only in a designated, permitted space; not at the natural falls GIS coordinates or golf maintenance areas.",
+      "feature": "Quiet two-step Misery River cascades through ancient cedar and mossy boulders with variable seasonal water.",
+      "decision": "Choose a short forest hike with uneven footing and use only the mapped brochure parking approach; do not treat golf course facilities as a public lot.",
+      "further": "No guaranteed accessible trail, restrooms or winter-plowed side road. Visitor bureau estimates 250 yards; other sources differ, so route is not digitized precisely. Current opening and road conditions are unverified.",
+      "manager": "Keweenaw regional waterfall visitor system; no assumed entitlement to golf-course or adjacent private land",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "visitor-bureau-documented-parking-road-and-rustic-footpath-not-open-now",
+      "winterRoad": "Parking road and rustic trail may be uncleared during snow. No live road/golf-course operational status source.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Regional Keweenaw visitor bureau documents the established public-facing waterfall arrival, not a legal title statement about adjoining golf land."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "Regional 2023 map describes Wyandotte Falls as an established visitor stop with rustic walking trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "description": "M-26 to Poyhonen Rd roughly 0.8 mile from turn to parking; actual stall unverified by coordinates."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.coppercountry.com/destinations/waterfalls/wyandotte-falls/",
+          "description": "Independent Copper Country visitor guide describes approximately 250 yards along unimproved path from roadside parking to falls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #128 named falls on Misery River distinct from visitor lot."
+        }
+      }
+    },
+    {
+      "id": "rock-river-falls",
+      "name": "Rock River Falls",
+      "region": "Central U.P.",
+      "place": "Rock River Canyon Wilderness · near Chatham",
+      "lat": 46.411253,
+      "lng": -86.976063,
+      "gisObjectId": 194,
+      "level": "difficult",
+      "minutes": "90–180 min",
+      "walk": "From a permitted open forest-road turnout on FR 2293, follow the natural Rock River Falls footpath; NCTA also describes a distinct 1.2-mile spur from the main NCT. Published direct-walk estimates vary (roughly 1.5–1.8 mile roundtrip) by parking and route. No exact legal falls lot GPS or maintained trail distance is asserted.",
+      "best": "Snow-free, dry-road conditions when the FR 2276/2293 forest roads are open and passable; avoid winter driving to the western NCT trailhead.",
+      "access": "USDA Hiawatha National Forest Rock River Canyon Wilderness, with NCTA chapter-documented public North Country Trail and falls spur. U.P. visitor bureau describes unmarked falls parking along FR2293. No promise of current safe/authorized winter motor access, bridge, accessibility or exact coordinates.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "National forest wilderness trail",
+      "parking": "From Chatham take Rock River Road/H-01 to FR 2276 (Cole Creek/Sandstrom Road), then FR 2293 (Falls Road). Find permitted signed/unmarked visitor turnout described in U.P. tourism; do not route to the natural waterfall GIS point. The western NCT parking reference is a different trailhead, not a certified Rock River Falls lot.",
+      "feature": "Secluded Rock River cascade in forest wilderness, with a rugged wet-landscape trail and no developed overlook.",
+      "decision": "Choose this only when the rough forest-road approach and unmarked wilderness trail fit your vehicle and experience. NCTA warns the FR 2293 western trailhead is unreachable by car in winter; trail spur and direct approach distances differ.",
+      "further": "North Country Trail Association's 2023 segment guide documents FR 2276/2293 road system, 1.2-mile falls spur and winter road limits; U.P. tourism describes small FR2293 falls parking. Current opening and road conditions are unverified; do not assume roadside parking near private land is legal.",
+      "manager": "USDA Forest Service · Hiawatha National Forest · Rock River Canyon Wilderness",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "mapped-public-wilderness-NCTA-trail-regional-parking-no-open-now",
+      "winterRoad": "NCTA advises higher-clearance vehicle for the western trailhead late spring through early winter and says western trailhead is not vehicle-accessible in winter. Confirm current USFS road opening and closures.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd534265.pdf",
+          "description": "USFS Hiawatha forest NCT map names Rock River Canyon Wilderness and Rock River Falls Trail."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA chapter documents public trail/rock river falls spur and wilderness-appropriate visitor footpath."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+          "description": "U.P. visitor association explicitly describes a small falls trail parking area on FR2293; no exact survey-level GPS parking coordinate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA 2023 segment guide describes Rock River Falls spur (1.2 miles on NCT route), road approaches and winter reachability distinct from other direct-route walking distances."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #194 locates the actual Rock River Falls natural river feature, not parking."
+        }
+      }
+    },
+    {
+      "id": "morgan-falls",
+      "name": "Morgan Falls",
+      "region": "Central U.P.",
+      "place": "Morgan Creek · NTN South Trails · Marquette",
+      "lat": 46.507745,
+      "lng": -87.446107,
+      "gisObjectId": 166,
+      "level": "moderate",
+      "minutes": "90–150 min",
+      "walk": "Begin at the NTN South Trailhead lot on M-553, use the designated trail connection to a safer highway crossing, then follow Mount Marquette Road on foot about 1.2 miles and a short side footpath to Morgan Creek Falls. Regional visitor sources list about 2.8 miles round trip from the South Trailhead; do not drive motor-restricted road or claim a shorter shoulder crossing.",
+      "best": "Dry trail season with careful crossing of M-553 and safe creek-side footing; autumn hardwood color is excellent but wet leaves hide roots.",
+      "access": "Documented public NTN South Trailhead and nonmotorized Mount Marquette Road approach; Travel Marquette explicitly prohibits/strongly warns against parking the M-553 dirt shoulder opposite NTN due to high-speed traffic and blind sight lines. Follow marked designated crossing.",
+      "status": "verify",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Public nonmotorized trail and creek waterfall",
+      "parking": "Use NTN South Trails main trailhead off M-553 south of Marquette, on left heading south before Rippling River Resort. DO NOT park opposite on M-553 dirt shoulder. Walk to designated trail crossing with better sight lines; do not drive motor-restricted Mount Marquette Road or the GIS falls point.",
+      "feature": "Morgan Creek cascade in dark bedrock near Marquette reached by NTN South trail crossing and a vehicle-closed road walk.",
+      "decision": "Choose Morgan for a substantial family-friendly forest walk only if your group can safely negotiate the designated M-553 crossing and uneven final creek path. The falls pin itself is not the trailhead.",
+      "further": "NTN South Trails is mixed-use with seasonal grooming and distinct biking routes; no current waterfall trail status available. Current opening and road conditions are unverified. Close sightlines and highway traffic make shoulder parking dangerous.",
+      "manager": "Noquemanon Trail Network · NTN South Trails",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "NTN-public-parking-crossing-visitor-route-confirmed-no-current-status",
+      "winterRoad": "NTN publishes season-specific trail use and grooming; no promise of public access to steep, icy waterfall creek path or motor traffic on Mount Marquette Road.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://noquetrails.org/south-trails/",
+          "description": "Noquemanon Trail Network official South Trails manager site identifies NTN South public trail system and main trailhead along County Road 553."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Travel Marquette publishes public Morgan Falls hike from NTN South parking, designated crossing and closed-to-cars Mount Marquette Road."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Local visitor bureau directs parking at NTN South Trailhead and explicitly warns against unsafe illegal M-553 shoulder parking."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Tourism describes designated safe highway crossing, nonmotorized Mount Marquette Road segment about 1.2mi, short falls footpath, about 2.8mi total."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS feature #166 locates Morgan Falls natural feature on Morgan Creek, not the public parking lot."
+        }
+      }
+    },
+    {
+      "id": "falls-river-trail",
+      "name": "Falls River Trail: Middle & Lower Falls",
+      "region": "Western U.P.",
+      "place": "L’Anse · Falls River · Baraga County",
+      "lat": 46.752422,
+      "lng": -88.452723,
+      "gisObjectId": 95,
+      "multiFeatureGisObjectIds": [
+        96
+      ],
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 96,
+          "name": "Lower Falls",
+          "lat": 46.754031,
+          "lng": -88.454957,
+          "arrival": "Public downstream Falls River Trail parking described by Baraga County Trails, not the natural GIS coordinate",
+          "visitorRoute": "Downstream riverside signed trail toward Lower Falls, then upstream to Middle Falls",
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail"
+        }
+      ],
+      "coverageScope": "One maintained L’Anse Falls River Trail outing combines Middle Falls #95 and Lower Falls #96 without duplicating search pages; upper/private and powerhouse/utility falls are excluded.",
+      "level": "easy",
+      "minutes": "35–75 min",
+      "walk": "Follow the signed Falls River Trail beside the river. On the downstream approach the first named natural cascade is Lower Falls, followed upstream by Middle Falls visible from the high bank. Baraga County Trails describes 1.4 miles out-and-back for the complete trail, NOT the distance between individual waterfall views. Do not cross the railroad, utility structures, US-41 or the river for shortcuts.",
+      "best": "Spring and autumn daylight with dry trail footing; rain can swell Falls River but no flow forecast is offered.",
+      "access": "Baraga County Trails describes a public 1.4-mile out-and-back riverside trail, with a downtown Main Street downstream lot and separate US-41 bridge-side upstream trailhead. Older county brochure confirms the Lower-to-Middle viewpoint sequence. The high-bank viewpoint is not a river scrambling route.",
+      "status": "verify",
+      "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Village public riverside waterfall walk",
+      "parking": "Downstream Falls River Trail: from L’Anse Main Street, use the public small-park parking on the right beside Falls River as specified by Baraga County Trails. Walk on the marked east-bank trail upstream, beside the power plant. The upstream alternate is the right-side signed lot on US-41 just before its Falls River bridge. Neither parking entrance is the natural waterfall coordinate.",
+      "feature": "Slate-ledged cascades in a short riverside corridor connecting L’Anse's lower and middle falls.",
+      "decision": "For an accessible-by-town short outing rather than a deep-woods hike, begin at the downtown Falls River Trail lot and stay on the formal bank trail. Avoid old railroad and powerhouse shortcuts.",
+      "further": "Trail association's 1.4 miles is the full walk, not falls-to-falls distance. The older county waterfall brochure and independent geography establish Lower and Middle falls as separate river drops. Some informal pages recommend crossing railroad tracks, going beneath US-41 or approaching private Upper Falls: none are part of this recommended visit. Current opening and road conditions are unverified.",
+      "manager": "Baraga County Trails in Motion · Falls River Trail; nearby industrial property is not public trail",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-trail-organization-two-lots-and-county-waterfall-view-sequence-current-conditions-not-live",
+      "winterRoad": "The trail organization lists snowshoeing; that does not guarantee either lot is plowed, icy bluff safety or a fall-specific winter route. Never assume river ice is safe.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+          "description": "Local trail organization maintains published Falls River Trail and signed downtown/US41 access; does not grant permission onto the power plant."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://visitbaragacounty.com/activities/summer-recreation/",
+          "description": "Baraga County tourism describes Falls River Trail as accessible public walk with Lower Falls views; no authority to cross the railway."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+          "description": "Published downtown Main Street river-side parking and separate US-41 bridge-side trailhead; no surveyed parking GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+          "description": "County falls brochure describes Lower Falls first and continuing upstream along high bluff to Middle Falls, corroborated by current trail organization route."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #95 Middle and #96 Lower are separate named Falls River features, not lots or old cement dam."
+        }
+      }
+    },
+    {
+      "id": "sturgeon-falls",
+      "name": "Sturgeon Falls",
+      "region": "Western U.P.",
+      "place": "Sturgeon River Gorge Wilderness · Ottawa National Forest",
+      "lat": 46.64242,
+      "lng": -88.69346,
+      "level": "difficult",
+      "minutes": "120–180 min",
+      "walk": "From the established wilderness parking, follow the Sturgeon Falls footpath downhill through steep switchbacks into the gorge. Visit Keweenaw estimates approximately one mile each way to the river waterfall; allow 2–3 hours for the trip. The NCTA 2025 map's white-blazed half-mile spur connects the parking with the North Country Trail, and must NOT be mistaken for the falls walk.",
+      "best": "Dry-road late spring through fall, with good daylight and cautious footing. Forest roads are not plowed in winter and can be affected by spring washouts.",
+      "access": "Federal Ottawa National Forest wilderness footpath documented by 2025 North Country Trail Association map, with separate parking from FR2200 NCT lot. Visitor bureau independently locates natural falls at ~46.6428,-88.6937, 6.74 km away from the similarly named state GIS #45 record; that state point is NOT promoted as the visitor location.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "locationSource": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/",
+      "kind": "National forest wilderness waterfall hike",
+      "parking": "Use the signed Sturgeon River Gorge Wilderness trailhead on the mapped Forest Road 2270 access corridor. The NCTA's 2025 trail map distinguishes this wilderness trailhead parking from the FR2200 North Country Trail lot. An older NCTA GPS list uses the road name FR2276 for the wilderness falls parking; follow current Forest Service road signs and maps, not either historic numbering alone. No certified live drivable route or vehicle navigation to the waterfall point.",
+      "feature": "Powerful Sturgeon River drop through a narrow volcanic-rock chute in a remote forested gorge.",
+      "decision": "Visit only with sufficient daylight, dry-route experience and confirmed passable forest roads. The marked wilderness parking area is not the natural falls coordinate; take the switchback footpath rather than shortcuts down the cliff.",
+      "further": "Two independent field references agree on the actual Sturgeon River Falls location around 46.6424 N. Michigan GIS #45 says 46.582163 N: the roughly 6.74 km difference is unresolved, so the public guide does NOT claim an exact GIS link. NCTA's 2014 GPS table also uses an older road reference FR2276 where its 2025 trail guide uses FR2270. Current opening and road conditions are unverified, and neither the historic NCTA GPS waypoint nor the natural waterfall latitude is a guaranteed car routing destination.",
+      "manager": "USDA Forest Service · Ottawa National Forest · Sturgeon River Gorge Wilderness",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-access-guide",
+      "accessConfidence": "verified-federal-wilderness-NCTA-trail-and-two-independent-visitor-falls-positions-but-unlinked-state-geography",
+      "winterRoad": "NCTA 2025 states no roads on its Sturgeon River Gorge segment map are plowed in winter. Spring mud and washouts can persist into June. No current forest-road open-now claim.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238242",
+          "description": "Federal recreation source describes wilderness Sturgeon Falls in Ottawa National Forest, including steep undeveloped gorge."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA's 2025 trail map documents the public wilderness trailhead and the maintained wilderness falls path."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA 2025 marks wilderness falls trailhead parking on FR2270 corridor distinct from FR2200 NCT parking; 2014 GPS list calls an adjacent parking road FR2276, requiring current sign verification."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/exploring-the-sturgeon-river-gorge-wilderness-area/",
+          "description": "Visit Keweenaw describes approximately one-mile steep switchback path from public trailhead; 2025 NCTA independently confirms unblazed maintained wilderness path."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf",
+          "description": "NCTA 2014 GPS table lists Sturgeon Falls at 46.64242,-88.69346, corroborated by Visit Keweenaw and independent waterfall guide; conflicting state GIS #45 at 46.582163,-88.68412 is NOT an exact match."
+        }
+      }
+    },
+    {
+      "id": "twin-waterfalls-memorial-preserve",
+      "name": "Memorial & Tannery Falls: Preserve Closure",
+      "region": "Pictured Rocks / Munising",
+      "place": "Twin Waterfalls Memorial Plant Preserve · Munising",
+      "lat": 46.413381,
+      "lng": -86.629242,
+      "gisObjectId": 198,
+      "multiFeatureGisObjectIds": [
+        199
+      ],
+      "gisFeatureCrosswalk": [
+        {
+          "gisObjectId": 199,
+          "name": "Tannery Falls / Rudy M. Olson Falls",
+          "lat": 46.415716,
+          "lng": -86.626745,
+          "arrival": "No visitor arrival. MNA sanctuary closed to all visitors through 2028 according to current landowner website.",
+          "visitorRoute": "No public trail or parking while closure applies",
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171"
+        }
+      ],
+      "coverageScope": "One privately conserved sanctuary closure covers distinct state GIS #198 Memorial Falls and #199 Tannery/Olson Falls without inventing an accessible visitor route.",
+      "level": "closed",
+      "minutes": "No visit permitted",
+      "walk": "There is no permitted visitor trail to Memorial Falls or Tannery / Rudy M. Olson Falls while the preserve is closed. Do not bypass barricades, enter from neighboring property, walk along the creek, or treat GIS natural coordinates as a public route. Consider Wagner Falls or Mosquito Falls subject to their own current access restrictions.",
+      "best": "After the Michigan Nature Association explicitly announces an authorized reopening; closure has no guaranteed end date.",
+      "access": "Michigan Nature Association identifies both falls within its Twin Waterfalls Memorial Plant Preserve and states the sanctuary is currently closed to ALL visitors. The organization's current homepage says closed through 2028. No private or alternative access is allowed.",
+      "status": "closed",
+      "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Conservation sanctuary · CLOSED",
+      "parking": "DO NOT VISIT the Twin Waterfalls Memorial Plant Preserve. The Michigan Nature Association currently prohibits all visitors, and its homepage announces closure through 2028. Former Nestor, Cleveland or Washington Street directions and older trail maps are superseded by the landowner's closure. No parking or path to either fall is recommended.",
+      "feature": "Two separate sandstone-canyon falls in a protected plant preserve; the owner currently prohibits visitation.",
+      "decision": "Do not visit the preserve while closed. Check MNA's own closure statement; choose another officially accessible waterfall rather than trying old Nestor/Washington approaches.",
+      "further": "MNA's 2021 closure notice explains needed trail rerouting, erosion repairs, visitor infrastructure and signage upgrades. The owner still marks the sanctuary closed in October 2026 and its homepage says through 2028, not that reopening automatically happens on January 1, 2029. Older brochures showing trailheads and private neighboring side approaches are obsolete for public access; no live trail or parking availability is claimed.",
+      "manager": "Michigan Nature Association · Twin Waterfalls Memorial Plant Preserve",
+      "sourceReviewed": "2026-10-29",
+      "publication": "verified-closure-guide",
+      "accessConfidence": "current-landowner-closure-confirmed-through-2028-no-public-visit",
+      "winterRoad": "Closed to all visitors regardless of snow or daylight; a winter frozen waterfall is not a permitted exception.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+          "description": "MNA identifies owner/manager of Twin Waterfalls Memorial Plant Preserve, including Memorial, Tannery/Olson Falls."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+          "description": "Landowner expressly says currently CLOSED to all visitors. Closure overrides historical visitor routes."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigannature.org/news/article/Twin-Waterfalls-Closure.html",
+          "description": "Historic visitor entrances and parking from older guides are not permitted visitor arrivals while sanctuary closure is in effect."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigannature.org/",
+          "description": "Current MNA banner says Twin Waterfalls sanctuary closed through 2028; no authorized walking trail currently available."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS #198 Memorial and #199 Tannery are separate waterfall features. They are NOT visitor parking or legal entry."
+        }
+      }
+    },
+    {
+      "id": "houghton-douglass-falls",
+      "name": "Houghton-Douglass Falls",
+      "region": "Western U.P.",
+      "place": "Hammell Creek · Calumet Township · M-26",
+      "lat": 47.206922,
+      "lng": -88.427485,
+      "gisObjectId": 135,
+      "level": "moderate",
+      "minutes": "30–75 min",
+      "walk": "From the DNR's completed M-26 site entrance, use the Phase 1 accessible path to the pedestrian bridge over Hammell Creek. BEYOND THE BRIDGE the trail remains rugged and undeveloped, with no completed accessible fall overlook, safety barriers or observation platform. Do not treat a local visitor bureau's approximate 0.5-mile round trip as an ADA-certified trail.",
+      "best": "Snow-free, dry footing and adequate daylight, only while DNR signs allow visitor access. Full overlook expected after planned Phase 2 construction, not currently complete.",
+      "access": "DNR says the property is still under development and will officially open/dedicate once all phases are complete; Visit Keweenaw currently describes visitation after Phase 1. DNR cautions that beyond the bridge the trail is rugged with no barriers. Phase 2 overlooks and completed accessible route are scheduled for construction in 2027. Verify posted site-specific restrictions before attempting the undeveloped path.",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State scenic site under development",
+      "parking": "DNR Phase 1 built a dedicated parking area and access drive off M-26, 1.5 miles north of Lake Linden. Use the entrance signed for Houghton-Douglass Falls; the DNR site reference point 47.206425,-88.431575 is an area direction, not a surveyed parking space. Do not use the waterfall's natural GIS marker or historical lower private-land access.",
+      "feature": "A towering Hammell Creek waterfall framed by volcanic rock; the public site is still being constructed.",
+      "decision": "If you visit, choose the completed parking-to-bridge portion and assess whether continuing onto the undeveloped path is permitted and safe. This is not yet a completed ADA waterfall overlook.",
+      "further": "Michigan DNR says official dedication is after all improvements. Keweenaw visitor bureau reports visits are possible following Phase 1. These are different milestones, not a contradiction to erase. Do not promise an opened accessible falls platform, guardrails, or a completed overlook in 2026. Current opening and road conditions are unverified. No precise surveyed parking GPS is asserted.",
+      "manager": "Michigan DNR · Houghton-Douglass Falls and Veterans Memorial Scenic Site",
+      "sourceReviewed": "2026-10-30",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-visitor-source-and-site-geometry-confirmed-no-live-season-status",
+      "winterRoad": "The parking/bridge may be affected by construction, ice and weather. Phase 2 planned for 2027 is not a live schedule or opening guarantee.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+          "description": "DNR is the site owner/manager, with 70-acre scenic project and construction milestones."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/outdoors/waterfalls/houghton-douglass-falls/",
+          "description": "Visit Keweenaw says Phase 1 complete and visitation possible, subject to DNR site limitations; this is not full official dedication."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
+          "description": "Phase 1 new access road, parking and vault toilet off M-26; area coordinates are not individual parking GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates",
+          "description": "Accessible to pedestrian bridge ONLY; beyond bridge natural unimproved path, no finished barriers/observation deck."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Natural #135 marker on Hammell Creek separate from official DNR visitor approach."
+        }
+      }
+    },
+    {
+      "id": "power-house-falls",
+      "name": "Power House Falls",
+      "region": "Western U.P.",
+      "place": "Falls River · L’Anse · Baraga County",
+      "lat": 46.736793,
+      "lng": -88.44433,
+      "gisObjectId": 88,
+      "level": "easy",
+      "minutes": "15–45 min",
+      "walk": "From the small park at Power House Falls, view the cascade from established riverside ground. The Village of L'Anse describes a roughly half-mile upstream riverside trail; this is the general path length, not a signed promise of access to every other drop. Do not enter the old powerhouse, climb its walls, use industrial structures, or scramble down the falls.",
+      "best": "Snow-free spring to autumn. Spring runoff produces more active water; slow summer conditions can show low cascades.",
+      "access": "The Village of L'Anse describes a small park beside Power House Falls, and Baraga County visitor bureau separately lists it as a waterfall destination. Independent field directions identify the signed Power Dam Road park spur. No verified current closure notice was found; do not assert open now or winter plowing.",
+      "status": "verify",
+      "source": "https://visitbaragacounty.com/activities/waterfalls/",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Riverside village park waterfall",
+      "parking": "Travel from US-41 south of L'Anse onto Power Dam Road. The Baraga County tourism listing and independent field guide describe the signed Power House Falls spur off Power Dam Road leading to a small park with parking and pavilion. This is NOT the downtown Falls River Trail parking and not the GIS natural falls waypoint. Present maintenance, road clearance and park opening have not been verified live.",
+      "feature": "A short, broad Falls River cascade beside a historic concrete powerhouse, with a small riverside park and upstream trail.",
+      "decision": "Choose this for a short, less strenuous Falls River stop separate from the downtown Middle and Lower Falls Trail. Stay on the park side and do not use the abandoned industrial building.",
+      "further": "The village describes a park and upstream trail, independent field observations describe a signed park road, and USGS old-powerplant station 04043098 independently places the powerplant at 46.737155,-88.444853 close to Michigan GIS natural falls #88. These are geographic identity checks, not current park opening permission. Published heights vary widely (about 6 to 15 feet), so no definitive height is promised. Current opening and road conditions are unverified.",
+      "manager": "L'Anse area small riverside visitor park; present operating authority not independently confirmed",
+      "sourceReviewed": "2026-10-30",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-visitor-source-and-site-geometry-confirmed-no-live-season-status",
+      "winterRoad": "No current winter-plowing or side-road maintenance confirmation; verify access before driving. Riverside ice, dam ruins and abandoned concrete structures are unsafe.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+          "description": "Village of L'Anse official visitor manual documents park by falls and half-mile upstream walk, not formal parcel ownership."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://visitbaragacounty.com/activities/waterfalls/",
+          "description": "Baraga County tourism names Power House Falls as a separate visitor waterfall, corroborating civic guide."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/",
+          "description": "Independent site-specific field guide describes signed Power Dam Road spur, parking, pavilion and falls at park."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf",
+          "description": "Village describes riverside trail half mile upstream and nearby old concrete powerhouse."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043098/",
+          "description": "USGS old powerplant stream station is close to GIS #88; American Whitewater separately georeferences the named natural waterfall, not parking."
+        }
+      }
+    },
+    {
+      "id": "lower-silver-falls",
+      "name": "Lower Silver Falls",
+      "region": "Western U.P.",
+      "place": "Silver River · Falls Road · near L’Anse",
+      "lat": 46.792674,
+      "lng": -88.335692,
+      "gisObjectId": 110,
+      "level": "easy",
+      "minutes": "20–40 min",
+      "walk": "Independent accounts describe lower Silver River cascades, but the lawful walking corridor, public viewing boundary and present access restrictions remain unverified. No visitor hiking route is recommended.",
+      "best": "Late spring to fall with dry road conditions and running water; avoid high-water and icy ledges.",
+      "access": "Baraga County visitor literature describes historic picnic viewing, but exact ownership, manager, lawful parking and current road/foot access are not verified. Research-only; do not use this page as a driving itinerary.",
+      "status": "research",
+      "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Roadside picnic-area waterfall and short footpath",
+      "parking": "Historical visitor literature mentions a Falls Road picnic clearing, but a legally authorized public parking area and responsible land manager have not been established. No current arrival directions are supplied.",
+      "feature": "Two tight chutes cut through dark basalt beneath tall pines, close enough for a short visit without a backcountry ascent.",
+      "decision": "Research only. The reported lower picnic-site route has an unidentified owner/manager and unverified current permission. Select another fully verified waterfall outing.",
+      "further": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified. Publication gate re-audit October 31, 2026: verified land-manager axis is FALSE, so the visitor page is noindex and removed from the public waterfall sitemap until owner, legal parking and visitor walking permissions are source-cleared.",
+      "manager": "Lower Silver Falls public picnic/visitor area described by Baraga County tourism; exact owner/operating manager not verified",
+      "sourceReviewed": "2026-10-31",
+      "publication": "research-only-guide",
+      "accessConfidence": "not-cleared-public-owner-manager-title-and-legal-arrival",
+      "winterRoad": "The public tourist sources are not winter-road reports. Falls Road/side spurs may be unplowed or impassable; do not infer winter driving access. Falls and pool ice may be unstable.",
+      "verification": {
+        "landManager": {
+          "verified": false,
+          "source": "https://www.baragacountytourism.org/attractions",
+          "description": "Baraga County tourism publishes this as a visitor attraction, not an official park ownership or operating-management statement."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+          "description": "Baraga County tourism specifically endorses a lower Silver River picnic waterfall and short visitor footpath."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/",
+          "description": "Field visitor notes describe a parking area and outhouse at the lower falls fork, not certified GPS coordinates or road clearance."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+          "description": "Published lower-site footpath of about 100 feet between lower drops, NOT upstream rugged quarter-mile trek."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml",
+          "description": "Independent lower Silver Falls coordinate 46.79355,-88.33650 broadly aligns with state GIS #110, not upper feature #68."
+        }
+      }
+    },
+    {
+      "id": "tibbets-falls",
+      "name": "Tibbets Falls",
+      "region": "Western U.P.",
+      "place": "Sturgeon River · Baraga Plains Road · near Watton",
+      "lat": 46.58047,
+      "lng": -88.588843,
+      "gisObjectId": 44,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "Follow the marked foot connector from the Tibbets Falls trailhead to the blue-blazed North Country Trail, then use the official Peter Wolfe Chapter/Avenza #27 map to follow the Sturgeon River section where Tibbets Falls appears along Segment 44. The waterfall is a series of slate-ledged rapids visible from the trail as it climbs the bluff. Several NCT segments and a separate white-blazed fishermen's spur meet near Plains Road; confirm the correct trail on the current chapter map. Do not drive the unmaintained sandy two-track, attempt an unsignposted river crossing, or walk out onto slick slate slabs for a closer photograph.",
+      "best": "Snow-free season with dry trail tread, steady Sturgeon River flow and adequate daylight. Spring runoff makes slate banks more hazardous; winter trailhead plowing is not guaranteed.",
+      "access": "NCTA Peter Wolfe Chapter's April 2025 guide identifies State of Michigan ownership on NCT segments 44–46, a signed trail connection from the named Plains Road parking area, maintained blue-blazed routes and views of the natural Tibbets rapids from the trail. Current closures, parking clearing and flood conditions require checking on arrival.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State-managed river trail on the North Country Trail",
+      "parking": "From M-28 near Watton take Baraga Plains Road north, cross the Sturgeon River on the road bridge, and continue to the named Tibbets Falls / North Country Trail parking area on the west side of Plains Road. The Peter Wolfe Chapter's current segment 46 guide confirms this parking area and warns not to block the westbound sandy two-track. The parking is a trailhead, NOT the waterfall GIS coordinate. Use NCTA's current Avenza map #27 and road signs; no live winter clearing, exact driving turnoff coordinates or vehicle access down the sandy two-track is guaranteed.",
+      "feature": "Low, wide steps of amber Sturgeon River water sliding across layered slate, framed by cedar and white pine; the falls unfold in a long series of rapids rather than one towering plunge.",
+      "decision": "A quiet northwoods hiking stop when the Baraga Plains Road NCT parking is available and foot trails are passable. Take the signed route, not the vehicle two-track; do not expect a roadside viewing platform or one giant drop.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-2025-primary-trail-maintainer-state-land-signed-parking-and-waterfall-view",
+      "sourceReviewed": "2026-10-31",
+      "manager": "State of Michigan (trail land); North Country Trail Association Peter Wolfe Chapter volunteer-maintained tread",
+      "further": "Michigan state GIS Tibbets Falls #44 at 46.580470,-88.588843 is within roughly 55 metres of the independent waterfall field reference 46.58092,-88.58902. NCTA's 2025 Segment 44 guide describes the falls extending for hundreds of feet across slate, visible from the NCT, and source segment 46 and 2024 Segment 47 describe the named parking. The 2014 NCTA GPS waypoint for parking is historical and should not be treated as a current certified lot position. NCTA says Plains Road is normally plowed in winter but parking is only sometimes cleared; sandy two-track is unmaintained and not a reliable public-vehicle route. No live closure or water-stage data was ingested.",
+      "winterRoad": "The chapter warns winter clearing of the named trailhead lot is variable. Baraga Plains Road may be plowed, but access to the parking area and trail is not confirmed for today. Unmaintained two-tracks are not an alternative.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "Peter Wolfe Chapter 2025 guide marks Segments 44–46 State of Michigan ownership and identifies trail caretakers; private land outside the trail is not assumed public."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA's official signed segment descriptions expressly include the falls and an established visitor walking connection from the Plains Road parking area."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "Segment 46 explicitly identifies good Tibbets Falls Trailhead parking on the Baraga Plains Road and warns not to block the sandy vehicle track."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA Segment 44 describes blue-blazed Sturgeon River trail and the Tibbets Falls slate cascades visible from the trail; wet ledges can be extremely slippery."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named waterfall GIS feature #44 at 46.580470,-88.588843, corroborated by an independent Tibbets field GPS point nearby."
+        }
+      }
+    },
+    {
+      "id": "little-garlic-falls",
+      "name": "Little Garlic Falls",
+      "region": "Central U.P.",
+      "place": "Little Garlic River · Elliott Donnelley Wilderness · Marquette",
+      "lat": 46.667721,
+      "lng": -87.578452,
+      "gisObjectId": 157,
+      "level": "moderate",
+      "minutes": "75–150 min",
+      "walk": "From the designated western trailhead, follow the North Country Trail Association Little Garlic Falls Spur northwest along the Little Garlic River. NCTA describes about one mile one way, 118 feet ascent, rocky tread and wooden footbridges over tributaries; use current Avenza Map #41. Do not cross the main river, follow fisherman fords or continue onto private Big Garlic banks.",
+      "best": "Dry snow-free days; spring flow is dramatic but wet ledges dangerous. Fall color is especially beautiful.",
+      "access": "NCTA official public Little Garlic Falls Spur, named Harrison/Little Garlic Road parking, wooded bridge crossings and State of Michigan wilderness. Verify today's road and trail conditions.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State wilderness and North Country Trail hiking spur",
+      "parking": "Use the named western Little Garlic Falls Spur trailhead on Harrison Road/Little Garlic Road. From County Road 550 north of Marquette, cross the Little Garlic River and take the first left. The NCTA 2023 Segment 19 guide describes parking on the left roughly two miles along Harrison Road. The chapter's old Google driving map was marked unverified; check its updated July 2026 maps, Avenza #41 and signs. This is a rough backroad, with no guaranteed plowing or current passability; the falls coordinate is not parking.",
+      "feature": "A shaded river gorge of dark stone, timber footbridges and wooded cascades, reached along a quiet public northwoods trail.",
+      "decision": "Choose the roughly 2–2.2-mile round-trip western NCTA spur when the Harrison Road trailhead is accessible. The separate CR550 Elliott Donnelley trailhead yields a much longer, roughly 7.6–8-mile trip. Neither parking area is verified open today.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-2023-public-state-trail-and-west-parking-current-conditions-unverified",
+      "sourceReviewed": "2026-10-31",
+      "manager": "State of Michigan Elliott Donnelley Wilderness / NCTA Marquette Area Chapter",
+      "further": "NCTA Marquette Area Chapter 2023 Segment 19 identifies State of Michigan Elliott Donnelley Wilderness and the named western parking on Harrison/Little Garlic Road, with the separate one-mile Little Garlic Falls Spur. The chapter links updated July 2026 maps; its older Google driving map was expressly marked unverified. Travel Marquette independently contrasts short 2.2 mile and long 7.6 mile options. Michigan tourism also describes an older route requiring a ford, but the established NCTA spur has feeder-stream footbridges and does not require a main-river ford. The natural source GIS #157 location is not the parking site. This is LITTLE Garlic River; the separate BIG Garlic River GIS #215 has disputed/private banks and no verified public access. Winter road and lot clearing and present trail conditions are unverified.",
+      "winterRoad": "CR550 may be driveable in winter but the Elliott lot is not maintained, and AWD recommended for the western Harrison Road trailhead in the NCTA 2023 guide; current plowing and road conditions are unknown.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA Segment 19 describes Elliott Donnelley Wilderness gifted to State of Michigan and maintained marked chapter trail."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "The NCTA publishes the named Little Garlic Falls Spur as a public hiking route."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "Named western parking along Harrison/Little Garlic Road, but 2023 driving map was unverified and 2026 road passability is unknown."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA spur one mile one way, 118ft ascent, footbridges; current Avenza #41 controls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #157 at 46.667721,-87.578452 on Little Garlic River, distinct from the Big Garlic River."
+        }
+      }
+    },
+    {
+      "id": "lepisto-falls",
+      "name": "Lepisto Falls",
+      "region": "Western U.P.",
+      "place": "Presque Isle River · Porcupine Mountains · County Road 519",
+      "lat": 46.658637,
+      "lng": -89.94027,
+      "gisObjectId": 79,
+      "level": "moderate",
+      "minutes": "60–110 min",
+      "walk": "From the County Road 519 NCT parking area, cross the highway carefully and follow the blue-blazed NCT east through old-growth forest. The Western U.P. visitor map describes approximately 0.6 mile along the NCT plus about 0.2 mile on the falls side approach, roughly 1.6 miles out-and-back. NCTA's 2025 MI-008 trail description confirms the maintained trail passes Lepisto Falls and notes a spring near mile MI-43.1. Remain on the established trail and avoid steep riverbanks; continue north past the falls only if prepared for the rope-assisted steep climb beyond the footbridge.",
+      "best": "Snow-free hiking seasons, especially spring runoff and autumn forest color. Slippery rock and ice require caution.",
+      "access": "NCTA Ni-Miikanaake 2025 guide verifies the County Road 519 trailhead/parking, NCT entry into the state park and route past Lepisto Falls; regional brochure specifies final side walk. Current trail alerts and parking status unverified.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR state park · North Country Trail",
+      "parking": "From M-28 near Wakefield, follow County Road 519 north approximately 12 miles to the named North Country Trail trailhead parking by the road crossing. The NCTA Ni-Miikanaake 2025 segment guide confirms an actual trailhead and parking area there. Cross CR519 with traffic caution, follow blue blazes east into the state park, and rely on current NCTA map MI-008 rather than routing to the waterfall's geographic point. Winter parking clearing and present road/trail conditions are not confirmed.",
+      "feature": "Deep forest encloses the Presque Isle River as dark water gathers speed over a broad rocky lip. A quiet North Country Trail walk leads to a waterfall away from the busy lower gorge.",
+      "decision": "A shorter public NCT waterfall hike near the western edge of Porcupine Mountains Wilderness State Park. Use it when the CR519 trailhead is accessible and you want a 1.6-mile outing rather than the developed lower Presque Isle boardwalk loop.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-official-2025-parking-and-public-nct-plus-regional-brochure-spur",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR Porcupine Mountains Wilderness State Park / NCTA Ni-Miikanaake Chapter",
+      "further": "The NCTA 2025 Ni-Miikanaake Chapter segment MI-008 documents County 519 NCT parking and a signed walk east into Porcupine Mountains Wilderness State Park passing Lepisto Falls, with route beyond the falls steep and rope-assisted. The Western U.P. 2026-hosted waterfall brochure specifies a 0.6mi NCT approach and 0.2mi falls spur; the regional point 46.659062,-89.940555 is about 52m from Michigan GIS #79 46.658637,-89.940270. The waterfall is NOT the designated parking position. State park vehicle permit may be required; check current park and chapter maps. Winter car access to the parking area cannot be assumed from the DNR's general CR519 access statement. Regional brochure Iagoo Falls is ~0.4km north of Lepisto, while Michigan GIS Iagoo #86 is ~4.4km downstream near South Boundary Road; these are separate conflicting research features and no Iagoo route is implied by the Lepisto guide.",
+      "winterRoad": "CR519 is generally a winter approach to the Presque Isle park unit, but the specific NCTA crossing parking and falls spur are NOT confirmed plowed/open in winter. NCTA 2025 describes rugged conditions; no current opening asserted.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "NCTA confirms the east-of-CR519 NCT enters Porcupine Mountains Wilderness State Park, publicly managed by Michigan DNR."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "NCTA MI-008 documents public trail on the state park section that passes named Lepisto Falls, not merely a point on a GIS map."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "The Ni-Miikanaake official trail description expressly identifies an NCT trailhead and parking area at County Road 519."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "Regional visitor brochure specifies 0.6mi marked NCT plus 0.2mi falls side trail, supported by NCTA's 2025 official route."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State Michigan GIS Lepisto #79 at 46.658637,-89.940270 agrees within about 52m with regional brochure 46.659062,-89.940555; it is natural falls only."
+        }
+      }
+    },
+    {
+      "id": "trappers-falls",
+      "name": "Trappers Falls",
+      "region": "Western U.P.",
+      "place": "Little Carp River Trail · Porkies · Little Carp River Road",
+      "lat": 46.732624,
+      "lng": -89.884667,
+      "gisObjectId": 102,
+      "level": "difficult",
+      "minutes": "180–300 min",
+      "walk": "Follow the marked Little Carp River Trail from the official Little Carp River Road trailhead. You pass Overlooked Falls at the first bridge, then Greenstone Falls, and continue into old-growth forest to Trappers Falls about three miles from the trailhead according to the Western U.P. park-waterfall brochure. Expect roughly six miles round-trip over roots, wet ground and uneven hills. Keep to official trail connections, do not force a river crossing, and do not use the natural falls GPS as a hiking line.",
+      "best": "Summer or fall with the road accessible and dry footpath. Spring can deliver stronger rapids but flooding and unbridged water crossings can change access.",
+      "access": "Michigan DNR park trail system plus Western U.P. waterfall brochure document legitimate named public hiking approach and waterfall location. Current road/trail and river conditions remain unverified.",
+      "status": "verify",
+      "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR wilderness state park foot trail",
+      "parking": "Use the designated Little Carp River Road trailhead off South Boundary Road inside Porcupine Mountains Wilderness State Park. DNR's park map and cabin visitor guide show official Little Carp River Road parking and the Little Carp River Trail; the regional waterfall brochure directs hikers from that trailhead via Overlooked and Greenstone Falls. Road opening and plowing, especially around the December 1 winter seasonal closure, are not confirmed for today.",
+      "feature": "An intimate waterfall on the Little Carp River, tucked deep in hemlock and hardwood forest beyond the better-known Overlooked and Greenstone stops.",
+      "decision": "For hikers willing to make a longer half-day river walk, not a roadside waterfall. Choose Trappers after Overlooked and Greenstone when you have about six trail miles and reliable access to Little Carp River Road.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-dnr-park-trail-and-parking-plus-regional-named-falls",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "further": "The regional brochure says approximately three miles one way from the Little Carp River Road parking area, passing both earlier falls. Michigan DNR publishes the actual Little Carp River Trail and its trailhead in park maps. The brochure's coordinate agrees with Michigan GIS #102 within about 70 metres. This is not an accessible platform, and no current live river or trail conditions are provided. The state GIS river property calls this 'Carp River' while the named park trail and waterfall brochure place it on the Little Carp River. Do not use that generic source attribute to send visitors to the separate Big Carp River Trail.",
+      "winterRoad": "The park states portions of South Boundary Road close around December 1 until late spring. Little Carp River Road/trailhead and river conditions must be checked; no winter vehicle access or trail grooming promised.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
+    },
+    {
+      "id": "explorers-falls",
+      "name": "Explorers Falls",
+      "region": "Western U.P.",
+      "place": "Little Carp River Trail · beyond Trappers Falls · Porkies",
+      "lat": 46.735434,
+      "lng": -89.886494,
+      "gisObjectId": 104,
+      "level": "difficult",
+      "minutes": "210–360 min",
+      "walk": "Begin at the designated Little Carp River Road trailhead, follow the marked Little Carp River Trail past Overlooked Falls and Greenstone Falls, continue to Trappers Falls (about three miles from parking in the Western U.P. waterfall brochure), then follow the same official trail a short distance farther to Explorers Falls. It is more than three miles one way; do not represent the remaining gap as a measured connector or turn an unmarked riverbank shortcut into a trail.",
+      "best": "Mid-summer and autumn when trail tread is passable and daylight is long enough for an extended river outing. Heavy rain or snow can make the backcountry trail unsafe.",
+      "access": "Michigan DNR park trail system plus Western U.P. waterfall brochure document legitimate named public hiking approach and waterfall location. Current road/trail and river conditions remain unverified.",
+      "status": "verify",
+      "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR wilderness state park foot trail",
+      "parking": "Use Michigan DNR's official Little Carp River Road parking near the south end of the park's Little Carp River Trail, approached from South Boundary Road when open. The regional waterfall map establishes this as a continuation past Trappers, not a separate drivable waterfall turnout. Carry a current DNR park map and return by the same trail; don't use the GIS waterfall point as a destination for vehicles.",
+      "feature": "An out-of-the-way Little Carp River drop beyond Trappers Falls, approached through long corridors of old-growth forest, fern and dark river stone.",
+      "decision": "A natural extension for experienced hikers already committed to Trappers Falls, not an easy standalone waterfall stop. Allow more than six miles of walking for the full out-and-back trip.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-dnr-park-trail-and-parking-plus-regional-named-falls",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "further": "DNR's official Little Carp River Trail is 10.7 miles end to end in its current trail map (an older trail description lists 11.3 miles). Western U.P. brochure locates Explorers just past Trappers along that marked path, and its falls coordinate is within about 33 metres of Michigan GIS #104. No independent exact trailhead-to-Explorers mileage is published, so the guide deliberately avoids an invented number. State GIS uses generic river attribute 'Carp River'; regional park map and visitor trail define this outing on the Little Carp River. Explorers is distinct from the unrelated waterfall with the same name in some unaudited internet lists.",
+      "winterRoad": "South Boundary Road may be seasonally closed and the backcountry trail is not a groomed winter path. No current parking/bridge/ford condition is confirmed.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
+    },
+    {
+      "id": "shining-cloud-falls",
+      "name": "Shining Cloud Falls",
+      "region": "Western U.P.",
+      "place": "Big Carp River Trail · wilderness interior · Porcupine Mountains",
+      "lat": 46.757774,
+      "lng": -89.866956,
+      "gisObjectId": 113,
+      "level": "difficult",
+      "minutes": "360–720 min",
+      "walk": "Two official park-trail options lead to Shining Cloud Falls. From Lake of the Clouds on M-107, follow the Big Carp River Trail west approximately 8.2 miles one way (DNR trail description: 5.3 miles to Correction Line junction plus 2.9 miles to Shining Cloud). A shorter but still strenuous approach starts at Pinkerton Trail parking on South Boundary Road: Pinkerton Trail about 2.6 miles to Lake Superior Trail, follow Lake Superior Trail east approximately 1.3 miles to Big Carp River mouth, then climb about 1.4 miles upstream on Big Carp River Trail to Shining Cloud. That totals roughly 5.3 miles one way by published trail-segment distances. Both demand an all-day backcountry commitment or an overnight plan; neither is a short roadside hike.",
+      "best": "Long, stable summer daylight, firm backcountry footing and sufficient water/food. Fall color is extraordinary but dwindling daylight and wet leaves complicate a strenuous trip.",
+      "access": "Michigan DNR park trail system plus Western U.P. waterfall brochure document legitimate named public hiking approach and waterfall location. Current road/trail and river conditions remain unverified.",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR wilderness state park foot trail",
+      "parking": "Use the official Lake of the Clouds scenic parking/trailhead via M-107 for the approximately 8.2-mile one-way escarpment approach, OR the officially mapped Pinkerton Creek Trailhead parking on South Boundary Road for the shorter 5.3-mile one-way trail combination. They are distinct starting points; neither is the falls coordinate. DNR park map and latest road guidance govern vehicle access; South Boundary Road and M-107 have winter closures. A Recreation Passport is required for vehicle entry.",
+      "feature": "A remote Big Carp River waterfall set beneath the Porcupine Mountains escarpment, where a long ribbon of river winds through a deep valley of old-growth hardwoods.",
+      "decision": "A major wilderness objective, not a casual waterfall stop. Select the Pinkerton Creek option for an approximately 10.6-mile round trip or the Lake of the Clouds ridge route for roughly 16.4 miles round trip; the two starts offer different terrain and time demands.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-dnr-park-trail-and-parking-plus-regional-named-falls",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "further": "Michigan DNR's official trail description explicitly places Shining Cloud on BIG Carp River Trail and gives 8.2 miles from M-107 (5.3 + 2.9). DNR also publishes Pinkerton Trail (2.6 miles) plus Lake Superior Little Carp-to-Big Carp (1.3 miles) plus Big Carp rivermouth-to-Shining (1.4 miles), totalling about 5.3 miles from Pinkerton. The Western U.P. brochure independently gives 8.2 and 5.3 alternatives, and identifies a waterfall point ~99m from Michigan GIS #113. Trail distances are source-derived and should be rechecked on current DNR maps, not represented as precise surveying. The state waterfall GIS lists 'Shinning Cloud Falls' with an apparent name misspelling and river field 'LITTLE CARP RIVER'. DNR's official trail guide and regional brochure consistently place SHINING CLOUD on BIG CARP RIVER. The public guide uses official Big Carp identity and retains source #113 crosswalk with discrepancy notes, rather than generating a duplicate Little Carp destination.",
+      "winterRoad": "The DNR lists seasonal road closure on M-107 and South Boundary Road starting December 1 through late spring. Do not promise either vehicle trailhead accessible in winter or a route safe over ice. Unbridged streams, river levels and limited daylight matter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
+    },
+    {
+      "id": "big-erics-falls",
+      "name": "Big Eric's Falls",
+      "region": "Western U.P.",
+      "place": "Huron River · Big Eric's Bridge · Skanee",
+      "lat": 46.864777,
+      "lng": -88.082503,
+      "gisObjectId": 126,
+      "level": "easy",
+      "minutes": "20–60 min",
+      "walk": "From the designated campground/bridge visitor area, observe the Huron River cascades immediately downstream of Big Eric's Bridge. A specialist field account documents a short footpath beginning on the campground side of the bridge and following the river downstream; stay within visibly permitted public campground access and on established dry ground. The farther riverside banks have not been parcel-surveyed, so do not assume unrestricted access along the whole river, cross private property, scramble onto layered ledges, or wade the river.",
+      "best": "Snow-free days when Erick Road and the campground entrance are passable; stronger spring flow and autumn color are scenic but river ledges become slippery.",
+      "access": "DNR confirms the public campground/bridge river recreation site, and specialist waterfall geography documents nearby short cascades and a campground-side footpath. Access to any farther bank is not independently verified. Present gates, road opening and campground status are unverified.",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR state forest campground scenic river stop",
+      "parking": "Follow the Michigan DNR's Big Eric's Bridge State Forest Campground directions: from Skanee travel about 6.7 miles east by Skanee Road and Erick Road to the campground along the Huron River. The official campground position (46.86508482, -88.08476906) is separate from the natural waterfall, and its campground drive/parking must not be confused with the geographic waterfall pin. A local specialist describes an established parking area across the road from the campground; observe actual DNR signs, permitted parking spaces and any campground closure or restrictions. Do not block campsites or use a riverbank as a vehicle approach.",
+      "feature": "A broad chain of modest, stair-step cascades beneath the bridge, where the Huron River gathers in small pools before sliding over bands of layered stone.",
+      "decision": "A short low-effort Huron River stop when the state forest campground is accessible. Expect many small drops, not one towering waterfall. Use the campground and bridge as the arrival, with no claim that a longer riverbank route is open.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-dnr-public-campground-and-visitor-parking-with-specialist-bridge-falls-footpath",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR · Big Eric's Bridge State Forest Campground",
+      "further": "Michigan DNR official Big Eric's Bridge State Forest Campground at 46.86508482,-88.08476906 has 21 rustic sites, vault toilets, day river access and a Recreation Passport requirement for vehicle entry, reached 6.7 miles east of Skanee by Skanee and Erick roads. Specialist waterfalls reference locates natural Big Erick's Falls 46.86505,-88.08267, around 33m from source GIS #126 at 46.864777,-88.082503 and separately describes a short campground-side footpath below the bridge and designated visitor parking opposite campground. This specialist trail report is not a survey of entire downstream banks or live access confirmation: guide limits authorized approach to documented campground/bridge visitor area and clearly marks longer bank rights unverified. State GIS spelling Big Eric'S, specialist Big Erick's, DNR campground Big Eric's Bridge, refer to same Huron River confluence/bridge area. Do NOT confuse GIS #114 Erick's Falls on WEST BRANCH HURON, 6.5km upstream, with campground-side #126. DNR current site says site capacity 21 and first-come campsites, and Recreation Passport; camping availability, seasonal dates, road clearing and open-now cannot be assumed. County source may list outdated 20 sites, official 21 governs.",
+      "winterRoad": "The DNR campground is seasonal in nature; official current page does not prove its gate, road or visitor parking open on October 31 or cleared in winter. Do not enter a closed campground or park on a narrow bridge/road shoulder.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "Michigan DNR official Big Eric's Bridge State Forest Campground on Huron River, 21 rustic sites and named road arrival."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "DNR confirms campground river access to state-managed public recreation area; sightseeing is limited to designated campground and bridge-side visitor area, not unrestricted downstream lands."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "DNR publishes exact campground arrival coordinates and access via Skanee/Erick roads; specialist identifies adjacent designated parking. Campground GPS is NOT the natural falls GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/huron-river/big-ericks-falls/",
+          "description": "Independent specialist documents short footpath from campground side of bridge downstream near initial falls. Longer riverbank ownership and trail maintenance remain unverified."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan waterfall GIS #126 physical point matches specialist natural falls position within about 33 metres; distinct from DNR campground/visitor parking and GIS #114 West Branch Erick's Falls."
+        }
+      }
+    },
+    {
+      "id": "tioga-park-falls",
+      "name": "Tioga Park Falls (roadside cascades)",
+      "region": "Western U.P.",
+      "place": "Tioga Creek Roadside Park · US-41/M-28 · Covington",
+      "lat": 46.5734,
+      "lng": -88.3398,
+      "level": "easy",
+      "minutes": "15–45 min",
+      "walk": "Within Tioga Creek Roadside Park, start from the established parking and open grass/picnic area by the river and small footbridge. An independent 2015 waterfall field guide records lower cascades visible near the park parking area and a short marked upstream creek trail a few hundred feet to another modest drop. A later independent visitor describes a paved park path becoming a rugged, possibly overgrown footpath with fallen trees. Enjoy the bridge and lower public park-side river views if the upstream side path is blocked; do not bushwhack beyond the park, wade the Tioga River, or seek the unrelated private-gated downstream falls.",
+      "best": "Spring or autumn when the seasonal roadside park is open and paved paths are dry; snow and late-October gate closures can prevent entry.",
+      "access": "Public MDOT Tioga Creek Roadside Park established independently of source GIS Tioga Falls. Small lower river cascades and a short park-side trail are documented, but upstream trail can be obstructed and current MDOT gate state is not confirmed.",
+      "status": "seasonal",
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+      "locationSource": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml",
+      "kind": "MDOT highway roadside park and public Tioga River cascades",
+      "parking": "Arrive at the officially named Tioga Creek Roadside Park on the SOUTH side of US-41/M-28 in Baraga County, west of Three Lakes/Nestoria. Michigan DOT lists Tioga Creek Roadside Park in its 2026 public facilities update, while an independent roadside facility catalog locates the parking/picnic site near 46.57515,-88.33961. That is the PARK location, not the larger, gated Tioga Falls identified by Michigan GIS #46 over two kilometres away. Use the marked park entrance and actual visitor spaces, never roadside shoulder parking.",
+      "feature": "A modest set of Tioga River cascades where a small MDOT roadside park, grassy river crossing and wooded creek path offer a quiet break from US-41.",
+      "decision": "A low-effort park-side stream and lower-cascade stop, not a trip to the remote GIS Tioga Falls. If park closed or the small creek path is overgrown, do not enter through a closed gate or leave park property.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "2026-mdot-public-roadside-park-2015-independent-park-waterfall-path-not-a-gis-linked-fall",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan Department of Transportation · Tioga Creek Roadside Park",
+      "further": "Michigan MDOT explicitly lists seasonal Tioga Creek Roadside Park on US-41/M-28 in its April 21, 2026 reopening notice (delayed by late spring snow); MDOT warns roadside parks may close annually in late October, so October 31 2026 'open now' cannot be stated. Outdoor Michigan facility location 46.57515,-88.33961 documents road and owner. EPA Michigan DEQ water sample Tioga River at US41 roadside park at 46.57527,-88.34066 independently confirms river/roadside public-place identity. Independent gowaterfalling June 2015 field observation locates 'Tioga Creek Falls' park-side lower cascades at 46.5734,-88.3398, about 195m south of park centre, with short marked stream footpath; Mi Roadtrip describes paved grass approach and later overgrown trail. Neither certifies current trail clearing; natural point is approximate and not a surveyed park boundary. **Separate** GIS Tioga Falls #46 46.593805,-88.348735 is about 2.19km north with private camp and gate reported by specialist. Do not cross from MDOT park to upstream private falls or use same name/coordinates as alias. Publication is a PARK-SIDE scenic visitor guide, no claim of access to gated Tioga waterfall.",
+      "winterRoad": "MDOT's 2026 bulletin named this as a seasonal park with delayed late-spring opening and warned roadside facilities often close in late October. No live Oct31 gate, restroom, trail or winter parking status is known. Never park on US-41/M-28 shoulder or block a park gate.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+          "description": "MDOT operates the named Tioga Creek Roadside Park with seasonal parking facilities."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/mdot/travel/tourists/roadside-parks",
+          "description": "MDOT-managed highway roadside park provides legal public short-stop/river viewing when open; unlike the separate gated Tioga GIS #46 site."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://outdoormichigan.org/feature/11732",
+          "description": "Independent roadside facility record identifies MDOT-owned signed highway park and approximate park coordinates 46.57515,-88.33961, not natural fall or certified stall GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml",
+          "description": "Independent field visitor records small public park-side falls and a short marked path; later field report warns trail overgrown; park-side lower view is fallback and no wild-bushwhack offered."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.waterqualitydata.us/provider/STORET/21MICH_WQX/21MICH_WQX-070070/",
+          "description": "EPA/Michigan DEQ Tioga River sampling site specifically at US41 state roadside park confirms river/park relationship; approximate falls point from independent field survey, not GIS #46."
+        }
+      },
+      "featureIdentity": "independent-tioga-roadside-park-cascades-not-source-gis-46",
+      "parkingPositionContext": {
+        "lat": 46.57515,
+        "lng": -88.33961,
+        "kind": "independent-MDOT-roadside-park-reference-not-surveyed-parking",
+        "source": "https://outdoormichigan.org/feature/11732"
+      }
+    },
+    {
+      "id": "yondota-falls",
+      "name": "Yondota Falls",
+      "region": "Western U.P.",
+      "place": "Presque Isle River · Ottawa National Forest · Marenisco",
+      "lat": 46.430643,
+      "lng": -89.685341,
+      "gisObjectId": 30,
+      "level": "moderate",
+      "minutes": "35–90 min",
+      "walk": "Follow the short river trail from the north-of-bridge trailhead downstream toward the falls. The U.S. Forest Service describes a trail descending beside a series of cascades, with a noticeably uphill return. Independent field visits estimate roughly a quarter mile one way to the main drop. The path is rustic, with uneven ground and wet rock nearby; stay on existing tread and do not wade or scramble along the gorge edge.",
+      "best": "Snow-free conditions with steady river levels. Spring brings strong cascades but dangerous wet rock; autumn brings colorful riverbank forest.",
+      "access": "U.S. Forest Service recreation destination and north-of-bridge trailhead corroborated by regional waterfall reports. Current road/trail conditions are not verified.",
+      "status": "verify",
+      "source": "https://www.recreation.gov/camping/poi/238265",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "U.S. Forest Service waterfall trail",
+      "parking": "From US-2 near Marenisco, take County Road 523 north about 3.25 miles to the bridge over the Presque Isle River. Federal recreation directions identify the Yondota trailhead on the north side of the bridge. Independent field reports describe a small west-side turnout beyond the crossing. Follow current signs and park only in a lawful off-road space; do not block the bridge or road. Neither the natural waterfall marker nor an informal shoulder is a parking destination. Road condition and winter clearing are not currently verified.",
+      "feature": "Dark tea-colored water gathers between rock walls, turns white at a narrow plunge, then flows over smaller cascades beneath tall cedars and hemlocks.",
+      "decision": "Choose this short river hike when the County Road 523 bridge trailhead is safely accessible. A downhill start means a more demanding uphill return; it is not a paved overlook.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "usfs-recreation-facility-and-ridb-trailhead-source-backed",
+      "sourceReviewed": "2026-10-31",
+      "manager": "U.S. Forest Service · Ottawa National Forest",
+      "further": "Federal Recreation.gov documents Yondota Falls on the Ottawa National Forest Bessemer Ranger District with a short descending river path and moderate uphill return. The federal Recreation Information Database route reproduced at ForwardToUSA locates the trailhead north of the Presque Isle River bridge on County Road 523, 3.25 miles north of US-2. Regional Western U.P. tourism and independent waterfall visitors corroborate the approach and roughly 0.25-mile footpath. Michigan waterfall source GIS #30 (46.430643,-89.685341) is 67 metres from specialist natural falls (46.43028,-89.68465), not a parking coordinate. No current road status, winter plowing, lot availability or live waterfall condition confirmed.",
+      "winterRoad": "No live October 31, 2026 road or trail opening confirmed. County Road 523 can become a rough forest road and the trailhead may not be plowed or usable in winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "Official Recreation.gov identifies Yondota as Ottawa National Forest, Bessemer Ranger District."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "USFS-recognized public waterfall site and short marked visitor trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://forwardtousa.com/recreation/yondota-falls/",
+          "description": "Federal recreation directions identify the north-of-bridge trailhead; exact current legal spaces and winter condition remain unverified."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "The Forest Service describes a short descending waterfall walk and uphill return; field observers estimate a quarter mile each way."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State GIS #30 falls coordinates agree within 67 metres of independently documented Yondota Falls location."
         }
       }
     }
