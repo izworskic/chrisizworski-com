@@ -42,6 +42,17 @@ export function validateReleaseRecord(record,{repoRoot=null,checkSite=false}={})
  const bad=(code,description)=>issues.push({code,description});
  if(!record||typeof record!=='object'||Array.isArray(record))return {ok:false,issues:[{code:'record',description:'Expected a JSON record object'}]};
  if(record.schemaVersion!=='1.2')bad('schemaVersion','Use schemaVersion "1.2"');
+ const scanned=new WeakSet();
+ const rejectPlaceholder=(value,label)=>{
+  if(typeof value==='string'&&/^\s*PENDING\s*:/i.test(value))
+   bad('pending.placeholder',label+' contains an unfilled PENDING placeholder');
+  if(value&&typeof value==='object'&&!scanned.has(value)){
+   scanned.add(value);
+   for(const [key,child] of Object.entries(value))rejectPlaceholder(child,label+'.'+key);
+  }
+ };
+ rejectPlaceholder(record,'record');
+
  const p=record.project||{};
  if(!/^[a-z0-9][a-z0-9-]{2,80}$/.test(p.slug||''))bad('project.slug','A stable lowercase, hyphenated slug is required');
  if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(p.ownerRepo||''))bad('project.ownerRepo','A real owner/repository is required');
@@ -130,7 +141,10 @@ export function validateReleaseRecord(record,{repoRoot=null,checkSite=false}={})
    if(step==='measured'&&!isText(row.comparisonWindow))bad('release.measured.window','Visitor outcomes require a comparable measured window');
   } else if(step!=='measured') priorConfirmed=false;
  }
+ if(release.verified?.status==='CONFIRMED'&&qa.browserStatus!=='PASSED')
+  bad('release.browserProof','Verified release requires a passed, linked actual browser QA run');
  if(record.recordStatus==='released'){
+  if(qa.browserStatus!=='PASSED')bad('recordStatus.browser','Released record cannot have unverified or failed browser QA');
   for(const step of ['implemented','verified','deployed','live'])
    if(release[step]?.status!=='CONFIRMED')bad('recordStatus.release','Released records must prove '+step+' or stay draft');
  }
