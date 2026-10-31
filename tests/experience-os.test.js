@@ -46,7 +46,7 @@ test('pattern, failure and release catalogs remain substantive', () => {
   const patterns = read('design-systems/experience-os-v1/docs/INTERACTION_PATTERN_LIBRARY.md');
   const failures = read('design-systems/experience-os-v1/docs/ANTI_PATTERNS.md');
   const qa = read('design-systems/experience-os-v1/docs/QA_SCORECARD.md');
-  for (let i = 1; i <= 18; i++) assert.match(patterns, new RegExp('P' + String(i).padStart(2, '0')));
+  for (let i = 1; i <= 23; i++) assert.match(patterns, new RegExp('P' + String(i).padStart(2, '0')));
   for (let i = 1; i <= 30; i++) assert.match(failures, new RegExp('A' + String(i).padStart(2, '0')));
   const scoringRows = qa.split('\n').filter(line => /^\|[^|]+\|\s*(25|15|10|5)\s*\|/.test(line));
   const weights = scoringRows.map(line => Number(line.split('|')[2].trim()));
@@ -89,7 +89,7 @@ test('v1.2 introduces a reusable connected-state contract grounded in two real p
     assert.ok(matrix.includes(phrase),'state matrix must cover '+phrase);
   }
   assert.match(agents,/STATE_MATRIX\.md/);
-  assert.match(readme,/1\.2\.0/);
+  assert.match(readme,/1\.2\.1/);
   assert.match(readme,/CONNECTED_EXPERIENCE_CONTRACT/);
   assert.match(readme,/PILOT_LESSONS_V1_2/);
 });
@@ -111,4 +111,22 @@ test('v1.2 strengthens QA without changing score weights or silently changing th
   const weights=qa.split('\n').filter(line=>/^\|[^|]+\|\s*(25|15|10|5)\s*\|/.test(line))
     .map(line=>Number(line.split('|')[2].trim()));
   assert.equal(weights.reduce((a,b)=>a+b,0),100);
+});
+
+test('v1.2.1 keeps one backward-compatible operational source of truth and working entrypoints',()=>{
+ const manifest=JSON.parse(read('design-systems/experience-os-v1/manifest.json'));
+ const agents=read('AGENTS.md');
+ const readme=read('design-systems/experience-os-v1/README.md');
+ assert.equal(manifest.version,'1.2.1');
+ assert.equal(manifest.id,'EXPERIENCE_OS_V1');
+ assert.equal(manifest.noPublicRoute,true);
+ for(const required of ['docs/V1_2_OPERATING_KIT.md','docs/GOOSEBERRY_PILOT_20261031.md'])assert.ok(manifest.requiredDocs.includes(required));
+ for(const file of Object.values(manifest.operationalKit).filter(v=>typeof v==='string'&&v.includes('/'))){
+  assert.ok(fs.existsSync(path.join(root,file)),file);
+ }
+ assert.match(readme,/operational kit/i);
+ assert.match(agents,/new-experience-os-v1\.2/);
+ const caseStudy=read('design-systems/experience-os-v1/docs/GOOSEBERRY_PILOT_20261031.md');
+ for(const id of ['P19','P20','P21','P22','P23'])assert.match(caseStudy,new RegExp(id));
+ assert.match(caseStudy,/NO_DATA|no live Gooseberry flow sensor/);
 });
