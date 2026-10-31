@@ -96,7 +96,8 @@ async function main(){
  await writeFile(output,JSON.stringify(report,null,2)+"\n");
  console.log(JSON.stringify({checkedAt:report.checkedAt,conclusion:report.conclusion,
   reviewSignals:report.reviewSignals,available:report.results.filter(x=>x.availability==="read").length,
-  total:report.results.length,output},null,2));
+  total:report.results.length,sourceResults:report.results.map(r=>({id:r.id,availability:r.availability,
+   reviewReasons:r.reviewReasons,error:r.error||null})),output},null,2));
  if(report.results.some(r=>r.availability==="unavailable"))
   console.warn("At least one official source was unreachable; no access/opening claim is possible.");
 }
