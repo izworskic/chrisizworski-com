@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 63,
-    "matchedGisFeatures": 58,
-    "pendingGisFeatures": 103
+    "curatedDestinations": 64,
+    "matchedGisFeatures": 59,
+    "pendingGisFeatures": 102
   },
   "batchSize": 8,
   "batches": [
@@ -119,57 +119,56 @@
       "candidates": [
         148,
         153,
-        157,
         162,
         163,
         169,
         170,
-        172
+        172,
+        173
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        173,
         175,
         180,
         181,
         183,
         184,
         185,
-        186
+        186,
+        187
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        187,
         22,
         28,
         54,
         57,
         60,
         61,
-        62
+        62,
+        72
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        72,
         84,
         106,
         122,
         51,
         120,
         136,
-        137
+        137,
+        139
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        139,
         140,
         149,
         152,
@@ -1163,21 +1162,6 @@
       "lat": 46.780948,
       "lng": -87.70844,
       "cluster": "MARQUETTE / ALDER CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 157,
-      "name": "Little Garlic Falls",
-      "county": "MARQUETTE",
-      "river": "LITTLE GARLIC RIVER",
-      "lat": 46.667721,
-      "lng": -87.578452,
-      "cluster": "MARQUETTE / LITTLE GARLIC RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

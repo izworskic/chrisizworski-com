@@ -3556,6 +3556,60 @@
           "description": "Michigan named waterfall GIS feature #44 at 46.580470,-88.588843, corroborated by an independent Tibbets field GPS point nearby."
         }
       }
+    },
+    {
+      "id": "little-garlic-falls",
+      "name": "Little Garlic Falls",
+      "region": "Central U.P.",
+      "place": "Little Garlic River · Elliott Donnelley Wilderness · Marquette",
+      "lat": 46.667721,
+      "lng": -87.578452,
+      "gisObjectId": 157,
+      "level": "moderate",
+      "minutes": "75–150 min",
+      "walk": "From the designated western trailhead, follow the North Country Trail Association Little Garlic Falls Spur northwest along the Little Garlic River. NCTA describes about one mile one way, 118 feet ascent, rocky tread and wooden footbridges over tributaries; use current Avenza Map #41. Do not cross the main river, follow fisherman fords or continue onto private Big Garlic banks.",
+      "best": "Dry snow-free days; spring flow is dramatic but wet ledges dangerous. Fall color is especially beautiful.",
+      "access": "NCTA official public Little Garlic Falls Spur, named Harrison/Little Garlic Road parking, wooded bridge crossings and State of Michigan wilderness. Verify today's road and trail conditions.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State wilderness and North Country Trail hiking spur",
+      "parking": "Use the named western Little Garlic Falls Spur trailhead on Harrison Road/Little Garlic Road. From County Road 550 north of Marquette, cross the Little Garlic River and take the first left. The NCTA 2023 Segment 19 guide describes parking on the left roughly two miles along Harrison Road. The chapter's old Google driving map was marked unverified; check its updated July 2026 maps, Avenza #41 and signs. This is a rough backroad, with no guaranteed plowing or current passability; the falls coordinate is not parking.",
+      "feature": "A shaded river gorge of dark stone, timber footbridges and wooded cascades, reached along a quiet public northwoods trail.",
+      "decision": "Choose the roughly 2–2.2-mile round-trip western NCTA spur when the Harrison Road trailhead is accessible. The separate CR550 Elliott Donnelley trailhead yields a much longer, roughly 7.6–8-mile trip. Neither parking area is verified open today.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-2023-public-state-trail-and-west-parking-current-conditions-unverified",
+      "sourceReviewed": "2026-10-31",
+      "manager": "State of Michigan Elliott Donnelley Wilderness / NCTA Marquette Area Chapter",
+      "further": "NCTA Marquette Area Chapter 2023 Segment 19 identifies State of Michigan Elliott Donnelley Wilderness and the named western parking on Harrison/Little Garlic Road, with the separate one-mile Little Garlic Falls Spur. The chapter links updated July 2026 maps; its older Google driving map was expressly marked unverified. Travel Marquette independently contrasts short 2.2 mile and long 7.6 mile options. Michigan tourism also describes an older route requiring a ford, but the established NCTA spur has feeder-stream footbridges and does not require a main-river ford. The natural source GIS #157 location is not the parking site. This is LITTLE Garlic River; the separate BIG Garlic River GIS #215 has disputed/private banks and no verified public access. Winter road and lot clearing and present trail conditions are unverified.",
+      "winterRoad": "CR550 may be driveable in winter but the Elliott lot is not maintained, and AWD recommended for the western Harrison Road trailhead in the NCTA 2023 guide; current plowing and road conditions are unknown.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA Segment 19 describes Elliott Donnelley Wilderness gifted to State of Michigan and maintained marked chapter trail."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "The NCTA publishes the named Little Garlic Falls Spur as a public hiking route."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "Named western parking along Harrison/Little Garlic Road, but 2023 driving map was unverified and 2026 road passability is unknown."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+          "description": "NCTA spur one mile one way, 118ft ascent, footbridges; current Avenza #41 controls."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan GIS #157 at 46.667721,-87.578452 on Little Garlic River, distinct from the Big Garlic River."
+        }
+      }
     }
   ]
 }

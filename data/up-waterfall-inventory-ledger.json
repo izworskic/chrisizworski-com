@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 63,
-  "linkedByExactOid": 58,
-  "unresolvedCandidates": 103,
+  "curatedCount": 64,
+  "linkedByExactOid": 59,
+  "unresolvedCandidates": 102,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3142,18 +3142,30 @@
         -87.578452
       ],
       "river": "LITTLE GARLIC RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "little-garlic-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "ncta-state-trail-not-live",
+      "landManager": "State of Michigan Elliott Donnelley Wilderness / NCTA Marquette Area Chapter",
+      "parkingEvidence": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "trailEvidence": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-10-31",
+      "nextAction": "Check NCTA July 2026 map/Avenza 41, winter road and trail alerts. No GIS falls driving destination.",
+      "batch": "county-marquette",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "28",
+      "classification": "state-wilderness-public-little-garlic-spur",
+      "accessAssessment": "NCTA Marquette Area Chapter 2023 Segment 19 identifies State of Michigan Elliott Donnelley Wilderness and the named western parking on Harrison/Little Garlic Road, with the separate one-mile Little Garlic Falls Spur. The chapter links updated July 2026 maps; its older Google driving map was expressly marked unverified. Travel Marquette independently contrasts short 2.2 mile and long 7.6 mile options. Michigan tourism also describes an older route requiring a ford, but the established NCTA spur has feeder-stream footbridges and does not require a main-river ford. The natural source GIS #157 location is not the parking site. This is LITTLE Garlic River; the separate BIG Garlic River GIS #215 has disputed/private banks and no verified public access. Winter road and lot clearing and present trail conditions are unverified.",
+      "evidence": [
+        "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+        "https://northcountrytrail.org/trail/michigan/mac/",
+        "https://northcountrytrail.org/the-trail/trail-alerts/",
+        "https://www.michigan.org/property/little-garlic-falls",
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4389,5 +4401,5 @@
       ]
     }
   ],
-  "lastBatch": "27"
+  "lastBatch": "28"
 }
