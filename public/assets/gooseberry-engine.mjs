@@ -74,10 +74,14 @@ export function chooseOuting(input={},evidence={}) {
     id='fifth';
     why='A longer visit makes the DNR-described two-mile Fifth Falls loop a plausible outing. It has hills and rougher terrain, not a guaranteed time-to-finish.';
     alternatives=['Check the DNR map and the separate Superior Hiking Trail advisory before any backcountry extension.'];
-  } else if(minutes>=60){
+  } else if(minutes>=90){
     id='loop';
-    why='You have room for the DNR 45–90-minute route taking in Upper, Middle and Lower Falls. It includes non-accessible trail sections.';
-    alternatives=['Switch to the 30–45-minute Upper/Middle walk if conditions or pace warrant a shorter day.'];
+    why='With 90 minutes available, the DNR 45–90-minute three-falls loop is a plausible choice. It reaches Upper, Middle and Lower Falls but includes non-accessible trail sections.';
+    alternatives=['Choose the 30–45-minute Upper/Middle walk if conditions or pace warrant a shorter day.'];
+  } else if(minutes>=60) {
+    id='short';
+    why='For a one-hour stop, the DNR 30–45-minute Upper/Middle walk leaves a margin for photographs and a slower pace. The full three-falls loop can take as long as 90 minutes.';
+    alternatives=['If you have more time, consider the 45–90-minute Lower Falls loop; it includes stairs and uneven sections.'];
   } else {
     why='The DNR quotes 30–45 minutes for the shorter walk. A 30-minute stop is the lower edge of that estimate; consider a single overlook if running late.';
     alternatives=['If you need longer than 30 minutes, save Lower Falls for another visit.'];
