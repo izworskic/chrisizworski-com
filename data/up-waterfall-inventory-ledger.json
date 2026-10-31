@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 68,
-  "linkedByExactOid": 63,
-  "unresolvedCandidates": 98,
+  "curatedCount": 69,
+  "linkedByExactOid": 64,
+  "unresolvedCandidates": 97,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -2593,18 +2593,30 @@
         -88.082503
       ],
       "river": "HURON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "big-erics-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "official-dnr-campground-public-bridge-area-no-open-now",
+      "landManager": "Michigan DNR · Big Eric's Bridge State Forest Campground",
+      "parkingEvidence": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+      "trailEvidence": "https://www.waterfallsofthekeweenaw.com/huron-river/big-ericks-falls/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-10-31",
+      "nextAction": "Verify current access, official camp entry and footpath signs. Avoid downstream private riverbank and GIS point navigation.",
+      "batch": "county-baraga",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "32",
+      "classification": "dnr-state-forest-campground-public-waterfall-view",
+      "accessAssessment": "Michigan DNR official Big Eric's Bridge State Forest Campground at 46.86508482,-88.08476906 has 21 rustic sites, vault toilets, day river access and a Recreation Passport requirement for vehicle entry, reached 6.7 miles east of Skanee by Skanee and Erick roads. Specialist waterfalls reference locates natural Big Erick's Falls 46.86505,-88.08267, around 33m from source GIS #126 at 46.864777,-88.082503 and separately describes a short campground-side footpath below the bridge and designated visitor parking opposite campground. This specialist trail report is not a survey of entire downstream banks or live access confirmation: guide limits authorized approach to documented campground/bridge visitor area and clearly marks longer bank rights unverified. State GIS spelling Big Eric'S, specialist Big Erick's, DNR campground Big Eric's Bridge, refer to same Huron River confluence/bridge area. Do NOT confuse GIS #114 Erick's Falls on WEST BRANCH HURON, 6.5km upstream, with campground-side #126. DNR current site says site capacity 21 and first-come campsites, and Recreation Passport; camping availability, seasonal dates, road clearing and open-now cannot be assumed. County source may list outdated 20 sites, official 21 governs.",
+      "evidence": [
+        "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+        "https://www.waterfallsofthekeweenaw.com/huron-river/big-ericks-falls/",
+        "https://www.michigan.org/property/big-erics-bridge-state-forest-campground",
+        "https://www.baragacountytourism.org/attractions",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/ericks-falls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4507,5 +4519,5 @@
       ]
     }
   ],
-  "lastBatch": "31"
+  "lastBatch": "32"
 }

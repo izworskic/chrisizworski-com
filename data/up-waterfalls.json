@@ -3826,6 +3826,60 @@
           "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
         }
       }
+    },
+    {
+      "id": "big-erics-falls",
+      "name": "Big Eric's Falls",
+      "region": "Western U.P.",
+      "place": "Huron River · Big Eric's Bridge · Skanee",
+      "lat": 46.864777,
+      "lng": -88.082503,
+      "gisObjectId": 126,
+      "level": "easy",
+      "minutes": "20–60 min",
+      "walk": "From the designated campground/bridge visitor area, observe the Huron River cascades immediately downstream of Big Eric's Bridge. A specialist field account documents a short footpath beginning on the campground side of the bridge and following the river downstream; stay within visibly permitted public campground access and on established dry ground. The farther riverside banks have not been parcel-surveyed, so do not assume unrestricted access along the whole river, cross private property, scramble onto layered ledges, or wade the river.",
+      "best": "Snow-free days when Erick Road and the campground entrance are passable; stronger spring flow and autumn color are scenic but river ledges become slippery.",
+      "access": "DNR confirms the public campground/bridge river recreation site, and specialist waterfall geography documents nearby short cascades and a campground-side footpath. Access to any farther bank is not independently verified. Present gates, road opening and campground status are unverified.",
+      "status": "verify",
+      "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR state forest campground scenic river stop",
+      "parking": "Follow the Michigan DNR's Big Eric's Bridge State Forest Campground directions: from Skanee travel about 6.7 miles east by Skanee Road and Erick Road to the campground along the Huron River. The official campground position (46.86508482, -88.08476906) is separate from the natural waterfall, and its campground drive/parking must not be confused with the geographic waterfall pin. A local specialist describes an established parking area across the road from the campground; observe actual DNR signs, permitted parking spaces and any campground closure or restrictions. Do not block campsites or use a riverbank as a vehicle approach.",
+      "feature": "A broad chain of modest, stair-step cascades beneath the bridge, where the Huron River gathers in small pools before sliding over bands of layered stone.",
+      "decision": "A short low-effort Huron River stop when the state forest campground is accessible. Expect many small drops, not one towering waterfall. Use the campground and bridge as the arrival, with no claim that a longer riverbank route is open.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "official-dnr-public-campground-and-visitor-parking-with-specialist-bridge-falls-footpath",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR · Big Eric's Bridge State Forest Campground",
+      "further": "Michigan DNR official Big Eric's Bridge State Forest Campground at 46.86508482,-88.08476906 has 21 rustic sites, vault toilets, day river access and a Recreation Passport requirement for vehicle entry, reached 6.7 miles east of Skanee by Skanee and Erick roads. Specialist waterfalls reference locates natural Big Erick's Falls 46.86505,-88.08267, around 33m from source GIS #126 at 46.864777,-88.082503 and separately describes a short campground-side footpath below the bridge and designated visitor parking opposite campground. This specialist trail report is not a survey of entire downstream banks or live access confirmation: guide limits authorized approach to documented campground/bridge visitor area and clearly marks longer bank rights unverified. State GIS spelling Big Eric'S, specialist Big Erick's, DNR campground Big Eric's Bridge, refer to same Huron River confluence/bridge area. Do NOT confuse GIS #114 Erick's Falls on WEST BRANCH HURON, 6.5km upstream, with campground-side #126. DNR current site says site capacity 21 and first-come campsites, and Recreation Passport; camping availability, seasonal dates, road clearing and open-now cannot be assumed. County source may list outdated 20 sites, official 21 governs.",
+      "winterRoad": "The DNR campground is seasonal in nature; official current page does not prove its gate, road or visitor parking open on October 31 or cleared in winter. Do not enter a closed campground or park on a narrow bridge/road shoulder.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "Michigan DNR official Big Eric's Bridge State Forest Campground on Huron River, 21 rustic sites and named road arrival."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "DNR confirms campground river access to state-managed public recreation area; sightseeing is limited to designated campground and bridge-side visitor area, not unrestricted downstream lands."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+          "description": "DNR publishes exact campground arrival coordinates and access via Skanee/Erick roads; specialist identifies adjacent designated parking. Campground GPS is NOT the natural falls GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/huron-river/big-ericks-falls/",
+          "description": "Independent specialist documents short footpath from campground side of bridge downstream near initial falls. Longer riverbank ownership and trail maintenance remain unverified."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan waterfall GIS #126 physical point matches specialist natural falls position within about 33 metres; distinct from DNR campground/visitor parking and GIS #114 West Branch Erick's Falls."
+        }
+      }
     }
   ]
 }

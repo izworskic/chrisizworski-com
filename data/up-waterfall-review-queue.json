@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 68,
-    "matchedGisFeatures": 63,
-    "pendingGisFeatures": 98
+    "curatedDestinations": 69,
+    "matchedGisFeatures": 64,
+    "pendingGisFeatures": 97
   },
   "batchSize": 8,
   "batches": [
@@ -65,111 +65,110 @@
     {
       "batchNumber": 5,
       "candidates": [
-        126,
         20,
         24,
         25,
         30,
         37,
         39,
-        40
+        40,
+        48
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        48,
         58,
         63,
         65,
         69,
         70,
         74,
-        75
+        75,
+        112
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        112,
         29,
         42,
         80,
         85,
         129,
         15,
-        17
+        17,
+        144
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        144,
         18,
         116,
         127,
         148,
         153,
         162,
-        163
+        163,
+        169
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        169,
         170,
         172,
         173,
         175,
         180,
         181,
-        183
+        183,
+        184
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        184,
         185,
         186,
         187,
         22,
         28,
         54,
-        57
+        57,
+        60
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        60,
         61,
         62,
         72,
         84,
         106,
         122,
-        149
+        149,
+        51
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        51,
         120,
         136,
         137,
         139,
         140,
         152,
-        176
+        176,
+        177
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        177,
         23
       ]
     }
@@ -648,21 +647,6 @@
       "lat": 46.848917,
       "lng": -88.063472,
       "cluster": "BARAGA / EAST BRANCH HURON",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 126,
-      "name": "Big Eric'S Falls",
-      "county": "BARAGA",
-      "river": "HURON RIVER",
-      "lat": 46.864777,
-      "lng": -88.082503,
-      "cluster": "BARAGA / HURON RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,
