@@ -15,6 +15,12 @@ Grade each category from 0–5 only after observing real behavior. Weighted cont
 
 **Release expectation:** >=90/100 **AND** every category >=4/5 **AND** all hard gates passed. No assumed grade: unrun browser checks = **NOT MEASURED**, not a pass. In v1.2 a green syntax test or screenshot alone cannot prove interaction, live-public deployment or real user benefit.
 
+## V1.2.1 machine-checkable review supplement
+
+For substantial releases, record the source categories, time budgets, failure journeys, screenshots and release evidence in a [V1.2 release record](V1_2_OPERATING_KIT.md); run `scripts/verify-experience-os-v1.2.mjs` and central `--check-site` when applicable. This is an **additional structural QA gate** that cannot replace scorecard observation, original owner CI, real source verification, licensed-image inspection or independent public smoke.
+
+For a new central-site canonical verify the actual **visible Tools card ↔ JSON-LD ItemList count/order/entity ↔ sitemap ↔ registry relation**. For provider maps/imagery, verify both mocked failure paths and **live loaded tiles/photographs** after release, not merely an HTTP 200 or a fixture. A short-time visitor recommendation must fit the **full official published duration** or prominently disclose that it could overrun; do not optimize to the minimum.
+
 ## Non-negotiable hard gates
 
 1. Source truth: live, observed, forecast, estimated, simulation and editorial labels distinguished; stale data cannot silently produce "good/open/safe".
