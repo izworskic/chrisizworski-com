@@ -4,6 +4,9 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/rocket-launch-usa.js": {
+      "maxDuration": 35
+    },
     "api/st-lawrence-seaway.js": {
       "maxDuration": 15
     },
@@ -2335,6 +2338,18 @@
     {
       "source": "/national-tools/kilauea-episode-watch/",
       "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
+    },
+    {
+      "source": "/national-tools/rocket-launch-live",
+      "destination": "/synced-national-tools/rocket-launch-live/index.html"
+    },
+    {
+      "source": "/national-tools/rocket-launch-live/",
+      "destination": "/synced-national-tools/rocket-launch-live/index.html"
+    },
+    {
+      "source": "/national-tools/rocket-launch-live/:path*",
+      "destination": "/synced-national-tools/rocket-launch-live/:path*"
     },
     {
       "source": "/national-tools/:path*",
