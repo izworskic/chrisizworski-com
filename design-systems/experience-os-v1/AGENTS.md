@@ -9,6 +9,8 @@ When a task in an adopting repository creates a visitor-facing tool, materially 
 ## Mandatory work order
 
 1. **Locate:** current production URL, owning repo, generated versus source files, visitor journeys, current baseline, sources, and SEO/ads contracts. Read existing `FIELD_GUIDE_V1` / `JOURNEY_ATLAS_V1` where relevant.
+**Editorial companion for parks and landscape tools:** before writing or revising visitor-facing descriptions, read [INTERPRETIVE_VOICE_FOR_PLACES.md](docs/INTERPRETIVE_VOICE_FOR_PLACES.md). Write source-grounded, interpretive guidance in a knowledgeable park-guide voice without falsely claiming agency or employee status. Keep the answer visible, the map and plan factual, and actual mobile text readable. This does not apply indiscriminately to traffic or live status engines.
+
 2. **Research:** before committing to an interface, read this package's `docs/INSPIRATION_LIBRARY.md`, `docs/INTERACTION_PATTERN_LIBRARY.md`, `docs/ANTI_PATTERNS.md`, `docs/TECHNOLOGY_DECISIONS.md`, and `docs/RESEARCH_SOURCES.md`. For new/major work, investigate at least two relevant **external, credible, currently checked** examples and primary data/rights sources; cite exact URLs and checked dates. Use counterexamples.
 3. **Frame:** complete `templates/EXPERIENCE_BRIEF.md` in project docs. State the user's question, what changes when a control is used, two genuinely different concepts, why one was selected, no-data behavior, and evidence requirements.
 4. **Build:** implement the least complex practical architecture. No React/Rust/3D mandate. Preserve HTML-first answer, readable sources, accessible and reversible interactions; map tiles + pins + route must be verified, not merely an API 200.
