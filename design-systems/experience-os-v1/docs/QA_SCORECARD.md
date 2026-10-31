@@ -13,7 +13,7 @@ Grade each category from 0–5 only after observing real behavior. Weighted cont
 | Performance and resilience | 5 | Measured versus baseline; no heavy first-answer dependency, live/API/map failure fallback |
 | Integration and site integrity | 5 | No unexpected ad, person schema, canonical, internal-nav or owning-repo regression |
 
-**Release expectation:** >=90/100 **AND** every category >=4/5 **AND** all hard gates passed. No assumed grade: unrun browser checks = **NOT MEASURED**, not a pass.
+**Release expectation:** >=90/100 **AND** every category >=4/5 **AND** all hard gates passed. No assumed grade: unrun browser checks = **NOT MEASURED**, not a pass. In v1.2 a green syntax test or screenshot alone cannot prove interaction, live-public deployment or real user benefit.
 
 ## Non-negotiable hard gates
 
@@ -27,10 +27,14 @@ Grade each category from 0–5 only after observing real behavior. Weighted cont
 8. Verify no unapproved AdSense, tracking, Redis, canonical/Person, indexing, map-key or source/ownership changes.
 9. Owning repo full tests and CI green, actual rendered review done; **never merge while red**.
 10. Evidence of result (test output, screenshots, PR details) recorded, with production smoke status truthfully stated.
+11. **Connected state (v1.2):** selected ID, detail, card, map or explicit unmapped state, optional photograph/credit, source qualifier and native control agree after initial load, alternate and reversal. Test no-JS and keyboard equivalents where meaningful.
+12. **Media resilience (v1.2):** slow/error/no-photo states preserve meaningful answer; prior async image loads cannot replace the new selection. Inspect actual crops and credit links at four viewport widths.
+13. **Units and narrative truth (v1.2):** conversion changes display only; authoritative values/ranking stay fixed. Descriptive labels can include legitimate safety caveats; tests do not demand their removal.
+14. **Release evidence (v1.2):** distinguish passing PR checks, merged commit, READY deploy matching the SHA, independently observed canonical HTML and later visitor outcome measurements. Mark unknown stages NOT VERIFIED rather than calling them green.
 
 ## Three mandatory scenario examples
 
-- **Destination explorer:** choose two real trailheads; map/cards/directions reflect the correct places, verified access caveat; tiles fail → source-linked alternative remains.
+- **Destination explorer:** choose two real trailheads; map/cards/featured detail all reflect the same place, with directions **only when independently verified**; unavailable route geometry explicitly says so. Tiles fail → source-linked alternative remains. A→B→A and a slow/failed photo must not show the wrong place.
 - **Time-based engine:** switch dates or times; forecast and confidence actually change; stale observation is clearly expired, timezone shown.
 - **Live tracker:** select a ship/flight/lock event; recorded last-seen, forecast/ETA and unknown status stay distinct; no invented live position.
 
