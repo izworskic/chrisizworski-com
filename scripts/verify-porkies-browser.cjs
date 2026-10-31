@@ -53,7 +53,23 @@ async function main(){
    await page.waitForFunction(()=>document.querySelector('#experience-compare')?.dataset.loaded==='yes',null,{timeout:15000});
    need((await page.locator('#experience-a h3').innerText())==='Lake of the Clouds overlook',device.name+' initial lake comparison missing');
    need((await page.locator('#experience-b h3').innerText())==='Summit Peak tower',device.name+' initial summit comparison missing');
+   need(await page.locator('#read-landscape .journal-entry').count()===4,device.name+' four landscape stories missing');
+   const reading=await page.evaluate(()=>({
+     width:document.querySelector('.journal-text')?.getBoundingClientRect().width,
+     font:parseFloat(getComputedStyle(document.querySelector('.journal-text p')).fontSize),
+     note:parseFloat(getComputedStyle(document.querySelector('.experience-fieldnote-copy')).fontSize)
+   }));
+   need(reading.width>=245,device.name+' field journal reading column too narrow');
+   need(reading.font>=14,device.name+' field journal text too small');
+   need(reading.note>=14,device.name+' selection field note too small');
+   need(await page.locator('#experience-a .experience-fieldnote').count()===1,device.name+' interactive lake story missing');
+   await page.locator('#experience-a .experience-fieldnote summary').focus();
+   await page.keyboard.press('Enter');
+   need(await page.locator('#experience-a .experience-fieldnote').getAttribute('open')!==null,device.name+' keyboard note disclosure did not open');
+   need((await page.locator('#experience-a .experience-fieldnote-copy').innerText()).includes('Lake of the Clouds'),device.name+' selected lake story missing');
    await page.locator('#experience-choice-a').selectOption('river');
+   need((await page.locator('#experience-a .experience-fieldnote-copy').textContent()).includes('Presque Isle River'),device.name+' selected river story did not update');
+   need((await page.locator('#experience-a .experience-fieldnote-source').getAttribute('href')).includes('/presque-isle-river-scenic-site'),device.name+' wrong DNR river source');
    need((await page.locator('#experience-a .experience-decision').innerText()).includes('Western road access unresolved'),device.name+' source risk not updated for river');
    need((await page.locator('#experience-compare-status').innerText()).includes('Different park districts'),device.name+' origin and comparative district warning missing');
    await page.locator('#experience-choice-b').selectOption('clouds');
@@ -82,6 +98,8 @@ async function main(){
    await page.locator('#experience-choice-a').selectOption('clouds');
    await page.locator('#experience-choice-b').selectOption('summit');
    await page.locator('#experience-compare').screenshot({path:path.join(out,device.name+'-experience-compare.png')});
+   await page.locator('#read-landscape').screenshot({path:path.join(out,device.name+'-field-journal.png')});
+   report.screenshots.push(device.name+'-field-journal.png');
    report.screenshots.push(device.name+'-experience-compare.png');
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
    need(await page.locator('#park-access-evidence').count()===1,device.name+' official source status desk missing');
@@ -284,6 +302,9 @@ async function main(){
   need((await page.locator('#experience-a').innerText()).includes('100 yards'),'no JS lake-of-clouds walking proof missing');
   need((await page.locator('#experience-b').innerText()).includes('half a mile'),'no JS Summit Peak walking proof missing');
   need(await page.locator('#experience-choice-a option').count()===6,'no JS six available comparison choices missing');
+  need(await page.locator('#read-landscape .journal-entry').count()===4,'no JS field journal stories missing');
+  await page.locator('#experience-a .experience-fieldnote summary').click();
+  need((await page.locator('#experience-a .experience-fieldnote-copy').innerText()).includes('Lake of the Clouds'),'no JS interpretive note failed to expand');
   need(await page.locator('#experience-map-compare').count()===1,'no JS map button absent but source parking list must remain');
 
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
