@@ -36,7 +36,7 @@
       -89.94118,
       46.695608
     ],
-    "status": "Initial ten segments were a clipped spatial subset; a separate expanded 17-feature MGF geometry audit is available without certified signed turns, live plowing, or road-to-lot connection.",
+    "status": "possible-corresponding-approach-segments-not-individually-crosswalked-to-signed-CR519",
     "note": "MGF centerline naming in this envelope does not use 519. Do not equate these IDs one-for-one with the signed County Road 519 or claim a complete drive from US-28 to a parking stall.",
     "expandedReviewedSource": "See /porcupine-mountains/west-road-evidence.json for full reviewed 17-centerline corridor and 15 South Boundary line records; the original ten records came from a smaller spatial envelope."
   },
