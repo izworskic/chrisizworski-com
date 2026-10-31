@@ -93,3 +93,31 @@ test('Experience OS V1.2: a draft cannot imply confirmed later evidence if its b
  const r=validateReleaseRecord(x);
  assert.ok(r.issues.some(e=>e.code==='release.order'));
 });
+
+test('Experience OS V1.2: bootstrap creates an explicitly incomplete draft, not a fake release',async()=>{
+ const {makeDraft}=await import(pathToFileURL(path.join(root,'scripts/new-experience-os-v1.2.mjs')).href);
+ const {validateReleaseRecord}=await load();
+ const draft=makeDraft({slug:'test-adventure',ownerRepo:'owner/visitors',canonical:'https://example.org/test-adventure/',pageFile:'public/test-adventure/index.html'});
+ assert.equal(draft.recordStatus,'draft');
+ assert.equal(draft.release.live.status,'PENDING');
+ assert.equal(draft.release.measured.status,'NOT_MEASURED');
+ const result=validateReleaseRecord(draft);
+ assert.equal(result.ok,false,'A source-free draft must not pass the structural release gate');
+ assert.ok(result.issues.some(x=>x.code==='claims'));
+});
+test('Experience OS V1.2: bootstrap rejects unsafe paths and avoids clobbering existing outputs',async()=>{
+ const {makeDraft}=await import(pathToFileURL(path.join(root,'scripts/new-experience-os-v1.2.mjs')).href);
+ assert.throws(()=>makeDraft({slug:'test-adventure',ownerRepo:'owner/repo',canonical:'http://example.com/test/',pageFile:'public/test/index.html'}),/HTTPS/);
+ assert.throws(()=>makeDraft({slug:'test-adventure',ownerRepo:'owner/repo',canonical:'https://example.com/test/',pageFile:'../secret.html'}),/safe relative/);
+ const {spawnSync}=require('node:child_process'),os=require('node:os');
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'experience-os-'));
+ try{
+  const cli=path.join(root,'scripts/new-experience-os-v1.2.mjs');
+  const args=[cli,'--slug','test-adventure','--ownerRepo','owner/repo','--canonical','https://example.org/test-adventure/','--pageFile','public/test-adventure/index.html','--out','data/draft.json'];
+  const a=spawnSync(process.execPath,args,{cwd:tmp,encoding:'utf8'});
+  const b=spawnSync(process.execPath,args,{cwd:tmp,encoding:'utf8'});
+  assert.equal(a.status,0,a.stderr);
+  assert.equal(b.status,1,'The second call must never overwrite an existing review');
+  assert.ok(fs.existsSync(path.join(tmp,'data/draft.json')));
+ }finally{fs.rmSync(tmp,{recursive:true,force:true})}
+});
