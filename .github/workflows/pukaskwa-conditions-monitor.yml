@@ -123,7 +123,7 @@ jobs:
                 await github.rest.issues.create({owner,repo,title:failureTitle,body});
                 core.warning('Created monitor-failure issue');
               } else core.warning('Existing monitor-failure issue retained');
-            }else if(report.recovered&&find(failureTitle)){
+            }else if(find(failureTitle)){
               await github.rest.issues.createComment({owner,repo,issue_number:find(failureTitle).number,
                 body:'Source collection and persistence recovered at '+report.checkedAt+
                   '. This does not make old source observations newly current. '+run});
