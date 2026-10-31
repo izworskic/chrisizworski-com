@@ -10,7 +10,7 @@ const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 test('EXPERIENCE_OS_V1 manifest and all required source-only docs resolve', () => {
   const manifest = JSON.parse(read('design-systems/experience-os-v1/manifest.json'));
   assert.equal(manifest.id, 'EXPERIENCE_OS_V1');
-  assert.match(manifest.version, /^1\./);
+  assert.match(manifest.version, /^1\.2\./, 'Experience OS v1.2 must be discoverable');
   assert.equal(manifest.noPublicRoute, true);
   for (const relative of ['README.md', ...manifest.requiredDocs, ...manifest.templates]) {
     const file = path.join(dir, relative);
@@ -46,8 +46,8 @@ test('pattern, failure and release catalogs remain substantive', () => {
   const patterns = read('design-systems/experience-os-v1/docs/INTERACTION_PATTERN_LIBRARY.md');
   const failures = read('design-systems/experience-os-v1/docs/ANTI_PATTERNS.md');
   const qa = read('design-systems/experience-os-v1/docs/QA_SCORECARD.md');
-  for (let i = 1; i <= 15; i++) assert.match(patterns, new RegExp('P' + String(i).padStart(2, '0')));
-  for (let i = 1; i <= 20; i++) assert.match(failures, new RegExp('A' + String(i).padStart(2, '0')));
+  for (let i = 1; i <= 18; i++) assert.match(patterns, new RegExp('P' + String(i).padStart(2, '0')));
+  for (let i = 1; i <= 30; i++) assert.match(failures, new RegExp('A' + String(i).padStart(2, '0')));
   const scoringRows = qa.split('\n').filter(line => /^\|[^|]+\|\s*(25|15|10|5)\s*\|/.test(line));
   const weights = scoringRows.map(line => Number(line.split('|')[2].trim()));
   assert.equal(weights.reduce((a,b) => a+b,0),100);
@@ -66,4 +66,49 @@ test('visitor outcomes and original architecture take precedence over effects', 
   assert.match(workflow, /two external/i);
   assert.match(workflow, /three different user journeys/i);
   for(const h of ['Visitor question', 'Inputs, evidence', 'Two genuinely different', 'Interaction contract', 'Acceptance and release']) assert.ok(brief.includes(h), h);
+});
+
+test('v1.2 introduces a reusable connected-state contract grounded in two real pilots', () => {
+  const manifest=JSON.parse(read('design-systems/experience-os-v1/manifest.json'));
+  for(const doc of ['docs/CONNECTED_EXPERIENCE_CONTRACT.md','docs/PILOT_LESSONS_V1_2.md']){
+    assert.ok(manifest.requiredDocs.includes(doc),'manifest must require '+doc);
+  }
+  assert.ok(manifest.templates.includes('templates/STATE_MATRIX.md'));
+  const contract=read('design-systems/experience-os-v1/docs/CONNECTED_EXPERIENCE_CONTRACT.md');
+  const ledger=read('design-systems/experience-os-v1/docs/PILOT_LESSONS_V1_2.md');
+  const matrix=read('design-systems/experience-os-v1/templates/STATE_MATRIX.md');
+  const agents=read('design-systems/experience-os-v1/AGENTS.md');
+  const readme=read('design-systems/experience-os-v1/README.md');
+  for(const phrase of ['stable source ID','A is selected then B','first useful answer','source units','public HTML','NOT VERIFIED']) {
+    assert.ok(contract.includes(phrase), 'contract must include '+phrase);
+  }
+  for(const phrase of ['Tahquamenon','Sleeping Giant','#1331','PR #1300','not independently verified']) {
+    assert.ok(ledger.includes(phrase), 'pilot ledger must include '+phrase);
+  }
+  for(const phrase of ['Initial load','Meaningful preference change','Reverse or reset','No known geometry','A→B race','Missing map tiles','NOT MEASURED']) {
+    assert.ok(matrix.includes(phrase),'state matrix must cover '+phrase);
+  }
+  assert.match(agents,/STATE_MATRIX\.md/);
+  assert.match(readme,/1\.2\.0/);
+  assert.match(readme,/CONNECTED_EXPERIENCE_CONTRACT/);
+  assert.match(readme,/PILOT_LESSONS_V1_2/);
+});
+
+test('v1.2 strengthens QA without changing score weights or silently changing the published site', () => {
+  const manifest=JSON.parse(read('design-systems/experience-os-v1/manifest.json'));
+  assert.equal(manifest.noPublicRoute,true);
+  assert.equal(manifest.releaseThreshold,90);
+  const qa=read('design-systems/experience-os-v1/docs/QA_SCORECARD.md');
+  const pattern=read('design-systems/experience-os-v1/docs/INTERACTION_PATTERN_LIBRARY.md');
+  const lifecycle=read('design-systems/experience-os-v1/docs/EXPERIENCE_LIFECYCLE.md');
+  const review=read('design-systems/experience-os-v1/templates/RELEASE_REVIEW.md');
+  for (const id of ['P16','P17','P18']) assert.match(pattern,new RegExp(id));
+  for (const claim of ['Connected state','Media resilience','Units and narrative truth','Release evidence']) assert.match(qa,new RegExp(claim));
+  assert.match(lifecycle,/STATE_MATRIX/);
+  assert.match(lifecycle,/NOT VERIFIED/);
+  assert.match(review,/Independently fetched canonical public HTML/);
+  assert.match(review,/Source units, conversion/);
+  const weights=qa.split('\n').filter(line=>/^\|[^|]+\|\s*(25|15|10|5)\s*\|/.test(line))
+    .map(line=>Number(line.split('|')[2].trim()));
+  assert.equal(weights.reduce((a,b)=>a+b,0),100);
 });

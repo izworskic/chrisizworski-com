@@ -7,6 +7,10 @@
 - Real browser tests (selection, reset, 3 scenarios):
 - Test commands and exit status (not intentions):
 - CI run and status:
+- Production deploy provider / environment / expected merged SHA / READY:
+- **Independently fetched canonical public HTML:** changed output, canonical, schema, ads, date (or NOT VERIFIED):
+- Visitor outcome / real-user CWV after observation (or NOT MEASURED):
+- Filled v1.2 state matrix (or N/A for minor corrections):
 - Production smoke URL/status (only after released):
 
 ## Scoring
@@ -32,7 +36,10 @@ All `QA_SCORECARD.md` hard gates pass? [yes/no/unknown]. Merge allowed? [yes/no;
 - Stale/missing data:
 - Keyboard/focus/alternative to drag:
 - Reduced motion:
-- Source rights/photo credits:
+- Source rights/photo credits, image A→B race and failure:
+- Loaded-image framing and first answer/action position at 360/390/768/1440:
+- Source units, conversion and original algorithm invariants:
+- Semantic route labels, explicit unmapped state and test assertion intent:
 - Canonical, Person ID, indexing, ad controls, no Redis regression:
 
 ## What the next builder should reuse

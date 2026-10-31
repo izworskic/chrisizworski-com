@@ -21,6 +21,8 @@ Use `templates/EXPERIENCE_BRIEF.md` with **two substantially different approache
 
 Every proposed interactive control must pass a simple test: **"If the user changes X, what meaningfully changes in the answer?"** If nothing, remove it.
 
+**v1.2 selection contract:** for substantial multi-surface work, fill [`templates/STATE_MATRIX.md`](../templates/STATE_MATRIX.md) before building and follow the [`connected experience contract`](CONNECTED_EXPERIENCE_CONTRACT.md): a stable selected ID, source/display units, user-visible map/photo/details invariants, explicit unavailable states and A→B→A behavior.
+
 Select one anchor interaction and a coherent visual hierarchy. Do not graft on an excessive tool catalog. Primary answer + next action appear near the top, not hidden under oversized editorial imagery.
 
 ## Stage 3 — Implement intentionally
@@ -35,12 +37,16 @@ Select one anchor interaction and a coherent visual hierarchy. Do not graft on a
 - Test 360px, 390px, 768px, a typical desktop and touch/keyboard. Inspect actual viewport and deep-scroll renders.
 - Test three different user journeys including an alternative, invalid input/empty set, map without tiles and no data/expired observation. Ensure map and cards share state and have direct list fallback.
 - Test JavaScript disabled, keyboard-only, focus visible, screen-reader labels, reduced motion, accessible click alternatives to dragging, and color contrast.
+- Inspect **loaded and failed** image/photo compositions, linked credits and async A→B race states. Record first useful answer/action location on phone; hero height is contextual, not an arbitrary global fixed limit.
+- Assert verified facts and IDs exactly, but test descriptive captions semantically; preserve real “not mapped” and “unverified” text instead of rewriting it to satisfy a brittle assertion.
+- Confirm source units remain authoritative while displayed units round correctly for users, including total round trips and mode segments.
 - Measure lab CWV and compare to baseline if available. Record field data separately; never claim lab checks equal real-user p75.
 - Complete QA scorecard with evidence; run owning-repo full verification and actual production smoke **after** allowed release.
 
 ## Stage 5 — Deliver responsibly
 
-- In PR: link evidence, design brief, current screenshots, scorecard, test results, intended source/canonical/ads impact and rollout/rollback.
+- In PR: link evidence, design brief, filled state matrix, current screenshots, scorecard, test results, intended source/canonical/ads impact and rollout/rollback.
+- Report distinct statuses: source implemented, verified CI/browser head, production deployment READY for correct merged SHA, independently fetched live HTML, and visitor outcome measured. Omit no step; **NOT VERIFIED** is valid when a public smoke cannot be performed.
 - A failing or incomplete test is not a pass. Never merge under a red owning-repo gate. Repository rules and explicit owner constraints supersede this guide.
 - This system being added as source-only requires no site deployment or new URL.
 

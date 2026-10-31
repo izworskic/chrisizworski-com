@@ -19,6 +19,9 @@ A pattern is accepted only when **a visitor action changes meaningful informatio
 | P13 | **Live operational timeline** — launches, freighters | Select event to reveal known state transitions and links to reliable tracker | No predictive track disguised as observed position |
 | P14 | **Shareable decision state** — route planners | Changing meaningful inputs updates a stable share link | Parse/replay safe, privacy, canonical unaffected, invalid param fallback |
 | P15 | **Mobile focus panel** — map-heavy tools | Map, card and action use limited viewport with accessible expand/collapse | No double scrolling trap, focus returns sensibly, pinned controls visible |
+| P16 | **Selection spine** — any connected experience | Preference, card, map/list, image and detail derive from one stable selected ID; A→B→A restores truth everywhere | Fill STATE_MATRIX; assert visible answer and valid unavailable geometry; check same selected ID under click, keyboard and reset |
+| P17 | **Source-backed media handoff** — parks, guides, destinations | Change selected place to a credited exact-subject image and narrative, only after image loads | Image failure/slow A→B race hides previous photo/credit; text-only answer stays; inspect responsive crop/credit |
+| P18 | **First-screen decision threshold** — every destination/tool | Choice and primary actionable answer precede secondary storytelling on the narrowest phone | Measure answer/action location at 360/390, and full/deep screenshot; do not impose a one-size fixed hero height |
 
 ## Pattern recipe (required in a design brief)
 
@@ -30,6 +33,7 @@ For each selected pattern, document:
 4. **Failure.** With map API missing or status stale, readable list and citations remain.
 5. **Accessibility.** Native control, visible label, focus, keyboard, reduced motion, alternative to dragging/hover.
 6. **Validation.** At least three scenarios and a test proving a changed *decision*, not simply a changed CSS class.
+7. **State matrix (v1.2).** Record A→B→A, input-method equivalence, source unit versus displayed unit, geometry/photo unavailable behavior and actual screenshot artifacts using [`templates/STATE_MATRIX.md`](../templates/STATE_MATRIX.md). Follow the [`connected contract`](CONNECTED_EXPERIENCE_CONTRACT.md), including assertions based on user-visible meaning instead of brittle exact descriptive strings.
 
 ## When NOT to add a pattern
 
