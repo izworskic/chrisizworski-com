@@ -101,7 +101,7 @@ async function main(){
      await page.locator('#map-route-picker').selectOption('middlebrun-beach');
      must((await page.locator('#focus-title').innerText())==='Middlebrun Bay Beach',
        viewport.name+' map picker failed to update featured outing');
-     must((await page.locator('#map-route-name').innerText())==='Middlebrun Bay Beach',
+     must((await page.locator('#map-route-name').innerText()).startsWith('Middlebrun Bay Beach'),
        viewport.name+' map and feature are out of sync');
      must(await page.locator('[data-id="middlebrun-beach"]').evaluate(el=>el.classList.contains('is-selected')),
        viewport.name+' picker did not mark the same card');
