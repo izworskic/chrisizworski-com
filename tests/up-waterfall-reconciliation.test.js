@@ -993,3 +993,33 @@ test('Tibbets Falls #44 state land via NCTA named parking and blazed view, no 2-
  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/tibbets-falls/'));
  for(const axis of ['landManager','publicAccess','parking','trail','location']){assert.equal(f.verification[axis].verified,true);assert.ok(h.includes(f.verification[axis].source),axis);}
 });
+
+test('Au Train FERC final December 2025 termination cannot be mistaken for a proposed surrender or site closure',()=>{
+ const row=ledger.candidates.find(x=>x.gisObjectId===192);
+ const original=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===192);
+ const reviews=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records;
+ const review=reviews.find(x=>x.gisObjectId===192);
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const html=fs.readFileSync('public/upper-peninsula-waterfalls/research/au-train-falls/index.html','utf8');
+ assert.ok(row&&original&&review);
+ assert.equal(row.curatedId,null);
+ assert.equal(row.publicationEligible,false);
+ assert.equal(review.publicationEligible,false);
+ assert.equal(row.accessRouteAudit.outcome,'not-cleared');
+ assert.equal(row.accessRouteAudit.segments.length,6);
+ assert.ok(queue.candidates.some(x=>x.gisObjectId===192));
+ assert.equal(original.classification,row.disposition);
+ assert.equal(review.researchPage,'/upper-peninsula-waterfalls/research/au-train-falls/');
+ assert.match(row.sourceNotes,/TERMINATED/);
+ assert.match(row.sourceNotes,/December 29, 2025/);
+ assert.match(row.sourceNotes,/LEFT IN PLACE/);
+ assert.match(html,/name="robots" content="noindex,follow"/);
+ assert.match(html,/Federal Energy Regulatory Commission/);
+ assert.match(html,/not merely a proposal/i);
+ assert.match(html,/D. Charles Trust Investments/);
+ assert.match(html,/state.*EGLE/i);
+ assert.ok(!html.includes('data-parking-lat='));
+ assert.ok(!html.includes('google.com/maps/dir'));
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/au-train-falls/'));
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/au-train-falls/'));
+});

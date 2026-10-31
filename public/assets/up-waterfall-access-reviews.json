@@ -568,28 +568,78 @@
       "gisObjectId": 192,
       "name": "Au Train Falls",
       "county": "ALGER",
-      "status": "hydroelectric-dam-site-access-operator-review",
-      "publicAccess": "historic-visitor-parking-dam-rights-unverified",
+      "status": "FERC-final-termination-EGLE-dam-oversight-access-unknown",
+      "publicAccess": "research-only-two-visitor-routes-neither-cleared",
       "publicationEligible": false,
-      "title": "Au Train: two visitor approaches; utility rights need checking",
-      "summary": "Munising visitor sources describe two different Power Dam Road parking areas, one for upper cascades and another for lower falls beyond a gate. The Au Train dam has faced federal safety compliance and license-surrender proceedings, with reported property/operating-right changes in 2025. Those reports do not prove the waterfall area is currently closed or open.",
-      "guidance": "Do not infer permission through utility gates or present a current safe parking/walking route until the dam operator's current access rules and federal project status are verified. Water release conditions can change and are not monitored here.",
-      "reviewLimitations": "Historical tourism directions do not establish 2026 utility landowner permission; reporting on proposed license surrender is not a final current FERC status or an official public closure order.",
-      "nextEvidence": "Check current FERC project docket and dam operator identity, public-access condition at both Power Dam Road parking areas, and gates/posted warnings. Preserve upper and lower falls as separate access experiences.",
+      "title": "Au Train Falls: federal hydro license terminated; visitor access still unverified",
+      "summary": "FERC's December 29, 2025 final order (Docket P-10856-141, 193 FERC ¶61,242) TERMINATED the Au Train Hydroelectric Project license by implied surrender, effective that day's close of business, with existing facilities LEFT IN PLACE. FERC's record cites high-hazard dam classification, inadequate spillway remediation, licensee UP Hydro's bankruptcy and loss of property control. In 2025 foreclosure, Stephenson Bank acquired 18/22 project parcels and later sold those 18 to D. Charles Trust Investments, LLC (including powerhouse and surrounding project buffer), but individual tourist parking and falls-side parcel title/right of way are not mapped by this order. Michigan EGLE now holds state dam-safety jurisdiction; termination neither orders immediate dam removal nor establishes all waterfall visitor routes closed or open. Munising tourism describes two separate upper/lower falls visitor stops near utility gates, but that older guidance does not establish October 2026 parking, public gate entry, walkway, flow conditions or new property owner consent.",
+      "guidance": "Do not treat either of the old Power Dam Road upper/lower tourism lots as current authorized parking; do not pass power plant or dam gates without posted public authorization. The federal license ended in 2025; that does NOT automatically mean the waterfall is closed or dam removed. No river crossing or dam-outlet approach is recommended.",
+      "reviewLimitations": "Original 2025 report about a proposed license surrender is superseded by FERC's December 29 FINAL termination order. The FERC order ends federal licensing, not every existing owner property right or recreational activity. Ownership changes within project boundary do not map the exact upper/lower parking parcels.",
+      "nextEvidence": "Current 2026 rights owner/EGLE source explicitly documenting a lawful publicly accessible upper and/or lower falls visitor parking area and foot corridor on utility land; verify separate two-view routes, gate policy, dam safety/flow notices and legal parking. FERC final license termination itself neither closes all visits nor authorizes tourist access.",
       "sourceLinks": [
         {
-          "label": "Munising Visitor Bureau upper/lower directions",
+          "label": "FERC final order Dec 29, 2025 (P-10856-141)",
+          "url": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+        },
+        {
+          "label": "Federal order legal summary Jan 2026",
+          "url": "https://www.troutmanenergyreport.com/2026/01/ferc-terminates-au-train-hydroelectric-project-license-by-implied-surrender/"
+        },
+        {
+          "label": "Munising visitor bureau two falls approaches (historic)",
           "url": "https://www.munising.org/activities/au-train-falls/"
         },
         {
-          "label": "2025 FERC safety and license proceeding reporting",
+          "label": "2025 pre-order regional reporting (context only)",
           "url": "https://www.uppermichiganssource.com/2025/11/17/federal-government-calls-surrender-au-train-dam/"
         },
         {
-          "label": "Regional two-parking-area visitor guidance",
-          "url": "https://www.exploremunising.com/waterfalls/"
+          "label": "Michigan geographic falls record",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         }
-      ]
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Natural waterfall geography",
+            "status": "verified-geography",
+            "finding": "State natural Au Train Falls GIS #192 near 46.339031,-86.851879. Natural GIS point is not an official lot, utility gate or safe waterfall viewing location.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Hydro regulation",
+            "status": "verified-geography",
+            "finding": "Final FERC December 29, 2025 order terminated P-10856-141 license by implied surrender effective same date. Facilities remain in place; dam oversight transfers to Michigan EGLE.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Property and title",
+            "status": "documented-not-live",
+            "finding": "FERC order documents May 2025 bank foreclosure on 18 of 22 project parcels and later conveyance to D. Charles Trust Investments LLC. Neither original project licensee nor tourist guide can assume current approval of waterfall parking and access corridors.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Upper and lower parking",
+            "status": "not-cleared",
+            "finding": "Municipal tourism lists two distinct Power Dam Road upper/lower falls parking options. No 2026 right-of-way or owner-signed permissions, exact spaces, gate rules or new operator access policy independently confirmed.",
+            "source": "https://www.munising.org/activities/au-train-falls/"
+          },
+          {
+            "label": "Dam risk and viewing trail",
+            "status": "not-cleared",
+            "finding": "FERC explicitly flags high hazard due to spillway and other dam safety deficiencies. Old utility gravel/gated walking directions do not certify an open, nonhazardous public path. Do not enter restricted works or wade below outlet.",
+            "source": "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No present owner/EGLE posted safety closure or specific October 2026 permission, roadway maintenance or reservoir release plan verified. License termination does not imply instant public closure or dam removal.",
+            "source": "https://www.troutmanenergyreport.com/2026/01/ferc-terminates-au-train-hydroelectric-project-license-by-implied-surrender/"
+          }
+        ]
+      },
+      "researchPage": "/upper-peninsula-waterfalls/research/au-train-falls/"
     },
     {
       "gisObjectId": 213,
