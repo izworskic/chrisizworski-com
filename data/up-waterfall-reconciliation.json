@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 60,
-    "pending": 101,
-    "curatedTotal": 65,
+    "exactIdMatched": 63,
+    "pending": 98,
+    "curatedTotal": 68,
     "curatedNoMatchingGIS": 9
   },
   "candidates": [
@@ -2167,14 +2167,63 @@
       "lat": 46.732624,
       "lng": -89.884667,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "trappers-falls",
+      "publicGuide": "/upper-peninsula-waterfalls/trappers-falls/",
+      "landManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "official-dnr-state-park-public-hiking-trail",
+      "sourceNotes": "The regional brochure says approximately three miles one way from the Little Carp River Road parking area, passing both earlier falls. Michigan DNR publishes the actual Little Carp River Trail and its trailhead in park maps. The brochure's coordinate agrees with Michigan GIS #102 within about 70 metres. This is not an accessible platform, and no current live river or trail conditions are provided. The state GIS river property calls this 'Carp River' while the named park trail and waterfall brochure place it on the Little Carp River. Do not use that generic source attribute to send visitors to the separate Big Carp River Trail. The park states portions of South Boundary Road close around December 1 until late spring. Little Carp River Road/trailhead and river conditions must be checked; no winter vehicle access or trail grooming promised.",
+      "outstandingGate": "Check current DNR trail/parking seasonal closures and source map; never route to raw waterfall coordinates.",
+      "sourceLinks": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "parkManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+        "trail": "Little Carp River Trail",
+        "arrival": "Use the designated Little Carp River Road trailhead off South Boundary Road inside Porcupine Mountains Wilderness State Park. DNR's park map and cabin visitor guide show official Little Carp River Road parking and the Little Carp River Trail; the regional waterfall brochure directs hikers from that trailhead via Overlooked and Greenstone Falls. Road opening and plowing, especially around the December 1 winter seasonal closure, are not confirmed for today.",
+        "waterfall": "Trappers Falls",
+        "brochureSeparationMeters": 70,
+        "navigationToGisPointAllowed": false,
+        "seasonalOpenStatus": "not verified"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
     },
     {
       "gisObjectId": 103,
@@ -2201,14 +2250,63 @@
       "lat": 46.735434,
       "lng": -89.886494,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "explorers-falls",
+      "publicGuide": "/upper-peninsula-waterfalls/explorers-falls/",
+      "landManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "official-dnr-state-park-public-hiking-trail",
+      "sourceNotes": "DNR's official Little Carp River Trail is 10.7 miles end to end in its current trail map (an older trail description lists 11.3 miles). Western U.P. brochure locates Explorers just past Trappers along that marked path, and its falls coordinate is within about 33 metres of Michigan GIS #104. No independent exact trailhead-to-Explorers mileage is published, so the guide deliberately avoids an invented number. State GIS uses generic river attribute 'Carp River'; regional park map and visitor trail define this outing on the Little Carp River. Explorers is distinct from the unrelated waterfall with the same name in some unaudited internet lists. South Boundary Road may be seasonally closed and the backcountry trail is not a groomed winter path. No current parking/bridge/ford condition is confirmed.",
+      "outstandingGate": "Check current DNR trail/parking seasonal closures and source map; never route to raw waterfall coordinates.",
+      "sourceLinks": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "parkManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+        "trail": "Little Carp River Trail",
+        "arrival": "Use Michigan DNR's official Little Carp River Road parking near the south end of the park's Little Carp River Trail, approached from South Boundary Road when open. The regional waterfall map establishes this as a continuation past Trappers, not a separate drivable waterfall turnout. Carry a current DNR park map and return by the same trail; don't use the GIS waterfall point as a destination for vehicles.",
+        "waterfall": "Explorers Falls",
+        "brochureSeparationMeters": 33,
+        "navigationToGisPointAllowed": false,
+        "seasonalOpenStatus": "not verified"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
     },
     {
       "gisObjectId": 105,
@@ -2351,14 +2449,63 @@
       "lat": 46.757774,
       "lng": -89.866956,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "shining-cloud-falls",
+      "publicGuide": "/upper-peninsula-waterfalls/shining-cloud-falls/",
+      "landManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "official-dnr-state-park-public-hiking-trail",
+      "sourceNotes": "Michigan DNR's official trail description explicitly places Shining Cloud on BIG Carp River Trail and gives 8.2 miles from M-107 (5.3 + 2.9). DNR also publishes Pinkerton Trail (2.6 miles) plus Lake Superior Little Carp-to-Big Carp (1.3 miles) plus Big Carp rivermouth-to-Shining (1.4 miles), totalling about 5.3 miles from Pinkerton. The Western U.P. brochure independently gives 8.2 and 5.3 alternatives, and identifies a waterfall point ~99m from Michigan GIS #113. Trail distances are source-derived and should be rechecked on current DNR maps, not represented as precise surveying. The state waterfall GIS lists 'Shinning Cloud Falls' with an apparent name misspelling and river field 'LITTLE CARP RIVER'. DNR's official trail guide and regional brochure consistently place SHINING CLOUD on BIG CARP RIVER. The public guide uses official Big Carp identity and retains source #113 crosswalk with discrepancy notes, rather than generating a duplicate Little Carp destination. The DNR lists seasonal road closure on M-107 and South Boundary Road starting December 1 through late spring. Do not promise either vehicle trailhead accessible in winter or a route safe over ice. Unbridged streams, river levels and limited daylight matter.",
+      "outstandingGate": "Check current DNR trail/parking seasonal closures and source map; never route to raw waterfall coordinates.",
+      "sourceLinks": [
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "parkManager": "Michigan DNR Porcupine Mountains Wilderness State Park",
+        "trail": "Big Carp River Trail; Pinkerton optional",
+        "arrival": "Use the official Lake of the Clouds scenic parking/trailhead via M-107 for the approximately 8.2-mile one-way escarpment approach, OR the officially mapped Pinkerton Creek Trailhead parking on South Boundary Road for the shorter 5.3-mile one-way trail combination. They are distinct starting points; neither is the falls coordinate. DNR park map and latest road guidance govern vehicle access; South Boundary Road and M-107 have winter closures. A Recreation Passport is required for vehicle entry.",
+        "waterfall": "Shining Cloud Falls",
+        "brochureSeparationMeters": 99,
+        "navigationToGisPointAllowed": false,
+        "seasonalOpenStatus": "not verified"
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/parks/porkies",
+          "description": "Michigan DNR official Porcupine Mountains State Park land/trail map identifies park and named corridor."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR maps the public hiking trail and regional visitor brochure confirms this named fall along the visitor corridor."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+          "description": "DNR official park map shows the named public trailhead parking, not the raw falls point."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+          "description": "DNR trail and regional U.P. waterfall brochure establish the named hiking sequence; no invented bushwhack or extra river crossing."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named GIS point independently agrees geographically with Western U.P. waterfall brochure; river and name field conflicts are separately noted."
+        }
+      }
     },
     {
       "gisObjectId": 114,
@@ -5096,6 +5243,17 @@
       ],
       "publicGuidesAdded": 1,
       "outcome": "Verified NCTA county519 parking and state-park trail to Lepisto; Iagoo state GIS versus visitor-map location differs about 3.9km, held research-only."
+    },
+    {
+      "batch": "31-porcupine-little-carp-and-big-carp-verified-visitor-guide",
+      "date": "2026-10-31",
+      "reviewedIds": [
+        102,
+        104,
+        113
+      ],
+      "publicGuidesAdded": 3,
+      "outcome": "DNR official Little Carp Trail, Little Carp Road parking and regional brochure distinguish Trappers + Explorers; DNR official Big Carp River Trail validates Shining Cloud, fixes state GIS Little Carp/name typo and shows two lawful long trail starts. Real-time conditions not inferred."
     }
   ]
 }
