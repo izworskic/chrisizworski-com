@@ -139,7 +139,7 @@
         if (v.source && v.source.startsWith('https://')) {
           actions.appendChild(link(v.source, 'Official access source', 'launch-link official'));
         }
-        if (v.address) {
+        if (v.address && !['closed', 'ineligible'].includes(v.level)) {
           actions.appendChild(link('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.address), 'Directions · verify entry', 'launch-link'));
         }
         card.appendChild(actions);

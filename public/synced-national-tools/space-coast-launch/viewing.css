@@ -75,3 +75,14 @@
 .launch-sky-compare p{margin:7px 0 0;font-size:14px;line-height:1.55;color:#46574b}
 .launch-cloud-number{font-family:Georgia,serif;font-size:clamp(30px,4vw,44px);font-weight:700;line-height:1.1;padding-top:8px;color:#22533c}
 @media(max-width:760px){.launch-select-bar{grid-template-columns:1fr;padding:16px;gap:15px}.launch-select-control{padding:12px}.launch-arrival-panel{padding:16px}.launch-cloud-number{font-size:36px}}
+
+/* Prioritize the visitor's launch selection on narrow screens, without touching ad containers. */
+@media(max-width:760px){
+  .page .breadcrumb{margin-bottom:9px}
+  .page .hero{padding:16px;gap:10px}
+  .page .hero h1{font-size:32px;line-height:1.04;margin-bottom:8px}
+  .page .hero .lede{font-size:15px;line-height:1.45;margin:0}
+  .page .hero-note{padding:11px 13px;font-size:13px;line-height:1.4}
+  .page .hero-note strong{font-size:14px;line-height:1.3;margin-bottom:4px}
+  .page .launch-select-bar{margin-top:12px}
+}
