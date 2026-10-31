@@ -28,7 +28,7 @@ Every location-specific image has a ledger row: exact depicted subject, image so
 
 ## 4. Source facts and display units have distinct ownership
 
-Preserve original authoritative distance and route data in its published units and precision. Display miles/kilometers or other user-facing units via an explicit conversion layer with documented rounding. Distinguish one-way versus full return, biking versus walking and surveyed versus inferred distances. Conversion must not recalculate ranking, permit status, source eligibility or route coordinates. Verify representative small/large distances, totals and zero/unknown behavior using unit tests and no-JS HTML.
+Preserve original authoritative distance and route data in its published units and precision. Keep source units unchanged in storage and source-backed calculations. Display miles/kilometers or other user-facing units via an explicit conversion layer with documented rounding. Distinguish one-way versus full return, biking versus walking and surveyed versus inferred distances. Conversion must not recalculate ranking, permit status, source eligibility or route coordinates. Verify representative small/large distances, totals and zero/unknown behavior using unit tests and no-JS HTML.
 
 ## 5. Faults remain useful and honest
 
@@ -45,7 +45,7 @@ Use **exact equality** only for stable data contracts: canonical URL, route ID, 
 1. **Implemented**: source commit and PR exist. Not yet tested.
 2. **Verified**: actual owning-repo CI, real browser scenarios and screenshot inspection pass on a particular PR head. Not yet merged.
 3. **Deployed**: production provider reports READY (or equivalent) for the *expected merged SHA*. No public HTML assertion implied.
-4. **Live verified**: independent request to canonical public URL confirms actual changed output, canonical/schema, expected interactions where possible and no regressions. If public fetch cannot be performed, record “not verified”.
+4. **Live verified**: independent request to canonical public URL confirms actual changed output, canonical/schema, expected interactions where possible and no regressions. If public fetch cannot be performed, record **NOT VERIFIED**; a READY provider status is not evidence of a served public page.
 5. **Outcome measured** (later): comparable usage/traffic/visitor decision evidence, not inferred from QA, a screenshot or a ready deployment.
 
 A release report records these separately. Never say “live verified” merely because the PR merged or Vercel is READY. Do not promise asynchronous follow-up.
