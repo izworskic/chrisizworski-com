@@ -1,79 +1,172 @@
-const LAUNCHES='https://ll.thespacedevs.com/2.0.0/launch/upcoming/?limit=60';
-const KSC='https://www.kennedyspacecenter.com/launches-and-events/';
-const NWS='https://api.weather.gov';
+'use strict';
 
-function isSpaceCoast(launch){
-  const name=String(launch?.pad?.location?.name||'').toLowerCase();
-  const lat=Number(launch?.pad?.latitude),lon=Number(launch?.pad?.longitude);
-  return name.includes('cape canaveral')||name.includes('kennedy space center')||(Number.isFinite(lat)&&Number.isFinite(lon)&&lat>27.9&&lat<29&&lon>-81&&lon<-80.3);
-}
-function isFutureLaunch(launch,now=Date.now()){
-  const net=new Date(launch?.net).getTime();
-  return Number.isFinite(net)&&net>now;
-}
-function scheduleConfidence(l){
-  const status=String(l?.status?.name||'').toLowerCase();
-  if(status==='go'&&!l.tbddate&&!l.tbdtime)return {level:'high',label:'Go / scheduled',detail:'Launch Library currently marks the mission Go with a specific date and time.'};
-  if(status.includes('hold'))return {level:'hold',label:'Hold',detail:'The launch is currently shown on hold. Do not make a viewing decision from the prior time.'};
-  if(l.tbddate)return {level:'low',label:'Date TBD',detail:'The date is still tentative. Treat this as planning context, not a trip commitment.'};
-  if(l.tbdtime)return {level:'medium',label:'Time TBD',detail:'The date is listed but the launch time remains tentative.'};
-  if(status==='tbd'||status==='tbc')return {level:'medium',label:String(l.status?.name||'Tentative'),detail:'The schedule is still provisional and can move.'};
-  return {level:'medium',label:l?.status?.name||'Scheduled',detail:'Launch dates and times can change with little notice.'};
-}
-function windMax(period){
-  const nums=String(period?.windSpeed||'').match(/\d+/g)?.map(Number).filter(Number.isFinite)||[];
-  return nums.length?Math.max(...nums):null;
-}
-function weatherGrade(period){
-  if(!period)return {level:'unknown',label:'Weather window unavailable',detail:'NWS hourly guidance does not yet cover the launch time.'};
-  const text=String(period.shortForecast||'').trim();
-  const lower=text.toLowerCase();
-  const rawPop=period?.probabilityOfPrecipitation?.value;
-  const pop=rawPop===null||rawPop===undefined?null:Number(rawPop);
-  const wind=windMax(period);
-  const thunder=/thunder/.test(lower);
-  if(thunder)return {level:'poor',label:'Weather could limit viewing',detail:`${text||'Thunderstorms are possible'}; thunderstorms can reduce visibility. This is a visibility read, not a launch-weather forecast.`};
-  if(!text||pop===null||!Number.isFinite(pop)||wind===null)return {level:'unknown',label:'Viewing-weather evidence is incomplete',detail:'The hourly forecast is missing cloud, precipitation, or wind evidence, so this tool will not grade the viewing window as good.'};
-  const cloudBad=/overcast|cloudy|showers|rain/.test(lower);
-  if(pop>=50)return {level:'poor',label:'Weather could limit viewing',detail:`${text}; precipitation chance ${pop}%. This is a visibility read, not a launch-weather forecast.`};
-  if(pop>=25||cloudBad||wind>=20)return {level:'mixed',label:'Mixed viewing weather',detail:`${text}; precipitation chance ${pop}%. Clouds or weather may reduce visibility.`};
-  return {level:'good',label:'Viewing weather looks workable',detail:`${text}; precipitation chance ${pop}%. Launch operations can still scrub for other reasons.`};
-}
-async function nwsFor(lat,lon,when){
-  const headers={'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'application/geo+json'};
-  const p=await fetch(`${NWS}/points/${lat.toFixed(4)},${lon.toFixed(4)}`,{headers,signal:AbortSignal.timeout(10000)});
-  if(!p.ok)throw new Error(`NWS points ${p.status}`);
-  const point=await p.json();
-  const url=point?.properties?.forecastHourly;
-  if(!url)return null;
-  const f=await fetch(url,{headers,signal:AbortSignal.timeout(10000)});
-  if(!f.ok)throw new Error(`NWS hourly ${f.status}`);
-  const data=await f.json();
-  const target=new Date(when).getTime();
-  const periods=data?.properties?.periods||[];
-  return periods.find(x=>target>=new Date(x.startTime).getTime()&&target<new Date(x.endTime).getTime())||null;
+const {
+  isSpaceCoast, isFutureLaunch, normalizeLaunch, activeAlerts,
+  viewAccess, VIEWPOINTS, PUBLIC_NPS_ALERTS, weatherGrade
+} = require('../lib/space-coast-decision');
+
+const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
+const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
+const NASA_SCHEDULE = 'https://www.nasa.gov/event-type/launch-schedule/';
+const NPS_API = 'https://developer.nps.gov/api/v1/alerts?parkCode=cana&limit=50';
+const NWS = 'https://api.weather.gov';
+const UA = 'ChrisIzworskiRocketLaunch/1.0 (https://chrisizworski.com/)';
+
+async function fetchJson(url, headers = {}, timeout = 10000) {
+  const r = await fetch(url, {
+    headers: { 'User-Agent': UA, Accept: 'application/json', ...headers },
+    signal: AbortSignal.timeout(timeout)
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status + ' from ' + new URL(url).hostname);
+  return r.json();
 }
 
-module.exports=async function handler(req,res){
-  res.setHeader('Cache-Control','s-maxage=600, stale-while-revalidate=1800');
-  res.setHeader('X-Robots-Tag','noindex, nofollow');
-  try{
-    const response=await fetch(LAUNCHES,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0','Accept':'application/json'},signal:AbortSignal.timeout(12000)});
-    if(!response.ok)throw new Error(`Launch Library ${response.status}`);
-    const data=await response.json();
-    const now=Date.now();
-    const launches=(data.results||[]).filter(isSpaceCoast).filter(l=>isFutureLaunch(l,now)).sort((a,b)=>new Date(a.net)-new Date(b.net)).slice(0,8);
-    const next=launches[0]||null;
-    let weather=null;
-    if(next){
-      const lat=Number(next.pad?.latitude)||28.5619,lon=Number(next.pad?.longitude)||-80.5774;
-      try{const period=await nwsFor(lat,lon,next.net);weather={period,assessment:weatherGrade(period)};}catch(error){weather={period:null,assessment:weatherGrade(null),error:String(error?.message||error)};}
+async function loadNpsAlerts(now) {
+  const checkedAt = new Date().toISOString();
+  const errors = [];
+  try {
+    const raw = await fetchJson(PUBLIC_NPS_ALERTS, {}, 7000);
+    return {
+      verified: true, checkedAt, feed: 'park-site',
+      url: PUBLIC_NPS_ALERTS, alerts: activeAlerts(raw, now), errors
+    };
+  } catch (err) {
+    errors.push('NPS park alerts: ' + err.message);
+  }
+  if (process.env.NPS_API_KEY) {
+    try {
+      const raw = await fetchJson(NPS_API, { 'X-Api-Key': process.env.NPS_API_KEY }, 7000);
+      return {
+        verified: true, checkedAt, feed: 'developer-api',
+        url: NPS_API, alerts: activeAlerts(raw, now), errors
+      };
+    } catch (err) {
+      errors.push('NPS developer alerts: ' + err.message);
     }
-    const normalized=launches.map(l=>({id:l.id,name:l.name,net:l.net,windowStart:l.window_start,windowEnd:l.window_end,status:l.status?.name||null,tbdTime:Boolean(l.tbdtime),tbdDate:Boolean(l.tbddate),probability:l.probability??null,provider:l.launch_service_provider?.name||null,rocket:l.rocket?.configuration?.full_name||l.rocket?.configuration?.name||null,mission:l.mission?.name||null,pad:l.pad?.name||null,location:l.pad?.location?.name||null,lat:Number(l.pad?.latitude)||null,lon:Number(l.pad?.longitude)||null,scheduleConfidence:scheduleConfidence(l)}));
-    res.status(200).json({ok:true,generatedAt:new Date().toISOString(),next:normalized[0]||null,upcoming:normalized,weather,nextDecision:normalized[0]?{schedule:normalized[0].scheduleConfidence,viewingWeather:weather?.assessment||weatherGrade(null)}:{schedule:{level:'none',label:'No future Space Coast launch found in current feed',detail:'Check the official Kennedy Space Center calendar for newly announced missions.'},viewingWeather:null},sources:[{name:'Launch Library 2',url:'https://ll.thespacedevs.com/'},{name:'Kennedy Space Center Visitor Complex',url:KSC,note:'Officially announced launch viewing opportunities'},{name:'National Weather Service',url:'https://www.weather.gov/mlb/',note:'Local viewing-weather guidance'}],limits:['Launch schedule confidence and viewing weather are separate signals.','A favorable visibility forecast does not mean the launch will occur.','Kennedy Space Center only publishes official publicly announced launch information; always confirm viewing access there before travel.']});
-  }catch(error){
-    res.status(502).json({ok:false,error:'Space Coast launch feed is temporarily unavailable.',detail:String(error?.message||error),official:KSC});
+  }
+  return { verified: false, checkedAt, feed: null, url: PUBLIC_NPS_ALERTS, alerts: [], errors };
+}
+
+async function nwsFor(lat, lon, iso) {
+  const headers = { Accept: 'application/geo+json' };
+  const point = await fetchJson(NWS + '/points/' + lat.toFixed(4) + ',' + lon.toFixed(4), headers, 8000);
+  const hourlyUrl = point?.properties?.forecastHourly;
+  if (!hourlyUrl || !hourlyUrl.startsWith(NWS + '/gridpoints/')) {
+    throw new Error('NWS hourly forecast URL not available');
+  }
+  const data = await fetchJson(hourlyUrl, headers, 8000);
+  const t = Date.parse(iso);
+  const period = (data?.properties?.periods || []).find(
+    x => t >= Date.parse(x.startTime) && t < Date.parse(x.endTime)
+  );
+  return period || null;
+}
+
+async function weatherForLocations(next, now) {
+  const locations = [
+    { id: 'titusville', name: 'Titusville waterfront', lat: 28.6100, lon: -80.8060 },
+    { id: 'port-canaveral', name: 'Port Canaveral coast', lat: 28.4046, lon: -80.5984 }
+  ];
+  const exact = next && ['minute', 'second'].includes(next.netPrecision);
+  const withinHorizon = exact && Date.parse(next.net) >= now &&
+    Date.parse(next.net) - now <= 7 * 86400000;
+  if (!withinHorizon) {
+    return locations.map(({ id, name }) => ({
+      id, name, period: null, assessment: weatherGrade(null),
+      checkedAt: null, status: 'not-in-forecast-window'
+    }));
+  }
+  const results = await Promise.all(locations.map(async ({ id, name, lat, lon }) => {
+    try {
+      const period = await nwsFor(lat, lon, next.net);
+      return {
+        id, name, period, assessment: weatherGrade(period),
+        checkedAt: new Date().toISOString(), status: period ? 'ok' : 'outside-hourly-coverage'
+      };
+    } catch (_err) {
+      return {
+        id, name, period: null, assessment: weatherGrade(null),
+        checkedAt: new Date().toISOString(), status: 'unavailable'
+      };
+    }
+  }));
+  return results;
+}
+
+module.exports = async function handler(req, res) {
+  if (req.method && req.method !== 'GET') {
+    res.setHeader('Allow', 'GET');
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
+  // One server-side cached response: do not expose upstream API keys to clients.
+  // A globally shared durable cache or paid LL2 allowance is required before
+  // aggressively polling at scale from several CDN regions.
+  res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=1800');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  try {
+    const now = Date.now();
+    const [feed, nps] = await Promise.all([fetchJson(LAUNCHES, {}, 12000), loadNpsAlerts(now)]);
+    if (!Array.isArray(feed?.results)) throw new Error('Launch Library results are missing');
+    const launches = feed.results
+      .filter(isSpaceCoast)
+      .filter(l => isFutureLaunch(l, now))
+      .sort((a, b) => Date.parse(a.net) - Date.parse(b.net))
+      .slice(0, 8)
+      .map(normalizeLaunch);
+    const next = launches[0] || null;
+    const forecasts = await weatherForLocations(next, now);
+    const primary = forecasts[0] || null;
+    const parkAlerts = nps.alerts.map(a => ({
+      ...a, description: a.description.slice(0, 600)
+    }));
+    const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified));
+    const schedule = next?.scheduleConfidence || {
+      level: 'none', label: 'No future Florida launch in current feed',
+      detail: 'Check official NASA and launch-operator schedules for new announcements.'
+    };
+    return res.status(200).json({
+      ok: true, generatedAt: new Date().toISOString(),
+      next, upcoming: launches,
+      weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
+      viewingWeatherByArea: forecasts,
+      nextDecision: {
+        schedule,
+        viewingWeather: primary?.assessment || weatherGrade(null),
+        launchWeather: {
+          level: 'unknown', label: 'Official launch-weather approval not verified',
+          detail: 'A local spectator forecast cannot establish range approval or a weather launch commit.'
+        }
+      },
+      viewpoints, parkAlerts,
+      accessSource: {
+        name: 'National Park Service, Canaveral National Seashore',
+        url: nps.url, checkedAt: nps.checkedAt, verified: nps.verified,
+        feed: nps.feed, lagNote: nps.feed === 'developer-api' ?
+          'The NPS developer API may lag the park-hosted alerts by about two hours.' : null,
+        errors: nps.errors
+      },
+      sources: [
+        { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/', checkedAt: new Date().toISOString(), note: 'Florida launch schedule and stated timing precision; third-party, not final launch authority.' },
+        { name: 'NPS Canaveral alerts', url: nps.url, checkedAt: nps.checkedAt, note: nps.verified ? 'Official park alerts checked.' : 'Current closure feed unavailable; Playalinda access unverified.' },
+        { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Surface conditions at spectator areas; not rocket trajectory visibility or launch go-weather.' },
+        { name: 'Kennedy Space Center Visitor Complex', url: KSC, note: 'Check exact launch viewing venue, tickets and mission access.' },
+        { name: 'NASA launch schedule', url: NASA_SCHEDULE, note: 'Official NASA missions only, not an exhaustive commercial launch calendar.' }
+      ],
+      limits: [
+        'A time listed only to the day, month or year is not an exact local launch time.',
+        'Public NPS park alerts do not establish NASA security or launch-specific Playalinda access.',
+        'Viewpoint candidates are not guarantees of parking, admission or a clear line of sight.',
+        'NWS surface forecasts do not predict orbital trajectory, upper-level cloud interception or launch approval.',
+        'For a specific mission, follow official operator and site manager instructions before traveling.'
+      ]
+    });
+  } catch (err) {
+    return res.status(502).json({
+      ok: false, error: 'Florida launch schedule temporarily unavailable.',
+      detail: String(err?.message || err).slice(0, 160),
+      official: KSC
+    });
   }
 };
 
-module.exports._test={isSpaceCoast,isFutureLaunch,scheduleConfidence,weatherGrade,windMax};
+module.exports._test = { loadNpsAlerts, weatherForLocations, nwsFor, fetchJson };
