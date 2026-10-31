@@ -2,7 +2,8 @@
 
 const {
   isSpaceCoast, isFutureLaunch, normalizeLaunch, activeAlerts,
-  viewAccess, VIEWPOINTS, PUBLIC_NPS_ALERTS, weatherGrade
+  viewAccess, VIEWPOINTS, PUBLIC_NPS_ALERTS, weatherGrade,
+  scheduleConfidence, windMax
 } = require('../lib/space-coast-decision');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
@@ -169,4 +170,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { loadNpsAlerts, weatherForLocations, nwsFor, fetchJson };
+module.exports._test = { isSpaceCoast, isFutureLaunch, scheduleConfidence, weatherGrade, windMax, loadNpsAlerts, weatherForLocations, nwsFor, fetchJson };
