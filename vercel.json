@@ -1132,6 +1132,14 @@
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-falls.css"
     },
     {
+      "source": "/assets/tahquamenon-experience.js",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-experience.js"
+    },
+    {
+      "source": "/assets/tahquamenon-experience.css",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-experience.css"
+    },
+    {
       "source": "/assets/css/:path*",
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/css/:path*"
     },
