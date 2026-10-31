@@ -117,6 +117,11 @@ function renderChoices() {
     refs.other.append(li);
   }
   renderCards(choice);
+  // Public, non-personal selection state for the Hattie Cove map. This event
+  // never implies the mapped landmark is a trailhead or current access.
+  document.dispatchEvent(new CustomEvent('pukaskwa:choice',{
+    detail:{id:primary?.id || null,status:primary?.status || 'unverified'}
+  }));
 }
 function renderSource(feed) {
   if (!feed || !Array.isArray(feed.dayHikes) || !feed.dayHikes.length) throw new Error('Incomplete visitor condition data');
