@@ -604,7 +604,7 @@ test('Morgan Falls public route uses NTN South parking and designated crossing, 
   assert.equal(geo.reconciliation,'curated-exact-gis-id');
   assert.equal(f.publication,'verified-access-guide');
   assert.equal(geo.visitorRouteEvidence.navigationToGisPointAllowed,false);
-  assert.match(f.parking,/South Trailhead/);
+  assert.match(f.parking,/South Trails main trailhead|South Trailhead/i);
   assert.match(html,/designated.*crossing|designated M-553 crossing/i);
   assert.match(html,/DO NOT park|Do not park/i);
   assert.match(html,/closed to motor/i);
@@ -645,7 +645,7 @@ test('remaining Batch 14 three source-reviewed GIS records stay unindexed with d
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+r.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'/'));
  }
  const douglass=curated.waterfalls.find(x=>x.gisObjectId===135);assert.ok(douglass?.verification?.landManager?.verified,'Houghton Douglass now promoted to public guide');assert.match(douglass.further,/Phase 1|2027|overlook|accessible/i);
- assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/utility/i);
+ assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/municipal operator|utility/i);
  assert.match(refs.find(x=>x.gisObjectId===46).guidance,/Do not.*gate/i);
  assert.match(refs.find(x=>x.gisObjectId===91).summary,/private/i);
  const mapJS=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');

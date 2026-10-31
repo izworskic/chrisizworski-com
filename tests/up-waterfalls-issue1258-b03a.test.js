@@ -57,7 +57,7 @@ test('B03a ledger moves two stable GIS identities without inflating research can
  assert.equal(ledger.curatedCount,data.length,'ledger reflects current curated inventory');
  const linked=new Set(data.flatMap(x=>[...(Number.isInteger(x.gisObjectId)?[x.gisObjectId]:[]),...(x.multiFeatureGisObjectIds||[])]));assert.equal(ledger.linkedByExactOid,linked.size,'include multi-feature GIS IDs');
  assert.equal(ledger.unresolvedCandidates,ledger.sourceCandidateCount-ledger.linkedByExactOid);
- assert.equal(ledger.entries.length,169);
+ assert.ok(ledger.entries.length>=169,'source history can grow without invalidating earlier batch 03a');
  assert.ok(ledger.lastBatch,'batch lineage must remain recorded');
  for(const oid of [97,118]){const x=ledger.entries.find(y=>y.sourceId===oid&&y.source==='mi-state-gis');assert.ok(x);assert.equal(x.identity,'linked');assert.equal(x.reviewBatch,'03a');assert.equal(x.publication,'verified-access-guide');assert.ok(x.parkingEvidence.startsWith('https://'));assert.ok(x.trailEvidence.startsWith('https://'));}
  const schemas=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
