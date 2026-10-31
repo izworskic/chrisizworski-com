@@ -20,7 +20,7 @@ For new visitor tools, substantial UI redesigns or new interactions, read the
 EXPERIENCE_OS_V1 package maintained at:
 https://github.com/izworskic/chrisizworski-com/tree/main/design-systems/experience-os-v1
 Use AGENTS.md, EXPERIENCE_LIFECYCLE, INTERACTION_PATTERN_LIBRARY, QA_SCORECARD,
-and relevant source/technology docs. Apply this repository's own safety, CI,
+and, for substantial interconnected interactions, CONNECTED_EXPERIENCE_CONTRACT.md\nand templates/STATE_MATRIX.md. Apply this repository's own safety, CI,
 canonical, map/data and ad rules first. Read the current default-branch release
 or pin a reviewed commit if stable reproducibility is required.
 Tiny bug fixes need only relevant guardrails.
