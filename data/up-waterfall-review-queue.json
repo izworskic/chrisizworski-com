@@ -42,56 +42,56 @@
         38,
         86,
         112,
+        29,
         12,
         172,
         4,
-        9,
-        195
+        9
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
+        195,
         205,
         52,
         59,
         83,
         99,
         103,
-        105,
-        107
+        105
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
+        107,
         121,
         123,
         20,
         24,
         25,
         37,
-        39,
-        40
+        39
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
+        40,
         48,
         58,
         63,
         65,
         69,
         70,
-        74,
-        75
+        74
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        29,
+        75,
         42,
         80,
         85,
@@ -452,6 +452,21 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 6,
       "blockingGate": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions."
+    },
+    {
+      "gisObjectId": 29,
+      "name": "Jumbo Falls",
+      "county": "HOUGHTON",
+      "river": "JUMBO RIVER",
+      "lat": 46.453006,
+      "lng": -88.912138,
+      "cluster": "HOUGHTON / JUMBO RIVER",
+      "priorityScore": 12,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling."
     },
     {
       "gisObjectId": 12,
@@ -881,21 +896,6 @@
       "lat": 46.640813,
       "lng": -90.111839,
       "cluster": "GOGEBIC / MAPLE CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 29,
-      "name": "Jumbo Falls",
-      "county": "HOUGHTON",
-      "river": "JUMBO RIVER",
-      "lat": 46.453006,
-      "lng": -88.912138,
-      "cluster": "HOUGHTON / JUMBO RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

@@ -553,21 +553,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "access": "public-trail-documented-but-geometry-and-current-arrival-unverified",
+      "landManager": "U.S. Forest Service · Ottawa National Forest",
+      "parkingEvidence": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf",
+      "trailEvidence": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Verify official USFS parking and ownership, seasonal road status.",
+      "checked": "2026-10-31",
+      "nextAction": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
       "batch": "county-houghton",
-      "reviewBatch": "02",
-      "reviewed": "2026-10-28",
-      "classification": "recreation-route-reported-not-fully-verified",
-      "accessAssessment": "Regional chamber reports USFS road turnout and short path. Confirm public road and signed parking with land manager.",
+      "reviewBatch": "37",
+      "reviewed": "2026-10-31",
+      "classification": "federal-public-trail-with-conflicting-natural-falls-positions",
+      "accessAssessment": "The USDA Forest Service Ottawa National Forest 2015 Recreation Opportunity Guide names Jumbo Falls and directs visitors from M-28 west of Kenton through Golden Glow Road, Forest Road 4589 and 4589-B past Jumbo Pit to an established falls trail. Its official coordinate is 46.457753,-88.912228. A regional trail list describes a short, roughly 0.1-mile level trail from the named parking to Jumbo Falls, but a specialist natural falls point is 46.44963,-88.91278, 904 metres from the agency brochure point; Michigan GIS #29 at 46.453006,-88.912138 lies between them, 528 metres from agency and 379 metres from specialist. We cannot identify which coordinate is trailhead, fall, other cascade or an outdated record from currently published evidence. Historic park/trail road descriptions do NOT establish road passability, a correct map pin, new signage or a precise current legal parking turnout.",
       "evidence": [
+        "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf",
+        "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/",
+        "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/",
+        "https://upper-michigan.com/guide/waterfalls/jumbo-falls.html",
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.iron.org/outdoors/waterfalls/"
+        "https://www.fs.usda.gov/r09/ottawa"
       ]
     },
     {
@@ -4571,5 +4575,5 @@
       ]
     }
   ],
-  "lastBatch": "36"
+  "lastBatch": "37"
 }
