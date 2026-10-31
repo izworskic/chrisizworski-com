@@ -9,6 +9,7 @@ on:
       - 'api/pukaskwa-conditions.js'
       - 'tests/pukaskwa-visitor-chooser.test.js'
       - 'tests/pukaskwa-map.test.js'
+      - 'tests/pukaskwa-trail-geometry.test.js'
       - 'scripts/verify-pukaskwa-browser.cjs'
       - 'scripts/verify-pukaskwa-map-browser.cjs'
       - '.github/workflows/pukaskwa-browser-qa.yml'
@@ -29,7 +30,7 @@ jobs:
         with:
           node-version: '22'
       - name: Verify visitor data, ranking, source and API contracts
-        run: node --test tests/pukaskwa-visitor-chooser.test.js tests/pukaskwa-map.test.js
+        run: node --test tests/pukaskwa-visitor-chooser.test.js tests/pukaskwa-map.test.js tests/pukaskwa-trail-geometry.test.js
       - name: Install isolated browser runner
         run: |
           mkdir -p /tmp/pukaskwa-playwright
