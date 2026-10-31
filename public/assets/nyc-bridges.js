@@ -40,23 +40,50 @@ function focusBridge(id){
 
 function startMap(){
  var status=document.getElementById("map-status"),el=document.getElementById("bridge-map");
- if(!el||!window.L){if(status)status.prepend(document.createTextNode("Interactive map unavailable. Use the bridge list and map links. "));return}
+ if(!el)return;
+ if(map)return;
+ if(!window.L){
+  if(document.readyState!=="complete"){
+   window.addEventListener("load",startMap,{once:true});
+  }else{
+   setTimeout(startMap,150);
+  }
+  return;
+ }
  try{
  map=L.map(el,{scrollWheelZoom:false,attributionControl:true}).setView([40.773,-73.968],11);
- var tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'});
- tiles.addTo(map);el.dataset.tiles="osm";
- var errors=0,loaded=0;tiles.on("tileload",function(){loaded++});tiles.on("tileerror",function(){errors++;if(errors>=3&&loaded===0&&status){status.prepend(document.createTextNode("Map imagery could not load. Use the bridge links or open the full city map. "))}});
  
+ var cartoKey="cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88";
+ var cartoUri="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key="+encodeURIComponent(cartoKey);
+ var carto=L.tileLayer(cartoUri,{subdomains:"abcd",maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; CARTO'});
+ var osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'});
+ 
+ var cartoLoaded=0,cartoErrors=0;
+ carto.on("tileload",function(){cartoLoaded++;el.dataset.tiles="carto"});
+ carto.on("tileerror",function(){
+  cartoErrors++;
+  if(cartoErrors>=3&&cartoLoaded===0){
+   if(map.hasLayer(carto))map.removeLayer(carto);
+   osm.addTo(map);
+   el.dataset.tiles="osm-fallback";
+  }
+ });
+ carto.addTo(map);
+ el.dataset.tiles="carto";
+
  fetch("/api/carto-basemap-config",{credentials:"same-origin"}).then(function(res){return res.ok?res.json():null}).then(function(conf){
   if(!conf||conf.provider!=="CARTO"||typeof conf.key!=="string"||!conf.key.trim())return;
-  var uri="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key="+encodeURIComponent(conf.key.trim());
-  var carto=L.tileLayer(uri,{subdomains:"abcd",maxZoom:19,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
-  var gotTile=false,failed=0;
-  carto.on("tileload",function(){gotTile=true});
-  carto.on("tileerror",function(){failed++;if(failed>=3&&map.hasLayer(carto)){map.removeLayer(carto);el.dataset.tiles="osm-fallback"}});
-  carto.on("load",function(){if(gotTile&&map.hasLayer(tiles)&&map.hasLayer(carto)){map.removeLayer(tiles);tiles=carto;el.dataset.tiles="carto"}});
-  carto.addTo(map);
- }).catch(function(){el.dataset.tiles="osm-fallback"});
+  var freshKey=conf.key.trim();
+  if(freshKey===cartoKey)return;
+  var freshUri="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key="+encodeURIComponent(freshKey);
+  var freshLayer=L.tileLayer(freshUri,{subdomains:"abcd",maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; CARTO'});
+  freshLayer.on("tileload",function(){
+   if(map.hasLayer(carto))map.removeLayer(carto);
+   carto=freshLayer;
+   el.dataset.tiles="carto";
+  });
+  freshLayer.addTo(map);
+ }).catch(function(){});
 
  bridges.forEach(function(b){
   var icon=L.divIcon({className:"bridge-pin-wrap",html:'<span class="bridge-marker" aria-hidden="true"><span class="pin-num">'+b.num+'</span></span>',iconSize:[28,28],iconAnchor:[14,14]});
@@ -83,7 +110,15 @@ function startMap(){
  });
 
  if(window.ResizeObserver){new ResizeObserver(function(){map.invalidateSize({pan:false})}).observe(el)}
- setTimeout(function(){map.invalidateSize({pan:false})},100);
+ if(window.IntersectionObserver){
+  new IntersectionObserver(function(entries){
+   entries.forEach(function(entry){
+    if(entry.isIntersecting&&map){map.invalidateSize({pan:false})}
+   });
+  }).observe(el);
+ }
+ window.addEventListener("load",function(){if(map)map.invalidateSize({pan:false})},{once:true});
+ setTimeout(function(){if(map)map.invalidateSize({pan:false})},100);
 
  function checkHash(){
   var hash=(window.location.hash||"").replace("#","");
@@ -98,7 +133,12 @@ function startMap(){
 
  }catch(e){if(status)status.prepend(document.createTextNode("Interactive map unavailable. Use the bridge list and direct map links. "))}
 }
-startMap();
+
+if(document.readyState==="loading"){
+ document.addEventListener("DOMContentLoaded",startMap);
+}else{
+ startMap();
+}
 
 document.addEventListener("click",function(e){
  var btn=e.target.closest("[data-focus]");
@@ -159,5 +199,6 @@ function calculate(){
  result.append(grid);
  var note=document.createElement("p");note.style.fontSize=".74rem";note.style.marginTop="12px";note.textContent="Approximate NYC local time (ET). Low-angle windows are defined here as the sun between the horizon and 6° elevation, not guaranteed 'golden hour' for any specific viewpoint.";result.append(note)
 }
-if(form){form.addEventListener("submit",function(e){e.preventDefault();calculate()});calculate()}
+if(form)form.addEventListener("submit",function(e){e.preventDefault();calculate()});
+calculate();
 })();
