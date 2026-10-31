@@ -5,6 +5,13 @@ on:
   schedule:
     - cron: '17 3,9,15,21 * * *'
   workflow_dispatch:
+  # The initial source baseline runs immediately when this workflow merges.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pukaskwa-conditions-monitor.yml'
+      - 'lib/pukaskwa/**'
+      - 'scripts/pukaskwa/**'
 
 permissions:
   contents: write
