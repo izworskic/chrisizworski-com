@@ -1132,14 +1132,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only-full-visitor-route-not-authorized",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-10-31",
+      "nextAction": "Obtain current parcel-level authority for the specific falls and both banks, reconcile state GNIS and field falls coordinates, verify the signed trail remains lawful, and identify a road-authority-approved visitor turnout and current road conditions.",
+      "batch": "county-baraga",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "40",
+      "classification": "state-vs-field-position-private-forest-and-parking-unverified",
+      "accessAssessment": "Michigan GIS and official GNIS place Ogemaw Falls at approximately the same point, but an independent waterfall field point lies about half a kilometre away. Old field reports identify a tiny signed creek trail from Baraga Plains Road and an informal pond-side road turnout; their road mileages differ. DNR's broad forest-compartment report lists portions of Ogemaw Creek but does not identify exact public access/owner or an approved visitor parking area. Field-to-source coordinate separation approximately 536 metres. Raw natural waterfall coordinates are NOT visitor parking or a legal footpath.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/2099901",
+        "https://www.waterfallsofthekeweenaw.com/ogemaw-creek/ogemaw-falls/",
+        "https://travelthemitten.com/waterfalls/ogemaw-falls-baraga-county/",
+        "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Baraga/2013/bar004_comp_info.pdf"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3350,20 +3361,22 @@
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-30",
-      "nextAction": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
+      "checked": "2026-10-31",
+      "nextAction": "Obtain a site-specific current MBLP/FERC map or policy authorizing the powerhouse-side lot, service gate passage and complete falls trail. Public recreation on a distinct 65-acre MBLP corridor is not enough.",
       "batch": "county-marquette",
-      "reviewed": "2026-10-30",
-      "reviewBatch": "19",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "40",
       "classification": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
-      "accessAssessment": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
+      "accessAssessment": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules. City of Marquette's adopted 2024 Master Plan page 22 describes a 65-acre MBLP-owned Dead River recreation property subject to FERC public-recreation requirements. This establishes public recreation in the broader river corridor, NOT authorization at the upstream Forestville powerhouse lot, service gate or exact gorge waterfall trail. The NCTA's named Forestville trailhead is distinct from that falls-side parking.",
       "evidence": [
         "https://mblp.org/",
         "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf",
         "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
         "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
         "https://www.noquetrails.org/north-trails",
-        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/",
+        "https://marquettemi.gov/wp-content/uploads/2026/04/Community-Master-Plan.pdf",
+        "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
       ]
     },
     {
@@ -4012,14 +4025,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only-full-visitor-route-not-authorized",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-10-31",
+      "nextAction": "Obtain the current USFS Hiawatha National Forest Motor Vehicle Use Map for FR2276 and FR2293, an authorized signed parking/turnaround before any gate, exact public land title and a continuous usable 0.25-mile creek trail.",
+      "batch": "county-alger",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "40",
+      "classification": "forest-gate-road-mvum-and-parking-unverified",
+      "accessAssessment": "Michigan GIS maps Silver Bell Falls on Nelson Creek close to an independent 2016 field location. Historic approach descriptions go through rough Hiawatha National Forest roads FR2276, possibly FR2293, and an intermittently gated logging-road segment. One account describes a short footpath; an older hiker reports wet beaver-affected terrain. Neither establishes the current USFS Motor Vehicle Use Map road status, public parking, safe crossings or current forest permissions. Field-to-source coordinate separation approximately 35 metres. Raw natural waterfall coordinates are NOT visitor parking or a legal footpath.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gowaterfalling.com/waterfalls/silverbell.shtml",
+        "https://uphiking.blogspot.com/",
+        "https://www.fs.usda.gov/r09/hiawatha"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4575,5 +4598,5 @@
       ]
     }
   ],
-  "lastBatch": "39"
+  "lastBatch": "40"
 }

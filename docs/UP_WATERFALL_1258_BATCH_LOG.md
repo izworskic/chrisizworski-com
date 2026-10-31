@@ -362,3 +362,7 @@ The U.P. waterfall Chromium workflow previously checked only HTML/assets on PR. 
 ## Batch 39 — Lower Silver Falls owner/permission source gate enforced (2026-10-31)
 
 Automated Node QA exposed public indexed Silver River lower picnic falls with landManager.verified=false. Baraga County tourism guides document historical picnic use, but no verified owner/managing agency nor current legal signed parking. Kept curated geographical research source #110 and provenance (not conflated with Upper Silver GIS #68), but downgraded publication to research-only, set noindex, removed TouristAttraction schema and public sitemap ItemList entry, redacted hub arrival and route and marked research pending. Static page retains source-history context without turn-by-turn hiking directions. Maintains **71 curated records including research, 65 linked GIS, 96 pending; 69 public sitemap locations including hub**. Source verification must be real before promoting. Browser/index and batch20 tests updated.
+
+## Batch 40 — Ogemaw, Silver Bell, Dead River, Alger (2026-10-31)
+
+Source-backed access review only: Ogemaw state/GNIS falls versus different field point, no approved shoulder lot; Silver Bell USFS rough/gated FR road, no present MVUM; Dead River general FERC public river recreation but unverified powerhouse falls access; Alger city says NO SAFE PARKING, use separately signed Wagner Falls. Two new noindex research pages, six-source checkpoints, source ledger/reconciliation updated. Public waterfall counts unchanged (71 curated, 65 linked GIS, 96 pending). No outreach.
