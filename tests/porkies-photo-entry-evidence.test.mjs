@@ -96,7 +96,7 @@ test("native no-JavaScript answer and official sources remain published",()=>{
  assert.match(html,/asset #1409.*74 m/);
  assert.match(html,/asset #72.*31 m/);
  assert.match(html,/experience-entry-evidence\.json/);
- assert.match(html,/photos of today.s signed Nature Trail entrance/);
+ assert.match(html,/photographs of today.s signed Nature Trail entrance/);
  assert.match(html,/name="robots" content="noindex,follow"/);
  assert.match(css,/\.experience-entry-source summary:focus-visible/);
  assert.match(css,/@media\(max-width:680px\)/);
