@@ -3072,10 +3072,63 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "research-only-access-not-cleared-149",
+      "evidenceReviewed": "2026-10-31",
+      "publicationEligible": false,
+      "sourceNotes": "DNR 1988 report documents Salmon Trout Upper Falls on WEST BRANCH in T51N R28W section 15 ~0.5 river mile upstream of East-West junction. GNIS #2098060 at 46.8152778,-87.8530556 is ~18m from state GIS #149. Most lower watershed is historically on Huron Mountain Club private land; current club policy says roads gated and patrolled, but precise modern parcel intersection for this waterfall has not been carried out. Upper public stream-sampling stations near Dodge City are not visitor permissions.",
+      "outstandingGate": "Current exact land parcel and owner, express tourist sightseeing permission, approved parking/road, fully legal footpath and current restrictions.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf",
+        "https://geo.mytopo.com/feature/michigan/marquette/falls/2098060/upper-falls/",
+        "https://huronmountainclub.org/guest-info/",
+        "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "verified-geography",
+            "finding": "DNR 1988 Upper Falls is on WEST Branch, section 15, 0.5 mile above East Branch junction; GNIS #2098060 is about 18m from state GIS #149.",
+            "source": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098060/upper-falls/"
+          },
+          {
+            "label": "Predominant land rights",
+            "status": "documented-not-live",
+            "finding": "DNR records most lower Salmon Trout watershed on private Huron Mountain Club land, not an exact current #149 parcel survey.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Club entry policy",
+            "status": "documented-not-live",
+            "finding": "Current HMC guest policy states all access roads are gated and patrolled.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          },
+          {
+            "label": "Public parking",
+            "status": "not-cleared",
+            "finding": "No signed public falls lot or owner-authorized road identified; public monitoring further upstream cannot be substituted.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          },
+          {
+            "label": "Walking route",
+            "status": "not-cleared",
+            "finding": "No club-authorized public footpath or dry viewpoint from lawful public parking.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Current owner permission",
+            "status": "not-cleared",
+            "finding": "No dated club or current parcel owner authorization for sightseeing at this fall.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 150,
@@ -3089,10 +3142,64 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "research-only-access-not-cleared-150",
+      "evidenceReviewed": "2026-10-31",
+      "publicationEligible": false,
+      "sourceNotes": "State source GIS Twin #150 46.806661,-87.848926 is ~40m from independent field Twin 46.80701,-87.84904, on the EAST Branch, not WEST Upper or mainstem Middle. Specialist September 2026 updated article distinguishes Twin from separate Hogback farther downstream across Huron Mountain Club line and warns old private-camp routes. Suggested tiny Commercial Forest corner access plus nine-mile bushwhack has no independently verified complete parcel/easement or legal tourist parking. Michigan DNR explicitly limits the public right on CF land to foot access for HUNTING/FISHING/TRAPPING; ordinary waterfall sightseeing and photography require owner permission, including beyond the small CF entry. Monitoring site STEB1 elsewhere on East Branch uses private JM Longyear gate.",
+      "outstandingGate": "Current DNR CF parcel overlay and authorized SIGHTSEEING permission for every segment, signed public lot, continuous walking corridor and safety/seasonal access before visitor guide. Do not promote a 9mi CF hunting right as general tourism.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/",
+        "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/",
+        "https://www.michigan.gov/en/dnr/managing-resources/forestry/private/cf",
+        "https://huronmountainclub.org/guest-info/",
+        "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Natural Twin identity",
+            "status": "verified-geography",
+            "finding": "State #150 is roughly 40m from specialist East Branch Twin site, distinct from Hogback cascade downstream past club line.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/"
+          },
+          {
+            "label": "Commercial Forest corner",
+            "status": "documented-not-live",
+            "finding": "Specialist reports a tiny CF parcel entry north of Dodge City, not a verified current official parcel or continuous easement.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/"
+          },
+          {
+            "label": "Legal sightseeing permission",
+            "status": "verified-geography",
+            "finding": "DNR CF Program allows public foot access for hunting, fishing and trapping only; other activities require landowner permission.",
+            "source": "https://www.michigan.gov/en/dnr/managing-resources/forestry/private/cf"
+          },
+          {
+            "label": "Permitted parking",
+            "status": "not-cleared",
+            "finding": "Informal small gated logging-road turnout is not a road-authority approved tourist lot; private Dodge City camps must not be crossed.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/dodge-city-falls/"
+          },
+          {
+            "label": "Visitor trail",
+            "status": "not-cleared",
+            "finding": "About nine-mile expert bushwhack and ~700–800ft ascent is no authorized maintained public sightseeing route.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-salmon-trout-river/twin-falls/"
+          },
+          {
+            "label": "Boundary and conditions",
+            "status": "not-cleared",
+            "finding": "2022 monitoring identifies separate East Branch site behind JM Longyear private gate; actual falls corridor/club boundary not surveyed.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 151,
@@ -3106,10 +3213,63 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "research-only-access-not-cleared-151",
+      "evidenceReviewed": "2026-10-31",
+      "publicationEligible": false,
+      "sourceNotes": "DNR fisheries report 88-7 places Middle Falls on MAINSTEM Salmon Trout River in section 14 about one river mile downstream of East-West junction, separate from East Twin and West Upper. GNIS #2098058 46.8111111,-87.8258333 ~177m from GIS #151 46.811603,-87.828052. DNR describes majority of lower basin inside private Huron Mountain Club, club policy gates/patrols roads, and 2022 MiCorps document identifies a DIFFERENT nearby Lower Dam monitoring station as HMC-private. Neither report is an exact current title intersect, and neither provides tourist parking or a permitted footpath. No confusion with Marquette Dead River Middle Falls.",
+      "outstandingGate": "Confirm current site parcel and manager, express visitor access, signed public trail and road parking plus present conditions; scientific monitoring access alone does not qualify.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf",
+        "https://geo.mytopo.com/feature/michigan/marquette/falls/2098058/middle-falls/",
+        "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf",
+        "https://huronmountainclub.org/guest-info/"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Named middle location",
+            "status": "verified-geography",
+            "finding": "1988 DNR documents Middle on mainstem ~1 river mile downstream of West-East junction in section 14; GNIS #2098058 ~177m from source #151.",
+            "source": "https://geo.mytopo.com/feature/michigan/marquette/falls/2098058/middle-falls/"
+          },
+          {
+            "label": "Mainstem ownership",
+            "status": "documented-not-live",
+            "finding": "DNR says most Salmon Trout lower basin lies in privately held Huron Mountain Club watershed; current falls parcel not independently intersected.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Nearby monitoring land",
+            "status": "documented-not-live",
+            "finding": "2022 YDWP MiCorps Lower Dam monitoring location near Middle is private HMC, but it is NOT Middle Falls and does not itself prove that waterfall's title.",
+            "source": "https://www.micorps.net/wp-content/uploads/2022/04/VSMP-YellowDog-QAPP.pdf"
+          },
+          {
+            "label": "Road and parking",
+            "status": "not-cleared",
+            "finding": "HMC official guest policy says roads are gated/patrolled and offers no public Middle Falls lot.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          },
+          {
+            "label": "Tourist footpath",
+            "status": "not-cleared",
+            "finding": "No documented public easement, designated walking approach or visitor viewpoint.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/TechnicalReports/TR88-7.pdf"
+          },
+          {
+            "label": "Current permission",
+            "status": "not-cleared",
+            "finding": "No current site manager authorization or 2026 road/trail access determination for this fall.",
+            "source": "https://huronmountainclub.org/guest-info/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 152,
@@ -3157,10 +3317,62 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "disposition": "research-only-access-not-cleared-154",
+      "evidenceReviewed": "2026-10-31",
+      "publicationEligible": false,
+      "sourceNotes": "Michigan GIS #154 46.734481,-87.694124 is roughly 167m from a specialist creek-mouth Bushy Falls point 46.73593,-87.69355. This small Bushy Creek waterfall enters Yellow Dog River; state GIS river field records the receiving river. Yellow Dog Watershed Preserve advertises a legitimate community forest trail from CR510 bridge to first Hills/Yellow Dog Falls and separately a 12-acre Bushy Creek property DOWNSTREAM of the confluence; neither proves the falls themselves and a complete trail sit inside public land. Specialist field notes describe an unofficial fading south-bank path, possible river-wading and a private cabin on north bank beyond the fourth Yellow Dog fall. Do not convert that into public route guidance.",
+      "outstandingGate": "Parcel map for exact natural falls and BOTH banks, signed owner-approved continuous dry path from lawful parking, posted current access and water safety; YDWP property downstream of confluence and official Hills trail are insufficient.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+        "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/",
+        "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #154 is approximately 167 metres from the specialist mapped drop where Bushy Creek joins Yellow Dog River.",
+            "source": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+          },
+          {
+            "label": "Protected lands",
+            "status": "documented-not-live",
+            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/"
+          },
+          {
+            "label": "Public access entry",
+            "status": "documented-not-live",
+            "finding": "YDWP CR510 bridge trail reaches Hills Falls after about 0.75 mile; it does not document a visitor route to Bushy creek mouth.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          },
+          {
+            "label": "Continuous footpath",
+            "status": "not-cleared",
+            "finding": "Specialist downstream riverside route fades after fourth drop and mentions wading and a cabin; no sanctioned unbroken dry route.",
+            "source": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+          },
+          {
+            "label": "Waterfall visitor parking",
+            "status": "not-cleared",
+            "finding": "Neither separate Bushy parking nor entitlement to finish the creek-mouth visit from existing CR510 lot verified.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          },
+          {
+            "label": "Current safety",
+            "status": "not-cleared",
+            "finding": "Seasonal Bushy Truck Trail is described without reliable directions, recent passability or crossing conditions.",
+            "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 155,
@@ -4759,6 +4971,18 @@
       ],
       "publicGuidesAdded": 1,
       "outcome": "One-mile public NCTA Little Garlic Falls Spur with named western Harrison Road parking on state wilderness; late-season/road uncertainty. Separate inaccessible Big Garlic features not cross-linked."
+    },
+    {
+      "batch": "29-bushy-salmon-trout-land-access",
+      "date": "2026-10-31",
+      "reviewedIds": [
+        154,
+        149,
+        150,
+        151
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Bushy creek mouth not cleared by nearby Yellow Dog public forest/12acre parcel. Salmon Trout West Upper and mainstem Middle near mostly private HMC; Twin East Branch CF-corner 9mi route lacks permission for general sightseeing under DNR CF rules. All four research-only."
     }
   ]
 }

@@ -12,7 +12,7 @@ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8')
 const distance=(a,b,c,d)=>{const r=x=>x*Math.PI/180;const aa=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 6371*2*Math.asin(Math.sqrt(aa));};
 
 test('batch 27 keeps each candidate research-only, source-ledger linked, and absent from public visitor publication',()=>{
- assert.equal(recon.candidates.length,161); assert.equal(curated.length,63);
+ assert.equal(recon.candidates.length,161); assert.ok(curated.length>=63,'future guide additions do not change batch 27 findings');
  for(const id of [190,191,215]){
   const g=recon.candidates.find(x=>x.gisObjectId===id),s=source.entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===id),u=publicReviews.records.find(x=>x.gisObjectId===id);
   assert.ok(g&&s&&u,'missing source '+id);
@@ -27,8 +27,8 @@ test('batch 27 keeps each candidate research-only, source-ledger linked, and abs
   assert.ok(u.sourceLinks.every(v=>v.url.startsWith('https://')));
   assert.ok(queue.candidates.some(v=>v.gisObjectId===id&&v.publicationEligible===false&&v.sourceCount>=3));
  }
- assert.equal(queue.counts.pendingGisFeatures,103);
- assert.equal(queue.counts.matchedGisFeatures,58);
+ assert.equal(queue.counts.pendingGisFeatures,recon.counts.pending);
+ assert.equal(queue.counts.matchedGisFeatures,recon.counts.exactIdMatched);
  assert.equal(queue.batches.length,13);
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/hunters-brooks-falls/'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/whitefish-falls/'));

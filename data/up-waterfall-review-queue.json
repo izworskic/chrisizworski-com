@@ -26,10 +26,10 @@
     {
       "batchNumber": 2,
       "candidates": [
-        215,
-        91,
         154,
+        215,
         150,
+        91,
         151,
         68,
         8,
@@ -159,18 +159,18 @@
         84,
         106,
         122,
+        149,
         51,
         120,
         136,
-        137,
-        139
+        137
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
+        139,
         140,
-        149,
         152,
         176,
         177,
@@ -300,6 +300,21 @@
       "blockingGate": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json."
     },
     {
+      "gisObjectId": 154,
+      "name": "Bushy Creek Falls",
+      "county": "MARQUETTE",
+      "river": "YELLOW DOG RIVER",
+      "lat": 46.734481,
+      "lng": -87.694124,
+      "cluster": "MARQUETTE / YELLOW DOG RIVER",
+      "priorityScore": 95,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Parcel map for exact natural falls and BOTH banks, signed owner-approved continuous dry path from lawful parking, posted current access and water safety; YDWP property downstream of confluence and official Hills trail are insufficient."
+    },
+    {
       "gisObjectId": 215,
       "name": "Big Garlic Falls",
       "county": "MARQUETTE",
@@ -313,6 +328,21 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Resolve official source alias Lower Big Garlic versus Big Garlic GIS #215; confirm current parcel/owner rules and a complete permitted bank-to-view route, approved visitor parking and seasonal safety by published manager/road records. Never route via private banks, river wading, Gold Mine bridge or the separate Little Garlic trail."
+    },
+    {
+      "gisObjectId": 150,
+      "name": "Twin Falls",
+      "county": "MARQUETTE",
+      "river": "SALMON TROUT RIVER",
+      "lat": 46.806661,
+      "lng": -87.848926,
+      "cluster": "MARQUETTE / SALMON TROUT RIVER",
+      "priorityScore": 93,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Current DNR CF parcel overlay and authorized SIGHTSEEING permission for every segment, signed public lot, continuous walking corridor and safety/seasonal access before visitor guide. Do not promote a 9mi CF hunting right as general tourism."
     },
     {
       "gisObjectId": 91,
@@ -330,36 +360,6 @@
       "blockingGate": "Obtain mapped public trail-to-GIS-#91 view with land title/easement evidence or establish same-name feature mixup. Do not route onto private river property or along rail tracks."
     },
     {
-      "gisObjectId": 154,
-      "name": "Bushy Creek Falls",
-      "county": "MARQUETTE",
-      "river": "YELLOW DOG RIVER",
-      "lat": 46.734481,
-      "lng": -87.694124,
-      "cluster": "MARQUETTE / YELLOW DOG RIVER",
-      "priorityScore": 83,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 150,
-      "name": "Twin Falls",
-      "county": "MARQUETTE",
-      "river": "SALMON TROUT RIVER",
-      "lat": 46.806661,
-      "lng": -87.848926,
-      "cluster": "MARQUETTE / SALMON TROUT RIVER",
-      "priorityScore": 81,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
       "gisObjectId": 151,
       "name": "Middle Falls",
       "county": "MARQUETTE",
@@ -367,12 +367,12 @@
       "lat": 46.811603,
       "lng": -87.828052,
       "cluster": "MARQUETTE / SALMON TROUT RIVER",
-      "priorityScore": 65,
+      "priorityScore": 77,
       "priorityReason": "Named priority for authoritative source review",
       "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm current site parcel and manager, express visitor access, signed public trail and road parking plus present conditions; scientific monitoring access alone does not qualify."
     },
     {
       "gisObjectId": 68,
@@ -1545,6 +1545,21 @@
       "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
     },
     {
+      "gisObjectId": 149,
+      "name": "Upper Falls",
+      "county": "MARQUETTE",
+      "river": "SALMON TROUT RIVER",
+      "lat": 46.815119,
+      "lng": -87.853043,
+      "cluster": "MARQUETTE / SALMON TROUT RIVER",
+      "priorityScore": -3,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Current exact land parcel and owner, express tourist sightseeing permission, approved parking/road, fully legal footpath and current restrictions."
+    },
+    {
       "gisObjectId": 51,
       "name": "Upper Falls",
       "county": "BARAGA",
@@ -1627,21 +1642,6 @@
       "lat": 47.39797,
       "lng": -87.836302,
       "cluster": "KEWEENAW / MONTREAL RIVER",
-      "priorityScore": -15,
-      "priorityReason": "Generic name; disambiguate river and physical waterfall",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 149,
-      "name": "Upper Falls",
-      "county": "MARQUETTE",
-      "river": "SALMON TROUT RIVER",
-      "lat": 46.815119,
-      "lng": -87.853043,
-      "cluster": "MARQUETTE / SALMON TROUT RIVER",
       "priorityScore": -15,
       "priorityReason": "Generic name; disambiguate river and physical waterfall",
       "publicationEligible": false,
