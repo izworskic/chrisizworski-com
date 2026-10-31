@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-29",
+  "reviewed": "2026-10-31",
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
@@ -343,6 +343,74 @@
       }
     },
     {
+      "gisObjectId": 68,
+      "name": "Upper Silver Falls",
+      "county": "BARAGA",
+      "status": "12km-same-name-location-discrepancy",
+      "publicAccess": "research-only-geographic-identity-unresolved",
+      "publicationEligible": false,
+      "title": "Upper Silver Falls #68: not the upper picnic-site chute",
+      "summary": "GIS Upper Silver Falls #68 is at 46.681143,-88.329766, roughly 12 km south of Lower Silver Falls #110 46.792674,-88.335692. Specialist field account names an upper drop only ~0.25 miles upstream from lower picnic falls. No valid exact GIS match for that informal upper chute; do NOT attach #68 to lower Silver visitor guide or send visitors on upstream riverbank routes.",
+      "guidance": "Do not treat source #68 as the short upstream drops above Lower Silver Falls. No verified trailhead or access rights exist for this separate 12-km-distant research marker.",
+      "reviewLimitations": "Independent account's quarter-mile upstream chute location does not agree with GIS #68, and two different river features may share the Upper Silver label.",
+      "nextEvidence": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching.",
+      "sourceLinks": [
+        {
+          "label": "Source Michigan waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent lower and upper visitor descriptions",
+          "url": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+        },
+        {
+          "label": "Lower picnic falls coordinates",
+          "url": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "not-cleared",
+            "finding": "Upper #68 12km south of lower #110, not quarter-mile upstream chute",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager",
+            "status": "not-cleared",
+            "finding": "No confirmed public land title/manager for #68",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Road",
+            "status": "not-cleared",
+            "finding": "Lower Falls Rd does not establish road to feature #68",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          },
+          {
+            "label": "Visitor parking",
+            "status": "not-cleared",
+            "finding": "No approved public parking for distinct GIS #68",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Trail",
+            "status": "not-cleared",
+            "finding": "No approved approach to #68; short upstream rough path in field guide is unrelated",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No current access status",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          }
+        ]
+      }
+    },
+    {
       "gisObjectId": 91,
       "name": "Upper Falls (Falls River)",
       "county": "BARAGA",
@@ -412,6 +480,114 @@
             "source": "https://cms2.revize.com/revize/lansemi/VILLAGE%20INFORMATION%20MANUAL%202025.pdf"
           }
         ]
+      }
+    },
+    {
+      "gisObjectId": 119,
+      "name": "Slate River Falls",
+      "county": "BARAGA",
+      "status": "TNC-fee-natural-falls-verified-public-parking-and-dry-view-not-cleared",
+      "publicAccess": "TNC restricted land, hiking allowed subject to preserve policy, complete visitor path unverified",
+      "publicationEligible": false,
+      "title": "Slate River Falls: landowner confirmed; the bridge and parking are different questions",
+      "summary": "TNC fee-owns natural falls #119. The 2025 Visit Keweenaw report describes a small pull-off and gorge-rim trail, but parking authorization, legal continuous footpath, safe no-ford viewpoint and current conditions remain unresolved.",
+      "guidance": "The research-only access checklist separates verified ownership from four public route gates. Do not navigate to natural GIS points or treat a 2025 tourism pull-off description as approved parking.",
+      "reviewLimitations": "A TNC Fee Ownership boundary is not a surveyed county tax parcel/road right-of-way. TNC GIS PUB_ACCESS is Restricted Access. Hiking permission does not grant vehicle entry; flood-damaged Skanee Road segments were passable with caution in May 2025, not a statement of current road status.",
+      "nextEvidence": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json.",
+      "sourceLinks": [
+        {
+          "label": "TNC live reserve fee-polygon query",
+          "url": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
+        },
+        {
+          "label": "TNC reserve hiking and vehicle restrictions",
+          "url": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/"
+        },
+        {
+          "label": "USGS Skanee Road bridge coordinates",
+          "url": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
+        },
+        {
+          "label": "NBI road bridge #504 location",
+          "url": "https://bridgecondition.com/bridge/michigan/mi-000000000000504"
+        },
+        {
+          "label": "Baraga County Road Commission authority/contact",
+          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+        },
+        {
+          "label": "Baraga County official GIS parcel viewer",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        },
+        {
+          "label": "2025 CRC flood/Skanee road updates",
+          "url": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+        },
+        {
+          "label": "Visit Keweenaw 2025 pull-off and gorge-rim report (not a parking authorization)",
+          "url": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/"
+        },
+        {
+          "label": "Baraga Road Commission official contact",
+          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+        },
+        {
+          "label": "Baraga Equalization parcel authority",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Waterfall geography",
+            "status": "verified-geography",
+            "finding": "GIS #119 at 46.831054,-88.252067 matches independent lower-gorge falls point; not a parking location or approved footpath.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Protected land ownership",
+            "status": "documented-not-live",
+            "finding": "Verified TNC fee ownership of the natural GIS #119 waterfall from live public layer OBJECTID 8370. Layer PUB_ACCESS is Restricted Access. Skanee public bridge is outside fee polygon; 100m east sample is inside, but this cannot establish parking, road rights or actual route. TNC hiking permission applies subject to preserve rules.",
+            "source": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
+          },
+          {
+            "label": "Skanee Road public bridge",
+            "status": "verified-geography",
+            "finding": "USGS stream site and NBI #504 identify bridge near 46.8332,-88.2586, outside TNC fee-owned reserve polygon. Bridge passability and 2025 flood status are not parking/roadside permission or live 2026 road clearance.",
+            "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
+          },
+          {
+            "label": "Roadside arrival and parking",
+            "status": "not-cleared",
+            "finding": "TNC polygon shows sample 100m east of bridge inside reserve. Actual two-track/turnout not independently mapped, and no Baraga CRC approval or current road reconstruction/plowing confirmation exists. No vehicle access on TNC preserve.",
+            "source": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+          },
+          {
+            "label": "Dry-ground viewpoint and trail",
+            "status": "not-cleared",
+            "finding": "Half-mile rough east-bank path is described in visitor materials; historical field report required river crossing for its close view and reports hazardous water. Continuous authorized and non-fording access not established.",
+            "source": "https://www.gowaterfalling.com/waterfalls/slateriver.shtml"
+          },
+          {
+            "label": "Upstream Arvon route identity",
+            "status": "conflicting",
+            "finding": "County brochure labels Arvon Road slate-quarry approach as Slate River Falls; Quartzite/Black Slate cluster has separate mapped points at that road. No valid connection to GIS #119 lower gorge.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
+          },
+          {
+            "label": "Live conditions",
+            "status": "not-cleared",
+            "finding": "2025 Baraga CRC flood updates listed Skanee Road as passable with caution and the damaged Skanee Road approach toward Slate River; no 2026 confirmation for turnouts, road reconstruction or dry trail conditions.",
+            "source": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+          }
+        ]
+      },
+      "researchPage": "/upper-peninsula-waterfalls/research/slate-river-falls/",
+      "accessDecision": {
+        "sourceFile": "data/up-waterfall-slate-river-access-decision.json",
+        "publicGuideEligible": false,
+        "requestsSent": false
       }
     },
     {
@@ -565,6 +741,164 @@
       }
     },
     {
+      "gisObjectId": 190,
+      "name": "Hunters Brooks Falls",
+      "county": "DELTA",
+      "status": "primary-DNR-natural-falls-at-brook-mouth-private-posted-reported",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
+      "publicationEligible": false,
+      "title": "Hunters Brook Falls — posted private land reported; no public mouth access",
+      "summary": "DNR confirms a small falls where Hunters Brook reaches the Escanaba River. Specialist sources report private, posted land next to the confluence. No land-based public visitor route is established.",
+      "guidance": "No route or parking pin. The DNR's documented public fishing sites elsewhere on Hunters Brook are not waterfall access. Do not enter posted land or assume a paddler's sighting creates a public approach.",
+      "reviewLimitations": "The DNR 2018 fishery report is authoritative for physical waterfall location, not 2026 private-land restrictions. The database's Posted classification is not a freshly surveyed parcel/status check. Neither an American Whitewater river narrative nor a nearby fishing site establishes land access.",
+      "nextEvidence": "Find a current published parcel/right-of-way layer for the mouth, current posting/owner-approved visitor route and official legal trailhead/parking specifically connected to the falls; do not substitute farther-upstream DNR fishing access or boat-trip scouting.",
+      "sourceLinks": [
+        {
+          "label": "Michigan state geographic waterfall GIS",
+          "url": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+        },
+        {
+          "label": "Source evidence 1",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+        },
+        {
+          "label": "Source evidence 2",
+          "url": "https://www.americanwhitewater.org/content/River/view/river-detail/929/main"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall existence and identity",
+            "status": "verified-geography",
+            "finding": "DNR fisheries report 2018-248 explicitly identifies a single waterfall at the mouth of Hunters Brook entering the Escanaba River; source GIS #190 marks the named feature.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Land rights near confluence",
+            "status": "documented-not-live",
+            "finding": "World Waterfall Database marks the unofficially named falls Posted and private; American Whitewater notes a nearby residence. Current parcel and posting inspection have not been established.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+          },
+          {
+            "label": "Vehicle approach",
+            "status": "not-cleared",
+            "finding": "Neither DNR nor river-boating material identifies a lawful public road-to-falls vehicle approach. Broader CR426 public access along a 28-mile brook is not the same as access to its mouth.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Permitted visitor parking",
+            "status": "not-cleared",
+            "finding": "The DNR's 2000s planned walk-in fishing lot on another reach of Hunters Brook does not prove parking for the mouth waterfall.",
+            "source": "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c"
+          },
+          {
+            "label": "Continuous walking/viewing corridor",
+            "status": "not-cleared",
+            "finding": "No designated public bank route or safe viewpoint is identified; watercraft-only river visibility is not a pedestrian trail.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/929/main"
+          },
+          {
+            "label": "Current permission and conditions",
+            "status": "not-cleared",
+            "finding": "No dated 2026 site posting or owner-issued public permission, trail status or safe river level is available. Do not index a visitor guide.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 191,
+      "name": "Whitefish Falls",
+      "county": "ALGER",
+      "status": "visitor-bureau-unimproved-trail-parking-and-manager-unverified",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
+      "publicationEligible": false,
+      "title": "Whitefish Falls — bureau-described trail, no verified lot or exact manager",
+      "summary": "A genuine small waterfall northwest of Trenary has a regional visitor-bureau listing and a photographed informal trail. The listed trail is not yet joined to a verified public parking/land-manager source.",
+      "guidance": "Do not drive to the natural falls pin, use an unrelated township-park coordinate, or promise an easy walk. The named Whitefish Falls is separate from Laughing Whitefish Falls State Park.",
+      "reviewLimitations": "Regional tourism says 'unimproved trail' and '15 minutes or less' but supplies no mapped lot or land authority. One guide's claimed township-park coordinate lies ~4.9 km east of the MI GIS falls. A field photographer reports a state forest section, not an authoritative DNR permission or parking classification.",
+      "nextEvidence": "Find current DNR parcel/forest recreation map with precise #191 ownership and permitted arrival, public signed lot or designated roadside parking, mapped unimproved trail to the SAME waterfall and land-manager seasonal notices; check claims around Whitefish River Township Park independently.",
+      "sourceLinks": [
+        {
+          "label": "Michigan state geographic waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source evidence 1",
+          "url": "https://www.munising.org/activities/whitefish-falls/"
+        },
+        {
+          "label": "Source evidence 2",
+          "url": "https://www.miroadtrip.com/locations/whitefish-falls"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://waterfallsamerica.com/waterfalls/whitefish-falls-mi-1622606/"
+        },
+        {
+          "label": "Source evidence 4",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        },
+        {
+          "label": "Source evidence 5",
+          "url": "https://www.usgs.gov/us-board-on-geographic-names/what-geographic-names-information-system-gnis"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Waterfall identity",
+            "status": "verified-geography",
+            "finding": "Michigan source #191 and independently published USGS GNIS #1622606 positions are ~172 m apart. This is Whitefish Falls near Trenary, NOT Laughing Whitefish Falls State Park.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager and permission",
+            "status": "not-cleared",
+            "finding": "An independent photographer describes state-forest land; no exact DNR legal boundary/site manager or explicit public trail permission has been matched to GIS #191.",
+            "source": "https://www.miroadtrip.com/locations/whitefish-falls"
+          },
+          {
+            "label": "Road identity and geographic disagreement",
+            "status": "not-cleared",
+            "finding": "Munising bureau places falls west of US-41 northwest of Trenary. Another aggregate's township park pin is ~4.9 km east and cannot be transferred to the falls as directions.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Legal visitor parking",
+            "status": "not-cleared",
+            "finding": "Neither official/regionally published address nor signed legal parking lot and year-round status established; do not infer from informal cars seen during one visit.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          },
+          {
+            "label": "Complete unimproved trail",
+            "status": "documented-not-live",
+            "finding": "Munising bureau says <=15 minutes on an unimproved trail; no certified parking-to-view line or current trail maintenance/riverbank conditions documented.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          },
+          {
+            "label": "Current seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated trailhead opening, parking/plowing notice or hazard update for late October 2026 verified.",
+            "source": "https://www.munising.org/activities/whitefish-falls/"
+          }
+        ]
+      }
+    },
+    {
       "gisObjectId": 192,
       "name": "Au Train Falls",
       "county": "ALGER",
@@ -669,176 +1003,75 @@
       ]
     },
     {
-      "gisObjectId": 119,
-      "name": "Slate River Falls",
-      "county": "BARAGA",
-      "status": "TNC-fee-natural-falls-verified-public-parking-and-dry-view-not-cleared",
-      "publicAccess": "TNC restricted land, hiking allowed subject to preserve policy, complete visitor path unverified",
+      "gisObjectId": 215,
+      "name": "Big Garlic Falls",
+      "county": "MARQUETTE",
+      "status": "state-gis-point-probably-lower-big-garlic-private-owner-reports",
+      "publicAccess": "no-verifiable-complete-public-visitor-corridor",
       "publicationEligible": false,
-      "title": "Slate River Falls: landowner confirmed; the bridge and parking are different questions",
-      "summary": "TNC fee-owns natural falls #119. The 2025 Visit Keweenaw report describes a small pull-off and gorge-rim trail, but parking authorization, legal continuous footpath, safe no-ford viewpoint and current conditions remain unresolved.",
-      "guidance": "The research-only access checklist separates verified ownership from four public route gates. Do not navigate to natural GIS points or treat a 2025 tourism pull-off description as approved parking.",
-      "reviewLimitations": "A TNC Fee Ownership boundary is not a surveyed county tax parcel/road right-of-way. TNC GIS PUB_ACCESS is Restricted Access. Hiking permission does not grant vehicle entry; flood-damaged Skanee Road segments were passable with caution in May 2025, not a statement of current road status.",
-      "nextEvidence": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json.",
+      "title": "Big Garlic GIS likely LOWER falls, private bank reports and conflicting names",
+      "summary": "State GIS #215 appears to mark LOWER Big Garlic Falls, not the separate main Big Garlic Falls. Historical comments from landowners warn of private banks, and no complete public visiting corridor is verified.",
+      "guidance": "Do not present a Gold Mine Road/County Road KE parking pin, river-wading shortcut or Little Garlic trail as access. Keep the distinct river falls separate and obtain an authoritative legal visitor route before publishing.",
+      "reviewLimitations": "Approximate 51 m match is highly suggestive but not a formally accepted source alias. Owner-reported private-land comments are historical and not a current surveyed ownership determination. Online comment arguments about navigable waterways are not an approved safe walking route or a land-tenure opinion.",
+      "nextEvidence": "Resolve official source alias Lower Big Garlic versus Big Garlic GIS #215; confirm current parcel/owner rules and a complete permitted bank-to-view route, approved visitor parking and seasonal safety by published manager/road records. Never route via private banks, river wading, Gold Mine bridge or the separate Little Garlic trail.",
       "sourceLinks": [
         {
-          "label": "TNC live reserve fee-polygon query",
-          "url": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
-        },
-        {
-          "label": "TNC reserve hiking and vehicle restrictions",
-          "url": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/"
-        },
-        {
-          "label": "USGS Skanee Road bridge coordinates",
-          "url": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
-        },
-        {
-          "label": "NBI road bridge #504 location",
-          "url": "https://bridgecondition.com/bridge/michigan/mi-000000000000504"
-        },
-        {
-          "label": "Baraga County Road Commission authority/contact",
-          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
-        },
-        {
-          "label": "Baraga County official GIS parcel viewer",
-          "url": "https://www.baragacounty.org/government/departments/equalization/"
-        },
-        {
-          "label": "2025 CRC flood/Skanee road updates",
-          "url": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
-        },
-        {
-          "label": "Visit Keweenaw 2025 pull-off and gorge-rim report (not a parking authorization)",
-          "url": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/"
-        },
-        {
-          "label": "Baraga Road Commission official contact",
-          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
-        },
-        {
-          "label": "Baraga Equalization parcel authority",
-          "url": "https://www.baragacounty.org/government/departments/equalization/"
-        }
-      ],
-      "routeAudit": {
-        "outcome": "not-cleared",
-        "segments": [
-          {
-            "label": "Waterfall geography",
-            "status": "verified-geography",
-            "finding": "GIS #119 at 46.831054,-88.252067 matches independent lower-gorge falls point; not a parking location or approved footpath.",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
-          },
-          {
-            "label": "Protected land ownership",
-            "status": "documented-not-live",
-            "finding": "Verified TNC fee ownership of the natural GIS #119 waterfall from live public layer OBJECTID 8370. Layer PUB_ACCESS is Restricted Access. Skanee public bridge is outside fee polygon; 100m east sample is inside, but this cannot establish parking, road rights or actual route. TNC hiking permission applies subject to preserve rules.",
-            "source": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson"
-          },
-          {
-            "label": "Skanee Road public bridge",
-            "status": "verified-geography",
-            "finding": "USGS stream site and NBI #504 identify bridge near 46.8332,-88.2586, outside TNC fee-owned reserve polygon. Bridge passability and 2025 flood status are not parking/roadside permission or live 2026 road clearance.",
-            "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
-          },
-          {
-            "label": "Roadside arrival and parking",
-            "status": "not-cleared",
-            "finding": "TNC polygon shows sample 100m east of bridge inside reserve. Actual two-track/turnout not independently mapped, and no Baraga CRC approval or current road reconstruction/plowing confirmation exists. No vehicle access on TNC preserve.",
-            "source": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
-          },
-          {
-            "label": "Dry-ground viewpoint and trail",
-            "status": "not-cleared",
-            "finding": "Half-mile rough east-bank path is described in visitor materials; historical field report required river crossing for its close view and reports hazardous water. Continuous authorized and non-fording access not established.",
-            "source": "https://www.gowaterfalling.com/waterfalls/slateriver.shtml"
-          },
-          {
-            "label": "Upstream Arvon route identity",
-            "status": "conflicting",
-            "finding": "County brochure labels Arvon Road slate-quarry approach as Slate River Falls; Quartzite/Black Slate cluster has separate mapped points at that road. No valid connection to GIS #119 lower gorge.",
-            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
-          },
-          {
-            "label": "Live conditions",
-            "status": "not-cleared",
-            "finding": "2025 Baraga CRC flood updates listed Skanee Road as passable with caution and the damaged Skanee Road approach toward Slate River; no 2026 confirmation for turnouts, road reconstruction or dry trail conditions.",
-            "source": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
-          }
-        ]
-      },
-      "researchPage": "/upper-peninsula-waterfalls/research/slate-river-falls/",
-      "accessDecision": {
-        "sourceFile": "data/up-waterfall-slate-river-access-decision.json",
-        "publicGuideEligible": false,
-        "requestsSent": false
-      }
-    },
-    {
-      "gisObjectId": 68,
-      "name": "Upper Silver Falls",
-      "county": "BARAGA",
-      "status": "12km-same-name-location-discrepancy",
-      "publicAccess": "research-only-geographic-identity-unresolved",
-      "publicationEligible": false,
-      "title": "Upper Silver Falls #68: not the upper picnic-site chute",
-      "summary": "GIS Upper Silver Falls #68 is at 46.681143,-88.329766, roughly 12 km south of Lower Silver Falls #110 46.792674,-88.335692. Specialist field account names an upper drop only ~0.25 miles upstream from lower picnic falls. No valid exact GIS match for that informal upper chute; do NOT attach #68 to lower Silver visitor guide or send visitors on upstream riverbank routes.",
-      "guidance": "Do not treat source #68 as the short upstream drops above Lower Silver Falls. No verified trailhead or access rights exist for this separate 12-km-distant research marker.",
-      "reviewLimitations": "Independent account's quarter-mile upstream chute location does not agree with GIS #68, and two different river features may share the Upper Silver label.",
-      "nextEvidence": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching.",
-      "sourceLinks": [
-        {
-          "label": "Source Michigan waterfall GIS",
+          "label": "Michigan state geographic waterfall GIS",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "Independent lower and upper visitor descriptions",
-          "url": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          "label": "Source evidence 1",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
         },
         {
-          "label": "Lower picnic falls coordinates",
-          "url": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml"
+          "label": "Source evidence 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/big-garlic-falls/"
+        },
+        {
+          "label": "Source evidence 3",
+          "url": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
         }
       ],
       "routeAudit": {
+        "reviewed": "2026-10-31",
         "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
         "segments": [
           {
-            "label": "Geographic identity",
-            "status": "not-cleared",
-            "finding": "Upper #68 12km south of lower #110, not quarter-mile upstream chute",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "label": "Which waterfall GIS #215 represents",
+            "status": "verified-geography",
+            "finding": "GIS #215 is ~51 m from independently mapped LOWER Big Garlic and ~3.87 km from separate main Big Garlic Falls. Retain a probable identity link, not an exact official alias.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
           },
           {
-            "label": "Land manager",
-            "status": "not-cleared",
-            "finding": "No confirmed public land title/manager for #68",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "label": "Land rights and reporting",
+            "status": "documented-not-live",
+            "finding": "2018/2019 landowner or nearby-owner comments on specialist source report private banks; current parcel boundaries and rights are not independently confirmed.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
           },
           {
-            "label": "Road",
+            "label": "Road/bridge separation",
             "status": "not-cleared",
-            "finding": "Lower Falls Rd does not establish road to feature #68",
-            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+            "finding": "Main Big Garlic's Gold Mine Road bridge is ~3.9 km from GIS #215 and has a separate reported 2021 posting. No Big Garlic bridge access permission is established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/big-garlic-falls/"
           },
           {
-            "label": "Visitor parking",
+            "label": "Designated visitor parking",
             "status": "not-cleared",
-            "finding": "No approved public parking for distinct GIS #68",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "No officially designated legal visitor parking for LOWER Big Garlic is documented. Do not promote shoulder/bridge parking from a third-party account.",
+            "source": "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/"
           },
           {
-            "label": "Trail",
+            "label": "Visitor trail versus river passage",
             "status": "not-cleared",
-            "finding": "No approved approach to #68; short upstream rough path in field guide is unrelated",
-            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+            "finding": "No authorized continuous land trail exists in current published evidence; wading/river-law arguments and public Little Garlic Falls trail do not solve access to Big Garlic.",
+            "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
           },
           {
-            "label": "Current conditions",
+            "label": "Current ownership, restrictions and conditions",
             "status": "not-cleared",
-            "finding": "No current access status",
+            "finding": "Neither a fresh parcel review nor published permission and seasonal trail/river safety is available; research only.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           }
         ]

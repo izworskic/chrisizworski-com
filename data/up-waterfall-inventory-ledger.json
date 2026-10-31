@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "issue": 1258,
-  "reviewed": "2026-10-28",
+  "reviewed": "2026-10-31",
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
@@ -3669,14 +3669,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "primary-DNR-natural-falls-at-brook-mouth-private-posted-reported",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-delta"
+      "checked": "2026-10-31",
+      "nextAction": "Find a current published parcel/right-of-way layer for the mouth, current posting/owner-approved visitor route and official legal trailhead/parking specifically connected to the falls; do not substitute farther-upstream DNR fishing access or boat-trip scouting.",
+      "batch": "county-delta",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "27",
+      "classification": "verified-brook-mouth-geography-posted-private-visitor-access-not-established",
+      "accessAssessment": "Michigan DNR fisheries report 2018-248 documents the single waterfall where Hunters Brook enters the Escanaba River, a fish-migration barrier. World Waterfall Database identifies Hunters Brook Falls as an unofficial name and reports privately owned/posting; American Whitewater locates the confluence feature and observes a residence immediately upstream. DNR's general Hunters Brook public fishing access and CR426 parking project apply to OTHER stream reaches and cannot authorize public access to the mouth falls.",
+      "evidence": [
+        "https://www.michigan.gov/-/media/Project/Websites/dnr/Documents/Fisheries/Status/folder4/statusreport_hunters_brook.pdf?rev=74e2fa629c024423b55eee2a2064118c",
+        "https://www.worldwaterfalldatabase.com/waterfall/Hunters-Brook-Falls-13167",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/929/main",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3692,14 +3702,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "visitor-bureau-unimproved-trail-parking-and-manager-unverified",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-10-31",
+      "nextAction": "Find current DNR parcel/forest recreation map with precise #191 ownership and permitted arrival, public signed lot or designated roadside parking, mapped unimproved trail to the SAME waterfall and land-manager seasonal notices; check claims around Whitefish River Township Park independently.",
+      "batch": "county-alger",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "27",
+      "classification": "identity-corroborated-bureau-unimproved-trail-unverified-arrival",
+      "accessAssessment": "Michigan GIS #191 at 46.217693,-87.050041 is about 172 m from a separately published USGS GNIS #1622606 position at 46.218839,-87.051534. Munising Visitor Bureau lists Whitefish Falls four miles NW of Trenary and an unimproved short trail (15 minutes or less) but NO site-specific parking address, named road turn, permit, official landowner or mapped walking line. A photographed independent visit describes Michigan State Forest and an informal footpath, yet provides no authoritative tract/lot evidence. A separate waterfall aggregation labels 'Whitefish River Township Park' at 46.2122,-86.9867 roughly 4.9 km EAST of state GIS #191; do NOT use as the fall, lot or legal trailhead.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.munising.org/activities/whitefish-falls/",
+        "https://www.miroadtrip.com/locations/whitefish-falls",
+        "https://waterfallsamerica.com/waterfalls/whitefish-falls-mi-1622606/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/",
+        "https://www.usgs.gov/us-board-on-geographic-names/what-geographic-names-information-system-gnis"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4150,14 +4172,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "state-gis-point-probably-lower-big-garlic-private-owner-reports",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-10-31",
+      "nextAction": "Resolve official source alias Lower Big Garlic versus Big Garlic GIS #215; confirm current parcel/owner rules and a complete permitted bank-to-view route, approved visitor parking and seasonal safety by published manager/road records. Never route via private banks, river wading, Gold Mine bridge or the separate Little Garlic trail.",
+      "batch": "county-marquette",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "27",
+      "classification": "probable-lower-big-garlic-identity-private-bank-visit-not-established",
+      "accessAssessment": "Michigan GIS #215 46.682069,-87.573100 lies ~51 m from independent Lower Big Garlic Falls 46.68166,-87.57340, but ~3.87 km from the separately named main Big Garlic Falls 46.66763,-87.61922. Geographic name-only linking to main/upper cascades is incorrect. Lower Big Garlic specialist field report includes multiple landowner/nearby-owner comments (2018-2019) reporting private banks and no public access. Main Big Garlic bridge has a separate 2021 posted warning. Arguments in comments about wading/navigability are not a legal determination or safe visitor route. The official NCTA public Little Garlic Falls spur follows a DIFFERENT river and is not a route to Big Garlic #215.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/big-garlic-river/lower-big-garlic-falls/",
+        "https://www.waterfallsofthekeweenaw.com/big-garlic-river/big-garlic-falls/",
+        "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf"
+      ]
     },
     {
       "source": "curated-non-gis",
@@ -4357,5 +4389,5 @@
       ]
     }
   ],
-  "lastBatch": "26"
+  "lastBatch": "27"
 }

@@ -16,19 +16,19 @@
         160,
         45,
         46,
+        190,
+        191,
         192,
         213,
-        119,
-        91,
-        190
+        119
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        191,
-        154,
         215,
+        91,
+        154,
         150,
         151,
         68,
@@ -226,6 +226,36 @@
       "blockingGate": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance."
     },
     {
+      "gisObjectId": 190,
+      "name": "Hunters Brooks Falls",
+      "county": "DELTA",
+      "river": "HUNTERS BROOK",
+      "lat": 45.956376,
+      "lng": -87.241148,
+      "cluster": "DELTA / HUNTERS BROOK",
+      "priorityScore": 104,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Find a current published parcel/right-of-way layer for the mouth, current posting/owner-approved visitor route and official legal trailhead/parking specifically connected to the falls; do not substitute farther-upstream DNR fishing access or boat-trip scouting."
+    },
+    {
+      "gisObjectId": 191,
+      "name": "Whitefish Falls",
+      "county": "ALGER",
+      "river": "WHITEFISH RIVER",
+      "lat": 46.217693,
+      "lng": -87.050041,
+      "cluster": "ALGER / WHITEFISH RIVER",
+      "priorityScore": 103,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Find current DNR parcel/forest recreation map with precise #191 ownership and permitted arrival, public signed lot or designated roadside parking, mapped unimproved trail to the SAME waterfall and land-manager seasonal notices; check claims around Whitefish River Township Park independently."
+    },
+    {
       "gisObjectId": 192,
       "name": "Au Train Falls",
       "county": "ALGER",
@@ -271,6 +301,21 @@
       "blockingGate": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json."
     },
     {
+      "gisObjectId": 215,
+      "name": "Big Garlic Falls",
+      "county": "MARQUETTE",
+      "river": null,
+      "lat": 46.682069,
+      "lng": -87.5731,
+      "cluster": "MARQUETTE / UNKNOWN",
+      "priorityScore": 94,
+      "priorityReason": "Named priority for authoritative source review",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Resolve official source alias Lower Big Garlic versus Big Garlic GIS #215; confirm current parcel/owner rules and a complete permitted bank-to-view route, approved visitor parking and seasonal safety by published manager/road records. Never route via private banks, river wading, Gold Mine bridge or the separate Little Garlic trail."
+    },
+    {
       "gisObjectId": 91,
       "name": "Upper Falls",
       "county": "BARAGA",
@@ -286,36 +331,6 @@
       "blockingGate": "Obtain mapped public trail-to-GIS-#91 view with land title/easement evidence or establish same-name feature mixup. Do not route onto private river property or along rail tracks."
     },
     {
-      "gisObjectId": 190,
-      "name": "Hunters Brooks Falls",
-      "county": "DELTA",
-      "river": "HUNTERS BROOK",
-      "lat": 45.956376,
-      "lng": -87.241148,
-      "cluster": "DELTA / HUNTERS BROOK",
-      "priorityScore": 92,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 191,
-      "name": "Whitefish Falls",
-      "county": "ALGER",
-      "river": "WHITEFISH RIVER",
-      "lat": 46.217693,
-      "lng": -87.050041,
-      "cluster": "ALGER / WHITEFISH RIVER",
-      "priorityScore": 91,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
       "gisObjectId": 154,
       "name": "Bushy Creek Falls",
       "county": "MARQUETTE",
@@ -324,21 +339,6 @@
       "lng": -87.694124,
       "cluster": "MARQUETTE / YELLOW DOG RIVER",
       "priorityScore": 83,
-      "priorityReason": "Named priority for authoritative source review",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 215,
-      "name": "Big Garlic Falls",
-      "county": "MARQUETTE",
-      "river": null,
-      "lat": 46.682069,
-      "lng": -87.5731,
-      "cluster": "MARQUETTE / UNKNOWN",
-      "priorityScore": 82,
       "priorityReason": "Named priority for authoritative source review",
       "publicationEligible": false,
       "reviewStatus": "needs-source-discovery",
