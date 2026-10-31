@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
+import {createRequire} from "node:module";
+const require=createRequire(import.meta.url);
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const data=JSON.parse(read("public/porcupine-mountains/trail-reference-catalog.json"));
@@ -55,4 +57,20 @@ test("map inspection highlights ONLY existing named DNR segments without inventi
  assert.match(gis,/NOT a verified continuous route/);
  assert.match(gis,/source line fragment/);
  assert.ok(!/walkingTimeMinutes|drivingETA|hikingETA|routeEligible:\s*true/.test(js+gis));
+});
+
+// The source naming variants are real published GIS labels, not fuzzy matches.
+test("map inspection finds both reviewed DNR name variants without inventing routes",()=>{
+ const {trailSourceMatch}=require("../public/assets/porkies-route-evidence.js");
+ const features=JSON.parse(read("public/porcupine-mountains/trail-reference.geojson")).features;
+ const selected=name=>features.filter(feature=>trailSourceMatch(feature.properties.name,name));
+ assert.equal(selected("East River Trail").length,2,"East River has two separately labelled features");
+ assert.equal(selected("Correction Line Trail").length,13,"Correction Line has 13 specifically labelled features");
+ assert.equal(selected("Cross Trail").length,38,"Cross has 38 combined-label features, never route-certified");
+ assert.ok(selected("Cross Trail").every(f=>f.properties.name==="Porcupine Mountain Wilderness Cross Trail Correction Line Trail"));
+ assert.equal(selected("Summit Peak Tower Trail").length,0,"do not manufacture missing summit tower geometry");
+ assert.equal(selected("Visitor Center Nature Trail").length,0,"do not manufacture missing nature-trail geometry");
+ assert.equal(trailSourceMatch("Porcupine Mountain Wilderness Cross Trail Correction Line Trail","Correction Line Trail"),false,"ambiguous combined geometry must not be counted as proven Correction Line segments");
+ assert.equal(trailSourceMatch("Porcupine Mountains East River Trail","West River Trail"),false);
+ assert.ok(selected("East River Trail").every(f=>f.properties.routingCertified===false));
 });
