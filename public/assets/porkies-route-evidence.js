@@ -15,9 +15,19 @@
   return c==="south-boundary"||c==="m107"||c==="summit-road";
  }
  function winter(season){return season==="winter"||season==="reopening";}
+ // Source IDs checked against the Michigan Geographic Framework road layer in the
+ // western South Boundary corridor beyond Pinkerton. DNR's closure notice covers
+ // Headquarters Road to Pinkerton, not every line named South Boundary Road.
+ // These IDs identify GIS linework, NEVER a currently open or legal driving route.
+ const WEST_OF_PINKERTON_IDS=new Set([9688,9685,9684,9533,9429,9372,9218,9121,9107,9071,9042,8963,8910,8892,8884]);
+ function westernAccessSource(feature){
+  return feature?.properties?.corridor==="south-boundary" && WEST_OF_PINKERTON_IDS.has(Number(feature?.properties?.id));
+ }
+ function seasonalClosureSource(feature){
+  return restricted(feature?.properties?.corridor)&&!westernAccessSource(feature);
+ }
  function roadStyle(feature) {
-  const corridor=feature?.properties?.corridor;
-  if(restricted(corridor))return winter(currentSeason())||currentSeason()==="prewinter"
+  if(seasonalClosureSource(feature))return winter(currentSeason())||currentSeason()==="prewinter"
    ?{color:"#ad4839",weight:4,opacity:.95,dashArray:"7,6"}
    :{color:"#b47d3c",weight:3,opacity:.85,dashArray:"9,5"};
   return {color:"#496e84",weight:3,opacity:.72};
@@ -85,13 +95,13 @@
     onEachFeature:(feature,part)=>{
      const p=feature.properties||{};
      const road=kind==="roads";
-     const caut=road?(restricted(p.corridor)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
+     const caut=road?(westernAccessSource(feature)?"DNR identifies County Road 519 as separate western access to Presque Isle. This mapped South Boundary segment is not proof of an open gate, legal turn, drivable route or plowing." : seasonalClosureSource(feature)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
      part.bindPopup("<strong>"+safe(p.name)+"</strong><p>"+safe(caut)+"</p><p>Official source record "+safe(p.id)+". Not a generated hiking or driving route.</p>");
     }
    }).addTo(atlas);
    layers[kind]=layer;
    button?.setAttribute("aria-pressed","true");
-   message(kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines from the 296-record research extract. Red dashed roads have documented seasonal vehicle restrictions; current opening is not inferred.");
+   message(kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines. Red dashed lines indicate the DNR's interior seasonal vehicle restriction. The 15 reviewed road-source segments west of Pinkerton remain ordinary blue reference lines, not confirmation of open roads, legal turns or plowing.");
    return true;
   }catch(err){
    button?.setAttribute("aria-pressed","false");
@@ -124,7 +134,7 @@
  }
  function refresh(){
   if(layers.roads)layers.roads.setStyle(roadStyle);
-  if(layers.roads)message("Road restrictions shown for the selected date. Red dashed lines are flagged as seasonally restricted; geometry is not live closure data.");
+  if(layers.roads)message("Road restrictions shown for the selected date. The western 15 source segments are not part of the documented interior closure and remain blue; neither color confirms current road conditions.");
  }
  function init(){
   const buttonT=root.document.getElementById("porkies-trails-toggle");
@@ -140,6 +150,6 @@
   atlas=root.PorkiesAtlas?.map||null;
   root.addEventListener("porkies:map-ready",()=>{atlas=root.PorkiesAtlas?.map||null;});
  }
- if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle,trailSourceMatch};
+ if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle,trailSourceMatch,westernAccessSource,seasonalClosureSource};
  if(root.document)init();
 })(typeof window!=="undefined"?window:globalThis);
