@@ -52,7 +52,9 @@ test("winter and May do not certify scenic roads",()=>{
    assert.equal(x.key,"limited");
    assert.equal(x.roadOpenVerified,false);
    assert.equal(x.routeCertified,false);
-   assert.match(x.heading,/unverified/);
+   assert.match(x.reasons.join(" "),/seasonally restricted/);
+   if(id==="escarpment")assert.match(x.heading,/Poor fit for a short outing/);
+   else assert.match(x.heading,/unverified/);
   }
  const winter=summary(byId("winter"),ctx("2027-01-15"),seasonFor);
  assert.match(winter.reasons.join(" "),/same-day snow/);
