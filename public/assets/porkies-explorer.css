@@ -273,3 +273,15 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 /* County Road 519 provenance: neutral research overlay, never live road status. */
 .route-evidence-key .key-west{border-color:#7753a1}
 .west-corridor-field-note .west-roadwork-note{border-left:3px solid #82629e;padding-left:13px}
+
+/* October 31 access proof: editorial source summary, no fabricated open state. */
+.west-corridor-field-note .access-proof-lead{border-left:4px solid #ac7b4b;padding:11px 14px;margin:15px 0;background:#fff8ec;color:#493d2a}
+.west-corridor-field-note .access-proof-lead .eyebrow{font-size:.7rem;letter-spacing:.09em;margin:0 0 4px;color:#69543b}
+.west-corridor-field-note .access-proof-lead p:last-child{margin:0;font-size:.88rem;line-height:1.6}
+.west-corridor-field-note .porkies-access-proof{background:#fffdf5;border:1px solid #d1cbba;border-radius:5px;padding:12px 15px;margin:12px 0 18px}
+.west-corridor-field-note .porkies-access-proof summary{color:#193d34;font-weight:750;cursor:pointer;font-size:.9rem;line-height:1.5}
+.west-corridor-field-note .porkies-access-proof summary:focus-visible{outline:3px solid #a56834;outline-offset:3px}
+.west-corridor-field-note .access-proof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 21px;margin:8px 0}
+.west-corridor-field-note .access-proof-grid p{margin:6px 0;font-size:.82rem;line-height:1.6}
+.west-corridor-field-note .proof-footnote{font-size:.76rem;line-height:1.5;border-top:1px solid #d1cbba;padding-top:10px;margin:12px 0 2px}
+@media(max-width:740px){.west-corridor-field-note .access-proof-grid{grid-template-columns:1fr}.west-corridor-field-note .porkies-access-proof{padding:12px}}
