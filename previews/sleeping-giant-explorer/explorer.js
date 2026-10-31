@@ -17,6 +17,13 @@
  const mappedDist=document.getElementById('mapped-distance'),gap=document.getElementById('gap-note');
  const bikePanel=document.getElementById('bike-breakdown'),mapStatus=document.getElementById('map-status');
  const mapFocus=document.getElementById('map-focus'),mapZoomStatus=document.getElementById('map-zoom-status');
+ const mapRoutePicker=document.getElementById('map-route-picker');
+ const featured=document.getElementById('featured-adventure'),featuredPhoto=document.getElementById('featured-photo');
+ const featuredImage=document.getElementById('featured-image'),featuredCredit=document.getElementById('featured-credit');
+ const focusTitle=document.getElementById('focus-title'),focusStory=document.getElementById('focus-story');
+ const focusDistance=document.getElementById('focus-distance'),focusTime=document.getElementById('focus-time');
+ const focusAccess=document.getElementById('focus-access'),focusStatus=document.getElementById('focus-status');
+ const focusMapButton=document.getElementById('focus-map-button');
 
  const geoElement=document.getElementById('map-geographic');
  const geoFrame=document.getElementById('map-viewport');
@@ -168,6 +175,79 @@
   'head-of-the-giant':'No bicycle rack is documented where the Head Trail becomes a walk.',
   'nanabosho-lookout':'No bicycle rack is documented where the Nanabosho approach becomes a walk.'
  };
+ const verifiedPhotos={
+  'sea-lion':{
+   filename:'Diabase_dyke_formation_known_as_the_sea_lion_in_Sleeping_Giant_Provincial_Park_in_Ontario_02.jpg',
+   alt:'The Sea Lion diabase rock arch viewed from a forest trail above Lake Superior',
+   author:'Mcdougallgregor',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/'
+  },
+  'top-of-the-giant':{
+   filename:'View_from_the_top_of_the_Sleeping_Giant_Trail.jpg',
+   alt:'Rocky cliff and forest viewed from the Top of the Giant Trail',
+   author:'Tariq Hossenbux',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/'
+  },
+  'middlebrun-beach':{
+   filename:'Middlebrun_Bay_Rock.jpg',
+   alt:'Pink shoreline rock at Middlebrun Bay beside Lake Superior',
+   author:'Sharon Mollerus',license:'CC BY 2.0',licenseUrl:'https://creativecommons.org/licenses/by/2.0/'
+  }
+ };
+ const walkingTimes={
+  'sea-lion':'About 1 hour',
+  'top-of-the-giant':'6–10 hours on foot',
+  'head-of-the-giant':'Not published',
+  'nanabosho-lookout':'Not published',
+  'middlebrun-beach':'Not published',
+  'pass-lake-overlook':'Not published'
+ };
+ const accessNotes={
+  'sea-lion':'Begin at South Kabeyun parking. Ontario Parks describes a difficult rocky approach. Trail conditions and the exact mapped parking connection are not verified here.',
+  'top-of-the-giant':'Begin at South Kabeyun parking. Permitted cycling ends at the Talus Lake junction, where Ontario Parks documents a bike rack. Allow daylight for the full return.',
+  'head-of-the-giant':'Begin at South Kabeyun parking. The permitted Sawyer Bay bicycle approach has no documented rack at the walk transition. Plan for the full steep return.',
+  'nanabosho-lookout':'Begin at South Kabeyun parking. Some cycling is permitted on the approach, but no rack is documented where the walk begins. Check access with Ontario Parks.',
+  'middlebrun-beach':'This beach walk has its own trailhead, separate from the long Giant climbs. Confirm parking and current access with Ontario Parks before travelling.',
+  'pass-lake-overlook':'This short sandstone lookout walk has its own trailhead. Ontario Parks has not supplied a complete walking time; confirm current access and parking.'
+ };
+ let photoRequest=0;
+ function updateFeatured(route){
+  featured.dataset.selectedTrail=route.id;
+  focusTitle.textContent=route.name;
+  focusStory.textContent=summaries[route.id]||'Choose a trail to learn what makes this part of Sleeping Giant distinctive.';
+  focusDistance.textContent=showDistance(route.roundTripKm);
+  focusTime.textContent=walkingTimes[route.id]||'Not published';
+  focusAccess.textContent=(accessNotes[route.id]||'Check Ontario Parks before travelling.')+
+   ' This planner does not confirm a trail is open.';
+  focusStatus.textContent='Showing '+route.name+'. No live trail status is available.';
+  const photo=verifiedPhotos[route.id],request=++photoRequest;
+  if(!photo){
+   featuredPhoto.hidden=true;
+   featured.classList.add('no-photo');
+   return;
+  }
+  // Never show the previous trail's photograph while the next one loads.
+  featuredPhoto.hidden=true;
+  featured.classList.add('no-photo');
+  const source='https://commons.wikimedia.org/wiki/File:'+photo.filename;
+  const src='https://commons.wikimedia.org/wiki/Special:FilePath/'+photo.filename+'?width=960';
+  const preloader=new Image();
+  preloader.onload=()=>{
+   if(request!==photoRequest)return;
+   featuredImage.src=src;
+   featuredImage.alt=photo.alt;
+   featuredCredit.replaceChildren();
+   const author=document.createElement('a');author.href=source;author.textContent=photo.author;
+   const license=document.createElement('a');license.href=photo.licenseUrl;license.textContent=photo.license;
+   featuredCredit.append(author,' · ',license,' · cropped');
+   featuredPhoto.hidden=false;
+   featured.classList.remove('no-photo');
+  };
+  preloader.onerror=()=>{
+   if(request!==photoRequest)return;
+   featuredPhoto.hidden=true;
+   featured.classList.add('no-photo');
+  };
+  preloader.src=src;
+ }
  let currentId='sea-lion';
  function el(name,attributes,parent){
   const element=document.createElementNS(NS,name);
@@ -211,10 +291,21 @@
    :'Only Ontario Parks’ published return-walk times are used here. For other trails, take the distance as a starting point, not a promise about how long your day will take.';
   document.getElementById('result-head').textContent=fitting?
    'A few trails may fit the hours you have.':'Let the landscape and your available time guide the choice.';
+  const matching=results.filter(score=>score.interestMatched);
+  const first=matching.find(score=>score.classification==='planning_candidate')||matching[0]||results[0];
+  return first?.id||currentId;
  }
  function drawRoute(id){
   const route=routes.get(id);if(!route)return;
   currentId=id;
+  mapRoutePicker.value=id;
+  updateFeatured(route);
+  for(const [cardId,card] of cards){
+   const selected=cardId===id;
+   card.classList.toggle('is-selected',selected);
+   const action=card.querySelector('[data-select]');
+   if(action)action.setAttribute('aria-pressed',String(selected));
+  }
   const overlay=overlays.get(id);
   map.setAttribute('aria-label',overlay
     ?'Research-only trail outline for '+route.name+', with an approximate parking area indicated separately. Not a navigation map.'
@@ -288,7 +379,15 @@
   focusMap('overview');
  }
  mapFocus.addEventListener('change',()=>focusMap(mapFocus.value));
- planner.addEventListener('change',()=>{updateDecisions();drawRoute(currentId)});
+ mapRoutePicker.addEventListener('change',()=>drawRoute(mapRoutePicker.value));
+ focusMapButton.addEventListener('click',()=>{
+  drawRoute(currentId);
+  document.getElementById('map-section').scrollIntoView({
+   behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',
+   block:'start'
+  });
+ });
+ planner.addEventListener('change',()=>drawRoute(updateDecisions()));
  cardList.addEventListener('click',event=>{
    const button=event.target.closest('[data-select]');
    if(!button)return;
@@ -299,5 +398,5 @@
      window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
  });
  initGeo();
- updateDecisions();drawRoute(currentId);
+ drawRoute(updateDecisions());
 })();
