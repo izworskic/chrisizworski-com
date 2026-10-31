@@ -27,7 +27,7 @@ on:
       - '.github/workflows/up-waterfalls-browser-smoke.yml'
   workflow_dispatch:
 concurrency:
-  group: up-waterfalls-${{ github.event.pull_request.number || github.ref }}
+  group: up-waterfalls-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 permissions:
   contents: read
