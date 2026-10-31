@@ -1,9 +1,9 @@
 {
-  "date": "2026-10-30",
-  "updated": "2026-10-30T17:03:25.134Z",
-  "body": "Southwest and Southeast Lower Michigan are at peak color with 100 percent modeled foliage change, while Central and Saginaw Bay shows 33 percent in the falling phase. All Upper Peninsula regions and the Tip of the Mitt remain in early stages at 7 percent. Northeast Lower sits between at modest levels as the season progresses unevenly across the state.\n\nThis weekend, mixed skies dominate most areas with highs from 56 to 68 degrees. Eastern U.P. and Northwest Lower will see some rain, which may accelerate leaf drop in those regions. Cooler overnight lows near 32 to 40 degrees support continued color development, though the rain could dampen viewing conditions in affected areas.\n\nFor peak foliage viewing this weekend, Southeast Lower Michigan along US-12 through the Irish Hills offers the best combination of color and weather, with mixed skies and highs near 68 degrees. Alternatively, Southwest Lower's Blue Star Highway along the Saugatuck dunes provides similar peak conditions with slightly cooler temperatures.",
+  "date": "2026-10-31",
+  "updated": "2026-10-31T16:09:59.574Z",
+  "body": "The model shows stark regional variation in fall color progression. Southwest and Southeast Lower Michigan lead significantly at 79 percent color, both in falling phase. Central and Saginaw Bay follows at 23 percent falling. All Upper Peninsula regions and the Tip of the Mitt remain at 7 percent in down phase, indicating minimal color change statewide except in the southern Lower Peninsula.\n\nThis weekend's rain across most regions will dampen foliage viewing conditions, though temperatures remain mild with highs near 59 to 68 degrees. The Northeast Lower and Central areas show mixed skies rather than rain, offering slightly better visibility. Cool overnight lows ranging from 30 to 42 degrees may accelerate color development in coming days.\n\nFor optimal weekend viewing, the Southwest Lower Peninsula offers the most advanced color at 79 percent. Blue Star Highway along the Saugatuck dunes provides a scenic drive through peak fall conditions, though some rain is expected. Alternatively, the Southeast Lower's Irish Hills along US-12 presents similar color intensity with comparable weather.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-10-30T17:03:21.760Z",
+  "conditionsUpdated": "2026-10-31T16:09:56.122Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -17,7 +17,7 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
@@ -33,7 +33,7 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
@@ -49,7 +49,7 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
@@ -65,7 +65,7 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
@@ -81,13 +81,13 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 33,
+      "modeledPercent": 23,
       "source": {
         "drivers": [
           "regional climatology",
@@ -97,13 +97,13 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 100,
+      "modeledPercent": 79,
       "source": {
         "drivers": [
           "regional climatology",
@@ -113,13 +113,13 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 100,
+      "modeledPercent": 79,
       "source": {
         "drivers": [
           "regional climatology",
@@ -129,7 +129,7 @@
         "anchorShiftDays": -8,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 47,
+        "satelliteAgeDays": 48,
         "satelliteWeight": 0
       }
     }
