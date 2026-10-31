@@ -6,7 +6,9 @@ on:
       - 'lib/pukaskwa/**'
       - 'scripts/pukaskwa/**'
       - 'tests/pukaskwa-conditions.test.js'
+      - 'tests/pukaskwa-condition-monitor.test.js'
       - '.github/workflows/pukaskwa-conditions-probe.yml'
+      - '.github/workflows/pukaskwa-conditions-monitor.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,6 +24,6 @@ jobs:
         with:
           node-version: '22'
       - name: Run deterministic source-logic tests
-        run: node --test tests/pukaskwa-conditions.test.js
+        run: node --test tests/pukaskwa-conditions.test.js tests/pukaskwa-condition-monitor.test.js
       - name: Verify the real Parks Canada table can be safely parsed
         run: node scripts/pukaskwa/refresh-conditions.mjs
