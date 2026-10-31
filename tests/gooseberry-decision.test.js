@@ -94,3 +94,24 @@ test('Gooseberry API: always says park access unverified and contains no invente
  assert.match(file,/flowMeasurement:'UNAVAILABLE_NO_CONTINUOUS_USGS_DATA'/);
  assert.match(file,/X-Robots-Tag/);
 });
+
+test('Gooseberry discovery: Tools card, ItemList schema, registry and sitemap all point to one canonical',()=>{
+ const root=path.join(__dirname,'..');
+ const toolsHtml=fs.readFileSync(path.join(root,'public/tools/index.html'),'utf8');
+ const sitemap=fs.readFileSync(path.join(root,'public/sitemap.xml'),'utf8');
+ const registry=JSON.parse(fs.readFileSync(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));
+ const circle=fs.readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+ const canonical='https://chrisizworski.com/gooseberry-falls/';
+ assert.equal(toolsHtml.split('data-tool-id="gooseberry-falls"').length-1,1);
+ const tag='<script type="application/ld+json">';
+ const begin=toolsHtml.indexOf(tag);
+ assert.ok(begin>=0,'Tools JSON-LD is missing');
+ const end=toolsHtml.indexOf('</script>',begin);
+ assert.ok(end>begin,'Tools JSON-LD has no closing script');
+ const data=JSON.parse(toolsHtml.slice(begin+tag.length,end));
+ const list=data['@graph'].find(x=>x['@type']==='ItemList').itemListElement;
+ assert.equal(list.filter(x=>x.item?.url===canonical).length,1);
+ assert.equal(sitemap.split('<loc>'+canonical+'</loc>').length-1,1);
+ assert.equal(registry.tools.filter(x=>x.canonical===canonical).length,1);
+ assert.ok(circle.includes('href="/gooseberry-falls/"'));
+});
