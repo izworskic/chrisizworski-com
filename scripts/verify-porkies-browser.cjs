@@ -62,6 +62,8 @@ async function main(){
 
    need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
    const westNote=await page.locator('#west-corridor-field-note').innerText();
+   need(westNote.includes('September 22, 2026')&&westNote.includes('Johnson Road')&&westNote.includes('17 connected Presque Isle Road'),'township detour and expanded MGF road ledger absent '+device.name);
+   need(await page.locator('#west-corridor-field-note a[href*="wakefieldtownship.com/north-county-road-519-will-be-closed"]').count()>=1,'source-linked township notice missing '+device.name);
    need(westNote.includes('County Road 519')&&westNote.includes('2 of 10')&&westNote.includes('not an east-to-west shortcut'),device.name+' CR519 named route/pavement safety evidence missing');
    need(await page.locator('#west-corridor-field-note a[href*="michiganbusiness.org"]').count()===1,device.name+' county pavement source link missing');
    need(await page.locator('.trail-truth-card').count()===21,device.name+' source-cited 21-trail catalog missing');
@@ -98,6 +100,13 @@ async function main(){
      need(skiLines>=20,'Official DNR ski routes not rendered '+skiLines);
      const roadLines=await page.locator('.leaflet-porkies-road-evidence-pane path').count();
      need(roadLines>=50,'Official park-road centerline layer missing '+roadLines);
+     await page.locator('#porkies-west-toggle').click();
+     await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 17 mapped Presque Isle Road centerlines'),null,{timeout:25000});
+     need(await page.locator('#porkies-west-toggle').getAttribute('aria-pressed')==='true','western source geometry should be enabled');
+     const westLines=await page.locator('.leaflet-porkies-west-evidence-pane path').count();
+     need(westLines>=30&&westLines<=80,'reviewed 17+15 western reference linework missing/duplicated '+westLines);
+     await page.locator('#parking-map').screenshot({path:path.join(out,'desktop-west-519-source.png')});
+     report.screenshots.push('desktop-west-519-source.png');
      await page.locator('#parking-map').screenshot({path:path.join(out,'desktop-road-trail-evidence.png')});
      report.screenshots.push('desktop-road-trail-evidence.png');
      await page.locator('#travel-date').fill('2027-01-15');
@@ -126,6 +135,7 @@ async function main(){
      await page.locator('#porkies-trails-toggle').click();
      await page.locator('#porkies-roads-toggle').click();
      await page.locator('#porkies-ski-toggle').click();
+     await page.locator('#porkies-west-toggle').click();
    }
    await page.waitForFunction(()=>document.querySelector('#results h3')?.textContent.includes('Let one corner'),null,{timeout:10000});
    let overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
@@ -160,6 +170,10 @@ async function main(){
    need(await cr519.count()===0,device.name+' winter CR519 navigation has no verified complete road route; withhold directions');
    need((await page.locator('[data-parking-id="presque"] .access-date-note').innerText()).includes('County Road 519'),device.name+' missing source-described western approach');
    need(await page.locator('[data-parking-id="presque"] .parking-maplink').count()===1,device.name+' mapped parking point link missing in winter');
+   await page.locator('#travel-date').fill('2027-08-15');
+   await page.waitForFunction(()=>!document.querySelector('[data-parking-id="presque"] .parking-drive'),null,{timeout:5000});
+   need((await page.locator('[data-parking-id="presque"] .access-date-note').innerText()).includes('Johnson Road'),'summer west-side driving must remain withheld for unresolved work-zone');
+   await page.locator('#travel-date').fill('2027-01-15');
    await page.locator('#arrival').selectOption('east');
    await page.locator('#planner button[type=submit]').click();
    await page.waitForFunction(()=>!document.querySelector('[data-parking-id="presque"] .parking-drive'),null,{timeout:5000});
@@ -223,6 +237,8 @@ async function main(){
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
+  need((await page.locator('#west-corridor-field-note').innerText()).includes('September 22, 2026'),'no-JS township work-zone warning missing');
+  need(await page.locator('#porkies-west-toggle').count()===1,'source-only west layer control should exist without JS');
   need(await page.locator('details[data-trail="escarpment"] .trail-edition-warning').count()===1,'no JS source mileage discrepancy hidden');
   need((await page.locator('#routing-explainer').innerText()).includes('7 disconnected groups'),'source-only trail topology fallback missing');
   need(await page.locator('.parking-maplink').count()===6,'no JS parking map pin links missing');

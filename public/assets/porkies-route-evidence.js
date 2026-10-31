@@ -5,7 +5,8 @@
  "use strict";
  const BASE="/porcupine-mountains/",MAX_FEATURES={trails:819,roads:250},layers={};
  const pendingLoads={};
- const paths={trails:"trail-reference.geojson",roads:"park-road-reference.geojson",ski:"ski-reference.geojson"};
+ const paths={trails:"trail-reference.geojson",roads:"park-road-reference.geojson",ski:"ski-reference.geojson",west:"west-road-reference.geojson"};
+ let westEvidence=null;
  let atlas=null,evidence=null;
  function currentSeason(){
   const e=root.document.getElementById("travel-date");
@@ -32,6 +33,10 @@
    :{color:"#b47d3c",weight:3,opacity:.85,dashArray:"9,5"};
   return {color:"#496e84",weight:3,opacity:.72};
  }
+ // Purple means source geometry, never an open road, official detour, or drivable route.
+ function westStyle(f){return f?.properties?.corridor==="mgf-presque-isle-west-road"
+  ?{color:"#7753a1",weight:4,opacity:.88}
+  :{color:"#8766ae",weight:3.5,opacity:.9,dashArray:"5,6"};}
  function skiStyle(){return {color:"#496f9f",weight:3,opacity:.82,dashArray:"7,3"};}
  function trailStyle(){
   return {color:"#256c57",weight:2.5,opacity:.7,dashArray:"4,4"};
@@ -62,6 +67,32 @@
   evidence=data;
   return data;
  }
+ async function loadWest(){
+  if(westEvidence)return westEvidence;
+  const [m,g]=await Promise.all([
+   root.fetch(BASE+"west-road-evidence.json",{credentials:"same-origin"}),
+   root.fetch(BASE+paths.west,{credentials:"same-origin"})
+  ]);
+  if(!m.ok||!g.ok)throw Error("missing western corridor source audit");
+  const audit=await m.json(),geo=await g.json();
+  if(audit.status!=="western-approach-evidence-not-turn-by-turn"||
+     audit.westRoadFeatureCount!==17||audit.westSouthBoundaryFeatureCount!==15||
+     audit.presquIsleRoadNetworkAt5m!==1||audit.routesAllowed!==false||
+     audit.ETAallowed!==false||audit.seasonal?.presentAccessVerified!==false||
+     audit.parkLot?.routeFromRoadCertified!==false||
+     audit.workZone?.reopeningVerified!==false||
+     audit.workZone?.googleDrivingLinksToPresqueSuppressed!==true)
+   throw Error("unreviewed west approach claims");
+  if(geo.type!=="FeatureCollection"||geo.features?.length!==32)throw Error("unexpected western road feature count");
+  const w=geo.features.filter(f=>f.properties?.corridor==="mgf-presque-isle-west-road");
+  const b=geo.features.filter(f=>f.properties?.corridor==="west-of-pinkerton-south-boundary");
+  if(w.length!==17||b.length!==15||geo.features.some(f=>
+    f.properties?.routingCertified!==false||f.properties?.plowingVerified!==false||
+    f.properties?.temporaryGateVerified!==false||f.properties?.noThroughParkDrive!==true))
+   throw Error("unverified west road source");
+  westEvidence=geo;
+  return geo;
+ }
  // A layer toggle and a trail-card inspection can arrive while the same
  // GeoJSON is still loading. Share the in-flight promise so they cannot add
  // duplicate Leaflet overlays or disagree about the final button state.
@@ -75,33 +106,41 @@
  }
  async function showActual(kind) {
   if(!atlas){message("The map is not available. Please use the official DNR GPS map above.");return false;}
-  const button=root.document.getElementById(kind==="trails"?"porkies-trails-toggle":kind==="ski"?"porkies-ski-toggle":"porkies-roads-toggle");
+  const button=root.document.getElementById(kind==="trails"?"porkies-trails-toggle":kind==="ski"?"porkies-ski-toggle":kind==="west"?"porkies-west-toggle":"porkies-roads-toggle");
   if(layers[kind]){atlas.removeLayer(layers[kind]);delete layers[kind];button?.setAttribute("aria-pressed","false");message("Map layer hidden. No navigable park route is certified by these GIS layers.");return false;}
   button?.setAttribute("aria-pressed","true");
-  message("Loading official "+(kind==="trails"?"DNR hiking geometry":kind==="ski"?"DNR ski-trail geometry":"Michigan road geometry")+"…");
+  message("Loading official "+(kind==="trails"?"DNR hiking geometry":kind==="ski"?"DNR ski-trail geometry":kind==="west"?"western road-reference geometry":"Michigan road geometry")+"…");
   try{
    await loadManifest();
-   const r=await root.fetch(BASE+paths[kind],{credentials:"same-origin"});
-   if(!r.ok)throw Error("Geometry not available");
-   const geo=await r.json();
+   let geo;
+   if(kind==="west")geo=await loadWest();
+   else{
+    const r=await root.fetch(BASE+paths[kind],{credentials:"same-origin"});
+    if(!r.ok)throw Error("Geometry not available");
+    geo=await r.json();
+   }
    if(geo.type!=="FeatureCollection"||!Array.isArray(geo.features)||geo.features.length<20||geo.features.length>(kind==="trails"?1000:250)||kind==="ski"&&geo.features.length!==40)throw Error("Unexpected geometry coverage");
    if(geo.features.some(f=>f.properties?.routingCertified!==false))throw Error("Unreviewed route status");
-   const pane=kind==="trails"?"porkies-trail-evidence":kind==="ski"?"porkies-ski-evidence":"porkies-road-evidence";
+   const pane=kind==="trails"?"porkies-trail-evidence":kind==="ski"?"porkies-ski-evidence":kind==="west"?"porkies-west-evidence":"porkies-road-evidence";
    if(!atlas.getPane(pane))atlas.createPane(pane);
-   atlas.getPane(pane).style.zIndex=kind==="trails"?"352":kind==="ski"?"354":"348";
+   atlas.getPane(pane).style.zIndex=kind==="trails"?"352":kind==="ski"?"354":kind==="west"?"355":"348";
    atlas.getPane(pane).style.pointerEvents="auto";
    const layer=root.L.geoJSON(geo,{
-    pane,style:kind==="trails"?trailStyle:kind==="ski"?skiStyle:roadStyle,
+    pane,style:kind==="trails"?trailStyle:kind==="ski"?skiStyle:kind==="west"?westStyle:roadStyle,
     onEachFeature:(feature,part)=>{
      const p=feature.properties||{};
      const road=kind==="roads";
-     const caut=road?(westernAccessSource(feature)?"DNR identifies County Road 519 as separate western access to Presque Isle. This mapped South Boundary segment is not proof of an open gate, legal turn, drivable route or plowing." : seasonalClosureSource(feature)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
+     const caut=kind==="west"?"These government road-centerline fragments do not establish signed County Road 519 turns, the Johnson Road detour, an open gate, or a verified entrance to the Presque Isle lot. Wakefield Township published a September 22, 2026 M-28 junction work-zone notice; reopening not verified.":road?(westernAccessSource(feature)?"DNR identifies County Road 519 as separate western access to Presque Isle. This mapped South Boundary segment is not proof of an open gate, legal turn, drivable route or plowing." : seasonalClosureSource(feature)?"This road corridor is seasonally restricted. Check its current status with the DNR.":"Road centerline only; no turn restrictions, gate or plowing status are provided."):kind==="ski"?"DNR ski-trail source geometry; not a live trail-grooming, snow or operations report.":"Trail source geometry only. The named trail may be incomplete, and crossings are unverified.";
      part.bindPopup("<strong>"+safe(p.name)+"</strong><p>"+safe(caut)+"</p><p>Official source record "+safe(p.id)+". Not a generated hiking or driving route.</p>");
     }
    }).addTo(atlas);
    layers[kind]=layer;
    button?.setAttribute("aria-pressed","true");
-   message(kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines. Red dashed lines indicate the DNR's interior seasonal vehicle restriction. The 15 reviewed road-source segments west of Pinkerton remain ordinary blue reference lines, not confirmation of open roads, legal turns or plowing.");
+   if(kind==="west"){
+    const bounds=layer.getBounds();
+    if(bounds.isValid())atlas.fitBounds(bounds.pad(.15),{maxZoom:11});
+   }
+   message(kind==="west"?"Showing 17 mapped Presque Isle Road centerlines and 15 western South Boundary source segments. They do not certify an open or legal driving route. The September 22 township CR519/M-28 work-zone reopening is unverified.":kind==="trails"?"Showing "+geo.features.length+" DNR hiking features. Connected lines do not certify crossings, bridges or full named-trail distances.":kind==="ski"?"Showing "+geo.features.length+" DNR ski-trail records. This is NOT a current snow or grooming report and does not establish that any ski trail is open.":"Showing "+geo.features.length+" selected park-area road centerlines. Red dashed lines indicate the DNR's interior seasonal vehicle restriction. The 15 reviewed road-source segments west of Pinkerton remain ordinary blue reference lines, not confirmation of open roads, legal turns or plowing.");
    return true;
   }catch(err){
    button?.setAttribute("aria-pressed","false");
@@ -140,16 +179,18 @@
   const buttonT=root.document.getElementById("porkies-trails-toggle");
   const buttonR=root.document.getElementById("porkies-roads-toggle");
   const buttonS=root.document.getElementById("porkies-ski-toggle");
+  const buttonW=root.document.getElementById("porkies-west-toggle");
   if(!buttonT||!buttonR)return;
   buttonT.addEventListener("click",()=>show("trails"));
   buttonR.addEventListener("click",()=>show("roads"));
   if(buttonS)buttonS.addEventListener("click",()=>show("ski"));
+  if(buttonW)buttonW.addEventListener("click",()=>show("west"));
   root.addEventListener("porkies:trail-reference",e=>inspectNamedTrail(e?.detail?.name));
   root.document.getElementById("travel-date")?.addEventListener("change",refresh);
   root.document.getElementById("planner")?.addEventListener("submit",()=>root.setTimeout(refresh,0));
   atlas=root.PorkiesAtlas?.map||null;
   root.addEventListener("porkies:map-ready",()=>{atlas=root.PorkiesAtlas?.map||null;});
  }
- if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle,trailSourceMatch,westernAccessSource,seasonalClosureSource};
+ if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle,westStyle,trailSourceMatch,westernAccessSource,seasonalClosureSource};
  if(root.document)init();
 })(typeof window!=="undefined"?window:globalThis);

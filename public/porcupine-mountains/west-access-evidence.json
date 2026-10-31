@@ -37,7 +37,8 @@
       46.695608
     ],
     "status": "possible-corresponding-approach-segments-not-individually-crosswalked-to-signed-CR519",
-    "note": "MGF centerline naming in this envelope does not use 519. Do not equate these IDs one-for-one with the signed County Road 519 or claim a complete drive from US-28 to a parking stall."
+    "note": "MGF centerline naming in this envelope does not use 519. Do not equate these IDs one-for-one with the signed County Road 519 or claim a complete drive from US-28 to a parking stall.",
+    "expandedReviewedSource": "See /porcupine-mountains/west-road-evidence.json for full reviewed 17-centerline corridor and 15 South Boundary line records; the original ten records came from a smaller spatial envelope."
   },
   "routeRules": {
     "fromWestDuringWinter": "DNR-authorized west-side approach identified, subject to current posted closures and parking",
@@ -51,5 +52,16 @@
   "lastMile": {
     "candidateParkingAssetId": 841,
     "sourceVerification": "DNR parking asset and named trail point previously crosswalked; exact signed turn and lot open status unverified"
+  },
+  "townshipWorkZone": {
+    "officialNotice": "https://wakefieldtownship.com/north-county-road-519-will-be-closed/",
+    "noticePublished": "2026-09-22",
+    "checked": "2026-10-31",
+    "closureArea": "North County Road 519 at M-28",
+    "reason": "water main replacement",
+    "namedDetour": "Johnson Road",
+    "verifiedReopening": false,
+    "automaticDrivingLinksAllowed": false,
+    "reasonToWithhold": "township notice has no verified reopening and map provider route might ignore local work-zone or season restrictions"
   }
 }
