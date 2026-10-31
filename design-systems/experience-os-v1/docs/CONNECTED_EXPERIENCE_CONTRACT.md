@@ -40,7 +40,7 @@ Do not mistake image HTTP success for visible usable photography, map HTTP 200 f
 
 Use **exact equality** only for stable data contracts: canonical URL, route ID, numeric units, aria/selection state, official measurements and other fixed identifiers. For descriptive UI, prefer semantic assertions: correct route name and relevant qualifier, expected meaning, accessible actionable label and absence of contradictory claims. Never weaken a safety caveat to satisfy a brittle string assertion. A failed browser check needs a logged cause and a fresh full rerun on the final commit.
 
-## 7. Four distinct release statuses
+## 7. Five distinct evidence levels (the first four describe delivery status)
 
 1. **Implemented**: source commit and PR exist. Not yet tested.
 2. **Verified**: actual owning-repo CI, real browser scenarios and screenshot inspection pass on a particular PR head. Not yet merged.
