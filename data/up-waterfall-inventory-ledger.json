@@ -2217,19 +2217,19 @@
       "identity": "linked",
       "curatedId": "lower-silver-falls",
       "possibleCuratedIds": [],
-      "publication": "verified-access-guide",
-      "access": "published-county-tourism-public-lower-picnic-stop-no-live-road-status",
+      "publication": "research-only",
+      "access": "owner-management-and-parking-permission-not-established",
       "landManager": "Lower Silver Falls public picnic/visitor area described by Baraga County tourism; exact owner/operating manager not verified",
       "parkingEvidence": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/",
       "trailEvidence": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-30",
-      "nextAction": "Verify site operating manager/deed and current road maintenance or closures. Guide is lower falls picnic area ONLY; no GIS #68 alias, upstream path/ford or mapped parking coordinate.",
+      "checked": "2026-10-31",
+      "nextAction": "Confirm current parcel/manager, open public picnic status, legal parking and signed lower Silver Falls walking access. Do not infer this from the 2022 Baraga tourist brochure, unrelated Upper Silver GIS #68, or historical parking clearing.",
       "batch": "county-baraga",
-      "reviewed": "2026-10-30",
-      "reviewBatch": "20",
-      "classification": "lower-silver-picnic-road-end-and-100ft-footpath-published-county-tourism",
-      "accessAssessment": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified.",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "39",
+      "classification": "research-only-lower-silver-county-tourism-not-land-manager",
+      "accessAssessment": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified. Tourist promotion does not establish owner/manager or legal tourist right; paused public guide October 31, 2026.",
       "evidence": [
         "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
         "https://www.baragacountytourism.org/attractions",
@@ -4575,5 +4575,5 @@
       ]
     }
   ],
-  "lastBatch": "37"
+  "lastBatch": "39"
 }

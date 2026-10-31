@@ -2505,15 +2505,15 @@
       "curatedId": "lower-silver-falls",
       "publicGuide": "verified-access-guide",
       "landManager": "Lower Silver Falls public picnic/visitor area described by Baraga County tourism; exact owner/operating manager not verified",
-      "parkingVerified": true,
-      "publicAccessVerified": true,
-      "reviewed": "2026-10-30",
+      "parkingVerified": false,
+      "publicAccessVerified": null,
+      "reviewed": "2026-10-31",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "evidenceReviewed": "2026-10-30",
-      "disposition": "lower-silver-picnic-road-end-and-100ft-footpath-published-county-tourism",
-      "publicationEligible": true,
-      "sourceNotes": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified.",
-      "outstandingGate": "Verify site operating manager/deed and current road maintenance or closures. Guide is lower falls picnic area ONLY; no GIS #68 alias, upstream path/ford or mapped parking coordinate.",
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "research-only-owner-parking-rights-unverified",
+      "publicationEligible": false,
+      "sourceNotes": "GIS #110 at 46.792674,-88.335692 aligns with independent lower Silver Falls waypoint 46.79355,-88.33650. Another state GIS Upper Silver Falls #68 at 46.681143,-88.329766 lies about 12 km south; the similar name is NOT sufficient to connect it to the short upper-series chute described near the lower park. The county brochure and visitor field account disagree about exact spur-road mileage and a fork, so use posted signs. Landowner, park maintenance authority, winter plowing and live closure status not independently verified. October 31 source gate correction: published lower picnicking brochures are not owner/managing agency title proof; held research-only and removed from sitemap pending lawful visitor parking/footpath.",
+      "outstandingGate": "Confirm current parcel/manager, open public picnic status, legal parking and signed lower Silver Falls walking access. Do not infer this from the 2022 Baraga tourist brochure, unrelated Upper Silver GIS #68, or historical parking clearing.",
       "sourceLinks": [
         "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
         "https://www.baragacountytourism.org/attractions",
@@ -5620,6 +5620,15 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "USFS named public Jumbo trail at FR4589-B, but 2015 agency coordinate vs specialist natural falls about 904m apart; GIS point between. Exact visitor geometry/pin and legal parking unverified. Research-only."
+    },
+    {
+      "batch": "39-lower-silver-publication-gate-demotion",
+      "date": "2026-10-31",
+      "reviewedIds": [
+        110
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Previously indexed Lower Silver guide had explicit landManager.verified=false; retain curated geographic research and full provenance, but noindex/remove sitemap and suppress public parking directions until manager title and legal route are confirmed."
     }
   ]
 }

@@ -358,3 +358,7 @@ USFS public short trail via Golden Glow / FR4589-B [2015 guide](https://upnorthe
 ## Batch 38 — Automatic source and browser release gate (2026-10-31)
 
 The U.P. waterfall Chromium workflow previously checked only HTML/assets on PR. Updated in place to run on this waterfall feature branch and on relevant pull requests including source ledger, queue, sitemap and tests. Runs Node source/route/geography safety suite first, then real Chromium map, mobile and save/filter checks, retaining screenshots. Concurrency cancels obsolete runs. No production app files changed, no merge/promotion. Vercel success alone does not establish tested release readiness.
+
+## Batch 39 — Lower Silver Falls owner/permission source gate enforced (2026-10-31)
+
+Automated Node QA exposed public indexed Silver River lower picnic falls with landManager.verified=false. Baraga County tourism guides document historical picnic use, but no verified owner/managing agency nor current legal signed parking. Kept curated geographical research source #110 and provenance (not conflated with Upper Silver GIS #68), but downgraded publication to research-only, set noindex, removed TouristAttraction schema and public sitemap ItemList entry, redacted hub arrival and route and marked research pending. Static page retains source-history context without turn-by-turn hiking directions. Maintains **71 curated records including research, 65 linked GIS, 96 pending; 69 public sitemap locations including hub**. Source verification must be real before promoting. Browser/index and batch20 tests updated.
