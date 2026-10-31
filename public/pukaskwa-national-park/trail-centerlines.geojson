@@ -1,0 +1,1551 @@
+{
+  "type": "FeatureCollection",
+  "name": "Pukaskwa Hattie Cove — OpenStreetMap named trail segments",
+  "schemaVersion": 1,
+  "park": "pukaskwa",
+  "createdOn": "2026-10-31",
+  "dataStatus": "community-mapped georeferenced path segments; NOT Parks Canada surveying; missing start connectors and junction verification",
+  "publisher": "OpenStreetMap contributors",
+  "attribution": "© OpenStreetMap contributors",
+  "license": "Open Database License (ODbL) 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "sourceApi": "https://api.openstreetmap.org/api/0.6/way/{osmWayId}/full",
+  "authoritativeTrailMap": "https://pcweb2.azureedge.net/-/media/pn-np/on/pukaskwa/WET4/activ/maps/Carte-map-HCCAT.jpg",
+  "authoritativeTrailInfo": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+  "safety": {
+    "containsOnlyNamedPublicHikingWaySegments": true,
+    "sourceIsNotParksCanadaCertifiedGPS": true,
+    "noConnectingSyntheticLines": true,
+    "noRouteNavigationOrGPXDownload": true,
+    "noClosedWhiteRiverTrail": true,
+    "noBackcountryTracks": true,
+    "checkOfficialTrailConditionsFirst": true
+  },
+  "trailSummary": [
+    {
+      "id": "beach",
+      "name": "Beach Trail",
+      "officialEntireOutingKm": 2,
+      "mappedSegmentCount": 7,
+      "mappedCenterlineKm": 1.239,
+      "coverage": "mapped sections only; shared access paths, return legs or junctions may be missing"
+    },
+    {
+      "id": "boardwalk-beach",
+      "name": "Boardwalk Beach Trail",
+      "officialEntireOutingKm": 1.2,
+      "mappedSegmentCount": 2,
+      "mappedCenterlineKm": 0.216,
+      "coverage": "mapped sections only; shared access paths, return legs or junctions may be missing"
+    },
+    {
+      "id": "southern-headland",
+      "name": "Southern Headland Trail",
+      "officialEntireOutingKm": 2.2,
+      "mappedSegmentCount": 3,
+      "mappedCenterlineKm": 1.032,
+      "coverage": "mapped sections only; shared access paths, return legs or junctions may be missing"
+    },
+    {
+      "id": "manito-miikana",
+      "name": "Manito Miikana Trail",
+      "officialEntireOutingKm": 2,
+      "mappedSegmentCount": 1,
+      "mappedCenterlineKm": 0.846,
+      "coverage": "mapped sections only; shared access paths, return legs or junctions may be missing"
+    },
+    {
+      "id": "bimose-kinoomagewnan",
+      "name": "Bimose Kinoomagewnan",
+      "officialEntireOutingKm": 3.7,
+      "mappedSegmentCount": 1,
+      "mappedCenterlineKm": 2.033,
+      "coverage": "mapped sections only; shared access paths, return legs or junctions may be missing"
+    }
+  ],
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 443602400,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "sand",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/443602400",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.129,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2985977,
+            48.5900957
+          ],
+          [
+            -86.2983719,
+            48.5901545
+          ],
+          [
+            -86.2981141,
+            48.5902219
+          ],
+          [
+            -86.2978703,
+            48.5902529
+          ],
+          [
+            -86.2975875,
+            48.5902231
+          ],
+          [
+            -86.2972716,
+            48.5901472
+          ],
+          [
+            -86.2969663,
+            48.5900235
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742332531,
+        "name": "Boardwalk Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": "boardwalk",
+        "surface": "wood",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742332531",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2024-08-14T14:32:03Z",
+        "segmentLengthKm": 0.067,
+        "trailId": "boardwalk-beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2959745,
+            48.5901038
+          ],
+          [
+            -86.2960071,
+            48.5900297
+          ],
+          [
+            -86.2961488,
+            48.5899258
+          ],
+          [
+            -86.2962906,
+            48.5898157
+          ],
+          [
+            -86.2965019,
+            48.5896168
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742968743,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "sand",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742968743",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.31,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.3002896,
+            48.5933509
+          ],
+          [
+            -86.3004155,
+            48.5935743
+          ],
+          [
+            -86.3005509,
+            48.5938677
+          ],
+          [
+            -86.3006863,
+            48.5941735
+          ],
+          [
+            -86.3008918,
+            48.5945688
+          ],
+          [
+            -86.3010413,
+            48.5949147
+          ],
+          [
+            -86.301144,
+            48.5952421
+          ],
+          [
+            -86.3014242,
+            48.5956251
+          ],
+          [
+            -86.3016484,
+            48.5959772
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742968746,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "sand",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742968746",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.222,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.3001908,
+            48.590337
+          ],
+          [
+            -86.3003255,
+            48.5904751
+          ],
+          [
+            -86.3003068,
+            48.5905987
+          ],
+          [
+            -86.3002881,
+            48.5907223
+          ],
+          [
+            -86.3001761,
+            48.5911053
+          ],
+          [
+            -86.3000873,
+            48.5914481
+          ],
+          [
+            -86.2998912,
+            48.5917632
+          ],
+          [
+            -86.2998818,
+            48.5920381
+          ],
+          [
+            -86.2999494,
+            48.5922621
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742973685,
+        "name": "Manito Miikana Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742973685",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2024-07-06T16:19:42Z",
+        "segmentLengthKm": 0.846,
+        "trailId": "manito-miikana",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2992155,
+            48.5902289
+          ],
+          [
+            -86.2993859,
+            48.5900992
+          ],
+          [
+            -86.2995187,
+            48.5900289
+          ],
+          [
+            -86.2997728,
+            48.5900164
+          ],
+          [
+            -86.300008,
+            48.5899637
+          ],
+          [
+            -86.3000763,
+            48.5899436
+          ],
+          [
+            -86.3001901,
+            48.5898583
+          ],
+          [
+            -86.3003494,
+            48.5898232
+          ],
+          [
+            -86.3007021,
+            48.5898157
+          ],
+          [
+            -86.3009487,
+            48.5898307
+          ],
+          [
+            -86.3012522,
+            48.5898006
+          ],
+          [
+            -86.3014494,
+            48.58963
+          ],
+          [
+            -86.3016846,
+            48.5895698
+          ],
+          [
+            -86.3018515,
+            48.5895773
+          ],
+          [
+            -86.3021701,
+            48.5896601
+          ],
+          [
+            -86.3023332,
+            48.5896702
+          ],
+          [
+            -86.3025381,
+            48.5895874
+          ],
+          [
+            -86.3027656,
+            48.5895522
+          ],
+          [
+            -86.3029439,
+            48.5894544
+          ],
+          [
+            -86.303016,
+            48.5892512
+          ],
+          [
+            -86.3030729,
+            48.5892135
+          ],
+          [
+            -86.3031563,
+            48.5891985
+          ],
+          [
+            -86.3035584,
+            48.5891232
+          ],
+          [
+            -86.3043133,
+            48.5891458
+          ],
+          [
+            -86.3050719,
+            48.5891408
+          ],
+          [
+            -86.3054019,
+            48.5890705
+          ],
+          [
+            -86.3057244,
+            48.5888472
+          ],
+          [
+            -86.3058268,
+            48.5887067
+          ],
+          [
+            -86.3060809,
+            48.5885637
+          ],
+          [
+            -86.3061113,
+            48.5885135
+          ],
+          [
+            -86.3060999,
+            48.5884633
+          ],
+          [
+            -86.3060468,
+            48.5884232
+          ],
+          [
+            -86.3058533,
+            48.5883479
+          ],
+          [
+            -86.3051326,
+            48.5883454
+          ],
+          [
+            -86.3048781,
+            48.5883365
+          ],
+          [
+            -86.304666,
+            48.5883931
+          ],
+          [
+            -86.3045902,
+            48.5885436
+          ],
+          [
+            -86.3044081,
+            48.5886415
+          ],
+          [
+            -86.3043322,
+            48.588664
+          ],
+          [
+            -86.3039946,
+            48.5886415
+          ],
+          [
+            -86.303786,
+            48.5887067
+          ],
+          [
+            -86.3036267,
+            48.5888246
+          ],
+          [
+            -86.3035774,
+            48.5889802
+          ],
+          [
+            -86.3035584,
+            48.5891232
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742973686,
+        "name": "Southern Headland Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742973686",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2024-07-06T16:19:42Z",
+        "segmentLengthKm": 0.819,
+        "trailId": "southern-headland",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2961781,
+            48.5889682
+          ],
+          [
+            -86.2962261,
+            48.5889024
+          ],
+          [
+            -86.2963437,
+            48.5888899
+          ],
+          [
+            -86.2964575,
+            48.5888146
+          ],
+          [
+            -86.2964917,
+            48.5887669
+          ],
+          [
+            -86.2964917,
+            48.5887092
+          ],
+          [
+            -86.2964651,
+            48.5886615
+          ],
+          [
+            -86.2964689,
+            48.5885561
+          ],
+          [
+            -86.296632,
+            48.5884282
+          ],
+          [
+            -86.2967799,
+            48.5883805
+          ],
+          [
+            -86.2969431,
+            48.5883554
+          ],
+          [
+            -86.2970265,
+            48.5883529
+          ],
+          [
+            -86.2971024,
+            48.5883353
+          ],
+          [
+            -86.2973565,
+            48.5881973
+          ],
+          [
+            -86.2976258,
+            48.5880719
+          ],
+          [
+            -86.2978572,
+            48.5879816
+          ],
+          [
+            -86.2979824,
+            48.5879113
+          ],
+          [
+            -86.2980355,
+            48.5878661
+          ],
+          [
+            -86.2980014,
+            48.5877357
+          ],
+          [
+            -86.2979483,
+            48.587693
+          ],
+          [
+            -86.2978838,
+            48.5876704
+          ],
+          [
+            -86.2977245,
+            48.5876704
+          ],
+          [
+            -86.2975727,
+            48.5876905
+          ],
+          [
+            -86.2971327,
+            48.5878185
+          ],
+          [
+            -86.2969127,
+            48.5878436
+          ],
+          [
+            -86.2968179,
+            48.5878335
+          ],
+          [
+            -86.2964993,
+            48.5877432
+          ],
+          [
+            -86.2964158,
+            48.5877181
+          ],
+          [
+            -86.2963589,
+            48.587683
+          ],
+          [
+            -86.2962868,
+            48.5876579
+          ],
+          [
+            -86.296211,
+            48.5876579
+          ],
+          [
+            -86.2960896,
+            48.5878586
+          ],
+          [
+            -86.2960327,
+            48.5878912
+          ],
+          [
+            -86.2959644,
+            48.5879138
+          ],
+          [
+            -86.2955775,
+            48.5879138
+          ],
+          [
+            -86.2955206,
+            48.5880117
+          ],
+          [
+            -86.2955054,
+            48.5880644
+          ],
+          [
+            -86.2954523,
+            48.5882902
+          ],
+          [
+            -86.2954713,
+            48.5884006
+          ],
+          [
+            -86.2954372,
+            48.5884508
+          ],
+          [
+            -86.2952209,
+            48.588516
+          ],
+          [
+            -86.294944,
+            48.5886189
+          ],
+          [
+            -86.2948037,
+            48.5887418
+          ],
+          [
+            -86.2945799,
+            48.5888873
+          ],
+          [
+            -86.2945002,
+            48.5889827
+          ],
+          [
+            -86.2944585,
+            48.589083
+          ],
+          [
+            -86.2943978,
+            48.5891132
+          ],
+          [
+            -86.2943219,
+            48.5891257
+          ],
+          [
+            -86.2940754,
+            48.5891332
+          ],
+          [
+            -86.2938326,
+            48.5891759
+          ],
+          [
+            -86.2936923,
+            48.589211
+          ],
+          [
+            -86.293055,
+            48.5892813
+          ],
+          [
+            -86.2929981,
+            48.5893189
+          ],
+          [
+            -86.292926,
+            48.5893264
+          ],
+          [
+            -86.2928464,
+            48.5893064
+          ],
+          [
+            -86.2926415,
+            48.5892863
+          ],
+          [
+            -86.2925657,
+            48.5892863
+          ],
+          [
+            -86.292486,
+            48.5893038
+          ],
+          [
+            -86.2922812,
+            48.5894042
+          ],
+          [
+            -86.2920877,
+            48.589482
+          ],
+          [
+            -86.2920726,
+            48.5895447
+          ],
+          [
+            -86.2921257,
+            48.5895961
+          ],
+          [
+            -86.2920915,
+            48.5896651
+          ],
+          [
+            -86.2920471,
+            48.5898725
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 742973687,
+        "name": "Southern Headland Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/742973687",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2024-07-06T16:19:42Z",
+        "segmentLengthKm": 0.08,
+        "trailId": "southern-headland",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2954372,
+            48.5884508
+          ],
+          [
+            -86.2957095,
+            48.5885714
+          ],
+          [
+            -86.2959687,
+            48.5887893
+          ],
+          [
+            -86.2961781,
+            48.5889682
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 769800690,
+        "name": "Southern Headland Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "sand",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/769800690",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.133,
+        "trailId": "southern-headland",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2969663,
+            48.5900235
+          ],
+          [
+            -86.2967277,
+            48.5898208
+          ],
+          [
+            -86.2965019,
+            48.5896168
+          ],
+          [
+            -86.2963979,
+            48.5894884
+          ],
+          [
+            -86.2963001,
+            48.5893376
+          ],
+          [
+            -86.2962784,
+            48.5892359
+          ],
+          [
+            -86.296232,
+            48.5890425
+          ],
+          [
+            -86.2961781,
+            48.5889682
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1115333798,
+        "name": "Bimose Kinoomagewnan",
+        "highway": "footway",
+        "foot": "designated",
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1115333798",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2023-07-26T01:26:35Z",
+        "segmentLengthKm": 2.033,
+        "trailId": "bimose-kinoomagewnan",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.293693,
+            48.5921053
+          ],
+          [
+            -86.2937114,
+            48.5922402
+          ],
+          [
+            -86.2937784,
+            48.5923121
+          ],
+          [
+            -86.2940379,
+            48.5923786
+          ],
+          [
+            -86.2941634,
+            48.5924395
+          ],
+          [
+            -86.2943811,
+            48.5928271
+          ],
+          [
+            -86.2945234,
+            48.5929821
+          ],
+          [
+            -86.2949754,
+            48.5933364
+          ],
+          [
+            -86.2950006,
+            48.593425
+          ],
+          [
+            -86.2948917,
+            48.5934749
+          ],
+          [
+            -86.2941048,
+            48.5934693
+          ],
+          [
+            -86.293996,
+            48.5935191
+          ],
+          [
+            -86.2937449,
+            48.5937849
+          ],
+          [
+            -86.2935775,
+            48.5938181
+          ],
+          [
+            -86.293184,
+            48.5937904
+          ],
+          [
+            -86.2927571,
+            48.5936797
+          ],
+          [
+            -86.2925394,
+            48.5936852
+          ],
+          [
+            -86.2923385,
+            48.5937019
+          ],
+          [
+            -86.2921962,
+            48.5936742
+          ],
+          [
+            -86.2920958,
+            48.593569
+          ],
+          [
+            -86.2919284,
+            48.5935468
+          ],
+          [
+            -86.2910829,
+            48.5935247
+          ],
+          [
+            -86.2909824,
+            48.5935634
+          ],
+          [
+            -86.2908317,
+            48.5936963
+          ],
+          [
+            -86.2906727,
+            48.5936963
+          ],
+          [
+            -86.2903295,
+            48.593724
+          ],
+          [
+            -86.2901118,
+            48.5938458
+          ],
+          [
+            -86.2899695,
+            48.594095
+          ],
+          [
+            -86.2901118,
+            48.5942278
+          ],
+          [
+            -86.2901788,
+            48.5943109
+          ],
+          [
+            -86.2901788,
+            48.5944327
+          ],
+          [
+            -86.2902123,
+            48.5945379
+          ],
+          [
+            -86.290363,
+            48.5946486
+          ],
+          [
+            -86.2903881,
+            48.5947206
+          ],
+          [
+            -86.2903881,
+            48.5948147
+          ],
+          [
+            -86.2904467,
+            48.5948701
+          ],
+          [
+            -86.2906057,
+            48.5948811
+          ],
+          [
+            -86.2912084,
+            48.5948092
+          ],
+          [
+            -86.291401,
+            48.5948645
+          ],
+          [
+            -86.2916354,
+            48.594942
+          ],
+          [
+            -86.2918363,
+            48.5950306
+          ],
+          [
+            -86.2918781,
+            48.5951247
+          ],
+          [
+            -86.2918363,
+            48.595241
+          ],
+          [
+            -86.2916019,
+            48.5954182
+          ],
+          [
+            -86.2915433,
+            48.5955677
+          ],
+          [
+            -86.2916605,
+            48.5958279
+          ],
+          [
+            -86.2916753,
+            48.5958602
+          ],
+          [
+            -86.291596,
+            48.5959056
+          ],
+          [
+            -86.2916013,
+            48.5959441
+          ],
+          [
+            -86.2916965,
+            48.5960281
+          ],
+          [
+            -86.2918605,
+            48.5961261
+          ],
+          [
+            -86.2919399,
+            48.5963045
+          ],
+          [
+            -86.2919875,
+            48.5963395
+          ],
+          [
+            -86.2920827,
+            48.5963395
+          ],
+          [
+            -86.2923578,
+            48.596259
+          ],
+          [
+            -86.2925906,
+            48.5961296
+          ],
+          [
+            -86.29267,
+            48.5961366
+          ],
+          [
+            -86.2927599,
+            48.5962206
+          ],
+          [
+            -86.2928287,
+            48.596322
+          ],
+          [
+            -86.2929821,
+            48.596413
+          ],
+          [
+            -86.2931408,
+            48.596413
+          ],
+          [
+            -86.2933048,
+            48.5963255
+          ],
+          [
+            -86.2933048,
+            48.5962485
+          ],
+          [
+            -86.2934212,
+            48.5960841
+          ],
+          [
+            -86.2934741,
+            48.5960491
+          ],
+          [
+            -86.2937069,
+            48.5960911
+          ],
+          [
+            -86.2938868,
+            48.5961016
+          ],
+          [
+            -86.2941513,
+            48.5960386
+          ],
+          [
+            -86.2944582,
+            48.5959616
+          ],
+          [
+            -86.2945957,
+            48.5959616
+          ],
+          [
+            -86.2952147,
+            48.5962101
+          ],
+          [
+            -86.2955533,
+            48.5962101
+          ],
+          [
+            -86.2957597,
+            48.5961471
+          ],
+          [
+            -86.2962041,
+            48.5961786
+          ],
+          [
+            -86.296548,
+            48.5961786
+          ],
+          [
+            -86.2967014,
+            48.5961786
+          ],
+          [
+            -86.2969077,
+            48.5961786
+          ],
+          [
+            -86.297495,
+            48.5962415
+          ],
+          [
+            -86.298188,
+            48.5961891
+          ],
+          [
+            -86.2985531,
+            48.5960946
+          ],
+          [
+            -86.2987065,
+            48.5960036
+          ],
+          [
+            -86.2987435,
+            48.5958812
+          ],
+          [
+            -86.2987753,
+            48.5958462
+          ],
+          [
+            -86.2988864,
+            48.5958147
+          ],
+          [
+            -86.299098,
+            48.5957587
+          ],
+          [
+            -86.2991985,
+            48.5956712
+          ],
+          [
+            -86.2993572,
+            48.5952793
+          ],
+          [
+            -86.2993784,
+            48.5948174
+          ],
+          [
+            -86.2993308,
+            48.594632
+          ],
+          [
+            -86.2991245,
+            48.5942681
+          ],
+          [
+            -86.2989446,
+            48.5941246
+          ],
+          [
+            -86.2986536,
+            48.5940301
+          ],
+          [
+            -86.2978018,
+            48.5940406
+          ],
+          [
+            -86.2973521,
+            48.5941631
+          ],
+          [
+            -86.2970082,
+            48.5941526
+          ],
+          [
+            -86.2965585,
+            48.5940406
+          ],
+          [
+            -86.2964421,
+            48.5939952
+          ],
+          [
+            -86.2961776,
+            48.5938657
+          ],
+          [
+            -86.29613,
+            48.5937957
+          ],
+          [
+            -86.2961194,
+            48.5936418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1307756994,
+        "name": "Boardwalk Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": "boardwalk",
+        "surface": "wood",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1307756994",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2024-08-14T14:32:03Z",
+        "segmentLengthKm": 0.149,
+        "trailId": "boardwalk-beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2959745,
+            48.5901038
+          ],
+          [
+            -86.2959026,
+            48.5901205
+          ],
+          [
+            -86.2957034,
+            48.5901768
+          ],
+          [
+            -86.2954828,
+            48.5902142
+          ],
+          [
+            -86.2951623,
+            48.5902832
+          ],
+          [
+            -86.2948894,
+            48.5903143
+          ],
+          [
+            -86.2945372,
+            48.5905482
+          ],
+          [
+            -86.2941699,
+            48.5906373
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1434966488,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1434966488",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.129,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2999494,
+            48.5922621
+          ],
+          [
+            -86.2999667,
+            48.5924388
+          ],
+          [
+            -86.3000273,
+            48.5925142
+          ],
+          [
+            -86.3001389,
+            48.5925965
+          ],
+          [
+            -86.3002069,
+            48.5926793
+          ],
+          [
+            -86.3001856,
+            48.5928245
+          ],
+          [
+            -86.3001381,
+            48.5929573
+          ],
+          [
+            -86.3002228,
+            48.5932273
+          ],
+          [
+            -86.3002896,
+            48.5933509
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1434966489,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1434966489",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.121,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2985977,
+            48.5900957
+          ],
+          [
+            -86.2990773,
+            48.5901925
+          ],
+          [
+            -86.2992155,
+            48.5902289
+          ],
+          [
+            -86.2993701,
+            48.5902518
+          ],
+          [
+            -86.2995844,
+            48.5902935
+          ],
+          [
+            -86.299889,
+            48.5903184
+          ],
+          [
+            -86.3001908,
+            48.590337
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1434966490,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1434966490",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.077,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2969663,
+            48.5900235
+          ],
+          [
+            -86.2968155,
+            48.5900659
+          ],
+          [
+            -86.2963816,
+            48.5901159
+          ],
+          [
+            -86.2961923,
+            48.5900557
+          ],
+          [
+            -86.2960629,
+            48.5900832
+          ],
+          [
+            -86.2959745,
+            48.5901038
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osmWayId": 1434966491,
+        "name": "Beach Trail",
+        "highway": "footway",
+        "foot": null,
+        "bridge": null,
+        "surface": "ground",
+        "source": "OpenStreetMap contributors",
+        "sourceUrl": "https://www.openstreetmap.org/way/1434966491",
+        "license": "ODbL 1.0",
+        "osmTimestamp": "2025-10-02T23:31:43Z",
+        "segmentLengthKm": 0.251,
+        "trailId": "beach",
+        "geometryStatus": "community-mapped segment, not a GPS-certified complete route"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -86.2971741,
+            48.5933166
+          ],
+          [
+            -86.2973564,
+            48.5932612
+          ],
+          [
+            -86.2977138,
+            48.5933346
+          ],
+          [
+            -86.2980651,
+            48.5933407
+          ],
+          [
+            -86.2985776,
+            48.5934979
+          ],
+          [
+            -86.2988283,
+            48.5936612
+          ],
+          [
+            -86.2993692,
+            48.5936535
+          ],
+          [
+            -86.2995786,
+            48.5935652
+          ],
+          [
+            -86.2999484,
+            48.5934644
+          ],
+          [
+            -86.3002896,
+            48.5933509
+          ]
+        ]
+      }
+    }
+  ]
+}
