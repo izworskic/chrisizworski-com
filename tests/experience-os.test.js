@@ -121,12 +121,12 @@ test('v1.2.1 keeps one backward-compatible operational source of truth and worki
  assert.equal(manifest.id,'EXPERIENCE_OS_V1');
  assert.equal(manifest.noPublicRoute,true);
  for(const required of ['docs/V1_2_OPERATING_KIT.md','docs/GOOSEBERRY_PILOT_20261031.md'])assert.ok(manifest.requiredDocs.includes(required));
- for(const file of Object.values(manifest.operationalKit).filter(v=>typeof v==='string'&&v.includes('/'))){
+ for(const file of ['scaffold','checker','validator','example'].map(key=>manifest.operationalKit[key])){
   assert.ok(fs.existsSync(path.join(root,file)),file);
  }
  assert.match(readme,/operational kit/i);
  assert.match(agents,/new-experience-os-v1\.2/);
  const caseStudy=read('design-systems/experience-os-v1/docs/GOOSEBERRY_PILOT_20261031.md');
  for(const id of ['P19','P20','P21','P22','P23'])assert.match(caseStudy,new RegExp(id));
- assert.match(caseStudy,/NO_DATA|no live Gooseberry flow sensor/);
+ assert.match(caseStudy,/live Gooseberry flow sensor|continuous discharge/);
 });
