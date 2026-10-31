@@ -67,6 +67,12 @@ export function validateReleaseRecord(record,{repoRoot=null,checkSite=false}={})
    if(CAPABILITIES[c?.kind]&&!CAPABILITIES[c.kind].has(c.subject))bad('claims.scope',String(c?.id)+': '+c.kind+' cannot support '+c.subject);
    if(c?.kind==='official-notice'&&c?.subject==='park-access'&&!isText(c.accessScope))bad('claims.accessScope',String(c?.id)+': official access claim needs exact named access scope');
    if(c?.kind==='forecast'&&(!Number.isInteger(c.maxAgeMinutes)||c.maxAgeMinutes<=0))bad('claims.forecastAge',String(c?.id)+': forecast must specify an expiry policy in minutes');
+   if(c?.kind==='observation'){
+    const m=c.measurement;
+    if(!m||!Number.isFinite(m.value)||typeof m.unit!=='string'||!m.unit.trim()||
+       !isText(m.stationId)||typeof m.observedAt!=='string'||!Number.isFinite(Date.parse(m.observedAt)))
+      bad('claims.observationProvenance',String(c?.id)+': observed measurement requires value, unit, station ID and timestamp; a monitoring site alone is not a live observation');
+   }
   }
   // A forecast does not establish a trail opening, and a no-data gauge cannot establish flow.
   const hasParkClaim=claims.some(c=>c?.subject==='park-access');
@@ -161,8 +167,18 @@ export function auditSite(record,repoRoot){
    // The displayed order is authoritative; enforce index alignment for this tool.
    const cards=[...tools.matchAll(/data-tool-id="([^"]+)"/g)].map(x=>x[1]);
    const cardIndex=cards.indexOf(slug),itemIndex=items.findIndex(x=>x.item?.url===canonical);
-   // Some directory entries lack first-party item IDs; use local nearest neighbors instead.
    if(cardIndex<0||itemIndex<0)bad('site.catalog','Missing card or ItemList item');
+   else if(registryRaw){
+    try {
+     const catalog=JSON.parse(registryRaw);
+     const canonicalById=new Map(catalog.tools.map(x=>[x.id,x.canonical]));
+     const listUrls=new Set(items.map(x=>x.item?.url));
+     const mappedCardOrder=cards.map(id=>canonicalById.get(id)).filter(url=>listUrls.has(url));
+     const mappedItemOrder=items.map(x=>x.item?.url).filter(url=>mappedCardOrder.includes(url));
+     if(mappedCardOrder.length===mappedItemOrder.length&&mappedCardOrder.some((url,i)=>mappedItemOrder[i]!==url))
+      bad('site.catalogOrder','Tools visible cards and ItemList canonical order disagree');
+    }catch {bad('site.catalogRegistry','Unable to reconcile directory order with registry');}
+   }
   }catch{bad('site.itemListJSON','Invalid Tools JSON-LD');}
  }
  if(map&&map.split('<loc>'+canonical+'</loc>').length-1!==1)bad('site.sitemap','Sitemap must include exactly one canonical');
