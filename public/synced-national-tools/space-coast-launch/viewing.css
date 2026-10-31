@@ -1,0 +1,49 @@
+/* Space Coast launch access desk. Scoped to preserve shared Southeast tooling. */
+.launch-desk{margin-top:26px}
+.launch-desk-head{display:flex;justify-content:space-between;align-items:flex-end;gap:22px;margin-bottom:16px}
+.launch-desk-head h2{margin:0;font-size:clamp(24px,3.8vw,38px)}
+.launch-desk-head p{max-width:620px;color:#526157;margin:8px 0 0}
+.launch-statusline{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 14px}
+.launch-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid #b9c9bf;background:#eef4ef;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.01em}
+.launch-chip[data-state="closed"],.launch-chip[data-state="ineligible"],.launch-chip[data-state="poor"]{border-color:#e3bdba;background:#fcf0ee;color:#77352f}
+.launch-chip[data-state="unknown"],.launch-chip[data-state="verify"],.launch-chip[data-state="mixed"],.launch-chip[data-state="low"]{border-color:#e5d5b0;background:#fcf7e9;color:#63471f}
+.launch-chip[data-state="candidate"],.launch-chip[data-state="good"],.launch-chip[data-state="high"]{border-color:#acd0b8;background:#eff7ef;color:#205a3e}
+.launch-evidence{font-size:13px;color:#526157;margin:0 0 18px}
+.launch-alert-panel{border:1px solid #e7cbc3;border-left:5px solid #a54d3c;border-radius:14px;background:#fff9f7;padding:15px 18px;margin-bottom:17px}
+.launch-alert-panel h3{font-size:20px;margin:0 0 6px}
+.launch-alert-panel p{margin:0 0 7px}
+.launch-alert-panel a{font-weight:700}
+.launch-alert-panel[data-empty="true"]{background:#f2f3ee;border-color:#d4dcd2}
+.launch-venue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.launch-venue{background:#fff;border:1px solid #cfd7cd;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.launch-venue[data-state="closed"],.launch-venue[data-state="ineligible"]{background:#f8f7f4}
+.launch-venue-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.launch-venue .eyebrow{font-size:11px;margin:0;letter-spacing:.08em;color:#66736b}
+.launch-venue h3{font-size:24px;margin:0}
+.launch-venue .launch-note{margin:0;color:#46534a;font-size:14px;line-height:1.55}
+.launch-venue .launch-reason{font-size:14px;font-weight:600;color:#20392c;margin:0}
+.launch-venue[data-state="closed"] .launch-reason,.launch-venue[data-state="ineligible"] .launch-reason{color:#813c34}
+.launch-venue-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
+.launch-link{border:1px solid #adc0b4;border-radius:9px;padding:8px 11px;text-decoration:none;font-size:13px;font-weight:700;background:#f8fbf8;color:#20543b;display:inline-block}
+.launch-link:hover,.launch-link:focus-visible{background:#dfeae1;outline-offset:2px}
+.launch-link.official{background:#275b40;color:#fff;border-color:#275b40}
+.launch-link.official:hover,.launch-link.official:focus-visible{background:#173e29}
+.launch-weather-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.launch-weather-place{padding:18px;background:#fff;border:1px solid #d4ddd2;border-radius:15px}
+.launch-weather-place h3{font-size:23px;margin:0 0 8px}
+.launch-weather-place p{font-size:14px;margin:7px 0 0;color:#46534a}
+.launch-weather-place .launch-chip{margin:4px 0 7px}
+.launch-context-list{display:flex;gap:13px;flex-wrap:wrap;margin:12px 0}
+.launch-context-list>*{flex:1 1 210px;background:#fff;padding:13px 15px;border:1px solid #d4ddd2;border-radius:12px}
+.launch-context-list strong{display:block;font-size:14px}
+.launch-context-list p{font-size:13px;margin:5px 0;color:#526157}
+.launch-disclaimer{font-size:13px;max-width:900px;color:#526157;line-height:1.65}
+.launch-utility{display:flex;gap:11px;flex-wrap:wrap;align-items:center}
+.launch-utility a{font-size:14px;font-weight:700}
+@media (max-width:760px){
+  .launch-venue-grid,.launch-weather-grid{grid-template-columns:1fr}
+  .launch-desk-head{display:block}
+  .launch-venue{padding:16px}
+  .launch-venue h3{font-size:22px}
+  .launch-utility a{display:inline-flex}
+}
