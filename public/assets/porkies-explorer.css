@@ -269,3 +269,7 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .porkies-access-truth[data-match=unverified]{border-color:#b99453;background:#fcf7ec}
 .porkies-access-truth a{font-weight:700}
 @media(max-width:740px){.park-access-evidence{padding:15px 14px;margin:16px 0 20px}.access-evidence-grid{grid-template-columns:1fr}.access-evidence-tile{padding:16px}}
+
+/* County Road 519 provenance: neutral research overlay, never live road status. */
+.route-evidence-key .key-west{border-color:#7753a1}
+.west-corridor-field-note .west-roadwork-note{border-left:3px solid #82629e;padding-left:13px}
