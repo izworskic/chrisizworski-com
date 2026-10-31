@@ -1,8 +1,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { readFileSync, existsSync } = require('node:fs');
+const { readFileSync, existsSync, statSync } = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { execSync } = require('node:child_process');
 
 const root = path.join(__dirname, '..');
 const read = (file) => readFileSync(path.join(root, file), 'utf8');
@@ -91,8 +92,8 @@ test('Client JS has CARTO basemap, OSM fallback, and RIVERS array', () => {
 
 test('Google Maps links use coordinates without directions API', () => {
   const html = read('public/michigan-rivers-field-guide/index.html');
-  const gmapsLinks = html.match(/href="https:\/\/maps\.google\.com\/\?q=[^"]+"/g) || [];
-  assert.equal(gmapsLinks.length, 14, 'Must have 14 Google Maps coordinates links');
+  const gmapsLinks = html.match(/href="https:\/\/(?:maps\.google\.com\/\?q=|www\.google\.com\/maps\/search\/\?api=1&amp;query=|www\.google\.com\/maps\/search\/\?api=1&query=)[^"]+"/g) || [];
+  assert.equal(gmapsLinks.length, 28, 'Must have 28 Google Maps coordinates links (14 put-in and 14 take-out)');
   for (const link of gmapsLinks) {
     assert.ok(!link.includes('/dir/'), 'Must not link to directions API');
   }
@@ -104,8 +105,35 @@ test('All destination photos have valid figcaption attributions', () => {
   assert.equal(figcaptions.length, 14, 'Must have exactly 14 figcaption attributions');
   for (const cap of figcaptions) {
     assert.ok(cap.includes('Photo:') || cap.includes('Photo'), 'Must credit photographer');
-    assert.ok(cap.includes('CC BY') || cap.includes('Public domain') || cap.includes('Wikimedia'), 'Must cite license or source');
+    assert.ok(
+      cap.includes('CC BY') ||
+      cap.toLowerCase().includes('public domain') ||
+      cap.includes('CC0') ||
+      cap.includes('Wikimedia'),
+      'Must cite license or source'
+    );
   }
+});
+
+test('All 14 river float images are locally hosted web-optimized assets', () => {
+  const html = read('public/michigan-rivers-field-guide/index.html');
+  const imgMatches = [...html.matchAll(/<img[^>]+src="(\/assets\/michigan-rivers\/[^"]+\.jpg)"/g)];
+  assert.equal(imgMatches.length, 14, 'Must link 14 local river images');
+  for (const m of imgMatches) {
+    const relPath = 'public' + m[1];
+    const absPath = path.join(root, relPath);
+    assert.ok(existsSync(absPath), `Local image must exist: ${relPath}`);
+    const stat = statSync(absPath);
+    assert.ok(stat.size > 20000, `Image ${relPath} should be high quality (>20KB), got ${stat.size} bytes`);
+    assert.ok(stat.size < 500000, `Image ${relPath} should be web-optimized (<500KB), got ${stat.size} bytes`);
+  }
+});
+
+test('10-Persona value function benchmark passes 100%', () => {
+  const scriptPath = path.join(root, 'scripts/benchmark-michigan-rivers-personas.mjs');
+  assert.ok(existsSync(scriptPath), 'Benchmark script must exist');
+  const out = execSync(`node "${scriptPath}"`, { encoding: 'utf8' });
+  assert.ok(out.includes('ALL 10 PERSONAS AND ARCHITECTURAL REQUIREMENTS PASS 100%!'), 'Persona benchmark must pass 100%');
 });
 
 test('Connected river tools are linked', () => {
