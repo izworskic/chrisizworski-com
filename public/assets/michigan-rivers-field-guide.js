@@ -549,25 +549,27 @@
     cartoVoyager.addTo(map);
     mapEl.dataset.tiles = 'carto';
 
-    fetch('/api/carto-basemap-config', { credentials: 'same-origin' }).then(function (res) {
-      return res.ok ? res.json() : null;
-    }).then(function (conf) {
-      if (!conf || conf.provider !== 'CARTO' || typeof conf.key !== 'string' || !conf.key.trim()) return;
-      var freshKey = conf.key.trim();
-      if (freshKey === cartoKey) return;
-      var freshUri = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' + encodeURIComponent(freshKey);
-      var freshLayer = L.tileLayer(freshUri, {
-        subdomains: 'abcd',
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-      freshLayer.on('tileload', function () {
-        if (map.hasLayer(cartoVoyager)) map.removeLayer(cartoVoyager);
-        cartoVoyager = freshLayer;
-        mapEl.dataset.tiles = 'carto';
-      });
-      freshLayer.addTo(map);
-    }).catch(function () {});
+    if (location.protocol !== 'file:') {
+      fetch('/api/carto-basemap-config', { credentials: 'same-origin' }).then(function (res) {
+        return res.ok ? res.json() : null;
+      }).then(function (conf) {
+        if (!conf || conf.provider !== 'CARTO' || typeof conf.key !== 'string' || !conf.key.trim()) return;
+        var freshKey = conf.key.trim();
+        if (freshKey === cartoKey) return;
+        var freshUri = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' + encodeURIComponent(freshKey);
+        var freshLayer = L.tileLayer(freshUri, {
+          subdomains: 'abcd',
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        freshLayer.on('tileload', function () {
+          if (map.hasLayer(cartoVoyager)) map.removeLayer(cartoVoyager);
+          cartoVoyager = freshLayer;
+          mapEl.dataset.tiles = 'carto';
+        });
+        freshLayer.addTo(map);
+      }).catch(function () {});
+    }
 
     markerGroup = L.layerGroup().addTo(map);
     routeLineGroup = L.layerGroup().addTo(map);

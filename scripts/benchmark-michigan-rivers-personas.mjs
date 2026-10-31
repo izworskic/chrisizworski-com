@@ -84,8 +84,8 @@ for (const id of floatIds) {
   }
 
   // HTML must reference local image path
-  const expectedImgSrc = `/assets/michigan-rivers/${id}.jpg`;
-  if (!html.includes(expectedImgSrc)) {
+  const expectedImgSrc = `assets/michigan-rivers/${id}.jpg`;
+  if (!html.includes('/' + expectedImgSrc) && !html.includes('../' + expectedImgSrc)) {
     console.error(`FAIL: HTML does not reference local image ${expectedImgSrc}`);
     imageIssues++;
   }

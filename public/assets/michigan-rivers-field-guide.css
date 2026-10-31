@@ -4,7 +4,12 @@
    River Teal (#0d9488), Terracotta Copper (#c2410c), Daylight Slate (#334155).
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap');
+
 :root {
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
   --bg-stone: #f8faf9;
   --bg-card: #ffffff;
   --bg-subtle: #f1f5f4;
@@ -55,9 +60,63 @@ body {
   padding: 0;
   background-color: var(--bg-stone);
   color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* --- Signature Two-Tier Publication Masthead --- */
+.hm-masthead {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.hm-masthead__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.hm-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hm-brand-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--river-teal);
+}
+.hm-brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--cedar-dark);
+}
+.hm-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.hm-nav a {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.hm-nav a:hover {
+  color: var(--river-teal);
 }
 
 /* --- Breadcrumbs & Header --- */
@@ -76,6 +135,8 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 .fg-breadcrumbs li:not(:last-child)::after {
   content: "/";
@@ -92,9 +153,9 @@ body {
 
 /* --- Hero Section --- */
 .fg-hero {
-  background: linear-gradient(180deg, #f0fdf4 0%, #e6f4ef 100%);
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
   border-bottom: 1px solid var(--border-light);
-  padding: 44px 20px 36px;
+  padding: 48px 20px 40px;
   text-align: center;
 }
 .fg-hero-inner {
@@ -103,21 +164,25 @@ body {
 }
 .fg-kicker {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: var(--amber-accent);
   background: #fef3c7;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 20px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   border: 1px solid #fde68a;
 }
 .fg-hero h1 {
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 600;
   color: var(--cedar-dark);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 16px;
   line-height: 1.2;
   margin: 0 0 16px;
   letter-spacing: -0.02em;
@@ -350,8 +415,10 @@ body {
   margin-bottom: 6px;
 }
 .wf-story-title {
-  font-size: 1.45rem;
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--cedar-dark);
   margin: 0;
   line-height: 1.25;
@@ -691,7 +758,10 @@ body {
   margin-bottom: 24px;
 }
 .fg-ref-card h2 {
-  font-size: 1.4rem;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--cedar-dark);
   margin-top: 0;
   margin-bottom: 12px;
@@ -733,6 +803,15 @@ body {
   border-radius: var(--radius-md);
   padding: 24px;
   box-shadow: var(--shadow-sm);
+}
+.fg-faq-card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 .fg-faq-item {
   border-bottom: 1px solid #f1f5f4;

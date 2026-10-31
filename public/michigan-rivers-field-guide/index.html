@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
   <!-- Guide CSS -->
-  <link rel="stylesheet" href="/assets/michigan-rivers-field-guide.css">
+  <link rel="stylesheet" href="../assets/michigan-rivers-field-guide.css">
 
   <!-- JSON-LD Structured Data Schema -->
   <script type="application/ld+json">
@@ -242,8 +242,884 @@
     ]
   }
   </script>
+
+  <!-- Google Fonts: Fraunces & DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap">
+
+  <!-- Embedded Field Guide Stylesheet (Instant Zero-FOUC & Offline Rendering) -->
+  <style>
+/* ==========================================================================
+   MICHIGAN BLUE-RIBBON RIVERS FIELD GUIDE - CRISP DAYLIGHT DESIGN SYSTEM
+   Palette: River-Clear White, Crisp Stone (#f8faf9), Cedar Green (#0f5132),
+   River Teal (#0d9488), Terracotta Copper (#c2410c), Daylight Slate (#334155).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap');
+
+:root {
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --bg-stone: #f8faf9;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f4;
+  --border-light: #dbe5e1;
+  --border-focus: #0d9488;
+  
+  --text-main: #13241f;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+  
+  --cedar-dark: #0f3d2e;
+  --cedar-green: #15803d;
+  --river-teal: #0d9488;
+  --river-teal-hover: #0f766e;
+  --takeout-copper: #c2410c;
+  --takeout-copper-hover: #9a3412;
+  --amber-accent: #b45309;
+  
+  --badge-green-bg: #ecfdf5;
+  --badge-green-border: #a7f3d0;
+  --badge-green-text: #065f46;
+  
+  --badge-amber-bg: #fffbeb;
+  --badge-amber-border: #fde68a;
+  --badge-amber-text: #92400e;
+  
+  --badge-blue-bg: #f0f9ff;
+  --badge-blue-border: #bae6fd;
+  --badge-blue-text: #0369a1;
+
+  --shadow-sm: 0 1px 3px rgba(15, 61, 46, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 61, 46, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-stone);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Signature Two-Tier Publication Masthead --- */
+.hm-masthead {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.hm-masthead__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.hm-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hm-brand-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--river-teal);
+}
+.hm-brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--cedar-dark);
+}
+.hm-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.hm-nav a {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.hm-nav a:hover {
+  color: var(--river-teal);
+}
+
+/* --- Breadcrumbs & Header --- */
+.fg-breadcrumbs {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.fg-breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.fg-breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 8px;
+  color: #94a3b8;
+}
+.fg-breadcrumbs a {
+  color: var(--river-teal);
+  text-decoration: none;
+}
+.fg-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+/* --- Hero Section --- */
+.fg-hero {
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  border-bottom: 1px solid var(--border-light);
+  padding: 48px 20px 40px;
+  text-align: center;
+}
+.fg-hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.fg-kicker {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--amber-accent);
+  background: #fef3c7;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  border: 1px solid #fde68a;
+}
+.fg-hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 600;
+  color: var(--cedar-dark);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  line-height: 1.2;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+.fg-hero-dek {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 auto 20px;
+  max-width: 780px;
+}
+.fg-byline {
+  font-size: 0.88rem;
+  color: var(--text-subtle);
+  margin-top: 14px;
+}
+
+/* --- Persona Quick Jump & Value Function Desk --- */
+.fg-persona-bar {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 24px auto 0;
+  max-width: 860px;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+.fg-persona-bar-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fg-persona-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fg-persona-chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.fg-persona-chip:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: var(--cedar-dark);
+}
+
+/* --- Multi-Group Filter Desk --- */
+.fg-filter-section {
+  max-width: 1100px;
+  margin: 28px auto 20px;
+  padding: 0 20px;
+}
+.fg-filter-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.fg-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fg-filter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cedar-dark);
+}
+.fg-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fg-pill-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: var(--text-main);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.fg-pill-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+.fg-pill-btn.is-active {
+  background: var(--river-teal);
+  border-color: var(--river-teal);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(13, 148, 136, 0.25);
+}
+
+/* --- Interactive Leaflet Map Desk --- */
+.fg-map-section {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  padding: 0 20px;
+}
+.fg-map-wrap {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+}
+.fg-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.fg-map-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  margin: 0;
+}
+.fg-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.fg-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.fg-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.fg-legend-dot.in {
+  background: var(--river-teal);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--river-teal);
+}
+.fg-legend-dot.out {
+  background: var(--takeout-copper);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--takeout-copper);
+}
+
+#rivers-map {
+  width: 100%;
+  height: 480px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #e2e8f0;
+  background: #eef4f2;
+}
+
+/* --- Main Layout & River Cards --- */
+.fg-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 48px;
+}
+
+.fg-river-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.wf-story {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+.wf-story:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+.wf-story.is-highlighted {
+  border-color: var(--river-teal);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+}
+
+.wf-story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f4;
+  padding-bottom: 14px;
+}
+.wf-story-number {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--river-teal);
+  background: #ccfbf1;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.wf-story-title {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin: 0;
+  line-height: 1.25;
+}
+.wf-story-route {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* --- USGS CFS Flow Badges --- */
+.wf-flow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.wf-flow-badge.normal {
+  background: var(--badge-green-bg);
+  border: 1px solid var(--badge-green-border);
+  color: var(--badge-green-text);
+}
+.wf-flow-badge.high {
+  background: var(--badge-amber-bg);
+  border: 1px solid var(--badge-amber-border);
+  color: var(--badge-amber-text);
+}
+.wf-flow-badge.low {
+  background: var(--badge-blue-bg);
+  border: 1px solid var(--badge-blue-border);
+  color: var(--badge-blue-text);
+}
+
+.wf-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  position: relative;
+}
+.wf-flow-badge.normal .wf-pulse-dot {
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-emerald 2s infinite;
+}
+.wf-flow-badge.high .wf-pulse-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  animation: pulse-amber 2s infinite;
+}
+.wf-flow-badge.low .wf-pulse-dot {
+  background: #0ea5e9;
+  box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+  animation: pulse-sky 2s infinite;
+}
+
+@keyframes pulse-emerald {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+@keyframes pulse-amber {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+@keyframes pulse-sky {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(14, 165, 233, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+}
+
+/* --- River Metrics Bar --- */
+.wf-metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: var(--bg-subtle);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.wf-metric-item {
+  display: flex;
+  flex-direction: column;
+}
+.wf-metric-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  letter-spacing: 0.05em;
+}
+.wf-metric-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+
+/* --- Card Body & Photography --- */
+.wf-story-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 820px) {
+  .wf-story-body {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.wf-story-figure {
+  margin: 0;
+  position: relative;
+}
+.wf-story-figure img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+  background: #e2e8f0;
+  border: 1px solid var(--border-light);
+}
+.wf-story-figure figcaption {
+  font-size: 0.76rem;
+  color: var(--text-subtle);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.wf-story-figure figcaption a {
+  color: var(--river-teal);
+  text-decoration: underline;
+}
+
+.wf-story-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+.wf-story-text p {
+  margin: 0 0 12px;
+}
+
+/* --- Dual Put-In & Take-Out GIS Launch Desk --- */
+.wf-launch-desk {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin: 16px 0;
+}
+.wf-launch-desk-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cedar-dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wf-launch-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .wf-launch-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.wf-launch-card {
+  background: var(--bg-subtle);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wf-launch-card.put-in {
+  border-left: 4px solid var(--river-teal);
+}
+.wf-launch-card.take-out {
+  border-left: 4px solid var(--takeout-copper);
+}
+
+.wf-launch-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.wf-launch-card.put-in .wf-launch-badge {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+.wf-launch-card.take-out .wf-launch-badge {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.wf-launch-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  margin-bottom: 4px;
+}
+.wf-launch-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.wf-launch-gis {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  color: #475569;
+  background: #ffffff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.wf-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  min-height: 38px;
+}
+.wf-put-in-btn {
+  background: var(--river-teal);
+  color: #ffffff;
+  border: 1px solid var(--river-teal);
+}
+.wf-put-in-btn:hover {
+  background: var(--river-teal-hover);
+}
+.wf-take-out-btn {
+  background: var(--takeout-copper);
+  color: #ffffff;
+  border: 1px solid var(--takeout-copper);
+}
+.wf-take-out-btn:hover {
+  background: var(--takeout-copper-hover);
+}
+
+.wf-shuttle-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wf-shuttle-stat {
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+.wf-map-jump-btn {
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  color: var(--cedar-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.wf-map-jump-btn:hover {
+  background: #f1f5f9;
+  border-color: var(--cedar-dark);
+}
+
+/* --- Persona Suitability Matrix on Card --- */
+.wf-persona-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.wf-persona-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+.wf-persona-tag.highlight {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+  font-weight: 700;
+}
+
+/* --- Reference Modules & Tables --- */
+.fg-ref-section {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.fg-ref-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+.fg-ref-card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+.fg-ref-card p {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.fg-table-wrap {
+  overflow-x: auto;
+}
+.fg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+.fg-table th {
+  background: var(--bg-subtle);
+  color: var(--cedar-dark);
+  font-weight: 700;
+  padding: 10px 14px;
+  border-bottom: 2px solid #cbd5e1;
+}
+.fg-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: var(--text-main);
+}
+.fg-table tr:hover td {
+  background: #f8fafc;
+}
+
+/* --- FAQ Section --- */
+.fg-faq-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.fg-faq-card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.fg-faq-item {
+  border-bottom: 1px solid #f1f5f4;
+  padding: 14px 0;
+}
+.fg-faq-item:last-child {
+  border-bottom: none;
+}
+.fg-faq-q {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--cedar-dark);
+  margin-bottom: 6px;
+}
+.fg-faq-a {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* --- Footer Brand --- */
+.hm-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hm-brand-avatar {
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+}
+.hm-brand-name {
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+
+  </style>
 </head>
 <body>
+
+  <!-- Signature Publication Masthead -->
+  <header class="hm-masthead">
+    <div class="hm-masthead__inner">
+      <div class="hm-brand-group">
+        <a href="/" aria-label="Chris Izworski Home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
+          <img class="hm-brand-avatar" src="../chris-izworski-portrait.jpg" alt="Chris Izworski" width="38" height="38">
+          <span class="hm-brand-name">Chris Izworski</span>
+        </a>
+      </div>
+      <nav class="hm-nav" aria-label="Primary site navigation">
+        <a href="/tools/">Tools</a>
+        <a href="/guides/">Guides</a>
+        <a href="/great-lakes-gazette/">Gazette</a>
+        <a href="/about/">About</a>
+      </nav>
+    </div>
+  </header>
 
   <!-- Breadcrumbs -->
   <nav class="fg-breadcrumbs" aria-label="Breadcrumbs">
@@ -371,7 +1247,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/au-sable-holy-water.jpg" alt="Canoes along the clear cedar banks of the Au Sable River near Grayling, Michigan" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/au-sable-holy-water.jpg" alt="Canoes along the clear cedar banks of the Au Sable River near Grayling, Michigan" loading="lazy" width="600" height="375">
             <figcaption>Au Sable River mainstream cedar banks. Photo: Wikimedia Commons (Public domain).</figcaption>
           </figure>
 
@@ -468,7 +1344,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/au-sable-mason-tract.jpg" alt="South Branch Au Sable River flowing through the pristine Mason Tract wilderness" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/au-sable-mason-tract.jpg" alt="South Branch Au Sable River flowing through the pristine Mason Tract wilderness" loading="lazy" width="600" height="375">
             <figcaption>South Branch Au Sable River Mason Tract. Photo: Kurt Schwoppe (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -562,7 +1438,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/au-sable-lower-river.jpg" alt="Broad waters and sand bluffs along the Lower Au Sable River corridor near Iargo Springs" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/au-sable-lower-river.jpg" alt="Broad waters and sand bluffs along the Lower Au Sable River corridor near Iargo Springs" loading="lazy" width="600" height="375">
             <figcaption>Lower Au Sable sand bluffs and river valley. Photo: Mtn-graphic (CC BY-SA 4.0).</figcaption>
           </figure>
 
@@ -656,7 +1532,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/manistee-upper-deward.jpg" alt="Upper Manistee River flowing through tranquil northern cedar forest" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/manistee-upper-deward.jpg" alt="Upper Manistee River flowing through tranquil northern cedar forest" loading="lazy" width="600" height="375">
             <figcaption>Upper Manistee forested river corridor. Photo: Eric Schmuttenmaer (CC BY-SA 2.0).</figcaption>
           </figure>
 
@@ -750,7 +1626,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/manistee-middle-ccc-sharon.jpg" alt="Broad sandy flats and clear water of the Middle Manistee River" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/manistee-middle-ccc-sharon.jpg" alt="Broad sandy flats and clear water of the Middle Manistee River" loading="lazy" width="600" height="375">
             <figcaption>Middle Manistee River gravel flats. Photo: Michigan Paddling Archive (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -844,7 +1720,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/manistee-lower-tippy-bear-creek.jpg" alt="Broad big water of the Lower Manistee River below Tippy Dam" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/manistee-lower-tippy-bear-creek.jpg" alt="Broad big water of the Lower Manistee River below Tippy Dam" loading="lazy" width="600" height="375">
             <figcaption>Lower Manistee River bluffs and deep pools below Tippy Dam. Photo: Notorious4life (Public domain / CC0).</figcaption>
           </figure>
 
@@ -938,7 +1814,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/pine-river-elm-flats.jpg" alt="Fast clear currents and boulder riffles of the Pine National Scenic River" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/pine-river-elm-flats.jpg" alt="Fast clear currents and boulder riffles of the Pine National Scenic River" loading="lazy" width="600" height="375">
             <figcaption>Pine National Scenic River rapids corridor. Photo: US Forest Service (Public domain).</figcaption>
           </figure>
 
@@ -1032,7 +1908,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/pere-marquette-holy-water.jpg" alt="Pere Marquette National Scenic River flowing over pristine gravel bars in Manistee National Forest" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/pere-marquette-holy-water.jpg" alt="Pere Marquette National Scenic River flowing over pristine gravel bars in Manistee National Forest" loading="lazy" width="600" height="375">
             <figcaption>Pere Marquette National Scenic River. Photo: en:User:Yetiwriter (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -1126,7 +2002,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/pere-marquette-gleasons-walhalla.jpg" alt="Paddlers canoeing down the cedar-lined Pere Marquette River corridor near Gleason's Landing" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/pere-marquette-gleasons-walhalla.jpg" alt="Paddlers canoeing down the cedar-lined Pere Marquette River corridor near Gleason's Landing" loading="lazy" width="600" height="375">
             <figcaption>Pere Marquette River wilderness float. Photo: Michigan Paddling Archive (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -1220,7 +2096,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/jordan-river-graves-crossing.jpg" alt="Lush green cedar banks and crystal-clear water along the Jordan Natural River" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/jordan-river-graves-crossing.jpg" alt="Lush green cedar banks and crystal-clear water along the Jordan Natural River" loading="lazy" width="600" height="375">
             <figcaption>Jordan River Natural River valley. Photo: Wikimedia Commons (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -1314,7 +2190,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/pigeon-river-elk-country.jpg" alt="Dense northern forest and cold tea-colored stream in Pigeon River Country" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/pigeon-river-elk-country.jpg" alt="Dense northern forest and cold tea-colored stream in Pigeon River Country" loading="lazy" width="600" height="375">
             <figcaption>Pigeon River Country State Forest. Photo: Chris Izworski Trout Streams (Public domain / Wikimedia).</figcaption>
           </figure>
 
@@ -1408,7 +2284,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/two-hearted-river-mouth.jpg" alt="Two Hearted River historical marker and river corridor leading to Lake Superior" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/two-hearted-river-mouth.jpg" alt="Two Hearted River historical marker and river corridor leading to Lake Superior" loading="lazy" width="600" height="375">
             <figcaption>Two Hearted River Lake Superior corridor. Photo: Wikimedia Commons (CC BY-SA 3.0).</figcaption>
           </figure>
 
@@ -1502,7 +2378,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/fox-river-seney.jpg" alt="Quiet amber waters of the Fox River flowing through the Upper Peninsula wilderness" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/fox-river-seney.jpg" alt="Quiet amber waters of the Fox River flowing through the Upper Peninsula wilderness" loading="lazy" width="600" height="375">
             <figcaption>Fox River near Seney, Upper Peninsula. Photo: Chris Izworski Trout Streams (Public domain / Wikimedia).</figcaption>
           </figure>
 
@@ -1596,7 +2472,7 @@
 
         <div class="wf-story-body">
           <figure class="wf-story-figure">
-            <img src="/assets/michigan-rivers/platte-river-sleeping-bear.jpg" alt="Platte River flowing gently into Lake Michigan at Sleeping Bear Dunes National Lakeshore" loading="lazy" width="600" height="375">
+            <img src="../assets/michigan-rivers/platte-river-sleeping-bear.jpg" alt="Platte River flowing gently into Lake Michigan at Sleeping Bear Dunes National Lakeshore" loading="lazy" width="600" height="375">
             <figcaption>Platte River Point at Sleeping Bear Dunes. Photo: National Park Service (Public domain / NPS).</figcaption>
           </figure>
 
@@ -1835,7 +2711,7 @@
     <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px;">
       <div class="hm-brand-group">
         <a href="/" aria-label="Chris Izworski Home">
-          <img class="hm-brand-avatar" src="/chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
+          <img class="hm-brand-avatar" src="../chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
         </a>
         <span class="hm-brand-name">Chris Izworski</span>
       </div>
@@ -1852,6 +2728,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Guide Client JS -->
-  <script src="/assets/michigan-rivers-field-guide.js"></script>
+  <script src="../assets/michigan-rivers-field-guide.js"></script>
 </body>
 </html>

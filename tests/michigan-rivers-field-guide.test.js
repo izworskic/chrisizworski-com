@@ -117,10 +117,11 @@ test('All destination photos have valid figcaption attributions', () => {
 
 test('All 14 river float images are locally hosted web-optimized assets', () => {
   const html = read('public/michigan-rivers-field-guide/index.html');
-  const imgMatches = [...html.matchAll(/<img[^>]+src="(\/assets\/michigan-rivers\/[^"]+\.jpg)"/g)];
+  const imgMatches = [...html.matchAll(/<img[^>]+src="((?:\/|\.\.\/)assets\/michigan-rivers\/[^"]+\.jpg)"/g)];
   assert.equal(imgMatches.length, 14, 'Must link 14 local river images');
   for (const m of imgMatches) {
-    const relPath = 'public' + m[1];
+    const cleanRel = m[1].replace(/^\.\.\//, '/');
+    const relPath = 'public' + cleanRel;
     const absPath = path.join(root, relPath);
     assert.ok(existsSync(absPath), `Local image must exist: ${relPath}`);
     const stat = statSync(absPath);
