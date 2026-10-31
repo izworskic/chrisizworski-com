@@ -28,6 +28,16 @@ test('Sleeping Giant production renderer preserves 6 static options, all 70 sour
  assert.ok(html.includes('id="map-focus"'));
  assert.ok(html.includes('id="map-canvas"'));
  assert.ok(html.includes('id="map-geographic"'), 'real geographic basemap container missing');
+ assert.ok(html.includes('id="featured-adventure"'), 'Experience OS route focus missing');
+ assert.ok(html.includes('id="map-route-picker"'), 'native keyboard map trail chooser missing');
+ assert.ok(html.includes('id="featured-image"'), 'sourced trail photography missing');
+ assert.ok(html.includes('id="focus-map-button"'), 'focused selection map action missing');
+ assert.ok(html.includes('updateFeatured(route)'), 'map and feature are not linked to the same route data');
+ assert.ok(html.includes('Mcdougallgregor'), 'Sea Lion CC attribution missing');
+ assert.ok(html.includes('Tariq Hossenbux'), 'Top of the Giant CC attribution missing');
+ assert.ok(html.includes('Sharon Mollerus'), 'Middlebrun Bay CC attribution missing');
+ assert.ok(html.includes('featuredPhoto.hidden=true'), 'missing-image/failed-image fallback missing');
+ assert.ok(html.includes('No live trail status is available'), 'selected route must not imply verified opening');
  assert.ok(html.includes('/assets/vendor/leaflet-1.9.4.css'), 'Leaflet styles absent');
  assert.ok(html.includes('/assets/leaflet-1.9.4.js'), 'local Leaflet runtime absent');
  assert.ok(html.includes('/api/carto-basemap-config'), 'site CARTO configuration not wired');

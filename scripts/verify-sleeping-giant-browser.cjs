@@ -34,7 +34,9 @@ async function main(){
      headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
    for(const viewport of [
      {name:'desktop',width:1440,height:900},
-     {name:'phone',width:390,height:844}
+     {name:'tablet',width:768,height:1024},
+     {name:'phone',width:390,height:844},
+     {name:'small-phone',width:360,height:800}
    ]){
      const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},
        deviceScaleFactor:1,reducedMotion:'reduce'});
@@ -90,6 +92,36 @@ async function main(){
      must(await page.locator('.map-geographic path.leaflet-interactive').count()>=5,
        viewport.name+' georeferenced Sea Lion segments and markers not drawn');
      must((await page.locator('#map-canvas').getAttribute('aria-label')).includes('Sea Lion'),viewport.name+' default map accessibility name incorrect');
+     must((await page.locator('#focus-title').innerText())==='Sea Lion Trail',
+       viewport.name+' initial featured trail must match static source');
+     must((await page.locator('#map-route-picker').inputValue())==='sea-lion',
+       viewport.name+' initial map picker not synchronized');
+     must(await page.locator('.route-card.is-selected').count()===1,
+       viewport.name+' exactly one selected route card required');
+     must((await page.locator('#focus-distance').innerText()).includes('1.5 mi'),
+       viewport.name+' featured distance not miles first');
+     await page.locator('#map-route-picker').selectOption('middlebrun-beach');
+     must((await page.locator('#focus-title').innerText())==='Middlebrun Bay Beach',
+       viewport.name+' map picker failed to update featured outing');
+     must((await page.locator('#map-route-name').innerText()).startsWith('Middlebrun Bay Beach'),
+       viewport.name+' map and feature are out of sync');
+     must(await page.locator('[data-id="middlebrun-beach"]').evaluate(el=>el.classList.contains('is-selected')),
+       viewport.name+' picker did not mark the same card');
+     await page.locator('#map-route-picker').selectOption('head-of-the-giant');
+     must(await page.locator('#featured-photo').isHidden(),
+       viewport.name+' unverified-route photo should not linger from another trail');
+     must((await page.locator('#focus-story').innerText()).includes('steepest'),
+       viewport.name+' photo-free trail must retain interpretive content');
+     await page.locator('#map-route-picker').selectOption('sea-lion');
+     must((await page.locator('#focus-title').innerText())==='Sea Lion Trail',
+       viewport.name+' reversible map selection failed');
+     await page.locator('#interest').selectOption('beach');
+     must((await page.locator('#focus-title').innerText())==='Middlebrun Bay Beach',
+       viewport.name+' beach intent did not affect featured outing');
+     must((await page.locator('#map-route-picker').inputValue())==='middlebrun-beach',
+       viewport.name+' planner did not update map picker');
+     await page.locator('#interest').selectOption('short-walk');
+     await page.locator('#map-route-picker').selectOption('sea-lion');
      const visible=await page.locator('[data-id="sea-lion"] .card-decision').innerText();
      must(visible.includes('Published hiking range fits')||visible.includes('Ontario Parks'),viewport.name+' source duration unavailable');
      // The hero is a CSS background: layout-only screenshots do not prove its
@@ -115,6 +147,8 @@ async function main(){
      report.screenshots.push(viewport.name+'-hero.png');
      await page.locator('#hours').selectOption('12');
      await page.locator('#interest').selectOption('summit');
+     must((await page.locator('#focus-title').innerText())==='Top of the Giant',
+       viewport.name+' summit intent should feature the long summit route');
      await page.locator('input[name="mode"][value="bike-hike"]').check();
      const top=page.locator('[data-id="top-of-the-giant"]');
      must((await top.locator('.card-decision').innerText()).includes('no official total'),viewport.name+' bike timing shown as known');
@@ -139,6 +173,8 @@ async function main(){
      await mapFocus.selectOption('overview');
      must((await page.locator('#map-canvas').getAttribute('viewBox'))==='0.00 0.00 820.00 610.00',
        viewport.name+' full research route reset did not work');
+     await page.locator('#featured-adventure').screenshot({path:path.join(out,viewport.name+'-featured.png'),animations:'disabled'});
+     report.screenshots.push(viewport.name+'-featured.png');
      await page.locator('#map-section').screenshot({path:path.join(out,viewport.name+'-map.png'),animations:'disabled'});
      report.screenshots.push(viewport.name+'-map.png');
      await page.locator('[data-id="middlebrun-beach"] button[data-select="middlebrun-beach"]').click();
