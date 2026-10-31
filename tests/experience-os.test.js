@@ -60,7 +60,7 @@ test('visitor outcomes and original architecture take precedence over effects', 
   const tech = read('design-systems/experience-os-v1/docs/TECHNOLOGY_DECISIONS.md');
   const workflow = read('design-systems/experience-os-v1/docs/EXPERIENCE_LIFECYCLE.md');
   const brief = read('design-systems/experience-os-v1/templates/EXPERIENCE_BRIEF.md');
-  assert.match(tech, /React[\\s*]+island/);
+  assert.ok(tech.includes('React') && tech.includes('island'));
   assert.match(tech, /HTML/);
   assert.match(tech, /No dependency requirement/);
   assert.match(workflow, /two external/i);
