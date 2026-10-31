@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 62,
-    "matchedGisFeatures": 57,
-    "pendingGisFeatures": 104
+    "curatedDestinations": 63,
+    "matchedGisFeatures": 58,
+    "pendingGisFeatures": 103
   },
   "batchSize": 8,
   "batches": [
@@ -44,132 +44,131 @@
         9,
         195,
         205,
-        44,
         52,
-        59
+        59,
+        83
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        83,
         99,
         103,
         105,
         107,
         114,
         121,
-        123
+        123,
+        126
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        126,
         20,
         24,
         25,
         30,
         37,
         39,
-        40
+        40,
+        48
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        48,
         58,
         63,
         65,
         69,
         70,
         74,
-        75
+        75,
+        79
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        79,
         86,
         102,
         104,
         112,
         113,
         29,
-        42
+        42,
+        80
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        80,
         85,
         129,
         15,
         17,
         144,
         18,
-        116
+        116,
+        127
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        127,
         148,
         153,
         157,
         162,
         163,
         169,
-        170
+        170,
+        172
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        172,
         173,
         175,
         180,
         181,
         183,
         184,
-        185
+        185,
+        186
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        186,
         187,
         22,
         28,
         54,
         57,
         60,
-        61
+        61,
+        62
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        62,
         72,
         84,
         106,
         122,
         51,
         120,
-        136
+        136,
+        137
       ]
     },
     {
       "batchNumber": 13,
       "candidates": [
-        137,
         139,
         140,
         149,
@@ -489,21 +488,6 @@
       "lat": 46.669583,
       "lng": -85.955765,
       "cluster": "ALGER / CHIPMUNK CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 44,
-      "name": "Tibbets Falls",
-      "county": "BARAGA",
-      "river": "STURGEON RIVER",
-      "lat": 46.58047,
-      "lng": -88.588843,
-      "cluster": "BARAGA / STURGEON RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

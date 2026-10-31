@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 57,
-    "pending": 104,
-    "curatedTotal": 62,
+    "exactIdMatched": 58,
+    "pending": 103,
+    "curatedTotal": 63,
     "curatedNoMatchingGIS": 9
   },
   "candidates": [
@@ -824,14 +824,38 @@
       "lat": 46.58047,
       "lng": -88.588843,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "tibbets-falls",
+      "publicGuide": "verified-access-guide",
+      "landManager": "State of Michigan (trail land); North Country Trail Association Peter Wolfe Chapter volunteer-maintained tread",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "state-owned-NCTA-maintained-trail-and-named-Plains-Road-parking-verified",
+      "publicationEligible": true,
+      "sourceNotes": "Michigan state GIS Tibbets Falls #44 at 46.580470,-88.588843 is within roughly 55 metres of the independent waterfall field reference 46.58092,-88.58902. NCTA's 2025 Segment 44 guide describes the falls extending for hundreds of feet across slate, visible from the NCT, and source segment 46 and 2024 Segment 47 describe the named parking. The 2014 NCTA GPS waypoint for parking is historical and should not be treated as a current certified lot position. NCTA says Plains Road is normally plowed in winter but parking is only sometimes cleared; sandy two-track is unmaintained and not a reliable public-vehicle route. No live closure or water-stage data was ingested.",
+      "outstandingGate": "Current trail/parking seasonal status must be checked; no vehicle use of sandy westbound two-track, no river ford, no invented parking coordinate or slate ledge access.",
+      "sourceLinks": [
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+        "https://northcountrytrail.org/trail/michigan/pwc/",
+        "https://northcountrytrail.org/the-trail/trail-alerts/",
+        "https://www.waterfallsofthekeweenaw.com/sturgeon-river/tibbets-falls/",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ],
+      "visitorRouteEvidence": {
+        "managerSource": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+        "roadArrivalSource": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+        "parking": "From M-28 near Watton take Baraga Plains Road north, cross the Sturgeon River on the road bridge, and continue to the named Tibbets Falls / North Country Trail parking area on the west side of Plains Road. The Peter Wolfe Chapter's current segment 46 guide confirms this parking area and warns not to block the westbound sandy two-track. The parking is a trailhead, NOT the waterfall GIS coordinate. Use NCTA's current Avenza map #27 and road signs; no live winter clearing, exact driving turnoff coordinates or vehicle access down the sandy two-track is guaranteed.",
+        "trail": "Follow the marked foot connector from the Tibbets Falls trailhead to the blue-blazed North Country Trail, then use the official Peter Wolfe Chapter/Avenza #27 map to follow the Sturgeon River section where Tibbets Falls appears along Segment 44. The waterfall is a series of slate-ledged rapids visible from the trail as it climbs the bluff. Several NCT segments and a separate white-blazed fishermen's spur meet near Plains Road; confirm the correct trail on the current chapter map. Do not drive the unmaintained sandy two-track, attempt an unsignposted river crossing, or walk out onto slick slate slabs for a closer photograph.",
+        "currentRoadStatus": "seasonal-check-plowing-and-floods",
+        "navigationToGisPointAllowed": false,
+        "parkingMarkerVerified": false,
+        "noFordingNeededOnPublishedNCTView": true
+      }
     },
     {
       "gisObjectId": 45,

@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 62,
-  "linkedByExactOid": 57,
-  "unresolvedCandidates": 104,
+  "curatedCount": 63,
+  "linkedByExactOid": 58,
+  "unresolvedCandidates": 103,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -785,18 +785,31 @@
         -88.588843
       ],
       "river": "STURGEON RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "tibbets-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "ncta-state-land-public-hiking-trail-via-named-road-lot-no-live-winter-opening",
+      "landManager": "State of Michigan (trail land); North Country Trail Association Peter Wolfe Chapter volunteer-maintained tread",
+      "parkingEvidence": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "trailEvidence": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-10-31",
+      "nextAction": "Current trail/parking seasonal status must be checked; no vehicle use of sandy westbound two-track, no river ford, no invented parking coordinate or slate ledge access.",
+      "batch": "county-baraga",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "25",
+      "classification": "state-owned-NCTA-maintained-trail-and-named-Plains-Road-parking-verified",
+      "accessAssessment": "Michigan state GIS Tibbets Falls #44 at 46.580470,-88.588843 is within roughly 55 metres of the independent waterfall field reference 46.58092,-88.58902. NCTA's 2025 Segment 44 guide describes the falls extending for hundreds of feet across slate, visible from the NCT, and source segment 46 and 2024 Segment 47 describe the named parking. The 2014 NCTA GPS waypoint for parking is historical and should not be treated as a current certified lot position. NCTA says Plains Road is normally plowed in winter but parking is only sometimes cleared; sandy two-track is unmaintained and not a reliable public-vehicle route. No live closure or water-stage data was ingested.",
+      "evidence": [
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+        "https://northcountrytrail.org/trail/michigan/pwc/",
+        "https://northcountrytrail.org/the-trail/trail-alerts/",
+        "https://www.waterfallsofthekeweenaw.com/sturgeon-river/tibbets-falls/",
+        "https://northcountrytrail.org/files/chapters/pwc/PWC%20GPS%20Readings-2014.pdf",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4332,5 +4345,5 @@
       ]
     }
   ],
-  "lastBatch": "24"
+  "lastBatch": "25"
 }

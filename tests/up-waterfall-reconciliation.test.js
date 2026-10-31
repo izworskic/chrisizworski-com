@@ -964,3 +964,32 @@ test('Scott Falls park-side-only promotion backed by Alger County and MDOT, no M
  assert.ok(hub.includes('data-arrival-verified="verified"'));
  assert.ok(sitemap.includes('/upper-peninsula-waterfalls/scott-falls/'));
 });
+
+test('Tibbets Falls #44 state land via NCTA named parking and blazed view, no 2-track vehicle directions',()=>{
+ const f=curated.waterfalls.find(x=>x.id==='tibbets-falls');
+ const row=ledger.candidates.find(x=>x.gisObjectId===44);
+ const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===44);
+ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8'));
+ const h=fs.readFileSync('public/upper-peninsula-waterfalls/tibbets-falls/index.html','utf8');
+ const hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+ assert.ok(f&&row&&source);
+ assert.equal(f.gisObjectId,44);
+ assert.equal(f.publication,'verified-access-guide');
+ assert.equal(row.curatedId,'tibbets-falls');
+ assert.equal(row.publicationEligible,true);
+ assert.equal(row.visitorRouteEvidence.navigationToGisPointAllowed,false);
+ assert.equal(row.visitorRouteEvidence.parkingMarkerVerified,false);
+ assert.equal(row.visitorRouteEvidence.noFordingNeededOnPublishedNCTView,true);
+ assert.equal(source.publication,'verified-access-guide');
+ assert.ok(!queue.candidates.some(x=>x.gisObjectId===44));
+ assert.match(h,/name="robots" content="index,follow,max-image-preview:large"/);
+ assert.match(h,/Segment 44/);
+ assert.match(h,/blue-blazed North Country Trail/);
+ assert.match(h,/sandy two-track/);
+ assert.match(h,/current chapter map/i);
+ assert.match(h,/winter clearing/i);
+ assert.ok(!h.includes('data-parking-lat='));
+ assert.ok(hub.includes('data-id="tibbets-falls" data-gis-oid="44"'));
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/tibbets-falls/'));
+ for(const axis of ['landManager','publicAccess','parking','trail','location']){assert.equal(f.verification[axis].verified,true);assert.ok(h.includes(f.verification[axis].source),axis);}
+});

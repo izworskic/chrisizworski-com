@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-30",
+  "reviewed": "2026-10-31",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -3500,6 +3500,60 @@
           "verified": true,
           "source": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml",
           "description": "Independent lower Silver Falls coordinate 46.79355,-88.33650 broadly aligns with state GIS #110, not upper feature #68."
+        }
+      }
+    },
+    {
+      "id": "tibbets-falls",
+      "name": "Tibbets Falls",
+      "region": "Western U.P.",
+      "place": "Sturgeon River · Baraga Plains Road · near Watton",
+      "lat": 46.58047,
+      "lng": -88.588843,
+      "gisObjectId": 44,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "Follow the marked foot connector from the Tibbets Falls trailhead to the blue-blazed North Country Trail, then use the official Peter Wolfe Chapter/Avenza #27 map to follow the Sturgeon River section where Tibbets Falls appears along Segment 44. The waterfall is a series of slate-ledged rapids visible from the trail as it climbs the bluff. Several NCT segments and a separate white-blazed fishermen's spur meet near Plains Road; confirm the correct trail on the current chapter map. Do not drive the unmaintained sandy two-track, attempt an unsignposted river crossing, or walk out onto slick slate slabs for a closer photograph.",
+      "best": "Snow-free season with dry trail tread, steady Sturgeon River flow and adequate daylight. Spring runoff makes slate banks more hazardous; winter trailhead plowing is not guaranteed.",
+      "access": "NCTA Peter Wolfe Chapter's April 2025 guide identifies State of Michigan ownership on NCT segments 44–46, a signed trail connection from the named Plains Road parking area, maintained blue-blazed routes and views of the natural Tibbets rapids from the trail. Current closures, parking clearing and flood conditions require checking on arrival.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "State-managed river trail on the North Country Trail",
+      "parking": "From M-28 near Watton take Baraga Plains Road north, cross the Sturgeon River on the road bridge, and continue to the named Tibbets Falls / North Country Trail parking area on the west side of Plains Road. The Peter Wolfe Chapter's current segment 46 guide confirms this parking area and warns not to block the westbound sandy two-track. The parking is a trailhead, NOT the waterfall GIS coordinate. Use NCTA's current Avenza map #27 and road signs; no live winter clearing, exact driving turnoff coordinates or vehicle access down the sandy two-track is guaranteed.",
+      "feature": "Low, wide steps of amber Sturgeon River water sliding across layered slate, framed by cedar and white pine; the falls unfold in a long series of rapids rather than one towering plunge.",
+      "decision": "A quiet northwoods hiking stop when the Baraga Plains Road NCT parking is available and foot trails are passable. Take the signed route, not the vehicle two-track; do not expect a roadside viewing platform or one giant drop.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-2025-primary-trail-maintainer-state-land-signed-parking-and-waterfall-view",
+      "sourceReviewed": "2026-10-31",
+      "manager": "State of Michigan (trail land); North Country Trail Association Peter Wolfe Chapter volunteer-maintained tread",
+      "further": "Michigan state GIS Tibbets Falls #44 at 46.580470,-88.588843 is within roughly 55 metres of the independent waterfall field reference 46.58092,-88.58902. NCTA's 2025 Segment 44 guide describes the falls extending for hundreds of feet across slate, visible from the NCT, and source segment 46 and 2024 Segment 47 describe the named parking. The 2014 NCTA GPS waypoint for parking is historical and should not be treated as a current certified lot position. NCTA says Plains Road is normally plowed in winter but parking is only sometimes cleared; sandy two-track is unmaintained and not a reliable public-vehicle route. No live closure or water-stage data was ingested.",
+      "winterRoad": "The chapter warns winter clearing of the named trailhead lot is variable. Baraga Plains Road may be plowed, but access to the parking area and trail is not confirmed for today. Unmaintained two-tracks are not an alternative.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "Peter Wolfe Chapter 2025 guide marks Segments 44–46 State of Michigan ownership and identifies trail caretakers; private land outside the trail is not assumed public."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA's official signed segment descriptions expressly include the falls and an established visitor walking connection from the Plains Road parking area."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "Segment 46 explicitly identifies good Tibbets Falls Trailhead parking on the Baraga Plains Road and warns not to block the sandy vehicle track."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+          "description": "NCTA Segment 44 describes blue-blazed Sturgeon River trail and the Tibbets Falls slate cascades visible from the trail; wet ledges can be extremely slippery."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan named waterfall GIS feature #44 at 46.580470,-88.588843, corroborated by an independent Tibbets field GPS point nearby."
         }
       }
     }
