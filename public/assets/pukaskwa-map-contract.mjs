@@ -13,6 +13,18 @@ export const APPROVED_POINTS = Object.freeze({
   'southern-headland-chair':985,
   'picnic-area':1003,
 });
+export const APPROVED_COORDINATES = Object.freeze({
+  'day-use-parking':[-86.290157,48.591016],
+  'visitor-centre':[-86.290354,48.590297],
+  'park-kiosk':[-86.288882,48.592218],
+  'horseshoe-beach':[-86.296686,48.589730],
+  'middle-beach':[-86.300158,48.591302],
+  'southern-headland-chair':[-86.293675,48.589424],
+  'picnic-area':[-86.290795,48.590394],
+});
+// Coordinates were rounded to six decimals from Parks Canada WGS84 GIS.
+// Source revisions must be investigated rather than silently moving pins.
+const MAX_COORDINATE_DRIFT_DEGREES = 0.00002;
 export const MAP_DATA_ROUTE = '/pukaskwa-national-park/access-points.json';
 const MIN_LON=-86.31,MAX_LON=-86.28,MIN_LAT=48.585,MAX_LAT=48.598;
 const geoDataset='https://open.canada.ca/data/en/dataset/cf5c266c-3a6a-4a3b-aed1-2ddd6e49d5e6';
@@ -32,6 +44,9 @@ export function verifyMapCatalog(catalog) {
     const pointId=record?.id;
     if(!pointId || seen.has(pointId) || !Object.hasOwn(APPROVED_POINTS,pointId) ||
        record.officialObjectId!==APPROVED_POINTS[pointId] ||
+       !APPROVED_COORDINATES[pointId] ||
+       Math.abs(record.lon-APPROVED_COORDINATES[pointId][0])>MAX_COORDINATE_DRIFT_DEGREES ||
+       Math.abs(record.lat-APPROVED_COORDINATES[pointId][1])>MAX_COORDINATE_DRIFT_DEGREES ||
        !Number.isFinite(record.lon)||!Number.isFinite(record.lat)||
        !(record.lon>=MIN_LON && record.lon<=MAX_LON && record.lat>=MIN_LAT && record.lat<=MAX_LAT) ||
        !['parking','information','landmark'].includes(record.kind) ||
