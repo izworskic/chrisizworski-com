@@ -41,7 +41,8 @@ jobs:
             'Checked: '+report.checkedAt,
             'Source conclusion: '+report.conclusion,
             'This is **not** an open-road/lot/bridge status or a driving route.',
-            ...report.results.map(r=>'- '+r.id+': '+r.availability+(r.reviewReasons.length?' — '+r.reviewReasons.join(', '):''))
+            ...report.results.map(r=>'- '+r.id+': '+r.availability+(r.reviewReasons.length?' — '+r.reviewReasons.join(', '):'')),
+            ...report.manualSources.map(r=>'- '+r.id+': manual-only — '+r.reason)
           ].join('\n\n');
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary+'\n');
           NODE
