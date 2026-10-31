@@ -146,14 +146,14 @@ async function main(){
    need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===0,device.name+' lake summer-road directions leaked in winter');
    need(await page.locator('[data-parking-id="summit"] .parking-drive').count()===0,device.name+' summit summer-road directions leaked in winter');
    const cr519=page.locator('[data-parking-id="presque"] .parking-drive');
-   need(await cr519.count()===1,device.name+' official CR519 independent winter approach missing');
-   const googleLink=new URL(await cr519.getAttribute('href'));
-   need(googleLink.hostname==='www.google.com'&&googleLink.pathname==='/maps/dir/'&&googleLink.searchParams.get('api')==='1',device.name+' DNR parking route URL malformed');
+   need(await cr519.count()===0,device.name+' winter CR519 navigation has no verified complete road route; withhold directions');
+   need((await page.locator('[data-parking-id="presque"] .access-date-note').innerText()).includes('County Road 519'),device.name+' missing source-described western approach');
+   need(await page.locator('[data-parking-id="presque"] .parking-maplink').count()===1,device.name+' mapped parking point link missing in winter');
    await page.locator('#arrival').selectOption('east');
    await page.locator('#planner button[type=submit]').click();
    await page.waitForFunction(()=>!document.querySelector('[data-parking-id="presque"] .parking-drive'),null,{timeout:5000});
    need(await page.locator('[data-parking-id="presque"] .parking-drive').count()===0,device.name+' east-origin winter route incorrectly offered County Road 519 across closed park');
-   need(await page.locator('[data-parking-id="ski"] .parking-drive').count()===1,device.name+' east-origin winter sports route missing');
+   need(await page.locator('[data-parking-id="ski"] .parking-drive').count()===0,device.name+' uncertified ski-area winter drive should not be linked');
    content=await page.locator('#results').innerText();
    need(content.includes('Winter Sports Complex'),device.name+' eastern winter planner did not select ski complex');
    await page.locator('#travel-date').fill('2027-05-02');
@@ -168,6 +168,18 @@ async function main(){
    content=await page.locator('#results').innerText();
    need(content.includes('Lake of the Clouds'),device.name+' accessible outlook missing');
    need(!(await page.locator('#results .recommendations li a').allTextContents()).some(x=>x.includes('Summit Peak')),device.name+' inappropriate tower suggestion');
+   await page.locator('#vehicle').selectOption('trailer');
+   need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===0,device.name+' trailer offered constrained Lake of the Clouds upper lot');
+   need(await page.locator('[data-parking-id="summit"] .parking-drive').count()===0,device.name+' trailer offered Summit Peak upper lot');
+   need((await page.locator('[data-parking-id="lake"] .access-date-note').innerText()).includes('middle ski-hill'),device.name+' official camper staging caution missing');
+   await page.locator('#vehicle').selectOption('car');
+   need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===1,device.name+' ordinary-season car route missing');
+   await page.locator('#travel-date').fill('2026-11-10');
+   need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===0,device.name+' seasonal change did not immediately withhold road directions');
+   await page.locator('#travel-date').fill('2026-10-28');
+   need(await page.locator('[data-parking-id="lake"] .parking-drive').count()===1,device.name+' returning to ordinary season did not restore car link');
+   const summerGoogle=new URL(await page.locator('[data-parking-id="lake"] .parking-drive').getAttribute('href'));
+   need(summerGoogle.hostname==='www.google.com'&&summerGoogle.pathname==='/maps/dir/'&&summerGoogle.searchParams.get('api')==='1',device.name+' DNR lot navigation URL malformed');
    await page.locator('#results').screenshot({path:path.join(out,device.name+'-decision.png')});
    report.screenshots.push(device.name+'-decision.png');
    if(device.name!=='narrow'){
