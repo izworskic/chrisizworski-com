@@ -27,7 +27,7 @@
 
 Two approaches compared:
 - **A: Auto-detected road-open map** with green/red GPS route based on whether an official notice disappears. **Rejected:** unreliable public notice publishing, missing turn network and risk of falsely announcing an open road; would force unsupported visitor routing.
-- **B: Human-verifiable proof disclosure + scheduled official-source drift detection. Selected.** Keep the main editor's interpretive prose; show a compact access answer and expandable four-source proof. Run daily GitHub Actions that preserve a dated artifact; on substantive source changes, open/update one review issue. Never modify the road verdict without primary-source verification.
+- **B: Human-verifiable proof disclosure + scheduled official-source drift detection. Selected.** Keep the main editor's interpretive prose; show a compact access answer and expandable four-source proof. Run daily GitHub Actions for three official county/township sources reachable from GitHub runners; preserve a dated artifact and open/update one review issue on substantive changes. DNR's page is **manual-only** because it returns HTTP 403 to the unattended runner (confirmed 2026-10-31), though its dated statement remains directly linked in the guide. Never modify the road verdict without primary-source verification.
 
 **Reusable patterns:** EXPERIENCE_OS_V1 P01 answer-before-controls, P06 proof panel, P08 progressive disclosure, P10 alternatives after unknown. Anti-pattern A08 (geometry != permission), A07 (old evidence != live), A18 (research trapped in chat), A19 (mechanical park copy).
 
@@ -44,7 +44,7 @@ Two approaches compared:
 
 ## Acceptance / scoring
 
-Prior to release require: source-geometry recalculation, monitor normal/reopen/HTTP-failure fixture tests, no-JS source proof, mobile/narrow/desktop Chromium and keyboard toggling, full repository verification, static HTML and ads/Person/sitemap gates, review of exactly-head checks. A monitored source update must never produce `accessOpenVerified:true` or permission to render drive links.
+Prior to release require: source-geometry recalculation, monitor normal/reopen/HTTP-failure fixture tests, no-JS source proof, mobile/narrow/desktop Chromium and keyboard toggling, full repository verification, static HTML and ads/Person/sitemap gates, review of exactly-head checks. The three-source automated monitor excludes the DNR page (HTTP 403), which requires manual review. A monitored source update must never produce `accessOpenVerified:true` or permission to render drive links.
 
 **Results at drafting:** unmeasured until exact-head CI and screenshots complete. Record PR, test links, review outcome, and remaining real-world work in the final release handoff.
 
