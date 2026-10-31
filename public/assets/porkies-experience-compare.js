@@ -54,7 +54,7 @@
   }
   if(id==="escarpment"){
    reasons.push("DNR editions disagree on trail mileage (4.3 vs 3.7 miles); no full route or shuttle is certified.");
-   if(hours<=4){key="limited";heading="Poor fit for a short outing";reasons.push("The longer ridge traverse and its return logistics are not a quick scenic stop.");}
+   if(hours<=4){key="limited";if(ability!=="low")heading="Poor fit for a short outing";reasons.push("The longer ridge traverse and its return logistics are not a quick scenic stop.");}
   }
   if(id==="river")reasons.push("The riverbank trails are not a certified loop; unbridged-crossing conditions must not be inferred.");
   return {key,heading,reasons,mode,roadOpenVerified:false,routeCertified:false,parkingOpenVerified:false};
