@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "park": "pukaskwa",
+  "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
+  "checkedAt": "2026-10-31T14:40:21.611Z",
+  "lastSuccessAt": "2026-10-31T14:40:21.611Z",
+  "lastChangeAt": "2026-10-31T14:40:21.611Z",
+  "health": "ok",
+  "consecutiveFailures": 0,
+  "lastError": null,
+  "fingerprint": "2072e0e12b39e6ec49ade18467007e4609ce45a3547fbe02f9f8341a1301305e",
+  "snapshot": {
+    "schemaVersion": 1,
+    "park": "pukaskwa",
+    "retrievedAt": "2026-10-31T14:40:21.611Z",
+    "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
+    "collectionMethod": "public-html-table",
+    "sourceRecords": [
+      {
+        "name": "Current conditions",
+        "difficulty": "N.A.",
+        "status": "unknown",
+        "rawStatus": "Low",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Respect all posted notices and signs; Use caution;"
+      },
+      {
+        "name": "Hattie Cove Parking Lot",
+        "difficulty": "N.A.",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Respect all posted notices and signs;"
+      },
+      {
+        "name": "Beach Trail",
+        "difficulty": "Moderate",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted;"
+      },
+      {
+        "name": "Boardwalk Beach Trail",
+        "difficulty": "Easy",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted;"
+      },
+      {
+        "name": "Southern Headland trail",
+        "difficulty": "Moderate",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted;"
+      },
+      {
+        "name": "Bimose Kinoomagewnan Trail",
+        "difficulty": "Moderate",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted;"
+      },
+      {
+        "name": "Manito Miikana Trail",
+        "difficulty": "Moderate",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted;"
+      },
+      {
+        "name": "White River Suspension Bridge Trail",
+        "difficulty": "Difficult",
+        "status": "closed",
+        "rawStatus": "Closed.",
+        "issuedOn": "2026-10-22",
+        "comment": "2026-10-22: Adhere to all posted warnings and closures along trails;"
+      },
+      {
+        "name": "Mdaabii Miikna: 0 KM - 3.75 KM: North Entrance to Playter Harbour South",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Mdaabii Miikna: 3.75 KM - 4.75 KM: Playter Harbour South to Picture Rock Harbour North",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Mdaabii Miikna: 4.75 KM - 8 KM: Picture Rock Harbour North to Picture Rock Harbour South",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Mdaabii Miikna: 8 KM - 9.5 KM: Picture Rock Harbour South to White River Portage",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Mdaabii Miikna: 9.5 KM - 13.45 KM: White River Portage to South Entrance",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Mdaabii Miikna: Mdaabii Miikna",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Route finding may be necessary;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 0 KM - 4.5 KM: Hattie Cove to Playter Harbour North",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 4.5 KM - 7.8 KM: Playter Harbour North to Chigaamiwinigum Falls",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 7.8 KM - 8.8 KM: Chigaamiwinigum Falls to Hook Falls",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 8.8 KM - 16.4 KM: Hook Falls to Willow River",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 16.4 KM - 22 KM: Willow River to Morrison Harbour",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 22 KM - 25.4 KM: Morrison Harbour to Fish Harbour",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 25.4 KM - 30.5 KM: Fish Harbour to Oiseau Bay",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 30.5 KM - 37.7 KM: Oiseau Bay to Fisherman's Cove",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 37.7 KM - 44.8 KM: Fisherman's Cove to White Gravel River",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 44.8 KM - 47.9 KM: White Gravel River to White Spruce Harbour",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 47.9 KM - 54.7 KM: White Spruce Harbour to Hideaway Lake",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: 54.7 KM - 58.7 KM: Hideaway Lake to North Swallow River",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      },
+      {
+        "name": "Coastal Hiking Trail: Coastal Hiking Trail",
+        "difficulty": "Difficult",
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-10-12",
+        "comment": "2026-10-12: Adhere to all posted warnings and closures along trails; Campground open.; Stay on designated trails and viewpoints; Dogs on leash permitted; Recommended for experienced hikers only; Wet and muddy sections;"
+      }
+    ],
+    "warnings": [
+      "Parks Canada HTML is not a documented official trail-status API.",
+      "Published source date is not retrieval date or guaranteed present access.",
+      "Seasonal backcountry dates conflict between official pages; conservative boundary applied."
+    ]
+  },
+  "recentChanges": [],
+  "closureHolds": []
+}
