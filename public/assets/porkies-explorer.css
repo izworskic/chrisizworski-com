@@ -285,3 +285,48 @@ footer{border-top:1px solid var(--border);padding:20px clamp(18px,4vw,62px);disp
 .west-corridor-field-note .access-proof-grid p{margin:6px 0;font-size:.82rem;line-height:1.6}
 .west-corridor-field-note .proof-footnote{font-size:.76rem;line-height:1.5;border-top:1px solid #d1cbba;padding-top:10px;margin:12px 0 2px}
 @media(max-width:740px){.west-corridor-field-note .access-proof-grid{grid-template-columns:1fr}.west-corridor-field-note .porkies-access-proof{padding:12px}}
+
+/* Porkies Experience Lens: two real outing choices, not two fake routes. */
+main>.experience-compare{max-width:none;background:#e9e4d8;padding-left:max(18px,calc((100vw - 1325px)/2));padding-right:max(18px,calc((100vw - 1325px)/2));border-top:1px solid #d5d1c6;border-bottom:1px solid #d5d1c6}
+.experience-intro{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;margin-bottom:25px}
+.experience-intro>div{max-width:740px}
+.experience-intro h2{font-size:clamp(2rem,3.3vw,3.25rem)}
+.experience-intro p:not(.eyebrow){font-size:.98rem;line-height:1.65;color:#47574d}
+.experience-intro>a{font-size:.8rem;font-weight:750;padding-bottom:12px;white-space:normal}
+.experience-picker{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);gap:12px;align-items:end;margin-bottom:9px}
+.experience-picker label{display:grid;gap:6px;color:#32493f;font-size:.81rem;font-weight:750}
+.experience-picker select{width:100%;min-width:0;min-height:47px;border:1px solid #9eaea2;border-radius:5px;background:#fffdf8;color:#183b32;padding:10px 35px 10px 12px;font-size:.91rem}
+.experience-versus{align-self:center;text-align:center;color:#8b6549;font:italic 1.3rem Fraunces,Georgia,serif;padding-top:15px}
+.experience-sync-note{font-size:.8rem;color:#536358;margin:8px 0 20px}
+.experience-sides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:21px;align-items:stretch}
+.experience-side{display:flex;flex-direction:column;min-width:0;background:#fffdf7;border:1px solid #c3c7ba;border-radius:7px;overflow:hidden;box-shadow:0 9px 23px rgba(24,52,46,.05)}
+.experience-photo{position:relative;min-height:205px;background:#c2cfc0}
+.experience-photo figure{margin:0;height:100%;position:relative}
+.experience-photo img{display:block;width:100%;height:clamp(195px,24vw,280px);object-fit:cover}
+.experience-photo figcaption{font-size:.67rem;line-height:1.4;background:#f6f3e9;color:#385248;padding:6px 13px}
+.experience-photo-empty{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:24px;min-height:205px;background:linear-gradient(125deg,#d7e1d2,#f4ead8);color:#344d3e}
+.experience-photo-empty .experience-illustration{font:italic 2.4rem Fraunces,Georgia,serif;color:#456453}
+.experience-photo-empty p{max-width:40ch;font-size:.82rem;line-height:1.55}
+.experience-body{flex:1;display:flex;flex-direction:column;padding:20px clamp(16px,2vw,26px) 22px}
+.experience-body h3{font-size:clamp(1.55rem,2.2vw,2.15rem);margin:0 0 5px;color:#183d35}
+.experience-tagline{font:italic 1.03rem Fraunces,Georgia,serif;color:#5d5945;margin:3px 0 14px}
+.experience-decision{font-size:.76rem;line-height:1.4;font-weight:800;letter-spacing:.015em;border-left:3px solid #a4774f;background:#f8f0dd;padding:8px 11px;margin:0 0 14px;color:#4c3b28}
+.experience-side[data-verdict="limited"] .experience-decision{border-left-color:#a6523e;background:#fff0e9;color:#703d30}
+.experience-facts{margin:0;display:grid;gap:4px}
+.experience-facts dt{font-size:.68rem;font-weight:800;letter-spacing:.085em;text-transform:uppercase;color:#567064}
+.experience-facts dd{font-size:.88rem;line-height:1.55;margin:0 0 10px;color:#2c423a}
+.experience-proof{margin:4px 0 10px;background:#f4f3ea;border-radius:4px;padding:12px 14px}
+.experience-proof h4{font-size:.82rem;margin:0 0 7px;color:#2e5041}
+.experience-proof ul{margin:0;padding-left:19px;font-size:.8rem;line-height:1.5}
+.experience-proof li+li{margin-top:6px}
+.experience-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:auto}
+.experience-actions a,.experience-actions button{font-size:.77rem;font-weight:750;background:transparent;border:1px solid #8fa69a;color:#1d5546;padding:9px 10px;border-radius:4px;text-decoration:none;min-height:40px;line-height:1.4}
+.experience-actions a:hover,.experience-actions button:hover{background:#ecf1e6}
+.experience-bottom{margin:20px 0 10px;padding:17px 19px;background:#fffdf7;border-left:4px solid #546e60;display:flex;align-items:center;gap:18px;justify-content:space-between;border-radius:2px}
+.experience-bottom p{margin:0;font-size:.87rem;line-height:1.6;max-width:75ch}
+#experience-map-compare{flex-shrink:0;border-radius:4px;background:var(--pine);color:#fff;border:1px solid var(--pine);font-size:.81rem;line-height:1.4;font-weight:700;padding:10px 14px}
+#experience-map-compare:disabled{opacity:.5;cursor:not-allowed}
+.experience-caveat{font-size:.76rem;color:#4a6358;line-height:1.62;margin-bottom:0}
+.experience-screenreader{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:800px){.experience-intro{grid-template-columns:1fr;gap:5px}.experience-intro>a{padding:0}.experience-bottom{flex-wrap:wrap}.experience-sides{gap:13px}}
+@media(max-width:680px){.experience-picker{grid-template-columns:1fr;gap:8px}.experience-versus{padding:0;text-align:left;font-size:1.1rem}.experience-sides{grid-template-columns:1fr}.experience-photo img{height:220px}.experience-bottom{padding:14px}#experience-map-compare{width:100%;white-space:normal}}
