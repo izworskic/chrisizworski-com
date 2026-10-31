@@ -27,24 +27,38 @@
    if(month===11)return "november";
    return "normal";
  }
- function eligibility(point,date,arrival) {
+ function eligibility(point,date,arrival,vehicle) {
    var s=season(date), road=point.roadRule;
-   arrival = ["west","east","inpark"].includes(arrival) ? arrival : "inpark";
-   if(s==="unknown")return {canDirect:false,notice:"Tell us your visit date before we offer driving directions."};
-   if(road==="west"){
-     var limited = s==="winter" || s==="spring";
-     return {canDirect:!limited||arrival==="west",notice:limited
-       ? (arrival==="west"?"The west-side County Road 519 approach brings you toward the Presque Isle River even when the interior scenic roads close. Check current parking and trail conditions before you go.":"The way to the western river country is not a shortcut from the eastern side when interior roads are closed. Choose the Western U.P. approach only if it matches your actual journey, and check the DNR road notices.")
-       : "Follow the signed County Road 519 approach to the river country, then choose a designated public day-use lot on arrival."};
+   if(s==="unknown")return {canDirect:false,notice:"Choose a valid visit date before driving directions are considered."};
+   vehicle=vehicle||"car";
+   if(!["car","rv","trailer"].includes(vehicle))return {canDirect:false,notice:"Vehicle type is not recognized. Consult the official DNR map before driving."};
+   // The park's 2025 visitor guide explicitly directs campers and trailers away
+   // from the upper Lake of the Clouds and Summit Peak parking areas. We have not
+   // verified a navigation coordinate for either lower staging area.
+   if(vehicle==="rv"||vehicle==="trailer"){
+     if(point.id==="lake")return {canDirect:false,notice:"DNR recommends campers and trailers use the middle ski-hill parking area on busy summer and fall days, not this upper overlook lot. The correct staging-lot coordinates are not verified here; ask the park before driving."};
+     if(point.id==="summit")return {canDirect:false,notice:"DNR recommends trailers and campers stop at the designated lower lot near the South Boundary Road turnoff, not this upper approach. Its exact navigation location is not verified here."};
+     return {canDirect:false,notice:"This mapped point has not been verified for RV or trailer turning, parking or a safe approach. Consult the park office and official map before taking a large vehicle to this lot."};
    }
-   if(road==="ski"){
-     var allowed = s==="normal" || (s==="winter" && arrival==="east");
-     return {canDirect:allowed,notice:s==="winter"
-       ? (arrival==="east"?"The eastern winter-sports area may offer snowy forest trails. Check the ski and snow report, operations and parking before traveling; none is confirmed open here.":"The winter road closures prevent us from suggesting a through-park drive. Use the eastern approach only if that is how you will actually arrive.")
-       : s==="normal"?"The eastern trail network begins near this mapped lot. Follow signs and confirm your planned activity is available.":"This parking point is shown for orientation; seasonal operations have not been confirmed."};
+   // No origin-to-parking road sequence has been audited end-to-end. In the
+   // shoulder and closure seasons, a Google Maps destination alone could
+   // inadvertently send the traveler across a restricted park corridor.
+   if(s!=="normal"){
+     if(road==="west"){
+       return {canDirect:false,notice:"The DNR describes the western County Road 519 approach from the Wakefield side, including during seasonal interior-road closures. Only the approach is documented, not an end-to-end car route. View the lot on a map, confirm current road notices, and do not let navigation send you across the closed park roads."};
+     }
+     if(road==="ski"){
+       return {canDirect:false,notice:"In winter the ski area is approached from the eastern side, but the online map cannot verify your actual start point, route, plowing or complex operations. Check the DNR ski report and access notices before driving."};
+     }
+     return {canDirect:false,notice:"The M-107 and South Boundary scenic-road gates may be closed, not yet reopened or affected by early snow. Driving directions are withheld pending current official confirmation."};
    }
-   if(road==="seasonal")return {canDirect:s==="normal",notice:s==="normal"?"This mapped lot is near a named park trail. Enjoy the view only after confirming the scenic road is open and parking is signed.":"The high scenic roads may still be closed for winter or spring breakup. The point remains on the map, but driving directions are withheld until seasonal access can be confirmed."};
-   return {canDirect:s==="normal",notice:s==="normal"?"The mapped lot is near a named nature trail. Check posted opening hours and access before walking in.":"Visitor-center access is not confirmed for this date. Use this pin for orientation rather than driving instructions."};
+   if(road==="west" && arrival==="east"){
+     return {canDirect:false,notice:"This destination is on the far western County Road 519 approach. A cross-park drive has not been verified; check official park-road notices and approach from the western side if appropriate."};
+   }
+   if(road==="seasonal")return {canDirect:true,notice:"June–October is the usual scenic-road season, not proof the gate is open. Check DNR notices and posted conditions; navigation to a DNR parking coordinate is not a verified road or trail route."};
+   if(road==="ski")return {canDirect:true,notice:"This is a DNR parking asset near the eastern trail network. Confirm the road, designated parking and activity status before travel."};
+   if(road==="west")return {canDirect:true,notice:"Approach the river country on signed County Road 519 from the western side. Check road and lot conditions; this is not a guaranteed start for every waterfall path."};
+   return {canDirect:true,notice:"Mapped parking asset near a named DNR nature trail. Check the visitor center hours and designated day-use parking before driving."};
  }
  function urlFor(point,driving) {
    var xy=point.lat.toFixed(6)+","+point.lon.toFixed(6);
@@ -61,7 +75,7 @@
    var node=root.document.querySelector('[data-parking-id="'+point.id+'"]');
    if(!node)return;
    var date=root.document.getElementById("travel-date")?.value||"";
-   var state=eligibility(point,date,root.document.getElementById("arrival")?.value);
+   var state=eligibility(point,date,root.document.getElementById("arrival")?.value,root.document.getElementById("vehicle")?.value);
    var actions=node.querySelector(".access-actions");
    if(actions) {
      actions.replaceChildren();
@@ -160,6 +174,10 @@
      if(!Array.isArray(body.points)||body.points.length!==6||body.points.some(x=>x.status!=="dnr-mapped-crosschecked-not-current"))throw Error("Invalid parking source data");
      body.points.forEach(p=>{siteById[p.id]=p;});
      initMap(body.points);
+     ["travel-date","arrival","vehicle"].forEach(function(id){
+       var control=root.document.getElementById(id);
+       if(control){control.addEventListener("change",updateFilter);if(id==="travel-date")control.addEventListener("input",updateFilter);}
+     });
      var planner=root.document.getElementById("planner");
      if(planner){
        planner.addEventListener("submit",()=>root.setTimeout(()=>{var eng=root.PorkiesEngine?.recommend;if(typeof eng==="function"){onPlan(eng({date:root.document.getElementById("travel-date").value,arrival:root.document.getElementById("arrival").value,hours:+root.document.getElementById("hours").value,ability:root.document.getElementById("ability").value,interest:root.document.getElementById("interest").value}));}},0));

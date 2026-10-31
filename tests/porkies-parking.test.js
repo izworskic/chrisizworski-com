@@ -66,10 +66,11 @@ test('map-only routing policy blocks closed or uncertain seasonal roads',()=>{
    assert.equal(eligibility(byId[id],'2026-11-15').canDirect,false,id+' falsely routed during ambiguous November');
    assert.equal(eligibility(byId[id],'2027-08-15').canDirect,true,id+' did not offer summer directions');
  }
- assert.equal(eligibility(byId.presque,'2027-01-15','west').canDirect,true,'CR519 distinct winter west approach should be preserved');
+ assert.equal(eligibility(byId.presque,'2027-01-15','west').canDirect,false,'official CR519 approach does not certify end-to-end winter vehicle navigation');
+ assert.match(eligibility(byId.presque,'2027-01-15','west').notice,/County Road 519/);
  assert.equal(eligibility(byId.presque,'2027-01-15','east').canDirect,false,'winter east-to-Presque route cannot silently cross closed park roads');
  assert.equal(eligibility(byId.presque,'2027-01-15','inpark').canDirect,false,'unknown winter arrival corridor cannot imply legal route');
- assert.equal(eligibility(byId.ski,'2027-01-15','east').canDirect,true,'winter complex east approach should be possible');
+ assert.equal(eligibility(byId.ski,'2027-01-15','east').canDirect,false,'winter ski area approach requires signed route, operations and road check');
  assert.equal(eligibility(byId.ski,'2027-01-15','west').canDirect,false,'winter west-to-ski cannot silently cross South Boundary Road');
  assert.equal(eligibility(byId.ski,'2027-05-15').canDirect,false,'spring ski operation cannot be inferred');
  assert.equal(eligibility(byId.visitor,'2027-01-15').canDirect,false,'winter visitor center approach unverified');
@@ -86,4 +87,33 @@ test('Google Maps links end at DNR mapped parking asset coordinates, not attract
  assert.equal(nameFor({name:'Lake of the Clouds overlook'}),'lake');
  assert.equal(nameFor({name:'Presque Isle River scenic-area access (County Road 519)'}),'presque');
  assert.equal(nameFor({name:'A sourced wilderness hike'}),null,'do not fake a parking lot for unresolved backcountry hike');
+});
+
+test('DNR camper and trailer parking cautions prevent unsafe upper-scenic-area directions',()=>{
+ const byId=Object.fromEntries(published.points.map(p=>[p.id,p]));
+ for (const vehicle of ['rv','trailer']){
+   assert.equal(eligibility(byId.lake,'2027-08-15','east',vehicle).canDirect,false);
+   assert.match(eligibility(byId.lake,'2027-08-15','east',vehicle).notice,/middle ski-hill/);
+   assert.equal(eligibility(byId.summit,'2027-08-15','west',vehicle).canDirect,false);
+   assert.match(eligibility(byId.summit,'2027-08-15','west',vehicle).notice,/lower lot/);
+   for(const point of published.points){
+     assert.equal(eligibility(point,'2027-08-15','west',vehicle).canDirect,false,point.id+' has no RV/trailer parking clearance');
+   }
+ }
+ assert.equal(eligibility(byId.lake,'2027-08-15','east','car').canDirect,true);
+ assert.match(html,/id="vehicle"/);
+ assert.match(html,/value="trailer"/);
+ assert.match(html,/value="rv"/);
+ assert.match(html,/DNR visitor guide \/ scenic-area parking instructions/);
+});
+test('date and arrival changes refresh map directions without first submitting the planner',()=>{
+ assert.match(js,/\["travel-date","arrival","vehicle"\]/);
+ assert.match(js,/addEventListener\("change",updateFilter\)/);
+ for(const date of ['2027-01-15','2027-05-15','2026-11-15']){
+   assert.equal(eligibility(published.points.find(p=>p.id==='presque'),date,'west','car').canDirect,false);
+ }
+ assert.equal(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','east','car').canDirect,false,'cross-park west destination needs verified approach');
+ assert.equal(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','west','car').canDirect,true);
+ assert.equal(eligibility(published.points.find(p=>p.id==='ski'),'2027-08-15','east','car').canDirect,true);
+ assert.equal(eligibility(published.points.find(p=>p.id==='lake'),'2027-02-30','east','car').canDirect,false);
 });
