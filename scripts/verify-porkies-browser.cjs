@@ -91,6 +91,7 @@ async function main(){
      need(trailLines>=500&&trailLines<1500,'DNR trail overlay missing or duplicated on rapid taps: '+trailLines);
      await page.locator('#porkies-roads-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('selected park-area road centerlines'),null,{timeout:25000});
+     need((await page.locator('#route-evidence-status').innerText()).includes('15 reviewed road-source segments'), 'western South Boundary source corridor must not be represented as the interior closure');
      await page.locator('#porkies-ski-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#route-evidence-status')?.textContent.includes('Showing 40 DNR ski-trail records'),null,{timeout:25000});
      const skiLines=await page.locator('.leaflet-porkies-ski-evidence-pane path').count();
