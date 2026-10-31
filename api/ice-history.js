@@ -69,7 +69,7 @@ export default async function handler(req) {
       series:rows,
       scope:'Whole-lake percentages only. No local bay coverage, ice thickness, or safe-ice assessment.',
       chartArchive:'https://www.glerl.noaa.gov/data/ice/glicd.php?year='+(start+1)
-    },200,michiganIceClock(now).rolloverWindow?'no-store':seasonActive?'public, max-age=600, s-maxage=1800':'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
+    },200,(start===latest && michiganIceClock(now).rolloverWindow)?'no-store':seasonActive?'public, max-age=600, s-maxage=1800':'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
   }catch{
     return response({ok:false,seasonStartYear:start,
       error:'NOAA has no usable daily record for this winter right now. Other seasons remain available.'},
