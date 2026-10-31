@@ -1,4 +1,5 @@
 import { verifyMapCatalog, MAP_DATA_ROUTE, relatedPlace, mapLink, placeInterpretation } from './pukaskwa-map-contract.mjs';
+import {verifyCommunityCenterlines, TRAIL_GEOJSON_URL, APPROVED_WAYS, summaryForTrail, OSM_COPYRIGHT_URL, ODBL_URL} from './pukaskwa-trail-geometry.mjs';
 
 const doc=document;
 const officialButton=doc.getElementById('pk-official-map-tab');
@@ -10,10 +11,14 @@ const status=doc.getElementById('pk-map-status');
 const explanationTitle=doc.getElementById('pk-map-choice-title');
 const explanationBody=doc.getElementById('pk-map-choice-body');
 const focusChoice=doc.getElementById('pk-map-focus-choice');
+const focusTrail=doc.getElementById('pk-map-focus-trail');
+const trailNote=doc.getElementById('pk-map-choice-trail-note');
+const trailToggle=doc.getElementById('pk-show-trail-lines');
+const trailStatus=doc.getElementById('pk-trail-lines-status');
 const placeNodes=[...doc.querySelectorAll('[data-map-place]')];
 const buttons=[...doc.querySelectorAll('[data-map-focus]')];
 if(!officialButton||!interactiveButton||!originalPanel||!interactivePanel||!mapFrame||!status||
-   !explanationTitle||!explanationBody||!focusChoice||!placeNodes.length) {
+   !explanationTitle||!explanationBody||!focusChoice||!focusTrail||!trailToggle||!trailStatus||!placeNodes.length) {
   throw new Error('Pukaskwa visitor map HTML is incomplete');
 }
 const resourceUrl='/api/carto-basemap-config';
@@ -21,6 +26,7 @@ const CDN_CSS='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
 const CDN_JS='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
 const OSM_TILES='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 let catalog=null,map=null,markers=new Map(),requestedMap=null,libraryLoad=null;
+let communityLines=null,communityFetch=null,communityLayer=null,trailLayers=new Map();
 let activeId=null,selectedTrail='southern-headland',selectedStatus='source-unverified';
 const text=(el,value)=>{if(el)el.textContent=value};
 const requestedLink=()=>doc.getElementById('pk-result-link')?.getAttribute('href')?.replace(/^#pk-/,'')||'southern-headland';
@@ -69,7 +75,144 @@ function updateTrailSelection() {
   focusChoice.disabled=!point;
   focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
+  const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
+  const blocked=selectedStatus==='closed'||selectedStatus==='out-of-season';
+  focusTrail.disabled=!hasTrail||blocked;
+  focusTrail.textContent=blocked?'Trail is reported closed':hasTrail?'Show mapped trail line':'No independently mapped trail line';
+  if(trailNote) {
+    trailNote.textContent=blocked
+      ? 'The route is reported closed. A mapped line never overrides that closure.'
+      : hasTrail
+        ? 'This path is community-mapped, not Parks Canada GPS-surveyed. Missing access connectors and return legs are not drawn.'
+        : 'No approved coordinate path is available for this outing; use the official illustration and dated park notices.';
+  }
+  updateCommunityHighlight();
 }
+
+function trailStatusFor(id){
+  return doc.getElementById('pk-'+id)?.dataset.status||'source-unverified';
+}
+function styleForTrail(id){
+  const closed=trailStatusFor(id)==='closed'||trailStatusFor(id)==='out-of-season';
+  const selected=id===selectedTrail&&!closed;
+  return {
+    className:'pk-community-trail',
+    color:closed?'#a03f2a':selected?'#176e64':'#708d80',
+    weight:closed?4:selected?6:3.3,
+    opacity:closed?.85:selected?1:.66,
+    dashArray:closed?'4 5':selected?null:'7 6',
+    lineCap:'round',lineJoin:'round',
+  };
+}
+function popupForTrail(feature) {
+  const item=feature.properties,trailId=item.trailId;
+  const summary=summaryForTrail(communityLines,trailId);
+  const state=trailStatusFor(trailId);
+  const holder=doc.createElement('div');holder.className='pk-map-popup';
+  const title=doc.createElement('strong');title.textContent=item.name||'Community-mapped trail';holder.append(title);
+  const provenance=doc.createElement('small');
+  provenance.textContent='OpenStreetMap georeferenced path segment · NOT an official GPS-surveyed track';
+  holder.append(provenance);
+  const p=doc.createElement('p');
+  p.textContent=summary
+    ? 'Community-mapped segments: '+summary.mappedCenterlineKm.toFixed(2)+' km across '+summary.mappedSegmentCount+
+      ' ways. Parks Canada full hike: '+summary.officialEntireOutingKm+' km. These are different measurements, not interchangeable.'
+    : 'Only part of this walking path may be mapped.';
+  holder.append(p);
+  if(state==='closed'||state==='out-of-season'){
+    const warning=doc.createElement('p');warning.textContent='Parks Canada has reported this trail closed or out of season. Do not enter based on this line.';
+    warning.style.fontWeight='800';warning.style.color='#a03f2a';holder.append(warning);
+  } else {
+    const notice=doc.createElement('p');
+    notice.textContent='This is location-reference geometry only. Inspect official trail condition dates and follow park signs before hiking.';
+    holder.append(notice);
+  }
+  const links=doc.createElement('div');links.className='pk-map-linkline';
+  const original=doc.createElement('a');original.href=item.sourceUrl;original.target='_blank';original.rel='noopener noreferrer';
+  original.textContent='View original OSM way';links.append(original);
+  const official=doc.createElement('a');
+  official.href='https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions';
+  official.target='_blank';official.rel='noopener noreferrer';official.textContent='Official dated conditions';
+  links.append(official);holder.append(links);
+  return holder;
+}
+function updateCommunityHighlight(){
+  if(!map||!communityLayer)return;
+  communityLayer.eachLayer(layer=>{
+    const f=layer.feature, id=f?.properties?.trailId;
+    if(id){
+      layer.setStyle(styleForTrail(id));
+      layer.bindPopup(popupForTrail(f),{maxWidth:310});
+    }
+  });
+  mapFrame.dataset.activeTrail=selectedTrail||'none';
+  if(trailToggle.checked){
+    const selected=trailLayers.get(selectedTrail)||[];
+    selected.forEach(layer=>layer.bringToFront());
+    for(const marker of markers.values())marker.bringToFront();
+  }
+}
+async function loadCommunityLines(){
+  if(communityLines)return communityLines;
+  if(communityFetch)return communityFetch;
+  communityFetch=fetch(TRAIL_GEOJSON_URL,{
+    headers:{Accept:'application/geo+json,application/json'},cache:'force-cache',
+    signal:AbortSignal.timeout(8500)
+  }).then(async response=>{
+    if(!response.ok)throw new Error('Community trail data unavailable');
+    const len=Number(response.headers.get('content-length')||'0');
+    if(len>130000)throw new Error('Unexpectedly large trail file');
+    const raw=await response.text();
+    if(raw.length>130000)throw new Error('Unexpectedly large trail file');
+    communityLines=verifyCommunityCenterlines(JSON.parse(raw));
+    return communityLines;
+  }).finally(()=>{communityFetch=null;});
+  return communityFetch;
+}
+function attachCommunityLines(L){
+  if(!map||!communityLines||communityLayer)return;
+  trailLayers=new Map();
+  communityLayer=L.geoJSON(communityLines,{
+    style:f=>styleForTrail(f.properties.trailId),
+    onEachFeature:(feature,layer)=>{
+      const id=feature.properties.trailId;
+      if(!trailLayers.has(id))trailLayers.set(id,[]);
+      trailLayers.get(id).push(layer);
+      layer.bindPopup(popupForTrail(feature),{maxWidth:310});
+    }
+  });
+  map.attributionControl.addAttribution(
+    'Trail lines &copy; <a href="'+OSM_COPYRIGHT_URL+'" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors (ODbL)</a>'
+  );
+  if(trailToggle.checked)communityLayer.addTo(map);
+  mapFrame.dataset.trailLines=String(communityLines.features.length);
+  mapFrame.dataset.visibleTrailLines=trailToggle.checked?String(communityLines.features.length):'0';
+  trailStatus.textContent=communityLines.features.length+' community-mapped segments for five named trails. Not certified for GPS navigation.';
+  updateCommunityHighlight();
+}
+function setTraceVisibility(){
+  if(!map||!communityLayer)return;
+  const show=trailToggle.checked;
+  if(show&&!map.hasLayer(communityLayer))communityLayer.addTo(map);
+  if(!show&&map.hasLayer(communityLayer))map.removeLayer(communityLayer);
+  mapFrame.dataset.visibleTrailLines=show?String(communityLines.features.length):'0';
+  if(show)updateCommunityHighlight();
+}
+function focusSelectedTrace(){
+  if(!map||!communityLayer||!communityLines||!trailToggle.checked)return;
+  const layers=trailLayers.get(selectedTrail)||[];
+  if(!layers.length||trailStatusFor(selectedTrail)==='closed'||trailStatusFor(selectedTrail)==='out-of-season')return;
+  const L=window.L;
+  const points=layers.flatMap(layer=>layer.feature.geometry.coordinates.map(p=>[p[1],p[0]]));
+  if(!points.length)return;
+  // The visitor explicitly asked to see the trail, not keep a large place popup
+  // covering the mapped line on a narrow mobile viewport.
+  map.closePopup();
+  map.fitBounds(L.latLngBounds(points).pad(.22),{maxZoom:15.5,animate:false});
+  updateCommunityHighlight();
+  map.invalidateSize({pan:false});
+}
+
 function switchDisplay(which) {
   const interactive=which==='interactive';
   originalPanel.hidden=interactive;
@@ -121,7 +264,7 @@ function showMapFailure(message){
   switchDisplay('official');
   const evidence=doc.querySelector('.pk-map-evidence');
   if(evidence) evidence.dataset.mapFailure='true';
-  if(map){try{map.remove()}catch{}map=null;markers.clear();}
+  if(map){try{map.remove()}catch{}map=null;markers.clear();trailLayers.clear();communityLayer=null;}
   requestedMap=null;
 }
 function tilePromise(layer,mapInstance,{timeout=9000,errorsAllowed=2}={}) {
@@ -184,10 +327,17 @@ async function createMap(){
   await new Promise(resolve=>requestAnimationFrame(()=>{map.invalidateSize({pan:false});resolve()}));
   text(status,'Checking real basemap tiles and the seven publicly released Parks Canada coordinates…');
   const provider=await addRealTiles(L,map);
+  try {
+    await loadCommunityLines();
+    attachCommunityLines(L);
+  } catch(err) {
+    mapFrame.dataset.trailLines='unavailable';
+    trailStatus.textContent='Community-mapped centerlines unavailable. Parks Canada’s official trail diagram remains the route reference.';
+  }
   map.invalidateSize({pan:false});
   doc.body.dataset.pkMapReady='true';
   status.dataset.state='ready';
-  text(status,provider+' map tiles loaded. Seven Parks Canada public places are mapped. No trail paths, safe crossings or road access are inferred.');
+  text(status,provider+' map tiles loaded. Seven Parks Canada visitor points and '+(communityLines?communityLines.features.length+' community trail segments':'no verified trail lines')+' are available. Lines are not full-route GPS directions or access authorization.');
 }
 async function showInteractive(){
   switchDisplay('interactive');
@@ -210,6 +360,14 @@ for(const button of buttons){
     });
   });
 }
+trailToggle.addEventListener('change',setTraceVisibility);
+focusTrail.addEventListener('click',async()=>{
+  if(focusTrail.disabled)return;
+  await showInteractive();
+  if(!communityLayer||!map)return;
+  if(!trailToggle.checked){trailToggle.checked=true;setTraceVisibility();}
+  focusSelectedTrace();
+});
 focusChoice.addEventListener('click',()=>{
   const pointId=focusChoice.dataset.mapTarget;
   if(!pointId)return;

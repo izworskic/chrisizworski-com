@@ -37,3 +37,22 @@
 #pk-interactive-map [role="button"]:focus-visible{outline:3px solid #ca9144;outline-offset:3px}
 @media(max-width:950px){.pk-map-shell{grid-template-columns:1fr}.pk-map-visual{max-width:850px}.pk-map-place-list{max-height:none;overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.pk-map-place{height:100%}}
 @media(max-width:650px){.pk-map-section{padding-top:28px}.pk-map-place-list{grid-template-columns:1fr}.pk-map-selection{padding:18px}.pk-official-map-panel img{max-height:none}#pk-interactive-map{height:360px;min-height:360px}.pk-map-statusline{font-size:.83rem}.pk-map-legend{gap:9px}.pk-map-evidence{font-size:.78rem}.pk-map-place{padding:15px}.pk-map-place[data-picked="true"]{padding:14px}}
+
+
+/* Actual coordinate sequences from named OpenStreetMap ways, never park-certified
+ * GPS routing. Keep map attribution readable beside both provider and data. */
+.pk-trail-toggle-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:4px 2px 12px;background:#fffef9}
+.pk-trail-toggle-row label{display:flex;align-items:center;gap:9px;color:#214b42;font-weight:800;font-size:.9rem;cursor:pointer;min-height:40px}
+.pk-trail-toggle-row input{height:19px;width:19px;accent-color:#206454;flex:none}
+#pk-trail-lines-status{font-size:.82rem;line-height:1.45;color:#587165;flex:1 1 220px}
+.pk-legend-line{display:inline-block;width:27px;height:0;border-top:3px dashed #708d80;vertical-align:middle}
+.pk-legend-line-selected{border-top:5px solid #176e64}
+.pk-map-choice-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:4px 0 10px}
+.pk-map-choice-actions button{margin:0}
+.pk-map-choice-actions button:disabled{background:#bdccc5;border-color:#bdccc5;color:#344d44;cursor:not-allowed}
+.pk-map-choice-caveat{font-size:.89rem!important;line-height:1.48!important;margin:7px 0 0!important;color:#e0e8dc!important}
+#pk-interactive-map path.pk-community-trail{cursor:pointer;outline-offset:3px}
+#pk-interactive-map path.pk-community-trail:focus-visible{outline:3px solid #d18f40}
+#pk-interactive-map .leaflet-control-attribution{font-size:11px;color:#294c41;background:rgba(255,255,250,.95)}
+#pk-interactive-map .leaflet-control-attribution a{color:#155b4d;text-decoration:underline}
+@media(max-width:650px){.pk-trail-toggle-row{display:block}.pk-trail-toggle-row label{font-size:.9rem;min-height:44px}#pk-trail-lines-status{display:block;font-size:.88rem;margin:2px 0 7px}.pk-map-choice-actions{display:grid;grid-template-columns:1fr;gap:8px}.pk-map-choice-actions button{width:100%;min-height:44px}.pk-map-choice-caveat{font-size:.9rem!important}}

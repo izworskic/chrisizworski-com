@@ -80,13 +80,22 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     const tiles=await page.evaluate(()=>({
       provider:document.querySelector('#pk-interactive-map')?.dataset.tiles,
       tileCount:[...document.querySelectorAll('#pk-interactive-map img.leaflet-tile-loaded')].filter(img=>img.naturalWidth>0).length,
-      pinCount:document.querySelectorAll('#pk-interactive-map path.leaflet-interactive').length
+      pinCount:document.querySelectorAll('#pk-interactive-map path.leaflet-interactive:not(.pk-community-trail)').length,
+      trailCount:document.querySelectorAll('#pk-interactive-map path.pk-community-trail').length,
+      trailVerified:document.querySelector('#pk-interactive-map')?.dataset.trailLines
     }));
     check(tiles.tileCount>0,view.name+' no actual raster tiles');
     check(tiles.pinCount===7,view.name+' GIS pin count '+tiles.pinCount);
+    check(tiles.trailCount===14,view.name+' approved community path segments '+tiles.trailCount);
+    check(tiles.trailVerified==='14',view.name+' source-qualified line layer missing');
+    check((await page.locator('#pk-show-trail-lines').isChecked())===true,view.name+' trail overlay switch on');
     check(tiles.provider==='osm'||tiles.provider==='carto',view.name+' missing tile provider confirmation');
     await page.locator('#pk-map-focus-choice').click();
     check((await page.locator('#pk-map-place-southern-headland-chair').getAttribute('data-picked'))==='true',view.name+' default trail-chair synchronization');
+    await page.locator('#pk-map-focus-trail').click();
+    check((await page.locator('#pk-interactive-map').getAttribute('data-active-trail'))==='southern-headland',view.name+' default mapped line selected');
+    check(await page.locator('#pk-interactive-map path.pk-community-trail').count()===14,view.name+' actual vector line shapes retained');
+
     await page.locator('input[name="pk-time"][value="30"]').check();
     await page.locator('#pk-effort').selectOption('easy');
     await page.locator('#pk-vibe').selectOption('beach');
@@ -95,13 +104,41 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     await page.locator('#pk-map-focus-choice').click();
     check((await page.locator('#pk-map-place-horseshoe-beach').getAttribute('data-picked'))==='true',view.name+' beach destination highlighted');
     check((await page.locator('#pk-map-choice-body').innerText()).includes('not a starting point'),view.name+' shoreline pin caveat');
+    await page.locator('#pk-map-focus-trail').click();
+    check((await page.locator('#pk-interactive-map').getAttribute('data-active-trail'))==='boardwalk-beach',view.name+' chooser-highlighted boardwalk route');
+    await page.locator('#pk-interactive-map .leaflet-popup').waitFor({state:'detached',timeout:2500});
+    check(await page.locator('#pk-interactive-map .leaflet-popup').count()===0,view.name+' place popup no longer obscures requested trail line');
+    await page.locator('#pk-show-trail-lines').uncheck();
+    check(await page.locator('#pk-interactive-map path.pk-community-trail').count()===0,view.name+' community trail toggle off');
+    check(await page.locator('#pk-interactive-map path.leaflet-interactive').count()===7,view.name+' source GIS pins unaffected when paths hidden');
+    await page.locator('#pk-show-trail-lines').check();
+    check(await page.locator('#pk-interactive-map path.pk-community-trail').count()===14,view.name+' community route toggle restored');
+    const lineShot=view.name+'-trail-lines.png';
+    await page.locator('.pk-map-shell').screenshot({path:path.join(out,lineShot),timeout:20000});
+    report.screenshots.push(lineShot);
+
     await page.locator('#pk-official-map-tab').click();
     check(await page.locator('#pk-official-map-image').isVisible(),view.name+' original map restores');
     check(errors.length===0,view.name+' JS errors: '+errors.slice(0,3).join('; '));
     const filename=view.name+'-access-map.png';
     await page.locator('.pk-map-shell').screenshot({path:path.join(out,filename),timeout:20000});
     report.screenshots.push(filename);
-    report.views.push({...view,overflowPx:overflow,provider:tiles.provider,loadedTiles:tiles.tileCount,gisPins:tiles.pinCount,connectedChoice:'Boardwalk Beach',errors});
+    report.views.push({...view,overflowPx:overflow,provider:tiles.provider,loadedTiles:tiles.tileCount,gisPins:tiles.pinCount,osmTrailLines:tiles.trailCount,connectedChoice:'Boardwalk Beach',errors});
+    await context.close();
+  }
+  {
+    const context=await browser.newContext({viewport:{width:390,height:844}});
+    const page=await context.newPage();
+    await page.route('**/pukaskwa-national-park/trail-centerlines.geojson',route=>route.fulfill({
+      status:503,contentType:'application/json',body:'{"error":"source disconnected"}'
+    }));
+    await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
+    await page.locator('#pk-interactive-map-tab').click();
+    await page.waitForFunction(()=>document.body.dataset.pkMapReady==='true'||document.body.dataset.pkMapReady==='fallback',null,{timeout:35000});
+    check((await page.locator('#pk-interactive-map').getAttribute('data-trail-lines'))==='unavailable','missing trail data clearly marked');
+    check(await page.locator('#pk-interactive-map path.leaflet-interactive').count()===7,'missing OSM route source keeps official GIS pins and tiles');
+    check((await page.locator('#pk-trail-lines-status').innerText()).includes('unavailable'),'missing lines explained visibly');
+    report.views.push({name:'trail-source-failure',mapPins:7,routeStatus:'unavailable',officialMapStillExists:true});
     await context.close();
   }
   {
@@ -125,6 +162,7 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     check(await page.locator('#pk-official-map-image').isVisible(),'noJS official map');
     check(await page.locator('.pk-map-place').count()===7,'noJS seven public places');
     check(await page.locator('.pk-map-place-actions a[href^="https://www.google.com/maps/search/"]').count()===7,'noJS native map links');
+    check((await page.locator('.pk-map-evidence').innerText()).includes('OpenStreetMap contributors'),'no-JS license and path disclaimer visible');
     report.views.push({name:'no-JS',officialDiagram:true,placeLinks:7});
     await context.close();
   }
