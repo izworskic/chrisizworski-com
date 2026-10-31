@@ -142,13 +142,17 @@ function selectPlace(id){
  document.querySelectorAll('[data-place]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.place===id)));
 }
 async function tilesLoad(L,m,template,label,credit){
- const layer=L.tileLayer(template,{subdomains:'abcd',maxZoom:19,attribution:credit,crossOrigin:true});
+ // Tile images are displayed, never read as canvas pixels. Avoid CORS mode:
+ // some basemap servers can serve valid raster tiles without CORS headers.
+ const layer=L.tileLayer(template,{subdomains:'abcd',maxZoom:19,attribution:credit});
  await new Promise((resolve,reject)=>{
    let done=false,errors=0;
    const end=(error)=>{if(done)return;done=true;clearTimeout(timer);layer.off('tileload',onLoad);layer.off('tileerror',onError);if(error){m.removeLayer(layer);reject(error);}else resolve();};
    const onLoad=()=>end(null);
-   const onError=()=>{if(++errors>=2)end(new Error('tile unavailable'));};
-   const timer=setTimeout(()=>end(new Error('tile timeout')),7500);
+   // Two tile errors do not prove the entire layer failed. Edge tiles and
+   // transient HTTP failures can coincide with other valid visible tiles.
+   const onError=()=>{errors++;};
+   const timer=setTimeout(()=>end(new Error('no raster tile loaded; errors='+errors)),12000);
    layer.on('tileload',onLoad);layer.on('tileerror',onError);layer.addTo(m);
  });
  mapStatus.textContent=label+' basemap tile loaded. Markers are orientation only, not a hiking route or access clearance.';
