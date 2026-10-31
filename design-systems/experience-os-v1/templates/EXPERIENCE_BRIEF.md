@@ -7,6 +7,7 @@
 - Scope and non-goals:
 - Research last checked:
 - Current experience baseline (screenshot/link, what works, what fails):
+- v1.2 [connected interaction contract](../docs/CONNECTED_EXPERIENCE_CONTRACT.md) applicability and filled [state matrix](STATE_MATRIX.md) (or N/A with reason):
 
 ## 1. Visitor question and decisive action
 
@@ -47,6 +48,10 @@ Relevant EXPERIENCE_OS_V1 pattern IDs: [P02, P06]; local system: [FIELD_GUIDE_V1
 - Map tiles/attribution, parking/trail/route evidence and fallback:
 - Keyboard, screenreader, visible focus and alternative to drag:
 - Accessibility motion policy, large targets, contrast:
+
+### v1.2 selection/units/photo/failure contract
+
+Stable selected ID; preference versus explicit choice; every linked answer surface; A→B→A and native control; source units versus rendered units; photography authorship/credit/loading/race/failure; truthful unverified-map status; first-screen answer placement. Complete [`STATE_MATRIX.md`](STATE_MATRIX.md) for substantial multi-surface interactions.
 
 ## 7. Technical decision
 
