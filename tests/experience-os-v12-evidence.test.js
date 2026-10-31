@@ -34,7 +34,7 @@ test('Experience OS V1.2: no gauge data cannot be promoted to observed streamflo
  // Structurally, real observed river-flow needs an actual observation evidence source.
  // Preserve the no-data claim rather than forging a new observation from the known site.
  assert.equal(r.ok,false);
- assert.ok(r.issues.some(e=>e.code==='claims.noDataContradiction'),JSON.stringify(r.issues));
+ assert.ok(r.issues.some(e=>e.code==='claims.observationProvenance'),JSON.stringify(r.issues));
 });
 
 test('Experience OS V1.2: unscoped access status is not accepted as official notice',async()=>{
