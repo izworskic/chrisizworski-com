@@ -3610,6 +3610,60 @@
           "description": "Michigan GIS #157 at 46.667721,-87.578452 on Little Garlic River, distinct from the Big Garlic River."
         }
       }
+    },
+    {
+      "id": "lepisto-falls",
+      "name": "Lepisto Falls",
+      "region": "Western U.P.",
+      "place": "Presque Isle River · Porcupine Mountains · County Road 519",
+      "lat": 46.658637,
+      "lng": -89.94027,
+      "gisObjectId": 79,
+      "level": "moderate",
+      "minutes": "60–110 min",
+      "walk": "From the County Road 519 NCT parking area, cross the highway carefully and follow the blue-blazed NCT east through old-growth forest. The Western U.P. visitor map describes approximately 0.6 mile along the NCT plus about 0.2 mile on the falls side approach, roughly 1.6 miles out-and-back. NCTA's 2025 MI-008 trail description confirms the maintained trail passes Lepisto Falls and notes a spring near mile MI-43.1. Remain on the established trail and avoid steep riverbanks; continue north past the falls only if prepared for the rope-assisted steep climb beyond the footbridge.",
+      "best": "Snow-free hiking seasons, especially spring runoff and autumn forest color. Slippery rock and ice require caution.",
+      "access": "NCTA Ni-Miikanaake 2025 guide verifies the County Road 519 trailhead/parking, NCT entry into the state park and route past Lepisto Falls; regional brochure specifies final side walk. Current trail alerts and parking status unverified.",
+      "status": "verify",
+      "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Michigan DNR state park · North Country Trail",
+      "parking": "From M-28 near Wakefield, follow County Road 519 north approximately 12 miles to the named North Country Trail trailhead parking by the road crossing. The NCTA Ni-Miikanaake 2025 segment guide confirms an actual trailhead and parking area there. Cross CR519 with traffic caution, follow blue blazes east into the state park, and rely on current NCTA map MI-008 rather than routing to the waterfall's geographic point. Winter parking clearing and present road/trail conditions are not confirmed.",
+      "feature": "Deep forest encloses the Presque Isle River as dark water gathers speed over a broad rocky lip. A quiet North Country Trail walk leads to a waterfall away from the busy lower gorge.",
+      "decision": "A shorter public NCT waterfall hike near the western edge of Porcupine Mountains Wilderness State Park. Use it when the CR519 trailhead is accessible and you want a 1.6-mile outing rather than the developed lower Presque Isle boardwalk loop.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "ncta-official-2025-parking-and-public-nct-plus-regional-brochure-spur",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan DNR Porcupine Mountains Wilderness State Park / NCTA Ni-Miikanaake Chapter",
+      "further": "The NCTA 2025 Ni-Miikanaake Chapter segment MI-008 documents County 519 NCT parking and a signed walk east into Porcupine Mountains Wilderness State Park passing Lepisto Falls, with route beyond the falls steep and rope-assisted. The Western U.P. 2026-hosted waterfall brochure specifies a 0.6mi NCT approach and 0.2mi falls spur; the regional point 46.659062,-89.940555 is about 52m from Michigan GIS #79 46.658637,-89.940270. The waterfall is NOT the designated parking position. State park vehicle permit may be required; check current park and chapter maps. Winter car access to the parking area cannot be assumed from the DNR's general CR519 access statement. Regional brochure Iagoo Falls is ~0.4km north of Lepisto, while Michigan GIS Iagoo #86 is ~4.4km downstream near South Boundary Road; these are separate conflicting research features and no Iagoo route is implied by the Lepisto guide.",
+      "winterRoad": "CR519 is generally a winter approach to the Presque Isle park unit, but the specific NCTA crossing parking and falls spur are NOT confirmed plowed/open in winter. NCTA 2025 describes rugged conditions; no current opening asserted.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "NCTA confirms the east-of-CR519 NCT enters Porcupine Mountains Wilderness State Park, publicly managed by Michigan DNR."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "NCTA MI-008 documents public trail on the state park section that passes named Lepisto Falls, not merely a point on a GIS map."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+          "description": "The Ni-Miikanaake official trail description expressly identifies an NCT trailhead and parking area at County Road 519."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "Regional visitor brochure specifies 0.6mi marked NCT plus 0.2mi falls side trail, supported by NCTA's 2025 official route."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State Michigan GIS Lepisto #79 at 46.658637,-89.940270 agrees within about 52m with regional brochure 46.659062,-89.940555; it is natural falls only."
+        }
+      }
     }
   ]
 }

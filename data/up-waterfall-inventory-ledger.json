@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 64,
-  "linkedByExactOid": 59,
-  "unresolvedCandidates": 102,
+  "curatedCount": 65,
+  "linkedByExactOid": 60,
+  "unresolvedCandidates": 101,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -1538,18 +1538,31 @@
         -89.94027
       ],
       "river": "PRESQUE ISLE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "lepisto-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "ncta-official-parking-and-state-park-visitor-trail-unverified-live",
+      "landManager": "Michigan DNR Porcupine Mountains Wilderness State Park / NCTA Ni-Miikanaake Chapter",
+      "parkingEvidence": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+      "trailEvidence": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-10-31",
+      "nextAction": "Consult NCTA MI-008, park alert/CR519 trailhead current status and public signs; do not navigate to waterfall point.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "30",
+      "classification": "public-state-park-nct-trail",
+      "accessAssessment": "The NCTA 2025 Ni-Miikanaake Chapter segment MI-008 documents County 519 NCT parking and a signed walk east into Porcupine Mountains Wilderness State Park passing Lepisto Falls, with route beyond the falls steep and rope-assisted. The Western U.P. 2026-hosted waterfall brochure specifies a 0.6mi NCT approach and 0.2mi falls spur; the regional point 46.659062,-89.940555 is about 52m from Michigan GIS #79 46.658637,-89.940270. The waterfall is NOT the designated parking position. State park vehicle permit may be required; check current park and chapter maps. Winter car access to the parking area cannot be assumed from the DNR's general CR519 access statement. Regional brochure Iagoo Falls is ~0.4km north of Lepisto, while Michigan GIS Iagoo #86 is ~4.4km downstream near South Boundary Road; these are separate conflicting research features and no Iagoo route is implied by the Lepisto guide.",
+      "evidence": [
+        "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://northcountrytrail.org/the-trail/trail-alerts/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1680,14 +1693,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "unverified-geographic-identity-and-visitor-route",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-10-31",
+      "nextAction": "Reconcile state GIS Iagoo #86 with regional brochure and river hydrography using independent authoritative park GIS; verify exact Iagoo viewing point, approved NCT spur/shoreline path and legal access/parking. Do NOT send hikers to GIS #86 or substitute Lepisto spur.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "30",
+      "classification": "state-vs-brochure-iagoo-4km-disagreement",
+      "accessAssessment": "Regional 2026-hosted Western U.P. visitor brochure identifies Iagoo Falls near 46.662334,-89.941527, about 0.42km north of Lepisto, while Michigan state GIS #86 places Iagoo at 46.691604,-89.970696, roughly 3.9km farther north near South Boundary Road. Those cannot be represented as one verified visitor site; park/NCTA identifies Lepisto route, not a signed Iagoo side trail.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+        "https://www.michigan.gov/recsearch/parks/porkies"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4447,5 +4471,5 @@
       ]
     }
   ],
-  "lastBatch": "29"
+  "lastBatch": "30"
 }

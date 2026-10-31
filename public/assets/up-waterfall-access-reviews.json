@@ -411,6 +411,81 @@
       }
     },
     {
+      "gisObjectId": 86,
+      "name": "Iagoo Falls",
+      "county": "GOGEBIC",
+      "status": "geographic-name-conflict-public-route-unverified",
+      "publicAccess": "unreconciled-two-locations",
+      "publicationEligible": false,
+      "title": "Iagoo Falls: state GIS and park visitor map disagree by over four kilometres",
+      "summary": "Regional 2026-hosted Western U.P. visitor brochure identifies Iagoo Falls near 46.662334,-89.941527, about 0.42km north of Lepisto, while Michigan state GIS #86 places Iagoo at 46.691604,-89.970696, roughly 3.9km farther north near South Boundary Road. Those cannot be represented as one verified visitor site; park/NCTA identifies Lepisto route, not a signed Iagoo side trail.",
+      "guidance": "Do not drive to either Iagoo coordinate as if it were a trailhead. The verified Lepisto hike is a separate public experience; do not extend it along an unsigned riverbank without a legitimate trail.",
+      "reviewLimitations": "2026-hosted brochure and state GIS may refer to different falls, misplaced coordinates, or a shared name; no authoritative adjudication exists.",
+      "nextEvidence": "Reconcile state GIS Iagoo #86 with regional brochure and river hydrography using independent authoritative park GIS; verify exact Iagoo viewing point, approved NCT spur/shoreline path and legal access/parking. Do NOT send hikers to GIS #86 or substitute Lepisto spur.",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Western U.P. visitor map Iagoo point and Lepisto route",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "NCTA 2025 MI-008 actual trail",
+          "url": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+        },
+        {
+          "label": "DNR state park",
+          "url": "https://www.michigan.gov/recsearch/parks/porkies"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-10-31",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Source GIS #86",
+            "status": "verified-geography",
+            "finding": "Michigan state named Iagoo position at 46.691604,-89.970696 is raw geography, not a trailhead.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Visitor bureau Iagoo position",
+            "status": "conflicting",
+            "finding": "Regional brochure maps Iagoo at 46.662334,-89.941527 very near Lepisto, ~3.9km from source GIS #86.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Park/NCTA public land",
+            "status": "documented-not-live",
+            "finding": "Park and NCTA confirm marked NCT corridor through the park, but not a named Iagoo route or consistent coordinate.",
+            "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+          },
+          {
+            "label": "Public parking",
+            "status": "not-cleared",
+            "finding": "Lepisto CR519 lot is documented; neither source proves a legal lot-to-actual-Iagoo route, whichever geographic interpretation applies.",
+            "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf"
+          },
+          {
+            "label": "Complete viewing route",
+            "status": "not-cleared",
+            "finding": "Brochure calls Iagoo downstream from Lepisto without mapped spur. State GIS point nearer SBR cannot be treated as 0.2mi side trip.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Current conditions",
+            "status": "not-cleared",
+            "finding": "No 2026 signed side-trail/river conditions or precise name resolution verified.",
+            "source": "https://www.michigan.gov/recsearch/parks/porkies"
+          }
+        ]
+      }
+    },
+    {
       "gisObjectId": 91,
       "name": "Upper Falls (Falls River)",
       "county": "BARAGA",
