@@ -3,8 +3,11 @@
 const {
   isSpaceCoast, isFutureLaunch, normalizeLaunch, activeAlerts,
   viewAccess, VIEWPOINTS, PUBLIC_NPS_ALERTS, weatherGrade,
-  scheduleConfidence, windMax
+  scheduleConfidence, windMax, launchArrivalGuidance
 } = require('../lib/space-coast-decision');
+const {
+  skyCoverAt, surfaceSkyAssessment, skyComparison
+} = require('../lib/space-coast-visibility');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -48,19 +51,33 @@ async function loadNpsAlerts(now) {
   return { verified: false, checkedAt, feed: null, url: PUBLIC_NPS_ALERTS, alerts: [], errors };
 }
 
-async function nwsFor(lat, lon, iso) {
+async function nwsSnapshot(lat, lon, iso) {
   const headers = { Accept: 'application/geo+json' };
   const point = await fetchJson(NWS + '/points/' + lat.toFixed(4) + ',' + lon.toFixed(4), headers, 8000);
   const hourlyUrl = point?.properties?.forecastHourly;
+  const gridUrl = point?.properties?.forecastGridData;
   if (!hourlyUrl || !hourlyUrl.startsWith(NWS + '/gridpoints/')) {
-    throw new Error('NWS hourly forecast URL not available');
+    throw new Error('NWS hourly forecast URL unavailable');
   }
-  const data = await fetchJson(hourlyUrl, headers, 8000);
-  const t = Date.parse(iso);
-  const period = (data?.properties?.periods || []).find(
-    x => t >= Date.parse(x.startTime) && t < Date.parse(x.endTime)
-  );
-  return period || null;
+  const [hourly, grid] = await Promise.all([
+    fetchJson(hourlyUrl, headers, 8000),
+    gridUrl && gridUrl.startsWith(NWS + '/gridpoints/') ?
+      fetchJson(gridUrl, headers, 8000).catch(() => null) : Promise.resolve(null)
+  ]);
+  const target = Date.parse(iso);
+  const period = (hourly?.properties?.periods || []).find(
+    x => target >= Date.parse(x.startTime) && target < Date.parse(x.endTime)
+  ) || null;
+  return {
+    period,
+    cloud: skyCoverAt(grid, iso),
+    hourlySource: hourlyUrl, gridSource: gridUrl || null
+  };
+}
+
+// Compatibility for prior internal NWS helper consumers.
+async function nwsFor(lat, lon, iso) {
+  return (await nwsSnapshot(lat, lon, iso)).period;
 }
 
 async function weatherForLocations(next, now) {
@@ -74,24 +91,32 @@ async function weatherForLocations(next, now) {
   if (!withinHorizon) {
     return locations.map(({ id, name }) => ({
       id, name, period: null, assessment: weatherGrade(null),
+      cloudCoverPercent: null, cloudStatus: 'no-exact-window', cloudEvidence: null,
       checkedAt: null, status: 'not-in-forecast-window'
     }));
   }
-  const results = await Promise.all(locations.map(async ({ id, name, lat, lon }) => {
+  return Promise.all(locations.map(async ({ id, name, lat, lon }) => {
     try {
-      const period = await nwsFor(lat, lon, next.net);
+      const result = await nwsSnapshot(lat, lon, next.net);
+      const assessment = surfaceSkyAssessment(result.period, result.cloud, weatherGrade);
       return {
-        id, name, period, assessment: weatherGrade(period),
-        checkedAt: new Date().toISOString(), status: period ? 'ok' : 'outside-hourly-coverage'
+        id, name, period: result.period, assessment,
+        cloudCoverPercent: assessment.cloudCoverPercent,
+        cloudStatus: assessment.cloudStatus,
+        cloudEvidence: assessment.cloudEvidence,
+        forecastUpdatedAt: assessment.forecastUpdatedAt,
+        sourceUrl: result.gridSource || result.hourlySource,
+        checkedAt: new Date().toISOString(),
+        status: result.period ? 'ok' : 'outside-hourly-coverage'
       };
     } catch (_err) {
       return {
         id, name, period: null, assessment: weatherGrade(null),
+        cloudCoverPercent: null, cloudStatus: 'unavailable', cloudEvidence: null,
         checkedAt: new Date().toISOString(), status: 'unavailable'
       };
     }
   }));
-  return results;
 }
 
 module.exports = async function handler(req, res) {
@@ -104,6 +129,11 @@ module.exports = async function handler(req, res) {
   // aggressively polling at scale from several CDN regions.
   res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=1800');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  const requestedId = req?.query?.launchId;
+  if (requestedId != null && (
+    typeof requestedId !== 'string' ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestedId)
+  )) return res.status(400).json({ ok: false, error: 'Invalid launch selection.' });
   try {
     const now = Date.now();
     const [feed, nps] = await Promise.all([fetchJson(LAUNCHES, {}, 12000), loadNpsAlerts(now)]);
@@ -114,19 +144,25 @@ module.exports = async function handler(req, res) {
       .sort((a, b) => Date.parse(a.net) - Date.parse(b.net))
       .slice(0, 8)
       .map(normalizeLaunch);
-    const next = launches[0] || null;
+    const next = requestedId ? launches.find(x => x.id === requestedId) : launches[0] || null;
+    if (requestedId && !next) return res.status(404).json({
+      ok: false, error: 'This mission is no longer in the current Florida launch list.'
+    });
     const forecasts = await weatherForLocations(next, now);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
       ...a, description: a.description.slice(0, 600)
     }));
-    const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified));
+    const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified, { now }));
+    const arrivalGuidance = launchArrivalGuidance(next, nps.alerts, nps.verified, now);
+    const skyComparisonDecision = skyComparison(forecasts);
     const schedule = next?.scheduleConfidence || {
       level: 'none', label: 'No future Florida launch in current feed',
       detail: 'Check official NASA and launch-operator schedules for new announcements.'
     };
     return res.status(200).json({
       ok: true, generatedAt: new Date().toISOString(),
+      selectedLaunchId: next?.id || null,
       next, upcoming: launches,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
       viewingWeatherByArea: forecasts,
@@ -139,6 +175,7 @@ module.exports = async function handler(req, res) {
         }
       },
       viewpoints, parkAlerts,
+      arrivalGuidance, skyComparison: skyComparisonDecision,
       accessSource: {
         name: 'National Park Service, Canaveral National Seashore',
         url: nps.url, checkedAt: nps.checkedAt, verified: nps.verified,
@@ -149,7 +186,8 @@ module.exports = async function handler(req, res) {
       sources: [
         { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/', checkedAt: new Date().toISOString(), note: 'Florida launch schedule and stated timing precision; third-party, not final launch authority.' },
         { name: 'NPS Canaveral alerts', url: nps.url, checkedAt: nps.checkedAt, note: nps.verified ? 'Official park alerts checked.' : 'Current closure feed unavailable; Playalinda access unverified.' },
-        { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Surface conditions at spectator areas; not rocket trajectory visibility or launch go-weather.' },
+        { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Hourly spectator conditions and gridded sky-cover percentage near the viewing areas; not trajectory visibility.' },
+        { name: 'NPS launch entry policy', url: 'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm', note: 'Playalinda Beach Road normally closes to incoming visitors beginning T–30; mission security can alter access.' },
         { name: 'Kennedy Space Center Visitor Complex', url: KSC, note: 'Check exact launch viewing venue, tickets and mission access.' },
         { name: 'NASA launch schedule', url: NASA_SCHEDULE, note: 'Official NASA missions only, not an exhaustive commercial launch calendar.' }
       ],
@@ -170,4 +208,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { isSpaceCoast, isFutureLaunch, scheduleConfidence, weatherGrade, windMax, loadNpsAlerts, weatherForLocations, nwsFor, fetchJson };
+module.exports._test = { isSpaceCoast, isFutureLaunch, scheduleConfidence, weatherGrade, windMax, loadNpsAlerts, weatherForLocations, nwsFor, nwsSnapshot, fetchJson };
