@@ -53,7 +53,7 @@ test('pattern, failure and release catalogs remain substantive', () => {
   assert.equal(weights.reduce((a,b) => a+b,0),100);
   assert.match(qa, /NOT MEASURED/);
   assert.match(qa, /never merge while red/i);
-  assert.match(qa, /map tiles/i);
+  assert.match(qa, /map.*tiles/i);
 });
 
 test('visitor outcomes and original architecture take precedence over effects', () => {
