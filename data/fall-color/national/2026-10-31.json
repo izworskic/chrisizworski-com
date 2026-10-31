@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-31",
+  "updated": "2026-10-31T16:10:14.564Z",
+  "briefings": {
+    "new-england": "New England foliage has moved past peak timing; mostly sunny conditions favor viewing remaining color on Kancamagus Highway and Smugglers' Notch.",
+    "great-smoky-mountains": "Great Smoky Mountains fall color is within the traditional window with mostly cloudy skies; Newfound Gap Road and Cades Cove Loop offer current viewing.",
+    "colorado-aspens": "Colorado aspen season is well past; 51% rain chance this weekend may limit visibility on Maroon Creek Road and Kebler Pass.",
+    "adirondacks": "Adirondacks foliage is well past peak timing; mostly sunny conditions provide clear views despite limited remaining color.",
+    "north-shore-superior": "Minnesota North Shore and Western U.P. foliage is well past the traditional window; live weather data unavailable for this weekend.",
+    "ozarks": "Ozarks fall color remains within the traditional window; 45% rain chance may affect Arkansas Scenic Byway 7 and Pig Trail viewing.",
+    "eastern-sierra": "Eastern Sierra aspen season is well past; 84% precipitation chance with light snow likely on Bishop Creek Canyon and June Lake Loop.",
+    "wasatch": "Wasatch foliage is well past peak timing; 99% precipitation chance with snow showers expected on Alpine Loop and Guardsman Pass.",
+    "columbia-river-gorge": "Columbia River Gorge fall color is within the traditional window with partly sunny skies and low rain chance favoring scenic drives.",
+    "door-county": "Door County foliage has passed peak but retains color; cloudy conditions with 21% rain chance on WI-42 and Peninsula State Park drives.",
+    "poconos": "Poconos fall color remains strong past peak timing; sunny skies with zero rain chance ideal for Delaware Water Gap and Lake Wallenpaupack corridor.",
+    "texas-hill-country": "Texas Hill Country fall color is within the traditional window; mostly cloudy conditions with 7% rain chance on FM-337 and Lost Maples approach.",
+    "west-virginia-highlands": "West Virginia Highlands foliage has passed peak but shows remaining color; mostly cloudy with minimal rain chance on Highland Scenic Highway and US-48.",
+    "catskills": "Catskills fall color has passed peak timing; sunny skies with zero rain chance favor Catskill Mountains Scenic Byway and Kaaterskill Clove.",
+    "shenandoah": "Shenandoah Skyline Drive fall color is within the traditional window; partly sunny conditions with 3% rain chance ideal for North and Central Districts."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
