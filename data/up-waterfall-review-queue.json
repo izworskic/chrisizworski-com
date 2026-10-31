@@ -32,93 +32,93 @@
         91,
         151,
         68,
-        8,
-        38
+        114,
+        8
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
+        38,
         86,
+        112,
         12,
+        172,
         4,
         9,
-        195,
-        205,
-        52,
-        59
+        195
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
+        205,
+        52,
+        59,
         83,
         99,
         103,
         105,
-        107,
-        114,
-        121,
-        123
+        107
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
+        121,
+        123,
         20,
         24,
         25,
         30,
         37,
-        39,
-        40,
-        48
+        39
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
+        40,
+        48,
         58,
         63,
         65,
         69,
         70,
-        74,
-        75,
-        112
+        74
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
+        75,
         29,
         42,
         80,
         85,
         129,
         15,
-        17,
-        144
+        17
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
+        144,
         18,
         116,
         127,
         148,
         153,
         162,
-        163,
-        169
+        163
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
+        169,
         170,
-        172,
         173,
         175,
         180,
@@ -385,6 +385,21 @@
       "blockingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching."
     },
     {
+      "gisObjectId": 114,
+      "name": "Eric'S Falls",
+      "county": "BARAGA",
+      "river": "WEST BRANCH HURON",
+      "lat": 46.806264,
+      "lng": -88.087136,
+      "cluster": "BARAGA / WEST BRANCH HURON",
+      "priorityScore": 12,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route."
+    },
+    {
       "gisObjectId": 8,
       "name": "Mill Pond Falls",
       "county": "DICKINSON",
@@ -430,6 +445,21 @@
       "blockingGate": "Reconcile state GIS Iagoo #86 with regional brochure and river hydrography using independent authoritative park GIS; verify exact Iagoo viewing point, approved NCT spur/shoreline path and legal access/parking. Do NOT send hikers to GIS #86 or substitute Lepisto spur."
     },
     {
+      "gisObjectId": 112,
+      "name": "Traders Falls",
+      "county": "GOGEBIC",
+      "river": "CARP RIVER",
+      "lat": 46.751671,
+      "lng": -89.893639,
+      "cluster": "GOGEBIC / CARP RIVER",
+      "priorityScore": 12,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions."
+    },
+    {
       "gisObjectId": 12,
       "name": "Chicagon Falls",
       "county": "IRON",
@@ -443,6 +473,21 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 9,
       "blockingGate": "Natural falls on state parcel verified. Official DNR compartment review of nearby Chicagon Creek area records private owners controlling much of vehicle access; neither older county road list nor general state road viewer proves public legal Raymer/Dave's Camp route. Require ROW, designated turnout and full walking trail verification before index."
+    },
+    {
+      "gisObjectId": 172,
+      "name": "Warner Falls",
+      "county": "MARQUETTE",
+      "river": "WARNER CREEK",
+      "lat": 46.433378,
+      "lng": -87.59896,
+      "cluster": "MARQUETTE / WARNER CREEK",
+      "priorityScore": 12,
+      "priorityReason": "Previously sourced, access review incomplete",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking."
     },
     {
       "gisObjectId": 4,
@@ -602,21 +647,6 @@
       "lat": 46.789247,
       "lng": -88.242098,
       "cluster": "BARAGA / SLATE RIVER",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 114,
-      "name": "Eric'S Falls",
-      "county": "BARAGA",
-      "river": "WEST BRANCH HURON",
-      "lat": 46.806264,
-      "lng": -88.087136,
-      "cluster": "BARAGA / WEST BRANCH HURON",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,
@@ -880,21 +910,6 @@
       "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
     },
     {
-      "gisObjectId": 112,
-      "name": "Traders Falls",
-      "county": "GOGEBIC",
-      "river": "CARP RIVER",
-      "lat": 46.751671,
-      "lng": -89.893639,
-      "cluster": "GOGEBIC / CARP RIVER",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
       "gisObjectId": 29,
       "name": "Jumbo Falls",
       "county": "HOUGHTON",
@@ -1142,21 +1157,6 @@
       "lat": 46.438804,
       "lng": -87.687002,
       "cluster": "MARQUETTE / ELY CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 172,
-      "name": "Warner Falls",
-      "county": "MARQUETTE",
-      "river": "WARNER CREEK",
-      "lat": 46.433378,
-      "lng": -87.59896,
-      "cluster": "MARQUETTE / WARNER CREEK",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

@@ -2236,14 +2236,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "not-verified",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-10-31",
+      "nextAction": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "34",
+      "classification": "research-only-visitor-approach-not-cleared",
+      "accessAssessment": "Michigan DNR maps the publicly accessible Pinkerton Creek Trail from South Boundary Road, and the Western U.P. visitor map describes Traders Falls about two miles along it. However Michigan state GIS #112 places the waterfall at 46.751671,-89.893639 with river field CARP RIVER; the regional brochure places Traders around 46.748746,-89.891906, approximately 351 metres away. No park-manager evidence identifies a signed final path or authorized creek crossing to the precise waterfall. Public park hiking is verified; the full path to named Traders Falls is not.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=ea21f7c022dc46edbd24f96d40021739",
+        "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2294,14 +2306,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "not-verified",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-10-31",
+      "nextAction": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route.",
+      "batch": "county-baraga",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "34",
+      "classification": "research-only-visitor-approach-not-cleared",
+      "accessAssessment": "Michigan GIS #114 46.806264,-88.087136 agrees within about 16m of specialist West Branch Erick's Falls 46.8064,-88.08705. Older field accounts describe an informal Black Creek Road bridge turnout and a short walk downstream, but lack a signed public parking site, county-road status and verified landowner permission along the banks. This is a distinct river branch and bridge several miles upstream from officially public Big Eric's Bridge State Forest Campground (GIS #126); campground permission does not transfer to this location.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/ericks-falls/",
+        "https://upper-michigan.com/guide/waterfalls/ericks-falls.html",
+        "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3463,14 +3485,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "not-verified",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-10-31",
+      "nextAction": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
+      "batch": "county-marquette",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "34",
+      "classification": "research-only-visitor-approach-not-cleared",
+      "accessAssessment": "Michigan tourism and Travel Marquette historically call Warner Falls a roadside stop on M-35 near Palmer. Michigan MDOT's July 1 2026 release documents replacement of the M-35 culvert over Warner Creek with road reconstruction, asphalt and new pavement markings, and predicted a mid-August completion. A predicted construction finish does not certify safe October visitor parking, shoulder legality or an intact old guardrail footpath. No post-work MDOT-sanctioned parking and pedestrian route identified. Do not route drivers to a shoulder.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27",
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://www.michigan.org/property/warner-falls"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4525,5 +4557,5 @@
       ]
     }
   ],
-  "lastBatch": "33"
+  "lastBatch": "34"
 }
