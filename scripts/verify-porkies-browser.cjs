@@ -107,7 +107,7 @@ async function main(){
    need((await page.locator('#experience-b figcaption').innerText()).includes('NOT confirmed as the Visitor Center Nature Trail'),device.name+' misleading exact-trail photo claim');
    await page.locator('#experience-b .experience-photo img').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>{const i=document.querySelector('#experience-b .experience-photo img');return i&&i.complete&&i.naturalWidth>0},null,{timeout:15000});
-   need((await page.locator('#experience-b .experience-entry').innerText()).includes('visitor center parking'),device.name+' visitor trailhead crosswalk missing');
+   need((await page.locator('#experience-b .experience-entry').innerText()).includes('Visitor Center Nature Trail')&&(await page.locator('#experience-b .experience-entry').innerText()).includes('nearby parking'),device.name+' visitor trailhead crosswalk missing');
    await page.locator('#experience-choice-b').selectOption('winter');
    need((await page.locator('#experience-b figcaption').innerText()).includes('1959'),device.name+' ski photo archival date missing');
    need((await page.locator('#experience-b figcaption').innerText()).includes('NOT today'),device.name+' photo misrepresented as current winter facility');
