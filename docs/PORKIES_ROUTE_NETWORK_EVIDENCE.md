@@ -123,3 +123,14 @@ Do not make unsupported corrections by simply assuming the missing portions are 
 
 ### The product moat
 The real difference will be *verified feasible experiences* and *transparent reasons why something cannot be recommended*, not a colorful but fake automatic trail router. This phase supplies actual government geometry, a reproducible topology graph, evidence overlays and precise remaining verification gaps. It does not yet fulfill the final user-facing safe travel-time promise.
+
+
+## October 31, 2026: west-of-Pinkerton cartographic correction
+
+**Primary source:** Michigan DNR park operations at https://www.michigan.gov/recsearch/parks/porkies distinguishes the December 1–late spring closure of M-107 and South Boundary **from Headquarters Road to Pinkerton Trailhead** from the separate western Presque Isle approach via **County Road 519**. The DNR explicitly states that affected roads reopen only when safe, so the published GIS lines cannot prove present access.
+
+The existing 104-feature public road reference includes **59** South Boundary source segments. Fifteen independently cross-checked Michigan Geographic Framework source IDs west of Pinkerton are `9688, 9685, 9684, 9533, 9429, 9372, 9218, 9121, 9107, 9071, 9042, 8963, 8910, 8892, 8884`. These were reviewed in the west-approach source research (draft PR #1272, not itself a certified driving itinerary). The other **44** South Boundary source lines remain subject to the page's seasonal-risk overlay. The code matches **both** corridor classification and source ID, rather than an ID alone or a name substring.
+
+The public map previously colored all 59 South Boundary lines as if the DNR specifically declared a seasonal vehicle closure along their full lengths. It now leaves the 15 west-of-Pinkerton source lines in **neutral road-centerline blue** while flagging documented interior closures red when the selected visit date requires it. The west-side tooltip explicitly denies current open gate, signed turn, legal routing, plowing and destination parking status. The line's legacy `seasonalRoadClosureRisk` source property is deliberately not rewritten in this limited display correction; the visitor-facing closure classification uses the reviewed 15-ID exception.
+
+**Not established:** end-to-end road geometry from US-28 to a named lot; current barricades; road grading or snow clearance; authorized turning directions; travel time; RV suitability; or bridge/ford conditions. No new directions, west-road route overlay or road opening claim is published. Source-based road geometry remains orientation only.
