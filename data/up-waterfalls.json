@@ -3940,6 +3940,60 @@
         "kind": "independent-MDOT-roadside-park-reference-not-surveyed-parking",
         "source": "https://outdoormichigan.org/feature/11732"
       }
+    },
+    {
+      "id": "yondota-falls",
+      "name": "Yondota Falls",
+      "region": "Western U.P.",
+      "place": "Presque Isle River · Ottawa National Forest · Marenisco",
+      "lat": 46.430643,
+      "lng": -89.685341,
+      "gisObjectId": 30,
+      "level": "moderate",
+      "minutes": "35–90 min",
+      "walk": "Follow the short river trail from the north-of-bridge trailhead downstream toward the falls. The U.S. Forest Service describes a trail descending beside a series of cascades, with a noticeably uphill return. Independent field visits estimate roughly a quarter mile one way to the main drop. The path is rustic, with uneven ground and wet rock nearby; stay on existing tread and do not wade or scramble along the gorge edge.",
+      "best": "Snow-free conditions with steady river levels. Spring brings strong cascades but dangerous wet rock; autumn brings colorful riverbank forest.",
+      "access": "U.S. Forest Service recreation destination and north-of-bridge trailhead corroborated by regional waterfall reports. Current road/trail conditions are not verified.",
+      "status": "verify",
+      "source": "https://www.recreation.gov/camping/poi/238265",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "U.S. Forest Service waterfall trail",
+      "parking": "From US-2 near Marenisco, take County Road 523 north about 3.25 miles to the bridge over the Presque Isle River. Federal recreation directions identify the Yondota trailhead on the north side of the bridge. Independent field reports describe a small west-side turnout beyond the crossing. Follow current signs and park only in a lawful off-road space; do not block the bridge or road. Neither the natural waterfall marker nor an informal shoulder is a parking destination. Road condition and winter clearing are not currently verified.",
+      "feature": "Dark tea-colored water gathers between rock walls, turns white at a narrow plunge, then flows over smaller cascades beneath tall cedars and hemlocks.",
+      "decision": "Choose this short river hike when the County Road 523 bridge trailhead is safely accessible. A downhill start means a more demanding uphill return; it is not a paved overlook.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "usfs-recreation-facility-and-ridb-trailhead-source-backed",
+      "sourceReviewed": "2026-10-31",
+      "manager": "U.S. Forest Service · Ottawa National Forest",
+      "further": "Federal Recreation.gov documents Yondota Falls on the Ottawa National Forest Bessemer Ranger District with a short descending river path and moderate uphill return. The federal Recreation Information Database route reproduced at ForwardToUSA locates the trailhead north of the Presque Isle River bridge on County Road 523, 3.25 miles north of US-2. Regional Western U.P. tourism and independent waterfall visitors corroborate the approach and roughly 0.25-mile footpath. Michigan waterfall source GIS #30 (46.430643,-89.685341) is 67 metres from specialist natural falls (46.43028,-89.68465), not a parking coordinate. No current road status, winter plowing, lot availability or live waterfall condition confirmed.",
+      "winterRoad": "No live October 31, 2026 road or trail opening confirmed. County Road 523 can become a rough forest road and the trailhead may not be plowed or usable in winter.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "Official Recreation.gov identifies Yondota as Ottawa National Forest, Bessemer Ranger District."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "USFS-recognized public waterfall site and short marked visitor trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://forwardtousa.com/recreation/yondota-falls/",
+          "description": "Federal recreation directions identify the north-of-bridge trailhead; exact current legal spaces and winter condition remain unverified."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "The Forest Service describes a short descending waterfall walk and uphill return; field observers estimate a quarter mile each way."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State GIS #30 falls coordinates agree within 67 metres of independently documented Yondota Falls location."
+        }
+      }
     }
   ]
 }

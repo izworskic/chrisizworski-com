@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 70,
-    "matchedGisFeatures": 64,
-    "pendingGisFeatures": 97
+    "curatedDestinations": 71,
+    "matchedGisFeatures": 65,
+    "pendingGisFeatures": 96
   },
   "batchSize": 8,
   "batches": [
@@ -70,105 +70,99 @@
         20,
         24,
         25,
-        30,
         37,
-        39
+        39,
+        40
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        40,
         48,
         58,
         63,
         65,
         69,
         70,
-        74
+        74,
+        75
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        75,
         29,
         42,
         80,
         85,
         129,
         15,
-        17
+        17,
+        144
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        144,
         18,
         116,
         127,
         148,
         153,
         162,
-        163
+        163,
+        169
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        169,
         170,
         173,
         175,
         180,
         181,
         183,
-        184
+        184,
+        185
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        185,
         186,
         187,
         22,
         28,
         54,
         57,
-        60
+        60,
+        61
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        61,
         62,
         72,
         84,
         106,
         122,
         149,
-        51
+        51,
+        120
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        120,
         136,
         137,
         139,
         140,
         152,
         176,
-        177
-      ]
-    },
-    {
-      "batchNumber": 13,
-      "candidates": [
+        177,
         23
       ]
     }
@@ -722,21 +716,6 @@
       "lat": 46.391819,
       "lng": -89.579675,
       "cluster": "GOGEBIC / NELSON CREEK",
-      "priorityScore": 0,
-      "priorityReason": "Requires independent land-manager and visitor-approach evidence",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 30,
-      "name": "Yondota",
-      "county": "GOGEBIC",
-      "river": "PRESQUE ISLE RIVER",
-      "lat": 46.430643,
-      "lng": -89.685341,
-      "cluster": "GOGEBIC / PRESQUE ISLE RIVER",
       "priorityScore": 0,
       "priorityReason": "Requires independent land-manager and visitor-approach evidence",
       "publicationEligible": false,

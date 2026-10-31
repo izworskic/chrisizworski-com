@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 70,
-  "linkedByExactOid": 64,
-  "unresolvedCandidates": 97,
+  "curatedCount": 71,
+  "linkedByExactOid": 65,
+  "unresolvedCandidates": 96,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -580,18 +580,32 @@
         -89.685341
       ],
       "river": "PRESQUE ISLE RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "yondota-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "usfs-public-visitor-trail-open-now-unknown",
+      "landManager": "U.S. Forest Service · Ottawa National Forest",
+      "parkingEvidence": "https://forwardtousa.com/recreation/yondota-falls/",
+      "trailEvidence": "https://www.recreation.gov/camping/poi/238265",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-10-31",
+      "nextAction": "Consult Ottawa National Forest current road/trail alerts; do not route to falls GIS point.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "36",
+      "classification": "federal-forest-public-trailhead",
+      "accessAssessment": "Federal Recreation.gov documents Yondota Falls on the Ottawa National Forest Bessemer Ranger District with a short descending river path and moderate uphill return. The federal Recreation Information Database route reproduced at ForwardToUSA locates the trailhead north of the Presque Isle River bridge on County Road 523, 3.25 miles north of US-2. Regional Western U.P. tourism and independent waterfall visitors corroborate the approach and roughly 0.25-mile footpath. Michigan waterfall source GIS #30 (46.430643,-89.685341) is 67 metres from specialist natural falls (46.43028,-89.68465), not a parking coordinate. No current road status, winter plowing, lot availability or live waterfall condition confirmed.",
+      "evidence": [
+        "https://www.recreation.gov/camping/poi/238265",
+        "https://forwardtousa.com/recreation/yondota-falls/",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://www.waterfallsofthekeweenaw.com/presque-isle-river/yondota-falls/",
+        "https://www.gowaterfalling.com/~gowaterf/waterfalls/minorfallsT-Z.shtml",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.fs.usda.gov/r09/ottawa",
+        "https://www.fws.gov/rivers/guidance/river/presque-isle"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4557,5 +4571,5 @@
       ]
     }
   ],
-  "lastBatch": "34"
+  "lastBatch": "36"
 }

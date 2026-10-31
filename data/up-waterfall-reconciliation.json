@@ -7,9 +7,9 @@
   "sourceRetrieved": "2026-10-26",
   "counts": {
     "gisCandidates": 161,
-    "exactIdMatched": 64,
-    "pending": 97,
-    "curatedTotal": 70,
+    "exactIdMatched": 65,
+    "pending": 96,
+    "curatedTotal": 71,
     "curatedNoMatchingGIS": 10
   },
   "candidates": [
@@ -622,14 +622,63 @@
       "lat": 46.430643,
       "lng": -89.685341,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "pending-identity-and-access-research",
-      "curatedId": null,
-      "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reconciliation": "curated-exact-gis-id",
+      "curatedId": "yondota-falls",
+      "publicGuide": "/upper-peninsula-waterfalls/yondota-falls/",
+      "landManager": "U.S. Forest Service · Ottawa National Forest",
+      "parkingVerified": true,
+      "publicAccessVerified": true,
+      "reviewed": "2026-10-31",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "publicationEligible": true,
+      "evidenceReviewed": "2026-10-31",
+      "disposition": "usfs-public-river-trail-and-named-bridge-trailhead",
+      "sourceNotes": "Federal Recreation.gov documents Yondota Falls on the Ottawa National Forest Bessemer Ranger District with a short descending river path and moderate uphill return. The federal Recreation Information Database route reproduced at ForwardToUSA locates the trailhead north of the Presque Isle River bridge on County Road 523, 3.25 miles north of US-2. Regional Western U.P. tourism and independent waterfall visitors corroborate the approach and roughly 0.25-mile footpath. Michigan waterfall source GIS #30 (46.430643,-89.685341) is 67 metres from specialist natural falls (46.43028,-89.68465), not a parking coordinate. No current road status, winter plowing, lot availability or live waterfall condition confirmed.",
+      "outstandingGate": "Check current USFS trail signs, County Road 523 condition and legal parking before visiting.",
+      "sourceLinks": [
+        "https://www.recreation.gov/camping/poi/238265",
+        "https://forwardtousa.com/recreation/yondota-falls/",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://www.waterfallsofthekeweenaw.com/presque-isle-river/yondota-falls/",
+        "https://www.gowaterfalling.com/~gowaterf/waterfalls/minorfallsT-Z.shtml",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.fs.usda.gov/r09/ottawa",
+        "https://www.fws.gov/rivers/guidance/river/presque-isle"
+      ],
+      "visitorRouteEvidence": {
+        "trailhead": "North of County Road 523 Presque Isle River bridge",
+        "walkingDistance": "roughly quarter mile one way, field estimate",
+        "currentRoadStatus": "unverified",
+        "navigationToGisPointAllowed": false,
+        "geographicMatchMeters": 67
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "Official Recreation.gov identifies Yondota as Ottawa National Forest, Bessemer Ranger District."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "USFS-recognized public waterfall site and short marked visitor trail."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://forwardtousa.com/recreation/yondota-falls/",
+          "description": "Federal recreation directions identify the north-of-bridge trailhead; exact current legal spaces and winter condition remain unverified."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.recreation.gov/camping/poi/238265",
+          "description": "The Forest Service describes a short descending waterfall walk and uphill return; field observers estimate a quarter mile each way."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State GIS #30 falls coordinates agree within 67 metres of independently documented Yondota Falls location."
+        }
+      }
     },
     {
       "gisObjectId": 33,
@@ -5499,6 +5548,15 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Traders Pinkerton Trail public, final 351m waterfall identity/path unverified. Warner 2026 M35 culvert replacement invalidates unreviewed old shoulder parking. West Branch Erick's informal bridge parking and bank access lack official permission, distinct from public Big Eric's campground."
+    },
+    {
+      "batch": "36-yondota-usfs-federal-bridge-trailhead",
+      "date": "2026-10-31",
+      "reviewedIds": [
+        30
+      ],
+      "publicGuidesAdded": 1,
+      "outcome": "USFS short Yondota river trail and federal RIDB named trailhead north of CR523 bridge; independent natural point 67m from state GIS; no real-time opening or parking coordinates inferred."
     }
   ]
 }
