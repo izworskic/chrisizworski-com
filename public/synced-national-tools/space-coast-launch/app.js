@@ -80,6 +80,13 @@
       card.appendChild(element('p', '', place.assessment?.detail || 'Hourly forecast unavailable.'));
       const short = place.period?.shortForecast;
       if (short) card.appendChild(element('p', 'small', 'NWS: ' + short + '. Forecast is near the viewing area, not the rocket flight path.'));
+      if (Number.isInteger(place.cloudCoverPercent) && place.cloudStatus === 'ok') {
+        card.appendChild(element('div', 'launch-cloud-number', place.cloudCoverPercent + '%'));
+        card.appendChild(element('p', 'small', 'Forecast sky covered by clouds near this area, from the NWS gridded forecast.'));
+      } else {
+        card.appendChild(element('p', 'small', 'No verified cloud-cover percentage for this mission and location.'));
+      }
+      if (place.forecastUpdatedAt) card.appendChild(element('p', 'small', 'NWS grid updated ' + new Date(place.forecastUpdatedAt).toLocaleString('en-US') + '.'));
       target.appendChild(card);
     });
   };
@@ -139,11 +146,80 @@
         venues.appendChild(card);
       });
   };
-  async function load() {
+  const renderSelector = (data) => {
+    const select = $('launch-selector');
+    if (!select) return;
+    select.replaceChildren();
+    const options = data.upcoming || [];
+    options.forEach(l => {
+      const option = document.createElement('option');
+      option.value = l.id;
+      option.textContent = (l.name || 'Mission') + ' · ' +
+        dateFormat(l.net, l.netPrecision) + ' · ' +
+        (['minute', 'second'].includes(l.netPrecision) ? timeFormat(l.net, l.netPrecision) : l.scheduleConfidence?.label || 'Time TBD');
+      select.appendChild(option);
+    });
+    if (!options.length) {
+      const o = document.createElement('option');
+      o.textContent = 'No Florida launches in current feed';
+      o.value = '';
+      select.appendChild(o);
+      select.disabled = true;
+    } else select.disabled = false;
+    if (data.selectedLaunchId) select.value = data.selectedLaunchId;
+    select.onchange = () => {
+      if (select.value) load(select.value);
+    };
+  };
+  const renderArrival = data => {
+    const panel = $('launch-arrival');
+    if (!panel) return;
+    panel.replaceChildren();
+    const g = data.arrivalGuidance || {};
+    panel.dataset.state = g.level || 'unknown';
+    panel.appendChild(element('h3', '', 'Playalinda: ' + (g.label || 'Confirm the park gate')));
+    if (g.estimatedRoadRestrictionAt) {
+      const when = new Date(g.estimatedRoadRestrictionAt);
+      panel.appendChild(element('strong', 'launch-gate-time', 'Policy-based T–30 estimate: ' +
+        when.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York', timeZoneName: 'short' })));
+    }
+    panel.appendChild(element('p', '', g.detail || 'Confirm the current park entrance policy.'));
+    if (g.npsOperatingHours) {
+      const h = g.npsOperatingHours;
+      const fmt = minutes => {
+        const hour = Math.floor(minutes / 60) % 24;
+        const min = minutes % 60;
+        return (hour % 12 || 12) + ':' + String(min).padStart(2, '0') + (hour >= 12 ? ' p.m.' : ' a.m.');
+      };
+      panel.appendChild(element('p', 'small', 'Active NPS notice: ' +
+        fmt(h.openMinutes) + '–' + fmt(h.closeMinutes) +
+        (h.lastEntryMinutes === null ? '' : '; last entry ' + fmt(h.lastEntryMinutes)) +
+        '. Special launch restrictions can override these hours.'));
+    }
+    panel.appendChild(link(g.source || 'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm', 'Read NPS launch-day entry rules', 'launch-link official'));
+  };
+  const renderSkyComparison = data => {
+    const panel = $('launch-sky-compare');
+    if (!panel) return;
+    panel.replaceChildren();
+    const v = data.skyComparison || {};
+    panel.dataset.state = v.level || 'unknown';
+    panel.appendChild(element('strong', '', v.label || 'No sky comparison yet'));
+    panel.appendChild(element('p', '', v.detail ||
+      'Select a precisely timed mission within the NWS forecast horizon to compare cloud forecasts.'));
+    if (v.winner) panel.appendChild(element('p', 'small',
+      'This is a relative cloud forecast, not a recommendation that a rocket will be visible from that location.'));
+  };
+  let loadSequence = 0;
+  async function load(selectedId) {
+    const sequence = ++loadSequence;
     try {
-      const r = await fetch(API, { headers: { Accept: 'application/json' } });
+      const endpoint = selectedId ? API + '?launchId=' + encodeURIComponent(selectedId) : API;
+      const r = await fetch(endpoint, { headers: { Accept: 'application/json' } });
       const d = await r.json();
+      if (sequence !== loadSequence) return;
       if (!r.ok || !d.ok) throw new Error(d.error || 'Launch data unavailable');
+      renderSelector(d);
       set('loading', 'Latest checked ' + new Date(d.generatedAt).toLocaleString('en-US') + '. Times displayed in Eastern Time.');
       const next = d.next;
       const decision = d.nextDecision || {};
@@ -168,6 +244,8 @@
       renderList(d.upcoming || []);
       renderWeather(d.viewingWeatherByArea || []);
       renderAccess(d);
+      renderArrival(d);
+      renderSkyComparison(d);
     } catch (err) {
       set('loading', err.message);
       $('schedule-card').dataset.level = 'unknown';
@@ -177,6 +255,10 @@
       set('weather-label', 'Visibility not assessed');
       set('weather-detail', 'This page is not displaying verified live forecast conditions.');
       set('launch-access-checked', 'Live access data could not be checked.');
+      const arrival = $('launch-arrival');
+      if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';
+      const comparison = $('launch-sky-compare');
+      if (comparison) comparison.textContent = 'Current sky comparison unavailable. Do not assume a clear line of sight.';
       const panel = $('launch-nps-alert');
       if (panel) panel.textContent = 'NPS live closures unavailable. Do not assume Playalinda access.';
     }
