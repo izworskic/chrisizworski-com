@@ -313,6 +313,18 @@ async function main(){
    report.cases.push({device:device.name,viewport:device.width+'x'+device.height,overflow:'pass',errors:0,planner:'pass'});
    await ctx.close();
   }
+  // An unavailable entry crosswalk must leave the verified static two-outing answer,
+  // never publish unreviewed geometry or a fake parking-to-trail connection.
+  const failedEntry=await browser.newContext({viewport:{width:390,height:844}});
+  const fallbackPage=await failedEntry.newPage();
+  await fallbackPage.route('**/experience-entry-evidence.json',route=>route.fulfill({status:503,body:'Unavailable'}));
+  await fallbackPage.goto(url,{waitUntil:'domcontentloaded'});
+  await fallbackPage.waitForFunction(()=>document.querySelector('#experience-compare')?.dataset.loaded==='unavailable',null,{timeout:12000});
+  need(await fallbackPage.locator('#experience-choice-a').isDisabled(),'missing entry evidence did not disable unsupported comparison controls');
+  need((await fallbackPage.locator('#experience-a').innerText()).includes('DNR parking asset #1409')===false,'static fallback overpromised unknown source');
+  need((await fallbackPage.locator('#experience-a .experience-entry-static').innerText()).includes('asset #1409'),'static source-backed Lake overview vanished on source outage');
+  need((await fallbackPage.locator('#experience-compare-status').innerText()).includes('unavailable'),'entry source outage not explained to visitor');
+  await failedEntry.close();
   const noJS=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const page=await noJS.newPage();
   await page.goto(url,{waitUntil:'domcontentloaded'});
