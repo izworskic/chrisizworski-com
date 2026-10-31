@@ -387,6 +387,43 @@
         "/michigan-paddling/",
         "/michigan-trout-streams/"
       ]
+    },
+    {
+      "slug": "national-park-phenomena-field-guide",
+      "url": "/national-park-phenomena-field-guide/",
+      "title": "The National Park Phenomenon Atlas: 12 Narrow-Window U.S. Natural Events & How to Time Them",
+      "subtitle": "12 Bucket-List Events · Interactive 12-Month Timeline Scrubber, Permit Lead Times & Live Telemetry",
+      "status": "live",
+      "releaseWave": "National Flagship Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "All Year · 12-Month Interactive Scrubber",
+      "summary": "Chief NPS interpretive ranger field guide to 12 narrow-window natural spectacles across U.S. National Parks: Yosemite Firefall, Blue Spring manatees, Smoky Mountains synchronous fireflies, and Rocky Mountain elk rut.",
+      "connectedTools": [
+        "/yosemite-firefall-live/",
+        "/national-tools/blue-spring-live/",
+        "/national-tools/elk-rut/",
+        "/synced-national-tools/zion-narrows-conditions/",
+        "/synced-national-tools/going-to-the-sun-road-status/",
+        "/synced-national-tools/columbia-salmon-run/",
+        "/synced-national-tools/yellowstone-geysers/",
+        "/synced-national-tools/cadillac-mountain-sunrise/",
+        "/synced-national-tools/haleakala-sunrise/",
+        "/synced-national-tools/"
+      ]
     }
   ],
   "plannedRoadmap": [

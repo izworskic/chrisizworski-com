@@ -1,0 +1,675 @@
+<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>National Park Phenomenon Atlas: 12 Events | Chris Izworski</title>
+<meta name="description" content="Chief NPS ranger guide to 12 narrow-window natural events: Yosemite Firefall, Smoky fireflies, elk rut, salmon runs and geysers with live permit timelines.">
+<meta name="author" content="Chris Izworski"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://chrisizworski.com/national-park-phenomena-field-guide/">
+<meta property="og:type" content="article"><meta property="og:title" content="The National Park Phenomenon Atlas: 12 Narrow-Window U.S. Natural Events &amp; How to Time Them">
+<meta property="og:description" content="Chief NPS Interpretive Ranger field guide to timing 12 bucket-list U.S. natural events: Yosemite Firefall, Smoky Mountains synchronous fireflies, Rocky Mountain elk rut, and Blue Spring manatees.">
+<meta property="og:url" content="https://chrisizworski.com/national-park-phenomena-field-guide/">
+<meta property="og:image" content="https://chrisizworski.com/assets/national-park-phenomena/yosemite-horsetail-firefall.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="google-adsense-account" content="ca-pub-8222782620788075"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
+<link rel="stylesheet" href="/assets/national-park-phenomena-field-guide.css">
+<style>
+/* Embedded daylight stylesheet for zero-FOUC and offline pop-out resilience */
+:root{--np-bg:#faf8f5;--np-card-bg:#ffffff;--np-text:#1a202c;--np-muted:#4a5568;--np-border:#e2dcd2;--np-border-subtle:#ede8e1;--np-forest:#1e3f20;--np-forest-dark:#132714;--np-forest-light:#e8f0e9;--np-gold:#b45309;--np-gold-light:#fef3c7;--np-canyon:#c2410c;--np-canyon-light:#ffedd5;--np-water:#0369a1;--np-water-light:#e0f2fe;--np-font-serif:'Fraunces',Georgia,serif;--np-font-sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;--np-shadow:0 4px 16px rgba(30,63,32,0.07);--np-shadow-hover:0 8px 24px rgba(30,63,32,0.12)}
+body.wf--national-parks{background-color:var(--np-bg);color:var(--np-text);font-family:var(--np-font-sans);line-height:1.65;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+.wf-sitebar{background:var(--np-forest-dark);color:#fff;padding:12px 0;border-bottom:3px solid var(--np-gold)}
+.wf-sitebar .wf-shell{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.wf-brand{font-family:var(--np-font-serif);font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:-0.02em}
+.wf-sitebar nav a{color:#e2e8f0;text-decoration:none;font-size:0.9rem;font-weight:500;margin-left:18px;transition:color 0.15s ease}
+.wf-sitebar nav a:hover{color:var(--np-gold-light);text-decoration:underline}
+.wf-shell{max-width:1200px;margin:0 auto;padding:0 20px}
+.wf-hero{padding:48px 20px 32px}
+.wf-eyebrow{font-size:0.825rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--np-forest);margin-bottom:8px}
+.wf-hero h1{font-family:var(--np-font-serif);font-size:clamp(2.1rem,4.2vw,3.2rem);font-weight:700;line-height:1.15;color:var(--np-forest-dark);margin:0 0 16px;letter-spacing:-0.02em}
+.wf-lede{font-size:1.15rem;line-height:1.65;color:var(--np-muted);max-width:880px;margin:0 0 24px}
+.np-hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.wf-primary{background:var(--np-forest);color:#fff;padding:12px 22px;border-radius:6px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s}
+.wf-primary:hover{background:var(--np-forest-dark)}
+.np-secondary-cta{background:#fff;color:var(--np-forest);border:1px solid var(--np-border);padding:12px 20px;border-radius:6px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+.np-secondary-cta:hover{border-color:var(--np-forest);background:var(--np-forest-light)}
+.wf-veracity{font-size:0.85rem;color:var(--np-muted);border-left:3px solid var(--np-gold);padding-left:12px;margin-top:20px;line-height:1.5}
+.np-hero-montage{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.wf-photo{margin:0;background:#fff;border:1px solid var(--np-border);border-radius:8px;overflow:hidden;box-shadow:var(--np-shadow)}
+.wf-photo img{width:100%;height:230px;object-fit:cover;display:block}
+.wf-photo figcaption{font-size:0.78rem;color:var(--np-muted);padding:8px 12px;line-height:1.4;background:#fff;border-top:1px solid var(--np-border-subtle)}
+.wf-photo figcaption a{color:var(--np-forest);text-decoration:underline}
+.np-timeline-section{margin:44px auto 32px;background:#fff;border:1px solid var(--np-border);border-radius:10px;padding:28px 24px;box-shadow:var(--np-shadow)}
+.np-timeline-head h2{font-family:var(--np-font-serif);font-size:1.8rem;color:var(--np-forest-dark);margin:0 0 8px}
+.np-timeline-sub{color:var(--np-muted);font-size:0.98rem;margin:0 0 20px;max-width:860px}
+.np-month-bar{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;margin-bottom:18px}
+.np-month-btn{background:var(--np-bg);border:1px solid var(--np-border);border-radius:6px;padding:10px 4px;font-size:0.85rem;font-weight:600;color:var(--np-forest-dark);cursor:pointer;text-align:center;transition:all 0.15s ease;user-select:none}
+.np-month-btn:hover{background:var(--np-forest-light);border-color:var(--np-forest)}
+.np-month-btn.active{background:var(--np-forest);color:#fff;border-color:var(--np-forest-dark);box-shadow:0 2px 6px rgba(30,63,32,0.25)}
+.np-month-btn .btn-sub{display:block;font-size:0.68rem;font-weight:500;opacity:0.85;margin-top:2px}
+.np-filter-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:14px;border-top:1px solid var(--np-border-subtle)}
+.np-filter-label{font-size:0.825rem;font-weight:700;color:var(--np-muted);text-transform:uppercase;letter-spacing:0.05em;margin-right:4px}
+.np-filter-pill{background:var(--np-bg);border:1px solid var(--np-border);border-radius:20px;padding:6px 14px;font-size:0.825rem;font-weight:600;color:var(--np-forest-dark);cursor:pointer;transition:all 0.15s ease}
+.np-filter-pill:hover{background:var(--np-forest-light);border-color:var(--np-forest)}
+.np-filter-pill.active{background:var(--np-forest);color:#fff;border-color:var(--np-forest)}
+.np-month-intel-banner{margin-top:20px;background:var(--np-forest-light);border:1px solid #c2dbcd;border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.np-intel-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.np-intel-title{font-family:var(--np-font-serif);font-size:1.2rem;font-weight:700;color:var(--np-forest-dark)}
+.np-intel-badge{background:var(--np-forest);color:#fff;padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase}
+.np-intel-details{font-size:0.92rem;color:#1e3f20;line-height:1.55;margin:0}
+.np-intel-lead-time{font-size:0.85rem;background:#ffffff;padding:10px 14px;border-radius:6px;border-left:3px solid var(--np-gold);color:#334155}
+.np-map-section{margin:32px auto 44px;background:#fff;border:1px solid var(--np-border);border-radius:10px;padding:24px;box-shadow:var(--np-shadow)}
+.np-map-head h2{font-family:var(--np-font-serif);font-size:1.7rem;color:var(--np-forest-dark);margin:0 0 6px}
+.np-map-desc{color:var(--np-muted);font-size:0.95rem;margin:0 0 16px}
+#phenomenon-leaflet-map{width:100%;height:520px;border-radius:8px;border:1px solid var(--np-border);overflow:hidden;background:#e5e3df}
+.np-map-popup h4{font-family:var(--np-font-serif);font-size:1.05rem;margin:0 0 4px;color:var(--np-forest-dark)}
+.np-map-popup .popup-meta{font-size:0.8rem;font-weight:600;color:var(--np-gold);margin-bottom:6px}
+.np-map-popup .popup-lead{font-size:0.78rem;color:var(--np-muted);margin-bottom:8px}
+.np-map-popup .popup-jump{display:inline-block;background:var(--np-forest);color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;font-weight:600;text-decoration:none}
+.np-briefing-section{margin:44px auto}
+.np-briefing-head h2{font-family:var(--np-font-serif);font-size:1.8rem;color:var(--np-forest-dark);margin:0 0 8px}
+.np-briefing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:20px}
+.np-briefing-card{background:#fff;border:1px solid var(--np-border);border-radius:8px;padding:22px;box-shadow:var(--np-shadow)}
+.np-briefing-card strong{display:block;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--np-gold);margin-bottom:6px}
+.np-briefing-card h3{font-family:var(--np-font-serif);font-size:1.25rem;color:var(--np-forest-dark);margin:0 0 10px}
+.np-briefing-card p{color:var(--np-muted);font-size:0.94rem;margin:0;line-height:1.6}
+.np-stories-section{margin:48px auto}
+.np-stories-head h2{font-family:var(--np-font-serif);font-size:2rem;color:var(--np-forest-dark);margin:0 0 8px}
+.np-stories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+.wf-story{background:#fff;border:1px solid var(--np-border);border-radius:10px;overflow:hidden;box-shadow:var(--np-shadow);display:flex;flex-direction:column;transition:transform 0.2s ease,box-shadow 0.2s ease,border-color 0.2s ease}
+.wf-story:hover{transform:translateY(-2px);box-shadow:var(--np-shadow-hover);border-color:#cbd5e1}
+.wf-story.highlighted{border:2px solid var(--np-forest);box-shadow:0 0 0 4px var(--np-forest-light)}
+.wf-story.dimmed{opacity:0.45;filter:grayscale(40%)}
+.story-media{position:relative}
+.story-media img{width:100%;height:260px;object-fit:cover;display:block}
+.story-badge-cluster{position:absolute;top:14px;left:14px;display:flex;flex-wrap:wrap;gap:6px}
+.story-pill{background:rgba(19,39,20,0.9);color:#fff;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:14px;letter-spacing:0.04em;text-transform:uppercase;backdrop-filter:blur(4px)}
+.story-pill.permit-lottery{background:rgba(194,65,12,0.92)}
+.story-pill.permit-open{background:rgba(3,105,161,0.92)}
+.story-body{padding:24px;display:flex;flex-direction:column;flex-grow:1}
+.story-park-tag{font-size:0.825rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--np-forest);margin-bottom:4px}
+.story-title{font-family:var(--np-font-serif);font-size:1.45rem;color:var(--np-forest-dark);margin:0 0 12px;line-height:1.25}
+.story-window-box{background:var(--np-bg);border:1px solid var(--np-border-subtle);border-radius:6px;padding:12px 14px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.window-item strong{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--np-muted)}
+.window-item span{font-size:0.88rem;font-weight:600;color:var(--np-text)}
+.story-desc{font-size:0.95rem;color:var(--np-muted);line-height:1.6;margin-bottom:18px}
+.story-dossier{border-top:1px solid var(--np-border-subtle);padding-top:14px;margin-top:auto;display:flex;flex-direction:column;gap:12px}
+.dossier-block{font-size:0.875rem;line-height:1.5}
+.dossier-block strong{color:var(--np-forest-dark);display:inline-block;margin-right:4px}
+.dossier-block p{margin:2px 0 0;color:#334155}
+.story-actions{border-top:1px solid var(--np-border-subtle);padding-top:14px;margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.story-tool-link{display:inline-flex;align-items:center;gap:6px;background:var(--np-forest-light);color:var(--np-forest-dark);font-weight:700;font-size:0.85rem;padding:9px 14px;border-radius:6px;text-decoration:none;transition:all 0.15s}
+.story-tool-link:hover{background:var(--np-forest);color:#fff}
+.story-gmaps-link{font-size:0.8rem;color:var(--np-muted);text-decoration:none}
+.story-gmaps-link:hover{color:var(--np-forest);text-decoration:underline}
+.np-faq-section{margin:54px auto;background:#fff;border:1px solid var(--np-border);border-radius:10px;padding:32px 28px;box-shadow:var(--np-shadow)}
+.np-faq-head h2{font-family:var(--np-font-serif);font-size:1.8rem;color:var(--np-forest-dark);margin:0 0 8px}
+.np-faq-list{display:flex;flex-direction:column;gap:20px;margin-top:24px}
+.np-faq-item{border-bottom:1px solid var(--np-border-subtle);padding-bottom:18px}
+.np-faq-item:last-child{border-bottom:none;padding-bottom:0}
+.np-faq-question{font-family:var(--np-font-serif);font-size:1.15rem;font-weight:700;color:var(--np-forest-dark);margin:0 0 8px}
+.np-faq-answer{font-size:0.94rem;color:var(--np-muted);line-height:1.65;margin:0}
+.wf-footer{background:var(--np-forest-dark);color:#cbd5e1;padding:36px 0;border-top:1px solid #2d4530;margin-top:60px}
+.wf-footer a{color:#f1f5f9;text-decoration:underline}
+.wf-footer nav{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px}
+.wf-footer nav a{color:#94a3b8;font-size:0.88rem;text-decoration:none}
+.wf-footer nav a:hover{color:#fff;text-decoration:underline}
+@media(max-width:1024px){.np-month-bar{grid-template-columns:repeat(7,1fr)}.np-stories-grid{grid-template-columns:1fr}.np-briefing-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.np-month-bar{grid-template-columns:repeat(4,1fr)}.np-hero-montage{grid-template-columns:1fr}.story-window-box{grid-template-columns:1fr}#phenomenon-leaflet-map{height:380px}.wf-hero{padding:32px 16px 24px}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"CollectionPage","@id":"https://chrisizworski.com/national-park-phenomena-field-guide/#page","name":"The National Park Phenomenon Atlas: 12 Narrow-Window U.S. Natural Events & How to Time Them","url":"https://chrisizworski.com/national-park-phenomena-field-guide/","description":"Chief National Park Service Interpretive Ranger guide to timing 12 bucket-list U.S. natural phenomena with calendar windows, Recreation.gov permit lead times, and live conditions engines.","datePublished":"2026-10-31","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/national-park-phenomena-field-guide/#phenomena"}},{"@type":"ItemList","@id":"https://chrisizworski.com/national-park-phenomena-field-guide/#phenomena","numberOfItems":12,"itemListElement":[{"@type":"ListItem","position":1,"name":"Yosemite Horsetail Fall Firefall","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#yosemite-horsetail-firefall"},{"@type":"ListItem","position":2,"name":"Blue Spring West Indian Manatee Gathering","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#blue-spring-manatees"},{"@type":"ListItem","position":3,"name":"Death Valley Superbloom & Badwater Salt Crusts","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#death-valley-superbloom"},{"@type":"ListItem","position":4,"name":"Elkmont Synchronous Fireflies","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#elkmont-synchronous-fireflies"},{"@type":"ListItem","position":5,"name":"Zion Narrows Slot Canyon Window","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#zion-narrows-flash-window"},{"@type":"ListItem","position":6,"name":"Glacier Going-to-the-Sun Road Alpine Opening","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#glacier-going-to-the-sun-opening"},{"@type":"ListItem","position":7,"name":"Katmai Brooks Falls Brown Bear Sockeye Feeding","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#katmai-brooks-falls-bears"},{"@type":"ListItem","position":8,"name":"Columbia River Salmon Run Leaping Windows","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#columbia-salmon-leap"},{"@type":"ListItem","position":9,"name":"Yellowstone Geysers & Steamboat Hydrothermal Cycles","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#yellowstone-geysers"},{"@type":"ListItem","position":10,"name":"Rocky Mountain Moraine Park Bull Elk Rut","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#rocky-mountain-elk-rut"},{"@type":"ListItem","position":11,"name":"Acadia Cadillac Mountain First U.S. Sunrise","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#acadia-cadillac-first-sunrise"},{"@type":"ListItem","position":12,"name":"Haleakalā Summit Cloud Inversion Sunrise","url":"https://chrisizworski.com/national-park-phenomena-field-guide/#haleakala-summit-inversion"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I plan a trip around a natural phenomenon that only lasts two weeks?","acceptedAnswer":{"@type":"Answer","text":"Timing narrow-window natural phenomena requires working backwards from federal reservation and permit release dates rather than the event dates themselves. For instance, Katmai Brooks Camp campground reservations open January 5 on Recreation.gov and sell out within minutes for July bear viewing. Yosemite Firefall vehicle reservations drop 2.5 months in advance in December. Glacier Going-to-the-Sun Road vehicle timed entry uses a 120-day rolling window. Always set calendar alarms for permit drops, reserve flexible gateway lodging, and consult specialized live condition tools before traveling."}},{"@type":"Question","name":"Why does the Yosemite Horsetail Fall Firefall fail to light up on some February nights?","acceptedAnswer":{"@type":"Answer","text":"The Firefall requires three independent physical variables to intersect simultaneously. First, Horsetail Fall must have flowing water, which depends on high-elevation snowpack receiving daytime solar melting. Second, the western sky toward California's Central Valley must remain completely free of cloud decks at sunset; even a low bank of clouds 100 miles away can block the sun's rays before they hit El Capitan. Third, the solar declination must align precisely between February 10 and February 28. If clouds roll in or temperatures stay sub-freezing all day, the effect does not occur."}},{"@type":"Question","name":"What are the wildlife safety distances for watching the elk rut and brown bears?","acceptedAnswer":{"@type":"Answer","text":"Federal regulations strictly require visitors to remain at least 75 feet (25 yards or two bus lengths) away from bull elk, deer, and bighorn sheep, and at least 300 feet (100 yards) away from bears and wolves. During the autumn rut, bull elk are aggressively territorial, weigh over 700 pounds, and will charge vehicles and pedestrians without warning. In Katmai National Park, visitors must complete mandatory NPS bear school upon landing and remain on elevated boardwalks and viewing platforms along Brooks Falls."}},{"@type":"Question","name":"When is the safest window to hike the Zion Narrows without flash flood danger?","acceptedAnswer":{"@type":"Answer","text":"September and early October offer the prime 'goldilocks' window for hiking The Narrows. By September, the high-volume spring snowmelt runoff that closes the river in April and May has receded, water temperatures hover around 60°F to 62°F, and the volatile North American Monsoon storm season (July and August) has diminished. However, slot canyon flash floods can trigger from storms miles away. Zion NPS closes the river immediately whenever flow exceeds 150 cubic feet per second (CFS) or when NWS Salt Lake City issues a Flash Flood Warning."}},{"@type":"Question","name":"Why is Cadillac Mountain in Acadia the first place in the U.S. to see sunrise only in fall and winter?","acceptedAnswer":{"@type":"Answer","text":"Because of Earth's 23.5-degree axial tilt, the solar terminator line (the boundary between day and night) angles from northeast to southwest during the Northern Hemisphere's autumn and winter (October 7 through March 6). This southern solar declination gives Maine's 1,530-foot granite peak the geographic advantage over northern locations like Mars Hill or West Quoddy Head. From May to September, the sunrise angle shifts north, and Mars Hill, Maine greets the sun first."}},{"@type":"Question","name":"What etiquette is required for viewing the Elkmont synchronous fireflies in Great Smoky Mountains?","acceptedAnswer":{"@type":"Answer","text":"The synchronous firefly mating display depends entirely on female beetles on the forest floor spotting the rhythmic bioluminescent flashes of flying males. White flashlight beams, camera flashes, and phone screens instantly disrupt this mating communication. Park rangers strictly enforce red-light headlamp protocols (red cellophane or red LED settings only), keeping flashlights pointed down at your feet while walking, and shutting all lights off once seated."}}]}]}</script>
+<script defer src="/assets/leaflet-1.9.4.js"></script>
+<script defer src="/assets/national-park-phenomena-field-guide.js"></script>
+</head><body class="wf wf--national-parks" data-guide="national-park-phenomena-field-guide"><a href="#main" class="wf-skip">Skip to National Park Phenomenon Atlas content</a>
+<header class="wf-sitebar"><div class="wf-shell"><a class="wf-brand" href="/">Chris Izworski</a><nav aria-label="Main"><a href="/yosemite-firefall-live/">Firefall Live</a><a href="/national-tools/blue-spring-live/">Blue Spring Manatees</a><a href="/national-tools/elk-rut/">Elk Rut</a><a href="/synced-national-tools/">National Tools Hub</a><a href="/guides/">All Field Guides</a><a href="/tools/">Decision Tools</a></nav></div></header>
+<main id="main">
+<section class="wf-hero wf-shell" aria-label="National Park Phenomenon Atlas introductory feature">
+<div class="wf-intro">
+<p class="wf-eyebrow">Chief National Park Service Interpretive Ranger Field Guide · By Chris Izworski</p>
+<h1>The National Park Phenomenon Atlas: 12 Narrow-Window U.S. Natural Events &amp; How to Time Them</h1>
+<p class="wf-lede">America's most breathtaking natural wonders don't operate on a relaxed summer vacation schedule. They are tightly choreographed physical collisions of <strong>solar declination, geothermal hydrology, photoperiod biology, and slot-canyon hydraulics</strong>—events with windows as fleeting as 15 minutes before sunset (Yosemite's glowing Firefall) or 10 nights of synchronized bioluminescence (Great Smoky Mountains fireflies). Below is the official NPS interpretive guide to timing 12 bucket-list national park phenomena, complete with seasonal calendars, Recreation.gov permit lead times, and live condition telemetry.</p>
+<div class="np-hero-ctas" role="group" aria-label="Field guide quick navigation">
+<a class="wf-primary" href="#timeline">Explore 12-Month Timeline <span aria-hidden="true">&darr;</span></a>
+<a class="np-secondary-cta" href="#phenomenon-map">View Interactive Map <span aria-hidden="true">&darr;</span></a>
+<a class="np-secondary-cta" href="/synced-national-tools/">National Tools Hub <span aria-hidden="true">&nearr;</span></a>
+</div>
+<p class="wf-veracity">By <a href="/chris-izworski/" style="color:inherit;text-decoration:underline">Chris Izworski</a> · 12 audited U.S. national park phenomena evaluated for solar alignment, wildlife safety perimeters, hydrologic thresholds, and federal Recreation.gov permit lead times.</p>
+</div>
+<div class="np-hero-montage" aria-label="Three authentic photographs of narrow-window national park phenomena">
+<figure class="wf-photo" data-photo-provenance="source-checked">
+<img src="../assets/national-park-phenomena/yosemite-horsetail-firefall.jpg" alt="Horsetail Fall glowing fiery orange against the granite wall of El Capitan at sunset in Yosemite National Park" width="1200" height="800" fetchpriority="high">
+<figcaption>Yosemite Horsetail Fall · Photo: Matthew Dillon · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a><span class="wf-scene"> · Yosemite National Park, CA</span></figcaption>
+</figure>
+<figure class="wf-photo" data-photo-provenance="source-checked">
+<img src="../assets/national-park-phenomena/blue-spring-manatees.jpg" alt="Dozens of Florida manatees resting together in the transparent turquoise spring water at Blue Spring State Park" width="1200" height="800" loading="lazy">
+<figcaption>Blue Spring Manatee Aggregation · Photo: KimonBerlin · <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a><span class="wf-scene"> · Blue Spring, FL</span></figcaption>
+</figure>
+<figure class="wf-photo" data-photo-provenance="source-checked">
+<img src="../assets/national-park-phenomena/rocky-mountain-elk-rut.jpg" alt="A majestic bull elk with large antlers bugling in an alpine meadow with Rocky Mountain peaks in the background" width="1200" height="800" loading="lazy">
+<figcaption>Rocky Mountain Elk Rut · Photo: Andrew Russell · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a><span class="wf-scene"> · Rocky Mountain NP, CO</span></figcaption>
+</figure>
+</div>
+</section>
+
+<!-- The "Field Guide-ish" Interactive Hook: 12-Month Phenomenon Timeline Bar -->
+<section class="wf-shell np-timeline-section" id="timeline" aria-labelledby="timeline-heading">
+<div class="np-timeline-head">
+<p class="wf-eyebrow">Interactive Ranger Timeline Engine · Calendar Scrubber</p>
+<h2 id="timeline-heading">12-Month Phenomenon Calendar: What Peak Windows Are Open Right Now?</h2>
+<p class="np-timeline-sub">Click any month below to scrub the calendar. The atlas highlights active peak natural events, filters the map, and reveals exact Recreation.gov reservation lead times you need to book today.</p>
+</div>
+<div class="np-month-bar" role="tablist" aria-label="12-Month Phenomenon Scrubber">
+<button class="np-month-btn active" data-month="0" type="button">All Year<span class="btn-sub">12 Events</span></button>
+<button class="np-month-btn" data-month="1" type="button">Jan<span class="btn-sub">Manatee Peak</span></button>
+<button class="np-month-btn" data-month="2" type="button">Feb<span class="btn-sub">Firefall Peak</span></button>
+<button class="np-month-btn" data-month="3" type="button">Mar<span class="btn-sub">Superbloom</span></button>
+<button class="np-month-btn" data-month="4" type="button">Apr<span class="btn-sub">Firefly Lottery</span></button>
+<button class="np-month-btn" data-month="5" type="button">May<span class="btn-sub">Firefly Display</span></button>
+<button class="np-month-btn" data-month="6" type="button">Jun<span class="btn-sub">Sun Road Open</span></button>
+<button class="np-month-btn" data-month="7" type="button">Jul<span class="btn-sub">Katmai Bears</span></button>
+<button class="np-month-btn" data-month="8" type="button">Aug<span class="btn-sub">Geysers &amp; Rut Prep</span></button>
+<button class="np-month-btn" data-month="9" type="button">Sep<span class="btn-sub">Bull Elk Rut</span></button>
+<button class="np-month-btn" data-month="10" type="button">Oct<span class="btn-sub">Cadillac Sunrise</span></button>
+<button class="np-month-btn" data-month="11" type="button">Nov<span class="btn-sub">Cold Springs</span></button>
+<button class="np-month-btn" data-month="12" type="button">Dec<span class="btn-sub">Solstice Light</span></button>
+</div>
+
+<div class="np-filter-row" role="group" aria-label="Filter phenomena by access or category">
+<span class="np-filter-label">Quick Filter:</span>
+<button class="np-filter-pill active" data-filter="all" type="button">All 12 Stops</button>
+<button class="np-filter-pill" data-filter="lottery" type="button">Recreation.gov Permit / Lottery (8)</button>
+<button class="np-filter-pill" data-filter="open" type="button">Open Access / No Lottery (4)</button>
+<button class="np-filter-pill" data-filter="wildlife" type="button">Wildlife Migrations &amp; Rut (5)</button>
+<button class="np-filter-pill" data-filter="optical" type="button">Optical &amp; Hydrothermal (7)</button>
+</div>
+
+<!-- Active Month Dynamic Intelligence Strip -->
+<div class="np-month-intel-banner" id="np-month-intel" aria-live="polite">
+<div class="np-intel-header">
+<span class="np-intel-title">Full 12-Month Phenomenon Almanac</span>
+<span class="np-intel-badge">Annual Cycle Overview</span>
+</div>
+<p class="np-intel-details">Explore 12 audited narrow-window national park phenomena across the United States. Use the timeline buttons above to scrub through each calendar month and discover which natural spectacles are unfolding right now, alongside urgent booking deadlines.</p>
+<div class="np-intel-lead-time">Tip: Click any month button (Jan through Dec) to see exact Recreation.gov lottery opening dates and physical timing windows.</div>
+</div>
+</section>
+
+<!-- Geographic Map Section -->
+<section class="wf-shell np-map-section" id="phenomenon-map" aria-labelledby="map-heading">
+<div class="np-map-head">
+<p class="wf-eyebrow">Cartographic Ranger Dispatch · Continental &amp; Island Coordinates</p>
+<h2 id="map-heading">Interactive National Park Phenomenon Map</h2>
+<p class="np-map-desc">Click any numbered ranger badge on the map to inspect vehicle access rules, peak seasonal windows, and jump directly to that park's chief interpretive ranger dossier.</p>
+</div>
+<div id="phenomenon-leaflet-map" role="region" aria-label="Map plotting 12 national park phenomena across the United States"></div>
+</section>
+
+<!-- Chief Ranger Field Briefings -->
+<section class="wf-shell np-briefing-section" aria-labelledby="briefing-heading">
+<div class="np-briefing-head">
+<p class="wf-eyebrow">Chief Interpretive Ranger Briefings · Physics, Law &amp; Wilderness Safety</p>
+<h2 id="briefing-heading">The Science of Narrow Windows: How to Plan for the Fleeting</h2>
+</div>
+<div class="np-briefing-grid">
+<div class="np-briefing-card">
+<strong>Physics &amp; Optics · Ephemeral Events</strong>
+<h3>Solar Declination &amp; Geothermal Plumbing</h3>
+<p>Natural spectacles like Yosemite's Firefall or Acadia's first sunrise are governed by celestial mechanics. The tilt of the Earth's axis aligns the setting or rising sun with a precise granite notch for only 10 to 15 days each calendar year. Similarly, hydrothermal plumbing in Yellowstone relies on delicate subsurface silica deposits that regulate subterranean steam flashpoints. Missing the window by even one week turns a world-class wonder into a standard rock face or dormant geyser pool.</p>
+</div>
+<div class="np-briefing-card">
+<strong>Federal Logistics · Recreation.gov</strong>
+<h3>The Advance Reservation Matrix</h3>
+<p>Because these phenomena attract global interest into ecologically fragile habitats, the National Park Service enforces vehicle timed-entry reservations, day-use lotteries, and wilderness permits. The cardinal rule of phenomenon travel: <em>you must plan your trip around permit release dates, not event dates</em>. Booking windows range from 120 days rolling (Glacier Going-to-the-Sun Road) to 6 months rolling, and lottery windows open as early as January 5 (Katmai Brooks Camp) or late April (Smoky Mountains fireflies).</p>
+</div>
+<div class="np-briefing-card">
+<strong>Ecology &amp; Ethics · Leave No Trace</strong>
+<h3>Red-Light Protocols &amp; Bear Perimeters</h3>
+<p>Experiencing these phenomena requires strict compliance with park regulations. In Great Smoky Mountains, white light shatters the fireflies' bioluminescent mating signals; only red-filtered headlamps are permitted. In Rocky Mountain and Katmai, federal wildlife distances are strictly enforced: 75 feet from rutting bull elk (who can weigh 700 lbs and charge vehicles) and 300 feet from coastal brown bears. Stay on boardwalks, pack out all food scraps, and carry bear spray in grizzly country.</p>
+</div>
+<div class="np-briefing-card">
+<strong>Hydrology &amp; Weather · Safety Boundaries</strong>
+<h3>Monsoon Flashes &amp; Thermal Inversions</h3>
+<p>Weather is the ultimate arbiter. In Zion's Narrows, a thunderstorm 15 miles upriver can funnel a deadly wall of water through the canyon within minutes; rangers close the gorge whenever USGS flow exceeds 150 CFS. At Haleakalā (10,023 ft) and Cadillac Mountain, high-elevation summit winds plunge temperatures into the 20s and 30s while valley floors bask in mild sunshine. Always layer for winter conditions even in peak summer.</p>
+</div>
+</div>
+</section>
+
+<!-- The 12 Phenomenon Cards -->
+<section class="wf-shell np-stories-section" id="phenomena-list" aria-labelledby="phenomena-heading">
+<div class="np-stories-head">
+<p class="wf-eyebrow">12 Audited U.S. Natural Events · Field Dossiers</p>
+<h2 id="phenomena-heading">The 12 Narrow-Window National Park Phenomena</h2>
+<p class="wf-lede">Explore all 12 events ranked by seasonal progression, featuring physical triggers, precise timing windows, permit lead times, and connected live condition decision tools.</p>
+</div>
+<div class="np-stories-grid">
+
+<!-- 1. Yosemite Firefall -->
+<article class="wf-story" id="yosemite-horsetail-firefall" data-phenomenon-id="yosemite-horsetail-firefall" data-months="2" data-category="optical" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/yosemite-horsetail-firefall.jpg" alt="Horsetail Fall glowing fiery orange against the granite wall of El Capitan at sunset in Yosemite National Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Recreation.gov Permit</span>
+<span class="story-pill">Peak: Feb 10–28</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Yosemite National Park · California</span>
+<h3 class="story-title">1. Yosemite Horsetail Fall "Firefall"</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Feb 10–28 (Peak Feb 15–26)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>10–15 Min Before Sunset</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Book Nov/Dec (~2.5 Mo Ahead)</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Solar Angle + Snowmelt Flow</span></div>
+</div>
+<p class="story-desc">For roughly two weeks in mid-to-late February, the setting sun strikes Horsetail Fall on the eastern shoulder of El Capitan at an exact 90-degree optical angle. If the waterfall has water from high-elevation snowpack melt and the western horizon toward the Central Valley remains completely clear of clouds, the cascading spray illuminates with an intense, fiery orange-red glow resembling pouring lava.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Requires three non-negotiable variables: sufficient snowpack with daytime temperatures above freezing to generate meltwater; absolute cloud clearance on the western horizon at sunset; and exact February solar declination.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>NPS requires vehicle timed-entry reservations for February weekends via Recreation.gov. The initial batch drops in early December, with 2-day rolling releases dropping daily at 8:00 AM PT. Walk-ins must use YARTS regional bus transit.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Set up at the El Capitan Picnic Area viewing zone along Northside Drive by 2:00 PM. Bring warm insulated boots, microspikes for icy road shoulders, camp chairs, and headlamps for the 1.5-mile return walk in darkness.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/yosemite-firefall-live/">Connected Tool: Yosemite Firefall Live Sunset Cloud Tracker &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=37.7282%2C-119.6247" target="_blank" rel="noopener noreferrer">View Yosemite Horsetail Fall on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 2. Blue Spring Manatees -->
+<article class="wf-story" id="blue-spring-manatees" data-phenomenon-id="blue-spring-manatees" data-months="11,12,1,2,3" data-category="wildlife" data-permit="open">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/blue-spring-manatees.jpg" alt="Dozens of Florida manatees resting together in the transparent turquoise spring water at Blue Spring State Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-open">Open Park Access</span>
+<span class="story-pill">Peak: Dec–Feb Cold Fronts</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Blue Spring State Park / St. Johns River · Orange City, Florida</span>
+<h3 class="story-title">2. Blue Spring West Indian Manatee Gathering</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Nov 15–Mar 15 (Peak Dec–Feb)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Early Morning After Cold Front</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>No Lottery · Gate Arrival by 7:30 AM</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Constant 72°F Aquifer Boil</span></div>
+</div>
+<p class="story-desc">When Arctic cold fronts drop water temperatures in the St. Johns River below 68°F (20°C), hundreds of West Indian manatees face fatal cold stress syndrome and swim into the crystal-clear 0.4-mile Blue Spring run. Fed by an underground Floridan Aquifer boil discharging 102 million gallons daily at a steady 72°F, the spring becomes a thermal sanctuary with record counts exceeding 700+ individuals gathered in transparent waters.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Manatees possess low metabolic rates and thin blubber layers. Prolonged exposure to river water below 68°F induces hypothermia. The spring's thermal stability acts as a biological life-support refuge.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>No Recreation.gov lottery required. However, state park vehicle capacity is strictly enforced. On cold January and February mornings, the vehicle gate frequently reaches capacity and closes by 7:30 AM to 8:00 AM.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>All in-water activities (swimming, snorkeling, scuba, and paddling) are legally closed throughout the winter refuge season to protect the herd. Walk the 0.3-mile elevated wooden boardwalk to Overlook 1 and Overlook 2 for unobstructed overhead viewing.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/national-tools/blue-spring-live/">Connected Tool: Blue Spring Live Manatee Counter &amp; River Temp Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=28.9458%2C-81.3403" target="_blank" rel="noopener noreferrer">View Blue Spring State Park on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 3. Death Valley Superbloom -->
+<article class="wf-story" id="death-valley-superbloom" data-phenomenon-id="death-valley-superbloom" data-months="2,3,4" data-category="optical" data-permit="open">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/death-valley-superbloom.jpg" alt="A sweeping field of yellow Desert Gold flowers blooming across the desert floor with the salt flats and mountains of Death Valley beyond" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-open">Open Park Access</span>
+<span class="story-pill">Peak: Late Feb–Mid Apr</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Death Valley National Park · California / Nevada</span>
+<h3 class="story-title">3. Death Valley Superbloom &amp; Badwater Salt Crusts</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Late Feb–Apr (Elevation Dependent)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Golden Hour / Morning Light</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>No Reservation · Book Hotel 6 Mo Ahead</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Cyclonic Autumn Rains (&gt;3 Inches)</span></div>
+</div>
+<p class="story-desc">Occurring only once every 10 to 15 years, a true Death Valley superbloom is an astronomical botanical anomaly. Millions of dormant annual desert seeds—Desert Gold (<em>Geraea canescens</em>), Notch-leaf Phacelia, and Gravel Ghost—remain suspended in arid soils until rare autumn rainstorms deliver over 3 inches of soaking moisture. Combined with winter ephemeral lake flooding across Badwater Basin (-282 ft) that evaporates into fresh geometric salt polygon crusts, the driest place in North America briefly transforms into an ocean of gold.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Seed coats contain protective chemical germination inhibitors that require heavy soaking rains to wash away, followed by mild spring warming without desiccant desert windstorms.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Standard National Park entrance pass. No vehicle reservations. Lodging at Furnace Creek Oasis and Stovepipe Wells books 4 to 6 months in advance during spring bloom rumors.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Never walk off established trails in bloom corridors; desert annuals are fragile and crushing them destroys the seed bank for future decades. Pair lower-elevation viewing along Badwater Road in February with canyon hikes (Titus Canyon, Golden Canyon) in April.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/">Connected Tool: Death Valley Live Weather &amp; Park Access Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=36.2503%2C-116.8258" target="_blank" rel="noopener noreferrer">View Badwater Basin on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 4. Elkmont Synchronous Fireflies -->
+<article class="wf-story" id="elkmont-synchronous-fireflies" data-phenomenon-id="elkmont-synchronous-fireflies" data-months="5,6" data-category="wildlife" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/elkmont-synchronous-fireflies.jpg" alt="A dense hardwood forest in the Great Smoky Mountains illuminated by the bioluminescent flashes of synchronous fireflies" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Recreation.gov Lottery</span>
+<span class="story-pill">Peak: Late May–Early Jun</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Great Smoky Mountains National Park · Tennessee / North Carolina</span>
+<h3 class="story-title">4. Elkmont Synchronous Fireflies (Photinus carolinus)</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Late May–Early Jun (~May 25–Jun 6)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>9:30 PM–11:00 PM Full Darkness</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Lottery Opens Late April (4-Day Window)</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Degree-Days &amp; Soil Warming</span></div>
+</div>
+<p class="story-desc">In the mature hardwood forests of Elkmont, thousands of male <em>Photinus carolinus</em> beetles engage in a breathtaking, synchronized bioluminescent mating display found in only a few places on Earth. Flying through the humid mountain air, the fireflies flash in near-perfect unison: 5 to 8 rapid flashes across entire mountain slopes, followed by 6 to 8 seconds of absolute, pitch-black silence, before repeating the rhythm in hypnotic waves.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Soil temperatures and cumulative spring degree-days determine the exact emergence window. The flashing synchrony evolved so females on the forest floor can distinguish their species' pattern amid ambient forest clutter.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Recreation.gov vehicle lottery strictly controls access; the lottery opens for roughly 4 days in late April. Only lottery winners are permitted to park or board shuttle buses into Elkmont during the event dates.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>White light destroys the mating display. Only red-filtered flashlights are permitted on trails. Point red beams directly down at your feet while walking, and extinguish all lights once seated along the Little River and Jakes Creek trails.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/appalachia/">Connected Tool: Great Smoky Mountains Live Conditions &amp; Weather Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=35.6539%2C-83.5806" target="_blank" rel="noopener noreferrer">View Elkmont Historic District on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 5. Zion Narrows Slot Canyon -->
+<article class="wf-story" id="zion-narrows-flash-window" data-phenomenon-id="zion-narrows-flash-window" data-months="5,6,7,8,9,10" data-category="optical" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/zion-narrows-flash-window.jpg" alt="Hikers wading through the shallow Virgin River between towering sheer Navajo sandstone cliffs in The Narrows, Zion National Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Permit for Top-Down</span>
+<span class="story-pill">Peak: Late May–Oct</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Zion National Park · Springdale, Utah</span>
+<h3 class="story-title">5. Zion Narrows Summer/Fall Slot Canyon Window</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Late May–Oct (Goldilocks: Sep–Oct)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Early Morning Shuttle Departure</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Top-Down Opens 5th of Prior Month</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>USGS Flow Rate &lt;150 CFS</span></div>
+</div>
+<p class="story-desc">Wading up the Virgin River between 1,000-foot sheer Navajo sandstone cliffs in The Narrows is one of the world's premier canyon experiences—yet it is strictly governed by upstream river hydraulics. During spring snowmelt, flows regularly exceed 150 cubic feet per second (CFS), triggering mandatory park closures. Once flows drop below 120 CFS in late May, a narrow window opens, though hikers must vigilantly navigate July and August monsoon flash-flood threats before hitting the pristine, warm, low-flow window of September and October.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>The canyon is an inescapable slot. When a convective storm hits the 500-square-mile upper watershed, water gathers into a catastrophic surge within hours. Zion NPS closes The Narrows immediately if flow exceeds 150 CFS or if a Flash Flood Warning is issued.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Bottom-Up day hiking from Temple of Sinawava to Big Spring (up to 9.4 mi round-trip) requires no wilderness permit. The full 16-mile Top-Down through-hike requires a Wilderness Permit via Recreation.gov calendar reservation (opens 5th of each month for the next month).</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Neoprene booties, sticky-rubber canyoneering boots, and a sturdy wooden hiking stick (not flexing trekking poles) are mandatory gear. Turn around immediately if water turns muddy or rises unexpectedly.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/zion-narrows-conditions/">Connected Tool: Zion Narrows Live USGS Flow &amp; Flash-Flood Alert Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=37.2852%2C-112.9475" target="_blank" rel="noopener noreferrer">View Temple of Sinawava on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 6. Glacier Going-to-the-Sun Road -->
+<article class="wf-story" id="glacier-going-to-the-sun-opening" data-phenomenon-id="glacier-going-to-the-sun-opening" data-months="6,7,8,9,10" data-category="optical" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/glacier-going-to-the-sun-opening.jpg" alt="The dramatic alpine curves of Going-to-the-Sun Road winding below Clements Mountain at Logan Pass in Glacier National Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Vehicle Timed Entry</span>
+<span class="story-pill">Peak: Late Jun/Jul–Mid Oct</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Glacier National Park · West Glacier, Montana</span>
+<h3 class="story-title">6. Going-to-the-Sun Road Alpine Opening &amp; Logan Pass</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Late Jun/Jul–Mid Oct (Wildflowers Jul/Aug)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Before 8:00 AM at Logan Pass Lot</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>120-Day Rolling Window at 8 AM MT</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Big Drift Avalanche Clearing (60+ Ft)</span></div>
+</div>
+<p class="story-desc">Few road openings on the planet rival the engineering and alpine drama of Glacier's Going-to-the-Sun Road. Crossing the Continental Divide at Logan Pass (6,646 ft), the 50-mile route takes NPS heavy equipment crews over 10 weeks of hazardous plowing through 40-to-80-foot avalanche snowdrifts along the sheer rock faces of the Garden Wall. When the full road finally unlocks in late June or early July, it unveils a transient alpine paradise of yellow glacier lilies, waterfalls pouring onto pavement, and bighorn sheep nursing lambs.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Deep Pacific maritime and Arctic continental snowpacks converge on the Livingston and Lewis mountain ranges, burying the highway under massive avalanches that freeze into dense glacial ice.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>NPS vehicle timed-entry reservations are strictly required for vehicle access via Recreation.gov. The rolling 120-day window releases tickets daily at 8:00 AM MT, with a secondary next-day batch releasing daily at 7:00 PM MT.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>The Logan Pass Visitor Center parking lot fills completely by 7:30 AM every sunny morning in July and August. Utilize the free park shuttle from Apgar or St. Mary to eliminate parking gridlock and hike the Highline Trail safely.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/going-to-the-sun-road-status/">Connected Tool: Glacier Sun Road Live Plowing &amp; Logan Pass Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=48.6961%2C-113.7178" target="_blank" rel="noopener noreferrer">View Logan Pass Visitor Center on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 7. Katmai Brooks Falls Bears -->
+<article class="wf-story" id="katmai-brooks-falls-bears" data-phenomenon-id="katmai-brooks-falls-bears" data-months="7" data-category="wildlife" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/katmai-brooks-falls-bears.jpg" alt="A large coastal brown bear standing atop Brooks Falls with jaws open capturing a migrating red sockeye salmon leaping upstream" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Campground Lottery</span>
+<span class="story-pill">Peak: July 1–31</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Katmai National Park &amp; Preserve · King Salmon, Alaska</span>
+<h3 class="story-title">7. Katmai Brooks Falls Brown Bear Sockeye Feeding</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>July 1–31 (Peak Migration July 5–25)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Daylight Viewing (10 AM–6 PM)</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Campground Lottery Jan 5 at 8 AM AKST</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Bristol Bay Sockeye Salmon Run</span></div>
+</div>
+<p class="story-desc">In the Alaskan wilderness accessible only by floatplane, July triggers the ultimate wildlife spectacle on the continent. Millions of sockeye (red) salmon enter Bristol Bay and fight their way up the Brooks River toward spawning gravels in Naknek Lake. At the 6-foot Brooks Falls, hundreds of thousands of salmon must launch themselves into the air to surmount the waterfall lip. Up to 40+ massive coastal brown bears assemble at the falls to catch fighting 6-pound fish mid-air, establishing a strict dominance hierarchy on the rocks.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>The Bristol Bay sockeye run is the largest wild salmon migration on Earth. The waterfall creates an energetic bottleneck that forces salmon to repeatedly leap, giving apex predators unprecedented feeding efficiency.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Brooks Camp campground reservations release on Recreation.gov on January 5 at 8:00 AM AKST and sell out for the entire July season in under 3 minutes. Day-trip floatplanes from Anchorage, Homer, or King Salmon must be chartered 6 to 9 months in advance.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Every visitor must attend mandatory NPS 'Bear School' immediately upon stepping off the floatplane. Visitors must remain on elevated boardwalk platforms; when bears occupy access bridges, rangers initiate a 'bear jam' waiting protocol.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/">Connected Tool: National Park Decision Tools Hub &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=58.5553%2C-155.7797" target="_blank" rel="noopener noreferrer">View Brooks Falls Platform on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 8. Columbia River Salmon Run -->
+<article class="wf-story" id="columbia-salmon-leap" data-phenomenon-id="columbia-salmon-leap" data-months="6,7,8,9,10" data-category="wildlife" data-permit="open">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/columbia-salmon-leap.jpg" alt="A large adult salmon leaping over concrete fish ladder baffles at Bonneville Dam along the Columbia River" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-open">Open Public Access</span>
+<span class="story-pill">Peak: Jun–Oct Runs</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Columbia River Gorge / Bonneville Dam · Oregon / Washington</span>
+<h3 class="story-title">8. Columbia River Sockeye &amp; Chinook Salmon Run</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Jun–Oct (Sockeye Jun/Jul · Chinook Sep)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>9:00 AM–5:00 PM Viewing Windows</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>No Reservation Required · Free Entry</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Anadromous Upstream Spawning Run</span></div>
+</div>
+<p class="story-desc">Carving a deep basalt canyon through the Cascade Mountain Range, the Columbia River Gorge is the ancient highway for Pacific anadromous fish. From June through October, hundreds of thousands of sockeye salmon, massive fall Chinook, coho, and steelhead battle 140 miles upstream from the Pacific Ocean. At Bonneville Lock and Dam, public underwater viewing galleries and cascading fish ladder channels allow visitors to watch 30-pound salmon leaping concrete baffles and passing counting windows just inches behind the glass.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Salmon born in high alpine tributaries spend 2 to 5 years in the Pacific Ocean before returning to their natal streams. They navigate by olfactory homing, swimming tirelessly against heavy river discharge without feeding.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Free admission. The U.S. Army Corps of Engineers Bonneville Lock and Dam Visitor Center on Bradford Island is open daily. No tickets or lotteries needed.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>September is the overall grand finale: daily fish counts at Bonneville regularly exceed 15,000 to 25,000 migrating salmon per day. Pair dam viewing with a hike along the Gorge waterfalls (Multnomah, Wahkeena, Horsetail).</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/columbia-salmon-run/">Connected Tool: Columbia River Daily Salmon Ladder Counts &amp; Ladder Engine &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=45.6442%2C-121.9406" target="_blank" rel="noopener noreferrer">View Bonneville Lock &amp; Dam on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 9. Yellowstone Geysers -->
+<article class="wf-story" id="yellowstone-geysers" data-phenomenon-id="yellowstone-geysers" data-months="5,6,7,8,9,10" data-category="optical" data-permit="open">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/yellowstone-geysers.jpg" alt="Old Faithful geyser erupting a towering column of steam and boiling water into a blue sky in Yellowstone National Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-open">Open Park Access</span>
+<span class="story-pill">Peak: May–Oct Daylight</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Yellowstone National Park · Wyoming / Montana / Idaho</span>
+<h3 class="story-title">9. Yellowstone Upper Geyser Basin &amp; Steamboat Cycles</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>May–Oct (Boardwalks Clear &amp; Daylight Long)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Interval-Based (Check Prediction Clock)</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>No Permit · Book In-Park Lodging 1 Yr Ahead</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Superheated Rhyolitic Hydrothermal Plumbing</span></div>
+</div>
+<p class="story-desc">Sitting atop a massive volcanic caldera, Yellowstone harbors over 500 active geysers—more than half the geysers on Earth. In the Upper Geyser Basin, Old Faithful erupts with dependable rhythm every 60 to 110 minutes, launching boiling water 130 feet into the mountain air. Meanwhile, nearby in the Norris Geyser Basin, Steamboat Geyser—the tallest active geyser in the world—unleashes unpredictable superheated eruptions exceeding 300 feet, shaking the forest and spewing abrasive silica mist across the pines.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Deep magma chambers heat groundwater to over 400°F (204°C) under high pressure. When rising water begins boiling near the surface, steam expands rapidly, ejecting the water column and causing an explosive flash of pressure release.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Standard National Park entrance pass. No reservations required for geyser viewing. Historic park hotels (Old Faithful Inn, Lake Hotel) open for reservations 365 days in advance on May 1.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Never leave established wooden boardwalks. Thermal crusts over boiling acidic groundwater can be as thin as an inch; stepping through causes fatal thermal burns. Consult NPS prediction boards at Old Faithful Visitor Education Center to time Grand Geyser, Castle, and Riverside.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/yellowstone-geysers/">Connected Tool: Yellowstone Geysers Live Prediction &amp; Eruption Windows &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=44.4605%2C-110.8281" target="_blank" rel="noopener noreferrer">View Upper Geyser Basin on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 10. Rocky Mountain Elk Rut -->
+<article class="wf-story" id="rocky-mountain-elk-rut" data-phenomenon-id="rocky-mountain-elk-rut" data-months="9,10" data-category="wildlife" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/rocky-mountain-elk-rut.jpg" alt="A massive bull elk with multi-tined antlers bugling in an open autumn meadow in Moraine Park, Rocky Mountain National Park" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Timed Entry Required</span>
+<span class="story-pill">Peak: Sep 15–Oct 25</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Rocky Mountain National Park · Estes Park, Colorado</span>
+<h3 class="story-title">10. Rocky Mountain Moraine Park Bull Elk Bugling Rut</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Sep 15–Oct 25 (Peak Sep 20–Oct 10)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>5:00 PM–7:00 PM Golden Dusk</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Timed Entry Booked Aug 1 at 8 AM MT</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Diminishing Autumn Photoperiod</span></div>
+</div>
+<p class="story-desc">As golden aspen leaves peak across the Colorado Rockies in late September, Moraine Park, Horseshoe Park, and Upper Beaver Meadows become the amphitheater for one of North America's most intense wildlife spectacles. Diminishing daylight triggers a massive surge of testosterone in bull elk (<em>Cervus canadensis</em>). Weighing up to 800 pounds with six-foot antler spreads, mature bulls gather harems of 30+ cow elk, challenging rival bulls with piercing, high-pitched bugles that echo off towering granite cirques before clashing antlers in violent shoving battles.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Melatonin receptors register shortening daylength, stimulating hormonal surges that drive rutting aggression, scent marking, wallowing in mud, and vocal bugling to assert dominance over territory.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Recreation.gov Timed Entry Permit + Bear Lake Road corridor reservation required through late October. Permits release on the 1st of the prior month at 8:00 AM MT, with a 24-hour next-day release at 5:00 PM MT.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Park meadows are strictly closed to all pedestrian entry between 5:00 PM and 7:00 AM to prevent breeding disruption. Remain behind split-rail fences along Moraine Park Road. Bull elk view approaching humans as rival challengers—keep at least 75 feet distance.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/national-tools/elk-rut/">Connected Tool: Rocky Mountain Elk Rut Live Meadow &amp; Bugling Intel &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=40.3601%2C-105.5975" target="_blank" rel="noopener noreferrer">View Moraine Park on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 11. Acadia Cadillac Mountain Sunrise -->
+<article class="wf-story" id="acadia-cadillac-first-sunrise" data-phenomenon-id="acadia-cadillac-first-sunrise" data-months="10,11,12,1,2,3" data-category="optical" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/acadia-cadillac-first-sunrise.jpg" alt="The sun rising over the Atlantic Ocean and coastal islands, casting golden light across the granite summit of Cadillac Mountain in Acadia" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Sunrise Vehicle Pass</span>
+<span class="story-pill">Peak: Oct 7–Mar 6</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Acadia National Park · Bar Harbor, Maine</span>
+<h3 class="story-title">11. Acadia Cadillac Mountain First U.S. Sunrise</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Oct 7–Mar 6 (Astronomical First Sunrise)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>Dawn (30 Min Before Sunrise)</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>90-Day Rolling Window at 10 AM ET</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Earth's Axial Tilt &amp; Southern Declination</span></div>
+</div>
+<p class="story-desc">Rising 1,530 feet straight out of Frenchman Bay, Cadillac Mountain is the highest point along the eastern seaboard of North America. Due to Earth's 23.5-degree axial tilt and southern solar declination during the autumn and winter months, Cadillac Mountain summit greets the very first beam of sunlight in the United States every morning from October 7 through March 6. Standing atop the pink Mount Desert Island granite, observers watch dawn ignite across the Atlantic Ocean, illuminating outer spruce-covered islands in brilliant rose-gold light.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>During autumn and winter, the solar terminator line angles northeast to southwest. Cadillac Mountain's altitude and southern coastal protrusion allow its summit to intersect the rising sun rays minutes before Mars Hill or Lubec.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Recreation.gov vehicle sunrise reservations are required for Cadillac Summit Road from May through late October (90-day rolling window + 2-day rolling window). From December through April, the auto road closes to vehicles for snow; visitors reach the first sunrise on foot or snowshoes.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Summit winds at dawn frequently drop wind chill temperatures below 20°F even during October. Dress in full sub-freezing winter wind layers and bring a thermos of hot coffee. Stay strictly on durable pink granite; fragile subalpine vegetation takes decades to recover from footsteps.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/cadillac-mountain-sunrise/">Connected Tool: Cadillac Mountain Solar Alignment &amp; First Sunrise Tracker &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=44.3526%2C-68.2246" target="_blank" rel="noopener noreferrer">View Cadillac Mountain Summit on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+<!-- 12. Haleakala Summit Sunrise -->
+<article class="wf-story" id="haleakala-summit-inversion" data-phenomenon-id="haleakala-summit-inversion" data-months="4,5,6,7,8,9,10" data-category="optical" data-permit="lottery">
+<div class="story-media">
+<img src="../assets/national-park-phenomena/haleakala-summit-inversion.jpg" alt="A brilliant orange sunrise bursting over a sea of white trade-wind inversion clouds viewed from the 10,023-foot volcanic rim of Haleakala" width="1200" height="800" loading="lazy">
+<div class="story-badge-cluster">
+<span class="story-pill permit-lottery">Sunrise Ticket Mandatory</span>
+<span class="story-pill">Peak: Apr–Oct Inversions</span>
+</div>
+</div>
+<div class="story-body">
+<span class="story-park-tag">Haleakalā National Park · Kula, Maui, Hawaii</span>
+<h3 class="story-title">12. Haleakalā Summit Cloud Inversion Sunrise</h3>
+<div class="story-window-box">
+<div class="window-item"><strong>Peak Window</strong><span>Year-Round (Best Trade Winds Apr–Oct)</span></div>
+<div class="window-item"><strong>Daily Timing</strong><span>3:00 AM–7:00 AM Summit Entry</span></div>
+<div class="window-item"><strong>Permit Lead Time</strong><span>Book 60 Days Ahead at 7:00 AM HST</span></div>
+<div class="window-item"><strong>Physical Trigger</strong><span>Trade-Wind Atmospheric Inversion</span></div>
+</div>
+<p class="story-desc">Rising 10,023 feet above the Pacific Ocean, the summit crater of Haleakalā ('House of the Sun') offers an otherworldly atmospheric vantage point. Pacific trade winds generate a strong temperature inversion layer typically between 5,000 and 7,000 feet, trapping moist marine air and thick stratocumulus clouds below the volcano's rim. Visitors standing at the summit gaze across an undulating ocean of white clouds stretching to the horizon, watching the sun erupt through the cloud deck in vivid scarlet, indigo, and gold hues.</p>
+<div class="story-dossier">
+<div class="dossier-block"><strong>The Physical Trigger:</strong><p>Subsiding dry air from the Hadley cell circulation caps rising moist maritime air, creating a sharp boundary layer (the trade-wind inversion). The volcano summit pierces above this layer into dry, crystalline alpine atmosphere.</p></div>
+<div class="dossier-block"><strong>Permit &amp; Access Logistics:</strong><p>Haleakalā Sunrise vehicle reservations are strictly required for any vehicle entering between 3:00 AM and 7:00 AM via Recreation.gov. Tickets release 60 days in advance at 7:00 AM HST (1:00 PM EDT), with a secondary batch releasing 2 days in advance at 7:00 AM HST.</p></div>
+<div class="dossier-block"><strong>Chief Ranger Field Advice:</strong><p>Despite being in Hawaii, summit temperatures hover between 30°F and 45°F (-1°C to 7°C) before dawn with ferocious wind chills. Bring heavy winter coats, beanies, and gloves. Arrive at the summit by 5:15 AM to observe the astronomical twilight glow.</p></div>
+</div>
+<div class="story-actions">
+<a class="story-tool-link" href="/synced-national-tools/haleakala-sunrise/">Connected Tool: Haleakalā Summit Inversion &amp; Trade-Wind Live Tracker &rarr;</a>
+<a class="story-gmaps-link" href="https://www.google.com/maps/search/?api=1&amp;query=20.7097%2C-156.2534" target="_blank" rel="noopener noreferrer">View Haleakalā Summit on Google Maps · area only, not verified parking ↗</a>
+</div>
+</div>
+</article>
+
+</div>
+</section>
+
+<!-- Chief Ranger FAQ Section -->
+<section class="wf-shell np-faq-section" id="faq" aria-labelledby="faq-heading">
+<div class="np-faq-head">
+<p class="wf-eyebrow">Interpretive Ranger Desk · Visitor Questions &amp; Practical Advice</p>
+<h2 id="faq-heading">Frequently Asked Questions: Timing National Park Natural Phenomena</h2>
+</div>
+<div class="np-faq-list">
+<div class="np-faq-item">
+<h3 class="np-faq-question">How do I plan a trip around a natural phenomenon that only lasts two weeks?</h3>
+<p class="np-faq-answer">Timing narrow-window natural phenomena requires working backwards from federal reservation and permit release dates rather than the event dates themselves. For instance, Katmai Brooks Camp campground reservations open January 5 on Recreation.gov and sell out within minutes for July bear viewing. Yosemite Firefall vehicle reservations drop 2.5 months in advance in December. Glacier Going-to-the-Sun Road vehicle timed entry uses a 120-day rolling window. Always set calendar alarms for permit drops, reserve flexible gateway lodging, and consult specialized live condition tools before traveling.</p>
+</div>
+<div class="np-faq-item">
+<h3 class="np-faq-question">Why does the Yosemite Horsetail Fall Firefall fail to light up on some February nights?</h3>
+<p class="np-faq-answer">The Firefall requires three independent physical variables to intersect simultaneously. First, Horsetail Fall must have flowing water, which depends on high-elevation snowpack receiving daytime solar melting. Second, the western sky toward California's Central Valley must remain completely free of cloud decks at sunset; even a low bank of clouds 100 miles away can block the sun's rays before they hit El Capitan. Third, the solar declination must align precisely between February 10 and February 28. If clouds roll in or temperatures stay sub-freezing all day, the effect does not occur.</p>
+</div>
+<div class="np-faq-item">
+<h3 class="np-faq-question">What are the wildlife safety distances for watching the elk rut and brown bears?</h3>
+<p class="np-faq-answer">Federal regulations strictly require visitors to remain at least 75 feet (25 yards or two bus lengths) away from bull elk, deer, and bighorn sheep, and at least 300 feet (100 yards) away from bears and wolves. During the autumn rut, bull elk are aggressively territorial, weigh over 700 pounds, and will charge vehicles and pedestrians without warning. In Katmai National Park, visitors must complete mandatory NPS bear school upon landing and remain on elevated boardwalks and viewing platforms along Brooks Falls.</p>
+</div>
+<div class="np-faq-item">
+<h3 class="np-faq-question">When is the safest window to hike the Zion Narrows without flash flood danger?</h3>
+<p class="np-faq-answer">September and early October offer the prime 'goldilocks' window for hiking The Narrows. By September, the high-volume spring snowmelt runoff that closes the river in April and May has receded, water temperatures hover around 60°F to 62°F, and the volatile North American Monsoon storm season (July and August) has diminished. However, slot canyon flash floods can trigger from storms miles away. Zion NPS closes the river immediately whenever flow exceeds 150 cubic feet per second (CFS) or when NWS Salt Lake City issues a Flash Flood Warning.</p>
+</div>
+<div class="np-faq-item">
+<h3 class="np-faq-question">Why is Cadillac Mountain in Acadia the first place in the U.S. to see sunrise only in fall and winter?</h3>
+<p class="np-faq-answer">Because of Earth's 23.5-degree axial tilt, the solar terminator line (the boundary between day and night) angles from northeast to southwest during the Northern Hemisphere's autumn and winter (October 7 through March 6). This southern solar declination gives Maine's 1,530-foot granite peak the geographic advantage over northern locations like Mars Hill or West Quoddy Head. From May to September, the sunrise angle shifts north, and Mars Hill, Maine greets the sun first.</p>
+</div>
+<div class="np-faq-item">
+<h3 class="np-faq-question">What etiquette is required for viewing the Elkmont synchronous fireflies in Great Smoky Mountains?</h3>
+<p class="np-faq-answer">The synchronous firefly mating display depends entirely on female beetles on the forest floor spotting the rhythmic bioluminescent flashes of flying males. White flashlight beams, camera flashes, and phone screens instantly disrupt this mating communication. Park rangers strictly enforce red-light headlamp protocols (red cellophane or red LED settings only), keeping flashlights pointed down at your feet while walking, and shutting all lights off once seated.</p>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="wf-footer">
+<div class="wf-shell">
+<p class="wf-veracity">The National Park Phenomenon Atlas · Curated by <a href="/chris-izworski/">Chris Izworski</a> · 12 audited narrow-window natural spectacles across U.S. National Parks, evaluated for solar alignment, wildlife biology, and Recreation.gov permit lead times.</p>
+<nav aria-label="Footer">
+<a href="/yosemite-firefall-live/">Yosemite Firefall Live</a>
+<a href="/national-tools/blue-spring-live/">Blue Spring Manatees</a>
+<a href="/national-tools/elk-rut/">Rocky Mountain Elk Rut</a>
+<a href="/synced-national-tools/zion-narrows-conditions/">Zion Narrows Flow</a>
+<a href="/synced-national-tools/going-to-the-sun-road-status/">Glacier Sun Road</a>
+<a href="/synced-national-tools/columbia-salmon-run/">Columbia Salmon Run</a>
+<a href="/synced-national-tools/yellowstone-geysers/">Yellowstone Geysers</a>
+<a href="/synced-national-tools/cadillac-mountain-sunrise/">Cadillac Sunrise</a>
+<a href="/synced-national-tools/haleakala-sunrise/">Haleakalā Sunrise</a>
+<a href="/synced-national-tools/">All National Tools</a>
+<a href="/guides/">All Field Guides</a>
+<a href="/tools/">Decision Tools</a>
+<a href="/privacy/">Privacy</a>
+</nav>
+</div>
+</footer>
+</body></html>
