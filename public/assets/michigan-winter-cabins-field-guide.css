@@ -1,0 +1,689 @@
+/* ==========================================================================
+   Michigan Winter Cabins, Saunas & Hot-Tub Basecamps Field Guide Stylesheet
+   Architecture: FIELD_GUIDE_V1
+   Persona: Northwoods Lodgekeeper & Winter Trail Scout
+   ========================================================================== */
+
+:root {
+  --mc-spruce: #183a2d;
+  --mc-spruce-dark: #0d2119;
+  --mc-spruce-light: #eaf2ed;
+  --mc-cedar: #8b4513;
+  --mc-cedar-dark: #66320d;
+  --mc-cedar-light: #fbf2ec;
+  --mc-amber: #c26b38;
+  --mc-amber-light: #fff3ed;
+  --mc-ice: #1b4965;
+  --mc-ice-dark: #123348;
+  --mc-ice-light: #ebf4f8;
+  --mc-bg: #f8fafc;
+  --mc-card: #ffffff;
+  --mc-text: #1e293b;
+  --mc-muted: #475569;
+  --mc-border: #cbd5e1;
+  --mc-border-subtle: #e2e8f0;
+  --mc-font-serif: 'Fraunces', Georgia, serif;
+  --mc-font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mc-shadow: 0 4px 18px rgba(15, 37, 28, 0.08);
+  --mc-shadow-hover: 0 8px 26px rgba(15, 37, 28, 0.13);
+}
+
+body.wf--winter-cabins {
+  background-color: var(--mc-bg);
+  color: var(--mc-text);
+  font-family: var(--mc-font-sans);
+  line-height: 1.65;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sitebar & Navigation */
+.wf-sitebar {
+  background: var(--mc-spruce-dark);
+  color: #fff;
+  padding: 12px 0;
+  border-bottom: 3px solid var(--mc-amber);
+}
+
+.wf-sitebar .wf-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.wf-brand {
+  font-family: var(--mc-font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.wf-sitebar nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-left: 18px;
+  transition: color 0.15s ease;
+}
+
+.wf-sitebar nav a:hover {
+  color: var(--mc-amber-light);
+  text-decoration: underline;
+}
+
+.wf-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.wf-hero {
+  padding: 48px 20px 32px;
+}
+
+.wf-eyebrow {
+  font-size: 0.825rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mc-cedar);
+  margin-bottom: 8px;
+}
+
+.wf-hero h1 {
+  font-family: var(--mc-font-serif);
+  font-size: clamp(2.1rem, 4.2vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+.wf-lede {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--mc-muted);
+  max-width: 880px;
+  margin: 0 0 24px;
+}
+
+.mc-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.wf-primary {
+  background: var(--mc-spruce);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.wf-primary:hover {
+  background: var(--mc-spruce-dark);
+}
+
+.mc-secondary-cta {
+  background: #fff;
+  color: var(--mc-spruce);
+  border: 1px solid var(--mc-border);
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.mc-secondary-cta:hover {
+  border-color: var(--mc-spruce);
+  background: var(--mc-spruce-light);
+}
+
+.wf-veracity {
+  font-size: 0.85rem;
+  color: var(--mc-muted);
+  border-left: 3px solid var(--mc-amber);
+  padding-left: 12px;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+/* Montage */
+.mc-hero-montage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.wf-photo {
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--mc-shadow);
+}
+
+.wf-photo img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+}
+
+.wf-photo figcaption {
+  font-size: 0.78rem;
+  color: var(--mc-muted);
+  padding: 8px 12px;
+  line-height: 1.4;
+  background: #fff;
+  border-top: 1px solid var(--mc-border-subtle);
+}
+
+.wf-photo figcaption a {
+  color: var(--mc-spruce);
+  text-decoration: underline;
+}
+
+/* Interactive Filter & Telemetry Section */
+.mc-filter-section {
+  margin: 44px auto 32px;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 10px;
+  padding: 28px 24px;
+  box-shadow: var(--mc-shadow);
+}
+
+.mc-filter-head h2 {
+  font-family: var(--mc-font-serif);
+  font-size: 1.8rem;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 8px;
+}
+
+.mc-filter-sub {
+  color: var(--mc-muted);
+  font-size: 0.98rem;
+  margin: 0 0 20px;
+  max-width: 860px;
+}
+
+.mc-style-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.mc-style-pill {
+  background: var(--mc-bg);
+  border: 1px solid var(--mc-border);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--mc-spruce-dark);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.mc-style-pill:hover {
+  background: var(--mc-spruce-light);
+  border-color: var(--mc-spruce);
+}
+
+.mc-style-pill.active {
+  background: var(--mc-spruce);
+  color: #fff;
+  border-color: var(--mc-spruce-dark);
+  box-shadow: 0 2px 6px rgba(24, 58, 45, 0.25);
+}
+
+/* Dynamic Snow Telemetry Banner */
+.mc-snow-intel-banner {
+  margin-top: 20px;
+  background: var(--mc-ice-light);
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mc-intel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mc-intel-title {
+  font-family: var(--mc-font-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--mc-ice-dark);
+}
+
+.mc-intel-badge {
+  background: var(--mc-ice);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mc-intel-details {
+  font-size: 0.92rem;
+  color: var(--mc-ice-dark);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.mc-intel-advisory {
+  font-size: 0.85rem;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--mc-amber);
+  color: #334155;
+}
+
+/* Interactive Map Section */
+.mc-map-section {
+  margin: 32px auto 44px;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: var(--mc-shadow);
+}
+
+.mc-map-header {
+  margin-bottom: 16px;
+}
+
+.mc-map-header h2 {
+  font-family: var(--mc-font-serif);
+  font-size: 1.7rem;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 6px;
+}
+
+.mc-map-header p {
+  color: var(--mc-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+#cabin-map {
+  height: 480px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--mc-border);
+  z-index: 1;
+}
+
+.mc-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 0.825rem;
+  color: var(--mc-muted);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Stories / Basecamp Cards */
+.wf-stories {
+  margin-top: 32px;
+}
+
+.wf-story {
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 12px;
+  margin-bottom: 36px;
+  overflow: hidden;
+  box-shadow: var(--mc-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wf-story:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mc-shadow-hover);
+}
+
+.wf-story.hidden {
+  display: none !important;
+}
+
+.wf-story .wf-photo img {
+  height: 380px;
+  border-radius: 12px 12px 0 0;
+}
+
+.wf-story-body {
+  padding: 28px 32px 32px;
+}
+
+.mc-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mc-badge-style {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.badge--wood-fired-sauna {
+  background: var(--mc-amber-light);
+  color: var(--mc-cedar);
+  border: 1px solid #fbd5c0;
+}
+
+.badge--ski-in-chalet {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.badge--rustic-yurt-cabin {
+  background: #fefce8;
+  color: #854d0e;
+  border: 1px solid #fef08a;
+}
+
+.badge--riverfront-cabin {
+  background: var(--mc-ice-light);
+  color: var(--mc-ice);
+  border: 1px solid #bfdbfe;
+}
+
+.mc-badge-snow {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid var(--mc-border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mc-badge-awd {
+  background: #fff1f2;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.wf-story-body h3 {
+  font-family: var(--mc-font-serif);
+  font-size: 1.85rem;
+  color: var(--mc-spruce-dark);
+  margin: 6px 0 14px;
+  line-height: 1.25;
+}
+
+.mc-dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 18px 0 22px;
+  background: var(--mc-bg);
+  border: 1px solid var(--mc-border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.mc-dossier-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mc-dossier-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mc-muted);
+}
+
+.mc-dossier-value {
+  font-size: 0.92rem;
+  color: var(--mc-text);
+  font-weight: 500;
+}
+
+.wf-story-body p {
+  color: #334155;
+  font-size: 1.02rem;
+  line-height: 1.68;
+  margin: 0 0 16px;
+}
+
+.mc-scout-rule {
+  background: var(--mc-cedar-light);
+  border-left: 4px solid var(--mc-cedar);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #451a03;
+  margin: 20px 0;
+}
+
+.mc-scout-rule strong {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  color: var(--mc-cedar-dark);
+}
+
+.wf-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--mc-border-subtle);
+  margin-top: 22px;
+}
+
+.wf-tool {
+  background: var(--mc-spruce);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+}
+
+.wf-tool:hover {
+  background: var(--mc-spruce-dark);
+}
+
+.wf-links a:not(.wf-tool) {
+  font-size: 0.85rem;
+  color: var(--mc-spruce);
+  text-decoration: none;
+  padding: 7px 12px;
+  border: 1px solid var(--mc-border);
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.wf-links a:not(.wf-tool):hover {
+  border-color: var(--mc-spruce);
+  background: var(--mc-spruce-light);
+}
+
+/* FAQ Section */
+.mc-faq-section {
+  margin: 48px auto;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 12px;
+  padding: 36px 32px;
+  box-shadow: var(--mc-shadow);
+}
+
+.mc-faq-head h2 {
+  font-family: var(--mc-font-serif);
+  font-size: 2rem;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 10px;
+}
+
+.mc-faq-sub {
+  color: var(--mc-muted);
+  font-size: 1.05rem;
+  margin: 0 0 28px;
+}
+
+.mc-faq-item {
+  border-bottom: 1px solid var(--mc-border-subtle);
+  padding: 20px 0;
+}
+
+.mc-faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.mc-faq-item h3 {
+  font-family: var(--mc-font-serif);
+  font-size: 1.25rem;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 10px;
+}
+
+.mc-faq-item p {
+  color: #334155;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Safety & Ethics */
+.wf-safety {
+  background: #f1f5f9;
+  border-top: 1px solid var(--mc-border);
+  border-bottom: 1px solid var(--mc-border);
+  padding: 44px 0;
+  margin-top: 56px;
+}
+
+.wf-safety h2 {
+  font-family: var(--mc-font-serif);
+  font-size: 1.8rem;
+  color: var(--mc-spruce-dark);
+  margin: 0 0 12px;
+}
+
+.wf-safety p {
+  color: var(--mc-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 880px;
+}
+
+/* Footer */
+.wf-footer {
+  background: var(--mc-spruce-dark);
+  color: #94a3b8;
+  padding: 32px 0;
+  font-size: 0.88rem;
+}
+
+.wf-footer a {
+  color: #cbd5e1;
+  text-decoration: underline;
+}
+
+.wf-footer a:hover {
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mc-hero-montage {
+    grid-template-columns: 1fr;
+  }
+  .wf-story .wf-photo img {
+    height: 240px;
+  }
+  .wf-story-body {
+    padding: 20px;
+  }
+  .wf-story-body h3 {
+    font-size: 1.5rem;
+  }
+  .mc-dossier-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -424,6 +424,29 @@
         "/synced-national-tools/haleakala-sunrise/",
         "/synced-national-tools/"
       ]
+    },
+    {
+      "slug": "michigan-winter-cabins-field-guide",
+      "url": "/michigan-winter-cabins-field-guide/",
+      "title": "Michigan Winter Cabins, Saunas & Hot-Tub Basecamps Field Guide",
+      "subtitle": "12 Basecamp Zones · Wood-Fired Shoreline Saunas, Ski Chalets, Yurts & Live Snowpack",
+      "status": "live",
+      "releaseWave": "Release 2: Peak Winter (Jan–Feb)",
+      "stopCount": 12,
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Nov–Mar · Peak Winter Basecamps",
+      "summary": "12 architectural winter basecamp zones across Michigan: Keweenaw wood-fired shoreline saunas, Boyne ski chalets, Au Sable log cabins, and Porcupine Mountains yurts with live snowpack and AWD road rules.",
+      "connectedTools": [
+        "/michigan-winter-weekends/",
+        "/michigan-snow-depth/",
+        "/michigan-ski-hills/"
+      ]
     }
   ],
   "plannedRoadmap": [
@@ -434,8 +457,7 @@
         "Michigan Snowshoeing Destinations Field Guide",
         "Michigan Fat-Tire Snow Biking Field Guide",
         "Michigan Winter Dark Sky & Aurora Viewing Guide",
-        "Michigan Family Sledding, Tubing & Luge Field Guide",
-        "Michigan Winter Cabins, Lodges & Hot-Tub Basecamps Guide"
+        "Michigan Family Sledding, Tubing & Luge Field Guide"
       ]
     },
     {
