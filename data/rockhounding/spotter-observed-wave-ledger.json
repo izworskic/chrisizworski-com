@@ -2,142 +2,12 @@
   "schemaVersion": "rockhounding-glos-spotter-observed-ledger-v1",
   "stationId": "SPOT-1361",
   "source": "GLOS_SEAGULL_OBS_140",
-  "generatedAtUTC": "2026-10-31T07:00:23.248Z",
+  "generatedAtUTC": "2026-10-31T13:39:53.754Z",
   "retentionDays": 120,
   "thresholdM": 1,
   "originalObservationsOnly": true,
   "sourceObservationNotBeachSurf": true,
   "records": [
-    {
-      "time": "2026-07-03T07:16:01Z",
-      "waveHeightM": 0.13,
-      "waveFromDeg": 310.65,
-      "meanPeriodS": 3.34,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T07:46:01Z",
-      "waveHeightM": 0.17,
-      "waveFromDeg": 312.14,
-      "meanPeriodS": 2.8,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T08:16:01Z",
-      "waveHeightM": 0.17,
-      "waveFromDeg": 303.02,
-      "meanPeriodS": 2.5,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T08:46:01Z",
-      "waveHeightM": 0.15,
-      "waveFromDeg": 305.78,
-      "meanPeriodS": 2.68,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T09:16:01Z",
-      "waveHeightM": 0.14,
-      "waveFromDeg": 310.07,
-      "meanPeriodS": 2.92,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T09:46:10Z",
-      "waveHeightM": 0.13,
-      "waveFromDeg": 312.7,
-      "meanPeriodS": 3.04,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T10:16:10Z",
-      "waveHeightM": 0.11,
-      "waveFromDeg": 314.54,
-      "meanPeriodS": 3.12,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T10:46:01Z",
-      "waveHeightM": 0.13,
-      "waveFromDeg": 314.36,
-      "meanPeriodS": 2.92,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T11:16:01Z",
-      "waveHeightM": 0.12,
-      "waveFromDeg": 310.77,
-      "meanPeriodS": 2.56,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T11:46:01Z",
-      "waveHeightM": 0.11,
-      "waveFromDeg": 308.47,
-      "meanPeriodS": 3,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T12:16:01Z",
-      "waveHeightM": 0.1,
-      "waveFromDeg": 308.98,
-      "meanPeriodS": 3.14,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T12:46:01Z",
-      "waveHeightM": 0.1,
-      "waveFromDeg": 306.9,
-      "meanPeriodS": 3.02,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
-    {
-      "time": "2026-07-03T13:16:01Z",
-      "waveHeightM": 0.12,
-      "waveFromDeg": 307.48,
-      "meanPeriodS": 2.7,
-      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
-      "phase": "OBSERVATION",
-      "lat": 46.695671,
-      "lon": -86.003799
-    },
     {
       "time": "2026-07-03T13:46:01Z",
       "waveHeightM": 0.15,
@@ -56157,21 +56027,501 @@
       "phase": "OBSERVATION",
       "lat": 46.695671,
       "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T00:16:01Z",
+      "waveHeightM": 2.03,
+      "waveFromDeg": 302.67,
+      "meanPeriodS": 5.46,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T00:46:01Z",
+      "waveHeightM": 2.06,
+      "waveFromDeg": 300.95,
+      "meanPeriodS": 5.36,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T01:16:01Z",
+      "waveHeightM": 1.99,
+      "waveFromDeg": 301.71,
+      "meanPeriodS": 5.34,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T01:46:01Z",
+      "waveHeightM": 2.04,
+      "waveFromDeg": 302.77,
+      "meanPeriodS": 5.44,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T02:16:01Z",
+      "waveHeightM": 2.06,
+      "waveFromDeg": 302.55,
+      "meanPeriodS": 5.26,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T02:46:01Z",
+      "waveHeightM": 2.14,
+      "waveFromDeg": 300.92,
+      "meanPeriodS": 5.32,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T03:16:01Z",
+      "waveHeightM": 1.98,
+      "waveFromDeg": 304.3,
+      "meanPeriodS": 5.3,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T03:46:01Z",
+      "waveHeightM": 2.2,
+      "waveFromDeg": 303.81,
+      "meanPeriodS": 5.38,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T04:16:01Z",
+      "waveHeightM": 2.16,
+      "waveFromDeg": 304.88,
+      "meanPeriodS": 5.48,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T04:46:01Z",
+      "waveHeightM": 2.01,
+      "waveFromDeg": 302.74,
+      "meanPeriodS": 5.26,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T05:16:01Z",
+      "waveHeightM": 2.07,
+      "waveFromDeg": 305.55,
+      "meanPeriodS": 5.24,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T05:46:01Z",
+      "waveHeightM": 2.01,
+      "waveFromDeg": 308.48,
+      "meanPeriodS": 5.24,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T06:16:01Z",
+      "waveHeightM": 1.79,
+      "waveFromDeg": 305.62,
+      "meanPeriodS": 4.98,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T06:46:01Z",
+      "waveHeightM": 1.94,
+      "waveFromDeg": 306.87,
+      "meanPeriodS": 5.24,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T07:16:01Z",
+      "waveHeightM": 1.68,
+      "waveFromDeg": 308.79,
+      "meanPeriodS": 4.84,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T07:46:01Z",
+      "waveHeightM": 1.71,
+      "waveFromDeg": 309.99,
+      "meanPeriodS": 4.96,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T08:16:01Z",
+      "waveHeightM": 1.61,
+      "waveFromDeg": 308.92,
+      "meanPeriodS": 4.76,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T08:46:01Z",
+      "waveHeightM": 1.64,
+      "waveFromDeg": 308.85,
+      "meanPeriodS": 4.76,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T09:16:01Z",
+      "waveHeightM": 1.53,
+      "waveFromDeg": 308.99,
+      "meanPeriodS": 4.6,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T09:46:01Z",
+      "waveHeightM": 1.47,
+      "waveFromDeg": 308.33,
+      "meanPeriodS": 4.64,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T10:16:01Z",
+      "waveHeightM": 1.49,
+      "waveFromDeg": 311.49,
+      "meanPeriodS": 4.54,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T10:46:01Z",
+      "waveHeightM": 1.42,
+      "waveFromDeg": 313.21,
+      "meanPeriodS": 4.4,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T11:16:01Z",
+      "waveHeightM": 1.38,
+      "waveFromDeg": 312.55,
+      "meanPeriodS": 4.42,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T11:46:01Z",
+      "waveHeightM": 1.36,
+      "waveFromDeg": 314.9,
+      "meanPeriodS": 4.46,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T12:16:01Z",
+      "waveHeightM": 1.27,
+      "waveFromDeg": 319.97,
+      "meanPeriodS": 4.3,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T12:46:01Z",
+      "waveHeightM": 1.28,
+      "waveFromDeg": 317.08,
+      "meanPeriodS": 4.36,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T13:16:01Z",
+      "waveHeightM": 1.25,
+      "waveFromDeg": 321.78,
+      "meanPeriodS": 4.2,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T13:46:12Z",
+      "waveHeightM": 1.3,
+      "waveFromDeg": 319.69,
+      "meanPeriodS": 4.36,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T14:16:12Z",
+      "waveHeightM": 1.28,
+      "waveFromDeg": 320.49,
+      "meanPeriodS": 4.26,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T14:46:01Z",
+      "waveHeightM": 1.2,
+      "waveFromDeg": 316.22,
+      "meanPeriodS": 4.2,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T15:16:01Z",
+      "waveHeightM": 1.14,
+      "waveFromDeg": 316.01,
+      "meanPeriodS": 4.14,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T15:46:01Z",
+      "waveHeightM": 1.19,
+      "waveFromDeg": 320.12,
+      "meanPeriodS": 4.26,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T16:16:01Z",
+      "waveHeightM": 1.15,
+      "waveFromDeg": 319.03,
+      "meanPeriodS": 4.18,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T16:46:01Z",
+      "waveHeightM": 1.06,
+      "waveFromDeg": 317.49,
+      "meanPeriodS": 3.96,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T17:16:01Z",
+      "waveHeightM": 1.04,
+      "waveFromDeg": 318.38,
+      "meanPeriodS": 3.88,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T17:46:01Z",
+      "waveHeightM": 1.11,
+      "waveFromDeg": 315.56,
+      "meanPeriodS": 4.02,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T18:16:01Z",
+      "waveHeightM": 1.03,
+      "waveFromDeg": 313.8,
+      "meanPeriodS": 3.84,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T18:46:01Z",
+      "waveHeightM": 1.17,
+      "waveFromDeg": 314.64,
+      "meanPeriodS": 3.9,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T19:16:01Z",
+      "waveHeightM": 1.24,
+      "waveFromDeg": 317.3,
+      "meanPeriodS": 4.06,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T19:46:01Z",
+      "waveHeightM": 1.23,
+      "waveFromDeg": 317.05,
+      "meanPeriodS": 4.02,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T20:16:01Z",
+      "waveHeightM": 1.27,
+      "waveFromDeg": 320.45,
+      "meanPeriodS": 4.18,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T20:46:01Z",
+      "waveHeightM": 1.2,
+      "waveFromDeg": 318.9,
+      "meanPeriodS": 4.1,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T21:16:01Z",
+      "waveHeightM": 1.24,
+      "waveFromDeg": 322.84,
+      "meanPeriodS": 4.38,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T21:46:01Z",
+      "waveHeightM": 1.21,
+      "waveFromDeg": 323.84,
+      "meanPeriodS": 4.28,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T22:16:01Z",
+      "waveHeightM": 1.28,
+      "waveFromDeg": 326.69,
+      "meanPeriodS": 4.42,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T22:46:01Z",
+      "waveHeightM": 1.18,
+      "waveFromDeg": 326.29,
+      "meanPeriodS": 4.36,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T23:16:01Z",
+      "waveHeightM": 1.08,
+      "waveFromDeg": 329.8,
+      "meanPeriodS": 4.34,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
+    },
+    {
+      "time": "2026-10-30T23:46:01Z",
+      "waveHeightM": 0.97,
+      "waveFromDeg": 325.32,
+      "meanPeriodS": 4.2,
+      "source": "GLOS_SPOT_1361_OBSERVED_OPEN_LAKE",
+      "phase": "OBSERVATION",
+      "lat": 46.695671,
+      "lon": -86.003799
     }
   ],
   "canPredictFreshStones": false,
   "canPublishVisitWindow": false,
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
-  "lastSourceSampleAtUTC": "2026-10-29T23:46:01Z",
+  "lastSourceSampleAtUTC": "2026-10-30T23:46:01Z",
   "diagnostics": {
-    "incoming": 130,
-    "added": 0,
-    "expired": 16,
-    "retained": 5615,
-    "firstAt": "2026-07-03T07:16:01Z",
-    "lastAt": "2026-10-29T23:46:01Z",
-    "distinctUtcDays": 119,
-    "lastObservationAgeHours": 31.24
+    "incoming": 165,
+    "added": 48,
+    "expired": 13,
+    "retained": 5650,
+    "firstAt": "2026-07-03T13:46:01Z",
+    "lastAt": "2026-10-30T23:46:01Z",
+    "distinctUtcDays": 120,
+    "lastObservationAgeHours": 13.9
   }
 }
