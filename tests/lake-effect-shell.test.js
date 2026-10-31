@@ -11,7 +11,7 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.equal(geographicRoute?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect-geography");
  const griddedRoute=site.rewrites.find(x=>x.source==="/api/lake-effect-grid");
  assert.equal(griddedRoute?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect-grid");
- assert.match(html,/lake-effect-grid\.js\?v=20261031-1/);
+ assert.match(html,/lake-effect-grid\.js\?v=20261031-2/);
  assert.match(html,/lake-effect-grid\.css\?v=20261031-1/);
  assert.match(html,/lake-effect-geography\.js\?v=20261031-1/);
  assert.match(html,/lake-effect-geography\.css\?v=20261031-1/);
