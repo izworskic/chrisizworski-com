@@ -34,7 +34,9 @@ async function main(){
      headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
    for(const viewport of [
      {name:'desktop',width:1440,height:900},
-     {name:'phone',width:390,height:844}
+     {name:'tablet',width:768,height:1024},
+     {name:'phone',width:390,height:844},
+     {name:'small-phone',width:360,height:800}
    ]){
      const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},
        deviceScaleFactor:1,reducedMotion:'reduce'});
