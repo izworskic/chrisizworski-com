@@ -40,6 +40,14 @@
      if(point.id==="summit")return {canDirect:false,notice:"DNR recommends trailers and campers stop at the designated lower lot near the South Boundary Road turnoff, not this upper approach. Its exact navigation location is not verified here."};
      return {canDirect:false,notice:"This mapped point has not been verified for RV or trailer turning, parking or a safe approach. Consult the park office and official map before taking a large vehicle to this lot."};
    }
+   // Wakefield Township's 2026-09-22 public notice closes the CR519/M-28
+   // junction for water-main work and names Johnson Road as a detour. We have
+   // not verified a reopening, legal detour turn sequence, or last-mile lot
+   // entrance. Fail closed for trips after the notice, across all seasons;
+   // changing a visit date must never silently enable unsafe Google routing.
+   if(road==="west" && date>="2026-09-22"){
+     return {canDirect:false,notice:"Wakefield Township published a September 22, 2026 closure notice for County Road 519 at M-28 and identifies Johnson Road as the detour. No reopening or complete driving route has been verified here. View this DNR map location only, read the township notice, and confirm signed roads before traveling."};
+   }
    // No origin-to-parking road sequence has been audited end-to-end. In the
    // shoulder and closure seasons, a Google Maps destination alone could
    // inadvertently send the traveler across a restricted park corridor.
