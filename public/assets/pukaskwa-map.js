@@ -205,6 +205,9 @@ function focusSelectedTrace(){
   const L=window.L;
   const points=layers.flatMap(layer=>layer.feature.geometry.coordinates.map(p=>[p[1],p[0]]));
   if(!points.length)return;
+  // The visitor explicitly asked to see the trail, not keep a large place popup
+  // covering the mapped line on a narrow mobile viewport.
+  map.closePopup();
   map.fitBounds(L.latLngBounds(points).pad(.22),{maxZoom:15.5,animate:false});
   updateCommunityHighlight();
   map.invalidateSize({pan:false});
