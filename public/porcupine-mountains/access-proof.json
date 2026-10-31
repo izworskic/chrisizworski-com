@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "reviewedOn": "2026-10-31",
+  "state": "access-unverified-not-navigable",
+  "safeToIssueDirections": false,
+  "visitorQuestion": "Can I legally and reliably drive to the Presque Isle River trail-area parking point?",
+  "decision": "An official western approach exists, but this source set does not establish the current signed road-to-lot connection. Check the township work-zone notice and local signs before travel.",
+  "parkingAsset": {
+    "source": "Michigan DNR parking inventory",
+    "id": 841,
+    "latitude": 46.707426,
+    "longitude": -89.975468,
+    "namedTrailPointId": 3763
+  },
+  "lastMileAudit": {
+    "method": "minimum straight-line point-to-GIS-segment distance measured in a local equirectangular projection at latitude 46.7; rounded to nearest metre",
+    "source": "Reviewed Michigan Geographic Framework linework, not surveyed property access or a drivable route",
+    "nearestReviewedWestSouthBoundaryCenterlineMetres": 1217,
+    "nearestReviewedPresqueIsleCenterlineMetres": 1316,
+    "westSouthBoundarySourceId": 9684,
+    "presqueIsleRoadSourceId": 10130,
+    "verdict": "Unresolved gap in the available road centerline extracts, not proof that roads terminate or that a visitor must walk the gap",
+    "legalTurnVerified": false,
+    "lastLotEntranceVerified": false,
+    "lastMileOpenVerified": false,
+    "parkingAvailabilityVerified": false
+  },
+  "roadwork": {
+    "source": "Wakefield Township",
+    "url": "https://wakefieldtownship.com/north-county-road-519-will-be-closed/",
+    "noticeIssuedOn": "2026-09-22",
+    "reportedClosure": "County Road 519 at M-28",
+    "reportedReason": "water main replacement",
+    "namedDetour": "Johnson Road",
+    "reopeningVerified": false,
+    "detourTurnsVerified": false,
+    "status": "township-issued-closure-notice-reopening-unknown"
+  },
+  "parkRoads": {
+    "source": "Michigan DNR",
+    "url": "https://www.michigan.gov/recsearch/parks/porkies",
+    "winterRule": "M-107 and South Boundary Road from Headquarters Road to Pinkerton Trailhead close to vehicles beginning December 1 until deemed safe for reopening",
+    "westApproach": "County Road 519 is distinct from the interior seasonal closures",
+    "currentVehicleAccessVerified": false
+  },
+  "winterParking": {
+    "source": "Gogebic County Road Commission",
+    "url": "https://gogebiccountyroadcommission.org/",
+    "noticeIssuedOn": "2026-10-26",
+    "rule": "No parking on Gogebic County roads and state-highway roadways or shoulders outside city limits from 2:00 a.m. to 7:00 a.m. Nov 1 to Apr 15",
+    "appliesToDesignatedParkLots": "unknown; this notice concerns roads and shoulders, not an independent lot policy"
+  },
+  "sourceWatch": {
+    "automation": "Daily GitHub Actions monitors three reachable official county/township pages, retains a dated artifact and flags source-change review; DNR is manual-only. It never certifies reopening or silently alters visitor directions.",
+    "sources": [
+      "township-notice",
+      "township-news",
+      "gogebic-road-commission"
+    ],
+    "updateAuthority": "Manual primary-source verification required before changing route permissions",
+    "manualSources": [
+      {
+        "id": "dnr-park",
+        "url": "https://www.michigan.gov/recsearch/parks/porkies",
+        "reason": "DNR serves HTTP 403 to unattended GitHub Actions in the verified 2026-10-31 check; manual official source inspection required"
+      }
+    ]
+  }
+}

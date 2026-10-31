@@ -1,0 +1,81 @@
+name: Porkies official access source watch
+on:
+  schedule:
+    - cron: '17 12 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/check-porkies-access-sources.mjs'
+      - 'public/porcupine-mountains/access-proof.json'
+      - '.github/workflows/porkies-official-access-watch.yml'
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: porkies-official-access-watch-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  official-source-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify fail-closed official evidence and geography tests
+        run: node --test tests/porkies-access-proof.test.mjs
+      - name: Read official public sources (never infer opening)
+        id: sources
+        run: |
+          node scripts/check-porkies-access-sources.mjs --output artifacts/porkies-access-watch/report.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const report=JSON.parse(fs.readFileSync('artifacts/porkies-access-watch/report.json','utf8'));
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'review='+Boolean(report.reviewSignals.length)+'\n');
+          const summary=[
+            '## Porcupine Mountains access-source review',
+            'Checked: '+report.checkedAt,
+            'Source conclusion: '+report.conclusion,
+            'This is **not** an open-road/lot/bridge status or a driving route.',
+            ...report.results.map(r=>'- '+r.id+': '+r.availability+(r.reviewReasons.length?' — '+r.reviewReasons.join(', '):'')),
+            ...report.manualSources.map(r=>'- '+r.id+': manual-only — '+r.reason)
+          ].join('\n\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary+'\n');
+          NODE
+      - name: Preserve dated source check and unavailable-source evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: porkies-official-source-watch
+          path: artifacts/porkies-access-watch/report.json
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Open or update one source-review issue (never auto-certify road access)
+        if: github.ref == 'refs/heads/main' && steps.sources.outputs.review == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('node:fs');
+            const report=JSON.parse(fs.readFileSync('artifacts/porkies-access-watch/report.json','utf8'));
+            const owner=context.repo.owner,repo=context.repo.repo;
+            const title='Porkies access source changed — manual review needed';
+            const body=[
+              'Official public-access text has changed or contains possible reopening language. **Do not automatically reopen roads, restore Google directions, or certify the DNR parking entrance.**',
+              'Checked (UTC): '+report.checkedAt,
+              ...report.reviewSignals.map(s=>'- '+s.id+' / '+s.reason+' / '+s.url),
+              'Review both the specific source and [the current access ledger](https://github.com/'+owner+'/'+repo+'/blob/main/public/porcupine-mountains/access-proof.json).',
+              'The visitor page remains fail-closed. Only update its status with explicit authority, effective date, route and parking evidence.',
+              'Automated source check run: '+context.serverUrl+'/'+owner+'/'+repo+'/actions/runs/'+context.runId
+            ].join('\n\n');
+            const existing=await github.paginate(github.rest.issues.listForRepo,{owner,repo,state:'open',per_page:100});
+            const same=existing.find(i=>!i.pull_request && i.title===title);
+            if(same){
+              // Do not edit the issue on every daily run merely because checkedAt changed.
+              // Expand it only when a genuinely different source/reason appears.
+              const unseen=report.reviewSignals.some(s=>!(same.body||'').includes('- '+s.id+' / '+s.reason+' / '+s.url));
+              if(unseen)await github.rest.issues.update({owner,repo,issue_number:same.number,body});
+            }else await github.rest.issues.create({owner,repo,title,body});

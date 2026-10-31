@@ -25,7 +25,7 @@ async function main(){
  let browser;
  try{
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const device of [{name:'mobile',width:390,height:844},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750}]){
+  for(const device of [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750}]){
    const ctx=await browser.newContext({viewport:{width:device.width,height:device.height},deviceScaleFactor:1,ignoreHTTPSErrors:false});
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
@@ -61,6 +61,18 @@ async function main(){
    await page.waitForFunction(()=>document.querySelector('#park-gis-panel')?.dataset.check==='queried',null,{timeout:10000});
 
    need(await page.locator('#west-corridor-field-note').count()===1,device.name+' distinct western approach note missing');
+   need((await page.locator('.access-proof-lead').innerText()).includes('not a walking or driving distance'),device.name+' missing plain-language 1.2km last-mile source gap');
+   const proof=page.locator('#porkies-access-proof');
+   need(await proof.count()===1,device.name+' access proof disclosure missing');
+   await proof.locator('summary').click();
+   need(await proof.getAttribute('open')!==null,device.name+' source proof disclosure failed to open');
+   const proofText=await proof.innerText();
+   need(proofText.includes('November 1 through April 15')&&proofText.includes('2–7 a.m.')&&proofText.includes('Johnson Road'),device.name+' incomplete work-zone/winter-parking source evidence');
+   await proof.screenshot({path:path.join(out,device.name+'-access-proof.png')});
+   report.screenshots.push(device.name+'-access-proof.png');
+   await proof.locator('summary').focus();
+   await page.keyboard.press('Enter');
+   need(await proof.getAttribute('open')===null,device.name+' disclosure not keyboard reversible');
    const westNote=await page.locator('#west-corridor-field-note').innerText();
    need(westNote.includes('September 22, 2026')&&westNote.includes('Johnson Road')&&westNote.includes('17 connected Presque Isle Road'),'township detour and expanded MGF road ledger absent '+device.name);
    need(await page.locator('#west-corridor-field-note a[href*="wakefieldtownship.com/north-county-road-519-will-be-closed"]').count()>=1,'source-linked township notice missing '+device.name);
@@ -236,6 +248,9 @@ async function main(){
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
   need(await page.locator('.trail-truth-card').count()===21,'no JS 21 static trail descriptions missing');
+  need(await page.locator('.access-proof-lead').count()===1,'no JS source-backed 1.2km warning missing');
+  await page.locator('#porkies-access-proof summary').click();
+  need((await page.locator('#porkies-access-proof').innerText()).includes('Gogebic County Road Commission'),'no JS native access-proof disclosure failed');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('County Road 519'),'no JS winter access corridor note missing');
   need((await page.locator('#west-corridor-field-note').innerText()).includes('September 22, 2026'),'no-JS township work-zone warning missing');
   need(await page.locator('#porkies-west-toggle').count()===1,'source-only west layer control should exist without JS');
