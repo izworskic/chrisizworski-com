@@ -90,6 +90,64 @@
       target.appendChild(card);
     });
   };
+  const renderKsc = (data) => {
+    const target = $('ksc-mission-viewing');
+    if (!target) return;
+    target.replaceChildren();
+    const ksc = data.kscViewing || {};
+    const confirmed = ksc.state === 'matched' &&
+      typeof ksc.sourceUrl === 'string' &&
+      /^https:\/\/www\.kennedyspacecenter\.com\/event\/[a-z0-9-]+\/?$/.test(ksc.sourceUrl);
+    target.dataset.state = confirmed ? 'matched' : 'unverified';
+    const meta = element('div', 'ksc-evidence-status');
+    addChip(meta, confirmed ? 'candidate' : 'unknown',
+      confirmed ? 'Official mission listing matched' : 'Viewing announcement not verified');
+    if (ksc.checkedAt) {
+      meta.appendChild(element('span', 'small',
+        'Source checked ' + new Date(ksc.checkedAt).toLocaleString('en-US')));
+    }
+    target.appendChild(meta);
+    if (!confirmed) {
+      target.appendChild(element('h4', '', 'Do not buy a viewing ticket based on this schedule alone.'));
+      target.appendChild(element('p', '',
+        'We could not match a current Kennedy Space Center viewing announcement to this exact mission. That does not mean there will be no viewing or that tickets are sold out. KSC publishes viewing options after official confirmation, sometimes close to launch.'));
+      target.appendChild(link('https://www.kennedyspacecenter.com/launches-and-events/events-calendar/',
+        'Check Kennedy’s official events calendar', 'launch-link official'));
+      return;
+    }
+    target.appendChild(element('h4', '', ksc.eventTitle || 'Official KSC launch event'));
+    target.appendChild(element('p', 'ksc-event-explanation',
+      'The operator lists these locations for this mission, with different entry and ticket conditions. The listing is not real-time ticket inventory, and the launch can still move.'));
+    const list = element('div', 'ksc-venue-grid');
+    for (const venue of ksc.venues || []) {
+      const v = element('article', 'ksc-venue');
+      v.dataset.state = venue.status || 'listed-on-source';
+      v.appendChild(element('h5', '', venue.name || 'Viewing area'));
+      const ticketNames = {
+        'sold-out-on-page': 'Sold out on the published page',
+        'additional-ticket-listed': 'Additional ticket listed',
+        'package-listed': 'Launch package listed',
+        'included-with-admission-listed': 'Listed with admission',
+        'details-not-verified': 'Ticket type not verified'
+      };
+      addChip(v, venue.status === 'sold-out-on-source' ? 'closed' :
+        venue.status === 'conditional' ? 'verify' : 'candidate',
+      ticketNames[venue.ticket] || 'Ticket details require confirmation');
+      if (venue.openingAt) v.appendChild(element('p', 'ksc-venue-time', 'Listed opening: ' + venue.openingAt));
+      if (venue.opensIfDelayedUntil) v.appendChild(element('p', 'ksc-venue-time',
+        'Only opens if launch is delayed until ' + venue.opensIfDelayedUntil + ' or later'));
+      if (venue.closesAt) v.appendChild(element('p', 'ksc-venue-time',
+        'Published viewing cutoff: ' + venue.closesAt));
+      if (venue.checkInAt) v.appendChild(element('p', 'ksc-venue-time', 'Check-in: ' + venue.checkInAt));
+      if (venue.busBoardingAt) v.appendChild(element('p', 'ksc-venue-time', 'Bus boarding: ' + venue.busBoardingAt));
+      v.appendChild(element('p', 'ksc-venue-note', venue.note || 'Confirm current rules with Kennedy Space Center.'));
+      list.appendChild(v);
+    }
+    target.appendChild(list);
+    target.appendChild(link(ksc.sourceUrl, 'Read this mission’s official KSC viewing notice', 'launch-link official'));
+    target.appendChild(element('p', 'small',
+      'KSC can change opening hours, viewing areas, price and ticket inventory. Confirm the event page again before travelling.'));
+  };
   const renderAccess = (data) => {
     const venues = $('launch-venues');
     const flags = $('launch-access-flags');
@@ -244,6 +302,7 @@
       renderList(d.upcoming || []);
       renderWeather(d.viewingWeatherByArea || []);
       renderAccess(d);
+      renderKsc(d);
       renderArrival(d);
       renderSkyComparison(d);
     } catch (err) {
@@ -261,6 +320,8 @@
       if (comparison) comparison.textContent = 'Current sky comparison unavailable. Do not assume a clear line of sight.';
       const panel = $('launch-nps-alert');
       if (panel) panel.textContent = 'NPS live closures unavailable. Do not assume Playalinda access.';
+      const kscPanel = $('ksc-mission-viewing');
+      if (kscPanel) kscPanel.textContent = 'KSC mission viewing could not be verified. Check the official KSC calendar before purchasing admission.';
     }
   }
   load();

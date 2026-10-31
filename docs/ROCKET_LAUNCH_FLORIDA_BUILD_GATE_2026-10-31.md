@@ -81,3 +81,37 @@ The original canonical URL is retained. The selector shows up to eight Florida m
 - Validate lot-specific/whole-beach closure, updated park hours, T–30 estimate and selected mission reassessment.
 - Preserve the existing canonical, advertising, routing, sync-workflow protection and official land-manager source links.
 - After deployment confirm the live API, chosen mission response, and frontend assets. Do not claim browser-visual verification without it.
+
+
+## Phase 4, mission-specific Kennedy Space Center viewing evidence (October 31, 2026)
+
+Official operator pages are the source of truth. Examples inspected: Starlink 10-54 (June 12, 2026; admission-included venue-specific opening times), Starlink 10-50 (July 5; viewing only if the launch moves later into a specific time window), Starlink 10-38 (May 1; Gantry and Apollo published close-before-window-end limits), Crew-13 (October 1; launch transportation tickets, Gateway rooftop and sold-out Gantry), NROL-97 (October 1; a separate Feel the Heat package). Historical dates are **fixtures**, never reused as current availability.
+
+Live KSC research:
+- https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing
+- https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing-locations
+- https://www.kennedyspacecenter.com/launches-and-events/events-calendar/
+- https://www.kennedyspacecenter.com/event/spacex-falcon-9-starlink-10-54/
+- https://www.kennedyspacecenter.com/event/spacex-falcon-9-starlink-10-50/
+- https://www.kennedyspacecenter.com/event/spacex-falcon-9-starlink-10-38/
+- https://www.kennedyspacecenter.com/event/nasas-spacex-crew-13/
+- https://www.kennedyspacecenter.com/event/spacex-falcon-heavy-nrol-97/
+
+KSC's public events calendar is browser JavaScript-rendered, not a stable machine-readable launch availability service. The official event-page HTML has machine-inspectable exact event titles, NET dates, pad text, location sections, ticket terms, opening, cutoff, check-in and boarding bullet points. The site also publishes a sitemap.xml. The mission resolver uses only the official HTTPS domain, finds candidate event URLs from exact distinctive mission IDs (with sitemap lookup for nonstandard slugs), and fetches the official page. **A URL candidate is never displayed without verifying the returned page's unique mission identity, schedule date, compatible pad and actual venue sections.** A stale, missing, unparsable or wrong-pad page remains unknown.
+
+Scope of published statuses:
+- 'Official mission listing matched' means a dated event page was verified, **not** real-time inventory or launch clearance.
+- 'Included with admission', 'additional LTT', 'launch package', 'sold out on published page', and 'conditional opening' are different statuses.
+- Venue deadlines/opening times are copied only from the matching official mission section, never generic operating hours.
+- Gantry safety exclusion for 39A/39B continues even if a page claims the venue is listed.
+- The exact official event source is linked only when verified; otherwise link the official KSC calendar with no ticket-availability assertion.
+- KSC has no public guaranteed machine-readable feed here. Heuristic slug discovery can miss unconventional new event URLs. The tool fails safely and should later integrate an authorized KSC events feed if published.
+- No user credentials or personal ticket bookings are read. No NASA API key needed for this feature; public NASA mission schedule remains contextual.
+- To avoid overloading the operator, candidate checks are capped and cached with the existing 15-minute shared CDN policy. No Redis added.
+
+Required new regression tests:
+- 'node --test tests/space-coast-ksc-viewing.test.js' in addition to the prior Space Coast suites.
+- Never connect another mission's Starlink group, NG/CRS launch, stale event date or wrong pad.
+- Detect published conditional openings, separate ticket/package/sold-out labels, check-in and venue closing times.
+- Empty KSC results never mean viewing unavailable, sold out, or that admission automatically includes a launch.
+- Parse published source data with fixed HTML fixtures and test the live official pages separately before declaring automated ingestion successful.
