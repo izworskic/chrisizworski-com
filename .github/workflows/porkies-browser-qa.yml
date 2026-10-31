@@ -40,6 +40,8 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
       - name: Verify source gate unit tests
         run: node --test tests/porkies-conditions.test.js tests/porkies-parking.test.js tests/porkies-route-evidence.test.mjs tests/porkies-west-approach.test.mjs tests/porkies-west-road.test.mjs tests/porkies-access-proof.test.mjs
+      - name: Smoke official-source monitor in read-only mode
+        run: node scripts/check-porkies-access-sources.mjs --output artifacts/porkies-access-watch/report.json
       - name: Verify mobile and desktop planner, license imagery, no-JS fallback
         run: node scripts/verify-porkies-browser.cjs
       - name: Upload screenshots and browser assertion report
@@ -47,6 +49,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: porkies-browser-qa
-          path: artifacts/porkies-browser/
+          path: |
+            artifacts/porkies-browser/
+            artifacts/porkies-access-watch/report.json
           if-no-files-found: warn
           retention-days: 7
