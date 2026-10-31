@@ -252,3 +252,16 @@ test('site has one canonical, a national directory card, sitemap entry and six r
   assert.equal(blocks.length,1);
   assert.doesNotThrow(()=>JSON.parse(blocks[0][1]));
 });
+
+test('national launch atlas requests keyed CARTO tile URLs and retains functional OSM fallback', () => {
+  const source=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
+  const endpoint=fs.readFileSync(path.resolve(__dirname,'../api/carto-basemap-config.js'),'utf8');
+  assert.match(source,/fetch\('\/api\/carto-basemap-config'/);
+  assert.match(source,/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key=/);
+  assert.match(source,/tile\.openstreetmap\.org/);
+  assert.doesNotMatch(source,/cartocdn\.com\/light_all/);
+  assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
+  const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
+  assert.match(page,/Senior Airman Kadielle Shaw/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261031-2/);
+});

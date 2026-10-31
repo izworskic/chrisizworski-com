@@ -122,10 +122,42 @@
     root.replaceChildren();
     try {
       const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true });
-      window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 16,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+      // Never request a keyless CARTO tile: as of 2026 those tiles return
+      // an "API KEY REQUIRED" watermark even though the HTTP response is 200.
+      // Start with a working fallback, then replace it only after a keyed tile loads.
+      const osm = window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: osmCredit
       }).addTo(map);
+      root.dataset.tiles = 'osm-fallback';
+      fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: AbortSignal.timeout(6500) })
+        .then(response => response.ok ? response.json() : null)
+        .then(config => {
+          if (config?.provider !== 'CARTO' || typeof config.key !== 'string' || !config.key.trim()) return;
+          const keyedUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' +
+            encodeURIComponent(config.key.trim());
+          const carto = window.L.tileLayer(keyedUrl, {
+            subdomains: 'abcd', maxZoom: 19,
+            attribution: osmCredit + ' &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          });
+          let confirmed = false, errors = 0;
+          carto.on('tileload', () => {
+            if (!confirmed && map.hasLayer(carto)) {
+              confirmed = true;
+              root.dataset.tiles = 'carto-keyed';
+              if (map.hasLayer(osm)) map.removeLayer(osm);
+            }
+          });
+          carto.on('tileerror', () => {
+            if (++errors >= 2 && !confirmed) {
+              if (map.hasLayer(carto)) map.removeLayer(carto);
+              if (!map.hasLayer(osm)) osm.addTo(map);
+              root.dataset.tiles = 'osm-fallback';
+            }
+          });
+          carto.addTo(map);
+        })
+        .catch(() => { root.dataset.tiles = 'osm-fallback'; });
       const bounds = [];
       for (const r of state.data.regions) {
         if (!Number.isFinite(r.lat) || !Number.isFinite(r.lon)) continue;
