@@ -6,7 +6,7 @@ const queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','ut
 const ledger=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8'));
 const hub=fs.readFileSync(base+'index.html','utf8');
 const sitemap=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
-const expected=['lepisto-falls','trappers-falls','explorers-falls','shining-cloud-falls','big-erics-falls','tioga-park-falls'];
+const expected=['lepisto-falls','trappers-falls','explorers-falls','shining-cloud-falls','big-erics-falls','tioga-park-falls','yondota-falls'];
 test('all source-gated visitor guides are published, but seasonal status is never fabricated',()=>{
  for(const id of expected){
   const guide=data.find(f=>f.id===id);
