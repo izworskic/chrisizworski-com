@@ -8,6 +8,8 @@ const {
 const {
   skyCoverAt, surfaceSkyAssessment, skyComparison
 } = require('../lib/space-coast-visibility');
+const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
+  require('../lib/space-coast-ksc-viewing');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -148,7 +150,15 @@ module.exports = async function handler(req, res) {
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
     });
-    const forecasts = await weatherForLocations(next, now);
+    const [forecasts, kscViewing] = await Promise.all([
+      weatherForLocations(next, now),
+      inspectKscLaunch(next).catch(() => ({
+        state: 'unverified', checkedAt: new Date().toISOString(),
+        sourceUrl: null, venues: [], checked: 0,
+        reason: 'source-unavailable', calendarUrl: KSC_CALENDAR,
+        note: 'Official KSC mission-viewing details could not be verified. Check the operator calendar.'
+      }))
+    ]);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
       ...a, description: a.description.slice(0, 600)
@@ -176,6 +186,7 @@ module.exports = async function handler(req, res) {
       },
       viewpoints, parkAlerts,
       arrivalGuidance, skyComparison: skyComparisonDecision,
+      kscViewing,
       accessSource: {
         name: 'National Park Service, Canaveral National Seashore',
         url: nps.url, checkedAt: nps.checkedAt, verified: nps.verified,
@@ -189,6 +200,10 @@ module.exports = async function handler(req, res) {
         { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Hourly spectator conditions and gridded sky-cover percentage near the viewing areas; not trajectory visibility.' },
         { name: 'NPS launch entry policy', url: 'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm', note: 'Playalinda Beach Road normally closes to incoming visitors beginning T–30; mission security can alter access.' },
         { name: 'Kennedy Space Center Visitor Complex', url: KSC, note: 'Check exact launch viewing venue, tickets and mission access.' },
+        { name: 'KSC mission-specific viewing', url: kscViewing.sourceUrl || KSC_CALENDAR,
+          checkedAt: kscViewing.checkedAt,
+          note: kscViewing.state === 'matched' ? 'Verified official event listing for the selected mission; inventory may still change.' :
+            'No current official event listing matched; no ticket-availability assertion is made.' },
         { name: 'NASA launch schedule', url: NASA_SCHEDULE, note: 'Official NASA missions only, not an exhaustive commercial launch calendar.' }
       ],
       limits: [
@@ -196,6 +211,7 @@ module.exports = async function handler(req, res) {
         'Public NPS park alerts do not establish NASA security or launch-specific Playalinda access.',
         'Viewpoint candidates are not guarantees of parking, admission or a clear line of sight.',
         'NWS surface forecasts do not predict orbital trajectory, upper-level cloud interception or launch approval.',
+        'Published KSC ticket listings are not real-time inventory, and absent event pages do not imply that viewing is unavailable.',
         'For a specific mission, follow official operator and site manager instructions before traveling.'
       ]
     });
