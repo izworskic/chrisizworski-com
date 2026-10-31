@@ -26,6 +26,21 @@
   return {color:"#256c57",weight:2.5,opacity:.7,dashArray:"4,4"};
  }
  function safe(s){return String(s||"Unnamed").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+ // Explicit names audited against the published DNR GIS feature labels. Do not use
+ // substring matching: the shared Cross/Correction source label is ambiguous.
+ const reviewedTrailNames=Object.freeze({
+  "east river trail":["Porcupine Mountains East River Trail"],
+  "correction line trail":["Porcupine Mountains Correction Line Trail"],
+  "cross trail":["Porcupine Mountain Wilderness Cross Trail Correction Line Trail"]
+ });
+ function trailSourceMatch(source,name){
+  const named=String(name||"").trim().toLowerCase();
+  const label=String(source||"").trim().toLowerCase();
+  if(!named||!label)return false;
+  return label===named || label==="porcupine mountain wilderness "+named ||
+    (reviewedTrailNames[named]||[]).some(alias=>alias.toLowerCase()===label);
+ }
+
  function message(s){const e=root.document.getElementById("route-evidence-status");if(e)e.textContent=s;}
  async function loadManifest(){
   if(evidence)return evidence;
@@ -82,8 +97,7 @@
   const selected=[],normal=trailStyle();
   layers.trails.eachLayer(layer=>{
    const source=String(layer.feature?.properties?.name||"");
-   const match=source.trim().toLowerCase()===name.trim().toLowerCase() ||
-      source.trim().toLowerCase()==="porcupine mountain wilderness "+name.trim().toLowerCase();
+   const match=trailSourceMatch(source,name);
    if(layer.setStyle)layer.setStyle(match?{color:"#d07d31",weight:5,opacity:1,dashArray:null}:normal);
    if(match){selected.push(layer);if(layer.bringToFront)layer.bringToFront();}
   });
@@ -93,7 +107,8 @@
   }
   const bounds=root.L.featureGroup(selected).getBounds();
   if(bounds.isValid())atlas.fitBounds(bounds.pad(.25),{maxZoom:13});
-  message(name+": showing "+selected.length+" source line fragment"+(selected.length===1?"":"s")+". This is NOT a verified continuous route; check the published map for missing parts, return trip and unbridged crossings.");
+  const sharedLabel=name.trim().toLowerCase()==="cross trail" ? " The DNR labels these features 'Cross Trail Correction Line Trail'; their individual trail identity is unresolved." : "";
+  message(name+": showing "+selected.length+" source line fragment"+(selected.length===1?"":"s")+"."+sharedLabel+" This is NOT a verified continuous route; check the published map for missing parts, return trip and unbridged crossings.");
  }
  function refresh(){
   if(layers.roads)layers.roads.setStyle(roadStyle);
@@ -113,6 +128,6 @@
   atlas=root.PorkiesAtlas?.map||null;
   root.addEventListener("porkies:map-ready",()=>{atlas=root.PorkiesAtlas?.map||null;});
  }
- if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle};
+ if(typeof module!=="undefined"&&module.exports)module.exports={restricted,winter,roadStyle,trailSourceMatch};
  if(root.document)init();
 })(typeof window!=="undefined"?window:globalThis);
