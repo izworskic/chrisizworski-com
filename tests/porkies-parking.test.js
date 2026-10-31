@@ -113,7 +113,8 @@ test('date and arrival changes refresh map directions without first submitting t
    assert.equal(eligibility(published.points.find(p=>p.id==='presque'),date,'west','car').canDirect,false);
  }
  assert.equal(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','east','car').canDirect,false,'cross-park west destination needs verified approach');
- assert.equal(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','west','car').canDirect,true);
+ assert.equal(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','west','car').canDirect,false,'open-ended township work-zone notice blocks west driving even in summer');
+ assert.match(eligibility(published.points.find(p=>p.id==='presque'),'2027-08-15','west','car').notice,/Johnson Road/);
  assert.equal(eligibility(published.points.find(p=>p.id==='ski'),'2027-08-15','east','car').canDirect,true);
  assert.equal(eligibility(published.points.find(p=>p.id==='lake'),'2027-02-30','east','car').canDirect,false);
 });
