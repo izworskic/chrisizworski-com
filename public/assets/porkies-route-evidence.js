@@ -4,6 +4,7 @@
 (function(root){
  "use strict";
  const BASE="/porcupine-mountains/",MAX_FEATURES={trails:819,roads:250},layers={};
+ const pendingLoads={};
  const paths={trails:"trail-reference.geojson",roads:"park-road-reference.geojson",ski:"ski-reference.geojson"};
  let atlas=null,evidence=null;
  function currentSeason(){
@@ -51,7 +52,18 @@
   evidence=data;
   return data;
  }
- async function show(kind) {
+ // A layer toggle and a trail-card inspection can arrive while the same
+ // GeoJSON is still loading. Share the in-flight promise so they cannot add
+ // duplicate Leaflet overlays or disagree about the final button state.
+ function show(kind){
+  if(pendingLoads[kind])return pendingLoads[kind];
+  const operation=showActual(kind);
+  pendingLoads[kind]=operation;
+  const clear=()=>{if(pendingLoads[kind]===operation)delete pendingLoads[kind];};
+  operation.then(clear,clear);
+  return operation;
+ }
+ async function showActual(kind) {
   if(!atlas){message("The map is not available. Please use the official DNR GPS map above.");return false;}
   const button=root.document.getElementById(kind==="trails"?"porkies-trails-toggle":kind==="ski"?"porkies-ski-toggle":"porkies-roads-toggle");
   if(layers[kind]){atlas.removeLayer(layers[kind]);delete layers[kind];button?.setAttribute("aria-pressed","false");message("Map layer hidden. No navigable park route is certified by these GIS layers.");return false;}
