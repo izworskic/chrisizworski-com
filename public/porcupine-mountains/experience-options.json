@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "reviewedOn": "2026-10-31",
+  "policy": {
+    "accessVerified": false,
+    "roadEtaVerified": false,
+    "trailRouteCertified": false,
+    "photosAreArchived": true,
+    "dnrTrailEditionsDoNotMatch": true,
+    "sourceOfTruth": "DNR official park, 2025 visitor guide and official trail descriptions; parking IDs from existing DNR crosswalk",
+    "visitorNotice": "These are outings to compare, not GPS routes. A named trail does not prove an open gate, passable bridge or accessible parking."
+  },
+  "sources": {
+    "park": "https://www.michigan.gov/recsearch/parks/porkies",
+    "visitorGuide": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf",
+    "trailDescriptions": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+    "parkMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+  },
+  "options": [
+    {
+      "id": "clouds",
+      "name": "Lake of the Clouds overlook",
+      "tagline": "The world opens over the escarpment.",
+      "zone": "east",
+      "parkingId": "lake",
+      "parkingAssetId": 1409,
+      "trailId": null,
+      "kind": "view",
+      "effort": "short",
+      "accessSurface": "DNR describes roughly 100 yards of paved trail or accessible boardwalk to the overlook.",
+      "publishedDistance": "Overlook approach: approximately 100 yards (DNR 2025 visitor guide). Not the Escarpment Trail.",
+      "experience": "A wide view of Lake of the Clouds and the old-growth valley without committing to a long ridge hike.",
+      "limits": "The longer Escarpment Trail begins in this district but is a separate strenuous outing. M-107 scenic-road gates are seasonal. RV/trailer staging is not this upper lot.",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf",
+      "photo": {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg",
+        "alt": "Lake of the Clouds beneath the wooded escarpment in autumn",
+        "credit": "Lake of the Clouds · Stevenliuyi · CC BY-SA 4.0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg"
+      },
+      "photoAbout": "Actual Lake of the Clouds overlook; archival photo, not a current conditions view."
+    },
+    {
+      "id": "summit",
+      "name": "Summit Peak tower",
+      "tagline": "A high tower above the hardwoods.",
+      "zone": "central",
+      "parkingId": "summit",
+      "parkingAssetId": 72,
+      "trailId": "summit-tower",
+      "kind": "view",
+      "effort": "moderate",
+      "accessSurface": "Packed dirt approach through hardwood forest, benches, and a tower reached by wooden stairs.",
+      "publishedDistance": "DNR describes 0.5 mile from parking to tower and about 300 feet of climbing. Not a calculated return hike.",
+      "experience": "Follow a forest path before climbing to views across the western Upper Peninsula's hills.",
+      "limits": "Tower stairs are not a step-free overlook. South Boundary Road access is seasonal and the upper parking approach is not appropriate for unverified trailers/RVs.",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf",
+      "photo": {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Scenic_view_near_Summit_Peak_trail_%2855568874038%29.jpg/960px-Scenic_view_near_Summit_Peak_trail_%2855568874038%29.jpg",
+        "alt": "Viewing platform overlooking forested ridges near Summit Peak trail",
+        "credit": "Near Summit Peak trail · daveynin · CC BY 4.0 · July 2026",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Scenic_view_near_Summit_Peak_trail_(55568874038).jpg"
+      },
+      "photoAbout": "Scenic view near Summit Peak trail; not proof of conditions on your chosen date."
+    },
+    {
+      "id": "river",
+      "name": "Presque Isle waterfalls",
+      "tagline": "Hear the river in a dark-rock gorge.",
+      "zone": "west",
+      "parkingId": "presque",
+      "parkingAssetId": 841,
+      "trailId": "west-river",
+      "kind": "water",
+      "effort": "moderate",
+      "accessSurface": "Wooden stairs and riverbank boardwalks at the falls; a separate gravel path behind the DNR contact booth provides shorter Nawadaha viewing access.",
+      "publishedDistance": "DNR older trail descriptions: West River 1.1 miles; East River 1.2 miles. They are separate trail descriptions, not a certified loop.",
+      "experience": "A river-country outing among Nawadaha, Manido and Manabezho, with different viewing approaches.",
+      "limits": "Accessible Nawadaha platform does not make the whole river corridor accessible. The contact-booth entrance is NOT matched to parking asset #841. The M-28/CR519 work-zone reopening and last-mile vehicle turns remain unverified.",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf",
+      "secondarySource": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/0/01/Manabezho_Falls.jpg",
+        "alt": "Manabezho Falls rushing over dark rock ledges on the Presque Isle River",
+        "credit": "Manabezho Falls · Gittinsj · CC BY-SA 3.0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Manabezho_Falls.jpg"
+      },
+      "photoAbout": "Actual Manabezho Falls within the Presque Isle corridor; not a photograph of every falls or trail."
+    },
+    {
+      "id": "nature",
+      "name": "Visitor Center Nature Trail",
+      "tagline": "Meet the old forest at its edge.",
+      "zone": "east",
+      "parkingId": "visitor",
+      "parkingAssetId": 11,
+      "trailId": "visitor-nature",
+      "kind": "forest",
+      "effort": "moderate",
+      "accessSurface": "Interpretive nature path near the visitor center; no verified step-free route for the full loop.",
+      "publishedDistance": "DNR trail descriptions list 1.4 miles for the loop; this is a published trail length, not a current verified hike.",
+      "experience": "Follow the park's forest story more quietly, with a chance to explore exhibits when the visitor center is open.",
+      "limits": "Visitor Center building seasonal hours are May 15–Oct 14; closed Oct 15–May 14. Trail access and surface conditions are not confirmed by building hours.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "secondarySource": "https://www.michigan.gov/dnr/places/v-centers/porkies",
+      "photo": null,
+      "photoAbout": "No licensed exact-trail photograph in this edition; no substitute scenery is presented."
+    },
+    {
+      "id": "escarpment",
+      "name": "Escarpment Trail",
+      "tagline": "The rugged ridge beyond the easy overlook.",
+      "zone": "east",
+      "parkingId": "lake",
+      "parkingAssetId": 1409,
+      "trailId": "escarpment",
+      "kind": "wilderness",
+      "effort": "strenuous",
+      "accessSurface": "Steep exposed ridge hiking with large changes in elevation; a long one-way alignment and return/shuttle planning.",
+      "publishedDistance": "DNR editions disagree: older description 4.3 miles; 2025 GPS map 3.7 miles. Neither is a parking-to-parking trip.",
+      "experience": "Take the longer escarpment above the lake into a more demanding wilderness landscape.",
+      "limits": "Not the 100-yard accessible overlook. DNR crossing/mapping records do not certify an unbroken passable route, return shuttle, or current road access.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "secondarySource": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+      "photo": {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg",
+        "alt": "Lake of the Clouds beneath the wooded escarpment in autumn",
+        "credit": "Lake of the Clouds · Stevenliuyi · CC BY-SA 4.0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg"
+      },
+      "photoAbout": "Lake of the Clouds scenic region; photograph is not a documented view from every Escarpment Trail section."
+    },
+    {
+      "id": "winter",
+      "name": "Winter Sports Complex",
+      "tagline": "Follow the snow into the eastern hills.",
+      "zone": "east",
+      "parkingId": "ski",
+      "parkingAssetId": 171,
+      "trailId": null,
+      "kind": "winter",
+      "effort": "moderate",
+      "accessSurface": "Separate cross-country ski, snowshoe and winter-sport experiences; exact activity access must be confirmed on the official snow report.",
+      "publishedDistance": "The DNR describes a park ski-trail network, but this is not an individual verified skiing itinerary or distance.",
+      "experience": "Snow-covered forest and winter recreation in the eastern park approach instead of closed summer scenic roads.",
+      "limits": "No live snow, lift operations, rental availability or grooming is verified here. Do not assume the building, tracks or lot are open.",
+      "source": "https://www.michigan.gov/skitheporkies/the-mountain/trail-and-snow-report",
+      "photo": null,
+      "photoAbout": "No verified exact-location winter photograph is displayed."
+    }
+  ]
+}
