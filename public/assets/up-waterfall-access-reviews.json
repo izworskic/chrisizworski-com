@@ -912,9 +912,9 @@
       "publicAccess": "no complete lawful sightseeing route verified",
       "publicationEligible": false,
       "title": "Bushy Creek: nearby public forest does not establish a legal waterfall route",
-      "summary": "Public CR510 trail reaches Yellow Dog/Hills Falls, not necessarily creek-mouth Bushy Falls. A separate YDWP 12-acre property is downstream of the confluence. Natural falls ownership and a continuous safe public path remain unresolved.",
+      "summary": "Public CR510 trail reaches Yellow Dog/Hills Falls, not necessarily creek-mouth Bushy Falls. A separate YDWP 12-acre property is downstream of the confluence. Natural falls ownership and a continuous safe public path remain unresolved. A 2023 YDWP newsletter explicitly references Bushy Creek Falls in the Community Forest, strengthening conservation-land association but still no continuous public route.",
       "guidance": "Visit the verified Yellow Dog Falls trail instead; do not wade past private cabins, use Bushy Creek Truck Trail as assured access, or drive to the falls marker.",
-      "reviewLimitations": "The precise YDWP property boundaries have not been overlaid on the falls. Older unofficial downstream visits contain access/wading risks. Current seasonal conditions are unknown.",
+      "reviewLimitations": "The precise YDWP property boundaries have not been overlaid on the falls. Older unofficial downstream visits contain access/wading risks. Current seasonal conditions are unknown. Official 2017 forest plan confirms Bushy tributary frontage and 2023 Preserve newsletter locates fieldwork near Bushy Creek Falls, without a surveyed falls point/parking/walking line.",
       "nextEvidence": "Parcel map for exact natural falls and BOTH banks, signed owner-approved continuous dry path from lawful parking, posted current access and water safety; YDWP property downstream of confluence and official Hills trail are insufficient.",
       "researchPage": "/upper-peninsula-waterfalls/research/bushy-creek-falls/",
       "sourceLinks": [
@@ -933,6 +933,14 @@
         {
           "label": "Source 4",
           "url": "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+        },
+        {
+          "label": "YDWP 2017 community forest plan, Bushy Creek frontage",
+          "url": "https://yellowdogwatershed.org/wp-content/uploads/2015/06/Yellow-Dog-River-Community-Forest-Plan-with-Forestry-Plan.pdf"
+        },
+        {
+          "label": "YDWP Fall/Winter 2023 newsletter, Bushy Creek Falls field reference p12",
+          "url": "https://yellowdogwatershed.org/wp-content/uploads/2023/11/The-Howl-Fall-Winter-2023-2024.pdf"
         }
       ],
       "routeAudit": {
@@ -950,7 +958,7 @@
           {
             "label": "Protected lands",
             "status": "documented-not-live",
-            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract.",
+            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract. YDWP 2017 plan documents Bushy Creek frontage; 2023 newsletter explicitly references Bushy Creek Falls in Community Forest; not an approved exact route.",
             "source": "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/"
           },
           {

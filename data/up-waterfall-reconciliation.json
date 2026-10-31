@@ -3324,13 +3324,15 @@
       "disposition": "research-only-access-not-cleared-154",
       "evidenceReviewed": "2026-10-31",
       "publicationEligible": false,
-      "sourceNotes": "Michigan GIS #154 46.734481,-87.694124 is roughly 167m from a specialist creek-mouth Bushy Falls point 46.73593,-87.69355. This small Bushy Creek waterfall enters Yellow Dog River; state GIS river field records the receiving river. Yellow Dog Watershed Preserve advertises a legitimate community forest trail from CR510 bridge to first Hills/Yellow Dog Falls and separately a 12-acre Bushy Creek property DOWNSTREAM of the confluence; neither proves the falls themselves and a complete trail sit inside public land. Specialist field notes describe an unofficial fading south-bank path, possible river-wading and a private cabin on north bank beyond the fourth Yellow Dog fall. Do not convert that into public route guidance.",
+      "sourceNotes": "Michigan GIS #154 46.734481,-87.694124 is roughly 167m from a specialist creek-mouth Bushy Falls point 46.73593,-87.69355. This small Bushy Creek waterfall enters Yellow Dog River; state GIS river field records the receiving river. Yellow Dog Watershed Preserve advertises a legitimate community forest trail from CR510 bridge to first Hills/Yellow Dog Falls and separately a 12-acre Bushy Creek property DOWNSTREAM of the confluence; neither proves the falls themselves and a complete trail sit inside public land. Specialist field notes describe an unofficial fading south-bank path, possible river-wading and a private cabin on north bank beyond the fourth Yellow Dog fall. Do not convert that into public route guidance. Stronger official conservation-land association (not route proof): YDWP 2017 adopted Community Forest plan documents 0.6 mile of Bushy Creek plus other small tributary frontage inside its 688-acre community forest. YDWP Fall/Winter 2023 newsletter p12 explicitly captions a wolf-track field observation near 'Bushy Creek Falls in the Community Forest.' These are direct land-manager references to Bushy Creek Falls vicinity, but neither provides a surveyed parcel/falls-point boundary or signed approved arrival-and-footpath to that specific small drop.",
       "outstandingGate": "Parcel map for exact natural falls and BOTH banks, signed owner-approved continuous dry path from lawful parking, posted current access and water safety; YDWP property downstream of confluence and official Hills trail are insufficient.",
       "sourceLinks": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
         "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/",
-        "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/"
+        "https://www.waterfallsofthekeweenaw.com/bushy-creek/bushy-creek-falls/",
+        "https://yellowdogwatershed.org/wp-content/uploads/2015/06/Yellow-Dog-River-Community-Forest-Plan-with-Forestry-Plan.pdf",
+        "https://yellowdogwatershed.org/wp-content/uploads/2023/11/The-Howl-Fall-Winter-2023-2024.pdf"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
@@ -3344,7 +3346,7 @@
           {
             "label": "Protected lands",
             "status": "documented-not-live",
-            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract.",
+            "finding": "YDWP owns 688-acre Community Forest and separate 12-acre Bushy property downstream from confluence, but has not mapped the natural fall onto an identified owned tract. Preserve's 2017 plan confirms Bushy Creek frontage; a 2023 Preserve newsletter identifies fieldwork near Bushy Creek Falls in the Community Forest, strengthening location association but not exact parcel/route permission.",
             "source": "https://yellowdogwatershed.org/land-protection-program/ydwp-properties/"
           },
           {
@@ -3372,7 +3374,8 @@
             "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/"
           }
         ]
-      }
+      },
+      "accessAssessment": "Stronger official conservation-land association (not route proof): YDWP 2017 adopted Community Forest plan documents 0.6 mile of Bushy Creek plus other small tributary frontage inside its 688-acre community forest. YDWP Fall/Winter 2023 newsletter p12 explicitly captions a wolf-track field observation near 'Bushy Creek Falls in the Community Forest.' These are direct land-manager references to Bushy Creek Falls vicinity, but neither provides a surveyed parcel/falls-point boundary or signed approved arrival-and-footpath to that specific small drop."
     },
     {
       "gisObjectId": 155,

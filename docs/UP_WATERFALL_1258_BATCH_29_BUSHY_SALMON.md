@@ -36,3 +36,8 @@ Evidence: <https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Ge
 
 ## Release status
 All four opt-in geographic marker reviews have six source-linked route/land checkpoints. No visitor parking coordinate, public route, hub card or sitemap entry. Two HTML-first context pages are `noindex,follow`. Counts unchanged: 64 curated / 59 exact GIS links / 102 pending / 63 sitemap entries incl hub. Draft PR #1268 unmerged; runtime and browser QA still required.
+
+### Official-source strengthening: YDWP forest plan and 2023 newsletter
+- [YDWP adopted 2017 forest plan](https://yellowdogwatershed.org/wp-content/uploads/2015/06/Yellow-Dog-River-Community-Forest-Plan-with-Forestry-Plan.pdf) (water features section, p13) records ~0.6 mile of Bushy Creek and other small feeder-stream frontage within the 688-acre Community Forest.
+- [YDWP Fall/Winter 2023 newsletter](https://yellowdogwatershed.org/wp-content/uploads/2023/11/The-Howl-Fall-Winter-2023-2024.pdf) page 12 caption explicitly records a wolf track near **Bushy Creek Falls in the Community Forest**. This makes the geographic conservation association substantially stronger than inference only from a detached 12-acre tract.
+- Neither source specifies an exact surveyed falls parcel, verified end-to-end public tourist path, designated Bushy parking or seasonal river-crossing safety. Maintain **noindex research-only** until those independent access gates clear.
