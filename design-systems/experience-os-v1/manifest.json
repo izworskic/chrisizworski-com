@@ -1,6 +1,6 @@
 {
   "id": "EXPERIENCE_OS_V1",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "reviewedAt": "2026-10-31",
   "status": "source-only",
   "root": "design-systems/experience-os-v1",
@@ -23,14 +23,19 @@
     "docs/QA_SCORECARD.md",
     "docs/ANTI_PATTERNS.md",
     "docs/MULTI_REPO_ADOPTION.md",
-    "docs/INTERPRETIVE_VOICE_FOR_PLACES.md"
+    "docs/INTERPRETIVE_VOICE_FOR_PLACES.md",
+    "docs/CONNECTED_EXPERIENCE_CONTRACT.md",
+    "docs/PILOT_LESSONS_V1_2.md"
   ],
   "templates": [
     "templates/EXPERIENCE_BRIEF.md",
     "templates/RESEARCH_RECORD.md",
-    "templates/RELEASE_REVIEW.md"
+    "templates/RELEASE_REVIEW.md",
+    "templates/STATE_MATRIX.md"
   ],
   "firstPilot": "Tahquamenon Falls Visit Planner (implemented and merged; see docs/TAHQUAMENON_PILOT_20261031.md)",
   "releaseThreshold": 90,
-  "noPublicRoute": true
+  "noPublicRoute": true,
+  "secondPilot": "Sleeping Giant Provincial Park Explorer (merged PR #1331; see docs/PILOT_LESSONS_V1_2.md)",
+  "qualityUpgrade": "Connected experience state invariants, photo/loading/failure QA, units/source separation, and explicit release evidence tiers"
 }
