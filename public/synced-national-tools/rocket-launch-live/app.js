@@ -3,7 +3,7 @@
   const API = '/api/rocket-launch-usa';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [] };
+  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -113,7 +113,7 @@
         fillColor: id === r.id ? '#dc754c' : '#163f4b',
         color: '#fff', weight: id === r.id ? 3 : 2, fillOpacity: 1
       });
-      state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
+      if (state.userFocusedMap) state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
     }
   }
   function initMap() {
@@ -342,6 +342,7 @@
   }
   function changeRegion(region, scroll) {
     if (!validRegions.has(region)) return;
+    state.userFocusedMap = true;
     load(region);
     if (scroll) $('choose-coast')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -354,6 +355,7 @@
   const initial = new URL(location.href);
   const region = validRegions.has(initial.searchParams.get('region')) ?
     initial.searchParams.get('region') : null;
+  state.userFocusedMap = Boolean(region);
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
   load(region, launch);
