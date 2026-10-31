@@ -73,5 +73,8 @@ jobs:
             const existing=await github.paginate(github.rest.issues.listForRepo,{owner,repo,state:'open',per_page:100});
             const same=existing.find(i=>!i.pull_request && i.title===title);
             if(same){
-              if(same.body!==body)await github.rest.issues.update({owner,repo,issue_number:same.number,body});
+              // Do not edit the issue on every daily run merely because checkedAt changed.
+              // Expand it only when a genuinely different source/reason appears.
+              const unseen=report.reviewSignals.some(s=>!(same.body||'').includes('- '+s.id+' / '+s.reason+' / '+s.url));
+              if(unseen)await github.rest.issues.update({owner,repo,issue_number:same.number,body});
             }else await github.rest.issues.create({owner,repo,title,body});
