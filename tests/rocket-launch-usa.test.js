@@ -104,6 +104,8 @@ test('NASA Wallops Visitor Center stays event-specific, not assumed open after h
   assert.equal(site.state,'mission');
   assert.match(site.reason,/not automatically open/i);
   assert.equal(site.label,'NASA must announce launch-specific opening');
+  assert.equal(site.directionsAllowed,false,
+    'Do not route visitors to Wallops until NASA verifies launch-specific opening');
 });
 test('Starbase official beach and road page parser separates general access from road advisory',()=>{
   const html='<html><body>'+('a'.repeat(1200))+
