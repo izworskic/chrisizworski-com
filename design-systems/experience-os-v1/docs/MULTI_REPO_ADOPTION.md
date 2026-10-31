@@ -48,3 +48,7 @@ Add `CLAUDE.md` and/or Copilot instruction files where needed **after** checking
 ## Evidence of adoption
 
 A project is **adopted** only if its owning repository contains a discoverable pointer *and* a project PR shows a concrete research/experience brief and evidence. A central README mention alone is **not** adoption.
+
+## V1.2.1 portable source evidence (October 31, 2026)
+
+When an independent tool's owner explicitly adopts Experience OS, copy or vendor the **reviewed** small `lib/release-evidence.mjs`, `scripts/new-experience-os-v1.2.mjs` and `scripts/verify-experience-os-v1.2.mjs` with an explicit upstream commit reference. A mere link in this central repository does not load runnable code in another repo. Its own tests, CI, data and publishing contract remain authoritative; the central `--check-site` option is deliberately valid only for `izworskic/chrisizworski-com`. A future independent repo may implement its own catalog verifier rather than copying central HTML assumptions. No auto-push, secret access or blanket modification of sibling repos is authorized.
