@@ -130,9 +130,11 @@
         'included-with-admission-listed': 'Listed with admission',
         'details-not-verified': 'Ticket type not verified'
       };
-      addChip(v, venue.status === 'sold-out-on-source' ? 'closed' :
+      const safetyExcluded = venue.status === 'safety-exclusion';
+      addChip(v, safetyExcluded || venue.status === 'sold-out-on-source' ? 'closed' :
         venue.status === 'conditional' ? 'verify' : 'candidate',
-      ticketNames[venue.ticket] || 'Ticket details require confirmation');
+      safetyExcluded ? 'Excluded for this launch pad' :
+        ticketNames[venue.ticket] || 'Ticket details require confirmation');
       if (venue.openingAt) v.appendChild(element('p', 'ksc-venue-time', 'Listed opening: ' + venue.openingAt));
       if (venue.opensIfDelayedUntil) v.appendChild(element('p', 'ksc-venue-time',
         'Only opens if launch is delayed until ' + venue.opensIfDelayedUntil + ' or later'));
