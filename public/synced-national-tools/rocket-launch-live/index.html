@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rocket Launch Live USA | Upcoming Launches &amp; Where to Watch</title>
+<meta name="description" content="Upcoming U.S. coastal rocket launches. Choose Florida, California, Texas, Virginia, Alaska or Hawaii for launch timing, viewing access and sky forecasts.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/rocket-launch-live/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rocket Launch Live USA: Choose the Coast, Find the Window">
+<meta property="og:description" content="One national mission calendar. Six coastal launch regions. Honest timing, access and viewing-weather decisions.">
+<meta property="og:url" content="https://chrisizworski.com/national-tools/rocket-launch-live/">
+<meta name="google-adsense-account" content="ca-pub-8222782620788075">
+<meta name="theme-color" content="#102c38">
+<link rel="preconnect" href="https://basemaps.cartocdn.com">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261031-1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261031-1" defer></script>
+</head>
+<body>
+<a class="rl-skip" href="#main-content">Skip to launch decisions</a>
+<header class="rl-topbar">
+ <a class="rl-brand" href="/" aria-label="Chris Izworski home"><span class="rl-brandmark">CI</span><span>Chris Izworski <small>Decision intelligence</small></span></a>
+ <nav aria-label="Main navigation"><a href="/national-tools/">U.S. Tools</a><a href="/national-tools/space-coast-launch/">Florida Launches</a><a href="/guides/">Field Guides</a></nav>
+</header>
+<main id="main-content" class="rl-page">
+ <div class="rl-crumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/national-tools/">U.S. Tools</a><span aria-hidden="true">/</span>Rocket Launch Live USA</div>
+ <section class="rl-hero" aria-labelledby="rl-title">
+   <div class="rl-hero-copy">
+     <p class="rl-eyebrow"><span class="rl-pulse" aria-hidden="true"></span> USA launch intelligence <span class="rl-hero-separator">/</span> Atlantic · Pacific · Gulf</p>
+     <h1 id="rl-title">The launch is scheduled.<br><em>Will the trip work?</em></h1>
+     <p class="rl-lede">A rocket calendar is only the beginning. Choose a U.S. coast, follow the actual mission, and find out what we know about its launch time, legal viewing access and the sky you might stand beneath.</p>
+     <div class="rl-hero-actions">
+       <a class="rl-btn rl-btn-primary" href="#choose-coast">Choose a launch coast <span aria-hidden="true">↓</span></a>
+       <a class="rl-text-link" href="#how-it-works">How the decisions work</a>
+     </div>
+     <div class="rl-evidence-line"><strong>6 coastal regions</strong><span aria-hidden="true">·</span> Official land-manager sources <span aria-hidden="true">·</span> Launch-time precision matters</div>
+   </div>
+   <figure class="rl-hero-photo">
+     <img src="https://media.defense.gov/2024/Apr/11/2003436336/2000/2000/0/240411-X-XI961-1034.JPG" alt="Spectators watching a rocket ascend at Vandenberg Space Force Base in California" loading="eager" decoding="async">
+     <figcaption>On the California coast, launch spectators look up. <a href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3738319/ussf-62-mission-launches-from-vsfb/" target="_blank" rel="noopener">U.S. Space Force photograph</a></figcaption>
+   </figure>
+ </section>
+
+ <section class="rl-pulsebar" aria-label="National launch overview">
+   <div><span class="rl-stat-label">Next coastal U.S. launch in the feed</span><strong id="rl-national-next">Loading the launch calendar…</strong></div>
+   <div><span class="rl-stat-label">Schedule coverage</span><strong id="rl-feed-health">Checking seven launch-location IDs</strong></div>
+   <div><span class="rl-stat-label">Evidence checked</span><strong id="rl-updated-at">Checking source timestamps…</strong></div>
+ </section>
+
+ <section id="choose-coast" class="rl-section" aria-labelledby="rl-regions-title">
+   <div class="rl-section-head">
+     <div><p class="rl-eyebrow">01 / Where</p><h2 id="rl-regions-title">Six coasts. Six different launch decisions.</h2></div>
+     <p>California's fog is not Florida's ticketing. Texas beach closures are not Wallops visitor-center hours. Select a region for the rules that actually apply.</p>
+   </div>
+   <div class="rl-region-picker" id="rl-region-picker" role="group" aria-label="Choose a U.S. coastal launch region">
+    <button type="button" class="rl-region-btn" data-region="california" aria-pressed="false"><span>Pacific</span>California <small>Vandenberg</small></button>
+    <button type="button" class="rl-region-btn" data-region="florida" aria-pressed="false"><span>Atlantic</span>Florida <small>Kennedy &amp; Cape</small></button>
+    <button type="button" class="rl-region-btn" data-region="texas" aria-pressed="false"><span>Gulf</span>Texas <small>Starbase</small></button>
+    <button type="button" class="rl-region-btn" data-region="virginia" aria-pressed="false"><span>Atlantic</span>Virginia <small>Wallops</small></button>
+    <button type="button" class="rl-region-btn" data-region="alaska" aria-pressed="false"><span>Pacific</span>Alaska <small>Kodiak</small></button>
+    <button type="button" class="rl-region-btn" data-region="hawaii" aria-pressed="false"><span>Pacific</span>Hawaiʻi <small>Barking Sands</small></button>
+   </div>
+   <div class="rl-atlas">
+     <div class="rl-map-wrap">
+       <div id="rl-coast-map" class="rl-map" role="img" aria-label="Interactive U.S. coastal launch regions, including Alaska and Hawaii">
+         <div class="rl-map-fallback">Loading the coastal atlas. Use the region buttons above if the map is unavailable.</div>
+       </div>
+       <div class="rl-map-legend">Coastal range locations · approximate regional map markers, not public entrances <span>CARTO / OpenStreetMap</span></div>
+     </div>
+     <div class="rl-atlas-summary">
+       <p class="rl-eyebrow">Selected coast</p>
+       <h3 id="rl-region-name">Choose a region</h3>
+       <p id="rl-region-description">Explore the country’s active coastal launch ranges and the official viewing rules that govern each one.</p>
+       <div class="rl-mini-facts"><span>Region</span><strong id="rl-region-coast">—</strong><span>Local clock</span><strong id="rl-region-timezone">—</strong><span>Launches returned</span><strong id="rl-region-count">—</strong></div>
+       <div id="rl-region-links" class="rl-region-links"></div>
+     </div>
+   </div>
+ </section>
+
+ <section class="rl-section rl-mission-section" aria-labelledby="rl-next-title">
+  <div class="rl-section-head">
+   <div><p class="rl-eyebrow">02 / When</p><h2 id="rl-next-title">Follow a real mission, not a made-up countdown.</h2></div>
+   <p>Every launch carries a source timestamp and time precision. A date-only or month-only placeholder is not an invitation to arrive at midnight.</p>
+  </div>
+  <div class="rl-selector">
+   <div><label for="rl-launch-select">Launch to plan for</label><p>Choose an upcoming mission for the selected coast.</p></div>
+   <select id="rl-launch-select" aria-describedby="rl-launch-helper"><option value="">Loading scheduled missions…</option></select>
+   <p id="rl-launch-helper">New and delayed launches can change with little notice.</p>
+  </div>
+  <div class="rl-decision-grid">
+    <article class="rl-decision rl-decision-primary">
+      <div class="rl-decision-top"><span>Mission / 01</span><span class="rl-status" id="rl-schedule-grade">Verifying</span></div>
+      <h3 id="rl-mission-name">Upcoming U.S. mission</h3>
+      <div class="rl-launch-clock"><span id="rl-date">Date not confirmed</span><strong id="rl-time">Checking schedule…</strong></div>
+      <p id="rl-schedule-detail">Launch time and status will appear after the source is checked.</p>
+      <div class="rl-mission-meta"><span>Launch pad <strong id="rl-pad">—</strong></span><span>Rocket <strong id="rl-rocket">—</strong></span><span>Last schedule change <strong id="rl-schedule-updated">—</strong></span></div>
+    </article>
+    <article class="rl-decision rl-decision-secondary">
+      <div class="rl-decision-top"><span>Visitor decision / 02</span><span class="rl-status" id="rl-access-grade">Check required</span></div>
+      <h3>Can I get to the viewing area?</h3>
+      <p id="rl-access-summary">Land managers and range safety, not the rocket calendar, control public entry.</p>
+      <p class="rl-small">An open beach today may close during launch operations. A military launch facility is never a general public viewing destination.</p>
+      <div id="rl-official-notice" class="rl-official-notice" hidden></div>
+    </article>
+    <article class="rl-decision rl-decision-secondary">
+      <div class="rl-decision-top"><span>Spectator sky / 03</span><span class="rl-status" id="rl-weather-grade">Waiting for an exact time</span></div>
+      <h3>Will cloud cover help or hurt?</h3>
+      <p id="rl-weather-summary">Only a sufficiently precise launch within the seven-day forecast window gets a weather comparison.</p>
+      <p class="rl-small">Local NWS surface conditions are not upper-level rocket visibility or a launch go/no-go decision.</p>
+    </article>
+  </div>
+ </section>
+
+ <section class="rl-section" id="rl-viewing" aria-labelledby="rl-viewing-title">
+  <div class="rl-section-head"><div><p class="rl-eyebrow">03 / Where to stand</p><h2 id="rl-viewing-title">The places, and the restrictions.</h2></div>
+   <p>These are source-backed visitor candidates or explicit restrictions, not live occupancy reports. Directions disappear when a location is outside permitted hours or within a restricted range.</p></div>
+  <div id="rl-sites" class="rl-site-grid" aria-live="polite"><p>Loading official viewing guidance…</p></div>
+  <div id="rl-regional-sky" class="rl-sky" aria-live="polite"></div>
+ </section>
+
+ <section class="rl-section rl-schedule-all" id="all-coasts" aria-labelledby="rl-calendar-title">
+  <div class="rl-section-head"><div><p class="rl-eyebrow">04 / Around the country</p><h2 id="rl-calendar-title">The coastal launch board.</h2></div><p>The next launches returned by the schedule provider, organized by range. Missing listings are not proof that no launch is planned, particularly for sounding and military test rockets.</p></div>
+  <div id="rl-national-board" class="rl-board" aria-live="polite">
+    <p>Checking California, Florida, Texas, Virginia, Alaska and Hawaiʻi…</p>
+  </div>
+  <p id="rl-schedule-coverage" class="rl-schedule-coverage">Checking schedule availability…</p>
+ </section>
+
+ <section id="how-it-works" class="rl-explainer" aria-labelledby="rl-how-title">
+  <div><p class="rl-eyebrow">Reading the evidence</p><h2 id="rl-how-title">A dependable viewing plan has three separate answers.</h2></div>
+  <div class="rl-explain-grid">
+    <div><span>01</span><h3>Is the launch time real?</h3><p>Launch Library provides a scheduled target and its precision. We separate minute-level targets from tentative days and months. The rocket operator remains the final timing authority.</p></div>
+    <div><span>02</span><h3>Is the viewing spot actually accessible?</h3><p>NASA, military bases, park managers and local authorities publish different rules. Closures, tickets, wildlife protection and security can override a normal visiting schedule.</p></div>
+    <div><span>03</span><h3>What is the observer likely to see?</h3><p>When the window is precise and near enough, we look for public NWS hourly and gridded sky-cover evidence. We cannot promise rocket visibility without verified trajectory and cloud-height data.</p></div>
+  </div>
+ </section>
+ <section class="rl-faq" aria-labelledby="rl-faq-title">
+  <h2 id="rl-faq-title">Before you travel to a rocket launch</h2>
+  <details><summary>Does this include every rocket launched in the United States?</summary><p>It covers scheduled missions recorded by Launch Library 2 at the selected coastal launch ranges. Some defense tests, Wallops sounding rockets, Hawaiʻi range activities and launches announced at short notice are not published in that feed. The official range and NASA schedules linked for each region remain essential.</p></details>
+  <details><summary>Can I watch from the launch pad or inside a military base?</summary><p>Do not assume so. Vandenberg, Kodiak and Barking Sands have controlled range access. Starbase closes Boca Chica Beach and Highway 4 around certain tests and launches. Kennedy Space Center viewing is venue and ticket specific. Always follow official admission and safety rules.</p></details>
+  <details><summary>Is a clear forecast proof I will see the rocket?</summary><p>No. A forecast for your location does not model the rocket’s trajectory through multiple cloud layers. It also does not predict upper-level launch-weather constraints. The tool intentionally leaves conditions unknown when source evidence is insufficient.</p></details>
+  <details><summary>What if a launch scrubs or the date changes?</summary><p>Recheck the operator’s official updates before departing and again near launch. Scheduled liftoff times, launch windows and visitor access can change with little notice. A published opening time or ticket offer may apply to one attempt but not a later one.</p></details>
+ </section>
+ <p class="rl-method">Method: source-first decisions, updated as available. No Redis or hidden user tracking is required for the launch feed. <a href="https://ll.thespacedevs.com/" target="_blank" rel="noopener">Launch Library 2</a> is a third-party schedule provider. Public meteorological and range information comes from its named government or venue publisher. Creator: <a href="/chris-izworski/" rel="author">Chris Izworski</a>.</p>
+</main>
+<footer class="rl-footer"><span>© 2026 Chris Izworski · Rocket Launch Live USA</span><nav aria-label="Footer"><a href="/national-tools/">U.S. Tools</a><a href="/national-tools/space-coast-launch/">Florida Launch Viewer</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></footer>
+</body>
+</html>
