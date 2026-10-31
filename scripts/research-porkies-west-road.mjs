@@ -67,7 +67,7 @@ const boundary=existing.map(strip);
 const gj={type:"FeatureCollection",name:"Porkies mapped separate western road approach — evidence only",properties:{routingCertified:false,routeTimeVerified:false,openNowVerified:false,officialParkAccessName:"County Road 519",MGFcenterlineName:"Presque Isle Rd"},features:[...west,...boundary]};
 const summary={
  status:"western-approach-evidence-not-turn-by-turn",reviewedOn:"2026-10-28",
- sources:ledger.sources,sourceIdentity:ledger.sourceNameCrosswalk,
+ sources:{...ledger.sources,wakefieldTownshipNotice:ledger.workZoneSource.url},sourceIdentity:ledger.sourceNameCrosswalk,
  westRoadFeatureCount:west.length,westSouthBoundaryFeatureCount:boundary.length,
  presquIsleRoadNetworkAt5m:graph.componentCount,unjoinedEndpoints:graph.degreeOneNodes,
  westRoadGeometryMiles:graph.totalGeometryMiles,
@@ -77,12 +77,13 @@ const summary={
  westOfPinkerton:"DNR identifies the County Road 519 west approach as distinct from the South Boundary vehicle closure ending at Pinkerton Trailhead.",
  easternSouthBoundary:"M-107 and the portion of South Boundary from Headquarters south to Pinkerton remain seasonally closed for vehicles Dec 1 until deemed safe.",
  presentAccessVerified:false,countyTurnByTurnVerified:false,parkParkingOpenVerified:false},
- restrictions:ledger.evidenceLimitations,
+ restrictions:[...ledger.evidenceLimitations,"Township Sept 22, 2026 CR519/M-28 water-main closure names Johnson Road as detour; reopening/turn-by-turn unverified and Google directions withheld."],
  routesAllowed:false,ETAallowed:false,
+ workZone:{sourceNoticeDate:ledger.workZoneSource.noticeDate,reviewedOn:ledger.workZoneSource.reviewedOn,segment:ledger.workZoneSource.closureDescription,reason:"water-main replacement",townshipNamedDetour:ledger.workZoneSource.townshipDetour,reopeningVerified:false,googleDrivingLinksToPresqueSuppressed:true,turnByTurnVerified:false},
  doNotConfuse:"The named 17 MGF Presque Isle Rd pieces connect to western South Boundary. Neither data source certifies a full legal trip from Wakefield, plowed road, signed last-mile entrance, or bridge safety.",
  officialDnrSaysWinterAccess:true
 };
 const out=path.join(root,"public/porcupine-mountains");
-await fs.writeFile(path.join(out,"west-access-evidence.json"),JSON.stringify(summary,null,2));
+await fs.writeFile(path.join(out,"west-road-evidence.json"),JSON.stringify(summary,null,2)+"\n");
 await fs.writeFile(path.join(out,"west-road-reference.geojson"),JSON.stringify(gj));
 console.log(JSON.stringify({status:summary.status,roadCount:west.length,southBoundaryCount:boundary.length,roadComponent5m:graph.componentCount,roadEndpointNodes:graph.degreeOneNodes,roadGeometryMiles:graph.totalGeometryMiles,junctionOffsetMeters:summary.westToBoundarySourceOffsetMeters},null,2));
