@@ -1,0 +1,44 @@
+name: Gooseberry Falls Experience OS browser QA
+
+on:
+  pull_request:
+    paths:
+      - 'public/gooseberry-falls/**'
+      - 'public/assets/gooseberry-*'
+      - 'api/gooseberry-conditions.js'
+      - 'tests/gooseberry-decision.test.js'
+      - 'scripts/verify-gooseberry-browser.cjs'
+      - 'docs/experience-briefs/gooseberry-*'
+      - '.github/workflows/gooseberry-experience-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unit-test official-source route logic and no-JS HTML
+        run: node --test tests/gooseberry-decision.test.js
+      - name: Install isolated Chromium harness without changing site lockfile
+        run: |
+          mkdir -p /tmp/gooseberry-playwright
+          npm install --prefix /tmp/gooseberry-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/gooseberry-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify phone, tablet, desktop, choices, tile fallback and no JS
+        run: node scripts/verify-gooseberry-browser.cjs
+      - name: Save screenshots and decision/viewport report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gooseberry-experience-os-browser-qa
+          path: artifacts/gooseberry-browser/
+          if-no-files-found: warn
+          retention-days: 14
