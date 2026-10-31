@@ -38,7 +38,9 @@
         "credit": "Lake of the Clouds · Stevenliuyi · CC BY-SA 4.0",
         "creditUrl": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg"
       },
-      "photoAbout": "Actual Lake of the Clouds overlook; archival photo, not a current conditions view."
+      "photoAbout": "Actual Lake of the Clouds overlook; archival photo, not a current conditions view.",
+      "fieldNote": "The view begins with a surprise: Lake of the Clouds lies far below you, enclosed by steep wooded slopes. The Michigan DNR describes this as part of an ancient escarpment stretching across the mountains. Spend a minute looking beyond the water to the unbroken forest in the valley. The short overlook approach offers the scene without committing to the very different, rugged Escarpment Trail.",
+      "fieldNoteSource": "https://www.michigan.gov/dnr/places/natural-areas/porcupine-mountains"
     },
     {
       "id": "summit",
@@ -61,7 +63,9 @@
         "credit": "Near Summit Peak trail · daveynin · CC BY 4.0 · July 2026",
         "creditUrl": "https://commons.wikimedia.org/wiki/File:Scenic_view_near_Summit_Peak_trail_(55568874038).jpg"
       },
-      "photoAbout": "Scenic view near Summit Peak trail; not proof of conditions on your chosen date."
+      "photoAbout": "Scenic view near Summit Peak trail; not proof of conditions on your chosen date.",
+      "fieldNote": "Take your time under the hardwood canopy on the way to Summit Peak. The half-mile approach and benches are part of the outing, not just a walk to the tower. Climb the wooden stairs, if appropriate for your group, and look for the rolling pattern of forested ridges rather than a single landmark. This is an elevated tower experience, not an accessible roadside platform.",
+      "fieldNoteSource": "https://www.michigan.gov/recsearch/parks/porkies"
     },
     {
       "id": "river",
@@ -85,7 +89,9 @@
         "credit": "Manabezho Falls · Gittinsj · CC BY-SA 3.0",
         "creditUrl": "https://commons.wikimedia.org/wiki/File:Manabezho_Falls.jpg"
       },
-      "photoAbout": "Actual Manabezho Falls within the Presque Isle corridor; not a photograph of every falls or trail."
+      "photoAbout": "Actual Manabezho Falls within the Presque Isle corridor; not a photograph of every falls or trail.",
+      "fieldNote": "Here the Presque Isle River enters a remarkable stretch of old-growth sugar maple, hemlock and white pine. Water runs over lower cascades, then gathers into narrower channels carved deeply through bedrock. Stop and listen before choosing a viewpoint: the sound changes as the gorge tightens. Nawadaha has a separately documented accessible observation platform; the entire river corridor is not an accessible or verified loop.",
+      "fieldNoteSource": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site"
     },
     {
       "id": "nature",
@@ -104,7 +110,9 @@
       "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
       "secondarySource": "https://www.michigan.gov/dnr/places/v-centers/porkies",
       "photo": null,
-      "photoAbout": "No licensed exact-trail photograph in this edition; no substitute scenery is presented."
+      "photoAbout": "No licensed exact-trail photograph in this edition; no substitute scenery is presented.",
+      "fieldNote": "The first thing to notice here is the forest itself. Hemlocks hold the shade beneath broad-leaved hardwoods, and the quiet understory gives you a hint of the vast old-growth wilderness farther into the park. When the visitor center is open, its exhibits provide context for the landscape before you walk. The building's seasonal closure does not by itself tell you whether the outdoor nature trail is passable.",
+      "fieldNoteSource": "https://www.michigan.gov/dnr/places/v-centers/porkies"
     },
     {
       "id": "escarpment",
@@ -128,7 +136,9 @@
         "credit": "Lake of the Clouds · Stevenliuyi · CC BY-SA 4.0",
         "creditUrl": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg"
       },
-      "photoAbout": "Lake of the Clouds scenic region; photograph is not a documented view from every Escarpment Trail section."
+      "photoAbout": "Lake of the Clouds scenic region; photograph is not a documented view from every Escarpment Trail section.",
+      "fieldNote": "From the ridge, the forest and Lake of the Clouds seem to unfold in layers. This is the longer, more physically demanding side of the escarpment, not the short accessible viewing approach. Its age and scale are part of the wonder, but so is its remoteness: trail editions disagree on mileage and the current complete route and return logistics are not certified by this planner. Study the official map before considering a traverse.",
+      "fieldNoteSource": "https://www.michigan.gov/dnr/places/natural-areas/porcupine-mountains"
     },
     {
       "id": "winter",
@@ -146,7 +156,9 @@
       "limits": "No live snow, lift operations, rental availability or grooming is verified here. Do not assume the building, tracks or lot are open.",
       "source": "https://www.michigan.gov/skitheporkies/the-mountain/trail-and-snow-report",
       "photo": null,
-      "photoAbout": "No verified exact-location winter photograph is displayed."
+      "photoAbout": "No verified exact-location winter photograph is displayed.",
+      "fieldNote": "When snow settles across the hills, the Porkies become a different park. Groomed cross-country routes and the winter sports complex offer a way into the eastern forest while some scenic roads are closed to vehicles. Look for the shape of the hardwoods against the snow and listen for the quieter winter woods. The official ski report, not the calendar alone, determines whether any particular activity or lift is operating.",
+      "fieldNoteSource": "https://www.michigan.gov/recsearch/parks/porkies"
     }
   ]
 }
