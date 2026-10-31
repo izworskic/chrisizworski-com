@@ -68,6 +68,8 @@ async function main(){
    need(await proof.getAttribute('open')!==null,device.name+' source proof disclosure failed to open');
    const proofText=await proof.innerText();
    need(proofText.includes('November 1 through April 15')&&proofText.includes('2–7 a.m.')&&proofText.includes('Johnson Road'),device.name+' incomplete work-zone/winter-parking source evidence');
+   await proof.screenshot({path:path.join(out,device.name+'-access-proof.png')});
+   report.screenshots.push(device.name+'-access-proof.png');
    await proof.locator('summary').focus();
    await page.keyboard.press('Enter');
    need(await proof.getAttribute('open')===null,device.name+' disclosure not keyboard reversible');
