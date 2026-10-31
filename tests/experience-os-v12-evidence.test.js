@@ -121,3 +121,18 @@ test('Experience OS V1.2: bootstrap rejects unsafe paths and avoids clobbering e
   assert.ok(fs.existsSync(path.join(tmp,'data/draft.json')));
  }finally{fs.rmSync(tmp,{recursive:true,force:true})}
 });
+
+test('Experience OS V1.2: PENDING text fields cannot pass even when all required array keys exist',async()=>{
+ const {makeDraft}=await import(pathToFileURL(path.join(root,'scripts/new-experience-os-v1.2.mjs')).href);
+ const {validateReleaseRecord}=await load();
+ const blank=makeDraft({slug:'test-adventure',ownerRepo:'owner/visitors',canonical:'https://example.org/test-adventure/',pageFile:'public/test-adventure/index.html'});
+ const r=validateReleaseRecord(blank);
+ assert.ok(r.issues.some(i=>i.code==='pending.placeholder'));
+});
+test('Experience OS V1.2: a released record cannot claim verified if actual browser QA is pending',async()=>{
+ const {validateReleaseRecord}=await load();
+ const x=readSample();x.qa.browserStatus='PENDING';delete x.qa.browserRun;x.qa.screenshotEvidence=[];
+ const r=validateReleaseRecord(x);
+ assert.ok(r.issues.some(i=>i.code==='recordStatus.browser'));
+ assert.ok(r.issues.some(i=>i.code==='release.browserProof'));
+});
