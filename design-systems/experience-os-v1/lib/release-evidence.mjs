@@ -110,7 +110,7 @@ export function validateReleaseRecord(record,{repoRoot=null,checkSite=false}={})
  const images=record.photos||[];
  if(!Array.isArray(images))bad('photos','Photos must be an array, which can be empty');
  else for(const im of images){
-  if(!httpsUrl(im?.sourceUrl)||!isText(im?.depictedSubject)||!isText(im?.author)||!isText(im?.license)||!httpsUrl(im?.creditUrl))
+  if(!httpsUrl(im?.sourceUrl)||!isText(im?.depictedSubject)||!isText(im?.author)||typeof im?.license!=='string'||!im.license.trim()||!httpsUrl(im?.creditUrl))
    bad('photos.provenance','Each photo requires actual subject, author, license, image source and credit link');
   if(!['exact','contextual'].includes(im?.subjectMatch))bad('photos.subjectMatch','Label exact subject versus contextual photo');
   if(im?.subjectMatch==='contextual'&&!isText(im.disclosure))bad('photos.disclosure','Contextual imagery must visibly disclose the actual subject');
