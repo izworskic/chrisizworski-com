@@ -144,6 +144,9 @@ jobs:
       - name: Apply main-site shell metadata
         run: node scripts/normalize-national-shell.mjs
 
+      - name: Restore main-site-owned Rocket Launch USA discovery
+        run: node scripts/ensure-rocket-usa-national.mjs
+
       - name: Verify production bundle
         shell: bash
         run: |
