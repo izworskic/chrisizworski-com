@@ -105,6 +105,11 @@ async function main(){
        viewport.name+' map and feature are out of sync');
      must(await page.locator('[data-id="middlebrun-beach"]').evaluate(el=>el.classList.contains('is-selected')),
        viewport.name+' picker did not mark the same card');
+     await page.locator('#map-route-picker').selectOption('head-of-the-giant');
+     must(await page.locator('#featured-photo').isHidden(),
+       viewport.name+' unverified-route photo should not linger from another trail');
+     must((await page.locator('#focus-story').innerText()).includes('steepest'),
+       viewport.name+' photo-free trail must retain interpretive content');
      await page.locator('#map-route-picker').selectOption('sea-lion');
      must((await page.locator('#focus-title').innerText())==='Sea Lion Trail',
        viewport.name+' reversible map selection failed');
