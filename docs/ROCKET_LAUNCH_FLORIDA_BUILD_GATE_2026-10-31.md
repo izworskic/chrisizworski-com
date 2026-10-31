@@ -46,3 +46,38 @@ Launch Library 2 v2.3 tested with location IDs 12 (Cape Canaveral SFS) and 27 (K
 - NPS notices may not be geometrically structured at parking-lot granularity; decisions require conservative location-specific title/description rules.
 - Add a fully verified park-access/parking geometry map, actual park-hour exceptions, and mission-specific official launch-site event monitoring next.
 - Test live delay/scrub latencies before creating any "live launch now" countdown guarantee.
+
+## Mission-specific viewing desk (Phase 3, October 31, 2026)
+
+### Added authoritative NPS policy and source
+
+The official [NPS Rocket Launch Viewing page](https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm) states:
+- Playalinda Beach Road normally closes between the entry gate and parking lot 1 about **30 minutes before the launch** to vehicles, pedestrians and bicycles.
+- NASA security may close additional vistas, parking and road segments without notice.
+- The park may restrict incoming flow at capacity even during normal operating hours.
+- The active park-site JSON operating-hours alert provides the current published general hours, not the historical seasonal schedule.
+
+The engine calculates T–30 only for minute/second-precision mission times, and labels it a planning **estimate** derived from the third-party schedule. Never present it as confirmation of a live gate closure or admission.
+
+### NPS closure geometry
+
+Playalinda is separated into groups: lots 1–3, 4–7, and 8–13. Closure evidence applies only to specifically mentioned lots or to an explicit whole-district closure. KSC ticketed venues remain unconfirmed until their exact official event listing is checked; historic launch packages cannot establish current ticket eligibility.
+
+### NWS cloud-cover layer
+
+The NWS published forecastGridData endpoint exposes skyCover percent values with an updateTime and validTime interval. The pilot checks gridded skyCover near Titusville waterfront and Port Canaveral using /points and the raw grid feed, only for exact launch times inside the seven-day forecast horizon. A grid older than 18 hours, missing unit/values, or no matching target interval produces unknown cloud cover. Raw grid failure preserves the hourly text forecast.
+
+At least 20 percentage points' difference in verified sky cover is required to flag the relatively less cloudy viewing area. This is a relative surface-grid comparison, not a rocket trajectory/upper-level cloud visibility forecast or launch go-weather approval.
+
+### Mission selection
+
+The original canonical URL is retained. The selector shows up to eight Florida missions and requests /api/space-coast-launch?launchId=<UUID> for the visitor's choice. The API only accepts UUID-shaped identifiers present in its freshly fetched Florida list. Malformed IDs produce 400; missing missions produce 404. Venues, NPS gate timing and weather are recomputed for the selected launch. Vercel CDN caching remains 15 minutes (30 minutes stale-while-revalidate), with no Redis and no client-facing API keys.
+
+### Required release gates
+
+- Run targeted tests (space-coast-live, space-coast-mission-sky, destination-data-integrity) and full CI.
+- Syntax-check both backend libraries, the Vercel API and the browser app.
+- Validate good and missing grid data, stale grids, cloud thresholds, exact and coarse launch timestamps and two-locale comparisons.
+- Validate lot-specific/whole-beach closure, updated park hours, T–30 estimate and selected mission reassessment.
+- Preserve the existing canonical, advertising, routing, sync-workflow protection and official land-manager source links.
+- After deployment confirm the live API, chosen mission response, and frontend assets. Do not claim browser-visual verification without it.
