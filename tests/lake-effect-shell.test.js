@@ -13,7 +13,7 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.equal(griddedRoute?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect-grid");
  assert.match(html,/lake-effect-grid\.js\?v=20261031-2/);
  assert.match(html,/lake-effect-grid\.css\?v=20261031-1/);
- assert.match(html,/lake-effect-geography\.js\?v=20261031-1/);
+ assert.match(html,/lake-effect-geography\.js\?v=20261031-2/);
  assert.match(html,/lake-effect-geography\.css\?v=20261031-1/);
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/">/);
  assert.match(html,/national-snowpack-melt\.vercel\.app\/assets\/lake-effect\.js/);
