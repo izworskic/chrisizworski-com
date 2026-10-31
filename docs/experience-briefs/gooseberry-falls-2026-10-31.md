@@ -68,7 +68,13 @@ State transitions change named route, expected time, mobility details, access ca
 
 Exact-place image #1: https://commons.wikimedia.org/wiki/File:Goosberry_Falls.jpg (ZMoreno387; CC0 1.0; checked 2026-10-31). Author metadata GPS point refers to falls photo, not a parking place. Remote source via Commons Special:FilePath; do not download restricted Getty/travel image search thumbnails. Test actual load before release.
 
-Exact-place image #2 (optional only after visual QA): https://commons.wikimedia.org/wiki/File:Agate_Beach_(Gooseberry_Falls_State_Park).jpg (Joe Passe; CC BY-SA 2.0; checked 2026-10-31); must display author+license link if used.
+Additional exact-place photos now included in the prototype (all checked 2026-10-31, prominently captioned with credit/license and historical-photo limitations):
+- Upper + Lower overview: https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-the-full-falls.jpg — Yinan Chen, public-domain dedication (source: Good Free Photos).
+- Lower Falls: https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-lower-falls.jpg — Yinan Chen, public-domain dedication.
+- Park woodland scene, explicitly **not represented as Fifth Falls**: https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-state-park-view-through-trees.jpg — Yinan Chen, public-domain dedication.
+- Agate Beach: https://commons.wikimedia.org/wiki/File:Agate_Beach_(Gooseberry_Falls_State_Park).jpg — Joe Passe, CC BY-SA 2.0. Display credited license and link; images are sourced at the requested pixel size for responsive display.
+
+**Outstanding visual QA:** confirm Wikimedia image URLs actually load, maintain attribution at 360px, and never show a broken-image icon without a text/source fallback. All images show historical visits, not today's water level.
 
 ## Map and technical decision
 
