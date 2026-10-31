@@ -71,10 +71,9 @@ jobs:
           curl -fLsS "$HUB_RAW/public/national-tools/florida-red-tide/app.js" -o public/synced-national-tools/florida-red-tide/app.js
           curl -fLsS "$HUB_RAW/api/florida-red-tide.js" -o api/florida-red-tide.js
 
-          curl -fLsS "$HUB_RAW/public/national-tools/space-coast-launch/index.html" -o public/synced-national-tools/space-coast-launch/index.html
-          curl -fLsS "$HUB_RAW/public/national-tools/space-coast-launch/app.js" -o public/synced-national-tools/space-coast-launch/app.js
-          curl -fLsS "$HUB_RAW/api/space-coast-launch.js" -o api/space-coast-launch.js
 
+          # Space Coast launch is now owned by the main site: keep its NPS/LL2
+          # integration, viewing UI and tests; do not pull a stale hub copy.
           curl -fLsS "$HUB_RAW/public/national-tools/trail-ridge-road/index.html" -o public/synced-national-tools/trail-ridge-road/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/trail-ridge-road/app.js" -o public/synced-national-tools/trail-ridge-road/app.js
           curl -fLsS "$HUB_RAW/api/trail-ridge-road.js" -o api/trail-ridge-road.js
@@ -202,8 +201,12 @@ jobs:
           grep -q 'Insufficient recent sampling nearby' api/florida-red-tide.js
           grep -qi 'not an all-clear' api/florida-red-tide.js
           grep -q 'isFutureLaunch' api/space-coast-launch.js
-          grep -q 'filter(l=>isFutureLaunch(l,now))' api/space-coast-launch.js
-          grep -q 'NWS hourly guidance does not yet cover the launch time' api/space-coast-launch.js
+          grep -q 'filter(l => isFutureLaunch(l, now))' api/space-coast-launch.js
+          grep -q 'location__ids=12%2C27' api/space-coast-launch.js
+          grep -q 'PUBLIC_NPS_ALERTS' api/space-coast-launch.js
+          grep -q 'playalindaNorthClosed' lib/space-coast-decision.js
+          grep -q 'launch-venue-grid' public/synced-national-tools/space-coast-launch/index.html
+          node --test tests/space-coast-live.test.js
           grep -q 'NPS road status is authoritative' api/trail-ridge-road.js
           grep -q 'weather assessment never overrides it' api/trail-ridge-road.js
           grep -q 'does not calculate its own eruption model' api/yellowstone-geysers.js
