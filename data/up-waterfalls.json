@@ -3880,6 +3880,66 @@
           "description": "Michigan waterfall GIS #126 physical point matches specialist natural falls position within about 33 metres; distinct from DNR campground/visitor parking and GIS #114 West Branch Erick's Falls."
         }
       }
+    },
+    {
+      "id": "tioga-park-falls",
+      "name": "Tioga Park Falls (roadside cascades)",
+      "region": "Western U.P.",
+      "place": "Tioga Creek Roadside Park · US-41/M-28 · Covington",
+      "lat": 46.5734,
+      "lng": -88.3398,
+      "level": "easy",
+      "minutes": "15–45 min",
+      "walk": "Within Tioga Creek Roadside Park, start from the established parking and open grass/picnic area by the river and small footbridge. An independent 2015 waterfall field guide records lower cascades visible near the park parking area and a short marked upstream creek trail a few hundred feet to another modest drop. A later independent visitor describes a paved park path becoming a rugged, possibly overgrown footpath with fallen trees. Enjoy the bridge and lower public park-side river views if the upstream side path is blocked; do not bushwhack beyond the park, wade the Tioga River, or seek the unrelated private-gated downstream falls.",
+      "best": "Spring or autumn when the seasonal roadside park is open and paved paths are dry; snow and late-October gate closures can prevent entry.",
+      "access": "Public MDOT Tioga Creek Roadside Park established independently of source GIS Tioga Falls. Small lower river cascades and a short park-side trail are documented, but upstream trail can be obstructed and current MDOT gate state is not confirmed.",
+      "status": "seasonal",
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+      "locationSource": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml",
+      "kind": "MDOT highway roadside park and public Tioga River cascades",
+      "parking": "Arrive at the officially named Tioga Creek Roadside Park on the SOUTH side of US-41/M-28 in Baraga County, west of Three Lakes/Nestoria. Michigan DOT lists Tioga Creek Roadside Park in its 2026 public facilities update, while an independent roadside facility catalog locates the parking/picnic site near 46.57515,-88.33961. That is the PARK location, not the larger, gated Tioga Falls identified by Michigan GIS #46 over two kilometres away. Use the marked park entrance and actual visitor spaces, never roadside shoulder parking.",
+      "feature": "A modest set of Tioga River cascades where a small MDOT roadside park, grassy river crossing and wooded creek path offer a quiet break from US-41.",
+      "decision": "A low-effort park-side stream and lower-cascade stop, not a trip to the remote GIS Tioga Falls. If park closed or the small creek path is overgrown, do not enter through a closed gate or leave park property.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "2026-mdot-public-roadside-park-2015-independent-park-waterfall-path-not-a-gis-linked-fall",
+      "sourceReviewed": "2026-10-31",
+      "manager": "Michigan Department of Transportation · Tioga Creek Roadside Park",
+      "further": "Michigan MDOT explicitly lists seasonal Tioga Creek Roadside Park on US-41/M-28 in its April 21, 2026 reopening notice (delayed by late spring snow); MDOT warns roadside parks may close annually in late October, so October 31 2026 'open now' cannot be stated. Outdoor Michigan facility location 46.57515,-88.33961 documents road and owner. EPA Michigan DEQ water sample Tioga River at US41 roadside park at 46.57527,-88.34066 independently confirms river/roadside public-place identity. Independent gowaterfalling June 2015 field observation locates 'Tioga Creek Falls' park-side lower cascades at 46.5734,-88.3398, about 195m south of park centre, with short marked stream footpath; Mi Roadtrip describes paved grass approach and later overgrown trail. Neither certifies current trail clearing; natural point is approximate and not a surveyed park boundary. **Separate** GIS Tioga Falls #46 46.593805,-88.348735 is about 2.19km north with private camp and gate reported by specialist. Do not cross from MDOT park to upstream private falls or use same name/coordinates as alias. Publication is a PARK-SIDE scenic visitor guide, no claim of access to gated Tioga waterfall.",
+      "winterRoad": "MDOT's 2026 bulletin named this as a seasonal park with delayed late-spring opening and warned roadside facilities often close in late October. No live Oct31 gate, restroom, trail or winter parking status is known. Never park on US-41/M-28 shoulder or block a park gate.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+          "description": "MDOT operates the named Tioga Creek Roadside Park with seasonal parking facilities."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.michigan.gov/mdot/travel/tourists/roadside-parks",
+          "description": "MDOT-managed highway roadside park provides legal public short-stop/river viewing when open; unlike the separate gated Tioga GIS #46 site."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://outdoormichigan.org/feature/11732",
+          "description": "Independent roadside facility record identifies MDOT-owned signed highway park and approximate park coordinates 46.57515,-88.33961, not natural fall or certified stall GPS."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml",
+          "description": "Independent field visitor records small public park-side falls and a short marked path; later field report warns trail overgrown; park-side lower view is fallback and no wild-bushwhack offered."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.waterqualitydata.us/provider/STORET/21MICH_WQX/21MICH_WQX-070070/",
+          "description": "EPA/Michigan DEQ Tioga River sampling site specifically at US41 state roadside park confirms river/park relationship; approximate falls point from independent field survey, not GIS #46."
+        }
+      },
+      "featureIdentity": "independent-tioga-roadside-park-cascades-not-source-gis-46",
+      "parkingPositionContext": {
+        "lat": 46.57515,
+        "lng": -88.33961,
+        "kind": "independent-MDOT-roadside-park-reference-not-surveyed-parking",
+        "source": "https://outdoormichigan.org/feature/11732"
+      }
     }
   ]
 }

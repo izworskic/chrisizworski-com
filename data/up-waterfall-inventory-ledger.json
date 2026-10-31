@@ -5,7 +5,7 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 69,
+  "curatedCount": 70,
   "linkedByExactOid": 64,
   "unresolvedCandidates": 97,
   "entries": [
@@ -867,17 +867,23 @@
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-29",
-      "nextAction": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance.",
+      "checked": "2026-10-31",
+      "nextAction": "Distinct MDOT Tioga Creek Roadside Park scenic stop approximately 2.19km south is now a public guide; that does NOT authorize reaching this northern GIS Tioga Falls near reported private gate. Current parcel owner/manager consent and full marked public lot-to-#46 route are still required.",
       "batch": "county-baraga",
-      "reviewed": "2026-10-29",
-      "reviewBatch": "14",
+      "reviewed": "2026-10-31",
+      "reviewBatch": "33",
       "classification": "private-camp-gated-access-no-public-route",
-      "accessAssessment": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths. Third-party historical route description is not a legal parcel survey or 2026 gate status; absence of a public route is not proof that every possible access is legally closed.",
+      "accessAssessment": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths. Third-party historical route description is not a legal parcel survey or 2026 gate status; absence of a public route is not proof that every possible access is legally closed. Distinct MDOT Tioga Creek Roadside Park scenic stop approximately 2.19km south is now a public guide; that does NOT authorize reaching this northern GIS Tioga Falls near reported private gate. Current parcel owner/manager consent and full marked public lot-to-#46 route are still required.",
       "evidence": [
         "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/",
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
-      ]
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+        "https://outdoormichigan.org/feature/11732",
+        "https://www.waterqualitydata.us/provider/STORET/21MICH_WQX/21MICH_WQX-070070/",
+        "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml",
+        "https://www.miroadtrip.com/locations/tioga-park-falls-park"
+      ],
+      "alternativePublicGuide": "/upper-peninsula-waterfalls/tioga-park-falls/"
     },
     {
       "source": "mi-state-gis",
@@ -4519,5 +4525,5 @@
       ]
     }
   ],
-  "lastBatch": "32"
+  "lastBatch": "33"
 }

@@ -4,7 +4,7 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 69,
+    "curatedDestinations": 70,
     "matchedGisFeatures": 64,
     "pendingGisFeatures": 97
   },
@@ -216,8 +216,8 @@
       "priorityReason": "Named priority for authoritative source review",
       "publicationEligible": false,
       "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 2,
-      "blockingGate": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance."
+      "sourceCount": 7,
+      "blockingGate": "Distinct MDOT Tioga Creek Roadside Park scenic stop approximately 2.19km south is now a public guide; that does NOT authorize reaching this northern GIS Tioga Falls near reported private gate. Current parcel owner/manager consent and full marked public lot-to-#46 route are still required."
     },
     {
       "gisObjectId": 190,

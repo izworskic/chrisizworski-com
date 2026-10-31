@@ -286,8 +286,8 @@
       "publicAccess": "research-only-route-not-cleared",
       "publicationEligible": false,
       "title": "Tioga Falls: access evidence under review",
-      "summary": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths.",
-      "guidance": "Do not tell visitors to pass the gate, cross the river to bypass private land or take the GIS coordinates as a car destination. Keep research-only until an authorized public trailhead, parking and continuous permitted approach exist.",
+      "summary": "A specialist waterfall field record places Tioga Falls at a Tioga River cascade near a private camp and explicitly describes a signed private-property gate blocking the easier south approach. Suggested river crossings and off-trail alternatives are not verified lawful visitor paths. MDOT public Tioga Creek Roadside Park cascades are about 2.19km south and have a separate safe park-side visitor guide; do not treat them as this gated GIS Tioga Falls.",
+      "guidance": "Do not tell visitors to pass the gate, cross the river to bypass private land or take the GIS coordinates as a car destination. Keep research-only until an authorized public trailhead, parking and continuous permitted approach exist. For a public stop, choose the signed Tioga Creek Roadside Park only, and only if its gate is open. Do not follow directions toward this named GIS #46 upstream/private gate.",
       "reviewLimitations": "Third-party historical route description is not a legal parcel survey or 2026 gate status; absence of a public route is not proof that every possible access is legally closed.",
       "nextEvidence": "Check land boundaries/permissions from owner or authoritative land manager and an independently designated safe public parking and trail route; no informal ford guidance.",
       "sourceLinks": [
@@ -298,6 +298,14 @@
         {
           "label": "Michigan GIS named waterfall",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "2026 MDOT Tioga Creek Roadside Park seasonal listing",
+          "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28"
+        },
+        {
+          "label": "Independent park-side falls, distinct from #46",
+          "url": "https://gowaterfalling.com/waterfalls/minorfallsT-Z.shtml"
         }
       ],
       "routeAudit": {
@@ -306,7 +314,7 @@
           {
             "label": "Identity",
             "status": "verified-geography",
-            "finding": "Independent field account near exact Tioga River GIS #46 point",
+            "finding": "Independent field account near exact Tioga River GIS #46 point MDOT Tioga park cascades are about 2.19km south, NOT this natural GIS point.",
             "source": "https://www.waterfallsofthekeweenaw.com/tioga-river/tioga-falls/"
           },
           {
