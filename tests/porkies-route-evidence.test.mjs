@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
+import {createRequire} from "node:module";
+const require=createRequire(import.meta.url);
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const manifest=JSON.parse(read("public/porcupine-mountains/routing-evidence.json"));
@@ -53,4 +55,29 @@ test("no mile, crossing, or open-gate assertions in page's overlay source",()=>{
  assert.match(js,/routingCertified!==false/);
  assert.match(js,/not a live trail-grooming/);
  assert.ok(!/route\/navigate|ride ETA|current traffic|current trail status/.test(html));
+});
+
+test("western South Boundary source IDs are not falsely styled as the winter interior closure",()=>{
+ const {westernAccessSource,seasonalClosureSource,roadStyle}=require("../public/assets/porkies-route-evidence.js");
+ const ids=[9688,9685,9684,9533,9429,9372,9218,9121,9107,9071,9042,8963,8910,8892,8884];
+ const west=roads.features.filter(westernAccessSource);
+ assert.deepEqual(west.map(f=>Number(f.properties.id)).sort((a,b)=>a-b),ids.slice().sort((a,b)=>a-b));
+ const south=roads.features.filter(f=>f.properties.corridor==="south-boundary");
+ assert.equal(south.length,59,"reviewed South Boundary source coverage drifted");
+ assert.equal(south.length-west.length,44,"the interior corridor must stay seasonally flagged");
+ assert.ok(west.every(f=>seasonalClosureSource(f)===false));
+ assert.ok(west.every(f=>roadStyle(f).color==="#496e84"),"blue denotes source linework, not verified opening");
+ assert.equal(westernAccessSource({properties:{corridor:"m107",id:9688}}),false,"a shared id alone cannot exclude other road corridors");
+ const interior=south.find(f=>!westernAccessSource(f));
+ assert.ok(interior&&seasonalClosureSource(interior),"interior seasonal closure was accidentally suppressed");
+ const beforeDoc=globalThis.document,beforeEngine=globalThis.PorkiesEngine;
+ try{
+  globalThis.document={getElementById:()=>({value:"2027-01-15"})};
+  globalThis.PorkiesEngine={seasonFor:()=> "winter"};
+  assert.equal(roadStyle(interior).color,"#ad4839","interior restrictions remain visibly red during winter");
+  assert.equal(roadStyle(west[0]).color,"#496e84","western reference remains neutral in winter");
+ }finally{
+  if(beforeDoc===undefined)delete globalThis.document;else globalThis.document=beforeDoc;
+  if(beforeEngine===undefined)delete globalThis.PorkiesEngine;else globalThis.PorkiesEngine=beforeEngine;
+ }
 });
