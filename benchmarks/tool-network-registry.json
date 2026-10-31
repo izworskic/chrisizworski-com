@@ -4446,6 +4446,54 @@
         "decisionWindowDays": 28,
         "privacy": "No geolocation, browser storage or user identity collection"
       }
+    },
+    {
+      "id": "gooseberry-falls",
+      "name": "Gooseberry Falls Waterfall Walk & Access Planner",
+      "canonical": "https://chrisizworski.com/gooseberry-falls/",
+      "aliases": [],
+      "kind": "destination-decision",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Gooseberry Falls waterfall outing is appropriate for my available time, mobility needs and season, and what official access evidence must I check?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "lake-superior",
+        "minnesota-north-shore"
+      ],
+      "personas": [
+        "circle-tour-traveler",
+        "hiker",
+        "family-traveler",
+        "accessible-outdoors-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Dedicated within-park DNR waterfall route/access selector distinct from the 31-stop Circle Tour itinerary, Split Rock trail experiences and Minnesota North Shore fall colors."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Minnesota DNR official route distances/time/access, DNR seasonal map and USGS noncontinuous-gauge status checked Oct 31, 2026; no validated Gooseberry query volume or uplift prediction."
+      },
+      "measurement": {
+        "search": "GSC Web URL/query performance over 7 and 28 days",
+        "product": "Route choice and official source click events only if already instrumented; do not claim recording until verified",
+        "decisionWindowDays": 28,
+        "privacy": "No geolocation, browser storage, or visitor identity"
+      }
     }
   ],
   "relationships": [
@@ -6456,6 +6504,30 @@
       "strength": "strong",
       "surface": "pukaskwa-visitor-chooser",
       "reason": "Return a park-level hiking choice to the 7-, 10-, or 15-day Lake Superior road-trip context."
+    },
+    {
+      "from": "circle-tour",
+      "to": "gooseberry-falls",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "minnesota-north-shore-stop",
+      "reason": "Circle Tour stop 28 links to a Gooseberry Falls within-park outing chooser with official route lengths and permit/access boundaries."
+    },
+    {
+      "from": "gooseberry-falls",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "gooseberry-planner",
+      "reason": "Return to the lake-wide route and itinerary after choosing a park walk."
+    },
+    {
+      "from": "gooseberry-falls",
+      "to": "split-rock-lighthouse-visit",
+      "type": "nearby-destination",
+      "strength": "optional",
+      "surface": "north-shore-road-trip",
+      "reason": "Split Rock Lighthouse is a separate nearby North Shore outing to combine with Gooseberry Falls on a longer Circle Tour day."
     }
   ],
   "cannibalizationGroups": [
