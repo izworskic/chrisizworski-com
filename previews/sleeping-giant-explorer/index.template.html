@@ -56,6 +56,24 @@
       <option value="lookout">A high lookout</option>
     </select></div>
   </form>
+  <section class="featured-adventure" id="featured-adventure" aria-labelledby="focus-title" data-selected-trail="sea-lion">
+    <figure class="featured-photo" id="featured-photo">
+      <img id="featured-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Diabase_dyke_formation_known_as_the_sea_lion_in_Sleeping_Giant_Provincial_Park_in_Ontario_02.jpg?width=960" width="960" height="640" loading="lazy" decoding="async" alt="The Sea Lion diabase rock arch viewed from a forest trail above Lake Superior">
+      <figcaption id="featured-credit"><a href="https://commons.wikimedia.org/wiki/File:Diabase_dyke_formation_known_as_the_sea_lion_in_Sleeping_Giant_Provincial_Park_in_Ontario_02.jpg">Mcdougallgregor</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · cropped</figcaption>
+    </figure>
+    <div class="featured-body">
+      <div class="section-kicker subdued">YOUR ADVENTURE IN FOCUS</div>
+      <h3 id="focus-title">Sea Lion Trail</h3>
+      <p id="focus-story">Follow the forest path to Perry Bay, where a weathered arch of diabase rises from Lake Superior. The interpretive panels explain the geology of this extraordinary shoreline.</p>
+      <div class="featured-facts">
+        <div><span>Complete return</span><strong id="focus-distance">1.5 mi (2.4 km)</strong></div>
+        <div><span>Published walking time</span><strong id="focus-time">About 1 hour</strong></div>
+      </div>
+      <p class="featured-access" id="focus-access">This walk begins at South Kabeyun parking. The mapped approach and current trail conditions are not confirmed by this guide; check Ontario Parks before travel.</p>
+      <div class="featured-actions"><button type="button" id="focus-map-button" aria-controls="map-canvas">Explore this trail on the map</button><a href="https://www.ontarioparks.ca/park/sleepinggiant/activities" target="_blank" rel="noopener noreferrer">Ontario Parks trail facts</a></div>
+      <p class="featured-status" id="focus-status" role="status" aria-live="polite">Showing Sea Lion Trail. No live trail status is available.</p>
+    </div>
+  </section>
   <div class="result-intro"><div><div class="section-kicker subdued">CHOOSE YOUR EXPERIENCE</div><h3 id="result-head">Six trails. Six ways to meet the Giant.</h3><p id="result-hint" role="status" aria-live="polite">Discover what each trail has to offer, then check current park conditions before you go.</p></div><span id="result-count" class="count-note">Six trails to discover</span></div>
   <div class="route-grid" id="route-grid" aria-label="Official hiking options">
   <!-- Static cards are meaningful without JavaScript. The enhanced UI updates annotations and ranking only. -->
@@ -111,7 +129,17 @@
         </div>
       </div>
       <aside class="route-detail" aria-labelledby="detail-title">
-        <div class="detail-overline">A CLOSER LOOK</div><h3 id="detail-title">Sea Lion Trail</h3><p id="detail-intro">Come for the rock arch; stay a moment with the lake.</p>
+        <div class="detail-overline">A CLOSER LOOK</div>
+        <label class="map-route-select" for="map-route-picker">Choose a trail to inspect
+          <select id="map-route-picker">
+            <option value="sea-lion" selected>Sea Lion Trail</option>
+            <option value="top-of-the-giant">Top of the Giant</option>
+            <option value="head-of-the-giant">Head of the Giant</option>
+            <option value="nanabosho-lookout">Nanabosho Lookout</option>
+            <option value="middlebrun-beach">Middlebrun Bay Beach</option>
+            <option value="pass-lake-overlook">Pass Lake Overlook</option>
+          </select>
+        </label><h3 id="detail-title">Sea Lion Trail</h3><p id="detail-intro">Come for the rock arch; stay a moment with the lake.</p>
         <div class="distance-compare"><div><span>Full return, Ontario Parks</span><strong id="official-distance">1.5 mi (2.4 km)</strong></div><div><span>Mapped trail-line return</span><strong id="mapped-distance">Compare below</strong></div></div>
         <div class="gap-explainer" id="gap-note">The drawn trail and the park’s full return distance start in different places. The missing approach is not mapped here; never substitute a straight line for the signed trail.</div>
         <div id="bike-breakdown" class="mode-breakdown" hidden></div>
