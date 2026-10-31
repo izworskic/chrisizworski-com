@@ -93,6 +93,21 @@
    const dt=elt(doc,"dt","",k),dd=elt(doc,"dd","",v);dl.append(dt,dd);
   }
   body.appendChild(dl);
+  // EXPERIENCE_OS_V1: interpretation belongs to the selected outing,
+  // not to an unrelated photo gallery or a made-up live access verdict.
+  if(typeof option.fieldNote==="string"&&option.fieldNote.trim()){
+   const detail=elt(doc,"details","experience-fieldnote");
+   const summary=elt(doc,"summary","experience-fieldnote-trigger","What to notice on this outing");
+   const note=elt(doc,"p","experience-fieldnote-copy",option.fieldNote);
+   detail.append(summary,note);
+   if(typeof option.fieldNoteSource==="string"&&/^https:\/\/www\.michigan\.gov\//.test(option.fieldNoteSource)){
+    const evidence=elt(doc,"a","experience-fieldnote-source","Why this landscape matters · Michigan DNR");
+    evidence.href=option.fieldNoteSource;
+    evidence.target="_blank";evidence.rel="noopener noreferrer";
+    detail.appendChild(evidence);
+   }
+   body.appendChild(detail);
+  }
   const why=elt(doc,"div","experience-proof");why.append(elt(doc,"h4","","Before you choose"));
   const ul=elt(doc,"ul");
   for(const r of verdict.reasons.slice(0,6))ul.appendChild(elt(doc,"li","",r));
