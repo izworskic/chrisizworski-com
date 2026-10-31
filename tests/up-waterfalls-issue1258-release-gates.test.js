@@ -29,9 +29,13 @@ test('all source-gated visitor guides are published, but seasonal status is neve
  }
 });
 test('source/visitor totals are derived from registry, not hard-coded historical snapshot',()=>{
- const ids=new Set(data.filter(f=>Number.isInteger(f.gisObjectId)).map(f=>f.gisObjectId));
+ const ids=new Set(data.flatMap(f=>[
+  ...(Number.isInteger(f.gisObjectId)?[f.gisObjectId]:[]),
+  ...(Array.isArray(f.multiFeatureGisObjectIds)?f.multiFeatureGisObjectIds:[])
+ ]));
  assert.equal(data.length,ledger.curatedCount);
  assert.equal(ids.size,rec.counts.exactIdMatched);
+ assert.equal(data.filter(f=>!Number.isInteger(f.gisObjectId)).length,rec.counts.curatedNoMatchingGIS);
  assert.equal(rec.counts.exactIdMatched+rec.counts.pending,rec.counts.gisCandidates);
  assert.equal(queue.candidates.length,rec.counts.pending);
  assert.equal(queue.batches.length,Math.ceil(queue.candidates.length/queue.batchSize));
