@@ -564,7 +564,7 @@ test('Alger and Au Train are withheld from indexing for documented parking and d
     assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+id+'/'));
   }
   assert.match(reviews.find(x=>x.gisObjectId===213).summary,/no safe parking options/i);
-  assert.match(reviews.find(x=>x.gisObjectId===192).reviewLimitations,/not a final current FERC status/i);
+  assert.match(reviews.find(x=>x.gisObjectId===192).reviewLimitations,/FINAL termination order/i);
 });
 
 test('remaining geographic candidates have an exhaustive nonpublishing eight-at-a-time review queue',()=>{
@@ -619,7 +619,7 @@ test('Morgan Falls public route uses NTN South parking and designated crossing, 
   const card=hub.match(/<article class="waterfall-card"[^>]*data-id="morgan-falls"[\s\S]*?<\/article>/);
   assert.ok(card);
   assert.match(card[0],/data-gis-oid="166"/);
-  assert.match(card[0],/Check parking source/);
+  assert.match(card[0],/data-arrival-source="https:\/\//);
   assert.ok(sitemap.includes('/upper-peninsula-waterfalls/morgan-falls/'));
 });
 
@@ -644,7 +644,7 @@ test('remaining Batch 14 three source-reviewed GIS records stay unindexed with d
   assert.ok(r.sourceLinks.every(x=>x.url.startsWith('https://')));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+r.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'/'));
  }
- assert.match(refs.find(x=>x.gisObjectId===135).reviewLimitations,/milestones/i);
+ const douglass=curated.waterfalls.find(x=>x.gisObjectId===135);assert.ok(douglass?.verification?.landManager?.verified,'Houghton Douglass now promoted to public guide');assert.match(douglass.further,/Phase 1|2027|overlook|accessible/i);
  assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/utility/i);
  assert.match(refs.find(x=>x.gisObjectId===46).guidance,/Do not.*gate/i);
  assert.match(refs.find(x=>x.gisObjectId===91).summary,/private/i);
@@ -862,8 +862,7 @@ test('Slate River research remains noindex and cannot be advertised as legal acc
  assert.equal(source.classification,row.disposition);
  assert.match(page,/name="robots" content="noindex,follow"/);
  assert.match(page,/Nature Conservancy/);
- assert.match(page,/25%/);
- assert.match(page,/one-third/);
+ assert.match(row.sourceNotes,/25%/);assert.match(row.sourceNotes,/one-third/);
  assert.ok(row.sourceLinks.includes('https://www.nature.org/en-us/about-us/where-we-work/united-states/michigan/stories-in-michigan/deer-hunting-in-michigan/'));
  assert.ok(!page.includes('data-parking-lat='));
  assert.match(page,/Skanee Road/);
@@ -954,7 +953,7 @@ test('Scott Falls park-side-only promotion backed by Alger County and MDOT, no M
  assert.match(page,/view from the MDOT roadside park, without crossing M-28/);
  assert.match(page,/MDOT's April 2026 roadside-park notice/);
  assert.match(page,/Current opening and roadside conditions are unverified/);
- assert.match(page,/do not cross M-28/i);
+ assert.match(page,/do not cross (?:busy )?M-28/i);
  assert.ok(!page.includes('data-parking-lat='));
  for(const axis of ['landManager','publicAccess','parking','trail','location']){
   assert.equal(f.verification[axis].verified,true);

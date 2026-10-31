@@ -55,7 +55,7 @@ test('B03a ledger moves two stable GIS identities without inflating research can
  assert.equal(ledger.sourceCount,197);
  assert.equal(ledger.sourceCandidateCount,161);
  assert.equal(ledger.curatedCount,data.length,'ledger reflects current curated inventory');
- assert.equal(ledger.linkedByExactOid,data.filter(x=>Number.isInteger(x.gisObjectId)&&ledger.entries.some(e=>e.source==='mi-state-gis'&&e.sourceId===x.gisObjectId)).length);
+ const linked=new Set(data.flatMap(x=>[...(Number.isInteger(x.gisObjectId)?[x.gisObjectId]:[]),...(x.multiFeatureGisObjectIds||[])]));assert.equal(ledger.linkedByExactOid,linked.size,'include multi-feature GIS IDs');
  assert.equal(ledger.unresolvedCandidates,ledger.sourceCandidateCount-ledger.linkedByExactOid);
  assert.equal(ledger.entries.length,169);
  assert.ok(ledger.lastBatch,'batch lineage must remain recorded');

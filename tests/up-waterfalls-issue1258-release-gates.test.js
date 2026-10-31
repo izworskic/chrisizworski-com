@@ -15,7 +15,7 @@ test('all source-gated visitor guides are published, but seasonal status is neve
   assert.ok(guide.parking && guide.walk && guide.decision);
   const html=fs.readFileSync(base+id+'/index.html','utf8');
   assert.match(html,/meta name="robots" content="index,follow/);
-  assert.ok(html.includes('https://chrisizworski.com/'+base+id+'/'),id+' canonical');
+  assert.ok(html.includes('https://chrisizworski.com/upper-peninsula-waterfalls/'+id+'/'),id+' canonical');
   assert.match(html,/unverified|unknown|not confirmed|not verified/i);
   assert.ok(!html.includes('data-parking-lat='),'invented parking GPS '+id);
   const ld=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
