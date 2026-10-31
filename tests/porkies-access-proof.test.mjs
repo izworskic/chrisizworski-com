@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
-import {SOURCES,plainText,assessSource,checkSources} from "../scripts/check-porkies-access-sources.mjs";
+import {SOURCES,MANUAL_SOURCES,plainText,assessSource,checkSources} from "../scripts/check-porkies-access-sources.mjs";
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const file=p=>fs.readFileSync(path.join(root,p),"utf8");
@@ -31,11 +31,15 @@ test("official published claims are detectable without granting a road-open verd
  }
  const r=await checkSources(async item=>docs[item.id],()=>new Date("2026-10-31T13:00:00.000Z"));
  assert.equal(r.checkedAt,"2026-10-31T13:00:00.000Z");
- assert.equal(r.conclusion,"existing-official-claims-still-published");
+ assert.equal(r.conclusion,"monitored-county-notices-unchanged-dnr-manual-only");
  assert.equal(r.accessOpenVerified,false);
  assert.equal(r.verifiedParkingEntrance,false);
  assert.equal(r.mayEnableDirections,false);
- assert.equal(r.results.length,4);
+ assert.equal(r.results.length,3);
+ assert.equal(r.manualSources.length,1);
+ assert.equal(r.manualSources[0].id,"dnr-park");
+ assert.match(r.manualSources[0].reason,/HTTP 403/);
+ assert.equal(assessSource("dnr-park",docs["dnr-park"]).reviewReasons.length,0);
 });
 
 test("new township reopening language only triggers manual review, never automatic opening",async()=>{
@@ -48,9 +52,9 @@ test("new township reopening language only triggers manual review, never automat
 });
 
 test("missing current notice or site outage fails closed",async()=>{
- const missing=await checkSources(async item=>item.id==="dnr-park"?"<p>This park website has been redesigned and the closure notes are missing from the current release.</p>":docs[item.id]);
+ const missing=await checkSources(async item=>item.id==="township-notice"?"<p>The old township work-zone notice has been changed and has no verifiable closure details. This requires source review.</p>":docs[item.id]);
  assert.equal(missing.conclusion,"manual-source-review-needed");
- assert.ok(missing.reviewSignals.some(x=>x.id==="dnr-park"));
+ assert.ok(missing.reviewSignals.some(x=>x.id==="township-notice"));
  assert.equal(missing.accessOpenVerified,false);
  const outage=await checkSources(async item=>{if(item.id==="township-news")throw Error("timeout");return docs[item.id];});
  assert.equal(outage.conclusion,"official-source-check-incomplete");
