@@ -1,6 +1,6 @@
 # EXPERIENCE_OS_V1 — research-led interactive experience operating system
 
-**Version:** 1.0.0 · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
+**Version:** 1.0.1 · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
 
 ## Why this exists
 
@@ -48,9 +48,11 @@ The site already has `FIELD_GUIDE_V1` (photo-led editorial quality) and `JOURNEY
 - `templates/`: experience brief, source record and release review.
 - `tests/experience-os.test.js` at repository root: ensures this package remains readable, linked, versioned and has the core safety contracts.
 
-## First adoption test
+## First verified implementation
 
-Use the existing **Porcupine Mountains Explorer** as the initial substantial design review: visitor decision → verified trailhead/parking and park access → options → interactive geographic and photo layer. **This is a pilot suggestion, not a claim that a redesign has been built.** Do not silently switch its technology or modify its current route/access logic.
+The first full pilot, **Tahquamenon Falls Visit Planner**, has been implemented and merged in its authoritative tool repository. See the [source-backed lessons, screenshot evidence and release limits](docs/TAHQUAMENON_PILOT_20261031.md). It validates photo → selected place → existing map → original plan synchronization, a complete non-map source-linked place browser, real keyboard/mobile browser QA and a compact failure fallback **without introducing a new framework**.
+
+**Next appropriate adoption:** Porcupine Mountains Explorer once its current underlying route/parking development is complete. Do not interrupt the owning repo, assume its verified trail geometry is ready, or imply the Tahquamenon design is a reusable visual page template. Transfer research methods and tested interaction contracts, not a cloned layout.
 
 ## What this does NOT do
 
