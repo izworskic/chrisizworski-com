@@ -107,7 +107,7 @@ test('Published HTML retains source links, eight useful no-JS choices, identity 
   assert.match(html,/Southern Headland Trail.*2\.2 km/s);
   assert.match(html,/name="google-adsense-account"/);
   assert.match(html,/Horseshoe_Bay_Beach/);
-  assert.match(html,/source-linked/);
+  assert.match(html,/Parks Canada's day-hiking guidance/);
   assert.match(stylesheet,/@media\(max-width:670px\)/);
   assert.match(stylesheet, /prefers-reduced-motion/);
   assert.match(js,/\/api\/pukaskwa-conditions/);
