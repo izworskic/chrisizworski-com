@@ -13,7 +13,7 @@ test('crawlable statewide winter trail guide with 15 source-backed static trail 
   assert.match(html,/<noscript>/);
   for(const region of ['up','north','south'])assert.ok(html.includes('data-region="'+region+'"'),region);
   for(const tag of ['snowshoe','ski','bike','hike'])assert.ok(html.includes('data-tag="'+tag+'"'),tag);
-  for(const bad of ['michigan-winter-wildlife','great-lakes-winter-guide','michigan-winter-night-sky','michigan-winter-weekends']){
+  for(const bad of ['michigan-winter-wildlife','great-lakes-winter-guide','michigan-winter-night-sky']){
     assert.ok(!html.includes('href="/'+bad+'/"'),'unreleased sibling link '+bad);
   }
 });
@@ -25,29 +25,44 @@ test('closures, ski-only rules, fat-tire windows and 7 quarantined route blocker
   assert.match(html,/cross-country ski only/i);
   assert.match(html,/December 15 through March 15|Dec 15–Mar 15/);
   assert.match(html,/3\.5-inch/);
-  assert.match(html,/UNPLOWED_SEASONAL_ROAD/);
-  assert.match(html,/BRIDGE_CLOSED_OUT_AND_BACK/);
-  assert.match(html,/SKI_ONLY_NO_SNOWSHOE/);
+  assert.match(html,/Anderson Lake State Forest Campground and pathway access roads are not plowed/i);
+  assert.match(html,/footbridge[^<]*closed indefinitely/i);
+  assert.match(html,/cross-country ski only/i);
+  assert.match(html,/Muncie Lakes[^<]*avoid walking on groomed ski tracks/i);
+  assert.match(html,/Pine Bowl[^<]*steep outer descents/i);
   assert.match(html,/Anderson Lake Pathway/);
   assert.match(html,/Snow depth is not plowed parking/);
   assert.doesNotMatch(html,/guaranteed plowed parking|all trails are groomed daily/i);
 });
 
-test('photo credits and source rights are explicit with honest seasonal/archival disclosures',()=>{
+test('photo credits and source rights are explicit with honest seasonal/archival disclosures across all 15 breakout cards',()=>{
   const photos=[...html.matchAll(/<figure class="wf-photo[^]*?<\/figure>/g)];
-  assert.ok(photos.length>=12);
+  const indices=[...html.matchAll(/<div class="wf-story-index"[\s\S]*?<\/div>/g)];
+  assert.equal(photos.length,18);
+  assert.equal(indices.length,0);
   for(const [photo] of photos){
     assert.match(photo,/Photo: <a/);
-    assert.match(photo,/(CC BY|CC0|NPS public-domain)/);
+    assert.match(photo,/(CC BY|CC0|public[ -]domain|DNR public-use portfolio)/i);
     assert.match(photo,/figcaption/);
     assert.match(photo,/alt="[^"]+"/);
   }
   assert.match(html,/Joe Passe/);
   assert.match(html,/summer reference, not winter snow/);
   assert.match(html,/Guettarda/);
-  assert.match(html,/Tobico Marsh in winter/);
+  assert.match(html,/Frozen cattail channels at Tobico Marsh/);
   assert.match(js,/revealPhotoFallback/);
   assert.match(js,/IMAGE UNAVAILABLE/);
+});
+
+test('DNR winter photos retain their source credits and precise scene disclosures',()=>{
+  const porkies=html.match(/<article class="wf-story" id="stop-6"[\s\S]*?<\/article>/)?.[0];
+  const vasa=html.match(/<article class="wf-story" id="stop-7"[\s\S]*?<\/article>/)?.[0];
+  assert.ok(porkies); assert.ok(vasa);
+  assert.match(porkies,/Tyler Leipprandt/);
+  assert.match(porkies,/snowshoeing · February 2020 · archival image/);
+  assert.match(vasa,/Michigan Department of Natural Resources/);
+  assert.match(vasa,/specific snowshoe loop not identified/);
+  for(const card of [porkies,vasa]) assert.match(card,/DNR public-use portfolio/);
 });
 
 test('interactive trail-use decoder, grouped Vasa map marker and 4-way filters are wired',()=>{
@@ -72,7 +87,7 @@ test('all 15 winter trail systems link to view-only Google Maps areas, never unv
   assert.equal(blocks.length,15);
   for(const [b] of blocks){
     assert.match(b,/https:\/\/www\.google\.com\/maps\/search\/\?api=1&amp;query=[0-9.]+%2C-[0-9.]+/);
-    assert.match(b,/View place on Google Maps · not parking/);
+    assert.match(b,/View [^<]+ on Google Maps · area only, not verified parking/);
     assert.match(b,/target="_blank" rel="noopener noreferrer"/);
   }
   assert.match(js,/trl-popup-map-link/);

@@ -1,0 +1,60 @@
+{
+  "name": "Great Lakes Freighter Winter Layup & Soo Locks Seasonal Breakthrough Benchmark",
+  "version": "1.0.0",
+  "updatedOn": "2026-10-28",
+  "targetScore": 95,
+  "canonicalUrl": "https://chrisizworski.com/great-lakes-freighter-winter-layup/",
+  "dimensions": {
+    "vesselPhotoCoverage": {
+      "weight": 25,
+      "minSeasonsCovered": 2,
+      "required2025_26VesselPhotos": 12,
+      "required2024_25VesselPhotos": 2,
+      "requiredBiographyProfilesWithPhotos": 6
+    },
+    "illustratedBreakoutCards": {
+      "weight": 20,
+      "requiredFeatureStoryPhotos": 3,
+      "requiredBioRelatedPhotos": 3,
+      "requiredStoryCardPhotos": 3,
+      "requiredPortGuidePhotos": 8
+    },
+    "seasonalMaritimeEngine": {
+      "weight": 20,
+      "timezone": "America/Detroit",
+      "requiredPhases": [
+        "closing",
+        "winter",
+        "breakout",
+        "navigation"
+      ]
+    },
+    "portViewingFieldGuide": {
+      "weight": 15,
+      "requiredHarborCards": 8,
+      "requiredRegions": [
+        "superior-michigan",
+        "huron-georgian",
+        "erie-seaway",
+        "locks-ice"
+      ]
+    },
+    "seoSchemaAndClusterRouting": {
+      "weight": 20,
+      "requiredSchemas": [
+        "WebPage",
+        "Person",
+        "BreadcrumbList",
+        "ItemList",
+        "FAQPage"
+      ],
+      "requiredInboundClusterPages": [
+        "public/soo-locks/index.html",
+        "public/freighters/index.html",
+        "public/great-lakes-freighter-tracking/index.html",
+        "public/great-lakes-ship-watching-spots/index.html",
+        "public/tools/index.html"
+      ]
+    }
+  }
+}

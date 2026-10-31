@@ -1,0 +1,40 @@
+/* JOURNEY_ATLAS_V1 — scoped to the module, never modifies ad or existing map styling */
+.ja-shell{max-width:1380px;margin:20px auto 28px;padding:clamp(16px,2.5vw,28px);background:#f7f7f0;border:1px solid #d8ded5;border-radius:18px;color:#18342e;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.ja-shell *{box-sizing:border-box}
+.ja-shell .ja-kicker{color:#43675e;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;margin:0 0 6px}
+.ja-shell h2{font-family:Georgia,serif;font-size:clamp(23px,2.5vw,32px);line-height:1.17;margin:0 0 7px;color:#163a32}
+.ja-shell .ja-deck{max-width:800px;font-size:14px;line-height:1.55;margin:0 0 14px;color:#496058}
+.ja-shell .ja-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;background:#fff;border:1px solid #d8e1d9;padding:12px;border-radius:12px}
+.ja-shell .ja-field{display:grid;gap:5px}
+.ja-shell .ja-field label{font-size:12px;color:#334f47;font-weight:750}
+.ja-shell .ja-field select{width:100%;min-width:0;font:inherit;font-size:14px;line-height:1.35;color:#173e33;background:white;border:1px solid #9ab1a7;border-radius:8px;padding:9px 12px;min-height:42px}
+.ja-shell .ja-summary{display:flex;gap:10px;justify-content:space-between;align-items:center;margin:12px 0 8px;flex-wrap:wrap}
+.ja-shell .ja-summary p{font-size:12px;color:#52685f;margin:0}
+.ja-shell button,.ja-shell .ja-link{font:inherit;font-size:13px;border-radius:8px;padding:8px 10px;min-height:40px;cursor:pointer}
+.ja-shell .ja-small-btn{border:1px solid #b3c4bc;background:#fff;color:#224c3e}
+.ja-shell .ja-small-btn:hover,.ja-shell .ja-small-btn:focus-visible{background:#e3ede5}
+.ja-shell .ja-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ja-shell .ja-card{background:#fff;border:1px solid #d9e0da;border-radius:12px;overflow:hidden;min-width:0;display:flex;flex-direction:column}
+.ja-shell .ja-card[hidden],.ja-shell [hidden]{display:none!important}
+.ja-shell .ja-photo{position:relative;margin:0;background:#e7ebe5}
+.ja-shell .ja-photo img{display:block;width:100%;height:188px;object-fit:cover;object-position:center}
+.ja-shell .ja-photo figcaption{font-size:10px;padding:4px 9px;line-height:1.45;background:#f4f5ef;color:#39564a}
+.ja-shell .ja-photo a{color:#1d5743;text-decoration:underline}
+.ja-shell .ja-plain{height:55px;display:flex;align-items:center;padding:10px 13px;background:#e5eae0;color:#31554b;font:italic 14px Georgia,serif}
+.ja-shell .ja-card-body{padding:13px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ja-shell .ja-locale{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#557565}
+.ja-shell .ja-card h3{font:600 21px/1.2 Georgia,serif;margin:0;color:#1e4038}
+.ja-shell .ja-card p{font-size:13px;line-height:1.48;color:#42574f;margin:0}
+.ja-shell .ja-card .ja-meta{font-size:12px;color:#456657;font-weight:650}
+.ja-shell .ja-card .ja-alt{border-top:1px solid #e3eae2;padding-top:7px}
+.ja-shell .ja-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:3px}
+.ja-shell .ja-actions a,.ja-shell .ja-actions button{display:inline-flex;align-items:center;justify-content:center;text-align:center;border:1px solid #a8c3b6;background:white;color:#1e5442;text-decoration:none;min-height:38px;line-height:1.25}
+.ja-shell .ja-actions a:first-child{background:#245b49;color:white;border-color:#245b49}
+.ja-shell .ja-actions a:hover,.ja-shell .ja-actions a:focus-visible,.ja-shell .ja-actions button:hover{background:#e5f0e9;color:#184735}
+.ja-shell .ja-actions a:first-child:hover{background:#174436;color:white}
+.ja-shell .ja-footer{font-size:12px;line-height:1.6;color:#4b6257;margin:13px 0 0}
+.ja-shell .ja-footer a{color:#1d5743}
+.ja-shell :focus-visible{outline:3px solid #b75c1a;outline-offset:3px}
+@media(max-width:900px){.ja-shell .ja-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.ja-shell{margin:12px 10px 22px;padding:14px;border-radius:13px}.ja-shell .ja-form{grid-template-columns:1fr;gap:9px}.ja-shell .ja-grid{grid-template-columns:1fr}.ja-shell .ja-card{display:flex;flex-direction:column}.ja-shell .ja-photo{height:auto}.ja-shell .ja-photo img{height:200px;object-fit:cover}.ja-shell .ja-photo figcaption{font-size:10px;padding:6px 12px}.ja-shell .ja-plain{height:90px;padding:12px}.ja-shell .ja-card-body{padding:16px;gap:10px}.ja-shell .ja-card h3{font-size:22px}.ja-shell .ja-card p{font-size:14px;line-height:1.55}.ja-shell .ja-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ja-shell .ja-actions a,.ja-shell .ja-actions button{width:100%;min-height:44px;font-size:12px;padding:9px 8px;border-radius:8px}.ja-shell .ja-actions a:first-child,.ja-shell .ja-actions a:last-child{grid-column:1/-1}}
+@media(max-width:370px){.ja-shell .ja-photo img{height:175px}.ja-shell .ja-card-body{padding:13px}}

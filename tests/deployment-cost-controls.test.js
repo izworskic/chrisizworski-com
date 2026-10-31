@@ -4,13 +4,21 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'nod
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { documentationOnly, shouldSkipBuild } from '../scripts/ignore-docs-build.mjs';
+import { documentationOnly, shouldSkipBuild, isMonitorDataBranch } from '../scripts/ignore-docs-build.mjs';
 import { readPinnedSource } from '../lib/pinned-build-source.mjs';
 
 test('only internal Markdown changes can skip a deployment', () => {
   assert.equal(documentationOnly(['docs/GROWTH_SESSION_LOG.md', 'README.md']), true);
   for (const files of [[], ['public/guide.md'], ['docs/widget.html'], ['docs/note.md', 'api/flight-assignment.js'], ['package-lock.json'], ['vercel.json'], ['tests/deployment-build-contract.test.js']])
     assert.equal(documentationOnly(files), false);
+});
+
+test('only the isolated Pukaskwa data branch skips Vercel builds', () => {
+  assert.equal(isMonitorDataBranch('pukaskwa-conditions-data'), true);
+  assert.equal(isMonitorDataBranch('main'), false);
+  assert.equal(isMonitorDataBranch('feat/pukaskwa-condition-monitor'), false);
+  assert.equal(isMonitorDataBranch('pukaskwa-conditions-data-other'), false);
+  assert.equal(isMonitorDataBranch(undefined), false);
 });
 
 test('prebuilt trial is manual, main-only, and cannot publish production', () => {

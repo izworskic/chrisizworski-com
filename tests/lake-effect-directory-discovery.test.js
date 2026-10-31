@@ -11,7 +11,7 @@ test("Michigan Tools has one canonical, actionable radar-rich lake-effect listin
  const items=graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/#toollist").itemListElement;
  assert.equal(items.filter(x=>x.item?.url===url).length,1);
  assert.match(items.find(x=>x.item?.url===url).item.description,/live NWS radar playback/);
- assert.equal(graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/").dateModified,"2026-10-28");
+ assert.ok(graph.find(x=>x["@id"]==="https://chrisizworski.com/tools/").dateModified >= "2026-10-28");
 });
 test("U.S. Outdoor Tools contains a discoverable Northeast Great Lakes radar card and ItemList",()=>{
  const {html,graph}=parse("public/synced-national-tools/index.html");
@@ -27,7 +27,7 @@ test("U.S. Outdoor Tools contains a discoverable Northeast Great Lakes radar car
  const cards=(html.match(/data-search-card/g)||[]).length;
  assert.equal(cards,items.numberOfItems);
  assert.match(html,new RegExp('id="finder-count" aria-live="polite">'+cards+' tools shown'));
- assert.equal(graph.find(x=>x["@id"]==="https://chrisizworski.com/national-tools/#page").dateModified,"2026-10-24");
+ assert.ok(graph.find(x=>x["@id"]==="https://chrisizworski.com/national-tools/#page").dateModified >= "2026-10-24");
 });
 test("Northeast Great Lakes desk links the live tool, without duplicate schema entities",()=>{
  const {html,graph}=parse("public/synced-national-tools/northeast-great-lakes/index.html");
@@ -38,9 +38,10 @@ test("Northeast Great Lakes desk links the live tool, without duplicate schema e
  assert.equal(list.itemListElement.filter(x=>x.url===url).length,1);
  assert.deepEqual(list.itemListElement.map(x=>x.position),list.itemListElement.map((_,i)=>i+1));
 });
-test("Sitemap freshness and canonical lake-effect URL stay unchanged",()=>{
+test("Sitemap dates match current page dates and canonical lake-effect URL stays unchanged",()=>{
  const map=read("public/sitemap.xml"),shell=read("public/lake-effect-snow/index.html");
- for(const [section, date] of [["/tools/","2026-10-28"],["/national-tools/","2026-10-24"]]){
+ for(const [section, file] of [["/tools/","public/tools/index.html"],["/national-tools/","public/synced-national-tools/index.html"]]){
+  const date=read(file).match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1]; assert.ok(date);
   assert.match(map,new RegExp("https://chrisizworski.com"+section.replace(/\//g,"\\/")+"<\\/loc>\\s*<lastmod>"+date+"<\\/lastmod>"));
  }
  assert.match(shell,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/"/);

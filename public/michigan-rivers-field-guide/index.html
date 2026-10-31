@@ -1,0 +1,2733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Michigan Rivers Field Guide: Paddle &amp; Fish | Chris Izworski</title>
+  <meta name="description" content="14 iconic Michigan river floats: Au Sable, Manistee, Pere Marquette &amp; Pine River paddles with USGS flow badges, USFS permit rules, and livery shuttles.">
+  <link rel="canonical" href="https://chrisizworski.com/michigan-rivers-field-guide/">
+  <meta name="author" content="Chris Izworski">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Michigan Rivers Field Guide: Paddle &amp; Fish | Chris Izworski">
+  <meta property="og:description" content="14 iconic Michigan river floats with live USGS CFS flow badges, USFS permit rules, dual put-in/take-out GIS coordinates, and livery shuttles.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://chrisizworski.com/michigan-rivers-field-guide/">
+  <meta property="og:image" content="https://chrisizworski.com/assets/michigan-rivers/au-sable-mason-tract.jpg">
+  <meta property="og:site_name" content="Chris Izworski">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Michigan Rivers Field Guide: Paddle &amp; Fish | Chris Izworski">
+  <meta name="twitter:description" content="14 iconic Michigan river floats with live USGS CFS flow badges, USFS permit rules, dual put-in/take-out GIS coordinates, and livery shuttles.">
+  <meta name="twitter:image" content="https://chrisizworski.com/assets/michigan-rivers/au-sable-mason-tract.jpg">
+
+  <!-- Leaflet 1.9.4 CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Guide CSS -->
+  <link rel="stylesheet" href="../assets/michigan-rivers-field-guide.css">
+
+  <!-- JSON-LD Structured Data Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://chrisizworski.com/#website",
+        "url": "https://chrisizworski.com/",
+        "name": "Chris Izworski",
+        "publisher": {
+          "@id": "https://chrisizworski.com/#person"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://chrisizworski.com/#person",
+        "name": "Chris Izworski",
+        "url": "https://chrisizworski.com/",
+        "image": "https://chrisizworski.com/chris-izworski-portrait.jpg",
+        "sameAs": [
+          "https://github.com/izworskic",
+          "https://michigantroutreport.com"
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://chrisizworski.com/michigan-rivers-field-guide/#page",
+        "url": "https://chrisizworski.com/michigan-rivers-field-guide/",
+        "name": "Holy Waters & Cedar Bottoms: Michigan's Blue-Ribbon River Paddling & Fly-Fishing Field Guide",
+        "description": "14 iconic Michigan river floats across the Au Sable, Manistee, Pere Marquette, Pine, Jordan, and Two Hearted rivers with live USGS CFS flow badges, dual put-in/take-out GIS coordinates, USFS permit rules, and livery shuttles.",
+        "isPartOf": {
+          "@id": "https://chrisizworski.com/#website"
+        },
+        "author": {
+          "@id": "https://chrisizworski.com/#person"
+        },
+        "datePublished": "2026-10-30",
+        "dateModified": "2026-10-31"
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://chrisizworski.com/michigan-rivers-field-guide/#floats",
+        "name": "14 Curated Michigan Blue-Ribbon River Floats",
+        "numberOfItems": 14,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Au Sable 'Holy Water': Burton's Landing to Wakeley Bridge",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#au-sable-holy-water"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "South Branch Au Sable: Chase Bridge to Smith Bridge (Mason Tract)",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#au-sable-mason-tract"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Lower Au Sable National Scenic River: Foote Dam to Whirlpool",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#au-sable-lower-river"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Upper Manistee Wilderness: Deward to M-72 Bridge",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#manistee-upper-deward"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Middle Manistee: CCC Bridge to Sharon (M-66)",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#manistee-middle-ccc-sharon"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Lower Big Manistee: High Bridge to Bear Creek",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#manistee-lower-tippy-bear-creek"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "name": "Pine National Scenic River: Elm Flats to Low Bridge",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#pine-river-elm-flats"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "name": "Pere Marquette National Scenic: Green Cottage to Upper Branch",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#pere-marquette-holy-water"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "name": "Lower Pere Marquette: Gleason's Landing to Walhalla",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#pere-marquette-gleasons-walhalla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "name": "Jordan River Natural River: Graves Crossing to Rogers Road",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#jordan-river-graves-crossing"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "name": "Pigeon River Wild Waters: Sturgeon Divide to Webb Road",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#pigeon-river-elk-country"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "name": "Two Hearted Wilderness: High Bridge to Lake Superior Mouth",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#two-hearted-river-mouth"
+          },
+          {
+            "@type": "ListItem",
+            "position": 13,
+            "name": "Hemingway's Fox River: Seney to Fox River SFC",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#fox-river-seney"
+          },
+          {
+            "@type": "ListItem",
+            "position": 14,
+            "name": "Lower Platte River: Salmon Weir to Lake Michigan Mouth",
+            "url": "https://chrisizworski.com/michigan-rivers-field-guide/#platte-river-sleeping-bear"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://chrisizworski.com/michigan-rivers-field-guide/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Do I need a federal permit to paddle the Pine or Pere Marquette rivers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The U.S. Forest Service requires mandatory watercraft permits on both the Pine River and the Pere Marquette National Scenic River from the Friday before Memorial Day through Labor Day. Daily craft caps apply between 9:00 AM and 6:00 PM to protect fragile riverbanks from overcrowding. Permits are reserved through Recreation.gov."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the gear rules on Michigan 'Holy Water' flies-only sections?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "On Michigan Quality Trout Waters (Type 4 or Gear-Restricted streams like the Au Sable Mainstream from Burton's to Wakeley, the South Branch Mason Tract, and Pere Marquette from Baldwin to Gleason's), anglers may only use artificial flies or single-pointed unweighted artificial lures. Harvest is restricted (catch-and-release only on designated sections), and scented synthetic baits are prohibited."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you camp for free along northern Michigan riverbanks?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dispersed camping is permitted on state forest lands and Huron-Manistee National Forests, provided campsites are located at least 100 to 200 feet from the water's edge, away from boat landings, and outside designated no-camping zones (like the Mason Tract). State Forest Campgrounds along the rivers offer established fire rings and vault toilets for a nominal nightly fee."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the safest flow (CFS) for canoeing or kayaking Michigan rivers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Stable groundwater feeds give rivers like the Au Sable (180–220 CFS at Grayling) and Manistee steady, predictable summer flows. However, fast-gradient streams like the Pine River become turbulent Class II whitewater during spring runoff above 350 CFS. Always check live USGS real-time gauges before launching."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does two-vehicle self-shuttling work on Michigan rivers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Drive both vehicles to the take-out landing first. Leave vehicle B parked in the designated day-use or trailer lot with your vehicle transfer gear. Drive together in vehicle A with your boats to the put-in launch. After completing your float, load boats onto vehicle B, drive back to the put-in to retrieve vehicle A. Always verify DNR Recreation Passport or USFS vehicle parking passes at both sites."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When does the famous Hexagenia limbata (Hex) mayfly hatch happen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The massive Hexagenia limbata (giant yellow mayfly) emerges from silt beds during the last two weeks of June and the first week of July, typically between 9:30 PM and midnight on warm, muggy nights when water temperatures reach 64°–68°F. It brings the river's largest, wariest trophy brown trout to the surface."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://chrisizworski.com/michigan-rivers-field-guide/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://chrisizworski.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Field Guides",
+            "item": "https://chrisizworski.com/guides/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Michigan Rivers Field Guide",
+            "item": "https://chrisizworski.com/michigan-rivers-field-guide/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts: Fraunces & DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap">
+
+  <!-- Embedded Field Guide Stylesheet (Instant Zero-FOUC & Offline Rendering) -->
+  <style>
+/* ==========================================================================
+   MICHIGAN BLUE-RIBBON RIVERS FIELD GUIDE - CRISP DAYLIGHT DESIGN SYSTEM
+   Palette: River-Clear White, Crisp Stone (#f8faf9), Cedar Green (#0f5132),
+   River Teal (#0d9488), Terracotta Copper (#c2410c), Daylight Slate (#334155).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap');
+
+:root {
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --bg-stone: #f8faf9;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f4;
+  --border-light: #dbe5e1;
+  --border-focus: #0d9488;
+  
+  --text-main: #13241f;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+  
+  --cedar-dark: #0f3d2e;
+  --cedar-green: #15803d;
+  --river-teal: #0d9488;
+  --river-teal-hover: #0f766e;
+  --takeout-copper: #c2410c;
+  --takeout-copper-hover: #9a3412;
+  --amber-accent: #b45309;
+  
+  --badge-green-bg: #ecfdf5;
+  --badge-green-border: #a7f3d0;
+  --badge-green-text: #065f46;
+  
+  --badge-amber-bg: #fffbeb;
+  --badge-amber-border: #fde68a;
+  --badge-amber-text: #92400e;
+  
+  --badge-blue-bg: #f0f9ff;
+  --badge-blue-border: #bae6fd;
+  --badge-blue-text: #0369a1;
+
+  --shadow-sm: 0 1px 3px rgba(15, 61, 46, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 61, 46, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-stone);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Signature Two-Tier Publication Masthead --- */
+.hm-masthead {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.hm-masthead__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.hm-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hm-brand-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--river-teal);
+}
+.hm-brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--cedar-dark);
+}
+.hm-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.hm-nav a {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.hm-nav a:hover {
+  color: var(--river-teal);
+}
+
+/* --- Breadcrumbs & Header --- */
+.fg-breadcrumbs {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.fg-breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.fg-breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 8px;
+  color: #94a3b8;
+}
+.fg-breadcrumbs a {
+  color: var(--river-teal);
+  text-decoration: none;
+}
+.fg-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+/* --- Hero Section --- */
+.fg-hero {
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  border-bottom: 1px solid var(--border-light);
+  padding: 48px 20px 40px;
+  text-align: center;
+}
+.fg-hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.fg-kicker {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--amber-accent);
+  background: #fef3c7;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  border: 1px solid #fde68a;
+}
+.fg-hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 600;
+  color: var(--cedar-dark);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  line-height: 1.2;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+.fg-hero-dek {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 auto 20px;
+  max-width: 780px;
+}
+.fg-byline {
+  font-size: 0.88rem;
+  color: var(--text-subtle);
+  margin-top: 14px;
+}
+
+/* --- Persona Quick Jump & Value Function Desk --- */
+.fg-persona-bar {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 24px auto 0;
+  max-width: 860px;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+.fg-persona-bar-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fg-persona-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fg-persona-chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.fg-persona-chip:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: var(--cedar-dark);
+}
+
+/* --- Multi-Group Filter Desk --- */
+.fg-filter-section {
+  max-width: 1100px;
+  margin: 28px auto 20px;
+  padding: 0 20px;
+}
+.fg-filter-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.fg-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fg-filter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cedar-dark);
+}
+.fg-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fg-pill-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: var(--text-main);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.fg-pill-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+.fg-pill-btn.is-active {
+  background: var(--river-teal);
+  border-color: var(--river-teal);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(13, 148, 136, 0.25);
+}
+
+/* --- Interactive Leaflet Map Desk --- */
+.fg-map-section {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  padding: 0 20px;
+}
+.fg-map-wrap {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+}
+.fg-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.fg-map-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  margin: 0;
+}
+.fg-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.fg-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.fg-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.fg-legend-dot.in {
+  background: var(--river-teal);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--river-teal);
+}
+.fg-legend-dot.out {
+  background: var(--takeout-copper);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--takeout-copper);
+}
+
+#rivers-map {
+  width: 100%;
+  height: 480px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #e2e8f0;
+  background: #eef4f2;
+}
+
+/* --- Main Layout & River Cards --- */
+.fg-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 48px;
+}
+
+.fg-river-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.wf-story {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+.wf-story:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+.wf-story.is-highlighted {
+  border-color: var(--river-teal);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+}
+
+.wf-story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f4;
+  padding-bottom: 14px;
+}
+.wf-story-number {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--river-teal);
+  background: #ccfbf1;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.wf-story-title {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin: 0;
+  line-height: 1.25;
+}
+.wf-story-route {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* --- USGS CFS Flow Badges --- */
+.wf-flow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.wf-flow-badge.normal {
+  background: var(--badge-green-bg);
+  border: 1px solid var(--badge-green-border);
+  color: var(--badge-green-text);
+}
+.wf-flow-badge.high {
+  background: var(--badge-amber-bg);
+  border: 1px solid var(--badge-amber-border);
+  color: var(--badge-amber-text);
+}
+.wf-flow-badge.low {
+  background: var(--badge-blue-bg);
+  border: 1px solid var(--badge-blue-border);
+  color: var(--badge-blue-text);
+}
+
+.wf-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  position: relative;
+}
+.wf-flow-badge.normal .wf-pulse-dot {
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-emerald 2s infinite;
+}
+.wf-flow-badge.high .wf-pulse-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  animation: pulse-amber 2s infinite;
+}
+.wf-flow-badge.low .wf-pulse-dot {
+  background: #0ea5e9;
+  box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+  animation: pulse-sky 2s infinite;
+}
+
+@keyframes pulse-emerald {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+@keyframes pulse-amber {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+@keyframes pulse-sky {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(14, 165, 233, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+}
+
+/* --- River Metrics Bar --- */
+.wf-metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: var(--bg-subtle);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.wf-metric-item {
+  display: flex;
+  flex-direction: column;
+}
+.wf-metric-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  letter-spacing: 0.05em;
+}
+.wf-metric-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+
+/* --- Card Body & Photography --- */
+.wf-story-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 820px) {
+  .wf-story-body {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.wf-story-figure {
+  margin: 0;
+  position: relative;
+}
+.wf-story-figure img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+  background: #e2e8f0;
+  border: 1px solid var(--border-light);
+}
+.wf-story-figure figcaption {
+  font-size: 0.76rem;
+  color: var(--text-subtle);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.wf-story-figure figcaption a {
+  color: var(--river-teal);
+  text-decoration: underline;
+}
+
+.wf-story-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+.wf-story-text p {
+  margin: 0 0 12px;
+}
+
+/* --- Dual Put-In & Take-Out GIS Launch Desk --- */
+.wf-launch-desk {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin: 16px 0;
+}
+.wf-launch-desk-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cedar-dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wf-launch-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .wf-launch-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.wf-launch-card {
+  background: var(--bg-subtle);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wf-launch-card.put-in {
+  border-left: 4px solid var(--river-teal);
+}
+.wf-launch-card.take-out {
+  border-left: 4px solid var(--takeout-copper);
+}
+
+.wf-launch-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.wf-launch-card.put-in .wf-launch-badge {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+.wf-launch-card.take-out .wf-launch-badge {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.wf-launch-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cedar-dark);
+  margin-bottom: 4px;
+}
+.wf-launch-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.wf-launch-gis {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  color: #475569;
+  background: #ffffff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.wf-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  min-height: 38px;
+}
+.wf-put-in-btn {
+  background: var(--river-teal);
+  color: #ffffff;
+  border: 1px solid var(--river-teal);
+}
+.wf-put-in-btn:hover {
+  background: var(--river-teal-hover);
+}
+.wf-take-out-btn {
+  background: var(--takeout-copper);
+  color: #ffffff;
+  border: 1px solid var(--takeout-copper);
+}
+.wf-take-out-btn:hover {
+  background: var(--takeout-copper-hover);
+}
+
+.wf-shuttle-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wf-shuttle-stat {
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+.wf-map-jump-btn {
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  color: var(--cedar-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.wf-map-jump-btn:hover {
+  background: #f1f5f9;
+  border-color: var(--cedar-dark);
+}
+
+/* --- Persona Suitability Matrix on Card --- */
+.wf-persona-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.wf-persona-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+.wf-persona-tag.highlight {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+  font-weight: 700;
+}
+
+/* --- Reference Modules & Tables --- */
+.fg-ref-section {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.fg-ref-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+.fg-ref-card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+.fg-ref-card p {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.fg-table-wrap {
+  overflow-x: auto;
+}
+.fg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+.fg-table th {
+  background: var(--bg-subtle);
+  color: var(--cedar-dark);
+  font-weight: 700;
+  padding: 10px 14px;
+  border-bottom: 2px solid #cbd5e1;
+}
+.fg-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: var(--text-main);
+}
+.fg-table tr:hover td {
+  background: #f8fafc;
+}
+
+/* --- FAQ Section --- */
+.fg-faq-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.fg-faq-card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--cedar-dark);
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.fg-faq-item {
+  border-bottom: 1px solid #f1f5f4;
+  padding: 14px 0;
+}
+.fg-faq-item:last-child {
+  border-bottom: none;
+}
+.fg-faq-q {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--cedar-dark);
+  margin-bottom: 6px;
+}
+.fg-faq-a {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* --- Footer Brand --- */
+.hm-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hm-brand-avatar {
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+}
+.hm-brand-name {
+  font-weight: 700;
+  color: var(--cedar-dark);
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Signature Publication Masthead -->
+  <header class="hm-masthead">
+    <div class="hm-masthead__inner">
+      <div class="hm-brand-group">
+        <a href="/" aria-label="Chris Izworski Home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
+          <img class="hm-brand-avatar" src="../chris-izworski-portrait.jpg" alt="Chris Izworski" width="38" height="38">
+          <span class="hm-brand-name">Chris Izworski</span>
+        </a>
+      </div>
+      <nav class="hm-nav" aria-label="Primary site navigation">
+        <a href="/tools/">Tools</a>
+        <a href="/guides/">Guides</a>
+        <a href="/great-lakes-gazette/">Gazette</a>
+        <a href="/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="fg-breadcrumbs" aria-label="Breadcrumbs">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/guides/">Field Guides</a></li>
+      <li aria-current="page">Michigan Rivers Field Guide</li>
+    </ol>
+  </nav>
+
+  <!-- Hero Banner -->
+  <header class="fg-hero">
+    <div class="fg-hero-inner">
+      <span class="fg-kicker">Blue-Ribbon Paddling &amp; Fly-Fishing Flagship</span>
+      <h1>Holy Waters &amp; Cedar Bottoms: Michigan River Field Guide</h1>
+      <p class="fg-hero-dek">
+        14 curated river reaches across the Au Sable, Manistee, Pere Marquette, Pine, Jordan, and Two Hearted rivers.
+        Equipped with real-time USGS CFS flow telemetry, dual put-in &amp; take-out GIS navigation buttons, USFS watercraft permits, and livery shuttles.
+      </p>
+      <div class="fg-byline">
+        Researched &amp; curated by <strong>Chris Izworski</strong> &middot; Last updated October 31, 2026
+      </div>
+
+      <!-- 10-Persona Quick Jump Desk -->
+      <div class="fg-persona-bar">
+        <div class="fg-persona-bar-title">
+          <span>🎯 Built for 10 River Personas:</span>
+        </div>
+        <div class="fg-persona-chips">
+          <a href="#au-sable-holy-water" class="fg-persona-chip">🎣 Dry-Fly Match-the-Hatch Purist</a>
+          <a href="#platte-river-sleeping-bear" class="fg-persona-chip">🛶 Family &amp; Beginner Day-Tripper</a>
+          <a href="#manistee-lower-tippy-bear-creek" class="fg-persona-chip">🏕️ Multi-Day Float-Camper</a>
+          <a href="#pine-river-elm-flats" class="fg-persona-chip">⚡ Whitewater &amp; Fast-Current Kayaker</a>
+          <a href="#au-sable-lower-river" class="fg-persona-chip">🐟 Salmon &amp; Steelhead Drift Boater</a>
+          <a href="#platte-river-sleeping-bear" class="fg-persona-chip">🏄 Stand-Up Paddleboarder (SUP)</a>
+          <a href="#pigeon-river-elk-country" class="fg-persona-chip">🦅 Wilderness Eco-Tourist &amp; Birding</a>
+          <a href="#au-sable-holy-water" class="fg-persona-chip">🚗 Two-Vehicle Self-Shuttle Driver</a>
+          <a href="#fox-river-seney" class="fg-persona-chip">📖 Hemingway &amp; Heritage Traveler</a>
+          <a href="#strainer-safety" class="fg-persona-chip">🚨 River Safety &amp; Emergency Official</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Multi-Group Filter Desk -->
+  <section class="fg-filter-section" aria-label="River Reach Filters">
+    <div class="fg-filter-card">
+      <div class="fg-filter-group">
+        <span class="fg-filter-label">Filter by River Experience:</span>
+        <div class="fg-filter-pills">
+          <button type="button" class="fg-pill-btn is-active" data-filter-group="category" data-filter-value="all">All 14 Floats</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="category" data-filter-value="fly-water">🎣 Match-the-Hatch Fly Water</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="category" data-filter-value="beginner-family">🛶 Beginner &amp; Family Friendly</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="category" data-filter-value="overnight-camp">🏕️ Multi-Day Float Camps</button>
+        </div>
+      </div>
+
+      <div class="fg-filter-group">
+        <span class="fg-filter-label">Filter by Watershed Basin:</span>
+        <div class="fg-filter-pills">
+          <button type="button" class="fg-pill-btn is-active" data-filter-group="watershed" data-filter-value="all">All Basins</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="watershed" data-filter-value="ausable-huron">Au Sable &amp; Northeast Huron</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="watershed" data-filter-value="manistee-west">Manistee &amp; West Michigan</button>
+          <button type="button" class="fg-pill-btn" data-filter-group="watershed" data-filter-value="up-wild">Upper Peninsula Wild Rivers</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Leaflet Map Section -->
+  <section class="fg-map-section" aria-label="Interactive Michigan River Map">
+    <div class="fg-map-wrap">
+      <div class="fg-map-header">
+        <h2 class="fg-map-title">Interactive Reach Map: Dual Put-In &amp; Take-Out GIS Coordinates</h2>
+        <div class="fg-map-legend">
+          <div class="fg-legend-item"><span class="fg-legend-dot in"></span> <span>Put-In Launch</span></div>
+          <div class="fg-legend-item"><span class="fg-legend-dot out"></span> <span>Take-Out Landing</span></div>
+          <div class="fg-legend-item"><span style="color:#0d9488;font-weight:bold;">══</span> <span>River Reach</span></div>
+        </div>
+      </div>
+      <div id="rivers-map"></div>
+    </div>
+  </section>
+
+  <!-- Main Float Directory Container -->
+  <main class="fg-container" id="floats-directory">
+    <div class="fg-river-grid">
+
+      <!-- 1. Au Sable Holy Water -->
+      <article class="wf-story" id="au-sable-holy-water" data-category="fly-water" data-type="fly-water" data-gauge="04135700" data-watershed="ausable-huron">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #1 &middot; Au Sable River Basin</span>
+            <h2 class="wf-story-title">Au Sable "Holy Water": Burton's Landing to Wakeley Bridge</h2>
+            <div class="wf-story-route">Grayling, MI &middot; 8.8 River Miles &middot; 2.5–3.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04135700">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Clear &middot; ~190 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">3.2 ft/mi (Steady)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.5–3.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Gentle)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (DNR Passport)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04135700</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/au-sable-holy-water.jpg" alt="Canoes along the clear cedar banks of the Au Sable River near Grayling, Michigan" loading="lazy" width="600" height="375">
+            <figcaption>Au Sable River mainstream cedar banks. Photo: Wikimedia Commons (Public domain).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              The 8.8-mile stretch from Burton's Landing downstream to Wakeley Bridge is the birth basin of Trout Unlimited (founded on these banks in 1959) and the gold standard of American spring-fed trout streams. Flowing over stable glacial outwash gravel at an almost unchanging 52° to 58°F, the Holy Water is governed by strict <strong>flies-only, catch-and-release artificial lure regulations</strong>.
+            </p>
+            <p>
+              For dry-fly anglers, this is hallowed ground: Hendrickson mayflies (<em>Ephemerella subvaria</em>) pop between 1:00 PM and 4:00 PM in May, followed by Sulphurs in June, and the legendary midnight <em>Hexagenia limbata</em> "Hex" hatch in late June and early July. For recreational paddlers and families, the current is smooth, forgiving, and crystal-clear with a firm gravel bottom and shallow sandbars ideal for children and sit-on-top kayaks.
+            </p>
+
+            <!-- Dual Put-In & Take-Out GIS Launch Desk -->
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('au-sable-holy-water')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Burton's Landing DNR Access</div>
+                    <div class="wf-launch-desc">Timber canoe slide &amp; carry-in wooden steps. Gravel lot with 12 vehicle spaces. DNR Recreation Passport required.</div>
+                    <div class="wf-launch-gis">44.6608° N, 84.6297° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.6608,-84.6297" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Wakeley Bridge Landing</div>
+                    <div class="wf-launch-desc">Concrete boat launch ramp &amp; floating kayak dock. Paved parking for 25 vehicles + trailers. Vault toilet &amp; trash service.</div>
+                    <div class="wf-launch-gis">44.6467° N, 84.5122° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.6467,-84.5122" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">7.9 road miles &middot; 11 min drive</span> via North Down River Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 8.8 river miles &middot; 3.0 hrs paddle time.</div>
+              </div>
+            </div>
+
+            <!-- Persona Suitability Scores -->
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Dry-Fly: 10/10 (Holy Water Flies-Only)</span>
+              <span class="wf-persona-tag highlight">Family/Rec: 9/10 (Gentle Flow)</span>
+              <span class="wf-persona-tag">SUP: 9/10 (Clean Sand &amp; Gravel)</span>
+              <span class="wf-persona-tag">Shuttle: Paved 11 min</span>
+              <span class="wf-persona-tag">Livery: Carlisle's &amp; Penrod's</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. Au Sable Mason Tract -->
+      <article class="wf-story" id="au-sable-mason-tract" data-category="fly-water" data-type="fly-water" data-gauge="04136500" data-watershed="ausable-huron">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #2 &middot; Au Sable River Basin</span>
+            <h2 class="wf-story-title">South Branch Au Sable: Chase Bridge to Smith Bridge</h2>
+            <div class="wf-story-route">Roscommon, MI &middot; 9.5 River Miles &middot; 3.5–4.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04136500">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Clear &middot; ~210 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">3.8 ft/mi (Brisk)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.0–3.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Tight Cedar Bends)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (Wilderness Rules)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04136500</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/au-sable-mason-tract.jpg" alt="South Branch Au Sable River flowing through the pristine Mason Tract wilderness" loading="lazy" width="600" height="375">
+            <figcaption>South Branch Au Sable River Mason Tract. Photo: Kurt Schwoppe (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Gifted to the state by automotive executive George Mason with the legal deed covenant that it remain an uncommercialized wilderness in perpetuity, the Mason Tract preserves 4,700 acres of pure pine barrens, towering white cedar swamps, and silent winding water. No permanent cabins, roads, or motors touch this reach.
+            </p>
+            <p>
+              Midway through the float sits the stone-and-timber <strong>Mason Chapel</strong>, an open river landing where paddlers pull out to sign the guest register in quiet reverence. The river here narrows through deep cut-banks and fast outside bends with sunken cedar logs ("sweepers") that require alert steering and basic ferry-gliding skills. Trophy brown trout hold tight beneath undercut cedar root-balls.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('au-sable-mason-tract')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Chase Bridge Access</div>
+                    <div class="wf-launch-desc">Timber stairs &amp; wooden canoe slide into deep pool. Shaded gravel parking for 15 vehicles. DNR Recreation Passport required.</div>
+                    <div class="wf-launch-gis">44.5244° N, 84.4989° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.5244,-84.4989" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Smith Bridge Access (M-72)</div>
+                    <div class="wf-launch-desc">Wooden steps &amp; gravel landing on river right above M-72 bridge. Paved parking for 18 vehicles. Vault toilet on site.</div>
+                    <div class="wf-launch-gis">44.6078° N, 84.4442° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.6078,-84.4442" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">8.4 road miles &middot; 12 min drive</span> via Chase Bridge Rd &amp; M-72.</div>
+                <div>🛶 <strong>River Float:</strong> 9.5 river miles &middot; 4.0 hrs float time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Heritage Lore: 10/10 (Mason Chapel)</span>
+              <span class="wf-persona-tag highlight">Wilderness: 10/10 (Zero Structures)</span>
+              <span class="wf-persona-tag">Dry-Fly: 10/10 (Flies-Only Reach)</span>
+              <span class="wf-persona-tag">Caution: Blind Sweepers on Bends</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Lower Au Sable -->
+      <article class="wf-story" id="au-sable-lower-river" data-category="beginner-family" data-type="beginner-family" data-gauge="04137500" data-watershed="ausable-huron">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #3 &middot; Au Sable River Basin</span>
+            <h2 class="wf-story-title">Lower Au Sable National Scenic River: Foote Dam to Whirlpool</h2>
+            <div class="wf-story-route">Oscoda, MI &middot; 11.0 River Miles &middot; 3.5–5.0 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04137500">
+            <span class="wf-pulse-dot"></span>
+            <span>Steady Tailwater &middot; ~1,350 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">1.8 ft/mi (Broad)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.0–2.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Wide Water)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">USFS Day Pass ($5)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04137500</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/au-sable-lower-river.jpg" alt="Broad waters and sand bluffs along the Lower Au Sable River corridor near Iargo Springs" loading="lazy" width="600" height="375">
+            <figcaption>Lower Au Sable sand bluffs and river valley. Photo: Mtn-graphic (CC BY-SA 4.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Below Foote Dam, the Au Sable expands into a magnificent 150-foot-wide National Wild and Scenic River corridor flanked by towering 80-foot golden sand bluffs and old-growth white pines. This is big water, yet remarkably calm and free of dangerous log strainers, making it the premier family canoe, sit-on-top kayak, and SUP float on the Lake Huron side of Michigan.
+            </p>
+            <p>
+              In September and October, this tailwater transforms into Michigan's premier fall salmon and steelhead highway: massive Chinook salmon and chrome steelhead push upstream from Lake Huron to spawn on the gravel bars below Rea Road and Foote Site. Active bald eagle and osprey nests line the bluffs near Lumberman's Monument.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('au-sable-lower-river')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Foote Dam Tailwater Launch</div>
+                    <div class="wf-launch-desc">Paved boat ramp &amp; shoreline carry-in launch below dam. Paved lot for 30 vehicles + trailers. Restrooms &amp; USFS fee kiosk.</div>
+                    <div class="wf-launch-gis">44.4439° N, 83.4561° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.4439,-83.4561" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Whirlpool DNR Access</div>
+                    <div class="wf-launch-desc">Concrete boat ramp &amp; boarding dock. Expansive gravel parking for 40 vehicles + trailers. Vault toilet &amp; trash service.</div>
+                    <div class="wf-launch-gis">44.4286° N, 83.3672° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.4286,-83.3672" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">6.8 road miles &middot; 10 min drive</span> via River Rd National Scenic Byway.</div>
+                <div>🛶 <strong>River Float:</strong> 11.0 river miles &middot; 4.0 hrs paddle time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Family/Beginner: 10/10 (Wide &amp; Safe)</span>
+              <span class="wf-persona-tag highlight">Salmon/Steelhead: 10/10 (Drift Boat Runs)</span>
+              <span class="wf-persona-tag">SUP Explorer: 10/10 (No Snags)</span>
+              <span class="wf-persona-tag">Wildlife: Eagles &amp; Osprey</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. Upper Manistee Deward -->
+      <article class="wf-story" id="manistee-upper-deward" data-category="fly-water" data-type="fly-water" data-gauge="04123500" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #4 &middot; Manistee River Basin</span>
+            <h2 class="wf-story-title">Upper Manistee Wilderness: Deward to M-72 Bridge</h2>
+            <div class="wf-story-route">Kalkaska County, MI &middot; 12.2 River Miles &middot; 4.0–5.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04123500">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Cold &middot; ~180 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">4.0 ft/mi (Brisk)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.0–3.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Tight Cedar Turns)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (Wilderness)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04123500</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/manistee-upper-deward.jpg" alt="Upper Manistee River flowing through tranquil northern cedar forest" loading="lazy" width="600" height="375">
+            <figcaption>Upper Manistee forested river corridor. Photo: Eric Schmuttenmaer (CC BY-SA 2.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Originating in the sandy peat springs of Antrim County, the infant Manistee flows through the historic Deward ghost lumber town tract as one of Michigan's purest native brook trout streams. The water temperature rarely breaks 56°F even during July heatwaves, fed by hundreds of bubbling cedar seepages.
+            </p>
+            <p>
+              This is a narrow, intimate wilderness reach: the current is brisk, curling sharply around sandbars and cedar root balls. Paddlers must stay alert for low-hanging branches and submerged timber ("deadheads"). There is zero cell service from the put-in until near M-72. For dry-fly anglers, delicate presentations with 6X tippet and small parachute Adams or elk hair caddis produce eager, brightly colored wild brookies.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('manistee-upper-deward')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Deward Co Rd 612 Bridge</div>
+                    <div class="wf-launch-desc">Natural sand carry-in landing on river right. Unimproved dirt shoulder parking for 8 vehicles. Remote wilderness site.</div>
+                    <div class="wf-launch-gis">44.8211° N, 84.8717° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.8211,-84.8717" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Manistee River M-72 Access</div>
+                    <div class="wf-launch-desc">DNR gravel boat ramp on upstream side of bridge. Large gravel parking lot (20 vehicles). Vault toilet &amp; info kiosk.</div>
+                    <div class="wf-launch-gis">44.7578° N, 84.9781° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.7578,-84.9781" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">9.8 road miles &middot; 14 min drive</span> via Co Rd 612 and M-72.</div>
+                <div>🛶 <strong>River Float:</strong> 12.2 river miles &middot; 4.5 hrs float time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Brook Trout: 10/10 (Spring-Fed 54°F)</span>
+              <span class="wf-persona-tag">Wilderness: 10/10 (Deward Tract)</span>
+              <span class="wf-persona-tag">Alert: Zero Cell Service</span>
+              <span class="wf-persona-tag">Shuttle: Gravel 14 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. Middle Manistee CCC to Sharon -->
+      <article class="wf-story" id="manistee-middle-ccc-sharon" data-category="beginner-family" data-type="beginner-family" data-gauge="04124000" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #5 &middot; Manistee River Basin</span>
+            <h2 class="wf-story-title">Middle Manistee: CCC Bridge to Sharon (M-66)</h2>
+            <div class="wf-story-route">Fife Lake, MI &middot; 14.0 River Miles &middot; 4.5–6.0 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04124000">
+            <span class="wf-pulse-dot"></span>
+            <span>Steady Flow &middot; ~820 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">2.4 ft/mi (Gentle)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Broad Gravel Flats)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (State Forest)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04124000</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/manistee-middle-ccc-sharon.jpg" alt="Broad sandy flats and clear water of the Middle Manistee River" loading="lazy" width="600" height="375">
+            <figcaption>Middle Manistee River gravel flats. Photo: Michigan Paddling Archive (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              The Middle Manistee from CCC Bridge down to Sharon is arguably the most relaxing, family-proven day float in northern Lower Michigan. Here, the river broadens to 90–120 feet with a continuous sand and fine-gravel bed, stable 2.5-mph current, and wide, gentle sweeping turns that leave ample time to navigate around any outer-bank woody structure.
+            </p>
+            <p>
+              CCC Bridge State Forest Campground at the put-in offers 24 rustic campsites directly overlooking the river, allowing paddlers to camp overnight and launch straight from their campsite in the morning. Shallow sandy islands midway through make ideal family picnic stops with waist-deep swimming water.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('manistee-middle-ccc-sharon')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">CCC Bridge SFC Landing</div>
+                    <div class="wf-launch-desc">Gravel boat ramp &amp; wooden canoe chute. Campground &amp; day-use lot (25 vehicles). Vault toilets &amp; potable hand pump.</div>
+                    <div class="wf-launch-gis">44.5119° N, 85.1275° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.5119,-85.1275" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Sharon DNR Access (M-66)</div>
+                    <div class="wf-launch-desc">Concrete boat ramp &amp; floating boarding dock. Paved parking lot for 20 vehicles + trailers. Vault toilet on site.</div>
+                    <div class="wf-launch-gis">44.5881° N, 85.1831° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.5881,-85.1831" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">9.2 road miles &middot; 13 min drive</span> via Sunset Trail &amp; M-66.</div>
+                <div>🛶 <strong>River Float:</strong> 14.0 river miles &middot; 5.0 hrs paddle time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Family/Rec: 10/10 (Wide &amp; Forgiving)</span>
+              <span class="wf-persona-tag highlight">Float Camp: 10/10 (CCC Bridge SFC)</span>
+              <span class="wf-persona-tag">SUP: 8/10 (Sandy Bottoms)</span>
+              <span class="wf-persona-tag">Shuttle: Paved/Gravel 13 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6. Lower Manistee Tippy to Bear Creek -->
+      <article class="wf-story" id="manistee-lower-tippy-bear-creek" data-category="overnight-camp" data-type="overnight-camp" data-gauge="04125550" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #6 &middot; Manistee River Basin</span>
+            <h2 class="wf-story-title">Lower Big Manistee: High Bridge to Bear Creek</h2>
+            <div class="wf-story-route">Wellston, MI &middot; 16.5 River Miles &middot; 5.0–7.0 Hours (or Overnight)</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04125550">
+            <span class="wf-pulse-dot"></span>
+            <span>Heavy Tailwater &middot; ~1,850 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">2.8 ft/mi (Heavy)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.5–4.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I+ (Strong Eddy Lines)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (DNR Passport)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04125550</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/manistee-lower-tippy-bear-creek.jpg" alt="Broad big water of the Lower Manistee River below Tippy Dam" loading="lazy" width="600" height="375">
+            <figcaption>Lower Manistee River bluffs and deep pools below Tippy Dam. Photo: Notorious4life (Public domain / CC0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Downstream of Consumers Energy's Tippy Hydro Dam, the Big Manistee becomes a massive, surging powerhouse—over 180 feet wide with heavy flow and deep turquoise pools reaching 15 feet down. This is the holy grail for Michigan drift boat guides chasing giant king salmon in September and October, and chromer winter steelhead straight through April.
+            </p>
+            <p>
+              For multi-day backcountry canoeists, expansive gravel islands and national forest bluffs provide some of the finest legal dispersed float camping in the Midwest. Build your campfire on the sand, watch the stars reflect off the black water, and wake up to morning mist rolling through the cedar bottoms. Due to heavy water volume, all paddlers must wear secure PFDs.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('manistee-lower-tippy-bear-creek')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">High Bridge DNR Boat Launch</div>
+                    <div class="wf-launch-desc">Dual paved boat ramps &amp; boarding dock. Massive paved lot for 45 vehicles + trailers. Vault toilets &amp; trash service.</div>
+                    <div class="wf-launch-gis">44.2750° N, 85.9622° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.2750,-85.9622" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Bear Creek DNR Access</div>
+                    <div class="wf-launch-desc">Gravel drift boat ramp &amp; kayak beach at Bear Creek confluence. Parking for 25 vehicles + trailers. Vault toilet.</div>
+                    <div class="wf-launch-gis">44.3314° N, 86.0597° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.3314,-86.0597" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">9.5 road miles &middot; 15 min drive</span> via High Bridge Rd &amp; Coates Hwy.</div>
+                <div>🛶 <strong>River Float:</strong> 16.5 river miles &middot; 6.0 hrs float time (or 2-day camp).</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Float Camping: 10/10 (Gravel Island Camps)</span>
+              <span class="wf-persona-tag highlight">Salmon/Steelhead: 10/10 (Tippy Dam Runs)</span>
+              <span class="wf-persona-tag">Drift Boat: Dual Concrete Ramps</span>
+              <span class="wf-persona-tag">PFD Mandatory: Heavy 1850 CFS</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7. Pine River Elm Flats -->
+      <article class="wf-story" id="pine-river-elm-flats" data-category="fly-water" data-type="fly-water" data-gauge="04125000" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #7 &middot; Pine River Basin</span>
+            <h2 class="wf-story-title">Pine National Scenic River: Elm Flats to Low Bridge</h2>
+            <div class="wf-story-route">Wellston, MI &middot; 8.5 River Miles &middot; 2.5–3.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04125000">
+            <span class="wf-pulse-dot"></span>
+            <span>Fast Whitewater &middot; ~275 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">12.0 ft/mi (Steepest in LP)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">4.0–6.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I–II (Standing Waves)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">USFS Watercraft Permit</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04125000</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/pine-river-elm-flats.jpg" alt="Fast clear currents and boulder riffles of the Pine National Scenic River" loading="lazy" width="600" height="375">
+            <figcaption>Pine National Scenic River rapids corridor. Photo: US Forest Service (Public domain).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Tumbling down an astonishing 12-foot-per-mile gradient, the Pine River is the wildest, fastest, and most technical whitewater run in Michigan's Lower Peninsula. The water is ice-cold, carving through clay bedrock chutes, boulder fields, and tight s-turns with standing wave trains that will test your bracing, ruddering, and eddy-turn techniques.
+            </p>
+            <p>
+              <strong>Mandatory Federal Regulation:</strong> To protect this fragile National Wild and Scenic River canyon from erosion, the U.S. Forest Service enforces strict watercraft permits from the Friday before Memorial Day through Labor Day between 9:00 AM and 6:00 PM. Reserve your permit through Recreation.gov months in advance. Securely strap all dry bags and wear a high-flotation PFD.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('pine-river-elm-flats')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Elm Flats USFS Access</div>
+                    <div class="wf-launch-desc">Timber stairs &amp; wooden canoe slide. Paved USFS lot (20 vehicles). Watercraft permit validation kiosk &amp; vault toilet.</div>
+                    <div class="wf-launch-gis">44.2189° N, 85.7761° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.2189,-85.7761" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Low Bridge USFS Access</div>
+                    <div class="wf-launch-desc">Concrete boat ramp &amp; timber kayak steps. Paved USFS lot for 35 vehicles + trailers. Vault toilets &amp; fee station.</div>
+                    <div class="wf-launch-gis">44.2250° N, 85.8942° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.2250,-85.8942" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">8.7 road miles &middot; 14 min drive</span> via S 9 Rd &amp; M-55.</div>
+                <div>🛶 <strong>River Float:</strong> 8.5 river miles &middot; 3.0 hrs whitewater float.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Whitewater: 10/10 (Class I–II Chutes)</span>
+              <span class="wf-persona-tag highlight">USFS Permits: Required (May–Sep)</span>
+              <span class="wf-persona-tag">Expert Paddler: Standing Waves</span>
+              <span class="wf-persona-tag">PFD Mandatory: Fast Current</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8. Pere Marquette Holy Water -->
+      <article class="wf-story" id="pere-marquette-holy-water" data-category="fly-water" data-type="fly-water" data-gauge="04122500" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #8 &middot; Pere Marquette Basin</span>
+            <h2 class="wf-story-title">Pere Marquette National Scenic: Green Cottage to Upper Branch</h2>
+            <div class="wf-story-route">Baldwin, MI &middot; 10.5 River Miles &middot; 3.5–4.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04122500">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Clear &middot; ~620 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">3.6 ft/mi (Active)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Undammed Freestone)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">USFS Watercraft Permit</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04122500</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/pere-marquette-holy-water.jpg" alt="Pere Marquette National Scenic River flowing over pristine gravel bars in Manistee National Forest" loading="lazy" width="600" height="375">
+            <figcaption>Pere Marquette National Scenic River. Photo: en:User:Yetiwriter (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              The Pere Marquette is Michigan's crown jewel undammed freestone river—where German brown trout were first successfully stocked in the United States in 1884. Free of hydro dams from its headwaters all the way to Lake Michigan, the PM retains an untamed seasonal pulse: clear cold water, gravel spawning bars, and deeply undercut banks draped with ancient hemlock and white pine.
+            </p>
+            <p>
+              From M-37 down to Gleason's Landing, the river is designated Quality Trout Water with strict <strong>flies-only and artificial lure catch-and-release rules</strong>. Paddlers must obtain a mandatory USFS watercraft permit between Memorial Day weekend and Labor Day. The section between Green Cottage and Upper Branch Bridge provides a quintessential blue-ribbon float: lively riffles, dark holding pools, and zero development.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('pere-marquette-holy-water')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Green Cottage USFS Access</div>
+                    <div class="wf-launch-desc">Wooden stairs &amp; timber canoe slide down hillside. Shaded gravel parking for 15 vehicles. USFS permit kiosk &amp; vault toilet.</div>
+                    <div class="wf-launch-gis">43.8647° N, 85.9189° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=43.8647,-85.9189" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Upper Branch Bridge USFS Access</div>
+                    <div class="wf-launch-desc">Gravel drift boat ramp &amp; wooden steps. Paved parking lot for 20 vehicles + trailers. Vault toilet &amp; info board.</div>
+                    <div class="wf-launch-gis">43.8964° N, 86.0353° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=43.8964,-86.0353" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">8.2 road miles &middot; 12 min drive</span> via US-10 &amp; S Branch Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 10.5 river miles &middot; 4.0 hrs float time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Brown Trout: 10/10 (First U.S. Stocking 1884)</span>
+              <span class="wf-persona-tag highlight">USFS Permits: Required (May–Sep)</span>
+              <span class="wf-persona-tag">Flies-Only: Quality Trout Water</span>
+              <span class="wf-persona-tag">Undammed: True Freestone Pulse</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 9. Lower PM Gleasons to Walhalla -->
+      <article class="wf-story" id="pere-marquette-gleasons-walhalla" data-category="overnight-camp" data-type="overnight-camp" data-gauge="04122500" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #9 &middot; Pere Marquette Basin</span>
+            <h2 class="wf-story-title">Lower Pere Marquette: Gleason's Landing to Walhalla</h2>
+            <div class="wf-story-route">Branch, MI &middot; 12.0 River Miles &middot; 4.0–5.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04122500">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Clear &middot; ~620 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">2.8 ft/mi (Mellowing)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Deep Clay Pools)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">USFS Watercraft Permit</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04122500</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/pere-marquette-gleasons-walhalla.jpg" alt="Paddlers canoeing down the cedar-lined Pere Marquette River corridor near Gleason's Landing" loading="lazy" width="600" height="375">
+            <figcaption>Pere Marquette River wilderness float. Photo: Michigan Paddling Archive (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Downstream of Gleason's Landing, the Pere Marquette transitions from strict flies-only water into open gear regulations. The river cuts deeply through dark blue-gray clay banks, forming massive submerged log complexes where migratory king salmon stage by the thousands in late summer, followed by autumn coho and sea-run steelhead.
+            </p>
+            <p>
+              Gleason's Landing USFS Campground offers riverside rustic sites, making this the ideal multi-day staging base. For paddlers and canoe trippers, the river features deep outside sweeping bends with wide sandy inside point-bars perfect for pulling up canoes and swimming in clean, refreshing current.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('pere-marquette-gleasons-walhalla')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Gleason's Landing USFS Campground</div>
+                    <div class="wf-launch-desc">Paved canoe slide &amp; gravel drift boat launch. Campground day-use lot (25 vehicles). Vault toilets &amp; hand pump.</div>
+                    <div class="wf-launch-gis">43.8906° N, 86.0028° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=43.8906,-86.0028" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Walhalla Road Bridge DNR Access</div>
+                    <div class="wf-launch-desc">Concrete boat ramp &amp; gravel shoreline. Large gravel parking lot (30 vehicles + trailers). Vault toilet &amp; trash service.</div>
+                    <div class="wf-launch-gis">43.9161° N, 86.1189° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=43.9161,-86.1189" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">8.5 road miles &middot; 13 min drive</span> via US-10 &amp; Walhalla Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 12.0 river miles &middot; 4.5 hrs float time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Salmon Staging: 10/10 (Clay Holes)</span>
+              <span class="wf-persona-tag highlight">Float Camp: 10/10 (Gleason's SFC)</span>
+              <span class="wf-persona-tag">Family Friendly: Broad Gentle Runs</span>
+              <span class="wf-persona-tag">USFS Permits: Required (May–Sep)</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 10. Jordan River Graves Crossing -->
+      <article class="wf-story" id="jordan-river-graves-crossing" data-category="beginner-family" data-type="beginner-family" data-gauge="04127800" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #10 &middot; Jordan River Basin</span>
+            <h2 class="wf-story-title">Jordan River Natural River: Graves Crossing to Rogers Road</h2>
+            <div class="wf-story-route">East Jordan, MI &middot; 9.0 River Miles &middot; 3.0–4.0 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04127800">
+            <span class="wf-pulse-dot"></span>
+            <span>Cold Spring-Fed &middot; ~200 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">4.5 ft/mi (Swift)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.0–3.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Tight Cedar Chutes)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (Natural River Rules)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04127800</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/jordan-river-graves-crossing.jpg" alt="Lush green cedar banks and crystal-clear water along the Jordan Natural River" loading="lazy" width="600" height="375">
+            <figcaption>Jordan River Natural River valley. Photo: Wikimedia Commons (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Designated in 1972 as Michigan's very first Natural River under the Natural River Act, the Jordan River flows through a glacial outwash valley of astonishing ecological purity. Fed by hundreds of subterranean cold-water artesian springs, the water temperature rarely exceeds 52°F, ensuring year-round nursery habitat for wild brook trout and sculpin.
+            </p>
+            <p>
+              Launching from Graves Crossing State Forest Campground, the river cuts through a cathedral of mossy northern white cedars. The current is brisk and clean with a firm sand-and-gravel bottom. Tight bends require basic steering control to avoid overhanging cedar boughs. For families, children, and fly anglers, it is one of northern Michigan's most visually breathtaking 4-hour river journeys.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('jordan-river-graves-crossing')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Graves Crossing DNR Access / SFC</div>
+                    <div class="wf-launch-desc">Wooden steps &amp; timber launch chute. State Forest Campground parking for 15 vehicles. Vault toilet &amp; hand pump.</div>
+                    <div class="wf-launch-gis">45.1092° N, 85.0883° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=45.1092,-85.0883" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Rogers Road Bridge Access</div>
+                    <div class="wf-launch-desc">Natural sand river landing on river right. Gravel roadside turnaround clearing for 10 vehicles. Rustic carry-out.</div>
+                    <div class="wf-launch-gis">45.1611° N, 85.1186° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=45.1611,-85.1186" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">5.6 road miles &middot; 9 min drive</span> via Graves Crossing Rd &amp; Rogers Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 9.0 river miles &middot; 3.5 hrs paddle time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">1st Natural River: 10/10 (Protected Corridor)</span>
+              <span class="wf-persona-tag highlight">Cold Springs: 50°F Artesian Headwaters</span>
+              <span class="wf-persona-tag">Family Friendly: Fast but Shallow Sand</span>
+              <span class="wf-persona-tag">Shuttle: Quick 9 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 11. Pigeon River Elk Country -->
+      <article class="wf-story" id="pigeon-river-elk-country" data-category="fly-water" data-type="fly-water" data-gauge="04128900" data-watershed="ausable-huron">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #11 &middot; Pigeon River Basin</span>
+            <h2 class="wf-story-title">Pigeon River Wild Waters: Sturgeon Divide to Webb Road</h2>
+            <div class="wf-story-route">Vanderbilt, MI &middot; 7.2 River Miles &middot; 2.5–3.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04128900">
+            <span class="wf-pulse-dot"></span>
+            <span>Running Clear &middot; ~85 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">4.8 ft/mi (Freestone)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">3.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Boulders &amp; Snags)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (P.R.C. Rules)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04128900</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/pigeon-river-elk-country.jpg" alt="Dense northern forest and cold tea-colored stream in Pigeon River Country" loading="lazy" width="600" height="375">
+            <figcaption>Pigeon River Country State Forest. Photo: Chris Izworski Trout Streams (Public domain / Wikimedia).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Flowing straight through the 106,000-acre heart of the "Big Wild"—Pigeon River Country State Forest—this boulder-strewn freestone stream is Michigan's premier big-wilderness freestone trout water. The surrounding forest is home to the largest free-roaming wild elk herd east of the Mississippi (over 1,000 elk), plus black bears, bobcats, and bald eagles.
+            </p>
+            <p>
+              The Pigeon is wilder, rockier, and more unkempt than the gentle sand-bottomed Au Sable. Submerged granite boulders and natural log blowdowns create pocket-water feeding lanes where wild brookies and feisty brown trout aggressively strike dry flies and streamers. There is no cell service across this entire forest basin; bring a map, compass, and water filter.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('pigeon-river-elk-country')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Sturgeon Divide / Red Bridge</div>
+                    <div class="wf-launch-desc">Rustic gravel carry-in launch under bridge. Dirt shoulder clearing for 8 vehicles. Wilderness carry-in with no facilities.</div>
+                    <div class="wf-launch-gis">45.1950° N, 84.4817° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=45.1950,-84.4817" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Webb Road Bridge Access</div>
+                    <div class="wf-launch-desc">Sand bank carry-in landing on river right. Gravel parking clearing for 10 vehicles. Pigeon River Country information kiosk.</div>
+                    <div class="wf-launch-gis">45.1389° N, 84.4756° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=45.1389,-84.4756" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">5.2 road miles &middot; 9 min drive</span> via Osmun Rd &amp; Webb Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 7.2 river miles &middot; 3.0 hrs wilderness paddle.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Wild Elk Herd: 10/10 (Heart of Big Wild)</span>
+              <span class="wf-persona-tag highlight">Freestone Pocket Water: Wild Trout</span>
+              <span class="wf-persona-tag">Wilderness Alert: Zero Cell Service</span>
+              <span class="wf-persona-tag">Shuttle: Forest Sand Roads</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 12. Two Hearted River Mouth -->
+      <article class="wf-story" id="two-hearted-river-mouth" data-category="overnight-camp" data-type="overnight-camp" data-gauge="04044700" data-watershed="up-wild">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #12 &middot; Upper Peninsula Basin</span>
+            <h2 class="wf-story-title">Two Hearted Wilderness: High Bridge to Lake Superior Mouth</h2>
+            <div class="wf-story-route">Newberry, MI &middot; 14.0 River Miles &middot; 5.0–6.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04044700">
+            <span class="wf-pulse-dot"></span>
+            <span>Wilderness Amber &middot; ~130 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">3.0 ft/mi (Wilderness)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.5–3.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Spruce Snags)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (State Forest)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04044700</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/two-hearted-river-mouth.jpg" alt="Two Hearted River historical marker and river corridor leading to Lake Superior" loading="lazy" width="600" height="375">
+            <figcaption>Two Hearted River Lake Superior corridor. Photo: Wikimedia Commons (CC BY-SA 3.0).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Immortalized in title by Ernest Hemingway (though he actually fished the Fox River in Seney for the story), the real Two Hearted River is one of the wildest, most solitary black-spruce water highways in the entire Upper Peninsula. Deep in Luce County, this amber-tinted stream flows over clean sandbars flanked by ancient tamarack bogs and blueberry plains.
+            </p>
+            <p>
+              The float culminates in one of the great geographic spectacles of the Northwoods: the river rounds a massive golden sand spit and empties directly into the roaring blue surf of Lake Superior. At the mouth, Two Hearted River State Forest Campground provides 39 rustic campsites right where the river meets the big lake. Target native coaster brook trout and migratory fall steelhead near the mouth.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('two-hearted-river-mouth')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">High Bridge State Forest Access</div>
+                    <div class="wf-launch-desc">Timber slide &amp; gravel carry-in launch off Co Rd 407. Forest parking clearing (12 vehicles). Remote wilderness access.</div>
+                    <div class="wf-launch-gis">46.6433° N, 85.4419° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=46.6433,-85.4419" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Two Hearted River Mouth SFC</div>
+                    <div class="wf-launch-desc">Sandy beach river mouth landing on Lake Superior spit. State Forest Campground lot (30 vehicles). Vault toilets &amp; water.</div>
+                    <div class="wf-launch-gis">46.6989° N, 85.4228° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=46.6989,-85.4228" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">8.8 road miles &middot; 18 min drive</span> via seasonal sand roads (4WD/AWD recommended).</div>
+                <div>🛶 <strong>River Float:</strong> 14.0 river miles &middot; 5.5 hrs backcountry float.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Lake Superior Mouth: 10/10 (Surf Confluence)</span>
+              <span class="wf-persona-tag highlight">Wilderness Solitude: 10/10 (Black Spruce Bog)</span>
+              <span class="wf-persona-tag">Float Camping: Mouth SFC</span>
+              <span class="wf-persona-tag">4WD Vehicle Recommended</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 13. Fox River Seney -->
+      <article class="wf-story" id="fox-river-seney" data-category="fly-water" data-type="fly-water" data-gauge="04059000" data-watershed="up-wild">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #13 &middot; Upper Peninsula Basin</span>
+            <h2 class="wf-story-title">Hemingway's Fox River: Seney to Fox River SFC</h2>
+            <div class="wf-story-route">Seney, MI &middot; 10.5 River Miles &middot; 3.5–5.0 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04059000">
+            <span class="wf-pulse-dot"></span>
+            <span>Cold Peat Springs &middot; ~160 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">2.8 ft/mi (Meandering)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">2.5 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Cedar Sweepers)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">None (DNR Passport)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04059000</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/fox-river-seney.jpg" alt="Quiet amber waters of the Fox River flowing through the Upper Peninsula wilderness" loading="lazy" width="600" height="375">
+            <figcaption>Fox River near Seney, Upper Peninsula. Photo: Chris Izworski Trout Streams (Public domain / Wikimedia).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              In the late summer of 1919, a wounded 20-year-old Ernest Hemingway stepped off the train in the burned-over lumber hamlet of Seney, hiked north along the railroad tracks, and set up camp along the Fox River to heal from the traumas of World War I. That trip provided the emotional and sensory architecture for his masterpiece, <em>"Big Two-Hearted River"</em>—which he set on the Two-Hearted in name only because of its poetic cadence.
+            </p>
+            <p>
+              The real Fox River remains astonishingly wild and unchanged: tea-colored, spring-cold water curling past dense cedar hummocks, tag alders, and white birch. The river borders the 95,000-acre Seney National Wildlife Refuge, offering frequent sightings of sandhill cranes, trumpeter swans, and river otters. Wild brook trout rise eagerly to grasshoppers and caddis along the grassy undercut banks.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('fox-river-seney')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Fox River M-28 Bridge Launch</div>
+                    <div class="wf-launch-desc">Natural sand canoe landing under highway bridge in Seney. Paved highway shoulder turnout for 10 vehicles. Highway roadside landing.</div>
+                    <div class="wf-launch-gis">46.3497° N, 85.9461° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=46.3497,-85.9461" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Fox River State Forest Campground</div>
+                    <div class="wf-launch-desc">Wooden canoe steps &amp; sandy landing on river right. Campground parking for 15 vehicles. Rustic campsites, hand pump &amp; vault toilet.</div>
+                    <div class="wf-launch-gis">46.4022° N, 85.9614° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=46.4022,-85.9614" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">6.2 road miles &middot; 11 min drive</span> via Co Rd 450 (Fox River Rd).</div>
+                <div>🛶 <strong>River Float:</strong> 10.5 river miles &middot; 4.0 hrs float time.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">Hemingway 1919: 10/10 (True Nick Adams River)</span>
+              <span class="wf-persona-tag highlight">Wild Brookies: Dry Fly Hopper Water</span>
+              <span class="wf-persona-tag">Wildlife: Seney Refuge Cranes &amp; Moose</span>
+              <span class="wf-persona-tag">Shuttle: Paved/Gravel 11 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 14. Platte River Sleeping Bear -->
+      <article class="wf-story" id="platte-river-sleeping-bear" data-category="beginner-family" data-type="beginner-family" data-gauge="04127200" data-watershed="manistee-west">
+        <div class="wf-story-header">
+          <div>
+            <span class="wf-story-number">Reach #14 &middot; Sleeping Bear Basin</span>
+            <h2 class="wf-story-title">Lower Platte River: Salmon Weir to Lake Michigan Mouth</h2>
+            <div class="wf-story-route">Honor, MI &middot; 4.5 River Miles &middot; 1.5–2.5 Hours Float</div>
+          </div>
+          <div class="wf-flow-badge normal" data-usgs-gauge="04127200">
+            <span class="wf-pulse-dot"></span>
+            <span>Gentle Crystal Clear &middot; ~125 CFS Normal</span>
+          </div>
+        </div>
+
+        <div class="wf-metrics-bar">
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">River Gradient</span>
+            <span class="wf-metric-val">1.5 ft/mi (Shallow &amp; Calm)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Current Velocity</span>
+            <span class="wf-metric-val">1.5–2.0 mph</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Rapids / Class</span>
+            <span class="wf-metric-val">Class I (Zero Rapids)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">Permits Required</span>
+            <span class="wf-metric-val">NPS Park Pass ($25)</span>
+          </div>
+          <div class="wf-metric-item">
+            <span class="wf-metric-label">USGS Gauge</span>
+            <span class="wf-metric-val">USGS 04127200</span>
+          </div>
+        </div>
+
+        <div class="wf-story-body">
+          <figure class="wf-story-figure">
+            <img src="../assets/michigan-rivers/platte-river-sleeping-bear.jpg" alt="Platte River flowing gently into Lake Michigan at Sleeping Bear Dunes National Lakeshore" loading="lazy" width="600" height="375">
+            <figcaption>Platte River Point at Sleeping Bear Dunes. Photo: National Park Service (Public domain / NPS).</figcaption>
+          </figure>
+
+          <div class="wf-story-text">
+            <p>
+              Flowing straight through the southern boundary of Sleeping Bear Dunes National Lakeshore, the Lower Platte is without question the most relaxed, child-safe, and crystal-clear river float in the State of Michigan. Averaging only 2 to 3 feet in depth over a pure white sugar-sand bottom, this 4.5-mile float carries paddlers past Loon Lake, nesting loons, and dune bluffs without a single rapid, boulder, or dangerous log strainer.
+            </p>
+            <p>
+              This is the uncontested <strong>#1 Stand-Up Paddleboarding (SUP) river float in Michigan</strong>: the water is glass-calm, protected from Lake Michigan winds by dense pine dunes, and deep enough for long tracking fins while remaining shallow enough to step off onto soft sand at any point. The float ends on the pristine sandy beach at Platte River Point, where the warm river lazily mingles with the emerald swells of Lake Michigan.
+            </p>
+
+            <div class="wf-launch-desk">
+              <div class="wf-launch-desk-title">
+                <span>📍 Dual Launch GIS &amp; Shuttle Logistics</span>
+                <button type="button" class="wf-map-jump-btn" onclick="showOnMap('platte-river-sleeping-bear')">Show Both on Map 🗺️</button>
+              </div>
+              <div class="wf-launch-grid">
+                <div class="wf-launch-card put-in">
+                  <div>
+                    <span class="wf-launch-badge">🟢 Put-In Launch</span>
+                    <div class="wf-launch-name">Platte River Salmon Weir / M-22</div>
+                    <div class="wf-launch-desc">Wooden launch platform &amp; canoe slide. Paved parking lot for 25 vehicles. National Park pass required. Vault toilet on site.</div>
+                    <div class="wf-launch-gis">44.6983° N, 86.1039° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.6983,-86.1039" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-put-in-btn">Navigate to Put-In (Google Maps GIS) &rarr;</a>
+                </div>
+
+                <div class="wf-launch-card take-out">
+                  <div>
+                    <span class="wf-launch-badge">🔴 Take-Out Landing</span>
+                    <div class="wf-launch-name">Platte River Point / Lake Michigan</div>
+                    <div class="wf-launch-desc">Sandy river spit beach landing. Expansive paved NPS lot (60 vehicles). Restrooms, outdoor rinse showers &amp; picnic tables.</div>
+                    <div class="wf-launch-gis">44.7333° N, 86.1517° W</div>
+                  </div>
+                  <a href="https://www.google.com/maps/search/?api=1&query=44.7333,-86.1517" target="_blank" rel="noopener noreferrer" class="wf-launch-btn wf-take-out-btn">Navigate to Take-Out (Google Maps GIS) &rarr;</a>
+                </div>
+              </div>
+
+              <div class="wf-shuttle-row">
+                <div>🚗 <strong>Road Shuttle:</strong> <span class="wf-shuttle-stat">4.8 road miles &middot; 8 min drive</span> via Lake Michigan Rd.</div>
+                <div>🛶 <strong>River Float:</strong> 4.5 river miles &middot; 2.0 hrs gentle float.</div>
+              </div>
+            </div>
+
+            <div class="wf-persona-scores">
+              <span class="wf-persona-tag highlight">#1 Family Float: 10/10 (Pure Sand &amp; 2-3 ft Depth)</span>
+              <span class="wf-persona-tag highlight">#1 SUP in Michigan: 10/10 (Glass Clear)</span>
+              <span class="wf-persona-tag">Lake Michigan Beach Take-Out</span>
+              <span class="wf-persona-tag">Livery: Riverside Canoe Trips</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Reference Modules: USFS & DNR Permits, Hatch Calendar & River Safety -->
+  <section class="fg-ref-section" id="permits-and-regulations">
+    <div class="fg-ref-card">
+      <h2>U.S. Forest Service &amp; Michigan DNR River Permit Regulations</h2>
+      <p>
+        To prevent overcrowding, ecological bank degradation, and litter on federally protected National Wild and Scenic Rivers, the U.S. Forest Service (Huron-Manistee National Forests) enforces mandatory watercraft quotas on specific reaches. Review the official rules below before staging your float:
+      </p>
+      <div class="fg-table-wrap">
+        <table class="fg-table">
+          <thead>
+            <tr>
+              <th>River Reach</th>
+              <th>Permit Season Window</th>
+              <th>Permit Window Hours</th>
+              <th>Daily Craft Quotas</th>
+              <th>Reservation Portal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Pine River USFS Permits</strong> (Elm Flats to Low Bridge)</td>
+              <td>Fri before Memorial Day &ndash; Labor Day</td>
+              <td>9:00 AM &ndash; 6:00 PM</td>
+              <td>Capped daily per launch point</td>
+              <td>Recreation.gov (Pine River Watercraft)</td>
+            </tr>
+            <tr>
+              <td><strong>Pere Marquette Scenic Permits</strong> (M-37 to Gleason's)</td>
+              <td>Fri before Memorial Day &ndash; Labor Day</td>
+              <td>9:00 AM &ndash; 6:00 PM</td>
+              <td>Capped daily per section</td>
+              <td>Recreation.gov (Pere Marquette Watercraft)</td>
+            </tr>
+            <tr>
+              <td><strong>Au Sable River</strong> (Foote Dam to Whirlpool)</td>
+              <td>Year-Round</td>
+              <td>Daylight Hours</td>
+              <td>No craft cap (Parking fee pass applies)</td>
+              <td>USFS Day Pass ($5 / vehicle)</td>
+            </tr>
+            <tr>
+              <td><strong>Sleeping Bear Dunes</strong> (Lower Platte River)</td>
+              <td>Year-Round</td>
+              <td>Daylight Hours</td>
+              <td>No craft cap (NPS entrance pass applies)</td>
+              <td>NPS Sleeping Bear Dunes Pass ($25)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Mayfly & Caddis Hatch Calendar -->
+    <div class="fg-ref-card" id="hatch-calendar">
+      <h2>Northern Michigan Blue-Ribbon Mayfly &amp; Caddis Hatch Calendar</h2>
+      <p>
+        Stable spring-fed water temperatures across the Au Sable, Manistee, Pere Marquette, and Jordan rivers fuel legendary aquatic insect emergences. Match your river float dates with the primary hatch windows:
+      </p>
+      <div class="fg-table-wrap">
+        <table class="fg-table">
+          <thead>
+            <tr>
+              <th>Aquatic Insect Hatch</th>
+              <th>Peak Emergence Window</th>
+              <th>Water Temp Threshold</th>
+              <th>Time of Day</th>
+              <th>Key River Reaches</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Hendrickson</strong> (<em>Ephemerella subvaria</em>)</td>
+              <td>Late April &ndash; Late May</td>
+              <td>50&deg;F &ndash; 54&deg;F</td>
+              <td>1:00 PM &ndash; 4:30 PM (Afternoon)</td>
+              <td>Au Sable Holy Water, Manistee Upper Deward, Pere Marquette</td>
+            </tr>
+            <tr>
+              <td><strong>Sulphur / Pale Evening Dun</strong></td>
+              <td>Late May &ndash; Late June</td>
+              <td>58&deg;F &ndash; 62&deg;F</td>
+              <td>7:00 PM &ndash; Dark (Evening rise)</td>
+              <td>South Branch Mason Tract, Boardman, Pere Marquette</td>
+            </tr>
+            <tr>
+              <td><strong>Brown Drake</strong> (<em>Ephemera simulans</em>)</td>
+              <td>Early June &ndash; Mid-June</td>
+              <td>60&deg;F &ndash; 64&deg;F</td>
+              <td>Dusk to Full Dark (Intense)</td>
+              <td>Au Sable Mainstream, Manistee CCC Bridge, Jordan River</td>
+            </tr>
+            <tr>
+              <td><strong>Hexagenia limbata</strong> ("The Hex")</td>
+              <td>Late June &ndash; Early July</td>
+              <td>64&deg;F &ndash; 68&deg;F</td>
+              <td>9:30 PM &ndash; Midnight (Night fishing)</td>
+              <td>Au Sable Mason Tract, Middle Manistee, Lower Au Sable</td>
+            </tr>
+            <tr>
+              <td><strong>Trico Mayfly</strong> (<em>Tricorythodes</em>)</td>
+              <td>July &ndash; September</td>
+              <td>56&deg;F &ndash; 60&deg;F</td>
+              <td>7:00 AM &ndash; 10:00 AM (Morning spinner fall)</td>
+              <td>Au Sable Holy Water, Upper Manistee, Pigeon River</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Strainer & Sweeper Safety Protocol -->
+    <div class="fg-ref-card" id="strainer-safety">
+      <h2>Cedar Sweeper &amp; Strainer Survival Guide: Cold-Water River Safety</h2>
+      <p>
+        Michigan trout rivers flow through dense cedar and hemlock swamps where fallen trees ("sweepers") and partially submerged branches ("strainers") pose the single greatest objective hazard to recreational paddlers. Water rushes through the branches like a sieve while pinning boats and paddlers against the wood with tons of hydraulic force.
+      </p>
+      <ul>
+        <li><strong>Ferry-Glide Away from Outside Bends:</strong> River current accelerates around outside curves, drawing canoes directly into fallen cedar logs. Angle your bow 45 degrees toward the inside sandbar and back-paddle firmly to glide across the current away from the obstacle.</li>
+        <li><strong>Lean INTO the Obstacle:</strong> If your canoe or kayak contacts a submerged log, your instinct is to lean away from it. This immediately exposes the upstream gunwale to the current, instantly swamping and capsizing the boat. Always lean downstream toward the log to allow the river to pass safely underneath your hull.</li>
+        <li><strong>Wear a Fast-Drying PFD:</strong> Even on an 85°F July afternoon, northern Michigan spring-fed rivers flow at 50° to 56°F. Sudden immersion causes an involuntary cold-shock gasp reflex that can lead to immediate drowning without a properly fitted Life Jacket / Personal Flotation Device.</li>
+        <li><strong>Cellular Dead Zones:</strong> Reaches like Deward on the Upper Manistee, the Pigeon River Country, and the Two Hearted River have zero cellular reception. Download offline Google Maps tiles and keep an emergency vehicle key pinned inside a waterproof dry box.</li>
+      </ul>
+    </div>
+
+    <!-- FAQ Module -->
+    <div class="fg-faq-card" id="faq">
+      <h2>Frequently Asked Questions: Michigan River Paddling &amp; Angling</h2>
+      
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">Do I need a federal permit to paddle the Pine or Pere Marquette rivers?</div>
+        <div class="fg-faq-a">Yes. The U.S. Forest Service requires mandatory watercraft permits on both the Pine River and the Pere Marquette National Scenic River from the Friday before Memorial Day through Labor Day. Daily craft caps apply between 9:00 AM and 6:00 PM to protect fragile riverbanks from overcrowding. Permits are reserved through Recreation.gov.</div>
+      </div>
+
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">What are the gear rules on Michigan "Holy Water" flies-only sections?</div>
+        <div class="fg-faq-a">On Michigan Quality Trout Waters (Type 4 or Gear-Restricted streams like the Au Sable Mainstream from Burton's to Wakeley, the South Branch Mason Tract, and Pere Marquette from Baldwin to Gleason's), anglers may only use artificial flies or single-pointed unweighted artificial lures. Harvest is restricted (catch-and-release only on designated sections), and scented synthetic baits are prohibited.</div>
+      </div>
+
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">Can you camp for free along northern Michigan riverbanks?</div>
+        <div class="fg-faq-a">Dispersed camping is permitted on state forest lands and Huron-Manistee National Forests, provided campsites are located at least 100 to 200 feet from the water's edge, away from boat landings, and outside designated no-camping zones (like the Mason Tract). State Forest Campgrounds along the rivers offer established fire rings and vault toilets for a nominal nightly fee.</div>
+      </div>
+
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">What is the safest flow (CFS) for canoeing or kayaking Michigan rivers?</div>
+        <div class="fg-faq-a">Stable groundwater feeds give rivers like the Au Sable (180–220 CFS at Grayling) and Manistee steady, predictable summer flows. However, fast-gradient streams like the Pine River become turbulent Class II whitewater during spring runoff above 350 CFS. Always check live USGS real-time gauges before launching.</div>
+      </div>
+
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">How does two-vehicle self-shuttling work on Michigan rivers?</div>
+        <div class="fg-faq-a">Drive both vehicles to the take-out landing first. Leave vehicle B parked in the designated day-use or trailer lot with your vehicle transfer gear. Drive together in vehicle A with your boats to the put-in launch. After completing your float, load boats onto vehicle B, drive back to the put-in to retrieve vehicle A. Always verify DNR Recreation Passport or USFS vehicle parking passes at both sites.</div>
+      </div>
+
+      <div class="fg-faq-item">
+        <div class="fg-faq-q">When does the famous Hexagenia limbata (Hex) mayfly hatch happen?</div>
+        <div class="fg-faq-a">The massive Hexagenia limbata (giant yellow mayfly) emerges from silt beds during the last two weeks of June and the first week of July, typically between 9:30 PM and midnight on warm, muggy nights when water temperatures reach 64°–68°F. It brings the river's largest, wariest trophy brown trout to the surface.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connected Tools Navigation Desk -->
+  <section class="fg-ref-section" style="margin-top:0;">
+    <div class="fg-ref-card" style="background:#f0fdf4;border-color:#bbf7d0;">
+      <h2 style="font-size:1.15rem;margin-bottom:8px;color:#14532d;">Connected Live Michigan River Tools</h2>
+      <p style="margin-bottom:12px;font-size:0.9rem;color:#166534;">
+        This field guide connects directly with Chris Izworski's live river hydrology and trout angling telemetry engines:
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="/au-sable-river/" style="background:#fff;border:1px solid #86efac;color:#14532d;padding:6px 12px;border-radius:6px;font-size:0.85rem;font-weight:700;text-decoration:none;">Au Sable River Field Map &rarr;</a>
+        <a href="/manistee-river-map/" style="background:#fff;border:1px solid #86efac;color:#14532d;padding:6px 12px;border-radius:6px;font-size:0.85rem;font-weight:700;text-decoration:none;">Manistee River Map &rarr;</a>
+        <a href="/michigan-paddling/" style="background:#fff;border:1px solid #86efac;color:#14532d;padding:6px 12px;border-radius:6px;font-size:0.85rem;font-weight:700;text-decoration:none;">Michigan Paddling Explorer &rarr;</a>
+        <a href="/michigan-trout-streams/" style="background:#fff;border:1px solid #86efac;color:#14532d;padding:6px 12px;border-radius:6px;font-size:0.85rem;font-weight:700;text-decoration:none;">Michigan Trout Stream Map &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Brand -->
+  <footer style="background:#ffffff;border-top:1px solid #e2e8f0;padding:32px 20px;text-align:center;font-size:0.85rem;color:#64748b;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div class="hm-brand-group">
+        <a href="/" aria-label="Chris Izworski Home">
+          <img class="hm-brand-avatar" src="../chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
+        </a>
+        <span class="hm-brand-name">Chris Izworski</span>
+      </div>
+      <div>
+        Great Lakes Almanac &middot; Live Decision Engines &middot; Verified Field Guides
+      </div>
+      <div>
+        &copy; 2026 Chris Izworski. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Leaflet 1.9.4 JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Guide Client JS -->
+  <script src="../assets/michigan-rivers-field-guide.js"></script>
+</body>
+</html>

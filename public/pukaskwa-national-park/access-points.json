@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "park": "pukaskwa",
+  "checkedOn": "2026-10-31",
+  "geometryClass": "Parks Canada publicly released visitor point locations only; no trail route polylines",
+  "provenance": {
+    "publisher": "Parks Canada / Government of Canada",
+    "licence": "https://open.canada.ca/en/open-government-licence-canada",
+    "dataset": "https://open.canada.ca/data/en/dataset/cf5c266c-3a6a-4a3b-aed1-2ddd6e49d5e6",
+    "layer": "https://services2.arcgis.com/wCOMu5IS7YdSyPNx/arcgis/rest/services/Interest_Point_Interet_APCA_OpenOuvert/FeatureServer/0",
+    "officialVisitorMap": "https://pcweb2.azureedge.net/-/media/pn-np/on/pukaskwa/WET4/activ/maps/Carte-map-HCCAT.jpg",
+    "officialParkMapPage": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+    "officialDayUseParking": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/services/boutique",
+    "officialRedChair": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/chaises-chairs",
+    "officialDayHikes": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+    "openTrailsDataset": "https://open.canada.ca/data/en/dataset/64a90e8d-5bc0-4027-8645-b5881b4068d4",
+    "geometriesAvailable": "0 intersecting Pukaskwa Hattie Cove (-86.36,48.54,-86.22,48.64) in both public Trails APCA layers checked Oct 31. No trail line is asserted."
+  },
+  "coordinatesOrder": "longitude,latitude",
+  "points": [
+    {
+      "id": "day-use-parking",
+      "name": "Visitor Centre day-use parking",
+      "lon": -86.290157,
+      "lat": 48.591016,
+      "officialObjectId": 1005,
+      "kind": "parking",
+      "description": "The park directs day-use hikers and backcountry visitors to parking at the Visitor Centre. This is the GIS point for parking, not a claim that the lot or Highway 627 is open today.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/services/boutique",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "visitor-centre",
+      "name": "Hattie Cove Visitor Centre",
+      "lon": -86.290354,
+      "lat": 48.590297,
+      "officialObjectId": 990,
+      "kind": "information",
+      "description": "Park exhibits and staff advice in the visitor season. The centre is seasonal; consult published hours before counting on services.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/services/boutique",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "park-kiosk",
+      "name": "Park kiosk area",
+      "lon": -86.288882,
+      "lat": 48.592218,
+      "officialObjectId": 996,
+      "kind": "information",
+      "description": "Mapped kiosk and rental area. Availability of equipment and on-site staffing changes by season; no current service guarantee.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/heures-hours",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "horseshoe-beach",
+      "name": "Horseshoe Beach",
+      "lon": -86.296686,
+      "lat": 48.58973,
+      "officialObjectId": 973,
+      "kind": "landmark",
+      "description": "The sandy Lake Superior shoreline reached from Hattie Cove. It is a visitor landmark, not a surveyed Boardwalk Beach Trail starting point.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "middle-beach",
+      "name": "Middle Beach",
+      "lon": -86.300158,
+      "lat": 48.591302,
+      "officialObjectId": 988,
+      "kind": "landmark",
+      "description": "Park-listed destination on the Beach Trail shoreline. The pin is a beach location, not a trailhead, access confirmation or recommended cross-country route.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "southern-headland-chair",
+      "name": "Southern Headland red chairs",
+      "lon": -86.293675,
+      "lat": 48.589424,
+      "officialObjectId": 985,
+      "kind": "landmark",
+      "description": "Parks Canada's red-chair viewpoint on Southern Headland Trail. This is not a trailhead or a shortcut, and the map does not certify trail access.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/chaises-chairs",
+      "mapLinkType": "view-only"
+    },
+    {
+      "id": "picnic-area",
+      "name": "Visitor-area picnic spot",
+      "lon": -86.290795,
+      "lat": 48.590394,
+      "officialObjectId": 1003,
+      "kind": "landmark",
+      "description": "A Parks Canada mapped picnic-area point near the visitor facilities; no claim about current accessibility or services.",
+      "url": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/services",
+      "mapLinkType": "view-only"
+    }
+  ],
+  "trailFocus": {
+    "boardwalk-beach": "horseshoe-beach",
+    "beach": "middle-beach",
+    "southern-headland": "southern-headland-chair",
+    "manito-miikana": "day-use-parking",
+    "bimose-kinoomagewnan": "day-use-parking",
+    "hattie-cove-fire-walk": "day-use-parking",
+    "combination-hike": "day-use-parking",
+    "white-river-bridge": null
+  },
+  "safety": {
+    "noRoutes": true,
+    "noTrailheadWaypoints": true,
+    "noAccessOrSafetyClaims": true,
+    "doNotRevealSensitiveLocations": true,
+    "noDrivingDirectionsFromMappedPins": true,
+    "alwaysUseOfficialMapForTrailPaths": true,
+    "statement": "Public access points are genuine GIS locations, not paths, turn-by-turn directions, travel times or open-now confirmations."
+  }
+}

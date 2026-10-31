@@ -1,0 +1,361 @@
+/* FIELD_GUIDE_V1 · Great Lakes Rockhound Field Guide Styles */
+.wf--rockhound {
+  --wf-paper: #f4f5f2;
+  --wf-surface: #ffffff;
+  --wf-ink: #1b2624;
+  --wf-muted: #51635f;
+  --wf-accent: #255d54;
+  --wf-line: #dbe3dd;
+  --wf-copper: #9b5a32;
+  --wf-agate: #b24a29;
+  --wf-yooper: #d97706;
+  --wf-petoskey: #486581;
+}
+
+.wf-hero-rock-montage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.wf-hero-rock-montage figure {
+  height: 250px;
+}
+
+/* Hero CTA Button Row */
+.rh-hero-ctas,
+.lfa-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.rh-hero-ctas .wf-primary,
+.lfa-hero-ctas .wf-primary {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: var(--wf-accent, #255d54);
+  color: #ffffff !important;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(37, 93, 84, 0.2);
+  transition: all .15s ease-in-out;
+}
+.rh-hero-ctas .wf-primary:hover,
+.lfa-hero-ctas .wf-primary:hover {
+  background: #19433c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 93, 84, 0.28);
+}
+.rh-secondary-cta,
+.lfa-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--wf-accent, #255d54);
+  background: #ffffff;
+  color: var(--wf-accent, #255d54) !important;
+  font-size: .86rem;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all .15s ease-in-out;
+}
+.rh-secondary-cta:hover,
+.lfa-secondary-cta:hover {
+  background: #edf5f3;
+  border-color: #19433c;
+  color: #19433c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Field Blueprint & Anatomy Sections */
+.rh-anatomy {
+  margin: 28px auto 32px;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 8px;
+  padding: 24px 26px;
+  box-shadow: 0 4px 16px -6px rgba(27, 38, 36, 0.06);
+}
+.rh-anatomy-head {
+  margin-bottom: 20px;
+}
+.rh-anatomy-head h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+  color: var(--wf-ink);
+  margin: 4px 0 8px;
+}
+.rh-anatomy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+.rh-anatomy-card {
+  background: var(--wf-paper);
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rh-anatomy-card strong {
+  font: 700 0.85rem/1.3 var(--wf-body);
+  color: var(--wf-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rh-anatomy-card h3 {
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--wf-ink);
+}
+.rh-anatomy-card p {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--wf-muted);
+  margin: 0;
+}
+
+/* Stone ID Gallery */
+.rh-stone-gallery {
+  margin: 28px auto 32px;
+}
+.rh-stone-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+.rh-stone-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.rh-stone-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px -6px rgba(27, 38, 36, 0.12);
+}
+.rh-stone-photo {
+  height: 140px;
+  position: relative;
+  background: #2b3236;
+}
+.rh-stone-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rh-stone-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+.rh-stone-kicker {
+  font: 700 0.62rem/1.2 var(--wf-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--wf-copper);
+}
+.rh-stone-name {
+  font-family: var(--wf-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--wf-ink);
+  margin: 0;
+}
+.rh-stone-age {
+  font-size: 0.72rem;
+  color: var(--wf-muted);
+}
+.rh-stone-desc {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--wf-ink);
+  margin-top: 4px;
+}
+
+/* UV Specs & Legal Rule callout */
+.rh-deepdive {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 24px auto 32px;
+}
+.rh-spec-box {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-left: 4px solid var(--wf-accent);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+.rh-spec-box--uv {
+  border-left-color: var(--wf-yooper);
+  background: #fbfaf5;
+}
+.rh-spec-box--legal {
+  border-left-color: #b23f1c;
+  background: #fcf8f6;
+}
+.rh-spec-box h3 {
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+  color: var(--wf-ink);
+}
+.rh-spec-box p {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--wf-muted);
+  margin-bottom: 10px;
+}
+.rh-spec-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--wf-ink);
+}
+.rh-spec-list li {
+  margin-bottom: 6px;
+}
+
+/* Live Wave Badge on Story Cards */
+.rock-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font: 700 0.69rem/1.2 var(--wf-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  background: #eef2f0;
+  color: #3b5049;
+  border: 1px solid #c9d8cf;
+  transition: all 0.2s ease;
+}
+.rock-live-badge[data-status="PRIME"] {
+  background: #e6f4ea;
+  color: #137333;
+  border-color: #a8dab5;
+}
+.rock-live-badge[data-status="GOOD"] {
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-color: #aecbfa;
+}
+.rock-live-badge[data-status="STORM"],
+.rock-live-badge[data-status="BUILDING"] {
+  background: #fef7e0;
+  color: #b06000;
+  border-color: #fdd663;
+}
+.rock-live-badge[data-status="QUIET"] {
+  background: #f1f3f4;
+  color: #5f6368;
+  border-color: #dadce0;
+}
+
+/* Stone Tags & Rules Badges */
+.rh-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 4px 0 6px;
+}
+.rh-tag {
+  font: 700 0.62rem/1 var(--wf-body);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background: #e8edea;
+  color: var(--wf-accent);
+}
+.rh-tag--agate { background: #faeee7; color: var(--wf-agate); }
+.rh-tag--petoskey { background: #eaf0f6; color: var(--wf-petoskey); }
+.rh-tag--yooperlite { background: #fef3c7; color: #92400e; }
+.rh-tag--charlevoix { background: #f3e8ff; color: #6b21a8; }
+.rh-tag--fossil { background: #ecfdf5; color: #047857; }
+
+.rh-rule-pill {
+  font: 700 0.64rem/1 var(--wf-body);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+.rh-rule-pill--state { background: #dcfce7; color: #166534; }
+.rh-rule-pill--local { background: #e0f2fe; color: #0369a1; }
+.rh-rule-pill--usfs { background: #fef9c3; color: #854d0e; }
+.rh-rule-pill--nps { background: #fee2e2; color: #991b1b; font-weight: 800; border: 1px solid #f87171; }
+
+.rh-wave-metrics {
+  background: var(--wf-paper);
+  border: 1px solid var(--wf-line);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 0.73rem;
+  line-height: 1.45;
+  color: var(--wf-muted);
+  margin-top: 6px;
+}
+.rh-wave-metrics strong {
+  color: var(--wf-ink);
+}
+
+.rh-google-map-link {
+  font-size: 0.68rem !important;
+  color: #6a7c76 !important;
+}
+
+@media (max-width: 1024px) {
+  .rh-stone-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .wf-hero-rock-montage {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .wf-hero-rock-montage figure {
+    height: 180px;
+  }
+  .rh-anatomy-grid {
+    grid-template-columns: 1fr;
+  }
+  .rh-deepdive {
+    grid-template-columns: 1fr;
+  }
+  .rh-stone-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .rh-stone-grid {
+    grid-template-columns: 1fr;
+  }
+}

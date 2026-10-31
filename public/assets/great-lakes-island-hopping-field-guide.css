@@ -1,0 +1,468 @@
+/* FIELD_GUIDE_V1 · Great Lakes Island-Hopper Field Guide Styles */
+.wf--islands {
+  --wf-paper: #f0f4f8;
+  --wf-surface: #ffffff;
+  --wf-ink: #0f1e2e;
+  --wf-muted: #486581;
+  --wf-accent: #0c4a6e;
+  --wf-accent-hover: #073b57;
+  --wf-line: #cbd5e1;
+  --wf-navy: #0f2d4a;
+  --wf-seafoam: #e0f2fe;
+  --wf-amber: #d97706;
+  --wf-emerald: #065f46;
+  --wf-badge-bg: #e2e8f0;
+}
+
+.wf-hero-island-montage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.wf-hero-island-montage figure {
+  height: 250px;
+}
+
+/* Hero CTA Button Row */
+.ig-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.ig-hero-ctas .wf-primary {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: var(--wf-accent, #0c4a6e);
+  color: #ffffff !important;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(12, 74, 110, 0.22);
+  transition: all .15s ease-in-out;
+}
+.ig-hero-ctas .wf-primary:hover {
+  background: var(--wf-accent-hover, #073b57);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(12, 74, 110, 0.3);
+}
+.ig-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--wf-accent, #0c4a6e);
+  background: #ffffff;
+  color: var(--wf-accent, #0c4a6e) !important;
+  font-size: .86rem;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all .15s ease-in-out;
+}
+.ig-secondary-cta:hover {
+  background: #f0f7fb;
+  border-color: var(--wf-accent-hover, #073b57);
+  color: var(--wf-accent-hover, #073b57) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Island Personality Matrix & Filter Section */
+.ig-matrix-box {
+  margin: 32px auto 28px;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 8px;
+  padding: 24px 26px;
+  box-shadow: 0 4px 16px -6px rgba(15, 30, 46, 0.08);
+}
+.ig-matrix-head h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+  color: var(--wf-ink);
+  margin: 4px 0 8px;
+}
+.ig-matrix-head p {
+  color: var(--wf-muted);
+  font-size: .95rem;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+.ig-filter-cluster {
+  margin-bottom: 16px;
+}
+.ig-filter-label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--wf-muted);
+  margin-bottom: 8px;
+}
+.ig-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ig-filter-btn {
+  background: var(--wf-paper);
+  border: 1px solid var(--wf-line);
+  color: var(--wf-ink);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: .83rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.ig-filter-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+.ig-filter-btn.is-active {
+  background: var(--wf-accent);
+  border-color: var(--wf-accent);
+  color: #ffffff;
+}
+
+.ig-filter-secondary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--wf-line);
+  margin-top: 16px;
+}
+.ig-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ig-select-group label {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--wf-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.ig-select-group select {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--wf-line);
+  background: #ffffff;
+  color: var(--wf-ink);
+  font-size: .85rem;
+  font-weight: 500;
+}
+
+.ig-counter-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  margin-top: 18px;
+  font-size: .84rem;
+  color: var(--wf-ink);
+  font-weight: 600;
+}
+.ig-counter-strip a {
+  color: var(--wf-accent);
+  text-decoration: underline;
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+/* Interactive Leaflet Map */
+.ig-map-section {
+  margin: 26px auto 36px;
+}
+.ig-map-container {
+  height: 420px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--wf-line);
+  box-shadow: 0 4px 12px rgba(15, 30, 46, 0.08);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.ig-map-meta {
+  font-size: .75rem;
+  color: var(--wf-muted);
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Open-Water Physics & Anatomy Cards */
+.ig-physics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 22px auto 36px;
+}
+.ig-physics-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(15, 30, 46, 0.04);
+}
+.ig-physics-badge {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--wf-seafoam);
+  color: var(--wf-accent);
+  margin-bottom: 8px;
+}
+.ig-physics-card h3 {
+  font-size: 1.12rem;
+  color: var(--wf-ink);
+  margin: 4px 0 8px;
+  line-height: 1.35;
+}
+.ig-physics-card p {
+  font-size: .88rem;
+  color: var(--wf-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Island Ranger Protocols Banner */
+.ig-ranger-box {
+  background: #fdfbf7;
+  border: 1.5px solid #d4a373;
+  border-radius: 8px;
+  padding: 24px 26px;
+  margin: 34px auto;
+  box-shadow: 0 4px 12px rgba(139, 94, 60, 0.08);
+}
+.ig-ranger-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ig-ranger-badge {
+  background: #a45a2a;
+  color: #ffffff;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.ig-ranger-head h2 {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: #4a2810;
+  margin: 0;
+}
+.ig-ranger-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.ig-ranger-rule {
+  background: #ffffff;
+  border: 1px solid #e9d8c4;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.ig-ranger-rule strong {
+  display: block;
+  color: #5c3214;
+  font-size: .88rem;
+  margin-bottom: 6px;
+}
+.ig-ranger-rule p {
+  font-size: .82rem;
+  color: #6c584c;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* 12 Island Destination Cards */
+.ig-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid var(--wf-line);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 14px 0 18px;
+}
+.ig-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ig-spec-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--wf-muted);
+}
+.ig-spec-val {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--wf-ink);
+}
+
+.ig-personality-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.ig-personality-pill--historic {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.ig-personality-pill--wilderness {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.ig-personality-pill--car {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+.ig-personality-pill--bike {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+
+.ig-captain-log,
+.ig-ranger-briefing {
+  border-left: 3px solid var(--wf-accent);
+  padding: 8px 0 8px 16px;
+  margin: 14px 0;
+}
+.ig-captain-log strong,
+.ig-ranger-briefing strong {
+  display: block;
+  font-size: .88rem;
+  color: var(--wf-ink);
+  margin-bottom: 4px;
+}
+.ig-captain-log p,
+.ig-ranger-briefing p {
+  font-size: .88rem;
+  color: var(--wf-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ig-ranger-briefing {
+  border-left-color: #a45a2a;
+}
+
+.ig-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--wf-line);
+}
+.ig-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--wf-accent);
+  color: #ffffff !important;
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 9px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.ig-card-cta:hover {
+  background: var(--wf-accent-hover);
+  transform: translateY(-1px);
+}
+.ig-buoy-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: var(--wf-accent) !important;
+  border: 1.5px solid var(--wf-accent);
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.ig-buoy-cta:hover {
+  background: #f0f7fb;
+  transform: translateY(-1px);
+}
+.ig-google-map-link {
+  font-size: .78rem;
+  color: var(--wf-muted);
+  text-decoration: underline;
+  margin-left: auto;
+}
+.ig-google-map-link:hover {
+  color: var(--wf-ink);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .wf-hero-island-montage {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .wf-hero-island-montage figure {
+    height: 200px;
+  }
+  .ig-physics-grid,
+  .ig-ranger-grid {
+    grid-template-columns: 1fr;
+  }
+  .ig-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ig-google-map-link {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 6px;
+  }
+}

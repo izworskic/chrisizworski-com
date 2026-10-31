@@ -1,0 +1,59 @@
+name: Porkies visitor planner browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/porcupine-mountains/**'
+      - 'public/assets/porkies-explorer.*'
+      - 'public/assets/porkies-conditions.js'
+      - 'public/assets/porkies-access-map.js'
+      - 'public/assets/porkies-route-evidence.js'
+      - 'tests/porkies-conditions.test.js'
+      - 'tests/porkies-west-road.test.mjs'
+      - 'tests/porkies-parking.test.js'
+      - 'tests/porkies-access-proof.test.mjs'
+      - 'tests/porkies-experience-compare.test.mjs'
+      - 'tests/porkies-photo-entry-evidence.test.mjs'
+      - 'public/assets/porkies-experience-compare.js'
+      - 'scripts/check-porkies-access-sources.mjs'
+      - 'scripts/verify-porkies-browser.cjs'
+      - '.github/workflows/porkies-browser-qa.yml'
+  workflow_dispatch:
+concurrency:
+  group: porkies-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  chromium-field-guide:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated pinned Playwright harness
+        run: |
+          mkdir -p /tmp/porkies-playwright
+          npm install --prefix /tmp/porkies-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/porkies-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify source gate unit tests
+        run: node --test tests/porkies-conditions.test.js tests/porkies-parking.test.js tests/porkies-route-evidence.test.mjs tests/porkies-west-approach.test.mjs tests/porkies-west-road.test.mjs tests/porkies-access-proof.test.mjs tests/porkies-experience-compare.test.mjs tests/porkies-photo-entry-evidence.test.mjs
+      - name: Smoke official-source monitor in read-only mode
+        run: node scripts/check-porkies-access-sources.mjs --output artifacts/porkies-access-watch/report.json
+      - name: Verify mobile and desktop planner, license imagery, no-JS fallback
+        run: node scripts/verify-porkies-browser.cjs
+      - name: Upload screenshots and browser assertion report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-browser-qa
+          path: |
+            artifacts/porkies-browser/
+            artifacts/porkies-access-watch/report.json
+          if-no-files-found: warn
+          retention-days: 7

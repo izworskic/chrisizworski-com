@@ -107,6 +107,27 @@ async function main(){
       check(await firstMap.evaluate(img=>img.naturalWidth>0),name+' NPS Stockton trail map image failed to load');
       await page.locator('#island-atlas').screenshot({path:path.join(out,name+'-island-atlas.png')});
       report.screenshots.push(name+'-island-atlas.png');
+      // NPS route evidence: labels, three-step chain, map emphasis and trip handoff.
+      check(await page.locator('.atlas-path-card').count()===21,name+' 21 sourced pathway examples');
+      check(await page.locator('.path-sequence li').count()===63,name+' three stages per pathway');
+      await page.locator('[data-path-select="stockton-access"]:not([hidden])').waitFor({timeout:14000});
+      check(await page.locator('.atlas-path-choose:not([hidden])').count()===21,name+' pathway data load or UI activation failed');
+      await page.locator('#atlas-path-stockton-quarry-groups summary').click();
+      await page.locator('[data-path-select="stockton-quarry-groups"]').click();
+      check((await page.locator('#atlas-connection-readout').innerText()).includes('Quarry Bay'),name+' selected group-camp pathway missing');
+      check((await page.locator('#atlas-connection-readout').innerText()).includes('A, B'),name+' published group site identifiers missing');
+      check(await page.locator('#atlas-geographic-map .leaflet-interactive').count()===21,name+' selecting evidence must retain all Stockton site dots');
+      check(await page.locator('#atlas-path-stockton-quarry-groups').evaluate(el=>el.classList.contains('is-selected')),name+' selected pathway not visually distinct');
+      await page.locator('[data-atlas-pick="sand"]').click();
+      check(await page.locator('#atlas-coordinates-withheld').isVisible(),name+' Sand dots should remain withheld');
+      await page.locator('[data-path-select="sand-boardwalk"]').click();
+      check((await page.locator('#atlas-connection-readout').innerText()).includes('No campsite markers plotted'),name+' Sand description implying guessed campsite locations');
+      await page.locator('[data-path-trip="sand-boardwalk"]').click();
+      check(await page.locator('#trip-island').inputValue()==='sand',name+' NPS pathway trip handoff lost island');
+      check((await page.locator('#trip-selected-path').innerText()).includes('accessible site 3'),name+' trip brief lost verified accessible site context');
+      await page.locator('[data-atlas-pick="stockton"]').click();
+      await page.locator('#island-atlas').screenshot({path:path.join(out,name+'-source-pathways.png')});
+      report.screenshots.push(name+'-source-pathways.png');
       // Visitor can move from a dock's published trail/campsite record to a trip brief.
       check(await page.locator('.dock-record').count()===11,name+' 11 NPS dock records');
       check(await page.locator('.dock-record[data-dock-state="closed"]').count()===1,name+' only Devils dock closed');
@@ -212,6 +233,10 @@ async function main(){
     check(await nojs.locator('.atlas-scene').count()===8,'no JavaScript 8 official island maps');
     check(await nojs.locator('.atlas-trails li').count()===24,'no JavaScript 24 documented trails');
     check(await nojs.locator('.atlas-site-link').count()===42,'no JavaScript 42 NPS campsite site records');
+    check(await nojs.locator('.atlas-path-card').count()===21,'no JavaScript NPS pathway descriptions');
+    check(await nojs.locator('.path-sequence li').count()===63,'no JavaScript three-stage visitor sequences');
+    check((await nojs.locator('#atlas-path-sand-boardwalk').textContent()).includes('NPS-documented East Bay dock boardwalk'),'no JavaScript verified Sand boardwalk');
+    check((await nojs.locator('#atlas-path-devils-closed').textContent()).includes('Do not plan a dock landing'),'no JavaScript Devils closure explanation');
     check((await nojs.locator('#atlas-sand').innerText()).includes('being corrected'),'no JavaScript Sand location warning');
     check((await nojs.locator('#dock-devils-south').innerText()).includes('Closed landing'),'no JavaScript Devils closure');
     check((await nojs.locator('[data-source-id="operator-shuttle"]').innerText()).includes('Published season: June 20'),'no JavaScript dated operator evidence');

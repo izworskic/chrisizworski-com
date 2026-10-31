@@ -1,0 +1,52 @@
+name: Pukaskwa visitor chooser browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/pukaskwa-national-park/**'
+      - 'public/assets/pukaskwa-*'
+      - 'lib/pukaskwa/public-status.mjs'
+      - 'api/pukaskwa-conditions.js'
+      - 'tests/pukaskwa-visitor-chooser.test.js'
+      - 'tests/pukaskwa-map.test.js'
+      - 'scripts/verify-pukaskwa-browser.cjs'
+      - 'scripts/verify-pukaskwa-map-browser.cjs'
+      - '.github/workflows/pukaskwa-browser-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify visitor data, ranking, source and API contracts
+        run: node --test tests/pukaskwa-visitor-chooser.test.js tests/pukaskwa-map.test.js
+      - name: Install isolated browser runner
+        run: |
+          mkdir -p /tmp/pukaskwa-playwright
+          npm install --prefix /tmp/pukaskwa-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/pukaskwa-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Mobile desktop, real photo and no-JS browser QA
+        run: node scripts/verify-pukaskwa-browser.cjs
+      - name: Verify GIS pins, actual map tiles and failover on 360/390/768/1366
+        run: node scripts/verify-pukaskwa-map-browser.cjs
+      - name: Preserve review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pukaskwa-visitor-browser-qa
+          path: |
+            artifacts/pukaskwa-chooser
+            artifacts/pukaskwa-access-map
+          retention-days: 7
+          if-no-files-found: warn

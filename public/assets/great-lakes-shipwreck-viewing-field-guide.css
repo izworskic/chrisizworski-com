@@ -1,0 +1,390 @@
+/* FIELD_GUIDE_V1 · Great Lakes Shipwreck Viewing Field Guide Styles
+ * Color palette: Deep maritime navy, crystal cold freshwater cyan, weathered oak rust.
+ */
+.wf--shipwrecks {
+  --wf-paper: #f1f5f9;
+  --wf-surface: #ffffff;
+  --wf-ink: #0f172a;
+  --wf-muted: #475569;
+  --wf-accent: #0284c7;
+  --wf-accent-hover: #0369a1;
+  --wf-navy: #0c2340;
+  --wf-cyan: #06b6d4;
+  --wf-rust: #b45309;
+  --wf-aqua-bg: #ecfeff;
+  --wf-line: #cbd5e1;
+  --wf-badge-bg: #e2e8f0;
+}
+
+.wf-hero-shipwreck-montage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.wf-hero-shipwreck-montage figure {
+  height: 250px;
+}
+
+/* Hero CTA Button Row */
+.sw-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 12px;
+}
+.sw-hero-ctas .wf-primary {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: var(--wf-navy, #0c2340);
+  color: #ffffff !important;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(12, 35, 64, 0.25);
+  transition: all .15s ease-in-out;
+}
+.sw-hero-ctas .wf-primary:hover {
+  background: #081a30;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(12, 35, 64, 0.35);
+}
+.sw-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 700;
+  background: #ffffff;
+  color: var(--wf-navy, #0c2340) !important;
+  border: 1.5px solid var(--wf-line, #cbd5e1);
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: all .15s ease-in-out;
+}
+.sw-secondary-cta:hover {
+  background: #f8fafc;
+  border-color: var(--wf-accent, #0284c7);
+  color: var(--wf-accent, #0284c7) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Physics & Mussel Clarity Section */
+.sw-clarity {
+  margin: 44px auto;
+}
+.sw-clarity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+.sw-clarity-card {
+  background: var(--wf-surface, #ffffff);
+  border: 1px solid var(--wf-line, #cbd5e1);
+  border-radius: 8px;
+  padding: 22px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+}
+.sw-clarity-card strong {
+  display: inline-block;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--wf-accent, #0284c7);
+  margin-bottom: 6px;
+}
+.sw-clarity-card h3 {
+  font-family: var(--wf-display, Georgia, serif);
+  font-size: 1.25rem;
+  margin: 0 0 10px;
+  color: var(--wf-navy, #0c2340);
+}
+.sw-clarity-card p {
+  color: var(--wf-muted, #475569);
+  font-size: .92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Wave Viewing Window Index */
+.sw-wave-window {
+  background: var(--wf-navy, #0c2340);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 28px;
+  margin: 36px auto;
+}
+.sw-wave-window h2 {
+  font-family: var(--wf-display, Georgia, serif);
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+  color: #ffffff;
+}
+.sw-wave-window .wf-lede {
+  color: #94a3b8;
+  margin-bottom: 22px;
+}
+.sw-wave-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.sw-wave-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 18px;
+}
+.sw-wave-status {
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.sw-wave-status--prime {
+  background: #10b981;
+  color: #ffffff;
+}
+.sw-wave-status--moderate {
+  background: #f59e0b;
+  color: #ffffff;
+}
+.sw-wave-status--blown {
+  background: #ef4444;
+  color: #ffffff;
+}
+.sw-wave-card h3 {
+  font-size: 1.1rem;
+  margin: 0 0 6px;
+  color: #ffffff;
+}
+.sw-wave-card p {
+  font-size: .88rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Viewing Method Filter Bar */
+.sw-filter-section {
+  background: var(--wf-surface, #ffffff);
+  border: 1px solid var(--wf-line, #cbd5e1);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 36px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.sw-filter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.sw-filter-head h2 {
+  font-family: var(--wf-display, Georgia, serif);
+  font-size: 1.4rem;
+  margin: 0;
+  color: var(--wf-navy, #0c2340);
+}
+.sw-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.sw-method-btn {
+  background: var(--wf-paper, #f1f5f9);
+  border: 1.5px solid var(--wf-line, #cbd5e1);
+  color: var(--wf-ink, #0f172a);
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: .88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.sw-method-btn:hover {
+  border-color: var(--wf-accent, #0284c7);
+  background: #e0f2fe;
+}
+.sw-method-btn.is-active {
+  background: var(--wf-navy, #0c2340);
+  border-color: var(--wf-navy, #0c2340);
+  color: #ffffff;
+}
+.sw-secondary-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--wf-line, #cbd5e1);
+}
+.sw-filter-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--wf-muted, #475569);
+}
+.sw-filter-field select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--wf-line, #cbd5e1);
+  background: #ffffff;
+  color: var(--wf-ink, #0f172a);
+  font-size: .88rem;
+}
+.sw-count-badge {
+  font-size: .86rem;
+  color: var(--wf-muted, #475569);
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Map Section */
+.sw-map-section {
+  margin: 36px auto;
+}
+.sw-map-container {
+  height: 440px;
+  border-radius: 8px;
+  border: 1px solid var(--wf-line, #cbd5e1);
+  background: #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.sw-map-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: .8rem;
+  color: var(--wf-muted, #475569);
+}
+
+/* Stop Card Tags */
+.sw-tag-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.sw-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .78rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--wf-paper, #f1f5f9);
+  color: var(--wf-navy, #0c2340);
+  border: 1px solid var(--wf-line, #cbd5e1);
+}
+.sw-tag--depth {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+.sw-tag--access {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+.sw-tag--preserve {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+/* Ranger Golden Rules */
+.sw-ranger-rules {
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-left: 6px solid #d97706;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 40px auto;
+}
+.sw-ranger-rules h2 {
+  font-family: var(--wf-display, Georgia, serif);
+  font-size: 1.4rem;
+  color: #92400e;
+  margin: 0 0 10px;
+}
+.sw-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+.sw-rule-item {
+  background: #ffffff;
+  border: 1px solid #fef3c7;
+  border-radius: 6px;
+  padding: 16px;
+}
+.sw-rule-item h3 {
+  font-size: 1.05rem;
+  color: #78350f;
+  margin: 0 0 6px;
+}
+.sw-rule-item p {
+  font-size: .88rem;
+  line-height: 1.5;
+  color: #451a03;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .wf-hero-shipwreck-montage {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .wf-hero-shipwreck-montage figure {
+    height: 180px;
+  }
+  .sw-map-container {
+    height: 320px;
+  }
+  .sw-filter-buttons {
+    flex-direction: column;
+  }
+  .sw-method-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .sw-secondary-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sw-count-badge {
+    margin-left: 0;
+    text-align: center;
+  }
+}

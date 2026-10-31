@@ -347,13 +347,14 @@ test('house page exposes complete search, social-card and app discovery metadata
 test('site discovery surfaces describe the current House product rather than the retired Fit Ceiling concept', () => {
   const root = path.join(__dirname, '..');
   const tools = readFileSync(path.join(root, 'public', 'tools', 'index.html'), 'utf8');
+  const national = readFileSync(path.join(root, 'public', 'synced-national-tools', 'index.html'), 'utf8');
   const llms = readFileSync(path.join(root, 'public', 'llms.txt'), 'utf8');
   const sitemap = readFileSync(path.join(root, 'public', 'sitemap.xml'), 'utf8');
 
-  assert.match(tools, /latest daily 30-year conforming mortgage-rate average/i);
-  assert.match(tools, /Reality Gap/);
-  assert.doesNotMatch(tools, /reverse-solves the purchase price at which estimated monthly ownership cost fits a buyer-chosen limit/);
-  assert.doesNotMatch(tools, /current Freddie Mac 30-year benchmark/);
+  assert.match(national, /latest daily 30-year conforming mortgage-rate average/i);
+  assert.match(national, /Reality Gap/);
+  assert.doesNotMatch(national, /reverse-solves the purchase price at which estimated monthly ownership cost fits a buyer-chosen limit/);
+  assert.doesNotMatch(national, /current Freddie Mac 30-year benchmark/);
 
   assert.match(llms, /## Home-Buying Decision Tool/);
   assert.match(llms, /https:\/\/chrisizworski\.com\/can-i-afford-this-house\//);

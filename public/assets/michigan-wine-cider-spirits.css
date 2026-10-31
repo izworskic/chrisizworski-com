@@ -1,0 +1,448 @@
+/* Michigan Wine, Cider & Spirits Field Guide v1  -  extends /assets/winter-field-guide.css */
+.wf.wf--wine {
+  --wf-accent: #6e2b3b;
+  --wf-accent-soft: #f5ebee;
+  --wf-gold: #8c5a2b;
+}
+
+.wcs-hero-montage {
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  gap: 14px;
+  align-items: stretch;
+}
+.wcs-hero-montage .wf-hero-photo {
+  grid-row: span 2;
+}
+.wcs-hero-montage .wf-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 185px;
+  max-height: 360px;
+  object-fit: cover;
+}
+@media (max-width: 860px) {
+  .wcs-hero-montage {
+    grid-template-columns: 1fr;
+  }
+  .wcs-hero-montage .wf-hero-photo {
+    grid-row: auto;
+  }
+}
+
+.wcs-signpost {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+  margin-bottom: 22px;
+}
+.wcs-signpost > div {
+  background: var(--wf-surface, #fffdf9);
+  border: 1px solid var(--wf-line, #dcd5c9);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.wcs-signpost strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--wf-ink, #1b2420);
+  margin-bottom: 4px;
+}
+.wcs-signpost span {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--wf-muted, #4f5b55);
+  line-height: 1.45;
+}
+@media (max-width: 780px) {
+  .wcs-signpost {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wcs-closure {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: #fdf6ee;
+  border: 1px solid #dec3a4;
+  border-left: 5px solid #6e2b3b;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+.wcs-closure h2 {
+  font-size: 1.18rem;
+  margin: 4px 0 8px;
+  color: #2b1810;
+}
+.wcs-closure p {
+  margin: 0;
+  max-width: 78ch;
+  color: #3f2b22;
+  line-height: 1.55;
+  font-size: 0.94rem;
+}
+.wcs-closure-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.wcs-closure-actions > a {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #6e2b3b;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.wcs-closure-actions > a:hover {
+  background: #531e2b;
+}
+
+.wcs-season-engine {
+  background: linear-gradient(135deg, #fffdf9 0%, #f9f2ed 100%);
+  border: 1px solid #dcc8b8;
+  border-left: 5px solid var(--wf-accent, #6e2b3b);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+}
+.wcs-season-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e6d8cc;
+}
+.wcs-season-head h2 {
+  margin: 4px 0 0;
+  font-size: 1.32rem;
+  color: var(--wf-ink, #1b2420);
+}
+.wcs-season-lead {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--wf-muted, #4f5b55);
+}
+.wcs-season-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 1080px) {
+  .wcs-season-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .wcs-season-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.wcs-season-card {
+  background: #ffffff;
+  border: 1px solid #dfd1c4;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wcs-season-card[data-current-season="true"] {
+  border-color: var(--wf-accent, #6e2b3b);
+  box-shadow: 0 4px 14px rgba(110, 43, 59, 0.12);
+  background: #fffdfb;
+}
+.wcs-season-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.wcs-season-window {
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wf-gold, #8c5a2b);
+}
+.wcs-season-live-pill {
+  background: var(--wf-accent, #6e2b3b);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.wcs-season-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.28;
+  color: var(--wf-ink, #1b2420);
+}
+.wcs-season-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.wcs-season-card h3 a:hover {
+  color: var(--wf-accent, #6e2b3b);
+  text-decoration: underline;
+}
+.wcs-season-card p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #2c221e;
+}
+.wcs-season-picks {
+  margin-top: auto !important;
+  padding-top: 6px;
+  font-size: 0.8rem !important;
+}
+.wcs-season-picks a {
+  color: var(--wf-accent, #6e2b3b);
+  font-weight: 600;
+  text-decoration: none;
+}
+.wcs-season-picks a:hover {
+  text-decoration: underline;
+}
+.wcs-season-card-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--wf-accent-soft, #f5ebee);
+  color: var(--wf-accent, #6e2b3b);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+.wcs-season-card-cta:hover {
+  background: var(--wf-accent, #6e2b3b);
+  color: #ffffff;
+}
+
+.wcs-science {
+  background: var(--wf-surface, #fffdf9);
+  border: 1px solid var(--wf-line, #dcd5c9);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 30px;
+}
+.wcs-science-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.wcs-science-head h2 {
+  margin: 4px 0 0;
+  font-size: 1.45rem;
+}
+.wcs-science-head > p {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--wf-muted, #4f5b55);
+  font-size: 0.93rem;
+}
+.wcs-science-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 18px;
+  align-items: stretch;
+}
+@media (max-width: 860px) {
+  .wcs-science-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.wcs-mode-selector {
+  display: grid;
+  gap: 10px;
+}
+.wcs-mode-selector button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 2px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--wf-line, #dcd5c9);
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.wcs-mode-selector button span {
+  grid-row: span 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--wf-accent, #6e2b3b);
+  align-self: center;
+}
+.wcs-mode-selector button strong {
+  font-size: 0.96rem;
+  color: var(--wf-ink, #1b2420);
+}
+.wcs-mode-selector button small {
+  font-size: 0.82rem;
+  color: var(--wf-muted, #4f5b55);
+}
+.wcs-mode-selector button[aria-pressed="true"] {
+  border-color: var(--wf-accent, #6e2b3b);
+  background: #faf1f3;
+  box-shadow: 0 1px 4px rgba(110, 43, 59, 0.12);
+}
+
+.wcs-mode-stage {
+  background: #f9f4ef;
+  border: 1px solid #e2d5c8;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wcs-stage-type {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wf-accent, #6e2b3b);
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+.wcs-mode-stage h3 {
+  margin: 0 0 10px;
+  font-size: 1.24rem;
+  color: var(--wf-ink, #1b2420);
+}
+.wcs-mode-stage p {
+  margin: 0 0 12px;
+  line-height: 1.55;
+  font-size: 0.94rem;
+  color: #26312c;
+}
+.wcs-stage-foot {
+  margin: 0 !important;
+  padding-top: 10px;
+  border-top: 1px solid #dfd2c5;
+  font-size: 0.86rem !important;
+  font-weight: 600;
+  color: #5a2230 !important;
+}
+
+.wcs-status {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 4px 9px;
+  border-radius: 999px;
+  margin: 0 0 8px;
+}
+.wcs-status-walkin {
+  background: #e6f2ec;
+  color: #214d39;
+}
+.wcs-status-reserve {
+  background: #f8e8ec;
+  color: #6e2b3b;
+}
+.wcs-status-evening {
+  background: #fdf0df;
+  color: #6e4514;
+}
+
+.wcs-why {
+  font-size: 0.9rem;
+  color: var(--wf-muted, #4f5b55);
+}
+
+.wcs-map-caution {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f9f2ed;
+  border: 1px solid #e2d1c3;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+.wcs-map-caution strong {
+  display: block;
+  color: #2b1810;
+  margin-bottom: 2px;
+}
+
+.wcs-ledger {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  background: var(--wf-surface, #fffdf9);
+  border: 1px solid var(--wf-line, #dcd5c9);
+  border-radius: 16px;
+  padding: 24px;
+}
+.wcs-ledger-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+.wcs-ledger-card {
+  background: #ffffff;
+  border: 1px solid var(--wf-line, #dcd5c9);
+  border-radius: 12px;
+  padding: 16px;
+}
+.wcs-ledger-card h3 {
+  font-size: 1.04rem;
+  margin: 0 0 6px;
+}
+.wcs-ledger-card p {
+  font-size: 0.86rem;
+  color: var(--wf-muted, #4f5b55);
+  margin: 0 0 10px;
+  line-height: 1.45;
+}
+.wcs-ledger-card ul {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+.wcs-ledger-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eee7dd;
+}
+.wcs-ledger-links a {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6e2b3b;
+  text-decoration: none;
+}
+.wcs-ledger-links a:hover {
+  text-decoration: underline;
+}

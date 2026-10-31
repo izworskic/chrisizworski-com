@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 29: owner-corrected Prepared start date and identity context.
+  "/chris-izworski-911/",
   // Oct 26: owner-approved lake-effect forecast → winter-decision cards added to source while the clean snapshot predates this release. Existing page audits remain active.\n  "/lake-effect-snow/",\n  // Oct 26: verified Bridge live ribbon answer-jump CSS intentionally differs from older live crawl snapshot; no ad styling changes.
   "/assets/mackinac-bridge-live.css",
   // October 25: reviewed Bridge toll UI and calculator script are intentionally new relative to the older live-crawl snapshot. Retain QA/regression gates until next clean production crawl.
@@ -143,6 +145,7 @@ const intentionalChanges = new Set([
   // Mirror changes come from the national hub owner; no specialist engine implementation changes.
   "/assets/tool-engagement.js",
   "/synced-national-tools/",
+  "/synced-national-tools/assets/national-tools-directory.css",
   "/synced-national-tools/assets/national-tools-directory.js",
   // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.
   "/synced-national-tools/haleakala-sunrise/",
@@ -473,7 +476,7 @@ const committedDriftHashEntries = [
   // pages. Verified semantically (parsed JSON-LD compared property by property) that nothing but
   // url / description / alumniOf moved on these routes. Re-crawl after deploy and these pins can
   // go back to the live snapshot.
-  ["/chris-izworski-biography/", "2191b790b006cd1c9ff20308aff607b319f9b79cfbec3cd0e0515ffd78c3d526"],
+  ["/chris-izworski-biography/", "4158c676804c5621ce1d24f81be5ef9432a2384925ad1d3c063805637325b3a6"],
   // Oct 8 2026: feature four flagship tools and link reviewed engineering evidence.
   ["/chris-izworski-works/", "01fc5627af81f877af40e02a558fcfaf90b832dcfa04bdd37a87688147bfe13a"],
   ["/fall-color/ann-arbor-irish-hills-fall-color/", "ee05322133166c076ca3ec0d02389524f703830e1bd5104c15de67d229490a61"],
@@ -540,7 +543,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
   // Oct. 25 wildlife evidence update synchronizes Great Lakes Birding dateModified with sitemap lastmod. Pinned exact sitemap bytes; not a parity exemption.
-  ["/sitemap-reputation.xml", "67c71a4c4615221b0b2bafc6d5f0a9319be445184a1573251dbde159cce2f400"],
+  ["/sitemap-reputation.xml", "88603a66a4d3075756c8f74aff47d141f525fa0123122e7d677566f2664df850"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 

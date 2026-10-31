@@ -1,0 +1,65 @@
+name: Porkies official road and trail route-evidence rebuild
+on:
+  push:
+    branches: [feat/porkies-access-decision-explorer-20261028]
+    paths:
+      - 'scripts/research-porkies-routing.mjs'
+      - 'lib/porkies/route-topology.mjs'
+      - '.github/workflows/porkies-route-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: porkies-route-evidence-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  gis-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test graph truth rules before extraction
+        run: node --test tests/porkies-route-topology.test.mjs
+      - name: Fetch full DNR trails and official Michigan road centerlines
+        run: node scripts/research-porkies-routing.mjs --emit-public-research
+      - name: Validate research output never claims a certified route
+        run: |
+          node -e "const f=require('./public/porcupine-mountains/routing-evidence.json'); if(f.status!=='geometry-not-navigable'||!f.noPublicRouteTimes||!f.noCrossingSafetyCertification||f.audit.trailFeatures!==819||f.audit.roadFeatures<50||f.audit.skiFeatures!==40)process.exit(1)"
+      - name: Preserve audit and GIS geometries for independent review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-official-road-trail-audit
+          path: artifacts/porkies-routing/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Commit audited GIS reference geometry to this feature branch only
+        if: github.ref == 'refs/heads/feat/porkies-access-decision-explorer-20261028'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/porcupine-mountains/routing-evidence.json public/porcupine-mountains/trail-reference.geojson public/porcupine-mountains/park-road-reference.geojson public/porcupine-mountains/ski-reference.geojson
+          if git diff --cached --quiet; then
+            echo "No GIS changes"
+          else
+            git commit -m "data(porkies): retain official non-routable trail and road geometry research"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin feat/porkies-access-decision-explorer-20261028
+              git rebase origin/feat/porkies-access-decision-explorer-20261028
+              if git push origin HEAD:feat/porkies-access-decision-explorer-20261028; then
+                echo "Published audited source layers without overwriting concurrent work"
+                break
+              fi
+              if [ "$attempt" = 5 ]; then
+                echo "Concurrent branch updates prevented source publication" >&2
+                exit 1
+              fi
+              sleep "$attempt"
+            done
+          fi

@@ -1,3 +1,13 @@
+## EXPERIENCE_OS_V1 — automatic experience research for visitor-facing work (2026-10-31)
+
+For **any new interactive visitor tool, substantial UI redesign, or new meaningful interaction**, automatically read [`design-systems/experience-os-v1/AGENTS.md`](design-systems/experience-os-v1/AGENTS.md) and its research, inspiration, patterns, technology decisions, lifecycle and QA scorecard **without waiting for the owner to remember a template name**. Write an evidence-backed experience brief and compare at least two approaches before a major build. Reuse `FIELD_GUIDE_V1` and `JOURNEY_ATLAS_V1` when applicable; preserve distinctive layouts and choose technologies only for proven user value. Verify real mobile/desktop browser behavior and capture transferable lessons. This is **not** a React/Rust/3D mandate.
+
+**Priority and scope:** existing authoritative owning-repository instructions, safety, accessibility, map/data, ad, canonical/Person and CI rules still take precedence. Tiny fixes do not require a full new design brief. Independent extracted tool repositories do not inherit these instructions; see [cross-repository adoption](design-systems/experience-os-v1/docs/MULTI_REPO_ADOPTION.md) and add a pointer there by reviewed change. This package creates no production URL.
+
+## Reusable Journey Atlas experience intelligence — 2026-10-30
+
+When the owner asks **"Use JOURNEY_ATLAS_V1"**, **"use my Journey Atlas template"** or **"trip-aware field guide"**, first read [`design-systems/journey-atlas-v1/AGENTS.md`](design-systems/journey-atlas-v1/AGENTS.md), [`README.md`](design-systems/journey-atlas-v1/README.md) and the evidence/QA rules. It complements `FIELD_GUIDE_V1`: experience matching by shore, interest and qualitative time; source-linked alternatives; optional integration with the existing stop planner. Reuse verified specialist tools rather than duplicating their logic. No fake live access, unapproved ad changes, or new indexable duplicate route. Lake Superior reference: `/lake-superior-circle-tour/#journey-atlas`.
+
 ## Reusable photo-led Field Guide standard — 2026-10-26
 
 When the owner asks **"use my Field Guide design standard"**, **"FIELD_GUIDE_V1"** or **"the Michigan Adventure Finder design"**, first read [`design-systems/field-guide-v1/AGENTS.md`](design-systems/field-guide-v1/AGENTS.md) and its referenced specification. The self-contained, versioned system includes accessible HTML/CSS/JS starter, photographed destination cards, credits/licenses, map fallback and QA benchmark. Apply the *experience principles*, not cloned text or duplicated cards. Do not modify the existing advertising stack without a separate explicit request. The source folder is not a public route and not a separate GitHub repository.

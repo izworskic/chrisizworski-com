@@ -12,7 +12,7 @@
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg"><meta property="og:image:alt" content="Historic wall of intense lake-effect snowfall advancing toward the Buffalo Southtowns in November 2014.">
 <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Lake Effect Snow: Which Snowbelt Is Favored?"><meta name="twitter:description" content="Compare official forecasts, lake conditions and changing wind direction across the Great Lakes.">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/lake-effect-snow/#tool","name":"Great Lakes Lake-Effect Snow Decision Engine","url":"https://chrisizworski.com/lake-effect-snow/","operatingSystem":"Web","applicationCategory":"WeatherApplication","dateModified":"2026-10-26","author":{"@id":"https://chrisizworski.com/#person"},"description":"Snowbelt-level interpretation of official NWS hourly snow, wind and alert forecasts, contextualized with NOAA daily lakewide temperature and explicitly qualitative uncertainty.","publisher":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/lake-effect-snow/#tool","name":"Great Lakes Lake-Effect Snow Decision Engine","url":"https://chrisizworski.com/lake-effect-snow/","operatingSystem":"Web","applicationCategory":"WeatherApplication","dateModified":"2026-10-28","author":{"@id":"https://chrisizworski.com/#person"},"description":"Snowbelt-level interpretation of official NWS hourly snow, wind and alert forecasts, contextualized with NOAA daily lakewide temperature and explicitly qualitative uncertainty.","publisher":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true}]}</script>
 <style>
 :root{color-scheme:light;--ink:#202b34;--muted:#556777;--paper:#f4f7f7;--line:#d2dfe5;--blue:#114e64;--sea:#087f85;--gold:#996516}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--blue)}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #00899b;outline-offset:3px}
@@ -119,6 +119,8 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 @media(max-width:980px){.winter-next-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.winter-next-grid{grid-template-columns:1fr}.winter-next-grid a{min-height:0}}
 </style>
+<link rel="stylesheet" href="https://national-snowpack-melt.vercel.app/assets/lake-effect-time-lens.css?v=20261031-1">
+<link rel="stylesheet" href="https://national-snowpack-melt.vercel.app/assets/lake-effect-geography.css?v=20261031-1">
 </head>
 <body>
 <header class="head"><div class="shell"><a href="https://chrisizworski.com/">Chris Izworski</a><nav aria-label="Site"><a href="https://chrisizworski.com/tools/">All tools</a><a href="https://chrisizworski.com/michigan-snow-depth/">Snow on the ground</a><a href="https://chrisizworski.com/national-tools/snow/">National snow tracker</a></nav></div></header>
@@ -213,6 +215,9 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
     <a href="/michigan-ice/"><strong>How is lake ice developing?</strong><span>Cold accumulation and observations; never safe-ice certification</span></a>
     <a href="/michigan-ice-caves/"><strong>Which ice caves can I visit?</strong><span>Formation conditions and access are separate checks</span></a>
     <a href="/national-tools/white-christmas/forecast/"><strong>Will Christmas be snowy?</strong><span>Historical December 25 odds, not a long-range snowstorm forecast</span></a>
+    <a href="/michigan-first-snow-adventures/"><strong>Where does first snow accumulate?</strong><span>12 early-winter Michigan snowbelts &amp; grass-bed Nordic trails</span></a>
+    <a href="/michigan-winter-weekends/"><strong>Plan a 2-day winter weekend</strong><span>12 Michigan base towns with snow plans &amp; weather-proof backups</span></a>
+    <a href="/michigan-white-christmas-escapes/"><strong>Michigan White Christmas escapes</strong><span>10 holiday towns ranked by NOAA 1991–2020 snow probability</span></a>
   </div>
 </nav>
 <section class="panel"><h2>How forecasts and reported snowfall differ</h2><div class="guide">
@@ -221,8 +226,10 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 </div></section>
 </div></main>
 <footer><div class="shell">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · NOAA/NWS data are government sources; interpretation is independent and does not replace official alerts or local road authorities.</div></footer>
-<script src="https://national-snowpack-melt.vercel.app/assets/lake-effect.js?v=20261025-2" defer></script>
+<script src="https://national-snowpack-melt.vercel.app/assets/lake-effect.js?v=20261031-2" defer></script>
 <script src="https://national-snowpack-melt.vercel.app/assets/lake-effect-explainer.js?v=20261024-1" defer></script>
 <script src="https://national-snowpack-melt.vercel.app/assets/lake-effect-radar.js?v=20261025-1" defer></script>
+<script src="https://national-snowpack-melt.vercel.app/assets/lake-effect-time-lens.js?v=20261031-1" defer></script>
+<script src="https://national-snowpack-melt.vercel.app/assets/lake-effect-geography.js?v=20261031-1" defer></script>
 </body>
 </html>

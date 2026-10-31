@@ -202,7 +202,11 @@
 .layup-home .ship-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s}
 .layup-home .ship-card:hover{transform:translateY(-3px);border-color:var(--line-strong);box-shadow:0 20px 40px rgba(0,0,0,.35)}
 .layup-home .ship-card.is-selected{border-color:var(--lamp);box-shadow:0 0 0 1px var(--lamp),0 20px 40px rgba(0,0,0,.35)}
-.layup-home .ship-art{position:relative;background:linear-gradient(180deg,#0a1a2b 0%,#0e2234 70%,#0c2231 70%,#0a1b29 100%);aspect-ratio:300/92;overflow:hidden}
+.layup-home .ship-card-photo{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#081827,#13304a);overflow:hidden;border-bottom:1px solid var(--line)}
+.layup-home .ship-card-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.88) brightness(.92);transition:transform .45s ease,filter .3s}
+.layup-home .ship-card:hover .ship-card-photo img{transform:scale(1.04);filter:saturate(.98) brightness(1)}
+.layup-home .ship-photo-credit{position:absolute;right:8px;bottom:6px;background:rgba(5,13,22,.78);color:var(--fog);font-size:.66rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);max-width:85%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;backdrop-filter:blur(4px)}
+.layup-home .ship-art{position:relative;background:linear-gradient(180deg,#0a1a2b 0%,#0e2234 70%,#0c2231 70%,#0a1b29 100%);aspect-ratio:300/68;overflow:hidden}
 .layup-home .ship-art .card-ship{position:absolute;inset:0;width:100%;height:100%}
 .layup-home .card-rule{fill:var(--sub);font:500 9px/1 var(--body)}
 .layup-home .ship-monogram{position:absolute;right:10px;top:8px;font-family:var(--display);font-weight:800;font-size:.72rem;letter-spacing:.14em;color:var(--sub);background:rgba(5,13,22,.6);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
@@ -250,16 +254,79 @@
 .layup-home .feature-desc{color:var(--fog);font-size:.9rem}
 .layup-home .feature-link{font-size:.84rem;color:var(--lamp);font-weight:600;margin-top:4px}
 .layup-home .feature-credit{font-size:.74rem;color:var(--sub);margin:12px 0 0;line-height:1.5}
-.layup-home .ship-library-title{margin:26px 0 10px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sub)}
-.layup-home .bio-related-grid{display:flex;gap:8px;flex-wrap:wrap}
-.layup-home .bio-related{background:var(--panel);border:1px solid var(--line);color:var(--ice);border-radius:999px;padding:.5rem 1rem;font-weight:600;font-size:.9rem}
-.layup-home .bio-related:hover{text-decoration:none;border-color:var(--lamp)}
+.layup-home .ship-library-title{margin:26px 0 12px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sub)}
+.layup-home .bio-related-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.layup-home .bio-related{background:var(--panel);border:1px solid var(--line);color:var(--ice);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;font-weight:600;font-size:.9rem;transition:transform .25s,border-color .25s,box-shadow .25s}
+.layup-home .bio-related:hover{text-decoration:none;border-color:var(--lamp);transform:translateY(-2px);box-shadow:0 16px 32px rgba(0,0,0,.35)}
+.layup-home .bio-related-media{position:relative;display:block;aspect-ratio:16/9;background:linear-gradient(135deg,#091929,#13304a);overflow:hidden}
+.layup-home .bio-related-thumb{width:100%;height:100%;object-fit:cover;filter:saturate(.82) brightness(.9)}
+.layup-home .bio-related-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px;flex:1}
+.layup-home .bio-related-kicker{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lamp);font-weight:700}
+.layup-home .bio-related-body strong{font-family:var(--display);font-size:1.15rem;color:var(--white)}
+.layup-home .bio-related-desc{font-size:.84rem;color:var(--fog);font-weight:400;line-height:1.45}
 
 /* Why */
 .layup-home .story-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.layup-home .story-grid article{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-.layup-home .story-grid h3{margin-bottom:8px}
-.layup-home .story-grid p{color:var(--fog);font-size:.92rem}
+.layup-home .story-grid article{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0;overflow:hidden;display:flex;flex-direction:column}
+.layup-home .story-card-media{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#081726,#13304a);overflow:hidden}
+.layup-home .story-card-media img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.88)}
+.layup-home .story-card-badge{position:absolute;left:12px;bottom:10px;background:rgba(5,13,22,.84);border:1px solid var(--line-strong);color:var(--lamp);font-size:.68rem;font-weight:700;letter-spacing:.12em;padding:4px 9px;border-radius:999px;backdrop-filter:blur(6px)}
+.layup-home .story-card-copy{padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px;flex:1}
+.layup-home .story-grid h3{margin-bottom:4px}
+.layup-home .story-grid p{color:var(--fog);font-size:.92rem;margin-bottom:10px}
+.layup-home .story-card-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:auto}
+
+/* Automatic 4-Season Maritime Calendar Engine */
+.layup-home .layup-season-engine{margin-top:42px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line-strong);border-radius:var(--radius);padding:24px;box-shadow:0 24px 48px rgba(0,0,0,.3)}
+.layup-home .season-engine-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.layup-home .season-engine-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(79,207,149,.14);border:1px solid var(--aurora);color:var(--aurora);border-radius:999px;padding:.42rem .9rem;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.layup-home .season-engine-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:18px}
+.layup-home .season-engine-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.layup-home .season-tab{display:inline-flex;align-items:center;background:rgba(5,13,22,.5);border:1px solid var(--line);color:var(--fog);border-radius:12px;padding:.7rem .85rem;font-size:.82rem;font-weight:650;cursor:pointer;text-align:left;text-decoration:none;transition:border-color .2s,background .2s,color .2s}
+.layup-home .season-tab:hover{border-color:var(--line-strong);color:var(--ice);text-decoration:none}
+.layup-home .season-tab.is-active{background:rgba(242,178,74,.14);border-color:var(--lamp);color:var(--white);box-shadow:0 0 0 1px rgba(242,178,74,.35)}
+.layup-home .season-panel{background:rgba(5,13,22,.45);border:1px solid var(--line);border-radius:14px;padding:20px}
+.layup-home .season-panel.is-current-phase{border-color:var(--lamp);box-shadow:0 0 0 1px rgba(242,178,74,.35),0 14px 32px rgba(0,0,0,.28)}
+.layup-home .season-panel-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.layup-home .season-panel h3{font-size:1.3rem;margin:4px 0 10px;color:var(--white)}
+.layup-home .season-checklist{margin:12px 0 16px;padding-left:18px;color:var(--fog);font-size:.9rem;display:grid;gap:8px}
+.layup-home .season-panel-links{display:flex;flex-wrap:wrap;gap:10px}
+.layup-home .season-panel-metrics{display:grid;gap:10px}
+.layup-home .season-metric-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+.layup-home .season-metric-box strong{font-family:var(--display);font-size:1.35rem;color:var(--lamp);font-weight:800}
+.layup-home .season-metric-box span{font-size:.78rem;color:var(--fog)}
+
+/* Illustrated Port & Viewing Field Guide */
+.layup-home .layup-port-guide{margin-top:46px}
+.layup-home .port-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.layup-home .port-filter-btn{background:var(--panel);border:1px solid var(--line-strong);color:var(--fog);border-radius:999px;padding:.48rem .95rem;font-size:.82rem;font-weight:600;cursor:pointer}
+.layup-home .port-filter-btn:hover{color:var(--ice);border-color:var(--fog)}
+.layup-home .port-filter-btn.is-active{background:var(--lamp);color:#1a1000;border-color:var(--lamp);font-weight:700}
+.layup-home .port-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.layup-home .port-guide-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 36px rgba(0,0,0,.26)}
+.layup-home .port-card-media{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#081827,#13304a);overflow:hidden}
+.layup-home .port-card-media img{width:100%;height:100%;object-fit:cover;filter:saturate(.86) brightness(.9)}
+.layup-home .port-card-lake{position:absolute;left:12px;top:12px;background:rgba(5,13,22,.82);border:1px solid var(--line-strong);color:var(--ice);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;backdrop-filter:blur(6px)}
+.layup-home .port-card-count{position:absolute;right:12px;bottom:10px;background:rgba(242,178,74,.92);color:#1a1000;font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.layup-home .port-card-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.layup-home .port-card-body h3{font-size:1.28rem;color:var(--white)}
+.layup-home .port-card-sub{font-size:.8rem;color:var(--lamp);font-weight:600;letter-spacing:.04em;margin:0}
+.layup-home .port-card-desc{font-size:.9rem;color:var(--fog);margin:0}
+.layup-home .port-card-viewing{background:rgba(5,13,22,.48);border-left:3px solid var(--aurora);border-radius:0 10px 10px 0;padding:10px 12px;font-size:.84rem;color:var(--fog);display:grid;gap:3px}
+.layup-home .port-card-viewing strong{color:var(--ice);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.layup-home .port-card-credit{font-size:.72rem;color:var(--sub);margin:2px 0 0}
+.layup-home .port-card-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:auto;padding-top:8px}
+.layup-home .port-card-link{font-size:.84rem;font-weight:600}
+
+/* Winter Layup FAQ */
+.layup-home .layup-faq{margin-top:44px}
+.layup-home .layup-faq-list{display:grid;gap:10px}
+.layup-home .layup-faq-item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden}
+.layup-home .layup-faq-item summary{cursor:pointer;padding:15px 18px;font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--white);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.layup-home .layup-faq-item summary::-webkit-details-marker{display:none}
+.layup-home .layup-faq-item summary::after{content:"+";color:var(--lamp);font-size:1.2rem;font-weight:800}
+.layup-home .layup-faq-item[open] summary::after{content:"–"}
+.layup-home .layup-faq-item p{padding:0 18px 16px;margin:0;color:var(--fog);font-size:.92rem}
 
 /* Sources */
 .layup-home .sources-evidence details{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0}
@@ -292,13 +359,14 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
  .layup-home .filter-row .small-button{justify-self:start}
  .layup-home .atlas-workspace.has-harbor{grid-template-columns:minmax(0,1fr)}
  .layup-home .atlas-harbor-column{position:static}
- .layup-home .feature-grid,.layup-home .story-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .layup-home .feature-grid,.layup-home .story-grid,.layup-home .bio-related-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .layup-home .season-engine-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:900px){
  .layup-home .hero-inner{grid-template-columns:1fr;padding-top:72px}
  .layup-home .season-dial{justify-self:stretch;max-width:none}
  .layup-home .atlas-heading{flex-direction:column;align-items:flex-start}
- .layup-home .detail-grid{grid-template-columns:1fr}
+ .layup-home .detail-grid,.layup-home .season-panel-grid,.layup-home .port-guide-grid{grid-template-columns:1fr}
 }
 @media(max-width:620px){.layup-home{--layup-anchor-reserve:calc(158px + env(safe-area-inset-bottom,0px))}}
 @media(max-width:580px){
@@ -309,10 +377,10 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
  .layup-home select,.layup-home input[type=search]{min-width:0;width:100%}
  .layup-home .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
  .layup-home .stats strong{font-size:1.4rem}
- .layup-home .feature-grid,.layup-home .story-grid{grid-template-columns:1fr}
+ .layup-home .feature-grid,.layup-home .story-grid,.layup-home .bio-related-grid,.layup-home .season-engine-tabs{grid-template-columns:1fr}
  .layup-home .feature-story,.layup-home .feature-info{min-height:300px}
  .layup-home .winter-update{grid-template-columns:1fr;gap:4px}
- .layup-home .living-winter,.layup-home .ais-watch,.layup-home .detail{padding:16px}
+ .layup-home .living-winter,.layup-home .ais-watch,.layup-home .detail,.layup-home .layup-season-engine,.layup-home .season-panel{padding:16px}
  .layup-home .living-totals{width:100%}
  .layup-home .living-totals > div{flex:1;min-width:0}
  .layup-home .dial-number{font-size:56px}

@@ -423,6 +423,16 @@
       "source": "/labs/kilauea-live/",
       "destination": "/national-tools/kilauea-live/",
       "permanent": true
+    },
+    {
+      "source": "/michigan-after-dark-field-guide",
+      "destination": "/michigan-dark-sky-field-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/michigan-after-dark-field-guide/",
+      "destination": "/michigan-dark-sky-field-guide/",
+      "permanent": true
     }
   ],
   "headers": [
@@ -653,6 +663,23 @@
       ]
     },
     {
+      "source": "/assets/tahquamenon-experience.:ext(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/assets/isle-royale-map.js",
       "headers": [
         {
@@ -721,6 +748,10 @@
     {
       "source": "/api/lake-effect",
       "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect"
+    },
+    {
+      "source": "/api/lake-effect-geography",
+      "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect-geography"
     },
     {
       "source": "/api/california-roads",
@@ -1082,6 +1113,10 @@
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
     },
     {
+      "source": "/assets/white-christmas-season.js",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-season.js"
+    },
+    {
       "source": "/assets/white-christmas-hero-final.webp",
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-hero-final.webp"
     },
@@ -1116,6 +1151,14 @@
     {
       "source": "/assets/tahquamenon-falls.css",
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-falls.css"
+    },
+    {
+      "source": "/assets/tahquamenon-experience.js",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-experience.js"
+    },
+    {
+      "source": "/assets/tahquamenon-experience.css",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-experience.css"
     },
     {
       "source": "/assets/css/:path*",

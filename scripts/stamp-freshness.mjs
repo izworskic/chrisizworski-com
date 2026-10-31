@@ -141,7 +141,7 @@ for (const name of readdirSync(publicRoot).filter(name => /sitemap.*\.xml$/.test
 // dateModified on all children. Sync any available dates, but require their owning
 // generators to add the missing stamps; do not manufacture dates in deployment mirrors.
 const DELEGATED_DATE_SCHEMAS = new Set([
-  "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml",
+  "sitemap-petoskey-wine.xml", "sitemap-blue-spring.xml", "sitemap-melvin-price.xml", "sitemap-reputation.xml",
 ]);
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
@@ -203,7 +203,10 @@ for (const file of files) {
 
   const routeKey = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
   const lagDays = Math.round((Date.parse(real) - Date.parse(claimed)) / 86400000);
-  dateByRoute.set(routeKey, lagDays > 0 ? real : claimed);
+  // In check mode compare the sitemap with the date actually in the document.
+  // Write mode synchronizes to the date it will stamp; a permitted lag in check
+  // mode must not be mistaken for a page/sitemap mismatch.
+  dateByRoute.set(routeKey, CHECK ? claimed : (lagDays > 0 ? real : claimed));
   if (lagDays <= 0) continue; // already truthful, or newer than git which we never touch
 
   const rel = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");

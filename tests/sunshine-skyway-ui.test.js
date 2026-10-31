@@ -53,10 +53,10 @@ test('search, social and creator metadata are complete', () => {
   assert.match(page, /Built by <a href="\/">Chris Izworski<\/a>/);
 });
 
-test('discovery build registers sitemap, tools, national tools and inbound bridge links', () => {
+test('discovery build registers sitemap, national tools and inbound bridge links', () => {
   assert.match(discovery, /benchmarks\/tool-network-registry\.json/);
   assert.match(discovery, /public\/sitemap\.xml/);
-  assert.match(discovery, /public\/tools\/index\.html/);
+  assert.doesNotMatch(discovery, /public\/tools\/index\.html/);
   assert.match(discovery, /public\/synced-national-tools\/index\.html/);
   assert.match(discovery, /public\/chesapeake-bay-bridge-maryland\/index\.html/);
   assert.match(discovery, /public\/chesapeake-bay-bridge-tunnel\/index\.html/);

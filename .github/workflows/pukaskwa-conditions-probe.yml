@@ -1,0 +1,29 @@
+name: Pukaskwa source-only conditions probe
+
+on:
+  pull_request:
+    paths:
+      - 'lib/pukaskwa/**'
+      - 'scripts/pukaskwa/**'
+      - 'tests/pukaskwa-conditions.test.js'
+      - 'tests/pukaskwa-condition-monitor.test.js'
+      - '.github/workflows/pukaskwa-conditions-probe.yml'
+      - '.github/workflows/pukaskwa-conditions-monitor.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-pukaskwa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run deterministic source-logic tests
+        run: node --test tests/pukaskwa-conditions.test.js tests/pukaskwa-condition-monitor.test.js
+      - name: Verify the real Parks Canada table can be safely parsed
+        run: node scripts/pukaskwa/refresh-conditions.mjs

@@ -5,3 +5,4 @@ audit/preview/snapshot/
 audit/*.tmp
 __pycache__/
 *.pyc
+scratch/

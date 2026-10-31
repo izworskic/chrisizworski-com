@@ -1,0 +1,475 @@
+{
+  "version": "2026-10-28",
+  "architecture": "FIELD_GUIDE_V1",
+  "description": "Single source-of-truth registry for Chris Izworski's Michigan & Great Lakes Field Guides. Used by /guides/, /tools/, and scripts/verify-field-guides.mjs.",
+  "guides": [
+    {
+      "slug": "michigan-winter-weekends",
+      "url": "/michigan-winter-weekends/",
+      "title": "Michigan Winter Weekend Getaways",
+      "subtitle": "12 2-Day Base Towns · Snow Trails + Weather-Proof Backups",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Oct–Mar · All Winter",
+      "summary": "Twelve researched Michigan winter weekend bases, from Munising, Marquette and the Keweenaw to Traverse City, Grayling and Detroit, with outdoor itineraries and weather backups.",
+      "connectedTools": [
+        "/michigan-snow-depth/",
+        "/lake-effect-snow/",
+        "/michigan-ski-hills/",
+        "/michigan-cross-country-skiing/",
+        "/mackinac-bridge-live/",
+        "/national-tools/white-christmas/"
+      ]
+    },
+    {
+      "slug": "michigan-white-christmas-escapes",
+      "url": "/michigan-white-christmas-escapes/",
+      "title": "Michigan White Christmas & Christmas-Week Escapes",
+      "subtitle": "10 Holiday Base Towns · NOAA 1991–2020 Snow Odds + Backups",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 10,
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Oct–Dec · Holiday Planning",
+      "summary": "Compare 10 Michigan Christmas-week escape towns ranked by NOAA 1991–2020 1-inch snow-depth probability (~96% Marquette to 45.7% Frankenmuth), resort snowmaking insurance, holiday lights, and mild-December backup plans.",
+      "connectedTools": [
+        "/national-tools/white-christmas/",
+        "/national-tools/white-christmas/forecast/",
+        "/white-christmas-probability-map/",
+        "/white-christmas-michigan/",
+        "/michigan-snow-depth/",
+        "/michigan-ski-hills/"
+      ]
+    },
+    {
+      "slug": "michigan-first-snow-adventures",
+      "url": "/michigan-first-snow-adventures/",
+      "title": "Michigan First Snow Adventures",
+      "subtitle": "12 Early-Winter Snowbelts · Lake-Effect Physics & Grass-Bed Trails",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Late Oct–Dec · Early Snow",
+      "summary": "Where winter arrives first in Michigan: 12 high-elevation Lake Superior and Northern Lower snowbelt stops with grass-bed Nordic trail thresholds (2–4\" vs. 12\"), early snowmaking hills, and bare-ground hike backups.",
+      "connectedTools": [
+        "/michigan-snow-depth/",
+        "/lake-effect-snow/",
+        "/michigan-snow-totals/",
+        "/michigan-cross-country-skiing/",
+        "/michigan-ski-hills/"
+      ]
+    },
+    {
+      "slug": "michigan-late-fall-adventures",
+      "url": "/michigan-late-fall-adventures/",
+      "title": "Michigan Late-Fall & November Adventure Guide",
+      "subtitle": "12 Shoulder-Season Stops · Swollen Waterfalls, Agates, Steelhead & Migration",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Late Oct–Early Dec · Late Fall",
+      "summary": "12 researched Michigan late-fall and November destinations for swollen U.P. waterfalls, post-gale Lake Superior agates and Petoskey stones, fall chrome steelhead runs, and sandhill crane/waterfowl staging—with Nov 15–30 firearm deer-season blaze-orange rules.",
+      "connectedTools": [
+        "/upper-peninsula-waterfalls/",
+        "/michigan-rockhounding/",
+        "/waterfowl-freeze-line/",
+        "https://michigantroutreport.com/salmon-run/",
+        "/edmund-fitzgerald/",
+        "https://whitetail.chrisizworski.com/"
+      ]
+    },
+    {
+      "slug": "great-lakes-winter-freighter-guide",
+      "url": "/great-lakes-winter-freighter-guide/",
+      "title": "Great Lakes Winter Freighter & Harbor Guide",
+      "subtitle": "12 Shoreline Viewing Hubs · Final Lock Push, Layups & Icebreakers",
+      "status": "live",
+      "releaseWave": "Release 1: Pre-Christmas Flagship",
+      "stopCount": 12,
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Nov–Mar · Winter Fleet",
+      "summary": "12 public Great Lakes harbors and lock overlooks for late-season freighter passages, the Jan 15–Mar 25 Soo Locks winter closure, 1,000-footer winter layup berths, and USCG icebreaker operations.",
+      "connectedTools": [
+        "/great-lakes-freighter-winter-layup/",
+        "/great-lakes-freighter-tracking/",
+        "/soo-locks/",
+        "/duluth-canal-park/",
+        "/detroit-river-freighters/",
+        "/freighters/"
+      ]
+    },
+    {
+      "slug": "michigan-winter-activities",
+      "url": "/michigan-winter-activities/",
+      "title": "Michigan Winter Activities Field Guide",
+      "subtitle": "18 Curated Experiences · Snowshoeing, Luge, Waterfalls & Dark Skies",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 18,
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Nov–Mar · Statewide Winter",
+      "summary": "18 source-backed winter experiences across both peninsulas covering snowshoeing, frozen waterfalls, fat-tire biking, winter wildlife, downhill and XC skiing, Muskegon luge, and dark-sky stargazing.",
+      "connectedTools": [
+        "/michigan-snow-depth/",
+        "/michigan-cross-country-skiing/",
+        "/michigan-ski-hills/",
+        "/michigan-ice-caves/",
+        "/northern-lights-michigan/"
+      ]
+    },
+    {
+      "slug": "frozen-michigan",
+      "url": "/frozen-michigan/",
+      "title": "Frozen Michigan: Ice Caves, Waterfalls & Shorelines",
+      "subtitle": "11 Winter Ice Wonders · Formation Evidence & Safe Shore Access",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 11,
+      "activeMonths": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Dec–Mar · Deep Freeze",
+      "summary": "Eleven Michigan winter viewpoints, including Eben Ice Caves, Pictured Rocks ice curtains, Tahquamenon and Bond Falls, and Lake Michigan shorelines, with access notes and cold-trend handoffs.",
+      "connectedTools": [
+        "/michigan-ice-caves/",
+        "/michigan-ice/",
+        "/mackinac-ice-bridge/",
+        "/tahquamenon-falls/"
+      ]
+    },
+    {
+      "slug": "michigan-winter-trails",
+      "url": "/michigan-winter-trails/",
+      "title": "Michigan Winter Trails: Snowshoe, XC Ski & Fat-Bike Loops",
+      "subtitle": "15 Trail Systems · 50 Named Loops · Track Etiquette & Plow Rules",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 15,
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Nov–Mar · Trail Season",
+      "summary": "15 audited Michigan winter trail systems and 50 named DNR/NPS loops with snowshoe vs. groomed ski track etiquette, Silver Lake's Dec 15–Mar 15 fat-bike season, and seasonal unplowed road warnings.",
+      "connectedTools": [
+        "/michigan-cross-country-skiing/",
+        "/michigan-snow-depth/",
+        "/michigan-snow-totals/",
+        "/estivant-pines/"
+      ]
+    },
+    {
+      "slug": "michigan-wine-cider-spirits",
+      "url": "/michigan-wine-cider-spirits/",
+      "title": "Northern Michigan Wine, Cider & Spirits",
+      "subtitle": "18 Anchor Venues + 102-Venue Crosswalk · Heated Igloos & Fireside Flights",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 18,
+      "activeMonths": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "seasonLabel": "Oct–Apr · Igloos & Tasting",
+      "summary": "18 anchor wineries, heritage cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey/Walloon Lake—with heated winter domes, vineyard snowshoe loops, and 5:00 PM distillery handoffs.",
+      "connectedTools": [
+        "/petoskey-wine/",
+        "https://tcwine.chrisizworski.com/"
+      ]
+    },
+    {
+      "slug": "great-lakes-rockhounding-field-guide",
+      "url": "/great-lakes-rockhounding-field-guide/",
+      "title": "The Great Lakes Rockhound’s Field Guide",
+      "subtitle": "15 Agate, Petoskey Stone, Yooperlite & Fossil Beaches",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 15,
+      "activeMonths": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "seasonLabel": "Apr–Nov · Peak Post-Storm Season",
+      "summary": "15 audited Great Lakes beaches with stone ID diagnostics, gravel-bar anatomy, 365nm filtered UV specs for Yooperlites, live 72-hour wave-worked badges, and the boundary between Michigan's 25-lb state limit and National Lakeshore collecting bans.",
+      "connectedTools": [
+        "/michigan-rockhounding/",
+        "/great-lakes-beaches/",
+        "/great-lakes-buoys/"
+      ]
+    },
+    {
+      "slug": "great-lakes-island-hopping-field-guide",
+      "url": "/great-lakes-island-hopping-field-guide/",
+      "title": "The Great Lakes Island-Hopper's Field Guide",
+      "subtitle": "12 Ferry-Access Archipelagos · Personality Matrix & Open-Water Rules",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May-Oct · Peak Ferry Season",
+      "summary": "12 audited Great Lakes ferry-access archipelagos with open-water nautical miles, crossing physics, vehicle and bike regulations, canine biosecurity bans, and direct ferry booking handoffs.",
+      "connectedTools": [
+        "/great-lakes-ferries/",
+        "/isle-royale-ferry-comparison/",
+        "/mackinac-island/ferry-planner/",
+        "/beaver-island-ferry/",
+        "/manitou-island-ferry/",
+        "/pelee-island-ferry/",
+        "/put-in-bay-ferry/",
+        "/chi-cheemaun-ferry/",
+        "/apostle-islands/",
+        "/great-lakes-buoys/"
+      ]
+    },
+    {
+      "slug": "michigan-spring-awakening-field-guide",
+      "url": "/michigan-spring-awakening-field-guide/",
+      "title": "Michigan Spring Awakening & Forager’s Field Guide",
+      "subtitle": "12 Seasonal Milestones · Morels, Sugarbushes, Ephemerals & Vernal Choruses",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "seasonLabel": "Feb–May · Spring Awakening",
+      "summary": "Northwoods field naturalist & phenology guide to Michigan spring: morels, maple tapping, vernal pool amphibian choruses, trillium blankets, and 41.7°N to 47.4°N soil warming waves.",
+      "connectedTools": [
+        "/michigan-maple-sap-run/",
+        "/michigan-soil-temperature/",
+        "/michigan-frog-chorus/",
+        "/michigan-trillium/",
+        "https://morel.chrisizworski.com/"
+      ]
+    },
+    {
+      "slug": "great-lakes-shipwreck-viewing-field-guide",
+      "url": "/great-lakes-shipwreck-viewing-field-guide/",
+      "title": "Ghost Ships & Clear Water: Great Lakes Shipwreck Viewing Field Guide",
+      "subtitle": "12 Shallow Preserves · Kayak, Glass-Bottom Boat, Snorkel & Dune Viewing",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May–Oct · Clear-Water Season",
+      "summary": "Maritime historian & underwater preserve ranger guide to 12 shallow Great Lakes shipwrecks in 5 to 25 feet of crystal-clear water visible by kayak, glass-bottom boat, snorkel, or beach walking.",
+      "connectedTools": [
+        "/great-lakes-shipwrecks/",
+        "/edmund-fitzgerald/",
+        "/great-lakes-lighthouses/",
+        "/great-lakes-buoys/",
+        "/great-lakes-island-hopping-field-guide/"
+      ]
+    },
+    {
+      "slug": "michigan-dark-sky-field-guide",
+      "url": "/michigan-dark-sky-field-guide/",
+      "title": "Michigan After Dark: The Northern Lights, Dark-Sky Preserves & Meteor Shower Field Guide",
+      "subtitle": "12 Dark-Sky Preserves & Aurora Shorelines · Horizon Azimuths, Bortle Ratings & Night Etiquette",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "Year-Round · Peak Aurora Sep–Apr · Perseids Aug",
+      "summary": "12 audited Michigan dark-sky preserves and Great Lakes shorelines with horizon azimuth compasses, Bortle ratings, 24/7 gate access rules, and smartphone night-mode cheat sheets.",
+      "connectedTools": [
+        "/northern-lights-michigan/",
+        "/national-tools/dark-sky/michigan/",
+        "/national-tools/meteor-shower/",
+        "/great-lakes-buoys/",
+        "/great-lakes-rockhounding-field-guide/"
+      ]
+    },
+    {
+      "slug": "michigan-rivers-field-guide",
+      "url": "/michigan-rivers-field-guide/",
+      "title": "Holy Waters & Cedar Bottoms: Michigan’s Blue-Ribbon River Paddling & Fly-Fishing Field Guide",
+      "subtitle": "14 Curated Floats · Live USGS CFS Flow Badges, USFS Permits & Livery Shuttles",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 14,
+      "activeMonths": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May–Oct · Peak Paddling & Dry Fly Hatches",
+      "summary": "14 curated half-day and overnight river floats across the Au Sable, Manistee, Pere Marquette, Pine, Jordan, and Two Hearted rivers with live USGS CFS flow badges, USFS permit rules, and livery shuttles.",
+      "connectedTools": [
+        "/au-sable-river/",
+        "/manistee-river-map/",
+        "/michigan-paddling/",
+        "/michigan-trout-streams/"
+      ]
+    },
+    {
+      "slug": "national-park-phenomena-field-guide",
+      "url": "/national-park-phenomena-field-guide/",
+      "title": "The National Park Phenomenon Atlas: 12 Narrow-Window U.S. Natural Events & How to Time Them",
+      "subtitle": "12 Bucket-List Events · Interactive 12-Month Timeline Scrubber, Permit Lead Times & Live Telemetry",
+      "status": "live",
+      "releaseWave": "National Flagship Guide",
+      "stopCount": 12,
+      "activeMonths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "seasonLabel": "All Year · 12-Month Interactive Scrubber",
+      "summary": "Chief NPS interpretive ranger field guide to 12 narrow-window natural spectacles across U.S. National Parks: Yosemite Firefall, Blue Spring manatees, Smoky Mountains synchronous fireflies, and Rocky Mountain elk rut.",
+      "connectedTools": [
+        "/yosemite-firefall-live/",
+        "/national-tools/blue-spring-live/",
+        "/national-tools/elk-rut/",
+        "/synced-national-tools/zion-narrows-conditions/",
+        "/synced-national-tools/going-to-the-sun-road-status/",
+        "/synced-national-tools/columbia-salmon-run/",
+        "/synced-national-tools/yellowstone-geysers/",
+        "/synced-national-tools/cadillac-mountain-sunrise/",
+        "/synced-national-tools/haleakala-sunrise/",
+        "/synced-national-tools/"
+      ]
+    },
+    {
+      "slug": "michigan-winter-cabins-field-guide",
+      "url": "/michigan-winter-cabins-field-guide/",
+      "title": "Michigan Winter Cabins, Saunas & Hot-Tub Basecamps Field Guide",
+      "subtitle": "12 Basecamp Zones · Wood-Fired Shoreline Saunas, Ski Chalets, Yurts & Live Snowpack",
+      "status": "live",
+      "releaseWave": "Release 2: Peak Winter (Jan–Feb)",
+      "stopCount": 12,
+      "activeMonths": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "seasonLabel": "Nov–Mar · Peak Winter Basecamps",
+      "summary": "12 architectural winter basecamp zones across Michigan: Keweenaw wood-fired shoreline saunas, Boyne ski chalets, Au Sable log cabins, and Porcupine Mountains yurts with live snowpack and AWD road rules.",
+      "connectedTools": [
+        "/michigan-winter-weekends/",
+        "/michigan-snow-depth/",
+        "/michigan-ski-hills/"
+      ]
+    }
+  ],
+  "plannedRoadmap": [
+    {
+      "releaseWave": "Release 2: Peak Winter (Jan–Feb)",
+      "guides": [
+        "Michigan Frozen Waterfalls Field Guide",
+        "Michigan Snowshoeing Destinations Field Guide",
+        "Michigan Fat-Tire Snow Biking Field Guide",
+        "Michigan Winter Dark Sky & Aurora Viewing Guide",
+        "Michigan Family Sledding, Tubing & Luge Field Guide"
+      ]
+    },
+    {
+      "releaseWave": "Release 3: Late Winter to Early Spring (Feb–Mar)",
+      "guides": [
+        "Michigan Maple Sugaring & Sugarbush Tour Field Guide",
+        "Great Lakes Ice-Out & Spring Breakup Field Guide",
+        "Michigan Waterfowl & Sandhill Crane Spring Migration Guide",
+        "Michigan Early Spring Wildflowers & Trillium Woods Guide",
+        "Michigan Spring Steelhead & Early Trout Opener Field Guide",
+        "Great Lakes Spring Rockhounding (Agates & Petoskey Stones) Guide"
+      ]
+    }
+  ]
+}

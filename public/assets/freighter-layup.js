@@ -20,7 +20,7 @@
  function photoHTML(v,detail=false){
    const p=v.photo;
    if(!p)return shipSVG;
-   const url='https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960';
+   const url=p.thumbUrl||('https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(p.file)+'?width=960');
    return '<span class="fallback-ship" hidden>'+shipSVG+'</span><img loading="lazy" decoding="async" src="'+esc(url)+'" alt="'+esc(p.alt)+'" onerror="this.hidden=true;this.previousElementSibling.hidden=false">';
  }
  function vesselCard(v){
@@ -33,7 +33,8 @@
    // To-scale silhouette from the fleet specs file when the experience layer is present; the monogram stays as the hull mark.
    const fleet=window.WinterFleet,spec=fleet?.specFor(v.id),art=fleet?fleet.cardArt(v):'';
    const specLine=spec?'<p class="spec">'+esc(spec.lengthFt.toLocaleString()+' ft · '+spec.beamFt+' ft beam · built '+spec.built+(spec.fleet?' · '+spec.fleet:''))+'</p>':'';
-   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'"><div class="ship-art">'+art+'<span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p>'+specLine+'<button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
+   const cardPhoto=v.photo?'<div class="ship-card-photo">'+photoHTML(v)+'<span class="ship-photo-credit">'+esc(v.photo.creator)+'</span></div>':'';
+   return '<article class="ship-card'+(selected?' is-selected':'')+'" data-card="'+esc(v.id)+'">'+cardPhoto+'<div class="ship-art">'+art+'<span class="ship-monogram" aria-hidden="true">'+esc(initials)+'</span></div><div class="ship-card-copy"><h3>'+esc(v.name)+'</h3><p class="berth">'+esc(cardBerth)+'</p>'+specLine+'<button type="button" data-ship="'+esc(v.id)+'" aria-label="Read '+esc(v.name)+' layup history">Explore vessel record →</button>'+(biog?'<a class="ship-biography-link" href="/great-lakes-freighter-winter-layup/vessels/'+esc(v.id)+'/">Full biography ↗</a>':'')+'</div></article>';
  }
 
  function activeRecordsFromLedger(ledger,archive){
@@ -286,7 +287,49 @@
      });
    }catch(e){$('map-status').textContent='Map could not load; the documented vessel list below is still available.'}
  }
+ function detectLayupSeasonPhase(date = new Date()){
+   const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric',day:'numeric'}).formatToParts(date);
+   const m=+parts.find(p=>p.type==='month').value,d=+parts.find(p=>p.type==='day').value;
+   if(m>=11||(m===1&&d<=15))return {id:'closing',label:'Closing Rush (Nov 1 – Jan 15)'};
+   if((m===1&&d>=16)||m===2)return {id:'winter',label:'Deep Winter Layup (Jan 16 – Feb 28)'};
+   if(m===3||(m===4&&d<=15))return {id:'breakout',label:'Fit-Out & Breakout (Mar 1 – Apr 15)'};
+   return {id:'navigation',label:'Open Navigation (Apr 16 – Oct 31)'};
+ }
+ function initSeasonalMaritimeEngine(){
+   const engine=$('layup-season-engine');if(!engine)return;
+   const auto=detectLayupSeasonPhase(new Date());
+   const badge=$('layup-auto-season-badge');
+   if(badge)badge.textContent='Current phase today: '+auto.label;
+   const tabs=[...engine.querySelectorAll('[data-layup-phase-btn]')];
+   const panels=[...engine.querySelectorAll('[data-layup-phase-panel]')];
+   tabs.forEach(t=>{const on=t.dataset.layupPhaseBtn===auto.id;t.classList.toggle('is-active',on)});
+   panels.forEach(p=>{
+     p.hidden=false;
+     p.classList.toggle('is-current-phase',p.dataset.layupPhasePanel===auto.id);
+   });
+ }
+ function initPortViewingGuide(){
+   const guide=$('layup-port-guide');if(!guide)return;
+   const btns=[...guide.querySelectorAll('[data-port-filter]')];
+   const cards=[...guide.querySelectorAll('.port-guide-card')];
+   btns.forEach(b=>b.addEventListener('click',()=>{
+     const region=b.dataset.portFilter;
+     btns.forEach(x=>x.classList.toggle('is-active',x===b));
+     cards.forEach(c=>{c.hidden=region!=='all'&&c.dataset.portRegion!==region});
+   }));
+   guide.querySelectorAll('[data-port-select-harbor]').forEach(btn=>btn.addEventListener('click',()=>{
+     const harborId=btn.dataset.portSelectHarbor;
+     if(!state.archive)return;
+     if(!records().some(v=>v.harborId===harborId)){
+       $('season').value='2025-26';setSeason('2025-26');
+     }
+     setHarbor(harborId,true);
+     $('fleet')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+   }));
+ }
  async function boot(){
+   initSeasonalMaritimeEngine();
+   initPortViewingGuide();
    let archive;
    try{
      const res=await fetch('/assets/freighter-layup-registry.json',{signal:AbortSignal.timeout(9000)});

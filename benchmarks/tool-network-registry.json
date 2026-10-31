@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-26",
+  "updated": "2026-10-31",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1322,6 +1322,40 @@
       },
       "searchEvidence": {
         "status": "unknown"
+      }
+    },
+    {
+      "id": "sleeping-giant-provincial-park",
+      "name": "Sleeping Giant Provincial Park Trail Explorer",
+      "canonical": "https://chrisizworski.com/sleeping-giant-provincial-park/",
+      "aliases": [],
+      "kind": "authority-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Sleeping Giant Provincial Park trail matches my visit time and official walking versus bike-and-hike distances?",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "lake-superior",
+        "ontario-provincial-parks"
+      ],
+      "personas": [
+        "road-tripper",
+        "hiker",
+        "family-traveler",
+        "cyclist"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "new-source-verified-intent"
       }
     },
     {
@@ -4321,6 +4355,97 @@
         "decisionWindowDays": 28,
         "privacy": "No precise user location or visitor identity collected"
       }
+    },
+    {
+      "id": "michigan-wine-cider-spirits",
+      "name": "Northern Michigan Wine, Cider & Spirits Field Guide",
+      "canonical": "https://chrisizworski.com/michigan-wine-cider-spirits/",
+      "aliases": [],
+      "kind": "seasonal-field-guide",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Northern Michigan wineries, heritage hard cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey fit my day, season, winter igloo/snowshoe plan, and after-5 PM lounge window?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "northwest-lower-michigan",
+        "traverse-city",
+        "petoskey",
+        "little-traverse-bay"
+      ],
+      "personas": [
+        "traveler",
+        "group-planner",
+        "wine-traveler",
+        "winter-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Root-domain editorial field guide uniting 18 anchor wineries, heritage cideries, and craft distilleries across 4 Northern Michigan corridors with winter heated igloos, snowshoe vineyard loops, and 5:00 PM distillery handoffs, routing deep scheduling intent to tc-wine (77 stops) and petoskey-wine (25 stops)."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Built to solve above-the-fold SSR, photography, winter igloo/snowshoe positioning, and cross-corridor wine/cider/spirits comparison for TC and Petoskey."
+      },
+      "measurement": {
+        "search": "GSC Web URL and query for 7/28 days",
+        "product": "Handoffs to tc-wine, petoskey-wine, and winter trail/ski tools",
+        "decisionWindowDays": 28,
+        "privacy": "No precise user location or visitor identity collected"
+      }
+    },
+    {
+      "id": "pukaskwa-national-park",
+      "name": "Pukaskwa National Park Trail & Conditions Chooser",
+      "canonical": "https://chrisizworski.com/pukaskwa-national-park/",
+      "aliases": [],
+      "kind": "destination-decision",
+      "cluster": "trip-planning",
+      "primaryIntent": "Which Pukaskwa day hike fits my limited time and ability, and what do Parks Canada's dated access reports actually say?",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "ontario-lake-superior",
+        "pukaskwa-national-park"
+      ],
+      "personas": [
+        "circle-tour-traveler",
+        "hiker",
+        "family-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Dedicated eight-hike Hattie Cove time/effort/scenery selector connected to official dated trail statuses, distinct from the Lake Superior Circle Tour's 31-stop regional trip itinerary, backcountry permit guidance and official park web pages."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Primary Parks Canada day-hike geometry/durations and 27 monitored condition records checked October 31, 2026; no validated keyword volume or uplift forecast."
+      },
+      "measurement": {
+        "search": "GSC Web URL and queries after 7/28 days",
+        "product": "Chooser interactions, official source clicks and Circle Tour handoffs without visitor identity",
+        "decisionWindowDays": 28,
+        "privacy": "No geolocation, browser storage or user identity collection"
+      }
     }
   ],
   "relationships": [
@@ -6227,6 +6352,110 @@
       "strength": "optional",
       "surface": "winter-network",
       "reason": "Return to the 18-experience statewide winter activity chooser."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "tc-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tc-corridor-handoff",
+      "reason": "Field guide anchor stops hand off to the 77-stop routed Traverse City winery day planner."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "petoskey-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "petoskey-corridor-handoff",
+      "reason": "Field guide Tip of the Mitt stops hand off to the 25-stop Petoskey wine, cider, and distillery planner."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "michigan-winter-trails",
+      "type": "related-context",
+      "strength": "strong",
+      "surface": "snowshoe-vineyard-handoff",
+      "reason": "Vineyard snowshoe loops pair with 15 audited DNR/NPS winter trail systems."
+    },
+    {
+      "from": "michigan-wine-cider-spirits",
+      "to": "michigan-ski-hills",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "apres-ski-handoff",
+      "reason": "Boyne, Walloon, and Leelanau tasting rooms and distilleries pair with Northern Michigan ski weekends."
+    },
+    {
+      "from": "michigan-adventure-finder",
+      "to": "michigan-wine-cider-spirits",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tasting-field-guide-discovery",
+      "reason": "All-season destination finder routes Traverse City and Tip of the Mitt tasting intent into the unified field guide."
+    },
+    {
+      "from": "michigan-winter-activities",
+      "to": "michigan-wine-cider-spirits",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "winter-igloo-handoff",
+      "reason": "Winter activity guide connects snowshoe-and-sip and heated vineyard igloo seekers to Northern Michigan tasting rooms."
+    },
+    {
+      "from": "michigan-winter-trails",
+      "to": "michigan-wine-cider-spirits",
+      "type": "related-context",
+      "strength": "optional",
+      "surface": "winter-network",
+      "reason": "Winter trail hikers can warm up at snowshoe-friendly vineyards, heated domes, and after-hours distilleries."
+    },
+    {
+      "from": "petoskey-wine",
+      "to": "michigan-wine-cider-spirits",
+      "type": "related-context",
+      "strength": "strong",
+      "surface": "search-answer-handoff",
+      "reason": "Petoskey planner links to the 4-corridor Northern Michigan Wine, Cider & Spirits Field Guide for cross-peninsula comparison."
+    },
+    {
+      "from": "circle-tour",
+      "to": "sleeping-giant-provincial-park",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "Sleeping Giant is a Thunder Bay-area Circle Tour stop; the Explorer resolves published hike length and legal bike-to-hike transitions."
+    },
+    {
+      "from": "sleeping-giant-provincial-park",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "ontario-provincial-park",
+      "reason": "Visitors can return to the entire Lake Superior driving itinerary without confusing detailed trail mapping with a car route."
+    },
+    {
+      "from": "sleeping-giant-provincial-park",
+      "to": "lake-superior-provincial-park",
+      "type": "regional-alternative",
+      "strength": "optional",
+      "surface": "ontario-provincial-park",
+      "reason": "A related but geographically separate Ontario park explorer lets travelers compare time and access, not swap trail coordinates."
+    },
+    {
+      "from": "circle-tour",
+      "to": "pukaskwa-national-park",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "Pukaskwa's Highway 627 detour and dated day-hike restrictions require a more detailed park chooser than the Circle Tour stop card."
+    },
+    {
+      "from": "pukaskwa-national-park",
+      "to": "circle-tour",
+      "type": "route-return",
+      "strength": "strong",
+      "surface": "pukaskwa-visitor-chooser",
+      "reason": "Return a park-level hiking choice to the 7-, 10-, or 15-day Lake Superior road-trip context."
     }
   ],
   "cannibalizationGroups": [

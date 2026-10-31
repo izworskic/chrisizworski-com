@@ -1,0 +1,36 @@
+{
+  "id": "EXPERIENCE_OS_V1",
+  "version": "1.0.2",
+  "reviewedAt": "2026-10-31",
+  "status": "source-only",
+  "root": "design-systems/experience-os-v1",
+  "extends": [
+    "FIELD_GUIDE_V1",
+    "JOURNEY_ATLAS_V1"
+  ],
+  "activation": [
+    "new visitor-facing tool",
+    "major UX redesign",
+    "substantial new interaction"
+  ],
+  "requiredDocs": [
+    "AGENTS.md",
+    "docs/RESEARCH_SOURCES.md",
+    "docs/INSPIRATION_LIBRARY.md",
+    "docs/INTERACTION_PATTERN_LIBRARY.md",
+    "docs/TECHNOLOGY_DECISIONS.md",
+    "docs/EXPERIENCE_LIFECYCLE.md",
+    "docs/QA_SCORECARD.md",
+    "docs/ANTI_PATTERNS.md",
+    "docs/MULTI_REPO_ADOPTION.md",
+    "docs/INTERPRETIVE_VOICE_FOR_PLACES.md"
+  ],
+  "templates": [
+    "templates/EXPERIENCE_BRIEF.md",
+    "templates/RESEARCH_RECORD.md",
+    "templates/RELEASE_REVIEW.md"
+  ],
+  "firstPilot": "Tahquamenon Falls Visit Planner (implemented and merged; see docs/TAHQUAMENON_PILOT_20261031.md)",
+  "releaseThreshold": 90,
+  "noPublicRoute": true
+}

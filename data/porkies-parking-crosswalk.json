@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-28",
+  "sourceAssets": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/DNRReferenceAssetsOPENDATA/FeatureServer/6",
+  "sourceNamedRecreation": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRRecreationSearchPointsOPENDATA/FeatureServer/0",
+  "officialMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+  "reviewNote": "Publication means DNR two-layer coordinate agreement and named park-map approach, not field verification or current operational status. Candidate matches are not visitor directions.",
+  "total": 16,
+  "publishedCrosschecked": 6,
+  "heldBack": 10,
+  "records": [
+    {
+      "parkingAssetId": 11,
+      "lat": 46.815121,
+      "lon": -89.625775,
+      "recPointId": 3744,
+      "separationMeters": 25,
+      "decision": "published",
+      "why": "Visitor Center Nature Trail",
+      "namedRecreationLat": 46.81525449,
+      "namedRecreationLon": -89.62550806
+    },
+    {
+      "parkingAssetId": 72,
+      "lat": 46.743247,
+      "lon": -89.771044,
+      "recPointId": 3749,
+      "separationMeters": 31,
+      "decision": "published",
+      "why": "Summit Peak Tower Trail",
+      "namedRecreationLat": 46.74351051,
+      "namedRecreationLon": -89.77115503
+    },
+    {
+      "parkingAssetId": 129,
+      "lat": 46.735422,
+      "lon": -89.757507,
+      "recPointId": null,
+      "separationMeters": null,
+      "decision": "hold",
+      "why": "Unresolved southern Summit Peak road asset"
+    },
+    {
+      "parkingAssetId": 130,
+      "lat": 46.719487,
+      "lon": -89.82491,
+      "recPointId": null,
+      "separationMeters": null,
+      "decision": "hold",
+      "why": "Unresolved interior roadside asset"
+    },
+    {
+      "parkingAssetId": 148,
+      "lat": 46.717138,
+      "lon": -89.933457,
+      "recPointId": null,
+      "separationMeters": null,
+      "decision": "hold",
+      "why": "Unresolved west boundary asset"
+    },
+    {
+      "parkingAssetId": 171,
+      "lat": 46.817736,
+      "lon": -89.648506,
+      "recPointId": 3747,
+      "separationMeters": 38,
+      "decision": "published",
+      "why": "Ski-area named trail network",
+      "namedRecreationLat": 46.81792849,
+      "namedRecreationLon": -89.64891005
+    },
+    {
+      "parkingAssetId": 223,
+      "lat": 46.727955,
+      "lon": -89.756743,
+      "recPointId": null,
+      "separationMeters": null,
+      "decision": "hold",
+      "why": "Unresolved south Summit approach asset"
+    },
+    {
+      "parkingAssetId": 291,
+      "lat": 46.74449,
+      "lon": -89.72452,
+      "recPointId": 3732,
+      "separationMeters": 253,
+      "decision": "hold",
+      "why": "Near White Pine outpost, not day-use trailhead"
+    },
+    {
+      "parkingAssetId": 609,
+      "lat": 46.705052,
+      "lon": -89.974867,
+      "recPointId": 3763,
+      "separationMeters": 255,
+      "decision": "hold",
+      "why": "Presque separate lot; river trail pin 255m away, exact entry unknown",
+      "namedRecreationLat": 46.7073356,
+      "namedRecreationLon": -89.97461272
+    },
+    {
+      "parkingAssetId": 639,
+      "lat": 46.789564,
+      "lon": -89.626129,
+      "recPointId": 3745,
+      "separationMeters": 502,
+      "decision": "hold",
+      "why": "Union Mine/Spring trail point 502m; no proven matched trailhead"
+    },
+    {
+      "parkingAssetId": 689,
+      "lat": 46.739853,
+      "lon": -89.756691,
+      "recPointId": 3749,
+      "separationMeters": 1175,
+      "decision": "hold",
+      "why": "Summit Peak network 1.2km away; may be other lot",
+      "namedRecreationLat": 46.74351051,
+      "namedRecreationLon": -89.77115503
+    },
+    {
+      "parkingAssetId": 841,
+      "lat": 46.707426,
+      "lon": -89.975468,
+      "recPointId": 3763,
+      "separationMeters": 66,
+      "decision": "published",
+      "why": "Presque river trail area",
+      "namedRecreationLat": 46.7073356,
+      "namedRecreationLon": -89.97461272
+    },
+    {
+      "parkingAssetId": 1153,
+      "lat": 46.742587,
+      "lon": -89.726892,
+      "recPointId": 3732,
+      "separationMeters": 26,
+      "decision": "hold",
+      "why": "White Pine OUTPOST overnight site, not general day-use lot"
+    },
+    {
+      "parkingAssetId": 1294,
+      "lat": 46.725204,
+      "lon": -89.898772,
+      "recPointId": 3752,
+      "separationMeters": 27,
+      "decision": "published",
+      "why": "Pinkerton Trailhead",
+      "namedRecreationLat": 46.72542783,
+      "namedRecreationLon": -89.89891487
+    },
+    {
+      "parkingAssetId": 1393,
+      "lat": 46.702894,
+      "lon": -89.975333,
+      "recPointId": 3736,
+      "separationMeters": 451,
+      "decision": "hold",
+      "why": "Presque south lot; not independently matched to trail entry"
+    },
+    {
+      "parkingAssetId": 1409,
+      "lat": 46.803804,
+      "lon": -89.765793,
+      "recPointId": 3761,
+      "separationMeters": 74,
+      "decision": "published",
+      "why": "Lake of Clouds / Escarpment trail area",
+      "namedRecreationLat": 46.8041165,
+      "namedRecreationLon": -89.76493702
+    }
+  ],
+  "negativeRules": [
+    "No named trail record => no parking navigation pin.",
+    "DNR recsearch trail point can be a representative point rather than parking; require distinct parking asset plus map corroboration.",
+    "Camping/outpost lots are not casual day-use parking without authorization.",
+    "Winter road restriction and parking state are independent.",
+    "Unverified lower trailer parking and Nawadaha contact booth remain map-only without matched coordinates."
+  ]
+}

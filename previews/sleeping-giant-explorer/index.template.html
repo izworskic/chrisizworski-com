@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="author" content="Chris Izworski">
+<title>Sleeping Giant Explorer | Unpublished Visitor Preview</title>
+<meta name="description" content="Compare Ontario Parks Sleeping Giant hikes, full parking-to-destination distances and documented bike-to-hike portions. Unpublished planning preview, not navigation.">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
+<style>/* INLINE_STYLES */</style>
+</head>
+<body>
+<a class="skip" href="#explorer">Skip to trip planner</a>
+<header class="mast">
+  <div class="mast-inner">
+    <nav aria-label="Guide context" class="mast-nav"><a class="brand" href="https://chrisizworski.com/">Chris Izworski <span>FIELD GUIDES</span></a><a class="backlink" href="https://chrisizworski.com/lake-superior-circle-tour/">Lake Superior Circle Tour</a></nav>
+    <div class="hero-image" aria-hidden="true"></div>
+    <div class="hero-gradient" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> ONTARIO / SIBLEY PENINSULA / LAKE SUPERIOR</div>
+      <h1>Meet the Giant.<br><em>Find your own adventure.</em></h1>
+      <p class="intro">Sleeping Giant Provincial Park rises above the blue reach of Lake Superior. Beyond the shoreline lie quiet forest paths, a lake-worn stone arch, secluded sand and cliffs that seem to meet the sky. Each trail tells a different story. Come find the one you have time to hear.</p>
+      <div class="hero-metrics" aria-label="Park planning reference">
+        <div><strong>6</strong><span>trails with their own stories</span></div>
+        <div><strong>13.5 mi</strong><span>return walk to the high cliffs</span></div>
+        <div><strong>62+ mi</strong><span>of trails to discover</span></div>
+      </div>
+      <div class="hero-actions"><a class="primary-cta" href="#explorer">Explore the trails <span aria-hidden="true">↓</span></a><a class="quiet-cta" href="#map-section">See the landscape</a></div>
+    </div>
+    <div class="photo-credit">Landscape: <a href="https://commons.wikimedia.org/wiki/File:Top_of_the_Sleeping_Giant.jpg">Justin Meissen</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a> · display cropped</div>
+  </div>
+</header>
+<div class="status-strip" role="note">
+  <div class="wrap status-inner"><span class="status-dot"></span><p><strong>A good day outdoors begins with the right information.</strong> This is a planning guide, not a live trail report. Trail and road access, parking availability, weather and exact junction coordinates are not verified. <a href="https://www.ontarioparks.ca/park/sleepinggiant/alerts" target="_blank" rel="noopener noreferrer">Read Ontario Parks alerts</a> before travelling.</p></div>
+</div>
+<main>
+<section id="explorer" class="section wrap" aria-labelledby="find-title">
+  <div class="section-kicker"><span class="index">01</span> PLAN YOUR DAY</div>
+  <div class="section-head"><div><h2 id="find-title">Which part of the Giant<br>is calling you?</h2><p>Maybe you have an hour to stand beside the water. Maybe you have the whole day to climb above it. Choose what draws you outdoors, how you would like to travel and the hours you can give. The comparison uses Ontario Parks’ published distances and documented timing; the wonder is yours to discover.</p></div><div class="verified-label"><span class="seal">✓</span> TRAIL DISTANCES<br><small>FROM ONTARIO PARKS</small></div></div>
+  <form class="planner" id="planner" aria-label="Compare trail plans">
+    <div class="control"><label for="hours">Time for the trail and return</label><select id="hours" name="hours">
+      <option value="2" selected>About 2 hours</option><option value="4">Half day (4 hours)</option><option value="8">Full day (8 hours)</option><option value="10">Long day (10 hours)</option><option value="12">Extended day (12 hours)</option>
+    </select></div>
+    <fieldset class="control modes"><legend>How would you like to explore?</legend><div class="pill-pair">
+    <label><input type="radio" name="mode" value="hike" checked><span>On foot</span></label>
+    <label><input type="radio" name="mode" value="bike-hike"><span>Bike + hike</span></label>
+    </div></fieldset>
+    <div class="control"><label for="interest">What would you love to see?</label><select id="interest" name="interest">
+      <option value="short-walk" selected>A short walk with a memorable view</option>
+      <option value="summit">Stand above the lake</option>
+      <option value="geology">Ancient rocks and lake-worn shore</option>
+      <option value="beach">A quiet stretch of sand</option>
+      <option value="lake">Look out across Superior</option>
+      <option value="challenge">A long day in the wild</option>
+      <option value="lookout">A high lookout</option>
+    </select></div>
+  </form>
+  <div class="result-intro"><div><div class="section-kicker subdued">CHOOSE YOUR EXPERIENCE</div><h3 id="result-head">Six trails. Six ways to meet the Giant.</h3><p id="result-hint" role="status" aria-live="polite">Discover what each trail has to offer, then check current park conditions before you go.</p></div><span id="result-count" class="count-note">Six trails to discover</span></div>
+  <div class="route-grid" id="route-grid" aria-label="Official hiking options">
+  <!-- Static cards are meaningful without JavaScript. The enhanced UI updates annotations and ranking only. -->
+  <article class="route-card" data-id="sea-lion">
+    <div class="card-top"><span class="card-num">01 / SHORE</span><span class="rating moderate">MODERATE</span></div>
+    <h4>Sea Lion Trail</h4><p class="card-story">The forest gives way to bare rock and a pebble beach on Perry Bay. Just beyond stands the Sea Lion, an extraordinary arch of dark diabase shaped by time and the lake. Stop at the interpretive panels to learn the story held in the stone.</p><div class="card-fig"><strong>1.5 mi</strong><span>Ontario Parks: 2.4 km · return walk from South Kabeyun parking</span></div><div class="card-time">Allow roughly an hour for the return walk, as Ontario Parks suggests. Leave a little time to linger.</div><p class="card-decision" data-decision="sea-lion">A short walk to one of Superior’s most unusual shoreline landmarks.</p><button type="button" class="map-choice" data-select="sea-lion" aria-controls="map-canvas">Follow this trail on the map</button>
+  </article>
+  <article class="route-card" data-id="top-of-the-giant">
+    <div class="card-top"><span class="card-num">02 / SUMMIT</span><span class="rating difficult">DIFFICULT</span></div>
+    <h4>Top of the Giant</h4><p class="card-story">First comes the long walk through the forest. Then the trail climbs toward the Giant’s broad, high summit, where sheer cliffs reveal Lake Superior on both sides of the peninsula. The views are immense, but reaching them takes patience, stamina and daylight.</p><div class="card-fig"><strong>13.5 mi</strong><span>Ontario Parks: 21.8 km · entire return from parking, not just the summit spur</span></div><div class="card-time">Ontario Parks suggests 6–10 hours on foot for the full return. A combined bike-and-hike time is not published.</div><p class="card-decision" data-decision="top-of-the-giant">The permitted bike ride ends at the South Kabeyun–Talus Lake junction. The rest is on foot.</p><button type="button" class="map-choice" data-select="top-of-the-giant" aria-controls="map-canvas">Follow this trail on the map</button>
+  </article>
+  <article class="route-card" data-id="head-of-the-giant">
+    <div class="card-top"><span class="card-num">03 / SUMMIT</span><span class="rating difficult">DIFFICULT</span></div>
+    <h4>Head of the Giant</h4><p class="card-story">Follow the long approach toward Sawyer Bay, then begin the steepest climb in the park. Above the trees, the head of the Giant opens into a sweeping lookout. The reward is the view; the price is a demanding climb and a long return.</p><div class="card-fig"><strong>10.1 mi</strong><span>Ontario Parks: 16.2 km · entire return from South Kabeyun parking</span></div><div class="card-time">Ontario Parks does not publish a full return time. Plan with care and enough daylight.</div><p class="card-decision" data-decision="head-of-the-giant">If you bring a bicycle, Ontario Parks does not identify a rack where this route becomes a walk.</p><button type="button" class="map-choice" data-select="head-of-the-giant" aria-controls="map-canvas">Follow this trail on the map</button>
+  </article>
+  <article class="route-card" data-id="nanabosho-lookout">
+    <div class="card-top"><span class="card-num">04 / LOOKOUT</span><span class="rating difficult">DIFFICULT</span></div>
+    <h4>Nanabosho Lookout</h4><p class="card-story">A long approach through the woods leads up the Giant’s chest. At Nanabosho Lookout, the trees fall away to reveal Sawyer Bay, Marie Louise Lake and islands scattered across the horizon. Take in how much land and water surround you.</p><div class="card-fig"><strong>10.6 mi</strong><span>Ontario Parks: 17.0 km · entire return from South Kabeyun parking</span></div><div class="card-time">Ontario Parks does not publish a full return time. The distance deserves an early start.</div><p class="card-decision" data-decision="nanabosho-lookout">A bicycle may shorten part of the approach, but no rack is documented at the walking transition.</p><button type="button" class="map-choice" data-select="nanabosho-lookout" aria-controls="map-canvas">Follow this trail on the map</button>
+  </article>
+  <article class="route-card" data-id="middlebrun-beach">
+    <div class="card-top"><span class="card-num">05 / BEACH</span><span class="rating moderate">MODERATE</span></div>
+    <h4>Middlebrun Bay Beach</h4><p class="card-story">Take a forest path to a quiet sweep of sand at Middlebrun Bay. The lake reaches the beach in clear, cold waves; this is a place to slow down, watch the water and listen to the shore. Superior can be frigid even on a sunny afternoon.</p><div class="card-fig"><strong>2.9 mi</strong><span>Ontario Parks: 4.6 km · return to the beach from Middlebrun trailhead</span></div><div class="card-time">Ontario Parks lists the distance but not a complete walking time. Leave room for the beach.</div><p class="card-decision" data-decision="middlebrun-beach">This trail begins elsewhere in the park. Confirm its trailhead and parking with Ontario Parks.</p><button type="button" class="map-choice" data-select="middlebrun-beach" aria-controls="map-canvas">Learn about this trail</button>
+  </article>
+  <article class="route-card" data-id="pass-lake-overlook">
+    <div class="card-top"><span class="card-num">06 / LOOKOUT</span><span class="rating moderate">MODERATE</span></div>
+    <h4>Pass Lake Overlook</h4><p class="card-story">A short climb leads to an old sandstone height overlooking Pass Lake and Thunder Bay. Thousands of years ago, as glacial waters receded, this bluff was an island. The trail also passes Ravine Lake and returns through the cool shade of cedars.</p><div class="card-fig"><strong>0.6 mi</strong><span>Ontario Parks: 1.0 km · return walk from Pass Lake trailhead</span></div><div class="card-time">Ontario Parks lists the return distance but no complete walking time.</div><p class="card-decision" data-decision="pass-lake-overlook">Check the trailhead and current access with park staff before setting out.</p><button type="button" class="map-choice" data-select="pass-lake-overlook" aria-controls="map-canvas">Learn about this trail</button>
+  </article>
+  </div>
+  <noscript><p class="nojs">These six trail descriptions and Ontario Parks distances are here even without an interactive map. Check current park notices and signs; no trail is confirmed open by this guide.</p></noscript>
+</section>
+<section id="map-section" class="map-band" aria-labelledby="map-title">
+  <div class="wrap">
+    <div class="section-kicker pale"><span class="index">02</span> THE LANDSCAPE BENEATH THE TRAILS</div>
+    <div class="map-heading"><div><h2 id="map-title">See where the forest<br>meets the great lake.</h2><p>Lake Superior has shaped this peninsula over a long, wild history. Follow the mapped sections to see how the trails wind through the woods and climb toward open stone. These four government-sourced outlines help you picture the country, not find your way by GPS. The unverified parking-to-trail connection is intentionally not drawn.</p></div><div class="map-legend"><span><i class="bike-key"></i>Cycling permitted on this section</span><span><i class="walk-key"></i>Continue on foot here</span><span><i class="park-key"></i>Approximate parking area, not verified</span></div></div>
+    <div class="map-layout">
+      <div class="map-surface">
+        <div class="map-topbar"><div><span>A LOOK AT THE LAND / ONTARIO TRAIL NETWORK</span><strong id="map-route-name">Sea Lion Trail</strong></div><span class="no-nav">FOR EXPLORING · NOT DIRECTIONS</span></div>
+        <div class="map-viewport" id="map-viewport">
+        <svg id="map-canvas" viewBox="0 0 820 610" role="img" aria-label="Research-only trail outline for Sea Lion, with an approximate parking area indicated separately. Not a navigation map."><defs>
+          <radialGradient id="lake" cx="65%" cy="70%" r="100%"><stop offset="0%" stop-color="#183e50"/><stop offset="100%" stop-color="#0b2633"/></radialGradient>
+          <pattern id="mapgrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="#3c6c75" stroke-opacity=".19" fill="none"/></pattern>
+        </defs><rect width="820" height="610" fill="url(#lake)"/><rect width="820" height="610" fill="url(#mapgrid)"/><g id="route-shapes"></g><g id="route-pins"></g></svg>
+        <div id="map-geographic" class="map-geographic" role="region" aria-label="Geographic park context with research-only trail overlays. Not a navigation map." aria-hidden="true"></div>
+        <div class="basemap-note" id="basemap-note" aria-live="polite">Opening a view of the landscape. The trail outline will remain if map tiles cannot load.</div>
+        </div>
+        <div class="map-bottom">
+          <span id="map-status">Trail lines show mapped sections, not current trail conditions.</span>
+          <label class="map-focus-label" for="map-focus">Take a closer look <select id="map-focus" aria-label="Explore a mapped section">
+            <option value="overview">The whole trail</option><option value="start">Where the mapped trail begins</option>
+            <option value="destination">Where the mapped trail leads</option><option value="parking">The approximate parking area</option>
+          </select></label>
+          <span class="map-zoom-status" id="map-zoom-status" aria-live="polite">Overview · not for navigation</span>
+        </div>
+      </div>
+      <aside class="route-detail" aria-labelledby="detail-title">
+        <div class="detail-overline">A CLOSER LOOK</div><h3 id="detail-title">Sea Lion Trail</h3><p id="detail-intro">Come for the rock arch; stay a moment with the lake.</p>
+        <div class="distance-compare"><div><span>Full return, Ontario Parks</span><strong id="official-distance">1.5 mi (2.4 km)</strong></div><div><span>Mapped trail-line return</span><strong id="mapped-distance">Compare below</strong></div></div>
+        <div class="gap-explainer" id="gap-note">The drawn trail and the park’s full return distance start in different places. The missing approach is not mapped here; never substitute a straight line for the signed trail.</div>
+        <div id="bike-breakdown" class="mode-breakdown" hidden></div>
+        <div class="checklist"><h4>Before you head into the woods</h4><ul>
+          <li>Read current Ontario Parks alerts and respect trail closures.</li><li>Check where to park and which permit you need.</li><li>Use official park signs and maps for your route, not these research lines.</li></ul></div>
+        <a class="source-link" href="https://www.ontarioparks.ca/park/sleepinggiant/activities" target="_blank" rel="noopener noreferrer">See Ontario Parks’ trail descriptions <span aria-hidden="true">↗</span></a>
+        <a class="source-link" href="https://www.ontarioparks.ca/park/sleepinggiant/alerts" target="_blank" rel="noopener noreferrer">Read current park alerts <span aria-hidden="true">↗</span></a>
+      </aside>
+    </div>
+    <p class="map-source">About this map: trail lines come from the Ontario Trail Network / Land Information Ontario (Open Government Licence – Ontario). The approximate parking-area point is based on © OpenStreetMap contributors (ODbL). These sources help show the landscape; they do not confirm present-day conditions, a legal parking entrance or the exact signed route.</p>
+  </div>
+</section>
+<section class="section wrap before" id="access" aria-labelledby="access-title">
+<div class="section-kicker"><span class="index">03</span> BEFORE YOUR WALK</div>
+<h2 id="access-title">A little preparation makes room for wonder.</h2>
+<div class="access-grid">
+<article><span class="access-num">01</span><h3>Find the right trailhead</h3><p>For the Sea Lion and the long Giant climbs, Ontario Parks directs walkers to the signed South Kabeyun lot on Highway 587, about 22.7 miles (36.5 km) south along the highway. It is different from the park gatehouse. We have not independently confirmed the exact parking entrance, so follow the park’s signs, not an approximate map pin.</p><a href="https://www.ontarioparks.ca/park/SleepingGiant/camping" target="_blank" rel="noopener noreferrer">Park information: parking and permits ↗</a></article>
+<article><span class="access-num">02</span><h3>When the trail belongs to your feet</h3><p>You can cycle part of South Kabeyun, but only as far as its junction with Talus Lake Trail. Do not cycle beyond the cutoff. Ontario Parks describes a bicycle rack there. The walking transitions for Head of the Giant and Nanabosho are different, and racks are not documented at those points.</p><a href="https://blog.ontarioparks.ca/bike-hike-sleeping-giant/" target="_blank" rel="noopener noreferrer">Ontario Parks guide to cycling and hiking ↗</a></article>
+<article><span class="access-num">03</span><h3>Let the park have the final word</h3><p>The lake can change its mood quickly, and long hikes need daylight for the return. This guide does not report live weather, trail conditions, open roads or parking. A walk that looks possible on paper may not be possible today. Always check park notices and the conditions in front of you.</p><a href="https://www.ontarioparks.ca/park/sleepinggiant/alerts" target="_blank" rel="noopener noreferrer">See the latest Ontario Parks notices ↗</a></article>
+</div>
+</section>
+<section class="closing wrap"><h2>There is no need to hurry a place like this.</h2><p>Listen to the wind in the trees. Watch the light move over the water. Choose a trail with enough daylight for both the outward journey and the walk home. The best thing you can carry away is a memory of being here, not the feeling that you raced through it.</p><p class="footlinks"><a href="https://chrisizworski.com/lake-superior-circle-tour/">Back to Lake Superior Circle Tour</a> <span aria-hidden="true">·</span> <a href="https://www.ontarioparks.ca/park/sleepinggiant">Ontario Parks information</a></p></section>
+</main>
+<footer class="page-footer"><div class="wrap"><span>Built by Chris Izworski</span><span>Evidence reviewed October 29, 2026 · Preview only · No live trail status</span><span>Landscape by Justin Meissen, CC BY-SA 2.0</span></div></footer>
+<script src="/assets/leaflet-1.9.4.js"></script>
+<script id="explorer-data" type="application/json">/* INLINE_DATA */</script>
+<script>/* INLINE_SCRIPT */</script>
+</body></html>

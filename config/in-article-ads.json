@@ -22,6 +22,12 @@
       "path": "/great-lakes-water-temperature",
       "match": "exact",
       "reason": "Same hero displacement as the Lake Michigan ShoreFeel pages."
+    },
+    {
+      "host": "chrisizworski.com",
+      "path": "/nyc-bridges",
+      "match": "exact",
+      "reason": "New photo-led NYC Bridges field guide had a 320px empty AdSense-reserved block above its first-screen hero on desktop and mobile. Keep this guide's first-screen content visible; do not change ad behavior on any other route."
     }
   ]
 }

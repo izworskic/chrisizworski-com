@@ -1,0 +1,600 @@
+{
+  "status": "crossing-research-not-route-approved",
+  "reviewedOn": "2026-10-28",
+  "sources": {
+    "trailGIS": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/2/query",
+    "streamGIS": "https://gisagoegle.state.mi.us/arcgis/rest/services/EGLE/MiEnviroBasemap/MapServer/1/query",
+    "dnrGPSMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+    "descriptions": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf"
+  },
+  "counts": {
+    "sourceTrails": 819,
+    "sourceStreams": 1190,
+    "geometricIntersections": 86,
+    "nearLineCandidates": 88,
+    "totalCandidates": 174,
+    "sourceDescribedJunctionRecords": 23
+  },
+  "registry": [
+    {
+      "id": "bigcarp-m107-correction",
+      "trail": "Big Carp River Trail",
+      "site": "M-107 to Correction Line Trail",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 5.3,
+      "note": "Old DNR trail description lists the leg as 5.3 miles; do not infer route-ready line geometry.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "bigcarp-correction-shiningcloud",
+      "trail": "Big Carp River Trail",
+      "site": "Correction Line junction to Shining Cloud Falls",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 2.9,
+      "note": "Old DNR trail description: 2.9 miles; no waterfall-to-trail crossing location supplied.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "bigcarp-shiningcloud-mouth",
+      "trail": "Big Carp River Trail",
+      "site": "Shining Cloud Falls to Big Carp rivermouth",
+      "type": "trail-terminal",
+      "status": "source-described",
+      "referenceMiles": 1.4,
+      "note": "Named segment, not a confirmed modern path; NCT/shoreline connectivity unverified.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "littlecarp-mirror-beaver",
+      "trail": "Little Carp River Trail",
+      "site": "Mirror Lake to Beaver Creek Trail junction",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 1.5,
+      "note": "Described as a leg; geometric exact junction not independently resolved.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "littlecarp-beaver-lily",
+      "trail": "Little Carp River Trail",
+      "site": "Beaver Creek junction to Lily Pond",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 0.8,
+      "note": "Described corridor, no route/bridge approval.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "littlecarp-lily-cross",
+      "trail": "Little Carp River Trail",
+      "site": "Lily Pond to Cross Trail junction",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 3,
+      "note": "Old guide named hiking leg, map alignment requires validation.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "littlecarp-cross-mouth",
+      "trail": "Little Carp River Trail",
+      "site": "Cross Trail junction to Little Carp rivermouth",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 6,
+      "note": "Old guide length not operational route distance.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "beaver-littlecarp-ford",
+      "trail": "Beaver Creek Trail",
+      "site": "Little Carp River crossing before joining Little Carp River Trail",
+      "type": "river-crossing",
+      "status": "source-confirms-water-crossing",
+      "referenceMiles": null,
+      "note": "DNR explicitly says trail crosses Little Carp River and adjoining wetlands. Bridge vs unbridged vs current passability NOT established. Must be blocked from route certification.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "govtpeak-uppercarp-cross",
+      "trail": "Government Peak Trail",
+      "site": "Upper Carp River crossing near beginning from M-107",
+      "type": "river-crossing",
+      "status": "source-confirms-water-crossing",
+      "referenceMiles": null,
+      "note": "DNR says Government Peak Trail crosses upper Carp River; exact coordinates, bridge, legal access and present condition not verified.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "govtpeak-northmirror-junction",
+      "trail": "Government Peak Trail",
+      "site": "North Mirror Lake junction north of Mirror Lake",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 0.9,
+      "note": "Guide describes junction 0.9 miles north of Mirror Lake. Not a routable map coordinate.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "escarpment-m107-ends",
+      "trail": "Escarpment Trail",
+      "site": "Lake of the Clouds parking to Government Peak Trailhead on M-107",
+      "type": "trail-terminals",
+      "status": "source-described",
+      "referenceMiles": 4.3,
+      "note": "Trail description gives 4.3 miles while later DNR map lists 3.7. Hiking GIS label totals 0.429. Exact endpoints and the route are NOT validated.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "lakesuperior-speakers",
+      "trail": "Lake Superior Trail",
+      "site": "Presque Isle to Speaker's Creek",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 2.1,
+      "note": "Old guide says 2.1 mi. Crossings and exact current alignment remain unresolved.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "lakesuperior-speakers-littlecarp",
+      "trail": "Lake Superior Trail",
+      "site": "Speaker's Creek to Little Carp River",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 4.2,
+      "note": "No certification of bridge or ford at Little Carp.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "lakesuperior-little-big",
+      "trail": "Lake Superior Trail",
+      "site": "Little Carp River to Big Carp rivermouth",
+      "type": "river-corridor",
+      "status": "source-described",
+      "referenceMiles": 1.3,
+      "note": "Old source describes shoreline leg; crossing/bridge status cannot be assumed.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "lakesuperior-big-lonerock",
+      "trail": "Lake Superior Trail",
+      "site": "Big Carp rivermouth to Lone Rock",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 4.6,
+      "note": "Historical bridge information does not establish current bridge condition.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "lakesuperior-lonerock-m107",
+      "trail": "Lake Superior Trail",
+      "site": "Lone Rock to M-107",
+      "type": "trail-terminal",
+      "status": "source-described",
+      "referenceMiles": 4.9,
+      "note": "Old DNR trail segment, current designated use/route not verified.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "presque-east",
+      "trail": "East River Trail",
+      "site": "Presque Isle East River Trail",
+      "type": "river-bank-viewing",
+      "status": "source-described",
+      "referenceMiles": 1.2,
+      "note": "DNR describes boardwalks and viewing platforms and warns no swimming/wading in Presque Isle River. No complete route/pedestrian bridge evidence tied to GIS.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "presque-west",
+      "trail": "West River Trail",
+      "site": "Presque Isle West River Trail",
+      "type": "river-bank-viewing",
+      "status": "source-described",
+      "referenceMiles": 1.1,
+      "note": "DNR describes boardwalks and viewing platforms and warns no swimming/wading in Presque Isle River. Exact parking-to-waterfall access unresolved.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "presque-loop-bridge",
+      "trail": "East River Trail / West River Trail",
+      "site": "Presque Isle suspension bridge near river mouth",
+      "type": "possible-bridge",
+      "status": "map-symbol-only",
+      "referenceMiles": null,
+      "note": "Older DNR map shows suspension-bridge symbol; location and current condition not independently verified for an actual loop. NOT route approved.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "bigcarp-2016-bridge",
+      "trail": "Big Carp River",
+      "site": "Bridge reported washed out in 2016",
+      "type": "historical-bridge-condition",
+      "status": "historical-only",
+      "referenceMiles": null,
+      "note": "DNR historical 2016 bulletin confirms a bridge washed out. Not evidence of a current closure, replacement, or usable ford.",
+      "source": "https://content.govdelivery.com/accounts/MIDNR/bulletins/158f0d0",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "pinkerton-creek",
+      "trail": "Pinkerton Trail",
+      "site": "South Boundary Road to Pinkerton Creek to Lake Superior Trail",
+      "type": "trail-junction",
+      "status": "source-described",
+      "referenceMiles": 2.6,
+      "note": "The source breaks distance at Pinkerton Creek (1.4 + 1.2 miles) without establishing a ford or bridge. Do not label a crossing confirmed.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "presque-westriver-head",
+      "trail": "West River Trail",
+      "site": "West River Trailhead / Nawadaha approach",
+      "type": "access-point",
+      "status": "map-label-only",
+      "referenceMiles": null,
+      "note": "GPS map shows separately named West River Trailhead and scenic-area trails; DNR trail description does not establish accessible continuous waterfall circuit.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    },
+    {
+      "id": "nct-shared",
+      "trail": "North Country Trail",
+      "site": "Shared shoreline/backcountry corridor",
+      "type": "network-overlap",
+      "status": "needs-geometric-reconciliation",
+      "referenceMiles": null,
+      "note": "NCT classification overlaps sections of other park trails. Do not add separate NCT line lengths to hiking route total without line geometry crosswalk.",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+      "coordinatesPublished": false,
+      "bridgeOrFord": "unknown",
+      "routeEligible": false
+    }
+  ],
+  "priorityEvidence": [
+    {
+      "ledgerId": "beaver-littlecarp-ford",
+      "candidateCount": 4,
+      "lineIntersections": 1,
+      "navigationStatus": "blocked-until-bridge-ford-junction-review",
+      "comment": "DNR narrative explicitly names crossing; candidate GIS intersection agrees, bridge condition unknown.",
+      "coordinatePublished": false
+    },
+    {
+      "ledgerId": "govtpeak-uppercarp-cross",
+      "candidateCount": 1,
+      "lineIntersections": 1,
+      "navigationStatus": "blocked-until-bridge-ford-junction-review",
+      "comment": "DNR narrative names upper Carp river; EGLE labels Carp River Inlet near a Government Peak line. Waterway-name match must be confirmed.",
+      "coordinatePublished": false
+    },
+    {
+      "ledgerId": "presque-east",
+      "candidateCount": 1,
+      "lineIntersections": 1,
+      "navigationStatus": "blocked-until-bridge-ford-junction-review",
+      "comment": "A riverside trail touching the river centerline is NOT proof of a crossing.",
+      "coordinatePublished": false
+    },
+    {
+      "ledgerId": "presque-west",
+      "candidateCount": 1,
+      "lineIntersections": 0,
+      "navigationStatus": "blocked-until-bridge-ford-junction-review",
+      "comment": "A riverbank near-line is NOT proof of a cross-river bridge.",
+      "coordinatePublished": false
+    },
+    {
+      "ledgerId": "pinkerton-creek",
+      "candidateCount": 2,
+      "lineIntersections": 1,
+      "navigationStatus": "blocked-until-bridge-ford-junction-review",
+      "comment": "DNR trail description names Pinkerton Creek as a segment break, NOT explicitly as a ford.",
+      "coordinatePublished": false
+    }
+  ],
+  "structureReview": {
+    "mapEdition": "Michigan DNR GPS park map 2025-07-14",
+    "compiledOn": "2026-10-28",
+    "conditionCertified": 0,
+    "officialClosureReview": {
+      "url": "https://www.michigan.gov/dnr/about/newsroom/closures",
+      "reviewed": "2026-10-28",
+      "targetedPorkiesBridgeItemFound": false,
+      "inference": "No matching listed closure does NOT establish an open bridge or safe ford."
+    },
+    "managedBridgeAssetAudit": {
+      "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRReferenceAssetsOPENDATA/FeatureServer/0",
+      "reviewed": "2026-10-28",
+      "spatialFilter": "-90.06,46.61,-89.55,46.90 WGS84 envelope",
+      "recordsFound": 1,
+      "records": [
+        {
+          "objectId": 163,
+          "assetType": "Bridge",
+          "detailType": "Vehicular",
+          "description": "Snowmobile UP1",
+          "owner": "County",
+          "administrator": "DNR",
+          "condition": null,
+          "publicVisitorHikingBridge": false
+        }
+      ],
+      "explicitlyVerifiedFootbridgeAssetRecords": 0,
+      "interpretation": "Only one regional vehicular/snowmobile asset is recorded in this DNR managed bridge layer. No named Porkies pedestrian crossings were confirmed by this dataset. This is an incomplete asset-inventory source for hiking and MUST NOT be used to claim that bridges do not physically exist, are closed, or are open."
+    },
+    "entries": [
+      {
+        "id": "beaver-littlecarp-ford",
+        "label": "Beaver Creek Trail / Little Carp River",
+        "district": "Summit Peak / upper Little Carp",
+        "kind": "documented-water-crossing",
+        "mapMarkerReview": "DNR 2025 map has unbridged-crossing legend, but corresponding symbol not independently correlated",
+        "structure": "unverified",
+        "latestCondition": "unverified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [
+            6244,
+            6245
+          ],
+          "hydro": [
+            27276,
+            19348
+          ]
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "govtpeak-uppercarp-cross",
+        "label": "Government Peak Trail / upper Carp River",
+        "district": "Government Peak / Trap Falls corridor",
+        "kind": "documented-water-crossing",
+        "mapMarkerReview": "DNR map supplies regional trail context; crossing symbol not independently coordinate-matched",
+        "structure": "unverified",
+        "latestCondition": "unverified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+          "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        ],
+        "sourceIds": {
+          "trail": [
+            5055
+          ],
+          "hydro": [
+            30025
+          ]
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "pinkerton-creek",
+        "label": "Pinkerton Trail / Pinkerton Creek",
+        "district": "Pinkerton wilderness approach",
+        "kind": "named-creek-waypoint",
+        "mapMarkerReview": "No specific unbridged symbol tied reliably to this source ID",
+        "structure": "not-established-as-crossing",
+        "latestCondition": "unverified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [
+            7033,
+            6696
+          ],
+          "hydro": [
+            30056
+          ]
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "presque-east",
+        "label": "Presque Isle East River Trail / river",
+        "district": "Presque Isle waterfalls",
+        "kind": "riverbank-geometry",
+        "mapMarkerReview": "General Presque Isle area is recognizable; exact crossing symbol not associated with trail GIS ID",
+        "structure": "unknown-not-proven-bridge",
+        "latestCondition": "unverified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [
+            7080
+          ],
+          "hydro": [
+            28114
+          ]
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "presque-west",
+        "label": "Presque Isle West River Trail / river",
+        "district": "Presque Isle waterfalls",
+        "kind": "riverbank-geometry",
+        "mapMarkerReview": "No verified mapping from this near-line segment to a suspension bridge entrance",
+        "structure": "unknown",
+        "latestCondition": "unverified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [
+            5330
+          ],
+          "hydro": [
+            28114
+          ]
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "presque-loop-bridge",
+        "label": "Presque Isle river-mouth suspension bridge",
+        "district": "Presque Isle waterfalls",
+        "kind": "mapped-bridge-existence",
+        "mapMarkerReview": "Map and tourism brochure show bridge in scenic area, but no certified current bridge-inspection or operation record",
+        "structure": "suspension-bridge-mapped",
+        "latestCondition": "not-currently-verified",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+          "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        ],
+        "sourceIds": {
+          "trail": [],
+          "hydro": []
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "bigcarp-2016-bridge",
+        "label": "Big Carp River mouth / Lake Superior Trail bridge",
+        "district": "Big Carp river-mouth shoreline",
+        "kind": "historical-bridge-washout",
+        "mapMarkerReview": "Map river-mouth corridor is identifiable; no confirmed matching 2025 bridge symbol or current structural status",
+        "structure": "washed-out-in-2016",
+        "latestCondition": "unknown-in-2026",
+        "sourceUrls": [
+          "https://content.govdelivery.com/accounts/MIDNR/bulletins/158f0d0",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [],
+          "hydro": []
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "bigcarp-upstream-ford",
+        "label": "Big Carp River Trail / upstream river crossing",
+        "district": "Big Carp / Correction Line downstream reach",
+        "kind": "2026-hiker-observed-unbridged-crossing",
+        "mapMarkerReview": "Cannot individually place an unbridged icon at the visitor account's described mile mark from official map alone",
+        "structure": "reported-unbridged-in-2026-hiker-account",
+        "latestCondition": "nonofficial-and-subject-to-change",
+        "sourceUrls": [
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+          "https://thelupines.com/big-carp-river-trail/",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [],
+          "hydro": []
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      },
+      {
+        "id": "littlecarp-overlooked-falls-bridge",
+        "label": "Little Carp River / Overlooked Falls bridge",
+        "district": "Little Carp River Road / falls approach",
+        "kind": "tourism-brochure-described-bridge",
+        "mapMarkerReview": "Tourism waterfall brochure indicates first bridge near Overlooked Falls, distinct from Beaver Creek upper Little Carp crossing",
+        "structure": "reported-pedestrian-bridge",
+        "latestCondition": "not-currently-verified",
+        "sourceUrls": [
+          "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf"
+        ],
+        "sourceIds": {
+          "trail": [],
+          "hydro": []
+        },
+        "publicCoordinate": null,
+        "routeEligible": false
+      }
+    ]
+  },
+  "safety": {
+    "currentBridgeStatus": "unknown",
+    "officialCrossingCoordinatesCertified": false,
+    "anyAutoRouteAcrossStream": false,
+    "historicalBigCarpBridgeStatus": "2016 report only, no current assertion",
+    "fieldVerificationRequired": true,
+    "currentPassableCrossings": 0,
+    "exactMapSymbolToCrossingMatches": 0
+  },
+  "advisory": "Evidence of a river crossing or connected trail is not evidence of a safe, open, bridged route. No GPS crossing pin, route time, or ford status is published."
+}

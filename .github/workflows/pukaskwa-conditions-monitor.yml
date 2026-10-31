@@ -1,0 +1,184 @@
+name: Pukaskwa official condition monitor
+
+# Routine checks write only to an isolated data branch, never main.
+on:
+  schedule:
+    - cron: '17 3,9,15,21 * * *'
+  workflow_dispatch:
+  # The initial source baseline runs immediately when this workflow merges.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pukaskwa-conditions-monitor.yml'
+      - 'lib/pukaskwa/**'
+      - 'scripts/pukaskwa/**'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: pukaskwa-official-condition-monitor
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test collection and state transitions
+        run: node --test tests/pukaskwa-conditions.test.js tests/pukaskwa-condition-monitor.test.js
+      - name: Read prior snapshot from data-only branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const {owner, repo} = context.repo;
+            try {
+              const result = await github.rest.repos.getContent({
+                owner, repo, path:'pukaskwa/conditions-latest.json',
+                ref:'pukaskwa-conditions-data',
+              });
+              const file = result.data;
+              if (!file || Array.isArray(file) || file.encoding !== 'base64') throw new Error('Invalid saved feed representation');
+              fs.writeFileSync(process.env.RUNNER_TEMP + '/pukaskwa-prior.json',
+                Buffer.from(file.content.replace(/\s/g, ''), 'base64'));
+              core.info('Prior state loaded from the isolated data branch');
+            } catch (err) {
+              if (err.status === 404) core.info('No prior state: first successful run becomes baseline');
+              else throw err;
+            }
+      - name: Collect official conditions and produce health report
+        run: |
+          node scripts/pukaskwa/monitor-conditions.mjs \
+            --previous "$RUNNER_TEMP/pukaskwa-prior.json" \
+            --output "$RUNNER_TEMP/pukaskwa-latest.json" \
+            --report "$RUNNER_TEMP/pukaskwa-report.json"
+      - name: Update isolated data branch (not the production branch)
+        id: publish
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const {owner, repo} = context.repo;
+            const branch='pukaskwa-conditions-data', filePath='pukaskwa/conditions-latest.json';
+            const content=fs.readFileSync(process.env.RUNNER_TEMP+'/pukaskwa-latest.json','utf8');
+            let current=null;
+            try {
+              const response=await github.rest.repos.getContent({owner,repo,path:filePath,ref:branch});
+              current=response.data;
+              if (!current || Array.isArray(current) || current.encoding!=='base64') throw new Error('Invalid current data file');
+            } catch(err) {
+              if(err.status!==404)throw err;
+              try {await github.rest.git.getRef({owner,repo,ref:'heads/'+branch});}
+              catch(refError) {
+                if(refError.status!==404)throw refError;
+                await github.rest.git.createRef({owner,repo,ref:'refs/heads/'+branch,sha:context.sha});
+              }
+            }
+            const old=current?Buffer.from(current.content.replace(/\s/g,''),'base64').toString('utf8'):null;
+            if(old===content){core.info('No changed monitor heartbeat');return;}
+            const health=JSON.parse(content).health;
+            const result=await github.rest.repos.createOrUpdateFileContents({
+              owner,repo,path:filePath,branch,
+              message:health==='source-error'?'data(pukaskwa): record source outage':'data(pukaskwa): refresh dated official conditions',
+              content:Buffer.from(content).toString('base64'),
+              ...(current?{sha:current.sha}:{}),
+            });
+            core.info('Data-only commit: '+result.data.commit.sha);
+      - name: GitHub issue alerts for changes, outages and recovery
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+        with:
+          script: |
+            const fs=require('node:fs');
+            const {owner,repo}=context.repo;
+            const source='https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions';
+            const run=context.serverUrl+'/'+owner+'/'+repo+'/actions/runs/'+context.runId;
+            const failureTitle='Pukaskwa conditions monitor — collection or publication failure';
+            const changeTitle='Pukaskwa official trail conditions changed — review required';
+            const reportPath=process.env.RUNNER_TEMP+'/pukaskwa-report.json';
+            const report=fs.existsSync(reportPath)?JSON.parse(fs.readFileSync(reportPath,'utf8')):null;
+            const open=await github.paginate(github.rest.issues.listForRepo,{owner,repo,state:'open',per_page:100});
+            const find=(title)=>open.find(x=>!x.pull_request&&x.title===title);
+            const failure=!report||report.result!=='success'||process.env.PUBLISH_OUTCOME!=='success';
+            if(failure){
+              const detail=report?
+                'Checked: '+report.checkedAt+'; consecutive fetch failures: '+report.failureCount+
+                  '; outcome: '+process.env.PUBLISH_OUTCOME+'; error: '+(report.error||'upstream workflow step') :
+                'No valid report was produced by the workflow.';
+              const body=['Monitor could not retrieve and/or persist a verified Pukaskwa source state.',
+                '**Previous evidence is not proof of current trail access.**',detail,
+                'Official source: '+source,'Failed workflow: '+run,
+                'Do not create new visitor-facing green access claims from this run.'].join('\n\n');
+              if(!find(failureTitle)){
+                await github.rest.issues.create({owner,repo,title:failureTitle,body});
+                core.warning('Created monitor-failure issue');
+              } else core.warning('Existing monitor-failure issue retained');
+            }else if(find(failureTitle)){
+              await github.rest.issues.createComment({owner,repo,issue_number:find(failureTitle).number,
+                body:'Source collection and persistence recovered at '+report.checkedAt+
+                  '. This does not make old source observations newly current. '+run});
+              await github.rest.issues.update({owner,repo,issue_number:find(failureTitle).number,state:'closed'});
+            }
+            if(!report||report.baseline||(!report.changed&&!report.holds.length))return;
+            const marker='<!-- pukaskwa-condition-fingerprint:'+report.fingerprint+' -->';
+            const body=[
+              'Official source record changed or an apparent reopening conflicts with a previously dated closure.',
+              '**Human review required before changing public hike recommendations.**',
+              'Checked (UTC): '+report.checkedAt,
+              'Retrieved (UTC): '+(report.sourceRetrievedAt||'unknown'),
+              'Official evidence: '+source,
+              ...report.changes.slice(0,30).map(c=>
+                '- '+c.name+' ['+c.type+']: '+(c.before?.status||'not listed')+' ('+(c.before?.issuedOn||'undated')+
+                ') → '+(c.after?.status||'not listed')+' ('+(c.after?.issuedOn||'undated')+')'),
+              ...report.holds.map(h=>
+                '- HELD CLOSED: '+h.name+' (prior '+(h.sourceIssuedOn||'undated')+
+                '; source now says '+h.incomingStatus+' '+(h.incomingIssuedOn||'undated')+')'),
+              'Workflow: '+run,marker,
+            ].join('\n\n');
+            const existing=find(changeTitle);
+            if(!existing){
+              await github.rest.issues.create({owner,repo,title:changeTitle,body});
+            }else if(!(existing.body||'').includes(marker)){
+              await github.rest.issues.createComment({owner,repo,issue_number:existing.number,body});
+              await github.rest.issues.update({owner,repo,issue_number:existing.number,body});
+            }
+      - name: Summarize source freshness, not merely fetch success
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const p=process.env.RUNNER_TEMP+'/pukaskwa-report.json';
+          const r=fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):null;
+          const lines=['## Pukaskwa official conditions watch',
+            'Park status is dated official evidence, **not** live open-now certification.',
+            r?'Checked UTC: '+r.checkedAt:'Source check did not produce a report',
+            r?'Result: '+r.result:'Result: failed',
+            r?'Last successful check: '+(r.lastSuccessAt||'never'):'',
+            r?'Changes: '+r.changes.length+'; closure holds: '+r.holds.length:'',
+            'Data-only branch: pukaskwa-conditions-data; no push to main.'];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n\n')+'\n');
+          NODE
+      - name: Archive monitor evidence (30 days)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pukaskwa-official-conditions
+          path: |
+            ${{ runner.temp }}/pukaskwa-latest.json
+            ${{ runner.temp }}/pukaskwa-report.json
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Fail visible Actions check when health requires review
+        if: always()
+        run: |
+          node -e "const fs=require('fs');const p=process.env.RUNNER_TEMP+'/pukaskwa-latest.json';if(!fs.existsSync(p))process.exit(1);const f=JSON.parse(fs.readFileSync(p));if(f.health!=='ok'){console.error('Source needs attention: '+f.health);process.exit(1)}"

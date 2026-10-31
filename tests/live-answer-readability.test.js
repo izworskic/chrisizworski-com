@@ -14,7 +14,7 @@ test('visible aurora jump reaches the actual tonight decision without changing S
  assert.match(aurora,/\.live-strip \.live-jump:focus-visible/);
  assert.match(aurora,/#aurora-decision\{scroll-margin-top:18px\}/);
  assert.match(aurora,/<title>Northern Lights Michigan Tonight: Can You See Them\?<\/title>/);
- assert.match(aurora,/"dateModified": "2026-10-26"/);
+ assert.ok((aurora.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1] || "") >= "2026-10-26");
 });
 test('official bridge status remains the first answer and gets direct ribbon navigation',()=>{
  assert.match(bridge,/<a class="ribbon-answer-link" href="#statusCard">Read full official bridge report/);

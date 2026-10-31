@@ -1,0 +1,925 @@
+<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michigan Winter Cabins &amp; Saunas Guide | Chris Izworski</title>
+<meta name="description" content="Northwoods guide to 12 Michigan winter cabins, wood-fired saunas, ski chalets and yurts with live snow depth, trail access and AWD road requirements.">
+<meta name="author" content="Chris Izworski"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://chrisizworski.com/michigan-winter-cabins-field-guide/">
+<meta property="og:type" content="article"><meta property="og:title" content="Michigan Winter Cabins, Saunas &amp; Hot-Tub Basecamps Field Guide">
+<meta property="og:description" content="Northwoods lodgekeeper and trail scout field guide to 12 Michigan winter basecamp zones: Keweenaw wood-fired shoreline saunas, Boyne ski chalets, Au Sable log cabins and Porcupine Mountains yurts.">
+<meta property="og:url" content="https://chrisizworski.com/michigan-winter-cabins-field-guide/">
+<meta property="og:image" content="https://chrisizworski.com/assets/michigan-winter-cabins/keweenaw-copper-harbor-sauna.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="google-adsense-account" content="ca-pub-8222782620788075"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
+<link rel="stylesheet" href="/assets/michigan-winter-cabins-field-guide.css">
+<style>
+/* Embedded Northwoods stylesheet for zero-FOUC and offline pop-out resilience */
+:root{--mc-spruce:#183a2d;--mc-spruce-dark:#0d2119;--mc-spruce-light:#eaf2ed;--mc-cedar:#8b4513;--mc-cedar-dark:#66320d;--mc-cedar-light:#fbf2ec;--mc-amber:#c26b38;--mc-amber-light:#fff3ed;--mc-ice:#1b4965;--mc-ice-dark:#123348;--mc-ice-light:#ebf4f8;--mc-bg:#f8fafc;--mc-card:#ffffff;--mc-text:#1e293b;--mc-muted:#475569;--mc-border:#cbd5e1;--mc-border-subtle:#e2e8f0;--mc-font-serif:'Fraunces',Georgia,serif;--mc-font-sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;--mc-shadow:0 4px 18px rgba(15,37,28,0.08);--mc-shadow-hover:0 8px 26px rgba(15,37,28,0.13)}
+body.wf--winter-cabins{background-color:var(--mc-bg);color:var(--mc-text);font-family:var(--mc-font-sans);line-height:1.65;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+.wf-sitebar{background:var(--mc-spruce-dark);color:#fff;padding:12px 0;border-bottom:3px solid var(--mc-amber)}
+.wf-sitebar .wf-shell{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.wf-brand{font-family:var(--mc-font-serif);font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:-0.02em}
+.wf-sitebar nav a{color:#e2e8f0;text-decoration:none;font-size:0.9rem;font-weight:500;margin-left:18px;transition:color 0.15s ease}
+.wf-sitebar nav a:hover{color:var(--mc-amber-light);text-decoration:underline}
+.wf-shell{max-width:1200px;margin:0 auto;padding:0 20px}
+.wf-hero{padding:48px 20px 32px}
+.wf-eyebrow{font-size:0.825rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--mc-cedar);margin-bottom:8px}
+.wf-hero h1{font-family:var(--mc-font-serif);font-size:clamp(2.1rem,4.2vw,3.2rem);font-weight:700;line-height:1.15;color:var(--mc-spruce-dark);margin:0 0 16px;letter-spacing:-0.02em}
+.wf-lede{font-size:1.15rem;line-height:1.65;color:var(--mc-muted);max-width:880px;margin:0 0 24px}
+.mc-hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.wf-primary{background:var(--mc-spruce);color:#fff;padding:12px 22px;border-radius:6px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s}
+.wf-primary:hover{background:var(--mc-spruce-dark)}
+.mc-secondary-cta{background:#fff;color:var(--mc-spruce);border:1px solid var(--mc-border);padding:12px 20px;border-radius:6px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+.mc-secondary-cta:hover{border-color:var(--mc-spruce);background:var(--mc-spruce-light)}
+.wf-veracity{font-size:0.85rem;color:var(--mc-muted);border-left:3px solid var(--mc-amber);padding-left:12px;margin-top:20px;line-height:1.5}
+.mc-hero-montage{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.wf-photo{margin:0;background:#fff;border:1px solid var(--mc-border);border-radius:8px;overflow:hidden;box-shadow:var(--mc-shadow)}
+.wf-photo img{width:100%;height:230px;object-fit:cover;display:block}
+.wf-photo figcaption{font-size:0.78rem;color:var(--mc-muted);padding:8px 12px;line-height:1.4;background:#fff;border-top:1px solid var(--mc-border-subtle)}
+.wf-photo figcaption a{color:var(--mc-spruce);text-decoration:underline}
+.mc-filter-section{margin:44px auto 32px;background:#fff;border:1px solid var(--mc-border);border-radius:10px;padding:28px 24px;box-shadow:var(--mc-shadow)}
+.mc-filter-head h2{font-family:var(--mc-font-serif);font-size:1.8rem;color:var(--mc-spruce-dark);margin:0 0 8px}
+.mc-filter-sub{color:var(--mc-muted);font-size:0.98rem;margin:0 0 20px;max-width:860px}
+.mc-style-pills{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:20px}
+.mc-style-pill{background:var(--mc-bg);border:1px solid var(--mc-border);border-radius:20px;padding:8px 18px;font-size:0.85rem;font-weight:600;color:var(--mc-spruce-dark);cursor:pointer;transition:all 0.15s ease;user-select:none}
+.mc-style-pill:hover{background:var(--mc-spruce-light);border-color:var(--mc-spruce)}
+.mc-style-pill.active{background:var(--mc-spruce);color:#fff;border-color:var(--mc-spruce-dark);box-shadow:0 2px 6px rgba(24,58,45,0.25)}
+.mc-snow-intel-banner{margin-top:20px;background:var(--mc-ice-light);border:1px solid #bfdbfe;border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.mc-intel-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.mc-intel-title{font-family:var(--mc-font-serif);font-size:1.2rem;font-weight:700;color:var(--mc-ice-dark)}
+.mc-intel-badge{background:var(--mc-ice);color:#fff;padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase}
+.mc-intel-details{font-size:0.92rem;color:var(--mc-ice-dark);line-height:1.55;margin:0}
+.mc-intel-advisory{font-size:0.85rem;background:#ffffff;padding:10px 14px;border-radius:6px;border-left:3px solid var(--mc-amber);color:#334155}
+.mc-map-section{margin:32px auto 44px;background:#fff;border:1px solid var(--mc-border);border-radius:10px;padding:24px;box-shadow:var(--mc-shadow)}
+.mc-map-header{margin-bottom:16px}
+.mc-map-header h2{font-family:var(--mc-font-serif);font-size:1.7rem;color:var(--mc-spruce-dark);margin:0 0 6px}
+.mc-map-header p{color:var(--mc-muted);font-size:0.95rem;margin:0}
+#cabin-map{height:480px;width:100%;border-radius:8px;border:1px solid var(--mc-border);z-index:1}
+.mc-map-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-size:0.825rem;color:var(--mc-muted)}
+.legend-item{display:inline-flex;align-items:center;gap:6px}
+.legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.wf-stories{margin-top:32px}
+.wf-story{background:#fff;border:1px solid var(--mc-border);border-radius:12px;margin-bottom:36px;overflow:hidden;box-shadow:var(--mc-shadow);transition:transform 0.2s ease,box-shadow 0.2s ease}
+.wf-story:hover{transform:translateY(-2px);box-shadow:var(--mc-shadow-hover)}
+.wf-story.hidden{display:none!important}
+.wf-story .wf-photo img{height:380px;border-radius:12px 12px 0 0}
+.wf-story-body{padding:28px 32px 32px}
+.mc-card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.mc-badge-style{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:4px 10px;border-radius:4px}
+.badge--wood-fired-sauna{background:var(--mc-amber-light);color:var(--mc-cedar);border:1px solid #fbd5c0}
+.badge--ski-in-chalet{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.badge--rustic-yurt-cabin{background:#fefce8;color:#854d0e;border:1px solid #fef08a}
+.badge--riverfront-cabin{background:var(--mc-ice-light);color:var(--mc-ice);border:1px solid #bfdbfe}
+.mc-badge-snow{background:#f1f5f9;color:#0f172a;border:1px solid var(--mc-border);font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+.mc-badge-awd{background:#fff1f2;color:#9f1239;border:1px solid #fecdd3;font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:4px}
+.wf-story-body h3{font-family:var(--mc-font-serif);font-size:1.85rem;color:var(--mc-spruce-dark);margin:6px 0 14px;line-height:1.25}
+.mc-dossier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:18px 0 22px;background:var(--mc-bg);border:1px solid var(--mc-border-subtle);border-radius:8px;padding:16px}
+.mc-dossier-item{display:flex;flex-direction:column;gap:4px}
+.mc-dossier-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--mc-muted)}
+.mc-dossier-value{font-size:0.92rem;color:var(--mc-text);font-weight:500}
+.wf-story-body p{color:#334155;font-size:1.02rem;line-height:1.68;margin:0 0 16px}
+.mc-scout-rule{background:var(--mc-cedar-light);border-left:4px solid var(--mc-cedar);padding:14px 18px;border-radius:0 8px 8px 0;font-size:0.95rem;color:#451a03;margin:20px 0}
+.mc-scout-rule strong{display:block;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;color:var(--mc-cedar-dark)}
+.wf-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-top:18px;border-top:1px solid var(--mc-border-subtle);margin-top:22px}
+.wf-tool{background:var(--mc-spruce);color:#fff!important;font-weight:600;font-size:0.85rem;padding:8px 16px;border-radius:6px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background 0.15s ease}
+.wf-tool:hover{background:var(--mc-spruce-dark)}
+.wf-links a:not(.wf-tool){font-size:0.85rem;color:var(--mc-spruce);text-decoration:none;padding:7px 12px;border:1px solid var(--mc-border);border-radius:6px;font-weight:500;transition:all 0.15s ease}
+.wf-links a:not(.wf-tool):hover{border-color:var(--mc-spruce);background:var(--mc-spruce-light)}
+.mc-faq-section{margin:48px auto;background:#fff;border:1px solid var(--mc-border);border-radius:12px;padding:36px 32px;box-shadow:var(--mc-shadow)}
+.mc-faq-head h2{font-family:var(--mc-font-serif);font-size:2rem;color:var(--mc-spruce-dark);margin:0 0 10px}
+.mc-faq-sub{color:var(--mc-muted);font-size:1.05rem;margin:0 0 28px}
+.mc-faq-item{border-bottom:1px solid var(--mc-border-subtle);padding:20px 0}
+.mc-faq-item:last-child{border-bottom:none;padding-bottom:0}
+.mc-faq-item h3{font-family:var(--mc-font-serif);font-size:1.25rem;color:var(--mc-spruce-dark);margin:0 0 10px}
+.mc-faq-item p{color:#334155;font-size:0.98rem;line-height:1.65;margin:0}
+.wf-safety{background:#f1f5f9;border-top:1px solid var(--mc-border);border-bottom:1px solid var(--mc-border);padding:44px 0;margin-top:56px}
+.wf-safety h2{font-family:var(--mc-font-serif);font-size:1.8rem;color:var(--mc-spruce-dark);margin:0 0 12px}
+.wf-safety p{color:var(--mc-muted);font-size:1rem;line-height:1.65;max-width:880px}
+.wf-footer{background:var(--mc-spruce-dark);color:#94a3b8;padding:32px 0;font-size:0.88rem}
+.wf-footer a{color:#cbd5e1;text-decoration:underline}
+.wf-footer a:hover{color:#fff}
+@media (max-width:768px){.mc-hero-montage{grid-template-columns:1fr}.wf-story .wf-photo img{height:240px}.wf-story-body{padding:20px}.wf-story-body h3{font-size:1.5rem}.mc-dossier-grid{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://chrisizworski.com/#website",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#page",
+      "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/",
+      "name": "Michigan Winter Cabins, Saunas & Hot-Tub Basecamps Field Guide",
+      "description": "Northwoods lodgekeeper and winter trail scout field guide to 12 architectural winter basecamps across Michigan: Keweenaw wood-fired saunas, Boyne ski chalets, Au Sable river cabins, and Porcupine Mountains yurts.",
+      "datePublished": "2026-10-31",
+      "dateModified": "2026-10-31",
+      "author": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://chrisizworski.com/#website"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "12 Michigan Winter Basecamp Zones",
+      "numberOfItems": 12,
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Keweenaw Shoreline Saunas & Cold Plunge", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-1"},
+        {"@type": "ListItem", "position": 2, "name": "Porcupine Mountains Wilderness Yurts & Cabins", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-2"},
+        {"@type": "ListItem", "position": 3, "name": "Boyne Mountain & Walloon Lake Chalets", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-3"},
+        {"@type": "ListItem", "position": 4, "name": "Au Sable River 'Holy Water' Cedar Cabins", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-4"},
+        {"@type": "ListItem", "position": 5, "name": "Marquette Sandstone Shoreline & Presque Isle Saunas", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-5"},
+        {"@type": "ListItem", "position": 6, "name": "Munising & Pictured Rocks Backcountry Cabin Outposts", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-6"},
+        {"@type": "ListItem", "position": 7, "name": "The Highlands at Harbor Springs & Nub's Nob Chalets", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-7"},
+        {"@type": "ListItem", "position": 8, "name": "Upper Manistee River & Jordan River Valley Hideaways", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-8"},
+        {"@type": "ListItem", "position": 9, "name": "Crystal Mountain & Benzie County Alpine Chalets", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-9"},
+        {"@type": "ListItem", "position": 10, "name": "Tahquamenon Falls & Whitefish Bay Boreal Lodges", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-10"},
+        {"@type": "ListItem", "position": 11, "name": "Pine River & Manistee National Forest Rustic Yurts", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-11"},
+        {"@type": "ListItem", "position": 12, "name": "Pere Marquette River 'Fly-Water' Retreats", "url": "https://chrisizworski.com/michigan-winter-cabins-field-guide/#basecamp-12"}
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What AWD or 4WD vehicle setup do I need for Michigan winter cabin getaways?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For paved resort chalets in Boyne or Harbor Springs, all-wheel drive with good all-season tires is sufficient. However, for Upper Peninsula shoreline saunas (Keweenaw, Marquette, Whitefish Bay) and backcountry state forest cabins (Au Sable, Jordan River, Porkies), true 4WD or dedicated winter snow tires (with the Three-Peak Mountain Snowflake rating) and 8+ inches of ground clearance are required to handle unplowed seasonal roads, lake-effect squalls, and deep driveway plow berms."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do wood-fired Lake Superior saunas work in below-freezing temperatures?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditional Finnish wood-fired saunas use seasoned hardwood (sugar maple, yellow birch) in heavy cast-iron or steel rock baskets loaded with dense igneous sauna stones. Stoked hot for 45 to 60 minutes, the room easily reaches 185°F to 210°F even when outside temperatures plummet below zero. The ritual pairs hot steam (löyly) with a brisk roll in fresh powder snow or a cold dip in Lake Superior before returning to the radiant cedar heat."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What gear do I need to ski or snowshoe into a Porcupine Mountains rustic yurt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Backcountry yurts and cabins in the Porkies require a 1 to 4-mile trek on skis or snowshoes over snow-packed terrain. You should haul gear using a pulk or towable plastic sled rather than a heavy backpack. Essential gear includes zero-degree sleeping bags, insulated sleeping pads, headlamps with extra lithium batteries (cold drains alkaline cells rapidly), waterproof matches, camp stove and fuel, dry warm socks, and non-perishable high-calorie food. Firewood and an airtight woodstove are provided at each site."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do private hot tubs hold temperature during Northern Michigan lake-effect cold snaps?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Quality winter hot tubs in Michigan ski country are equipped with heavy 4-to-6-inch tapered marine-grade thermal covers. Keep the cover tightly latched whenever the tub is not occupied. When temperatures drop below zero with high winds, water temperature will drop approximately 1 to 2 degrees every ten minutes if left uncovered. Maintain the thermostat at 102°F–104°F and keep snow shoveled clear of the tub cover and access path."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I find riverfront cabins that remain accessible during heavy winter snowstorms?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Upper Au Sable River near Grayling (Stephan Bridge and Wakeley Bridge corridors) and the Pere Marquette River near Baldwin (M-37 and Bowman's Bridge) offer the most reliably plowed access in winter. Because county road commissions prioritize school bus and county arterial routes, staying within 1 mile of a paved county road ensures you can navigate in and out even after a 12-inch lake-effect snowfall."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I track live snow depth before heading to a ski chalet or sauna lodge?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the companion Michigan Snow Depth Finder tool on chrisizworski.com (/michigan-snow-depth/), which aggregates NOAA NOHRSC satellite and ground station snow telemetry alongside live observer reports across both peninsulas. It lets you verify whether a lake-effect snowband has delivered fluffy powder corduroy to Boyne or the Keweenaw before you pack your skis."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="wf--winter-cabins">
+<header class="wf-sitebar"><div class="wf-shell"><a class="wf-brand" href="/">Chris Izworski</a><nav aria-label="Primary navigation"><a href="/michigan-winter-weekends/">Winter Weekends</a><a href="/michigan-snow-depth/">Snow Depth Map</a><a href="/michigan-ski-hills/">Ski Hills</a><a href="/guides/#field-guides">Field Guides</a><a href="/tools/">All Tools</a></nav></div></header>
+
+<main class="wf-shell">
+  <section class="wf-hero">
+    <p class="wf-eyebrow">FIELD_GUIDE_V1 · Northwoods Lodgekeeper &amp; Winter Trail Scout</p>
+    <h1>Michigan Winter Cabins, Saunas &amp; Hot-Tub Basecamps Field Guide</h1>
+    <p class="wf-lede">I have stoked cast-iron barrel stoves at 20 below zero and shoveled out lake-effect drifts that buried the eaves of a Keweenaw A-frame. A true Northwoods winter basecamp isn't a generic rental listing—it is a thermal machine: a split-hardwood woodstove that drafts cleanly, a cedar shoreline sauna hot enough to make rolling in powder feel invigorating, a steamy hot tub under snow-laden hemlocks, and a plowed turn-around so Lake Superior never strands you.</p>
+
+    <div class="mc-hero-ctas">
+      <a class="wf-primary" href="#basecamp-grid">Explore 12 Winter Basecamps ↓</a>
+      <a class="mc-secondary-cta" href="#cabin-map-section">View Basecamp Map ↗</a>
+      <a class="mc-secondary-cta" href="/michigan-snow-depth/">Check Live Snow Depth ↗</a>
+    </div>
+
+    <p class="wf-veracity"><strong>Scout Field Rule:</strong> Every basecamp below is audited for actual winter road maintenance, required vehicle clearance (AWD vs 4WD), trail distance to ski or snowshoe trailheads, and authentic thermal infrastructure (wood-fired Finnish saunas, private outdoor hot tubs, or airtight stone hearths).</p>
+
+    <div class="mc-hero-montage">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/keweenaw-copper-harbor-sauna.jpg" alt="Deep snowdrifts and frozen Lake Superior harbor ice at Copper Harbor" width="960" height="600" loading="eager" fetchpriority="high">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:FrozenHarbor.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> · Lake Superior shoreline winter ice</figcaption>
+      </figure>
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/boyne-mountain-walloon-chalet.jpg" alt="Alpine ski chalets and snow-covered slopes at Boyne Mountain in winter" width="960" height="600" loading="eager" fetchpriority="high">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Base_of_Boyne_Mt,_1978.JPG" target="_blank" rel="noopener noreferrer">National Archives</a> · Public Domain · Boyne ski slopes and chalets</figcaption>
+      </figure>
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/tahquamenon-whitefish-bay-lodges.jpg" alt="Amber frozen cascades and cedar snow forest at Upper Tahquamenon Falls" width="960" height="600" loading="eager" fetchpriority="high">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Upper_Tahquamenon_Falls.jpg" target="_blank" rel="noopener noreferrer">James Phelps</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a> · Tahquamenon boreal forest in winter</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Interactive Filter & Live Snow Telemetry Section -->
+  <section class="mc-filter-section" id="basecamp-grid" aria-labelledby="mc-filter-heading">
+    <div class="mc-filter-head">
+      <h2 id="mc-filter-heading">Choose Your Winter Basecamp Style</h2>
+      <p class="mc-filter-sub">Filter the 12 basecamp zones by heating and architectural style, paired with real-time snow depth indicators and winter road accessibility rules.</p>
+    </div>
+
+    <div class="mc-style-pills" role="tablist" aria-label="Basecamp Style Filter">
+      <button type="button" class="mc-style-pill active" data-style="all" role="tab" aria-selected="true">All 12 Basecamps</button>
+      <button type="button" class="mc-style-pill" data-style="wood-fired-sauna" role="tab" aria-selected="false">Wood-Fired Lake Superior Sauna (3)</button>
+      <button type="button" class="mc-style-pill" data-style="ski-in-chalet" role="tab" aria-selected="false">Ski-In/Ski-Out Chalet (3)</button>
+      <button type="button" class="mc-style-pill" data-style="rustic-yurt-cabin" role="tab" aria-selected="false">Rustic State Park Yurt/Cabin (3)</button>
+      <button type="button" class="mc-style-pill" data-style="riverfront-cabin" role="tab" aria-selected="false">Riverfront Fireplace Cabin (3)</button>
+    </div>
+
+    <div class="mc-snow-intel-banner" id="mc-snow-intel" aria-live="polite">
+      <div class="mc-intel-header">
+        <span class="mc-intel-title" id="mc-snow-intel-title">All 12 Michigan Winter Basecamp Zones</span>
+        <span class="mc-intel-badge" id="mc-snow-intel-badge">12 Stops · Peak Winter Network Active</span>
+      </div>
+      <p class="mc-intel-details" id="mc-snow-intel-details">Curated for authentic winter thermal comfort: wood-fired Finnish saunas, private ski chalets, DNR backcountry yurts, and spring-fed river cabins.</p>
+      <div class="mc-intel-advisory" id="mc-snow-intel-advisory">Scout Advice: Always check MDOT MiDrive for real-time highway plow status and pack traction cleats plus snowshoes inside your vehicle.</div>
+    </div>
+  </section>
+
+  <!-- Interactive Map Section -->
+  <section class="mc-map-section" id="cabin-map-section" aria-labelledby="mc-map-title">
+    <div class="mc-map-header">
+      <h2 id="mc-map-title">Michigan Winter Basecamps &amp; Trailhead Access Map</h2>
+      <p>Click any numbered basecamp marker to inspect style, regional snowpack, vehicle AWD requirements, and nearby trail systems.</p>
+    </div>
+    <div id="cabin-map" role="region" aria-label="Interactive map of Michigan winter basecamp zones"></div>
+    <div class="mc-map-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#c26b38;"></span> Wood-Fired Shoreline Sauna</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#166534;"></span> Ski-In/Ski-Out Chalet</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#854d0e;"></span> Rustic Wilderness Yurt</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#1b4965;"></span> Riverfront Fireplace Cabin</span>
+    </div>
+  </section>
+
+  <!-- Basecamp Dossiers -->
+  <section class="wf-stories" aria-label="Michigan Winter Basecamp Dossiers">
+
+    <!-- STOP 1 -->
+    <article class="wf-story" id="basecamp-1" data-style="wood-fired-sauna" data-basecamp-id="1">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/keweenaw-copper-harbor-sauna.jpg" alt="Snowpack and frozen harbor ice at Copper Harbor on the Keweenaw Peninsula in winter" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:FrozenHarbor.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> · Lake Superior shoreline winter ice at Copper Harbor</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--wood-fired-sauna">Wood-Fired Lake Superior Sauna</span>
+          <span class="mc-badge-snow" data-basecamp-id="1">❄️ 32" Snowpack · Deep Lake-Effect Powder</span>
+          <span class="mc-badge-awd">AWD + Winter Tires Essential</span>
+        </div>
+        <h3>1. Keweenaw Shoreline Saunas &amp; Lake Superior Cold Plunge</h3>
+        <p>In the Keweenaw Peninsula—where Lake Superior dumps 250 to 300 inches of lake-effect snow every winter—the Finnish wood-fired sauna is not an amenity; it is a sacred cultural survival tool. Along the rugged sandstone and basalt coastlines of Eagle Harbor and Copper Harbor, private timber sauna cabins sit perched just feet from the frozen lake. Built with cedar interior benches, heavy cast-iron stoves, and dense basalt rock baskets, these thermal sanctuaries easily crack 200°F while sub-zero lake gales howl outside.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Keweenaw Peninsula (Eagle Harbor / Copper Harbor / Phoenix)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Mount Bohemia backcountry powder glades &amp; Swedetown Nordic trails (0.5–8 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">US-41 plowed regularly; private coastal lanes unplowed; heavy drift hazard</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Split sugar maple wood-fired stove, cedar rock basket, shoreline snowbank plunge</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Stack split sugar maple wood inside the hot room 2 hours before firing so cold exterior moisture evaporates off the bark. When rolling in a fresh snowdrift between 15-minute sauna sessions, wear thick wool felt slippers so your feet never freeze to the icy timber deck.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-snow-depth/">Check Keweenaw Snow Depth ↗</a>
+          <a class="wf-tool" href="/michigan-ski-hills/#bohemia">Mount Bohemia Conditions ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="1">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=47.4690%2C-87.8910" target="_blank" rel="noopener noreferrer">View Copper Harbor Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 2 -->
+    <article class="wf-story" id="basecamp-2" data-style="rustic-yurt-cabin" data-basecamp-id="2">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/porkies-wilderness-yurts.jpg" alt="Frozen waterfall ice and deep snow in the Porcupine Mountains and Ontonagon backcountry" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Bond_Falls_Winter_Ice.jpg" target="_blank" rel="noopener noreferrer">Stefan.Anderson</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> · Ontonagon County / Western U.P. backcountry winter ice</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--rustic-yurt-cabin">Rustic State Park Yurt/Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="2">❄️ 28" Snowpack · High Ridge Powder Base</span>
+          <span class="mc-badge-awd">4WD / High Clearance to Trailhead</span>
+        </div>
+        <h3>2. Porcupine Mountains Wilderness Yurts &amp; Cabins</h3>
+        <p>If you want real silence where the only sound is the crackle of birch bark in an airtight cast-iron woodstove, the winter backcountry yurts and historic log cabins of the Porcupine Mountains Wilderness State Park are unbeatable. Tucked into the ancient hemlocks of the Carp River valley and Union River basin, these DNR rustic outposts require a 1 to 4-mile snowshoe or backcountry ski trek pulling a pulk sled. With no electricity or running water, you melt clean snow for tea and fall asleep to sub-zero winds whipping across the escarpment.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Ontonagon County / Porcupine Mountains Wilderness State Park</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">1 to 4-mile ski-in / snowshoe trek from plowed downhill ski chalet lot</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">M-107 plowed to ski area; interior park roads closed to vehicles; groomer tracks</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Airtight wood-burning stove, ranger-supplied firewood, insulated timber/canvas yurt walls</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Never pack gear in a backpack when heading to a winter yurt—use a waist-harnessed pulk or plastic cargo sled so your center of gravity stays low in deep powder. Pack firestarter nuggets, two reliable headlamps, and keep water bottles inside your sleeping bag footbox overnight so they don't freeze solid.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-1">Porkies Winter Weekend Guide ↗</a>
+          <a class="wf-tool" href="/michigan-snow-depth/">Check Western U.P. Snow Depth ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="2">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=46.8042%2C-89.7025" target="_blank" rel="noopener noreferrer">View Porcupine Mountains Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 3 -->
+    <article class="wf-story" id="basecamp-3" data-style="ski-in-chalet" data-basecamp-id="3">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/boyne-mountain-walloon-chalet.jpg" alt="Alpine ski chalets and snow-covered slopes at Boyne Mountain in winter" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Base_of_Boyne_Mt,_1978.JPG" target="_blank" rel="noopener noreferrer">National Archives</a> · Public Domain · Boyne ski slopes and chalets in winter</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--ski-in-chalet">Ski-In/Ski-Out Chalet</span>
+          <span class="mc-badge-snow" data-basecamp-id="3">❄️ 18" Snowpack · Machine-Groomed Base</span>
+          <span class="mc-badge-awd">AWD Recommended for Hill Climbs</span>
+        </div>
+        <h3>3. Boyne Mountain &amp; Walloon Lake Timber Chalets</h3>
+        <p>For high-alpine lodge comfort paired with immediate slope access, the timberframe chalets clustered around Boyne Mountain and nearby Walloon Lake offer the premier ski-in/ski-out experience in Lower Michigan. Picture private multi-person cedar hot tubs steaming beneath snow-heavy white pines, stone fireplaces roaring with split hardwoods, and equipment mudrooms equipped with heated boot dryers. You can step directly onto the corduroy of Disciples Ridge in the morning and soak under starry night skies after last chair.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Charlevoix County / Boyne Falls &amp; Walloon Lake</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Direct ski-in/ski-out to 60 downhill runs, terrain parks, and Boyne Valley Trailway</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">US-131 and resort roadways plowed continuously; steep private drives require AWD</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Outdoor 104°F hot tub with insulated marine cover, gas or stone wood fireplace, radiant floors</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Keep the insulated hot-tub cover firmly latched until everyone is ready to submerge. In sub-zero temperatures, an open tub loses 2 degrees every five minutes. Shovel a clear walking path from the back door and lay down rubber traction mats to prevent ice rinks on the cedar decking.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-ski-hills/#boyne-mountain">Boyne Mountain Ski Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-5">Petoskey &amp; Boyne Weekend Itinerary ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="3">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=45.1633%2C-84.9317" target="_blank" rel="noopener noreferrer">View Boyne Falls Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 4 -->
+    <article class="wf-story" id="basecamp-4" data-style="riverfront-cabin" data-basecamp-id="4">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/au-sable-holy-water-cabins.jpg" alt="Snow-covered forest and winter ice along the Grayling and Au Sable River headwaters corridor" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Ice_Fishing_Shanties_on_Houghton_Lake,_Michigan_during_Tip-Up_Town_Weekend_(6778351105).jpg" target="_blank" rel="noopener noreferrer">Joe Ross</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a> · Northern Lower I-75 &amp; Grayling winter snow corridor</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--riverfront-cabin">Riverfront Fireplace Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="4">❄️ 12" Snowpack · Cold Pine Plains Base</span>
+          <span class="mc-badge-awd">AWD Advised for Forest Two-Tracks</span>
+        </div>
+        <h3>4. Au Sable River "Holy Water" Cedar Log Cabins</h3>
+        <p>Few places in the Midwest feel as deeply rooted in Northwoods tradition as the cedar-log angler cabins overlooking the "Holy Water" stretch of the Au Sable River east of Grayling. Because the river is fed by massive underground glacial aquifers, the water remains at a steady 48°F–50°F and never freezes solid, creating dramatic dawn steam plumes rising between snow-draped balsam firs. Staying in a historic knotty-pine cabin with a massive fieldstone hearth, split birch kindling, and zero highway noise is the ultimate winter retreat.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Crawford County / Grayling &amp; Lovells (Stephan Bridge to Wakeley Bridge)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Mason Tract Pathway &amp; Hartwick Pines virgin white pine loops (0.5–6 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">Stephan Bridge Road plowed promptly; forest two-tracks to river bends require AWD</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Native fieldstone hearth, seasoned red oak and birch firewood, screened hot tub or sauna</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Crawford County sits on cold glacial sand that traps sub-zero nighttime inversions—temperatures can easily drop 10 degrees colder along the river than in downtown Grayling. Keep your stove damper cracked open slightly to maintain a steady overnight draft and prevent chimney creosote build-up.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/au-sable-river/">Au Sable River Explorer ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-7">Grayling Winter Weekend Guide ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="4">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=44.6611%2C-84.7139" target="_blank" rel="noopener noreferrer">View Grayling Au Sable Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 5 -->
+    <article class="wf-story" id="basecamp-5" data-style="wood-fired-sauna" data-basecamp-id="5">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/marquette-presque-isle-sauna.jpg" alt="Deep snowdrifts and frozen Lake Superior shoreline in Marquette, Michigan" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Winter_in_Marquette.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> · Deep lake-effect snow in Marquette</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--wood-fired-sauna">Wood-Fired Lake Superior Sauna</span>
+          <span class="mc-badge-snow" data-basecamp-id="5">❄️ 24" Snowpack · Lake Superior Shoreline Base</span>
+          <span class="mc-badge-awd">AWD Essential for CR 550 Corridor</span>
+        </div>
+        <h3>5. Marquette Sandstone Shoreline &amp; Presque Isle Saunas</h3>
+        <p>Marquette blends the raw energy of Lake Superior winter with a vibrant Nordic outdoor culture. Basecamp lodges and modern Scandinavian barrel saunas along the shoreline north of Presque Isle Park offer panoramic glass walls looking out over ice floes and crashing waves. After spending the afternoon carving tracks through the world-class groomed corduroy of the Noquemanon Trail Network (NTN) or scrambling up Sugarloaf Mountain, you fire up the cedar sauna, step onto the frosted rock shelf, and breathe in crisp Lake Superior air.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Marquette County / Lake Superior Coast &amp; Big Bay Corridor</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">NTN Forestville &amp; South Trails (groomed XC &amp; fat tire), Sugarloaf Mountain (1–5 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">City streets plowed quickly; County Road 550 north to Big Bay experiences sudden whiteouts</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Panoramic barrel or timber sauna, cedar soaking tub, outdoor fire bowl overlooking the bay</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          If you stay along the CR 550 lakeshore corridor, watch the wind direction closely. A steady north-northwest gale can produce 2 inches of dry powder an hour. Always top off your fuel tank in town and keep an emergency vehicle kit with traction sand and a metal snow shovel.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-2">Marquette Winter Weekend Guide ↗</a>
+          <a class="wf-tool" href="/michigan-snow-depth/">Check Marquette Snow Depth ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="5">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=46.5436%2C-87.3954" target="_blank" rel="noopener noreferrer">View Marquette Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 6 -->
+    <article class="wf-story" id="basecamp-6" data-style="rustic-yurt-cabin" data-basecamp-id="6">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/munising-pictured-rocks-cabins.jpg" alt="Towering sandstone ice curtains and snowshoe trail along the Pictured Rocks escarpment near Munising" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://www.nps.gov/piro/planyourvisit/winteractivities.htm" target="_blank" rel="noopener noreferrer">National Park Service</a> · Public Domain · Pictured Rocks sandstone winter ice curtains</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--rustic-yurt-cabin">Rustic State Park Yurt/Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="6">❄️ 26" Snowpack · Lake-Effect Ice Belt</span>
+          <span class="mc-badge-awd">High-Clearance AWD Required</span>
+        </div>
+        <h3>6. Munising &amp; Pictured Rocks Backcountry Outposts</h3>
+        <p>Munising is Michigan's ice climbing and frozen waterfall epicenter. Groundwater seeping through the porous Cambrian sandstone bluffs freezes into massive 40-foot curtains of cobalt-blue, turquoise, and iron-tinted ice along Sand Point and Miners Basin. Backcountry cabin outposts and rustic forest lodges scattered throughout Alger County and Hiawatha National Forest serve as basecamps for winter explorers, ice climbers, and snowshoers tackling Eben Ice Caves and Valley Spur ski trails.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Alger County / Munising &amp; Pictured Rocks National Lakeshore</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Sand Point Ice Curtains, Valley Spur XC ski network, Eben Ice Caves (0.5–12 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">M-28 plowed; Sand Point Road plowed to beach turnaround; Miners Castle unplowed</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Wood-burning barrel stove, wood-fired outdoor sauna house, boot and rope drying lines</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Never park on the unplowed road shoulders of Sand Point Road—the snowplow berms are deceptively soft and local rangers will tow vehicles that block the plow turnaround. Always park in the designated Sand Point Beach turnaround lot.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/frozen-michigan/">Frozen Michigan Field Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-3">Munising Winter Itinerary ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="6">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=46.4111%2C-86.6475" target="_blank" rel="noopener noreferrer">View Munising Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 7 -->
+    <article class="wf-story" id="basecamp-7" data-style="ski-in-chalet" data-basecamp-id="7">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/harbor-springs-nubs-nob-chalets.jpg" alt="Winter ice and heavy lake-effect snow along the Little Traverse Bay and Harbor Springs shoreline" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Charlevoix_Lighthouse_Winter.jpg" target="_blank" rel="noopener noreferrer">Charles Dawley</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a> · Little Traverse Bay &amp; Harbor Springs winter shore</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--ski-in-chalet">Ski-In/Ski-Out Chalet</span>
+          <span class="mc-badge-snow" data-basecamp-id="7">❄️ 20" Snowpack · Little Traverse Ski Belt</span>
+          <span class="mc-badge-awd">AWD Essential for Private Ridge Drives</span>
+        </div>
+        <h3>7. The Highlands at Harbor Springs &amp; Nub's Nob Chalets</h3>
+        <p>Perched high on the cedar ridges above Little Traverse Bay, Harbor Springs is Michigan's premier ski town. Clustered along Pleasantview Road and adjacent to the twin ski peaks of Nub's Nob and The Highlands, multi-level A-frame and modern alpine chalets feature soaring glass windows framing panoramic views of snowy hemlocks and Lake Michigan ice. Equipped with private hot tubs, wrap-around cedar decks, radiant bathroom floors, and ski-tuning benches, these chalets are built for serious skiers.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Emmet County / Harbor Springs &amp; Pleasantview Ski Corridor</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Nub's Nob award-winning snow runs, The Highlands Nordic trails, Thorne Swift preserve (Direct–3 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">Pleasantview Road plowed continuously; steep private chalet driveways require AWD or studs</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Private outdoor hot tub under fairy lights, custom ski boot dryers, floor-to-ceiling stone hearth</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Nub's Nob consistently wins national awards for the best snow quality in the Midwest thanks to cold lake-effect air and cutting-edge grooming. If you arrive during a heavy squall off Little Traverse Bay, back your vehicle into the chalet driveway so you don't struggle against the plow berm when departing for first chair.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-ski-hills/#nubs-nob">Nub's Nob Snow Report ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-5">Harbor Springs Guide ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="7">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=45.4319%2C-84.9878" target="_blank" rel="noopener noreferrer">View Harbor Springs Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 8 -->
+    <article class="wf-story" id="basecamp-8" data-style="riverfront-cabin" data-basecamp-id="8">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/jordan-river-valley-hideaways.jpg" alt="Heavy lake-effect snow blanketing cedar hollows and wooded river valleys in Northwest Michigan" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://www.nps.gov/aboutus/disclaimer.htm" target="_blank" rel="noopener noreferrer">National Park Service</a> · Public Domain · Deep winter snowpack in Northwest Michigan</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--riverfront-cabin">Riverfront Fireplace Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="8">❄️ 16" Snowpack · Valley Lake-Effect Pocket</span>
+          <span class="mc-badge-awd">4WD / High Clearance for Forest Lanes</span>
+        </div>
+        <h3>8. Upper Manistee River &amp; Jordan River Valley Hideaways</h3>
+        <p>The Jordan River Valley and the upper headwaters of the Manistee River represent one of the most secluded wild pockets in the Northern Lower Peninsula. Hemmed in by steep glacial moraines and dense cedar swamps, the spring-fed waters rush cold and clear over gravel beds that never freeze. Tucked down winding two-track forest roads near Graves Crossing and Deadman's Hill, off-grid riverside cabins offer complete isolation, woodstove heat, and direct access to the 18-mile Jordan River Pathway snowshoe and ski loop.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Antrim &amp; Kalkaska Counties / Jordan River Valley &amp; Upper Manistee</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Jordan River Pathway, Deadman's Hill Overlook, Pinney Bridge winter walk (1–4 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">US-131 plowed; forest roads down into the valley are unplowed or packed snow; 4WD necessary</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Cast-iron wood stove, cedar barrel riverside sauna, kerosene lanterns, split firewood shed</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          The steep descent into the Jordan Valley off Deadman's Hill Road turns into sheer hard-packed ice by mid-January. Do not attempt driving down into the valley without high-clearance 4WD and low-range gearing; if in doubt, park at the upper county turnout and snowshoe your gear down.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/manistee-river-map/">Manistee River Map ↗</a>
+          <a class="wf-tool" href="/michigan-paddling/manistee-river/">Jordan &amp; Manistee River Guides ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="8">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=44.9039%2C-85.0611" target="_blank" rel="noopener noreferrer">View Jordan Valley Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 9 -->
+    <article class="wf-story" id="basecamp-9" data-style="ski-in-chalet" data-basecamp-id="9">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/crystal-mountain-benzie-chalets.jpg" alt="Snow-covered pine bluffs overlooking frozen shoreline in Benzie County and Crystal Mountain country" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Sleeping_Bear_Bluff_in_Winter_(9085511671).jpg" target="_blank" rel="noopener noreferrer">Sleeping Bear Dunes NPS</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a> · Benzie County / Lake Michigan winter bluff</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--ski-in-chalet">Ski-In/Ski-Out Chalet</span>
+          <span class="mc-badge-snow" data-basecamp-id="9">❄️ 18" Snowpack · Benzie Snowbelt Base</span>
+          <span class="mc-badge-awd">AWD Recommended for Lake Squalls</span>
+        </div>
+        <h3>9. Crystal Mountain &amp; Benzie County Alpine Chalets</h3>
+        <p>In Benzie County, lake-effect snow squalls off Lake Michigan regularly dump deep, dry powder across the pine ridges of Thompsonville. Crystal Mountain's slopeside chalets and secluded forest bungalows provide direct walk-to-lift or ski-in/ski-out convenience paired with access to 25 km of F.I.S.-certified groomed cross-country ski trails and the illuminated Michigan Legacy Art Park snowshoe trail. Private outdoor spas, wrap-around porches, and gas log fireplaces make these chalets top family basecamps.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Benzie County / Thompsonville &amp; Crystal Lake</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">59 downhill runs, 25 km FIS Nordic trails, Michigan Legacy Art Park (Direct slope access)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">M-115 plowed regularly; resort perimeter parkways well maintained; AWD advised during squalls</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Private deck hot tub with thermal insulated cover, gas log stone fireplace, boot drying alcove</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Crystal Mountain's cross-country trails are among the highest rated in the Midwest, featuring both classic tracks and wide skate corduroy. Pack headlamps for the lighted night ski loops through the pines, and check the wind forecast off Crystal Lake before choosing morning slope exposures.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-ski-hills/#crystal-mountain">Crystal Mountain Ski Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-4">Traverse City &amp; Benzie Weekend ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="9">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=44.5208%2C-85.9961" target="_blank" rel="noopener noreferrer">View Thompsonville Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 10 -->
+    <article class="wf-story" id="basecamp-10" data-style="wood-fired-sauna" data-basecamp-id="10">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/tahquamenon-whitefish-bay-lodges.jpg" alt="Upper Tahquamenon Falls thundering between snow-covered banks and cedar forest in winter" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Upper_Tahquamenon_Falls.jpg" target="_blank" rel="noopener noreferrer">James Phelps</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a> · Upper Tahquamenon Falls in deep winter</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--wood-fired-sauna">Wood-Fired Lake Superior Sauna</span>
+          <span class="mc-badge-snow" data-basecamp-id="10">❄️ 26" Snowpack · Boreal Whitefish Bay Belt</span>
+          <span class="mc-badge-awd">AWD Essential for M-123 Drifts</span>
+        </div>
+        <h3>10. Tahquamenon Falls &amp; Whitefish Bay Boreal Forest Lodges</h3>
+        <p>In the far Eastern Upper Peninsula, the dense boreal spruce and tamarack forests surrounding Tahquamenon Falls and Whitefish Bay feel like a Siberian wilderness. When cold Arctic winds sweep across Lake Superior, snowbanks pile eight feet high along the M-123 scenic byway. Heavy-timber log lodges and Finnish shoreline sauna houses tucked into the woods near Paradise offer a rugged haven. Seeing the amber-colored waters of Upper Tahquamenon Falls thundering through giant rim ice formations before retreating to a wood-fired sauna is pure winter magic.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Chippewa &amp; Luce Counties / Paradise &amp; Tahquamenon Falls</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Tahquamenon Upper and Lower Falls snowshoe trails, Whitefish Point dunes (1–10 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">M-123 plowed regularly; Whitefish Point Road drifts heavily with north winds; AWD essential</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Wood-fired cedar sauna, outdoor fire cauldron with split birch logs, airtight wood cookstove</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Whitefish Bay gales cause ground blizzards on M-123 where open muskeg allows wind to wipe out visibility even on sunny days. Travel with a full tank of fuel, carry high-energy trail food, and always ensure your cabin woodpile has a dry canvas tarp secured against blowing spindrift.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/frozen-michigan/#stop-6">Tahquamenon Falls Ice Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/#stop-3">Whitefish Bay Itinerary ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="10">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=46.5748%2C-85.2568" target="_blank" rel="noopener noreferrer">View Paradise Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 11 -->
+    <article class="wf-story" id="basecamp-11" data-style="rustic-yurt-cabin" data-basecamp-id="11">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/pine-river-manistee-forest-yurts.jpg" alt="Winter snow blanketed forest corridor in Huron-Manistee National Forest near Pine River and Caberfae" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/Public_domain" target="_blank" rel="noopener noreferrer">US Forest Service</a> · Public Domain · Snow-blanketed Huron-Manistee National Forest winter corridor</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--rustic-yurt-cabin">Rustic State Park Yurt/Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="11">❄️ 16" Snowpack · Cadillac High Ridge Base</span>
+          <span class="mc-badge-awd">High-Clearance AWD for Forest Lanes</span>
+        </div>
+        <h3>11. Pine River &amp; Manistee National Forest Rustic Yurts</h3>
+        <p>The Cadillac high plateau and the deep incised valley of the Pine River receive some of the most reliable inland snowfalls in Lower Michigan. Hidden beneath towering red pines and eastern hemlocks in the Huron-Manistee National Forest, rustic winter yurts and USFS trail cabins provide cozy shelter for Nordic skiers and snowshoers. Located minutes from Caberfae Peaks—Michigan's oldest ski resort—and the Mackenzie Cross-Country Ski Trail network, these circular insulated yurts feature airtight woodstoves and serene wilderness silence.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Wexford &amp; Lake Counties / Wellston &amp; Caberfae Peaks Plateau</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Mackenzie XC Ski Trails (10+ mi groomed), North Country Trail Pine River (0.5–8 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">M-55 plowed regularly; forest service two-tracks are packed snow or unplowed; AWD required</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Airtight wood-burning box stove, double-layer insulated yurt canvas, firewood shelter</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Yurt heating requires active fuel management: start your fire with light cedar shavings and dry pine needles, then establish a thick coal bed before feeding split oak or beech logs for a long overnight burn. Always maintain ventilation at the roof dome ring to prevent condensation build-up.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-ski-hills/#caberfae-peaks">Caberfae Peaks Ski Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-trails/#stop-6">Mackenzie Ski Trails Guide ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="11">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=44.2483%2C-85.8344" target="_blank" rel="noopener noreferrer">View Wellston &amp; Caberfae Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- STOP 12 -->
+    <article class="wf-story" id="basecamp-12" data-style="riverfront-cabin" data-basecamp-id="12">
+      <figure class="wf-photo" data-photo-provenance="verified">
+        <img src="/assets/michigan-winter-cabins/pere-marquette-flywater-retreats.jpg" alt="Winter woods and snowshoe tracks along a snow-covered cedar river bottom in Michigan" width="960" height="600" loading="lazy">
+        <figcaption>Photo: <a href="https://www.nps.gov/aboutus/disclaimer.htm" target="_blank" rel="noopener noreferrer">National Park Service</a> · Public Domain · Winter cedar river bottoms in Michigan</figcaption>
+      </figure>
+      <div class="wf-story-body">
+        <div class="mc-card-meta">
+          <span class="mc-badge-style badge--riverfront-cabin">Riverfront Fireplace Cabin</span>
+          <span class="mc-badge-snow" data-basecamp-id="12">❄️ 10" Snowpack · Spring-Fed River Basin</span>
+          <span class="mc-badge-awd">Good Tires for Icy Gravel Access</span>
+        </div>
+        <h3>12. Pere Marquette River "Fly-Water" Timber &amp; Stone Retreats</h3>
+        <p>Flowing entirely undammed from its source to Lake Michigan, the Pere Marquette is Michigan's crown jewel National Scenic River. In winter, the river's designated "Fly-Only Water" between M-37 and Gleason's Landing remains free of surface ice, creating misty pools where winter steelhead and trophy brown trout hold in deep water. Traditional river guide cabins tucked among ancient white cedars feature native stone hearths, screened cedar hot tub gazebos, boot drying rooms, and easy access to serene riverside snowshoe loops.</p>
+        
+        <div class="mc-dossier-grid">
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Basecamp Zone</span>
+            <span class="mc-dossier-value">Lake County / Baldwin &amp; Walhalla (Bowman's Bridge to Sulak)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Trailhead Access</span>
+            <span class="mc-dossier-value">Pere Marquette River Pathway, Bowman's Bridge winter walk, Sheep Ranch trail (0.5–5 mi)</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Winter Road &amp; Plow Status</span>
+            <span class="mc-dossier-value">US-10 and M-37 cleared promptly; private river lanes can glaze into ice sheets; AWD advised</span>
+          </div>
+          <div class="mc-dossier-item">
+            <span class="mc-dossier-label">Thermal Infrastructure</span>
+            <span class="mc-dossier-value">Native fieldstone wood-burning fireplace, screened cedar hot tub, wader drying room</span>
+          </div>
+        </div>
+
+        <div class="mc-scout-rule">
+          <strong>Lodgekeeper's Field Rule:</strong>
+          Lake County experiences freeze-thaw cycles that turn hard-packed snow into glass-like ice on unpaved river lanes. Keep traction cleats in your glove compartment, pack an extra set of wool wader socks, and enjoy the complete silence of a cedar bottomland at dusk.
+        </div>
+
+        <div class="wf-links">
+          <a class="wf-tool" href="/michigan-rivers-field-guide/#stop-9">Pere Marquette River Guide ↗</a>
+          <a class="wf-tool" href="/michigan-winter-weekends/">Winter Weekends Directory ↗</a>
+          <a class="mc-center-map-btn" href="#cabin-map-section" data-basecamp-id="12">Center on Map ↗</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=43.8967%2C-85.8528" target="_blank" rel="noopener noreferrer">View Baldwin Area on Google Maps ↗</a>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="mc-faq-section" id="faq" aria-labelledby="mc-faq-heading">
+    <div class="mc-faq-head">
+      <h2 id="mc-faq-heading">Frequently Asked Questions: Michigan Winter Basecamps</h2>
+      <p class="mc-faq-sub">Northwoods lodgekeeper advice on vehicle clearance, wood heating, hot tub care, and winter trail access.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>What AWD or 4WD vehicle setup do I need for Michigan winter cabin getaways?</h3>
+      <p>For paved resort chalets in Boyne or Harbor Springs, all-wheel drive with good all-season tires is sufficient. However, for Upper Peninsula shoreline saunas (Keweenaw, Marquette, Whitefish Bay) and backcountry state forest cabins (Au Sable, Jordan River, Porkies), true 4WD or dedicated winter snow tires (with the Three-Peak Mountain Snowflake rating) and 8+ inches of ground clearance are required to handle unplowed seasonal roads, lake-effect squalls, and deep driveway plow berms.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>How do wood-fired Lake Superior saunas work in below-freezing temperatures?</h3>
+      <p>Traditional Finnish wood-fired saunas use seasoned hardwood (sugar maple, yellow birch) in heavy cast-iron or steel rock baskets loaded with dense igneous sauna stones. Stoked hot for 45 to 60 minutes, the room easily reaches 185°F to 210°F even when outside temperatures plummet below zero. The ritual pairs hot steam (löyly) with a brisk roll in fresh powder snow or a cold dip in Lake Superior before returning to the radiant cedar heat.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>What gear do I need to ski or snowshoe into a Porcupine Mountains rustic yurt?</h3>
+      <p>Backcountry yurts and cabins in the Porkies require a 1 to 4-mile trek on skis or snowshoes over snow-packed terrain. You should haul gear using a pulk or towable plastic sled rather than a heavy backpack. Essential gear includes zero-degree sleeping bags, insulated sleeping pads, headlamps with extra lithium batteries (cold drains alkaline cells rapidly), waterproof matches, camp stove and fuel, dry warm socks, and non-perishable high-calorie food. Firewood and an airtight woodstove are provided at each site.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>How do private hot tubs hold temperature during Northern Michigan lake-effect cold snaps?</h3>
+      <p>Quality winter hot tubs in Michigan ski country are equipped with heavy 4-to-6-inch tapered marine-grade thermal covers. Keep the cover tightly latched whenever the tub is not occupied. When temperatures drop below zero with high winds, water temperature will drop approximately 1 to 2 degrees every ten minutes if left uncovered. Maintain the thermostat at 102°F–104°F and keep snow shoveled clear of the tub cover and access path.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>Where can I find riverfront cabins that remain accessible during heavy winter snowstorms?</h3>
+      <p>The Upper Au Sable River near Grayling (Stephan Bridge and Wakeley Bridge corridors) and the Pere Marquette River near Baldwin (M-37 and Bowman's Bridge) offer the most reliably plowed access in winter. Because county road commissions prioritize school bus and county arterial routes, staying within 1 mile of a paved county road ensures you can navigate in and out even after a 12-inch lake-effect snowfall.</p>
+    </div>
+
+    <div class="mc-faq-item">
+      <h3>How can I track live snow depth before heading to a ski chalet or sauna lodge?</h3>
+      <p>Use the companion Michigan Snow Depth Finder tool on chrisizworski.com (<a href="/michigan-snow-depth/">/michigan-snow-depth/</a>), which aggregates NOAA NOHRSC satellite and ground station snow telemetry alongside live observer reports across both peninsulas. It lets you verify whether a lake-effect snowband has delivered fluffy powder corduroy to Boyne or the Keweenaw before you pack your skis.</p>
+    </div>
+  </section>
+
+  <!-- Field Ethics & Safety -->
+  <section class="wf-safety">
+    <div class="wf-shell">
+      <p class="wf-eyebrow">Northwoods Scout Safety &amp; Ethics</p>
+      <h2>The Fire Stays Burning. The Wilderness Remains Clean.</h2>
+      <p>Winter in the Northwoods is uncompromising. Always carry extra dry wool base layers, a full thermos of hot water, an emergency automotive jump pack, and a metal shovel in your vehicle. When using rustic yurts or state forest cabins, follow strict Leave No Trace winter rules: pack out every scrap of trash, never burn pressure-treated lumber in indoor stoves, and replenish the dry firewood kindling box for the next winter scout who arrives through a snowstorm.</p>
+      <p><a href="/michigan-snow-depth/">Live Michigan Snow Depth ↗</a> · <a href="/michigan-ski-hills/">Michigan Ski Hills Guide ↗</a> · <a href="/michigan-winter-weekends/">Winter Weekends ↗</a> · <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener noreferrer">MDOT MiDrive Road Conditions ↗</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="wf-footer">
+  <div class="wf-shell">
+    <p>Michigan Winter Cabins, Saunas &amp; Hot-Tub Basecamps Field Guide · Built by <a href="/chris-izworski/">Chris Izworski</a> · <a href="/michigan-winter-weekends/">Winter Weekends</a> · <a href="/michigan-snow-depth/">Snow Depth Map</a> · <a href="/michigan-ski-hills/">Ski Hills</a> · <a href="/guides/">All Field Guides</a> · <a href="/tools/">All Tools</a></p>
+  </div>
+</footer>
+
+<script src="/assets/vendor/leaflet-1.9.4.js"></script>
+<script src="/assets/michigan-winter-cabins-field-guide.js"></script>
+</body></html>
