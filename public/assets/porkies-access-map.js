@@ -182,6 +182,18 @@
      if(!Array.isArray(body.points)||body.points.length!==6||body.points.some(x=>x.status!=="dnr-mapped-crosschecked-not-current"))throw Error("Invalid parking source data");
      body.points.forEach(p=>{siteById[p.id]=p;});
      initMap(body.points);
+     // Two verified DNR parking asset pins, without drawing a drive or hiking route.
+     root.addEventListener("porkies:compare-parking",event=>{
+       const ids=event?.detail?.ids;
+       if(!map||!Array.isArray(ids)||ids.length!==2)return;
+       if(!ids.every(id=>typeof id==="string"&&siteById[id]&&markerById[id]))return;
+       const selected=Array.from(new Set(ids)).map(id=>markerById[id].getLatLng());
+       if(selected.length===1)map.setView(selected[0],12,{animate:false});
+       else map.fitBounds(root.L.latLngBounds(selected).pad(.3),{maxZoom:11,animate:false});
+       const label=root.document.getElementById("parking-map-message");
+       if(label)label.textContent="Showing "+selected.length+" DNR-mapped parking location"+(selected.length===1?"":"s")+". These pins are NOT a continuous route, driving itinerary or confirmation that the lots are open.";
+       root.document.getElementById("parking-map")?.scrollIntoView({block:"center",behavior:"auto"});
+     });
      ["travel-date","arrival","vehicle"].forEach(function(id){
        var control=root.document.getElementById(id);
        if(control){control.addEventListener("change",updateFilter);if(id==="travel-date")control.addEventListener("input",updateFilter);}
