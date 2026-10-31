@@ -1,0 +1,61 @@
+{
+  "status": "western-approach-evidence-not-turn-by-turn",
+  "reviewedOn": "2026-10-28",
+  "sources": {
+    "dnrPark": "https://www.michigan.gov/recsearch/parks/porkies",
+    "mgfRoads": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
+    "dnrMap": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf",
+    "dnrWinterSki": "https://www.michigan.gov/skitheporkies",
+    "wakefieldTownshipNotice": "https://wakefieldtownship.com/north-county-road-519-will-be-closed/"
+  },
+  "sourceIdentity": {
+    "officialParkAccessName": "County Road 519",
+    "mgfCenterlineName": "Presque Isle Rd",
+    "mgfPrincipalRouteId": 1475809,
+    "mgfNfc": 5,
+    "reason": "Official DNR calls the separate west approach CR519; state MGF labels the west connector Presque Isle Rd, without an explicit county-road number in its RDNAME field. These names align spatially to the DNR park 519 approach. This is map-source reconciliation, not live road inspection."
+  },
+  "westRoadFeatureCount": 17,
+  "westSouthBoundaryFeatureCount": 15,
+  "presquIsleRoadNetworkAt5m": 1,
+  "unjoinedEndpoints": 2,
+  "westRoadGeometryMiles": 13.316,
+  "westToBoundarySourceOffsetMeters": 0,
+  "parkLot": {
+    "id": 841,
+    "lat": 46.707426,
+    "lon": -89.975468,
+    "proof": "DNR parking asset corroborated by separately named DNR recreation point; not a legal route to/from CR519",
+    "routeFromRoadCertified": false
+  },
+  "seasonal": {
+    "westOfPinkerton": "DNR identifies the County Road 519 west approach as distinct from the South Boundary vehicle closure ending at Pinkerton Trailhead.",
+    "easternSouthBoundary": "M-107 and the portion of South Boundary from Headquarters south to Pinkerton remain seasonally closed for vehicles Dec 1 until deemed safe.",
+    "presentAccessVerified": false,
+    "countyTurnByTurnVerified": false,
+    "parkParkingOpenVerified": false
+  },
+  "restrictions": [
+    "MGF is road centerlines, not live legal driving directions",
+    "County Road 519 name is corroborated by official DNR park guidance, not identical to the MGF road string",
+    "Road dataset does not certify bridge load restrictions, plowing, temporary gates or turns",
+    "Never route across the seasonal South Boundary portion east of Pinkerton or restricted M-107",
+    "CR519 MGF southern line terminates north of Wakefield and has no certified origin-to-park routing",
+    "Final spur from South Boundary to the independently mapped DNR lot is not a signed/inspected drive route",
+    "Township Sept 22, 2026 CR519/M-28 work-zone notice names Johnson Road as detour; no reopening/turn-by-turn confirmation as of Oct 31. No automatic Google directions to Presque Isle."
+  ],
+  "routesAllowed": false,
+  "ETAallowed": false,
+  "doNotConfuse": "The named 17 MGF Presque Isle Rd pieces connect to western South Boundary. Neither data source certifies a full legal trip from Wakefield, plowed road, signed last-mile entrance, or bridge safety.",
+  "officialDnrSaysWinterAccess": true,
+  "workZone": {
+    "sourceNoticeDate": "2026-09-22",
+    "reviewedOn": "2026-10-31",
+    "segment": "North County Road 519 at its M-28 intersection",
+    "reason": "water-main replacement",
+    "townshipNamedDetour": "Johnson Road",
+    "reopeningVerified": false,
+    "googleDrivingLinksToPresqueSuppressed": true,
+    "turnByTurnVerified": false
+  }
+}
