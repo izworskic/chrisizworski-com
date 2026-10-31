@@ -40,7 +40,7 @@ async function main(){
    need(response?.status()===200,device.name+' HTML load failed');
    need(await page.locator('h1').count()===1,device.name+' missing H1');
    need((await page.locator('h1').innerText()).includes('Porkies'),device.name+' missing identity');
-   need(await page.locator('#planner select').count()===4,device.name+' planner inputs missing');
+   need(await page.locator('#planner select').count()===5,device.name+' expected travel, vehicle and walking inputs');
    need(await page.locator('article.story').count()===3,device.name+' static destination stories missing');
    need(await page.locator('#crossings .crossing-card').count()===4,device.name+' evidence-supported river crossing desk missing');
    await page.locator('.crossing-inventory summary').click();
