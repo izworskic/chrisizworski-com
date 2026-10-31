@@ -361,6 +361,32 @@
         "/great-lakes-buoys/",
         "/great-lakes-rockhounding-field-guide/"
       ]
+    },
+    {
+      "slug": "michigan-rivers-field-guide",
+      "url": "/michigan-rivers-field-guide/",
+      "title": "Holy Waters & Cedar Bottoms: Michigan’s Blue-Ribbon River Paddling & Fly-Fishing Field Guide",
+      "subtitle": "14 Curated Floats · Live USGS CFS Flow Badges, USFS Permits & Livery Shuttles",
+      "status": "live",
+      "releaseWave": "Foundation Guide",
+      "stopCount": 14,
+      "activeMonths": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "seasonLabel": "May–Oct · Peak Paddling & Dry Fly Hatches",
+      "summary": "14 curated half-day and overnight river floats across the Au Sable, Manistee, Pere Marquette, Pine, Jordan, and Two Hearted rivers with live USGS CFS flow badges, USFS permit rules, and livery shuttles.",
+      "connectedTools": [
+        "/au-sable-river/",
+        "/manistee-river-map/",
+        "/michigan-paddling/",
+        "/michigan-trout-streams/"
+      ]
     }
   ],
   "plannedRoadmap": [
