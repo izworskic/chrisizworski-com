@@ -13,6 +13,13 @@ test('Gooseberry: 30-minute stop chooses source-backed shorter walk',async()=>{
  assert.match(r.why,/30–45/);
  assert.equal(r.parkAccess,'UNVERIFIED');
 });
+test('Gooseberry: a one-hour window chooses the conservative 30–45-minute route',async()=>{
+ const {chooseOuting}=await load();
+ const r=chooseOuting({minutes:60,mobility:'standard',interest:'waterfalls'});
+ assert.equal(r.outing.id,'short');
+ assert.match(r.why,/one-hour/);
+ assert.match(r.alternatives.join(' '),/45–90-minute/);
+});
 test('Gooseberry: 90-minute standard walking fits the DNR falls loop',async()=>{
  const {chooseOuting}=await load();
  const r=chooseOuting({minutes:90,mobility:'standard',interest:'waterfalls'});
