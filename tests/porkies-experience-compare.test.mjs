@@ -34,7 +34,13 @@ test("all six choices identify a DNR-mapped parking asset and cited walking evid
   if(o.trailId)assert.equal(trail.find(t=>t.id===o.trailId)?.parkingId,o.parkingId,"trail-point identity drift: "+o.id);
   if(o.photo) {
    assert.ok(o.photo.alt&&o.photo.credit&&o.photo.creditUrl);
-   assert.ok(html.includes(o.photo.src), "must reuse already rights-reviewed photograph for "+o.id);
+   if(["clouds","summit","river","escarpment"].includes(o.id))
+    assert.ok(html.includes(o.photo.src), "initially used photo should already be rights-reviewed: "+o.id);
+   if(["nature","winter"].includes(o.id)){
+    assert.ok(o.photo.licenseUrl&&o.photo.creditUrl&&o.photo.capturedYear);
+    assert.match(o.photoAbout,/NOT/);
+    assert.match(o.photo.scope,/not-exact-trail|not-current-facility/);
+   }
   }
  }
  assert.equal(byId("clouds").parkingAssetId,1409);
