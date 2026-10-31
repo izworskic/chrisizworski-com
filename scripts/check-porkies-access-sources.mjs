@@ -10,8 +10,14 @@ import {fileURLToPath} from "node:url";
 export const SOURCES=Object.freeze([
  {id:"township-notice",url:"https://wakefieldtownship.com/north-county-road-519-will-be-closed/"},
  {id:"township-news",url:"https://wakefieldtownship.com/category/news/"},
- {id:"dnr-park",url:"https://www.michigan.gov/recsearch/parks/porkies"},
  {id:"gogebic-road-commission",url:"https://gogebiccountyroadcommission.org/"}
+]);
+// Michigan DNR returns HTTP 403 to GitHub Actions' unattended fetch (verified
+// 2026-10-31). Never represent it as a daily monitored feed. Read on the
+// official site for a dated manual route/gate check before changing permissions.
+export const MANUAL_SOURCES=Object.freeze([
+ {id:"dnr-park",url:"https://www.michigan.gov/recsearch/parks/porkies",
+  reason:"DNR public park page is not accessible to the unattended GitHub Actions runner (HTTP 403); manual authoritative review required."}
 ]);
 
 export function plainText(html){
@@ -68,7 +74,8 @@ export async function checkSources(loader,clock=()=>new Date()){
   scope:"official-source-monitoring-not-live-road-clearance",
   accessOpenVerified:false,verifiedParkingEntrance:false,mayEnableDirections:false,
   conclusion:reviewSignals.length?"manual-source-review-needed":
-   results.some(r=>r.availability!=="read")?"official-source-check-incomplete":"existing-official-claims-still-published",
+   results.some(r=>r.availability!=="read")?"official-source-check-incomplete":"monitored-county-notices-unchanged-dnr-manual-only",
+  manualSources:MANUAL_SOURCES,
   reviewSignals,
   results
  };
@@ -96,7 +103,7 @@ async function main(){
  await writeFile(output,JSON.stringify(report,null,2)+"\n");
  console.log(JSON.stringify({checkedAt:report.checkedAt,conclusion:report.conclusion,
   reviewSignals:report.reviewSignals,available:report.results.filter(x=>x.availability==="read").length,
-  total:report.results.length,sourceResults:report.results.map(r=>({id:r.id,availability:r.availability,
+  total:report.results.length,manualSources:report.manualSources.map(x=>x.id),sourceResults:report.results.map(r=>({id:r.id,availability:r.availability,
    reviewReasons:r.reviewReasons,error:r.error||null})),output},null,2));
  if(report.results.some(r=>r.availability==="unavailable"))
   console.warn("At least one official source was unreachable; no access/opening claim is possible.");
