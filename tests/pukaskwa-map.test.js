@@ -65,7 +65,7 @@ test('official map image, seven static GIS links and visit instructions are visi
   assert.equal((html.match(/data-map-focus="/g)||[]).length,7);
   assert.equal((html.match(/www\.google\.com\/maps\/search\/\?api=1&amp;query=/g)||[]).length,7);
   assert.ok(html.includes('Parks Canada public GIS'));
-  assert.ok(html.includes('We will not trace approximate routes'));
+  assert.ok(html.includes('Missing links from the Visitor Centre'));
   assert.ok(html.includes('/assets/pukaskwa-map.js?v=1'));
   assert.ok(html.includes('/assets/pukaskwa-map.css?v=1'));
   assert.equal((html.match(/<link rel="canonical"/g)||[]).length,1);
@@ -82,7 +82,9 @@ test('map enhancement is linked to preference changes and waits for actual tiles
   assert.match(mapCode,/tile\.openstreetmap\.org/);
   assert.match(mapCode,/verifyMapCatalog\(await response\.json\(\)\)/);
   assert.ok(!mapCode.includes('localStorage')&&!mapCode.includes('geolocation'));
-  assert.ok(!mapCode.includes('GeoJSON')&&!mapCode.includes('polyline('));
+  assert.ok(!mapCode.includes('L.polyline('));
+  assert.match(mapCode,/L\.geoJSON\(communityLines/);
+  assert.match(mapCode,/verifyCommunityCenterlines/);
   assert.match(mapCode,/switchDisplay\('official'\)/);
   assert.match(mapCss,/@media\(max-width:650px\)/);
 });
