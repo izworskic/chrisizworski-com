@@ -330,3 +330,53 @@ main>.experience-compare{max-width:none;background:#e9e4d8;padding-left:max(18px
 .experience-screenreader{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media(max-width:800px){.experience-intro{grid-template-columns:1fr;gap:5px}.experience-intro>a{padding:0}.experience-bottom{flex-wrap:wrap}.experience-sides{gap:13px}}
 @media(max-width:680px){.experience-picker{grid-template-columns:1fr;gap:8px}.experience-versus{padding:0;text-align:left;font-size:1.1rem}.experience-sides{grid-template-columns:1fr}.experience-photo img{height:220px}.experience-bottom{padding:14px}#experience-map-compare{width:100%;white-space:normal}}
+
+
+/* EXPERIENCE_OS_V1: an interpretive field journal, not more destination cards.
+   The existing visit answer, A/B choice, source evidence and noindex remain intact. */
+main>.porkies-journal{max-width:1450px;margin:auto;padding-top:clamp(45px,6vw,80px);padding-bottom:clamp(48px,6vw,82px);background:#f8f5ed;color:#243d33}
+.journal-heading{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.68fr);align-items:end;gap:clamp(18px,3vw,44px);margin-bottom:30px}
+.journal-heading h2{max-width:810px;font-size:clamp(2.15rem,4vw,4rem);line-height:1.09;margin:.12em 0 0;color:#183e34}
+.journal-heading>p{max-width:46ch;color:#3e5548;font-size:1.02rem;line-height:1.75;margin:0 0 4px}
+.journal-entries{border-top:2px solid #9f9a7e}
+.journal-entry{display:grid;grid-template-columns:minmax(165px,.45fr) minmax(0,1.55fr);column-gap:clamp(24px,5vw,85px);padding:27px 0 29px;border-bottom:1px solid #d5d2c6}
+.journal-index{display:flex;flex-direction:column;gap:7px;align-items:flex-start;padding-top:4px}
+.journal-index span{font:400 clamp(3rem,5.4vw,5.1rem)/.95 Fraunces,Georgia,serif;color:#a56e43;letter-spacing:-.04em}
+.journal-index strong{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#526b5d}
+.journal-text{min-width:0;max-width:890px}
+.journal-text h3{font-size:clamp(1.55rem,2.5vw,2.55rem);line-height:1.16;margin:2px 0 13px;color:#243e35}
+.journal-text p{font-size:1rem;line-height:1.8;margin:0 0 13px;color:#394f44}
+.journal-text .journal-visitor-tip{margin:16px 0 11px;padding:11px 0 10px 18px;border-left:3px solid #ad7d4e;color:#314e40}
+.journal-visitor-tip strong{font-weight:800}
+.journal-actions{display:flex;flex-wrap:wrap;gap:9px 22px;margin-top:14px}
+.journal-actions a{display:inline-flex;align-items:center;font-weight:750;font-size:.86rem;line-height:1.45;min-height:38px;color:#174f3d}
+.journal-actions a:hover{color:#7f4d2d}
+.journal-actions a:focus-visible,.experience-fieldnote summary:focus-visible,.experience-fieldnote a:focus-visible{outline:3px solid #ab693b;outline-offset:3px}
+.journal-boundary{max-width:950px;margin:20px 0 0;color:#647269;font-size:.78rem;line-height:1.65}
+.experience-fieldnote{margin:6px 0 18px;padding:12px 15px 13px;border:1px solid #afbfaf;border-left:4px solid #966a43;border-radius:5px;background:#f4f4e9;color:#304d40}
+.experience-fieldnote summary{cursor:pointer;min-height:30px;font-size:.89rem;line-height:1.55;font-weight:800;color:#234d3e;list-style:disclosure-closed}
+.experience-fieldnote[open] summary{margin-bottom:9px}
+.experience-fieldnote-copy{font-size:.91rem;line-height:1.7;color:#385349;margin:4px 0 10px}
+.experience-fieldnote-source{display:inline-flex;align-items:center;min-height:36px;font-size:.78rem;font-weight:750;color:#1f5746}
+@media(max-width:850px){
+ .journal-heading{grid-template-columns:minmax(0,1fr);gap:10px}
+ .journal-heading>p{max-width:70ch}
+ .journal-entry{grid-template-columns:minmax(125px,.3fr) minmax(0,1fr);gap:23px}
+}
+@media(max-width:600px){
+ .journal-heading{margin-bottom:21px}
+ .journal-heading h2{font-size:clamp(2.05rem,8vw,2.8rem)}
+ .journal-heading>p{font-size:.94rem;line-height:1.65}
+ .journal-entry{grid-template-columns:minmax(0,1fr);gap:8px;padding:23px 0 25px}
+ .journal-index{flex-direction:row;align-items:center;gap:13px}
+ .journal-index span{font-size:2.6rem;line-height:1}
+ .journal-index strong{font-size:.7rem}
+ .journal-text h3{font-size:clamp(1.5rem,6vw,1.9rem);margin:5px 0 10px}
+ .journal-text p{font-size:.93rem;line-height:1.72}
+ .journal-actions{gap:5px 15px}
+ .journal-boundary{font-size:.75rem}
+ .experience-fieldnote{padding:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .journal-actions *, .experience-fieldnote *{scroll-behavior:auto!important;transition:none!important}
+}
