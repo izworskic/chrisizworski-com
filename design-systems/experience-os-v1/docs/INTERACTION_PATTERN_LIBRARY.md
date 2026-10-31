@@ -23,6 +23,12 @@ A pattern is accepted only when **a visitor action changes meaningful informatio
 | P17 | **Source-backed media handoff** — parks, guides, destinations | Change selected place to a credited exact-subject image and narrative, only after image loads | Image failure/slow A→B race hides previous photo/credit; text-only answer stays; inspect responsive crop/credit |
 | P18 | **First-screen decision threshold** — every destination/tool | Choice and primary actionable answer precede secondary storytelling on the narrowest phone | Measure answer/action location at 360/390, and full/deep screenshot; do not impose a one-size fixed hero height |
 
+| P19 | **Conservative time-fit** — trail, tour, parking and stop planners | Choosing a time budget changes the recommendation to a realistic outing with margin rather than the longest route whose *minimum* time fits | Use official published time bands and terrain; compare 30/60/90-minute cases; never invent travel times or treat minimum duration as sufficient |
+| P20 | **Fixture ↔ live source proof** — maps, forecasts, cameras and external services | Fixture-based selections remain reproducible, while post-deploy checks confirm actual tiles/photos/public response rendered | Real tile images and attributions, actual provider script/image loading and dated live smoke; browser fixture pass is not live-provider proof |
+| P21 | **Lazy-media proof** — photo-led destinations | Opening or selecting a below-fold experience triggers appropriately loaded, licensed photo and matched credit or a compact text fallback | Scroll/lazy-load in Chromium, assert naturalWidth, exact credited subject, fail image; inspect full/changed-state screenshots, including no-photo |
+| P22 | **Atomic discovery handoff** — new canonical tools | From the regional entry, visitors find the tool; Tools directory and sitemap reveal the same canonical without cannibalizing an existing page | Keep source page, Tools card, ItemList, source registry, relations, canonical and sitemap in the same reviewed release; test actual published HTML |
+| P23 | **Catalog/JSON-LD ordering parity** — tool hubs and collections | Visible cards and structured ItemList enumerate the same identity in the same order | Verify unique URLs, correct count, position, entity @id/type and visible card order; don't append a new schema entry arbitrarily |
+
 ## Pattern recipe (required in a design brief)
 
 For each selected pattern, document:

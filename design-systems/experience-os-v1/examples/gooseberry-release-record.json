@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "released",
+  "project": {
+    "slug": "gooseberry-falls",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/gooseberry-falls/",
+    "pageFile": "public/gooseberry-falls/index.html",
+    "visitorDecision": "Choose an appropriate Gooseberry Falls outing by available time, accessibility preference and season without assuming current trail access.",
+    "primaryAction": "Open the official DNR trail map and park notices for the suggested outing before travel."
+  },
+  "claims": [
+    {
+      "id": "official-waterfall-walks",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html",
+      "checkedDate": "2026-10-31",
+      "limitation": "These are typical DNR route time ranges, not guarantees of current trail access or visitor pace."
+    },
+    {
+      "id": "wayside-parking-rule",
+      "kind": "official-reference",
+      "subject": "parking-rule",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour.html",
+      "checkedDate": "2026-10-31",
+      "limitation": "Permit exceptions are specific to the visitor-center wayside; other in-park areas have different permit rules."
+    },
+    {
+      "id": "park-access-unverified",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.dnr.state.mn.us/state-parks/park.html?id=spk00172",
+      "checkedDate": "2026-10-31",
+      "limitation": "No trustworthy structured official trail-closure feed was integrated; current access requires checking DNR notices and signs."
+    },
+    {
+      "id": "regional-nws-forecast",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/points/47.143,-91.470",
+      "checkedDate": "2026-10-31",
+      "maxAgeMinutes": 35,
+      "limitation": "Weather is for the park vicinity, never direct proof that any route is open or that the river is safely crossable."
+    },
+    {
+      "id": "river-flow-no-series",
+      "kind": "no-data",
+      "subject": "river-flow",
+      "state": "NO_DATA",
+      "sourceUrl": "https://waterdata.usgs.gov/monitoring-location/USGS-04015140/",
+      "checkedDate": "2026-10-31",
+      "limitation": "The monitoring location lacks continuous water-flow data; the tool does not invent a live river-level trend."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "outing.id",
+    "sourceOfTruth": "Pure normalize/chooseOuting engine in public/assets/gooseberry-engine.mjs; weather alerts only add regional caution.",
+    "linkedSurfaces": [
+      "answer",
+      "choice-controls",
+      "experience-cards",
+      "map-or-unavailable",
+      "source-panel",
+      "shareable-url"
+    ],
+    "unavailableBehavior": "When map, access or forecast information is unavailable, keep a DNR-sourced outing and provide official maps, notices and directions."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "60 minutes, snow-free, standard mobility",
+      "expectedVisibleAnswer": "Recommend the 30–45-minute Upper and Middle Falls walk, preserving margin within an hour.",
+      "sourceAndSafety": "DNR time guidance is typical; actual park access is unverified."
+    },
+    {
+      "kind": "alternative",
+      "input": "90 minutes, snow-free, standard mobility",
+      "expectedVisibleAnswer": "Recommend the 45–90-minute three-falls loop with non-ADA terrain disclosed.",
+      "sourceAndSafety": "DNR guidance supports the loop, but does not certify opening or conditions."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose 90 minutes and then return to 60 minutes",
+      "expectedVisibleAnswer": "Restore the Upper and Middle Falls recommendation, details, selected card and share URL.",
+      "sourceAndSafety": "The park access qualifier remains unverified after reversing inputs."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript in the visitor browser",
+      "expectedVisibleAnswer": "Show a readable default Upper and Middle Falls answer, plus DNR source and official map.",
+      "sourceAndSafety": "No dynamic forecast is implied when JavaScript is disabled."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block both CARTO and OpenStreetMap tile images",
+      "expectedVisibleAnswer": "Show a compact map fallback and links to DNR summer and winter maps.",
+      "sourceAndSafety": "The lack of a map must not become guessed route geometry."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Break or expire the forecast/alert feed",
+      "expectedVisibleAnswer": "Retain the route suggestion but label forecast unavailable and link to NWS.",
+      "sourceAndSafety": "Do not promote an old forecast into a current safety or access decision."
+    },
+    {
+      "kind": "mobility",
+      "input": "Step-free preference on a snow-free visit",
+      "expectedVisibleAnswer": "Prefer Upper and Middle with the switchback option and explain the Lower Falls loop is not ADA accessible.",
+      "sourceAndSafety": "Surface conditions remain subject to current official notices."
+    },
+    {
+      "kind": "winter",
+      "input": "Snow-covered walking day",
+      "expectedVisibleAnswer": "Recommend the Upper Falls winter walking approach rather than the complete three-falls loop.",
+      "sourceAndSafety": "River ice is never safe and groomed ski routes are for their designated use."
+    },
+    {
+      "kind": "shoreline",
+      "input": "Prefer Lake Superior shoreline during a 90-minute visit",
+      "expectedVisibleAnswer": "Choose Picnic Flow and shoreline with a separate vehicle-permit consequence.",
+      "sourceAndSafety": "Exact shore access and trail surface are unverified; use the signed official map."
+    }
+  ],
+  "failures": {
+    "no-js": "Serve the DNR-backed Upper/Middle walk, main map link and official source in HTML before client enhancement.",
+    "no-tiles": "Collapse an unrendered map and retain official PDF maps and the street-address directions action.",
+    "no-image": "Keep the outing text and source-linked answer without a blank photo panel or stale caption.",
+    "stale-data": "Label regional NWS weather unavailable, preserve outing caveats, and avoid using older forecast as current access guidance."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/41242249813",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/41242249813/artifacts"
+    ],
+    "scopeNote": "Fixture-based Chromium interactions and loaded photographs were checked; a separate public browser smoke confirmed real CARTO tiles after the hotfix. This record checker cannot repeat those checks."
+  },
+  "photos": [
+    {
+      "depictedSubject": "Gooseberry Falls cascading through the river gorge",
+      "author": "ZMoreno387",
+      "license": "CC0 1.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Goosberry_Falls.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Goosberry_Falls.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Full Gooseberry Falls cascades",
+      "author": "Yinan Chen",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Gfp-minnesota-gooseberry-falls-the-full-falls.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-the-full-falls.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Lower Gooseberry Falls",
+      "author": "Yinan Chen",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Gfp-minnesota-gooseberry-falls-lower-falls.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-lower-falls.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Gooseberry State Park woodland, not a photo of Fifth Falls",
+      "author": "Yinan Chen",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Gfp-minnesota-gooseberry-falls-state-park-view-through-trees.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Gfp-minnesota-gooseberry-falls-state-park-view-through-trees.jpg",
+      "subjectMatch": "contextual",
+      "disclosure": "The park woodland photograph is not Fifth Falls and must be clearly labeled as context, not an exact waterfall photograph."
+    },
+    {
+      "depictedSubject": "Agate Beach on Lake Superior inside the state park",
+      "author": "Joe Passe",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Agate_Beach_(Gooseberry_Falls_State_Park).jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Agate_Beach_(Gooseberry_Falls_State_Park).jpg",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-10-31",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1332"
+    },
+    "verified": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-10-31",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/41243737917"
+    },
+    "deployed": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-10-31",
+      "evidenceUrl": "https://chrisizworski-jq60wr1xd-izworski-gmailcoms-projects.vercel.app",
+      "commitSha": "e50b3730bc5dbac32c0c3f063321c055a2621f98"
+    },
+    "live": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-10-31",
+      "evidenceUrl": "https://chrisizworski.com/gooseberry-falls/",
+      "publicUrl": "https://chrisizworski.com/gooseberry-falls/"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "The record is a dated research/release snapshot. It is NOT a current park-access or weather status and does not establish GSC/visitor uplift."
+}

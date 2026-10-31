@@ -25,6 +25,14 @@
 - Four research-only trail overlays and unresolved parking connectors remain openly described as non-navigation. **Lesson:** source truth and uncertainty do not become safer simply because the map becomes more engaging.
 - The PR passed the owning repo checks and was merged. The production provider later reported **READY for the exact merged SHA**; an independent post-release public HTML fetch was **not** evidenced in that turn. Record “deployed, live smoke not independently verified” rather than “live verified.”
 
+## Gooseberry Falls: third pilot, with independently verified production findings
+
+See the [Gooseberry pilot ledger](GOOSEBERRY_PILOT_20261031.md), its [dated machine-checkable release record](../examples/gooseberry-release-record.json), and source [PR #1332](https://github.com/izworskic/chrisizworski-com/pull/1332), [raster map correction #1334](https://github.com/izworskic/chrisizworski-com/pull/1334), and [discovery integration #1339](https://github.com/izworskic/chrisizworski-com/pull/1339).
+
+The Gooseberry work established that a successful fixture-based Leaflet map test **does not** prove the live raster provider; an independent public browser initially showed fallback before the CORS/retry correction, then successfully rendered six CARTO tiles. The first browser screenshots had lazy-loaded photo blanks, so verification was strengthened to wait for real image dimensions before passing. A visitor with 60 minutes was initially sent to a 45–90-minute loop; using the full time band produced the more conservative shorter route. A good page without its Tools/sitemap/registry integration remained an incomplete release; the extra discovery PR caught and fixed a real ItemList order/count mismatch in CI.
+
+These are delivery and source-integrity lessons. They are **not** proof of user-conversion lift, new search demand, current park access or reliable live river flow.
+
 ## Three cross-pilot principles now formalized
 
 1. **One decision, many synchronized surfaces:** the visitor's choice needs the same stable ID and evidence in cards, maps, photos and detail. “Changes a CSS class” is not sufficient.

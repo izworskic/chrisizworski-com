@@ -13,6 +13,17 @@
 - Filled v1.2 state matrix (or N/A for minor corrections):
 - Production smoke URL/status (only after released):
 
+## V1.2.1 operational evidence
+
+- V1.2 release record path and structural checker command/result (or N/A with reason):
+- Source category/subject table, including forecast versus park access and measured versus unavailable readings:
+- Full official time-band decision fit with realistic margin (or not applicable):
+- Fixture-based provider test **and** independently loaded public raster tiles/photos (or NOT VERIFIED):
+- New canonical release discovery as **one set**: Tools card / ItemList count and visible order / sitemap / registry and relationships (or owner-specific equivalent):
+- Source-only structural check limitations and any failed assertion corrected on final SHA:
+- Source scenario QA and **independent** public HTML/tile verification are separate evidence links:
+- Visitor outcome comparison remains **NOT MEASURED** unless a real comparable cohort/window is documented.
+
 ## Scoring
 
 | Category | Weight | Observed score 0–5 or NOT MEASURED | Evidence |

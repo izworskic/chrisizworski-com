@@ -18,6 +18,12 @@ When a task in an adopting repository creates a visitor-facing tool, materially 
 6. **Gate:** complete `docs/QA_SCORECARD.md`. Unmeasured is not passed. Run all existing owning-repo tests and full CI; no merge while red.
 7. **Learn:** record a tested pattern or anti-pattern, exact implementation evidence, sources, and what did not work in the research/experience ledger. Consult [`docs/PILOT_LESSONS_V1_2.md`](docs/PILOT_LESSONS_V1_2.md) before reusing prior park UX patterns. Distinguish implemented, CI/browser verified, production READY, live-public verified and actual visitor outcome measured; never collapse them into one “done” claim. Do not misrepresent analytics improvements.
 
+## V1.2.1 runnable process (substantial work only)
+
+After the experience brief and state matrix, read [V1_2_OPERATING_KIT.md](docs/V1_2_OPERATING_KIT.md) and [GOOSEBERRY_PILOT_20261031.md](docs/GOOSEBERRY_PILOT_20261031.md). Create an intentionally incomplete release record with `scripts/new-experience-os-v1.2.mjs` and fill actual claims, checked sources, six meaningful interaction/failure scenarios, loaded-photo evidence and distinct release stages. Validate with `scripts/verify-experience-os-v1.2.mjs` and, on this central site only, `--check-site`. It is a source-and-evidence **structural** check, never a substitute for the owning repo's actual browser, public API/tile, SEO/ads or live source checks.
+
+For any new canonical central-site tool, plan its Tools card, JSON-LD ItemList **in visible order**, sitemap, registry and directed relationships in the initial PR; don't launch a stranded page. For a conservative short visit, evaluate the full official time range, not simply its lower bound. Test real external map tiles and loaded photography after a real deployment, not only deterministic fixture images.
+
 ## Non-negotiable truths
 
 Never invent live access, open trails, verified routes, measured drive times, scores, sensor freshness, weather certainty, or actual photo provenance. Do not copy other companies' UI assets, licensed map layers, or restricted trail data. No AI-generated place photograph masquerading as the destination. Preserve one canonical intent owner, visible creator identity, search indexing, and existing ads policy. No Redis added. No automatic geolocation or tracking. No unapproved production framework migration.

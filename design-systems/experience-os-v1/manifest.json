@@ -1,6 +1,6 @@
 {
   "id": "EXPERIENCE_OS_V1",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "reviewedAt": "2026-10-31",
   "status": "source-only",
   "root": "design-systems/experience-os-v1",
@@ -25,7 +25,9 @@
     "docs/MULTI_REPO_ADOPTION.md",
     "docs/INTERPRETIVE_VOICE_FOR_PLACES.md",
     "docs/CONNECTED_EXPERIENCE_CONTRACT.md",
-    "docs/PILOT_LESSONS_V1_2.md"
+    "docs/PILOT_LESSONS_V1_2.md",
+    "docs/V1_2_OPERATING_KIT.md",
+    "docs/GOOSEBERRY_PILOT_20261031.md"
   ],
   "templates": [
     "templates/EXPERIENCE_BRIEF.md",
@@ -37,5 +39,14 @@
   "releaseThreshold": 90,
   "noPublicRoute": true,
   "secondPilot": "Sleeping Giant Provincial Park Explorer (merged PR #1331; see docs/PILOT_LESSONS_V1_2.md)",
-  "qualityUpgrade": "Connected experience state invariants, photo/loading/failure QA, units/source separation, and explicit release evidence tiers"
+  "qualityUpgrade": "Connected state and real media; plus conservative time choice, independently verified raster tiles and release/discovery evidence checker",
+  "thirdPilot": "Gooseberry Falls planner (PRs #1332, #1334, #1339); real CARTO smoke, source-scope and catalog lessons",
+  "operationalKit": {
+    "schemaVersion": "1.2",
+    "scaffold": "scripts/new-experience-os-v1.2.mjs",
+    "checker": "scripts/verify-experience-os-v1.2.mjs",
+    "validator": "design-systems/experience-os-v1/lib/release-evidence.mjs",
+    "example": "design-systems/experience-os-v1/examples/gooseberry-release-record.json",
+    "notes": "Strictly source-only; do not equate passing record checks with browser/production/live or visitor outcome verification"
+  }
 }
