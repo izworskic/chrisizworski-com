@@ -48,7 +48,7 @@ test("no mile, crossing, or open-gate assertions in page's overlay source",()=>{
  assert.match(html,/id="porkies-trails-toggle"/);
  assert.match(html,/id="porkies-roads-toggle"/);
  assert.match(html,/id="porkies-ski-toggle"/);
- assert.match(html,/40 separate DNR ski-trail records/);
+ assert.match(html,/40 ski-trail records/);
  assert.match(html,/id="route-evidence-status"/);
  assert.match(html,/name="robots" content="noindex,follow"/);
  assert.match(html,/unbridged crossings/);
