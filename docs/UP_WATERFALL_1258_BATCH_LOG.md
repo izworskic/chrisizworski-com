@@ -366,3 +366,5 @@ Automated Node QA exposed public indexed Silver River lower picnic falls with la
 ## Batch 40 — Ogemaw, Silver Bell, Dead River, Alger (2026-10-31)
 
 Source-backed access review only: Ogemaw state/GNIS falls versus different field point, no approved shoulder lot; Silver Bell USFS rough/gated FR road, no present MVUM; Dead River general FERC public river recreation but unverified powerhouse falls access; Alger city says NO SAFE PARKING, use separately signed Wagner Falls. Two new noindex research pages, six-source checkpoints, source ledger/reconciliation updated. Public waterfall counts unchanged (71 curated, 65 linked GIS, 96 pending). No outreach.
+
+**Batch40 priority fix:** The review queue generator is now tiered: newly discovered candidates, partially sourced candidates and fully audited access-blocked sites. Old hard-coded pins cannot keep Dead River, Alger, Ogemaw and Silver Bell at the front until new evidence is available. Every one of 96 remaining state GIS features stays in the review queue, with its previous reviewStatus still available for older tests. No public visitor publication changed.
