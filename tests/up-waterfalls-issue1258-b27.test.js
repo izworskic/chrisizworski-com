@@ -29,7 +29,7 @@ test('batch 27 keeps each candidate research-only, source-ledger linked, and abs
  }
  assert.equal(queue.counts.pendingGisFeatures,recon.counts.pending);
  assert.equal(queue.counts.matchedGisFeatures,recon.counts.exactIdMatched);
- assert.equal(queue.batches.length,13);
+ assert.equal(queue.batches.length,Math.ceil(queue.candidates.length/queue.batchSize));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/hunters-brooks-falls/'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/whitefish-falls/'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/big-garlic-falls/'));

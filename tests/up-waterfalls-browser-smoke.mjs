@@ -117,7 +117,7 @@ try{
     assert.ok(scroll<=width+2,'Bonanza page horizontal overflow '+scroll+' > '+width);
     await page.screenshot({path:screenshots+'/bonanza-township-park-mobile.png',fullPage:true,animations:'disabled'});
   });
-  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',false],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['morgan-falls',true],['falls-river-trail',true],['sturgeon-falls',true],['twin-waterfalls-memorial-preserve',true],['houghton-douglass-falls',true],['power-house-falls',true],['lower-silver-falls',true],['scott-falls',true],['tibbets-falls',true],['bridalveil-falls',true]]){
+  for(const [id,expectedIndex] of [['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',true],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['morgan-falls',true],['falls-river-trail',true],['sturgeon-falls',true],['twin-waterfalls-memorial-preserve',true],['houghton-douglass-falls',true],['power-house-falls',true],['lower-silver-falls',true],['scott-falls',true],['tibbets-falls',true],['bridalveil-falls',true],['lepisto-falls',true],['trappers-falls',true],['explorers-falls',true],['shining-cloud-falls',true],['big-erics-falls',true],['tioga-park-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -129,7 +129,23 @@ try{
       await page.waitForFunction(()=>!!document.querySelector('.detail-map .leaflet-pane'),{timeout:10000});
       const metrics=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
       assert.ok(metrics.scroll<=metrics.width+2,id+' mobile horizontal overflow');
-      if(id==='scott-falls')assert.match(await page.locator('body').innerText(),/not yet confirmed|noindex|access evidence/i);
+      if(id==='scott-falls'){
+        const body=await page.locator('body').innerText();
+        assert.match(body,/without crossing M-28|Do not cross M-28|do not cross busy M-28/i);
+        assert.match(body,/park-side|roadside park/i);
+        assert.ok(!body.includes('Google Maps directions to the waterfall coordinate'));
+      }
+      if(id==='tioga-park-falls'){
+        const body=await page.locator('body').innerText();
+        assert.match(body,/separate|distinct/i);
+        assert.match(body,/2\.2 kilometres|2\.2 km|2\.19km/);
+        assert.match(body,/seasonal|late October/i);
+      }
+      if(id==='shining-cloud-falls'){
+        const body=await page.locator('body').innerText();
+        assert.match(body,/Big Carp River/i);
+        assert.match(body,/Pinkerton/i);
+      }
       if(id==='munising-falls')assert.match(await page.locator('body').innerText(),/closed until further notice|trail closed/i);
       if(id==='bridalveil-falls'){const body=await page.locator('body').innerText();assert.match(body,/Miners Castle/);assert.match(body,/Miners Beach/);assert.match(body,/No maintained hiking path|No maintained trail/i);await page.screenshot({path:screenshots+'/bridalveil-falls-mobile.png',fullPage:true,animations:'disabled'});}
       if(id==='sand-portage-falls'){const body=await page.locator('body').innerText();assert.match(body,/Knutson|Knuston/);assert.match(body,/0.5-mile/);assert.match(body,/not.*parking/i);}

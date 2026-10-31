@@ -32,7 +32,11 @@ test('issue 1258 batch 03a: individual public access, parking, trail, land and g
  assert.ok(data.some(x=>x.id==='saxon-falls'));
  assert.ok(data.some(x=>x.id==='superior-falls'));
  assert.ok(data.some(x=>x.id==='greenstone-falls'));
- assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/scott-falls/'));
+ const scott=data.find(x=>x.id==='scott-falls');
+ assert.ok(scott && scott.publication==='verified-access-guide','later park-side-only Scott guide must remain published');
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/scott-falls/'));
+ assert.match(scott.walk,/without crossing M-28|Do not cross busy M-28|There is no established public pedestrian crossing/i);
+ assert.equal(scott.verification.publicAccess.verified,true);
 });
 test('trap hydro comparison is geographical only, not a parking or safe-travel guarantee',()=>{
  const trap=data.find(x=>x.id==='trap-falls'),overlooked=data.find(x=>x.id==='overlooked-falls');
