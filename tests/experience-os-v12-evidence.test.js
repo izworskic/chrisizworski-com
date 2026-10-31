@@ -136,3 +136,40 @@ test('Experience OS V1.2: a released record cannot claim verified if actual brow
  assert.ok(r.issues.some(i=>i.code==='recordStatus.browser'));
  assert.ok(r.issues.some(i=>i.code==='release.browserProof'));
 });
+
+test('Experience OS V1.2: published CLI verifies the real Gooseberry release record with site integration',()=>{
+ const {spawnSync}=require('node:child_process');
+ const cli=path.join(root,'scripts/verify-experience-os-v1.2.mjs');
+ const record=path.join(root,'design-systems/experience-os-v1/examples/gooseberry-release-record.json');
+ const run=spawnSync(process.execPath,[cli,record,'--check-site'],{cwd:root,encoding:'utf8'});
+ assert.equal(run.status,0,run.stderr||run.stdout);
+ assert.match(run.stdout,/structural checks/);
+ assert.match(run.stdout,/No browser, network/);
+});
+test('Experience OS V1.2: central site audit catches catalog/ItemList order drift',async()=>{
+ const {auditSite}=await load();
+ const tmp=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'experience-os-order-'));
+ try{
+  for(const relative of [
+   'public/gooseberry-falls/index.html','public/tools/index.html',
+   'public/sitemap.xml','benchmarks/tool-network-registry.json'
+  ]){
+   const target=path.join(tmp,relative);
+   fs.mkdirSync(path.dirname(target),{recursive:true});
+   fs.copyFileSync(path.join(root,relative),target);
+  }
+  const toolsFile=path.join(tmp,'public/tools/index.html');
+  let html=fs.readFileSync(toolsFile,'utf8');
+  const block=html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(block);
+  const graph=JSON.parse(block[1]),items=graph['@graph'].find(x=>x['@type']==='ItemList').itemListElement;
+  const idx=items.findIndex(x=>x.item?.url==='https://chrisizworski.com/gooseberry-falls/');
+  assert.ok(idx>=0&&idx<items.length-1,'Must start ordered to test drift');
+  const [gooseberry]=items.splice(idx,1);items.push(gooseberry);
+  items.forEach((x,i)=>x.position=i+1);
+  html=html.replace(block[1],JSON.stringify(graph));
+  fs.writeFileSync(toolsFile,html);
+  const issues=auditSite(readSample(),tmp);
+  assert.ok(issues.some(x=>x.code==='site.catalogOrder'),JSON.stringify(issues));
+ }finally{fs.rmSync(tmp,{recursive:true,force:true})}
+});
