@@ -29,6 +29,11 @@ These are **design risks and previously reported complaints**, not claims each i
 | A23 | Dynamically selected remote photo occupies a large blank panel while loading or after failed request | Hide the panel until a successfully loaded real image is available; keep source/detail readable | Screenshot after selection with slow/broken image requests |
 | A24 | Source syntax tests pass but runtime `$().forEach` selector typo prevents all visitor controls | Run real browser interaction tests for every selected major control | Playwright keyboard and click scenarios, check pageerror |
 | A25 | Photo/map choice scrolls users away from the updated detail, or is buried after secondary information | Put experience immediately after the core answer and scroll/focus to the changed evidence | Observe viewport before/after photo or marker select |
+| A26 | Descriptive test expects a bare route name even when honest map state appends “line unavailable” | Assert the selected ID and meaningful route label while preserving safety/unknown qualifier | Select an unmapped route; make sure map/feature agree and test passes without weakening truthful wording |
+| A27 | Desktop featured photo leaves a blank lower panel, or photo/caption composition differs from what source checks imply | Use real loaded image and aspect/layout screenshot; inspect fitting and linked credits | Capture selected photo at desktop/tablet/phone, not just hero and CSS selectors |
+| A28 | Source kilometre values get overwritten during a miles-first change, or bike/foot versus round-trip semantics blur | Keep source data and calculation units stable; convert only display with explicit rounding | Unit tests on small/large routes; assert public text distinguishes return and permitted bike/walk segments |
+| A29 | Green PR, merge or Vercel READY described as independently inspected live page | Record implementation, verified head, deployed matching merged SHA and public fetched HTML as separate facts | Check exact SHA and canonical public response; mark missing independent smoke NOT VERIFIED |
+| A30 | Updated planner and map have different selected trail, photo or decision evidence | One selected ID with a causal matrix; photo request tokens must ignore old async results | Browser A→B→A via all input paths and blocked/slow photos, with matched card/map/answer |
 
 ## Severity and repair
 
