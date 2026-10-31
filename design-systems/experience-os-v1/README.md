@@ -1,6 +1,6 @@
 # EXPERIENCE_OS_V1 — research-led interactive experience operating system
 
-**Version:** 1.0.1 · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
+**Version:** 1.0.2 · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
 
 ## Why this exists
 
@@ -11,7 +11,7 @@ The site already has `FIELD_GUIDE_V1` (photo-led editorial quality) and `JOURNEY
 ## Mandatory reading sequence
 
 1. Read the owning repository's `AGENTS.md`, identify the original implementation and canonical URL, and honor existing production/SEO gates.
-2. Read [this package's AGENTS.md](AGENTS.md), [lifecycle](docs/EXPERIENCE_LIFECYCLE.md), [pattern library](docs/INTERACTION_PATTERN_LIBRARY.md), [inspiration library](docs/INSPIRATION_LIBRARY.md), [technology choices](docs/TECHNOLOGY_DECISIONS.md), [anti-patterns](docs/ANTI_PATTERNS.md), and [scorecard](docs/QA_SCORECARD.md).
+2. Read [this package's AGENTS.md](AGENTS.md), [lifecycle](docs/EXPERIENCE_LIFECYCLE.md), [pattern library](docs/INTERACTION_PATTERN_LIBRARY.md), [interpretive voice for parks](docs/INTERPRETIVE_VOICE_FOR_PLACES.md), [inspiration library](docs/INSPIRATION_LIBRARY.md), [technology choices](docs/TECHNOLOGY_DECISIONS.md), [anti-patterns](docs/ANTI_PATTERNS.md), and [scorecard](docs/QA_SCORECARD.md).
 3. Examine prior `FIELD_GUIDE_V1` and `JOURNEY_ATLAS_V1` specs **when applicable**, not as compulsory page templates.
 4. For substantial work, research appropriate external examples and fresh source evidence, write an experience brief from [template](templates/EXPERIENCE_BRIEF.md), then implement, test, and record the outcome. Minor bug fixes are not burdened with a new brief.
 
@@ -20,6 +20,7 @@ The site already has `FIELD_GUIDE_V1` (photo-led editorial quality) and `JOURNEY
 - Start with the **specific visitor decision** and information required to make it. Don't start with a library, hero photo, or technology.
 - Research at least **two credible external experience examples** for significant projects and confirm their actual affordances. Do not copy layouts, copyrighted assets or vendor code.
 - Distinguish verified access and observations from forecasts, simulations, editorial suggestions, and unknowns. Display source issue time, retrieval time, timezone and stale-state behavior where relevant.
+- For parks, outdoor destinations and field guides, consult the [source-first interpretive voice standard](docs/INTERPRETIVE_VOICE_FOR_PLACES.md) so visitor copy explains what to notice, why it matters, and how to explore responsibly; never impersonate park staff.
 - Design for one coherent core interaction, with HTML-first answers, genuine site-specific photography where appropriate, and a working no-JS path.
 - Design mobile first, including keyboard access, reduced-motion support, screen readers, map fallback and contrast. Check rendered screenshots, not just source.
 - Do not alter AdSense, Redis policy, canonical ownership, existing tool data contracts, or other repositories' production code without required authorization and owner-specific testing.

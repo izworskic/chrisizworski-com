@@ -1,6 +1,6 @@
 {
   "id": "EXPERIENCE_OS_V1",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "reviewedAt": "2026-10-31",
   "status": "source-only",
   "root": "design-systems/experience-os-v1",
@@ -22,7 +22,8 @@
     "docs/EXPERIENCE_LIFECYCLE.md",
     "docs/QA_SCORECARD.md",
     "docs/ANTI_PATTERNS.md",
-    "docs/MULTI_REPO_ADOPTION.md"
+    "docs/MULTI_REPO_ADOPTION.md",
+    "docs/INTERPRETIVE_VOICE_FOR_PLACES.md"
   ],
   "templates": [
     "templates/EXPERIENCE_BRIEF.md",
