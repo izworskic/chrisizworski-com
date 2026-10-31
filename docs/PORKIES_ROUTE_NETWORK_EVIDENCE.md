@@ -151,3 +151,24 @@ Source evidence recovered from the unmerged October 28 draft research into **sep
 Tests: `tests/porkies-west-road.test.mjs`, existing `tests/porkies-parking.test.js`, and Chromium `scripts/verify-porkies-browser.cjs` cover exact official GIS feature IDs, browser map overlays, 2026–27 winter/summer west-side route denial, source links and no-JavaScript fallback. Run full `npm run verify:all` and exact-head Porkies browser GitHub Actions before production.
 
 **Next field evidence (not remotely verifiable)**: confirmation of construction reopening and current signed Johnson Road detour; exact junction/legal entrance from western South Boundary into DNR lot asset 841; any emergency restrictions or bridge status; RV/large vehicle access. Do not publish driving ETA, open-road verdict or an automatic hiking route until those have current primary-source evidence.
+
+
+## 2026-10-31 follow-up: measured final parking gap and source-change watch
+
+The road-line-to-lot connection remains **unverified** even after recovering the 17 MGF Presque Isle Rd and 15 western South Boundary records. A point-to-segment test against the DNR mapped Presque Isle River trail-area parking asset **#841** (46.707426, -89.975468), using the source data in `west-road-reference.geojson`, found:
+
+- **1,217 m straight-line** to the nearest west-of-Pinkerton South Boundary line (#9684).
+- **1,316 m straight-line** to the nearest MGF Presque Isle Road line (#10130).
+- These are omissions/offsets in the government source extracts, **not** road endpoints, road lengths, walking distances, navigation directions, or a no-access determination. The 2025 DNR map depicts the area but does not bridge the machine-readable segment-to-asset provenance to a current signed, passable, legal lot entrance. The campground loop, contact booth, day-use area and independent DNR trail-area asset should not be silently substituted for one another.
+
+The source-of-truth visitor summary is now `public/porcupine-mountains/access-proof.json`, intentionally `safeToIssueDirections:false`. The existing `porkies-access-map.js` continues withholding Google driving links after the published September 22 work-zone notice. DNR-mapped location-only links remain usable.
+
+**Additional primary-source visitor restriction**: Gogebic County Road Commission's October 26 winter parking order prohibits roadway/shoulder parking outside city limits from **2–7 a.m., November 1 through April 15**. It does **not** automatically classify separately designated DNR parking lots as prohibited or permitted. Always distinguish roadside parking from park lots.
+
+### Ongoing authoritative evidence maintenance
+
+`scripts/check-porkies-access-sources.mjs` checks four public authority pages (Wakefield Township original notice and news list, Michigan DNR park page, Gogebic Road Commission) and produces a timestamped, per-source result. The daily `.github/workflows/porkies-official-access-watch.yml` workflow retains the report as a GitHub Actions artifact. It creates or updates one GitHub issue only when a source introduces potential reopening language or removes a previously verified source statement. The job **never** edits production route permission or public status. An inaccessible URL yields `official-source-check-incomplete` and leaves every access permission denied.
+
+The official [MDOT Mi Drive disclaimer](https://www.michigan.gov/mdot/about/mi-drive-disclaimer) states that its lane closure reporting is limited to Interstate/M/US routes, so it must **not** be used to infer that a county-road work zone has cleared merely because no MDOT incident is mapped.
+
+**One next meaningful action requiring external authoritative evidence:** recover a dated, direct roadway reopening/detour clearance plus an explicitly mapped and signed entrance into DNR parking asset 841, independently identifying the relevant day-use lot. Until then, current vehicle access and all pedestrian crossing/bridge safety remain unknown.
