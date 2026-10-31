@@ -47,3 +47,7 @@
   .launch-venue h3{font-size:22px}
   .launch-utility a{display:inline-flex}
 }
+
+/* Status meaning overrides shared Southeast colors: confirmed time is not red; a hold is not green. */
+#schedule-card.status[data-level="high"]{border-left-color:#32774c}
+#schedule-card.status[data-level="hold"]{border-left-color:#9e3f32}
