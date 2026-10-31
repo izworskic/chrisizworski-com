@@ -757,6 +757,10 @@
       "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect-geography"
     },
     {
+      "source": "/api/lake-effect-grid",
+      "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect-grid"
+    },
+    {
       "source": "/api/california-roads",
       "destination": "https://national-outdoor-core.vercel.app/api/california-roads"
     },

@@ -9,6 +9,10 @@ test("Lake-effect entry is a single canonical source-backed tool",()=>{
  assert.equal(route?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect");
  const geographicRoute=site.rewrites.find(x=>x.source==="/api/lake-effect-geography");
  assert.equal(geographicRoute?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect-geography");
+ const griddedRoute=site.rewrites.find(x=>x.source==="/api/lake-effect-grid");
+ assert.equal(griddedRoute?.destination,"https://national-snowpack-melt.vercel.app/api/lake-effect-grid");
+ assert.match(html,/lake-effect-grid\.js\?v=20261031-1/);
+ assert.match(html,/lake-effect-grid\.css\?v=20261031-1/);
  assert.match(html,/lake-effect-geography\.js\?v=20261031-1/);
  assert.match(html,/lake-effect-geography\.css\?v=20261031-1/);
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski.com\/lake-effect-snow\/">/);
@@ -33,7 +37,7 @@ test("winter network keeps future snow, observed depth and trail readiness separ
  const xc=read("public/michigan-cross-country-skiing/index.html");
  const downhill=read("public/michigan-ski-hills/index.html");
  const sled=read("public/snowmobile/index.html");
- assert.match(snowbelt,/lake-effect\.js\?v=20261031-2/);
+ assert.match(snowbelt,/lake-effect\.js\?v=20261031-3/);
  assert.match(snowbelt,/michigan-cross-country-skiing/);
  assert.match(snowbelt,/michigan-ski-hills/);
  assert.match(snowbelt,/snowmobile\//);
