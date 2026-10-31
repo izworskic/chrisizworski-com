@@ -102,7 +102,7 @@ test('missing weather and incomplete forecast produce no positive visibility ver
   assert.equal(decision.weatherGrade(null).level, 'unknown');
   assert.equal(decision.weatherGrade({ shortForecast: 'Sunny' }).level, 'unknown');
   assert.equal(decision.weatherGrade({ shortForecast: 'Thunderstorms', probabilityOfPrecipitation: { value: 40 } }).level, 'poor');
-  assert.equal(decision.weatherGrade({ shortForecast: 'Mostly Cloudy', probabilityOfPrecipitation: { value: 15 } }).level, 'mixed');
+  assert.equal(decision.weatherGrade({ shortForecast: 'Mostly Cloudy', probabilityOfPrecipitation: { value: 15 }, windSpeed: '8 mph' }).level, 'mixed');
   const good = decision.weatherGrade({ shortForecast: 'Sunny', probabilityOfPrecipitation: { value: 10 }, windSpeed: '8 mph' });
   assert.equal(good.level, 'good');
   assert.match(good.detail, /does not establish/);
