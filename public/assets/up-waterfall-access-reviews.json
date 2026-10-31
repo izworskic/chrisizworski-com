@@ -626,10 +626,10 @@
       "publicAccess": "TNC restricted land, hiking allowed subject to preserve policy, complete visitor path unverified",
       "publicationEligible": false,
       "title": "Slate River Falls: landowner confirmed; the bridge and parking are different questions",
-      "summary": "October 30, 2026 live public TNC ArcGIS Fee Ownership feature OBJECTID 8370 (Slate River Forest Reserve, PUB_ACCESS=Restricted Access) contains the exact state GIS Slate River Falls #119 coordinate 46.831054,-88.252067. The public Skanee Road bridge coordinates confirmed independently by USGS #04043165 and NBI #504 are OUTSIDE this TNC fee polygon. A diagnostic point roughly 100 m due east of the bridge and other sample points around the natural waterfall are inside the reserve. This is an actual TNC polygon/point intersection, not inferred from a place name. The polygon is generalized (maxAllowableOffset 0.00005°), not a parcel survey, road right-of-way, pedestrian easement, approved turnout, signed hiking route or safe dry-ground viewpoint.",
-      "guidance": "The natural waterfall belongs to TNC's fee-owned reserve and TNC permits foot hiking under its limited-access rules. Skanee Road bridge is outside that polygon; the nearby potential turnout has NOT been legally designated for parking. Do not drive to the falls GIS point, follow an unverified two-track, cross the river, or use these geometry sample points for navigation.",
+      "summary": "TNC fee-owns natural falls #119. The 2025 Visit Keweenaw report describes a small pull-off and gorge-rim trail, but parking authorization, legal continuous footpath, safe no-ford viewpoint and current conditions remain unresolved.",
+      "guidance": "The research-only access checklist separates verified ownership from four public route gates. Do not navigate to natural GIS points or treat a 2025 tourism pull-off description as approved parking.",
       "reviewLimitations": "A TNC Fee Ownership boundary is not a surveyed county tax parcel/road right-of-way. TNC GIS PUB_ACCESS is Restricted Access. Hiking permission does not grant vehicle entry; flood-damaged Skanee Road segments were passable with caution in May 2025, not a statement of current road status.",
-      "nextEvidence": "Verified landowner of the NATURAL FALLS is TNC, but public access remains RESTRICTED and visitor route is NOT verified. Obtain TNC permission/official signed footpath policy specifically from bridge/turnout to a no-ford view; obtain Baraga County Road Commission authorization for the exact roadside parking/road right-of-way (2025 flash flood road damage; 2026 clearance unverified); check deed/right-of-way overlays for the road and any off-reserve segments, current seasonal road restrictions and safe dry-land viewing route. Do not use the illustrative 100m east sample as directions or parking.",
+      "nextEvidence": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json.",
       "sourceLinks": [
         {
           "label": "TNC live reserve fee-polygon query",
@@ -658,6 +658,18 @@
         {
           "label": "2025 CRC flood/Skanee road updates",
           "url": "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/"
+        },
+        {
+          "label": "Visit Keweenaw 2025 pull-off and gorge-rim report (not a parking authorization)",
+          "url": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/"
+        },
+        {
+          "label": "Baraga Road Commission official contact",
+          "url": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/"
+        },
+        {
+          "label": "Baraga Equalization parcel authority",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
         }
       ],
       "routeAudit": {
@@ -707,7 +719,12 @@
           }
         ]
       },
-      "researchPage": "/upper-peninsula-waterfalls/research/slate-river-falls/"
+      "researchPage": "/upper-peninsula-waterfalls/research/slate-river-falls/",
+      "accessDecision": {
+        "sourceFile": "data/up-waterfall-slate-river-access-decision.json",
+        "publicGuideEligible": false,
+        "requestsSent": false
+      }
     },
     {
       "gisObjectId": 68,

@@ -2339,8 +2339,8 @@
       "evidenceReviewed": "2026-10-30",
       "disposition": "TNC-fee-falls-confirmed-bridge-outside-private-arrival-easement-and-view-unverified",
       "publicationEligible": false,
-      "sourceNotes": "Michigan GIS #119 and independent lower Slate River Falls locations agree, but the public visit route does not yet have permission-backed parking or a safe viewing path. UPtravel and Circle Tour describe a rough east-bank route from near the Skanee Road bridge. A separate field report required a river crossing for a close view and declined it during high water. The older Baraga visitor brochure's 3.3-mile Arvon Road/quarry directions overlap a different upstream Quartzite/Black Slate cluster. The Nature Conservancy now owns the 9,760-acre Slate River Forest, including approximately four miles of river, and permits hiking on ITS protected property, but published evidence does not prove the lower GIS #119 waterfall, road turnout and entire bank path are all on that property. An NBI-derived listing says the Skanee bridge itself is open, which does NOT authorize roadside parking. TNC separate Michigan land-use guidance states only 25% of Slate River Forest is currently enrolled in Commercial Forest and about one-third is covered by private hunting leases. Those figures govern hunting/fishing access analysis, not a determination that hiking is categorically prohibited elsewhere; parcel-specific rights and lease limitations must be read, and no walking line to the waterfall is authorized from these general sources. October 30, 2026 live public TNC ArcGIS Fee Ownership feature OBJECTID 8370 (Slate River Forest Reserve, PUB_ACCESS=Restricted Access) contains the exact state GIS Slate River Falls #119 coordinate 46.831054,-88.252067. The public Skanee Road bridge coordinates confirmed independently by USGS #04043165 and NBI #504 are OUTSIDE this TNC fee polygon. A diagnostic point roughly 100 m due east of the bridge and other sample points around the natural waterfall are inside the reserve. This is an actual TNC polygon/point intersection, not inferred from a place name. The polygon is generalized (maxAllowableOffset 0.00005°), not a parcel survey, road right-of-way, pedestrian easement, approved turnout, signed hiking route or safe dry-ground viewpoint.",
-      "outstandingGate": "Verified landowner of the NATURAL FALLS is TNC, but public access remains RESTRICTED and visitor route is NOT verified. Obtain TNC permission/official signed footpath policy specifically from bridge/turnout to a no-ford view; obtain Baraga County Road Commission authorization for the exact roadside parking/road right-of-way (2025 flash flood road damage; 2026 clearance unverified); check deed/right-of-way overlays for the road and any off-reserve segments, current seasonal road restrictions and safe dry-land viewing route. Do not use the illustrative 100m east sample as directions or parking.",
+      "sourceNotes": "Michigan GIS #119 and independent lower Slate River Falls locations agree, but the public visit route does not yet have permission-backed parking or a safe viewing path. UPtravel and Circle Tour describe a rough east-bank route from near the Skanee Road bridge. A separate field report required a river crossing for a close view and declined it during high water. The older Baraga visitor brochure's 3.3-mile Arvon Road/quarry directions overlap a different upstream Quartzite/Black Slate cluster. The Nature Conservancy now owns the 9,760-acre Slate River Forest, including approximately four miles of river, and permits hiking on ITS protected property, but published evidence does not prove the lower GIS #119 waterfall, road turnout and entire bank path are all on that property. An NBI-derived listing says the Skanee bridge itself is open, which does NOT authorize roadside parking. TNC separate Michigan land-use guidance states only 25% of Slate River Forest is currently enrolled in Commercial Forest and about one-third is covered by private hunting leases. Those figures govern hunting/fishing access analysis, not a determination that hiking is categorically prohibited elsewhere; parcel-specific rights and lease limitations must be read, and no walking line to the waterfall is authorized from these general sources. October 30, 2026 live public TNC ArcGIS Fee Ownership feature OBJECTID 8370 (Slate River Forest Reserve, PUB_ACCESS=Restricted Access) contains the exact state GIS Slate River Falls #119 coordinate 46.831054,-88.252067. The public Skanee Road bridge coordinates confirmed independently by USGS #04043165 and NBI #504 are OUTSIDE this TNC fee polygon. A diagnostic point roughly 100 m due east of the bridge and other sample points around the natural waterfall are inside the reserve. This is an actual TNC polygon/point intersection, not inferred from a place name. The polygon is generalized (maxAllowableOffset 0.00005°), not a parcel survey, road right-of-way, pedestrian easement, approved turnout, signed hiking route or safe dry-ground viewpoint. Visit Keweenaw's 2025 Hidden Gems article independently describes a small pull-off on Skanee Road after the bridge and a gorge-top hiking trail. It does not establish legal parking, a certified continuous path or a dry-ground waterfall viewpoint.",
+      "outstandingGate": "Obtain written or official source evidence from TNC for continuous walking corridor and safe no-ford viewpoint, Baraga County Road Commission for approved turnout, road ROW and current approach, and Equalization for parcel IDs. See data/up-waterfall-slate-river-access-decision.json.",
       "sourceLinks": [
         "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
         "https://www.uptravel.com/listing/slate-river-falls/3708/",
@@ -2359,7 +2359,8 @@
         "https://www.baragacounty.org/government/departments/equalization/",
         "https://www.uppermichiganssource.com/2025/05/20/baraga-county-road-commission-provides-updates-damage-roads/",
         "https://bridgecondition.com/bridge/michigan/mi-000000000000504",
-        "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/"
+        "https://waterdata.usgs.gov/monitoring-location/USGS-04043165/",
+        "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
@@ -2425,6 +2426,19 @@
         "fullWalkingCorridorVerified": false,
         "sourceUrl": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0/query?where=OBJECTID%3D8370&outFields=OBJECTID%2CPUBLIC_NA%2CPUB_ACCESS%2CMAP_SYM%2CSTATE&returnGeometry=true&outSR=4326&geometryPrecision=6&maxAllowableOffset=0.00005&f=geojson",
         "date": "2026-10-30"
+      },
+      "accessDecision": {
+        "sourceFile": "data/up-waterfall-slate-river-access-decision.json",
+        "verified": [
+          "natural-owner"
+        ],
+        "pending": [
+          "legal-parking",
+          "walking-corridor",
+          "safe-viewpoint",
+          "current-conditions"
+        ],
+        "publicGuideEligible": false
       }
     },
     {

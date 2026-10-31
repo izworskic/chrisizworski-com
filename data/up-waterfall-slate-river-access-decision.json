@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "issue": 1258,
+  "date": "2026-10-30",
+  "gisObjectId": 119,
+  "visitorGuideEligible": false,
+  "publicRouteStatus": "noindex-research-only",
+  "ownerGeometry": "TNC public fee-owned feature 8370: falls inside, Skanee public bridge outside",
+  "autoPromote": false,
+  "policy": "All five gates require date-current authoritative evidence before a routed or indexable visitor guide. Published tourism reports alone do not establish parking rights.",
+  "gates": [
+    {
+      "id": "natural-owner",
+      "label": "Who owns the falls?",
+      "state": "verified",
+      "authority": "TNC",
+      "source": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/TNC_Lands_Public_Layer/FeatureServer/0",
+      "evidence": "Public TNC feature 8370 contains the exact natural waterfall #119 as Fee Ownership, Restricted Access."
+    },
+    {
+      "id": "legal-parking",
+      "label": "Where may visitors park?",
+      "state": "unverified",
+      "authority": "Baraga County Road Commission",
+      "source": "https://www.visitkeweenaw.com/blog/post/hidden-gems-of-the-copper-country-region/",
+      "evidence": "A 2025 visitor guide describes a small Skanee Road pull-off, but does not establish parking permission, ROW, or current conditions."
+    },
+    {
+      "id": "walking-corridor",
+      "label": "Is the complete walking approach permitted?",
+      "state": "unverified",
+      "authority": "TNC and bridge-side parcel owner",
+      "source": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
+      "evidence": "TNC allows hiking on its reserve, not motor vehicles or cutting new trails. The reported route has no signed authorization in the evidence."
+    },
+    {
+      "id": "safe-viewpoint",
+      "label": "Can visitors see the falls without a river ford?",
+      "state": "unverified",
+      "authority": "TNC",
+      "source": "https://www.gowaterfalling.com/waterfalls/slateriver.shtml",
+      "evidence": "Independent older account required a river crossing for a close view. No authority-verified dry-ground viewing point."
+    },
+    {
+      "id": "current-conditions",
+      "label": "Is the bridge approach currently suitable?",
+      "state": "unverified",
+      "authority": "Baraga County Road Commission",
+      "source": "https://keweenawreport.com/2025/05/27/146749/",
+      "evidence": "Road damage was reported in 2025, not a current 2026 road/turnout status or snow-clearing statement."
+    }
+  ],
+  "contacts": [
+    {
+      "role": "preserve manager",
+      "name": "The Nature Conservancy",
+      "to": "miplaces@tnc.org",
+      "source": "https://www.nature.org/en-us/get-involved/how-to-help/places-we-protect/slate-river-forest/",
+      "asks": [
+        "Approved public foot approach",
+        "Authorized no-ford lookout",
+        "Seasonal restrictions"
+      ]
+    },
+    {
+      "role": "road authority",
+      "name": "Baraga County Road Commission",
+      "to": "info@baragacountyroads.org",
+      "source": "https://micountyroads.org/about/find-a-county-road-agency/baraga-county-road-commission/",
+      "asks": [
+        "Approved turnout/shoulder parking",
+        "Road ROW and two-track jurisdiction",
+        "Current road and flood-repair status"
+      ]
+    },
+    {
+      "role": "parcel records",
+      "name": "Baraga County Equalization",
+      "to": "andersone@baragacounty.org",
+      "source": "https://www.baragacounty.org/government/departments/equalization/",
+      "asks": [
+        "Owner and parcel IDs for bridge-side turnout",
+        "Road ROW and documented easement",
+        "Official parcel map reference"
+      ]
+    }
+  ],
+  "outreach": {
+    "state": "three-Gmail-drafts-created",
+    "sent": false
+  },
+  "routeGeometryApproved": false,
+  "parkingGpsApproved": false
+}

@@ -915,3 +915,22 @@ test('TNC fee polygon covers Slate River Falls but not Skanee Road bridge; no pa
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/slate-river-falls/'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/slate-river-falls/'));
 });
+
+
+test('Slate River public-route gates require primary authority permission',()=>{
+ const d=JSON.parse(fs.readFileSync('data/up-waterfall-slate-river-access-decision.json','utf8'));
+ const row=ledger.candidates.find(x=>x.gisObjectId===119);
+ const page=fs.readFileSync('public/upper-peninsula-waterfalls/research/slate-river-falls/index.html','utf8');
+ assert.equal(d.visitorGuideEligible,false);
+ assert.equal(d.autoPromote,false);
+ assert.equal(d.gates.length,5);
+ assert.deepEqual(d.gates.filter(g=>g.state==='verified').map(g=>g.id),['natural-owner']);
+ assert.equal(d.gates.filter(g=>g.state!=='verified').length,4);
+ assert.equal(d.outreach.sent,false);
+ assert.equal(row.curatedId,null);
+ assert.equal(row.accessDecision.publicGuideEligible,false);
+ assert.match(page,/name="robots" content="noindex,follow"/);
+ assert.match(page,/Five separate access decisions/);
+ assert.match(page,/2025 Visit Keweenaw feature/);
+ assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/slate-river-falls/'));
+});
