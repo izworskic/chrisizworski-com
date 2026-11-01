@@ -90,7 +90,7 @@
         var b = node('button', { type: 'button', class: 'pn-stage' + (x.id === active.id ? ' is-active' : ''), 'aria-pressed': x.id === active.id ? 'true' : 'false' },
           node('span', { class: 'pn-stage-number' }, String(i + 1).padStart(2, '0')),
           node('span', { class: 'pn-stage-copy' }, node('strong', null, x.title), node('small', null, x.when)));
-        b.addEventListener('click', function () { stage = x.id; render(last); });
+        b.addEventListener('click', function () { stage = x.id; render(last); var current = get('pnSeasonSteps').children[i]; if (current && current.focus) current.focus(); });
         return b;
       }));
       get('pnSeasonStepTitle').textContent = active.title;
