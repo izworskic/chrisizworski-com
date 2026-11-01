@@ -14,6 +14,11 @@ const assert=require('node:assert/strict');
    const page=await ctx.newPage();
    page.on('pageerror',error=>console.error('Browser error:',error));
    await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:8765/')?route.continue():route.abort());
+   await page.route('**/api/garden-seasonal-heat*',async route=>{
+    const data={schema:'seasonal-heat-v1',provider:'USA National Phenology Network',status:'AVAILABLE',
+      asOfDate:'2026-10-31',totalGdd50F:2805.3,comparison:{anomalyGdd50F:237.4,referencePeriod:'1991-2020'}};
+    await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
+   });
    await page.goto('http://127.0.0.1:8765/michigan-gardening/?place=Bay+City&date=2026-11-01',{waitUntil:'domcontentloaded'});
    assert.match(await page.locator('#welcomeSeasonLabel').innerText(),/current season/i);
    assert.match(await page.locator('#welcomeLocal').innerText(),/Bay City.*Oct 3/);
@@ -85,7 +90,14 @@ const assert=require('node:assert/strict');
    await page.locator('#gardenPlanTitle').scrollIntoViewIfNeeded();
    await page.screenshot({path:`artifacts/garden-home-browser/garden-${width}.png`,fullPage:true,animations:'disabled'});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'horizontal page overflow at '+width);
-   await page.locator('#pnPlace').fill('Adrian');await page.locator('#pnPlace').press('Tab');
+   await page.locator('#pnPlace').fill('Bay City');await page.locator('#pnPlace').press('Tab');
+   await page.locator('#plant-now').evaluate(node=>node.open=true);
+   await page.locator('#gardenThermal').evaluate(node=>node.open=true);
+   await page.locator('#gardenThermalCheck').click();
+   await page.waitForFunction(()=>document.querySelector('#gardenThermalResults')?.textContent.includes('2805.3'),null,{timeout:6000});
+   assert.match(await page.locator('#gardenThermalResults').innerText(),/237.4/);
+   assert.match(await page.locator('#gardenThermalResults').innerText(),/1991–2020/);
+      await page.locator('#pnPlace').fill('Adrian');await page.locator('#pnPlace').press('Tab');
    assert.match(await page.locator('#gardenPlan').innerText(),/No sourced fall frost date/);
    await page.locator('.garden-plant').filter({hasText:'Tomatoes'}).getByRole('button',{name:/Remove/}).click();
    await page.waitForFunction(()=>!document.querySelector('#gardenAhead').textContent.includes('Tomatoes'),null,{timeout:5000});
