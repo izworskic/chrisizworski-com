@@ -119,18 +119,6 @@ findParkLabel?.addEventListener('click',()=>{
 
 function updateTrailSelection() {
   renderJunctionEvidence(selectedTrail,selectedStatus);
-  if(!catalog)return;
-  const point=relatedPlace(catalog,selectedTrail);
-  const title=doc.querySelector('#pk-'+selectedTrail+' h3')?.textContent?.trim()||
-    doc.getElementById('pk-result-heading')?.textContent?.trim()||'Your selected hike';
-  text(explanationTitle,title);
-  text(explanationBody,placeInterpretation(point,selectedTrail)+
-    (isBlockedStatus(selectedStatus)?' This trail has a documented closure or season restriction; do not plan to enter.':' The pin does not establish present access.'));
-  focusChoice.dataset.mapTarget=point?.id||'';
-  focusChoice.disabled=!point;
-  focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
-  if(point)selectFromList(point.id,{moveMap:Boolean(map)});
-  const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
   const blocked=isBlockedStatus(selectedStatus);
   const parkEvidence=officialMapOrientation(selectedTrail,{blocked});
   if(parkEvidence&&parkDiagramTitle&&parkDiagramText&&parkDiagramRing){
@@ -149,6 +137,18 @@ function updateTrailSelection() {
         parkEvidence.label?'Show name on park campground map':'Show on full official park map';
     }
   }
+  if(!catalog)return;
+  const point=relatedPlace(catalog,selectedTrail);
+  const title=doc.querySelector('#pk-'+selectedTrail+' h3')?.textContent?.trim()||
+    doc.getElementById('pk-result-heading')?.textContent?.trim()||'Your selected hike';
+  text(explanationTitle,title);
+  text(explanationBody,placeInterpretation(point,selectedTrail)+
+    (isBlockedStatus(selectedStatus)?' This trail has a documented closure or season restriction; do not plan to enter.':' The pin does not establish present access.'));
+  focusChoice.dataset.mapTarget=point?.id||'';
+  focusChoice.disabled=!point;
+  focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
+  if(point)selectFromList(point.id,{moveMap:Boolean(map)});
+  const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
   const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
   if(orientation&&startText&&startSequence&&startWarning) {
     startText.textContent=orientation.guidance;
