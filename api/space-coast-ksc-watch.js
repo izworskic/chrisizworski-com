@@ -26,8 +26,17 @@ function createHandler({
         const result = await run();
         return res.status(200).json(result);
       } catch (e) {
-        console.error('ksc_monitor_run_failed', String(e?.message || e).slice(0, 120));
-        return res.status(503).json({ ok: false, error: 'KSC monitor check failed; history preserved.' });
+        const detail = String(e?.message || e).slice(0, 150);
+        console.error('ksc_monitor_run_failed', detail);
+        const code = /Private Postgres|tool state is not configured/i.test(detail) ?
+          'storage-unavailable' :
+          /Private tool state|State command|state failed|deployment identity/i.test(detail) ?
+            'storage-command-failed' :
+          /calendar|source-size/i.test(detail) ? 'official-calendar-unavailable' :
+          'collector-processing-error';
+        // Only a successfully verified workflow token can reach this branch;
+        // return a short diagnostic to scheduled-run logs without credentials.
+        return res.status(503).json({ ok: false, error: 'KSC monitor check failed; history preserved.', code, detail });
       }
     }
     if (req.method && req.method !== 'GET') {
