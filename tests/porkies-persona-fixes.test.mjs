@@ -21,7 +21,7 @@ test("vehicle mode changes the first plan, not only the deep map or comparison",
   assert.ok(c.vehicleWarnings?.length>1);
   assert.match(c.vehicleWarnings.join(" "),/middle ski hill parking area off M-107/);
   assert.match(c.vehicleWarnings.join(" "),/NOT a verified RV route/);
-  assert.ok(c.sources.some(x=>/DNR 2025 scenic-area vehicle staging guidance/.test(x.name)));
+  assert.ok(c.sources.some(x=>/DNR park information — confirm vehicle staging/.test(x.name)));
   const w=recommend(trip({vehicle,arrival:"west",hours:8,interest:"falls"}));
   assert.ok(w.vehicleWarnings.some(x=>/Presque Isle.*#841/.test(x)));
   assert.ok(w.vehicleWarnings.some(x=>/Summit Peak.*South Boundary Road turn-off/.test(x)));
@@ -83,9 +83,9 @@ test("safe normal-season and winter defaults remain correctly qualified",()=>{
 
 test("HTML-first entry options and official source warnings remain accessible",()=>{
  assert.match(html,/class="hero-quickstart"/);
- for(const x of ["views","falls","forest"])assert.match(html,new RegExp('data-porkies-start="'+x+'"'));
+ for(const x of ["lake","presque","visitor"])assert.match(html,new RegExp('data-map-place="'+x+'"'));
  assert.match(html,/plan-vehicle-source/);
- assert.match(html,/DNR 2025 visitor guidance/);
+ assert.match(html,/DNR park information/);
  assert.match(html,/plan-choice-static/);
  assert.match(html,/name="robots" content="noindex,follow"/);
  assert.match(html,/id="planner"/);
