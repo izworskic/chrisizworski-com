@@ -11,4 +11,5 @@ const margeson=R.candidates.find(x=>x.gisObjectId===15);assert.match(margeson.la
 const west=R.candidates.find(x=>x.gisObjectId===85);assert.match(west.landManager,/Ottawa National Forest/);assert.match(west.sourceNotes,/526m/);
 const manakiki=R.candidates.find(x=>x.gisObjectId===75);assert.match(manakiki.sourceNotes,/356m/);
 const overlay=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');assert.match(overlay,/visitorDecision/);assert.match(overlay,/Waterfall not confirmed/);
+const styles=fs.readFileSync('public/assets/up-waterfalls.css','utf8');assert.match(styles,/\.detail \.eyebrow\{color:var\(--pine\)\}/);
 });

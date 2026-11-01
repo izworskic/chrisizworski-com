@@ -17,3 +17,6 @@
 .selected-stop .selected-status{color:var(--sub);font-size:.84rem}
 .selected-stop .selected-warning{font-weight:650;color:var(--danger)}
 .selected-stop a{overflow-wrap:anywhere}
+
+/* Research notes sit on pale paper; the hero retains its light eyebrow. */
+.detail .eyebrow{color:var(--pine)}
