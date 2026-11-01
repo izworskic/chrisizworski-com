@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "garden-home-season-plan-20261101",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-gardening/",
+    "pageFile": "public/michigan-gardening/index.html",
+    "visitorDecision": "Which next steps and planning dates fit the plants I want to grow near my town?",
+    "primaryAction": "Choose plants and optional packet days to see a chronological local garden notebook."
+  },
+  "claims": [
+    {
+      "id": "michigan-frost-reference",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/resources/frost-free-dates",
+      "checkedDate": "2026-11-01",
+      "limitation": "Historical station probabilities do not predict a future frost or a garden soil temperature."
+    },
+    {
+      "id": "fall-crop-planning",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "Packet conventions, weather and slower fall growth vary; calculation is not a safe deadline."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "chosen crop IDs and packet maturity keyed by crop ID",
+    "sourceOfTruth": "PlantNow.gardenPlan reads station, conditions and the selected crops.",
+    "linkedSurfaces": [
+      "answer",
+      "garden list",
+      "upcoming references"
+    ],
+    "unavailableBehavior": "Show plant guidance without fabricating missing fall or soil dates."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Choose tomatoes in Bay City.",
+      "expectedVisibleAnswer": "The next seed-starting and planting references appear with years.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "alternative",
+      "input": "Add lettuce and packet days, then change town.",
+      "expectedVisibleAnswer": "The notebook combines available crop references and changes with station.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "reverse",
+      "input": "Remove tomatoes and return to the first town.",
+      "expectedVisibleAnswer": "Removed crop events disappear and remaining plant data is retained.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "no-js",
+      "input": "Open the page with JavaScript disabled.",
+      "expectedVisibleAnswer": "Garden guides and an explanation of the list remain available.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Open the notebook without a map or external tile service.",
+      "expectedVisibleAnswer": "The text notebook remains usable; no map is required.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Choose a station without a sourced fall frost date.",
+      "expectedVisibleAnswer": "The plant remains visible and no fall date is generated.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    }
+  ],
+  "failures": {
+    "no-js": "Guides and plain-language gardening notes remain available.",
+    "no-tiles": "No map or external tile service is required for this notebook.",
+    "no-image": "No new photograph is required for the planner.",
+    "stale-data": "Unknown fall frost remains unavailable, with source links in the existing guide."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft evidence record. Real browser viewports, final CI and production verification remain to be recorded."
+}

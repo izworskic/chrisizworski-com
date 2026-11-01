@@ -318,7 +318,10 @@
       if (!c) {errors.push({index:index,reason:'unknown_crop',cropId:item.cropId});return;}
       if (seen[c.id]) {errors.push({index:index,reason:'duplicate_crop',cropId:c.id});return;} seen[c.id]=true;
       var current=cropStatus(c,st,K.fromISO(iso),options.conditions||{}), packet=null;
-      if (item.maturityDays!==undefined) packet=c.kind==='garlic'?{ok:false,reason:'overwinter_crop'}:(!fallReference(c.id)&&c.id!=='beans')?{ok:false,reason:'fall_sowing_unverified'}:fallPlan(st,{year:Number(iso.slice(0,4)),maturityDays:item.maturityDays,bufferDays:item.bufferDays===undefined?14:item.bufferDays,frostISO:options.frostISO});
+      var fallYear=year, typicalFall=frostOf(st).fall;
+      // When this year's typical frost date is behind us, plan for the next fall; a visitor's explicit date stays authoritative.
+      if (!options.frostISO && typicalFall!==null && iso>K.toISO(typicalFall,year)) fallYear++;
+      if (item.maturityDays!==undefined) packet=c.kind==='garlic'?{ok:false,reason:'overwinter_crop'}:(!fallReference(c.id)&&c.id!=='beans')?{ok:false,reason:'fall_sowing_unverified'}:fallPlan(st,{year:fallYear,maturityDays:item.maturityDays,bufferDays:item.bufferDays===undefined?14:item.bufferDays,frostISO:options.frostISO});
       if (c.kind==='transplant') {
         timeline.push({cropId:c.id,kind:'indoor',fromISO:springISO(-56),toISO:springISO(-42),source:'indoor'});
         timeline.push({cropId:c.id,kind:'harden',fromISO:springISO(-10),toISO:springISO(-1),source:'harden'});
