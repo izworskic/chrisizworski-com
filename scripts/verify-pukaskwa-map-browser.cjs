@@ -56,7 +56,7 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const url='http://127.0.0.1:'+server.address().port+'/pukaskwa-national-park/';
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||undefined,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const view of [{name:'phone360',width:360,height:760},{name:'phone390',width:390,height:844},{name:'tablet768',width:768,height:1024},{name:'desktop1366',width:1366,height:900}]){
+  for(const view of [{name:'phone360',width:360,height:760},{name:'phone390',width:390,height:844},{name:'tablet768',width:768,height:1024},{name:'desktop1366',width:1366,height:900},{name:'desktop1440',width:1440,height:900}]){
     const context=await browser.newContext({viewport:{width:view.width,height:view.height},reducedMotion:'reduce'});
     const page=await context.newPage();
     const errors=[];
