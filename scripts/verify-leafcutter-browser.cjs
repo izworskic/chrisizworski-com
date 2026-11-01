@@ -22,6 +22,17 @@ async function ready(){
    const page=await ctx.newPage();
    const errors=[];page.on('pageerror',e=>errors.push(String(e)));
    await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+   await page.route('**/api/garden-seasonal-heat*',async route=>{
+    const u=new URL(route.request().url()),zip=u.searchParams.get('zip');
+    if(zip==='48707'){
+      await route.fulfill({status:404,contentType:'application/json',body:JSON.stringify({code:'ZIP_NOT_MAPPED',status:'UNAVAILABLE'})});return;
+    }
+    const site=zip?{id:'zip:'+zip,zip,kind:'zcta-interior-point'}:{id:'bay-city',zip:null,kind:'named-city'};
+    const d={schema:'seasonal-heat-v1',provider:'USA National Phenology Network',status:'AVAILABLE',
+      site,asOfDate:'2026-10-31',totalGdd50F:2805.3,weekChangeGdd50F:87.4,
+      comparison:{anomalyGdd50F:237.4,referencePeriod:'1991-2020'},modelNotObservation:true};
+    await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(d)});
+   });
    await page.route('**/api/leafcutter-release-weather*',async route=>{
     const url=new URL(route.request().url());
     const zip=url.searchParams.get('zip');
@@ -49,6 +60,9 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/No sustained 75°F warm stretch/);
    assert.equal(await page.locator('.bee-day').count(),2);
+   await page.waitForFunction(()=>document.querySelector('#bee-seasonal-total')?.textContent.includes('2805.3'),null,{timeout:6000});
+   assert.equal(await page.locator('#bee-seasonal-anomaly').innerText(),'+237.4 °F·days');
+   assert.equal(await page.locator('#bee-seasonal-week').innerText(),'+87.4 °F·days');
    assert.equal(await page.locator('#bee-gdd-total').innerText(),'32.5 °F·days');
    assert.equal(await page.locator('#bee-gdd-days').innerText(),'2');
    assert.equal(await page.locator('#bee-gdd-hours').innerText(),'0');
@@ -64,6 +78,7 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelector('#bee-weather-status')?.textContent.includes('no mapped Census area'),null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/no mapped Census area/);
    assert.equal(await page.locator('.bee-day').count(),0,'Unmapped ZIP must not retain prior forecast cards');
+   assert.notEqual(await page.locator('#bee-seasonal-total').innerText(),'2805.3 °F·days','Unmapped ZIP must clear previous seasonal heat');
    assert.ok(!(await page.locator('#bee-heat-meter').isVisible()),'Unmapped ZIP must clear old warmth numbers');
    await page.locator('#bee-zip').fill('');
    await page.locator('#bee-check').click();
