@@ -1,6 +1,7 @@
 import { verifyMapCatalog, MAP_DATA_ROUTE, relatedPlace, mapLink, placeInterpretation } from './pukaskwa-map-contract.mjs';
 import {verifyCommunityCenterlines, TRAIL_GEOJSON_URL, APPROVED_WAYS, summaryForTrail, OSM_COPYRIGHT_URL, ODBL_URL} from './pukaskwa-trail-geometry.mjs';
 import {startAdvice} from './pukaskwa-starts.mjs';
+import {mappedJunctionEvidence,osmNodeUrl,osmWayUrl} from './pukaskwa-junction-evidence.mjs';
 
 const doc=document;
 const officialButton=doc.getElementById('pk-official-map-tab');
@@ -17,6 +18,11 @@ const trailNote=doc.getElementById('pk-map-choice-trail-note');
 const startText=doc.getElementById('pk-map-start-text');
 const startSequence=doc.getElementById('pk-map-start-sequence');
 const startWarning=doc.getElementById('pk-map-start-warning');
+const junctionHead=doc.getElementById('pk-junction-heading');
+const junctionSummary=doc.getElementById('pk-junction-summary');
+const junctionList=doc.getElementById('pk-junction-list');
+const junctionSources=doc.getElementById('pk-junction-sources');
+const junctionWarning=doc.getElementById('pk-junction-warning');
 const trailToggle=doc.getElementById('pk-show-trail-lines');
 const trailStatus=doc.getElementById('pk-trail-lines-status');
 const placeNodes=[...doc.querySelectorAll('[data-map-place]')];
@@ -67,7 +73,37 @@ function selectFromList(id,{moveMap=true}={}) {
     marker.bringToFront();
   }
 }
+function renderJunctionEvidence(trailId,status){
+  // This is source-relationship evidence only, deliberately independent of
+  // the GIS catalog and of the Leaflet/CARTO tile-loading path.
+  if(!junctionHead||!junctionSummary||!junctionList||!junctionWarning||!junctionSources)return;
+  const blocked=status==='closed'||status==='out-of-season'||status==='last-known-closed';
+  const audit=mappedJunctionEvidence(trailId,{blocked});
+  junctionHead.textContent=audit.heading;
+  junctionSummary.textContent=audit.summary;
+  junctionWarning.textContent=audit.safety;
+  junctionList.replaceChildren();
+  junctionSources.hidden=!audit.items.length;
+  for(const entry of audit.items){
+    const li=doc.createElement('li');
+    const name=doc.createElement('strong');name.textContent=entry.label;
+    const original=doc.createElement('a');
+    original.href=osmNodeUrl(entry.nodeId);original.target='_blank';original.rel='noopener noreferrer';
+    original.textContent='Original OSM node';
+    const trail=doc.createElement('a');
+    trail.href=osmWayUrl(entry.trailWay);trail.target='_blank';trail.rel='noopener noreferrer';
+    trail.textContent='Named trail';
+    const adjoining=doc.createElement('a');
+    adjoining.href=osmWayUrl(entry.adjoiningWay);adjoining.target='_blank';adjoining.rel='noopener noreferrer';
+    adjoining.textContent=entry.adjoiningClass==='service-road'?'Mapped road':'Adjoining trail';
+    li.append(name,doc.createTextNode(' '),original,doc.createTextNode(' · '),trail,
+      doc.createTextNode(' · '),adjoining);
+    junctionList.append(li);
+  }
+}
+
 function updateTrailSelection() {
+  renderJunctionEvidence(selectedTrail,selectedStatus);
   if(!catalog)return;
   const point=relatedPlace(catalog,selectedTrail);
   const title=doc.querySelector('#pk-'+selectedTrail+' h3')?.textContent?.trim()||
