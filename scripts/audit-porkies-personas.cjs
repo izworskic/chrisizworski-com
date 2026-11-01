@@ -26,6 +26,19 @@ async function scenario(browser,c,r){
   one.observations.http=res?.status();
   if(res?.status()!==200)throw Error("Public page HTTP "+res?.status());
   await p.locator("#planner").waitFor({timeout:12000});
+  // Smoke the actual production JavaScript: a cached HTML shell is not proof
+  // that the new vehicle and destination engines reached the live domain.
+  const liveEngine=await p.evaluate(()=>({
+   vehiclePolicy:typeof window.PorkiesEngine?.vehicleCautions==="function",
+   quickstart:document.querySelectorAll(".hero-quickstart [data-porkies-start]").length,
+   hasStaticRoadProof:!!document.querySelector(".plan-vehicle-source")
+  }));
+  one.observations.liveEngine=liveEngine;
+  if(!liveEngine.vehiclePolicy||liveEngine.quickstart!==3||!liveEngine.hasStaticRoadProof){
+   one.flags.push("production lacks one or more post-release engine signals");
+   issue(r,"P-DEPLOYMENT-DRIFT","P0","Production JS/HTML does not reflect merged visitor fixes",
+    JSON.stringify(liveEngine),"Investigate Vercel assigned production sha and browser cache.",c.id);
+  }
   await p.locator("#travel-date").fill(c.inputs.date);
   for(const k of ["arrival","vehicle","hours","ability","interest"])await p.locator("#"+k).selectOption(String(c.inputs[k]));
   await p.locator('#planner button[type="submit"]').click();
