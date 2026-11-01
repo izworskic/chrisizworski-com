@@ -37,7 +37,9 @@ module.exports=async function handler(req,res){
   const issuedAt=p.generatedAt||p.updateTime||p.updated||null;
   const timeZone=String(p.timeZone||point?.properties?.timeZone||site.tz||'America/Detroit');
   if(!['America/Detroit','America/Chicago','America/New_York','US/Eastern','US/Central'].includes(timeZone))throw Error('INVALID_NWS_TIMEZONE');
-  const summary=E.reducePeriods(p.periods,issuedAt,new Date(),timeZone);
+  const now=new Date();
+  const summary=E.reducePeriods(p.periods,issuedAt,now,timeZone);
+  const heat=E.summarizeHeat(p.periods,summary.fresh,now,timeZone);
   if(!summary.daily.length)throw Error('NO_USABLE_FORECAST');
   res.setHeader('Cache-Control','public, s-maxage=900, stale-while-revalidate=300');
   return res.status(200).json({scope:'forecast-planning-only',provider:'National Weather Service',
@@ -47,12 +49,13 @@ module.exports=async function handler(req,res){
       coordinateSource:site.coordinateSource||(site.kind?'':'Named city reference point from site location catalogue'),
       coordinateMeaning:site.coordinateMeaning||'Named city forecast reference coordinate, not a property measurement',
       geography:site.geography||null,geographyUrl:site.geographyUrl||null},
-    ...summary,forecastOnly:true,bloomStatus:'UNVERIFIED',nestStatus:'UNVERIFIED',
+    ...summary,heat,forecastOnly:true,bloomStatus:'UNVERIFIED',nestStatus:'UNVERIFIED',
     caveats:['Forecast highs are modeled daytime conditions, not observed bee flight or currently open flowers.',
     'Two warm forecast days are an operational weather signal, not a validated species-specific release cutoff.',
     'Commercially incubated cocoons require species- and supplier-specific timing and cannot be returned to dormancy.',
     'A ZIP-area interior point or named city reference may differ materially from your lakeshore garden.',
-    'Census ZCTAs are statistical approximations of USPS ZIPs, not exact mail-delivery areas or property coordinates.']});
+    'Census ZCTAs are statistical approximations of USPS ZIPs, not exact mail-delivery areas or property coordinates.',
+    'Growing degree days base 50F measure forecast garden warmth, not a species-specific emergence countdown.']});
  }catch(e){
   res.setHeader('Cache-Control','no-store');
   if(hasZip&&e.statusCode===404)return res.status(404).json({

@@ -35,6 +35,9 @@ async function ready(){
        issuedAt:'2026-11-01T11:00:00-05:00',checkedAt:'2026-11-01T13:00:00-05:00',
        sourceUrl:'https://api.weather.gov/gridpoints/DTX/88,88/forecast/hourly',
        status:'NO_STRETCH',fresh:true,firstWarmStretch:null,
+       heat:{status:'AVAILABLE',baseF:50,unit:'F-degree-days',completeDays:2,totalDegreeDaysF:32.5,warmDaytimeHours:0,scope:'forecast-only-garden-warmth-index',daily:[
+        {date:'2026-11-02',gdd50F:20,coverage:'complete',hours:24,warmDaytimeHours:0},
+        {date:'2026-11-03',gdd50F:12.5,coverage:'complete',hours:24,warmDaytimeHours:0}]},
        daily:[{date:'2026-11-02',highF:53,precipPeakPct:30,signal:'COOL_DAY'},{date:'2026-11-03',highF:56,precipPeakPct:25,signal:'COOL_DAY'}]};
     await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
    });
@@ -46,6 +49,11 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/No sustained 75°F warm stretch/);
    assert.equal(await page.locator('.bee-day').count(),2);
+   assert.equal(await page.locator('#bee-gdd-total').innerText(),'32.5 °F·days');
+   assert.equal(await page.locator('#bee-gdd-days').innerText(),'2');
+   assert.equal(await page.locator('#bee-gdd-hours').innerText(),'0');
+   assert.equal(await page.locator('.bee-gdd-col').count(),2);
+   assert.match(await page.locator('#bee-gdd-note').innerText(),/not a season-to-date total/i);
    await page.locator('#bee-zip').fill('48706');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelector('#bee-geo-note').textContent.includes('ZIP 48706'),null,{timeout:6000});
@@ -56,6 +64,7 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelector('#bee-weather-status')?.textContent.includes('no mapped Census area'),null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/no mapped Census area/);
    assert.equal(await page.locator('.bee-day').count(),0,'Unmapped ZIP must not retain prior forecast cards');
+   assert.ok(!(await page.locator('#bee-heat-meter').isVisible()),'Unmapped ZIP must clear old warmth numbers');
    await page.locator('#bee-zip').fill('');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
