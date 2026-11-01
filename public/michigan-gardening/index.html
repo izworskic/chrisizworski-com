@@ -450,6 +450,7 @@ a:hover { text-decoration: underline; }
 .pn-credit{font-size:12.5px;color:#6b746f;margin:14px 0 0}
 .pn-more{margin:24px 0 34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-radius:10px;padding:20px 24px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font:500 1.35rem/1.25 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin:0 0 10px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:5px 0}
 @media(max-width:680px){.pn-top{padding:22px 20px}.pn-lede{font-size:.98rem}.pn-more ul{columns:1}}
+.garden-thermal{border:1px solid #d1dbc9;border-radius:10px;background:#f6f8f1;margin:13px 0 18px;color:#293e31}.garden-thermal>summary{padding:15px 18px;cursor:pointer;display:block;list-style:none}.garden-thermal>summary::-webkit-details-marker{display:none}.garden-thermal>summary::before{content:'+';float:right;font-size:1.15rem;font-weight:700;color:#20573f}.garden-thermal[open]>summary::before{content:'−'}.garden-thermal-tag{font:700 .68rem system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#526a45;display:block;margin-bottom:4px}.garden-thermal>summary strong{font:600 1.09rem Georgia,serif;color:#254a35;display:block}.garden-thermal>summary small{font-size:.78rem;line-height:1.5;color:#46574b;display:block;margin-top:4px}.garden-thermal-body{padding:3px 18px 16px}.garden-thermal-body>p{font-size:.82rem;color:#3b5648}.garden-thermal-body>button{border:1px solid #23553d;color:#fff;background:#23553d;border-radius:7px;padding:11px 15px;font-weight:800;cursor:pointer}.garden-thermal-body>button:focus-visible{outline:3px solid #f3ac4c;outline-offset:3px}.garden-thermal-body>button:disabled{opacity:.6;cursor:progress}.garden-thermal-results{padding:12px 14px;background:#fff;border:1px solid #d1dbc9;border-radius:7px;margin:10px 0;color:#244a35;font-size:.86rem;line-height:1.6}.garden-thermal-results strong{color:#1d5339;font-size:1.08rem}.garden-thermal-source{font-size:.75rem!important;line-height:1.5}.garden-thermal-source a{color:#1b6741}@media(max-width:550px){.garden-thermal{margin-left:0;margin-right:0}.garden-thermal>summary,.garden-thermal-body{padding-left:12px;padding-right:12px}}
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 <link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261101c">
@@ -572,6 +573,15 @@ a:hover { text-decoration: underline; }
     <div class="gk-field"><label for="pnPlace">Your town or ZIP</label><input type="text" id="pnPlace" list="pnTowns" autocomplete="off" value="Bay City" placeholder="for example Traverse City or 48706"><datalist id="pnTowns"></datalist></div>
   </div>
   <p class="gk-note" id="pnWhere">Nearest frost station: Bay City.</p>
+  <details class="garden-thermal" id="gardenThermal">
+   <summary><span class="garden-thermal-tag">Seasonal warmth</span><strong>Is this year's growing season running ahead or behind?</strong><small>Official base-50°F accumulated heat matched to your selected Michigan town or ZIP. Separate from frost and planting dates.</small></summary>
+   <div class="garden-thermal-body">
+    <p>Use the Michigan town or ZIP selected above. This reads the official seasonal weather grid, not your soil or garden plants.</p>
+    <button type="button" id="gardenThermalCheck">Read seasonal warmth for this location</button>
+    <div class="garden-thermal-results" id="gardenThermalResults" role="status" aria-live="polite">No seasonal heat record checked yet.</div>
+    <p class="garden-thermal-source">From <a href="https://phenology.chrisizworski.com/" target="_blank" rel="noopener">Michigan Phenology</a> and the <a href="https://www.usanpn.org/data/maps/AGDD" target="_blank" rel="noopener">USA National Phenology Network</a>. Warmth does not confirm a crop is ready to plant, soil is workable, or flowers are open.</p>
+   </div>
+  </details>
   <section class="my-garden" aria-labelledby="gardenPlanTitle">
     <p class="gy-kicker">Your garden · your season</p><h3 id="gardenPlanTitle">What are you growing?</h3>
     <p>Make a list of the plants you want in your garden. We’ll bring their next steps together for your town, from seed starting to fall planning.</p>
@@ -1065,7 +1075,7 @@ a:hover { text-decoration: underline; }
     if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
   }
   function query(){var u=new URLSearchParams(),c=cond();if(place)u.set('place',place.zip||place.label);if(Story.selected()!=='tomatoes')u.set('crop',Story.selected());if(q.get('date'))u.set('date',q.get('date'));if(c.workable!==null)u.set('work',c.workable?'yes':'no');if(c.soilF!==null&&isFinite(c.soilF))u.set('soil',String(c.soilF));return '?'+u.toString()}
-  function setPlace(v){var loc=E.locate(v);if(!loc){el('pnWhere').textContent='No Michigan town or ZIP called "'+v+'" was found. Try a nearby town, or a five-digit ZIP.';return false}place=loc;render();return true}
+  function setPlace(v){var loc=E.locate(v);if(!loc){el('pnWhere').textContent='No Michigan town or ZIP called "'+v+'" was found. Try a nearby town, or a five-digit ZIP.';return false}place=loc;if(window.gardenHeatInvalidate)window.gardenHeatInvalidate();render();return true}
   el('pnPlace').addEventListener('change',function(){setPlace(el('pnPlace').value)});
   document.querySelectorAll('input[name="pnWork"]').forEach(function(r){r.addEventListener('change',render)});
   el('pnSoil').addEventListener('input',render);
@@ -1088,5 +1098,6 @@ a:hover { text-decoration: underline; }
   var start=q.get('place')||load()||'Bay City';el('pnPlace').value=start;if(!setPlace(start)){el('pnPlace').value='Bay City';setPlace('Bay City')}
 })();
 </script>
+<script src="/assets/garden-tools/seasonal-heat.js?v=20261101"></script>
 </body>
 </html>
