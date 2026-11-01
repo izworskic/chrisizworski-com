@@ -1,5 +1,6 @@
 import { verifyMapCatalog, MAP_DATA_ROUTE, relatedPlace, mapLink, placeInterpretation } from './pukaskwa-map-contract.mjs';
 import {verifyCommunityCenterlines, TRAIL_GEOJSON_URL, APPROVED_WAYS, summaryForTrail, OSM_COPYRIGHT_URL, ODBL_URL} from './pukaskwa-trail-geometry.mjs';
+import {startAdvice} from './pukaskwa-starts.mjs';
 
 const doc=document;
 const officialButton=doc.getElementById('pk-official-map-tab');
@@ -13,6 +14,9 @@ const explanationBody=doc.getElementById('pk-map-choice-body');
 const focusChoice=doc.getElementById('pk-map-focus-choice');
 const focusTrail=doc.getElementById('pk-map-focus-trail');
 const trailNote=doc.getElementById('pk-map-choice-trail-note');
+const startText=doc.getElementById('pk-map-start-text');
+const startSequence=doc.getElementById('pk-map-start-sequence');
+const startWarning=doc.getElementById('pk-map-start-warning');
 const trailToggle=doc.getElementById('pk-show-trail-lines');
 const trailStatus=doc.getElementById('pk-trail-lines-status');
 const placeNodes=[...doc.querySelectorAll('[data-map-place]')];
@@ -77,6 +81,13 @@ function updateTrailSelection() {
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
   const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
   const blocked=selectedStatus==='closed'||selectedStatus==='out-of-season';
+  const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
+  if(orientation&&startText&&startSequence&&startWarning) {
+    startText.textContent=orientation.guidance;
+    startWarning.textContent=orientation.closureNote+' '+orientation.geometryNote;
+    const steps=orientation.sequence.map(value=>{const li=doc.createElement('li');li.textContent=value;return li;});
+    startSequence.replaceChildren(...steps);
+  }
   focusTrail.disabled=!hasTrail||blocked;
   focusTrail.textContent=blocked?'Trail is reported closed':hasTrail?'Show mapped trail line':'No independently mapped trail line';
   if(trailNote) {
