@@ -405,6 +405,7 @@ async function main(){
   await fallbackPage.route('**/experience-entry-evidence.json',route=>route.fulfill({status:503,body:'Unavailable'}));
   await fallbackPage.goto(url,{waitUntil:'domcontentloaded'});
   await fallbackPage.waitForFunction(()=>document.querySelector('#experience-compare')?.dataset.loaded==='unavailable',null,{timeout:12000});
+  await fallbackPage.locator('.optional-comparison > summary').click();
   need(await fallbackPage.locator('#experience-choice-a').isDisabled(),'missing entry evidence did not disable unsupported comparison controls');
   need((await fallbackPage.locator('#experience-a').innerText()).includes('DNR parking asset #1409')===false,'static fallback overpromised unknown source');
   need((await fallbackPage.locator('#experience-a .experience-entry-static').innerText()).includes('asset #1409'),'static source-backed Lake overview vanished on source outage');
@@ -419,6 +420,7 @@ async function main(){
   need(await page.locator('.crossing-alternative-grid>div').count()===3,'no JS crossing-safe itinerary alternatives missing');
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
+  await page.locator('.optional-comparison > summary').click();
   need((await page.locator('#experience-a').innerText()).includes('100 yards'),'no JS lake-of-clouds walking proof missing');
   need((await page.locator('#experience-b').innerText()).includes('half a mile'),'no JS Summit Peak walking proof missing');
   need(await page.locator('#experience-choice-a option').count()===6,'no JS six available comparison choices missing');
@@ -429,7 +431,6 @@ async function main(){
   need((await page.locator('#experience-a .experience-entry-static').innerText()).includes('asset #1409'),'no JS lake source starting point missing');
   need((await page.locator('#experience-b .experience-entry-static').innerText()).includes('asset #72'),'no JS Summit Peak signed entry uncertainty missing');
   need(await page.locator('#read-landscape .journal-entry').count()===4,'no JS field journal stories missing');
-  await page.locator('.optional-comparison > summary').click();
   await page.locator('#experience-a .experience-fieldnote summary').click();
   need((await page.locator('#experience-a .experience-fieldnote-copy').innerText()).includes('Lake of the Clouds'),'no JS interpretive note failed to expand');
   need(await page.locator('#experience-map-compare').count()===1,'no JS map button absent but source parking list must remain');
