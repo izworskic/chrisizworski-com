@@ -119,7 +119,7 @@ test('GIS endpoints and source confidence attach to mission response but cannot 
   assert.equal(g.boardwalks.find(x=>x.number===14).spatialConnectionAudit,null);
   assert.equal(g.geojson.features.filter(f=>f.geometry.type==='Polygon').length,13,
     'Static NPS lot inventory preserved separately from live alert overlay');
-  assert.ok(g.safety.some(x=>/official historical named geographic references/i.test(x)));
+  assert.ok(g.safety.some(x=>/authoritative historical named geographic references/i.test(x)));
 });
 
 test('stale and failed NPS sources never display allegedly current closures or imply open parking',()=>{
