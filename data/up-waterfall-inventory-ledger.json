@@ -1362,14 +1362,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
-      "landManager": null,
+      "access": "research-only",
+      "landManager": "USDA Forest Service — Ottawa National Forest (feature point only)",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "43",
+      "classification": "one-foot-rapid-not-destination",
+      "accessAssessment": "One-foot Black River split ripple; independent 46.61882,-90.07444 is 29m from GIS. World Waterfall Database disqualifies as significant waterfall. USFS FS-managed surface ownership polygon #120 confirms Ottawa National Forest at natural point, sourced 2026-10-30. North Country National Scenic Trail #60014 appears within 1km; historic visitor account describes steep unmarked river descent from small informal roadside pull-off. No authorized signed waterfall lot, side trail or viewpoint.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/algonquin-falls/",
+        "https://www.worldwaterfalldatabase.com/waterfall/Algonquin-Falls-13088",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1408,14 +1423,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "43",
+      "classification": "natural-feature-unverified-access",
+      "accessAssessment": "Copper Creek bedrock slide corroborated by American Whitewater; GeoNames 46.63449,-89.92933 is 38m from GIS. No USFS surface-owned polygon intersects the natural point; no Michigan DNR LOTS state parcel or easement record at point. Commercial forest was described historically, not current title. American Whitewater documents unmarked old logging-road paddler put-in with 2005 gate recollection, not signed public waterfall hiking. No USDA published NFS trails in 1km.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://mapcarta.com/22354350",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1520,14 +1550,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "43",
+      "classification": "natural-feature-unverified-access",
+      "accessAssessment": "Middle of three Copper Creek bedrock slides in American Whitewater report; GeoNames 46.64071,-89.92674 is 19m from GIS. No USFS managed parcel at natural point, no DNR LOTS state parcel or state easement point. 2007 source caption calls this commercial forest, not proven 2026 title. Historic whitewater trip from remote logging road mentions gate and old cabin; no present legal public parking, maintained trail or authorized full walk. No published NFS trails within 1km.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://mapcarta.com/22354356",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1543,14 +1588,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "43",
+      "classification": "natural-feature-unverified-access",
+      "accessAssessment": "Third named Copper Creek bedrock slide in American Whitewater source; GNIS point 46.6424256,-89.9267683 is 24m from Michigan GIS. No USFS FS-managed surface parcel at natural point and zero DNR LOTS state/easement intersections; cannot label Ottawa NF owned solely from nearby forest. Unmarked historic paddler logging-road approach is not signed waterfall hike; no NFS published trail in 1km or official safe viewpoint and visitor parking.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://www.anyplaceamerica.com/directory/mi/gogebic-county-26053/falls/abinodji-falls-1618983/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1635,14 +1695,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-gogebic"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "batch": "county-gogebic",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "43",
+      "classification": "natural-feature-unverified-access",
+      "accessAssessment": "Nokomis river ledge documented by 2007 photo and GeoNames point 46.646613,-89.910168 about 80m from state GIS. No USFS managed surface polygon and no DNR LOTS state parcel/easement point intersects. 2007 photographer captions commercial forest land; online guides claiming state park or USFS ownership conflict, current title unresolved. No NFS published trail within 1km; no authorized walking route proven beyond developed downstream Presque Isle loop, nor signed parking for this feature.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://commons.wikimedia.org/wiki/File:Nokomis_Falls_-_panoramio.jpg",
+        "https://www.geonames.org/5003563/nokomis-falls.html",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4822,5 +4897,5 @@
       ]
     }
   ],
-  "lastBatch": "42"
+  "lastBatch": "43"
 }

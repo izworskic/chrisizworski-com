@@ -1950,11 +1950,71 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "landManager": "USDA Forest Service — Ottawa National Forest (feature point only)",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "source-backed-named-rapid-not-public-visitor-stop",
+      "sourceNotes": "One-foot Black River split ripple; independent 46.61882,-90.07444 is 29m from GIS. World Waterfall Database disqualifies as significant waterfall. USFS FS-managed surface ownership polygon #120 confirms Ottawa National Forest at natural point, sourced 2026-10-30. North Country National Scenic Trail #60014 appears within 1km; historic visitor account describes steep unmarked river descent from small informal roadside pull-off. No authorized signed waterfall lot, side trail or viewpoint.",
+      "outstandingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/algonquin-falls/",
+        "https://www.worldwaterfalldatabase.com/waterfall/Algonquin-Falls-13088",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named geographic feature and scale",
+            "status": "documented-geography",
+            "finding": "One-foot Black River split ripple; independent 46.61882,-90.07444 is 29m from GIS. World Waterfall Database disqualifies as significant waterfall.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/algonquin-falls/"
+          },
+          {
+            "label": "Official land ownership at natural point",
+            "status": "verified-geography",
+            "finding": "USFS FS-managed surface ownership polygon #120 confirms Ottawa National Forest at natural point, sourced 2026-10-30.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus public permission",
+            "status": "documented-not-live",
+            "finding": "North Country National Scenic Trail #60014 appears within 1km; historic visitor account describes steep unmarked river descent from small informal roadside pull-off. No authorized signed waterfall lot, side trail or viewpoint.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/algonquin-falls/"
+          },
+          {
+            "label": "Authorized signed parking",
+            "status": "not-cleared",
+            "finding": "No verified signed public visitor parking for this exact waterfall; natural-feature GPS is not a driving destination. No historic forest-road stop is a parking permit.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Legal continuous footpath and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "One North Country National Scenic Trail #60014 within 1km. Nearby trail data alone does not establish the sanctioned final connection.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.07407%2C46.618863&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current gates, road and water conditions",
+            "status": "not-cleared",
+            "finding": "No current site-specific verification of vehicle road legality, 2026 gate state, river crossing or safe developed viewpoint; developed downstream waterfall stops are separate.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 64,
@@ -1993,10 +2053,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "source-backed-geography-no-verified-visitor-route",
+      "sourceNotes": "Copper Creek bedrock slide corroborated by American Whitewater; GeoNames 46.63449,-89.92933 is 38m from GIS. No USFS surface-owned polygon intersects the natural point; no Michigan DNR LOTS state parcel or easement record at point. Commercial forest was described historically, not current title. American Whitewater documents unmarked old logging-road paddler put-in with 2005 gate recollection, not signed public waterfall hiking. No USDA published NFS trails in 1km.",
+      "outstandingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://mapcarta.com/22354350",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named geographic feature and scale",
+            "status": "documented-geography",
+            "finding": "Copper Creek bedrock slide corroborated by American Whitewater; GeoNames 46.63449,-89.92933 is 38m from GIS.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Official land ownership at natural point",
+            "status": "not-cleared",
+            "finding": "No USFS surface-owned polygon intersects the natural point; no Michigan DNR LOTS state parcel or easement record at point. Commercial forest was described historically, not current title.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus public permission",
+            "status": "documented-not-live",
+            "finding": "American Whitewater documents unmarked old logging-road paddler put-in with 2005 gate recollection, not signed public waterfall hiking. No USDA published NFS trails in 1km.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Authorized signed parking",
+            "status": "not-cleared",
+            "finding": "No verified signed public visitor parking for this exact waterfall; natural-feature GPS is not a driving destination. No historic forest-road stop is a parking permit.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Legal continuous footpath and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA Forest Service published trail features in a 1km radius. Nearby trail data alone does not establish the sanctioned final connection.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.929%2C46.634234&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current gates, road and water conditions",
+            "status": "not-cleared",
+            "finding": "No current site-specific verification of vehicle road legality, 2026 gate state, river crossing or safe developed viewpoint; developed downstream waterfall stops are separate.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 66,
@@ -2085,10 +2205,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "source-backed-geography-no-verified-visitor-route",
+      "sourceNotes": "Middle of three Copper Creek bedrock slides in American Whitewater report; GeoNames 46.64071,-89.92674 is 19m from GIS. No USFS managed parcel at natural point, no DNR LOTS state parcel or state easement point. 2007 source caption calls this commercial forest, not proven 2026 title. Historic whitewater trip from remote logging road mentions gate and old cabin; no present legal public parking, maintained trail or authorized full walk. No published NFS trails within 1km.",
+      "outstandingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://mapcarta.com/22354356",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named geographic feature and scale",
+            "status": "documented-geography",
+            "finding": "Middle of three Copper Creek bedrock slides in American Whitewater report; GeoNames 46.64071,-89.92674 is 19m from GIS.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Official land ownership at natural point",
+            "status": "not-cleared",
+            "finding": "No USFS managed parcel at natural point, no DNR LOTS state parcel or state easement point. 2007 source caption calls this commercial forest, not proven 2026 title.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus public permission",
+            "status": "documented-not-live",
+            "finding": "Historic whitewater trip from remote logging road mentions gate and old cabin; no present legal public parking, maintained trail or authorized full walk. No published NFS trails within 1km.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Authorized signed parking",
+            "status": "not-cleared",
+            "finding": "No verified signed public visitor parking for this exact waterfall; natural-feature GPS is not a driving destination. No historic forest-road stop is a parking permit.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Legal continuous footpath and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA Forest Service published trail features in a 1km radius. Nearby trail data alone does not establish the sanctioned final connection.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926674%2C46.640546&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current gates, road and water conditions",
+            "status": "not-cleared",
+            "finding": "No current site-specific verification of vehicle road legality, 2026 gate state, river crossing or safe developed viewpoint; developed downstream waterfall stops are separate.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 70,
@@ -2102,10 +2282,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "source-backed-geography-no-verified-visitor-route",
+      "sourceNotes": "Third named Copper Creek bedrock slide in American Whitewater source; GNIS point 46.6424256,-89.9267683 is 24m from Michigan GIS. No USFS FS-managed surface parcel at natural point and zero DNR LOTS state/easement intersections; cannot label Ottawa NF owned solely from nearby forest. Unmarked historic paddler logging-road approach is not signed waterfall hike; no NFS published trail in 1km or official safe viewpoint and visitor parking.",
+      "outstandingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main",
+        "https://www.anyplaceamerica.com/directory/mi/gogebic-county-26053/falls/abinodji-falls-1618983/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named geographic feature and scale",
+            "status": "documented-geography",
+            "finding": "Third named Copper Creek bedrock slide in American Whitewater source; GNIS point 46.6424256,-89.9267683 is 24m from Michigan GIS.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Official land ownership at natural point",
+            "status": "not-cleared",
+            "finding": "No USFS FS-managed surface parcel at natural point and zero DNR LOTS state/easement intersections; cannot label Ottawa NF owned solely from nearby forest.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus public permission",
+            "status": "documented-not-live",
+            "finding": "Unmarked historic paddler logging-road approach is not signed waterfall hike; no NFS published trail in 1km or official safe viewpoint and visitor parking.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2690/main"
+          },
+          {
+            "label": "Authorized signed parking",
+            "status": "not-cleared",
+            "finding": "No verified signed public visitor parking for this exact waterfall; natural-feature GPS is not a driving destination. No historic forest-road stop is a parking permit.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Legal continuous footpath and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA Forest Service published trail features in a 1km radius. Nearby trail data alone does not establish the sanctioned final connection.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.926691%2C46.64222&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current gates, road and water conditions",
+            "status": "not-cleared",
+            "finding": "No current site-specific verification of vehicle road legality, 2026 gate state, river crossing or safe developed viewpoint; developed downstream waterfall stops are separate.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 71,
@@ -2182,10 +2422,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "source-backed-geography-no-verified-visitor-route",
+      "sourceNotes": "Nokomis river ledge documented by 2007 photo and GeoNames point 46.646613,-89.910168 about 80m from state GIS. No USFS managed surface polygon and no DNR LOTS state parcel/easement point intersects. 2007 photographer captions commercial forest land; online guides claiming state park or USFS ownership conflict, current title unresolved. No NFS published trail within 1km; no authorized walking route proven beyond developed downstream Presque Isle loop, nor signed parking for this feature.",
+      "outstandingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://commons.wikimedia.org/wiki/File:Nokomis_Falls_-_panoramio.jpg",
+        "https://www.geonames.org/5003563/nokomis-falls.html",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named geographic feature and scale",
+            "status": "documented-geography",
+            "finding": "Nokomis river ledge documented by 2007 photo and GeoNames point 46.646613,-89.910168 about 80m from state GIS.",
+            "source": "https://commons.wikimedia.org/wiki/File:Nokomis_Falls_-_panoramio.jpg"
+          },
+          {
+            "label": "Official land ownership at natural point",
+            "status": "not-cleared",
+            "finding": "No USFS managed surface polygon and no DNR LOTS state parcel/easement point intersects. 2007 photographer captions commercial forest land; online guides claiming state park or USFS ownership conflict, current title unresolved.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus public permission",
+            "status": "documented-not-live",
+            "finding": "No NFS published trail within 1km; no authorized walking route proven beyond developed downstream Presque Isle loop, nor signed parking for this feature.",
+            "source": "https://commons.wikimedia.org/wiki/File:Nokomis_Falls_-_panoramio.jpg"
+          },
+          {
+            "label": "Authorized signed parking",
+            "status": "not-cleared",
+            "finding": "No verified signed public visitor parking for this exact waterfall; natural-feature GPS is not a driving destination. No historic forest-road stop is a parking permit.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Legal continuous footpath and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA Forest Service published trail features in a 1km radius. Nearby trail data alone does not establish the sanctioned final connection.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.911055%2C46.646225&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current gates, road and water conditions",
+            "status": "not-cleared",
+            "finding": "No current site-specific verification of vehicle road legality, 2026 gate state, river crossing or safe developed viewpoint; developed downstream waterfall stops are separate.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 75,
@@ -6784,6 +7084,19 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Neepikon and Narrow low-relief ripples, source geolocation conflicts (Neepikon 477m; 10ft Narrow generic point off ~7.5km). Powder Horn 3m, Rocky Forty 145m but published easy-route claim 69.2km wrong, Chippewa 15m. Nearby property concerns, old lodge/utility parking and old forest routes do not satisfy official signed visitor arrival. USFS trails 1km found none at Powderhorn/Rocky/Narrow, snowmobile-only near Neepikon, NFST-128-B near Chippewa but no complete connection. Ten DNR LOTS point intersects empty; title not determined. Five noindex pages and source-ledgers, no public guide."
+    },
+    {
+      "batch": "43-algonquin-copper-creek-nokomis",
+      "date": "2026-11-01",
+      "reviewedIds": [
+        63,
+        65,
+        69,
+        70,
+        74
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Algonquin one-foot rapid on FS ownership with NCT nearby but no verified signed final route; Copper Creek Ogima, Ogimakwe, Abinodji named technical paddler slides with historic logging-road/gate, absent FS and DNR parcel point matches and no NFS mapped foot trail; Nokomis 2007 photo commercial forest conflicts with tourist park/USFS ownership assertions. Five research-only pages and six source gates each; no visitor promotion."
     }
   ]
 }
