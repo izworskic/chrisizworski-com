@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "pukaskwa-national-park",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/pukaskwa-national-park/",
+    "pageFile": "public/pukaskwa-national-park/index.html",
+    "visitorDecision": "Choose a Hattie Cove day hike and understand exactly which mapped path-to-road or path-to-path relationships are source-backed, without confusing them with legal signed trailhead access.",
+    "primaryAction": "Inspect the original shared OSM node evidence for the selected day hike, then check the illustrated Parks Canada route map and latest park access reports before visiting."
+  },
+  "claims": [
+    {
+      "id": "official-hattie-day-hikes",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking",
+      "checkedDate": "2026-11-01",
+      "limitation": "Park-return hiking descriptions and named routes do not supply verified signed GPS junction coordinates or present access."
+    },
+    {
+      "id": "hattie-parking",
+      "kind": "official-reference",
+      "subject": "parking-rule",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/visit/services/boutique",
+      "checkedDate": "2026-11-01",
+      "limitation": "Visitor Centre parking is the published arrival area but opening and navigable access from the lot are not verified by this document."
+    },
+    {
+      "id": "osm-original-junction-nodes",
+      "kind": "unverified",
+      "subject": "route-guidance",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/6949507750/ways",
+      "checkedDate": "2026-11-01",
+      "limitation": "Exact OSM shared node membership is supported; the source cannot establish signed trailhead, hiking permission, complete route, vertex GPS survey or safety."
+    },
+    {
+      "id": "official-trails-gis-gap",
+      "kind": "no-data",
+      "subject": "park-access",
+      "state": "NO_DATA",
+      "sourceUrl": "https://open.canada.ca/data/en/dataset/64a90e8d-5bc0-4027-8645-b5881b4068d4",
+      "checkedDate": "2026-11-01",
+      "limitation": "Both official trail FeatureServer layers returned zero paths intersecting the Hattie Cove envelope; missing geometry is not a park access restriction or permission."
+    },
+    {
+      "id": "official-bridge-closure",
+      "kind": "official-notice",
+      "subject": "park-access",
+      "state": "SUPPORTED",
+      "accessScope": "White River Suspension Bridge Trail only, officially reported closed October 22, 2026",
+      "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
+      "checkedDate": "2026-11-01",
+      "limitation": "The last reported closure blocks selection; an older positive report for other trails does not establish current access."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "Existing Pukaskwa chooser selectedTrail id via pukaskwa:choice event",
+    "sourceOfTruth": "Parks Canada official visitor route reference remains authoritative for hiking; static OSM junction evidence module supplies only exact source relationships, never permission or opening.",
+    "linkedSurfaces": [
+      "answer",
+      "hike-chooser",
+      "selected-hike-start-panel",
+      "source-linked-junction-evidence",
+      "static-original-park-map",
+      "optional-source-qualified-osm-overlay",
+      "no-js-fallback"
+    ],
+    "unavailableBehavior": "Source GIS, OSM way lines or tiles missing: retain official map and static source explanation, and never infer a parking-to-footway route."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Two hours, moderate, Lake Superior coast; default Southern Headland",
+      "expectedVisibleAnswer": "Selected headland remains the primary hike with two independently recorded OSM junction relationships and an explicit no-signed-start notice.",
+      "sourceAndSafety": "Parks Canada lists the Visitor Centre origin; OSM node membership is not a signed or legally accessible trail entrance."
+    },
+    {
+      "kind": "alternative",
+      "input": "Thirty minutes, easy, beach preference",
+      "expectedVisibleAnswer": "Boardwalk Beach becomes selected; evidence changes to the recorded South Loop and Beach Trail shared nodes with original OSM source links.",
+      "sourceAndSafety": "Adjacent OSM service-road geometry does not establish an approved walk to the beach or safe access."
+    },
+    {
+      "kind": "reverse",
+      "input": "Southern Headland to Boardwalk Beach and back to Southern Headland",
+      "expectedVisibleAnswer": "Junction records return to the correct original headland node IDs and selected hiking title without stale Boardwalk links.",
+      "sourceAndSafety": "Reversible evidence selection does not override a park closure or status freshness checks."
+    },
+    {
+      "kind": "no-js",
+      "input": "Client JavaScript disabled on 390-pixel phone",
+      "expectedVisibleAnswer": "Static Southern Headland shared-node source links, separate official route starting guidance and original park map remain readable.",
+      "sourceAndSafety": "No GPS route generated without scripts; original sources and uncertainty survive."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "CARTO and OSM map tiles both blocked",
+      "expectedVisibleAnswer": "Original illustrated Parks Canada map and the source evidence panel remain available without a blank map or false navigation advice.",
+      "sourceAndSafety": "Community node membership never becomes a new route line."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Official October 12 open observations and October 22 bridge closure on November 1",
+      "expectedVisibleAnswer": "Hikes carry stale/unknown current access labels and bridge remains closed regardless of nearby mapped way nodes.",
+      "sourceAndSafety": "Updated collector timestamp is not a new issued trail observation."
+    },
+    {
+      "kind": "no-junction",
+      "input": "Fire Walk or Combination Hike",
+      "expectedVisibleAnswer": "Panel says no reviewed mapped entrance junction and keeps original park route description.",
+      "sourceAndSafety": "Named multi-trail circuit is not a complete surveyed coordinate graph."
+    }
+  ],
+  "failures": {
+    "no-js": "Show the original Parks Canada illustrated map and two static headland OSM shared-node citations; keep the explicit parking-to-path uncertainty in HTML.",
+    "no-tiles": "Switch to the Parks Canada illustrated map with existing seven GIS visitor-place links; shared-node provenance stays text-only.",
+    "no-image": "Keep full hiking chooser, source-backed start explanation and original node links, with no dependency on photos to understand access.",
+    "stale-data": "Keep old official open records stale, preserve explicit White River closure and never use the fresh OSM audit date to imply fresh park status."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": [],
+    "scopeNote": "Substantial regression and real Chromium map checks are required before any verified release claim; no new photos or map shapes were introduced."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-01",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feat/pukaskwa-mapped-junction-evidence-20261101"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "This source-only structural release ledger cannot certify signed trail access, park routes, Vercel deployment, live map tiles or visitor outcomes. Original credited photographs are unchanged."
+}
