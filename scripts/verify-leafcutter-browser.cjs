@@ -28,9 +28,10 @@ async function ready(){
       await route.fulfill({status:404,contentType:'application/json',body:JSON.stringify({code:'ZIP_NOT_MAPPED',status:'UNAVAILABLE'})});return;
     }
     const site=zip?{id:'zip:'+zip,zip,kind:'zcta-interior-point'}:{id:'bay-city',zip:null,kind:'named-city'};
-    const d={schema:'seasonal-heat-v1',provider:'USA National Phenology Network',status:'AVAILABLE',
+    const partial=zip==='49931';
+    const d={schema:'seasonal-heat-v1',provider:'USA National Phenology Network',status:partial?'PARTIAL':'AVAILABLE',
       site,asOfDate:'2026-10-31',totalGdd50F:2805.3,weekChangeGdd50F:87.4,
-      comparison:{anomalyGdd50F:237.4,referencePeriod:'1991-2020'},modelNotObservation:true};
+      comparison:partial?null:{anomalyGdd50F:237.4,referencePeriod:'1991-2020'},modelNotObservation:true};
     await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(d)});
    });
    await page.route('**/api/leafcutter-release-weather*',async route=>{
@@ -73,7 +74,12 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelector('#bee-geo-note').textContent.includes('ZIP 48706'),null,{timeout:6000});
    assert.match(await page.locator('#bee-geo-note').innerText(),/not a USPS boundary/);
    assert.equal(await page.locator('.bee-day').count(),2);
-   await page.locator('#bee-zip').fill('48707');
+   await page.locator('#bee-zip').fill('49931');
+   await page.locator('#bee-check').click();
+   await page.waitForFunction(()=>document.querySelector('#bee-seasonal-anomaly')?.textContent==='Not mapped',null,{timeout:6000});
+   assert.equal(await page.locator('#bee-seasonal-total').innerText(),'2805.3 °F·days');
+   assert.match(await page.locator('#bee-seasonal-note').innerText(),/no published data/);
+      await page.locator('#bee-zip').fill('48707');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelector('#bee-weather-status')?.textContent.includes('no mapped Census area'),null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/no mapped Census area/);

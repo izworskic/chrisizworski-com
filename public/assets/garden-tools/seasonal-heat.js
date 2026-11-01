@@ -33,14 +33,18 @@
      'Official seasonal heat unavailable. The garden planner will not guess the comparison.';
     return;
    }
-   if(d?.schema!=='seasonal-heat-v1'||d?.provider!=='USA National Phenology Network'||d?.status!=='AVAILABLE'
-       ||!Number.isFinite(d.totalGdd50F)||!Number.isFinite(d?.comparison?.anomalyGdd50F))throw Error('UNVERIFIED_SEASON');
-   var delta=d.comparison.anomalyGdd50F;
+   if(d?.schema!=='seasonal-heat-v1'||d?.provider!=='USA National Phenology Network'
+       ||!(d.status==='AVAILABLE'&&Number.isFinite(d?.comparison?.anomalyGdd50F)||d.status==='PARTIAL'&&d.comparison===null)
+       ||!Number.isFinite(d.totalGdd50F))throw Error('UNVERIFIED_SEASON');
+   var comparable=d.status==='AVAILABLE';
+   var delta=comparable?d.comparison.anomalyGdd50F:null;
    var strong=document.createElement('strong');strong.textContent=Number(d.totalGdd50F).toFixed(1)+' °F·days since January 1';
    output.textContent='';output.appendChild(strong);
-   output.appendChild(document.createTextNode(' · '+(delta>0?'+':'')+Number(delta).toFixed(1)+
-    ' °F·days versus the 1991–2020 reference · Source date '+d.asOfDate+'. '+
-    (delta>5?'More seasonal warmth than the reference.':delta< -5?'Less seasonal warmth than the reference.':'Near the reference.')+
+   var compare=comparable?' · '+(delta>0?'+':'')+Number(delta).toFixed(1)+
+    ' °F·days versus the 1991–2020 reference. '+
+    (delta>5?'More seasonal warmth than the reference.':delta< -5?'Less seasonal warmth than the reference.':'Near the reference.'):
+    ' · Historical comparison not mapped for this location. No average-year comparison is available.';
+   output.appendChild(document.createTextNode(' · Source date '+d.asOfDate+'. '+compare+
     ' The frost date and actual soil conditions still control planting.'));
   }catch(e){if(seq===requestNumber)output.textContent='The seasonal source cannot be verified right now. No comparison has been assumed.';}
   finally{if(seq===requestNumber)button.disabled=false;}

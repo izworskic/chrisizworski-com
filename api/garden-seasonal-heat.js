@@ -13,8 +13,9 @@ async function upstream(site){
   redirect:'error',signal:AbortSignal.timeout(14000)});
  if(!r.ok)throw Error('PHENOLOGY_NOT_AVAILABLE');
  const d=await r.json();
- if(!d||d.schema!=='seasonal-heat-v1'||d.provider!=='USA National Phenology Network'||d.status!=='AVAILABLE'
-   ||!Number.isFinite(d.totalGdd50F)||!Number.isFinite(d.comparison?.anomalyGdd50F)
+ if(!d||d.schema!=='seasonal-heat-v1'||d.provider!=='USA National Phenology Network'
+   ||!(d.status==='AVAILABLE'&&Number.isFinite(d.comparison?.anomalyGdd50F)||d.status==='PARTIAL'&&d.comparison===null)
+   ||!Number.isFinite(d.totalGdd50F)
    ||!d.asOfDate||!/^\d{4}-\d{2}-\d{2}$/.test(d.asOfDate)
    ||Math.abs(d.location?.latitude-site.lat)>0.0002||Math.abs(d.location?.longitude-site.lon)>0.0002
    ||d.modelNotObservation!==true)throw Error('PHENOLOGY_UNVERIFIED_SCHEMA');

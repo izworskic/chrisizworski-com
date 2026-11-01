@@ -308,10 +308,12 @@ function setSeasonalEvidence(data,kind){
  if(kind==='loading'){total.textContent=anom.textContent=week.textContent='…';note.textContent='Reading official accumulated heat for this location…';return;}
  if(!data||kind!=='ready'){total.textContent=anom.textContent=week.textContent='—';note.textContent='Seasonal heat data are currently unavailable for this area. No comparison is assumed.';return;}
  total.textContent=Number(data.totalGdd50F).toFixed(1)+' °F·days';
- var delta=data.comparison.anomalyGdd50F;
- anom.textContent=(delta>0?'+':'')+Number(delta).toFixed(1)+' °F·days';
+ var hasComparison=data.status==='AVAILABLE'&&Number.isFinite(data.comparison?.anomalyGdd50F);
+ var delta=hasComparison?data.comparison.anomalyGdd50F:null;
+ anom.textContent=hasComparison?(delta>0?'+':'')+Number(delta).toFixed(1)+' °F·days':'Not mapped';
  week.textContent=data.weekChangeGdd50F===null?'Not available':'+'+Number(data.weekChangeGdd50F).toFixed(1)+' °F·days';
- note.textContent='USA-NPN reference date: '+data.asOfDate+'. '+(delta>5?'More base-50 warmth than the reference average.':delta< -5?'Less base-50 warmth than the reference average.':'Near the reference average.')+' Seasonal weather context does not confirm bee activity or open flowers.';
+ var compare=hasComparison?(delta>5?'More base-50 warmth than the reference average.':delta< -5?'Less base-50 warmth than the reference average.':'Near the reference average.'):'The 1991–2020 anomaly has no published data for this grid cell; no average-year comparison is available.';
+ note.textContent='USA-NPN reference date: '+data.asOfDate+'. '+compare+' Seasonal weather context does not confirm bee activity or open flowers.';
 }
 async function loadBeeSeasonal(key,raw,city,sequence){
  setSeasonalEvidence(null,'loading');
@@ -322,7 +324,8 @@ async function loadBeeSeasonal(key,raw,city,sequence){
   if(sequence!==weatherRequest||beeLocationKey()!==key)return;
   var matches=raw?(data?.site?.zip===raw):(data?.site?.id===city);
   if(!resp.ok||!matches||data?.schema!=='seasonal-heat-v1'||data?.provider!=='USA National Phenology Network'
-      ||data?.status!=='AVAILABLE'||!Number.isFinite(data.totalGdd50F)||!Number.isFinite(data?.comparison?.anomalyGdd50F))throw Error('SEASONAL_UNVERIFIED');
+      ||!(data.status==='AVAILABLE'&&Number.isFinite(data?.comparison?.anomalyGdd50F)||data.status==='PARTIAL'&&data.comparison===null)
+      ||!Number.isFinite(data.totalGdd50F))throw Error('SEASONAL_UNVERIFIED');
   setSeasonalEvidence(data,'ready');
  }catch(e){if(sequence===weatherRequest&&beeLocationKey()===key)setSeasonalEvidence(null,'unavailable');}
 }
