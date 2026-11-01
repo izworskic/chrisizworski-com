@@ -116,6 +116,16 @@
       return;
     }
     target.appendChild(element('h4', '', ksc.eventTitle || 'Official KSC launch event'));
+    const officialClock = ksc.officialTiming || {};
+    if (officialClock.state === 'different-time' || officialClock.state === 'different-day') {
+      const warning = element('div', 'ksc-source-conflict');
+      warning.setAttribute('role', 'status');
+      warning.appendChild(element('strong', '', officialClock.label || 'Schedule sources disagree'));
+      warning.appendChild(element('p', '', officialClock.detail || 'Verify the current launch time with the operator.'));
+      if (officialClock.sourceDate) warning.appendChild(element('p', 'small',
+        'KSC event listing: ' + officialClock.sourceDate + (officialClock.sourceTime ? ' · ' + officialClock.sourceTime : '')));
+      target.appendChild(warning);
+    }
     target.appendChild(element('p', 'ksc-event-explanation',
       'The operator lists these locations for this mission, with different entry and ticket conditions. The listing is not real-time ticket inventory, and the launch can still move.'));
     const list = element('div', 'ksc-venue-grid');
