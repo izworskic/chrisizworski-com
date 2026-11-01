@@ -148,7 +148,7 @@
    root.PorkiesAtlas={map:map};
    root.dispatchEvent(new Event('porkies:map-ready'));
 
-   var fallback=root.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',crossOrigin:true});
+   var fallback=root.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'});
    fallback.addTo(map);
    var active=fallback;
    for (var point of points){
@@ -166,7 +166,7 @@
    root.fetch("/api/carto-basemap-config",{credentials:"same-origin",signal:AbortSignal.timeout(6500)}).then(r=>r.ok?r.json():null).then(config=>{
      if(config?.provider!=="CARTO"||typeof config.key!=="string"||!config.key.trim())return;
      var url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key="+encodeURIComponent(config.key.trim());
-     var layer=root.L.tileLayer(url,{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',crossOrigin:true});
+     var layer=root.L.tileLayer(url,{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'});
      var loaded=0,errors=0;
      layer.on("tileload",()=>{loaded++;if(loaded>=3&&active!==layer){active=layer;map.removeLayer(fallback);}});
      layer.on("tileerror",()=>{errors++;if(errors>=2&&active!==fallback){active=fallback;if(!map.hasLayer(fallback))fallback.addTo(map);map.removeLayer(layer);}});
