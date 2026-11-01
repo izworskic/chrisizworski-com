@@ -80,7 +80,7 @@ test('source classification has no signed, complete or permitted trailhead asser
     assert.ok(audit.heading.length>15);
     assert.ok(audit.summary.length>35);
     assert.equal(audit.checkedOn,'2026-11-01');
-    assert.ok(!JSON.stringify(audit).includes('lat'));
+    assert.equal('lat' in audit||'lon' in audit,false);
     if(['hattie-cove-fire-walk','combination-hike','white-river-bridge'].includes(id)){
       assert.equal(audit.items.length,0,id);
       assert.match(audit.heading,/No reviewed/);
