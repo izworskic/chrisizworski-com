@@ -117,3 +117,24 @@
 .ksc-source-conflict strong{display:block;color:#773528;font-size:16px}
 .ksc-source-conflict p{font-size:14px;line-height:1.5;color:#613f34;margin:7px 0 0}
 .ksc-source-conflict .small{font-size:12px}
+
+
+/* Mission-specific documentary timeline, not a duplicated launch calendar. */
+.ksc-chronicle{position:relative;margin:26px 0 24px;padding:clamp(18px,3vw,30px);border:1px solid #b9c9b8;border-radius:20px;background:linear-gradient(145deg,#f7faf4,#edf3ee)}
+.ksc-chronicle-heading{display:grid;grid-template-columns:minmax(220px,1fr) minmax(260px,1.15fr);gap:18px;align-items:end}
+.ksc-chronicle-heading .eyebrow{font-size:11px;letter-spacing:.12em;color:#53685b;margin:0 0 7px;text-transform:uppercase}
+.ksc-chronicle-heading h3{font-family:Georgia,serif;font-size:clamp(24px,3.3vw,33px);line-height:1.16;margin:0;color:#193f30}
+.ksc-chronicle-heading>p{font-size:14px;line-height:1.64;margin:0;color:#3d544b}
+.ksc-watch-health{border-top:1px solid #c9d8c9;margin:19px 0 0;padding:13px 0 18px;font-size:13px;color:#354e41;line-height:1.55}
+.ksc-watch-health[data-status="overdue"],.ksc-watch-health[data-status="partial"],.ksc-watch-health[data-status="not-initialized"]{color:#76572b}
+.ksc-chronicle-entries{position:relative;display:grid;gap:14px}
+.ksc-chronicle-event{position:relative;margin-left:13px;padding:17px 18px 16px 23px;background:#fff;border:1px solid #cad7c9;border-radius:12px;box-shadow:0 4px 16px rgba(14,50,31,.045)}
+.ksc-chronicle-event:before{content:"";position:absolute;width:12px;height:12px;border:3px solid #fff;background:#366d4e;box-shadow:0 0 0 1px #8caa96;border-radius:50%;top:20px;left:-20px;z-index:1}
+.ksc-chronicle-entries:before{content:"";position:absolute;top:20px;bottom:20px;left:0;border-left:2px solid #bed0c0}
+.ksc-chronicle-event h4{font-family:Georgia,serif;margin:6px 0;font-size:19px;line-height:1.25;color:#173f2e}
+.ksc-chronicle-event p{font-size:14px;line-height:1.6;color:#3f5148;margin:0 0 11px}
+.ksc-chronicle-event time{display:block;font-size:12px;letter-spacing:.02em;color:#536658;font-weight:700}
+.ksc-chronicle-event .launch-link{margin-top:2px}
+.ksc-chronicle-empty{background:#fff;border:1px dashed #bbcdbd;border-radius:12px;padding:20px;color:#405948;line-height:1.6;font-size:14px}
+.ksc-chronicle-footnote{font-size:12px;line-height:1.65;color:#53665a;margin:17px 0 0}
+@media(max-width:700px){.ksc-chronicle{padding:17px 15px}.ksc-chronicle-heading{grid-template-columns:1fr;gap:10px}.ksc-chronicle-event{padding:14px 14px 14px 20px}}
