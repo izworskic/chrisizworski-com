@@ -2,6 +2,10 @@
 
 **Important limitation:** a root `AGENTS.md` in `izworskic/chrisizworski-com` applies to agents in that repository only. A new chat, an independent extracted tool repository, and a different agent harness may **not** load the same instructions. Do not claim this package is universally injected.
 
+## Active version for extracted-tool agents
+
+“Use Experience OS v1.2” always means the canonical `EXPERIENCE_OS_V1` package's latest **released 1.2.x** from the `main` manifest, currently **1.2.1**. Read [VERSION_RESOLUTION.md](VERSION_RESOLUTION.md) and **the extracted repository's own `AGENTS.md` first**. This site does not broadcast policy into a separate tool repo or other agent harness; a reviewed adoption pointer is required. Inspect in-flight PRs before opening competing work.
+
 ## This repo (first adoption)
 
 - The root `AGENTS.md` requires reading `design-systems/experience-os-v1/AGENTS.md` for relevant work.
@@ -19,8 +23,10 @@ During the **next approved substantial work** on a separate tool, first read its
 For new visitor tools, substantial UI redesigns or new interactions, read the
 EXPERIENCE_OS_V1 package maintained at:
 https://github.com/izworskic/chrisizworski-com/tree/main/design-systems/experience-os-v1
-Use AGENTS.md, EXPERIENCE_LIFECYCLE, INTERACTION_PATTERN_LIBRARY, QA_SCORECARD,
-and, for substantial interconnected interactions, CONNECTED_EXPERIENCE_CONTRACT.md
+Use the latest released compatible 1.2.x package from the main manifest (see
+VERSION_RESOLUTION.md), AGENTS.md, EXPERIENCE_LIFECYCLE,
+INTERACTION_PATTERN_LIBRARY, QA_SCORECARD, and for substantial interconnected
+interactions, CONNECTED_EXPERIENCE_CONTRACT.md
 and templates/STATE_MATRIX.md. Apply this repository's own safety, CI,
 canonical, map/data and ad rules first. Read the current default-branch release
 or pin a reviewed commit if stable reproducibility is required.
