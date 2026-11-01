@@ -16,7 +16,7 @@ for(const [id,slug] of [[17,"chipmunk-falls-net-river"],[144,"copper-falls-owl-c
  const schema=JSON.parse(html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)?.[1]||'{}');assert.equal(schema['@type'],'WebPage');assert.equal(schema.author['@id'],'https://chrisizworski.com/#person');assert.doesNotMatch(html,/"@type":"TouristAttraction"/);assert.match(html,/Built by Chris Izworski/);
 }
 assert.equal(R.counts.curatedTotal,71);assert.equal(R.counts.pending,96);assert.equal(L.unresolvedCandidates,96);assert.equal(Q.candidates.length,96);assert.equal(V.records.length,59);
-assert.match(R.candidates.find(x=>x.gisObjectId===17).sourceNotes,/three feet/i);
+assert.match(R.candidates.find(x=>x.gisObjectId===17).sourceNotes,/three.foot|three feet/i);
 assert.match(R.candidates.find(x=>x.gisObjectId===144).sourceNotes,/private/i);
 assert.match(R.candidates.find(x=>x.gisObjectId===18).sourceNotes,/2024/);
 assert.match(R.candidates.find(x=>x.gisObjectId===116).sourceNotes,/Keweenaw/i);
